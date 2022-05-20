@@ -2,68 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D81E52F246
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 May 2022 20:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A135F52F4EA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 May 2022 23:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235496AbiETSNk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 May 2022 14:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S238796AbiETVSj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 May 2022 17:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352491AbiETSNi (ORCPT
+        with ESMTP id S236005AbiETVSg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 May 2022 14:13:38 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9172E18FF11
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 May 2022 11:13:32 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id eg11so11738526edb.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 May 2022 11:13:32 -0700 (PDT)
+        Fri, 20 May 2022 17:18:36 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA7319C74A;
+        Fri, 20 May 2022 14:18:34 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id n23so12335896edy.0;
+        Fri, 20 May 2022 14:18:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=diEsMUAPJX4u0FJo9NkDwZ5Xz9iATJQSF3lAp/gYU1A=;
-        b=I87RLcljCH0RuSbiTrRQexejctdo+oMuIRy59YA+r+nR+yZwS2t6yeUqhQNO3I0sho
-         0kvV9fopy2diCllarPTabCkUVUGiHFwYWAYnpqsf7Pa7SmkSmgcM/rzj7catq+4TMWVq
-         EOkLlq6rMWfkrLiGFfbgaoxEz78RbWy5Oc2a54iNQCB2Z21hIlbfiTzpkuWY21YUjOEi
-         dmYO4mZ0+WM6qw5mmauUQf69pAkPy5b5D915wxqgN/EmALrVJq6ly76nBGi5VWw8gjcI
-         4O3Ns1t1LgkRbhOcQmhON3hCYwT5gZGIJh2HAja7zlFXEjHIUtl5AWU9yAa2BjipS9x3
-         BCDA==
+        bh=DDu/yTLze4KFg1yFxzaUGUfDQmxCo5o2Ixng2muyqhM=;
+        b=cGT/MLA73M02bfwmF153L+N9j9VGqt4svVWLmTvd8me8wufermxRixpqT7FiftfEWw
+         snz0jt0fvMmRJycvtC19EfxtGK0uJLEpqsINRZHAIqqJGJAidG3GhnE1JcDorl4KbQX0
+         U/yijzz++jneJNOfIv0LL0x7C6yfmr7DX6xT3nJk9Zto9Ra+FvcvEXKvVoeiVSAsGFdv
+         qw0xXE4mEi5xNL1V+f/6usYfu8dha1bsepuEf309yAsCpxjkgzYvoOeO4WkooK7VEDev
+         i+6XuTpJ/+khHFt4PCt8ogJCs284JujSoeaCEdicl39lyA+h5ojY5er7SAf3ZrVTH/Pr
+         g42w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=diEsMUAPJX4u0FJo9NkDwZ5Xz9iATJQSF3lAp/gYU1A=;
-        b=7Iq7ZpAcBh9m9ez2odudxiZeZPbSn9tk9R87RnIM5ldrBwdVqTaAXFotP1K+EXCgMt
-         XpHqfe44xc6tYLULmZd/BHFjbiH3/JpBRLhdkXF1t+ryn+2jPU6LYwE2EbxuCIderfde
-         roduhpY4HxtqTvoMD8w5L9zrWnhnOy60ceF2dJ0j7XE/uu5VvVnab8vPn398C8d10N0Q
-         TMrvwzzHeUF8jeU0UoN81WsbvGwGXGsHLTnAsnt453Fe4EsVr5F+CDE4PFrXH6FtDCeX
-         Q1Xpc08Me7i1sEfluzWhoecsFmNbozwdsHBtbIBIi52wZRqTHdnElHfjki26qLmSxb4Z
-         e7Iw==
-X-Gm-Message-State: AOAM533gOjH+ZgxTMWFmV1vvMCPIuK6H1fu4cAisU9KWdOz+gWxGRycf
-        L1fKCQfQXGmraQWujsr31Wgyw1SNP3nR62lkAO4Mra2om00ASg==
-X-Google-Smtp-Source: ABdhPJyJ9aD1+buOd6X23qPr2SUjHKZOvsxBvuzgTQCHrWKd4i4H+xLKXa2OUWjgWol3otPNS4gl1fDpDbZoTdNYgOc=
-X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id
- b10-20020a056402084a00b00426262d967emr12527519edz.286.1653070410982; Fri, 20
- May 2022 11:13:30 -0700 (PDT)
+        bh=DDu/yTLze4KFg1yFxzaUGUfDQmxCo5o2Ixng2muyqhM=;
+        b=xaYTWvq3jB9ymqJwktTlOmu5PrnxZWNgSSOTcw1f8ONkEqAtSkoxbSmd4aTAB+bH9Z
+         /vXBnGOt+a8+Z0nh4W4zlwE1nziC6Q5B1gpM1nd7lItRIU3BRfVU12mAOS4i6KC+oBTZ
+         axDnArJ5aNepuCCpqF2URxBtIbmS5TZ2HywDxTAgHyyKLmUjiIGIAunbw0kVYOiZ8yp4
+         boiTZCH4DdK2jj+v9H2pkVjsbvxAIQz9gunfQ1LTzlFRhniejiRO9vbIrId+LSz8Xxz0
+         stZ5MQKX3tniZgD4yKDtIx67h20BU1EVom+1hAlzwe5GGfLiT3g6y5AqOQpurNfET5Ud
+         3CLw==
+X-Gm-Message-State: AOAM530PEmh0BHEPZmM1WfpPA+KWTh7nRlRQ/xjDkxPNcxAfQzsUJuT6
+        CKZFAeL2GUO6yqDTHp3cPxbymmgllpVdekWWenHKkuMa
+X-Google-Smtp-Source: ABdhPJxjcBduBZ+3KMZKwOS16jDqf/LZsYbh4MNzUOUwuzvLfR/ciHJ9IfIzVmNsXrghMzHXByJKIR7piKRMzcpmlSM=
+X-Received: by 2002:a05:6402:1d48:b0:427:dfa3:2272 with SMTP id
+ dz8-20020a0564021d4800b00427dfa32272mr12914264edb.333.1653081513187; Fri, 20
+ May 2022 14:18:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220519164512.3180360-1-dlatypov@google.com> <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
-In-Reply-To: <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 20 May 2022 11:13:19 -0700
-Message-ID: <CAGS_qxrDYKKoWy3UAuVqebT+3jp-ux_uyfbwX3OnJqVbnzaiJg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: refactor internal kconfig handling, allow overriding
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+References: <20220518131638.3401509-1-xukuohai@huawei.com> <20220518131638.3401509-6-xukuohai@huawei.com>
+In-Reply-To: <20220518131638.3401509-6-xukuohai@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 20 May 2022 14:18:20 -0700
+Message-ID: <CAADnVQJr8Sc5d+XUAY2UnNbZ2TP5OCAQNm3eyTponbMfcpXbkQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 5/6] bpf, arm64: bpf trampoline for arm64
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,32 +103,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:13 PM David Gow <davidgow@google.com> wrote:
+On Wed, May 18, 2022 at 6:54 AM Xu Kuohai <xukuohai@huawei.com> wrote:
 >
-> I like this, but do think there are a few gaps this doesn't handle
-> properly. (Though exactly how we'd deal with them, I'm not yet sure.)
+> Add bpf trampoline support for arm64. Most of the logic is the same as
+> x86.
 >
-> In particular, it's not possible to disable a pair of options where
-> one depends on the other: disabling the parent option will result in
-> the child one not being present in the generated config. This will
-> conflict both with "=y" and "=n/not set": we'd need a way to _remove_
-> a kconfig option for that to work.
+> Tested on raspberry pi 4b and qemu with KASLR disabled (avoid long jump),
+> result:
+>  #9  /1     bpf_cookie/kprobe:OK
+>  #9  /2     bpf_cookie/multi_kprobe_link_api:FAIL
+>  #9  /3     bpf_cookie/multi_kprobe_attach_api:FAIL
+>  #9  /4     bpf_cookie/uprobe:OK
+>  #9  /5     bpf_cookie/tracepoint:OK
+>  #9  /6     bpf_cookie/perf_event:OK
+>  #9  /7     bpf_cookie/trampoline:OK
+>  #9  /8     bpf_cookie/lsm:OK
+>  #9         bpf_cookie:FAIL
+>  #18 /1     bpf_tcp_ca/dctcp:OK
+>  #18 /2     bpf_tcp_ca/cubic:OK
+>  #18 /3     bpf_tcp_ca/invalid_license:OK
+>  #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+>  #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+>  #18        bpf_tcp_ca:OK
+>  #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+>  #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+>  #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+>  #51 /4     dummy_st_ops/dummy_multiple_args:OK
+>  #51        dummy_st_ops:OK
+>  #55        fentry_fexit:OK
+>  #56        fentry_test:OK
+>  #57 /1     fexit_bpf2bpf/target_no_callees:OK
+>  #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+>  #57 /3     fexit_bpf2bpf/func_replace:OK
+>  #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+>  #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+>  #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+>  #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+>  #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+>  #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+>  #57        fexit_bpf2bpf:OK
+>  #58        fexit_sleep:OK
+>  #59        fexit_stress:OK
+>  #60        fexit_test:OK
+>  #67        get_func_args_test:OK
+>  #68        get_func_ip_test:OK
+>  #104       modify_return:OK
+>  #237       xdp_bpf2bpf:OK
+>
+> bpf_cookie/multi_kprobe_link_api and bpf_cookie/multi_kprobe_attach_api
+> failed due to lack of multi_kprobe on arm64.
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> Acked-by: Song Liu <songliubraving@fb.com>
 
-Do you have an example?
-Because what you describe sounds like how we want it to work, but I'm
-not sure if I'm misunderstanding the scenario you describe.
+Catalin, Will, Mark,
 
-I was considering the case mentioned in the commit description.
-I.e. we do --kunitconfig_add=CONFIG_KUNIT=n to the default kunitconfig.
-That gives us complaints about these
- CONFIG_KUNIT_EXAMPLE_TEST=y, CONFIG_KUNIT_TEST=y,
- CONFIG_KUNIT_ALL_TESTS=y
-options no longer being in the generated .config.
-And I think that's exactly how it _should_ work, as this flag is a
-low-level tool for tweaking individual options.
-
-IMO, anything complicated should be done by editing the
-kunitconfig/qemu_config files, in which case it's a lot less
-cumbersome to disable multiple options by just deleting them.
-
-Daniel
+could you please ack this patch that you don't mind us
+taking this set through bpf-next ?
