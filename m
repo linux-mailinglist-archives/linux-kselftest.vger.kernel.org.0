@@ -2,154 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F92652DFF1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 May 2022 00:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E01152E158
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 May 2022 02:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbiESWWz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 May 2022 18:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
+        id S1343978AbiETAsX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 May 2022 20:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiESWWz (ORCPT
+        with ESMTP id S232937AbiETAsV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 May 2022 18:22:55 -0400
-Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B9A6622A;
-        Thu, 19 May 2022 15:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=sqsu7gnbk3ckn4qeg5tktvky4q6bd77q; d=linaro.org; t=1652998972;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=W5dL5IIIiJA2zdge9PK5/lbWNC80HjqnMb1aFoZBBK4=;
-        b=hw9pB8LwzpVh9y4gAkThxxwBWltpCbH6QNC2bWm8QSIug+7qsljk3aG5dn8mjGoq
-        O6gG4usmMEdkaxypEdvmW/7Ip1rs/OihCSwKY/5ddhxpCakC4sZQu3lNTmQ+Mj4r2n+
-        mhfJmipltF6eBB3NfLrzLkg5QAxGMKqwlxb4Gyqc=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1652998972;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=W5dL5IIIiJA2zdge9PK5/lbWNC80HjqnMb1aFoZBBK4=;
-        b=Ad2127uXoNQBMhwvHwtkovqgiszDIjWl0Euxzjs+uDXB/cs234EqTIZRWRhv0oka
-        x0qfa6dlr9r3fdDj67y1wUBuGpwMUiuDnqjotiQ26KpwoZsckdRUUvrdodPyC+zNZmF
-        S/r+b24VrY5nkDKzrYJ0XxFTvFINfxj6D7is+7Cc=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220518
+        Thu, 19 May 2022 20:48:21 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27666131282;
+        Thu, 19 May 2022 17:48:20 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id f9so4709992ils.7;
+        Thu, 19 May 2022 17:48:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Oj7MrD85RT/bMm8gL3PkltfI4HET7Lu7FGmvmGW0/28=;
+        b=as2ZITbTtHudPfEicLOBd1exjgyLGfFo22nQX/5EGXC+XZ53fZ/rMPxVW0JtP26wJr
+         dCILoFQhTFhggQKauJbEMyPHs8bdXNcFmekeNnBfZVX1sF8kAnC2XcapJ+vsZ5atiq8M
+         n7aK+v2TO6xFqOco1ZpvpgTTBzUzMkrOfzpz4eWPkkTeXD9HUJtz/yD8xXw4SO3qqjvY
+         Ntkr3i+CZbv/OJx8TVAi5evHzM3cMW0mV6gvrjxiorWPuz0IzsyztC3nOImpHob5luGA
+         syXrJ8VM1UnNfYA1iFR57EP+SnhjBvnJVVUH+J1WNq5JekkVSCbJwH5SFrl7q+YEeOW3
+         JXUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Oj7MrD85RT/bMm8gL3PkltfI4HET7Lu7FGmvmGW0/28=;
+        b=j7PSDM7oQ0I7EURvSiGAQUmhDtdRzxcLbN+Z/lZH+kNdcC2EMCsGjMqz6nJzpURvcU
+         qy4NH5TVBjvb7zaAL8GOQoGktpweCAN3uNe/doKv1Nh3J7qDV9orOIqqXXltY03EuWqX
+         7C0AQVZmwvtfYnqgFbmq2dBQDPYMXffub8K/s08raOP/xYJNMwsC+pIEFqHMsey5LVQB
+         JUBQGdkf/FTLkuamE7S133mmvMV5WGff8T8zgl+VyCIsn90ekNlwARQl8ULhReBxkDd6
+         n2zlm6QXpPiCRYM6pq4N1jVN/UK0RsavgTTubOE2cO8YL8TR0jNbig5WdG3V2n/dut6y
+         bK2g==
+X-Gm-Message-State: AOAM533ChAkFmZVKN233czg6gJwy9XjI5COpMPp3+j19CgaSdl3emhxG
+        bUkIHqYLtYa8d2WZ9lNiVEUyHgy++PBwHYX34UlWJNt46qU=
+X-Google-Smtp-Source: ABdhPJw5wgU//yKzajDuQ5MvxxZPylTGsw5+T5ctfpLdd1eJFUGoUgIdN6HhevKpJU67Dn7YYZgBo2jQHLha0RHrcJo=
+X-Received: by 2002:a05:6e02:1c01:b0:2d1:262e:8d5f with SMTP id
+ l1-20020a056e021c0100b002d1262e8d5fmr4026979ilh.98.1653007699548; Thu, 19 May
+ 2022 17:48:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000180de6aa3ac-3a1408f3-2645-4338-87dc-b580b034dad8-000000@email.amazonses.com>
-Date:   Thu, 19 May 2022 22:22:52 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.05.19-54.240.48.34
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <cover.1652772731.git.esyr@redhat.com> <9e4171972a3d75e656073e0c25cd4071a6f652e4.1652772731.git.esyr@redhat.com>
+ <CAEf4BzYpNZSY+D6_QP4NE2dN25g4wD43UmJyzmqXCL=HOE9HFA@mail.gmail.com> <20220519143702.GA22773@asgard.redhat.com>
+In-Reply-To: <20220519143702.GA22773@asgard.redhat.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 19 May 2022 17:48:08 -0700
+Message-ID: <CAEf4BzYLyR7=KUqoFLCdgw0+YeAJ=r9SEzdmve8r+obv+4TBVw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/4] bpf_trace: check size for overflow in bpf_kprobe_multi_link_attach
+To:     Eugene Syromiatnikov <esyr@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.18.0-rc7
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-* git branch: master
-* git commit: 736ee37e2e8eed7fe48d0a37ee5a709514d478b3
-* git describe: next-20220518
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220518
+On Thu, May 19, 2022 at 7:37 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
+>
+> On Wed, May 18, 2022 at 04:30:14PM -0700, Andrii Nakryiko wrote:
+> > On Tue, May 17, 2022 at 12:36 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
+> > >
+> > > Check that size would not overflow before calculation (and return
+> > > -EOVERFLOW if it will), to prevent potential out-of-bounds write
+> > > with the following copy_from_user.  Use kvmalloc_array
+> > > in copy_user_syms to prevent out-of-bounds write into syms
+> > > (and especially buf) as well.
+> > >
+> > > Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
+> > > Cc: <stable@vger.kernel.org> # 5.18
+> > > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> > > ---
+> > >  kernel/trace/bpf_trace.c | 7 ++++---
+> > >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > index 7141ca8..9c041be 100644
+> > > --- a/kernel/trace/bpf_trace.c
+> > > +++ b/kernel/trace/bpf_trace.c
+> > > @@ -2261,11 +2261,11 @@ static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32
+> > >         int err = -ENOMEM;
+> > >         unsigned int i;
+> > >
+> > > -       syms = kvmalloc(cnt * sizeof(*syms), GFP_KERNEL);
+> > > +       syms = kvmalloc_array(cnt, sizeof(*syms), GFP_KERNEL);
+> > >         if (!syms)
+> > >                 goto error;
+> > >
+> > > -       buf = kvmalloc(cnt * KSYM_NAME_LEN, GFP_KERNEL);
+> > > +       buf = kvmalloc_array(cnt, KSYM_NAME_LEN, GFP_KERNEL);
+> > >         if (!buf)
+> > >                 goto error;
+> > >
+> > > @@ -2461,7 +2461,8 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+> > >         if (!cnt)
+> > >                 return -EINVAL;
+> > >
+> > > -       size = cnt * sizeof(*addrs);
+> > > +       if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size))
+> > > +               return -EOVERFLOW;
+> > >         addrs = kvmalloc(size, GFP_KERNEL);
+> >
+> > any good reason not to use kvmalloc_array() here as well and delegate
+> > overflow to it. And then use long size (as expected by copy_from_user
+> > anyway) everywhere?
+>
+> Just to avoid double calculation of size, otherwise I don't have
+> any significant prefernce, other than -EOVERFLOW would not be reported
+> separately (not sure if this a good or a bad thing), and that
+> it would be a bit more cumbersome to incorporate the Yonghong's
+> suggestion[1] about the INT_MAX check.
+>
 
-## Test Regressions (compared to next-20220506)
-* qemu-arm64-mte, kselftest-cgroup
-  - cgroup.test_freezer
+I think it's totally fine to return ENOMEM if someone requested some
+unreasonable amount of symbols. And INT_MAX won't be necessary if we
+delegate all the overflow checking to kvmalloc_array()
 
-* x86, kselftest-kvm
-  - kvm.evmcs_test
-  - kvm.hyperv_clock
-  - kvm.smm_test
-  - kvm.state_test
-  - kvm.vmx_preemption_timer_test
-
-
-## Metric Regressions (compared to next-20220506)
-No metric regressions found.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220506)
-* dragonboard-845c, kselftest-proc
-  - proc.proc-uptime-001
-
-* dragonboard-845c, kselftest-rtc
-  - rtc.rtctest.rtc.uie_select
-
-
-## Metric Fixes (compared to next-20220506)
-No metric fixes found.
-
-## Test result summary
-total: 5265, pass: 2783, fail: 537, skip: 1945, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> [1] https://lore.kernel.org/lkml/412bf136-6a5b-f442-1e84-778697e2b694@fb.com/
+>
+> > >         if (!addrs)
+> > >                 return -ENOMEM;
+> > > --
+> > > 2.1.4
+> > >
+> >
+>
