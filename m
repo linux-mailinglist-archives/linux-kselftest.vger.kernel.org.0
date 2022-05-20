@@ -2,69 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B85E52F5B7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 00:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9686052F5B9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 00:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238856AbiETWf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 May 2022 18:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        id S1353922AbiETWfw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 May 2022 18:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbiETWf1 (ORCPT
+        with ESMTP id S1353916AbiETWfv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 May 2022 18:35:27 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCA316F925
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 May 2022 15:35:26 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id c12so12393757eds.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 May 2022 15:35:26 -0700 (PDT)
+        Fri, 20 May 2022 18:35:51 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15E712AD7;
+        Fri, 20 May 2022 15:35:50 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id m20so17991354ejj.10;
+        Fri, 20 May 2022 15:35:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Hc2DTzkdvmY5/H2+h1fYLqdWLOpbPYQU4WUrtguKfK8=;
-        b=YcQ0Hu0u3oUtOd9K6qAjIrCzfi7ako/V39ndwIxJG58KfcKA6mHEbr02iQKhS+icJ7
-         AWTF2PJV9YsGtctpG00VQ2dF159kSsPOUXUfYAgkjXoXbsftFK+R0lncDH8FpSfgueC+
-         7RzlTU+Diyl/K6STYoJjnz/brTfG73icT2DNlhlm+lmO827D6BhSScD//biiZGRO05QL
-         q3RnvLZwT6mcTsisMw8lRJ7Epy1rFcyBbvwAnyHXaGG2Yn/MikvesKpcqYFXNKUh/3QK
-         RcGUiDblIarbhgeIP7M/68tM41h18GHneABwFEDjCDltu8G3/5wCeHdcVOkSrsvu+uB6
-         +cOA==
+        bh=f6mQZ2563VnlVljlnpofq/t3QXLtb3EyEH3JMTBfeGQ=;
+        b=iotslgJFN236L7y2ZEavwT9L/z3aaIolNpPkRq9eT0tCpVAmHk6q6NvyoYWHc5kj56
+         pNpYh2ztZsQUSXvHi17wV89W2v9sVRutHctsdO7gQK5OEN3KyCC4qZ9WvTWVkjbu5Ad+
+         Iwc2B9CXMS0ZV/HzN6nItNIA7a7CxaGKuz6WYpiKIBxVIgh5q/7aWmR6quJ/2hqMpTj/
+         Q02LDA1TLMrHq6z98BQ7ffP+cL7pZkkvtNybtEe1Ua2i1GyA9L31REPnRqdeyAn2fi13
+         o5sP6/JCkuA5NwtHon4qECwnzaVPpxKZHQ46QiSfnAlu7dlfw77kDYxQtSQMM/knHpyO
+         1w7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Hc2DTzkdvmY5/H2+h1fYLqdWLOpbPYQU4WUrtguKfK8=;
-        b=p53wBR39VrvBydo8TJClUPmsqFiTE3ZSoPF8yqKa6YmbzjM8orJt+8OJ5Br3YUw74F
-         q7nJ6iBDm4W+uRXgX60bYFFemwFmceUNBRZsPYDYDcNbW0qrkWB/ANfkiEV1Pu3KUpr0
-         3BPROB17hse8NYFWgb2IIDYESdj/84qjkjeXNoK+7Ttvbxf9NlgcT9Njk0zX416gayPd
-         l9F95N9d45XciEwRIF6/cNe0lSOcpJzvjOKfJhR5wFCJVhDDA6AKSaotOC+1A7Co/eVe
-         ebsQ6D5sQyjTyLqKwqHqCpUviIz00sBP8Zu6v9u7rcqK0IzG96Kt+FTXJ3JsLazNmN2O
-         P/qg==
-X-Gm-Message-State: AOAM532gVmD6HVJFwpySfyEa4ffXF9RDfpHFwq5ZmNihVg0mc+y0EevS
-        lElZmVyO8dzrs9LmUQr3p2CR0kd+2P5mpVfh5iSV9w==
-X-Google-Smtp-Source: ABdhPJz7+9WUFMLkPO5qjQRZ4cQTpghpM2BlJvmMqQmZrSUEytXCmKRqFwOg9PAc+vapCevWMtNPVvcpFn9X9SbxdiM=
-X-Received: by 2002:a05:6402:3047:b0:42a:fbe9:4509 with SMTP id
- bs7-20020a056402304700b0042afbe94509mr11941788edb.159.1653086125167; Fri, 20
- May 2022 15:35:25 -0700 (PDT)
+        bh=f6mQZ2563VnlVljlnpofq/t3QXLtb3EyEH3JMTBfeGQ=;
+        b=sxmEXzLOvtBCscOR8owM+cxfRBT6MvTzX1mWwapjGZe+BaTH9iL9E0l5LdBudchHrz
+         16dfnjQcbBbMh25bKREqCzzrG7b3GkpCPOTES4ny0/1Zvkam5yAxzEL/mkNQ555Xkmlk
+         2E5I+DEbOvlO3WHD8sqie+FwPUmDjOEThlPOvmyupcLbTa/yofHoeWrH15l+HXvk+T7z
+         bynHOZQYbO90a88Px9dfraSWijfCntV0ZKZmYlstz2SiAatHOhipv1Nyy3PVQNz0lWSc
+         XaIyHj1vn2agwkMm/3TgtZsU6/84FD4J3PG2rb9t3+7DzLS7FEfCD13X5rzYF5DuQVZl
+         sg+w==
+X-Gm-Message-State: AOAM532KEXWeg/s4xrJa2n8cwJwZs0Fmt71yPRSWH0ulBidvFVrXnk/m
+        1DVdbS5gWP/qy6V4vPH2gS+QLZBLlDVAwxQL86A=
+X-Google-Smtp-Source: ABdhPJxXYuqnkxBLmgyHT7uOpLrSg1TsNNjRa83aVTBxZgCYJar2Sya0THdKD+e0CrIp7bOv8zRAWZBD6oVe7rmb68E=
+X-Received: by 2002:a17:907:3da1:b0:6fe:ae46:997d with SMTP id
+ he33-20020a1709073da100b006feae46997dmr4317372ejc.633.1653086149126; Fri, 20
+ May 2022 15:35:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220519164512.3180360-1-dlatypov@google.com> <CABVgOSnooocLsy2=a8rm7Y_m3DpffKtDam5_uYou+Y2tUkumRw@mail.gmail.com>
- <CAGS_qxrDYKKoWy3UAuVqebT+3jp-ux_uyfbwX3OnJqVbnzaiJg@mail.gmail.com> <CAGS_qxrvR+xxfmzz92rYYW=VzG1kyycn1EuaJxdNSMd_L5afFQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxrvR+xxfmzz92rYYW=VzG1kyycn1EuaJxdNSMd_L5afFQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 20 May 2022 15:35:13 -0700
-Message-ID: <CAGS_qxpF338dvbB+6QW1n8_agddeS10+nkTQNmT+0UcvoE1gBw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: refactor internal kconfig handling, allow overriding
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+References: <cover.1652982525.git.esyr@redhat.com>
+In-Reply-To: <cover.1652982525.git.esyr@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 20 May 2022 15:35:36 -0700
+Message-ID: <CAADnVQLVoUMwuJa=dzCModQC1K9sqi2+w_AdSk+uK+ynkpdaQQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v4 0/3] Fix kprobe_multi interface issues for 5.18
+To:     Eugene Syromiatnikov <esyr@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,38 +80,15 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 20, 2022 at 3:13 PM Daniel Latypov <dlatypov@google.com> wrote:
-> Talking offline with David, we've come up with a small example.
+On Thu, May 19, 2022 at 11:14 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
 >
-> If we add this kconfig somewhere
-> +config X
-> +       bool "X"
-> +       default y
-> +
-> +config Y
-> +       bool "Y"
-> +       default y
-> +       depends on X
-> +
+> Hello.
 >
-> Then running this will fail
-> $ ./tools/testing/kunit/kunit.py config --kunitconfig xy_kunitconfig
-> --kconfig_add=CONFIG_X=n --kconfig_add=CONFIG_Y=n
->
-> It will fail with this
-> This is probably due to unsatisfied dependencies.
-> Missing: # CONFIG_Y is not set
->
-> The problem is that kunit.py is looking for an explicit line saying
-> CONFIG_Y is not set.
-> But CONFIG_Y's dependencies are not met, so Kconfig doesn't write it out.
->
-> I assume we can treat the absence of it in the file as proof that it's not set.
-> I.e. the bug lies in the is_subset() logic we have in kunit.py?
+> While [1] seems to require additional work[2] due to changes
+> in the interface (and it has already been re-targeted for bpf-next),
+> I would like to ask to consider the following three patches, that fix
+> possible out-of-bounds write, properly disable the interface
+> for 32-bit compat user space, and prepare the libbpf interface change,
+> for the 5.18 release.  Thank you.
 
-Ah no, this is just me trying to be clever and avoid a call to this logic.
-I tried to use set_diff() and check if that's empty as an alternative.
-But the set_diff() logic is not aware of how to treat the absence of
-options properly.
-
-I'll send a v2 w/ a fix.
+5.19 is imminent. All fixes should go into bpf-next and backported later.
