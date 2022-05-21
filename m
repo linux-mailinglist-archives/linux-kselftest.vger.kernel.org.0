@@ -2,94 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F7F52F947
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 08:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D34552F956
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 08:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237239AbiEUGgp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 May 2022 02:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S240278AbiEUGom (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 May 2022 02:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiEUGgo (ORCPT
+        with ESMTP id S230493AbiEUGol (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 May 2022 02:36:44 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F4215A0A;
-        Fri, 20 May 2022 23:36:43 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id y199so9383532pfb.9;
-        Fri, 20 May 2022 23:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=LI4LxelWEjEaX1Q8c74mSsIuglj1BIMj7hPy6RZdBWU=;
-        b=krDiS0tWzf4yZqe9YLwZohr5GraL2gzIFd9ot/Kj0fRMoOtw4+cET5/WyGnPwPHIyw
-         dckRcE/nyT+u8ePN8HZxY85dxQYBJfVDY89t61rOHerC9SIN/2SbOjgZNG3QQQuv+0Qr
-         cl4Wx3mhK0wz3gvKpssMoO4H3eVFoyUaIhqdr4kGYyN8WcjKRWqHBztrmM+GGlUueuH2
-         8AMjuRBj+X/QTfzvNJqIe+/HydLmpzzogZgcZzbw6c7ky8pN8M5dPaUwI0gEaKTt4k9s
-         eQsq9Hvv449COPCNLiz5gPMq3uXJW0G+i2Oh/4+INPoQ4VkdCaCM965ild5pQpnNen0i
-         kofw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LI4LxelWEjEaX1Q8c74mSsIuglj1BIMj7hPy6RZdBWU=;
-        b=m6lkSfF5EH7kL9lOZydWkYR88XjhryVQL2FRSl47cQPSFjSeg5Y/bk3NqIbxRoaZ5B
-         4mXy0hW6mYkqebW6P521nk00MUq/yOlsxzo4SrXmNhkEp/tSasJCvvl4/HH0HxGktaHS
-         iAoHia11U8uogjj5zBL4naqvWXeYc5DgrtfHsoG7upeStauf6H685R7Rp3ds3XOSFzR2
-         XYbo1ItWOC6CgUBxvy/2xgZ48R+6t4gKy1udXVfjZorCPHwPiPe5BCtE9pvZZm6ZlZDy
-         kXVs8bQNq6lAmoXZ3JOd1n8/e55/M8tLIv3nvxNc/xm5dX9jnUqfgsGoQzN/pkt+Bow6
-         NPeQ==
-X-Gm-Message-State: AOAM533JUGcpj0bk4SzJ3pg2o8Y4uwERFtWneGvrF+veAngMCmIDNspG
-        Td2opDA7u11XkBjKL1k6kvbCO5CWsebXDQ==
-X-Google-Smtp-Source: ABdhPJzDUUyxPh+4E2F/F1Ikqk8CKNA1QtsqzcgZ7yuZwLkqqeloj+WzWL3eWZPGPvlRSOK6iO6mIA==
-X-Received: by 2002:a63:f355:0:b0:3f6:41f4:b551 with SMTP id t21-20020a63f355000000b003f641f4b551mr9790328pgj.383.1653115002830;
-        Fri, 20 May 2022 23:36:42 -0700 (PDT)
-Received: from Negi ([207.151.52.3])
-        by smtp.gmail.com with ESMTPSA id h5-20020a62de05000000b0051831863f10sm2848702pfg.109.2022.05.20.23.36.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 23:36:42 -0700 (PDT)
-From:   Soumya Negi <soumya.negi97@gmail.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Soumya Negi <soumya.negi97@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: drivers/dma-buf: Improve message in selftest summary
-Date:   Fri, 20 May 2022 23:36:10 -0700
-Message-Id: <20220521063610.4924-1-soumya.negi97@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 21 May 2022 02:44:41 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1D815EA4C;
+        Fri, 20 May 2022 23:44:40 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 341E41F469C3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653115479;
+        bh=vZubmbERibb5UaHu4PMlVt8DMsGhoRyewNkbdIiKYd0=;
+        h=Date:Cc:From:Subject:To:From;
+        b=gNXRFxou8H8JO0cVZ302YdprJ1+fZ5ZMjEoEOX1307xylbiC+nise/Jr16E//xkID
+         Ct82n3t5g3WVn1G9SSxhICp1yIFcwzy1xCZ+2FSPIQo5Bi+hhBbG7jmm/lCTa+lqyU
+         r//BWJIoUNYnyMLV24AXOZ8HTpqpSpk1xC9J5Z8wvVuEE083Q0DZ0yPwJB9a3FOCVi
+         OOAevZ02WZxPKyiQmVJwGte6yyqju6v9tGcfGky4H/1iGBoboYLeRgKex0ZK7wNK1X
+         SXzFbjNJvrTLRViz3tDbbBJn2tjk1hYUL2VrkZsmbn17lwGPJMeI/2Z8q/uRoZF8RL
+         T1i53NT0TlDnQ==
+Message-ID: <c25d7ea7-4f72-4a2b-d8c3-d317e64fcbbb@collabora.com>
+Date:   Sat, 21 May 2022 11:44:32 +0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     usama.anjum@collabora.com, Shuah Khan <shuah@kernel.org>,
+        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "kernelci@groups.io" <kernelci@groups.io>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [Bug Report] - kselftest build fails if output directory is first
+ level sub-directory
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Selftest udmabuf for the dma-buf driver is skipped when the device file
-(e.g. /dev/udmabuf) for the DMA buffer cannot be opened i.e. no DMA buffer
-has been allocated.
+Hello,
 
-This patch adds clarity to the SKIP message.
+kselftest can be built using the kernel's top most Makefile without
+using kselftest's Makefile directly. But there is bug in the top most
+Makefile. The build fails if the specified output directory is first
+level sub-directory. Here is a example to reproduce this bug:
 
-Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
----
- tools/testing/selftests/drivers/dma-buf/udmabuf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+make kselftest-all O=build
 
-diff --git a/tools/testing/selftests/drivers/dma-buf/udmabuf.c b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-index de1c4e6de0b2..c812080e304e 100644
---- a/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-+++ b/tools/testing/selftests/drivers/dma-buf/udmabuf.c
-@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
- 
- 	devfd = open("/dev/udmabuf", O_RDWR);
- 	if (devfd < 0) {
--		printf("%s: [skip,no-udmabuf]\n", TEST_PREFIX);
-+		printf("%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-+		       TEST_PREFIX);
- 		exit(77);
- 	}
- 
--- 
-2.17.1
+"The Make is working in a wrong directory, that is why the relative path
+does not work." Masahiro Yamada. Feel free to fix it if someone pin the bug.
 
+It should be noted that the build works in some other combinations:
+make kselftest-all (works)
+make kselftest-all O=/tmp (works)
+make kselftest-all O=build/build2 (works)
+
+My unsuccessful attempt to fix this bug can be found here:
+https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
+
+Thanks,
+Muhammad Usama Anjum
