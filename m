@@ -2,91 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69952FAA8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 12:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC40A52FB11
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 13:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242279AbiEUKZK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 May 2022 06:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        id S1354902AbiEULMu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 May 2022 07:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiEUKZK (ORCPT
+        with ESMTP id S1354487AbiEULMj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 May 2022 06:25:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113B654032;
-        Sat, 21 May 2022 03:25:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id CFE571F46413
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653128707;
-        bh=lBOnXIC7rDI/XGVOI25lydeYhAWS63MlMY/nx5UGlLI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=GkT6VGFso/wL6JhQo1/m7n2V+8gVKfvw5W0OgrXT76T7QVQmHpDTwOcb44zavI/QJ
-         PWBMDkcVjAxMH0VyLou7Kz+dQ6lMdHBL83AgFO2KfLX84ZYZdfPhIt4s47ZiHgXZAy
-         AMRnl9hLLfnO8pVa+uiZAosCmNIvu61yMgGkDmxXvAbFKseL09c9OMyeBSica2i2fC
-         z7OucM+WeBD4zQPxkwuBrTibedhPZl8tkvPwW9mrw/t4DuAasHb4qfy5zti2Hex0q9
-         nDsiDOOHd4xgYQiaIT5i3sSovhAxKSpd1HemtYndb75Evx/5Z7QBIYlYt43nsfIfXN
-         jfVw0HiauCLLw==
-Message-ID: <0ede5fe6-89c8-5e63-0c0c-265b57ea5ca6@collabora.com>
-Date:   Sat, 21 May 2022 15:24:59 +0500
+        Sat, 21 May 2022 07:12:39 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD303617B;
+        Sat, 21 May 2022 04:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/GqEVHzCeGmnHEwCJ5d9fnnW3FSeEfNTvrJLua2eLiM=;
+  b=dH7s7ZRozr+Wa2TmhlucZ/VjO3wxam0VR19m8ZnfkekvfKMSBlvG9Fdl
+   gT1NaLNGnydRPsjxkgbKbsLpPBiU/Si4gTOcD5PLYNNLcMFBRoPJiMCWI
+   o7R8dUKY2X4vzlnPSU2uEIx7Y3VhYn69aTK8avMX7umPuH5nUK2uTR+7a
+   s=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
+   d="scan'208";a="14727942"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:00 +0200
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftest: sync: fix typo in comment
+Date:   Sat, 21 May 2022 13:10:55 +0200
+Message-Id: <20220521111145.81697-45-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     usama.anjum@collabora.com, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Subject: Re: [PATCH v11 8/8] kselftest/cgroup: Add cpuset v2 partition root
- state test
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-9-longman@redhat.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220510153413.400020-9-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/10/22 8:34 PM, Waiman Long wrote:
-> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-> index 745fe25fa0b9..01687418b92f 100644
-> --- a/tools/testing/selftests/cgroup/Makefile
-> +++ b/tools/testing/selftests/cgroup/Makefile
-> @@ -1,10 +1,11 @@
->  # SPDX-License-Identifier: GPL-2.0
->  CFLAGS += -Wall -pthread
->  
-> -all:
-> +all: ${HELPER_PROGS}
->  
->  TEST_FILES     := with_stress.sh
-> -TEST_PROGS     := test_stress.sh
-> +TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
-> +TEST_GEN_FILES := wait_inotify
-Please add wait_inotify to .gitignore file.
+Spelling mistake (triple letters) in comment.
+Detected with the help of Coccinelle.
 
->  TEST_GEN_PROGS = test_memcontrol
->  TEST_GEN_PROGS += test_kmem
->  TEST_GEN_PROGS += test_core
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
--- 
-Muhammad Usama Anjum
+---
+ tools/testing/selftests/sync/sync_stress_parallelism.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/sync/sync_stress_parallelism.c b/tools/testing/selftests/sync/sync_stress_parallelism.c
+index e6c9be671dfc..6ce56ca204c4 100644
+--- a/tools/testing/selftests/sync/sync_stress_parallelism.c
++++ b/tools/testing/selftests/sync/sync_stress_parallelism.c
+@@ -87,7 +87,7 @@ int test_stress_two_threads_shared_timeline(void)
+ 
+ 	/*
+ 	 * Use a single timeline to synchronize two threads
+-	 * hammmering on the same counter.
++	 * hammering on the same counter.
+ 	 */
+ 
+ 	pthread_create(&a, NULL, (void *(*)(void *))
+
