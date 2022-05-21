@@ -2,47 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71E352FB6C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 13:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA77B52FC4B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 14:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354937AbiEULOt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 May 2022 07:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S1344025AbiEUMG5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 May 2022 08:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354997AbiEULOB (ORCPT
+        with ESMTP id S241248AbiEUMG4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 May 2022 07:14:01 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20697106346;
-        Sat, 21 May 2022 04:12:30 -0700 (PDT)
+        Sat, 21 May 2022 08:06:56 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D09E36688
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 May 2022 05:06:54 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so13552703pjp.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 21 May 2022 05:06:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=y/6NGQjtjKURfO9GuBRgYSn6RmGl/qwDj/5EGpGJGIU=;
-  b=ThRvXcAfzT/pn3SVxqI2qokUtGznDGJ0/7+VBDUrKq2PQstGi/kCKZYj
-   b/Z0Et8kEaL/zRT6MJKn0L+n7ZDSMLnkOYa0/QhbSLTZb8VUNzzS5zNtt
-   Eyr69uuRoWiQoMNwzT3wsri0ZCBrxqPbq0T1YVQd6mWMsby8OlHpDpRue
-   E=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727988"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:12:06 +0200
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel-janitors@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XOxK0GZTG3zYkcVVIz/tjC8b+nMMdPNdYaC1uHgulmg=;
+        b=cLlFPBA7LKFbuNteDXM/Ni5gcCSWkLFLbWThl8P7vJ3mk++xLUT4Q3WQIGAryBxjY7
+         YGEJkip6/wx0DT0jV+UgKgQ3lAd7X7t7lSdvUOu0TfSaqPZcGIKQmmCg0iAd1cDu0QWb
+         1sRaeRlGXQ9lA3pVX18udLrUZB196WgYGAtdjW8Zu5P29ent9e+BV8x6ObT4u4JmtEWm
+         npRMdTc8x7PMtfZQQ1JpW6TH7l+PrMAYyqVqdlJjQKlvo5ddL675g0o2trW/KZzF3XUR
+         zAJyuf0n9TeZEE1/PL//EtlpQ38ol2ovoKW9QxOxzD4j77ml//cac5HXZ8Th9R972k66
+         0Kig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XOxK0GZTG3zYkcVVIz/tjC8b+nMMdPNdYaC1uHgulmg=;
+        b=2BYfeiG6lUl9Wkd0ZgDsiNVPzttQQHJuSb7hsm4rIGKVokXeN37IHvTYseEciBc+vA
+         RHUbdnmH3mIEEgoPu1YzwUOITyTfPCdnS0EvYM7sbHQji4c8VxWdY1SJB665D9Sbfn4I
+         XAO+LsVjlCaxTgc0/PT0WM89tfbFhwwHbGNZRE77zvRk5yImmH86LVGewigldFvL5GF4
+         vJQKf02PDj07Ku5msTHRrEP4jfschHtXO05cqkUSZVfUMsh4PmmaDaDVrwXfKKuu5nYb
+         e23fs7wc+W6JtOeLB6x7Uw85v1MMnKgNW2Vco/OmKBlry86eOiC5spqi8Qv9lXZYviD1
+         9QbA==
+X-Gm-Message-State: AOAM5331sp22ZSl+pbONpKLDNZyXuAfaWzrgmUZ7aQDqxXf5cNw1Kq1h
+        NS05hPIClpXejpg5UZ1zw2zl3qwuVthd3w==
+X-Google-Smtp-Source: ABdhPJxUfkJQDODwjG5WeDkaRuJF0E4A7lcddfUZ9xKoHPZapNAa14RROOwglDBP6qGMwA748aydHA==
+X-Received: by 2002:a17:902:bb85:b0:161:556f:7782 with SMTP id m5-20020a170902bb8500b00161556f7782mr14481930pls.10.1653134813995;
+        Sat, 21 May 2022 05:06:53 -0700 (PDT)
+Received: from localhost ([139.177.225.250])
+        by smtp.gmail.com with ESMTPSA id i198-20020a6287cf000000b005180c127200sm3596875pfe.24.2022.05.21.05.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 May 2022 05:06:53 -0700 (PDT)
+Date:   Sat, 21 May 2022 20:06:50 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kernel-janitors@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/vm/pkeys: fix typo in comment
-Date:   Sat, 21 May 2022 13:11:30 +0200
-Message-Id: <20220521111145.81697-80-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
+Subject: Re: [PATCH] selftests/vm/pkeys: fix typo in comment
+Message-ID: <YojV2iAMAzTYhHOp@FVFYT0MHHV2J.usts.net>
+References: <20220521111145.81697-80-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220521111145.81697-80-Julia.Lawall@inria.fr>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,26 +71,11 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Spelling mistake (triple letters) in comment.
-Detected with the help of Coccinelle.
+On Sat, May 21, 2022 at 01:11:30PM +0200, Julia Lawall wrote:
+> Spelling mistake (triple letters) in comment.
+> Detected with the help of Coccinelle.
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-
----
- tools/testing/selftests/vm/protection_keys.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-index 2d0ae88665db..291bc1e07842 100644
---- a/tools/testing/selftests/vm/protection_keys.c
-+++ b/tools/testing/selftests/vm/protection_keys.c
-@@ -1523,7 +1523,7 @@ void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
- 	/*
- 	 * Reset the shadow, assuming that the above mprotect()
- 	 * correctly changed PKRU, but to an unknown value since
--	 * the actual alllocated pkey is unknown.
-+	 * the actual allocated pkey is unknown.
- 	 */
- 	shadow_pkey_reg = __read_pkey_reg();
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
  
-
