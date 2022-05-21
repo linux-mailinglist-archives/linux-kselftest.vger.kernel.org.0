@@ -2,48 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F317252FA71
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 11:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA5B52FA98
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 12:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbiEUJnm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 May 2022 05:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S240903AbiEUKPP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 May 2022 06:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiEUJnk (ORCPT
+        with ESMTP id S235635AbiEUKPO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 May 2022 05:43:40 -0400
+        Sat, 21 May 2022 06:15:14 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2A75BD2E;
-        Sat, 21 May 2022 02:43:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7033492D11;
+        Sat, 21 May 2022 03:15:12 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id A88491F465C9
+        with ESMTPSA id 77A5C1F465E9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653126219;
-        bh=JxpYWqA4EvWvPXVdzoV9L/2PthWDoiS5DByYbtXK87U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=G2nOMSYS/ujgEaDWVYPKh8nfXqDVWgaPRZPWswVtkZHh/OrqPvNSsZ+pKEtWv7TqN
-         O/6m1mxQX7bOMJGaG3PzuBs1EBML5i40mrOvB1Op4mvC6gXhPPySjyJnJ9qkO8vUEM
-         ABh2CQexKA+hAxFaXpYrZyavrMQwnDJJh2u5i5zvh42e5iqgx92C72KpycpFK8lG8Y
-         +OUeRZPZwRP0ypgfkMRuSSvyS1rs7H2yJvrzywjLHzJpFHzzp2AWEh1KKcOlLSThpc
-         xLl6K2zrRPx16J7x/fmsMJDXMgYm8AbkV4SbtNpv65lxGp/NKc0YdpR91Kzsemluon
-         4tavJqWBvmj/Q==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alistair Popple <apopple@nvidia.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: vm: add migration to the .gitignore
-Date:   Sat, 21 May 2022 14:43:13 +0500
-Message-Id: <20220521094313.166505-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        s=mail; t=1653128111;
+        bh=U5YYJMFVDj3+ZXv5ZAFidJafbwiSoIY5HnfXpGh6rAQ=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=oMoyK3w1YJ2PVNfPvw+RD6t1fHMeeqpJmiDcE8SpeQ/4muCzkrsfGVkHgvqJ9C6Hn
+         N88TlBup/hKQ3eFIWH9s0JoZvlDU8HHTOh6SWzS5BSSymMx96ikENa15ZWXHKAAaID
+         PHVtndYhUdryLb8NM7id4YsBl1GrJ9G0SyFwd7ckZBB4o0yWbX26QprnBdiNu1Dgng
+         BHgEzene+7JSCWDzDkdfHhTRnlb/4V/KG1eoK5AYJEiB1qLWyE1STxBG96D2/5DVch
+         eDRa7e7UEBzQV8bq6hqPJLRjjl8/Uhh9w3mEZW1GJPiltOKPxE8Kjb/jC52lITXsAh
+         d83BYBjPrh67A==
+Message-ID: <0d63c264-520c-687d-7ac6-26cb3f119f0b@collabora.com>
+Date:   Sat, 21 May 2022 15:15:03 +0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     usama.anjum@collabora.com, daniel@ffwll.ch, tj@kernel.org,
+        hridya@google.com, christian.koenig@amd.com, jstultz@google.com,
+        tkjos@android.com, cmllamas@google.com, surenb@google.com,
+        kaleshsingh@google.com, Kenny.Ho@amd.com, mkoutny@suse.com,
+        skhan@linuxfoundation.org, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 6/6] selftests: Add binder cgroup gpu memory transfer
+ tests
+Content-Language: en-US
+To:     "T.J. Mercier" <tjmercier@google.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220510235653.933868-1-tjmercier@google.com>
+ <20220510235653.933868-7-tjmercier@google.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220510235653.933868-7-tjmercier@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,26 +60,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add newly added migration test object to .gitignore file.
+On 5/11/22 4:56 AM, T.J. Mercier wrote:
+>  .../selftests/drivers/android/binder/Makefile |   8 +
+>  .../drivers/android/binder/binder_util.c      | 250 +++++++++
+>  .../drivers/android/binder/binder_util.h      |  32 ++
+>  .../selftests/drivers/android/binder/config   |   4 +
+>  .../binder/test_dmabuf_cgroup_transfer.c      | 526 ++++++++++++++++++
+>  5 files changed, 820 insertions(+)
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/Makefile
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/binder_util.c
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/binder_util.h
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/config
+>  create mode 100644 tools/testing/selftests/drivers/android/binder/test_dmabuf_cgroup_transfer.c
+> 
+> diff --git a/tools/testing/selftests/drivers/android/binder/Makefile b/tools/testing/selftests/drivers/android/binder/Makefile
+> new file mode 100644
+> index 000000000000..726439d10675
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/android/binder/Makefile
+> @@ -0,0 +1,8 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +CFLAGS += -Wall
+Please add $(KHDR_INCLUDES) here to include the uapi header files from
+the source tree.
 
-Fixes: 0c2d08728470 ("mm: add selftests for migration entries")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/vm/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+> +
+> +TEST_GEN_PROGS = test_dmabuf_cgroup_transfer
+Please create a .gitignore file and add test_dmabuf_cgroup_transfer to it.
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 6c2ac4208c272..31e5eea2a9b90 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -9,6 +9,7 @@ map_hugetlb
- map_populate
- thuge-gen
- compaction_test
-+migration
- mlock2-tests
- mrelease_test
- mremap_dontunmap
+> +
+> +include ../../../lib.mk
+> +
+> +$(OUTPUT)/test_dmabuf_cgroup_transfer: ../../../cgroup/cgroup_util.c binder_util.c
+
 -- 
-2.30.2
-
+Muhammad Usama Anjum
