@@ -2,44 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420BB52FA57
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 11:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F317252FA71
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 11:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242100AbiEUJhi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 May 2022 05:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S232402AbiEUJnm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 May 2022 05:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238242AbiEUJhh (ORCPT
+        with ESMTP id S229606AbiEUJnk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 May 2022 05:37:37 -0400
+        Sat, 21 May 2022 05:43:40 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980A5A7E3D;
-        Sat, 21 May 2022 02:37:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2A75BD2E;
+        Sat, 21 May 2022 02:43:40 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id CDF301F41DE4
+        with ESMTPSA id A88491F465C9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653125855;
-        bh=GBarC/KmBBn1x+zZIBSt3K7iXAx+oRve73M9dZOIV+g=;
+        s=mail; t=1653126219;
+        bh=JxpYWqA4EvWvPXVdzoV9L/2PthWDoiS5DByYbtXK87U=;
         h=From:To:Cc:Subject:Date:From;
-        b=KKNoPqiYwDba5yjKLaY/6heeSlCR0pdjyBk8Uxxs6xcoIIWkynT+Z83A3a1cxT6qn
-         IUz+25BuBQ5bttL0KEd+u1K91MEwmtw4+A4jiOZO9DGG3LtzY/e2ygbggN42RsDJKm
-         1hBJS2WRQdyjFUCExmoXBrY9w+Nh+8Tz6181YDYXvNclETVYUD/3vROsA7oqG/cyg3
-         RFyUFtorhSAyeAkQuGHOPczWPBuiPaPwAYe/4JU8hHvYUjO3/2NYsZVUu/5pJRkqQW
-         AA6txrqb+/wvtm3CWG4oBlL+YIegtOna7TulO5um3a2UkNF295CcoNrzHob/iNhQ3K
-         SORp45W/tUO8g==
+        b=G2nOMSYS/ujgEaDWVYPKh8nfXqDVWgaPRZPWswVtkZHh/OrqPvNSsZ+pKEtWv7TqN
+         O/6m1mxQX7bOMJGaG3PzuBs1EBML5i40mrOvB1Op4mvC6gXhPPySjyJnJ9qkO8vUEM
+         ABh2CQexKA+hAxFaXpYrZyavrMQwnDJJh2u5i5zvh42e5iqgx92C72KpycpFK8lG8Y
+         +OUeRZPZwRP0ypgfkMRuSSvyS1rs7H2yJvrzywjLHzJpFHzzp2AWEh1KKcOlLSThpc
+         xLl6K2zrRPx16J7x/fmsMJDXMgYm8AbkV4SbtNpv65lxGp/NKc0YdpR91Kzsemluon
+         4tavJqWBvmj/Q==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alistair Popple <apopple@nvidia.com>
 Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, netdev@vger.kernel.org,
+        kernel@collabora.com, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: selftests: Add stress_reuseport_listen to .gitignore
-Date:   Sat, 21 May 2022 14:37:06 +0500
-Message-Id: <20220521093706.157595-1-usama.anjum@collabora.com>
+Subject: [PATCH] selftests: vm: add migration to the .gitignore
+Date:   Sat, 21 May 2022 14:43:13 +0500
+Message-Id: <20220521094313.166505-1-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,26 +51,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add newly added stress_reuseport_listen object to .gitignore file.
+Add newly added migration test object to .gitignore file.
 
-Fixes: ec8cb4f617a2 ("net: selftests: Stress reuseport listen")
+Fixes: 0c2d08728470 ("mm: add selftests for migration entries")
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/net/.gitignore | 1 +
+ tools/testing/selftests/vm/.gitignore | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 21a411b048900..a29f796189347 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -5,6 +5,7 @@ socket
- psock_fanout
- psock_snd
- psock_tpacket
-+stress_reuseport_listen
- reuseport_addr_any
- reuseport_bpf
- reuseport_bpf_cpu
+diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+index 6c2ac4208c272..31e5eea2a9b90 100644
+--- a/tools/testing/selftests/vm/.gitignore
++++ b/tools/testing/selftests/vm/.gitignore
+@@ -9,6 +9,7 @@ map_hugetlb
+ map_populate
+ thuge-gen
+ compaction_test
++migration
+ mlock2-tests
+ mrelease_test
+ mremap_dontunmap
 -- 
 2.30.2
 
