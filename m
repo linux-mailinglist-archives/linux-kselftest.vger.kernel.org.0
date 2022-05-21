@@ -2,52 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA5B52FA98
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 12:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA69952FAA8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 May 2022 12:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240903AbiEUKPP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 21 May 2022 06:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
+        id S242279AbiEUKZK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 21 May 2022 06:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbiEUKPO (ORCPT
+        with ESMTP id S231536AbiEUKZK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 21 May 2022 06:15:14 -0400
+        Sat, 21 May 2022 06:25:10 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7033492D11;
-        Sat, 21 May 2022 03:15:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113B654032;
+        Sat, 21 May 2022 03:25:09 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: usama.anjum)
-        with ESMTPSA id 77A5C1F465E9
+        with ESMTPSA id CFE571F46413
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1653128111;
-        bh=U5YYJMFVDj3+ZXv5ZAFidJafbwiSoIY5HnfXpGh6rAQ=;
+        s=mail; t=1653128707;
+        bh=lBOnXIC7rDI/XGVOI25lydeYhAWS63MlMY/nx5UGlLI=;
         h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=oMoyK3w1YJ2PVNfPvw+RD6t1fHMeeqpJmiDcE8SpeQ/4muCzkrsfGVkHgvqJ9C6Hn
-         N88TlBup/hKQ3eFIWH9s0JoZvlDU8HHTOh6SWzS5BSSymMx96ikENa15ZWXHKAAaID
-         PHVtndYhUdryLb8NM7id4YsBl1GrJ9G0SyFwd7ckZBB4o0yWbX26QprnBdiNu1Dgng
-         BHgEzene+7JSCWDzDkdfHhTRnlb/4V/KG1eoK5AYJEiB1qLWyE1STxBG96D2/5DVch
-         eDRa7e7UEBzQV8bq6hqPJLRjjl8/Uhh9w3mEZW1GJPiltOKPxE8Kjb/jC52lITXsAh
-         d83BYBjPrh67A==
-Message-ID: <0d63c264-520c-687d-7ac6-26cb3f119f0b@collabora.com>
-Date:   Sat, 21 May 2022 15:15:03 +0500
+        b=GkT6VGFso/wL6JhQo1/m7n2V+8gVKfvw5W0OgrXT76T7QVQmHpDTwOcb44zavI/QJ
+         PWBMDkcVjAxMH0VyLou7Kz+dQ6lMdHBL83AgFO2KfLX84ZYZdfPhIt4s47ZiHgXZAy
+         AMRnl9hLLfnO8pVa+uiZAosCmNIvu61yMgGkDmxXvAbFKseL09c9OMyeBSica2i2fC
+         z7OucM+WeBD4zQPxkwuBrTibedhPZl8tkvPwW9mrw/t4DuAasHb4qfy5zti2Hex0q9
+         nDsiDOOHd4xgYQiaIT5i3sSovhAxKSpd1HemtYndb75Evx/5Z7QBIYlYt43nsfIfXN
+         jfVw0HiauCLLw==
+Message-ID: <0ede5fe6-89c8-5e63-0c0c-265b57ea5ca6@collabora.com>
+Date:   Sat, 21 May 2022 15:24:59 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Cc:     usama.anjum@collabora.com, daniel@ffwll.ch, tj@kernel.org,
-        hridya@google.com, christian.koenig@amd.com, jstultz@google.com,
-        tkjos@android.com, cmllamas@google.com, surenb@google.com,
-        kaleshsingh@google.com, Kenny.Ho@amd.com, mkoutny@suse.com,
-        skhan@linuxfoundation.org, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 6/6] selftests: Add binder cgroup gpu memory transfer
- tests
+Cc:     usama.anjum@collabora.com, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Subject: Re: [PATCH v11 8/8] kselftest/cgroup: Add cpuset v2 partition root
+ state test
 Content-Language: en-US
-To:     "T.J. Mercier" <tjmercier@google.com>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220510235653.933868-1-tjmercier@google.com>
- <20220510235653.933868-7-tjmercier@google.com>
+To:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+References: <20220510153413.400020-1-longman@redhat.com>
+ <20220510153413.400020-9-longman@redhat.com>
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220510235653.933868-7-tjmercier@google.com>
+In-Reply-To: <20220510153413.400020-9-longman@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -60,38 +66,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/11/22 4:56 AM, T.J. Mercier wrote:
->  .../selftests/drivers/android/binder/Makefile |   8 +
->  .../drivers/android/binder/binder_util.c      | 250 +++++++++
->  .../drivers/android/binder/binder_util.h      |  32 ++
->  .../selftests/drivers/android/binder/config   |   4 +
->  .../binder/test_dmabuf_cgroup_transfer.c      | 526 ++++++++++++++++++
->  5 files changed, 820 insertions(+)
->  create mode 100644 tools/testing/selftests/drivers/android/binder/Makefile
->  create mode 100644 tools/testing/selftests/drivers/android/binder/binder_util.c
->  create mode 100644 tools/testing/selftests/drivers/android/binder/binder_util.h
->  create mode 100644 tools/testing/selftests/drivers/android/binder/config
->  create mode 100644 tools/testing/selftests/drivers/android/binder/test_dmabuf_cgroup_transfer.c
-> 
-> diff --git a/tools/testing/selftests/drivers/android/binder/Makefile b/tools/testing/selftests/drivers/android/binder/Makefile
-> new file mode 100644
-> index 000000000000..726439d10675
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/android/binder/Makefile
-> @@ -0,0 +1,8 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +CFLAGS += -Wall
-Please add $(KHDR_INCLUDES) here to include the uapi header files from
-the source tree.
+On 5/10/22 8:34 PM, Waiman Long wrote:
+> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+> index 745fe25fa0b9..01687418b92f 100644
+> --- a/tools/testing/selftests/cgroup/Makefile
+> +++ b/tools/testing/selftests/cgroup/Makefile
+> @@ -1,10 +1,11 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  CFLAGS += -Wall -pthread
+>  
+> -all:
+> +all: ${HELPER_PROGS}
+>  
+>  TEST_FILES     := with_stress.sh
+> -TEST_PROGS     := test_stress.sh
+> +TEST_PROGS     := test_stress.sh test_cpuset_prs.sh
+> +TEST_GEN_FILES := wait_inotify
+Please add wait_inotify to .gitignore file.
 
-> +
-> +TEST_GEN_PROGS = test_dmabuf_cgroup_transfer
-Please create a .gitignore file and add test_dmabuf_cgroup_transfer to it.
-
-> +
-> +include ../../../lib.mk
-> +
-> +$(OUTPUT)/test_dmabuf_cgroup_transfer: ../../../cgroup/cgroup_util.c binder_util.c
+>  TEST_GEN_PROGS = test_memcontrol
+>  TEST_GEN_PROGS += test_kmem
+>  TEST_GEN_PROGS += test_core
 
 -- 
 Muhammad Usama Anjum
