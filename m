@@ -2,89 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842C1531DB6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 May 2022 23:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B95531C31
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 May 2022 22:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiEWV2y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 May 2022 17:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S232405AbiEWUKP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 May 2022 16:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiEWV2w (ORCPT
+        with ESMTP id S231847AbiEWUKO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 May 2022 17:28:52 -0400
-X-Greylist: delayed 5226 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 14:28:51 PDT
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089C0A2056;
-        Mon, 23 May 2022 14:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0TgBdWDrgCwk3/yiVL4MjST4OruMage9l2vL9QRHrUI=; b=DEPNVraFW2DF3xnuijyQYottQI
-        EnzvrRqNHh6tdFjrww5RoRUiKbcMnwDONbrvvay2nocBtbdlpj6vOkSk82OCn6LO7yGqjCa8mTFGP
-        1unIyHtE8ceJZphYFwv/RAGJlsR00fpL9uMACN/7kz1yKM+SaopXnXn2N8S2BWamZqidXlSYrSRip
-        SeO/AzJLndNbm5diDt1KOmBF9QNaXiIzfF8s4Hsc0kdDE8d4/C4LDjg0wp7xajO+12IWm11+S82S0
-        iNRZBktO0eWh7LwCLFJaFhPmwY4Zym97HGYjIhdxL77wFwVNWNWiCitM3w+m18cmGkLIBUsLUQVuu
-        mIRJ0BAA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ntDrR-005iLS-B4; Mon, 23 May 2022 19:37:01 +0000
-Date:   Mon, 23 May 2022 12:37:01 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, tj@kernel.org,
-        akpm@linux-foundation.org, jeyu@kernel.org, shuah@kernel.org,
-        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
-        keescook@chromium.org, rostedt@goodmis.org, minchan@kernel.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 3/6] selftests: add tests_sysfs module
-Message-ID: <YoviXT37FAUqpQEu@bombadil.infradead.org>
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
- <20211029184500.2821444-4-mcgrof@kernel.org>
- <Yao3vtSKBKLyQY1E@kroah.com>
- <87fsl1iqg0.ffs@tglx>
- <YopM5XGMdqVCU+bL@kroah.com>
- <87czg5ip2z.ffs@tglx>
+        Mon, 23 May 2022 16:10:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A9F9858C;
+        Mon, 23 May 2022 13:10:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90427B815C3;
+        Mon, 23 May 2022 20:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 49CF4C385A9;
+        Mon, 23 May 2022 20:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653336611;
+        bh=t9ed7xwBhw3HzY0r4U+A4ALzGc8ApH2AjH9dQPtOGUI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=MdefCYG1oiwzFjXK5Mn04e3xtjZ8uIaM5MdwBLAtUzhEEEpvHUXtIxhRlM2roiXRH
+         WnC4XP/sCvCRn+FUopdfBjacmiZraEuyMH8SVfLqMo6uHu4f73hD4Xu3idaPxmlAU7
+         /9UHhWdw4YLnVUJKRbfBzbZEHJFybD3GLA0YgWrRQzgN6BFQIZ4sXVob1tWIJ2XLjq
+         lshvLo56LJ8NnFJ10vUqMOiIRuPwiiM09LcZM3xN2znD6NVRTJrwAXMIQc6Mcv5a6L
+         EkubBBbJcVvfYcGd/5dw3I9kPIbcChpZfxd/Y6McC+VPp9LyYinsdi6HU9BchCOuBf
+         GPTub+sHBebYA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2AEB1F03938;
+        Mon, 23 May 2022 20:10:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czg5ip2z.ffs@tglx>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] selftests/bpf: Fix spelling mistake: "unpriviliged" ->
+ "unprivileged"
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165333661117.30857.3574938614262437532.git-patchwork-notify@kernel.org>
+Date:   Mon, 23 May 2022 20:10:11 +0000
+References: <20220523115604.49942-1-colin.i.king@gmail.com>
+In-Reply-To: <20220523115604.49942-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, May 22, 2022 at 05:06:44PM +0200, Thomas Gleixner wrote:
-> On Sun, May 22 2022 at 16:47, Greg KH wrote:
-> > On Sun, May 22, 2022 at 04:37:19PM +0200, Thomas Gleixner wrote:
-> >> On Fri, Dec 03 2021 at 16:29, Greg KH wrote:
-> >> 
-> >> While I agree that we want to keep the number of licenses as small as
-> >> possible, we cannot really dictate which dual licensing options a
-> >> submitter selects unless the license is GPL-2.0-only incompatible, which
-> >> copyleft-next is not.
-> >> 
-> >> Can we just get over this, add the license with the SPDX identifier and
-> >> move on?
-> >
-> > From what I recall, I had technical reasons I didn't take this series,
-> > but that was a long time ago and I would be glad to review it again if
-> > it were rebased and resubmitted after the next merge window is closed.
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Mon, 23 May 2022 12:56:04 +0100 you wrote:
+> There are spelling mistakes in ASSERT messages. Fix these.
 > 
-> The license addition and the SPDX identifier cleanup should be seperated
-> from the new test code which was part of the series.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-I'll send a re-spin after the merge window and split this up.
+Here is the summary with links:
+  - [next] selftests/bpf: Fix spelling mistake: "unpriviliged" -> "unprivileged"
+    https://git.kernel.org/bpf/bpf-next/c/f9a3eca4bc04
 
-And FWIW, AFAICT I addressed all the comments, so I can resend after
-the spdx stuff gets merged so to make the series easier to read /
-review.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  Luis
+
