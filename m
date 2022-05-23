@@ -2,52 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20A3530731
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 May 2022 03:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1DF530737
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 May 2022 03:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351844AbiEWBkO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 22 May 2022 21:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S239282AbiEWBmI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 22 May 2022 21:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345325AbiEWBkM (ORCPT
+        with ESMTP id S233703AbiEWBmG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 22 May 2022 21:40:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16FE38D9E
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 May 2022 18:40:11 -0700 (PDT)
+        Sun, 22 May 2022 21:42:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8C21F62E
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 May 2022 18:42:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FA3960FAF
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 May 2022 01:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8936FC3411C
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 May 2022 01:40:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CA6760FBA
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 May 2022 01:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A91C341C6
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 May 2022 01:42:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653270010;
-        bh=5JeWuwjQW7xr/qkbQaD/3uau65ZZ/ngwMP47lMW7Jvo=;
+        s=k20201202; t=1653270125;
+        bh=L1rWichVspWPMp1YW4Y6OtO8akQ8Yw1ttG9zNJ5MEfY=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Jm5q6GjK3jpPgk4onSGCKNR2oqgAqJhBAlrAhMjc+RanBPhEFEQGrJafWhYJaGrhR
-         9/PVLLg6dtnFafUMRwtHtzDLXVcUiwYux2y11qDNRjgaXe6pNftzIOB4b7+5i2737N
-         UoYIdVjTd9+AR4jcaRo9if4eUzfh3xX3SImiVFmevjnsLYeaZ/XdNx2VjC4F4G6fZL
-         KjgfgWX6l5vVrgThZ2XoMUWFhfxenTvHNGh2tjGSctOlUqGUzK062qrt5zRTQKtbba
-         8oQp8meDDw7rMcTOFvCrPevcrdpvpFQpUw7uZAWr/y3ILoBCCMr+7UeDthTTTcfWAy
-         QJ3YQkDo/q0tQ==
-Received: by mail-lf1-f45.google.com with SMTP id y32so23097113lfa.6
-        for <linux-kselftest@vger.kernel.org>; Sun, 22 May 2022 18:40:10 -0700 (PDT)
-X-Gm-Message-State: AOAM532NeyStJtKW2Iu4cdR+kmZmM24negpT0C9CpX65fJ3KghfsUy6/
-        Gqy2oRyxMGKmhZhmz0CszC6/GKAEp49VtlEL/aw27Q==
-X-Google-Smtp-Source: ABdhPJxmuAT2uoIVA13vw5iZhn4vJIM5zmSioEz4qbTJnHoc456EmfCoOhbAoNsxZbATqZraLBzH60m/6MHzCKaFZhM=
-X-Received: by 2002:a05:6512:2347:b0:478:5a69:6dc4 with SMTP id
- p7-20020a056512234700b004785a696dc4mr8785670lfu.478.1653270008538; Sun, 22
- May 2022 18:40:08 -0700 (PDT)
+        b=e7Jg4x7j6d5762KIShgTeQ9GZsR5hgrxt5neCELacXz4M5Z1gyZ09NbZ6WrMm95Ll
+         SOs3FR/CShuAugXTtL85ipFHcZk8v/COxVuvq4UzOcmdC7kXfYdDkqhntPc21EoI3n
+         FP+rJa/IvSiPuEAoEZ+OeXv3En0AHqfJMA7ZbprDh4KvHmbX0yDGoR4zb2G5+N+k3T
+         Z9c7Pz0oweBX5nf6HcXI3zp4B+gOrXq1Exa4UbsQMxuzbkE8BQPNy4PVycTFA35nQ9
+         35WAupqkdKqwAN3dFe0z0L+CGFn8TX8cf6vxRdwZTH2DCJKuDXoAf17kTziaO56dxT
+         DiVlOOoGCDKHA==
+Received: by mail-lj1-f177.google.com with SMTP id v9so6260640lja.12
+        for <linux-kselftest@vger.kernel.org>; Sun, 22 May 2022 18:42:04 -0700 (PDT)
+X-Gm-Message-State: AOAM533lZapPIkthHZjhUXjdvOY0tdO+wujF+7avqQ/Luwlzbb5oU73+
+        P7VhQyayp8yywLHNx0hCxbZv3VxjOpHNQSLVtFeXRQ==
+X-Google-Smtp-Source: ABdhPJxW/B7l0ZYMbp3xOewxlp/RE5dcd/Q8Gp+bsMNbcyF3sbnRvjECqGoH3Y8c9sdW4EECkINOGJX02UIXbe/qdII=
+X-Received: by 2002:a05:651c:10a8:b0:253:c8a7:3afd with SMTP id
+ k8-20020a05651c10a800b00253c8a73afdmr11948558ljn.431.1653270122939; Sun, 22
+ May 2022 18:42:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518131638.3401509-1-xukuohai@huawei.com> <20220518131638.3401509-2-xukuohai@huawei.com>
-In-Reply-To: <20220518131638.3401509-2-xukuohai@huawei.com>
+References: <20220518131638.3401509-1-xukuohai@huawei.com> <20220518131638.3401509-5-xukuohai@huawei.com>
+In-Reply-To: <20220518131638.3401509-5-xukuohai@huawei.com>
 From:   KP Singh <kpsingh@kernel.org>
-Date:   Mon, 23 May 2022 03:39:57 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4aetRT0SuF3Kh5MOMw3y_AQP8qNoDxFdz_0hypQ6H10w@mail.gmail.com>
-Message-ID: <CACYkzJ4aetRT0SuF3Kh5MOMw3y_AQP8qNoDxFdz_0hypQ6H10w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/6] arm64: ftrace: Add ftrace direct call support
+Date:   Mon, 23 May 2022 03:41:52 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7PAcNBHSL87tUPo6Dc+ykG7uEQ_nhCVpWvj-3KqLL-Wg@mail.gmail.com>
+Message-ID: <CACYkzJ7PAcNBHSL87tUPo6Dc+ykG7uEQ_nhCVpWvj-3KqLL-Wg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/6] bpf, arm64: Impelment bpf_arch_text_poke()
+ for arm64
 To:     Xu Kuohai <xukuohai@huawei.com>
 Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
@@ -94,20 +95,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 18, 2022 at 3:53 PM Xu Kuohai <xukuohai@huawei.com> wrote:
+On Wed, May 18, 2022 at 3:54 PM Xu Kuohai <xukuohai@huawei.com> wrote:
 >
-> Add ftrace direct support for arm64.
->
-> 1. When there is custom trampoline only, replace the fentry nop to a
->    jump instruction that jumps directly to the custom trampoline.
->
-> 2. When ftrace trampoline and custom trampoline coexist, jump from
->    fentry to ftrace trampoline first, then jump to custom trampoline
->    when ftrace trampoline exits. The current unused register
->    pt_regs->orig_x0 is used as an intermediary for jumping from ftrace
->    trampoline to custom trampoline.
+> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+> it to replace nop with jump, or replace jump with nop.
 >
 > Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 > Acked-by: Song Liu <songliubraving@fb.com>
+> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
 
-Acked-by: KP Singh <kpsingh@kernel.org>
+Reviewed-by: KP Singh <kpsingh@kernel.org>
