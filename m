@@ -2,103 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4ECE531046
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 May 2022 15:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E25531202
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 May 2022 18:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235184AbiEWL42 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 May 2022 07:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
+        id S236414AbiEWN3i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 May 2022 09:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235368AbiEWL4O (ORCPT
+        with ESMTP id S236314AbiEWN3Y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 May 2022 07:56:14 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559FA517FD;
-        Mon, 23 May 2022 04:56:07 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id z17so1742366wmf.1;
-        Mon, 23 May 2022 04:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xxq/dtScJVM5dKv6qygc3KWh1gjFjuflRzvNDTnM53w=;
-        b=pLmmGrFWpXbszthY96rthCc9b4MM/ZEGzTH8IMpe2fliWdFOTZBnGJ/wqMMXmLUsHk
-         Vsr5KhbVSa5mtuS33e0dr7Cub55i1F4rCOrGOM5nF1m1xbqOIBT/2E6KXZwpBxfSQM93
-         letAfrSKHd7d9GBG4QYSZORwxCEOVYcsyllH3Q0vP/rygjI0BorNdDKb5e4tl1f64frA
-         vfrSXDjEeDaW+Xoo0CeF4+HIqyIAD7ocXnthZIV1OfpS9oRWE4d6mgoz/vt3nrGUyo7U
-         bqTkBmoVLF1hGRxThHmQxCAjhjO6snZHfKTC94jVJuFXV2TWAJaLyt1zGmmuKPdrxUII
-         lZAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xxq/dtScJVM5dKv6qygc3KWh1gjFjuflRzvNDTnM53w=;
-        b=67t/C0gA4LHRtkg5EqD5tS5VkTUeZXDY/9IlndiJQs3eGGi9L5JdkcWX0WQLtQqQsh
-         ZmawmiY39SmsAEXWtiAKh8akkz/+aVhX2BxQY/7NXsMEx+K6HEz55BV2YarbKag/rR83
-         CdO8MjwuHV1yeuNz4AAW8luSLJUcDzulo8XuG3Rwj/eUYi7h/fzGhll0umMc8GVMbx75
-         nnhjuZOURdbZHmJJJwZUxaavA9ATfh8juPgjxkd/ZKlo6b9F7o4opluM+xxfY0hhh9vK
-         MNYkMkSkUIivIafaghwsZOq6c8zHjAOXU4OmqG91msxqdDCENncqSM0pcROg6wzzibZU
-         X3tA==
-X-Gm-Message-State: AOAM533wKwxIirLe8SJdAaivMt9LcZwukStL8obGeKY6FHFJ8uYHyrhd
-        3kTKUAqBa5A+upfj3yFl5Lo=
-X-Google-Smtp-Source: ABdhPJyIvRwYjDWyS5V+7WUUgXAgLnV4DhDTkH4YwdP+WN1QjtWs7C496pfQlB+56nIqjk00XzgJOg==
-X-Received: by 2002:a1c:6a01:0:b0:37f:1b18:6b17 with SMTP id f1-20020a1c6a01000000b0037f1b186b17mr20118573wmc.146.1653306965646;
-        Mon, 23 May 2022 04:56:05 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p6-20020a05600c358600b0039726cd3ae5sm10991929wmq.3.2022.05.23.04.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 04:56:05 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/bpf: Fix spelling mistake: "unpriviliged" -> "unprivileged"
-Date:   Mon, 23 May 2022 12:56:04 +0100
-Message-Id: <20220523115604.49942-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Mon, 23 May 2022 09:29:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139E81FCFA;
+        Mon, 23 May 2022 06:29:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A09AC21ACF;
+        Mon, 23 May 2022 13:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653312559; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gtxU29oO1IFvVA3hN0PuI5lGfiBVozRsUJAeElrZ+0M=;
+        b=IXT+cH2wydH7nqcS1UuXTHk70XKlgBcSFLBInZA3NzwcOi4YTvYLyHoGDjpnf/0xPS002U
+        7cEHjkPzTdRzhmhZJWszJj4Fmk8JZszqWKwLAE63ifwZ8einhrZsvmylYrUY/hY4mtk3oP
+        EvlUPDNRE0cf0oPb0O2GzeRQU+RCI9M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6867A139F5;
+        Mon, 23 May 2022 13:29:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cuh1GC+Mi2I2WwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 23 May 2022 13:29:19 +0000
+Date:   Mon, 23 May 2022 15:29:17 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.de>
+Subject: Re: [PATCH v2 1/5] selftests: memcg: Fix compilation
+Message-ID: <20220523132917.GA4988@blackbody.suse.cz>
+References: <20220518161859.21565-1-mkoutny@suse.com>
+ <20220518161859.21565-2-mkoutny@suse.com>
+ <5242b7ab-d6b6-55d4-c211-ec27293be795@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5242b7ab-d6b6-55d4-c211-ec27293be795@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There are spelling mistakes in ASSERT messages. Fix these.
+On Sat, May 21, 2022 at 07:11:01PM +0500, Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+> On 5/18/22 9:18 PM, Michal Koutný wrote:
+> > This fixes mis-applied changes from commit 72b1e03aa725 ("cgroup:
+> > account for memory_localevents in test_memcg_oom_group_leaf_events()").
+> Shouldn't the Fixes tag be added here and in 2/5 patch?
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ad the patch 1/5 -- yes, sounds appropriate.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c b/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-index 2800185179cf..1ed3cc2092db 100644
---- a/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-+++ b/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
-@@ -261,10 +261,10 @@ void test_unpriv_bpf_disabled(void)
- 	if (ret == -EPERM) {
- 		/* if unprivileged_bpf_disabled=1, we get -EPERM back; that's okay. */
- 		if (!ASSERT_OK(strcmp(unprivileged_bpf_disabled_orig, "1"),
--			       "unpriviliged_bpf_disabled_on"))
-+			       "unprivileged_bpf_disabled_on"))
- 			goto cleanup;
- 	} else {
--		if (!ASSERT_OK(ret, "set unpriviliged_bpf_disabled"))
-+		if (!ASSERT_OK(ret, "set unprivileged_bpf_disabled"))
- 			goto cleanup;
- 	}
- 
--- 
-2.35.3
+Ad the patch 2/5 -- that's an effective revert, I don't see reverts
+being marked with Fixes.
 
+I see the patch 5/5 didn't make it to MLs (their public archives, except
+for LKML). So I'll resend the series with the modified commit message
+(if nothing else pops up).
+
+Michal
