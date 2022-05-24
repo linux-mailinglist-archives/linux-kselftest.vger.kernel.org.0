@@ -2,241 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADE5532D26
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 17:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC28C532D3B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 17:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238766AbiEXPQ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 May 2022 11:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
+        id S235596AbiEXPWO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 May 2022 11:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbiEXPQ4 (ORCPT
+        with ESMTP id S238823AbiEXPWG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 May 2022 11:16:56 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FF019284
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 08:16:54 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id v9so17085658oie.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 08:16:54 -0700 (PDT)
+        Tue, 24 May 2022 11:22:06 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0E454BC2;
+        Tue, 24 May 2022 08:22:03 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id a23so21273600ljd.9;
+        Tue, 24 May 2022 08:22:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oPCAh/MbNJ7vTzTZ4OICpOYd9k58HhsAFhhZYJpObms=;
-        b=T5qQDbRM+U5IieOuT0qtFSvOh21ZF62wGaKxGUwtlgHrCMThlJ4Gw8B91aRK5nhj6z
-         tf3F4MNHUJRdtwCO5KyQVrSuhoSvGAW9/0FpJ9aFpULcf/cxjwQr4/cq8KVWICgAFT0O
-         gjrxNVlAu2FnAoO3mV25cFGeGCr3EMHsxwtXU=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version:organization
+         :content-transfer-encoding;
+        bh=iIwfYVv7fNEx0HicZDp/iynxMZIWTs5X4JU/e8Toj3Q=;
+        b=YaH1DgHLdkIdhEkYiJgKlTaJvj4NY2mznzZKESIAkDFw10sVbEHVoiK2zstW/JE8nu
+         nRp07bJCs6GvOyurfm4MwvVX1zkyRRlntXwRIot1WglIJROzBtn5sJ9lRAgQd39vCf7H
+         q0zswAaje5UcywXY1hwzEXbjPNaQ9WWT5ckeoPlZ4ZE3KnfpGmJep2L2k7lAGcJpT7uO
+         0VgE0jnh7gFcc0LzgHgyrg+kXKXRFwFZmKBIkKODmpBHwcjYCjL0a8bxWnmYwFwZHWhT
+         Wz0X99R6O2cLOjxYvmWp3ynXDiuJqB5egZ3ShbmqlOMdet2pU2rn8i7MsgLYUqDG/HjT
+         jRrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oPCAh/MbNJ7vTzTZ4OICpOYd9k58HhsAFhhZYJpObms=;
-        b=wCud1rNMQQUw5GpiL/jRQlBOEo/ZV+5YGnBEv6pPCp5uxNtHEJzZ5UkOLo8xkVu9xG
-         qtKy8GP3Wpf/qrhB8FGesJVFnhKxknUoZkU7SBscUuAWjSgsbh1AcFiMMwQdfZdbvoF9
-         3K/ZIn/f92V9ZMrGiIOlihMhCxEEL0pjL0rlitP8wGb6ZURrlqu+R4k/XbLYUFc6xjaj
-         2sv29dipuygBju9LqFTLIJ5JyzZ8ZffZNqy/ljBrN1mmber2Tv989HyGODdh3GdvrOIN
-         yIHUJgXKk+Nc3I2W+517mtSJ5awh+Jeyj7fd/9h2fyTafP1kwLV72JjPpgtd9CaeLMAy
-         DQag==
-X-Gm-Message-State: AOAM5312B4q4JvQq3NVdBSDemrIiAZMk+qHMD+w0OeSHz0ekvgzax3Ec
-        LzZkW8p5+VjinuJmLq5MPKBm8A==
-X-Google-Smtp-Source: ABdhPJy6HF1goWkqu/fQqtmL0KamjoLObtK9Bu/HN/WxBuE04sk+qxQqHp02nRL9NMAISKf3ZyQt9g==
-X-Received: by 2002:a05:6808:248:b0:32b:6aa:6cbd with SMTP id m8-20020a056808024800b0032b06aa6cbdmr2437182oie.34.1653405413669;
-        Tue, 24 May 2022 08:16:53 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x26-20020a056830245a00b0060afe803e5bsm3972666otr.35.2022.05.24.08.16.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 08:16:53 -0700 (PDT)
-Subject: Re: [GIT PULL] KUnit update for Linux 5.19-rc1
-To:     linux-kselftest@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <76e8af6c-9757-4367-1407-84fbad96cc8d@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <cee5ce2e-faa0-4acf-35b9-1c16c890c040@linuxfoundation.org>
-Date:   Tue, 24 May 2022 09:16:51 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :organization:content-transfer-encoding;
+        bh=iIwfYVv7fNEx0HicZDp/iynxMZIWTs5X4JU/e8Toj3Q=;
+        b=LJafSphZ+xNmDwnQQ4Fb3Hd/zkMO2TJpjwxYZI69gwWG9gzS/21Pq3asYtyARO5C11
+         WED+6mLVdxpdiarSWDCTvwmbZk1KuL98F8DMCSYOXPfbqvQGJjl+MdPcMm4W3jggo2Uw
+         s/os1gxiUfuawM8xcVcI/MIeIiK/7NYSE3ENLQFLOp8EcWuBaTKGCMdlSA7VSNVjENV+
+         HD5XAqRFtUdm7/2BA+s1KADjEU4CVC+LkS0qUswjuLges2/4zlxQM9G55DHzE7j6tk4P
+         tqF0JIR9eP0E6seEcNk+IJYcSfSphcFHmbGU1bE7k++BwkVxFIT1Uos6d0Zo0KhVzfYO
+         xN5w==
+X-Gm-Message-State: AOAM531M0BhuDxqRb6lHX2T4BkELpi5fzkgSWJDumV17M3RCU4Hy1ctD
+        5NezFkMcyc0SWAR21XWee9g=
+X-Google-Smtp-Source: ABdhPJxKOf1Z5C8nqRQC4aBKdkYusKDJvRIrXFggpup7JrNlk7rEBE+aZ9ziKk36agciZEwkl2qFOw==
+X-Received: by 2002:a2e:22c3:0:b0:253:e5f5:51f6 with SMTP id i186-20020a2e22c3000000b00253e5f551f6mr8645905lji.293.1653405720493;
+        Tue, 24 May 2022 08:22:00 -0700 (PDT)
+Received: from wse-c0127.westermo.com (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
+        by smtp.gmail.com with ESMTPSA id d22-20020a2e3316000000b00253deeaeb3dsm2441404ljc.131.2022.05.24.08.21.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 08:21:59 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH V3 net-next 0/4] Extend locked port feature with FDB locked flag (MAC-Auth/MAB)
+Date:   Tue, 24 May 2022 17:21:40 +0200
+Message-Id: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <76e8af6c-9757-4367-1407-84fbad96cc8d@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/23/22 12:21 PM, Shuah Khan wrote:
-> Hi Linus,
-> 
-> Please pull the following KUnit update for Linux 5.19-rc1.
-> 
-> This KUnit update for Linux 5.19-rc1 consists of several fixes, cleanups,
-> and enhancements to tests and framework:
-> 
-> - introduces _NULL and _NOT_NULL macros to pointer error checks
-> 
-> - reworks kunit_resource allocation policy to fix memory leaks when
->    caller doesn't specify free() function to be used when allocating
->    memory using kunit_add_resource() and kunit_alloc_resource() funcs.
-> 
-> - adds ability to specify suite-level init and exit functions
-> 
-> diff is attached.
-> 
-> thanks,
-> -- Shuah
-> 
+This patch set extends the locked port feature for devices
+that are behind a locked port, but do not have the ability to
+authorize themselves as a supplicant using IEEE 802.1X.
+Such devices can be printers, meters or anything related to
+fixed installations. Instead of 802.1X authorization, devices
+can get access based on their MAC addresses being whitelisted.
 
-This bounced from linux-kselftest list  as the diff exceeded the message
-size. Sorry for the noise for others that are seeing this twice (minus
-the diff).
+For an authorization daemon to detect that a device is trying
+to get access through a locked port, the bridge will add the
+MAC address of the device to the FDB with a locked flag to it.
+Thus the authorization daemon can catch the FDB add event and
+check if the MAC address is in the whitelist and if so replace
+the FDB entry without the locked flag enabled, and thus open
+the port for the device.
 
-FYI that the following KUnit pull request has been sent for Linux 5.19-rc1
+This feature is known as MAC-Auth or MAC Authentication Bypass
+(MAB) in Cisco terminology, where the full MAB concept involves
+additional Cisco infrastructure for authorization. There is no
+real authentication process, as the MAC address of the device
+is the only input the authorization daemon, in the general
+case, has to base the decision if to unlock the port or not.
 
-thanks,
--- Shuah
+With this patch set, an implementation of the offloaded case is
+supplied for the mv88e6xxx driver. When a packet ingresses on
+a locked port, an ATU miss violation event will occur. When
+handling such ATU miss violation interrupts, the MAC address of
+the device is added to the FDB with a zero destination port
+vector (DPV) and the MAC address is communicated through the
+switchdev layer to the bridge, so that a FDB entry with the
+locked flag enabled can be added.
 
-> ----------------------------------------------------------------
-> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-> 
->    Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-> 
-> are available in the Git repository at:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-5.19-rc1
-> 
-> for you to fetch changes up to e7eaffce47b7db72b077630dbe836f0c4132496d:
-> 
->    kunit: tool: Use qemu-system-i386 for i386 runs (2022-05-18 17:03:54 -0600)
-> 
-> ----------------------------------------------------------------
-> linux-kselftest-kunit-5.19-rc1
-> 
-> This KUnit update for Linux 5.19-rc1 consists of several fixes, cleanups,
-> and enhancements to tests and framework:
-> 
-> - introduces _NULL and _NOT_NULL macros to pointer error checks
-> 
-> - reworks kunit_resource allocation policy to fix memory leaks when
->    caller doesn't specify free() function to be used when allocating
->    memory using kunit_add_resource() and kunit_alloc_resource() funcs.
-> 
-> - adds ability to specify suite-level init and exit functions
-> 
-> ----------------------------------------------------------------
-> Brendan Higgins (2):
->        kunit: add support for kunit_suites that reference init code
->        kunit: tool: update riscv QEMU config with new serial dependency
-> 
-> Daniel Latypov (25):
->        kunit: tool: make --json handling a bit clearer
->        kunit: tool: drop unused KernelDirectoryPath var
->        kunit: tool: drop last uses of collections.namedtuple
->        kunit: tool: simplify code since build_dir can't be None
->        kunit: tool: readability tweaks in KernelCI json generation logic
->        kunit: tool: refactor how we plumb metadata into JSON
->        kunit: tool: properly report the used arch for --json, or '' if not known
->        kunit: tool: more descriptive metavars/--help output
->        kunit: split resource API from test.h into new resource.h
->        kunit: split resource API impl from test.c into new resource.c
->        Documentation: kunit: update kconfig options needed for UML coverage
->        kunit: rename print_subtest_{start,end} for clarity (s/subtest/suite)
->        kunit: add ability to specify suite-level init and exit functions
->        kfence: test: use new suite_{init/exit} support, add .kunitconfig
->        kunit: fix debugfs code to use enum kunit_status, not bool
->        lib/Kconfig.debug: change KUnit tests to default to KUNIT_ALL_TESTS
->        kunit: bail out of test filtering logic quicker if OOM
->        kunit: tool: update test counts summary line format
->        kunit: tool: stop using a shell to run kernel under QEMU
->        kunit: tool: print clearer error message when there's no TAP output
->        kunit: tool: remove dead parse_crash_in_log() logic
->        kunit: tool: make parser stop overwriting status of suites w/ no_tests
->        kunit: tool: minor cosmetic cleanups in kunit_parser.py
->        kunit: tool: misc cleanups
->        kunit: fix executor OOM error handling logic on non-UML
-> 
-> David Gow (5):
->        list: test: Test the hlist structure
->        kunit: Make kunit_remove_resource() idempotent
->        kunit: Rework kunit_resource allocation policy
->        kunit: tool: Add list of all valid test configs on UML
->        kunit: tool: Use qemu-system-i386 for i386 runs
-> 
-> Kees Cook (1):
->        kunit: tool: Do not colorize output when redirected
-> 
-> Marco Elver (1):
->        kcsan: test: use new suite_{init,exit} support
-> 
-> Miguel Ojeda (1):
->        kunit: take `kunit_assert` as `const`
-> 
-> Ricardo Ribalda (6):
->        kunit: Introduce _NULL and _NOT_NULL macros
->        kunit: use NULL macros
->        thunderbolt: test: use NULL macros
->        kasan: test: Use NULL macros
->        mctp: test: Use NULL macros
->        apparmor: test: Use NULL macros
-> 
-> 
->   Documentation/dev-tools/kunit/api/index.rst        |   5 +
->   Documentation/dev-tools/kunit/api/resource.rst     |  13 +
->   Documentation/dev-tools/kunit/running_tips.rst     |   3 +-
->   Documentation/dev-tools/kunit/usage.rst            |  19 +-
->   drivers/thunderbolt/test.c                         | 134 +++----
->   include/kunit/resource.h                           | 406 ++++++++++++++++++++
->   include/kunit/test.h                               | 418 ++++++---------------
->   kernel/kcsan/kcsan_test.c                          |  31 +-
->   lib/Kconfig.debug                                  |  15 +-
->   lib/kunit/Makefile                                 |   1 +
->   lib/kunit/debugfs.c                                |   2 +-
->   lib/kunit/executor.c                               |  32 +-
->   lib/kunit/executor_test.c                          |   4 +-
->   lib/kunit/kunit-example-test.c                     |  16 +
->   lib/kunit/kunit-test.c                             |  37 +-
->   lib/kunit/resource.c                               |  79 ++++
->   lib/kunit/test.c                                   | 145 ++-----
->   lib/list-test.c                                    | 397 ++++++++++++++++++-
->   lib/test_kasan.c                                   |   2 +-
->   mm/kfence/.kunitconfig                             |   6 +
->   mm/kfence/kfence_test.c                            |  31 +-
->   net/mctp/test/route-test.c                         |   4 +-
->   security/apparmor/policy_unpack_test.c             |   6 +-
->   tools/testing/kunit/configs/all_tests_uml.config   |  37 ++
->   tools/testing/kunit/kunit.py                       |  63 ++--
->   tools/testing/kunit/kunit_config.py                |  21 +-
->   tools/testing/kunit/kunit_json.py                  |  66 ++--
->   tools/testing/kunit/kunit_kernel.py                |  81 ++--
->   tools/testing/kunit/kunit_parser.py                | 154 +++-----
->   tools/testing/kunit/kunit_tool_test.py             |  44 +--
->   tools/testing/kunit/qemu_config.py                 |  17 +-
->   tools/testing/kunit/qemu_configs/alpha.py          |   2 +-
->   tools/testing/kunit/qemu_configs/arm.py            |   2 +-
->   tools/testing/kunit/qemu_configs/arm64.py          |   2 +-
->   tools/testing/kunit/qemu_configs/i386.py           |   4 +-
->   tools/testing/kunit/qemu_configs/powerpc.py        |   2 +-
->   tools/testing/kunit/qemu_configs/riscv.py          |   7 +-
->   tools/testing/kunit/qemu_configs/s390.py           |   4 +-
->   tools/testing/kunit/qemu_configs/sparc.py          |   2 +-
->   tools/testing/kunit/qemu_configs/x86_64.py         |   2 +-
->   tools/testing/kunit/run_checks.py                  |   2 +-
->   .../kunit/test_data/test_is_test_passed-crash.log  |  70 ----
->   .../test_is_test_passed-no_tests_no_plan.log       |   2 +-
->   43 files changed, 1499 insertions(+), 891 deletions(-)
->   create mode 100644 Documentation/dev-tools/kunit/api/resource.rst
->   create mode 100644 include/kunit/resource.h
->   create mode 100644 lib/kunit/resource.c
->   create mode 100644 mm/kfence/.kunitconfig
->   create mode 100644 tools/testing/kunit/configs/all_tests_uml.config
->   delete mode 100644 tools/testing/kunit/test_data/test_is_test_passed-crash.log
-> ----------------------------------------------------------------
+Hans Schultz (4):
+  net: bridge: add fdb flag to extent locked port feature
+  net: switchdev: add support for offloading of fdb locked flag
+  net: dsa: mv88e6xxx: mac-auth/MAB implementation
+  selftests: forwarding: add test of MAC-Auth Bypass to locked port
+    tests
+
+ drivers/net/dsa/mv88e6xxx/Makefile            |   1 +
+ drivers/net/dsa/mv88e6xxx/chip.c              |  40 ++-
+ drivers/net/dsa/mv88e6xxx/chip.h              |   5 +
+ drivers/net/dsa/mv88e6xxx/global1.h           |   1 +
+ drivers/net/dsa/mv88e6xxx/global1_atu.c       |  35 ++-
+ .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 249 ++++++++++++++++++
+ .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   |  40 +++
+ drivers/net/dsa/mv88e6xxx/port.c              |  32 ++-
+ drivers/net/dsa/mv88e6xxx/port.h              |   2 +
+ include/net/dsa.h                             |   6 +
+ include/net/switchdev.h                       |   3 +-
+ include/uapi/linux/neighbour.h                |   1 +
+ net/bridge/br.c                               |   3 +-
+ net/bridge/br_fdb.c                           |  18 +-
+ net/bridge/br_if.c                            |   1 +
+ net/bridge/br_input.c                         |  11 +-
+ net/bridge/br_private.h                       |   9 +-
+ .../net/forwarding/bridge_locked_port.sh      |  42 ++-
+ 18 files changed, 470 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
+ create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
+
+-- 
+2.30.2
 
