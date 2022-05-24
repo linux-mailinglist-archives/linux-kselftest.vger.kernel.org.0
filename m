@@ -2,55 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AC0532D48
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 17:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BE8532DB0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 17:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbiEXPWn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 May 2022 11:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
+        id S238922AbiEXPjJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 May 2022 11:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238825AbiEXPWQ (ORCPT
+        with ESMTP id S236252AbiEXPjH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 May 2022 11:22:16 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D2F49682;
-        Tue, 24 May 2022 08:22:12 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id c19so18312332lfv.5;
-        Tue, 24 May 2022 08:22:12 -0700 (PDT)
+        Tue, 24 May 2022 11:39:07 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75246223D
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 08:39:05 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id x12so2019595wrg.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 08:39:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=FgEZaD+qaBUQURDZcatdSAcmpukEK3yyWD1n5B1AlNE=;
-        b=Dqj8l9wZWDZHC1yP3YJCdmoXSjz9VdQZ0nXh27JmdifHCAIdkhRbRZVQrIejbZ3WjQ
-         Facd+POgcmZoA1cdq73VcsPdCaQaAaTKVp5LHtYw4L1/E/nOU22l7xsISjb2Rwn5mTYS
-         B/K02m5GurI9+HcZsANOpX/kFRKW5mQsMTRHcVgCKPiJVvMYxxxks6npgJp87DTTWKCo
-         0zfjBUBu4SaIPElyMYzh2zUvhVknUjvzJ6sSEPM6AE3Lwg4DdaLTqZDWzfgdvPOLmSW1
-         K7UQILzLUgJSIWLuPfcMrf+Kum4zLz5TvwBScXCaxb0/192mPsaw8vZoKo3dhGaOiHST
-         a3lA==
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=h7r5aQ2w5OifNsIkpCoXMifoXPvuX3aY8xJJkG9EXtw=;
+        b=N8KrblnWf/1Gd8SH3jlgYJfY/xNV2wjof6Mna4pghYvc1UdsO31fVScY0vu9Ah65TX
+         angBNbUaT55stx0kDug7PuDc4Y8kQfIzfr2Pgya95z2eAHlAMgbAQuuiIi3mkBGNdRV4
+         lk2Y2Xwi5Dce4uJVhCRAMzVM9yk4i/pZ6WMA8Vy5yvZp3sYUybbkTwKPrn9d0MOhY6E7
+         yhygy3oLUNBEZ8Tk4f++J/+babcMzzMP/k+htNTxiYp1y/kyfoBI4Xe+M4mlr3QGU2OP
+         kfl83txIR5FOrW9ELEHpoG8QmtxDT3xifA/jb/+EdQqurvlISqH8Ey+Q0peJtNhNiTat
+         OVsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=FgEZaD+qaBUQURDZcatdSAcmpukEK3yyWD1n5B1AlNE=;
-        b=Ba/kgke4xvcp2a+nza7Z+Fj2hi0jq6xGhukWTrrA20dJY7yyPSxFE2WoCKWLoFQZ4n
-         u6v+ba/Jl2aCpqrJ9fLVJQs0CqV/sgpvocjqH8BGyvaZyQcUPm01JbKs34+Z4R3YgSaS
-         dzpNXY5sKvqyKHMAWa7/30M2MfSvJJA6sn4Fr3RhLucZ3InEJ9vV3wGDFdubtsda4+yU
-         Kh65FM6iFiw1tt/W4/U7Y8J10zFrmHFECsV23pQ2SFi+YhXO5HsKQRzY6bjyDq1nGJUF
-         7Hzq2yxovwK/Zx2b2wQGvzMS5FYpg2C0h83r5TGycE+xLsWNeDSxf9gOo3p6HLmMjn6b
-         exSA==
-X-Gm-Message-State: AOAM533QyZArUP3BcaV2QSFArYJPxCvJs+72HZGdzFMSxy+O80Rcf6mk
-        /FH9fV9q6gYp58DTDWnn40s=
-X-Google-Smtp-Source: ABdhPJxDH5QbQwWSsc4CHoBv8PDLSvGdn1OPRFrwKo67di2vK6AqwBhM00lt3/n2SEU2ZLuAtpjeLA==
-X-Received: by 2002:a05:6512:150b:b0:43b:3539:e215 with SMTP id bq11-20020a056512150b00b0043b3539e215mr19370076lfb.573.1653405731360;
-        Tue, 24 May 2022 08:22:11 -0700 (PDT)
-Received: from wse-c0127.westermo.com (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
-        by smtp.gmail.com with ESMTPSA id d22-20020a2e3316000000b00253deeaeb3dsm2441404ljc.131.2022.05.24.08.22.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 08:22:11 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=h7r5aQ2w5OifNsIkpCoXMifoXPvuX3aY8xJJkG9EXtw=;
+        b=TZZEcUXcd04DkF9xU/XQEnoG+4a3zu7HCefTwly2OmKNpQVV1iaDMigjDJjEFoELAC
+         m9j+Ghj4wlGeF0z0j++3mg0L66nHO7E1fQpuwxjO10SrXz8WF8EMeADUPEQlZwAy6H0/
+         kAuP3Z54G5WOMJ6vvByeXS9F/9oakTDpSLEk1ihOad156jVaeR7w1qaE2EJTL3MKXmxp
+         lqWGOFYcSn7CbzSqbm4Cg7J0aUdCPY7+MCoDCf3Bb3Hc1D2djaYQic1vQ4FHmxg/r76B
+         /1XpoDlXkVx4Hw3duZShxJYIE+fCWBKnxZBjcQ8B2tiWdtenYZ7YJaDPmSMTnj1bV94L
+         61FQ==
+X-Gm-Message-State: AOAM532NY/vMLTWfEB8Wa6HjiPqFAsXrvupvUnR2jtUvJq0JKhxiZYV1
+        BNvYdf7sJRlqIidfCwgP4RVZdw==
+X-Google-Smtp-Source: ABdhPJyLc8Hoyt2GuHKUKSWnfiyo0dtTUxgy0oarseFAy0Arfimt0aCjeNBFi1oFUYlcolmCYAXauQ==
+X-Received: by 2002:adf:fb10:0:b0:207:af88:1eb9 with SMTP id c16-20020adffb10000000b00207af881eb9mr24509733wrr.238.1653406744205;
+        Tue, 24 May 2022 08:39:04 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id c13-20020adfc04d000000b0020fee88d0f2sm3196776wrf.0.2022.05.24.08.39.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 May 2022 08:39:03 -0700 (PDT)
+Message-ID: <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
+Date:   Tue, 24 May 2022 18:39:02 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Content-Language: en-US
+To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
 Cc:     netdev@vger.kernel.org,
         Hans Schultz <schultz.hans+netdev@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -60,131 +68,114 @@ Cc:     netdev@vger.kernel.org,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
         Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH V3 net-next 4/4] selftests: forwarding: add test of MAC-Auth Bypass to locked port tests
-Date:   Tue, 24 May 2022 17:21:44 +0200
-Message-Id: <20220524152144.40527-5-schultz.hans+netdev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
 References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
-MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verify that the MAC-Auth mechanism works by adding a FDB entry with the
-locked flag set. denying access until the FDB entry is replaced with a
-FDB entry without the locked flag set.
+On 24/05/2022 18:21, Hans Schultz wrote:
+> Add an intermediate state for clients behind a locked port to allow for
+> possible opening of the port for said clients. This feature corresponds
+> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
+> latter defined by Cisco.
+> Locked FDB entries will be limited in number, so as to prevent DOS
+> attacks by spamming the port with random entries. The limit will be
+> a per port limit as it is a port based feature and that the port flushes
+> all FDB entries on link down.
+> 
+> Only the kernel can set this FDB entry flag, while userspace can read
+> the flag and remove it by deleting the FDB entry.
+> 
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> ---
+>  include/uapi/linux/neighbour.h |  1 +
+>  net/bridge/br_fdb.c            | 11 +++++++++++
+>  net/bridge/br_if.c             |  1 +
+>  net/bridge/br_input.c          | 11 ++++++++++-
+>  net/bridge/br_private.h        |  7 ++++++-
+>  5 files changed, 29 insertions(+), 2 deletions(-)
+> 
 
-Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
----
- .../net/forwarding/bridge_locked_port.sh      | 42 ++++++++++++++++---
- 1 file changed, 36 insertions(+), 6 deletions(-)
+Hi Hans,
+So this approach has a fundamental problem, f->dst is changed without any synchronization
+you cannot rely on it and thus you cannot account for these entries properly. We must be very
+careful if we try to add any new synchronization not to affect performance as well.
+More below...
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-index 5b02b6b60ce7..50b9048d044a 100755
---- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-@@ -1,7 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
-+ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
- NUM_NETIFS=4
- CHECK_TC="no"
- source lib.sh
-@@ -94,13 +94,13 @@ locked_port_ipv4()
- 	ping_do $h1 192.0.2.2
- 	check_fail $? "Ping worked after locking port, but before adding FDB entry"
- 
--	bridge fdb add `mac_get $h1` dev $swp1 master static
-+	bridge fdb replace `mac_get $h1` dev $swp1 master static
- 
- 	ping_do $h1 192.0.2.2
- 	check_err $? "Ping did not work after locking port and adding FDB entry"
- 
- 	bridge link set dev $swp1 locked off
--	bridge fdb del `mac_get $h1` dev $swp1 master static
-+	bridge fdb del `mac_get $h1` dev $swp1 master
- 
- 	ping_do $h1 192.0.2.2
- 	check_err $? "Ping did not work after unlocking port and removing FDB entry."
-@@ -124,13 +124,13 @@ locked_port_vlan()
- 	ping_do $h1.100 198.51.100.2
- 	check_fail $? "Ping through vlan worked after locking port, but before adding FDB entry"
- 
--	bridge fdb add `mac_get $h1` dev $swp1 vlan 100 master static
-+	bridge fdb replace `mac_get $h1` dev $swp1 master static
- 
- 	ping_do $h1.100 198.51.100.2
- 	check_err $? "Ping through vlan did not work after locking port and adding FDB entry"
- 
- 	bridge link set dev $swp1 locked off
--	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master static
-+	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master
- 
- 	ping_do $h1.100 198.51.100.2
- 	check_err $? "Ping through vlan did not work after unlocking port and removing FDB entry"
-@@ -153,7 +153,8 @@ locked_port_ipv6()
- 	ping6_do $h1 2001:db8:1::2
- 	check_fail $? "Ping6 worked after locking port, but before adding FDB entry"
- 
--	bridge fdb add `mac_get $h1` dev $swp1 master static
-+	bridge fdb replace `mac_get $h1` dev $swp1 master static
-+
- 	ping6_do $h1 2001:db8:1::2
- 	check_err $? "Ping6 did not work after locking port and adding FDB entry"
- 
-@@ -166,6 +167,35 @@ locked_port_ipv6()
- 	log_test "Locked port ipv6"
- }
- 
-+locked_port_mab()
-+{
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "MAB: Ping did not work before locking port"
-+
-+	bridge link set dev $swp1 locked on
-+	bridge link set dev $swp1 learning on
-+
-+	bridge fdb del `mac_get $h1` dev $swp1 master
-+
-+	ping_do $h1 192.0.2.2
-+	check_fail $? "MAB: Ping worked on locked port without FDB entry"
-+
-+	bridge fdb show | grep `mac_get $h1` | grep -q "locked"
-+	check_err $? "MAB: No locked fdb entry after ping on locked port"
-+
-+	bridge fdb replace `mac_get $h1` dev $swp1 master static
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
-+
-+	bridge fdb del `mac_get $h1` dev $swp1 master
-+	bridge link set dev $swp1 locked off
-+
-+	log_test "Locked port MAB"
-+}
- trap cleanup EXIT
- 
- setup_prepare
--- 
-2.30.2
+> diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
+> index 39c565e460c7..76d65b481086 100644
+> --- a/include/uapi/linux/neighbour.h
+> +++ b/include/uapi/linux/neighbour.h
+> @@ -53,6 +53,7 @@ enum {
+>  #define NTF_ROUTER	(1 << 7)
+>  /* Extended flags under NDA_FLAGS_EXT: */
+>  #define NTF_EXT_MANAGED	(1 << 0)
+> +#define NTF_EXT_LOCKED	(1 << 1)
+>  
+>  /*
+>   *	Neighbor Cache Entry States.
+> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+> index e7f4fccb6adb..6b83e2d6435d 100644
+> --- a/net/bridge/br_fdb.c
+> +++ b/net/bridge/br_fdb.c
+> @@ -105,6 +105,7 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
+>  	struct nda_cacheinfo ci;
+>  	struct nlmsghdr *nlh;
+>  	struct ndmsg *ndm;
+> +	u32 ext_flags = 0;
+>  
+>  	nlh = nlmsg_put(skb, portid, seq, type, sizeof(*ndm), flags);
+>  	if (nlh == NULL)
+> @@ -125,11 +126,16 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
+>  		ndm->ndm_flags |= NTF_EXT_LEARNED;
+>  	if (test_bit(BR_FDB_STICKY, &fdb->flags))
+>  		ndm->ndm_flags |= NTF_STICKY;
+> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
+> +		ext_flags |= NTF_EXT_LOCKED;
+>  
+>  	if (nla_put(skb, NDA_LLADDR, ETH_ALEN, &fdb->key.addr))
+>  		goto nla_put_failure;
+>  	if (nla_put_u32(skb, NDA_MASTER, br->dev->ifindex))
+>  		goto nla_put_failure;
+> +	if (nla_put_u32(skb, NDA_FLAGS_EXT, ext_flags))
+> +		goto nla_put_failure;
+> +
+>  	ci.ndm_used	 = jiffies_to_clock_t(now - fdb->used);
+>  	ci.ndm_confirmed = 0;
+>  	ci.ndm_updated	 = jiffies_to_clock_t(now - fdb->updated);
+> @@ -171,6 +177,7 @@ static inline size_t fdb_nlmsg_size(void)
+>  	return NLMSG_ALIGN(sizeof(struct ndmsg))
+>  		+ nla_total_size(ETH_ALEN) /* NDA_LLADDR */
+>  		+ nla_total_size(sizeof(u32)) /* NDA_MASTER */
+> +		+ nla_total_size(sizeof(u32)) /* NDA_FLAGS_EXT */
+>  		+ nla_total_size(sizeof(u16)) /* NDA_VLAN */
+>  		+ nla_total_size(sizeof(struct nda_cacheinfo))
+>  		+ nla_total_size(0) /* NDA_FDB_EXT_ATTRS */
+> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
+>  	if (test_bit(BR_FDB_STATIC, &f->flags))
+>  		fdb_del_hw_addr(br, f->key.addr.addr);
+>  
+> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
+> +		atomic_dec(&f->dst->locked_entry_cnt);
 
+Sorry but you cannot do this for multiple reasons:
+ - f->dst can be NULL
+ - f->dst changes without any synchronization
+ - there is no synchronization between fdb's flags and its ->dst
+
+Cheers,
+ Nik
