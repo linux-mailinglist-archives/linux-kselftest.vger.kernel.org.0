@@ -2,166 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7747F532B5C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 15:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCBB532BD1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 16:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237874AbiEXNd4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 May 2022 09:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S237963AbiEXN7i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 May 2022 09:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiEXNdz (ORCPT
+        with ESMTP id S234396AbiEXN7h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 May 2022 09:33:55 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C943719D9
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 06:33:54 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id g21so6223516qtg.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 06:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7p2U0ToaQGK8ydTaA8am+2nfDgACRmmoUvxmzOpA12U=;
-        b=oLZdKW61LnQtETJC2I7xGHN7izyYt40WB0UUMDSq57yoHw9xsPhU3LqMld8FjqxuyJ
-         ah7VSZH9XHPdSWTJ3SuynV+h95M3rlw7P4TviVUS4xxhSz7t40bX/5ohYsXP9NI4eMr4
-         eihJIdjwSOyDL2p42O8bD1S0BZnxelmy3RGNuUPL+7fPixrJqXCsUnDWfWDA40H5M7rc
-         lT/kXfKoZbidj/h+bUyyKaaO89xche6e34cEJ8ZKj2vhjkz37edFeRiJsmXTC6IPhaNL
-         qubsfy7QbIJeDFoOhOkPppAoYSOUAKUHxlusenSYJjVlIjOqMtgJ+LPQ4neFg1l2zNzJ
-         T4rg==
+        Tue, 24 May 2022 09:59:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DF9287A01
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 06:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653400775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Ff+pshfC1Z6E3EzI0y8JRQ1REVK5W8crSBK2MgvYz0=;
+        b=CPY9tM8sOjSxfzwTh7DEsSuHWWLbrhLWX/iqRSn1MdNdt6EJxKhOSCoLqqSSl3gemhEHbK
+        t3Dz7DkZWAEtTC7RfPioiOQfvQjjR1vUCQgtIpZoMW7n8QaM6Gmmn7lnqVZDCa0/9PhDhj
+        KTzNspw7a0zwd+Armo35R/J0iFl1BhY=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-346-7zPLod8OMG-T0lO2-vEYvA-1; Tue, 24 May 2022 09:59:33 -0400
+X-MC-Unique: 7zPLod8OMG-T0lO2-vEYvA-1
+Received: by mail-qt1-f198.google.com with SMTP id m19-20020a05622a055300b002f940281f18so1989332qtx.22
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 06:59:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7p2U0ToaQGK8ydTaA8am+2nfDgACRmmoUvxmzOpA12U=;
-        b=qRvxMKHqT7VxJZ+CP+ixarOUwbDEuuQxANvuvYWyQSPyHP0uhOFCKBZS6jFe2q2JFg
-         4kv9ekJ6eJmHjvVpm3BQrlL0FdkiFIu/LyxSNficSDitKzpEFFQRx6RokDvhTqNYZ8+S
-         IFgRIJt8uDZGHG/EA9rXglVqvznsYtv7O1vtzQt1GJ/0UfXFnr/nWgn708K5ZHrTbspO
-         UnLPd9TEOklEkRBJDRNNN7yJElvThBndT2HKLmwF0us1w3uVf64Eovbt8Vnz5g7KsGSs
-         xY81votMxsthFFAsiMmAHLljyh1wS/wVLkOd5eypGW6vh4FB/XDWJ3E3hZJM+RHgpaXz
-         12XA==
-X-Gm-Message-State: AOAM533nxPZ//jiRygkfY2gScKineFpo3gsovDKJXskhKOjdJsHc+scS
-        Ht5UnhExSmpjHLf7p/t96MlgJYde7dk=
-X-Google-Smtp-Source: ABdhPJx3GODl1QreM+AAYSDpjT0opMe0kurA9N20Ko4GAu/CWdAHATuYf0G33xBN3LNHkiB3vz2EYg==
-X-Received: by 2002:ac8:5dd4:0:b0:2f9:2bd5:24c5 with SMTP id e20-20020ac85dd4000000b002f92bd524c5mr10908815qtx.226.1653399233231;
-        Tue, 24 May 2022 06:33:53 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id l26-20020ac848da000000b002f39b99f66fsm6230347qtr.9.2022.05.24.06.33.51
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 06:33:52 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f83983782fso181768297b3.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 06:33:51 -0700 (PDT)
-X-Received: by 2002:a81:134f:0:b0:2ff:59d9:aa98 with SMTP id
- 76-20020a81134f000000b002ff59d9aa98mr27987057ywt.348.1653399231392; Tue, 24
- May 2022 06:33:51 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=2Ff+pshfC1Z6E3EzI0y8JRQ1REVK5W8crSBK2MgvYz0=;
+        b=3d3iK09dmpWI/kzJwHzji+0kWlB3w2DGFtFQPDIVBB8GqxYbMjYMJsiE1lCTVhFx3f
+         cq937tEjyM09S+d5kf7sKul7ff9XuH+ngTL6HGl+jbUGKOzffPz87eYFxsXida3efwsn
+         FNtTuP8NKiyYN9eqdcZvUSo1bxXSVd5S5Wee/4jAdccTakHXHU/WchrnUJhUWsjgRo4y
+         zMkMKXqrMVxmXDPHmkOO+1kVWRx6J/JDySYD2Q6nRz9bDRxRWR/HM+T1w9YYU7ypB/5u
+         Xg9G8sSBgB0qH8mTw47ITAjCWdOkCmehrLBlMpluuhjLui+WafNpYS4GAkC7m0bhfjHM
+         6shA==
+X-Gm-Message-State: AOAM5330TstJzmGIii6HB0BVjqQ0i11T2LuO4OthUZtdmMVaFbF4r9za
+        E3ryf295ns4D94ySqwPHJ1dPiw6l7ewy+cA1CN+ijNF3WMjWc/lmtffeTkCompD7cKGC2sothLD
+        oPh3Im40Y1n7f9rjLDvBRTzSA/nm2cITRFHDW4qnClIg6
+X-Received: by 2002:a05:620a:1981:b0:507:4a52:f310 with SMTP id bm1-20020a05620a198100b005074a52f310mr17389262qkb.611.1653400773147;
+        Tue, 24 May 2022 06:59:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwqS+yZK5ZzpIED7qcr754PYpaiBLoHFNyuZBNAopvk3ojwwBfdu204lMoxiDpi9ZmkpuCv+gT3j6X+c8inrO8=
+X-Received: by 2002:a05:620a:1981:b0:507:4a52:f310 with SMTP id
+ bm1-20020a05620a198100b005074a52f310mr17389243qkb.611.1653400772863; Tue, 24
+ May 2022 06:59:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220520063835.866445-1-luyun_611@163.com> <CA+FuTSdoZeAncRVAYrb66Kp6bEueWrgyy7A8qP0kmr9pxfHMoA@mail.gmail.com>
- <3f494c7a-6648-a696-b215-f597e680c5d9@163.com> <CA+FuTSdHCszjFtkZj37KE-1rfSfzYEd5oXLyKS6Kz9pdi05ReA@mail.gmail.com>
- <754c0cd5-2289-3887-e7d2-71ff87e59afd@163.com>
-In-Reply-To: <754c0cd5-2289-3887-e7d2-71ff87e59afd@163.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 24 May 2022 09:33:15 -0400
-X-Gmail-Original-Message-ID: <CA+FuTScW3TekvnLnm=R9JvibOfPXRBP0O_3AuCmo4z=d3fP3fA@mail.gmail.com>
-Message-ID: <CA+FuTScW3TekvnLnm=R9JvibOfPXRBP0O_3AuCmo4z=d3fP3fA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/net: enable lo.accept_local in psock_snd test
-To:     Yun Lu <luyun_611@163.com>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        davem@davemloft.net, edumazet@google.com, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+References: <20211029184500.2821444-1-mcgrof@kernel.org> <20211029184500.2821444-2-mcgrof@kernel.org>
+ <87h75g0xbm.ffs@tglx>
+In-Reply-To: <87h75g0xbm.ffs@tglx>
+From:   Richard Fontana <rfontana@redhat.com>
+Date:   Tue, 24 May 2022 09:59:22 -0400
+Message-ID: <CAC1cPGz3ARW_H9cq6LY0_h3YXomMmSdVR1v1+xEYbshtK8Mvmw@mail.gmail.com>
+Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, tj@kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        Shuah Khan <shuah@kernel.org>, bvanassche@acm.org,
+        dan.j.williams@intel.com, joe@perches.com, keescook@chromium.org,
+        rostedt@goodmis.org, minchan@kernel.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Kuno Woudt <kuno@frob.nl>,
+        Richard Fontana <fontana@sharpeleven.org>,
+        copyleft-next@lists.fedorahosted.org,
+        Ciaran Farrell <Ciaran.Farrell@suse.com>,
+        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thorsten Leemhuis <linux@leemhuis.info>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 24, 2022 at 6:04 AM Yun Lu <luyun_611@163.com> wrote:
+On Mon, May 23, 2022 at 5:10 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> On 2022/5/23 =E4=B8=8B=E5=8D=889:32, Willem de Bruijn wrote:
->
-> > On Mon, May 23, 2022 at 5:25 AM Yun Lu <luyun_611@163.com> wrote:
-> >> On 2022/5/20 =E4=B8=8B=E5=8D=889:52, Willem de Bruijn wrote:
-> >>
-> >>> On Fri, May 20, 2022 at 2:40 AM Yun Lu <luyun_611@163.com> wrote:
-> >>>> From: luyun <luyun@kylinos.cn>
-> >>>>
-> >>>> The psock_snd test sends and recievs packets over loopback, but the
-> >>>> parameter lo.accept_local is disabled by default, this test will
-> >>>> fail with Resource temporarily unavailable:
-> >>>> sudo ./psock_snd.sh
-> >>>> dgram
-> >>>> tx: 128
-> >>>> rx: 142
-> >>>> ./psock_snd: recv: Resource temporarily unavailable
-> >>> I cannot reproduce this failure.
-> >>>
-> >>> Passes on a machine with accept_local 0.
-> >>>
-> >>> accept_local is defined as
-> >>>
-> >>> "
-> >>> accept_local - BOOLEAN
-> >>>       Accept packets with local source addresses. In combination
-> >>>       with suitable routing, this can be used to direct packets
-> >>>       between two local interfaces over the wire and have them
-> >>>       accepted properly.
-> >>> "
-> >> I did this test on my system(Centos 8.3 X86_64):
-> >>
-> >> [root@localhost net]# sysctl net.ipv4.conf.lo.accept_local
-> >> net.ipv4.conf.lo.accept_local =3D 0
-> >> [root@localhost net]# ./psock_snd -d
-> >> tx: 128
-> >> rx: 142
-> >> ./psock_snd: recv: Resource temporarily unavailable
-> >> [root@localhost net]# sysctl -w net.ipv4.conf.lo.accept_local=3D1
-> >> net.ipv4.conf.lo.accept_local =3D 1
-> >> [root@localhost net]# ./psock_snd -d
-> >> tx: 128
-> >> rx: 142
-> >> rx: 100
-> >> OK
-> >>
-> >> This failure does seem to be related to accept_local.
-> >>
-> >> Also, it's reported on Ubuntu:
-> >> https://bugs.launchpad.net/ubuntu-kernel-tests/+bug/1812618
-> > That is an old kernel, 4.18 derived.
+> On Fri, Oct 29 2021 at 11:44, Luis Chamberlain wrote:
+> > preferred. A summary of benefits why projects outside of Linux might
+> > prefer to use copyleft-next >= 0.3.1 over GPLv2:
 > >
-> > I simply am unable to reproduce this on an upstream v4.18 or v5.18.
-> > Likely something with either the distro kernel release, or another
-> > distro feature that interacts with this. Can you try v5.18 or another
-> > clean upstream kernel?
+> <snip>
 > >
-> > Else it requires instrumenting IN_DEV_ACCEPT_LOCAL tests to understand
-> > where this sysctl makes a meaningful change for you when running this
-> > test.
+> > o copyleft-next has a 'built-in or-later' provision
 >
-> I found another parameter rp_filter which interacts with this test:
+> Not convinced that this is a benefit under all circumstances, but that's
+> a philosopical problem. The real problem is this:
 >
-> Set rp_filter =3D 0, the psock_snd test OK.
+> > +Valid-License-Identifier: copyleft-next-0.3.1
 >
-> Or set rp_filter =3D 1 and accept_local=3D1, the psock_snd test OK.
+> and
 >
-> I get the same test results on kernel v5.10 or v5.15.  Analysis from
-> source code,  this two parameters
+> > +11. Later License Versions
+> > +
+> > +    The Copyleft-Next Project may release new versions of copyleft-next,
+> > +    designated by a distinguishing version number ("Later Versions").
+> > +    Unless I explicitly remove the option of Distributing Covered Works
+> > +    under Later Versions, You may Distribute Covered Works under any Later
+> > +    Version.
 >
-> will change the result of fib_validate_source when running this test.
-> For most distro kernel releases,
->
-> rp_filter is enabled by default, so this test will fail when
-> accept_local is kept to be zero.
+> If I want to remove this option, then how do I express this with a SPDX
+> license identifier?
 
-That explains.
+Probably off-topic but: I think as things currently stand in SPDX you
+would have to use an ad hoc LicenseRef- identifier to express the
+entirety of copyleft-next-0.3.1 coupled with an amendment that sort of
+strikes the later versions provision. This issue is also somewhat
+relevant: https://github.com/spdx/spdx-spec/issues/153
 
-Since this test runs inside a netns, changing a sysctl is fine.
+FWIW, built-in 'or-later' clauses are actually common in copyleft open
+source licenses; the GPL family is the oddity here. (Then again, the
+whole idea of a downstream license upgradability option is sort of
+unusual in the bigger scheme of things, but that's another topic.)
 
-Can you resubmit with a more detailed description now that the exact
-check is more clear, as well as interplay with rp_filter, and the
-default config of these two parameters configured by distros? Thanks.
-Please double check typos (s/recievs/receives).
+Richard
+
