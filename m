@@ -2,116 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8258D532ED5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 18:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F281532EF2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 18:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239152AbiEXQVM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 May 2022 12:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
+        id S239620AbiEXQaP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 May 2022 12:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbiEXQVI (ORCPT
+        with ESMTP id S239654AbiEXQaP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 May 2022 12:21:08 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82976BFB;
-        Tue, 24 May 2022 09:21:05 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id p22so31637051lfo.10;
-        Tue, 24 May 2022 09:21:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=2/bDGPYXufJFzkVnBY8mqDgAglNZetlk8WJ7Djt/e2E=;
-        b=e6JB8CI6WFSU+Q/ABVHaxlfYhBRAsmmbmkIDuhn1m6DKPOXKF37gjB/m9GdsVi49dc
-         JNf43jPT5zw03LMoVZ8t3fuV30/a2V5p20h02AkSpplyqHBCbbU0BEhybKuk9LvBIU0v
-         yF5u5B3igHgLN7iRG8ZQrDAszFgPNI/I5CRCOoGPWgb0Tr5z/PCYQqsyZhaq45tfM2ue
-         TR82sVYgQfPiZLzURg9Q0Ng/5eocdGR5EPE8FxukEwr6LoxzCf3TXITUf9yHbYMLAfmG
-         vt/o3bafEdXjgzQsP4rsUwQGadPuBcmEHO5dtLS97SrWhTOdZeC4FS/jt5IR6+lcfUJ1
-         OuKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=2/bDGPYXufJFzkVnBY8mqDgAglNZetlk8WJ7Djt/e2E=;
-        b=Esfw8PkOJy8PWA2w3nW58LKuNx19lVLSmgduJqZ5dkFeDnKyxtHufoWqMq3hyhH2iM
-         mlKY4hhya99RkIOU59HY9EG0tB94FSg8XxXGYg4nzEbdE4s4qWdqgJh6IwM7tVghTOYX
-         Tx8zGzeOXVjkL2K14r9LI5U/Hq7r0srO39Dc2tbaAI+fCVM5ac3kasco8O4MRHZsKMGV
-         Snd0pADdwiiSxjWIU1tmRTB1x6hWQDgSeEkrsCWckmYzzdtW5Sr2Whfp9dLWmG3+JUKq
-         jQLBdsQc33EPrJlOotS9YaWMBLfJraK8FlT65HdCncSt5MMErX5cbNAQM3DCyEG6YyFQ
-         yhww==
-X-Gm-Message-State: AOAM5318skmTGNPL93OcE5nw/vmEENrhf37/yPxIvjw9mnrNnd56lCWc
-        2NzZQ0fX5OO+PxY5Os2K0foT3oeOJl7gdA==
-X-Google-Smtp-Source: ABdhPJzIQuFRRQuyC1EsDbZ10YZKs55feovmJnYJ1MTbAEC+b0Jjw4TR7inmyaHD1E/9Z28qwFMM0w==
-X-Received: by 2002:a05:6512:1510:b0:445:cbc3:a51f with SMTP id bq16-20020a056512151000b00445cbc3a51fmr20695039lfb.116.1653409263918;
-        Tue, 24 May 2022 09:21:03 -0700 (PDT)
-Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
-        by smtp.gmail.com with ESMTPSA id a26-20020a19f81a000000b0047255d21116sm2611832lff.69.2022.05.24.09.21.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 09:21:03 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Nikolay Aleksandrov <razor@blackwall.org>,
-        Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-In-Reply-To: <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
-Date:   Tue, 24 May 2022 18:21:02 +0200
-Message-ID: <86zgj6oqa9.fsf@gmail.com>
+        Tue, 24 May 2022 12:30:15 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16E037BE1;
+        Tue, 24 May 2022 09:30:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 83F4621A19;
+        Tue, 24 May 2022 16:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1653409811; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0aOp5yJI56RJ+SoECoGbDOaEZ7yLii4c891MVbbA4to=;
+        b=vWivk4oDuWVezANW9v3pF+X1FQpt89ke1A10GKiVNLMUJ+jKgPPHySGQopTrxU0imeKFLr
+        k+1ZR6j/nCl9XEAgMYfAPpUpabKowr0uyuLmMwXw0sARrEEeOtbpG4gcmjsoNanvdpJ34L
+        3mSGJgG0AgCIjZnsfZVZLvG7LV9vDyg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 435A913ADF;
+        Tue, 24 May 2022 16:30:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Y49RDxMIjWJaWgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 24 May 2022 16:30:11 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     cgroups@vger.kernel.org, linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.de>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [PATCH v3 0/5] memcontrol selftests fixups
+Date:   Tue, 24 May 2022 18:29:50 +0200
+Message-Id: <20220524162955.8635-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->
-> Hi Hans,
-> So this approach has a fundamental problem, f->dst is changed without any synchronization
-> you cannot rely on it and thus you cannot account for these entries properly. We must be very
-> careful if we try to add any new synchronization not to affect performance as well.
-> More below...
->
->> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
->>  	if (test_bit(BR_FDB_STATIC, &f->flags))
->>  		fdb_del_hw_addr(br, f->key.addr.addr);
->>  
->> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
->> +		atomic_dec(&f->dst->locked_entry_cnt);
->
-> Sorry but you cannot do this for multiple reasons:
->  - f->dst can be NULL
->  - f->dst changes without any synchronization
->  - there is no synchronization between fdb's flags and its ->dst
->
-> Cheers,
->  Nik
+Hello.
 
-Hi Nik,
+I'm just flushing the patches to make memcontrol selftests check the
+events behavior we had consensus about (test_memcg_low fails).
 
-if a port is decoupled from the bridge, the locked entries would of
-course be invalid, so maybe if adding and removing a port is accounted
-for wrt locked entries and the count of locked entries, would that not
-work?
+(test_memcg_reclaim, test_memcg_swap_max fail for me now but it's present
+even before the refactoring.)
 
-Best,
-Hans
+The two bigger changes are:
+- adjustment of the protected values to make tests succeed with the given
+  tolerance,
+- both test_memcg_low and test_memcg_min check protection of memory in
+  populated cgroups (actually as per Documentation/admin-guide/cgroup-v2.rst
+  memory.min should not apply to empty cgroups, which is not the case
+  currently. Therefore I unified tests with the populated case in order to to
+  bring more broken tests).
+
+Thanks,
+Michal
+
+Changes from v2 (https://lore.kernel.org/r/20220518161859.21565-2-mkoutny@suse.com/)
+- rebased on mm-stable 02e34fff195d3a5f67cbb553795dc109a37d1dcf
+- collected acked-bys
+- proper Fixes: tag
+
+Changes from v1 (https://lore.kernel.org/r/20220513171811.730-1-mkoutny@suse.com/)
+- fixed mis-rebase in compilation fix patch,
+- added review, ack tags from v1,
+- applied feedback from v1 (Octave script in git tree),
+- added one more patch extracting common parts,
+- rebased on mm-stable bbe832b9db2e.
+
+Michal Koutný (5):
+  selftests: memcg: Fix compilation
+  selftests: memcg: Expect no low events in unprotected sibling
+  selftests: memcg: Adjust expected reclaim values of protected cgroups
+  selftests: memcg: Remove protection from top level memcg
+  selftests: memcg: Factor out common parts of memory.{low,min} tests
+
+ MAINTAINERS                                   |   1 +
+ .../selftests/cgroup/memcg_protection.m       |  89 +++++++
+ .../selftests/cgroup/test_memcontrol.c        | 247 +++++-------------
+ 3 files changed, 152 insertions(+), 185 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/memcg_protection.m
+
+-- 
+2.35.3
+
