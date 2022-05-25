@@ -1,76 +1,46 @@
 Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BDE533CBD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 14:35:30 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id B16E6533DBC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 15:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237661AbiEYMf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 May 2022 08:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S236572AbiEYNVn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 May 2022 09:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiEYMf1 (ORCPT
+        with ESMTP id S229621AbiEYNVm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 08:35:27 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DD06D86D
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 05:35:26 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id c1so17137173qkf.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 05:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z/A2wyDaNzDKlw/qvtJ6FS1LUC1S3cZ+h0mgvejXLlQ=;
-        b=Xu0TlTNRdwdUzPc+JG7TdjcIcmHQVTnDdMtn2/xYgcHTdk79peQrh9W0ndYk8aiTtu
-         4jdxFmD5UknvI88YVoWg8gKAOx8ED/n1yiBVPLl43W305r3CnALPVFcDqADWto0L3Z4O
-         aWqLKq9rOV6xa2J/4s1V5lbBpOG02aXz3/f57Ch6VJLrXXbqf1t0p9XHjLdBBQ9Jg7Ww
-         M9atpVK4WiZ5ELkuZyUTjaJ6v31f6uQs931T6ty9sbmfHjStLPGrh8+UvmrwLeI5QSwi
-         p5gQvyw7udp0gDXeVIG7Myk1P2ccWwzOaLCU5YBChIs//ogjtKU9CAwb3Zan4xgLgpb+
-         NCmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z/A2wyDaNzDKlw/qvtJ6FS1LUC1S3cZ+h0mgvejXLlQ=;
-        b=YtD2+uUsiRl/oWo599K4r6ulpES/o2g25UMuk45oGgM7MJBUvEqfcJmZGlKc5AOyfr
-         vyzxNfbtViBrzMIccaBQOvNnfQZp3XXIdeJQ1k4yn0bbNShZmNF3i+lK1N89pXMsr1R5
-         Sidj6J/gp4P0BWDgx7QZgGOrufEBA6k68JNmFVczLtxp6tEwkBirDBRKalO6ztxINYj+
-         m6Rz3U862zP312vs3OHw3jgHZ7w5HYYn75hI9q62Zw62qzg5Ppz118KRwSxcSqUagDz2
-         j/8yDeQOS20tBwjfH1KlIxF1jIEo9/MeTyFCTvOuWCsVWU1o80m6OebVRYNuG6w7NP9+
-         umgA==
-X-Gm-Message-State: AOAM5335T5+heRyf6WxM8qhN7cSSZnPeFNS5Rvec1Gwka4r9lmJBXqHU
-        RIJ89rAMiREAX4faRFUpx+KhoOqFdO8=
-X-Google-Smtp-Source: ABdhPJzM8IRaJ0qBJoByGGmWQC9EPVKTMEMRKdiswCbouX4XRJGtbuNVfAyM/Q1+mySBaXkCxK0EgA==
-X-Received: by 2002:a37:8e02:0:b0:6a3:76d8:ed7a with SMTP id q2-20020a378e02000000b006a376d8ed7amr10969998qkd.162.1653482125604;
-        Wed, 25 May 2022 05:35:25 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id 128-20020a370c86000000b0069fc13ce23dsm1167836qkm.110.2022.05.25.05.35.25
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 05:35:25 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ff7b90e635so147178027b3.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 05:35:25 -0700 (PDT)
-X-Received: by 2002:a0d:db12:0:b0:300:55ea:66cc with SMTP id
- d18-20020a0ddb12000000b0030055ea66ccmr2046488ywe.348.1653482124711; Wed, 25
- May 2022 05:35:24 -0700 (PDT)
+        Wed, 25 May 2022 09:21:42 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2982427FF8;
+        Wed, 25 May 2022 06:21:38 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L7Wsr5bJbz67Q1X;
+        Wed, 25 May 2022 21:21:04 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 25 May 2022 15:21:35 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/3] bpf: Add support for maps with authenticated values
+Date:   Wed, 25 May 2022 15:21:12 +0200
+Message-ID: <20220525132115.896698-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220525031819.866684-1-luyun_611@163.com> <Yo3YoZWRkygFyqUc@Laptop-X1>
-In-Reply-To: <Yo3YoZWRkygFyqUc@Laptop-X1>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Wed, 25 May 2022 08:34:48 -0400
-X-Gmail-Original-Message-ID: <CA+FuTSeoy9v9omBOMyL=3NY8ayEz6gPaTcZXStCuTdmHWQtYHQ@mail.gmail.com>
-Message-ID: <CA+FuTSeoy9v9omBOMyL=3NY8ayEz6gPaTcZXStCuTdmHWQtYHQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/net: enable lo.accept_local in psock_snd test
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     Yun Lu <luyun_611@163.com>, davem@davemloft.net,
-        edumazet@google.com, willemdebruijn.kernel@gmail.com,
-        liuyun01@kylinos.cn, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,34 +48,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 25, 2022 at 3:20 AM Hangbin Liu <liuhangbin@gmail.com> wrote:
->
-> On Wed, May 25, 2022 at 11:18:19AM +0800, Yun Lu wrote:
-> > From: luyun <luyun@kylinos.cn>
-> >
-> > The psock_snd test sends and recieves packets over loopback, and
-> > the test results depend on parameter settings:
-> > Set rp_filter=0,
-> > or set rp_filter=1 and accept_local=1
-> > so that the test will pass. Otherwise, this test will fail with
-> > Resource temporarily unavailable:
-> > sudo ./psock_snd.sh
-> > dgram
-> > tx: 128
-> > rx: 142
-> > ./psock_snd: recv: Resource temporarily unavailable
-> >
-> > For most distro kernel releases(like Ubuntu or Centos), the parameter
-> > rp_filter is enabled by default, so it's necessary to enable the
-> > parameter lo.accept_local in psock_snd test. And this test runs
-> > inside a netns, changing a sysctl is fine.
-> >
-> > v2: add detailed description.
-> >
-> > Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> > Signed-off-by: luyun <luyun@kylinos.cn>
-> > Reviewed-by: Jackie Liu <liuyun01@kylinos.cn>
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
-Acked-by: Willem de Bruijn <willemb@google.com>
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
 
-ps: I did not really suggest this fix, but no need to respin just to remove that
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
+
+The initial idea for this feature was to provide an helper that eBPF
+programs might call to authenticate data whenever necessary. However, this
+restricts the ability to use that helper only in sleepable programs (due to
+crypto operations). Furthermore, data authentication would have been
+responsibility of eBPF programs.
+
+The proposed implementation instead shifts the responsibility of data
+authentication to the eBPF subsystem, upon request by the users. Whenever
+the users desire such feature, they just have to set a new map flag called
+BPF_F_VERIFY_ELEM. The eBPF subsystem ensures that only authenticated data
+can be added to the map. The check is performed during the execution of the
+bpf() system call when the commands are BPF_MAP_UPDATE_ELEM or
+BPF_MAP_UPDATE_BATCH. Since memory regions are not verified, usage of the
+BPF_F_MMAPABLE map flag is forbidden when BPF_F_VERIFY_ELEM is set.
+
+An advantage of shifting the responsibility of data authentication to the
+eBPF subsystem is that it can be offered to any kind of eBPF programs, not
+only the sleepable ones.
+
+When the new map flag BPF_F_VERIFY_ELEM is set, users have to provide a map
+value in the following format:
+
++-------------------------------+---------------+-----+-----------------+
+| verified data+sig size (be32) | verified data | sig | unverified data |
++-------------------------------+---------------+-----+-----------------+
+
+This is mostly the same format adopted for kernel modules, with the
+exception of the first field, as the size cannot be determined otherwise
+due to the fixed map value size. More details can be found in patch 1.
+
+Since the kernel already parses the format above, it was convenient to
+introduce also a new helper, called bpf_map_verified_data_size(), to
+return the size of verified data to the caller. This is done in patch 2.
+
+Finally, the added functionality is tested in patch 3.
+
+Roberto Sassu (3):
+  bpf: Add BPF_F_VERIFY_ELEM to require signature verification on map
+    values
+  bpf: Introduce bpf_map_verified_data_size() helper
+  bpf: Add tests for signed map values
+
+ include/linux/bpf.h                           |   7 +
+ include/uapi/linux/bpf.h                      |  11 +
+ kernel/bpf/arraymap.c                         |   2 +-
+ kernel/bpf/helpers.c                          |  15 ++
+ kernel/bpf/syscall.c                          |  70 ++++++
+ tools/include/uapi/linux/bpf.h                |  11 +
+ .../bpf/prog_tests/test_map_value_sig.c       | 212 ++++++++++++++++++
+ .../selftests/bpf/progs/map_value_sig.c       |  50 +++++
+ 8 files changed, 377 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_map_value_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/map_value_sig.c
+
+-- 
+2.25.1
+
