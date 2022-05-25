@@ -2,65 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2B15341B8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 18:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BF05341C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 18:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiEYQwI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 May 2022 12:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S242723AbiEYQ5j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 May 2022 12:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238797AbiEYQwI (ORCPT
+        with ESMTP id S229743AbiEYQ5g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 12:52:08 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBF933349;
-        Wed, 25 May 2022 09:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653497527; x=1685033527;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m352ENUFZqE2xOC6YCGx5rdnXcIf8B+FsHq1FS7a9n4=;
-  b=AlR8AeCx7MJd2tej0iO8awLGjA2hz2+nU2TmER/ibgpmzzJn3bdo1x+V
-   7hxfyXoemCZuMOXD/kiFtxdPmH4m3GInUu+dI+Iacv34OJwtjRiOEBEbt
-   XWgpEuGhNqPtThVAZI95vtfU+/NLCb9hQCri3szbfhNTmDzAJo2wIVD9x
-   KeMVM32MU7BG2Umspxk3wo1zcCZM8HJETA4ZFowYeskRqrygh1uiCRzC9
-   6xAdjwE1cuEIlnC6zomXmQGI88NDMMHAdyr+0+be5lFSeMxamPysR+pJ1
-   rsPempsjRRTJq/K7apaLkhmQ8d0nyH+LE1n5m4jTPgPhoulFyZnVEOJGi
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="255929672"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="255929672"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 09:52:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="559767274"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 25 May 2022 09:52:01 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntuEr-00039o-1Z;
-        Wed, 25 May 2022 16:52:01 +0000
-Date:   Thu, 26 May 2022 00:51:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org
-Cc:     kbuild-all@lists.01.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
- verification on map values
-Message-ID: <202205260057.t4Lmg5Gb-lkp@intel.com>
-References: <20220525132115.896698-2-roberto.sassu@huawei.com>
+        Wed, 25 May 2022 12:57:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A769BAD0;
+        Wed, 25 May 2022 09:57:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Pd4ZKHsCuwHbRpUVf7SH7T6MocnoUW1wyZlaf+DhBgw=; b=rbb/t1Gya+2NhoVAtcLM6UX02v
+        9hSw7P9l2AHuQYsheLBHoMrfI69aZHUlfQN98ERH4tTZL+jhd/NJewBbLwDWlIEf6CdcF74g3mWs7
+        JpyH+hxaqbUAkh7kNuX+A8EccNBsGHLEGLe/XA9HJtNywrQqfnwhdYt1MnVGMkCwAArix0iB7BwIP
+        JhK3LD+ofrn2jYClqvFG3Jl/z7QWjDs//HmPO4JsrKuC5d11qmNUKWBH0XXwJQAvnjg1UebVR09Sz
+        +4xUUPz8c0rqxG2RDHC2LZhaBlFa/X+P3bQwNf12i9hf0nhE0Si/8juf1oam66p0rw5dbwSHU2FaL
+        irUGiZZg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ntuK6-00BuIT-QJ; Wed, 25 May 2022 16:57:26 +0000
+Date:   Wed, 25 May 2022 09:57:26 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <fontana@sharpeleven.org>
+Cc:     tj@kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, jeyu@kernel.org, shuah@kernel.org,
+        bvanassche@acm.org, dan.j.williams@intel.com, joe@perches.com,
+        keescook@chromium.org, rostedt@goodmis.org, minchan@kernel.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Kuno Woudt <kuno@frob.nl>,
+        copyleft-next@lists.fedorahosted.org,
+        Ciaran Farrell <Ciaran.Farrell@suse.com>,
+        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
+Message-ID: <Yo5f9nctTwHZqPbl@bombadil.infradead.org>
+References: <20211029184500.2821444-1-mcgrof@kernel.org>
+ <20211029184500.2821444-2-mcgrof@kernel.org>
+ <87ee0k0wrn.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220525132115.896698-2-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <87ee0k0wrn.ffs@tglx>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,37 +66,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Roberto,
+On Mon, May 23, 2022 at 11:22:36PM +0200, Thomas Gleixner wrote:
+> On Fri, Oct 29 2021 at 11:44, Luis Chamberlain wrote:
+> > --- /dev/null
+> > +++ b/LICENSES/dual/copyleft-next-0.3.1
+> > @@ -0,0 +1,237 @@
+> > +Valid-License-Identifier: copyleft-next-0.3.1
+> > +SPDX-URL: https://spdx.org/licenses/copyleft-next-0.3.1
+> > +Usage-Guide:
+> > +  This license can be used in code, it has been found to be GPLv2 compatible
+> > +  by attorneys at Redhat and SUSE, however to air on the side of caution,
+> 
+> air ?
 
-Thank you for the patch! Yet something to improve:
+Hehe, thanks I'll fix in the next spin.
 
-[auto build test ERROR on bpf-next/master]
-[also build test ERROR on bpf/master horms-ipvs/master net/master net-next/master v5.18 next-20220525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > +  it's best to only use it together with a GPL2 compatible license using "OR".
+> 
+> This paragraph is not really understandable for Joe Developer.
+> 
+>   copyleft-next-0.3.1 is explicitly compatible with GPLv2 (or later) and
+>   can therefore be used for kernel code. Though the best and recommended
+>   practice is to express this in the SPDX license identifier by
+>   licensing the code under both licenses expressed by the OR operator.
+> 
+> Hmm?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roberto-Sassu/bpf-Add-support-for-maps-with-authenticated-values/20220525-212552
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20220526/202205260057.t4Lmg5Gb-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/196e68e5ddfa50f40efaf20c8df37f3420e38b72
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Roberto-Sassu/bpf-Add-support-for-maps-with-authenticated-values/20220525-212552
-        git checkout 196e68e5ddfa50f40efaf20c8df37f3420e38b72
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Let me try clarifying this further, how about:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+   copyleft-next-0.3.1 is explicitly compatible with GPLv2 (or later) and
+   can therefore be used for kernel code. Despite this, if you use
+   copyleft-next-0.3.1 on Linux, the recommended practice is to express
+   dual licensing with GPL using in the SPDX license identifiers by
+   using by the OR operator.
 
-All errors (new ones prefixed by >>):
+> > +  To use the copyleft-next-0.3.1 license put the following SPDX tag/value
+> > +  pair into a comment according to the placement guidelines in the
+> > +  licensing rules documentation:
+> > +    SPDX-License-Identifier: GPL-2.0 OR copyleft-next-0.3.1
+> > +    SPDX-License-Identifier: GPL-2.0-only OR copyleft-next 0.3.1
+> > +    SPDX-License-Identifier: GPL-2.0+ OR copyleft-next-0.3.1
+> > +    SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
+> 
+> Please don't propagate the GPL-2.0 and GPL-2.0+ tags. They are
+> outdated (still valid) in the SPDX spec, which reminds me that I should
+> update the relevant documentation...
 
-   ld: kernel/bpf/syscall.o: in function `bpf_map_verify_value_sig':
->> syscall.c:(.text+0x4ff): undefined reference to `mod_check_sig'
+OK thanks for the recommendation, I'll leave it at:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
++    SPDX-License-Identifier: GPL-2.0 OR copyleft-next-0.3.1
++    SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
+
+  Luis
