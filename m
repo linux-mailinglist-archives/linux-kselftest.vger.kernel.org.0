@@ -2,94 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB05534096
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 17:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0535340CE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 17:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236093AbiEYPpO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 May 2022 11:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S233482AbiEYP4X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 May 2022 11:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245281AbiEYPpG (ORCPT
+        with ESMTP id S231952AbiEYP4T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 11:45:06 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740B331378
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 08:45:05 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2fed274f3fbso180661307b3.17
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 08:45:05 -0700 (PDT)
+        Wed, 25 May 2022 11:56:19 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB0E1117E;
+        Wed, 25 May 2022 08:56:17 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id q203so21861479iod.0;
+        Wed, 25 May 2022 08:56:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8crKctF/FapgbNwtKywxdiRKxJS9KDB6fu8ZFm9leIY=;
-        b=HD0dnRcINZlIc28mvYS69ByWX+qQxZpdVeIizu3L/fs8eMaiizEOW5O0gY2kNm3R0L
-         yaItTi+yrlaV/PsjehHgrVKTSmRgEJO4r018YLG1lc09l74nejdM+P5GAVaqqujGtJ3t
-         ThxEHpfFz4jWZVGaFigAq5VT+n0jZiiFoiEUJcjVwxYh51J2YTMl7v/3EwOJFNsDgupy
-         Cw4cgTSpASYp8AyzW/7xuF1dabTAcwmQSNAW87x3FjCYiLAamLU8Dr0UVMmK1kgDKpBZ
-         aQx17405zIqpx6smduoBe0YD6+OGooQSsZzEC6t73mOAgOEyirzHAL/D7cqEnhaqF0/r
-         2amA==
+        bh=NWTqeXZC8D6YtjtGAZs5ZXY5lGkGmqycfWxou9ZqxyY=;
+        b=F75F5kEB3L9Vo76l2tFnO18BnVfeBJI5QUakq32KdOL772s9ifaDvEeYFWF+X09ZRr
+         ue4pe8ZL7S0ma6GTc10AK0GvjDjSJGYUGA8mMsppBiyewozGpHuhZnywSl0zAaEgWljU
+         6UltHubliITzBSB+HWZ4zhfUlawjmKeXDDxJizblYd0X89yR4ABQ9h9TiOL/yaXy9RrI
+         8TXAK86YihXvmWElKUTz4id4PrNJF5vPy9e3LPKwykJLXr47S2WlXyGgWsmNQO8tY4B5
+         7Xt+6PVUqX879tG8OQGyPHKNqOAuC008OZGFBkizJNZMcCiQ1jUKSA7AU1j6ahRKiuXK
+         M/2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=8crKctF/FapgbNwtKywxdiRKxJS9KDB6fu8ZFm9leIY=;
-        b=7y9pg7h9Z2S2EvdKUUXF0CbANGvnSfMP2RNBxErhjYhHhnA8v+c+BUKu2R0gvdPUmu
-         d+obB+SESW6L11vC32/N1ntxUIJJbzu6Q7z1RGeFW0Z/3UdtMZC1IG2f0FSOQ3NTgRLg
-         kjSixsFWneJUZv7iW/UExc2ipzd6OpMq+fe0hqwVTILKUJ9gFULgRlAMLrwuknpG7McY
-         xLaIB0VHYsQY5jr4kvGXJn4/WtwLwLBhv4/fJhboO3Df2rbftADHXgP4FBQPHkwj37Ub
-         9AbtgBAm/ItVZPoIAWuC5Y6DjVDyRN7v0cMj/tE3tMcU33gsbikTcZwJLrVMbdyAWlEJ
-         1Z9w==
-X-Gm-Message-State: AOAM531z8p3+v+XKYlbLRtBijEyF0Ay6hKVAvtYxtwulDtATbeXHtSVF
-        ySetp5PeNPd32pnRsUy8J6G3kHbol7PL0g==
-X-Google-Smtp-Source: ABdhPJxILJCqLH0vLgrdn2WPeC0lY9gp5yI55a6IR4a66YCH2wlHlcpCY79q19ipw1SsuXvLeiLMV66R9sTbIQ==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:5bba:b161:2a8a:2ddd])
- (user=dlatypov job=sendgmr) by 2002:a0d:d503:0:b0:300:d3cb:cee1 with SMTP id
- x3-20020a0dd503000000b00300d3cbcee1mr1127476ywd.368.1653493504657; Wed, 25
- May 2022 08:45:04 -0700 (PDT)
-Date:   Wed, 25 May 2022 08:44:42 -0700
-In-Reply-To: <20220525154442.1438081-1-dlatypov@google.com>
-Message-Id: <20220525154442.1438081-5-dlatypov@google.com>
-Mime-Version: 1.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NWTqeXZC8D6YtjtGAZs5ZXY5lGkGmqycfWxou9ZqxyY=;
+        b=svkMg4uC9KwPXYQaQXC9Izni8wNR6g9Crd6cvcy9S0a5tXy1DOWETyvFz06qi+QDaz
+         QlG4C1QcLepRCG50jqPWYTU1kCXkVVlGh3D/76JtoGKnIilsUNg0L7RHiTu5ei1Zk6wN
+         TuB3/Oor06UYLZ3Sjwdiz6+18DBS4Vs5I4TVMQfG+aKlYOQ93z9gC/xWaJAIKsXguZ5E
+         o265houizv702nr2W7q63iwfQCQG7p7Oy2niTQKGmhEEWtRdXhv8pV5CI7JESPTZSnQV
+         +hMy2VhQHYCSh1FDIus7xVdA/ZAfhY15A7GOTfstCpp3vN75MmMcfVQVe2Z7Zj/0/L18
+         WbVg==
+X-Gm-Message-State: AOAM532iiQRZdXNA1KfWVtrHOI+wjJcGPgrWsQq+/nDqaiMl0VYannXg
+        5m1gIne6xPhv97Fo+7B4GTPLQ6dDg7ouCgnX8R/ImzbFfCU=
+X-Google-Smtp-Source: ABdhPJx0nsTy7x/z3D7P4+MW7NBNmIiAAUjKUz14406W14FWGR/5GPTAA+C3B/HrIhGELqRot1gVa6mHN3MZspD9C5s=
+X-Received: by 2002:a05:6602:2d90:b0:63d:b41e:e4e4 with SMTP id
+ k16-20020a0566022d9000b0063db41ee4e4mr14600570iow.172.1653494177294; Wed, 25
+ May 2022 08:56:17 -0700 (PDT)
+MIME-Version: 1.0
 References: <20220525154442.1438081-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [RFC PATCH 4/4] kunit: delcare kunit_assert structs as const
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     ojeda@kernel.org, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        Daniel Latypov <dlatypov@google.com>
+In-Reply-To: <20220525154442.1438081-1-dlatypov@google.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 25 May 2022 17:56:06 +0200
+Message-ID: <CANiq72=hRbmHE865bwxQnCn2+kwB5nTaQgGAM0nijJnEL=3TJQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] kunit: more assertion reworking
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Everywhere we use the assert structs now takes them via const*, as of
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=7466886b400b1904ce30fa311904849e314a2cf4
+Hi Daniel,
 
-So now let's properly declare the structs as const as well.
----
- include/kunit/test.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, May 25, 2022 at 5:44 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Note: this does change the function signature of
+> kunit_do_failed_assertion, so we'd need to update the rust wrapper in https://github.com/Rust-for-Linux/linux/blob/rust/rust/kernel/kunit.rs
+> But otherwise, I don't think this series changes anything on the
+> rust-side.
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index e4b54f5d2731..fa5955c8b412 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -514,7 +514,7 @@ void kunit_do_failed_assertion(struct kunit *test,
- 
- #define _KUNIT_FAILED(test, assert_type, assert_class, assert_format, INITIALIZER, fmt, ...) do { \
- 	static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;	       \
--	struct assert_class __assertion = INITIALIZER;			       \
-+	const struct assert_class __assertion = INITIALIZER;		       \
- 	kunit_do_failed_assertion(test,					       \
- 				  &__loc,				       \
- 				  assert_type,				       \
--- 
-2.36.1.124.g0e6072fb45-goog
+Thanks for the heads up! I can take care of that.
 
+Cheers,
+Miguel
