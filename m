@@ -2,121 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48550533743
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 09:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E087E5337F8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 10:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242567AbiEYHUL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 May 2022 03:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
+        id S231140AbiEYIG5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 May 2022 04:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239469AbiEYHUJ (ORCPT
+        with ESMTP id S235323AbiEYIGy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 03:20:09 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD2A113A;
-        Wed, 25 May 2022 00:20:07 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id h186so18214766pgc.3;
-        Wed, 25 May 2022 00:20:07 -0700 (PDT)
+        Wed, 25 May 2022 04:06:54 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED33381490
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 01:06:48 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id g23so1120274wrb.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 01:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=c3NN2a98vQ67oBdy58k4ALAhQdAN1uSvB09A0CcmiJY=;
-        b=mBcbVGb3wNLi5hNPLMu/XoOvLWcCk4sqM8U0MLyhriNhx+FA5oKEsABeEVw2hPkIYw
-         1QRrqx3sFIFYWGINrNZ57Q+nJZmjAeBdpHgORWba7mJC9Npa/QaDdaXZwmM+d0kpHPjk
-         CtnhC6WvPlztLh8INB9OjcEea7gcwRTetIwZXh01miBnvzHwCOe2vLHBfui86TktvHpK
-         wQ9iRZMTflwV251+iVAoyqFaFR0aH2SyuQHH0SgaA009BrDs6Dz43wf9jdsZ52U9z1Xo
-         1jPLIjYxbgCUyIn5eY0Hy75XUoG5UN7X50u2TAJDNagp9vUylM6ddP65pmyQuV2Vj0m8
-         LZng==
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cVq7pwXv2//Gfr1cHlRRSEheHaq4li61MQakSnDYkHk=;
+        b=NSbOEN1kEirXXcI0n+Rf9Sy90jmua25IOlwq3lBlny6ebWLJYupmHvohFiRfMPOYyq
+         4F5ikMXUckwPZMYV4cy1mkymCR7C/+/APrT91TE45m53C/G8or+AB0C7YnLnAmuFqZxj
+         a/5bJX+7SKQT+s4uAyqsGz5KEfN+/60UTN5yTFZEQNyAHD1BVJT73zQdK0VlccjJONE9
+         6R2aYtGZx2oDjYvCVCmv2sLZ5HSRUx3w3LKH4wb4s0fzsiBa9yitlqNtoveAi/tXQGzZ
+         HxQ1a1kqvyEtO1SgEEEkCr31sl8DHd8EzzaECAtIi2qlVGJgviVNf+Z4TdWIH4CvIbxt
+         nT8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c3NN2a98vQ67oBdy58k4ALAhQdAN1uSvB09A0CcmiJY=;
-        b=ThNntfvJZbClD/pY9bqbOPn2KOxOS7b9CTylGtK7X3Bm7IzL/8iO2jgXNn6cgKWEX4
-         tnBPCJa+i6l868dLjFV6dNZ3wdrlB1IQygqX0wuHZUpZ+3yiLxrXGUv4zlD/WgLBQgYj
-         FPG6kBJwwL+3nLjh/clYqjhDe+QUMiif0/33B1gbLkoFC+HpyAvEplMqdd00AH0tDUdZ
-         TaTXCG9neT+SoTqBfVfbd94v1Io3s5KtnEzRCMDDF9EE/AEGBQv+m3RTHrGxyD5AXqjK
-         50B29xl0JnMz9+8DCWqVbONQqkgY6yuSx07g06s6UgoPF5DZ3o9Sa7tbPNo+l9E9p8cG
-         av7Q==
-X-Gm-Message-State: AOAM533eWcqvbureeO+M5wL+YH7t1zl60uCWew6Ls8xeNJ0zKUZJjiqJ
-        Tm3+y36lIpF5biZ/ifWTDcU=
-X-Google-Smtp-Source: ABdhPJy4SzjDG9HgY2opuZXTbupL+Jja3hb5i7r++rjCcqLLwoKwoafmNx3vWrkya6xc0kk2NjTxDQ==
-X-Received: by 2002:a05:6a00:114e:b0:4c8:55f7:faad with SMTP id b14-20020a056a00114e00b004c855f7faadmr32105069pfm.86.1653463207201;
-        Wed, 25 May 2022 00:20:07 -0700 (PDT)
-Received: from Laptop-X1 ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id x15-20020a170902a38f00b00162496617b9sm2657121pla.286.2022.05.25.00.20.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 00:20:06 -0700 (PDT)
-Date:   Wed, 25 May 2022 15:20:01 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Yun Lu <luyun_611@163.com>
-Cc:     willemb@google.com, davem@davemloft.net, edumazet@google.com,
-        willemdebruijn.kernel@gmail.com, liuyun01@kylinos.cn,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/net: enable lo.accept_local in psock_snd
- test
-Message-ID: <Yo3YoZWRkygFyqUc@Laptop-X1>
-References: <20220525031819.866684-1-luyun_611@163.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cVq7pwXv2//Gfr1cHlRRSEheHaq4li61MQakSnDYkHk=;
+        b=fgzg+h5NZ2jIerdliqhY/rCygpvWihvRQT0lvzwjn5GkKWzZPmvziTPARlnjVlZw6X
+         LUdZSUqO9wNymIhiq4RO6q0yll/8xFNqedv8eN3QUP6eZkIHz5ohmETLLZ1DXTUV2Tjg
+         33XnoFTzPfrvm2ekDykDDRXE0vfCIgazuGLTAzLKm6y+FjYi1XJbSwLdn2zTK+JLvZLc
+         n2f3hdDxclrMdVmd0l8dydGvB/TP6rqu8uyLE72XHvwydkY0n11qDjmW/QT0JJZQq3c/
+         vXhJD8C8Uzj0Pd+Ou84whNSP14hQgGZaagqc/QLSFpEq9QkWOw/o75/RjSFfJf+3Z3JS
+         V3Bw==
+X-Gm-Message-State: AOAM531XmAeqX8HxBzq78EQ2CyZdlbkG/az6qfni9Xn7lumlaLwJXlZh
+        jxZyRDO8oPpLQSpdXN+z6l5JOA==
+X-Google-Smtp-Source: ABdhPJxxUHRzsWG9Ga2j1bOgOyilkp0ZbdgwfH/TcJtO2mh86zxzRwq60XFA/9neVmDozoa29iR3JA==
+X-Received: by 2002:adf:d1a8:0:b0:20f:f808:2ac8 with SMTP id w8-20020adfd1a8000000b0020ff8082ac8mr4694627wrc.495.1653466007320;
+        Wed, 25 May 2022 01:06:47 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id x8-20020a7bc208000000b0039765a7add4sm1038032wmi.29.2022.05.25.01.06.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 01:06:46 -0700 (PDT)
+Message-ID: <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
+Date:   Wed, 25 May 2022 11:06:44 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525031819.866684-1-luyun_611@163.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Content-Language: en-US
+To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+ <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
+ <86zgj6oqa9.fsf@gmail.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <86zgj6oqa9.fsf@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 25, 2022 at 11:18:19AM +0800, Yun Lu wrote:
-> From: luyun <luyun@kylinos.cn>
+On 24/05/2022 19:21, Hans Schultz wrote:
+>>
+>> Hi Hans,
+>> So this approach has a fundamental problem, f->dst is changed without any synchronization
+>> you cannot rely on it and thus you cannot account for these entries properly. We must be very
+>> careful if we try to add any new synchronization not to affect performance as well.
+>> More below...
+>>
+>>> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
+>>>  	if (test_bit(BR_FDB_STATIC, &f->flags))
+>>>  		fdb_del_hw_addr(br, f->key.addr.addr);
+>>>  
+>>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
+>>> +		atomic_dec(&f->dst->locked_entry_cnt);
+>>
+>> Sorry but you cannot do this for multiple reasons:
+>>  - f->dst can be NULL
+>>  - f->dst changes without any synchronization
+>>  - there is no synchronization between fdb's flags and its ->dst
+>>
+>> Cheers,
+>>  Nik
 > 
-> The psock_snd test sends and recieves packets over loopback, and
-> the test results depend on parameter settings:
-> Set rp_filter=0,
-> or set rp_filter=1 and accept_local=1
-> so that the test will pass. Otherwise, this test will fail with
-> Resource temporarily unavailable:
-> sudo ./psock_snd.sh
-> dgram
-> tx: 128
-> rx: 142
-> ./psock_snd: recv: Resource temporarily unavailable
+> Hi Nik,
 > 
-> For most distro kernel releases(like Ubuntu or Centos), the parameter
-> rp_filter is enabled by default, so it's necessary to enable the
-> parameter lo.accept_local in psock_snd test. And this test runs
-> inside a netns, changing a sysctl is fine.
+> if a port is decoupled from the bridge, the locked entries would of
+> course be invalid, so maybe if adding and removing a port is accounted
+> for wrt locked entries and the count of locked entries, would that not
+> work?
 > 
-> v2: add detailed description.
-> 
-> Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> Signed-off-by: luyun <luyun@kylinos.cn>
-> Reviewed-by: Jackie Liu <liuyun01@kylinos.cn>
-> ---
->  tools/testing/selftests/net/psock_snd.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/psock_snd.c b/tools/testing/selftests/net/psock_snd.c
-> index 7d15e10a9fb6..edf1e6f80d41 100644
-> --- a/tools/testing/selftests/net/psock_snd.c
-> +++ b/tools/testing/selftests/net/psock_snd.c
-> @@ -389,6 +389,8 @@ int main(int argc, char **argv)
->  		error(1, errno, "ip link set mtu");
->  	if (system("ip addr add dev lo 172.17.0.1/24"))
->  		error(1, errno, "ip addr add");
-> +	if (system("sysctl -w net.ipv4.conf.lo.accept_local=1"))
-> +		error(1, errno, "sysctl lo.accept_local");
->  
->  	run_test();
->  
-> -- 
-> 2.25.1
+> Best,
+> Hans
 
-Great, this also fixed my problem. Please feel free to add my
+Hi Hans,
+Unfortunately you need the correct amount of locked entries per-port if you want
+to limit their number per-port, instead of globally. So you need a consistent
+fdb view with all its attributes when changing its dst in this case, which would
+require new locking because you have multiple dependent struct fields and it will
+kill roaming/learning scalability. I don't think this use case is worth the complexity it
+will bring, so I'd suggest an alternative - you can monitor the number of locked entries
+per-port from a user-space agent and disable port learning or some similar solution that
+doesn't require any complex kernel changes. Is the limit a requirement to add the feature?
 
-Tested-by: Hangbin Liu <liuhangbin@gmail.com>
+I have an idea how to do it and to minimize the performance hit if it really is needed
+but it'll add a lot of complexity which I'd like to avoid if possible.
+
+Cheers,
+ Nik
+
