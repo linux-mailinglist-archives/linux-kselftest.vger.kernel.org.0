@@ -1,190 +1,111 @@
 Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDC8533A85
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 12:18:58 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 64BDE533CBD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 14:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241013AbiEYKS5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 May 2022 06:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
+        id S237661AbiEYMf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 May 2022 08:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238650AbiEYKS4 (ORCPT
+        with ESMTP id S230107AbiEYMf1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 06:18:56 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C3D95DFD
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 03:18:53 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id l30so862756wrb.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 03:18:53 -0700 (PDT)
+        Wed, 25 May 2022 08:35:27 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DD06D86D
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 05:35:26 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id c1so17137173qkf.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 05:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IKO1wQPqNeafXW7ePx/p6H6D1wFfnLpkgbfwaCOWD9o=;
-        b=CWTtkvYFGef5ey+p035Mn9qClBe5IM61n2d51HyOo6ItqkiavbGG73JXbcGaExiw9d
-         wg00mxcAerlPgWUpzrJ8w6fSjW5TntE/H91PCb0KJYsCdbsqhG0HHYHt/TcVL2g0w/Ot
-         8nHb+85XPzoFVRbf6s2E5ctugD4BfMmxQVRESSUjYMiYDY/bubJsIu4u80siyLDjTWK7
-         4OD/HyNkz1YL4xJBkatPj577T+sZwbDw+4yMFfuIjDdoCJFGA2lsiOjm2TkIgWZHwn+I
-         7ldZ4aH+oyR7xWefpMIn+gtNyZDyj3AkIES6acDXz1k4cAxWd0aCtMJYx0SfvYWgZ9nN
-         J77w==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z/A2wyDaNzDKlw/qvtJ6FS1LUC1S3cZ+h0mgvejXLlQ=;
+        b=Xu0TlTNRdwdUzPc+JG7TdjcIcmHQVTnDdMtn2/xYgcHTdk79peQrh9W0ndYk8aiTtu
+         4jdxFmD5UknvI88YVoWg8gKAOx8ED/n1yiBVPLl43W305r3CnALPVFcDqADWto0L3Z4O
+         aWqLKq9rOV6xa2J/4s1V5lbBpOG02aXz3/f57Ch6VJLrXXbqf1t0p9XHjLdBBQ9Jg7Ww
+         M9atpVK4WiZ5ELkuZyUTjaJ6v31f6uQs931T6ty9sbmfHjStLPGrh8+UvmrwLeI5QSwi
+         p5gQvyw7udp0gDXeVIG7Myk1P2ccWwzOaLCU5YBChIs//ogjtKU9CAwb3Zan4xgLgpb+
+         NCmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IKO1wQPqNeafXW7ePx/p6H6D1wFfnLpkgbfwaCOWD9o=;
-        b=kNBDiHye/gPWa2tJ+aRL0AleaYRomfUVtKGUZI4UxXhOjVs6DlrOWNwPs1O7dsTnSG
-         b7F6+BeHpPGDqU7Jls9SU/fESKxdPbbQxaoKjcYQ9okXlYOhoJi9GPg/HM6u3MoMeKFD
-         GScliESaZOs2RqGmQkel25MUo/Sew2+Fz/2I8iIiiF2vq7KrXv9bTUm+quf1ICm53ESO
-         XmZPlFdczIKwBhUvd16UukET+9rbolQk30xPlrhcCTX+yyiFlY7DfH5EnQfhpITSZ0mf
-         fWX3YVGCo9yDutqTtkcyAmTpaOTEteXlAqovxexTDjwrLElNGWnGdoK7Sma+viZFBUyk
-         pajQ==
-X-Gm-Message-State: AOAM531ArhUC9PFdlWeGMh6q7Y6Eysa830ZeBD0yKw6pu1+fB7STSHxy
-        ZgYH0DC3hHt675E5eghVIPcPzg==
-X-Google-Smtp-Source: ABdhPJxgtLZHCd6/bHzg9r3GWuTdZpprQ2vQ2cJsbS0c885HtYWHWfg4GYMB8tQn4zKYJcJdaeJoiA==
-X-Received: by 2002:adf:fc01:0:b0:20c:ff9a:2c53 with SMTP id i1-20020adffc01000000b0020cff9a2c53mr26042048wrr.142.1653473931814;
-        Wed, 25 May 2022 03:18:51 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id p3-20020a1c7403000000b0039744664af7sm1749957wmc.1.2022.05.25.03.18.50
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z/A2wyDaNzDKlw/qvtJ6FS1LUC1S3cZ+h0mgvejXLlQ=;
+        b=YtD2+uUsiRl/oWo599K4r6ulpES/o2g25UMuk45oGgM7MJBUvEqfcJmZGlKc5AOyfr
+         vyzxNfbtViBrzMIccaBQOvNnfQZp3XXIdeJQ1k4yn0bbNShZmNF3i+lK1N89pXMsr1R5
+         Sidj6J/gp4P0BWDgx7QZgGOrufEBA6k68JNmFVczLtxp6tEwkBirDBRKalO6ztxINYj+
+         m6Rz3U862zP312vs3OHw3jgHZ7w5HYYn75hI9q62Zw62qzg5Ppz118KRwSxcSqUagDz2
+         j/8yDeQOS20tBwjfH1KlIxF1jIEo9/MeTyFCTvOuWCsVWU1o80m6OebVRYNuG6w7NP9+
+         umgA==
+X-Gm-Message-State: AOAM5335T5+heRyf6WxM8qhN7cSSZnPeFNS5Rvec1Gwka4r9lmJBXqHU
+        RIJ89rAMiREAX4faRFUpx+KhoOqFdO8=
+X-Google-Smtp-Source: ABdhPJzM8IRaJ0qBJoByGGmWQC9EPVKTMEMRKdiswCbouX4XRJGtbuNVfAyM/Q1+mySBaXkCxK0EgA==
+X-Received: by 2002:a37:8e02:0:b0:6a3:76d8:ed7a with SMTP id q2-20020a378e02000000b006a376d8ed7amr10969998qkd.162.1653482125604;
+        Wed, 25 May 2022 05:35:25 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id 128-20020a370c86000000b0069fc13ce23dsm1167836qkm.110.2022.05.25.05.35.25
+        for <linux-kselftest@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 03:18:51 -0700 (PDT)
-Message-ID: <4bf1c80d-0f18-f444-3005-59a45797bcfd@blackwall.org>
-Date:   Wed, 25 May 2022 13:18:49 +0300
+        Wed, 25 May 2022 05:35:25 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ff7b90e635so147178027b3.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 05:35:25 -0700 (PDT)
+X-Received: by 2002:a0d:db12:0:b0:300:55ea:66cc with SMTP id
+ d18-20020a0ddb12000000b0030055ea66ccmr2046488ywe.348.1653482124711; Wed, 25
+ May 2022 05:35:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
- <86zgj6oqa9.fsf@gmail.com>
- <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
- <86fskyggdo.fsf@gmail.com>
- <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
- <86v8tu7za3.fsf@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <86v8tu7za3.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220525031819.866684-1-luyun_611@163.com> <Yo3YoZWRkygFyqUc@Laptop-X1>
+In-Reply-To: <Yo3YoZWRkygFyqUc@Laptop-X1>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 25 May 2022 08:34:48 -0400
+X-Gmail-Original-Message-ID: <CA+FuTSeoy9v9omBOMyL=3NY8ayEz6gPaTcZXStCuTdmHWQtYHQ@mail.gmail.com>
+Message-ID: <CA+FuTSeoy9v9omBOMyL=3NY8ayEz6gPaTcZXStCuTdmHWQtYHQ@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/net: enable lo.accept_local in psock_snd test
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     Yun Lu <luyun_611@163.com>, davem@davemloft.net,
+        edumazet@google.com, willemdebruijn.kernel@gmail.com,
+        liuyun01@kylinos.cn, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 25/05/2022 12:11, Hans Schultz wrote:
-> On ons, maj 25, 2022 at 11:38, Nikolay Aleksandrov <razor@blackwall.org> wrote:
->> On 25/05/2022 11:34, Hans Schultz wrote:
->>> On ons, maj 25, 2022 at 11:06, Nikolay Aleksandrov <razor@blackwall.org> wrote:
->>>> On 24/05/2022 19:21, Hans Schultz wrote:
->>>>>>
->>>>>> Hi Hans,
->>>>>> So this approach has a fundamental problem, f->dst is changed without any synchronization
->>>>>> you cannot rely on it and thus you cannot account for these entries properly. We must be very
->>>>>> careful if we try to add any new synchronization not to affect performance as well.
->>>>>> More below...
->>>>>>
->>>>>>> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
->>>>>>>  	if (test_bit(BR_FDB_STATIC, &f->flags))
->>>>>>>  		fdb_del_hw_addr(br, f->key.addr.addr);
->>>>>>>  
->>>>>>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
->>>>>>> +		atomic_dec(&f->dst->locked_entry_cnt);
->>>>>>
->>>>>> Sorry but you cannot do this for multiple reasons:
->>>>>>  - f->dst can be NULL
->>>>>>  - f->dst changes without any synchronization
->>>>>>  - there is no synchronization between fdb's flags and its ->dst
->>>>>>
->>>>>> Cheers,
->>>>>>  Nik
->>>>>
->>>>> Hi Nik,
->>>>>
->>>>> if a port is decoupled from the bridge, the locked entries would of
->>>>> course be invalid, so maybe if adding and removing a port is accounted
->>>>> for wrt locked entries and the count of locked entries, would that not
->>>>> work?
->>>>>
->>>>> Best,
->>>>> Hans
->>>>
->>>> Hi Hans,
->>>> Unfortunately you need the correct amount of locked entries per-port if you want
->>>> to limit their number per-port, instead of globally. So you need a
->>>> consistent
->>>
->>> Hi Nik,
->>> the used dst is a port structure, so it is per-port and not globally.
->>>
->>> Best,
->>> Hans
->>>
->>
->> Yeah, I know. :) That's why I wrote it, if the limit is not a feature requirement I'd suggest
->> dropping it altogether, it can be enforced externally (e.g. from user-space) if needed.
->>
->> By the way just fyi net-next is closed right now due to merge window. And one more
->> thing please include a short log of changes between versions when you send a new one.
->> I had to go look for v2 to find out what changed.
->>
-> 
-> Okay, I will drop the limit in the bridge module, which is an easy thing
-> to do. :) (It is mostly there to ensure against DOS attacks if someone
-> bombards a locked port with random mac addresses.)
-> I have a similar limitation in the driver, which should then probably be
-> dropped too?
-> 
+On Wed, May 25, 2022 at 3:20 AM Hangbin Liu <liuhangbin@gmail.com> wrote:
+>
+> On Wed, May 25, 2022 at 11:18:19AM +0800, Yun Lu wrote:
+> > From: luyun <luyun@kylinos.cn>
+> >
+> > The psock_snd test sends and recieves packets over loopback, and
+> > the test results depend on parameter settings:
+> > Set rp_filter=0,
+> > or set rp_filter=1 and accept_local=1
+> > so that the test will pass. Otherwise, this test will fail with
+> > Resource temporarily unavailable:
+> > sudo ./psock_snd.sh
+> > dgram
+> > tx: 128
+> > rx: 142
+> > ./psock_snd: recv: Resource temporarily unavailable
+> >
+> > For most distro kernel releases(like Ubuntu or Centos), the parameter
+> > rp_filter is enabled by default, so it's necessary to enable the
+> > parameter lo.accept_local in psock_snd test. And this test runs
+> > inside a netns, changing a sysctl is fine.
+> >
+> > v2: add detailed description.
+> >
+> > Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> > Signed-off-by: luyun <luyun@kylinos.cn>
+> > Reviewed-by: Jackie Liu <liuyun01@kylinos.cn>
 
-That is up to you/driver, I'd try looking for similar problems in other switch drivers
-and check how those were handled. There are people in the CC above that can
-directly answer that. :)
+Acked-by: Willem de Bruijn <willemb@google.com>
 
-> The mayor difference between v2 and v3 is in the mv88e6xxx driver, where
-> I now keep an inventory of locked ATU entries and remove them based on a
-> timer (mv88e6xxx_switchcore.c).
-> 
-
-ack
-
-> I guess the mentioned log should be in the cover letter part?
-> 
-
-Yep, usually a short mention of what changed to make it easier for reviewers.
-Some people also add the patch-specific changes to each patch under the ---
-so they're not included in the log, but I'm fine either way as long as I don't
-have to go digging up the old versions.
-
-> 
->>>> fdb view with all its attributes when changing its dst in this case, which would
->>>> require new locking because you have multiple dependent struct fields and it will
->>>> kill roaming/learning scalability. I don't think this use case is worth the complexity it
->>>> will bring, so I'd suggest an alternative - you can monitor the number of locked entries
->>>> per-port from a user-space agent and disable port learning or some similar solution that
->>>> doesn't require any complex kernel changes. Is the limit a requirement to add the feature?
->>>>
->>>> I have an idea how to do it and to minimize the performance hit if it really is needed
->>>> but it'll add a lot of complexity which I'd like to avoid if possible.
->>>>
->>>> Cheers,
->>>>  Nik
-
+ps: I did not really suggest this fix, but no need to respin just to remove that
