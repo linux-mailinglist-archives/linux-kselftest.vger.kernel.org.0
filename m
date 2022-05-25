@@ -2,149 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87B05332FC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 May 2022 23:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F5A53347B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 02:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241919AbiEXVgU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 May 2022 17:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S235866AbiEYAz0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 May 2022 20:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiEXVgT (ORCPT
+        with ESMTP id S233891AbiEYAzZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 May 2022 17:36:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9791E02C;
-        Tue, 24 May 2022 14:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653428178; x=1684964178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9jK8G9ag+81bcO5Ko8qhZ3SN8Fupy/S9GkA/3mPTsOI=;
-  b=deIq+mwioW3JsB9+Y80mOQ9R9K/hsTy/+1HQG0F1AXZBSBPrhcdumWYL
-   KTncHMQJvCLZpyfBHK5StZ8OLFZVHQPgWa9a2UrSU869+3N0IEsaq/dR8
-   J2XAzX3HQZ9dbCQKj02+4pHUeu2YZWg2NCtbx9DfQXpNwUWzLYgTEhRlM
-   SJiO1Hmh55l5hHBCNA//7pAwMFQRe9uWzO9kD3h2kJh/3og0TOuxf0r7A
-   tudBezPqqK0KC3u2Y6IzG1Ry4ZXhhaPCy+bmMcW/iY4fZsEOmIojWDM02
-   IfvMFEIZ/26yoXKkIQm56NXBJ+1/bkS/LXgdOzouodN9mWDEYN3TJSxUz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10357"; a="273382969"
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="273382969"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 14:36:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,250,1647327600"; 
-   d="scan'208";a="745404583"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 May 2022 14:36:12 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntcCJ-0002T6-UI;
-        Tue, 24 May 2022 21:36:11 +0000
-Date:   Wed, 25 May 2022 05:36:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <202205250511.beuDDi9L-lkp@intel.com>
-References: <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
+        Tue, 24 May 2022 20:55:25 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0146CA8E
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 17:55:23 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-f1d5464c48so24340416fac.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 May 2022 17:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=87TAdO7JVTyU4dJLZx4/twxaR3Jk7wL6ogRvawQDX/I=;
+        b=JIv9rAjc5IAfYhvvJ4+4CyGclox8QGMjVLCV4cdp6JH0BX/N5umdP0MRbQAiEZW9iH
+         Tepm36gZweXci0jyXQz/OHvziPK6hnlGztgxjOt/n/8mWMSFnW/LjcpcXudoYPCDJeKv
+         N3lBWB1XkkmwNMm7/R4jUBR6jvftLDN2KLLFXaCdTgEQEoyAo8FdYCWODHViuca04dbk
+         IUtXTEtK8+z0KmykxRAQrE1MMpzcNcGTeOGBHi/dhWq3Z6vZk+H0Qu67jQtyQUUJWz3C
+         GhLvq0MPZFFlPmbbg0+zVgmeUyPgb50F9kht7pKLCOKFngI+956xeYdrtxxGIg1b5lnI
+         yaBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=87TAdO7JVTyU4dJLZx4/twxaR3Jk7wL6ogRvawQDX/I=;
+        b=jJx1KEh5lriXmM7NFUF0jCrEB4Zjom70/3+V5wgrsoYV27c0iZja2Xtb/XHNt5dT8T
+         KtQPH+0HPlXTGJCeOGTz8XzlOv6UPg/6WP2FI5x39zzzwb8edBY37PvMWOoM+H5GN6w1
+         CJyedC7019kSrI9qUC7r59F3XsGwBS1o9ALVb+EjiyuiXxJKoPxXzAseBh0XirldTV0s
+         I3A1tGAG06kcQ6OeJIXLCyHdxVMXwg6wfBlLZDBH+/ZkB8Kqk3y1ID0L+sGLQDnUWDTX
+         RCUtU+Un8lu7O7t7EyEIDZI+uDtETqtMSyEKoj39tZauR2BsdVQ+Z10Ogf00h2yTefl1
+         zMJg==
+X-Gm-Message-State: AOAM531a8ybCYCguLU2k5KTUrg1xoWMvFxVsDfI2psSfRGjf44RcSwvS
+        XAhN4Rv8lAmECkJxEq5FP0hxFj7OC1hjuyRZr6lfPg==
+X-Google-Smtp-Source: ABdhPJwuIQfcxPE3CrjW3nGLNRxcyh8Nyr3XOH9nVNz3aP18UDS9v2PrgtCxeZabMgswSF/jtx1j7MFj7uvcmqz5eic=
+X-Received: by 2002:a05:6870:c683:b0:ed:efb9:ffe9 with SMTP id
+ cv3-20020a056870c68300b000edefb9ffe9mr4067382oab.241.1653440122904; Tue, 24
+ May 2022 17:55:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220504182908.1322874-1-yuanchu@google.com> <20220504184537.130085-1-sj@kernel.org>
+In-Reply-To: <20220504184537.130085-1-sj@kernel.org>
+From:   Yuanchu Xie <yuanchu@google.com>
+Date:   Tue, 24 May 2022 17:55:11 -0700
+Message-ID: <CAJj2-QGUsqx8uRTamv7Hbw_-FRJOtrEnX6=fGEseZDJEtcnOaw@mail.gmail.com>
+Subject: Re: [PATCH v3] selftests/damon: suppress compiler warnings for huge_count_read_write
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     SeongJae Park <sj@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        David Rientjes <rientjes@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Hans,
+Hi Shuah,
 
-Thank you for the patch! Perhaps something to improve:
+On Wed, May 4, 2022 at 11:45 AM SeongJae Park <sj@kernel.org> wrote:
+>
+> Hi Yuanchu,
+>
+> On Wed, 4 May 2022 18:29:08 +0000 Yuanchu Xie <yuanchu@google.com> wrote:
+>
+> > The test case added in commit db7a347b26fe ("mm/damon/dbgfs:
+> > use '__GFP_NOWARN' for user-specified size buffer allocation")
+> > intentionally writes and reads with a large count to cause
+> > allocation failure and check for kernel warnings. We suppress
+> > the compiler warnings for these calls as they work as intended.
+> >
+> > Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+> > ---
+>
+> It would be a good practice to mention the changes from the previous vers=
+ion of
+> this patch here[1].
+>
+> [1] https://docs.kernel.org/process/submitting-patches.html#the-canonical=
+-patch-format
+>
+> >  tools/testing/selftests/damon/huge_count_read_write.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/to=
+ols/testing/selftests/damon/huge_count_read_write.c
+> > index ad7a6b4cf338..91bd80c75cd9 100644
+> > --- a/tools/testing/selftests/damon/huge_count_read_write.c
+> > +++ b/tools/testing/selftests/damon/huge_count_read_write.c
+> > @@ -2,6 +2,8 @@
+> >  /*
+> >   * Author: SeongJae Park <sj@kernel.org>
+> >   */
+> > +#pragma GCC diagnostic ignored "-Wstringop-overflow"
+> > +#pragma GCC diagnostic ignored "-Wstringop-overread"
+>
+> I agree that this must be the cleaner way than v2.  But, I get below warn=
+ing
+> after applying this:
+>
+>     $ sudo make -C tools/testing/selftests/damon run_tests
+>     make: Entering directory '/home/sjpark/linux/tools/testing/selftests/=
+damon'
+>     gcc     huge_count_read_write.c  -o /home/sjpark/linux/tools/testing/=
+selftests/damon/huge_count_read_write
+>     huge_count_read_write.c:6:32: warning: unknown option after =E2=80=98=
+#pragma GCC diagnostic=E2=80=99 kind [-Wpragmas]
+>         6 | #pragma GCC diagnostic ignored "-Wstringop-overread"
+>           |                                ^~~~~~~~~~~~~~~~~~~~~
+>
+> My gcc version is:
+>
+>     $ gcc --version
+>     gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
 
-[auto build test WARNING on net-next/master]
+    $ gcc --version
+    gcc (Debian 11.2.0-16+build1) 11.2.0
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220524-232455
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 677fb7525331375ba2f90f4bc94a80b9b6e697a3
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220525/202205250511.beuDDi9L-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 10c9ecce9f6096e18222a331c5e7d085bd813f75)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5c2d731ec7670b3eb06906c64d66c6098c588a6a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hans-Schultz/Extend-locked-port-feature-with-FDB-locked-flag-MAC-Auth-MAB/20220524-232455
-        git checkout 5c2d731ec7670b3eb06906c64d66c6098c588a6a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/mv88e6xxx/
+I believe this is a new warning for gcc-11 [1], and somewhat unfortunate th=
+at
+it results in a warning for gcc-9.4. So a patch that would resolve the test
+warnings for gcc 11 would introduce a new warning for gcc 9, and vice versa=
+.
+What's the preferred solution here?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[1] https://gcc.gnu.org/onlinedocs/gcc-10.3.0/gcc/Warning-Options.html
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/dsa/mv88e6xxx/chip.c:2754:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (!locked_found) {
-               ^~~~~~~~~~~~~
-   drivers/net/dsa/mv88e6xxx/chip.c:2759:9: note: uninitialized use occurs here
-           return err;
-                  ^~~
-   drivers/net/dsa/mv88e6xxx/chip.c:2754:2: note: remove the 'if' if its condition is always true
-           if (!locked_found) {
-           ^~~~~~~~~~~~~~~~~~~
-   drivers/net/dsa/mv88e6xxx/chip.c:2749:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
-   1 warning generated.
-
-
-vim +2754 drivers/net/dsa/mv88e6xxx/chip.c
-
-  2742	
-  2743	static int mv88e6xxx_port_fdb_del(struct dsa_switch *ds, int port,
-  2744					  const unsigned char *addr, u16 vid,
-  2745					  struct dsa_db db)
-  2746	{
-  2747		struct mv88e6xxx_chip *chip = ds->priv;
-  2748		bool locked_found = false;
-  2749		int err;
-  2750	
-  2751		if (mv88e6xxx_port_is_locked(chip, port, true))
-  2752			locked_found = mv88e6xxx_atu_locked_entry_find_purge(ds, port, addr, vid);
-  2753	
-> 2754		if (!locked_found) {
-  2755			mv88e6xxx_reg_lock(chip);
-  2756			err = mv88e6xxx_port_db_load_purge(chip, port, addr, vid, 0);
-  2757			mv88e6xxx_reg_unlock(chip);
-  2758		}
-  2759		return err;
-  2760	}
-  2761	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Yuanchu
