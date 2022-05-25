@@ -2,62 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC745338A2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 10:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F8F5339B2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 May 2022 11:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235058AbiEYIiq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 May 2022 04:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
+        id S231882AbiEYJN5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 May 2022 05:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiEYIio (ORCPT
+        with ESMTP id S241314AbiEYJNU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 04:38:44 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB6921E0B
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 01:38:41 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id f23-20020a7bcc17000000b003972dda143eso664486wmh.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 May 2022 01:38:41 -0700 (PDT)
+        Wed, 25 May 2022 05:13:20 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9647090B;
+        Wed, 25 May 2022 02:11:04 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id e4so23219468ljb.13;
+        Wed, 25 May 2022 02:11:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KtU04oFIh5Z0YSsR5FQRVyG/XaU2MIHApujJFCWuZlw=;
-        b=QqGYFn4Ab/DfOssUeWALroVEeCh9UhII4ToDkKRqMH2XJaQXYENX3C07V7wDmMpuPs
-         JB3nZ4QAR/l9TljZY57Uuupxe1QmncQMTZ5I50aguJnVGNj9v5id7qb2+BG1fcInEp2L
-         b9z2+5kDCMMMCrsXu7n7v40qvPya+hxNYfNUtz0O9ntgyGKdkE02ugcZO98fspQhi80T
-         u/uE2lleR4T3dIgB7EKLlUELP3N/KLVAA7/6/EEP16i87GjgEC6aZW5yNb/sGrVc69iw
-         gxuZU+B3cTUODouyMdi1eNJJ5xxLm0G9V7ka82qlV5C9zfWaWc31Q5mm4ez/nueuTqH5
-         AQfg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=J5DCkWestgVKoHEZoLossBiU0LtcBuAy5pRj+r09hN4=;
+        b=XP3vHIYmf/Ce3FGxCzpcX7HjyAZBtPpnAymzxt8qes+BDIeDOh6F7lvUPFfx9tnC2d
+         +xpmCEvfyTHqVlt9SBLYRRGulX1GyGwjXVwLdpwO14peVNHNhC/MII2rabef1oU1ErBK
+         uZNvN3T5485zyLUgwwpDngrc7ZKytkgjUuSjRsNTvH9Df89NPu+mu9qTsDxub0/hnh6C
+         byCcXLsQtqiFctApMaQMfD87zErzxamzEsrJpPNHWIcIzFKIGY+PgHKumqiyb4GOareT
+         KhMZwEFZbM0wSipJvO7WkM2n+0uetym0XUO7zrCJcc94gdFBZglaLeYg2gOGwAWC740i
+         G1nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KtU04oFIh5Z0YSsR5FQRVyG/XaU2MIHApujJFCWuZlw=;
-        b=fNBkKIoAMACRPPwGEXeccPiSSQhp2REUSWE8ziMFj72EpNAcHAiqgYsib85fb+G3Vn
-         cGTx1vmu7Bv0143LRXTpGBiva+JJEIzFXfPhDz1Lr/ZAN0VqQoLLQQipJKEQzSCpKt9v
-         xxZIJMtdNEIrLmdLFXhYILNv2LziumsCsBl47/g8DtBWwf4keDH5cDA5V8Wt2/crdUNQ
-         YOy65EcHS7lgBzkrk7bQHTr4Hd+8MwMKk0C9JEQU0853OV4USN+08vlu+lLTIj1pI74Z
-         tsa3mPrCAVl3zy8mk8h/Dn+7OTloiDvn3vwrQTpK8TSewhBm//0RyXkTalvuK72odDwn
-         v85g==
-X-Gm-Message-State: AOAM53257chrwEoMAJjvJt/6HAs4m6DIVgiQOPV2Lav2bOJ5sNTZgXLP
-        RziIU1ZaMvqv4Xk74pdtR6rLAA==
-X-Google-Smtp-Source: ABdhPJxg30sXPTLAyZtvayj2nwwa80y3xEtCg/2rQQDarGJN5d/Z2NA4PqAO4xPOizxFU+5GcDqMVw==
-X-Received: by 2002:a7b:cf11:0:b0:397:33e3:87b2 with SMTP id l17-20020a7bcf11000000b0039733e387b2mr7086443wmg.152.1653467920448;
-        Wed, 25 May 2022 01:38:40 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id n11-20020a5d598b000000b0020c61af5e1fsm1620689wri.51.2022.05.25.01.38.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 01:38:39 -0700 (PDT)
-Message-ID: <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
-Date:   Wed, 25 May 2022 11:38:37 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-Content-Language: en-US
-To:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=J5DCkWestgVKoHEZoLossBiU0LtcBuAy5pRj+r09hN4=;
+        b=M6Dta61jLTY0DIhkMCsMyM3jThlE/oKFDew0BeYpP+PNsfswhYgeLI/hgqITHSIpYW
+         14Gy7CV7fnT7t/cCz78TPcDTP8p6C/MKaXoA2LhSiiuaUIaZX/TOUpNGX6B9eQ732BO+
+         I8GrCXribvfJ20zm9Yoee49jFtSsLN/383aL7659Wsn+zAJBlzKY+WilNBhgs6Ywbepq
+         1oh7fTRFv4o30/tOMwW1aEMC7aHSuGw6rx2lGjUYkohIT7V+TC2+MM4knMlHqGhB3ruY
+         iEsWdQ+EX94rMhARIR0HfVueFUikzfH4NJirn0hdyCNB/pfb+eoWDrl0OQU+jFCS4+lF
+         2NgA==
+X-Gm-Message-State: AOAM531KrsIDtT7wHe9CrKHuupqypp68h/CNJvR0gXLyBAV4yMaIi3XK
+        LebKEHd60S8MeE0Sqd48IV8cESznXN0f4A==
+X-Google-Smtp-Source: ABdhPJxIXYAN5qFD5hWU5lh23XROsNBf9wj+TE2QF64dbWr41TJAr6prDo9vAodw5m5Udb8lTpYjkQ==
+X-Received: by 2002:a2e:888f:0:b0:253:f1af:7577 with SMTP id k15-20020a2e888f000000b00253f1af7577mr5922075lji.99.1653469862534;
+        Wed, 25 May 2022 02:11:02 -0700 (PDT)
+Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
+        by smtp.gmail.com with ESMTPSA id h4-20020ac250c4000000b00477be45fb23sm2951020lfm.56.2022.05.25.02.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 02:11:01 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Nikolay Aleksandrov <razor@blackwall.org>,
+        Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
         kuba@kernel.org
 Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -70,89 +64,108 @@ Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+In-Reply-To: <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
 References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
  <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
  <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
  <86zgj6oqa9.fsf@gmail.com>
  <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
  <86fskyggdo.fsf@gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <86fskyggdo.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
+Date:   Wed, 25 May 2022 11:11:00 +0200
+Message-ID: <86v8tu7za3.fsf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 25/05/2022 11:34, Hans Schultz wrote:
-> On ons, maj 25, 2022 at 11:06, Nikolay Aleksandrov <razor@blackwall.org> wrote:
->> On 24/05/2022 19:21, Hans Schultz wrote:
+On ons, maj 25, 2022 at 11:38, Nikolay Aleksandrov <razor@blackwall.org> wrote:
+> On 25/05/2022 11:34, Hans Schultz wrote:
+>> On ons, maj 25, 2022 at 11:06, Nikolay Aleksandrov <razor@blackwall.org> wrote:
+>>> On 24/05/2022 19:21, Hans Schultz wrote:
+>>>>>
+>>>>> Hi Hans,
+>>>>> So this approach has a fundamental problem, f->dst is changed without any synchronization
+>>>>> you cannot rely on it and thus you cannot account for these entries properly. We must be very
+>>>>> careful if we try to add any new synchronization not to affect performance as well.
+>>>>> More below...
+>>>>>
+>>>>>> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
+>>>>>>  	if (test_bit(BR_FDB_STATIC, &f->flags))
+>>>>>>  		fdb_del_hw_addr(br, f->key.addr.addr);
+>>>>>>  
+>>>>>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
+>>>>>> +		atomic_dec(&f->dst->locked_entry_cnt);
+>>>>>
+>>>>> Sorry but you cannot do this for multiple reasons:
+>>>>>  - f->dst can be NULL
+>>>>>  - f->dst changes without any synchronization
+>>>>>  - there is no synchronization between fdb's flags and its ->dst
+>>>>>
+>>>>> Cheers,
+>>>>>  Nik
 >>>>
->>>> Hi Hans,
->>>> So this approach has a fundamental problem, f->dst is changed without any synchronization
->>>> you cannot rely on it and thus you cannot account for these entries properly. We must be very
->>>> careful if we try to add any new synchronization not to affect performance as well.
->>>> More below...
+>>>> Hi Nik,
 >>>>
->>>>> @@ -319,6 +326,9 @@ static void fdb_delete(struct net_bridge *br, struct net_bridge_fdb_entry *f,
->>>>>  	if (test_bit(BR_FDB_STATIC, &f->flags))
->>>>>  		fdb_del_hw_addr(br, f->key.addr.addr);
->>>>>  
->>>>> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &f->flags) && !test_bit(BR_FDB_OFFLOADED, &f->flags))
->>>>> +		atomic_dec(&f->dst->locked_entry_cnt);
+>>>> if a port is decoupled from the bridge, the locked entries would of
+>>>> course be invalid, so maybe if adding and removing a port is accounted
+>>>> for wrt locked entries and the count of locked entries, would that not
+>>>> work?
 >>>>
->>>> Sorry but you cannot do this for multiple reasons:
->>>>  - f->dst can be NULL
->>>>  - f->dst changes without any synchronization
->>>>  - there is no synchronization between fdb's flags and its ->dst
->>>>
->>>> Cheers,
->>>>  Nik
+>>>> Best,
+>>>> Hans
 >>>
->>> Hi Nik,
+>>> Hi Hans,
+>>> Unfortunately you need the correct amount of locked entries per-port if you want
+>>> to limit their number per-port, instead of globally. So you need a
+>>> consistent
+>> 
+>> Hi Nik,
+>> the used dst is a port structure, so it is per-port and not globally.
+>> 
+>> Best,
+>> Hans
+>> 
+>
+> Yeah, I know. :) That's why I wrote it, if the limit is not a feature requirement I'd suggest
+> dropping it altogether, it can be enforced externally (e.g. from user-space) if needed.
+>
+> By the way just fyi net-next is closed right now due to merge window. And one more
+> thing please include a short log of changes between versions when you send a new one.
+> I had to go look for v2 to find out what changed.
+>
+
+Okay, I will drop the limit in the bridge module, which is an easy thing
+to do. :) (It is mostly there to ensure against DOS attacks if someone
+bombards a locked port with random mac addresses.)
+I have a similar limitation in the driver, which should then probably be
+dropped too?
+
+The mayor difference between v2 and v3 is in the mv88e6xxx driver, where
+I now keep an inventory of locked ATU entries and remove them based on a
+timer (mv88e6xxx_switchcore.c).
+
+I guess the mentioned log should be in the cover letter part?
+
+
+>>> fdb view with all its attributes when changing its dst in this case, which would
+>>> require new locking because you have multiple dependent struct fields and it will
+>>> kill roaming/learning scalability. I don't think this use case is worth the complexity it
+>>> will bring, so I'd suggest an alternative - you can monitor the number of locked entries
+>>> per-port from a user-space agent and disable port learning or some similar solution that
+>>> doesn't require any complex kernel changes. Is the limit a requirement to add the feature?
 >>>
->>> if a port is decoupled from the bridge, the locked entries would of
->>> course be invalid, so maybe if adding and removing a port is accounted
->>> for wrt locked entries and the count of locked entries, would that not
->>> work?
+>>> I have an idea how to do it and to minimize the performance hit if it really is needed
+>>> but it'll add a lot of complexity which I'd like to avoid if possible.
 >>>
->>> Best,
->>> Hans
->>
->> Hi Hans,
->> Unfortunately you need the correct amount of locked entries per-port if you want
->> to limit their number per-port, instead of globally. So you need a
->> consistent
-> 
-> Hi Nik,
-> the used dst is a port structure, so it is per-port and not globally.
-> 
-> Best,
-> Hans
-> 
-
-Yeah, I know. :) That's why I wrote it, if the limit is not a feature requirement I'd suggest
-dropping it altogether, it can be enforced externally (e.g. from user-space) if needed.
-
-By the way just fyi net-next is closed right now due to merge window. And one more
-thing please include a short log of changes between versions when you send a new one.
-I had to go look for v2 to find out what changed.
-
->> fdb view with all its attributes when changing its dst in this case, which would
->> require new locking because you have multiple dependent struct fields and it will
->> kill roaming/learning scalability. I don't think this use case is worth the complexity it
->> will bring, so I'd suggest an alternative - you can monitor the number of locked entries
->> per-port from a user-space agent and disable port learning or some similar solution that
->> doesn't require any complex kernel changes. Is the limit a requirement to add the feature?
->>
->> I have an idea how to do it and to minimize the performance hit if it really is needed
->> but it'll add a lot of complexity which I'd like to avoid if possible.
->>
->> Cheers,
->>  Nik
-
+>>> Cheers,
+>>>  Nik
