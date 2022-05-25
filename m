@@ -2,177 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9596D5346D6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 May 2022 00:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CB0534710
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 May 2022 01:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238821AbiEYWxY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 May 2022 18:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S242657AbiEYXyR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 May 2022 19:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbiEYWxY (ORCPT
+        with ESMTP id S229824AbiEYXyP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 18:53:24 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C56F3B55D;
-        Wed, 25 May 2022 15:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653519203; x=1685055203;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E0mLQr3arF2hw1fLqA325E6sG4xs0WL8xdqdjaiaNI8=;
-  b=linCQBwrsSxpEZNTP+RVTdYGt7bOE/gO+TR0FGL4qdvA4tejDX2xCMcE
-   tVI7TSjUY5cU7fNKeokiBVMRJQ+KZ2HMHEVSGeMrasqoKQ6FaMH0mY6ic
-   yfjWvtcSpr5fb7ucOO3a5Gh2rjJwGAzxJTev0HWOMUkAsg8HLpMOq2k2+
-   Rxjpnr9fcRNmr11JeOIbdDZUdC9RFUOXlZdhkso5hYl8Ujd9TsiYjYRoM
-   XXmCwlcSSgTWOflq/HSxeEfeL+ifNc4/RurW+VNN8/DGl1lgdgwFf6YeD
-   fUUs0Xe5eNUNlgoMNGdfTwN5xxVtJtGim6EIDtf6JCixYjqkA/33xVHpp
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10358"; a="261568232"
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="261568232"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 15:53:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,252,1647327600"; 
-   d="scan'208";a="578542089"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 25 May 2022 15:53:20 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ntzsV-0003Nc-Jl;
-        Wed, 25 May 2022 22:53:19 +0000
-Date:   Thu, 26 May 2022 06:53:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org
-Cc:     kbuild-all@lists.01.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
- verification on map values
-Message-ID: <202205260606.VXzztn2R-lkp@intel.com>
-References: <20220525132115.896698-2-roberto.sassu@huawei.com>
+        Wed, 25 May 2022 19:54:15 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147B69D070;
+        Wed, 25 May 2022 16:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=l4fKDERpiICSOVgCQ8QwCarZ+nXg0XUnq0ATowURuHc=; b=dzwK7kFgMsM4dtgzFXJxmWXZFa
+        u+Q7RFwB4jvwWWz8PwBDLQpHj4ZK0YGZiyHU+lI4x2bdXw5XdPK1jJ4rxeSbi0iM9LtMiUjwiCMGK
+        sk07Lf4YOWErKZDftjL5EUS6bSB+I4To98jq/cbHVJYzq336XwpuNwFstUEWVUW911uW9NiZh86Dl
+        glQIo5lGtlpAyKujL6jZzNtS5izUCyWSs8RcUticJXAxL0UBNTsem/IXOFrXk02tosz4FEzKSD99r
+        HjN3iYpVp6vLptw5OEzyRio/9aMzIA5bMm9QOG5QhrN7Gz3D7nlgWgRVNkbVz4ahCkN4/pjws9RbT
+        LUmv21/A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nu0pC-00CynK-Py; Wed, 25 May 2022 23:53:58 +0000
+Date:   Wed, 25 May 2022 16:53:58 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Richard Fontana <fontana@sharpeleven.org>, tj@kernel.org,
+        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
+        jeyu@kernel.org, shuah@kernel.org, bvanassche@acm.org,
+        dan.j.williams@intel.com, joe@perches.com, keescook@chromium.org,
+        rostedt@goodmis.org, minchan@kernel.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Kuno Woudt <kuno@frob.nl>,
+        copyleft-next@lists.fedorahosted.org,
+        Ciaran Farrell <Ciaran.Farrell@suse.com>,
+        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
+Message-ID: <Yo7Blhgke3WhZSLe@bombadil.infradead.org>
+References: <20211029184500.2821444-1-mcgrof@kernel.org>
+ <20211029184500.2821444-2-mcgrof@kernel.org>
+ <87ee0k0wrn.ffs@tglx>
+ <Yo5f9nctTwHZqPbl@bombadil.infradead.org>
+ <874k1dz674.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220525132115.896698-2-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <874k1dz674.ffs@tglx>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Roberto,
+On Wed, May 25, 2022 at 10:51:43PM +0200, Thomas Gleixner wrote:
+> On Wed, May 25 2022 at 09:57, Luis Chamberlain wrote:
+> > On Mon, May 23, 2022 at 11:22:36PM +0200, Thomas Gleixner wrote:
+> >> This paragraph is not really understandable for Joe Developer.
+> >> 
+> >>   copyleft-next-0.3.1 is explicitly compatible with GPLv2 (or later) and
+> >>   can therefore be used for kernel code. Though the best and recommended
+> >>   practice is to express this in the SPDX license identifier by
+> >>   licensing the code under both licenses expressed by the OR operator.
+> >> 
+> >> Hmm?
+> >
+> > Let me try clarifying this further, how about:
+> >
+> >    copyleft-next-0.3.1 is explicitly compatible with GPLv2 (or later) and
+> >    can therefore be used for kernel code. Despite this, if you use
+> >    copyleft-next-0.3.1 on Linux, the recommended practice is to express
+> >    dual licensing with GPL using in the SPDX license identifiers by
+> >    using by the OR operator.
+> 
+>   'using in the ..' ?
+> 
+> and
+> 
+>   'by using by' is off by one 'by' :)
+> 
+> I'm not seeing how that clarifies stuff further. I might be biased, but
+> the version I suggested is crystal clear.
 
-Thank you for the patch! Perhaps something to improve:
+Oh sorry, I didn't realize the paragraph you posted was a suggestion, I
+thought it was the one you were indicating needed further enhancement!
 
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on bpf/master horms-ipvs/master net/master net-next/master v5.18 next-20220525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I'll just take yours then.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roberto-Sassu/bpf-Add-support-for-maps-with-authenticated-values/20220525-212552
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220526/202205260606.VXzztn2R-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-14-g5a0004b5-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/196e68e5ddfa50f40efaf20c8df37f3420e38b72
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Roberto-Sassu/bpf-Add-support-for-maps-with-authenticated-values/20220525-212552
-        git checkout 196e68e5ddfa50f40efaf20c8df37f3420e38b72
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/bpf/
+> >> > +  To use the copyleft-next-0.3.1 license put the following SPDX tag/value
+> >> > +  pair into a comment according to the placement guidelines in the
+> >> > +  licensing rules documentation:
+> >> > +    SPDX-License-Identifier: GPL-2.0 OR copyleft-next-0.3.1
+> >> > +    SPDX-License-Identifier: GPL-2.0-only OR copyleft-next 0.3.1
+> >> > +    SPDX-License-Identifier: GPL-2.0+ OR copyleft-next-0.3.1
+> >> > +    SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
+> >> 
+> >> Please don't propagate the GPL-2.0 and GPL-2.0+ tags. They are
+> >> outdated (still valid) in the SPDX spec, which reminds me that I should
+> >> update the relevant documentation...
+> >
+> > OK thanks for the recommendation, I'll leave it at:
+> >
+> > +    SPDX-License-Identifier: GPL-2.0 OR copyleft-next-0.3.1
+> 
+> 	SPDX-License-Identifier: GPL-2.0-only OR copyleft-next-0.3.1
+> 
+> please. See my previous reply quoted above.
+> 
+> > +    SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry I hadn't had my coffee yet so I should only list:
 
+SPDX-License-Identifier: GPL-2.0-only OR copyleft-next 0.3.1
+SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/bpf/syscall.c:590:25: sparse: sparse: Using plain integer as NULL pointer
->> kernel/bpf/syscall.c:1386:19: sparse: sparse: cast to restricted __be32
-   kernel/bpf/syscall.c: note: in included file (through include/linux/bpf.h):
-   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
-   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
-   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
-   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
-   include/linux/bpfptr.h:81:43: sparse: sparse: cast to non-scalar
-   include/linux/bpfptr.h:81:43: sparse: sparse: cast from non-scalar
-   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
-   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
-   include/linux/bpfptr.h:52:47: sparse: sparse: cast to non-scalar
-   include/linux/bpfptr.h:52:47: sparse: sparse: cast from non-scalar
+Will do this on the next spin.
 
-vim +1386 kernel/bpf/syscall.c
-
-  1369	
-  1370	int bpf_map_verify_value_sig(const void *mod, size_t modlen, bool verify)
-  1371	{
-  1372		const size_t marker_len = strlen(MODULE_SIG_STRING);
-  1373		struct module_signature ms;
-  1374		size_t sig_len;
-  1375		u32 _modlen;
-  1376		int ret;
-  1377	
-  1378		/*
-  1379		 * Format of mod:
-  1380		 *
-  1381		 * verified data+sig size (be32), verified data, sig, unverified data
-  1382		 */
-  1383		if (modlen <= sizeof(u32))
-  1384			return -ENOENT;
-  1385	
-> 1386		_modlen = be32_to_cpu(*(u32 *)(mod));
-  1387	
-  1388		if (_modlen > modlen - sizeof(u32))
-  1389			return -EINVAL;
-  1390	
-  1391		modlen = _modlen;
-  1392		mod += sizeof(u32);
-  1393	
-  1394		if (modlen <= marker_len)
-  1395			return -ENOENT;
-  1396	
-  1397		if (memcmp(mod + modlen - marker_len, MODULE_SIG_STRING, marker_len))
-  1398			return -ENOENT;
-  1399	
-  1400		modlen -= marker_len;
-  1401	
-  1402		if (modlen <= sizeof(ms))
-  1403			return -EBADMSG;
-  1404	
-  1405		memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
-  1406	
-  1407		ret = mod_check_sig(&ms, modlen, "bpf_map_value");
-  1408		if (ret)
-  1409			return ret;
-  1410	
-  1411		sig_len = be32_to_cpu(ms.sig_len);
-  1412		modlen -= sig_len + sizeof(ms);
-  1413	
-  1414		if (verify) {
-  1415			ret = verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
-  1416						     VERIFY_USE_SECONDARY_KEYRING,
-  1417						     VERIFYING_UNSPECIFIED_SIGNATURE,
-  1418						     NULL, NULL);
-  1419			if (ret < 0)
-  1420				return ret;
-  1421		}
-  1422	
-  1423		return modlen;
-  1424	}
-  1425	EXPORT_SYMBOL_GPL(bpf_map_verify_value_sig);
-  1426	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  Luis
