@@ -2,133 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CB0534710
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 May 2022 01:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D6453479C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 May 2022 02:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242657AbiEYXyR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 May 2022 19:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S1344637AbiEZAl3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 May 2022 20:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiEYXyP (ORCPT
+        with ESMTP id S242987AbiEZAlZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 May 2022 19:54:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147B69D070;
-        Wed, 25 May 2022 16:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l4fKDERpiICSOVgCQ8QwCarZ+nXg0XUnq0ATowURuHc=; b=dzwK7kFgMsM4dtgzFXJxmWXZFa
-        u+Q7RFwB4jvwWWz8PwBDLQpHj4ZK0YGZiyHU+lI4x2bdXw5XdPK1jJ4rxeSbi0iM9LtMiUjwiCMGK
-        sk07Lf4YOWErKZDftjL5EUS6bSB+I4To98jq/cbHVJYzq336XwpuNwFstUEWVUW911uW9NiZh86Dl
-        glQIo5lGtlpAyKujL6jZzNtS5izUCyWSs8RcUticJXAxL0UBNTsem/IXOFrXk02tosz4FEzKSD99r
-        HjN3iYpVp6vLptw5OEzyRio/9aMzIA5bMm9QOG5QhrN7Gz3D7nlgWgRVNkbVz4ahCkN4/pjws9RbT
-        LUmv21/A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nu0pC-00CynK-Py; Wed, 25 May 2022 23:53:58 +0000
-Date:   Wed, 25 May 2022 16:53:58 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Richard Fontana <fontana@sharpeleven.org>, tj@kernel.org,
-        gregkh@linuxfoundation.org, akpm@linux-foundation.org,
-        jeyu@kernel.org, shuah@kernel.org, bvanassche@acm.org,
-        dan.j.williams@intel.com, joe@perches.com, keescook@chromium.org,
-        rostedt@goodmis.org, minchan@kernel.org,
-        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        copyleft-next@lists.fedorahosted.org,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v9 1/6] LICENSES: Add the copyleft-next-0.3.1 license
-Message-ID: <Yo7Blhgke3WhZSLe@bombadil.infradead.org>
-References: <20211029184500.2821444-1-mcgrof@kernel.org>
- <20211029184500.2821444-2-mcgrof@kernel.org>
- <87ee0k0wrn.ffs@tglx>
- <Yo5f9nctTwHZqPbl@bombadil.infradead.org>
- <874k1dz674.ffs@tglx>
+        Wed, 25 May 2022 20:41:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732959EB44;
+        Wed, 25 May 2022 17:41:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18B38B81EAA;
+        Thu, 26 May 2022 00:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8414FC385B8;
+        Thu, 26 May 2022 00:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653525681;
+        bh=mEug+FNS3WAXtVD1YTd+ywizxj+k7diM1xohqO66iJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XQPhmP8pgmq6nZ3qk05p/o5hHp6puXPtqeJVhD6j8wjQBFd2MdDJnkUrsJj2SqhYo
+         pcwALRgvkDWrNcknXYYTCYrnyg00EhFKc4U2m6wEzQY/JjO1opRITP8WUBZPBgRjke
+         yulFv7ieKYW0J6bxZmwWRjPy5NU0eD6zLnBRQSrLAmznMnR5cA8ZvlZynrrPpLldV/
+         ZnhoOgXXNcI2dOchczXi6BcGT0Af6jlrjxdgW/9JmzDt48be7qmo/B852JAj+Zc63J
+         NZcxbsTTKVMYBLO/Iw06c4dTLGvHQA7cNImKUkah1oW2cbpsWjkaezoZkN9QjVQyKw
+         cYXKGSBtU7xuA==
+Date:   Thu, 26 May 2022 03:39:39 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>, dave.hansen@linux.intel.com
+Cc:     stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Borislav Petkov <bp@suse.de>, linux-sgx@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/sgx: add test_encl.elf to TEST_GEN_FILES
+Message-ID: <Yo7MS2+g9kcI39xq@iki.fi>
+References: <20220523181120.54547-1-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874k1dz674.ffs@tglx>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220523181120.54547-1-jarkko@kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 25, 2022 at 10:51:43PM +0200, Thomas Gleixner wrote:
-> On Wed, May 25 2022 at 09:57, Luis Chamberlain wrote:
-> > On Mon, May 23, 2022 at 11:22:36PM +0200, Thomas Gleixner wrote:
-> >> This paragraph is not really understandable for Joe Developer.
-> >> 
-> >>   copyleft-next-0.3.1 is explicitly compatible with GPLv2 (or later) and
-> >>   can therefore be used for kernel code. Though the best and recommended
-> >>   practice is to express this in the SPDX license identifier by
-> >>   licensing the code under both licenses expressed by the OR operator.
-> >> 
-> >> Hmm?
-> >
-> > Let me try clarifying this further, how about:
-> >
-> >    copyleft-next-0.3.1 is explicitly compatible with GPLv2 (or later) and
-> >    can therefore be used for kernel code. Despite this, if you use
-> >    copyleft-next-0.3.1 on Linux, the recommended practice is to express
-> >    dual licensing with GPL using in the SPDX license identifiers by
-> >    using by the OR operator.
+On Mon, May 23, 2022 at 09:11:20PM +0300, Jarkko Sakkinen wrote:
+> TEST_GEN_FILES contains files that are generated during compilation and are
+> required to be included together with the test binaries, e.g. when
+> performing:
 > 
->   'using in the ..' ?
+> make -C tools/testing/selftests install INSTALL_PATH=/some/other/path [*]
 > 
-> and
+> Add test_encl.elf to TEST_GEN_FILES because otherwise the installed test
+> binary will fail to run.
 > 
->   'by using by' is off by one 'by' :)
+> [*] https://docs.kernel.org/dev-tools/kselftest.html
 > 
-> I'm not seeing how that clarifies stuff further. I might be biased, but
-> the version I suggested is crystal clear.
-
-Oh sorry, I didn't realize the paragraph you posted was a suggestion, I
-thought it was the one you were indicating needed further enhancement!
-
-I'll just take yours then.
-
-> >> > +  To use the copyleft-next-0.3.1 license put the following SPDX tag/value
-> >> > +  pair into a comment according to the placement guidelines in the
-> >> > +  licensing rules documentation:
-> >> > +    SPDX-License-Identifier: GPL-2.0 OR copyleft-next-0.3.1
-> >> > +    SPDX-License-Identifier: GPL-2.0-only OR copyleft-next 0.3.1
-> >> > +    SPDX-License-Identifier: GPL-2.0+ OR copyleft-next-0.3.1
-> >> > +    SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
-> >> 
-> >> Please don't propagate the GPL-2.0 and GPL-2.0+ tags. They are
-> >> outdated (still valid) in the SPDX spec, which reminds me that I should
-> >> update the relevant documentation...
-> >
-> > OK thanks for the recommendation, I'll leave it at:
-> >
-> > +    SPDX-License-Identifier: GPL-2.0 OR copyleft-next-0.3.1
+> Cc: stable@vger.kernel.org
+> Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> v2:
+> Use TEST_GEN_FILES in the "all" target, instead of duplicating the path for
+> test_encl.elf.
+> ---
+>  tools/testing/selftests/sgx/Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> 	SPDX-License-Identifier: GPL-2.0-only OR copyleft-next-0.3.1
+> diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
+> index 75af864e07b6..7f60811b5b20 100644
+> --- a/tools/testing/selftests/sgx/Makefile
+> +++ b/tools/testing/selftests/sgx/Makefile
+> @@ -17,9 +17,10 @@ ENCL_CFLAGS := -Wall -Werror -static -nostdlib -nostartfiles -fPIC \
+>  	       -fno-stack-protector -mrdrnd $(INCLUDES)
+>  
+>  TEST_CUSTOM_PROGS := $(OUTPUT)/test_sgx
+> +TEST_GEN_FILES := $(OUTPUT)/test_encl.elf
+>  
+>  ifeq ($(CAN_BUILD_X86_64), 1)
+> -all: $(TEST_CUSTOM_PROGS) $(OUTPUT)/test_encl.elf
+> +all: $(TEST_CUSTOM_PROGS) $(TEST_GEN_FILES)
+>  endif
+>  
+>  $(OUTPUT)/test_sgx: $(OUTPUT)/main.o \
+> -- 
+> 2.36.1
 > 
-> please. See my previous reply quoted above.
-> 
-> > +    SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
 
-Sorry I hadn't had my coffee yet so I should only list:
+Dave, would it be by any means possible to pick this? My workload is
+kernel testing with buildroot [*].
 
-SPDX-License-Identifier: GPL-2.0-only OR copyleft-next 0.3.1
-SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
+[*] Related:
+    https://lore.kernel.org/buildroot/2c42570b01b2b51cc33d6623b25a736e4f20c601.camel@iki.fi/T/#t
 
-Will do this on the next spin.
-
-  Luis
+BR, Jarkko
