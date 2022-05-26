@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EB1534CF6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 May 2022 12:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E5E534D0D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 May 2022 12:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345836AbiEZKGZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 May 2022 06:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S233657AbiEZKMm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 May 2022 06:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346945AbiEZKGX (ORCPT
+        with ESMTP id S1347017AbiEZKMi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 May 2022 06:06:23 -0400
+        Thu, 26 May 2022 06:12:38 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEE1960C4;
-        Thu, 26 May 2022 03:06:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4E962651;
+        Thu, 26 May 2022 03:12:36 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 707FE1474;
-        Thu, 26 May 2022 03:06:22 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A3931477;
+        Thu, 26 May 2022 03:12:36 -0700 (PDT)
 Received: from FVFF77S0Q05N (unknown [10.57.2.68])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A4AC73F70D;
-        Thu, 26 May 2022 03:06:13 -0700 (PDT)
-Date:   Thu, 26 May 2022 11:06:09 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78E903F70D;
+        Thu, 26 May 2022 03:12:28 -0700 (PDT)
+Date:   Thu, 26 May 2022 11:12:24 +0100
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     Xu Kuohai <xukuohai@huawei.com>
 Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -57,19 +57,17 @@ Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Peter Collingbourne <pcc@google.com>,
         Mark Brown <broonie@kernel.org>,
         Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        cj.chengjian@huawei.com, huawei.libin@huawei.com,
-        xiexiuqi@huawei.com, liwei391@huawei.com
-Subject: Re: [PATCH bpf-next v5 1/6] arm64: ftrace: Add ftrace direct call
- support
-Message-ID: <Yo9REdx3nsgbZunE@FVFF77S0Q05N>
-References: <Yo4xb2w+FHhUtJNw@FVFF77S0Q05N>
- <0f8fe661-c450-ccd8-761f-dbfff449c533@huawei.com>
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v5 3/6] bpf: Remove is_valid_bpf_tramp_flags()
+Message-ID: <Yo9SiJssne1oJgIq@FVFF77S0Q05N>
+References: <20220518131638.3401509-1-xukuohai@huawei.com>
+ <20220518131638.3401509-4-xukuohai@huawei.com>
+ <Yo4y54M6Jb41lqX+@FVFF77S0Q05N>
+ <985fe022-552c-9d04-16d8-14784c4075f8@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0f8fe661-c450-ccd8-761f-dbfff449c533@huawei.com>
+In-Reply-To: <985fe022-552c-9d04-16d8-14784c4075f8@huawei.com>
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -79,130 +77,106 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 26, 2022 at 05:45:03PM +0800, Xu Kuohai wrote:
-> On 5/25/2022 9:38 PM, Mark Rutland wrote:
-> > On Wed, May 18, 2022 at 09:16:33AM -0400, Xu Kuohai wrote:
-> >> Add ftrace direct support for arm64.
+On Thu, May 26, 2022 at 05:45:25PM +0800, Xu Kuohai wrote:
+> On 5/25/2022 9:45 PM, Mark Rutland wrote:
+> > On Wed, May 18, 2022 at 09:16:35AM -0400, Xu Kuohai wrote:
+> >> BPF_TRAM_F_XXX flags are not used by user code and are almost constant
+> >> at compile time, so run time validation is a bit overkill. Remove
+> >> is_valid_bpf_tramp_flags() and add some usage comments.
 > >>
-> >> 1. When there is custom trampoline only, replace the fentry nop to a
-> >>    jump instruction that jumps directly to the custom trampoline.
-> >>
-> >> 2. When ftrace trampoline and custom trampoline coexist, jump from
-> >>    fentry to ftrace trampoline first, then jump to custom trampoline
-> >>    when ftrace trampoline exits. The current unused register
-> >>    pt_regs->orig_x0 is used as an intermediary for jumping from ftrace
-> >>    trampoline to custom trampoline.
+> >> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> >> Acked-by: Song Liu <songliubraving@fb.com>
 > > 
-> > For those of us not all that familiar with BPF, can you explain *why* you want
-> > this? The above explains what the patch implements, but not why that's useful.
+> > Am I right in thinking this is independent of the arm64-specific bits, and
+> > could be taken on its own now?
 > > 
-> > e.g. is this just to avoid the overhead of the ops list processing in the
-> > regular ftrace code, or is the custom trampoline there to allow you to do
-> > something special?
 > 
-> IIUC, ftrace direct call was designed to *remove* the unnecessary
-> overhead of saving regs completely [1][2].
+> Currenly is_valid_bpf_tramp_flags() is defined in x86 and called before
+> bpf trampoline is constructed. The check logic is irrelevant to the
+> architecture code. So we also need to call this function on arm64. But
+> as Alexei pointed out, the check is not requried, so it's better to
+> remove it before adding bpf trampoline to arm64.
 
-Ok. My plan is to get rid of most of the register saving generally, so I think
-that aspect can be solved without direct calls.
-
-> [1]
-> https://lore.kernel.org/all/20191022175052.frjzlnjjfwwfov64@ast-mbp.dhcp.thefacebook.com/
-> [2] https://lore.kernel.org/all/20191108212834.594904349@goodmis.org/
-> 
-> This patch itself is just a variant of [3].
-> 
-> [3] https://lore.kernel.org/all/20191108213450.891579507@goodmis.org/
-> 
-> > 
-> > There is another patch series on the list from some of your colleagues which
-> > uses dynamic trampolines to try to avoid that ops list overhead, and it's not
-> > clear to me whether these are trying to solve the largely same problem or
-> > something different. That other thread is at:
-> > 
-> >   https://lore.kernel.org/linux-arm-kernel/20220316100132.244849-1-bobo.shaobowang@huawei.com/
-> > 
-> > ... and I've added the relevant parties to CC here, since there doesn't seem to
-> > be any overlap in the CC lists of the two threads.
-> 
-> We're not working to solve the same problem. The trampoline introduced
-> in this series helps us to monitor kernel function or another bpf prog
-> with bpf, and also helps us to use bpf prog like a normal kernel
-> function pointer.
-
-Ok, but why is it necessary to have a special trampoline?
-
-Is that *just* to avoid overhead, or do you need to do something special that
-the regular trampoline won't do?
-
-> > 
-> > In that other thread I've suggested a general approach we could follow at:
-> >   
-> >   https://lore.kernel.org/linux-arm-kernel/YmGF%2FOpIhAF8YeVq@lakrids/
-> >
-> 
-> Is it possible for a kernel function to take a long jump to common
-> trampoline when we get a huge kernel image?
-
-It is possible, but only where the kernel Image itself is massive and the .text
-section exceeeds 128MiB, at which point other things break anyway. Practically
-speaking, this doesn't happen for production kernels, or reasonable test
-kernels.
-
-I've been meaning to add some logic to detect this at boot time and idsable
-ftrace (or at build time), since live patching would also be broken in that
-case.
-
-> > As noted in that thread, I have a few concerns which equally apply here:
-> > 
-> > * Due to the limited range of BL instructions, it's not always possible to
-> >   patch an ftrace call-site to branch to an arbitrary trampoline. The way this
-> >   works for ftrace today relies upon knowingthe set of trampolines at
-> >   compile-time, and allocating module PLTs for those, and that approach cannot
-> >   work reliably for dynanically allocated trampolines.
-> 
-> Currently patch 5 returns -ENOTSUPP when long jump is detected, so no
-> bpf trampoline is constructed for out of range patch-site:
-> 
-> if (is_long_jump(orig_call, image))
-> 	return -ENOTSUPP;
-
-Sure, my point is that in practice that means that (from the user's PoV) this
-may randomly fail to work, and I'd like something that we can ensure works
-consistently.
-
-> >   I'd strongly prefer to avoid custom tramplines unless they're strictly
-> >   necessary for functional reasons, so that we can have this work reliably and
-> >   consistently.
-> 
-> bpf trampoline is needed by bpf itself, not to replace ftrace trampolines.
-
-As above, can you please let me know *why* specifically it is needed? Why can't
-we invoke the BPF code through the usual ops mechanism?
-
-Is that to avoid overhead, or are there other functional reasons you need a
-special trampoline?
-
-> >> * If this is mostly about avoiding the ops list processing overhead, I
-> beleive
-> >   we can implement some custom ops support more generally in ftrace which would
-> >   still use a common trampoline but could directly call into those custom ops.
-> >   I would strongly prefer this over custom trampolines.
-> > 
-> > * I'm looking to minimize the set of regs ftrace saves, and never save a full
-> >   pt_regs, since today we (incompletely) fill that with bogus values and cannot
-> >   acquire some state reliably (e.g. PSTATE). I'd like to avoid usage of pt_regs
-> >   unless necessary, and I don't want to add additional reliance upon that
-> >   structure.
-> 
-> Even if such a common trampoline is used, bpf trampoline is still
-> necessary since we need to construct custom instructions to implement
-> bpf functions, for example, to implement kernel function pointer with a
-> bpf prog.
-
-Sorry, but I'm struggling to understand this. What specifically do you need to
-do that means this can't use the same calling convention as the regular ops
-function pointers?
+Cool. So this patch could be merged now, even if the rest of the series needs
+more work?
 
 Thanks,
 Mark.
+
+> >> ---
+> >>  arch/x86/net/bpf_jit_comp.c | 20 --------------------
+> >>  kernel/bpf/bpf_struct_ops.c |  3 +++
+> >>  kernel/bpf/trampoline.c     |  3 +++
+> >>  3 files changed, 6 insertions(+), 20 deletions(-)
+> >>
+> >> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> >> index a2b6d197c226..7698ef3b4821 100644
+> >> --- a/arch/x86/net/bpf_jit_comp.c
+> >> +++ b/arch/x86/net/bpf_jit_comp.c
+> >> @@ -1922,23 +1922,6 @@ static int invoke_bpf_mod_ret(const struct btf_func_model *m, u8 **pprog,
+> >>  	return 0;
+> >>  }
+> >>  
+> >> -static bool is_valid_bpf_tramp_flags(unsigned int flags)
+> >> -{
+> >> -	if ((flags & BPF_TRAMP_F_RESTORE_REGS) &&
+> >> -	    (flags & BPF_TRAMP_F_SKIP_FRAME))
+> >> -		return false;
+> >> -
+> >> -	/*
+> >> -	 * BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
+> >> -	 * and it must be used alone.
+> >> -	 */
+> >> -	if ((flags & BPF_TRAMP_F_RET_FENTRY_RET) &&
+> >> -	    (flags & ~BPF_TRAMP_F_RET_FENTRY_RET))
+> >> -		return false;
+> >> -
+> >> -	return true;
+> >> -}
+> >> -
+> >>  /* Example:
+> >>   * __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
+> >>   * its 'struct btf_func_model' will be nr_args=2
+> >> @@ -2017,9 +2000,6 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+> >>  	if (nr_args > 6)
+> >>  		return -ENOTSUPP;
+> >>  
+> >> -	if (!is_valid_bpf_tramp_flags(flags))
+> >> -		return -EINVAL;
+> >> -
+> >>  	/* Generated trampoline stack layout:
+> >>  	 *
+> >>  	 * RBP + 8         [ return address  ]
+> >> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+> >> index d9a3c9207240..0572cc5aeb28 100644
+> >> --- a/kernel/bpf/bpf_struct_ops.c
+> >> +++ b/kernel/bpf/bpf_struct_ops.c
+> >> @@ -341,6 +341,9 @@ int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_links *tlinks,
+> >>  
+> >>  	tlinks[BPF_TRAMP_FENTRY].links[0] = link;
+> >>  	tlinks[BPF_TRAMP_FENTRY].nr_links = 1;
+> >> +	/* BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
+> >> +	 * and it must be used alone.
+> >> +	 */
+> >>  	flags = model->ret_size > 0 ? BPF_TRAMP_F_RET_FENTRY_RET : 0;
+> >>  	return arch_prepare_bpf_trampoline(NULL, image, image_end,
+> >>  					   model, flags, tlinks, NULL);
+> >> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> >> index 93c7675f0c9e..bd3f2e673874 100644
+> >> --- a/kernel/bpf/trampoline.c
+> >> +++ b/kernel/bpf/trampoline.c
+> >> @@ -358,6 +358,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
+> >>  
+> >>  	if (tlinks[BPF_TRAMP_FEXIT].nr_links ||
+> >>  	    tlinks[BPF_TRAMP_MODIFY_RETURN].nr_links)
+> >> +		/* NOTE: BPF_TRAMP_F_RESTORE_REGS and BPF_TRAMP_F_SKIP_FRAME
+> >> +		 * should not be set together.
+> >> +		 */
+> >>  		flags = BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_SKIP_FRAME;
+> >>  
+> >>  	if (ip_arg)
+> >> -- 
+> >> 2.30.2
+> >>
+> > .
+> 
