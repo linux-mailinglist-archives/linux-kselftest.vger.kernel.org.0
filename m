@@ -2,56 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E3F535D22
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 May 2022 11:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E28535DB8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 May 2022 11:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243264AbiE0JLw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 May 2022 05:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
+        id S1350731AbiE0J6o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 May 2022 05:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344759AbiE0JLD (ORCPT
+        with ESMTP id S1350728AbiE0J6n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 May 2022 05:11:03 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CB31312B1;
-        Fri, 27 May 2022 02:07:58 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id i23so4291928ljb.4;
-        Fri, 27 May 2022 02:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=QhJy8vAsWRk7rBxT10iDy/5PmoVr3qcRU2Dxdwypg2w=;
-        b=BFYKpQ+8HJ031Pci0GGoXTHAK52LstG0U+QTzwaDWYuNKuqt6XQOmyKDhqE4LpIweq
-         ddrtnQYze5cmPDF816qSS+xaUlDY24jUhRklTLRJHNb2kludEKx1hdd5wHhWDvb08gKa
-         LevUQgwVi8mn9T5XFFOnNVtGY5dWJcNmqREqpjXCUPLR2x7Th55wEZ7xPmUQy6fu7u+S
-         Z9eoeDMEgDTOLUUV3N+I0yEY9OH9OxbB4lxErfv89muikeeaq6/+/ETll0ovphhOM4S1
-         p1BK0EiffcXwJjrp0h/wVqqXZkykAy0GzEo9y6Ws9EoOijhpHwJauuKDRNeNQL0lCu1j
-         qYhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=QhJy8vAsWRk7rBxT10iDy/5PmoVr3qcRU2Dxdwypg2w=;
-        b=Yui6kY0lFPyE6eakMJplHu7mCsciVgebp0xKXqzF1WOcVLYjNFts6/qMgrjoboInee
-         zCCh1qJ/Q/YeFQ/SGF71S4Obn0QFIAUq4W42Z7IJ00PC9vV96/tcycFOzRcIKtsfzeCy
-         +qDt5mSsEMkRlO/yB3vKR7e52BmSMJ9xPcYYfuajEU2e33nKCitiFNxkir5aq6HEBQgN
-         AN6ZJ6Iy18gycIi1l5QCXDtTCUnrNYyGQT2E0M0q2JEyODdjZR7L9iVddN0cEENVKFQf
-         RQ/02c2Ifl+OJ3JZgr431sdkxH8nywo6f8D4d9eGvtUc3uSK+NnS6uq7VMdYk4vjm18U
-         c/VQ==
-X-Gm-Message-State: AOAM532t43qXpmYb1NzB20iQarDeCqzC1TQXXN8HYqy92PfqO+87oKPC
-        HRJHRzOQYtWzm07fZQ1D9XoSgnOjCwmwYA==
-X-Google-Smtp-Source: ABdhPJz3dOSfuDx2uiYcak6q55G0/yRusHjmQ01zeaTTpiKKJVdkc3yPqv08H48DT8wHs1EdQCIjOg==
-X-Received: by 2002:a05:651c:160b:b0:255:3884:7940 with SMTP id f11-20020a05651c160b00b0025538847940mr1469961ljq.379.1653642473217;
-        Fri, 27 May 2022 02:07:53 -0700 (PDT)
-Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
-        by smtp.gmail.com with ESMTPSA id b9-20020a056512070900b0047862287498sm783205lfs.208.2022.05.27.02.07.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 02:07:52 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Ido Schimmel <idosch@idosch.org>,
-        Hans Schultz <schultz.hans@gmail.com>
+        Fri, 27 May 2022 05:58:43 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C854339D;
+        Fri, 27 May 2022 02:58:38 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6FA8E5C015C;
+        Fri, 27 May 2022 05:58:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 27 May 2022 05:58:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1653645515; x=1653731915; bh=EiD5ylETSiKx2sZ0AEuhqhGtVCfZ
+        ZuZgoLENo4nmHjI=; b=nl1wqhKerxlTczMdRkjvSnPtwogU5s5fEPawnMJK9jUi
+        +U9sQE+Xa1qD8B/YVmkLs+aD7AXrZF5/TcXXNqDyFR29gcywdBl6ohsY5JzqUoK4
+        QjJ+Kr7VGpMSB0rSdfvt/gGkgIvHXdPIwpgtJEKihENGGJ9hHO0AcZMYWK0xF2zm
+        +4UF50xRCHd0pMAppOt+J0yqGgj9uLz3FNZ02YlwodsgSlSILClZDP3Q19fBCZW0
+        5jWVH2/Xffs9D0+eMxydw3bJPskA6uDhP82oHM/FBeEnpb9+TLlJRU7wy6tsluic
+        JPgN/u76HcWDZe7U+kxV+HPMfhAUJE8fuvPN7EYU3g==
+X-ME-Sender: <xms:yqCQYi5uVAePkXoWspOvnHh8L_xPLalSW9G1n64DafXVXC6yXvqMug>
+    <xme:yqCQYr5ZTriITbWl1N-V4q5-33eXA3IbLWwpv7d1riob3tw0iqqX0lEqkJ_mufXTg
+    rQs7CVUzS_D2-M>
+X-ME-Received: <xmr:yqCQYhdChVRfZ3YHejad2KTBTfieOxfIkk5VrPNZ-GfoQWOpgJPofCBnAyXTnM8ORIF5-2G1ZF-jpScoCn3_Vd6RoNTqVQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeelgddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeg
+    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:yqCQYvI5NdpEHQGa421oczRfs8oDG5kKWtCpLVA0NKpvWt-F5koyzw>
+    <xmx:yqCQYmLcFD69B14v_s2Vn0FHsm1uIGUmjjTs4MWgDq1kc67F6vIjpw>
+    <xmx:yqCQYgx-INT9hl_02YCP-cqFsfFY6MxkrIRA6wp2aNkIcFQNwZufvA>
+    <xmx:y6CQYndoTV0A5gjPE9GQ_bQeERG3Or7GULDrCHVpljyeLiItw_ia0Q>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 May 2022 05:58:34 -0400 (EDT)
+Date:   Fri, 27 May 2022 12:58:30 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>
 Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -66,152 +68,87 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3 net-next 4/4] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <Yo+OYN/rjdB7wfQu@shredder>
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Message-ID: <YpCgxtJf9Qe7fTFd@shredder>
 References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-5-schultz.hans+netdev@gmail.com>
- <Yo+OYN/rjdB7wfQu@shredder>
-Date:   Fri, 27 May 2022 11:07:50 +0200
-Message-ID: <86pmjz2vix.fsf@gmail.com>
+ <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+ <Yo+LAj1vnjq0p36q@shredder>
+ <86sfov2w8k.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86sfov2w8k.fsf@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On tor, maj 26, 2022 at 17:27, Ido Schimmel <idosch@idosch.org> wrote:
-> On Tue, May 24, 2022 at 05:21:44PM +0200, Hans Schultz wrote:
->> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
->> locked flag set. denying access until the FDB entry is replaced with a
->> FDB entry without the locked flag set.
->> 
->> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
->> ---
->>  .../net/forwarding/bridge_locked_port.sh      | 42 ++++++++++++++++---
->>  1 file changed, 36 insertions(+), 6 deletions(-)
->> 
->> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
->> index 5b02b6b60ce7..50b9048d044a 100755
->> --- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
->> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
->> @@ -1,7 +1,7 @@
->>  #!/bin/bash
->>  # SPDX-License-Identifier: GPL-2.0
->>  
->> -ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
->> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan locked_port_mab"
->>  NUM_NETIFS=4
->>  CHECK_TC="no"
->>  source lib.sh
->> @@ -94,13 +94,13 @@ locked_port_ipv4()
->>  	ping_do $h1 192.0.2.2
->>  	check_fail $? "Ping worked after locking port, but before adding FDB entry"
->>  
->> -	bridge fdb add `mac_get $h1` dev $swp1 master static
->> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
->>  
->>  	ping_do $h1 192.0.2.2
->>  	check_err $? "Ping did not work after locking port and adding FDB entry"
->>  
->>  	bridge link set dev $swp1 locked off
->> -	bridge fdb del `mac_get $h1` dev $swp1 master static
->> +	bridge fdb del `mac_get $h1` dev $swp1 master
->>  
->>  	ping_do $h1 192.0.2.2
->>  	check_err $? "Ping did not work after unlocking port and removing FDB entry."
->> @@ -124,13 +124,13 @@ locked_port_vlan()
->>  	ping_do $h1.100 198.51.100.2
->>  	check_fail $? "Ping through vlan worked after locking port, but before adding FDB entry"
->>  
->> -	bridge fdb add `mac_get $h1` dev $swp1 vlan 100 master static
->> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
->>  
->>  	ping_do $h1.100 198.51.100.2
->>  	check_err $? "Ping through vlan did not work after locking port and adding FDB entry"
->>  
->>  	bridge link set dev $swp1 locked off
->> -	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master static
->> +	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master
->>  
->>  	ping_do $h1.100 198.51.100.2
->>  	check_err $? "Ping through vlan did not work after unlocking port and removing FDB entry"
->> @@ -153,7 +153,8 @@ locked_port_ipv6()
->>  	ping6_do $h1 2001:db8:1::2
->>  	check_fail $? "Ping6 worked after locking port, but before adding FDB entry"
->>  
->> -	bridge fdb add `mac_get $h1` dev $swp1 master static
->> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
->> +
->>  	ping6_do $h1 2001:db8:1::2
->>  	check_err $? "Ping6 did not work after locking port and adding FDB entry"
->>  
->> @@ -166,6 +167,35 @@ locked_port_ipv6()
->>  	log_test "Locked port ipv6"
->>  }
->
-> Why did you change s/add/replace/? Also, from the subject and commit
-> message I understand the patch is about adding a new test, not changing
-> existing ones.
->
+On Fri, May 27, 2022 at 10:52:27AM +0200, Hans Schultz wrote:
+> On tor, maj 26, 2022 at 17:13, Ido Schimmel <idosch@idosch.org> wrote:
+> > On Tue, May 24, 2022 at 05:21:41PM +0200, Hans Schultz wrote:
+> >> Add an intermediate state for clients behind a locked port to allow for
+> >> possible opening of the port for said clients. This feature corresponds
+> >> to the Mac-Auth and MAC Authentication Bypass (MAB) named features. The
+> >> latter defined by Cisco.
+> >> Locked FDB entries will be limited in number, so as to prevent DOS
+> >> attacks by spamming the port with random entries. The limit will be
+> >> a per port limit as it is a port based feature and that the port flushes
+> >> all FDB entries on link down.
+> >
+> > Why locked FDB entries need a special treatment compared to regular
+> > entries? A port that has learning enabled can be spammed with random
+> > source MACs just as well.
+> >
+> > The authorization daemon that is monitoring FDB notifications can have a
+> > policy to shut down a port if the rate / number of locked entries is
+> > above a given threshold.
+> >
+> > I don't think this kind of policy belongs in the kernel. If it resides
+> > in user space, then the threshold can be adjusted. Currently it's hard
+> > coded to 64 and I don't see how user space can change or monitor it.
+> 
+> In the Mac-Auth/MAB context, the locked port feature is really a form of
+> CPU based learning, and on mv88e6xxx switchcores, this is facilitated by
+> violation interrupts. Based on miss violation interrupts, the locked
+> entries are then added to a list with a timer to remove the entries
+> according to the bridge timeout.
+> As this is very CPU intensive compared to normal operation, the
+> assessment is that all this will jam up most devices if bombarded with
+> random entries at link speed, and my estimate is that any userspace 
+> daemon that listens to the ensuing fdb events will never get a chance
+> to stop this flood and eventually the device will lock down/reset. To
+> prevent this, the limit is introduced.
+> 
+> Ideally this limit could be adjustable from userspace, but in real
+> use-cases a cap like 64 should be more than enough, as that corresponds
+> to 64 possible devices behind a port that cannot authenticate by other
+> means (printers etc.) than having their mac addresses white-listed.
+> 
+> The software bridge behavior was then just set to correspond to the
+> offloaded behavior, but after correspondence with Nik, the software
+> bridge locked entries limit will be removed.
 
-Sorry, I might have lost a bit track of the kernel selftests, as for
-internal reasons there has been a pause in the work. I will remove the
-changes to the previous tests, and I hope it will be fine.
+As far as the bridge is concerned, locked entries are not really
+different from regular learned entries in terms of processing and since
+we don't have limits for regular entries I don't think we should have
+limits for locked entries.
 
->>  
->> +locked_port_mab()
->> +{
->> +	RET=0
->> +	check_locked_port_support || return 0
->> +
->> +	ping_do $h1 192.0.2.2
->> +	check_err $? "MAB: Ping did not work before locking port"
->> +
->> +	bridge link set dev $swp1 locked on
->> +	bridge link set dev $swp1 learning on
->> +
->> +	bridge fdb del `mac_get $h1` dev $swp1 master
->
-> Why the delete is needed? Aren't you getting errors on trying to delete
-> a non-existing entry? In previous test cases learning is disabled and it
-> seems the FDB entry is cleaned up.
->
+I do understand the problem you have in mv88e6xxx and I think it would
+be wise to hard code a reasonable limit there. It can be adjusted over
+time based on feedback and possibly exposed to user space.
 
-I guess you are right.
-
->> +
->> +	ping_do $h1 192.0.2.2
->> +	check_fail $? "MAB: Ping worked on locked port without FDB entry"
->> +
->> +	bridge fdb show | grep `mac_get $h1` | grep -q "locked"
->> +	check_err $? "MAB: No locked fdb entry after ping on locked port"
->> +
->> +	bridge fdb replace `mac_get $h1` dev $swp1 master static
->> +
->> +	ping_do $h1 192.0.2.2
->> +	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
->> +
->> +	bridge fdb del `mac_get $h1` dev $swp1 master
->
-> bridge link set dev $swp1 learning off
->
-
-noted.
-
->> +	bridge link set dev $swp1 locked off
->> +
->> +	log_test "Locked port MAB"
->> +}
->>  trap cleanup EXIT
->>  
->>  setup_prepare
->> -- 
->> 2.30.2
->> 
+Just to give you another data point about how this works in other
+devices, I can say that at least in Spectrum this works a bit
+differently. Packets that ingress via a locked port and incur an FDB
+miss are trapped to the CPU where they should be injected into the Rx
+path so that the bridge will create the 'locked' FDB entry and notify it
+to user space. The packets are obviously rated limited as the CPU cannot
+handle billions of packets per second, unlike the ASIC. The limit is not
+per bridge port (or even per bridge), but instead global to the entire
+device.
