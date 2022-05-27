@@ -2,117 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8015365A1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 May 2022 18:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCBF536602
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 May 2022 18:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354353AbiE0QCY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 May 2022 12:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S1344354AbiE0QcK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 May 2022 12:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354255AbiE0QCQ (ORCPT
+        with ESMTP id S231132AbiE0QcI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 May 2022 12:02:16 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6141B14AF61;
-        Fri, 27 May 2022 09:01:10 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id m11so5418053ljc.1;
-        Fri, 27 May 2022 09:01:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=2phuWBtcTkzKGfEFPcHjL5qNni//IzOpMEfDTaY87Dg=;
-        b=a/6lEtQeNSwtgd+B0HQwGamPbSXYBak0YscNWlZH2/cUpwdbbAjCMlEDfXxPMCmOrv
-         C+4+F0Z4eYHmr3iiuXdmt5mZ63JjkJlfLjAAAaciLrMQQRSxV9AHtoP3rSCsNUJtqdHI
-         FlUW5jUaj6AUAs6lTwHCbeEbdjL+NbmODSkcWbukTJ6GMWwdAYtg5ZUaGIeoz8ADApXv
-         scpsabiUuF162UFICurltoKqm8/0kcfzUpxxe/6aYV3VdvJGbK3o+EwnMdMVkv5Eq7yM
-         TyFCOAZWRb4lDVyaDzF8Hhkfm70+iMyBVKw3U67S2GVj5jnyVIaeU++KAmPOT0wMrN0L
-         RJwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=2phuWBtcTkzKGfEFPcHjL5qNni//IzOpMEfDTaY87Dg=;
-        b=PKdm5Z3QFjRc9UjkUyGI2plEcNajEoig6lho/dAbl8FxUqNeb05q/xiOx4ibpaIhv2
-         Q2/mWP+WDyjJXyxGVREqG08quZEObXQLkop2+cC2fkF/7WrIi813ruXX55FJNdA7jWzG
-         iaquPBTi4RUsFY1JfFb2LXENAaHxE1f2n6jkKoQb7ke0qH0YpnBvBMcNj28bI8AujX28
-         2wqsTY4nRpth7qoB6dzDOv47hYkGIcKRAqdm0f7+UpOVX0Qh6NCEXbxDfNAupouxhiJ1
-         rnozJbafBJvVQM7WLF5YrC1M4xJwbrLVZCwJk9CU2V9fsas7vy2ZzyIzR81JQzMXZmz8
-         N2fg==
-X-Gm-Message-State: AOAM533RjMJh1fWKiv2WtQ1/GHpbIUotJpvNcbu3O071g2viKylvXmqY
-        B4LtK/zKLOaY8XogNH3dLpiCuUnevgXZ/g==
-X-Google-Smtp-Source: ABdhPJycHoLeVBSFT6HYlEmAjtp5jZp5ZTK0nv+yLI/11Jm6IOTFbrJhS9SBvMptdgirewqC4QKNzQ==
-X-Received: by 2002:a2e:81ca:0:b0:255:44a9:8bea with SMTP id s10-20020a2e81ca000000b0025544a98beamr140022ljg.205.1653667258651;
-        Fri, 27 May 2022 09:00:58 -0700 (PDT)
-Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
-        by smtp.gmail.com with ESMTPSA id i20-20020a0565123e1400b0047426f59b33sm916670lfv.252.2022.05.27.09.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 May 2022 09:00:58 -0700 (PDT)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Ido Schimmel <idosch@idosch.org>,
-        Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
- locked port feature
-In-Reply-To: <YpCgxtJf9Qe7fTFd@shredder>
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
- <Yo+LAj1vnjq0p36q@shredder> <86sfov2w8k.fsf@gmail.com>
- <YpCgxtJf9Qe7fTFd@shredder>
-Date:   Fri, 27 May 2022 18:00:56 +0200
-Message-ID: <86a6b33qyv.fsf@gmail.com>
+        Fri, 27 May 2022 12:32:08 -0400
+X-Greylist: delayed 463 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 May 2022 09:32:06 PDT
+Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB43B62FA
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 May 2022 09:32:06 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4L8qrN1bZvzMqWbp;
+        Fri, 27 May 2022 18:24:20 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4L8qrM6RHTzlhMbr;
+        Fri, 27 May 2022 18:24:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1653668660;
+        bh=hXEP0YV2tisSrUNLHisVWLIXyHgN/uN/8A9Zrhkd+Qo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JGyyRu51rIh96WccpOaxrreJkOdxxHA2C8UA6k1Jl+ZtYxoVcIG1Pu2CSiNyhi0+Q
+         oFCGhWcc4IHI7q+muj7hUOtTo/06pPc6QG5Updu+mRPTVjIS+X3sD51MVw+4DZYd9o
+         thYPSzk6yLgmjInePR3S8H+VHg3/QEv/LIKqri9E=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v1] selftests/kselftest: Make failed tests exit with 1
+Date:   Fri, 27 May 2022 18:24:17 +0200
+Message-Id: <20220527162417.2646998-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->
-> As far as the bridge is concerned, locked entries are not really
-> different from regular learned entries in terms of processing and since
-> we don't have limits for regular entries I don't think we should have
-> limits for locked entries.
->
-> I do understand the problem you have in mv88e6xxx and I think it would
-> be wise to hard code a reasonable limit there. It can be adjusted over
-> time based on feedback and possibly exposed to user space.
->
-> Just to give you another data point about how this works in other
-> devices, I can say that at least in Spectrum this works a bit
-> differently. Packets that ingress via a locked port and incur an FDB
-> miss are trapped to the CPU where they should be injected into the Rx
-> path so that the bridge will create the 'locked' FDB entry and notify it
-> to user space. The packets are obviously rated limited as the CPU cannot
-> handle billions of packets per second, unlike the ASIC. The limit is not
-> per bridge port (or even per bridge), but instead global to the entire
-> device.
+To check that tests are passing we must parse the kselftest runner
+output.  It is much more convenient to check the return value of the
+runner instead: 0 is OK, and 1 implies one or more errors.
 
-Ahh, I see. I think that the best is for those FDB entries to be created
-as dynamic entries, so that user-space does not have to keep track of
-unauthorized entries.
-Also the mv88e6xxx chipsets have a 'hold at one' feature, for authorized
-entries, so that if a device goes quiet after being authorized the
-driver can signal to the software bridge and further to userspace that
-an authorized device has gone quiet, and the entry can then be
-removed. This though requires user added dynamic entries in the ATU, or
-you can call it synthetically 'learned' entries.
+This has an impact on the kselftest's gen_tar bundle and the run_tests
+make target.
+
+Backporting this change would be useful to consistently test older
+kernels as well.
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: SeongJae Park <sjpark@amazon.de>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: stable@vger.kernel.org # 303f8e2d0200: selftests/kselftest/runner/run_one(): allow running non-executable files
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20220527162417.2646998-1-mic@digikod.net
+---
+ tools/testing/selftests/kselftest/runner.sh | 36 +++++++++++++--------
+ tools/testing/selftests/run_kselftest.sh    |  4 ++-
+ 2 files changed, 26 insertions(+), 14 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 294619ade49f..f6488a53a78c 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -46,6 +46,8 @@ run_one()
+ 	DIR="$1"
+ 	TEST="$2"
+ 	NUM="$3"
++	local rc=1
++	local ret=1
+ 
+ 	BASENAME_TEST=$(basename $TEST)
+ 
+@@ -107,29 +109,36 @@ run_one()
+ 				cmd="$interpreter ./$BASENAME_TEST"
+ 			else
+ 				echo "not ok $test_num $TEST_HDR_MSG"
+-				return
++				return 1
+ 			fi
+ 		fi
+ 		cd `dirname $TEST` > /dev/null
+-		((((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
++		if (((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
+ 			tap_prefix >&4) 3>&1) |
+-			(read xs; exit $xs)) 4>>"$logfile" &&
+-		echo "ok $test_num $TEST_HDR_MSG") ||
+-		(rc=$?;	\
+-		if [ $rc -eq $skip_rc ]; then	\
+-			echo "ok $test_num $TEST_HDR_MSG # SKIP"
+-		elif [ $rc -eq $timeout_rc ]; then \
+-			echo "#"
+-			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
++			(read xs; exit $xs)) 4>>"$logfile"; then
++			echo "ok $test_num $TEST_HDR_MSG"
++			ret=0
+ 		else
+-			echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
+-		fi)
++			rc=$?
++			if [ $rc -eq $skip_rc ]; then
++				echo "ok $test_num $TEST_HDR_MSG # SKIP"
++				ret=0
++			elif [ $rc -eq $timeout_rc ]; then
++				echo "#"
++				echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
++			else
++				echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
++			fi
++		fi
+ 		cd - >/dev/null
+ 	fi
++	return $ret
+ }
+ 
+ run_many()
+ {
++	local ret=0
++
+ 	echo "TAP version 13"
+ 	DIR="${PWD#${BASE_DIR}/}"
+ 	test_num=0
+@@ -142,6 +151,7 @@ run_many()
+ 			logfile="/tmp/$BASENAME_TEST"
+ 			cat /dev/null > "$logfile"
+ 		fi
+-		run_one "$DIR" "$TEST" "$test_num"
++		run_one "$DIR" "$TEST" "$test_num" || ret=1
+ 	done
++	return $ret
+ }
+diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+index 97165a83df63..6164314f837e 100755
+--- a/tools/testing/selftests/run_kselftest.sh
++++ b/tools/testing/selftests/run_kselftest.sh
+@@ -85,9 +85,11 @@ if [ -n "$TESTS" ]; then
+ 	available="$(echo "$valid" | sed -e 's/ /\n/g')"
+ fi
+ 
++ret=0
+ collections=$(echo "$available" | cut -d: -f1 | uniq)
+ for collection in $collections ; do
+ 	[ -w /dev/kmsg ] && echo "kselftest: Running tests in $collection" >> /dev/kmsg
+ 	tests=$(echo "$available" | grep "^$collection:" | cut -d: -f2)
+-	($dryrun cd "$collection" && $dryrun run_many $tests)
++	($dryrun cd "$collection" && $dryrun run_many $tests) || ret=1
+ done
++exit $ret
+
+base-commit: 7e284070abe53d448517b80493863595af4ab5f0
+-- 
+2.36.0
+
