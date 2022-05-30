@@ -2,47 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06327537D67
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 May 2022 15:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EAAE537D90
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 May 2022 15:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237559AbiE3Nio (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 May 2022 09:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        id S237509AbiE3Nl2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 May 2022 09:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237583AbiE3Nhy (ORCPT
+        with ESMTP id S237377AbiE3Njv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 May 2022 09:37:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD6B8AE7E;
-        Mon, 30 May 2022 06:31:11 -0700 (PDT)
+        Mon, 30 May 2022 09:39:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E3799689;
+        Mon, 30 May 2022 06:31:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FF6FB80DAE;
-        Mon, 30 May 2022 13:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B659CC3411A;
-        Mon, 30 May 2022 13:31:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D10660F25;
+        Mon, 30 May 2022 13:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB6E3C385B8;
+        Mon, 30 May 2022 13:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917468;
-        bh=ogyjMyihZQAL3OGvTEq7dTUDoOlDFa9mgae1624z+fw=;
+        s=k20201202; t=1653917487;
+        bh=cYbqQ0dMuwCZflYozzYeRbTkmB9Hzvvc14PryXL08Gw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j2L1kTWAyPjhPKHO7z/G5szrbt8QI/lUAPhqQJeUe8ujfM3WElT1FPN1WLAN4LTwG
-         qLCugSuI9FbAOqtx/kqpmtuP7JYlzipLW5T8jgM8dmhbfVMQBKeEbn/RYYV1Nm7Mfp
-         /m+gT1aqJIeoFKCu1BsFIKsN6VmPLenz2TZkOSwgPUgV14gHqbbRo9oGKB4mPk6GKS
-         lQv98BUU/DSuxhPRFcRhFA69vAyjPgvqXqyByj5cVb9LjxuvN0myasNyOxCeZ/7D14
-         nRkUsjA89Cu9cJkdM+MSVHTBjaMkw+XQmIcMptli20fD5+tLzhkZoazSbhAJshMO5R
-         KEcK9MkX7nJ+w==
+        b=D9aEfR5UAqIeehZQGW/thHypfwAN0JoxSDd5pJoDGltX18eMkYrgSOk/NKIrM2vbE
+         nkOPaCBJ4wGdT8Bya/p1LWt3pL1brob+32hHyEyolykIV6BeiqDeRd5MIe5nriqHXK
+         5HOFj1U+mSGKTpOmHuH7+py5CU8RXHQR+ozbJ1eSNiPVrH6ShfTYHpI3OP4fI7Akg1
+         CImcbS38PncwdtzxQeNtLN1z+SAMJorLoylD/JxaYmhfITpGCwwmleRfY/yiWJU6Uz
+         JRwSfam2ZTewEk7RrkfaQwtjHflQMVEXFTp3Pz9NnO5BTKIUs5JyPqptRNbGuFcFXL
+         M/C9wkwY0VuLA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yuntao Wang <ytcoode@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        ast@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
-        sunyucong@gmail.com, kuifeng@fb.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 148/159] selftests/bpf: Add missing trampoline program type to trampoline_count test
-Date:   Mon, 30 May 2022 09:24:13 -0400
-Message-Id: <20220530132425.1929512-148-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, sunyucong@gmail.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.18 157/159] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
+Date:   Mon, 30 May 2022 09:24:22 -0400
+Message-Id: <20220530132425.1929512-157-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
 References: <20220530132425.1929512-1-sashal@kernel.org>
@@ -60,261 +61,87 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Yuntao Wang <ytcoode@gmail.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit b23316aabffa835ecc516cb81daeef5b9155e8a5 ]
+[ Upstream commit 4050764cbaa25760aab40857f723393c07898474 ]
 
-Currently the trampoline_count test doesn't include any fmod_ret bpf
-programs, fix it to make the test cover all possible trampoline program
-types.
+Latest llvm-project upstream had a change of behavior
+related to qualifiers on function return type ([1]).
+This caused selftests btf_dump/btf_dump failure.
+The following example shows what changed.
 
-Since fmod_ret bpf programs can't be attached to __set_task_comm function,
-as it's neither whitelisted for error injection nor a security hook, change
-it to bpf_modify_return_test.
+  $ cat t.c
+  typedef const char * const (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
+  struct t {
+    int a;
+    fn_ptr_arr2_t l;
+  };
+  int foo(struct t *arg) {
+    return arg->a;
+  }
 
-This patch also does some other cleanups such as removing duplicate code,
-dropping inconsistent comments, etc.
+Compiled with latest upstream llvm15,
+  $ clang -O2 -g -target bpf -S -emit-llvm t.c
+The related generated debuginfo IR looks like:
+  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
+  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !32)
+  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
+  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
+  !20 = !DISubroutineType(types: !21)
+  !21 = !{!22, null}
+  !22 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !23, size: 64)
+  !23 = !DISubroutineType(types: !24)
+  !24 = !{!25, !28}
+  !25 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !26, size: 64)
+  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
+  !27 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+You can see two intermediate const qualifier to pointer are dropped in debuginfo IR.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220519150610.601313-1-ytcoode@gmail.com
+With llvm14, we have following debuginfo IR:
+  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
+  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !34)
+  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
+  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
+  !20 = !DISubroutineType(types: !21)
+  !21 = !{!22, null}
+  !22 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !23)
+  !23 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !24, size: 64)
+  !24 = !DISubroutineType(types: !25)
+  !25 = !{!26, !30}
+  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
+  !27 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !28, size: 64)
+  !28 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !29)
+  !29 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+All const qualifiers are preserved.
+
+To adapt the selftest to both old and new llvm, this patch removed
+the intermediate const qualifier in const-to-ptr types, to make the
+test succeed again.
+
+  [1] https://reviews.llvm.org/D125919
+
+Reported-by: Mykola Lysenko <mykolal@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20220523152044.3905809-1-yhs@fb.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/bpf.h                           |   2 +-
- .../bpf/prog_tests/trampoline_count.c         | 134 +++++++-----------
- .../bpf/progs/test_trampoline_count.c         |  16 ++-
- 3 files changed, 61 insertions(+), 91 deletions(-)
+ tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bdb5298735ce..f084b251fce7 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -672,7 +672,7 @@ struct btf_func_model {
- #define BPF_TRAMP_F_RET_FENTRY_RET	BIT(4)
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 1c7105fcae3c..4ee4748133fe 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -94,7 +94,7 @@ typedef void (* (*signal_t)(int, void (*)(int)))(int);
  
- /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-- * bytes on x86.  Pick a number to fit into BPF_IMAGE_SIZE / 2
-+ * bytes on x86.
-  */
- #define BPF_MAX_TRAMP_PROGS 38
+ typedef char * (*fn_ptr_arr1_t[10])(int **);
  
-diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-index 9c795ee52b7b..b0acbda6dbf5 100644
---- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
-@@ -1,126 +1,94 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #define _GNU_SOURCE
--#include <sched.h>
--#include <sys/prctl.h>
- #include <test_progs.h>
+-typedef char * (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
++typedef char * (* (* const fn_ptr_arr2_t[5])())(char * (*)(int));
  
- #define MAX_TRAMP_PROGS 38
- 
- struct inst {
- 	struct bpf_object *obj;
--	struct bpf_link   *link_fentry;
--	struct bpf_link   *link_fexit;
-+	struct bpf_link   *link;
- };
- 
--static int test_task_rename(void)
--{
--	int fd, duration = 0, err;
--	char buf[] = "test_overhead";
--
--	fd = open("/proc/self/comm", O_WRONLY|O_TRUNC);
--	if (CHECK(fd < 0, "open /proc", "err %d", errno))
--		return -1;
--	err = write(fd, buf, sizeof(buf));
--	if (err < 0) {
--		CHECK(err < 0, "task rename", "err %d", errno);
--		close(fd);
--		return -1;
--	}
--	close(fd);
--	return 0;
--}
--
--static struct bpf_link *load(struct bpf_object *obj, const char *name)
-+static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
- {
-+	struct bpf_object *obj;
- 	struct bpf_program *prog;
--	int duration = 0;
-+	int err;
-+
-+	obj = bpf_object__open_file(file, NULL);
-+	if (!ASSERT_OK_PTR(obj, "obj_open_file"))
-+		return NULL;
-+
-+	inst->obj = obj;
-+
-+	err = bpf_object__load(obj);
-+	if (!ASSERT_OK(err, "obj_load"))
-+		return NULL;
- 
- 	prog = bpf_object__find_program_by_name(obj, name);
--	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", name))
--		return ERR_PTR(-EINVAL);
--	return bpf_program__attach_trace(prog);
-+	if (!ASSERT_OK_PTR(prog, "obj_find_prog"))
-+		return NULL;
-+
-+	return prog;
- }
- 
- /* TODO: use different target function to run in concurrent mode */
- void serial_test_trampoline_count(void)
- {
--	const char *fentry_name = "prog1";
--	const char *fexit_name = "prog2";
--	const char *object = "test_trampoline_count.o";
--	struct inst inst[MAX_TRAMP_PROGS] = {};
--	int err, i = 0, duration = 0;
--	struct bpf_object *obj;
-+	char *file = "test_trampoline_count.o";
-+	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
-+	struct inst inst[MAX_TRAMP_PROGS + 1] = {};
-+	struct bpf_program *prog;
- 	struct bpf_link *link;
--	char comm[16] = {};
-+	int prog_fd, err, i;
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
- 
- 	/* attach 'allowed' trampoline programs */
- 	for (i = 0; i < MAX_TRAMP_PROGS; i++) {
--		obj = bpf_object__open_file(object, NULL);
--		if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
--			obj = NULL;
-+		prog = load_prog(file, progs[i % ARRAY_SIZE(progs)], &inst[i]);
-+		if (!prog)
- 			goto cleanup;
--		}
- 
--		err = bpf_object__load(obj);
--		if (CHECK(err, "obj_load", "err %d\n", err))
-+		link = bpf_program__attach(prog);
-+		if (!ASSERT_OK_PTR(link, "attach_prog"))
- 			goto cleanup;
--		inst[i].obj = obj;
--		obj = NULL;
--
--		if (rand() % 2) {
--			link = load(inst[i].obj, fentry_name);
--			if (!ASSERT_OK_PTR(link, "attach_prog")) {
--				link = NULL;
--				goto cleanup;
--			}
--			inst[i].link_fentry = link;
--		} else {
--			link = load(inst[i].obj, fexit_name);
--			if (!ASSERT_OK_PTR(link, "attach_prog")) {
--				link = NULL;
--				goto cleanup;
--			}
--			inst[i].link_fexit = link;
--		}
-+
-+		inst[i].link = link;
- 	}
- 
- 	/* and try 1 extra.. */
--	obj = bpf_object__open_file(object, NULL);
--	if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
--		obj = NULL;
-+	prog = load_prog(file, "fmod_ret_test", &inst[i]);
-+	if (!prog)
- 		goto cleanup;
--	}
--
--	err = bpf_object__load(obj);
--	if (CHECK(err, "obj_load", "err %d\n", err))
--		goto cleanup_extra;
- 
- 	/* ..that needs to fail */
--	link = load(obj, fentry_name);
--	err = libbpf_get_error(link);
--	if (!ASSERT_ERR_PTR(link, "cannot attach over the limit")) {
--		bpf_link__destroy(link);
--		goto cleanup_extra;
-+	link = bpf_program__attach(prog);
-+	if (!ASSERT_ERR_PTR(link, "attach_prog")) {
-+		inst[i].link = link;
-+		goto cleanup;
- 	}
- 
- 	/* with E2BIG error */
--	ASSERT_EQ(err, -E2BIG, "proper error check");
--	ASSERT_EQ(link, NULL, "ptr_is_null");
-+	if (!ASSERT_EQ(libbpf_get_error(link), -E2BIG, "E2BIG"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
-+		goto cleanup;
- 
- 	/* and finaly execute the probe */
--	if (CHECK_FAIL(prctl(PR_GET_NAME, comm, 0L, 0L, 0L)))
--		goto cleanup_extra;
--	CHECK_FAIL(test_task_rename());
--	CHECK_FAIL(prctl(PR_SET_NAME, comm, 0L, 0L, 0L));
-+	prog_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(prog_fd, &opts);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(opts.retval & 0xffff, 4, "bpf_modify_return_test.result");
-+	ASSERT_EQ(opts.retval >> 16, 1, "bpf_modify_return_test.side_effect");
- 
--cleanup_extra:
--	bpf_object__close(obj);
- cleanup:
--	if (i >= MAX_TRAMP_PROGS)
--		i = MAX_TRAMP_PROGS - 1;
- 	for (; i >= 0; i--) {
--		bpf_link__destroy(inst[i].link_fentry);
--		bpf_link__destroy(inst[i].link_fexit);
-+		bpf_link__destroy(inst[i].link);
- 		bpf_object__close(inst[i].obj);
- 	}
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-index f030e469d05b..7765720da7d5 100644
---- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-+++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
-@@ -1,20 +1,22 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <stdbool.h>
--#include <stddef.h>
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
--struct task_struct;
-+SEC("fentry/bpf_modify_return_test")
-+int BPF_PROG(fentry_test, int a, int *b)
-+{
-+	return 0;
-+}
- 
--SEC("fentry/__set_task_comm")
--int BPF_PROG(prog1, struct task_struct *tsk, const char *buf, bool exec)
-+SEC("fmod_ret/bpf_modify_return_test")
-+int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
- {
- 	return 0;
- }
- 
--SEC("fexit/__set_task_comm")
--int BPF_PROG(prog2, struct task_struct *tsk, const char *buf, bool exec)
-+SEC("fexit/bpf_modify_return_test")
-+int BPF_PROG(fexit_test, int a, int *b, int ret)
- {
- 	return 0;
- }
+ struct struct_w_typedefs {
+ 	int_t a;
 -- 
 2.35.1
 
