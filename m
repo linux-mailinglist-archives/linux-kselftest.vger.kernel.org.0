@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344CA537D79
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 May 2022 15:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06327537D67
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 May 2022 15:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237739AbiE3Nhz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 May 2022 09:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S237559AbiE3Nio (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 May 2022 09:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237646AbiE3Ngy (ORCPT
+        with ESMTP id S237583AbiE3Nhy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 May 2022 09:36:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AC060DB6;
-        Mon, 30 May 2022 06:30:34 -0700 (PDT)
+        Mon, 30 May 2022 09:37:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD6B8AE7E;
+        Mon, 30 May 2022 06:31:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29D4660EE0;
-        Mon, 30 May 2022 13:30:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E1CC385B8;
-        Mon, 30 May 2022 13:30:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FF6FB80DAE;
+        Mon, 30 May 2022 13:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B659CC3411A;
+        Mon, 30 May 2022 13:31:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917433;
-        bh=xRzVVb9dp3AfJuQgs6IuBJGSwSqg0aexqaH6UBZReSc=;
+        s=k20201202; t=1653917468;
+        bh=ogyjMyihZQAL3OGvTEq7dTUDoOlDFa9mgae1624z+fw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EChGrhftWYhvDU+MG1c6B62esrZ9vMbXnCY5xCQ8mllztiCTksMoj8ypMVUEaDKHK
-         HCFHCF0vREkIH6LlOLoMC329tJn94EyxOH2hSqNey8RM/uQvAuXpwa8Ksw4EeuxgLf
-         iD1Je94SEP7G6LWSPu3dSP71dwxzLJuf16UeWcRW34IuVHX3CF3cjXD+XthSd3vkae
-         GpX1aHiZ6X+5PODhahq80UWXhE6O9IiiUjXQ1rZLSDoTs0XoiZRTfxI/7GkspJsAtA
-         3yJnq2KDtN3FQCuMBft6J4IQ7+JBYSOD/uJOcJZyGQk18o9cWHTKC1+ne1EiIiudN0
-         Uc4T0JA3aiQxQ==
+        b=j2L1kTWAyPjhPKHO7z/G5szrbt8QI/lUAPhqQJeUe8ujfM3WElT1FPN1WLAN4LTwG
+         qLCugSuI9FbAOqtx/kqpmtuP7JYlzipLW5T8jgM8dmhbfVMQBKeEbn/RYYV1Nm7Mfp
+         /m+gT1aqJIeoFKCu1BsFIKsN6VmPLenz2TZkOSwgPUgV14gHqbbRo9oGKB4mPk6GKS
+         lQv98BUU/DSuxhPRFcRhFA69vAyjPgvqXqyByj5cVb9LjxuvN0myasNyOxCeZ/7D14
+         nRkUsjA89Cu9cJkdM+MSVHTBjaMkw+XQmIcMptli20fD5+tLzhkZoazSbhAJshMO5R
+         KEcK9MkX7nJ+w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 5.18 133/159] kunit: tool: make parser stop overwriting status of suites w/ no_tests
-Date:   Mon, 30 May 2022 09:23:58 -0400
-Message-Id: <20220530132425.1929512-133-sashal@kernel.org>
+Cc:     Yuntao Wang <ytcoode@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+        ast@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        sunyucong@gmail.com, kuifeng@fb.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 148/159] selftests/bpf: Add missing trampoline program type to trampoline_count test
+Date:   Mon, 30 May 2022 09:24:13 -0400
+Message-Id: <20220530132425.1929512-148-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
 References: <20220530132425.1929512-1-sashal@kernel.org>
@@ -60,82 +60,261 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Daniel Latypov <dlatypov@google.com>
+From: Yuntao Wang <ytcoode@gmail.com>
 
-[ Upstream commit dbf0b0d53a2b5afa6ef7372dcedf52302669fc2c ]
+[ Upstream commit b23316aabffa835ecc516cb81daeef5b9155e8a5 ]
 
-Consider this invocation
-$ ./tools/testing/kunit/kunit.py parse <<EOF
-  TAP version 14
-  1..2
-  ok 1 - suite
-    # Subtest: no_tests_suite
-    # catastrophic error!
-  not ok 1 - no_tests_suite
-EOF
+Currently the trampoline_count test doesn't include any fmod_ret bpf
+programs, fix it to make the test cover all possible trampoline program
+types.
 
-It will have a 0 exit code even though there's a "not ok".
+Since fmod_ret bpf programs can't be attached to __set_task_comm function,
+as it's neither whitelisted for error injection nor a security hook, change
+it to bpf_modify_return_test.
 
-Consider this one:
-$ ./tools/testing/kunit/kunit.py parse <<EOF
-  TAP version 14
-  1..2
-  ok 1 - suite
-  not ok 1 - no_tests_suite
-EOF
+This patch also does some other cleanups such as removing duplicate code,
+dropping inconsistent comments, etc.
 
-It will a non-zero exit code.
-
-Why?
-We have this line in the kunit_parser.py
-> parent_test = parse_test_header(lines, test)
-where we have special handling when we see "# Subtest" and we ignore the
-explicit reported "not ok 1" status!
-
-Also, NO_TESTS at a suite-level only results in a non-zero status code
-where then there's only one suite atm.
-
-This change is the minimal one to make sure we don't overwrite it.
-
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220519150610.601313-1-ytcoode@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/kunit/kunit_parser.py                        | 7 +++++--
- .../test_data/test_is_test_passed-no_tests_no_plan.log     | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ include/linux/bpf.h                           |   2 +-
+ .../bpf/prog_tests/trampoline_count.c         | 134 +++++++-----------
+ .../bpf/progs/test_trampoline_count.c         |  16 ++-
+ 3 files changed, 61 insertions(+), 91 deletions(-)
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 05ff334761dd..2f93ed1d7f99 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -789,8 +789,11 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index bdb5298735ce..f084b251fce7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -672,7 +672,7 @@ struct btf_func_model {
+ #define BPF_TRAMP_F_RET_FENTRY_RET	BIT(4)
  
- 	# Check for there being no tests
- 	if parent_test and len(subtests) == 0:
--		test.status = TestStatus.NO_TESTS
--		test.add_error('0 tests run!')
-+		# Don't override a bad status if this test had one reported.
-+		# Assumption: no subtests means CRASHED is from Test.__init__()
-+		if test.status in (TestStatus.TEST_CRASHED, TestStatus.SUCCESS):
-+			test.status = TestStatus.NO_TESTS
-+			test.add_error('0 tests run!')
+ /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
+- * bytes on x86.  Pick a number to fit into BPF_IMAGE_SIZE / 2
++ * bytes on x86.
+  */
+ #define BPF_MAX_TRAMP_PROGS 38
  
- 	# Add statuses to TestCounts attribute in Test object
- 	bubble_up_test_results(test)
-diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
-index dd873c981108..4f81876ee6f1 100644
---- a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
-+++ b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
-@@ -3,5 +3,5 @@ TAP version 14
-   # Subtest: suite
-   1..1
-     # Subtest: case
--  ok 1 - case # SKIP
-+  ok 1 - case
- ok 1 - suite
+diff --git a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+index 9c795ee52b7b..b0acbda6dbf5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
++++ b/tools/testing/selftests/bpf/prog_tests/trampoline_count.c
+@@ -1,126 +1,94 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #define _GNU_SOURCE
+-#include <sched.h>
+-#include <sys/prctl.h>
+ #include <test_progs.h>
+ 
+ #define MAX_TRAMP_PROGS 38
+ 
+ struct inst {
+ 	struct bpf_object *obj;
+-	struct bpf_link   *link_fentry;
+-	struct bpf_link   *link_fexit;
++	struct bpf_link   *link;
+ };
+ 
+-static int test_task_rename(void)
+-{
+-	int fd, duration = 0, err;
+-	char buf[] = "test_overhead";
+-
+-	fd = open("/proc/self/comm", O_WRONLY|O_TRUNC);
+-	if (CHECK(fd < 0, "open /proc", "err %d", errno))
+-		return -1;
+-	err = write(fd, buf, sizeof(buf));
+-	if (err < 0) {
+-		CHECK(err < 0, "task rename", "err %d", errno);
+-		close(fd);
+-		return -1;
+-	}
+-	close(fd);
+-	return 0;
+-}
+-
+-static struct bpf_link *load(struct bpf_object *obj, const char *name)
++static struct bpf_program *load_prog(char *file, char *name, struct inst *inst)
+ {
++	struct bpf_object *obj;
+ 	struct bpf_program *prog;
+-	int duration = 0;
++	int err;
++
++	obj = bpf_object__open_file(file, NULL);
++	if (!ASSERT_OK_PTR(obj, "obj_open_file"))
++		return NULL;
++
++	inst->obj = obj;
++
++	err = bpf_object__load(obj);
++	if (!ASSERT_OK(err, "obj_load"))
++		return NULL;
+ 
+ 	prog = bpf_object__find_program_by_name(obj, name);
+-	if (CHECK(!prog, "find_probe", "prog '%s' not found\n", name))
+-		return ERR_PTR(-EINVAL);
+-	return bpf_program__attach_trace(prog);
++	if (!ASSERT_OK_PTR(prog, "obj_find_prog"))
++		return NULL;
++
++	return prog;
+ }
+ 
+ /* TODO: use different target function to run in concurrent mode */
+ void serial_test_trampoline_count(void)
+ {
+-	const char *fentry_name = "prog1";
+-	const char *fexit_name = "prog2";
+-	const char *object = "test_trampoline_count.o";
+-	struct inst inst[MAX_TRAMP_PROGS] = {};
+-	int err, i = 0, duration = 0;
+-	struct bpf_object *obj;
++	char *file = "test_trampoline_count.o";
++	char *const progs[] = { "fentry_test", "fmod_ret_test", "fexit_test" };
++	struct inst inst[MAX_TRAMP_PROGS + 1] = {};
++	struct bpf_program *prog;
+ 	struct bpf_link *link;
+-	char comm[16] = {};
++	int prog_fd, err, i;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
+ 
+ 	/* attach 'allowed' trampoline programs */
+ 	for (i = 0; i < MAX_TRAMP_PROGS; i++) {
+-		obj = bpf_object__open_file(object, NULL);
+-		if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
+-			obj = NULL;
++		prog = load_prog(file, progs[i % ARRAY_SIZE(progs)], &inst[i]);
++		if (!prog)
+ 			goto cleanup;
+-		}
+ 
+-		err = bpf_object__load(obj);
+-		if (CHECK(err, "obj_load", "err %d\n", err))
++		link = bpf_program__attach(prog);
++		if (!ASSERT_OK_PTR(link, "attach_prog"))
+ 			goto cleanup;
+-		inst[i].obj = obj;
+-		obj = NULL;
+-
+-		if (rand() % 2) {
+-			link = load(inst[i].obj, fentry_name);
+-			if (!ASSERT_OK_PTR(link, "attach_prog")) {
+-				link = NULL;
+-				goto cleanup;
+-			}
+-			inst[i].link_fentry = link;
+-		} else {
+-			link = load(inst[i].obj, fexit_name);
+-			if (!ASSERT_OK_PTR(link, "attach_prog")) {
+-				link = NULL;
+-				goto cleanup;
+-			}
+-			inst[i].link_fexit = link;
+-		}
++
++		inst[i].link = link;
+ 	}
+ 
+ 	/* and try 1 extra.. */
+-	obj = bpf_object__open_file(object, NULL);
+-	if (!ASSERT_OK_PTR(obj, "obj_open_file")) {
+-		obj = NULL;
++	prog = load_prog(file, "fmod_ret_test", &inst[i]);
++	if (!prog)
+ 		goto cleanup;
+-	}
+-
+-	err = bpf_object__load(obj);
+-	if (CHECK(err, "obj_load", "err %d\n", err))
+-		goto cleanup_extra;
+ 
+ 	/* ..that needs to fail */
+-	link = load(obj, fentry_name);
+-	err = libbpf_get_error(link);
+-	if (!ASSERT_ERR_PTR(link, "cannot attach over the limit")) {
+-		bpf_link__destroy(link);
+-		goto cleanup_extra;
++	link = bpf_program__attach(prog);
++	if (!ASSERT_ERR_PTR(link, "attach_prog")) {
++		inst[i].link = link;
++		goto cleanup;
+ 	}
+ 
+ 	/* with E2BIG error */
+-	ASSERT_EQ(err, -E2BIG, "proper error check");
+-	ASSERT_EQ(link, NULL, "ptr_is_null");
++	if (!ASSERT_EQ(libbpf_get_error(link), -E2BIG, "E2BIG"))
++		goto cleanup;
++	if (!ASSERT_EQ(link, NULL, "ptr_is_null"))
++		goto cleanup;
+ 
+ 	/* and finaly execute the probe */
+-	if (CHECK_FAIL(prctl(PR_GET_NAME, comm, 0L, 0L, 0L)))
+-		goto cleanup_extra;
+-	CHECK_FAIL(test_task_rename());
+-	CHECK_FAIL(prctl(PR_SET_NAME, comm, 0L, 0L, 0L));
++	prog_fd = bpf_program__fd(prog);
++	if (!ASSERT_GE(prog_fd, 0, "bpf_program__fd"))
++		goto cleanup;
++
++	err = bpf_prog_test_run_opts(prog_fd, &opts);
++	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
++		goto cleanup;
++
++	ASSERT_EQ(opts.retval & 0xffff, 4, "bpf_modify_return_test.result");
++	ASSERT_EQ(opts.retval >> 16, 1, "bpf_modify_return_test.side_effect");
+ 
+-cleanup_extra:
+-	bpf_object__close(obj);
+ cleanup:
+-	if (i >= MAX_TRAMP_PROGS)
+-		i = MAX_TRAMP_PROGS - 1;
+ 	for (; i >= 0; i--) {
+-		bpf_link__destroy(inst[i].link_fentry);
+-		bpf_link__destroy(inst[i].link_fexit);
++		bpf_link__destroy(inst[i].link);
+ 		bpf_object__close(inst[i].obj);
+ 	}
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_trampoline_count.c b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+index f030e469d05b..7765720da7d5 100644
+--- a/tools/testing/selftests/bpf/progs/test_trampoline_count.c
++++ b/tools/testing/selftests/bpf/progs/test_trampoline_count.c
+@@ -1,20 +1,22 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <stdbool.h>
+-#include <stddef.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
+-struct task_struct;
++SEC("fentry/bpf_modify_return_test")
++int BPF_PROG(fentry_test, int a, int *b)
++{
++	return 0;
++}
+ 
+-SEC("fentry/__set_task_comm")
+-int BPF_PROG(prog1, struct task_struct *tsk, const char *buf, bool exec)
++SEC("fmod_ret/bpf_modify_return_test")
++int BPF_PROG(fmod_ret_test, int a, int *b, int ret)
+ {
+ 	return 0;
+ }
+ 
+-SEC("fexit/__set_task_comm")
+-int BPF_PROG(prog2, struct task_struct *tsk, const char *buf, bool exec)
++SEC("fexit/bpf_modify_return_test")
++int BPF_PROG(fexit_test, int a, int *b, int ret)
+ {
+ 	return 0;
+ }
 -- 
 2.35.1
 
