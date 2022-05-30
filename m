@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE0A537CDA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 May 2022 15:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344CA537D79
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 May 2022 15:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237482AbiE3Ngr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 May 2022 09:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        id S237739AbiE3Nhz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 May 2022 09:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237876AbiE3Nfw (ORCPT
+        with ESMTP id S237646AbiE3Ngy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 May 2022 09:35:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD03795DCD;
-        Mon, 30 May 2022 06:29:12 -0700 (PDT)
+        Mon, 30 May 2022 09:36:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AC060DB6;
+        Mon, 30 May 2022 06:30:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D8E9B80DAD;
-        Mon, 30 May 2022 13:29:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1180AC36AE9;
-        Mon, 30 May 2022 13:29:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29D4660EE0;
+        Mon, 30 May 2022 13:30:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E1CC385B8;
+        Mon, 30 May 2022 13:30:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917350;
-        bh=DrlCtqRdmd/H4FDcqecWOdiAET1SvEdTVJUq2ANWkK8=;
+        s=k20201202; t=1653917433;
+        bh=xRzVVb9dp3AfJuQgs6IuBJGSwSqg0aexqaH6UBZReSc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qpF5BJkUH7F79e2m3y1Faif/lDDdUm4JG1rm/yTK+ahFCGUOu8QtANoRMQw3SelDr
-         2G+1t9HwmVXRno7hY2BHSbsSvBJAYtrTSWLNDXKnw8vb2JzN79jsGeJAUIungAHMk+
-         VWUeP4zmDQpMuSrFJs0Voumj7Ym/FbuYZzkYm2ah/fwmS0J8+edz6zrVzLBd3bbVwG
-         Cf3Lras5zwSfG8xd8pZBpHjpUY3oESb5WM0rWBEua4I39nlD5OEurruULBgKfcF6/D
-         W4Y1R3iBzluCjf2hw39586R2SARkPTC3mq7n5OuWHwIXmbDEuFWgCtASjMkSx/Ojp8
-         yxQyh53dUlOQw==
+        b=EChGrhftWYhvDU+MG1c6B62esrZ9vMbXnCY5xCQ8mllztiCTksMoj8ypMVUEaDKHK
+         HCFHCF0vREkIH6LlOLoMC329tJn94EyxOH2hSqNey8RM/uQvAuXpwa8Ksw4EeuxgLf
+         iD1Je94SEP7G6LWSPu3dSP71dwxzLJuf16UeWcRW34IuVHX3CF3cjXD+XthSd3vkae
+         GpX1aHiZ6X+5PODhahq80UWXhE6O9IiiUjXQ1rZLSDoTs0XoiZRTfxI/7GkspJsAtA
+         3yJnq2KDtN3FQCuMBft6J4IQ7+JBYSOD/uJOcJZyGQk18o9cWHTKC1+ne1EiIiudN0
+         Uc4T0JA3aiQxQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Daniel Latypov <dlatypov@google.com>,
-        Zeal Robot <zealci@zte.com.cn>, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 5.18 107/159] kunit: bail out of test filtering logic quicker if OOM
-Date:   Mon, 30 May 2022 09:23:32 -0400
-Message-Id: <20220530132425.1929512-107-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 133/159] kunit: tool: make parser stop overwriting status of suites w/ no_tests
+Date:   Mon, 30 May 2022 09:23:58 -0400
+Message-Id: <20220530132425.1929512-133-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
 References: <20220530132425.1929512-1-sashal@kernel.org>
@@ -62,142 +62,80 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Daniel Latypov <dlatypov@google.com>
 
-[ Upstream commit a02353f491622e49c7ddedc6a6dc4f1d6ed2150a ]
+[ Upstream commit dbf0b0d53a2b5afa6ef7372dcedf52302669fc2c ]
 
-When filtering what tests to run (suites and/or cases) via
-kunit.filter_glob (e.g. kunit.py run <glob>), we allocate copies of
-suites.
+Consider this invocation
+$ ./tools/testing/kunit/kunit.py parse <<EOF
+  TAP version 14
+  1..2
+  ok 1 - suite
+    # Subtest: no_tests_suite
+    # catastrophic error!
+  not ok 1 - no_tests_suite
+EOF
 
-These allocations can fail, and we largely don't handle that.
-Note: realistically, this probably doesn't matter much.
-We're not allocating much memory and this happens early in boot, so if
-we can't do that, then there's likely far bigger problems.
+It will have a 0 exit code even though there's a "not ok".
 
-This patch makes us immediately bail out from the top-level function
-(kunit_filter_suites) with -ENOMEM if any of the underlying kmalloc()
-calls return NULL.
+Consider this one:
+$ ./tools/testing/kunit/kunit.py parse <<EOF
+  TAP version 14
+  1..2
+  ok 1 - suite
+  not ok 1 - no_tests_suite
+EOF
 
-Implementation note: we used to return NULL pointers from some functions
-to indicate either that all suites/tests were filtered out or there was
-an error allocating the new array.
+It will a non-zero exit code.
 
-We'll log a short error in this case and not run any tests or print a
-TAP header. From a kunit.py user's perspective, they'll get a message
-about missing/invalid TAP output and have to dig into the test.log to
-see it. Since hitting this error seems so unlikely, it's probably fine
-to not invent a way to plumb this error message more visibly.
+Why?
+We have this line in the kunit_parser.py
+> parent_test = parse_test_header(lines, test)
+where we have special handling when we see "# Subtest" and we ignore the
+explicit reported "not ok 1" status!
 
-See also: https://lore.kernel.org/linux-kselftest/20220329103919.2376818-1-lv.ruyi@zte.com.cn/
+Also, NO_TESTS at a suite-level only results in a non-zero status code
+where then there's only one suite atm.
+
+This change is the minimal one to make sure we don't overwrite it.
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Reported-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Reviewed-by: David Gow <davidgow@google.com>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/kunit/executor.c      | 27 ++++++++++++++++++++++-----
- lib/kunit/executor_test.c |  4 +++-
- 2 files changed, 25 insertions(+), 6 deletions(-)
+ tools/testing/kunit/kunit_parser.py                        | 7 +++++--
+ .../test_data/test_is_test_passed-no_tests_no_plan.log     | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 22640c9ee819..2f73a6a35a7e 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -71,9 +71,13 @@ kunit_filter_tests(struct kunit_suite *const suite, const char *test_glob)
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 05ff334761dd..2f93ed1d7f99 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -789,8 +789,11 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
  
- 	/* Use memcpy to workaround copy->name being const. */
- 	copy = kmalloc(sizeof(*copy), GFP_KERNEL);
-+	if (!copy)
-+		return ERR_PTR(-ENOMEM);
- 	memcpy(copy, suite, sizeof(*copy));
+ 	# Check for there being no tests
+ 	if parent_test and len(subtests) == 0:
+-		test.status = TestStatus.NO_TESTS
+-		test.add_error('0 tests run!')
++		# Don't override a bad status if this test had one reported.
++		# Assumption: no subtests means CRASHED is from Test.__init__()
++		if test.status in (TestStatus.TEST_CRASHED, TestStatus.SUCCESS):
++			test.status = TestStatus.NO_TESTS
++			test.add_error('0 tests run!')
  
- 	filtered = kcalloc(n + 1, sizeof(*filtered), GFP_KERNEL);
-+	if (!filtered)
-+		return ERR_PTR(-ENOMEM);
- 
- 	n = 0;
- 	kunit_suite_for_each_test_case(suite, test_case) {
-@@ -106,14 +110,16 @@ kunit_filter_subsuite(struct kunit_suite * const * const subsuite,
- 
- 	filtered = kmalloc_array(n + 1, sizeof(*filtered), GFP_KERNEL);
- 	if (!filtered)
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 
- 	n = 0;
- 	for (i = 0; subsuite[i] != NULL; ++i) {
- 		if (!glob_match(filter->suite_glob, subsuite[i]->name))
- 			continue;
- 		filtered_suite = kunit_filter_tests(subsuite[i], filter->test_glob);
--		if (filtered_suite)
-+		if (IS_ERR(filtered_suite))
-+			return ERR_CAST(filtered_suite);
-+		else if (filtered_suite)
- 			filtered[n++] = filtered_suite;
- 	}
- 	filtered[n] = NULL;
-@@ -146,7 +152,8 @@ static void kunit_free_suite_set(struct suite_set suite_set)
- }
- 
- static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
--					    const char *filter_glob)
-+					    const char *filter_glob,
-+					    int *err)
- {
- 	int i;
- 	struct kunit_suite * const **copy, * const *filtered_subsuite;
-@@ -166,6 +173,10 @@ static struct suite_set kunit_filter_suites(const struct suite_set *suite_set,
- 
- 	for (i = 0; i < max; ++i) {
- 		filtered_subsuite = kunit_filter_subsuite(suite_set->start[i], &filter);
-+		if (IS_ERR(filtered_subsuite)) {
-+			*err = PTR_ERR(filtered_subsuite);
-+			return filtered;
-+		}
- 		if (filtered_subsuite)
- 			*copy++ = filtered_subsuite;
- 	}
-@@ -236,9 +247,15 @@ int kunit_run_all_tests(void)
- 		.start = __kunit_suites_start,
- 		.end = __kunit_suites_end,
- 	};
-+	int err;
- 
--	if (filter_glob_param)
--		suite_set = kunit_filter_suites(&suite_set, filter_glob_param);
-+	if (filter_glob_param) {
-+		suite_set = kunit_filter_suites(&suite_set, filter_glob_param, &err);
-+		if (err) {
-+			pr_err("kunit executor: error filtering suites: %d\n", err);
-+			return err;
-+		}
-+	}
- 
- 	if (!action_param)
- 		kunit_exec_run_tests(&suite_set);
-diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-index 4ed57fd94e42..eac6ff480273 100644
---- a/lib/kunit/executor_test.c
-+++ b/lib/kunit/executor_test.c
-@@ -137,14 +137,16 @@ static void filter_suites_test(struct kunit *test)
- 		.end = suites + 2,
- 	};
- 	struct suite_set filtered = {.start = NULL, .end = NULL};
-+	int err = 0;
- 
- 	/* Emulate two files, each having one suite */
- 	subsuites[0][0] = alloc_fake_suite(test, "suite0", dummy_test_cases);
- 	subsuites[1][0] = alloc_fake_suite(test, "suite1", dummy_test_cases);
- 
- 	/* Filter out suite1 */
--	filtered = kunit_filter_suites(&suite_set, "suite0");
-+	filtered = kunit_filter_suites(&suite_set, "suite0", &err);
- 	kfree_subsuites_at_end(test, &filtered); /* let us use ASSERTs without leaking */
-+	KUNIT_EXPECT_EQ(test, err, 0);
- 	KUNIT_ASSERT_EQ(test, filtered.end - filtered.start, (ptrdiff_t)1);
- 
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, filtered.start);
+ 	# Add statuses to TestCounts attribute in Test object
+ 	bubble_up_test_results(test)
+diff --git a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
+index dd873c981108..4f81876ee6f1 100644
+--- a/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
++++ b/tools/testing/kunit/test_data/test_is_test_passed-no_tests_no_plan.log
+@@ -3,5 +3,5 @@ TAP version 14
+   # Subtest: suite
+   1..1
+     # Subtest: case
+-  ok 1 - case # SKIP
++  ok 1 - case
+ ok 1 - suite
 -- 
 2.35.1
 
