@@ -2,84 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AF85393B4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 May 2022 17:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3845053943F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 May 2022 17:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345540AbiEaPNw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 May 2022 11:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S1345850AbiEaPto (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 May 2022 11:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345539AbiEaPNv (ORCPT
+        with ESMTP id S1345784AbiEaPtn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 May 2022 11:13:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9784994DC
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 May 2022 08:13:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F486B811B1
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 May 2022 15:13:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5AFCC385A9;
-        Tue, 31 May 2022 15:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654010027;
-        bh=RmwCycR3WFlIwfKXA5dP2eyhQAV6Zi3YQ1p6a5oR4A4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=X3PA433joT0XoLzFfVKPaRF8uiK6lH7oPvAiWsVJSbUkaJ338U46HfNfa6wvPSBoc
-         9BFJ8wv5W6TuiXYJ0ZOx94kdXyuHp36rpenrEj3vsXZR9FKZJaDoUOqa9UD+EjCYZn
-         E8agMwIgYf1kMsyIIiQ5e8NqsOzhmXSxzLUwOHzxkzkXq/bU+g9ccEyd/JnRMJhYLe
-         zxFq/gW1GLU4/W+KbTqVNT/38VapH1Ira3EqMtx4WKXEqmS5B3xt0MqjXWsq0OfH6b
-         mI6HyScAbgqeHkKTY4TzPd7QzlcjHcOCsI8HpoTYiEndNVuqjz60k7S/ETsTNOn/74
-         ryT/wtvNVP0qw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH] selftests: alsa: Handle pkg-config failure more gracefully
-Date:   Tue, 31 May 2022 17:13:37 +0200
-Message-Id: <20220531151337.2933810-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 31 May 2022 11:49:43 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A16E3055A;
+        Tue, 31 May 2022 08:49:41 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id a23so15122078ljd.9;
+        Tue, 31 May 2022 08:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=A44GayFxXseGVVD0HVJY3qkIMetyjm2M3KFYhOBPZao=;
+        b=Lc2SkHq0n+vROccbAbpL/H+0Dgf53+UBnImyq5CgM9VVRWDpx10kq2qoKeRy5CiiNv
+         FpYqx7RLrPfzOXP1dLFMNnKOMJjfs0j3CllR2+GJRAa+xeBU5+JbMkHbXZorezgexw5d
+         HGgZ4udmYbVkujDnMOIolsGQ7yZ9Um0MhApXuj0MmHNdk/aseo7VgnbONDaDGCgKVE3c
+         FuTyGFUkXda1QvJT4RQyWKfbQAi8S/iBAKCnvKjFKVSRdK55tF/42d80eLGIxnVHMeV9
+         i67I3EIzPReqjqpeR0xbzcuj79b5DdwnddziDXHyUbsQumSonS/xMlSxLAb4ToZY3hR+
+         QdzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=A44GayFxXseGVVD0HVJY3qkIMetyjm2M3KFYhOBPZao=;
+        b=t4Ead4NSPuX1/HrbMeDCne6KnyP8cpdd33kTfZfanLUzISYgtq3SIvgyJWKjvZ5P0v
+         Kkss2wuxMUqGkudW4OFlWYjKyhLKL1HWBzeMBUVI7+betapHrI3+sMHAA1aakFQa/C3h
+         QYK8Y8mggHwOfOomk4jBt7Z/SqvtrdvOwZOmugdx+Y0alH9Jm7mKspQbeG7YelARQ6S7
+         gPbhmPRPotqWafAPZPaFZXCvJQMWxIEyGvIF1YP+Zb35/PwApFw1PVoblTHSS4Dm9Zs0
+         etKA8SC9QgVBymaNX1s7be1LmSEPiRxLkJZJIoyBjQPeVufqueaE8QHy4+uW7ZP0fKF0
+         oS/g==
+X-Gm-Message-State: AOAM532xhJctZoN/bvQNXsYpneGWEqpnfYCfNqdJUNxEVEimPMWef+ZN
+        C1+FhF18JP0yXosn/y6E/W5cHuf98W5bdg==
+X-Google-Smtp-Source: ABdhPJyayYqbFsxb0MdWRwSCpz3NUX9pwUjHVkmGzVQskq93loEB+jvYxlRiwE+Ww+vF4RZ2rUjS3w==
+X-Received: by 2002:a05:651c:1a22:b0:255:61fc:4645 with SMTP id by34-20020a05651c1a2200b0025561fc4645mr1543446ljb.99.1654012179713;
+        Tue, 31 May 2022 08:49:39 -0700 (PDT)
+Received: from wse-c0127 (2-104-116-184-cable.dk.customer.tdc.net. [2.104.116.184])
+        by smtp.gmail.com with ESMTPSA id p16-20020a2e9ad0000000b002556428fcb6sm233597ljj.61.2022.05.31.08.49.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 May 2022 08:49:39 -0700 (PDT)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Ido Schimmel <idosch@nvidia.com>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+In-Reply-To: <YpYk4EIeH6sdRl+1@shredder>
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+ <Yo+LAj1vnjq0p36q@shredder> <86sfov2w8k.fsf@gmail.com>
+ <YpCgxtJf9Qe7fTFd@shredder> <86sfoqgi5e.fsf@gmail.com>
+ <YpYk4EIeH6sdRl+1@shredder>
+Date:   Tue, 31 May 2022 17:49:32 +0200
+Message-ID: <868rqh3do3.fsf@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=894; h=from:subject; bh=RmwCycR3WFlIwfKXA5dP2eyhQAV6Zi3YQ1p6a5oR4A4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiljBBCCHKDUduv/2nquVo28cAVN51XaTXqgU+Tu7q X2OsG86JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYpYwQQAKCRAk1otyXVSH0CpYB/ 9QBZ+2ZEym7LVf16fGuCDWbOBtahBrHoM+mSrEzpsYPimoy6iMkBxy/QJFqhxCb2xGWP45mEHieKBc enOaemDT17QIJDWAvqZIBr+zIKviE5ongTuvxqacPnR8MdUCdTEl0ZSKo98GGLR2ExVI+6p9iXdf5N cIrkK5CmajuEYHxkq2qlG9bWC/FzXTB5n3tp4E4tqyzrVMfRkPyDfj88I1LWtM9R6L+OgexgCgscse 9h+eJ/PQBjaHLKCf7RkF3IMAwZq/lF03RsolwPbWGsHtND94ZzHLRgt2HfWtFmCG2z2t0FErL4tKpr jJ69pgWBSi8QzAqFwVR5QDADPmIeOt
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Follow the pattern used by other selftests like memfd and fall back on the
-standard toolchain options to build with a system installed alsa-lib if
-we don't get anything from pkg-config. This reduces our build dependencies
-a bit in the common case while still allowing use of pkg-config in case
-there is a need for it.
+On tis, maj 31, 2022 at 17:23, Ido Schimmel <idosch@nvidia.com> wrote:
+> On Tue, May 31, 2022 at 11:34:21AM +0200, Hans Schultz wrote:
+>> > Just to give you another data point about how this works in other
+>> > devices, I can say that at least in Spectrum this works a bit
+>> > differently. Packets that ingress via a locked port and incur an FDB
+>> > miss are trapped to the CPU where they should be injected into the Rx
+>> > path so that the bridge will create the 'locked' FDB entry and notify it
+>> > to user space. The packets are obviously rated limited as the CPU cannot
+>> > handle billions of packets per second, unlike the ASIC. The limit is not
+>> > per bridge port (or even per bridge), but instead global to the entire
+>> > device.
+>> 
+>> Btw, will the bridge not create a SWITCHDEV_FDB_ADD_TO_DEVICE event
+>> towards the switchcore in the scheme you mention and thus add an entry
+>> that opens up for the specified mac address?
+>
+> It will, but the driver needs to ignore FDB entries that are notified
+> with locked flag. I see that you extended 'struct
+> switchdev_notifier_fdb_info' with the locked flag, but it's not
+> initialized in br_switchdev_fdb_populate(). Can you add it in the next
+> version?
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/alsa/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
-index f64d9090426d..fd8ddce2b1a6 100644
---- a/tools/testing/selftests/alsa/Makefile
-+++ b/tools/testing/selftests/alsa/Makefile
-@@ -3,6 +3,9 @@
- 
- CFLAGS += $(shell pkg-config --cflags alsa)
- LDLIBS += $(shell pkg-config --libs alsa)
-+ifeq ($(LDLIBS),)
-+LDLIBS += -lasound
-+endif
- 
- TEST_GEN_PROGS := mixer-test
- 
--- 
-2.30.2
-
+Yes, definitely. I have only had focus on it in the messages coming up
+from the driver, and neglected it the other way.
