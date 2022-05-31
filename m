@@ -2,101 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5027538D26
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 May 2022 10:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABAE538D71
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 May 2022 11:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244958AbiEaIsE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 May 2022 04:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S245080AbiEaJHI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 May 2022 05:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244908AbiEaIsD (ORCPT
+        with ESMTP id S245068AbiEaJHE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 May 2022 04:48:03 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC7B3E5F8;
-        Tue, 31 May 2022 01:48:02 -0700 (PDT)
-Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LC5W25ffgz6H7q1;
-        Tue, 31 May 2022 16:47:10 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 31 May 2022 10:47:59 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Tue, 31 May 2022 10:47:59 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/2] libbpf: Retry map access with read-only permission
-Thread-Topic: [PATCH 1/2] libbpf: Retry map access with read-only permission
-Thread-Index: AQHYdAGr6HbH9aP+3U6x+kyoxSOBpK031lIAgADW9rA=
-Date:   Tue, 31 May 2022 08:47:59 +0000
-Message-ID: <8473aece18f64fbea2d27ddd30036685@huawei.com>
-References: <20220530084514.10170-1-roberto.sassu@huawei.com>
- <20220530084514.10170-2-roberto.sassu@huawei.com>
- <4089f118-662c-4ea2-131f-c8a9b702b6ca@iogearbox.net>
-In-Reply-To: <4089f118-662c-4ea2-131f-c8a9b702b6ca@iogearbox.net>
-Accept-Language: en-US
+        Tue, 31 May 2022 05:07:04 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C431CB01;
+        Tue, 31 May 2022 02:06:58 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24V6xGdr024794;
+        Tue, 31 May 2022 09:06:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=fAHU2rGOL5A9cKDCCU+65wK9t9lX0odo/5gNkrL7RrE=;
+ b=d7T4kbhPCvKczmXNb9Oyn6xkcQco5OZB0YFf37LeYzCPb/RzH21kv0bTeB/cjGtnyMsp
+ cfyjwmrjS7kDi73gBz4lbiGP0bZ5vpzB2kxV32Ac5YNBYRlJbPLClXsz9fUJPtoJXROc
+ hDccOi6bz2fd8ApjR3B3V9IxymKIAaJle+/xnC5oYOiAboB/5qzj7DprGwVXV6rxlOt6
+ NnjY7ndf3vv8XVCTGZien0cUg6TQ4KoR/cGMdzZ7W8Kl/kZ9i+GdOmgOdTKSBTGCYo/G
+ jFqdPIoNMDgbzgQsHwOgUfC8rHzQvQ3xe6erjakWaA49c/KEYggQ9JSnBH+vXWhKdC8G Uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gda53e9ge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 09:06:55 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24V8Zh5M030807;
+        Tue, 31 May 2022 09:06:55 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gda53e9fb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 09:06:55 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24V8rHbh015563;
+        Tue, 31 May 2022 09:06:52 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3gbcae3ub3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 May 2022 09:06:52 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24V95i3G29491500
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 May 2022 09:05:44 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8274AA404D;
+        Tue, 31 May 2022 09:06:49 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E5B34A4040;
+        Tue, 31 May 2022 09:06:48 +0000 (GMT)
+Received: from [9.171.6.109] (unknown [9.171.6.109])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 31 May 2022 09:06:48 +0000 (GMT)
+Message-ID: <9b3c88f2-ca23-df23-4a5b-d86b0b38a6aa@linux.ibm.com>
+Date:   Tue, 31 May 2022 11:06:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 0/4] KVM: s390: selftests: Provide TAP output in tests
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.21]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20220429063724.480919-1-thuth@redhat.com>
+ <e39149e0-e6c4-f850-cd0f-cbdb453ee0c2@redhat.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <e39149e0-e6c4-f850-cd0f-cbdb453ee0c2@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jao7N3FvW6AykUFcVV3MtLJT33K9lNIY
+X-Proofpoint-ORIG-GUID: OgBash_X-XnBTBGxkmjQJ6Hhj_Rwpo9A
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-05-31_03,2022-05-30_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
+ impostorscore=0 spamscore=0 mlxscore=0 suspectscore=0 adultscore=0
+ priorityscore=1501 mlxlogscore=999 phishscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2205310047
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PiBGcm9tOiBEYW5pZWwgQm9ya21hbm4gW21haWx0bzpkYW5pZWxAaW9nZWFyYm94Lm5ldF0NCj4g
-U2VudDogTW9uZGF5LCBNYXkgMzAsIDIwMjIgMTE6NTUgUE0NCj4gT24gNS8zMC8yMiAxMDo0NSBB
-TSwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gPiBSZXRyeSBtYXAgYWNjZXNzIHdpdGggcmVhZC1v
-bmx5IHBlcm1pc3Npb24sIGlmIGFjY2VzcyB3YXMgZGVuaWVkIHdoZW4gYWxsDQo+ID4gcGVybWlz
-c2lvbnMgd2VyZSByZXF1ZXN0ZWQgKG9wZW5fZmxhZ3MgaXMgc2V0IHRvIHplcm8pLiBXcml0ZSBh
-Y2Nlc3MgbWlnaHQNCj4gPiBoYXZlIGJlZW4gZGVuaWVkIGJ5IHRoZSBicGZfbWFwIHNlY3VyaXR5
-IGhvb2suDQo+ID4NCj4gPiBTb21lIG9wZXJhdGlvbnMsIHN1Y2ggYXMgc2hvdyBhbmQgZHVtcCwg
-ZG9uJ3QgbmVlZCB3cml0ZSBwZXJtaXNzaW9ucywgc28NCj4gPiB0aGVyZSBpcyBhIGdvb2QgY2hh
-bmNlIG9mIHN1Y2Nlc3Mgd2l0aCByZXRyeWluZy4NCj4gPg0KPiA+IFByZWZlciB0aGlzIHNvbHV0
-aW9uIHRvIGV4dGVuZGluZyB0aGUgQVBJLCBhcyBvdGhlcndpc2UgYSBuZXcgbWVjaGFuaXNtDQo+
-ID4gd291bGQgbmVlZCB0byBiZSBpbXBsZW1lbnRlZCB0byBkZXRlcm1pbmUgdGhlIHJpZ2h0IHBl
-cm1pc3Npb25zIGZvciBhbg0KPiA+IG9wZXJhdGlvbi4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6
-IFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT4NCj4gPiAtLS0NCj4gPiAg
-IHRvb2xzL2xpYi9icGYvYnBmLmMgfCA1ICsrKysrDQo+ID4gICAxIGZpbGUgY2hhbmdlZCwgNSBp
-bnNlcnRpb25zKCspDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvbGliL2JwZi9icGYuYyBi
-L3Rvb2xzL2xpYi9icGYvYnBmLmMNCj4gPiBpbmRleCAyNDAxODZhYWM4ZTYuLmI0ZWVjMzkwMjFh
-NCAxMDA2NDQNCj4gPiAtLS0gYS90b29scy9saWIvYnBmL2JwZi5jDQo+ID4gKysrIGIvdG9vbHMv
-bGliL2JwZi9icGYuYw0KPiA+IEBAIC0xMDU2LDYgKzEwNTYsMTEgQEAgaW50IGJwZl9tYXBfZ2V0
-X2ZkX2J5X2lkKF9fdTMyIGlkKQ0KPiA+ICAgCWF0dHIubWFwX2lkID0gaWQ7DQo+ID4NCj4gPiAg
-IAlmZCA9IHN5c19icGZfZmQoQlBGX01BUF9HRVRfRkRfQllfSUQsICZhdHRyLCBzaXplb2YoYXR0
-cikpOw0KPiA+ICsJaWYgKGZkIDwgMCkgew0KPiA+ICsJCWF0dHIub3Blbl9mbGFncyA9IEJQRl9G
-X1JET05MWTsNCj4gPiArCQlmZCA9IHN5c19icGZfZmQoQlBGX01BUF9HRVRfRkRfQllfSUQsICZh
-dHRyLCBzaXplb2YoYXR0cikpOw0KPiA+ICsJfQ0KPiA+ICsNCj4gDQo+IEJ1dCB0aGVuIHdoYXQg
-YWJvdXQgYnBmX29ial9nZXQoKSBBUEkgaW4gbGliYnBmPyBhdHRyLmZpbGVfZmxhZ3MgaGFzIHNp
-bWlsYXINCj4gcHVycG9zZSBhcyBhdHRyLm9wZW5fZmxhZ3MgaW4gdGhpcyBjYXNlLg0KDQpPaywg
-SSBtaXNzZWQgaXQuDQoNCj4gVGhlIG90aGVyIGlzc3VlIGlzIHRoYXQgdGhpcyBjb3VsZCBoYXZl
-IHVwZ3JhZGUgaW1wbGljYXRpb25zLCBlLmcuIHdoZXJlIGFuDQo+IGFwcGxpY2F0aW9uIGJhaWxl
-ZCBvdXQgYmVmb3JlLCBpdCBpcyBub3cgcGFzc2luZyB3cnQgYnBmX21hcF9nZXRfZmRfYnlfaWQo
-KSwNCj4gYnV0IHRoZW4gc3VkZGVubHkgZmFpbGluZyBkdXJpbmcgbWFwIHVwZGF0ZSBjYWxscy4N
-Cg0KR29vZCBwb2ludC4NCg0KPiBJbWhvLCBpdCBtaWdodCBiZSBiZXR0ZXIgdG8gYmUgZXhwbGlj
-aXQgYWJvdXQgdXNlciBpbnRlbnQgdy9vIHRoZSBsaWIgZG9pbmcNCj4gZ3Vlc3Mgd29yayB1cG9u
-IGZhaWx1cmUgY2FzZXMgKC4uLiBvciBoYXZlIHRoZSBCUEYgTFNNIHNldCB0aGUgYXR0ci5vcGVu
-X2ZsYWdzDQo+IHRvIEJQRl9GX1JET05MWSBmcm9tIHdpdGhpbiB0aGUgQlBGIHByb2cpLg0KDQpV
-aG0sIEkgZG9uJ3QgbGlrZSB0aGF0IHRoZSB1c2VycyBzaG91bGQgYmUgYXdhcmUgb2YgcGVybWlz
-c2lvbnMgYXNzaWduZWQNCnRvIG1hcHMgdGhhdCB0aGV5IGRvbid0IG93bi4NCg0KTWF5YmUsIGJl
-dHRlciB0aGUgb3JpZ2luYWwgaWRlYSwgcmVxdWVzdCByZWFkLW9ubHkgcGVybWlzc2lvbiBmb3Ig
-dGhlDQpsaXN0IGFuZCBkdW1wIG9wZXJhdGlvbnMuDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hO
-T0xPR0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBM
-aSBQZW5nLCBaaG9uZyBSb25naHVhDQo=
+
+
+Am 31.05.22 um 10:02 schrieb Thomas Huth:
+> On 29/04/2022 08.37, Thomas Huth wrote:
+>> This patch series is motivated by Shuah's suggestion here:
+>>
+>>   https://lore.kernel.org/kvm/d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org/
+>>
+>> Many s390x KVM selftests do not output any information about which
+>> tests have been run, so it's hard to say whether a test binary
+>> contains a certain sub-test or not. To improve this situation let's
+>> add some TAP output via the kselftest.h interface to these tests,
+>> so that it easier to understand what has been executed or not.
+>>
+>> v3:
+>>   - Added comments / fixed cosmetics according to Janosch's and
+>>     Janis' reviews of the v2 series
+>>   - Added Reviewed-by tags from the v2 series
+>>
+>> v2:
+>>   - Reworked the extension checking in the first patch
+>>   - Make sure to always print the TAP 13 header in the second patch
+>>   - Reworked the SKIP printing in the third patch
+>>
+>> Thomas Huth (4):
+>>    KVM: s390: selftests: Use TAP interface in the memop test
+>>    KVM: s390: selftests: Use TAP interface in the sync_regs test
+>>    KVM: s390: selftests: Use TAP interface in the tprot test
+>>    KVM: s390: selftests: Use TAP interface in the reset test
+>>
+>>   tools/testing/selftests/kvm/s390x/memop.c     | 90 +++++++++++++++----
+>>   tools/testing/selftests/kvm/s390x/resets.c    | 38 ++++++--
+>>   .../selftests/kvm/s390x/sync_regs_test.c      | 87 +++++++++++++-----
+>>   tools/testing/selftests/kvm/s390x/tprot.c     | 29 ++++--
+>>   4 files changed, 193 insertions(+), 51 deletions(-)
+
+Can you refresh against latest linus master? I will apply then
