@@ -2,101 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5143C5388B8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 May 2022 23:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39E7538C6D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 May 2022 10:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243273AbiE3VzX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 May 2022 17:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
+        id S244705AbiEaIDF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 May 2022 04:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240312AbiE3VzW (ORCPT
+        with ESMTP id S244604AbiEaIDE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 May 2022 17:55:22 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EEF56C08;
-        Mon, 30 May 2022 14:55:19 -0700 (PDT)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nvnLz-0001Zh-5r; Mon, 30 May 2022 23:55:11 +0200
-Received: from [85.1.206.226] (helo=linux-2.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nvnLy-000Laq-UY; Mon, 30 May 2022 23:55:10 +0200
-Subject: Re: [PATCH 1/2] libbpf: Retry map access with read-only permission
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        andrii@kernel.org, kpsingh@kernel.org
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220530084514.10170-1-roberto.sassu@huawei.com>
- <20220530084514.10170-2-roberto.sassu@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <4089f118-662c-4ea2-131f-c8a9b702b6ca@iogearbox.net>
-Date:   Mon, 30 May 2022 23:55:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 31 May 2022 04:03:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAC6291543
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 May 2022 01:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653984182;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yyZQADKZC4ReRzpE60kxchJgWQOZMoqrjCrM2arpsng=;
+        b=Es1tYI22HwwRtMhEMoJq/3ruI5VtLJq7PJRo+6LE0sxQFKXOl9NPThrzX8cxLSrCS7iufU
+        bhASeRZgCWdAExUFqopIvVh7LMA7vyDy5YSrcwpnOsd5bgFvUINEg9ZGtHCihYTJ2WstNq
+        CaOWax0ilrXL1O+pNHSUXciU8Tqkqxw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-7z0_DAncOrazNcvGdh1QUw-1; Tue, 31 May 2022 04:03:01 -0400
+X-MC-Unique: 7z0_DAncOrazNcvGdh1QUw-1
+Received: by mail-wm1-f71.google.com with SMTP id bg40-20020a05600c3ca800b00394779649b1so1033745wmb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 May 2022 01:03:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=yyZQADKZC4ReRzpE60kxchJgWQOZMoqrjCrM2arpsng=;
+        b=uGuUiXIVa4h/OwxXzDUCI1B4pavbq5vJTwHSTMsljqEp4T//Jk3swPIAN5rz5YmGMX
+         jpQ1+KvxWMUBDZLdtxf0gMDkmWpA1eDGlTVZ/zpaBHqXjWPqzLkQg+qql+7KXzcFjMhB
+         pkYmCmy26g7jLFGadWDredlBVQLnVwWN4qMFldlToFWNL+Wtn7UwESh6ERFMh7q2WUHT
+         f9s0hJldlSpRElCWDBk2AG46R823S5dLJub/e6KPpEej/yikVhR1o5DdbhYwRKg68ZdY
+         5gmtQ57qxiHOwD1DdKEs33GCX6s7en1RFuIFDULw6+6AxU+/F158vipYDXJC0KUPIJEN
+         zoFw==
+X-Gm-Message-State: AOAM531amZqjd0FfXgPDdc4EKF5mGS+cQSguYC8cK0RWo8wqUezWe+u4
+        HWB37yqqpGVXWpg+3BQAGXFiXVehemr7B616YlqA4isEYi0OTKVsUkyZ+QWUTOTaZQlm8cn9pdV
+        WGIyhr9nrdV9EKj6kbf4IGmmrufdW
+X-Received: by 2002:a7b:ca59:0:b0:397:8c63:4bd2 with SMTP id m25-20020a7bca59000000b003978c634bd2mr18044030wml.76.1653984179705;
+        Tue, 31 May 2022 01:02:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxvK+kVHptLw/I1R4X+Hc3Su3WAjoCzlHqw32wWdDS/iEXLwXclgerYkX9VR5zibNnxhwKRgg==
+X-Received: by 2002:a7b:ca59:0:b0:397:8c63:4bd2 with SMTP id m25-20020a7bca59000000b003978c634bd2mr18044015wml.76.1653984179461;
+        Tue, 31 May 2022 01:02:59 -0700 (PDT)
+Received: from [192.168.0.2] (ip-109-43-177-214.web.vodafone.de. [109.43.177.214])
+        by smtp.gmail.com with ESMTPSA id j14-20020a05600c190e00b00397381a7ae8sm1525224wmq.30.2022.05.31.01.02.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 01:02:58 -0700 (PDT)
+Message-ID: <e39149e0-e6c4-f850-cd0f-cbdb453ee0c2@redhat.com>
+Date:   Tue, 31 May 2022 10:02:56 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220530084514.10170-2-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3 0/4] KVM: s390: selftests: Provide TAP output in tests
 Content-Language: en-US
+From:   Thomas Huth <thuth@redhat.com>
+To:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20220429063724.480919-1-thuth@redhat.com>
+In-Reply-To: <20220429063724.480919-1-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26557/Mon May 30 10:05:44 2022)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/30/22 10:45 AM, Roberto Sassu wrote:
-> Retry map access with read-only permission, if access was denied when all
-> permissions were requested (open_flags is set to zero). Write access might
-> have been denied by the bpf_map security hook.
+On 29/04/2022 08.37, Thomas Huth wrote:
+> This patch series is motivated by Shuah's suggestion here:
 > 
-> Some operations, such as show and dump, don't need write permissions, so
-> there is a good chance of success with retrying.
+>   https://lore.kernel.org/kvm/d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org/
 > 
-> Prefer this solution to extending the API, as otherwise a new mechanism
-> would need to be implemented to determine the right permissions for an
-> operation.
+> Many s390x KVM selftests do not output any information about which
+> tests have been run, so it's hard to say whether a test binary
+> contains a certain sub-test or not. To improve this situation let's
+> add some TAP output via the kselftest.h interface to these tests,
+> so that it easier to understand what has been executed or not.
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->   tools/lib/bpf/bpf.c | 5 +++++
->   1 file changed, 5 insertions(+)
+> v3:
+>   - Added comments / fixed cosmetics according to Janosch's and
+>     Janis' reviews of the v2 series
+>   - Added Reviewed-by tags from the v2 series
 > 
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 240186aac8e6..b4eec39021a4 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -1056,6 +1056,11 @@ int bpf_map_get_fd_by_id(__u32 id)
->   	attr.map_id = id;
->   
->   	fd = sys_bpf_fd(BPF_MAP_GET_FD_BY_ID, &attr, sizeof(attr));
-> +	if (fd < 0) {
-> +		attr.open_flags = BPF_F_RDONLY;
-> +		fd = sys_bpf_fd(BPF_MAP_GET_FD_BY_ID, &attr, sizeof(attr));
-> +	}
-> +
+> v2:
+>   - Reworked the extension checking in the first patch
+>   - Make sure to always print the TAP 13 header in the second patch
+>   - Reworked the SKIP printing in the third patch
+> 
+> Thomas Huth (4):
+>    KVM: s390: selftests: Use TAP interface in the memop test
+>    KVM: s390: selftests: Use TAP interface in the sync_regs test
+>    KVM: s390: selftests: Use TAP interface in the tprot test
+>    KVM: s390: selftests: Use TAP interface in the reset test
+> 
+>   tools/testing/selftests/kvm/s390x/memop.c     | 90 +++++++++++++++----
+>   tools/testing/selftests/kvm/s390x/resets.c    | 38 ++++++--
+>   .../selftests/kvm/s390x/sync_regs_test.c      | 87 +++++++++++++-----
+>   tools/testing/selftests/kvm/s390x/tprot.c     | 29 ++++--
+>   4 files changed, 193 insertions(+), 51 deletions(-)
 
-But then what about bpf_obj_get() API in libbpf? attr.file_flags has similar
-purpose as attr.open_flags in this case.
+Ping!
 
-The other issue is that this could have upgrade implications, e.g. where an
-application bailed out before, it is now passing wrt bpf_map_get_fd_by_id(),
-but then suddenly failing during map update calls.
+  Thomas
 
-Imho, it might be better to be explicit about user intent w/o the lib doing
-guess work upon failure cases (... or have the BPF LSM set the attr.open_flags
-to BPF_F_RDONLY from within the BPF prog).
-
->   	return libbpf_err_errno(fd);
->   }
->   
-> 
 
