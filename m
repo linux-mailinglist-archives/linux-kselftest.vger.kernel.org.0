@@ -2,127 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39E7538C6D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 May 2022 10:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5027538D26
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 May 2022 10:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244705AbiEaIDF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 May 2022 04:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S244958AbiEaIsE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 May 2022 04:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244604AbiEaIDE (ORCPT
+        with ESMTP id S244908AbiEaIsD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 May 2022 04:03:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAC6291543
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 May 2022 01:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653984182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yyZQADKZC4ReRzpE60kxchJgWQOZMoqrjCrM2arpsng=;
-        b=Es1tYI22HwwRtMhEMoJq/3ruI5VtLJq7PJRo+6LE0sxQFKXOl9NPThrzX8cxLSrCS7iufU
-        bhASeRZgCWdAExUFqopIvVh7LMA7vyDy5YSrcwpnOsd5bgFvUINEg9ZGtHCihYTJ2WstNq
-        CaOWax0ilrXL1O+pNHSUXciU8Tqkqxw=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-253-7z0_DAncOrazNcvGdh1QUw-1; Tue, 31 May 2022 04:03:01 -0400
-X-MC-Unique: 7z0_DAncOrazNcvGdh1QUw-1
-Received: by mail-wm1-f71.google.com with SMTP id bg40-20020a05600c3ca800b00394779649b1so1033745wmb.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 May 2022 01:03:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=yyZQADKZC4ReRzpE60kxchJgWQOZMoqrjCrM2arpsng=;
-        b=uGuUiXIVa4h/OwxXzDUCI1B4pavbq5vJTwHSTMsljqEp4T//Jk3swPIAN5rz5YmGMX
-         jpQ1+KvxWMUBDZLdtxf0gMDkmWpA1eDGlTVZ/zpaBHqXjWPqzLkQg+qql+7KXzcFjMhB
-         pkYmCmy26g7jLFGadWDredlBVQLnVwWN4qMFldlToFWNL+Wtn7UwESh6ERFMh7q2WUHT
-         f9s0hJldlSpRElCWDBk2AG46R823S5dLJub/e6KPpEej/yikVhR1o5DdbhYwRKg68ZdY
-         5gmtQ57qxiHOwD1DdKEs33GCX6s7en1RFuIFDULw6+6AxU+/F158vipYDXJC0KUPIJEN
-         zoFw==
-X-Gm-Message-State: AOAM531amZqjd0FfXgPDdc4EKF5mGS+cQSguYC8cK0RWo8wqUezWe+u4
-        HWB37yqqpGVXWpg+3BQAGXFiXVehemr7B616YlqA4isEYi0OTKVsUkyZ+QWUTOTaZQlm8cn9pdV
-        WGIyhr9nrdV9EKj6kbf4IGmmrufdW
-X-Received: by 2002:a7b:ca59:0:b0:397:8c63:4bd2 with SMTP id m25-20020a7bca59000000b003978c634bd2mr18044030wml.76.1653984179705;
-        Tue, 31 May 2022 01:02:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxvK+kVHptLw/I1R4X+Hc3Su3WAjoCzlHqw32wWdDS/iEXLwXclgerYkX9VR5zibNnxhwKRgg==
-X-Received: by 2002:a7b:ca59:0:b0:397:8c63:4bd2 with SMTP id m25-20020a7bca59000000b003978c634bd2mr18044015wml.76.1653984179461;
-        Tue, 31 May 2022 01:02:59 -0700 (PDT)
-Received: from [192.168.0.2] (ip-109-43-177-214.web.vodafone.de. [109.43.177.214])
-        by smtp.gmail.com with ESMTPSA id j14-20020a05600c190e00b00397381a7ae8sm1525224wmq.30.2022.05.31.01.02.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 01:02:58 -0700 (PDT)
-Message-ID: <e39149e0-e6c4-f850-cd0f-cbdb453ee0c2@redhat.com>
-Date:   Tue, 31 May 2022 10:02:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 0/4] KVM: s390: selftests: Provide TAP output in tests
+        Tue, 31 May 2022 04:48:03 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC7B3E5F8;
+        Tue, 31 May 2022 01:48:02 -0700 (PDT)
+Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LC5W25ffgz6H7q1;
+        Tue, 31 May 2022 16:47:10 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 31 May 2022 10:47:59 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Tue, 31 May 2022 10:47:59 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/2] libbpf: Retry map access with read-only permission
+Thread-Topic: [PATCH 1/2] libbpf: Retry map access with read-only permission
+Thread-Index: AQHYdAGr6HbH9aP+3U6x+kyoxSOBpK031lIAgADW9rA=
+Date:   Tue, 31 May 2022 08:47:59 +0000
+Message-ID: <8473aece18f64fbea2d27ddd30036685@huawei.com>
+References: <20220530084514.10170-1-roberto.sassu@huawei.com>
+ <20220530084514.10170-2-roberto.sassu@huawei.com>
+ <4089f118-662c-4ea2-131f-c8a9b702b6ca@iogearbox.net>
+In-Reply-To: <4089f118-662c-4ea2-131f-c8a9b702b6ca@iogearbox.net>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20220429063724.480919-1-thuth@redhat.com>
-In-Reply-To: <20220429063724.480919-1-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.21]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29/04/2022 08.37, Thomas Huth wrote:
-> This patch series is motivated by Shuah's suggestion here:
-> 
->   https://lore.kernel.org/kvm/d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org/
-> 
-> Many s390x KVM selftests do not output any information about which
-> tests have been run, so it's hard to say whether a test binary
-> contains a certain sub-test or not. To improve this situation let's
-> add some TAP output via the kselftest.h interface to these tests,
-> so that it easier to understand what has been executed or not.
-> 
-> v3:
->   - Added comments / fixed cosmetics according to Janosch's and
->     Janis' reviews of the v2 series
->   - Added Reviewed-by tags from the v2 series
-> 
-> v2:
->   - Reworked the extension checking in the first patch
->   - Make sure to always print the TAP 13 header in the second patch
->   - Reworked the SKIP printing in the third patch
-> 
-> Thomas Huth (4):
->    KVM: s390: selftests: Use TAP interface in the memop test
->    KVM: s390: selftests: Use TAP interface in the sync_regs test
->    KVM: s390: selftests: Use TAP interface in the tprot test
->    KVM: s390: selftests: Use TAP interface in the reset test
-> 
->   tools/testing/selftests/kvm/s390x/memop.c     | 90 +++++++++++++++----
->   tools/testing/selftests/kvm/s390x/resets.c    | 38 ++++++--
->   .../selftests/kvm/s390x/sync_regs_test.c      | 87 +++++++++++++-----
->   tools/testing/selftests/kvm/s390x/tprot.c     | 29 ++++--
->   4 files changed, 193 insertions(+), 51 deletions(-)
-
-Ping!
-
-  Thomas
-
-
+PiBGcm9tOiBEYW5pZWwgQm9ya21hbm4gW21haWx0bzpkYW5pZWxAaW9nZWFyYm94Lm5ldF0NCj4g
+U2VudDogTW9uZGF5LCBNYXkgMzAsIDIwMjIgMTE6NTUgUE0NCj4gT24gNS8zMC8yMiAxMDo0NSBB
+TSwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gPiBSZXRyeSBtYXAgYWNjZXNzIHdpdGggcmVhZC1v
+bmx5IHBlcm1pc3Npb24sIGlmIGFjY2VzcyB3YXMgZGVuaWVkIHdoZW4gYWxsDQo+ID4gcGVybWlz
+c2lvbnMgd2VyZSByZXF1ZXN0ZWQgKG9wZW5fZmxhZ3MgaXMgc2V0IHRvIHplcm8pLiBXcml0ZSBh
+Y2Nlc3MgbWlnaHQNCj4gPiBoYXZlIGJlZW4gZGVuaWVkIGJ5IHRoZSBicGZfbWFwIHNlY3VyaXR5
+IGhvb2suDQo+ID4NCj4gPiBTb21lIG9wZXJhdGlvbnMsIHN1Y2ggYXMgc2hvdyBhbmQgZHVtcCwg
+ZG9uJ3QgbmVlZCB3cml0ZSBwZXJtaXNzaW9ucywgc28NCj4gPiB0aGVyZSBpcyBhIGdvb2QgY2hh
+bmNlIG9mIHN1Y2Nlc3Mgd2l0aCByZXRyeWluZy4NCj4gPg0KPiA+IFByZWZlciB0aGlzIHNvbHV0
+aW9uIHRvIGV4dGVuZGluZyB0aGUgQVBJLCBhcyBvdGhlcndpc2UgYSBuZXcgbWVjaGFuaXNtDQo+
+ID4gd291bGQgbmVlZCB0byBiZSBpbXBsZW1lbnRlZCB0byBkZXRlcm1pbmUgdGhlIHJpZ2h0IHBl
+cm1pc3Npb25zIGZvciBhbg0KPiA+IG9wZXJhdGlvbi4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6
+IFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT4NCj4gPiAtLS0NCj4gPiAg
+IHRvb2xzL2xpYi9icGYvYnBmLmMgfCA1ICsrKysrDQo+ID4gICAxIGZpbGUgY2hhbmdlZCwgNSBp
+bnNlcnRpb25zKCspDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvbGliL2JwZi9icGYuYyBi
+L3Rvb2xzL2xpYi9icGYvYnBmLmMNCj4gPiBpbmRleCAyNDAxODZhYWM4ZTYuLmI0ZWVjMzkwMjFh
+NCAxMDA2NDQNCj4gPiAtLS0gYS90b29scy9saWIvYnBmL2JwZi5jDQo+ID4gKysrIGIvdG9vbHMv
+bGliL2JwZi9icGYuYw0KPiA+IEBAIC0xMDU2LDYgKzEwNTYsMTEgQEAgaW50IGJwZl9tYXBfZ2V0
+X2ZkX2J5X2lkKF9fdTMyIGlkKQ0KPiA+ICAgCWF0dHIubWFwX2lkID0gaWQ7DQo+ID4NCj4gPiAg
+IAlmZCA9IHN5c19icGZfZmQoQlBGX01BUF9HRVRfRkRfQllfSUQsICZhdHRyLCBzaXplb2YoYXR0
+cikpOw0KPiA+ICsJaWYgKGZkIDwgMCkgew0KPiA+ICsJCWF0dHIub3Blbl9mbGFncyA9IEJQRl9G
+X1JET05MWTsNCj4gPiArCQlmZCA9IHN5c19icGZfZmQoQlBGX01BUF9HRVRfRkRfQllfSUQsICZh
+dHRyLCBzaXplb2YoYXR0cikpOw0KPiA+ICsJfQ0KPiA+ICsNCj4gDQo+IEJ1dCB0aGVuIHdoYXQg
+YWJvdXQgYnBmX29ial9nZXQoKSBBUEkgaW4gbGliYnBmPyBhdHRyLmZpbGVfZmxhZ3MgaGFzIHNp
+bWlsYXINCj4gcHVycG9zZSBhcyBhdHRyLm9wZW5fZmxhZ3MgaW4gdGhpcyBjYXNlLg0KDQpPaywg
+SSBtaXNzZWQgaXQuDQoNCj4gVGhlIG90aGVyIGlzc3VlIGlzIHRoYXQgdGhpcyBjb3VsZCBoYXZl
+IHVwZ3JhZGUgaW1wbGljYXRpb25zLCBlLmcuIHdoZXJlIGFuDQo+IGFwcGxpY2F0aW9uIGJhaWxl
+ZCBvdXQgYmVmb3JlLCBpdCBpcyBub3cgcGFzc2luZyB3cnQgYnBmX21hcF9nZXRfZmRfYnlfaWQo
+KSwNCj4gYnV0IHRoZW4gc3VkZGVubHkgZmFpbGluZyBkdXJpbmcgbWFwIHVwZGF0ZSBjYWxscy4N
+Cg0KR29vZCBwb2ludC4NCg0KPiBJbWhvLCBpdCBtaWdodCBiZSBiZXR0ZXIgdG8gYmUgZXhwbGlj
+aXQgYWJvdXQgdXNlciBpbnRlbnQgdy9vIHRoZSBsaWIgZG9pbmcNCj4gZ3Vlc3Mgd29yayB1cG9u
+IGZhaWx1cmUgY2FzZXMgKC4uLiBvciBoYXZlIHRoZSBCUEYgTFNNIHNldCB0aGUgYXR0ci5vcGVu
+X2ZsYWdzDQo+IHRvIEJQRl9GX1JET05MWSBmcm9tIHdpdGhpbiB0aGUgQlBGIHByb2cpLg0KDQpV
+aG0sIEkgZG9uJ3QgbGlrZSB0aGF0IHRoZSB1c2VycyBzaG91bGQgYmUgYXdhcmUgb2YgcGVybWlz
+c2lvbnMgYXNzaWduZWQNCnRvIG1hcHMgdGhhdCB0aGV5IGRvbid0IG93bi4NCg0KTWF5YmUsIGJl
+dHRlciB0aGUgb3JpZ2luYWwgaWRlYSwgcmVxdWVzdCByZWFkLW9ubHkgcGVybWlzc2lvbiBmb3Ig
+dGhlDQpsaXN0IGFuZCBkdW1wIG9wZXJhdGlvbnMuDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hO
+T0xPR0lFUyBEdWVzc2VsZG9yZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBM
+aSBQZW5nLCBaaG9uZyBSb25naHVhDQo=
