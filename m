@@ -2,91 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F26539DF5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jun 2022 09:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB37A539EDF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jun 2022 10:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350236AbiFAHQ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Jun 2022 03:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S245619AbiFAIBM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Jun 2022 04:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350844AbiFAHPy (ORCPT
+        with ESMTP id S1350476AbiFAIBK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jun 2022 03:15:54 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50282A26E6;
-        Wed,  1 Jun 2022 00:15:36 -0700 (PDT)
-X-UUID: 716a8cf323a7496ba4f7d438554a5a9b-20220601
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:1aa1ea8f-56af-4e4f-9002-5fef85241bad,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:54
-X-CID-INFO: VERSION:1.1.5,REQID:1aa1ea8f-56af-4e4f-9002-5fef85241bad,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_HamU,ACTI
-        ON:release,TS:54
-X-CID-META: VersionHash:2a19b09,CLOUDID:67008514-f88c-475e-badf-d9ee54230b8f,C
-        OID:d03bb2fe049f,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:0,BEC:nil
-X-UUID: 716a8cf323a7496ba4f7d438554a5a9b-20220601
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <lina.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 748532127; Wed, 01 Jun 2022 15:15:27 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 1 Jun 2022 15:15:26 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Wed, 1 Jun 2022 15:15:25 +0800
-From:   Lina Wang <lina.wang@mediatek.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Maciej enczykowski <maze@google.com>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lkp@intel.com>,
-        <rong.a.chen@intel.com>, kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH] selftests net: fix bpf build error
-Date:   Wed, 1 Jun 2022 15:08:44 +0800
-Message-ID: <20220601070844.10515-1-lina.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <9c462ffc-f2c0-f542-4e61-251571da8c22@iogearbox.net>
-References: <9c462ffc-f2c0-f542-4e61-251571da8c22@iogearbox.net>
+        Wed, 1 Jun 2022 04:01:10 -0400
+X-Greylist: delayed 759 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 01:01:10 PDT
+Received: from mail.forindustry.pl (mail.forindustry.pl [37.187.225.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36347939B1
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Jun 2022 01:01:09 -0700 (PDT)
+Received: by mail.forindustry.pl (Postfix, from userid 1002)
+        id C03FEA62F4; Wed,  1 Jun 2022 07:45:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=forindustry.pl;
+        s=mail; t=1654069661;
+        bh=Vw5jk5D1DE7WK/GNf/MxRQNyAyPYcC0rMJLibxKTj58=;
+        h=Date:From:To:Subject:From;
+        b=gUGEEt1t6UGICL6l0vy6djCmAxQIXxcysmP9UlgvBWWINrMy/B8iAN7ICPmN7IlJu
+         Y6Labxh8TukiwWSHXYzlpi8bWG+O2Xf4NxyfRFLStphnRVMvxPC0TeN3dY/80NLEaK
+         dl/ksRsc/o8irS1BWTMEL5cquftwIsTdQUe+PB5GcAxSoNa5R7DJ4Myqvz9xSq0uNs
+         cQyfMM7I19+j0fQ6+YO0uJ+Ehz+2vEReSWNO3FTLKfk1TxOPi7ub7GDATGwfNRresJ
+         OzbjcGPFu4zrKlxfNMILThlK10g9/z7yvhdF1nOwtprTkX/n1tqkXPJZYi6UIWrdch
+         a0VeTbpbD5cDg==
+Received: by mail.forindustry.pl for <linux-kselftest@vger.kernel.org>; Wed,  1 Jun 2022 07:45:30 GMT
+Message-ID: <20220601064501-0.1.3k.lm5b.0.xcwlqg1lto@forindustry.pl>
+Date:   Wed,  1 Jun 2022 07:45:30 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@forindustry.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.forindustry.pl
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2022-06-01 at 01:01 +0200, Daniel Borkmann wrote:
-> On 5/30/22 8:21 AM, Lina Wang wrote:
-> clang -O2 -target bpf -c bpf/nat6to4.c -I../../bpf -I../../../../lib
-> -I../../../../../usr/include/ -o
-> /root/daniel/bpf/tools/testing/selftests/net/bpf/nat6to4.o
-> In file included from bpf/nat6to4.c:27:
-> In file included from /usr/include/linux/bpf.h:11:
-> /usr/include/linux/types.h:5:10: fatal error: 'asm/types.h' file not
-> found
-> #include <asm/types.h>
->           ^~~~~~~~~~~~~
-> 1 error generated.
+Dzie=C5=84 dobry,
 
-maybe your pc is ubuntu or Debian, you should apt-get install gcc-multilib, 
-guys on the internet meets the same problem when build libbpf related, just
-install gcc-multilib package
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99.
 
-> Could we reuse the build infra from tools/testing/selftests/bpf/ for nat6to4.c?
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
 
-We discussed it before, please refer to https://patchwork.kernel.org/project/netdevbpf/patch/20220407084727.10241-1-lina.wang@mediatek.com/
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
 
-Thanks!
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
 
+Pozdrawiam,
+Arkadiusz Soko=C5=82owski
