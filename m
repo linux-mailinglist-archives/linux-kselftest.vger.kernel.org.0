@@ -2,119 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D1E53AC24
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jun 2022 19:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6237153AF18
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jun 2022 00:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355962AbiFARnp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Jun 2022 13:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
+        id S231294AbiFAVKY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Jun 2022 17:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356403AbiFARnp (ORCPT
+        with ESMTP id S231185AbiFAVJ5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jun 2022 13:43:45 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5B16FD0C;
-        Wed,  1 Jun 2022 10:43:43 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id d5-20020a05600c34c500b0039776acee62so2587290wmq.1;
-        Wed, 01 Jun 2022 10:43:43 -0700 (PDT)
+        Wed, 1 Jun 2022 17:09:57 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F681183F
+        for <linux-kselftest@vger.kernel.org>; Wed,  1 Jun 2022 14:09:55 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 84-20020a250557000000b0065bb92955a2so2468152ybf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 Jun 2022 14:09:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7cbknEZGUGD2cxU937ieJPI9qyLodJRcbX0FPdvitY4=;
-        b=ifBZEtRLIZDgnjgCirPIRbDpD4+2k0ji6YiTOqqGf3vyBHkTGgWU2FrXcQ65T2Nv6E
-         LY/qQy0xpRocxt2MjbXIYNEzJ5ZIbgr8eTQtVAtSoW0BMfJq0KRJGhn615hQkdbri0zQ
-         J4oMNV2moa3q/9jdiTR/9qVYAwv34VDvnA+b7Nb0aYmKo41fEnWhToQzLiAG3RAG8Jo5
-         2VA9+UXbujviKWjeHig9tJohVjITD6sctW6AlJ/tglBmib/ME5dB1G7nHe4FYASNaTOo
-         OCCI2o7RMJeTcCEgRKYNnNhJKsKpHmpDmIZnH8q8UkySlK0gc8Mbf4q2rkJpPrWkXmIi
-         ZnfQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=eoJzH/fmzFvACjVcvXMxe/8zwQW+mPMqokRQV/WBtz0=;
+        b=I4e1nXx9RXm7sY0HmftB536BjJPeFCp3BQy7eEqPUaXM9dJP5nxl/iX3HWy6ta8/po
+         aSntDJ87OZUR0FtlBzM4E3l1cBvHdn/FHX8nlxwNJxOL22ZrI6SfY23BjXbX1q0kvav3
+         xk9J2O1V7l+QEjeclGH2UOIg8sra7op/dGXQsjM8JyhYNakRkeSH7KTyXd9giDnge1CU
+         rclyMxF2ETuh7Oo61zDK5B5zsqJeq7XreghYR6/8bhFkca1C+bklF8YWphFZIi+G7CMp
+         yTvTw+o1tJwJeoGsNXDRp2XEs1aWOU+sdJ5VsjYnISHAHHVhMPpnN/p3IytQmXHpnaFA
+         NcGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7cbknEZGUGD2cxU937ieJPI9qyLodJRcbX0FPdvitY4=;
-        b=VIXfzlOZUnRhA8XL6w/h2qNY7igHEAUO/5MDEwG1UcCNfTrkY3s8K3eiJWBfrXgQj5
-         4tgpRDmiFGFSWxLYd965xeW3U76oe/XKX0ecZFgr7nNZwXm+p6v7Ibr4O7UCX/PQnQl+
-         QiUtoPkFf6y2bhwn8Hf1FXHH8g/JKQteuqI/pP3i5G+KYGHOrexoTOvxswxeCG+n5XbN
-         d3TSarKda17yrJEt3sikKRlKJPBVmGKW9NPcQO9Uxml030swLSFpTmmZ0lJOP1OeHy6k
-         IX9AXX1Fz0bvf8+dqA1Rtb7vRDHteDMmL1COunambumI8e6zbZpdcSj4jiEO6CQtHm/p
-         r+Nw==
-X-Gm-Message-State: AOAM531KW7T8Xk5IQUh0sOV/v7RddKYV08Ta28+4O7hGD1F2YW84ufkJ
-        6jDLbfwD2qkwrN9RXrd2rdDjkzBGvK4=
-X-Google-Smtp-Source: ABdhPJwLxV/v4JoM4W2W2dE7sIidkESeRh7JcIp8hPqVguQXHIYFoQQsNd4zVoXzYP27YjKcYKfeGw==
-X-Received: by 2002:a05:600c:1f0e:b0:397:707f:5a60 with SMTP id bd14-20020a05600c1f0e00b00397707f5a60mr463432wmb.3.1654105422243;
-        Wed, 01 Jun 2022 10:43:42 -0700 (PDT)
-Received: from localhost.localdomain ([197.57.182.33])
-        by smtp.gmail.com with ESMTPSA id az29-20020a05600c601d00b00398d2f6b5d8sm2940824wmb.4.2022.06.01.10.43.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 10:43:41 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH net-next v2] selftests: net: fib_rule_tests: fix support for running individual tests
-Date:   Wed,  1 Jun 2022 19:43:16 +0200
-Message-Id: <20220601174316.4278-1-eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=eoJzH/fmzFvACjVcvXMxe/8zwQW+mPMqokRQV/WBtz0=;
+        b=oPtX0thBfHoxwf01nc9Mur2E/3gvmXp3UlfRdAIPii9Sx5Pee29qZJL+C52uC2IZby
+         rt82RhR70Yhdbt8tnyJHtbXyL6H2kDo3tR82puzOpCEDqjHb1uWwOEn8/34h0VqFOq6f
+         ko1NwZastR05YXWybq1i3nQg2Me7hXwDnAxnEILe9v9TQPKUvkICjq5qHmBaz0tRgB4G
+         H02TBSe5Q9ZibUPrHx64U8Tp6QMoCNKmZweYxPHdv/YKpgOurWApbl67R11qB+J5xGDt
+         7aoZfMGgOsj69qlTbJBHCOlqRG46g5YC7whRx9elEWJeZQ/qvUYKzgo1GkHMRRffDmNc
+         ACTw==
+X-Gm-Message-State: AOAM533lSOBZFHovZ1gcz9wfcqWtBz/TDCGhoIWkotUtkikWiWGKWwZn
+        dF9nn+besmNR+Lip7ALDL0tFerzE/7b9rjfwcGy+
+X-Google-Smtp-Source: ABdhPJxCWt56mzfA5CD6MeujZ27HxUTABufO/zQyWKERxfd0WM6O2BB0EgrhAOZyTRsf3KYc/T1JMlERUDmdwQvdDW0w
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:aaec:e358:9f0e:2b26])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:4a02:0:b0:2fe:d277:2b47 with
+ SMTP id x2-20020a814a02000000b002fed2772b47mr1708755ywa.169.1654117794963;
+ Wed, 01 Jun 2022 14:09:54 -0700 (PDT)
+Date:   Wed,  1 Jun 2022 14:09:45 -0700
+Message-Id: <20220601210951.3916598-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH v3 0/6] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-parsing and usage of -t got missed in the previous patch.
-this patch fixes it
+This series is based on linux-next/akpm-base.
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
-changes in v2:
-	edit commit subject and message.
----
- tools/testing/selftests/net/fib_rule_tests.sh | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+The series is split up like so:
+- Patch 1 is a simple fixup which we should take in any case (even by itself).
+- Patches 2-4 add the feature, basic support for it to the selftest, and docs.
+- Patches 5-6 make the selftest configurable, so you can test one or the other
+  instead of always both. If we decide this is overcomplicated, we could just
+  drop these two patches and take the rest of the series.
 
-diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
-index bbe3b379927a..c245476fa29d 100755
---- a/tools/testing/selftests/net/fib_rule_tests.sh
-+++ b/tools/testing/selftests/net/fib_rule_tests.sh
-@@ -303,6 +303,29 @@ run_fibrule_tests()
- 	log_section "IPv6 fib rule"
- 	fib_rule6_test
- }
-+################################################################################
-+# usage
-+
-+usage()
-+{
-+	cat <<EOF
-+usage: ${0##*/} OPTS
-+
-+        -t <test>   Test(s) to run (default: all)
-+                    (options: $TESTS)
-+EOF
-+}
-+
-+################################################################################
-+# main
-+
-+while getopts ":t:h" opt; do
-+	case $opt in
-+		t) TESTS=$OPTARG;;
-+		h) usage; exit 0;;
-+		*) usage; exit 1;;
-+	esac
-+done
- 
- if [ "$(id -u)" -ne 0 ];then
- 	echo "SKIP: Need root privileges"
--- 
-2.25.1
+Changelog:
+
+v2->v3:
+  - Rebased onto linux-next/akpm-base, in order to be based on top of the
+    run_vmtests.sh refactor which was merged previously.
+  - Picked up some Reviewed-by's.
+  - Fixed ioctl definition (_IO instead of _IOWR), and stopped using
+    compat_ptr_ioctl since it is unneeded for ioctls which don't take a pointer.
+  - Removed the "handle_kernel_faults" bool, simplifying the code. The result is
+    logically equivalent, but simpler.
+  - Fixed userfaultfd selftest so it returns KSFT_SKIP appropriately.
+  - Reworded documentation per Shuah's feedback on v2.
+  - Improved example usage for userfaultfd selftest.
+
+v1->v2:
+  - Add documentation update.
+  - Test *both* userfaultfd(2) and /dev/userfaultfd via the selftest.
+
+Axel Rasmussen (6):
+  selftests: vm: add hugetlb_shared userfaultfd test to run_vmtests.sh
+  userfaultfd: add /dev/userfaultfd for fine grained access control
+  userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+  userfaultfd: update documentation to describe /dev/userfaultfd
+  userfaultfd: selftests: make /dev/userfaultfd testing configurable
+  selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
+
+ Documentation/admin-guide/mm/userfaultfd.rst | 40 ++++++++++-
+ Documentation/admin-guide/sysctl/vm.rst      |  3 +
+ fs/userfaultfd.c                             | 76 ++++++++++++++++----
+ include/uapi/linux/userfaultfd.h             |  4 ++
+ tools/testing/selftests/vm/run_vmtests.sh    | 11 ++-
+ tools/testing/selftests/vm/userfaultfd.c     | 66 ++++++++++++++---
+ 6 files changed, 172 insertions(+), 28 deletions(-)
+
+--
+2.36.1.255.ge46751e96f-goog
 
