@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC1B53A84E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jun 2022 16:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1318653A864
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jun 2022 16:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354455AbiFAOGp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Jun 2022 10:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S1354477AbiFAOIX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Jun 2022 10:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354881AbiFAOFS (ORCPT
+        with ESMTP id S1354510AbiFAOHW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jun 2022 10:05:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CF0AE44B;
-        Wed,  1 Jun 2022 06:59:17 -0700 (PDT)
+        Wed, 1 Jun 2022 10:07:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB17A2073;
+        Wed,  1 Jun 2022 07:00:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39F856163D;
-        Wed,  1 Jun 2022 13:59:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D55EC385B8;
-        Wed,  1 Jun 2022 13:59:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B2B0615BF;
+        Wed,  1 Jun 2022 14:00:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7D4FC34119;
+        Wed,  1 Jun 2022 14:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654091956;
+        s=k20201202; t=1654092001;
         bh=KJhUKllErRJpBntBCZwKFWW3K3q4jqc9MvCVLYA5Vgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hMyy3HzkUA3LNCZfh2catNm3ksielIkc7CsIDPT0BJrPjkf8+uhpMBvUGiXDiZHxf
-         +UfY71B5xnELiKiNXGRVxlxiCEGo+rOobAEizwkAlJbhFhO7grEGKqiuSWL7zZKqvO
-         QZ/Rpy9PvWyURXUa1kZF7hRpYyZ4TqjDAF48JYOV7Kek73KZkwJ1eFAUAyiom1GkUX
-         yAYM/sELA+SHHa1fEzqtfPOTnofqr2oKtDH1M61t+iUXq77nS01wwsu2i7pviZZAg4
-         MzgJ85bTbLhrAVK4rxXNyD+IRxeHIJ/OSvdmrHEJvUwL9cXwh9k9QQvex3mvGPaALo
-         YsdDp6qCmSRIw==
+        b=WSbO3vNwdDp3hvanO2mD6VrlUEq/I9RD+hWykXMLzzUVp69GfYbvTpe0sBX35R41G
+         796O2Fk8kn/FBKJlzFlgfj6Klx9crgnTvD+e87cWRli0XFTyX5QoezAQFKT8l8RQTM
+         fLPBG4M+9Rtq1wc2Jr9OJiNI4G4mD3kDihgwf78Nw85TYeOCm5Yt+LxY2BGcC2SzkU
+         wigbkozU19+Cx0OMBMy8XhJh6yr0NT9P92LJ2MBrCY9V2PrGONq4J6ZfmrQ1i9WkE4
+         4p+NuIuBc91Cbm673wY0q3HjpgIsOn9t40IequX4X+QyIyARSOExPn4HDS9MrX3bdg
+         MfS4zkLeBZn7Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
@@ -40,12 +40,12 @@ Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 07/20] selftests/resctrl: Change the default limited time to 120 seconds
-Date:   Wed,  1 Jun 2022 09:58:49 -0400
-Message-Id: <20220601135902.2004823-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 05/15] selftests/resctrl: Change the default limited time to 120 seconds
+Date:   Wed,  1 Jun 2022 09:59:40 -0400
+Message-Id: <20220601135951.2005085-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220601135902.2004823-1-sashal@kernel.org>
-References: <20220601135902.2004823-1-sashal@kernel.org>
+In-Reply-To: <20220601135951.2005085-1-sashal@kernel.org>
+References: <20220601135951.2005085-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
