@@ -2,49 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1499953A0A2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jun 2022 11:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A0F53A671
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jun 2022 15:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351132AbiFAJf7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Jun 2022 05:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
+        id S1353547AbiFANxq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Jun 2022 09:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351236AbiFAJfe (ORCPT
+        with ESMTP id S1353520AbiFANxk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Jun 2022 05:35:34 -0400
-Received: from a48-37.smtp-out.amazonses.com (a48-37.smtp-out.amazonses.com [54.240.48.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B4A8FD5F;
-        Wed,  1 Jun 2022 02:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1654076132;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=9AMtDg2Y5aAkB0Fq77W2ubU91kwlffa/46gFCwaOz/s=;
-        b=pi467wzYJC8qTxMOD+/iAUfSzuQIlFThlXWrDuC+LG4PtvnsVbZC5M9GsMIbyKNH
-        OD0qzTnYdkL2VrUAW6bZF0bJwhP4RXJrCe5A2B6tu08pRpbdutsLybjHNvfLN/qFhWT
-        IcSbXX7zNaAl+3cD02zFBazo43wuwbINI/co2A7o=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1654076132;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=9AMtDg2Y5aAkB0Fq77W2ubU91kwlffa/46gFCwaOz/s=;
-        b=NKcab6t1XqbA/C80AdU5w08VqBVSdsCmN7J1papB8CgC3yipYs/GuAHq3usvAMnS
-        m2pPrRGQ6uxqq/SXFxBMOwehy6RRPhWzklW1+umH+Rh4OPOYH7e0mFIp1CMiHXtH67d
-        liWtfupv0f8dHxucngDdve8bqYPggyQlooD2iUdo=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: lkft kselftest for next-20220601
+        Wed, 1 Jun 2022 09:53:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B1387224;
+        Wed,  1 Jun 2022 06:53:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F38FBB81AE8;
+        Wed,  1 Jun 2022 13:53:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB820C36AE2;
+        Wed,  1 Jun 2022 13:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654091582;
+        bh=KJhUKllErRJpBntBCZwKFWW3K3q4jqc9MvCVLYA5Vgo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=h2LCE4WBlI0eekOGba0slT3Ok7AjwEp4HiNlpQ1Gr3RM8ua9nsuhRm4h9vK+/hg0s
+         JImtrj78HOHM658FwS4BchedocIK+s1JJk4AHOlfFZ/jAsW0FWfpRKzAGWezN9Acz+
+         xedTl5jG4yofsubF2BYnQvaJ3DesmA//VPmyqPq5O6otXT9GfQ1ezYvzpV7YrwWt9O
+         FQlkhU8ZrMDw9r5JSQdLusiq2kvrv5/KJss1UNQP13hlk3uPq0aKnelDl1j55anfNS
+         KUT4H+Nc6xYXX8X4pyeVSh5qQyVyOXvhn+90ZlYmYu9VL5ReriqU0ylICBhHoOTBr7
+         BqNlZURHZ0RZA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 19/49] selftests/resctrl: Change the default limited time to 120 seconds
+Date:   Wed,  1 Jun 2022 09:51:43 -0400
+Message-Id: <20220601135214.2002647-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220601135214.2002647-1-sashal@kernel.org>
+References: <20220601135214.2002647-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <010001811e9ec826-716b9268-d6ba-47c6-b270-5b988f2f99c5-000000@email.amazonses.com>
-Date:   Wed, 1 Jun 2022 09:35:31 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.06.01-54.240.48.37
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,78 +60,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.18.0
-* git: ['', 'https://gitlab.com/Linaro/lkft/mirrors/next/linux-next']
-* git branch: master
-* git commit: 5d8e7e3bbaaf115a935accd269873469928848c0
-* git describe: next-20220601
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220601
+From: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 
-## Test Regressions (compared to next-20220531)
-No test regressions found.
+[ Upstream commit e2e3fb6ef0d6548defbe0be6e092397aaa92f3a1 ]
 
-## Metric Regressions (compared to next-20220531)
-No metric regressions found.
+When testing on a Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz the resctrl
+selftests fail due to timeout after exceeding the default time limit of
+45 seconds. On this system the test takes about 68 seconds.
+Since the failing test by default accesses a fixed size of memory, the
+execution time should not vary significantly between different environment.
+A new default of 120 seconds should be sufficient yet easy to customize
+with the introduction of the "settings" file for reference.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/resctrl/settings | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 tools/testing/selftests/resctrl/settings
 
+diff --git a/tools/testing/selftests/resctrl/settings b/tools/testing/selftests/resctrl/settings
+new file mode 100644
+index 000000000000..a383f3d4565b
+--- /dev/null
++++ b/tools/testing/selftests/resctrl/settings
+@@ -0,0 +1,3 @@
++# If running time is longer than 120 seconds when new tests are added in
++# the future, increase timeout here.
++timeout=120
+-- 
+2.35.1
 
-## Test Fixes (compared to next-20220531)
-* qemu_arm, kselftest-seccomp
-  - seccomp.seccomp_benchmark
-
-
-## Metric Fixes (compared to next-20220531)
-No metric fixes found.
-
-## Test result summary
-total: 546, pass: 266, fail: 108, skip: 172, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-gpio
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-
---
-Linaro LKFT
-https://lkft.linaro.org
