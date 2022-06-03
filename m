@@ -2,292 +2,241 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A852E53C9AB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jun 2022 14:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8610153CA77
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jun 2022 15:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244107AbiFCMHz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Jun 2022 08:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
+        id S243537AbiFCNLh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Jun 2022 09:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiFCMHx (ORCPT
+        with ESMTP id S230170AbiFCNLg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:07:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223BF140C0
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Jun 2022 05:07:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0C5F615A7
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Jun 2022 12:07:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02911C341C0
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Jun 2022 12:07:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654258067;
-        bh=T934igT47qjG/TgdvSCfrEqMrn8cCh6pBKy0B3VVjT8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jxhqGJRDO5hTrLTotj+I35Azl9lWQ8AyJcNYuNQFZen8mVfqKhYiaAevsrjwIIq9e
-         1Y4ZS5DuH2aDkS08gPtkSWPONCD3PthZP+mYLOLcGDCOC2Zqlx5NffWUAouJlbAqqV
-         OirTvjfN9JdWtF6GIRNh/HK3KGcul5nyQpSJI9giTKH/RdrX1KHas/Rc0XYWqM79t7
-         LhoXNDqbs7BlEfK0x5V1ZokZqGeikIDBWLmdDafQNJct23gykI0kyDRN0x+8GWEFRV
-         /hl7sfBUdvg13Hp1WFpxbDY0qlURaDmTOZCrq+pZg9BkhV7U/PCsnN9WwZ2W6dZI3C
-         zDhCgQjOqyExg==
-Received: by mail-yb1-f173.google.com with SMTP id l204so13332569ybf.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jun 2022 05:07:46 -0700 (PDT)
-X-Gm-Message-State: AOAM531Z8o8IuA3VPmhL143VuEDJv6buPRvWJyp+vBlakB2j3DlaKEFE
-        U3cS99y7vQd/cxrf2/UWR6L5fhOTNiTNhtUQsgVEPA==
-X-Google-Smtp-Source: ABdhPJx0NgrkprQ5rfNp0IzDQIbalp124FvEdQVuUhK239g8tFL3tgWKjmNv7xOB0R5AVVTjw4SXx0vSecSXxGJ59ss=
-X-Received: by 2002:a5b:c12:0:b0:662:af24:c27c with SMTP id
- f18-20020a5b0c12000000b00662af24c27cmr1634522ybq.158.1654258065912; Fri, 03
- Jun 2022 05:07:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220525132115.896698-1-roberto.sassu@huawei.com> <20220525132115.896698-2-roberto.sassu@huawei.com>
-In-Reply-To: <20220525132115.896698-2-roberto.sassu@huawei.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Fri, 3 Jun 2022 14:07:35 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7L-fE740t91amu4uiDA5dnDMU1D+c0vhb-sFHyQK08kA@mail.gmail.com>
-Message-ID: <CACYkzJ7L-fE740t91amu4uiDA5dnDMU1D+c0vhb-sFHyQK08kA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
+        Fri, 3 Jun 2022 09:11:36 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5682F017;
+        Fri,  3 Jun 2022 06:11:34 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LF3CX6gtbz67jq3;
+        Fri,  3 Jun 2022 21:10:32 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 3 Jun 2022 15:11:31 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Fri, 3 Jun 2022 15:11:31 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     KP Singh <kpsingh@kernel.org>
+CC:     "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
  verification on map values
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Thread-Topic: [PATCH 1/3] bpf: Add BPF_F_VERIFY_ELEM to require signature
+ verification on map values
+Thread-Index: AQHYcDpckKyFNQT2PU2oWx8V6Vr5oK09gwmAgAAxm2A=
+Date:   Fri, 3 Jun 2022 13:11:31 +0000
+Message-ID: <89db5543066f4dccbfebd78ed3c025e7@huawei.com>
+References: <20220525132115.896698-1-roberto.sassu@huawei.com>
+ <20220525132115.896698-2-roberto.sassu@huawei.com>
+ <CACYkzJ7L-fE740t91amu4uiDA5dnDMU1D+c0vhb-sFHyQK08kA@mail.gmail.com>
+In-Reply-To: <CACYkzJ7L-fE740t91amu4uiDA5dnDMU1D+c0vhb-sFHyQK08kA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.21]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 25, 2022 at 3:21 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> In some cases, it is desirable to ensure that a map contains data from
-> authenticated sources, for example if map data are used for making security
-> decisions.
-
-I am guessing this comes from the discussion we had about digilim.
-I remember we discussed a BPF helper that could verify signatures.
-Why would that approach not work?
-
->
->
-> Such restriction is achieved by verifying the signature of map values, at
-> the time those values are added to the map with the bpf() system call (more
-> specifically, when the commands passed to bpf() are BPF_MAP_UPDATE_ELEM or
-> BPF_MAP_UPDATE_BATCH). Mmappable maps are not allowed in this case.
->
-> Signature verification is initially done with keys in the primary and
-> secondary kernel keyrings, similarly to kernel modules. This allows system
-> owners to enforce a system-wide policy based on the keys they trust.
-> Support for additional keyrings could be added later, based on use case
-> needs.
->
-> Signature verification is done only for those maps for which the new map
-> flag BPF_F_VERIFY_ELEM is set. When the flag is set, the kernel expects map
-> values to be in the following format:
->
-> +-------------------------------+---------------+-----+-----------------+
-> | verified data+sig size (be32) | verified data | sig | unverified data |
-> +-------------------------------+---------------+-----+-----------------+
->
-> where sig is a module-style appended signature as generated by the
-> sign-file tool. The verified data+sig size (in big endian) must be
-> explicitly provided (it is not generated by sign-file), as it cannot be
-> determined in other ways (currently, the map value size is fixed). It can
-> be obtained from the size of the file created by sign-file.
->
-> Introduce the new map flag BPF_F_VERIFY_ELEM, and additionally call the new
-> function bpf_map_verify_value_sig() from bpf_map_update_value() if the flag
-> is set. bpf_map_verify_value_sig(), declared as global for a new helper, is
-> basically equivalent to mod_verify_sig(). It additionally does the marker
-> check, that for kernel modules is done in module_sig_check(), and the
-> parsing of the verified data+sig size.
->
-> Currently, enable the usage of the flag only for the array map. Support for
-> more map types can be added later.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  include/linux/bpf.h            |  7 ++++
->  include/uapi/linux/bpf.h       |  3 ++
->  kernel/bpf/arraymap.c          |  2 +-
->  kernel/bpf/syscall.c           | 70 ++++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h |  3 ++
->  5 files changed, 84 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index a7080c86fa76..8f5c042e70a7 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1825,6 +1825,8 @@ static inline bool unprivileged_ebpf_enabled(void)
->         return !sysctl_unprivileged_bpf_disabled;
->  }
->
-> +int bpf_map_verify_value_sig(const void *mod, size_t modlen, bool verify);
-> +
->  #else /* !CONFIG_BPF_SYSCALL */
->  static inline struct bpf_prog *bpf_prog_get(u32 ufd)
->  {
-> @@ -2034,6 +2036,11 @@ static inline bool unprivileged_ebpf_enabled(void)
->         return false;
->  }
->
-> +static inline int bpf_map_verify_value_sig(const void *mod, size_t modlen,
-> +                                          bool verify)
-> +{
-> +       return -EOPNOTSUPP;
-> +}
->  #endif /* CONFIG_BPF_SYSCALL */
->
->  void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index f4009dbdf62d..a8e7803d2593 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1226,6 +1226,9 @@ enum {
->
->  /* Create a map that is suitable to be an inner map with dynamic max entries */
->         BPF_F_INNER_MAP         = (1U << 12),
-> +
-> +/* Verify map value (fmt: ver data+sig size(be32), ver data, sig, unver data) */
-> +       BPF_F_VERIFY_ELEM       = (1U << 13)
->  };
->
->  /* Flags for BPF_PROG_QUERY. */
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index fe40d3b9458f..b430fdd0e892 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -17,7 +17,7 @@
->
->  #define ARRAY_CREATE_FLAG_MASK \
->         (BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK | \
-> -        BPF_F_PRESERVE_ELEMS | BPF_F_INNER_MAP)
-> +        BPF_F_PRESERVE_ELEMS | BPF_F_INNER_MAP | BPF_F_VERIFY_ELEM)
->
->  static void bpf_array_free_percpu(struct bpf_array *array)
->  {
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 2b69306d3c6e..ca9e4a284120 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -35,6 +35,8 @@
->  #include <linux/rcupdate_trace.h>
->  #include <linux/memcontrol.h>
->  #include <linux/trace_events.h>
-> +#include <linux/verification.h>
-> +#include <linux/module_signature.h>
->
->  #define IS_FD_ARRAY(map) ((map)->map_type == BPF_MAP_TYPE_PERF_EVENT_ARRAY || \
->                           (map)->map_type == BPF_MAP_TYPE_CGROUP_ARRAY || \
-> @@ -180,6 +182,13 @@ static int bpf_map_update_value(struct bpf_map *map, struct fd f, void *key,
->  {
->         int err;
->
-> +       if (map->map_flags & BPF_F_VERIFY_ELEM) {
-> +               err = bpf_map_verify_value_sig(value, bpf_map_value_size(map),
-> +                                              true);
-> +               if (err < 0)
-> +                       return err;
-> +       }
-> +
->         /* Need to create a kthread, thus must support schedule */
->         if (bpf_map_is_dev_bound(map)) {
->                 return bpf_map_offload_update_elem(map, key, value, flags);
-> @@ -1057,6 +1066,11 @@ static int map_create(union bpf_attr *attr)
->         if (err)
->                 return -EINVAL;
->
-> +       /* Allow signed data to go through update/push methods only. */
-> +       if ((attr->map_flags & BPF_F_VERIFY_ELEM) &&
-> +           (attr->map_flags & BPF_F_MMAPABLE))
-> +               return -EINVAL;
-> +
->         if (attr->btf_vmlinux_value_type_id) {
->                 if (attr->map_type != BPF_MAP_TYPE_STRUCT_OPS ||
->                     attr->btf_key_type_id || attr->btf_value_type_id)
-> @@ -1353,6 +1367,62 @@ static int map_lookup_elem(union bpf_attr *attr)
->         return err;
->  }
->
-> +int bpf_map_verify_value_sig(const void *mod, size_t modlen, bool verify)
-> +{
-> +       const size_t marker_len = strlen(MODULE_SIG_STRING);
-> +       struct module_signature ms;
-> +       size_t sig_len;
-> +       u32 _modlen;
-> +       int ret;
-> +
-> +       /*
-> +        * Format of mod:
-> +        *
-> +        * verified data+sig size (be32), verified data, sig, unverified data
-> +        */
-> +       if (modlen <= sizeof(u32))
-> +               return -ENOENT;
-> +
-> +       _modlen = be32_to_cpu(*(u32 *)(mod));
-> +
-> +       if (_modlen > modlen - sizeof(u32))
-> +               return -EINVAL;
-> +
-> +       modlen = _modlen;
-> +       mod += sizeof(u32);
-> +
-> +       if (modlen <= marker_len)
-> +               return -ENOENT;
-> +
-> +       if (memcmp(mod + modlen - marker_len, MODULE_SIG_STRING, marker_len))
-> +               return -ENOENT;
-> +
-> +       modlen -= marker_len;
-> +
-> +       if (modlen <= sizeof(ms))
-> +               return -EBADMSG;
-> +
-> +       memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
-> +
-> +       ret = mod_check_sig(&ms, modlen, "bpf_map_value");
-> +       if (ret)
-> +               return ret;
-> +
-> +       sig_len = be32_to_cpu(ms.sig_len);
-> +       modlen -= sig_len + sizeof(ms);
-> +
-> +       if (verify) {
-> +               ret = verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
-> +                                            VERIFY_USE_SECONDARY_KEYRING,
-> +                                            VERIFYING_UNSPECIFIED_SIGNATURE,
-> +                                            NULL, NULL);
-> +               if (ret < 0)
-> +                       return ret;
-> +       }
-> +
-> +       return modlen;
-> +}
-> +EXPORT_SYMBOL_GPL(bpf_map_verify_value_sig);
->
->  #define BPF_MAP_UPDATE_ELEM_LAST_FIELD flags
->
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index f4009dbdf62d..a8e7803d2593 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -1226,6 +1226,9 @@ enum {
->
->  /* Create a map that is suitable to be an inner map with dynamic max entries */
->         BPF_F_INNER_MAP         = (1U << 12),
-> +
-> +/* Verify map value (fmt: ver data+sig size(be32), ver data, sig, unver data) */
-> +       BPF_F_VERIFY_ELEM       = (1U << 13)
->  };
->
->  /* Flags for BPF_PROG_QUERY. */
-> --
-> 2.25.1
->
+PiBGcm9tOiBLUCBTaW5naCBbbWFpbHRvOmtwc2luZ2hAa2VybmVsLm9yZ10NCj4gU2VudDogRnJp
+ZGF5LCBKdW5lIDMsIDIwMjIgMjowOCBQTQ0KPiBPbiBXZWQsIE1heSAyNSwgMjAyMiBhdCAzOjIx
+IFBNIFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT4NCj4gd3JvdGU6DQo+
+ID4NCj4gPiBJbiBzb21lIGNhc2VzLCBpdCBpcyBkZXNpcmFibGUgdG8gZW5zdXJlIHRoYXQgYSBt
+YXAgY29udGFpbnMgZGF0YSBmcm9tDQo+ID4gYXV0aGVudGljYXRlZCBzb3VyY2VzLCBmb3IgZXhh
+bXBsZSBpZiBtYXAgZGF0YSBhcmUgdXNlZCBmb3IgbWFraW5nIHNlY3VyaXR5DQo+ID4gZGVjaXNp
+b25zLg0KPiANCj4gSSBhbSBndWVzc2luZyB0aGlzIGNvbWVzIGZyb20gdGhlIGRpc2N1c3Npb24g
+d2UgaGFkIGFib3V0IGRpZ2lsaW0uDQo+IEkgcmVtZW1iZXIgd2UgZGlzY3Vzc2VkIGEgQlBGIGhl
+bHBlciB0aGF0IGNvdWxkIHZlcmlmeSBzaWduYXR1cmVzLg0KPiBXaHkgd291bGQgdGhhdCBhcHBy
+b2FjaCBub3Qgd29yaz8NCg0KVGhlIG1haW4gcmVhc29uIGlzIHRoYXQgc2lnbmF0dXJlIHZlcmlm
+aWNhdGlvbiBjYW4gYmUgZG9uZSBhbHNvDQpmb3Igbm9uLXNsZWVwYWJsZSBob29rcy4gRm9yIGV4
+YW1wbGUsIG9uZSBpcyBmZXhpdC9hcnJheV9tYXBfdXBkYXRlX2VsZW0uDQoNCkN1cnJlbnRseSB0
+aGUgaGVscGVyIGluIHBhdGNoIDIganVzdCByZXR1cm5zIHRoZSBzaXplIG9mIHZlcmlmaWVkIGRh
+dGEuDQpXaXRoIGFuIGFkZGl0aW9uYWwgcGFyYW1ldGVyLCBpdCBjb3VsZCBhbHNvIGJlIHVzZWQg
+YXMgYSBoZWxwZXIgZm9yDQpzaWduYXR1cmUgdmVyaWZpY2F0aW9uIGJ5IGFueSBlQlBGIHByb2dy
+YW1zLg0KDQpUbyBiZSBob25lc3QsIEkgbGlrZSBtb3JlIHRoZSBpZGVhIG9mIGEgbWFwIGZsYWcs
+IGFzIGl0IGlzIG1vcmUNCmNsZWFyIHRoYXQgc2lnbmF0dXJlIHZlcmlmaWNhdGlvbiBpcyBiZWlu
+ZyBkb25lLiBPdGhlcndpc2UsDQp3ZSB3b3VsZCBuZWVkIHRvIGluZmVyIGl0IGZyb20gdGhlIGVC
+UEYgcHJvZ3JhbSBjb2RlLg0KDQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9H
+SUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBl
+bmcsIFlhbmcgWGksIExpIEhlDQoNCj4gPiBTdWNoIHJlc3RyaWN0aW9uIGlzIGFjaGlldmVkIGJ5
+IHZlcmlmeWluZyB0aGUgc2lnbmF0dXJlIG9mIG1hcCB2YWx1ZXMsIGF0DQo+ID4gdGhlIHRpbWUg
+dGhvc2UgdmFsdWVzIGFyZSBhZGRlZCB0byB0aGUgbWFwIHdpdGggdGhlIGJwZigpIHN5c3RlbSBj
+YWxsIChtb3JlDQo+ID4gc3BlY2lmaWNhbGx5LCB3aGVuIHRoZSBjb21tYW5kcyBwYXNzZWQgdG8g
+YnBmKCkgYXJlIEJQRl9NQVBfVVBEQVRFX0VMRU0NCj4gb3INCj4gPiBCUEZfTUFQX1VQREFURV9C
+QVRDSCkuIE1tYXBwYWJsZSBtYXBzIGFyZSBub3QgYWxsb3dlZCBpbiB0aGlzIGNhc2UuDQo+ID4N
+Cj4gPiBTaWduYXR1cmUgdmVyaWZpY2F0aW9uIGlzIGluaXRpYWxseSBkb25lIHdpdGgga2V5cyBp
+biB0aGUgcHJpbWFyeSBhbmQNCj4gPiBzZWNvbmRhcnkga2VybmVsIGtleXJpbmdzLCBzaW1pbGFy
+bHkgdG8ga2VybmVsIG1vZHVsZXMuIFRoaXMgYWxsb3dzIHN5c3RlbQ0KPiA+IG93bmVycyB0byBl
+bmZvcmNlIGEgc3lzdGVtLXdpZGUgcG9saWN5IGJhc2VkIG9uIHRoZSBrZXlzIHRoZXkgdHJ1c3Qu
+DQo+ID4gU3VwcG9ydCBmb3IgYWRkaXRpb25hbCBrZXlyaW5ncyBjb3VsZCBiZSBhZGRlZCBsYXRl
+ciwgYmFzZWQgb24gdXNlIGNhc2UNCj4gPiBuZWVkcy4NCj4gPg0KPiA+IFNpZ25hdHVyZSB2ZXJp
+ZmljYXRpb24gaXMgZG9uZSBvbmx5IGZvciB0aG9zZSBtYXBzIGZvciB3aGljaCB0aGUgbmV3IG1h
+cA0KPiA+IGZsYWcgQlBGX0ZfVkVSSUZZX0VMRU0gaXMgc2V0LiBXaGVuIHRoZSBmbGFnIGlzIHNl
+dCwgdGhlIGtlcm5lbCBleHBlY3RzIG1hcA0KPiA+IHZhbHVlcyB0byBiZSBpbiB0aGUgZm9sbG93
+aW5nIGZvcm1hdDoNCj4gPg0KPiA+ICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKy0t
+LS0tLS0tLS0tLS0tLSstLS0tLSstLS0tLS0tLS0tLS0tLS0tLSsNCj4gPiB8IHZlcmlmaWVkIGRh
+dGErc2lnIHNpemUgKGJlMzIpIHwgdmVyaWZpZWQgZGF0YSB8IHNpZyB8IHVudmVyaWZpZWQgZGF0
+YSB8DQo+ID4gKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLS0tLS0t
+Ky0tLS0tKy0tLS0tLS0tLS0tLS0tLS0tKw0KPiA+DQo+ID4gd2hlcmUgc2lnIGlzIGEgbW9kdWxl
+LXN0eWxlIGFwcGVuZGVkIHNpZ25hdHVyZSBhcyBnZW5lcmF0ZWQgYnkgdGhlDQo+ID4gc2lnbi1m
+aWxlIHRvb2wuIFRoZSB2ZXJpZmllZCBkYXRhK3NpZyBzaXplIChpbiBiaWcgZW5kaWFuKSBtdXN0
+IGJlDQo+ID4gZXhwbGljaXRseSBwcm92aWRlZCAoaXQgaXMgbm90IGdlbmVyYXRlZCBieSBzaWdu
+LWZpbGUpLCBhcyBpdCBjYW5ub3QgYmUNCj4gPiBkZXRlcm1pbmVkIGluIG90aGVyIHdheXMgKGN1
+cnJlbnRseSwgdGhlIG1hcCB2YWx1ZSBzaXplIGlzIGZpeGVkKS4gSXQgY2FuDQo+ID4gYmUgb2J0
+YWluZWQgZnJvbSB0aGUgc2l6ZSBvZiB0aGUgZmlsZSBjcmVhdGVkIGJ5IHNpZ24tZmlsZS4NCj4g
+Pg0KPiA+IEludHJvZHVjZSB0aGUgbmV3IG1hcCBmbGFnIEJQRl9GX1ZFUklGWV9FTEVNLCBhbmQg
+YWRkaXRpb25hbGx5IGNhbGwgdGhlDQo+IG5ldw0KPiA+IGZ1bmN0aW9uIGJwZl9tYXBfdmVyaWZ5
+X3ZhbHVlX3NpZygpIGZyb20gYnBmX21hcF91cGRhdGVfdmFsdWUoKSBpZiB0aGUgZmxhZw0KPiA+
+IGlzIHNldC4gYnBmX21hcF92ZXJpZnlfdmFsdWVfc2lnKCksIGRlY2xhcmVkIGFzIGdsb2JhbCBm
+b3IgYSBuZXcgaGVscGVyLCBpcw0KPiA+IGJhc2ljYWxseSBlcXVpdmFsZW50IHRvIG1vZF92ZXJp
+Znlfc2lnKCkuIEl0IGFkZGl0aW9uYWxseSBkb2VzIHRoZSBtYXJrZXINCj4gPiBjaGVjaywgdGhh
+dCBmb3Iga2VybmVsIG1vZHVsZXMgaXMgZG9uZSBpbiBtb2R1bGVfc2lnX2NoZWNrKCksIGFuZCB0
+aGUNCj4gPiBwYXJzaW5nIG9mIHRoZSB2ZXJpZmllZCBkYXRhK3NpZyBzaXplLg0KPiA+DQo+ID4g
+Q3VycmVudGx5LCBlbmFibGUgdGhlIHVzYWdlIG9mIHRoZSBmbGFnIG9ubHkgZm9yIHRoZSBhcnJh
+eSBtYXAuIFN1cHBvcnQgZm9yDQo+ID4gbW9yZSBtYXAgdHlwZXMgY2FuIGJlIGFkZGVkIGxhdGVy
+Lg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUm9iZXJ0byBTYXNzdSA8cm9iZXJ0by5zYXNzdUBo
+dWF3ZWkuY29tPg0KPiA+IC0tLQ0KPiA+ICBpbmNsdWRlL2xpbnV4L2JwZi5oICAgICAgICAgICAg
+fCAgNyArKysrDQo+ID4gIGluY2x1ZGUvdWFwaS9saW51eC9icGYuaCAgICAgICB8ICAzICsrDQo+
+ID4gIGtlcm5lbC9icGYvYXJyYXltYXAuYyAgICAgICAgICB8ICAyICstDQo+ID4gIGtlcm5lbC9i
+cGYvc3lzY2FsbC5jICAgICAgICAgICB8IDcwICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysNCj4gPiAgdG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIHwgIDMgKysNCj4gPiAg
+NSBmaWxlcyBjaGFuZ2VkLCA4NCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4NCj4g
+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9icGYuaCBiL2luY2x1ZGUvbGludXgvYnBmLmgN
+Cj4gPiBpbmRleCBhNzA4MGM4NmZhNzYuLjhmNWMwNDJlNzBhNyAxMDA2NDQNCj4gPiAtLS0gYS9p
+bmNsdWRlL2xpbnV4L2JwZi5oDQo+ID4gKysrIGIvaW5jbHVkZS9saW51eC9icGYuaA0KPiA+IEBA
+IC0xODI1LDYgKzE4MjUsOCBAQCBzdGF0aWMgaW5saW5lIGJvb2wgdW5wcml2aWxlZ2VkX2VicGZf
+ZW5hYmxlZCh2b2lkKQ0KPiA+ICAgICAgICAgcmV0dXJuICFzeXNjdGxfdW5wcml2aWxlZ2VkX2Jw
+Zl9kaXNhYmxlZDsNCj4gPiAgfQ0KPiA+DQo+ID4gK2ludCBicGZfbWFwX3ZlcmlmeV92YWx1ZV9z
+aWcoY29uc3Qgdm9pZCAqbW9kLCBzaXplX3QgbW9kbGVuLCBib29sIHZlcmlmeSk7DQo+ID4gKw0K
+PiA+ICAjZWxzZSAvKiAhQ09ORklHX0JQRl9TWVNDQUxMICovDQo+ID4gIHN0YXRpYyBpbmxpbmUg
+c3RydWN0IGJwZl9wcm9nICpicGZfcHJvZ19nZXQodTMyIHVmZCkNCj4gPiAgew0KPiA+IEBAIC0y
+MDM0LDYgKzIwMzYsMTEgQEAgc3RhdGljIGlubGluZSBib29sIHVucHJpdmlsZWdlZF9lYnBmX2Vu
+YWJsZWQodm9pZCkNCj4gPiAgICAgICAgIHJldHVybiBmYWxzZTsNCj4gPiAgfQ0KPiA+DQo+ID4g
+K3N0YXRpYyBpbmxpbmUgaW50IGJwZl9tYXBfdmVyaWZ5X3ZhbHVlX3NpZyhjb25zdCB2b2lkICpt
+b2QsIHNpemVfdCBtb2RsZW4sDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIGJvb2wgdmVyaWZ5KQ0KPiA+ICt7DQo+ID4gKyAgICAgICByZXR1cm4gLUVPUE5P
+VFNVUFA7DQo+ID4gK30NCj4gPiAgI2VuZGlmIC8qIENPTkZJR19CUEZfU1lTQ0FMTCAqLw0KPiA+
+DQo+ID4gIHZvaWQgX19icGZfZnJlZV91c2VkX2J0ZnMoc3RydWN0IGJwZl9wcm9nX2F1eCAqYXV4
+LA0KPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL3VhcGkvbGludXgvYnBmLmggYi9pbmNsdWRlL3Vh
+cGkvbGludXgvYnBmLmgNCj4gPiBpbmRleCBmNDAwOWRiZGY2MmQuLmE4ZTc4MDNkMjU5MyAxMDA2
+NDQNCj4gPiAtLS0gYS9pbmNsdWRlL3VhcGkvbGludXgvYnBmLmgNCj4gPiArKysgYi9pbmNsdWRl
+L3VhcGkvbGludXgvYnBmLmgNCj4gPiBAQCAtMTIyNiw2ICsxMjI2LDkgQEAgZW51bSB7DQo+ID4N
+Cj4gPiAgLyogQ3JlYXRlIGEgbWFwIHRoYXQgaXMgc3VpdGFibGUgdG8gYmUgYW4gaW5uZXIgbWFw
+IHdpdGggZHluYW1pYyBtYXggZW50cmllcw0KPiAqLw0KPiA+ICAgICAgICAgQlBGX0ZfSU5ORVJf
+TUFQICAgICAgICAgPSAoMVUgPDwgMTIpLA0KPiA+ICsNCj4gPiArLyogVmVyaWZ5IG1hcCB2YWx1
+ZSAoZm10OiB2ZXIgZGF0YStzaWcgc2l6ZShiZTMyKSwgdmVyIGRhdGEsIHNpZywgdW52ZXIgZGF0
+YSkgKi8NCj4gPiArICAgICAgIEJQRl9GX1ZFUklGWV9FTEVNICAgICAgID0gKDFVIDw8IDEzKQ0K
+PiA+ICB9Ow0KPiA+DQo+ID4gIC8qIEZsYWdzIGZvciBCUEZfUFJPR19RVUVSWS4gKi8NCj4gPiBk
+aWZmIC0tZ2l0IGEva2VybmVsL2JwZi9hcnJheW1hcC5jIGIva2VybmVsL2JwZi9hcnJheW1hcC5j
+DQo+ID4gaW5kZXggZmU0MGQzYjk0NThmLi5iNDMwZmRkMGU4OTIgMTAwNjQ0DQo+ID4gLS0tIGEv
+a2VybmVsL2JwZi9hcnJheW1hcC5jDQo+ID4gKysrIGIva2VybmVsL2JwZi9hcnJheW1hcC5jDQo+
+ID4gQEAgLTE3LDcgKzE3LDcgQEANCj4gPg0KPiA+ICAjZGVmaW5lIEFSUkFZX0NSRUFURV9GTEFH
+X01BU0sgXA0KPiA+ICAgICAgICAgKEJQRl9GX05VTUFfTk9ERSB8IEJQRl9GX01NQVBBQkxFIHwg
+QlBGX0ZfQUNDRVNTX01BU0sgfCBcDQo+ID4gLSAgICAgICAgQlBGX0ZfUFJFU0VSVkVfRUxFTVMg
+fCBCUEZfRl9JTk5FUl9NQVApDQo+ID4gKyAgICAgICAgQlBGX0ZfUFJFU0VSVkVfRUxFTVMgfCBC
+UEZfRl9JTk5FUl9NQVAgfCBCUEZfRl9WRVJJRllfRUxFTSkNCj4gPg0KPiA+ICBzdGF0aWMgdm9p
+ZCBicGZfYXJyYXlfZnJlZV9wZXJjcHUoc3RydWN0IGJwZl9hcnJheSAqYXJyYXkpDQo+ID4gIHsN
+Cj4gPiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi9zeXNjYWxsLmMgYi9rZXJuZWwvYnBmL3N5c2Nh
+bGwuYw0KPiA+IGluZGV4IDJiNjkzMDZkM2M2ZS4uY2E5ZTRhMjg0MTIwIDEwMDY0NA0KPiA+IC0t
+LSBhL2tlcm5lbC9icGYvc3lzY2FsbC5jDQo+ID4gKysrIGIva2VybmVsL2JwZi9zeXNjYWxsLmMN
+Cj4gPiBAQCAtMzUsNiArMzUsOCBAQA0KPiA+ICAjaW5jbHVkZSA8bGludXgvcmN1cGRhdGVfdHJh
+Y2UuaD4NCj4gPiAgI2luY2x1ZGUgPGxpbnV4L21lbWNvbnRyb2wuaD4NCj4gPiAgI2luY2x1ZGUg
+PGxpbnV4L3RyYWNlX2V2ZW50cy5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvdmVyaWZpY2F0aW9u
+Lmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tb2R1bGVfc2lnbmF0dXJlLmg+DQo+ID4NCj4gPiAg
+I2RlZmluZSBJU19GRF9BUlJBWShtYXApICgobWFwKS0+bWFwX3R5cGUgPT0NCj4gQlBGX01BUF9U
+WVBFX1BFUkZfRVZFTlRfQVJSQVkgfHwgXA0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+KG1hcCktPm1hcF90eXBlID09IEJQRl9NQVBfVFlQRV9DR1JPVVBfQVJSQVkgfHwgXA0KPiA+IEBA
+IC0xODAsNiArMTgyLDEzIEBAIHN0YXRpYyBpbnQgYnBmX21hcF91cGRhdGVfdmFsdWUoc3RydWN0
+IGJwZl9tYXANCj4gKm1hcCwgc3RydWN0IGZkIGYsIHZvaWQgKmtleSwNCj4gPiAgew0KPiA+ICAg
+ICAgICAgaW50IGVycjsNCj4gPg0KPiA+ICsgICAgICAgaWYgKG1hcC0+bWFwX2ZsYWdzICYgQlBG
+X0ZfVkVSSUZZX0VMRU0pIHsNCj4gPiArICAgICAgICAgICAgICAgZXJyID0gYnBmX21hcF92ZXJp
+ZnlfdmFsdWVfc2lnKHZhbHVlLCBicGZfbWFwX3ZhbHVlX3NpemUobWFwKSwNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRydWUpOw0KPiA+ICsgICAg
+ICAgICAgICAgICBpZiAoZXJyIDwgMCkNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICByZXR1
+cm4gZXJyOw0KPiA+ICsgICAgICAgfQ0KPiA+ICsNCj4gPiAgICAgICAgIC8qIE5lZWQgdG8gY3Jl
+YXRlIGEga3RocmVhZCwgdGh1cyBtdXN0IHN1cHBvcnQgc2NoZWR1bGUgKi8NCj4gPiAgICAgICAg
+IGlmIChicGZfbWFwX2lzX2Rldl9ib3VuZChtYXApKSB7DQo+ID4gICAgICAgICAgICAgICAgIHJl
+dHVybiBicGZfbWFwX29mZmxvYWRfdXBkYXRlX2VsZW0obWFwLCBrZXksIHZhbHVlLCBmbGFncyk7
+DQo+ID4gQEAgLTEwNTcsNiArMTA2NiwxMSBAQCBzdGF0aWMgaW50IG1hcF9jcmVhdGUodW5pb24g
+YnBmX2F0dHIgKmF0dHIpDQo+ID4gICAgICAgICBpZiAoZXJyKQ0KPiA+ICAgICAgICAgICAgICAg
+ICByZXR1cm4gLUVJTlZBTDsNCj4gPg0KPiA+ICsgICAgICAgLyogQWxsb3cgc2lnbmVkIGRhdGEg
+dG8gZ28gdGhyb3VnaCB1cGRhdGUvcHVzaCBtZXRob2RzIG9ubHkuICovDQo+ID4gKyAgICAgICBp
+ZiAoKGF0dHItPm1hcF9mbGFncyAmIEJQRl9GX1ZFUklGWV9FTEVNKSAmJg0KPiA+ICsgICAgICAg
+ICAgIChhdHRyLT5tYXBfZmxhZ3MgJiBCUEZfRl9NTUFQQUJMRSkpDQo+ID4gKyAgICAgICAgICAg
+ICAgIHJldHVybiAtRUlOVkFMOw0KPiA+ICsNCj4gPiAgICAgICAgIGlmIChhdHRyLT5idGZfdm1s
+aW51eF92YWx1ZV90eXBlX2lkKSB7DQo+ID4gICAgICAgICAgICAgICAgIGlmIChhdHRyLT5tYXBf
+dHlwZSAhPSBCUEZfTUFQX1RZUEVfU1RSVUNUX09QUyB8fA0KPiA+ICAgICAgICAgICAgICAgICAg
+ICAgYXR0ci0+YnRmX2tleV90eXBlX2lkIHx8IGF0dHItPmJ0Zl92YWx1ZV90eXBlX2lkKQ0KPiA+
+IEBAIC0xMzUzLDYgKzEzNjcsNjIgQEAgc3RhdGljIGludCBtYXBfbG9va3VwX2VsZW0odW5pb24g
+YnBmX2F0dHIgKmF0dHIpDQo+ID4gICAgICAgICByZXR1cm4gZXJyOw0KPiA+ICB9DQo+ID4NCj4g
+PiAraW50IGJwZl9tYXBfdmVyaWZ5X3ZhbHVlX3NpZyhjb25zdCB2b2lkICptb2QsIHNpemVfdCBt
+b2RsZW4sIGJvb2wgdmVyaWZ5KQ0KPiA+ICt7DQo+ID4gKyAgICAgICBjb25zdCBzaXplX3QgbWFy
+a2VyX2xlbiA9IHN0cmxlbihNT0RVTEVfU0lHX1NUUklORyk7DQo+ID4gKyAgICAgICBzdHJ1Y3Qg
+bW9kdWxlX3NpZ25hdHVyZSBtczsNCj4gPiArICAgICAgIHNpemVfdCBzaWdfbGVuOw0KPiA+ICsg
+ICAgICAgdTMyIF9tb2RsZW47DQo+ID4gKyAgICAgICBpbnQgcmV0Ow0KPiA+ICsNCj4gPiArICAg
+ICAgIC8qDQo+ID4gKyAgICAgICAgKiBGb3JtYXQgb2YgbW9kOg0KPiA+ICsgICAgICAgICoNCj4g
+PiArICAgICAgICAqIHZlcmlmaWVkIGRhdGErc2lnIHNpemUgKGJlMzIpLCB2ZXJpZmllZCBkYXRh
+LCBzaWcsIHVudmVyaWZpZWQgZGF0YQ0KPiA+ICsgICAgICAgICovDQo+ID4gKyAgICAgICBpZiAo
+bW9kbGVuIDw9IHNpemVvZih1MzIpKQ0KPiA+ICsgICAgICAgICAgICAgICByZXR1cm4gLUVOT0VO
+VDsNCj4gPiArDQo+ID4gKyAgICAgICBfbW9kbGVuID0gYmUzMl90b19jcHUoKih1MzIgKikobW9k
+KSk7DQo+ID4gKw0KPiA+ICsgICAgICAgaWYgKF9tb2RsZW4gPiBtb2RsZW4gLSBzaXplb2YodTMy
+KSkNCj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+ID4gKw0KPiA+ICsgICAg
+ICAgbW9kbGVuID0gX21vZGxlbjsNCj4gPiArICAgICAgIG1vZCArPSBzaXplb2YodTMyKTsNCj4g
+PiArDQo+ID4gKyAgICAgICBpZiAobW9kbGVuIDw9IG1hcmtlcl9sZW4pDQo+ID4gKyAgICAgICAg
+ICAgICAgIHJldHVybiAtRU5PRU5UOw0KPiA+ICsNCj4gPiArICAgICAgIGlmIChtZW1jbXAobW9k
+ICsgbW9kbGVuIC0gbWFya2VyX2xlbiwgTU9EVUxFX1NJR19TVFJJTkcsDQo+IG1hcmtlcl9sZW4p
+KQ0KPiA+ICsgICAgICAgICAgICAgICByZXR1cm4gLUVOT0VOVDsNCj4gPiArDQo+ID4gKyAgICAg
+ICBtb2RsZW4gLT0gbWFya2VyX2xlbjsNCj4gPiArDQo+ID4gKyAgICAgICBpZiAobW9kbGVuIDw9
+IHNpemVvZihtcykpDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVybiAtRUJBRE1TRzsNCj4gPiAr
+DQo+ID4gKyAgICAgICBtZW1jcHkoJm1zLCBtb2QgKyAobW9kbGVuIC0gc2l6ZW9mKG1zKSksIHNp
+emVvZihtcykpOw0KPiA+ICsNCj4gPiArICAgICAgIHJldCA9IG1vZF9jaGVja19zaWcoJm1zLCBt
+b2RsZW4sICJicGZfbWFwX3ZhbHVlIik7DQo+ID4gKyAgICAgICBpZiAocmV0KQ0KPiA+ICsgICAg
+ICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiArICAgICAgIHNpZ19sZW4gPSBiZTMy
+X3RvX2NwdShtcy5zaWdfbGVuKTsNCj4gPiArICAgICAgIG1vZGxlbiAtPSBzaWdfbGVuICsgc2l6
+ZW9mKG1zKTsNCj4gPiArDQo+ID4gKyAgICAgICBpZiAodmVyaWZ5KSB7DQo+ID4gKyAgICAgICAg
+ICAgICAgIHJldCA9IHZlcmlmeV9wa2NzN19zaWduYXR1cmUobW9kLCBtb2RsZW4sIG1vZCArIG1v
+ZGxlbiwgc2lnX2xlbiwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBWRVJJRllfVVNFX1NFQ09OREFSWV9LRVlSSU5HLA0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFZFUklGWUlOR19VTlNQRUNJRklFRF9TSUdO
+QVRVUkUsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+TlVMTCwgTlVMTCk7DQo+ID4gKyAgICAgICAgICAgICAgIGlmIChyZXQgPCAwKQ0KPiA+ICsgICAg
+ICAgICAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+ID4gKyAgICAgICB9DQo+ID4gKw0KPiA+
+ICsgICAgICAgcmV0dXJuIG1vZGxlbjsNCj4gPiArfQ0KPiA+ICtFWFBPUlRfU1lNQk9MX0dQTChi
+cGZfbWFwX3ZlcmlmeV92YWx1ZV9zaWcpOw0KPiA+DQo+ID4gICNkZWZpbmUgQlBGX01BUF9VUERB
+VEVfRUxFTV9MQVNUX0ZJRUxEIGZsYWdzDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMvaW5j
+bHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvdG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+
+ID4gaW5kZXggZjQwMDlkYmRmNjJkLi5hOGU3ODAzZDI1OTMgMTAwNjQ0DQo+ID4gLS0tIGEvdG9v
+bHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gKysrIGIvdG9vbHMvaW5jbHVkZS91YXBp
+L2xpbnV4L2JwZi5oDQo+ID4gQEAgLTEyMjYsNiArMTIyNiw5IEBAIGVudW0gew0KPiA+DQo+ID4g
+IC8qIENyZWF0ZSBhIG1hcCB0aGF0IGlzIHN1aXRhYmxlIHRvIGJlIGFuIGlubmVyIG1hcCB3aXRo
+IGR5bmFtaWMgbWF4IGVudHJpZXMNCj4gKi8NCj4gPiAgICAgICAgIEJQRl9GX0lOTkVSX01BUCAg
+ICAgICAgID0gKDFVIDw8IDEyKSwNCj4gPiArDQo+ID4gKy8qIFZlcmlmeSBtYXAgdmFsdWUgKGZt
+dDogdmVyIGRhdGErc2lnIHNpemUoYmUzMiksIHZlciBkYXRhLCBzaWcsIHVudmVyIGRhdGEpICov
+DQo+ID4gKyAgICAgICBCUEZfRl9WRVJJRllfRUxFTSAgICAgICA9ICgxVSA8PCAxMykNCj4gPiAg
+fTsNCj4gPg0KPiA+ICAvKiBGbGFncyBmb3IgQlBGX1BST0dfUVVFUlkuICovDQo+ID4gLS0NCj4g
+PiAyLjI1LjENCj4gPg0K
