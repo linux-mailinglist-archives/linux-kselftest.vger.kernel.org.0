@@ -2,95 +2,237 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B1C53EA46
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jun 2022 19:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC0E53EAAD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jun 2022 19:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241026AbiFFPmO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jun 2022 11:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S231267AbiFFQgJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jun 2022 12:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241037AbiFFPmJ (ORCPT
+        with ESMTP id S231286AbiFFQgI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jun 2022 11:42:09 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B29E64
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Jun 2022 08:42:07 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id kq6so16714525ejb.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jun 2022 08:42:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uehsw7JCHsCehIFzJ7Aoew6SKLLpwBI0xFRB23aWgk0=;
-        b=tcrko6FTGCS/eACggns71j8w2N7EZA3SyXAUcixwJMcKre5pzGrYtmf4jdhNTTM839
-         EuLtacAOl7LqmzTsKuVTTpp5y71v2y6drwykMBAoZpnB8AsMUNCb6g/yZR3xQrC9zNvt
-         qFbk7zACZB8LJO+M18DqOOYEdb+sZGl1QuYwvgk4+gjZ8GM/K5YKU5Ht13M5EHfKLuSA
-         8RkoT/hzNe8770BPI+dtMfLSjo/xiV7dRr7QEWqvuH57E9DBRd1LMGTjBB+CgyMKjnCd
-         lbe0zxxz09zn6dlkVeW/KjfOVLwv1m4Bz+TI/jBB2HRStNsRT4x/J7TdaNL81BauiE6l
-         ZDEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uehsw7JCHsCehIFzJ7Aoew6SKLLpwBI0xFRB23aWgk0=;
-        b=nQ9byt7IkdGZCUeYOpVZU5JTMNE29wFMiv8NguUiUY1gPpQXLznnOVMEqg6Xppcaa2
-         PqjwqH/RzAkgej/PWe0VmYMRZu0YoCBbn5qcHjGCIDq3eKesWd0j+w8if0oYpwgApSg5
-         kbwdO9hGUgokRJtQG5Wyf1fHqEY9X+cBqnV0cUFys+RK8fGcvQOHN25IAJkHo73FNEX+
-         WAlQ+1GSUqdWDUuddpnraa77yqagNCXyDq6vYgH5mIPUJrHgb18VO7TiTzZkQvjvsGo9
-         J61Qsa+aY+PD7nURRf7H71OSfj3cYJShd+XSHjkqwZAR+sx06bb+MCnS1zFCLzVW9kJw
-         4vFg==
-X-Gm-Message-State: AOAM5330fA59fCYX7YIDCHukhJCwNJVR8grH1YYYwhRrvQPosb4SyYYi
-        cfG3Lqoybj4sU7k19ZlMX52BOCkosbR5y/IRvfdJjg==
-X-Google-Smtp-Source: ABdhPJxEb0Eopb/17oP8J0PE3mgoandk4wXldPU5cxioIQw6Wc+XdMik0Mex5P5wo9mIQpxJKyhtTSWg7FK9cOBBhUg=
-X-Received: by 2002:a17:907:16a4:b0:711:c9a7:dc75 with SMTP id
- hc36-20020a17090716a400b00711c9a7dc75mr6704199ejc.542.1654530125425; Mon, 06
- Jun 2022 08:42:05 -0700 (PDT)
+        Mon, 6 Jun 2022 12:36:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B860B7F7;
+        Mon,  6 Jun 2022 09:36:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DBFA165C;
+        Mon,  6 Jun 2022 09:36:06 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.37.128])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB1243F73B;
+        Mon,  6 Jun 2022 09:36:00 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 17:35:57 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        cj.chengjian@huawei.com, huawei.libin@huawei.com,
+        xiexiuqi@huawei.com, liwei391@huawei.com
+Subject: Re: [PATCH bpf-next v5 1/6] arm64: ftrace: Add ftrace direct call
+ support
+Message-ID: <Yp4s7eNGvb2CNtPp@FVFF77S0Q05N.cambridge.arm.com>
+References: <Yo4xb2w+FHhUtJNw@FVFF77S0Q05N>
+ <0f8fe661-c450-ccd8-761f-dbfff449c533@huawei.com>
+ <Yo9REdx3nsgbZunE@FVFF77S0Q05N>
+ <40fda0b0-0efc-ea1b-96d5-e51a4d1593dd@huawei.com>
 MIME-Version: 1.0
-References: <20220530133133.1931716-1-sashal@kernel.org> <20220530133133.1931716-89-sashal@kernel.org>
- <CAGS_qxrtZBrpk8x64oj53o4EEUCgTj1c4D12W+6UNArQfiiXaQ@mail.gmail.com> <YpyvEyomrPpj3JJR@sashalap>
-In-Reply-To: <YpyvEyomrPpj3JJR@sashalap>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 6 Jun 2022 08:41:54 -0700
-Message-ID: <CAGS_qxrOW-hha-anpd0+D8LbaPTYrsWpHc2Qvz8ZeURZEq5ZWQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.17 089/135] kunit: bail out of test filtering
- logic quicker if OOM
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40fda0b0-0efc-ea1b-96d5-e51a4d1593dd@huawei.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jun 5, 2022 at 6:26 AM Sasha Levin <sashal@kernel.org> wrote:
->
-> On Tue, May 31, 2022 at 09:15:11AM -0700, Daniel Latypov wrote:
-> >On Mon, May 30, 2022 at 6:36 AM Sasha Levin <sashal@kernel.org> wrote:
+On Thu, May 26, 2022 at 10:48:05PM +0800, Xu Kuohai wrote:
+> On 5/26/2022 6:06 PM, Mark Rutland wrote:
+> > On Thu, May 26, 2022 at 05:45:03PM +0800, Xu Kuohai wrote:
+> >> On 5/25/2022 9:38 PM, Mark Rutland wrote:
+> >>> On Wed, May 18, 2022 at 09:16:33AM -0400, Xu Kuohai wrote:
+> >>>> Add ftrace direct support for arm64.
+> >>>>
+> >>>> 1. When there is custom trampoline only, replace the fentry nop to a
+> >>>>    jump instruction that jumps directly to the custom trampoline.
+> >>>>
+> >>>> 2. When ftrace trampoline and custom trampoline coexist, jump from
+> >>>>    fentry to ftrace trampoline first, then jump to custom trampoline
+> >>>>    when ftrace trampoline exits. The current unused register
+> >>>>    pt_regs->orig_x0 is used as an intermediary for jumping from ftrace
+> >>>>    trampoline to custom trampoline.
+> >>>
+> >>> For those of us not all that familiar with BPF, can you explain *why* you want
+> >>> this? The above explains what the patch implements, but not why that's useful.
+> >>>
+> >>> e.g. is this just to avoid the overhead of the ops list processing in the
+> >>> regular ftrace code, or is the custom trampoline there to allow you to do
+> >>> something special?
 > >>
-> >> From: Daniel Latypov <dlatypov@google.com>
-> >>
-> >> [ Upstream commit a02353f491622e49c7ddedc6a6dc4f1d6ed2150a ]
-> >>
-> >
-> >Is it possible to make sure the fix for this commit gets picked up as well [1]?
-> >I was waiting a bit to see if it was going to get picked up
-> >automatically, but I don't see such an email yet:
-> >https://lore.kernel.org/stable/?q=kunit+OOM
-> >(Perhaps the automation just hasn't gotten around to it yet?)
->
-> I'll make sure the fix added along with this commit.
+> >> IIUC, ftrace direct call was designed to *remove* the unnecessary
+> >> overhead of saving regs completely [1][2].
+> > 
+> > Ok. My plan is to get rid of most of the register saving generally, so I think
+> > that aspect can be solved without direct calls.
+> Looking forward to your new solution.
 
-I just saw the emails about it being added to the 5.{17,18} stable trees.
+For the register saving rework, I have a WIP branch on my kernel.org repo:
 
-Thanks a bunch!
-Daniel
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/minimal-regs
+  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/minimal-regs
+
+I'm working on that at the moment along with a per-callsite ops implementaiton
+that would avoid most of the need for custom trampolines (and work with branch
+range limitations):
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/ftrace/per-callsite-ops
+  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/per-callsite-ops
+
+> >> [1]
+> >> https://lore.kernel.org/all/20191022175052.frjzlnjjfwwfov64@ast-mbp.dhcp.thefacebook.com/
+> >> [2] https://lore.kernel.org/all/20191108212834.594904349@goodmis.org/
+> >>
+> >> This patch itself is just a variant of [3].
+> >>
+> >> [3] https://lore.kernel.org/all/20191108213450.891579507@goodmis.org/
+> >>
+> >>>
+> >>> There is another patch series on the list from some of your colleagues which
+> >>> uses dynamic trampolines to try to avoid that ops list overhead, and it's not
+> >>> clear to me whether these are trying to solve the largely same problem or
+> >>> something different. That other thread is at:
+> >>>
+> >>>   https://lore.kernel.org/linux-arm-kernel/20220316100132.244849-1-bobo.shaobowang@huawei.com/
+> >>>
+> >>> ... and I've added the relevant parties to CC here, since there doesn't seem to
+> >>> be any overlap in the CC lists of the two threads.
+> >>
+> >> We're not working to solve the same problem. The trampoline introduced
+> >> in this series helps us to monitor kernel function or another bpf prog
+> >> with bpf, and also helps us to use bpf prog like a normal kernel
+> >> function pointer.
+> > 
+> > Ok, but why is it necessary to have a special trampoline?
+> > 
+> > Is that *just* to avoid overhead, or do you need to do something special that
+> > the regular trampoline won't do?
+> > 
+> 
+> Sorry for not explaining the problem. The main bpf prog accepts only a
+> single argument 'ctx' in r1, so to allow kernel code to call bpf prog
+> transparently, we need a trampoline to convert native calling convention
+> into BPF calling convention [1].
+> 
+> [1] https://lore.kernel.org/bpf/20191114185720.1641606-5-ast@kernel.org/
+
+Thanks for the pointer; I'll go page that in.
+
+> For example,
+> 
+> SEC("struct_ops/dctcp_state")
+> void BPF_PROG(dctcp_state, struct sock *sk, __u8 new_state)
+> {
+>     // do something
+> }
+> 
+> The above bpf prog will be compiled to something like this:
+> 
+> dctcp_state:
+>     r2 = *(u64 *)(r1 + 8)  // new_state
+>     r1 = *(u64 *)(r1 + 0)  // sk
+>     ...
+> 
+> It accepts only one argument 'ctx' in r1, and loads the actual arugment
+> 'sk' and 'new_state' from r1 + 0 and r1 + 8, resepectively. So before
+> calling this prog, we need to construct 'ctx' and store its address to r1.
+> 
+> >>>
+> >>> In that other thread I've suggested a general approach we could follow at:
+> >>>   
+> >>>   https://lore.kernel.org/linux-arm-kernel/YmGF%2FOpIhAF8YeVq@lakrids/
+> >>
+> >> Is it possible for a kernel function to take a long jump to common
+> >> trampoline when we get a huge kernel image?
+> > 
+> > It is possible, but only where the kernel Image itself is massive and the .text
+> > section exceeeds 128MiB, at which point other things break anyway. Practically
+> > speaking, this doesn't happen for production kernels, or reasonable test
+> > kernels.
+> 
+> So even for normal kernel functions, we need some way to construct and
+> destruct long jumps atomically and safely.
+
+My point was that case is unrealistic for production kernels, and utterly
+broken anyway (and as below I intend to make ftrace detect this and mark itself
+as broken).
+
+FWIW, an allmodconfig kernel built with GCC 12.1.0 has a ~30MB .text segment,
+so for realistic kernels we have plenty of headroom for normal functions to
+reach the in-kernel trampoline.
+
+> > I've been meaning to add some logic to detect this at boot time and idsable
+> > ftrace (or at build time), since live patching would also be broken in that
+> > case.
+> >>>> As noted in that thread, I have a few concerns which equally apply here:
+> >>>
+> >>> * Due to the limited range of BL instructions, it's not always possible to
+> >>>   patch an ftrace call-site to branch to an arbitrary trampoline. The way this
+> >>>   works for ftrace today relies upon knowingthe set of trampolines at
+> >>>   compile-time, and allocating module PLTs for those, and that approach cannot
+> >>>   work reliably for dynanically allocated trampolines.
+> >>
+> >> Currently patch 5 returns -ENOTSUPP when long jump is detected, so no
+> >> bpf trampoline is constructed for out of range patch-site:
+> >>
+> >> if (is_long_jump(orig_call, image))
+> >> 	return -ENOTSUPP;
+> > 
+> > Sure, my point is that in practice that means that (from the user's PoV) this
+> > may randomly fail to work, and I'd like something that we can ensure works
+> > consistently.
+> > 
+> 
+> OK, should I suspend this work until you finish refactoring ftrace?
+
+Yes; I'd appreciate if we could hold on this for a bit.
+
+I think with some ground work we can avoid most of the painful edge cases and
+might be able to avoid the need for custom trampolines.
+
+Thanks,
+Mark.
