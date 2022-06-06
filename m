@@ -2,57 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659F753DBB9
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jun 2022 15:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A64B53E8BD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jun 2022 19:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344029AbiFENkN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 5 Jun 2022 09:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S233052AbiFFJa6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jun 2022 05:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343834AbiFENkM (ORCPT
+        with ESMTP id S233039AbiFFJao (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 Jun 2022 09:40:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B4022B0C;
-        Sun,  5 Jun 2022 06:40:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 659EAB80735;
-        Sun,  5 Jun 2022 13:40:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63D4C385A5;
-        Sun,  5 Jun 2022 13:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654436409;
-        bh=NwObenWbHO817AcTNpCBYS8i6ub6XU64uqzXl/+yLE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j6kYgd7n2jn3qs9IqmVReQcLWMBTH7vn27O+sxeFVNb5yEOFd5OU44wMcgn8ifkZz
-         cg2MWStQOFkr5bbnEyCgDJE8MNT+vY4YRlfVfK5zr4iw4JfBV4xWB7M0RCT01lsgkf
-         nLJeoalUm5C5Cz/Y1+ORyR6C8fu4HsFUFvydB5rjNnprL8cR7KyllDxx7wHLs9pt1L
-         howxitaOjoX1GjwTT0qyAOzGOwoMz7Qh3Zpz+sgTSN7rRGdeNheFWwqFUPIPtG0z6L
-         YPzYXkbgsAM+kgEJ896VuPGu69QYOrdh0We1duDEnX1M57VA/3cHSuS/VFPJI/rfJC
-         v66Q8FtGJUi6A==
-Date:   Sun, 5 Jun 2022 09:40:07 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.9 03/11] selftests/resctrl: Change the default
- limited time to 120 seconds
-Message-ID: <YpyyN5OBWAE2O4cX@sashalap>
-References: <20220601140100.2005469-1-sashal@kernel.org>
- <20220601140100.2005469-3-sashal@kernel.org>
- <55ef4461-75b5-4c1b-90b5-17909ec58f25@intel.com>
+        Mon, 6 Jun 2022 05:30:44 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BD6CFE04;
+        Mon,  6 Jun 2022 02:30:36 -0700 (PDT)
+X-UUID: 9da0ca4ab9714784bc805696926d2f86-20220606
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:8a3a7e6c-ef0d-4a18-bce8-80824a24180b,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:105
+X-CID-INFO: VERSION:1.1.5,REQID:8a3a7e6c-ef0d-4a18-bce8-80824a24180b,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:105
+X-CID-META: VersionHash:2a19b09,CLOUDID:a2a64f7e-c8dc-403a-96e8-6237210dceee,C
+        OID:0e4a7272b3e5,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 9da0ca4ab9714784bc805696926d2f86-20220606
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <lina.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1911604969; Mon, 06 Jun 2022 14:52:09 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 6 Jun 2022 14:52:08 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Mon, 6 Jun 2022 14:52:04 +0800
+From:   Lina Wang <lina.wang@mediatek.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maciej enczykowski <maze@google.com>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Lina Wang <lina.wang@mediatek.com>
+Subject: [PATCH v3] selftests net: fix bpf build error
+Date:   Mon, 6 Jun 2022 14:45:17 +0800
+Message-ID: <20220606064517.8175-1-lina.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <55ef4461-75b5-4c1b-90b5-17909ec58f25@intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,25 +72,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 10:19:45AM -0700, Reinette Chatre wrote:
->Dear Stable Team,
->
->I received the below notice about this commit being considered for
->4.9 as well as other notices for it being considered for 4.14, 4.19,
->5.4, 5.10, 5.15, 5.17, and 5.18.
->
->I do not believe this commit is appropriate for stable because:
->- It forms part of a series and without the other accompanying patches
->  from that series it does not do anything. Series is at:
->  https://lore.kernel.org/lkml/20220323081227.1603991-1-tan.shaopeng@jp.fujitsu.com/
->- The original series was not not submitted for inclusion to stable and
->  none of its patches have a Fixes: tag.
->- The series this patch forms part of aims to port resctrl_tests to the
->  kselftest framework and I do not believe such a change matches stable
->  criteria.
+bpf_helpers.h has been moved to tools/lib/bpf since 5.10, so add more
+including path.
 
-Sure, I'll drop it, thanks!
+Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+---
+ tools/testing/selftests/net/bpf/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+index f91bf14bbee7..8a69c91fcca0 100644
+--- a/tools/testing/selftests/net/bpf/Makefile
++++ b/tools/testing/selftests/net/bpf/Makefile
+@@ -2,6 +2,7 @@
+ 
+ CLANG ?= clang
+ CCINCLUDE += -I../../bpf
++CCINCLUDE += -I../../../lib
+ CCINCLUDE += -I../../../../../usr/include/
+ 
+ TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
+@@ -10,5 +11,4 @@ all: $(TEST_CUSTOM_PROGS)
+ $(OUTPUT)/%.o: %.c
+ 	$(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) -o $@
+ 
+-clean:
+-	rm -f $(TEST_CUSTOM_PROGS)
++EXTRA_CLEAN := $(TEST_CUSTOM_PROGS)
 -- 
-Thanks,
-Sasha
+2.18.0
+
