@@ -2,130 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC86C53FF95
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jun 2022 14:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA5D540009
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jun 2022 15:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244352AbiFGM7h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jun 2022 08:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S244701AbiFGNaQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jun 2022 09:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244341AbiFGM7g (ORCPT
+        with ESMTP id S232553AbiFGNaO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jun 2022 08:59:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC958A07D;
-        Tue,  7 Jun 2022 05:59:35 -0700 (PDT)
-Received: from [192.168.10.2] (unknown [39.45.211.232])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 7 Jun 2022 09:30:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7F3D19E6;
+        Tue,  7 Jun 2022 06:30:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EAECB6601A93;
-        Tue,  7 Jun 2022 13:59:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654606774;
-        bh=QEuHwxJN6odW1g5krFZeQvoskzQhnvkfJZhXm3QQ7hk=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=Wnreb7Vt0UfkowMpVzJX44PRp7et4qVMYEC774vdMH2+S5q9cIb+SL+S+wTm3FdCn
-         Dplll3g9VRylAoiNYTCe+1cOA+TbaDM2V72XBpxx9qRWe38p+y+vaaNzNQPT1PlXUn
-         GhIw7LJ7ib9IkVZNYDsilKwMjx2qSgNU9R4n8uV466lFS8l7tu0mxo4ROtiJWcHWne
-         f+mZwDYOXWlGh8ACAIh3LIvt7oYi97y5rLsDbr5fBaoQ4gz6kfihuEKsngUiZEcIy4
-         nuU8ZeEln3co52oGHiuorhM4+EQWXkmiFME/wh5hQ8qxVZ+ULcxw3nAcCK9jZIYHJ4
-         4RaHbM9QUl1MA==
-Message-ID: <e01f90a0-a3c7-c5fd-ae1f-197c6fec525e@collabora.com>
-Date:   Tue, 7 Jun 2022 17:59:28 +0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07AE561484;
+        Tue,  7 Jun 2022 13:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5159BC34119;
+        Tue,  7 Jun 2022 13:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654608612;
+        bh=zyhrWRXdVXO+HYqEJk8OrrgU5Np0Uk7LNBouSz/WdWk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ScN+2e1u3+nDzZk/Al7r1+6WF1/wNS0eV+otewgvoNfOjHPb2KfMd1X/bldLpTCnb
+         AAbYk3HnKiIUFUlMwrPUF2rpCiJ+dd2+0MN8sFOWVoxJ+wlUZpc4JoqEs1bcvuB9a2
+         h2ZiF1bKQsR8b6YchGandWN+7DtI5GRgYVNhKiaTL6aLSxes4cN4BLcdyTW3axXO7H
+         Xko5T/ioQy3I7z40H1xCTLC80OtIyWMg/YNyKyLZelyTEkYa6Z6kYzw+nbKIxEn7qZ
+         EPEKyNQBM7QQkm3L4hhfic9xpioxdOLfYPMvpLbhrSbYRTByyTsq2yvXK/sbbL1HaH
+         gUd/mRMYm4+Zg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 33CDEE737E2;
+        Tue,  7 Jun 2022 13:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        bagasdotme@gmail.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] docs/kselftest: add more guidelines for adding new
- tests
-Content-Language: en-US
-To:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-References: <20220521073651.4191910-1-usama.anjum@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220521073651.4191910-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] selftests net: fix bpf build error
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165460861220.26982.2362920387757777214.git-patchwork-notify@kernel.org>
+Date:   Tue, 07 Jun 2022 13:30:12 +0000
+References: <20220606064517.8175-1-lina.wang@mediatek.com>
+In-Reply-To: <20220606064517.8175-1-lina.wang@mediatek.com>
+To:     Lina Wang <lina.wang@mediatek.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, matthias.bgg@gmail.com, maze@google.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Reminder!
+Hello:
 
-On 5/21/22 12:36 PM, Muhammad Usama Anjum wrote:
-> Improve and add instructions to add new tests. Add build commands to
-> test before sending the new test patch.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> Changes in v2:
-> - Updated commit message
-> - Removed dependence of this patch from other patch
-> - Updated instructions
-> ---
->  Documentation/dev-tools/kselftest.rst | 27 ++++++++++++++++++++++++++-
->  1 file changed, 26 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index a833ecf12fbc1..ee6467ca8293f 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -208,6 +208,14 @@ In general, the rules for selftests are
->  Contributing new tests (details)
->  ================================
->  
-> + * In your Makefile, use facilities from lib.mk by including it instead of
-> +   reinventing the wheel. Specify flags and binaries generation flags on
-> +   need basis before including lib.mk. ::
-> +
-> +    CFLAGS = $(KHDR_INCLUDES)
-> +    TEST_GEN_PROGS := close_range_test
-> +    include ../lib.mk
-> +
->   * Use TEST_GEN_XXX if such binaries or files are generated during
->     compiling.
->  
-> @@ -230,13 +238,30 @@ Contributing new tests (details)
->   * First use the headers inside the kernel source and/or git repo, and then the
->     system headers.  Headers for the kernel release as opposed to headers
->     installed by the distro on the system should be the primary focus to be able
-> -   to find regressions.
-> +   to find regressions. Use KHDR_INCLUDES in Makefile to include headers from
-> +   the kernel source.
->  
->   * If a test needs specific kernel config options enabled, add a config file in
->     the test directory to enable them.
->  
->     e.g: tools/testing/selftests/android/config
->  
-> + * Create a .gitignore file inside test directory and add all generated objects
-> +   in it.
-> +
-> + * Add new test name in TARGETS in selftests/Makefile::
-> +
-> +    TARGETS += android
-> +
-> + * All changes should pass::
-> +
-> +    kselftest-{all,install,clean,gen_tar}
-> +    kselftest-{all,install,clean,gen_tar} O=abo_path
-> +    kselftest-{all,install,clean,gen_tar} O=rel_path
-> +    make -C tools/testing/selftests {all,install,clean,gen_tar}
-> +    make -C tools/testing/selftests {all,install,clean,gen_tar} O=abs_path
-> +    make -C tools/testing/selftests {all,install,clean,gen_tar} O=rel_path
-> +
->  Test Module
->  ===========
->  
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
+On Mon, 6 Jun 2022 14:45:17 +0800 you wrote:
+> bpf_helpers.h has been moved to tools/lib/bpf since 5.10, so add more
+> including path.
+> 
+> Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+> Acked-by: Song Liu <songliubraving@fb.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v3] selftests net: fix bpf build error
+    https://git.kernel.org/netdev/net/c/cf67838c4422
+
+You are awesome, thank you!
 -- 
-Muhammad Usama Anjum
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
