@@ -2,368 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3213542EED
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jun 2022 13:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A88543017
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jun 2022 14:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237556AbiFHLPV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jun 2022 07:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
+        id S239331AbiFHMSz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jun 2022 08:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237679AbiFHLPP (ORCPT
+        with ESMTP id S239303AbiFHMSz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jun 2022 07:15:15 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9FC27B9AE;
-        Wed,  8 Jun 2022 04:15:11 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ4Jb7195z6GD8L;
-        Wed,  8 Jun 2022 19:10:23 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 8 Jun 2022 13:15:08 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kpsingh@kernel.org>
-CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 3/3] selftests/bpf: Add test for bpf_verify_pkcs7_signature() helper
-Date:   Wed, 8 Jun 2022 13:12:21 +0200
-Message-ID: <20220608111221.373833-4-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220608111221.373833-1-roberto.sassu@huawei.com>
-References: <20220608111221.373833-1-roberto.sassu@huawei.com>
+        Wed, 8 Jun 2022 08:18:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3127C3207F2
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Jun 2022 05:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654690731;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6e94wVFgyA3yMZPhP+FJ+85je68iLfycTawkAGztOtg=;
+        b=aQYX7HWTEvHXSvAW92RWYa4sQl7rrzCQkjzmUoQx7hn/Et8EPhDU7jQ+loIT/9nn5IkB2A
+        5qgxFYlv+4D7F/o/XbablId2x/z19+SOv+lmEAn9aNUZCNhl2lPdtkwOlXkV8Fho0LEIEi
+        mDKHoMC8z+urPCYVXIGvoLKJsFFLv0g=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-375-eOAPgqtuPiWGC9NgpaFx0w-1; Wed, 08 Jun 2022 08:18:50 -0400
+X-MC-Unique: eOAPgqtuPiWGC9NgpaFx0w-1
+Received: by mail-wm1-f71.google.com with SMTP id k15-20020a7bc40f000000b0039c4b7f7d09so4088987wmi.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jun 2022 05:18:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6e94wVFgyA3yMZPhP+FJ+85je68iLfycTawkAGztOtg=;
+        b=SknOBD/h+bIQ/WwgzkgrCeAaIzxZ5P/wJVp63+ct0QIJK01mMLGmGwnzSb28INh9Nj
+         2YnBXyyciSCgvm8kGwFHM5JUKILVg+N47r0+nVkAMYtJY6ZJnp7xXv6zBVW0eWwkZ7s2
+         pwqIsFQycYQAV2sDupJp5lV/eigtnJ0PXpUHOcqNuPXB9O1tHeIyynYbTe/ma4W9dTeJ
+         Yw7beaYqyZDYx+NHUo8wj4EQuBhYQgxCQSsKEhAsgtIUWa1foCXTqDEgHTBqCO732RJl
+         0IWRAc8zhh043YY+X1RIhWWNhn5s8GpQQXe4UBF7iDFnRGqa6EN+HlS8WcwS6F3HwDeo
+         VYgQ==
+X-Gm-Message-State: AOAM530zB6E7+b+pjWnYaxRes1pcxuhRxVMuwanugTO45Q5rQxSGB45v
+        zSJd39YDc8PlpNnpWEksQ5M9fEyAcKp6kDg9K2D1YbsyCuagYhkNE3YmJT1bvXMkkuK66yhPKr4
+        zWaJ2NrAd2iDsAeRSfc3C+xNBcdt+
+X-Received: by 2002:a05:600c:4e8b:b0:39c:35da:c196 with SMTP id f11-20020a05600c4e8b00b0039c35dac196mr31236067wmq.200.1654690728853;
+        Wed, 08 Jun 2022 05:18:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzKUxTQwltHZUhBCsdirrX5JANqio6gOoNAJeUeNfmkGtUsUbNdzy4rsk8+LhAjlPx9DVh8qw==
+X-Received: by 2002:a05:600c:4e8b:b0:39c:35da:c196 with SMTP id f11-20020a05600c4e8b00b0039c35dac196mr31236048wmq.200.1654690728527;
+        Wed, 08 Jun 2022 05:18:48 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i13-20020a05600c354d00b0039c60e33702sm2706173wmq.16.2022.06.08.05.18.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 05:18:48 -0700 (PDT)
+Message-ID: <7758b6ff-5c20-0c11-dc2f-dceb5e8e3799@redhat.com>
+Date:   Wed, 8 Jun 2022 14:18:47 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 0/4] fat: add support for the renameat2 RENAME_EXCHANGE
+ flag
+Content-Language: en-US
+To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+Cc:     Lennart Poettering <lennart@poettering.net>,
+        linux-kernel@vger.kernel.org, Colin Walters <walters@verbum.org>,
+        Peter Jones <pjones@redhat.com>,
+        Alberto Ruiz <aruiz@redhat.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Chung-Chiang Cheng <cccheng@synology.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Larsson <alexl@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+References: <20220601173204.1372569-1-javierm@redhat.com>
+ <05bfb010-6b00-edb1-0e28-889a2ff71503@redhat.com>
+ <87ilpbtrsm.fsf@mail.parknet.co.jp>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <87ilpbtrsm.fsf@mail.parknet.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ensure that signature verification is performed successfully from an eBPF
-program, with the new bpf_verify_pkcs7_signature() helper.
+On 6/8/22 11:42, OGAWA Hirofumi wrote:
+> Javier Martinez Canillas <javierm@redhat.com> writes:
+> 
+>> Hello OGAWA,
+>>
+>> On 6/1/22 19:32, Javier Martinez Canillas wrote:
+>>> Hello,
+>>>
+>>> The series adds support for the renameat2 system call RENAME_EXCHANGE flag
+>>> (which allows to atomically replace two paths) to the vfat filesystem code.
+>>>
+>>> There are many use cases for this, but we are particularly interested in
+>>> making possible for vfat filesystems to be part of OSTree [0] deployments.
+>>>
+>>> Currently OSTree relies on symbolic links to make the deployment updates
+>>> an atomic transactional operation. But RENAME_EXCHANGE could be used [1]
+>>> to achieve a similar level of robustness when using a vfat filesystem.
+>>>
+>>> Patch #1 is just a preparatory patch to introduce the RENAME_EXCHANGE
+>>> support, patch #2 moves some code blocks in vfat_rename() to a set of
+>>> helper functions, that can be reused by tvfat_rename_exchange() that's
+>>> added by patch #3 and finally patch #4 adds some kselftests to test it.
+>>>
+>>
+>> I think that addressed all the issues you pointed out in v3, please let me
+>> know if there's anything else that is needed for this patch series.
+>>
+>> Would these be merged by you or should I ping someone else? I'm not
+>> that familiar with how filesystem patches make into the mainline tree.
+> 
+> Sorry, it is just the my issue. I was traveling latest week, so is not
+> reviewing yet. I'll do soon.
+> 
 
-The test requires access to the kernel modules signing key and the
-execution of the sign-file tool with the signing key path passed as
-argument.
+Sure, there's no rush. I just wanted to confirm that. Thanks a lot!
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- tools/testing/selftests/bpf/config            |   2 +
- .../bpf/prog_tests/verify_pkcs7_sig.c         | 149 ++++++++++++++++++
- .../bpf/progs/test_verify_pkcs7_sig.c         | 127 +++++++++++++++
- 3 files changed, 278 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 3b3edc0fc8a6..43f92ce5f3f3 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -57,3 +57,5 @@ CONFIG_FPROBE=y
- CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
- CONFIG_MPTCP=y
-+CONFIG_MODULE_SIG_FORMAT=y
-+CONFIG_SECONDARY_TRUSTED_KEYRING=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-new file mode 100644
-index 000000000000..3c85b8cd13d4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-@@ -0,0 +1,149 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include <stdio.h>
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <endian.h>
-+#include <sys/stat.h>
-+#include <sys/wait.h>
-+#include <test_progs.h>
-+
-+#include "test_verify_pkcs7_sig.skel.h"
-+
-+#define MAX_DATA_SIZE 4096
-+
-+struct data {
-+	u8 payload[MAX_DATA_SIZE];
-+};
-+
-+static int populate_data_item(struct data *data_item)
-+{
-+	struct stat st;
-+	char signed_file_template[] = "/tmp/signed_fileXXXXXX";
-+	int ret, fd, child_status, child_pid;
-+
-+	fd = mkstemp(signed_file_template);
-+	if (fd == -1)
-+		return -errno;
-+
-+	ret = write(fd, "test", 4);
-+
-+	close(fd);
-+
-+	if (ret != 4) {
-+		ret = -EIO;
-+		goto out;
-+	}
-+
-+	child_pid = fork();
-+
-+	if (child_pid == -1) {
-+		ret = -errno;
-+		goto out;
-+	}
-+
-+	if (child_pid == 0)
-+		return execlp(env.sign_file_path, env.sign_file_path, "sha256",
-+			      env.kernel_priv_cert_path,
-+			      env.kernel_priv_cert_path,
-+			      signed_file_template, NULL);
-+
-+	waitpid(child_pid, &child_status, 0);
-+
-+	ret = WEXITSTATUS(child_status);
-+	if (ret)
-+		goto out;
-+
-+	ret = stat(signed_file_template, &st);
-+	if (ret == -1) {
-+		ret = -errno;
-+		goto out;
-+	}
-+
-+	if (st.st_size > sizeof(data_item->payload) - sizeof(u32)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	*(u32 *)data_item->payload = __cpu_to_be32(st.st_size);
-+
-+	fd = open(signed_file_template, O_RDONLY);
-+	if (fd == -1) {
-+		ret = -errno;
-+		goto out;
-+	}
-+
-+	ret = read(fd, data_item->payload + sizeof(u32), st.st_size);
-+
-+	close(fd);
-+
-+	if (ret != st.st_size) {
-+		ret = -EIO;
-+		goto out;
-+	}
-+
-+	ret = 0;
-+out:
-+	unlink(signed_file_template);
-+	return ret;
-+}
-+
-+void test_verify_pkcs7_sig(void)
-+{
-+	struct test_verify_pkcs7_sig *skel = NULL;
-+	struct bpf_map *map;
-+	struct data data;
-+	u32 saved_len;
-+	int ret, zero = 0;
-+
-+	if (!env.sign_file_path || !env.kernel_priv_cert_path) {
-+		printf(
-+		  "%s:SKIP:sign-file and kernel priv key cert paths missing\n",
-+		  __func__);
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_verify_pkcs7_sig__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_verify_pkcs7_sig__open_and_load"))
-+		goto close_prog;
-+
-+	ret = test_verify_pkcs7_sig__attach(skel);
-+	if (!ASSERT_OK(ret, "test_verify_pkcs7_sig__attach\n"))
-+		goto close_prog;
-+
-+	map = bpf_object__find_map_by_name(skel->obj, "data_input");
-+	if (!ASSERT_OK_PTR(map, "data_input not found"))
-+		goto close_prog;
-+
-+	ret = populate_data_item(&data);
-+	if (!ASSERT_OK(ret, "populate_data_item\n"))
-+		goto close_prog;
-+
-+	skel->bss->monitored_pid = getpid();
-+
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &data, BPF_ANY);
-+	if (!ASSERT_OK(ret, "bpf_map_update_elem\n"))
-+		goto close_prog;
-+
-+	saved_len = *(__u32 *)data.payload;
-+	*(__u32 *)data.payload = sizeof(data.payload);
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &data, BPF_ANY);
-+	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem data_input\n"))
-+		goto close_prog;
-+
-+	*(__u32 *)data.payload = saved_len;
-+	data.payload[sizeof(__u32)] = 'a';
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &data, BPF_ANY);
-+	ASSERT_LT(ret, 0, "bpf_map_update_elem data_input\n");
-+close_prog:
-+	skel->bss->monitored_pid = 0;
-+	test_verify_pkcs7_sig__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-new file mode 100644
-index 000000000000..e72bcb7fb7a9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-@@ -0,0 +1,127 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_endian.h>
-+
-+#define MAX_DATA_SIZE 4096
-+
-+#ifdef __BIG_ENDIAN__
-+#define be32_to_cpu(x) (x)
-+#else
-+#define be32_to_cpu(x) ___bpf_swab32(x)
-+#endif
-+
-+#define VERIFY_USE_SECONDARY_KEYRING (1UL)
-+
-+/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
-+#define MODULE_SIG_STRING "~Module signature appended~\n"
-+
-+u32 monitored_pid;
-+
-+struct data {
-+	u8 payload[MAX_DATA_SIZE];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct data);
-+} data_input SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+static int mod_check_sig(const struct module_signature *ms, size_t file_len)
-+{
-+	if (!ms)
-+		return -ENOENT;
-+
-+	if (be32_to_cpu(ms->sig_len) >= file_len - sizeof(*ms))
-+		return -EBADMSG;
-+
-+	if (ms->id_type != PKEY_ID_PKCS7)
-+		return -ENOPKG;
-+
-+	if (ms->algo != 0 ||
-+	    ms->hash != 0 ||
-+	    ms->signer_len != 0 ||
-+	    ms->key_id_len != 0 ||
-+	    ms->__pad[0] != 0 ||
-+	    ms->__pad[1] != 0 ||
-+	    ms->__pad[2] != 0)
-+		return -EBADMSG;
-+
-+	return 0;
-+}
-+
-+SEC("lsm.s/bpf")
-+int BPF_PROG(bpf, int cmd, union bpf_attr *attr, unsigned int size)
-+{
-+	const size_t marker_len = sizeof(MODULE_SIG_STRING) - 1;
-+	char marker[sizeof(MODULE_SIG_STRING) - 1];
-+	struct module_signature ms;
-+	struct data *data_ptr;
-+	u32 modlen;
-+	u32 sig_len;
-+	u64 value;
-+	u8 *mod;
-+	u32 pid;
-+	int ret, zero = 0;
-+
-+	pid = bpf_get_current_pid_tgid() >> 32;
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	data_ptr = bpf_map_lookup_elem(&data_input, &zero);
-+	if (!data_ptr)
-+		return 0;
-+
-+	bpf_probe_read(&value, sizeof(value), &attr->value);
-+
-+	bpf_copy_from_user(data_ptr, sizeof(struct data),
-+			   (void *)(unsigned long)value);
-+
-+	modlen = be32_to_cpu(*(u32 *)data_ptr->payload);
-+	mod = data_ptr->payload + sizeof(u32);
-+
-+	if (modlen > sizeof(struct data) - sizeof(u32))
-+		return -EINVAL;
-+
-+	if (modlen <= marker_len)
-+		return -ENOENT;
-+
-+	modlen &= sizeof(struct data) - 1;
-+	bpf_probe_read(marker, marker_len, (char *)mod + modlen - marker_len);
-+
-+	if (bpf_strncmp(marker, marker_len, MODULE_SIG_STRING))
-+		return -ENOENT;
-+
-+	modlen -= marker_len;
-+
-+	if (modlen <= sizeof(ms))
-+		return -EBADMSG;
-+
-+	bpf_probe_read(&ms, sizeof(ms), (char *)mod + (modlen - sizeof(ms)));
-+
-+	ret = mod_check_sig(&ms, modlen);
-+	if (ret)
-+		return ret;
-+
-+	sig_len = be32_to_cpu(ms.sig_len);
-+	modlen -= sig_len + sizeof(ms);
-+
-+	modlen &= 0x3ff;
-+	sig_len &= 0x3ff;
-+
-+	return bpf_verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
-+					  VERIFY_USE_SECONDARY_KEYRING);
-+}
 -- 
-2.25.1
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
