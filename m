@@ -2,129 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C4F54360E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jun 2022 17:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2925543704
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jun 2022 17:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243032AbiFHPGN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jun 2022 11:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S243782AbiFHPPU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jun 2022 11:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242504AbiFHPFc (ORCPT
+        with ESMTP id S244531AbiFHPOk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jun 2022 11:05:32 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5173826B96B;
-        Wed,  8 Jun 2022 07:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654700253; x=1686236253;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vabkUfz2r5crtrIrJqk2A20R0OQx7I0ukNGf+NHVR10=;
-  b=Uqh6wab9Ud1bgRlPBUeeVRCWsKzFyQoenBrbzHpT/tqGlTxEb50VXH5E
-   4ChG/dmZkRrNE/Z2Pv5nhiwPCQswMfoSt8/nPyexC+ciPcUK4JyNhn99+
-   VhbRWgStb2moKesatl/QnWX5cGKVL3H8Y7GjIrImldmHHSAw7eJ+8OfhP
-   3NiQ4Ft2WqoKfkueCAutmYAAYpaUwJskwcNHa5ckTtGiggt9dl6Ohav94
-   ZoEfV04Qqc1+dCp63JwYEg3JaZnHtfccCR1+EUry/aZOL+YFZEjSrvoeh
-   UmfMcAXuVcc0z7IO/beu1tef4q6rWoDOs8sfDHQKCtPj5bg6wZNrERWvY
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="363250872"
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="363250872"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 07:49:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,286,1647327600"; 
-   d="scan'208";a="580090504"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Jun 2022 07:49:35 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nyx03-000EiI-8k;
-        Wed, 08 Jun 2022 14:49:35 +0000
-Date:   Wed, 8 Jun 2022 22:48:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org
-Cc:     kbuild-all@lists.01.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
-Message-ID: <202206082219.09oAvCwe-lkp@intel.com>
-References: <20220608111221.373833-2-roberto.sassu@huawei.com>
+        Wed, 8 Jun 2022 11:14:40 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC6E60D8A;
+        Wed,  8 Jun 2022 08:09:23 -0700 (PDT)
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ9XF0F5Lz67KyY;
+        Wed,  8 Jun 2022 23:05:49 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 8 Jun 2022 17:09:21 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 8 Jun 2022 17:09:21 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>
+Subject: RE: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
+Thread-Topic: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
+Thread-Index: AQHYeykC4IUHTOQmMkOl9JmoHUWP061FdE4AgAAm6EA=
+Date:   Wed, 8 Jun 2022 15:09:21 +0000
+Message-ID: <2eb67f81576e40cbb4dbf2f7895d5446@huawei.com>
+References: <20220608111221.373833-1-roberto.sassu@huawei.com>
+ <20220608111221.373833-2-roberto.sassu@huawei.com>
+ <1456514b-ec2e-6a79-438a-33ad1ffc509d@iogearbox.net>
+In-Reply-To: <1456514b-ec2e-6a79-438a-33ad1ffc509d@iogearbox.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.21]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608111221.373833-2-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Roberto,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on bpf/master]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Roberto-Sassu/bpf-Add-bpf_verify_pkcs7_signature-helper/20220608-192110
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220608/202206082219.09oAvCwe-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/223914a2278b692d4120315d2fc7a29e3b89512a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Roberto-Sassu/bpf-Add-bpf_verify_pkcs7_signature-helper/20220608-192110
-        git checkout 223914a2278b692d4120315d2fc7a29e3b89512a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/bpf/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   kernel/bpf/bpf_lsm.c: In function '____bpf_verify_pkcs7_signature':
->> kernel/bpf/bpf_lsm.c:146:38: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     146 |                                      (struct key *)keyring,
-         |                                      ^
-
-
-vim +146 kernel/bpf/bpf_lsm.c
-
-   135	
-   136	BPF_CALL_5(bpf_verify_pkcs7_signature, u8 *, data, u32, datalen, u8 *, sig,
-   137		   u32, siglen, u64, keyring)
-   138	{
-   139		int ret = -EOPNOTSUPP;
-   140	
-   141	#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-   142		if (keyring > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
-   143			return -EINVAL;
-   144	
-   145		ret = verify_pkcs7_signature(data, datalen, sig, siglen,
- > 146					     (struct key *)keyring,
-   147					     VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-   148					     NULL);
-   149	#endif
-   150		return ret;
-   151	}
-   152	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+PiBGcm9tOiBEYW5pZWwgQm9ya21hbm4gW21haWx0bzpkYW5pZWxAaW9nZWFyYm94Lm5ldF0NCj4g
+U2VudDogV2VkbmVzZGF5LCBKdW5lIDgsIDIwMjIgNDo0MyBQTQ0KPiBPbiA2LzgvMjIgMToxMiBQ
+TSwgUm9iZXJ0byBTYXNzdSB3cm90ZToNCj4gPiBBZGQgdGhlIGJwZl92ZXJpZnlfcGtjczdfc2ln
+bmF0dXJlKCkgaGVscGVyLCB0byBnaXZlIHRoZSBhYmlsaXR5IHRvIGVCUEYNCj4gPiBzZWN1cml0
+eSBtb2R1bGVzIHRvIGNoZWNrIHRoZSB2YWxpZGl0eSBvZiBhIFBLQ1MjNyBzaWduYXR1cmUgYWdh
+aW5zdA0KPiA+IHN1cHBsaWVkIGRhdGEuDQo+ID4NCj4gPiBVc2UgdGhlICdrZXlyaW5nJyBwYXJh
+bWV0ZXIgdG8gc2VsZWN0IHRoZSBrZXlyaW5nIGNvbnRhaW5pbmcgdGhlDQo+ID4gdmVyaWZpY2F0
+aW9uIGtleTogMCBmb3IgdGhlIHByaW1hcnkga2V5cmluZywgMSBmb3IgdGhlIHByaW1hcnkgYW5k
+DQo+ID4gc2Vjb25kYXJ5IGtleXJpbmdzLCAyIGZvciB0aGUgcGxhdGZvcm0ga2V5cmluZy4NCj4g
+Pg0KPiA+IFNpZ25lZC1vZmYtYnk6IFJvYmVydG8gU2Fzc3UgPHJvYmVydG8uc2Fzc3VAaHVhd2Vp
+LmNvbT4NCj4gPiAtLS0NCj4gPiAgIGluY2x1ZGUvdWFwaS9saW51eC9icGYuaCAgICAgICB8ICA4
+ICsrKysrKysrDQo+ID4gICBrZXJuZWwvYnBmL2JwZl9sc20uYyAgICAgICAgICAgfCAzMiArKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ICAgdG9vbHMvaW5jbHVkZS91YXBpL2xp
+bnV4L2JwZi5oIHwgIDggKysrKysrKysNCj4gPiAgIDMgZmlsZXMgY2hhbmdlZCwgNDggaW5zZXJ0
+aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvdWFwaS9saW51eC9icGYuaCBi
+L2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPiA+IGluZGV4IGY0MDA5ZGJkZjYyZC4uNDBkMGZj
+MGQ5NDkzIDEwMDY0NA0KPiA+IC0tLSBhL2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPiA+ICsr
+KyBiL2luY2x1ZGUvdWFwaS9saW51eC9icGYuaA0KPiA+IEBAIC01MjQ5LDYgKzUyNDksMTMgQEAg
+dW5pb24gYnBmX2F0dHIgew0KPiA+ICAgICoJCVBvaW50ZXIgdG8gdGhlIHVuZGVybHlpbmcgZHlu
+cHRyIGRhdGEsIE5VTEwgaWYgdGhlIGR5bnB0ciBpcw0KPiA+ICAgICoJCXJlYWQtb25seSwgaWYg
+dGhlIGR5bnB0ciBpcyBpbnZhbGlkLCBvciBpZiB0aGUgb2Zmc2V0IGFuZCBsZW5ndGgNCj4gPiAg
+ICAqCQlpcyBvdXQgb2YgYm91bmRzLg0KPiA+ICsgKg0KPiA+ICsgKiBsb25nIGJwZl92ZXJpZnlf
+cGtjczdfc2lnbmF0dXJlKHU4ICpkYXRhLCB1MzIgZGF0YWxlbiwgdTggKnNpZywgdTMyIHNpZ2xl
+biwNCj4gdTY0IGtleXJpbmcpDQo+ID4gKyAqCURlc2NyaXB0aW9uDQo+ID4gKyAqCQlWZXJpZnkg
+dGhlIFBLQ1MjNyAqc2lnKiB3aXRoIGxlbmd0aCAqc2lnbGVuKiwgb24gKmRhdGEqIHdpdGgNCj4g
+PiArICoJCWxlbmd0aCAqZGF0YWxlbiosIHdpdGgga2V5IGluICprZXlyaW5nKi4NCj4gDQo+IENv
+dWxkIHlvdSBhbHNvIGFkZCBhIGRlc2NyaXB0aW9uIGZvciB1c2VycyBhYm91dCB0aGUga2V5cmlu
+ZyBhcmd1bWVudCBhbmQNCj4gZ3VpZGFuY2Ugb24gd2hlbg0KPiB0aGV5IHNob3VsZCB1c2Ugd2hp
+Y2ggaW4gdGhlaXIgcHJvZ3JhbXM/IEFib3ZlIGlzIGEgYml0IHRvbyB0ZXJzZSwgaW1oby4JDQoN
+CkhpIERhbmllbA0KDQpzdXJlLCB3aWxsIGRvLg0KDQo+ID4gKyAqCVJldHVybg0KPiA+ICsgKgkJ
+MCBvbiBzdWNjZXNzLCBhIG5lZ2F0aXZlIHZhbHVlIG9uIGVycm9yLg0KPiA+ICAgICovDQo+ID4g
+ICAjZGVmaW5lIF9fQlBGX0ZVTkNfTUFQUEVSKEZOKQkJXA0KPiA+ICAgCUZOKHVuc3BlYyksCQkJ
+XA0KPiA+IEBAIC01NDU1LDYgKzU0NjIsNyBAQCB1bmlvbiBicGZfYXR0ciB7DQo+ID4gICAJRk4o
+ZHlucHRyX3JlYWQpLAkJXA0KPiA+ICAgCUZOKGR5bnB0cl93cml0ZSksCQlcDQo+ID4gICAJRk4o
+ZHlucHRyX2RhdGEpLAkJXA0KPiA+ICsJRk4odmVyaWZ5X3BrY3M3X3NpZ25hdHVyZSksCVwNCj4g
+PiAgIAkvKiAqLw0KPiA+DQo+ID4gICAvKiBpbnRlZ2VyIHZhbHVlIGluICdpbW0nIGZpZWxkIG9m
+IEJQRl9DQUxMIGluc3RydWN0aW9uIHNlbGVjdHMgd2hpY2ggaGVscGVyDQo+ID4gZGlmZiAtLWdp
+dCBhL2tlcm5lbC9icGYvYnBmX2xzbS5jIGIva2VybmVsL2JwZi9icGZfbHNtLmMNCj4gPiBpbmRl
+eCBjMTM1MWRmOWY3ZWUuLjFjZGE0M2NiNTQxYSAxMDA2NDQNCj4gPiAtLS0gYS9rZXJuZWwvYnBm
+L2JwZl9sc20uYw0KPiA+ICsrKyBiL2tlcm5lbC9icGYvYnBmX2xzbS5jDQo+ID4gQEAgLTE2LDYg
+KzE2LDcgQEANCj4gPiAgICNpbmNsdWRlIDxsaW51eC9icGZfbG9jYWxfc3RvcmFnZS5oPg0KPiA+
+ICAgI2luY2x1ZGUgPGxpbnV4L2J0Zl9pZHMuaD4NCj4gPiAgICNpbmNsdWRlIDxsaW51eC9pbWEu
+aD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L3ZlcmlmaWNhdGlvbi5oPg0KPiA+DQo+ID4gICAvKiBG
+b3IgZXZlcnkgTFNNIGhvb2sgdGhhdCBhbGxvd3MgYXR0YWNobWVudCBvZiBCUEYgcHJvZ3JhbXMs
+IGRlY2xhcmUgYQ0KPiBub3ANCj4gPiAgICAqIGZ1bmN0aW9uIHdoZXJlIGEgQlBGIHByb2dyYW0g
+Y2FuIGJlIGF0dGFjaGVkLg0KPiA+IEBAIC0xMzIsNiArMTMzLDM1IEBAIHN0YXRpYyBjb25zdCBz
+dHJ1Y3QgYnBmX2Z1bmNfcHJvdG8NCj4gYnBmX2dldF9hdHRhY2hfY29va2llX3Byb3RvID0gew0K
+PiA+ICAgCS5hcmcxX3R5cGUJPSBBUkdfUFRSX1RPX0NUWCwNCj4gPiAgIH07DQo+ID4NCj4gPiAr
+QlBGX0NBTExfNShicGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZSwgdTggKiwgZGF0YSwgdTMyLCBk
+YXRhbGVuLCB1OCAqLCBzaWcsDQo+ID4gKwkgICB1MzIsIHNpZ2xlbiwgdTY0LCBrZXlyaW5nKQ0K
+PiA+ICt7DQo+ID4gKwlpbnQgcmV0ID0gLUVPUE5PVFNVUFA7DQo+ID4gKw0KPiA+ICsjaWZkZWYg
+Q09ORklHX1NZU1RFTV9EQVRBX1ZFUklGSUNBVElPTg0KPiA+ICsJaWYgKGtleXJpbmcgPiAodW5z
+aWduZWQgbG9uZylWRVJJRllfVVNFX1BMQVRGT1JNX0tFWVJJTkcpDQo+ID4gKwkJcmV0dXJuIC1F
+SU5WQUw7DQo+ID4gKw0KPiA+ICsJcmV0ID0gdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZShkYXRhLCBk
+YXRhbGVuLCBzaWcsIHNpZ2xlbiwNCj4gPiArCQkJCSAgICAgKHN0cnVjdCBrZXkgKilrZXlyaW5n
+LA0KPiA+ICsJCQkJICAgICBWRVJJRllJTkdfVU5TUEVDSUZJRURfU0lHTkFUVVJFLA0KPiBOVUxM
+LA0KPiA+ICsJCQkJICAgICBOVUxMKTsNCj4gPiArI2VuZGlmDQo+ID4gKwlyZXR1cm4gcmV0Ow0K
+PiA+ICt9DQo+IA0KPiBMb29rcyBncmVhdCEgT25lIHNtYWxsIG5pdCwgSSB3b3VsZCBtb3ZlIGFs
+bCBvZiB0aGUgQlBGX0NBTEwgYW5kIF9wcm90byB1bmRlcg0KPiB0aGUNCj4gI2lmZGVmIENPTkZJ
+R19TWVNURU1fREFUQV9WRVJJRklDQVRJT04gLi4uDQoNCk9rLg0KDQo+ID4gK3N0YXRpYyBjb25z
+dCBzdHJ1Y3QgYnBmX2Z1bmNfcHJvdG8gYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1cmVfcHJvdG8g
+PSB7DQo+ID4gKwkuZnVuYwkJPSBicGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZSwNCj4gPiArCS5n
+cGxfb25seQk9IGZhbHNlLA0KPiA+ICsJLnJldF90eXBlCT0gUkVUX0lOVEVHRVIsDQo+ID4gKwku
+YXJnMV90eXBlCT0gQVJHX1BUUl9UT19NRU0sDQo+ID4gKwkuYXJnMl90eXBlCT0gQVJHX0NPTlNU
+X1NJWkVfT1JfWkVSTywNCj4gPiArCS5hcmczX3R5cGUJPSBBUkdfUFRSX1RPX01FTSwNCj4gPiAr
+CS5hcmc0X3R5cGUJPSBBUkdfQ09OU1RfU0laRV9PUl9aRVJPLA0KPiA+ICsJLmFyZzVfdHlwZQk9
+IEFSR19BTllUSElORywNCj4gPiArCS5hbGxvd2VkCT0gYnBmX2ltYV9pbm9kZV9oYXNoX2FsbG93
+ZWQsDQo+ID4gK307DQo+ID4gKw0KPiA+ICAgc3RhdGljIGNvbnN0IHN0cnVjdCBicGZfZnVuY19w
+cm90byAqDQo+ID4gICBicGZfbHNtX2Z1bmNfcHJvdG8oZW51bSBicGZfZnVuY19pZCBmdW5jX2lk
+LCBjb25zdCBzdHJ1Y3QgYnBmX3Byb2cgKnByb2cpDQo+ID4gICB7DQo+ID4gQEAgLTE1OCw2ICsx
+ODgsOCBAQCBicGZfbHNtX2Z1bmNfcHJvdG8oZW51bSBicGZfZnVuY19pZCBmdW5jX2lkLCBjb25z
+dA0KPiBzdHJ1Y3QgYnBmX3Byb2cgKnByb2cpDQo+ID4gICAJCXJldHVybiBwcm9nLT5hdXgtPnNs
+ZWVwYWJsZSA/ICZicGZfaW1hX2ZpbGVfaGFzaF9wcm90byA6DQo+IE5VTEw7DQo+ID4gICAJY2Fz
+ZSBCUEZfRlVOQ19nZXRfYXR0YWNoX2Nvb2tpZToNCj4gPiAgIAkJcmV0dXJuIGJwZl9wcm9nX2hh
+c190cmFtcG9saW5lKHByb2cpID8NCj4gJmJwZl9nZXRfYXR0YWNoX2Nvb2tpZV9wcm90byA6IE5V
+TEw7DQo+ID4gKwljYXNlIEJQRl9GVU5DX3ZlcmlmeV9wa2NzN19zaWduYXR1cmU6DQo+ID4gKwkJ
+cmV0dXJuIHByb2ctPmF1eC0+c2xlZXBhYmxlID8NCj4gJmJwZl92ZXJpZnlfcGtjczdfc2lnbmF0
+dXJlX3Byb3RvIDogTlVMTDsNCj4gDQo+IC4uLiBzYW1lIGhlcmU6DQo+IA0KPiAjaWZkZWYgQ09O
+RklHX1NZU1RFTV9EQVRBX1ZFUklGSUNBVElPTg0KPiAJY2FzZSBCUEZfRlVOQ192ZXJpZnlfcGtj
+czdfc2lnbmF0dXJlOg0KPiAJCXJldHVybiBwcm9nLT5hdXgtPnNsZWVwYWJsZSA/DQo+ICZicGZf
+dmVyaWZ5X3BrY3M3X3NpZ25hdHVyZV9wcm90byA6IE5VTEw7DQo+ICNlbmRpZg0KPiANCj4gU28g
+dGhhdCBicGZ0b29sIG9yIG90aGVyIGZlYXR1cmUgcHJvYmVzIGNhbiBjaGVjayBmb3IgaXRzIGF2
+YWlsYWJpbGl0eS4gT3RoZXJ3aXNlLA0KPiBhcHBzIGhhdmUNCj4gYSBoYXJkIHRpbWUgY2hlY2tp
+bmcgd2hldGhlciBicGZfdmVyaWZ5X3BrY3M3X3NpZ25hdHVyZSgpIGhlbHBlciBpcyBhdmFpbGFi
+bGUNCj4gZm9yIHVzZSBvciBub3QuDQoNCk9rLg0KDQpJJ20gY3VycmVudGx5IGZpeGluZyB0aGUg
+dGVzdC4gVGhlIGNoYWxsZW5nZSBpcyB0aGF0IHRoZSBtb2R1bGVfc2lnbmF0dXJlDQpzdHJ1Y3R1
+cmUgbWlnaHQgbm90IGJlIGRlZmluZWQuIFRoZSB3YXkgSSBmb3VuZCB0byBmaXggaXQgaXMgdG8g
+aW5jbHVkZQ0Kc3RkbGliLmggYW5kIGxpbnV4L2JwZi5oIGluc3RlYWQgb2Ygdm1saW51eC5oLCBh
+bmQgYWx3YXlzIGRlZmluZSB0aGUNCnN0cnVjdHVyZS4NCg0KV2lsbCBhbHNvIHNraXAgdGhlIHRl
+c3QgaWYgQ09ORklHX01PRFVMRV9TSUcgaXMgbm90IGRlZmluZWQuDQoNCkFib3V0IHRoZSBDSSwg
+SSBub3RpY2VkIHRoYXQgdGhlIGtlcm5lbCBjb25maWd1cmF0aW9uIGZpbGUgaXMgaW4gdGhlIHRy
+YXZpcw0KZGlyZWN0b3J5LiBJIG1vZGlmaWVkIHRvb2xzL3NlbGZ0ZXN0cy9icGYvY29uZmlnIHRv
+IHVwZGF0ZSB0aGUgZGVwZW5kZW5jaWVzDQpmb3IgdGhlIG5ldyBoZWxwZXIuDQoNCk1heWJlIHdl
+IHNob3VsZCBtZXJnZSBib3RoIGNvbmZpZ3MgYXQgdGhlIHRpbWUgdGhlIGtlcm5lbCBpcyBidWls
+dD8NCg0KVGhhbmtzDQoNClJvYmVydG8NCg0KSFVBV0VJIFRFQ0hOT0xPR0lFUyBEdWVzc2VsZG9y
+ZiBHbWJILCBIUkIgNTYwNjMNCk1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBZYW5nIFhpLCBM
+aSBIZQ0KDQo+ID4gICAJZGVmYXVsdDoNCj4gPiAgIAkJcmV0dXJuIHRyYWNpbmdfcHJvZ19mdW5j
+X3Byb3RvKGZ1bmNfaWQsIHByb2cpOw0KPiA+ICAgCX0NCj4gPiBkaWZmIC0tZ2l0IGEvdG9vbHMv
+aW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oIGIvdG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5o
+DQo+ID4gaW5kZXggZjQwMDlkYmRmNjJkLi40MGQwZmMwZDk0OTMgMTAwNjQ0DQo+ID4gLS0tIGEv
+dG9vbHMvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oDQo+ID4gKysrIGIvdG9vbHMvaW5jbHVkZS91
+YXBpL2xpbnV4L2JwZi5oDQo+ID4gQEAgLTUyNDksNiArNTI0OSwxMyBAQCB1bmlvbiBicGZfYXR0
+ciB7DQo+ID4gICAgKgkJUG9pbnRlciB0byB0aGUgdW5kZXJseWluZyBkeW5wdHIgZGF0YSwgTlVM
+TCBpZiB0aGUgZHlucHRyIGlzDQo+ID4gICAgKgkJcmVhZC1vbmx5LCBpZiB0aGUgZHlucHRyIGlz
+IGludmFsaWQsIG9yIGlmIHRoZSBvZmZzZXQgYW5kIGxlbmd0aA0KPiA+ICAgICoJCWlzIG91dCBv
+ZiBib3VuZHMuDQo+ID4gKyAqDQo+ID4gKyAqIGxvbmcgYnBmX3ZlcmlmeV9wa2NzN19zaWduYXR1
+cmUodTggKmRhdGEsIHUzMiBkYXRhbGVuLCB1OCAqc2lnLCB1MzIgc2lnbGVuLA0KPiB1NjQga2V5
+cmluZykNCj4gPiArICoJRGVzY3JpcHRpb24NCj4gPiArICoJCVZlcmlmeSB0aGUgUEtDUyM3ICpz
+aWcqIHdpdGggbGVuZ3RoICpzaWdsZW4qLCBvbiAqZGF0YSogd2l0aA0KPiA+ICsgKgkJbGVuZ3Ro
+ICpkYXRhbGVuKiwgd2l0aCBrZXkgaW4gKmtleXJpbmcqLg0KPiA+ICsgKglSZXR1cm4NCj4gPiAr
+ICoJCTAgb24gc3VjY2VzcywgYSBuZWdhdGl2ZSB2YWx1ZSBvbiBlcnJvci4NCj4gPiAgICAqLw0K
+PiA+ICAgI2RlZmluZSBfX0JQRl9GVU5DX01BUFBFUihGTikJCVwNCj4gPiAgIAlGTih1bnNwZWMp
+LAkJCVwNCj4gPiBAQCAtNTQ1NSw2ICs1NDYyLDcgQEAgdW5pb24gYnBmX2F0dHIgew0KPiA+ICAg
+CUZOKGR5bnB0cl9yZWFkKSwJCVwNCj4gPiAgIAlGTihkeW5wdHJfd3JpdGUpLAkJXA0KPiA+ICAg
+CUZOKGR5bnB0cl9kYXRhKSwJCVwNCj4gPiArCUZOKHZlcmlmeV9wa2NzN19zaWduYXR1cmUpLAlc
+DQo+ID4gICAJLyogKi8NCj4gPg0KPiA+ICAgLyogaW50ZWdlciB2YWx1ZSBpbiAnaW1tJyBmaWVs
+ZCBvZiBCUEZfQ0FMTCBpbnN0cnVjdGlvbiBzZWxlY3RzIHdoaWNoIGhlbHBlcg0KPiA+DQoNCg==
