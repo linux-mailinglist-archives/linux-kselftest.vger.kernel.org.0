@@ -2,221 +2,200 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFCE5431F5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jun 2022 15:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BAD5432E9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jun 2022 16:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240825AbiFHNy2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jun 2022 09:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        id S241879AbiFHOor (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jun 2022 10:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240570AbiFHNy1 (ORCPT
+        with ESMTP id S241911AbiFHOoZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jun 2022 09:54:27 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C52FA5010
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Jun 2022 06:54:25 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id i39so8610113ybj.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jun 2022 06:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QffLOMVkq4vPGOpmsNiz3TpRhqQHTgTu4YdXcc6LKCA=;
-        b=D9yWToWQN/B+5vQmx5zsbm1ZiYMjYstGza9HxeAzjnPSPfHdZGra3wOUA7LVYJxBRl
-         qGXOUXd5tFSWbUPT1gOwsOOQbQtFePybdzlZeLN+tlIk070wCHEoGtoh/qOw+3Mtmlax
-         POL/HF+z72OgtymNSsNkEiJRFSS5t/HjfmfLCV0ZhqmvwXVQM3xcQvi99lvFAMTHoO+u
-         cTeKY63Iy0wCw3FJONb7JsqpqHNEMngrxpEjfXY7RveWTg+5dXv36djtn6DoWnU4coJR
-         ocR1sJpxdzVW0zQ5E3oFUEdBIgbPq5HLPwOcJH7UqzWG9vJjoqJMxM3SJQH5YC40Vsh1
-         vi5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QffLOMVkq4vPGOpmsNiz3TpRhqQHTgTu4YdXcc6LKCA=;
-        b=fLXeMy8dqeG6/c3PpoExVcNT5+Q5eOml13286TV88Wy1nbtbE3Jy5cnJlRh6RvpSIi
-         2oOKstcZBycPyG3ItOb8tl/PxqEVDVJ+CJ9OfIiU/PERNvOop1ymRDedDrN+EaumamJ6
-         qoTS9yR03iV7ONonpGQ/rkoPjxiaLKXzGzZlvkpurlK2eSSlL9CPvfZj8WwAZeMvVhmk
-         l5fScpgG2lyCL8e+U/GoHThNInY1H02dwArhupvTDKUpWaseqS/kKVRg16JDBiLUssMh
-         sZl/RSnErQeTIomPUjOHFnDRnwSxvD7px20wzvsndnFGqT92FH76wELsqXtUPzWx/eU4
-         RIwg==
-X-Gm-Message-State: AOAM530ctHdzsu5NDJHcQ7nK0+OynoaCOBRAVYZMbwgb9x00qwHfoeuD
-        syFNCgNLJrYa90atMoQ0XN183gx94oAQaru+vmsgUg==
-X-Google-Smtp-Source: ABdhPJz4iF1FvuNuWOrkjJQFbgs3+fIz5GRDdVeYhPBRlNnFUguU8wgPyUKch+ezqzYSA+ke6pvHFtAtBAhGVnpiI9M=
-X-Received: by 2002:a25:4705:0:b0:65d:43f8:5652 with SMTP id
- u5-20020a254705000000b0065d43f85652mr34234204yba.389.1654696464028; Wed, 08
- Jun 2022 06:54:24 -0700 (PDT)
+        Wed, 8 Jun 2022 10:44:25 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028F62AC6C;
+        Wed,  8 Jun 2022 07:43:29 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nywtt-000AFv-88; Wed, 08 Jun 2022 16:43:13 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nywts-000K4B-W3; Wed, 08 Jun 2022 16:43:13 +0200
+Subject: Re: [PATCH v2 1/3] bpf: Add bpf_verify_pkcs7_signature() helper
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, kpsingh@kernel.org
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        john.fastabend@gmail.com
+References: <20220608111221.373833-1-roberto.sassu@huawei.com>
+ <20220608111221.373833-2-roberto.sassu@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <1456514b-ec2e-6a79-438a-33ad1ffc509d@iogearbox.net>
+Date:   Wed, 8 Jun 2022 16:43:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20220607164948.980838585@linuxfoundation.org>
-In-Reply-To: <20220607164948.980838585@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 8 Jun 2022 19:24:12 +0530
-Message-ID: <CA+G9fYui20CoDeqa6OrCYB+CGpgoFkhXtkdMDFJd1H55efCm6Q@mail.gmail.com>
-Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220608111221.373833-2-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26566/Wed Jun  8 10:05:45 2022)
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 7 Jun 2022 at 23:41, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.17.14 release.
-> There are 772 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.17.14-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.17.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 6/8/22 1:12 PM, Roberto Sassu wrote:
+> Add the bpf_verify_pkcs7_signature() helper, to give the ability to eBPF
+> security modules to check the validity of a PKCS#7 signature against
+> supplied data.
+> 
+> Use the 'keyring' parameter to select the keyring containing the
+> verification key: 0 for the primary keyring, 1 for the primary and
+> secondary keyrings, 2 for the platform keyring.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   include/uapi/linux/bpf.h       |  8 ++++++++
+>   kernel/bpf/bpf_lsm.c           | 32 ++++++++++++++++++++++++++++++++
+>   tools/include/uapi/linux/bpf.h |  8 ++++++++
+>   3 files changed, 48 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index f4009dbdf62d..40d0fc0d9493 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5249,6 +5249,13 @@ union bpf_attr {
+>    *		Pointer to the underlying dynptr data, NULL if the dynptr is
+>    *		read-only, if the dynptr is invalid, or if the offset and length
+>    *		is out of bounds.
+> + *
+> + * long bpf_verify_pkcs7_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u64 keyring)
+> + *	Description
+> + *		Verify the PKCS#7 *sig* with length *siglen*, on *data* with
+> + *		length *datalen*, with key in *keyring*.
 
-Results from Linaro=E2=80=99s test farm.
+Could you also add a description for users about the keyring argument and guidance on when
+they should use which in their programs? Above is a bit too terse, imho.
 
-Regressions found on qemu_x86_64:
-  - kunit/kasan [1]
+> + *	Return
+> + *		0 on success, a negative value on error.
+>    */
+>   #define __BPF_FUNC_MAPPER(FN)		\
+>   	FN(unspec),			\
+> @@ -5455,6 +5462,7 @@ union bpf_attr {
+>   	FN(dynptr_read),		\
+>   	FN(dynptr_write),		\
+>   	FN(dynptr_data),		\
+> +	FN(verify_pkcs7_signature),	\
+>   	/* */
+>   
+>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index c1351df9f7ee..1cda43cb541a 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -16,6 +16,7 @@
+>   #include <linux/bpf_local_storage.h>
+>   #include <linux/btf_ids.h>
+>   #include <linux/ima.h>
+> +#include <linux/verification.h>
+>   
+>   /* For every LSM hook that allows attachment of BPF programs, declare a nop
+>    * function where a BPF program can be attached.
+> @@ -132,6 +133,35 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
+>   	.arg1_type	= ARG_PTR_TO_CTX,
+>   };
+>   
+> +BPF_CALL_5(bpf_verify_pkcs7_signature, u8 *, data, u32, datalen, u8 *, sig,
+> +	   u32, siglen, u64, keyring)
+> +{
+> +	int ret = -EOPNOTSUPP;
+> +
+> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> +	if (keyring > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
+> +		return -EINVAL;
+> +
+> +	ret = verify_pkcs7_signature(data, datalen, sig, siglen,
+> +				     (struct key *)keyring,
+> +				     VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+> +				     NULL);
+> +#endif
+> +	return ret;
+> +}
 
-Regressions found on qemu_i386:
-  - kunit/kfence [2]
-  - kunit/test_out_of_bounds_read
+Looks great! One small nit, I would move all of the BPF_CALL and _proto under the
+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION ...
 
-We will bisect and let you know more details about this reported problem.
+> +static const struct bpf_func_proto bpf_verify_pkcs7_signature_proto = {
+> +	.func		= bpf_verify_pkcs7_signature,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_PTR_TO_MEM,
+> +	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
+> +	.arg3_type	= ARG_PTR_TO_MEM,
+> +	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
+> +	.arg5_type	= ARG_ANYTHING,
+> +	.allowed	= bpf_ima_inode_hash_allowed,
+> +};
+> +
+>   static const struct bpf_func_proto *
+>   bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   {
+> @@ -158,6 +188,8 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
+>   	case BPF_FUNC_get_attach_cookie:
+>   		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : NULL;
+> +	case BPF_FUNC_verify_pkcs7_signature:
+> +		return prog->aux->sleepable ? &bpf_verify_pkcs7_signature_proto : NULL;
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+... same here:
 
-[1] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v=
-5.17.13-773-gd0f9b2818e1e/testrun/10038101/suite/kunit/test/kasan/details/
-[2] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v=
-5.17.13-773-gd0f9b2818e1e/testrun/10038215/suite/kunit/test/kfence/details/
+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+	case BPF_FUNC_verify_pkcs7_signature:
+		return prog->aux->sleepable ? &bpf_verify_pkcs7_signature_proto : NULL;
+#endif
 
-## Build
-* kernel: 5.17.14-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.17.y
-* git commit: d0f9b2818e1e4d43847e10d6e5310a0c653cb18f
-* git describe: v5.17.13-773-gd0f9b2818e1e
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
-.13-773-gd0f9b2818e1e
+So that bpftool or other feature probes can check for its availability. Otherwise, apps have
+a hard time checking whether bpf_verify_pkcs7_signature() helper is available for use or not.
 
-## Test Regressions (compared to v5.17.11-188-g8eb69e8f0d45)
-Regressions found on qemu_x86_64:
-  - kunit/kasan [1]
+>   	default:
+>   		return tracing_prog_func_proto(func_id, prog);
+>   	}
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index f4009dbdf62d..40d0fc0d9493 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -5249,6 +5249,13 @@ union bpf_attr {
+>    *		Pointer to the underlying dynptr data, NULL if the dynptr is
+>    *		read-only, if the dynptr is invalid, or if the offset and length
+>    *		is out of bounds.
+> + *
+> + * long bpf_verify_pkcs7_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u64 keyring)
+> + *	Description
+> + *		Verify the PKCS#7 *sig* with length *siglen*, on *data* with
+> + *		length *datalen*, with key in *keyring*.
+> + *	Return
+> + *		0 on success, a negative value on error.
+>    */
+>   #define __BPF_FUNC_MAPPER(FN)		\
+>   	FN(unspec),			\
+> @@ -5455,6 +5462,7 @@ union bpf_attr {
+>   	FN(dynptr_read),		\
+>   	FN(dynptr_write),		\
+>   	FN(dynptr_data),		\
+> +	FN(verify_pkcs7_signature),	\
+>   	/* */
+>   
+>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> 
 
-Regressions found on qemu_i386:
-  - kunit/kfence [2]
-  - kunit/test_out_of_bounds_read
-
-## Metric Regressions (compared to v5.17.11-188-g8eb69e8f0d45)
-No metric regressions found.
-
-## Test Fixes (compared to v5.17.11-188-g8eb69e8f0d45)
-No test fixes found.
-
-## Metric Fixes (compared to v5.17.11-188-g8eb69e8f0d45)
-No metric fixes found.
-
-## Test result summary
-total: 134591, pass: 121555, fail: 447, skip: 11730, xfail: 859
-
-## Build Summary
-* arm: 17 total, 14 passed, 3 failed
-* arm64: 20 total, 20 passed, 0 failed
-* i386: 17 total, 12 passed, 5 failed
-* mips: 4 total, 1 passed, 3 failed
-* parisc: 2 total, 2 passed, 0 failed
-* powerpc: 5 total, 2 passed, 3 failed
-* riscv: 5 total, 5 passed, 0 failed
-* s390: 5 total, 2 passed, 3 failed
-* sh: 2 total, 0 passed, 2 failed
-* sparc: 2 total, 2 passed, 0 failed
-* x86_64: 20 total, 20 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
