@@ -2,129 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E814543DB3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jun 2022 22:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E0E544064
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jun 2022 02:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbiFHUpg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jun 2022 16:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S232927AbiFIAM5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jun 2022 20:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbiFHUpf (ORCPT
+        with ESMTP id S229673AbiFIAM4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jun 2022 16:45:35 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2E9EBE88;
-        Wed,  8 Jun 2022 13:45:33 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so8629322pjg.5;
-        Wed, 08 Jun 2022 13:45:33 -0700 (PDT)
+        Wed, 8 Jun 2022 20:12:56 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37B034676;
+        Wed,  8 Jun 2022 17:12:55 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id x5so24033015edi.2;
+        Wed, 08 Jun 2022 17:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bTBDtpW2qpcmzetkuUn9+lFzWx5HLxWub8Bm7cJfh2o=;
-        b=Ebv8KX8PrhCbhkiUOwrYsdSxtwhEYjuLpaIcWDDUxSEhuOm5U2E/ijtPueb/kBf9on
-         UVGe3xTfppkY+qsf3Oc9TnYJjgyaLdovdnHfAF+PSF2bgjoDAg6x78SLsWc5kosawUIm
-         ZzVM6u3shW7LjAmkuYlKaJIyw6UX3eUeMYTugbSxHS+oUYBy/UW9b8m5mVg81JUUgPcD
-         1RV33HRC0GYVgdFGBeEgmIw3B5rDlmCPMYhChQVskDJcmSqmiN4TxJ41JOj/P5FUWDGb
-         lkMV7KEPpp0mCp4/P0mm97GwH7ojt8SUXm9n3engCy4mE4p/vFKnatudqpX5jbO0nOE/
-         CySg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d+/fJF2djT1DclZjNPSTPoNHUSOfCcPs6iD3wKEM/T0=;
+        b=jEvOiDBS+YNifNjxyaLVHDF+j7G8V4Nw4YjUEgr6O3/ehWQRDJahNRv1qIqI4RkyU8
+         tFgrUVO0H/dBghITg3LcWXwJVCcaRPV2tLh5BabJcoF730++jgsFt4xSK7m3/5Os2pX5
+         O22HzgzO9c4NjZ6O24NROX5dC7fD2sagaInba+n2zDsF/rAp4PStdG1/ZeMMETCCvebB
+         4ASOSrnI+P0dCZ+9azWEeEoH+sAvdriabmroV3CobwWJMI4U2THTGnqmeM+nZng5sI5C
+         ZbWXSMXZDnleEgrKOX8kZqeOemDmW+MJNb75innj2kRnTlWiVepolEOemyOyF5NH+wMn
+         Yesg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=bTBDtpW2qpcmzetkuUn9+lFzWx5HLxWub8Bm7cJfh2o=;
-        b=rlMfQoJNTs1+LUVxdFeuJ57sY5dE9BE9YMcTkNS0VVPiiALecP73AEzjLvfOzG4giS
-         mXA3bRae4+BIoNqeHyeQVtw5yht0iVoW6GEv9Dde5NmgdoHHcaQPlpbAtAZCklect9ix
-         6vr1qDWsAoj+uhjQWZ/bsjONzVw2N3YQiLaxPERihSyzGuTN5kqlhYPOTjGleWSobpMw
-         0hK3vNxv2wW3O+TOrL9qUokg5/nic4juckoSX5fETPQ+f3gt9loW8FxTGr+AWTUtP/eT
-         62CERHBiXTePu6jctzCHqvu0Kq5OV7XpmjDS2ag/9E9mqEVCYmO2Uz+A8PoSFlBPEIg7
-         AXBg==
-X-Gm-Message-State: AOAM530F8cUeeaPBvHTPZLJ8s8ANCH63Sm3RyZIY/et0L7VSV5ZR4y8G
-        BV+jjhlS12MJ96A/McxuWzY=
-X-Google-Smtp-Source: ABdhPJxWnOVLKSSb2udV5MEgFj+HgqKRxSGhFY7d0TphKFpZQyhmluBHlgWM/bio1Z4rR05TfrYjvA==
-X-Received: by 2002:a17:903:22c9:b0:163:e49d:648c with SMTP id y9-20020a17090322c900b00163e49d648cmr36311082plg.54.1654721132718;
-        Wed, 08 Jun 2022 13:45:32 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:f30f:4d03:66e6:b121])
-        by smtp.gmail.com with ESMTPSA id cj24-20020a056a00299800b0051bc1865ca5sm13796026pfb.122.2022.06.08.13.45.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 13:45:32 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 8 Jun 2022 13:45:30 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d+/fJF2djT1DclZjNPSTPoNHUSOfCcPs6iD3wKEM/T0=;
+        b=g36x7LmCT5DhDA+mUl67BnBSZ6g3sU4jVb6HVbjcaCkSU9nZGAYoNDyJHf6G7qtVUt
+         6wuvbMVMiQ8tEG9bcQYfWs83ztX6uZyh6ItmD1ScJG3c6S54cJgLPrNOjz5L00l+NWNi
+         OeWYTqIjCSJj27qMf+rRqLU8/BTM1DgM3wKQ4ePnu+UtNWoHS6Blm1q2JXuM+GLyr3Tn
+         TMMzAuTl4lMC/uyT5xIF9SuLBCBKmQf3QDz0GlPWYrGveB92goy+swRBpAuk+cVmtwpP
+         vTLaNjibewz3rWmA9Tnf5Y3V3hBDawsNnQj4zcrqoRAMn9vYvU1zw36O01UcOernm/sM
+         yzKQ==
+X-Gm-Message-State: AOAM532mKZAItQkCtSw5n0FH0wsIQTmw1CKm6ymueRcSQ1XoPkQhE1NT
+        XK8r6qOlsANcfHlFgvObjr2NCZFjh+YaFKtBzjM=
+X-Google-Smtp-Source: ABdhPJwnxHMwfwrtisT2I4w3h9eLchQbIXCVEYfwv8wr1DmS6m2YMxY6ATx90TISPZhEXcwR0lGzkIpJSntkYwMobbM=
+X-Received: by 2002:a05:6402:3895:b0:430:6a14:8ca3 with SMTP id
+ fd21-20020a056402389500b004306a148ca3mr29401064edb.421.1654733574084; Wed, 08
+ Jun 2022 17:12:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220608111221.373833-1-roberto.sassu@huawei.com> <20220608111221.373833-3-roberto.sassu@huawei.com>
+In-Reply-To: <20220608111221.373833-3-roberto.sassu@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 8 Jun 2022 17:12:41 -0700
+Message-ID: <CAADnVQJ4RCSAeDMqFpF5bQznPQaTWFr=kL7GdssDQuzLof06fg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] selftests/bpf: Add test_progs opts for sign-file
+ and kernel priv key + cert
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Nitin Gupta <ngupta@vflare.org>
-Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
- dereference at virtual address 00000140
-Message-ID: <YqEKapKLBgKEXGBg@google.com>
-References: <CA+G9fYtVOfWWpx96fa3zzKzBPKiNu1w3FOD4j++G8MOG3Vs0EA@mail.gmail.com>
- <Yp47DODPCz0kNgE8@google.com>
- <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
- <Yp/kpPA7GdbArXDo@google.com>
- <YqAL+HeZDk5Wug28@google.com>
- <YqAMmTiwcyS3Ttla@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqAMmTiwcyS3Ttla@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 11:42:33AM +0900, Sergey Senozhatsky wrote:
-> On (22/06/08 11:39), Sergey Senozhatsky wrote:
-> > On (22/06/07 16:52), Minchan Kim wrote:
-> > > > rootfs: https://oebuilds.tuxbuild.com/29zhlbEc3EWq2wod9Uy964Bp27q/images/am57xx-evm/rpb-console-image-lkft-am57xx-evm-20220601222434.rootfs.ext4.gz
-> > > > kernel: https://builds.tuxbuild.com/29zhqJJizU2Y7Ka7ArhryUOrNDC/zImage
-> > > > 
-> > > > Boot command,
-> > > >  /usr/bin/qemu-system-aarch64 -cpu host,aarch64=off -machine
-> > > > virt-2.10,accel=kvm -nographic -net
-> > > > nic,model=virtio,maaacaddr=BA:DD:AD:CC:09:04 -net tap -m 2048 -monitor
-> > > > none -kernel kernel/zImage --append "console=ttyAMA0 root=/dev/vda rw"
-> > > > -hda rootfs/rpb-console-image-lkft-am57xx-evm-20220601222434.rootfs.ext4
-> > > > -m 4096 -smp 2
-> > > > 
-> > > > # cd /opt/kselftests/default-in-kernel/zram
-> > > > # ./zram.sh
-> > > > 
-> > > > Allow me sometime I will try to bisect this problem.
-> > > 
-> > > Thanks for sharing the info. 
-> > > 
-> > > I managed to work your rootfs with my local arm build
-> > > based on the problematic git tip. 
-> > > However, I couldn't suceed to reproduce it.
-> > > 
-> > > I needed to build zsmalloc/zram built-in instead of modules
-> > > Is it related? Hmm,
-> > > 
-> > > Yeah, It would be very helpful if you could help to bisect it.
-> > 
-> > This looks like a NULL lock->name dereference in lockdep. I suspect
-> > that somehow local_lock doesn't get .dep_map initialized. Maybe running
-> > the kernel with CONFIG_DEBUG_LOCK_ALLOC would help us? Naresh, can you
-> > help us with this?
-> 
-> Hmm, actually, hold on. mapping_area is per-CPU, so what happens if CPU
-> get offlined and onlined again? I don't see us re-initializing mapping_area
-> local_lock_init(&zs_map_area.lock) and so on.
+On Wed, Jun 8, 2022 at 4:15 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> According to the logs of the eBPF CI, built kernel and tests are copied to
+> a virtual machine to run there.
+>
+> Since a test for a new helper to verify PKCS#7 signatures requires to sign
+> data to be verified, extend test_progs to store in the test_env data
+> structure (accessible by individual tests) the path of sign-file and of the
+> kernel private key and cert.
+>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  tools/testing/selftests/bpf/test_progs.c | 12 ++++++++++++
+>  tools/testing/selftests/bpf/test_progs.h |  3 +++
+>  2 files changed, 15 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index c639f2e56fc5..90ce2c06a15e 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+> @@ -707,6 +707,8 @@ enum ARG_KEYS {
+>         ARG_TEST_NAME_GLOB_DENYLIST = 'd',
+>         ARG_NUM_WORKERS = 'j',
+>         ARG_DEBUG = -1,
+> +       ARG_SIGN_FILE = 'S',
+> +       ARG_KERNEL_PRIV_CERT = 'C',
+>  };
+>
+>  static const struct argp_option opts[] = {
+> @@ -732,6 +734,10 @@ static const struct argp_option opts[] = {
+>           "Number of workers to run in parallel, default to number of cpus." },
+>         { "debug", ARG_DEBUG, NULL, 0,
+>           "print extra debug information for test_progs." },
+> +       { "sign-file", ARG_SIGN_FILE, "PATH", 0,
+> +         "sign-file path " },
+> +       { "kernel-priv-cert", ARG_KERNEL_PRIV_CERT, "PATH", 0,
+> +         "kernel private key and cert path " },
+>         {},
+>  };
+>
+> @@ -862,6 +868,12 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+>         case ARG_DEBUG:
+>                 env->debug = true;
+>                 break;
+> +       case ARG_SIGN_FILE:
+> +               env->sign_file_path = arg;
+> +               break;
+> +       case ARG_KERNEL_PRIV_CERT:
+> +               env->kernel_priv_cert_path = arg;
+> +               break;
 
-I am trying to understand the problem. AFAIK, the mapping_area was
-static allocation per cpu so in zs_cpu_down, we never free the
-mapping_area itself. Then, why do we need to reinitialize the local
-lock again?
+That's cumbersome approach to use to force CI and
+users to pass these args on command line.
+The test has to be self contained.
+test_progs should execute it without any additional input.
+For example by having test-only private/public key
+that is used to sign and verify the signature.
