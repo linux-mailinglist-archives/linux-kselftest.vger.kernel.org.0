@@ -2,287 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01B4544DD6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jun 2022 15:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52592545109
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jun 2022 17:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243212AbiFINiL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Jun 2022 09:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S1344567AbiFIPio (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Jun 2022 11:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239633AbiFINiK (ORCPT
+        with ESMTP id S237587AbiFIPik (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Jun 2022 09:38:10 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FE01016;
-        Thu,  9 Jun 2022 06:38:08 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id w19-20020a9d6393000000b0060aeb359ca8so17368046otk.6;
-        Thu, 09 Jun 2022 06:38:08 -0700 (PDT)
+        Thu, 9 Jun 2022 11:38:40 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF6326329E;
+        Thu,  9 Jun 2022 08:38:37 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id o10so31705776edi.1;
+        Thu, 09 Jun 2022 08:38:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=HcPWLjNKeSLW/i1svoOPg26HSpUrJUafk75Nuxi7jnE=;
-        b=a3LalNpGDnWpCAa+cZkBt85rY9q64Rb8Md1StD4YVcyA/+NOTYdtuhUE/AdRkYWryr
-         7BZlcc+a90G5tSrxb2Fvjq4BYHgtSRSzgO6qAx7yTJ3r8PpZ5d5gbXDOEgg8ejIYR7zC
-         0Nd2zQR39MAXROwPpCC+W22y+Log40Ww8LoWhCp+VyPLI2Lgt+92X3YbnoZouISvfWoM
-         Vs11TkiKxq1Avi8rteAExnwtFcXl2EWDdY8CKxyxh6vm3c4J/6VTatv3ffO1yCWOWg+P
-         ySqIhD2B3E3MdYj06yn2t9KQwnauQPebmx8yto4Vae+DzgyPCRclWtI7fGawIdrlr+0A
-         pQdA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mg7JMiMVAhUH8K1hucSMpRfWYhKs0b5aSTxdi9koiAw=;
+        b=fVwBnNiAwp7xgtTmQYNF749ks9JXSD2bg2YjxxWGiObTL28ROuVZJuS22JONbKHEAM
+         lpRS4XfSOioN2mWEYrgpimmQQL7pECXClPcZB1GqYXg9wPYtYmk2wg1MNDbKNS/MSt9d
+         zH6m3leRaqH5tMseU5MZBbi4/I/VyO2gr3c8yu6L0WkB1I3eTvJGYDsHWtpY8ZkpXPEy
+         hLytZNL+EO17uuMVHm8bFCS46vRBe2enbDBwmQdVoeXcubs7OBJ6DnFQWZE/cR7u3CVL
+         wysjuiqrIiWLhqjdwx+NPj2cZmu01pjCHMweqPROWobGuyXIXsEz+vP8nzzRVN6ZHbCx
+         0zbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=HcPWLjNKeSLW/i1svoOPg26HSpUrJUafk75Nuxi7jnE=;
-        b=v3qHfhVB7kr76z+VsufY3OdPtSR7Okqfqrg+aK+33vAiuaspF7KQRK/EyrGbUlSs2R
-         3sVSB6qhuW9g705dRLNrcbbO53c+ebg4G5PI4uGbzUsGzRejh4ljf0XzaAddkfhpf+by
-         857cIWSW+aaMiXQw2MwRff0SFBE80H2fWeaFPzyCjVkhO+wPjZlnwzZHa/GFLgx5nHLd
-         ezlXfwAJuzY2JSU3T/HDTBvttjsWVv/pw3+4eOVNF+hXLWrozwkhMp23SyuUV/ZWHl47
-         DW7bT7sICo7eXfIOWzUITTcHGZ2PziZZ78bGBBhytGcRItYbqoczW26ySqiDgLyV+qmE
-         mxfg==
-X-Gm-Message-State: AOAM5311terdI/iQi23kNuAjBWBe0VWj/Y3DdL1lB8Jz+NVF0I938el0
-        r4TyNC6pV+wtNZRVfVMU/1s=
-X-Google-Smtp-Source: ABdhPJzHRwh7un9RpiInZJR/C0odWKcL7VyPguqIc9WP04cRhMcweQ9UahbJOT1nQb71cNZWfhXmZA==
-X-Received: by 2002:a9d:6f0d:0:b0:60c:ae:9319 with SMTP id n13-20020a9d6f0d000000b0060c00ae9319mr7713161otq.51.1654781887297;
-        Thu, 09 Jun 2022 06:38:07 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k6-20020a9d1986000000b0060603221268sm12090504otk.56.2022.06.09.06.38.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 06:38:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <cb8d9226-5aea-00bc-2dbf-21db2cb8f176@roeck-us.net>
-Date:   Thu, 9 Jun 2022 06:38:03 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mg7JMiMVAhUH8K1hucSMpRfWYhKs0b5aSTxdi9koiAw=;
+        b=YqxlWM0JXoMczTTZ5T7eAoofSO3EzuEcpgEzAK88Fi77tzzHw8GLJnSLOg40q3WVeH
+         ToTFJKds0dErQyX5ivlCRGH+Dtp784UH511JOA7ej9/ggSTcYPla6lVMv952Ji13OL0Y
+         zDhD5DPg1hCctHRTsmAcEsPF2Q6hMj6n5C5fe152+UddizYaE+PqzepIjM9FlK1sbMbv
+         8GfSWcLGsaSh0a496yaTm0mE9xm/dmXXC4dL5YasW9GBHjuWJu7/7GF9HnGeJGVCFxZn
+         pmI5dV7NQZVX3PnW4vIQrLlikNhGlxUTj/k9T+DCvh339Skekt0Pa57zBARtfXaeE2v+
+         uejw==
+X-Gm-Message-State: AOAM533jBfOZG/A4Qdke12+xQiF4VpQHUxMLOJZqV/MBK3+xWZ+iOWhH
+        3/ODuB70Wlpaut3tv+9Hy9P+yrRSCRdtgq/4kY2fMOf5rp4=
+X-Google-Smtp-Source: ABdhPJz3cHnciiAj2zKCGvjtUPGW1JPISEltKYJUwf/VFV3cj1sIWruCAc+UarPUfh5NMJr73eST6atzEIAwdI3MyPo=
+X-Received: by 2002:a05:6402:11d1:b0:433:4a09:3f49 with SMTP id
+ j17-20020a05640211d100b004334a093f49mr884992edw.357.1654789116109; Thu, 09
+ Jun 2022 08:38:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com,
+References: <20220608111221.373833-1-roberto.sassu@huawei.com>
+ <20220608111221.373833-3-roberto.sassu@huawei.com> <CAADnVQJ4RCSAeDMqFpF5bQznPQaTWFr=kL7GdssDQuzLof06fg@mail.gmail.com>
+ <92d8b9c08e20449782f19f64cc3ec5fa@huawei.com>
+In-Reply-To: <92d8b9c08e20449782f19f64cc3ec5fa@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 9 Jun 2022 08:38:24 -0700
+Message-ID: <CAADnVQLd2d+_2iJ84u9zK3Nnb+LL3Gw7k=XQCVOHuekb2hLf_g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] selftests/bpf: Add test_progs opts for sign-file
+ and kernel priv key + cert
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20220607164948.980838585@linuxfoundation.org>
- <CA+G9fYui20CoDeqa6OrCYB+CGpgoFkhXtkdMDFJd1H55efCm6Q@mail.gmail.com>
- <CA+G9fYt47PBfbOK77eiH3qP2QH0iWQ=p12NELpL+R_k7O678=g@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
-In-Reply-To: <CA+G9fYt47PBfbOK77eiH3qP2QH0iWQ=p12NELpL+R_k7O678=g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/9/22 05:51, Naresh Kamboju wrote:
-> On Wed, 8 Jun 2022 at 19:24, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->>
->> On Tue, 7 Jun 2022 at 23:41, Greg Kroah-Hartman
->> <gregkh@linuxfoundation.org> wrote:
->>>
->>> This is the start of the stable review cycle for the 5.17.14 release.
->>> There are 772 patches in this series, all will be posted as a response
->>> to this one.  If anyone has any issues with these being applied, please
->>> let me know.
->>>
->>> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
->>> Anything received after that time might be too late.
->>>
->>> The whole patch series can be found in one patch at:
->>>          https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.14-rc1.gz
->>> or in the git tree and branch at:
->>>          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
->>> and the diffstat can be found below.
->>>
->>> thanks,
->>>
->>> greg k-h
->>
->> Results from Linaro’s test farm.
->>
->> Regressions found on qemu_x86_64:
->>    - kunit/kasan [1]
->>
->> Regressions found on qemu_i386:
->>    - kunit/kfence [2]
->>    - kunit/test_out_of_bounds_read
->>
->> We will bisect and let you know more details about this reported problem.
-> 
-> The bisect script pointed me to this commit and  reverted and tested and
-> confirmed.
-> 
+On Thu, Jun 9, 2022 at 2:00 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
+> > Sent: Thursday, June 9, 2022 2:13 AM
+> > On Wed, Jun 8, 2022 at 4:15 AM Roberto Sassu <roberto.sassu@huawei.com>
+> > wrote:
+> > >
+> > > According to the logs of the eBPF CI, built kernel and tests are copied to
+> > > a virtual machine to run there.
+> > >
+> > > Since a test for a new helper to verify PKCS#7 signatures requires to sign
+> > > data to be verified, extend test_progs to store in the test_env data
+> > > structure (accessible by individual tests) the path of sign-file and of the
+> > > kernel private key and cert.
+> > >
+> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > ---
+> > >  tools/testing/selftests/bpf/test_progs.c | 12 ++++++++++++
+> > >  tools/testing/selftests/bpf/test_progs.h |  3 +++
+> > >  2 files changed, 15 insertions(+)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/test_progs.c
+> > b/tools/testing/selftests/bpf/test_progs.c
+> > > index c639f2e56fc5..90ce2c06a15e 100644
+> > > --- a/tools/testing/selftests/bpf/test_progs.c
+> > > +++ b/tools/testing/selftests/bpf/test_progs.c
+> > > @@ -707,6 +707,8 @@ enum ARG_KEYS {
+> > >         ARG_TEST_NAME_GLOB_DENYLIST = 'd',
+> > >         ARG_NUM_WORKERS = 'j',
+> > >         ARG_DEBUG = -1,
+> > > +       ARG_SIGN_FILE = 'S',
+> > > +       ARG_KERNEL_PRIV_CERT = 'C',
+> > >  };
+> > >
+> > >  static const struct argp_option opts[] = {
+> > > @@ -732,6 +734,10 @@ static const struct argp_option opts[] = {
+> > >           "Number of workers to run in parallel, default to number of cpus." },
+> > >         { "debug", ARG_DEBUG, NULL, 0,
+> > >           "print extra debug information for test_progs." },
+> > > +       { "sign-file", ARG_SIGN_FILE, "PATH", 0,
+> > > +         "sign-file path " },
+> > > +       { "kernel-priv-cert", ARG_KERNEL_PRIV_CERT, "PATH", 0,
+> > > +         "kernel private key and cert path " },
+> > >         {},
+> > >  };
+> > >
+> > > @@ -862,6 +868,12 @@ static error_t parse_arg(int key, char *arg, struct
+> > argp_state *state)
+> > >         case ARG_DEBUG:
+> > >                 env->debug = true;
+> > >                 break;
+> > > +       case ARG_SIGN_FILE:
+> > > +               env->sign_file_path = arg;
+> > > +               break;
+> > > +       case ARG_KERNEL_PRIV_CERT:
+> > > +               env->kernel_priv_cert_path = arg;
+> > > +               break;
+> >
+> > That's cumbersome approach to use to force CI and
+> > users to pass these args on command line.
+> > The test has to be self contained.
+> > test_progs should execute it without any additional input.
+> > For example by having test-only private/public key
+> > that is used to sign and verify the signature.
+>
+> I thought a bit about this. Just generating a test key does not work,
+> as it must be signed by the kernel signing key (otherwise, loading
+> in the secondary keyring will be rejected). Having the test key around
+> is as dangerous as having the kernel signing key around copied
+> somewhere.
+>
+> Allowing users to specify a test keyring in the helper is possible.
 
-I see the same error messages after enabling CONFIG_KFENCE_KUNIT_TEST, but
-it doesn't go away after removing the patch below. That patch also seems
-to be completely unrelated to the error.
+We shouldn't need to load into the secondary keyring.
+The helper needs to support an arbitrary key ring.
+The kernel shouldn't interfere with loading that test key into
+a test ring.
 
-I also see the same problem in the mainline kernel. I suspect that something
-is wrong with CONFIG_KFENCE_KUNIT_TEST.
+> But it would introduce unnecessary code, plus the keyring identifier
 
-Guenter
+What kind of 'unnecessary code' ?
 
-> commit 1883088ed4a0d5cc9cea500ca4e89a354ab32c11
-> Author: Jia-Ju Bai <baijiaju1990@gmail.com>
-> Date:   Fri May 27 23:28:18 2022 +0800
-> 
->      md: bcache: check the return value of kzalloc() in detached_dev_do_request()
-> 
->      commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
-> 
->      The function kzalloc() in detached_dev_do_request() can fail, so its
->      return value should be checked.
-> 
->      Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached
-> bcache devices")
->      Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
->      Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
->      Signed-off-by: Coly Li <colyli@suse.de>
->      Link: https://lore.kernel.org/r/20220527152818.27545-4-colyli@suse.de
->      Signed-off-by: Jens Axboe <axboe@kernel.dk>
->      Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
-> index d15aae6c51c1..673a680240a9 100644
-> --- a/drivers/md/bcache/request.c
-> +++ b/drivers/md/bcache/request.c
-> @@ -1107,6 +1107,12 @@ static void detached_dev_do_request(struct
-> bcache_device *d, struct bio *bio,
->           * which would call closure_get(&dc->disk.cl)
->           */
->          ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
-> +       if (!ddip) {
-> +               bio->bi_status = BLK_STS_RESOURCE;
-> +               bio->bi_end_io(bio);
-> +               return;
-> +       }
-> +
->          ddip->d = d;
->          /* Count on the bcache device */
->          ddip->orig_bdev = orig_bdev;
-> 
-> 
-> 
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>
->> [1] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17.13-773-gd0f9b2818e1e/testrun/10038101/suite/kunit/test/kasan/details/
->> [2] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17.13-773-gd0f9b2818e1e/testrun/10038215/suite/kunit/test/kfence/details/
->>
->> ## Build
->> * kernel: 5.17.14-rc1
->> * git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
->> * git branch: linux-5.17.y
->> * git commit: d0f9b2818e1e4d43847e10d6e5310a0c653cb18f
->> * git describe: v5.17.13-773-gd0f9b2818e1e
->> * test details:
->> https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17.13-773-gd0f9b2818e1e
->>
->> ## Test Regressions (compared to v5.17.11-188-g8eb69e8f0d45)
->> Regressions found on qemu_x86_64:
->>    - kunit/kasan [1]
->>
->> Regressions found on qemu_i386:
->>    - kunit/kfence [2]
->>    - kunit/test_out_of_bounds_read
->>
->> ## Metric Regressions (compared to v5.17.11-188-g8eb69e8f0d45)
->> No metric regressions found.
->>
->> ## Test Fixes (compared to v5.17.11-188-g8eb69e8f0d45)
->> No test fixes found.
->>
->> ## Metric Fixes (compared to v5.17.11-188-g8eb69e8f0d45)
->> No metric fixes found.
->>
->> ## Test result summary
->> total: 134591, pass: 121555, fail: 447, skip: 11730, xfail: 859
->>
->> ## Build Summary
->> * arm: 17 total, 14 passed, 3 failed
->> * arm64: 20 total, 20 passed, 0 failed
->> * i386: 17 total, 12 passed, 5 failed
->> * mips: 4 total, 1 passed, 3 failed
->> * parisc: 2 total, 2 passed, 0 failed
->> * powerpc: 5 total, 2 passed, 3 failed
->> * riscv: 5 total, 5 passed, 0 failed
->> * s390: 5 total, 2 passed, 3 failed
->> * sh: 2 total, 0 passed, 2 failed
->> * sparc: 2 total, 2 passed, 0 failed
->> * x86_64: 20 total, 20 passed, 0 failed
->>
->> ## Test suites summary
->> * fwts
->> * kunit
->> * kvm-unit-tests
->> * libgpiod
->> * libhugetlbfs
->> * log-parser-boot
->> * log-parser-test
->> * ltp-cap_bounds
->> * ltp-cap_bounds-tests
->> * ltp-commands
->> * ltp-commands-tests
->> * ltp-containers
->> * ltp-containers-tests
->> * ltp-controllers-tests
->> * ltp-cpuhotplug-tests
->> * ltp-crypto
->> * ltp-crypto-tests
->> * ltp-cve-tests
->> * ltp-dio-tests
->> * ltp-fcntl-locktests
->> * ltp-fcntl-locktests-tests
->> * ltp-filecaps
->> * ltp-filecaps-tests
->> * ltp-fs
->> * ltp-fs-tests
->> * ltp-fs_bind
->> * ltp-fs_bind-tests
->> * ltp-fs_perms_simple
->> * ltp-fs_perms_simple-tests
->> * ltp-fsx
->> * ltp-fsx-tests
->> * ltp-hugetlb
->> * ltp-hugetlb-tests
->> * ltp-io
->> * ltp-io-tests
->> * ltp-ipc
->> * ltp-ipc-tests
->> * ltp-math-tests
->> * ltp-mm-tests
->> * ltp-nptl
->> * ltp-nptl-tests
->> * ltp-open-posix-tests
->> * ltp-pty
->> * ltp-pty-tests
->> * ltp-sched-tests
->> * ltp-securebits
->> * ltp-securebits-tests
->> * ltp-syscalls-tests
->> * ltp-tracing-tests
->> * network-basic-tests
->> * packetdrill
->> * perf
->> * rcutorture
->> * ssuite
->> * v4l2-compliance
->> * vdso
->>
->> --
->> Linaro LKFT
->> https://lkft.linaro.org
+> will be understood by eBPF only and not by verify_pkcs7_signature(),
+> as it happens for other keyring identifiers.
 
+Maybe wrapping verify_pkcs7_signature as a helper is too high level?
+
+> We may have environment variables directly in the eBPF test, to
+> specify the location of the signing key, but there is a risk of
+> duplication, as other tests wanting the same information might
+> not be aware of them.
+
+That's no go.
+
+> I would not introduce any code that handles the kernel signing
+> key (in the Makefile, or in a separate script). This information is
+> so sensible, that it must be responsibility of an external party
+> to do the work of making that key available and tell where it is.
+>
+> Roberto
+>
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Yang Xi, Li He
