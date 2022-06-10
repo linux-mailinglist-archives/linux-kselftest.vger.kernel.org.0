@@ -2,111 +2,211 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49385468CF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jun 2022 16:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286B65468D1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jun 2022 16:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348865AbiFJOtp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Jun 2022 10:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S1349655AbiFJOtw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Jun 2022 10:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349530AbiFJOtI (ORCPT
+        with ESMTP id S1344919AbiFJOtU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Jun 2022 10:49:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F206144BE4;
-        Fri, 10 Jun 2022 07:48:37 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D5DA422142;
-        Fri, 10 Jun 2022 14:48:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654872515; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nzSWh5rBV1A+StTwCtLelwjw28JbYq11oZnaBq7FmbI=;
-        b=LZzoM2o4ZAIu6Dv2Vy/H07nR9RoEf+fwvQ+Mbn+L297C863vNLm8oPArrA5w52MOafX/tZ
-        86o0JWJVbXoZye2q903q+2tWkM5j+5M6tb5gJHAW8IIIqKPfa60WSyFBxoI1288BsVBS+A
-        OJTvRy2tvEFKxOXrwP4MB9JvTbo+QvU=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B0C392C141;
-        Fri, 10 Jun 2022 14:48:35 +0000 (UTC)
-Date:   Fri, 10 Jun 2022 16:48:32 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz
-Subject: Re: [PATCH 0/2] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-Message-ID: <YqNZwBWJmi5E/Nvo@alley>
-References: <20220603143242.870-1-mpdesouza@suse.com>
- <c5dc436e-2e3f-db2c-5cd5-215a9af19152@linuxfoundation.org>
- <5966397b-5577-8075-ffdd-f32e5e4ca75a@redhat.com>
+        Fri, 10 Jun 2022 10:49:20 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2193DE93;
+        Fri, 10 Jun 2022 07:48:48 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nzfwF-0000ZJ-IP; Fri, 10 Jun 2022 16:48:39 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nzfwF-000IXa-9T; Fri, 10 Jun 2022 16:48:39 +0200
+Subject: Re: [PATCH v3 1/2] bpf: Add bpf_verify_signature() helper
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, kpsingh@kernel.org
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>, john.fastabend@gmail.com
+References: <20220610135916.1285509-1-roberto.sassu@huawei.com>
+ <20220610135916.1285509-2-roberto.sassu@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <ce56c551-019f-9e10-885f-4e88001a8f6b@iogearbox.net>
+Date:   Fri, 10 Jun 2022 16:48:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5966397b-5577-8075-ffdd-f32e5e4ca75a@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220610135916.1285509-2-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26568/Fri Jun 10 10:06:23 2022)
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri 2022-06-10 09:06:16, Joe Lawrence wrote:
-> On 6/9/22 4:16 PM, Shuah Khan wrote:
-> > On 6/3/22 8:32 AM, Marcos Paulo de Souza wrote:
-> >> Hi there,
-> >>
-> >> The first patch moves the current livepatch tests to selftests,
-> >> allowing it
-> >> be better suited to contain more complex tests, like using userspace C
-> >> code
-> >> to use the livepatched kernel code. As a bonus it allows to use
-> >> "gen_tar" to export the livepatch selftests, rebuild the modules by
-> >> running make in selftests/livepatch directory and simplifies the process
-> >> of creating and debugging new selftests.
-> >>
-> > 
-> > In general selftests don't include modules. We keep test modules under lib.
-> > One of the reasons is that modules have dependencies on the kernel and
-> > should
-> > be built when kernel is built.
-> > 
-> > I don't fully buy the argument that moving modules under selftest would
-> > simplify
-> > the process.
-> > 
+On 6/10/22 3:59 PM, Roberto Sassu wrote:
+> Add the bpf_verify_signature() helper, to give eBPF security modules the
+> ability to check the validity of a signature against supplied data, by
+> using system-provided keys as trust anchor.
 > 
-> Hi Shuah,
+> The new helper makes it possible to enforce mandatory policies, as eBPF
+> programs might be allowed to make security decisions only based on data
+> sources the system administrator approves.
 > 
-> I see that there is tools/testing/selftests/bpf/bpf_testmod/ which
-> claims to be a "conceptually out-of-tree module".  Would similarly
-> moving livepatch test modules under tools/ give us flexibility to write
-> them build for multiple kernel versions?  Then one could theoretically
-> build and run the latest, greatest selftests against older kernels
-> (assuming the associate script/module/kernel supports the idea)?
+> The caller should specify the identifier of the keyring containing the keys
+> for signature verification: 0 for the primary keyring (immutable keyring of
+> system keys); 1 for both the primary and secondary keyring (where keys can
+> be added only if they are vouched for by existing keys in those keyrings);
+> 2 for the platform keyring (primarily used by the integrity subsystem to
+> verify a kexec'ed kerned image and, possibly, the initramfs signature);
+> 0xffff for the session keyring (for testing purposes).
+> 
+> The caller should also specify the type of signature. Currently only PKCS#7
+> is supported.
+> 
+> Since the maximum number of parameters of an eBPF helper is 5, the keyring
+> and signature types share one (keyring ID: low 16 bits, signature type:
+> high 16 bits).
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reported-by: kernel test robot <lkp@intel.com> (cast warning)
+> ---
+>   include/uapi/linux/bpf.h       | 17 +++++++++++++
+>   kernel/bpf/bpf_lsm.c           | 46 ++++++++++++++++++++++++++++++++++
+>   tools/include/uapi/linux/bpf.h | 17 +++++++++++++
+>   3 files changed, 80 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index f4009dbdf62d..97521857e44a 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5249,6 +5249,22 @@ union bpf_attr {
+>    *		Pointer to the underlying dynptr data, NULL if the dynptr is
+>    *		read-only, if the dynptr is invalid, or if the offset and length
+>    *		is out of bounds.
+> + *
+> + * long bpf_verify_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u32 info)
+> + *	Description
+> + *		Verify a signature of length *siglen* against the supplied data
+> + *		with length *datalen*. *info* contains the keyring identifier
+> + *		(low 16 bits) and the signature type (high 16 bits). The keyring
+> + *		identifier can have the following values (some defined in
+> + *		verification.h): 0 for the primary keyring (immutable keyring of
+> + *		system keys); 1 for both the primary and secondary keyring
+> + *		(where keys can be added only if they are vouched for by
+> + *		existing keys in those keyrings); 2 for the platform keyring
+> + *		(primarily used by the integrity subsystem to verify a kexec'ed
+> + *		kerned image and, possibly, the initramfs signature); 0xffff for
+> + *		the session keyring (for testing purposes).
+> + *	Return
+> + *		0 on success, a negative value on error.
+>    */
+>   #define __BPF_FUNC_MAPPER(FN)		\
+>   	FN(unspec),			\
+> @@ -5455,6 +5471,7 @@ union bpf_attr {
+>   	FN(dynptr_read),		\
+>   	FN(dynptr_write),		\
+>   	FN(dynptr_data),		\
+> +	FN(verify_signature),		\
+>   	/* */
+>   
+>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index c1351df9f7ee..20bd850ea3ee 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -16,6 +16,8 @@
+>   #include <linux/bpf_local_storage.h>
+>   #include <linux/btf_ids.h>
+>   #include <linux/ima.h>
+> +#include <linux/verification.h>
+> +#include <linux/module_signature.h>
+>   
+>   /* For every LSM hook that allows attachment of BPF programs, declare a nop
+>    * function where a BPF program can be attached.
+> @@ -132,6 +134,46 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
+>   	.arg1_type	= ARG_PTR_TO_CTX,
+>   };
+>   
+> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> +BPF_CALL_5(bpf_verify_signature, u8 *, data, u32, datalen, u8 *, sig,
+> +	   u32, siglen, u32, info)
+> +{
+> +	unsigned long keyring_id = info & U16_MAX;
+> +	enum pkey_id_type id_type = info >> 16;
+> +	const struct cred *cred = current_cred();
+> +	struct key *keyring;
+> +
+> +	if (keyring_id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING &&
+> +	    keyring_id != U16_MAX)
+> +		return -EINVAL;
+> +
+> +	keyring = (keyring_id == U16_MAX) ?
+> +		  cred->session_keyring : (struct key *)keyring_id;
+> +
+> +	switch (id_type) {
+> +	case PKEY_ID_PKCS7:
+> +		return verify_pkcs7_signature(data, datalen, sig, siglen,
+> +					      keyring,
+> +					      VERIFYING_UNSPECIFIED_SIGNATURE,
+> +					      NULL, NULL);
+> +	default:
+> +		return -EOPNOTSUPP;
 
-+1
+Question to you & KP:
 
-Another motivation is that the new selftest also needs
-an executable binary. It would be nice to handle both modules
-and binaries the same way.
+ > Can we keep the helper generic so that it can be extended to more types of
+ > signatures and pass the signature type as an enum?
 
-Honestly, lib/* is a mess. It mixes real functionality and test
-modules. The relation between the modules and tools/testing/*
-is far from clear. IMHO, it would be more clean to have the related
-stuff together.
+How many different signature types do we expect, say, in the next 6mo, to land
+here? Just thinking out loud whether it is better to keep it simple as with the
+last iteration where we have a helper specific to pkcs7, and if needed in future
+we add others. We only have the last reg as auxillary arg where we need to squeeze
+all info into it now. What if for other, future signature types this won't suffice?
 
-Of course, we could not move all test modules from lib/* easily.
-Some of them might be used on its own or even as built-in
-tests. But preventing the move looks like a step in
-the wrong direction to me.
+> +	}
+> +}
+> +
+> +static const struct bpf_func_proto bpf_verify_signature_proto = {
+> +	.func		= bpf_verify_signature,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_PTR_TO_MEM,
+> +	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
 
-Best Regards,
-Petr
+Can verify_pkcs7_signature() handle null/0 len for data* args?
+
+> +	.arg3_type	= ARG_PTR_TO_MEM,
+> +	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
+
+Ditto for sig* args?
+
+> +	.arg5_type	= ARG_ANYTHING,
+> +	.allowed	= bpf_ima_inode_hash_allowed,
+> +};
+> +#endif
+> +
+>   static const struct bpf_func_proto *
+>   bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   {
+> @@ -158,6 +200,10 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
+>   	case BPF_FUNC_get_attach_cookie:
+>   		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : NULL;
+> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> +	case BPF_FUNC_verify_signature:
+> +		return prog->aux->sleepable ? &bpf_verify_signature_proto : NULL;
+> +#endif
+>   	default:
+>   		return tracing_prog_func_proto(func_id, prog);
+>   	}
