@@ -2,57 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B88546937
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jun 2022 17:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA6C546A42
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jun 2022 18:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiFJPOi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Jun 2022 11:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S1344640AbiFJQVA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Jun 2022 12:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiFJPOh (ORCPT
+        with ESMTP id S242991AbiFJQU7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Jun 2022 11:14:37 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC4E95A3;
-        Fri, 10 Jun 2022 08:14:35 -0700 (PDT)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nzgLE-0003a9-0M; Fri, 10 Jun 2022 17:14:28 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nzgLD-000Tc0-Mu; Fri, 10 Jun 2022 17:14:27 +0200
-Subject: Re: [PATCH v3 1/2] bpf: Add bpf_verify_signature() helper
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>
-References: <20220610135916.1285509-1-roberto.sassu@huawei.com>
- <20220610135916.1285509-2-roberto.sassu@huawei.com>
- <ce56c551-019f-9e10-885f-4e88001a8f6b@iogearbox.net>
- <4b877d4877be495787cb431d0a42cbc9@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <1a5534e6-4d63-7c91-8dcd-41b22f1ea2ba@iogearbox.net>
-Date:   Fri, 10 Jun 2022 17:14:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 10 Jun 2022 12:20:59 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EB3392A0B;
+        Fri, 10 Jun 2022 09:20:58 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z7so35938510edm.13;
+        Fri, 10 Jun 2022 09:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L4it2eyJHyN8t1fOMqjVlgvqQJ+rz5N7UVDB3nB9u44=;
+        b=K50pcIsA+qwcFU9iH9P9p8e1nglHZJAOqtEakftPNdwSO2KzgxX4z+gbz8vSQU9fV8
+         vz3g/9+5n4Z+lo0PTGSRt063uif4BRt2/AnKW5/it3n0o7BX4lZDNSmGyvcMixu4bfLr
+         CBmd+6daJMpQOWH3Hu+YbWkOIkRJGIHVy9nmvqtMoWNB/6iK4jHgeONxWrgzrTF0ZwSQ
+         TCvd3QTJqsO/4/sZKzDMKfbUWZtM+ycNJQpz6FrdGnPdTahuTwi/DoeKGOwOoyT6HSOG
+         ZCelkPytaS/Wrx8JN8FBd6/R4fZrkl5939p7y2eCRQWsuFWvawK3NrzaCJ5cnSoHRRZj
+         pzSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L4it2eyJHyN8t1fOMqjVlgvqQJ+rz5N7UVDB3nB9u44=;
+        b=tfO6CtXsiy9NnqS1rCagoa/M6SZFzPgMW3GEiBDkZY1v7pKtnU2c8UFfPMOJSgxSM1
+         HqVFW38z+YRcvGfbbjtqDB3wu/k2FWBL8uTwSwLHHHOHpU0bxaE2UUpmVjPIcplBGW0U
+         d9t+SHGRW5erESscC2kPQf7KQIEcp6k+HVonvCQ+nDduAWGBIdpOgswjEezKfAgisq0r
+         vyG+NYrj7Z3lposFiESQ6UXXvSv+SQlk1KZKnCL2GKvNzvj8DBrq/PU65l20887l7Q78
+         ohIxgigO7rINXnJKbjO0Y1SMYY/jB2+dMKxeC9IPDzLeXLMoOSMvt9muJc1VWXxHmCr+
+         1ClQ==
+X-Gm-Message-State: AOAM533IpZe5haL/OqPCJntgK2Weg9/2t69tvPTyR6vKxePReri0Axl9
+        s0j6W6fiN9tSNbDBBO026Wk8Ww67wtfko2ZaF6VKjOnDFm8=
+X-Google-Smtp-Source: ABdhPJyfLZAobuekWBFHlpOaOs5JxtoWWf3vcfvczaZsS7370i2OnQVyszhKYnZqfsdDp1FfbvC8KFe9Q/atGTNyjr4=
+X-Received: by 2002:a05:6402:120b:b0:42f:aa44:4d85 with SMTP id
+ c11-20020a056402120b00b0042faa444d85mr42817903edw.338.1654878056591; Fri, 10
+ Jun 2022 09:20:56 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4b877d4877be495787cb431d0a42cbc9@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26568/Fri Jun 10 10:06:23 2022)
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20220610135916.1285509-1-roberto.sassu@huawei.com> <20220610135916.1285509-2-roberto.sassu@huawei.com>
+In-Reply-To: <20220610135916.1285509-2-roberto.sassu@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 10 Jun 2022 09:20:44 -0700
+Message-ID: <CAADnVQLOWsqs1=MS=k2uJu01vNJzd9EZxtEwHW24t4+myj5s0w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] bpf: Add bpf_verify_signature() helper
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,204 +73,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/10/22 4:59 PM, Roberto Sassu wrote:
->> From: Daniel Borkmann [mailto:daniel@iogearbox.net]
->> Sent: Friday, June 10, 2022 4:49 PM
->> On 6/10/22 3:59 PM, Roberto Sassu wrote:
->>> Add the bpf_verify_signature() helper, to give eBPF security modules the
->>> ability to check the validity of a signature against supplied data, by
->>> using system-provided keys as trust anchor.
->>>
->>> The new helper makes it possible to enforce mandatory policies, as eBPF
->>> programs might be allowed to make security decisions only based on data
->>> sources the system administrator approves.
->>>
->>> The caller should specify the identifier of the keyring containing the keys
->>> for signature verification: 0 for the primary keyring (immutable keyring of
->>> system keys); 1 for both the primary and secondary keyring (where keys can
->>> be added only if they are vouched for by existing keys in those keyrings);
->>> 2 for the platform keyring (primarily used by the integrity subsystem to
->>> verify a kexec'ed kerned image and, possibly, the initramfs signature);
->>> 0xffff for the session keyring (for testing purposes).
->>>
->>> The caller should also specify the type of signature. Currently only PKCS#7
->>> is supported.
->>>
->>> Since the maximum number of parameters of an eBPF helper is 5, the keyring
->>> and signature types share one (keyring ID: low 16 bits, signature type:
->>> high 16 bits).
->>>
->>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->>> Reported-by: kernel test robot <lkp@intel.com> (cast warning)
->>> ---
->>>    include/uapi/linux/bpf.h       | 17 +++++++++++++
->>>    kernel/bpf/bpf_lsm.c           | 46 ++++++++++++++++++++++++++++++++++
->>>    tools/include/uapi/linux/bpf.h | 17 +++++++++++++
->>>    3 files changed, 80 insertions(+)
->>>
->>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->>> index f4009dbdf62d..97521857e44a 100644
->>> --- a/include/uapi/linux/bpf.h
->>> +++ b/include/uapi/linux/bpf.h
->>> @@ -5249,6 +5249,22 @@ union bpf_attr {
->>>     *		Pointer to the underlying dynptr data, NULL if the dynptr is
->>>     *		read-only, if the dynptr is invalid, or if the offset and length
->>>     *		is out of bounds.
->>> + *
->>> + * long bpf_verify_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u32
->> info)
->>> + *	Description
->>> + *		Verify a signature of length *siglen* against the supplied data
->>> + *		with length *datalen*. *info* contains the keyring identifier
->>> + *		(low 16 bits) and the signature type (high 16 bits). The keyring
->>> + *		identifier can have the following values (some defined in
->>> + *		verification.h): 0 for the primary keyring (immutable keyring of
->>> + *		system keys); 1 for both the primary and secondary keyring
->>> + *		(where keys can be added only if they are vouched for by
->>> + *		existing keys in those keyrings); 2 for the platform keyring
->>> + *		(primarily used by the integrity subsystem to verify a kexec'ed
->>> + *		kerned image and, possibly, the initramfs signature); 0xffff for
->>> + *		the session keyring (for testing purposes).
->>> + *	Return
->>> + *		0 on success, a negative value on error.
->>>     */
->>>    #define __BPF_FUNC_MAPPER(FN)		\
->>>    	FN(unspec),			\
->>> @@ -5455,6 +5471,7 @@ union bpf_attr {
->>>    	FN(dynptr_read),		\
->>>    	FN(dynptr_write),		\
->>>    	FN(dynptr_data),		\
->>> +	FN(verify_signature),		\
->>>    	/* */
->>>
->>>    /* integer value in 'imm' field of BPF_CALL instruction selects which helper
->>> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
->>> index c1351df9f7ee..20bd850ea3ee 100644
->>> --- a/kernel/bpf/bpf_lsm.c
->>> +++ b/kernel/bpf/bpf_lsm.c
->>> @@ -16,6 +16,8 @@
->>>    #include <linux/bpf_local_storage.h>
->>>    #include <linux/btf_ids.h>
->>>    #include <linux/ima.h>
->>> +#include <linux/verification.h>
->>> +#include <linux/module_signature.h>
->>>
->>>    /* For every LSM hook that allows attachment of BPF programs, declare a
->> nop
->>>     * function where a BPF program can be attached.
->>> @@ -132,6 +134,46 @@ static const struct bpf_func_proto
->> bpf_get_attach_cookie_proto = {
->>>    	.arg1_type	= ARG_PTR_TO_CTX,
->>>    };
->>>
->>> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
->>> +BPF_CALL_5(bpf_verify_signature, u8 *, data, u32, datalen, u8 *, sig,
->>> +	   u32, siglen, u32, info)
->>> +{
->>> +	unsigned long keyring_id = info & U16_MAX;
->>> +	enum pkey_id_type id_type = info >> 16;
->>> +	const struct cred *cred = current_cred();
->>> +	struct key *keyring;
->>> +
->>> +	if (keyring_id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING &&
->>> +	    keyring_id != U16_MAX)
->>> +		return -EINVAL;
->>> +
->>> +	keyring = (keyring_id == U16_MAX) ?
->>> +		  cred->session_keyring : (struct key *)keyring_id;
->>> +
->>> +	switch (id_type) {
->>> +	case PKEY_ID_PKCS7:
->>> +		return verify_pkcs7_signature(data, datalen, sig, siglen,
->>> +					      keyring,
->>> +
->> VERIFYING_UNSPECIFIED_SIGNATURE,
->>> +					      NULL, NULL);
->>> +	default:
->>> +		return -EOPNOTSUPP;
->>
->> Question to you & KP:
->>
->>   > Can we keep the helper generic so that it can be extended to more types of
->>   > signatures and pass the signature type as an enum?
->>
->> How many different signature types do we expect, say, in the next 6mo, to land
->> here? Just thinking out loud whether it is better to keep it simple as with the
->> last iteration where we have a helper specific to pkcs7, and if needed in future
->> we add others. We only have the last reg as auxillary arg where we need to
->> squeeze
->> all info into it now. What if for other, future signature types this won't suffice?
-> 
-> I would add at least another for PGP, assuming that the code will be
-> upstreamed. But I agree, the number should not be that high.
+On Fri, Jun 10, 2022 at 6:59 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> Since the maximum number of parameters of an eBPF helper is 5, the keyring
+> and signature types share one (keyring ID: low 16 bits, signature type:
+> high 16 bits).
+...
+> + * long bpf_verify_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u32 info)
+> + *     Description
+> + *             Verify a signature of length *siglen* against the supplied data
+> + *             with length *datalen*. *info* contains the keyring identifier
+> + *             (low 16 bits) and the signature type (high 16 bits). The keyring
+> + *             identifier can have the following values (some defined in
+> + *             verification.h): 0 for the primary keyring (immutable keyring of
+> + *             system keys); 1 for both the primary and secondary keyring
+> + *             (where keys can be added only if they are vouched for by
+> + *             existing keys in those keyrings); 2 for the platform keyring
+> + *             (primarily used by the integrity subsystem to verify a kexec'ed
+> + *             kerned image and, possibly, the initramfs signature); 0xffff for
+> + *             the session keyring (for testing purposes).
 
-If realistically expected is really just two helpers, what speaks against a
-bpf_verify_signature_pkcs7() and bpf_verify_signature_pgp() in that case, for
-sake of better user experience?
-
-Maybe one other angle.. if CONFIG_SYSTEM_DATA_VERIFICATION is enabled, it may
-not be clear whether verify_pkcs7_signature() or a verify_pgp_signature() are
-both always builtin. And then, we run into the issue again of more complex probing
-for availability of the algs compared to simple ...
-
-#if defined(CONFIG_SYSTEM_DATA_VERIFICATION) && defined(CONFIG_XYZ)
-	case BPF_FUNC_verify_signature_xyz:
-		return ..._proto;
-#endif
-
-... which bpftool and others easily understand.
-
->>> +	}
->>> +}
->>> +
->>> +static const struct bpf_func_proto bpf_verify_signature_proto = {
->>> +	.func		= bpf_verify_signature,
->>> +	.gpl_only	= false,
->>> +	.ret_type	= RET_INTEGER,
->>> +	.arg1_type	= ARG_PTR_TO_MEM,
->>> +	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
->>
->> Can verify_pkcs7_signature() handle null/0 len for data* args?
-> 
-> Shouldn't ARG_PTR_TO_MEM require valid memory? 0 len should
-> not be a problem.
-
-check_helper_mem_access() has:
-
-      /* Allow zero-byte read from NULL, regardless of pointer type */
-      if (zero_size_allowed && access_size == 0 &&
-          register_is_null(reg))
-              return 0;
-
-So NULL/0 pair can be passed. Maybe good to add these corner cases to the test_progs
-selftest additions then if it's needed.
-
->>> +	.arg3_type	= ARG_PTR_TO_MEM,
->>> +	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
->>
->> Ditto for sig* args?
->>
->>> +	.arg5_type	= ARG_ANYTHING,
->>> +	.allowed	= bpf_ima_inode_hash_allowed,
->>> +};
->>> +#endif
->>> +
->>>    static const struct bpf_func_proto *
->>>    bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->>>    {
->>> @@ -158,6 +200,10 @@ bpf_lsm_func_proto(enum bpf_func_id func_id,
->> const struct bpf_prog *prog)
->>>    		return prog->aux->sleepable ? &bpf_ima_file_hash_proto :
->> NULL;
->>>    	case BPF_FUNC_get_attach_cookie:
->>>    		return bpf_prog_has_trampoline(prog) ?
->> &bpf_get_attach_cookie_proto : NULL;
->>> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
->>> +	case BPF_FUNC_verify_signature:
->>> +		return prog->aux->sleepable ? &bpf_verify_signature_proto :
->> NULL;
->>> +#endif
->>>    	default:
->>>    		return tracing_prog_func_proto(func_id, prog);
->>>    	}
-
+Muxing all kinds of info in the 5th arg isn't great.
+It's better to use dynptr here for data and sig.
+It will free up two extra arguments.
