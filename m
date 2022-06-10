@@ -2,426 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5857154591C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jun 2022 02:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AB1545973
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jun 2022 03:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239817AbiFJAUz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Jun 2022 20:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S240244AbiFJBFn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Jun 2022 21:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239549AbiFJAUz (ORCPT
+        with ESMTP id S240541AbiFJBFl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Jun 2022 20:20:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A9142A264
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Jun 2022 17:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654820452;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=sm1YrHRBQ1QJZPUgeEFq2SDAcSXhEPRjCPtrFv/MFMc=;
-        b=Q5l+BAelmtaFYCqnCs4TJ2GcY1ajQcxg7iHE+/z/XaSokw8+OqSiWHCe5AxmH0fWpJltU8
-        ZKKC8WT/l3sQR0coDGZbYb37LbGFWlPku7eISeuubn+IMA4qd7s5GXbAWGIMolyYbM6iQF
-        r8JIiZ4EvV+9g8NP7Ce1CDhRf7mbA0s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-298-bKEvQTA8Op-aVCL4Gk9-KA-1; Thu, 09 Jun 2022 20:20:49 -0400
-X-MC-Unique: bKEvQTA8Op-aVCL4Gk9-KA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1289E3C0ED47;
-        Fri, 10 Jun 2022 00:20:49 +0000 (UTC)
-Received: from jsavitz-csb.redhat.com (unknown [10.22.11.108])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B536B1415100;
-        Fri, 10 Jun 2022 00:20:48 +0000 (UTC)
-From:   Joel Savitz <jsavitz@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Nico Pache <npache@redhat.com>
-Subject: [RFC PATCH] selftests/vm: enable running select groups of tests
-Date:   Thu,  9 Jun 2022 20:20:46 -0400
-Message-Id: <20220610002046.3243874-1-jsavitz@redhat.com>
+        Thu, 9 Jun 2022 21:05:41 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2040.outbound.protection.outlook.com [40.107.92.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09EF126998;
+        Thu,  9 Jun 2022 18:05:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ESUrVXLQc1cTK38qWaXYRk4giy4E/5w8c4f+76RoZxjUWOQFQkfJnco8R2doalJdJgaWk91ZOpr+sa2rqRtS7fJZnt+eppSC7W7kLs6btiBb8zlutHybrYpcSWWxvVYGoI4KtQGBrnVETBp6rfFran92vJ3w081kibP91wd0OevG6JsVmbCg7zBWOUqHfw8nVYhfMNyVWoTVb5GW5Igy1vs6BvKu+wRSHNSfl74RA0w2fZZ3lOng7qzvEBqqExpTeEGskf5dlxGsuNZOe59USQ5qFZ0f/eC6xNEd2QKdKH3EYpiAo69dHnhiKsoorxRkEUt1n4RcyhhYKFO5ojxqKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kCcZDvasupbveQ8RbqnbUMijxNxxVetwncqEFJlFcm8=;
+ b=TlBLDUyLGmDa74DlvEHbZdjVaqW9g7woFJzGXwQ/vxwMcSq7ptl7pKJyOV6FZLIyqhGQgQRIK0Hkv3tpE00vxKOM504ntLkQTdIvJmCeyqX40V5OXhX5t/UzkIvP0xBnfTJ3jhymJr5PBKtpA5TCjiIJBlfr56qvSNasDpUOfDem7uu3DZ9xiQmJjFc887sFGlwK4r7/pAQow9BsZHn/BQtqdlun8O8pUsGrDfAJ2/MMgoy+ihPvNssrMistAuz19I2lRu1u4BFgds0lPGNS21NsrPgQuXoCQWx1gQkr0xyd/8o/4rMBZg62hDTzIdaR2PERqlvUY1nvd/YGAjYqMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kCcZDvasupbveQ8RbqnbUMijxNxxVetwncqEFJlFcm8=;
+ b=zWCX+hsz3b2ShrVyjTaehY4LNC/XtgQ8K1q5T+P4hJ4eNin7GCD3KzJsju8mVcWqowBaerFPSJTwrAUinZxxodkQLi94cX0srmK56XTj52tNBdfa2PgIbWfsIEHbsAj7X0m9OWeiV5tP53+U1inltUpQQX9n5AOoxfRmMsWZqWc=
+Received: from DS7P222CA0006.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::23) by
+ CY4PR1201MB2517.namprd12.prod.outlook.com (2603:10b6:903:da::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.15; Fri, 10 Jun
+ 2022 01:05:36 +0000
+Received: from DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2e:cafe::a7) by DS7P222CA0006.outlook.office365.com
+ (2603:10b6:8:2e::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12 via Frontend
+ Transport; Fri, 10 Jun 2022 01:05:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT003.mail.protection.outlook.com (10.13.173.162) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Fri, 10 Jun 2022 01:05:36 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 9 Jun
+ 2022 20:05:35 -0500
+Date:   Thu, 9 Jun 2022 20:05:10 -0500
+From:   Michael Roth <michael.roth@amd.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+CC:     <x86@kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <pbonzini@redhat.com>, <vkuznets@redhat.com>,
+        <wanpengli@tencent.com>, <jmattson@google.com>, <joro@8bytes.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <shuah@kernel.org>,
+        <yang.zhong@intel.com>, <drjones@redhat.com>,
+        <ricarkol@google.com>, <aaronlewis@google.com>,
+        <wei.w.wang@intel.com>, <kirill.shutemov@linux.intel.com>,
+        <corbet@lwn.net>, <hughd@google.com>, <jlayton@kernel.org>,
+        <bfields@fieldses.org>, <akpm@linux-foundation.org>,
+        <chao.p.peng@linux.intel.com>, <yu.c.zhang@linux.intel.com>,
+        <jun.nakajima@intel.com>, <dave.hansen@intel.com>,
+        <qperret@google.com>, <steven.price@arm.com>, <ak@linux.intel.com>,
+        <david@redhat.com>, <luto@kernel.org>, <vbabka@suse.cz>,
+        <marcorr@google.com>, <erdemaktas@google.com>, <pgonda@google.com>,
+        <nikunj@amd.com>, <seanjc@google.com>, <diviness@google.com>,
+        <maz@kernel.org>, <dmatlack@google.com>,
+        <axelrasmussen@google.com>, <maciej.szmigiero@oracle.com>,
+        <mizhang@google.com>, <bgardon@google.com>
+Subject: Re: [RFC V1 PATCH 0/3] selftests: KVM: sev: selftests for fd-based
+ approach of supporting private memory
+Message-ID: <20220610010510.vlxax4g3sgvsmoly@amd.com>
+References: <20220524205646.1798325-1-vannapurve@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220524205646.1798325-1-vannapurve@google.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5f3aa4dc-527a-4100-b128-08da4a7d53e4
+X-MS-TrafficTypeDiagnostic: CY4PR1201MB2517:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR1201MB2517D15AD88495FA5DA9E08D95A69@CY4PR1201MB2517.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dA75hRsAMw3E0zeoLrmwdGsIMc85TWLqKgO4yuWUbMFuTj9i1vuvHHGO4sEC20YLA9ZP5q/eUhr7WCbEdKvKZJb5zqLL0T99ROO6OqSqpMd5Q1sbcWk4dx4b6sBRSkOtWPV858e1ffvNeZxkNxKYD+M0q3+O1N1L10KbgkjSTC1P26lIo1KnYSmQuYBU78beOVJV1pPfhP9FTghUCzi3HREcnMgEb37FFB7UKVSk1uR96ZvGP5Gp9sTl8avYtccgUrqyFXfXyBhuaqFRF2Wv2J9PecSYK6LthKLwk2jVk5/6HrFkweEmUXxeaZj31jXgcNVIbTC56pvc6dO+mPg56EFvLTTDScGZOBX5JIRwcTcLQWe+wGQB8qoXRwZ4Pz7KpH6VVAanmsvAjMVsyGsKs9XQKP9tfzmRGL+1PlXL09EdToU+IXn7xfxw9Z69/efeWn4PXzR2EM042j80yKuFfCWN4/dftO+8SXwr31oQYtLb3zvx4TQx/vXwqWti6nR533hjs/agRQ3w3EFCW6CkZA4KviLZraRTZ/luLcix7qa9FbvV+9KVMLmSI7Q1Gv45TMxhuUX6sz70nqzfJuKCsYKV2gcRSOubLMefn1lS5/8fdJUfjYeEHMw0YFO9qfuSZ6uPPb4Xp7BSD+prUVQqt5heEQZSRC2JlLPVCrIT4fZWZIMmYi6knV3sh1AkFWRN5WJMTfgv6oQJDyy4NK90SaklKCwiT/6eBSQJ2Th8MD5Rrlhe11HvnsYFiqlxxx0Qq8aIv1DNQaVzLbfJQa33WgtsxESQ+mWGhI6OAn4PKZqVSpO4BOVZnNfcW7Pxufvk31aZ+PnY+WL40gNE8lG/Fg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(186003)(16526019)(426003)(336012)(966005)(5660300002)(54906003)(6916009)(36860700001)(47076005)(83380400001)(70586007)(8676002)(44832011)(45080400002)(70206006)(8936002)(508600001)(4326008)(40460700003)(7406005)(7416002)(6666004)(82310400005)(26005)(36756003)(356005)(2616005)(2906002)(86362001)(1076003)(81166007)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 01:05:36.4272
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f3aa4dc-527a-4100-b128-08da4a7d53e4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2517
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add the ability to run one or more groups of vm tests (specified
-by the environment variable TEST_ITEMS). Preserve existing default
-behavior of running all tests when TEST_ITEMS is empty or "default".
+On Tue, May 24, 2022 at 08:56:43PM +0000, Vishal Annapurve wrote:
+> This series implements selftests targeting the feature floated by Chao
+> via:
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-mm%2F20220519153713.819591-1-chao.p.peng%40linux.intel.com%2F&amp;data=05%7C01%7Cmichael.roth%40amd.com%7Cbe9cc77fc6ff4da6707808da3dc7f39c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637890226337327131%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=81aPsc4zGLgPZh5A4IwKuN7AB0LLc7sNH8LYrhNMgNM%3D&amp;reserved=0
+> 
+> Below changes aim to test the fd based approach for guest private memory
+> in context of SEV/SEV-ES VMs executing on AMD SEV/SEV-ES compatible
+> platforms.
 
-Documentation of test groups is included in the patch as follows:
+Hi Vishal,
 
-    # ./run_vmtests.sh [ -h || --help ]
+Thanks for posting this!
 
-    usage: ./tools/testing/selftests/vm/run_vmtests.sh [ -h ]
-      -h: display this message
+Nikunj and I have been working on a test tree with UPM support for SEV and
+SEV-SNP. I hit some issues getting your selftests to work against our tree 
+since some of the HC_MAP_GPA_RANGE handling for SEV was stepping on the kernel
+handling you'd added for the UPM selftests.
 
-    The default behavior is to run all tests.
+I ended up adding a KVM_CAP_UNMAPPED_PRIVATE_MEM to distinguish between the
+2 modes. With UPM-mode enabled it basically means KVM can/should enforce that
+all private guest pages are backed by private memslots, and enable a couple
+platform-specific hooks to handle MAP_GPA_RANGE, and queries from MMU on
+whether or not an NPT fault is for a private page or not. SEV uses these hooks
+to manage its encryption bitmap, and uses that bitmap as the authority on
+whether or not a page is encrypted. SNP uses GHCB page-state-change requests
+so MAP_GPA_RANGE is a no-op there, but uses the MMU hook to indicate whether a
+fault is private based on the page fault flags.
 
-    Alternatively, specific groups tests can be run by defining
-    the TEST_ITEMS shell variable with a space-separated string
-    of one or more of the following:
-    - mmap
-	    tests for mmap(2)
-    - gup_test
-	    tests for gup using gup_test interface
-    - userfaultfd
-	    tests for  userfaultfd(2)
-    - compaction
-	    a test for the patch "Allow compaction of unevictable pages"
-    - mlock
-	    tests for mlock(2)
-    - mremap
-	    tests for mremap(2)
-    - hugevm
-	    tests for very large virtual address space
-    - vmalloc
-	    vmalloc smoke tests
-    - hmm
-	    hmm smoke tests
-    - madv_populate
-	    test memadvise(2) MADV_POPULATE_{READ,WRITE} options
-    - memfd_secret
-	    test memfd_secret(2)
-    - process_mrelease
-	    test process_mrelease(2)
-    - ksm
-	    ksm tests that do not require >=2 NUMA nodes
-    - ksm_numa
-	    ksm tests that require >=2 NUMA nodes
-    example: TEST_ITEMS="hmm mmap ksm" ./run_vmtests.sh
+When UPM-mode isn't enabled, MAP_GPA_RANGE just gets passed on to userspace
+as before, and platform-specific hooks above are no-ops. That's the mode
+your SEV self-tests ran in initially. I added a test that runs the
+PrivateMemoryPrivateAccess in UPM-mode, where the guest's OS memory is also
+backed by private memslot and the platform hooks are enabled, and things seem
+to still work okay there. I only added a UPM-mode test for the
+PrivateMemoryPrivateAccess one though so far. I suppose we'd want to make
+sure it works exactly as it did with UPM-mode disabled, but I don't see why
+it wouldn't. 
 
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
----
- tools/testing/selftests/vm/run_vmtests.sh | 224 +++++++++++++++-------
- 1 file changed, 150 insertions(+), 74 deletions(-)
+But probably worth having some discussion on how exactly we should define this
+mode, and whether that meshes with what TDX folks are planning.
 
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index 41fce8bea929..d31fc66205f8 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -1,22 +1,74 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
--#please run as root
-+# Please run as root
- 
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
- mnt=./huge
- exitcode=0
--
--#get huge pagesize and freepages from /proc/meminfo
--while read -r name size unit; do
--	if [ "$name" = "HugePages_Free:" ]; then
--		freepgs="$size"
--	fi
--	if [ "$name" = "Hugepagesize:" ]; then
--		hpgsize_KB="$size"
-+nr_tests_ran=0
-+
-+if [ ${1:-0} == "-h" ] || [ ${1:-0} == "--help" ]
-+then
-+	cat <<EOF
-+usage: ${BASH_SOURCE[0]:-$0} [ -h ]
-+  -h: display this message
-+
-+The default behavior is to run all tests.
-+
-+Alternatively, specific groups tests can be run by defining
-+the TEST_ITEMS shell variable with a space-separated string
-+of one or more of the following:
-+- mmap
-+	tests for mmap(2)
-+- gup_test
-+	tests for gup using gup_test interface
-+- userfaultfd
-+	tests for  userfaultfd(2)
-+- compaction
-+	a test for the patch "Allow compaction of unevictable pages"
-+- mlock
-+	tests for mlock(2)
-+- mremap
-+	tests for mremap(2)
-+- hugevm
-+	tests for very large virtual address space
-+- vmalloc
-+	vmalloc smoke tests
-+- hmm
-+	hmm smoke tests
-+- madv_populate
-+	test memadvise(2) MADV_POPULATE_{READ,WRITE} options
-+- memfd_secret
-+	test memfd_secret(2)
-+- process_mrelease
-+	test process_mrelease(2)
-+- ksm
-+	ksm tests that do not require >=2 NUMA nodes
-+- ksm_numa
-+	ksm tests that require >=2 NUMA nodes
-+example: TEST_ITEMS="hmm mmap ksm" ./run_vmtests.sh
-+EOF
-+	exit 0
-+fi # $1 == -h || $1 == --help
-+
-+# default behavior: run all tests
-+TEST_ITEMS=${TEST_ITEMS:-default}
-+
-+echo "Selected test items: ${TEST_ITEMS}"
-+
-+test_selected() {
-+	if [ "$TEST_ITEMS" == "default" ]; then
-+		# If no TEST_ITEMS are specified, run all tests
-+		return 0
- 	fi
--done < /proc/meminfo
-+	echo ${TEST_ITEMS} | grep ${1} 2>&1 >/dev/null
-+	return ${?}
-+}
-+
-+# Hugepage setup only needed for hugetlb tests
-+if test_selected "hugetlb"; then
- 
- # Simple hugetlbfs tests have a hardcoded minimum requirement of
- # huge pages totaling 256MB (262144KB) in size.  The userfaultfd
-@@ -28,7 +80,17 @@ hpgsize_MB=$((hpgsize_KB / 1024))
- half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
- needmem_KB=$((half_ufd_size_MB * 2 * 1024))
- 
--#set proper nr_hugepages
-+# get huge pagesize and freepages from /proc/meminfo
-+while read -r name size unit; do
-+	if [ "$name" = "HugePages_Free:" ]; then
-+		freepgs="$size"
-+	fi
-+	if [ "$name" = "Hugepagesize:" ]; then
-+		hpgsize_KB="$size"
-+	fi
-+done < /proc/meminfo
-+
-+# set proper nr_hugepages
- if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
- 	nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
- 	needpgs=$((needmem_KB / hpgsize_KB))
-@@ -57,126 +119,140 @@ else
- 	exit 1
- fi
- 
--#filter 64bit architectures
-+fi # test_selected "hugetlb"
-+
-+# filter 64bit architectures
- ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
- if [ -z "$ARCH" ]; then
- 	ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
- fi
- VADDR64=0
--echo "$ARCH64STR" | grep "$ARCH" && VADDR64=1
-+echo "$ARCH64STR" | grep "$ARCH" &>/dev/null && VADDR64=1
- 
- # Usage: run_test [test binary] [arbitrary test arguments...]
- run_test() {
--	local title="running $*"
--	local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
--	printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
--
--	"$@"
--	local ret=$?
--	if [ $ret -eq 0 ]; then
--		echo "[PASS]"
--	elif [ $ret -eq $ksft_skip ]; then
--		echo "[SKIP]"
--		exitcode=$ksft_skip
--	else
--		echo "[FAIL]"
--		exitcode=1
--	fi
-+	if test_selected ${CATEGORY}; then
-+		local title="running $*"
-+		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
-+		printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
-+
-+		"$@"
-+		local ret=$?
-+		if [ $ret -eq 0 ]; then
-+			echo "[PASS]"
-+		elif [ $ret -eq $ksft_skip ]; then
-+			echo "[SKIP]"
-+			exitcode=$ksft_skip
-+		else
-+			echo "[FAIL]"
-+			exitcode=1
-+		fi
-+		nr_tests_ran=$((nr_tests_ran + 1))
-+	fi # test_selected
- }
- 
--mkdir "$mnt"
--mount -t hugetlbfs none "$mnt"
-+# setup only needed for hugetlb tests
-+if test_selected "hugetlb"; then
-+	mkdir "$mnt"
-+	mount -t hugetlbfs none "$mnt"
-+fi
- 
--run_test ./hugepage-mmap
-+CATEGORY="hugetlb" run_test ./hugepage-mmap
- 
- shmmax=$(cat /proc/sys/kernel/shmmax)
- shmall=$(cat /proc/sys/kernel/shmall)
- echo 268435456 > /proc/sys/kernel/shmmax
- echo 4194304 > /proc/sys/kernel/shmall
--run_test ./hugepage-shm
-+CATEGORY="hugetlb" run_test ./hugepage-shm
- echo "$shmmax" > /proc/sys/kernel/shmmax
- echo "$shmall" > /proc/sys/kernel/shmall
- 
--run_test ./map_hugetlb
-+CATEGORY="hugetlb" run_test ./map_hugetlb
- 
--run_test ./hugepage-mremap "$mnt"/huge_mremap
--rm -f "$mnt"/huge_mremap
-+CATEGORY="hugetlb" run_test ./hugepage-mremap "$mnt"/huge_mremap
-+test_selected "hugetlb" && rm -f "$mnt"/huge_mremap
- 
--run_test ./hugepage-vmemmap
-+CATEGORY="hugetlb" run_test ./hugepage-vmemmap
- 
--run_test ./hugetlb-madvise "$mnt"/madvise-test
--rm -f "$mnt"/madvise-test
-+CATEGORY="hugetlb" run_test ./hugetlb-madvise "$mnt"/madvise-test
-+test_selected "hugetlb" && rm -f "$mnt"/madvise-test
- 
--echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
--echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
--echo "      hugetlb regression testing."
-+if test_selected "hugetlb"; then
-+	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
-+	echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
-+	echo "      hugetlb regression testing."
-+fi
- 
--run_test ./map_fixed_noreplace
-+CATEGORY="mmap" run_test ./map_fixed_noreplace
- 
- # get_user_pages_fast() benchmark
--run_test ./gup_test -u
-+CATEGORY="gup_test" run_test ./gup_test -u
- # pin_user_pages_fast() benchmark
--run_test ./gup_test -a
-+CATEGORY="gup_test" run_test ./gup_test -a
- # Dump pages 0, 19, and 4096, using pin_user_pages:
--run_test ./gup_test -ct -F 0x1 0 19 0x1000
-+CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
- 
--run_test ./userfaultfd anon 20 16
-+CATEGORY="userfaultfd" run_test ./userfaultfd anon 20 16
- # Test requires source and destination huge pages.  Size of source
- # (half_ufd_size_MB) is passed as argument to test.
--run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
--run_test ./userfaultfd shmem 20 16
--
--#cleanup
--umount "$mnt"
--rm -rf "$mnt"
--echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
-+CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-+CATEGORY="userfaultfd" run_test ./userfaultfd shmem 20 16
-+
-+# cleanup (only needed when running hugetlb tests)
-+if test_selected "hugetlb"; then
-+	umount "$mnt"
-+	rm -rf "$mnt"
-+	echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
-+fi
- 
--run_test ./compaction_test
-+CATEGORY="compaction" run_test ./compaction_test
- 
--run_test sudo -u nobody ./on-fault-limit
-+CATEGORY="mlock" run_test sudo -u nobody ./on-fault-limit
- 
--run_test ./map_populate
-+CATEGORY="mmap" run_test ./map_populate
- 
--run_test ./mlock-random-test
-+CATEGORY="mlock" run_test ./mlock-random-test
- 
--run_test ./mlock2-tests
-+CATEGORY="mlock" run_test ./mlock2-tests
- 
--run_test ./mrelease_test
-+CATEGORY="process_mrelease" run_test ./mrelease_test
- 
--run_test ./mremap_test
-+CATEGORY="mremap" run_test ./mremap_test
- 
--run_test ./thuge-gen
-+CATEGORY="hugetlb" run_test ./thuge-gen
- 
- if [ $VADDR64 -ne 0 ]; then
--	run_test ./virtual_address_range
-+	CATEGORY="hugevm" run_test ./virtual_address_range
- 
- 	# virtual address 128TB switch test
--	run_test ./va_128TBswitch
-+	CATEGORY="hugevm" run_test ./va_128TBswitch
- fi # VADDR64
- 
- # vmalloc stability smoke test
--run_test ./test_vmalloc.sh smoke
-+CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
- 
--run_test ./mremap_dontunmap
-+CATEGORY="mremap" run_test ./mremap_dontunmap
- 
--run_test ./test_hmm.sh smoke
-+CATEGORY="hmm" run_test ./test_hmm.sh smoke
- 
- # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
--run_test ./madv_populate
-+CATEGORY="madv_populate" run_test ./madv_populate
- 
--run_test ./memfd_secret
-+CATEGORY="memfd_secret" run_test ./memfd_secret
- 
- # KSM MADV_MERGEABLE test with 10 identical pages
--run_test ./ksm_tests -M -p 10
-+CATEGORY="ksm" run_test ./ksm_tests -M -p 10
- # KSM unmerge test
--run_test ./ksm_tests -U
-+CATEGORY="ksm" run_test ./ksm_tests -U
- # KSM test with 10 zero pages and use_zero_pages = 0
--run_test ./ksm_tests -Z -p 10 -z 0
-+CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 0
- # KSM test with 10 zero pages and use_zero_pages = 1
--run_test ./ksm_tests -Z -p 10 -z 1
-+CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 1
- # KSM test with 2 NUMA nodes and merge_across_nodes = 1
--run_test ./ksm_tests -N -m 1
-+CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
- # KSM test with 2 NUMA nodes and merge_across_nodes = 0
--run_test ./ksm_tests -N -m 0
-+CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
-+
-+echo "Ran $nr_tests_ran tests"
- 
- exit $exitcode
--- 
-2.31.1
+I've pushed my UPM-mode selftest additions here:
+  https://github.com/mdroth/linux/commits/sev_upm_selftests_rfc_v1_upmmode
 
+And the UPM SEV/SEV-SNP tree I'm running them against (DISCLAIMER: EXPERIMENTAL):
+  https://github.com/mdroth/linux/commits/pfdv6-on-snpv6-upm1
+
+Thanks!
+
+-Mike
