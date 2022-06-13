@@ -2,53 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09097549CF8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jun 2022 21:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5231F549D6C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jun 2022 21:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235346AbiFMTKt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Jun 2022 15:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        id S1348563AbiFMTVi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Jun 2022 15:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349365AbiFMTIr (ORCPT
+        with ESMTP id S1349089AbiFMTVS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:08:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33EE950061
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jun 2022 10:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655139987;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s7hhCYT7OGqCx5nH+qXS1ao3TYt75AzmKiJLPQv1MlY=;
-        b=dN7XFuXy/NWHD2GALDrP/g+Tp4sT4W9Tv4HMrVJG6rUUtnNYuOkLd70ou+1H4i9IIEphie
-        A8kaF705rtufmt6MmOPibuYCLTEA1qQj4oT3ThVchBnKt3CZo2DGW5qjvf9eX7Vd2uCnmH
-        07Yxv6ZGdibYBrILf0/Rv5c+kgGsTMc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-29-u9ZkP3_qMFWE3PS8XzGi6A-1; Mon, 13 Jun 2022 13:06:22 -0400
-X-MC-Unique: u9ZkP3_qMFWE3PS8XzGi6A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3825D801756;
-        Mon, 13 Jun 2022 17:06:21 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 68A6F2026D64;
-        Mon, 13 Jun 2022 17:06:20 +0000 (UTC)
-Message-ID: <c91a8c45-123d-dbae-b07c-83772add082d@redhat.com>
-Date:   Mon, 13 Jun 2022 13:06:20 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Mon, 13 Jun 2022 15:21:18 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CABA1CB22;
+        Mon, 13 Jun 2022 10:23:06 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id s37so3637895pfg.11;
+        Mon, 13 Jun 2022 10:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=7M+A4Tkcl4j2ZEYJxnHofmbHWBP8K2O9jymdDhG9tv0=;
+        b=SfbzRvanLsSXpQIXsHN2DLvLUMY5t8/g0db/VVEH7eeh+ei07KzvHZObXvbjTtVeim
+         QqAtDY4GBjmFmerP5kZz+/mf7m/AS/3Q5XZMZOj/OJ8HDObBVWj2SDvQTRMUldRoZMZ+
+         SeJLzy0p5MzASUh/0RwJPnMgBysfdsAoMl1zLmYslcAO+FOxbb8NVeSW1lz0Tf3iyUJ1
+         7LDCIUE5aIDnihc8OtiMhEzJchy+X65LWl8FCJEPOHTTeMSAznyrJtD842u6apyMxgiI
+         ZuePfGPvvzwdUYaLN3R4KH78h6kCwyviro32caqZmQSWGivj6/D750j/QfJwc+em2o6W
+         8ANw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=7M+A4Tkcl4j2ZEYJxnHofmbHWBP8K2O9jymdDhG9tv0=;
+        b=t3DkZMS/cctafLZdQLmxZP854yMY27zMd3yQMrXvqyh8klLUZAh1a8p1Yg3DldYyXG
+         1Y6I47mjQxw0VkSicPFwXJkPaw9VgcJ5o1Uz3aBm3RKqAw7KeMkzFvIZQH2bslvRsM+K
+         ohuOWNPBBN3yjD/xEa+soqp+6a7nj77qDycRfjGMDXqbAoxR7oAR34RmTRwM0SlufChL
+         6Uzp2r7InXKbTsVAGao0SaCE3aj5FRtkte/esTEJDQmTGQxuI0mGvKbCO/SlA+m4pC0C
+         eYnTWuZ7kV89ZHDgMKIUpU0MOgsuEOMGRCkTfu8fJswXUic1ksdCUebQukqM8Y+18oMu
+         GNCw==
+X-Gm-Message-State: AOAM531gkt+L5SdHB/8PZ9u3H9D0zXCWxttkv8Szo7ecXSbAs0NqtrLY
+        VJU1CZv1DIyGLCTPgAKNgeo=
+X-Google-Smtp-Source: ABdhPJw4VXb316KPeH1PJV6+trUh6zgGxF5VJQRHS1G9M7KvTAY4ypmt5bbKi2jd6R5tOl/qrqr8KQ==
+X-Received: by 2002:a63:1f55:0:b0:3fd:41c5:b53a with SMTP id q21-20020a631f55000000b003fd41c5b53amr529334pgm.441.1655140985316;
+        Mon, 13 Jun 2022 10:23:05 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id s194-20020a6377cb000000b003fd1111d73csm5956795pgc.4.2022.06.13.10.23.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 10:23:04 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 13 Jun 2022 07:23:03 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
@@ -59,68 +65,55 @@ Cc:     Zefan Li <lizefan.x@bytedance.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v11 3/8] cgroup/cpuset: Allow no-task partition to have
+ empty cpuset.cpus.effective
+Message-ID: <Yqdydz3vNgfVMgDf@slm.duckdns.org>
 References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-8-longman@redhat.com>
- <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
- <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
- <YqarMyNo9oHxhZFh@slm.duckdns.org>
- <8d7ddb5a-0d0b-3f2e-e049-900360e95fc6@redhat.com>
-In-Reply-To: <8d7ddb5a-0d0b-3f2e-e049-900360e95fc6@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20220510153413.400020-4-longman@redhat.com>
+ <YqYlCRywdgSYtwKk@slm.duckdns.org>
+ <YqYlOQjKtQCBsQuT@slm.duckdns.org>
+ <ce3106c1-a3c4-b449-bafc-6940d672bd94@redhat.com>
+ <YqanEZZooeZwtutA@slm.duckdns.org>
+ <20220613140206.GA6910@blackbody.suse.cz>
+ <f1c33447-1f82-9698-6b0c-fc9ffb12b4bb@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <f1c33447-1f82-9698-6b0c-fc9ffb12b4bb@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/13/22 09:18, Waiman Long wrote:
-> On 6/12/22 23:12, Tejun Heo wrote:
->> Hello,
->>
->> On Sun, Jun 12, 2022 at 11:02:38PM -0400, Waiman Long wrote:
->>> That is the behavior enforced by setting the CPU_EXCLUSIVE bit in 
->>> cgroup v1.
->>> I haven't explicitly change it to make it different in cgroup v2. 
->>> The major
->>> reason is that I don't want change to one cpuset to affect a sibling
->>> partition as it may make the code more complicate to validate if a 
->>> partition
->>> is valid.
->> If at all possible, I'd really like to avoid situations where a 
->> parent can't
->> withdraw resources due to something that a descendant does.
->
-> No, it doesn't affect parent at all. It just limit whats the siblings 
-> can do due to their mutual constraint. If this is what the confusion 
-> is about, I will try to reword the doc text.
+Hello,
 
-I am planning to make the following change to the documentation patch. 
-Please let me know if that can clarify the confusion, if any.
+On Mon, Jun 13, 2022 at 12:47:37PM -0400, Waiman Long wrote:
+> On 6/13/22 10:02, Michal Koutn� wrote:
+> > On Sun, Jun 12, 2022 at 04:55:13PM -1000, Tejun Heo <tj@kernel.org> wrote:
+> > > But how would that happen? A lot of other things would break too if that
+> > > were to happen.
+> > cpuset is a threaded controller where the internal-node-constraint does
+> > not hold. So the additional condition for cpuset migrations is IMO
+> > warranted (and needed if there's no "fall up").
+> 
+> Yes, you are right. cpuset is threaded and so it may have tasks even if it
+> is not the leaf node.
 
-Thanks,
-Longman
+And we had this same exchange the last time. Can you please add a comment?
+We might also already have had this exchange before too but is it necessary
+to allow threaded cgroups to be isolated roots? The interaction between
+being threaded and isolated is cleaner at that layer as it's interactions
+between two explicit mode changes.
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst 
-b/Documentation/admin-guid>
-index 9184a09e0fc9..9cbfa25dab97 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2176,7 +2175,8 @@ Cpuset Interface Files
+Thanks.
 
-         For a valid partition root or an invalid partition root with
-         the exclusivity rule enabled, changes made to "cpuset.cpus"
--       that violate the exclusivity rule will not be allowed.
-+       that violate the exclusivity rule with its siblings will not
-+       be allowed.
-
-         A valid non-root parent partition may distribute out all its CPUs
-         to its child partitions when there is no task associated with it.
-
+-- 
+tejun
