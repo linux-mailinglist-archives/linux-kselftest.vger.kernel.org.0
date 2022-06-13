@@ -2,90 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CCF54A2A9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 01:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A95A54A2BD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 01:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347314AbiFMXX2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Jun 2022 19:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        id S230256AbiFMXdx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Jun 2022 19:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238421AbiFMXXR (ORCPT
+        with ESMTP id S229783AbiFMXdu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Jun 2022 19:23:17 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D2031DFC;
-        Mon, 13 Jun 2022 16:23:17 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 63E322D6;
-        Mon, 13 Jun 2022 23:23:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 63E322D6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1655162595; bh=DaRek4VCbbCEWDVHGSepYt+fEnKtHG9ut+awCzRUXRQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=FvS3IOr2TAOGBY3ITgsqcvlVGpzQmoKdunLDI+3/shEpR/t7oSEVVeHoGDDdKX6dK
-         Cd2H+2nc/WjM5b4sVQ8yNi7nlUuPXXG+a4sIK+UrOD6YPML0Y/EpPTvLykfUtrihqp
-         1XS8NPeT74mLMvk6FtO/Ac9KHGggTSOoAru8AlmMmkiVFfNrdkZ8ngujBF+HYdqN34
-         3UJ5krv9fnSnhbPSzoTQy5sHuxOwVSwaZWMBP/YU3q+oSaktASpzcEQaAUL/OUsBas
-         i3jQ8659pZFpkCyCBVVeNy4nrowO+LjnbeEtjztKMVkqznwuc4JCXqMY6ZifUbJ8c6
-         OCm5Hpe4Z58GQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 2/6] userfaultfd: add /dev/userfaultfd for fine
- grained access control
-In-Reply-To: <CAJHvVchdmV42qCgO6j=zGBi0DeVcvW1OC88rHUP6V66Fg3CSww@mail.gmail.com>
-References: <20220601210951.3916598-1-axelrasmussen@google.com>
- <20220601210951.3916598-3-axelrasmussen@google.com>
- <20220613145540.1c9f7750092911bae1332b92@linux-foundation.org>
- <Yqe6R+XSH+nFc8se@xz-m1.local>
- <CAJHvVchdmV42qCgO6j=zGBi0DeVcvW1OC88rHUP6V66Fg3CSww@mail.gmail.com>
-Date:   Mon, 13 Jun 2022 17:23:14 -0600
-Message-ID: <87k09kxi59.fsf@meer.lwn.net>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 13 Jun 2022 19:33:50 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8098B3055D
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jun 2022 16:33:49 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id 206-20020a6218d7000000b0051893ee2888so2943867pfy.16
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jun 2022 16:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Lpl6bFxJI4CHRgZzmX1LV+v0qDroFLN/nvNicZhBWbk=;
+        b=PBbqm2oEvfRdfqUL7Z30R+/pfa0TDaOZnOfFZ0FGkyyXTVfaeA859rqjWm5M1jgU4x
+         x9JF9CHjapYA+Mh3kZOTZBfRwi95ukBYi4SdXiCXBziNv0P/HPw9E1dCWO6gbH+BcCKm
+         tkhDkanIMftPysWbsqKlgR9QcfvPiyPBDZ/GSuklEWBnmW3oudZLo8ywT96P48LV6iA4
+         XmsVCsryoiDxhn+5j4mLRhSC2gJiFeyyEotYhoPswCKK6KwnReLTepOho7gwxE37W1Zi
+         K/rIYy1sy8uQjBLmW9Eh+KI/HR8kZ34ztVrGSb3dFKCZ8WMgaXsxVEFfLfbbLSPqJGOj
+         6gTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Lpl6bFxJI4CHRgZzmX1LV+v0qDroFLN/nvNicZhBWbk=;
+        b=VqMYAZgz60dItlMX1ppV7jQrawYcTqC50Iy5ff4+Z+Re7xUASfOojMu74cv751YvES
+         RLIcTlG61p2wDK+y+01jPcxTQs1A/yiPfX9/DOVFT3u+fUr0smaf70kGsniDF2Rdo3at
+         pj9nCim0kUlBj2MlRPrJvmXiAwdQ0iZt4XnhqoKf7hX1JLYTkZ8Y9+1lexlx13X+5MeG
+         iDJSM30hPJEw6/H965OkkWvJs2TVpMp8H/+T+Fd/VcwimUbsH9Yz0ZLCw40NfrVFNvWE
+         7I70FnD5esgVcg7+KCf8Vsso+S9QU1iRf84IsT2CtTsZAiBm4/64i58hPl5EwBzklKNs
+         /dXA==
+X-Gm-Message-State: AJIora980SQZgxQ+6sRkvWsjpBieqYSL8B7GJyhmY1P7qESU3TZYu6BM
+        3oYkM1xFLTrH0IsNmy6VewsaiA5TlwY=
+X-Google-Smtp-Source: AGRyM1txbt+9NgJBywZye18wHMFrzrxDjzOEouzPoc8+gANuChnXlXGrxwM174nRDA4EmaMfxx9wSKZ3OXQ=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4be])
+ (user=edliaw job=sendgmr) by 2002:a17:90a:e7c8:b0:1e6:92fe:84c2 with SMTP id
+ kb8-20020a17090ae7c800b001e692fe84c2mr1259645pjb.194.1655163228891; Mon, 13
+ Jun 2022 16:33:48 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 23:33:21 +0000
+Message-Id: <20220613233321.431282-1-edliaw@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH v1] userfaultfd: selftests: infinite loop in faulting_process
+From:   Edward Liaw <edliaw@google.com>
+To:     shuah@kernel.org
+Cc:     axelrasmussen@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com, Edward Liaw <edliaw@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Axel Rasmussen <axelrasmussen@google.com> writes:
+On Android this test is getting stuck in an infinite loop due to
+indeterminate behavior:
 
-> I think for any approach involving syscalls, we need to be able to
-> control access to who can call a syscall. Maybe there's another way
-> I'm not aware of, but I think today the only mechanism to do this is
-> capabilities. I proposed adding a CAP_USERFAULTFD for this purpose,
-> but that approach was rejected [1]. So, I'm not sure of another way
-> besides using a device node.
+The local variables steps and signalled were being reset to 1 and 0
+respectively after every jump back to sigsetjmp by siglongjmp in the
+signal handler. The test was incrementing them and expecting them to
+retain their incremented values. The documentation for siglongjmp says:
 
-I take it there's a reason why this can't be done with a security module
-- either a custom module or a policy in one of the existing modules?
-That sort of access control is just what security modules are supposed
-to be for, after all.
+All accessible objects have values as of the time sigsetjmp() was
+called, except that the values of objects of automatic storage duration
+which are local to the function containing the invocation of the
+corresponding sigsetjmp() which do not have volatile-qualified type and
+which are changed between the sigsetjmp() invocation and siglongjmp()
+call are indeterminate.
 
-Thanks,
+Tagging steps and signalled with volatile enabled the test to pass.
 
-jon
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ tools/testing/selftests/vm/userfaultfd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 0bdfc1955229..2b2a68722ae1 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -931,7 +931,7 @@ static int faulting_process(int signal_test)
+ 	unsigned long split_nr_pages;
+ 	unsigned long lastnr;
+ 	struct sigaction act;
+-	unsigned long signalled = 0;
++	volatile unsigned long signalled = 0;
+ 
+ 	split_nr_pages = (nr_pages + 1) / 2;
+ 
+@@ -946,7 +946,7 @@ static int faulting_process(int signal_test)
+ 	}
+ 
+ 	for (nr = 0; nr < split_nr_pages; nr++) {
+-		int steps = 1;
++		volatile int steps = 1;
+ 		unsigned long offset = nr * page_size;
+ 
+ 		if (signal_test) {
+-- 
+2.36.1.476.g0c4daa206d-goog
+
