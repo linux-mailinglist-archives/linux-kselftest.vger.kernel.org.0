@@ -2,94 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE57A54B78C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 19:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877E054B7A9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 19:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238047AbiFNRV6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jun 2022 13:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
+        id S237389AbiFNRaJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jun 2022 13:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238237AbiFNRV5 (ORCPT
+        with ESMTP id S238534AbiFNRaI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:21:57 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6423531DFC
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:21:56 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id bf7so11207328oib.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:21:56 -0700 (PDT)
+        Tue, 14 Jun 2022 13:30:08 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CA43D493
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:30:06 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id h18so7069425ilj.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5ywm3mNyiKeLVTgO84COA1L5/j176F2hvLnvyrxiZpk=;
-        b=AWkMw8qDDxUsyjkc8/EdDf0vDUNZI4+1avXvECNWeq65H7wYaV4MeZ7v1OOHLMhMj4
-         FLzKW+OKYNmbUaKtFTWofkfTtgV129jDjarxpLM2bUCsQZEJhSLUpDJXEL1nc94wUk6Q
-         JKafkc/wNofuOHkWC95WULU92xyVIeZA23cc8=
+        bh=aSo5B7wxHruikT7i10mL2QJi9ruKuv2MIJIK2ELKKvQ=;
+        b=YKoyf7NH8rTqqJlql8rCXPzZQKfg+dExryRIoaqgMhhpp3kgzWSnTAYFlzsTjibY9a
+         BU21asQwL8ditAIxoOXHyATnCLEFjjvsZpYJDm6dyLRyPWiNfqvLUhZWzZsPF7v2epxs
+         jrhv/G7m/dQfkgIVk368alJlXzLcXWcLX/o/8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=5ywm3mNyiKeLVTgO84COA1L5/j176F2hvLnvyrxiZpk=;
-        b=NRyL7zt/PEGhlMtp5+41qMSROFS42SfZEaXy+v+YmstHA4zOa0va2IhRk0wkX31rpE
-         z+P+e/UDuMJyCMLBVYrCxGGENdfORAzMVESEE7oUElJNqJ0Xp02J/48DbJMmaQ9401sr
-         7E3w3jGDhaBBgQ17DRjVip091dzJRSH+gSc+jV6shGIWzmPii9oIaNdV6Coih8gRyX5M
-         yW0Gy93vtXQowD2eAuYSV+EUBEAYxMTcpGTHe38GRTYarprEeI0212CSuY6K4jV2ahDO
-         rX6U6fquiiIjOt/9s5N1jwSCpbxxN1enVcgE6M2Pd3pVR/9t6IWbMMLqVvUYDD0Qi+Vq
-         8C1Q==
-X-Gm-Message-State: AOAM53001EEiGkeePflvHsyV8zk9X7q6FmeOUXeJUNU8SnNTiKZW5m/X
-        4pATdC/z42WIO9RE71+nCpKVJg==
-X-Google-Smtp-Source: ABdhPJyyL3I7o6YWcvJMsSOx0GWGShRXku1QmIK25GsYA4K+0gPS+KzviOpXpB43NXZuolmRy3EWsQ==
-X-Received: by 2002:a05:6808:10d3:b0:32f:51ae:6245 with SMTP id s19-20020a05680810d300b0032f51ae6245mr2636903ois.125.1655227315718;
-        Tue, 14 Jun 2022 10:21:55 -0700 (PDT)
+        bh=aSo5B7wxHruikT7i10mL2QJi9ruKuv2MIJIK2ELKKvQ=;
+        b=Gdd4zUIkkS13UjC6Qw4exLPV3zU6oFkMzDRz38sSS8SAHGnU8EQfTP7uIuV6C97QqW
+         stIXSm52I4mGF5JRR4wy5jiKfZprjD5Oj1xI8XmR4uHFiPAjSKVHb7qhsZdCIy15Gsbf
+         JZ/pDfrgK/Z/DlaFO37W26iKJ77g+vslT3k8nZreSfl1fQqPRUG7uTHDAnqP+i90W1lO
+         Q3K2bKdUH4H970lDJiirpHVPrvK12C2LIFbXy9OeZUAL40X9az3rikUg7FgYjCQ0ml8q
+         Td+tx3/+112I9gVOvl5G9eumRFLCPB6s1PY5NdaU0Tr81vC52yqLJtyVulB9SDQ1YOyf
+         rlrQ==
+X-Gm-Message-State: AJIora+SY4+L81SNN5jsaKZqcRI5R7E0np4luuAtDqCquSaKBCysm3vL
+        Ed3HKeGqybBB6uDxKjRlpG6D/Q==
+X-Google-Smtp-Source: AGRyM1st09tU6WIPog6ZcsfIOrj9H83BSjqzdkiMrUDy/mg5vbeZQkHTijSmV+dIzW2lR6nKJ7yR3A==
+X-Received: by 2002:a05:6e02:20cc:b0:2d1:a5d6:b78c with SMTP id 12-20020a056e0220cc00b002d1a5d6b78cmr3563131ilq.160.1655227806288;
+        Tue, 14 Jun 2022 10:30:06 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p7-20020a056830318700b0060bfb4e4033sm4914235ots.9.2022.06.14.10.21.55
+        by smtp.gmail.com with ESMTPSA id i6-20020a056e02054600b002d3de4c1ecbsm5668058ils.68.2022.06.14.10.30.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 10:21:55 -0700 (PDT)
-Subject: Re: [PATCH] selftests: Fix clang cross compilation
-To:     Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Tue, 14 Jun 2022 10:30:06 -0700 (PDT)
+Subject: Re: [PATCH] userfaultfd/selftests: Fix typo in comment
+To:     Xiang wangx <wangxiang@cdjrlc.com>, akpm@linux-foundation.org
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220614121045.1046475-1-broonie@kernel.org>
+References: <20220610071244.59679-1-wangxiang@cdjrlc.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b4965ab7-c619-16b9-c027-aeb6986f76b7@linuxfoundation.org>
-Date:   Tue, 14 Jun 2022 11:21:53 -0600
+Message-ID: <3e3922c1-c6a7-ac60-2478-6b94defd1ead@linuxfoundation.org>
+Date:   Tue, 14 Jun 2022 11:30:05 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220614121045.1046475-1-broonie@kernel.org>
+In-Reply-To: <20220610071244.59679-1-wangxiang@cdjrlc.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/14/22 6:10 AM, Mark Brown wrote:
-> Unlike GCC clang uses a single compiler image to support multiple target
-> architectures meaning that we can't simply rely on CROSS_COMPILE to select
-> the output architecture. Instead we must pass --target to the compiler to
-> tell it what to output, kselftest was not doing this so cross compilation
-> of kselftest using clang resulted in kselftest being built for the host
-> architecture.
+On 6/10/22 1:12 AM, Xiang wangx wrote:
+> Delete the redundant word 'in'.
 > 
-> More work is required to fix tests using custom rules but this gets the
-> bulk of things building.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
 > ---
->   tools/testing/selftests/lib.mk | 25 +++++++++++++++++++++++--
->   1 file changed, 23 insertions(+), 2 deletions(-)
+>   tools/testing/selftests/vm/userfaultfd.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> index 0bdfc1955229..4bc24581760d 100644
+> --- a/tools/testing/selftests/vm/userfaultfd.c
+> +++ b/tools/testing/selftests/vm/userfaultfd.c
+> @@ -860,7 +860,7 @@ static int stress(struct uffd_stats *uffd_stats)
+>   	/*
+>   	 * Be strict and immediately zap area_src, the whole area has
+>   	 * been transferred already by the background treads. The
+> -	 * area_src could then be faulted in in a racy way by still
+> +	 * area_src could then be faulted in a racy way by still
+>   	 * running uffdio_threads reading zeropages after we zapped
+>   	 * area_src (but they're guaranteed to get -EEXIST from
+>   	 * UFFDIO_COPY without writing zero pages into area_dst
 > 
 
-Thank you. I will apply this for the next rc.
+Thank you. Applied to next Linux 5.20-rc1
 
 thanks,
 -- Shuah
-
