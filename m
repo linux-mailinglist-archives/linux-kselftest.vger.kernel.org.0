@@ -2,126 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9789D54B069
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 14:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8CC54B1F6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 15:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232409AbiFNMTS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jun 2022 08:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        id S241156AbiFNNGj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jun 2022 09:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356752AbiFNMPz (ORCPT
+        with ESMTP id S238639AbiFNNGi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:15:55 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB7326D1;
-        Tue, 14 Jun 2022 05:15:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n8Ar/a3WwzbHpgOytoNaFtoNHMugRY1lORlJjEQ6KIJPB8hfDscFE+BXtWOvN7Ow3dxIe2AqIhuaV8hLoC3HIFK0NVDSFgEY4HQC0QnIZf3c/WjH4XJInNMh7KK/FmwzdoVl6OjSKyzdLMF3VdzRgZN4f6QLjyYfhHL/AqNZYLK+hHxFsyIDhMnHsYMtv2pLv+eq3IYw7IF4D1Fnb/KDhK0+5w+5LH521Uybjc1ZhcpESsl86+XWo3AaysK70EAFtYewNWxkX/Bk3IENVNUsyC3PJ0d4GCEUokm66vy44lYoybvOOfyt1ZqMjOBTKSrwQhVlau7qRYcOIHgsHJeqEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5Bx1UivNzjf3mg/aro47NJr3P633/rSNCtPjp4HeUXo=;
- b=CRLiRnivYzmY/CJosDMB851Im9msBq+tQe8ySMNmH78ArSUDMcMTdQIETB0wJDBl1KMkWORlqjaU2bNNC/R1lTuP/HXSN/QAJ5+O3QPQ4vIzLomhRmGP7afQMIZp81MDgSKSW4lyDiCX/LPJT9tvMtgiimywBwWyL4xN35YKxF0GqTVcE+U5BE43vXqQfQw+KzWZ/Pu4ECKOPWFLNoT5qlv+/qU2JHLgKJ1N0Z644NGCcsxGQ4EzsYIp8cnFiIrR11qRmtTRKY/eJAdG+2yGsK3LOAZjiv31GEKdvvjIa2wZDPp4MRII6CYHouuuE5GeBn0F8+CWIRltEQfAGxyB1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5Bx1UivNzjf3mg/aro47NJr3P633/rSNCtPjp4HeUXo=;
- b=wHAhw9LQtDICFJgT+G6gdBHfv/9aJNEBX4PnGIpRHXNiU2qaDKhRxxsF31By0mC9RSOWiDi52gQEh8tfG84CX59SI99uFpJMDlPBG1cqKPFf5tWfRuygbWdgWMy8GL0Te1jFwhkg8yjrnlNHMTV3//dnro2LVgKVx8nYG41MDs4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL3PR12MB6449.namprd12.prod.outlook.com (2603:10b6:208:3b8::6)
- by CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Tue, 14 Jun
- 2022 12:15:52 +0000
-Received: from BL3PR12MB6449.namprd12.prod.outlook.com
- ([fe80::5552:c915:15f5:cb5b]) by BL3PR12MB6449.namprd12.prod.outlook.com
- ([fe80::5552:c915:15f5:cb5b%9]) with mapi id 15.20.5332.022; Tue, 14 Jun 2022
- 12:15:52 +0000
-Message-ID: <e1703fcf-c5e2-70b1-cae2-30330108ad26@amd.com>
-Date:   Tue, 14 Jun 2022 17:45:31 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V2] selftests/vm: Add protection_keys tests to run_vmtests
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>, akpm@linux-foundation.org,
-        shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220610090704.296-1-kalpana.shetty@amd.com>
- <8e7fca3a-096c-7d6c-e43b-9292995ab970@linuxfoundation.org>
-From:   "Shetty, Kalpana" <kalpana.shetty@amd.com>
-In-Reply-To: <8e7fca3a-096c-7d6c-e43b-9292995ab970@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0097.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:27::12) To BL3PR12MB6449.namprd12.prod.outlook.com
- (2603:10b6:208:3b8::6)
+        Tue, 14 Jun 2022 09:06:38 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DDC1FCC3;
+        Tue, 14 Jun 2022 06:06:36 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMpWd1F06z67JVD;
+        Tue, 14 Jun 2022 21:02:53 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 15:06:33 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>, <john.fastabend@gmail.com>,
+        <songliubraving@fb.com>, <kafai@fb.com>, <yhs@fb.com>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RESEND][PATCH v4 0/4] bpf: Add bpf_verify_pkcs7_signature() helper
+Date:   Tue, 14 Jun 2022 15:06:17 +0200
+Message-ID: <20220614130621.1976089-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e461d4ce-9ad9-409f-8584-08da4dffa012
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR12MB542763DCFA062949F3EAA9C98CAA9@CO6PR12MB5427.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WkftFjrdvmJeZzOJi0I0dLfVckQRJlQhL0TgA9oUizEd1qf79136Ztmg3EGyfGJLHe+8EcwjI6+DijV6yYi5/wztSBBsa87Yklp4/DUuDbP1Ux74v0eqsqtTOstDA/JnhY5NQ/nBc05DqlGz9axk/ph2XoLFcMKZp9l4fFRewHZtZAX3mrWNp2boP5p5m0BcThv0yzf5bZKtIlimZC7Z16VkS82WoslT6PRvwyoSO9CljU2ZcNj7aQOqerKIEFUUGgbt/j5xcSOtRRLS5eHIliPLk7yFghXd+egHSrI1Dh5dOKNsky1QH7UyTs3ab2mfy0d43xgkwkTj4C2xSjeYP/OQyBytYITxdKKWA2KvV+v9smlECj7VZYZQ3Urh14gvv0+HYrC3kj0gJtGcapOw9eK82QtzWW4Nz32AyBmn34VWg2T8WtPBJzDRqaqffDQHA0KtUPMqORnUEM4Vq1H5ntv3QOUYMKnguUxhha9wNeAJTvJdyNda92/duXMyHEcRJeTeeWOd+slU7QU2tKOTT/Qikb2LqLeaQ1RkPCMtlyqA2i4lTgpf2Ujh85k8ADrZKg7UtPiTNeNMyn+z5MR6Q5JCJkAza1YyhsfW+xySEU6oum5qzVsq/wlaZW3bSirUxSPZUHajGYnSyfvdITPqVtM5YiLUDyQQi2P0EaxwJ7e7o7WJ77vm86w9R9iM58ydAmV0FKn4C2ljERZU+ACP26vmvnYsQCiyXJM4C0yB5fI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR12MB6449.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(2906002)(26005)(6506007)(36756003)(53546011)(31686004)(38100700002)(6666004)(186003)(316002)(6512007)(4744005)(86362001)(66946007)(8676002)(31696002)(66556008)(66476007)(6486002)(508600001)(5660300002)(2616005)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MXNYcmpIRUtrdVdRWW1SbUYrS1crQ3RjdENXS1pMUzIxdEU2bDQ4Z1BJa2xk?=
- =?utf-8?B?Z3hrSWwzQm40UUxhK28rREw1TlE3aXJIcGs0TUtFcmdpaWZLcDN1RFFjbmxR?=
- =?utf-8?B?Sk1POENtQSt6azJRNXpBbmdvZSs4ZHpXMmJMS3JLcEJrOVk3TCtGN1NHYlh5?=
- =?utf-8?B?bFY2RVhBRUl5elE1MnlCSENHS0FBNTRSM3hrd0hOM1VFNW9nS2VIOFNvNG4y?=
- =?utf-8?B?S2poTjJtUWlQaGJ0MzRHRGZ3N3ZEVWhoT0ZCUWoySElMRUpRcTJNUU51UHc5?=
- =?utf-8?B?Z281QjYyY0djbEVpWEtpQ1EvTmprQUxwUjRiUUFsY3hBZzZUemcxU0F5ekg3?=
- =?utf-8?B?NzgvNjJ0SVpoODRwV0tUajhwVnhTeHVSM0wxUkcwalpPcFZxaE9qNDBvTGxj?=
- =?utf-8?B?ckQ3OXVkY3F3ZnRycWhITVlRYnN5aWZEc2xHVmZwQWhIK1dxQzB5TmR2QmVh?=
- =?utf-8?B?a1NTMXVKL3RpYnRuZ0Z6aC9WbVFBcU9EQ0Uvc1VvL2t6Y2pCRjV1V3pCNG41?=
- =?utf-8?B?QUN4TDBLS05jLzhoazNKaVFaZGNvcXZmcXNsS3ZIOVJpVlVYMTZCd3pnTnNL?=
- =?utf-8?B?eGFpREI3Y3Uyb1RwRkUyNGVxT05taVpaZ1greHFQN2lxZGlValJxR05QWERv?=
- =?utf-8?B?dytCaUVYV0pUSk5rZ1pmcTRVL1JENXVLaVN2VWFLMXI3Z0tLVWxOM21JSzZX?=
- =?utf-8?B?YWlUcTdjNHVnL3U4T0ZEZmRKbk1obG9ZNWxZNmI2WUVMdmRBQzJoaVFpYUFZ?=
- =?utf-8?B?dHBQblVGRTRhMlRqZGZva3NDT0J2WU15YWN6em9yeTJ2TG53TmJDdlVkZGZE?=
- =?utf-8?B?TlFkQzN6WjJWVDRTTVRKTEowUmdIdU90VWJRMUpDNVVwNy9RV2dWODhzWFBm?=
- =?utf-8?B?V2FhYSt1K2FiL2lqbHdiai9aZ0loN283YkZjd3EyVys3SzBOdXZBMnJFS0NI?=
- =?utf-8?B?cndvd0pmajQxTVJLYytkbFFGODRzUkFRays0eFlKNGg0aDZ6M1ZLcElsUHBh?=
- =?utf-8?B?ZmoxVzRaczlhdEFZdEthMGl4dlZPaFBCd1pUMWw2dzNQazkyQU5rNjVTQndV?=
- =?utf-8?B?RXl1c0NRa3MzSy9qemtJNVdqVEczb3Jxbjl4NHhuMWhyamZCaU1ZTjF5Q2U3?=
- =?utf-8?B?cjFSekhyWW9zZjdPWTkybTNvMGdIUWNadDBSUTQxMDRmSktHODVRQjJDTjR4?=
- =?utf-8?B?VDdveVVnSlgzaFhNM0NWdElwY1N0VU5Sa05qcG1SV3ptZS9WVFV3L0tEQkZM?=
- =?utf-8?B?VHpTdG1hWXRtMXhmaC9KeWg5ejhjeUJLREpjMldoemdTa2JUTzl0N1NIWmFo?=
- =?utf-8?B?a0RLMC9LdFc1QXZKTCt0aUxkd2FORGxrWTdmTGdVeVBhODhQSFpxZDdRenV3?=
- =?utf-8?B?YTZlSjI1Z0gyMHFHeHB5YXBNejdLL1dabDZJdWF0RlVMUlh4dVNZblhyR3Uw?=
- =?utf-8?B?QWFxcS9uOHJXSU9LM0NFUDgyRTdXQjhTSHNLUExneXRSTHpnTE9YVHlacldz?=
- =?utf-8?B?WDZJbW4xM1pOd1BydytjL2ljcXdTNm9oRmFYZmZ5RGpnOVZHRUNFMXpJQUcz?=
- =?utf-8?B?MXhkVytuTm5KOGVtbCszR0RpUmN1dXRINndER2pqd2Rlc1JxdTVQVDlLL29K?=
- =?utf-8?B?WFMrYWUxVnoyWlQ1RVlMcU42NlpOcUFjbVIzanoxYUxXcnBqdXpaa3M0dy9o?=
- =?utf-8?B?L2E3aGxvQ2pNYzg3SWFndVpVcFEweWE3LzVxdWl4U3JURUhqMjhVMUYzODZG?=
- =?utf-8?B?TmpKSjlqem00M2tGbklsaW1aLzhjTnJoK3daTDZQL0tQMS9VMkFJc0hCU3h3?=
- =?utf-8?B?NHV4MHNJRHgvYjhhY21nRzhraG41b1UwK1hsd2RRR3FEalVBZmVxZmZzc1Mw?=
- =?utf-8?B?bnJvb2xvUXQvNTR1NEdGcktVU2pQOU5RWlBWM3hUZHhoRGRaRXlNc255NVhR?=
- =?utf-8?B?OUhNVHFLRGE4VzFZc2cveHkzV2RXeXZDUnFqUEJ4b2dBTWFyNUp5ZG5HYlVT?=
- =?utf-8?B?MUtESnV4UHZrYmdHYnJDVzU5NnpRQURtZjlmc1MzaXNqUWlSVHFUMUtERjFq?=
- =?utf-8?B?a2owSTZnaWR3djcvcHlZYnA0Z0xnRjh1Z1BPdDVFdW9ub0FYbTVCTTM5S1hC?=
- =?utf-8?B?ditwaHZXZEdwTVB4S1VrQlE5MzBMVWJwVzZic2pHUXhhaWhMcXlicCt6YVkw?=
- =?utf-8?B?RndOakpzYXd6ejYyMDh3Y0pFT2c0a2dRTk0xSStENFkxekpZTnRhM0NyVGJv?=
- =?utf-8?B?cFpXd2Vld3pLaHdlc2JkdjZDNjdBUEZuT0g1MG1WS1pBalA5cVpScnBkamho?=
- =?utf-8?B?UlliamhJM3pOdDZlanQxLy8wbGw3dU4ydmYvTGJ3a1paWHVnMDF5QT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e461d4ce-9ad9-409f-8584-08da4dffa012
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR12MB6449.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 12:15:52.7351
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sxTvmYFE3uPhm+aVcBLd80mxHzAhvUxZyDQxc+fpJc9aJ2WPMszsTSpoR4CMNB92rBalslr+78rkx/U2jA3xvA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5427
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,40 +49,106 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Resending with a fix of mktemp argument in verify_sig_setup.sh
 
-On 6/14/2022 3:14 AM, Shuah Khan wrote:
-> On 6/10/22 3:07 AM, Kalpana Shetty wrote:
->> Adding "protected_keys" tests to "run_vmtests.sh" would help out to 
->> run all VM related tests
->> from a single shell script.
->>
->
-> Makes sense - can you explain why you can't just run
-> protection_keys_32 without checks? 
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
-Yes; we can run protection_keys_32 without check.
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
 
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
 
-> Why are you checking for VADDR64? 
+After a discussion in the eBPF mailing list, it was decided that the stated
+goal should be accomplished by introducing a new helper:
+bpf_verify_pkcs7_signature(), dedicated to verify PKCS#7 signatures. More
+helpers will be introduced later, as necessary.
 
-The check is added to ensure if the system is in 64-bit mode before 
-executing 64-bit binary.
+The job of bpf_verify_pkcs7_signature() is simply to call the corresponding
+signature verification function verify_pkcs7_signature(). Data and
+signature can be provided to the new helper with two dynamic pointers, to
+reduce the number of parameters. The keyring containing the signature
+verification key can be obtained with a new helper
+called bpf_request_key_by_id().
 
+For now, keyrings can be obtained with an identifier defined in
+verification.h (except for the special value ULONG_MAX, used for testing).
+In the future, keyring can be searched also by their description. This
+functionality has not been included here in this patch set, as would
+require additional care for decrementing the reference count of the
+keyring. It could be added later.
 
-> All of this information helps us review the
-> patch and give you feedback and suggest a different approach.
+While bpf_request_key_by_id() can be called from any program,
+bpf_verify_pkcs7_signature(), instead, must be called by a sleepable
+program, as it is doing crypto operations. For the latter, for example,
+lsm.s/bpf is suitable, fexit/array_map_update_elem is not.
 
+The added test, which invokes both helpers, checks the ability of an eBPF
+program to verify module-style appended signatures, as produced by the
+kernel tool sign-file, currently used to sign kernel modules.
 
-Thanks,
+The patch set is organized as follows.
 
-Kalpana
+Patch 1 exports bpf_dynptr_get_size(), to obtain the real size of data
+carried by a dynamic pointer. Patch 2 introduces the
+bpf_request_key_by_id() helper. Patch 3 introduces the
+bpf_verify_pkcs7_signature() helper. Finally, patch 4 adds a test for both
+helpers.
 
->
->> Signed-off-by: Kalpana Shetty <kalpana.shetty@amd.com>
->> ---
->>   Changes in V2:
->>    * Added patch description.
->>
->
-> thanks,
-> -- Shuah
+Changelog
+
+v3:
+ - Rename bpf_verify_signature() back to bpf_verify_pkcs7_signature() to
+   avoid managing different parameters for each signature verification
+   function in one helper (suggested by Daniel)
+ - Use dynamic pointers and export bpf_dynptr_get_size() (suggested by
+   Alexei)
+ - Introduce bpf_request_key_by_id() to give more flexibility to the caller
+   of bpf_verify_pkcs7_signature() to retrieve the appropriate keyring
+   (suggested by Alexei)
+ - Fix test by reordering the gcc command line, always compile sign-file
+ - Improve helper support check mechanism in the test
+
+v2:
+ - Rename bpf_verify_pkcs7_signature() to a more generic
+   bpf_verify_signature() and pass the signature type (suggested by KP)
+ - Move the helper and prototype declaration under #ifdef so that user
+   space can probe for support for the helper (suggested by Daniel)
+ - Describe better the keyring types (suggested by Daniel)
+ - Include linux/bpf.h instead of vmlinux.h to avoid implicit or
+   redeclaration
+ - Make the test selfcontained (suggested by Alexei)
+
+v1:
+ - Don't define new map flag but introduce simple wrapper of
+   verify_pkcs7_signature() (suggested by Alexei and KP)
+
+Roberto Sassu (4):
+  bpf: Export bpf_dynptr_get_size()
+  bpf: Add bpf_request_key_by_id() helper
+  bpf: Add bpf_verify_pkcs7_signature() helper
+  selftests/bpf: Add test for bpf_verify_pkcs7_signature() helper
+
+ include/linux/bpf.h                           |   1 +
+ include/uapi/linux/bpf.h                      |  25 ++
+ kernel/bpf/bpf_lsm.c                          |  60 +++++
+ kernel/bpf/helpers.c                          |   2 +-
+ scripts/bpf_doc.py                            |   2 +
+ tools/include/uapi/linux/bpf.h                |  25 ++
+ tools/testing/selftests/bpf/Makefile          |  14 +-
+ tools/testing/selftests/bpf/config            |   2 +
+ .../bpf/prog_tests/verify_pkcs7_sig.c         | 217 ++++++++++++++++++
+ .../bpf/progs/test_verify_pkcs7_sig.c         | 168 ++++++++++++++
+ .../testing/selftests/bpf/verify_sig_setup.sh | 100 ++++++++
+ 11 files changed, 612 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+ create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
+
+-- 
+2.25.1
+
