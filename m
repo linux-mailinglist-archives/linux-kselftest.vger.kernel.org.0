@@ -2,68 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420A554A7C7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 06:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5016454AAEE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 09:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234180AbiFNETk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jun 2022 00:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S231756AbiFNHsn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jun 2022 03:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiFNETk (ORCPT
+        with ESMTP id S1353011AbiFNHsm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 00:19:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7460027B2B;
-        Mon, 13 Jun 2022 21:19:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11760615FB;
-        Tue, 14 Jun 2022 04:19:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17B41C3411B;
-        Tue, 14 Jun 2022 04:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655180378;
-        bh=hMmh6MFQYrFpqoANaJzb2dlWl/uq5j7z53GVi4306hE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P6aclL4Uw4zSJgE7oDf/62QoHQtE0QTLOGTlqsxVsoK7yh5xfurO16qH0W68j+zvc
-         i2rdQMrYvjdN5w+UJ2pzFMIbeWaiVU6sATQRcOCl5ZJvICkvkBIG8dAYx3a5olsCAv
-         2WGJWwixkQj0igXS4YdgYPWbCXT4FQ8tSApi640zyVrftX4GF9dS2qDmYWR/c0VKaj
-         4xLzfuT/BxXKpdFlrWitxI8D7VIT90vpcfOqwFAnx57g8W/RlaDRAO70hssXQOygBL
-         KXkRyPwwZ9fz63w6Nqc/QPejjVX47g3girluGB8BErjV/aC8PtQjiHxVud5Gi826hn
-         dn7LruiUU7TdA==
-Date:   Tue, 14 Jun 2022 07:19:26 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] userfaultfd: update documentation to describe
- /dev/userfaultfd
-Message-ID: <YqgMTq0IEa6u/FXt@kernel.org>
-References: <20220601210951.3916598-1-axelrasmussen@google.com>
- <20220601210951.3916598-5-axelrasmussen@google.com>
+        Tue, 14 Jun 2022 03:48:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 755343EA9E
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 00:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655192920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pA9hWNFeXf3Ws8HBvV+hgwjcVRJHqFaY7TkNSW+q34Y=;
+        b=gOPcrY+GZZOlhL+WmRodJfjT4pOohU8eX6sJsv3lNw7LFgiEDPG/pzx7o6ctq33/0jmDjG
+        squYJd8GqPupqTHACj1gCsb0xr7pjastIPRq74NlUk7F304P2Eu9fGPxZchG1D5Mpw3fXd
+        B42n07RKVhNPyln9D1O5UnHMzNnJ9nc=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-Byrjt90bO9GVMgSWm-iXKw-1; Tue, 14 Jun 2022 03:48:39 -0400
+X-MC-Unique: Byrjt90bO9GVMgSWm-iXKw-1
+Received: by mail-ej1-f71.google.com with SMTP id pv1-20020a170907208100b00710f5f8105cso2518793ejb.17
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 00:48:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pA9hWNFeXf3Ws8HBvV+hgwjcVRJHqFaY7TkNSW+q34Y=;
+        b=e+G0M7IduowsEk82yY/bvtHuPfEVx1zMYndzOjoLLHOpx1dLAM3d07eozk83PYsgaH
+         4KweKA6ulXs4zCO7BEAKRHLNVuOU7ZZQ0XC1xd6YnX1WyQS/wvv3InS3L4nfq37QQAQ2
+         DuBDLyxjLFuj0Qgk0J8rs1tsAdoOt+Z6HLtaK7A/mP9x+ODKxuGgR7rhggqDhxijWAZV
+         iMi+NczA9qiK82Xu0SLDL6RtEYRLqpL63uSBA+87zYcJRYilY+hIELajK/lZ8NWCndPq
+         V56l8EM6YRLEl0m08Vskqv2YoucgSiVZJyqAWTXLBqv3BwcDT2fh0pb7H58DtI1j42zx
+         FMbA==
+X-Gm-Message-State: AJIora+e/Wu++tLWYSQbu9+ADschhYM6BQ64zfqEigjrLQgAfXTYEJn5
+        1rXhSKuYXw8a/rxK0sHPc3Xd0cEaY8LHdVcfMbVS6HZMUB0H/bmalfPEqcRujLMVfY+Y6Y1pmmM
+        YfFkDef42cJlPlro099ah6yJEVqGB
+X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id ew4-20020a056402538400b004316d84b451mr4299282edb.46.1655192918267;
+        Tue, 14 Jun 2022 00:48:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzP9bNFT/YiQLWZHW1O9vZ21ws6w7/jitcSKem//QoUBDC+1oG4tlyeyJ5BHfZ4fUU8Wr3ZaQ==
+X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id ew4-20020a056402538400b004316d84b451mr4299270edb.46.1655192918087;
+        Tue, 14 Jun 2022 00:48:38 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id y18-20020aa7ce92000000b0042dc882c823sm6586576edv.70.2022.06.14.00.48.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 00:48:37 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 09:48:35 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     shaoqin.huang@intel.com
+Cc:     pbonzini@redhat.com, Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        David Dunn <daviddunn@google.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Remove the mismatched parameter comments
+Message-ID: <20220614074835.qto55feu74ionlh5@gator>
+References: <20220614224126.211054-1-shaoqin.huang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601210951.3916598-5-axelrasmussen@google.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220614224126.211054-1-shaoqin.huang@intel.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,114 +84,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:09:49PM -0700, Axel Rasmussen wrote:
-> Explain the different ways to create a new userfaultfd, and how access
-> control works for each way.
+On Tue, Jun 14, 2022 at 04:41:19PM -0600, shaoqin.huang@intel.com wrote:
+> From: Shaoqin Huang <shaoqin.huang@intel.com>
 > 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> There are some parameter being removed in function but the parameter
+> comments still exist, so remove them.
+> 
+> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
 > ---
->  Documentation/admin-guide/mm/userfaultfd.rst | 40 ++++++++++++++++++--
->  Documentation/admin-guide/sysctl/vm.rst      |  3 ++
->  2 files changed, 40 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
-> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-> index 6528036093e1..9bae1acd431f 100644
-> --- a/Documentation/admin-guide/mm/userfaultfd.rst
-> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
-> @@ -17,7 +17,10 @@ of the ``PROT_NONE+SIGSEGV`` trick.
->  Design
->  ======
->  
-> -Userfaults are delivered and resolved through the ``userfaultfd`` syscall.
-> +Userspace creates a new userfaultfd, initializes it, and registers one or more
-> +regions of virtual memory with it. Then, any page faults which occur within the
-> +region(s) result in a message being delivered to the userfaultfd, notifying
-> +userspace of the fault.
->  
->  The ``userfaultfd`` (aside from registering and unregistering virtual
->  memory ranges) provides two primary functionalities:
-> @@ -34,12 +37,11 @@ The real advantage of userfaults if compared to regular virtual memory
->  management of mremap/mprotect is that the userfaults in all their
->  operations never involve heavyweight structures like vmas (in fact the
->  ``userfaultfd`` runtime load never takes the mmap_lock for writing).
-> -
->  Vmas are not suitable for page- (or hugepage) granular fault tracking
->  when dealing with virtual address spaces that could span
->  Terabytes. Too many vmas would be needed for that.
->  
-> -The ``userfaultfd`` once opened by invoking the syscall, can also be
-> +The ``userfaultfd``, once created, can also be
->  passed using unix domain sockets to a manager process, so the same
->  manager process could handle the userfaults of a multitude of
->  different processes without them being aware about what is going on
-> @@ -50,6 +52,38 @@ is a corner case that would currently return ``-EBUSY``).
->  API
->  ===
->  
-> +Creating a userfaultfd
-> +----------------------
-> +
-> +There are two ways to create a new userfaultfd, each of which provide ways to
-> +restrict access to this functionality (since historically userfaultfds which
-> +handle kernel page faults have been a useful tool for exploiting the kernel).
-> +
-> +The first way, supported by older kernels, is the userfaultfd(2) syscall.
-> +Access to this is controlled in several ways:
-> +
-> +- By default, the userfaultfd will be able to handle kernel page faults. This
-> +  can be disabled by passing in UFFD_USER_MODE_ONLY.
-> +
-> +- If vm.unprivileged_userfaultfd is 0, then the caller must *either* have
-> +  CAP_SYS_PTRACE, or pass in UFFD_USER_MODE_ONLY.
-> +
-> +- If vm.unprivileged_userfaultfd is 1, then no particular privilege is needed to
-> +  use this syscall, even if UFFD_USER_MODE_ONLY is *not* set.
-> +
-> +The second way, added to the kernel more recently, is by opening and issuing a
-> +USERFAULTFD_IOC_NEW ioctl to /dev/userfaultfd. This method yields equivalent
-> +userfaultfds to the userfaultfd(2) syscall; its benefit is in how access to
-> +creating userfaultfds is controlled.
-> +
-> +Access to /dev/userfaultfd is controlled via normal filesystem permissions
-> +(user/group/mode for example), which gives fine grained access to userfaultfd
-> +specifically, without also granting other unrelated privileges at the same time
-> +(as e.g. granting CAP_SYS_PTRACE would do).
-> +
-> +Initializing up a userfaultfd
-
-I think 'up' is out of place here. It should be "initializing a
-userfaultfd" or "setting up a userfaultfd".
-
-> +-----------------------------
-> +
->  When first opened the ``userfaultfd`` must be enabled invoking the
->  ``UFFDIO_API`` ioctl specifying a ``uffdio_api.api`` value set to ``UFFD_API`` (or
->  a later API version) which will specify the ``read/POLLIN`` protocol
-> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-> index d7374a1e8ac9..e3a952d1fd35 100644
-> --- a/Documentation/admin-guide/sysctl/vm.rst
-> +++ b/Documentation/admin-guide/sysctl/vm.rst
-> @@ -927,6 +927,9 @@ calls without any restrictions.
->  
->  The default value is 0.
->  
-> +An alternative to this sysctl / the userfaultfd(2) syscall is to create
-> +userfaultfds via /dev/userfaultfd. See
-
-Maybe:
-
-Another way to control permissions for userfaultfd is to use
-/dev/userfaultfd instead of userfaultfd(2). See ...
-
-> +Documentation/admin-guide/mm/userfaultfd.rst.
->  
->  user_reserve_kbytes
->  ===================
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 1665a220abcb..58fdc82b20f4 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1336,8 +1336,6 @@ static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+>   *   vm - Virtual Machine
+>   *   sz - Size in bytes
+>   *   vaddr_min - Minimum starting virtual address
+> - *   data_memslot - Memory region slot for data pages
+> - *   pgd_memslot - Memory region slot for new virtual translation tables
+>   *
+>   * Output Args: None
+>   *
+> @@ -1423,7 +1421,6 @@ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm)
+>   *   vaddr - Virtuall address to map
+>   *   paddr - VM Physical Address
+>   *   npages - The number of pages to map
+> - *   pgd_memslot - Memory region slot for new virtual translation tables
+>   *
+>   * Output Args: None
+>   *
 > -- 
-> 2.36.1.255.ge46751e96f-goog
-> 
-> 
+> 2.30.2
+>
 
--- 
-Sincerely yours,
-Mike.
+Hi Shaoqin,
+
+Please check kvm/queue, the extra parameter comments have already been
+removed.
+
+Thanks,
+drew 
+
