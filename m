@@ -2,128 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773CF54B641
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 18:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C4B54B730
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 19:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344148AbiFNQbu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jun 2022 12:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S240569AbiFNRB1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jun 2022 13:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244892AbiFNQbs (ORCPT
+        with ESMTP id S1357152AbiFNQ7k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:31:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3494D443EC
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 09:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655224300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oavP8gsV6cJWMEx/ty3RSD/S2p03O0ZnolvRU2i8U0U=;
-        b=AXaSp1R5dTOazmBr/xwLsKeIcCQEs8omJNxnUKnr5gFRtHZFo9ymOUIiLNTWDUSmzOXP1e
-        82JqXBY+dYVZ1Zn/YHuF32yjoaD4mpYLDL0yijDLvHhVOCBJjIKCj1/8+sjtnZjIAa7BMa
-        TzgtVf9U3h/Uy6M5f6ssgdz1i5FqWMU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-CgU3ycf5PSCI5QezvAu6AA-1; Tue, 14 Jun 2022 12:31:38 -0400
-X-MC-Unique: CgU3ycf5PSCI5QezvAu6AA-1
-Received: by mail-wm1-f72.google.com with SMTP id o23-20020a05600c511700b0039743cd8093so5025145wms.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 09:31:38 -0700 (PDT)
+        Tue, 14 Jun 2022 12:59:40 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218A011163;
+        Tue, 14 Jun 2022 09:59:37 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id w2so16179088ybi.7;
+        Tue, 14 Jun 2022 09:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NrzbgcNkUQ7Zz63xqhepzP97koEMht4Jhs6UIjwgzis=;
+        b=V3/W/fKyA3uoUiUA9aT+aWTgy1wwkxhnteXP50eGwFpDuNmBHPwfj6nRaS3vncCqwu
+         M15I7n3lpyYLg/3uEZlwW7lqd8DANUrPt2z2GsFBIWTozAUhtVHM8sjBPj4f9abuPDf7
+         dYRck76N1vqEeSrMAe3tojVIybQK1yt2MH0ItTzORfuLs9VZBq8dG+khQSbbBz9r1+Ab
+         fIVL8JrYpaqegZyeGvtBNgz9ql/O9oV6f6XToqU8C49EvHmF3H3L6i/tIx5Xd8C4GnvX
+         IaeUnc8Sdn5EZEfryzaEQhYdxh3rT8qKls6yEHKxjR8iAKbAp+7AvbRoeLwKMhtb2loC
+         jb7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oavP8gsV6cJWMEx/ty3RSD/S2p03O0ZnolvRU2i8U0U=;
-        b=nOqCip8+BR4l6hPnalKRgLze4QacyQZs5HVCObV0bNokHP50Y1hsb80dkX9Kf9hJhu
-         ejNK+GgaHFA0OGgw6AXQEUiYdSnXgOg3v0PPcNRm3iliXry+i4qDsy5lyC89plsTbJ9I
-         x/2jCWyE7rxTmGgGf0/lXAFaf7+JaoaquGD2NJrYmcwDwRtMUoFaTnwtDLwVQAw3Vham
-         wErOIKdyYSf0NmUD1/hz8G3Ow1Dqod0XxUZDNYNStablH65PXHTxxGFHaHtne2MQWc6x
-         arlc64xDRFKLaDesCqa8VULfVH5ZknFsmlybi63glZytM9Pla91f9ywSr4QMWKJkyJan
-         NSMQ==
-X-Gm-Message-State: AJIora/WfJLoHWHr3x9W3HysjU4E3a1ZspZxfMWt5m9BGHhOTiWETvz8
-        T7Om8UE9jtelsIg7iICu2mtsuO/zPsdsydobfdqlEaxSIsYKTea5gSco4raAg1bDITqMxNdnrry
-        z53omuDZ2WaGwXczf52ENckvQ59K1
-X-Received: by 2002:a5d:6da3:0:b0:219:bcdd:97cd with SMTP id u3-20020a5d6da3000000b00219bcdd97cdmr5702987wrs.274.1655224297805;
-        Tue, 14 Jun 2022 09:31:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1svQzIL6zLCvemWeG8M2S6FR8uXiEVS4pzOzqfRybaUZfeRrJrTeJlYzJRR2cIqLDUDDp3ugw==
-X-Received: by 2002:a5d:6da3:0:b0:219:bcdd:97cd with SMTP id u3-20020a5d6da3000000b00219bcdd97cdmr5702966wrs.274.1655224297599;
-        Tue, 14 Jun 2022 09:31:37 -0700 (PDT)
-Received: from [192.168.0.3] (ip-109-42-114-75.web.vodafone.de. [109.42.114.75])
-        by smtp.gmail.com with ESMTPSA id m17-20020adfc591000000b0020fff0ea0a3sm12632199wrg.116.2022.06.14.09.31.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 09:31:37 -0700 (PDT)
-Message-ID: <047aa23e-7926-6f8f-eadd-122dc81a3159@redhat.com>
-Date:   Tue, 14 Jun 2022 18:31:35 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NrzbgcNkUQ7Zz63xqhepzP97koEMht4Jhs6UIjwgzis=;
+        b=JjSxnrMpqZPpl7v2EGqxhL9X+GDahnjXswIX9N9jf3tIsw+CsRSVXNdayiMdVrzcfq
+         rgzU9IQxoFLa7bIx+WaAVDP2PmcM67aUdaf24xB9EK9UJox5PSA4Wsx93i+HZkKLqABN
+         +HvBtYCYJpMd85PGLDisz0+PxlJE0ddiK+8hCbto+yYgR+Ce1eynYaKPTrLlcQEQttI3
+         eaZzgQ2+gIP6PSBZLkshrHlJk2zT7LJzwJ0wv/E60DRZLW3ctZ4UEXpcTj9snvyF+Hfo
+         ZiY7Jp+Wci2YSTqtr/2JuMIcr6j7fOdgnxJdwWyUCwD6MvVABtq/ii9qOBxekn/C+M6K
+         fxmQ==
+X-Gm-Message-State: AJIora8NXpqoi4bzof9/Xc7sajC4RiQ5PSGRMD/9DYVezPiALxPtCsWu
+        lCuDf8IZNUNNfr72J3YjHPqyq8EjtCHFtIR4o9A=
+X-Google-Smtp-Source: AGRyM1s0CA6NwVMVfHhR6mzaguUfsT3S3k/e7TA0AYn0Nyt4w9paFcqYcHihga4qUy8I2d9Gq0icGGz0RGnoMNxqmGg=
+X-Received: by 2002:a25:90a:0:b0:664:3dd3:63de with SMTP id
+ 10-20020a25090a000000b006643dd363demr5919917ybj.506.1655225976180; Tue, 14
+ Jun 2022 09:59:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] KVM: s390: selftests: Fix memop extension capability
- check
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, pbonzini@redhat.com
-Cc:     david@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org, shuah@kernel.org
-References: <36d83871-343d-e8a0-1aed-05bf386f9b1b@redhat.com>
- <20220614162635.3445019-1-scgl@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20220614162635.3445019-1-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220607133135.271788-1-eyal.birger@gmail.com> <f80edf4f-c795-1e1e-bac2-414189988156@iogearbox.net>
+In-Reply-To: <f80edf4f-c795-1e1e-bac2-414189988156@iogearbox.net>
+From:   Eyal Birger <eyal.birger@gmail.com>
+Date:   Tue, 14 Jun 2022 19:59:24 +0300
+Message-ID: <CAHsH6GvWkyDg5mXnSNoyY0H2V2i4iMsucydB=RZB100czc-85A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: add lwt ip encap tests to test_progs
+To:     Daniel Borkmann <daniel@iogearbox.net>, andrii@kernel.org
+Cc:     shuah@kernel.org, ast@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, posk@google.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 14/06/2022 18.26, Janis Schoetterl-Glausch wrote:
-> Fix the inverted logic of the memop extension capability check.
-> 
-> Fixes: 97da92c0ff92 ("KVM: s390: selftests: Use TAP interface in the memop test")
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
-> 
-> 
-> Here you go.
-> Hope it doesn't get lost as a reply, but I can always resend
-> and it's not super critical after all.
-> 
-> 
->   tools/testing/selftests/kvm/s390x/memop.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index e704c6fa5758..e1056f20dfa1 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -769,7 +769,7 @@ int main(int argc, char *argv[])
->   	ksft_set_plan(ARRAY_SIZE(testlist));
->   
->   	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
-> -		if (testlist[idx].extension >= extension_cap) {
-> +		if (extension_cap >= testlist[idx].extension) {
->   			testlist[idx].test();
->   			ksft_test_result_pass("%s\n", testlist[idx].name);
->   		} else {
+On Fri, Jun 10, 2022 at 12:37 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> Hi Eyal,
+>
+> On 6/7/22 3:31 PM, Eyal Birger wrote:
+> > Port test_lwt_ip_encap.sh tests onto test_progs.
+> >
+> > In addition, this commit adds "egress_md" tests which test a similar
+> > flow as egress tests only they use gre devices in collect_md mode
+> > for encapsulation and set the tunnel key using bpf_set_tunnel_key().
+> >
+> > This introduces minor changes to test_lwt_ip_encap.{sh,c} for consistency
+> > with the new tests:
+> >
+> > - GRE key must exist as bpf_set_tunnel_key() explicitly sets the
+> >    TUNNEL_KEY flag
+> >
+> > - Source address for GRE traffic is set to IP*_5 instead of IP*_1 since
+> >    GRE traffic is sent via veth5 so its address is selected when using
+> >    bpf_set_tunnel_key()
+> >
+> > Note: currently these programs use the legacy section name convention
+> > as iproute2 lwt configuration does not support providing function names.
+> >
+> > Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
+> > ---
+> >   .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 582 ++++++++++++++++++
+> >   .../selftests/bpf/progs/test_lwt_ip_encap.c   |  51 +-
+> >   .../selftests/bpf/test_lwt_ip_encap.sh        |   6 +-
+> >   3 files changed, 633 insertions(+), 6 deletions(-)
+> >   create mode 100644 tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> > new file mode 100644
+> > index 000000000000..e1b6f3ce6045
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> > @@ -0,0 +1,582 @@
+> [...]
+>
+> Thanks a lot for porting the test into test_progs! Looks like the BPF CI currently
+> bails out here:
+>
+> https://github.com/kernel-patches/bpf/runs/6812283921?check_suite_focus=true
+>
+> Andrii, looks like we might be missing CONFIG_NET_VRF in vmtest config-latest.*?
 
-Thanks!
+Hi Andrii,
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+What's the next step - should I submit a PR to libbpf on Github for adding
+CONFIG_NET_VRF?
 
-Paolo, could you please queue this directly as a fix for the "Use TAP 
-interface in the memop test" patch that is currently already in your "next" 
-branch? (or in case you rebase that branch, squash it directly into that patch?)
-
-  Thanks,
-   Thomas
-
+Eyal.
