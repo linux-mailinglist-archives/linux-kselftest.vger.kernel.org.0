@@ -2,219 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1761054B444
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 17:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982FE54B605
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 18:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356250AbiFNPL5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jun 2022 11:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
+        id S244756AbiFNQ04 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jun 2022 12:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356221AbiFNPLz (ORCPT
+        with ESMTP id S235828AbiFNQ0z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:11:55 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377623F88B;
-        Tue, 14 Jun 2022 08:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655219514; x=1686755514;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2aHl53WvnO/FvyT5FOpuxZQlcnfaJheQizeiOWcK4bw=;
-  b=Y2QtsKMAd+lpqykaFHkHgDagVpreJthl3MoBa0HVQfxSAOIPxq5mzIsg
-   rEPESjdlaTFacD+olnlaWA/iHaUbTWC65FUlh/DdZ1G4JkU2TgA+mAfGV
-   iNkzwp6qjk3a4wO89VQLUVrrJbKl8lRApcwh+jna5FLw8k6VFryfxeZ6F
-   LdGlRagfSG21D0o//xjmlq1aeit/qDyH+g/TA5hQYFI0LrankLzy185gr
-   srbnsmdaiebDQxzbBRuMGRs0htuVbbVQuGMZpcG+O68NG4l2yAr4VeKn5
-   z2NvduUfltuqHvowTY75vGtXHmtkt5iVrT5w+1PDgzx8PxjA7QsjFNVWJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="261673605"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="261673605"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 08:11:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="673941779"
-Received: from xpf.sh.intel.com ([10.239.182.112])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Jun 2022 08:11:51 -0700
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
-        Hansen Dave <dave.hansen@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bae Chang Seok <chang.seok.bae@intel.com>
-Subject: [PATCH v9 2/2] selftests/x86/xstate: Add xstate fork test for XSAVE feature
-Date:   Tue, 14 Jun 2022 23:11:06 +0800
-Message-Id: <d31e4ba98e5a5deecd06be9ae62be9aa48eb5273.1655218544.git.pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1655218544.git.pengfei.xu@intel.com>
-References: <cover.1655218544.git.pengfei.xu@intel.com>
+        Tue, 14 Jun 2022 12:26:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BC42BB20;
+        Tue, 14 Jun 2022 09:26:54 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25EGQoiA031134;
+        Tue, 14 Jun 2022 16:26:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=6/TalSMpRDCZ4+DG9lsQ67+dg6iiSAzSJZ/PRuZfARA=;
+ b=iZgfswXrcDEE0bPKWRRGxQVrFe2bfrtXBxdUpWvdcmzZOVCZXH8z7Cvxp9i/96rAYmm7
+ rh1x1cwiQQqLwkI/QhAxZ/okMZf6bZJY5u2JsEFHVBRTBWcQ7/XTz8+KDb2OuG4qu3qq
+ RqKbzBv3Nb9SKuv5c4ocN4Rza9Dbjx/8DzJmWcWnDd0+ilmOvyKDDi87U63ffsBptCHD
+ vRvgBHIjBBPj71jB4r2upWAUWtVeYheBP2x+WLUZA5PPGljwn7sGd1X9g5x0ktatRnOy
+ B8d4oEOF2Bzfk66ZhajsJN8lwgPVnZmMJZjPFThM/Q0Ltu8eDUVqt4PqtCCcYb6rK7Sw dw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gppa6739m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jun 2022 16:26:53 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25EGQqL5031459;
+        Tue, 14 Jun 2022 16:26:52 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gppa67342-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jun 2022 16:26:52 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25EG6v4N031317;
+        Tue, 14 Jun 2022 16:26:41 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gmjajcms5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jun 2022 16:26:41 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25EGQcQu14942552
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jun 2022 16:26:38 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 05AB54C040;
+        Tue, 14 Jun 2022 16:26:38 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97E684C046;
+        Tue, 14 Jun 2022 16:26:37 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Jun 2022 16:26:37 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     thuth@redhat.com, borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, pbonzini@redhat.com
+Cc:     david@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-s390@vger.kernel.org, scgl@linux.ibm.com, shuah@kernel.org
+Subject: [PATCH] KVM: s390: selftests: Fix memop extension capability check
+Date:   Tue, 14 Jun 2022 18:26:35 +0200
+Message-Id: <20220614162635.3445019-1-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <36d83871-343d-e8a0-1aed-05bf386f9b1b@redhat.com>
+References: <36d83871-343d-e8a0-1aed-05bf386f9b1b@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: bbCm_KGA5GT1nJ6yz2bkdsVAd0LVogjw
+X-Proofpoint-ORIG-GUID: B8dsVfyF-Pfrxd7CIb6Ie_WRb-G7_jJr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-14_06,2022-06-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 phishscore=0 malwarescore=0 adultscore=0
+ mlxscore=0 spamscore=0 mlxlogscore=863 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206140062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to ensure that XSAVE works correctly, add XSAVE most basic fork
-test:
-1. The contents of these xstates in the child process should be the same as
-   the contents of the xstate in the parent process after the fork syscall.
-2. The contents of xstates in the parent process should not change after
-   the context switch.
+Fix the inverted logic of the memop extension capability check.
 
-  [ Dave Hansen; Chang S. Bae: bunches of cleanups ]
-
-Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+Fixes: 97da92c0ff92 ("KVM: s390: selftests: Use TAP interface in the memop test")
+Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 ---
- tools/testing/selftests/x86/xstate.c         | 22 ++++++++-
- tools/testing/selftests/x86/xstate.h         |  1 +
- tools/testing/selftests/x86/xstate_helpers.c | 51 ++++++++++++++++++++
- tools/testing/selftests/x86/xstate_helpers.h |  2 +
- 4 files changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
-index 05dabb4733a0..96e6b5db907b 100644
---- a/tools/testing/selftests/x86/xstate.c
-+++ b/tools/testing/selftests/x86/xstate.c
-@@ -45,7 +45,7 @@
- #include "xstate_helpers.h"
- #include "../kselftest.h"
+
+Here you go.
+Hope it doesn't get lost as a reply, but I can always resend
+and it's not super critical after all.
+
+
+ tools/testing/selftests/kvm/s390x/memop.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+index e704c6fa5758..e1056f20dfa1 100644
+--- a/tools/testing/selftests/kvm/s390x/memop.c
++++ b/tools/testing/selftests/kvm/s390x/memop.c
+@@ -769,7 +769,7 @@ int main(int argc, char *argv[])
+ 	ksft_set_plan(ARRAY_SIZE(testlist));
  
--#define NUM_TESTS 1
-+#define NUM_TESTS 3
- #define xstate_test_array_init(idx, init_opt, fill_opt)	\
- 	do {						\
- 		xstate_tests[idx].init = init_opt;	\
-@@ -135,6 +135,25 @@ static void test_xstate_sig_handle(void)
- 	compare_buf_result(valid_xbuf, compared_xbuf, case_name1);
- }
- 
-+static void test_xstate_fork(void)
-+{
-+	const char *case_name2 = "xstate of child process should be same as xstate of parent";
-+	const char *case_name3 = "parent xstate should be same after context switch";
-+
-+	ksft_print_msg("[RUN]\tParent pid:%d check xstate around fork test.\n",
-+		       getpid());
-+	/* Child process xstate should be same as the parent process xstate. */
-+	if (xstate_fork(valid_xbuf, compared_xbuf, xstate_info.mask,
-+	    xstate_size)) {
-+		ksft_test_result_pass("The case: %s.\n", case_name2);
-+	} else {
-+		ksft_test_result_fail("The case: %s.\n", case_name2);
-+	}
-+
-+	/* The parent process xstate should not change after context switch. */
-+	compare_buf_result(valid_xbuf, compared_xbuf, case_name3);
-+}
-+
- static void prepare_xstate_test(void)
- {
- 	xstate_test_array_init(XFEATURE_FP, init_legacy_info,
-@@ -153,6 +172,7 @@ static void prepare_xstate_test(void)
- 			       fill_pkru_xstate_buf);
- 
- 	xstate_tests[XSTATE_CASE_SIG].xstate_case = test_xstate_sig_handle;
-+	xstate_tests[XSTATE_CASE_FORK].xstate_case = test_xstate_fork;
- }
- 
- static void test_xstate(void)
-diff --git a/tools/testing/selftests/x86/xstate.h b/tools/testing/selftests/x86/xstate.h
-index a60429591c49..17e0f7b17a6e 100644
---- a/tools/testing/selftests/x86/xstate.h
-+++ b/tools/testing/selftests/x86/xstate.h
-@@ -87,6 +87,7 @@ enum supportability {
- 
- enum xstate_case {
- 	XSTATE_CASE_SIG,
-+	XSTATE_CASE_FORK,
- 	XSTATE_CASE_MAX,
- };
- 
-diff --git a/tools/testing/selftests/x86/xstate_helpers.c b/tools/testing/selftests/x86/xstate_helpers.c
-index 0f88f56f839e..406d7330e2ae 100644
---- a/tools/testing/selftests/x86/xstate_helpers.c
-+++ b/tools/testing/selftests/x86/xstate_helpers.c
-@@ -158,3 +158,54 @@ bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
- 
- 	return sigusr1_done;
- }
-+
-+bool xstate_fork(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
-+		 uint32_t xstate_size)
-+{
-+	pid_t child;
-+	int status, fd[2];
-+	bool child_result;
-+
-+	memset(compared_xbuf, 0, xstate_size);
-+	/* Use pipe to transfer test result to parent process. */
-+	if (pipe(fd) < 0)
-+		fatal_error("create pipe failed");
-+	/*
-+	 * Xrstor the valid_xbuf and call syscall assembly instruction, then
-+	 * save the xstate to compared_xbuf in child process for comparison.
-+	 */
-+	__xrstor(valid_xbuf, mask);
-+	child = __fork();
-+	if (child < 0) {
-+		/* Fork syscall failed */
-+		fatal_error("fork failed");
-+	} else if (child == 0) {
-+		/* Fork syscall succeeded, now in the child. */
-+		__xsave(compared_xbuf, mask);
-+
-+		if (memcmp(valid_xbuf, compared_xbuf, xstate_size))
-+			child_result = false;
-+		else
-+			child_result = true;
-+
-+		/*
-+		 * Transfer the child process test result to
-+		 * the parent process for aggregation.
-+		 */
-+		close(fd[0]);
-+		if (!write(fd[1], &child_result, sizeof(child_result)))
-+			fatal_error("write fd failed");
-+		_exit(0);
-+	} else {
-+		/* Fork syscall succeeded, now in the parent. */
-+		__xsave(compared_xbuf, mask);
-+		if (waitpid(child, &status, 0) != child || !WIFEXITED(status)) {
-+			fatal_error("Child exit with error status");
-+		} else {
-+			close(fd[1]);
-+			if (!read(fd[0], &child_result, sizeof(child_result)))
-+				fatal_error("read fd failed");
-+			return child_result;
-+		}
-+	}
-+}
-diff --git a/tools/testing/selftests/x86/xstate_helpers.h b/tools/testing/selftests/x86/xstate_helpers.h
-index 1806c0bf484b..307781708ffa 100644
---- a/tools/testing/selftests/x86/xstate_helpers.h
-+++ b/tools/testing/selftests/x86/xstate_helpers.h
-@@ -6,3 +6,5 @@ extern void fill_fp_mxcsr_xstate_buf(void *buf, int xfeature_num,
- 				     uint8_t ui8_fp);
- extern bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf,
- 			      uint64_t mask, uint32_t xstate_size);
-+extern bool xstate_fork(void *valid_xbuf, void *compared_xbuf,
-+			uint64_t mask, uint32_t xstate_size);
+ 	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
+-		if (testlist[idx].extension >= extension_cap) {
++		if (extension_cap >= testlist[idx].extension) {
+ 			testlist[idx].test();
+ 			ksft_test_result_pass("%s\n", testlist[idx].name);
+ 		} else {
 -- 
-2.31.1
+2.32.0
 
