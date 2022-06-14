@@ -2,69 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6E854BAD6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 21:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D3354BBBE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 22:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiFNTno (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jun 2022 15:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S238917AbiFNUYh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jun 2022 16:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346818AbiFNTnl (ORCPT
+        with ESMTP id S1357168AbiFNUYb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:43:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0A682A421
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 12:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655235819;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0kBJ9jVSmrZsPatTagpukwacW+JAMXi3G+ttyb9CVmA=;
-        b=Sk7LCxwaEEpe1GKCm2Y7ECHAmlVI2iQMS7TvJuKo27xcvBgoz7MCBueOA8j4dt7ps5Q/Ua
-        /4lyx+TdveASNpeV8Q9cC4WeXJxZRtyjwXEYY1lmIvLVcqsf6HZZFogZdGasYya1oCUL/y
-        UrbLdcj9mZEA6NJWSDe688dMIqUFgdg=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-398-rB1VENXeMbaJ1t5JdIaRGw-1; Tue, 14 Jun 2022 15:43:38 -0400
-X-MC-Unique: rB1VENXeMbaJ1t5JdIaRGw-1
-Received: by mail-il1-f200.google.com with SMTP id k15-20020a056e021a8f00b002d79963e53fso6082944ilv.14
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 12:43:38 -0700 (PDT)
+        Tue, 14 Jun 2022 16:24:31 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECB449FA4
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 13:24:29 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id a10so10614174ioe.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 13:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vaTd6J5QW2zH+C0RW1NLJUMn73O3x7V9fILF9tLqrzI=;
+        b=gRVRxHZMe7GB0CMT7h68KGoW9wprnOjEoeTrdTux4jLVQBc6iVdCNm+kcl5WQF+Cz2
+         JtExKCFNoo4EFeNNqD1eSojr64JLEV1BfzRV+EQZHSvC5LBywUXaf7kQiiOO235C86X4
+         hNYJtch2R0PBiluBbXbdWKTzekpDDqXVBeRFj5DN1+VkM13YIRCzp3WG7Km0S+mA0uLj
+         vrnR7unp0020iNc1qX1iTREpmwCXBKBpqjTpoKG3ANGjME/Yv9bcclsdEN26n4G6qFA3
+         ac8RReknpeEI4OpUlVPxbdvgkyf0lalZQJIWbI5ZeHntnojVYz6B+Tiiecxqlao2LfIH
+         17Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0kBJ9jVSmrZsPatTagpukwacW+JAMXi3G+ttyb9CVmA=;
-        b=uoaTjdxXEJRfDeIv1OakxCIVWXUM0/72n11UKwiWP3YY4P6wZMC7ZD6wiy04TaLSl4
-         cWNdOPeVtOzHGm+S1GtTNLDmzXwJuxdHY9H9ZWtp9vs6SvjI+Z0vqtj3wOQQJZMnExa5
-         u4oJ66fbSosHaTnzsyJJ8aZz7KWrrt10iP+XKvSenNc6ghibnzosl0gvVf9k1XOA0pnT
-         76B54GfJ7wjh+YCMyxCv2ggzNgUpdjVa6v7W8RlVBQDwZ8+AL6nSzsBUWRFGEakd77VF
-         6G3ti5GYtc+RcFWU+ZAEVrceMbE6MJ87nOR1nPOgwe8Tpykpep0T8Fc10F0eDoDV29KH
-         LMRQ==
-X-Gm-Message-State: AOAM533o0UOMQL8RU3VQlkl9vNqAlIt6ZukRuKID2R0X9W6EJoo4PUuS
-        bOvK6Akf+Ix6BdJB2I+lsYYJ+LIbAQwBoVVtFOt9IxZggoACuuDJNZPXaXRMpRxGiJ4nwl1hEE1
-        42mzp7t+fqlQU3tsJoB1Onws9aKVL
-X-Received: by 2002:a05:6638:2711:b0:332:1030:d6c2 with SMTP id m17-20020a056638271100b003321030d6c2mr3742567jav.263.1655235818123;
-        Tue, 14 Jun 2022 12:43:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyka9HjOgMy6b8pnRt/A/embx73zjB9YhZLRYD1IRFIZfVzSN4bJjcwuFQgiPhot6lgYqIMuA==
-X-Received: by 2002:a05:6638:2711:b0:332:1030:d6c2 with SMTP id m17-20020a056638271100b003321030d6c2mr3742560jav.263.1655235817943;
-        Tue, 14 Jun 2022 12:43:37 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id y11-20020a02904b000000b0032e6f0d3796sm5225276jaf.145.2022.06.14.12.43.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 12:43:37 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 15:43:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vaTd6J5QW2zH+C0RW1NLJUMn73O3x7V9fILF9tLqrzI=;
+        b=jLtFFFPi42QYJ+PIovGCisvvFyJOQvqZzK2SqJNQEoUNCaDxa9L0FGNHmJNBUFBjQN
+         j78H3EdXpXLx8KKu7oyORn7wyuJAMrT/ni1JXjyfadm01wss/EG7HtJf1fPNBxJpeipN
+         K4cwP2pdfDBDfwcQN6DMqjeEV1L8mkf213RP6tp9fgEWOuNB6Oi/gVzMXt/t5hNuhR51
+         Xp/cuwz2a7QPn5fxHnPFXj0MuFn9xbsmoheM+ZKpwYgh0D8/pvHAervqjRBDB9UuFvDH
+         ronJdJKVYitcua66WTvbE6VEAHJr+RlwxbsOLECsoO2AEQTh/OggvmskZ7SkxctQG13N
+         4K1w==
+X-Gm-Message-State: AOAM530sLOgxdcHznrBdgM/d0nXdm76q2qj323gaLdiajPwN01qmXJ98
+        Fn8S2zO44adZczAbi6yIAqMo+frT/bIwc//+ywVC5Q==
+X-Google-Smtp-Source: ABdhPJxLjAfk4yJjPZ49rC5OWFXh9ANQ837dlv+XDuJcCGSbPEAHdRsUXzEvf2lpgiu8Gw11a3UVil6vMRe/1LGT4wQ=
+X-Received: by 2002:a6b:3e42:0:b0:669:ae49:589 with SMTP id
+ l63-20020a6b3e42000000b00669ae490589mr3353488ioa.138.1655238268174; Tue, 14
+ Jun 2022 13:24:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220601210951.3916598-1-axelrasmussen@google.com>
+ <20220601210951.3916598-3-axelrasmussen@google.com> <20220613145540.1c9f7750092911bae1332b92@linux-foundation.org>
+ <Yqe6R+XSH+nFc8se@xz-m1.local> <CAJHvVchdmV42qCgO6j=zGBi0DeVcvW1OC88rHUP6V66Fg3CSww@mail.gmail.com>
+ <87k09kxi59.fsf@meer.lwn.net>
+In-Reply-To: <87k09kxi59.fsf@meer.lwn.net>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Tue, 14 Jun 2022 13:23:52 -0700
+Message-ID: <CAJHvVcjAnewRATU3AAZK+TFpNbfiVATfd1tt_ok2k+X+3s3dBA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Peter Xu <peterx@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Charan Teja Reddy <charante@codeaurora.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "Dmitry V . Levin" <ldv@altlinux.org>,
         Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
         Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
         Mel Gorman <mgorman@techsingularity.net>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
@@ -72,38 +72,54 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Suren Baghdasaryan <surenb@google.com>,
         Vlastimil Babka <vbabka@suse.cz>,
         zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v3 6/6] selftests: vm: add /dev/userfaultfd test cases to
- run_vmtests.sh
-Message-ID: <Yqjk5qEvNk9l72P3@xz-m1.local>
-References: <20220601210951.3916598-1-axelrasmussen@google.com>
- <20220601210951.3916598-7-axelrasmussen@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220601210951.3916598-7-axelrasmussen@google.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:09:51PM -0700, Axel Rasmussen wrote:
-> This new mode was recently added to the userfaultfd selftest. We want to
-> exercise both userfaultfd(2) as well as /dev/userfaultfd, so add both
-> test cases to the script.
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+On Mon, Jun 13, 2022 at 4:23 PM Jonathan Corbet <corbet@lwn.net> wrote:
+>
+> Axel Rasmussen <axelrasmussen@google.com> writes:
+>
+> > I think for any approach involving syscalls, we need to be able to
+> > control access to who can call a syscall. Maybe there's another way
+> > I'm not aware of, but I think today the only mechanism to do this is
+> > capabilities. I proposed adding a CAP_USERFAULTFD for this purpose,
+> > but that approach was rejected [1]. So, I'm not sure of another way
+> > besides using a device node.
+>
+> I take it there's a reason why this can't be done with a security module
+> - either a custom module or a policy in one of the existing modules?
+> That sort of access control is just what security modules are supposed
+> to be for, after all.
+>
+> Thanks,
+>
+> jon
 
-Acked-by: Peter Xu <peterx@redhat.com>
+Admittedly I haven't tried proposing a patch, but I suspect there
+would be pushback against adding an entirely new LSM just for this
+case, similarly to the reasons the CAP_USERFAULTFD approach was
+rejected.
 
--- 
-Peter Xu
-
+For existing LSMs, I think SELinux can be used to restrict access to
+syscalls. But then again, it's fairly heavy weight / difficult to
+configure, and I suspect migrating production servers which don't use
+it today would be a nontrivial undertaking. At least to me it seems
+unfortunate to say, there isn't an obvious "safe" way to use
+userfaultfd, without enabling + configuring selinux. (That assumes by
+"safe" we mean, without granting wider-than necessary access to
+userfaultfd, or without granting uffd-using processes more permissions
+[root or CAP_SYS_PTRACE] to do their job.) I suspect if we do that
+then in practice many? most? users will just either run UFFD programs
+as root, or toggle the sysctl to allow unprivileged UFFD usage.
