@@ -2,143 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C211854A35F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 03:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D3254A68A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 04:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiFNBC6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Jun 2022 21:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S1355931AbiFNCcv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Jun 2022 22:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243576AbiFNBCz (ORCPT
+        with ESMTP id S1356443AbiFNCbL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:02:55 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03891275D6
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jun 2022 18:02:55 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id z11so5540070ilq.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jun 2022 18:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=U3JKGYdmDlTw2F6x4avaOz6AUUg72m8v/vKLi53Y55o=;
-        b=XPZgm7k4Cr+yPljAMD4+l1gO8xn+qimmbENRm+RaANbnTnLnnT5pKGzGk8PgG32Khc
-         iAkDtoPCQ/wON3/pUPsTgNmtdbXG0wwTvBs57F0uvqxPeZFlIQQOCgLJa5LQadT01GAZ
-         I7Nf/wsGY2tQWr515zVi6wd2yLpGX4NCnvI+M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=U3JKGYdmDlTw2F6x4avaOz6AUUg72m8v/vKLi53Y55o=;
-        b=QQtAoVbR98i67YUn7JnOyEnOCKNRJSsUzNoSVz0rmyYZDI50iCitfqKKZFTAJri280
-         uDS04NtSOUuXLaeYMy/dzc+ciXw1W2juzprqMDEj1BbHGn5vpZHEJRn5elrL7xf+uRkS
-         V8Q7h+lh3/YkfULUjz681FqCVuVr4E7izHOsKOQoy24M5i9WhwLxyykJkc9L2UoqbtHL
-         +J5PNAlWuEaFtie7r41fBIToS5gIqsWsrckeTLVQp1sMAxfw5BQ/1tRjzfnFHSAzNEhu
-         pm/VZVUOwK2g+H7hawRd8bkTcglwNKKuzgKSkB3EYQ/3Md3NnPbyhUSkq/Ec2E9UcPd/
-         H8jw==
-X-Gm-Message-State: AJIora+sAnRdFyd9FD0XlCUSf+2jBFiX9Nhv1cP+vrHcHyhSnJFB9MoC
-        7XLdJYuMeC45KWs44e306g6NAQ==
-X-Google-Smtp-Source: AGRyM1tiRrBBCbPwtYpv2ZRItmEb/a9UGRnjSmhR0oelcDd+j7k6iVl1VwFTfEx6eRJBxnEqUrVWnA==
-X-Received: by 2002:a92:da4c:0:b0:2d5:4942:151c with SMTP id p12-20020a92da4c000000b002d54942151cmr1462803ilq.54.1655168573945;
-        Mon, 13 Jun 2022 18:02:53 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id v19-20020a02cbb3000000b0032e3b0933c6sm4176608jap.162.2022.06.13.18.02.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 18:02:53 -0700 (PDT)
-Subject: Re: [PATCH 0/2] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-To:     Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220603143242.870-1-mpdesouza@suse.com>
- <c5dc436e-2e3f-db2c-5cd5-215a9af19152@linuxfoundation.org>
- <5966397b-5577-8075-ffdd-f32e5e4ca75a@redhat.com> <YqNZwBWJmi5E/Nvo@alley>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <a45df8ff-ce6b-e7c8-323d-6c37ad38f5ae@linuxfoundation.org>
-Date:   Mon, 13 Jun 2022 19:02:52 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 13 Jun 2022 22:31:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E6943AFA;
+        Mon, 13 Jun 2022 19:12:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08B7260AD8;
+        Tue, 14 Jun 2022 02:11:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66621C3411B;
+        Tue, 14 Jun 2022 02:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655172685;
+        bh=IBCeAButYsRtNeRmHz0Nr8ebRIHdO/EQ3qn0BXhofwY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=M1On4L+fWL7wvaH3ZGjA7W4y8ckiGBSVVdbGwrGbIHO7YihuOgsv2IwLFVSu91aos
+         YqFSp12qZ7tRjbr/DC01dFxVGxcuU1eMbFJdCYzhwuftzdrpi+OKMXEFMAZ79Ohu59
+         o/jil8afMkfmRuqEjsdW+dwMV6qU9ILilOnbjjK80WibSkUF0bSbWbSGMz4yuDlBLL
+         eCw7YNU2NUkR2kNBrMOFmt07PClKazT7auy741m8SPbfpFjJQ6HrcM7+nCszTryQAP
+         cUP9Y/EwDgPiOPw6PFIZVYZIaV6r6LzkMaXe3FB1rcs8mAp2fOW1P8U6MMYwAhzD9i
+         DiZlSEOFYBVOg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        seanjc@google.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH MANUALSEL 5.18 3/6] KVM: selftests: Make hyperv_clock selftest more stable
+Date:   Mon, 13 Jun 2022 22:11:12 -0400
+Message-Id: <20220614021116.1101331-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220614021116.1101331-1-sashal@kernel.org>
+References: <20220614021116.1101331-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YqNZwBWJmi5E/Nvo@alley>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/10/22 8:48 AM, Petr Mladek wrote:
-> On Fri 2022-06-10 09:06:16, Joe Lawrence wrote:
->> On 6/9/22 4:16 PM, Shuah Khan wrote:
->>> On 6/3/22 8:32 AM, Marcos Paulo de Souza wrote:
->>>> Hi there,
->>>>
->>>> The first patch moves the current livepatch tests to selftests,
->>>> allowing it
->>>> be better suited to contain more complex tests, like using userspace C
->>>> code
->>>> to use the livepatched kernel code. As a bonus it allows to use
->>>> "gen_tar" to export the livepatch selftests, rebuild the modules by
->>>> running make in selftests/livepatch directory and simplifies the process
->>>> of creating and debugging new selftests.
->>>>
->>>
->>> In general selftests don't include modules. We keep test modules under lib.
->>> One of the reasons is that modules have dependencies on the kernel and
->>> should
->>> be built when kernel is built.
->>>
->>> I don't fully buy the argument that moving modules under selftest would
->>> simplify
->>> the process.
->>>
->>
->> Hi Shuah,
->>
->> I see that there is tools/testing/selftests/bpf/bpf_testmod/ which
->> claims to be a "conceptually out-of-tree module".  Would similarly
->> moving livepatch test modules under tools/ give us flexibility to write
->> them build for multiple kernel versions?  Then one could theoretically
->> build and run the latest, greatest selftests against older kernels
->> (assuming the associate script/module/kernel supports the idea)?
-> 
-> +1
-> 
-> Another motivation is that the new selftest also needs
-> an executable binary. It would be nice to handle both modules
-> and binaries the same way.
-> 
-> Honestly, lib/* is a mess. It mixes real functionality and test
-> modules. The relation between the modules and tools/testing/*
-> is far from clear. IMHO, it would be more clean to have the related
-> stuff together.
-> 
-> Of course, we could not move all test modules from lib/* easily.
-> Some of them might be used on its own or even as built-in
-> tests. But preventing the move looks like a step in
-> the wrong direction to me.
-> 
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-As such bpf_testmod is the only one that is currently under kselftests.
-I don't have an objection to it from technical stand point. My concern
-is more from the standpoint of people writing modules that can't be built
-out of tree. We would add another requirement to kselftest that the out
-of tree modules should build successfully.
+[ Upstream commit eae260be3a0111a28fe95923e117a55dddec0384 ]
 
-As long as that concern is addressed and also test gracefully fails if the
-module fails to build, we can move on that direction. I would hesitate to
-extend this to modules dependent on hardware and architecture features
-such as cpufreq test drivers for example.
+hyperv_clock doesn't always give a stable test result, especially with
+AMD CPUs. The test compares Hyper-V MSR clocksource (acquired either
+with rdmsr() from within the guest or KVM_GET_MSRS from the host)
+against rdtsc(). To increase the accuracy, increase the measured delay
+(done with nop loop) by two orders of magnitude and take the mean rdtsc()
+value before and after rdmsr()/KVM_GET_MSRS.
 
-thanks,
--- Shuah
+Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
+Message-Id: <20220601144322.1968742-1-vkuznets@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/kvm/x86_64/hyperv_clock.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+index e0b2bb1339b1..3330fb183c68 100644
+--- a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
++++ b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+@@ -44,7 +44,7 @@ static inline void nop_loop(void)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < 1000000; i++)
++	for (i = 0; i < 100000000; i++)
+ 		asm volatile("nop");
+ }
+ 
+@@ -56,12 +56,14 @@ static inline void check_tsc_msr_rdtsc(void)
+ 	tsc_freq = rdmsr(HV_X64_MSR_TSC_FREQUENCY);
+ 	GUEST_ASSERT(tsc_freq > 0);
+ 
+-	/* First, check MSR-based clocksource */
++	/* For increased accuracy, take mean rdtsc() before and afrer rdmsr() */
+ 	r1 = rdtsc();
+ 	t1 = rdmsr(HV_X64_MSR_TIME_REF_COUNT);
++	r1 = (r1 + rdtsc()) / 2;
+ 	nop_loop();
+ 	r2 = rdtsc();
+ 	t2 = rdmsr(HV_X64_MSR_TIME_REF_COUNT);
++	r2 = (r2 + rdtsc()) / 2;
+ 
+ 	GUEST_ASSERT(r2 > r1 && t2 > t1);
+ 
+@@ -181,12 +183,14 @@ static void host_check_tsc_msr_rdtsc(struct kvm_vm *vm)
+ 	tsc_freq = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TSC_FREQUENCY);
+ 	TEST_ASSERT(tsc_freq > 0, "TSC frequency must be nonzero");
+ 
+-	/* First, check MSR-based clocksource */
++	/* For increased accuracy, take mean rdtsc() before and afrer ioctl */
+ 	r1 = rdtsc();
+ 	t1 = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TIME_REF_COUNT);
++	r1 = (r1 + rdtsc()) / 2;
+ 	nop_loop();
+ 	r2 = rdtsc();
+ 	t2 = vcpu_get_msr(vm, VCPU_ID, HV_X64_MSR_TIME_REF_COUNT);
++	r2 = (r2 + rdtsc()) / 2;
+ 
+ 	TEST_ASSERT(t2 > t1, "Time reference MSR is not monotonic (%ld <= %ld)", t1, t2);
+ 
+-- 
+2.35.1
+
