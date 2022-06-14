@@ -2,121 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0291354B75F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 19:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0B354B783
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 19:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238015AbiFNRJO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jun 2022 13:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S1344219AbiFNRU3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jun 2022 13:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243127AbiFNRJH (ORCPT
+        with ESMTP id S1344158AbiFNRU1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:09:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 846D921259
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655226545;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TtO7y3+ijZ6YgcAc4PQtJVzw8h5/IO41lJW3F/O5h8o=;
-        b=MExBRNUrDgO3Q+J734Mscv2T2qASZLzHE4c8el9HZi4lUBQWptJZY+ONvKd8Y6oXwuv7uE
-        /ufobr/ex6e07iXpTO4d2IvHFhWqnVY54c6O9vb6obt4kK3C5MGbgQqNzmPab29/h4jUiv
-        y1ANlS0px2g3htt6lFW/B2sNQxgCp58=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-4w-cy-2qNSml6ZHpdOxHWQ-1; Tue, 14 Jun 2022 13:09:04 -0400
-X-MC-Unique: 4w-cy-2qNSml6ZHpdOxHWQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 2-20020a1c0202000000b0039c94528746so1680469wmc.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:09:04 -0700 (PDT)
+        Tue, 14 Jun 2022 13:20:27 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2C72E0BF
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:20:25 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id v143so12371398oie.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=hg6Vqov4iXvBWaAWFrjzE3cJyqu2kSLgOmZIB62TeP4=;
+        b=ZkUTOL7K1RF/aEE1Lfl/rHZMd5mzmuyLkpzUflHyzVmXEl0/ykuBz0T6xVQIEM/eVN
+         s/D90OYveIE+nIbTNu4ml9ME5ulVcDOTtFLHdbYk6gxDJhzCQ86LnuIKbK3IMvRYtkht
+         733KAbrSO+4Eg6Xfa+qhVujYC0UKgFD0zMnGU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=TtO7y3+ijZ6YgcAc4PQtJVzw8h5/IO41lJW3F/O5h8o=;
-        b=dwbwHGXbas5zu2EHgc2Ds6PV8SRegukSGQTgBAF4WCVCFZgvUELBFa5mBBo6yVrL7s
-         w7N8y6mSwlJ64akYtc97txezRyzZEhEokV6M8xNMLrI08kVrGmHxhhqtwWyIk78U7jKQ
-         945ZfLpZAmqy8scpbQVdKj+K2c+DAxFAP+71ubpcZGLFHMrYRY1qX2r88fSnk/tkgC8H
-         Zhh2b3Y7B+Fd2C9aJbCb+w5ebbNWCtZ1M5RmW0/8YHe7VKNw8WjMKrMt9+KR6ZdBf5oz
-         rNncpbbnYjg5CWZUGcRg/JnQqxT3q50qZA4D3+MHhZUL+NyhripD68DIPw5cSpUXJkyW
-         7p1Q==
-X-Gm-Message-State: AOAM530jfDslUGE6s392Xp9Os1CeKUgrrEGL1xh4TVBrTVIVRlzh92wx
-        dFDftUIxrTToRg782x/sHFb3D1u4qWIAO9UWP1eHhTXgHPA7MfNYFeB2vT/YfQgW77Wvi++XNGP
-        MOpi4ruXHznF3L6pw9Xr+XqsVNwHy
-X-Received: by 2002:a1c:f213:0:b0:39b:ad32:5e51 with SMTP id s19-20020a1cf213000000b0039bad325e51mr5215044wmc.72.1655226543168;
-        Tue, 14 Jun 2022 10:09:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwEH0VwSnOcNDbF6N4JmvvUE3uFVg/Be8POxZzNI8KiXy7aOZbLTS8Lt1QSrzLFl377ZtNdew==
-X-Received: by 2002:a1c:f213:0:b0:39b:ad32:5e51 with SMTP id s19-20020a1cf213000000b0039bad325e51mr5215014wmc.72.1655226542875;
-        Tue, 14 Jun 2022 10:09:02 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id v1-20020adfebc1000000b0020d07d90b71sm12236421wrn.66.2022.06.14.10.09.01
+        bh=hg6Vqov4iXvBWaAWFrjzE3cJyqu2kSLgOmZIB62TeP4=;
+        b=Nw1zfik1p+c+PW3SmTMtT3zPzkPZYRz+cyaLlU6CG1FNsdRdL2f9oFAyiOqtW8ck6z
+         EnCFtiNDjnQpp9uhEj1tBK77hWL95G0RC1vDN7SVr4Qznw43z7SaJa+5mRDdMXP6DNf6
+         A4DRnoKG8AmffOh8Xo5xtI2c9PTUHVSqu1PXBwVsVKrF9HO/sQzIrYwTD5cexDS3Ftew
+         nbnsv4wJUQOQknHx0pEov9z4JJhl4WiK8BVQQne9R8zYDc5V2mgJjDKufmyBC+Bt4rW0
+         wyr2xgXvhlNI2CyBthI+P0iTx5pRToH7vZajMCP4ju41N2xSs/HGgipnvZhwdsGDodlu
+         41VA==
+X-Gm-Message-State: AOAM5316ytabYi5PmptTvl7qhhCLRhMi/t12HD+W9XhY5HHumvkbl1cs
+        s9OgHTG+p6iDMTirfoUdWVVHKg==
+X-Google-Smtp-Source: ABdhPJz5iNx+05iYtyKjN+1yjrjUV9JdHERfov+sTvxBpWyYWz/4EqWVrZiwlG4doCoQdTxjdoKR8w==
+X-Received: by 2002:a05:6808:1512:b0:32e:f1bf:b8f8 with SMTP id u18-20020a056808151200b0032ef1bfb8f8mr2555983oiw.81.1655227224787;
+        Tue, 14 Jun 2022 10:20:24 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h4-20020a056870170400b000f5e33aaa66sm6074177oae.0.2022.06.14.10.20.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 10:09:01 -0700 (PDT)
-Message-ID: <6dca9fc3-d50a-2920-b22e-73f0bd2c93f9@redhat.com>
-Date:   Tue, 14 Jun 2022 19:09:00 +0200
+        Tue, 14 Jun 2022 10:20:24 -0700 (PDT)
+Subject: Re: [PATCH V2] selftests/vm: Add protection_keys tests to run_vmtests
+To:     "Shetty, Kalpana" <kalpana.shetty@amd.com>,
+        akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220610090704.296-1-kalpana.shetty@amd.com>
+ <8e7fca3a-096c-7d6c-e43b-9292995ab970@linuxfoundation.org>
+ <e1703fcf-c5e2-70b1-cae2-30330108ad26@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <2f157493-02ed-4bc8-6624-b7d077c0d5af@linuxfoundation.org>
+Date:   Tue, 14 Jun 2022 11:20:23 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] KVM: s390: selftests: Fix memop extension capability
- check
+In-Reply-To: <e1703fcf-c5e2-70b1-cae2-30330108ad26@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, thuth@redhat.com,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com
-Cc:     david@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org, shuah@kernel.org
-References: <36d83871-343d-e8a0-1aed-05bf386f9b1b@redhat.com>
- <20220614162635.3445019-1-scgl@linux.ibm.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220614162635.3445019-1-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/14/22 18:26, Janis Schoetterl-Glausch wrote:
-> Fix the inverted logic of the memop extension capability check.
+On 6/14/22 6:15 AM, Shetty, Kalpana wrote:
 > 
-> Fixes: 97da92c0ff92 ("KVM: s390: selftests: Use TAP interface in the memop test")
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
+> On 6/14/2022 3:14 AM, Shuah Khan wrote:
+>> On 6/10/22 3:07 AM, Kalpana Shetty wrote:
+>>> Adding "protected_keys" tests to "run_vmtests.sh" would help out to run all VM related tests
+>>> from a single shell script.
+>>>
+>>
+>> Makes sense - can you explain why you can't just run
+>> protection_keys_32 without checks? 
+> 
+> Yes; we can run protection_keys_32 without check.
 > 
 > 
-> Here you go.
-> Hope it doesn't get lost as a reply, but I can always resend
-> and it's not super critical after all.
+>> Why are you checking for VADDR64? 
+> 
+> The check is added to ensure if the system is in 64-bit mode before executing 64-bit binary.
 > 
 > 
->   tools/testing/selftests/kvm/s390x/memop.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index e704c6fa5758..e1056f20dfa1 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -769,7 +769,7 @@ int main(int argc, char *argv[])
->   	ksft_set_plan(ARRAY_SIZE(testlist));
->   
->   	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
-> -		if (testlist[idx].extension >= extension_cap) {
-> +		if (extension_cap >= testlist[idx].extension) {
->   			testlist[idx].test();
->   			ksft_test_result_pass("%s\n", testlist[idx].name);
->   		} else {
 
-Done, thanks!
+Okay. protection_keys_32 will only be built on 32-bit system and.
+protection_keys_64 on 64-bit system.
 
-Paolo
+Won't it be better to check if binary exists and run either _32 or
+_64 instead of checking for VADDR64?
 
+thanks,
+-- Shuah
