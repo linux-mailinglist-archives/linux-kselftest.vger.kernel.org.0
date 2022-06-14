@@ -2,100 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877E054B7A9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 19:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E84154B817
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jun 2022 19:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237389AbiFNRaJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jun 2022 13:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
+        id S1350666AbiFNRu4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jun 2022 13:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiFNRaI (ORCPT
+        with ESMTP id S1350483AbiFNRuz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:30:08 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CA43D493
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:30:06 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id h18so7069425ilj.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jun 2022 10:30:06 -0700 (PDT)
+        Tue, 14 Jun 2022 13:50:55 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D503B55E;
+        Tue, 14 Jun 2022 10:50:54 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id r12so9686927vsg.8;
+        Tue, 14 Jun 2022 10:50:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=aSo5B7wxHruikT7i10mL2QJi9ruKuv2MIJIK2ELKKvQ=;
-        b=YKoyf7NH8rTqqJlql8rCXPzZQKfg+dExryRIoaqgMhhpp3kgzWSnTAYFlzsTjibY9a
-         BU21asQwL8ditAIxoOXHyATnCLEFjjvsZpYJDm6dyLRyPWiNfqvLUhZWzZsPF7v2epxs
-         jrhv/G7m/dQfkgIVk368alJlXzLcXWcLX/o/8=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y7lWlC0ID6xcYIKCksaK2Q6U4VJ116tOdaANaaZcHwU=;
+        b=pOjMdzI/JF0vEBkUzR6KhTpZx5s6v5P4F67yaNDe4QPTSP1717tVEC2JvCxksyFIk0
+         egCsCID/4hPrNntwYL8Is+XuagbsEEYfJRxrbdHIyg9B4/gba3mprI//UDspafagYbbX
+         lu1/hDyxP6rahxQQqvHM5yidQf7HWyFfC16Wh3MSxEjd/Pd0nm4uzZPLTx10L7QIjC3I
+         0GwqBs3fjPLGgfOoT5l79FEgJuoDGUARR9KPFzobRQaeGGDiUlR74ZEY0CWQBLEuDxMR
+         37k8XTJYReH618+W3RuncRf+hXWsWje0X2Ys1UR8KDe/EFEXpiGVR3T+Dc1METl1ic5N
+         3A+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=aSo5B7wxHruikT7i10mL2QJi9ruKuv2MIJIK2ELKKvQ=;
-        b=Gdd4zUIkkS13UjC6Qw4exLPV3zU6oFkMzDRz38sSS8SAHGnU8EQfTP7uIuV6C97QqW
-         stIXSm52I4mGF5JRR4wy5jiKfZprjD5Oj1xI8XmR4uHFiPAjSKVHb7qhsZdCIy15Gsbf
-         JZ/pDfrgK/Z/DlaFO37W26iKJ77g+vslT3k8nZreSfl1fQqPRUG7uTHDAnqP+i90W1lO
-         Q3K2bKdUH4H970lDJiirpHVPrvK12C2LIFbXy9OeZUAL40X9az3rikUg7FgYjCQ0ml8q
-         Td+tx3/+112I9gVOvl5G9eumRFLCPB6s1PY5NdaU0Tr81vC52yqLJtyVulB9SDQ1YOyf
-         rlrQ==
-X-Gm-Message-State: AJIora+SY4+L81SNN5jsaKZqcRI5R7E0np4luuAtDqCquSaKBCysm3vL
-        Ed3HKeGqybBB6uDxKjRlpG6D/Q==
-X-Google-Smtp-Source: AGRyM1st09tU6WIPog6ZcsfIOrj9H83BSjqzdkiMrUDy/mg5vbeZQkHTijSmV+dIzW2lR6nKJ7yR3A==
-X-Received: by 2002:a05:6e02:20cc:b0:2d1:a5d6:b78c with SMTP id 12-20020a056e0220cc00b002d1a5d6b78cmr3563131ilq.160.1655227806288;
-        Tue, 14 Jun 2022 10:30:06 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i6-20020a056e02054600b002d3de4c1ecbsm5668058ils.68.2022.06.14.10.30.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 10:30:06 -0700 (PDT)
-Subject: Re: [PATCH] userfaultfd/selftests: Fix typo in comment
-To:     Xiang wangx <wangxiang@cdjrlc.com>, akpm@linux-foundation.org
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220610071244.59679-1-wangxiang@cdjrlc.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3e3922c1-c6a7-ac60-2478-6b94defd1ead@linuxfoundation.org>
-Date:   Tue, 14 Jun 2022 11:30:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y7lWlC0ID6xcYIKCksaK2Q6U4VJ116tOdaANaaZcHwU=;
+        b=cQBNBdSrq5WoVN0fL0fsRHVbrutFZ9YmcnWkENQy8GA8tf5v17rNnt2qSmrhYjvzct
+         B7xwt53mEoOpUCYo1XyOowH4dwVO5AcwQHjZ5mIViXyJODej05ohARf+sTBpf6Y/RMA9
+         1D6Lm1Vvz5E0URy9hU1LN1i5VIIfZ0ar01pGByxDRekuKKLA4dWl+ZuMivebI3COl+X8
+         Kg80Wls3fAU3iS2uC4ZNW8BFTwK4ntnzDASapT4TApt1oZos6PG3BQVLDBUhZKqG95PA
+         NRWZA9P6tXlNWJ+Jo+UxXUd+SqJUcdkrCiqIPYE/0F7dcPEnIiG3qR+xX5UQSbTFgFEZ
+         Pazw==
+X-Gm-Message-State: AJIora+/Ta2a0MguaV+u3O21lo2rjwEksTO9a4u4xSKepZ786lm42Ahh
+        lWeStPrrUSgy47Ou9rmYo3RGM4ZK9mS2CkC4ruE=
+X-Google-Smtp-Source: AGRyM1tE8iGrta1sVvxhDPQh8BCuTc253XBQH2pgFXHYPLVPTv3GqCMLRqQNJsX26NjGlp2URASn1JPtDTSQqqI8xCI=
+X-Received: by 2002:a67:d70e:0:b0:34b:8e32:404b with SMTP id
+ p14-20020a67d70e000000b0034b8e32404bmr3097325vsj.31.1655229053277; Tue, 14
+ Jun 2022 10:50:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220610071244.59679-1-wangxiang@cdjrlc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+References: <20220614115420.1964686-1-roberto.sassu@huawei.com> <20220614115420.1964686-2-roberto.sassu@huawei.com>
+In-Reply-To: <20220614115420.1964686-2-roberto.sassu@huawei.com>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Tue, 14 Jun 2022 10:50:42 -0700
+Message-ID: <CAJnrk1bz33yeRRXP46tU1iKOHKxowj5-BaThT24kEnfUP9aAeQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] bpf: Export bpf_dynptr_get_size()
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/10/22 1:12 AM, Xiang wangx wrote:
-> Delete the redundant word 'in'.
-> 
-> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+On Tue, Jun 14, 2022 at 4:54 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> Export bpf_dynptr_get_size(), so that kernel code dealing with eBPF dynamic
+> pointers can obtain the real size of data carried by this data structure.
+>
+> Cc: Joanne Koong <joannelkoong@gmail.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+LGTM
+
+Acked-by: Joanne Koong <joannelkoong@gmail.com>
+
 > ---
->   tools/testing/selftests/vm/userfaultfd.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index 0bdfc1955229..4bc24581760d 100644
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -860,7 +860,7 @@ static int stress(struct uffd_stats *uffd_stats)
->   	/*
->   	 * Be strict and immediately zap area_src, the whole area has
->   	 * been transferred already by the background treads. The
-> -	 * area_src could then be faulted in in a racy way by still
-> +	 * area_src could then be faulted in a racy way by still
->   	 * running uffdio_threads reading zeropages after we zapped
->   	 * area_src (but they're guaranteed to get -EEXIST from
->   	 * UFFDIO_COPY without writing zero pages into area_dst
-> 
-
-Thank you. Applied to next Linux 5.20-rc1
-
-thanks,
--- Shuah
+>  include/linux/bpf.h  | 1 +
+>  kernel/bpf/helpers.c | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 8e6092d0ea95..6eb03a0c9687 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2420,5 +2420,6 @@ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+>                      enum bpf_dynptr_type type, u32 offset, u32 size);
+>  void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+>  int bpf_dynptr_check_size(u32 size);
+> +u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr);
+>
+>  #endif /* _LINUX_BPF_H */
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 225806a02efb..29e1810afaf6 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1430,7 +1430,7 @@ static void bpf_dynptr_set_type(struct bpf_dynptr_kern *ptr, enum bpf_dynptr_typ
+>         ptr->size |= type << DYNPTR_TYPE_SHIFT;
+>  }
+>
+> -static u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
+> +u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
+>  {
+>         return ptr->size & DYNPTR_SIZE_MASK;
+>  }
+> --
+> 2.25.1
+>
