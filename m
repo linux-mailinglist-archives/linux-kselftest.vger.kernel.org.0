@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003DF54CAB5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jun 2022 16:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7943A54CAB1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jun 2022 16:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355569AbiFOOAo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jun 2022 10:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44300 "EHLO
+        id S1355730AbiFOOAq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jun 2022 10:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355619AbiFOOAZ (ORCPT
+        with ESMTP id S1344928AbiFOOAc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:00:25 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FD73CA73
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jun 2022 07:00:06 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-10113b4c2b5so14920831fac.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jun 2022 07:00:06 -0700 (PDT)
+        Wed, 15 Jun 2022 10:00:32 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7643BBC8
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jun 2022 07:00:12 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id a21-20020a9d4715000000b0060bfaac6899so8871682otf.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jun 2022 07:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=usp.br; s=usp-google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8yv61sauJajXoaBuee9c1zbGBJhUL7kPVgP/LwHr7y0=;
-        b=Mc0neaTSXLu96iwKmQhgaDclyfuNSl7Ud9kjUnBY0VwSbTCb8CpvZ5rD0wDTM+XbW9
-         4zq5VaDf5vFYkBWKKg6uuz2uf1cQCnSOgO2IDrkTUh83dqNLyei0tWPsCADcpxIUNRsI
-         nV5TzvWTM/i4o8fJVDTy9Boq5ChVJcDIPR0WgqXwUnjGQ4T9aVrnqVwzsFzwaQ5ksnTJ
-         8mjfuC4hYPkZaUbLw4bDT9YkU+CD12Qv2v9WAXPj0iplf7vRhZYZCL1KLmb1ZbOsxQPa
-         fAobBXw0gqQUwA5s3mkyv4twJO7BvBm9iwIcesoBAJVxhjBiL5P38T63lulpPaj3QF5I
-         293g==
+        bh=UulhO8y71QH4EnuoJYot2qDwQlYlgRmDOiqdrx2SxD8=;
+        b=M7watJjGWIgfa8T4f1pFCYgktvYrTqymn6IO+zCtIJPhGFFKZxdF/loFkY41sRMGR9
+         iKmFcUg65O9AOEFvQz2Oed9SxFjsKFJhzwxN/+5CXBZenPZHqQUYQ1MvOGvnXrfAnwLf
+         Al+AhE6+onddGQm+U4H3YPqkW02NAo5fWjATEwP09IhMN5WGiiuemxO4DJxdANK51aGy
+         hnVA4MgJxImH+KbrvhRl5cWJ12c7a1iC2H3BGKeMngysKP6ErJjZpdFALG+6N1O7jXQz
+         YZ4mbGMI43lQtSYNf2QWPLtC2ViBt1p0uReYRuVw3IMzLFnL5le6RMc82RHEoqDP7eSC
+         LzSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8yv61sauJajXoaBuee9c1zbGBJhUL7kPVgP/LwHr7y0=;
-        b=n6LVWHr5nLtyac6+LplhL2A+StR+7uReWytffCGrYEkqKYcbu31W5avA/Y/DC3hzzc
-         4CAZIbqtoOI8BaaOwITJAYa3uF0JZoRlK+PU8cMXcE1RCw1R+uMZNbbZ0IW2f90lAVcu
-         HqGQXOhTQifvL8H1722ZRk/Zn9rSNJKFdHz1nOJzTYSeoquWILGCfXc+dyMj+rhbqmsE
-         U9KAgtzEHYKuwMTe9GJmYoNmGggWFSV/f0tIEmGRZ3Qr82YlRvgV6IzLMb58gE6A10nw
-         5830jkxaCrlc37sXLZk5L+KPFujgQl6vuG7lvU7KTGw9klaJSuzj8QUU5y0CRXYEFmKA
-         hmyQ==
-X-Gm-Message-State: AJIora9o2bGpTJ8sVDqiKeDAVqNhM35PK/b6WxjE2fXGdHCP5Zwh3P1D
-        l8QZNISL38eVzQoKVgHrTTd4yQ==
-X-Google-Smtp-Source: AGRyM1vPWvFxVmggWkk1YCwWjYSeI53rphkWlvmY6c37Zb+13DUq+1xk5Z8Lr9m5hqYZz8qadNRQkg==
-X-Received: by 2002:a05:6870:c1cd:b0:fe:1295:6e34 with SMTP id i13-20020a056870c1cd00b000fe12956e34mr5353309oad.137.1655301604757;
-        Wed, 15 Jun 2022 07:00:04 -0700 (PDT)
+        bh=UulhO8y71QH4EnuoJYot2qDwQlYlgRmDOiqdrx2SxD8=;
+        b=AhLwjGBWkw6AcBzaMTcaQr9qcvbNzXKG3pLjLKD3CSBdiX7wcbG+dd6HjMcyLATDKE
+         grm8cmACA9xG7LRiCYfl9v63UbL+e7W1IN8DSWSGXC28swOjxeD8JkYnp7SKfeOfi6Qs
+         YciV8/I5Er87N6EpgNif5AFW3zHupkycXjHkT5Qex9TDjp3BKCjsQzkHts0alUnjYz91
+         dxo8dSFMWJ15BpdvYvYndOTA7LMhkox4cpr797gGVWBN8QSEvicHqg3ZRTiBb6AdgMvg
+         iG/w4BwtySlc06E7WLQGfpCEvRn9m/kPib0sSyRISw5w5NuiM+bvVD7CwmsT5IxqD605
+         u4Hw==
+X-Gm-Message-State: AOAM533xpirTHJ7P9/bOd96DUnaFycWPCoW9LWfaY3nzZdaL6AQ5rOnu
+        TarNG5orKqeZYQnxodb6E6NZKw==
+X-Google-Smtp-Source: ABdhPJxeaml9Tc/xHb/iUm0RVTMtro5FrcF+2E49Hal/9Nbk4ryDqiLQrZPeGkU6Ym/T1UHsc4vbDA==
+X-Received: by 2002:a05:6830:31a3:b0:60c:3dd3:708f with SMTP id q3-20020a05683031a300b0060c3dd3708fmr4295843ots.172.1655301611339;
+        Wed, 15 Jun 2022 07:00:11 -0700 (PDT)
 Received: from fedora.. ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
-        by smtp.gmail.com with ESMTPSA id u7-20020a056830248700b0060bfebb96e5sm6056928ots.35.2022.06.15.06.59.59
+        by smtp.gmail.com with ESMTPSA id u7-20020a056830248700b0060bfebb96e5sm6056928ots.35.2022.06.15.07.00.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 07:00:04 -0700 (PDT)
+        Wed, 15 Jun 2022 07:00:10 -0700 (PDT)
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
 To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
@@ -65,10 +65,11 @@ To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
 Cc:     dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        Arthur Grillo <arthur.grillo@usp.br>,
         =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-Subject: [PATCH 09/10] drm: selftest: convert drm_buddy selftest to KUnit
-Date:   Wed, 15 Jun 2022 10:58:23 -0300
-Message-Id: <20220615135824.15522-10-maira.canal@usp.br>
+Subject: [PATCH 10/10] drm: selftest: convert drm_mm selftest to KUnit
+Date:   Wed, 15 Jun 2022 10:58:24 -0300
+Message-Id: <20220615135824.15522-11-maira.canal@usp.br>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220615135824.15522-1-maira.canal@usp.br>
 References: <20220615135824.15522-1-maira.canal@usp.br>
@@ -85,1069 +86,294 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Considering the current adoption of the KUnit framework, convert the
-DRM buddy selftest to the KUnit API.
+From: Arthur Grillo <arthur.grillo@usp.br>
 
+Considering the current adoption of the KUnit framework, convert the
+DRM mm selftest to the KUnit API.
+
+Signed-off-by: Arthur Grillo <arthur.grillo@usp.br>
 Signed-off-by: Maíra Canal <maira.canal@usp.br>
 ---
- drivers/gpu/drm/selftests/Makefile            |   2 +-
- .../gpu/drm/selftests/drm_buddy_selftests.h   |  15 -
- drivers/gpu/drm/selftests/test-drm_buddy.c    | 994 ------------------
- drivers/gpu/drm/tests/Kconfig                 |  15 +
- drivers/gpu/drm/tests/Makefile                |   1 +
- drivers/gpu/drm/tests/test-drm_buddy.c        | 748 +++++++++++++
- 6 files changed, 765 insertions(+), 1010 deletions(-)
- delete mode 100644 drivers/gpu/drm/selftests/drm_buddy_selftests.h
- delete mode 100644 drivers/gpu/drm/selftests/test-drm_buddy.c
- create mode 100644 drivers/gpu/drm/tests/test-drm_buddy.c
+ drivers/gpu/drm/Kconfig                       |   20 -
+ drivers/gpu/drm/Makefile                      |    1 -
+ drivers/gpu/drm/selftests/Makefile            |    2 -
+ drivers/gpu/drm/selftests/drm_mm_selftests.h  |   28 -
+ drivers/gpu/drm/selftests/drm_selftest.c      |  109 --
+ drivers/gpu/drm/selftests/drm_selftest.h      |   41 -
+ drivers/gpu/drm/tests/Kconfig                 |   14 +
+ drivers/gpu/drm/tests/Makefile                |    1 +
+ .../drm/{selftests => tests}/test-drm_mm.c    | 1135 +++++++----------
+ 9 files changed, 465 insertions(+), 886 deletions(-)
+ delete mode 100644 drivers/gpu/drm/selftests/Makefile
+ delete mode 100644 drivers/gpu/drm/selftests/drm_mm_selftests.h
+ delete mode 100644 drivers/gpu/drm/selftests/drm_selftest.c
+ delete mode 100644 drivers/gpu/drm/selftests/drm_selftest.h
+ rename drivers/gpu/drm/{selftests => tests}/test-drm_mm.c (58%)
 
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index bd1b5d82c9cf..f1330d091a6e 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -50,26 +50,6 @@ config DRM_DEBUG_MM
+ 
+ 	  If in doubt, say "N".
+ 
+-config DRM_DEBUG_SELFTEST
+-	tristate "kselftests for DRM"
+-	depends on DRM
+-	depends on DEBUG_KERNEL
+-	select PRIME_NUMBERS
+-	select DRM_DISPLAY_DP_HELPER
+-	select DRM_DISPLAY_HELPER
+-	select DRM_LIB_RANDOM
+-	select DRM_KMS_HELPER
+-	select DRM_BUDDY
+-	select DRM_EXPORT_FOR_TESTS if m
+-	default n
+-	help
+-	  This option provides kernel modules that can be used to run
+-	  various selftests on parts of the DRM api. This option is not
+-	  useful for distributions or general kernels, but only for kernel
+-	  developers working on DRM and associated drivers.
+-
+-	  If in doubt, say "N".
+-
+ source "drivers/gpu/drm/tests/Kconfig"
+ 
+ config DRM_KMS_HELPER
+diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
+index 0f24aa542be0..8322a740146f 100644
+--- a/drivers/gpu/drm/Makefile
++++ b/drivers/gpu/drm/Makefile
+@@ -75,7 +75,6 @@ obj-$(CONFIG_DRM_KMS_HELPER) += drm_kms_helper.o
+ # Drivers and the rest
+ #
+ 
+-obj-$(CONFIG_DRM_DEBUG_SELFTEST) += selftests/
+ obj-y += tests/
+ 
+ obj-$(CONFIG_DRM_MIPI_DBI) += drm_mipi_dbi.o
 diff --git a/drivers/gpu/drm/selftests/Makefile b/drivers/gpu/drm/selftests/Makefile
-index f7db628b60cb..a4ebecb8146b 100644
---- a/drivers/gpu/drm/selftests/Makefile
-+++ b/drivers/gpu/drm/selftests/Makefile
-@@ -1,2 +1,2 @@
- # SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_buddy.o
-+obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o
-diff --git a/drivers/gpu/drm/selftests/drm_buddy_selftests.h b/drivers/gpu/drm/selftests/drm_buddy_selftests.h
 deleted file mode 100644
-index 455b756c4ae5..000000000000
---- a/drivers/gpu/drm/selftests/drm_buddy_selftests.h
+index a4ebecb8146b..000000000000
+--- a/drivers/gpu/drm/selftests/Makefile
 +++ /dev/null
-@@ -1,15 +0,0 @@
+@@ -1,2 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o
+diff --git a/drivers/gpu/drm/selftests/drm_mm_selftests.h b/drivers/gpu/drm/selftests/drm_mm_selftests.h
+deleted file mode 100644
+index 8c87c964176b..000000000000
+--- a/drivers/gpu/drm/selftests/drm_mm_selftests.h
++++ /dev/null
+@@ -1,28 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 */
 -/* List each unit test as selftest(name, function)
 - *
 - * The name is used as both an enum and expanded as igt__name to create
 - * a module parameter. It must be unique and legal for a C identifier.
 - *
-- * Tests are executed in order by igt/drm_buddy
+- * Tests are executed in order by igt/drm_mm
 - */
 -selftest(sanitycheck, igt_sanitycheck) /* keep first (selfcheck for igt) */
--selftest(buddy_alloc_limit, igt_buddy_alloc_limit)
--selftest(buddy_alloc_range, igt_buddy_alloc_range)
--selftest(buddy_alloc_optimistic, igt_buddy_alloc_optimistic)
--selftest(buddy_alloc_pessimistic, igt_buddy_alloc_pessimistic)
--selftest(buddy_alloc_smoke, igt_buddy_alloc_smoke)
--selftest(buddy_alloc_pathological, igt_buddy_alloc_pathological)
-diff --git a/drivers/gpu/drm/selftests/test-drm_buddy.c b/drivers/gpu/drm/selftests/test-drm_buddy.c
+-selftest(init, igt_init)
+-selftest(debug, igt_debug)
+-selftest(reserve, igt_reserve)
+-selftest(insert, igt_insert)
+-selftest(replace, igt_replace)
+-selftest(insert_range, igt_insert_range)
+-selftest(align, igt_align)
+-selftest(frag, igt_frag)
+-selftest(align32, igt_align32)
+-selftest(align64, igt_align64)
+-selftest(evict, igt_evict)
+-selftest(evict_range, igt_evict_range)
+-selftest(bottomup, igt_bottomup)
+-selftest(lowest, igt_lowest)
+-selftest(topdown, igt_topdown)
+-selftest(highest, igt_highest)
+-selftest(color, igt_color)
+-selftest(color_evict, igt_color_evict)
+-selftest(color_evict_range, igt_color_evict_range)
+diff --git a/drivers/gpu/drm/selftests/drm_selftest.c b/drivers/gpu/drm/selftests/drm_selftest.c
 deleted file mode 100644
-index aca0c491040f..000000000000
---- a/drivers/gpu/drm/selftests/test-drm_buddy.c
+index e29ed9faef5b..000000000000
+--- a/drivers/gpu/drm/selftests/drm_selftest.c
 +++ /dev/null
-@@ -1,994 +0,0 @@
--// SPDX-License-Identifier: MIT
+@@ -1,109 +0,0 @@
 -/*
-- * Copyright © 2019 Intel Corporation
+- * Copyright © 2016 Intel Corporation
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a
+- * copy of this software and associated documentation files (the "Software"),
+- * to deal in the Software without restriction, including without limitation
+- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+- * and/or sell copies of the Software, and to permit persons to whom the
+- * Software is furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice (including the next
+- * paragraph) shall be included in all copies or substantial portions of the
+- * Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+- * IN THE SOFTWARE.
 - */
 -
--#define pr_fmt(fmt) "drm_buddy: " fmt
+-#include <linux/compiler.h>
 -
--#include <linux/module.h>
--#include <linux/prime_numbers.h>
--#include <linux/sched/signal.h>
+-#define selftest(name, func) __idx_##name,
+-enum {
+-#include TESTS
+-};
+-#undef selftest
 -
--#include <drm/drm_buddy.h>
+-#define selftest(n, f) [__idx_##n] = { .name = #n, .func = f },
+-static struct drm_selftest {
+-	bool enabled;
+-	const char *name;
+-	int (*func)(void *);
+-} selftests[] = {
+-#include TESTS
+-};
+-#undef selftest
 -
--#include "../lib/drm_random.h"
+-/* Embed the line number into the parameter name so that we can order tests */
+-#define param(n) __PASTE(igt__, __PASTE(__PASTE(__LINE__, __), n))
+-#define selftest_0(n, func, id) \
+-module_param_named(id, selftests[__idx_##n].enabled, bool, 0400);
+-#define selftest(n, func) selftest_0(n, func, param(n))
+-#include TESTS
+-#undef selftest
 -
--#define TESTS "drm_buddy_selftests.h"
--#include "drm_selftest.h"
--
--#define IGT_TIMEOUT(name__) \
--	unsigned long name__ = jiffies + MAX_SCHEDULE_TIMEOUT
--
--static unsigned int random_seed;
--
--static inline u64 get_size(int order, u64 chunk_size)
+-static void set_default_test_all(struct drm_selftest *st, unsigned long count)
 -{
--	return (1 << order) * chunk_size;
+-	unsigned long i;
+-
+-	for (i = 0; i < count; i++)
+-		if (st[i].enabled)
+-			return;
+-
+-	for (i = 0; i < count; i++)
+-		st[i].enabled = true;
 -}
 -
--__printf(2, 3)
--static bool __igt_timeout(unsigned long timeout, const char *fmt, ...)
+-static int run_selftests(struct drm_selftest *st,
+-			 unsigned long count,
+-			 void *data)
 -{
--	va_list va;
--
--	if (!signal_pending(current)) {
--		cond_resched();
--		if (time_before(jiffies, timeout))
--			return false;
--	}
--
--	if (fmt) {
--		va_start(va, fmt);
--		vprintk(fmt, va);
--		va_end(va);
--	}
--
--	return true;
--}
--
--static inline const char *yesno(bool v)
--{
--	return v ? "yes" : "no";
--}
--
--static void __igt_dump_block(struct drm_buddy *mm,
--			     struct drm_buddy_block *block,
--			     bool buddy)
--{
--	pr_err("block info: header=%llx, state=%u, order=%d, offset=%llx size=%llx root=%s buddy=%s\n",
--	       block->header,
--	       drm_buddy_block_state(block),
--	       drm_buddy_block_order(block),
--	       drm_buddy_block_offset(block),
--	       drm_buddy_block_size(mm, block),
--	       yesno(!block->parent),
--	       yesno(buddy));
--}
--
--static void igt_dump_block(struct drm_buddy *mm,
--			   struct drm_buddy_block *block)
--{
--	struct drm_buddy_block *buddy;
--
--	__igt_dump_block(mm, block, false);
--
--	buddy = drm_get_buddy(block);
--	if (buddy)
--		__igt_dump_block(mm, buddy, true);
--}
--
--static int igt_check_block(struct drm_buddy *mm,
--			   struct drm_buddy_block *block)
--{
--	struct drm_buddy_block *buddy;
--	unsigned int block_state;
--	u64 block_size;
--	u64 offset;
 -	int err = 0;
 -
--	block_state = drm_buddy_block_state(block);
+-	set_default_test_all(st, count);
 -
--	if (block_state != DRM_BUDDY_ALLOCATED &&
--	    block_state != DRM_BUDDY_FREE &&
--	    block_state != DRM_BUDDY_SPLIT) {
--		pr_err("block state mismatch\n");
--		err = -EINVAL;
--	}
+-	/* Tests are listed in natural order in drm_*_selftests.h */
+-	for (; count--; st++) {
+-		if (!st->enabled)
+-			continue;
 -
--	block_size = drm_buddy_block_size(mm, block);
--	offset = drm_buddy_block_offset(block);
--
--	if (block_size < mm->chunk_size) {
--		pr_err("block size smaller than min size\n");
--		err = -EINVAL;
--	}
--
--	if (!is_power_of_2(block_size)) {
--		pr_err("block size not power of two\n");
--		err = -EINVAL;
--	}
--
--	if (!IS_ALIGNED(block_size, mm->chunk_size)) {
--		pr_err("block size not aligned to min size\n");
--		err = -EINVAL;
--	}
--
--	if (!IS_ALIGNED(offset, mm->chunk_size)) {
--		pr_err("block offset not aligned to min size\n");
--		err = -EINVAL;
--	}
--
--	if (!IS_ALIGNED(offset, block_size)) {
--		pr_err("block offset not aligned to block size\n");
--		err = -EINVAL;
--	}
--
--	buddy = drm_get_buddy(block);
--
--	if (!buddy && block->parent) {
--		pr_err("buddy has gone fishing\n");
--		err = -EINVAL;
--	}
--
--	if (buddy) {
--		if (drm_buddy_block_offset(buddy) != (offset ^ block_size)) {
--			pr_err("buddy has wrong offset\n");
--			err = -EINVAL;
--		}
--
--		if (drm_buddy_block_size(mm, buddy) != block_size) {
--			pr_err("buddy size mismatch\n");
--			err = -EINVAL;
--		}
--
--		if (drm_buddy_block_state(buddy) == block_state &&
--		    block_state == DRM_BUDDY_FREE) {
--			pr_err("block and its buddy are free\n");
--			err = -EINVAL;
--		}
--	}
--
--	return err;
--}
--
--static int igt_check_blocks(struct drm_buddy *mm,
--			    struct list_head *blocks,
--			    u64 expected_size,
--			    bool is_contiguous)
--{
--	struct drm_buddy_block *block;
--	struct drm_buddy_block *prev;
--	u64 total;
--	int err = 0;
--
--	block = NULL;
--	prev = NULL;
--	total = 0;
--
--	list_for_each_entry(block, blocks, link) {
--		err = igt_check_block(mm, block);
--
--		if (!drm_buddy_block_is_allocated(block)) {
--			pr_err("block not allocated\n"),
--			       err = -EINVAL;
--		}
--
--		if (is_contiguous && prev) {
--			u64 prev_block_size;
--			u64 prev_offset;
--			u64 offset;
--
--			prev_offset = drm_buddy_block_offset(prev);
--			prev_block_size = drm_buddy_block_size(mm, prev);
--			offset = drm_buddy_block_offset(block);
--
--			if (offset != (prev_offset + prev_block_size)) {
--				pr_err("block offset mismatch\n");
--				err = -EINVAL;
--			}
--		}
--
+-		pr_debug("drm: Running %s\n", st->name);
+-		err = st->func(data);
 -		if (err)
 -			break;
--
--		total += drm_buddy_block_size(mm, block);
--		prev = block;
 -	}
 -
--	if (!err) {
--		if (total != expected_size) {
--			pr_err("size mismatch, expected=%llx, found=%llx\n",
--			       expected_size, total);
--			err = -EINVAL;
--		}
--		return err;
--	}
+-	if (WARN(err > 0 || err == -ENOTTY,
+-		 "%s returned %d, conflicting with selftest's magic values!\n",
+-		 st->name, err))
+-		err = -1;
 -
--	if (prev) {
--		pr_err("prev block, dump:\n");
--		igt_dump_block(mm, prev);
--	}
--
--	pr_err("bad block, dump:\n");
--	igt_dump_block(mm, block);
--
+-	rcu_barrier();
 -	return err;
 -}
 -
--static int igt_check_mm(struct drm_buddy *mm)
+-static int __maybe_unused
+-__drm_subtests(const char *caller,
+-	       const struct drm_subtest *st,
+-	       int count,
+-	       void *data)
 -{
--	struct drm_buddy_block *root;
--	struct drm_buddy_block *prev;
--	unsigned int i;
--	u64 total;
--	int err = 0;
--
--	if (!mm->n_roots) {
--		pr_err("n_roots is zero\n");
--		return -EINVAL;
--	}
--
--	if (mm->n_roots != hweight64(mm->size)) {
--		pr_err("n_roots mismatch, n_roots=%u, expected=%lu\n",
--		       mm->n_roots, hweight64(mm->size));
--		return -EINVAL;
--	}
--
--	root = NULL;
--	prev = NULL;
--	total = 0;
--
--	for (i = 0; i < mm->n_roots; ++i) {
--		struct drm_buddy_block *block;
--		unsigned int order;
--
--		root = mm->roots[i];
--		if (!root) {
--			pr_err("root(%u) is NULL\n", i);
--			err = -EINVAL;
--			break;
--		}
--
--		err = igt_check_block(mm, root);
--
--		if (!drm_buddy_block_is_free(root)) {
--			pr_err("root not free\n");
--			err = -EINVAL;
--		}
--
--		order = drm_buddy_block_order(root);
--
--		if (!i) {
--			if (order != mm->max_order) {
--				pr_err("max order root missing\n");
--				err = -EINVAL;
--			}
--		}
--
--		if (prev) {
--			u64 prev_block_size;
--			u64 prev_offset;
--			u64 offset;
--
--			prev_offset = drm_buddy_block_offset(prev);
--			prev_block_size = drm_buddy_block_size(mm, prev);
--			offset = drm_buddy_block_offset(root);
--
--			if (offset != (prev_offset + prev_block_size)) {
--				pr_err("root offset mismatch\n");
--				err = -EINVAL;
--			}
--		}
--
--		block = list_first_entry_or_null(&mm->free_list[order],
--						 struct drm_buddy_block,
--						 link);
--		if (block != root) {
--			pr_err("root mismatch at order=%u\n", order);
--			err = -EINVAL;
--		}
--
--		if (err)
--			break;
--
--		prev = root;
--		total += drm_buddy_block_size(mm, root);
--	}
--
--	if (!err) {
--		if (total != mm->size) {
--			pr_err("expected mm size=%llx, found=%llx\n", mm->size,
--			       total);
--			err = -EINVAL;
--		}
--		return err;
--	}
--
--	if (prev) {
--		pr_err("prev root(%u), dump:\n", i - 1);
--		igt_dump_block(mm, prev);
--	}
--
--	if (root) {
--		pr_err("bad root(%u), dump:\n", i);
--		igt_dump_block(mm, root);
--	}
--
--	return err;
--}
--
--static void igt_mm_config(u64 *size, u64 *chunk_size)
--{
--	DRM_RND_STATE(prng, random_seed);
--	u32 s, ms;
--
--	/* Nothing fancy, just try to get an interesting bit pattern */
--
--	prandom_seed_state(&prng, random_seed);
--
--	/* Let size be a random number of pages up to 8 GB (2M pages) */
--	s = 1 + drm_prandom_u32_max_state((BIT(33 - 12)) - 1, &prng);
--	/* Let the chunk size be a random power of 2 less than size */
--	ms = BIT(drm_prandom_u32_max_state(ilog2(s), &prng));
--	/* Round size down to the chunk size */
--	s &= -ms;
--
--	/* Convert from pages to bytes */
--	*chunk_size = (u64)ms << 12;
--	*size = (u64)s << 12;
--}
--
--static int igt_buddy_alloc_pathological(void *arg)
--{
--	u64 mm_size, size, min_page_size, start = 0;
--	struct drm_buddy_block *block;
--	const int max_order = 3;
--	unsigned long flags = 0;
--	int order, top, err;
--	struct drm_buddy mm;
--	LIST_HEAD(blocks);
--	LIST_HEAD(holes);
--	LIST_HEAD(tmp);
--
--	/*
--	 * Create a pot-sized mm, then allocate one of each possible
--	 * order within. This should leave the mm with exactly one
--	 * page left. Free the largest block, then whittle down again.
--	 * Eventually we will have a fully 50% fragmented mm.
--	 */
--
--	mm_size = PAGE_SIZE << max_order;
--	err = drm_buddy_init(&mm, mm_size, PAGE_SIZE);
--	if (err) {
--		pr_err("buddy_init failed(%d)\n", err);
--		return err;
--	}
--	BUG_ON(mm.max_order != max_order);
--
--	for (top = max_order; top; top--) {
--		/* Make room by freeing the largest allocated block */
--		block = list_first_entry_or_null(&blocks, typeof(*block), link);
--		if (block) {
--			list_del(&block->link);
--			drm_buddy_free_block(&mm, block);
--		}
--
--		for (order = top; order--; ) {
--			size = min_page_size = get_size(order, PAGE_SIZE);
--			err = drm_buddy_alloc_blocks(&mm, start, mm_size, size,
--						     min_page_size, &tmp, flags);
--			if (err) {
--				pr_info("buddy_alloc hit -ENOMEM with order=%d, top=%d\n",
--					order, top);
--				goto err;
--			}
--
--			block = list_first_entry_or_null(&tmp,
--							 struct drm_buddy_block,
--							 link);
--			if (!block) {
--				pr_err("alloc_blocks has no blocks\n");
--				err = -EINVAL;
--				goto err;
--			}
--
--			list_move_tail(&block->link, &blocks);
--		}
--
--		/* There should be one final page for this sub-allocation */
--		size = min_page_size = get_size(0, PAGE_SIZE);
--		err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--		if (err) {
--			pr_info("buddy_alloc hit -ENOMEM for hole\n");
--			goto err;
--		}
--
--		block = list_first_entry_or_null(&tmp,
--						 struct drm_buddy_block,
--						 link);
--		if (!block) {
--			pr_err("alloc_blocks has no blocks\n");
--			err = -EINVAL;
--			goto err;
--		}
--
--		list_move_tail(&block->link, &holes);
--
--		size = min_page_size = get_size(top, PAGE_SIZE);
--		err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--		if (!err) {
--			pr_info("buddy_alloc unexpectedly succeeded at top-order %d/%d, it should be full!",
--				top, max_order);
--			block = list_first_entry_or_null(&tmp,
--							 struct drm_buddy_block,
--							 link);
--			if (!block) {
--				pr_err("alloc_blocks has no blocks\n");
--				err = -EINVAL;
--				goto err;
--			}
--
--			list_move_tail(&block->link, &blocks);
--			err = -EINVAL;
--			goto err;
--		}
--	}
--
--	drm_buddy_free_list(&mm, &holes);
--
--	/* Nothing larger than blocks of chunk_size now available */
--	for (order = 1; order <= max_order; order++) {
--		size = min_page_size = get_size(order, PAGE_SIZE);
--		err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--		if (!err) {
--			pr_info("buddy_alloc unexpectedly succeeded at order %d, it should be full!",
--				order);
--			block = list_first_entry_or_null(&tmp,
--							 struct drm_buddy_block,
--							 link);
--			if (!block) {
--				pr_err("alloc_blocks has no blocks\n");
--				err = -EINVAL;
--				goto err;
--			}
--
--			list_move_tail(&block->link, &blocks);
--			err = -EINVAL;
--			goto err;
--		}
--	}
--
--	if (err)
--		err = 0;
--
--err:
--	list_splice_tail(&holes, &blocks);
--	drm_buddy_free_list(&mm, &blocks);
--	drm_buddy_fini(&mm);
--	return err;
--}
--
--static int igt_buddy_alloc_smoke(void *arg)
--{
--	u64 mm_size, min_page_size, chunk_size, start = 0;
--	unsigned long flags = 0;
--	struct drm_buddy mm;
--	int *order;
--	int err, i;
--
--	DRM_RND_STATE(prng, random_seed);
--	IGT_TIMEOUT(end_time);
--
--	igt_mm_config(&mm_size, &chunk_size);
--
--	err = drm_buddy_init(&mm, mm_size, chunk_size);
--	if (err) {
--		pr_err("buddy_init failed(%d)\n", err);
--		return err;
--	}
--
--	order = drm_random_order(mm.max_order + 1, &prng);
--	if (!order) {
--		err = -ENOMEM;
--		goto out_fini;
--	}
--
--	for (i = 0; i <= mm.max_order; ++i) {
--		struct drm_buddy_block *block;
--		int max_order = order[i];
--		bool timeout = false;
--		LIST_HEAD(blocks);
--		u64 total, size;
--		LIST_HEAD(tmp);
--		int order;
--
--		err = igt_check_mm(&mm);
--		if (err) {
--			pr_err("pre-mm check failed, abort\n");
--			break;
--		}
--
--		order = max_order;
--		total = 0;
--
--		do {
--retry:
--			size = min_page_size = get_size(order, chunk_size);
--			err = drm_buddy_alloc_blocks(&mm, start, mm_size, size,
--						     min_page_size, &tmp, flags);
--			if (err) {
--				if (err == -ENOMEM) {
--					pr_info("buddy_alloc hit -ENOMEM with order=%d\n",
--						order);
--				} else {
--					if (order--) {
--						err = 0;
--						goto retry;
--					}
--
--					pr_err("buddy_alloc with order=%d failed(%d)\n",
--					       order, err);
--				}
--
--				break;
--			}
--
--			block = list_first_entry_or_null(&tmp,
--							 struct drm_buddy_block,
--							 link);
--			if (!block) {
--				pr_err("alloc_blocks has no blocks\n");
--				err = -EINVAL;
--				break;
--			}
--
--			list_move_tail(&block->link, &blocks);
--
--			if (drm_buddy_block_order(block) != order) {
--				pr_err("buddy_alloc order mismatch\n");
--				err = -EINVAL;
--				break;
--			}
--
--			total += drm_buddy_block_size(&mm, block);
--
--			if (__igt_timeout(end_time, NULL)) {
--				timeout = true;
--				break;
--			}
--		} while (total < mm.size);
--
--		if (!err)
--			err = igt_check_blocks(&mm, &blocks, total, false);
--
--		drm_buddy_free_list(&mm, &blocks);
--
--		if (!err) {
--			err = igt_check_mm(&mm);
--			if (err)
--				pr_err("post-mm check failed\n");
--		}
--
--		if (err || timeout)
--			break;
--
--		cond_resched();
--	}
--
--	if (err == -ENOMEM)
--		err = 0;
--
--	kfree(order);
--out_fini:
--	drm_buddy_fini(&mm);
--
--	return err;
--}
--
--static int igt_buddy_alloc_pessimistic(void *arg)
--{
--	u64 mm_size, size, min_page_size, start = 0;
--	struct drm_buddy_block *block, *bn;
--	const unsigned int max_order = 16;
--	unsigned long flags = 0;
--	struct drm_buddy mm;
--	unsigned int order;
--	LIST_HEAD(blocks);
--	LIST_HEAD(tmp);
 -	int err;
 -
--	/*
--	 * Create a pot-sized mm, then allocate one of each possible
--	 * order within. This should leave the mm with exactly one
--	 * page left.
--	 */
--
--	mm_size = PAGE_SIZE << max_order;
--	err = drm_buddy_init(&mm, mm_size, PAGE_SIZE);
--	if (err) {
--		pr_err("buddy_init failed(%d)\n", err);
--		return err;
--	}
--	BUG_ON(mm.max_order != max_order);
--
--	for (order = 0; order < max_order; order++) {
--		size = min_page_size = get_size(order, PAGE_SIZE);
--		err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
+-	for (; count--; st++) {
+-		pr_debug("Running %s/%s\n", caller, st->name);
+-		err = st->func(data);
 -		if (err) {
--			pr_info("buddy_alloc hit -ENOMEM with order=%d\n",
--				order);
--			goto err;
--		}
--
--		block = list_first_entry_or_null(&tmp,
--						 struct drm_buddy_block,
--						 link);
--		if (!block) {
--			pr_err("alloc_blocks has no blocks\n");
--			err = -EINVAL;
--			goto err;
--		}
--
--		list_move_tail(&block->link, &blocks);
--	}
--
--	/* And now the last remaining block available */
--	size = min_page_size = get_size(0, PAGE_SIZE);
--	err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--	if (err) {
--		pr_info("buddy_alloc hit -ENOMEM on final alloc\n");
--		goto err;
--	}
--
--	block = list_first_entry_or_null(&tmp,
--					 struct drm_buddy_block,
--					 link);
--	if (!block) {
--		pr_err("alloc_blocks has no blocks\n");
--		err = -EINVAL;
--		goto err;
--	}
--
--	list_move_tail(&block->link, &blocks);
--
--	/* Should be completely full! */
--	for (order = max_order; order--; ) {
--		size = min_page_size = get_size(order, PAGE_SIZE);
--		err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--		if (!err) {
--			pr_info("buddy_alloc unexpectedly succeeded at order %d, it should be full!",
--				order);
--			block = list_first_entry_or_null(&tmp,
--							 struct drm_buddy_block,
--							 link);
--			if (!block) {
--				pr_err("alloc_blocks has no blocks\n");
--				err = -EINVAL;
--				goto err;
--			}
--
--			list_move_tail(&block->link, &blocks);
--			err = -EINVAL;
--			goto err;
+-			pr_err("%s: %s failed with error %d\n",
+-			       caller, st->name, err);
+-			return err;
 -		}
 -	}
 -
--	block = list_last_entry(&blocks, typeof(*block), link);
--	list_del(&block->link);
--	drm_buddy_free_block(&mm, block);
--
--	/* As we free in increasing size, we make available larger blocks */
--	order = 1;
--	list_for_each_entry_safe(block, bn, &blocks, link) {
--		list_del(&block->link);
--		drm_buddy_free_block(&mm, block);
--
--		size = min_page_size = get_size(order, PAGE_SIZE);
--		err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--		if (err) {
--			pr_info("buddy_alloc (realloc) hit -ENOMEM with order=%d\n",
--				order);
--			goto err;
--		}
--
--		block = list_first_entry_or_null(&tmp,
--						 struct drm_buddy_block,
--						 link);
--		if (!block) {
--			pr_err("alloc_blocks has no blocks\n");
--			err = -EINVAL;
--			goto err;
--		}
--
--		list_del(&block->link);
--		drm_buddy_free_block(&mm, block);
--		order++;
--	}
--
--	/* To confirm, now the whole mm should be available */
--	size = min_page_size = get_size(max_order, PAGE_SIZE);
--	err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--	if (err) {
--		pr_info("buddy_alloc (realloc) hit -ENOMEM with order=%d\n",
--			max_order);
--		goto err;
--	}
--
--	block = list_first_entry_or_null(&tmp,
--					 struct drm_buddy_block,
--					 link);
--	if (!block) {
--		pr_err("alloc_blocks has no blocks\n");
--		err = -EINVAL;
--		goto err;
--	}
--
--	list_del(&block->link);
--	drm_buddy_free_block(&mm, block);
--
--err:
--	drm_buddy_free_list(&mm, &blocks);
--	drm_buddy_fini(&mm);
--	return err;
--}
--
--static int igt_buddy_alloc_optimistic(void *arg)
--{
--	u64 mm_size, size, min_page_size, start = 0;
--	struct drm_buddy_block *block;
--	unsigned long flags = 0;
--	const int max_order = 16;
--	struct drm_buddy mm;
--	LIST_HEAD(blocks);
--	LIST_HEAD(tmp);
--	int order, err;
--
--	/*
--	 * Create a mm with one block of each order available, and
--	 * try to allocate them all.
--	 */
--
--	mm_size = PAGE_SIZE * ((1 << (max_order + 1)) - 1);
--	err = drm_buddy_init(&mm,
--			     mm_size,
--			     PAGE_SIZE);
--	if (err) {
--		pr_err("buddy_init failed(%d)\n", err);
--		return err;
--	}
--
--	BUG_ON(mm.max_order != max_order);
--
--	for (order = 0; order <= max_order; order++) {
--		size = min_page_size = get_size(order, PAGE_SIZE);
--		err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--		if (err) {
--			pr_info("buddy_alloc hit -ENOMEM with order=%d\n",
--				order);
--			goto err;
--		}
--
--		block = list_first_entry_or_null(&tmp,
--						 struct drm_buddy_block,
--						 link);
--		if (!block) {
--			pr_err("alloc_blocks has no blocks\n");
--			err = -EINVAL;
--			goto err;
--		}
--
--		list_move_tail(&block->link, &blocks);
--	}
--
--	/* Should be completely full! */
--	size = min_page_size = get_size(0, PAGE_SIZE);
--	err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, min_page_size, &tmp, flags);
--	if (!err) {
--		pr_info("buddy_alloc unexpectedly succeeded, it should be full!");
--		block = list_first_entry_or_null(&tmp,
--						 struct drm_buddy_block,
--						 link);
--		if (!block) {
--			pr_err("alloc_blocks has no blocks\n");
--			err = -EINVAL;
--			goto err;
--		}
--
--		list_move_tail(&block->link, &blocks);
--		err = -EINVAL;
--		goto err;
--	} else {
--		err = 0;
--	}
--
--err:
--	drm_buddy_free_list(&mm, &blocks);
--	drm_buddy_fini(&mm);
--	return err;
--}
--
--static int igt_buddy_alloc_range(void *arg)
--{
--	unsigned long flags = DRM_BUDDY_RANGE_ALLOCATION;
--	u64 offset, size, rem, chunk_size, end;
--	unsigned long page_num;
--	struct drm_buddy mm;
--	LIST_HEAD(blocks);
--	int err;
--
--	igt_mm_config(&size, &chunk_size);
--
--	err = drm_buddy_init(&mm, size, chunk_size);
--	if (err) {
--		pr_err("buddy_init failed(%d)\n", err);
--		return err;
--	}
--
--	err = igt_check_mm(&mm);
--	if (err) {
--		pr_err("pre-mm check failed, abort, abort, abort!\n");
--		goto err_fini;
--	}
--
--	rem = mm.size;
--	offset = 0;
--
--	for_each_prime_number_from(page_num, 1, ULONG_MAX - 1) {
--		struct drm_buddy_block *block;
--		LIST_HEAD(tmp);
--
--		size = min(page_num * mm.chunk_size, rem);
--		end = offset + size;
--
--		err = drm_buddy_alloc_blocks(&mm, offset, end, size, mm.chunk_size, &tmp, flags);
--		if (err) {
--			if (err == -ENOMEM) {
--				pr_info("alloc_range hit -ENOMEM with size=%llx\n",
--					size);
--			} else {
--				pr_err("alloc_range with offset=%llx, size=%llx failed(%d)\n",
--				       offset, size, err);
--			}
--
--			break;
--		}
--
--		block = list_first_entry_or_null(&tmp,
--						 struct drm_buddy_block,
--						 link);
--		if (!block) {
--			pr_err("alloc_range has no blocks\n");
--			err = -EINVAL;
--			break;
--		}
--
--		if (drm_buddy_block_offset(block) != offset) {
--			pr_err("alloc_range start offset mismatch, found=%llx, expected=%llx\n",
--			       drm_buddy_block_offset(block), offset);
--			err = -EINVAL;
--		}
--
--		if (!err)
--			err = igt_check_blocks(&mm, &tmp, size, true);
--
--		list_splice_tail(&tmp, &blocks);
--
--		if (err)
--			break;
--
--		offset += size;
--
--		rem -= size;
--		if (!rem)
--			break;
--
--		cond_resched();
--	}
--
--	if (err == -ENOMEM)
--		err = 0;
--
--	drm_buddy_free_list(&mm, &blocks);
--
--	if (!err) {
--		err = igt_check_mm(&mm);
--		if (err)
--			pr_err("post-mm check failed\n");
--	}
--
--err_fini:
--	drm_buddy_fini(&mm);
--
--	return err;
--}
--
--static int igt_buddy_alloc_limit(void *arg)
--{
--	u64 size = U64_MAX, start = 0;
--	struct drm_buddy_block *block;
--	unsigned long flags = 0;
--	LIST_HEAD(allocated);
--	struct drm_buddy mm;
--	int err;
--
--	err = drm_buddy_init(&mm, size, PAGE_SIZE);
--	if (err)
--		return err;
--
--	if (mm.max_order != DRM_BUDDY_MAX_ORDER) {
--		pr_err("mm.max_order(%d) != %d\n",
--		       mm.max_order, DRM_BUDDY_MAX_ORDER);
--		err = -EINVAL;
--		goto out_fini;
--	}
--
--	size = mm.chunk_size << mm.max_order;
--	err = drm_buddy_alloc_blocks(&mm, start, size, size,
--				     PAGE_SIZE, &allocated, flags);
--
--	if (unlikely(err))
--		goto out_free;
--
--	block = list_first_entry_or_null(&allocated,
--					 struct drm_buddy_block,
--					 link);
--
--	if (!block) {
--		err = -EINVAL;
--		goto out_fini;
--	}
--
--	if (drm_buddy_block_order(block) != mm.max_order) {
--		pr_err("block order(%d) != %d\n",
--		       drm_buddy_block_order(block), mm.max_order);
--		err = -EINVAL;
--		goto out_free;
--	}
--
--	if (drm_buddy_block_size(&mm, block) !=
--	    BIT_ULL(mm.max_order) * PAGE_SIZE) {
--		pr_err("block size(%llu) != %llu\n",
--		       drm_buddy_block_size(&mm, block),
--		       BIT_ULL(mm.max_order) * PAGE_SIZE);
--		err = -EINVAL;
--		goto out_free;
--	}
--
--out_free:
--	drm_buddy_free_list(&mm, &allocated);
--out_fini:
--	drm_buddy_fini(&mm);
--	return err;
--}
--
--static int igt_sanitycheck(void *ignored)
--{
--	pr_info("%s - ok!\n", __func__);
 -	return 0;
 -}
+diff --git a/drivers/gpu/drm/selftests/drm_selftest.h b/drivers/gpu/drm/selftests/drm_selftest.h
+deleted file mode 100644
+index c784ec02ff53..000000000000
+--- a/drivers/gpu/drm/selftests/drm_selftest.h
++++ /dev/null
+@@ -1,41 +0,0 @@
+-/*
+- * Copyright © 2016 Intel Corporation
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a
+- * copy of this software and associated documentation files (the "Software"),
+- * to deal in the Software without restriction, including without limitation
+- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+- * and/or sell copies of the Software, and to permit persons to whom the
+- * Software is furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice (including the next
+- * paragraph) shall be included in all copies or substantial portions of the
+- * Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+- * IN THE SOFTWARE.
+- */
 -
--#include "drm_selftest.c"
+-#ifndef __DRM_SELFTEST_H__
+-#define __DRM_SELFTEST_H__
 -
--static int __init test_drm_buddy_init(void)
--{
--	int err;
+-struct drm_subtest {
+-	int (*func)(void *data);
+-	const char *name;
+-};
 -
--	while (!random_seed)
--		random_seed = get_random_int();
+-static int __drm_subtests(const char *caller,
+-			  const struct drm_subtest *st,
+-			  int count,
+-			  void *data);
+-#define drm_subtests(T, data) \
+-	__drm_subtests(__func__, T, ARRAY_SIZE(T), data)
 -
--	pr_info("Testing DRM buddy manager (struct drm_buddy), with random_seed=0x%x\n",
--		random_seed);
--	err = run_selftests(selftests, ARRAY_SIZE(selftests), NULL);
+-#define SUBTEST(x) { x, #x }
 -
--	return err > 0 ? 0 : err;
--}
--
--static void __exit test_drm_buddy_exit(void)
--{
--}
--
--module_init(test_drm_buddy_init);
--module_exit(test_drm_buddy_exit);
--
--MODULE_AUTHOR("Intel Corporation");
--MODULE_LICENSE("GPL");
+-#endif /* __DRM_SELFTEST_H__ */
 diff --git a/drivers/gpu/drm/tests/Kconfig b/drivers/gpu/drm/tests/Kconfig
-index de44385f217e..60c4f9801692 100644
+index 60c4f9801692..b7de6b6cd73b 100644
 --- a/drivers/gpu/drm/tests/Kconfig
 +++ b/drivers/gpu/drm/tests/Kconfig
-@@ -98,4 +98,19 @@ config DRM_FRAMEBUFFER_KUNIT_TEST
+@@ -113,4 +113,18 @@ config DRM_BUDDY_KUNIT_TEST
  
  		If in doubt, say "N".
  
-+config DRM_BUDDY_KUNIT_TEST
-+	tristate "KUnit tests for DRM buddy" if !DRM_KUNIT_TEST
++config DRM_MM_KUNIT_TEST
++	tristate "KUnit tests for DRM mm" if !DRM_KUNIT_TEST
 +	select DRM_KMS_HELPER
 +	select PRIME_NUMBERS
 +	select DRM_LIB_RANDOM
-+	select DRM_BUDDY
 +	default y if DRM_KUNIT_TEST
 +	help
 +		This option provides KUnit modules that can be used to run
-+		various selftests on parts of the DRM buddy API.  This
++		various selftests on parts of the DRM mm API.  This
 +		option is not useful for distributions or general kernels, but only
 +		for kernel developers working on DRM and associated drivers.
 +
@@ -1155,768 +381,2606 @@ index de44385f217e..60c4f9801692 100644
 +
  endmenu
 diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
-index d802ca0f1544..670316fddba1 100644
+index 670316fddba1..5140681a5e14 100644
 --- a/drivers/gpu/drm/tests/Makefile
 +++ b/drivers/gpu/drm/tests/Makefile
-@@ -6,3 +6,4 @@ obj-$(CONFIG_DRM_FORMAT_KUNIT_TEST) += test-drm_format.o
- obj-$(CONFIG_DRM_PLANE_HELPER_KUNIT_TEST) += test-drm_plane_helper.o
+@@ -7,3 +7,4 @@ obj-$(CONFIG_DRM_PLANE_HELPER_KUNIT_TEST) += test-drm_plane_helper.o
  obj-$(CONFIG_DRM_DP_MST_HELPER_KUNIT_TEST) += test-drm_dp_mst_helper.o
  obj-$(CONFIG_DRM_FRAMEBUFFER_KUNIT_TEST) += test-drm_framebuffer.o
-+obj-$(CONFIG_DRM_BUDDY_KUNIT_TEST) += test-drm_buddy.o
-diff --git a/drivers/gpu/drm/tests/test-drm_buddy.c b/drivers/gpu/drm/tests/test-drm_buddy.c
-new file mode 100644
-index 000000000000..e2aa4175a1d4
---- /dev/null
-+++ b/drivers/gpu/drm/tests/test-drm_buddy.c
-@@ -0,0 +1,748 @@
-+// SPDX-License-Identifier: MIT
-+/*
-+ * Copyright © 2019 Intel Corporation
-+ */
-+
+ obj-$(CONFIG_DRM_BUDDY_KUNIT_TEST) += test-drm_buddy.o
++obj-$(CONFIG_DRM_MM_KUNIT_TEST) += test-drm_mm.o
+diff --git a/drivers/gpu/drm/selftests/test-drm_mm.c b/drivers/gpu/drm/tests/test-drm_mm.c
+similarity index 58%
+rename from drivers/gpu/drm/selftests/test-drm_mm.c
+rename to drivers/gpu/drm/tests/test-drm_mm.c
+index b768b53c4aee..29d9b5227746 100644
+--- a/drivers/gpu/drm/selftests/test-drm_mm.c
++++ b/drivers/gpu/drm/tests/test-drm_mm.c
+@@ -3,9 +3,7 @@
+  * Test cases for the drm_mm range manager
+  */
+ 
+-#define pr_fmt(fmt) "drm_mm: " fmt
+-
+-#include <linux/module.h>
 +#include <kunit/test.h>
-+#include <linux/prime_numbers.h>
-+#include <linux/sched/signal.h>
-+
-+#include <drm/drm_buddy.h>
-+
-+#include "../lib/drm_random.h"
-+
-+#define IGT_TIMEOUT(name__)                                                    \
-+	unsigned long name__ = jiffies + MAX_SCHEDULE_TIMEOUT
-+
-+static unsigned int random_seed;
-+
-+static inline u64 get_size(int order, u64 chunk_size)
-+{
-+	return (1 << order) * chunk_size;
-+}
-+
-+__printf(2, 3)
-+static bool __igt_timeout(unsigned long timeout, const char *fmt, ...)
-+{
-+	va_list va;
-+
-+	if (!signal_pending(current)) {
-+		cond_resched();
-+		if (time_before(jiffies, timeout))
-+			return false;
-+	}
-+
-+	if (fmt) {
-+		va_start(va, fmt);
-+		vprintk(fmt, va);
-+		va_end(va);
-+	}
-+
-+	return true;
-+}
-+
-+static void __igt_dump_block(struct kunit *test, struct drm_buddy *mm,
-+			     struct drm_buddy_block *block, bool buddy)
-+{
-+	kunit_err(test, "block info: header=%llx, state=%u, order=%d, offset=%llx size=%llx root=%d buddy=%d\n",
-+			  block->header, drm_buddy_block_state(block),
-+			  drm_buddy_block_order(block), drm_buddy_block_offset(block),
-+			  drm_buddy_block_size(mm, block), !block->parent, buddy);
-+}
-+
-+static void igt_dump_block(struct kunit *test, struct drm_buddy *mm,
-+			   struct drm_buddy_block *block)
-+{
-+	struct drm_buddy_block *buddy;
-+
-+	__igt_dump_block(test, mm, block, false);
-+
-+	buddy = drm_get_buddy(block);
-+	if (buddy)
-+		__igt_dump_block(test, mm, buddy, true);
-+}
-+
-+static int igt_check_block(struct kunit *test, struct drm_buddy *mm,
-+			   struct drm_buddy_block *block)
-+{
-+	struct drm_buddy_block *buddy;
-+	unsigned int block_state;
-+	u64 block_size;
-+	u64 offset;
-+	int err = 0;
-+
-+	block_state = drm_buddy_block_state(block);
-+
-+	if (block_state != DRM_BUDDY_ALLOCATED &&
-+	    block_state != DRM_BUDDY_FREE && block_state != DRM_BUDDY_SPLIT) {
-+		kunit_err(test, "block state mismatch\n");
-+		err = -EINVAL;
-+	}
-+
-+	block_size = drm_buddy_block_size(mm, block);
-+	offset = drm_buddy_block_offset(block);
-+
-+	if (block_size < mm->chunk_size) {
-+		kunit_err(test, "block size smaller than min size\n");
-+		err = -EINVAL;
-+	}
-+
-+	if (!is_power_of_2(block_size)) {
-+		kunit_err(test, "block size not power of two\n");
-+		err = -EINVAL;
-+	}
-+
-+	if (!IS_ALIGNED(block_size, mm->chunk_size)) {
-+		kunit_err(test, "block size not aligned to min size\n");
-+		err = -EINVAL;
-+	}
-+
-+	if (!IS_ALIGNED(offset, mm->chunk_size)) {
-+		kunit_err(test, "block offset not aligned to min size\n");
-+		err = -EINVAL;
-+	}
-+
-+	if (!IS_ALIGNED(offset, block_size)) {
-+		kunit_err(test, "block offset not aligned to block size\n");
-+		err = -EINVAL;
-+	}
-+
-+	buddy = drm_get_buddy(block);
-+
-+	if (!buddy && block->parent) {
-+		kunit_err(test, "buddy has gone fishing\n");
-+		err = -EINVAL;
-+	}
-+
-+	if (buddy) {
-+		if (drm_buddy_block_offset(buddy) != (offset ^ block_size)) {
-+			kunit_err(test, "buddy has wrong offset\n");
-+			err = -EINVAL;
-+		}
-+
-+		if (drm_buddy_block_size(mm, buddy) != block_size) {
-+			kunit_err(test, "buddy size mismatch\n");
-+			err = -EINVAL;
-+		}
-+
-+		if (drm_buddy_block_state(buddy) == block_state &&
-+		    block_state == DRM_BUDDY_FREE) {
-+			kunit_err(test, "block and its buddy are free\n");
-+			err = -EINVAL;
-+		}
-+	}
-+
-+	return err;
-+}
-+
-+static int igt_check_blocks(struct kunit *test, struct drm_buddy *mm,
-+			    struct list_head *blocks, u64 expected_size, bool is_contiguous)
-+{
-+	struct drm_buddy_block *block;
-+	struct drm_buddy_block *prev;
-+	u64 total;
-+	int err = 0;
-+
-+	block = NULL;
-+	prev = NULL;
-+	total = 0;
-+
-+	list_for_each_entry(block, blocks, link) {
-+		err = igt_check_block(test, mm, block);
-+
-+		if (!drm_buddy_block_is_allocated(block)) {
-+			kunit_err(test, "block not allocated\n");
-+			err = -EINVAL;
-+		}
-+
-+		if (is_contiguous && prev) {
-+			u64 prev_block_size;
-+			u64 prev_offset;
-+			u64 offset;
-+
-+			prev_offset = drm_buddy_block_offset(prev);
-+			prev_block_size = drm_buddy_block_size(mm, prev);
-+			offset = drm_buddy_block_offset(block);
-+
-+			if (offset != (prev_offset + prev_block_size)) {
-+				kunit_err(test, "block offset mismatch\n");
-+				err = -EINVAL;
-+			}
-+		}
-+
-+		if (err)
-+			break;
-+
-+		total += drm_buddy_block_size(mm, block);
-+		prev = block;
-+	}
-+
-+	if (!err) {
-+		if (total != expected_size) {
-+			kunit_err(test, "size mismatch, expected=%llx, found=%llx\n",
-+				  expected_size, total);
-+			err = -EINVAL;
-+		}
-+		return err;
-+	}
-+
-+	if (prev) {
-+		kunit_err(test, "prev block, dump:\n");
-+		igt_dump_block(test, mm, prev);
-+	}
-+
-+	kunit_err(test, "bad block, dump:\n");
-+	igt_dump_block(test, mm, block);
-+
-+	return err;
-+}
-+
-+static int igt_check_mm(struct kunit *test, struct drm_buddy *mm)
-+{
-+	struct drm_buddy_block *root;
-+	struct drm_buddy_block *prev;
-+	unsigned int i;
-+	u64 total;
-+	int err = 0;
-+
-+	if (!mm->n_roots) {
-+		kunit_err(test, "n_roots is zero\n");
-+		return -EINVAL;
-+	}
-+
-+	if (mm->n_roots != hweight64(mm->size)) {
-+		kunit_err(test, "n_roots mismatch, n_roots=%u, expected=%lu\n",
-+			  mm->n_roots, hweight64(mm->size));
-+		return -EINVAL;
-+	}
-+
-+	root = NULL;
-+	prev = NULL;
-+	total = 0;
-+
-+	for (i = 0; i < mm->n_roots; ++i) {
-+		struct drm_buddy_block *block;
-+		unsigned int order;
-+
-+		root = mm->roots[i];
-+		if (!root) {
-+			kunit_err(test, "root(%u) is NULL\n", i);
-+			err = -EINVAL;
-+			break;
-+		}
-+
-+		err = igt_check_block(test, mm, root);
-+
-+		if (!drm_buddy_block_is_free(root)) {
-+			kunit_err(test, "root not free\n");
-+			err = -EINVAL;
-+		}
-+
-+		order = drm_buddy_block_order(root);
-+
-+		if (!i) {
-+			if (order != mm->max_order) {
-+				kunit_err(test, "max order root missing\n");
-+				err = -EINVAL;
-+			}
-+		}
-+
-+		if (prev) {
-+			u64 prev_block_size;
-+			u64 prev_offset;
-+			u64 offset;
-+
-+			prev_offset = drm_buddy_block_offset(prev);
-+			prev_block_size = drm_buddy_block_size(mm, prev);
-+			offset = drm_buddy_block_offset(root);
-+
-+			if (offset != (prev_offset + prev_block_size)) {
-+				kunit_err(test, "root offset mismatch\n");
-+				err = -EINVAL;
-+			}
-+		}
-+
-+		block = list_first_entry_or_null(&mm->free_list[order],
-+						 struct drm_buddy_block, link);
-+		if (block != root) {
-+			kunit_err(test, "root mismatch at order=%u\n", order);
-+			err = -EINVAL;
-+		}
-+
-+		if (err)
-+			break;
-+
-+		prev = root;
-+		total += drm_buddy_block_size(mm, root);
-+	}
-+
-+	if (!err) {
-+		if (total != mm->size) {
-+			kunit_err(test, "expected mm size=%llx, found=%llx\n",
-+				  mm->size, total);
-+			err = -EINVAL;
-+		}
-+		return err;
-+	}
-+
-+	if (prev) {
-+		kunit_err(test, "prev root(%u), dump:\n", i - 1);
-+		igt_dump_block(test, mm, prev);
-+	}
-+
-+	if (root) {
-+		kunit_err(test, "bad root(%u), dump:\n", i);
-+		igt_dump_block(test, mm, root);
-+	}
-+
-+	return err;
-+}
-+
-+static void igt_mm_config(u64 *size, u64 *chunk_size)
-+{
-+	DRM_RND_STATE(prng, random_seed);
-+	u32 s, ms;
-+
-+	/* Nothing fancy, just try to get an interesting bit pattern */
-+
-+	prandom_seed_state(&prng, random_seed);
-+
-+	/* Let size be a random number of pages up to 8 GB (2M pages) */
-+	s = 1 + drm_prandom_u32_max_state((BIT(33 - 12)) - 1, &prng);
-+	/* Let the chunk size be a random power of 2 less than size */
-+	ms = BIT(drm_prandom_u32_max_state(ilog2(s), &prng));
-+	/* Round size down to the chunk size */
-+	s &= -ms;
-+
-+	/* Convert from pages to bytes */
-+	*chunk_size = (u64)ms << 12;
-+	*size = (u64)s << 12;
-+}
-+
-+static void igt_buddy_alloc_pathological(struct kunit *test)
-+{
-+	u64 mm_size, size, start = 0;
-+	struct drm_buddy_block *block;
-+	const int max_order = 3;
-+	unsigned long flags = 0;
-+	int order, top;
-+	struct drm_buddy mm;
-+	LIST_HEAD(blocks);
-+	LIST_HEAD(holes);
-+	LIST_HEAD(tmp);
-+
-+	/*
-+	 * Create a pot-sized mm, then allocate one of each possible
-+	 * order within. This should leave the mm with exactly one
-+	 * page left. Free the largest block, then whittle down again.
-+	 * Eventually we will have a fully 50% fragmented mm.
-+	 */
-+
-+	mm_size = PAGE_SIZE << max_order;
-+	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_init(&mm, mm_size, PAGE_SIZE),
-+			       "buddy_init failed\n");
-+
-+	KUNIT_EXPECT_EQ(test, mm.max_order, max_order);
-+
-+	for (top = max_order; top; top--) {
-+		/* Make room by freeing the largest allocated block */
-+		block = list_first_entry_or_null(&blocks, typeof(*block), link);
-+		if (block) {
-+			list_del(&block->link);
-+			drm_buddy_free_block(&mm, block);
-+		}
-+
-+		for (order = top; order--;) {
-+			size = get_size(order, PAGE_SIZE);
-+			KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, start,
-+								   mm_size, size, size, &tmp, flags),
-+								   "buddy_alloc hit -ENOMEM with order=%d, top=%d\n",
-+								   order, top);
-+
-+			block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+			KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_blocks has no blocks\n");
-+
-+			list_move_tail(&block->link, &blocks);
-+		}
-+
-+		/* There should be one final page for this sub-allocation */
-+		size = get_size(0, PAGE_SIZE);
-+		KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+							   size, size, &tmp, flags),
-+							   "buddy_alloc hit -ENOMEM for hole\n");
-+
-+		block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+		KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_blocks has no blocks\n");
-+
-+		list_move_tail(&block->link, &holes);
-+
-+		size = get_size(top, PAGE_SIZE);
-+		KUNIT_ASSERT_TRUE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+							  size, size, &tmp, flags),
-+							  "buddy_alloc unexpectedly succeeded at top-order %d/%d, it should be full!",
-+							  top, max_order);
-+	}
-+
-+	drm_buddy_free_list(&mm, &holes);
-+
-+	/* Nothing larger than blocks of chunk_size now available */
-+	for (order = 1; order <= max_order; order++) {
-+		size = get_size(order, PAGE_SIZE);
-+		KUNIT_ASSERT_TRUE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+							  size, size, &tmp, flags),
-+							  "buddy_alloc unexpectedly succeeded at order %d, it should be full!",
-+							  order);
-+	}
-+
-+	list_splice_tail(&holes, &blocks);
-+	drm_buddy_free_list(&mm, &blocks);
-+	drm_buddy_fini(&mm);
-+}
-+
-+static void igt_buddy_alloc_smoke(struct kunit *test)
-+{
-+	u64 mm_size, chunk_size, start = 0;
-+	unsigned long flags = 0;
-+	struct drm_buddy mm;
-+	int *order;
-+	int i;
-+
-+	DRM_RND_STATE(prng, random_seed);
-+	IGT_TIMEOUT(end_time);
-+
-+	igt_mm_config(&mm_size, &chunk_size);
-+
-+	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_init(&mm, mm_size, chunk_size),
-+			"buddy_init failed\n");
-+
-+	order = drm_random_order(mm.max_order + 1, &prng);
-+	KUNIT_ASSERT_TRUE(test, order);
-+
-+	for (i = 0; i <= mm.max_order; ++i) {
-+		struct drm_buddy_block *block;
-+		int max_order = order[i];
-+		bool timeout = false;
-+		LIST_HEAD(blocks);
-+		u64 total, size;
-+		LIST_HEAD(tmp);
-+		int order, err;
-+
-+		KUNIT_ASSERT_FALSE_MSG(test, igt_check_mm(test, &mm),
-+							   "pre-mm check failed, abort\n");
-+
-+		order = max_order;
-+		total = 0;
-+
-+		do {
-+retry:
-+			size = get_size(order, chunk_size);
-+			err = drm_buddy_alloc_blocks(&mm, start, mm_size, size, size, &tmp, flags);
-+			if (err) {
-+				if (err == -ENOMEM) {
-+					KUNIT_FAIL(test, "buddy_alloc hit -ENOMEM with order=%d\n",
-+						order);
-+				} else {
-+					if (order--) {
-+						err = 0;
-+						goto retry;
-+					}
-+
-+					KUNIT_FAIL(test, "buddy_alloc with order=%d failed\n", order);
-+				}
-+
-+				break;
-+			}
-+
-+			block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+			KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_blocks has no blocks\n");
-+
-+			list_move_tail(&block->link, &blocks);
-+			KUNIT_EXPECT_EQ_MSG(test, drm_buddy_block_order(block), order,
-+								"buddy_alloc order mismatch\n");
-+
-+			total += drm_buddy_block_size(&mm, block);
-+
-+			if (__igt_timeout(end_time, NULL)) {
-+				timeout = true;
-+				break;
-+			}
-+		} while (total < mm.size);
-+
-+		if (!err)
-+			err = igt_check_blocks(test, &mm, &blocks, total, false);
-+
-+		drm_buddy_free_list(&mm, &blocks);
-+
-+		if (!err) {
-+			KUNIT_EXPECT_FALSE_MSG(test, igt_check_mm(test, &mm),
-+								   "post-mm check failed\n");
-+		}
-+
-+		if (err || timeout)
-+			break;
-+
-+		cond_resched();
-+	}
-+
-+	kfree(order);
-+	drm_buddy_fini(&mm);
-+}
-+
-+static void igt_buddy_alloc_pessimistic(struct kunit *test)
-+{
-+	u64 mm_size, size, start = 0;
-+	struct drm_buddy_block *block, *bn;
-+	const unsigned int max_order = 16;
-+	unsigned long flags = 0;
-+	struct drm_buddy mm;
-+	unsigned int order;
-+	LIST_HEAD(blocks);
-+	LIST_HEAD(tmp);
-+
-+	/*
-+	 * Create a pot-sized mm, then allocate one of each possible
-+	 * order within. This should leave the mm with exactly one
-+	 * page left.
-+	 */
-+
-+	mm_size = PAGE_SIZE << max_order;
-+	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_init(&mm, mm_size, PAGE_SIZE),
-+						   "buddy_init failed\n");
-+
-+	KUNIT_EXPECT_EQ(test, mm.max_order, max_order);
-+
-+	for (order = 0; order < max_order; order++) {
-+		size = get_size(order, PAGE_SIZE);
-+		KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+							   size, size, &tmp, flags),
-+							   "buddy_alloc hit -ENOMEM with order=%d\n", order);
-+
-+		block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+		KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_blocks has no blocks\n");
-+
-+		list_move_tail(&block->link, &blocks);
-+	}
-+
-+	/* And now the last remaining block available */
-+	size = get_size(0, PAGE_SIZE);
-+	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+						   size, size, &tmp, flags),
-+						   "buddy_alloc hit -ENOMEM on final alloc\n");
-+
-+	block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+	KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_blocks has no blocks\n");
-+
-+	list_move_tail(&block->link, &blocks);
-+
-+	/* Should be completely full! */
-+	for (order = max_order; order--;) {
-+		size = get_size(order, PAGE_SIZE);
-+		KUNIT_ASSERT_TRUE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+							  size, size, &tmp, flags),
-+							  "buddy_alloc unexpectedly succeeded, it should be full!");
-+	}
-+
-+	block = list_last_entry(&blocks, typeof(*block), link);
-+	list_del(&block->link);
-+	drm_buddy_free_block(&mm, block);
-+
-+	/* As we free in increasing size, we make available larger blocks */
-+	order = 1;
-+	list_for_each_entry_safe(block, bn, &blocks, link) {
-+		list_del(&block->link);
-+		drm_buddy_free_block(&mm, block);
-+
-+		size = get_size(order, PAGE_SIZE);
-+		KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+							   size, size, &tmp, flags),
-+							   "buddy_alloc hit -ENOMEM with order=%d\n", order);
-+
-+		block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+		KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_blocks has no blocks\n");
-+
-+		list_del(&block->link);
-+		drm_buddy_free_block(&mm, block);
-+		order++;
-+	}
-+
-+	/* To confirm, now the whole mm should be available */
-+	size = get_size(max_order, PAGE_SIZE);
-+	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+						   size, size, &tmp, flags),
-+						   "buddy_alloc (realloc) hit -ENOMEM with order=%d\n", max_order);
-+
-+	block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+	KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_blocks has no blocks\n");
-+
-+	list_del(&block->link);
-+	drm_buddy_free_block(&mm, block);
-+	drm_buddy_free_list(&mm, &blocks);
-+	drm_buddy_fini(&mm);
-+}
-+
-+static void igt_buddy_alloc_optimistic(struct kunit *test)
-+{
-+	u64 mm_size, size, start = 0;
-+	struct drm_buddy_block *block;
-+	unsigned long flags = 0;
-+	const int max_order = 16;
-+	struct drm_buddy mm;
-+	LIST_HEAD(blocks);
-+	LIST_HEAD(tmp);
-+	int order;
-+
-+	/*
-+	 * Create a mm with one block of each order available, and
-+	 * try to allocate them all.
-+	 */
-+
-+	mm_size = PAGE_SIZE * ((1 << (max_order + 1)) - 1);
-+
-+	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_init(&mm, mm_size, PAGE_SIZE),
-+						   "buddy_init failed\n");
-+
-+	KUNIT_EXPECT_EQ(test, mm.max_order, max_order);
-+
-+	for (order = 0; order <= max_order; order++) {
-+		size = get_size(order, PAGE_SIZE);
-+		KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+							   size, size, &tmp, flags),
-+							   "buddy_alloc hit -ENOMEM with order=%d\n", order);
-+
-+		block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+		KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_blocks has no blocks\n");
-+
-+		list_move_tail(&block->link, &blocks);
-+	}
-+
-+	/* Should be completely full! */
-+	size = get_size(0, PAGE_SIZE);
-+	KUNIT_ASSERT_TRUE_MSG(test, drm_buddy_alloc_blocks(&mm, start, mm_size,
-+						  size, size, &tmp, flags),
-+						  "buddy_alloc unexpectedly succeeded, it should be full!");
-+
-+	drm_buddy_free_list(&mm, &blocks);
-+	drm_buddy_fini(&mm);
-+}
-+
-+static void igt_buddy_alloc_range(struct kunit *test)
-+{
-+	unsigned long flags = DRM_BUDDY_RANGE_ALLOCATION;
-+	u64 offset, size, rem, chunk_size, end;
-+	unsigned long page_num;
-+	struct drm_buddy mm;
-+	LIST_HEAD(blocks);
-+
-+	igt_mm_config(&size, &chunk_size);
-+
-+	KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_init(&mm, size, chunk_size),
-+						   "buddy_init failed");
-+
-+	KUNIT_ASSERT_FALSE_MSG(test, igt_check_mm(test, &mm),
-+						   "pre-mm check failed, abort!");
-+
-+	rem = mm.size;
-+	offset = 0;
-+
-+	for_each_prime_number_from(page_num, 1, ULONG_MAX - 1) {
-+		struct drm_buddy_block *block;
-+		LIST_HEAD(tmp);
-+
-+		size = min(page_num * mm.chunk_size, rem);
-+		end = offset + size;
-+
-+		KUNIT_ASSERT_FALSE_MSG(test, drm_buddy_alloc_blocks(&mm, offset, end,
-+							   size, mm.chunk_size, &tmp, flags),
-+							   "alloc_range with offset=%llx, size=%llx failed\n",
-+							   offset, size);
-+
-+		block = list_first_entry_or_null(&tmp, struct drm_buddy_block, link);
-+		KUNIT_ASSERT_TRUE_MSG(test, block, "alloc_range has no blocks\n");
-+
-+		KUNIT_ASSERT_EQ_MSG(test, drm_buddy_block_offset(block), offset,
-+							"alloc_range start offset mismatch, found=%llx, expected=%llx\n",
-+							drm_buddy_block_offset(block), offset);
-+
-+		KUNIT_ASSERT_FALSE(test, igt_check_blocks(test, &mm, &tmp, size, true));
-+
-+		list_splice_tail(&tmp, &blocks);
-+
-+		offset += size;
-+
-+		rem -= size;
-+		if (!rem)
-+			break;
-+
-+		cond_resched();
-+	}
-+
-+	drm_buddy_free_list(&mm, &blocks);
-+
-+	KUNIT_EXPECT_FALSE_MSG(test, igt_check_mm(test, &mm), "post-mm check failed\n");
-+
-+	drm_buddy_fini(&mm);
-+}
-+
-+static void igt_buddy_alloc_limit(struct kunit *test)
-+{
-+	u64 size = U64_MAX, start = 0;
-+	struct drm_buddy_block *block;
-+	unsigned long flags = 0;
-+	LIST_HEAD(allocated);
-+	struct drm_buddy mm;
-+
-+	KUNIT_EXPECT_FALSE(test, drm_buddy_init(&mm, size, PAGE_SIZE));
-+
-+	KUNIT_EXPECT_EQ_MSG(test, mm.max_order, DRM_BUDDY_MAX_ORDER,
-+						"mm.max_order(%d) != %d\n", mm.max_order,
-+						DRM_BUDDY_MAX_ORDER);
-+
-+	size = mm.chunk_size << mm.max_order;
-+	KUNIT_EXPECT_FALSE(test, drm_buddy_alloc_blocks(&mm, start, size, size,
-+					   PAGE_SIZE, &allocated, flags));
-+
-+	block = list_first_entry_or_null(&allocated, struct drm_buddy_block, link);
-+	KUNIT_EXPECT_TRUE(test, block);
-+
-+	KUNIT_EXPECT_EQ_MSG(test, drm_buddy_block_order(block), mm.max_order,
-+						"block order(%d) != %d\n",
-+						drm_buddy_block_order(block), mm.max_order);
-+
-+	KUNIT_EXPECT_EQ_MSG(test, drm_buddy_block_size(&mm, block),
-+						BIT_ULL(mm.max_order) * PAGE_SIZE,
-+						"block size(%llu) != %llu\n",
-+						drm_buddy_block_size(&mm, block),
-+						BIT_ULL(mm.max_order) * PAGE_SIZE);
-+
-+	drm_buddy_free_list(&mm, &allocated);
-+	drm_buddy_fini(&mm);
-+}
-+
-+static int drm_buddy_init_test(struct kunit *test)
-+{
-+	while (!random_seed)
-+		random_seed = get_random_int();
-+
+ #include <linux/prime_numbers.h>
+ #include <linux/slab.h>
+ #include <linux/random.h>
+@@ -16,9 +14,6 @@
+ 
+ #include "../lib/drm_random.h"
+ 
+-#define TESTS "drm_mm_selftests.h"
+-#include "drm_selftest.h"
+-
+ static unsigned int random_seed;
+ static unsigned int max_iterations = 8192;
+ static unsigned int max_prime = 128;
+@@ -45,13 +40,7 @@ static const struct insert_mode {
+ 	{}
+ };
+ 
+-static int igt_sanitycheck(void *ignored)
+-{
+-	pr_info("%s - ok!\n", __func__);
+-	return 0;
+-}
+-
+-static bool assert_no_holes(const struct drm_mm *mm)
++static bool assert_no_holes(struct kunit *test, const struct drm_mm *mm)
+ {
+ 	struct drm_mm_node *hole;
+ 	u64 hole_start, __always_unused hole_end;
+@@ -61,13 +50,14 @@ static bool assert_no_holes(const struct drm_mm *mm)
+ 	drm_mm_for_each_hole(hole, mm, hole_start, hole_end)
+ 		count++;
+ 	if (count) {
+-		pr_err("Expected to find no holes (after reserve), found %lu instead\n", count);
++		KUNIT_FAIL(test,
++			   "Expected to find no holes (after reserve), found %lu instead\n", count);
+ 		return false;
+ 	}
+ 
+ 	drm_mm_for_each_node(hole, mm) {
+ 		if (drm_mm_hole_follows(hole)) {
+-			pr_err("Hole follows node, expected none!\n");
++			KUNIT_FAIL(test, "Hole follows node, expected none!\n");
+ 			return false;
+ 		}
+ 	}
+@@ -75,7 +65,7 @@ static bool assert_no_holes(const struct drm_mm *mm)
+ 	return true;
+ }
+ 
+-static bool assert_one_hole(const struct drm_mm *mm, u64 start, u64 end)
++static bool assert_one_hole(struct kunit *test, const struct drm_mm *mm, u64 start, u64 end)
+ {
+ 	struct drm_mm_node *hole;
+ 	u64 hole_start, hole_end;
+@@ -89,62 +79,62 @@ static bool assert_one_hole(const struct drm_mm *mm, u64 start, u64 end)
+ 	drm_mm_for_each_hole(hole, mm, hole_start, hole_end) {
+ 		if (start != hole_start || end != hole_end) {
+ 			if (ok)
+-				pr_err("empty mm has incorrect hole, found (%llx, %llx), expect (%llx, %llx)\n",
+-				       hole_start, hole_end,
+-				       start, end);
++				KUNIT_FAIL(test,
++					   "empty mm has incorrect hole, found (%llx, %llx), expect (%llx, %llx)\n",
++					   hole_start, hole_end, start, end);
+ 			ok = false;
+ 		}
+ 		count++;
+ 	}
+ 	if (count != 1) {
+-		pr_err("Expected to find one hole, found %lu instead\n", count);
++		KUNIT_FAIL(test, "Expected to find one hole, found %lu instead\n", count);
+ 		ok = false;
+ 	}
+ 
+ 	return ok;
+ }
+ 
+-static bool assert_continuous(const struct drm_mm *mm, u64 size)
++static bool assert_continuous(struct kunit *test, const struct drm_mm *mm, u64 size)
+ {
+ 	struct drm_mm_node *node, *check, *found;
+ 	unsigned long n;
+ 	u64 addr;
+ 
+-	if (!assert_no_holes(mm))
++	if (!assert_no_holes(test, mm))
+ 		return false;
+ 
+ 	n = 0;
+ 	addr = 0;
+ 	drm_mm_for_each_node(node, mm) {
+ 		if (node->start != addr) {
+-			pr_err("node[%ld] list out of order, expected %llx found %llx\n",
++			KUNIT_FAIL(test, "node[%ld] list out of order, expected %llx found %llx\n",
+ 			       n, addr, node->start);
+ 			return false;
+ 		}
+ 
+ 		if (node->size != size) {
+-			pr_err("node[%ld].size incorrect, expected %llx, found %llx\n",
++			KUNIT_FAIL(test, "node[%ld].size incorrect, expected %llx, found %llx\n",
+ 			       n, size, node->size);
+ 			return false;
+ 		}
+ 
+ 		if (drm_mm_hole_follows(node)) {
+-			pr_err("node[%ld] is followed by a hole!\n", n);
++			KUNIT_FAIL(test, "node[%ld] is followed by a hole!\n", n);
+ 			return false;
+ 		}
+ 
+ 		found = NULL;
+ 		drm_mm_for_each_node_in_range(check, mm, addr, addr + size) {
+ 			if (node != check) {
+-				pr_err("lookup return wrong node, expected start %llx, found %llx\n",
+-				       node->start, check->start);
++				KUNIT_FAIL(test,
++					   "lookup return wrong node, expected start %llx, found %llx\n",
++					   node->start, check->start);
+ 				return false;
+ 			}
+ 			found = check;
+ 		}
+ 		if (!found) {
+-			pr_err("lookup failed for node %llx + %llx\n",
+-			       addr, size);
++			KUNIT_FAIL(test, "lookup failed for node %llx + %llx\n", addr, size);
+ 			return false;
+ 		}
+ 
+@@ -166,30 +156,31 @@ static u64 misalignment(struct drm_mm_node *node, u64 alignment)
+ 	return rem;
+ }
+ 
+-static bool assert_node(struct drm_mm_node *node, struct drm_mm *mm,
++static bool assert_node(struct kunit *test, struct drm_mm_node *node, struct drm_mm *mm,
+ 			u64 size, u64 alignment, unsigned long color)
+ {
+ 	bool ok = true;
+ 
+ 	if (!drm_mm_node_allocated(node) || node->mm != mm) {
+-		pr_err("node not allocated\n");
++		KUNIT_FAIL(test, "node not allocated\n");
+ 		ok = false;
+ 	}
+ 
+ 	if (node->size != size) {
+-		pr_err("node has wrong size, found %llu, expected %llu\n",
++		KUNIT_FAIL(test, "node has wrong size, found %llu, expected %llu\n",
+ 		       node->size, size);
+ 		ok = false;
+ 	}
+ 
+ 	if (misalignment(node, alignment)) {
+-		pr_err("node is misaligned, start %llx rem %llu, expected alignment %llu\n",
+-		       node->start, misalignment(node, alignment), alignment);
++		KUNIT_FAIL(test,
++			   "node is misaligned, start %llx rem %llu, expected alignment %llu\n",
++			   node->start, misalignment(node, alignment), alignment);
+ 		ok = false;
+ 	}
+ 
+ 	if (node->color != color) {
+-		pr_err("node has wrong color, found %lu, expected %lu\n",
++		KUNIT_FAIL(test, "node has wrong color, found %lu, expected %lu\n",
+ 		       node->color, color);
+ 		ok = false;
+ 	}
+@@ -197,76 +188,64 @@ static bool assert_node(struct drm_mm_node *node, struct drm_mm *mm,
+ 	return ok;
+ }
+ 
+-#define show_mm(mm) do { \
+-	struct drm_printer __p = drm_debug_printer(__func__); \
+-	drm_mm_print((mm), &__p); } while (0)
+-
+-static int igt_init(void *ignored)
++static void igt_mm_init(struct kunit *test)
+ {
+ 	const unsigned int size = 4096;
+ 	struct drm_mm mm;
+ 	struct drm_mm_node tmp;
+-	int ret = -EINVAL;
+ 
+ 	/* Start with some simple checks on initialising the struct drm_mm */
+ 	memset(&mm, 0, sizeof(mm));
+-	if (drm_mm_initialized(&mm)) {
+-		pr_err("zeroed mm claims to be initialized\n");
+-		return ret;
+-	}
++	KUNIT_ASSERT_FALSE_MSG(test, drm_mm_initialized(&mm),
++			       "zeroed mm claims to be initialized\n");
+ 
+ 	memset(&mm, 0xff, sizeof(mm));
+ 	drm_mm_init(&mm, 0, size);
+ 	if (!drm_mm_initialized(&mm)) {
+-		pr_err("mm claims not to be initialized\n");
++		KUNIT_FAIL(test, "mm claims not to be initialized\n");
+ 		goto out;
+ 	}
+ 
+ 	if (!drm_mm_clean(&mm)) {
+-		pr_err("mm not empty on creation\n");
++		KUNIT_FAIL(test, "mm not empty on creation\n");
+ 		goto out;
+ 	}
+ 
+ 	/* After creation, it should all be one massive hole */
+-	if (!assert_one_hole(&mm, 0, size)) {
+-		ret = -EINVAL;
++	if (!assert_one_hole(test, &mm, 0, size)) {
++		KUNIT_FAIL(test, "");
+ 		goto out;
+ 	}
+ 
+ 	memset(&tmp, 0, sizeof(tmp));
+ 	tmp.start = 0;
+ 	tmp.size = size;
+-	ret = drm_mm_reserve_node(&mm, &tmp);
+-	if (ret) {
+-		pr_err("failed to reserve whole drm_mm\n");
++	if (drm_mm_reserve_node(&mm, &tmp)) {
++		KUNIT_FAIL(test, "failed to reserve whole drm_mm\n");
+ 		goto out;
+ 	}
+ 
+ 	/* After filling the range entirely, there should be no holes */
+-	if (!assert_no_holes(&mm)) {
+-		ret = -EINVAL;
++	if (!assert_no_holes(test, &mm)) {
++		KUNIT_FAIL(test, "");
+ 		goto out;
+ 	}
+ 
+ 	/* And then after emptying it again, the massive hole should be back */
+ 	drm_mm_remove_node(&tmp);
+-	if (!assert_one_hole(&mm, 0, size)) {
+-		ret = -EINVAL;
++	if (!assert_one_hole(test, &mm, 0, size)) {
++		KUNIT_FAIL(test, "");
+ 		goto out;
+ 	}
+ 
+ out:
+-	if (ret)
+-		show_mm(&mm);
+ 	drm_mm_takedown(&mm);
+-	return ret;
+ }
+ 
+-static int igt_debug(void *ignored)
++static void igt_mm_debug(struct kunit *test)
+ {
+ 	struct drm_mm mm;
+ 	struct drm_mm_node nodes[2];
+-	int ret;
+ 
+ 	/* Create a small drm_mm with a couple of nodes and a few holes, and
+ 	 * check that the debug iterator doesn't explode over a trivial drm_mm.
+@@ -277,24 +256,16 @@ static int igt_debug(void *ignored)
+ 	memset(nodes, 0, sizeof(nodes));
+ 	nodes[0].start = 512;
+ 	nodes[0].size = 1024;
+-	ret = drm_mm_reserve_node(&mm, &nodes[0]);
+-	if (ret) {
+-		pr_err("failed to reserve node[0] {start=%lld, size=%lld)\n",
+-		       nodes[0].start, nodes[0].size);
+-		return ret;
+-	}
++	KUNIT_ASSERT_FALSE_MSG(test, drm_mm_reserve_node(&mm, &nodes[0]),
++			       "failed to reserve node[0] {start=%lld, size=%lld)\n",
++			       nodes[0].start, nodes[0].size);
+ 
+ 	nodes[1].size = 1024;
+ 	nodes[1].start = 4096 - 512 - nodes[1].size;
+-	ret = drm_mm_reserve_node(&mm, &nodes[1]);
+-	if (ret) {
+-		pr_err("failed to reserve node[1] {start=%lld, size=%lld)\n",
+-		       nodes[1].start, nodes[1].size);
+-		return ret;
+-	}
++	KUNIT_ASSERT_FALSE_MSG(test, drm_mm_reserve_node(&mm, &nodes[1]),
++			       "failed to reserve node[0] {start=%lld, size=%lld)\n",
++			       nodes[0].start, nodes[0].size);
+ 
+-	show_mm(&mm);
+-	return 0;
+ }
+ 
+ static struct drm_mm_node *set_node(struct drm_mm_node *node,
+@@ -305,7 +276,7 @@ static struct drm_mm_node *set_node(struct drm_mm_node *node,
+ 	return node;
+ }
+ 
+-static bool expect_reserve_fail(struct drm_mm *mm, struct drm_mm_node *node)
++static bool expect_reserve_fail(struct kunit *test, struct drm_mm *mm, struct drm_mm_node *node)
+ {
+ 	int err;
+ 
+@@ -314,17 +285,18 @@ static bool expect_reserve_fail(struct drm_mm *mm, struct drm_mm_node *node)
+ 		return true;
+ 
+ 	if (!err) {
+-		pr_err("impossible reserve succeeded, node %llu + %llu\n",
+-		       node->start, node->size);
++		KUNIT_FAIL(test, "impossible reserve succeeded, node %llu + %llu\n",
++			   node->start, node->size);
+ 		drm_mm_remove_node(node);
+ 	} else {
+-		pr_err("impossible reserve failed with wrong error %d [expected %d], node %llu + %llu\n",
++		KUNIT_FAIL(test,
++			   "impossible reserve failed with wrong error %d [expected %d], node %llu + %llu\n",
+ 		       err, -ENOSPC, node->start, node->size);
+ 	}
+ 	return false;
+ }
+ 
+-static bool check_reserve_boundaries(struct drm_mm *mm,
++static bool check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
+ 				     unsigned int count,
+ 				     u64 size)
+ {
+@@ -356,11 +328,9 @@ static bool check_reserve_boundaries(struct drm_mm *mm,
+ 	int n;
+ 
+ 	for (n = 0; n < ARRAY_SIZE(boundaries); n++) {
+-		if (!expect_reserve_fail(mm,
+-					 set_node(&tmp,
+-						  boundaries[n].start,
++		if (!expect_reserve_fail(test, mm, set_node(&tmp, boundaries[n].start,
+ 						  boundaries[n].size))) {
+-			pr_err("boundary[%d:%s] failed, count=%u, size=%lld\n",
++			KUNIT_FAIL(test, "boundary[%d:%s] failed, count=%u, size=%lld\n",
+ 			       n, boundaries[n].name, count, size);
+ 			return false;
+ 		}
+@@ -369,7 +339,7 @@ static bool check_reserve_boundaries(struct drm_mm *mm,
+ 	return true;
+ }
+ 
+-static int __igt_reserve(unsigned int count, u64 size)
++static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ {
+ 	DRM_RND_STATE(prng, random_seed);
+ 	struct drm_mm mm;
+@@ -377,7 +347,7 @@ static int __igt_reserve(unsigned int count, u64 size)
+ 	unsigned int *order, n, m, o = 0;
+ 	int ret, err;
+ 
+-	/* For exercising drm_mm_reserve_node(), we want to check that
++	/* For exercising drm_mm_reserve_node(struct kunit *test, ), we want to check that
+ 	 * reservations outside of the drm_mm range are rejected, and to
+ 	 * overlapping and otherwise already occupied ranges. Afterwards,
+ 	 * the tree and nodes should be intact.
+@@ -392,13 +362,12 @@ static int __igt_reserve(unsigned int count, u64 size)
+ 		goto err;
+ 
+ 	nodes = vzalloc(array_size(count, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err_order;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	ret = -EINVAL;
+ 	drm_mm_init(&mm, 0, count * size);
+ 
+-	if (!check_reserve_boundaries(&mm, count, size))
++	if (!check_reserve_boundaries(test, &mm, count, size))
+ 		goto out;
+ 
+ 	for (n = 0; n < count; n++) {
+@@ -407,57 +376,53 @@ static int __igt_reserve(unsigned int count, u64 size)
+ 
+ 		err = drm_mm_reserve_node(&mm, &nodes[n]);
+ 		if (err) {
+-			pr_err("reserve failed, step %d, start %llu\n",
++			KUNIT_FAIL(test, "reserve failed, step %d, start %llu\n",
+ 			       n, nodes[n].start);
+ 			ret = err;
+ 			goto out;
+ 		}
+ 
+ 		if (!drm_mm_node_allocated(&nodes[n])) {
+-			pr_err("reserved node not allocated! step %d, start %llu\n",
++			KUNIT_FAIL(test, "reserved node not allocated! step %d, start %llu\n",
+ 			       n, nodes[n].start);
+ 			goto out;
+ 		}
+ 
+-		if (!expect_reserve_fail(&mm, &nodes[n]))
++		if (!expect_reserve_fail(test, &mm, &nodes[n]))
+ 			goto out;
+ 	}
+ 
+ 	/* After random insertion the nodes should be in order */
+-	if (!assert_continuous(&mm, size))
++	if (!assert_continuous(test, &mm, size))
+ 		goto out;
+ 
+ 	/* Repeated use should then fail */
+ 	drm_random_reorder(order, count, &prng);
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(&mm,
+-					 set_node(&tmp, order[n] * size, 1)))
++		if (!expect_reserve_fail(test, &mm, set_node(&tmp, order[n] * size, 1)))
+ 			goto out;
+ 
+ 		/* Remove and reinsert should work */
+ 		drm_mm_remove_node(&nodes[order[n]]);
+ 		err = drm_mm_reserve_node(&mm, &nodes[order[n]]);
+ 		if (err) {
+-			pr_err("reserve failed, step %d, start %llu\n",
++			KUNIT_FAIL(test, "reserve failed, step %d, start %llu\n",
+ 			       n, nodes[n].start);
+ 			ret = err;
+ 			goto out;
+ 		}
+ 	}
+ 
+-	if (!assert_continuous(&mm, size))
++	if (!assert_continuous(test, &mm, size))
+ 		goto out;
+ 
+ 	/* Overlapping use should then fail */
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(&mm, set_node(&tmp, 0, size*count)))
++		if (!expect_reserve_fail(test, &mm, set_node(&tmp, 0, size*count)))
+ 			goto out;
+ 	}
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(&mm,
+-					 set_node(&tmp,
+-						  size * n,
+-						  size * (count - n))))
++		if (!expect_reserve_fail(test, &mm, set_node(&tmp, size * n, size * (count - n))))
+ 			goto out;
+ 	}
+ 
+@@ -472,7 +437,7 @@ static int __igt_reserve(unsigned int count, u64 size)
+ 			node = &nodes[order[(o + m) % count]];
+ 			err = drm_mm_reserve_node(&mm, node);
+ 			if (err) {
+-				pr_err("reserve failed, step %d/%d, start %llu\n",
++				KUNIT_FAIL(test, "reserve failed, step %d/%d, start %llu\n",
+ 				       m, n, node->start);
+ 				ret = err;
+ 				goto out;
+@@ -481,7 +446,7 @@ static int __igt_reserve(unsigned int count, u64 size)
+ 
+ 		o += n;
+ 
+-		if (!assert_continuous(&mm, size))
++		if (!assert_continuous(test, &mm, size))
+ 			goto out;
+ 	}
+ 
+@@ -491,41 +456,29 @@ static int __igt_reserve(unsigned int count, u64 size)
+ 		drm_mm_remove_node(node);
+ 	drm_mm_takedown(&mm);
+ 	vfree(nodes);
+-err_order:
+ 	kfree(order);
+ err:
+ 	return ret;
+ }
+ 
+-static int igt_reserve(void *ignored)
++static void igt_mm_reserve(struct kunit *test)
+ {
+ 	const unsigned int count = min_t(unsigned int, BIT(10), max_iterations);
+-	int n, ret;
++	int n;
+ 
+ 	for_each_prime_number_from(n, 1, 54) {
+ 		u64 size = BIT_ULL(n);
+ 
+-		ret = __igt_reserve(count, size - 1);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_reserve(count, size);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_reserve(count, size + 1);
+-		if (ret)
+-			return ret;
++		KUNIT_ASSERT_FALSE(test, __igt_reserve(test, count, size - 1));
++		KUNIT_ASSERT_FALSE(test, __igt_reserve(test, count, size));
++		KUNIT_ASSERT_FALSE(test, __igt_reserve(test, count, size + 1));
+ 
+ 		cond_resched();
+ 	}
+-
+-	return 0;
+ }
+ 
+-static bool expect_insert(struct drm_mm *mm, struct drm_mm_node *node,
+-			  u64 size, u64 alignment, unsigned long color,
+-			  const struct insert_mode *mode)
++static bool expect_insert(struct kunit *test, struct drm_mm *mm, struct drm_mm_node *node,
++			  u64 size, u64 alignment, unsigned long color, const struct insert_mode *mode)
+ {
+ 	int err;
+ 
+@@ -533,12 +486,13 @@ static bool expect_insert(struct drm_mm *mm, struct drm_mm_node *node,
+ 					 size, alignment, color,
+ 					 mode->mode);
+ 	if (err) {
+-		pr_err("insert (size=%llu, alignment=%llu, color=%lu, mode=%s) failed with err=%d\n",
+-		       size, alignment, color, mode->name, err);
++		KUNIT_FAIL(test,
++			   "insert (size=%llu, alignment=%llu, color=%lu, mode=%s) failed with err=%d\n",
++			   size, alignment, color, mode->name, err);
+ 		return false;
+ 	}
+ 
+-	if (!assert_node(node, mm, size, alignment, color)) {
++	if (!assert_node(test, node, mm, size, alignment, color)) {
+ 		drm_mm_remove_node(node);
+ 		return false;
+ 	}
+@@ -546,7 +500,7 @@ static bool expect_insert(struct drm_mm *mm, struct drm_mm_node *node,
+ 	return true;
+ }
+ 
+-static bool expect_insert_fail(struct drm_mm *mm, u64 size)
++static bool expect_insert_fail(struct kunit *test, struct drm_mm *mm, u64 size)
+ {
+ 	struct drm_mm_node tmp = {};
+ 	int err;
+@@ -556,17 +510,18 @@ static bool expect_insert_fail(struct drm_mm *mm, u64 size)
+ 		return true;
+ 
+ 	if (!err) {
+-		pr_err("impossible insert succeeded, node %llu + %llu\n",
++		KUNIT_FAIL(test, "impossible insert succeeded, node %llu + %llu\n",
+ 		       tmp.start, tmp.size);
+ 		drm_mm_remove_node(&tmp);
+ 	} else {
+-		pr_err("impossible insert failed with wrong error %d [expected %d], size %llu\n",
+-		       err, -ENOSPC, size);
++		KUNIT_FAIL(test,
++			   "impossible insert failed with wrong error %d [expected %d], size %llu\n",
++			   err, -ENOSPC, size);
+ 	}
+ 	return false;
+ }
+ 
+-static int __igt_insert(unsigned int count, u64 size, bool replace)
++static int __igt_insert(struct kunit *test, unsigned int count, u64 size, bool replace)
+ {
+ 	DRM_RND_STATE(prng, random_seed);
+ 	const struct insert_mode *mode;
+@@ -582,8 +537,7 @@ static int __igt_insert(unsigned int count, u64 size, bool replace)
+ 
+ 	ret = -ENOMEM;
+ 	nodes = vmalloc(array_size(count, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	order = drm_random_order(count, &prng);
+ 	if (!order)
+@@ -598,8 +552,8 @@ static int __igt_insert(unsigned int count, u64 size, bool replace)
+ 
+ 			node = replace ? &tmp : &nodes[n];
+ 			memset(node, 0, sizeof(*node));
+-			if (!expect_insert(&mm, node, size, 0, n, mode)) {
+-				pr_err("%s insert failed, size %llu step %d\n",
++			if (!expect_insert(test, &mm, node, size, 0, n, mode)) {
++				KUNIT_FAIL(test, "%s insert failed, size %llu step %d\n",
+ 				       mode->name, size, n);
+ 				goto out;
+ 			}
+@@ -607,32 +561,34 @@ static int __igt_insert(unsigned int count, u64 size, bool replace)
+ 			if (replace) {
+ 				drm_mm_replace_node(&tmp, &nodes[n]);
+ 				if (drm_mm_node_allocated(&tmp)) {
+-					pr_err("replaced old-node still allocated! step %d\n",
+-					       n);
++					KUNIT_FAIL(test,
++						   "replaced old-node still allocated! step %d\n",
++						   n);
+ 					goto out;
+ 				}
+ 
+-				if (!assert_node(&nodes[n], &mm, size, 0, n)) {
+-					pr_err("replaced node did not inherit parameters, size %llu step %d\n",
+-					       size, n);
++				if (!assert_node(test, &nodes[n], &mm, size, 0, n)) {
++					KUNIT_FAIL(test,
++						   "replaced node did not inherit parameters, size %llu step %d\n",
++						   size, n);
+ 					goto out;
+ 				}
+ 
+ 				if (tmp.start != nodes[n].start) {
+-					pr_err("replaced node mismatch location expected [%llx + %llx], found [%llx + %llx]\n",
+-					       tmp.start, size,
+-					       nodes[n].start, nodes[n].size);
++					KUNIT_FAIL(test,
++						   "replaced node mismatch location expected [%llx + %llx], found [%llx + %llx]\n",
++						   tmp.start, size, nodes[n].start, nodes[n].size);
+ 					goto out;
+ 				}
+ 			}
+ 		}
+ 
+ 		/* After random insertion the nodes should be in order */
+-		if (!assert_continuous(&mm, size))
++		if (!assert_continuous(test, &mm, size))
+ 			goto out;
+ 
+ 		/* Repeated use should then fail */
+-		if (!expect_insert_fail(&mm, size))
++		if (!expect_insert_fail(test, &mm, size))
+ 			goto out;
+ 
+ 		/* Remove one and reinsert, as the only hole it should refill itself */
+@@ -640,19 +596,20 @@ static int __igt_insert(unsigned int count, u64 size, bool replace)
+ 			u64 addr = nodes[n].start;
+ 
+ 			drm_mm_remove_node(&nodes[n]);
+-			if (!expect_insert(&mm, &nodes[n], size, 0, n, mode)) {
+-				pr_err("%s reinsert failed, size %llu step %d\n",
++			if (!expect_insert(test, &mm, &nodes[n], size, 0, n, mode)) {
++				KUNIT_FAIL(test, "%s reinsert failed, size %llu step %d\n",
+ 				       mode->name, size, n);
+ 				goto out;
+ 			}
+ 
+ 			if (nodes[n].start != addr) {
+-				pr_err("%s reinsert node moved, step %d, expected %llx, found %llx\n",
+-				       mode->name, n, addr, nodes[n].start);
++				KUNIT_FAIL(test,
++					   "%s reinsert node moved, step %d, expected %llx, found %llx\n",
++					   mode->name, n, addr, nodes[n].start);
+ 				goto out;
+ 			}
+ 
+-			if (!assert_continuous(&mm, size))
++			if (!assert_continuous(test, &mm, size))
+ 				goto out;
+ 		}
+ 
+@@ -665,19 +622,20 @@ static int __igt_insert(unsigned int count, u64 size, bool replace)
+ 
+ 			for (m = 0; m < n; m++) {
+ 				node = &nodes[order[(o + m) % count]];
+-				if (!expect_insert(&mm, node, size, 0, n, mode)) {
+-					pr_err("%s multiple reinsert failed, size %llu step %d\n",
+-					       mode->name, size, n);
++				if (!expect_insert(test, &mm, node, size, 0, n, mode)) {
++					KUNIT_FAIL(test,
++							   "%s multiple reinsert failed, size %llu step %d\n",
++							   mode->name, size, n);
+ 					goto out;
+ 				}
+ 			}
+ 
+ 			o += n;
+ 
+-			if (!assert_continuous(&mm, size))
++			if (!assert_continuous(test, &mm, size))
+ 				goto out;
+ 
+-			if (!expect_insert_fail(&mm, size))
++			if (!expect_insert_fail(test, &mm, size))
+ 				goto out;
+ 		}
+ 
+@@ -696,42 +654,30 @@ static int __igt_insert(unsigned int count, u64 size, bool replace)
+ 	kfree(order);
+ err_nodes:
+ 	vfree(nodes);
+-err:
+ 	return ret;
+ }
+ 
+-static int igt_insert(void *ignored)
++static void igt_mm_insert(struct kunit *test)
+ {
+ 	const unsigned int count = min_t(unsigned int, BIT(10), max_iterations);
+ 	unsigned int n;
+-	int ret;
+ 
+ 	for_each_prime_number_from(n, 1, 54) {
+ 		u64 size = BIT_ULL(n);
+ 
+-		ret = __igt_insert(count, size - 1, false);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert(count, size, false);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert(count, size + 1, false);
+-		if (ret)
+-			return ret;
++		KUNIT_ASSERT_FALSE(test, __igt_insert(test, count, size - 1, false));
++		KUNIT_ASSERT_FALSE(test, __igt_insert(test, count, size, false));
++		KUNIT_ASSERT_FALSE(test, __igt_insert(test, count, size + 1, false));
+ 
+ 		cond_resched();
+ 	}
+ 
+-	return 0;
+ }
+ 
+-static int igt_replace(void *ignored)
++static void igt_mm_replace(struct kunit *test)
+ {
+ 	const unsigned int count = min_t(unsigned int, BIT(10), max_iterations);
+ 	unsigned int n;
+-	int ret;
+ 
+ 	/* Reuse igt_insert to exercise replacement by inserting a dummy node,
+ 	 * then replacing it with the intended node. We want to check that
+@@ -742,28 +688,17 @@ static int igt_replace(void *ignored)
+ 	for_each_prime_number_from(n, 1, 54) {
+ 		u64 size = BIT_ULL(n);
+ 
+-		ret = __igt_insert(count, size - 1, true);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert(count, size, true);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert(count, size + 1, true);
+-		if (ret)
+-			return ret;
++		KUNIT_ASSERT_FALSE(test, __igt_insert(test, count, size - 1, true));
++		KUNIT_ASSERT_FALSE(test, __igt_insert(test, count, size, true));
++		KUNIT_ASSERT_FALSE(test, __igt_insert(test, count, size + 1, true));
+ 
+ 		cond_resched();
+ 	}
+-
+-	return 0;
+ }
+ 
+-static bool expect_insert_in_range(struct drm_mm *mm, struct drm_mm_node *node,
++static bool expect_insert_in_range(struct kunit *test, struct drm_mm *mm, struct drm_mm_node *node,
+ 				   u64 size, u64 alignment, unsigned long color,
+-				   u64 range_start, u64 range_end,
+-				   const struct insert_mode *mode)
++				   u64 range_start, u64 range_end, const struct insert_mode *mode)
+ {
+ 	int err;
+ 
+@@ -772,13 +707,14 @@ static bool expect_insert_in_range(struct drm_mm *mm, struct drm_mm_node *node,
+ 					  range_start, range_end,
+ 					  mode->mode);
+ 	if (err) {
+-		pr_err("insert (size=%llu, alignment=%llu, color=%lu, mode=%s) nto range [%llx, %llx] failed with err=%d\n",
+-		       size, alignment, color, mode->name,
+-		       range_start, range_end, err);
++		KUNIT_FAIL(test,
++				   "insert (size=%llu, alignment=%llu, color=%lu, mode=%s) nto range [%llx, %llx] failed with err=%d\n",
++				   size, alignment, color, mode->name,
++				   range_start, range_end, err);
+ 		return false;
+ 	}
+ 
+-	if (!assert_node(node, mm, size, alignment, color)) {
++	if (!assert_node(test, node, mm, size, alignment, color)) {
+ 		drm_mm_remove_node(node);
+ 		return false;
+ 	}
+@@ -786,67 +722,63 @@ static bool expect_insert_in_range(struct drm_mm *mm, struct drm_mm_node *node,
+ 	return true;
+ }
+ 
+-static bool expect_insert_in_range_fail(struct drm_mm *mm,
+-					u64 size,
+-					u64 range_start,
+-					u64 range_end)
++static bool expect_insert_in_range_fail(struct kunit *test, struct drm_mm *mm,
++					u64 size, u64 range_start, u64 range_end)
+ {
+ 	struct drm_mm_node tmp = {};
+ 	int err;
+ 
+-	err = drm_mm_insert_node_in_range(mm, &tmp,
+-					  size, 0, 0,
+-					  range_start, range_end,
++	err = drm_mm_insert_node_in_range(mm, &tmp, size, 0, 0, range_start, range_end,
+ 					  0);
+ 	if (likely(err == -ENOSPC))
+ 		return true;
+ 
+ 	if (!err) {
+-		pr_err("impossible insert succeeded, node %llx + %llu, range [%llx, %llx]\n",
+-		       tmp.start, tmp.size, range_start, range_end);
++		KUNIT_FAIL(test,
++				   "impossible insert succeeded, node %llx + %llu, range [%llx, %llx]\n",
++				   tmp.start, tmp.size, range_start, range_end);
+ 		drm_mm_remove_node(&tmp);
+ 	} else {
+-		pr_err("impossible insert failed with wrong error %d [expected %d], size %llu, range [%llx, %llx]\n",
+-		       err, -ENOSPC, size, range_start, range_end);
++		KUNIT_FAIL(test,
++				   "impossible insert failed with wrong error %d [expected %d], size %llu, range [%llx, %llx]\n",
++				   err, -ENOSPC, size, range_start, range_end);
+ 	}
+ 
+ 	return false;
+ }
+ 
+-static bool assert_contiguous_in_range(struct drm_mm *mm,
+-				       u64 size,
+-				       u64 start,
+-				       u64 end)
++static bool assert_contiguous_in_range(struct kunit *test, struct drm_mm *mm,
++				       u64 size, u64 start, u64 end)
+ {
+ 	struct drm_mm_node *node;
+ 	unsigned int n;
+ 
+-	if (!expect_insert_in_range_fail(mm, size, start, end))
++	if (!expect_insert_in_range_fail(test, mm, size, start, end))
+ 		return false;
+ 
+ 	n = div64_u64(start + size - 1, size);
+ 	drm_mm_for_each_node(node, mm) {
+ 		if (node->start < start || node->start + node->size > end) {
+-			pr_err("node %d out of range, address [%llx + %llu], range [%llx, %llx]\n",
+-			       n, node->start, node->start + node->size, start, end);
++			KUNIT_FAIL(test,
++					   "node %d out of range, address [%llx + %llu], range [%llx, %llx]\n",
++					   n, node->start, node->start + node->size, start, end);
+ 			return false;
+ 		}
+ 
+ 		if (node->start != n * size) {
+-			pr_err("node %d out of order, expected start %llx, found %llx\n",
++			KUNIT_FAIL(test, "node %d out of order, expected start %llx, found %llx\n",
+ 			       n, n * size, node->start);
+ 			return false;
+ 		}
+ 
+ 		if (node->size != size) {
+-			pr_err("node %d has wrong size, expected size %llx, found %llx\n",
++			KUNIT_FAIL(test, "node %d has wrong size, expected size %llx, found %llx\n",
+ 			       n, size, node->size);
+ 			return false;
+ 		}
+ 
+-		if (drm_mm_hole_follows(node) &&
+-		    drm_mm_hole_node_end(node) < end) {
+-			pr_err("node %d is followed by a hole!\n", n);
++		if (drm_mm_hole_follows(node) && drm_mm_hole_node_end(node) < end) {
++			KUNIT_FAIL(test, "node %d is followed by a hole!\n", n);
+ 			return false;
+ 		}
+ 
+@@ -856,7 +788,7 @@ static bool assert_contiguous_in_range(struct drm_mm *mm,
+ 	if (start > 0) {
+ 		node = __drm_mm_interval_first(mm, 0, start - 1);
+ 		if (drm_mm_node_allocated(node)) {
+-			pr_err("node before start: node=%llx+%llu, start=%llx\n",
++			KUNIT_FAIL(test, "node before start: node=%llx+%llu, start=%llx\n",
+ 			       node->start, node->size, start);
+ 			return false;
+ 		}
+@@ -865,7 +797,7 @@ static bool assert_contiguous_in_range(struct drm_mm *mm,
+ 	if (end < U64_MAX) {
+ 		node = __drm_mm_interval_first(mm, end, U64_MAX);
+ 		if (drm_mm_node_allocated(node)) {
+-			pr_err("node after end: node=%llx+%llu, end=%llx\n",
++			KUNIT_FAIL(test, "node after end: node=%llx+%llu, end=%llx\n",
+ 			       node->start, node->size, end);
+ 			return false;
+ 		}
+@@ -874,7 +806,7 @@ static bool assert_contiguous_in_range(struct drm_mm *mm,
+ 	return true;
+ }
+ 
+-static int __igt_insert_range(unsigned int count, u64 size, u64 start, u64 end)
++static int __igt_insert_range(struct kunit *test, unsigned int count, u64 size, u64 start, u64 end)
+ {
+ 	const struct insert_mode *mode;
+ 	struct drm_mm mm;
+@@ -886,14 +818,13 @@ static int __igt_insert_range(unsigned int count, u64 size, u64 start, u64 end)
+ 	DRM_MM_BUG_ON(!size);
+ 	DRM_MM_BUG_ON(end <= start);
+ 
+-	/* Very similar to __igt_insert(), but now instead of populating the
++	/* Very similar to __igt_insert(struct kunit *test, ), but now instead of populating the
+ 	 * full range of the drm_mm, we try to fill a small portion of it.
+ 	 */
+ 
+ 	ret = -ENOMEM;
+ 	nodes = vzalloc(array_size(count, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	ret = -EINVAL;
+ 	drm_mm_init(&mm, 0, count * size);
+@@ -903,20 +834,19 @@ static int __igt_insert_range(unsigned int count, u64 size, u64 start, u64 end)
+ 
+ 	for (mode = insert_modes; mode->name; mode++) {
+ 		for (n = start_n; n <= end_n; n++) {
+-			if (!expect_insert_in_range(&mm, &nodes[n],
+-						    size, size, n,
+-						    start, end, mode)) {
+-				pr_err("%s insert failed, size %llu, step %d [%d, %d], range [%llx, %llx]\n",
+-				       mode->name, size, n,
+-				       start_n, end_n,
+-				       start, end);
++			if (!expect_insert_in_range(test, &mm, &nodes[n], size, size, n,
++						start, end, mode)) {
++				KUNIT_FAIL(test,
++						   "%s insert failed, size %llu, step %d [%d, %d], range [%llx, %llx]\n",
++						   mode->name, size, n, start_n, end_n, start, end);
+ 				goto out;
+ 			}
+ 		}
+ 
+-		if (!assert_contiguous_in_range(&mm, size, start, end)) {
+-			pr_err("%s: range [%llx, %llx] not full after initialisation, size=%llu\n",
+-			       mode->name, start, end, size);
++		if (!assert_contiguous_in_range(test, &mm, size, start, end)) {
++			KUNIT_FAIL(test,
++				   "%s: range [%llx, %llx] not full after initialisation, size=%llu\n",
++				   mode->name, start, end, size);
+ 			goto out;
+ 		}
+ 
+@@ -925,23 +855,24 @@ static int __igt_insert_range(unsigned int count, u64 size, u64 start, u64 end)
+ 			u64 addr = nodes[n].start;
+ 
+ 			drm_mm_remove_node(&nodes[n]);
+-			if (!expect_insert_in_range(&mm, &nodes[n],
+-						    size, size, n,
++			if (!expect_insert_in_range(test, &mm, &nodes[n], size, size, n,
+ 						    start, end, mode)) {
+-				pr_err("%s reinsert failed, step %d\n", mode->name, n);
++				KUNIT_FAIL(test, "%s reinsert failed, step %d\n", mode->name, n);
+ 				goto out;
+ 			}
+ 
+ 			if (nodes[n].start != addr) {
+-				pr_err("%s reinsert node moved, step %d, expected %llx, found %llx\n",
+-				       mode->name, n, addr, nodes[n].start);
++				KUNIT_FAIL(test,
++					   "%s reinsert node moved, step %d, expected %llx, found %llx\n",
++					   mode->name, n, addr, nodes[n].start);
+ 				goto out;
+ 			}
+ 		}
+ 
+-		if (!assert_contiguous_in_range(&mm, size, start, end)) {
+-			pr_err("%s: range [%llx, %llx] not full after reinsertion, size=%llu\n",
+-			       mode->name, start, end, size);
++		if (!assert_contiguous_in_range(test, &mm, size, start, end)) {
++			KUNIT_FAIL(test,
++				   "%s: range [%llx, %llx] not full after reinsertion, size=%llu\n",
++				   mode->name, start, end, size);
+ 			goto out;
+ 		}
+ 
+@@ -958,11 +889,10 @@ static int __igt_insert_range(unsigned int count, u64 size, u64 start, u64 end)
+ 		drm_mm_remove_node(node);
+ 	drm_mm_takedown(&mm);
+ 	vfree(nodes);
+-err:
+ 	return ret;
+ }
+ 
+-static int insert_outside_range(void)
++static int insert_outside_range(struct kunit *test)
+ {
+ 	struct drm_mm mm;
+ 	const unsigned int start = 1024;
+@@ -971,81 +901,57 @@ static int insert_outside_range(void)
+ 
+ 	drm_mm_init(&mm, start, size);
+ 
+-	if (!expect_insert_in_range_fail(&mm, 1, 0, start))
++	if (!expect_insert_in_range_fail(test, &mm, 1, 0, start))
+ 		return -EINVAL;
+ 
+-	if (!expect_insert_in_range_fail(&mm, size,
++	if (!expect_insert_in_range_fail(test, &mm, size,
+ 					 start - size/2, start + (size+1)/2))
+ 		return -EINVAL;
+ 
+-	if (!expect_insert_in_range_fail(&mm, size,
++	if (!expect_insert_in_range_fail(test, &mm, size,
+ 					 end - (size+1)/2, end + size/2))
+ 		return -EINVAL;
+ 
+-	if (!expect_insert_in_range_fail(&mm, 1, end, end + size))
++	if (!expect_insert_in_range_fail(test, &mm, 1, end, end + size))
+ 		return -EINVAL;
+ 
+ 	drm_mm_takedown(&mm);
+ 	return 0;
+ }
+ 
+-static int igt_insert_range(void *ignored)
++static void igt_mm_insert_range(struct kunit *test)
+ {
+ 	const unsigned int count = min_t(unsigned int, BIT(13), max_iterations);
+ 	unsigned int n;
+-	int ret;
+ 
+ 	/* Check that requests outside the bounds of drm_mm are rejected. */
+-	ret = insert_outside_range();
+-	if (ret)
+-		return ret;
++	KUNIT_ASSERT_FALSE(test, insert_outside_range(test));
+ 
+ 	for_each_prime_number_from(n, 1, 50) {
+ 		const u64 size = BIT_ULL(n);
+ 		const u64 max = count * size;
+ 
+-		ret = __igt_insert_range(count, size, 0, max);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert_range(count, size, 1, max);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert_range(count, size, 0, max - 1);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert_range(count, size, 0, max/2);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert_range(count, size, max/2, max);
+-		if (ret)
+-			return ret;
+-
+-		ret = __igt_insert_range(count, size, max/4+1, 3*max/4-1);
+-		if (ret)
+-			return ret;
++		KUNIT_ASSERT_FALSE(test, __igt_insert_range(test, count, size, 0, max));
++		KUNIT_ASSERT_FALSE(test, __igt_insert_range(test, count, size, 1, max));
++		KUNIT_ASSERT_FALSE(test, __igt_insert_range(test, count, size, 0, max - 1));
++		KUNIT_ASSERT_FALSE(test, __igt_insert_range(test, count, size, 0, max/2));
++		KUNIT_ASSERT_FALSE(test, __igt_insert_range(test, count, size, max/2, max/2));
++		KUNIT_ASSERT_FALSE(test, __igt_insert_range(test, count, size, max/4+1, 3*max/4-1));
+ 
+ 		cond_resched();
+ 	}
+-
+-	return 0;
+ }
+ 
+-static int prepare_igt_frag(struct drm_mm *mm,
+-			    struct drm_mm_node *nodes,
+-			    unsigned int num_insert,
++static int prepare_igt_frag(struct kunit *test, struct drm_mm *mm,
++			    struct drm_mm_node *nodes, unsigned int num_insert,
+ 			    const struct insert_mode *mode)
+ {
+ 	unsigned int size = 4096;
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < num_insert; i++) {
+-		if (!expect_insert(mm, &nodes[i], size, 0, i,
+-				   mode) != 0) {
+-			pr_err("%s insert failed\n", mode->name);
++		if (!expect_insert(test, mm, &nodes[i], size, 0, i, mode) != 0) {
++			KUNIT_FAIL(test, "%s insert failed\n", mode->name);
+ 			return -EINVAL;
+ 		}
+ 	}
+@@ -1060,9 +966,8 @@ static int prepare_igt_frag(struct drm_mm *mm,
+ 
+ }
+ 
+-static u64 get_insert_time(struct drm_mm *mm,
+-			   unsigned int num_insert,
+-			   struct drm_mm_node *nodes,
++static u64 get_insert_time(struct kunit *test, struct drm_mm *mm,
++			   unsigned int num_insert, struct drm_mm_node *nodes,
+ 			   const struct insert_mode *mode)
+ {
+ 	unsigned int size = 8192;
+@@ -1071,8 +976,8 @@ static u64 get_insert_time(struct drm_mm *mm,
+ 
+ 	start = ktime_get();
+ 	for (i = 0; i < num_insert; i++) {
+-		if (!expect_insert(mm, &nodes[i], size, 0, i, mode) != 0) {
+-			pr_err("%s insert failed\n", mode->name);
++		if (!expect_insert(test, mm, &nodes[i], size, 0, i, mode) != 0) {
++			KUNIT_FAIL(test, "%s insert failed\n", mode->name);
+ 			return 0;
+ 		}
+ 	}
+@@ -1080,27 +985,25 @@ static u64 get_insert_time(struct drm_mm *mm,
+ 	return ktime_to_ns(ktime_sub(ktime_get(), start));
+ }
+ 
+-static int igt_frag(void *ignored)
++static void igt_mm_frag(struct kunit *test)
+ {
+ 	struct drm_mm mm;
+ 	const struct insert_mode *mode;
+ 	struct drm_mm_node *nodes, *node, *next;
+ 	unsigned int insert_size = 10000;
+ 	unsigned int scale_factor = 4;
+-	int ret = -EINVAL;
+ 
+ 	/* We need 4 * insert_size nodes to hold intermediate allocated
+ 	 * drm_mm nodes.
+-	 * 1 times for prepare_igt_frag()
+-	 * 1 times for get_insert_time()
+-	 * 2 times for get_insert_time()
++	 * 1 times for prepare_igt_frag(struct kunit *test, )
++	 * 1 times for get_insert_time(struct kunit *test, )
++	 * 2 times for get_insert_time(struct kunit *test, )
+ 	 */
+ 	nodes = vzalloc(array_size(insert_size * 4, sizeof(*nodes)));
+-	if (!nodes)
+-		return -ENOMEM;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	/* For BOTTOMUP and TOPDOWN, we first fragment the
+-	 * address space using prepare_igt_frag() and then try to verify
++	 * address space using prepare_igt_frag(struct kunit *test, ) and then try to verify
+ 	 * that that insertions scale quadratically from 10k to 20k insertions
+ 	 */
+ 	drm_mm_init(&mm, 1, U64_MAX - 2);
+@@ -1111,28 +1014,25 @@ static int igt_frag(void *ignored)
+ 		    mode->mode != DRM_MM_INSERT_HIGH)
+ 			continue;
+ 
+-		ret = prepare_igt_frag(&mm, nodes, insert_size, mode);
+-		if (ret)
++		if (prepare_igt_frag(test, &mm, nodes, insert_size, mode))
+ 			goto err;
+ 
+-		insert_time1 = get_insert_time(&mm, insert_size,
++		insert_time1 = get_insert_time(test, &mm, insert_size,
+ 					       nodes + insert_size, mode);
+ 		if (insert_time1 == 0)
+ 			goto err;
+ 
+-		insert_time2 = get_insert_time(&mm, (insert_size * 2),
++		insert_time2 = get_insert_time(test, &mm, (insert_size * 2),
+ 					       nodes + insert_size * 2, mode);
+ 		if (insert_time2 == 0)
+ 			goto err;
+ 
+-		pr_info("%s fragmented insert of %u and %u insertions took %llu and %llu nsecs\n",
+-			mode->name, insert_size, insert_size * 2,
+-			insert_time1, insert_time2);
++		kunit_info(test, "%s fragmented insert of %u and %u insertions took %llu and %llu nsecs\n",
++			mode->name, insert_size, insert_size * 2, insert_time1, insert_time2);
+ 
+ 		if (insert_time2 > (scale_factor * insert_time1)) {
+-			pr_err("%s fragmented insert took %llu nsecs more\n",
+-			       mode->name,
+-			       insert_time2 - (scale_factor * insert_time1));
++			KUNIT_FAIL(test, "%s fragmented insert took %llu nsecs more\n",
++			       mode->name, insert_time2 - (scale_factor * insert_time1));
+ 			goto err;
+ 		}
+ 
+@@ -1140,24 +1040,20 @@ static int igt_frag(void *ignored)
+ 			drm_mm_remove_node(node);
+ 	}
+ 
+-	ret = 0;
+ err:
+ 	drm_mm_for_each_node_safe(node, next, &mm)
+ 		drm_mm_remove_node(node);
+ 	drm_mm_takedown(&mm);
+ 	vfree(nodes);
+-
+-	return ret;
+ }
+ 
+-static int igt_align(void *ignored)
++static void igt_mm_align(struct kunit *test)
+ {
+ 	const struct insert_mode *mode;
+ 	const unsigned int max_count = min(8192u, max_prime);
+ 	struct drm_mm mm;
+ 	struct drm_mm_node *nodes, *node, *next;
+ 	unsigned int prime;
+-	int ret = -EINVAL;
+ 
+ 	/* For each of the possible insertion modes, we pick a few
+ 	 * arbitrary alignments and check that the inserted node
+@@ -1165,8 +1061,7 @@ static int igt_align(void *ignored)
+ 	 */
+ 
+ 	nodes = vzalloc(array_size(max_count, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	drm_mm_init(&mm, 1, U64_MAX - 2);
+ 
+@@ -1176,10 +1071,8 @@ static int igt_align(void *ignored)
+ 		for_each_prime_number_from(prime, 1, max_count) {
+ 			u64 size = next_prime_number(prime);
+ 
+-			if (!expect_insert(&mm, &nodes[i],
+-					   size, prime, i,
+-					   mode)) {
+-				pr_err("%s insert failed with alignment=%d",
++			if (!expect_insert(test, &mm, &nodes[i], size, prime, i, mode)) {
++				KUNIT_FAIL(test, "%s insert failed with alignment=%d",
+ 				       mode->name, prime);
+ 				goto out;
+ 			}
+@@ -1194,22 +1087,18 @@ static int igt_align(void *ignored)
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+ 	drm_mm_for_each_node_safe(node, next, &mm)
+ 		drm_mm_remove_node(node);
+ 	drm_mm_takedown(&mm);
+ 	vfree(nodes);
+-err:
+-	return ret;
+ }
+ 
+-static int igt_align_pot(int max)
++static void igt_align_pot(struct kunit *test, int max)
+ {
+ 	struct drm_mm mm;
+ 	struct drm_mm_node *node, *next;
+ 	int bit;
+-	int ret = -EINVAL;
+ 
+ 	/* Check that we can align to the full u64 address space */
+ 
+@@ -1220,51 +1109,45 @@ static int igt_align_pot(int max)
+ 
+ 		node = kzalloc(sizeof(*node), GFP_KERNEL);
+ 		if (!node) {
+-			ret = -ENOMEM;
++			KUNIT_FAIL(test, "failed to allocate node");
+ 			goto out;
+ 		}
+ 
+ 		align = BIT_ULL(bit);
+ 		size = BIT_ULL(bit-1) + 1;
+-		if (!expect_insert(&mm, node,
+-				   size, align, bit,
+-				   &insert_modes[0])) {
+-			pr_err("insert failed with alignment=%llx [%d]",
+-			       align, bit);
++		if (!expect_insert(test, &mm, node, size, align, bit, &insert_modes[0])) {
++			KUNIT_FAIL(test, "insert failed with alignment=%llx [%d]", align, bit);
+ 			goto out;
+ 		}
+ 
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+ 	drm_mm_for_each_node_safe(node, next, &mm) {
+ 		drm_mm_remove_node(node);
+ 		kfree(node);
+ 	}
+ 	drm_mm_takedown(&mm);
+-	return ret;
+ }
+ 
+-static int igt_align32(void *ignored)
++static void igt_mm_align32(struct kunit *test)
+ {
+-	return igt_align_pot(32);
++	igt_align_pot(test, 32);
+ }
+ 
+-static int igt_align64(void *ignored)
++static void igt_mm_align64(struct kunit *test)
+ {
+-	return igt_align_pot(64);
++	igt_align_pot(test, 64);
+ }
+ 
+-static void show_scan(const struct drm_mm_scan *scan)
++static void show_scan(struct kunit *test, const struct drm_mm_scan *scan)
+ {
+-	pr_info("scan: hit [%llx, %llx], size=%lld, align=%lld, color=%ld\n",
+-		scan->hit_start, scan->hit_end,
+-		scan->size, scan->alignment, scan->color);
++	kunit_info(test, "scan: hit [%llx, %llx], size=%lld, align=%lld, color=%ld\n",
++		scan->hit_start, scan->hit_end, scan->size, scan->alignment, scan->color);
+ }
+ 
+-static void show_holes(const struct drm_mm *mm, int count)
++static void show_holes(struct kunit *test, const struct drm_mm *mm, int count)
+ {
+ 	u64 hole_start, hole_end;
+ 	struct drm_mm_node *hole;
+@@ -1274,19 +1157,15 @@ static void show_holes(const struct drm_mm *mm, int count)
+ 		const char *node1 = NULL, *node2 = NULL;
+ 
+ 		if (drm_mm_node_allocated(hole))
+-			node1 = kasprintf(GFP_KERNEL,
+-					  "[%llx + %lld, color=%ld], ",
++			node1 = kasprintf(GFP_KERNEL, "[%llx + %lld, color=%ld], ",
+ 					  hole->start, hole->size, hole->color);
+ 
+ 		if (drm_mm_node_allocated(next))
+-			node2 = kasprintf(GFP_KERNEL,
+-					  ", [%llx + %lld, color=%ld]",
++			node2 = kasprintf(GFP_KERNEL, ", [%llx + %lld, color=%ld]",
+ 					  next->start, next->size, next->color);
+ 
+-		pr_info("%sHole [%llx - %llx, size %lld]%s\n",
+-			node1,
+-			hole_start, hole_end, hole_end - hole_start,
+-			node2);
++		kunit_info(test, "%sHole [%llx - %llx, size %lld]%s\n", node1,
++			hole_start, hole_end, hole_end - hole_start, node2);
+ 
+ 		kfree(node2);
+ 		kfree(node1);
+@@ -1301,12 +1180,9 @@ struct evict_node {
+ 	struct list_head link;
+ };
+ 
+-static bool evict_nodes(struct drm_mm_scan *scan,
+-			struct evict_node *nodes,
+-			unsigned int *order,
+-			unsigned int count,
+-			bool use_color,
+-			struct list_head *evict_list)
++static bool evict_nodes(struct kunit *test, struct drm_mm_scan *scan,
++			struct evict_node *nodes, unsigned int *order, unsigned int count,
++			bool use_color, struct list_head *evict_list)
+ {
+ 	struct evict_node *e, *en;
+ 	unsigned int i;
+@@ -1322,8 +1198,9 @@ static bool evict_nodes(struct drm_mm_scan *scan,
+ 			list_del(&e->link);
+ 	}
+ 	if (list_empty(evict_list)) {
+-		pr_err("Failed to find eviction: size=%lld [avail=%d], align=%lld (color=%lu)\n",
+-		       scan->size, count, scan->alignment, scan->color);
++		KUNIT_FAIL(test,
++			   "Failed to find eviction: size=%lld [avail=%d], align=%lld (color=%lu)\n",
++			   scan->size, count, scan->alignment, scan->color);
+ 		return false;
+ 	}
+ 
+@@ -1340,7 +1217,8 @@ static bool evict_nodes(struct drm_mm_scan *scan,
+ 		}
+ 	} else {
+ 		if (drm_mm_scan_color_evict(scan)) {
+-			pr_err("drm_mm_scan_color_evict unexpectedly reported overlapping nodes!\n");
++			KUNIT_FAIL(test,
++				   "drm_mm_scan_color_evict unexpectedly reported overlapping nodes!\n");
+ 			return false;
+ 		}
+ 	}
+@@ -1348,9 +1226,8 @@ static bool evict_nodes(struct drm_mm_scan *scan,
+ 	return true;
+ }
+ 
+-static bool evict_nothing(struct drm_mm *mm,
+-			  unsigned int total_size,
+-			  struct evict_node *nodes)
++static bool evict_nothing(struct kunit *test, struct drm_mm *mm,
++			  unsigned int total_size, struct evict_node *nodes)
+ {
+ 	struct drm_mm_scan scan;
+ 	LIST_HEAD(evict_list);
+@@ -1371,7 +1248,7 @@ static bool evict_nothing(struct drm_mm *mm,
+ 		e = &nodes[n];
+ 
+ 		if (!drm_mm_node_allocated(&e->node)) {
+-			pr_err("node[%d] no longer allocated!\n", n);
++			KUNIT_FAIL(test, "node[%d] no longer allocated!\n", n);
+ 			return false;
+ 		}
+ 
+@@ -1387,17 +1264,16 @@ static bool evict_nothing(struct drm_mm *mm,
+ 		e = &nodes[n];
+ 
+ 		if (!e->link.next) {
+-			pr_err("node[%d] no longer connected!\n", n);
++			KUNIT_FAIL(test, "node[%d] no longer connected!\n", n);
+ 			return false;
+ 		}
+ 	}
+ 
+-	return assert_continuous(mm, nodes[0].node.size);
++	return assert_continuous(test, mm, nodes[0].node.size);
+ }
+ 
+-static bool evict_everything(struct drm_mm *mm,
+-			     unsigned int total_size,
+-			     struct evict_node *nodes)
++static bool evict_everything(struct kunit *test, struct drm_mm *mm,
++			     unsigned int total_size, struct evict_node *nodes)
+ {
+ 	struct drm_mm_scan scan;
+ 	LIST_HEAD(evict_list);
+@@ -1417,7 +1293,7 @@ static bool evict_everything(struct drm_mm *mm,
+ 	list_for_each_entry(e, &evict_list, link) {
+ 		if (!drm_mm_scan_remove_block(&scan, &e->node)) {
+ 			if (!err) {
+-				pr_err("Node %lld not marked for eviction!\n",
++				KUNIT_FAIL(test, "Node %lld not marked for eviction!\n",
+ 				       e->node.start);
+ 				err = -EINVAL;
+ 			}
+@@ -1429,29 +1305,25 @@ static bool evict_everything(struct drm_mm *mm,
+ 	list_for_each_entry(e, &evict_list, link)
+ 		drm_mm_remove_node(&e->node);
+ 
+-	if (!assert_one_hole(mm, 0, total_size))
++	if (!assert_one_hole(test, mm, 0, total_size))
+ 		return false;
+ 
+ 	list_for_each_entry(e, &evict_list, link) {
+ 		err = drm_mm_reserve_node(mm, &e->node);
+ 		if (err) {
+-			pr_err("Failed to reinsert node after eviction: start=%llx\n",
++			KUNIT_FAIL(test, "Failed to reinsert node after eviction: start=%llx\n",
+ 			       e->node.start);
+ 			return false;
+ 		}
+ 	}
+ 
+-	return assert_continuous(mm, nodes[0].node.size);
++	return assert_continuous(test, mm, nodes[0].node.size);
+ }
+ 
+-static int evict_something(struct drm_mm *mm,
+-			   u64 range_start, u64 range_end,
+-			   struct evict_node *nodes,
+-			   unsigned int *order,
+-			   unsigned int count,
+-			   unsigned int size,
+-			   unsigned int alignment,
+-			   const struct insert_mode *mode)
++static int evict_something(struct kunit *test, struct drm_mm *mm,
++			   u64 range_start, u64 range_end, struct evict_node *nodes,
++			   unsigned int *order, unsigned int count, unsigned int size,
++			   unsigned int alignment, const struct insert_mode *mode)
+ {
+ 	struct drm_mm_scan scan;
+ 	LIST_HEAD(evict_list);
+@@ -1459,38 +1331,35 @@ static int evict_something(struct drm_mm *mm,
+ 	struct drm_mm_node tmp;
+ 	int err;
+ 
+-	drm_mm_scan_init_with_range(&scan, mm,
+-				    size, alignment, 0,
+-				    range_start, range_end,
+-				    mode->mode);
+-	if (!evict_nodes(&scan,
+-			 nodes, order, count, false,
+-			 &evict_list))
++	drm_mm_scan_init_with_range(&scan, mm, size, alignment, 0, range_start,
++			range_end, mode->mode);
++	if (!evict_nodes(test, &scan, nodes, order, count, false, &evict_list))
+ 		return -EINVAL;
+ 
+ 	memset(&tmp, 0, sizeof(tmp));
+ 	err = drm_mm_insert_node_generic(mm, &tmp, size, alignment, 0,
+ 					 DRM_MM_INSERT_EVICT);
+ 	if (err) {
+-		pr_err("Failed to insert into eviction hole: size=%d, align=%d\n",
++		KUNIT_FAIL(test, "Failed to insert into eviction hole: size=%d, align=%d\n",
+ 		       size, alignment);
+-		show_scan(&scan);
+-		show_holes(mm, 3);
++		show_scan(test, &scan);
++		show_holes(test, mm, 3);
+ 		return err;
+ 	}
+ 
+ 	if (tmp.start < range_start || tmp.start + tmp.size > range_end) {
+-		pr_err("Inserted [address=%llu + %llu] did not fit into the request range [%llu, %llu]\n",
+-		       tmp.start, tmp.size, range_start, range_end);
++		KUNIT_FAIL(test,
++			   "Inserted [address=%llu + %llu] did not fit into the request range [%llu, %llu]\n",
++			   tmp.start, tmp.size, range_start, range_end);
+ 		err = -EINVAL;
+ 	}
+ 
+-	if (!assert_node(&tmp, mm, size, alignment, 0) ||
++	if (!assert_node(test, &tmp, mm, size, alignment, 0) ||
+ 	    drm_mm_hole_follows(&tmp)) {
+-		pr_err("Inserted did not fill the eviction hole: size=%lld [%d], align=%d [rem=%lld], start=%llx, hole-follows?=%d\n",
+-		       tmp.size, size,
+-		       alignment, misalignment(&tmp, alignment),
+-		       tmp.start, drm_mm_hole_follows(&tmp));
++		KUNIT_FAIL(test,
++			   "Inserted did not fill the eviction hole: size=%lld [%d], align=%d [rem=%lld], start=%llx, hole-follows?=%d\n",
++			   tmp.size, size, alignment, misalignment(&tmp, alignment),
++			   tmp.start, drm_mm_hole_follows(&tmp));
+ 		err = -EINVAL;
+ 	}
+ 
+@@ -1501,21 +1370,21 @@ static int evict_something(struct drm_mm *mm,
+ 	list_for_each_entry(e, &evict_list, link) {
+ 		err = drm_mm_reserve_node(mm, &e->node);
+ 		if (err) {
+-			pr_err("Failed to reinsert node after eviction: start=%llx\n",
++			KUNIT_FAIL(test, "Failed to reinsert node after eviction: start=%llx\n",
+ 			       e->node.start);
+ 			return err;
+ 		}
+ 	}
+ 
+-	if (!assert_continuous(mm, nodes[0].node.size)) {
+-		pr_err("range is no longer continuous\n");
++	if (!assert_continuous(test, mm, nodes[0].node.size)) {
++		KUNIT_FAIL(test, "range is no longer continuous\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	return 0;
+ }
+ 
+-static int igt_evict(void *ignored)
++static void igt_mm_evict(struct kunit *test)
+ {
+ 	DRM_RND_STATE(prng, random_seed);
+ 	const unsigned int size = 8192;
+@@ -1524,7 +1393,6 @@ static int igt_evict(void *ignored)
+ 	struct evict_node *nodes;
+ 	struct drm_mm_node *node, *next;
+ 	unsigned int *order, n;
+-	int ret, err;
+ 
+ 	/* Here we populate a full drm_mm and then try and insert a new node
+ 	 * by evicting other nodes in a random order. The drm_mm_scan should
+@@ -1533,61 +1401,48 @@ static int igt_evict(void *ignored)
+ 	 * sizes to try and stress the hole finder.
+ 	 */
+ 
+-	ret = -ENOMEM;
+ 	nodes = vzalloc(array_size(size, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	order = drm_random_order(size, &prng);
+ 	if (!order)
+ 		goto err_nodes;
+ 
+-	ret = -EINVAL;
+ 	drm_mm_init(&mm, 0, size);
+ 	for (n = 0; n < size; n++) {
+-		err = drm_mm_insert_node(&mm, &nodes[n].node, 1);
+-		if (err) {
+-			pr_err("insert failed, step %d\n", n);
+-			ret = err;
++		if (drm_mm_insert_node(&mm, &nodes[n].node, 1)) {
++			KUNIT_FAIL(test, "insert failed, step %d\n", n);
+ 			goto out;
+ 		}
+ 	}
+ 
+ 	/* First check that using the scanner doesn't break the mm */
+-	if (!evict_nothing(&mm, size, nodes)) {
+-		pr_err("evict_nothing() failed\n");
++	if (!evict_nothing(test, &mm, size, nodes)) {
++		KUNIT_FAIL(test, "evict_nothing() failed\n");
+ 		goto out;
+ 	}
+-	if (!evict_everything(&mm, size, nodes)) {
+-		pr_err("evict_everything() failed\n");
++	if (!evict_everything(test, &mm, size, nodes)) {
++		KUNIT_FAIL(test, "evict_everything() failed\n");
+ 		goto out;
+ 	}
+ 
+ 	for (mode = evict_modes; mode->name; mode++) {
+ 		for (n = 1; n <= size; n <<= 1) {
+ 			drm_random_reorder(order, size, &prng);
+-			err = evict_something(&mm, 0, U64_MAX,
+-					      nodes, order, size,
+-					      n, 1,
+-					      mode);
+-			if (err) {
+-				pr_err("%s evict_something(size=%u) failed\n",
++			if (evict_something(test, &mm, 0, U64_MAX, nodes, order, size, n, 1, mode)) {
++				KUNIT_FAIL(test, "%s evict_something(size=%u) failed\n",
+ 				       mode->name, n);
+-				ret = err;
+ 				goto out;
+ 			}
+ 		}
+ 
+ 		for (n = 1; n < size; n <<= 1) {
+ 			drm_random_reorder(order, size, &prng);
+-			err = evict_something(&mm, 0, U64_MAX,
+-					      nodes, order, size,
+-					      size/2, n,
+-					      mode);
+-			if (err) {
+-				pr_err("%s evict_something(size=%u, alignment=%u) failed\n",
+-				       mode->name, size/2, n);
+-				ret = err;
++			if (evict_something(test, &mm, 0, U64_MAX, nodes, order, size,
++					      size/2, n, mode)) {
++				KUNIT_FAIL(test,
++					   "%s evict_something(size=%u, alignment=%u) failed\n",
++					   mode->name, size/2, n);
+ 				goto out;
+ 			}
+ 		}
+@@ -1598,14 +1453,10 @@ static int igt_evict(void *ignored)
+ 			DRM_MM_BUG_ON(!nsize);
+ 
+ 			drm_random_reorder(order, size, &prng);
+-			err = evict_something(&mm, 0, U64_MAX,
+-					      nodes, order, size,
+-					      nsize, n,
+-					      mode);
+-			if (err) {
+-				pr_err("%s evict_something(size=%u, alignment=%u) failed\n",
+-				       mode->name, nsize, n);
+-				ret = err;
++			if (evict_something(test, &mm, 0, U64_MAX, nodes, order, size,
++					      nsize, n, mode)) {
++				KUNIT_FAIL(test, "%s evict_something(size=%u, alignment=%u) failed\n",
++					   mode->name, nsize, n);
+ 				goto out;
+ 			}
+ 		}
+@@ -1613,7 +1464,6 @@ static int igt_evict(void *ignored)
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+ 	drm_mm_for_each_node_safe(node, next, &mm)
+ 		drm_mm_remove_node(node);
+@@ -1621,11 +1471,9 @@ static int igt_evict(void *ignored)
+ 	kfree(order);
+ err_nodes:
+ 	vfree(nodes);
+-err:
+-	return ret;
+ }
+ 
+-static int igt_evict_range(void *ignored)
++static void igt_mm_evict_range(struct kunit *test)
+ {
+ 	DRM_RND_STATE(prng, random_seed);
+ 	const unsigned int size = 8192;
+@@ -1637,28 +1485,22 @@ static int igt_evict_range(void *ignored)
+ 	struct evict_node *nodes;
+ 	struct drm_mm_node *node, *next;
+ 	unsigned int *order, n;
+-	int ret, err;
+ 
+ 	/* Like igt_evict() but now we are limiting the search to a
+ 	 * small portion of the full drm_mm.
+ 	 */
+ 
+-	ret = -ENOMEM;
+ 	nodes = vzalloc(array_size(size, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	order = drm_random_order(size, &prng);
+ 	if (!order)
+ 		goto err_nodes;
+ 
+-	ret = -EINVAL;
+ 	drm_mm_init(&mm, 0, size);
+ 	for (n = 0; n < size; n++) {
+-		err = drm_mm_insert_node(&mm, &nodes[n].node, 1);
+-		if (err) {
+-			pr_err("insert failed, step %d\n", n);
+-			ret = err;
++		if (drm_mm_insert_node(&mm, &nodes[n].node, 1)) {
++			KUNIT_FAIL(test, "insert failed, step %d\n", n);
+ 			goto out;
+ 		}
+ 	}
+@@ -1666,26 +1508,22 @@ static int igt_evict_range(void *ignored)
+ 	for (mode = evict_modes; mode->name; mode++) {
+ 		for (n = 1; n <= range_size; n <<= 1) {
+ 			drm_random_reorder(order, size, &prng);
+-			err = evict_something(&mm, range_start, range_end,
+-					      nodes, order, size,
+-					      n, 1,
+-					      mode);
+-			if (err) {
+-				pr_err("%s evict_something(size=%u) failed with range [%u, %u]\n",
+-				       mode->name, n, range_start, range_end);
++			if (evict_something(test, &mm, range_start, range_end, nodes,
++					order, size, n, 1, mode)) {
++				KUNIT_FAIL(test,
++					   "%s evict_something(size=%u) failed with range [%u, %u]\n",
++					   mode->name, n, range_start, range_end);
+ 				goto out;
+ 			}
+ 		}
+ 
+ 		for (n = 1; n <= range_size; n <<= 1) {
+ 			drm_random_reorder(order, size, &prng);
+-			err = evict_something(&mm, range_start, range_end,
+-					      nodes, order, size,
+-					      range_size/2, n,
+-					      mode);
+-			if (err) {
+-				pr_err("%s evict_something(size=%u, alignment=%u) failed with range [%u, %u]\n",
+-				       mode->name, range_size/2, n, range_start, range_end);
++			if (evict_something(test, &mm, range_start, range_end, nodes,
++					order, size, range_size/2, n, mode)) {
++				KUNIT_FAIL(test,
++					   "%s evict_something(size=%u, alignment=%u) failed with range [%u, %u]\n",
++					   mode->name, range_size/2, n, range_start, range_end);
+ 				goto out;
+ 			}
+ 		}
+@@ -1696,13 +1534,11 @@ static int igt_evict_range(void *ignored)
+ 			DRM_MM_BUG_ON(!nsize);
+ 
+ 			drm_random_reorder(order, size, &prng);
+-			err = evict_something(&mm, range_start, range_end,
+-					      nodes, order, size,
+-					      nsize, n,
+-					      mode);
+-			if (err) {
+-				pr_err("%s evict_something(size=%u, alignment=%u) failed with range [%u, %u]\n",
+-				       mode->name, nsize, n, range_start, range_end);
++			if (evict_something(test, &mm, range_start, range_end, nodes,
++					order, size, nsize, n, mode)) {
++				KUNIT_FAIL(test,
++					   "%s evict_something(size=%u, alignment=%u) failed with range [%u, %u]\n",
++					   mode->name, nsize, n, range_start, range_end);
+ 				goto out;
+ 			}
+ 		}
+@@ -1710,7 +1546,6 @@ static int igt_evict_range(void *ignored)
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+ 	drm_mm_for_each_node_safe(node, next, &mm)
+ 		drm_mm_remove_node(node);
+@@ -1718,8 +1553,6 @@ static int igt_evict_range(void *ignored)
+ 	kfree(order);
+ err_nodes:
+ 	vfree(nodes);
+-err:
+-	return ret;
+ }
+ 
+ static unsigned int node_index(const struct drm_mm_node *node)
+@@ -1727,7 +1560,7 @@ static unsigned int node_index(const struct drm_mm_node *node)
+ 	return div64_u64(node->start, node->size);
+ }
+ 
+-static int igt_topdown(void *ignored)
++static void igt_mm_topdown(struct kunit *test)
+ {
+ 	const struct insert_mode *topdown = &insert_modes[TOPDOWN];
+ 	DRM_RND_STATE(prng, random_seed);
+@@ -1737,17 +1570,14 @@ static int igt_topdown(void *ignored)
+ 	struct drm_mm mm;
+ 	struct drm_mm_node *nodes, *node, *next;
+ 	unsigned int *order, n, m, o = 0;
+-	int ret;
+ 
+ 	/* When allocating top-down, we expect to be returned a node
+ 	 * from a suitable hole at the top of the drm_mm. We check that
+ 	 * the returned node does match the highest available slot.
+ 	 */
+ 
+-	ret = -ENOMEM;
+ 	nodes = vzalloc(array_size(count, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	bitmap = bitmap_zalloc(count, GFP_KERNEL);
+ 	if (!bitmap)
+@@ -1757,28 +1587,26 @@ static int igt_topdown(void *ignored)
+ 	if (!order)
+ 		goto err_bitmap;
+ 
+-	ret = -EINVAL;
+ 	for (size = 1; size <= 64; size <<= 1) {
+ 		drm_mm_init(&mm, 0, size*count);
+ 		for (n = 0; n < count; n++) {
+-			if (!expect_insert(&mm, &nodes[n],
+-					   size, 0, n,
+-					   topdown)) {
+-				pr_err("insert failed, size %u step %d\n", size, n);
++			if (!expect_insert(test, &mm, &nodes[n], size, 0, n, topdown)) {
++				KUNIT_FAIL(test, "insert failed, size %u step %d\n", size, n);
+ 				goto out;
+ 			}
+ 
+ 			if (drm_mm_hole_follows(&nodes[n])) {
+-				pr_err("hole after topdown insert %d, start=%llx\n, size=%u",
+-				       n, nodes[n].start, size);
++				KUNIT_FAIL(test,
++					   "hole after topdown insert %d, start=%llx\n, size=%u",
++					   n, nodes[n].start, size);
+ 				goto out;
+ 			}
+ 
+-			if (!assert_one_hole(&mm, 0, size*(count - n - 1)))
++			if (!assert_one_hole(test, &mm, 0, size*(count - n - 1)))
+ 				goto out;
+ 		}
+ 
+-		if (!assert_continuous(&mm, size))
++		if (!assert_continuous(test, &mm, size))
+ 			goto out;
+ 
+ 		drm_random_reorder(order, count, &prng);
+@@ -1793,23 +1621,23 @@ static int igt_topdown(void *ignored)
+ 				unsigned int last;
+ 
+ 				node = &nodes[order[(o + m) % count]];
+-				if (!expect_insert(&mm, node,
+-						   size, 0, 0,
+-						   topdown)) {
+-					pr_err("insert failed, step %d/%d\n", m, n);
++				if (!expect_insert(test, &mm, node, size, 0, 0, topdown)) {
++					KUNIT_FAIL(test, "insert failed, step %d/%d\n", m, n);
+ 					goto out;
+ 				}
+ 
+ 				if (drm_mm_hole_follows(node)) {
+-					pr_err("hole after topdown insert %d/%d, start=%llx\n",
+-					       m, n, node->start);
++					KUNIT_FAIL(test,
++						   "hole after topdown insert %d/%d, start=%llx\n",
++						   m, n, node->start);
+ 					goto out;
+ 				}
+ 
+ 				last = find_last_bit(bitmap, count);
+ 				if (node_index(node) != last) {
+-					pr_err("node %d/%d, size %d, not inserted into upmost hole, expected %d, found %d\n",
+-					       m, n, size, last, node_index(node));
++					KUNIT_FAIL(test,
++						   "node %d/%d, size %d, not inserted into upmost hole, expected %d, found %d\n",
++						   m, n, size, last, node_index(node));
+ 					goto out;
+ 				}
+ 
+@@ -1827,7 +1655,6 @@ static int igt_topdown(void *ignored)
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+ 	drm_mm_for_each_node_safe(node, next, &mm)
+ 		drm_mm_remove_node(node);
+@@ -1837,11 +1664,9 @@ static int igt_topdown(void *ignored)
+ 	bitmap_free(bitmap);
+ err_nodes:
+ 	vfree(nodes);
+-err:
+-	return ret;
+ }
+ 
+-static int igt_bottomup(void *ignored)
++static void igt_mm_bottomup(struct kunit *test)
+ {
+ 	const struct insert_mode *bottomup = &insert_modes[BOTTOMUP];
+ 	DRM_RND_STATE(prng, random_seed);
+@@ -1851,16 +1676,13 @@ static int igt_bottomup(void *ignored)
+ 	struct drm_mm mm;
+ 	struct drm_mm_node *nodes, *node, *next;
+ 	unsigned int *order, n, m, o = 0;
+-	int ret;
+ 
+ 	/* Like igt_topdown, but instead of searching for the last hole,
+ 	 * we search for the first.
+ 	 */
+ 
+-	ret = -ENOMEM;
+ 	nodes = vzalloc(array_size(count, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	bitmap = bitmap_zalloc(count, GFP_KERNEL);
+ 	if (!bitmap)
+@@ -1870,22 +1692,20 @@ static int igt_bottomup(void *ignored)
+ 	if (!order)
+ 		goto err_bitmap;
+ 
+-	ret = -EINVAL;
+ 	for (size = 1; size <= 64; size <<= 1) {
+ 		drm_mm_init(&mm, 0, size*count);
+ 		for (n = 0; n < count; n++) {
+-			if (!expect_insert(&mm, &nodes[n],
+-					   size, 0, n,
+-					   bottomup)) {
+-				pr_err("bottomup insert failed, size %u step %d\n", size, n);
++			if (!expect_insert(test, &mm, &nodes[n], size, 0, n, bottomup)) {
++				KUNIT_FAIL(test,
++					   "bottomup insert failed, size %u step %d\n", size, n);
+ 				goto out;
+ 			}
+ 
+-			if (!assert_one_hole(&mm, size*(n + 1), size*count))
++			if (!assert_one_hole(test, &mm, size*(n + 1), size*count))
+ 				goto out;
+ 		}
+ 
+-		if (!assert_continuous(&mm, size))
++		if (!assert_continuous(test, &mm, size))
+ 			goto out;
+ 
+ 		drm_random_reorder(order, count, &prng);
+@@ -1900,17 +1720,16 @@ static int igt_bottomup(void *ignored)
+ 				unsigned int first;
+ 
+ 				node = &nodes[order[(o + m) % count]];
+-				if (!expect_insert(&mm, node,
+-						   size, 0, 0,
+-						   bottomup)) {
+-					pr_err("insert failed, step %d/%d\n", m, n);
++				if (!expect_insert(test, &mm, node, size, 0, 0, bottomup)) {
++					KUNIT_FAIL(test, "insert failed, step %d/%d\n", m, n);
+ 					goto out;
+ 				}
+ 
+ 				first = find_first_bit(bitmap, count);
+ 				if (node_index(node) != first) {
+-					pr_err("node %d/%d not inserted into bottom hole, expected %d, found %d\n",
+-					       m, n, first, node_index(node));
++					KUNIT_FAIL(test,
++						   "node %d/%d not inserted into bottom hole, expected %d, found %d\n",
++						   m, n, first, node_index(node));
+ 					goto out;
+ 				}
+ 				__clear_bit(first, bitmap);
+@@ -1927,7 +1746,6 @@ static int igt_bottomup(void *ignored)
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+ 	drm_mm_for_each_node_safe(node, next, &mm)
+ 		drm_mm_remove_node(node);
+@@ -1937,47 +1755,39 @@ static int igt_bottomup(void *ignored)
+ 	bitmap_free(bitmap);
+ err_nodes:
+ 	vfree(nodes);
+-err:
+-	return ret;
+ }
+ 
+-static int __igt_once(unsigned int mode)
++static void __igt_once(struct kunit *test, unsigned int mode)
+ {
+ 	struct drm_mm mm;
+ 	struct drm_mm_node rsvd_lo, rsvd_hi, node;
+-	int err;
+ 
+ 	drm_mm_init(&mm, 0, 7);
+ 
+ 	memset(&rsvd_lo, 0, sizeof(rsvd_lo));
+ 	rsvd_lo.start = 1;
+ 	rsvd_lo.size = 1;
+-	err = drm_mm_reserve_node(&mm, &rsvd_lo);
+-	if (err) {
+-		pr_err("Could not reserve low node\n");
++	if (drm_mm_reserve_node(&mm, &rsvd_lo)) {
++		KUNIT_FAIL(test, "Could not reserve low node\n");
+ 		goto err;
+ 	}
+ 
+ 	memset(&rsvd_hi, 0, sizeof(rsvd_hi));
+ 	rsvd_hi.start = 5;
+ 	rsvd_hi.size = 1;
+-	err = drm_mm_reserve_node(&mm, &rsvd_hi);
+-	if (err) {
+-		pr_err("Could not reserve low node\n");
++	if (drm_mm_reserve_node(&mm, &rsvd_hi)) {
++		KUNIT_FAIL(test, "Could not reserve low node\n");
+ 		goto err_lo;
+ 	}
+ 
+ 	if (!drm_mm_hole_follows(&rsvd_lo) || !drm_mm_hole_follows(&rsvd_hi)) {
+-		pr_err("Expected a hole after lo and high nodes!\n");
+-		err = -EINVAL;
++		KUNIT_FAIL(test, "Expected a hole after lo and high nodes!\n");
+ 		goto err_hi;
+ 	}
+ 
+ 	memset(&node, 0, sizeof(node));
+-	err = drm_mm_insert_node_generic(&mm, &node, 2, 0, 0, mode);
+-	if (err) {
+-		pr_err("Could not insert the node into the available hole!\n");
+-		err = -EINVAL;
++	if (drm_mm_insert_node_generic(&mm, &node, 2, 0, 0, mode)) {
++		KUNIT_FAIL(test, "Could not insert the node into the available hole!\n");
+ 		goto err_hi;
+ 	}
+ 
+@@ -1988,23 +1798,20 @@ static int __igt_once(unsigned int mode)
+ 	drm_mm_remove_node(&rsvd_lo);
+ err:
+ 	drm_mm_takedown(&mm);
+-	return err;
+ }
+ 
+-static int igt_lowest(void *ignored)
++static void igt_mm_lowest(struct kunit *test)
+ {
+-	return __igt_once(DRM_MM_INSERT_LOW);
++	__igt_once(test, DRM_MM_INSERT_LOW);
+ }
+ 
+-static int igt_highest(void *ignored)
++static void igt_mm_highest(struct kunit *test)
+ {
+-	return __igt_once(DRM_MM_INSERT_HIGH);
++	__igt_once(test, DRM_MM_INSERT_HIGH);
+ }
+ 
+ static void separate_adjacent_colors(const struct drm_mm_node *node,
+-				     unsigned long color,
+-				     u64 *start,
+-				     u64 *end)
++				     unsigned long color, u64 *start, u64 *end)
+ {
+ 	if (drm_mm_node_allocated(node) && node->color != color)
+ 		++*start;
+@@ -2014,11 +1821,11 @@ static void separate_adjacent_colors(const struct drm_mm_node *node,
+ 		--*end;
+ }
+ 
+-static bool colors_abutt(const struct drm_mm_node *node)
++static bool colors_abutt(struct kunit *test, const struct drm_mm_node *node)
+ {
+ 	if (!drm_mm_hole_follows(node) &&
+ 	    drm_mm_node_allocated(list_next_entry(node, node_list))) {
+-		pr_err("colors abutt; %ld [%llx + %llx] is next to %ld [%llx + %llx]!\n",
++		KUNIT_FAIL(test, "colors abutt; %ld [%llx + %llx] is next to %ld [%llx + %llx]!\n",
+ 		       node->color, node->start, node->size,
+ 		       list_next_entry(node, node_list)->color,
+ 		       list_next_entry(node, node_list)->start,
+@@ -2029,14 +1836,13 @@ static bool colors_abutt(const struct drm_mm_node *node)
+ 	return false;
+ }
+ 
+-static int igt_color(void *ignored)
++static void igt_mm_color(struct kunit *test)
+ {
+ 	const unsigned int count = min(4096u, max_iterations);
+ 	const struct insert_mode *mode;
+ 	struct drm_mm mm;
+ 	struct drm_mm_node *node, *nn;
+ 	unsigned int n;
+-	int ret = -EINVAL, err;
+ 
+ 	/* Color adjustment complicates everything. First we just check
+ 	 * that when we insert a node we apply any color_adjustment callback.
+@@ -2050,14 +1856,11 @@ static int igt_color(void *ignored)
+ 	for (n = 1; n <= count; n++) {
+ 		node = kzalloc(sizeof(*node), GFP_KERNEL);
+ 		if (!node) {
+-			ret = -ENOMEM;
+ 			goto out;
+ 		}
+ 
+-		if (!expect_insert(&mm, node,
+-				   n, 0, n,
+-				   &insert_modes[0])) {
+-			pr_err("insert failed, step %d\n", n);
++		if (!expect_insert(test, &mm, node, n, 0, n, &insert_modes[0])) {
++			KUNIT_FAIL(test, "insert failed, step %d\n", n);
+ 			kfree(node);
+ 			goto out;
+ 		}
+@@ -2065,7 +1868,7 @@ static int igt_color(void *ignored)
+ 
+ 	drm_mm_for_each_node_safe(node, nn, &mm) {
+ 		if (node->color != node->size) {
+-			pr_err("invalid color stored: expected %lld, found %ld\n",
++			KUNIT_FAIL(test, "invalid color stored: expected %lld, found %ld\n",
+ 			       node->size, node->color);
+ 
+ 			goto out;
+@@ -2082,17 +1885,14 @@ static int igt_color(void *ignored)
+ 
+ 		node = kzalloc(sizeof(*node), GFP_KERNEL);
+ 		if (!node) {
+-			ret = -ENOMEM;
+ 			goto out;
+ 		}
+ 
+ 		node->size = 1 + 2*count;
+ 		node->color = node->size;
+ 
+-		err = drm_mm_reserve_node(&mm, node);
+-		if (err) {
+-			pr_err("initial reserve failed!\n");
+-			ret = err;
++		if (drm_mm_reserve_node(&mm, node)) {
++			KUNIT_FAIL(test, "initial reserve failed!\n");
+ 			goto out;
+ 		}
+ 
+@@ -2103,7 +1903,6 @@ static int igt_color(void *ignored)
+ 
+ 			node = kzalloc(sizeof(*node), GFP_KERNEL);
+ 			if (!node) {
+-				ret = -ENOMEM;
+ 				goto out;
+ 			}
+ 
+@@ -2111,10 +1910,8 @@ static int igt_color(void *ignored)
+ 			node->size = n + count;
+ 			node->color = node->size;
+ 
+-			err = drm_mm_reserve_node(&mm, node);
+-			if (err != -ENOSPC) {
+-				pr_err("reserve %d did not report color overlap! err=%d\n",
+-				       n, err);
++			if (drm_mm_reserve_node(&mm, node) != -ENOSPC) {
++				KUNIT_FAIL(test, "reserve %d did not report color overlap!", n);
+ 				goto out;
+ 			}
+ 
+@@ -2122,10 +1919,8 @@ static int igt_color(void *ignored)
+ 			rem = misalignment(node, n + count);
+ 			node->start += n + count - rem;
+ 
+-			err = drm_mm_reserve_node(&mm, node);
+-			if (err) {
+-				pr_err("reserve %d failed, err=%d\n", n, err);
+-				ret = err;
++			if (drm_mm_reserve_node(&mm, node)) {
++				KUNIT_FAIL(test, "reserve %d failed", n);
+ 				goto out;
+ 			}
+ 
+@@ -2135,15 +1930,11 @@ static int igt_color(void *ignored)
+ 		for (n = 1; n <= count; n++) {
+ 			node = kzalloc(sizeof(*node), GFP_KERNEL);
+ 			if (!node) {
+-				ret = -ENOMEM;
+ 				goto out;
+ 			}
+ 
+-			if (!expect_insert(&mm, node,
+-					   n, n, n,
+-					   mode)) {
+-				pr_err("%s insert failed, step %d\n",
+-				       mode->name, n);
++			if (!expect_insert(test, &mm, node, n, n, n, mode)) {
++				KUNIT_FAIL(test, "%s insert failed, step %d\n", mode->name, n);
+ 				kfree(node);
+ 				goto out;
+ 			}
+@@ -2153,19 +1944,21 @@ static int igt_color(void *ignored)
+ 			u64 rem;
+ 
+ 			if (node->color != node->size) {
+-				pr_err("%s invalid color stored: expected %lld, found %ld\n",
+-				       mode->name, node->size, node->color);
++				KUNIT_FAIL(test,
++					   "%s invalid color stored: expected %lld, found %ld\n",
++					   mode->name, node->size, node->color);
+ 
+ 				goto out;
+ 			}
+ 
+-			if (colors_abutt(node))
++			if (colors_abutt(test, node))
+ 				goto out;
+ 
+ 			div64_u64_rem(node->start, node->size, &rem);
+ 			if (rem) {
+-				pr_err("%s colored node misaligned, start=%llx expected alignment=%lld [rem=%lld]\n",
+-				       mode->name, node->start, node->size, rem);
++				KUNIT_FAIL(test,
++					   "%s colored node misaligned, start=%llx expected alignment=%lld [rem=%lld]\n",
++					   mode->name, node->start, node->size, rem);
+ 				goto out;
+ 			}
+ 
+@@ -2176,25 +1969,18 @@ static int igt_color(void *ignored)
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+ 	drm_mm_for_each_node_safe(node, nn, &mm) {
+ 		drm_mm_remove_node(node);
+ 		kfree(node);
+ 	}
+ 	drm_mm_takedown(&mm);
+-	return ret;
+ }
+ 
+-static int evict_color(struct drm_mm *mm,
+-		       u64 range_start, u64 range_end,
+-		       struct evict_node *nodes,
+-		       unsigned int *order,
+-		       unsigned int count,
+-		       unsigned int size,
+-		       unsigned int alignment,
+-		       unsigned long color,
+-		       const struct insert_mode *mode)
++static int evict_color(struct kunit *test, struct drm_mm *mm, u64 range_start,
++		u64 range_end, struct evict_node *nodes, unsigned int *order,
++		unsigned int count, unsigned int size, unsigned int alignment,
++		unsigned long color, const struct insert_mode *mode)
+ {
+ 	struct drm_mm_scan scan;
+ 	LIST_HEAD(evict_list);
+@@ -2202,39 +1988,37 @@ static int evict_color(struct drm_mm *mm,
+ 	struct drm_mm_node tmp;
+ 	int err;
+ 
+-	drm_mm_scan_init_with_range(&scan, mm,
+-				    size, alignment, color,
+-				    range_start, range_end,
+-				    mode->mode);
+-	if (!evict_nodes(&scan,
+-			 nodes, order, count, true,
+-			 &evict_list))
++	drm_mm_scan_init_with_range(&scan, mm, size, alignment, color, range_start,
++			range_end, mode->mode);
++	if (!evict_nodes(test, &scan, nodes, order, count, true, &evict_list))
+ 		return -EINVAL;
+ 
+ 	memset(&tmp, 0, sizeof(tmp));
+ 	err = drm_mm_insert_node_generic(mm, &tmp, size, alignment, color,
+ 					 DRM_MM_INSERT_EVICT);
+ 	if (err) {
+-		pr_err("Failed to insert into eviction hole: size=%d, align=%d, color=%lu, err=%d\n",
+-		       size, alignment, color, err);
+-		show_scan(&scan);
+-		show_holes(mm, 3);
++		KUNIT_FAIL(test,
++			   "Failed to insert into eviction hole: size=%d, align=%d, color=%lu, err=%d\n",
++			   size, alignment, color, err);
++		show_scan(test, &scan);
++		show_holes(test, mm, 3);
+ 		return err;
+ 	}
+ 
+ 	if (tmp.start < range_start || tmp.start + tmp.size > range_end) {
+-		pr_err("Inserted [address=%llu + %llu] did not fit into the request range [%llu, %llu]\n",
+-		       tmp.start, tmp.size, range_start, range_end);
++		KUNIT_FAIL(test,
++			   "Inserted [address=%llu + %llu] did not fit into the request range [%llu, %llu]\n",
++			   tmp.start, tmp.size, range_start, range_end);
+ 		err = -EINVAL;
+ 	}
+ 
+-	if (colors_abutt(&tmp))
++	if (colors_abutt(test, &tmp))
+ 		err = -EINVAL;
+ 
+-	if (!assert_node(&tmp, mm, size, alignment, color)) {
+-		pr_err("Inserted did not fit the eviction hole: size=%lld [%d], align=%d [rem=%lld], start=%llx\n",
+-		       tmp.size, size,
+-		       alignment, misalignment(&tmp, alignment), tmp.start);
++	if (!assert_node(test, &tmp, mm, size, alignment, color)) {
++		KUNIT_FAIL(test,
++			   "Inserted did not fit the eviction hole: size=%lld [%d], align=%d [rem=%lld], start=%llx\n",
++			   tmp.size, size, alignment, misalignment(&tmp, alignment), tmp.start);
+ 		err = -EINVAL;
+ 	}
+ 
+@@ -2245,7 +2029,7 @@ static int evict_color(struct drm_mm *mm,
+ 	list_for_each_entry(e, &evict_list, link) {
+ 		err = drm_mm_reserve_node(mm, &e->node);
+ 		if (err) {
+-			pr_err("Failed to reinsert node after eviction: start=%llx\n",
++			KUNIT_FAIL(test, "Failed to reinsert node after eviction: start=%llx\n",
+ 			       e->node.start);
+ 			return err;
+ 		}
+@@ -2255,7 +2039,7 @@ static int evict_color(struct drm_mm *mm,
+ 	return 0;
+ }
+ 
+-static int igt_color_evict(void *ignored)
++static void igt_mm_color_evict(struct kunit *test)
+ {
+ 	DRM_RND_STATE(prng, random_seed);
+ 	const unsigned int total_size = min(8192u, max_iterations);
+@@ -2265,7 +2049,6 @@ static int igt_color_evict(void *ignored)
+ 	struct evict_node *nodes;
+ 	struct drm_mm_node *node, *next;
+ 	unsigned int *order, n;
+-	int ret, err;
+ 
+ 	/* Check that the drm_mm_scan also honours color adjustment when
+ 	 * choosing its victims to create a hole. Our color_adjust does not
+@@ -2273,23 +2056,20 @@ static int igt_color_evict(void *ignored)
+ 	 * enlarging the set of victims that must be evicted.
+ 	 */
+ 
+-	ret = -ENOMEM;
+ 	nodes = vzalloc(array_size(total_size, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	order = drm_random_order(total_size, &prng);
+ 	if (!order)
+ 		goto err_nodes;
+ 
+-	ret = -EINVAL;
+ 	drm_mm_init(&mm, 0, 2*total_size - 1);
+ 	mm.color_adjust = separate_adjacent_colors;
+ 	for (n = 0; n < total_size; n++) {
+-		if (!expect_insert(&mm, &nodes[n].node,
++		if (!expect_insert(test, &mm, &nodes[n].node,
+ 				   1, 0, color++,
+ 				   &insert_modes[0])) {
+-			pr_err("insert failed, step %d\n", n);
++			KUNIT_FAIL(test, "insert failed, step %d\n", n);
+ 			goto out;
+ 		}
+ 	}
+@@ -2297,25 +2077,18 @@ static int igt_color_evict(void *ignored)
+ 	for (mode = evict_modes; mode->name; mode++) {
+ 		for (n = 1; n <= total_size; n <<= 1) {
+ 			drm_random_reorder(order, total_size, &prng);
+-			err = evict_color(&mm, 0, U64_MAX,
+-					  nodes, order, total_size,
+-					  n, 1, color++,
+-					  mode);
+-			if (err) {
+-				pr_err("%s evict_color(size=%u) failed\n",
+-				       mode->name, n);
++			if (evict_color(test, &mm, 0, U64_MAX, nodes, order, total_size,
++					  n, 1, color++, mode)) {
++				KUNIT_FAIL(test, "%s evict_color(size=%u) failed\n", mode->name, n);
+ 				goto out;
+ 			}
+ 		}
+ 
+ 		for (n = 1; n < total_size; n <<= 1) {
+ 			drm_random_reorder(order, total_size, &prng);
+-			err = evict_color(&mm, 0, U64_MAX,
+-					  nodes, order, total_size,
+-					  total_size/2, n, color++,
+-					  mode);
+-			if (err) {
+-				pr_err("%s evict_color(size=%u, alignment=%u) failed\n",
++			if (evict_color(test, &mm, 0, U64_MAX, nodes, order, total_size,
++					  total_size/2, n, color++, mode)) {
++				KUNIT_FAIL(test, "%s evict_color(size=%u, alignment=%u) failed\n",
+ 				       mode->name, total_size/2, n);
+ 				goto out;
+ 			}
+@@ -2327,12 +2100,9 @@ static int igt_color_evict(void *ignored)
+ 			DRM_MM_BUG_ON(!nsize);
+ 
+ 			drm_random_reorder(order, total_size, &prng);
+-			err = evict_color(&mm, 0, U64_MAX,
+-					  nodes, order, total_size,
+-					  nsize, n, color++,
+-					  mode);
+-			if (err) {
+-				pr_err("%s evict_color(size=%u, alignment=%u) failed\n",
++			if (evict_color(test, &mm, 0, U64_MAX, nodes, order, total_size,
++					  nsize, n, color++, mode)) {
++				KUNIT_FAIL(test, "%s evict_color(size=%u, alignment=%u) failed\n",
+ 				       mode->name, nsize, n);
+ 				goto out;
+ 			}
+@@ -2341,21 +2111,16 @@ static int igt_color_evict(void *ignored)
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+-	if (ret)
+-		show_mm(&mm);
+ 	drm_mm_for_each_node_safe(node, next, &mm)
+ 		drm_mm_remove_node(node);
+ 	drm_mm_takedown(&mm);
+ 	kfree(order);
+ err_nodes:
+ 	vfree(nodes);
+-err:
+-	return ret;
+ }
+ 
+-static int igt_color_evict_range(void *ignored)
++static void igt_mm_color_evict_range(struct kunit *test)
+ {
+ 	DRM_RND_STATE(prng, random_seed);
+ 	const unsigned int total_size = 8192;
+@@ -2368,29 +2133,25 @@ static int igt_color_evict_range(void *ignored)
+ 	struct evict_node *nodes;
+ 	struct drm_mm_node *node, *next;
+ 	unsigned int *order, n;
+-	int ret, err;
+ 
+ 	/* Like igt_color_evict(), but limited to small portion of the full
+ 	 * drm_mm range.
+ 	 */
+ 
+-	ret = -ENOMEM;
+ 	nodes = vzalloc(array_size(total_size, sizeof(*nodes)));
+-	if (!nodes)
+-		goto err;
++	KUNIT_ASSERT_TRUE(test, nodes);
+ 
+ 	order = drm_random_order(total_size, &prng);
+ 	if (!order)
+ 		goto err_nodes;
+ 
+-	ret = -EINVAL;
+ 	drm_mm_init(&mm, 0, 2*total_size - 1);
+ 	mm.color_adjust = separate_adjacent_colors;
+ 	for (n = 0; n < total_size; n++) {
+-		if (!expect_insert(&mm, &nodes[n].node,
++		if (!expect_insert(test, &mm, &nodes[n].node,
+ 				   1, 0, color++,
+ 				   &insert_modes[0])) {
+-			pr_err("insert failed, step %d\n", n);
++			KUNIT_FAIL(test, "insert failed, step %d\n", n);
+ 			goto out;
+ 		}
+ 	}
+@@ -2398,26 +2159,21 @@ static int igt_color_evict_range(void *ignored)
+ 	for (mode = evict_modes; mode->name; mode++) {
+ 		for (n = 1; n <= range_size; n <<= 1) {
+ 			drm_random_reorder(order, range_size, &prng);
+-			err = evict_color(&mm, range_start, range_end,
+-					  nodes, order, total_size,
+-					  n, 1, color++,
+-					  mode);
+-			if (err) {
+-				pr_err("%s evict_color(size=%u) failed for range [%x, %x]\n",
+-				       mode->name, n, range_start, range_end);
++			if (evict_color(test, &mm, range_start, range_end, nodes, order,
++					total_size, n, 1, color++, mode)) {
++				KUNIT_FAIL(test, "%s evict_color(size=%u) failed for range [%x, %x]\n",
++					   mode->name, n, range_start, range_end);
+ 				goto out;
+ 			}
+ 		}
+ 
+ 		for (n = 1; n < range_size; n <<= 1) {
+ 			drm_random_reorder(order, total_size, &prng);
+-			err = evict_color(&mm, range_start, range_end,
+-					  nodes, order, total_size,
+-					  range_size/2, n, color++,
+-					  mode);
+-			if (err) {
+-				pr_err("%s evict_color(size=%u, alignment=%u) failed for range [%x, %x]\n",
+-				       mode->name, total_size/2, n, range_start, range_end);
++			if (evict_color(test, &mm, range_start, range_end, nodes, order,
++					total_size, range_size/2, n, color++, mode)) {
++				KUNIT_FAIL(test,
++					   "%s evict_color(size=%u, alignment=%u) failed for range [%x, %x]\n",
++					   mode->name, total_size/2, n, range_start, range_end);
+ 				goto out;
+ 			}
+ 		}
+@@ -2428,13 +2184,11 @@ static int igt_color_evict_range(void *ignored)
+ 			DRM_MM_BUG_ON(!nsize);
+ 
+ 			drm_random_reorder(order, total_size, &prng);
+-			err = evict_color(&mm, range_start, range_end,
+-					  nodes, order, total_size,
+-					  nsize, n, color++,
+-					  mode);
+-			if (err) {
+-				pr_err("%s evict_color(size=%u, alignment=%u) failed for range [%x, %x]\n",
+-				       mode->name, nsize, n, range_start, range_end);
++			if (evict_color(test, &mm, range_start, range_end, nodes, order,
++					total_size, nsize, n, color++, mode)) {
++				KUNIT_FAIL(test,
++					   "%s evict_color(size=%u, alignment=%u) failed for range [%x, %x]\n",
++					   mode->name, nsize, n, range_start, range_end);
+ 				goto out;
+ 			}
+ 		}
+@@ -2442,46 +2196,57 @@ static int igt_color_evict_range(void *ignored)
+ 		cond_resched();
+ 	}
+ 
+-	ret = 0;
+ out:
+-	if (ret)
+-		show_mm(&mm);
+ 	drm_mm_for_each_node_safe(node, next, &mm)
+ 		drm_mm_remove_node(node);
+ 	drm_mm_takedown(&mm);
+ 	kfree(order);
+ err_nodes:
+ 	vfree(nodes);
+-err:
+-	return ret;
+ }
+ 
+-#include "drm_selftest.c"
+-
+-static int __init test_drm_mm_init(void)
++static int drm_mm_init_test(struct kunit *test)
+ {
+-	int err;
+-
+ 	while (!random_seed)
+ 		random_seed = get_random_int();
+ 
+-	pr_info("Testing DRM range manager (struct drm_mm), with random_seed=0x%x max_iterations=%u max_prime=%u\n",
+-		random_seed, max_iterations, max_prime);
+-	err = run_selftests(selftests, ARRAY_SIZE(selftests), NULL);
+-
+-	return err > 0 ? 0 : err;
+-}
+-
+-static void __exit test_drm_mm_exit(void)
+-{
 +	return 0;
-+}
-+
-+static struct kunit_case drm_buddy_tests[] = {
-+	KUNIT_CASE(igt_buddy_alloc_limit),
-+	KUNIT_CASE(igt_buddy_alloc_range),
-+	KUNIT_CASE(igt_buddy_alloc_optimistic),
-+	KUNIT_CASE(igt_buddy_alloc_pessimistic),
-+	KUNIT_CASE(igt_buddy_alloc_smoke),
-+	KUNIT_CASE(igt_buddy_alloc_pathological),
+ }
+ 
+-module_init(test_drm_mm_init);
+-module_exit(test_drm_mm_exit);
+-
+ module_param(random_seed, uint, 0400);
+ module_param(max_iterations, uint, 0400);
+ module_param(max_prime, uint, 0400);
+ 
++static struct kunit_case drm_mm_tests[] = {
++	KUNIT_CASE(igt_mm_init),
++	KUNIT_CASE(igt_mm_debug),
++	KUNIT_CASE(igt_mm_reserve),
++	KUNIT_CASE(igt_mm_insert),
++	KUNIT_CASE(igt_mm_replace),
++	KUNIT_CASE(igt_mm_insert_range),
++	KUNIT_CASE(igt_mm_frag),
++	KUNIT_CASE(igt_mm_align),
++	KUNIT_CASE(igt_mm_align32),
++	KUNIT_CASE(igt_mm_align64),
++	KUNIT_CASE(igt_mm_evict),
++	KUNIT_CASE(igt_mm_evict_range),
++	KUNIT_CASE(igt_mm_topdown),
++	KUNIT_CASE(igt_mm_bottomup),
++	KUNIT_CASE(igt_mm_lowest),
++	KUNIT_CASE(igt_mm_highest),
++	KUNIT_CASE(igt_mm_color),
++	KUNIT_CASE(igt_mm_color_evict),
++	KUNIT_CASE(igt_mm_color_evict_range),
 +	{}
 +};
 +
-+static struct kunit_suite drm_buddy_test_suite = {
-+	.name = "drm_buddy_tests",
-+	.init = drm_buddy_init_test,
-+	.test_cases = drm_buddy_tests,
++static struct kunit_suite drm_mm_test_suite = {
++	.name = "drm_mm_tests",
++	.init = drm_mm_init_test,
++	.test_cases = drm_mm_tests,
 +};
 +
-+kunit_test_suite(drm_buddy_test_suite);
++kunit_test_suite(drm_mm_test_suite);
 +
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Intel Corporation");
+ MODULE_LICENSE("GPL");
 -- 
 2.36.1
 
