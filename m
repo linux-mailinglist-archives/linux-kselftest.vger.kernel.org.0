@@ -2,137 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632E654D554
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 01:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B5854DC0D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 09:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348640AbiFOXbg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jun 2022 19:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S242049AbiFPHmU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jun 2022 03:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350030AbiFOXbf (ORCPT
+        with ESMTP id S1359264AbiFPHmT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jun 2022 19:31:35 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474CE13F0A;
-        Wed, 15 Jun 2022 16:31:34 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id y19so26122681ejq.6;
-        Wed, 15 Jun 2022 16:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uywbVqQj1UUa1x49fXsITPkeRamAeteYpQUEtRIFol4=;
-        b=mAIQ1JXBEx71YnBFqIbN01cbrkXILJ3RXf7RD/MsqRPM2F6/F7rA6flHjLEmRUzc7/
-         JVkf6RyXpnx95ckmwLW77OJWb3AnzMDLff7WO7Ocu0ByUeQtZdDC8F+c0VPM7OVtU511
-         N/mAFITqEtkWcZlrPt0NLBfpa6tcY0UyRHxTtKxJENodengqtNC3H4G6WcZcQF08EDpB
-         e0TQEq9ITh01nxFZEnOQzk/t2R5gY/crI0llhGT3nfBguhTGMzQO9WejP4tv/Iv0udsq
-         bxcb9aVCnH/fO6ckH41hf5ZQLex7OeyPlY3BZ4nZeg92pnZjl4j5zMiV2wCvG7nmGoG1
-         Lflg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uywbVqQj1UUa1x49fXsITPkeRamAeteYpQUEtRIFol4=;
-        b=ZFYKsqMaz3RMTUKeWK2tHzgVIMQqV/YxdnD89qFxFhLks4pWEcRM9Cq1MLH+b+IZ+t
-         FmQHvDUX9mG1hslRY4YYwdwPyHyaIu+ODrMTrzmy9ovd7SKDegtbirh+/22rFGy862Sd
-         6n8R2P261UdradnJR/JV55secTMw0DyNGl+ya1z/aeen9jnzzvk5rrjXO6rIAbdZYxbg
-         5vtYJIxuczjpxszFpPf9ZCjZ5k/A37eibkkIdnSRy8mFgXjHk5xezEL66MKPQCceWGU3
-         3Q7+DfwfeiDpahSfZTHsm7GshV7vctlFBhDJH3e+BrouNAOTcA2a2ICrA8ZgtQqs//U0
-         g+ZQ==
-X-Gm-Message-State: AJIora8qZ15/Ya63POLTjv5BcNCNK8kmuNTQw2kJIxWsmRTQtRaj85VG
-        UoAAdWE/7RiM/4XcWzNs3tqlU2yaDCvk6W2Xwu4=
-X-Google-Smtp-Source: AGRyM1ucMnDhOPT2NHAtF43xNrfO26e4c21AUOICAmCyD+r324xzulHXtANz/X9WMY7GtxCw+MeJD9ZkgSxCUAKjaGo=
-X-Received: by 2002:a17:906:3f51:b0:712:3945:8c0d with SMTP id
- f17-20020a1709063f5100b0071239458c0dmr2107499ejj.302.1655335892744; Wed, 15
- Jun 2022 16:31:32 -0700 (PDT)
+        Thu, 16 Jun 2022 03:42:19 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680BA5D194;
+        Thu, 16 Jun 2022 00:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655365338; x=1686901338;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QVIx4qVuVd8wCYaFS31911D6k3+63SEBMiaY928x8UE=;
+  b=JmSgkhxTmNCHG8xCvnHnhpAtOycJEJyIq9R33hlZedO144uE4lHyqKVK
+   43VXvY2N2PQ1GLdZWFDTfLDqfnZt1hB6kStdCVvwfPSsRUHfPv3Gm+YkS
+   ApdzIrTK3Pyz81CCRSm/7BaWTf/AYmsTVffOgmsTkcvFw8TmBTkFi1Vio
+   VOQVKtP/PYdGHMy5s9qjmEEvsclhEMJX8Gn/YIR+gqYediJ0AgwLD5YQ2
+   p7t8FB9rDypX/oJLlji/BhYal0Ph/35cAkvCXYa/GSj+kMmfTPcQWaFc+
+   gn87SBlTJ9VAOIn53SgwkovD2c78MXJoaOJM1OQ5SD/3DaEqsW/SlETNP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="279905787"
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="279905787"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 00:42:10 -0700
+X-IronPort-AV: E=Sophos;i="5.91,304,1647327600"; 
+   d="scan'208";a="641418725"
+Received: from yxiao-mobl1.ccr.corp.intel.com (HELO jiezho4x-mobl1.ccr.corp.intel.com) ([10.255.28.222])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2022 00:42:06 -0700
+From:   Jie2x Zhou <jie2x.zhou@intel.com>
+To:     jie2x.zhou@intel.com, shuah@kernel.org, pablo@netfilter.org,
+        sbrivio@redhat.com, liuhangbin@gmail.com, fw@strlen.de
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Philip Li <philip.li@intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] selftests: netfilter: correct PKTGEN_SCRIPT_PATHS in nft_concat_range.sh
+Date:   Thu, 16 Jun 2022 15:40:46 +0800
+Message-Id: <20220616074046.49349-1-jie2x.zhou@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220607133135.271788-1-eyal.birger@gmail.com>
- <f80edf4f-c795-1e1e-bac2-414189988156@iogearbox.net> <CAHsH6GvWkyDg5mXnSNoyY0H2V2i4iMsucydB=RZB100czc-85A@mail.gmail.com>
-In-Reply-To: <CAHsH6GvWkyDg5mXnSNoyY0H2V2i4iMsucydB=RZB100czc-85A@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 15 Jun 2022 16:31:21 -0700
-Message-ID: <CAEf4BzYMqXZ6H-Mv=xSvRTJ0o8okrLQjVVYzgpG1D-8+3HNj1w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: add lwt ip encap tests to test_progs
-To:     Eyal Birger <eyal.birger@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, posk@google.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 9:59 AM Eyal Birger <eyal.birger@gmail.com> wrote:
->
-> On Fri, Jun 10, 2022 at 12:37 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >
-> > Hi Eyal,
-> >
-> > On 6/7/22 3:31 PM, Eyal Birger wrote:
-> > > Port test_lwt_ip_encap.sh tests onto test_progs.
-> > >
-> > > In addition, this commit adds "egress_md" tests which test a similar
-> > > flow as egress tests only they use gre devices in collect_md mode
-> > > for encapsulation and set the tunnel key using bpf_set_tunnel_key().
-> > >
-> > > This introduces minor changes to test_lwt_ip_encap.{sh,c} for consistency
-> > > with the new tests:
-> > >
-> > > - GRE key must exist as bpf_set_tunnel_key() explicitly sets the
-> > >    TUNNEL_KEY flag
-> > >
-> > > - Source address for GRE traffic is set to IP*_5 instead of IP*_1 since
-> > >    GRE traffic is sent via veth5 so its address is selected when using
-> > >    bpf_set_tunnel_key()
-> > >
-> > > Note: currently these programs use the legacy section name convention
-> > > as iproute2 lwt configuration does not support providing function names.
-> > >
-> > > Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-> > > ---
-> > >   .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 582 ++++++++++++++++++
-> > >   .../selftests/bpf/progs/test_lwt_ip_encap.c   |  51 +-
-> > >   .../selftests/bpf/test_lwt_ip_encap.sh        |   6 +-
-> > >   3 files changed, 633 insertions(+), 6 deletions(-)
-> > >   create mode 100644 tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> > > new file mode 100644
-> > > index 000000000000..e1b6f3ce6045
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-> > > @@ -0,0 +1,582 @@
-> > [...]
-> >
-> > Thanks a lot for porting the test into test_progs! Looks like the BPF CI currently
-> > bails out here:
-> >
-> > https://github.com/kernel-patches/bpf/runs/6812283921?check_suite_focus=true
-> >
-> > Andrii, looks like we might be missing CONFIG_NET_VRF in vmtest config-latest.*?
->
-> Hi Andrii,
->
-> What's the next step - should I submit a PR to libbpf on Github for adding
-> CONFIG_NET_VRF?
+Before change:
+make -C netfilter
+ TEST: performance
+   net,port                                                      [SKIP]
+   perf not supported
+   port,net                                                      [SKIP]
+   perf not supported
+   net6,port                                                     [SKIP]
+   perf not supported
+   port,proto                                                    [SKIP]
+   perf not supported
+   net6,port,mac                                                 [SKIP]
+   perf not supported
+   net6,port,mac,proto                                           [SKIP]
+   perf not supported
+   net,mac                                                       [SKIP]
+   perf not supported
 
-Yes, please, for [0] and [1]:
+After change:
+   net,mac                                                       [ OK ]
+     baseline (drop from netdev hook):               2061098pps
+     baseline hash (non-ranged entries):             1606741pps
+     baseline rbtree (match on first field only):    1191607pps
+     set with  1000 full, ranged entries:            1639119pps
+ok 8 selftests: netfilter: nft_concat_range.sh
 
- [0] https://github.com/libbpf/libbpf
- [1] https://github.com/kernel-patches/vmtest
+Fixes: 611973c1e06f ("selftests: netfilter: Introduce tests for sets with range concatenation")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+---
+ tools/testing/selftests/netfilter/nft_concat_range.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Eyal.
+diff --git a/tools/testing/selftests/netfilter/nft_concat_range.sh b/tools/testing/selftests/netfilter/nft_concat_range.sh
+index b35010cc7f6a..a6991877e50c 100755
+--- a/tools/testing/selftests/netfilter/nft_concat_range.sh
++++ b/tools/testing/selftests/netfilter/nft_concat_range.sh
+@@ -31,7 +31,7 @@ BUGS="flush_remove_add reload"
+ 
+ # List of possible paths to pktgen script from kernel tree for performance tests
+ PKTGEN_SCRIPT_PATHS="
+-	../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
++	../../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
+ 	pktgen/pktgen_bench_xmit_mode_netif_receive.sh"
+ 
+ # Definition of set types:
+-- 
+2.34.1
+
