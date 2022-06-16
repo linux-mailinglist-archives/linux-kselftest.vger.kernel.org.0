@@ -2,150 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C44B54E784
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 18:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CF354E821
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 18:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236932AbiFPQn5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jun 2022 12:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S232675AbiFPQxb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jun 2022 12:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbiFPQn4 (ORCPT
+        with ESMTP id S1378441AbiFPQs3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:43:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7DB227CFD
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 09:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655397831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AjMtM8OGnDrbMwcn+8vKnlZdrkOGRhE/5nADc7InRc4=;
-        b=TSQFJkRBWy3mvIQerMvPzNPpML8zeT0oOJPe6Z6WXrAzfYtgo0XC38GHDJkICj+3i9k/ps
-        8EzERBrf4TEe/rq3FmxDsc86RgyXxqLg1QyMeKB+nFZe8gNAeVoHRcN1ka5A7y1DkBF6u7
-        xwdZ7fI3mYdQdGrwQICBt86RGeIjSW0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-322-d90u9gYZOUysfikrFbUKOQ-1; Thu, 16 Jun 2022 12:43:49 -0400
-X-MC-Unique: d90u9gYZOUysfikrFbUKOQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 206-20020a1c02d7000000b0039c9a08c52bso851195wmc.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 09:43:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AjMtM8OGnDrbMwcn+8vKnlZdrkOGRhE/5nADc7InRc4=;
-        b=uvgjIuKULsUKGBL3GAwMR6zwbnkQD7x9qPypeVyGc77aFeWTgj0f7bK7R3nboTMQfi
-         FWC8ck51FfbYj7UKa08mdb10fotYM6y84EuaDRgcx6qQD7zs1yxW7ptwIY8OkZ6zLYHa
-         2PDejELR11AGAS2i8HnR6xYQgq1i1D86xRaboG+9pn3M7cZ9iD5cKHwoQQxuBq3IDj97
-         /B9lXYCBj6n9HhosP9wqTGalBiPmrNDBQkW0Dv+MsnAjXVGBxQ1n2ScWcSZyxuhzarIM
-         gjn5QVJRa1c1b+NzLU7/KLPBA76G3fR/e/iMCk8I2QR0avdQweq4DXWIRg4dZ0WNxFoL
-         bTIQ==
-X-Gm-Message-State: AOAM531djtWg5Ut1IQpRaEI5l/UOllujJQnLBrc2O9GQDJsRCxlOP91N
-        MbUmnINIUJ5b7XXCf/uMivwiP/1usFWrNf+bH68DNVaonEsmCygK9E7SOvkBRyhY02kE+WCxuF+
-        qWj2YAFonVhnVHrFHL1zgKJnsm2I6
-X-Received: by 2002:a05:600c:10cf:b0:39c:8270:7b86 with SMTP id l15-20020a05600c10cf00b0039c82707b86mr16724436wmd.180.1655397828436;
-        Thu, 16 Jun 2022 09:43:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz8+fKsEXIAvNyB94ZpK27ofIlM12w0GekOLSDeZEFo92yryX6GxBCFSwKJr3GgRIgUlCaqhQ==
-X-Received: by 2002:a05:600c:10cf:b0:39c:8270:7b86 with SMTP id l15-20020a05600c10cf00b0039c82707b86mr16724402wmd.180.1655397828203;
-        Thu, 16 Jun 2022 09:43:48 -0700 (PDT)
-Received: from [172.20.10.8] ([185.124.31.117])
-        by smtp.gmail.com with ESMTPSA id t15-20020adfeb8f000000b0020e63ab5d78sm2381222wrn.26.2022.06.16.09.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 09:43:47 -0700 (PDT)
-Message-ID: <d6c00532-5546-ea4a-1927-9d4ea5e83741@redhat.com>
-Date:   Thu, 16 Jun 2022 18:43:44 +0200
+        Thu, 16 Jun 2022 12:48:29 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49E8236E25
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 09:48:08 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-90-KsoYMlcUM_yKluVn1AzPOw-1; Thu, 16 Jun 2022 17:48:06 +0100
+X-MC-Unique: KsoYMlcUM_yKluVn1AzPOw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Thu, 16 Jun 2022 17:48:04 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Thu, 16 Jun 2022 17:48:04 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andrew Jones' <drjones@redhat.com>
+CC:     Raghavendra Rao Ananta <rananta@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        "Ricardo Koller" <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        "Reiji Watanabe" <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        "Colton Lewis" <coltonlewis@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
+Thread-Topic: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
+Thread-Index: AQHYgXkNkdHi2edO0UOJoWwOrv/ni61SMGPg///3a4CAABX/cA==
+Date:   Thu, 16 Jun 2022 16:48:04 +0000
+Message-ID: <3e73cb07968d4c92b797781b037c2d45@AcuMS.aculab.com>
+References: <20220615185706.1099208-1-rananta@google.com>
+ <20220616120232.ctkekviusrozqpru@gator>
+ <33ca91aeb5254831a88e187ff8d9a2c2@AcuMS.aculab.com>
+ <20220616162557.55bopzfa6glusuh5@gator>
+In-Reply-To: <20220616162557.55bopzfa6glusuh5@gator>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 00/10] drm: selftest: Convert to KUnit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        dri-devel@lists.freedesktop.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-References: <20220615135824.15522-1-maira.canal@usp.br>
- <CABVgOSkVOKx1EEYtg-Os+kui-UivfFLT9OSEB9+sDxcgcxh5Mg@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CABVgOSkVOKx1EEYtg-Os+kui-UivfFLT9OSEB9+sDxcgcxh5Mg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/16/22 16:55, David Gow wrote:
-> On Wed, Jun 15, 2022 at 9:59 PM Maíra Canal <maira.canal@usp.br> wrote:
->>
->> KUnit unifies the test structure and provides helper tools that simplify
->> the development of tests. The basic use case allows running tests as regular
->> processes, which makes it easier to run unit tests on a development machine
->> and to integrate the tests into a CI system.
->>
->> That said, the conversion of selftests for DRM to KUnit tests is beneficial
->> as it unifies the testing API by using the KUnit API.
->>
->> KUnit is beneficial for developers as it eases the process to run unit tests.
->> It is possible to run the tests by using the kunit-tool on userspace with the
->> following command:
->>
->> ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests --arch=x86_64
->>
->> For CI system, it is possible to execute during the build. But, we also think
->> about IGT: we are developing a patch to introduce KUnit to IGT.
->>
->> These patches were developed during a KUnit hackathon [0] last October. Now,
->> we believe that both the IGT side and the Kernel side are in good shape for
->> submission.
->>
->> If you are willing to check the output, here is the Pastebin with the output
->> and execution times [1].
->>
->> [0] https://groups.google.com/g/kunit-dev/c/YqFR1q2uZvk/m/IbvItSfHBAAJ
->> [1] https://pastebin.com/FJjLPKsC
->>
->> - Arthur Grillo, Isabella Basso, and Maíra Canal
+From: Andrew Jones
+> Sent: 16 June 2022 17:26
 > 
-> Great to see these going upstream!
->
+> On Thu, Jun 16, 2022 at 03:58:52PM +0000, David Laight wrote:
+> > From: Andrew Jones
+> > > Sent: 16 June 2022 13:03
+> > >
+> > > On Wed, Jun 15, 2022 at 06:57:06PM +0000, Raghavendra Rao Ananta wrote:
+> > > > The selftests, when built with newer versions of clang, is found
+> > > > to have over optimized guests' ucall() function, and eliminating
+> > > > the stores for uc.cmd (perhaps due to no immediate readers). This
+> > > > resulted in the userspace side always reading a value of '0', and
+> > > > causing multiple test failures.
+> > > >
+> > > > As a result, prevent the compiler from optimizing the stores in
+> > > > ucall() with WRITE_ONCE().
+> > > >
+> > > > Suggested-by: Ricardo Koller <ricarkol@google.com>
+> > > > Suggested-by: Reiji Watanabe <reijiw@google.com>
+> > > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > > > ---
+> > > >  tools/testing/selftests/kvm/lib/aarch64/ucall.c | 9 ++++-----
+> > > >  1 file changed, 4 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > > index e0b0164e9af8..be1d9728c4ce 100644
+> > > > --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > > +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
+> > > > @@ -73,20 +73,19 @@ void ucall_uninit(struct kvm_vm *vm)
+> > > >
+> > > >  void ucall(uint64_t cmd, int nargs, ...)
+> > > >  {
+> > > > -	struct ucall uc = {
+> > > > -		.cmd = cmd,
+> > > > -	};
+> > > > +	struct ucall uc = {};
+> > > >  	va_list va;
+> > > >  	int i;
+> > > >
+> > > > +	WRITE_ONCE(uc.cmd, cmd);
+> > > >  	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
+> > > >
+> > > >  	va_start(va, nargs);
+> > > >  	for (i = 0; i < nargs; ++i)
+> > > > -		uc.args[i] = va_arg(va, uint64_t);
+> > > > +		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
+> > > >  	va_end(va);
+> > > >
+> > > > -	*ucall_exit_mmio_addr = (vm_vaddr_t)&uc;
+> > > > +	WRITE_ONCE(*ucall_exit_mmio_addr, (vm_vaddr_t)&uc);
+> > > >  }
+> >
+> > Am I misreading things again?
+> > That function looks like it writes the address of an on-stack
+> > item into global data.
+> 
+> The write to the address that the global points at causes a switch
+> from guest to host context. The guest's stack remains intact while
+> executing host code and the host can access the uc stack variable
+> directly by its address. Take a look at lib/aarch64/ucall.c to see
+> all the details.
 
-Indeed, this is pretty awesome!
- 
-I haven't reviewed the patches yet but just have a meta comment. There's a TODO
-entry for this [0] in Documentation/gpu/todo.rst, so I think that you could add
-a patch removing that as a part of this series.
+No wonder I was confused.
+It's not surprising the compiler optimises it all away.
 
-[0]: https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/todo.rst#n620
+It doesn't seem right to be 'abusing' WRITE_ONCE() here.
+Just adding barrier() should be enough and much more descriptive.
 
--- 
-Best regards,
+	David
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
