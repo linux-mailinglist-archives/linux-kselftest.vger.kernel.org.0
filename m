@@ -2,111 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B6E54EDAE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 00:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F46554EDBE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 01:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379217AbiFPWzd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jun 2022 18:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
+        id S1379309AbiFPXBv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jun 2022 19:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378814AbiFPWzd (ORCPT
+        with ESMTP id S1379307AbiFPXBv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 18:55:33 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3716221A
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 15:55:32 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-fe4ac3b87fso3625983fac.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 15:55:32 -0700 (PDT)
+        Thu, 16 Jun 2022 19:01:51 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2817462A1A
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 16:01:50 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id p1so1906706ilj.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 16:01:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EyvJseAKA33VxLuSPD/KqIItoVoJnWsD5tPgzIRSfk0=;
-        b=cFQc89Kh8mS8WI32omCWsF28H+iEoG4YWcqt4G3xmV+tMBK1JUB7e6Tk467rlvKL+q
-         Wcnrx+ik/BIePyQBAKdV6g9IqaTryblxJY7oy1DJ1dKuMhynHExaqm1FYFRin0c+i89F
-         qGr2aje+WK1A8HZFoAqv8lEzXf0ccT3z1Diss=
+        bh=dxYlFYa08li+b2bH2lpzssUgCCuwu/1aYyeRjozsoxA=;
+        b=WI575e9Yb3UURQikbwMwnVlY7aFjJ5HZCCsnkaOWrdzEauSAVut+sqOcHZgLf0S7xa
+         zqp6pmpRe8FHVecMzWb/PTiZZfyk5w2koS6iDe4Vg1KswQd3pBxNC++CyRGIgIveOAOf
+         EDkFaZlrYPNMKdPMa8l9eLQGJYIp65QDsGwnE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=EyvJseAKA33VxLuSPD/KqIItoVoJnWsD5tPgzIRSfk0=;
-        b=VxnVmRsVvTw72fHEvLbpZdHg+h6B0nw4hptt4TU/I7whKGMtygIzzjP6xDCIM4jNcg
-         E25liaB3pZ103eNM9X+mjKe10pfZxrNrh4YrEuUVpmUFL63f3bw/t8fLFDDJixYOcZ2D
-         d2tGSQAMoRkWEAgThEo2IVol+g01t5HhMrlMfX4/90E0TyONwW9V9ESinnwnXBdf+ZtQ
-         FfeDMiSSJftcywIrmb+9FJAlSVPptDOVUdljGuGPbuADO9Hy6Y9Ejzz0PUN+Pd5BTAx5
-         OYWcLNGEYy87FCdcQWhEa8eKq+gOjNmJku7p2CzaJO0iUTpDi0R+x7JVgJIH4M+aSMen
-         lZKg==
-X-Gm-Message-State: AJIora9TbVBD6u2lNiY13OdJmVmmT5bI5308e2AottC9SLpa8CLJtgKP
-        S8iKfOW7qv084PSJoXuUyWbwiQ==
-X-Google-Smtp-Source: AGRyM1tSctUJdSQ/TjLU6aUpm/5aGOC4Xrd/5azPNZHjH7a2JYSM9SAM8WKr+m0btTzn9hdWxUchQA==
-X-Received: by 2002:a05:6870:c890:b0:fe:5223:29f0 with SMTP id er16-20020a056870c89000b000fe522329f0mr10067851oab.6.1655420131764;
-        Thu, 16 Jun 2022 15:55:31 -0700 (PDT)
+        bh=dxYlFYa08li+b2bH2lpzssUgCCuwu/1aYyeRjozsoxA=;
+        b=Q7mqYFft8m19SXdhclq0+8FBMZ2NcbZsZ/yFR0aP/oMtIFldDXPb5NFuVEH3RinITl
+         sjxBE4aP9fAfPSBuwmPnxQcW+DR5trO8VtVOaZv7iQDRSX1Jqoqm+3VOOy0H6JGktdxL
+         tVW0VeotwfohRdufxSa9idhaIPBBG5olKGiLIlK6rNGpZDpOLZdbTAsOIxKgcOpZnlx+
+         GmwmkQoqxr8X0cRCYa1/SiOJ1ieioHIix2sJWXKx87t+fHmZqHYnWrqUO6aKhB7hxTmT
+         JUZwk2w7Fhcnkq7vo4dBdJQP9Qmv/FE6fhvwqSLuGa7/IrqOWoC2YHqQ9ZJeFC8faxuN
+         xvJA==
+X-Gm-Message-State: AJIora9qIXmT3akfSx4z501AOdqOrBrBtGHmNSRPlhrJo0BK8i2F5sD9
+        WVbXF2C5qoQH05lK35SWFNRamA==
+X-Google-Smtp-Source: AGRyM1s7LIyJLY6T2Uw2EEkj6wJqA6dr2rUEctCYF7at0sSK8+Zh7zsCGDCfSXKU0oW2S2jL2LftaQ==
+X-Received: by 2002:a05:6e02:152f:b0:2d4:980:a529 with SMTP id i15-20020a056e02152f00b002d40980a529mr4197820ilu.72.1655420509530;
+        Thu, 16 Jun 2022 16:01:49 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id k2-20020a4adfa2000000b0041ba545a844sm1674431ook.32.2022.06.16.15.55.31
+        by smtp.gmail.com with ESMTPSA id s71-20020a02514a000000b0033171dafaa0sm1414627jaa.178.2022.06.16.16.01.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 15:55:31 -0700 (PDT)
-Subject: Re: [PATCH 0/2] selftests/x86: AMX-related test improvements
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@suse.de,
+        Thu, 16 Jun 2022 16:01:49 -0700 (PDT)
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Dylan Hatch <dylanbhatch@google.com>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220401221014.13556-1-chang.seok.bae@intel.com>
+References: <20220616211016.4037482-1-dylanbhatch@google.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <86661dd7-6ca3-dc72-dff7-782a83ba7bc5@linuxfoundation.org>
-Date:   Thu, 16 Jun 2022 16:55:30 -0600
+Message-ID: <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+Date:   Thu, 16 Jun 2022 17:01:48 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220401221014.13556-1-chang.seok.bae@intel.com>
+In-Reply-To: <20220616211016.4037482-1-dylanbhatch@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 4/1/22 4:10 PM, Chang S. Bae wrote:
-> A couple of test updates are included:
-> 
-> * With this option [1,2], the kernel's altstack check becomes stringent.
->    The x86 sigaltstack test is ignorant about this. Adjust the test now.
->    This check was established [3] to ensure every AMX task's altstack is
->    sufficient (regardless of that option) [4].
-> 
-> * The AMX test wrongly fails on non-AMX machines. Fix the code to skip the
->    test instead.
-> 
-> The series is available in this repository:
->    git://github.com/intel/amx-linux.git selftest
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/Kconfig#n2432
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/kernel-parameters.txt#n5676
-> [3] 3aac3ebea08f ("x86/signal: Implement sigaltstack size validation")
-> [4] 4b7ca609a33d ("x86/signal: Use fpu::__state_user_size for sigalt stack validation")
-> 
-> Chang S. Bae (2):
->    selftests/x86/signal: Adjust the test to the kernel's altstack check
->    selftests/x86/amx: Fix the test to avoid failure when AMX is
->      unavailable
-> 
->   tools/testing/selftests/x86/amx.c         | 42 +++++++++++++++++------
->   tools/testing/selftests/x86/sigaltstack.c | 12 ++++++-
->   2 files changed, 42 insertions(+), 12 deletions(-)
-> 
-> 
-> base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+On 6/16/22 3:10 PM, Dylan Hatch wrote:
+> This test would erroneously fail the /proc/$PID/maps case if
+> vsyscall=xonly since the existing probe of the vsyscall page only
+> succeeds if the process has read permissions. Fix this by checking for
+> either no vsyscall mapping OR an execute-only vsyscall mapping in the
+> case were probing the vsyscall page segfaults.
 > 
 
-These are fixes and I can take them through kselftest once the review
-comments are addressed and get an ack from x86 maintainers.
+Does this fix include skipping the test with a clear message that
+says why test is skipped?
+
+> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+> ---
+>   tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
+>   1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
+> index 28604c9f805c..5ca85520131f 100644
+> --- a/tools/testing/selftests/proc/proc-pid-vm.c
+> +++ b/tools/testing/selftests/proc/proc-pid-vm.c
+> @@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
+>   
+>   static bool g_vsyscall = false;
+>   
+> -static const char str_vsyscall[] =
+> +static const char str_vsyscall_rx[] =
+>   "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
+>   
+> +static const char str_vsyscall_x[] =
+> +"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
+> +
+>   #ifdef __x86_64__
+>   static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
+>   {
+> @@ -261,6 +264,7 @@ int main(void)
+>   	int exec_fd;
+>   
+>   	vsyscall();
+> +	const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
+>   
+>   	atexit(ate);
+>   
+> @@ -314,7 +318,8 @@ int main(void)
+>   
+>   	/* Test /proc/$PID/maps */
+>   	{
+> -		const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
+> +		const size_t len_buf0 = strlen(buf0);
+> +		const size_t len_vsys = strlen(str_vsyscall);
+>   		char buf[256];
+>   		ssize_t rv;
+>   		int fd;
+> @@ -325,11 +330,16 @@ int main(void)
+>   			return 1;
+>   		}
+>   		rv = read(fd, buf, sizeof(buf));
+> -		assert(rv == len);
+> -		assert(memcmp(buf, buf0, strlen(buf0)) == 0);
+>   		if (g_vsyscall) {
+> -			assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
+> +			assert(rv == len_buf0 + len_vsys);
+> +		} else {
+> +			/* If vsyscall isn't readable, it's either x-only or not mapped at all */
+> +			assert(rv == len_buf0 + len_vsys || rv == len_buf0);
+>   		}
+> +		assert(memcmp(buf, buf0, len_buf0) == 0);
+> +		/* Check for vsyscall mapping if buf is long enough */
+> +		if (rv == len_buf0 + len_vsys)
+> +			assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
+>   	}
+>   
+>   	/* Test /proc/$PID/smaps */
+> 
+
+The change looks good to me. Doesn't look like it skips the test though?
 
 thanks,
 -- Shuah
