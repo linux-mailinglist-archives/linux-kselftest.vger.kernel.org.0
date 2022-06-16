@@ -2,136 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59EF54EC43
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 23:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6B054ECDF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 23:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379087AbiFPVKg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jun 2022 17:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
+        id S1378169AbiFPVy0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jun 2022 17:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379084AbiFPVKf (ORCPT
+        with ESMTP id S231569AbiFPVyZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 17:10:35 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE95C60B95
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 14:10:34 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b6-20020a252e46000000b0065d5168f3f0so2031483ybn.21
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 14:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=KURsuV8TI+ATVlfiPoD0dDzYcHxpBF6tQO88IJ4dTj0=;
-        b=NPwKpqicoiF3JrI3nvAy2wavL/qdxmApmwUODLbg9kllBq3O7YIU7scvwDOn25KzpP
-         jC0cGPcobMV2UjA/u/07U8UO5etg6EO+lETP0sa7aPA+g02oqAT2q4Zct/xj0RbRQss4
-         0AgamnAU0JkWNr0r8gkXn5MTJtB0HBGC+WiYaoC841iycAdEdrtgE2TPt2nKA6MK9gVw
-         ennDDk0WH1D9+ls4IAUfpDluG86Tyb5bV8IececwSKnTYyU42AMNcWhNMjFH/a6hN3iN
-         /AIxCU6fkESR39R5t5poGacKGtADiZlwtEGJQmfePUEkviQSC9rObt9j2eCwa9UV+Az9
-         zIpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=KURsuV8TI+ATVlfiPoD0dDzYcHxpBF6tQO88IJ4dTj0=;
-        b=CInNerTM9S8UEpDPNUbbkCeR0SLJ16abbGVCtpBBfW7KPHVGjX62rBnS5T4IugIWK7
-         963BoDhSrxk5V1BBlh18I09SIDrB51fLBzFx20R9yaS64tpw7UliqcHKn6yuwBKh4Au6
-         VpNTihmWDSQOr0nK1i8wwrL+FeGsNK7F2/l1ZtAje13IDkzVRwaTX67RldTsyUvk8HH1
-         Qc4XII4usG9Qo+iGic8m+byfAmSxWIzI3vHe5u35Yg4HUrVjHfO+L/QshJWuy7xoT5z7
-         wM13H2czHGcl23/Jlljygb2QwOvd4BlXSSr8Dw/AL3q64jV520woE0GTfSltg9UIlLFt
-         VqZw==
-X-Gm-Message-State: AJIora+sJZsP5QPPRi8Mq1ZUlcA9xm0M/GWgfbowzZbGw30/1ZVJV60m
-        IO2eQ1xzZRrHdHeTi+4ZAfFQ53Lxmux+4L20Tw==
-X-Google-Smtp-Source: AGRyM1uyocs/VCv/SSpacc2XdE8qNYAeZuQBDEG16K8OvRmn50r0ngLRzhMzRvrsEd2ZP4RW/0B+YqsFlSSJK1o7sA==
-X-Received: from pickles.svl.corp.google.com ([2620:15c:2cd:202:784d:8898:15c0:fd93])
- (user=dylanbhatch job=sendgmr) by 2002:a25:504d:0:b0:668:b120:6d0a with SMTP
- id e74-20020a25504d000000b00668b1206d0amr1304727ybb.584.1655413834064; Thu,
- 16 Jun 2022 14:10:34 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 14:10:16 -0700
-Message-Id: <20220616211016.4037482-1-dylanbhatch@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
-From:   Dylan Hatch <dylanbhatch@google.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Dylan Hatch <dylanbhatch@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Jun 2022 17:54:25 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED71D57143
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 14:54:21 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-62-astVriicPDe5cx5R_yDGqw-1; Thu, 16 Jun 2022 22:54:18 +0100
+X-MC-Unique: astVriicPDe5cx5R_yDGqw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Thu, 16 Jun 2022 22:54:16 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Thu, 16 Jun 2022 22:54:16 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'oliver.upton@linux.dev'" <oliver.upton@linux.dev>
+CC:     Raghavendra Rao Ananta <rananta@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        "Ricardo Koller" <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        "Reiji Watanabe" <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        "Colton Lewis" <coltonlewis@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Andrew Jones" <drjones@redhat.com>
+Subject: RE: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
+Thread-Topic: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
+Thread-Index: AQHYgXkNkdHi2edO0UOJoWwOrv/ni61SMGPg///3a4CAABX/cIAAENKAgABDjYA=
+Date:   Thu, 16 Jun 2022 21:54:16 +0000
+Message-ID: <2ec9ecbfb13d422ab6cda355ff011c9f@AcuMS.aculab.com>
+References: <3e73cb07968d4c92b797781b037c2d45@AcuMS.aculab.com>
+ <20220615185706.1099208-1-rananta@google.com>
+ <20220616120232.ctkekviusrozqpru@gator>
+ <33ca91aeb5254831a88e187ff8d9a2c2@AcuMS.aculab.com>
+ <20220616162557.55bopzfa6glusuh5@gator>
+ <7b1040c48bc9b2986798322c336660ab@linux.dev>
+In-Reply-To: <7b1040c48bc9b2986798322c336660ab@linux.dev>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This test would erroneously fail the /proc/$PID/maps case if
-vsyscall=xonly since the existing probe of the vsyscall page only
-succeeds if the process has read permissions. Fix this by checking for
-either no vsyscall mapping OR an execute-only vsyscall mapping in the
-case were probing the vsyscall page segfaults.
-
-Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
----
- tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
-index 28604c9f805c..5ca85520131f 100644
---- a/tools/testing/selftests/proc/proc-pid-vm.c
-+++ b/tools/testing/selftests/proc/proc-pid-vm.c
-@@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
- 
- static bool g_vsyscall = false;
- 
--static const char str_vsyscall[] =
-+static const char str_vsyscall_rx[] =
- "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
- 
-+static const char str_vsyscall_x[] =
-+"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
-+
- #ifdef __x86_64__
- static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
- {
-@@ -261,6 +264,7 @@ int main(void)
- 	int exec_fd;
- 
- 	vsyscall();
-+	const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
- 
- 	atexit(ate);
- 
-@@ -314,7 +318,8 @@ int main(void)
- 
- 	/* Test /proc/$PID/maps */
- 	{
--		const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
-+		const size_t len_buf0 = strlen(buf0);
-+		const size_t len_vsys = strlen(str_vsyscall);
- 		char buf[256];
- 		ssize_t rv;
- 		int fd;
-@@ -325,11 +330,16 @@ int main(void)
- 			return 1;
- 		}
- 		rv = read(fd, buf, sizeof(buf));
--		assert(rv == len);
--		assert(memcmp(buf, buf0, strlen(buf0)) == 0);
- 		if (g_vsyscall) {
--			assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
-+			assert(rv == len_buf0 + len_vsys);
-+		} else {
-+			/* If vsyscall isn't readable, it's either x-only or not mapped at all */
-+			assert(rv == len_buf0 + len_vsys || rv == len_buf0);
- 		}
-+		assert(memcmp(buf, buf0, len_buf0) == 0);
-+		/* Check for vsyscall mapping if buf is long enough */
-+		if (rv == len_buf0 + len_vsys)
-+			assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
- 	}
- 
- 	/* Test /proc/$PID/smaps */
--- 
-2.36.1.476.g0c4daa206d-goog
+RnJvbTogb2xpdmVyLnVwdG9uQGxpbnV4LmRldg0KPiBTZW50OiAxNiBKdW5lIDIwMjIgMTk6NDUN
+Cg0KPiANCj4gSnVuZSAxNiwgMjAyMiAxMTo0OCBBTSwgIkRhdmlkIExhaWdodCIgPERhdmlkLkxh
+aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPiBObyB3b25kZXIgSSB3YXMgY29uZnVzZWQuDQo+
+ID4gSXQncyBub3Qgc3VycHJpc2luZyB0aGUgY29tcGlsZXIgb3B0aW1pc2VzIGl0IGFsbCBhd2F5
+Lg0KPiA+DQo+ID4gSXQgZG9lc24ndCBzZWVtIHJpZ2h0IHRvIGJlICdhYnVzaW5nJyBXUklURV9P
+TkNFKCkgaGVyZS4NCj4gPiBKdXN0IGFkZGluZyBiYXJyaWVyKCkgc2hvdWxkIGJlIGVub3VnaCBh
+bmQgbXVjaCBtb3JlIGRlc2NyaXB0aXZlLg0KPiANCj4gSSBoYWQgdGhlIHNhbWUgdGhvdWdodCwg
+YWx0aG91Z2ggSSBkbyBub3QgYmVsaWV2ZSBiYXJyaWVyKCkgaXMgc3VmZmljaWVudA0KPiBvbiBp
+dHMgb3duLiBiYXJyaWVyX2RhdGEoKSB3aXRoIGEgcG9pbnRlciB0byB1YyBwYXNzZWQgdGhyb3Vn
+aA0KPiBpcyByZXF1aXJlZCB0byBrZWVwIGNsYW5nIGZyb20gZWxpbWluYXRpbmcgdGhlIGRlYWQg
+c3RvcmUuDQoNCkEgYmFycmllcigpIChmdWxsIG1lbW9yeSBjbG9iYmVyKSBvdWdodCB0byBiZSBz
+dHJvbmdlciB0aGFuDQp0aGUgcGFydGlhbCBvbmUgdGhhbiBiYXJyaWVyX2RhdGEoKSBnZW5lcmF0
+ZXMuDQoNCkkgY2FuJ3QgcXVpdGUgZGVjaWRlIHdoZXRoZXIgeW91IG5lZWQgYSBiYXJyaWVyKCkg
+Ym90aCBzaWRlcw0Kb2YgdGhlICdtYWdpYyB3cml0ZScuDQpQbGF1c2libHkgdGhlIGNvbXBpbGVy
+IGNvdWxkIGRpc2NhcmQgdGhlIG9uLXN0YWNrIGRhdGENCmFmdGVyIHRoZSBiYXJyaWVyKCkgYW5k
+IGJlZm9yZSB0aGUgJ21hZ2ljIHdyaXRlJy4NCg0KQ2VydGFpbmx5IHB1dHRpbmcgdGhlICdtYWdp
+YyB3cml0ZScgaW5zaWRlIGEgYXNtIGJsb2NrDQp0aGF0IGhhcyBhIG1lbW9yeSBjbG9iYmVyIGlz
+IGEgbW9yZSBjb3JyZWN0IHNvbHV0aW9uLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
+ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
+MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
