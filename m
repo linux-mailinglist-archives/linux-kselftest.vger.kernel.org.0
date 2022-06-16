@@ -2,136 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4267954E250
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 15:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 191FE54E572
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 16:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377060AbiFPNq1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jun 2022 09:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S1377399AbiFPOzY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jun 2022 10:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376372AbiFPNq0 (ORCPT
+        with ESMTP id S1377410AbiFPOzW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 09:46:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 078E3326E8
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 06:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655387184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FmNUkOO/CPYlAiNCXkHb5y6oDWLQMyJAjm4NQJecMuc=;
-        b=GjkXcvxgehGLKDH2rToj12pTFj0WoBcVYjVCjjWpEWmlrlJ609Yc47K0y4iA4MAjNXgEcP
-        KoQ+6CwmrWCVOAbdZB3M4YFGeyO6CDMFCYrqEtGoiqp3DT5MURbpHnGatHO1Hb8LS9iQ9l
-        whkQA6bYSnomY7MnaR2eSR+Aj0FxztU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-h1PLAn-NMViEKO72XyHw_w-1; Thu, 16 Jun 2022 09:46:23 -0400
-X-MC-Unique: h1PLAn-NMViEKO72XyHw_w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 728793C138A1;
-        Thu, 16 Jun 2022 13:46:22 +0000 (UTC)
-Received: from maya.cloud.tilaa.com (unknown [10.40.208.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 27A712026D2D;
-        Thu, 16 Jun 2022 13:46:22 +0000 (UTC)
-Date:   Thu, 16 Jun 2022 15:46:18 +0200
-From:   Stefano Brivio <sbrivio@redhat.com>
-To:     Jie2x Zhou <jie2x.zhou@intel.com>
-Cc:     Pablo Neira Ayuso <pablo@netfilter.org>, shuah@kernel.org,
-        liuhangbin@gmail.com, fw@strlen.de,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH] selftests: netfilter: correct PKTGEN_SCRIPT_PATHS in
- nft_concat_range.sh
-Message-ID: <20220616154618.0eb6b283@elisabeth>
-In-Reply-To: <Yqr9pQ9QsVaGjNW/@salvia>
-References: <20220616074046.49349-1-jie2x.zhou@intel.com>
-        <Yqr9pQ9QsVaGjNW/@salvia>
-Organization: Red Hat
+        Thu, 16 Jun 2022 10:55:22 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37342326F4
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 07:55:21 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id w17so2207365wrg.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 07:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=i61TpzN79pFd8jTgYBxbOsIXd3ZePgcEGIUlQDrP1oA=;
+        b=M/0k6QEAATbj8kUW5XwyTvB1JajbQWDuSL/nFsg2g4nuZM6ljYMq0q3I0sLs2205Dl
+         9Pewsmz/LnfdEd+7a2J0V9T4JScjQUlSwbRcl9v7EWkC2nsARiDxxKfrOGQvMTPLjVXF
+         Bt6OjKJuvmG6yndpzucExvXSGXyHVv+ffey0bSoaGLk94nMaxPao93IKOcDj48zpuG/M
+         9cH6aBjoaQOkknW2oQlhQ3N7WbWeNVf7WPjwpGNE11abmuMGgRxBiXgony8A2AY9bTPA
+         dRhUeY37FIi4i5E79o/M5TRMbzmHFmcBj9+M60rkByb2PgJT5hKqaHRN6enYys9bDtUn
+         PFbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=i61TpzN79pFd8jTgYBxbOsIXd3ZePgcEGIUlQDrP1oA=;
+        b=aqrT12OSCTqp+na6z938w23hJJAlZ/lHkM+xvQy/RJNkxMOgaJci/rzX1sQt/sdg3W
+         YR4Q7aUADi8KMW36xLdPZ//AXADGrv2v5bp2E9kPmAcGuyM2ksPFB4o7JAjC2Zto6Nq6
+         +ptC4DgnjHmwb0c7dfyVs9cT/4cqRBex05uaGuVwH8ukkyt9SnGQ1m0ASi4YCzxGNr/a
+         efAGRsbNNkbCzctNhhImnj8xSaGr0T3/lW/l9FadyhNPUKFrfEM003Y1xXk0eGgbVcwY
+         DJKrx8+IRTwNIx158SWuoke4Ab+qnMa/arOfa/iWXOWszn2VzAQz6Lm7AJLjEHBjkxn6
+         EHEA==
+X-Gm-Message-State: AJIora9ZYpud83RSiRfrQOOKSPH8BWS17mcEea6y5wqJrHAOO4MJG/gy
+        kpiD7log7xzSvCNc6J/jA9Fa6an/y9P0YevNkr+t8A==
+X-Google-Smtp-Source: AGRyM1vln/RJNFB5gnVroReIptb3DCyDVdXiSGVTD0fsO1X/g7WEyvgJkHlyCbvxclOodYlVPdUzKesDei1IR6d9Itk=
+X-Received: by 2002:a05:6000:1889:b0:218:4de1:25a3 with SMTP id
+ a9-20020a056000188900b002184de125a3mr5084396wri.622.1655391319594; Thu, 16
+ Jun 2022 07:55:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220615135824.15522-1-maira.canal@usp.br>
+In-Reply-To: <20220615135824.15522-1-maira.canal@usp.br>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 16 Jun 2022 22:55:08 +0800
+Message-ID: <CABVgOSkVOKx1EEYtg-Os+kui-UivfFLT9OSEB9+sDxcgcxh5Mg@mail.gmail.com>
+Subject: Re: [PATCH 00/10] drm: selftest: Convert to KUnit
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        dri-devel@lists.freedesktop.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jie2x,
+On Wed, Jun 15, 2022 at 9:59 PM Ma=C3=ADra Canal <maira.canal@usp.br> wrote=
+:
+>
+> KUnit unifies the test structure and provides helper tools that simplify
+> the development of tests. The basic use case allows running tests as regu=
+lar
+> processes, which makes it easier to run unit tests on a development machi=
+ne
+> and to integrate the tests into a CI system.
+>
+> That said, the conversion of selftests for DRM to KUnit tests is benefici=
+al
+> as it unifies the testing API by using the KUnit API.
+>
+> KUnit is beneficial for developers as it eases the process to run unit te=
+sts.
+> It is possible to run the tests by using the kunit-tool on userspace with=
+ the
+> following command:
+>
+> ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/tests =
+--arch=3Dx86_64
+>
+> For CI system, it is possible to execute during the build. But, we also t=
+hink
+> about IGT: we are developing a patch to introduce KUnit to IGT.
+>
+> These patches were developed during a KUnit hackathon [0] last October. N=
+ow,
+> we believe that both the IGT side and the Kernel side are in good shape f=
+or
+> submission.
+>
+> If you are willing to check the output, here is the Pastebin with the out=
+put
+> and execution times [1].
+>
+> [0] https://groups.google.com/g/kunit-dev/c/YqFR1q2uZvk/m/IbvItSfHBAAJ
+> [1] https://pastebin.com/FJjLPKsC
+>
+> - Arthur Grillo, Isabella Basso, and Ma=C3=ADra Canal
 
-On Thu, 16 Jun 2022 11:53:41 +0200
-Pablo Neira Ayuso <pablo@netfilter.org> wrote:
+Great to see these going upstream!
 
-> Cc'ing netfilter-devel and Stefano Brivio.
-> 
-> On Thu, Jun 16, 2022 at 03:40:46PM +0800, Jie2x Zhou wrote:
-> > Before change:
-> > make -C netfilter
-> >  TEST: performance
-> >    net,port                                                      [SKIP]
-> >    perf not supported
-> >    port,net                                                      [SKIP]
-> >    perf not supported
-> >    net6,port                                                     [SKIP]
-> >    perf not supported
-> >    port,proto                                                    [SKIP]
-> >    perf not supported
-> >    net6,port,mac                                                 [SKIP]
-> >    perf not supported
-> >    net6,port,mac,proto                                           [SKIP]
-> >    perf not supported
-> >    net,mac                                                       [SKIP]
-> >    perf not supported
-> > 
-> > After change:
-> >    net,mac                                                       [ OK ]
-> >      baseline (drop from netdev hook):               2061098pps
-> >      baseline hash (non-ranged entries):             1606741pps
-> >      baseline rbtree (match on first field only):    1191607pps
-> >      set with  1000 full, ranged entries:            1639119pps
-> > ok 8 selftests: netfilter: nft_concat_range.sh
-> > 
-> > Fixes: 611973c1e06f ("selftests: netfilter: Introduce tests for sets with range concatenation")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
-> > ---
-> >  tools/testing/selftests/netfilter/nft_concat_range.sh | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/netfilter/nft_concat_range.sh b/tools/testing/selftests/netfilter/nft_concat_range.sh
-> > index b35010cc7f6a..a6991877e50c 100755
-> > --- a/tools/testing/selftests/netfilter/nft_concat_range.sh
-> > +++ b/tools/testing/selftests/netfilter/nft_concat_range.sh
-> > @@ -31,7 +31,7 @@ BUGS="flush_remove_add reload"
-> >  
-> >  # List of possible paths to pktgen script from kernel tree for performance tests
-> >  PKTGEN_SCRIPT_PATHS="
-> > -	../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
-> > +	../../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
+I've tested them on my machine, both with x86_64 qemu and with UML using:
+./tools/testing/kunit/kunit.py run
+--kunitconfig=3Ddrivers/gpu/drm/tests/.kunitconfig \
+--kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy \
+--kconfig_add CONFIG_VIRTIO_UML=3Dy
 
-This came from the fact that I used, for testing, to copy the
-directories 'samples' and 'selftests' to the root of a filesystem
-on a virtual machine, instead of copying the full 'tools' directory.
+And all 114 tests pass, and everything looks good. My only minor notes
+(from a quick look at the results, rather than a detailed review of
+the code) are that the test names have a few small oddities:
+- The suites all end in _tests (or _test, in the case of
+drm_plane_helper_test). This is a bit redundant (and while there is
+only one drm_plane_helper_test, the inconsistency with the others is a
+bit awkward), so removing the suffix may be cleaner. (Or at least
+being optimistic, and making drm_plane_helper_test plural.)
+- The drm_cmdline_parser_tests suite's tests have some inconsistencies
+name-wise: they're the only ones to start with drm_, not igt_, and
+they have a few capital letters in some of the
+'drm_cmdline_test_force_D_' tests. (It's also technically redundant to
+start all of the test names with drm_cmdline_test, given the suite
+name.)
 
-It was a very arbitrary usage though, also given that 'selftests' is
-typically biggest directory in 'tools', so there's no need to keep the
-previous path.
+Of course, if you're trying to keep compatibility with existing tests
+or tooling, or there's some deeper reason they're named like this,
+it's definitely not a dealbreaker.
 
-Thanks for fixing this,
+Either way, this whole series is:
 
-Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+Tested-by: David Gow <davidgow@google.com>
 
--- 
-Stefano
-
+Cheers,
+-- David
