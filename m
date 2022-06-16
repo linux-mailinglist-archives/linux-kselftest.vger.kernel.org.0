@@ -2,120 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113B954EEF4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 03:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05B254EFE1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 05:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbiFQBrB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jun 2022 21:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S1379488AbiFQDwj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jun 2022 23:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237138AbiFQBrA (ORCPT
+        with ESMTP id S1379820AbiFQDwi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 21:47:00 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0077A63BEA
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 18:46:59 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id w21so2988143pfc.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 18:46:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=pwHaV2y2Bxu1k9V48sfmgmcfSPlc3DuZU6Ieth+3iJk=;
-        b=enayjOKyisnqanZBUUvJT2Kj/wEqSNI17S7JnjYSgXzUo8FyTAIMLqv2yVSFvpegwE
-         3OEVaP3ZR/z1KhbAh/jI3/VRsTcboyuUPp4i3kIfqidOYdj79omlVF27cI8hJOPBRFjd
-         WP10sp/geo833+VAFjdeHd8Zpr+rfyfRQMhTwBpgnZCXRs3xFvkejrAJm6itA7wzqpVJ
-         SJEnQYJ1JbFIn8d7qvETdh3IIYckiu8IOVPeg0IRZp+/va1KbTgCb3Vdeo2V8w/3x1ZU
-         nyWjwI1T+P217TulML8CbZy+gNiTDGqKRxkUwTGQitjX1e+n+QppSOj48Vl3AvrXhbsU
-         l0Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=pwHaV2y2Bxu1k9V48sfmgmcfSPlc3DuZU6Ieth+3iJk=;
-        b=EkE2iyzpIcv+EVMUN5KOHma6S8K7qSpeVWGDhiUceU+L73Ub+u5Bfy6C2i+RaUO/CT
-         i+TWuUB+u5U0pq8mI6/Vy3MzkzHhzOPjq5QdtUYiYfJzfAy6QNqDsliqXjo5ds3lx70g
-         J9L748Q9cFNI2dh/WFq7HXvdp6ltltZphaiB5UVDfJqA6lCLvu499noVV/Nhmq/1u+AL
-         r5eyO7Yw672Cgsa3frjstcci6WFlrH7a9CllrqO9DVEcXWQbmCYOmmWGctEI66fcxop6
-         RL7v6C29uuN548he2pXzFjjNNlDrmJpoffyBiAevSUz9+oao6wH9Zlki3fzFDha5NrBd
-         LYoQ==
-X-Gm-Message-State: AJIora8BnzqQ1CXkKzZG0KvQiA9gigcQ8M9la2ge0ZRHCIx8K6OOCxrT
-        ygWOsdq2vsyzI6L+G85EzYs+2A==
-X-Google-Smtp-Source: AGRyM1uUzZHOeIYcSeG9bMKgFd68+pIUWcO9f3rVjGNNnvl8G/weWivbw1M63dWzI/DquGjLQTge3A==
-X-Received: by 2002:a05:6a00:1ace:b0:51c:242d:b62e with SMTP id f14-20020a056a001ace00b0051c242db62emr7525604pfv.25.1655430419481;
-        Thu, 16 Jun 2022 18:46:59 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id ja1-20020a170902efc100b0016632179ecfsm2223989plb.264.2022.06.16.18.46.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 18:46:59 -0700 (PDT)
-Message-ID: <62abdd13.1c69fb81.e3d21.3415@mx.google.com>
-Date:   Thu, 16 Jun 2022 18:46:59 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.19-rc1-4-g9b4d5c01eb234
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes build: 5 builds: 0 failed,
- 5 passed (v5.19-rc1-4-g9b4d5c01eb234)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Jun 2022 23:52:38 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC911BB;
+        Thu, 16 Jun 2022 20:52:30 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H2Il8n013995;
+        Fri, 17 Jun 2022 03:51:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : in-reply-to : references : content-type : mime-version :
+ date : content-transfer-encoding; s=pp1;
+ bh=CXxs8+WhIUl3U8lU7Qeuh+7j6KZHP8StgkoSzdoFeqI=;
+ b=glOV6CVsKdaWUcxk//dcNwKvPZhscAgrx4325MsfegJVeT6bmfjzUUiFz/NSoybN4PJB
+ PyclC7vJGxNnl7LP1pYuiTJmbqV+kXQ3I8y+XkkmyJRD4hPYmboA3Ml/fnsTBYx+TPay
+ rhEGmaWuY1KALBbBOJXAtaFu5rj3BNXJo8u6JXFug9A8U8wR8FM2FR5I7F3uYhOCo6eI
+ LN/90YL+DpOu/bw837FGHkBWKtveRtzggWNhDm1J4sJ/fV6aeHjsB/fL1sP4cBRbaTIf
+ D/tOmtcrcziSjGQtJgra+vSkH1xA8MCWbg16x655bPDG776OrPVrkK29+7+yBdo1tdq6 eg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gqw83xnp1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 03:51:32 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25H3ZbrG017222;
+        Fri, 17 Jun 2022 03:51:31 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gqw83xnnn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 03:51:31 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25H3p0lj020732;
+        Fri, 17 Jun 2022 03:51:29 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3gmjp8xc6h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jun 2022 03:51:29 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25H3pRtJ18678188
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jun 2022 03:51:27 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 159174C046;
+        Fri, 17 Jun 2022 03:51:27 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 982C74C040;
+        Fri, 17 Jun 2022 03:51:25 +0000 (GMT)
+Received: from sig-9-65-64-10.ibm.com (unknown [9.65.64.10])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Jun 2022 03:51:25 +0000 (GMT)
+Message-ID: <dba0cbb3e516ce715939be3638d2b5639608f2c1.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 1/2] selftests/kexec: remove broken EFI_VARS secure
+ boot fallback check
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+In-Reply-To: <20220616124740.580708-2-ardb@kernel.org>
+References: <20220616124740.580708-1-ardb@kernel.org>
+         <20220616124740.580708-2-ardb@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Mime-Version: 1.0
+Date:   Thu, 16 Jun 2022 14:08:56 -0400
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4InHe3smSIPxZBcxxyoelLs9sVfQeoNo
+X-Proofpoint-ORIG-GUID: mKzpx9LRGCWb-ISX2aC0oL-oxHzRhU8z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-17_02,2022-06-16_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=947
+ mlxscore=0 spamscore=0 suspectscore=0 impostorscore=0 clxscore=1011
+ priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206170015
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes build: 5 builds: 0 failed, 5 passed (v5.19-rc1-4-g9b4d5c01e=
-b234)
+On Thu, 2022-06-16 at 14:47 +0200, Ard Biesheuvel wrote:
+> Commit b433a52aa28733e0 ("selftests/kexec: update get_secureboot_mode")
+> refactored the code that discovers the EFI secure boot mode so it only
+> depends on either the efivars pseudo filesystem or the efivars sysfs
+> interface, but never both.
+> 
+> However, the latter version was not implemented correctly, given the
+> fact that the local 'efi_vars' variable never assumes a value. This
+> means the fallback has been dead code ever since it was introduced.
+> 
+> So let's drop the fallback altogether. The sysfs interface has been
+> deprecated for ~10 years now, and is only enabled on x86 to begin with,
+> so it is time to get rid of it entirely.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/v5.19-rc1-4-g9b4d5c01eb234/
+Thanks, Ard.
 
-Tree: kselftest
-Branch: fixes
-Git Describe: v5.19-rc1-4-g9b4d5c01eb234
-Git Commit: 9b4d5c01eb234f66a15a746b1c73e10209edb199
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 3 unique architectures
+Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-14) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
