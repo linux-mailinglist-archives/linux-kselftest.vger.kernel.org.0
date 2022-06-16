@@ -2,92 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7466554E6EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 18:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E2054E75C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jun 2022 18:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbiFPQ0H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jun 2022 12:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S233539AbiFPQdN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jun 2022 12:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiFPQ0G (ORCPT
+        with ESMTP id S230319AbiFPQdL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 12:26:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58B872E9FB
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 09:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655396763;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cq3EZTL12suGQBdO/AxiYch3x1bNx+94IHDi7h+Rhok=;
-        b=d9gXLvdu00EYqZtFdIzNu/qXjl6xZT6JlP4rqiShGKxiddvtP/QVT0+v1T1q8Buvq9uK5G
-        sK4WgMTViLwlZQrDXxdNMDwDwVgYZikzxwsRbFof5fIBzf6nxdq8al+D7J9nj3xbpGLxDy
-        Qn80C5sX+zP2NipfP+HMcoIyv7UpURs=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-116-swKCR6HnNumsQXhLp8fT1g-1; Thu, 16 Jun 2022 12:26:02 -0400
-X-MC-Unique: swKCR6HnNumsQXhLp8fT1g-1
-Received: by mail-ed1-f69.google.com with SMTP id co13-20020a0564020c0d00b0042dc9ef4f01so1581644edb.16
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jun 2022 09:26:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cq3EZTL12suGQBdO/AxiYch3x1bNx+94IHDi7h+Rhok=;
-        b=KRasW7lpvaKfzTlTgHAYmGwuf1fN1ZA7C1dSFo/nJ75QNpC2iC+yFuins68duHLZ3L
-         z2n0Hv59CRphC1jcN1SMzOYU5eXCfB1LS2c7lf2cDLOHJy45kIACk43wpZ3o+nGncSaK
-         oezjIPBfMYAUkFjg6/EIU7iKXIQm7WbfVIh5c2hHMDODvXsvFGCrfI4W0T0WfzfFUso3
-         l8dmjasS/2huzIgjX5tVwV+ymmkwiAC663kA6fy6dFq8JK6KnRmEo/bjZAZQEExibao2
-         ejLGo1lSUjwpXpTOWlImA1QhV0g/mx1nPXK/oDWlZTf8Qtz59WD9xPTzd6IoIMC+9Hkl
-         28eg==
-X-Gm-Message-State: AJIora+S07rs3uObuWwyYwFNnyRy82hdrGLo4gYkd9CIpe+jBWXQIPBC
-        KF3ftkTGwpMu/Ln2ypDzR8waPTVKfYBkwe1P34fH1D8zUFRGZws210Y5siZdIEaa7nWiZkTJBn9
-        RuWXPWiFeg/m94WPQv2dz88PLgakW
-X-Received: by 2002:a17:906:ff18:b0:711:d197:b942 with SMTP id zn24-20020a170906ff1800b00711d197b942mr5233781ejb.357.1655396760903;
-        Thu, 16 Jun 2022 09:26:00 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1snrckDTTS90UbXkNnXz7wC/j3NwBRdfiiLHQ55Yf08Jlwcihk2BkICbCcSqD0NukcTombHSw==
-X-Received: by 2002:a17:906:ff18:b0:711:d197:b942 with SMTP id zn24-20020a170906ff1800b00711d197b942mr5233761ejb.357.1655396760732;
-        Thu, 16 Jun 2022 09:26:00 -0700 (PDT)
-Received: from gator ([194.213.204.253])
-        by smtp.gmail.com with ESMTPSA id ep14-20020a1709069b4e00b006febc86b8besm936606ejc.117.2022.06.16.09.25.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 09:26:00 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 18:25:57 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Raghavendra Rao Ananta <rananta@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
-Message-ID: <20220616162557.55bopzfa6glusuh5@gator>
-References: <20220615185706.1099208-1-rananta@google.com>
- <20220616120232.ctkekviusrozqpru@gator>
- <33ca91aeb5254831a88e187ff8d9a2c2@AcuMS.aculab.com>
+        Thu, 16 Jun 2022 12:33:11 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D36C183B4;
+        Thu, 16 Jun 2022 09:33:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AFA2ACE2645;
+        Thu, 16 Jun 2022 16:33:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7758EC385A2;
+        Thu, 16 Jun 2022 16:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655397186;
+        bh=ajIRcyhE9euZCf1gQtbn+SYSBSduLaCdd2YqjZLkIUA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TlT4LUsV3F8YRNp8qbdZsuzsR23JJT5NWD/GUaFPFc8K20X/Y/EZgUacqoXx5HDFo
+         o39yp4HHzQzWHNQWGi8UNzM2oRQO/5d68Ee3GsEje5VWyv1XA1R9daOJ/AL1BtxZ19
+         WWlAkhrQo85/qLhfxfX2ADK24OIoETzkHEhGE4mJZnUAqhabgVIGHrNDU10byThhiI
+         jXBefplHE10QQfkckrAkU7mXqcdgbHzu2TdYco8cpal8BjVXamuXQEZFb6X5nGSwbc
+         W1AYBsdWZ/WSpZoGrkdh9tcJHld8r+TFiHNbmPCHuI0j7Wz+iYG9zkIcb5XZH3sXpg
+         +qvXBsC1a2JbA==
+Received: by mail-oi1-f178.google.com with SMTP id s124so2542684oia.0;
+        Thu, 16 Jun 2022 09:33:06 -0700 (PDT)
+X-Gm-Message-State: AOAM531LNFyd1a7x0eam8NRMwrKnhMtkYHeWD2ZqW9fS/brkaL3eZQ51
+        PFXCz3Q/zvuoqT11j0FW+9UjGTHQJVczEac8zBE=
+X-Google-Smtp-Source: ABdhPJzvTcTzDyBn3A6U05nubb1Udaj+J1O806kE5tNDRAfbLDFrGbibjpdd5fShQ53UcGBhHIVVTr3XGgkzvsMvDmg=
+X-Received: by 2002:aca:aad5:0:b0:32f:3b9b:e0f with SMTP id
+ t204-20020acaaad5000000b0032f3b9b0e0fmr8420111oie.228.1655397185610; Thu, 16
+ Jun 2022 09:33:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33ca91aeb5254831a88e187ff8d9a2c2@AcuMS.aculab.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220616124740.580708-1-ardb@kernel.org> <20220616124740.580708-3-ardb@kernel.org>
+ <202206160919.360DB5F4@keescook>
+In-Reply-To: <202206160919.360DB5F4@keescook>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 16 Jun 2022 18:32:54 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXF9RWXrZbNZwLU9y7rM36b=sUM97i-12ngAsW+WnKfZ4A@mail.gmail.com>
+Message-ID: <CAMj1kXF9RWXrZbNZwLU9y7rM36b=sUM97i-12ngAsW+WnKfZ4A@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] efi: remove deprecated 'efivars' sysfs interface
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-efi <linux-efi@vger.kernel.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,66 +70,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 03:58:52PM +0000, David Laight wrote:
-> From: Andrew Jones
-> > Sent: 16 June 2022 13:03
-> > 
-> > On Wed, Jun 15, 2022 at 06:57:06PM +0000, Raghavendra Rao Ananta wrote:
-> > > The selftests, when built with newer versions of clang, is found
-> > > to have over optimized guests' ucall() function, and eliminating
-> > > the stores for uc.cmd (perhaps due to no immediate readers). This
-> > > resulted in the userspace side always reading a value of '0', and
-> > > causing multiple test failures.
-> > >
-> > > As a result, prevent the compiler from optimizing the stores in
-> > > ucall() with WRITE_ONCE().
-> > >
-> > > Suggested-by: Ricardo Koller <ricarkol@google.com>
-> > > Suggested-by: Reiji Watanabe <reijiw@google.com>
-> > > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > > ---
-> > >  tools/testing/selftests/kvm/lib/aarch64/ucall.c | 9 ++++-----
-> > >  1 file changed, 4 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> > b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> > > index e0b0164e9af8..be1d9728c4ce 100644
-> > > --- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> > > +++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-> > > @@ -73,20 +73,19 @@ void ucall_uninit(struct kvm_vm *vm)
-> > >
-> > >  void ucall(uint64_t cmd, int nargs, ...)
-> > >  {
-> > > -	struct ucall uc = {
-> > > -		.cmd = cmd,
-> > > -	};
-> > > +	struct ucall uc = {};
-> > >  	va_list va;
-> > >  	int i;
-> > >
-> > > +	WRITE_ONCE(uc.cmd, cmd);
-> > >  	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> > >
-> > >  	va_start(va, nargs);
-> > >  	for (i = 0; i < nargs; ++i)
-> > > -		uc.args[i] = va_arg(va, uint64_t);
-> > > +		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
-> > >  	va_end(va);
-> > >
-> > > -	*ucall_exit_mmio_addr = (vm_vaddr_t)&uc;
-> > > +	WRITE_ONCE(*ucall_exit_mmio_addr, (vm_vaddr_t)&uc);
-> > >  }
-> 
-> Am I misreading things again?
-> That function looks like it writes the address of an on-stack
-> item into global data.
+On Thu, 16 Jun 2022 at 18:20, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Jun 16, 2022 at 02:47:40PM +0200, Ard Biesheuvel wrote:
+> > Commit 5d9db883761a ("efi: Add support for a UEFI variable filesystem")
+> > dated Oct 5, 2012, introduced a new efivarfs pseudo-filesystem to
+> > replace the efivars sysfs interface that was used up to that point to
+> > expose EFI variables to user space.
+> >
+> > The main problem with the sysfs interface was that it only supported up
+> > to 1024 bytes of payload per file, whereas the underlying variables
+> > themselves are only bounded by a platform specific per-variable and
+> > global limit that is typically much higher than 1024 bytes.
+> >
+> > The deprecated sysfs interface is only enabled on x86 and Itanium, other
+> > EFI enabled architectures only support the efivarfs pseudo-filesystem.
+>
+> Does anything still use the sysfs interface? (e.g. do paths to it exist
+> in anything meaningful in, say, a Debian code search?)
+>
 
-The write to the address that the global points at causes a switch
-from guest to host context. The guest's stack remains intact while
-executing host code and the host can access the uc stack variable
-directly by its address. Take a look at lib/aarch64/ucall.c to see
-all the details.
-
-Thanks,
-drew
-
+All the hits I get there are in code that refers to
+/sys/firmware/efi/vars as the 'legacy' path, and also carries a
+reference to efivarfs. (i.e., /sys/firmware/efi/efivars)
