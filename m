@@ -2,300 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADEEE54FFD8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 00:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4550754FFDE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 00:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358481AbiFQWVh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jun 2022 18:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S245202AbiFQW1h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jun 2022 18:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350694AbiFQWVe (ORCPT
+        with ESMTP id S231913AbiFQW1g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jun 2022 18:21:34 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C6760DB7;
-        Fri, 17 Jun 2022 15:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655504492; x=1687040492;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=AwK27hVZVLJqA6EFFXRj5aJ3kvjRSN8Mxug7MyG3/kk=;
-  b=JbuG6tU/MrYZwkMB8T0CQO0GGxhjKAtumclp1sD6LrhCTr5eVByn7ic8
-   +uxRlluTxYPdJrtXoTkK1lcljMstu5cgeqypI9s7OeyoaeYnrBKq2DRH9
-   YIsQSqsMaZmlu1rKjVcqTSOa1G3Hiz7Sgf0vP51tZ9pawd8pBeoFJ1gIP
-   ipVHD4tGM1oKmRrpa9yEuQBDjZyknvEAtzZeYQVYYZD8xNFrC1cZ+Cok+
-   vWU4pgcic2V685J1FbDJvP+mfz5/Qb0mhv3sq1Wmbej/74moIZ/0EfcRG
-   fe8n8TLgd1ipo5ARM3VCVvx86uufSc8rqEihuLT3N8EBhOUjIgHSiZfer
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="343587806"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="343587806"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2022 15:21:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="560729937"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jun 2022 15:21:31 -0700
-Received: from orsmsx605.amr.corp.intel.com (10.22.229.18) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 17 Jun 2022 15:21:30 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 17 Jun 2022 15:21:30 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 17 Jun 2022 15:21:30 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k23Ksn4g/CDv720WFIxF5T1S6K/I05Vxyw2aeZBsv3SlWBaWPQk8k0ll1zEK6fVswvjI5mgxNI34KaHZS+rFeO+9akdEDCSZEsY5aYG/DZvddr16PCjy7AW6sv8j4KhNbqaX/l3AXeU36+3SBjtZnLOA/FnxIS4zx4uy5cxcbCAu1xyk1i+ea3SEEH34P31RxUUMK/we5HHeRtRm6YcP0KQoBeUNsi3Jmdp+HdxCitgkUQy8L6hmbLIKdkw21Bhx4wFHc/tYcAN+o7b1Gujmr2VoSVAAqronqYqYim2ofmwQ3oPTTbmpEuEEUCAkehC62bn6ehXGoo13m1uknw5pzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JEuHhaLnis4Z0ayzj2OlzFI1ctO+JtA7nrcdb/bOLRw=;
- b=JAzG/f/+sUDqnTa8YtddaGaLfQvoch6fETI3HozhBu/IkgHKaXF4hoORyQLsBPWeBvqOi36Qtvsk+MMTXFZK4nwbbv0d6grhOk+0zjWx980IB6VNmRiXlEMDrGPAhNQI6fYE1Hct3o2Dor5FQ/Wow4/nksZbnRJDvmdlqyE41+4IG4OlEEep41DhJvyt1RYm7aH5YtPhOQxUhcBff1OQkGoDDVR+pMBXuwSp0cBMnO2m8AOpmPUWdabXBKLIxnzPt7fh0y4obpAmkxpbHb+6QH/1V9M1S4/jakDiCNEeE6HCVFf7Wg/JGViN9JeNFTRrdcdf5pCzQlolFoicTA92AQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB4849.namprd11.prod.outlook.com (2603:10b6:303:90::13)
- by MN2PR11MB3614.namprd11.prod.outlook.com (2603:10b6:208:ea::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.15; Fri, 17 Jun
- 2022 22:21:28 +0000
-Received: from CO1PR11MB4849.namprd11.prod.outlook.com
- ([fe80::8484:f106:3adc:33b3]) by CO1PR11MB4849.namprd11.prod.outlook.com
- ([fe80::8484:f106:3adc:33b3%3]) with mapi id 15.20.5353.017; Fri, 17 Jun 2022
- 22:21:28 +0000
-Message-ID: <327cde12-daea-84ba-4b24-64fe12e89dea@intel.com>
-Date:   Fri, 17 Jun 2022 15:21:18 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] selftests/x86/amx: Fix the test to avoid failure when
- AMX is unavailable
-Content-Language: en-CA
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>, <shuah@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <dave.hansen@linux.intel.com>, <tglx@linutronix.de>, <bp@suse.de>
-References: <20220401221014.13556-1-chang.seok.bae@intel.com>
- <20220401221014.13556-3-chang.seok.bae@intel.com>
- <aaab50d2-592c-69e4-58a6-0a0926669de3@linuxfoundation.org>
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-In-Reply-To: <aaab50d2-592c-69e4-58a6-0a0926669de3@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR08CA0003.namprd08.prod.outlook.com
- (2603:10b6:a03:100::16) To CO1PR11MB4849.namprd11.prod.outlook.com
- (2603:10b6:303:90::13)
+        Fri, 17 Jun 2022 18:27:36 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7364AE58
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 15:27:34 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id q11so6923579oih.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 15:27:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BWoZH05gfMTA7sYUbTkU0N63/c9r6q3L+sOo8Fl00Ng=;
+        b=Xgyi4MQcDW1OVDu1nFkyetAQAAdhN/kvJcA3uyoQR+T1CXxXyUwGN4a/pqHIDHVX4P
+         07fxzEziBlveMKdrE416PECbuRmAyrHT+Kx96DJJ/+xyjg5WDtYkTeuAJdwdp4aCRAMr
+         d97NyRLt9uX9EAw9QAQbWhcI1MQQJzTkHD6ug=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BWoZH05gfMTA7sYUbTkU0N63/c9r6q3L+sOo8Fl00Ng=;
+        b=HsQZZxnEJk/aJELlO0KzcTpHyd9WYXnkwgz20NzqkEcrJqWDIGWc6qivwzZ3M5MiDm
+         fDR8cCPPgEfmBOg5kkC4FFvFWWFL3jD25ae5D0Hb1AwBQKGxEVV24PWp/SqHduXCTpMo
+         0UP149fy1b/W9mOIrpHXTISfROhqFCS2xy28G/grP8MxCrDOeoam5XUokX/Lh6Bt/vfy
+         8o7DbaWRE6ucDXO0BBmHsNEWwirgIZJx+gSTQv5PSElSTv7CVpUV1GDlCIYRQMl5HYBY
+         EETTzNwqQ/CrYq9/1FcU6YRDn2eK9TnalAf0Ji4ce20RxGr9RQXnN4AxbTnnpnbrIl0G
+         q3tg==
+X-Gm-Message-State: AJIora/1QNRGLxMOSNIbg/enCKCxAbZrL7pTze1Myjmml8LLylExRC8I
+        I1BzIu1bXLxGIwu2BpI5usRSaQ==
+X-Google-Smtp-Source: AGRyM1vwbUKpGIaPpmfhAkyPsgnwGP8/J7U2qq1EK/rp9ZP2Hd/8lvIt2wjzbVH62NfsvERArFJJ6Q==
+X-Received: by 2002:a05:6808:23d6:b0:333:1a12:f682 with SMTP id bq22-20020a05680823d600b003331a12f682mr1216419oib.44.1655504853779;
+        Fri, 17 Jun 2022 15:27:33 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id 89-20020a9d0362000000b0060603221281sm3223566otv.81.2022.06.17.15.27.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jun 2022 15:27:33 -0700 (PDT)
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Dylan Hatch <dylanbhatch@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220616211016.4037482-1-dylanbhatch@google.com>
+ <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+ <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
+ <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
+ <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a5f46e4e-a472-77ce-f61e-b2f9922bdd50@linuxfoundation.org>
+Date:   Fri, 17 Jun 2022 16:27:31 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c9cedbad-abbf-421b-8c6c-08da50afb4e7
-X-MS-TrafficTypeDiagnostic: MN2PR11MB3614:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR11MB36142B1AE1D3F9DC5E084836D8AF9@MN2PR11MB3614.namprd11.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nAn6U4zQKEVe2imYPHiKPEL5vBPN5r/Y/iZYgxfiO5wCdLW1BP0bDO7MpTlwEnFfxPbSoh759TGNal447lnOzMRBoQBGm74j5AUr0sOMVhvNi9dLT00UqCDNwTarPRLyvyNeRwCvxF8Wx+xFXnGJDkrDK4L6XaFZHJ6jjFtME3mNRlf+uGDFaJhPPZLv3gRjTg7UDOI7rmCMss6a9uaCsrE5M1MWuVh7w8vGE6yJvQjkBXRKUU8xrHdCnZMjbNo7E8JFa3t7FCVtkO5IvkSL4ZX4CpAJybJpyxKqin2LgzsPgCz4dztQ2u0uJ1kdJ9Hxv3url/8EuTjWZn8BsJ03DuMJDZrrFzdoFEFQwAYd4vUfnUjYnzg6v+SkBw7KGRf2EANm8Hu9Qavd/pY/cFJ7ISk4OLsuFUFZDlwnTfichCABFuczAx/57V5cWbQ5vfCu2QalVNG8jkRKOk/NZoMKJ0/iSGlqZDw/P8X1/7ZZYl6HiWXxwvTdg3PtnVJA891sXNc22ursFdlHTnHCYfQ+a+CjaANT/mu+XsfI4KldV5s3JrZoeEoUDF+UXPgceGhdVnLBAS+Z2wFLuRqZSefeju8sWuQX7bV4o+ylx350Fnqnz8vxuYWGRSb5Fy1iyUvKepqoMgXV2lFjd2+RnFIkSKx/RQ76R5EUURuLnS3BxKN32NDh1ph7oeKMug6IGFiKMlt5rqkT3PTHqZslfeFJMnb7w7NgQIm56arZwVYDYfKcw/2/y9Qs5of9weweyFXxp4Myyw/eNZatbV96+kduk/BCPfyE4inn1d3+CpI7gjZZdziSARUrIyquoFo1hWQ8NuVcZkMm15YWzcwn5au2VQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4849.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(8676002)(498600001)(966005)(53546011)(8936002)(31686004)(6512007)(6486002)(26005)(4326008)(66946007)(2616005)(316002)(2906002)(66476007)(66556008)(86362001)(36756003)(6666004)(186003)(31696002)(6506007)(5660300002)(82960400001)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YmVlZ1NQN3BxaVU2MXA3ODhCTmtOaUhDUFFCV0JVOTN5WVZxYzJPd3lDZUtB?=
- =?utf-8?B?bVl3QW5helZ0MGZPUHhneWJERmNQbDFxUVlMemNGKzU3dzE4Q2ZYYkZlNE5S?=
- =?utf-8?B?aDhmYStGRWh4ZzFESWYxVUFER1BHRTVWMUJkelBXakkrSmZGM0ExYzhjYjZU?=
- =?utf-8?B?VUNaYm00UGdRakIxU3ViMEdSbmY1SnBtUUw5cnBSTEtzdFpmN0ZsamIxSHBE?=
- =?utf-8?B?OGVVWU1kRFNSZU5kbzBvdTFWK3NpaWFCd2VLakxaT1lPOTlDa3VucFFvUE03?=
- =?utf-8?B?V0dFeFlkVU9qV1lObCtLWnQ0YjdKUzFwR2JBZUphaTdFWjNPU2VXK0FLelFQ?=
- =?utf-8?B?dS9LdWx3QWxFYWlvZ2hoQ2hYdWNZbmZkUDJNRU9rd3hxQm4zRlJ4R1lzbkxI?=
- =?utf-8?B?amhBc3BKTG16ZndiWFlnVWozakNub1ZPSHdVcnlFOHNwNjJ6di84c05ieEw4?=
- =?utf-8?B?YVZ5YXd5djVRRGc2MTYrNjlSaXNyUkRHRHpKcXRKbk9KdjFwNFhSLzdqc3Np?=
- =?utf-8?B?UHczUkwzRHArMVNpNUxTQ3hwYUl2TW03eUp3SHh0RHFVTU9HTi91WWltYWNh?=
- =?utf-8?B?aDdQVGRSVmZBVmdYMG01M0ljZkcrY1NJQXgzdWg0YXREN2ZkVDltQTJFU0Vl?=
- =?utf-8?B?ZFltT1IzSDMyenhtU2dSbkgrQmNTMTZWZlJHRFNia3FhMGpwNk1UeDA5TVBi?=
- =?utf-8?B?WlBpVS92YXB3cklhb1dabWpZaEJzcWpjcEwyeEJnWlpZMCtHZEVCVUNwRitr?=
- =?utf-8?B?RFQ4Rnl0RWRTRThNQU9xUHVtUTIwaFAyeElGa3oxNjVtYlBuakMvWkVGeDZa?=
- =?utf-8?B?ZUV0d1VHQWVTaUdKOGhMSHFVdW5aUmFLY0lvV01RaEVzSVE5a0dodVBtSHVP?=
- =?utf-8?B?RHhZbHI4a1RjMUxTZjZHS0FGNmFVV1o0bTVoYlYzR2tiRmd5dE5hemFJb2Z5?=
- =?utf-8?B?eS9OakJhbHF5U0tOOGIxYyt0aVY1YVp5eHgxN3ppNmxXanIrTFBFSUVmNnFM?=
- =?utf-8?B?b1gxTEs1SDJtTDBEMTgwL0VlaTZaWjkzelJSNUtWVFNyRTdYemVNakJpS0NW?=
- =?utf-8?B?MG1jRTAxZHhQeFNGTmZPL1JxQzZxM0NnM2RnOWs3TnlpVmJCcnpiei9yRnMw?=
- =?utf-8?B?ZHQ4M1E4MEMxMTdmRXcrSCs0bkYxczFCMjg2V0ZQcGtEeERjcm5kTzZkUVZm?=
- =?utf-8?B?ZGlyVzNMNkpORUp4QU55RnE4UWJNMk4rSm5iSDk2a2FXZitVUlpFenFLaFlo?=
- =?utf-8?B?aWo4MUlGMUZ6Q0dmbjhpckxKTndGZjBhS3RhR3NRT0ljRWMwQy84QXFVVU1W?=
- =?utf-8?B?YVZKWnJTNHlQUHp4WGNHc3UvTWVsRDN0ODBQYUNFY3VqSFRKYWZyazJwMlBL?=
- =?utf-8?B?Y1FvZUNCNWNjdDVkbCtBSVd6cC92YmdxbENYbFN4QXFya1ZvMGE2ZDA2V2Nk?=
- =?utf-8?B?UDBWOWhJM2JERjNTM3hDT2YvdzYxa004ZmJsRk5NZE9ORnJzbEE0bnlYWEM4?=
- =?utf-8?B?R3M5bWZVM0FFM0pqZ1pKZ0UvNmZQcExNeWM4aS9uNm1uTXdZNEludEFKaHB3?=
- =?utf-8?B?WlpBVzUvZzVDM2pjaUhOTE5mK0trMFNNS1I3dkxReTNFUEtUR1lKRGhSSmZw?=
- =?utf-8?B?QjhCRG9yVURuTWhNYWpiMnNOR0RCVnZTV3dFb2RTTm1mTjJkM2lzVEVWWHhu?=
- =?utf-8?B?cmttMnNTSnBYQU9xRDFSWGZ2T2E1cWdRbWU5TVptSVhpakdHMG1NZ3lVMkxz?=
- =?utf-8?B?ak1EcExJOGdMZTloaDltV0dSSWVWT3paWGcvUE5CMDJQNDI2bkRQZ2Rneldi?=
- =?utf-8?B?SVZLZU81UTluVEx3NDJWRDFzMHE0R1pMYXJYRGlQMWs2UEVrU1g0STkxK3RM?=
- =?utf-8?B?bGEydUx0czl2UFNDVVQ0SlFyVFdwTGNRTUVjSTUvMWJuK1RjYnlVTWJocmtp?=
- =?utf-8?B?N1NoUVBzVXU3SE5EeVc0Y0ZsNUZVMTVXdkczUmFzR0RBaXR0K2FodGw5c0d1?=
- =?utf-8?B?RTlocksvckdkd0kzRGM0R2hJOUZlMkE3bldXUHo0ZzhPVGdUbzRrM0cvL1F0?=
- =?utf-8?B?N1UvakM1WFI4bWFGWGhBWGU1Mm5TZ01UU1dpR2RXdGRwYXRvUlVPdDBna2R5?=
- =?utf-8?B?M2J0bUlSNUlrZFA4d0ZGZ0JiZzBvT3RQOUhBdllSSkkxK1hVOU1Nb2dVZ1Nw?=
- =?utf-8?B?eVRNVy9kZnF2WHpoUHR3aGRzTXNsTG9lbVNCZWlRdU1Qb0dzN05mTU5URGt3?=
- =?utf-8?B?ZEhhRi9hMCs5VUtIbjdJTkFCOEVOSS9BcDdKK2VnTENLQkxyWGxiL1RnVlhP?=
- =?utf-8?B?TG5RZmcrSUlJRmFpWklhb1FMTE0vQVgrSnFDNUUwYVl2di9YL3paek5iN2pm?=
- =?utf-8?Q?6F48cmtAm5oRH85k=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9cedbad-abbf-421b-8c6c-08da50afb4e7
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4849.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 22:21:28.2092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GtKYpB0fwrasczJZ9Wz17v4+VaKBpMi97q0kGYnCMOfTUM3FnoErethlzsMrl2JVDGPjDWt5lpr7EPaIc8lJpXlBgnUM8nqvyzQ8DpEnse8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB3614
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/16/2022 3:54 PM, Shuah Khan wrote:
-> On 4/1/22 4:10 PM, Chang S. Bae wrote:
+On 6/17/22 4:05 PM, Dylan Hatch wrote:
+> On Fri, Jun 17, 2022 at 12:38 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >>
->> +
->> +static struct {
->> +    unsigned xsave:   1;
->> +    unsigned osxsave: 1;
->> +} cpuinfo;
->> +
+>> On 6/17/22 12:45 PM, Dylan Hatch wrote:
+>>> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>>
+>
+>>
+>> It depends on the goal of the test. Is the test looking to see if the
+>> probe fails with insufficient permissions, then you are changing the
+>> test to not check for that condition.
 > 
-> Why is this needed? Also naming this cpuinfo is confuing.
-
-This came from the below CPUID check which seems to be moot.
-
+> The goal of the test is to validate the output of /proc/$PID/maps, and
+> the memory probe is only needed as setup to determine what the
+> expected output should be. This used to be sufficient, but now it can
+> no longer fully disambiguate it with the introduction of
+> vsyscall=xonly. The solution proposed here is to disambiguate it by
+> also checking the length read from /proc/$PID/maps.
 > 
->>   static inline void check_cpuid_xsave(void)
->>   {
->>       uint32_t eax, ebx, ecx, edx;
->> @@ -118,10 +124,8 @@ static inline void check_cpuid_xsave(void)
->>       eax = 1;
->>       ecx = 0;
->>       cpuid(&eax, &ebx, &ecx, &edx);
->> -    if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
->> -        fatal_error("cpuid: no CPU xsave support");
->> -    if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
->> -        fatal_error("cpuid: no OS xsave support");
->> +    cpuinfo.xsave = !!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK);
->> +    cpuinfo.osxsave = !!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK);
+>>
+
+Makes sense. However the question is does this test need to be enhanced
+with the addition of vsyscall=xonly?
+
+>> I would say in this case, the right approach would be to leave the test
+>> as is and report expected fail and add other cases.
+>>
+>> The goal being adding more coverage and not necessarily opt for a simple
+>> solution.
 > 
-> Why add this complexity. Why not just Skip here?
-
-I think these CPUID checks can go away with ARCH_GET_XCOMP_SUPP.
-
+> What does it mean to report a test as expected fail? Is this a
+> mechanism unique to kselftest? I agree adding another test case would
+> work, but I'm unsure how to do it within the framework of kselftest.
+> Ideally, there would be separate test cases for vsyscall=none,
+> vsyscall=emulate, and vsyscall=xonly, but these options can be toggled
+> both in the kernel config and on the kernel command line, meaning (to
+> the best of my knowledge) these test cases would have to be built
+> conditionally against the conflig options and also parse the command
+> line for the 'vsyscall' option.
 > 
->>   }
->>   static uint32_t xbuf_size;
->> @@ -161,14 +165,31 @@ static void check_cpuid_xtiledata(void)
->>        * eax: XTILEDATA state component size
->>        * ebx: XTILEDATA state component offset in user buffer
->>        */
->> -    if (!eax || !ebx)
->> -        fatal_error("xstate cpuid: invalid tile data size/offset: 
->> %d/%d",
->> -                eax, ebx);
->> -
->>       xtiledata.size          = eax;
->>       xtiledata.xbuf_offset = ebx;
->>   }
->> +static bool amx_available(void)
->> +{
->> +    check_cpuid_xsave();
->> +    if (!cpuinfo.xsave) {
->> +        printf("[SKIP]\tcpuid: no CPU xsave support\n");
->> +        return false;
->> +    } else if (!cpuinfo.osxsave) {
->> +        printf("[SKIP]\tcpuid: no OS xsave support\n");
->> +        return false;
->> +    }
->> +
->> +    check_cpuid_xtiledata();
->> +    if (!xtiledata.size || !xtiledata.xbuf_offset) {
->> +        printf("[SKIP]\txstate cpuid: no tile data (size/offset: 
->> %d/%d)\n",
->> +               xtiledata.size, xtiledata.xbuf_offset);
->> +        return false;
->> +    }
->> +
->> +    return true;
->> +}
->> +
-> 
-> I am not seeing any value in adding this layer of abstraction.
-> Keep it simple and do the handling in main()
 
-Sure.
+Expected fail isn't unique kselftest. It is a testing criteria where
+a test is expected to fail. For example if a file can only be opened
+with privileged user a test that runs and looks for failure is an
+expected to fail case - we are looking for a failure.
 
-> 
->>   /* The helpers for managing XSAVE buffer and tile states: */
->>   struct xsave_buffer *alloc_xbuf(void)
->> @@ -826,9 +847,8 @@ static void test_context_switch(void)
->>   int main(void)
->>   {
->> -    /* Check hardware availability at first */
->> -    check_cpuid_xsave();
->> -    check_cpuid_xtiledata();
->> +    if (!amx_available())
->> +        return 0;
-> 
-> This should KSFT_SKIP for this to be reported as a skip. Returning 0
-> will be reported as a Pass.
+A complete battery of tests for vsyscall=none, vsyscall=emulate,
+vsyscall=xonly would test for conditions that are expected to pass
+and fail based on the config.
 
-I think that's a good point, thanks.
+tools/testing/selftests/proc/config doesn't have any config options
+that are relevant to VSYSCALL
 
-Now, along with the on-going documentation [1], this test code can be 
-simplified like the below changes, instead of having those cpuid functions:
+Can you please send me the how you are running the test and what the
+failure output looks like?
 
-diff --git a/tools/testing/selftests/x86/amx.c 
-b/tools/testing/selftests/x86/amx.c
-index 625e42901237..83705c472a5c 100644
---- a/tools/testing/selftests/x86/amx.c
-+++ b/tools/testing/selftests/x86/amx.c
-@@ -348,6 +348,7 @@ enum expected_result { FAIL_EXPECTED, 
-SUCCESS_EXPECTED };
-
-  /* arch_prctl() and sigaltstack() test */
-
-+#define ARCH_GET_XCOMP_SUPP    0x1021
-  #define ARCH_GET_XCOMP_PERM    0x1022
-  #define ARCH_REQ_XCOMP_PERM    0x1023
-
-@@ -828,9 +829,14 @@ static void test_context_switch(void)
-
-  int main(void)
-  {
--       /* Check hardware availability at first */
--       check_cpuid_xsave();
--       check_cpuid_xtiledata();
-+       unsigned long features;
-+       long rc;
-+
-+       rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_SUPP, &features);
-+       if (rc || (features & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
-+               printf("[SKIP]\tno AMX support\n");
-+               exit(KSFT_FAIL);
-+       }
-
-         init_stashed_xsave();
-         sethandler(SIGILL, handle_noperm, 0);
-
-Thanks,
-Chang
-
-[1] 
-https://lore.kernel.org/lkml/86952726-53e6-17a9-dbe0-3e970c565044@intel.com/
-
+thanks,
+-- Shuah
