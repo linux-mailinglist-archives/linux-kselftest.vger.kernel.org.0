@@ -2,69 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFF854EFE6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 05:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBF654F049
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 06:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379821AbiFQD7O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jun 2022 23:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S1380009AbiFQEjP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jun 2022 00:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379395AbiFQD7N (ORCPT
+        with ESMTP id S229781AbiFQEjP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jun 2022 23:59:13 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E8D66688;
-        Thu, 16 Jun 2022 20:59:12 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 184so2996666pga.12;
-        Thu, 16 Jun 2022 20:59:12 -0700 (PDT)
+        Fri, 17 Jun 2022 00:39:15 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B94A5C35D;
+        Thu, 16 Jun 2022 21:39:10 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id x5so4681862edi.2;
+        Thu, 16 Jun 2022 21:39:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0W/HagJonywK7ZJ69fI6hX0gZNSYy1J0766XYUBnWpk=;
-        b=Nvg1C8j395PzqVMZnx7Pj7fKKRISIC9UVVzrpnpRJTkWrg/GeiXEoHYLleP8PgtdO3
-         ue0ZDjtp9W4ASVbp+E2+uL8kpw9jDv6oT5cqQDt1HQfKY8QUNNC1pA3xeCMjGRQKJv/a
-         xMgxd7N9YDtp65T23zwrOpasD8RV3eunaCc5Iunf7nFnnnuCZjivH01djAnKKCyM3Mmm
-         mZbSZ2BqtLWnSIApdds3cMEMtK+pXGWVM3uZyOQmVoOlRJ9x84nYFC1GrkSd2fB+DaUg
-         6Z0cpc8VJete8mRvSkx4IQH+xf7V15Ec1TI2DQ5mUpb8MKF5OP3nl2BIaT+CK7MLAtCU
-         RHLw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QCQ0Od0tcwJbvHdyyHIfxbGAHrqBA+XAak6iXg8kQ0E=;
+        b=ihbD6OvPl6LT4redci0P+Jkfk4DyCsIGqF4w/P+dRK0zJOa+xhWE2bcRMUcmGb9YxF
+         B/OL90/U065R8mCuHuzW0kuj7C0t/y/9qkXRRkgm90feXUXna6SRKd33qm+H9G98DZsZ
+         gIhW2XFle5jCoitKXJ4dHMExLAbwTrunrxP2Nd1uqBql+6nKsocRWVS/RuixI4owZKmP
+         ZUDPqvbfxuCx0K92adji7fndgkP3h7QRbl5iDPCLJEPmIQj/9VA+HpHPNXPCo5ROwtd6
+         /uGeFLw822g7m0Cp7lM1/hqx56bMfHrcDkxAhIweNnzxYl5zqsXV7NUXu15kBr8ahoOS
+         KEWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0W/HagJonywK7ZJ69fI6hX0gZNSYy1J0766XYUBnWpk=;
-        b=oteqYV5z5Bx7N1fMbLiYDGcN6Ltm3yl2rBocursT6I7ixBS6YrHqISJ6++Gefv3GS6
-         47NyvQKYX58IIVn93NzXFbkKsShXxnqHG4R54GNvQa2KnHnxbl0QmiFZwQdqY4J0jJmy
-         P/g2cN07kTgI7BTiFjAEw7DtYUGCckFm6GEXnjmCeCdOas7MVjJwIKjPl4DeXT/2xlSu
-         i0gRFcoFR1Ay/l0wWzkObG07I1kshDKlENvNJj72q4rYVhMN+SXcnrsY11fCrM6k0bXN
-         n/WVHkw9wbUlbRVHw/Kz0K3YMEldOfGCOAZXtCBSTeFBteqydtBViVImLCz2biabGFZx
-         Lgfg==
-X-Gm-Message-State: AJIora8f5wOP0DWwIbL1GiAQDfm3Tq1iW34K7s/qLJPDEsy6IUatJ+vX
-        99vEGB7U7z4PGzWhgup4+H8=
-X-Google-Smtp-Source: AGRyM1vVl/dKUvpt/f8eeQsaxDmxmSSgcVkCHsMH8j6ipARrJnfgTrUyJ/gnAnfCrqd0Dt9fJRq5nw==
-X-Received: by 2002:a63:3e0b:0:b0:40c:42db:6601 with SMTP id l11-20020a633e0b000000b0040c42db6601mr3050057pga.586.1655438351515;
-        Thu, 16 Jun 2022 20:59:11 -0700 (PDT)
-Received: from MacBook-Pro-3.local ([2620:10d:c090:400::5:29cb])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b0016a0858b25dsm39168plg.152.2022.06.16.20.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jun 2022 20:59:11 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 20:59:08 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kpsingh@kernel.org, john.fastabend@gmail.com,
-        songliubraving@fb.com, kafai@fb.com, yhs@fb.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND][PATCH v4 4/4] selftests/bpf: Add test for
- bpf_verify_pkcs7_signature() helper
-Message-ID: <20220617035908.iw4426f3h4ecpvvp@MacBook-Pro-3.local>
-References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
- <20220614130621.1976089-5-roberto.sassu@huawei.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QCQ0Od0tcwJbvHdyyHIfxbGAHrqBA+XAak6iXg8kQ0E=;
+        b=nx9UJ70ih0mI3i75KtqtujjrrWwqZcf9Cn1GUxt5VzNq5HzOJ/dDfquXnf48gEAjaY
+         3HPKflZgE4nMDnLZZP9FwDD5jvTzUDXDdu/LvMfiqq8Ezklj8QCWmLgPTulFUGSb6Px2
+         23PNRSEjxg56jGSOjpoZBaMLdGLVUdxjMo5IgYeMsERZtc8+J+gyJDmfg5wHGOb90Sr+
+         8l1Y2rURK8Y1HkSzq0ntteBludbzjTxZYsEdI9j+IdPVLWp9uFdJiJvTyIxLsROzHhwe
+         kEmjFQl+Hmy6/IuLSwA3eFEezZOIuyNWEqkCil0cRB8tD99EnWZufLXytNzhPXJ/3sDo
+         kQjg==
+X-Gm-Message-State: AJIora+rzULlKuScPVOAM/nNqknUL2zmV0Ssv0mf8pbkSOoVG/bcrULN
+        xdsr5qfAGgNUv92npPTFPLrAqLP9B/TdL3rXIs8=
+X-Google-Smtp-Source: AGRyM1sJUjTLrrA5uQ1nu7507WovaGSCZ6Lgw7F/iNrUMVbJlZD90bNqpIN4Lt+N+8ThvvJeekhfx9m6ewEWVQKgA9s=
+X-Received: by 2002:a05:6402:56:b0:431:6f7b:533 with SMTP id
+ f22-20020a056402005600b004316f7b0533mr10180371edu.333.1655440748678; Thu, 16
+ Jun 2022 21:39:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614130621.1976089-5-roberto.sassu@huawei.com>
+References: <20220615134847.3753567-1-maximmi@nvidia.com>
+In-Reply-To: <20220615134847.3753567-1-maximmi@nvidia.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 16 Jun 2022 21:38:57 -0700
+Message-ID: <CAADnVQKR1BJPdW6U+HUhoS5k-6YSJs5w1HBF6Gg7oaVjsqqVOg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v10 0/6] New BPF helpers to accelerate synproxy
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,81 +90,96 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:06:21PM +0200, Roberto Sassu wrote:
-> +
-> +	if (child_pid == 0) {
-> +		snprintf(path, sizeof(path), "%s/signing_key.pem", tmp_dir);
-> +
-> +		return execlp("./sign-file", "./sign-file", "sha256",
-> +			      path, path, signed_file_template, NULL);
+On Wed, Jun 15, 2022 at 6:49 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+>
+> The first patch of this series is a documentation fix.
+>
+> The second patch allows BPF helpers to accept memory regions of fixed
+> size without doing runtime size checks.
+>
+> The two next patches add new functionality that allows XDP to
+> accelerate iptables synproxy.
+>
+> v1 of this series [1] used to include a patch that exposed conntrack
+> lookup to BPF using stable helpers. It was superseded by series [2] by
+> Kumar Kartikeya Dwivedi, which implements this functionality using
+> unstable helpers.
+>
+> The third patch adds new helpers to issue and check SYN cookies without
+> binding to a socket, which is useful in the synproxy scenario.
+>
+> The fourth patch adds a selftest, which includes an XDP program and a
+> userspace control application. The XDP program uses socketless SYN
+> cookie helpers and queries conntrack status instead of socket status.
+> The userspace control application allows to tune parameters of the XDP
+> program. This program also serves as a minimal example of usage of the
+> new functionality.
+>
+> The last two patches expose the new helpers to TC BPF and extend the
+> selftest.
+>
+> The draft of the new functionality was presented on Netdev 0x15 [3].
+>
+> v2 changes:
+>
+> Split into two series, submitted bugfixes to bpf, dropped the conntrack
+> patches, implemented the timestamp cookie in BPF using bpf_loop, dropped
+> the timestamp cookie patch.
+>
+> v3 changes:
+>
+> Moved some patches from bpf to bpf-next, dropped the patch that changed
+> error codes, split the new helpers into IPv4/IPv6, added verifier
+> functionality to accept memory regions of fixed size.
+>
+> v4 changes:
+>
+> Converted the selftest to the test_progs runner. Replaced some
+> deprecated functions in xdp_synproxy userspace helper.
+>
+> v5 changes:
+>
+> Fixed a bug in the selftest. Added questionable functionality to support
+> new helpers in TC BPF, added selftests for it.
+>
+> v6 changes:
+>
+> Wrap the new helpers themselves into #ifdef CONFIG_SYN_COOKIES, replaced
+> fclose with pclose and fixed the MSS for IPv6 in the selftest.
+>
+> v7 changes:
+>
+> Fixed the off-by-one error in indices, changed the section name to
+> "xdp", added missing kernel config options to vmtest in CI.
+>
+> v8 changes:
+>
+> Properly rebased, dropped the first patch (the same change was applied
+> by someone else), updated the cover letter.
+>
+> v9 changes:
+>
+> Fixed selftests for no_alu32.
+>
+> v10 changes:
+>
+> Selftests for s390x were blacklisted due to lack of support of kfunc,
+> rebased the series, split selftests to separate commits, created
+> ARG_PTR_TO_FIXED_SIZE_MEM and packed arg_size, addressed the rest of
+> comments.
 
-Please use sign_only option,
-so it saves the signature and doesn't do 'struct module_signature' append.
-Parsing of that is unnecessary for the purpose of the helper.
-Checking MODULE_SIG_STRING is unnecessary, etc, etc.
-Long term we won't be following mod sig approach anyway.
-bpf maps and progs will have a different format.
+Applied.
+Please follow up with a patch to add:
+CONFIG_NETFILTER_SYNPROXY=y
+CONFIG_NETFILTER_XT_TARGET_CT=y
+CONFIG_NETFILTER_XT_MATCH_STATE=y
+CONFIG_IP_NF_FILTER=y
+CONFIG_IP_NF_TARGET_SYNPROXY=y
+CONFIG_IP_NF_RAW=y
 
-> +	}
-> +
-> +	waitpid(child_pid, &child_status, 0);
-> +
-> +	ret = WEXITSTATUS(child_status);
-> +	if (ret)
-> +		goto out;
-> +
-> +	ret = stat(signed_file_template, &st);
-> +	if (ret == -1) {
-> +		ret = -errno;
-> +		goto out;
-> +	}
-> +
-> +	if (st.st_size > sizeof(data_item->payload) - sizeof(u32)) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	*(u32 *)data_item->payload = __cpu_to_be32(st.st_size);
-> +
-> +	fd = open(signed_file_template, O_RDONLY);
-> +	if (fd == -1) {
-> +		ret = -errno;
-> +		goto out;
-> +	}
-> +
-> +	ret = read(fd, data_item->payload + sizeof(u32), st.st_size);
-> +
-> +	close(fd);
-> +
-> +	if (ret != st.st_size) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
-> +
-> +	ret = 0;
-> +out:
-> +	unlink(signed_file_template);
-> +	return ret;
-> +}
-> +
-> +void test_verify_pkcs7_sig(void)
-> +{
-> +	char tmp_dir_template[] = "/tmp/verify_sigXXXXXX";
-> +	char *tmp_dir;
-> +	char *buf = NULL;
-> +	struct test_verify_pkcs7_sig *skel = NULL;
-> +	struct bpf_map *map;
-> +	struct data data;
-> +	u32 saved_len;
-> +	int ret, zero = 0;
-> +
-> +	LIBBPF_OPTS(bpf_object_open_opts, opts);
-> +
-> +	/* Trigger creation of session keyring. */
-> +	syscall(__NR_request_key, "keyring", "_uid.0", NULL,
-> +		KEY_SPEC_SESSION_KEYRING);
+to selftests/bpf/config.
 
-My understanding that user space can receive a specific id here.
-It should pass it to bpf prog via global variable and prog
-should use that id instead of max_ulong hack.
-
+Otherwise folks will not know what to enable when they see
+test_synproxy:FAIL:iptables -t raw -I PREROUTING         -i tmp1 -p
+tcp -m tcp --syn --dport 8080 -j CT --notrack unexpected error: 256
+(errno 22)
