@@ -2,61 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D79454F05A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 06:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106FB54F1F7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 09:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbiFQEkR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jun 2022 00:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S1348356AbiFQH2h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jun 2022 03:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiFQEkR (ORCPT
+        with ESMTP id S1380578AbiFQH2T (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jun 2022 00:40:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D73764BEB;
-        Thu, 16 Jun 2022 21:40:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4648BB82748;
-        Fri, 17 Jun 2022 04:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E508AC3411C;
-        Fri, 17 Jun 2022 04:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655440814;
-        bh=sEx1t+BRx828IBzL4ndbZFRyANYUPIQCi3bA6dqbKN8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rOsh2lLolUhgVEo7SC/4MU3cmJShd8tqK6sO52xSVwvzft4ZkrqzBa9hvyAAF1HBo
-         CPV4bpiDim8jTBKJLT1LE2grPzwn6hChI+D/kYoQxbmGoVd4nOyAbouAhGKCMmXUyA
-         dGgfuxl7CeZUldYNGjcTdQC8YTQ59f8hDVuXjbWAJa7SQbEfrPvdi5WIExi53h4/c2
-         eLWRz0gwwjRDjBNXA4Hab9lKMOXvGQrOf0oMe5jSrTRuYsAen5JFuvAC4/jp1kCAKt
-         WsBPoJPJxQM4Iebaid2tTF0SbmPi+KXcWUg6LFDovDdOXvwFaB28j4BMykCbL5p8Hh
-         l3KeM3u3XCQiA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C829EFD99FF;
-        Fri, 17 Jun 2022 04:40:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 17 Jun 2022 03:28:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0486A2C11C
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 00:28:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655450885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TfwWmf6pndQ83NMYFfQo/NU9rMgkJupydsAN7k3Ml00=;
+        b=AFYF0Qz7pY3y2DBrfZXIfWbaWnHgnK+UDTkBql4SbSWpsJ+0RoW9WdZI7+WrBALJFsI8X6
+        Nt4eHnuKhAvcq7M62PDWTGLbuF0QhjRvBP+2BHE6VkSKncrnPmbRcjGXh+kU71zfoLinxw
+        LRUtmFMQaWW9+G6mdiYBkvtBbt5QmRE=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-104-AIM7InFmNVKe6c9wGHJnJQ-1; Fri, 17 Jun 2022 03:28:04 -0400
+X-MC-Unique: AIM7InFmNVKe6c9wGHJnJQ-1
+Received: by mail-ej1-f71.google.com with SMTP id k7-20020a1709062a4700b006fe92440164so1664202eje.23
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 00:28:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TfwWmf6pndQ83NMYFfQo/NU9rMgkJupydsAN7k3Ml00=;
+        b=nN6ewMw1RpWaTXbR/4f9GF2es17BgP88Y5AuZyCfMayJYldCbd+zwPDmBXzcfyMbto
+         LMe0B+M3A/3Dnn1/Rb5Hs7hPiu5Xs+GFH1FhTOP6C8pDGc2aEaDHe03DtP6wTQMR/FLm
+         2QEtJWaXLQwidvRWv7Le+dD6atTizEJ2JL9iyldnGzLtaGGO70auF+l+FEXydHjZn8NF
+         NfKi2zaygKZ6QMfNj/2XnMO/IEHhpbiF1y24BWQN2zrRvp98uSnS8EQdVdYHp3DAsxTY
+         Q+6d0+cth0Jvc/TA/RDMQD47Hr27kfPJsgni6nvXdpZAcvPng5pN06g+JAkxyfRrJzcE
+         Pn+Q==
+X-Gm-Message-State: AJIora/Le+TlhaKZA+iMcEYNtN6SHrIzy9Exp31XGVhsq37oO675ti5M
+        7Y5awknExD0bIz1SUisFzp8LxGulF+CoIPekMS8jqy3+uqxvXWhzmUbvRmK95HPhndJhDkTeE8z
+        Qw2bWSZFcTIS5gqCRMSP6Ji6KmRQV
+X-Received: by 2002:aa7:c744:0:b0:42d:f68f:13de with SMTP id c4-20020aa7c744000000b0042df68f13demr10725885eds.294.1655450883305;
+        Fri, 17 Jun 2022 00:28:03 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tKxJhbjxu1gQEDYzXe7aBUKjZhwikhFKlF31X4MiTyfLwkpvElCJYDyCHPMnrvEcQLcQ8oEA==
+X-Received: by 2002:aa7:c744:0:b0:42d:f68f:13de with SMTP id c4-20020aa7c744000000b0042df68f13demr10725866eds.294.1655450883047;
+        Fri, 17 Jun 2022 00:28:03 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id 7-20020a170906328700b006f3ef214db7sm1810644ejw.29.2022.06.17.00.28.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jun 2022 00:28:02 -0700 (PDT)
+Date:   Fri, 17 Jun 2022 09:28:00 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "'oliver.upton@linux.dev'" <oliver.upton@linux.dev>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
+Message-ID: <20220617072800.cvqb4wmafxdi3knq@gator>
+References: <3e73cb07968d4c92b797781b037c2d45@AcuMS.aculab.com>
+ <20220615185706.1099208-1-rananta@google.com>
+ <20220616120232.ctkekviusrozqpru@gator>
+ <33ca91aeb5254831a88e187ff8d9a2c2@AcuMS.aculab.com>
+ <20220616162557.55bopzfa6glusuh5@gator>
+ <7b1040c48bc9b2986798322c336660ab@linux.dev>
+ <2ec9ecbfb13d422ab6cda355ff011c9f@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v10 0/6] New BPF helpers to accelerate synproxy
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165544081381.22504.14558130099478687878.git-patchwork-notify@kernel.org>
-Date:   Fri, 17 Jun 2022 04:40:13 +0000
-References: <20220615134847.3753567-1-maximmi@nvidia.com>
-In-Reply-To: <20220615134847.3753567-1-maximmi@nvidia.com>
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, netdev@vger.kernel.org, tariqt@nvidia.com,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, edumazet@google.com, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, shuah@kernel.org, hawk@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, joe@cilium.io,
-        revest@chromium.org, linux-kselftest@vger.kernel.org, toke@toke.dk,
-        memxor@gmail.com, fw@strlen.de, pabeni@redhat.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ec9ecbfb13d422ab6cda355ff011c9f@AcuMS.aculab.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,39 +100,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Wed, 15 Jun 2022 16:48:41 +0300 you wrote:
-> The first patch of this series is a documentation fix.
+On Thu, Jun 16, 2022 at 09:54:16PM +0000, David Laight wrote:
+> From: oliver.upton@linux.dev
+> > Sent: 16 June 2022 19:45
 > 
-> The second patch allows BPF helpers to accept memory regions of fixed
-> size without doing runtime size checks.
+> > 
+> > June 16, 2022 11:48 AM, "David Laight" <David.Laight@aculab.com> wrote:
+> > > No wonder I was confused.
+> > > It's not surprising the compiler optimises it all away.
+> > >
+> > > It doesn't seem right to be 'abusing' WRITE_ONCE() here.
+> > > Just adding barrier() should be enough and much more descriptive.
+> > 
+> > I had the same thought, although I do not believe barrier() is sufficient
+> > on its own. barrier_data() with a pointer to uc passed through
+> > is required to keep clang from eliminating the dead store.
 > 
-> The two next patches add new functionality that allows XDP to
-> accelerate iptables synproxy.
+> A barrier() (full memory clobber) ought to be stronger than
+> the partial one than barrier_data() generates.
 > 
-> [...]
+> I can't quite decide whether you need a barrier() both sides
+> of the 'magic write'.
+> Plausibly the compiler could discard the on-stack data
+> after the barrier() and before the 'magic write'.
+> 
+> Certainly putting the 'magic write' inside a asm block
+> that has a memory clobber is a more correct solution.
 
-Here is the summary with links:
-  - [bpf-next,v10,1/6] bpf: Fix documentation of th_len in bpf_tcp_{gen,check}_syncookie
-    https://git.kernel.org/bpf/bpf-next/c/ac80287a6af9
-  - [bpf-next,v10,2/6] bpf: Allow helpers to accept pointers with a fixed size
-    https://git.kernel.org/bpf/bpf-next/c/508362ac66b0
-  - [bpf-next,v10,3/6] bpf: Add helpers to issue and check SYN cookies in XDP
-    https://git.kernel.org/bpf/bpf-next/c/33bf9885040c
-  - [bpf-next,v10,4/6] selftests/bpf: Add selftests for raw syncookie helpers
-    https://git.kernel.org/bpf/bpf-next/c/fb5cd0ce70d4
-  - [bpf-next,v10,5/6] bpf: Allow the new syncookie helpers to work with SKBs
-    https://git.kernel.org/bpf/bpf-next/c/9a4cf073866c
-  - [bpf-next,v10,6/6] selftests/bpf: Add selftests for raw syncookie helpers in TC mode
-    https://git.kernel.org/bpf/bpf-next/c/784d5dc0efc2
+Indeed, since the magic write is actually a guest MMIO write, then
+it should be using writeq().
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks,
+drew
 
