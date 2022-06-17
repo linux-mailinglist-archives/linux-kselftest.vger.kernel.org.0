@@ -2,175 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869BC54FDC5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 21:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808F754FE5A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 22:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbiFQTil (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jun 2022 15:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
+        id S234221AbiFQU3y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jun 2022 16:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239685AbiFQTiX (ORCPT
+        with ESMTP id S229952AbiFQU3y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:38:23 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642DB2F006
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 12:38:21 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id u2so3624945iln.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 12:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wmbuV7JBORPXXzvNtfIZq/lTzS3aE7SHxRte41av5uM=;
-        b=E0B1WMNGy43PvdJGAw2GYGQ5aKuCRPlGDVLSnor2QZJNSRe5zTPsqxbwe6DludNLxs
-         R4wYYbLa/fc/Ecl0bf0NnRRH8HbpYCn+8yNpx2sS/CcpcFAfgg29nSpNUvdaE7ZyKLUe
-         X2pIoc6EroL/LYddX/FkGtSPgP77qKkI6tr/o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wmbuV7JBORPXXzvNtfIZq/lTzS3aE7SHxRte41av5uM=;
-        b=Q8eGVgDmzfd7aCS8rPxKDzvabU2YXQmdWFA6ThKMAg6ZtZqvSZcSqlLtGMmIq00WSg
-         /8ErqumJLaM5jAdG7D/MUXlT1bwqGxUhpeQaUmDVTmn6XV/8GwdkDaeMuStR0yRoOPqQ
-         q86rz/CsRyrI161Qdv51B7FWD7tNzvOFCyrmPxwKVT1PE0Jo/55Dd5KgMy59ftIjVimp
-         Ho6WsAqsdTF5wtXYFGT6HAwmUUzZckuyPk6OH6Hj6zV8T5Ej+MQAiLa0Fktfm3Vbuzrn
-         aodfjpLzp0iO3A6mB2HwAnuoYlHiVs/rz36LX/jvZ9W65LPpbOZTox3h+vwARv82/dqE
-         +ysg==
-X-Gm-Message-State: AJIora+2+W/feuEq9pW9v4mUuO9lz8IH23Q49WtuwSd4Smw+L1lXdOaG
-        CJ3zqQIzLa+n68wQ9mgCRwjL2g==
-X-Google-Smtp-Source: AGRyM1tEue9xzls/gET9Q/THpzqGhH2Ss/UxUuncgPwKpQV957JCH1xLpqkKlgCFSExHWhnOMXGSmw==
-X-Received: by 2002:a05:6e02:1a23:b0:2d3:82bb:4dae with SMTP id g3-20020a056e021a2300b002d382bb4daemr6485677ile.62.1655494700776;
-        Fri, 17 Jun 2022 12:38:20 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m2-20020a6bbc02000000b006656f9eefa3sm2917727iof.18.2022.06.17.12.38.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 12:38:20 -0700 (PDT)
-Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
-To:     Dylan Hatch <dylanbhatch@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220616211016.4037482-1-dylanbhatch@google.com>
- <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
- <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
-Date:   Fri, 17 Jun 2022 13:38:19 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 17 Jun 2022 16:29:54 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463365C667;
+        Fri, 17 Jun 2022 13:29:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GSP+4iogq+TFLoNY5uQODqxcaOwKchkxJvKyMcPW7ChkKOKLlI0S3m9PoUEDKbpRsRSSLrxzgRuAqHvsZtFuz7sv9AyXzsek7lOVwQQnJ/HLHzm1ORI7pd9ApPTa08Yu0EVQDyqe3MLw1vsH8NF80GE++z3jhB8lOz471u7WWVXKFmQkGnoViY6byntF4rVtAwQVIkNupkyVYVH//JqciXsqU6Rht7UUZ8bgMcm/jC/ob7gQE3F+jo8QAigJUtcVtjv19W9s40MAphLYSCWtqaVymDqdU2DlQBpTNfS5IBbrQulENwCmjetKiHe9uGhaKv03rfreKpDUPNgk7gHWFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h71o3MzoDzF3LLHXKe1qKHVG9WVQKO/eyAIcHygqIMo=;
+ b=J/R0I59PG/NNb7DVhjCtdmfAr1QZqVoEkCwAxZHV4kkUueJnuewkgMP7UKdKeXWRMnraV4pwpcafbMOdB0s9yLdRyicLbqtj2ZMRT4WjRL7ykrR0PWoPhTtYEhB6JiQlT4tXAItvaHuAzCDpQ7V7JpICbHl9qKLs50zyDj3L6aKCbKpLXwfBhN6hYxIF0FJGUINyB8J9hnCvrApQJLmHl08X02u0dhXBEtvnmBcw348VK5hHEhZqaoGlZN7Irm2NG6Q2vWbmoj6HM6SgTLPxbVo9mk6mXG5zBadEVxRAfvclpZwvjUkgWrP+pNtDt+2lBJrPSZ31w7DgSHEz9DHFxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h71o3MzoDzF3LLHXKe1qKHVG9WVQKO/eyAIcHygqIMo=;
+ b=hs7Hxx06Cl9SF3NVQdxIoYXjyKgfKy/9w06xnNt0oaguAyeSl0p93r6BY3JfGb3/7YuDcGvYIiRlOwaaNE/VPnk3T/DhIaKI57i8gawZgWTkGj9Wo8tAAJJP5D0FOZ4KCL7TnBSk3F9SGQO79UnWVn88Y+BfjS7Oyr0I4SBuS2M=
+Received: from BN8PR04CA0063.namprd04.prod.outlook.com (2603:10b6:408:d4::37)
+ by DM5PR12MB1210.namprd12.prod.outlook.com (2603:10b6:3:75::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5332.19; Fri, 17 Jun 2022 20:29:51 +0000
+Received: from BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:d4:cafe::b6) by BN8PR04CA0063.outlook.office365.com
+ (2603:10b6:408:d4::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15 via Frontend
+ Transport; Fri, 17 Jun 2022 20:29:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT028.mail.protection.outlook.com (10.13.176.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5353.14 via Frontend Transport; Fri, 17 Jun 2022 20:29:51 +0000
+Received: from BLR-5CG1345Z9Y.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 17 Jun
+ 2022 15:29:48 -0500
+From:   Kalpana Shetty <kalpana.shetty@amd.com>
+To:     <akpm@linux-foundation.org>, <shuah@kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Kalpana Shetty <kalpana.shetty@amd.com>
+Subject: [PATCH V4] selftests/vm: Add protection_keys tests to run_vmtests
+Date:   Sat, 18 Jun 2022 01:59:31 +0530
+Message-ID: <20220617202931.357-1-kalpana.shetty@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fec8738d-2d02-467c-895b-08da50a0219c
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1210:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1210BC11A4EC8705886E24DF8CAF9@DM5PR12MB1210.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KhykEKRTA6hShTR3G8CNwJaJCyku4SFFhP4KN4L6NxsGtIpPqIJXqHmrbAJFjTZ4R8uDOTEagzJufdrthR9WrZJQyEQtAg2zijsvMJeCUsg0VousraNrYZBO0AyP8PZkrlEYjLyqQDVXlzMZCgj0fdwz9hqbIVO+9gxSFoNoc9jmx4zDHSxmHkKoR0h/LoEI791poilABV1T4YcCnI2U3/8CXvWXFoH+zbOQFVg8dvoofxUd1lXmb2R6eKo/jMUkfgsBOjFj+CPGw5NPOHL5nVwit3Iw5JecbT0fkmTL505qSv6mx4fwARClVhGQMvFtr31g1SNcO0IJxHB75NPWRwapHxHo8QGPhARmfSfvPtJgHpdtZY9Mqi/baZfosS3XE76QHx1rlmaLAmjlPPf8dIejIas8JKW5x8zf76zdybjgDmg7gFfgnyjS6qD+A/9nuoCTG4K43F5SpLY5HpBwhK/vMuaIFs0DKB55iwOBj7kMvgd8+lmTKVVrK6TJQRoO7fNR22lS4KPpJJ5JpUzfnbxtfB7eGc3ZOyoROFjOXx7/3+zNElOOvI6JgXVnJjSa+qWPot755THSgyal8lyJ2YoStfbHHtSZDpItNQkRWsAThCjyv7YTeCaZ3tjtGNczrFkkGfsjHLikmOFZhuZDiuNnAT+4QlPIeSRvapVuhxQJukqhDdiwRSBpUv00hVRh67pKXE2irmZo0BRQ32jcv8K6uMNROKthnTZg68kzwRw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(46966006)(36840700001)(40470700004)(26005)(70586007)(8676002)(70206006)(110136005)(186003)(426003)(1076003)(4326008)(336012)(8936002)(356005)(16526019)(47076005)(2616005)(7696005)(86362001)(82310400005)(316002)(2906002)(5660300002)(6666004)(40460700003)(36756003)(4744005)(498600001)(36860700001)(81166007)(44832011)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2022 20:29:51.4461
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fec8738d-2d02-467c-895b-08da50a0219c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1210
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/17/22 12:45 PM, Dylan Hatch wrote:
-> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 6/16/22 3:10 PM, Dylan Hatch wrote:
->>> This test would erroneously fail the /proc/$PID/maps case if
->>> vsyscall=xonly since the existing probe of the vsyscall page only
->>> succeeds if the process has read permissions. Fix this by checking for
->>> either no vsyscall mapping OR an execute-only vsyscall mapping in the
->>> case were probing the vsyscall page segfaults.
->>>
->>
->> Does this fix include skipping the test with a clear message that
->> says why test is skipped?
->>
->>> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
->>> ---
->>>    tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
->>>    1 file changed, 15 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
->>> index 28604c9f805c..5ca85520131f 100644
->>> --- a/tools/testing/selftests/proc/proc-pid-vm.c
->>> +++ b/tools/testing/selftests/proc/proc-pid-vm.c
->>> @@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
->>>
->>>    static bool g_vsyscall = false;
->>>
->>> -static const char str_vsyscall[] =
->>> +static const char str_vsyscall_rx[] =
->>>    "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
->>>
->>> +static const char str_vsyscall_x[] =
->>> +"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
->>> +
->>>    #ifdef __x86_64__
->>>    static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
->>>    {
->>> @@ -261,6 +264,7 @@ int main(void)
->>>        int exec_fd;
->>>
->>>        vsyscall();
->>> +     const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
->>>
->>>        atexit(ate);
->>>
->>> @@ -314,7 +318,8 @@ int main(void)
->>>
->>>        /* Test /proc/$PID/maps */
->>>        {
->>> -             const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
->>> +             const size_t len_buf0 = strlen(buf0);
->>> +             const size_t len_vsys = strlen(str_vsyscall);
->>>                char buf[256];
->>>                ssize_t rv;
->>>                int fd;
->>> @@ -325,11 +330,16 @@ int main(void)
->>>                        return 1;
->>>                }
->>>                rv = read(fd, buf, sizeof(buf));
->>> -             assert(rv == len);
->>> -             assert(memcmp(buf, buf0, strlen(buf0)) == 0);
->>>                if (g_vsyscall) {
->>> -                     assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
->>> +                     assert(rv == len_buf0 + len_vsys);
->>> +             } else {
->>> +                     /* If vsyscall isn't readable, it's either x-only or not mapped at all */
->>> +                     assert(rv == len_buf0 + len_vsys || rv == len_buf0);
->>>                }
->>> +             assert(memcmp(buf, buf0, len_buf0) == 0);
->>> +             /* Check for vsyscall mapping if buf is long enough */
->>> +             if (rv == len_buf0 + len_vsys)
->>> +                     assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
->>>        }
->>>
->>>        /* Test /proc/$PID/smaps */
->>>
->>
->> The change looks good to me. Doesn't look like it skips the test though?
-> 
-> Instead of skipping the test, it changes the passing condition to
-> accept both cases of an unmapped vsyscall page and an x-only vsyscall
-> page. Differentiating between these two cases without relying on
-> /proc/$PID/maps would involve both checking the kernel command line
-> for vsyscall=xonly and having a special ifdef block for
-> CONFIG_VSYSCALL_XONLY, so accepting both as passing conditions seems
-> like a simpler solution.
-> 
+Adding "protected_keys" tests to "run_vmtests.sh" would help out to run all VM related tests
+from a single shell script.
 
-It depends on the goal of the test. Is the test looking to see if the
-probe fails with insufficient permissions, then you are changing the
-test to not check for that condition.
+Signed-off-by: Kalpana Shetty <kalpana.shetty@amd.com>
+---
+Changes in V4:
+ Shuah Khan's review comments incorporated, added -x executable check.
 
-I would say in this case, the right approach would be to leave the test
-as is and report expected fail and add other cases.
+ tools/testing/selftests/vm/run_vmtests.sh | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-The goal being adding more coverage and not necessarily opt for a simple
-solution.
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index 41fce8bea929..61b1ca129a30 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -179,4 +179,15 @@ run_test ./ksm_tests -N -m 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+ run_test ./ksm_tests -N -m 0
+ 
++# protection_keys tests
++if [ -x ./protection_keys_32 ]
++then
++	run_test ./protection_keys_32
++fi
++
++if [ -x ./protection_keys_64 ]
++then
++	run_test ./protection_keys_64
++fi
++
+ exit $exitcode
+-- 
+2.25.1
 
-thanks,
--- Shuah
