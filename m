@@ -2,540 +2,381 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B57554FEAC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 23:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D6454FF42
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 23:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383620AbiFQUjx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jun 2022 16:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
+        id S234724AbiFQVR3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jun 2022 17:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383623AbiFQUjn (ORCPT
+        with ESMTP id S235481AbiFQVR3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jun 2022 16:39:43 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0569969CF3;
-        Fri, 17 Jun 2022 13:36:34 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o2IhL-0001TO-Tf; Fri, 17 Jun 2022 22:36:07 +0200
-Received: from [85.1.206.226] (helo=linux-3.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1o2IhL-000P9I-Hn; Fri, 17 Jun 2022 22:36:07 +0200
-Subject: Re: [PATCH bpf-next] selftests/bpf: add lwt ip encap tests to
- test_progs
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Eyal Birger <eyal.birger@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, posk@google.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-References: <20220607133135.271788-1-eyal.birger@gmail.com>
- <f80edf4f-c795-1e1e-bac2-414189988156@iogearbox.net>
- <CAHsH6GvWkyDg5mXnSNoyY0H2V2i4iMsucydB=RZB100czc-85A@mail.gmail.com>
- <CAEf4BzYMqXZ6H-Mv=xSvRTJ0o8okrLQjVVYzgpG1D-8+3HNj1w@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <588753e1-0a05-8d74-23f2-24fd7e9888ad@iogearbox.net>
-Date:   Fri, 17 Jun 2022 22:36:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 17 Jun 2022 17:17:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D994222BDC
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 14:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655500646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pRGM3eCM2TVyTh8eKkLCwBJv4tVgFarHtFdgBbpbMvw=;
+        b=WE1a+M3ThheqWq81a0KbrmY6+JDp9qoDrU3SUobNplCmsUEhmJPQmv1AsQehDBzaWIwonY
+        X4s5LXiOD4JpqHaz8pEhbe5uiMLhMonH5b1AgCIGma+cadFDi0UZw5fGKIwQ01wvcVRR0K
+        vSyChlAB+VdmvlfJM4s2HtsY/OqFZ1A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-119-AKmPiZPkNTePDOE-39LfxA-1; Fri, 17 Jun 2022 17:17:25 -0400
+X-MC-Unique: AKmPiZPkNTePDOE-39LfxA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D623A802C17;
+        Fri, 17 Jun 2022 21:17:24 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.8.184])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 70EEF4010E4D;
+        Fri, 17 Jun 2022 21:17:24 +0000 (UTC)
+Date:   Fri, 17 Jun 2022 17:17:23 -0400
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz,
+        pmladek@suse.com
+Subject: Re: [PATCH 2/2] selftests: livepatch: Test livepatching a heavily
+ called syscall
+Message-ID: <YqzvY37fI0GzHoIH@redhat.com>
+References: <20220603143242.870-1-mpdesouza@suse.com>
+ <20220603143242.870-3-mpdesouza@suse.com>
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzYMqXZ6H-Mv=xSvRTJ0o8okrLQjVVYzgpG1D-8+3HNj1w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26575/Fri Jun 17 10:08:05 2022)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220603143242.870-3-mpdesouza@suse.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Eyal,
+On Fri, Jun 03, 2022 at 11:32:42AM -0300, Marcos Paulo de Souza wrote:
+> Syscalls are called a tricky way. Test that it is possible and works.
 
-On 6/16/22 1:31 AM, Andrii Nakryiko wrote:
-[...]
->> What's the next step - should I submit a PR to libbpf on Github for adding
->> CONFIG_NET_VRF?
+"Tricky" may be accurate, but short on details.  If the full story is
+too much for the commit log, maybe just handwave about the
+__SYSCALL_DEFINEx preprocessor wrappers, etc.  :)
+
 > 
-> Yes, please, for [0] and [1]:
+> This new test creates one userspace process per online cpu calling getpid
+> continuously and tries to livepatch the getpid function.
 > 
->   [0] https://github.com/libbpf/libbpf
->   [1] https://github.com/kernel-patches/vmtest
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> ---
+>  tools/testing/selftests/livepatch/Makefile    | 12 +++-
+>  .../selftests/livepatch/test-syscall.sh       | 46 ++++++++++++++
+>  .../test_binaries/test_klp-call_getpid.c      | 48 +++++++++++++++
+>  .../selftests/livepatch/test_modules/Makefile |  3 +-
+>  .../livepatch/test_modules/test_klp_syscall.c | 60 +++++++++++++++++++
+>  5 files changed, 165 insertions(+), 4 deletions(-)
+>  create mode 100755 tools/testing/selftests/livepatch/test-syscall.sh
+>  create mode 100644 tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
+>  create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> 
+> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+> index 5ef492b87bb1..35014197184e 100644
+> --- a/tools/testing/selftests/livepatch/Makefile
+> +++ b/tools/testing/selftests/livepatch/Makefile
+> @@ -1,10 +1,14 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> +include ../../../build/Build.include
+> +include ../../../scripts/Makefile.arch
+> +include ../../../scripts/Makefile.include
+>  
+>  TEST_FILES := settings \
+>  		test_modules
+>  
+>  # We need the test_modules dir in order to make gen_tar and install to work
+> -TEST_GEN_PROGS_EXTENDED := test_modules/test_klp_atomic_replace.ko \
+> +TEST_GEN_PROGS_EXTENDED := test_binaries/test_klp-call_getpid \
+> +			test_modules/test_klp_atomic_replace.ko \
+>  			test_modules/test_klp_callbacks_busy.ko \
+>  			test_modules/test_klp_callbacks_demo.ko \
+>  			test_modules/test_klp_callbacks_demo2.ko \
+> @@ -13,7 +17,8 @@ TEST_GEN_PROGS_EXTENDED := test_modules/test_klp_atomic_replace.ko \
+>  			test_modules/test_klp_state.ko \
+>  			test_modules/test_klp_state2.ko \
+>  			test_modules/test_klp_state3.ko \
+> -			test_modules/test_klp_shadow_vars.ko
+> +			test_modules/test_klp_shadow_vars.ko \
+> +			test_modules/test_klp_syscall.ko
+>  
+>  TEST_PROGS_EXTENDED := functions.sh
+>  TEST_PROGS := \
+> @@ -21,7 +26,8 @@ TEST_PROGS := \
+>  	test-callbacks.sh \
+>  	test-shadow-vars.sh \
+>  	test-state.sh \
+> -	test-ftrace.sh
+> +	test-ftrace.sh \
+> +	test-syscall.sh
+>  
+>  # override lib.mk's default rules
+>  OVERRIDE_TARGETS := 1
+> diff --git a/tools/testing/selftests/livepatch/test-syscall.sh b/tools/testing/selftests/livepatch/test-syscall.sh
+> new file mode 100755
+> index 000000000000..f1d49e6ce2ee
+> --- /dev/null
+> +++ b/tools/testing/selftests/livepatch/test-syscall.sh
+> @@ -0,0 +1,46 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2022 SUSE
+> +# Author: Marcos Paulo de Souza <mpdesouza@suse.com>
+> +
+> +. $(dirname $0)/functions.sh
+> +
+> +MOD_SYSCALL=test_klp_syscall
+> +
+> +setup_config
+> +
+> +# - Start _NRPROC processes calling getpid and load a livepatch to patch the
+> +#   getpid syscall
+> +
+> +start_test "patch getpid syscall while being heavily hammered"
+> +
+> +declare -a pids
+> +for i in $(seq 1 $(getconf _NPROCESSORS_ONLN)); do
+> +	./test_klp-call_getpid &
+> +	pids[${#pids[*]}]="$!"
+             ^^^^^^^^^^^
+This looks fancy, would it be more approachable to use something like
+this:
+
+  for i in $(seq 0 $(( $(getconf _NPROCESSORS_ONLN) - 1 )) ); do
+  	./test_klp-call_getpid &
+  	pids[$i]="$!"
+  done
+
+or is there some strange race condition that requires using the method
+in the patch?
+
+> +done
+> +
+> +load_lp $MOD_SYSCALL
+> +# Success, getpid syscall was livepatched
+
+I don't think we need this comment as success is implied, otherwise
+load_lp would have pulled the die() ripcord.
+
+> +
+> +for pid in ${pids[@]}; do
+> +	kill $pid || true
+> +done
+> +
+> +disable_lp $MOD_SYSCALL
+> +unload_lp $MOD_SYSCALL
+> +
+> +check_result "% insmod test_modules/$MOD_SYSCALL.ko
+> +livepatch: enabling patch '$MOD_SYSCALL'
+> +livepatch: '$MOD_SYSCALL': initializing patching transition
+> +livepatch: '$MOD_SYSCALL': starting patching transition
+> +livepatch: '$MOD_SYSCALL': completing patching transition
+> +livepatch: '$MOD_SYSCALL': patching complete
+> +% echo 0 > /sys/kernel/livepatch/$MOD_SYSCALL/enabled
+> +livepatch: '$MOD_SYSCALL': initializing unpatching transition
+> +livepatch: '$MOD_SYSCALL': starting unpatching transition
+> +livepatch: '$MOD_SYSCALL': completing unpatching transition
+> +livepatch: '$MOD_SYSCALL': unpatching complete
+> +% rmmod $MOD_SYSCALL"
+> +
+> +exit 0
+> diff --git a/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c b/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
+> new file mode 100644
+> index 000000000000..be9d3110687d
+> --- /dev/null
+> +++ b/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
+> @@ -0,0 +1,48 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2017 SUSE
+> + * Author: Libor Pechacek <lpechacek@suse.cz>
+> + */
+> +
+> +#include <stdio.h>
+> +#include <unistd.h>
+> +#include <sys/syscall.h>
+> +#include <sys/types.h>
+> +#include <signal.h>
+> +
+> +static int run = 1;
+> +static int sig_int;
+> +
+> +void hup_handler(int signum)
+> +{
+> +	run = 0;
+> +}
+> +
+> +void int_handler(int signum)
+> +{
+> +	run = 0;
+> +	sig_int = 1;
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	pid_t orig_pid, pid;
+> +	long count = 0;
+> +
+> +	signal(SIGHUP, &hup_handler);
+> +	signal(SIGINT, &int_handler);
+> +
+> +	orig_pid = syscall(SYS_getpid);
+> +
+> +	while(run) {
+
+nit: could do s/run/stop/g and flip the assignment and check here so it
+matches the sig_int flag, ie, 0 by default and 1 on HUP / INT.
+
+> +		pid = syscall(SYS_getpid);
+> +		if (pid != orig_pid)
+> +			return 1;
+> +		count++;
+> +	}
+> +
+> +	if (sig_int)
+> +		printf("%d iterations done\n", count);
+
+nit: %ld for long
+
+> +
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
+> index 375180bc1b16..288c65ccd080 100644
+> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
+> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+> @@ -15,7 +15,8 @@ obj-m += test_klp_atomic_replace.o \
+>  	test_klp_state.o \
+>  	test_klp_state2.o \
+>  	test_klp_state3.o \
+> -	test_klp_shadow_vars.o
+> +	test_klp_shadow_vars.o \
+> +	test_klp_syscall.o
+>  
+>  %.ko:
+>  	make -C $(KDIR) M=$(TESTMODS_DIR) $@
+> diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> new file mode 100644
+> index 000000000000..e170accfb10c
+> --- /dev/null
+> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> @@ -0,0 +1,60 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2017-2022 SUSE
+> + * Authors: Libor Pechacek <lpechacek@suse.cz>
+> + *          Nicolai Stange <nstange@suse.de>
+> + *          Marcos Paulo de Souza <mpdesouza@suse.com>
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/sched.h>
+> +#include <linux/livepatch.h>
+> +
+> +#if defined(__x86_64__)
+> +#define FN_PREFIX __x64_
+> +#elif defined(__s390x__)
+> +#define FN_PREFIX __s390x_
+> +#elif defined(__PPC64__)
+> +#define FN_PREFIX __ppc64_
+> +#else
+> +#error "livepatch not supported"
+
+What about 32-bit powerpc [1]?  Would this cause the selftests to fail
+on that hardware?
+
+[1] https://lore.kernel.org/live-patching/cover.1640017960.git.christophe.leroy@csgroup.eu/
+
+> +#endif
+> +
+> +asmlinkage long lp_sys_getpid(void)
+> +{
+> +	return task_tgid_vnr(current);
+> +}
+> +
+> +static struct klp_func vmlinux_funcs[] = {
+> +	{
+> +		.old_name = __stringify(FN_PREFIX) "sys_getpid",
+> +		.new_func = lp_sys_getpid,
+> +	}, {}
+> +};
+> +
+> +static struct klp_object objs[] = {
+> +	{
+> +		/* name being NULL means vmlinux */
+> +		.funcs = vmlinux_funcs,
+> +	}, {}
+> +};
+> +
+> +static struct klp_patch patch = {
+> +	.mod = THIS_MODULE,
+> +	.objs = objs,
+> +};
+> +
+> +static int livepatch_init(void)
+> +{
+> +	return klp_enable_patch(&patch);
+> +}
+> +
+> +static void livepatch_exit(void)
+> +{
+> +}
+> +
+> +module_init(livepatch_init);
+> +module_exit(livepatch_exit);
+> +MODULE_LICENSE("GPL");
+> +MODULE_INFO(livepatch, "Y");
+> -- 
+> 2.35.3
+>
+
+Hi Marcos,
+
+A few comments and small nits found inline above.
+
+First, the test is pretty straightforward and a reasonable one to run,
+particularly putting the system under some load while patching.
+
+What do you think about the following tweaks:
+
+test_klp_syscall:
+- only calls the new syscall behavior for a list of known PIDs
+- PID list supplied via module parameter
+- when calling new syscall, PID is removed from list,
+  PIDs-left-to-patch counter (exposed to sysfs) decremented
+
+test-syscall.sh:
+- loads test_klp_syscall with test_klp-call_getpid PIDs that it spawned
+- before killing the test_klp-call_getpid PIDs, checks that
+  test_klp_syscall's sysfs PIDs-left-to-patch counter == 0
+
+I think this would ensure a few things:
+
+  1. Restrict the getpid syscall change to only callers expecting new
+     behavior
+  2. Force test_klp_syscall to patch each test_klp-call_getpid
+  3. Force all test_klp-call_getpid to hang around long enough for (2)
+
+Maybe this is too defensive, but I think could be handled without adding
+too much complexity.
+
+Regards,
+
+--
+Joe 
 
-Thanks a lot for getting the needed configs in.
-
-The CI looks better now, but there is one small failure on s390 (big endian):
-
-   https://github.com/kernel-patches/bpf/runs/6932751303?check_suite_focus=true
-
-These:
-
-1) "Failed to cycle device vethX; route tables might be wrong!" is this expected?
-2) test_gso:FAIL:recv from server unexpected recv from server: actual 7140 != expected 9000
-
-Please take a look and fix in a v2 when you get a chance.
-
-I'm pasting the full log just in case:
-
-   [...]
-   #97      lookup_and_delete:OK
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth6: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   veth3: Failed to cycle device veth3; route tables might be wrong!
-
-   veth7: Failed to cycle device veth7; route tables might be wrong!
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth6: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   veth3: Failed to cycle device veth3; route tables might be wrong!
-
-   veth7: Failed to cycle device veth7; route tables might be wrong!
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth6: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth6: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   veth3: Failed to cycle device veth3; route tables might be wrong!
-
-   veth7: Failed to cycle device veth7; route tables might be wrong!
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth6: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   veth3: Failed to cycle device veth3; route tables might be wrong!
-
-   veth7: Failed to cycle device veth7; route tables might be wrong!
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth6: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth1: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth5: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth2: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth4: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth3: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth8: link becomes ready
-
-   IPv6: ADDRCONF(NETDEV_CHANGE): veth7: link becomes ready
-
-   serial_test_lwt_ip_encap:PASS:pthread_create 0 nsec
-   setup_namespaces:PASS:ip netns add ns_lwt_1 0 nsec
-   setup_namespaces:PASS:ip netns add ns_lwt_2 0 nsec
-   setup_namespaces:PASS:ip netns add ns_lwt_3 0 nsec
-   lwt_ip_encap_test:PASS:setup namespaces 0 nsec
-   setup_links_and_routes:PASS:ip link add veth1 netns ns_lwt_1 type veth peer name veth2 netns ns_lwt_2 0 nsec
-   setup_links_and_routes:PASS:ip link add veth3 netns ns_lwt_2 type veth peer name veth4 netns ns_lwt_3 0 nsec
-   setup_links_and_routes:PASS:ip link add veth5 netns ns_lwt_1 type veth peer name veth6 netns ns_lwt_2 0 nsec
-   setup_links_and_routes:PASS:ip link add veth7 netns ns_lwt_2 type veth peer name veth8 netns ns_lwt_3 0 nsec
-   open_netns:PASS:malloc token 0 nsec
-   open_netns:PASS:open /proc/self/ns/net 0 nsec
-   open_netns:PASS:open netns fd 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   open_netns:PASS:setns_by_fd 0 nsec
-   setup_ns:PASS:setns 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   setup_ns1:PASS:ip link add gre_md type gre external 0 nsec
-   setup_ns1:PASS:ip link add gre6_md type ip6gre external 0 nsec
-   setup_device:PASS:ip addr add 172.16.1.100/24 dev veth1 0 nsec
-   setup_device:PASS:ip -6 addr add fb01::1/128 nodad dev veth1 0 nsec
-   setup_device:PASS:ip link set dev veth1 up 0 nsec
-   setup_device:PASS:ip addr add 172.16.5.100/24 dev veth5 0 nsec
-   setup_device:PASS:ip -6 addr add fb05::1/128 nodad dev veth5 0 nsec
-   setup_device:PASS:ip link set dev veth5 up 0 nsec
-   setup_device:PASS:ip addr add 172.16.1.100/24 dev gre_md 0 nsec
-   setup_device:PASS:ip -6 addr add fb01::1/128 nodad dev gre_md 0 nsec
-   setup_device:PASS:ip link set dev gre_md up 0 nsec
-   setup_device:PASS:ip addr add 172.16.1.100/24 dev gre6_md 0 nsec
-   setup_device:PASS:ip -6 addr add fb01::1/128 nodad dev gre6_md 0 nsec
-   setup_device:PASS:ip link set dev gre6_md up 0 nsec
-   setup_ns1:PASS:ip   route add  172.16.2.100/32 dev veth1 0 nsec
-   setup_ns1:PASS:ip  -6 route add  fb02::1/128 dev veth1 0 nsec
-   setup_ns1:PASS:ip   route add  default dev veth1 via 172.16.2.100 0 nsec
-   setup_ns1:PASS:ip  -6 route add  default dev veth1 via fb02::1 0 nsec
-   setup_ns1:PASS:ip   route add  172.16.6.100/32 dev veth5 0 nsec
-   setup_ns1:PASS:ip   route add  172.16.7.100/32 dev veth5 via 172.16.6.100 0 nsec
-   setup_ns1:PASS:ip   route add  172.16.8.100/32 dev veth5 via 172.16.6.100 0 nsec
-   setup_ns1:PASS:ip  -6 route add  fb06::1/128 dev veth5 0 nsec
-   setup_ns1:PASS:ip  -6 route add  fb07::1/128 dev veth5 via fb06::1 0 nsec
-   setup_ns1:PASS:ip  -6 route add  fb08::1/128 dev veth5 via fb06::1 0 nsec
-   setup_ns1:PASS:ip   route add  172.16.16.100/32 dev veth5 via 172.16.6.100 0 nsec
-   setup_ns1:PASS:ip  -6 route add  fb10::1/128 dev veth5 via fb06::1 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   close_netns:PASS:setns_by_fd 0 nsec
-   open_netns:PASS:malloc token 0 nsec
-   open_netns:PASS:open /proc/self/ns/net 0 nsec
-   open_netns:PASS:open netns fd 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   open_netns:PASS:setns_by_fd 0 nsec
-   setup_ns:PASS:setns 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   setup_device:PASS:ip addr add 172.16.2.100/24 dev veth2 0 nsec
-   setup_device:PASS:ip -6 addr add fb02::1/128 nodad dev veth2 0 nsec
-   setup_device:PASS:ip link set dev veth2 up 0 nsec
-   setup_device:PASS:ip addr add 172.16.3.100/24 dev veth3 0 nsec
-   setup_device:PASS:ip -6 addr add fb03::1/128 nodad dev veth3 0 nsec
-   setup_device:PASS:ip link set dev veth3 up 0 nsec
-   setup_device:PASS:ip addr add 172.16.6.100/24 dev veth6 0 nsec
-   setup_device:PASS:ip -6 addr add fb06::1/128 nodad dev veth6 0 nsec
-   setup_device:PASS:ip link set dev veth6 up 0 nsec
-   setup_device:PASS:ip addr add 172.16.7.100/24 dev veth7 0 nsec
-   setup_device:PASS:ip -6 addr add fb07::1/128 nodad dev veth7 0 nsec
-   setup_device:PASS:ip link set dev veth7 up 0 nsec
-   setup_ns2:PASS:ip   route add  172.16.1.100/32 dev veth2 0 nsec
-   setup_ns2:PASS:ip   route add  172.16.4.100/32 dev veth3 0 nsec
-   setup_ns2:PASS:ip  -6 route add  fb01::1/128 dev veth2 0 nsec
-   setup_ns2:PASS:ip  -6 route add  fb04::1/128 dev veth3 0 nsec
-   setup_ns2:PASS:ip   route add  172.16.5.100/32 dev veth6 0 nsec
-   setup_ns2:PASS:ip   route add  172.16.8.100/32 dev veth7 0 nsec
-   setup_ns2:PASS:ip  -6 route add  fb05::1/128 dev veth6 0 nsec
-   setup_ns2:PASS:ip  -6 route add  fb08::1/128 dev veth7 0 nsec
-   setup_ns2:PASS:ip   route add  172.16.16.100/32 dev veth7 via 172.16.8.100 0 nsec
-   setup_ns2:PASS:ip  -6 route add  fb10::1/128 dev veth7 via fb08::1 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   close_netns:PASS:setns_by_fd 0 nsec
-   open_netns:PASS:malloc token 0 nsec
-   open_netns:PASS:open /proc/self/ns/net 0 nsec
-   open_netns:PASS:open netns fd 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   open_netns:PASS:setns_by_fd 0 nsec
-   setup_ns:PASS:setns 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   write_sysctl:PASS:open sysctl 0 nsec
-   write_sysctl:PASS:write sysctl 0 nsec
-   setup_device:PASS:ip addr add 172.16.4.100/24 dev veth4 0 nsec
-   setup_device:PASS:ip -6 addr add fb04::1/128 nodad dev veth4 0 nsec
-   setup_device:PASS:ip link set dev veth4 up 0 nsec
-   setup_device:PASS:ip addr add 172.16.8.100/24 dev veth8 0 nsec
-   setup_device:PASS:ip -6 addr add fb08::1/128 nodad dev veth8 0 nsec
-   setup_device:PASS:ip link set dev veth8 up 0 nsec
-   setup_ns3:PASS:ip   route add  172.16.3.100/32 dev veth4 0 nsec
-   setup_ns3:PASS:ip   route add  172.16.1.100/32 dev veth4 via 172.16.3.100 0 nsec
-   setup_ns3:PASS:ip   route add  172.16.2.100/32 dev veth4 via 172.16.3.100 0 nsec
-   setup_ns3:PASS:ip  -6 route add  fb03::1/128 dev veth4 0 nsec
-   setup_ns3:PASS:ip  -6 route add  fb01::1/128 dev veth4 via fb03::1 0 nsec
-   setup_ns3:PASS:ip  -6 route add  fb02::1/128 dev veth4 via fb03::1 0 nsec
-   setup_ns3:PASS:ip   route add  172.16.7.100/32 dev veth8 0 nsec
-   setup_ns3:PASS:ip   route add  172.16.5.100/32 dev veth8 via 172.16.7.100 0 nsec
-   setup_ns3:PASS:ip   route add  172.16.6.100/32 dev veth8 via 172.16.7.100 0 nsec
-   setup_ns3:PASS:ip  -6 route add  fb07::1/128 dev veth8 0 nsec
-   setup_ns3:PASS:ip  -6 route add  fb05::1/128 dev veth8 via fb07::1 0 nsec
-   setup_ns3:PASS:ip  -6 route add  fb06::1/128 dev veth8 via fb07::1 0 nsec
-   setup_ns3:PASS:ip tunnel add gre_dev mode gre remote 172.16.5.100 local 172.16.16.100 ttl 255 key 0 0 nsec
-   setup_device:PASS:ip addr add 172.16.16.100/24 dev gre_dev 0 nsec
-   setup_device:PASS:ip link set dev gre_dev up 0 nsec
-   setup_ns3:PASS:ip tunnel add gre6_dev mode ip6gre remote fb05::1 local fb10::1 ttl 255 key 0 0 nsec
-   setup_device:PASS:ip -6 addr add fb10::1/128 nodad dev gre6_dev 0 nsec
-   setup_device:PASS:ip link set dev gre6_dev up 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   close_netns:PASS:setns_by_fd 0 nsec
-   lwt_ip_encap_test:PASS:setup links and routes 0 nsec
-   test_ping:PASS:ip netns exec ns_lwt_1 ping -c 1 -W 1 -I veth1 172.16.4.100 > /dev/null 0 nsec
-   test_ping:PASS:ip netns exec ns_lwt_1 ping6 -c 1 -W 1 -I veth1 fb04::1 > /dev/null 0 nsec
-   lwt_ip_encap_test:PASS:ip -netns ns_lwt_2  route del  172.16.4.100/32 dev veth3 0 nsec
-   lwt_ip_encap_test:PASS:ip -netns ns_lwt_2 -6 route del  fb04::1/128 dev veth3 0 nsec
-   test_ping:PASS:ip netns exec ns_lwt_1 ping -c 1 -W 1 -I veth1 172.16.4.100 > /dev/null 0 nsec
-   test_ping:PASS:ip netns exec ns_lwt_1 ping6 -c 1 -W 1 -I veth1 fb04::1 > /dev/null 0 nsec
-   lwt_ip_encap_test:PASS:ip -netns ns_lwt_1  route add  172.16.4.100/32 encap bpf xmit obj test_lwt_ip_encap.o sec encap_gre dev veth1 0 nsec
-   lwt_ip_encap_test:PASS:ip -netns ns_lwt_1 -6 route add  fb04::1/128 encap bpf xmit obj test_lwt_ip_encap.o sec encap_gre dev veth1 0 nsec
-   test_ping:PASS:ip netns exec ns_lwt_1 ping -c 1 -W 1 -I veth1 172.16.4.100 > /dev/null 0 nsec
-   test_ping:PASS:ip netns exec ns_lwt_1 ping6 -c 1 -W 1 -I veth1 fb04::1 > /dev/null 0 nsec
-   open_netns:PASS:malloc token 0 nsec
-   open_netns:PASS:open /proc/self/ns/net 0 nsec
-   open_netns:PASS:open netns fd 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   open_netns:PASS:setns_by_fd 0 nsec
-   test_gso:PASS:setns 0 nsec
-   test_gso:PASS:listen 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   close_netns:PASS:setns_by_fd 0 nsec
-   open_netns:PASS:malloc token 0 nsec
-   open_netns:PASS:open /proc/self/ns/net 0 nsec
-   open_netns:PASS:open netns fd 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   open_netns:PASS:setns_by_fd 0 nsec
-   test_gso:PASS:setns src 0 nsec
-   test_gso:PASS:connect_to_fd 0 nsec
-   test_gso:PASS:accept 0 nsec
-   test_gso:PASS:settimeo 0 nsec
-   test_gso:PASS:send to server 0 nsec
-   test_gso:PASS:recv from server 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   close_netns:PASS:setns_by_fd 0 nsec
-   open_netns:PASS:malloc token 0 nsec
-   open_netns:PASS:open /proc/self/ns/net 0 nsec
-   open_netns:PASS:open netns fd 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   open_netns:PASS:setns_by_fd 0 nsec
-   test_gso:PASS:setns 0 nsec
-   test_gso:PASS:listen 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   close_netns:PASS:setns_by_fd 0 nsec
-   open_netns:PASS:malloc token 0 nsec
-   open_netns:PASS:open /proc/self/ns/net 0 nsec
-   open_netns:PASS:open netns fd 0 nsec
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   open_netns:PASS:setns_by_fd 0 nsec
-   test_gso:PASS:setns src 0 nsec
-   test_gso:PASS:connect_to_fd 0 nsec
-   test_gso:PASS:accept 0 nsec
-   test_gso:PASS:settimeo 0 nsec
-   test_gso:PASS:send to server 0 nsec
-   test_gso:FAIL:recv from server unexpected recv from server: actual 7140 != expected 9000
-   setns_by_fd:PASS:setns 0 nsec
-   setns_by_fd:PASS:unshare 0 nsec
-   setns_by_fd:PASS:remount private /sys 0 nsec
-   setns_by_fd:PASS:umount2 /sys 0 nsec
-   setns_by_fd:PASS:mount /sys 0 nsec
-   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
-   close_netns:PASS:setns_by_fd 0 nsec
-   remove_routes_to_gredev:PASS:ip -netns ns_lwt_1  route del  172.16.16.100/32 dev veth5 0 nsec
-   remove_routes_to_gredev:PASS:ip -netns ns_lwt_1 -6 route del  fb10::1/128 dev veth5 0 nsec
-   remove_routes_to_gredev:PASS:ip -netns ns_lwt_2  route del  172.16.16.100/32 dev veth7 0 nsec
-   remove_routes_to_gredev:PASS:ip -netns ns_lwt_2 -6 route del  fb10::1/128 dev veth7 0 nsec
-   setup_namespaces:PASS:ip netns delete ns_lwt_1 0 nsec
-   setup_namespaces:PASS:ip netns delete ns_lwt_2 0 nsec
-   setup_namespaces:PASS:ip netns delete ns_lwt_3 0 nsec
-   #98/1    lwt_ip_encap/lwt_ipv4_encap_egress:FAIL
-   #98/2    lwt_ip_encap/lwt_ipv6_encap_egress:OK
-   #98/3    lwt_ip_encap/lwt_ipv4_encap_egress_vrf:OK
-   #98/4    lwt_ip_encap/lwt_ipv6_encap_egress_vrf:OK
-   #98/5    lwt_ip_encap/lwt_ipv4_encap_ingress:OK
-   #98/6    lwt_ip_encap/lwt_ipv6_encap_ingress:OK
-   #98/7    lwt_ip_encap/lwt_ipv4_encap_ingress_vrf:OK
-   #98/8    lwt_ip_encap/lwt_ipv6_encap_ingress_vrf:OK
-   #98/9    lwt_ip_encap/lwt_ipv4_encap_egress_md:OK
-   #98/10   lwt_ip_encap/lwt_ipv6_encap_egress_md:OK
-   #98      lwt_ip_encap:FAIL
-   [...]
-
-Thanks,
-Daniel
