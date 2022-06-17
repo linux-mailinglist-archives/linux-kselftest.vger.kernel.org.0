@@ -2,76 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B577F54FBE2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 19:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C860D54FD0B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 20:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382911AbiFQRHG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jun 2022 13:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S232338AbiFQSp6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jun 2022 14:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382891AbiFQRHE (ORCPT
+        with ESMTP id S232176AbiFQSp5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jun 2022 13:07:04 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DFA24BFF;
-        Fri, 17 Jun 2022 10:07:03 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id u12so9907088eja.8;
-        Fri, 17 Jun 2022 10:07:03 -0700 (PDT)
+        Fri, 17 Jun 2022 14:45:57 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6393150F
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 11:45:55 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id w2so8649668ybi.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 11:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Kzy5eGCbr6f18ypDB7MvrF9DPS0nn/SHTUhj0XAiEdI=;
-        b=LSa+fMtdQerlOGeqtUY3stk0s2SQSieL6Szi8MmoJdPq13rupg8ol8Cba7pLgldSxp
-         tae4DBuz9BsuR9agzR0JIewsq+x9udV/JlzCZf80eZgJCj8uViDYNdrtwoR1xYkyBznO
-         p5qsXER5s0XMtBv52ZlD4gzmv7DXDifUBswmiPYNKSadIVZNbsyxhRUBU6VTJlk8fht5
-         NrPCL4Gobfx6lm7rlQTbK0U93jA4XqfEn31N+ueP05Ajm6NvFD5n8mW23bvdGy3mm6hl
-         BnaTcMZUusUa7osm21PAamjUY4EKj+YGbkGe/rMxVD7U1V6yPZDayx3fpbbNVkcMezf9
-         1l+Q==
+        bh=t69yZaPZyOhoI5m6h+4mPKQ2+aXLu7liL3vlg7ZXpvc=;
+        b=il8crSULlGQz05QE0HJEASQXvn2qoQaLFQqAZUe7KNy6sLCxE8wtDxs+T6w2gbX6is
+         xu4hhOXS31wdIAe9JqlRtHPQEpAEpBMND7jnjl3F6RxZgU1tni39UrjlYB+9+OZshOxV
+         gn5FRvwxzv2L7JtZU8K4T/Rq/ANecNK7c6E8M51aYccHSCxybwT7GnTTc4PtagYeFIMz
+         ofPkhAAg7Jequ1qj2VsN9cL32C786s0dZzkJjsYRpxaNKvFVQlFIiibMWdOkSO2+SjK4
+         Wnjs/DB5a7STrpHaH/QviUh02rHBTybRFMBjm5LBZG12neLP6iIXzkrHFpN5KN8H0y1A
+         dTcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Kzy5eGCbr6f18ypDB7MvrF9DPS0nn/SHTUhj0XAiEdI=;
-        b=UYsD2CqUvTzYW8HCn0LBAlCX0qlTXOloniy3aGtS2o7tqrbRsJYmjo6J9CzrHQqMgZ
-         66wdAZq3I2KjOPTN12RWKETlASAdn6AbjAiiWbnBxjBMYX3dcJyz3yuv+O/MFnAOBNDO
-         6kAZ0lQJ/cfq9JmB9gThrMewh0YSvd9L0vajof3DxYVujqxkV5+yeNdtuSH5sriZIF+A
-         T8yYbYEgt9wrpZgqjrzpo+20Mk7CY5oNuYUK2ac8n33lPZOEo+guflDeUQ9pQWB+8nL0
-         9KwmPD7nyHguLX6Ly3iRs3fynAvAtyR25mbkZjbsTHWDtPHD8cLNiC1m9LVdCDOR90+q
-         8gfg==
-X-Gm-Message-State: AJIora9Es2bF8UrMnv0+dP/x1jm+yDsrXqnWoB/rSUPqc8YfB95tvSWK
-        V6geVPZBR5weam4/jp2B3tBGtxAOvz9U2rPMFvY=
-X-Google-Smtp-Source: AGRyM1sr0V5BczPcq0Mm9GUKXXFAWmbSI5HBGzSLNTHSR9s3tMADbaw5NkB97OiUiay/4nTE4h0NG4rIRVOKD6pNBdw=
-X-Received: by 2002:a17:906:449:b0:711:c975:cfb8 with SMTP id
- e9-20020a170906044900b00711c975cfb8mr10460835eja.58.1655485621509; Fri, 17
- Jun 2022 10:07:01 -0700 (PDT)
+        bh=t69yZaPZyOhoI5m6h+4mPKQ2+aXLu7liL3vlg7ZXpvc=;
+        b=jvR9JZ4CUu0kJvq7uZYSvKHzjOG8Igco1ZyrGk9hIUKlIhIMBwCLbLYkgnhs/rbYQd
+         rtfJhEhyDkDcy6epHqb0FGkqhnBr+J97w11N+FlP8mEynnF63olBIwh4Oy2qNSR6UuOB
+         SxHn1nevP7rCOewX0yc81HF9SOw+dEojV5wbG/jXO2QlvABB/+q/6WN/WR8Vr2ahWnsB
+         5JabIUN8EoPjkVynaiHXCliUKZV9SXf2//ZY0/q31R2PFkM+n48kacIt07pGOJLWgUwh
+         1mlnQlebbpWnEkTTIYhibG4X3KQYyXRgEWKpH/YZc2JfMq+ws3DzHEuafyyGIkTZrWAm
+         kbrw==
+X-Gm-Message-State: AJIora+TD4fU+KaCJNxlfTxABZbJ9f1dZuB0uMeEoIEkdUhERS+ezpPm
+        ou8J/ShSwS6csI8pHikbIIWWPu9iQ8dQSiR3HSyXRg==
+X-Google-Smtp-Source: AGRyM1vLqXiU6LvN9FeRt4QHUJN+8f1GRm6wQZeNYfa8yd42zjW3EX03bOZwFIL3249pJprqq7jSL3T03lYmRq54NE4=
+X-Received: by 2002:a25:207:0:b0:668:6a4a:609 with SMTP id 7-20020a250207000000b006686a4a0609mr10829294ybc.326.1655491554504;
+ Fri, 17 Jun 2022 11:45:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
- <20220614130621.1976089-3-roberto.sassu@huawei.com> <20220617034617.db23phfavuhqx4vi@MacBook-Pro-3.local>
- <b146ee9242cb4c128e56bc9cb3b20b26@huawei.com>
-In-Reply-To: <b146ee9242cb4c128e56bc9cb3b20b26@huawei.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 17 Jun 2022 10:06:49 -0700
-Message-ID: <CAADnVQL+hBsWaKJAVYT0OX4SZtVDO+rRZ-0OLq+3SaPQsGqLBg@mail.gmail.com>
-Subject: Re: [RESEND][PATCH v4 2/4] bpf: Add bpf_request_key_by_id() helper
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "dhowells@redhat.com" <dhowells@redhat.com>
+References: <20220616211016.4037482-1-dylanbhatch@google.com> <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+In-Reply-To: <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+From:   Dylan Hatch <dylanbhatch@google.com>
+Date:   Fri, 17 Jun 2022 11:45:43 -0700
+Message-ID: <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,43 +66,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 2:11 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> > From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> > Sent: Friday, June 17, 2022 5:46 AM
+> On 6/16/22 3:10 PM, Dylan Hatch wrote:
+> > This test would erroneously fail the /proc/$PID/maps case if
+> > vsyscall=xonly since the existing probe of the vsyscall page only
+> > succeeds if the process has read permissions. Fix this by checking for
+> > either no vsyscall mapping OR an execute-only vsyscall mapping in the
+> > case were probing the vsyscall page segfaults.
+> >
 >
-> Adding in CC the keyring mailing list and David.
+> Does this fix include skipping the test with a clear message that
+> says why test is skipped?
 >
-> Sort summary: we are adding an eBPF helper, to let eBPF programs
-> verify PKCS#7 signatures. The helper simply calls verify_pkcs7_signature().
+> > Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+> > ---
+> >   tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
+> >   1 file changed, 15 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
+> > index 28604c9f805c..5ca85520131f 100644
+> > --- a/tools/testing/selftests/proc/proc-pid-vm.c
+> > +++ b/tools/testing/selftests/proc/proc-pid-vm.c
+> > @@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
+> >
+> >   static bool g_vsyscall = false;
+> >
+> > -static const char str_vsyscall[] =
+> > +static const char str_vsyscall_rx[] =
+> >   "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
+> >
+> > +static const char str_vsyscall_x[] =
+> > +"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
+> > +
+> >   #ifdef __x86_64__
+> >   static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
+> >   {
+> > @@ -261,6 +264,7 @@ int main(void)
+> >       int exec_fd;
+> >
+> >       vsyscall();
+> > +     const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
+> >
+> >       atexit(ate);
+> >
+> > @@ -314,7 +318,8 @@ int main(void)
+> >
+> >       /* Test /proc/$PID/maps */
+> >       {
+> > -             const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
+> > +             const size_t len_buf0 = strlen(buf0);
+> > +             const size_t len_vsys = strlen(str_vsyscall);
+> >               char buf[256];
+> >               ssize_t rv;
+> >               int fd;
+> > @@ -325,11 +330,16 @@ int main(void)
+> >                       return 1;
+> >               }
+> >               rv = read(fd, buf, sizeof(buf));
+> > -             assert(rv == len);
+> > -             assert(memcmp(buf, buf0, strlen(buf0)) == 0);
+> >               if (g_vsyscall) {
+> > -                     assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
+> > +                     assert(rv == len_buf0 + len_vsys);
+> > +             } else {
+> > +                     /* If vsyscall isn't readable, it's either x-only or not mapped at all */
+> > +                     assert(rv == len_buf0 + len_vsys || rv == len_buf0);
+> >               }
+> > +             assert(memcmp(buf, buf0, len_buf0) == 0);
+> > +             /* Check for vsyscall mapping if buf is long enough */
+> > +             if (rv == len_buf0 + len_vsys)
+> > +                     assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
+> >       }
+> >
+> >       /* Test /proc/$PID/smaps */
+> >
 >
-> The problem is how to pass the key for verification.
->
-> For hardcoded keyring IDs, it is easy, pass 0, 1 or 2 for respectively
-> the built-in, secondary and platform keyring.
->
-> If you want to pass another keyring, you need to do a lookup,
-> which returns a key with reference count increased.
->
-> While in the kernel you can call key_put() to decrease the
-> reference count, that is not guaranteed with an eBPF program,
-> if the developer forgets about it. What probably is necessary,
-> is to add the capability to the verifier to check whether the
-> reference count is decreased, or adding a callback mechanism
-> to call automatically key_put() when the eBPF program is
-> terminated.
+> The change looks good to me. Doesn't look like it skips the test though?
 
-Nothing special here.
-See acquire/release logic in the verifier and relevant helpers.
-Like bpf_sk_lookup_tcp and others.
+Instead of skipping the test, it changes the passing condition to
+accept both cases of an unmapped vsyscall page and an x-only vsyscall
+page. Differentiating between these two cases without relying on
+/proc/$PID/maps would involve both checking the kernel command line
+for vsyscall=xonly and having a special ifdef block for
+CONFIG_VSYSCALL_XONLY, so accepting both as passing conditions seems
+like a simpler solution.
 
-> Is there an alternative solution?
->
-> Thanks
->
-> Roberto
->
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH,
-> HRB 56063 Managing Director: Li Peng, Yang Xi, Li He
-
-Please remove this footer from your emails.
+Thanks,
+Dylan
