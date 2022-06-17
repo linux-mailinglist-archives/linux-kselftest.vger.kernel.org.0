@@ -2,112 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B907254FD8B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 21:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869BC54FDC5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jun 2022 21:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbiFQTb5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jun 2022 15:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
+        id S231931AbiFQTil (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jun 2022 15:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiFQTb4 (ORCPT
+        with ESMTP id S239685AbiFQTiX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jun 2022 15:31:56 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D885548A
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 12:31:55 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-101b0266185so2586240fac.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 12:31:55 -0700 (PDT)
+        Fri, 17 Jun 2022 15:38:23 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642DB2F006
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 12:38:21 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id u2so3624945iln.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jun 2022 12:38:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=subject:to:references:cc:from:message-id:date:user-agent
+        h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EM4WuQB1JkdTQD8PY45ndgmJsVAA9Yd6J+wbPO6NpPg=;
-        b=TcZ7SsxLlJOf8PjxVePN9jg050m+yfM+JWoqwMqqcRQognupSR97SauP4yE0s235yb
-         ddqXUpJ2jmqQ2cPn0LYI/eUMXwGCnQYZGxq09p1VvIOFWOKnXPLd6CCuPMPvgPP+a5Of
-         YbzaWxRWjHeubq5L+RnC2r7UE+g4xISk26HfM=
+        bh=wmbuV7JBORPXXzvNtfIZq/lTzS3aE7SHxRte41av5uM=;
+        b=E0B1WMNGy43PvdJGAw2GYGQ5aKuCRPlGDVLSnor2QZJNSRe5zTPsqxbwe6DludNLxs
+         R4wYYbLa/fc/Ecl0bf0NnRRH8HbpYCn+8yNpx2sS/CcpcFAfgg29nSpNUvdaE7ZyKLUe
+         X2pIoc6EroL/LYddX/FkGtSPgP77qKkI6tr/o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=EM4WuQB1JkdTQD8PY45ndgmJsVAA9Yd6J+wbPO6NpPg=;
-        b=QqjoDM4A47OgolgVQKdeBGRZJmtF+qgGU8TiuGmACWAm6WFylKhPARwMHI/hqmiQ9m
-         nac96zu3tiAC7ewH4yZKwKWOMcR3lx2wWV2pRnwiiUPY8huw+hhy11g1MteMa1oQ6DDp
-         ffsCZRIErTN0y4yiDtBFBDtWRQZTKA/86EGT/BgKJv1QECzbjb5ImtGVvyHEsRzf0Tws
-         dgLzFRWJtCiN++r0wW/p1wB1ucw5gY1h9o5BBEqL6dIx+tprTuXRUF6swDIG6TqNpMYs
-         mUtFTm2PNMURa8nakZs4VOzwg7SCBhzGx1aw2bHWXKCHaB9vcPRJtIRCoFz05UzerFTl
-         R/Ww==
-X-Gm-Message-State: AJIora99M3Jkhc7Kr1nHV5QaMnWqaJsebJcj0LszvuOz6oE9iMf/rk9V
-        vaZaKNE/SiUU5wgpxsydLmGJ3Q==
-X-Google-Smtp-Source: AGRyM1udGQRr7r3xRSI/SRpvnZ3d7wdlghukWbcfvBoS9d8ngIokzM5DUrYDRBl24rE/d98H+8gkjw==
-X-Received: by 2002:a05:6870:6097:b0:e1:a94d:9a38 with SMTP id t23-20020a056870609700b000e1a94d9a38mr6481520oae.191.1655494314848;
-        Fri, 17 Jun 2022 12:31:54 -0700 (PDT)
+        bh=wmbuV7JBORPXXzvNtfIZq/lTzS3aE7SHxRte41av5uM=;
+        b=Q8eGVgDmzfd7aCS8rPxKDzvabU2YXQmdWFA6ThKMAg6ZtZqvSZcSqlLtGMmIq00WSg
+         /8ErqumJLaM5jAdG7D/MUXlT1bwqGxUhpeQaUmDVTmn6XV/8GwdkDaeMuStR0yRoOPqQ
+         q86rz/CsRyrI161Qdv51B7FWD7tNzvOFCyrmPxwKVT1PE0Jo/55Dd5KgMy59ftIjVimp
+         Ho6WsAqsdTF5wtXYFGT6HAwmUUzZckuyPk6OH6Hj6zV8T5Ej+MQAiLa0Fktfm3Vbuzrn
+         aodfjpLzp0iO3A6mB2HwAnuoYlHiVs/rz36LX/jvZ9W65LPpbOZTox3h+vwARv82/dqE
+         +ysg==
+X-Gm-Message-State: AJIora+2+W/feuEq9pW9v4mUuO9lz8IH23Q49WtuwSd4Smw+L1lXdOaG
+        CJ3zqQIzLa+n68wQ9mgCRwjL2g==
+X-Google-Smtp-Source: AGRyM1tEue9xzls/gET9Q/THpzqGhH2Ss/UxUuncgPwKpQV957JCH1xLpqkKlgCFSExHWhnOMXGSmw==
+X-Received: by 2002:a05:6e02:1a23:b0:2d3:82bb:4dae with SMTP id g3-20020a056e021a2300b002d382bb4daemr6485677ile.62.1655494700776;
+        Fri, 17 Jun 2022 12:38:20 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id w4-20020a9d3604000000b0060aeccf6b44sm2944399otb.41.2022.06.17.12.31.53
+        by smtp.gmail.com with ESMTPSA id m2-20020a6bbc02000000b006656f9eefa3sm2917727iof.18.2022.06.17.12.38.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 12:31:54 -0700 (PDT)
-Subject: Re: [PATCH V3] selftests/vm: Add protection_keys tests to run_vmtests
-To:     Kalpana Shetty <kalpana.shetty@amd.com>, akpm@linux-foundation.org,
-        shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220617111019.476-1-kalpana.shetty@amd.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>
+        Fri, 17 Jun 2022 12:38:20 -0700 (PDT)
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Dylan Hatch <dylanbhatch@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220616211016.4037482-1-dylanbhatch@google.com>
+ <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+ <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f73fd7c9-cb9c-1e89-4e22-e6931172eb91@linuxfoundation.org>
-Date:   Fri, 17 Jun 2022 13:31:52 -0600
+Message-ID: <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
+Date:   Fri, 17 Jun 2022 13:38:19 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220617111019.476-1-kalpana.shetty@amd.com>
+In-Reply-To: <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/17/22 5:10 AM, Kalpana Shetty wrote:
-> Adding "protected_keys" tests to "run_vmtests.sh" would help out to run all VM related tests
-> from a single shell script.
+On 6/17/22 12:45 PM, Dylan Hatch wrote:
+> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 6/16/22 3:10 PM, Dylan Hatch wrote:
+>>> This test would erroneously fail the /proc/$PID/maps case if
+>>> vsyscall=xonly since the existing probe of the vsyscall page only
+>>> succeeds if the process has read permissions. Fix this by checking for
+>>> either no vsyscall mapping OR an execute-only vsyscall mapping in the
+>>> case were probing the vsyscall page segfaults.
+>>>
+>>
+>> Does this fix include skipping the test with a clear message that
+>> says why test is skipped?
+>>
+>>> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+>>> ---
+>>>    tools/testing/selftests/proc/proc-pid-vm.c | 20 +++++++++++++++-----
+>>>    1 file changed, 15 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/proc/proc-pid-vm.c b/tools/testing/selftests/proc/proc-pid-vm.c
+>>> index 28604c9f805c..5ca85520131f 100644
+>>> --- a/tools/testing/selftests/proc/proc-pid-vm.c
+>>> +++ b/tools/testing/selftests/proc/proc-pid-vm.c
+>>> @@ -213,9 +213,12 @@ static int make_exe(const uint8_t *payload, size_t len)
+>>>
+>>>    static bool g_vsyscall = false;
+>>>
+>>> -static const char str_vsyscall[] =
+>>> +static const char str_vsyscall_rx[] =
+>>>    "ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
+>>>
+>>> +static const char str_vsyscall_x[] =
+>>> +"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
+>>> +
+>>>    #ifdef __x86_64__
+>>>    static void sigaction_SIGSEGV(int _, siginfo_t *__, void *___)
+>>>    {
+>>> @@ -261,6 +264,7 @@ int main(void)
+>>>        int exec_fd;
+>>>
+>>>        vsyscall();
+>>> +     const char *str_vsyscall = g_vsyscall ? str_vsyscall_rx : str_vsyscall_x;
+>>>
+>>>        atexit(ate);
+>>>
+>>> @@ -314,7 +318,8 @@ int main(void)
+>>>
+>>>        /* Test /proc/$PID/maps */
+>>>        {
+>>> -             const size_t len = strlen(buf0) + (g_vsyscall ? strlen(str_vsyscall) : 0);
+>>> +             const size_t len_buf0 = strlen(buf0);
+>>> +             const size_t len_vsys = strlen(str_vsyscall);
+>>>                char buf[256];
+>>>                ssize_t rv;
+>>>                int fd;
+>>> @@ -325,11 +330,16 @@ int main(void)
+>>>                        return 1;
+>>>                }
+>>>                rv = read(fd, buf, sizeof(buf));
+>>> -             assert(rv == len);
+>>> -             assert(memcmp(buf, buf0, strlen(buf0)) == 0);
+>>>                if (g_vsyscall) {
+>>> -                     assert(memcmp(buf + strlen(buf0), str_vsyscall, strlen(str_vsyscall)) == 0);
+>>> +                     assert(rv == len_buf0 + len_vsys);
+>>> +             } else {
+>>> +                     /* If vsyscall isn't readable, it's either x-only or not mapped at all */
+>>> +                     assert(rv == len_buf0 + len_vsys || rv == len_buf0);
+>>>                }
+>>> +             assert(memcmp(buf, buf0, len_buf0) == 0);
+>>> +             /* Check for vsyscall mapping if buf is long enough */
+>>> +             if (rv == len_buf0 + len_vsys)
+>>> +                     assert(memcmp(buf + len_buf0, str_vsyscall, len_vsys) == 0);
+>>>        }
+>>>
+>>>        /* Test /proc/$PID/smaps */
+>>>
+>>
+>> The change looks good to me. Doesn't look like it skips the test though?
 > 
-> Signed-off-by: Kalpana Shetty <kalpana.shetty@amd.com>
-> ---
-> Changes in V3:
->   Shuah Khan's review comments incorporated, added protection_keys binary check.
-> 
->   tools/testing/selftests/vm/run_vmtests.sh | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index 41fce8bea929..b19c6b1b84c4 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -179,4 +179,15 @@ run_test ./ksm_tests -N -m 1
->   # KSM test with 2 NUMA nodes and merge_across_nodes = 0
->   run_test ./ksm_tests -N -m 0
->   
-> +# protection_keys tests
-> +if ./protection_keys_32 &> /dev/null
-> +then
-> +	run_test ./protection_keys_32
-> +fi
-> +
-> +if ./protection_keys_64 &> /dev/null
-> +then
-> +	run_test ./protection_keys_64
-> +fi
-> +
->   exit $exitcode
+> Instead of skipping the test, it changes the passing condition to
+> accept both cases of an unmapped vsyscall page and an x-only vsyscall
+> page. Differentiating between these two cases without relying on
+> /proc/$PID/maps would involve both checking the kernel command line
+> for vsyscall=xonly and having a special ifdef block for
+> CONFIG_VSYSCALL_XONLY, so accepting both as passing conditions seems
+> like a simpler solution.
 > 
 
-Why not use file test operators. -x works for this case.
-There is no need to run attempt to run the test.
+It depends on the goal of the test. Is the test looking to see if the
+probe fails with insufficient permissions, then you are changing the
+test to not check for that condition.
+
+I would say in this case, the right approach would be to leave the test
+as is and report expected fail and add other cases.
+
+The goal being adding more coverage and not necessarily opt for a simple
+solution.
 
 thanks,
 -- Shuah
