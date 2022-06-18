@@ -2,84 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22397550422
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 13:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFCA550449
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 13:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiFRLFc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Jun 2022 07:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S233050AbiFRLhf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Jun 2022 07:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234630AbiFRLEd (ORCPT
+        with ESMTP id S233232AbiFRLhY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Jun 2022 07:04:33 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE36A193E8;
-        Sat, 18 Jun 2022 04:04:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A11A1F99B;
-        Sat, 18 Jun 2022 11:04:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655550271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QJMP/vq8QN0402dYS33way0QQugXiCZk/ovuT6fnfP0=;
-        b=YPJ4LuOeKMO1iZqFMsIPmq59eu/pUdng+PJtayn5SXQ4gfjg+Qe1QFn/KkDLX1pS5VCrz+
-        7sjJMLY6CSt6VTm7hEB+MvXK6ITVBimK9+yL9eP+dnF9DdQGCiCHc+psyJ6Y49QyKm+o31
-        BlJLsNcRvPfoPQF+7P+5O5AZD5Srh/0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655550271;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QJMP/vq8QN0402dYS33way0QQugXiCZk/ovuT6fnfP0=;
-        b=8h+zJWONo1uXpWLOQbyfsRNR5kEvA3SXdTJGsLLWkVZNdX4ISpPKKO65ti/IuEwomPjI1i
-        cs3JPJCCCBE9pvBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4D8C21342C;
-        Sat, 18 Jun 2022 11:04:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id W4E0JTixrWK/LAAAMHmgww
-        (envelope-from <colyli@suse.de>); Sat, 18 Jun 2022 11:04:24 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <20220618104925.GA3644@duo.ucw.cz>
-Date:   Sat, 18 Jun 2022 19:04:22 +0800
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, baijiaju1990@gmail.com,
-        oslab@tsinghua.edu.cn, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com, Daniel Latypov <dlatypov@google.com>,
+        Sat, 18 Jun 2022 07:37:24 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79F41A041;
+        Sat, 18 Jun 2022 04:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655552241; x=1687088241;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=trJevHg9pw/ezRiw4PuJjXBPnKq5vd9v7IT0hWBUmjs=;
+  b=nTfRcL+RznaoaintCyx+/llluE1JcgqCyShELSdwnOb60MHOcYT+lV2W
+   UFfiXfHgjCNTTxYtLbbq1ELMK9RCar2Lt2/5q2wc4M3CmrXsBYM67MpQY
+   1wBaipWSlXYw07bhHlOb3frmRdMZeFxDf+FrpPXLGDPXfIBbQcbKOnHEp
+   RljMa5zvGctTR7A11W63RRq3+M9oBVhtw640CCvYehdiBr1M26Ze6hBtN
+   NKLCmgIt/yvVFjUNeUUHbwEkXRlrQXPa94wMBurzB9iSoeyHNia6q9Mu9
+   VHa/lmq0CI2RBCQH4i4cdRb7U9CaxLkSMNGcjVNEiBDSCnncLJatkk06P
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262690059"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="262690059"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 04:37:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="912969164"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Jun 2022 04:37:16 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2WlP-000QHv-Cp;
+        Sat, 18 Jun 2022 11:37:15 +0000
+Date:   Sat, 18 Jun 2022 19:36:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6497730E-D4D2-4FB3-B95B-E1DAB2C2B287@suse.de>
-References: <20220607164948.980838585@linuxfoundation.org>
- <CA+G9fYui20CoDeqa6OrCYB+CGpgoFkhXtkdMDFJd1H55efCm6Q@mail.gmail.com>
- <CA+G9fYt47PBfbOK77eiH3qP2QH0iWQ=p12NELpL+R_k7O678=g@mail.gmail.com>
- <20220618104925.GA3644@duo.ucw.cz>
-To:     Pavel Machek <pavel@denx.de>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>
+Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        David Gow <davidgow@google.com>
+Subject: Re: [PATCH 1/5] kunit: unify module and builtin suite definitions
+Message-ID: <202206181950.qNG3jcE8-lkp@intel.com>
+References: <20220618090310.1174932-2-davidgow@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618090310.1174932-2-davidgow@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,93 +79,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi David,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[cannot apply to mcgrof/modules-next joel-aspeed/for-next ulf-hansson-mmc-mirror/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20220618/202206181950.qNG3jcE8-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/14ff6ae01a41e301f1409874dd5aa38f73bc96f5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
+        git checkout 14ff6ae01a41e301f1409874dd5aa38f73bc96f5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash lib/kunit/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   lib/kunit/test.c: In function 'kunit_module_init':
+>> lib/kunit/test.c:618:28: error: 'struct module' has no member named 'num_kunit_suites'
+     618 |         for (i = 0; i < mod->num_kunit_suites; i++)
+         |                            ^~
+>> lib/kunit/test.c:619:45: error: 'struct module' has no member named 'kunit_suites'
+     619 |                 __kunit_test_suites_init(mod->kunit_suites[i]);
+         |                                             ^~
+   lib/kunit/test.c: In function 'kunit_module_exit':
+   lib/kunit/test.c:626:28: error: 'struct module' has no member named 'num_kunit_suites'
+     626 |         for (i = 0; i < mod->num_kunit_suites; i++)
+         |                            ^~
+   lib/kunit/test.c:627:45: error: 'struct module' has no member named 'kunit_suites'
+     627 |                 __kunit_test_suites_exit(mod->kunit_suites[i]);
+         |                                             ^~
 
 
-> 2022=E5=B9=B46=E6=9C=8818=E6=97=A5 18:49=EF=BC=8CPavel Machek =
-<pavel@denx.de> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi!
->>>>=20
->>>> This is the start of the stable review cycle for the 5.17.14 =
-release.
->>>> There are 772 patches in this series, all will be posted as a =
-response
->>>> to this one.  If anyone has any issues with these being applied, =
-please
->>>> let me know.
->>>>=20
->>>> Responses should be made by Thu, 09 Jun 2022 16:48:02 +0000.
->>>> Anything received after that time might be too late.
->>>>=20
->>>> The whole patch series can be found in one patch at:
->>>>        =
-https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.14-r=
-c1.gz
->>>> or in the git tree and branch at:
->>>>        =
-git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git =
-linux-5.17.y
->>>> and the diffstat can be found below.
->>>>=20
-> ...
->>> We will bisect and let you know more details about this reported =
-problem.
->>=20
->> The bisect script pointed me to this commit and  reverted and tested =
-and
->> confirmed.
->=20
-> Can you add some printks into that? Because I'm pretty sure this patch
-> does not break anything. (It should not fix much, either.)
->=20
->> commit 1883088ed4a0d5cc9cea500ca4e89a354ab32c11
->> Author: Jia-Ju Bai <baijiaju1990@gmail.com>
->=20
->>    md: bcache: check the return value of kzalloc() in =
-detached_dev_do_request()
->>=20
->>    commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
->>=20
->>    The function kzalloc() in detached_dev_do_request() can fail, so =
-its
->>    return value should be checked.
->>=20
->>    Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached
-> ...
->=20
->> +++ b/drivers/md/bcache/request.c
->> @@ -1107,6 +1107,12 @@ static void detached_dev_do_request(struct
->> bcache_device *d, struct bio *bio,
->>         * which would call closure_get(&dc->disk.cl)
->>         */
->>        ddip =3D kzalloc(sizeof(struct detached_dev_io_private), =
-GFP_NOIO);
->> +       if (!ddip) {
->> +               bio->bi_status =3D BLK_STS_RESOURCE;
->> +               bio->bi_end_io(bio);
->> +               return;
->> +       }
->> +
->>        ddip->d =3D d;
->>        /* Count on the bcache device */
->>        ddip->orig_bdev =3D orig_bdev;
->>=20
->=20
-> So... for patch to make any difference, memory allocation has to fail
-> and ddip has to be NULL.
->=20
-> Before the patch, it would oops in "ddip->d =3D d;". With the patch, =
-you
-> do some kind of error handling. Even if it is buggy, it should not do
-> more harm than immediate oops.
+vim +618 lib/kunit/test.c
 
-I just receive this single email and don=E2=80=99t have any idea for the =
-context and what the problem is. Where can I see the whole conversation?
+   612	
+   613	#ifdef CONFIG_MODULES
+   614	static void kunit_module_init(struct module *mod)
+   615	{
+   616		unsigned int i;
+   617	
+ > 618		for (i = 0; i < mod->num_kunit_suites; i++)
+ > 619			__kunit_test_suites_init(mod->kunit_suites[i]);
+   620	}
+   621	
 
-BTW, maybe commit 7d6b902ea0e0 (=E2=80=9Cbcache: memset on stack =
-variables in bch_btree_check() and bch_sectors_dirty_init()=E2=80=9D) is =
-necessary, how about trying to add it in?
-
-Coly Li
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
