@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F00550567
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 16:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDDF550591
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 16:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236943AbiFRODM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Jun 2022 10:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
+        id S229492AbiFROtf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Jun 2022 10:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346954AbiFRN7Z (ORCPT
+        with ESMTP id S229449AbiFROte (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Jun 2022 09:59:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A896815724;
-        Sat, 18 Jun 2022 06:59:23 -0700 (PDT)
+        Sat, 18 Jun 2022 10:49:34 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E900D17AA5;
+        Sat, 18 Jun 2022 07:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655560763; x=1687096763;
+  t=1655563774; x=1687099774;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KhvgxqN/MU+pbySf6/r74IVdKy4xbfE7RP+iY5t+B5U=;
-  b=B9iOExdJf08mDFLNaM+bv9WGAXEMgla2TUGbq/LaNmcNc3qr/bbMh3jv
-   ZC/N6bc5M+lLYPGgl/lSQZX5ZBi8GjgQLgz5f3J5JNZLQQJO6XnD45VWf
-   hFoU3FwFc46j2y2qUHDi3LfIWNHzX28Rb19uK/i44IH7KQ/AqIfX12nYm
-   AWQmy78erfYYLRjOM+VFJSye8DyoQ9XzrJsweaNmJc7L4j5I1pk/5zhfv
-   4gW3o1RssPRlkMuirvn47DfuxV2VUYXXI7aXdP0o6kH6ugR4L+DZFFKe2
-   8IqVhkX5aHjoIIGUmBf63lFJqJlylerTgc3T/TR/oX89963KRROlh0Vbt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280717413"
+  bh=w5tzZ7RrqHkJr3FpjfrwlqfOP6Ec32jd0b8PId2bAqg=;
+  b=fsbrNLt0H+zjiBlcIhoypCJQYu2Pt1QEdgXVxDk11ZihhHWxwAQZSFig
+   BSfgRdMHhuE2kAZJT37KRHNY21C9Rej0bG6gMEqr/aY0Q3MUj5d2At8ae
+   naIuAf9so67I5paw2h75iq1F0etN35jqiYm2XpS0sH5uRzLTsdFsW1nDD
+   qiRZ62RzxKBH1q/ZvyZgvt9CgbfGgUMykxpvaLz5CR45Lz3iRZQ/WZl+R
+   wuytPK94fnDuVMzXM0QU/cvdqVk885AVmcIEm9gPep4NRocpHCbsT6dQ7
+   Mj/cFESYpL4pvIp2Y1aumXcRHTqAIccuU8YnxfFLe7nfuOMwXlYCwSHWD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365985672"
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280717413"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 06:59:23 -0700
+   d="scan'208";a="365985672"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 07:49:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="584348783"
+   d="scan'208";a="688737041"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 18 Jun 2022 06:59:18 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2022 07:49:20 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o2Yyr-000QLv-Sb;
-        Sat, 18 Jun 2022 13:59:17 +0000
-Date:   Sat, 18 Jun 2022 21:58:28 +0800
+        id 1o2ZlG-000QNA-KA;
+        Sat, 18 Jun 2022 14:49:18 +0000
+Date:   Sat, 18 Jun 2022 22:49:16 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
@@ -64,7 +64,7 @@ Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
         David Gow <davidgow@google.com>
 Subject: Re: [PATCH 2/5] kunit: flatten kunit_suite*** to kunit_suite** in
  .kunit_test_suites
-Message-ID: <202206182117.58z5vWxq-lkp@intel.com>
+Message-ID: <202206182258.EahbTrAv-lkp@intel.com>
 References: <20220618090310.1174932-3-davidgow@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -86,15 +86,15 @@ Thank you for the patch! Yet something to improve:
 
 [auto build test ERROR on linus/master]
 [also build test ERROR on v5.19-rc2 next-20220617]
-[cannot apply to mcgrof/modules-next]
+[cannot apply to mcgrof/modules-next joel-aspeed/for-next ulf-hansson-mmc-mirror/next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220618/202206182117.58z5vWxq-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
+config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220618/202206182258.EahbTrAv-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.3.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -104,7 +104,7 @@ reproduce (this is a W=1 build):
         git checkout c2386c54cc9fd471e5353f375ff71734214ed3c6
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
@@ -114,49 +114,46 @@ Note: the linux-review/David-Gow/Rework-KUnit-test-execution-in-modules/20220618
 
 All errors (new ones prefixed by >>):
 
-   drivers/mmc/host/sdhci-of-aspeed.c: In function 'aspeed_sdc_tests_init':
->> drivers/mmc/host/sdhci-of-aspeed.c:612:16: error: too few arguments to function '__kunit_test_suites_init'
-     612 |         return __kunit_test_suites_init(aspeed_sdc_test_suites);
+   drivers/thunderbolt/test.c: In function 'tb_test_init':
+>> drivers/thunderbolt/test.c:2824:16: error: too few arguments to function '__kunit_test_suites_init'
+    2824 |         return __kunit_test_suites_init(tb_test_suites);
          |                ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/mmc/host/sdhci-of-aspeed-test.c:4,
-                    from drivers/mmc/host/sdhci-of-aspeed.c:608:
+   In file included from drivers/thunderbolt/test.c:9:
    include/kunit/test.h:240:5: note: declared here
      240 | int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
          |     ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/mmc/host/sdhci-of-aspeed.c: In function 'aspeed_sdc_tests_exit':
->> drivers/mmc/host/sdhci-of-aspeed.c:617:9: error: too few arguments to function '__kunit_test_suites_exit'
-     617 |         __kunit_test_suites_exit(aspeed_sdc_test_suites);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/mmc/host/sdhci-of-aspeed-test.c:4,
-                    from drivers/mmc/host/sdhci-of-aspeed.c:608:
+   drivers/thunderbolt/test.c: In function 'tb_test_exit':
+>> drivers/thunderbolt/test.c:2829:16: error: too few arguments to function '__kunit_test_suites_exit'
+    2829 |         return __kunit_test_suites_exit(tb_test_suites);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/thunderbolt/test.c:9:
    include/kunit/test.h:242:6: note: declared here
      242 | void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
          |      ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/mmc/host/sdhci-of-aspeed.c: In function 'aspeed_sdc_tests_init':
-   drivers/mmc/host/sdhci-of-aspeed.c:613:1: error: control reaches end of non-void function [-Werror=return-type]
-     613 | }
+   drivers/thunderbolt/test.c:2829:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+    2829 |         return __kunit_test_suites_exit(tb_test_suites);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/thunderbolt/test.c:2827:6: note: declared here
+    2827 | void tb_test_exit(void)
+         |      ^~~~~~~~~~~~
+   drivers/thunderbolt/test.c: In function 'tb_test_init':
+   drivers/thunderbolt/test.c:2825:1: error: control reaches end of non-void function [-Werror=return-type]
+    2825 | }
          | ^
    cc1: some warnings being treated as errors
 
 
-vim +/__kunit_test_suites_init +612 drivers/mmc/host/sdhci-of-aspeed.c
+vim +/__kunit_test_suites_init +2824 drivers/thunderbolt/test.c
 
-4af307f574260c Andrew Jeffery 2021-01-22  609  
-4af307f574260c Andrew Jeffery 2021-01-22  610  static inline int aspeed_sdc_tests_init(void)
-4af307f574260c Andrew Jeffery 2021-01-22  611  {
-4af307f574260c Andrew Jeffery 2021-01-22 @612  	return __kunit_test_suites_init(aspeed_sdc_test_suites);
-4af307f574260c Andrew Jeffery 2021-01-22  613  }
-4af307f574260c Andrew Jeffery 2021-01-22  614  
-4af307f574260c Andrew Jeffery 2021-01-22  615  static inline void aspeed_sdc_tests_exit(void)
-4af307f574260c Andrew Jeffery 2021-01-22  616  {
-4af307f574260c Andrew Jeffery 2021-01-22 @617  	__kunit_test_suites_exit(aspeed_sdc_test_suites);
-4af307f574260c Andrew Jeffery 2021-01-22  618  }
-4af307f574260c Andrew Jeffery 2021-01-22  619  #else
-4af307f574260c Andrew Jeffery 2021-01-22  620  static inline int aspeed_sdc_tests_init(void)
-4af307f574260c Andrew Jeffery 2021-01-22  621  {
-4af307f574260c Andrew Jeffery 2021-01-22  622  	return 0;
-4af307f574260c Andrew Jeffery 2021-01-22  623  }
-4af307f574260c Andrew Jeffery 2021-01-22  624  
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2821  
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2822  int tb_test_init(void)
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2823  {
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24 @2824  	return __kunit_test_suites_init(tb_test_suites);
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2825  }
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2826  
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2827  void tb_test_exit(void)
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2828  {
+2c6ea4e2cefe2e Mika Westerberg 2020-08-24 @2829  	return __kunit_test_suites_exit(tb_test_suites);
 
 -- 
 0-DAY CI Kernel Test Service
