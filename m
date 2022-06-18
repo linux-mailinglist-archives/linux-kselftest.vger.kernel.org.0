@@ -2,153 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEE2550457
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 13:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDD95504D4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 14:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbiFRL5O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Jun 2022 07:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
+        id S235702AbiFRMs0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Jun 2022 08:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiFRL5N (ORCPT
+        with ESMTP id S233293AbiFRMsX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Jun 2022 07:57:13 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A9211147;
-        Sat, 18 Jun 2022 04:57:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 29E8121B71;
-        Sat, 18 Jun 2022 11:57:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655553431; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+5gUbZKbWvo49PKciu8+d42cmuCqpds779UDQWH0oCE=;
-        b=Pgu8AR6w8Xv6QWo5qaWBLpqWYCTOdD5aQPMXFgzazcZNJ0kvYbnkg4LRmb6K+aac5Eqx5Z
-        WUi2wknXg9HHUQSCZCaLUnzA+J2ARMC+28+O0p4N8LDVleO8IjeBSF+fyW62zkhrOCvJol
-        aJzS684I6rFeixMLoTGjKz2MNkFDd3U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655553431;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+5gUbZKbWvo49PKciu8+d42cmuCqpds779UDQWH0oCE=;
-        b=HSs0Dl61dRIojTsbIKQfMSltuEKzoRGyuusjofYKmIzRNd4OWaXE4kcozDeZqCmHnNz6+y
-        WxD8rseTNeA5KnDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 53B441342C;
-        Sat, 18 Jun 2022 11:57:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /3yUCJC9rWL8OwAAMHmgww
-        (envelope-from <colyli@suse.de>); Sat, 18 Jun 2022 11:57:04 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <20220618113703.GA10888@duo.ucw.cz>
-Date:   Sat, 18 Jun 2022 19:57:01 +0800
-Cc:     Pavel Machek <pavel@denx.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        baijiaju1990@gmail.com, oslab@tsinghua.edu.cn,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Daniel Latypov <dlatypov@google.com>,
+        Sat, 18 Jun 2022 08:48:23 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E8213DD0;
+        Sat, 18 Jun 2022 05:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655556503; x=1687092503;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L0u3OGCTfFetGTTP1NGlLb83GnefDKjn1DOmKdkgXls=;
+  b=M8V4C/ToubdcIkw1UqoPb4GPNNHnEeNEzkDij+gcqKg0CA83QAVXS+15
+   9v612iugAXgOUc+Is4C18ty0Hp2MeneFdSy54yliRkE9ymSk4W85I/uaJ
+   vWQil5SM6TiEMP/MUQOUEOdSNTSq/cTTqVeqZLeYsFhEAcYgDKRif+8WZ
+   c7J1H7WvPuPJLOblsvcBxXI9AEoe/ZbyL0x72rXcah8lEg5xmMjGG7abd
+   44b/zwfTNKI9euRHVCDmyejO+FNxy07zEv5RkbWyKnfwqi2cwPf9en4Bf
+   CFpsbgNholx9TZTVhL4vw3u4KvlB35M36Qx49/H+UwArQt8GjCnNFj35c
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="305084546"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="305084546"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 05:48:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="763567439"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 18 Jun 2022 05:48:17 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o2Xs8-000QKB-QM;
+        Sat, 18 Jun 2022 12:48:16 +0000
+Date:   Sat, 18 Jun 2022 20:47:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <186E5519-55D4-48EE-8599-2C863BEC3918@suse.de>
-References: <20220607164948.980838585@linuxfoundation.org>
- <CA+G9fYui20CoDeqa6OrCYB+CGpgoFkhXtkdMDFJd1H55efCm6Q@mail.gmail.com>
- <CA+G9fYt47PBfbOK77eiH3qP2QH0iWQ=p12NELpL+R_k7O678=g@mail.gmail.com>
- <20220618104925.GA3644@duo.ucw.cz>
- <6497730E-D4D2-4FB3-B95B-E1DAB2C2B287@suse.de>
- <20220618113703.GA10888@duo.ucw.cz>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        David Gow <davidgow@google.com>
+Subject: Re: [PATCH 1/5] kunit: unify module and builtin suite definitions
+Message-ID: <202206182025.UNVY0coI-lkp@intel.com>
+References: <20220618090310.1174932-2-davidgow@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618090310.1174932-2-davidgow@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi David,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.19-rc2 next-20220617]
+[cannot apply to mcgrof/modules-next joel-aspeed/for-next ulf-hansson-mmc-mirror/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
+config: riscv-randconfig-r034-20220617 (https://download.01.org/0day-ci/archive/20220618/202206182025.UNVY0coI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 91688716ba49942051dccdf7b9c4f81a7ec8feaf)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/14ff6ae01a41e301f1409874dd5aa38f73bc96f5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
+        git checkout 14ff6ae01a41e301f1409874dd5aa38f73bc96f5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash lib/kunit/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> lib/kunit/test.c:618:23: error: no member named 'num_kunit_suites' in 'struct module'
+           for (i = 0; i < mod->num_kunit_suites; i++)
+                           ~~~  ^
+>> lib/kunit/test.c:619:33: error: no member named 'kunit_suites' in 'struct module'
+                   __kunit_test_suites_init(mod->kunit_suites[i]);
+                                            ~~~  ^
+   lib/kunit/test.c:626:23: error: no member named 'num_kunit_suites' in 'struct module'
+           for (i = 0; i < mod->num_kunit_suites; i++)
+                           ~~~  ^
+   lib/kunit/test.c:627:33: error: no member named 'kunit_suites' in 'struct module'
+                   __kunit_test_suites_exit(mod->kunit_suites[i]);
+                                            ~~~  ^
+   4 errors generated.
 
 
-> 2022=E5=B9=B46=E6=9C=8818=E6=97=A5 19:37=EF=BC=8CPavel Machek =
-<pavel@ucw.cz> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi!
->=20
->>>>   Fixes: bc082a55d25c ("bcache: fix inaccurate io state for =
-detached
->>> ...
->>>=20
->>>> +++ b/drivers/md/bcache/request.c
->>>> @@ -1107,6 +1107,12 @@ static void detached_dev_do_request(struct
->>>> bcache_device *d, struct bio *bio,
->>>>        * which would call closure_get(&dc->disk.cl)
->>>>        */
->>>>       ddip =3D kzalloc(sizeof(struct detached_dev_io_private), =
-GFP_NOIO);
->>>> +       if (!ddip) {
->>>> +               bio->bi_status =3D BLK_STS_RESOURCE;
->>>> +               bio->bi_end_io(bio);
->>>> +               return;
->>>> +       }
->>>> +
->>>>       ddip->d =3D d;
->>>>       /* Count on the bcache device */
->>>>       ddip->orig_bdev =3D orig_bdev;
->>>>=20
->>>=20
->>> So... for patch to make any difference, memory allocation has to =
-fail
->>> and ddip has to be NULL.
->>>=20
->>> Before the patch, it would oops in "ddip->d =3D d;". With the patch, =
-you
->>> do some kind of error handling. Even if it is buggy, it should not =
-do
->>> more harm than immediate oops.
->>=20
->> I just receive this single email and don=E2=80=99t have any idea for =
-the context and what the problem is. Where can I see the whole =
-conversation?
->>=20
->=20
-> Discussion happened on stable@vger.kernel.org mailing lists, archives
-> should be easily available. Copy went to lkml, too.
+vim +618 lib/kunit/test.c
 
-Hi Pavel and Greg,
+   612	
+   613	#ifdef CONFIG_MODULES
+   614	static void kunit_module_init(struct module *mod)
+   615	{
+   616		unsigned int i;
+   617	
+ > 618		for (i = 0; i < mod->num_kunit_suites; i++)
+ > 619			__kunit_test_suites_init(mod->kunit_suites[i]);
+   620	}
+   621	
 
-Thanks for the hint, I see the context. I cannot tell the direct reason =
-of the kfence regression, but it is worthy to have this patch in,
-- commit 7d6b902ea0e0 ("bcache: memset on stack variables in =
-bch_btree_check() and bch_sectors_dirty_init()=E2=80=9D)
-
-I am not sure whether it is directly related to the kfence issue, it =
-corrects potential unexpected stack state in some condition. Hope it may =
-help a bit.
-
-Thanks.
-
-Coly Li=
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
