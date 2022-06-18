@@ -2,48 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDDF550591
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 16:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD53550646
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jun 2022 19:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiFROtf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Jun 2022 10:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S237335AbiFRRLo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Jun 2022 13:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiFROte (ORCPT
+        with ESMTP id S235170AbiFRRLm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Jun 2022 10:49:34 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E900D17AA5;
-        Sat, 18 Jun 2022 07:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655563774; x=1687099774;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w5tzZ7RrqHkJr3FpjfrwlqfOP6Ec32jd0b8PId2bAqg=;
-  b=fsbrNLt0H+zjiBlcIhoypCJQYu2Pt1QEdgXVxDk11ZihhHWxwAQZSFig
-   BSfgRdMHhuE2kAZJT37KRHNY21C9Rej0bG6gMEqr/aY0Q3MUj5d2At8ae
-   naIuAf9so67I5paw2h75iq1F0etN35jqiYm2XpS0sH5uRzLTsdFsW1nDD
-   qiRZ62RzxKBH1q/ZvyZgvt9CgbfGgUMykxpvaLz5CR45Lz3iRZQ/WZl+R
-   wuytPK94fnDuVMzXM0QU/cvdqVk885AVmcIEm9gPep4NRocpHCbsT6dQ7
-   Mj/cFESYpL4pvIp2Y1aumXcRHTqAIccuU8YnxfFLe7nfuOMwXlYCwSHWD
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="365985672"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="365985672"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2022 07:49:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="688737041"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2022 07:49:20 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2ZlG-000QNA-KA;
-        Sat, 18 Jun 2022 14:49:18 +0000
-Date:   Sat, 18 Jun 2022 22:49:16 +0800
-From:   kernel test robot <lkp@intel.com>
+        Sat, 18 Jun 2022 13:11:42 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9840F13D72
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Jun 2022 10:11:36 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1016409cf0bso9133809fac.12
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Jun 2022 10:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=B8CXs8G7SKCeidkQWd9kAuICsm7Sw1h76v8hv8CR6wQ=;
+        b=cuXb7N4G9pIbYvpYCa6o9PQHUD2DfcKP/+gFugpXKusIPZ8udyvtuH7DJPmo+JUAOL
+         8eagpNlDgynjnq8Gd81Y/eopVQYnjECp8OsqpfuRnKA9HNyn++ZH7HNNZ9TIjsRXeSeG
+         BvdjwgCJNtORrqw8bW9YNyv+ik/h87ruk6IhWF/Ulomb3roDpockEzXUsaUcJnWsLKey
+         JlqmKq38sV0x3yb+kEcSWDJ7IjC7ODgIlcJzGQ3llXc0MXXhANbar/PuhU229R0QH9qT
+         lz3fsVlqpE6nT/3L7c8FVrsr8AgyflhOszSQr4SlJOROtqKz5LZwEe2tkhcIJNa2UAy5
+         H5YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B8CXs8G7SKCeidkQWd9kAuICsm7Sw1h76v8hv8CR6wQ=;
+        b=d8gJLZIODtS6u7IpefUDHqBdHqvpqD8IemyZqwfnbqjuc04IEkoY0LYnRPDhOHk9y0
+         V5hkWnxtLI+03l/r7sP1k48vjV3yEydJIZN4d5/mRRIROlcp+AjuOq8rJTn96x8DX8VL
+         ZCSA7KQPoFGBBBZMSYBtIoQ8l17ei+FBboG4iGhZjUg6XMpkGO0zr7jOwfybkUIkp3SM
+         I2CxBW3lOjqf2pUZFfIXDWk3UARoUkrvwuaZKHtNwFGoODlJ5uQfkO/b6GpoK8QAFpr4
+         gGwvPJMjKyEKBoLQ31Gz51nTaS2IXb/iudxsyUGE5I2WGafCI1sHdBS7EYEqcSuqCYS6
+         E5Dw==
+X-Gm-Message-State: AJIora8WnxieNGsWmZVJpO/yBCyaFl3dbeURy6XujV5sNR97HXBh9Sl8
+        PSXw/xj7okcFADKEjjNSjnD/Ww==
+X-Google-Smtp-Source: AGRyM1tDVmXtipYu/LaRH32Cww8VlWl/7+4pR6EaOfqHWjwGaKiJnIATqU0fJ7tQTyGNrbOvR86wqw==
+X-Received: by 2002:a05:6870:538b:b0:101:17f2:d6e with SMTP id h11-20020a056870538b00b0010117f20d6emr13782917oan.200.1655572295844;
+        Sat, 18 Jun 2022 10:11:35 -0700 (PDT)
+Received: from ?IPV6:2804:14d:8084:84c6:fe26:c42d:aab9:fa8a? ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
+        by smtp.gmail.com with ESMTPSA id o5-20020a4a2c05000000b0035eb4e5a6b3sm4677268ooo.9.2022.06.18.10.11.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Jun 2022 10:11:35 -0700 (PDT)
+Message-ID: <3358b97e-021a-82b7-9ae2-2113aea2c2d9@usp.br>
+Date:   Sat, 18 Jun 2022 14:11:29 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/5] Rework KUnit test execution in modules
+Content-Language: en-US
 To:     David Gow <davidgow@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
@@ -54,25 +66,19 @@ To:     David Gow <davidgow@google.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andra Paraschiv <andraprs@amazon.com>,
         Longpeng <longpeng2@huawei.com>
-Cc:     kbuild-all@lists.01.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        David Gow <davidgow@google.com>
-Subject: Re: [PATCH 2/5] kunit: flatten kunit_suite*** to kunit_suite** in
- .kunit_test_suites
-Message-ID: <202206182258.EahbTrAv-lkp@intel.com>
-References: <20220618090310.1174932-3-davidgow@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220618090310.1174932-3-davidgow@google.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-usb@vger.kernel.org, linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+References: <20220618090310.1174932-1-davidgow@google.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
+In-Reply-To: <20220618090310.1174932-1-davidgow@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,81 +86,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
+On 6/18/22 06:03, David Gow wrote:
+> This patch series makes two changes to how KUnit test suites are stored
+> and executed:
+> - The .kunit_test_suites section is now used for tests in modules (in
+>   lieu of a module_init funciton), as well as for built-in tests. The
+>   module loader will now trigger test execution. This frees up the
+>   module_init function for other uses.
+> - Instead of storing an array of arrays of suites, have the
+>   kunit_test_suite() and kunit_test_suites() macros append to one global
+>   (or per-module) list of test suites. This removes a needless layer of
+>   indirection.
+> 
+> The upshot of this is that it should now be possible to use the
+> kunit_test_suite() and kunit_test_suites() macros to register test
+> suites even from within modules which otherwise had module_init
+> functions. This was proving to be quite a common issue, resulting in
+> several modules calling into KUnit's private suite execution functions
+> to run their tests (often introducing incompatibilities with the KUnit
+> tooling).
+> 
+> This series also fixes the thunderbolt, nitro_enclaves, and
+> sdhci-of-aspeed tests to use kunit_test_suite() now that it works.
+> 
+> Huge thanks to Jeremy Kerr, who designed and implemented the module
+> loader changes, and to Daniel Latypov for pushing the simplification of
+> the nested arrays in .kunit_test_suites.
+> 
+> I've tested this series both with builtin tests, and with modules on
+> x86_64, but there's always the possibility that there's something subtle
+> and nasty on another architecture, so please test!
+> 
+> Cheers,
+> -- David
+> 
 
-Thank you for the patch! Yet something to improve:
+I've tested the modules on x86_64 machines, and everything looks fine.
+Also, I applied the AMDGPU KUnit tests [1] on top of these patches,
+tried out compiling as a module, and it runs pretty well!
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19-rc2 next-20220617]
-[cannot apply to mcgrof/modules-next joel-aspeed/for-next ulf-hansson-mmc-mirror/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Great to see this feature on KUnit!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4b35035bcf80ddb47c0112c4fbd84a63a2836a18
-config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220618/202206182258.EahbTrAv-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c2386c54cc9fd471e5353f375ff71734214ed3c6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653
-        git checkout c2386c54cc9fd471e5353f375ff71734214ed3c6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+Tested-by: Maíra Canal <maira.canal@usp.br>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[1] https://lore.kernel.org/dri-devel/20220608010709.272962-1
+maira.canal@usp.br/
 
-Note: the linux-review/David-Gow/Rework-KUnit-test-execution-in-modules/20220618-170653 HEAD fddb3ea0ed5627098eabc542fdba5a8b4b769066 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   drivers/thunderbolt/test.c: In function 'tb_test_init':
->> drivers/thunderbolt/test.c:2824:16: error: too few arguments to function '__kunit_test_suites_init'
-    2824 |         return __kunit_test_suites_init(tb_test_suites);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/thunderbolt/test.c:9:
-   include/kunit/test.h:240:5: note: declared here
-     240 | int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thunderbolt/test.c: In function 'tb_test_exit':
->> drivers/thunderbolt/test.c:2829:16: error: too few arguments to function '__kunit_test_suites_exit'
-    2829 |         return __kunit_test_suites_exit(tb_test_suites);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/thunderbolt/test.c:9:
-   include/kunit/test.h:242:6: note: declared here
-     242 | void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thunderbolt/test.c:2829:16: error: 'return' with a value, in function returning void [-Werror=return-type]
-    2829 |         return __kunit_test_suites_exit(tb_test_suites);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thunderbolt/test.c:2827:6: note: declared here
-    2827 | void tb_test_exit(void)
-         |      ^~~~~~~~~~~~
-   drivers/thunderbolt/test.c: In function 'tb_test_init':
-   drivers/thunderbolt/test.c:2825:1: error: control reaches end of non-void function [-Werror=return-type]
-    2825 | }
-         | ^
-   cc1: some warnings being treated as errors
-
-
-vim +/__kunit_test_suites_init +2824 drivers/thunderbolt/test.c
-
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2821  
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2822  int tb_test_init(void)
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2823  {
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24 @2824  	return __kunit_test_suites_init(tb_test_suites);
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2825  }
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2826  
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2827  void tb_test_exit(void)
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24  2828  {
-2c6ea4e2cefe2e Mika Westerberg 2020-08-24 @2829  	return __kunit_test_suites_exit(tb_test_suites);
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards,
+- Maíra Canal
