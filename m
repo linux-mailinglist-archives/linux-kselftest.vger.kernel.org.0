@@ -2,79 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478C3550BE1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Jun 2022 17:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019EA550C16
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Jun 2022 18:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiFSPlK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Jun 2022 11:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S232341AbiFSQhU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 Jun 2022 12:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiFSPlJ (ORCPT
+        with ESMTP id S229490AbiFSQhT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Jun 2022 11:41:09 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8916E646B;
-        Sun, 19 Jun 2022 08:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655653268; x=1687189268;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=OagA+1S5NVI9Ja8/jPij45wYg6CoVWVppDPjbSk9qus=;
-  b=GBdhA2L2koc966Q9SEy4yKmkSYNCIr1hGPCR6W0VHyvPNkAlZPBF9K1t
-   uStDiBrckkWx7cUxsMRkzmZEqZKtU6EnDdC+OEfgLM8CrTAwb502AaNxs
-   K2hD0IvXIJDeD+ymq5xckT5LlJPsQmyFgeIVSfTYgVdkclSzdifP/U/HY
-   2RKYz2JoqXGNRbZUKlZ3fQ1KC16+nUBSPWwmUny1t4c4pIz2nmJiyW+jV
-   fF7Xvv716JZCXKvsoCNcCVOwA4s/+6KVPMAwATU9jJmBtV3YIbkj92WUV
-   NwpR5FJ3v4O/q1R+Hl0h+f7jFDbaOgqa3LNYUX1PqLBgSPA3Or6igAfkp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="278512916"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="278512916"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 08:41:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="642751666"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Jun 2022 08:41:02 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o2x2r-000RKV-SK;
-        Sun, 19 Jun 2022 15:41:01 +0000
-Date:   Sun, 19 Jun 2022 23:40:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
-Cc:     kbuild-all@lists.01.org,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/10] drm: selftest: convert drm_framebuffer selftest to
- KUnit
-Message-ID: <202206192329.jxlyMOhN-lkp@intel.com>
-References: <20220615135824.15522-9-maira.canal@usp.br>
+        Sun, 19 Jun 2022 12:37:19 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBE9B491;
+        Sun, 19 Jun 2022 09:37:17 -0700 (PDT)
+Received: (Authenticated sender: pbl@bestov.io)
+        by mail.gandi.net (Postfix) with ESMTPSA id 959DE240005;
+        Sun, 19 Jun 2022 16:37:13 +0000 (UTC)
+From:   Riccardo Paolo Bestetti <pbl@bestov.io>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Riccardo Paolo Bestetti <pbl@bestov.io>,
+        Carlos Llamas <cmllamas@google.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 net] ipv4: fix bind address validity regression tests
+Date:   Sun, 19 Jun 2022 18:27:35 +0200
+Message-Id: <20220619162734.113340-1-pbl@bestov.io>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220615135824.15522-9-maira.canal@usp.br>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,43 +42,130 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi "Maíra,
+Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
+introduces support for binding to nonlocal addresses, as well as some
+basic test coverage for some of the related cases.
 
-Thank you for the patch! Yet something to improve:
+Commit b4a028c4d031 ("ipv4: ping: fix bind address validity check")
+fixes a regression which incorrectly removed some checks for bind
+address validation. In addition, it introduces regression tests for
+those specific checks. However, those regression tests are defective, in
+that they perform the tests using an incorrect combination of bind
+flags. As a result, those tests fail when they should succeed.
 
-[auto build test ERROR on drm/drm-next]
-[also build test ERROR on linus/master v5.19-rc2 next-20220617]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This commit introduces additional regression tests for nonlocal binding
+and fixes the defective regression tests. It also introduces new
+set_sysctl calls for the ipv4_bind test group, as to perform the ICMP
+binding tests it is necessary to allow ICMP socket creation by setting
+the net.ipv4.ping_group_range knob.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ma-ra-Canal/drm-selftest-Convert-to-KUnit/20220615-220404
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220619/202206192329.jxlyMOhN-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5109526a34e7196931f36b5537031eaa601de997
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ma-ra-Canal/drm-selftest-Convert-to-KUnit/20220615-220404
-        git checkout 5109526a34e7196931f36b5537031eaa601de997
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+Fixes: b4a028c4d031 ("ipv4: ping: fix bind address validity check")
+Reported-by: Riccardo Paolo Bestetti <pbl@bestov.io>
+Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
+---
+This has been tested on the net tree (@ b4a028c4d031) w/ the following:
+$ cd $KERNEL_TREE/tools/testing/selftests/net
+$ make nettest
+# PATH=$PATH:./ ./fcnal-test.sh -t ipv4_bind -v
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+All tests, including the previously broken ones and the new tests, pass
+with the expected results.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+ tools/testing/selftests/net/fcnal-test.sh | 36 +++++++++++++++++------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
 
-ERROR: modpost: missing MODULE_LICENSE() in drivers/gpu/drm/tests/test-drm_plane_helper.o
-ERROR: modpost: missing MODULE_LICENSE() in drivers/gpu/drm/tests/test-drm_dp_mst_helper.o
-ERROR: modpost: "drm_dp_encode_sideband_req" [drivers/gpu/drm/tests/test-drm_dp_mst_helper.ko] undefined!
-ERROR: modpost: "drm_dp_decode_sideband_req" [drivers/gpu/drm/tests/test-drm_dp_mst_helper.ko] undefined!
-ERROR: modpost: "drm_dp_dump_sideband_msg_req_body" [drivers/gpu/drm/tests/test-drm_dp_mst_helper.ko] undefined!
->> ERROR: modpost: "drm_internal_framebuffer_create" [drivers/gpu/drm/tests/test-drm_framebuffer.ko] undefined!
-
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 75223b63e3c8..03b586760164 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -1800,24 +1800,32 @@ ipv4_addr_bind_novrf()
+ 	done
+ 
+ 	#
+-	# raw socket with nonlocal bind
++	# tests for nonlocal bind
+ 	#
+ 	a=${NL_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${NSA_DEV} -b
+-	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after device bind"
++	run_cmd nettest -s -R -f -l ${a} -b
++	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address"
++
++	log_start
++	run_cmd nettest -s -f -l ${a} -b
++	log_test_addr ${a} $? 0 "TCP socket bind to nonlocal address"
++
++	log_start
++	run_cmd nettest -s -D -P icmp -f -l ${a} -b
++	log_test_addr ${a} $? 0 "ICMP socket bind to nonlocal address"
+ 
+ 	#
+ 	# check that ICMP sockets cannot bind to broadcast and multicast addresses
+ 	#
+ 	a=${BCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -l ${a} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address"
+ 
+ 	a=${MCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address"
+ 
+ 	#
+@@ -1870,24 +1878,32 @@ ipv4_addr_bind_vrf()
+ 	log_test_addr ${a} $? 1 "Raw socket bind to out of scope address after VRF bind"
+ 
+ 	#
+-	# raw socket with nonlocal bind
++	# tests for nonlocal bind
+ 	#
+ 	a=${NL_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -R -f -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after VRF bind"
+ 
++	log_start
++	run_cmd nettest -s -f -l ${a} -I ${VRF} -b
++	log_test_addr ${a} $? 0 "TCP socket bind to nonlocal address after VRF bind"
++
++	log_start
++	run_cmd nettest -s -D -P icmp -f -l ${a} -I ${VRF} -b
++	log_test_addr ${a} $? 0 "ICMP socket bind to nonlocal address after VRF bind"
++
+ 	#
+ 	# check that ICMP sockets cannot bind to broadcast and multicast addresses
+ 	#
+ 	a=${BCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address after VRF bind"
+ 
+ 	a=${MCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address after VRF bind"
+ 
+ 	#
+@@ -1922,10 +1938,12 @@ ipv4_addr_bind()
+ 
+ 	log_subsection "No VRF"
+ 	setup
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
+ 	ipv4_addr_bind_novrf
+ 
+ 	log_subsection "With VRF"
+ 	setup "yes"
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
+ 	ipv4_addr_bind_vrf
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+
