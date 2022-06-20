@@ -2,158 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD57551FAC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jun 2022 17:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D996552047
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jun 2022 17:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbiFTPER (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jun 2022 11:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S243469AbiFTPQr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jun 2022 11:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242850AbiFTPDe (ORCPT
+        with ESMTP id S243373AbiFTPQf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jun 2022 11:03:34 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F06B186D8
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jun 2022 07:35:46 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z11so9243347edp.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jun 2022 07:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wowsignal-io.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M7gM0wP0+sIb7H3gCRONWN64BT1n/VaMtz6QFS7EwXM=;
-        b=RFIUvaSLtaC87H/gtRAbXdAd5CqgCLltDnO/O6KHLQxWsbEwdsDYB7UK4unPoaBZtS
-         V7ZPrJhFn51kNPVaWQJJXpV68KCQ5wqBdTXrKpNLYyqn3Ds/WjXVuxybluarzdD1zQCl
-         MFFqH9AnZ7GQbRdnDHp3JyUWzFQMOkz4Tshg95eLyhwz0W4qrNjRubrNxc05SyaGy/ka
-         eUL2jGCf9bwGStISyRWW/o0vc5wrVapAbPvTVp5Z1S47fHUaGXC3AkuIqx1M+vSJMqJ8
-         IK/TlM/ExjHwpqp4L96jgA/L/CDrRknwvPaS6BiYn9DNJ8YnctGQx7rDJv0LZOw4XbPu
-         FA6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M7gM0wP0+sIb7H3gCRONWN64BT1n/VaMtz6QFS7EwXM=;
-        b=XzaT/w8vPkQb8EQCYkSMr0GTV1i35JagBM4Ha53tmf3J9ISP9w4+sKnd12EGhQO480
-         jgNoL1MZ8UW0hjseoJT1VS0/yB/Ai2G+5R3pxgDnUihGP0/5wzgncOKADa/d5+Jz8i0/
-         4RkPOEHv535O5YYwuiBYoAprdnZHK3ervN23ga0eRGmKBQkPCbvScMAHwkpEwp2l4yam
-         sCnY6FIrl2QeZJL269g4OujTs9u/wQ1DdHxG0eSQBmMYis9j16RA8xzoyX7TJooPQX8y
-         xI/pxZZGkjLKLsFId6NVuoGwcL3oRTR+Ti3lWns1bZJIK/WdkPS+CUYhzPBKKbZprFsc
-         qM+w==
-X-Gm-Message-State: AJIora9Z2wAicvQKSfF+gZ3IHZn0UOEGnxnGbeMytI0FtnqniD8spGfX
-        EpzBcj0Bsepd9EhCHMWeHamtPirGIx1mstEoE5WFrw==
-X-Google-Smtp-Source: AGRyM1sf+R7fPgNDROixrBdE7KPXww0jVCpSttQY7YMNTZ0aJrbMBWN41RXmm1B7kDmN4bsck7XBDg==
-X-Received: by 2002:a05:6402:11c7:b0:42e:c47a:ffdf with SMTP id j7-20020a05640211c700b0042ec47affdfmr29709943edw.113.1655735744509;
-        Mon, 20 Jun 2022 07:35:44 -0700 (PDT)
-Received: from localhost (fwdproxy-lla-111.fbsv.net. [2a03:2880:30ff:6f::face:b00c])
-        by smtp.gmail.com with ESMTPSA id mm15-20020a170906cc4f00b006f3ef214e14sm6023802ejb.122.2022.06.20.07.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jun 2022 07:35:44 -0700 (PDT)
-From:   Adam Sindelar <adam@wowsignal.io>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, Adam Sindelar <adam@wowsignal.io>,
-        Adam Sindelar <ats@fb.com>, David Vernet <dvernet@fb.com>
-Subject: [PATCH] selftests/vm: Only run the 128TB boundary test if 5-level paging is enabled
-Date:   Mon, 20 Jun 2022 07:35:36 -0700
-Message-Id: <20220620143536.2767866-1-adam@wowsignal.io>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 20 Jun 2022 11:16:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848BF65AD;
+        Mon, 20 Jun 2022 08:06:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3FFDD1F8D4;
+        Mon, 20 Jun 2022 15:06:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655737565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3vNpnaLHq5djaVo7KGcO8jIbELchA6oBGBaoWMyiA0M=;
+        b=NIA+A4AMgk4do6w1FIcx4eDF7kJj+MiAf5V0D+ocGdoNZaLWBhzxIOk5EaxBF/K2DbwyUW
+        9oUlUG1Nn0x99lc4H8q5SbwyztQtyW7nbSHBgXI2YGx7fko0QtPMVXmJ1Roqq7kOmXATxy
+        vbKrSwUCgnJ4HJ1PHzRvcaZAJNYY/EE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655737565;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3vNpnaLHq5djaVo7KGcO8jIbELchA6oBGBaoWMyiA0M=;
+        b=EAY4cmSGJEEyz1CQwI1dSxhSKiJ4u70WQ9C6rF3PaIiWbzUP8RcXFlWk3YguJvL03yLBEw
+        h1LTpy4Es7iKq1CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0B6213638;
+        Mon, 20 Jun 2022 15:05:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l9vELNaMsGLMcQAAMHmgww
+        (envelope-from <colyli@suse.de>); Mon, 20 Jun 2022 15:05:58 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH 5.17 000/772] 5.17.14-rc1 review
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <YrBHh5/FOUWXv3ho@kroah.com>
+Date:   Mon, 20 Jun 2022 23:05:54 +0800
+Cc:     Pavel Machek <pavel@ucw.cz>, Pavel Machek <pavel@denx.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        baijiaju1990@gmail.com, oslab@tsinghua.edu.cn,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kunit-dev@googlegroups.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <83F4613E-1B83-4DD8-B46E-DB94097A007E@suse.de>
+References: <20220607164948.980838585@linuxfoundation.org>
+ <CA+G9fYui20CoDeqa6OrCYB+CGpgoFkhXtkdMDFJd1H55efCm6Q@mail.gmail.com>
+ <CA+G9fYt47PBfbOK77eiH3qP2QH0iWQ=p12NELpL+R_k7O678=g@mail.gmail.com>
+ <20220618104925.GA3644@duo.ucw.cz>
+ <6497730E-D4D2-4FB3-B95B-E1DAB2C2B287@suse.de>
+ <20220618113703.GA10888@duo.ucw.cz>
+ <186E5519-55D4-48EE-8599-2C863BEC3918@suse.de> <YrBHh5/FOUWXv3ho@kroah.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test va_128TBswitch.c expects to be able to pass mmap an address hint
-and length that cross the address 1<<47. This is not possible without
-5-level page tables, so the test fails.
 
-The test is already only run on 64-bit powerpc and x86 archs, but this
-patch adds an additional check that skips the test if PG_TABLE_LEVELS < 5.
-There is precedent for checking /proc/config.gz in selftests, e.g. in
-selftests/firmware.
 
-Signed-off-by: Adam Sindelar <adam@wowsignal.io>
----
- tools/testing/selftests/vm/Makefile          |  1 +
- tools/testing/selftests/vm/run_vmtests.sh    | 13 +++++++---
- tools/testing/selftests/vm/va_128TBswitch.sh | 26 ++++++++++++++++++++
- 3 files changed, 36 insertions(+), 4 deletions(-)
- create mode 100755 tools/testing/selftests/vm/va_128TBswitch.sh
+> 2022=E5=B9=B46=E6=9C=8820=E6=97=A5 18:10=EF=BC=8CGreg Kroah-Hartman =
+<gregkh@linuxfoundation.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Sat, Jun 18, 2022 at 07:57:01PM +0800, Coly Li wrote:
+>>=20
+>>=20
+>>> 2022=E5=B9=B46=E6=9C=8818=E6=97=A5 19:37=EF=BC=8CPavel Machek =
+<pavel@ucw.cz> =E5=86=99=E9=81=93=EF=BC=9A
+>>>=20
+>>> Hi!
+>>>=20
+>>>>>>  Fixes: bc082a55d25c ("bcache: fix inaccurate io state for =
+detached
+>>>>> ...
+>>>>>=20
+>>>>>> +++ b/drivers/md/bcache/request.c
+>>>>>> @@ -1107,6 +1107,12 @@ static void detached_dev_do_request(struct
+>>>>>> bcache_device *d, struct bio *bio,
+>>>>>>       * which would call closure_get(&dc->disk.cl)
+>>>>>>       */
+>>>>>>      ddip =3D kzalloc(sizeof(struct detached_dev_io_private), =
+GFP_NOIO);
+>>>>>> +       if (!ddip) {
+>>>>>> +               bio->bi_status =3D BLK_STS_RESOURCE;
+>>>>>> +               bio->bi_end_io(bio);
+>>>>>> +               return;
+>>>>>> +       }
+>>>>>> +
+>>>>>>      ddip->d =3D d;
+>>>>>>      /* Count on the bcache device */
+>>>>>>      ddip->orig_bdev =3D orig_bdev;
+>>>>>>=20
+>>>>>=20
+>>>>> So... for patch to make any difference, memory allocation has to =
+fail
+>>>>> and ddip has to be NULL.
+>>>>>=20
+>>>>> Before the patch, it would oops in "ddip->d =3D d;". With the =
+patch, you
+>>>>> do some kind of error handling. Even if it is buggy, it should not =
+do
+>>>>> more harm than immediate oops.
+>>>>=20
+>>>> I just receive this single email and don=E2=80=99t have any idea =
+for the context and what the problem is. Where can I see the whole =
+conversation?
+>>>>=20
+>>>=20
+>>> Discussion happened on stable@vger.kernel.org mailing lists, =
+archives
+>>> should be easily available. Copy went to lkml, too.
+>>=20
+>> Hi Pavel and Greg,
+>>=20
+>> Thanks for the hint, I see the context. I cannot tell the direct =
+reason of the kfence regression, but it is worthy to have this patch in,
+>> - commit 7d6b902ea0e0 ("bcache: memset on stack variables in =
+bch_btree_check() and bch_sectors_dirty_init()=E2=80=9D)
+>>=20
+>> I am not sure whether it is directly related to the kfence issue, it =
+corrects potential unexpected stack state in some condition. Hope it may =
+help a bit.
+>=20
+> Added where?
+>=20
+> confused,
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 68cacffc93ec..bc64ca1e0de3 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -80,6 +80,7 @@ endif
- TEST_PROGS := run_vmtests.sh
- 
- TEST_FILES := test_vmalloc.sh
-+TEST_FILEs += va_128TBswitch.sh
- 
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index e953f3cd9664..10cccbedaaa1 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -290,12 +290,17 @@ fi
- echo "-----------------------------"
- echo "running virtual address 128TB switch test"
- echo "-----------------------------"
--./va_128TBswitch
--if [ $? -ne 0 ]; then
-+./va_128TBswitch.sh
-+ret_val=$?
-+
-+if [ $ret_val -eq 0 ]; then
-+    echo "[PASS]"
-+elif [ $ret_val -eq $ksft_skip ]; then
-+	 echo "[SKIP]"
-+	 exitcode=$ksft_skip
-+else
-     echo "[FAIL]"
-     exitcode=1
--else
--    echo "[PASS]"
- fi
- fi # VADDR64
- 
-diff --git a/tools/testing/selftests/vm/va_128TBswitch.sh b/tools/testing/selftests/vm/va_128TBswitch.sh
-new file mode 100755
-index 000000000000..f7b9db0bfd33
---- /dev/null
-+++ b/tools/testing/selftests/vm/va_128TBswitch.sh
-@@ -0,0 +1,26 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2022 Adam Sindelar (Meta) <adam@wowsignal.io>
-+#
-+# This is a test for mmap behavior with 5-level paging. This script wraps the
-+# real test to check that the kernel is configured to support at least 5
-+# pagetable levels.
-+
-+# 1 means the test failed
-+exitcode=1
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+check_test_requirements()
-+{
-+    pg_table_levels=$(gzip -dcfq /proc/config.gz | grep PGTABLE_LEVELS | cut -d'=' -f 2)
-+    if [ $pg_table_levels -lt 5 ]; then
-+    echo "$0: PG_TABLE_LEVELS=${pg_table_levels}, must be >= 5 to run this test"
-+        exit $ksft_skip
-+    fi
-+}
-+
-+check_test_requirements
-+./va_128TBswitch
--- 
-2.30.2
+I will post the patch to stable list for specific version. Thanks.
+
+Coly Li
 
