@@ -2,165 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5103A5536F2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 17:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B585537FC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 18:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349594AbiFUP6H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jun 2022 11:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
+        id S1351703AbiFUQi5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jun 2022 12:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353347AbiFUP5x (ORCPT
+        with ESMTP id S232900AbiFUQi4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jun 2022 11:57:53 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DD02CE21;
-        Tue, 21 Jun 2022 08:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1655827063; x=1687363063;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6mIaPxRsGigk5Fmzx4C3+h9sWlkBF9gn2ObKcp08TGs=;
-  b=kGIMxMAiYJRDLhLbah/sVK66LxQFKMvJt4X+WrUNWGL1V7e2/hXKQ8zn
-   WUfP0lPM20apgR+5SsidjP8SNm8++WkkbkIHoxEk1UGnbfVyvveFaDuRK
-   +KCtIK7pJKyEN8wrnOUQhi2Ftr0gfFbBVRJh6tRBiFlMXdRYzK46CqFM5
-   8=;
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-2520d768.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 21 Jun 2022 15:57:30 +0000
-Received: from EX13D16EUB003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-2520d768.us-west-2.amazon.com (Postfix) with ESMTPS id 6220743479;
-        Tue, 21 Jun 2022 15:57:29 +0000 (UTC)
-Received: from [192.168.13.50] (10.43.161.183) by EX13D16EUB003.ant.amazon.com
- (10.43.166.99) with Microsoft SMTP Server (TLS) id 15.0.1497.36; Tue, 21 Jun
- 2022 15:57:20 +0000
-Message-ID: <d171b002-7d24-3194-2647-267754864dd8@amazon.com>
-Date:   Tue, 21 Jun 2022 18:57:10 +0300
+        Tue, 21 Jun 2022 12:38:56 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B32418358;
+        Tue, 21 Jun 2022 09:38:53 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LSBxL5x72z6H6t4;
+        Wed, 22 Jun 2022 00:36:54 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 21 Jun 2022 18:38:49 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>, <john.fastabend@gmail.com>,
+        <songliubraving@fb.com>, <kafai@fb.com>, <yhs@fb.com>
+CC:     <dhowells@redhat.com>, <keyrings@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v5 0/5] bpf: Add bpf_verify_pkcs7_signature() helper
+Date:   Tue, 21 Jun 2022 18:37:52 +0200
+Message-ID: <20220621163757.760304-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v2 4/5] nitro_enclaves: test: Use kunit_test_suite() macro
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     <Paraschiv@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        <kunit-dev@googlegroups.com>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
-        <linux-mmc@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
-        <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Matt Johnston <matt@codeconstruct.com.au>
-References: <20220621085345.603820-1-davidgow@google.com>
- <20220621085345.603820-5-davidgow@google.com>
-From:   "Paraschiv, Andra-Irina" <andraprs@amazon.com>
-In-Reply-To: <20220621085345.603820-5-davidgow@google.com>
-X-Originating-IP: [10.43.161.183]
-X-ClientProxiedBy: EX13D07UWB003.ant.amazon.com (10.43.161.66) To
- EX13D16EUB003.ant.amazon.com (10.43.166.99)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CgpPbiAyMS4wNi4yMDIyIDExOjUzLCBEYXZpZCBHb3cgd3JvdGU6Cj4gCj4gVGhlIGt1bml0X3Rl
-c3Rfc3VpdGUoKSBtYWNybyBwcmV2aW91c2x5IGNvbmZsaWN0ZWQgd2l0aCBtb2R1bGVfaW5pdCwK
-PiBtYWtpbmcgaXQgdW5zdWl0YWJsZSBmb3IgdXNlIGluIHRoZSBuaXRyb19lbmNsYXZlcyB0ZXN0
-LiBOb3cgdGhhdCBpdCdzCj4gZml4ZWQsIHdlIGNhbiB1c2UgaXQgaW5zdGVhZCBvZiBhIGN1c3Rv
-bSBjYWxsIGludG8gaW50ZXJuYWwgS1VuaXQKPiBmdW5jdGlvbnMgdG8gcnVuIHRoZSB0ZXN0Lgo+
-IAo+IEFzIGEgc2lkZS1lZmZlY3QsIHRoaXMgbWVhbnMgdGhhdCB0aGUgdGVzdCByZXN1bHRzIGFy
-ZSBwcm9wZXJseSBpbmNsdWRlZAo+IHdpdGggb3RoZXIgc3VpdGVzIHdoZW4gYnVpbHQtaW4uIFRv
-IGNlbGVicmF0ZSwgZW5hYmxlIHRoZSB0ZXN0IGJ5Cj4gZGVmYXVsdCB3aGVuIEtVTklUX0FMTF9U
-RVNUUyBpcyBzZXQgKGFuZCBOSVRST19FTkNMQVZFUyBlbmFibGVkKS4KPiAKPiBUaGUgbml0cm9f
-ZW5jbGF2ZSB0ZXN0cyBjYW4gbm93IGJlIHJ1biB2aWEga3VuaXRfdG9vbCB3aXRoOgo+ICAgICAg
-ICAgIC4vdG9vbHMvdGVzdGluZy9rdW5pdC9rdW5pdC5weSBydW4gLS1hcmNoPXg4Nl82NCBcCj4g
-ICAgICAgICAgLS1rY29uZmlnX2FkZCBDT05GSUdfUENJPXkgLS1rY29uZmlnX2FkZCBDT05GSUdf
-U01QPXkgXAo+ICAgICAgICAgIC0ta2NvbmZpZ19hZGQgQ09ORklHX0hPVFBMVUdfQ1BVPXkgXAo+
-ICAgICAgICAgIC0ta2NvbmZpZ19hZGQgQ09ORklHX1ZJUlRfRFJJVkVSUz15IFwKPiAgICAgICAg
-ICAtLWtjb25maWdfYWRkIENPTkZJR19OSVRST19FTkNMQVZFUz15IFwKPiAgICAgICAgICAnbmVf
-bWlzY19kZXZfdGVzdCcKPiAKPiAoVGhpcyBpcyBhIHByZXR0eSBsb25nIGNvbW1hbmQsIHNvIGl0
-IG1heSBiZSB3b3J0aCBhZGRpbmcgYSAua3VuaXRjb25maWcKPiBmaWxlIGF0IHNvbWUgcG9pbnQs
-IGluc3RlYWQuKQo+IAo+IEFja2VkLWJ5OiBQYXJhc2NoaXYsIEFuZHJhLUlyaW5hIDxhbmRyYXBy
-c0BhbWF6b24uY29tPgo+IFNpZ25lZC1vZmYtYnk6IERhdmlkIEdvdyA8ZGF2aWRnb3dAZ29vZ2xl
-LmNvbT4KPiAtLS0KPiAKPiBDaGFuZ2VzIHNpbmNlIHYxOgo+IGh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL2xpbnV4LWtzZWxmdGVzdC8yMDIyMDYxODA5MDMxMC4xMTc0OTMyLTUtZGF2aWRnb3dAZ29v
-Z2xlLmNvbS8KPiAtIE1vdmUgdGhlIG1pc3Rha2VubHktYWRkZWQgdGh1bmRlcmJvbHQgS2NvbmZp
-ZyB0byB0aGUgcHJldmlvdXMgcGF0Y2gKPiAgICAoVGhhbmtzIEFuZHJhKQo+IC0gQWRkIEFuZHJh
-J3MgQWNrZWQtYnkgdGFnLgo+IAo+IC0tLQo+ICAgZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVz
-L0tjb25maWcgICAgICAgICAgIHwgIDUgKystLQo+ICAgZHJpdmVycy92aXJ0L25pdHJvX2VuY2xh
-dmVzL25lX21pc2NfZGV2LmMgICAgIHwgMjcgLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAgLi4uL3Zp
-cnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXZfdGVzdC5jICAgIHwgIDUgKy0tLQo+ICAgMyBm
-aWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDMzIGRlbGV0aW9ucygtKQoKUmV2aWV3ZWQt
-Ynk6IEFuZHJhIFBhcmFzY2hpdiA8YW5kcmFwcnNAYW1hem9uLmNvbT4KClRoYW5rIHlvdSwgRGF2
-aWQsIGZvciB0aGUgcGF0Y2ggdXBkYXRlcy4KCkFkZGVkIEdyZWcgdG8gdGhlIGxpc3Qgb2YgbWFp
-bCByZWNpcGllbnRzLCB0byBiZSBhd2FyZSBvZiB0aGlzIHBhdGNoIApjaGFuZ2VzLCBnaXZlbiB0
-aGF0IHRoZSBOaXRybyBFbmNsYXZlcyBrZXJuZWwgZHJpdmVyIGlzIHRyYWNrZWQgdmlhIHRoZSAK
-Y2hhci1taXNjIHRyZWUuCgpUaGFua3MsCkFuZHJhCgo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L3ZpcnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZyBiL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZl
-cy9LY29uZmlnCj4gaW5kZXggMmQzZDk4MTU4MTIxLi5jZTkxYWRkODE0MDEgMTAwNjQ0Cj4gLS0t
-IGEvZHJpdmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL0tjb25maWcKPiArKysgYi9kcml2ZXJzL3Zp
-cnQvbml0cm9fZW5jbGF2ZXMvS2NvbmZpZwo+IEBAIC0xNiw4ICsxNiw5IEBAIGNvbmZpZyBOSVRS
-T19FTkNMQVZFUwo+ICAgICAgICAgICAgVGhlIG1vZHVsZSB3aWxsIGJlIGNhbGxlZCBuaXRyb19l
-bmNsYXZlcy4KPiAKPiAgIGNvbmZpZyBOSVRST19FTkNMQVZFU19NSVNDX0RFVl9URVNUCj4gLSAg
-ICAgICBib29sICJUZXN0cyBmb3IgdGhlIG1pc2MgZGV2aWNlIGZ1bmN0aW9uYWxpdHkgb2YgdGhl
-IE5pdHJvIEVuY2xhdmVzIgo+IC0gICAgICAgZGVwZW5kcyBvbiBOSVRST19FTkNMQVZFUyAmJiBL
-VU5JVD15Cj4gKyAgICAgICBib29sICJUZXN0cyBmb3IgdGhlIG1pc2MgZGV2aWNlIGZ1bmN0aW9u
-YWxpdHkgb2YgdGhlIE5pdHJvIEVuY2xhdmVzIiBpZiAhS1VOSVRfQUxMX1RFU1RTCj4gKyAgICAg
-ICBkZXBlbmRzIG9uIE5JVFJPX0VOQ0xBVkVTICYmIEtVTklUCj4gKyAgICAgICBkZWZhdWx0IEtV
-TklUX0FMTF9URVNUUwo+ICAgICAgICAgIGhlbHAKPiAgICAgICAgICAgIEVuYWJsZSBLVW5pdCB0
-ZXN0cyBmb3IgdGhlIG1pc2MgZGV2aWNlIGZ1bmN0aW9uYWxpdHkgb2YgdGhlIE5pdHJvCj4gICAg
-ICAgICAgICBFbmNsYXZlcy4gU2VsZWN0IHRoaXMgb3B0aW9uIG9ubHkgaWYgeW91IHdpbGwgYm9v
-dCB0aGUga2VybmVsIGZvcgo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2
-ZXMvbmVfbWlzY19kZXYuYyBiL2RyaXZlcnMvdmlydC9uaXRyb19lbmNsYXZlcy9uZV9taXNjX2Rl
-di5jCj4gaW5kZXggMjBjODgxYjZhNGI2Li4yNDFiOTRmNjJlNTYgMTAwNjQ0Cj4gLS0tIGEvZHJp
-dmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL25lX21pc2NfZGV2LmMKPiArKysgYi9kcml2ZXJzL3Zp
-cnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXYuYwo+IEBAIC0xNzU5LDM1ICsxNzU5LDEwIEBA
-IHN0YXRpYyBsb25nIG5lX2lvY3RsKHN0cnVjdCBmaWxlICpmaWxlLCB1bnNpZ25lZCBpbnQgY21k
-LCB1bnNpZ25lZCBsb25nIGFyZykKPiAKPiAgICNpZiBkZWZpbmVkKENPTkZJR19OSVRST19FTkNM
-QVZFU19NSVNDX0RFVl9URVNUKQo+ICAgI2luY2x1ZGUgIm5lX21pc2NfZGV2X3Rlc3QuYyIKPiAt
-Cj4gLXN0YXRpYyBpbmxpbmUgaW50IG5lX21pc2NfZGV2X3Rlc3RfaW5pdCh2b2lkKQo+IC17Cj4g
-LSAgICAgICByZXR1cm4gX19rdW5pdF90ZXN0X3N1aXRlc19pbml0KG5lX21pc2NfZGV2X3Rlc3Rf
-c3VpdGVzKTsKPiAtfQo+IC0KPiAtc3RhdGljIGlubGluZSB2b2lkIG5lX21pc2NfZGV2X3Rlc3Rf
-ZXhpdCh2b2lkKQo+IC17Cj4gLSAgICAgICBfX2t1bml0X3Rlc3Rfc3VpdGVzX2V4aXQobmVfbWlz
-Y19kZXZfdGVzdF9zdWl0ZXMpOwo+IC19Cj4gLSNlbHNlCj4gLXN0YXRpYyBpbmxpbmUgaW50IG5l
-X21pc2NfZGV2X3Rlc3RfaW5pdCh2b2lkKQo+IC17Cj4gLSAgICAgICByZXR1cm4gMDsKPiAtfQo+
-IC0KPiAtc3RhdGljIGlubGluZSB2b2lkIG5lX21pc2NfZGV2X3Rlc3RfZXhpdCh2b2lkKQo+IC17
-Cj4gLX0KPiAgICNlbmRpZgo+IAo+ICAgc3RhdGljIGludCBfX2luaXQgbmVfaW5pdCh2b2lkKQo+
-ICAgewo+IC0gICAgICAgaW50IHJjID0gMDsKPiAtCj4gLSAgICAgICByYyA9IG5lX21pc2NfZGV2
-X3Rlc3RfaW5pdCgpOwo+IC0gICAgICAgaWYgKHJjIDwgMCkKPiAtICAgICAgICAgICAgICAgcmV0
-dXJuIHJjOwo+IC0KPiAgICAgICAgICBtdXRleF9pbml0KCZuZV9jcHVfcG9vbC5tdXRleCk7Cj4g
-Cj4gICAgICAgICAgcmV0dXJuIHBjaV9yZWdpc3Rlcl9kcml2ZXIoJm5lX3BjaV9kcml2ZXIpOwo+
-IEBAIC0xNzk4LDggKzE3NzMsNiBAQCBzdGF0aWMgdm9pZCBfX2V4aXQgbmVfZXhpdCh2b2lkKQo+
-ICAgICAgICAgIHBjaV91bnJlZ2lzdGVyX2RyaXZlcigmbmVfcGNpX2RyaXZlcik7Cj4gCj4gICAg
-ICAgICAgbmVfdGVhcmRvd25fY3B1X3Bvb2woKTsKPiAtCj4gLSAgICAgICBuZV9taXNjX2Rldl90
-ZXN0X2V4aXQoKTsKPiAgIH0KPiAKPiAgIG1vZHVsZV9pbml0KG5lX2luaXQpOwo+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3ZpcnQvbml0cm9fZW5jbGF2ZXMvbmVfbWlzY19kZXZfdGVzdC5jIGIvZHJp
-dmVycy92aXJ0L25pdHJvX2VuY2xhdmVzL25lX21pc2NfZGV2X3Rlc3QuYwo+IGluZGV4IDI2NTc5
-N2JlZDBlYS4uNzRkZjQzYjkyNWJlIDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvdmlydC9uaXRyb19l
-bmNsYXZlcy9uZV9taXNjX2Rldl90ZXN0LmMKPiArKysgYi9kcml2ZXJzL3ZpcnQvbml0cm9fZW5j
-bGF2ZXMvbmVfbWlzY19kZXZfdGVzdC5jCj4gQEAgLTE1MSw3ICsxNTEsNCBAQCBzdGF0aWMgc3Ry
-dWN0IGt1bml0X3N1aXRlIG5lX21pc2NfZGV2X3Rlc3Rfc3VpdGUgPSB7Cj4gICAgICAgICAgLnRl
-c3RfY2FzZXMgPSBuZV9taXNjX2Rldl90ZXN0X2Nhc2VzLAo+ICAgfTsKPiAKPiAtc3RhdGljIHN0
-cnVjdCBrdW5pdF9zdWl0ZSAqbmVfbWlzY19kZXZfdGVzdF9zdWl0ZXNbXSA9IHsKPiAtICAgICAg
-ICZuZV9taXNjX2Rldl90ZXN0X3N1aXRlLAo+IC0gICAgICAgTlVMTAo+IC19Owo+ICtrdW5pdF90
-ZXN0X3N1aXRlKG5lX21pc2NfZGV2X3Rlc3Rfc3VpdGUpOwo+IC0tCj4gMi4zNy4wLnJjMC4xMDQu
-ZzA2MTE2MTFhOTQtZ29vZwo+IAoKCgpBbWF6b24gRGV2ZWxvcG1lbnQgQ2VudGVyIChSb21hbmlh
-KSBTLlIuTC4gcmVnaXN0ZXJlZCBvZmZpY2U6IDI3QSBTZi4gTGF6YXIgU3RyZWV0LCBVQkM1LCBm
-bG9vciAyLCBJYXNpLCBJYXNpIENvdW50eSwgNzAwMDQ1LCBSb21hbmlhLiBSZWdpc3RlcmVkIGlu
-IFJvbWFuaWEuIFJlZ2lzdHJhdGlvbiBudW1iZXIgSjIyLzI2MjEvMjAwNS4K
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
+
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
+
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
+
+After a discussion in the eBPF mailing list, it was decided that the stated
+goal should be accomplished by introducing a new helper:
+bpf_verify_pkcs7_signature(), dedicated to verify PKCS#7 signatures. More
+helpers will be introduced later, as necessary.
+
+The job of bpf_verify_pkcs7_signature() is simply to call the corresponding
+signature verification function verify_pkcs7_signature(). Data and
+signature can be provided to the new helper with two dynamic pointers, to
+reduce the number of parameters.
+
+The keyring can be provided from its serial number, with the new helper
+bpf_lookup_user_key(). Since it acquires a reference of the found key, the
+corresponding release helper bpf_key_put() has been introduced to decrement
+the reference count. The eBPF verifier has been enhanced to ensure that the
+key reference count is always decreased, when incremented, or otherwise it
+refuses to load the program. This ability is being verified with the
+lookup_user_key_norelease test.
+
+While the new helpers provide great flexibility, they seem to be suboptimal
+in terms of security guarantees. If the goal is to do signature
+verification with system-provided keys (e.g. from the built-in keyring),
+the eBPF program would have to rely on the user space counterpart to search
+the correct keyring and to pass its serial. If only the eBPF program is
+signed and verified, there is not certainty that this operation is done
+correctly by unverified code.
+
+Instead, since verify_pkcs7_signature() understands a pre-determined set of
+struct key pointer values, which translates into the corresponding system
+keyrings, the keyring ID parameter has been added as well to the eBPF
+helper. It is considered only if the passed struct key pointer is NULL.
+That would guaranteed, assuming that the keyring ID is hardcoded, that
+signature verification is always done with the desired keys.
+
+The introduced helpers can be called only from sleepable programs, because
+of memory allocation (with key flag KEY_LOOKUP_CREATE) and crypto
+operations. For example, the lsm.s/bpf attach point is suitable,
+fexit/array_map_update_elem is not.
+
+A test was added to check the ability of bpf_verify_pkcs7_signature() to
+verify PKCS#7 signatures from the session keyring, a newly-created keyring,
+and from the secondary keyring (taking an existing kernel module for the
+verification). The test does not fail if a suitable kernel module is not
+found (needs support from the CI).
+
+The patch set is organized as follows.
+
+Patch 1 exports bpf_dynptr_get_size(), to obtain the real size of data
+carried by a dynamic pointer. Patch 2 introduces the
+bpf_lookup_user_key() and bpf_key_put() helpers. Patch 3 introduces the
+bpf_verify_pkcs7_signature() helper. Patches 4 and 5 respectively add the
+test for the first and the last helper.
+
+Changelog
+
+v4:
+ - Remove bpf_request_key_by_id(), don't return an invalid pointer that
+   other helpers can use
+ - Pass the keyring ID (without ULONG_MAX, suggested by Alexei) to
+   bpf_verify_pkcs7_signature()
+ - Introduce bpf_lookup_user_key() and bpf_key_put() helpers (suggested by
+   Alexei)
+ - Add lookup_key_norelease test, to ensure that the verifier blocks eBPF
+   programs which don't decrement the key reference count
+ - Parse raw PKCS#7 signature instead of module-style signature in the
+   verify_pkcs7_signature test (suggested by Alexei)
+ - Parse kernel module in user space and pass raw PKCS#7 signature to the
+   eBPF program for signature verification
+
+v3:
+ - Rename bpf_verify_signature() back to bpf_verify_pkcs7_signature() to
+   avoid managing different parameters for each signature verification
+   function in one helper (suggested by Daniel)
+ - Use dynamic pointers and export bpf_dynptr_get_size() (suggested by
+   Alexei)
+ - Introduce bpf_request_key_by_id() to give more flexibility to the caller
+   of bpf_verify_pkcs7_signature() to retrieve the appropriate keyring
+   (suggested by Alexei)
+ - Fix test by reordering the gcc command line, always compile sign-file
+ - Improve helper support check mechanism in the test
+
+v2:
+ - Rename bpf_verify_pkcs7_signature() to a more generic
+   bpf_verify_signature() and pass the signature type (suggested by KP)
+ - Move the helper and prototype declaration under #ifdef so that user
+   space can probe for support for the helper (suggested by Daniel)
+ - Describe better the keyring types (suggested by Daniel)
+ - Include linux/bpf.h instead of vmlinux.h to avoid implicit or
+   redeclaration
+ - Make the test selfcontained (suggested by Alexei)
+
+v1:
+ - Don't define new map flag but introduce simple wrapper of
+   verify_pkcs7_signature() (suggested by Alexei and KP)
+
+Roberto Sassu (5):
+  bpf: Export bpf_dynptr_get_size()
+  bpf: Add bpf_lookup_user_key() and bpf_key_put() helpers
+  bpf: Add bpf_verify_pkcs7_signature() helper
+  selftests/bpf: Add test for unreleased key references
+  selftests/bpf: Add test for bpf_verify_pkcs7_signature() helper
+
+ include/linux/bpf.h                           |   1 +
+ include/uapi/linux/bpf.h                      |  33 ++
+ kernel/bpf/bpf_lsm.c                          |  85 +++++
+ kernel/bpf/helpers.c                          |   2 +-
+ kernel/bpf/verifier.c                         |   6 +-
+ scripts/bpf_doc.py                            |   2 +
+ tools/include/uapi/linux/bpf.h                |  33 ++
+ tools/testing/selftests/bpf/Makefile          |  14 +-
+ tools/testing/selftests/bpf/config            |   2 +
+ .../prog_tests/lookup_user_key_norelease.c    |  52 +++
+ .../bpf/prog_tests/verify_pkcs7_sig.c         | 341 ++++++++++++++++++
+ .../progs/test_lookup_user_key_norelease.c    |  24 ++
+ .../bpf/progs/test_verify_pkcs7_sig.c         |  90 +++++
+ .../testing/selftests/bpf/verify_sig_setup.sh | 104 ++++++
+ 14 files changed, 783 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lookup_user_key_norelease.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_lookup_user_key_norelease.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+ create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
+
+-- 
+2.25.1
 
