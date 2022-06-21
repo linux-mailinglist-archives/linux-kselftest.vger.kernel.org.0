@@ -2,78 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8E8553E68
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 00:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D7F553E75
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 00:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbiFUWT0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jun 2022 18:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S1350019AbiFUW16 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jun 2022 18:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiFUWTZ (ORCPT
+        with ESMTP id S231383AbiFUW16 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:19:25 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B347731356
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 15:19:23 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id o7so30395686eja.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 15:19:23 -0700 (PDT)
+        Tue, 21 Jun 2022 18:27:58 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4061A2AD1;
+        Tue, 21 Jun 2022 15:27:56 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id d123so15741793iof.10;
+        Tue, 21 Jun 2022 15:27:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5TxB5mhSxXbS5+BgbfWYorbl1xw2wo/iBLR21P4z7SQ=;
-        b=D4OeYr5DObfkZ5SxU78+21kychVQSbaYxc23HIiBZL/HdobOEgoPwRKlVkqu1qxzwz
-         OMerWfBiqhPqNfus9CMllIQSBRuu8B0VSmqLAsRaVcsaJrJJuGEgFuQc3DonJ/KE+aLR
-         iLQdIyL/eb6AaFyiD53AvNC7yxOApi+ZRt5U2foiWaMwt0nuJZ+L81yHFaWh5xPh5n/0
-         aiU025tdZv1lG2fC0/5QfmsBWN+BZ2R4Q2xd7tyXdDCxKX4vUnvB8uLqyFudoI0U0u6C
-         25Mz9INEgtxhNkLP8DYKCeIzC0BrjXWVVeo3stEgIF35rQhqOLf6uwKpnMAvnoEaMeQs
-         h+JQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=fNGqJo+i9/6/f3kZZhedEKn3jNfO/JEUEuBNSE2ons8=;
+        b=Bsw5bU9aNfX0F844I1T/2Kq4vl6mJFjBGaNV9ZHdP3lfbUJ/NJmLvDw83lq1sZFFOk
+         jcxk50T2/0kg5pvZqxPXETFm7ri2eYeXWX6DleBI69HpzlTdwJPOtwNWsJItjFz8O79B
+         Z5VES7BJv+nUxwuzojgo6CCgZegw/ZBLHXB9TWjkWI6eWLIzO4nlq4KGdyoaaKMKFCX/
+         M69QnFTju+8iE/bwxLJFtsHzxqpssOEXchocaKHpI4dgQ/XeBdJsSco0UzSfmtL1hX3a
+         Eg52YGE/4lIAK4fPx8BV4Rz+0CiChofrVsBZPjeItE8yTJg1Uf4s4Vq1nIVl9mpNSrA6
+         8WJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5TxB5mhSxXbS5+BgbfWYorbl1xw2wo/iBLR21P4z7SQ=;
-        b=d9i5bPWBaHdhhDKQfsXjopjkCvBzM8JC1H/4G1Fwc5LR1YFEzy7/PMsNtNgYM2CAL+
-         u1EWYrd+LTb+Z47t5naWCvvtKIVoCZoLdlN2y7wBwJghbYUCNXOo9ld1oXqdeKi3J6sr
-         ATbhNtXTFwKVtrntKleUnRuhl/brzjMMJ7/AYfr3ypYmUu150GW/cwo5HVZiJOValBVI
-         WVZv2TfkTe54pv8QdfDm6ZdhYLokgTL1Mp5mGYxFOOz/BjaykLruH4LImTs2zIh1oGwY
-         yMAEQqx4h3QfW7RRgqDDbmovtOh9EaowKZRwvqZgfgKGd4Fr0QUUObnV73QqgHEfVPhh
-         eM1A==
-X-Gm-Message-State: AJIora/KnNkkJ1WEwsBXSRmQ0NicS1tIFUUbAyoDHBzx2Hmd+fI3vdpt
-        R8sPWaB+c7rfD7PNb0UtgjUpErvadR+2pO0d0vC6nA==
-X-Google-Smtp-Source: AGRyM1vVeJpl5YmahMIBRWKENGAY/5q7qFCUrgPBVWAl++5JmH2yrju9aDpjPk6EPGCreQdfMELmoUi+rubgGYVlS7Q=
-X-Received: by 2002:a17:906:728a:b0:715:2fb5:19f9 with SMTP id
- b10-20020a170906728a00b007152fb519f9mr270868ejl.170.1655849962024; Tue, 21
- Jun 2022 15:19:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
-In-Reply-To: <20220621085345.603820-6-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 21 Jun 2022 15:19:10 -0700
-Message-ID: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=fNGqJo+i9/6/f3kZZhedEKn3jNfO/JEUEuBNSE2ons8=;
+        b=gB5ikzvQynttGT3J50uuSZIxutL/gvPNBnEcSW4E3r60DriRnIbXwH9Jfi9i9XOwHZ
+         fcpkbMenod7TCAq5eX1l7foQwulqm54ctJkKa/SvZkzs0t8+i1Bigb4oh1S7TaIQM5Fo
+         KA+LX9OCtDjkdZ0hd3grgLQjfO+j8tkSYLPg8FC0I9idUTJdeZpYTCmPlY3Er/ffWeD0
+         U46ZTbrrPC+NHNECvbKv/4e1puAhhq2m6/vjDM+u5812GSp7mpP85fIg4Qe0duhNPsFG
+         GS8lkPZLyRl8937IBWiEGFi35VvIvM2s2yGq3VMSvkVats2Pq26SN+Tj3WTv2L52eSpU
+         34RQ==
+X-Gm-Message-State: AJIora/AG7MeT4ijtjApez5AV45mOlypKxbPys7c9jbtCFCkYaO8w4g2
+        Xmg76OnK5OT1tM+fpISYpAs=
+X-Google-Smtp-Source: AGRyM1s7CtUuGPbwQO3uFbWyjsf6za/ECqC0G+2mNEFJEQFJ6RUGx/b3UQVkQauF8xeSlfZOHgzUag==
+X-Received: by 2002:a05:6638:1301:b0:331:f2f0:a17e with SMTP id r1-20020a056638130100b00331f2f0a17emr227630jad.141.1655850475088;
+        Tue, 21 Jun 2022 15:27:55 -0700 (PDT)
+Received: from localhost ([172.243.153.43])
+        by smtp.gmail.com with ESMTPSA id h18-20020a02c732000000b0032e3b0933c6sm7637267jao.162.2022.06.21.15.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jun 2022 15:27:54 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 15:27:46 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
+        john.fastabend@gmail.com, songliubraving@fb.com, kafai@fb.com,
+        yhs@fb.com
+Cc:     dhowells@redhat.com, keyrings@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        kernel test robot <lkp@intel.com>
+Message-ID: <62b245e22effa_1627420871@john.notmuch>
+In-Reply-To: <20220621163757.760304-4-roberto.sassu@huawei.com>
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
+ <20220621163757.760304-4-roberto.sassu@huawei.com>
+Subject: RE: [PATCH v5 3/5] bpf: Add bpf_verify_pkcs7_signature() helper
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,55 +78,71 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
- On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
->
-> The kunit_test_suite() macro is no-longer incompatible with module_add,
-> so its use can be reinstated.
->
-> Since this fixes parsing with builtins and kunit_tool, also enable the
-> test by default when KUNIT_ALL_TESTS is enabled.
->
-> The test can now be run via kunit_tool with:
->         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
->         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
->         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
->         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
->         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
->         'sdhci-of-aspeed'
->
-> (It may be worth adding a .kunitconfig at some point, as there are
-> enough dependencies to make that command scarily long.)
->
-> Signed-off-by: David Gow <davidgow@google.com>
+Roberto Sassu wrote:
+> Add the bpf_verify_pkcs7_signature() helper, to give eBPF security modules
+> the ability to check the validity of a signature against supplied data, by
+> using user-provided or system-provided keys as trust anchor.
+> 
+> The new helper makes it possible to enforce mandatory policies, as eBPF
+> programs might be allowed to make security decisions only based on data
+> sources the system administrator approves.
+> 
+> The caller should provide both the data to be verified and the signature as
+> eBPF dynamic pointers (to minimize the number of parameters).
+> 
+> The caller should also provide a keyring pointer obtained with
+> bpf_lookup_user_key() or, alternatively, a keyring ID with values defined
+> in verification.h. While the first choice gives users more flexibility, the
+> second offers better security guarantees, as the keyring selection will not
+> depend on possibly untrusted user space but on the kernel itself.
+> 
+> Defined keyring IDs are: 0 for the primary keyring (immutable keyring of
+> system keys); 1 for both the primary and secondary keyring (where keys can
+> be added only if they are vouched for by existing keys in those keyrings);
+> 2 for the platform keyring (primarily used by the integrity subsystem to
+> verify a kexec'ed kerned image and, possibly, the initramfs signature).
+> 
+> Note: since the keyring ID assignment is understood only by
+> verify_pkcs7_signature(), it must be passed directly to the corresponding
+> helper, rather than to a separate new helper returning a struct key pointer
+> with the keyring ID as a pointer value. If such pointer is passed to any
+> other helper which does not check its validity, an illegal memory access
+> could occur.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reported-by: kernel test robot <lkp@intel.com> (cast warning)
+> ---
+>  include/uapi/linux/bpf.h       | 17 +++++++++++++++
+>  kernel/bpf/bpf_lsm.c           | 39 ++++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h | 17 +++++++++++++++
+>  3 files changed, 73 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 7bbcf2cd105d..524bed4d7170 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5339,6 +5339,22 @@ union bpf_attr {
+>   *		bpf_lookup_user_key() helper.
+>   *	Return
+>   *		0
+> + *
+> + * long bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr, struct bpf_dynptr *sig_ptr, struct key *trusted_keys, unsigned long keyring_id)
+> + *	Description
+> + *		Verify the PKCS#7 signature *sig* against the supplied *data*
+> + *		with keys in *trusted_keys* or in a keyring with ID
+> + *		*keyring_id*.
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
+Would be nice to give precedence here so that its obvious order between
+trusted_keys and keyring_id. 
 
-Minor, optional suggestion below.
-
->  static int __init aspeed_sdc_init(void)
-> @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
->         if (rc < 0)
->                 goto cleanup_sdhci;
->
-> -       rc = aspeed_sdc_tests_init();
-> -       if (rc < 0) {
-> -               platform_driver_unregister(&aspeed_sdc_driver);
-> -               goto cleanup_sdhci;
-> -       }
-> -
->         return 0;
->
->  cleanup_sdhci:
-
-This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
-kunit-related build error") to allow for this extra call to
-aspeed_sdc_tests_init().
-
-This could now be reverted back to what is
-        rc = platform_driver_register(&aspeed_sdc_driver);
-        if (rc < 0)
-               platform_driver_unregister(&aspeed_sdhci_driver);
-
-        return rc;
-
-but let's see what the maintainers think.
+> + *
+> + *		*keyring_id* can have the following values defined in
+> + *		verification.h: 0 for the primary keyring (immutable keyring of
+> + *		system keys); 1 for both the primary and secondary keyring
+> + *		(where keys can be added only if they are vouched for by
+> + *		existing keys in those keyrings); 2 for the platform keyring
+> + *		(primarily used by the integrity subsystem to verify a kexec'ed
+> + *		kerned image and, possibly, the initramfs signature).
+> + *	Return
+> + *		0 on success, a negative value on error.
+>   */
