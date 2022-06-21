@@ -2,116 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F26D553BA0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 22:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789C6553DAE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 23:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354021AbiFUU3k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jun 2022 16:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S1356398AbiFUV0T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jun 2022 17:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235086AbiFUU3j (ORCPT
+        with ESMTP id S1356175AbiFUVZu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jun 2022 16:29:39 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915892DA9F
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 13:29:37 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id v1so29834122ejg.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 13:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GQoT4eqYGuax/64sGawgD7sMHV+BWMBDm2reCmNiO4s=;
-        b=k+rN15KFxJA6a5zoP03uYyAUUFUaUXZ5WCyn4tsLzy3Z8nbqPA2uh+MFWG/ejpgZdt
-         fAMPct0hVTpOk6dY1CtpVoGS48IY07+4qGc6mvZImuCQ0HO8tDZ6Dj7IFv61OUAkNmIe
-         l8zutKN4eY/nZlDqTNhTr40wnq8/5PJ8i2x9UmdBmbR302lLpiTRyluuUeR/BL+pIDEN
-         ZyUjQeFqRNI55hVDY6vkbqrv4tUJPgVaQYtNdLwudlwwSYOfjNKRGpN3xf8KAcxXw0VG
-         Q6R82oOsuoNaALct3Wm1rVZxIYfPGRrF9gpYMV3LjU99VTUg0yc1+F0sYzxtMJU83xCY
-         ySkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GQoT4eqYGuax/64sGawgD7sMHV+BWMBDm2reCmNiO4s=;
-        b=nLnZGrZIEmvEsFSFVfUuJ/4rTcZbOqoYXBIqcxRCfivqGcov5fpXtUM6yJMvZ5Xv6M
-         VZ6pHbHNFVO5JBUOXCQQXhAAfjcvSptwuGtFRAXT1L7bx7q7hDAYTBRuYadmgEIOg2OZ
-         NRsB2tl956duerJ97vxgAt/opBz39MS3LJp7XKXMUKb1KUcngkUhl/THzxvRQmQR3WYZ
-         3irrOvr6cjc3k9DF4EOgwVn1OqYh8mCh89j+pYxm5ZhxScyRHitQb/id/xjiIPEteH2Y
-         CCZSocKQ2s/OAbPdlorvKro1Pb2TXM8EEPwtHfQXrpTi3sJvQJQwfGgKP1Qqh4cFWX6N
-         KdFw==
-X-Gm-Message-State: AJIora82/PpxrdQzdd3jGzeHQjwayAIOCciJ8RCb1RdDbTd5Y96RZTQ/
-        Sy29WG0hso5evLvx0nVGqFZY9Q5I50Uggx+m5EWNCg==
-X-Google-Smtp-Source: AGRyM1v2V9388Qkgg2T6Sj1QZIN2f5LmKlNSpQwA0h9/cgUy9z29R5wk/xhzbEPKrmXmDL6wGIYNKGmqGyASlMZNlXY=
-X-Received: by 2002:a17:906:c193:b0:718:d076:df7 with SMTP id
- g19-20020a170906c19300b00718d0760df7mr28234264ejz.358.1655843375835; Tue, 21
- Jun 2022 13:29:35 -0700 (PDT)
+        Tue, 21 Jun 2022 17:25:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5223120A;
+        Tue, 21 Jun 2022 14:21:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D055B81B1F;
+        Tue, 21 Jun 2022 21:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA16C3411C;
+        Tue, 21 Jun 2022 21:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655846499;
+        bh=3+kfBJXx7bJFsPBrjotmt2oV78Cw71odr1QKUuLojLM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gIxayzdB+vG0w+xIdQER2id6GxgCY1T4ky3Qb3uQStnmzPvYkrZMYAfOndRAONyAr
+         7WS9sIzkuur4XUhdbgPFYWQr+VC0AnbCx2nFqvwBqk/PNi5MZSDTzxFgzdZ4jw++3x
+         Zmq2tqSwZQdpfSHcpZqz09EJLRnSzN5tX7krsqFCF0gYwogvLAaQZtKOLDKppr9DX3
+         dsbOC8u7oQqXGaezOUK5BqdbfrshLEUbTFmLc/9LmZDjCDQ3EFd1NztdZR0Y7b9Go5
+         CGgTjlKcUZ6yAx4NoZmyPEVoUJPR4uWTOYTycX3hn2F2BheOLQs6EHZH2ZahniYim+
+         dP98j5Yy567rQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     David Matlack <dmatlack@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        bgardon@google.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH MANUALSEL 5.18 3/3] KVM: selftests: Restrict test region to 48-bit physical addresses when using nested
+Date:   Tue, 21 Jun 2022 17:21:32 -0400
+Message-Id: <20220621212132.251759-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220621212132.251759-1-sashal@kernel.org>
+References: <20220621212132.251759-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-3-davidgow@google.com>
-In-Reply-To: <20220621085345.603820-3-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 21 Jun 2022 13:29:24 -0700
-Message-ID: <CAGS_qxqnCvTnE-cGd-LNnhCMsz5YE3Ea9jw_OqNDwjQQ9TGpGg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 1:54 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> From: Daniel Latypov <dlatypov@google.com>
->
-> We currently store kunit suites in the .kunit_test_suites ELF section as
-> a `struct kunit_suite***` (modulo some `const`s).
-> For every test file, we store a struct kunit_suite** NULL-terminated arra=
-y.
->
-> This adds quite a bit of complexity to the test filtering code in the
-> executor.
->
-> Instead, let's just make the .kunit_test_suites section contain a single
-> giant array of struct kunit_suite pointers, which can then be directly
-> manipulated. This array is not NULL-terminated, and so none of the test
-> filtering code needs to NULL-terminate anything.
->
-> Tested-by: Ma=C3=ADra Canal <maira.canal@usp.br>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Co-developed-by: David Gow <davidgow@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20220618090310.1174932-3-davidgow=
-@google.com/
-> - No longer NULL-terminate generated suite_sets
+From: David Matlack <dmatlack@google.com>
 
-Nice!
-Thanks for picking and cleaning this up!
+[ Upstream commit e0f3f46e42064a51573914766897b4ab95d943e3 ]
 
-Daniel
+The selftests nested code only supports 4-level paging at the moment.
+This means it cannot map nested guest physical addresses with more than
+48 bits. Allow perf_test_util nested mode to work on hosts with more
+than 48 physical addresses by restricting the guest test region to
+48-bits.
+
+While here, opportunistically fix an off-by-one error when dealing with
+vm_get_max_gfn(). perf_test_util.c was treating this as the maximum
+number of GFNs, rather than the maximum allowed GFN. This didn't result
+in any correctness issues, but it did end up shifting the test region
+down slightly when using huge pages.
+
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: David Matlack <dmatlack@google.com>
+Message-Id: <20220520233249.3776001-12-dmatlack@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../testing/selftests/kvm/lib/perf_test_util.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
+index 722df3a28791..ddd68ba0c99f 100644
+--- a/tools/testing/selftests/kvm/lib/perf_test_util.c
++++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
+@@ -110,6 +110,7 @@ struct kvm_vm *perf_test_create_vm(enum vm_guest_mode mode, int vcpus,
+ 	struct kvm_vm *vm;
+ 	uint64_t guest_num_pages;
+ 	uint64_t backing_src_pagesz = get_backing_src_pagesz(backing_src);
++	uint64_t region_end_gfn;
+ 	int i;
+ 
+ 	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(mode));
+@@ -144,18 +145,29 @@ struct kvm_vm *perf_test_create_vm(enum vm_guest_mode mode, int vcpus,
+ 
+ 	pta->vm = vm;
+ 
++	/* Put the test region at the top guest physical memory. */
++	region_end_gfn = vm_get_max_gfn(vm) + 1;
++
++#ifdef __x86_64__
++	/*
++	 * When running vCPUs in L2, restrict the test region to 48 bits to
++	 * avoid needing 5-level page tables to identity map L2.
++	 */
++	if (pta->nested)
++		region_end_gfn = min(region_end_gfn, (1UL << 48) / pta->guest_page_size);
++#endif
+ 	/*
+ 	 * If there should be more memory in the guest test region than there
+ 	 * can be pages in the guest, it will definitely cause problems.
+ 	 */
+-	TEST_ASSERT(guest_num_pages < vm_get_max_gfn(vm),
++	TEST_ASSERT(guest_num_pages < region_end_gfn,
+ 		    "Requested more guest memory than address space allows.\n"
+ 		    "    guest pages: %" PRIx64 " max gfn: %" PRIx64
+ 		    " vcpus: %d wss: %" PRIx64 "]\n",
+-		    guest_num_pages, vm_get_max_gfn(vm), vcpus,
++		    guest_num_pages, region_end_gfn - 1, vcpus,
+ 		    vcpu_memory_bytes);
+ 
+-	pta->gpa = (vm_get_max_gfn(vm) - guest_num_pages) * pta->guest_page_size;
++	pta->gpa = (region_end_gfn - guest_num_pages) * pta->guest_page_size;
+ 	pta->gpa = align_down(pta->gpa, backing_src_pagesz);
+ #ifdef __s390x__
+ 	/* Align to 1M (segment size) */
+-- 
+2.35.1
+
