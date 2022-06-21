@@ -2,134 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36F6553DAC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 23:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8E8553E68
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 00:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356577AbiFUV0V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jun 2022 17:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S232203AbiFUWT0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jun 2022 18:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356431AbiFUVZw (ORCPT
+        with ESMTP id S230060AbiFUWTZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jun 2022 17:25:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696BB30F65;
-        Tue, 21 Jun 2022 14:21:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0932B615A8;
-        Tue, 21 Jun 2022 21:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97576C3411D;
-        Tue, 21 Jun 2022 21:21:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655846506;
-        bh=3+kfBJXx7bJFsPBrjotmt2oV78Cw71odr1QKUuLojLM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KJJq2VgXa+HRfEWPrWr6wGrH+KLybyVRS3X29halPEF+fdhKVk8eCcIC1pamlw2sM
-         R7Ne+cBgx1qbNzTgtw/0YL/UXvWWoZ9rCiMRMJw/NClyPi246FStSKOJGjnXDc4E1j
-         dddHKRbdgP9qUfv0z9TMDiwhwyBkeOde5OInh55dqd2NGigPUr7cyQvb2y/eRlHDO0
-         RAdQsQFa2q919yDxwUBFh1m5A7bj7nAcSeBmR9sNYLvW7oSb2dnwbdHv5qW9eb9Nfv
-         GDCS+aR9vhdSJXEdTUNn5tQp5gliSo3ze80cISGnWcjJKNdPq/B9gnCy5T3DDcMz+4
-         xaMaVDqas3dvg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Matlack <dmatlack@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        bgardon@google.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH MANUALSEL 5.17 3/3] KVM: selftests: Restrict test region to 48-bit physical addresses when using nested
-Date:   Tue, 21 Jun 2022 17:21:39 -0400
-Message-Id: <20220621212139.251808-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220621212139.251808-1-sashal@kernel.org>
-References: <20220621212139.251808-1-sashal@kernel.org>
+        Tue, 21 Jun 2022 18:19:25 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B347731356
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 15:19:23 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id o7so30395686eja.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 15:19:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5TxB5mhSxXbS5+BgbfWYorbl1xw2wo/iBLR21P4z7SQ=;
+        b=D4OeYr5DObfkZ5SxU78+21kychVQSbaYxc23HIiBZL/HdobOEgoPwRKlVkqu1qxzwz
+         OMerWfBiqhPqNfus9CMllIQSBRuu8B0VSmqLAsRaVcsaJrJJuGEgFuQc3DonJ/KE+aLR
+         iLQdIyL/eb6AaFyiD53AvNC7yxOApi+ZRt5U2foiWaMwt0nuJZ+L81yHFaWh5xPh5n/0
+         aiU025tdZv1lG2fC0/5QfmsBWN+BZ2R4Q2xd7tyXdDCxKX4vUnvB8uLqyFudoI0U0u6C
+         25Mz9INEgtxhNkLP8DYKCeIzC0BrjXWVVeo3stEgIF35rQhqOLf6uwKpnMAvnoEaMeQs
+         h+JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5TxB5mhSxXbS5+BgbfWYorbl1xw2wo/iBLR21P4z7SQ=;
+        b=d9i5bPWBaHdhhDKQfsXjopjkCvBzM8JC1H/4G1Fwc5LR1YFEzy7/PMsNtNgYM2CAL+
+         u1EWYrd+LTb+Z47t5naWCvvtKIVoCZoLdlN2y7wBwJghbYUCNXOo9ld1oXqdeKi3J6sr
+         ATbhNtXTFwKVtrntKleUnRuhl/brzjMMJ7/AYfr3ypYmUu150GW/cwo5HVZiJOValBVI
+         WVZv2TfkTe54pv8QdfDm6ZdhYLokgTL1Mp5mGYxFOOz/BjaykLruH4LImTs2zIh1oGwY
+         yMAEQqx4h3QfW7RRgqDDbmovtOh9EaowKZRwvqZgfgKGd4Fr0QUUObnV73QqgHEfVPhh
+         eM1A==
+X-Gm-Message-State: AJIora/KnNkkJ1WEwsBXSRmQ0NicS1tIFUUbAyoDHBzx2Hmd+fI3vdpt
+        R8sPWaB+c7rfD7PNb0UtgjUpErvadR+2pO0d0vC6nA==
+X-Google-Smtp-Source: AGRyM1vVeJpl5YmahMIBRWKENGAY/5q7qFCUrgPBVWAl++5JmH2yrju9aDpjPk6EPGCreQdfMELmoUi+rubgGYVlS7Q=
+X-Received: by 2002:a17:906:728a:b0:715:2fb5:19f9 with SMTP id
+ b10-20020a170906728a00b007152fb519f9mr270868ejl.170.1655849962024; Tue, 21
+ Jun 2022 15:19:22 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
+In-Reply-To: <20220621085345.603820-6-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 21 Jun 2022 15:19:10 -0700
+Message-ID: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: David Matlack <dmatlack@google.com>
+ On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
+>
+> The kunit_test_suite() macro is no-longer incompatible with module_add,
+> so its use can be reinstated.
+>
+> Since this fixes parsing with builtins and kunit_tool, also enable the
+> test by default when KUNIT_ALL_TESTS is enabled.
+>
+> The test can now be run via kunit_tool with:
+>         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
+>         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
+>         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
+>         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
+>         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
+>         'sdhci-of-aspeed'
+>
+> (It may be worth adding a .kunitconfig at some point, as there are
+> enough dependencies to make that command scarily long.)
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-[ Upstream commit e0f3f46e42064a51573914766897b4ab95d943e3 ]
+Acked-by: Daniel Latypov <dlatypov@google.com>
 
-The selftests nested code only supports 4-level paging at the moment.
-This means it cannot map nested guest physical addresses with more than
-48 bits. Allow perf_test_util nested mode to work on hosts with more
-than 48 physical addresses by restricting the guest test region to
-48-bits.
+Minor, optional suggestion below.
 
-While here, opportunistically fix an off-by-one error when dealing with
-vm_get_max_gfn(). perf_test_util.c was treating this as the maximum
-number of GFNs, rather than the maximum allowed GFN. This didn't result
-in any correctness issues, but it did end up shifting the test region
-down slightly when using huge pages.
+>  static int __init aspeed_sdc_init(void)
+> @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
+>         if (rc < 0)
+>                 goto cleanup_sdhci;
+>
+> -       rc = aspeed_sdc_tests_init();
+> -       if (rc < 0) {
+> -               platform_driver_unregister(&aspeed_sdc_driver);
+> -               goto cleanup_sdhci;
+> -       }
+> -
+>         return 0;
+>
+>  cleanup_sdhci:
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: David Matlack <dmatlack@google.com>
-Message-Id: <20220520233249.3776001-12-dmatlack@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../testing/selftests/kvm/lib/perf_test_util.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
+kunit-related build error") to allow for this extra call to
+aspeed_sdc_tests_init().
 
-diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-index 722df3a28791..ddd68ba0c99f 100644
---- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-+++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-@@ -110,6 +110,7 @@ struct kvm_vm *perf_test_create_vm(enum vm_guest_mode mode, int vcpus,
- 	struct kvm_vm *vm;
- 	uint64_t guest_num_pages;
- 	uint64_t backing_src_pagesz = get_backing_src_pagesz(backing_src);
-+	uint64_t region_end_gfn;
- 	int i;
- 
- 	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(mode));
-@@ -144,18 +145,29 @@ struct kvm_vm *perf_test_create_vm(enum vm_guest_mode mode, int vcpus,
- 
- 	pta->vm = vm;
- 
-+	/* Put the test region at the top guest physical memory. */
-+	region_end_gfn = vm_get_max_gfn(vm) + 1;
-+
-+#ifdef __x86_64__
-+	/*
-+	 * When running vCPUs in L2, restrict the test region to 48 bits to
-+	 * avoid needing 5-level page tables to identity map L2.
-+	 */
-+	if (pta->nested)
-+		region_end_gfn = min(region_end_gfn, (1UL << 48) / pta->guest_page_size);
-+#endif
- 	/*
- 	 * If there should be more memory in the guest test region than there
- 	 * can be pages in the guest, it will definitely cause problems.
- 	 */
--	TEST_ASSERT(guest_num_pages < vm_get_max_gfn(vm),
-+	TEST_ASSERT(guest_num_pages < region_end_gfn,
- 		    "Requested more guest memory than address space allows.\n"
- 		    "    guest pages: %" PRIx64 " max gfn: %" PRIx64
- 		    " vcpus: %d wss: %" PRIx64 "]\n",
--		    guest_num_pages, vm_get_max_gfn(vm), vcpus,
-+		    guest_num_pages, region_end_gfn - 1, vcpus,
- 		    vcpu_memory_bytes);
- 
--	pta->gpa = (vm_get_max_gfn(vm) - guest_num_pages) * pta->guest_page_size;
-+	pta->gpa = (region_end_gfn - guest_num_pages) * pta->guest_page_size;
- 	pta->gpa = align_down(pta->gpa, backing_src_pagesz);
- #ifdef __s390x__
- 	/* Align to 1M (segment size) */
--- 
-2.35.1
+This could now be reverted back to what is
+        rc = platform_driver_register(&aspeed_sdc_driver);
+        if (rc < 0)
+               platform_driver_unregister(&aspeed_sdhci_driver);
 
+        return rc;
+
+but let's see what the maintainers think.
