@@ -2,164 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE72B552C9F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 10:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD14B552D6F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 10:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345851AbiFUIH1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jun 2022 04:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S1348452AbiFUIxz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jun 2022 04:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345440AbiFUIH0 (ORCPT
+        with ESMTP id S1346582AbiFUIxy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jun 2022 04:07:26 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E9824BD5
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 01:07:24 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id ay16so6388391ejb.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 01:07:24 -0700 (PDT)
+        Tue, 21 Jun 2022 04:53:54 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E06BCAB
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 01:53:53 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id b191-20020a621bc8000000b00525168d1861so2295668pfb.21
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 01:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wowsignal-io.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=RJBnJgLtX0JwpwRuCzYXTMM3g+mi6KZvAfgwyVPPYzs=;
-        b=NUZH7GF2lNzVd3sE/+N6FkE8FnZcjlKqfbfmyvHxtu7nOVoQ/ITMGxYo6EP0Erf2yC
-         S2QKLqRkkGbvBAYNftyz43sPe9Mg9D1cLUY8HHWEN6py5C2Movt+sSR6tKKE1yBaOW67
-         AlIY3myt8zUdCU2/SrIvo3gP5R9RRqPqW3LT4Gqr9KMOn60d/BdIAET04azM+E3mWmEu
-         neHluiGGuYNKxfOEkKU0lKP8Igvj0S8klPn9cmQZUzncRisqcUzUMXSIIR0ceWcQzeIz
-         xZsi0xpBOrSMP5dWubN7ErqyxRrHomwbpmMy16lv2euLe3hD1piSWL7v9xMuJRJgmHtL
-         0eDQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=nf95HhrfWFUahqXSIitMKY23Se4rd+JJ9W9asuRVrfE=;
+        b=Ogsxr29vx7siAKBfxHcDd5vtA34uCszdFjp4M0pFwM3VCiNoCHpKhuGE5wgAtGqqHl
+         aCbOy32LCBU1l6SioJ723Ij5R8zHkMv6Ki0aQhFeYBWTMupd7de4Yq4HKQEgTBvLeYFY
+         qfTvVI3VxufEyM+pOkc9/Y0+8xQt6AYeRLNmovW+8Nn7Ai7EnB7tqpMZ0cplADz6SWN3
+         4WRDtNJUjqYiW80yyV3yZ+tn7w0CUK29zSyHR1iRT5yuA1kTdYdl4fVhmLRy0APOiM7m
+         EvlxApHEF4iDoOVP0PaNNrl7zYefWUgZo5Bou5AAzguAE+BIysGEnbHAffq1DWjcIYWq
+         qeoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RJBnJgLtX0JwpwRuCzYXTMM3g+mi6KZvAfgwyVPPYzs=;
-        b=YUzEOuStlzKQx/qfCgDt6oNjkXw7dFZy1rb6RXDc3SbKFV9cfBebyi0Lac9XNOG613
-         CcmpwQ8FBeXGHH9wIGxREyWnymjx07fgL2cbcxfG7xAlzxY9W8MCEvI21oGB5L/+YMdz
-         pf7vR0kxmvgWM632PUxlx9At4s2+WGNEPqBbrNOw6rvvaNCrm5iq1OuWcxoIdo268okq
-         jews9A4+n4DfmB+BBWj72ybDK1fjBwIEtitiPntz+pXqRripsqCQx9bYdK0Uawv4MXaF
-         GE4uJTCW3mJ9pZj8xaPN8EzUQKQ9b1Qvnb4xMe6/nMWylp1/JGVXY6FW6jXYJ6zNUdAe
-         Knzg==
-X-Gm-Message-State: AJIora8p8MAS1bypInrkqHVHTwc3+zUFrTuHrhVLVdca3CoZ6DzkXBNa
-        /NHNwTDrNWhWeuiC67XsjaiQ41kS+LcfCu2UKWtHHMtq
-X-Google-Smtp-Source: AGRyM1tPQv7Rq5zeRImjmstJyNLf6NW9QBBCknMosNFsGEoQif3cosqC4d+FdYuVw+9SzFtQo/zPEA==
-X-Received: by 2002:a17:906:c041:b0:718:c984:d9ee with SMTP id bm1-20020a170906c04100b00718c984d9eemr26003658ejb.722.1655798843238;
-        Tue, 21 Jun 2022 01:07:23 -0700 (PDT)
-Received: from devvm3537.lla0.facebook.com (fwdproxy-lla-008.fbsv.net. [2a03:2880:30ff:8::face:b00c])
-        by smtp.gmail.com with ESMTPSA id ht16-20020a170907609000b00711c7cca428sm7167694ejc.155.2022.06.21.01.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 01:07:22 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 01:07:20 -0700
-From:   Adam Sindelar <adam@wowsignal.io>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, David Vernet <void@manifault.com>
-Subject: Re: [PATCH] selftests/vm: Only run the 128TB boundary test if
- 5-level paging is enabled
-Message-ID: <YrF8OEK7E4T20IW8@devvm3537.lla0.facebook.com>
-References: <20220620143536.2767866-1-adam@wowsignal.io>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220620143536.2767866-1-adam@wowsignal.io>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=nf95HhrfWFUahqXSIitMKY23Se4rd+JJ9W9asuRVrfE=;
+        b=IQEviMacUJYTRsX05yGGWMfv8ASRgo+3CI3vz5tNSpfCnyIm/ryDRb1dSrzl5Mg31V
+         bW9h4Vq9500mxHQxJt78duArHdqPMAw0jSMtc0aC8RzMfkOOqA/8zcPJQKcy8uhC6WfW
+         Ne/0W4gkAKRm6/CRWhSy6Z7YHzez5T6HOi+pKlVescrLiXI3k0aSbkd4D8qFN+9NxuJM
+         k2PL/TfgFhB3MVt1U7WGz7/F8MPkG3KJiRE8J0LqRUZIPIVE1xOh8814IhP7mRGU536A
+         /fEeZucbaUqXTz4EAsYRGfSfbARb2+zYwT4gvjVsNzu97R2bKeUUgG5sjgCiuNlhALA6
+         xxdQ==
+X-Gm-Message-State: AJIora+JkHoaBFIGX14XLqtuMZdG4suTbG9VYzVosi7SXWcNj/aM1GBx
+        qRV/f2fJQR0WA5J3SYDBZBtbPzNMCXxLiA==
+X-Google-Smtp-Source: AGRyM1vm7uKvTRSoy8DBny3ZH2I/R3zY1c/M5lzSFFKf5zbsgHT5nrh/r0nP22nRH6TvP9voZc09YjHiLsB5UA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:90a:4a97:b0:1ea:fa24:467c with SMTP
+ id f23-20020a17090a4a9700b001eafa24467cmr694965pjh.1.1655801632812; Tue, 21
+ Jun 2022 01:53:52 -0700 (PDT)
+Date:   Tue, 21 Jun 2022 16:53:40 +0800
+Message-Id: <20220621085345.603820-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+Subject: [PATCH v2 0/5] Rework KUnit test execution in modules
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>
+Cc:     Paraschiv@google.com,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 07:35:36AM -0700, Adam Sindelar wrote:
-> The test va_128TBswitch.c expects to be able to pass mmap an address hint
-> and length that cross the address 1<<47. This is not possible without
-> 5-level page tables, so the test fails.
-> 
-> The test is already only run on 64-bit powerpc and x86 archs, but this
-> patch adds an additional check that skips the test if PG_TABLE_LEVELS < 5.
-> There is precedent for checking /proc/config.gz in selftests, e.g. in
-> selftests/firmware.
-> 
-> Signed-off-by: Adam Sindelar <adam@wowsignal.io>
-> ---
->  tools/testing/selftests/vm/Makefile          |  1 +
->  tools/testing/selftests/vm/run_vmtests.sh    | 13 +++++++---
->  tools/testing/selftests/vm/va_128TBswitch.sh | 26 ++++++++++++++++++++
->  3 files changed, 36 insertions(+), 4 deletions(-)
->  create mode 100755 tools/testing/selftests/vm/va_128TBswitch.sh
-> 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 68cacffc93ec..bc64ca1e0de3 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -80,6 +80,7 @@ endif
->  TEST_PROGS := run_vmtests.sh
->  
->  TEST_FILES := test_vmalloc.sh
-> +TEST_FILEs += va_128TBswitch.sh
->  
->  KSFT_KHDR_INSTALL := 1
->  include ../lib.mk
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index e953f3cd9664..10cccbedaaa1 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -290,12 +290,17 @@ fi
->  echo "-----------------------------"
->  echo "running virtual address 128TB switch test"
->  echo "-----------------------------"
-> -./va_128TBswitch
-> -if [ $? -ne 0 ]; then
-> +./va_128TBswitch.sh
-> +ret_val=$?
-> +
-> +if [ $ret_val -eq 0 ]; then
-> +    echo "[PASS]"
-> +elif [ $ret_val -eq $ksft_skip ]; then
-> +	 echo "[SKIP]"
-> +	 exitcode=$ksft_skip
-> +else
->      echo "[FAIL]"
->      exitcode=1
-> -else
-> -    echo "[PASS]"
->  fi
->  fi # VADDR64
->  
-> diff --git a/tools/testing/selftests/vm/va_128TBswitch.sh b/tools/testing/selftests/vm/va_128TBswitch.sh
-> new file mode 100755
-> index 000000000000..f7b9db0bfd33
-> --- /dev/null
-> +++ b/tools/testing/selftests/vm/va_128TBswitch.sh
-> @@ -0,0 +1,26 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Copyright (C) 2022 Adam Sindelar (Meta) <adam@wowsignal.io>
-> +#
-> +# This is a test for mmap behavior with 5-level paging. This script wraps the
-> +# real test to check that the kernel is configured to support at least 5
-> +# pagetable levels.
-> +
-> +# 1 means the test failed
-> +exitcode=1
-> +
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
-> +check_test_requirements()
-> +{
-> +    pg_table_levels=$(gzip -dcfq /proc/config.gz | grep PGTABLE_LEVELS | cut -d'=' -f 2)
-> +    if [ $pg_table_levels -lt 5 ]; then
-> +    echo "$0: PG_TABLE_LEVELS=${pg_table_levels}, must be >= 5 to run this test"
-> +        exit $ksft_skip
-> +    fi
-> +}
-> +
-> +check_test_requirements
-> +./va_128TBswitch
-> -- 
-> 2.30.2
-> 
+This patch series makes two changes to how KUnit test suites are stored
+and executed:
+- The .kunit_test_suites section is now used for tests in modules (in
+  lieu of a module_init funciton), as well as for built-in tests. The
+  module loader will now trigger test execution. This frees up the
+  module_init function for other uses.
+- Instead of storing an array of arrays of suites, have the
+  kunit_test_suite() and kunit_test_suites() macros append to one global
+  (or per-module) list of test suites. This removes a needless layer of
+  indirection, and removes the need to NULL-terminate suite_sets.
 
-Actually, I think I sent this to the wrong list. My bad, please disregard -
-I'll send it to mm, where I think it belongs.
+The upshot of this is that it should now be possible to use the
+kunit_test_suite() and kunit_test_suites() macros to register test
+suites even from within modules which otherwise had module_init
+functions. This was proving to be quite a common issue, resulting in
+several modules calling into KUnit's private suite execution functions
+to run their tests (often introducing incompatibilities with the KUnit
+tooling).
+
+This series also fixes the thunderbolt, nitro_enclaves, and
+sdhci-of-aspeed tests to use kunit_test_suite() now that it works. This
+is required, as otherwise the first two patches may break these tests
+entirely.
+
+Huge thanks to Jeremy Kerr, who designed and implemented the module
+loader changes, and to Daniel Latypov for pushing the simplification of
+the nested arrays in .kunit_test_suites.
+
+I've tested this series both with builtin tests, and with modules on
+x86_64, but there's always the possibility that there's something subtle
+and nasty on another architecture, so please test!
+
+Cheers,
+-- David
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220618090310.1174932-1-davidgow@google.com/
+- Fix a compile issue when CONFIG_KUNIT=m (Thanks Christophe)
+- No longer NULL-terminate suite_sets.
+- Move the thunderbird Kconfig to the correct patch (Thanks Andra)
+- Add all the Tested-by and Acked-by tags.
+
+---
+Daniel Latypov (1):
+  kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
+
+David Gow (3):
+  thunderbolt: test: Use kunit_test_suite() macro
+  nitro_enclaves: test: Use kunit_test_suite() macro
+  mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+
+Jeremy Kerr (1):
+  kunit: unify module and builtin suite definitions
+
+ drivers/mmc/host/Kconfig                      |   5 +-
+ drivers/mmc/host/sdhci-of-aspeed-test.c       |   8 +-
+ drivers/mmc/host/sdhci-of-aspeed.c            |  27 ----
+ drivers/thunderbolt/Kconfig                   |   5 +-
+ drivers/thunderbolt/domain.c                  |   3 -
+ drivers/thunderbolt/tb.h                      |   8 -
+ drivers/thunderbolt/test.c                    |  12 +-
+ drivers/virt/nitro_enclaves/Kconfig           |   5 +-
+ drivers/virt/nitro_enclaves/ne_misc_dev.c     |  27 ----
+ .../virt/nitro_enclaves/ne_misc_dev_test.c    |   5 +-
+ include/kunit/test.h                          |  60 ++------
+ include/linux/module.h                        |   5 +
+ kernel/module/main.c                          |   6 +
+ lib/kunit/executor.c                          | 115 ++++----------
+ lib/kunit/executor_test.c                     | 144 +++++-------------
+ lib/kunit/test.c                              |  54 ++++++-
+ 16 files changed, 152 insertions(+), 337 deletions(-)
+
+-- 
+2.37.0.rc0.104.g0611611a94-goog
+
