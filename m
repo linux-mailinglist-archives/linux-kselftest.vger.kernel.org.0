@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB910553B39
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 22:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33616553B36
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jun 2022 22:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354330AbiFUULD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jun 2022 16:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
+        id S1354340AbiFUULI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jun 2022 16:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237933AbiFUULC (ORCPT
+        with ESMTP id S1354296AbiFUULH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jun 2022 16:11:02 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3492A264
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 13:10:56 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so19730541fac.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 13:10:56 -0700 (PDT)
+        Tue, 21 Jun 2022 16:11:07 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F222A73B
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 13:11:05 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-101bb9275bcso14863146fac.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 13:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=usp.br; s=usp-google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6+JXFHG3jcYkJ4zBa6+egSCKXqbH+aGXx2km2H05uYQ=;
-        b=FbCYgR+iqW7O3ZMKXewe1TUS1d7pWW8ce8uyh7B3Esn9vyCQnIN/ixWEOXmpq7tN8m
-         Pgmb/CKvXTTRHiDLetCbAO5fSd+Qtk4V/GZhNToHrBU5u+35AssjPuc85YuDQFk2tFKD
-         OXj94n7WnU8mLfb5SoRFXs2kQ1VMMTJLdr4nXqBgCzfQSBFBYePfOTFd/A/dONJEXzFy
-         aveFizIKmL7DvIT9Tbe266Gux1Ce64n7+zZ67E51IyttW9vhuOYf9ZJqxhv0sa2u+w8p
-         QbTEjVwis1N8yvvKLIyT4YgJzzxuY5dflOS9SmRyknt36lv1A5r3+D3yQVJqOqtBaxW2
-         uthg==
+        bh=FIj3vneB7myjB+3bqNJgotk0PgvZy/jfZUlD6e7kiTA=;
+        b=i9E4oMAelSfxr9WNC6NYBjSOnfDcj7CHmZ2kvPnemYf6VMj9YRaZIMh6gnv1gMoYyR
+         shxk+VST3CjHbngQtJzUgE3TEDJUU4jtbRB3cgOvxG1pjjTujWi7wkUyLg/vLgKXEvR+
+         FZOO40pfJbRRsK4nYAew5/iDMJLxS09KGejb8ZyvZl/o/e3iHlV4XIfCIze7egtAIM1x
+         VeLT4rICazHllbdlBeEgBr17PrtGSoeFvdyVMPGatMTJor90ihRTv2KUvle40GYJkYN3
+         tmeWlAIxQavcTDZYnLM6yvH6dmfZQwgCbe4+vUjkTCfm3bT8UV/3JWpjARPy0pbS80wO
+         2TFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6+JXFHG3jcYkJ4zBa6+egSCKXqbH+aGXx2km2H05uYQ=;
-        b=Fg8aIVFGogh5rLok+bOwQ21Y4LVE6eSK4KGdew+FIHUOYRuRDZEZFc9GnTiET90LbQ
-         n0Y3aTGp8p2iXeP4wJY37DGO0icxIrWEA7EUbyCY4v0I/SQrO257yZm7VNhtRy9AoV4u
-         wGNirXFcqYdhkUlIm0jRgKwE5oQxy9YqzFCJB/JxaNUktZklSPmY1RUVRlG+uajnz3bh
-         d8PqhX/oSZmeALdGjDONlSyKRfoXSUrwgFu4jtBBApu9OWTUEcYpxh8ofoTKJad+J8jw
-         W72ebdUSuQ0IikN1JA86/MRjM8T31+cQuFQclYNaRNfep0dUqhKrTsHiPjL1rsZ7WPlz
-         DSyA==
-X-Gm-Message-State: AJIora8kP9VwLGcMGnJOKIsOWTIdiqJ7RY+cNUysA7mLKLCS4gn8tSpL
-        IKKhul3JcDIHAQuW7gRU49AsKQ==
-X-Google-Smtp-Source: AGRyM1sDsodObH5UQVWHkQxti2YwARV6TpiJCXO306fxkTS4dGJ48ylTGJWAvJewuYAdkwHvCXAnvg==
-X-Received: by 2002:a05:6870:9710:b0:101:d3a2:94d1 with SMTP id n16-20020a056870971000b00101d3a294d1mr8233766oaq.180.1655842256003;
-        Tue, 21 Jun 2022 13:10:56 -0700 (PDT)
+        bh=FIj3vneB7myjB+3bqNJgotk0PgvZy/jfZUlD6e7kiTA=;
+        b=m9Xj9YEV/1Lwh0BFdyZLAU+ieNswOxmNc8g2tnP6VT15l2cO1yycVIws/09I0P9pOn
+         NdijnEpzMKP3F23v92sTSNIgM8ZuFGizzFsttgGml+DanheORmv3dUPhYycTRs98G2cC
+         JxTcWzvXwFvvYp7QxXnZu75f6bBsGWTwYHqa/SG1Z86WK3HduhETjkE5At0ysH3p7koz
+         /O0hLppIgFimSOey/kYmUC93wHpU8Bp54JttWS1nJRXvhawQ4uqty+TZ9OmOxJy7HFF2
+         W8yFWYE8wP1iPUpZmzR8rbWohLSAMM6sUlSHzLIAQMetaNVtjguuEJGl0tx8oAHA3PFP
+         TTGQ==
+X-Gm-Message-State: AJIora8kOOh6UzFqDsTmBlfDhIvKdcPWpyispU8XmP1JLrkCTud1T3nc
+        kOWWyogGx5cn6Oj+Hg8CqMXFYw==
+X-Google-Smtp-Source: AGRyM1uk5Tb3EusBOFxl9fgiHSZoeNjyZaWyHWunFsL2XD49VslCiS3RpEAUxlJWvvXBjsz/b0yN+Q==
+X-Received: by 2002:a05:6870:b383:b0:e9:2fea:2148 with SMTP id w3-20020a056870b38300b000e92fea2148mr21378134oap.103.1655842264702;
+        Tue, 21 Jun 2022 13:11:04 -0700 (PDT)
 Received: from fedora.. ([2804:14d:8084:84c6:fe26:c42d:aab9:fa8a])
-        by smtp.gmail.com with ESMTPSA id o206-20020acad7d7000000b0032b7a0c5da1sm9759771oig.27.2022.06.21.13.10.49
+        by smtp.gmail.com with ESMTPSA id o206-20020acad7d7000000b0032b7a0c5da1sm9759771oig.27.2022.06.21.13.10.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 13:10:55 -0700 (PDT)
+        Tue, 21 Jun 2022 13:11:04 -0700 (PDT)
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
 To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
@@ -66,11 +66,10 @@ To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
 Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
-        "Djakson C . G . Filho" <djakson.filho@gmail.com>,
-        Anderson Fraga <aaafraga@gmail.com>
-Subject: [PATCH v2 5/9] drm: selftest: convert drm_plane_helper selftest to KUnit
-Date:   Tue, 21 Jun 2022 17:09:22 -0300
-Message-Id: <20220621200926.257002-6-maira.canal@usp.br>
+        Rubens Gomes Neto <rubens.gomes.neto@usp.br>
+Subject: [PATCH v2 6/9] drm: selftest: convert drm_dp_mst_helper selftest to KUnit
+Date:   Tue, 21 Jun 2022 17:09:23 -0300
+Message-Id: <20220621200926.257002-7-maira.canal@usp.br>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220621200926.257002-1-maira.canal@usp.br>
 References: <20220621200926.257002-1-maira.canal@usp.br>
@@ -88,268 +87,247 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Considering the current adoption of the KUnit framework, convert the
-DRM plane helper selftest to the KUnit API.
+DRM DP MST helper selftest to the KUnit API.
 
 Tested-by: David Gow <davidgow@google.com>
-Co-developed-by: Djakson C. G. Filho <djakson.filho@gmail.com>
-Signed-off-by: Djakson C. G. Filho <djakson.filho@gmail.com>
-Co-developed-by: Anderson Fraga <aaafraga@gmail.com>
-Signed-off-by: Anderson Fraga <aaafraga@gmail.com>
+Co-developed-by: Rubens Gomes Neto <rubens.gomes.neto@usp.br>
+Signed-off-by: Rubens Gomes Neto <rubens.gomes.neto@usp.br>
 Signed-off-by: Maíra Canal <maira.canal@usp.br>
 ---
- drivers/gpu/drm/selftests/Makefile            |   4 +-
- .../gpu/drm/selftests/drm_modeset_selftests.h |   1 -
- .../drm/selftests/test-drm_modeset_common.h   |   1 -
- drivers/gpu/drm/tests/Makefile                |   2 +-
- .../drm_plane_helper_test.c}                  | 103 ++++++++++--------
- 5 files changed, 60 insertions(+), 51 deletions(-)
- rename drivers/gpu/drm/{selftests/test-drm_plane_helper.c => tests/drm_plane_helper_test.c} (62%)
+ drivers/gpu/drm/selftests/Makefile            |  3 +-
+ .../gpu/drm/selftests/drm_modeset_selftests.h |  2 -
+ .../drm/selftests/test-drm_modeset_common.h   |  2 -
+ drivers/gpu/drm/tests/Makefile                |  3 +-
+ .../drm_dp_mst_helper_test.c}                 | 84 ++++++++++---------
+ 5 files changed, 49 insertions(+), 45 deletions(-)
+ rename drivers/gpu/drm/{selftests/test-drm_dp_mst_helper.c => tests/drm_dp_mst_helper_test.c} (73%)
 
 diff --git a/drivers/gpu/drm/selftests/Makefile b/drivers/gpu/drm/selftests/Makefile
-index b7f252d886d0..9e0ccb482841 100644
+index 9e0ccb482841..1539f55db9a7 100644
 --- a/drivers/gpu/drm/selftests/Makefile
 +++ b/drivers/gpu/drm/selftests/Makefile
-@@ -1,6 +1,6 @@
+@@ -1,6 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0-only
--test-drm_modeset-y := test-drm_modeset_common.o test-drm_plane_helper.o \
--                      test-drm_framebuffer.o test-drm_dp_mst_helper.o
-+test-drm_modeset-y := test-drm_modeset_common.o test-drm_framebuffer.o \
-+					test-drm_dp_mst_helper.o
+-test-drm_modeset-y := test-drm_modeset_common.o test-drm_framebuffer.o \
+-					test-drm_dp_mst_helper.o
++test-drm_modeset-y := test-drm_modeset_common.o test-drm_framebuffer.o
  
  obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o \
  				    test-drm_buddy.o
 diff --git a/drivers/gpu/drm/selftests/drm_modeset_selftests.h b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-index 63061ef55eff..22e467f6465a 100644
+index 22e467f6465a..40a29b8cf386 100644
 --- a/drivers/gpu/drm/selftests/drm_modeset_selftests.h
 +++ b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-@@ -6,7 +6,6 @@
-  *
+@@ -7,5 +7,3 @@
   * Tests are executed in order by igt/drm_selftests_helper
   */
--selftest(check_plane_state, igt_check_plane_state)
  selftest(check_drm_framebuffer_create, igt_check_drm_framebuffer_create)
- selftest(dp_mst_calc_pbn_mode, igt_dp_mst_calc_pbn_mode)
- selftest(dp_mst_sideband_msg_req_decode, igt_dp_mst_sideband_msg_req_decode)
+-selftest(dp_mst_calc_pbn_mode, igt_dp_mst_calc_pbn_mode)
+-selftest(dp_mst_sideband_msg_req_decode, igt_dp_mst_sideband_msg_req_decode)
 diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.h b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-index 5709d967a5c4..790f3cf31f0d 100644
+index 790f3cf31f0d..3feb2fea1a6b 100644
 --- a/drivers/gpu/drm/selftests/test-drm_modeset_common.h
 +++ b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-@@ -16,7 +16,6 @@
- 
+@@ -17,7 +17,5 @@
  #define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
  
--int igt_check_plane_state(void *ignored);
  int igt_check_drm_framebuffer_create(void *ignored);
- int igt_dp_mst_calc_pbn_mode(void *ignored);
- int igt_dp_mst_sideband_msg_req_decode(void *ignored);
+-int igt_dp_mst_calc_pbn_mode(void *ignored);
+-int igt_dp_mst_sideband_msg_req_decode(void *ignored);
+ 
+ #endif
 diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
-index 7a60289d2c6c..0dfc8b806f85 100644
+index 0dfc8b806f85..40c003df2625 100644
 --- a/drivers/gpu/drm/tests/Makefile
 +++ b/drivers/gpu/drm/tests/Makefile
-@@ -1,4 +1,4 @@
+@@ -1,4 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0-only
  
  obj-$(CONFIG_DRM_KUNIT_TEST) += drm_damage_helper_test.o drm_cmdline_parser_test.o \
--	drm_rect_test.o drm_format_test.o
-+	drm_rect_test.o drm_format_test.o drm_plane_helper_test.o
-diff --git a/drivers/gpu/drm/selftests/test-drm_plane_helper.c b/drivers/gpu/drm/tests/drm_plane_helper_test.c
-similarity index 62%
-rename from drivers/gpu/drm/selftests/test-drm_plane_helper.c
-rename to drivers/gpu/drm/tests/drm_plane_helper_test.c
-index b61273e9c403..794e7ddf62f1 100644
---- a/drivers/gpu/drm/selftests/test-drm_plane_helper.c
-+++ b/drivers/gpu/drm/tests/drm_plane_helper_test.c
-@@ -3,14 +3,11 @@
-  * Test cases for the drm_plane_helper functions
-  */
+-	drm_rect_test.o drm_format_test.o drm_plane_helper_test.o
++	drm_rect_test.o drm_format_test.o drm_plane_helper_test.o \
++	drm_dp_mst_helper_test.o
+diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
+similarity index 73%
+rename from drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+rename to drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
+index 967c52150b67..be846be84fe9 100644
+--- a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
++++ b/drivers/gpu/drm/tests/drm_dp_mst_helper_test.c
+@@ -5,15 +5,15 @@
  
--#define pr_fmt(fmt) "drm_plane_helper: " fmt
--
+ #define PREFIX_STR "[drm_dp_mst_helper]"
+ 
 +#include <kunit/test.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_plane_helper.h>
- #include <drm/drm_modes.h>
+ #include <linux/random.h>
  
+ #include <drm/display/drm_dp_mst_helper.h>
+ #include <drm/drm_print.h>
+ 
+ #include "../display/drm_dp_mst_topology_internal.h"
 -#include "test-drm_modeset_common.h"
--
- static void set_src(struct drm_plane_state *plane_state,
- 		    unsigned src_x, unsigned src_y,
- 		    unsigned src_w, unsigned src_h)
-@@ -73,7 +70,7 @@ static bool check_crtc_eq(struct drm_plane_state *plane_state,
- 	return true;
- }
  
--int igt_check_plane_state(void *ignored)
-+static void igt_check_plane_state(struct kunit *test)
+-int igt_dp_mst_calc_pbn_mode(void *ignored)
++static void igt_dp_mst_calc_pbn_mode(struct kunit *test)
  {
- 	int ret;
- 
-@@ -108,10 +105,10 @@ int igt_check_plane_state(void *ignored)
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  false, false);
--	FAIL(ret < 0, "Simple clipping check should pass\n");
--	FAIL_ON(!plane_state.visible);
--	FAIL_ON(!check_src_eq(&plane_state, 0, 0, 1024 << 16, 768 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 0, 0, 1024, 768));
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Simple clipping check should pass\n");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0, 0, 1024 << 16, 768 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 0, 0, 1024, 768));
- 
- 	/* Rotated clipping + reflection, no scaling. */
- 	plane_state.rotation = DRM_MODE_ROTATE_90 | DRM_MODE_REFLECT_X;
-@@ -119,10 +116,10 @@ int igt_check_plane_state(void *ignored)
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  false, false);
--	FAIL(ret < 0, "Rotated clipping check should pass\n");
--	FAIL_ON(!plane_state.visible);
--	FAIL_ON(!check_src_eq(&plane_state, 0, 0, 768 << 16, 1024 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 0, 0, 1024, 768));
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Rotated clipping check should pass\n");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0, 0, 768 << 16, 1024 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 0, 0, 1024, 768));
- 	plane_state.rotation = DRM_MODE_ROTATE_0;
- 
- 	/* Check whether positioning works correctly. */
-@@ -132,16 +129,17 @@ int igt_check_plane_state(void *ignored)
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  false, false);
--	FAIL(!ret, "Should not be able to position on the crtc with can_position=false\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, ret,
-+			"Should not be able to position on the crtc with can_position=false\n");
- 
- 	ret = drm_atomic_helper_check_plane_state(&plane_state, &crtc_state,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  true, false);
--	FAIL(ret < 0, "Simple positioning should work\n");
--	FAIL_ON(!plane_state.visible);
--	FAIL_ON(!check_src_eq(&plane_state, 0, 0, 1023 << 16, 767 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 0, 0, 1023, 767));
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Simple positioning should work\n");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0, 0, 1023 << 16, 767 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 0, 0, 1023, 767));
- 
- 	/* Simple scaling tests. */
- 	set_src(&plane_state, 0, 0, 512 << 16, 384 << 16);
-@@ -150,28 +148,28 @@ int igt_check_plane_state(void *ignored)
- 						  0x8001,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  false, false);
--	FAIL(!ret, "Upscaling out of range should fail.\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, ret, "Upscaling out of range should fail.\n");
- 	ret = drm_atomic_helper_check_plane_state(&plane_state, &crtc_state,
- 						  0x8000,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  false, false);
--	FAIL(ret < 0, "Upscaling exactly 2x should work\n");
--	FAIL_ON(!plane_state.visible);
--	FAIL_ON(!check_src_eq(&plane_state, 0, 0, 512 << 16, 384 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 0, 0, 1024, 768));
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Upscaling exactly 2x should work\n");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0, 0, 512 << 16, 384 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 0, 0, 1024, 768));
- 
- 	set_src(&plane_state, 0, 0, 2048 << 16, 1536 << 16);
- 	ret = drm_atomic_helper_check_plane_state(&plane_state, &crtc_state,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  0x1ffff, false, false);
--	FAIL(!ret, "Downscaling out of range should fail.\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, ret, "Downscaling out of range should fail.\n");
- 	ret = drm_atomic_helper_check_plane_state(&plane_state, &crtc_state,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  0x20000, false, false);
--	FAIL(ret < 0, "Should succeed with exact scaling limit\n");
--	FAIL_ON(!plane_state.visible);
--	FAIL_ON(!check_src_eq(&plane_state, 0, 0, 2048 << 16, 1536 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 0, 0, 1024, 768));
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Should succeed with exact scaling limit\n");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0, 0, 2048 << 16, 1536 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 0, 0, 1024, 768));
- 
- 	/* Testing rounding errors. */
- 	set_src(&plane_state, 0, 0, 0x40001, 0x40001);
-@@ -180,10 +178,10 @@ int igt_check_plane_state(void *ignored)
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  0x10001,
- 						  true, false);
--	FAIL(ret < 0, "Should succeed by clipping to exact multiple");
--	FAIL_ON(!plane_state.visible);
--	FAIL_ON(!check_src_eq(&plane_state, 0, 0, 2 << 16, 2 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 1022, 766, 2, 2));
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Should succeed by clipping to exact multiple");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0, 0, 2 << 16, 2 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 1022, 766, 2, 2));
- 
- 	set_src(&plane_state, 0x20001, 0x20001, 0x4040001, 0x3040001);
- 	set_crtc(&plane_state, -2, -2, 1028, 772);
-@@ -191,10 +189,10 @@ int igt_check_plane_state(void *ignored)
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  0x10001,
- 						  false, false);
--	FAIL(ret < 0, "Should succeed by clipping to exact multiple");
--	FAIL_ON(!plane_state.visible);
--	FAIL_ON(!check_src_eq(&plane_state, 0x40002, 0x40002, 1024 << 16, 768 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 0, 0, 1024, 768));
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Should succeed by clipping to exact multiple");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0x40002, 0x40002, 1024 << 16, 768 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 0, 0, 1024, 768));
- 
- 	set_src(&plane_state, 0, 0, 0x3ffff, 0x3ffff);
- 	set_crtc(&plane_state, 1022, 766, 4, 4);
-@@ -202,11 +200,11 @@ int igt_check_plane_state(void *ignored)
- 						  0xffff,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  true, false);
--	FAIL(ret < 0, "Should succeed by clipping to exact multiple");
--	FAIL_ON(!plane_state.visible);
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Should succeed by clipping to exact multiple");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
- 	/* Should not be rounded to 0x20001, which would be upscaling. */
--	FAIL_ON(!check_src_eq(&plane_state, 0, 0, 2 << 16, 2 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 1022, 766, 2, 2));
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0, 0, 2 << 16, 2 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 1022, 766, 2, 2));
- 
- 	set_src(&plane_state, 0x1ffff, 0x1ffff, 0x403ffff, 0x303ffff);
- 	set_crtc(&plane_state, -2, -2, 1028, 772);
-@@ -214,10 +212,23 @@ int igt_check_plane_state(void *ignored)
- 						  0xffff,
- 						  DRM_PLANE_HELPER_NO_SCALING,
- 						  false, false);
--	FAIL(ret < 0, "Should succeed by clipping to exact multiple");
--	FAIL_ON(!plane_state.visible);
--	FAIL_ON(!check_src_eq(&plane_state, 0x3fffe, 0x3fffe, 1024 << 16, 768 << 16));
--	FAIL_ON(!check_crtc_eq(&plane_state, 0, 0, 1024, 768));
+ 	int pbn, i;
+ 	const struct {
+@@ -33,13 +33,11 @@ int igt_dp_mst_calc_pbn_mode(void *ignored)
+ 		pbn = drm_dp_calc_pbn_mode(test_params[i].rate,
+ 					   test_params[i].bpp,
+ 					   test_params[i].dsc);
+-		FAIL(pbn != test_params[i].expected,
++		KUNIT_EXPECT_EQ_MSG(test, pbn, test_params[i].expected,
+ 		     "Expected PBN %d for clock %d bpp %d, got %d\n",
+ 		     test_params[i].expected, test_params[i].rate,
+ 		     test_params[i].bpp, pbn);
+ 	}
 -
 -	return 0;
-+	KUNIT_EXPECT_FALSE_MSG(test, ret, 0, "Should succeed by clipping to exact multiple");
-+	KUNIT_EXPECT_TRUE(test, plane_state.visible);
-+	KUNIT_EXPECT_TRUE(test, check_src_eq(&plane_state, 0x3fffe, 0x3fffe,
-+				1024 << 16, 768 << 16));
-+	KUNIT_EXPECT_TRUE(test, check_crtc_eq(&plane_state, 0, 0, 1024, 768));
+ }
+ 
+ static bool
+@@ -176,66 +174,64 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
+ 	return result;
+ }
+ 
+-int igt_dp_mst_sideband_msg_req_decode(void *unused)
++static void igt_dp_mst_sideband_msg_req_decode(struct kunit *test)
+ {
+ 	struct drm_dp_sideband_msg_req_body in = { 0 };
+ 	u8 data[] = { 0xff, 0x0, 0xdd };
+ 	int i;
+ 
+-#define DO_TEST() FAIL_ON(!sideband_msg_req_encode_decode(&in))
+-
+ 	in.req_type = DP_ENUM_PATH_RESOURCES;
+ 	in.u.port_num.port_number = 5;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_POWER_UP_PHY;
+ 	in.u.port_num.port_number = 5;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_POWER_DOWN_PHY;
+ 	in.u.port_num.port_number = 5;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_ALLOCATE_PAYLOAD;
+ 	in.u.allocate_payload.number_sdp_streams = 3;
+ 	for (i = 0; i < in.u.allocate_payload.number_sdp_streams; i++)
+ 		in.u.allocate_payload.sdp_stream_sink[i] = i + 1;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.allocate_payload.port_number = 0xf;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.allocate_payload.vcpi = 0x7f;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.allocate_payload.pbn = U16_MAX;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_QUERY_PAYLOAD;
+ 	in.u.query_payload.port_number = 0xf;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.query_payload.vcpi = 0x7f;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_REMOTE_DPCD_READ;
+ 	in.u.dpcd_read.port_number = 0xf;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.dpcd_read.dpcd_address = 0xfedcb;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.dpcd_read.num_bytes = U8_MAX;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_REMOTE_DPCD_WRITE;
+ 	in.u.dpcd_write.port_number = 0xf;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.dpcd_write.dpcd_address = 0xfedcb;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.dpcd_write.num_bytes = ARRAY_SIZE(data);
+ 	in.u.dpcd_write.bytes = data;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_REMOTE_I2C_READ;
+ 	in.u.i2c_read.port_number = 0xf;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.i2c_read.read_i2c_device_id = 0x7f;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.i2c_read.num_transactions = 3;
+ 	in.u.i2c_read.num_bytes_read = ARRAY_SIZE(data) * 3;
+ 	for (i = 0; i < in.u.i2c_read.num_transactions; i++) {
+@@ -244,32 +240,44 @@ int igt_dp_mst_sideband_msg_req_decode(void *unused)
+ 		in.u.i2c_read.transactions[i].i2c_dev_id = 0x7f & ~i;
+ 		in.u.i2c_read.transactions[i].i2c_transaction_delay = 0xf & ~i;
+ 	}
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_REMOTE_I2C_WRITE;
+ 	in.u.i2c_write.port_number = 0xf;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.i2c_write.write_i2c_device_id = 0x7f;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.i2c_write.num_bytes = ARRAY_SIZE(data);
+ 	in.u.i2c_write.bytes = data;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 
+ 	in.req_type = DP_QUERY_STREAM_ENC_STATUS;
+ 	in.u.enc_status.stream_id = 1;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	get_random_bytes(in.u.enc_status.client_id,
+ 			 sizeof(in.u.enc_status.client_id));
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.enc_status.stream_event = 3;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.enc_status.valid_stream_event = 0;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.enc_status.stream_behavior = 3;
+-	DO_TEST();
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
+ 	in.u.enc_status.valid_stream_behavior = 1;
+-	DO_TEST();
+-
+-#undef DO_TEST
+-	return 0;
++	KUNIT_EXPECT_TRUE(test, sideband_msg_req_encode_decode(&in));
  }
 +
-+static struct kunit_case drm_plane_helper_test[] = {
-+	KUNIT_CASE(igt_check_plane_state),
-+	{}
++static struct kunit_case drm_dp_mst_helper_tests[] = {
++	KUNIT_CASE(igt_dp_mst_calc_pbn_mode),
++	KUNIT_CASE(igt_dp_mst_sideband_msg_req_decode),
++	{ }
 +};
 +
-+static struct kunit_suite drm_plane_helper_test_suite = {
-+	.name = "drm_plane_helper",
-+	.test_cases = drm_plane_helper_test,
++static struct kunit_suite drm_dp_mst_helper_test_suite = {
++	.name = "drm_dp_mst_helper",
++	.test_cases = drm_dp_mst_helper_tests,
 +};
 +
-+kunit_test_suite(drm_plane_helper_test_suite);
++kunit_test_suite(drm_dp_mst_helper_test_suite);
 +
 +MODULE_LICENSE("GPL");
 -- 
