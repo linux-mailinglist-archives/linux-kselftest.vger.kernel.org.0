@@ -2,75 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55491553E97
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 00:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F254553F62
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 02:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354561AbiFUWfs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jun 2022 18:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S232134AbiFVAS3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jun 2022 20:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354293AbiFUWfr (ORCPT
+        with ESMTP id S230182AbiFVAS3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jun 2022 18:35:47 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929A432079;
-        Tue, 21 Jun 2022 15:35:46 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id s17so9482768iob.7;
-        Tue, 21 Jun 2022 15:35:46 -0700 (PDT)
+        Tue, 21 Jun 2022 20:18:29 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0C624BC7
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 17:18:26 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3177e60d980so125517917b3.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 17:18:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=EuOFBlwUe3i2VoLtrHcHqXQ3t7ZpmfRz4L66vLYl0Zk=;
-        b=ptky5XMl0C3VvHRE/uN2yj0zyO83oB3rrU+1mqb9m+5IQHtMjLDmGRjPecZPnoJ9zP
-         7WWSmBea+PmzduZkvctleKQV6yE33uqc+cUi1WQ2zrUndRDQowQAvoV9TMJ0hyVUDf0Z
-         PJOsmIitgmJcz+vz6pMcrTDux5dXQ2VyCyIClLkx4qhF8jjCXSyU7CV5Y9JFSET8aNbY
-         n8s9WDtRev7csG9bg40o9WpNSf19I3hTwjl903TfAHMFKzNoiIWZYtcjkvnYJgWEA4ZH
-         cVORxtP5I2J5JFrXiGCYCIkH2KWJpkGzMmARvpCHpcBjJqisgG4p6uttLCUS+NRwhG5U
-         mKDg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7oGTotRq4WT1s39cOcG1SCSH+1obZhPZeWPvkH3sdIY=;
+        b=pRiRdRZvjWOHeq131C46xsgsl6zJcY8C05hCjZzCa9c5mI+uxZS+aWO42sFaDVcz0b
+         nZ6JYvtfY+Dyq2C3cKgNrJEzQb345RwaajVb7ThwG5hC4/DO+seCNsOY5IrbWmSj93x2
+         odlhjOIH9KnXoJQSU0k/qCogGY7lOn36CEKee3zO/Hjmxp94lYh4Dbu3OZ2pdCN470GB
+         +pFf6fL2HolqA61KHmkwKp5hmNh6RdX/SFg+piwu9viA8TJy2VVclhV5fTeHJgt9D5mU
+         YbHFvldnFR/xTL31nImBrcfsqLyAFoBI+mjOIE5RD2EhoaF6AlCw0MOPtH1rTD4uNfEc
+         xIkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=EuOFBlwUe3i2VoLtrHcHqXQ3t7ZpmfRz4L66vLYl0Zk=;
-        b=BE6kfr8d2nkiwioSIs86K6twcQ2TwYBts2xHqjGdIiFHwlelmtyU9FGuno/NTw7Ql5
-         MtK+A4zu67Hr222uF+ml1Ct1zvfBc9auekkgoTaeMbAr3lUL5i9jffMYgKqfLKf8sPAo
-         oONZR0K95qAA8hz76YT7qHJ6WA2T+CV3KN7fVZsqJ8gmXOelaxUzHq/Hz3uuAbMBRkg1
-         wGZICyWXrmZUD0SnFDtRhVyFzjhprdfJ5qRCs/fug2T5emWR0usFcyQ5YB/YC5Ksrh8k
-         vPC5cGRKQKCH3I40Nj9LvFZ+HzLGnox7AXRX7dXlprZMMlyRBfV6GU38xNo9hu8HwsDX
-         RY+w==
-X-Gm-Message-State: AJIora9goMezfgz84HSbk9i/wdUZhCVKC77qmqCOk07cevIC0FDYaMh8
-        lPA4ImU/oPlGl+at/sDPeio=
-X-Google-Smtp-Source: AGRyM1vSA9nv/dLh6RGsJZZBucx8gPMUZ0qn7+Xw9uYIKkOwaymRH/SE5i5Dj5O3fkGwjkqVJD3CNw==
-X-Received: by 2002:a05:6602:2d06:b0:66a:2cdc:e6f7 with SMTP id c6-20020a0566022d0600b0066a2cdce6f7mr178003iow.113.1655850945946;
-        Tue, 21 Jun 2022 15:35:45 -0700 (PDT)
-Received: from localhost ([172.243.153.43])
-        by smtp.gmail.com with ESMTPSA id o8-20020a02cc28000000b003318783c940sm7681429jap.113.2022.06.21.15.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 15:35:45 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 15:35:37 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
-        john.fastabend@gmail.com, songliubraving@fb.com, kafai@fb.com,
-        yhs@fb.com
-Cc:     dhowells@redhat.com, keyrings@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Message-ID: <62b247b975506_162742082f@john.notmuch>
-In-Reply-To: <20220621163757.760304-5-roberto.sassu@huawei.com>
-References: <20220621163757.760304-1-roberto.sassu@huawei.com>
- <20220621163757.760304-5-roberto.sassu@huawei.com>
-Subject: RE: [PATCH v5 4/5] selftests/bpf: Add test for unreleased key
- references
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7oGTotRq4WT1s39cOcG1SCSH+1obZhPZeWPvkH3sdIY=;
+        b=1pJMxtxhOVTgBmx7BrzU3m1DEGGSgOzHHUvNUrvyQZHvLF0PdjOnUqIV6mH9/zzkWm
+         tyV2ASOsdFLi51sVSOKyDg9/TmAfc6rr0I5xVdVtuTd0Sh3Ic8vsqTz4PRRLwdkP7GCS
+         F2DD5lA9K7kZwVnAMp2hx0ViM0T6FSaS610AugfMiV0otob/1QMds8An2FA39jyKDDoy
+         5UTm0uPQYZfL61cQpSes/ipPIrfvaAQCRNBa0tpRjls4JUyeZjME8E2xRydT6uZaXhIL
+         PA+0KWdH16zPf2ooZPHKvthnOwqqF+J+z2YKyZsJN9Vo2b+mQ591nvKmkap5w1Zk3vHH
+         Dbzg==
+X-Gm-Message-State: AJIora/U5hvndIwZxArfS5l17Z78mmnH29SRjRNQ11s4LjUlOKFMZ4tJ
+        fL3db/apPHadV38/J+Bi8XdzOzAMELcggZh+n93ZWOvMqqZR5A==
+X-Google-Smtp-Source: AGRyM1uZMeYsz5mgtXqZFmpIy7OI6WlLsf1bMvgdPOTGVewZvG7oLbOCHMIQXhvHTWsNX+x8sktVDLoJVaFNzPzXsDo=
+X-Received: by 2002:a0d:cd81:0:b0:2ff:aa45:4238 with SMTP id
+ p123-20020a0dcd81000000b002ffaa454238mr984226ywd.155.1655857105884; Tue, 21
+ Jun 2022 17:18:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220616211016.4037482-1-dylanbhatch@google.com>
+ <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
+ <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
+ <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
+ <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com> <a5f46e4e-a472-77ce-f61e-b2f9922bdd50@linuxfoundation.org>
+In-Reply-To: <a5f46e4e-a472-77ce-f61e-b2f9922bdd50@linuxfoundation.org>
+From:   Dylan Hatch <dylanbhatch@google.com>
+Date:   Tue, 21 Jun 2022 17:18:14 -0700
+Message-ID: <CADBMgpzyOKVO1ju_WkxYLhXGvwJjHoL6V-+Nw49UdTFoPY7NvQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,13 +71,94 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Roberto Sassu wrote:
-> Ensure that the verifier detects the attempt of acquiring a reference of a
-> key through the helper bpf_lookup_user_key(), without releasing that
-> reference with bpf_key_put(), and refuses to load the program.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
+On Fri, Jun 17, 2022 at 3:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 6/17/22 4:05 PM, Dylan Hatch wrote:
+> > On Fri, Jun 17, 2022 at 12:38 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >>
+> >> On 6/17/22 12:45 PM, Dylan Hatch wrote:
+> >>> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >>>>
+> >
+> >>
+> >> It depends on the goal of the test. Is the test looking to see if the
+> >> probe fails with insufficient permissions, then you are changing the
+> >> test to not check for that condition.
+> >
+> > The goal of the test is to validate the output of /proc/$PID/maps, and
+> > the memory probe is only needed as setup to determine what the
+> > expected output should be. This used to be sufficient, but now it can
+> > no longer fully disambiguate it with the introduction of
+> > vsyscall=xonly. The solution proposed here is to disambiguate it by
+> > also checking the length read from /proc/$PID/maps.
+> >
+> >>
+>
+> Makes sense. However the question is does this test need to be enhanced
+> with the addition of vsyscall=xonly?
+>
+> >> I would say in this case, the right approach would be to leave the test
+> >> as is and report expected fail and add other cases.
+> >>
+> >> The goal being adding more coverage and not necessarily opt for a simple
+> >> solution.
+> >
+> > What does it mean to report a test as expected fail? Is this a
+> > mechanism unique to kselftest? I agree adding another test case would
+> > work, but I'm unsure how to do it within the framework of kselftest.
+> > Ideally, there would be separate test cases for vsyscall=none,
+> > vsyscall=emulate, and vsyscall=xonly, but these options can be toggled
+> > both in the kernel config and on the kernel command line, meaning (to
+> > the best of my knowledge) these test cases would have to be built
+> > conditionally against the conflig options and also parse the command
+> > line for the 'vsyscall' option.
+> >
+>
+> Expected fail isn't unique kselftest. It is a testing criteria where
+> a test is expected to fail. For example if a file can only be opened
+> with privileged user a test that runs and looks for failure is an
+> expected to fail case - we are looking for a failure.
+>
+> A complete battery of tests for vsyscall=none, vsyscall=emulate,
+> vsyscall=xonly would test for conditions that are expected to pass
+> and fail based on the config.
+>
+> tools/testing/selftests/proc/config doesn't have any config options
+> that are relevant to VSYSCALL
+>
+> Can you please send me the how you are running the test and what the
+> failure output looks like?
 
-Any reason not to add these to ./verifier/ref_tracking.c tests? Seems it
-might be easier to follow there and test both good/bad cases.
+I'm building a kernel with the following relevant configurations:
+
+$ cat .config | grep VSYSCALL
+CONFIG_GENERIC_TIME_VSYSCALL=y
+CONFIG_X86_VSYSCALL_EMULATION=y
+CONFIG_LEGACY_VSYSCALL_XONLY=y
+# CONFIG_LEGACY_VSYSCALL_NONE is not set
+
+Running the test without this change both in virtme and on real
+hardware gives the following error:
+
+# ./tools/testing/selftests/proc/proc-pid-vm
+proc-pid-vm: proc-pid-vm.c:328: int main(void): Assertion `rv == len' failed.
+Aborted
+
+This is because when CONFIG_LEGACY_VSYSCALL_XONLY=y a probe of the
+vsyscall page results in a segfault. This test was originally written
+before this option existed so it incorrectly assumes the vsyscall page
+isn't mapped at all, and the expected buffer length doesn't match the
+result.
+
+An alternate method of fixing this test could involve setting the
+expected result based on the config with #ifdef blocks, but I wasn't
+sure if that could be done for kernel config options in kselftest
+code. There's also the matter of checking the kernel command line for
+a `vsyscall=` arg, is parsing /proc/cmdline the best way to do this?
+
+>
+> thanks,
+> -- Shuah
+
+Thanks,
+Dylan
