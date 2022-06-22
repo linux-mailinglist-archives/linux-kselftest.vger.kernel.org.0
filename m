@@ -2,242 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4433F554D41
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 16:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F77B554E5F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 17:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358613AbiFVOeB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Jun 2022 10:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S1358876AbiFVPEG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jun 2022 11:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358551AbiFVOd4 (ORCPT
+        with ESMTP id S1358948AbiFVPEB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jun 2022 10:33:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B2D2ED64;
-        Wed, 22 Jun 2022 07:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655908435; x=1687444435;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/WUAZrN1zyWhIxKQEqmG7Ipp9FUtpkQKAS8q9yj5bhQ=;
-  b=E+sGlAx/K+3Nhy3DeyYlfIB+15yCbZEYOf5SY7U0NYmPl4Y4omnuryAC
-   Y+gVA/ZkPrZMSMNPOy3dDJNmU/HOHUlT33DnCLZfE0pVC5M4qysYsexxZ
-   oXLPBdfHJeVkr5Oe04Y0GBhp604P2fIbFfMOqwOjyjeWvvIdRFbNO6mXz
-   4S9H+ihqX6QfwE6Y9OUDCNZPBHkxi2na99nJeXDREsL6m7sQ5iom8vmCM
-   cPGz4pR2wWEwZv+zCQxrrElorx5/6IlxwCCHnIuDwqaUS1/MI6vt/b2hC
-   eb89r5xhlC0jhzvhZ6RBczwAEYDq/4VqUA5BnoGNk0FneZ1HdwJjz74c9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10385"; a="279200100"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="279200100"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 07:33:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="644225513"
-Received: from xpf.sh.intel.com ([10.239.182.112])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2022 07:33:52 -0700
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
-        Hansen Dave <dave.hansen@intel.com>,
-        Luck Tony <tony.luck@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>,
-        Chen Yu C <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bae Chang Seok <chang.seok.bae@intel.com>
-Subject: [PATCH v10 2/2] selftests/x86/xstate: Add xstate fork test for XSAVE feature
-Date:   Wed, 22 Jun 2022 22:33:13 +0800
-Message-Id: <39f3d46f7731617cb84e6c9f16698e369aa5fd77.1655906573.git.pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1655906573.git.pengfei.xu@intel.com>
-References: <cover.1655906573.git.pengfei.xu@intel.com>
+        Wed, 22 Jun 2022 11:04:01 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518B63EA9E
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 08:03:53 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1048b8a38bbso6090630fac.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 08:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
+        b=lmXhPRDXrnlbYClAFJkfHZYdowqXsf1nTuDLZnU/Y1W/T6TJ8ApbIv950i47frAtN/
+         OtndHJQoWJG+weygm2GuosJduERMEzUHLtTF4oGKopzqXa+c5O1ob2p5JuwuGNaCZz0D
+         0k2iO6ZG6gpeVsjTt5A+NLMvCH8qDkpG8Ex3xIMBpunG6BNJWrlCGLJYo7boJK6pvBIx
+         W4x550ST0gVpK9sdxwL58OfMVVl7H7xG/39bSvJCxipLUGbdwSBY6WRzvY6hd28wfB/N
+         vDKUfqITg8PxsgA4g6gEDGmS0K0dBg3KSntFmGDvcmLKkvSy/F4e+TYysqkO/txSQBCJ
+         afFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
+        b=4+E/Cftf12YbQsipWdnh59SZtXCZsXgpBMX1h+teUoNZV9CScZfGY9Cougqlhvapps
+         Vdxlq+MPTkR6yAz32xZ1ppvzSZvzESYn9A7j1fcJvGTqEX11xY6LNjUCxptetwiRrM5d
+         rxRgKzUXPWev5VTkKD/MgcneqjCP0bR1UEcJ41WvKNAoDh5oP7WCiNFvv5Fj5Uap79Dj
+         mgQ7rOAXl9LtDg7A73r2aLTtwIuS4KXjFEJvkUOEC2dUFGhadpBx72TrZfW5n0HGffZ9
+         gJ2EttXwpwfnr0PNM9w80dZtBrc/W+nbl3QT/MvRb+v0MLqR467ft1HbTGqeBvzdJmzX
+         9qEQ==
+X-Gm-Message-State: AJIora/DpHg5b5KS9cY0+ZDWe+bQG3TJJp5w1qFJRoaDB2liInh9ZX+j
+        tJFuej5G6reU07Sm/+6xmGL2Rv489QhHt0Nr4yTb4K5kBJhLHo6z
+X-Google-Smtp-Source: AGRyM1ulxotWsDV/SS5wzW6q4zt5LXu3F658bS4StYWI/FgPuIBqBz38zqk7aydOTm9FXxU+wDfnf428k+eRTEG/aD8=
+X-Received: by 2002:a17:90b:1988:b0:1ec:f52d:90d4 with SMTP id
+ mv8-20020a17090b198800b001ecf52d90d4mr1796737pjb.70.1655910220864; Wed, 22
+ Jun 2022 08:03:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a17:903:2308:b0:16a:1b3f:f74b with HTTP; Wed, 22 Jun 2022
+ 08:03:40 -0700 (PDT)
+Reply-To: sales0212@asonmedsystemsinc.com
+From:   Prasad Ronni <lerwickfinance7@gmail.com>
+Date:   Wed, 22 Jun 2022 16:03:40 +0100
+Message-ID: <CAFkto5vTxj70kORZJZdwOGowXjsZ399eo6DJj=8T==7paSuHTw@mail.gmail.com>
+Subject: Service Needed.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to ensure that XSAVE works correctly, add XSAVE most basic fork
-test:
-1. The contents of these xstates in the child process should be the same as
-   the contents of the xstate in the parent process after the fork syscall.
-2. The contents of xstates in the parent process should not change after
-   the context switch.
-
-  [ Dave Hansen; Chang S. Bae; Shuah Khan: bunches of cleanups ]
-
-Reviewed-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
----
- tools/testing/selftests/x86/xstate.c         | 22 ++++++-
- tools/testing/selftests/x86/xstate.h         |  1 +
- tools/testing/selftests/x86/xstate_helpers.c | 67 ++++++++++++++++++++
- tools/testing/selftests/x86/xstate_helpers.h |  2 +
- 4 files changed, 91 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/x86/xstate.c b/tools/testing/selftests/x86/xstate.c
-index 4eff539e783d..4abb46fe40dc 100644
---- a/tools/testing/selftests/x86/xstate.c
-+++ b/tools/testing/selftests/x86/xstate.c
-@@ -39,7 +39,7 @@
- #include "xstate_helpers.h"
- #include "../kselftest.h"
- 
--#define NUM_TESTS	1
-+#define NUM_TESTS	3
- #define xstate_test_array_init(idx, init_opt, fill_opt)	\
- 	do {						\
- 		xstate_tests[idx].init = init_opt;	\
-@@ -106,6 +106,25 @@ static void test_xstate_sig_handle(void)
- 	compare_buf_result(valid_xbuf, compared_xbuf, case_name1);
- }
- 
-+static void test_xstate_fork(void)
-+{
-+	const char *case_name2 = "xstate of child process should be same as xstate of parent";
-+	const char *case_name3 = "parent xstate should be same after context switch";
-+
-+	ksft_print_msg("[RUN]\tParent pid:%d check xstate around fork test.\n",
-+		       getpid());
-+	/* Child process xstate should be same as the parent process xstate. */
-+	if (xstate_fork(valid_xbuf, compared_xbuf, xstate_info.mask,
-+	    xstate_size)) {
-+		ksft_test_result_pass("The case: %s.\n", case_name2);
-+	} else {
-+		ksft_test_result_fail("The case: %s.\n", case_name2);
-+	}
-+
-+	/* The parent process xstate should not change after context switch. */
-+	compare_buf_result(valid_xbuf, compared_xbuf, case_name3);
-+}
-+
- static void prepare_xstate_test(void)
- {
- 	xstate_test_array_init(XFEATURE_FP, init_legacy_info,
-@@ -124,6 +143,7 @@ static void prepare_xstate_test(void)
- 			       fill_pkru_xstate_buf);
- 
- 	xstate_tests[XSTATE_CASE_SIG].xstate_case = test_xstate_sig_handle;
-+	xstate_tests[XSTATE_CASE_FORK].xstate_case = test_xstate_fork;
- }
- 
- static void test_xstate(void)
-diff --git a/tools/testing/selftests/x86/xstate.h b/tools/testing/selftests/x86/xstate.h
-index 92c853d64e99..c9ec4cbf141e 100644
---- a/tools/testing/selftests/x86/xstate.h
-+++ b/tools/testing/selftests/x86/xstate.h
-@@ -82,6 +82,7 @@ enum xfeature {
- 
- enum xstate_case {
- 	XSTATE_CASE_SIG,
-+	XSTATE_CASE_FORK,
- 	XSTATE_CASE_MAX,
- };
- 
-diff --git a/tools/testing/selftests/x86/xstate_helpers.c b/tools/testing/selftests/x86/xstate_helpers.c
-index 93838c95aaea..e06b07a662b5 100644
---- a/tools/testing/selftests/x86/xstate_helpers.c
-+++ b/tools/testing/selftests/x86/xstate_helpers.c
-@@ -73,6 +73,22 @@ inline void fill_fp_mxcsr_xstate_buf(void *buf, int xfeature_num,
- 	__xsave(buf, MASK_FP_SSE);
- }
- 
-+/*
-+ * Because xstate like XMM, YMM registers are not preserved across function
-+ * calls, so use inline function with assembly code only for fork syscall.
-+ */
-+static inline long __fork(void)
-+{
-+	long ret, nr = SYS_fork;
-+
-+	asm volatile("syscall"
-+		     : "=a" (ret)
-+		     : "a" (nr), "b" (nr)
-+		     : "rcx", "r11", "memory", "cc");
-+
-+	return ret;
-+}
-+
- /*
-  * Because xstate like XMM, YMM registers are not preserved across function
-  * calls, so use inline function with assembly code only to raise signal.
-@@ -140,3 +156,54 @@ bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
- 
- 	return sigusr1_done;
- }
-+
-+bool xstate_fork(void *valid_xbuf, void *compared_xbuf, uint64_t mask,
-+		 uint32_t xstate_size)
-+{
-+	pid_t child;
-+	int status, fd[2];
-+	bool child_result;
-+
-+	memset(compared_xbuf, 0, xstate_size);
-+	/* Use pipe to transfer test result to parent process. */
-+	if (pipe(fd) < 0)
-+		fatal_error("create pipe failed");
-+	/*
-+	 * Xrstor the valid_xbuf and call syscall assembly instruction, then
-+	 * save the xstate to compared_xbuf in child process for comparison.
-+	 */
-+	__xrstor(valid_xbuf, mask);
-+	child = __fork();
-+	if (child < 0) {
-+		/* Fork syscall failed */
-+		fatal_error("fork failed");
-+	} else if (child == 0) {
-+		/* Fork syscall succeeded, now in the child. */
-+		__xsave(compared_xbuf, mask);
-+
-+		if (memcmp(valid_xbuf, compared_xbuf, xstate_size))
-+			child_result = false;
-+		else
-+			child_result = true;
-+
-+		/*
-+		 * Transfer the child process test result to
-+		 * the parent process for aggregation.
-+		 */
-+		close(fd[0]);
-+		if (!write(fd[1], &child_result, sizeof(child_result)))
-+			fatal_error("write fd failed");
-+		_exit(0);
-+	} else {
-+		/* Fork syscall succeeded, now in the parent. */
-+		__xsave(compared_xbuf, mask);
-+		if (waitpid(child, &status, 0) != child || !WIFEXITED(status)) {
-+			fatal_error("Child exit with error status");
-+		} else {
-+			close(fd[1]);
-+			if (!read(fd[0], &child_result, sizeof(child_result)))
-+				fatal_error("read fd failed");
-+			return child_result;
-+		}
-+	}
-+}
-diff --git a/tools/testing/selftests/x86/xstate_helpers.h b/tools/testing/selftests/x86/xstate_helpers.h
-index 1806c0bf484b..307781708ffa 100644
---- a/tools/testing/selftests/x86/xstate_helpers.h
-+++ b/tools/testing/selftests/x86/xstate_helpers.h
-@@ -6,3 +6,5 @@ extern void fill_fp_mxcsr_xstate_buf(void *buf, int xfeature_num,
- 				     uint8_t ui8_fp);
- extern bool xstate_sig_handle(void *valid_xbuf, void *compared_xbuf,
- 			      uint64_t mask, uint32_t xstate_size);
-+extern bool xstate_fork(void *valid_xbuf, void *compared_xbuf,
-+			uint64_t mask, uint32_t xstate_size);
 -- 
-2.31.1
+Hi,
 
+Are you currently open to work as our executive company representative
+on contractual basis working remotely? If yes, we will be happy to
+share more details. Looking forward to your response.
+
+Regards,
