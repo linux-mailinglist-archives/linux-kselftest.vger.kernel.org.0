@@ -2,74 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F77B554E5F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 17:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDABA55509D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 18:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358876AbiFVPEG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Jun 2022 11:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S1359850AbiFVQB3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jun 2022 12:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358948AbiFVPEB (ORCPT
+        with ESMTP id S1359840AbiFVQBE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:04:01 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518B63EA9E
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 08:03:53 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1048b8a38bbso6090630fac.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 08:03:53 -0700 (PDT)
+        Wed, 22 Jun 2022 12:01:04 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B9B3FDA6
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 09:00:09 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id u12so35210231eja.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 09:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=lmXhPRDXrnlbYClAFJkfHZYdowqXsf1nTuDLZnU/Y1W/T6TJ8ApbIv950i47frAtN/
-         OtndHJQoWJG+weygm2GuosJduERMEzUHLtTF4oGKopzqXa+c5O1ob2p5JuwuGNaCZz0D
-         0k2iO6ZG6gpeVsjTt5A+NLMvCH8qDkpG8Ex3xIMBpunG6BNJWrlCGLJYo7boJK6pvBIx
-         W4x550ST0gVpK9sdxwL58OfMVVl7H7xG/39bSvJCxipLUGbdwSBY6WRzvY6hd28wfB/N
-         vDKUfqITg8PxsgA4g6gEDGmS0K0dBg3KSntFmGDvcmLKkvSy/F4e+TYysqkO/txSQBCJ
-         afFQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PLtKE1DbGNDAcHw+kGtoh0+pUA8+XW2olgnWv3dlEaI=;
+        b=OH2byGIkD+olnkeI/3nZfvCKqy/63vjNAWe3lYUTBJh+R2Abgs5g9jETQS/ScCVUFH
+         ryxF+tyQ41trfmgtRmC0vkovKtUUFWfRCZSO9FgSmnulWo4mpiGtZQFkCgg/V+3hE6qN
+         tojlkpUyG+b0iOdJimNXIRIJIlvZITKDLhUZ7ibGitrEy7F1SpAfMdZI7mJR+I90abzg
+         l3SzqeR51rfdBw1NjbEIQckyd8C27YxtR2fdEFiEajuK2Y6vvx5Ld2ruxZ2NNl2WFHtE
+         AfGvRSYfbehIJRIYz4br1sl+IJ9h3jgWQOlr0oXHexWHa695Sbk2GPAjNCU/+YlNF8Oz
+         7s/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=4+E/Cftf12YbQsipWdnh59SZtXCZsXgpBMX1h+teUoNZV9CScZfGY9Cougqlhvapps
-         Vdxlq+MPTkR6yAz32xZ1ppvzSZvzESYn9A7j1fcJvGTqEX11xY6LNjUCxptetwiRrM5d
-         rxRgKzUXPWev5VTkKD/MgcneqjCP0bR1UEcJ41WvKNAoDh5oP7WCiNFvv5Fj5Uap79Dj
-         mgQ7rOAXl9LtDg7A73r2aLTtwIuS4KXjFEJvkUOEC2dUFGhadpBx72TrZfW5n0HGffZ9
-         gJ2EttXwpwfnr0PNM9w80dZtBrc/W+nbl3QT/MvRb+v0MLqR467ft1HbTGqeBvzdJmzX
-         9qEQ==
-X-Gm-Message-State: AJIora/DpHg5b5KS9cY0+ZDWe+bQG3TJJp5w1qFJRoaDB2liInh9ZX+j
-        tJFuej5G6reU07Sm/+6xmGL2Rv489QhHt0Nr4yTb4K5kBJhLHo6z
-X-Google-Smtp-Source: AGRyM1ulxotWsDV/SS5wzW6q4zt5LXu3F658bS4StYWI/FgPuIBqBz38zqk7aydOTm9FXxU+wDfnf428k+eRTEG/aD8=
-X-Received: by 2002:a17:90b:1988:b0:1ec:f52d:90d4 with SMTP id
- mv8-20020a17090b198800b001ecf52d90d4mr1796737pjb.70.1655910220864; Wed, 22
- Jun 2022 08:03:40 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PLtKE1DbGNDAcHw+kGtoh0+pUA8+XW2olgnWv3dlEaI=;
+        b=RAd5ViZ6G2oflVgMLvLoIhP09oZHacpaYBLa4iiNChVLzjavL7ilCllH4tVz4PiNJ/
+         T/Me63BYmAE7HWvDP/O84hZCsOqTcURClHrjhjHRKqOFfrwq4DxCChtVmbNlwvPspmGl
+         IZ7LcDE33vNaJWfKV1J5GDixgssr6bUXIZJ5ivESdxi34SdqKa0WE54kEjFjdlwMTANH
+         +Yps37WtNZ0DCqCWHegaSY6XvC0QYfyTdpm66os8oBzAxnMU/fVOX6uAFk2N89Z4qV4z
+         6otqyYQvSWhMqrypzsf09nMmnwjeys4G95vU9RpvgDzYNfQP8mvU9/LUQMiDjl/UM6z2
+         cZbQ==
+X-Gm-Message-State: AJIora+rwoXOJhZ6sypObQmHqon9fdBzt2R3Adm7pU65FtCjHX6ZPCGN
+        JjvHS0OBBcrVz4GDDJFwYVxgRh5FQQfgGNd6Pnju8w==
+X-Google-Smtp-Source: AGRyM1s+tUCZdxTA4kkpJZebZj70VgjXomAgb+8vKGcmBYJIxp5WftwRivkjrD18cLRA0q+DUPvvIkkr5GNr3LAMNuI=
+X-Received: by 2002:a17:907:16a4:b0:711:c9a7:dc75 with SMTP id
+ hc36-20020a17090716a400b00711c9a7dc75mr3679859ejc.542.1655913608169; Wed, 22
+ Jun 2022 09:00:08 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:903:2308:b0:16a:1b3f:f74b with HTTP; Wed, 22 Jun 2022
- 08:03:40 -0700 (PDT)
-Reply-To: sales0212@asonmedsystemsinc.com
-From:   Prasad Ronni <lerwickfinance7@gmail.com>
-Date:   Wed, 22 Jun 2022 16:03:40 +0100
-Message-ID: <CAFkto5vTxj70kORZJZdwOGowXjsZ399eo6DJj=8T==7paSuHTw@mail.gmail.com>
-Subject: Service Needed.
-To:     undisclosed-recipients:;
+References: <20220622035326.759935-1-davidgow@google.com>
+In-Reply-To: <20220622035326.759935-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 22 Jun 2022 08:59:56 -0700
+Message-ID: <CAGS_qxrW-Js69+21Q9nHj19_AWvKcfUvKLYXDCXdB5ZdRPirfA@mail.gmail.com>
+Subject: Re: [RFC PATCH] kunit: tool: Enable virtio/PCI by default on UML
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
--- 
-Hi,
+On Tue, Jun 21, 2022 at 8:53 PM David Gow <davidgow@google.com> wrote:
+>
+> There are several tests which depend on PCI, and hence need a bunch of
+> extra options to run under UML. This makes it awkward to give
+> configuration instructions (whether in documentation, or as part of a
+> .kunitconfig file), as two separate, incompatible sets of config options
+> are required for UML and "most other architectures".
+>
+> For non-UML architectures, it's possible to add default kconfig options
+> via the qemu_config python files, but there's no equivalent for UML. Add
+> a new tools/testing/kunit/configs/arch_uml.config file containing extra
+> kconfig options to use on UML.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>
+> It's really ugly to have to type:
+>         --kconfig_add CONFIG_VIRTIO_UML=y
+>         --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
+> when running many tests under UML, particularly since it isn't required
+> on other architectures.
+>
+> This came up in discussion with Daniel this morning, and while the
+> ability to repeat the --kunitconfig flag would go some way to alleviate
+> this, having to add:
+>         --kunitconfig ./tools/testing/kunit/config/uml_pci.kunitconfig
+> isn't all that much better.
+>
+> So it seems like adding something by default would be nice.
+>
+> This implementation is not perfect (in particular, there's no easy way
+> of _disabling_ these options now, though [1] probably will help). The
 
-Are you currently open to work as our executive company representative
-on contractual basis working remotely? If yes, we will be happy to
-share more details. Looking forward to your response.
+I assume the missing link for [1] is
+https://lore.kernel.org/linux-kselftest/20220520224200.3764027-1-dlatypov@google.com/
+Note that we'll have to update one of these patches depending on the
+order they go in.
 
-Regards,
+[1] had to change make_arch_qemuconfig() to ensure that arch/qemu
+configs have *lower* priority than user-specified overrides.
+So we'll either need to do the same here or update [1] for this to work out.
+
+> 'arch_uml.config' filename can be bikeshedded, too.
+>
+> Thoughts?
+
+I was initially against effectively hard-coding these in, but it feels
+like making CONFIG_PCI=y work by default on UML is worth it.
+
+We've talked about architecture-specific options in kunitconfig files
+and it's only ever been about PCI. Nothing else has come up yet, so
+this patch would eliminate that concern for now.
