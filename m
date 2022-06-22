@@ -2,63 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDABA55509D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 18:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7255551FA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 19:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359850AbiFVQB3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Jun 2022 12:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
+        id S1377035AbiFVRHt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jun 2022 13:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359840AbiFVQBE (ORCPT
+        with ESMTP id S1377084AbiFVRHi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jun 2022 12:01:04 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B9B3FDA6
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 09:00:09 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id u12so35210231eja.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 09:00:09 -0700 (PDT)
+        Wed, 22 Jun 2022 13:07:38 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC83740E69
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 10:06:55 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id c13so20339296eds.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jun 2022 10:06:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PLtKE1DbGNDAcHw+kGtoh0+pUA8+XW2olgnWv3dlEaI=;
-        b=OH2byGIkD+olnkeI/3nZfvCKqy/63vjNAWe3lYUTBJh+R2Abgs5g9jETQS/ScCVUFH
-         ryxF+tyQ41trfmgtRmC0vkovKtUUFWfRCZSO9FgSmnulWo4mpiGtZQFkCgg/V+3hE6qN
-         tojlkpUyG+b0iOdJimNXIRIJIlvZITKDLhUZ7ibGitrEy7F1SpAfMdZI7mJR+I90abzg
-         l3SzqeR51rfdBw1NjbEIQckyd8C27YxtR2fdEFiEajuK2Y6vvx5Ld2ruxZ2NNl2WFHtE
-         AfGvRSYfbehIJRIYz4br1sl+IJ9h3jgWQOlr0oXHexWHa695Sbk2GPAjNCU/+YlNF8Oz
-         7s/g==
+         :cc:content-transfer-encoding;
+        bh=OqqiTD3gLybHOW4I6TLL5midAVTZ5DMLmHGaa4oXrwI=;
+        b=LViXX25+dhqxoIkD3PVPh5xlkUUjEcGqJEAQ2qrZky+J2zu84mwCgGHlmhvMlgCsTZ
+         /7+K0OsGs4c0r6Nxx1W3q3XWLkYo5PiFTkwvQoGEnBfp/rYyu9VMlF54QnNBcW6gxmeg
+         udE1bX3CTw4mk+szaqUlm7iwY6sxk/Fp1YqJoi3c8VLcRlDc/GekR6NuuTqB5VoMO1dv
+         RlTU9nDiD5VtqIMUKnNVdUrBu38/HydLxExUxcu7/Y4L75O1AA+/QDUzPv1hNPdlzD7Y
+         R0gs5JfrNdgn6vrpQuSabxnMwLLVOxHRrZmJRtT1JLDE8OvV1VaUVKyjabfpdU8pgg0B
+         PBpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PLtKE1DbGNDAcHw+kGtoh0+pUA8+XW2olgnWv3dlEaI=;
-        b=RAd5ViZ6G2oflVgMLvLoIhP09oZHacpaYBLa4iiNChVLzjavL7ilCllH4tVz4PiNJ/
-         T/Me63BYmAE7HWvDP/O84hZCsOqTcURClHrjhjHRKqOFfrwq4DxCChtVmbNlwvPspmGl
-         IZ7LcDE33vNaJWfKV1J5GDixgssr6bUXIZJ5ivESdxi34SdqKa0WE54kEjFjdlwMTANH
-         +Yps37WtNZ0DCqCWHegaSY6XvC0QYfyTdpm66os8oBzAxnMU/fVOX6uAFk2N89Z4qV4z
-         6otqyYQvSWhMqrypzsf09nMmnwjeys4G95vU9RpvgDzYNfQP8mvU9/LUQMiDjl/UM6z2
-         cZbQ==
-X-Gm-Message-State: AJIora+rwoXOJhZ6sypObQmHqon9fdBzt2R3Adm7pU65FtCjHX6ZPCGN
-        JjvHS0OBBcrVz4GDDJFwYVxgRh5FQQfgGNd6Pnju8w==
-X-Google-Smtp-Source: AGRyM1s+tUCZdxTA4kkpJZebZj70VgjXomAgb+8vKGcmBYJIxp5WftwRivkjrD18cLRA0q+DUPvvIkkr5GNr3LAMNuI=
-X-Received: by 2002:a17:907:16a4:b0:711:c9a7:dc75 with SMTP id
- hc36-20020a17090716a400b00711c9a7dc75mr3679859ejc.542.1655913608169; Wed, 22
- Jun 2022 09:00:08 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OqqiTD3gLybHOW4I6TLL5midAVTZ5DMLmHGaa4oXrwI=;
+        b=NYieisKLp8HW/1dbbXN0NOkdwT/KT6GnWVvq3tt7AzXRKm48+5cxQB3w6Ze0/5Cref
+         x2afA465MuXdlZBesJYmM7sL9dCqeUez9sOiNZ75ykZrWKuOPzlzg0se637142nz1wU3
+         VJQSt8Ikbcm82L2zX3lLlLm6tr0opsxpoYNHSySQipHyHy4VV4P1l7j0gtLkl1KS6tYJ
+         7o4i8ufjF/Ii2ntPGNKsisxyLM/nQnOG3oJbWQMk0yR0GvyDWEINC3kFtSSZw+TAlY93
+         DZ+d7R0fLYIb4ZFknb3mTDpPWd9MaqSo0yDxZqDP0L1hgM/suTUkpY8PxdeJXGO9/A8K
+         WodQ==
+X-Gm-Message-State: AJIora+QGHs9lEBsBOTgDQUIBR2UM74yE6tPnPlSTcQLtW79l5HLuuhl
+        dLnWwqFXgZ3EkfjROSHVtxkaUzSxNWQy5SJbPXNniQ==
+X-Google-Smtp-Source: AGRyM1s9NziaB5rFGJn8nlqg9mHNGM6U4u3m7TD4UXdULiRqF9kKHp+l0vbLc2Qiez8orLLht/Ury4IBWPhFVGR8TKU=
+X-Received: by 2002:a05:6402:438a:b0:435:bc23:d615 with SMTP id
+ o10-20020a056402438a00b00435bc23d615mr2590960edc.283.1655917614113; Wed, 22
+ Jun 2022 10:06:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220622035326.759935-1-davidgow@google.com>
-In-Reply-To: <20220622035326.759935-1-davidgow@google.com>
+References: <20220621200926.257002-1-maira.canal@usp.br> <20220621200926.257002-5-maira.canal@usp.br>
+In-Reply-To: <20220621200926.257002-5-maira.canal@usp.br>
 From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 22 Jun 2022 08:59:56 -0700
-Message-ID: <CAGS_qxrW-Js69+21Q9nHj19_AWvKcfUvKLYXDCXdB5ZdRPirfA@mail.gmail.com>
-Subject: Re: [RFC PATCH] kunit: tool: Enable virtio/PCI by default on UML
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+Date:   Wed, 22 Jun 2022 10:06:42 -0700
+Message-ID: <CAGS_qxrynX=q7ZVmFSm-HO-3r3wGVnXMXVMejM3-ONvyJUrrPg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] drm: selftest: convert drm_format selftest to KUnit
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
         Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,55 +81,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 8:53 PM David Gow <davidgow@google.com> wrote:
+On Tue, Jun 21, 2022 at 1:10 PM Ma=C3=ADra Canal <maira.canal@usp.br> wrote=
+:
 >
-> There are several tests which depend on PCI, and hence need a bunch of
-> extra options to run under UML. This makes it awkward to give
-> configuration instructions (whether in documentation, or as part of a
-> .kunitconfig file), as two separate, incompatible sets of config options
-> are required for UML and "most other architectures".
+> Considering the current adoption of the KUnit framework, convert the
+> DRM format selftest to the KUnit API.
 >
-> For non-UML architectures, it's possible to add default kconfig options
-> via the qemu_config python files, but there's no equivalent for UML. Add
-> a new tools/testing/kunit/configs/arch_uml.config file containing extra
-> kconfig options to use on UML.
->
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> It's really ugly to have to type:
->         --kconfig_add CONFIG_VIRTIO_UML=y
->         --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
-> when running many tests under UML, particularly since it isn't required
-> on other architectures.
->
-> This came up in discussion with Daniel this morning, and while the
-> ability to repeat the --kunitconfig flag would go some way to alleviate
-> this, having to add:
->         --kunitconfig ./tools/testing/kunit/config/uml_pci.kunitconfig
-> isn't all that much better.
->
-> So it seems like adding something by default would be nice.
->
-> This implementation is not perfect (in particular, there's no easy way
-> of _disabling_ these options now, though [1] probably will help). The
+> Tested-by: David Gow <davidgow@google.com>
+> Signed-off-by: Ma=C3=ADra Canal <maira.canal@usp.br>
 
-I assume the missing link for [1] is
-https://lore.kernel.org/linux-kselftest/20220520224200.3764027-1-dlatypov@google.com/
-Note that we'll have to update one of these patches depending on the
-order they go in.
+Acked-by: Daniel Latypov <dlatypov@google.com>
 
-[1] had to change make_arch_qemuconfig() to ensure that arch/qemu
-configs have *lower* priority than user-specified overrides.
-So we'll either need to do the same here or update [1] for this to work out.
+Overall looks good from the KUnit side, just a few general suggestions belo=
+w.
 
-> 'arch_uml.config' filename can be bikeshedded, too.
->
-> Thoughts?
+FYI, the warning email from kernel-test-robot is basically saying that
+the compiler is not optimizing away the temporary variables internally
+created in KUNIT_EXPECT_*.
+So having too many KUNIT_EXPECT_.* in a single function is the trigger.
+The main workaround you'd have is to split up the test into more test funct=
+ions.
+(I don't know if that's actually worth doing)
 
-I was initially against effectively hard-coding these in, but it feels
-like making CONFIG_PCI=y work by default on UML is worth it.
+> +static void igt_check_drm_format_block_width(struct kunit *test)
+> +{
+> +       const struct drm_format_info *info =3D NULL;
+> +
+> +       /* Test invalid arguments */
+> +       KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, 0));
+> +       KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, -1));
+> +       KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, 1));
 
-We've talked about architecture-specific options in kunitconfig files
-and it's only ever been about PCI. Nothing else has come up yet, so
-this patch would eliminate that concern for now.
+Hmm, I think one of these two would be clearer here:
+KUNIT_EXPECT_EQ(test, drm_format_info_block_width(info, 0), 0);
+KUNIT_EXPECT_EQ(test, 0, drm_format_info_block_width(info, 0));
+
+I think this helps test readability (giving hints about the types) and
+gives better error messages, more on that below.
+
+The problem with using the boolean expectations is that given
+  int foo =3D 2;
+  KUNIT_EXPECT_FALSE(test, foo);
+KUnit will only print out
+    Expected foo to be false, but is true
+
+Using EXPECT_EQ(foo, 0), we'd get
+    Expected foo =3D=3D 0, but
+        foo =3D=3D 2
+
+Knowing exactly what the offending return value was can help debug
+test failures a bit faster.
+
+> +
+> +       /* Test 1 plane format */
+> +       info =3D drm_format_info(DRM_FORMAT_XRGB4444);
+> +       KUNIT_EXPECT_TRUE(test, info);
+
+FYI, you can now instead write
+  KUNIT_EXPECT_NOT_NULL(test, info);
+this new macro was merged into 5.19-rc1.
