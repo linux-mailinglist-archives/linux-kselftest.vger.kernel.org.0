@@ -2,68 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F254553F62
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 02:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B95554104
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jun 2022 05:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiFVAS3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jun 2022 20:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S1356254AbiFVDxi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jun 2022 23:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiFVAS3 (ORCPT
+        with ESMTP id S1356400AbiFVDxh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jun 2022 20:18:29 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0C624BC7
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 17:18:26 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3177e60d980so125517917b3.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 17:18:26 -0700 (PDT)
+        Tue, 21 Jun 2022 23:53:37 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCC9338A2
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 20:53:35 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id q138-20020a252a90000000b006694ac29d4eso3806334ybq.14
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jun 2022 20:53:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7oGTotRq4WT1s39cOcG1SCSH+1obZhPZeWPvkH3sdIY=;
-        b=pRiRdRZvjWOHeq131C46xsgsl6zJcY8C05hCjZzCa9c5mI+uxZS+aWO42sFaDVcz0b
-         nZ6JYvtfY+Dyq2C3cKgNrJEzQb345RwaajVb7ThwG5hC4/DO+seCNsOY5IrbWmSj93x2
-         odlhjOIH9KnXoJQSU0k/qCogGY7lOn36CEKee3zO/Hjmxp94lYh4Dbu3OZ2pdCN470GB
-         +pFf6fL2HolqA61KHmkwKp5hmNh6RdX/SFg+piwu9viA8TJy2VVclhV5fTeHJgt9D5mU
-         YbHFvldnFR/xTL31nImBrcfsqLyAFoBI+mjOIE5RD2EhoaF6AlCw0MOPtH1rTD4uNfEc
-         xIkQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=iwk6opCsv4rch8cOLk7rLA4pRpTqnI7lX1MqEKmLDxo=;
+        b=jvavznh0cp68Y71XtKyHHUb1a1IbsXDqLyI9l6AZPSugBW0v14ZN7p8nppjz2lVDMD
+         2I+wN01Qp8I2gV+6O/1D9WNaYlCSVDGtLXgpGUUpgsvWgYIG7mKqLtsVSIwQdMlIUEJD
+         o+S1fM6rp0RPLbUNAKiMwCvsvs05ueljZZFXBm6Me0HsHbFu3Pg1pp3kb+dcn40DskMI
+         H5N9skt3Md0eTYkG4asMaNyYVwOnCqWAiEOWgNm+uofZ/wXshEzEUiSKz/5XTe96mOk0
+         pizhmimC3lJo1UJ7KkcNpUB8OrOUIQCP9kZr9hjRSsNrS+t5C7OTVKNwz6p90iusxweD
+         o/rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7oGTotRq4WT1s39cOcG1SCSH+1obZhPZeWPvkH3sdIY=;
-        b=1pJMxtxhOVTgBmx7BrzU3m1DEGGSgOzHHUvNUrvyQZHvLF0PdjOnUqIV6mH9/zzkWm
-         tyV2ASOsdFLi51sVSOKyDg9/TmAfc6rr0I5xVdVtuTd0Sh3Ic8vsqTz4PRRLwdkP7GCS
-         F2DD5lA9K7kZwVnAMp2hx0ViM0T6FSaS610AugfMiV0otob/1QMds8An2FA39jyKDDoy
-         5UTm0uPQYZfL61cQpSes/ipPIrfvaAQCRNBa0tpRjls4JUyeZjME8E2xRydT6uZaXhIL
-         PA+0KWdH16zPf2ooZPHKvthnOwqqF+J+z2YKyZsJN9Vo2b+mQ591nvKmkap5w1Zk3vHH
-         Dbzg==
-X-Gm-Message-State: AJIora/U5hvndIwZxArfS5l17Z78mmnH29SRjRNQ11s4LjUlOKFMZ4tJ
-        fL3db/apPHadV38/J+Bi8XdzOzAMELcggZh+n93ZWOvMqqZR5A==
-X-Google-Smtp-Source: AGRyM1uZMeYsz5mgtXqZFmpIy7OI6WlLsf1bMvgdPOTGVewZvG7oLbOCHMIQXhvHTWsNX+x8sktVDLoJVaFNzPzXsDo=
-X-Received: by 2002:a0d:cd81:0:b0:2ff:aa45:4238 with SMTP id
- p123-20020a0dcd81000000b002ffaa454238mr984226ywd.155.1655857105884; Tue, 21
- Jun 2022 17:18:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220616211016.4037482-1-dylanbhatch@google.com>
- <941e0991-eb3e-f988-8262-3d51ff8badad@linuxfoundation.org>
- <CADBMgpwt2ALzBTtEm7v6DLL_9pjUhVLDpBLHXn1b0bvVf2BSvg@mail.gmail.com>
- <47312e8a-87fe-c7dc-d354-74e81482bc1e@linuxfoundation.org>
- <CADBMgpx9hwHaWe=m2kQhKOJFWnLSejoWa6wz1VECEkLhWq4qog@mail.gmail.com> <a5f46e4e-a472-77ce-f61e-b2f9922bdd50@linuxfoundation.org>
-In-Reply-To: <a5f46e4e-a472-77ce-f61e-b2f9922bdd50@linuxfoundation.org>
-From:   Dylan Hatch <dylanbhatch@google.com>
-Date:   Tue, 21 Jun 2022 17:18:14 -0700
-Message-ID: <CADBMgpzyOKVO1ju_WkxYLhXGvwJjHoL6V-+Nw49UdTFoPY7NvQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/proc: Fix proc-pid-vm for vsyscall=xonly.
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=iwk6opCsv4rch8cOLk7rLA4pRpTqnI7lX1MqEKmLDxo=;
+        b=hVOf9U92ye6+Cdx8IVf5IQke5hr9f71H5CXxwP+i7DxxFJnM5EbWDbDIppV0T4Z10h
+         XwJsI10RhwEeLi5vK5LT+JVJ3gM0vl70au57QWVhU8q35r0xDDjwmpLy5aP4uZK/l7cm
+         Ox91n8L7nlogFHbb3e3ruplvaBwPoY8E/KwGfmnkzkNQa5XHPHbI3EAkz47JA6fNVvHI
+         c7rUQjww/7+HQgK6pfZzPuMBU8hAU2bfOQQfjo7UwBQtjImztwV6ERDFN28eDQE1Qtk2
+         Zn0n0ZJAcW2yfcZFygVJ/9Yp6UtFgFzevyWa6tfR9PbC9eNg91Ee2kh+fr65+nSCB6Na
+         FJFw==
+X-Gm-Message-State: AJIora+RZJFlWg4o40yBJx2+WNluu7upi7EWwcowZpnmvli4+V0sTYy1
+        uCwnX4DbtBqbCBPCS5JVY0qmwjTzDrPQrA==
+X-Google-Smtp-Source: AGRyM1vcFnqYSpCrlY49fkah+U80qc6Y9C7Ozo3wtzCut4wcNNU+NbVo5kf2UZf5RwDS98oX/vKfHX54FDd5xA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:d18f:0:b0:668:f385:737 with SMTP id
+ i137-20020a25d18f000000b00668f3850737mr1565616ybg.205.1655870014788; Tue, 21
+ Jun 2022 20:53:34 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 11:53:26 +0800
+Message-Id: <20220622035326.759935-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+Subject: [RFC PATCH] kunit: tool: Enable virtio/PCI by default on UML
+From:   David Gow <davidgow@google.com>
+To:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?=" <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,94 +67,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 3:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 6/17/22 4:05 PM, Dylan Hatch wrote:
-> > On Fri, Jun 17, 2022 at 12:38 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>
-> >> On 6/17/22 12:45 PM, Dylan Hatch wrote:
-> >>> On Thu, Jun 16, 2022 at 4:01 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>>>
-> >
-> >>
-> >> It depends on the goal of the test. Is the test looking to see if the
-> >> probe fails with insufficient permissions, then you are changing the
-> >> test to not check for that condition.
-> >
-> > The goal of the test is to validate the output of /proc/$PID/maps, and
-> > the memory probe is only needed as setup to determine what the
-> > expected output should be. This used to be sufficient, but now it can
-> > no longer fully disambiguate it with the introduction of
-> > vsyscall=xonly. The solution proposed here is to disambiguate it by
-> > also checking the length read from /proc/$PID/maps.
-> >
-> >>
->
-> Makes sense. However the question is does this test need to be enhanced
-> with the addition of vsyscall=xonly?
->
-> >> I would say in this case, the right approach would be to leave the test
-> >> as is and report expected fail and add other cases.
-> >>
-> >> The goal being adding more coverage and not necessarily opt for a simple
-> >> solution.
-> >
-> > What does it mean to report a test as expected fail? Is this a
-> > mechanism unique to kselftest? I agree adding another test case would
-> > work, but I'm unsure how to do it within the framework of kselftest.
-> > Ideally, there would be separate test cases for vsyscall=none,
-> > vsyscall=emulate, and vsyscall=xonly, but these options can be toggled
-> > both in the kernel config and on the kernel command line, meaning (to
-> > the best of my knowledge) these test cases would have to be built
-> > conditionally against the conflig options and also parse the command
-> > line for the 'vsyscall' option.
-> >
->
-> Expected fail isn't unique kselftest. It is a testing criteria where
-> a test is expected to fail. For example if a file can only be opened
-> with privileged user a test that runs and looks for failure is an
-> expected to fail case - we are looking for a failure.
->
-> A complete battery of tests for vsyscall=none, vsyscall=emulate,
-> vsyscall=xonly would test for conditions that are expected to pass
-> and fail based on the config.
->
-> tools/testing/selftests/proc/config doesn't have any config options
-> that are relevant to VSYSCALL
->
-> Can you please send me the how you are running the test and what the
-> failure output looks like?
+There are several tests which depend on PCI, and hence need a bunch of
+extra options to run under UML. This makes it awkward to give
+configuration instructions (whether in documentation, or as part of a
+.kunitconfig file), as two separate, incompatible sets of config options
+are required for UML and "most other architectures".
 
-I'm building a kernel with the following relevant configurations:
+For non-UML architectures, it's possible to add default kconfig options
+via the qemu_config python files, but there's no equivalent for UML. Add
+a new tools/testing/kunit/configs/arch_uml.config file containing extra
+kconfig options to use on UML.
 
-$ cat .config | grep VSYSCALL
-CONFIG_GENERIC_TIME_VSYSCALL=y
-CONFIG_X86_VSYSCALL_EMULATION=y
-CONFIG_LEGACY_VSYSCALL_XONLY=y
-# CONFIG_LEGACY_VSYSCALL_NONE is not set
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-Running the test without this change both in virtme and on real
-hardware gives the following error:
+It's really ugly to have to type:
+	--kconfig_add CONFIG_VIRTIO_UML=y
+	--kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
+when running many tests under UML, particularly since it isn't required
+on other architectures.
 
-# ./tools/testing/selftests/proc/proc-pid-vm
-proc-pid-vm: proc-pid-vm.c:328: int main(void): Assertion `rv == len' failed.
-Aborted
+This came up in discussion with Daniel this morning, and while the
+ability to repeat the --kunitconfig flag would go some way to alleviate
+this, having to add:
+	--kunitconfig ./tools/testing/kunit/config/uml_pci.kunitconfig
+isn't all that much better.
 
-This is because when CONFIG_LEGACY_VSYSCALL_XONLY=y a probe of the
-vsyscall page results in a segfault. This test was originally written
-before this option existed so it incorrectly assumes the vsyscall page
-isn't mapped at all, and the expected buffer length doesn't match the
-result.
+So it seems like adding something by default would be nice.
 
-An alternate method of fixing this test could involve setting the
-expected result based on the config with #ifdef blocks, but I wasn't
-sure if that could be done for kernel config options in kselftest
-code. There's also the matter of checking the kernel command line for
-a `vsyscall=` arg, is parsing /proc/cmdline the best way to do this?
+This implementation is not perfect (in particular, there's no easy way
+of _disabling_ these options now, though [1] probably will help). The
+'arch_uml.config' filename can be bikeshedded, too.
 
->
-> thanks,
-> -- Shuah
+Thoughts?
 
-Thanks,
-Dylan
+---
+ tools/testing/kunit/configs/arch_uml.config |  5 +++++
+ tools/testing/kunit/kunit_kernel.py         | 11 ++++++++---
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/kunit/configs/arch_uml.config
+
+diff --git a/tools/testing/kunit/configs/arch_uml.config b/tools/testing/kunit/configs/arch_uml.config
+new file mode 100644
+index 000000000000..e824ce43b05a
+--- /dev/null
++++ b/tools/testing/kunit/configs/arch_uml.config
+@@ -0,0 +1,5 @@
++# Config options which are added to UML builds by default
++
++# Enable virtio/pci, as a lot of tests require it.
++CONFIG_VIRTIO_UML=y
++CONFIG_UML_PCI_OVER_VIRTIO=y
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 3539efaf99ba..05e7b1e188d7 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -26,6 +26,7 @@ KUNITCONFIG_PATH = '.kunitconfig'
+ OLD_KUNITCONFIG_PATH = 'last_used_kunitconfig'
+ DEFAULT_KUNITCONFIG_PATH = 'tools/testing/kunit/configs/default.config'
+ BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
++UML_KCONFIG_PATH = 'tools/testing/kunit/configs/arch_uml.config'
+ OUTFILE_PATH = 'test.log'
+ ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
+ QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
+@@ -53,7 +54,7 @@ class LinuxSourceTreeOperations:
+ 		except subprocess.CalledProcessError as e:
+ 			raise ConfigError(e.output.decode())
+ 
+-	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
++	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+ 		pass
+ 
+ 	def make_allyesconfig(self, build_dir: str, make_options) -> None:
+@@ -109,7 +110,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 		self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
+ 		self._extra_qemu_params = qemu_arch_params.extra_qemu_params
+ 
+-	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
++	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+ 		kconfig = kunit_config.parse_from_string(self._kconfig)
+ 		base_kunitconfig.merge_in_entries(kconfig)
+ 
+@@ -137,6 +138,10 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 	def __init__(self, cross_compile=None):
+ 		super().__init__(linux_arch='um', cross_compile=cross_compile)
+ 
++	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
++		kconfig = kunit_config.parse_file(UML_KCONFIG_PATH)
++		base_kunitconfig.merge_in_entries(kconfig)
++
+ 	def make_allyesconfig(self, build_dir: str, make_options) -> None:
+ 		kunit_parser.print_with_timestamp(
+ 			'Enabling all CONFIGs for UML...')
+@@ -313,7 +318,7 @@ class LinuxSourceTree:
+ 			return self.build_config(build_dir, make_options)
+ 
+ 		existing_kconfig = kunit_config.parse_file(kconfig_path)
+-		self._ops.make_arch_qemuconfig(self._kconfig)
++		self._ops.make_arch_config(self._kconfig)
+ 		if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfig_changed(build_dir):
+ 			return True
+ 		print('Regenerating .config ...')
+-- 
+2.37.0.rc0.104.g0611611a94-goog
+
