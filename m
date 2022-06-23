@@ -2,69 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F4039557A6A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jun 2022 14:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE68558948
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jun 2022 21:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiFWMg6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jun 2022 08:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S231400AbiFWTk7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jun 2022 15:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiFWMg4 (ORCPT
+        with ESMTP id S231477AbiFWTkk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jun 2022 08:36:56 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656AB42499;
-        Thu, 23 Jun 2022 05:36:55 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LTKQy6cYtz6H74G;
-        Thu, 23 Jun 2022 20:32:58 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 14:36:53 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 23 Jun 2022 14:36:53 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v5 2/5] bpf: Add bpf_lookup_user_key() and bpf_key_put()
- helpers
-Thread-Topic: [PATCH v5 2/5] bpf: Add bpf_lookup_user_key() and bpf_key_put()
- helpers
-Thread-Index: AQHYhY1k21fgeQJHrk6eeuiL0ORSsa1aUQkAgACxApCAAeingA==
-Date:   Thu, 23 Jun 2022 12:36:52 +0000
-Message-ID: <f2d3da08e7774df9b44cc648dda7d0b8@huawei.com>
-References: <20220621163757.760304-1-roberto.sassu@huawei.com>
- <20220621163757.760304-3-roberto.sassu@huawei.com>
- <20220621223248.f6wgyewajw6x4lgr@macbook-pro-3.dhcp.thefacebook.com>
- <796b55c79be142cab6a22dd281fdb9fa@huawei.com>
-In-Reply-To: <796b55c79be142cab6a22dd281fdb9fa@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 23 Jun 2022 15:40:40 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9460A8053A
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jun 2022 12:30:27 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id u15so232525ejc.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jun 2022 12:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ktnWgaGfXlUyFzw3WYN81yNQBxVyn7TH3IijN8+TCrE=;
+        b=aJ0D63AMYWj9xoBmF2Uc/pS/uPixVK/1MLddTgFsNKqRD+Lk+NJHrr6NSGwldNE+5Q
+         WHSA2c2914/o7IpqT1HL51cyNIhbTT8XQkhVbOvP1giW7+Hlgl3eHFAoCdl34bwTbHyE
+         XP3eu4e1KkJVQCNEqa/zfcs4jy0SP2quGM82d4725Tc2a4UX0doDO+80a5YDecWbD/8g
+         XieTMxDtT5YIrnq7xcNoaoSQ2KY0VhUzaYdhFnbfgdLw3dUz+vqaIquROp0e09Un/w90
+         Iv5MMK0mMghkDT+4yB21UWHHW+lF7cF0XColTMLyM3JvCRNSisAytOu2u6ByU+t1r4eX
+         v/4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ktnWgaGfXlUyFzw3WYN81yNQBxVyn7TH3IijN8+TCrE=;
+        b=NJVHhEAtpKzsxAfcNNxGKetIIrXtt1J6UYn6MMcb6TgTJ3zB2woaDmOJOy42vIK2Dj
+         IaDp42n1/hjc/DDN7tuCTdYjZxjUAe4/c4foM9Lr08jy5La1dtm2UTWYxY0kwOtGZ6ZU
+         /sy71y5+rCH0zGO0slygtQr1N1E8GeF3Zd1Y9XFpyouGMbHp6vtd0SfzmvTd+GVxMDrv
+         RD+y5y3zIaX8U20qmQ9FTcFoL9DsL/y+OlsuW6B7zToBvzjvS4atRcrwpK1+shvVkdUJ
+         U97jwdTCot2EpyESFJLhJ0wd8laFwoE9bHVS9fm4wUyB7Yq9/i/pmE7o790weuTVmwPu
+         VFSg==
+X-Gm-Message-State: AJIora9L1cGNQ0xX7Yi2bKKhs/2OFZeTa13YOsl4Tqoiu8wwer/Dv9r2
+        vtYsqB/bmNL9LRKQxq7f6Zj/Fca2sI8n+7lOXWr8nw==
+X-Google-Smtp-Source: AGRyM1uGkfkSYAQGAKnZkLaETtz7YP/UT5QGMtV/dduPQuz1fa4n/cyMWGF0MVETAjU6nAYfsHYFSS6AUPCmQoDQHd4=
+X-Received: by 2002:a17:907:9715:b0:726:2a3b:9f84 with SMTP id
+ jg21-20020a170907971500b007262a3b9f84mr3195116ejc.414.1656012625972; Thu, 23
+ Jun 2022 12:30:25 -0700 (PDT)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220622035326.759935-1-davidgow@google.com>
+In-Reply-To: <20220622035326.759935-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 23 Jun 2022 12:30:14 -0700
+Message-ID: <CAFd5g45VTbQ+tR9Bh0nNCA_cc3myLyDSYwLwEQb1FmkwaEd2Ow@mail.gmail.com>
+Subject: Re: [RFC PATCH] kunit: tool: Enable virtio/PCI by default on UML
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,65 +70,124 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
-> Sent: Wednesday, June 22, 2022 9:12 AM
-> > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
-> > Sent: Wednesday, June 22, 2022 12:33 AM
-> > On Tue, Jun 21, 2022 at 06:37:54PM +0200, Roberto Sassu wrote:
-> > > Add the bpf_lookup_user_key() and bpf_key_put() helpers, to respectively
-> > > search a key with a given serial, and release the reference count of the
-> > > found key.
-> > >
-> > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > ---
-> > >  include/uapi/linux/bpf.h       | 16 ++++++++++++
-> > >  kernel/bpf/bpf_lsm.c           | 46 ++++++++++++++++++++++++++++++++++
-> > >  kernel/bpf/verifier.c          |  6 +++--
-> > >  scripts/bpf_doc.py             |  2 ++
-> > >  tools/include/uapi/linux/bpf.h | 16 ++++++++++++
-> > >  5 files changed, 84 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > index e81362891596..7bbcf2cd105d 100644
-> > > --- a/include/uapi/linux/bpf.h
-> > > +++ b/include/uapi/linux/bpf.h
-> > > @@ -5325,6 +5325,20 @@ union bpf_attr {
-> > >   *		**-EACCES** if the SYN cookie is not valid.
-> > >   *
-> > >   *		**-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
-> > > + *
-> > > + * struct key *bpf_lookup_user_key(u32 serial, unsigned long flags)
-> > > + *	Description
-> > > + *		Search a key with a given *serial* and the provided *flags*, and
-> > > + *		increment the reference count of the key.
-> >
-> > Why passing 'flags' is ok to do?
-> > Please think through every line of the patch.
-> 
-> To be honest, I thought about it. Probably yes, I should do some
-> sanitization, like I did for the keyring ID. When I checked
-> lookup_user_key(), I saw that flags are checked individually, so
-> an arbitrary value passed to the helper should not cause harm.
-> Will do sanitization, if you prefer. It is just that we have to keep
-> the eBPF code in sync with key flag definition (unless we have
-> a 'last' flag).
+On Tue, Jun 21, 2022 at 8:53 PM David Gow <davidgow@google.com> wrote:
+>
+> There are several tests which depend on PCI, and hence need a bunch of
+> extra options to run under UML. This makes it awkward to give
+> configuration instructions (whether in documentation, or as part of a
+> .kunitconfig file), as two separate, incompatible sets of config options
+> are required for UML and "most other architectures".
+>
+> For non-UML architectures, it's possible to add default kconfig options
+> via the qemu_config python files, but there's no equivalent for UML. Add
+> a new tools/testing/kunit/configs/arch_uml.config file containing extra
+> kconfig options to use on UML.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>
+> It's really ugly to have to type:
+>         --kconfig_add CONFIG_VIRTIO_UML=y
+>         --kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
+> when running many tests under UML, particularly since it isn't required
+> on other architectures.
+>
+> This came up in discussion with Daniel this morning, and while the
+> ability to repeat the --kunitconfig flag would go some way to alleviate
+> this, having to add:
+>         --kunitconfig ./tools/testing/kunit/config/uml_pci.kunitconfig
+> isn't all that much better.
+>
+> So it seems like adding something by default would be nice.
+>
+> This implementation is not perfect (in particular, there's no easy way
+> of _disabling_ these options now, though [1] probably will help). The
+> 'arch_uml.config' filename can be bikeshedded, too.
+>
+> Thoughts?
 
-I'm not sure that having a helper for lookup_user_key() alone is
-correct. By having separate helpers for lookup and usage of the
-key, nothing would prevent an eBPF program to ask for a
-permission to pass the access control check, and then use the
-key for something completely different from what it requested.
+I am supportive of adding the PCI dependency as a default for UML; I
+agree that there is a common desire to use PCI for tests and enabling
+it on UML is wonky.
 
-Looking at how lookup_user_key() is used in security/keys/keyctl.c,
-it seems clear that it should be used together with the operation
-that needs to be performed. Only in this way, the key permission
-would make sense.
+One additional note: It looks like this patch breaks kunit_tool:
+https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/21871
 
-What do you think (also David)?
+The python error in the log seems legitimate:
+https://storage.googleapis.com/oss-prow/pr-logs/pull/linux-review.googlesource.com_linux_kernel_git_torvalds_linux/21871/linux-kernel-mailing-list-presubmit/1539456886976286720/build-log.txt
 
-Thanks
+This line in particular:
 
-Roberto
+AttributeError: 'LinuxSourceTreeOperationsUml' object has no attribute
+'make_arch_qemuconfig'
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Yang Xi, Li He
+> ---
+>  tools/testing/kunit/configs/arch_uml.config |  5 +++++
+>  tools/testing/kunit/kunit_kernel.py         | 11 ++++++++---
+>  2 files changed, 13 insertions(+), 3 deletions(-)
+>  create mode 100644 tools/testing/kunit/configs/arch_uml.config
+>
+> diff --git a/tools/testing/kunit/configs/arch_uml.config b/tools/testing/kunit/configs/arch_uml.config
+> new file mode 100644
+> index 000000000000..e824ce43b05a
+> --- /dev/null
+> +++ b/tools/testing/kunit/configs/arch_uml.config
+> @@ -0,0 +1,5 @@
+> +# Config options which are added to UML builds by default
+> +
+> +# Enable virtio/pci, as a lot of tests require it.
+> +CONFIG_VIRTIO_UML=y
+> +CONFIG_UML_PCI_OVER_VIRTIO=y
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 3539efaf99ba..05e7b1e188d7 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -26,6 +26,7 @@ KUNITCONFIG_PATH = '.kunitconfig'
+>  OLD_KUNITCONFIG_PATH = 'last_used_kunitconfig'
+>  DEFAULT_KUNITCONFIG_PATH = 'tools/testing/kunit/configs/default.config'
+>  BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
+> +UML_KCONFIG_PATH = 'tools/testing/kunit/configs/arch_uml.config'
+>  OUTFILE_PATH = 'test.log'
+>  ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
+>  QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
+> @@ -53,7 +54,7 @@ class LinuxSourceTreeOperations:
+>                 except subprocess.CalledProcessError as e:
+>                         raise ConfigError(e.output.decode())
+>
+> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+>                 pass
+>
+>         def make_allyesconfig(self, build_dir: str, make_options) -> None:
+> @@ -109,7 +110,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>                 self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
+>                 self._extra_qemu_params = qemu_arch_params.extra_qemu_params
+>
+> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+>                 kconfig = kunit_config.parse_from_string(self._kconfig)
+>                 base_kunitconfig.merge_in_entries(kconfig)
+>
+> @@ -137,6 +138,10 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>         def __init__(self, cross_compile=None):
+>                 super().__init__(linux_arch='um', cross_compile=cross_compile)
+>
+> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> None:
+> +               kconfig = kunit_config.parse_file(UML_KCONFIG_PATH)
+> +               base_kunitconfig.merge_in_entries(kconfig)
+> +
+>         def make_allyesconfig(self, build_dir: str, make_options) -> None:
+>                 kunit_parser.print_with_timestamp(
+>                         'Enabling all CONFIGs for UML...')
+> @@ -313,7 +318,7 @@ class LinuxSourceTree:
+>                         return self.build_config(build_dir, make_options)
+>
+>                 existing_kconfig = kunit_config.parse_file(kconfig_path)
+> -               self._ops.make_arch_qemuconfig(self._kconfig)
+> +               self._ops.make_arch_config(self._kconfig)
+>                 if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfig_changed(build_dir):
+>                         return True
+>                 print('Regenerating .config ...')
+> --
+> 2.37.0.rc0.104.g0611611a94-goog
+>
