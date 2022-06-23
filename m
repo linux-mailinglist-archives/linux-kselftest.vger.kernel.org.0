@@ -2,60 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63E75577EA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jun 2022 12:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F206557A3B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jun 2022 14:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiFWKdi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jun 2022 06:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S230250AbiFWMYg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jun 2022 08:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbiFWKdh (ORCPT
+        with ESMTP id S231335AbiFWMYf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:33:37 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F6240E7E;
-        Thu, 23 Jun 2022 03:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655980416; x=1687516416;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gn5ZpRg4Tt3g3k8kBqC/n3XCLGoTrgvw3Xe7VLjDhQc=;
-  b=Eyrz51ArEUejTnsCAyPGbHM8ASzJ3BReZFM631HTOMUSjdbMTedmzr21
-   F8skAiFzb+Z8fSQOfpHZsU4xB3P9jNTbG9vITVcW50LYXGha+KV4CtyiP
-   5JJgAuX70xs47jQWkqX4bR6s8AJAEMIxWw15OTOIKwrjydHGgECV0fvBl
-   M0clgVuLyQKJbDXwaFjXEWWnSVwRC3bctv9UN6ibtDkJYjSXkNm2Sv7n0
-   +r+7H+FyDJnyR1bPgmE7WPNXaoqIVmbw9f63c1JdUbOW4CdB4AbXNm/7g
-   Wx64ucblwTogb8CmJP6DjMVeXVG8zLV0jopTBvd2AzwRBNkVjCqI0quHP
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="278232928"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="278232928"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 03:33:36 -0700
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="644674791"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 03:33:34 -0700
-Date:   Thu, 23 Jun 2022 18:33:19 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: selftest: Enhance handling WRMSR ICR register in
- x2APIC mode
-Message-ID: <20220623103314.GA14006@gao-cwp>
-References: <20220623094511.26066-1-guang.zeng@intel.com>
+        Thu, 23 Jun 2022 08:24:35 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8B03207A
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so26357944fac.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jun 2022 05:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
+        b=ZGAwRzzE8VL85qRDYfMIvCrIHJkVRiIYei98dO36+lgVyF3FWJUe7hqqUrsTwy639Y
+         fc+W8/1hfo7JZohSBn0BmrXgCAuBJ5vCaJB2sAWPRSGsx6O74BR4aBhFhTsdrI8SVpw6
+         yHYggGBjd/sq0CYiDjkFfZkeqRUmrn4J7Dg4e7iicPa2yWiHeuY+8e+bLsDAiI4i8pyr
+         EV80OclS5ilc1yqKp6AG1B401ALvhV3exYBeb2IeV0OW8rpAFVov8Ge0ATahc3RcmxRF
+         4FFQUAnzOwhEN6/m8cyLiVsmXun+S618Er5jfz5mSVTteervSKejh8lx4MtRyhHmQCtR
+         ZssA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qcOFv+gUkOUIJJ72OOZ9NseYxv0LoGb9wAQ/jFJ2Dk8=;
+        b=ZLAdp5dmASIcC4iDrzCCFxHXNE9QbyY5c4KBKW1pOc2A6bKAICFMeCOrBvvNvTFlLm
+         43DXvXePpGnC6GOzSo6lWQars1MjsTJ/JQnyQtAF96XltLrvRNgiMCAC1VaDNW4MFY9A
+         jm6vHqpN6qe8eNAn7mSC9f90wyjRphjlehI7ZXMU4ZZD5PCIlFfVK1zAXuOMCOOwpD4i
+         G0FsRPPB11cGa79BsrYFXmDkVQppRrG3oy5XSuEhRAglMnRhc55wmu70Mt0R8WyXle65
+         p5XNhilUF3Svory5Rkgon3I/MoIzam3BOl7ven8gacn8GeN2gcsuqfYiBZofIicF1wDs
+         86aA==
+X-Gm-Message-State: AJIora+CAgT5CsCYVzgXJwKbNxP6KrFdmA9a4kRn02ctOL/eHEnacqMw
+        EOotJDLGNH/DfWgzF8QD0WkGbCadIcZPS2FDU04d+zKsTpQ=
+X-Google-Smtp-Source: AGRyM1tolYit2qOF13LQll2M1apYzVAPtBssHfNXvX79yFs+qX/QdnWSuZSn9LvvuTfowIJzogE5Gto6i2wMUvkyN5I=
+X-Received: by 2002:a05:6870:33a9:b0:f2:c44c:d054 with SMTP id
+ w41-20020a05687033a900b000f2c44cd054mr2317236oae.70.1655987073368; Thu, 23
+ Jun 2022 05:24:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623094511.26066-1-guang.zeng@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220621085345.603820-1-davidgow@google.com> <20220621085345.603820-6-davidgow@google.com>
+ <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxp6ZK9K0Sy1JcuU-SGqChOyr6-+5HDxgesOpxjxvDkiXQ@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 23 Jun 2022 14:23:57 +0200
+Message-ID: <CAPDyKFq0cTX5pfTLxTa9SEUBiiEcMuiEeDi3OPfMjFuBWca_jw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+To:     David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>, Paraschiv@google.com,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,54 +82,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 05:45:11PM +0800, Zeng Guang wrote:
->Hardware would directly write x2APIC ICR register instead of software
->emulation in some circumstances, e.g when Intel IPI virtualization is
->enabled. This behavior requires normal reserved bits checking to ensure
->them input as zero, otherwise it will cause #GP. So we need mask out
->those reserved bits from the data written to vICR register.
-
-OK. One open is:
-
-Current KVM doesn't emulate this #GP. Is there any historical reason?
-if no, we will fix KVM and add some tests to verify this #GP is
-correctly emulated.
-
+On Wed, 22 Jun 2022 at 00:19, Daniel Latypov <dlatypov@google.com> wrote:
 >
->Remove Delivery Status bit emulation in test case as this flag
->is invalid and not needed in x2APIC mode. KVM may ignore clearing
->it during interrupt dispatch which will lead to fake test failure.
+>  On Tue, Jun 21, 2022 at 1:54 AM David Gow <davidgow@google.com> wrote:
+> >
+> > The kunit_test_suite() macro is no-longer incompatible with module_add,
+> > so its use can be reinstated.
+> >
+> > Since this fixes parsing with builtins and kunit_tool, also enable the
+> > test by default when KUNIT_ALL_TESTS is enabled.
+> >
+> > The test can now be run via kunit_tool with:
+> >         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
+> >         --kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
+> >         --kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
+> >         --kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
+> >         --kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
+> >         'sdhci-of-aspeed'
+> >
+> > (It may be worth adding a .kunitconfig at some point, as there are
+> > enough dependencies to make that command scarily long.)
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
 >
->Opportunstically correct vector number for test sending IPI to
->non-existent vCPUs.
+> Acked-by: Daniel Latypov <dlatypov@google.com>
 >
->Signed-off-by: Zeng Guang <guang.zeng@intel.com>
->---
-> .../selftests/kvm/x86_64/xapic_state_test.c   | 20 ++++++++++++++++---
-> 1 file changed, 17 insertions(+), 3 deletions(-)
+> Minor, optional suggestion below.
 >
->diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
->index 0792334ba243..df916c6f53f9 100644
->--- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
->+++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
->@@ -70,13 +70,27 @@ static void ____test_icr(struct kvm_vm *vm, struct kvm_vcpu *vcpu, uint64_t val)
-> 	vcpu_ioctl(vm, vcpu->id, KVM_GET_LAPIC, &xapic);
-> 	icr = (u64)(*((u32 *)&xapic.regs[APIC_ICR])) |
-> 	      (u64)(*((u32 *)&xapic.regs[APIC_ICR2])) << 32;
->-	if (!vcpu->is_x2apic)
->+	if (!vcpu->is_x2apic) {
-> 		val &= (-1u | (0xffull << (32 + 24)));
->-	ASSERT_EQ(icr, val & ~APIC_ICR_BUSY);
->+		ASSERT_EQ(icr, val & ~APIC_ICR_BUSY);
->+	} else {
+> >  static int __init aspeed_sdc_init(void)
+> > @@ -639,12 +620,6 @@ static int __init aspeed_sdc_init(void)
+> >         if (rc < 0)
+> >                 goto cleanup_sdhci;
+> >
+> > -       rc = aspeed_sdc_tests_init();
+> > -       if (rc < 0) {
+> > -               platform_driver_unregister(&aspeed_sdc_driver);
+> > -               goto cleanup_sdhci;
+> > -       }
+> > -
+> >         return 0;
+> >
+> >  cleanup_sdhci:
+>
+> This goto was added in 4af307f57426 ("mmc: sdhci-of-aspeed: Fix
+> kunit-related build error") to allow for this extra call to
+> aspeed_sdc_tests_init().
+>
+> This could now be reverted back to what is
+>         rc = platform_driver_register(&aspeed_sdc_driver);
+>         if (rc < 0)
+>                platform_driver_unregister(&aspeed_sdhci_driver);
+>
+>         return rc;
+>
+> but let's see what the maintainers think.
 
->+		ASSERT_EQ(icr & ~APIC_ICR_BUSY, val & ~APIC_ICR_BUSY);
+I don't have a strong opinion on this, feel free to pick any of the options.
 
-Probably add a comment for it would be better. E.g.,
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-APIC_ICR_BUSY is removed and not used when CPU is in x2APIC mode.
-It is undefined whether write 1 to this bit will be preserved. So,
-even KVM keeps this bit cleared in some cases even in x2apic mode,
-no guarantee that hardware (specifically, CPU ucode when Intel IPI
-virtualization enabled) will clear the bit. So, skip checking this
-bit.
+Kind regards
+Uffe
