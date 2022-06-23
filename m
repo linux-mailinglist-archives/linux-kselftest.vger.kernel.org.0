@@ -2,99 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42AD558A2C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jun 2022 22:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B74558A65
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jun 2022 22:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiFWUef (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jun 2022 16:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S229787AbiFWUy2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jun 2022 16:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbiFWUee (ORCPT
+        with ESMTP id S229653AbiFWUy2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jun 2022 16:34:34 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2831E60E02
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jun 2022 13:34:32 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id d129so483021pgc.9
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jun 2022 13:34:32 -0700 (PDT)
+        Thu, 23 Jun 2022 16:54:28 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DFB62728;
+        Thu, 23 Jun 2022 13:54:27 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id lw20so695437ejb.4;
+        Thu, 23 Jun 2022 13:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VV9cljBvBFHor9Hsmi3I2V+2UnCkisvxO/5bxp9iuO0=;
-        b=TVePn525gz1XLdYPkgwNoXqcj14LJor7LSwXlZWvK+7XGD1ZD4uIy8qd7M8reu2WHE
-         phe8hp+0H402nxdcKG7yIb5RYp0AHL64lzETS64Xv9XEjlVjE1BA1ltUi+jyBBqN2qTc
-         N1WRXTm+pbum/QZS6WaGMwNNFJnSXxmgAgc7tyLwtZxse4XxIFiihF3sjdqdX0Oisdvn
-         2Z2fQgYWko0tGAnQuqmzieEJCdqD/55dJ/62RZEJRrDxQcrMAH4b77CaPucpni+sQE6y
-         ga6vTEzEe/vYMj1ayGv0icjAJ36ljYfM2Q5r9LlYVJ6EAeFx8ZLPtOf11AoGxl3cY6S6
-         MXQQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+NeDhzIsosAc6zjoUbMznd330rNHziGlr8pP4p3fVF0=;
+        b=fAx3pvL2mb1wUs/cl1pnaZOCuwao8+6SnBAODybSfO6ROi8NVo0gsKiyWCmyMbmkMF
+         b9S4yoI2SKgUW/Vp2Y4iNLOKbFtK0G6tdJi2kYeqDOqZaUlXCixb5Yx09/gLwJDkX9g2
+         WYGdfXOv7BKXlYhDmhz/UJrZDqvzmK5TbDKG9S39mn/+cW6tq78J/W6GZrg7aeuMCjOx
+         bz6q/v5o5SuZy856wRedvW5sCeM0PJprg1hDe5IvdltJYfCPXMmnNkS8QYXRUI89g290
+         AiXG2CJPs4gS2iuURPvnSXllm4vbU7SppK6KhveNTjEuGhjUDsg5v1ziIpgHh/S2n47a
+         lGWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VV9cljBvBFHor9Hsmi3I2V+2UnCkisvxO/5bxp9iuO0=;
-        b=PgIRm9HKqGrmUf65TR2aQtqLlIcvOKCI0ico0luFMuRmGsF7AxdtdG36fl2GfcDDil
-         XvrCVPT2aa2jgQODiKBwbS1lJsUI2Z1PKlXWCRKCLDJnt8GFfT07Frgk9eT4Vq2yGX3F
-         3hu7rvYtcVWXEhp+ulvIO8jGlmrorZDuEo3Nx0xxetO7AgJY6KwFNqfY7mA0UktUrWMo
-         W6icuEP9CMeecPCVP5p235gMuW7/C5HDvdhcN1bZu1oK0n3TdzCDXSEPmp1KOiUfTdmZ
-         CZUIhmp0CBLKHw9bl3EOasNMQZNMXEvmuA8KdAge2dpNEX3apwl/d+X9I8fffnS2K0no
-         6JEg==
-X-Gm-Message-State: AJIora9Nya7hDdFhI76uyKelD0iODTtN7TQwpO3Nd6bP08hTSLkLvaRx
-        3FdlJiEf6TR9T30RIZn+JURokA==
-X-Google-Smtp-Source: AGRyM1upbFHe5dNWeaInTDpiZf5i80ia/03IiaYuju8VaHMiLBdaK0ZnQif7xXzrfPW9Z/RJsEscPg==
-X-Received: by 2002:a63:5c56:0:b0:3fc:824d:fc57 with SMTP id n22-20020a635c56000000b003fc824dfc57mr9060291pgm.561.1656016471539;
-        Thu, 23 Jun 2022 13:34:31 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id t14-20020a17090340ce00b00163bddfb109sm237949pld.10.2022.06.23.13.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 13:34:31 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 20:34:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Venkatesh Srinivas <venkateshs@chromium.org>
-Subject: Re: [PATCH v2] KVM: selftest: Enhance handling WRMSR ICR register in
- x2APIC mode
-Message-ID: <YrTOU1QHHpGpe0ym@google.com>
-References: <20220623094511.26066-1-guang.zeng@intel.com>
- <20220623103314.GA14006@gao-cwp>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+NeDhzIsosAc6zjoUbMznd330rNHziGlr8pP4p3fVF0=;
+        b=TX766x9RN6iQgt5sl+tL+hokKmzPlBmAP4pZaJYHgH0KdjW5GXjHOrjAb4/NEnjwkR
+         2HluYevT3cIFFue8Pb86QW9XdVSPgmOA4/wttBPY1QzNrNxtSMSnUp+scG4JXkaWL5ZL
+         1HAteUtbh1nk2L5SQuYXpXpuwjBzo5XqWiiPNma3d8ZjeJsPRO6vDt4ArLEAnT75dZvE
+         xA+xUt3OW8yQ8oqGHpjN3cd9XyxfLtpMnMoNPOSI0N3Kfw5EsY8+8Bq/rx4oISwqFij3
+         e07OxdiXszyqwmmd3SwqGWDz6mvcvjyemsbwaXgsyzhf6Vd0Mv2t/DM605ZWL/uelRQS
+         NsJQ==
+X-Gm-Message-State: AJIora8nans6J/nKolpLjuTJFNSps6ppc1ngspxo2bxcdRJwsG1yRg3t
+        JTXFZw0yABTCuwMBgdk7ESXFtQonNt4zvqX/ma0=
+X-Google-Smtp-Source: AGRyM1uthzr9Oy84rLqxABiXeKGAOyvcg+MqzD8Qykjqulo8c8PXkSAiveDwBCRGCtZDd07fq0RBqRpxnYdg/51DLHM=
+X-Received: by 2002:a17:907:971e:b0:71d:955c:b296 with SMTP id
+ jg30-20020a170907971e00b0071d955cb296mr9639163ejc.633.1656017665626; Thu, 23
+ Jun 2022 13:54:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623103314.GA14006@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
+ <20220621163757.760304-3-roberto.sassu@huawei.com> <20220621223248.f6wgyewajw6x4lgr@macbook-pro-3.dhcp.thefacebook.com>
+ <796b55c79be142cab6a22dd281fdb9fa@huawei.com> <f2d3da08e7774df9b44cc648dda7d0b8@huawei.com>
+In-Reply-To: <f2d3da08e7774df9b44cc648dda7d0b8@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 23 Jun 2022 13:54:13 -0700
+Message-ID: <CAADnVQKVx9o1PcCV_F3ywJCzDTPtQG4MTKM2BmwdCwNvyxdNPg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] bpf: Add bpf_lookup_user_key() and bpf_key_put() helpers
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+Venkatesh
+On Thu, Jun 23, 2022 at 5:36 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> > From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
+> > Sent: Wednesday, June 22, 2022 9:12 AM
+> > > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
+> > > Sent: Wednesday, June 22, 2022 12:33 AM
+> > > On Tue, Jun 21, 2022 at 06:37:54PM +0200, Roberto Sassu wrote:
+> > > > Add the bpf_lookup_user_key() and bpf_key_put() helpers, to respectively
+> > > > search a key with a given serial, and release the reference count of the
+> > > > found key.
+> > > >
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > ---
+> > > >  include/uapi/linux/bpf.h       | 16 ++++++++++++
+> > > >  kernel/bpf/bpf_lsm.c           | 46 ++++++++++++++++++++++++++++++++++
+> > > >  kernel/bpf/verifier.c          |  6 +++--
+> > > >  scripts/bpf_doc.py             |  2 ++
+> > > >  tools/include/uapi/linux/bpf.h | 16 ++++++++++++
+> > > >  5 files changed, 84 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > > index e81362891596..7bbcf2cd105d 100644
+> > > > --- a/include/uapi/linux/bpf.h
+> > > > +++ b/include/uapi/linux/bpf.h
+> > > > @@ -5325,6 +5325,20 @@ union bpf_attr {
+> > > >   *               **-EACCES** if the SYN cookie is not valid.
+> > > >   *
+> > > >   *               **-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
+> > > > + *
+> > > > + * struct key *bpf_lookup_user_key(u32 serial, unsigned long flags)
+> > > > + *       Description
+> > > > + *               Search a key with a given *serial* and the provided *flags*, and
+> > > > + *               increment the reference count of the key.
+> > >
+> > > Why passing 'flags' is ok to do?
+> > > Please think through every line of the patch.
+> >
+> > To be honest, I thought about it. Probably yes, I should do some
+> > sanitization, like I did for the keyring ID. When I checked
+> > lookup_user_key(), I saw that flags are checked individually, so
+> > an arbitrary value passed to the helper should not cause harm.
+> > Will do sanitization, if you prefer. It is just that we have to keep
+> > the eBPF code in sync with key flag definition (unless we have
+> > a 'last' flag).
+>
+> I'm not sure that having a helper for lookup_user_key() alone is
+> correct. By having separate helpers for lookup and usage of the
+> key, nothing would prevent an eBPF program to ask for a
+> permission to pass the access control check, and then use the
+> key for something completely different from what it requested.
+>
+> Looking at how lookup_user_key() is used in security/keys/keyctl.c,
+> it seems clear that it should be used together with the operation
+> that needs to be performed. Only in this way, the key permission
+> would make sense.
 
-On Thu, Jun 23, 2022, Chao Gao wrote:
-> On Thu, Jun 23, 2022 at 05:45:11PM +0800, Zeng Guang wrote:
-> >Hardware would directly write x2APIC ICR register instead of software
-> >emulation in some circumstances, e.g when Intel IPI virtualization is
-> >enabled. This behavior requires normal reserved bits checking to ensure
-> >them input as zero, otherwise it will cause #GP. So we need mask out
-> >those reserved bits from the data written to vICR register.
-> 
-> OK. One open is:
-> 
-> Current KVM doesn't emulate this #GP. Is there any historical reason?
-> if no, we will fix KVM and add some tests to verify this #GP is
-> correctly emulated.
+lookup is roughly equivalent to open when all permission checks are done.
+And using the key is read/write.
 
-It's a bug.  There are patches posted[*], but they need to be refreshed to fix a
-rebase goof.
+> What do you think (also David)?
+>
+> Thanks
+>
+> Roberto
+>
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Yang Xi, Li He
 
-Venkatesh, are you planning on sending a v3 soonish?
-
-[*] https://lore.kernel.org/all/20220525173933.1611076-1-venkateshs@chromium.org
+Please use a different email server and get rid of this.
