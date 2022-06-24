@@ -2,127 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4440155A229
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jun 2022 21:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A61955A276
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jun 2022 22:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiFXTxA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jun 2022 15:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
+        id S231132AbiFXURN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jun 2022 16:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiFXTw7 (ORCPT
+        with ESMTP id S230495AbiFXURM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:52:59 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1F5B85;
-        Fri, 24 Jun 2022 12:52:57 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c4so2955892plc.8;
-        Fri, 24 Jun 2022 12:52:57 -0700 (PDT)
+        Fri, 24 Jun 2022 16:17:12 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CDC7C840
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jun 2022 13:17:11 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id u12so6852641eja.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jun 2022 13:17:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F64miWX8OIqGg7SQtGzniGR3amqV7Fg7vGx9jO7hUCs=;
-        b=KG3QkLlWUxzLyv8sJMKH921oVvgVk521YHQekwTUWlGSfDMB9pqY0/y10mxQ5RC/sE
-         RACAUQBOb9GFJAD0pNe7zYYb0zT6qdwrMkun4xBAmlAVFUVejeIgPtfkImyTxDcK9joG
-         WIyobwYTQFAzSCctv50iKXFyYvsWZ2NtQoaZp2XypkYmBi9vCH3bCMzGO1zf9oFrsiaA
-         m0sLaImwJ8X3u0ZEBoVB33JOBGWULVChZZaKNosHVhxAR7tgzzxUQiCZEi2cfOGxe8Og
-         JDxEJb/8Q/5s9D41e0wWDLUquxLYba8LZ/0lPR1GoAoRRWGvZ2yuwD1MOHsJbJVbszia
-         ueKg==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A7KsArznjDszXEtjfLGnA6REJfLUYfQ3Oszk2m5SudA=;
+        b=DysS05ypy7Dj7deDljGrAOAbGl2Xyt4/z99Z0sAnWou95elElB1LSY5/Ts4Ksh/mXP
+         DLv6fOZpbapyMhr7MkdZvU+yZ2/QnFZ1mpgFnWqAY41HyRd5w3WAVUbpmAQFwqme6Ilf
+         NCYlIIWT8tJDBPd7kF3JbEbHU58J7PTZbpGK0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F64miWX8OIqGg7SQtGzniGR3amqV7Fg7vGx9jO7hUCs=;
-        b=G2nsA2DYsiTZ2DX4tPnZEQZLmXhafHW+4EqLGhiaOINCr6L1LC18OKbdl3fgy4S6CY
-         NJE/t7mluWCxbjHqUSyohirdZvXDfZZgE1yV0jHSmp5n7ofgthT2qUtKyWAszXjC4zi7
-         BWPmX1jtZt0o8K+vrDHDz7SKKSvG1oULqaPugigVhHc6RVtSM3xdSzPIwCEkG5MP9f2L
-         iN+A1pVXGshs7JegaTtTHXNAqYQn+Nt8yuAI8zO0sLTE7UHzf94stbRXh/EgHU0a8MMP
-         7+c4UJXe1rdyBV9BsY68hiAyH1iD1HBtmsrtnT+LphsqowO1n0A5i6cVYs2aZd5S++L8
-         cH4w==
-X-Gm-Message-State: AJIora/oMMZFtiKlW2Yb2xklQXu5oEvARrnSxrs2kMWb+EoTM4S1gZlU
-        2Bs4JYKJrRB2pPue4YNgEHw=
-X-Google-Smtp-Source: AGRyM1u5oABiaQ4N9vv8eRRoGYjSna+gp2MU2xgiqmbWPGR0eG0IzoEqq8qbimjBVbruzHb8HViHyQ==
-X-Received: by 2002:a17:90a:8041:b0:1ec:9f10:3c4e with SMTP id e1-20020a17090a804100b001ec9f103c4emr614193pjw.148.1656100377092;
-        Fri, 24 Jun 2022 12:52:57 -0700 (PDT)
-Received: from fedora.. ([103.230.148.187])
-        by smtp.gmail.com with ESMTPSA id h9-20020a170902f70900b001663cf001besm2186069plo.174.2022.06.24.12.52.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=A7KsArznjDszXEtjfLGnA6REJfLUYfQ3Oszk2m5SudA=;
+        b=QYXjGz5Lc9UBbZejgc7jgmmqAt/bR96f4lbWUJ4Ao7+3jmLSx/cZw7EsJYVMYYAKna
+         yHBYEPzYVJYSaX/oZq2/ZE1WrRk/b6xA64LxxChw1LaTD/xdbfQg3Omt0Zjw6AW3h52Y
+         eW6hxco8wQ4sgLe3g2KKrG4jw+h67avc+DpjoYXd1SEiEXrbn2Yohfimvb2z9/SI2sjR
+         lZVL+awm/WmPK91yzjyPjmEFTRvjm/2IUjJiW885gCJw1Xur8W1g3/xlZjoi60rZIHhc
+         QFSDgF3lnZCfqcWCMqfuruff8fcnGtfR2nqezsk2YguERS5a0hqCORYkza2gFsVdoxsf
+         6QUw==
+X-Gm-Message-State: AJIora9oXC2fEqsCfcBvnOKXWwQML1VHnPYRY7mZeVUFS9lAh8rjMVVK
+        km0x87O1EawQxzP2rkKSbSxWGQ==
+X-Google-Smtp-Source: AGRyM1tbrhSpLiAB9dqU6edRxuLbyecMJr7L30I5wUrP26zUyqvNNkEwbuedAAWD5HRC48ej/oEHbg==
+X-Received: by 2002:a17:907:7d88:b0:726:2adb:2073 with SMTP id oz8-20020a1709077d8800b007262adb2073mr778546ejc.466.1656101829623;
+        Fri, 24 Jun 2022 13:17:09 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id w20-20020aa7dcd4000000b0042dc882c823sm2642667edu.70.2022.06.24.13.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 12:52:56 -0700 (PDT)
-From:   Gautam <gautammenghani201@gmail.com>
-To:     sj@kernel.org, shuah@kernel.org
-Cc:     Gautam <gautammenghani201@gmail.com>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kselftests/damon: add support for checking secureboot status
-Date:   Sat, 25 Jun 2022 01:22:39 +0530
-Message-Id: <20220624195239.7293-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 24 Jun 2022 13:17:08 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 22:17:06 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     "T.J. Mercier" <tjmercier@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        John Stultz <jstultz@google.com>,
+        Carlos Llamas <cmllamas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel-team@android.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
+Message-ID: <YrYbwu0iIAJJGXVg@phenom.ffwll.local>
+Mail-Followup-To: "T.J. Mercier" <tjmercier@google.com>,
+        Tejun Heo <tj@kernel.org>, Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>, Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>, Shuah Khan <shuah@kernel.org>,
+        John Stultz <jstultz@google.com>,
+        Carlos Llamas <cmllamas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>, kernel-team@android.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kselftest@vger.kernel.org
+References: <20220510235653.933868-1-tjmercier@google.com>
+ <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
+ <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
+ <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
+ <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
+ <Yn6DpUsoSz1/15Kc@slm.duckdns.org>
+ <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
+ <YodHjYlMx1XGtM2+@slm.duckdns.org>
+ <CABdmKX2Ok023rN1drQgXVZLKUO_DVYrzmEamCgMMu6BPO67yhQ@mail.gmail.com>
+ <CABdmKX0WV8VWgeafVGJ++nJ4xsJD7Wpz=3KX=BW1du=huttfvw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABdmKX0WV8VWgeafVGJ++nJ4xsJD7Wpz=3KX=BW1du=huttfvw@mail.gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kernel is in lockdown mode when secureboot is enabled and hence
-debugfs cannot be used. But the error printed after running tests does
-not indicate this currently:
+On Wed, Jun 15, 2022 at 10:31:21AM -0700, T.J. Mercier wrote:
+> On Fri, May 20, 2022 at 9:25 AM T.J. Mercier <tjmercier@google.com> wrote:
+> >
+> > On Fri, May 20, 2022 at 12:47 AM Tejun Heo <tj@kernel.org> wrote:
+> > >
+> > > Hello,
+> > >
+> > > On Tue, May 17, 2022 at 04:30:29PM -0700, T.J. Mercier wrote:
+> > > > Thanks for your suggestion. This almost works. "dmabuf" as a key could
+> > > > work, but I'd actually like to account for each heap. Since heaps can
+> > > > be dynamically added, I can't accommodate every potential heap name by
+> > > > hardcoding registrations in the misc controller.
+> > >
+> > > On its own, that's a pretty weak reason to be adding a separate gpu
+> > > controller especially given that it doesn't really seem to be one with
+> > > proper abstractions for gpu resources. We don't want to keep adding random
+> > > keys to misc controller but can definitely add limited flexibility. What
+> > > kind of keys do you need?
+> > >
+> > Well the dmabuf-from-heaps component of this is the initial use case.
+> > I was envisioning we'd have additional keys as discussed here:
+> > https://lore.kernel.org/lkml/20220328035951.1817417-1-tjmercier@google.com/T/#m82e5fe9d8674bb60160701e52dae4356fea2ddfa
+> > So we'd end up with a well-defined core set of keys like "system", and
+> > then drivers would be free to use their own keys for their own unique
+> > purposes which could be complementary or orthogonal to the core set.
+> > Yesterday I was talking with someone who is interested in limiting gpu
+> > cores and bus IDs in addition to gpu memory. How to define core keys
+> > is the part where it looks like there's trouble.
+> >
+> > For my use case it would be sufficient to have current and maximum
+> > values for an arbitrary number of keys - one per heap. So the only
+> > part missing from the misc controller (for my use case) is the ability
+> > to register a new key at runtime as heaps are added. Instead of
+> > keeping track of resources with enum misc_res_type, requesting a
+> > resource handle/ID from the misc controller at runtime is what I think
+> > would be required instead.
+> >
+> Quick update: I'm going to make an attempt to modify the misc
+> controller to support a limited amount of dynamic resource
+> registration/tracking in place of the new controller in this series.
+> 
+> Thanks everyone for the feedback.
 
->TAP version 13
->1..6
-># selftests: damon: debugfs_attrs.sh
-># cat: /sys/kernel/debug/damon/monitor_on: Operation not permitted
-># _debugfs_common.sh: line 48: [: =: unary operator expected
-># cat: /sys/kernel/debug/damon/attrs: Operation not permitted
-># _debugfs_common.sh: line 11: /sys/kernel/debug/damon/attrs: Operation 
-> not permitted
-># writing 1 2 3 4 5 to /sys/kernel/debug/damon/attrs doesn't return 0
-># expected because: valid input
-># _debugfs_common.sh: line 16: /sys/kernel/debug/damon/attrs: Operation 
-> not permitted
->not ok 1 selftests: damon: debugfs_attrs.sh # exit=1
+Somehow I missed this entire chain here.
 
+I'm not a fan, because I'm kinda hoping we could finally unify gpu memory
+account. Atm everyone just adds their one-off solution in a random corner:
+- total tracking in misc cgroup controller
+- dma-buf sysfs files (except apparently too slow so it'll get deleted
+  again)
+- random other stuff on open device files os OOM killer can see it
 
-After adding the check for secureboot, the output is as follows:
-
->TAP version 13
->1..6
-># selftests: damon: debugfs_attrs.sh
-># debugfs cannot work with secureboot enabled
->not ok 1 selftests: damon: debugfs_attrs.sh # exit=1
-
-
-Signed-off-by: Gautam <gautammenghani201@gmail.com>
----
- tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
- 1 file changed, 10 insertions(+)
- mode change 100644 => 100755 tools/testing/selftests/damon/_chk_dependency.sh
-
-diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
-old mode 100644
-new mode 100755
-index 0189db81550b..6e45c1fe230e
---- a/tools/testing/selftests/damon/_chk_dependency.sh
-+++ b/tools/testing/selftests/damon/_chk_dependency.sh
-@@ -26,3 +26,13 @@ do
- 		exit 1
- 	fi
- done
-+
-+secureboot_error="Operation not permitted"
-+for f in attrs target_ids monitor_on
-+do
-+	status=$( cat "$DBGFS/$f" 2>&1 )
-+	if [ "${status#*$secureboot_error}" != "$status" ]; then
-+		echo "debugfs cannot work with secureboot enabled"
-+		exit 1
-+	fi
-+done
+This doesn't look good.
+-Daniel
 -- 
-2.36.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
