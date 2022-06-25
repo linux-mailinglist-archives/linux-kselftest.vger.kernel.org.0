@@ -2,145 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5535555A79E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jun 2022 09:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E97D555A815
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jun 2022 10:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbiFYHBz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Jun 2022 03:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S232087AbiFYIfd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 Jun 2022 04:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiFYHBy (ORCPT
+        with ESMTP id S229722AbiFYIfc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Jun 2022 03:01:54 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAF83B3DD
-        for <linux-kselftest@vger.kernel.org>; Sat, 25 Jun 2022 00:01:54 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so2635900wms.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 25 Jun 2022 00:01:53 -0700 (PDT)
+        Sat, 25 Jun 2022 04:35:32 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB61621823;
+        Sat, 25 Jun 2022 01:35:31 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id d14so4783431pjs.3;
+        Sat, 25 Jun 2022 01:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iIzeczDw2HvlDp1in7hfvtjJE68cxyFabNgETqBrjSY=;
-        b=VylczFOBbptMSiVzl7Unj/HgXYpOmX4X+cLiLsNknVs4rLzN/kU7WfuubVyTHUkl2e
-         MCx21RS9GsfbSscOWyR/m0G+IJmSjVEEG8KoYAKyG+BRZ1NNn2O3orxga+MMHre9qtS1
-         d4FTBvw0JD9+nn8ehMJ9gCAKYWhxv2PiYzSl77z4yP89/OCYiwQ/2lhkUHTyOl76muU6
-         5pVJNQnAI+7y3oKVIh/3sgEMkx5qnW61XK9zMs/fWhEblFC6WmMqlu2S3r18ZNG2ynWD
-         BImErw14Adb97J3EhQKMn9FW2m2jCoU8VuDnNeUv0OQqc86ySVr1fVvloepdBG/rUnm2
-         7NfA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=PfI+U63NZLKVZ09V6Z9oBSRXc7vElcpXav+bJvvH+hE=;
+        b=NK1Y3X8cC4gG+cYt/V1M/IQ1qELujDa/yKcLRCQm1XvRN/dDddHXQnB9Q38Z6eagL7
+         jsEqP/2Yl/2b0u3vGXxRPbKF2XcgQj2bBjd+q13wc2YsFG69UPlcqJv6KyMNz79X0tS3
+         pcIutKsNc/MjEgLHMS1kku48nABf9N9woifiuVGJAm83gO2LZg8HVIC0LviDUby/onai
+         LqCOsdxDbkpAdWJVaH+ej+lO4OLHJCI75qoagYOoZ2AzzfCJoowoCZSGoPTb0uUCNpwn
+         quH9XA0vtcpXV/tdfzmKuaaa7lMQBdMfXKlfvqsu4MipPIik4qDHb43cxyyt4p2tgHv8
+         mygQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iIzeczDw2HvlDp1in7hfvtjJE68cxyFabNgETqBrjSY=;
-        b=DTmGbtmceHVgbEmh/UBw1aWnTrOXm7Noxj0Hul1ArzeLljfKHu/S2lqItVlUaA4k8B
-         1SXPG0MmQRU0jjJ/RA+9pLFpZK9SgPc8L5x2YTONOpIm8TzkCHwgSibPG96MYU7UyaCW
-         HMzpG9+V3YRo+sKmcNmMkeJvRwL6o9xfPhk4Dw2JRL4OqTElGQXUH+J2rknqAtKNWbWh
-         zC2Wtnn4qAPtmBqnUB/UbrO7qAapLp+9BBqW5bAjecKVxj1vHAmqwYCYgnIIi8LGMpZz
-         XHacSRpLKRBmYaaNRz3mcT5smoi4wuA/cU6VNUtWBTGV8m47jWHAFbCh0ekUNNDrrzEc
-         +Zyw==
-X-Gm-Message-State: AJIora/dy7f/hoYarEGhZnqL0BBWRvFnuUWYEU2kSv+oekqrjmDVbs8z
-        gAVYbUKEr/wlq33Zzxzh1AMlyeuX6DqCjLgwIZbNnQ==
-X-Google-Smtp-Source: AGRyM1sCZ2q61qZAr4YPDz2NLd9Jztv8w7KFU0MBQYhc4ZGZTD8bDlAaUGV+j5Rfp9P89xTWY+F62rLXnINfik05az8=
-X-Received: by 2002:a05:600c:34ce:b0:3a0:3b4b:9022 with SMTP id
- d14-20020a05600c34ce00b003a03b4b9022mr3055176wmq.66.1656140512499; Sat, 25
- Jun 2022 00:01:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=PfI+U63NZLKVZ09V6Z9oBSRXc7vElcpXav+bJvvH+hE=;
+        b=mQfu38E9EWKBnOtfhObh9q7XARINhX06Bf/wY+DSE5lwn487dYbdbned4N/wrLj0JN
+         CzPsjsqsh1YGAX/t3kDDqa6Wt954wO3W6Gs3/3ffzj7FqxlZWeXEEMe8hy9gJSqAbN1j
+         4KKyc+VwDZtNnuZ8VPNJSivgozvXWGfBd7MddB6n9xdZm6k13kBHbY2Qs1h/4pENp7L7
+         aZ81tU/TpQURTB3qhEZ8iHZCgpCpUc6EARnme7gHGDRFuA8wIS5WM/NYwxj0o10xMdwB
+         C35RrNig9WttmU0sB7OS/dhVve+aNtSO3UK4FH+gPl3AZ6MAzlKY8J3ZI4N61BCzL0Fa
+         8CLg==
+X-Gm-Message-State: AJIora9CskT33QUtK8+9LuNTR61VGSvdbmj9oTqtl5VQbM0USTwKwPc/
+        41MFX0wg+RQsXWFCRpm7FvafWM5VHXkD/Fia
+X-Google-Smtp-Source: AGRyM1s6dsMdYLtWyDA+S3DshJ8D6SZ4TR0+mhVzPUOJgCXEItyndBuPt55lKfMWW+v5UhGxAyTlbQ==
+X-Received: by 2002:a17:902:f685:b0:16a:3c40:e3b5 with SMTP id l5-20020a170902f68500b0016a3c40e3b5mr3343349plg.106.1656146131072;
+        Sat, 25 Jun 2022 01:35:31 -0700 (PDT)
+Received: from fedora.. ([103.230.148.186])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709027c0a00b0016a6caacaefsm2628345pll.103.2022.06.25.01.35.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jun 2022 01:35:30 -0700 (PDT)
+From:   Gautam <gautammenghani201@gmail.com>
+To:     sj@kernel.org, shuah@kernel.org
+Cc:     Gautam <gautammenghani201@gmail.com>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] kselftests/damon: add support for cases where debugfs cannot be read
+Date:   Sat, 25 Jun 2022 14:05:13 +0530
+Message-Id: <20220625083513.19761-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220625055608.12812-1-gautammenghani201@gmail.com>
+References: <20220625055608.12812-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
-References: <20220520224200.3764027-1-dlatypov@google.com> <CABVgOSkNpaY1HsygqkWC8LVO+XTqGwNxFNgne-ajoTiPqCnrkg@mail.gmail.com>
- <CAGS_qxqQiWDRwOJcU+1X31SgdKGFMLT8tA7EJXN9JUmKOhYfxw@mail.gmail.com>
-In-Reply-To: <CAGS_qxqQiWDRwOJcU+1X31SgdKGFMLT8tA7EJXN9JUmKOhYfxw@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 25 Jun 2022 15:01:41 +0800
-Message-ID: <CABVgOSnKsto0xrVzgNMcDjL71w_=65EyzszVSsQCNCFTEjy0wA@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: tool: refactor internal kconfig handling, allow overriding
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 4:24 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Fri, Jun 24, 2022 at 12:55 AM David Gow <davidgow@google.com> wrote:
-> > >
-> > > +       def set_diff(self, other: 'Kconfig') -> Set[KconfigEntry]:
-> > > +               return set(self._as_entries()) - set(other._as_entries())
-> > > +
-> >
-> > It took me a couple of goes to realise that this was looking at the
-> > difference between sets, not trying to set the difference. Maybe
-> > different_entries() or something like that'd be clearer, but I can't
-> > say it bothers me enough to be worth a new version.
->
-> Wdyt about `set_difference()`?
-> Or maybe adding a verb: `get_set_diff()`, `compute_set_diff()`?
->
-> But we do want to make it clear it has set (asymmetric) difference
-> semantics, see below.
->
+The kernel is in lockdown mode when secureboot is enabled and hence
+debugfs cannot be used. Add support for this and other general cases 
+where debugfs cannot be read and communicate the same to the user before
+running tests.
 
-I like adding a verb, personally.
+Signed-off-by: Gautam <gautammenghani201@gmail.com>
+---
+Changes in v2:
+1. Modify the error message to account for general cases.
+2. Change the return code so that the test is skipped.
 
-> >
-> > Then again (as noted below), the direct set difference isn't exactly
-> > what we want, it's more the equivalent of is_subset_of(). The
-> > follow-up repeated-kunitconfig patch adds differing_options(), which
-> > is closer to what we'd want, I think:
-> > https://lore.kernel.org/linux-kselftest/20220624001247.3255978-1-dlatypov@google.com/
->
-> differing_options() does not have the right semantics.
-> For this, we do explicitly want a set difference.
->
-> Context: This is the func used to print out these warnings:
-> $ .../kunit.py run --kconfig_add=CONFIG_PCI=y
-> ...
-> Missing: CONFIG_PCI=y
->
-> That comes from
->   invalid = self._kconfig.set_diff(validated_kconfig)
-> Using differing_options() to get our version of the configs:
->   invalid = (want for want, got in
-> self._kconfig.differing_options(validated_kconfig))
-> we instead get an empty list.
->
-> The problem is that differing_options() only shows config options that
-> are explicitly to different values.
+Changes in v3:
+1. Change the name of variable holding the error message.
 
-Ah, yep: my mistake. I was mixing up the (!b && value=n) check in
-is_subset_of with the (b && value != b) in differing options. Whoops.
+ tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ mode change 100644 => 100755 tools/testing/selftests/damon/_chk_dependency.sh
 
-But, thinking about it, the special handling of "=n" in set A not
-needing an equivalent in set B should fall out from the set difference
-anyway. So no problem here at all.
+diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
+old mode 100644
+new mode 100755
+index 0189db81550b..0328ac0b5a5e
+--- a/tools/testing/selftests/damon/_chk_dependency.sh
++++ b/tools/testing/selftests/damon/_chk_dependency.sh
+@@ -26,3 +26,13 @@ do
+ 		exit 1
+ 	fi
+ done
++
++permission_error="Operation not permitted"
++for f in attrs target_ids monitor_on
++do
++	status=$( cat "$DBGFS/$f" 2>&1 )
++	if [ "${status#*$permission_error}" != "$status" ]; then
++		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
++		exit $ksft_skip
++	fi
++done
+-- 
+2.36.1
 
-> There's probably a way I can name these functions better to make the
-> difference more clear.
-
-How about "conflicting_options" versus "missing_options"?
-
-> Or perhaps we should move set_diff() out of this class and have
-> kunit_kernel.py itself due the computation.
->
-> E.g.
->   // make as_entries() "public", s/invalid/missing
->   missing = set(self._kconfig.as_entries()) - set(validated_config.as_entries())
->
-> Thoughts?
-
-Fair enough point:
-
->
-> Daniel
