@@ -2,63 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97D555A815
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jun 2022 10:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CD255AAA5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jun 2022 15:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbiFYIfd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Jun 2022 04:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
+        id S233003AbiFYNzO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 Jun 2022 09:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiFYIfc (ORCPT
+        with ESMTP id S232822AbiFYNzN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Jun 2022 04:35:32 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB61621823;
-        Sat, 25 Jun 2022 01:35:31 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id d14so4783431pjs.3;
-        Sat, 25 Jun 2022 01:35:31 -0700 (PDT)
+        Sat, 25 Jun 2022 09:55:13 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAE912ACB;
+        Sat, 25 Jun 2022 06:55:12 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so8207440pjl.5;
+        Sat, 25 Jun 2022 06:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PfI+U63NZLKVZ09V6Z9oBSRXc7vElcpXav+bJvvH+hE=;
-        b=NK1Y3X8cC4gG+cYt/V1M/IQ1qELujDa/yKcLRCQm1XvRN/dDddHXQnB9Q38Z6eagL7
-         jsEqP/2Yl/2b0u3vGXxRPbKF2XcgQj2bBjd+q13wc2YsFG69UPlcqJv6KyMNz79X0tS3
-         pcIutKsNc/MjEgLHMS1kku48nABf9N9woifiuVGJAm83gO2LZg8HVIC0LviDUby/onai
-         LqCOsdxDbkpAdWJVaH+ej+lO4OLHJCI75qoagYOoZ2AzzfCJoowoCZSGoPTb0uUCNpwn
-         quH9XA0vtcpXV/tdfzmKuaaa7lMQBdMfXKlfvqsu4MipPIik4qDHb43cxyyt4p2tgHv8
-         mygQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rq85kfN+kIsKSpiVIlYRgY/oRH6pyH6elOkY0pr17X8=;
+        b=hgfxS3V4J1iXv9Nrh0fcvKWIa/amBW6X3fvUiBLLphkpMJt9wcgDSWULqm7GP/0GaP
+         6aSfy+jSCZ9j4WZexZhFObM3rwxX5lPJsFFZN076vmGQmL5F6VIzmzoUAY8rY6KRMSjv
+         R6ZhugXIa6LdfrPlfK9JaOa2U5bXh812sAwaUmgup8SDolYUTYEo+70VZvtcrFnSuFxi
+         04ypGDWM//+TRLLtFoEyutvFarER9RIv67xr7XYhJR1OgU+hLOJ0DxkN7EHu9Um5lj4r
+         KISANjryYyHsprldO94mdBahgWp9ATn+ceH0x3vcFmnINanU50nMhQKDvWs4Phh9vN1z
+         vACA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PfI+U63NZLKVZ09V6Z9oBSRXc7vElcpXav+bJvvH+hE=;
-        b=mQfu38E9EWKBnOtfhObh9q7XARINhX06Bf/wY+DSE5lwn487dYbdbned4N/wrLj0JN
-         CzPsjsqsh1YGAX/t3kDDqa6Wt954wO3W6Gs3/3ffzj7FqxlZWeXEEMe8hy9gJSqAbN1j
-         4KKyc+VwDZtNnuZ8VPNJSivgozvXWGfBd7MddB6n9xdZm6k13kBHbY2Qs1h/4pENp7L7
-         aZ81tU/TpQURTB3qhEZ8iHZCgpCpUc6EARnme7gHGDRFuA8wIS5WM/NYwxj0o10xMdwB
-         C35RrNig9WttmU0sB7OS/dhVve+aNtSO3UK4FH+gPl3AZ6MAzlKY8J3ZI4N61BCzL0Fa
-         8CLg==
-X-Gm-Message-State: AJIora9CskT33QUtK8+9LuNTR61VGSvdbmj9oTqtl5VQbM0USTwKwPc/
-        41MFX0wg+RQsXWFCRpm7FvafWM5VHXkD/Fia
-X-Google-Smtp-Source: AGRyM1s6dsMdYLtWyDA+S3DshJ8D6SZ4TR0+mhVzPUOJgCXEItyndBuPt55lKfMWW+v5UhGxAyTlbQ==
-X-Received: by 2002:a17:902:f685:b0:16a:3c40:e3b5 with SMTP id l5-20020a170902f68500b0016a3c40e3b5mr3343349plg.106.1656146131072;
-        Sat, 25 Jun 2022 01:35:31 -0700 (PDT)
-Received: from fedora.. ([103.230.148.186])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709027c0a00b0016a6caacaefsm2628345pll.103.2022.06.25.01.35.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rq85kfN+kIsKSpiVIlYRgY/oRH6pyH6elOkY0pr17X8=;
+        b=c3BqLgFuxZZMw9oiFdXnxOq94AIpSgYY+Uq/0Q9+iyQu48R73HEQw0SdauQLRE2uPp
+         l8t9xoBerbSeeFwWeAgtVYRxaUx/RPuTIwduZ/fcMIfSSiTNI7u4hDTTG3VBSkSsZv/t
+         u3tVNNeo04X+wOcA3bEOCC36Oo37sCpsHhCm4NUOyY/MQoX+Kn9JonAa1+fzwVcq5E/b
+         43pHqipRCzes0+ufSjx9m5G/UKvTtqdesGerN3vaOXaa/pknTTNY+xY4SD19MwZ5kD2i
+         f31EAAuD8fBAVeEgc4/3IQ8CRFmSMqLApfV15c0MkCCbiOtUUDXauctbNaTcJUJQnbxF
+         5GuQ==
+X-Gm-Message-State: AJIora+pbcv8zYS//Ob9o9VRZFPxb2ZpETPkGAoJmMXmQ80q/w0v9w3M
+        ffP4dUwDG8bUUVBILO0yVwM56TA2k2nj588P
+X-Google-Smtp-Source: AGRyM1tHN1gbZ2yVQGHra6qT4FiOfTNe6GbslEsaiCOvnvsi/mWa+4LCop/8sCB+fYivYjFqNJC8HQ==
+X-Received: by 2002:a17:90b:3a8f:b0:1ec:93d4:f955 with SMTP id om15-20020a17090b3a8f00b001ec93d4f955mr9909343pjb.23.1656165311419;
+        Sat, 25 Jun 2022 06:55:11 -0700 (PDT)
+Received: from fedora.. ([2409:4042:261d:8029:35f0:415b:b9b4:3fcb])
+        by smtp.gmail.com with ESMTPSA id a4-20020a170902710400b00162037fbb68sm3708733pll.215.2022.06.25.06.55.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 01:35:30 -0700 (PDT)
+        Sat, 25 Jun 2022 06:55:10 -0700 (PDT)
 From:   Gautam <gautammenghani201@gmail.com>
-To:     sj@kernel.org, shuah@kernel.org
-Cc:     Gautam <gautammenghani201@gmail.com>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] kselftests/damon: add support for cases where debugfs cannot be read
-Date:   Sat, 25 Jun 2022 14:05:13 +0530
-Message-Id: <20220625083513.19761-1-gautammenghani201@gmail.com>
+To:     shuah@kernel.org, brauner@kernel.org, keescook@chromium.org
+Cc:     Gautam <gautammenghani201@gmail.com>, kafai@fb.com,
+        songliubraving@fb.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH] kselftests: Enable the echo command to print newlines in Makefile
+Date:   Sat, 25 Jun 2022 19:24:55 +0530
+Message-Id: <20220625135455.167939-1-gautammenghani201@gmail.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220625055608.12812-1-gautammenghani201@gmail.com>
-References: <20220625055608.12812-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,44 +70,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kernel is in lockdown mode when secureboot is enabled and hence
-debugfs cannot be used. Add support for this and other general cases 
-where debugfs cannot be read and communicate the same to the user before
-running tests.
+In the install section of the main Makefile of kselftests, the echo
+command is used with -n flag, which disables the printing of new line
+due to which the output contains "\n" chars as follows:
+
+  Emit Tests for alsa\nSkipping non-existent dir: arm64
+  Emit Tests for breakpoints\nEmit Tests for capabilities\n
+
+This patch fixes the above bug by using the -e flag.
 
 Signed-off-by: Gautam <gautammenghani201@gmail.com>
 ---
-Changes in v2:
-1. Modify the error message to account for general cases.
-2. Change the return code so that the test is skipped.
+ tools/testing/selftests/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v3:
-1. Change the name of variable holding the error message.
-
- tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
- 1 file changed, 10 insertions(+)
- mode change 100644 => 100755 tools/testing/selftests/damon/_chk_dependency.sh
-
-diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
-old mode 100644
-new mode 100755
-index 0189db81550b..0328ac0b5a5e
---- a/tools/testing/selftests/damon/_chk_dependency.sh
-+++ b/tools/testing/selftests/damon/_chk_dependency.sh
-@@ -26,3 +26,13 @@ do
- 		exit 1
- 	fi
- done
-+
-+permission_error="Operation not permitted"
-+for f in attrs target_ids monitor_on
-+do
-+	status=$( cat "$DBGFS/$f" 2>&1 )
-+	if [ "${status#*$permission_error}" != "$status" ]; then
-+		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
-+		exit $ksft_skip
-+	fi
-+done
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index de11992dc577..52e31437f1a3 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -253,7 +253,7 @@ ifdef INSTALL_PATH
+ 	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+-		echo -n "Emit Tests for $$TARGET\n"; \
++		echo -ne "Emit Tests for $$TARGET\n"; \
+ 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+ 			-C $$TARGET emit_tests >> $(TEST_LIST); \
+ 	done;
 -- 
 2.36.1
 
