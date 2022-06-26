@@ -2,179 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56B655AE5C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jun 2022 05:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2C555B110
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jun 2022 12:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233866AbiFZC5H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Jun 2022 22:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
+        id S234177AbiFZKQC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 Jun 2022 06:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233862AbiFZC5G (ORCPT
+        with ESMTP id S234054AbiFZKQB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Jun 2022 22:57:06 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF48C14086;
-        Sat, 25 Jun 2022 19:57:05 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id jh14so5361826plb.1;
-        Sat, 25 Jun 2022 19:57:05 -0700 (PDT)
+        Sun, 26 Jun 2022 06:16:01 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED51120B3
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jun 2022 03:15:59 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b7-20020a256707000000b00669b4b2c5daso5902768ybc.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jun 2022 03:15:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=n3hhQPO2fW5XY1lD1FShy4GvYT7oXmPJAA+Tu0kaqEM=;
-        b=dyKiLrAygm72qE6EFgzwyNOrfbRkpr7KP6nllT7kft3OxF8MQwkd6Ss0SnL9M3ta4U
-         qSL1mO1d8aoIMVEeEhkoUO4q8RH9lKPnzAg6Opd/L2fjG6RIT7qqTutZyaGGdhZYnP75
-         4vfdpSfBY2yVKEPurE9tNM8L9epu9ZL9u+HfHLEbgf6G6sk2lWK0kGPlfONzOVBiDMjB
-         /nFLWkqfoFn0K5DcgJvs0c6ycmoN5n1GhbYANzLk6b9n6NhMGDtausPEsFcPao7y5bFi
-         J3zV8Yb5YNeJv1Mc6z2qV8xI2QRyF+SrspAaEOImnQudpC5TAj4u1AefAziasEn4BlBn
-         mM/A==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=A6ULT6qt3Y8m7tER4ibPrZPKIE4ZaUO512mygVxvB7M=;
+        b=EWyKT6lVXQco7x0/YZIBkhh6XaHBmrYABXmXYWxpobNTufTvVuAh6R/hGaomB0gbk9
+         MoDhbR6pLqoqhC0NtIrOylctzuk6nPlCi1SMitw8nT9b8tSsOKzQkzZCf6y9QyjNGyXf
+         71YVbB+DiRPc7Rl/6UOPfPcl3n5D2XcNWbSEoNL+j9fL8ToVqSd77/n1ioORc/bfKoiv
+         2ud53+X8DXDdazBwA7IHj7f6E+V5D21cZhmhRR0IWPkZ/FLATABE8cPEtJ7J/Ngp/NJz
+         Lf66maTxduZrOD6INDIZqgVwS/MOeXOMPx/FNSfvlDXT6OOJXSHseDvPC63ceiCvfyrP
+         HY6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=n3hhQPO2fW5XY1lD1FShy4GvYT7oXmPJAA+Tu0kaqEM=;
-        b=ho+oOPWipTZKVnB+pNJjAqlRQlDqOwOHXX+UNxi05JzgxOey/PzKK84bEPIg5bH+pn
-         gdzHsUoW8BMgP+XL5TZXFUeBBfHGG2meaO5t1zzZ69jV5FtHqhwCZbyg84nkjuqk6wHY
-         6ZleNYDFerXNHPNeDlEXIvnut6ww0XWRjreqfJAsOBriHMogoJgBGcOZRvLoJbWvAZJT
-         VoBmRyY7UJ+uMcMEHg++KJBTGhS3hcUAQvbPWy2CrhGueinFt5nW6Ma6UV7ek+E2Wy6A
-         /QLxUMo4zk1bFq7dD4wKIx0SpkmOWAlV/L0k0jHnAWo4TGkoDy31dxZMBzTsRpuqAZqu
-         bRrQ==
-X-Gm-Message-State: AJIora+jWb6yupXTIqPE1g0+Z9JIERWmAyOia6+PGgiIkVYPeMCRTdOF
-        1M1LWSvlgjiD0eeRvX1sKvE=
-X-Google-Smtp-Source: AGRyM1uP2nviRZEiBf+6u1N9g0wnWLeZjuMgeWwZZ1sWfg+gXrqAPaUZ1Zx9rtGjTy59Cq66R87PPw==
-X-Received: by 2002:a17:902:6503:b0:16a:4db1:8d5a with SMTP id b3-20020a170902650300b0016a4db18d5amr7434516plk.133.1656212225260;
-        Sat, 25 Jun 2022 19:57:05 -0700 (PDT)
-Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
-        by smtp.gmail.com with ESMTPSA id d15-20020a056a0024cf00b005258df7615bsm1607061pfv.0.2022.06.25.19.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 19:57:04 -0700 (PDT)
-From:   Jeff Xie <xiehuan09@gmail.com>
-To:     rostedt@goodmis.org
-Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
-        chensong_2000@189.cn, Jeff Xie <xiehuan09@gmail.com>
-Subject: [PATCH v13 4/4] Documentation: trace/objtrace: Add documentation for objtrace
-Date:   Sun, 26 Jun 2022 10:56:04 +0800
-Message-Id: <20220626025604.277413-5-xiehuan09@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220626025604.277413-1-xiehuan09@gmail.com>
-References: <20220626025604.277413-1-xiehuan09@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=A6ULT6qt3Y8m7tER4ibPrZPKIE4ZaUO512mygVxvB7M=;
+        b=QP9vjx12zaIbADdcqZiuAnKbJH2g4BMFsmLhmuazDHxTGkftFoDqpEaHxbOS9Eg9m9
+         6t9H80Xpu88WGdix/L/uxNTC4cTlUojnkXsyk+iY42iJ2mylirbugBkd464OoLcVH4/j
+         tKl8O7iwkZC+2rprRDMCuFLS/4hA4WGFP0iBRRuxieTrRaUDAkIo0mpzZfJnz87ToweC
+         20QekWYPNKgMj1CYv8pgKdATmD/uhfP4PLk3T6N05Hd5QttAQYxll/wa3csjc/9xHYz8
+         WQh3bVP/iqbJZWRZqBStiakuV6lF1SLiHN7ZXXFym6+Yik5yCpvFx/heJWvfuDRXiZGb
+         88eg==
+X-Gm-Message-State: AJIora/do4QFOHTw3USn3vqwG419/04XHbNV3DI43JS8rbZeCvMKD6aS
+        nr8jZ+lodESBOX4hP27/mEQERbvmsv2W8A==
+X-Google-Smtp-Source: AGRyM1vCFOBXMZXYd2wjunuMNSNfbqV2Qv5fUQ3A41LP1Ll6863YkjO7hQah6BirT2fg3gXJc6cEcx8GXwqnqA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:a08c:0:b0:66a:a7c3:d5a with SMTP id
+ y12-20020a25a08c000000b0066aa7c30d5amr8229590ybh.82.1656238559009; Sun, 26
+ Jun 2022 03:15:59 -0700 (PDT)
+Date:   Sun, 26 Jun 2022 18:15:53 +0800
+Message-Id: <20220626101553.1885428-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] Documentation: kunit: Cleanup run_wrapper, fix x-ref
+From:   David Gow <davidgow@google.com>
+To:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Added documentation explaining how to use objtrace trigger to get the value
-of the object.
+The "Run Tests on qemu" section of run_wrapper.rst had a few issues left
+over from the last big documentation refactor[1]:
+- It referenced a run_uml.rst page, which was integrated into the other
+  pages (including run_wrapper.rst).
+- It skimmed over the use of --arch= and --cross_compile= in favour of
+  using a custom --qemu_config. Since most users will want to use the
+  former, let's give examples.
 
-Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Remove the reference to the non-existant page, and add a couple of
+examples to encourage the use of --arch= and --cross_compile=.
+
+With this change, there should be no more broken references in the KUnit
+documentation (i.e., the one mentioned in [2] is gone).
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=46201d47d6c4be594c1d57b7f3251c371626a9c4
+[2]: https://lore.kernel.org/linux-doc/cover.1656234456.git.mchehab@kernel.org/
+
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- Documentation/trace/events.rst | 83 ++++++++++++++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
 
-diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-index c47f381d0c00..0dc475160133 100644
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -546,6 +546,89 @@ The following commands are supported:
+Thanks, Mauro, for noticing this in [2]: for whatever reason my version
+of Sphinx wasn't warning on it.
+
+Unless anyone objects, I'll add this to the list of things to be taken
+in via the kunit/kunit-fixes tree.
+
+Cheers,
+-- David
+
+---
+ Documentation/dev-tools/kunit/run_wrapper.rst | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+index 653985ce9cae..a695f58cd64e 100644
+--- a/Documentation/dev-tools/kunit/run_wrapper.rst
++++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -192,6 +192,20 @@ via UML. To run tests on qemu, by default it requires two flags:
+     if we have downloaded the microblaze toolchain from the 0-day
+     website to a directory in our home directory called toolchains.
  
-   See Documentation/trace/histogram.rst for details and examples.
++This means that for most architectures, running under qemu is as simple as:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run --arch=x86_64
++
++If a special toolchain is required, it can be slightly more complicated:
++
++.. code-block:: bash
++
++	./tools/testing/kunit/kunit.py run \
++		--arch=s390 \
++		--cross_compile=s390x-linux-gnu-
++
+ If we want to run KUnit tests on an architecture not supported by
+ the ``--arch`` flag, or want to run KUnit tests on qemu using a
+ non-default configuration; then we can write our own``QemuConfig``.
+@@ -214,9 +228,6 @@ as
+ 		--jobs=12 \
+ 		--qemu_config=./tools/testing/kunit/qemu_configs/x86_64.py
  
-+- objtrace
-+
-+  This command provides a way to get the value of any object, The object
-+  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
-+  static event(tracepoint).
-+
-+  Usage:
-+  When using the kprobe event, only need to set the objtrace(a new trigger),
-+  we can get the value of the object. The object is from the setting of the
-+  kprobe event.
-+
-+  For example:
-+  For the function bio_add_page():
-+
-+  int bio_add_page(struct bio *bio, struct page *page,
-+	unsigned int len, unsigned int offset)
-+
-+  Firstly, we can set the base of the object, thus the first string "arg1"
-+  stands for the value of the first parameter of this function bio_add_gage(),
-+
-+  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-+
-+  Secondly, we can get the value dynamically based on above object.
-+
-+  find the offset of the bi_size in struct bio:
-+  $ gdb vmlinux
-+  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-+  $1 = (unsigned int *) 0x28
-+
-+  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-+	p_bio_add_page_0/trigger
-+
-+  # cd /sys/kernel/debug/tracing/
-+  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-+  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-+
-+  # du -sh /test.txt
-+  12.0K   /test.txt
-+
-+  # cat  /test.txt > /dev/null
-+  # cat ./trace
-+  # tracer: nop
-+  #
-+  # entries-in-buffer/entries-written: 128/128   #P:4
-+  #
-+  #                                _-----=> irqs-off/BH-disabled
-+  #                               / _----=> need-resched
-+  #                              | / _---=> hardirq/softirq
-+  #                              || / _--=> preempt-depth
-+  #                              ||| / _-=> migrate-disable
-+  #                              |||| /     delay
-+  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+  #              | |         |   |||||     |         |
-+               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-+               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-+               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
-+               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-+               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-+               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
-+               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-+               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-+               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
-+            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+             ...
-+
- 7. In-kernel trace event API
- ============================
+-To run existing KUnit tests on non-UML architectures, see:
+-Documentation/dev-tools/kunit/non_uml.rst.
+-
+ Command-Line Arguments
+ ======================
  
 -- 
-2.25.1
+2.37.0.rc0.161.g10f37bed90-goog
 
