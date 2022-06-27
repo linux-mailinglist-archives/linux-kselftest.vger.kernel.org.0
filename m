@@ -2,130 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB7355C3AC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 14:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E7255D300
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240360AbiF0TKf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jun 2022 15:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S240703AbiF0TrG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jun 2022 15:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240365AbiF0TKd (ORCPT
+        with ESMTP id S240724AbiF0TrC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:10:33 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A003B5597;
-        Mon, 27 Jun 2022 12:10:32 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id n16-20020a17090ade9000b001ed15b37424so10310355pjv.3;
-        Mon, 27 Jun 2022 12:10:32 -0700 (PDT)
+        Mon, 27 Jun 2022 15:47:02 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE841ADB7
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 12:47:00 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id t26-20020a9d775a000000b006168f7563daso8141838otl.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 12:47:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/TJYBcpsxpHM1dgljke9KHv7g4SupUF3o95Sw1aZ2ck=;
-        b=IUrCqExbfNSEqdj1+aclN5lVCX6iP7eBPxz3UnA29I42X7w8qUJC0d2QFa6lECfvHS
-         lTMdErf6FACs1/hyp38L86tGz+o787pLf2VIheb7iIKAGcJlc9+ImxpPc6dZHKPr2Lnd
-         297Swn9MhvVXOe5pLyL9hyobmlUtJUylIgtVuWFNUy7M/cvy0Ei9a+7/6RNLP/vuaWpm
-         qPXLfyJ7VkpxIpiy0dSvQGEwS2wO1IikzptCMphwHEF+yGlRha2BCj6vVKJloizO0jzV
-         wtWURRXun0tZKmoLu2aju0/0SznVwcWbO33ww6x17xU68Xd6vEBZdnna3JSmuqObPHbN
-         196g==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sEyIMurSbUDEtnO4sXJJJqiGT9VfNu9mH5Y+RF1zXpM=;
+        b=Q/XU92EvXKhdUFHYTfxhesbhCz0S+IitCXqbWL1lwG8PNxG+l+4SrGA2WOvu8Hdddc
+         hxNASREKZON99TgF7gAIPDYD0ndh2+wavjuNnWpuUEeMootx4hkqjxKrR9TgklvfT9DF
+         NCYJjTEFsfdWM9OZUdQ8BfTDKs6pNJBV7n3tU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=/TJYBcpsxpHM1dgljke9KHv7g4SupUF3o95Sw1aZ2ck=;
-        b=IMOxxCH+3YW5q69QljDGHjGdATj/9ipfgW8YCq9jPRqEyKqBRh2RZXFh4D7ZsUEVfT
-         mzyE2c4HHjZRyqIbUedzt1hnDzWumsvZ+nLG3+Sk/z0xcWNMzal8k1FLfXDcQnoHeIKl
-         ILWXqMi+/qF5Wbcni0hFrj1L/19CjIzt39lLEcCfP8PfC01hO3DDcPajvIXh4/pDcDga
-         6EsNtsdJOaojsCFXBewDrTw4w8ViVOiRXUqN/RAi5JStChLWQHyqii4df9+DRv5dzjMh
-         LKUvfXKhMiBz2PyciB+RSaywmCZCkwZ6DeoS/bqambujl3RFc+c8KYEAbumVLkh3K+qX
-         uxqQ==
-X-Gm-Message-State: AJIora91OBj6bihYl7CPX5A7XSvvfFZyAdfauZt6Awu7PWCc9g02kP2J
-        0C8f7S8c2PRRSttO0AzNRnY=
-X-Google-Smtp-Source: AGRyM1v4pZPlgtYqoeaDHgmUszlXO0IEON1F8nITnkj9iOAgcw3+OR56oHGI6Qm3c0Gt8vy7rjuFZw==
-X-Received: by 2002:a17:902:bc4c:b0:16a:4849:ddbe with SMTP id t12-20020a170902bc4c00b0016a4849ddbemr816273plz.25.1656357031911;
-        Mon, 27 Jun 2022 12:10:31 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:4120])
-        by smtp.gmail.com with ESMTPSA id t5-20020a17090aae0500b001ec4f258028sm7805995pjq.55.2022.06.27.12.10.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 12:10:31 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 28 Jun 2022 04:10:29 +0900
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <YroApRMPV/6zO5I8@mtj.duckdns.org>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-8-longman@redhat.com>
- <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
- <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
- <YqarMyNo9oHxhZFh@slm.duckdns.org>
- <20220613142452.GB6910@blackbody.suse.cz>
- <YqdzuSQuAeiPXQvy@slm.duckdns.org>
- <20220613175548.GB21665@blackbody.suse.cz>
- <Yqd7WMFj6AEyV3Cy@slm.duckdns.org>
- <20220614115345.GA6771@blackbody.suse.cz>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sEyIMurSbUDEtnO4sXJJJqiGT9VfNu9mH5Y+RF1zXpM=;
+        b=k+I781CabA6W7d7RcOoMn8tVrL9Kiq6pvcMTdibAoE/OYOIJ+J/wsjoX2tikoRXXKf
+         cFzYCLMBtKqYsaPBmt2667OavKk1gLmSrEVrM2bxRDGYAPkWU6xZTfppWLZqS1pQMI1P
+         BIQ7PEbifA5hSuPo4nCrHju5TZDyT8dK4voyNCtngvdzAg5cPmXRnD+wix5Drl3ifjvL
+         MnTWtCGHv3JZHNZXbAqE4rDoNsH67oDbAC0WHnUrxfd+vMo1/u38TmnrNTN8LhpoBfLn
+         ZwB2mqRtt8VRVgbYQ4JjmhFSgMbwWe8RJ3dlDu33DO0sXEksVxe3UWl4piVVkWnEhzjG
+         /Avg==
+X-Gm-Message-State: AJIora8WBAeZxAJ8QrELYVEAZjkaSW2tjZ0RQmlO/Li004z3n9/2Uint
+        t8M3ycbYQpbnkrMqbKcMoI2GkQ==
+X-Google-Smtp-Source: AGRyM1te5Bj88UBGJhxBv7OUhUu6rYyaYCShv/RM1GHQuJnIgZVd2AIbqFEHx30R36IqvOP82OnZBg==
+X-Received: by 2002:a9d:76d0:0:b0:60b:53e5:6640 with SMTP id p16-20020a9d76d0000000b0060b53e56640mr6833397otl.241.1656359219758;
+        Mon, 27 Jun 2022 12:46:59 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h9-20020a056830400900b00616a19aac0bsm6693195ots.51.2022.06.27.12.46.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 12:46:59 -0700 (PDT)
+Subject: Re: [PATCH v4] kselftests/damon: add support for cases where debugfs
+ cannot be read
+To:     SeongJae Park <sj38.park@gmail.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Gautam <gautammenghani201@gmail.com>, shuah@kernel.org,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220627185704.58902-1-sj38.park@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <5708a2f6-4555-7bb3-4664-c33fe5b411b1@linuxfoundation.org>
+Date:   Mon, 27 Jun 2022 13:46:58 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220614115345.GA6771@blackbody.suse.cz>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220627185704.58902-1-sj38.park@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
-
-On Tue, Jun 14, 2022 at 01:53:45PM +0200, Michal Koutný wrote:
-> On Mon, Jun 13, 2022 at 08:00:56AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> > Yeah, I don't know why this part is different from any other errors that the
-> > parent can make.
+On 6/27/22 12:57 PM, SeongJae Park wrote:
+> From: SeongJae Park <sj@kernel.org>
 > 
-> It's different because a write to parent's cpuset.cpus is independent of
-> whether cpuset.cpus of its children are exclusive or not.
-> In an extreme case the children may be non-exclusive
+> Hi Shuah,
 > 
->     parent	cpuset.cpus=0-3 //   valid partition
->     `- child_1	cpuset.cpus=0-1	// invalid partition
->     `- child_2	cpuset.cpus=1-2 // invalid partition
+> On Mon, 27 Jun 2022 11:00:18 -0600 Shuah Khan <skhan@linuxfoundation.org> wrote:
 > 
-> but the parent can still be a valid partition (thanks to cpu no. 3 in
-> the example above).
+> [...]
+>>>> --- a/tools/testing/selftests/damon/_chk_dependency.sh
+>>>> +++ b/tools/testing/selftests/damon/_chk_dependency.sh
+>>>> @@ -26,3 +26,13 @@ do
+>>>>    		exit 1
+>>>>    	fi
+>>>>    done
+>>>> +
+>>>> +permission_error="Operation not permitted"
+>>>> +for f in attrs target_ids monitor_on
+>>>> +do
+>>>> +	status=$( cat "$DBGFS/$f" 2>&1 )
+>>>> +	if [ "${status#*$permission_error}" != "$status" ]; then
+>>>> +		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
+>>
+>> btw - does this run as a regular user or does it need root privilege?
+>> If so add a test for that and skip with a message.
 > 
-> Do I miss anything?
+> It needs the root permission, and does the check at the beginning[1].
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/damon/_chk_dependency.sh?h=v5.19-rc4#n9
+> 
+> 
 
-What I'm trying to say is that cpuset.cpus of child_1 and child_2 are
-owned by the parent, so a feature which blocks siblings from
-intersecting each other doesn't make whole lot of sense because all
-those files are under the control of the parent who would have the
-power to enable or disable the restrition anyway.
+Great. Thank you. I will pull this one in for linux-kselftest next
+for Linux 5.20-rc1
 
-The partition mode file is owned by the parent too, right? So, all
-these are to be configured by the same entity and the errors can be
-reported the same way, no?
-
-Thanks.
-
--- 
-tejun
+thanks,
+-- Shuah
