@@ -2,82 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18CD55DBDA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8F755DF83
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbiF0I5U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jun 2022 04:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        id S234623AbiF0M7C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jun 2022 08:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233760AbiF0I5M (ORCPT
+        with ESMTP id S234643AbiF0M6v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:57:12 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A68C0638C;
-        Mon, 27 Jun 2022 01:57:09 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id D258D1E80D5E;
-        Mon, 27 Jun 2022 16:56:14 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NySigRwC0Z_G; Mon, 27 Jun 2022 16:56:12 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 3812C1E80D11;
-        Mon, 27 Jun 2022 16:56:12 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH] tools: Strong conversion of void type pointer could be removed
-Date:   Mon, 27 Jun 2022 16:56:54 +0800
-Message-Id: <20220627085654.2902-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 08:58:51 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657D310541;
+        Mon, 27 Jun 2022 05:58:26 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id k129so3968775wme.0;
+        Mon, 27 Jun 2022 05:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JMkhE15DqUuUYsqdeVw0YV5US1cbKTxDmN+AZSpDcP0=;
+        b=h0RUdzs/T1fLlIR1/zIfcZGTBTOxi0NalXvCnyBA3PGTv2E7elyVjIS0kcS62w7C9w
+         kdGiI6r4eCjtXJcrM3R8GaNCejm6jR3xF/0YbyuR7hgwhhYbFxlKfl6qs6JQpV6/zT54
+         nAKGvxumCU2NoVQn9kpTtB8CCDUCHlzQQvvtLOHvk63ZigC9CbUFSxdui5ZR7BL7hy1n
+         Qi0H15xrkblODPN/Nx5fwtrO+ikBEKHoMCTKgDuDJrLL2HgUiPP85P19d6arDE65G/tL
+         UqPyRYAtkryAZe99Mf98zV+2YvRoTCF15jc48N8OMDFVmtoHJZu2YS2UMdifPdRKr1ru
+         JWwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JMkhE15DqUuUYsqdeVw0YV5US1cbKTxDmN+AZSpDcP0=;
+        b=MAKjOn8bFg2VL3Snmoe5cwdDZPfdUahk0bgC0epKoCuW93oekHxrHKk5Uz2XYIxX3k
+         89d8SE+fy5owPO/TbT3fgX6IpmzPxUPDo4k4nFjCYBwyhftM5Acp/xjY+/92gWjW0B26
+         BQJhCTL7pZ+K6DBZ1rQlx9k+hzvXrflC05/PtHJpEJ5Kek6W7IZv85rEbBTS6A9l58GR
+         6O6Mh6TW9oFGd+u2DvzGEWlHMfVci1WkCVFauuupm/4bAJCuvl0r8u+bCdclBJ6nrFjY
+         Ct0djpJDjx8M6oD1zwTsWoJsw71+cnV94fqCgT8CpyQyimtf4RECWrP8HHLhjRSv/BYW
+         FIPA==
+X-Gm-Message-State: AJIora8FoUet1SgzNXsmHTOB6ubzgvz+/JMRW8b1ieILn/kWiSvtPTzl
+        FNQuV7mTOHO5CSC+/V2tCR59m9mP0jLFPgNvsfM=
+X-Google-Smtp-Source: AGRyM1vjPE5hZwDXlzx8IvGj9TaZn/xlyGJ8rqNUB+DR5A3YYTBJAKlAN4COeaY6depDsGtZbnoGdALGOzVDvpJyCQE=
+X-Received: by 2002:a7b:c20d:0:b0:3a0:39e4:19e8 with SMTP id
+ x13-20020a7bc20d000000b003a039e419e8mr20413223wmi.166.1656334704704; Mon, 27
+ Jun 2022 05:58:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com> <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
+In-Reply-To: <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Mon, 27 Jun 2022 14:58:13 +0200
+Message-ID: <CAKUejP7xPByVP2Qe0fFCxhU_vX84qp2i_7RFnL9ZYMVr0xH=jw@mail.gmail.com>
+Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB implementation
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The void pointer argument does not require a cast assignment because it
-is the address passed.
+Hi Vladimir,
+maybe you have missed my upstreaming of this patch set...
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
----
- tools/testing/selftests/x86/fsgsbase.c      | 2 +-
- tools/testing/selftests/x86/test_vsyscall.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+According to our earlier discussions I have now implemented the
+feature, so that the ATU locked entries are owned by the driver, so to
+make the entries dynamic I add the entries to a list and use kernel
+timers to age out the entries as they should be 'dynamic'. See
+mv88e6xxx_switchdev.c.
 
-diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-index 8c780cce941d..5d99261317e1 100644
---- a/tools/testing/selftests/x86/fsgsbase.c
-+++ b/tools/testing/selftests/x86/fsgsbase.c
-@@ -63,7 +63,7 @@ static void clearhandler(int sig)
- 
- static void sigsegv(int sig, siginfo_t *si, void *ctx_void)
- {
--	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+	ucontext_t *ctx = ctx_void;
- 
- 	if (!want_segv) {
- 		clearhandler(SIGSEGV);
-diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
-index 5b45e6986aea..2416941a0952 100644
---- a/tools/testing/selftests/x86/test_vsyscall.c
-+++ b/tools/testing/selftests/x86/test_vsyscall.c
-@@ -184,7 +184,7 @@ static volatile unsigned long segv_err;
- 
- static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
- {
--	ucontext_t *ctx = (ucontext_t *)ctx_void;
-+	ucontext_t *ctx = ctx_void;
- 
- 	segv_err =  ctx->uc_mcontext.gregs[REG_ERR];
- 	siglongjmp(jmpbuf, 1);
--- 
-2.18.2
+Hans
 
+On Tue, May 24, 2022 at 5:22 PM Hans Schultz <schultz.hans@gmail.com> wrote:
+>
+> This implementation for the Marvell mv88e6xxx chip series, is
+> based on handling ATU miss violations occurring when packets
+> ingress on a port that is locked. The mac address triggering
+> the ATU miss violation is communicated through switchdev to
+> the bridge module, which adds a fdb entry with the fdb locked
+> flag set. The entry is kept according to the bridges ageing
+> time, thus simulating a dynamic entry.
+>
+> Note: The locked port must have learning enabled for the ATU
+> miss violation to occur.
+>
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> ---
+>  drivers/net/dsa/mv88e6xxx/Makefile            |   1 +
+>  drivers/net/dsa/mv88e6xxx/chip.c              |  40 ++-
+>  drivers/net/dsa/mv88e6xxx/chip.h              |   5 +
+>  drivers/net/dsa/mv88e6xxx/global1.h           |   1 +
+>  drivers/net/dsa/mv88e6xxx/global1_atu.c       |  35 ++-
+>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 249 ++++++++++++++++++
+>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   |  40 +++
+>  drivers/net/dsa/mv88e6xxx/port.c              |  32 ++-
+>  drivers/net/dsa/mv88e6xxx/port.h              |   2 +
+>  9 files changed, 389 insertions(+), 16 deletions(-)
+>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
+>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
+>
