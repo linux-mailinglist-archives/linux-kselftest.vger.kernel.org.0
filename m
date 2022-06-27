@@ -2,358 +2,242 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9469055B526
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jun 2022 04:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB0655CBDA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiF0COu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 Jun 2022 22:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S232638AbiF0GxQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jun 2022 02:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiF0COt (ORCPT
+        with ESMTP id S232698AbiF0GxK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 Jun 2022 22:14:49 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CD7270C;
-        Sun, 26 Jun 2022 19:14:48 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id x20so1296753plx.6;
-        Sun, 26 Jun 2022 19:14:48 -0700 (PDT)
+        Mon, 27 Jun 2022 02:53:10 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215EC26D3;
+        Sun, 26 Jun 2022 23:53:09 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id s1so11545475wra.9;
+        Sun, 26 Jun 2022 23:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p/CeoCTDhGdykZrVT9uCTA5wI+N8E9qPFrIhbM1twyQ=;
-        b=kCCTfCQ1mvklpJXP7NiWhdLXjBOOxYtl795VwPhnA7hgO4lUAw/aHLjRHCxxJU2inN
-         1OcURComNU+XF/Tkggxo6flVJIqrTG+zra0iiaSR3uHLjtZZ6+UKQ/99ltW09+dOMK9g
-         CAygQ7kVIoLkJiW4TlO9S9V8e2++18JTOw3n1vjgmw0Dtq7MfcDKb9aUWnpMQ/xM/HiH
-         mn76tQAjg+7gqxs4th0nZcjweZT/yX0ZONmuQAGaIPHTKe5XpptcXd9nJKwYIRyFuZsV
-         Edru6wXyWDmvzuuKVpGCyK9Mu5VsN3hH0p92ViJKRsQkoWqpLWA8BSJkitMCcF8nCJXO
-         vEJA==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=9HAkbZXww63s+0bv/ZmVBk4h2mlRk2b5X7UwuMp2450=;
+        b=ESN+8Do1SE3GUTvKJFRN4wmhzGOeAsxKSVSeauBw7GkWvNrHtgijUHi7k0Wx873fCM
+         cNvb2edqtxX1AlQgDByvyORqsmVvKvMlsr5YsNWnBRVrJar6/oslGxhw0l14nWdMW3II
+         DCz1nT6WTg29zu1yV9CgLGeC58hEznbG7Vqz9cMmvUIXzdHdEpGAAnatd4HhK1cYMD1E
+         +OfaB1UBfsqV7zJ5oeVLME1kHMzYgyd3LcmZeGg3fgahaWV6Yg1s/yFzm61K+2sjmsCf
+         jaCXNPOongdq53I7TWtX6pVEHT+VPu8dqNj6BPCnfQCcY52cNTGxO9TopZ/XTVDgj3Mo
+         pLDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p/CeoCTDhGdykZrVT9uCTA5wI+N8E9qPFrIhbM1twyQ=;
-        b=v9MjBJlbkyi/DJQFmTp05jAXp4+J2+j8NmXinpN10vRBRHeDDYUkT5GrQusG0me7+j
-         As2CjWWH4+x8srO/Ve6N5ZdbHNVWLuH/yVHRCGkMLdIwLVT+Bjgawy682ZYgYCo8WhRn
-         dteNM3C4i9cpPwWJR/nn9j2Rt0Ru99vlYcESXRc2JU0KNh9udCuy5rKhfCCMT7DmujDw
-         hI4KIgfwC1ZQJVAnTvgwLsfDwGYZj+vByDjAgPfblR+7uAmVG2c+9DujcBOw9EBiQly9
-         DOWoqyt7JYOU1yznzdQYD1g6U48nF38IybMqP15B5QM9SSKC7InijVyWqfVChqK0AJBS
-         J//A==
-X-Gm-Message-State: AJIora/ypcsbcnpzDT9jsbpWE7rJRIh+3t/OuWkEXZB7LKbEfr7c1yzf
-        rGYRiN/gcyLkIOZL/e8/DQiZdocN2Do=
-X-Google-Smtp-Source: AGRyM1tdkHDaq/xuwGyhiD4/4kUWaQf4E1SbbajDWVNwklhip7Sx0UNqhvitVWgBy/g5BhWrspL3VQ==
-X-Received: by 2002:a17:902:aa8a:b0:16a:1ea5:d417 with SMTP id d10-20020a170902aa8a00b0016a1ea5d417mr12271446plr.4.1656296087523;
-        Sun, 26 Jun 2022 19:14:47 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-21.three.co.id. [180.214.233.21])
-        by smtp.gmail.com with ESMTPSA id y27-20020a634b1b000000b0040cff9def93sm5749291pga.66.2022.06.26.19.14.46
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9HAkbZXww63s+0bv/ZmVBk4h2mlRk2b5X7UwuMp2450=;
+        b=vimkl1rHtaGjqhh3b3Dxi1vuBR4SfD3z5Xzyrl4kmEux3UZ7CqC45JCcDCsB7Cnnii
+         QkKxpPRcMUWfghsa6cBb3pvBFWLub2FiHqwG8Gd/Yma1lxu0qEQCnNe7QK2NuHK8qvXG
+         4Na9f4mK1dB/0S0tklhr1qu9X/j7o8Ctd0P1kP+LgDqvij9Mn5W3VY+UhHuG+GIDkmsp
+         WwG1C4I2OTzDlgeoKp6VVtnbyAyQNPthpdC3ZH7WhHceCRqofJHyuKRZZjRoEbFtmoRY
+         5PJqKZctVndBRBDDKVmOVT6ImHauf4M/mkBH8W5z+ZSSyjJG3ODkrJSHC++mWiMOxFUc
+         LNjw==
+X-Gm-Message-State: AJIora9KSZ0NGxT+O2wDNzNyMrb+s/iqyPCMdDHdRCPGWPMawjtf8mEB
+        3h7gb4k0hEVn3orSG9H6HZmVKlfFyvPtxA==
+X-Google-Smtp-Source: AGRyM1sig4gnVK31ID+ksDquPo3/G88OrQRa0WIdHga+Gi9ty3fvsFAyidLKJjgY+H2AF7Gpnenbpw==
+X-Received: by 2002:a5d:6da3:0:b0:21b:ab1a:5c79 with SMTP id u3-20020a5d6da3000000b0021bab1a5c79mr10965445wrs.160.1656312787482;
+        Sun, 26 Jun 2022 23:53:07 -0700 (PDT)
+Received: from elementary ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id f13-20020a05600c154d00b0039ee391a024sm17996474wmg.14.2022.06.26.23.53.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 19:14:46 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 6F8481038C5; Mon, 27 Jun 2022 09:14:42 +0700 (WIB)
-Date:   Mon, 27 Jun 2022 09:14:42 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
-        zanussi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net, chensong_2000@189.cn
-Subject: Re: [PATCH v13 4/4] Documentation: trace/objtrace: Add documentation
- for objtrace
-Message-ID: <YrkSkuluNhGcMyOu@debian.me>
-References: <20220626025604.277413-1-xiehuan09@gmail.com>
- <20220626025604.277413-5-xiehuan09@gmail.com>
+        Sun, 26 Jun 2022 23:53:07 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 08:53:04 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kunit: tool: Enable virtio/PCI by default on UML
+Message-ID: <20220627065304.GA43016@elementary>
+References: <20220624084400.1454579-1-davidgow@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220626025604.277413-5-xiehuan09@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220624084400.1454579-1-davidgow@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 10:56:04AM +0800, Jeff Xie wrote:
-> Added documentation explaining how to use objtrace trigger to get the value
-> of the object.
+On Fri, Jun 24, 2022 at 04:43:59PM +0800, David Gow wrote:
+> There are several tests which depend on PCI, and hence need a bunch of
+> extra options to run under UML. This makes it awkward to give
+> configuration instructions (whether in documentation, or as part of a
+> .kunitconfig file), as two separate, incompatible sets of config options
+> are required for UML and "most other architectures".
 > 
+> For non-UML architectures, it's possible to add default kconfig options
+> via the qemu_config python files, but there's no equivalent for UML. Add
+> a new tools/testing/kunit/configs/arch_uml.config file containing extra
+> kconfig options to use on UML.
+> 
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Write "Add documentation..." instead.
+Tested-by: José Expósito <jose.exposito89@gmail.com>
 
-> +- objtrace
+After applying this patch and its dependencies, I can confirm that it is
+possible to run the DRM tests with the following command:
+
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests
+
+Added a TODO for myself to remove the extra flag from the DRM docs once
+this patch is merged.
+
+Thanks a lot for making it easier!
+
+Jose
+
+> ---
+> 
+> NOTE: This has dependencies on the 'make --kunitconfig repeatable'
+> series:
+> https://lore.kernel.org/linux-kselftest/20220624001247.3255978-1-dlatypov@google.com/
+> which, in turn, depends on:
+> https://lore.kernel.org/linux-kselftest/20220520224200.3764027-1-dlatypov@google.com/
+> Please apply those first.
+> 
+> Changes since RFC:
+> https://lore.kernel.org/linux-kselftest/20220622035326.759935-1-davidgow@google.com/
+> - Rebase on top of the previous kconfig patches.
+> - Fix a missing make_arch_qemuconfig->make_arch_config rename (Thanks
+>   Brendan)
+> - Fix the tests to use the base LinuxSourceTreeOperations class, which
+>   has no default kconfig options (and so won't conflict with those set
+>   in the tests). Only test_build_reconfig_existing_config actually
+>   failed, but I updated a few more in case the defaults changed.
+> 
+> 
+> ---
+>  tools/testing/kunit/configs/arch_uml.config |  5 +++++
+>  tools/testing/kunit/kunit_kernel.py         | 14 ++++++++++----
+>  tools/testing/kunit/kunit_tool_test.py      | 12 ++++++++++++
+>  3 files changed, 27 insertions(+), 4 deletions(-)
+>  create mode 100644 tools/testing/kunit/configs/arch_uml.config
+> 
+> diff --git a/tools/testing/kunit/configs/arch_uml.config b/tools/testing/kunit/configs/arch_uml.config
+> new file mode 100644
+> index 000000000000..e824ce43b05a
+> --- /dev/null
+> +++ b/tools/testing/kunit/configs/arch_uml.config
+> @@ -0,0 +1,5 @@
+> +# Config options which are added to UML builds by default
 > +
-> +  This command provides a way to get the value of any object, The object
-> +  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
-> +  static event(tracepoint).
+> +# Enable virtio/pci, as a lot of tests require it.
+> +CONFIG_VIRTIO_UML=y
+> +CONFIG_UML_PCI_OVER_VIRTIO=y
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index fc415ff7530e..127598fb994b 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -26,6 +26,7 @@ KUNITCONFIG_PATH = '.kunitconfig'
+>  OLD_KUNITCONFIG_PATH = 'last_used_kunitconfig'
+>  DEFAULT_KUNITCONFIG_PATH = 'tools/testing/kunit/configs/default.config'
+>  BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
+> +UML_KCONFIG_PATH = 'tools/testing/kunit/configs/arch_uml.config'
+>  OUTFILE_PATH = 'test.log'
+>  ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
+>  QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
+> @@ -53,7 +54,7 @@ class LinuxSourceTreeOperations:
+>  		except subprocess.CalledProcessError as e:
+>  			raise ConfigError(e.output.decode())
+>  
+> -	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+> +	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+>  		return base_kunitconfig
+>  
+>  	def make_allyesconfig(self, build_dir: str, make_options) -> None:
+> @@ -109,7 +110,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>  		self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
+>  		self._extra_qemu_params = qemu_arch_params.extra_qemu_params
+>  
+> -	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+> +	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+>  		kconfig = kunit_config.parse_from_string(self._kconfig)
+>  		kconfig.merge_in_entries(base_kunitconfig)
+>  		return kconfig
+> @@ -138,6 +139,11 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>  	def __init__(self, cross_compile=None):
+>  		super().__init__(linux_arch='um', cross_compile=cross_compile)
+>  
+> +	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
+> +		kconfig = kunit_config.parse_file(UML_KCONFIG_PATH)
+> +		kconfig.merge_in_entries(base_kunitconfig)
+> +		return kconfig
 > +
-> +  Usage:
-> +  When using the kprobe event, only need to set the objtrace(a new trigger),
-> +  we can get the value of the object. The object is from the setting of the
-> +  kprobe event.
-> +
-
-Did you mean "the object value can be obtained by only needing to set the
-objtrace?"
-
-> +  For example:
-> +  For the function bio_add_page():
-> +
-> +  int bio_add_page(struct bio *bio, struct page *page,
-> +	unsigned int len, unsigned int offset)
-> +
-> +  Firstly, we can set the base of the object, thus the first string "arg1"
-> +  stands for the value of the first parameter of this function bio_add_gage(),
-> +
-> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-> +
-
-Did you mean "the first parameter (arg1) is the parameter value of function
-that is passed to kprobe_event, in this case the object base"?
-
-> +  Secondly, we can get the value dynamically based on above object.
-> +
-> +  find the offset of the bi_size in struct bio:
-> +  $ gdb vmlinux
-> +  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-> +  $1 = (unsigned int *) 0x28
-> +
-> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-> +	p_bio_add_page_0/trigger
-> +
-> +  # cd /sys/kernel/debug/tracing/
-> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-> +
-> +  # du -sh /test.txt
-> +  12.0K   /test.txt
-> +
-> +  # cat  /test.txt > /dev/null
-> +  # cat ./trace
-> +  # tracer: nop
-> +  #
-> +  # entries-in-buffer/entries-written: 128/128   #P:4
-> +  #
-> +  #                                _-----=> irqs-off/BH-disabled
-> +  #                               / _----=> need-resched
-> +  #                              | / _---=> hardirq/softirq
-> +  #                              || / _--=> preempt-depth
-> +  #                              ||| / _-=> migrate-disable
-> +  #                              |||| /     delay
-> +  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> +  #              | |         |   |||||     |         |
-> +               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-> +               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-> +               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +             ...
-> +
-
-The output is messy, because for code example and output, literal code
-blocks aren't used, hence trigger new warnings:
-
-Documentation/trace/events.rst:564: WARNING: Inline emphasis start-string without end-string.
-Documentation/trace/events.rst:564: WARNING: Inline emphasis start-string without end-string.
-Documentation/trace/events.rst:573: WARNING: Inline emphasis start-string without end-string.
-Documentation/trace/events.rst:573: WARNING: Inline emphasis start-string without end-string.
-Documentation/trace/events.rst:602: WARNING: Unexpected indentation.
-Documentation/trace/events.rst:622: WARNING: Block quote ends without a blank line; unexpected unindent.
-Documentation/trace/events.rst:630: WARNING: Unexpected indentation.
-
-I had to apply the following fixup (with rewording):
-
----- >8 ----
-
-diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-index 0dc47516013331..c15f1d25d4a071 100644
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -549,85 +549,89 @@ The following commands are supported:
- - objtrace
- 
-   This command provides a way to get the value of any object, The object
--  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
--  static event(tracepoint).
-+  can be obtained from the dynamic event (kprobe_event/uprobe_event) or the
-+  static event (tracepoint).
- 
-   Usage:
--  When using the kprobe event, only need to set the objtrace(a new trigger),
--  we can get the value of the object. The object is from the setting of the
--  kprobe event.
-+  When using the kprobe event, by only need to set the objtrace (a new
-+  trigger), we can get the value of object that is set by kprobe event.
- 
--  For example:
--  For the function bio_add_page():
-+  For example, for the function bio_add_page():
- 
--  int bio_add_page(struct bio *bio, struct page *page,
--	unsigned int len, unsigned int offset)
-+  .. code-block:: c
- 
--  Firstly, we can set the base of the object, thus the first string "arg1"
--  stands for the value of the first parameter of this function bio_add_gage(),
-+     int bio_add_page(struct bio *bio, struct page *page,
-+	              unsigned int len, unsigned int offset)
- 
--  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-+  Firstly, we can set the base of the object as first parameter (arg1) to
-+  to the function:
- 
--  Secondly, we can get the value dynamically based on above object.
-+  .. code-block::
- 
--  find the offset of the bi_size in struct bio:
--  $ gdb vmlinux
--  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
--  $1 = (unsigned int *) 0x28
-+     # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
- 
--  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
--	p_bio_add_page_0/trigger
-+  Secondly, we can get the value dynamically based on the object:
- 
--  # cd /sys/kernel/debug/tracing/
--  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
--  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-+  .. code-block::
- 
--  # du -sh /test.txt
--  12.0K   /test.txt
-+     find the offset of the bi_size in struct bio:
-+     $ gdb vmlinux
-+     (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-+     $1 = (unsigned int *) 0x28
- 
--  # cat  /test.txt > /dev/null
--  # cat ./trace
--  # tracer: nop
--  #
--  # entries-in-buffer/entries-written: 128/128   #P:4
--  #
--  #                                _-----=> irqs-off/BH-disabled
--  #                               / _----=> need-resched
--  #                              | / _---=> hardirq/softirq
--  #                              || / _--=> preempt-depth
--  #                              ||| / _-=> migrate-disable
--  #                              |||| /     delay
--  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
--  #              | |         |   |||||     |         |
--               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
--               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
--               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
--               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
--               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
--               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
--               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
--               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
--               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
--             ...
-+     # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-+       p_bio_add_page_0/trigger
-+
-+     # cd /sys/kernel/debug/tracing/
-+     # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-+     # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-+
-+     # du -sh /test.txt
-+     12.0K   /test.txt
-+
-+     # cat  /test.txt > /dev/null
-+     # cat ./trace
-+     # tracer: nop
-+     #
-+     # entries-in-buffer/entries-written: 128/128   #P:4
-+     #
-+     #                                _-----=> irqs-off/BH-disabled
-+     #                               / _----=> need-resched
-+     #                              | / _---=> hardirq/softirq
-+     #                              || / _--=> preempt-depth
-+     #                              ||| / _-=> migrate-disable
-+     #                              |||| /     delay
-+     #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+     #              | |         |   |||||     |         |
-+                  cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-+                  cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-+                  cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
-+                  cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-+                  cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-+                  cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
-+                  cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-+                  cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-+                  cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+                ...
- 
- 7. In-kernel trace event API
- ============================
-
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
+>  	def make_allyesconfig(self, build_dir: str, make_options) -> None:
+>  		kunit_parser.print_with_timestamp(
+>  			'Enabling all CONFIGs for UML...')
+> @@ -297,7 +303,7 @@ class LinuxSourceTree:
+>  		if build_dir and not os.path.exists(build_dir):
+>  			os.mkdir(build_dir)
+>  		try:
+> -			self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
+> +			self._kconfig = self._ops.make_arch_config(self._kconfig)
+>  			self._kconfig.write_to_file(kconfig_path)
+>  			self._ops.make_olddefconfig(build_dir, make_options)
+>  		except ConfigError as e:
+> @@ -328,7 +334,7 @@ class LinuxSourceTree:
+>  			return self.build_config(build_dir, make_options)
+>  
+>  		existing_kconfig = kunit_config.parse_file(kconfig_path)
+> -		self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
+> +		self._kconfig = self._ops.make_arch_config(self._kconfig)
+>  
+>  		if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfig_changed(build_dir):
+>  			return True
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index e21ae1331350..08cb2dc8ef7d 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -430,6 +430,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
+>  				f.write('CONFIG_KUNIT=y')
+>  
+>  			tree = kunit_kernel.LinuxSourceTree(build_dir)
+> +			# Stub out the source tree operations, so we don't have
+> +			# the defaults for any given architecture get in the
+> +			# way.
+> +			tree._ops = kunit_kernel.LinuxSourceTreeOperations(None, None)
+>  			mock_build_config = mock.patch.object(tree, 'build_config').start()
+>  
+>  			# Should generate the .config
+> @@ -447,6 +451,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
+>  				f.write('CONFIG_KUNIT=y\nCONFIG_KUNIT_TEST=y')
+>  
+>  			tree = kunit_kernel.LinuxSourceTree(build_dir)
+> +			# Stub out the source tree operations, so we don't have
+> +			# the defaults for any given architecture get in the
+> +			# way.
+> +			tree._ops = kunit_kernel.LinuxSourceTreeOperations(None, None)
+>  			mock_build_config = mock.patch.object(tree, 'build_config').start()
+>  
+>  			self.assertTrue(tree.build_reconfig(build_dir, make_options=[]))
+> @@ -463,6 +471,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
+>  				f.write('CONFIG_KUNIT=y\nCONFIG_KUNIT_TEST=y')
+>  
+>  			tree = kunit_kernel.LinuxSourceTree(build_dir)
+> +			# Stub out the source tree operations, so we don't have
+> +			# the defaults for any given architecture get in the
+> +			# way.
+> +			tree._ops = kunit_kernel.LinuxSourceTreeOperations(None, None)
+>  			mock_build_config = mock.patch.object(tree, 'build_config').start()
+>  
+>  			# ... so we should trigger a call to build_config()
+> -- 
+> 2.37.0.rc0.161.g10f37bed90-goog
+> 
