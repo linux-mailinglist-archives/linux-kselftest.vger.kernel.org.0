@@ -2,53 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D28A55D56B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5051B55CA69
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 14:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242470AbiF0WO7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jun 2022 18:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
+        id S242492AbiF0WPA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jun 2022 18:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242453AbiF0WO4 (ORCPT
+        with ESMTP id S242452AbiF0WO6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:14:56 -0400
+        Mon, 27 Jun 2022 18:14:58 -0400
 Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A236158
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 15:14:55 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id h13-20020a63e14d000000b0040df75eaa2eso2060045pgk.21
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 15:14:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D8C627E
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 15:14:56 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 134-20020a63018c000000b0040cf04213a1so5671140pgb.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 15:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=tpbMLj90Q5ZZyV7bAnYok0p0SPzRes9kgVh6ocDsDPE=;
-        b=JPmf0L12/7N7ahfNXCXTrk9Gd//dHUi7MDMJs3NR337watOhxy52oo3OTxnoZVwBme
-         nNMWxDszh0z5v2SNA47OWQgqLLGkW2qkpkfyeefC4aabx6t54aXOuOXkEf7XjUuzkeAc
-         CY+Hyaserw/vigQCC7Rzkms8WbevU+ZEnorMZbpLYmRbFBMGOZZi2Fkr2REcTB257B9H
-         /2M0SVqnbK8XdHzDzu8rjvNxrMZRGNu4yDXGiDx8Lu4UIjSeXmjA4JHRfAG8TjGvao8R
-         pI/A1P0TZW3+THwG9Tj1lf1Sg71u6hy95Ba0Hz/YEK4v+ZAcag/ybSZI/sIr6kFB4zZ/
-         11aQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=YG9Q3CRxjKNbFFtdimNgDK1kR2lmE0FhCvDoREvwN2w=;
+        b=Ev/BEy571NJsSBihxqtDR7WyJeVamBhiu+FJBqdrWAfNoGUQxirzSVv5PnbF3dGZPJ
+         gGV9pj6pfT/0r6dm7zifKoYWTEskhCZU8qYLRBYAVsokG1vH6tSqMorscQhy/sQC059E
+         bHkfSjR1+9YPRt5oEl8F+MqyXbCZo0XxOJadeETpTTRtfeXbE/a5/sMCE+tamLKxS1XQ
+         m450uOISq4Q3SvXq4nzLUZXaRO1WXZmXJHyF+eo8FlxT+7a4uzA670sG0m14cBPHQ/Cs
+         1Y/CZEswa6+xFr3eBjxpbYeflBJA+W3DfoVRQ5AMqqKDI+HSTPI4wybfXtWZ7New754C
+         tnig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=tpbMLj90Q5ZZyV7bAnYok0p0SPzRes9kgVh6ocDsDPE=;
-        b=cpKMF6QP3aiIEwHmU69AFjounn4RsF7EbAXkTFR9iPUpyvwM2jwQ6qhRkhTYhBZT/P
-         dsOnBtr9JJk8zQo15TrPIgOc/xUO69H/3x1BKH3yZpwql19wyb7lHTGghBMHmS5qzXw6
-         LcW6lMfHmP3BOAiFzkvwTp6Kl9LZJg8lZDsB/OXIeLiBiSIOpZytOtcAFS3C/nIZ3Njl
-         yUJuQh56eNGu+lTfm4uvl22lxrAKHG2OGlMPQxTxsA3rEwy5LXt10Le/3Qxpa9b+/uUw
-         R4CpiivlMVv/UzX9wIBkQKB5CFzsOF4kHj/js6xLECrw8LXt8LKQOj1ut/bTdc42+IJU
-         3A+A==
-X-Gm-Message-State: AJIora8EWJeO7Bp0RjREuH81hmXnXYiVSk1hxgqz9R9sTGGX5ig/G2MJ
-        t70ctukRH+9m2piOwJ1dz/jurrvVvXOVlg==
-X-Google-Smtp-Source: AGRyM1tLwLtAKfruj8QWEVxGwQLaxFwbNY3dEcAT1EOmq5HkH668rKgSNZZUFSnEinO9PpnHCqqbgj7psExtvA==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=YG9Q3CRxjKNbFFtdimNgDK1kR2lmE0FhCvDoREvwN2w=;
+        b=vJLL1rM6NPsASjyotk2ybvThzBAmO+b+8082hWfGVDz9ruMvUcGNtUUoIJDgDYtQIA
+         rAIPrH3jCzxs4jFY91Oy/YG9zr0Mqlheql6Foka0jdBl9BGi0kR3Md9ddS6Zs02F8S4V
+         U29j93mcE2dOmqsjdSGoX2yRGiCiFYIoyox84VDKXxgK8A4asT3qQRFHBz8Ia5jpcgCk
+         s4LMiPcGrXN5np1rUEw+M4J9w+bCgHsebLzl88BbZvLFcHXbv0CFlg9cZZOSCIaDNrdC
+         RBtoaVEAri81B7lRJSmOD4SvH6V6GE/Qw4TWyIY2JMsI8xcugN5O7bumrKJO1JtRXZqr
+         oyIg==
+X-Gm-Message-State: AJIora/1YfyxZzpvev6dE+rHKjDJsA4zg064AKSqnYrGvu4WZkY8Y+2+
+        RgBGgqJOprob3V1O02eIcdfFAvgTEs+Knw==
+X-Google-Smtp-Source: AGRyM1ugAoe8vRznb1kZSClsb15VkloCeEaGT1QxvE5gF2yNx/Buew4SWd4OLK2twuQvc/jWi/5e8xhorRe2Qg==
 X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a62:aa10:0:b0:525:22bb:b028 with SMTP id
- e16-20020a62aa10000000b0052522bbb028mr186430pff.21.1656368094689; Mon, 27 Jun
- 2022 15:14:54 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 22:14:44 +0000
-Message-Id: <20220627221446.82157-1-dlatypov@google.com>
+ (user=dlatypov job=sendgmr) by 2002:a17:902:e292:b0:16b:8e84:f230 with SMTP
+ id o18-20020a170902e29200b0016b8e84f230mr305396plc.173.1656368096455; Mon, 27
+ Jun 2022 15:14:56 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 22:14:45 +0000
+In-Reply-To: <20220627221446.82157-1-dlatypov@google.com>
+Message-Id: <20220627221446.82157-2-dlatypov@google.com>
 Mime-Version: 1.0
+References: <20220627221446.82157-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v3 1/3] kunit: tool: refactor internal kconfig handling, allow overriding
+Subject: [PATCH v3 2/3] kunit: tool: make --kunitconfig repeatable, blindly concat
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -58,322 +62,317 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, you cannot ovewrwrite what's in your kunitconfig via
---kconfig_add.
-Nor can you override something in a qemu_config via either means.
+It's come up a few times that it would be useful to have --kunitconfig
+be repeatable [1][2].
 
-This patch makes it so we have this level of priority
-* --kconfig_add
-* kunitconfig file (the default or the one from --kunitconfig)
-* qemu_config
+This could be done before with a bit of shell-fu, e.g.
+  $ find fs/ -name '.kunitconfig' -exec cat {} + | \
+    ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
+or equivalently:
+  $ cat fs/ext4/.kunitconfig fs/fat/.kunitconfig | \
+    ./tools/testing/kunit/kunit.py run --kunitconfig=/dev/stdin
 
-The rationale for this order is that the more "dynamic" sources of
-kconfig options should take priority.
+But this can be fairly clunky to use in practice.
 
---kconfig_add is obviously the most dynamic.
-And for kunitconfig, users probably tweak the file manually or specify
---kunitconfig more often than they delve into qemu_config python files.
+And having explicit support in kunit.py opens the door to having more
+config fragments of interest, e.g. options for PCI on UML [1], UML
+coverage [2], variants of tests [3].
+There's another argument to be made that users can just use multiple
+--kconfig_add's, but this gets very clunky very fast (e.g. [2]).
 
-And internally, we convert the kconfigs from a python list into a set or
-dict fairly often. We should just use a dict internally.
-We exposed the set transform in the past since we didn't define __eq__,
-so also take the chance to shore up the kunit_kconfig.Kconfig interface.
+Note: there's a big caveat here that some kconfig options might be
+incompatible. We try to give a clearish error message in the simple case
+where the same option appears multiple times with conflicting values,
+but more subtle ones (e.g. mutually exclusive options) will be
+potentially very confusing for the user. I don't know we can do better.
 
-Example
-=======
+Note 2: if you want to combine a --kunitconfig with the default, you
+either have to do to specify the current build_dir
+> --kunitconfig=.kunit --kunitconfig=additional.config
+or
+> --kunitconfig=tools/testing/kunit/configs/default.config --kunitconifg=additional.config
+each of which have their downsides (former depends on --build_dir,
+doesn't work if you don't have a .kunitconfig yet), etc.
 
-Let's consider the unrealistic example where someone would want to
-disable CONFIG_KUNIT.
-I.e. they run
-$ ./tools/testing/kunit/kunit.py config --kconfig_add=CONFIG_KUNIT=n
-
-Before
-------
-We'd write the following
-> # CONFIG_KUNIT is not set
-> CONFIG_KUNIT_ALL_TESTS=y
-> CONFIG_KUNIT_TEST=y
+Example with conflicting values:
+> $ ./tools/testing/kunit/kunit.py config --kunitconfig=lib/kunit --kunitconfig=/dev/stdin <<EOF
+> CONFIG_KUNIT_TEST=n
+> CONFIG_KUNIT=m
+> EOF
+> ...
+> kunit_kernel.ConfigError: Multiple values specified for 2 options in kunitconfig:
 > CONFIG_KUNIT=y
-> CONFIG_KUNIT_EXAMPLE_TEST=y
-
-And we'd error out with
-> ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-> This is probably due to unsatisfied dependencies.
-> Missing: # CONFIG_KUNIT is not set
-
-After
------
-We'd write the following
-> # CONFIG_KUNIT is not set
+>   vs from /dev/stdin
+> CONFIG_KUNIT=m
+>
 > CONFIG_KUNIT_TEST=y
-> CONFIG_KUNIT_ALL_TESTS=y
-> CONFIG_KUNIT_EXAMPLE_TEST=y
+>   vs from /dev/stdin
+> # CONFIG_KUNIT_TEST is not set
 
-And we'd error out with
-> ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-> This is probably due to unsatisfied dependencies.
-> Missing: CONFIG_KUNIT_EXAMPLE_TEST=y, CONFIG_KUNIT_TEST=y, CONFIG_KUNIT_ALL_TESTS=y
+[1] https://lists.freedesktop.org/archives/dri-devel/2022-June/357616.html
+[2] https://lore.kernel.org/linux-kselftest/CAFd5g45f3X3xF2vz2BkTHRqOC4uW6GZxtUUMaP5mwwbK8uNVtA@mail.gmail.com/
+[3] https://lore.kernel.org/linux-kselftest/CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com/
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
 ---
-v1 -> v2: fix validate_config() func.
-There was a bug found by David, see
-https://lore.kernel.org/linux-kselftest/CAGS_qxpF338dvbB+6QW1n8_agddeS10+nkTQNmT+0UcvoE1gBw@mail.gmail.com/
-v2 -> v3: remove `set_diff()` helper, merge into other kunitconfig
-series
+v1 -> v3: merge with kunitconfig refactor patch, rename
+differing_options() to conflicting_options()
 ---
- tools/testing/kunit/kunit_config.py    | 45 ++++++++++++++------------
- tools/testing/kunit/kunit_kernel.py    | 20 ++++++------
- tools/testing/kunit/kunit_tool_test.py | 45 +++++++++++---------------
- 3 files changed, 54 insertions(+), 56 deletions(-)
+ tools/testing/kunit/kunit.py           | 13 ++++---
+ tools/testing/kunit/kunit_config.py    | 11 +++++-
+ tools/testing/kunit/kunit_kernel.py    | 38 ++++++++++++------
+ tools/testing/kunit/kunit_tool_test.py | 54 +++++++++++++++++++++++---
+ 4 files changed, 91 insertions(+), 25 deletions(-)
 
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 13bd72e47da8..163f6b8ac464 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -291,8 +291,9 @@ def add_common_opts(parser) -> None:
+ 	parser.add_argument('--kunitconfig',
+ 			     help='Path to Kconfig fragment that enables KUnit tests.'
+ 			     ' If given a directory, (e.g. lib/kunit), "/.kunitconfig" '
+-			     'will get  automatically appended.',
+-			     metavar='PATH')
++			     'will get  automatically appended. If repeated, the files '
++			     'blindly concatenated, which might not work in all cases.',
++			     action='append', metavar='PATHS')
+ 	parser.add_argument('--kconfig_add',
+ 			     help='Additional Kconfig options to append to the '
+ 			     '.kunitconfig, e.g. CONFIG_KASAN=y. Can be repeated.',
+@@ -414,7 +415,7 @@ def main(argv, linux=None):
+ 
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-					kunitconfig_path=cli_args.kunitconfig,
++					kunitconfig_paths=cli_args.kunitconfig,
+ 					kconfig_add=cli_args.kconfig_add,
+ 					arch=cli_args.arch,
+ 					cross_compile=cli_args.cross_compile,
+@@ -440,7 +441,7 @@ def main(argv, linux=None):
+ 
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-					kunitconfig_path=cli_args.kunitconfig,
++					kunitconfig_paths=cli_args.kunitconfig,
+ 					kconfig_add=cli_args.kconfig_add,
+ 					arch=cli_args.arch,
+ 					cross_compile=cli_args.cross_compile,
+@@ -457,7 +458,7 @@ def main(argv, linux=None):
+ 	elif cli_args.subcommand == 'build':
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-					kunitconfig_path=cli_args.kunitconfig,
++					kunitconfig_paths=cli_args.kunitconfig,
+ 					kconfig_add=cli_args.kconfig_add,
+ 					arch=cli_args.arch,
+ 					cross_compile=cli_args.cross_compile,
+@@ -476,7 +477,7 @@ def main(argv, linux=None):
+ 	elif cli_args.subcommand == 'exec':
+ 		if not linux:
+ 			linux = kunit_kernel.LinuxSourceTree(cli_args.build_dir,
+-					kunitconfig_path=cli_args.kunitconfig,
++					kunitconfig_paths=cli_args.kunitconfig,
+ 					kconfig_add=cli_args.kconfig_add,
+ 					arch=cli_args.arch,
+ 					cross_compile=cli_args.cross_compile,
 diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-index 75a8dc1683d4..898b2a35eb29 100644
+index 898b2a35eb29..48b5f34b2e5d 100644
 --- a/tools/testing/kunit/kunit_config.py
 +++ b/tools/testing/kunit/kunit_config.py
 @@ -8,7 +8,7 @@
  
  from dataclasses import dataclass
  import re
--from typing import List, Set
-+from typing import Dict, Iterable, Set
+-from typing import Dict, Iterable, Set
++from typing import Dict, Iterable, List, Set, Tuple
  
  CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
  CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
-@@ -32,35 +32,42 @@ class Kconfig:
- 	"""Represents defconfig or .config specified using the Kconfig language."""
- 
- 	def __init__(self) -> None:
--		self._entries = []  # type: List[KconfigEntry]
-+		self._entries = {}  # type: Dict[str, str]
- 
--	def entries(self) -> Set[KconfigEntry]:
--		return set(self._entries)
-+	def __eq__(self, other) -> bool:
-+		if not isinstance(other, self.__class__):
-+			return False
-+		return self._entries == other._entries
- 
--	def add_entry(self, entry: KconfigEntry) -> None:
--		self._entries.append(entry)
-+	def __repr__(self) -> str:
-+		return ','.join(str(e) for e in self.as_entries())
-+
-+	def as_entries(self) -> Iterable[KconfigEntry]:
-+		for name, value in self._entries.items():
-+			yield KconfigEntry(name, value)
-+
-+	def add_entry(self, name: str, value: str) -> None:
-+		self._entries[name] = value
- 
- 	def is_subset_of(self, other: 'Kconfig') -> bool:
--		other_dict = {e.name: e.value for e in other.entries()}
--		for a in self.entries():
--			b = other_dict.get(a.name)
-+		for name, value in self._entries.items():
-+			b = other._entries.get(name)
- 			if b is None:
--				if a.value == 'n':
-+				if value == 'n':
- 					continue
- 				return False
--			if a.value != b:
-+			if value != b:
+@@ -60,6 +60,15 @@ class Kconfig:
  				return False
  		return True
  
++	def conflicting_options(self, other: 'Kconfig') -> List[Tuple[KconfigEntry, KconfigEntry]]:
++		diff = []  # type: List[Tuple[KconfigEntry, KconfigEntry]]
++		for name, value in self._entries.items():
++			b = other._entries.get(name)
++			if b and value != b:
++				pair = (KconfigEntry(name, value), KconfigEntry(name, b))
++				diff.append(pair)
++		return diff
++
  	def merge_in_entries(self, other: 'Kconfig') -> None:
--		if other.is_subset_of(self):
--			return
--		self._entries = list(self.entries().union(other.entries()))
-+		for name, value in other._entries.items():
-+			self._entries[name] = value
- 
- 	def write_to_file(self, path: str) -> None:
- 		with open(path, 'a+') as f:
--			for entry in self.entries():
--				f.write(str(entry) + '\n')
-+			for e in self.as_entries():
-+				f.write(str(e) + '\n')
- 
- def parse_file(path: str) -> Kconfig:
- 	with open(path, 'r') as f:
-@@ -78,14 +85,12 @@ def parse_from_string(blob: str) -> Kconfig:
- 
- 		match = config_matcher.match(line)
- 		if match:
--			entry = KconfigEntry(match.group(1), match.group(2))
--			kconfig.add_entry(entry)
-+			kconfig.add_entry(match.group(1), match.group(2))
- 			continue
- 
- 		empty_match = is_not_set_matcher.match(line)
- 		if empty_match:
--			entry = KconfigEntry(empty_match.group(1), 'n')
--			kconfig.add_entry(entry)
-+			kconfig.add_entry(empty_match.group(1), 'n')
- 			continue
- 
- 		if line[0] == '#':
+ 		for name, value in other._entries.items():
+ 			self._entries[name] = value
 diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 3539efaf99ba..4115781185e1 100644
+index 4115781185e1..f65c996127c3 100644
 --- a/tools/testing/kunit/kunit_kernel.py
 +++ b/tools/testing/kunit/kunit_kernel.py
-@@ -53,8 +53,8 @@ class LinuxSourceTreeOperations:
- 		except subprocess.CalledProcessError as e:
- 			raise ConfigError(e.output.decode())
+@@ -176,6 +176,30 @@ def get_kunitconfig_path(build_dir: str) -> str:
+ def get_old_kunitconfig_path(build_dir: str) -> str:
+ 	return os.path.join(build_dir, OLD_KUNITCONFIG_PATH)
  
--	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
--		pass
-+	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
-+		return base_kunitconfig
- 
- 	def make_allyesconfig(self, build_dir: str, make_options) -> None:
- 		raise ConfigError('Only the "um" arch is supported for alltests')
-@@ -109,9 +109,10 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
- 		self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
- 		self._extra_qemu_params = qemu_arch_params.extra_qemu_params
- 
--	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> None:
-+	def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
- 		kconfig = kunit_config.parse_from_string(self._kconfig)
--		base_kunitconfig.merge_in_entries(kconfig)
-+		kconfig.merge_in_entries(base_kunitconfig)
-+		return kconfig
- 
- 	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
- 		kernel_path = os.path.join(build_dir, self._kernel_path)
-@@ -267,10 +268,10 @@ class LinuxSourceTree:
- 		validated_kconfig = kunit_config.parse_file(kconfig_path)
- 		if self._kconfig.is_subset_of(validated_kconfig):
- 			return True
--		invalid = self._kconfig.entries() - validated_kconfig.entries()
-+		missing = set(self._kconfig.as_entries()) - set(validated_kconfig.as_entries())
- 		message = 'Not all Kconfig options selected in kunitconfig were in the generated .config.\n' \
- 			  'This is probably due to unsatisfied dependencies.\n' \
--			  'Missing: ' + ', '.join([str(e) for e in invalid])
-+			  'Missing: ' + ', '.join(str(e) for e in missing)
- 		if self._arch == 'um':
- 			message += '\nNote: many Kconfig options aren\'t available on UML. You can try running ' \
- 				   'on a different architecture with something like "--arch=x86_64".'
-@@ -282,7 +283,7 @@ class LinuxSourceTree:
- 		if build_dir and not os.path.exists(build_dir):
- 			os.mkdir(build_dir)
- 		try:
--			self._ops.make_arch_qemuconfig(self._kconfig)
-+			self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
- 			self._kconfig.write_to_file(kconfig_path)
- 			self._ops.make_olddefconfig(build_dir, make_options)
- 		except ConfigError as e:
-@@ -303,7 +304,7 @@ class LinuxSourceTree:
- 			return True
- 
- 		old_kconfig = kunit_config.parse_file(old_path)
--		return old_kconfig.entries() != self._kconfig.entries()
-+		return old_kconfig != self._kconfig
- 
- 	def build_reconfig(self, build_dir: str, make_options) -> bool:
- 		"""Creates a new .config if it is not a subset of the .kunitconfig."""
-@@ -313,7 +314,8 @@ class LinuxSourceTree:
- 			return self.build_config(build_dir, make_options)
- 
- 		existing_kconfig = kunit_config.parse_file(kconfig_path)
--		self._ops.make_arch_qemuconfig(self._kconfig)
-+		self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
++def get_parsed_kunitconfig(build_dir: str,
++			   kunitconfig_paths: Optional[List[str]]=None) -> kunit_config.Kconfig:
++	if not kunitconfig_paths:
++		path = get_kunitconfig_path(build_dir)
++		if not os.path.exists(path):
++			shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, path)
++		return kunit_config.parse_file(path)
 +
- 		if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfig_changed(build_dir):
- 			return True
- 		print('Regenerating .config ...')
++	merged = kunit_config.Kconfig()
++
++	for path in kunitconfig_paths:
++		if os.path.isdir(path):
++			path = os.path.join(path, KUNITCONFIG_PATH)
++		if not os.path.exists(path):
++			raise ConfigError(f'Specified kunitconfig ({path}) does not exist')
++
++		partial = kunit_config.parse_file(path)
++		diff = merged.conflicting_options(partial)
++		if diff:
++			diff_str = '\n\n'.join(f'{a}\n  vs from {path}\n{b}' for a, b in diff)
++			raise ConfigError(f'Multiple values specified for {len(diff)} options in kunitconfig:\n{diff_str}')
++		merged.merge_in_entries(partial)
++	return merged
++
+ def get_outfile_path(build_dir: str) -> str:
+ 	return os.path.join(build_dir, OUTFILE_PATH)
+ 
+@@ -221,7 +245,7 @@ class LinuxSourceTree:
+ 	      self,
+ 	      build_dir: str,
+ 	      load_config=True,
+-	      kunitconfig_path='',
++	      kunitconfig_paths: Optional[List[str]]=None,
+ 	      kconfig_add: Optional[List[str]]=None,
+ 	      arch=None,
+ 	      cross_compile=None,
+@@ -237,17 +261,7 @@ class LinuxSourceTree:
+ 		if not load_config:
+ 			return
+ 
+-		if kunitconfig_path:
+-			if os.path.isdir(kunitconfig_path):
+-				kunitconfig_path = os.path.join(kunitconfig_path, KUNITCONFIG_PATH)
+-			if not os.path.exists(kunitconfig_path):
+-				raise ConfigError(f'Specified kunitconfig ({kunitconfig_path}) does not exist')
+-		else:
+-			kunitconfig_path = get_kunitconfig_path(build_dir)
+-			if not os.path.exists(kunitconfig_path):
+-				shutil.copyfile(DEFAULT_KUNITCONFIG_PATH, kunitconfig_path)
+-
+-		self._kconfig = kunit_config.parse_file(kunitconfig_path)
++		self._kconfig = get_parsed_kunitconfig(build_dir, kunitconfig_paths)
+ 		if kconfig_add:
+ 			kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
+ 			self._kconfig.merge_in_entries(kconfig)
 diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 25a2eb3bf114..0fbca18b6e65 100755
+index 0fbca18b6e65..0c5ba3ed35e6 100755
 --- a/tools/testing/kunit/kunit_tool_test.py
 +++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -45,7 +45,7 @@ class KconfigTest(unittest.TestCase):
- 		self.assertTrue(kconfig0.is_subset_of(kconfig0))
+@@ -356,17 +356,46 @@ class LinuxSourceTreeTest(unittest.TestCase):
  
- 		kconfig1 = kunit_config.Kconfig()
--		kconfig1.add_entry(kunit_config.KconfigEntry('TEST', 'y'))
-+		kconfig1.add_entry('TEST', 'y')
- 		self.assertTrue(kconfig1.is_subset_of(kconfig1))
- 		self.assertTrue(kconfig0.is_subset_of(kconfig1))
- 		self.assertFalse(kconfig1.is_subset_of(kconfig0))
-@@ -56,40 +56,28 @@ class KconfigTest(unittest.TestCase):
- 		kconfig = kunit_config.parse_file(kconfig_path)
+ 	def test_invalid_kunitconfig(self):
+ 		with self.assertRaisesRegex(kunit_kernel.ConfigError, 'nonexistent.* does not exist'):
+-			kunit_kernel.LinuxSourceTree('', kunitconfig_path='/nonexistent_file')
++			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=['/nonexistent_file'])
  
- 		expected_kconfig = kunit_config.Kconfig()
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('UML', 'y'))
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('MMU', 'y'))
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('TEST', 'y'))
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('EXAMPLE_TEST', 'y'))
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('MK8', 'n'))
--
--		self.assertEqual(kconfig.entries(), expected_kconfig.entries())
-+		expected_kconfig.add_entry('UML', 'y')
-+		expected_kconfig.add_entry('MMU', 'y')
-+		expected_kconfig.add_entry('TEST', 'y')
-+		expected_kconfig.add_entry('EXAMPLE_TEST', 'y')
-+		expected_kconfig.add_entry('MK8', 'n')
+ 	def test_valid_kunitconfig(self):
+ 		with tempfile.NamedTemporaryFile('wt') as kunitconfig:
+-			kunit_kernel.LinuxSourceTree('', kunitconfig_path=kunitconfig.name)
++			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[kunitconfig.name])
+ 
+ 	def test_dir_kunitconfig(self):
+ 		with tempfile.TemporaryDirectory('') as dir:
+ 			with open(os.path.join(dir, '.kunitconfig'), 'w'):
+ 				pass
+-			kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
++			kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir])
 +
-+		self.assertEqual(kconfig, expected_kconfig)
- 
- 	def test_write_to_file(self):
- 		kconfig_path = os.path.join(test_tmpdir, '.config')
- 
- 		expected_kconfig = kunit_config.Kconfig()
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('UML', 'y'))
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('MMU', 'y'))
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('TEST', 'y'))
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('EXAMPLE_TEST', 'y'))
--		expected_kconfig.add_entry(
--			kunit_config.KconfigEntry('MK8', 'n'))
-+		expected_kconfig.add_entry('UML', 'y')
-+		expected_kconfig.add_entry('MMU', 'y')
-+		expected_kconfig.add_entry('TEST', 'y')
-+		expected_kconfig.add_entry('EXAMPLE_TEST', 'y')
-+		expected_kconfig.add_entry('MK8', 'n')
- 
- 		expected_kconfig.write_to_file(kconfig_path)
- 
- 		actual_kconfig = kunit_config.parse_file(kconfig_path)
--
--		self.assertEqual(actual_kconfig.entries(),
--				 expected_kconfig.entries())
-+		self.assertEqual(actual_kconfig, expected_kconfig)
- 
- class KUnitParserTest(unittest.TestCase):
- 
-@@ -381,8 +369,11 @@ class LinuxSourceTreeTest(unittest.TestCase):
- 			kunit_kernel.LinuxSourceTree('', kunitconfig_path=dir)
++	def test_multiple_kunitconfig(self):
++		want_kconfig = kunit_config.Kconfig()
++		want_kconfig.add_entry('KUNIT', 'y')
++		want_kconfig.add_entry('KUNIT_TEST', 'm')
++
++		with tempfile.TemporaryDirectory('') as dir:
++			other = os.path.join(dir, 'otherkunitconfig')
++			with open(os.path.join(dir, '.kunitconfig'), 'w') as f:
++				f.write('CONFIG_KUNIT=y')
++			with open(other, 'w') as f:
++				f.write('CONFIG_KUNIT_TEST=m')
++				pass
++
++			tree = kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir, other])
++			self.assertTrue(want_kconfig.is_subset_of(tree._kconfig), msg=tree._kconfig)
++
++
++	def test_multiple_kunitconfig_invalid(self):
++		with tempfile.TemporaryDirectory('') as dir:
++			other = os.path.join(dir, 'otherkunitconfig')
++			with open(os.path.join(dir, '.kunitconfig'), 'w') as f:
++				f.write('CONFIG_KUNIT=y')
++			with open(other, 'w') as f:
++				f.write('CONFIG_KUNIT=m')
++
++			with self.assertRaisesRegex(kunit_kernel.ConfigError, '(?s)Multiple values.*CONFIG_KUNIT'):
++				kunit_kernel.LinuxSourceTree('', kunitconfig_paths=[dir, other])
++
  
  	def test_kconfig_add(self):
-+		want_kconfig = kunit_config.Kconfig()
-+		want_kconfig.add_entry('NOT_REAL', 'y')
-+
- 		tree = kunit_kernel.LinuxSourceTree('', kconfig_add=['CONFIG_NOT_REAL=y'])
--		self.assertIn(kunit_config.KconfigEntry('NOT_REAL', 'y'), tree._kconfig.entries())
-+		self.assertTrue(want_kconfig.is_subset_of(tree._kconfig), msg=tree._kconfig)
+ 		want_kconfig = kunit_config.Kconfig()
+@@ -637,7 +666,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		kunit.main(['run', '--kunitconfig=mykunitconfig'])
+ 		# Just verify that we parsed and initialized it correctly here.
+ 		mock_linux_init.assert_called_once_with('.kunit',
+-							kunitconfig_path='mykunitconfig',
++							kunitconfig_paths=['mykunitconfig'],
+ 							kconfig_add=None,
+ 							arch='um',
+ 							cross_compile=None,
+@@ -649,19 +678,32 @@ class KUnitMainTest(unittest.TestCase):
+ 		kunit.main(['config', '--kunitconfig=mykunitconfig'])
+ 		# Just verify that we parsed and initialized it correctly here.
+ 		mock_linux_init.assert_called_once_with('.kunit',
+-							kunitconfig_path='mykunitconfig',
++							kunitconfig_paths=['mykunitconfig'],
+ 							kconfig_add=None,
+ 							arch='um',
+ 							cross_compile=None,
+ 							qemu_config_path=None)
  
- 	def test_invalid_arch(self):
- 		with self.assertRaisesRegex(kunit_kernel.ConfigError, 'not a valid arch, options are.*x86_64'):
-
-base-commit: 274295c6e53f8b8b8dfa8b24a3fcb8a9d670c22c
++	@mock.patch.object(kunit_kernel, 'LinuxSourceTree')
++	def test_run_multiple_kunitconfig(self, mock_linux_init):
++		mock_linux_init.return_value = self.linux_source_mock
++		kunit.main(['run', '--kunitconfig=mykunitconfig', '--kunitconfig=other'])
++		# Just verify that we parsed and initialized it correctly here.
++		mock_linux_init.assert_called_once_with('.kunit',
++							kunitconfig_paths=['mykunitconfig', 'other'],
++							kconfig_add=None,
++							arch='um',
++							cross_compile=None,
++							qemu_config_path=None)
++
++
+ 	@mock.patch.object(kunit_kernel, 'LinuxSourceTree')
+ 	def test_run_kconfig_add(self, mock_linux_init):
+ 		mock_linux_init.return_value = self.linux_source_mock
+ 		kunit.main(['run', '--kconfig_add=CONFIG_KASAN=y', '--kconfig_add=CONFIG_KCSAN=y'])
+ 		# Just verify that we parsed and initialized it correctly here.
+ 		mock_linux_init.assert_called_once_with('.kunit',
+-							kunitconfig_path=None,
++							kunitconfig_paths=None,
+ 							kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
+ 							arch='um',
+ 							cross_compile=None,
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 
