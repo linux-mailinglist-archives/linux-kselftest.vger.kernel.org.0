@@ -2,64 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D92655D008
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CDB55D3CE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236048AbiF0RAV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jun 2022 13:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
+        id S239833AbiF0RDz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jun 2022 13:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235437AbiF0RAV (ORCPT
+        with ESMTP id S239826AbiF0RDz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:00:21 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C21F101EA
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 10:00:20 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id r133so10223498iod.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 10:00:20 -0700 (PDT)
+        Mon, 27 Jun 2022 13:03:55 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0F914006
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 10:03:53 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id k15so10205611iok.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 10:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1n5+tTXfxvB7wLEdpHqCm9+HbbRZEAGOiM6JchYLEEA=;
-        b=TuIDyDjh+Fh8IvzIgcxLkECsvGgepX8QCxNW5muxgMj4AuxdvJykORfH+B33q2pSUz
-         aCPMMkkphNHOGRuWbIWhyQThYGYG0oAT8QKG8Ii+lgnwRaCSFyvSV15xWdJalgo72ieJ
-         BaaPgTXTMUgSePlhvCeaA9m9fgtz63Wslx2qY=
+        bh=E++Zo91YUYL49yU+TLX4vsiJviRDwZYo3TtlF2dL+yc=;
+        b=TH4qcvBC1WfFEVD0R2JEuUcpb16hZQ61gitb2lAXhJHnsDqjmg6llAHTDZe6jj0mxj
+         T/wEf4Z9pMJPuHomU36S1GhPxojnvtssDMENzgI6XhnASUHDJxfv8WJPh5LFQYXCf9Mq
+         rx2SK6QAf9KONBavHi4wNImeJvU8tMpT7dAzY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=1n5+tTXfxvB7wLEdpHqCm9+HbbRZEAGOiM6JchYLEEA=;
-        b=kKdbEWDXn45qvRlFApm9vlYMCCIb5oph0pJ14BkokdK/QLqHtwrsuM0LdzwIpE5Gkv
-         mFtS/Shj71SEi2MPTyDFhH8ByDXkrfiJMS8l5uoRLAC58GHA5Q5k3+w1z8HKIogtStsy
-         L9Hg+bEO4/nE+dGIFyt/nTL0A6/wPKoIuJ9rERW+J2XMEf2YDRvLC7nZhPCpaTEHc6tR
-         jXcgedf2ni5NskLwtjzwjSNAGIMZYvQkk/vXEDMysGgAsuqDgMLyj4rKU1rOSTI+VNDO
-         yuEDizLc1Qnc3LLTeKGWqbq9I4exMcOB/gW/8n0NzD+oyQ1LP4TXubSzPr1qgBq2lawo
-         nKag==
-X-Gm-Message-State: AJIora/U5rdvEBAm6EjxC0yLA0+w0oHsw84vBmabHjbqSPyZp9mUaQds
-        j//NzrdrBOQ9Alku0Cbj27a6EA==
-X-Google-Smtp-Source: AGRyM1vka6RjReMyIAyXcFVuxqCEEEXnk7tcE9JyWX3Aza/OqWoGpuS3GK/cWr9ft69qR0A9bFPljQ==
-X-Received: by 2002:a02:c48e:0:b0:33c:25bb:a1b2 with SMTP id t14-20020a02c48e000000b0033c25bba1b2mr6820280jam.180.1656349219772;
-        Mon, 27 Jun 2022 10:00:19 -0700 (PDT)
+        bh=E++Zo91YUYL49yU+TLX4vsiJviRDwZYo3TtlF2dL+yc=;
+        b=4p9QjcZjW7ypsjt/a3TO/LuG3pIuScf4PYnv+JQ2xEdcGdTM1MheUmFaOza8k1X+xC
+         yaC1jaBGlTRuBIdeoS3yt/FmI/6cHQpLTE7B0AG1LYfPAZ1zNL30Ugo6eEyMERaj4R+b
+         olevB/0sbTme54mkgWgtVtwp94+DzWVZN/HQPxViZXe+4zzCrKd20nmA5wJQ9fcA+3X1
+         FooxzmWLtmupdYWBqOoJXnx0kNa6LYntyILmKNQK+YAzMUFFI1RypzhNKObzmjvBux60
+         K9hwBHTV17sikF/OWAy0iC20EItoi/p0itmoxMYP4cshPNNeROlvvjzi8yqkkVxoZ/l2
+         M/Tw==
+X-Gm-Message-State: AJIora+7/vUDxaCOS4wnZFeunUq7rg6zapJPUxMqGmSDXlB0mgSYNVZt
+        nIHb2okKsTC3YEg40jCSpaIh5w==
+X-Google-Smtp-Source: AGRyM1v+GraNnGmLT3MJ5XC6BajyKtuce8TmvgiRH13sBZEVJK3xUNAN7bWSx+L2B2EU5t4WqU2UeQ==
+X-Received: by 2002:a05:6638:f16:b0:339:e45e:2cb4 with SMTP id h22-20020a0566380f1600b00339e45e2cb4mr8526928jas.151.1656349433131;
+        Mon, 27 Jun 2022 10:03:53 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f11-20020a02a80b000000b0033c14d2386bsm3090948jaj.75.2022.06.27.10.00.19
+        by smtp.gmail.com with ESMTPSA id q3-20020a02a983000000b0033be74df72csm3881238jam.3.2022.06.27.10.03.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 10:00:19 -0700 (PDT)
-Subject: Re: [PATCH v4] kselftests/damon: add support for cases where debugfs
- cannot be read
-To:     SeongJae Park <sj@kernel.org>, Gautam <gautammenghani201@gmail.com>
-Cc:     shuah@kernel.org, damon@lists.linux.dev, linux-mm@kvack.org,
+        Mon, 27 Jun 2022 10:03:52 -0700 (PDT)
+Subject: Re: [PATCH] kselftests: Enable the echo command to print newlines in
+ Makefile
+To:     Gautam <gautammenghani201@gmail.com>, shuah@kernel.org,
+        brauner@kernel.org, keescook@chromium.org
+Cc:     kafai@fb.com, songliubraving@fb.com,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220625200334.83818-1-sj@kernel.org>
+References: <20220625135455.167939-1-gautammenghani201@gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7d6b7de6-4609-e6ca-0a88-1f9799c70769@linuxfoundation.org>
-Date:   Mon, 27 Jun 2022 11:00:18 -0600
+Message-ID: <0c6c6966-0164-12b5-f73f-1ecf157e196f@linuxfoundation.org>
+Date:   Mon, 27 Jun 2022 11:03:52 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220625200334.83818-1-sj@kernel.org>
+In-Reply-To: <20220625135455.167939-1-gautammenghani201@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -73,61 +76,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/25/22 2:03 PM, SeongJae Park wrote:
-> Hi Gautam,
+On 6/25/22 7:54 AM, Gautam wrote:
+> In the install section of the main Makefile of kselftests, the echo
+> command is used with -n flag, which disables the printing of new line
+> due to which the output contains "\n" chars as follows:
 > 
-> On Sun, 26 Jun 2022 01:22:45 +0530 Gautam <gautammenghani201@gmail.com> wrote:
+>    Emit Tests for alsa\nSkipping non-existent dir: arm64
+>    Emit Tests for breakpoints\nEmit Tests for capabilities\n
 > 
->> The kernel is in lockdown mode when secureboot is enabled and hence
->> debugfs cannot be used. Add support for this and other general cases
->> where debugfs cannot be read and communicate the same to the user before
->> running tests.
->>
->> Signed-off-by: Gautam <gautammenghani201@gmail.com>
+> This patch fixes the above bug by using the -e flag.
 > 
-> Reviewed-by: SeongJae Park <sj@kernel.org>
+> Signed-off-by: Gautam <gautammenghani201@gmail.com>
+> ---
+>   tools/testing/selftests/Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index de11992dc577..52e31437f1a3 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -253,7 +253,7 @@ ifdef INSTALL_PATH
+>   	for TARGET in $(TARGETS); do \
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>   		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+> -		echo -n "Emit Tests for $$TARGET\n"; \
+> +		echo -ne "Emit Tests for $$TARGET\n"; \
+>   		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+>   			-C $$TARGET emit_tests >> $(TEST_LIST); \
+>   	done;
 > 
-> Thanks,
-> SJ
-> 
->> ---
->> Changes in v2:
->> 1. Modify the error message to account for general cases.
->> 2. Change the return code so that the test is skipped.
->>
->> Changes in v3:
->> 1. Change the name of variable holding the error message.
->>
->> Changes in v4:
->> 1. Correct the mode of the source file.
->>
->>   tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
->> index 0189db81550b..0328ac0b5a5e 100644
->> --- a/tools/testing/selftests/damon/_chk_dependency.sh
->> +++ b/tools/testing/selftests/damon/_chk_dependency.sh
->> @@ -26,3 +26,13 @@ do
->>   		exit 1
->>   	fi
->>   done
->> +
->> +permission_error="Operation not permitted"
->> +for f in attrs target_ids monitor_on
->> +do
->> +	status=$( cat "$DBGFS/$f" 2>&1 )
->> +	if [ "${status#*$permission_error}" != "$status" ]; then
->> +		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
 
-btw - does this run as a regular user or does it need root privilege?
-If so add a test for that and skip with a message.
->> +		exit $ksft_skip
->> +	fi
->> +done
->> -- 
->> 2.36.1
->
+Thank you. Will be applied to kselftest next for Linux 5.20-rc1
+
 thanks,
 -- Shuah
