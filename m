@@ -2,63 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8351C55E314
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B3C55CE55
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 15:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239746AbiF0T5v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jun 2022 15:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S240241AbiF0UA0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jun 2022 16:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238391AbiF0T5t (ORCPT
+        with ESMTP id S237891AbiF0UAX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:57:49 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CAA1AF06
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 12:57:48 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id m13so10775528ioj.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 12:57:48 -0700 (PDT)
+        Mon, 27 Jun 2022 16:00:23 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285FF1C918
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 13:00:23 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id k15so10711006iok.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jun 2022 13:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lqwOAoba/ks14RAlOuCuq3KoOwqWCZzhrVHd00SRYuU=;
-        b=EIi1+WIUXf3QH2AIHTiPlmrQhAjCiWwqMV/c4LV89ASzefFOIA7JDqpFHQ3unPykkr
-         I3VNmPE2O7qeNSlRDakDrvJcfUqnFL+Bvt1bVCFcVYdruUYTODGwQl6TJDVEo2l3y0Sn
-         pE9upRnscBoiyPkoLPi087ULasFmtuJW8BBgw=
+        bh=PmCKzNT4RC0cnhUtaHaQ03s7DAWtzdqqPOrOyNCaBG4=;
+        b=Lt+YE31WcR2166d1SPefS3gly61tzJRoFn0vjHM7iUytsQWmwywyNP1NhELFviJYJg
+         z0yK8zqzfS6guP+e0ELetZxZop9Da7wzGBAYCsqVaQfxTnumc17G9lIZt69fr37cvpD8
+         O81in/LREwcQ83rDdRe+gnb+QaVaEnmCak8yU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=lqwOAoba/ks14RAlOuCuq3KoOwqWCZzhrVHd00SRYuU=;
-        b=I8914gwcLxVSyJ0wTw8EBxBCqTABHpSWRFyrU31vDgF0YH7ul8zcRp8pQ3bln6rqN6
-         SgXUdfnYrqW/Jk//euqStFGcip22vlfDpXU9/peJWXj1u0xM1z5a8oi6knxhAEhVghxZ
-         VangGhEpHKQEv/m+5+lMRAZ6OEdHP1suU6uNaGPMfXpQ0hSoy2Q6hC0XexeUPnSwsIVx
-         xFShtNjXB8oxS8TMi4b7dC1Rx0oN3hebcppSvoS0tCoOi/wjfLYolyE/aIKuLzA9UsQQ
-         X+ecwmDai4LWBMAP+pKy2cgLcvE/ipT+yf4TB+oVAWQi8E7QKDqnKun7o5d5tCfiLe1g
-         53Aw==
-X-Gm-Message-State: AJIora8QkMmr0frNh1j1W1ehVhAJZaC15995srTV2uztbyVPDQqEUuDU
-        2bNXSyFSkeGSXv0BNRHKIzIiI7N3PZ9/3A==
-X-Google-Smtp-Source: AGRyM1vPUY5rBcsCKVKLXXe91Fex4P38D7+JHGrIjDVlAu1abFJfQoGRYq2ydMVgVtbhYTyQBUJapQ==
-X-Received: by 2002:a5d:9c45:0:b0:675:1774:74a2 with SMTP id 5-20020a5d9c45000000b00675177474a2mr7127442iof.104.1656359868372;
-        Mon, 27 Jun 2022 12:57:48 -0700 (PDT)
+        bh=PmCKzNT4RC0cnhUtaHaQ03s7DAWtzdqqPOrOyNCaBG4=;
+        b=6yWW7pI47dMlF/R+/rrovdttMExXR2lXJswPV22jIDA5ODNyHsQ7oLk1pqAv54bwOx
+         V2OUvhFdEqoZ2uFgR6vXymj8C24PC9/qymEGAN4RRHS4bpWYRPE3sDJz6fYCNy076HRj
+         DoRzSmY+I15zWLuuN4vjuHKivvCZYISSx3dgJa5rhiKO4tnZUfvE5J3b6Z1RnA/SFsG/
+         nR+iSTdoeJHIQV36sJ11pAwUG1FMaVlnhrTmWpHvm5zG4KiYgSH5p84clwIchLgHDIbn
+         8AE7YIfHEEzvXIC73JbZYb0C+GGgRJS7ZNlYnkfjIAVZWQhEy0lvZYtgKVK7rxdMYWpz
+         sovA==
+X-Gm-Message-State: AJIora8LcBiqaPYg3av0mW4IZ5L8FkifiGx09TSxEcQmL2/7nPMSlwqr
+        qaY0WlFCnWHMcjf5ckDfsrCtBA==
+X-Google-Smtp-Source: AGRyM1sxkFZ/FihbfEp2fsnz9ta8t0G6W1fz3wAwi7f1Z8Fj4gM/2esUWtYgHvBxcSjeadYfKWjDOQ==
+X-Received: by 2002:a05:6602:2c4e:b0:657:4115:d9e4 with SMTP id x14-20020a0566022c4e00b006574115d9e4mr7259526iov.91.1656360022577;
+        Mon, 27 Jun 2022 13:00:22 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t16-20020a92dc10000000b002d94906dacfsm4889401iln.67.2022.06.27.12.57.47
+        by smtp.gmail.com with ESMTPSA id r16-20020a02b110000000b0032e271a558csm5039190jah.168.2022.06.27.13.00.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 12:57:48 -0700 (PDT)
-Subject: Re: [PATCH] tools: Strong conversion of void type pointer could be
- removed
-To:     Li kunyu <kunyu@nfschina.com>, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mon, 27 Jun 2022 13:00:22 -0700 (PDT)
+Subject: Re: [PATCH v12 3/4] trace/objtrace: Add testcases for objtrace
+To:     Jeff Xie <xiehuan09@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220627085654.2902-1-kunyu@nfschina.com>
+References: <20220606160943.663180-1-xiehuan09@gmail.com>
+ <20220606160943.663180-4-xiehuan09@gmail.com>
+ <20220626010331.f2be529cfb52706d58bbdc2f@kernel.org>
+ <CAEr6+EB2_nfpZW00_4pDcvhqpO9abEPZNA5m8pU6DmNWPRKjEQ@mail.gmail.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <9b587975-db5b-c7bf-eb8f-bd6e5c3d9f54@linuxfoundation.org>
-Date:   Mon, 27 Jun 2022 13:57:47 -0600
+Message-ID: <55f53474-a2c8-dd56-a473-8cec8d2f9e8e@linuxfoundation.org>
+Date:   Mon, 27 Jun 2022 14:00:21 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20220627085654.2902-1-kunyu@nfschina.com>
+In-Reply-To: <CAEr6+EB2_nfpZW00_4pDcvhqpO9abEPZNA5m8pU6DmNWPRKjEQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,48 +77,27 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/27/22 2:56 AM, Li kunyu wrote:
-> The void pointer argument does not require a cast assignment because it
-> is the address passed.
+On 6/25/22 11:05 AM, Jeff Xie wrote:
+> Hi Masami,
+> 
+> On Sun, Jun 26, 2022 at 12:03 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>>
+>> Hi,
+>>
+>> This looks good to me (and I tested).
+>>
+>> Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>
+>> BTW, please use 'selftests/ftrace:' tag instead of (or in addition to)
+>> 'trace/objtrace:' for the ftracetest patch. And please Cc to
+>> linux-kselftest@vger.kernel.org and Shuah Khan.
+> 
+> Thanks for the reminder, I will do it like this in my next version.
 > 
 
-Please include information on you found this problem with output
-from the tool if any used. Send v2 with that information included
-in the commit log.
-
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
-> ---
->   tools/testing/selftests/x86/fsgsbase.c      | 2 +-
->   tools/testing/selftests/x86/test_vsyscall.c | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
-> index 8c780cce941d..5d99261317e1 100644
-> --- a/tools/testing/selftests/x86/fsgsbase.c
-> +++ b/tools/testing/selftests/x86/fsgsbase.c
-> @@ -63,7 +63,7 @@ static void clearhandler(int sig)
->   
->   static void sigsegv(int sig, siginfo_t *si, void *ctx_void)
->   {
-> -	ucontext_t *ctx = (ucontext_t*)ctx_void;
-> +	ucontext_t *ctx = ctx_void;
->   
->   	if (!want_segv) {
->   		clearhandler(SIGSEGV);
-> diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
-> index 5b45e6986aea..2416941a0952 100644
-> --- a/tools/testing/selftests/x86/test_vsyscall.c
-> +++ b/tools/testing/selftests/x86/test_vsyscall.c
-> @@ -184,7 +184,7 @@ static volatile unsigned long segv_err;
->   
->   static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
->   {
-> -	ucontext_t *ctx = (ucontext_t *)ctx_void;
-> +	ucontext_t *ctx = ctx_void;
->   
->   	segv_err =  ctx->uc_mcontext.gregs[REG_ERR];
->   	siglongjmp(jmpbuf, 1);
-> 
+Yes. Please. It isn't my Inbox or patchwork ... Send v2 with Masami's
+Tested-by and Ack so I can pull this in.
 
 thanks,
 -- Shuah
