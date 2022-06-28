@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5609E55EBB0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 20:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CD955EBAB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 20:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbiF1SDD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Jun 2022 14:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S233461AbiF1SDB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Jun 2022 14:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbiF1SC1 (ORCPT
+        with ESMTP id S233884AbiF1SCi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:02:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369213CC2;
-        Tue, 28 Jun 2022 11:02:27 -0700 (PDT)
+        Tue, 28 Jun 2022 14:02:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA6512AF1;
+        Tue, 28 Jun 2022 11:02:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3C0761A7B;
-        Tue, 28 Jun 2022 18:02:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C5F9C341CA;
-        Tue, 28 Jun 2022 18:02:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 492BDB81F57;
+        Tue, 28 Jun 2022 18:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4444FC341C8;
+        Tue, 28 Jun 2022 18:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656439346;
+        s=k20201202; t=1656439355;
         bh=Q9TQo1YpqN5c0AN7PcviO9s8yzNZpGDadJSGpTvGND8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uKiiaPzf2ZvHFLudRBkGB21dFDVzVaSbQQHMWq0KyyzxdxN871GhxPOoIK0ZjgIaI
-         xjGSO0xKxWknDuxYwa0rK0HcYswkrrUUVcHBZ29G5uC3R4vnyKpDpxvXjproBWDJIH
-         /L7DuPZE4pWblmD2QiBgnSmfGclV5jQ5NFOKnO0Jrh1dAFcMCwVAYXV35c7fMvgohr
-         vFmI74CAVk+Mb2omqoTl83GdIpB+1U1p4dhZo/oeYREiwY5KgQZqvJ5xKWsLeHwpLZ
-         gAgAVOufdBYK3UJlKLIERiVA++LWOsinbqwoNuELI4PD6bcDMd4YRrjzgJX71gdXAK
-         +h7jenDRStdZA==
+        b=XNpRuCV+U3ebLSUgntzijnXWzfjAmrlPU397uTsm22v32ApYGzmwT31udj7DgIH70
+         WFmyUwMe8oDcicnH6tMHAdjFu7DI43onAD45AtCSoW2IC8vPfx39z7D/BCVqhld2lk
+         JOKLD6UD+FZ/TNZp8uo8/hjR9Gw2HmF7Wk9u06qHspTbAOiyzE0/ZJA6CvCTEdWM96
+         ufBr4E6sGLIH/fdM4LAvYo5sLz/sZTvgYJh0OJDYAlrA7pCf/MCzKp79yBDP1ml0eN
+         yWFqr5Yk28HShv0VHQAqKaR357vvYA7bBXUf6NWLktUiqspWZc+uZKsXbfVKl+o0hi
+         LOOetByChqzGQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Raghavendra Rao Ananta <rananta@google.com>,
@@ -44,12 +44,12 @@ Cc:     Raghavendra Rao Ananta <rananta@google.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH MANUALSEL 5.18 2/3] selftests: KVM: Handle compiler optimizations in ucall
-Date:   Tue, 28 Jun 2022 14:02:16 -0400
-Message-Id: <20220628180220.621172-2-sashal@kernel.org>
+Subject: [PATCH MANUALSEL 5.15 2/3] selftests: KVM: Handle compiler optimizations in ucall
+Date:   Tue, 28 Jun 2022 14:02:27 -0400
+Message-Id: <20220628180230.621228-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220628180220.621172-1-sashal@kernel.org>
-References: <20220628180220.621172-1-sashal@kernel.org>
+In-Reply-To: <20220628180230.621228-1-sashal@kernel.org>
+References: <20220628180230.621228-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
