@@ -2,103 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58F455E955
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 18:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C9855E91D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jun 2022 18:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240702AbiF1OUd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Jun 2022 10:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
+        id S1344206AbiF1OjF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Jun 2022 10:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiF1OUc (ORCPT
+        with ESMTP id S1347026AbiF1OjE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jun 2022 10:20:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A7220BD6;
-        Tue, 28 Jun 2022 07:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=bGZWR4+xFQDcZf+1dFjdwobB0qRnC6+pf315BRLfGmw=; b=P+YP6JXp82I3hU0HChO35R7Xd5
-        SlXmDXZWicbX2zdNga0elkAGrONI5wXy5yU2x7sSjY8AljxvBkYBG+rRDz5Ey1jajKiWEO2cgYk2j
-        bZfnvlDg2OduF4iL3Y3QWbWw62OgHA2cVz5HlevQ37by6ZqZfT2mjXb1hwi9C0YYtWjBBwqpbvlOe
-        rn4Zyrxvf3BJC+0dQP3ONHPMssC1Xpak1p4zjB154q37hYif/uf+hydGitiKez0WNoNyTM821wI1/
-        TyHjtdSCs+jfuSKE+Xj95liXXik6VX8wC1AGILmORkZSYkhl0leBu8bx/A2CqtwJ+4yYA3I3mfrKa
-        tAaOvBHw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o6C4p-006gmR-KJ; Tue, 28 Jun 2022 14:20:27 +0000
-Message-ID: <62cdc6ce-1940-8b94-6c96-0f48f62c03d3@infradead.org>
-Date:   Tue, 28 Jun 2022 07:20:25 -0700
+        Tue, 28 Jun 2022 10:39:04 -0400
+Received: from smtp14.infineon.com (smtp14.infineon.com [IPv6:2a00:18f0:1e00:4::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741E72A941;
+        Tue, 28 Jun 2022 07:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1656427140; x=1687963140;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aaJgMADj7ev1K3Is1fXfxdTNXcbOe+xlCWeo10RKNAY=;
+  b=mDTk8hap1JLpaPQwUdO7OXNwUlLI8iFNX/jFXUlECNDLY/inrYMZE4FC
+   tiUtMnQDdWSUdVn7+tGphQNKnlIeVJOGCpw5DNnRHVTOUdWau4RLxSo5B
+   fIm61cCPTMu15sopUImVMbXRrhwHd9vzGR8u0Ne6qMIIX2Ix+lglbq2Ki
+   E=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="128773746"
+X-IronPort-AV: E=Sophos;i="5.92,229,1650924000"; 
+   d="scan'208";a="128773746"
+Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
+  by smtp14.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 16:38:55 +0200
+Received: from MUCSE822.infineon.com (MUCSE822.infineon.com [172.23.29.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
+        Tue, 28 Jun 2022 16:38:54 +0200 (CEST)
+Received: from MUCSE818.infineon.com (172.23.29.44) by MUCSE822.infineon.com
+ (172.23.29.53) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 28 Jun
+ 2022 16:38:54 +0200
+Received: from smaha-lin-dev01.agb.infineon.com (172.23.8.247) by
+ MUCSE818.infineon.com (172.23.29.44) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.26; Tue, 28 Jun 2022 16:38:54 +0200
+From:   Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+To:     <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <jarkko@kernel.org>, <peterhuewe@gmx.de>,
+        <stefan.mahnke-hartmann@infineon.com>,
+        <johannes.holland@infineon.com>
+Subject: [PATCH v2] selftests/tpm2: increase timeout for kselftests
+Date:   Tue, 28 Jun 2022 16:39:27 +0200
+Message-ID: <20220628143927.26043-1-stefan.mahnke-hartmann@infineon.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] Documentation: kunit: eliminate code-block warnings
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, Harinder Singh <sharinder@google.com>,
-        Tim Bird <tim.bird@sony.com>
-References: <20220401024707.10550-1-rdunlap@infradead.org>
- <87fsjt50c8.fsf@meer.lwn.net>
- <4c403239-3c71-4ab9-2168-f7e9d77008b2@infradead.org>
- <20220628081744.7e6955e6@sal.lan>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220628081744.7e6955e6@sal.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE803.infineon.com (172.23.29.29) To
+ MUCSE818.infineon.com (172.23.29.44)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mauro,
+From: Johannes Holland <johannes.holland@infineon.com>
 
-On 6/28/22 00:17, Mauro Carvalho Chehab wrote:
-> Em Sat, 25 Jun 2022 08:12:00 -0700
-> Randy Dunlap <rdunlap@infradead.org> escreveu:
-> 
->>> So which version of Sphinx are you using?  The language argument became
->>> optional in 2.0, so you'd need to be running something pretty ancient to
->>> see this.
->>>
->>> Ah, I see 1.8.5 in your later message...how wedded are you to that
->>> version?  
->>
->> It's what ships with OpenSuse Leap 15.3, which I have been using for quite
->> a long time.
->>
->> I see that there is now OpenSuse Leap 15.4, so I could upgrade to that,
->> but I don't know what version on Sphinx it uses.
-> 
-> It seems that there are two versions on it, packaged with different
-> names:
-> 
-> 2.3.1:
-> 	https://download.opensuse.org/distribution/leap/15.4/repo/oss/noarch/python3-Sphinx-2.3.1-150400.1.7.noarch.rpm
-> 4.2.0:
-> 	https://download.opensuse.org/distribution/leap/15.4/repo/oss/noarch/python3-Sphinx_4_2_0-4.2.0-150400.11.6.noarch.rpm
-> 
-> It should be noticed that, while we don't decide to remove support for
-> Sphinx < 3, kernel-doc has two different outputs, depending on Sphinx C
-> domain support. The legacy support is enabled with version < 3 [1].
-> 
-> As we're currently discussing dropping support for Sphinx version < 3,
-> I would recommend you to use the 4.2 package.
-> 
-> Regards,
-> Mauro
-> 
-> [1] Version 3.0 is a bad choice, as the C domain is partially broken.
+Due to CreatePrimary commands which need to create RSA keys of
+increasing size, the timeout value need to be raised, as well.
+Default is 45s.
 
-Thanks for the info. I'll take care of it.
+Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+Signed-off-by: Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+---
+Changelog:
+ * v2:
+   * Add maintainter to recipients
+   * Change subject
+ tools/testing/selftests/tpm2/settings | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 tools/testing/selftests/tpm2/settings
 
+diff --git a/tools/testing/selftests/tpm2/settings b/tools/testing/selftests/tpm2/settings
+new file mode 100644
+index 000000000000..919bc3803f03
+--- /dev/null
++++ b/tools/testing/selftests/tpm2/settings
+@@ -0,0 +1,2 @@
++timeout=600
++
 -- 
-~Randy
+2.25.1
+
