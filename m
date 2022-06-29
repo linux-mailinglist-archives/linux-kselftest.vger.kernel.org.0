@@ -2,140 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6C95609E9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jun 2022 21:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C2E560A4A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jun 2022 21:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiF2TFc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jun 2022 15:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
+        id S229948AbiF2T2e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jun 2022 15:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiF2TFb (ORCPT
+        with ESMTP id S230139AbiF2T2d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jun 2022 15:05:31 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B948F1F624
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jun 2022 12:05:30 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id r1so14945490plo.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jun 2022 12:05:30 -0700 (PDT)
+        Wed, 29 Jun 2022 15:28:33 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6888FB31;
+        Wed, 29 Jun 2022 12:28:31 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p14so16014370pfh.6;
+        Wed, 29 Jun 2022 12:28:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0GeTuZBlfQ/Y+eNOOfDxK3ZM+hvemUe7AZCxhx5HzJ8=;
-        b=JJYOmj+afcpj4I6DhLvv1DJGSO9RU/r60gm7oBHP/z1whsgUGzshmjyS+68ykpAOrB
-         PZMVASKhx3vYZgCdJaQmdVJhBWuZNtboZlCiQyj6WAMRN4Kvh07DF4VTpK0Sj27Lsl6/
-         B+YuMmqeZEeQs4/Hm/ALEzJa6KWlGaRQbzl9tn855YrjL5qXif4aSzoOgvxnIP9DSA9A
-         AjCVE/CVQkZEpunegRnMqN99nSMRJRGN9GrvEGnWTqbNczB5UFxLzgL4Q0ol3VBjFalf
-         WfkCL65+80IbqNSPjmY0C880X/KyGHWw3qCM01dlaIuQdT6x35pnOEkDo3rr7x3tH16d
-         1ARw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n0L9Ak2rih0QWqwb2iIsAHFOk1bnc7dnsv5n94hZROM=;
+        b=bYonWsLg6KUobudvYp5urS+ZmI6RFZXKRiXZ0m30zyE3tdJ6qP7MTjQWVWhimzvul2
+         go8d+H1wP+izwQlxcMlCuLUtyBDtzI4F+IQHvYyEdolqcddO9zWnC9i9RxhEB+4OHILp
+         41XoZK+JygXqEpucvuxto3mMa4DtgtBL1LWOE06yTHNg2JjRmTZMagWfseU32vToryL5
+         8iOl06VxW6w0mNSqDyXAdt4TwuanqT6zO2HmXKgap6HTdmLXikRIvw7YCP+35ps6+E8C
+         8HX3KuCpRlx5dgHmXiOR+1HSta+dW28o4rFLGRKNmc5SSSJPR+Xe/Yj3RNFBGgpDcpve
+         96wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0GeTuZBlfQ/Y+eNOOfDxK3ZM+hvemUe7AZCxhx5HzJ8=;
-        b=Zdh31/1UZa+oXtNaUIBxjmZda2B/eU6MYkZzrvb9WYGOZhlSHa6s0Cxf8m5MtLPLhx
-         kBo3B05SDSlQfLiI6BXdmBqYF0AF6CIBL5xGt/ZGnfa3Dv3s3k8A291Us8epFAYlrSSl
-         NnFALkXo/xJiEu0Czp3wD19EkGRggFSphPVzCIY9cF7EE121+zTQpCcma5zSMB2wiTGl
-         ++ecBR1HU8NKsBmmIxqWnYmckMOzldVtubm8uf+IzWwntEaZaC8MThLFtGmAP6zF+u5W
-         NHOOxmTyjHnefqVRtEl7QABkrg9p75miuMquwEWNzd4CehSgfFsZCEkAw5aQUemk5Jlo
-         id0w==
-X-Gm-Message-State: AJIora+U42S8SPJw/IWDs+fyqpxaAnBrR+wl0dFdFd9QuO3mhgBi7rc4
-        bPzrsz750ruCZBVwrUvcG1Nvbw==
-X-Google-Smtp-Source: AGRyM1vezWQnhsis70N2EBTExcFOKozEQIEPyaWoe+3MDeqfKtNE7YXyrWd0EDrKpPcD6CkEYj+x7A==
-X-Received: by 2002:a17:902:f552:b0:16a:a17:a9bd with SMTP id h18-20020a170902f55200b0016a0a17a9bdmr10672461plf.97.1656529529720;
-        Wed, 29 Jun 2022 12:05:29 -0700 (PDT)
-Received: from google.com ([2620:15c:211:200:1fe6:e5f3:8461:101c])
-        by smtp.gmail.com with ESMTPSA id e17-20020a63ee11000000b004119deff40dsm79889pgi.23.2022.06.29.12.05.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n0L9Ak2rih0QWqwb2iIsAHFOk1bnc7dnsv5n94hZROM=;
+        b=fsRSZ8WfYfG962sPWG595cMYS5PjnudrEytyRl41W/grkjttA52872mpNvkEz/ql0J
+         hEUZW2G1zAgWEPkNS3cwIc8vQw/OoPEy+gLTirZzspjN3JDgi/ah67r65fiz1CHBGa8H
+         FbLGGaA1RY1iI3HIdHz/HehtKTdjd1hx70VjUopWBo/KjGPWw+IXqIini0PUbq12y3uB
+         ya7RNc1ZqG6I2a2fj25QfacbLLRjuqJ/Njj2VT3koEvJMQ8hNzAUdLYDcFX1FWbBwgPH
+         JXfNEvFimpjCB5GEmxGm9glKF32KT50/eMPNG+o+PCxg1BvKRPIiz8MrBjcGymQIjDwu
+         7QMg==
+X-Gm-Message-State: AJIora9NiSVQ1tBOnC6gz3vzjLcznlO0QSJrL0OCgrLcHg4/7OT9AVsI
+        NaQSSm/l/I3F6XGUKd/XZFQ=
+X-Google-Smtp-Source: AGRyM1uu6WVpdI6B9X7lgvzZqLrkX6ko+p/ABP8tLoZC1Fng+vpKXrtPAltW+JdfMiIq6MQrRB4sPA==
+X-Received: by 2002:a05:6a00:2356:b0:525:7c6e:1dca with SMTP id j22-20020a056a00235600b005257c6e1dcamr11522615pfj.28.1656530910863;
+        Wed, 29 Jun 2022 12:28:30 -0700 (PDT)
+Received: from fedora.. ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id k11-20020a6555cb000000b0040d87299ca3sm11512389pgs.54.2022.06.29.12.28.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 12:05:28 -0700 (PDT)
-Date:   Wed, 29 Jun 2022 12:05:23 -0700
-From:   Kalesh Singh <kaleshsingh@google.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        sultan@kerneltoast.com
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <Yryic4YG9X2/DJiX@google.com>
-References: <20220629150102.1582425-1-hch@lst.de>
- <20220629150102.1582425-2-hch@lst.de>
- <Yrx5Lt7jrk5BiHXx@zx2c4.com>
- <20220629161020.GA24891@lst.de>
- <Yrx6EVHtroXeEZGp@zx2c4.com>
- <20220629161527.GA24978@lst.de>
- <Yrx8/Fyx15CTi2zq@zx2c4.com>
- <20220629163007.GA25279@lst.de>
- <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
- <YryNQvWGVwCjJYmB@zx2c4.com>
+        Wed, 29 Jun 2022 12:28:30 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     shuah@kernel.org
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/kcmp: Make the test output consistent and clear
+Date:   Thu, 30 Jun 2022 00:58:22 +0530
+Message-Id: <20220629192822.47577-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YryNQvWGVwCjJYmB@zx2c4.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 07:34:58PM +0200, Jason A. Donenfeld wrote:
-> On Wed, Jun 29, 2022 at 06:38:09PM +0200, Jason A. Donenfeld wrote:
-> > On the technical topic, an Android developer friend following this
-> > thread just pointed out to me that Android doesn't use PM_AUTOSLEEP and
-> > just has userspace causing suspend frequently. So by his rough
-> > estimation your patch actually *will* break Android devices. Zoinks.
-> > Maybe he's right, maybe he's not -- I don't know -- but you should
-> > probably look into this if you want this patch to land without breakage.
-> 
-> More details: https://cs.android.com/android/platform/superproject/+/master:system/core/libsuspend/autosuspend_wakeup_count.cpp;bpv=1;bpt=1;l=52?q=%22%2Fsys%2Fpower%2Fstate%22&start=51&gsn=sys_power_state&gs=kythe%3A%2F%2Fandroid.googlesource.com%2Fplatform%2Fsuperproject%3Flang%3Dc%252B%252B%3Fpath%3Dsystem%2Fcore%2Flibsuspend%2Fautosuspend_wakeup_count.cpp%23ftWlDJuOhS_2fn3Ri7rClxA30blj_idGgT12aoUHd1o
-> 
-> So indeed it looks like it's userspace controlled. If you want this to
-> be a runtime, rather than a compiletime, switch, maybe
-> autosuspend_init() of that file could write to a sysctl.
-> 
-> Who at Google "owns" that code? Can somebody CC them in?
+Make the output format of this test consistent. Currently the output is
+as follows:
 
-Hi Jason,
++TAP version 13
++1..1
++# selftests: kcmp: kcmp_test
++# pid1:  45814 pid2:  45815 FD:  1 FILES:  1 VM:  2 FS:  1 SIGHAND:  2 
++  IO:  0 SYSVSEM:  0 INV: -1
++# PASS: 0 returned as expected
++# PASS: 0 returned as expected
++# PASS: 0 returned as expected
++# # Planned tests != run tests (0 != 3)
++# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
++# # Planned tests != run tests (0 != 3)
++# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
++# # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
++ok 1 selftests: kcmp: kcmp_test
 
-Thanks for raising this.
+With this patch applied the output is as follows:
 
-Android no longer uses PM_AUTOSLEEP, is correct. libsuspend is
-also now deprecated. Android autosuspend is initiatiated from the
-userspace system suspend service [1].
++TAP version 13
++1..1
++# selftests: kcmp: kcmp_test
++# TAP version 13
++# 1..3
++# pid1:  46330 pid2:  46331 FD:  1 FILES:  2 VM:  2 FS:  2 SIGHAND:  1 
++  IO:  0 SYSVSEM:  0 INV: -1
++# PASS: 0 returned as expected
++# PASS: 0 returned as expected
++# PASS: 0 returned as expected
++# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
++ok 1 selftests: kcmp: kcmp_test
 
-A runtime config sounds more reasonable since in the !PM_AUTOSLEEP
-case, it is userspace which decides the suspend policy.
 
-[1] https://cs.android.com/android/platform/superproject/+/bf3906ecb33c98ff8edd96c852b884dbccb73295:system/hardware/interfaces/suspend/1.0/default/SystemSuspend.cpp;l=265
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+ tools/testing/selftests/kcmp/kcmp_test.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---Kalesh
+diff --git a/tools/testing/selftests/kcmp/kcmp_test.c b/tools/testing/selftests/kcmp/kcmp_test.c
+index 6ea7b9f37a41..25110c7c0b3e 100644
+--- a/tools/testing/selftests/kcmp/kcmp_test.c
++++ b/tools/testing/selftests/kcmp/kcmp_test.c
+@@ -88,6 +88,9 @@ int main(int argc, char **argv)
+ 		int pid2 = getpid();
+ 		int ret;
+ 
++		ksft_print_header();
++		ksft_set_plan(3);
++
+ 		fd2 = open(kpath, O_RDWR, 0644);
+ 		if (fd2 < 0) {
+ 			perror("Can't open file");
+@@ -152,7 +155,6 @@ int main(int argc, char **argv)
+ 			ksft_inc_pass_cnt();
+ 		}
+ 
+-		ksft_print_cnts();
+ 
+ 		if (ret)
+ 			ksft_exit_fail();
+@@ -162,5 +164,5 @@ int main(int argc, char **argv)
+ 
+ 	waitpid(pid2, &status, P_ALL);
+ 
+-	return ksft_exit_pass();
++	return 0;
+ }
+-- 
+2.36.1
 
-> 
-> Jason
-> 
