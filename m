@@ -2,77 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1737C56008E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jun 2022 14:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575905600F9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jun 2022 15:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbiF2Mzx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jun 2022 08:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S233683AbiF2NKS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jun 2022 09:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiF2Mzw (ORCPT
+        with ESMTP id S233461AbiF2NKR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jun 2022 08:55:52 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CF02E9E0;
-        Wed, 29 Jun 2022 05:55:51 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Wed, 29 Jun 2022 09:10:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E460821B8;
+        Wed, 29 Jun 2022 06:10:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3D6114FA;
-        Wed, 29 Jun 2022 12:55:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3D6114FA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1656507351; bh=XJl5q3/vT6FIjNUi1Eb8cZqtdz9msa9ZVePJ+Srhbno=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=g8zXpRz7bRSHh2wpmCa3bR+TZv80X7ujemiyJ30PgS4KXcMl5z63hNUSVC80KcyoD
-         +MeF/mYx4AwKhljGaEeMCKdGLc+6q2dpN2QdpK7B4MuW77e6yOuPAHcVnHv+depega
-         5hSKpLBzEY5p8wfepa2FoRKW1zERC2coUEcK2UmjxjNG8WswAamtiYUy8cPTP38QHU
-         hISEGvAgIDdYUE7CGy/uJhPMQN98AQKR3O+05oJiAVtTPi5J3nM0jNTAKv01sPP/Aw
-         aViVFbyBLygEtnHcqhys8P1jO0ojWDPFjSFEZ3gxs26BDLaoUaSU2tNCE9w9gf1vqO
-         MvLLtSdVmGD8A==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     David Gow <davidgow@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2] Documentation: kunit: Cleanup run_wrapper, fix x-ref
-In-Reply-To: <CABVgOSkybS55KynNvSA-B=2Lemwe-iTOwZ55BO4PwaECokizTw@mail.gmail.com>
-References: <20220626101553.1885428-1-davidgow@google.com>
- <20220629040605.2395481-1-davidgow@google.com>
- <321d069a-0db3-6abd-c25e-4da46f361bd7@gmail.com>
- <CABVgOSkybS55KynNvSA-B=2Lemwe-iTOwZ55BO4PwaECokizTw@mail.gmail.com>
-Date:   Wed, 29 Jun 2022 06:55:50 -0600
-Message-ID: <87tu83tyqx.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 818FE61CB6;
+        Wed, 29 Jun 2022 13:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CE050C341CE;
+        Wed, 29 Jun 2022 13:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656508215;
+        bh=QjTsITZLdwtkziEKrM0qlsW2H3uKs8jiR2VAmQfAmYg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HqRZS9f8EbhDU4qRdwZ/4EhKNgO945+1/VHY+Yn7wxNsRO097crle208h/l4841sw
+         ePbyWkESI2Rs+XdNl8e2BxfhUtFKIuEmGazQkEs/pcW750i/Xrh2WD77QbO5lp1+5F
+         1LjaQ+PC4WTMsHDgWtmIUua1QHXaV+3YoMpnAqCxAyyjGol6CCbystY1xFqtPm8WWG
+         cJCurR1w7fe4UyoU2kOVfEQ3qgm5cCyo2VdMJrMORo6Wh0UlzeGUind0RYezoOrb7v
+         EmOCCZBumZdUsoQGXF8pDCvzjghXkfthWaV3HR45Jq3sstqrB75MDW9t3+qzz5FqpB
+         VWcvSsv0KamBA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B6032E49BB8;
+        Wed, 29 Jun 2022 13:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: forwarding: ethtool_extended_state:
+ Convert to busywait
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165650821574.20617.13719931995682250837.git-patchwork-notify@kernel.org>
+Date:   Wed, 29 Jun 2022 13:10:15 +0000
+References: <b3f4a264c0270f3e4e22e291ee843fbf72d3fc7f.1656412324.git.petrm@nvidia.com>
+In-Reply-To: <b3f4a264c0270f3e4e22e291ee843fbf72d3fc7f.1656412324.git.petrm@nvidia.com>
+To:     Petr Machata <petrm@nvidia.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        mlxsw@nvidia.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+        amcohen@nvidia.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-David Gow <davidgow@google.com> writes:
+Hello:
 
-> Thanks. The rest of this document is using "we" rather than "you", so
-> I used "we'll" for consistency. If "you" is preferred generally, it'd
-> be best to change it throughout the document (probably in a separate
-> patch).
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Nobody has ever tried to articulate a wider policy on first or
-second-person usage for kernel docs, so far as I know, and I think
-that's just fine.  We have far bigger things to worry about before we
-get concerned about consistency at that level.
+On Tue, 28 Jun 2022 12:37:44 +0200 you wrote:
+> Currently, this script sets up the test scenario, which is supposed to end
+> in an inability of the system to negotiate a link. It then waits for a bit,
+> and verifies that the system can diagnose why the link was not established.
+> 
+> The wait time for the scenario where different link speeds are forced on
+> the two ends of a loopback cable, was set to 4 seconds, which exactly
+> covered it. As of a recent mlxsw firmware update, this time gets longer,
+> and this test starts failing.
+> 
+> [...]
 
-Thanks,
+Here is the summary with links:
+  - [net-next] selftests: forwarding: ethtool_extended_state: Convert to busywait
+    https://git.kernel.org/netdev/net-next/c/04cfbc1d89d4
 
-jon
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
