@@ -2,122 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6835617C8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 12:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810445617D3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 12:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbiF3KXA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jun 2022 06:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S234982AbiF3K0W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jun 2022 06:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235023AbiF3KWq (ORCPT
+        with ESMTP id S234930AbiF3K0E (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jun 2022 06:22:46 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3056B457A2
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jun 2022 03:22:41 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z19so25847730edb.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jun 2022 03:22:41 -0700 (PDT)
+        Thu, 30 Jun 2022 06:26:04 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EA97E031;
+        Thu, 30 Jun 2022 03:24:54 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id o4so22638645wrh.3;
+        Thu, 30 Jun 2022 03:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=y5UsByWLMWEYobec0CN6KDFyOSWUvAwaZ8r1U9iYpCA=;
-        b=GSP8LRnEUC3YB9em437uwIQRy41VuAuO8g4G5+rvlN9pk2hRaUTIC7RPWtP+4/iLfX
-         NbsuWSaMTClElRWXyedG58ZqOOrY3YChazC5x54rw4O8k7egy1jc2YTFgWJa0c+1ttes
-         WDniBrpGY8CGEvQSfn1HIIBiabI/klkG7e0t/6oshc86Mmf1IwxQVWtQIdNQz47n2Wxq
-         Ue14QtxdR3M9VfCM5ucJ5Mlfr4QiWIiaFaUzmo4H9QDF7WWHx7EXyIYXWUM/c6ey2xDY
-         JLckjeXOeuKccRqfKBHHRBOHdgNiEomFXjbyXjpOSC/DPYhETa51oG8U7CQViQueT1hO
-         iA+Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l6AzkA8havxcJ97cev8Fn2QmW59hqm7h1z8/O75RMTU=;
+        b=aoylw+Bm3d7bRynQXm1EtMpfdeC3Ct+tlDTFFxO9i2qmx573vK4ardA3U9kXEdcQET
+         1sFm6BKkYBZwjRU/xFlfrScK6BBIJ0hYPo8E2gMIYjh7XPtJzFf3+/S+0a37sFw+/V6b
+         qQFzBCNh01mzHMtxlwUPES3E5L9bND1WZtmrCpG038w+4ZD1lSsBxwz8jKkt+BrdwqfN
+         HGnYehdN508RV+jJJt+Os77+bsQLKUceNEUdjNlJybNFpAV8E5BU4wIj6wxMtmjvsesE
+         TDYKi7kGWznsxOxHTWRUTlaATFrdlkU4zwvRW+8HRZW/22rB8s1l7pmkVGONx5NUI7mv
+         Y5xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=y5UsByWLMWEYobec0CN6KDFyOSWUvAwaZ8r1U9iYpCA=;
-        b=M2Jo3z7QKOcWG8+hI8JD4AgUC3lQ5bDdL3XHZU5WavsEyT0EYKAQJDKeP266Z0Ch3H
-         jNo4VSmJcMRSQi5xdyRyiSfv3/df9blSd4BAmH+fmi+un+LfarH/Dn6VJfKG5f2+IeYM
-         taLbcvxL/bSZgSaJ7WZjONyPg0KTXf8awOyZhVzjvmdBndWCaMjVuCvx+hYwD4bI2dyE
-         wuRQYKvSqefZtCGJAOA2MDxfn/azN2kjoxggpPA2kY/CcXTTEt9vJWx1JffT2hJwUBQf
-         IhMbdS6vmiBdSfnMc6g6F0CZE86Z8SneF3rQ7TeQbuzNUjZcsy6HntUKK0e/yIOMSlO/
-         iTLQ==
-X-Gm-Message-State: AJIora8SVBRWCkzDux5l1rXo26VLwxl1mjC8pQAdxlMq9gNrBl1xomre
-        YcQ+xhWpiT7TRxEOWgJT7hv37+dUapIbL+f4nDk=
-X-Google-Smtp-Source: AGRyM1v/sMpb6LQCI0Xbq3TfjZJdpaj0M12tlJRfujf5QX2IMx+u6M1wnBeddEncbkc3uKPAx1y/Nw==
-X-Received: by 2002:aa7:d484:0:b0:435:65b0:e2d8 with SMTP id b4-20020aa7d484000000b0043565b0e2d8mr10622588edr.373.1656584559605;
-        Thu, 30 Jun 2022 03:22:39 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id u17-20020a056402111100b0042deea0e961sm13022756edv.67.2022.06.30.03.22.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 03:22:39 -0700 (PDT)
-Message-ID: <47d8d747-54ef-df52-3b9c-acb9a77fa14a@blackwall.org>
-Date:   Thu, 30 Jun 2022 13:22:37 +0300
+        bh=l6AzkA8havxcJ97cev8Fn2QmW59hqm7h1z8/O75RMTU=;
+        b=Mu2MR8/kiMCC1WaP/wyApqnpid9IGOxyH5yxoZTXT+A+VEK8eTcKDM4qmIzlpFKz2w
+         VnmNZxzC7w53LYFxpYsMPM2hHq5Xc9McidoJmz8I7cE3K/PVtCrW68qGOZhsxj5LKdrW
+         Gw118QTRQaPcLN2uhwShzKlR0170AmrXCpksAXev29bA0/a2cb5cq+ZQhY0IweF9kHvZ
+         IjKvlYvRkDB8f2JrV3Empht30Uskmg8EJFIwTOz41HuI+1Ef8p3KZNvgpZG9d03bfAuU
+         u2qtL2j7F1hDaZlYj0MXH1BuQ8bfbRRWgqgwc9eO0kaYbo6ZwLrBlTHRmhpJFXu/kHXG
+         dXBQ==
+X-Gm-Message-State: AJIora+aMEtbdMuSPB07+6zcTARwpuXIGYKmT+8NZ2/6tRtGRcQnEVBp
+        9MkUGTNgMXkKI2cLK/XwCMMzbMT8oIeMpQ==
+X-Google-Smtp-Source: AGRyM1sjWvYm+qQ4BW2cd3W6CjjSosbZ8CrO2mQYHT8N8FG4tQSn/tZEdcqpOsHusA0PlUD+TEqBiQ==
+X-Received: by 2002:a5d:48ce:0:b0:21b:9f34:f297 with SMTP id p14-20020a5d48ce000000b0021b9f34f297mr7654918wrs.351.1656584693134;
+        Thu, 30 Jun 2022 03:24:53 -0700 (PDT)
+Received: from localhost.localdomain ([41.232.197.17])
+        by smtp.gmail.com with ESMTPSA id g1-20020adffc81000000b00213ba3384aesm19536954wrr.35.2022.06.30.03.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 03:24:52 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH net-next v3] selftests: net: fib_rule_tests: fix support for running individual tests
+Date:   Thu, 30 Jun 2022 12:24:49 +0200
+Message-Id: <20220630102449.9539-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that multicast
- packets cannot unlock a locked port
-Content-Language: en-US
-To:     Hans Schultz <hans@kapio-technology.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220630100512.604364-1-hans@kapio-technology.com>
- <20220630100512.604364-2-hans@kapio-technology.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20220630100512.604364-2-hans@kapio-technology.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 30/06/2022 13:05, Hans Schultz wrote:
-> This makes it possible to use the locked port feature with learning
-> turned on which is needed for various driver features.
-> 
-> Signed-off-by: Hans Schultz <hans@kapio-technology.com>
-> ---
->  net/bridge/br_input.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
-> index 68b3e850bcb9..a3ce0a151817 100644
-> --- a/net/bridge/br_input.c
-> +++ b/net/bridge/br_input.c
-> @@ -215,6 +215,7 @@ static void __br_handle_local_finish(struct sk_buff *skb)
->  	if ((p->flags & BR_LEARNING) &&
->  	    nbp_state_should_learn(p) &&
->  	    !br_opt_get(p->br, BROPT_NO_LL_LEARN) &&
-> +	    !(p->flags & BR_PORT_LOCKED) &&
->  	    br_should_learn(p, skb, &vid))
->  		br_fdb_update(p->br, p, eth_hdr(skb)->h_source, vid, 0);
->  }
+parsing and usage of -t got missed in the previous patch.
+this patch fixes it
 
-hmm this is called for link-local traffic (01:80:c2), the title is misleading
-please include the real traffic type because it doesn't concern mcast
+Fixes: 816cda9ae531 ("selftests: net: fib_rule_tests: add support to
+select a test to run")
+Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+---
+changes in v2:
+	edit commit subject and message.
+---
+changes in v3:
+	add Fixes tag
+---
+ tools/testing/selftests/net/fib_rule_tests.sh | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-Also please include the long explanation from the 0 patch in this one
-and drop the cover letter, it's good to have the info.
-
-Thanks,
- Nik
-
-
-
+diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
+index bbe3b379927a..c245476fa29d 100755
+--- a/tools/testing/selftests/net/fib_rule_tests.sh
++++ b/tools/testing/selftests/net/fib_rule_tests.sh
+@@ -303,6 +303,29 @@ run_fibrule_tests()
+ 	log_section "IPv6 fib rule"
+ 	fib_rule6_test
+ }
++################################################################################
++# usage
++
++usage()
++{
++	cat <<EOF
++usage: ${0##*/} OPTS
++
++        -t <test>   Test(s) to run (default: all)
++                    (options: $TESTS)
++EOF
++}
++
++################################################################################
++# main
++
++while getopts ":t:h" opt; do
++	case $opt in
++		t) TESTS=$OPTARG;;
++		h) usage; exit 0;;
++		*) usage; exit 1;;
++	esac
++done
+ 
+ if [ "$(id -u)" -ne 0 ];then
+ 	echo "SKIP: Need root privileges"
+-- 
+2.25.1
 
