@@ -2,137 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA251561E2C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 16:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FEE561E34
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 16:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236052AbiF3OhO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jun 2022 10:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S237232AbiF3OiN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jun 2022 10:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235979AbiF3Ogz (ORCPT
+        with ESMTP id S237239AbiF3OiB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:36:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286CA201A6;
-        Thu, 30 Jun 2022 07:32:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CB1B921EFB;
-        Thu, 30 Jun 2022 14:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1656599532; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r+2jSverPOfqGEKU6YL54SGkmzqRewq0zi4aTwuQWVg=;
-        b=NQJFxWMbAHm7LziJAaX0qwJ3jblN0hLNNfEOc+ukjrHuS04pTcAJtGu2PvLSHHm2baWcLi
-        6d6yoEW/ti0PFPza/gAw0Pv8kuPVwzG0Cqo/igYQU3BYxnCm+v4Hr+jEtN7Hz8DTdG0u0/
-        9iFRnVdTN7We1cfra567KIbMx3damAM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FB7913A5C;
-        Thu, 30 Jun 2022 14:32:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +DZiHuyzvWJHbAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 30 Jun 2022 14:32:12 +0000
-Date:   Thu, 30 Jun 2022 16:32:11 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <20220630143211.GA22105@blackbody.suse.cz>
-References: <20220510153413.400020-8-longman@redhat.com>
- <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
- <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
- <YqarMyNo9oHxhZFh@slm.duckdns.org>
- <20220613142452.GB6910@blackbody.suse.cz>
- <YqdzuSQuAeiPXQvy@slm.duckdns.org>
- <20220613175548.GB21665@blackbody.suse.cz>
- <Yqd7WMFj6AEyV3Cy@slm.duckdns.org>
- <20220614115345.GA6771@blackbody.suse.cz>
- <YroApRMPV/6zO5I8@mtj.duckdns.org>
+        Thu, 30 Jun 2022 10:38:01 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6ADA197
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jun 2022 07:36:04 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id p14so12533632ile.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jun 2022 07:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=f9z5EbxXbqosYQFsoXX2aboDLVMH48aS/feIG93zb/A=;
+        b=ECjm+xtTfGhQo5LE4Ry7UFz2eivhvnsCOwyE1HrrNEYV8olpPLrJdXB1tm2VU1sLqf
+         ZP21WSgaFdZs82Bkc9Uub+LIfYFvnm4xhTUvi7+kGsge4Q3Xiv0c6ZIgoqXoztEw1MZl
+         gwv4WOXyFrS2ZBmlVN3ACzytjB66PPvSUUvJo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=f9z5EbxXbqosYQFsoXX2aboDLVMH48aS/feIG93zb/A=;
+        b=3eZRbb9DUbKnXEnCi3jJGeQy4/QcUFdeFq0fT6DigYOshGkRZdLqlcDVOotlC3FaQW
+         l4yiV0Ro6lWK+OrUkdLfBmVQEyVjjXHyN9981dMLuUfobwTAjkLu4bShlKPXm72gwx8b
+         2Vi71fPOh/KtGU12PsyDQXOEteJCExcugVO4EbAwvo6KATiZz7DcnKv4Sz69yd94aWBC
+         Whl5m97Lhubkb13GBpiGtodRCr2rLsghpxx+QcKM7Q5xdOccDBbSgKWXnB3Y/B5yKPnR
+         c9mNWOo7T5Jtb9y4Icx7EJrRqeNk8dRW+UxTrdFWHuKe9dPF3sL1som8gVh9vED7Cec8
+         O9+A==
+X-Gm-Message-State: AJIora8CTUfxgj1gjwfN1JIlGcr/RxpW4gp7S4L/DdUaHLoaHlTeex0+
+        6VC667T0aDHf0aMrG5WDTFFytw==
+X-Google-Smtp-Source: AGRyM1vqAwYNV03atR01g7cM184M3LG8DWL49aqimRNjYF3JNrRusxSxshCA1spfPqv/NIerj/qs6w==
+X-Received: by 2002:a92:b00f:0:b0:2d6:5628:6865 with SMTP id x15-20020a92b00f000000b002d656286865mr5378626ilh.230.1656599764064;
+        Thu, 30 Jun 2022 07:36:04 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p18-20020a056638217200b00339cae5cb8fsm8684193jak.103.2022.06.30.07.36.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jun 2022 07:36:03 -0700 (PDT)
+Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+To:     Marcos Paulo de Souza <mpdesouza@suse.com>,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz,
+        pmladek@suse.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220630141226.2802-1-mpdesouza@suse.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
+Date:   Thu, 30 Jun 2022 08:36:03 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YroApRMPV/6zO5I8@mtj.duckdns.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220630141226.2802-1-mpdesouza@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:10:29AM +0900, Tejun Heo <tj@kernel.org> wrote:
-> What I'm trying to say is that cpuset.cpus of child_1 and child_2 are
-> owned by the parent,
+On 6/30/22 8:12 AM, Marcos Paulo de Souza wrote:
+> Hi there,
+> 
+> this is the v2 of the patchset. The v1 can be found at [1]. There is only one
+> change in patch 1, which changed the target directory to build the test modules.
+> All other changes happen in patch 2.
+> 
+> Thanks for reviewing!
+> 
+> Changes from v1:
+> # test_modules/Makefile
+>    * Build the test modules targeting /lib/modules, instead of ksrc when building
+>      from the kernel source.
+> 
+> # test_modules/test_klp_syscall.c
+>    * Added a parameter array to receive the pids that should transition to the
+>      new system call. (suggedted by Joe)
+>    * Create a new sysfs file /sys/kernel/test_klp_syscall/npids to show how many
+>      pids from the argument need to transition to the new state. (suggested by
+>      Joe)
+>    * Fix the PPC32 support by adding the syscall wrapper for archs that select it
+>      by default, without erroring out. PPC does not set SYSCALL_WRAPPER, so
+>      having it set in v1 was a mistake. (suggested by Joe)
+>    * The aarch64 syscall prefix was added too, since the livepatch support will come soon.
+> 
+> # test_binaries/test_klp-call_getpid.c
+>    * Change %d/%u in printf (suggested byu Joe)
+>    * Change run -> stop variable name, and inverted the assignments (suggested by
+>    * Joe).
+> 
+> # File test-syscall.sh
+>    * Fixed test-syscall.sh to call test_klp-call-getpid in test_binaries dir
+>    * Load test_klp_syscall passed the pids of the test_klp-call_getpid instances.
+>      Check the sysfs file from test_klp_syscall module to check that all pids
+>      transitioned correctly. (suggested by Joe)
+>    * Simplified the loop that calls test_klp-call_getpid. (suggested by Joe)
+>    * Removed the "success" comment from the script, as it's implicit that it
+>      succeed. Otherwise load_lp would error out. (suggested by Joe)
+> 
+> * Changed the commit message of patch 2 to further detail what means "tricky"
+>    when livepatching syscalls. (suggested by Joe)
+> 
+> [1]: 20220603143242.870-1-mpdesouza@suse.com
+> 
 
-Cf
+Sorry Nack on this. Let's not add modules under selftests. Any usage of module_init()
+doesn't belong under selftests.
 
-On Mon, Jun 13, 2022 at 08:00:56AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> On Mon, Jun 13, 2022 at 07:55:49PM +0200, Michal Koutn=FD wrote:
-> > I don't think child_*/cpuset.cpus must be owned by root.
->=20
-> I meant the parent.
+Leave these under lib and use KSTM_MODULE_LOADERS to load these modules that
+live under lib.
 
-I'm slightly confused.
-
-> so a feature which blocks siblings from intersecting each other
-> doesn't make whole lot of sense because all those files are under the
-> control of the parent who would have the power to enable or disable
-> the restrition anyway.
-
-file				owner
-parent/				user (mkdir)
-`- cpuset.cpus			root
-`- cpuset.cpus.partition	root	(P)
-`- child_1/			user
-  ` cpuset.cpus			user	(*)
-`- child_2/			user
-  ` cpuset.cpus			user	(*)
-
-The writes to child cpuset.cpus may/may not invalidate parent's (P)
-partition validity (whether a cpu is left to it to host possible tasks).
-child_1 vs child_2 overlap affects only whether the children cgroups are
-a valid partition.
-
-I think you mean: writes to children cpuset.cpus should be allowed,
-possible exclusivity violation should be reported in
-parent/cpuset.cpus.partition.
-
-What I thought was OK: prevent (fail) writes to children cpuset.cpus
-that'd violate the exclusivity (or would take the last cpu from parent
-if it's necessary to host a task).
-IMO, it's similar to failed writes to parent/cgroup.subtree_control in a
-delegated subtree if the parent still has some tasks (that'd violate
-internal node constraint).
-
-What I think might still be OK: allow writes to children cpuset.cpus
-that violate exclusivity and report that in children's
-cpuset.cpus.partition. Writes that'd take last cpu from parent should
-still fail (similar to the failing subtree_control writes above).
-
-Hope that clarifies,
-Michal
+thanks,
+-- Shuah
