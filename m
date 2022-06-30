@@ -2,89 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF4C560F9A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 05:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC628561028
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 06:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbiF3DUm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jun 2022 23:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S231623AbiF3EZr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jun 2022 00:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiF3DUV (ORCPT
+        with ESMTP id S229797AbiF3EZq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jun 2022 23:20:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DF940A38;
-        Wed, 29 Jun 2022 20:20:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75391B827FB;
-        Thu, 30 Jun 2022 03:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 16732C341CA;
-        Thu, 30 Jun 2022 03:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656559214;
-        bh=DQg6ibDynoYcoqExVb/W9xu3z+AWl3sONWXlXNqrmoU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VS+IfqZ2W5qNpOmLcATfwuiVaKD/DoS/5GL4fm5OHoheMkuaRQMz7jIoAAXLDG4Uj
-         IUlClOEmfYuRKPRAuE+KshoH5m/23rVKlmRrZeBjZ6tWuLr4vo29EvRNEHZZOKzO4t
-         YcUBcJQAF7GoA+vsYtKF9rcnUDq3B1F0giyjRjOl4Zk9Eq6Gx/SUSfAnwlJgnLLjUj
-         7/Buv3Sgu1HWAT4/dVz8iXAkrIlQpn5F5n7IvLj9HU7rT5puTeHyJTjz7CsaKFtcCd
-         oH61mOnhKI6NoW57T6Ydm80A3RQI3WFmNKe3P+cPWNBskODpeU9wnptOedFvwj4vv/
-         H8rlp0KrR7P2w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EADAAE49FA0;
-        Thu, 30 Jun 2022 03:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 30 Jun 2022 00:25:46 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FBE37AB4
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jun 2022 21:25:44 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id g39-20020a05600c4ca700b003a03ac7d540so857308wmp.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jun 2022 21:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XF5+1TpNEHAiXDfVWQuBqZGuz8O67KY9U2sjyk0++xA=;
+        b=J/ogTuEcBjzc2rb/AX+pBYkVOtdqmFsidowp9idjspZWWtBCu0QpR9Omff+s+WRE4J
+         JQqudj/2Cr2qfjcFMt/rm61kR9b0uS6bBZ9XePjS6rge69pJNaxwG4FsPwBmcjgahoIT
+         zZ7xrswxi9aUQCIcykenow5cV1Jz6mOyIW2DJheISuKWr7KK/QYsFfFUTz46tTEUfApa
+         IsdiNxH21cVIcqCO/V4VZhpjVPJEdc87M9ji/eiTZcXPmWU0DsAVN72/jxdKBCH3gL1n
+         EWu/46jkA03D7DfT6mJU1cICL9/sZULYP1olO9hZtpAZ0rLsl247j0otusmUTpKjqAdj
+         5pMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XF5+1TpNEHAiXDfVWQuBqZGuz8O67KY9U2sjyk0++xA=;
+        b=Y728aelgTt/n/RMQL5exqiCaXJVo5a/YWqBS4PPjjirptosnDwNoUH0HLsiGISSdP/
+         fi/rFzPzOiGs5jeBWQDtACY7wbNIMuUCzCgUeRnmkuZBysBfv6PJURPZPodKPeyfJPoq
+         ISiMsE6ulo5V1nCGXVhS2il9tZrwN2huqbfWDZHtAL06FhU+RNyql5QA/ATLTyGBNJRU
+         8SAraAN2T9W01C2NFEi4iRuIuwmq6dlczb8QIuhTiC7laM6H/foymM81GI4M6VU1nF9F
+         KGabbOPr4McN4IOHzwLR/tH1Ibkf45Iss4wEQji1nJYyps9bj035SWeTWbf6S3uKxypI
+         CGsA==
+X-Gm-Message-State: AJIora9xbzLV6QkITmqJNg/ScyQvCyBt9AGVpRvDIGeAOZ+z1F0/qftm
+        y3vDi2LdFqaEPENFYTycwUWtEDgAn6zqE9JgqF4wGg==
+X-Google-Smtp-Source: AGRyM1uujfLK/yIN8VLByYx5OAyz3aygJHVOScpq0uxooZ08lDRQ3geR/QBC9YsnqM9Hy0OG7EskPqyOaUSnSkkqoHQ=
+X-Received: by 2002:a05:600c:3553:b0:3a0:519b:4b96 with SMTP id
+ i19-20020a05600c355300b003a0519b4b96mr7335634wmq.61.1656563143223; Wed, 29
+ Jun 2022 21:25:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests net: fix kselftest net fatal error
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165655921395.17409.13594561872528407248.git-patchwork-notify@kernel.org>
-Date:   Thu, 30 Jun 2022 03:20:13 +0000
-References: <20220628174744.7908-1-dietschc@csp.edu>
-In-Reply-To: <20220628174744.7908-1-dietschc@csp.edu>
-To:     Coleman Dietsch <dietschc@csp.edu>
-Cc:     linux-kselftest@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Yrx8/Fyx15CTi2zq@zx2c4.com> <20220629163007.GA25279@lst.de>
+ <Yrx/8UOY+J8Ao3Bd@zx2c4.com> <YryNQvWGVwCjJYmB@zx2c4.com> <Yryic4YG9X2/DJiX@google.com>
+ <Yry6XvOGge2xKx/n@zx2c4.com> <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
+ <YrzaCRl9rwy9DgOC@zx2c4.com> <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
+ <YrztOqBBll66C2/n@zx2c4.com> <YrzujZuJyfymC0LP@zx2c4.com>
+In-Reply-To: <YrzujZuJyfymC0LP@zx2c4.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Wed, 29 Jun 2022 21:25:32 -0700
+Message-ID: <CAC_TJvcNOx1C5csdkMCAPVmX4gLcRWkxKO8Vm=isgjgM-MowwA@mail.gmail.com>
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     John Stultz <jstultz@google.com>, Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
+        android-kernel-team <android-kernel-team@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Wed, Jun 29, 2022 at 5:30 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Hey again,
+>
+> On Thu, Jun 30, 2022 at 2:24 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > 1) Introduce a simple CONFIG_PM_CONTINUOUS_AUTOSLEEPING Kconfig thing
+> >    with lots of discouraging help text.
+> >
+> > 2) Go with the /sys/power tunable and bikeshed the naming of that a bit
+> >    to get it to something that reflects this better, and document it as
+> >    being undesirable except for Android phones.
+>
+> One other quick thought, which I had mentioned earlier to Kalesh:
+>
+> 3) Make the semantics a process holding open a file descriptor, rather
+>    than writing 0/1 into a file. It'd be called /sys/power/
+>    userspace_autosleep_ctrl, or something, and it'd enable this behavior
+>    while it's opened. And maybe down the line somebody will want to add
+>    ioctls to it for a different purpose. This way it's less of a tunable
+>    and more of an indication that there's a userspace app doing/controlling
+>    something.
+>
+> This idea (3) may be a lot of added complexity for basically nothing,
+> but it might fit the usage semantics concerns a bit better than (2). But
+> anyway, just an idea. Any one of those three are fine with me.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Two concerns John raised:
+  1) Adding new ABI we need to maintain
+  2) Having unclear config options
 
-On Tue, 28 Jun 2022 12:47:44 -0500 you wrote:
-> The incorrect path is causing the following error when trying to run net
-> kselftests:
-> 
-> In file included from bpf/nat6to4.c:43:
-> ../../../lib/bpf/bpf_helpers.h:11:10: fatal error: 'bpf_helper_defs.h' file not found
->          ^~~~~~~~~~~~~~~~~~~
-> 1 error generated.
-> 
-> [...]
+Another idea, I think, is to add the Kconfig option as
+CONFIG_SUSPEND_SKIP_RNG_RESEED? Similar to existing
+CONFIG_SUSPEND_SKIP_SYNC and I think it would address those concerns.
 
-Here is the summary with links:
-  - selftests net: fix kselftest net fatal error
-    https://git.kernel.org/netdev/net/c/7b92aa9e6135
+--Kalesh
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Jason
