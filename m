@@ -2,127 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FEE561E34
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 16:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46495620FF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 19:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237232AbiF3OiN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jun 2022 10:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S235463AbiF3RMs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jun 2022 13:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237239AbiF3OiB (ORCPT
+        with ESMTP id S231348AbiF3RMo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jun 2022 10:38:01 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6ADA197
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jun 2022 07:36:04 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id p14so12533632ile.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jun 2022 07:36:04 -0700 (PDT)
+        Thu, 30 Jun 2022 13:12:44 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8643ED3D
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jun 2022 10:12:42 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id b26so15879790wrc.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jun 2022 10:12:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=f9z5EbxXbqosYQFsoXX2aboDLVMH48aS/feIG93zb/A=;
-        b=ECjm+xtTfGhQo5LE4Ry7UFz2eivhvnsCOwyE1HrrNEYV8olpPLrJdXB1tm2VU1sLqf
-         ZP21WSgaFdZs82Bkc9Uub+LIfYFvnm4xhTUvi7+kGsge4Q3Xiv0c6ZIgoqXoztEw1MZl
-         gwv4WOXyFrS2ZBmlVN3ACzytjB66PPvSUUvJo=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uH3u1IFiXRo5yGbXIVqL1yqXLG2H1E4UXns/GZ0BaVE=;
+        b=FZwPzlvJMTMo74Fom19t74AoePXhXeGrkxqDczxBrgAmUE15h7mMgCvqS1RXp6H6dx
+         AJN1eEqiyXCQcVtOdWLHOlGOIYCzX0NYupog/3JnG9A7ikhyIHZBFXZVFGEfKGdZCXeY
+         zU1hnN1Wdqw7oADY6ZGrKHxwlMGT7A4lHt31aRjqd1iiC/ofThahR164aASaZMojTBSJ
+         5NpYz9PQrcA4PgL8kxOVJoX6B1W4Pk4wJyUC923AhZMJ3cMtqn4TGSDOwf2374Xfwolm
+         zoFBaFGsi3fEWFmXn2NQWslIpMLfYDFs4g+nzRAXD26K3skmpYuoFUlpgEIDvbWxpRWF
+         dGPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=f9z5EbxXbqosYQFsoXX2aboDLVMH48aS/feIG93zb/A=;
-        b=3eZRbb9DUbKnXEnCi3jJGeQy4/QcUFdeFq0fT6DigYOshGkRZdLqlcDVOotlC3FaQW
-         l4yiV0Ro6lWK+OrUkdLfBmVQEyVjjXHyN9981dMLuUfobwTAjkLu4bShlKPXm72gwx8b
-         2Vi71fPOh/KtGU12PsyDQXOEteJCExcugVO4EbAwvo6KATiZz7DcnKv4Sz69yd94aWBC
-         Whl5m97Lhubkb13GBpiGtodRCr2rLsghpxx+QcKM7Q5xdOccDBbSgKWXnB3Y/B5yKPnR
-         c9mNWOo7T5Jtb9y4Icx7EJrRqeNk8dRW+UxTrdFWHuKe9dPF3sL1som8gVh9vED7Cec8
-         O9+A==
-X-Gm-Message-State: AJIora8CTUfxgj1gjwfN1JIlGcr/RxpW4gp7S4L/DdUaHLoaHlTeex0+
-        6VC667T0aDHf0aMrG5WDTFFytw==
-X-Google-Smtp-Source: AGRyM1vqAwYNV03atR01g7cM184M3LG8DWL49aqimRNjYF3JNrRusxSxshCA1spfPqv/NIerj/qs6w==
-X-Received: by 2002:a92:b00f:0:b0:2d6:5628:6865 with SMTP id x15-20020a92b00f000000b002d656286865mr5378626ilh.230.1656599764064;
-        Thu, 30 Jun 2022 07:36:04 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p18-20020a056638217200b00339cae5cb8fsm8684193jak.103.2022.06.30.07.36.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jun 2022 07:36:03 -0700 (PDT)
-Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-To:     Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz,
-        pmladek@suse.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220630141226.2802-1-mpdesouza@suse.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
-Date:   Thu, 30 Jun 2022 08:36:03 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uH3u1IFiXRo5yGbXIVqL1yqXLG2H1E4UXns/GZ0BaVE=;
+        b=oBrXJHX4cGwp2DUh51EK8gRLHfQVS/U0JK5xeCN9BCffctPbgm0nmaTbbqimCkO1Oh
+         Ngv2YPvMqUerzCz2Y4SphWPZxUt7DL+h3NWhVZ5bte9taVpZ3gDK0V7iemHTIAltAUs/
+         E0/okTKJpW7YPa0rR9jSZBaA0BQ92riTjgvXNYjWRzpkpcvjjn87s5ej3f9QW9E7vjFw
+         d1bcIX7XLha8v/PObbyonZqluHgeRD2/EP45yWz/1bcydh4JlDvkyzO9ZTaup9qAEW6S
+         b+Uh4hp+tKbYNGfVJOi/5aPInSoHNQUwpLB7OVpCYj+BZFgF/LrHMqdpVx2Z0PhCaAVD
+         24LA==
+X-Gm-Message-State: AJIora/1fTKzIYOG/P7Xqy3LQ9bTAkJBv3N59PhPW15cfJ/Ig5W/hkjO
+        5aeGgTVU1kzNZgUSGnpgFxFtbD0FTT22sakOH4jl
+X-Google-Smtp-Source: AGRyM1szn9LwRU3Nw9ZfHq8EWST1CWq46Cj3fhZE2wtVrKEw7gClyoWnhjeSGDOpCcCwvmQvyhbN8nUX3DDA/n+VcV0=
+X-Received: by 2002:adf:ef10:0:b0:21b:8740:7085 with SMTP id
+ e16-20020adfef10000000b0021b87407085mr9148009wro.9.1656609160637; Thu, 30 Jun
+ 2022 10:12:40 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220630141226.2802-1-mpdesouza@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Yrx/8UOY+J8Ao3Bd@zx2c4.com> <YryNQvWGVwCjJYmB@zx2c4.com>
+ <Yryic4YG9X2/DJiX@google.com> <Yry6XvOGge2xKx/n@zx2c4.com>
+ <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
+ <YrzaCRl9rwy9DgOC@zx2c4.com> <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
+ <YrztOqBBll66C2/n@zx2c4.com> <YrzujZuJyfymC0LP@zx2c4.com> <CAC_TJvcNOx1C5csdkMCAPVmX4gLcRWkxKO8Vm=isgjgM-MowwA@mail.gmail.com>
+ <Yr11fp13yMRiEphS@zx2c4.com>
+In-Reply-To: <Yr11fp13yMRiEphS@zx2c4.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Thu, 30 Jun 2022 10:12:30 -0700
+Message-ID: <CANDhNCrcEBUUNevNyZp2qttqWssWBEcXMZ5nPO0Ntk7Vszd3bQ@mail.gmail.com>
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
+        android-kernel-team <android-kernel-team@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/30/22 8:12 AM, Marcos Paulo de Souza wrote:
-> Hi there,
-> 
-> this is the v2 of the patchset. The v1 can be found at [1]. There is only one
-> change in patch 1, which changed the target directory to build the test modules.
-> All other changes happen in patch 2.
-> 
-> Thanks for reviewing!
-> 
-> Changes from v1:
-> # test_modules/Makefile
->    * Build the test modules targeting /lib/modules, instead of ksrc when building
->      from the kernel source.
-> 
-> # test_modules/test_klp_syscall.c
->    * Added a parameter array to receive the pids that should transition to the
->      new system call. (suggedted by Joe)
->    * Create a new sysfs file /sys/kernel/test_klp_syscall/npids to show how many
->      pids from the argument need to transition to the new state. (suggested by
->      Joe)
->    * Fix the PPC32 support by adding the syscall wrapper for archs that select it
->      by default, without erroring out. PPC does not set SYSCALL_WRAPPER, so
->      having it set in v1 was a mistake. (suggested by Joe)
->    * The aarch64 syscall prefix was added too, since the livepatch support will come soon.
-> 
-> # test_binaries/test_klp-call_getpid.c
->    * Change %d/%u in printf (suggested byu Joe)
->    * Change run -> stop variable name, and inverted the assignments (suggested by
->    * Joe).
-> 
-> # File test-syscall.sh
->    * Fixed test-syscall.sh to call test_klp-call-getpid in test_binaries dir
->    * Load test_klp_syscall passed the pids of the test_klp-call_getpid instances.
->      Check the sysfs file from test_klp_syscall module to check that all pids
->      transitioned correctly. (suggested by Joe)
->    * Simplified the loop that calls test_klp-call_getpid. (suggested by Joe)
->    * Removed the "success" comment from the script, as it's implicit that it
->      succeed. Otherwise load_lp would error out. (suggested by Joe)
-> 
-> * Changed the commit message of patch 2 to further detail what means "tricky"
->    when livepatching syscalls. (suggested by Joe)
-> 
-> [1]: 20220603143242.870-1-mpdesouza@suse.com
-> 
+On Thu, Jun 30, 2022 at 3:06 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> On Wed, Jun 29, 2022 at 09:25:32PM -0700, Kalesh Singh wrote:
+> > Two concerns John raised:
+> >   1) Adding new ABI we need to maintain
+> >   2) Having unclear config options
+> >
+> > Another idea, I think, is to add the Kconfig option as
+> > CONFIG_SUSPEND_SKIP_RNG_RESEED? Similar to existing
+> > CONFIG_SUSPEND_SKIP_SYNC and I think it would address those concerns.
+>
+> I mentioned in my reply to him that this doesn't really work for me:
+>
+> | As a general rule, I don't expose knobs like that in wireguard /itself/,
+> | but wireguard has no problem with adapting to whatever machine properties
+> | it finds itself on. And besides, this *is* a very definite device
+> | property, something really particular and peculiar about the machine
+> | the kernel is running on. It's a concrete thing that the kernel should
+> | know about. So let's go with your "very clear description idea", above,
+> | instead.
+>
+> IOW, we're not going to add a tunable on every possible place this is
+> used.
 
-Sorry Nack on this. Let's not add modules under selftests. Any usage of module_init()
-doesn't belong under selftests.
+Hrm. Can you explain a bit more on why you're particularly adamant
+against scoping the config to describe the behavior we want from the
+kernel rather than describing a "machine property"?  As personally, I
+greatly prefer Kalesh's suggestion (as it avoids the same critique one
+could make of the CONFIG_ANDROID "flag"), but admittedly this is
+bikeshed territory.
 
-Leave these under lib and use KSTM_MODULE_LOADERS to load these modules that
-live under lib.
+Does this preference come out of the too-many-options-in-gpg
+antipattern? Or is there something else?
 
-thanks,
--- Shuah
+
+> Anyway if you don't want a runtime switch, make a compiletime switch
+> called CONFIG_PM_CONTINUOUS_RAPID_AUTOSLEEPING or whatever, write some
+> very discouraging help text, and call it a day. And this way you don't
+> have to worry about ABI and we can change this later on and do the whole
+> thing as a no-big-deal change that somebody can tweak later without
+> issue.
+
+Yeah, this is ok with me, as I don't see much benefit to creating a
+userland ABI, as I don't think at this point we expect the behavior to
+shift or oscillate at runtime.
+
+thanks
+-john
