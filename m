@@ -2,46 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BFD560E4D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 02:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18F1560EBD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 03:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbiF3Aux (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jun 2022 20:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
+        id S230073AbiF3Boe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jun 2022 21:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiF3Auw (ORCPT
+        with ESMTP id S229539AbiF3Boc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jun 2022 20:50:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0942403ED;
-        Wed, 29 Jun 2022 17:50:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C6FCB827B6;
-        Thu, 30 Jun 2022 00:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E5E0C34114;
-        Thu, 30 Jun 2022 00:50:41 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Rio6hS73"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656550239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lAj+UsLxPeGR3JIzKkMAY3UQ4Fc7rVtE34gVa7F5Mk0=;
-        b=Rio6hS73DikBrANqdWBHqlvUAZr9HeM3Tw2P2RT7GwzMWfx1mEoPnAX9y2tYS3dnyLa61K
-        G9F/AphVS3+hx/JuleNTfayYZfXj8oeQUQ6MZ4LtXRluQmG0UQvBPWFw0KqujncUNs3GUB
-        +IL/7OeJsmgFDXKFSsmPdhgTbsSjW5k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c29fd627 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Jun 2022 00:50:39 +0000 (UTC)
-Date:   Thu, 30 Jun 2022 02:50:34 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Joe Perches <joe@perches.com>
+        Wed, 29 Jun 2022 21:44:32 -0400
+X-Greylist: delayed 4037 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 29 Jun 2022 18:44:30 PDT
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11922252D;
+        Wed, 29 Jun 2022 18:44:30 -0700 (PDT)
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id D64CE21072;
+        Thu, 30 Jun 2022 01:44:26 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id 5CB071D;
+        Thu, 30 Jun 2022 01:44:15 +0000 (UTC)
+Message-ID: <1a1f24707a03c2363e29ef91905e9f206fb6a0b5.camel@perches.com>
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+From:   Joe Perches <joe@perches.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc:     Kalesh Singh <kaleshsingh@google.com>,
         Christoph Hellwig <hch@lst.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
+        Arve =?ISO-8859-1?Q?Hj=F8nnev=E5g?= <arve@android.com>,
         Todd Kjos <tkjos@android.com>,
         Martijn Coenen <maco@android.com>,
         Joel Fernandes <joel@joelfernandes.org>,
@@ -69,45 +57,301 @@ Cc:     Kalesh Singh <kaleshsingh@google.com>,
         android-kernel-team <android-kernel-team@google.com>,
         John Stultz <jstultz@google.com>,
         Saravana Kannan <saravanak@google.com>, rafael@kernel.org
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <YrzzWmQ9+uDRlO5K@zx2c4.com>
-References: <Yrx8/Fyx15CTi2zq@zx2c4.com>
- <20220629163007.GA25279@lst.de>
- <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
- <YryNQvWGVwCjJYmB@zx2c4.com>
- <Yryic4YG9X2/DJiX@google.com>
- <Yry6XvOGge2xKx/n@zx2c4.com>
- <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
- <YrzaCRl9rwy9DgOC@zx2c4.com>
- <CAC_TJvcEzp+zQp50wtj4=7b6vEObpJCQYLaTLhHJCxFdk3TgPg@mail.gmail.com>
- <306dacfb29c2e38312943fa70d419f0a8d5ffe82.camel@perches.com>
+Date:   Wed, 29 Jun 2022 18:44:14 -0700
+In-Reply-To: <YrzzWmQ9+uDRlO5K@zx2c4.com>
+References: <Yrx8/Fyx15CTi2zq@zx2c4.com> <20220629163007.GA25279@lst.de>
+         <Yrx/8UOY+J8Ao3Bd@zx2c4.com> <YryNQvWGVwCjJYmB@zx2c4.com>
+         <Yryic4YG9X2/DJiX@google.com> <Yry6XvOGge2xKx/n@zx2c4.com>
+         <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
+         <YrzaCRl9rwy9DgOC@zx2c4.com>
+         <CAC_TJvcEzp+zQp50wtj4=7b6vEObpJCQYLaTLhHJCxFdk3TgPg@mail.gmail.com>
+         <306dacfb29c2e38312943fa70d419f0a8d5ffe82.camel@perches.com>
+         <YrzzWmQ9+uDRlO5K@zx2c4.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <306dacfb29c2e38312943fa70d419f0a8d5ffe82.camel@perches.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: zbdp5d9fuytdswy6hfx17qhqzd7ozzw8
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 5CB071D
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19rCBqUb9HrdxbUJs3SdsgdKdwaYSpMY7s=
+X-HE-Tag: 1656553455-953600
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 05:36:57PM -0700, Joe Perches wrote:
-> > > +static ssize_t pm_userspace_autosleeper_show(struct kobject *kobj,
-> > > +                               struct kobj_attribute *attr, char *buf)
-> > > +{
-> > > +       return sprintf(buf, "%d\n", pm_userspace_autosleeper_enabled);
+On Thu, 2022-06-30 at 02:50 +0200, Jason A. Donenfeld wrote:
+> On Wed, Jun 29, 2022 at 05:36:57PM -0700, Joe Perches wrote:
+> > > > +static ssize_t pm_userspace_autosleeper_show(struct kobject *kobj,
+> > > > +                               struct kobj_attribute *attr, char *buf)
+> > > > +{
+> > > > +       return sprintf(buf, "%d\n", pm_userspace_autosleeper_enabled);
+> > 
+> > This should use sysfs_emit no?
 > 
-> This should use sysfs_emit no?
+> Probably, yea. Note that I just copy and pasted a nearby function,
+> pm_async_show, `:%s/`d the variable name, and then promptly `git diff |
+> clip`d it and plonked it into my email. Looking at the file, it uses
+> sprintf all over the place in this fashion. So you may want to submit a
+> cleanup to Rafael on this if you're right about sysfs_emit() being
+> universally preferred.
 
-Probably, yea. Note that I just copy and pasted a nearby function,
-pm_async_show, `:%s/`d the variable name, and then promptly `git diff |
-clip`d it and plonked it into my email. Looking at the file, it uses
-sprintf all over the place in this fashion. So you may want to submit a
-cleanup to Rafael on this if you're right about sysfs_emit() being
-universally preferred.
+Perhaps:
 
-Jason
+(trivial refactored and added a missing newline in autosleep_show)
+
+---
+ kernel/power/main.c | 102 ++++++++++++++++++++++++++--------------------------
+ 1 file changed, 52 insertions(+), 50 deletions(-)
+
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index e3694034b7536..c8a030319b15c 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -100,7 +100,7 @@ int pm_async_enabled = 1;
+ static ssize_t pm_async_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 			     char *buf)
+ {
+-	return sprintf(buf, "%d\n", pm_async_enabled);
++	return sysfs_emit(buf, "%d\n", pm_async_enabled);
+ }
+ 
+ static ssize_t pm_async_store(struct kobject *kobj, struct kobj_attribute *attr,
+@@ -124,27 +124,25 @@ power_attr(pm_async);
+ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 			      char *buf)
+ {
+-	char *s = buf;
++	int len = 0;
+ 	suspend_state_t i;
+ 
+ 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++) {
+ 		if (i >= PM_SUSPEND_MEM && cxl_mem_active())
+ 			continue;
+-		if (mem_sleep_states[i]) {
+-			const char *label = mem_sleep_states[i];
++		if (!mem_sleep_states[i])
++			continue;
+ 
+-			if (mem_sleep_current == i)
+-				s += sprintf(s, "[%s] ", label);
+-			else
+-				s += sprintf(s, "%s ", label);
+-		}
++		len += sysfs_emit_at(buf, len,
++				     mem_sleep_current == i ? "[%s] " : "%s ",
++				     mem_sleep_states[i]);
+ 	}
+ 
+-	/* Convert the last space to a newline if needed. */
+-	if (s != buf)
+-		*(s-1) = '\n';
++	/* Convert the last space to a newline if needed */
++	if (len)
++		sysfs_emit_at(buf, len - 1, "\n");
+ 
+-	return (s - buf);
++	return len;
+ }
+ 
+ static suspend_state_t decode_suspend_state(const char *buf, size_t n)
+@@ -205,7 +203,7 @@ bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
+ static ssize_t sync_on_suspend_show(struct kobject *kobj,
+ 				   struct kobj_attribute *attr, char *buf)
+ {
+-	return sprintf(buf, "%d\n", sync_on_suspend_enabled);
++	return sysfs_emit(buf, "%d\n", sync_on_suspend_enabled);
+ }
+ 
+ static ssize_t sync_on_suspend_store(struct kobject *kobj,
+@@ -242,22 +240,22 @@ static const char * const pm_tests[__TEST_AFTER_LAST] = {
+ static ssize_t pm_test_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 				char *buf)
+ {
+-	char *s = buf;
++	int len = 0;
+ 	int level;
+ 
+-	for (level = TEST_FIRST; level <= TEST_MAX; level++)
+-		if (pm_tests[level]) {
+-			if (level == pm_test_level)
+-				s += sprintf(s, "[%s] ", pm_tests[level]);
+-			else
+-				s += sprintf(s, "%s ", pm_tests[level]);
+-		}
++	for (level = TEST_FIRST; level <= TEST_MAX; level++) {
++		if (!pm_tests[level])
++			continue;
++		len += sysfs_emit_at(buf, len,
++				     level == pm_test_level ? "[%s] " : "%s ",
++				     pm_tests[level]);
++	}
+ 
+-	if (s != buf)
+-		/* convert the last space to a newline */
+-		*(s-1) = '\n';
++	/* convert the last space to a newline if needed */
++	if (len)
++		sysfs_emit_at(buf, len - 1, "\n");
+ 
+-	return (s - buf);
++	return len;
+ }
+ 
+ static ssize_t pm_test_store(struct kobject *kobj, struct kobj_attribute *attr,
+@@ -314,7 +312,7 @@ static char *suspend_step_name(enum suspend_stat_step step)
+ static ssize_t _name##_show(struct kobject *kobj,		\
+ 		struct kobj_attribute *attr, char *buf)		\
+ {								\
+-	return sprintf(buf, "%d\n", suspend_stats._name);	\
++	return sysfs_emit(buf, "%d\n", suspend_stats._name);	\
+ }								\
+ static struct kobj_attribute _name = __ATTR_RO(_name)
+ 
+@@ -339,7 +337,7 @@ static ssize_t last_failed_dev_show(struct kobject *kobj,
+ 	index %= REC_FAILED_NUM;
+ 	last_failed_dev = suspend_stats.failed_devs[index];
+ 
+-	return sprintf(buf, "%s\n", last_failed_dev);
++	return sysfs_emit(buf, "%s\n", last_failed_dev);
+ }
+ static struct kobj_attribute last_failed_dev = __ATTR_RO(last_failed_dev);
+ 
+@@ -353,7 +351,7 @@ static ssize_t last_failed_errno_show(struct kobject *kobj,
+ 	index %= REC_FAILED_NUM;
+ 	last_failed_errno = suspend_stats.errno[index];
+ 
+-	return sprintf(buf, "%d\n", last_failed_errno);
++	return sysfs_emit(buf, "%d\n", last_failed_errno);
+ }
+ static struct kobj_attribute last_failed_errno = __ATTR_RO(last_failed_errno);
+ 
+@@ -369,7 +367,7 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
+ 	step = suspend_stats.failed_steps[index];
+ 	last_failed_step = suspend_step_name(step);
+ 
+-	return sprintf(buf, "%s\n", last_failed_step);
++	return sysfs_emit(buf, "%s\n", last_failed_step);
+ }
+ static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
+ 
+@@ -477,7 +475,7 @@ bool pm_print_times_enabled;
+ static ssize_t pm_print_times_show(struct kobject *kobj,
+ 				   struct kobj_attribute *attr, char *buf)
+ {
+-	return sprintf(buf, "%d\n", pm_print_times_enabled);
++	return sysfs_emit(buf, "%d\n", pm_print_times_enabled);
+ }
+ 
+ static ssize_t pm_print_times_store(struct kobject *kobj,
+@@ -510,7 +508,7 @@ static ssize_t pm_wakeup_irq_show(struct kobject *kobj,
+ 	if (!pm_wakeup_irq())
+ 		return -ENODATA;
+ 
+-	return sprintf(buf, "%u\n", pm_wakeup_irq());
++	return sysfs_emit(buf, "%u\n", pm_wakeup_irq());
+ }
+ 
+ power_attr_ro(pm_wakeup_irq);
+@@ -520,7 +518,7 @@ bool pm_debug_messages_on __read_mostly;
+ static ssize_t pm_debug_messages_show(struct kobject *kobj,
+ 				      struct kobj_attribute *attr, char *buf)
+ {
+-	return sprintf(buf, "%d\n", pm_debug_messages_on);
++	return sysfs_emit(buf, "%d\n", pm_debug_messages_on);
+ }
+ 
+ static ssize_t pm_debug_messages_store(struct kobject *kobj,
+@@ -568,21 +566,24 @@ struct kobject *power_kobj;
+ static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 			  char *buf)
+ {
+-	char *s = buf;
++	int len = 0;
+ #ifdef CONFIG_SUSPEND
+ 	suspend_state_t i;
+ 
+-	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++)
++	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++) {
+ 		if (pm_states[i])
+-			s += sprintf(s,"%s ", pm_states[i]);
++			len += sysfs_emit_at(buf, len, "%s ", pm_states[i]);
++	}
+ 
+ #endif
+ 	if (hibernation_available())
+-		s += sprintf(s, "disk ");
+-	if (s != buf)
+-		/* convert the last space to a newline */
+-		*(s-1) = '\n';
+-	return (s - buf);
++		len += sysfs_emit_at(buf, len, "disk ");
++
++	/* convert the last space to a newline if needed */
++	if (len)
++		sysfs_emit_at(buf, len - 1, "\n");
++
++	return len;
+ }
+ 
+ static suspend_state_t decode_state(const char *buf, size_t n)
+@@ -681,8 +682,10 @@ static ssize_t wakeup_count_show(struct kobject *kobj,
+ {
+ 	unsigned int val;
+ 
+-	return pm_get_wakeup_count(&val, true) ?
+-		sprintf(buf, "%u\n", val) : -EINTR;
++	if (!pm_get_wakeup_count(&val, true))
++		return -EINTR;
++
++	return sysfs_emit(buf, "%u\n", val);
+ }
+ 
+ static ssize_t wakeup_count_store(struct kobject *kobj,
+@@ -724,17 +727,16 @@ static ssize_t autosleep_show(struct kobject *kobj,
+ 	suspend_state_t state = pm_autosleep_state();
+ 
+ 	if (state == PM_SUSPEND_ON)
+-		return sprintf(buf, "off\n");
++		return sysfs_emit(buf, "off\n");
+ 
+ #ifdef CONFIG_SUSPEND
+ 	if (state < PM_SUSPEND_MAX)
+-		return sprintf(buf, "%s\n", pm_states[state] ?
+-					pm_states[state] : "error");
++		return sysfs_emit(buf, "%s\n", pm_states[state] ?: "error");
+ #endif
+ #ifdef CONFIG_HIBERNATION
+-	return sprintf(buf, "disk\n");
++	return sysfs_emit(buf, "disk\n");
+ #else
+-	return sprintf(buf, "error");
++	return sysfs_emit(buf, "error\n");
+ #endif
+ }
+ 
+@@ -803,7 +805,7 @@ int pm_trace_enabled;
+ static ssize_t pm_trace_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 			     char *buf)
+ {
+-	return sprintf(buf, "%d\n", pm_trace_enabled);
++	return sysfs_emit(buf, "%d\n", pm_trace_enabled);
+ }
+ 
+ static ssize_t
+@@ -840,7 +842,7 @@ power_attr_ro(pm_trace_dev_match);
+ static ssize_t pm_freeze_timeout_show(struct kobject *kobj,
+ 				      struct kobj_attribute *attr, char *buf)
+ {
+-	return sprintf(buf, "%u\n", freeze_timeout_msecs);
++	return sysfs_emit(buf, "%u\n", freeze_timeout_msecs);
+ }
+ 
+ static ssize_t pm_freeze_timeout_store(struct kobject *kobj,
+
