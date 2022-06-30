@@ -2,126 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652EB560F62
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 05:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF4C560F9A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jun 2022 05:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbiF3DCe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jun 2022 23:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S232055AbiF3DUm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jun 2022 23:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiF3DCd (ORCPT
+        with ESMTP id S232144AbiF3DUV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jun 2022 23:02:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C62286DF;
-        Wed, 29 Jun 2022 20:02:32 -0700 (PDT)
+        Wed, 29 Jun 2022 23:20:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DF940A38;
+        Wed, 29 Jun 2022 20:20:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3E806202D;
-        Thu, 30 Jun 2022 03:02:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADC3C3411E;
-        Thu, 30 Jun 2022 03:02:27 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="cEfq2bbY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656558145;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lAxoLbADZAhu/fbtT19sYsfwjIQHx+7cL3zp8zm5ylc=;
-        b=cEfq2bbYg+E0cJPmGbfqowUlZyBsEFMB+Tx0GAvzVTKBOF7AJsVTfIV6F3UeLWUpu2xbSL
-        REcWxgdTxNMimTFAsv2fXTf8VAIjeKWpDKecdvNtTMkrU9267h6JnxgCkrxxlSMx660w+6
-        xigc6asOchBZ4Fie7h+gI+in3P0RKaw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 44cb7fda (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 30 Jun 2022 03:02:25 +0000 (UTC)
-Date:   Thu, 30 Jun 2022 05:02:19 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Kalesh Singh <kaleshsingh@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
-        android-kernel-team <android-kernel-team@google.com>,
-        John Stultz <jstultz@google.com>,
-        Saravana Kannan <saravanak@google.com>, rafael@kernel.org
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <Yr0SO0Ubi3Js7ciP@zx2c4.com>
-References: <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
- <YryNQvWGVwCjJYmB@zx2c4.com>
- <Yryic4YG9X2/DJiX@google.com>
- <Yry6XvOGge2xKx/n@zx2c4.com>
- <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
- <YrzaCRl9rwy9DgOC@zx2c4.com>
- <CAC_TJvcEzp+zQp50wtj4=7b6vEObpJCQYLaTLhHJCxFdk3TgPg@mail.gmail.com>
- <306dacfb29c2e38312943fa70d419f0a8d5ffe82.camel@perches.com>
- <YrzzWmQ9+uDRlO5K@zx2c4.com>
- <1a1f24707a03c2363e29ef91905e9f206fb6a0b5.camel@perches.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75391B827FB;
+        Thu, 30 Jun 2022 03:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16732C341CA;
+        Thu, 30 Jun 2022 03:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656559214;
+        bh=DQg6ibDynoYcoqExVb/W9xu3z+AWl3sONWXlXNqrmoU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VS+IfqZ2W5qNpOmLcATfwuiVaKD/DoS/5GL4fm5OHoheMkuaRQMz7jIoAAXLDG4Uj
+         IUlClOEmfYuRKPRAuE+KshoH5m/23rVKlmRrZeBjZ6tWuLr4vo29EvRNEHZZOKzO4t
+         YcUBcJQAF7GoA+vsYtKF9rcnUDq3B1F0giyjRjOl4Zk9Eq6Gx/SUSfAnwlJgnLLjUj
+         7/Buv3Sgu1HWAT4/dVz8iXAkrIlQpn5F5n7IvLj9HU7rT5puTeHyJTjz7CsaKFtcCd
+         oH61mOnhKI6NoW57T6Ydm80A3RQI3WFmNKe3P+cPWNBskODpeU9wnptOedFvwj4vv/
+         H8rlp0KrR7P2w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EADAAE49FA0;
+        Thu, 30 Jun 2022 03:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1a1f24707a03c2363e29ef91905e9f206fb6a0b5.camel@perches.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests net: fix kselftest net fatal error
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165655921395.17409.13594561872528407248.git-patchwork-notify@kernel.org>
+Date:   Thu, 30 Jun 2022 03:20:13 +0000
+References: <20220628174744.7908-1-dietschc@csp.edu>
+In-Reply-To: <20220628174744.7908-1-dietschc@csp.edu>
+To:     Coleman Dietsch <dietschc@csp.edu>
+Cc:     linux-kselftest@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 06:44:14PM -0700, Joe Perches wrote:
-> On Thu, 2022-06-30 at 02:50 +0200, Jason A. Donenfeld wrote:
-> > On Wed, Jun 29, 2022 at 05:36:57PM -0700, Joe Perches wrote:
-> > > > > +static ssize_t pm_userspace_autosleeper_show(struct kobject *kobj,
-> > > > > +                               struct kobj_attribute *attr, char *buf)
-> > > > > +{
-> > > > > +       return sprintf(buf, "%d\n", pm_userspace_autosleeper_enabled);
-> > > 
-> > > This should use sysfs_emit no?
-> > 
-> > Probably, yea. Note that I just copy and pasted a nearby function,
-> > pm_async_show, `:%s/`d the variable name, and then promptly `git diff |
-> > clip`d it and plonked it into my email. Looking at the file, it uses
-> > sprintf all over the place in this fashion. So you may want to submit a
-> > cleanup to Rafael on this if you're right about sysfs_emit() being
-> > universally preferred.
-> 
-> Perhaps:
-> 
-> (trivial refactored and added a missing newline in autosleep_show)
-> 
-> ---
->  kernel/power/main.c | 102 ++++++++++++++++++++++++++--------------------------
->  1 file changed, 52 insertions(+), 50 deletions(-)
+Hello:
 
-You should probably post a proper patch to the PM people. At least I'm
-not going to look at that here, as it's not really relevant at all to
-this discussion.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Jason
+On Tue, 28 Jun 2022 12:47:44 -0500 you wrote:
+> The incorrect path is causing the following error when trying to run net
+> kselftests:
+> 
+> In file included from bpf/nat6to4.c:43:
+> ../../../lib/bpf/bpf_helpers.h:11:10: fatal error: 'bpf_helper_defs.h' file not found
+>          ^~~~~~~~~~~~~~~~~~~
+> 1 error generated.
+> 
+> [...]
+
+Here is the summary with links:
+  - selftests net: fix kselftest net fatal error
+    https://git.kernel.org/netdev/net/c/7b92aa9e6135
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
