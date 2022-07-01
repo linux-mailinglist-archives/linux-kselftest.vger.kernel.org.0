@@ -2,93 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEC6563B9D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Jul 2022 23:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DE5563C37
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Jul 2022 00:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbiGAUx4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Jul 2022 16:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
+        id S230180AbiGAWN5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Jul 2022 18:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiGAUxz (ORCPT
+        with ESMTP id S229496AbiGAWNz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Jul 2022 16:53:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9139D31914;
-        Fri,  1 Jul 2022 13:53:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 383F2B83202;
-        Fri,  1 Jul 2022 20:53:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E896C3411E;
-        Fri,  1 Jul 2022 20:53:47 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WVCDR+HX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656708825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JJUgAvEg59n4qTslnzMARg0Z7Fq1XNYlppr5mzNAEqY=;
-        b=WVCDR+HXhx1XepQGWMhNtkhfpF4VuKMPP6hDrrkRVJxJJgKwabfBDrQXToI77SR9UXBm3F
-        kLVpx3RB9+LYbBp2zHoJ97qA3TEMKLwsAvbGJdF3Zt4r0pmUB7vdHkgPGYFRu+T6oyyoSK
-        VAYIk/Cx+c27Cg+gExj3m+nb5RQIEeQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b51dea0b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 1 Jul 2022 20:53:44 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 22:53:36 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     John Stultz <jstultz@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?utf-8?B?SGrDuG5uZXbDpWc=?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
-        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
-        android-kernel-team <android-kernel-team@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] remove CONFIG_ANDROID
-Message-ID: <Yr9e0JnUbu93Qq1p@zx2c4.com>
-References: <20220629163007.GA25279@lst.de>
- <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
- <YryNQvWGVwCjJYmB@zx2c4.com>
- <Yryic4YG9X2/DJiX@google.com>
- <Yry6XvOGge2xKx/n@zx2c4.com>
- <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
- <YrzaCRl9rwy9DgOC@zx2c4.com>
- <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
- <YrztOqBBll66C2/n@zx2c4.com>
- <87a69slh0x.fsf@meer.lwn.net>
+        Fri, 1 Jul 2022 18:13:55 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EE033EB6
+        for <linux-kselftest@vger.kernel.org>; Fri,  1 Jul 2022 15:13:53 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id m24-20020a0568301e7800b00616b5c114d4so2832281otr.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Jul 2022 15:13:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vIW1nHmpusRVF5xA8y8f60fs96mXWAcFdbwaab9mjTQ=;
+        b=AAiP3UDUcO0WW1eVydHEQqa/0yv6PGRxMGMWMq4CA6z1TjTc3RSmdqI+IxsZBR9Rxx
+         IkwgLoWFdwWT3VY/gZd6znbNEbl59FmAPzla9CILyjGcvqZAaHJhdgtZxcYRSpdxk1nx
+         moKiZb4Gu1/JExBVtUHDKtcc+yL+6POUFeNy8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vIW1nHmpusRVF5xA8y8f60fs96mXWAcFdbwaab9mjTQ=;
+        b=BmwcnWDMw+V41RThcwltoYmsiAQ/tBNpbsPtLap9Fl8ZzjzG2aRZE0FZZMY0bgibdy
+         dxfdVufWIivZ5LbgazS4yaK7rp5z06dOqfxbLw3/osB1O+D65ZeZ4c8Tl+nMn/QijRIy
+         19QgjRz+aQu3SvXi83TmoGXYAs1KTZewWu2KlvHfYqnQyCFBpZhOSkcRjuaCkcC0x7cr
+         /4Q+5HoNSJQ/NxO/BAugwc5H4l2I8IlbyE+oWgnO33lc+P7UFkEW0/b6MGPpy/ln8tKE
+         mmaoHlWFXy8otkD6sPIVCJRSJlEwNFAK8mSvW9GXT8uKMfCJdZBtUF3UoydyxHVPnwAk
+         8z6A==
+X-Gm-Message-State: AJIora+vKZ5eYN0OIbi0dBiLmVjisqAz63+18pqeqddfZdr7+ZGezfrz
+        1J4avJVRQ8DgljBE0FNBuZLk4sUYO676AA==
+X-Google-Smtp-Source: AGRyM1vwcKyX1NeGZPO3z+npoB1EW9K/fAsey9TXHIR98gOlceBgC9O5wUKh91o6R/hQY0yXFpq7tw==
+X-Received: by 2002:a05:6830:4186:b0:614:d750:825f with SMTP id r6-20020a056830418600b00614d750825fmr7670514otu.8.1656713633270;
+        Fri, 01 Jul 2022 15:13:53 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id l7-20020a056830268700b00616a2919312sm5660316otu.8.2022.07.01.15.13.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Jul 2022 15:13:52 -0700 (PDT)
+Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, jpoimboe@redhat.com, pmladek@suse.com,
+        joe.lawrence@redhat.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220630141226.2802-1-mpdesouza@suse.com>
+ <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
+ <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8ff95ef5-db76-171d-4c4c-a84d9981290d@linuxfoundation.org>
+Date:   Fri, 1 Jul 2022 16:13:50 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87a69slh0x.fsf@meer.lwn.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,50 +76,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jon,
-
-On Fri, Jul 01, 2022 at 02:22:38PM -0600, Jonathan Corbet wrote:
-> So please forgive the noise from the peanut gallery
-
-Yuh oh, I sure hope this isn't newsworthy for LWN. This has already
-consumed me for two days...
-
-> myself wondering...do you really need a knob for this?  The kernel
-> itself can observe how often (and for how long) the system is suspended,
-> and might well be able to do the right thing without explicit input from
-> user space.  If it works it would eliminate a potential configuration
-> problem and also perhaps respond correctly to changing workloads.
+On 7/1/22 1:48 AM, Miroslav Benes wrote:
+> Hi Shuah,
 > 
-> For example, rather than testing a knob, avoid resetting keys on resume
-> if the suspend time is less than (say) 30s?
+> On Thu, 30 Jun 2022, Shuah Khan wrote:
 > 
-> Educate me on what I'm missing here, please :)
 
-What you're missing is that wireguard needs to do this before going to
-sleep, not when waking up, because one of the objectives is forward
-secrecy. See
-https://git.zx2c4.com/wireguard-linux/tree/drivers/net/wireguard/device.c#n63
+>>
+>> Sorry Nack on this. Let's not add modules under selftests. Any usage of
+>> module_init()
+>> doesn't belong under selftests.
+> 
+> as mentioned before, that ship has already sailed with
+> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c. Anyway...
+> 
 
-	if (IS_ENABLED(CONFIG_PM_AUTOSLEEP) || IS_ENABLED(CONFIG_ANDROID))
-		return 0;
-	if (action != PM_HIBERNATION_PREPARE && action != PM_SUSPEND_PREPARE)
-		return 0;
-	[...]
-	wg_noise_handshake_clear(&peer->handshake);
-	wg_noise_keypairs_clear(&peer->keypairs);
+Just because of one module under bpf doesn't mean that now we can add more.
+bpf test is some ways is not a good example or model to use. bpf test requires
+specific environment and its needs are different from other tests.
 
-Somebody asked the same question on wgml here -
-https://lore.kernel.org/wireguard/CAHmME9p2OYSTX2C5M0faKtw2N8jiyohvRqnAPKa=e7BWynF7fQ@mail.gmail.com/T/
-- and then eventually suggested that I should wake up computers from
-sleep to clear that memory. No way jose.
+> You wrote before that you did not have a problem with it. And you would
+> not have a problem with Marcos' approach if modules can be compiled and if
+> not, the tests would fail gracefully. What has changed? If you see a
+> problem in the patch set regarding this, can we fix it?
+>   
 
-Anyway, this matter has been resolved in this thread here:
-https://lore.kernel.org/lkml/20220630191230.235306-1-kaleshsingh@google.com/T/
-And this Android change:
-https://android-review.googlesource.com/c/kernel/common/+/2142693/1
-Resulting in these two commits landing in Greg's tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=261e224d6a5c43e2bb8a07b7662f9b4ec425cfec
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git/commit/?id=1045a06724f322ed61f1ffb994427c7bdbe64647
-So hopefully this thread can come to an end and I can get back to work.
+Yes I did and after reviewing and thinking about it some more, I decided this
+is the right direction go down on.
 
-Jason
+>> Leave these under lib and use KSTM_MODULE_LOADERS to load these modules that
+>> live under lib.
+> 
+> I may misunderstand but KSTM_MODULE_LOADERS does not seem to provide the
+> flexibility we need (yes, it could be hacked around, but I do not think
+> that the result would be nice). See what we have in
+> tools/testing/selftests/livepatch/functions.sh to make sure that a live
+> patch module is properly loaded and unloaded.
+> 
+> My main question is different though. As Marcos mentioned before, we would
+> like to have our tests really flexible and a possibility to prepare and
+> load different live patch modules based on a template is a part of it.
+> What is your proposal regarding this? I can imagine having a template in
+> lib/livepatch/ which would not be compilable and a script in
+> tools/testing/selftests/livepatch/ would copy it many times, amend the
+> copies (meaning parameters would be filled in with sed or the code would
+> be changed), compile them and load them. But this sounds horrible to me,
+> especially when compared to Marcos' approach in this patch set which is
+> quite straightforward.
+> 
+
+I have to think about this some more to get a better feel for the use-case.
+
+> Then there is an opportunity which Joe described. To run the latest
+> livepatch kselftests on an older kernel. Having test modules in lib/ is
+> kind of an obstacle there.
+> 
+
+You can revision match if you think you have to have kernel and livepatch
+test be the same version.
+
+thanks,
+-- Shuah
