@@ -2,175 +2,245 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928EE56385D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Jul 2022 19:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53456563878
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Jul 2022 19:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiGARA6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Jul 2022 13:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        id S230370AbiGARRG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Jul 2022 13:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGARAy (ORCPT
+        with ESMTP id S229476AbiGARRF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Jul 2022 13:00:54 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2077.outbound.protection.outlook.com [40.107.220.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF4711C13;
-        Fri,  1 Jul 2022 10:00:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m5PywVwWaHOvDOdByGpds8R1wgrApeyBijjF4+RN3qiJtBcDbjbGLGkV/6leHoojCEOE9793M2SY+E7RcySRs0fEUJXcB8/REug4L9ULShrpMqyfNUZPN8hOb8GxKQ32tQEDHnqMpybkKHosRGi2Ftv+ElrN9Rkfy5uJdj8bhp8VNwQJZAD34wpNtQlhkivH2FxVlp07vp0jpudHGb40X7lnyzAKHwtT52kih4M/d8FY71axX9SDYXhpfyrLkyeAH3rGqcpdODcFHvYrF7k8FMHlESGSehscb3wv2xEh/RGiBhHzz2mirhTeLV1FuvPFLlEWtee3qfTaH5At0Xyqlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PCjr+f7uZ5DC0YbdbPOnjOwPt+ZQMquVRpoMqubuKm4=;
- b=bLj20C8j1NF24Q5ZJpx4zOlTPaaJ5txVLkFcNlAMJ4ChzYacznjS6y5nzdJy7a4ZB6S6Mvbmp+WJAQ1QwcPa7kzCZdCWxUdEbtXgsHXRgsywMx7Ruhjw5B+5aw5Pov22N7UG5xYGB2aeccQReyKg+MfXPuKFJhfP/Hl3vmlJcDPmxaiRIiY5VwQE4t66QroltB+VZ1SyMWgkMI42hIh3ecZwuOadCnO3ofEeXanXFPCa8XB7lyl31OAmYnJm93LIrG5NOwzyyuUTxcq3ijXb1jVvE1PGKUtuT46JADreTmvOOa9KhucW5UO9M9GEJ4yTbkhARHH72hbTqjqV9nxyCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PCjr+f7uZ5DC0YbdbPOnjOwPt+ZQMquVRpoMqubuKm4=;
- b=c+yZzSDubRBaYytIWeW4oJ58SPnAfbo44YoInD0HB91t1XXNSq9GT8hH0zbzhnuEYBI2C3f7Y+wpxTxFDxC5MdJUvekxIt5EbvCXn3+/PxfDlb5+5YuJ1NLerN8iH1f7T7I8BUutwQ8n/ugx+vSl9EcOy1LydocMEiiGJGIlsT7cRJXmyKgNHF8uRjZRgQyzSsrbIqjgFQU0RHwjWhwcJI9ZUK6Ho7bZAr8HA2TgpN6i2wWKOZoEa4AjyLTvr+WJa38qpvRhlcHOhHMrS4lL4X0qfvoVsDR9T3XsEUmMJ8627wKyZ2BwnRXF/SDNnYMOCceQ5nbuFcOGZ/WM2E62gA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by MWHPR1201MB0269.namprd12.prod.outlook.com (2603:10b6:301:5b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Fri, 1 Jul
- 2022 17:00:51 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::611c:e609:d343:aa34]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::611c:e609:d343:aa34%5]) with mapi id 15.20.5395.014; Fri, 1 Jul 2022
- 17:00:51 +0000
-Date:   Fri, 1 Jul 2022 20:00:45 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Hans S <schultz.hans@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
- traffic cannot unlock a locked port
-Message-ID: <Yr8oPba83rpJE3GV@shredder>
-References: <20220630111634.610320-1-hans@kapio-technology.com>
- <Yr2LFI1dx6Oc7QBo@shredder>
- <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
- <Yr778K/7L7Wqwws2@shredder>
- <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
+        Fri, 1 Jul 2022 13:17:05 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FBD167C9;
+        Fri,  1 Jul 2022 10:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656695824; x=1688231824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=78PtGUkKSp36JzVKi0xJJNA9YET195hTgBzl+p/xvmM=;
+  b=A2gnsFjE3ZPeTI+x9CA1JXAN5UA24mJHbH+t855fd3gSTISb6545KugD
+   Z+rXdRSJvCy7vgb039XagZXlAclk4980/8UzYJoPdsvgzX566F6wrHjm3
+   rEqZWJIhCHoKhJtcW6odgZfsQ6Df+i0YZtx1lzkFSVtbAzfNthcb42jcd
+   zgs0biuXedqEEzXboMsdxEflq2dFnRaY4oWUL5eUjAI9IQQPz1UDbvtIB
+   umnA/JImmuJvpE6q8yrUN3ux3zBPn1QdVe9xHRK4DHnw9eDbLqr2FDl+1
+   tDrx0yN+rtGXsPUOqfMr1bIygby2G/12G+3V21XBsSsXCZsKke5HUKxZ2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10395"; a="281464206"
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="281464206"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2022 10:17:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,237,1650956400"; 
+   d="scan'208";a="566417554"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Jul 2022 10:16:56 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o7KGG-000EBO-5W;
+        Fri, 01 Jul 2022 17:16:56 +0000
+Date:   Sat, 2 Jul 2022 01:16:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <greg@kroah.com>, Luis Chamberlain <mcgrof@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        David Gow <davidgow@google.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] selftest: Taint kernel when test module loaded
+Message-ID: <202207020131.L5kV3eDf-lkp@intel.com>
+References: <20220701084744.3002019-4-davidgow@google.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
-X-ClientProxiedBy: VI1PR0701CA0029.eurprd07.prod.outlook.com
- (2603:10a6:800:90::15) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7f10eb30-b7f4-4bb1-5ade-08da5b8340fa
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0269:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ApHyOAD34mGSuogm7Lu2qAijb0jMoDoYBNoe6fD0Hejnif4rhAfceA9Kcn1U1MJRBIzBDBCOcNYq+1tppZiKLIpCF3SPtRpB8qSjwvKeZTweKQcxl6Bzy/VPL9DMs+/mqXgxAQ2xIOmhufop0We+NpDPRj6zPf6bqe1YFcAgCMVQ+sRF8a1NkEbLc+NDnrw16TBCHm3D+6PDPb/uAjTLQJek+rao9UL9DPZjQYuB+wwnvBboSD/Fu9dsF9Hg6q/IuNcS1NkPHXcbEHdvVE8po2jsJoq7j+H9fTeScRAJe1qGA30p9wpRU9a6fOcA7wS8UWiZLOBcQHmgLcgjrv1+xmoQ1MPa/71HirXgjdWf0iDwiNyopwnaMJp20itDesyqYOfyqvb3PrWWLErVHOC5saYH4fA7waxRbaEjUNe8Lj0CjUcmTe7CDneSltf4rmLgmPHFhNWkYGo24uRgZ0Y7x6MnNKPsP1mxd24snjQbeagS0URCLB5CyIWlSzYgPW5g+KFakf9D/w/+GMT6A2ZAT+prpu2S7L3ttozT847+R6jvGmFSl5Hc/Kyp9oPLA1nR3H5wd95hHvn0dIhMqGJDB7mc0vkKYDYVSDdmJkcVPJKmE0xeAzUVkPM9OUJFi+ia3FmWYkKLymGOlc3u606pY5W9FTFeOZ6py2dX6SJ0Lz9FZRG2GxTf//tsccy/QwIlkAw3GrQjYQZUp7PY8AkiL+DConGyc4A8ip9jJ2s1uDkQU4IrcQk9PHnItzvVr07ERMfqKkJXGHjKfaEPMqR6pA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(366004)(376002)(39860400002)(346002)(396003)(136003)(33716001)(186003)(83380400001)(2906002)(41300700001)(5660300002)(38100700002)(66946007)(6916009)(66476007)(66556008)(9686003)(7416002)(26005)(6506007)(8936002)(6512007)(4326008)(316002)(6666004)(86362001)(478600001)(8676002)(6486002)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KEETqChD9kLiaO0Ir4QSHO/aWBf6Qagw8mhbMuJHlSxanbZ2bS1SD+m8Q1Gv?=
- =?us-ascii?Q?AvPYZ1a8pyO0QLwh4EAPilKjL6FIZ83+ncO3nrU8WDsqitylfUO7RtUmURFC?=
- =?us-ascii?Q?MMWy+WLMpd4m0zN+7SAzDsX7pdkSPLvOn0dm+J4CSUxifAG64wrZ2drWqNky?=
- =?us-ascii?Q?1sStBhQDnRi/9QGDvr0w83AceIBk27RpRf4ViK1bvfDn0OLet2IzbKUg6COa?=
- =?us-ascii?Q?d09HiQEIGeIkjcGuvlEIzw8QcgvuiEomIGABfbUoCxfFVyJG9BKBbET/Q6Q2?=
- =?us-ascii?Q?1gitwqtFWVUMcgovpsbbXryokRs5oxd2oTjbaAq8QNBLzIV5jaDYp7bTAxqj?=
- =?us-ascii?Q?3apgxsPwYWXU76AeuXkc6/lYbrhn62GuKgpjhfkYBRlbWGZ0PHmXW0WvXyZ4?=
- =?us-ascii?Q?7hQ9xUKhgEytAmPY4m+K+Z0e3Qy2S+W7UvQ8qwJZspoR60ewO5RKBmlzfJXv?=
- =?us-ascii?Q?6qhp8Udgt0Vh3OFDF8Uk5RDQJVPoR5cowGPOAg/Qb8BdUiiY9mex8K/8MdDn?=
- =?us-ascii?Q?I1i3g9FFwWRHCxEdfmyz16460LdY596scSTPTFtAIqWmrz/tAMCg9dpQLf2D?=
- =?us-ascii?Q?UVJOtnzV5e5ugm+7V03HuEWihi5pRDZoTAmy2f8YcxzUqD7656xZpphADhKO?=
- =?us-ascii?Q?6FMyiesY0T1tsJPzSmkF5ndxaGdc+biRfi21F5F8nRw3N21OS8a2ImltsEuH?=
- =?us-ascii?Q?YxWQ0Bd8UrDEXRA2fmdoJCeSur8y0bUI7oMByxZX0WkCfOc2Afk6H+MnBKUe?=
- =?us-ascii?Q?+xnGYzm4AMLJYiftmV8zuNxxDmoC+QkZnFLDjJK04eqSdxM22tCx3OjG3HIE?=
- =?us-ascii?Q?vvloWk4lf8ACm68N34c3Blyl6Nkcv/tZgpjDdchCu6GlNoLiCG65GvpQa1ia?=
- =?us-ascii?Q?s0I6OAyaiD2GeD+m+CPcEPtoenOhPHz0ceszr2k9c6y8MJGUKV/g6g84zAgt?=
- =?us-ascii?Q?XaV/M6NR3BG55/6JIJrBh2XcyY+xYc2uSCwmrEzscIWuT0KC6CwvVWndTM1y?=
- =?us-ascii?Q?tre9krqSXQdvocRBOrbw1HwVLwpqMP2+OHjjfdvDPm83GyOawVI8DH/8KvXb?=
- =?us-ascii?Q?PgM0K0fE1Te92U7v7ig0goNk9resdRdIpVX7llp0D0WdIrXDbzg3rvZ90Za/?=
- =?us-ascii?Q?v6ZBfxjHnJB8bTbic610cggjakx4r55AgdVa6Q/HrNywVTUI6Uy5z/Js2C8G?=
- =?us-ascii?Q?MsHVdTCbaG6TbjYtPXvwNsPmFKQ64xum/yKxUfsMMwyWEBWFPcdXN9NYgiBu?=
- =?us-ascii?Q?FCnT4CAHtT8g093nr7ZOu3w4Pn+OjvO8Yds4zwY2atNGivdkbUyjlucSRkhA?=
- =?us-ascii?Q?3Wu4mLHhVGDTYEMl7Ciwu7IReD8V5p1NikT9C+TOQND+ashqHzuPb3IWqKMR?=
- =?us-ascii?Q?kdOaLBKMtPd8LZh8O9eGVK4biHPjJBe/k0U+V/LccPOgqBlIqh+kA6GL6WFS?=
- =?us-ascii?Q?Y09WOfYa/Qjvdd6nNh+Z5I0N8i5ecr3oSeJHgvZMuC1Q1weFMd/9wOainy+V?=
- =?us-ascii?Q?MIi+YCvx9Eul89guOhQEaC+wBeqoHQstKtesh1CwH52s8JbftYnVDFhCF5/g?=
- =?us-ascii?Q?9qWZ0apoAFvH07Y1htyHQloPb2QASklQHJm5uHKy?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7f10eb30-b7f4-4bb1-5ade-08da5b8340fa
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 17:00:51.6275
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9goAaIZEA2EmTm5kHX3gsk+CT6kkflWRN3cWK1q0w0sKcMs/W9nwFfV5CkXGTIUkka5HkmB9E1KrpjwMItF7VQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0269
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220701084744.3002019-4-davidgow@google.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 06:07:10PM +0200, Hans S wrote:
-> There is several issues when learning is turned off with the mv88e6xxx driver:
+Hi David,
 
-Please don't top-post...
+I love your patch! Yet something to improve:
 
-> 
-> Mac-Auth requires learning turned on, otherwise there will be no miss
-> violation interrupts afair.
-> Refreshing of ATU entries does not work with learning turn off, as the
-> PAV is set to zero when learning is turned off.
-> This then further eliminates the use of the HoldAt1 feature and
-> age-out interrupts.
-> 
-> With dynamic ATU entries (an upcoming patch set), an authorized unit
-> gets a dynamic ATU entry, and if it goes quiet for 5 minutes, it's
-> entry will age out and thus get removed.
-> That also solves the port relocation issue as if a device relocates to
-> another port it will be able to get access again after 5 minutes.
+[auto build test ERROR on masahiroy-kbuild/for-next]
+[also build test ERROR on shuah-kselftest/next linus/master v5.19-rc4 next-20220701]
+[cannot apply to mcgrof/modules-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-You assume I'm familiar with mv88e6xxx, when in fact I'm not. Here is
-what I think you are saying:
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+config: arm-randconfig-r024-20220629 (https://download.01.org/0day-ci/archive/20220702/202207020131.L5kV3eDf-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a9119143a2d1f4d0d0bc1fe0d819e5351b4e0deb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/42b6461d6cca4baeeeed474b1400e203057c2b9b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/panic-Taint-kernel-if-tests-are-run/20220701-164843
+        git checkout 42b6461d6cca4baeeeed474b1400e203057c2b9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash lib/
 
-1. When a port is locked and a packet is received with a SA that is not
-in the FDB, it will only generate a miss violation if learning is
-enabled. In which case, you will notify the bridge driver about this
-entry as externally learned and locked entry.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-2. When a port is locked and a packet is received with a SA that matches
-a different port, it will be dropped regardless if learning is enabled
-or not.
+All errors (new ones prefixed by >>):
 
-3. From the above I conclude that the HW will not auto-populate its FDB
-when a port is locked.
+   lib/test_printf.c:157:52: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                  ~~~~                       ^
+                                  %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:55: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                       ~~~~                     ^
+                                       %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:58: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                            ~~~~                   ^~~
+                                            %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:63: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                                 ~~~~                   ^~~
+                                                 %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:157:68: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|128|255", "%hhu|%hhu|%hhu|%hhu|%hhu", 0, 1, 257, 128, -1);
+                                                      ~~~~                   ^~
+                                                      %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:52: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                  ~~~~                       ^
+                                  %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:55: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                       ~~~~                     ^
+                                       %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:58: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                            ~~~~                   ^~~
+                                            %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:63: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                                 ~~~~                   ^~~
+                                                 %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:158:68: warning: format specifies type 'char' but the argument has type 'int' [-Wformat]
+           test("0|1|1|-128|-1", "%hhd|%hhd|%hhd|%hhd|%hhd", 0, 1, 257, 128, -1);
+                                                      ~~~~                   ^~
+                                                      %d
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                     ~~~          ^~~~
+                                     %o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:47: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                        ~~~             ^~~~
+                                        %o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+   lib/test_printf.c:159:53: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+           test("2015122420151225", "%ho%ho%#ho", 1037, 5282, -11627);
+                                           ~~~~               ^~~~~~
+                                           %#o
+   lib/test_printf.c:137:40: note: expanded from macro 'test'
+           __test(expect, strlen(expect), fmt, ##__VA_ARGS__)
+                                          ~~~    ^~~~~~~~~~~
+>> lib/test_printf.c:801:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_printf);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   13 warnings and 1 error generated.
+--
+>> lib/test_scanf.c:811:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_scanf);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   1 error generated.
+--
+>> lib/test_bitmap.c:889:1: error: use of undeclared identifier 'TAINT_KUNIT'
+   KSTM_MODULE_LOADERS(test_bitmap);
+   ^
+   lib/../tools/testing/selftests/kselftest_module.h:45:12: note: expanded from macro 'KSTM_MODULE_LOADERS'
+           add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);       \
+                     ^
+   1 error generated.
 
-4. FDB entries that point to a port that does not have learning enabled
-are not subject to ageing (why?).
 
-Assuming the above is correct, in order for mv88e6xxx to work correctly,
-it needs to enable learning on all locked ports, but it should happen
-regardless of the bridge driver learning configuration let alone impose
-any limitations on it. In fact, hostapd must disable learning for all
-locked ports.
+vim +/TAINT_KUNIT +801 lib/test_printf.c
+
+707cc7280f452a1 Rasmus Villemoes 2015-11-06  800  
+6b1a4d5b1a26ae8 Tobin C. Harding 2019-04-05 @801  KSTM_MODULE_LOADERS(test_printf);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
