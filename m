@@ -2,156 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1649C56399E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Jul 2022 21:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCC8563B18
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Jul 2022 22:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbiGATTR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Jul 2022 15:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
+        id S231534AbiGAUWn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Jul 2022 16:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiGATTQ (ORCPT
+        with ESMTP id S230183AbiGAUWl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Jul 2022 15:19:16 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BED10FC8;
-        Fri,  1 Jul 2022 12:19:15 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id k7so4494287wrc.12;
-        Fri, 01 Jul 2022 12:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+btLS9OBdLthxpmSH7aEjgmKx+CA2SmFIV+Z3Abyo6M=;
-        b=QznS/Ul5921zyvr7SGAdAjWJPyFl2OnDgcIfaLZLbgOj5P3FmBayBT22F3dC904OxK
-         2LjBN65VV3yNIjbw5IVk6bLyPQF3quWXEWK4rthqK8dAUMoF7eJGlDt3Na9FpJ03fuAD
-         sbLkUpDNaVWpQbRENJBqM0Lyc4wPR6XeqsVqauKwh2OFzPBYXIee1Td2qPbLEiQBnAXd
-         WOI51HHCnxygVHYRg99A4rnOoakY7Hkrbl/Y+I/TJ5Sl7i60mprbdEw7lKwTG6kiSNA2
-         kBfY29HpCxd/Dv8acARD/L4jA36kimazdLCiJZZ0NXdhUx/3tkX5WY9eN6l/YFeW4x8s
-         7SUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+btLS9OBdLthxpmSH7aEjgmKx+CA2SmFIV+Z3Abyo6M=;
-        b=kKw2HFtwfWHOYrJ/nO25TYGa8Fo8kT3dx+3qIZnR//TzBvVhrqIv4eXMjgeENT4NzX
-         rmuOrRRYLVMDWMZtV7/6PaT3m+RDteTiQfmfxD5DbRobMq/yngrPC9c53b2GB0eGl1gP
-         FgV+/2BXWvNUOADrtD4npbx9XJ2KFHYPB7uUrTv09IfyuP7QhSRwY+4LkGNuP1dujee7
-         7eHzDRVIbzrycIjGV9HLeL1sZriEimZ5BggvtBlHmtamZfLh5EvwmF5SoxCWgnnRWqj7
-         qU8wScztid8tMQl7JbhlAhnLUqe++Npidf99xw/eG9fRg1CCKx7wHUKRifwsON0jYLjB
-         fIhw==
-X-Gm-Message-State: AJIora/C8NBC2VqHOKSJQwVH1ni1E6sn8kj1mTr64jRizHLyFqjeWrnB
-        HgusrZ7uzkzVF/XKNSDH3/UjP2fQj53dwt9uTLnW1szifIE=
-X-Google-Smtp-Source: AGRyM1tR5cJUPzpwFIGhhOg00Q2nOLkIS0YH+W4KE5ofW3LFFWMYxDBQyfdtKh5qXZUHPJ1X2A4wY5bcHurN8K6O4Zo=
-X-Received: by 2002:a05:6000:12d0:b0:21b:a248:9a2e with SMTP id
- l16-20020a05600012d000b0021ba2489a2emr15868624wrx.437.1656703154192; Fri, 01
- Jul 2022 12:19:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220630111634.610320-1-hans@kapio-technology.com>
- <Yr2LFI1dx6Oc7QBo@shredder> <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
- <Yr778K/7L7Wqwws2@shredder> <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
- <Yr8oPba83rpJE3GV@shredder>
-In-Reply-To: <Yr8oPba83rpJE3GV@shredder>
-From:   Hans S <schultz.hans@gmail.com>
-Date:   Fri, 1 Jul 2022 21:17:27 +0200
-Message-ID: <CAKUejP4_05E0hfFp-ceXLgPuid=MwrAoHyQ-nYE3qx3Tisb4uA@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
- traffic cannot unlock a locked port
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
+        Fri, 1 Jul 2022 16:22:41 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CB84D174;
+        Fri,  1 Jul 2022 13:22:40 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id BDCD936D;
+        Fri,  1 Jul 2022 20:22:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BDCD936D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1656706959; bh=dxet9HAczfcZ9vu/1oL1hu5S6lHOaJx1MYQzpzQnE3w=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=c/wZEaG8r9bEzMb/9Yed5GTIwTIqapPop1mA95KPr3rBUovZudh3MzbBq4CCf2w+N
+         O5wA2ppfkxYCkT2qYzn/jocPg/WF6Un9rseV62tBWBuL8our/CBG1rvsHTx82AKtaK
+         PadBeZObcRmaPrgOdyJXbkz9sR08gVwxb40AApbU05jfYCYZdziljL8MbgOsH9rdWj
+         h8Z5rZuitWMoBgGDvgE+XvHLus3OHETunxvmSJA+s7qxDSlCCuQ0kQcBBdP75BPdWR
+         ZYJRDJhoHU1mFDZqSclmpR1UPyNV2ue6xVZftBJdFvgLnyFLshgAKX8+i1NVJWFlCj
+         /8mq64R3WoXEQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        John Stultz <jstultz@google.com>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?utf-8?B?SGrDuG5u?= =?utf-8?B?ZXbDpWc=?= 
+        <arve@android.com>, Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        LKML <linux-kernel@vger.kernel.org>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, rcu <rcu@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, sultan@kerneltoast.com,
+        android-kernel-team <android-kernel-team@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH] remove CONFIG_ANDROID
+In-Reply-To: <YrztOqBBll66C2/n@zx2c4.com>
+References: <20220629161527.GA24978@lst.de> <Yrx8/Fyx15CTi2zq@zx2c4.com>
+ <20220629163007.GA25279@lst.de> <Yrx/8UOY+J8Ao3Bd@zx2c4.com>
+ <YryNQvWGVwCjJYmB@zx2c4.com> <Yryic4YG9X2/DJiX@google.com>
+ <Yry6XvOGge2xKx/n@zx2c4.com>
+ <CAC_TJve_Jk0+XD7VeSJVvJq4D9ZofnH69B4QZv2LPT4X3KNfeg@mail.gmail.com>
+ <YrzaCRl9rwy9DgOC@zx2c4.com>
+ <CANDhNCpRzzULaGmEGCbbJgVinA0pJJB-gOP9AY0Hy488n9ZStA@mail.gmail.com>
+ <YrztOqBBll66C2/n@zx2c4.com>
+Date:   Fri, 01 Jul 2022 14:22:38 -0600
+Message-ID: <87a69slh0x.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 1, 2022 at 7:00 PM Ido Schimmel <idosch@nvidia.com> wrote:
+"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+
+> I guess what I have in mind is the answer to these being "yes":
+> - "Is it very common to be asleep for only 2 seconds before being woken?"
+> - "Is it very common to be awake for only 2 seconds before sleeping?"
 >
-> On Fri, Jul 01, 2022 at 06:07:10PM +0200, Hans S wrote:
-> > There is several issues when learning is turned off with the mv88e6xxx driver:
->
-> Please don't top-post...
+> I think it'd be easiest to have a knob somewhere (compiletime,
+> runtime, wherever) that describes a device that exhibits those
+> properties. Then wireguard and other things will make a decision on how
+> to handle the crypto during relevant events.
 
-Sorry, I am using gmails own web interface for a short while now as my
-other options are not supported anymore by Google (not secure apps)
+So please forgive the noise from the peanut gallery, but I do find
+myself wondering...do you really need a knob for this?  The kernel
+itself can observe how often (and for how long) the system is suspended,
+and might well be able to do the right thing without explicit input from
+user space.  If it works it would eliminate a potential configuration
+problem and also perhaps respond correctly to changing workloads.
 
->
-> >
-> > Mac-Auth requires learning turned on, otherwise there will be no miss
-> > violation interrupts afair.
-> > Refreshing of ATU entries does not work with learning turn off, as the
-> > PAV is set to zero when learning is turned off.
-> > This then further eliminates the use of the HoldAt1 feature and
-> > age-out interrupts.
-> >
-> > With dynamic ATU entries (an upcoming patch set), an authorized unit
-> > gets a dynamic ATU entry, and if it goes quiet for 5 minutes, it's
-> > entry will age out and thus get removed.
-> > That also solves the port relocation issue as if a device relocates to
-> > another port it will be able to get access again after 5 minutes.
->
-> You assume I'm familiar with mv88e6xxx, when in fact I'm not. Here is
-> what I think you are saying:
->
-> 1. When a port is locked and a packet is received with a SA that is not
-> in the FDB, it will only generate a miss violation if learning is
-> enabled. In which case, you will notify the bridge driver about this
-> entry as externally learned and locked entry.
+For example, rather than testing a knob, avoid resetting keys on resume
+if the suspend time is less than (say) 30s?
 
-Right.
+Educate me on what I'm missing here, please :)
 
-> 2. When a port is locked and a packet is received with a SA that matches
-> a different port, it will be dropped regardless if learning is enabled
-> or not.
+Thanks,
 
-I would think so.
-
-> 3. From the above I conclude that the HW will not auto-populate its FDB
-> when a port is locked.
-
-Right, and it should not as the locked port feature is basically CPU
-controlled learning.
-(yes it is an irony to have CPU controlled learning and learning
-turned on, but that is just how it is with the mv88e6xxx series :-) )
-
-> 4. FDB entries that point to a port that does not have learning enabled
-> are not subject to ageing (why?).
-
-Sorry if I said so. Dynamic ATU entries will age I am sure, but they
-will not refresh unless there is a match between the ingress port and
-the Port Association Vector (PAV).
-But an age out violation will not occur, and the HoldAt1 (entries age
-from 7 -> 0) feature will not work either as it is related to the
-refresh mechanism.
-
->
-> Assuming the above is correct, in order for mv88e6xxx to work correctly,
-> it needs to enable learning on all locked ports, but it should happen
-> regardless of the bridge driver learning configuration let alone impose
-> any limitations on it. In fact, hostapd must disable learning for all
-> locked ports.
-
-To have hardware induced refreshing I would say learning should be on
-also for 802.1X (hostapd). This relies of course on user added dynamic
-ATU entries, which is what my follow-up patch set is about. Besides it
-is perfectly feasible to have both 802.1X and Mac-Auth on the same
-port.
+jon
