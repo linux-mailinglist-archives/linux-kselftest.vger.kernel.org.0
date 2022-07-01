@@ -2,165 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73FE562CFE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Jul 2022 09:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A2B562EBB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Jul 2022 10:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiGAHsK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Jul 2022 03:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
+        id S236249AbiGAIr5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Jul 2022 04:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235509AbiGAHsF (ORCPT
+        with ESMTP id S233360AbiGAIr4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Jul 2022 03:48:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7210A6D56B;
-        Fri,  1 Jul 2022 00:48:02 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D38C51FAC9;
-        Fri,  1 Jul 2022 07:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1656661680; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZWD8HIlDYdGdJ6mpl+S9OBb2c3fFloWoRrJwT7RJx5A=;
-        b=IQxNEGKPfcvkZL7LiKQXAwXxAIfZJskM6AqrosF025vVRRzcAZFOjLFHmC06+UIeHsbTmB
-        5hAF9ikm9t/pnuQaOG7imcalVSdef0RmTmpbUDMF0PCLKMx+K975t2SZShwwpV8yesz1Qf
-        IEHQeCxjYGUfq8NqWHyPO4Nw6ackK2M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1656661680;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZWD8HIlDYdGdJ6mpl+S9OBb2c3fFloWoRrJwT7RJx5A=;
-        b=sQbIL4b2cJtucmBs4mJ76xPZvKaRBKaNAc/Q5SZEOM0VFZpkXvxPepFFAS7eL8zANPy1Us
-        fazr8I6hRlk/xdDw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A900C2C141;
-        Fri,  1 Jul 2022 07:48:00 +0000 (UTC)
-Date:   Fri, 1 Jul 2022 09:48:00 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com, pmladek@suse.com,
-        joe.lawrence@redhat.com
-Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-In-Reply-To: <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
-Message-ID: <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
-References: <20220630141226.2802-1-mpdesouza@suse.com> <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 1 Jul 2022 04:47:56 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07161735A9
+        for <linux-kselftest@vger.kernel.org>; Fri,  1 Jul 2022 01:47:51 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id c10-20020a251c0a000000b00669b463d2e1so1463795ybc.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Jul 2022 01:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=NuZanDiX6ZABSMbfniI1TGr/DxYkHBykbUx4x4ghkJs=;
+        b=CZLCtNgssNVr6nSXDn6fB604VBq+KkeWkf1tsogW0rqBqDsWGig719MPVJL6gYAvgY
+         9RLRb9A15yblqEPywZl4Lgr6YSf9RXOrCrx05owdb7fROgwlMHPgEHweT+hfEokeoi8o
+         LNHODCorIbIyKm8aLbO68fc481xtKztaTjZzYQOWZdYOt+CAO+QwI1YDcZSKV3SuqVOA
+         FJ1LmVHx3rC43z4OWzucakfkXECe5G+RwAjDe0BEzlgwIeQv+q77AUOJhIdqm3JQLg0q
+         MP46dyYMh7yz1bpDLglsTAKkhXu3eoWqjeliptD0SJta9R4nLcM52BDKD2JG16NnEN4l
+         O7Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=NuZanDiX6ZABSMbfniI1TGr/DxYkHBykbUx4x4ghkJs=;
+        b=xczeNLlNPLRWE68um+NvmI8nTNNCh+MEz2O3QVDX2EpiTUgZoO1TDN3s0EZKF51BY5
+         JlG8li6iFuLzJhYxobepTAwEK9vPhcReuU60goWKM0F1BfHGcTxYDJl2MfxfrjJkaBM8
+         OFWxbFI/8+YX7tJ0Nx1qVorl2Dt5yCjT/piaSbyfDpO0ZA1GOv2w0n5YcC1vKBONzUlH
+         mzrvo0xR0t3zHBtHyhssHjpMCt/z05igYVi1qhyPtQhgvUci9rqgPc9m0geTALO5+qvs
+         tTfNAreI26CSWD2+3VQvWMH8V19flEKcNm22UWs8JVy9awEbL5ZtdLZqXUfker1SGCk8
+         F0IA==
+X-Gm-Message-State: AJIora8g5d5Z9/F7IrhjIZ1ihzu5qGBPBQ3Hb8tLU2QgWSBRepWHzcyg
+        2XUSP6M5W+VMbEw6RqatvDigDbMh0dYgDw==
+X-Google-Smtp-Source: AGRyM1ueeVhwlJQ7zRKjLy1gM9/U9w/+eRK9KccBKyOEVw0DgaknmIifOXTfkG/tj2NIxQjOyOX+A2D1Xy7eSg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:d292:0:b0:66c:8adb:ce55 with SMTP id
+ j140-20020a25d292000000b0066c8adbce55mr14348011ybg.131.1656665270212; Fri, 01
+ Jul 2022 01:47:50 -0700 (PDT)
+Date:   Fri,  1 Jul 2022 16:47:41 +0800
+Message-Id: <20220701084744.3002019-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v4 1/4] panic: Taint kernel if tests are run
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     David Gow <davidgow@google.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+Most in-kernel tests (such as KUnit tests) are not supposed to run on
+production systems: they may do deliberately illegal things to trigger
+errors, and have security implications (for example, KUnit assertions
+will often deliberately leak kernel addresses).
 
-On Thu, 30 Jun 2022, Shuah Khan wrote:
+Add a new taint type, TAINT_TEST to signal that a test has been run.
+This will be printed as 'N' (originally for kuNit, as every other
+sensible letter was taken.)
 
-> On 6/30/22 8:12 AM, Marcos Paulo de Souza wrote:
-> > Hi there,
-> > 
-> > this is the v2 of the patchset. The v1 can be found at [1]. There is only
-> > one
-> > change in patch 1, which changed the target directory to build the test
-> > modules.
-> > All other changes happen in patch 2.
-> > 
-> > Thanks for reviewing!
-> > 
-> > Changes from v1:
-> > # test_modules/Makefile
-> >    * Build the test modules targeting /lib/modules, instead of ksrc when
-> >    building
-> >      from the kernel source.
-> > 
-> > # test_modules/test_klp_syscall.c
-> >    * Added a parameter array to receive the pids that should transition to
-> >    the
-> >      new system call. (suggedted by Joe)
-> >    * Create a new sysfs file /sys/kernel/test_klp_syscall/npids to show how
-> >    many
-> >      pids from the argument need to transition to the new state. (suggested
-> >      by
-> >      Joe)
-> >    * Fix the PPC32 support by adding the syscall wrapper for archs that
-> >    select it
-> >      by default, without erroring out. PPC does not set SYSCALL_WRAPPER, so
-> >      having it set in v1 was a mistake. (suggested by Joe)
-> >    * The aarch64 syscall prefix was added too, since the livepatch support
-> >    will come soon.
-> > 
-> > # test_binaries/test_klp-call_getpid.c
-> >    * Change %d/%u in printf (suggested byu Joe)
-> >    * Change run -> stop variable name, and inverted the assignments
-> >    (suggested by
-> >    * Joe).
-> > 
-> > # File test-syscall.sh
-> >    * Fixed test-syscall.sh to call test_klp-call-getpid in test_binaries dir
-> >    * Load test_klp_syscall passed the pids of the test_klp-call_getpid
-> >    instances.
-> >      Check the sysfs file from test_klp_syscall module to check that all
-> >      pids
-> >      transitioned correctly. (suggested by Joe)
-> >    * Simplified the loop that calls test_klp-call_getpid. (suggested by Joe)
-> >    * Removed the "success" comment from the script, as it's implicit that it
-> >      succeed. Otherwise load_lp would error out. (suggested by Joe)
-> > 
-> > * Changed the commit message of patch 2 to further detail what means
-> > "tricky"
-> >    when livepatching syscalls. (suggested by Joe)
-> > 
-> > [1]: 20220603143242.870-1-mpdesouza@suse.com
-> > 
-> 
-> Sorry Nack on this. Let's not add modules under selftests. Any usage of
-> module_init()
-> doesn't belong under selftests.
+This should discourage people from running these tests on production
+systems, and to make it easier to tell if tests have been run
+accidentally (by loading the wrong configuration, etc.)
 
-as mentioned before, that ship has already sailed with 
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c. Anyway...
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-You wrote before that you did not have a problem with it. And you would 
-not have a problem with Marcos' approach if modules can be compiled and if 
-not, the tests would fail gracefully. What has changed? If you see a 
-problem in the patch set regarding this, can we fix it?
+Finally getting back to this, with the addition of a MODULE_INFO()
+to mark a module as a test module. This is automatically set for modules
+in the "tools/testing" directory by modpost (see patch #2).
+
+The 'N' character for the taint is even less useful now that it's no
+longer short for kuNit, but all the letters in TEST are taken. :-(
+
+Changes since v3:
+https://lore.kernel.org/lkml/20220513083212.3537869-1-davidgow@google.com/
+- Remove the mention of KUnit from the documentation.
+- Add Luis and Brendan's Acked/Reviewed-by tags.
+
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220430030019.803481-1-davidgow@google.com/
+- Rename TAINT_KUNIT -> TAINT_TEST.
+- Split into separate patches for adding the taint, and triggering it.
+- Taint on a kselftest_module being loaded (patch 3/3)
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220429043913.626647-1-davidgow@google.com/
+- Make the taint per-module, to handle the case when tests are in
+  (longer lasting) modules. (Thanks Greg KH).
+
+Note that this still has checkpatch.pl warnings around bracket
+placement, which are intentional as part of matching the surrounding
+code.
+
+---
+ Documentation/admin-guide/tainted-kernels.rst | 1 +
+ include/linux/panic.h                         | 3 ++-
+ kernel/panic.c                                | 1 +
+ 3 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+index ceeed7b0798d..7d80e8c307d1 100644
+--- a/Documentation/admin-guide/tainted-kernels.rst
++++ b/Documentation/admin-guide/tainted-kernels.rst
+@@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
+  15  _/K   32768  kernel has been live patched
+  16  _/X   65536  auxiliary taint, defined for and used by distros
+  17  _/T  131072  kernel was built with the struct randomization plugin
++ 18  _/N  262144  an in-kernel test has been run
+ ===  ===  ======  ========================================================
  
-> Leave these under lib and use KSTM_MODULE_LOADERS to load these modules that
-> live under lib.
+ Note: The character ``_`` is representing a blank in this table to make reading
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+index e71161da69c4..c7759b3f2045 100644
+--- a/include/linux/panic.h
++++ b/include/linux/panic.h
+@@ -68,7 +68,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+ #define TAINT_LIVEPATCH			15
+ #define TAINT_AUX			16
+ #define TAINT_RANDSTRUCT		17
+-#define TAINT_FLAGS_COUNT		18
++#define TAINT_TEST			18
++#define TAINT_FLAGS_COUNT		19
+ #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+ 
+ struct taint_flag {
+diff --git a/kernel/panic.c b/kernel/panic.c
+index a3c758dba15a..6b3369e21026 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -428,6 +428,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
+ 	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
+ 	[ TAINT_AUX ]			= { 'X', ' ', true },
+ 	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
++	[ TAINT_TEST ]			= { 'N', ' ', true },
+ };
+ 
+ /**
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 
-I may misunderstand but KSTM_MODULE_LOADERS does not seem to provide the 
-flexibility we need (yes, it could be hacked around, but I do not think 
-that the result would be nice). See what we have in 
-tools/testing/selftests/livepatch/functions.sh to make sure that a live 
-patch module is properly loaded and unloaded.
-
-My main question is different though. As Marcos mentioned before, we would 
-like to have our tests really flexible and a possibility to prepare and 
-load different live patch modules based on a template is a part of it. 
-What is your proposal regarding this? I can imagine having a template in 
-lib/livepatch/ which would not be compilable and a script in 
-tools/testing/selftests/livepatch/ would copy it many times, amend the 
-copies (meaning parameters would be filled in with sed or the code would 
-be changed), compile them and load them. But this sounds horrible to me, 
-especially when compared to Marcos' approach in this patch set which is 
-quite straightforward.
-
-Then there is an opportunity which Joe described. To run the latest 
-livepatch kselftests on an older kernel. Having test modules in lib/ is 
-kind of an obstacle there.
-
-Regards
-
-Miroslav
