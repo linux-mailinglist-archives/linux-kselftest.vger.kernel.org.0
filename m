@@ -2,104 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48F4563C62
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Jul 2022 00:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3C5563CF0
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Jul 2022 02:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbiGAWdm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Jul 2022 18:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S230497AbiGBAIq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Jul 2022 20:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiGAWdl (ORCPT
+        with ESMTP id S229994AbiGBAIl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Jul 2022 18:33:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1866286FA;
-        Fri,  1 Jul 2022 15:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ozZ+QlOzbJZ9re3qmbGHODDAg7MDsTvWY6xOS1msHBo=; b=S2WoAa7F4SyAS7ktY1sGQmbXFn
-        JcDs1MzFfihFl9a9LA4hE7xNwKP9bCOW6zr/xIwvKIHcJ3+M3mCX+7dyJF2F9cb1Xn+4paMV3zPhk
-        34T/i7wJUCe3arSUdlgAk4lk8yKe8yDFZjiM/RGqONF0cGFiANhz5qqCbwi/8Nn1ZwjjgVE9ubksO
-        r4q/2wgheH474TNzJMzr7ErdJqLml8aILBMwAgoac2Hr4LHpJiIeUy+H0QWbnru+LJbgJtUtHMna3
-        20dbtWHqGirgJOlFBNbBFGoqPna+n537exbCS/gZhjxz7y3tgADbEV0RftagQnv2Fnp1HVCY0Gp/3
-        pHUGGCYg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o7PCc-007Ehi-6b; Fri, 01 Jul 2022 22:33:30 +0000
-Date:   Fri, 1 Jul 2022 15:33:30 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] selftest: Taint kernel when test module loaded
-Message-ID: <Yr92OngNsEOxszUA@bombadil.infradead.org>
-References: <20220701084744.3002019-1-davidgow@google.com>
- <20220701084744.3002019-4-davidgow@google.com>
+        Fri, 1 Jul 2022 20:08:41 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753001658A;
+        Fri,  1 Jul 2022 17:08:40 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id l24so3683787ion.13;
+        Fri, 01 Jul 2022 17:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lYMzWkKhH/3tNWhE38B085YE86rbiEGeZQZfzPGQV+s=;
+        b=cCDjrDxxzafIkwcKOXVh2b12442Foe1zqigmwg/I40Hx7pWdeZ9Z0Tgt2kyYvcDi6o
+         kSsYlcJCgdTlCmlkcK2XmQIvytJNI5PlxQws9peYXiNFoqjzX6FH1tgxLRoKewDnen59
+         hsuaT4l1kIKtNvTg2AAstGerF6njx0HusfTS5A3lCDCCPgNExlM/MqDJjKGmWvppw5Wh
+         VX6z7nggJJUnimOa1cMMMCJcW0nBlSxVSz884sHFMXZ3ZDecwDkjJgcoc5zK3hlxvsIW
+         q1EsYjQy8gov5XY4r6ip9jIqggD0m/iCo3TWp1knm+jiI30Hgx2+f6TvfLMEMrsNhD/O
+         /Qyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lYMzWkKhH/3tNWhE38B085YE86rbiEGeZQZfzPGQV+s=;
+        b=OhcQEx9iTWQuMeBhDlLTxshhlmtQjgtQGxNo8EuNNThgD4qcPBqBN5Dy0pv/7AWsPs
+         ZT+qN4dcTZexoAnvLVwCgRl5Hm+HXjcQDkag5ra4DkEBFFY2MdJFv0VmWtcj8HtNj8xP
+         K/qLFGaXaoGjF2tmrwJrlw2f5WnLqJSZBeT4G5fqlVyLycOyHpzWZFkuZ8hQkKIoIGxn
+         JhVzPLcQd7biM+tp8Ruj7dnzjF8LDh2fvsOQI8hNlSbyKKwHy/+xJ+D/alUnVZqsiXNd
+         snjaNboTYqnJusuaqbflhKl3TCNCD/jVDqtpcW5HdSnss2Vkg4BuZ2CU2xHNEU0DUiVp
+         xllA==
+X-Gm-Message-State: AJIora8tTSuEJoRc3Y4OWiJjxP5yGtHLRLGXWZEB/k6PS9WNgQBd61Hi
+        JFVoBU6hNGGeIfj+vcd+WlGba2JvWfY=
+X-Google-Smtp-Source: AGRyM1tcTe9U+ijEojMN43N2CjFcIiUVFMfAnftF67asBv2lyn1PUEGv384O7a8BThWy8a9Nwj8dsg==
+X-Received: by 2002:a05:6638:3e1a:b0:33b:1257:9220 with SMTP id co26-20020a0566383e1a00b0033b12579220mr10518691jab.23.1656720519863;
+        Fri, 01 Jul 2022 17:08:39 -0700 (PDT)
+Received: from localhost.localdomain ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p4-20020a056638190400b0033ea1d9858bsm1010381jal.36.2022.07.01.17.08.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 17:08:39 -0700 (PDT)
+From:   Zan Aziz <zanaziz313@gmail.com>
+To:     jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org,
+        shuah@kernel.org
+Cc:     Zan Aziz <zanaziz313@gmail.com>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests:timers: globals don't need initialization
+Date:   Fri,  1 Jul 2022 18:08:34 -0600
+Message-Id: <20220702000834.7724-1-zanaziz313@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220701084744.3002019-4-davidgow@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 01, 2022 at 04:47:44PM +0800, David Gow wrote:
-> Make any kselftest test module (using the kselftest_module framework)
-> taint the kernel with TAINT_TEST on module load.
-> 
-> Note that several selftests use kernel modules which are not based on
-> the kselftest_module framework, and so will not automatically taint the
-> kernel.
-> 
-> This can be done in two ways:
-> - Moving the module to the tools/testing directory. All modules under
->   this directory will taint the kernel.
-> - Adding the 'test' module property with:
->   MODULE_INFO(test, "Y")
+Global variables do not need to be initialized to 0 and checkpatch
+flags this error in tools/testing/selftests/timers/alarmtimer-suspend.c:
 
-This just needs to be documented somewhere other than a commit log.
-Otherwise I am not sure how we can be sure it will catch on.
+ERROR: do not initialise globals to 0
++int final_ret = 0;
 
-> Similarly, selftests which do not load modules into the kernel generally
-> should not taint the kernel (or possibly should only do so on failure),
-> as it's assumed that testing from user-space should be safe. Regardless,
-> they can write to /proc/sys/kernel/tainted if required.
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
+Fix this checkpatch error.
 
-Looks good otherwise!
+Signed-off-by: Zan Aziz <zanaziz313@gmail.com>
+---
+ tools/testing/selftests/timers/alarmtimer-suspend.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+diff --git a/tools/testing/selftests/timers/alarmtimer-suspend.c b/tools/testing/selftests/timers/alarmtimer-suspend.c
+index 54da4b088f4c..4332b494103d 100644
+--- a/tools/testing/selftests/timers/alarmtimer-suspend.c
++++ b/tools/testing/selftests/timers/alarmtimer-suspend.c
+@@ -92,7 +92,7 @@ long long timespec_sub(struct timespec a, struct timespec b)
+ 	return ret;
+ }
+ 
+-int final_ret = 0;
++int final_ret;
+ 
+ void sigalarm(int signo)
+ {
+-- 
+2.32.0
 
-Do we want this to go through selftest / kunit / modules tree?
-Happy for it to through any. I can't predict a conflict.
-
-  Luis
