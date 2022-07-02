@@ -2,66 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7C1563FF0
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Jul 2022 13:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E1F564004
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Jul 2022 13:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbiGBLwE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 2 Jul 2022 07:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
+        id S232272AbiGBL4f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Jul 2022 07:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232243AbiGBLwD (ORCPT
+        with ESMTP id S232260AbiGBL4e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:52:03 -0400
+        Sat, 2 Jul 2022 07:56:34 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E27DD1275C
-        for <linux-kselftest@vger.kernel.org>; Sat,  2 Jul 2022 04:52:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 488E113F3C
+        for <linux-kselftest@vger.kernel.org>; Sat,  2 Jul 2022 04:56:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656762722;
+        s=mimecast20190719; t=1656762992;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aBlcdffUKRXsc9PEk6nABXGbXc001CdXE7OJZsMlP8k=;
-        b=Yo/2BY3/ZtYu3zdzlWUpHFe/TKyj2MGLnMuZP0sISm00vfWPYjMyRzOzmA6DX+ZZcL7Y9c
-        Kbuzz2wb9JnoPi9YooqzaP9CeM88BS/eqHwQ2ZLPHfshyvElRQHzLeAvyEj1ygso46WyTg
-        UonlpJbuumwOFy5x3ACKxC5HgTXZPM8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=cwZGWyzbjndeRVONcRo/Y/Xi6a7qOfJRRZZ6iABpQ64=;
+        b=PLwNShmg41MeYHWwlaHWngpK4TdhD4DCpRPT43Esyl+gM8LEF+3NqUdg7QPriyhqFgWFLr
+        VBlooAUUyaEwn7GO9otG/RA1kkVX7T1URcCeTxNUT7ptnbRIHIRJG1IA5aSemOSJrsurPV
+        t/9zRd2r6xyudmYpxuE9+7PLV8jGR6Q=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-490-2-9OolGrOuCa07bJMAJcmg-1; Sat, 02 Jul 2022 07:52:00 -0400
-X-MC-Unique: 2-9OolGrOuCa07bJMAJcmg-1
-Received: by mail-wm1-f69.google.com with SMTP id t20-20020a1c7714000000b003a032360873so4416358wmi.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 02 Jul 2022 04:52:00 -0700 (PDT)
+ us-mta-500-QlDH1YiWPvixbkY0kus3aw-1; Sat, 02 Jul 2022 07:56:31 -0400
+X-MC-Unique: QlDH1YiWPvixbkY0kus3aw-1
+Received: by mail-wm1-f70.google.com with SMTP id 130-20020a1c0288000000b003a18127d11aso1349132wmc.6
+        for <linux-kselftest@vger.kernel.org>; Sat, 02 Jul 2022 04:56:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=aBlcdffUKRXsc9PEk6nABXGbXc001CdXE7OJZsMlP8k=;
-        b=f7rlVrPqQJmU9rT3yyWPdtwcgGHeedLVWp2TKkqC5S998qdtLysPkCZ1ywXu5yStd7
-         JCPxCArJd/uIBhy+1Gwpqq7UuzVYROhECzXFJsCPKcN/msVVantbPLUxQ1cqCj1wOfJU
-         DBl+Or6ogTFBpzltTSl8AxZgQpGZOnnGlL9MjO94dHiWL60+KOI2tarqo2wcecLSCJAh
-         DSd0shVwXLbkatumXfLmqv3HcfAci07s5T50XmTfVGm3BSAHx8f0dUMWP8iRsPPmavrK
-         JjKEHp564x4jk3rk+dSbTjOefIEjxcwecCcikKJbLGVmwNQL+m5RzQgDKwPFDrKl3taC
-         1x7A==
-X-Gm-Message-State: AJIora9AzbhqGq9ojvjKI7BcvQwebG7wbkp+BYt0M9WG+yNygBYOwjwx
-        QjIgcyk0l1L3WzwiQeQ2+6+cpp6e+RjtQrefPJrSw67EHk0GaYv9awyMAHk+NuO3cnTII/HKHNH
-        y3YJ7t5jcaujzkX5MLARAOLzvgfwa
-X-Received: by 2002:a5d:64cc:0:b0:21b:ba06:4d4d with SMTP id f12-20020a5d64cc000000b0021bba064d4dmr18344056wri.157.1656762719669;
-        Sat, 02 Jul 2022 04:51:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sMLyiRwowUy7DUksqJ/vVSe40CQaqIn/NcAmSSiFjb9qPtH8jDU3mm/OgbP9QtaipFYcRWBw==
-X-Received: by 2002:a5d:64cc:0:b0:21b:ba06:4d4d with SMTP id f12-20020a5d64cc000000b0021bba064d4dmr18344033wri.157.1656762719467;
-        Sat, 02 Jul 2022 04:51:59 -0700 (PDT)
+        bh=cwZGWyzbjndeRVONcRo/Y/Xi6a7qOfJRRZZ6iABpQ64=;
+        b=KI+wcJhubm3w6t41QH4kG4vbqAqZLUcW1xMiNNFOLw9ThcDQNlK+nEaSAV7FPTDdBy
+         86rjtCxTwzdjP6laMt4k2P1cPQyZCJ52LARWWX/bwuGCHX7OkXGT5gCNMs5BRc6igk5m
+         dLEOLJ8DXWILl/uwcZ5uQoLkE2fPyQH/NTOuXb+jR7j3conV2PUhad+0VWvwZulOfEfy
+         c6B7lgQrfPkQW1oZBFnDf8ItGgK2hMD60U4QE9AJNzMfK08RoJ/zfNea+l8txAaQDRjc
+         klo6yG2XK2XRwpnNCQdAmgHbwbVTZO/2daZVzLFdT/0LJ1IIN0iMrNnmCa3ZNOc/cjUV
+         QcFQ==
+X-Gm-Message-State: AJIora8lfdKqZN/l+6Jp09HNuYKkmaDqKpF09UqNd3w/xL+CR/Tj1Ej+
+        keCH3oRKmwrgVJI4gh3V/hg5+GUmQ3dNxsJMYmA4clfRKcnltr3IZ4kYVlSaTLTLo6LTBJ94u6S
+        3f5/VLYjVyRAti9FWYVB+x/5cNLTs
+X-Received: by 2002:a05:600c:1d96:b0:3a0:30b6:bb1a with SMTP id p22-20020a05600c1d9600b003a030b6bb1amr22390005wms.93.1656762989838;
+        Sat, 02 Jul 2022 04:56:29 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uk1mCSCBDnIRoFf17fUzrFaDhgaShQwBHJ3hzA8TaQPISsd83pmv8uOjG8mUc6UBeHaesGRw==
+X-Received: by 2002:a05:600c:1d96:b0:3a0:30b6:bb1a with SMTP id p22-20020a05600c1d9600b003a030b6bb1amr22389983wms.93.1656762989620;
+        Sat, 02 Jul 2022 04:56:29 -0700 (PDT)
 Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id i30-20020a1c541e000000b003a032c88877sm9399422wmb.15.2022.07.02.04.51.58
+        by smtp.gmail.com with ESMTPSA id u20-20020a05600c19d400b0039c4f53c4fdsm12403602wmq.45.2022.07.02.04.56.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Jul 2022 04:51:59 -0700 (PDT)
-Message-ID: <cd7137ea-16b6-dd0a-2a09-93185d874c73@redhat.com>
-Date:   Sat, 2 Jul 2022 13:51:57 +0200
+        Sat, 02 Jul 2022 04:56:29 -0700 (PDT)
+Message-ID: <9185aadb-e459-00fe-70be-3675f6f3ef4c@redhat.com>
+Date:   Sat, 2 Jul 2022 13:56:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 9/9] drm: selftest: convert drm_mm selftest to KUnit
+Subject: Re: [PATCH v3 0/9] drm: selftest: Convert to KUnit
 Content-Language: en-US
 To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
         Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
@@ -78,18 +78,16 @@ To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
         David Gow <davidgow@google.com>,
         Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
 Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Arthur Grillo <arthur.grillo@usp.br>
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 References: <20220630004611.114441-1-maira.canal@usp.br>
- <20220630004611.114441-10-maira.canal@usp.br>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220630004611.114441-10-maira.canal@usp.br>
+In-Reply-To: <20220630004611.114441-1-maira.canal@usp.br>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -97,18 +95,27 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 6/30/22 02:46, Maíra Canal wrote:
-> From: Arthur Grillo <arthur.grillo@usp.br>
+> Hi everyone,
 > 
-> Considering the current adoption of the KUnit framework, convert the
-> DRM mm selftest to the KUnit API.
+> Here is the v3 of the conversion of selftests to KUnit. Since the v2, there
+> have been minor fixes. drm_format_test received the biggest change: the
+> KUNIT_EXPECT_FALSE and KUNIT_EXPECT_TRUE macros were changed to KUNIT_EXPECT_EQ,
+> as suggested by Daniel.
 > 
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Tested-by: David Gow <davidgow@google.com>
-> Signed-off-by: Arthur Grillo <arthur.grillo@usp.br>
-> Signed-off-by: Maíra Canal <maira.canal@usp.br>
-> ---
+> Most of all, the patches were rebased on top of the recently applied patches
+> for drm_format_helper tests (8f456104915f), in order to avoid conflicts when
+> applying the tests.
+> 
+> Thanks for your attention and any feedback is welcomed!
+> 
+> Best Regards,
+> - Maíra Canal
+>
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Thanks a lot for working on this! The patches look good to me, I just had some
+minor comments. If you re-spin, I think that we can just push the whole series
+to drm-misc since the patches have been in the mailing list for some time and
+have already been tested/reviewed.
 
 -- 
 Best regards,
