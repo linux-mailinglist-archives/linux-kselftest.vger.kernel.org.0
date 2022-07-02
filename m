@@ -2,96 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7334563F94
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Jul 2022 13:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC30563FBC
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Jul 2022 13:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbiGBLHw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 2 Jul 2022 07:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
+        id S230180AbiGBLdB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Jul 2022 07:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbiGBLHw (ORCPT
+        with ESMTP id S229446AbiGBLdA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Jul 2022 07:07:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1017215A1F;
-        Sat,  2 Jul 2022 04:07:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B8FFB8208C;
-        Sat,  2 Jul 2022 11:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04494C341CB;
-        Sat,  2 Jul 2022 11:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656760068;
-        bh=CstmAGIFUD9KcmREj8biRqou6vWNIVEs4ask1NN3mQY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AF/lHHye+fUHS+ddWCI8YAhQZTrDpvI3Gdasjfnmo40T4NMgB4Z8oNAv0HjkkcD8c
-         bNpj1OWZkY/dujiI9bqdmp9d0xcXZtSejqQFCxXFO8YkcgWzmGihZax9WDJl/L8epR
-         4TwIi9fjwdtEzya33PCuE8w+3ebcgwMiX42jreZJ1EqR2OWuUlRMN3pHZjIObsRsDe
-         BcbpSBhzhoQ75OTOaNuQyu6TVh/uvsFCW6XG7Fg/+YuFvA0YUkwlPo79CXye3YmE3r
-         /oPIDwGrXQ1JTg/Xw09CxWC3kj0M+vqEol6VYEwuiHVOJPXLOoaJEZok5S3fp+iAxB
-         6davtisyi7L5g==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1o7ayX-007gsC-Oj;
-        Sat, 02 Jul 2022 12:07:45 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 08/12] kunit: test.h: fix a kernel-doc markup
-Date:   Sat,  2 Jul 2022 12:07:40 +0100
-Message-Id: <32a67e9ee77cc6c435d08a2cb5ef12559b417fee.1656759989.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1656759988.git.mchehab@kernel.org>
-References: <cover.1656759988.git.mchehab@kernel.org>
+        Sat, 2 Jul 2022 07:33:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10B0516595
+        for <linux-kselftest@vger.kernel.org>; Sat,  2 Jul 2022 04:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656761578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+/CG7OlSvFtvPwBtKbOScoNNsNb5w33jEJ9roT+riGE=;
+        b=VsUd/B49SlrdiGK42tiBiJpcMNKKBFJtato26awWSp3sZ31ctBiTvNdq9sKdlm8+/w5UqN
+        sZYFO4w0YUQ4gyabDDKdCE1OpzqsqZrKHu9cNlIgvumrfeVU32IlUPy5EceaSrI32f/7lS
+        TMS/0tpscPAFPPJ2gB1CM9lmGk/bCjg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-a_DCUPPEPqeUvX_lbI_9gA-1; Sat, 02 Jul 2022 07:32:56 -0400
+X-MC-Unique: a_DCUPPEPqeUvX_lbI_9gA-1
+Received: by mail-wm1-f71.google.com with SMTP id i5-20020a1c3b05000000b003a02b027e53so4373589wma.7
+        for <linux-kselftest@vger.kernel.org>; Sat, 02 Jul 2022 04:32:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+/CG7OlSvFtvPwBtKbOScoNNsNb5w33jEJ9roT+riGE=;
+        b=TMGPwzuMiq/RcMafKO3TMD/zLnFRO1VauSbHb2/5SUqoFSS2lgr5gz9vmSN+4fTyNU
+         ZeGYuYr6qHEIiNIi/bRB+lnBipQ/oqIYBPj7S0Vbe4gG1YQFG1gphDD21fpA3E7CxNoC
+         Vit+nqF3I1V0P6ewNUEO4lyf+ikH/9t7f9Bl4N9YxJDawvokHVzq2LQ2BGfPApl3qQNm
+         lzQ1xxD98TyeIxKrv/F8AZBwSxYXrONRm0R/DBdgd8w5/1xzdLcx8gE3Obo8bp6ad+xm
+         uBICUHyjCz/ty10tys/d2PRN9Fs1jPpQ+iXpMpjNlrkfNbItgedfJ8BP7dMxmreW2Ow2
+         Y0Tg==
+X-Gm-Message-State: AJIora96HHqxDxhcgCfEtKlqZ50RGYNYNotJL1G6W1zjJJe6tkJniAFH
+        sNicygTgoJTROzaI2L/DdOFK2OwMqlph/fi853XajZLs4q9Slecdss2RB2nJQ+DoqervsqqCg9o
+        lNyYuq8YYgUVTnDTJX5IevrS4Tsy5
+X-Received: by 2002:a05:600c:2051:b0:3a0:3c58:6ff6 with SMTP id p17-20020a05600c205100b003a03c586ff6mr22334051wmg.98.1656761575581;
+        Sat, 02 Jul 2022 04:32:55 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uK7lyTTBd7+vx/Qhs8VIxakL50jdfDusliR+VYkqGsWVRmfyQsHe77h/XIU94xnlgnS61zoQ==
+X-Received: by 2002:a05:600c:2051:b0:3a0:3c58:6ff6 with SMTP id p17-20020a05600c205100b003a03c586ff6mr22334016wmg.98.1656761575330;
+        Sat, 02 Jul 2022 04:32:55 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id y15-20020adff14f000000b0021d2f322e50sm9308324wro.41.2022.07.02.04.32.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Jul 2022 04:32:54 -0700 (PDT)
+Message-ID: <ff375c95-96e9-6bcf-66ea-f70a44d0a5d1@redhat.com>
+Date:   Sat, 2 Jul 2022 13:32:52 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 1/9] drm: selftest: convert drm_damage_helper selftest
+ to KUnit
+Content-Language: en-US
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Arthur Grillo <arthur.grillo@usp.br>
+References: <20220630004611.114441-1-maira.canal@usp.br>
+ <20220630004611.114441-2-maira.canal@usp.br>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220630004611.114441-2-maira.canal@usp.br>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix this kernel-doc warning:
+Hello Maíra,
 
-	Documentation/dev-tools/kunit/api/test:9: ./include/kunit/test.h:323: WARNING: Inline interpreted text or phrase reference start-string without end-string.
+Thanks a lot for your patch.
 
-Functions should use func_name() on kernel-doc markups, as
-documented at:
-	Documentation/doc-guide/kernel-doc.rst
+On 6/30/22 02:46, Maíra Canal wrote:
+> Considering the current adoption of the KUnit framework, convert the
+> DRM damage helper selftest to the KUnit API.
+> 
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Tested-by: David Gow <davidgow@google.com>
+> Co-developed-by: Arthur Grillo <arthur.grillo@usp.br>
+> Signed-off-by: Arthur Grillo <arthur.grillo@usp.br>
+> Signed-off-by: Maíra Canal <maira.canal@usp.br>
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+I believe the order of the tags should be chronological. That is, Daniel and
+David tags should be after your Co-developed-by and Signed-off-by tags.
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 00/12] at: https://lore.kernel.org/all/cover.1656759988.git.mchehab@kernel.org/
+[...]
 
- include/kunit/test.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +++ b/drivers/gpu/drm/tests/drm_damage_helper_test.c
+> @@ -0,0 +1,634 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Test case for drm_damage_helper functions
+> + */
+> +
+> +#include <kunit/test.h>
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 8ffcd7de9607..f1c1a95df9b8 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -320,7 +320,7 @@ static inline int kunit_run_all_tests(void)
-  *
-  * @__suites: a statically allocated list of &struct kunit_suite.
-  *
-- * This functions identically as &kunit_test_suites() except that it suppresses
-+ * This functions identically as kunit_test_suites() except that it suppresses
-  * modpost warnings for referencing functions marked __init or data marked
-  * __initdata; this is OK because currently KUnit only runs tests upon boot
-  * during the init phase or upon loading a module during the init phase.
+Please add a blank line here to separate non-DRM headers include from DRM headers.
+
+> +#include <drm/drm_damage_helper.h>
+> +#include <drm/drm_framebuffer.h>
+> +#include <drm/drm_plane.h>
+> +#include <drm/drm_drv.h>
+> +
+
+I haven't looked at the KUnits tests in detail since Daniel and David already
+reviewed them. But from a quick glance, the tests look good to me as well.
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
 -- 
-2.36.1
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
