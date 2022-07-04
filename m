@@ -2,162 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753215652ED
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Jul 2022 13:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4699D5657FA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Jul 2022 15:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiGDLAL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Jul 2022 07:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S233511AbiGDN6r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Jul 2022 09:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiGDLAH (ORCPT
+        with ESMTP id S233329AbiGDN6r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Jul 2022 07:00:07 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6565101C9;
-        Mon,  4 Jul 2022 04:00:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nl+4A4aHVO9Yh/n9iIGywYZ141BLFmFV9Xib5ry9MRF7rPR/qK3oWfcwF6ix2eNoSJq+tAKCLBeEfoueB9qbEUvWZI4GkhSg4eHbxRQrIEqaXE39GsKSgimhr44CABdBEJDuMtU+zU9YXC3BbH5BOT+tCGeX7x4JeqdtlD+shQrcNPMgo0UE8OTH288Ijpc/itPZUqiic/aw6+d+2IVDxJm8XhLRyYbW1d2ztUmM2K+3hbuJF+WBJcwUYtHpCKk0dJGg413AoF1QDvsEw/BLoiapveOFkXy7W7VR7jrVRQspnCJuqfaKDF/ayoFolzMF7cL/Rsw1A3253g63/hv41Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HXWeMDzGZMD5k9QEdKbeaMDKulx9A8NNCN+tUfbNMT0=;
- b=OBgUU2P9UF/PWYyB+Y1Y3fxmbLBukxRPZ3a+vYd5oTCwjiwa67JtV54TJFXGGaWWQRBeKss6qprJWP8BpukSiwWLjBZpcNhx61PrBfCScXQoEXUukajabbuvl21b/W6lqSqvJj03cdr8IVBknNadUUDOmbfJNxTvepBxL46oWu8/84pRfUIEkaui5RNYsfMoNnBICwSZRX2TcRyVURdrAG45zlzhnsuKyoosvG78Xw33eTPAIt61boLYnuUK4r6GPQLoO+6gjyZcsOq4TDMNhQjJ6vYbB0zu1+bQ2HS5iw9YyzqfxxxvbycB+iWlBUkCVefdISn6Gd2cR0Prg24W3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HXWeMDzGZMD5k9QEdKbeaMDKulx9A8NNCN+tUfbNMT0=;
- b=UGYmOp/l4iwHK2BXkLpxGI4Px8ehAAK08Z+bWKhmTh09mAFMOeHZSQRnDdZaYaIQAsRqxCmYroxhPFi9RUQw/DKfD+mQmnIW59fvP83+em1p80NlKfubVeDs9aG+pIVyD+PUxqjvK13X8/B+QCgrKTS5cvHdT/Lq1x8vp0sP/8FV9v5IB/vRf0IUM+/jwyOAJmw4x4uF1qctH7PfYpatG6PIesWIw3XRWTGm3joq3VOzx11QnVzSv1sZPgfbfdP3lKlUDYEbye65M5FyLi7GnPSKR2aOE4jRdNslskDrEIeZ1cKpm9qw9wR9syCGz7+HT0RtZjTC50JVBERPHfqMCg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by BL3PR12MB6380.namprd12.prod.outlook.com (2603:10b6:208:3b3::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Mon, 4 Jul
- 2022 11:00:03 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::611c:e609:d343:aa34]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::611c:e609:d343:aa34%7]) with mapi id 15.20.5395.021; Mon, 4 Jul 2022
- 11:00:02 +0000
-Date:   Mon, 4 Jul 2022 13:59:56 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Hans S <schultz.hans@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
- traffic cannot unlock a locked port
-Message-ID: <YsLILMpLI3alAj+1@shredder>
-References: <20220630111634.610320-1-hans@kapio-technology.com>
- <Yr2LFI1dx6Oc7QBo@shredder>
- <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
- <Yr778K/7L7Wqwws2@shredder>
- <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
- <Yr8oPba83rpJE3GV@shredder>
- <CAKUejP4_05E0hfFp-ceXLgPuid=MwrAoHyQ-nYE3qx3Tisb4uA@mail.gmail.com>
- <YsE+hreRa0REAG3g@shredder>
- <CAKUejP4H4yKu6LaLUUUWypt7EPuYDK-5UdUDHPF8F2U5hGnzOQ@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKUejP4H4yKu6LaLUUUWypt7EPuYDK-5UdUDHPF8F2U5hGnzOQ@mail.gmail.com>
-X-ClientProxiedBy: MR1P264CA0022.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:2f::9) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+        Mon, 4 Jul 2022 09:58:47 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3914C65CA
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Jul 2022 06:58:46 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id t127so9070278vsb.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Jul 2022 06:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ztA+AcW0Z5yxncYBDtWD6STNULe14Sk0EXcXnPOw+f4=;
+        b=fydK2EY08GUj6bqmi53Jl6xaXTvB65A9lj5bRNFxZeapv/tUcE4QN7t8PznT4jlW+e
+         0rDG6bJ0fMViPwfaDZiR/WIecntHzLs+ddCh3VrBeb4zitUcdM4x9plNiNeRTVIh0TvV
+         TCkTeM70nq5ZST24ywg8pMnTQH5Nr32Q5LoEisV+hSJlt5MkxVO1wZMYxq90Nc/hOK+Q
+         ZOfpFu0DI6+kpXPe2V9WmbXwON5GNop+xAneuw6eQB/d6b2Q8kRPFp0roAy+/AEX7cPj
+         PER7yvGdPFy4Zj+r4qgMqMHWyIRWibEKlqXWQwU+rttUX3ngf2alEHE/VenxQKdvwEGh
+         uU8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ztA+AcW0Z5yxncYBDtWD6STNULe14Sk0EXcXnPOw+f4=;
+        b=SsIAYWAaFC6pm1B/CWPaq3MKF6AzxzN0OCFaBvdGMk2h4YsiUd9PeorBGxTAlm488A
+         0GPaLLGg4U6ECNPufEP+93/JL1oGYtLUcFCLQ9tbDuwBbwuo14kVyYd2m1K1NXMC34t+
+         /npTWwXFI+ZREPcaQB85JMDVqw26Rbnjzd7cqBZlQKMzcj1xWASS4IdjMfkUF8QnObFh
+         LzCwUPrk9kr5DNrnGrKBNOs9kcjE9wq4Ocmo6fwDLenFTS3QUCFh2y/8iy+2AR2Em54i
+         tI+EhTtiC63wPE7NVG4DLHOfI32SpsBlc83tmq+4+Y8NXk99SqMBjYC1YMjSx4QO/ASk
+         1QSA==
+X-Gm-Message-State: AJIora/Rr1qdlWYQ0KIRkiSCWEjQtkZCn3UJMH1UAPVrObg+J2VsWH69
+        dLYQ4O9mjqkZrTtusMr++xeMpg==
+X-Google-Smtp-Source: AGRyM1sE6X+ncoLXgmaxZR7/g+iA8gyRtqST2d07S2Z+ia/JWZThIFFbyNf15t/vtifF0SiuZRjkgg==
+X-Received: by 2002:a05:6102:1504:b0:354:397f:51c5 with SMTP id f4-20020a056102150400b00354397f51c5mr17054790vsv.63.1656943125320;
+        Mon, 04 Jul 2022 06:58:45 -0700 (PDT)
+Received: from localhost ([181.97.174.128])
+        by smtp.gmail.com with ESMTPSA id bi44-20020a05612218ac00b0036bff0dc94esm4494942vkb.34.2022.07.04.06.58.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 06:58:45 -0700 (PDT)
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+To:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com, keescook@chromium.org,
+        Martin Fernandez <martin.fernandez@eclypsium.com>
+Subject: [PATCH v9 0/9] x86: Show in sysfs if a memory node is able to do encryption
+Date:   Mon,  4 Jul 2022 10:58:24 -0300
+Message-Id: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2ee9df5a-4c42-423e-ee29-08da5dac5860
-X-MS-TrafficTypeDiagnostic: BL3PR12MB6380:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /vv4aosI52laHDdMMVbR5izayq6BGQZ0odjrckG6aOATzBPHlbie2fY7sa+R3VFmrGpzIelNC1J30fvyXR314lB6Lar+QDVGSvWs0T9bPurZDLU+gX8aoa0jFhjY4pD6YyVDC21GzJWXn/BRqePfaEKUFBA4xryknsYbyYgVz9qSa0Sc4ijDUGbswWlU5F76aTYjsMkRr7NBp//VuKG/o7k4CqtMCLsFn6RmiK/8XBBrR0uMjgtYAOf4+WIOA5O1qFrlKSPLG9qCbzUJ5Pt+IGpLIs7R05KZPvCK+iMfRwg+XiE+1Ugy0+3srcNlAayAsCzmKkgKHN6kLyjiaRlMXhb4rlNmUMCaCauI6n399tXUosvbB9dx3et3n+g/87p/Zq+Z/kjqaxiYfngxXo4tin0cNzk7S7/oKLPI00/71VMeMAjoZi/fNE0FSR7a3j7FyGwlFlq2XKNcpUD3PTNd6vDwpqR0wyyRPDMSKfycphQh4qJqJ3Q+BgcodTSS3BgnHs7NZqYrXbSjlGLO2LfFgPLNL6qz5Gx3DjqfH2EN5W9u/VS0qXtVm060SDSk8jLYu+RUlL1Gr5TIkoUAUuK4RnGAj2UHPWbXvGcvrrI4zjJJSU57TyQpmgksZe1fEwB9zsWeZoRA2TqSGhzCqG90s0KYG6aaI7s8HBOJZ60GYdwIcFe3QCWeYJp26yePwDzi23mxdEWku4NC7lBfNhGJyuvLWO2VzwX6Mv514WnRJjCxVyaTZpclW/clXNOv2dF41rfHh3JCUWeQ3/cG/pTDEUtE1xHqrrmnAlNnxrQ5W3B1oD9O8wPiRgw5EBoichWH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(136003)(366004)(39860400002)(376002)(346002)(396003)(6486002)(33716001)(5660300002)(478600001)(7416002)(9686003)(6512007)(186003)(8936002)(26005)(6506007)(86362001)(2906002)(83380400001)(6666004)(41300700001)(38100700002)(8676002)(4326008)(316002)(54906003)(66946007)(66556008)(66476007)(6916009)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?z+dFrlbfnTvQOTsVdODlB8qQ+614+MFVshg9wBZ1eY+JhhQ0m49KCg+KuJ+4?=
- =?us-ascii?Q?QSsva7Im0PwwS9ctpiEZQ6r4Gmrsr6f7/Y5GAvb2zsRGefUX/pqgu5dG2V7+?=
- =?us-ascii?Q?nKDHmeZVsJr8cxKWDHS60qxrLLt6YoxfkhZs0MZpbNKEGmWyZfbKSchVRuqO?=
- =?us-ascii?Q?aANEC2+w4zZW2V0CuMD3hNsYzyBhHO/UgEDh37s1kKJTJA9rmns1A0Csmcex?=
- =?us-ascii?Q?2Zp8vaBGOFnKyjFapoy/nuE9aqeLLvEzvbRAiqNpvYDhxIm5pNFGSi9B+u4D?=
- =?us-ascii?Q?GHihnPYgnEKyLjl0U8XRsxGJrE5iMkAyq31gF5vW5xNWw2LkZTvK5FPNDj5l?=
- =?us-ascii?Q?skY/Sjadm3o8nmIuKQF/akgf4SkolMrCwNQcFLmFmAQH7R4GVPmrwy+acbt7?=
- =?us-ascii?Q?r16t6pr24UqvJnZboZYN5CzBgm4oRdWNsCYRwgHgS8Bzz0dn59cnVX2O5gzi?=
- =?us-ascii?Q?ZQQcFcaYo9c570UJKBoAkc8B0JtCtABM9BfcYLcMQiqD6ePi2EMA2H8dh2DF?=
- =?us-ascii?Q?qacURi5j+wUXN9ntQnl9uENiFNoaOZ2JizJbRhSSGuOAcn7RwZNS0oQaYyyU?=
- =?us-ascii?Q?bzaflWLQy27FIWe5UDjJ88e1XB74j9NKb1QdNP/1w7NNqzJzR6W7FGsOVilI?=
- =?us-ascii?Q?DoNjuhxjSCronedh0tTzGFTj67R9CXkOY7IWvNiM1qaSETHgZIhw+VLQvF8B?=
- =?us-ascii?Q?FPi1uU7QmVB+hQsZP+I1/JfYqoUlpfHzO6NPi/PAKRpniEPRYYAhIFicFLyg?=
- =?us-ascii?Q?3TjrNm5Q7dXb8+X1u8s3lt/Iu6VyEIkYxlmRyycDgUNmYYeH6r55uPIBh98D?=
- =?us-ascii?Q?Ca7LBPimPcBupwZfnDmL9DH1mBzDmsVrnUqZCCljAirPMkuSVmlqCCUhy9Z+?=
- =?us-ascii?Q?VkNodj9ddZhu/t5Rdds7X1rW+nLWEpGibUqGXoEQuehyPPXuZVMHbYAharBI?=
- =?us-ascii?Q?LOrTv2RPNWbzRlen/ixKl3yf07RVN/9sUXpR5LZLdB+FRLWGCmvPGzPBDN1F?=
- =?us-ascii?Q?4kzZ7wxcwM5DdrDb+/1bVLJpfX30JD+aihRGKRuOjpM7XgSbtNhu7initoB+?=
- =?us-ascii?Q?RNiljqN4BNF59yJ4FYOM9qoX0Nz05Dg2XpTvrC1WxJYNkFAv/Q6rVbVhsjIh?=
- =?us-ascii?Q?eKhRRtV30GI7Um6QtJLftEl6nfoEFURzH8stlzoq3TZYAil0WhnyMjEBe0+J?=
- =?us-ascii?Q?ZrFZ392Z2BXfzCsSt2dnQT84uo2M14OxH5Rth/fk+SWhKNQe4HXBd0lgbRE1?=
- =?us-ascii?Q?UgNjxzIQV/6FFhmZb/bWhMJwpRH1TfYI/32v/Y8l+OufpTOset05FgtPfzWi?=
- =?us-ascii?Q?20c12gY/rot7GXu6zCD3Z7b2ThvbhO99kxrTvsckhAjCVmjzG8t1UGtDiGcT?=
- =?us-ascii?Q?wAJWlgWFV7SPlb8C3R/jZ4VPBfaqCeO5rb+LW0I0BoeY36DgfEl7Tr3B1m5u?=
- =?us-ascii?Q?cz40CXI+fYetlGaLNpXDCZjV5tmQC9VAGGmXRlJMsVxf2+/10TvQm8jrEzDC?=
- =?us-ascii?Q?+Sbbs6wAOt84X3Merk75mZqI5QQqTkTm4OR7JjR5pFXFbMZG2ybaIX9O/DR0?=
- =?us-ascii?Q?/WxscvLbeTPvVjjcGMiFgKQFrAe1ID0M6TGbj3DZ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ee9df5a-4c42-423e-ee29-08da5dac5860
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2022 11:00:02.7351
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gjICZc1gutzCgHLZv3s7WVUXuYTpyHuPrWZuNBouNUXZvBb+0sp7b17cUUHES2BlkVcBm0XlhmIDNu9qKacBMQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6380
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 09:54:31AM +0200, Hans S wrote:
-> >
-> > IIUC, with mv88e6xxx, when the port is locked and learning is disabled:
-> >
-> > 1. You do not get miss violation interrupts. Meaning, you can't report
-> > 'locked' entries to the bridge driver.
-> >
-> > 2. You do not get aged-out interrupts. Meaning, you can't tell the
-> > bridge driver to remove aged-out entries.
-> >
-> > My point is that this should happen regardless if learning is enabled on
-> > the bridge driver or not. Just make sure it is always enabled in
-> > mv88e6xxx when the port is locked. Learning in the bridge driver itself
-> > can be off, thereby eliminating the need to disable learning from
-> > link-local packets.
-> 
-> So you suggest that we enable learning in the driver when locking the
-> port and document that learning should be turned off from user space
-> before locking the port?
+Show for each node if every memory descriptor in that node has the
+EFI_MEMORY_CPU_CRYPTO attribute.
 
-Yes. Ideally, the bridge driver would reject configurations where
-learning is enabled and the port is locked, but it might be too late for
-that. It would be good to add a note in the man page that learning
-should be disabled when the port is locked to avoid "unlocking" the port
-by accident.
+fwupd project plans to use it as part of a check to see if the users
+have properly configured memory hardware encryption
+capabilities. fwupd's people have seen cases where it seems like there
+is memory encryption because all the hardware is capable of doing it,
+but on a closer look there is not, either because of system firmware
+or because some component requires updating to enable the feature.
+
+The MKTME/TME spec says that it will only encrypt those memory regions
+which are flagged with the EFI_MEMORY_CPU_CRYPTO attribute.
+
+If all nodes are capable of encryption and if the system have tme/sme
+on we can pretty confidently say that the device is actively
+encrypting all its memory.
+
+It's planned to make this check part of an specification that can be
+passed to people purchasing hardware
+
+These checks will run at every boot. The specification is called Host
+Security ID: https://fwupd.github.io/libfwupdplugin/hsi.html.
+
+We choosed to do it a per-node basis because although an ABI that
+shows that the whole system memory is capable of encryption would be
+useful for the fwupd use case, doing it in a per-node basis would make
+the path easier to give the capability to the user to target
+allocations from applications to NUMA nodes which have encryption
+capabilities in the future.
+
+
+Changes since v8:
+
+Add unit tests to e820_range_* functions
+
+
+Changes since v7:
+
+Less kerneldocs
+
+Less verbosity in the e820 code
+
+
+Changes since v6:
+
+Fixes in __e820__handle_range_update
+
+Const correctness in e820.c
+
+Correct alignment in memblock.h
+
+Rework memblock_overlaps_region
+
+
+Changes since v5:
+
+Refactor e820__range_{update, remove, set_crypto_capable} in order to
+avoid code duplication.
+
+Warn the user when a node has both encryptable and non-encryptable
+regions.
+
+Check that e820_table has enough size to store both current e820_table
+and EFI memmap.
+
+
+Changes since v4:
+
+Add enum to represent the cryptographic capabilities in e820:
+e820_crypto_capabilities.
+
+Revert __e820__range_update, only adding the new argument for
+__e820__range_add about crypto capabilities.
+
+Add a function __e820__range_update_crypto similar to
+__e820__range_update but to only update this new field.
+
+
+Changes since v3:
+
+Update date in Doc/ABI file.
+
+More information about the fwupd usecase and the rationale behind
+doing it in a per-NUMA-node.
+
+
+Changes since v2:
+
+e820__range_mark_crypto -> e820__range_mark_crypto_capable.
+
+In e820__range_remove: Create a region with crypto capabilities
+instead of creating one without it and then mark it.
+
+
+Changes since v1:
+
+Modify __e820__range_update to update the crypto capabilities of a
+range; now this function will change the crypto capability of a range
+if it's called with the same old_type and new_type. Rework
+efi_mark_e820_regions_as_crypto_capable based on this.
+
+Update do_add_efi_memmap to mark the regions as it creates them.
+
+Change the type of crypto_capable in e820_entry from bool to u8.
+
+Fix e820__update_table changes.
+
+Remove memblock_add_crypto_capable. Now you have to add the region and
+mark it then.
+
+Better place for crypto_capable in pglist_data.
+
+Martin Fernandez (9):
+  mm/memblock: Tag memblocks with crypto capabilities
+  mm/mmzone: Tag pg_data_t with crypto capabilities
+  x86/e820: Add infrastructure to refactor e820__range_{update,remove}
+  x86/e820: Refactor __e820__range_update
+  x86/e820: Refactor e820__range_remove
+  x86/e820: Tag e820_entry with crypto capabilities
+  x86/e820: Add unit tests for e820_range_* functions
+  x86/efi: Mark e820_entries as crypto capable from EFI memmap
+  drivers/node: Show in sysfs node's crypto capabilities
+
+ Documentation/ABI/testing/sysfs-devices-node |  10 +
+ arch/x86/Kconfig.debug                       |  10 +
+ arch/x86/include/asm/e820/api.h              |   1 +
+ arch/x86/include/asm/e820/types.h            |  12 +-
+ arch/x86/kernel/e820.c                       | 393 ++++++++++++++-----
+ arch/x86/kernel/e820_test.c                  | 249 ++++++++++++
+ arch/x86/platform/efi/efi.c                  |  37 ++
+ drivers/base/node.c                          |  10 +
+ include/linux/memblock.h                     |   5 +
+ include/linux/mmzone.h                       |   3 +
+ mm/memblock.c                                |  62 +++
+ mm/page_alloc.c                              |   1 +
+ 12 files changed, 695 insertions(+), 98 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-node
+ create mode 100644 arch/x86/kernel/e820_test.c
+
+-- 
+2.30.2
+
