@@ -2,83 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D271A564FC9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Jul 2022 10:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A12565112
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Jul 2022 11:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbiGDIep (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Jul 2022 04:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
+        id S233836AbiGDJkX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Jul 2022 05:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbiGDIen (ORCPT
+        with ESMTP id S233847AbiGDJkV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Jul 2022 04:34:43 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B517B5F8A;
-        Mon,  4 Jul 2022 01:34:42 -0700 (PDT)
-Received: from localhost.localdomain (unknown [39.53.41.168])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 4 Jul 2022 05:40:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED5E25E4;
+        Mon,  4 Jul 2022 02:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E2CD6601638;
-        Mon,  4 Jul 2022 09:34:39 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656923681;
-        bh=SeURJBNtzhwCV0tVGs7sh8U9S4mht0PBp1oWTSOLU/4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PQDdatC4C8GBKrjcAPRgfJUvT35DlZ1iPtXE/jyqwz6A5q5YThoqg5Zpf2Ecqbbl4
-         UFCe2ZQ3mH3vVJDumktUobxns/HFaDSmLc0FkPamSyygtsns+0NKvO+06yUBR5gCbI
-         iUgPSb4tjgE3nqr5SwNkUuLUwgK2lSG2fVToZyfhTNQWTUF7/ZQgAArbgAR5or0LPo
-         yneZJrfpQAmJsT5i8SpgXv9ui9/B0np8B/6fMKvdCW2Sfk18exGxOQ0GLmRPHnvP6w
-         uzjeHlvBigRzMdp4PE3/3gdaeWryb5pkGjYU3gbeWbWbN01kGJnDmZERDbTvu5uiBa
-         NggP244iCYIkw==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] docs/kselftest: Fix build commands in guidelines
-Date:   Mon,  4 Jul 2022 13:34:25 +0500
-Message-Id: <20220704083426.1867401-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        by ams.source.kernel.org (Postfix) with ESMTPS id 595C8B80E3F;
+        Mon,  4 Jul 2022 09:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07DF4C341CD;
+        Mon,  4 Jul 2022 09:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656927615;
+        bh=zftj9nKOAp79ayB0qyK8ahOTzbIYWv+GSDUKoSu/Ya0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=nK6yOvlZKhXdTgHmnayLtIfCEJlLlUwhjg21ghX3+Y8wqM8+saloSGHyJ/b87bIev
+         28oVUXJLXtKVb31xn/AZbl/g1YlhNZhHFVcix2UBq63R5UnO3qNzO/wBFRO/BuAoyl
+         L0x+0Fs5pc7mE7+lozSv6r9uy4s42X7bV2qSaZ2XFjFW5+4KlG27YdpylInL0ZSg4B
+         3mPcDMGWlQFUSpz25AczsCkbJmbD4Kdsl1qHjYz+RwxR++kU3bzCZ1qG2ztFToB+nW
+         h1espoX9DM2bAlf01AzmVRMLjJKgiRVcCEyGAdXJbRt9HGdfpPUoMLViKXNutyIPMG
+         g3b0d4QEAcKiw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBB40E45BDE;
+        Mon,  4 Jul 2022 09:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next] selftest: net: bridge mdb add/del entry to port that
+ is down
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165692761489.15750.11171118785999601605.git-patchwork-notify@kernel.org>
+Date:   Mon, 04 Jul 2022 09:40:14 +0000
+References: <20220701144350.2034989-1-casper.casan@gmail.com>
+In-Reply-To: <20220701144350.2034989-1-casper.casan@gmail.com>
+To:     Casper Andersson <casper.casan@gmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Build commands start with "make". It is missing. Add "make" to the start
-of the build command.
+Hello:
 
-Fixes: 820636106342 ("docs/kselftest: add more guidelines for adding new tests")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- Documentation/dev-tools/kselftest.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index ee6467ca8293..9dd94c334f05 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -255,9 +255,9 @@ Contributing new tests (details)
- 
-  * All changes should pass::
- 
--    kselftest-{all,install,clean,gen_tar}
--    kselftest-{all,install,clean,gen_tar} O=abo_path
--    kselftest-{all,install,clean,gen_tar} O=rel_path
-+    make kselftest-{all,install,clean,gen_tar}
-+    make kselftest-{all,install,clean,gen_tar} O=abs_path
-+    make kselftest-{all,install,clean,gen_tar} O=rel_path
-     make -C tools/testing/selftests {all,install,clean,gen_tar}
-     make -C tools/testing/selftests {all,install,clean,gen_tar} O=abs_path
-     make -C tools/testing/selftests {all,install,clean,gen_tar} O=rel_path
+On Fri,  1 Jul 2022 16:43:50 +0200 you wrote:
+> Tests that permanent mdb entries can be added/deleted on ports with state down.
+> 
+> Signed-off-by: Casper Andersson <casper.casan@gmail.com>
+> ---
+> This feature was implemented recently and a selftest was suggested:
+> https://lore.kernel.org/netdev/20220614063223.zvtrdrh7pbkv3b4v@wse-c0155/
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next] selftest: net: bridge mdb add/del entry to port that is down
+    https://git.kernel.org/netdev/net-next/c/0d153dd208d4
+
+You are awesome, thank you!
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
