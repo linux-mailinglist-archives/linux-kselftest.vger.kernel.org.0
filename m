@@ -2,512 +2,262 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2E45660EB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Jul 2022 04:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914E256642B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Jul 2022 09:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233209AbiGECEi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Jul 2022 22:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
+        id S229976AbiGEHdY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Jul 2022 03:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbiGECEi (ORCPT
+        with ESMTP id S229560AbiGEHdX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Jul 2022 22:04:38 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D0C7675
-        for <linux-kselftest@vger.kernel.org>; Mon,  4 Jul 2022 19:04:36 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id d16so9158719wrv.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Jul 2022 19:04:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N4vxhcH78eDM6NhcAwyXFnjauYWcotlatF/qhNMlDPI=;
-        b=F9XCGzCvNODUdPC/w5kmPsHX8FFCQK+yFfB+Zd8bj+q5iKim5gS6yAZusFtixVeOwI
-         mtIOZg5C0dUnFFAUqpc5JagjfxGFfxMgMTzS5W3bTY/vlWYEcHyrKWhwA1vH6t01BgEr
-         gYCwezi1pjoETcYnjzhweEbXgiz5uv3ASbPVOCRs7b5AVhLPtKUs2+okqrVRlTUoDD3D
-         QZvQU/eFpahRMeubxZWOEywHzhz9G1lB4u33NJyoS6DoeTrDb5mPSYl7YDKWgaK1NuUN
-         pXGxVavMnCQ/c5WQpEqTRcrDKJmeeiwmdvT15OQOJcz418fc4Iacis3fHR0FFnnxaW6M
-         3dgA==
+        Tue, 5 Jul 2022 03:33:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ED441099
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Jul 2022 00:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657006401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hm4YXXqjJ9GWGedmDSj6+xlai172kqS8Ta7PZrgUG2A=;
+        b=DciIeQ7xbSjWioLhZOUv1hNJUUJUUHFhvVHo+Z9ADOtdJoGwu6JPvziipMMYJHSKQXQIG+
+        kPAgIZY8nVAgVukyXdsDTOr+6mDL2ynKgaMjtc94V0RWIMQkito1utwOTskaSL9FE2T1Gk
+        EDUogbckdWucEtuX0wsdaFbxTnZLIhg=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-R2XtU-rlPmWGjIfcPwAmCg-1; Tue, 05 Jul 2022 03:33:20 -0400
+X-MC-Unique: R2XtU-rlPmWGjIfcPwAmCg-1
+Received: by mail-wm1-f70.google.com with SMTP id c126-20020a1c3584000000b003a02fa133ceso706481wma.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Jul 2022 00:33:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N4vxhcH78eDM6NhcAwyXFnjauYWcotlatF/qhNMlDPI=;
-        b=hbjJo7P+CaLkYI2BOfCCZY9KOA8YgIoTwb/akt7DQbE0iR8cKHFpDV3XBkHsAZIrR3
-         pPPAQYBt5ljgEPanG7XEi8vt0w7GNHfeW/5ZAWqeAPBB6beIV8rpOGdHdAozffvF3y9K
-         Ig8WZJYMpjy+i+Qt8Japcmsf0mX+5+ZZnb0q0weHLtLiDhXgrHmOrpUbc5Lk/luzT92m
-         8qqV4rWLcm30vYSUHDA6emhhBGa/ck163n4RmNLpXETr9Vv5mmTiWYoSFXgR1jjg5cQA
-         Q46l4CL6idErl3q4konIb4ku1Y9fzQdi92I616TOuazuIpFWn54RJ7/BHnaUr7iAIQMx
-         ebjw==
-X-Gm-Message-State: AJIora/7namzX//0jWrvfZ5hLn4VHjbizy9YHJc4Hh1mSQ4wZG9XOT6W
-        /XBLerb1UyWHfqo7pHPkPuWFcIEMzOsSChrlwwYayg==
-X-Google-Smtp-Source: AGRyM1tv3KSsz5ahO9QSNKUaP+zHm1S9VUrQk+2wU0G8MwJX6IyVGW9tMIR1SJntatob6T+oQmj+K+WMhmqXRaM0Kvg=
-X-Received: by 2002:a05:6000:1542:b0:21d:28c0:eb43 with SMTP id
- 2-20020a056000154200b0021d28c0eb43mr29830169wry.622.1656986674601; Mon, 04
- Jul 2022 19:04:34 -0700 (PDT)
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=hm4YXXqjJ9GWGedmDSj6+xlai172kqS8Ta7PZrgUG2A=;
+        b=jFKGxdtA5Oo1SPEFWp4Sq8sAa7MsJjNpV9WmSioPokvgZCa2fcO4PHFhnAlgXRKvab
+         9qQIgYkGjWzp5E4WywvrcQhu1T07CWkyedxXs02y2r+xrTGRaa2vYI1IFquV2pFJwjMg
+         uli5SxOcD8bGQ+BLE18Xhy30+O9XGkyCP3u3lz/I6l7s2uY1aSzi9jM9e8G0rMzR4EYw
+         b5lIyVzMvt8J2karpzLEwj05DapO5XCgRw/eZfohH/clPKCsN36BFtYz0tcPfZJivph7
+         jBqkw6Kud51AAhgcPTHXAsRJyHAXIRCd76QuYnmWdF8q/mVgxpW1kWxFEzTOse/sIxXW
+         xf/Q==
+X-Gm-Message-State: AJIora+0WD9VJrfcnofVuFDuPtfSCl8s3L1XHM3tSPnnESjGEcCKqIiI
+        hPTLWYPWoB6Nput0Kssm/iA/wu3Be6hMKs29gdMoJC4EJy8nIX/YO3592cIkMJdc5x3E4zFaefB
+        Evc5w2WbkD2ISqSGH0ByRk0vMCiID
+X-Received: by 2002:adf:ea08:0:b0:21d:6dbf:6366 with SMTP id q8-20020adfea08000000b0021d6dbf6366mr5983051wrm.137.1657006398687;
+        Tue, 05 Jul 2022 00:33:18 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1t/2oTZjs0yRS3ZRoO9aKmpSN52vrsTYwhAqDF0ZKCRvEpstriKJM/NkUDtvQxy6Nh5FDr1QA==
+X-Received: by 2002:adf:ea08:0:b0:21d:6dbf:6366 with SMTP id q8-20020adfea08000000b0021d6dbf6366mr5983026wrm.137.1657006398377;
+        Tue, 05 Jul 2022 00:33:18 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-106-148.dyn.eolo.it. [146.241.106.148])
+        by smtp.gmail.com with ESMTPSA id c2-20020adfe702000000b0021d69860b66sm6329438wrm.9.2022.07.05.00.33.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jul 2022 00:33:18 -0700 (PDT)
+Message-ID: <cd046e93a9783be5944cf15974afa534c94fb15e.camel@redhat.com>
+Subject: Re: [net-next v4 1/4] seg6: add support for SRv6 H.Encaps.Red
+ behavior
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Anton Makarov <anton.makarov11235@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+Date:   Tue, 05 Jul 2022 09:33:16 +0200
+In-Reply-To: <20220701150152.24103-2-andrea.mayer@uniroma2.it>
+References: <20220701150152.24103-1-andrea.mayer@uniroma2.it>
+         <20220701150152.24103-2-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com> <20220704135833.1496303-8-martin.fernandez@eclypsium.com>
-In-Reply-To: <20220704135833.1496303-8-martin.fernandez@eclypsium.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 5 Jul 2022 10:04:23 +0800
-Message-ID: <CABVgOS=V+-AN65mZRnzZo8LqDZgEPXrwGPXTSsPUsnBvzi7+WA@mail.gmail.com>
-Subject: Re: [PATCH v9 7/9] x86/e820: Add unit tests for e820_range_* functions
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, tglx@linutronix.de,
-        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rafael@kernel.org, rppt@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        daniel.gutson@eclypsium.com, hughsient@gmail.com,
-        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com,
-        Kees Cook <keescook@chromium.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000028d5af05e3054682"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000028d5af05e3054682
-Content-Type: text/plain; charset="UTF-8"
-
-On Mon, Jul 4, 2022 at 9:59 PM 'Martin Fernandez' via KUnit
-Development <kunit-dev@googlegroups.com> wrote:
->
-> Add KUnit tests for the e820_range_* functions.
->
-> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+On Fri, 2022-07-01 at 17:01 +0200, Andrea Mayer wrote:
+> The SRv6 H.Encaps.Red behavior described in [1] is an optimization of
+> the SRv6 H.Encaps behavior [2].
+> 
+> H.Encaps.Red reduces the length of the SRH by excluding the first
+> segment (SID) in the SRH of the pushed IPv6 header. The first SID is
+> only placed in the IPv6 Destination Address field of the pushed IPv6
+> header.
+> When the SRv6 Policy only contains one SID the SRH is omitted, unless
+> there is an HMAC TLV to be carried.
+> 
+> [1] - https://datatracker.ietf.org/doc/html/rfc8986#section-5.2
+> [2] - https://datatracker.ietf.org/doc/html/rfc8986#section-5.1
+> 
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> Signed-off-by: Anton Makarov <anton.makarov11235@gmail.com>
 > ---
-
-This looks good to me from a KUnit point of view. I've tested it on
-both 32- and 64- bit x86 under qemu with the following:
-./tools/testing/kunit/kunit.py run --arch=i386 'e820'
-./tools/testing/kunit/kunit.py run --arch=x86_64 'e820'
-
-Two notes inline below:
-- An indentation error in the Kconfig entry, which stops it from compiling.
-- Some minor pontificating about how KUnit wants to name macros in
-general. (No action required: just making a note that this is probably
-okay.)
-
-With the indentation issue fixed, this is:
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  arch/x86/Kconfig.debug      |  10 ++
->  arch/x86/kernel/e820.c      |   5 +
->  arch/x86/kernel/e820_test.c | 249 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 264 insertions(+)
->  create mode 100644 arch/x86/kernel/e820_test.c
->
-> diff --git a/arch/x86/Kconfig.debug b/arch/x86/Kconfig.debug
-> index d872a7522e55..b5040d345fb4 100644
-> --- a/arch/x86/Kconfig.debug
-> +++ b/arch/x86/Kconfig.debug
-> @@ -225,6 +225,16 @@ config PUNIT_ATOM_DEBUG
->           The current power state can be read from
->           /sys/kernel/debug/punit_atom/dev_power_state
->
-> +config E820_KUNIT_TEST
-> +       tristate "Tests for E820" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT=y
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This option enables unit tests for the e820.c code. It
-> +         should be enabled only in development environments.
-> +
-> +         If unsure, say N.
-
-The indentation here seems to be one space off, leading to errors building it:
-
-arch/x86/Kconfig.debug:236: syntax error
-arch/x86/Kconfig.debug:235:warning: ignoring unsupported character ','
-arch/x86/Kconfig.debug:235:warning: ignoring unsupported character '.'
-arch/x86/Kconfig.debug:235: unknown statement "If"
-make[2]: *** [../scripts/kconfig/Makefile:77: olddefconfig] Error 1
-
-
-> +
->  choice
->         prompt "Choose kernel unwinder"
->         default UNWINDER_ORC if X86_64
-> diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-> index dade59758b9f..a6ced3e306dd 100644
-> --- a/arch/x86/kernel/e820.c
-> +++ b/arch/x86/kernel/e820.c
-> @@ -1546,3 +1546,8 @@ void __init e820__memblock_setup(void)
->
->         memblock_dump_all();
+>  include/uapi/linux/seg6_iptunnel.h |   1 +
+>  net/ipv6/seg6_iptunnel.c           | 126 ++++++++++++++++++++++++++++-
+>  2 files changed, 126 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/uapi/linux/seg6_iptunnel.h b/include/uapi/linux/seg6_iptunnel.h
+> index eb815e0d0ac3..538152a7b2c3 100644
+> --- a/include/uapi/linux/seg6_iptunnel.h
+> +++ b/include/uapi/linux/seg6_iptunnel.h
+> @@ -35,6 +35,7 @@ enum {
+>  	SEG6_IPTUN_MODE_INLINE,
+>  	SEG6_IPTUN_MODE_ENCAP,
+>  	SEG6_IPTUN_MODE_L2ENCAP,
+> +	SEG6_IPTUN_MODE_ENCAP_RED,
+>  };
+>  
+>  #endif
+> diff --git a/net/ipv6/seg6_iptunnel.c b/net/ipv6/seg6_iptunnel.c
+> index d64855010948..4942073650d3 100644
+> --- a/net/ipv6/seg6_iptunnel.c
+> +++ b/net/ipv6/seg6_iptunnel.c
+> @@ -36,6 +36,7 @@ static size_t seg6_lwt_headroom(struct seg6_iptunnel_encap *tuninfo)
+>  	case SEG6_IPTUN_MODE_INLINE:
+>  		break;
+>  	case SEG6_IPTUN_MODE_ENCAP:
+> +	case SEG6_IPTUN_MODE_ENCAP_RED:
+>  		head = sizeof(struct ipv6hdr);
+>  		break;
+>  	case SEG6_IPTUN_MODE_L2ENCAP:
+> @@ -195,6 +196,122 @@ int seg6_do_srh_encap(struct sk_buff *skb, struct ipv6_sr_hdr *osrh, int proto)
 >  }
+>  EXPORT_SYMBOL_GPL(seg6_do_srh_encap);
+>  
+> +/* encapsulate an IPv6 packet within an outer IPv6 header with reduced SRH */
+> +static int seg6_do_srh_encap_red(struct sk_buff *skb,
+> +				 struct ipv6_sr_hdr *osrh, int proto)
+> +{
+> +	__u8 first_seg = osrh->first_segment;
+> +	struct dst_entry *dst = skb_dst(skb);
+> +	struct net *net = dev_net(dst->dev);
+> +	struct ipv6hdr *hdr, *inner_hdr;
+> +	int hdrlen = ipv6_optlen(osrh);
+> +	int red_tlv_offset, tlv_offset;
+> +	struct ipv6_sr_hdr *isrh;
+> +	bool skip_srh = false;
+> +	__be32 flowlabel;
+> +	int tot_len, err;
+> +	int red_hdrlen;
+> +	int tlvs_len;
 > +
-> +#ifdef CONFIG_E820_KUNIT_TEST
-> +/* Let e820_test have access the static functions in this file */
-> +#include "e820_test.c"
+> +	if (first_seg > 0) {
+> +		red_hdrlen = hdrlen - sizeof(struct in6_addr);
+> +	} else {
+> +		/* NOTE: if tag/flags and/or other TLVs are introduced in the
+> +		 * seg6_iptunnel infrastructure, they should be considered when
+> +		 * deciding to skip the SRH.
+> +		 */
+> +		skip_srh = !sr_has_hmac(osrh);
+> +
+> +		red_hdrlen = skip_srh ? 0 : hdrlen;
+> +	}
+> +
+> +	tot_len = red_hdrlen + sizeof(struct ipv6hdr);
+> +
+> +	err = skb_cow_head(skb, tot_len + skb->mac_len);
+> +	if (unlikely(err))
+> +		return err;
+> +
+> +	inner_hdr = ipv6_hdr(skb);
+> +	flowlabel = seg6_make_flowlabel(net, skb, inner_hdr);
+> +
+> +	skb_push(skb, tot_len);
+> +	skb_reset_network_header(skb);
+> +	skb_mac_header_rebuild(skb);
+> +	hdr = ipv6_hdr(skb);
+> +
+> +	/* based on seg6_do_srh_encap() */
+> +	if (skb->protocol == htons(ETH_P_IPV6)) {
+> +		ip6_flow_hdr(hdr, ip6_tclass(ip6_flowinfo(inner_hdr)),
+> +			     flowlabel);
+> +		hdr->hop_limit = inner_hdr->hop_limit;
+> +	} else {
+> +		ip6_flow_hdr(hdr, 0, flowlabel);
+> +		hdr->hop_limit = ip6_dst_hoplimit(skb_dst(skb));
+> +
+> +		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+> +		IP6CB(skb)->iif = skb->skb_iif;
+> +	}
+> +
+> +	/* no matter if we have to skip the SRH or not, the first segment
+> +	 * always comes in the pushed IPv6 header.
+> +	 */
+> +	hdr->daddr = osrh->segments[first_seg];
+> +
+> +	if (skip_srh) {
+> +		hdr->nexthdr = proto;
+> +
+> +		set_tun_src(net, dst->dev, &hdr->daddr, &hdr->saddr);
+> +		goto out;
+> +	}
+> +
+> +	/* we cannot skip the SRH, slow path */
+> +
+> +	hdr->nexthdr = NEXTHDR_ROUTING;
+> +	isrh = (void *)hdr + sizeof(struct ipv6hdr);
+> +
+> +	if (unlikely(!first_seg)) {
+> +		/* this is a very rare case; we have only one SID but
+> +		 * we cannot skip the SRH since we are carrying some
+> +		 * other info.
+> +		 */
+> +		memcpy(isrh, osrh, hdrlen);
+> +		goto srcaddr;
+> +	}
+> +
+> +	tlv_offset = sizeof(*osrh) + (first_seg + 1) * sizeof(struct in6_addr);
+> +	red_tlv_offset = tlv_offset - sizeof(struct in6_addr);
+> +
+> +	memcpy(isrh, osrh, red_tlv_offset);
+> +
+> +	tlvs_len = hdrlen - tlv_offset;
+> +	if (unlikely(tlvs_len > 0)) {
+> +		const void *s = (const void *)osrh + tlv_offset;
+> +		void *d = (void *)isrh + red_tlv_offset;
+> +
+> +		memcpy(d, s, tlvs_len);
+> +	}
+> +
+> +	--isrh->first_segment;
+> +	isrh->hdrlen -= 2;
+> +
+> +srcaddr:
+> +	isrh->nexthdr = proto;
+> +	set_tun_src(net, dst->dev, &hdr->daddr, &hdr->saddr);
+> +
+> +#ifdef CONFIG_IPV6_SEG6_HMAC
+> +	if (unlikely(!skip_srh && sr_has_hmac(isrh))) {
+> +		err = seg6_push_hmac(net, &hdr->saddr, isrh);
+> +		if (unlikely(err))
+> +			return err;
+> +	}
 > +#endif
-> diff --git a/arch/x86/kernel/e820_test.c b/arch/x86/kernel/e820_test.c
-> new file mode 100644
-> index 000000000000..6b28ea131380
-> --- /dev/null
-> +++ b/arch/x86/kernel/e820_test.c
-> @@ -0,0 +1,249 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <kunit/test.h>
 > +
-> +#include <asm/e820/api.h>
-> +#include <asm/setup.h>
-> +
-> +#define KUNIT_EXPECT_E820_ENTRY_EQ(_test, _entry, _addr, _size, _type,         \
-> +                                  _crypto_capable)                            \
-> +       do {                                                                   \
-> +               KUNIT_EXPECT_EQ((_test), (_entry).addr, (_addr));              \
-> +               KUNIT_EXPECT_EQ((_test), (_entry).size, (_size));              \
-> +               KUNIT_EXPECT_EQ((_test), (_entry).type, (_type));              \
-> +               KUNIT_EXPECT_EQ((_test), (_entry).crypto_capable,              \
-> +                               (_crypto_capable));                            \
-> +       } while (0)
-> +
+> +out:
+> +	skb_postpush_rcsum(skb, hdr, tot_len);
 
-I'm not 100% sure we ever came to a decision about tests naming their
-own expect macros KUNIT_EXPECT_*. I know KASAN is doing it, though the
-thought there was that other tests might have sensible reasons to
-expect given memory accesses, so it might not be limited to the one
-test.
+It looks like, at this point hdr->payload_len is not initialized yet -
+it will be set later by the caller. So the above will corrupt the
+checksum complete.
 
-Personally, I don't mind it, particularly since it's obvious that this
-is specific to the e820 test.
+I think the solution is moving 'payload_len' initialization before the
+csum update. Note that 'seg6_do_srh_encap' has a similar issue.
 
-> +struct e820_table test_table __initdata;
-> +
-> +static void __init test_e820_range_add(struct kunit *test)
-> +{
-> +       u32 full = ARRAY_SIZE(test_table.entries);
-> +       /* Add last entry. */
-> +       test_table.nr_entries = full - 1;
-> +       __e820__range_add(&test_table, 0, 15, 0, 0);
-> +       KUNIT_EXPECT_EQ(test, test_table.nr_entries, full);
-> +       /* Skip new entry when full. */
-> +       __e820__range_add(&test_table, 0, 15, 0, 0);
-> +       KUNIT_EXPECT_EQ(test, test_table.nr_entries, full);
-> +}
-> +
-> +static void __init test_e820_range_update(struct kunit *test)
-> +{
-> +       u64 entry_size = 15;
-> +       u64 updated_size = 0;
-> +       /* Initialize table */
-> +       test_table.nr_entries = 0;
-> +       __e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-> +                         E820_NOT_CRYPTO_CAPABLE);
-> +       __e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
-> +                         E820_NOT_CRYPTO_CAPABLE);
-> +       __e820__range_add(&test_table, entry_size * 2, entry_size,
-> +                         E820_TYPE_ACPI, E820_NOT_CRYPTO_CAPABLE);
-> +
-> +       updated_size = __e820__range_update(&test_table, 0, entry_size * 2,
-> +                                           E820_TYPE_RAM, E820_TYPE_RESERVED);
-> +
-> +       /* The first 2 regions were updated */
-> +       KUNIT_EXPECT_EQ(test, updated_size, entry_size * 2);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
-> +                                  E820_TYPE_RESERVED, E820_NOT_CRYPTO_CAPABLE);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
-> +                                  entry_size, E820_TYPE_RESERVED,
-> +                                  E820_NOT_CRYPTO_CAPABLE);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
-> +                                  entry_size, E820_TYPE_ACPI,
-> +                                  E820_NOT_CRYPTO_CAPABLE);
-> +
-> +       updated_size = __e820__range_update(&test_table, 0, entry_size * 3,
-> +                                           E820_TYPE_RESERVED, E820_TYPE_RAM);
-> +
-> +       /*
-> +        * Only the first 2 regions were updated,
-> +        * since E820_TYPE_ACPI > E820_TYPE_RESERVED
-> +        */
-> +       KUNIT_EXPECT_EQ(test, updated_size, entry_size * 2);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
-> +                                  E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
-> +                                  entry_size, E820_TYPE_RAM,
-> +                                  E820_NOT_CRYPTO_CAPABLE);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
-> +                                  entry_size, E820_TYPE_ACPI,
-> +                                  E820_NOT_CRYPTO_CAPABLE);
-> +}
-> +
-> +static void __init test_e820_range_remove(struct kunit *test)
-> +{
-> +       u64 entry_size = 15;
-> +       u64 removed_size = 0;
-> +
-> +       struct e820_entry_updater updater = { .should_update =
-> +                                                     remover__should_update,
-> +                                             .update = remover__update,
-> +                                             .new = NULL };
-> +
-> +       struct e820_remover_data data = { .check_type = true,
-> +                                         .old_type = E820_TYPE_RAM };
-> +
-> +       /* Initialize table */
-> +       test_table.nr_entries = 0;
-> +       __e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-> +                         E820_NOT_CRYPTO_CAPABLE);
-> +       __e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
-> +                         E820_NOT_CRYPTO_CAPABLE);
-> +       __e820__range_add(&test_table, entry_size * 2, entry_size,
-> +                         E820_TYPE_ACPI, E820_NOT_CRYPTO_CAPABLE);
-> +
-> +       /*
-> +        * Need to use __e820__handle_range_update because
-> +        * e820__range_remove doesn't ask for the table
-> +        */
-> +       removed_size = __e820__handle_range_update(&test_table,
-> +                                                  0, entry_size * 2,
-> +                                                  &updater, &data);
-> +
-> +       /* The first two regions were removed */
-> +       KUNIT_EXPECT_EQ(test, removed_size, entry_size * 2);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 0, 0, 0);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0, 0, 0, 0);
-> +
-> +       removed_size = __e820__handle_range_update(&test_table,
-> +                                                  0, entry_size * 3,
-> +                                                  &updater, &data);
-> +
-> +       /* Nothing was removed, since nothing matched the target type */
-> +       KUNIT_EXPECT_EQ(test, removed_size, 0);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 0, 0, 0);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0, 0, 0, 0);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
-> +                                  entry_size, E820_TYPE_ACPI,
-> +                                  E820_NOT_CRYPTO_CAPABLE);
-> +}
-> +
-> +static void __init test_e820_range_crypto_update(struct kunit *test)
-> +{
-> +       u64 entry_size = 15;
-> +       u64 updated_size = 0;
-> +       /* Initialize table */
-> +       test_table.nr_entries = 0;
-> +       __e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-> +                         E820_CRYPTO_CAPABLE);
-> +       __e820__range_add(&test_table, entry_size, entry_size, E820_TYPE_RAM,
-> +                         E820_NOT_CRYPTO_CAPABLE);
-> +       __e820__range_add(&test_table, entry_size * 2, entry_size,
-> +                         E820_TYPE_RAM, E820_CRYPTO_CAPABLE);
-> +
-> +       updated_size = __e820__range_update_crypto(&test_table,
-> +                                                  0, entry_size * 3,
-> +                                                  E820_CRYPTO_CAPABLE);
-> +
-> +       /* Only the region in the middle was updated */
-> +       KUNIT_EXPECT_EQ(test, updated_size, entry_size);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, entry_size,
-> +                                  E820_TYPE_RAM, E820_CRYPTO_CAPABLE);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], entry_size,
-> +                                  entry_size, E820_TYPE_RAM,
-> +                                  E820_CRYPTO_CAPABLE);
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size * 2,
-> +                                  entry_size, E820_TYPE_RAM,
-> +                                  E820_CRYPTO_CAPABLE);
-> +}
-> +
-> +static void __init test_e820_handle_range_update_intersection(struct kunit *test)
-> +{
-> +       struct e820_entry_updater updater = {
-> +               .should_update = type_updater__should_update,
-> +               .update = type_updater__update,
-> +               .new = type_updater__new
-> +       };
-> +
-> +       struct e820_type_updater_data data = { .old_type = E820_TYPE_RAM,
-> +                                              .new_type = E820_TYPE_RESERVED };
-> +
-> +       u64 entry_size = 15;
-> +       u64 intersection_size = 2;
-> +       u64 updated_size = 0;
-> +       /* Initialize table */
-> +       test_table.nr_entries = 0;
-> +       __e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-> +                         E820_NOT_CRYPTO_CAPABLE);
-> +
-> +       updated_size =
-> +               __e820__handle_range_update(&test_table, 0,
-> +                                           entry_size - intersection_size,
-> +                                           &updater, &data);
-> +
-> +       KUNIT_EXPECT_EQ(test, updated_size, entry_size - intersection_size);
-> +
-> +       /* There is a new entry */
-> +       KUNIT_EXPECT_EQ(test, test_table.nr_entries, intersection_size);
-> +
-> +       /* The original entry now is moved */
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0],
-> +                                  entry_size - intersection_size,
-> +                                  intersection_size, E820_TYPE_RAM,
-> +                                  E820_NOT_CRYPTO_CAPABLE);
-> +
-> +       /* The new entry has the correct values */
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 0,
-> +                                  entry_size - intersection_size,
-> +                                  E820_TYPE_RESERVED, E820_NOT_CRYPTO_CAPABLE);
-> +}
-> +
-> +static void __init test_e820_handle_range_update_inside(struct kunit *test)
-> +{
-> +       struct e820_entry_updater updater = {
-> +               .should_update = type_updater__should_update,
-> +               .update = type_updater__update,
-> +               .new = type_updater__new
-> +       };
-> +
-> +       struct e820_type_updater_data data = { .old_type = E820_TYPE_RAM,
-> +                                              .new_type = E820_TYPE_RESERVED };
-> +
-> +       u64 entry_size = 15;
-> +       u64 updated_size = 0;
-> +       /* Initialize table */
-> +       test_table.nr_entries = 0;
-> +       __e820__range_add(&test_table, 0, entry_size, E820_TYPE_RAM,
-> +                         E820_NOT_CRYPTO_CAPABLE);
-> +
-> +       updated_size = __e820__handle_range_update(&test_table, 5,
-> +                                                  entry_size - 10,
-> +                                                  &updater, &data);
-> +
-> +       KUNIT_EXPECT_EQ(test, updated_size, entry_size - 10);
-> +
-> +       /* There are two new entrie */
-> +       KUNIT_EXPECT_EQ(test, test_table.nr_entries, 3);
-> +
-> +       /* The original entry now shrunk */
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[0], 0, 5,
-> +                                  E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
-> +
-> +       /* The new entries have the correct values */
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[1], 5,
-> +                                  entry_size - 10, E820_TYPE_RESERVED,
-> +                                  E820_NOT_CRYPTO_CAPABLE);
-> +       /* Left over of the original region */
-> +       KUNIT_EXPECT_E820_ENTRY_EQ(test, test_table.entries[2], entry_size - 5,
-> +                                  5, E820_TYPE_RAM, E820_NOT_CRYPTO_CAPABLE);
-> +}
-> +
-> +static struct kunit_case e820_test_cases[] __initdata = {
-> +       KUNIT_CASE(test_e820_range_add),
-> +       KUNIT_CASE(test_e820_range_update),
-> +       KUNIT_CASE(test_e820_range_remove),
-> +       KUNIT_CASE(test_e820_range_crypto_update),
-> +       KUNIT_CASE(test_e820_handle_range_update_intersection),
-> +       KUNIT_CASE(test_e820_handle_range_update_inside),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite e820_test_suite __initdata = {
-> +       .name = "e820",
-> +       .test_cases = e820_test_cases,
-> +};
-> +
-> +kunit_test_init_section_suite(e820_test_suite);
-> --
-> 2.30.2
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220704135833.1496303-8-martin.fernandez%40eclypsium.com.
+Paolo
 
---00000000000028d5af05e3054682
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAZ
-X5kOv2Qz9LPT8qJdfY60Cwqrwy3MLKpLhOYnv4xLxDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDUwMjA0MzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAEjh5wJ7Hsrw6ShbSFVWL
-OvwZC1amhC1+Ot1F7F4e1oIeeIAONwnSU/T8LFsWKDXK1TIoF34qGIDkHAyMNbvbS7NI9K35ciQC
-V0CL4A2ijhsClwsvy3irUI+xOngjH5JAji9IcEFOHvecmqh+qmfzKZbHFxFvpdaQrsGnNF0LzV+4
-zl6m5kNYX4Hfamrnjjlw+JTj4G6VqSxVH82bJvkqw/4rBtQfV/mCwdX03RieS2Bhr1VwWlEp0SSX
-RBzz3vuPuPzYKrtwtNrVlIOFUtyRu1ptO84q3SojqlZ8/OMproGLJWpD8ZQX1JWBsnNOygn2GLh5
-PESvtZPVMRMLdUX4Vw==
---00000000000028d5af05e3054682--
