@@ -2,79 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EF0568E27
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 17:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECD4568E9A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 18:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234203AbiGFPpZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 11:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S233909AbiGFQEX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 12:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbiGFPpK (ORCPT
+        with ESMTP id S233786AbiGFQEW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:45:10 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53382AE25;
-        Wed,  6 Jul 2022 08:38:40 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id z12so13011928wrq.7;
-        Wed, 06 Jul 2022 08:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZWNwOHmzSgkdv+jrzNwG3Jf3HDC0HOWhdAu3xXOwiQw=;
-        b=UEc387REzaegIG1aRLLdB1AzsmZrVh+gNiHXsWTjXhdaIXBEbre+rDmlWSOlAA1Vld
-         n0Fi365KWeLYSBX+ZvnFHrszQbK0H3fENyDsVj1hNCs1nA60BSBR2hEDFNqr5DQRjKky
-         dQKlek0AHq7Iep3BhUVCSwjiS+C95AgzcEwlAsJQvMVK2qZDZM1KmmTjrIw1aetJCxLn
-         9L0cwUYbN20ajoFd3P7SpdD0MsHuxGIv6DPo+SgijUWVjFMnK9PPyc3BzzpQLmRv+gnh
-         BqfJl560A56QoLNEj+y/JpdM6c5AO2jOgPr1mZ33w/p+3qq1lggpAA1ynHhqol0/4hZO
-         yzWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZWNwOHmzSgkdv+jrzNwG3Jf3HDC0HOWhdAu3xXOwiQw=;
-        b=SVuQaTEkWXEs9nwIReLUzHz977rrNVkKOEqKcndmm6E5uJKlLGjJfJ6CXyBzjggKG3
-         RV0cgpCjuaINEPbXUBDMtlt+KaCB/bTsz5AypRgpptDw3brARRbvHM4qNsyuevZxit/m
-         6QU2KD1ir911RSQVt3LGDkWgtR3VOYteORmWGVtyslPyEr3YTn0kCN6CGbQ3gQHFIHsy
-         D6IgKyxp9Bf8NE1Lyh5LrzPP6wMI6p8/fclH2CREWJjj6+4lXyI/r0YxEVHBqxXy+z54
-         lo20skgGtq1QDTv/G/JLPmrTseJ8cIy4iygIkUMduA/2RfkZVDWJCg+gXqo+xILu7+dl
-         dvgg==
-X-Gm-Message-State: AJIora/56UErg1NeLEetGOtWXeCETaS0GPUOPmhFIJksx9si9MUa+ZgN
-        KgjT1+BuMYpd9H9tQW8Gqne7aCagnH8GIUmfUzI=
-X-Google-Smtp-Source: AGRyM1tWbkdJLQwaPNSG7jQaW5G50wxV4D0b+agnSC53ENlTz2jqAxvQnOtgOf4+htM/ZiWXgwIJJcdjoxwI5t17fq0=
-X-Received: by 2002:adf:dc0d:0:b0:21d:ea5:710f with SMTP id
- t13-20020adfdc0d000000b0021d0ea5710fmr38132877wri.48.1657121919107; Wed, 06
- Jul 2022 08:38:39 -0700 (PDT)
+        Wed, 6 Jul 2022 12:04:22 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D7A17586;
+        Wed,  6 Jul 2022 09:04:20 -0700 (PDT)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o97VG-0003Og-IK; Wed, 06 Jul 2022 18:03:50 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o97VG-000V92-4d; Wed, 06 Jul 2022 18:03:50 +0200
+Subject: Re: [PATCH v6 4/5] bpf: Add bpf_verify_pkcs7_signature() helper
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, kpsingh@kernel.org, john.fastabend@gmail.com,
+        songliubraving@fb.com, kafai@fb.com, yhs@fb.com,
+        dhowells@redhat.com
+Cc:     keyrings@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220628122750.1895107-1-roberto.sassu@huawei.com>
+ <20220628122750.1895107-5-roberto.sassu@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <903b1b6c-b0fd-d624-a24b-5983d8d661b7@iogearbox.net>
+Date:   Wed, 6 Jul 2022 18:03:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
- <20220524152144.40527-4-schultz.hans+netdev@gmail.com> <20220627180557.xnxud7d6ol22lexb@skbuf>
- <CAKUejP7ugMB9d3MVX3m9Brw12_ocFoT+nuJJucYdQH70kzC7=w@mail.gmail.com>
- <20220706085559.oyvzijcikivemfkg@skbuf> <CAKUejP7gmULyrjqd3b3PiWwi7TJzF4HNuEbmAf25Cqh3w7a1mw@mail.gmail.com>
- <20220706143339.iuwi23ktk53ihhb6@skbuf>
-In-Reply-To: <20220706143339.iuwi23ktk53ihhb6@skbuf>
-From:   Hans S <schultz.hans@gmail.com>
-Date:   Wed, 6 Jul 2022 17:38:27 +0200
-Message-ID: <CAKUejP6NG_X-Bh_xeA2y4Wru2=pxgHaRMdsvMu8NATNxPVeQ7A@mail.gmail.com>
-Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB implementation
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220628122750.1895107-5-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26595/Wed Jul  6 09:53:23 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,129 +56,179 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 6, 2022 at 4:33 PM Vladimir Oltean <olteanv@gmail.com> wrote:
->
-> > >> @@ -919,6 +920,9 @@ static void mv88e6xxx_mac_link_down(struct dsa_switch *ds, int port,
-> > >>       if (err)
-> > >>               dev_err(chip->dev,
-> > >>                       "p%d: failed to force MAC link down\n", port);
-> > >> +     else
-> > >> +             if (mv88e6xxx_port_is_locked(chip, port, true))
-> > >> +                     mv88e6xxx_atu_locked_entry_flush(ds, port);
-> > >
-> > >This is superfluous, is it not? The bridge will transition a port whose
-> > >link goes down to BR_STATE_DISABLED, which will make dsa_port_set_state()
-> > >fast-age the dynamic FDB entries on the port, which you've already
-> > >handled below.
-> >
-> > I removed this code, but then on link down the locked entries were not
-> > cleared out. Something not as thought?
->
-> What was the port's STP state before the link down event, and did it
-> change after the link down?
+On 6/28/22 2:27 PM, Roberto Sassu wrote:
+> Add the bpf_verify_pkcs7_signature() helper, to give eBPF security modules
+> the ability to check the validity of a signature against supplied data, by
+> using user-provided or system-provided keys as trust anchor.
+> 
+> The new helper makes it possible to enforce mandatory policies, as eBPF
+> programs might be allowed to make security decisions only based on data
+> sources the system administrator approves.
+> 
+> The caller should provide both the data to be verified and the signature as
+> eBPF dynamic pointers (to minimize the number of parameters).
+> 
+> The caller should also provide a trusted keyring serial, together with key
+> lookup-specific flags, to determine which keys can be used for signature
+> verification. Alternatively, the caller could specify zero as serial value
+> (not valid, serials must be positive), and provide instead a special
+> keyring ID.
+> 
+> Key lookup flags are defined in include/linux/key.h and can be: 1, to
+> request that special keyrings be created if referred to directly; 2 to
+> permit partially constructed keys to be found.
+> 
+> Special IDs are defined in include/linux/verification.h and can be: 0 for
+> the primary keyring (immutable keyring of system keys); 1 for both the
+> primary and secondary keyring (where keys can be added only if they are
+> vouched for by existing keys in those keyrings); 2 for the platform keyring
+> (primarily used by the integrity subsystem to verify a kexec'ed kerned
+> image and, possibly, the initramfs signature).
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reported-by: kernel test robot <lkp@intel.com> (cast warning)
 
-The stp state is FORWARDING.
+nit: Given this a new feature not a fix to existing code, there is no need to
+      add the above reported-by from kbuild bot.
 
->
-> If the STP state wasn't LEARNING or FORWARDING, there weren't supposed
-> to be dynamic FDB entries on the port in the first place, so DSA says
-> there's nothing to flush, and doesn't call dsa_port_fast_age().
-> Are there dynamic FDB entries being installed on a port that isn't
-> in a state that's supposed to learn? I guess the answer is yes.
-> Is that what you want, or should the locked entries be recorded only in
-> the LEARNING or FORWARDING states, otherwise discarded?
->
-Learning is off as has been discussed, and I do want the locked
-entries to be dynamic in the sense that the driver removes them after
-the system ageing time has passed.
+> ---
+>   include/uapi/linux/bpf.h       | 24 +++++++++++++
+>   kernel/bpf/bpf_lsm.c           | 63 ++++++++++++++++++++++++++++++++++
+>   tools/include/uapi/linux/bpf.h | 24 +++++++++++++
+>   3 files changed, 111 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index e81362891596..b4f5ad863281 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5325,6 +5325,29 @@ union bpf_attr {
+>    *		**-EACCES** if the SYN cookie is not valid.
+>    *
+>    *		**-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
+> + *
+> + * long bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr, struct bpf_dynptr *sig_ptr, u32 trusted_keyring_serial, unsigned long lookup_flags, unsigned long trusted_keyring_id)
 
->
-> What you actually want to say is: "mv88e6xxx_port_set_lock() is also
-> called when the DSA port joins a bridge, due to the switchdev attribute
-> replay logic present in dsa_port_switchdev_sync_attrs()".
->
-> Which, by the way, is logic that you've added yourself, in commit
-> b9e8b58fd2cb ("net: dsa: Include BR_PORT_LOCKED in the list of synced
-> brport flags") ;)
->
-> You are free to return early from mv88e6xxx_port_set_lock() if nothing has
-> changed. The DSA layer doesn't keep track of the locked state of the
-> port so it cannot deduce whether propagating to the switch driver is
-> necessary or not.
->
+nit: for the args instead of ulong, just do u64
 
-I think I can safely call mv88e6xxx_atu_locked_entry_flush() from
-mv88e6xxx_port_set_lock() when locked is off as the port setup for the
-respective port must have been completed successfully.
+> + *	Description
+> + *		Verify the PKCS#7 signature *sig_ptr* against the supplied
+> + *		*data_ptr* with keys in a keyring with serial
+> + *		*trusted_keyring_serial*, searched with *lookup_flags*, if the
+> + *		parameter value is positive, or alternatively in a keyring with
+> + *		special ID *trusted_keyring_id* if *trusted_keyring_serial* is
+> + *		zero.
+> + *
+> + *		*lookup_flags* are defined in include/linux/key.h and can be: 1,
+> + *		to request that special keyrings be created if referred to
+> + *		directly; 2 to permit partially constructed keys to be found.
+> + *
+> + *		Special IDs are defined in include/linux/verification.h and can
+> + *		be: 0 for the primary keyring (immutable keyring of system
+> + *		keys); 1 for both the primary and secondary keyring (where keys
+> + *		can be added only if they are vouched for by existing keys in
+> + *		those keyrings); 2 for the platform keyring (primarily used by
+> + *		the integrity subsystem to verify a kexec'ed kerned image and,
+> + *		possibly, the initramfs signature).
+> + *	Return
+> + *		0 on success, a negative value on error.
+>    */
+>   #define __BPF_FUNC_MAPPER(FN)		\
+>   	FN(unspec),			\
+> @@ -5535,6 +5558,7 @@ union bpf_attr {
+>   	FN(tcp_raw_gen_syncookie_ipv6),	\
+>   	FN(tcp_raw_check_syncookie_ipv4),	\
+>   	FN(tcp_raw_check_syncookie_ipv6),	\
+> +	FN(verify_pkcs7_signature),	\
 
-> > When added they are added with bridge FDB flags: extern_learn offload
-> > locked, with a SWITCHDEV_FDB_ADD_TO_BRIDGE event. So they are owned by
-> > the driver.
-> > When the driver deletes the locked entry the bridge FDB entry is
-> > removes by the SWITCHDEV_FDB_DEL_TO_BRIDGE event from the driver. That
-> > seems quite fair?
->
-> I'm just pointing out that you left other (probably unintended) code
-> paths for which the SWITCHDEV_FDB_DEL_TO_BRIDGE notifier is quite
-> useless. I haven't yet looked at your newest revision to see what
-> changed there.
->
+(Needs rebase)
 
-I guess I should add a boolean to tell if
-mv88e6xxx_atu_locked_entry_purge() should send a notification or not.
-So that port_fdb_del() will not cause a SWITCHDEV_FDB_DEL_TO_BRIDGE
-event.
+>   	/* */
+>   
+>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index c1351df9f7ee..401bda01ad84 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -16,6 +16,8 @@
+>   #include <linux/bpf_local_storage.h>
+>   #include <linux/btf_ids.h>
+>   #include <linux/ima.h>
+> +#include <linux/verification.h>
+> +#include <linux/key.h>
+>   
+>   /* For every LSM hook that allows attachment of BPF programs, declare a nop
+>    * function where a BPF program can be attached.
+> @@ -132,6 +134,62 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
+>   	.arg1_type	= ARG_PTR_TO_CTX,
+>   };
+>   
+> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> +BPF_CALL_5(bpf_verify_pkcs7_signature, struct bpf_dynptr_kern *, data_ptr,
+> +	   struct bpf_dynptr_kern *, sig_ptr, u32, trusted_keyring_serial,
+> +	   unsigned long, lookup_flags, unsigned long, trusted_keyring_id)
+> +{
+> +	key_ref_t trusted_keyring_ref;
+> +	struct key *trusted_keyring;
+> +	int ret;
+> +
+> +	/* Keep in sync with defs in include/linux/key.h. */
+> +	if (lookup_flags > KEY_LOOKUP_PARTIAL)
+> +		return -EINVAL;
 
-> > > > > Why is the rtnl_unlock() outside the switch statement but the rtnl_lock() inside?
-> > > > > Not to mention, the dsa_port_to_bridge_port() call needs to be under rtnl_lock().
-> > > >
-> > > > Just a small optimization as I also have another case of the switch
-> > > > (only one switch case if
-> > > > you didn't notice) belonging to the next patch set regarding dynamic
-> > > > ATU entries.
-> > >
-> > > What kind of optimization are you even talking about? Please get rid of
-> > > coding patterns like this, sorry.
-> > >
-> > Right!
->
-> Right what? I'm genuinely curious what optimization are you talking about.
->
+iiuc, the KEY_LOOKUP_* is a mask, so you could also combine the two, e.g.
+KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL. I haven't seen you mentioning anything
+specific on why it is not allowed. What's the rationale, if it's intentional
+if should probably be documented?
 
-I am just confirming that what you wrote is correct, e.g. the
-"Right!". So I have fixed that. :-)
+At minimum I also think the helper description needs to be improved for people
+to understand enough w/o reading through the kernel source, e.g. wrt lookup_flags
+since I haven't seen it in your selftests either ... when does a user need to
+use the given flags.
 
->
-> Just out of curiosity, are you even trying, are you looking at the
-> difference using a monospace font?
->
-> > Another issue...
-> >
-> > I have removed the timers as they are superfluous and now just use the
-> > worker and jiffies. But I have found that the whole ageing time seems
-> > to be broken on the 5.17 kernel I am running. I don't know if it has
-> > been fixed, but the ageing timeout is supposed to be given in seconds.
-> > Here is the output from various functions after the command "ip link
-> > set dev br0 type bridge ageing_time 1500" (that is nominally 1500
-> > seconds according to man page!):
-> >
-> > dsa_switch_ageing_time: ageing_time 10000, ageing_time_min 1000,
-> > ageing_time_max 3825000
-> > mv88e6xxx_set_ageing_time: set ageing time to 10000
-> > br0: failed (err=-34) to set attribute (id=6)
-> > dsa_switch_ageing_time: ageing_time 15000, ageing_time_min 1000,
-> > ageing_time_max 3825000
-> > mv88e6xxx_set_ageing_time: set ageing time to 15000
-> >
-> > The 15000 set corresponds to 150 seconds! (I hardcoded the dsa
-> > ageing_time_min to 1000)
->
-> Are you talking about this known problem, that the ageing time values in
-> seconds need to be scaled up by a factor of USER_HZ when passed to the
-> kernel?
-> https://www.spinics.net/lists/netdev/msg672070.html
-> https://www.spinics.net/lists/netdev/msg567332.html
+nit: when both trusted_keyring_serial and trusted_keyring_id are passed to the
+helper, then this should be rejected as invalid argument? (Kind of feels a bit
+like we're cramming two things in one helper.. KP, thoughts? :))
 
-It might be so, but there is another factor 10 which might be
-regarding topology change as I understand. If I want a ageing timeout
-of say 15 or 30 seconds, that hardly seems possible?
+> +	/* Keep in sync with defs in include/linux/verification.h. */
+> +	if (trusted_keyring_id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
+> +		return -EINVAL;
+> +
+> +	if (trusted_keyring_serial) {
+> +		trusted_keyring_ref = lookup_user_key(trusted_keyring_serial,
+> +						      lookup_flags,
+> +						      KEY_NEED_SEARCH);
+> +		if (IS_ERR(trusted_keyring_ref))
+> +			return PTR_ERR(trusted_keyring_ref);
+> +
+> +		trusted_keyring = key_ref_to_ptr(trusted_keyring_ref);
+> +		goto verify;
+> +	}
+> +
+> +	trusted_keyring = (struct key *)trusted_keyring_id;
+> +verify:
+> +	ret = verify_pkcs7_signature(data_ptr->data,
+> +				     bpf_dynptr_get_size(data_ptr),
+> +				     sig_ptr->data,
+> +				     bpf_dynptr_get_size(sig_ptr),
+> +				     trusted_keyring,
+> +				     VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+> +				     NULL);
+> +	if (trusted_keyring_serial)
+> +		key_put(trusted_keyring);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct bpf_func_proto bpf_verify_pkcs7_signature_proto = {
+> +	.func		= bpf_verify_pkcs7_signature,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL,
+> +	.arg2_type	= ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL,
+> +	.arg3_type	= ARG_ANYTHING,
+> +	.arg4_type	= ARG_ANYTHING,
+> +	.arg5_type	= ARG_ANYTHING,
+> +	.allowed	= bpf_ima_inode_hash_allowed,
+> +};
+> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
+> +
