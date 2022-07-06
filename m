@@ -2,94 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1C656936F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 22:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758B9569382
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 22:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbiGFUiw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 16:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S233173AbiGFUon (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 16:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiGFUiw (ORCPT
+        with ESMTP id S233670AbiGFUol (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:38:52 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99F213DF4
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 13:38:50 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u15so4614040ejx.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 13:38:50 -0700 (PDT)
+        Wed, 6 Jul 2022 16:44:41 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF8E28724
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 13:44:40 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id dn9so23779957ejc.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 13:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vZwr/3vScMTpIxRMv4WjBuRiSizQBnezajqPVx3a7e0=;
-        b=Si4QPqbtDaLn6pEEQtLRwxF4fYosbpF3ECvovEmamZp6mRc+rAEE4GEuQ1GA75QJNL
-         nT5vIiBeCYuWROYx7uLVrwrygeWtrzI4KqiAnNecy3vj45ZwRrP44UCSDGRJalFr35+v
-         XGT4GZ5JqGMYJimhJwHqNQ2Hb+k3JYeZ+eifljoPOqgoPE8y/++uz/BePLXB2KueIs+r
-         0kjqLOLNielZc+j0wai/ds7sORTK/n1ErXJZjzv1m/tPaFdA/noEhrGjQlWnOPGA+Kjr
-         AMe9D/cmbU6GzFJ9kIeTDxrT/59ynOFSiotyLbC3mHfTujW4dRJK1o6Nb49Y/B9ETLha
-         GO5Q==
+        bh=Z3UotlFtUTvslGYUw8cZAVdfuGjI1A/SzFtykXKyRDs=;
+        b=XXmST8IjmjKhpKR+8so2eTQlXVr5n4bcdbvCrQR6SsYDKxke/r6gGxBTEs3PzBfUyh
+         Gho/qFWBPkNnlvgZsPIcaSiRBSvnUQTjMZclY/lpnE7hoaQUck8+EJDww8z8kDOjxiZv
+         eSqdsmEU3zuFO1PAoxfQxKRN4J49RhPgLvgW6F4soy2RKNVzFJpojZ4RhC6KF8lF1Aqb
+         HieFtfEJjL/4yCDZtFqlIIqR4T0tEOOb21VGvz9PmnH62LTQe+tbS9DiHvJmIRMm8YKm
+         rZ6+8sGp6O3LS6QnsZ0HFLsbdn7cd1jNUe1eGqbgmsT6YH/QfloSLjfYo8pYvcO5vRzK
+         E/Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vZwr/3vScMTpIxRMv4WjBuRiSizQBnezajqPVx3a7e0=;
-        b=zU+RwOg1pnsTP7AmbYyDUwbF32AOoLCO+5KEuDRq3r7+lVSdn5LmVo6Atef7BLxC3h
-         zYrC2h05i/ksrlO4Jqlua2/Lhp9WBoMYUrU1S17e3BRU35CiUIMff58QJc8A/i+penKj
-         7E3Q9g4Mja2W/P7WN3+7VwnmaAxeIpsDVqkVSsS+sIRWYE5/BNGYTj1LXTRNFhgtB228
-         8wAZG5FpjE0D//EoRBmmufSA15BWrwItP6yu7vWDc3cAhRaQduyJXNGRGQ6CfaqeNBAU
-         +soPRgGiFIvZngHKZcTYgx8V5maMwfMCp+uvjwcEA6Es115OePvALeWKsB4uM8PLYlRw
-         IuTQ==
-X-Gm-Message-State: AJIora+jDhkbPIOPYv2D+Huy6z3nNKgYwgVVJHPhDezcHXvI/Cyx7KQn
-        3HJF5iRQR7HL3tac7MN6Bd6tE1UQshNR7OWBj/q3jQ==
-X-Google-Smtp-Source: AGRyM1vxTeQHfdIzYEDhVghCJRnsbHpY4JGNvAe08IGkmOJUZpH5AMO7hQ2aFcT2bjUbbSyKueyvirg7NJR8Stdijos=
-X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id
- g4-20020a1709065d0400b00722f46cb891mr42210274ejt.4.1657139929289; Wed, 06 Jul
- 2022 13:38:49 -0700 (PDT)
+        bh=Z3UotlFtUTvslGYUw8cZAVdfuGjI1A/SzFtykXKyRDs=;
+        b=FV7PDySRNUSDjEXgpMh8T9S2ZpIEeYy9g8WpZKop40TR+93hPDVvTVH7Yt7FhSy/Gq
+         oQaaIgQedB+fom9hZ7NG8PLhoslG9RgM3Rci6ZhKEexu7/xqaew3tslV1rw6QBplPCdd
+         pO6/OgcSYx0FmxIo3DJTx1BdK951nDCXVf1kFskmmnGtvdyzWZr8sLdwd9TR38TmypJ8
+         tN31VVzJxI3AXtJ2Q+0PUFOewO5dnIasf9Y8FrCKTym3y/j1bfYd0MxIddBHRIb1pXuw
+         YufAgnHvh5lLBl+ukfrzLt/iPpDwTe8HAU36TGg6L2rFxS7UIdHVXHM1r+W3E3ev0EdZ
+         LWPw==
+X-Gm-Message-State: AJIora+Jed/mWJPcome4DYR2yG7BejyBpPU1zKkx+f/8jZXaQkspBKE/
+        WGsZ1MjXxldjr8Ju0sB1QwMsV+T89CO0Rf6LRt+7nA==
+X-Google-Smtp-Source: AGRyM1vw/CTNjT0hp6sr0FIU1O+7erCuP7vrTl99ZxAX3PeTqVb05P8PgJwW0udPTa4ikFyGunX9tNbx/hXemripKPQ=
+X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id
+ hr1-20020a1709073f8100b006ff1a3d9092mr41210405ejc.319.1657140278463; Wed, 06
+ Jul 2022 13:44:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220627221446.82157-1-dlatypov@google.com> <20220627221446.82157-3-dlatypov@google.com>
-In-Reply-To: <20220627221446.82157-3-dlatypov@google.com>
+References: <20220702040959.3232874-1-davidgow@google.com> <20220702040959.3232874-2-davidgow@google.com>
+In-Reply-To: <20220702040959.3232874-2-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 16:38:38 -0400
-Message-ID: <CAFd5g45hnC81WHyOmU3Jd2Ov3-KZOZSSOfjPsptqkTfiK73MQA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] kunit: add coverage_uml.config to enable GCOV on UML
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+Date:   Wed, 6 Jul 2022 16:44:27 -0400
+Message-ID: <CAFd5g44UFqEe5WwKurzOMhT2ijUEvv-4R3Eo9W66c_Qruk2jAQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] module: panic: Taint the kernel when selftest
+ modules load
+To:     David Gow <davidgow@google.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 6:15 PM 'Daniel Latypov' via KUnit Development
+On Sat, Jul 2, 2022 at 12:10 AM 'David Gow' via KUnit Development
 <kunit-dev@googlegroups.com> wrote:
 >
-> Now that kunit.py's --kunitconfig is repeatable, let's create a file to
-> hold the various options needed to enable coverage under UML.
+> Taint the kernel with TAINT_TEST whenever a test module loads, by adding
+> a new "TEST" module property, and setting it for all modules in the
+> tools/testing directory. This property can also be set manually, for
+> tests which live outside the tools/testing directory with:
+> MODULE_INFO(test, "Y");
 >
-> This can be used like so:
-> $ ./tools/testing/kunit/kunit.py run \
->   --kunitconfig=tools/testing/kunit/configs/all_tests_uml.config \
->   --kunitconfig=tools/testing/kunit/configs/coverage_uml.config \
->   --make_options=CC=/usr/bin/gcc-6
->
-> which on my system is enough to get coverage working [1].
->
-> This is still a clunky command, but far better than before.
->
-> [1] at the time of this commit, I get:
->   Overall coverage rate:
->     lines......: 11.6% (34112 of 295033 lines)
->     functions..: 15.3% (3721 of 24368 functions)
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
