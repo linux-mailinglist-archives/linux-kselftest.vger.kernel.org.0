@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183F5569304
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 22:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67DA56931B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 22:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbiGFUGq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 16:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S234372AbiGFUMG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 16:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbiGFUGp (ORCPT
+        with ESMTP id S234315AbiGFUMF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 16:06:45 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5BA1C92F
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 13:06:44 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r18so20600959edb.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 13:06:44 -0700 (PDT)
+        Wed, 6 Jul 2022 16:12:05 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C4019023
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 13:12:04 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id v12so8015159edc.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 13:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7PiCfuqqFQMm4Z7Pxo/Mkp0vSHbF19ROVfmwHiEwIp8=;
-        b=nP8OozGQwV0hugk+1RizuLBuHeDBhO9I1ymaTbz9SVKu5nYndfbg6U0LGPb6gwFfHJ
-         ToZbABTlGJpV7Fyk+IMRHWjt2JHxQ45DWhkDuCmFXEEaQbf6RfOr5CSueAaKi6gUsh5a
-         Re0l7tzCHIGJ1Dw5CTE7fLIk/lTWUfy8Zu6/EVTWwCBo21YLl5rgE+ag9/k0RxO6uPdv
-         GIBGew/Ulw3raH0Q/cIqfI03t9KZH/OVjZiX7syD/4LdZeoIB5GkytSbgTT0CvCF6QEF
-         nNNtaoJCr1mmiucox/7veCDibYCx6ha7KADLG+MsqE7dMs9RavPoTfk7C/J1RzUZvtv6
-         dOFg==
+        bh=HVOyRJFl3auzy5uUE3eiIM7wPcPXSqEg2Dt9oNXrcRA=;
+        b=F9A/ikOaqolthCndIJZefO+fHoLKvvK44RvSom0Jn2f1fnbLY01z98yfO6SAglmu6g
+         ebvJCNo3VAMNdLgmCjQpAWUNiwcJ6iIjPkX2VHxTHLF7hgGzIx0Eb+RyZcaaYQaz19wQ
+         B3teprZ/TfuB0OscMddQLkM7WyIEGKRPBJ8zopVGnwsWzCbjM+DTxiO8h9l5uhnE3ZhV
+         hmSjqfK/VHae/9A16ZfAV9ft43alOi9r/4rS0uaiWY2/1MmnXCxzHlReQyt3Xwu1B1hz
+         MJmQRF4RZwH7+514+XY2tdV5vJVu/8CPZJtWWQvm6NUVciFTGGk336na0q6FuPanRxrR
+         PVNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7PiCfuqqFQMm4Z7Pxo/Mkp0vSHbF19ROVfmwHiEwIp8=;
-        b=2ld/f4J90v4BRYxX2S2UL4GtFXKEfUwORYDlLP4rt+o3qbGk2dKa85Ra+Gwx8DuYWJ
-         2th7jt6AVbioAaWArb2dfSRDfgYytVKeFyhBCVOGLmEL4khDEEOcwFRJbTwDOjSKDAkl
-         IH3u6vVfJZAYcENzC6rntjJuDRCzC7pvbrsoyNG3M0K4zjsgow7hJ4N9QtTHX55gINEw
-         T9pbnmx92+8ciFWU2WKGPKCyOrh9nFB650Xjn0IGhy+fynjstdKsLahLoJVWnEyW99Gv
-         B0ygWhTb/xuNUScvPyvqOPPPuRLCM1JtJ131vMT4EE4Y+ppGXWcgOmKkfT+LWdDQgEzp
-         yeHg==
-X-Gm-Message-State: AJIora+JyPoD7NnamPU4TNQ+KxOu7or+wYfhZM43uf6rGvdYl3WecBQV
-        2cxD5FEfM1QsBrC9z6SjNBx7HtFBWLBna02jrwyNow==
-X-Google-Smtp-Source: AGRyM1vVw8FO9mBPy3IYwxvYYV3o1j35+YKTnPDfsskfWqT5lbva7gMmrRyi07uXl3B4HhdRXqCM45LkaGsIUGz65VE=
-X-Received: by 2002:a05:6402:40c3:b0:439:6b72:483e with SMTP id
- z3-20020a05640240c300b004396b72483emr43951638edb.154.1657138003142; Wed, 06
- Jul 2022 13:06:43 -0700 (PDT)
+        bh=HVOyRJFl3auzy5uUE3eiIM7wPcPXSqEg2Dt9oNXrcRA=;
+        b=mvM6K5jyDbk7gcLHn+vCCajnKS14/uyFMwean4HHTx0btbQ0xSEbLqTvGNW+MPgZ7U
+         Oek55lgsKbssaKsV25rP53QWQ1rcCNwMl/eCBdGaky48BRPgh0lExQjzDDQGww6JTRCc
+         c/oXg0/dFfkVU3njk+at8dDmZKhw9nQmdEeu33EVJ4xWNohtbUtxivuxFF7qS2IF56Yg
+         WgAB2y4QBASUAK4s3TgCfM23B5z3Ut36x2cU2vYq70HwqigvaLfW28Cw+nbVgsN0mdg3
+         FEA0F9C9Oibb/DnaOBp1F2myZbAjW+w9GkwQ02gPVKXQTRkMbuxsIR0QrlffVb1KwaLW
+         QrhA==
+X-Gm-Message-State: AJIora+mkQEqlNVcTQfzBeLPcz54EZZdy96uTmVgfj/TcvF5nDKK2/4z
+        3Sxy4tlGt+Qr4FTuHjHkZnpdomEek9rahuaqpSQexQ==
+X-Google-Smtp-Source: AGRyM1upvjBlwtiujlobvzhUsrrWYckKitJAPdADnaI3IcTWbKbOiUCVF31DPq4GG6oCK8d+coL85qPBSdx7XLBmVRA=
+X-Received: by 2002:a05:6402:4488:b0:43a:7b6e:4b04 with SMTP id
+ er8-20020a056402448800b0043a7b6e4b04mr13073971edb.202.1657138322816; Wed, 06
+ Jul 2022 13:12:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518170124.2849497-1-dlatypov@google.com> <20220518170124.2849497-3-dlatypov@google.com>
-In-Reply-To: <20220518170124.2849497-3-dlatypov@google.com>
+References: <20220518170124.2849497-1-dlatypov@google.com> <20220518170124.2849497-4-dlatypov@google.com>
+In-Reply-To: <20220518170124.2849497-4-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 16:06:31 -0400
-Message-ID: <CAFd5g44RLKbDHLeMMsJYeBK+smeioJKQVeBmHwk5uccD-vKvUA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: tool: simplify creating LinuxSourceTreeOperations
+Date:   Wed, 6 Jul 2022 16:11:51 -0400
+Message-ID: <CAFd5g47LpZDVe7L1-B3Pz-pDmPkyojNFiugHEEAzWD_W5eOrHQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kunit: tool: introduce --qemu_args
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, elver@google.com,
         linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
@@ -71,11 +71,21 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Wed, May 18, 2022 at 1:01 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Drop get_source_tree_ops() and just call what used to be
-> get_source_tree_ops_from_qemu_config() in both cases.
+> Example usage:
+> $ ./tools/testing/kunit/kunit.py run --arch=x86_64 \
+>   --kconfig_add=CONFIG_SMP=y --qemu_args='-smp 8'
 >
-> Also rename the functions to have shorter names and add a "_" prefix to
-> note they're not meant to be used outside this function.
+> Looking in the test.log, one can see
+> > smp: Bringing up secondary CPUs ...
+> > .... node  #0, CPUs:      #1 #2 #3 #4 #5 #6 #7
+> > smp: Brought up 1 node, 8 CPUs
+>
+> This flag would allow people to make tweaks like this without having to
+> create custom qemu_config files.
+>
+> For consistency with --kernel_args, we allow users to repeat this
+> argument, e.g. you can tack on a --qemu_args='-m 2048', or you could
+> just append it to the first string ('-smp 8 -m 2048').
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
