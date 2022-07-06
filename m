@@ -2,59 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6395692EF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 21:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183F5569304
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 22:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbiGFT67 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 15:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S233306AbiGFUGq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 16:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233898AbiGFT67 (ORCPT
+        with ESMTP id S232953AbiGFUGp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:58:59 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557CD1659A
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 12:58:58 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dn9so23611252ejc.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 12:58:58 -0700 (PDT)
+        Wed, 6 Jul 2022 16:06:45 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5BA1C92F
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 13:06:44 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id r18so20600959edb.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 13:06:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hTNGgjqkz2i9jOPOcItVEbeQ0jxQ0QpDjfjTJFVrwkU=;
-        b=M2WUc3yqCrQNl6IC5KPsFmi9IMNMddHBmWopzsOro7NzVcBYgK9Znk35UelqCq7o+5
-         GF0I5TsuOGb/zpp81C5iDvkXEmiy9wO6kKmNUUa7wK2gH44wewzM/7vLadCmCEftVSne
-         aSoFHeY19PpvlSXBCDrEpPr65YD6HLHsBK+m3X5sLARERrp7fR5J6NMSoAg1TGYsjiLD
-         Q9kuge5amCUR6csjXshl7HJbWFLzpCxwpq16nWtz8y0hyYZcNmIeZ6jjJd3Jub1yd6fm
-         Nf8IY4oBRRQ7S2ew3rvwNqT+FaeKErGm7ZZTwfNF8iyrb641lTzD7SCcp9IjqdkmiLiU
-         oTQQ==
+        bh=7PiCfuqqFQMm4Z7Pxo/Mkp0vSHbF19ROVfmwHiEwIp8=;
+        b=nP8OozGQwV0hugk+1RizuLBuHeDBhO9I1ymaTbz9SVKu5nYndfbg6U0LGPb6gwFfHJ
+         ToZbABTlGJpV7Fyk+IMRHWjt2JHxQ45DWhkDuCmFXEEaQbf6RfOr5CSueAaKi6gUsh5a
+         Re0l7tzCHIGJ1Dw5CTE7fLIk/lTWUfy8Zu6/EVTWwCBo21YLl5rgE+ag9/k0RxO6uPdv
+         GIBGew/Ulw3raH0Q/cIqfI03t9KZH/OVjZiX7syD/4LdZeoIB5GkytSbgTT0CvCF6QEF
+         nNNtaoJCr1mmiucox/7veCDibYCx6ha7KADLG+MsqE7dMs9RavPoTfk7C/J1RzUZvtv6
+         dOFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hTNGgjqkz2i9jOPOcItVEbeQ0jxQ0QpDjfjTJFVrwkU=;
-        b=ZBott6Ozepu6TBMWOBnsv2AMTJBNgJW+0GTRbIjLSyCd2osFGRNSKCL4tDeWY6pHPr
-         a/qdDkIfwU452UBpapruHQznHATrmFbOT31egZFlPgZQEou1GUf8Fo3v17yAUK6eIYJD
-         oBJatCiG+kHrWELr9+p95gF8ijNCmMQxAYsp1H9QTABSr3WqSEsAOEEWGurmJLDL8E8A
-         Mo72yrbP4fMxRrl5ttTKw1ghPQaTEUn10VyvchEcYjHwmBUC9zqUsLyeA+/mOaStducm
-         rk3kxC7/e204vREmeplvnFtm1aE4ZkflHcgTrqYO1O3z1gBtD6Kyzq0XDB9T3MLLVb95
-         +xXA==
-X-Gm-Message-State: AJIora8LxDZluEVD2kUlSvw8k1Ef1PAbOwNAufhM3uOJPEEutzfgADhJ
-        gYjBN0jk7EvhZDVw9UwMELU21PwUfPtaftU+N3/Crg==
-X-Google-Smtp-Source: AGRyM1v7A/MquaHP5PJo1EWlwJrbCKNfY4bpW1A9o0wbsht2xfrGiZcfDPvidtmZAMizypVoC5VQo2xPBqsuSAufP18=
-X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id
- g4-20020a1709065d0400b00722f46cb891mr42052343ejt.4.1657137536835; Wed, 06 Jul
- 2022 12:58:56 -0700 (PDT)
+        bh=7PiCfuqqFQMm4Z7Pxo/Mkp0vSHbF19ROVfmwHiEwIp8=;
+        b=2ld/f4J90v4BRYxX2S2UL4GtFXKEfUwORYDlLP4rt+o3qbGk2dKa85Ra+Gwx8DuYWJ
+         2th7jt6AVbioAaWArb2dfSRDfgYytVKeFyhBCVOGLmEL4khDEEOcwFRJbTwDOjSKDAkl
+         IH3u6vVfJZAYcENzC6rntjJuDRCzC7pvbrsoyNG3M0K4zjsgow7hJ4N9QtTHX55gINEw
+         T9pbnmx92+8ciFWU2WKGPKCyOrh9nFB650Xjn0IGhy+fynjstdKsLahLoJVWnEyW99Gv
+         B0ygWhTb/xuNUScvPyvqOPPPuRLCM1JtJ131vMT4EE4Y+ppGXWcgOmKkfT+LWdDQgEzp
+         yeHg==
+X-Gm-Message-State: AJIora+JyPoD7NnamPU4TNQ+KxOu7or+wYfhZM43uf6rGvdYl3WecBQV
+        2cxD5FEfM1QsBrC9z6SjNBx7HtFBWLBna02jrwyNow==
+X-Google-Smtp-Source: AGRyM1vVw8FO9mBPy3IYwxvYYV3o1j35+YKTnPDfsskfWqT5lbva7gMmrRyi07uXl3B4HhdRXqCM45LkaGsIUGz65VE=
+X-Received: by 2002:a05:6402:40c3:b0:439:6b72:483e with SMTP id
+ z3-20020a05640240c300b004396b72483emr43951638edb.154.1657138003142; Wed, 06
+ Jul 2022 13:06:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220513181032.24484-1-dlatypov@google.com>
-In-Reply-To: <20220513181032.24484-1-dlatypov@google.com>
+References: <20220518170124.2849497-1-dlatypov@google.com> <20220518170124.2849497-3-dlatypov@google.com>
+In-Reply-To: <20220518170124.2849497-3-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 15:58:45 -0400
-Message-ID: <CAFd5g47g6Tb4nMB-NQQAF3vXZ9FZj9YwcdP=E_-=5A6fBTbfNw@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: tool: cosmetic: don't specify duplicate kernel
- cmdline options
+Date:   Wed, 6 Jul 2022 16:06:31 -0400
+Message-ID: <CAFd5g44RLKbDHLeMMsJYeBK+smeioJKQVeBmHwk5uccD-vKvUA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kunit: tool: simplify creating LinuxSourceTreeOperations
 To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+Cc:     davidgow@google.com, elver@google.com,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
@@ -69,38 +69,14 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 13, 2022 at 2:10 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Wed, May 18, 2022 at 1:01 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> Context:
-> When using a non-UML arch, kunit.py will boot the test kernel with
-> options like these by default (this is x86_64):
-> > mem=1G console=tty kunit_shutdown=halt console=ttyS0 kunit_shutdown=reboot
+> Drop get_source_tree_ops() and just call what used to be
+> get_source_tree_ops_from_qemu_config() in both cases.
 >
-> The first three options are added unconditionally but are only intended
-> for UML.
->
-> 1. 'mem=1G' is redundant with the '-m 1024' that we hard-code into the
->    qemu commandline.
->
-> 2. We specify a 'console' for all tools/testing/kunit/qemu_configs/*.py
->    already, so 'console=tty' gets overwritten.
->
-> 3. For QEMU, we need to use 'reboot', and for UML we need to use 'halt'.
->    If you switch them, kunit.py will hang until the --timeout expires.
->
-> This patch:
-> Having these duplicate options is a bit noisy.
-> Switch so we only add UML-specific options for UML.
->
-> I.e. we now get
-> UML: 'mem=1G console=tty kunit_shutdown=halt' (unchanged)
-> x86_64: 'console=ttyS0 kunit_shutdown=reboot'
->
-> Side effect: you can't overwrite these options on UML w/ --kernel_arg.
-> But you already couldn't for QEMU (console, kunit_shutdown), and why
-> would you want to?
+> Also rename the functions to have shorter names and add a "_" prefix to
+> note they're not meant to be used outside this function.
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
 
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
