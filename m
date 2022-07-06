@@ -2,67 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240575692C7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 21:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231CA5692C9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 21:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbiGFTnZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 15:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
+        id S232584AbiGFTow (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 15:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbiGFTnZ (ORCPT
+        with ESMTP id S231479AbiGFTow (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:43:25 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7762E285
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 12:43:22 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id g26so28845782ejb.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 12:43:22 -0700 (PDT)
+        Wed, 6 Jul 2022 15:44:52 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F10FDFA3
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 12:44:51 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x10so13208210edd.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 12:44:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uQRsnwv9u5IuL08Zu0b0BsRI6BGP8zbhAD30ZwGOKSY=;
-        b=mc2otIGuBDLviocnQmzsnPStf1y6s1B8oLQEpaEnJtA0+MhjEcCuE30cMfGGAr7rSh
-         3Dr+s6Pq80xvdUdJzHes1T7/9AA0thSKQDzO8jdRKCx/jKghZOSQ9ETfXVLnGPdTwil6
-         YDPfTfKxnb2LaQl8RkQ3y+tiJAmuG0fB0CeL8X+/DYZUN3JT+7gdh67sPEmSki5WhIoF
-         WdvK6x7P72Dk0c42qx+TzcKjLMUxLwGXY6RVlcH+FFIsckcUPUL3IIxSzX0jDxe5SCG9
-         qDcgUqD5ezsCVoOgcbhaMd/uKZiYkiToHfbQe3QmzCyWk6hKAKVHVi4ivbx2H0hQ1hjd
-         Y0qA==
+        bh=VKmMBf94dqxoTjWi2eeMymoq1+LEzz8Mcbmk6X430xs=;
+        b=QPubt1JaNqnaKlW47bNlowu/ISfn+jldi2xTy+EQoJxWPeFKU1fXtIqSlnaQ8geZHU
+         MyvpCrrdhsuyiSBK+8oQiezGplmIzd1ibjpsPY7r1nTUJDsIiNTYLER5QwE1NLeFpA19
+         iIrvQWcpJT0nLE+z508HT85iQwzfr5pljAOsy8D3idure2AMS1yrkyPmGOnTiRJnbR6y
+         vfsitWxWiyV9kh0Z2Y/7UcBx17U28/UW7p9TCdRqChlAdRXvP9StjGp8cyWAWpSj1e8/
+         ew2J8IUH9SX1FwlSZno2E428zLDu8QV6+yZB/5ZGOSQUFVF0oD3aERzIAc8AfrqM2KlO
+         3h2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uQRsnwv9u5IuL08Zu0b0BsRI6BGP8zbhAD30ZwGOKSY=;
-        b=n3G7Une5PEcbW9p+9zka7WmjTOUpvaskSwifKjHGVvjI8GyczTvd78XpQ9kYbCffZz
-         F4DLjDLdRm/5pY5lLEQFfNj/60uAtdRFhbFXDOdqCp+gttH1W+ORtnbpOQScjb95UENI
-         ZZ5OoWSLhDmjW0iriERIo88bZWcty327YLx0o7drsgpKqBoFpI1PolmYEev4pbNfj8hC
-         F0VgC0ZyivglCDtgr4N7wud0PsDe4lr7D1xhgGAz7KlgLgfs7gsrzjaWsE0G5KOm82CI
-         7CEQIW8T6gan324HCopbR7yilbyeuzaGxiKGwGmGAhsMONHmJSEKZnWGO4/7tlEeNaNe
-         zBOw==
-X-Gm-Message-State: AJIora/sZglfY1jq/PgekCIkK648mt+biTTeKklUycop34Es1HHcoGTt
-        01ojbI5Muzyhe/UkcBZ6XyUT/cf+KJeGzF7qxkxlHg==
-X-Google-Smtp-Source: AGRyM1t4dRFvvQJAo3o+9zwoctngRDgoPiYrC8YooMHhSrERSiGT4kieKFmITMD8tdqHtO7K0lhat2uj3BHpxqC84aA=
-X-Received: by 2002:a17:907:168c:b0:726:c521:25aa with SMTP id
- hc12-20020a170907168c00b00726c52125aamr40430672ejc.46.1657136600905; Wed, 06
- Jul 2022 12:43:20 -0700 (PDT)
+        bh=VKmMBf94dqxoTjWi2eeMymoq1+LEzz8Mcbmk6X430xs=;
+        b=cEWaZ8RrsN6BnlH4XuCYmE5SLXQNvO7QZKa693gzpRjNtLV1OyJ2EYf/ItQOxKsSiW
+         HG/mFOUDViXZ7/CbzfGOZMpjE4IT0LNuUFRWsq3XNefM/aLZIoy9AOjRJ+tf/jKgbRJN
+         dV44ea6sc/FKbp4nNMt8n1IHZb0L2YLBDxH2sWUbmg/HYzNnqqeDnxinKednBSO7UlFO
+         U6QQjAGjJjVikgWiU0w6sXWhcc0ze0J0mqv+j97tEb0v1+pIP3BHHrOeEPQuUY+jrvzO
+         AkoXV+/EUa9FPc6EN/yWm9x2mVCNzNNkNXS+qvJ8+dzOUkryk0XV9W6OWkfeJRkhnSvI
+         XkCQ==
+X-Gm-Message-State: AJIora9QciTwy2SwumEWoquOFbZoYF8lokQD4oDnsLDIkatRAQvJH58D
+        +Hb3iRzpRrWmOX2g8Yp0/2M/4F3cWpwpmm/awaAcmg==
+X-Google-Smtp-Source: AGRyM1tge25mCnt5shj9Yd6ABquNh8Ngrj9+FG84cVXYuPEcBT7yP71dGJsOKb6Fute1Sq/P9W4rWnjLnVhHKaJMjtI=
+X-Received: by 2002:a05:6402:43c4:b0:43a:6309:6c9b with SMTP id
+ p4-20020a05640243c400b0043a63096c9bmr22725476edc.91.1657136689614; Wed, 06
+ Jul 2022 12:44:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
- <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
- <CABVgOS=X51T_=hwTumnzL2yECgcshWBp1RT0F3GiT3+Fe_vang@mail.gmail.com> <CAGS_qxqsF-soqSM7-cO+tRD1Rg5fqrA07TGLRruxPE4i_rLdJw@mail.gmail.com>
-In-Reply-To: <CAGS_qxqsF-soqSM7-cO+tRD1Rg5fqrA07TGLRruxPE4i_rLdJw@mail.gmail.com>
+References: <20220518073232.526443-1-davidgow@google.com>
+In-Reply-To: <20220518073232.526443-1-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 15:43:09 -0400
-Message-ID: <CAFd5g44dp05DaEot23_a2QdOGfmg=eehtoe24=6yo_UKiGNukA@mail.gmail.com>
+Date:   Wed, 6 Jul 2022 15:44:38 -0400
+Message-ID: <CAFd5g44i2rQf8KVPc00bZzMx5zPtjoxesqyTd1aawVc10-0kyw@mail.gmail.com>
 Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>, Marco Elver <elver@google.com>,
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Marco Elver <elver@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
+        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -75,82 +71,22 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 19, 2022 at 1:11 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Wed, May 18, 2022 at 3:32 AM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> On Thu, May 19, 2022 at 6:15 AM David Gow <davidgow@google.com> wrote:
-> >
-> > I tend to agree that having both would be nice: I think there are
-> > enough useful "machine configs" that trying to maintain, e.g, a 1:1
-> > mapping with kernel architectures is going to leave a bunch of things
-> > on the table, particularly as we add more tests for, e.g., drivers and
-> > specific CPU models.
+> Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
+> 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
+> setup, so this is the best bet for testing things like KCSAN, which
+> require a multicore/multi-cpu system.
 >
-> I agree that we don't necessarily need to maintain a 1:1 mapping.
-> But I feel like we should have a pretty convincing reason for doing
-> so, e.g. support for a CPU that requires we add in a bunch of
-> kconfigs.
-
-Agreed. That being said, if we have a good convention for archs that
-are not in arch/, then it should be OK. The biggest thing is that all
-archs passed into ARCH=, if supported, should have a default with the
-same value for kunittool; as long as that is the case, I don't think
-anyone will get confused.
-
-> This particular one feels simple enough to me.
-> Given we already have to put specific instructions in the
-> kcsan/.kunitconfig, I don't know if there's much of a difference in
-> cost between these two commands
+> The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
+> KCSAN to run with a nontrivial number of worker threads, while still
+> working relatively quickly on older machines.
 >
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
-> --arch=x86_64-smp
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
-> --arch=x86_64 --kconfig_add CONFIG_SMP=y --qemu_args "-smp 8"
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Also agree.
+I know there is some discussion on this patch, but I think this patch
+is good as implemented; we could always delete this config if we
+change our policies later.
 
-> I've generally learned to prefer more explicit commands like the
-> second, even if they're quite a bit longer.
-
-I agree, but I think I learned this from you :-)
-
-> But I have the following biases
-> * I use FZF heavily, so I don't re-type long commands much
-
-Same.
-
-> * I'm the person who proposed --kconfig_add and --qemu_args, so of
-> course I'd think the longer form is easy to understand.
-> so I'm not in a position to object to this change.
-
-Yeah, I think I am a bit biased on this too, but I don't terribly care
-one way or the other.
-
-> Changing topics:
-> Users can overwrite the '-smp 8' here via --qemu_args [1], so I'm much
-> less worried about hard-coding any specific value in this file
-> anymore.
-> And given that, I think a more "natural" value for this file would be "-smp 2".
-> I think anything that needs more than that should explicitly should --qemu_args.
->
-> Thoughts?
-
-If we have time, we could bring this topic up at LPC?
-
-> [1] tested with --qemu_args='-smp 4' --qemu_args='-smp 8'
-> and I see the following in the test.log
->  smpboot: Allowing 8 CPUs, 0 hotplug CPUs
-> so QEMU respects the last value passed in, as expected.
->
-> >
-> > The problem, of course, is that the --kconfig_add flags don't allow us
-> > to override anything explicitly stated in either the kunitconfig or
-> > qemu_config (and I imagine there could be problems with --qemu_config,
-> > too).
->
-> This patch would fix that.
-> https://lore.kernel.org/linux-kselftest/20220519164512.3180360-1-dlatypov@google.com
->
-> It introduces an overwriting priority of
-> * --kconfig_add
-> * kunitconfig / --kunitconfig
-> * qemu_config
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
