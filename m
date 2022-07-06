@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231CA5692C9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 21:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89215692E1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 21:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbiGFTow (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 15:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S231166AbiGFTxZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 15:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbiGFTow (ORCPT
+        with ESMTP id S230412AbiGFTxZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 15:44:52 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F10FDFA3
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 12:44:51 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id x10so13208210edd.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 12:44:51 -0700 (PDT)
+        Wed, 6 Jul 2022 15:53:25 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A0BB3E
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 12:53:23 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id d2so28931974ejy.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 12:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VKmMBf94dqxoTjWi2eeMymoq1+LEzz8Mcbmk6X430xs=;
-        b=QPubt1JaNqnaKlW47bNlowu/ISfn+jldi2xTy+EQoJxWPeFKU1fXtIqSlnaQ8geZHU
-         MyvpCrrdhsuyiSBK+8oQiezGplmIzd1ibjpsPY7r1nTUJDsIiNTYLER5QwE1NLeFpA19
-         iIrvQWcpJT0nLE+z508HT85iQwzfr5pljAOsy8D3idure2AMS1yrkyPmGOnTiRJnbR6y
-         vfsitWxWiyV9kh0Z2Y/7UcBx17U28/UW7p9TCdRqChlAdRXvP9StjGp8cyWAWpSj1e8/
-         ew2J8IUH9SX1FwlSZno2E428zLDu8QV6+yZB/5ZGOSQUFVF0oD3aERzIAc8AfrqM2KlO
-         3h2w==
+        bh=d00ziUFyPDQ6I0nNLFmAgrCX7fUelcKHDlXhvLnYQpo=;
+        b=nGUFuIUnY1qJpuG/cN4pf1seuY5n4iP9FUEzgUx3P+dK84mIqETulIB+ZB0jmJzUHu
+         Y2061ysdXtXDBLFVfUJ4t0g1frRZFcyghbSEhrQlDOCnKEj3nJ3JMHBIums3AsKeXAtI
+         AcYFhYOv18/V4aMyMmSWmGmWXqcVeysFlmgjvIXgSQJ3aDy1a8UxMARlkCQSdgUHL4Np
+         NBJsIhpHurQ+U8HpEPcGOd0VCuSJE8yP4vvYix1ZhOj0PzzRSlF5g1aBjplh2Lfh6Hjd
+         ZY4dX7OrdHUUuJzV0AyEujVpNUdlWbHnz8O79FTB/cq2dvi2chPZVuQ9D+aQlNBkg8jJ
+         23SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VKmMBf94dqxoTjWi2eeMymoq1+LEzz8Mcbmk6X430xs=;
-        b=cEWaZ8RrsN6BnlH4XuCYmE5SLXQNvO7QZKa693gzpRjNtLV1OyJ2EYf/ItQOxKsSiW
-         HG/mFOUDViXZ7/CbzfGOZMpjE4IT0LNuUFRWsq3XNefM/aLZIoy9AOjRJ+tf/jKgbRJN
-         dV44ea6sc/FKbp4nNMt8n1IHZb0L2YLBDxH2sWUbmg/HYzNnqqeDnxinKednBSO7UlFO
-         U6QQjAGjJjVikgWiU0w6sXWhcc0ze0J0mqv+j97tEb0v1+pIP3BHHrOeEPQuUY+jrvzO
-         AkoXV+/EUa9FPc6EN/yWm9x2mVCNzNNkNXS+qvJ8+dzOUkryk0XV9W6OWkfeJRkhnSvI
-         XkCQ==
-X-Gm-Message-State: AJIora9QciTwy2SwumEWoquOFbZoYF8lokQD4oDnsLDIkatRAQvJH58D
-        +Hb3iRzpRrWmOX2g8Yp0/2M/4F3cWpwpmm/awaAcmg==
-X-Google-Smtp-Source: AGRyM1tge25mCnt5shj9Yd6ABquNh8Ngrj9+FG84cVXYuPEcBT7yP71dGJsOKb6Fute1Sq/P9W4rWnjLnVhHKaJMjtI=
-X-Received: by 2002:a05:6402:43c4:b0:43a:6309:6c9b with SMTP id
- p4-20020a05640243c400b0043a63096c9bmr22725476edc.91.1657136689614; Wed, 06
- Jul 2022 12:44:49 -0700 (PDT)
+        bh=d00ziUFyPDQ6I0nNLFmAgrCX7fUelcKHDlXhvLnYQpo=;
+        b=4B0f0pKN952XUoxjkT1Uvu6wElFi86WlF3i4MsZI644vE/4NuXbCDHAmpW6UXfepeS
+         oxx2lKekZRv+egcfMo0GcYbBxTJusnchLJRF41nxZXRGaw6cJCFsYCj0DWEy5dXxw5k7
+         PZcu/T8L7xZ2vajSgP7gkf3ho8I2PHz26Yz7IShBPSXWun9tRBVIaXixmCCRTgucEkIx
+         JUFlGwndSUmcnw+IWz+Xtp0MelRigXr0H0QqPzsWE+isU0siCoYAlUq7L69sJDmxTWpP
+         yQRWaT3jlMLHf1UQHj1zHwWeQeJyqdYDqhryPL5rrq20lWEoQEM8alu/s7gieNDw7GFM
+         FJbg==
+X-Gm-Message-State: AJIora8MBgoSx1BIa4IUtJNfTawcjqGrBf1n+RpWw7yxf/eNkXTm3N00
+        L2p6WxNBTvsWrJAZvP+LRZSrHh4+c+w/kqX9Wlg9CQ==
+X-Google-Smtp-Source: AGRyM1v03Sn7R2smMxM/h/qafl2ey/P2pKgbxvGHL46VoS8zNPyvn3VyZ4Ec21viRGNgqymy1sya0+RmWaQXBBxdr7Q=
+X-Received: by 2002:a17:906:cc96:b0:728:baf0:ba03 with SMTP id
+ oq22-20020a170906cc9600b00728baf0ba03mr40145424ejb.52.1657137202253; Wed, 06
+ Jul 2022 12:53:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com>
-In-Reply-To: <20220518073232.526443-1-davidgow@google.com>
+References: <20220518073232.526443-1-davidgow@google.com> <20220518073232.526443-2-davidgow@google.com>
+In-Reply-To: <20220518073232.526443-2-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 15:44:38 -0400
-Message-ID: <CAFd5g44i2rQf8KVPc00bZzMx5zPtjoxesqyTd1aawVc10-0kyw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
+Date:   Wed, 6 Jul 2022 15:53:11 -0400
+Message-ID: <CAFd5g47Jm78WxSo_A4syoUZApMHvRdXb2yNvdeu2BUDRpS75KQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
 To:     David Gow <davidgow@google.com>
 Cc:     Daniel Latypov <dlatypov@google.com>,
         Marco Elver <elver@google.com>,
@@ -71,22 +71,16 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 18, 2022 at 3:32 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Wed, May 18, 2022 at 3:32 AM David Gow <davidgow@google.com> wrote:
 >
-> Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
-> 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
-> setup, so this is the best bet for testing things like KCSAN, which
-> require a multicore/multi-cpu system.
->
-> The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
-> KCSAN to run with a nontrivial number of worker threads, while still
-> working relatively quickly on older machines.
+> Add a .kunitconfig file, which provides a default, working config for
+> running the KCSAN tests. Note that it needs to run on an SMP machine, so
+> to run under kunit_tool, the x86_64-smp qemu-based setup should be used:
+> ./tools/testing/kunit/kunit.py run --arch=x86_64-smp --kunitconfig=kernel/kcsan
 >
 > Signed-off-by: David Gow <davidgow@google.com>
 
-I know there is some discussion on this patch, but I think this patch
-is good as implemented; we could always delete this config if we
-change our policies later.
+Ack, but I think Marco settled on removing CONFIG_KCSAN_STRICT=y and
+CONFIG_KCSAN_WEAK_MEMORY=y.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
