@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5550B569416
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 23:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE74856942B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 23:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234559AbiGFVQI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 17:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S234168AbiGFVUJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 17:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234363AbiGFVQI (ORCPT
+        with ESMTP id S232890AbiGFVUI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 17:16:08 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E171FAE4C
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 14:16:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id fd6so20804297edb.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 14:16:05 -0700 (PDT)
+        Wed, 6 Jul 2022 17:20:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C73A193EB
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 14:20:07 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id o25so29202915ejm.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 14:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hThyagx/3gO75R3ByObu2jcXCn9gsg8eLIOZEOFTgW0=;
-        b=qxZxOVueXL4xlVup4HqnHuiID4ylYROtcIuMl/Z9Mo0Y57haMDDPOImjOILx8fPqt1
-         k6leDDEur87IiyUGE53yyulvaw0GG6VKKGKtC5TW74SIRBupHfYMrbhWton1G/KnqORy
-         Vo8KeFFXMqVBr7tP8UiplZ9ls+YJYM5Y24fTkbZVIxZ5SybAUUJGxNmObIIV8U8HW/Gd
-         IYIUjRvth7RP3GtrWLzmNsMl1vQPCgBoGHad5roS56vxNwWFlt94iAMdufbaKZZP73Xs
-         /lgqaSE/9c+5UqZmchyK7DTRYBZunag3dRo3yGYzMSfRvdmxdC1DDlGqGsMXCpIL4MNU
-         HVjQ==
+         :cc;
+        bh=g2UCDhMKypb3YzjSBsPeyBiF2PeTe0+wdsZ8OfsVOrY=;
+        b=sVFcjcHg2LfnGZPa5eF4aYhrF8RBJQ8TTDW3HHOvEbkPNvYtsAnwKb0K9pOEDOHtGr
+         5MLLVwfPiM5Ww6QytB5EQA6Nv4l7GlTpEl6BHslrWSxudyACtyeDn+/ZFJZbD1bb3K9g
+         TZc7d/Zj9PZ7ZFUq4pHASajIqU2e8MJPeQkohIwy1iMQWIy/F/DvYF5Pg7FC73nJd9sj
+         zfOlEUGVa9h3Ia4yQ4Di7y12ZyeK4KqxzVmiemdXbK61C1koJczt92TGDpDqfG5fy06O
+         a4NUSg/QnJ0l5x1VskRXEKu8EID1WZo1+FI60c+NpXidysJLk+EWwBPd3Ybclut9mea0
+         NJaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hThyagx/3gO75R3ByObu2jcXCn9gsg8eLIOZEOFTgW0=;
-        b=gQM3B1DJfjgdpOwXuJUydrMfnivEq4RHlSFLLxtl1inj726EmSrdCiUDi0HUXuuEor
-         mtHeMFlEzBy4uqgPyY2rtzRuyYuQRNgbUWJquiyAKIFQ/5Ym+AQke2+adP/DJGdvNjP0
-         +WWNkd+x5XHNeab2Wode+YWdQupJIzrDl5Xsyd+r/23NlIx8JDVB5vT6M3km8mrdT0AZ
-         S0XnjduD6dqq5ndvWpw2JQZgyXzhTFbrtjJXtfIvQGGHJGP5mq6cx1ttsopmKPtsxlLC
-         h+X+8w+WurOma1yQ6KMwBC/MLxvBq2K8T5SSB1LCyceU4d67+G+K3f58igVW9aBa2Ktz
-         dbUw==
-X-Gm-Message-State: AJIora9uitCpb8tW/DoTE/nPuMsfNUq2QRAY8qgOGZfVkJXNVC/771ri
-        cO+PtMw+ehuSemc3dltiPTpcl/Corm01Bw8860CpBQ==
-X-Google-Smtp-Source: AGRyM1sPbJFOfgds1z44L+2x0LeSz+WDXIcXmrmRGKcnUJOHvArk6m1Yo9JIVaHoclX4irKL2BmvvO9xvoY4Zp4J2ko=
-X-Received: by 2002:a05:6402:90a:b0:439:c144:24cd with SMTP id
- g10-20020a056402090a00b00439c14424cdmr33905014edz.209.1657142164310; Wed, 06
- Jul 2022 14:16:04 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=g2UCDhMKypb3YzjSBsPeyBiF2PeTe0+wdsZ8OfsVOrY=;
+        b=7DF32DsMLQdboGCBjFh7m8nOs4opYDUouiazyo6CrJkSR80Sb4XvUHxaTNalhghwDt
+         hGVAwe5DYrB5UVpyuvdThcjmhh+pk2r6nEn6uzBRLGU5uTTqLPlhKQD6syId7uviYHWm
+         +BAtHkxvA6NVioZCrqW+T1svk1cIaRj5H50bENb9/ZxCDiEvGed49pspmi2ryht9x56O
+         RmHCiyKgPeCz8ILETvO++RPzoNqQR9YLU+Y5oQZ7J3EnIyR5UKrCMaKx7WHqWyGsczdk
+         R66tZw86mhH+OegEdbzzXttTKKShyOAWa+gX05ShK/9qxnwaS9n8KTY2HBWwcM76Yo41
+         hu7g==
+X-Gm-Message-State: AJIora8olbmAnE/+LhGQbW8TUr+fpRkq96BVCTTGjGqlBp5aPibpWZ4z
+        048ytzyAW90WC7eajLdzh2UjYG09KTKv8KvY96YaqA==
+X-Google-Smtp-Source: AGRyM1susXO3wYeoDf0WuEIfBGex3/UVxBp2DE1XLABw70yWDUei6RgD/KNu5S+8rGhboeMpSh2JSE05/UMRGugtit0=
+X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id
+ hr1-20020a1709073f8100b006ff1a3d9092mr41342820ejc.319.1657142405356; Wed, 06
+ Jul 2022 14:20:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-3-davidgow@google.com>
-In-Reply-To: <20220625050838.1618469-3-davidgow@google.com>
+References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-4-davidgow@google.com>
+In-Reply-To: <20220625050838.1618469-4-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 6 Jul 2022 17:15:53 -0400
-Message-ID: <CAFd5g46ftDZwaPDdr8p2tRsd86uEQhFGfv+y6S3EVDtHCEa4zg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
+Date:   Wed, 6 Jul 2022 17:19:54 -0400
+Message-ID: <CAFd5g471_it8CQmBJnrhS=T3AgdfQF2tr4A9n=sYuWayovXmLw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] thunderbolt: test: Use kunit_test_suite() macro
 To:     David Gow <davidgow@google.com>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
@@ -70,39 +70,33 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         linux-modules@vger.kernel.org,
         Matt Johnston <matt@codeconstruct.com.au>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 1:10 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Sat, Jun 25, 2022 at 1:10 AM David Gow <davidgow@google.com> wrote:
 >
-> From: Daniel Latypov <dlatypov@google.com>
+> The new implementation of kunit_test_suite() for modules no longer
+> conflicts with module_init, so can now be used by the thunderbolt tests.
 >
-> We currently store kunit suites in the .kunit_test_suites ELF section as
-> a `struct kunit_suite***` (modulo some `const`s).
-> For every test file, we store a struct kunit_suite** NULL-terminated arra=
-y.
+> Also update the Kconfig entry to enable the test when KUNIT_ALL_TESTS is
+> enabled.
 >
-> This adds quite a bit of complexity to the test filtering code in the
-> executor.
+> This means that kunit_tool can now successfully run and parse the test
+> results with, for example:
+>         ./tools/testing/kunit/kunit.py run --arch=x86_64 \
+>         --kconfig_add CONFIG_PCI=y --kconfig_add CONFIG_USB4=y \
+>         'thunderbolt'
 >
-> Instead, let's just make the .kunit_test_suites section contain a single
-> giant array of struct kunit_suite pointers, which can then be directly
-> manipulated. This array is not NULL-terminated, and so none of the test
-> filtering code needs to NULL-terminate anything.
->
-> Tested-by: Ma=C3=ADra Canal <maira.canal@usp.br>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Co-developed-by: David Gow <davidgow@google.com>
+> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
 > Signed-off-by: David Gow <davidgow@google.com>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
