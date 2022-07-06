@@ -2,98 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B645687D3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 14:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A806568863
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 14:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbiGFMKT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 08:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S232650AbiGFMdU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 08:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbiGFMKS (ORCPT
+        with ESMTP id S231842AbiGFMdT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:10:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA7F25589;
-        Wed,  6 Jul 2022 05:10:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88A66B81CA6;
-        Wed,  6 Jul 2022 12:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 41A30C341CA;
-        Wed,  6 Jul 2022 12:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657109415;
-        bh=Fh74RXkBxb5qR+VbTaZWkzrhg2eyH/wAqBl/LYQyt0A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=c/1vkV/vpUlOMm7VrCDesvLhKVWm6TWzb1lIdab4ZpPubyUfcrGNIpHoAEymG40uh
-         DaGUfoBuEmReKSCRCtDgG52No3ouquJvhanoMKm8yasIo1cgRt5oHGw68ESNvTnhgm
-         Mj8LwYi05+qsPffq07RvJofSPir+K1EAUwWyxxAWk6/PfciMXwj5a8ON0OvPuxFNyc
-         2MSmQ6yIptxQXjRCiwmICxS8tvEAUE+d2Z6EugVzLrPqZMFgaJBd+PF0VCnEAg8fgi
-         1dBnxQzXNlLMDhjxqYoiwElgmHlukOe4aXq/labCzhxwTOHEYRo7mMYVRwzOALsbPW
-         0dSQmDfwx3aOA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1BA2CE45BDC;
-        Wed,  6 Jul 2022 12:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 6 Jul 2022 08:33:19 -0400
+X-Greylist: delayed 465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Jul 2022 05:33:17 PDT
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBCA26ACC;
+        Wed,  6 Jul 2022 05:33:17 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3165A18864BD;
+        Wed,  6 Jul 2022 12:25:31 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 27ACE25032B8;
+        Wed,  6 Jul 2022 12:25:31 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 1F97F9120FED; Wed,  6 Jul 2022 12:25:31 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from wse-c0127.vestervang (unknown [208.127.141.28])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id A337C9120FED;
+        Wed,  6 Jul 2022 12:25:29 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 1/1] net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
+Date:   Wed,  6 Jul 2022 14:25:02 +0200
+Message-Id: <20220706122502.1521819-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/5] tls: rx: nopad and backlog flushing
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165710941510.29479.16431508550562245023.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Jul 2022 12:10:15 +0000
-References: <20220705235926.1035407-1-kuba@kernel.org>
-In-Reply-To: <20220705235926.1035407-1-kuba@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        pabeni@redhat.com, john.fastabend@gmail.com, borisp@nvidia.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        maximmi@nvidia.com
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+For convenience the function mv88e6xxx_g1_atu_op() has been used to read
+ATU violations, but the function has other purposes and does not enable
+the possibility to read the FID when reading ATU violations.
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+The FID is needed to get hold of which VID was involved in the violation,
+thus the need for future purposes to be able to read the FID.
 
-On Tue,  5 Jul 2022 16:59:21 -0700 you wrote:
-> This small series contains the two changes I've been working
-> towards in the previous ~50 patches a couple of months ago.
-> 
-> The first major change is the optional "nopad" optimization.
-> Currently TLS 1.3 Rx performs quite poorly because it does
-> not support the "zero-copy" or rather direct decrypt to a user
-> space buffer. Because of TLS 1.3 record padding we don't
-> know if a record contains data or a control message until
-> we decrypt it. Most records will contain data, tho, so the
-> optimization is to try the decryption hoping its data and
-> retry if it wasn't.
-> 
-> [...]
+Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
+---
+ drivers/net/dsa/mv88e6xxx/global1_atu.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [net-next,1/5] tls: rx: don't include tail size in data_len
-    https://git.kernel.org/netdev/net-next/c/603380f54f83
-  - [net-next,2/5] tls: rx: support optimistic decrypt to user buffer with TLS 1.3
-    https://git.kernel.org/netdev/net-next/c/ce61327ce989
-  - [net-next,3/5] tls: rx: add sockopt for enabling optimistic decrypt with TLS 1.3
-    https://git.kernel.org/netdev/net-next/c/88527790c079
-  - [net-next,4/5] selftests: tls: add selftest variant for pad
-    https://git.kernel.org/netdev/net-next/c/f36068a20256
-  - [net-next,5/5] tls: rx: periodically flush socket backlog
-    https://git.kernel.org/netdev/net-next/c/c46b01839f7a
-
-You are awesome, thank you!
+diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+index 40bd67a5c8e9..5d120d53823c 100644
+--- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
++++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+@@ -114,6 +114,19 @@ static int mv88e6xxx_g1_atu_op_wait(struct mv88e6xxx_chip *chip)
+ 	return mv88e6xxx_g1_wait_bit(chip, MV88E6XXX_G1_ATU_OP, bit, 0);
+ }
+ 
++static int mv88e6xxx_g1_read_atu_violation(struct mv88e6xxx_chip *chip)
++{
++	int err;
++
++	err = mv88e6xxx_g1_write(chip, MV88E6XXX_G1_ATU_OP,
++				 MV88E6XXX_G1_ATU_OP_BUSY |
++				 MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
++	if (err)
++		return err;
++
++	return mv88e6xxx_g1_atu_op_wait(chip);
++}
++
+ static int mv88e6xxx_g1_atu_op(struct mv88e6xxx_chip *chip, u16 fid, u16 op)
+ {
+ 	u16 val;
+@@ -359,8 +372,7 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+ 
+ 	mv88e6xxx_reg_lock(chip);
+ 
+-	err = mv88e6xxx_g1_atu_op(chip, 0,
+-				  MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
++	err = mv88e6xxx_g1_read_atu_violation(chip);
+ 	if (err)
+ 		goto out;
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
