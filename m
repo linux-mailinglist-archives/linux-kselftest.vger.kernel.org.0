@@ -2,50 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2323567AFF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 01:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F1C567EB8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 08:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbiGEX7j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Jul 2022 19:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
+        id S229549AbiGFGin (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 02:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiGEX7i (ORCPT
+        with ESMTP id S229455AbiGFGin (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Jul 2022 19:59:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DAB183AD;
-        Tue,  5 Jul 2022 16:59:37 -0700 (PDT)
+        Wed, 6 Jul 2022 02:38:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E12167CA;
+        Tue,  5 Jul 2022 23:38:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 456CA61196;
-        Tue,  5 Jul 2022 23:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDECC341D1;
-        Tue,  5 Jul 2022 23:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657065577;
-        bh=C32Cn5loiON0F7czPEkArPlWf1v6YWueU3OQ7k4g/ms=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a20SWPQaGHEfFOAKcjStygR5nLVDigWPQgBYnb7ep+N7hCamfpCFcWFZMHvBicf5q
-         W0x0t2m6E95/i3WJEJWaS12eevvytFbedMdYYjjQWUt1tlGX8hppbBRpwIioAR8OJK
-         EuOFIjBL/rHHwfOjzN/79HNBuKusI9JVxLNk1+5+y5caHj/gAMU+O0JEJLnuPHq+c1
-         wyuQNtkx7KsipLk0eNliKQWrGuo2eExTktkl9EwDcvMWp5YIaUq5SCVOhXyVirkpmJ
-         ObXJgp99Ww0wi+Ij14koqcgrrvN3P/qQrxPdJvERnvyeUq1+sLcwuC36nzNIsezkKX
-         zfthKtO+5Rv7A==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-        john.fastabend@gmail.com, borisp@nvidia.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        maximmi@nvidia.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 5/5] tls: rx: periodically flush socket backlog
-Date:   Tue,  5 Jul 2022 16:59:26 -0700
-Message-Id: <20220705235926.1035407-6-kuba@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220705235926.1035407-1-kuba@kernel.org>
-References: <20220705235926.1035407-1-kuba@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62D2361D84;
+        Wed,  6 Jul 2022 06:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39758C3411C;
+        Wed,  6 Jul 2022 06:38:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657089519;
+        bh=sIhADMY3Ddiwqu/4zmrMxVcxGylkvp6d6ylGolHrEgY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dv8K6kxrFf7OTnxoy7BJoYTK27INCS/dp6gsLZU+mDz0eG+7Cfsq3vGkwutzzXz77
+         jOM4u9OlUDKwA1RaRr22Fe34PTWi+7e+iuBGypoSgP3RRd1neORWeqv6u+fz4YMohn
+         QmQwowyzodvSl9o04hklMK59Etq0P85n2f5nOg/4=
+Date:   Wed, 6 Jul 2022 08:38:37 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        rafael@kernel.org, rppt@kernel.org, akpm@linux-foundation.org,
+        daniel.gutson@eclypsium.com, hughsient@gmail.com,
+        alex.bazhaniuk@eclypsium.com, alison.schofield@intel.com,
+        keescook@chromium.org
+Subject: Re: [PATCH v9 9/9] drivers/node: Show in sysfs node's crypto
+ capabilities
+Message-ID: <YsUt7X6HLIY6wt1Z@kroah.com>
+References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
+ <20220704135833.1496303-10-martin.fernandez@eclypsium.com>
+ <YsL6XCWmgiIeLKJ9@kroah.com>
+ <CAKgze5aD3vJwMQwzJ1syzAKvSvPgYDFvtapDea_zBki5taoFEQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKgze5aD3vJwMQwzJ1syzAKvSvPgYDFvtapDea_zBki5taoFEQ@mail.gmail.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,78 +63,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We continuously hold the socket lock during large reads and writes.
-This may inflate RTT and negatively impact TCP performance.
-Flush the backlog periodically. I tried to pick a flush period (128kB)
-which gives significant benefit but the max Bps rate is not yet visibly
-impacted.
+On Tue, Jul 05, 2022 at 02:35:18PM -0300, Martin Fernandez wrote:
+> On 7/4/22, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Mon, Jul 04, 2022 at 10:58:33AM -0300, Martin Fernandez wrote:
+> >> Show in each node in sysfs if its memory is able to do be encrypted by
+> >> the CPU; on EFI systems: if all its memory is marked with
+> >> EFI_MEMORY_CPU_CRYPTO in the EFI memory map.
+> >>
+> >> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+> >> ---
+> >>  Documentation/ABI/testing/sysfs-devices-node | 10 ++++++++++
+> >>  drivers/base/node.c                          | 10 ++++++++++
+> >>  2 files changed, 20 insertions(+)
+> >>  create mode 100644 Documentation/ABI/testing/sysfs-devices-node
+> >>
+> >> diff --git a/Documentation/ABI/testing/sysfs-devices-node
+> >> b/Documentation/ABI/testing/sysfs-devices-node
+> >> new file mode 100644
+> >> index 000000000000..0e95420bd7c5
+> >> --- /dev/null
+> >> +++ b/Documentation/ABI/testing/sysfs-devices-node
+> >> @@ -0,0 +1,10 @@
+> >> +What:		/sys/devices/system/node/nodeX/crypto_capable
+> >> +Date:		April 2022
+> >> +Contact:	Martin Fernandez <martin.fernandez@eclypsium.com>
+> >> +Users:		fwupd (https://fwupd.org)
+> >> +Description:
+> >> +		This value is 1 if all system memory in this node is
+> >> +		capable of being protected with the CPU's memory
+> >> +		cryptographic capabilities.  It is 0 otherwise.
+> >> +		On EFI systems the node will be marked with
+> >> +		EFI_MEMORY_CPU_CRYPTO.
+> >
+> > Where will such a node be "marked"?  I do not understand this last
+> > sentence, sorry, can you please reword this?
+> 
+> What I meant is that if all the memory regions in a given node are
+> flagged with EFI_MEMORY_CPU_CRYPTO then that file will hold a 1.
+> 
+> Maybe it's a little confusing if you don't know what
+> EFI_MEMORY_CPU_CRYPTO is.
+> 
+> > And why is EFI an issue here at all?
+> 
+> Checking for EFI_MEMORY_CPU_CRYPTO is the way to know if a memory
+> region is able to be encrypted by the CPU on EFI platforms. It's not
+> really an issue and it's currently the only implementation for this
+> file.
+> 
+> Is it clearer here?
+> 
+>   This value is 1 if the memory in this node is capable of being
+>   protected with the CPU's memory cryptographic capabilities.  It is 0
+>   otherwise.
+>   On EFI systems this means that all the memory regions of the node
+>   have the EFI_MEMORY_CPU_CRYPTO attribute set.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- net/core/sock.c  |  1 +
- net/tls/tls_sw.c | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+Much better, thanks.
 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 92a0296ccb18..4cb957d934a2 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2870,6 +2870,7 @@ void __sk_flush_backlog(struct sock *sk)
- 	__release_sock(sk);
- 	spin_unlock_bh(&sk->sk_lock.slock);
- }
-+EXPORT_SYMBOL_GPL(__sk_flush_backlog);
- 
- /**
-  * sk_wait_data - wait for data to arrive at sk_receive_queue
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 7592b6519953..79043bc3da39 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1738,6 +1738,24 @@ static int process_rx_list(struct tls_sw_context_rx *ctx,
- 	return copied ? : err;
- }
- 
-+static void
-+tls_read_flush_backlog(struct sock *sk, struct tls_prot_info *prot,
-+		       size_t len_left, size_t decrypted, ssize_t done,
-+		       size_t *flushed_at)
-+{
-+	size_t max_rec;
-+
-+	if (len_left <= decrypted)
-+		return;
-+
-+	max_rec = prot->overhead_size - prot->tail_size + TLS_MAX_PAYLOAD_SIZE;
-+	if (done - *flushed_at < SZ_128K && tcp_inq(sk) > max_rec)
-+		return;
-+
-+	*flushed_at = done;
-+	sk_flush_backlog(sk);
-+}
-+
- int tls_sw_recvmsg(struct sock *sk,
- 		   struct msghdr *msg,
- 		   size_t len,
-@@ -1750,6 +1768,7 @@ int tls_sw_recvmsg(struct sock *sk,
- 	struct sk_psock *psock;
- 	unsigned char control = 0;
- 	ssize_t decrypted = 0;
-+	size_t flushed_at = 0;
- 	struct strp_msg *rxm;
- 	struct tls_msg *tlm;
- 	struct sk_buff *skb;
-@@ -1839,6 +1858,10 @@ int tls_sw_recvmsg(struct sock *sk,
- 		if (err <= 0)
- 			goto recv_end;
- 
-+		/* periodically flush backlog, and feed strparser */
-+		tls_read_flush_backlog(sk, prot, len, to_decrypt,
-+				       decrypted + copied, &flushed_at);
-+
- 		ctx->recv_pkt = NULL;
- 		__strp_unpause(&ctx->strp);
- 		__skb_queue_tail(&ctx->rx_list, skb);
--- 
-2.36.1
-
+greg k-h
