@@ -2,109 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303D55691FE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 20:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA87569203
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Jul 2022 20:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiGFSif (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Jul 2022 14:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S233776AbiGFSkx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Jul 2022 14:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiGFSie (ORCPT
+        with ESMTP id S232632AbiGFSkw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Jul 2022 14:38:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BAC4DAE
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 11:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657132712;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6bZNuL7RAHnFV67f4D5x/92+2WjgdYrP06Pk08jyQTU=;
-        b=Xx0ZQAf/10hsoNZw5I3xj4/pbWhRPN523y7sy21aPFJLY4zTEWl68WsL9UycFEQIk+Dfdc
-        yj9F4aS9axnUx8uv0syTbINtMolzeCKB3Pq6XptcMJN9KEJLBxOkMPV6Smpx2SCtUtW7F+
-        XX05b2U0wbZ3vnsgyd13QgbA8yOB1LY=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-VkDBwIiSNSeC_heTlViTgA-1; Wed, 06 Jul 2022 14:38:31 -0400
-X-MC-Unique: VkDBwIiSNSeC_heTlViTgA-1
-Received: by mail-ej1-f70.google.com with SMTP id qf29-20020a1709077f1d00b00722e68806c4so4026072ejc.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 11:38:30 -0700 (PDT)
+        Wed, 6 Jul 2022 14:40:52 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030C120F4A
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Jul 2022 11:40:51 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id j22so2325154ejs.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Jul 2022 11:40:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bzZxytl6Wz1ULT/c3I88/Se1K67ZgUfdG5WNP/NRkJ8=;
+        b=dQwN+tvPKIRMd1vYHaBJh6VuS0FJt91XOeuM/qjAhRLitRoEcZx2s1ezkBqZ/ws0Pg
+         3fiFn3BV2KEol8zrCiUrVmhY3GaspEBJYeJJtDFNmL/rqQWZTf8d+hj2qKX+/70qXGfe
+         irqBzNKxgl33ozpVHsT36ij1G44wFTxKWPMhBtLHLh8apjOtVYWDtRX8seWCmAySMsr8
+         wuwTTOie4Yj7HXN+8JVP9mNeWL3gK2Gp+P304WDehcZqKNquzHDl8Trkvdb3bQn7+CTd
+         LQvXjGrNOJXt55jX0zVxcj5ddRCMscsy3SaZNpt+o7opQAZBQ/d9Khe2YTFjaiQTFY1V
+         bqSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6bZNuL7RAHnFV67f4D5x/92+2WjgdYrP06Pk08jyQTU=;
-        b=NqYL9NmSSaIn9qnbmGNxi3+EQG2L7aaUg8N2SEG+PD38PcNzmLSVQngBVic2ztkOl6
-         /0l58+NhEnpqvM8bhZKWqTocvewwEWj0w3JXtGT0BAcC6RJytdYLdj3ZWf/hX09CAPwK
-         wjdpHJIdDYxbzZUKxjGejziEFktpuOqOJnjl4yXTMuG/LsFHZCDSh8W/YS0hxNYVOEMS
-         CTHbUp0f8sHCwqm7fDhqCFu3EIBEz1U4qPLiVuKyOdpDj7sFR448yF/+7+lmK+rdJ0ol
-         fcMl3qydFq41DUf9D5bKKAVcCMuQyJt2i47oi2AZJ+tOvgb3oI4HAtLNq8XXcGkQJbxZ
-         57cw==
-X-Gm-Message-State: AJIora//MrI/LhiImLVdspqeOMA5nF3QyoBW8k0xv+bzPz4t4bgmwSkk
-        KtCw7NWT5MhUHZS9d/tusgdOg4rL7u0k3r+aJOi65lQ+yPq7eg3XbBzywmPTZIgATXSdYgoakTI
-        rwmK40lKyfDxVOheRaOwCZn7Rv7RVqRegYpdpBPPWfOXO
-X-Received: by 2002:a05:6402:3514:b0:435:f24a:fbad with SMTP id b20-20020a056402351400b00435f24afbadmr54023792edd.311.1657132709526;
-        Wed, 06 Jul 2022 11:38:29 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vXkS+TeYM2iH5bLiOApP8aVSIv6LgG4byRceGi0vcWQ4mpyVXCApsVKw0zrZulmdTMksv1p49XD8lx8TzmptI=
-X-Received: by 2002:a05:6402:3514:b0:435:f24a:fbad with SMTP id
- b20-20020a056402351400b00435f24afbadmr54023768edd.311.1657132709303; Wed, 06
- Jul 2022 11:38:29 -0700 (PDT)
+        bh=bzZxytl6Wz1ULT/c3I88/Se1K67ZgUfdG5WNP/NRkJ8=;
+        b=c9PbcukLoRSxvkFnwpOdTQKk4XD8IRQQY0ik6BaD0NxYuLkBON2anOGshLm34FwZdf
+         zLKvEpAbxtjkFuUWQ6iqTBzJBGr6Pj2vWWpZrXhyAiTUq/Uw2/YXG2NoPyKVCNSaLZjC
+         2j1Lt9ftg22Ma5dedStUim0kRWZuwdpfCHZLdqIzWNVZC1H2QHaKX1JC24AIKiRBsCLF
+         i/sYRIrdlSsdnr3WWJ1IF5ZB5Bqe910BQxt+htKNTtgCoc/U5jKozfrB8S6WmJ1jrjUX
+         +oxseXBNUcDeRqolmmi+6VKh5xJCmAaEpUmIhJgcmLifgrDlyYGJpJDPcWIqlX9Dyn80
+         EXaA==
+X-Gm-Message-State: AJIora9Ks0/K4CUUr0zhwhptxNu8urAZ41p5D9bNgJ4dF/HZfEDnwpYd
+        budB/uBJrwlo4U39kH9k/a0bv2lS/BZkE/JmYynfCg==
+X-Google-Smtp-Source: AGRyM1t/wfpA6fOyKP5JwHbP+bdVJjg4/MG8xC6r/8iY7QXRXmsDubgkBJpnvhrkzd1QnRJThbyM11ZX1GZakD841c8=
+X-Received: by 2002:a17:907:3f81:b0:6ff:1a3d:9092 with SMTP id
+ hr1-20020a1709073f8100b006ff1a3d9092mr40708168ejc.319.1657132849397; Wed, 06
+ Jul 2022 11:40:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220705185605.3889110-1-jsavitz@redhat.com> <20220705133456.d5572b2e36ebb36188369988@linux-foundation.org>
-In-Reply-To: <20220705133456.d5572b2e36ebb36188369988@linux-foundation.org>
-From:   Nico Pache <npache@redhat.com>
-Date:   Wed, 6 Jul 2022 14:38:03 -0400
-Message-ID: <CAA1CXcAFyMLBEi87A0+pBbUKtzfEeE-5uyqPugmHLmzgH8=w8w@mail.gmail.com>
-Subject: Re: [PATCH] selftests/vm: enable running select groups of tests
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        linux-kselftest@vger.kernel.org
+References: <20220626101553.1885428-1-davidgow@google.com> <20220629040605.2395481-1-davidgow@google.com>
+In-Reply-To: <20220629040605.2395481-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 6 Jul 2022 14:40:38 -0400
+Message-ID: <CAFd5g4507mJryQy=fYeVSPpk=zf3LAm2wojM05rLkdTdyV-0Cw@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: kunit: Cleanup run_wrapper, fix x-ref
+To:     David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 4:35 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+On Wed, Jun 29, 2022 at 12:06 AM David Gow <davidgow@google.com> wrote:
 >
-> On Tue,  5 Jul 2022 14:56:05 -0400 Joel Savitz <jsavitz@redhat.com> wrote:
+> The "Run Tests on qemu" section of run_wrapper.rst had a few issues left
+> over from the last big documentation refactor[1]:
+> - It referenced a non_uml.rst page, which was integrated into the other
+>   pages (including run_wrapper.rst).
+> - It skimmed over the use of --arch= and --cross_compile= in favour of
+>   using a custom --qemu_config. Since most users will want to use the
+>   former, let's give examples.
 >
-> > Add the ability to run one or more groups of vm tests (specified
-> > by the environment variable TEST_ITEMS). Preserve existing default
-> > behavior of running all tests when TEST_ITEMS is empty or "default".
+> Remove the reference to the non-existant page, and add a couple of
+> examples to encourage the use of --arch= and --cross_compile=.
 >
-Hi Andrew,
+> With this change, there should be no more broken references in the KUnit
+> documentation (i.e., the one mentioned in [2] is gone).
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=46201d47d6c4be594c1d57b7f3251c371626a9c4
+> [2]: https://lore.kernel.org/linux-doc/cover.1656234456.git.mchehab@kernel.org/
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-> What is the reason for this?  What's the use case?
-
-The current design of vm selftests is all-or-none. We'd like to be
-able to selectively run these tests (We settled for selective groups
-of tests rather than individual tests).
-
-The main reason for doing this is our efforts to expand RedHats MM CI
-testing. There are two use cases for these changes that relate to our
-reasoning:
-1) Our current CI has overlapping tests between LTP and vm selftests,
-so we'd like a way to prevent running the same test in two places.
-2) We'd like the ability to skip a test if it is determined to be
-unstable or requires certain hardware requirements.
-
-By adding this functionality we are really expanding what we are able
-to do with the stock vm-selftests.
-
-> And why via the environment rather than via commandline args?
-Just a design choice I suppose. I'm sure Joel would be willing to
-implement it as a cmdline arg if you'd prefer that approach.
-
-Cheers,
--- Nico
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
