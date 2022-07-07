@@ -2,98 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6535A56A499
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Jul 2022 15:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02C056A511
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Jul 2022 16:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235166AbiGGNzx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Jul 2022 09:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S234442AbiGGOIW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Jul 2022 10:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235777AbiGGNzw (ORCPT
+        with ESMTP id S230380AbiGGOIV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Jul 2022 09:55:52 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722BA198;
-        Thu,  7 Jul 2022 06:55:51 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z41so23285906ede.1;
-        Thu, 07 Jul 2022 06:55:51 -0700 (PDT)
+        Thu, 7 Jul 2022 10:08:21 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F25A2A260
+        for <linux-kselftest@vger.kernel.org>; Thu,  7 Jul 2022 07:08:19 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id n4so13360119ejz.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Jul 2022 07:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6akCPIgr8HGJIBWi6ls9yminwTT+fuazEkGCjpCKWVw=;
-        b=flmDLr4QVWS1Xjiafg/+VA1HhH6ucmWh9iY8gj4q2kaOWsW2KjOmNEeq6HqHzrHOao
-         8tuIwlo6RfT8UDMT2LtCk083/SvLoo2fvLhm/rXZvxHzATU1X7ijfIgePCIyINQTY9xv
-         xEX86SiUKNfIdeAIxHupABpBxXm/XdZhCgHiAL12c6/LL11AommnUeRd8afy4ZKx0Boe
-         lIuz7UqnCPa1jz41dPBy9s18nTXUrIVZcOyJe1AtB8KHU49A10gdeATTuVu/NSC2QX0J
-         /tfLCmVYYkohEHkmUiEMSme/9xAsO9XmR34rG93xaaHKS2dVTeHPE8JxzzrAUVbJqbqE
-         i2Jg==
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=6rY/dl2MwiNlzvD+cvp/Yehm/zk9+xvHGZcTY6Q3tHo=;
+        b=t2gX55YR3zd30kvhnujoohIF5s3d5CO/xyZejpLQSF+S5o/KrNLttMvJGTX1oeAjn9
+         vUCeZ3TJi/rcNK7qQ1Ct4cYa2MdcUQ5w3TAQWCzbegoVLC9jJUqhZsuk6UC9qRFYK0Jq
+         4Pa/LZd9tsDU9Smmw84BbYJ60cIMADLrUl16WWi4ggOr+WMPbloLywj0iIASQzgtvL+W
+         twSlbGH2fS+itudRcqd43RuWsrM5v+Zi/wuYlFYG7umyfM8/7pMf2mkdyeF2eMljZLjd
+         3h+JBbNnjz573UvruSiquB6tfr6VgxiQdqKw/qQLBOn3YYt16vK+C8JF0HVcIuu7SsYb
+         Tvuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6akCPIgr8HGJIBWi6ls9yminwTT+fuazEkGCjpCKWVw=;
-        b=g1NYyXuQlWx19T84cq5P7C1Phezi+s2pE4DcNOaULdaz1YdPsSqV5psJmgrOC5Pkt3
-         kA25QbpxC/jiUfEtNGjMCBsWD7dn0OgGAAiJJ2WCQMXes3EFUViU/SNxBRvQqFyMyBO9
-         Qsq2lWZnnEwpeOFP2iH3SJmL3NvL/TcvOr4LUGlo+J0Lez04bp5rwqaOJyPgK8HDfsFx
-         oxPPSkaGhTyIhsntHvhkzmlVDANZyNw23r8O8/WG7xmtOCSWzFdtXUhYgJnYulNH7ezh
-         X3b9pqTp3cauiuUG8fKFiIfdSEKtdWU8Nd83iclABZDzqt6cWDpIBQfPDGMFZ0DIx3OU
-         xjxA==
-X-Gm-Message-State: AJIora+H1lgis/uWp5IYizrbxiiUw2jYVMBc4Zgo8Uah6/WYwhbYeC3U
-        nVJe0b5m0pMwwkwqgYzf5xOLpOPznz4=
-X-Google-Smtp-Source: AGRyM1uJ0I6gUyAMhq/gEJTnIQn1LRDGVeM9YVny+hyxq+2YOCHdbACWOoWpMmlNHzkZeoASXXPjGQ==
-X-Received: by 2002:a05:6402:1907:b0:435:c243:a66e with SMTP id e7-20020a056402190700b00435c243a66emr60906897edz.44.1657202149903;
-        Thu, 07 Jul 2022 06:55:49 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-095-117-000-249.95.117.pool.telefonica.de. [95.117.0.249])
-        by smtp.googlemail.com with ESMTPSA id x10-20020a170906298a00b00705cd37fd5asm19054969eje.72.2022.07.07.06.55.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 06:55:49 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     vladimir.oltean@nxp.com, linux-kernel@vger.kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, shuah@kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH 2/2] selftests: forwarding: Install no_forwarding.sh
-Date:   Thu,  7 Jul 2022 15:55:32 +0200
-Message-Id: <20220707135532.1783925-3-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <20220707135532.1783925-1-martin.blumenstingl@googlemail.com>
-References: <20220707135532.1783925-1-martin.blumenstingl@googlemail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=6rY/dl2MwiNlzvD+cvp/Yehm/zk9+xvHGZcTY6Q3tHo=;
+        b=F/uJn0LpwkcJh0pfRVWlUWHqCGxjUnxzpTKrdjvzq8KtCaahbSgH3SS0/+A509wG+r
+         xbOkU/X4D2z3jEelx7oYzuyheD49LDv6yElGzC8wR9lMHlGvTvDsqedzsOyOHj0SEDvb
+         AyWKeGYBTRHczE0cPRmmMpBag5KgocCviU6hBbV4CCC537qVtyPeSnEk8bRI8YYkgs4v
+         DRN/CqJYO4ZrtgzTXAsBUpTnUVF+8W8rEWVVtvY9jtG4dHGRVePL7JGbunNvbP9pXP3r
+         MeHUGmngPK+Z6RCjw2q7+9L3Y5vL/ZfQ9QtZD7iIOK6V7/MJLNu8Ji/hp/S1bqIUwB2O
+         uH+Q==
+X-Gm-Message-State: AJIora8gxsgqWzy4tbJRDYsNNL1qhJhuV8U8NjrkWeIFrblEHTTXeF52
+        U3MOtSJQeVM2mzPDVSEKLmSkhw==
+X-Google-Smtp-Source: AGRyM1vXnwj82Bxvke8sMoKXBGchoAelH3wU3m1m1FqidsNi8nJ6cJffAXN/13LDMJAzzvjAwflz7w==
+X-Received: by 2002:a17:906:a3ca:b0:726:2bd2:87bc with SMTP id ca10-20020a170906a3ca00b007262bd287bcmr44834471ejb.226.1657202898091;
+        Thu, 07 Jul 2022 07:08:18 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id d11-20020a170906304b00b0072abb95c9f4sm6590052ejd.193.2022.07.07.07.08.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Jul 2022 07:08:17 -0700 (PDT)
+Message-ID: <37d59561-6ce8-6c5f-5d31-5c37a0a3d231@blackwall.org>
+Date:   Thu, 7 Jul 2022 17:08:15 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH V3 net-next 1/4] net: bridge: add fdb flag to extent
+ locked port feature
+Content-Language: en-US
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+References: <20220524152144.40527-2-schultz.hans+netdev@gmail.com>
+ <01e6e35c-f5c9-9776-1263-058f84014ed9@blackwall.org>
+ <86zgj6oqa9.fsf@gmail.com>
+ <b78fb006-04c4-5a25-7ba5-94428cc9591a@blackwall.org>
+ <86fskyggdo.fsf@gmail.com>
+ <040a1551-2a9f-18d0-9987-f196bb429c1b@blackwall.org>
+ <86v8tu7za3.fsf@gmail.com>
+ <4bf1c80d-0f18-f444-3005-59a45797bcfd@blackwall.org>
+ <20220706181316.r5l5rzjysxow2j7l@skbuf>
+ <7cf30a3e-a562-d582-4391-072a2c98ab05@blackwall.org>
+ <20220706202130.ehzxnnqnduaq3rmt@skbuf>
+ <fe456fb0-4f68-f93e-d4a9-66e3bc56d547@blackwall.org>
+In-Reply-To: <fe456fb0-4f68-f93e-d4a9-66e3bc56d547@blackwall.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When using the Makefile from tools/testing/selftests/net/forwarding/
-all tests should be installed. Add no_forwarding.sh to the list of
-"to be installed tests" where it has been missing so far.
+On 07/07/2022 00:01, Nikolay Aleksandrov wrote:
+> On 06/07/2022 23:21, Vladimir Oltean wrote:
+>> On Wed, Jul 06, 2022 at 10:38:04PM +0300, Nikolay Aleksandrov wrote:
+[snip]
+> I already said it's ok to add hard configurable limits if they're done properly performance-wise.
+> Any distribution can choose to set some default limits after the option exists.
+> 
 
-Fixes: 476a4f05d9b83f ("selftests: forwarding: add a no_forwarding.sh test")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- tools/testing/selftests/net/forwarding/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
-index 6fcf6cdfaee2..a9c5c1be5088 100644
---- a/tools/testing/selftests/net/forwarding/Makefile
-+++ b/tools/testing/selftests/net/forwarding/Makefile
-@@ -54,6 +54,7 @@ TEST_PROGS = bridge_igmp.sh \
- 	mirror_gre_vlan_bridge_1q.sh \
- 	mirror_gre_vlan.sh \
- 	mirror_vlan.sh \
-+	no_forwarding.sh \
- 	pedit_dsfield.sh \
- 	pedit_ip.sh \
- 	pedit_l4port.sh \
--- 
-2.37.0
+Just fyi, and to avoid duplicate efforts, I already have patches for global and per-port software
+fdb limits that I'll polish and submit soon (depending on time availability, of course). If I find
+more time I might add per-vlan limits as well to the set. They use embedded netlink attributes
+to config and dump, so we can easily extend them later (e.g. different action on limit hit, limit
+statistics etc).
 
