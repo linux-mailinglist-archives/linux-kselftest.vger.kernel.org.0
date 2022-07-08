@@ -2,89 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045E056C3C4
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 01:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D0856C567
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 02:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238944AbiGHXKQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Jul 2022 19:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
+        id S229549AbiGHXjr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Jul 2022 19:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiGHXKP (ORCPT
+        with ESMTP id S229489AbiGHXjr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jul 2022 19:10:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98C63F33E;
-        Fri,  8 Jul 2022 16:10:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76874622A2;
-        Fri,  8 Jul 2022 23:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C109CC341C7;
-        Fri,  8 Jul 2022 23:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657321813;
-        bh=LZtnCM0f0jpHeCff8j2WnOJVIdYDUiM2+msLec9AK3w=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FHSvParJZpraceVFAoLBJGCrTE+s1804Zy0TUGuI/7FbQojwAtrY/PT9jUHSSKm/1
-         zlkcKXWYtp9EkkCL8aPMaox09XerOb3aLutMv0nNueRvCSfrpsQ5mTkNWyUhYqLAov
-         uYTf5hCSf295YemNjNqIqTDV/ilIoOr87agZfTG89e+2cDdJXBclWLZQCnuO+qgdA1
-         Hqb0t8n3QKRsFYHgoptPdujxqa79SOhbjbsLTgUYzOB7y+PkbVq3Ln84WLwyrVbHMR
-         W/Ha2tZ3IyT9tBH7UZc8adgNWdkOyQdpufwo60m8wcpwrE6U1qBNQvFSjRVrDkDkd6
-         Rzc7JPJ6PwDRQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A29DDE45BDD;
-        Fri,  8 Jul 2022 23:10:13 +0000 (UTC)
+        Fri, 8 Jul 2022 19:39:47 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF9684A15
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 16:39:46 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so3362945pjl.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 16:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Q2TV6aZYvYqUeP4xh9RCoVsbO8UvU6HXxHeVaR91HWk=;
+        b=tfFCqvv69xksbZ6uQIhCAHa1+IguPnJGtMyNqGFgqfAOWGlCLp/zpwC+ErqCMEXsgH
+         EGADKYlJod/VdLe7Y4Sq6ttjhp3lminlY87EIzsYHtxr6AVfk7in6t7Xbz33dRJzr0Ap
+         WtUMUlGaXW3lXdU8WwTUN0qmeGseGfOdOWVW8qJPYDbk533hlg+IRTrCzSUROi3OfM2a
+         mvwUicYXxKMGB3juDilPdBM3ExwDCOT27VMGB/PReDsP3WWZHt2dOewA/s8jdmVwMBsz
+         ROvp9W2n2KNz0Ttm780WmlFJICEuCdN8ZzlG2AVmBk2dDNsR8l4z+rEJDWQprY0fkmMr
+         reWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Q2TV6aZYvYqUeP4xh9RCoVsbO8UvU6HXxHeVaR91HWk=;
+        b=akzKvbM651IGVV7kGf7cKhx1qxyiglWw0RIgfx91c3zt1y2txvmghCQRLTurYcXKSm
+         wt8xngH3gVTLMLkd6F2MYgiHJOmGt3m5Mi+8Wxz2mX/8bkNy/V0+zJSCWUR9uT43C2Os
+         JnQv7iCmnfVxEpy3hO5YTL0zvpsZciWVWhuPFWFJjgtp8WzA9Qb0Sv2vhTC+J1uk2/0n
+         WhOqWrRmTn5DaY8MeE3Uc+UAq84rcJnvyrrTpGPUw+J6bZL/tAf8TK9hqWnN8Eu3iKLd
+         B9Tb3+aVqYHOaEYnfx1uGCge3Yzc557tjg5gR2UXXtahHcjENvkgHVR7QPYUw8OL8woE
+         nrXw==
+X-Gm-Message-State: AJIora9gh3J/j9LsxVPzXW1+6UszC+C9cOUZzPTNAebqunlsmyv10koR
+        JL4epHPljgpGSUtVPfu6fNsBc+44WBKc26vV
+X-Google-Smtp-Source: AGRyM1tEFStSQHOJ+wxGNT0Df73VzOp0vikws8ENtIQ3K9iF2bVEsFtPZCLuTSZSJBr1PpK3fqhqxw==
+X-Received: by 2002:a17:90b:17d1:b0:1f0:6f1:90d1 with SMTP id me17-20020a17090b17d100b001f006f190d1mr1445436pjb.221.1657323585835;
+        Fri, 08 Jul 2022 16:39:45 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id l11-20020a170902f68b00b0016372486febsm56453plg.297.2022.07.08.16.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 16:39:45 -0700 (PDT)
+Message-ID: <62c8c041.1c69fb81.63dc3.01e6@mx.google.com>
+Date:   Fri, 08 Jul 2022 16:39:45 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] selftests/bpf: Fix xdp_synproxy build failure if
- CONFIG_NF_CONNTRACK=m/n
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165732181366.25817.230995247723238716.git-patchwork-notify@kernel.org>
-Date:   Fri, 08 Jul 2022 23:10:13 +0000
-References: <20220708130319.1016294-1-maximmi@nvidia.com>
-In-Reply-To: <20220708130319.1016294-1-maximmi@nvidia.com>
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, ykaliuta@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc4-9-gdbeb23272687
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 8 builds: 0 failed,
+ 8 passed (v5.19-rc4-9-gdbeb23272687)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+kselftest/next build: 8 builds: 0 failed, 8 passed (v5.19-rc4-9-gdbeb232726=
+87)
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v5.19-rc4-9-gdbeb23272687/
 
-On Fri, 8 Jul 2022 16:03:19 +0300 you wrote:
-> When CONFIG_NF_CONNTRACK=m, struct bpf_ct_opts and enum member
-> BPF_F_CURRENT_NETNS are not exposed. This commit allows building the
-> xdp_synproxy selftest in such cases. Note that nf_conntrack must be
-> loaded before running the test if it's compiled as a module.
-> 
-> This commit also allows this selftest to be successfully compiled when
-> CONFIG_NF_CONNTRACK is disabled.
-> 
-> [...]
+Tree: kselftest
+Branch: next
+Git Describe: v5.19-rc4-9-gdbeb23272687
+Git Commit: dbeb232726871352fc3e688ff5b02897f8cb0dc7
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-Here is the summary with links:
-  - [bpf] selftests/bpf: Fix xdp_synproxy build failure if CONFIG_NF_CONNTRACK=m/n
-    https://git.kernel.org/bpf/bpf-next/c/24bdfdd2ec34
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Detailed per-defconfig build reports:
 
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-14) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-14) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-14) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
