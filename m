@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C26256C37A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 01:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D7656C369
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 01:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240071AbiGHUbz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Jul 2022 16:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S240111AbiGHUcM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Jul 2022 16:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240093AbiGHUbs (ORCPT
+        with ESMTP id S240116AbiGHUcD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:31:48 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237FD9CE36
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 13:31:44 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-10c0119dd16so57913fac.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 13:31:44 -0700 (PDT)
+        Fri, 8 Jul 2022 16:32:03 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49879B18D
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 13:31:56 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id w83so84364oiw.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 13:31:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=usp.br; s=usp-google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DTaWLiICbVytGNbdL4/jJ2tdjKgRvLW/Lx3Y/K1eO2Y=;
-        b=JoIyJdRLCpd6+ynNar8tPnGUd1Yf1GIANxQb5oLH/Y8RHTOIGOePZ9qv7mEamVfoew
-         YV8VAvMJAYfGG1yDeBzVRWQuHuJ9gMjHUFHC/bnVoH34RTvGkIFtzg6ttq9jb8Q6cSLf
-         ql9Qyntw/oSMxyffSZbtrTp+bAVh6RMGAp6sj1/hXNK/x8DxhuqS/9hu5SZfxzHs7xPj
-         JGlHN32oiU64AqrhaMn/uOrpO3rdAQFv9YGuxMlM1Sx2UWnTBG+f5fDyEIEiUBpA6MxQ
-         FuOxkm16theBMrOqnu7I6sZy2G74pZSPjMpWQpERLdkDbHAk6pGlUJf1p9wHHpxxvazf
-         MQsQ==
+        bh=jXSAcCjSuTVSwifnWHkttE3RKSSgb83Wqfj3wPc0wrU=;
+        b=y1urKzl9hlGlL2hsuZP/BCoSOOQW59H5pYHy1mrZSi4L63rlkDc7VhUiD/E/dWE398
+         LECrM2wlgY7YcqCK+helnutrikd6/4VwQQPXhSmn1vvAq4oknXB1m8LIGfcMajZZTTj9
+         KeXvnNGDrP9/Zo2dtY6pEn8hyVG12osaoXVxlY70qH3MFqSrWM8iM2TdsupCbWuoR81e
+         qrC6499iXnk87ZODHo5cS1u5Dv+0QWOwJzvyLGCwrc6Tkj16oAbKo+Gp6AATZH0vev35
+         WWVWg4rDjrytrsYJzg2S80tR9JHeU5iz67jhLCFIwzaadpSF7V2eR1leBKt8nLOJBXnf
+         9LjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DTaWLiICbVytGNbdL4/jJ2tdjKgRvLW/Lx3Y/K1eO2Y=;
-        b=KPH6Y2k02byde4CxKPRTpsh4rTrXhG4IrULhrMuEfzPYnSvqSQ/Gu5gFMvaiWb5Oxu
-         la4R6Y3JvoQQn2IaV1C3XksjYUnbJbqG2Yr8K+wOi4o+/t6aPq+bibc2hH4YiNcl2AsB
-         rrXtjesdpi5RMSYgozgeSzm7Kip7w7MEGbGATtLg4vJ0KpmkSTWzq5tFfpOYzv8KAxTD
-         DJ3voIVfFg4MTJhU5DedKTlLKy2Ty/sB8PDnx0wIKN+tRmclH6i0UVcga8a8Hl7D9tBJ
-         iFOLotQD5+baF1p4T13DhJVFKaQZRHJN+91ywYwvYtQzcdCvFYhFKrqnHi1v5baBfvdn
-         d4tQ==
-X-Gm-Message-State: AJIora8eKjYui1IkbQkDKI03Ne5iRw6gdVdhgPmQ6+2QdRxb1DgOK7xj
-        g3TyB7OI95dULp3jT0ojJsoqZw==
-X-Google-Smtp-Source: AGRyM1uGfXiUjMoBtP4xviVn+pviz0EpozLlh2oiIAUSFrPCHIlD5d60wUKEHjtEN/7l62JRIp6bsg==
-X-Received: by 2002:a05:6870:e997:b0:10c:66f1:8bbb with SMTP id r23-20020a056870e99700b0010c66f18bbbmr982399oao.243.1657312303687;
-        Fri, 08 Jul 2022 13:31:43 -0700 (PDT)
+        bh=jXSAcCjSuTVSwifnWHkttE3RKSSgb83Wqfj3wPc0wrU=;
+        b=q0ghGpsjpZYRjLIOznJp5CSWiGWv3jtDZgHiKH8yys7NMtbvZgONPVfAPAmgd+GYle
+         6Gil/AF4Ib9pqKB0861lZLSSJpnjhK/c4DaSLj0J4p20GtK31o6BpoSaYN3d01l09thh
+         futJyCuo24MXnmHyy5K/58LgygKWfs2oKZvNB1RUfe+cTrtDWM4rSlTFmPZQZhVIxeOT
+         gAVBEawQ2P0p+UiiGl+EtiUTCVMctqfVCKeDoezyaAAXVvjZnNmYnONLqJqDQGlzS+ti
+         xaGjSmRm7m1h2EJMdq//Fh+CdogyPSuWmWFgRUr1jIiGO1fZj0crH92ZGYp4OSJu/9pk
+         bIkQ==
+X-Gm-Message-State: AJIora+QZR0rIWf1iLGWCIGCQ8FwDsRX3QNUJOaazwpXA29GW5lD4jdg
+        NuLCkUZrIMQ809BPzP+ohdifh1dqWGMan6hgIoo=
+X-Google-Smtp-Source: AGRyM1u5AM+Y0DgDxIfbw4mbb1+UY2oUjfVjAJTQJRF03Sr1cDdc5nF7MkAb3W4C21DhBWnB7LOsQA==
+X-Received: by 2002:a05:6808:192a:b0:335:3fd7:665f with SMTP id bf42-20020a056808192a00b003353fd7665fmr951552oib.164.1657312315569;
+        Fri, 08 Jul 2022 13:31:55 -0700 (PDT)
 Received: from fedora.. ([143.107.182.242])
-        by smtp.gmail.com with ESMTPSA id ci10-20020a05683063ca00b0061c309b1dc2sm742225otb.39.2022.07.08.13.31.35
+        by smtp.gmail.com with ESMTPSA id ci10-20020a05683063ca00b0061c309b1dc2sm742225otb.39.2022.07.08.13.31.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 13:31:43 -0700 (PDT)
+        Fri, 08 Jul 2022 13:31:55 -0700 (PDT)
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
 To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
@@ -65,12 +65,10 @@ To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
 Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
-        Carlos Veras <carlos.craveiro@usp.br>,
-        Matheus Vieira <matheus.vieira.g@usp.br>
-Subject: [PATCH v5 3/9] drm: selftest: convert drm_rect selftest to KUnit
-Date:   Fri,  8 Jul 2022 17:30:46 -0300
-Message-Id: <20220708203052.236290-4-maira.canal@usp.br>
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+Subject: [PATCH v5 4/9] drm: selftest: convert drm_format selftest to KUnit
+Date:   Fri,  8 Jul 2022 17:30:47 -0300
+Message-Id: <20220708203052.236290-5-maira.canal@usp.br>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220708203052.236290-1-maira.canal@usp.br>
 References: <20220708203052.236290-1-maira.canal@usp.br>
@@ -79,7 +77,7 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,527 +86,651 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Considering the current adoption of the KUnit framework, convert the
-DRM rect selftest to the KUnit API.
+DRM format selftest to the KUnit API.
 
-Co-developed-by: Carlos Veras <carlos.craveiro@usp.br>
-Signed-off-by: Carlos Veras <carlos.craveiro@usp.br>
-Co-developed-by: Matheus Vieira <matheus.vieira.g@usp.br>
-Signed-off-by: Matheus Vieira <matheus.vieira.g@usp.br>
 Tested-by: David Gow <davidgow@google.com>
 Acked-by: Daniel Latypov <dlatypov@google.com>
 Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 Signed-off-by: Maíra Canal <maira.canal@usp.br>
 ---
- drivers/gpu/drm/selftests/Makefile            |   2 +-
- .../gpu/drm/selftests/drm_modeset_selftests.h |   4 -
- .../drm/selftests/test-drm_modeset_common.h   |   4 -
- drivers/gpu/drm/selftests/test-drm_rect.c     | 223 ------------------
+ drivers/gpu/drm/selftests/Makefile            |   3 +-
+ .../gpu/drm/selftests/drm_modeset_selftests.h |   3 -
+ drivers/gpu/drm/selftests/test-drm_format.c   | 280 -----------------
+ .../drm/selftests/test-drm_modeset_common.h   |   3 -
  drivers/gpu/drm/tests/Makefile                |   2 +-
- drivers/gpu/drm/tests/drm_rect_test.c         | 214 +++++++++++++++++
- 6 files changed, 216 insertions(+), 233 deletions(-)
- delete mode 100644 drivers/gpu/drm/selftests/test-drm_rect.c
- create mode 100644 drivers/gpu/drm/tests/drm_rect_test.c
+ drivers/gpu/drm/tests/drm_format_test.c       | 287 ++++++++++++++++++
+ 6 files changed, 289 insertions(+), 289 deletions(-)
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_format.c
+ create mode 100644 drivers/gpu/drm/tests/drm_format_test.c
 
 diff --git a/drivers/gpu/drm/selftests/Makefile b/drivers/gpu/drm/selftests/Makefile
-index 8633bb9ea717..8a794914e328 100644
+index 8a794914e328..b7f252d886d0 100644
 --- a/drivers/gpu/drm/selftests/Makefile
 +++ b/drivers/gpu/drm/selftests/Makefile
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0-only
  test-drm_modeset-y := test-drm_modeset_common.o test-drm_plane_helper.o \
-                       test-drm_format.o test-drm_framebuffer.o \
--		      test-drm_dp_mst_helper.o test-drm_rect.o
-+		      test-drm_dp_mst_helper.o
+-                      test-drm_format.o test-drm_framebuffer.o \
+-		      test-drm_dp_mst_helper.o
++                      test-drm_framebuffer.o test-drm_dp_mst_helper.o
  
  obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o \
  				    test-drm_buddy.o
 diff --git a/drivers/gpu/drm/selftests/drm_modeset_selftests.h b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-index 4787b3b70709..a3ca90307364 100644
+index a3ca90307364..63061ef55eff 100644
 --- a/drivers/gpu/drm/selftests/drm_modeset_selftests.h
 +++ b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-@@ -6,10 +6,6 @@
-  *
+@@ -7,9 +7,6 @@
   * Tests are executed in order by igt/drm_selftests_helper
   */
--selftest(drm_rect_clip_scaled_div_by_zero, igt_drm_rect_clip_scaled_div_by_zero)
--selftest(drm_rect_clip_scaled_not_clipped, igt_drm_rect_clip_scaled_not_clipped)
--selftest(drm_rect_clip_scaled_clipped, igt_drm_rect_clip_scaled_clipped)
--selftest(drm_rect_clip_scaled_signed_vs_unsigned, igt_drm_rect_clip_scaled_signed_vs_unsigned)
  selftest(check_plane_state, igt_check_plane_state)
- selftest(check_drm_format_block_width, igt_check_drm_format_block_width)
- selftest(check_drm_format_block_height, igt_check_drm_format_block_height)
-diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.h b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-index c29354e59cec..42a10d7da51c 100644
---- a/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-+++ b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-@@ -16,10 +16,6 @@
- 
- #define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
- 
--int igt_drm_rect_clip_scaled_div_by_zero(void *ignored);
--int igt_drm_rect_clip_scaled_not_clipped(void *ignored);
--int igt_drm_rect_clip_scaled_clipped(void *ignored);
--int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored);
- int igt_check_plane_state(void *ignored);
- int igt_check_drm_format_block_width(void *ignored);
- int igt_check_drm_format_block_height(void *ignored);
-diff --git a/drivers/gpu/drm/selftests/test-drm_rect.c b/drivers/gpu/drm/selftests/test-drm_rect.c
+-selftest(check_drm_format_block_width, igt_check_drm_format_block_width)
+-selftest(check_drm_format_block_height, igt_check_drm_format_block_height)
+-selftest(check_drm_format_min_pitch, igt_check_drm_format_min_pitch)
+ selftest(check_drm_framebuffer_create, igt_check_drm_framebuffer_create)
+ selftest(dp_mst_calc_pbn_mode, igt_dp_mst_calc_pbn_mode)
+ selftest(dp_mst_sideband_msg_req_decode, igt_dp_mst_sideband_msg_req_decode)
+diff --git a/drivers/gpu/drm/selftests/test-drm_format.c b/drivers/gpu/drm/selftests/test-drm_format.c
 deleted file mode 100644
-index 3a5ff38321f4..000000000000
---- a/drivers/gpu/drm/selftests/test-drm_rect.c
+index c5e212afa27a..000000000000
+--- a/drivers/gpu/drm/selftests/test-drm_format.c
 +++ /dev/null
-@@ -1,223 +0,0 @@
+@@ -1,280 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0
 -/*
-- * Test cases for the drm_rect functions
+- * Test cases for the drm_format functions
 - */
 -
--#define pr_fmt(fmt) "drm_rect: " fmt
+-#define pr_fmt(fmt) "drm_format: " fmt
 -
--#include <linux/limits.h>
+-#include <linux/errno.h>
+-#include <linux/kernel.h>
 -
--#include <drm/drm_rect.h>
+-#include <drm/drm_fourcc.h>
 -
 -#include "test-drm_modeset_common.h"
 -
--int igt_drm_rect_clip_scaled_div_by_zero(void *ignored)
+-int igt_check_drm_format_block_width(void *ignored)
 -{
--	struct drm_rect src, dst, clip;
--	bool visible;
+-	const struct drm_format_info *info = NULL;
 -
--	/*
--	 * Make sure we don't divide by zero when dst
--	 * width/height is zero and dst and clip do not intersect.
--	 */
--	drm_rect_init(&src, 0, 0, 0, 0);
--	drm_rect_init(&dst, 0, 0, 0, 0);
--	drm_rect_init(&clip, 1, 1, 1, 1);
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
--	FAIL(visible, "Destination not be visible\n");
--	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
+-	/* Test invalid arguments */
+-	FAIL_ON(drm_format_info_block_width(info, 0) != 0);
+-	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
+-	FAIL_ON(drm_format_info_block_width(info, 1) != 0);
 -
--	drm_rect_init(&src, 0, 0, 0, 0);
--	drm_rect_init(&dst, 3, 3, 0, 0);
--	drm_rect_init(&clip, 1, 1, 1, 1);
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
--	FAIL(visible, "Destination not be visible\n");
--	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
+-	/* Test 1 plane format */
+-	info = drm_format_info(DRM_FORMAT_XRGB4444);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_block_width(info, 0) != 1);
+-	FAIL_ON(drm_format_info_block_width(info, 1) != 0);
+-	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
+-
+-	/* Test 2 planes format */
+-	info = drm_format_info(DRM_FORMAT_NV12);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_block_width(info, 0) != 1);
+-	FAIL_ON(drm_format_info_block_width(info, 1) != 1);
+-	FAIL_ON(drm_format_info_block_width(info, 2) != 0);
+-	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
+-
+-	/* Test 3 planes format */
+-	info = drm_format_info(DRM_FORMAT_YUV422);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_block_width(info, 0) != 1);
+-	FAIL_ON(drm_format_info_block_width(info, 1) != 1);
+-	FAIL_ON(drm_format_info_block_width(info, 2) != 1);
+-	FAIL_ON(drm_format_info_block_width(info, 3) != 0);
+-	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
+-
+-	/* Test a tiled format */
+-	info = drm_format_info(DRM_FORMAT_X0L0);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_block_width(info, 0) != 2);
+-	FAIL_ON(drm_format_info_block_width(info, 1) != 0);
+-	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
 -
 -	return 0;
 -}
 -
--int igt_drm_rect_clip_scaled_not_clipped(void *ignored)
+-int igt_check_drm_format_block_height(void *ignored)
 -{
--	struct drm_rect src, dst, clip;
--	bool visible;
+-	const struct drm_format_info *info = NULL;
 -
--	/* 1:1 scaling */
--	drm_rect_init(&src, 0, 0, 1 << 16, 1 << 16);
--	drm_rect_init(&dst, 0, 0, 1, 1);
--	drm_rect_init(&clip, 0, 0, 1, 1);
+-	/* Test invalid arguments */
+-	FAIL_ON(drm_format_info_block_height(info, 0) != 0);
+-	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
+-	FAIL_ON(drm_format_info_block_height(info, 1) != 0);
 -
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+-	/* Test 1 plane format */
+-	info = drm_format_info(DRM_FORMAT_XRGB4444);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_block_height(info, 0) != 1);
+-	FAIL_ON(drm_format_info_block_height(info, 1) != 0);
+-	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
 -
--	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
--	     src.y1 != 0 || src.y2 != 1 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
--	     dst.y1 != 0 || dst.y2 != 1,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
+-	/* Test 2 planes format */
+-	info = drm_format_info(DRM_FORMAT_NV12);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_block_height(info, 0) != 1);
+-	FAIL_ON(drm_format_info_block_height(info, 1) != 1);
+-	FAIL_ON(drm_format_info_block_height(info, 2) != 0);
+-	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
 -
--	/* 2:1 scaling */
--	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
--	drm_rect_init(&dst, 0, 0, 1, 1);
--	drm_rect_init(&clip, 0, 0, 1, 1);
+-	/* Test 3 planes format */
+-	info = drm_format_info(DRM_FORMAT_YUV422);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_block_height(info, 0) != 1);
+-	FAIL_ON(drm_format_info_block_height(info, 1) != 1);
+-	FAIL_ON(drm_format_info_block_height(info, 2) != 1);
+-	FAIL_ON(drm_format_info_block_height(info, 3) != 0);
+-	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
 -
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
--
--	FAIL(src.x1 != 0 || src.x2 != 2 << 16 ||
--	     src.y1 != 0 || src.y2 != 2 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
--	     dst.y1 != 0 || dst.y2 != 1,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
--
--	/* 1:2 scaling */
--	drm_rect_init(&src, 0, 0, 1 << 16, 1 << 16);
--	drm_rect_init(&dst, 0, 0, 2, 2);
--	drm_rect_init(&clip, 0, 0, 2, 2);
--
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
--
--	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
--	     src.y1 != 0 || src.y2 != 1 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 2 ||
--	     dst.y1 != 0 || dst.y2 != 2,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
+-	/* Test a tiled format */
+-	info = drm_format_info(DRM_FORMAT_X0L0);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_block_height(info, 0) != 2);
+-	FAIL_ON(drm_format_info_block_height(info, 1) != 0);
+-	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
 -
 -	return 0;
 -}
 -
--int igt_drm_rect_clip_scaled_clipped(void *ignored)
+-int igt_check_drm_format_min_pitch(void *ignored)
 -{
--	struct drm_rect src, dst, clip;
--	bool visible;
+-	const struct drm_format_info *info = NULL;
 -
--	/* 1:1 scaling top/left clip */
--	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
--	drm_rect_init(&dst, 0, 0, 2, 2);
--	drm_rect_init(&clip, 0, 0, 1, 1);
+-	/* Test invalid arguments */
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
 -
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+-	/* Test 1 plane 8 bits per pixel format */
+-	info = drm_format_info(DRM_FORMAT_RGB332);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
 -
--	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
--	     src.y1 != 0 || src.y2 != 1 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
--	     dst.y1 != 0 || dst.y2 != 1,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 640);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 1024);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 1920);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 4096);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 671);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
+-			(uint64_t)UINT_MAX);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
+-			(uint64_t)(UINT_MAX - 1));
 -
--	/* 1:1 scaling bottom/right clip */
--	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
--	drm_rect_init(&dst, 0, 0, 2, 2);
--	drm_rect_init(&clip, 1, 1, 1, 1);
+-	/* Test 1 plane 16 bits per pixel format */
+-	info = drm_format_info(DRM_FORMAT_XRGB4444);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
 -
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 4);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 1280);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 2048);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 3840);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 8192);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 1342);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
+-			(uint64_t)UINT_MAX * 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
+-			(uint64_t)(UINT_MAX - 1) * 2);
 -
--	FAIL(src.x1 != 1 << 16 || src.x2 != 2 << 16 ||
--	     src.y1 != 1 << 16 || src.y2 != 2 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 1 || dst.x2 != 2 ||
--	     dst.y1 != 1 || dst.y2 != 2,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
+-	/* Test 1 plane 24 bits per pixel format */
+-	info = drm_format_info(DRM_FORMAT_RGB888);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
 -
--	/* 2:1 scaling top/left clip */
--	drm_rect_init(&src, 0, 0, 4 << 16, 4 << 16);
--	drm_rect_init(&dst, 0, 0, 2, 2);
--	drm_rect_init(&clip, 0, 0, 1, 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 3);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 6);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 1920);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 3072);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 5760);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 12288);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 2013);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
+-			(uint64_t)UINT_MAX * 3);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
+-			(uint64_t)(UINT_MAX - 1) * 3);
 -
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+-	/* Test 1 plane 32 bits per pixel format */
+-	info = drm_format_info(DRM_FORMAT_ABGR8888);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
 -
--	FAIL(src.x1 != 0 || src.x2 != 2 << 16 ||
--	     src.y1 != 0 || src.y2 != 2 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 1 ||
--	     dst.y1 != 0 || dst.y2 != 1,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 4);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 8);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 2560);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 4096);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 7680);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 16384);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 2684);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
+-			(uint64_t)UINT_MAX * 4);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
+-			(uint64_t)(UINT_MAX - 1) * 4);
 -
--	/* 2:1 scaling bottom/right clip */
--	drm_rect_init(&src, 0, 0, 4 << 16, 4 << 16);
--	drm_rect_init(&dst, 0, 0, 2, 2);
--	drm_rect_init(&clip, 1, 1, 1, 1);
+-	/* Test 2 planes format */
+-	info = drm_format_info(DRM_FORMAT_NV12);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 0) != 0);
 -
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 1) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 1) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 640);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 320) != 640);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 1024);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 512) != 1024);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 1920);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 960) != 1920);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 4096);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 2048) != 4096);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 671);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 336) != 672);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
+-			(uint64_t)UINT_MAX);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1) !=
+-			(uint64_t)UINT_MAX + 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
+-			(uint64_t)(UINT_MAX - 1));
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, (UINT_MAX - 1) /  2) !=
+-			(uint64_t)(UINT_MAX - 1));
 -
--	FAIL(src.x1 != 2 << 16 || src.x2 != 4 << 16 ||
--	     src.y1 != 2 << 16 || src.y2 != 4 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 1 || dst.x2 != 2 ||
--	     dst.y1 != 1 || dst.y2 != 2,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
+-	/* Test 3 planes 8 bits per pixel format */
+-	info = drm_format_info(DRM_FORMAT_YUV422);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 3, 0) != 0);
 -
--	/* 1:2 scaling top/left clip */
--	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
--	drm_rect_init(&dst, 0, 0, 4, 4);
--	drm_rect_init(&clip, 0, 0, 2, 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 1) != 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 1) != 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 2) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 2) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 640);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 320) != 320);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 320) != 320);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 1024);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 512) != 512);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 512) != 512);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 1920);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 960) != 960);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 960) != 960);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 4096);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 2048) != 2048);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 2048) != 2048);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 671);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 336) != 336);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, 336) != 336);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
+-			(uint64_t)UINT_MAX);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1) !=
+-			(uint64_t)UINT_MAX / 2 + 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, UINT_MAX / 2 + 1) !=
+-			(uint64_t)UINT_MAX / 2 + 1);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, (UINT_MAX - 1) / 2) !=
+-			(uint64_t)(UINT_MAX - 1) / 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, (UINT_MAX - 1) / 2) !=
+-			(uint64_t)(UINT_MAX - 1) / 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2) !=
+-			(uint64_t)(UINT_MAX - 1) / 2);
 -
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
+-	/* Test tiled format */
+-	info = drm_format_info(DRM_FORMAT_X0L2);
+-	FAIL_ON(!info);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
+-	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
 -
--	FAIL(src.x1 != 0 || src.x2 != 1 << 16 ||
--	     src.y1 != 0 || src.y2 != 1 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 0 || dst.x2 != 2 ||
--	     dst.y1 != 0 || dst.y2 != 2,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
--
--	/* 1:2 scaling bottom/right clip */
--	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
--	drm_rect_init(&dst, 0, 0, 4, 4);
--	drm_rect_init(&clip, 2, 2, 2, 2);
--
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
--
--	FAIL(src.x1 != 1 << 16 || src.x2 != 2 << 16 ||
--	     src.y1 != 1 << 16 || src.y2 != 2 << 16,
--	     "Source badly clipped\n");
--	FAIL(dst.x1 != 2 || dst.x2 != 4 ||
--	     dst.y1 != 2 || dst.y2 != 4,
--	     "Destination badly clipped\n");
--	FAIL(!visible, "Destination should be visible\n");
--	FAIL(!drm_rect_visible(&src), "Source should be visible\n");
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 4);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 1280);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 2048);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 3840);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 8192);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 1342);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
+-			(uint64_t)UINT_MAX * 2);
+-	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
+-			(uint64_t)(UINT_MAX - 1) * 2);
 -
 -	return 0;
 -}
--
--int igt_drm_rect_clip_scaled_signed_vs_unsigned(void *ignored)
--{
--	struct drm_rect src, dst, clip;
--	bool visible;
--
--	/*
--	 * 'clip.x2 - dst.x1 >= dst width' could result a negative
--	 * src rectangle width which is no longer expected by the
--	 * code as it's using unsigned types. This could lead to
--	 * the clipped source rectangle appering visible when it
--	 * should have been fully clipped. Make sure both rectangles
--	 * end up invisible.
--	 */
--	drm_rect_init(&src, 0, 0, INT_MAX, INT_MAX);
--	drm_rect_init(&dst, 0, 0, 2, 2);
--	drm_rect_init(&clip, 3, 3, 1, 1);
--
--	visible = drm_rect_clip_scaled(&src, &dst, &clip);
--
--	FAIL(visible, "Destination should not be visible\n");
--	FAIL(drm_rect_visible(&src), "Source should not be visible\n");
--
--	return 0;
--}
+diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.h b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
+index 42a10d7da51c..5709d967a5c4 100644
+--- a/drivers/gpu/drm/selftests/test-drm_modeset_common.h
++++ b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
+@@ -17,9 +17,6 @@
+ #define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
+ 
+ int igt_check_plane_state(void *ignored);
+-int igt_check_drm_format_block_width(void *ignored);
+-int igt_check_drm_format_block_height(void *ignored);
+-int igt_check_drm_format_min_pitch(void *ignored);
+ int igt_check_drm_framebuffer_create(void *ignored);
+ int igt_dp_mst_calc_pbn_mode(void *ignored);
+ int igt_dp_mst_sideband_msg_req_decode(void *ignored);
 diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
-index b3e73d674c67..f2eced30a955 100644
+index f2eced30a955..1aa1627cb5e6 100644
 --- a/drivers/gpu/drm/tests/Makefile
 +++ b/drivers/gpu/drm/tests/Makefile
 @@ -1,4 +1,4 @@
  # SPDX-License-Identifier: GPL-2.0
  
  obj-$(CONFIG_DRM_KUNIT_TEST) += drm_format_helper_test.o drm_damage_helper_test.o \
--	drm_cmdline_parser_test.o
-+	drm_cmdline_parser_test.o drm_rect_test.o
-diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
+-	drm_cmdline_parser_test.o drm_rect_test.o
++	drm_cmdline_parser_test.o drm_rect_test.o drm_format_test.o
+diff --git a/drivers/gpu/drm/tests/drm_format_test.c b/drivers/gpu/drm/tests/drm_format_test.c
 new file mode 100644
-index 000000000000..c1dbefd49a4c
+index 000000000000..056cb8599d6d
 --- /dev/null
-+++ b/drivers/gpu/drm/tests/drm_rect_test.c
-@@ -0,0 +1,214 @@
++++ b/drivers/gpu/drm/tests/drm_format_test.c
+@@ -0,0 +1,287 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Test cases for the drm_rect functions
++ * Test cases for the drm_format functions
 + *
 + * Copyright (c) 2022 Maíra Canal <mairacanal@riseup.net>
 + */
 +
 +#include <kunit/test.h>
 +
-+#include <drm/drm_rect.h>
++#include <drm/drm_fourcc.h>
 +
-+static void igt_drm_rect_clip_scaled_div_by_zero(struct kunit *test)
++static void igt_check_drm_format_block_width(struct kunit *test)
 +{
-+	struct drm_rect src, dst, clip;
-+	bool visible;
++	const struct drm_format_info *info = NULL;
 +
-+	/*
-+	 * Make sure we don't divide by zero when dst
-+	 * width/height is zero and dst and clip do not intersect.
-+	 */
-+	drm_rect_init(&src, 0, 0, 0, 0);
-+	drm_rect_init(&dst, 0, 0, 0, 0);
-+	drm_rect_init(&clip, 1, 1, 1, 1);
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	/* Test invalid arguments */
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, -1));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, 1));
 +
-+	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination not be visible\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
++	/* Test 1 plane format */
++	info = drm_format_info(DRM_FORMAT_XRGB4444);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_width(info, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, 1));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, -1));
 +
-+	drm_rect_init(&src, 0, 0, 0, 0);
-+	drm_rect_init(&dst, 3, 3, 0, 0);
-+	drm_rect_init(&clip, 1, 1, 1, 1);
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	/* Test 2 planes format */
++	info = drm_format_info(DRM_FORMAT_NV12);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_width(info, 0));
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_width(info, 1));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, 2));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, -1));
 +
-+	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination not be visible\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
++	/* Test 3 planes format */
++	info = drm_format_info(DRM_FORMAT_YUV422);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_width(info, 0));
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_width(info, 1));
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_width(info, 2));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, 3));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, -1));
++
++	/* Test a tiled format */
++	info = drm_format_info(DRM_FORMAT_X0L0);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_EQ(test, drm_format_info_block_width(info, 0), 2);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, 1));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_width(info, -1));
 +}
 +
-+static void igt_drm_rect_clip_scaled_not_clipped(struct kunit *test)
++static void igt_check_drm_format_block_height(struct kunit *test)
 +{
-+	struct drm_rect src, dst, clip;
-+	bool visible;
++	const struct drm_format_info *info = NULL;
 +
-+	/* 1:1 scaling */
-+	drm_rect_init(&src, 0, 0, 1 << 16, 1 << 16);
-+	drm_rect_init(&dst, 0, 0, 1, 1);
-+	drm_rect_init(&clip, 0, 0, 1, 1);
++	/* Test invalid arguments */
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, 1));
 +
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	/* Test 1 plane format */
++	info = drm_format_info(DRM_FORMAT_XRGB4444);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_height(info, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, 1));
 +
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 0 || src.x2 != 1 << 16 ||
-+			       src.y1 != 0 || src.y2 != 1 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 0 || dst.x2 != 1 ||
-+			       dst.y1 != 0 || dst.y2 != 1, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
++	/* Test 2 planes format */
++	info = drm_format_info(DRM_FORMAT_NV12);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_height(info, 0));
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_height(info, 1));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, 2));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
 +
-+	/* 2:1 scaling */
-+	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-+	drm_rect_init(&dst, 0, 0, 1, 1);
-+	drm_rect_init(&clip, 0, 0, 1, 1);
++	/* Test 3 planes format */
++	info = drm_format_info(DRM_FORMAT_YUV422);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_height(info, 0));
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_height(info, 1));
++	KUNIT_EXPECT_TRUE(test, drm_format_info_block_height(info, 2));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, 3));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
 +
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
-+
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 0 || src.x2 != 2 << 16 ||
-+			       src.y1 != 0 || src.y2 != 2 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 0 || dst.x2 != 1 ||
-+			       dst.y1 != 0 || dst.y2 != 1, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
-+
-+	/* 1:2 scaling */
-+	drm_rect_init(&src, 0, 0, 1 << 16, 1 << 16);
-+	drm_rect_init(&dst, 0, 0, 2, 2);
-+	drm_rect_init(&clip, 0, 0, 2, 2);
-+
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
-+
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 0 || src.x2 != 1 << 16 ||
-+			       src.y1 != 0 || src.y2 != 1 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 0 || dst.x2 != 2 ||
-+			       dst.y1 != 0 || dst.y2 != 2, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
++	/* Test a tiled format */
++	info = drm_format_info(DRM_FORMAT_X0L0);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_EQ(test, drm_format_info_block_height(info, 0), 2);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, 1));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
 +}
 +
-+static void igt_drm_rect_clip_scaled_clipped(struct kunit *test)
++static void igt_check_drm_format_min_pitch(struct kunit *test)
 +{
-+	struct drm_rect src, dst, clip;
-+	bool visible;
++	const struct drm_format_info *info = NULL;
 +
-+	/* 1:1 scaling top/left clip */
-+	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-+	drm_rect_init(&dst, 0, 0, 2, 2);
-+	drm_rect_init(&clip, 0, 0, 1, 1);
++	/* Test invalid arguments */
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
 +
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	/* Test 1 plane 8 bits per pixel format */
++	info = drm_format_info(DRM_FORMAT_RGB332);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
 +
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 0 || src.x2 != 1 << 16 ||
-+			       src.y1 != 0 || src.y2 != 1 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 0 || dst.x2 != 1 ||
-+			       dst.y1 != 0 || dst.y2 != 1, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 640);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 1024);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 1920);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 4096);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 671);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
++			(uint64_t)UINT_MAX);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
++			(uint64_t)(UINT_MAX - 1));
 +
-+	/* 1:1 scaling bottom/right clip */
-+	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-+	drm_rect_init(&dst, 0, 0, 2, 2);
-+	drm_rect_init(&clip, 1, 1, 1, 1);
++	/* Test 1 plane 16 bits per pixel format */
++	info = drm_format_info(DRM_FORMAT_XRGB4444);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
 +
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 4);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 1280);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 2048);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 3840);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 8192);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 1342);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
++			(uint64_t)UINT_MAX * 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
++			(uint64_t)(UINT_MAX - 1) * 2);
 +
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 1 << 16 || src.x2 != 2 << 16 ||
-+			       src.y1 != 1 << 16 || src.y2 != 2 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 1 || dst.x2 != 2 || dst.y1 != 1 ||
-+			       dst.y2 != 2, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
++	/* Test 1 plane 24 bits per pixel format */
++	info = drm_format_info(DRM_FORMAT_RGB888);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
 +
-+	/* 2:1 scaling top/left clip */
-+	drm_rect_init(&src, 0, 0, 4 << 16, 4 << 16);
-+	drm_rect_init(&dst, 0, 0, 2, 2);
-+	drm_rect_init(&clip, 0, 0, 1, 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 3);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 6);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 1920);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 3072);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 5760);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 12288);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 2013);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
++			(uint64_t)UINT_MAX * 3);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
++			(uint64_t)(UINT_MAX - 1) * 3);
 +
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	/* Test 1 plane 32 bits per pixel format */
++	info = drm_format_info(DRM_FORMAT_ABGR8888);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
 +
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 0 || src.x2 != 2 << 16 ||
-+			       src.y1 != 0 || src.y2 != 2 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 0 || dst.x2 != 1 || dst.y1 != 0 ||
-+			       dst.y2 != 1, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 4);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 8);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 2560);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 4096);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 7680);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 16384);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 2684);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
++			(uint64_t)UINT_MAX * 4);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
++			(uint64_t)(UINT_MAX - 1) * 4);
 +
-+	/* 2:1 scaling bottom/right clip */
-+	drm_rect_init(&src, 0, 0, 4 << 16, 4 << 16);
-+	drm_rect_init(&dst, 0, 0, 2, 2);
-+	drm_rect_init(&clip, 1, 1, 1, 1);
++	/* Test 2 planes format */
++	info = drm_format_info(DRM_FORMAT_NV12);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 2, 0));
 +
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 1), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 1), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 640);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 320), 640);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 1024);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 512), 1024);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 1920);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 960), 1920);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 4096);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 2048), 4096);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 671);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 336), 672);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
++			(uint64_t)UINT_MAX);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1),
++			(uint64_t)UINT_MAX + 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
++			(uint64_t)(UINT_MAX - 1));
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, (UINT_MAX - 1) /  2),
++			(uint64_t)(UINT_MAX - 1));
 +
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 2 << 16 || src.x2 != 4 << 16 ||
-+			       src.y1 != 2 << 16 || src.y2 != 4 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 1 || dst.x2 != 2 || dst.y1 != 1 ||
-+			       dst.y2 != 2, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
++	/* Test 3 planes 8 bits per pixel format */
++	info = drm_format_info(DRM_FORMAT_YUV422);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 2, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 3, 0));
 +
-+	/* 1:2 scaling top/left clip */
-+	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-+	drm_rect_init(&dst, 0, 0, 4, 4);
-+	drm_rect_init(&clip, 0, 0, 2, 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 1), 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 1), 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 2), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 2), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 640);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 320), 320);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 320), 320);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 1024);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 512), 512);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 512), 512);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 1920);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 960), 960);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 960), 960);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 4096);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 2048), 2048);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 2048), 2048);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 671);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 336), 336);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 336), 336);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
++			(uint64_t)UINT_MAX);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1),
++			(uint64_t)UINT_MAX / 2 + 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, UINT_MAX / 2 + 1),
++			(uint64_t)UINT_MAX / 2 + 1);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1) / 2),
++			(uint64_t)(UINT_MAX - 1) / 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, (UINT_MAX - 1) / 2),
++			(uint64_t)(UINT_MAX - 1) / 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2),
++			(uint64_t)(UINT_MAX - 1) / 2);
 +
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
++	/* Test tiled format */
++	info = drm_format_info(DRM_FORMAT_X0L2);
++	KUNIT_EXPECT_TRUE(test, info);
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
++	KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
 +
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 0 || src.x2 != 1 << 16 ||
-+			       src.y1 != 0 || src.y2 != 1 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 0 || dst.x2 != 2 || dst.y1 != 0 ||
-+			       dst.y2 != 2, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
-+
-+	/* 1:2 scaling bottom/right clip */
-+	drm_rect_init(&src, 0, 0, 2 << 16, 2 << 16);
-+	drm_rect_init(&dst, 0, 0, 4, 4);
-+	drm_rect_init(&clip, 2, 2, 2, 2);
-+
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
-+
-+	KUNIT_EXPECT_FALSE_MSG(test, src.x1 != 1 << 16 || src.x2 != 2 << 16 ||
-+			       src.y1 != 1 << 16 || src.y2 != 2 << 16, "Source badly clipped\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, dst.x1 != 2 || dst.x2 != 4 || dst.y1 != 2 ||
-+			       dst.y2 != 4, "Destination badly clipped\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n");
-+	KUNIT_EXPECT_TRUE_MSG(test, drm_rect_visible(&src), "Source should be visible\n");
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 4);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 1280);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 2048);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 3840);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 8192);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 1342);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
++			(uint64_t)UINT_MAX * 2);
++	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX - 1),
++			(uint64_t)(UINT_MAX - 1) * 2);
 +}
 +
-+static void igt_drm_rect_clip_scaled_signed_vs_unsigned(struct kunit *test)
-+{
-+	struct drm_rect src, dst, clip;
-+	bool visible;
-+
-+	/*
-+	 * 'clip.x2 - dst.x1 >= dst width' could result a negative
-+	 * src rectangle width which is no longer expected by the
-+	 * code as it's using unsigned types. This could lead to
-+	 * the clipped source rectangle appering visible when it
-+	 * should have been fully clipped. Make sure both rectangles
-+	 * end up invisible.
-+	 */
-+	drm_rect_init(&src, 0, 0, INT_MAX, INT_MAX);
-+	drm_rect_init(&dst, 0, 0, 2, 2);
-+	drm_rect_init(&clip, 3, 3, 1, 1);
-+
-+	visible = drm_rect_clip_scaled(&src, &dst, &clip);
-+
-+	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination should not be visible\n");
-+	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
-+}
-+
-+static struct kunit_case drm_rect_tests[] = {
-+	KUNIT_CASE(igt_drm_rect_clip_scaled_div_by_zero),
-+	KUNIT_CASE(igt_drm_rect_clip_scaled_not_clipped),
-+	KUNIT_CASE(igt_drm_rect_clip_scaled_clipped),
-+	KUNIT_CASE(igt_drm_rect_clip_scaled_signed_vs_unsigned),
++static struct kunit_case drm_format_tests[] = {
++	KUNIT_CASE(igt_check_drm_format_block_width),
++	KUNIT_CASE(igt_check_drm_format_block_height),
++	KUNIT_CASE(igt_check_drm_format_min_pitch),
 +	{ }
 +};
 +
-+static struct kunit_suite drm_rect_test_suite = {
-+	.name = "drm_rect",
-+	.test_cases = drm_rect_tests,
++static struct kunit_suite drm_format_test_suite = {
++	.name = "drm_format",
++	.test_cases = drm_format_tests,
 +};
 +
-+kunit_test_suite(drm_rect_test_suite);
++kunit_test_suite(drm_format_test_suite);
 +
 +MODULE_LICENSE("GPL");
 -- 
