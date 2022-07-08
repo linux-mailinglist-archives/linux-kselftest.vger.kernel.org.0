@@ -2,129 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735FB56C22C
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 01:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0352556C43B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 01:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240066AbiGHUWS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Jul 2022 16:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S239942AbiGHUbM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Jul 2022 16:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240058AbiGHUWS (ORCPT
+        with ESMTP id S239778AbiGHUbK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jul 2022 16:22:18 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF721904D9
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 13:22:16 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id n9so9327726ilq.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 13:22:16 -0700 (PDT)
+        Fri, 8 Jul 2022 16:31:10 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85590951D8
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 13:31:07 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-10c0430e27dso68929fac.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 13:31:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/UZePUHRNJILM679cWPNfgYLf9iBJLiMq5x1kWJ7CZ4=;
-        b=U4pdhs9bqBwM/E03LS2JpiFDCzjMlIq4GhGcpD6IuJj8LLGxXDbSJwvnx+GS0OJdVB
-         Fk3e8R/0Mo4Hti7k2MR7W66WaMnhWkydN3kRYJ2NNjthsCuxlV8LPe1zcEz/GEs4F1ZW
-         NoMF3cvZe2cnKZriRCjzI1C2hZQSt7+5L0pT4=
+        d=usp.br; s=usp-google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pd8YkNDiDu3oM3vugMaeJlBRepYD2LNfA5/ZK9a8FCY=;
+        b=c7GWI4FjKP8Zf4DT+zIaXhdSDSzdPiFkeJx4Z41D8JHnhBQS0IJ7/n/UDH3LXP4pGW
+         M6wpzhSS/1uL3HsWMmNusieS6kd00e0ns7y2qnI1B79xIS+oQ/6BeXK3ZZoX/vEWpgjw
+         kllTCIxt2V4oea6sSZ/IjQfDLU6k7gzux+hT9OU5zj35fVeFOwIzuCtpGuJ38IqXYcAX
+         UFDArmYMTx1VNiP4qf9lGlYyFPgk4d8YySzZSCPIQ7F1w8S73GTkF24r9ymfFY2kiYk3
+         krTuNS/jxGImaxoeAUmjH9rM01ayEH4fYglP/o5LzHFAjaSlNHs2AV4fvy/PSit4Jy2F
+         HQpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/UZePUHRNJILM679cWPNfgYLf9iBJLiMq5x1kWJ7CZ4=;
-        b=wpyAaWdiAigVvgpcWtLVt1VZOzoc/aXROsUlAlXixweEIZkt55CIJsr+2CUVZQs0+m
-         FzJnCOVgmWzUReGJGS0PQwFY75ozIh2tDOOU4i/+WGIJGlvuVG8obDKs/zrVsbZ/2cJK
-         xINNu8TyukzC0XqwnOaOL7a8Z5n9YggVtyjxNtirI7+M/fck+tgYpBpczIF3MUY/AATY
-         y63T7FdTOddDrwpfiphHniq19N22wWW8K/iKk2f9zdQeEV+gxaOpJSYTQtLArOoio7/N
-         C59J8UQc8/rayy5EMGFaxCS1gpE0RT5n4Fbkq8L4Wp0EamfO8aIyU+U86xIXC2DlAQqJ
-         yPEQ==
-X-Gm-Message-State: AJIora8BTtFmuFkJZqO6UGJRX18tvvroVuSsYiV+Mwqw72jUmR/NDIyy
-        k4SbzhOiYhTqiK/ntnvTsmfHBg==
-X-Google-Smtp-Source: AGRyM1sqoFVBarg/sjA1rALOnA1pW658MEpnpIO3S4XvRk/cZWsGRtqSyVTChGm4FvqKvvqsH5qgAg==
-X-Received: by 2002:a05:6e02:144f:b0:2dc:2850:2956 with SMTP id p15-20020a056e02144f00b002dc28502956mr3093263ilo.258.1657311736099;
-        Fri, 08 Jul 2022 13:22:16 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id u18-20020a92ccd2000000b002d8d813892csm16967320ilq.8.2022.07.08.13.22.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Jul 2022 13:22:15 -0700 (PDT)
-Subject: Re: [PATCH v6 3/4] kunit: Taint the kernel when KUnit tests are run
-To:     David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kbuild@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220708044847.531566-1-davidgow@google.com>
- <20220708044847.531566-3-davidgow@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fc638852-ac9a-abab-8fdb-01b685cdec96@linuxfoundation.org>
-Date:   Fri, 8 Jul 2022 14:22:14 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=pd8YkNDiDu3oM3vugMaeJlBRepYD2LNfA5/ZK9a8FCY=;
+        b=Jwe5AarmsxH9UE3FIsv6nR8LhH2YLpUOyI3MQ+9W+ejFuT6FDROogSMaHkPxKfKaVD
+         zz2/8v2j10BW8VsAXalt+h4liiMrBfkZg53W5SbTwtu1l/ctkz+sFNI1dnoT0r7MHH99
+         xL7S86K9mfPvkS5XgJboCp7lJch/LN64EWcCfaJ4NAT1PJmrW93c0pwJ/4K70x4q2vm5
+         2Eq+eKumz1Qxh0iz+s7o5rw+ziRnSEYeBQt6JWlkI5IfXWGSqmJMVj/JbtYrRGaMh0ZY
+         pD2fgxeB2X9J01qp7NxxAvYFWlx9jdWqbivD5O24QNhvmBvHjzqAZlUWuHAxWBx3MwFx
+         0n/Q==
+X-Gm-Message-State: AJIora+xeB2eWCX1etRSE60o84TjmuIowgyzqlWoQtzJoQOBTjmvcpqf
+        w2gPL6OG69Bav5pcwsepWdQyyg==
+X-Google-Smtp-Source: AGRyM1tA3sT7jHAHp1LoODm9LHVgtnfmCHw0qpHxlAVZr9PapaUwx0VSnahXFzNoP/CqRMxE9+6GPg==
+X-Received: by 2002:a05:6870:339a:b0:f2:d065:be1f with SMTP id w26-20020a056870339a00b000f2d065be1fmr1012447oae.69.1657312266571;
+        Fri, 08 Jul 2022 13:31:06 -0700 (PDT)
+Received: from fedora.. ([143.107.182.242])
+        by smtp.gmail.com with ESMTPSA id ci10-20020a05683063ca00b0061c309b1dc2sm742225otb.39.2022.07.08.13.30.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 13:31:06 -0700 (PDT)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+Subject: [PATCH v5 0/9] drm: selftest: Convert to KUnit
+Date:   Fri,  8 Jul 2022 17:30:43 -0300
+Message-Id: <20220708203052.236290-1-maira.canal@usp.br>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-In-Reply-To: <20220708044847.531566-3-davidgow@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/7/22 10:48 PM, David Gow wrote:
-> Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
-> Due to KUnit tests not being intended to run on production systems, and
-> potentially causing problems (or security issues like leaking kernel
-> addresses), the kernel's state should not be considered safe for
-> production use after KUnit tests are run.
-> 
-> This both marks KUnit modules as test modules using MODULE_INFO() and
-> manually taints the kernel when tests are run (which catches builtin
-> tests).
-> 
-> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-> Tested-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
-> 
-> No changes since v5:
-> https://lore.kernel.org/linux-kselftest/20220702040959.3232874-3-davidgow@google.com/
-> 
-> No changes since v4:
-> https://lore.kernel.org/linux-kselftest/20220701084744.3002019-3-davidgow@google.com/
-> 
+Hi everyone,
 
-David, Brendan, Andrew,
+Here is the v5 of the conversion of selftests to KUnit. Since the v4, the only
+fix was checking the checkpatch warnings and checks (Thank you Javier).
 
-Just confirming the status of these patches. I applied v4 1/3 and v4 3/4
-to linux-kselftest kunit for 5.20-rc1.
+Thanks for your attention and any feedback is welcomed!
 
-I am seeing v5 and v6 now. Andrew applied v5 looks like. Would you like
-me to drop the two I applied? Do we have to refresh with v6?
+Best Regards,
+- Maíra Canal
 
-thanks,
--- Shuah
+v1 -> v2: https://lore.kernel.org/dri-devel/20220615135824.15522-1-maira.canal@usp.br/T/
+
+- The suites not longer end in _tests (David Gow).
+- Remove the TODO entry involving the conversion of selftests to KUnit (Javier Martinez Canillas).
+- Change the filenames to match the documentation: use *_test.c (Javier Martinez Canillas).
+- Add MODULE_LICENSE to all tests (kernel test robot).
+- Make use of a generic symbol to group all tests - DRM_KUNIT_TEST (Javier Martinez Canillas).
+- Add .kunitconfig on the first patch (it was on the second patch of the series).
+- Straightforward conversion of the drm_cmdline_parser tests without functional changes (Shuah Khan)
+- Add David's Tested-by tags.
+
+v2 -> v3: https://lore.kernel.org/dri-devel/20220621200926.257002-1-maira.canal@usp.br/
+
+- Rebase it on top of the drm-misc-next with drm_format_helper KUnit tests.
+- Change KUNIT_EXPECT_FALSE to KUNIT_EXPECT_EQ on drm_format_test (Daniel Latypov).
+- Add Daniel's Acked-by tag.
+
+v3 -> v4: https://lore.kernel.org/dri-devel/9185aadb-e459-00fe-70be-3675f6f3ef4c@redhat.com/T/
+
+- Add blank line after #include <kunit/test.h>  (Javier Martinez Canillas).
+- Make the order of the tags chronological  (Javier Martinez Canillas).
+- Add Copywrite to the tests (Javier Martinez Canillas).
+- Add  Javier Martinez Canillas's Reviewed-By tag.
+
+v4 -> v5: https://lore.kernel.org/dri-devel/20220702131116.457444-1-maira.canal@usp.br/T/
+
+- Fix checkpatch warnings and checks (Javier Martinez Canillas).
+
+Arthur Grillo (1):
+  drm: selftest: convert drm_mm selftest to KUnit
+
+Maíra Canal (8):
+  drm: selftest: convert drm_damage_helper selftest to KUnit
+  drm: selftest: convert drm_cmdline_parser selftest to KUnit
+  drm: selftest: convert drm_rect selftest to KUnit
+  drm: selftest: convert drm_format selftest to KUnit
+  drm: selftest: convert drm_plane_helper selftest to KUnit
+  drm: selftest: convert drm_dp_mst_helper selftest to KUnit
+  drm: selftest: convert drm_framebuffer selftest to KUnit
+  drm: selftest: convert drm_buddy selftest to KUnit
+
+ Documentation/gpu/todo.rst                    |   11 -
+ drivers/gpu/drm/Kconfig                       |   20 +-
+ drivers/gpu/drm/Makefile                      |    1 -
+ drivers/gpu/drm/selftests/Makefile            |    8 -
+ .../gpu/drm/selftests/drm_buddy_selftests.h   |   15 -
+ .../gpu/drm/selftests/drm_cmdline_selftests.h |   68 -
+ drivers/gpu/drm/selftests/drm_mm_selftests.h  |   28 -
+ .../gpu/drm/selftests/drm_modeset_selftests.h |   40 -
+ drivers/gpu/drm/selftests/drm_selftest.c      |  109 --
+ drivers/gpu/drm/selftests/drm_selftest.h      |   41 -
+ drivers/gpu/drm/selftests/test-drm_buddy.c    |  994 -------------
+ .../drm/selftests/test-drm_cmdline_parser.c   | 1141 ---------------
+ .../drm/selftests/test-drm_damage_helper.c    |  668 ---------
+ drivers/gpu/drm/selftests/test-drm_format.c   |  280 ----
+ .../drm/selftests/test-drm_modeset_common.c   |   32 -
+ .../drm/selftests/test-drm_modeset_common.h   |   52 -
+ drivers/gpu/drm/selftests/test-drm_rect.c     |  223 ---
+ drivers/gpu/drm/tests/Makefile                |    4 +-
+ drivers/gpu/drm/tests/drm_buddy_test.c        |  756 ++++++++++
+ .../gpu/drm/tests/drm_cmdline_parser_test.c   | 1078 ++++++++++++++
+ .../gpu/drm/tests/drm_damage_helper_test.c    |  634 +++++++++
+ .../drm_dp_mst_helper_test.c}                 |   89 +-
+ drivers/gpu/drm/tests/drm_format_test.c       |  287 ++++
+ .../drm_framebuffer_test.c}                   |   77 +-
+ .../test-drm_mm.c => tests/drm_mm_test.c}     | 1248 +++++++----------
+ .../drm_plane_helper_test.c}                  |  122 +-
+ drivers/gpu/drm/tests/drm_rect_test.c         |  214 +++
+ 27 files changed, 3652 insertions(+), 4588 deletions(-)
+ delete mode 100644 drivers/gpu/drm/selftests/Makefile
+ delete mode 100644 drivers/gpu/drm/selftests/drm_buddy_selftests.h
+ delete mode 100644 drivers/gpu/drm/selftests/drm_cmdline_selftests.h
+ delete mode 100644 drivers/gpu/drm/selftests/drm_mm_selftests.h
+ delete mode 100644 drivers/gpu/drm/selftests/drm_modeset_selftests.h
+ delete mode 100644 drivers/gpu/drm/selftests/drm_selftest.c
+ delete mode 100644 drivers/gpu/drm/selftests/drm_selftest.h
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_buddy.c
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_cmdline_parser.c
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_damage_helper.c
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_format.c
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_modeset_common.c
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_modeset_common.h
+ delete mode 100644 drivers/gpu/drm/selftests/test-drm_rect.c
+ create mode 100644 drivers/gpu/drm/tests/drm_buddy_test.c
+ create mode 100644 drivers/gpu/drm/tests/drm_cmdline_parser_test.c
+ create mode 100644 drivers/gpu/drm/tests/drm_damage_helper_test.c
+ rename drivers/gpu/drm/{selftests/test-drm_dp_mst_helper.c => tests/drm_dp_mst_helper_test.c} (72%)
+ create mode 100644 drivers/gpu/drm/tests/drm_format_test.c
+ rename drivers/gpu/drm/{selftests/test-drm_framebuffer.c => tests/drm_framebuffer_test.c} (86%)
+ rename drivers/gpu/drm/{selftests/test-drm_mm.c => tests/drm_mm_test.c} (55%)
+ rename drivers/gpu/drm/{selftests/test-drm_plane_helper.c => tests/drm_plane_helper_test.c} (57%)
+ create mode 100644 drivers/gpu/drm/tests/drm_rect_test.c
+
+-- 
+2.35.3
 
