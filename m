@@ -2,65 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0064D56C251
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 01:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BDA56C3A0
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 01:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239640AbiGHW3G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Jul 2022 18:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
+        id S239226AbiGHXEv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Jul 2022 19:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239601AbiGHW3E (ORCPT
+        with ESMTP id S239113AbiGHXEu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jul 2022 18:29:04 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BB213B448;
-        Fri,  8 Jul 2022 15:29:03 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id dn9so34609126ejc.7;
-        Fri, 08 Jul 2022 15:29:03 -0700 (PDT)
+        Fri, 8 Jul 2022 19:04:50 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107053C147;
+        Fri,  8 Jul 2022 16:04:50 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id e15so241822edj.2;
+        Fri, 08 Jul 2022 16:04:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/Wt1t+gGbbDZ9PHq/lAlWLmts02V8uVl3YQUMJTQPTw=;
-        b=Ff/t2k+V3YD7+eZxVQHpBBBvVb92DnA6vEVVaEQ98rhdkrE9UuP/24tFeks3vlerLj
-         bZclV4xkP66nqZPvec0tiMa+qP08FIlvuLlvwFD4iL3BkLVH2bN3RKf8M8OLyPrT7/n0
-         TwodjpKKeCivvvFTgZQOws9ZfE0fyeP7qkd+wJ5r2Fynh3VhdsYGg9vKOeeSAntsxJYu
-         ON2kUFgOaO2IMt9NNnxCnstr5oVzp/6lY7a4fYBnRzR+DK2PUY0Vd3unAHrvwYU1nHxy
-         pzILOl81zrbqOfRn/+/sf/EKCxUmuNMt4STX0dYKEnGuodQaOUybfasE0hq0Cc6cucoP
-         7cKA==
+        bh=Mj2Ee6BNVC0lRz8SFhG2FrxB6VbtTeRJYQIs2AbTu0s=;
+        b=M1nNIpWyo7U3mGICfv2akVhXxl+3tlXtuNaLk6idAg2RXGNMVybBKK3Q+Bg4pDkS0q
+         r9Hj58KMmNwvUYlRAqBzbzFjgxqONxb3pvmw6h89HpVlrI0NFEQel8s13SOip7etSboT
+         WcZx2l6StZLxGBQ9q7XyWgReTGUXJWmkvnjhvXS/LRcbgHqi8geusFKo2qBGMcO7VdoR
+         R0gYmUgH2BvVKTNJ/pLStZ4tiT6c7Tvn2ECQUVal7GOrdFLnhFfJ6c8Du7DU9NmkEUW/
+         lrKpGpxy1pDgKx6G4I9gvVccYZD8KipwpS3b9MR5Nnh3CtqCgmJ2nK78N8PWcLvwOQyf
+         nQ+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/Wt1t+gGbbDZ9PHq/lAlWLmts02V8uVl3YQUMJTQPTw=;
-        b=ZVZDzHGb0q5lmE6KewHSAagHYRKB7UCEbICa8jNZ7b+MDna3E/gDOtvfNjTX94SfDs
-         +/5G2V14aHtoHQanquQmwOenQ0WSPFCEqgxCL5eaLiGkF5dnfKofdCGuJGkJ43riOmVi
-         lnBOTagfxTAFr+A2Iy+WRukvkE7fQyTn9VEB2mr0s5TMZf3DrQS0nxjUWQOy6xTF0L7h
-         rcKugZTPw5itZkj6goN/xoZj02a7jlMAbUlEnKmbGD7jAb6dV8pxvSCYshMLLivd6sDr
-         3Sx8bmqlbgXlFLpKoVjG7YKI8LShYC78TrUQizGjLXjDjW/gB6plgmrbjV5OPvgxYWsf
-         IVXA==
-X-Gm-Message-State: AJIora9N71SI49/lW5lQ8O4AjcZSwsIJuYPYRNwuTL54xzP1fD92Wy7v
-        hy2nMwBKZGMaaEJdebzOQISalRoYrPKTTlyPR18=
-X-Google-Smtp-Source: AGRyM1tGmOwYacc977nCBMDQs0faZ/lMDSsiUOkwt61kpjiUxDXrzb9CBsWtQkROdOXgQJuXBg2es+mW0W307QqADeU=
-X-Received: by 2002:a17:907:75f3:b0:72b:1cde:2a00 with SMTP id
- jz19-20020a17090775f300b0072b1cde2a00mr5790980ejc.147.1657319342393; Fri, 08
- Jul 2022 15:29:02 -0700 (PDT)
+        bh=Mj2Ee6BNVC0lRz8SFhG2FrxB6VbtTeRJYQIs2AbTu0s=;
+        b=qS8VGoUp9esEXkGN6BI5dYzTBCuvIRVsbgnkQivCU7IjbXdLG4o5Nrqrbzt4R8OyJX
+         BepxsjGRAqarHRTXY8FPETgR0P8hnD9WbSqvw6pD+LkNwwHFUR0hIf61jTQySin8Kjya
+         7Eh9Ace2brB0VvBE0DhWVEwONB9gNqX8bCb+6gBVGb2/s9bxbu9nCeCYF2Lpl7WjuEGv
+         jv7lkpy0bcAoZtVtwEpka5iD76b7Bpt1vL13MDYaa3OALdW7nUjH5LAazUuflTSTZVzR
+         tXG+834qT7TwBGjoHq6ana7gIeEU55E8BXDZjNjgGE5HY9cqZ74yDpMGnWQN/a+fhT8X
+         1NMg==
+X-Gm-Message-State: AJIora/vPxm1ofEFNgWM/qldLzQ7sAGPPdyXwSKpyWAP038vCkZ7Jpob
+        wAicX3lfnD/DqMN4JnxaY+lFapBpPP/JrqQ8ODk=
+X-Google-Smtp-Source: AGRyM1sWBkuMD8jN4uB24QxHNnydV9PwsJNcmyTAZKY13PMRmzcHMNZsGdizzP7u+qgaSMR+nhxr/gHOUR0Q/qpheEw=
+X-Received: by 2002:a05:6402:50d2:b0:43a:8487:8a09 with SMTP id
+ h18-20020a05640250d200b0043a84878a09mr7932866edb.232.1657321488508; Fri, 08
+ Jul 2022 16:04:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220707135532.1783925-1-martin.blumenstingl@googlemail.com> <20220707222519.movgavbpbptncuu6@skbuf>
-In-Reply-To: <20220707222519.movgavbpbptncuu6@skbuf>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 9 Jul 2022 00:28:51 +0200
-Message-ID: <CAFBinCAcRDQQ51DUKr7K4Vtf3z61JTiNiB9saeKVsHs8qRJpXQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] selftests: forwarding: Install two missing tests
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "shuah@kernel.org" <shuah@kernel.org>
+References: <20220708130319.1016294-1-maximmi@nvidia.com> <CAPhsuW5oGiXy27wyYXkzXCgYo+PD50paOvT1qKDwNjGsxGuWzQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW5oGiXy27wyYXkzXCgYo+PD50paOvT1qKDwNjGsxGuWzQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 8 Jul 2022 16:04:37 -0700
+Message-ID: <CAEf4BzZ4ep4gBpccuji4THxT92FqvjQBZ0iXhHtQx+ncYMkfYw@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests/bpf: Fix xdp_synproxy build failure if CONFIG_NF_CONNTRACK=m/n
+To:     Song Liu <song@kernel.org>
+Cc:     Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Yauheni Kaliuta <ykaliuta@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -72,38 +80,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Vladimir,
-
-On Fri, Jul 8, 2022 at 12:25 AM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+On Fri, Jul 8, 2022 at 9:49 AM Song Liu <song@kernel.org> wrote:
 >
-> Hi Martin,
->
-> On Thu, Jul 07, 2022 at 03:55:30PM +0200, Martin Blumenstingl wrote:
-> > For some distributions (e.g. OpenWrt) we don't want to rely on rsync
-> > to copy the tests to the target as some extra dependencies need to be
-> > installed. The Makefile in tools/testing/selftests/net/forwarding
-> > already installs most of the tests.
+> On Fri, Jul 8, 2022 at 6:03 AM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
 > >
-> > This series adds the two missing tests to the list of installed tests.
-> > That way a downstream distribution can build a package using this
-> > Makefile (and add dependencies there as needed).
+> > When CONFIG_NF_CONNTRACK=m, struct bpf_ct_opts and enum member
+> > BPF_F_CURRENT_NETNS are not exposed. This commit allows building the
+> > xdp_synproxy selftest in such cases. Note that nf_conntrack must be
+> > loaded before running the test if it's compiled as a module.
+> >
+> > This commit also allows this selftest to be successfully compiled when
+> > CONFIG_NF_CONNTRACK is disabled.
+> >
+> > One unused local variable of type struct bpf_ct_opts is also removed.
+> >
+> > Reported-by: Yauheni Kaliuta <ykaliuta@redhat.com>
+> > Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+> > Fixes: fb5cd0ce70d4 ("selftests/bpf: Add selftests for raw syncookie helpers")
 >
-> Just for future reference, the netdev process is to mark patch sets such
-> as this one with "PATCH net" since they fix a packaging problem with an
-> rc kernel. There's more information about this in
-> Documentation/process/maintainer-netdev.rst.
-noted
+> Given tools/testing/selftests/bpf/config specifies CONFIG_NF_CONNTRACK=y,
+> I don't think this is really necessary.
+>
 
-> Do we need to create a Makefile for the selftests symlinked by DSA in
-> tools/testing/selftests/drivers/net/dsa/, for the symlinks to be
-> installed, or how do you see this?
-Yes, we should have a Makefile there as well (IMO). I'll send a patch for this.
-
-> The reason why I created the symlinks was to make use of the custom
-> forwarding.config provided there, and also to reduce the clutter a bit
-> and only focus on the selftests I felt were relevant for DSA for now.
-Makes sense, I'll make sure that this one is installed by the Makefile as well
+We do redefine some of the kernel structs (e.g., bpf_iter.h), though,
+to simplify build systems if it doesn't cost much maintenance burden.
+Which seems to be the case here. So I've applied this to bpf-next
+tree.
 
 
-Best regards,
-Martin
+> Thanks,
+> Song
+>
+>
+
+[...]
