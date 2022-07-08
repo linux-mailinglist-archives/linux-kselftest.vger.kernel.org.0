@@ -2,71 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89E856AF86
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Jul 2022 03:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5772556AF80
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Jul 2022 03:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbiGHAlA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Jul 2022 20:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
+        id S235906AbiGHAoM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Jul 2022 20:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiGHAk7 (ORCPT
+        with ESMTP id S229572AbiGHAoL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Jul 2022 20:40:59 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE5370E4F;
-        Thu,  7 Jul 2022 17:40:58 -0700 (PDT)
+        Thu, 7 Jul 2022 20:44:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16A670E44;
+        Thu,  7 Jul 2022 17:44:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6BEA8CE276E;
-        Fri,  8 Jul 2022 00:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F750C3411E;
-        Fri,  8 Jul 2022 00:40:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E2D8B824B5;
+        Fri,  8 Jul 2022 00:44:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E0EDC3411E;
+        Fri,  8 Jul 2022 00:44:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657240855;
-        bh=IXsR/QrzvoIMkoWHmolTYwhwxD9j/FgCzzm8PhvI41I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BHrJ5+tCKYeD5Tmi/HULyLybxMAX92YkwnxJ0wQIUeGXK/c43NKQS8J8DqdH4Slh4
-         yC8A4kxW/vtHiPmC1kV/FRP0xkTRJ44kLgf9oUzp2m05sNm0dmQcmkBXy0BNOGvtJN
-         lw3ahGiwfRNWHCcUh3MMr95nBVCeQkUdV4kgaiGmAWrKRmm7Oktj/tFgeQGwJwHoNi
-         HGxcnEaS1lnd09pAWMYZacRdZVWa23boN/R2kX/dPum11+hIzPS7ziMtahUDHrA47o
-         BhTva9WGfwu3x1BSP1WTlaDWbkP9n6LXRxIR4nDTwss9wnlJFzH2AvMC9DSrDb1G0P
-         6ioLZ2kFcQCFQ==
-Date:   Thu, 7 Jul 2022 17:40:52 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v5 2/4] module: panic: Taint the kernel when selftest
- modules load
-Message-ID: <Ysd9FG1fOSnzKv8d@dev-arch.thelio-3990X>
-References: <20220702040959.3232874-1-davidgow@google.com>
- <20220702040959.3232874-2-davidgow@google.com>
+        s=k20201202; t=1657241048;
+        bh=EC7a4jTfAaizoRSMF4FsVpM10jc1Vx60by0MKMOikKI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J7buxAjoy+adEYbK2ndgRVkdH/bRZQd1xQJ83dKqMYPLqzO7K8SohPXucoAmj7lJw
+         lXlK98vnwsMtyUs6cqJvdncgZSM+u8iWNEd84GaJxGEb8JwmJznOQ8diA8yX3EE+9t
+         AyBc2jtDAHiy/c9qalzH/C4zpxEfR44rctLToIM/H+o6DzxW+shjErAqPIZ51BH2Tj
+         w3PhcIgxKUGzp6rfEjTCNkv8zm+iHrtWRB+8L8NEZ7Mv9xOAjzyEzGVOLdus18aNvi
+         qFBhYl1bIalHBXubutm/9Fbfkaocgls6Zfa3BLkpbMVdpgT4B7+bPE8Q+LLXcKle9S
+         rXNUZKZHDb9sw==
+Date:   Thu, 7 Jul 2022 17:43:58 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 1/1] net: dsa: mv88e6xxx: allow reading FID
+ when handling ATU violations
+Message-ID: <20220707174358.3b1b804a@kernel.org>
+In-Reply-To: <20220707102836.u7ig6rr2664mcrlf@skbuf>
+References: <20220706122502.1521819-1-netdev@kapio-technology.com>
+        <20220707102836.u7ig6rr2664mcrlf@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220702040959.3232874-2-davidgow@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -77,88 +67,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 02, 2022 at 12:09:57PM +0800, David Gow wrote:
-> Taint the kernel with TAINT_TEST whenever a test module loads, by adding
-> a new "TEST" module property, and setting it for all modules in the
-> tools/testing directory. This property can also be set manually, for
-> tests which live outside the tools/testing directory with:
-> MODULE_INFO(test, "Y");
+On Thu, 7 Jul 2022 13:28:36 +0300 Vladimir Oltean wrote:
+> Make no mistake, the existing code doesn't disallow reading back the FID
+> during an ATU Get/Clear Violation operation, and your patch isn't
+> "allowing" something that wasn't disallowed.
 > 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  kernel/module/main.c  | 7 +++++++
->  scripts/mod/modpost.c | 3 +++
->  2 files changed, 10 insertions(+)
+> The documentation for the ATU FID register says that its contents is
+> ignored before the operation starts, and it contains the returned ATU
+> entry's FID after the operation completes.
 > 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index fed58d30725d..730503561eb0 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1988,6 +1988,13 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
->  	/* Set up license info based on the info section */
->  	set_license(mod, get_modinfo(info, "license"));
->  
-> +	if (!get_modinfo(info, "test")) {
-> +		if (!test_taint(TAINT_TEST))
-> +			pr_warn_once("%s: loading test module taints kernel.\n",
-> +				     mod->name);
-> +		add_taint_module(mod, TAINT_TEST, LOCKDEP_STILL_OK);
-> +	}
-> +
->  	return 0;
->  }
->  
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 29d5a841e215..5937212b4433 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -2191,6 +2191,9 @@ static void add_header(struct buffer *b, struct module *mod)
->  
->  	if (strstarts(mod->name, "drivers/staging"))
->  		buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
-> +
-> +	if (strstarts(mod->name, "tools/testing"))
-> +		buf_printf(b, "\nMODULE_INFO(test, \"Y\");\n");
->  }
->  
->  static void add_exported_symbols(struct buffer *buf, struct module *mod)
-> -- 
-> 2.37.0.rc0.161.g10f37bed90-goog
+> So the change simply says: don't bother to write the ATU FID register
+> with zero, it doesn't matter what this contains. This is probably true,
+> but the patch needs to do what's written on the box.
 > 
+> Please note that this only even matters at all for switches with
+> mv88e6xxx_num_databases(chip) > 256, where MV88E6352_G1_ATU_FID is a
+> dedicated register which this patch avoids writing. For other switches,
+> the FID is embedded within MV88E6XXX_G1_ATU_CTL or MV88E6XXX_G1_ATU_OP.
+> So _practically_, for those switches, you are still emitting the
+> GET_CLR_VIOLATION ATU op with a FID of 0 whether you like it or not, and
+> this patch introduces a (most likely irrelevant) discrepancy between the
+> access methods for various switches.
 > 
+> Please note that this observation is relevant for your future changes to
+> read back the FID too. As I said here:
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220524152144.40527-4-schultz.hans+netdev@gmail.com/#24912482
+> you can't just assume that the FID lies within the MV88E6352_G1_ATU_FID
+> register, just look at the way it is packed within mv88e6xxx_g1_atu_op().
+> You'll need to unpack it in the same way.
 
-Hi David,
-
-This change has landed in linux-next as commit e20729ede7ed ("module:
-panic: taint the kernel when selftest modules load") and on all of my
-test machines, I see this new message printed, even though as far as I
-am aware, I am not loading any testing modules. For example, in QEMU, I
-see:
-
-[    0.596978] serio: loading test module taints kernel.
-
-and on my Honeycomb LX2, I see:
-
-[    5.400861] fuse: loading test module taints kernel.
-
-It seems like the get_modinfo() check might be wrong? The following diff
-resolves it for me, I can send a formal patch if necessary (although it
-appears to have gone in via -mm so I assume Andrew can squash this in).
-
-Cheers,
-Nathan
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 730503561eb0..4f91e41b8bc9 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1988,7 +1988,7 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
- 	/* Set up license info based on the info section */
- 	set_license(mod, get_modinfo(info, "license"));
- 
--	if (!get_modinfo(info, "test")) {
-+	if (get_modinfo(info, "test")) {
- 		if (!test_taint(TAINT_TEST))
- 			pr_warn_once("%s: loading test module taints kernel.\n",
- 				     mod->name);
+I reckon it'll be useful to render some of this info into the commit
+message and adjust the subject so marking Changes Requested.
