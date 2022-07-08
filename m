@@ -2,190 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3467556BA38
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Jul 2022 15:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C05C56BB76
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Jul 2022 16:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237642AbiGHNDd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Jul 2022 09:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
+        id S238410AbiGHOCC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Jul 2022 10:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237443AbiGHNDc (ORCPT
+        with ESMTP id S238363AbiGHOCB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jul 2022 09:03:32 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F132EA1B2;
-        Fri,  8 Jul 2022 06:03:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FPNlI6aUnSj+aBrUB2AlNWSlMmMLJ+OrFPOqo4WQ4FJ1hA54KjCpswjQgAY8g4eMGImH6WqnUet7MhN8Rt/4U6uM3IEJLcnW8AUTVnAsWLtqSW+OF44xtUTAeFmqQKtbtkwSaUNzALzDJ5HPSfjkeJk8KKMzqSw1NvXVgoytuQ2I1zaADH7+2W6hifCWuAIb4zlLnYawAiOcgd8HQi/KNidxfcIB37jvtGkjwG4chXIg/s2+175ux7vU3vrauPZTg1ack/9hut9bPtuBzOh9m9DjK00hHdh7zvwhYq4/42oVPTk2WRbpS4HZy+Br88am5+jEz+/YjakUAco1aEMdOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TwYAiMLEYWxpECEnOU8pJHLqwvlbYJxrhO27RukLDMU=;
- b=a8bFRm2CJnlmEZsHbggEkdvdZ0SrYdwLFWZw9HhfJGqMBRbz2ftzU0sSvGfGfoEGaE1q6+//EHERvH1Tk8LNG8v3vtcsGuu+yNnxMCqH6airYkP0khC0wh29iWZ3VHzhyzJIEBvlKeGY5B8QMOCikAWWdoN4J7XVXOYld0Ag8Ahm2m86bycIZxjqdyZ+XiQiIJ/Hhow2aK+J6V15HI/xycTVXUts7MztlkdtfG0B8lLHHCVs846ZcAJv5pjflMEyjOC7Z4la1/yOcLbtqChRM37iLCbcH6rbprH5fN+VPb2DAkmMbBMYxnFMgvALzNt8JE79mU7teUhbQ5m1FJwuFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TwYAiMLEYWxpECEnOU8pJHLqwvlbYJxrhO27RukLDMU=;
- b=c3iF17CaMT8Sf8W8yQfWOBk7i5O+9b4VjxFdMNOA7VuLHs57GCTjZB8fnmJ5Tx2raC2VrESHkObEriabFdb3LT4Caz4+FkCvn04dGsoovKCtnNRYU9JJXXdwWpkXAbIL4vVpvgtTrQAjXF/5mC8C+7I1uavXwnd8+pwNyyVHX3ITeI1F0+AS+Uxi+GTwZli+iVK0xlDOX3ydCjjs+A8l+S5STnK170zHWRgHEBAhyEYe710zJY4CyBLaxNtPBOe2qHnYw3YV8/Dtn1Fv6NlgT6V8SEyX/wclMHIVKjdq6P0z6/ozlM6E+1XREG8K00Q3WEO5i3RbvRKxgzaNxqv9Mw==
-Received: from DM6PR11CA0070.namprd11.prod.outlook.com (2603:10b6:5:14c::47)
- by MN2PR12MB4190.namprd12.prod.outlook.com (2603:10b6:208:1dd::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.16; Fri, 8 Jul
- 2022 13:03:29 +0000
-Received: from DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:14c:cafe::da) by DM6PR11CA0070.outlook.office365.com
- (2603:10b6:5:14c::47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.17 via Frontend
- Transport; Fri, 8 Jul 2022 13:03:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.235) by
- DM6NAM11FT054.mail.protection.outlook.com (10.13.173.95) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5417.15 via Frontend Transport; Fri, 8 Jul 2022 13:03:28 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 8 Jul
- 2022 13:03:28 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 8 Jul 2022
- 06:03:27 -0700
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server id 15.2.986.26 via Frontend Transport; Fri, 8 Jul
- 2022 06:03:23 -0700
-From:   Maxim Mikityanskiy <maximmi@nvidia.com>
-To:     Shuah Khan <shuah@kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC:     Yauheni Kaliuta <ykaliuta@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Fri, 8 Jul 2022 10:02:01 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3758D18B23
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 07:02:00 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id h19-20020a9d6f93000000b0061c1ad77d5fso3175944otq.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 07:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AgCA7JC4n87M0J4Cctl8zaLThkaSJBjNpAQEBOK0n1E=;
+        b=YuCU3LC4EmqmDANYLVa2rGn4cR9g+9cw2DLgXF8oCoF6AZxLFRfSQJPVMFb5dcnxhI
+         a05pFGlm/tVZW44jkqy1SXPlR5wDktz+7LIkeToD/5YkiElWGugxmgLSpDUf+s2OskWJ
+         Cp37s+zDo3qupWC0gw3gLYxdm4Zdfrlycfxyk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AgCA7JC4n87M0J4Cctl8zaLThkaSJBjNpAQEBOK0n1E=;
+        b=2dAjGeAhNnhSfSpkXU3Ks0DQRIyTKZYAvZ3DQSiroE1n8m9e5HUV9t6nXKE05ngS9G
+         kUGygcJTxNHTbOw9++fs3OrtfyFBtfGe9EDhE3lzyxzbI4jcCji1pHSVIOtF+Jbc7OqJ
+         CE/Pl815jiFXmiaPrSte22Yab2wqHybd4jGPmWOg1JXh/86JM9sJR+HPLutLGC+4pInw
+         lgMAs50IQqKliv+Dd5dgx1WnRVrtsg1xAkDpd+vo5p+5fZnEedsFVZmrcSXBubwI2BuZ
+         zM3uUP72xjmgj5xVtEJ6k9TH2cBrEQmGNzBMb7ZljBMZrND8GTvQg7ZHBVx21+mWJmCQ
+         PpCg==
+X-Gm-Message-State: AJIora/SAaDtMtNpU5vcF6xlHpAiAcxzbAB0DHX7zasUwNCBPuVMo3Hg
+        kwDUUgFLYPCMELRsqSD8jcv0iA==
+X-Google-Smtp-Source: AGRyM1sIQoZ2at//x/8ubeDtbsVzTdvW8iCJcL4x2IwszMFpKBYhfmP4STbUFtn8jkNHayqOr+h8zw==
+X-Received: by 2002:a05:6830:2331:b0:61c:2c18:555 with SMTP id q17-20020a056830233100b0061c2c180555mr1212008otg.367.1657288919372;
+        Fri, 08 Jul 2022 07:01:59 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id x10-20020a9d704a000000b00616d98ad780sm12787337otj.52.2022.07.08.07.01.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Jul 2022 07:01:43 -0700 (PDT)
+Message-ID: <3dbd5b30-f869-b284-1383-309ca6994557@cloudflare.com>
+Date:   Fri, 8 Jul 2022 09:01:32 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/4] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>
+Cc:     KP Singh <kpsingh@kernel.org>, revest@chromium.org,
+        jackmanb@chromium.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>
-Subject: [PATCH bpf] selftests/bpf: Fix xdp_synproxy build failure if CONFIG_NF_CONNTRACK=m/n
-Date:   Fri, 8 Jul 2022 16:03:19 +0300
-Message-ID: <20220708130319.1016294-1-maximmi@nvidia.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, shuah@kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com
+References: <20220707223228.1940249-1-fred@cloudflare.com>
+ <CAJ2a_DezgSpc28jvJuU_stT7V7et-gD7qjy409oy=ZFaUxJneg@mail.gmail.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <CAJ2a_DezgSpc28jvJuU_stT7V7et-gD7qjy409oy=ZFaUxJneg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5b65a0b8-00ce-4b1d-d923-08da60e240b6
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4190:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DVj+kyEkC4DWRTrH9wcJuPU5vG4van8l3qGDc4/hKRCBz7OSPzfz92x3t8y1Yv9QTtB/hZgEStnOP5AgFQKiOCqN41RGrCv+rCuVjl9Dlc6JMw1TPaY8I3lmSIsZN3E1i5007FcfFJSXZoSPBg+S3r7jQOsRCV/aSMWM9OIUBQTLvyrz9a9HOBBYQZNHV8QPWOaQGgqrMmlWoyF+Sn2Pk53YSy0vMG2aCe/suVKJYuj3ZGapjFzeKtOMJoiXTIR6vvzz8PPDU2Ts3W2x2RCNm6DqeE5atwQ8EbviPI4TR/Hr0BmmWaKFOp2RnXBqGZRrPtrhNBqo9JTRiw7a6U9GW/eCKYJYliTFuwaWJYmdC6JbEMINnxQNcxBjKrJOVuB3T47lMiFTvQbBzO+lDuteyFKVOKcOiGBG2ebtsV8ipNL9/BgvW0QCH71TfMbJlRmx83AyAfm6unHMeZZj4ZgdJtL8ERAauFoYj/gW1LT27RWFmC9tyyA0TQ8qyby07YycfHlY0Yqa4xeEpS8jNuwhPGUVlzh1ALyUbrT9d7mWPisAPmnOk449MzHy/Wa9piO4aPG6QzIjEX/tEqGjT/xHhvvZFDF3muzLUlTdHtlX5ExCt9fl0c60r6U7OxUN/h5OLYzJmdX/0WwKhmil/UIQWIr0F9+LmmEwiyL9UZKrESRMFTc4eA/7FLtbYjfGmEgtpscukkiCInqENJjXzDf+OKODRDAMAaQdd7lkKxBJUyNGoR2uAwE5TIKOP61hcodOuYVr203/CvsThL/V5/rFrFulzxkP3xcjvEpjG0nMaRwPKVNOvzpKoIH7vEDyounAsUj42pqeTvkVoYS3vl1+i6LDGkXREJ8qKziaAS/Wv2w=
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(136003)(396003)(46966006)(36840700001)(40470700004)(336012)(426003)(83380400001)(186003)(8676002)(110136005)(40480700001)(70206006)(47076005)(70586007)(1076003)(36756003)(4326008)(107886003)(26005)(54906003)(7696005)(2616005)(86362001)(82310400005)(41300700001)(7416002)(6666004)(356005)(2906002)(81166007)(316002)(5660300002)(36860700001)(478600001)(8936002)(40460700003)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2022 13:03:28.9696
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b65a0b8-00ce-4b1d-d923-08da60e240b6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4190
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When CONFIG_NF_CONNTRACK=m, struct bpf_ct_opts and enum member
-BPF_F_CURRENT_NETNS are not exposed. This commit allows building the
-xdp_synproxy selftest in such cases. Note that nf_conntrack must be
-loaded before running the test if it's compiled as a module.
+On 7/8/22 7:10 AM, Christian Göttsche wrote:
+> ,On Fri, 8 Jul 2022 at 00:32, Frederick Lawler <fred@cloudflare.com> wrote:
+>>
+>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>> used the LSM cred_prepare hook because that is the closest hook to prevent
+>> a call to create_user_ns().
+>>
+>> The calls look something like this:
+>>
+>>      cred = prepare_creds()
+>>          security_prepare_creds()
+>>              call_int_hook(cred_prepare, ...
+>>      if (cred)
+>>          create_user_ns(cred)
+>>
+>> We noticed that error codes were not propagated from this hook and
+>> introduced a patch [1] to propagate those errors.
+>>
+>> The discussion notes that security_prepare_creds()
+>> is not appropriate for MAC policies, and instead the hook is
+>> meant for LSM authors to prepare credentials for mutation. [2]
+>>
+>> Ultimately, we concluded that a better course of action is to introduce
+>> a new security hook for LSM authors. [3]
+>>
+>> This patch set first introduces a new security_create_user_ns() function
+>> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
+> 
+> Some thoughts:
+> 
+> I.
+> 
+> Why not make the hook more generic, e.g. support all other existing
+> and potential future namespaces?
 
-This commit also allows this selftest to be successfully compiled when
-CONFIG_NF_CONNTRACK is disabled.
+The main issue with a generic hook is that different namespaces have 
+different calling contexts. We decided in a previous discussion to 
+opt-out of a generic hook for this reason. [1]
 
-One unused local variable of type struct bpf_ct_opts is also removed.
+> Also I think the naming scheme is <object>_<verb>.
 
-Reported-by: Yauheni Kaliuta <ykaliuta@redhat.com>
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Fixes: fb5cd0ce70d4 ("selftests/bpf: Add selftests for raw syncookie helpers")
----
- .../selftests/bpf/progs/xdp_synproxy_kern.c   | 24 +++++++++++++------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+That's a good call out. I was originally hoping to keep the security_*() 
+match with the hook name matched with the caller function to keep things 
+all aligned. If no one objects to renaming the hook, I can rename the 
+hook for v3.
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c b/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-index 9fd62e94b5e6..736686e903f6 100644
---- a/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
-@@ -77,16 +77,30 @@ struct {
- 	__uint(max_entries, MAX_ALLOWED_PORTS);
- } allowed_ports SEC(".maps");
- 
-+/* Some symbols defined in net/netfilter/nf_conntrack_bpf.c are unavailable in
-+ * vmlinux.h if CONFIG_NF_CONNTRACK=m, so they are redefined locally.
-+ */
-+
-+struct bpf_ct_opts___local {
-+	s32 netns_id;
-+	s32 error;
-+	u8 l4proto;
-+	u8 dir;
-+	u8 reserved[2];
-+} __attribute__((preserve_access_index));
-+
-+#define BPF_F_CURRENT_NETNS (-1)
-+
- extern struct nf_conn *bpf_xdp_ct_lookup(struct xdp_md *xdp_ctx,
- 					 struct bpf_sock_tuple *bpf_tuple,
- 					 __u32 len_tuple,
--					 struct bpf_ct_opts *opts,
-+					 struct bpf_ct_opts___local *opts,
- 					 __u32 len_opts) __ksym;
- 
- extern struct nf_conn *bpf_skb_ct_lookup(struct __sk_buff *skb_ctx,
- 					 struct bpf_sock_tuple *bpf_tuple,
- 					 u32 len_tuple,
--					 struct bpf_ct_opts *opts,
-+					 struct bpf_ct_opts___local *opts,
- 					 u32 len_opts) __ksym;
- 
- extern void bpf_ct_release(struct nf_conn *ct) __ksym;
-@@ -393,7 +407,7 @@ static __always_inline int tcp_dissect(void *data, void *data_end,
- 
- static __always_inline int tcp_lookup(void *ctx, struct header_pointers *hdr, bool xdp)
- {
--	struct bpf_ct_opts ct_lookup_opts = {
-+	struct bpf_ct_opts___local ct_lookup_opts = {
- 		.netns_id = BPF_F_CURRENT_NETNS,
- 		.l4proto = IPPROTO_TCP,
- 	};
-@@ -714,10 +728,6 @@ static __always_inline int syncookie_handle_ack(struct header_pointers *hdr)
- static __always_inline int syncookie_part1(void *ctx, void *data, void *data_end,
- 					   struct header_pointers *hdr, bool xdp)
- {
--	struct bpf_ct_opts ct_lookup_opts = {
--		.netns_id = BPF_F_CURRENT_NETNS,
--		.l4proto = IPPROTO_TCP,
--	};
- 	int ret;
- 
- 	ret = tcp_dissect(data, data_end, hdr);
--- 
-2.30.2
+> 
+>      LSM_HOOK(int, 0, namespace_create, const struct cred *cred,
+> unsigned int flags)
+> 
+> where flags is a bitmap of CLONE flags from include/uapi/linux/sched.h
+> (like CLONE_NEWUSER).
+> 
+> II.
+> 
+> While adding policing for namespaces maybe also add a new hook for setns(2)
+> 
+>      LSM_HOOK(int, 0, namespace_join, const struct cred *subj,  const
+> struct cred *obj, unsigned int flags)
+> 
+
+IIUC, setns() will create a new namespace for the other namespaces 
+except for user namespace. If we add a security hook for the other 
+create_*_ns() functions, then we can catch setns() at that point.
+
+> III.
+> 
+> Maybe even attach a security context to namespaces so they can be
+> further governed?
+> SELinux example:
+> 
+>      type domainA_userns_t;
+>      type_transition domainA_t domainA_t : namespace domainA_userns_t "user";
+>      allow domainA_t domainA_userns_t:namespace create;
+> 
+>      # domainB calling setns(2) with domainA as target
+>      allow domainB_t domainA_userns_t:namespace join;
+> 
+
+Links:
+1. 
+https://lore.kernel.org/all/CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com/
+
+>>
+>> Links:
+>> 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+>> 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+>> 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+>>
+>> Changes since v1:
+>> - Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+>> - Add selinux: Implement create_user_ns hook patch
+>> - Change function signature of security_create_user_ns() to only take
+>>    struct cred
+>> - Move security_create_user_ns() call after id mapping check in
+>>    create_user_ns()
+>> - Update documentation to reflect changes
+>>
+>> Frederick Lawler (4):
+>>    security, lsm: Introduce security_create_user_ns()
+>>    bpf-lsm: Make bpf_lsm_create_user_ns() sleepable
+>>    selftests/bpf: Add tests verifying bpf lsm create_user_ns hook
+>>    selinux: Implement create_user_ns hook
+>>
+>>   include/linux/lsm_hook_defs.h                 |  1 +
+>>   include/linux/lsm_hooks.h                     |  4 +
+>>   include/linux/security.h                      |  6 ++
+>>   kernel/bpf/bpf_lsm.c                          |  1 +
+>>   kernel/user_namespace.c                       |  5 ++
+>>   security/security.c                           |  5 ++
+>>   security/selinux/hooks.c                      |  9 ++
+>>   security/selinux/include/classmap.h           |  2 +
+>>   .../selftests/bpf/prog_tests/deny_namespace.c | 88 +++++++++++++++++++
+>>   .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
+>>   10 files changed, 160 insertions(+)
+>>   create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+>>   create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+>>
+>> --
+>> 2.30.2
+>>
 
