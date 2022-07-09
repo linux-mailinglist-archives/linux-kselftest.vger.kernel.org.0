@@ -2,223 +2,249 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD1256C650
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 05:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA2456C65B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 05:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiGIDVG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Jul 2022 23:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S229480AbiGIDZW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Jul 2022 23:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiGIDUp (ORCPT
+        with ESMTP id S229472AbiGIDZV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jul 2022 23:20:45 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EA8820D0
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 20:20:29 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id bw5-20020a056a00408500b005251b5ea852so48225pfb.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 20:20:29 -0700 (PDT)
+        Fri, 8 Jul 2022 23:25:21 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FEA6C112
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 20:25:19 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so227618wmi.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 20:25:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0uk9B4iBCc1DStciW4cIjZgeCzcpo0HpP5e4tEE/Rl8=;
-        b=nG41Cf/zf7u/sNTdf7Cq7xkL6MwV2j9mNk/je+VAD8dJVe9tTCtvzxVUFtyVny5Btq
-         x1Ahnkjlg1ZJP0i/o40I0agXWzyjfVJ67zJnOTVgyBA3BpBqdQfv306NhXPG7cBH6z0b
-         5Jn3a76uHAReJMB6C82+3IlzI+hV76RWnd/MpwIBghPNvqEHfssIGDHylf1QKDRZOt7n
-         yqd7FwgKuQIeCu+n/LUwVlJDQfooV9o38TE36mJNDYxQopTcJPb3RqWFpOJ4KFfHvt59
-         srcH1okBUBcl/7iN9v5P7TbQmO+GJdwbNLUBj65K9m+zurkKaY56ZdTcQEVqi15/o9Wr
-         YthQ==
+        bh=MppQ7PhRtgyFl4DUXfuvvWPWLp0qiiL+BxkF4ixWhKo=;
+        b=Ckzphb6d9iKtUOfJnDaMXF0nrjocSE1rE0GI6LyDY9hLBVgwab6siOsu5VAlhHdV3W
+         JBuf6LPohVer001dAYgggblqkZi8iMI+XfT6LMFIOwJceqdqt1s+nlVZs/980RUeWyY/
+         gWLXCCe1R2EOFdUZ8puSHSQCSBOQzHamh93nUV63rm+osP6pOZUY6HZCeZC9KhxiLVym
+         JI2AazrSZFPHjiasbwcjWzUEjRzIScYejhC9/naKArlRHK0znRo9IMumNM+bHjm7Jam8
+         cPOQi67DecHGUJ5rC7CxhBQVLS67yDkUiaGnHJCoP12MqtOYyTAcjOfXRu19MNb8R3IV
+         xIHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=0uk9B4iBCc1DStciW4cIjZgeCzcpo0HpP5e4tEE/Rl8=;
-        b=3FeP7jHtEhKsANDUP331Jgh6qijMakvwIm4nj0Ue2jNIFUYHXW9eCfkcD5kKwjHUs2
-         rj3mYHZLYkm7IvuCFXCq21Djwt9Fh8wcaP3ITwonTitNAm0114qvGkLXrMD8vKISXDco
-         0VuRWqjZPbqcN12OC8RFNKAFrBtMKPBeze2+8W/CV6FXV3tJjuaW9MKP6Tse+PSLYlEk
-         mGc0nIVbZ4DSstMbEgMY9TpkZxhw5I/C2c43L9GBmCSvdHF1qMbz71KJL/T4K81UBO/H
-         qkzplXeHJN2ntdha0S3CAOJeKRgMscJ1dgzXT3eHwME92UkbP8U4sMrKi6wU6FreootU
-         ImKQ==
-X-Gm-Message-State: AJIora/q2lDtEGLClwR+RCmSpuqVDG/uD5gE70Sn+2473KVEGe0xnZ+C
-        coAiGPpzxzXsYKf12tVb2qTFpIAwLZRA1g==
-X-Google-Smtp-Source: AGRyM1vb6KdixOSRAr8QjZwc+RJeF7pVnk5EV/2mWAv2L+en8WMRLFL1aQm31W9Ny8aQAjNB+SWrLAXzTPEPcg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:902:8a82:b0:16c:3024:69c2 with SMTP
- id p2-20020a1709028a8200b0016c302469c2mr2056322plo.154.1657336828917; Fri, 08
- Jul 2022 20:20:28 -0700 (PDT)
-Date:   Sat,  9 Jul 2022 11:20:01 +0800
-In-Reply-To: <20220709032001.819487-1-davidgow@google.com>
-Message-Id: <20220709032001.819487-6-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220709032001.819487-1-davidgow@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4 5/5] mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MppQ7PhRtgyFl4DUXfuvvWPWLp0qiiL+BxkF4ixWhKo=;
+        b=glnFQfAqEHLRLm1qEcpe5LQBp6+EQp5M653pl9NAyuMu04hn+9sW1mJwmiZyDfBj4Q
+         HjdG61sqo9Ux7FnLo2E6m5Dw162GmmSVYatPAQVlSB6tTOzghutYc4+3Q0cw99gAva5g
+         KBgFfLagF98XMNac9fklkcF1zBl7lI+w/BW0ODjiut339WXBkP047iqUDgBl4h3xHoaH
+         5ixnHFIIyoobycKD/nAh+qC0FouONoAx60OBw2Bf1aZzXi+1yHkalokJylCybSWs7VPr
+         d9uS9dp2Sq1szGaB4cwqDpwyNJoyTUxZ5ig3PnSeh2DKeZcdMI3UKMHBPIthqSrnHVI5
+         anqg==
+X-Gm-Message-State: AJIora9eJ0AC4g4xBn8VPzE9ig64sROUYtii/b3ho4VcGFjYDIqVpVfZ
+        YFldrstLUim8vvel/KCkOm6Cli8tAO2ZHx1+gePMPopZOmHlmA==
+X-Google-Smtp-Source: AGRyM1swXGC1sfaXQRy1Xn69Dt8GxfoLuFYMy74dgllMBgXsH8MqmBm3CWHwxaQO0WXjO23yCp57TBd/Ze4MIb/YpdM=
+X-Received: by 2002:a05:600c:4fc8:b0:3a1:99cf:800 with SMTP id
+ o8-20020a05600c4fc800b003a199cf0800mr3054967wmq.60.1657337117577; Fri, 08 Jul
+ 2022 20:25:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-2-davidgow@google.com>
+ <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
+In-Reply-To: <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
 From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
+Date:   Sat, 9 Jul 2022 11:25:06 +0800
+Message-ID: <CABVgOS=AfJ7X5xqEKvXCzQ=UzOWrmR9KBO_TnkQw4Ti3fmKHBw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] kunit: unify module and builtin suite definitions
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
-        Daniel Latypov <dlatypov@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Andra Paraschiv <andraprs@amazon.com>,
         Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
-        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Greg KH <gregkh@linuxfoundation.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        linux-usb@vger.kernel.org, linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000002f74f405e356de27"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kunit_test_suite() macro is no-longer incompatible with module_add,
-so its use can be reinstated.
+--0000000000002f74f405e356de27
+Content-Type: text/plain; charset="UTF-8"
 
-Since this fixes parsing with builtins and kunit_tool, also enable the
-test by default when KUNIT_ALL_TESTS is enabled.
+On Sat, Jul 9, 2022 at 2:23 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Fri, Jun 24, 2022 at 10:10 PM David Gow <davidgow@google.com> wrote:
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index 8ffcd7de9607..54306271cfbf 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -250,41 +250,8 @@ static inline int kunit_run_all_tests(void)
+> >  }
+> >  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
+> >
+> > -#ifdef MODULE
+> > -/**
+> > - * kunit_test_suites_for_module() - used to register one or more
+> > - *                      &struct kunit_suite with KUnit.
+> > - *
+> > - * @__suites: a statically allocated list of &struct kunit_suite.
+> > - *
+> > - * Registers @__suites with the test framework. See &struct kunit_suite for
+> > - * more information.
+> > - *
+> > - * If a test suite is built-in, module_init() gets translated into
+> > - * an initcall which we don't want as the idea is that for builtins
+> > - * the executor will manage execution.  So ensure we do not define
+> > - * module_{init|exit} functions for the builtin case when registering
+> > - * suites via kunit_test_suites() below.
+> > - */
+> > -#define kunit_test_suites_for_module(__suites)                         \
+>
+> Deleting this bit now causes merge conflicts with Shuah's kunit
+> branch, due to https://patchwork.kernel.org/project/linux-kselftest/patch/20220702040959.3232874-3-davidgow@google.com/
+> I.e. We added in a MODULE_INFO(test, "Y") in this to-be-deleted section.
 
-The test can now be run via kunit_tool with:
-	./tools/testing/kunit/kunit.py run --arch=x86_64 \
-	--kconfig_add CONFIG_OF=y --kconfig_add CONFIG_OF_ADDRESS=y \
-	--kconfig_add CONFIG_MMC=y --kconfig_add CONFIG_MMC_SDHCI=y \
-	--kconfig_add CONFIG_MMC_SDHCI_PLTFM=y \
-	--kconfig_add CONFIG_MMC_SDHCI_OF_ASPEED=y \
-	'sdhci-of-aspeed'
+Nice catch. I've rebased this series on top of the taint stuff:
+https://lore.kernel.org/linux-kselftest/20220709032001.819487-2-davidgow@google.com/T/#u
 
-(It may be worth adding a .kunitconfig at some point, as there are
-enough dependencies to make that command scarily long.)
+> Perhaps something like this would be a fix?
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
-Acked-by: Brendan Higgins <brendanhiggins@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
+Thanks.The rebased version is basically this, but without the #ifdef
+MODULE indirection, as MODULE_INFO() will decay to nothing if MODULE
+is not defined, anyway.
 
-Changes since v3:
-https://lore.kernel.org/linux-kselftest/20220625050838.1618469-6-davidgow@google.com/
-- Rebase on top of the TAINT_TEST patch series. This should now apply
-  cleanly on top of the kunit branch:
-  https://lore.kernel.org/linux-kselftest/20220708044847.531566-1-davidgow@google.com/T/#u
-- Add Brendan's Acked-by tag.
+>   #ifdef MODULE
+>   #define _kunit_mark_test_module MODULE_INFO(test, "Y")
+>   #else
+>   #define _kunit_mark_test_module
+>   #endif /* MODULE */
+>
+>   #define __kunit_test_suites(unique_array, unique_suites, ...)
+>           \
+>           _kunit_mark_test_module;
+>           \
+>           static struct kunit_suite *unique_array[] = { __VA_ARGS__,
+> NULL };     \
+>           static struct kunit_suite **unique_suites
+>           \
+>           __used __section(".kunit_test_suites") = unique_array
+>
+>
+> > -       static int __init kunit_test_suites_init(void)                  \
+> > -       {                                                               \
+> > -               return __kunit_test_suites_init(__suites);              \
+> > -       }                                                               \
+> > -       module_init(kunit_test_suites_init);                            \
+> > -                                                                       \
+> > -       static void __exit kunit_test_suites_exit(void)                 \
+> > -       {                                                               \
+> > -               return __kunit_test_suites_exit(__suites);              \
+> > -       }                                                               \
+> > -       module_exit(kunit_test_suites_exit)
+> > -#else
+> > -#define kunit_test_suites_for_module(__suites)
+> > -#endif /* MODULE */
+> > -
+> >  #define __kunit_test_suites(unique_array, unique_suites, ...)                 \
+> >         static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
+> > -       kunit_test_suites_for_module(unique_array);                            \
+> >         static struct kunit_suite **unique_suites                              \
+> >         __used __section(".kunit_test_suites") = unique_array
+> >
 
-Changes since v2:
-https://lore.kernel.org/linux-kselftest/20220621085345.603820-6-davidgow@google.com/
-- Clean up the aspeed_sdc_init() function to get rid of an obsolete goto
-  (Thanks Daniel)
-- Add Daniel and Ulf's Acked-by tags.
+--0000000000002f74f405e356de27
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-No changes since v1:
-https://lore.kernel.org/linux-kselftest/20220618090310.1174932-6-davidgow@google.com/
-
----
- drivers/mmc/host/Kconfig                |  5 ++--
- drivers/mmc/host/sdhci-of-aspeed-test.c |  8 +-----
- drivers/mmc/host/sdhci-of-aspeed.c      | 34 +------------------------
- 3 files changed, 5 insertions(+), 42 deletions(-)
-
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index d6144978e32d..10c563999d3d 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -169,8 +169,9 @@ config MMC_SDHCI_OF_ASPEED
- 	  If unsure, say N.
- 
- config MMC_SDHCI_OF_ASPEED_TEST
--	bool "Tests for the ASPEED SDHCI driver"
--	depends on MMC_SDHCI_OF_ASPEED && KUNIT=y
-+	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
-+	depends on MMC_SDHCI_OF_ASPEED && KUNIT
-+	default KUNIT_ALL_TESTS
- 	help
- 	  Enable KUnit tests for the ASPEED SDHCI driver. Select this
- 	  option only if you will boot the kernel for the purpose of running
-diff --git a/drivers/mmc/host/sdhci-of-aspeed-test.c b/drivers/mmc/host/sdhci-of-aspeed-test.c
-index 1ed4f86291f2..ecb502606c53 100644
---- a/drivers/mmc/host/sdhci-of-aspeed-test.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed-test.c
-@@ -96,10 +96,4 @@ static struct kunit_suite aspeed_sdhci_test_suite = {
- 	.test_cases = aspeed_sdhci_test_cases,
- };
- 
--static struct kunit_suite *aspeed_sdc_test_suite_array[] = {
--	&aspeed_sdhci_test_suite,
--	NULL,
--};
--
--static struct kunit_suite **aspeed_sdc_test_suites
--	__used __section(".kunit_test_suites") = aspeed_sdc_test_suite_array;
-+kunit_test_suite(aspeed_sdhci_test_suite);
-diff --git a/drivers/mmc/host/sdhci-of-aspeed.c b/drivers/mmc/host/sdhci-of-aspeed.c
-index 6e4e132903a6..ba6677bf7372 100644
---- a/drivers/mmc/host/sdhci-of-aspeed.c
-+++ b/drivers/mmc/host/sdhci-of-aspeed.c
-@@ -606,25 +606,6 @@ static struct platform_driver aspeed_sdc_driver = {
- 
- #if defined(CONFIG_MMC_SDHCI_OF_ASPEED_TEST)
- #include "sdhci-of-aspeed-test.c"
--
--static inline int aspeed_sdc_tests_init(void)
--{
--	return __kunit_test_suites_init(aspeed_sdc_test_suites);
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--	__kunit_test_suites_exit(aspeed_sdc_test_suites);
--}
--#else
--static inline int aspeed_sdc_tests_init(void)
--{
--	return 0;
--}
--
--static inline void aspeed_sdc_tests_exit(void)
--{
--}
- #endif
- 
- static int __init aspeed_sdc_init(void)
-@@ -637,18 +618,7 @@ static int __init aspeed_sdc_init(void)
- 
- 	rc = platform_driver_register(&aspeed_sdc_driver);
- 	if (rc < 0)
--		goto cleanup_sdhci;
--
--	rc = aspeed_sdc_tests_init();
--	if (rc < 0) {
--		platform_driver_unregister(&aspeed_sdc_driver);
--		goto cleanup_sdhci;
--	}
--
--	return 0;
--
--cleanup_sdhci:
--	platform_driver_unregister(&aspeed_sdhci_driver);
-+		platform_driver_unregister(&aspeed_sdhci_driver);
- 
- 	return rc;
- }
-@@ -656,8 +626,6 @@ module_init(aspeed_sdc_init);
- 
- static void __exit aspeed_sdc_exit(void)
- {
--	aspeed_sdc_tests_exit();
--
- 	platform_driver_unregister(&aspeed_sdc_driver);
- 	platform_driver_unregister(&aspeed_sdhci_driver);
- }
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBl
+JmrHJzQ0vK1xYKaDEDYwR3rzNd2KyrVjy2GQK6mVbzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDkwMzI1MTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAlhD8Y9l2qJpJSHbsezKz
+AoI+Xv+FHHBzuTK2N9hJyGjtt7jFiiPYYf4bGpzIFX/sSTpd0Z7xOXtE5UpyA1lArMmWvWnFshJk
+JaaeTfJqrFEnPBv2QLVKFb+oBSjSFF6SbymFOnqs3v83Wu4ICwP+iZNYqaMSPsv4V4qEbIoUtKm7
+gl8ecAoPtoZRoek0wE49XtF1yCBLS3gKvrcCfpKw0L8ZSKPLssfO4gUakft6tLpi9PG+96CTGK1Z
+wXl8h+QlaYFi/oP83EPkJbc08GIegicX/2Y2q0T7h2v2v6QV7/Xz/jRYTrz1+rbFZ8hjWpZydZRy
+vZ8yWuqbB0qhxbm59Q==
+--0000000000002f74f405e356de27--
