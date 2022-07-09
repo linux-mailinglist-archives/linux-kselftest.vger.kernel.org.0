@@ -2,79 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA2456C65B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 05:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D6656C66A
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 05:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiGIDZW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Jul 2022 23:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        id S229547AbiGIDfm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Jul 2022 23:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiGIDZV (ORCPT
+        with ESMTP id S229472AbiGIDfl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jul 2022 23:25:21 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FEA6C112
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 20:25:19 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so227618wmi.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 20:25:19 -0700 (PDT)
+        Fri, 8 Jul 2022 23:35:41 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1189820CA
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 20:35:39 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id f2so619973wrr.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 20:35:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MppQ7PhRtgyFl4DUXfuvvWPWLp0qiiL+BxkF4ixWhKo=;
-        b=Ckzphb6d9iKtUOfJnDaMXF0nrjocSE1rE0GI6LyDY9hLBVgwab6siOsu5VAlhHdV3W
-         JBuf6LPohVer001dAYgggblqkZi8iMI+XfT6LMFIOwJceqdqt1s+nlVZs/980RUeWyY/
-         gWLXCCe1R2EOFdUZ8puSHSQCSBOQzHamh93nUV63rm+osP6pOZUY6HZCeZC9KhxiLVym
-         JI2AazrSZFPHjiasbwcjWzUEjRzIScYejhC9/naKArlRHK0znRo9IMumNM+bHjm7Jam8
-         cPOQi67DecHGUJ5rC7CxhBQVLS67yDkUiaGnHJCoP12MqtOYyTAcjOfXRu19MNb8R3IV
-         xIHg==
+        bh=jYQ/w2ZEwr0HERBuclwqg0i4nuMMDUs4wo+fy/B316k=;
+        b=gzJb2tgpNdtooltHtuRcmKmme5Dc4bxlxPP3R+8SDWLpGCLIb8LxPmRQVAdtkiwxaQ
+         trFO8S2Mr8TNf6XhdNpBdohUntIBTeqZSCeqOayD+QBskSAYI1mV/82/At2o5iV3WU4z
+         m0LW79toce9ka/0s91Tiqz9kEDqHb5nbh7TWRQM6ugw2aScIxkPWHmwKdwZOLuo1SyzJ
+         kXBlnXhf5EC3mZRdR6FPKwSszwUKeaTqYg+j7XKB12WQhgSpt7pjv/vY4qXkxGKAeMPL
+         VwfdskiTDCxldmT7VJmv2mePJgzN/mSZrSLAO/LjjsPco6et9eoK6R0Ps7Xx5em6znPs
+         mInA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MppQ7PhRtgyFl4DUXfuvvWPWLp0qiiL+BxkF4ixWhKo=;
-        b=glnFQfAqEHLRLm1qEcpe5LQBp6+EQp5M653pl9NAyuMu04hn+9sW1mJwmiZyDfBj4Q
-         HjdG61sqo9Ux7FnLo2E6m5Dw162GmmSVYatPAQVlSB6tTOzghutYc4+3Q0cw99gAva5g
-         KBgFfLagF98XMNac9fklkcF1zBl7lI+w/BW0ODjiut339WXBkP047iqUDgBl4h3xHoaH
-         5ixnHFIIyoobycKD/nAh+qC0FouONoAx60OBw2Bf1aZzXi+1yHkalokJylCybSWs7VPr
-         d9uS9dp2Sq1szGaB4cwqDpwyNJoyTUxZ5ig3PnSeh2DKeZcdMI3UKMHBPIthqSrnHVI5
-         anqg==
-X-Gm-Message-State: AJIora9eJ0AC4g4xBn8VPzE9ig64sROUYtii/b3ho4VcGFjYDIqVpVfZ
-        YFldrstLUim8vvel/KCkOm6Cli8tAO2ZHx1+gePMPopZOmHlmA==
-X-Google-Smtp-Source: AGRyM1swXGC1sfaXQRy1Xn69Dt8GxfoLuFYMy74dgllMBgXsH8MqmBm3CWHwxaQO0WXjO23yCp57TBd/Ze4MIb/YpdM=
-X-Received: by 2002:a05:600c:4fc8:b0:3a1:99cf:800 with SMTP id
- o8-20020a05600c4fc800b003a199cf0800mr3054967wmq.60.1657337117577; Fri, 08 Jul
- 2022 20:25:17 -0700 (PDT)
+        bh=jYQ/w2ZEwr0HERBuclwqg0i4nuMMDUs4wo+fy/B316k=;
+        b=vOe8KqqzOLQ619FWBo8WGGWnFEVAw6woFXqftEHK9ZC6N96YnQr4sblDAuVfYnMZM/
+         aFvSbWwxfdoheXXbg9FvSDszgHoUbp96Ry9jQsxKk273pwHoTgM4bibkvIMliwjLPlPw
+         yKKgTOP4vrFioaWHhl0D+iz1q7urgGh/YQaG/r/eN9PF5lRccT89ZgfkfL897mRECOc3
+         9yoD6ajCFNONrrD4jrUp7caa3RS/radb6W2dAGSAwgSB17COy8/zla5SFGsS0Jgp/5F0
+         yl8aNjncQRMk9Dmspa4zzmZHjIYZrN0kDs1cRwAsvsZur+CPlH0XF6hJ4UlM1Q9cE45v
+         3CPw==
+X-Gm-Message-State: AJIora+lciDuAI3vOSZjIhd4QydXwdG8NbSEIxdFzU+30JP5Iz4+KT+6
+        Ij5nH4yc9ZAFQTdihWHcGkr8QR+a57Mci7iwLiYROQ==
+X-Google-Smtp-Source: AGRyM1shMGyZogpGCQ7rR8WEcQtWqL8IiGW2YMygvlDEPhuGrGBQS1ciC9jpCUsZGsmLEfDWmVRI67mLR1of4gEOnKo=
+X-Received: by 2002:adf:e804:0:b0:21d:6e85:7550 with SMTP id
+ o4-20020adfe804000000b0021d6e857550mr6400492wrm.337.1657337738375; Fri, 08
+ Jul 2022 20:35:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220625050838.1618469-1-davidgow@google.com> <20220625050838.1618469-2-davidgow@google.com>
- <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
-In-Reply-To: <CAGS_qxrGwVL37AOUWCxwx=qg6YvXCDSSu4p_PSt7_87N3RxJZw@mail.gmail.com>
+References: <20220708044847.531566-1-davidgow@google.com> <20220708044847.531566-3-davidgow@google.com>
+ <fc638852-ac9a-abab-8fdb-01b685cdec96@linuxfoundation.org>
+ <CAGS_qxpODhSEs_sMm5Gu55EsYy-M9V98eLU-8O+xGMxncXmY4A@mail.gmail.com>
+ <f25f96ce-1c9b-7e66-a5be-96d7cf2988cf@linuxfoundation.org> <a00efaa8-71e0-c531-b6a4-e3d695ad628b@linuxfoundation.org>
+In-Reply-To: <a00efaa8-71e0-c531-b6a4-e3d695ad628b@linuxfoundation.org>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 9 Jul 2022 11:25:06 +0800
-Message-ID: <CABVgOS=AfJ7X5xqEKvXCzQ=UzOWrmR9KBO_TnkQw4Ti3fmKHBw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] kunit: unify module and builtin suite definitions
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+Date:   Sat, 9 Jul 2022 11:35:27 +0800
+Message-ID: <CABVgOSkroVjxTDoKTLBxiX_Fw5qZQmchDpY4U3XCCRYfXbS2bQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] kunit: Taint the kernel when KUnit tests are run
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-usb@vger.kernel.org, linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002f74f405e356de27"
+        boundary="00000000000030176705e357031a"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -86,91 +95,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000002f74f405e356de27
+--00000000000030176705e357031a
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Jul 9, 2022 at 2:23 AM Daniel Latypov <dlatypov@google.com> wrote:
+On Sat, Jul 9, 2022 at 5:24 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> On Fri, Jun 24, 2022 at 10:10 PM David Gow <davidgow@google.com> wrote:
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index 8ffcd7de9607..54306271cfbf 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -250,41 +250,8 @@ static inline int kunit_run_all_tests(void)
-> >  }
-> >  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
+> On 7/8/22 3:22 PM, Shuah Khan wrote:
+> > On 7/8/22 3:00 PM, Daniel Latypov wrote:
+> >> On Fri, Jul 8, 2022 at 1:22 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+> >>>
+> >>> On 7/7/22 10:48 PM, David Gow wrote:
+> >>>> Make KUnit trigger the new TAINT_TEST taint when any KUnit test is run.
+> >>>> Due to KUnit tests not being intended to run on production systems, and
+> >>>> potentially causing problems (or security issues like leaking kernel
+> >>>> addresses), the kernel's state should not be considered safe for
+> >>>> production use after KUnit tests are run.
+> >>>>
+> >>>> This both marks KUnit modules as test modules using MODULE_INFO() and
+> >>>> manually taints the kernel when tests are run (which catches builtin
+> >>>> tests).
+> >>>>
+> >>>> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+> >>>> Tested-by: Daniel Latypov <dlatypov@google.com>
+> >>>> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> >>>> Signed-off-by: David Gow <davidgow@google.com>
+> >>>> ---
+> >>>>
+> >>>> No changes since v5:
+> >>>> https://lore.kernel.org/linux-kselftest/20220702040959.3232874-3-davidgow@google.com/
+> >>>>
+> >>>> No changes since v4:
+> >>>> https://lore.kernel.org/linux-kselftest/20220701084744.3002019-3-davidgow@google.com/
+> >>>>
+> >>>
+> >>> David, Brendan, Andrew,
+> >>>
+> >>> Just confirming the status of these patches. I applied v4 1/3 and v4 3/4
+> >>> to linux-kselftest kunit for 5.20-rc1.
+> >>> I am seeing v5 and v6 now. Andrew applied v5 looks like. Would you like
+> >>> me to drop the two I applied? Do we have to refresh with v6?
+> >>
+> >> Just noting here that there'll be a merge conflict between this patch
+> >> (3/4) and some other patches lined up to go through the kunit tree:
+> >> https://patchwork.kernel.org/project/linux-kselftest/patch/20220625050838.1618469-2-davidgow@google.com/
+> >>
+> >> Not sure how we want to handle that.
+> >>
 > >
-> > -#ifdef MODULE
-> > -/**
-> > - * kunit_test_suites_for_module() - used to register one or more
-> > - *                      &struct kunit_suite with KUnit.
-> > - *
-> > - * @__suites: a statically allocated list of &struct kunit_suite.
-> > - *
-> > - * Registers @__suites with the test framework. See &struct kunit_suite for
-> > - * more information.
-> > - *
-> > - * If a test suite is built-in, module_init() gets translated into
-> > - * an initcall which we don't want as the idea is that for builtins
-> > - * the executor will manage execution.  So ensure we do not define
-> > - * module_{init|exit} functions for the builtin case when registering
-> > - * suites via kunit_test_suites() below.
-> > - */
-> > -#define kunit_test_suites_for_module(__suites)                         \
->
-> Deleting this bit now causes merge conflicts with Shuah's kunit
-> branch, due to https://patchwork.kernel.org/project/linux-kselftest/patch/20220702040959.3232874-3-davidgow@google.com/
-> I.e. We added in a MODULE_INFO(test, "Y") in this to-be-deleted section.
-
-Nice catch. I've rebased this series on top of the taint stuff:
-https://lore.kernel.org/linux-kselftest/20220709032001.819487-2-davidgow@google.com/T/#u
-
-> Perhaps something like this would be a fix?
-
-Thanks.The rebased version is basically this, but without the #ifdef
-MODULE indirection, as MODULE_INFO() will decay to nothing if MODULE
-is not defined, anyway.
-
->   #ifdef MODULE
->   #define _kunit_mark_test_module MODULE_INFO(test, "Y")
->   #else
->   #define _kunit_mark_test_module
->   #endif /* MODULE */
->
->   #define __kunit_test_suites(unique_array, unique_suites, ...)
->           \
->           _kunit_mark_test_module;
->           \
->           static struct kunit_suite *unique_array[] = { __VA_ARGS__,
-> NULL };     \
->           static struct kunit_suite **unique_suites
->           \
->           __used __section(".kunit_test_suites") = unique_array
->
->
-> > -       static int __init kunit_test_suites_init(void)                  \
-> > -       {                                                               \
-> > -               return __kunit_test_suites_init(__suites);              \
-> > -       }                                                               \
-> > -       module_init(kunit_test_suites_init);                            \
-> > -                                                                       \
-> > -       static void __exit kunit_test_suites_exit(void)                 \
-> > -       {                                                               \
-> > -               return __kunit_test_suites_exit(__suites);              \
-> > -       }                                                               \
-> > -       module_exit(kunit_test_suites_exit)
-> > -#else
-> > -#define kunit_test_suites_for_module(__suites)
-> > -#endif /* MODULE */
-> > -
-> >  #define __kunit_test_suites(unique_array, unique_suites, ...)                 \
-> >         static struct kunit_suite *unique_array[] = { __VA_ARGS__, NULL };     \
-> > -       kunit_test_suites_for_module(unique_array);                            \
-> >         static struct kunit_suite **unique_suites                              \
-> >         __used __section(".kunit_test_suites") = unique_array
+> > I can go drop the two patches and have Andrew carry the series through
+> > mm tree.
 > >
+>
+> Sorry spoke too soon. Yes there are others that might have conflicts as
+> Daniel pointed out:
+>
+> https://patchwork.kernel.org/project/linux-kselftest/patch/20220625050838.1618469-2-davidgow@google.com/
+>
+> thanks,
+> -- Shuah
+>
 
---0000000000002f74f405e356de27
+Thanks everyone for pointing these out.
+
+I've rebased the other series (the KUnit module support one:
+https://lore.kernel.org/linux-kselftest/20220709032001.819487-1-davidgow@google.com/
+) on top of this.
+
+If they all go in via the kselftest/kunit tree, everything should be fine now.
+
+Cheers,
+-- David
+
+--00000000000030176705e357031a
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -237,14 +233,14 @@ OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
 3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
 lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBl
-JmrHJzQ0vK1xYKaDEDYwR3rzNd2KyrVjy2GQK6mVbzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDkwMzI1MTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDW
+xOGRhc2KC7kyBAOO9VflVYWYSBCJ/Qfi9dyPQ2bzwzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA3MDkwMzM1MzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAlhD8Y9l2qJpJSHbsezKz
-AoI+Xv+FHHBzuTK2N9hJyGjtt7jFiiPYYf4bGpzIFX/sSTpd0Z7xOXtE5UpyA1lArMmWvWnFshJk
-JaaeTfJqrFEnPBv2QLVKFb+oBSjSFF6SbymFOnqs3v83Wu4ICwP+iZNYqaMSPsv4V4qEbIoUtKm7
-gl8ecAoPtoZRoek0wE49XtF1yCBLS3gKvrcCfpKw0L8ZSKPLssfO4gUakft6tLpi9PG+96CTGK1Z
-wXl8h+QlaYFi/oP83EPkJbc08GIegicX/2Y2q0T7h2v2v6QV7/Xz/jRYTrz1+rbFZ8hjWpZydZRy
-vZ8yWuqbB0qhxbm59Q==
---0000000000002f74f405e356de27--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEADngLlw+7BHWsDfXodA5M
+3ZhqcKoIUGTKOKpkyuCXDO2O0vKj8H+haMpVNzKb2bCYv1uGJ7wmYoCVGlEWyfEav54JNa7H0CId
+0KmpuSkAFG0AmzSaowoyS6brF411oVsZfEorrGd+H/0v2p+yeF5McUzsBxW5J11rFRw/A/YNysqz
+kHZkkNaZN8H46I3fYTGaNNVvYkbFJw3SXDO10Hbg6g1QLMHhcSF23AuLeaNoN1NN3vzLWIgkuq9n
+SSxPm6THzbhMkmIXgPU0J1KeAuk4LmnWoLX0s3q4qWfaBTD8r4BYYa9yC7w/Ojx6KJTiM/kxZXtq
+hAU+ejbbM2raoq4MZQ==
+--00000000000030176705e357031a--
