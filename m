@@ -2,135 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD83056C581
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 02:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48D256C604
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Jul 2022 04:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiGIAi6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Jul 2022 20:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S229455AbiGICl5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Jul 2022 22:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiGIAil (ORCPT
+        with ESMTP id S229452AbiGICl4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Jul 2022 20:38:41 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100BB764E
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Jul 2022 17:38:30 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id j1-20020a17090aeb0100b001ef777a7befso2558926pjz.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Jul 2022 17:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=eOOL5f+723faAiSlHx7PC7PgnCioS2X8+Peclx1uv/Q=;
-        b=ZML9wsfa6SzfRKEX1YRfYlLIBTNTF0Xm/IaU9xC6eGAHeZdQU9oOauawEu1wRBBdao
-         EBmR4vD/v1Jpki73RQK/msUJLtZi9bGSW1aQg5+Sycg3Xg/Wrs6GrElrq+QsGJ6paN46
-         EnoUKVrNlEFLF2Hy7cmD4Vk86UvntswIJjuFREfSsCp+OTargSoNB8o24eMXvLZ5GqC6
-         wPBlbXK9xPeFRNITuEevBnt5RpffJYTS90L7eEWwLsV7k2rOeOVlLcgwANxSYzy3YGkF
-         iNonllV7U3VCp+WLF/IHPO+1fJ+j8d1xbiZr/UIJL965zoBcf7F1cq2LVuAQ0kHnzjBx
-         ibxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=eOOL5f+723faAiSlHx7PC7PgnCioS2X8+Peclx1uv/Q=;
-        b=Yj335nhvDdyC9xnBZim71osrlFkHAn6A8kq0/9aawBFeqCyEcDdYvfon8Rl2nSqfOz
-         x6AxyCx8I+dLlr+PiZPpROB+2Jx6LLCwlMK2OttxsoblpyfYvSr3kYoCeySe1BdZc7K/
-         aUpv+Vrhp+0AzfcLvpiDzYfCNE9ud5RryIxRk7phZEb/znXL1LxaGbeML5LvlOaessbq
-         Ua9Jjxn+oEhSw2SNKDiwnsT8evrq+TB2i5HqAeZ5Vy5wp1mdvlD0VbN4gi/mNZw0JObH
-         OZeT0n3Vc5yvCuj2ntk9CmK52Moan3eUy4p85Gvn0+WKpLoVpU877Fv6iBoVqHjBmss7
-         8N+A==
-X-Gm-Message-State: AJIora8zEuYGJCWVmUH6vhdwDk7YFzomBOv8XfynI1Cn/vsOeNoHeJS6
-        qM46bQ2R37lAvV9iZw2bhq9IDQ==
-X-Google-Smtp-Source: AGRyM1vJMXXsks5u8uD16IT8wiXt/2Z6BgtfRKm9OC5yw/Dltm0m/F278a2TerqiPZP/JzCeUuCPFQ==
-X-Received: by 2002:a17:902:ef46:b0:168:bac3:2fd4 with SMTP id e6-20020a170902ef4600b00168bac32fd4mr6345893plx.132.1657327110524;
-        Fri, 08 Jul 2022 17:38:30 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a12-20020a62d40c000000b00528d8ce7394sm176533pfh.125.2022.07.08.17.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 17:38:30 -0700 (PDT)
-Message-ID: <62c8ce06.1c69fb81.bb3de.05e6@mx.google.com>
-Date:   Fri, 08 Jul 2022 17:38:30 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 8 Jul 2022 22:41:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED35768716;
+        Fri,  8 Jul 2022 19:41:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0EB3B80CE9;
+        Sat,  9 Jul 2022 02:41:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04075C341C0;
+        Sat,  9 Jul 2022 02:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657334513;
+        bh=umfFLEka3XrPxdqusW3BhDWioTLO6SMD/4V8fO3jGSc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=q5egRZWRl7CgQ/8xhi30z8GzAg6plxGN8zO7ukerkfatFQDJ6GUlkND4cQWrp9A4h
+         QSa7QZw9GC6Wry0D073IBjtJa7E+l7uLbrQux1guQJArE25/BWs48o4R0rhXvgF/5r
+         723o9vbi/IYA32uAvdGnckivLIzWH7YNcTztErvdkXt9sFqCm7irF/7epdznurf57U
+         twujhG2+5ShLCQDCs7M1nVtf2hesE09RwrEsV9PCsreElV60Z9VyCAVd3aHcFd2kRD
+         oRDw8I36/eS2YjIPVd83No6EVUSvAi4uJa/LwD5CBH/YZQ5QBdaqCPoz9hp3NelNWL
+         lmBTPKDkVsmHQ==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net] selftest: net: add tun to .gitignore
+Date:   Fri,  8 Jul 2022 19:41:41 -0700
+Message-Id: <20220709024141.321683-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.19-rc4-9-gdbeb23272687
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-seccomp: 4 runs,
- 1 regressions (v5.19-rc4-9-gdbeb23272687)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 4 runs, 1 regressions (v5.19-rc4-9-gdbeb2=
-3272687)
+Add missing .gitignore entry.
 
-Regressions Summary
--------------------
+Fixes: 839b92fede7b ("selftest: tun: add test for NAPI dismantle")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ tools/testing/selftests/net/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-platform                     | arch  | lab          | compiler | defconfig =
-          | regressions
------------------------------+-------+--------------+----------+-----------=
-----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre | gcc-10   | defconfig+=
-kselftest | 1          =
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index a29f79618934..ffc35a22e914 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -36,4 +36,5 @@ test_unix_oob
+ gro
+ ioam6_parser
+ toeplitz
++tun
+ cmsg_sender
+-- 
+2.36.1
 
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v5.1=
-9-rc4-9-gdbeb23272687/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v5.19-rc4-9-gdbeb23272687
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      dbeb232726871352fc3e688ff5b02897f8cb0dc7 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-          | regressions
------------------------------+-------+--------------+----------+-----------=
-----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-baylibre | gcc-10   | defconfig+=
-kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62c8be7aee6aa7d244a39bcf
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v5.19-rc4-9-gdb=
-eb23272687/arm64/defconfig+kselftest/gcc-10/lab-baylibre/kselftest-seccomp-=
-meson-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v5.19-rc4-9-gdb=
-eb23272687/arm64/defconfig+kselftest/gcc-10/lab-baylibre/kselftest-seccomp-=
-meson-gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20220624.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/62c8be7aee6a=
-a7d244a39bd0
-        failing since 10 days (last pass: v5.19-rc1, first fail: v5.19-rc4-=
-4-g43fe0cc46b62) =
-
- =20
