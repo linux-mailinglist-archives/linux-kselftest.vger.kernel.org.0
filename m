@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAB856CDBA
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Jul 2022 10:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F0756CDCF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Jul 2022 10:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiGJIUi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 10 Jul 2022 04:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S229581AbiGJIfr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 10 Jul 2022 04:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiGJIUg (ORCPT
+        with ESMTP id S229463AbiGJIfq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 10 Jul 2022 04:20:36 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43387BC0E;
-        Sun, 10 Jul 2022 01:20:35 -0700 (PDT)
+        Sun, 10 Jul 2022 04:35:46 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2040.outbound.protection.outlook.com [40.107.243.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64DC13F1F;
+        Sun, 10 Jul 2022 01:35:43 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dg7V3AP9cETJQSsFjRRw0Ri+5zclojKL8ZjjrXD8JwzovIZLrxCXMkLHFOzJLqoVI87Iwv66TQgT5em085HnQmyZBnrWuaICX36pyJe+RvlXCo5JN2qOdNxmr3p/w/HxidvJ7yv9wByQCaBW8XTE0u1Ta/pavMe8TuHonSVa1DNBBk5uQMf0EnQb6fQzV4TKNB7t2bwuB9WGTJn4fOLUaPBbaM/imQ6KmmJ1aI68NnYfd60Q687zqJtwL74kGlpFWse2WQ4z31AB1IaPooG7iSjrFzb0eCGjTNL6qgM8fjwVn43n2gaqqZ5qS+dquTxDec+UJQfGhU5cDxCM5+IhHg==
+ b=P50K5+H9cSs247F0M+lcOnXndyzsLnaLhcU8/pKGh4ZDDqvt4pdPARg0NKdjqOb3kkHmw6e+GxCvmbPBPQTLA+R97XcRMtPBhKP5P/ySBoFVxzPyjZSIPpl+z849K/rM1WLk5zifRk7hfSVe+T37pFb6l4iEdXmHFs2bmpP53pVpoiQX5C5xn4U27IBK3Q0CMOXNjoLTUAErr8PKGmv2G9Z4xdJ6CRd/SnX+VmZt6HgrsP4NEsoynM6dU4eW1LGE85UQksjaPRMNeM9J/VUnfBGMv5PZly55cawGg6Wr/xjGOjBoi0U5zaopH3tnUIV41epvmk+MZjHSDTJM+VpH6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6aOSOUd9RBEHqOP1XcSOPcC/VbZMbNhD9MrOCZg4pkA=;
- b=ZsqW2ANbPVeWiYJLpgF2bgrwZNweXZgyT5OB3gWwBglTCIx5TDq4i3/ITRUUG3lTXxESmznsU/491OAp5Lcu0N36w9nbR25rHKe383bJ5v0jFVQEjsay6pIGdL6FmzblofX1srNVHDijX6ocJyHm3gY1J+lKnwH2dgQf09fhN/VSpi5hftYOE36n+znwp7flhWB9PTPJl8l7ouRA0q9AAT44BNv7fJVCFtB/y7yDJPKe3OZUUgCBzQhVuy2Tq7/7Y2l286n0sCHD74pKQnMB1iUA8OFBSI0wxsM4+P//EqG0vjBROu4XTTlgIjQMhlhQt89GTxEWsCcm0ynMgep9Vw==
+ bh=UaG0H9YVd45cKQL3/FJQcUe93jcyrOYVfC41nfQax6c=;
+ b=aN6HCXshtB/jhpFR2/wfeogHnM4H3/CLz2rsEZkFGY2GQcY/D+BDHU3gPqBEnjuSWX6aKR8F/UePkZYvLqdyh+ykKVJigItKLivc1wLzUI7NZCIc3zRCLkG6DlNxBsHUbDjE1NAZQKLpzJ4rl5xY+OFypJXdtL/k6+4VreQa+akWZa1R769ccKC4Kxx/22ySKk1DKzE8M1A71RoHOwl/HTuSUYT1mnbN21lg1rGd0wsLXXq0Qm0kxwDg/IyZQ4q4hoL4hs12Q8DHz/0nzIPuVFIaCZXdwbYsPcrMbmQ9bRdeQhvNCI/0K8z/GrcvZhr1Qwtfk+6MvYF+549SMqYmEw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6aOSOUd9RBEHqOP1XcSOPcC/VbZMbNhD9MrOCZg4pkA=;
- b=cYCXhwwFC+6mNEoVFRjlhKGEOUKSpAD6VIWtM1VoiCy0C57G6Uj6RMrW3N9BFCnnZO3F6PxS/TOHVweKZ0pYViulJd6WGMYW36xuD9hva/ykV/qSPCUL0TnsQ72rnaIcgmRvQUZlJcFV6Y+Sg27P5AaxwzjSBf8MByHVjdduJHr7ul71c+DjlYQOxtLPnQh1/Pv30ygmXWE9xqvusUv7bjKaOmbYD+I3KPBugezScCKQ0Jy9/lTS0C6SAPqVo1ZvBNDOWRgcHH0VzE0UORPDPGlQoZwibHFD00bMK/2hYeNPDt2BLZ1hJVu3lI1q/1xMTbAbd9Swc/Mbyz4OqDto1Q==
+ bh=UaG0H9YVd45cKQL3/FJQcUe93jcyrOYVfC41nfQax6c=;
+ b=I4m85fuTMSlf1WqWJ69yvcPuwZJorKgLyqA+dIhQgLM9YD5mEtFHW2fATZcuf4a7n8iky9xfIdfo82cVGmUUbkNAiCMboTSC3BEyC8yRMmDjCoh9KmvafU3cZqZJ19luRaxkWBNdejkyh25cnV7sIeDbAVhvGbUbsK+EGC+2bt/10EXBsOv8T+6WmdY3ifS4ZijqBrfi5fvcvg6kC7TgtnkmNjhx9krN3B44KtIvhEKRWU6AkqA6FVj3iN45d0rPrKUVKPq+d3mc9u4pekwTktasCYQL9xvjdxfWy/dfTUnzrJU/tDY705Xba+3Fhd+118+knZV88HiCFt95QGT3ew==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by CH2PR12MB4037.namprd12.prod.outlook.com (2603:10b6:610:7a::20) with
+ by DS7PR12MB5719.namprd12.prod.outlook.com (2603:10b6:8:72::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Sun, 10 Jul
- 2022 08:20:33 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.25; Sun, 10 Jul
+ 2022 08:35:42 +0000
 Received: from CY5PR12MB6179.namprd12.prod.outlook.com
  ([fe80::a525:8fcf:95ec:f7ad]) by CY5PR12MB6179.namprd12.prod.outlook.com
  ([fe80::a525:8fcf:95ec:f7ad%9]) with mapi id 15.20.5417.025; Sun, 10 Jul 2022
- 08:20:33 +0000
-Date:   Sun, 10 Jul 2022 11:20:27 +0300
+ 08:35:42 +0000
+Date:   Sun, 10 Jul 2022 11:35:36 +0300
 From:   Ido Schimmel <idosch@nvidia.com>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+To:     netdev@kapio-technology.com
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
         Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
         Ivan Vecera <ivecera@redhat.com>,
@@ -58,65 +58,70 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 1/6] net: bridge: add locked entry fdb flag
- to extend locked port feature
-Message-ID: <YsqLyxTRtUjzDj6D@shredder>
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+Message-ID: <YsqPWK67U0+Iw2Ru@shredder>
 References: <20220707152930.1789437-1-netdev@kapio-technology.com>
- <20220707152930.1789437-2-netdev@kapio-technology.com>
+ <20220707152930.1789437-4-netdev@kapio-technology.com>
+ <20220708084904.33otb6x256huddps@skbuf>
+ <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
+ <20220708091550.2qcu3tyqkhgiudjg@skbuf>
+ <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
+ <20220708115624.rrjzjtidlhcqczjv@skbuf>
+ <723e2995314b41ff323272536ef27341@kapio-technology.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707152930.1789437-2-netdev@kapio-technology.com>
-X-ClientProxiedBy: MR1P264CA0153.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:54::11) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+In-Reply-To: <723e2995314b41ff323272536ef27341@kapio-technology.com>
+X-ClientProxiedBy: MR2P264CA0033.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500::21)
+ To CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9b9542cd-be34-46ee-13e6-08da624d0ee9
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4037:EE_
+X-MS-Office365-Filtering-Correlation-Id: dcc8961a-cf97-4cb1-51b5-08da624f2cda
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5719:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2U9f43Eq0iuU+Lk4fZrpjLFahKQymNh20MSjQUn6irw540lUcw8oCrQAHJfVTcGFI2ApcAMnhc40rqafxTXaR1P22FxFJllKcGH1EUUP3It3iSKRdLRSCyKNz+Oiu0ffY8HqA/kwEtj8Ejvx4y5xgPWq8AdJZl6V9uH9lgwlmXblRDWbfNoZnzlvFNeFoXscBGdEIZoW6pxUYhpRjUmZQCJAxfAW7RYsrt4+KdktZqDUODuFMB4W30fIZBNI5EKnS/W14HCMdn5VVZL8lPdCao+6+tYePsrFzWjt03sIaNjiIXMLepcwqA/p6s6RsucxX7sAc1YFyapSBSFG1j6qjjyprsqP3+nO26hA8ZzNR+pAMlPm9J6XNH5wpekqabPcNhU6Q7bgtZ2EjqZgqiHF3aUlSxwjZFCgL45kX/AUp5Hq8Ifp7+o73RcaIm1rM8hlTUb2M1fA7y3NsOkRhPPawWOLUfx9fydiMbtf9Qca1uXBUSqbp5LN7MD7ZVo1tn01jRfevUIjKdey1fz2wR3RN92V1q2SJtnKDhgENxBU99sSYmcrMChJaoH/dgwp+MH/l3a3UQ21FbpufHl+jwiwe5WQhPKKC1o0e9Itzpq2iGc1iRvYNR5Bc0l/8RPAvOUYkjEl9SIS6yC3I8orIMzlkF3eJVp1wlSsIozygHf2KCbgK/rZkn3M5nbPYprbB4xDrgpPmqV4TEJ/Z0r1pAhtthU8/LV6zoPGqB2iCjYO6OKC8khmUIStUhrBho5sXQ6mAlK41naEacb9KDYPed+UVA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(136003)(396003)(376002)(366004)(346002)(39860400002)(41300700001)(6512007)(9686003)(6666004)(2906002)(33716001)(86362001)(6486002)(478600001)(26005)(6506007)(316002)(6916009)(54906003)(38100700002)(8936002)(7416002)(8676002)(66476007)(66556008)(66946007)(5660300002)(4326008)(83380400001)(66574015)(186003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 6vnVx7O60lbWPMbhhzNalkRL02pcUuuaQvxAPPOkyuVJOBSzjAi1OTc0hj/g21JYCQ1xbAt4Lzu+j8WzNedOKV8cSQAxzgJuhhMWN72iIKMwphF40l4W0Skm2L3YxstINm7sfl7zdl06+0yItzP9QFKWwkkL8Xq7+dK5ef4W7TZcweJkgIbHrU0EhTCfn3PS1qlvWZGtH1xUWlVb2coQSq+tGohCpzq6+jCu689F/sxaF2+E8PQ2Oucy4x9IRJHfqSoLfo5oZdZuyL5Ff6JIkVOJ6SEfediNfBpdPmd01A6x3B7LxMPgU0oSap553byKRskwZLsC678PxiCxPwXti54EN7mEpWCEZompK5/1Gy7BTizYza3I/j32K4/F6lmC/4KCaosNXaUHT2aCjpQ3JPYV4Gkp+vbnvZAx0mxLyCd7HThqMCfs8eKiDpWOhctXhiohEzLshDjdlQV2t2sA6lxAP6DLDvH0zWvdZoM6DyzOyU722/IFYeSbf3GmGFlggCdoaQDR797YncLQzdx6l4Os3mzo7H1rwabOUM6TesfxB6RnzF5NiaaqDMbe0kpp9BpQG6pYUtbOG6m2w5bJkASor8+EoOxmq25d5yc4RCN0NZO2A3N3yRnF/LUYwAqq2yWuF02azsymzqdRFWgQUkbdGNwdtUfIVTosbR/EMoDUSlx44bQX4Ps7Tvg7TxXcvnxMtRKpWmxe0278FA8voFShadEsdlQic1LJZjwaJI3k1BbRroVqsN/S3lfFN6LlyPSngyXEzyVFZU/twVyOT1ohmSx2ODqZrXw67CX0MNApzRhaUT+7Dx0hodonHFxPtbVt2tOAStAqzVGK9Bo85Uyg2Gu0mLcpfmeq68J/7j+B+s8YoYXKEFtB4JvWQ5hxFRH/+xr8SZp7TmhiblKsbQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(39860400002)(396003)(136003)(366004)(376002)(346002)(86362001)(66946007)(66476007)(8676002)(4326008)(38100700002)(6916009)(54906003)(316002)(33716001)(186003)(7416002)(66556008)(5660300002)(8936002)(83380400001)(2906002)(478600001)(26005)(6486002)(6506007)(6512007)(53546011)(9686003)(966005)(6666004)(41300700001)(67856001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/K/T0k9eMOhvikHJLFAoLauXFIIB+yEdE2dTPHB6Lid1cFd1LmwN35AcnH0N?=
- =?us-ascii?Q?UqN1/7kJ7Q3nv59ea5LcIPc2HEPk6xmPNJIWvZ3TN+4podUPBB+1eGv4t7ao?=
- =?us-ascii?Q?9ExVgwHkWf4RdtHCmnjslTHu3hdqauEuBkm0a0WDKoA3IEJcZSRo75cVap7b?=
- =?us-ascii?Q?tp7JP3s0hfg2jPuC31tVeZWM7DbG6sflZG5pkI4Pb2p347J7Vs/Xj5K53wkp?=
- =?us-ascii?Q?DHZt70CExJu2wt7e3aGkYwW39zCMqeNDdCRE16DYFoV/Dt/TcHABa6WOtQaf?=
- =?us-ascii?Q?3n4DVPtVs2+bEGC8J9FZOxsbR/9SXfcFThA0YlymEpFJ/iSNOjbok4EWm5ch?=
- =?us-ascii?Q?y3ZKQzc9j0XabWwxIYu9i+viDyN4s7DhQvkEwnflHrMMbmaeAh+r/ACXbywF?=
- =?us-ascii?Q?ocIX8E4Np5K1BFAt7XPp66BAIZIQl5jOWM8XMw14HfZvUlKHqZazWTQDxCdX?=
- =?us-ascii?Q?wmeDmom0zX1tn2Vy9gxPa6x2vkeGcgyv2MOO52JIUIYPe9n6PB9KoHW2FFBR?=
- =?us-ascii?Q?gJv9vYXiBSoDwt+1VxozX0ZV9l4KaT7nvn4LLq/ELF66vJLa4WrGygo2VGO0?=
- =?us-ascii?Q?30wM9981Yushn+QhUwYQ/542v+qaCVTMJWTlbeywgaEzLcf4sVG6G0n1nPhL?=
- =?us-ascii?Q?mtNA0C34jPMr6fLou1NOzsNJV6mG7GTb9biR4kmv2db0raXFngo2JRj0UlfG?=
- =?us-ascii?Q?ICUngwHZP5XZoCqSS7CVP13CrP+LS5jsSUO/eCo6m3rALhI8AhJBHR5gqh4s?=
- =?us-ascii?Q?GJDajzkxPBNorsq1MGj5n69K7+IzITq3DCNicLkOCF4GtTyigbgACv5raUc6?=
- =?us-ascii?Q?48Y8cTrQ5d+W3GQ8M43MQ/qb/dIRyOgOOIWD8/4THC9APi8UiGZujTO1AGJ+?=
- =?us-ascii?Q?T8uHzPJ9Zu19GShAriJjT04j+O2J6S+o/11Wyq5mr7wQSlUQcilO4PVt1PSk?=
- =?us-ascii?Q?JKC+5WzTvnHseytcYfZNabHf1STWVcaOcryNC6Siq4NIdgyVO8tHfiG5DhII?=
- =?us-ascii?Q?FnE2PfV6eBOeOIr3KHHQRn1i0jxntC3S+zVX/FrKNe7T1wPnf6aq4yuPpinA?=
- =?us-ascii?Q?YcTPSEC/CkG5UM745QiwHRyCJoVsEdwqoRevEg97NWKmnfVPGvdvZ/HuQ0zf?=
- =?us-ascii?Q?7PO/W9hLXRlmOc+VqaTIFMHQ3if7DMXJrv+pMstmQSsYrs2NNxXh8wlJxDRZ?=
- =?us-ascii?Q?zSlIFiW3oJYpL7TelLPAOwhBG+kVIDe0NgDFRFRa0i23lLNlpPRp3ojmNSX3?=
- =?us-ascii?Q?9PZIDLBn3lzQwKj03k+6/mBSAzA8ucintpivO5rbKFVKLZu6j5nCwpkqR1f5?=
- =?us-ascii?Q?saVYob2ymthFro6WhMXqxu3YavzFDLpxoonsK3q1BEyTjEinbjmAS+ygwh1a?=
- =?us-ascii?Q?bubrWuQzN3QJl5JN2R+8HqoIDm1XrEgGxt5mS69QNGAp+QpPSYrbe8fAsTR5?=
- =?us-ascii?Q?kcoKbr9ZYmKfl+bkfoFCEJX01kKecxN1kcFmzQwvDTRTOPAqf1+hGV7E1xWZ?=
- =?us-ascii?Q?+JrHgBh0oGEmoCkk3dPU/9I4d/0u2+B77x1DawtXdIVumOfL/UkvggNspMgD?=
- =?us-ascii?Q?loQIs9WRdhHtbd3Ruq5K7vPvop+/1nkRi7MhHXVb?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EuMWxCne9cWyL41zMRGDqYjxV48XKvdF0IOerwEg7R2Hr5PgfnBnpqg4EUnU?=
+ =?us-ascii?Q?PI+KyEul54NrJwenE8S4c9Q/06rhw2gXQe3Hz35zRAzbr9C3NLWXr0MJd31I?=
+ =?us-ascii?Q?/VwFfXKJq8Hq3UemLVX3kOHZZW4T/p42iBO7S6FEOIuwRHSBlr5JksrCR7Pl?=
+ =?us-ascii?Q?fxV/R3v1PjwcYM1mmzewPiZHhmIebKz7aYSkme925PC5LaMn7JTSivxLysPt?=
+ =?us-ascii?Q?VLWIzuBnQw9938Wohfj27ZgRsHmgPV0gMA4RiT462xJeR7NO2o5K0eH3ASsW?=
+ =?us-ascii?Q?ycOpMOWL0KmJVHDs7loYt4HpmRQCiPluaW2y04qFPMTkiUG6Dhxsq2AabtP6?=
+ =?us-ascii?Q?OpsYoxx0ru4KZ3IgAoKg0E9LRMJxWJ9Tc5wwYBd2D4/Zuak8akEK8oYOZt2X?=
+ =?us-ascii?Q?vW0Q61p/1sm44d6T3SxHB8/0XHWfLUdvleWLfmNrqejwPLT/cPz4NF6isg+v?=
+ =?us-ascii?Q?gElPTH6YVSpUcVK9CpwAJkA49bT6yDkHIH13QmhHgJDG1aphi0aggCxOGtS8?=
+ =?us-ascii?Q?8cllrEpBgB3W/wWEk97Pd3yE/MUztC5i6Ius4AlTqmWhYg4nb0mLfw4WMQzo?=
+ =?us-ascii?Q?ny/baqbph85alAaIF/GBagJuSmirwjqYKS6XNruC6tAKv3FQOkgl2dqZqyyH?=
+ =?us-ascii?Q?0DfhzLC04qNnTjpFcUt/jXhD83SAyptAvRR8JtlEXlXBXsWzBF1YjeJ3dSM5?=
+ =?us-ascii?Q?x+u4HStAvcjjf0dXSMoW1k9kDxjp/oM+awTWFq6/87coN4igwoGLvBsuXRKt?=
+ =?us-ascii?Q?Z1w8d3YggQ7u4umIQpsbVHzZScFIX8QV4/B/THH8SVVKAdAu9y2veZ0ymmqo?=
+ =?us-ascii?Q?UxNbIdxphA98KBSdhXx6GHhqrCE8xQrger7XS5KiQ6pCR4c4cRbaWv+LsPwg?=
+ =?us-ascii?Q?ZwMWg1Tu9NJj4lsezc61m5gjU+rZXojqClul2pDdV+InTIrE9entlW5O6aKv?=
+ =?us-ascii?Q?d7vmOez41EmfVoPxkZeLnj2qYo1sP1auF91riKAWyTBl292nGN+++DcpADI6?=
+ =?us-ascii?Q?obbjixhOKS1bGnwy0ByHJ9bsR0r11Xgp4iyPSG3azmzI3APMXANFUVtvOkK3?=
+ =?us-ascii?Q?T59Hvmv1vXxczo6BhoTsCdKiuEopt5iP7hQGFO8v1qJoQRcLI6iuc5zDWt1L?=
+ =?us-ascii?Q?fBGF4nNMcA8EIuU0YoQf4XT89UWe2ZA84UZgdWCL3GBbkNAAA8aw2FDmLemF?=
+ =?us-ascii?Q?5C91dF4Rh+dkNfxD3KkXgpngyFZ7FcRNB2eR2fdIluyez4StDdZiipCbz7/v?=
+ =?us-ascii?Q?ey9cd6Jd5VjxR4hg9cUS0D6pKHaa/bFljzqdXz0TgWUmzT0JOyGk9lRVQPmD?=
+ =?us-ascii?Q?X5ZEi/YXywDuP0Bnv/vz/u4hs8WPHudnnp/SVlM0sm0zvwn3VRCiLT9GRQoo?=
+ =?us-ascii?Q?gYlkQce/LGPShaYcVN/Xn7j0qe6IUGemrLOZsONm2zvaZyhXB/Ed573Hqtfw?=
+ =?us-ascii?Q?5ombGMiJPARFYAocUu7Qw9Skg8hRZj+CQ+mikOqmiUh0WTbt950bzLLg97q4?=
+ =?us-ascii?Q?HO0n06JUj+Tdtrs9KsX6SnLMFPRV4gF7167oqzh3/y83UJUFFSR3Vac0+4En?=
+ =?us-ascii?Q?vDXUQki8GkktrdcTEnNl3v8YNRZvd4yp4o5X4Y5q?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b9542cd-be34-46ee-13e6-08da624d0ee9
+X-MS-Exchange-CrossTenant-Network-Message-Id: dcc8961a-cf97-4cb1-51b5-08da624f2cda
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2022 08:20:32.9755
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2022 08:35:42.1896
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qMnLUzSs3N6wKpoxApqpO9eavR86ydw+08yYxywhfSpdOXuuWMbC5Pr/WIRF04AwzUap2+FKrrRox4gdJ466IQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4037
+X-MS-Exchange-CrossTenant-UserPrincipalName: UreJY/xiZj3t167vrKTgvSFkOL7ZxHVXc7VFojM3+xyLUzGYCBdQvaktEk/alVBcncXBRt4q8CBbYIWF5YMbMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5719
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -127,149 +132,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 05:29:25PM +0200, Hans Schultz wrote:
-> Add an intermediate state for clients behind a locked port to allow for
-> possible opening of the port for said clients. The clients mac address
-> will be added with the locked flag set, denying access through the port
-> for the mac address, but also creating a new FDB add event giving
-> userspace daemons the ability to unlock the mac address. This feature
-> corresponds to the Mac-Auth and MAC Authentication Bypass (MAB) named
-> features. The latter defined by Cisco.
+On Fri, Jul 08, 2022 at 02:34:25PM +0200, netdev@kapio-technology.com wrote:
+> On 2022-07-08 13:56, Vladimir Oltean wrote:
+> > On Fri, Jul 08, 2022 at 11:50:33AM +0200, netdev@kapio-technology.com
+> > wrote:
+> > > On 2022-07-08 11:15, Vladimir Oltean wrote:
+> > > > When the possibility for it to be true will exist, _all_ switchdev
+> > > > drivers will need to be updated to ignore that (mlxsw, cpss, ocelot,
+> > > > rocker, prestera, etc etc), not just DSA. And you don't need to
+> > > > propagate the is_locked flag to all individual DSA sub-drivers when none
+> > > > care about is_locked in the ADD_TO_DEVICE direction, you can just ignore
+> > > > within DSA until needed otherwise.
+> > > >
+> > > 
+> > > Maybe I have it wrong, but I think that Ido requested me to send it
+> > > to all
+> > > the drivers, and have them ignore entries with is_locked=true ...
+> > 
+> > I don't think Ido requested you to ignore is_locked from all DSA
+> > drivers, but instead from all switchdev drivers maybe. Quite different.
 > 
-> Only the kernel can set this FDB entry flag, while userspace can read
-> the flag and remove it by replacing or deleting the FDB entry.
+> So without changing the signature on port_fdb_add(). If that is to avoid
+> changing that signature, which needs to be changed anyhow for any switchcore
+> driver to act on it, then my next patch set will change the signarure also
+> as it is needed for creating dynamic ATU entries from userspace, which is
+> needed to make the whole thing complete.
 > 
-> Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
-> ---
->  include/uapi/linux/neighbour.h |  1 +
->  net/bridge/br_fdb.c            | 12 ++++++++++++
->  net/bridge/br_input.c          | 10 +++++++++-
->  net/bridge/br_private.h        |  3 ++-
->  4 files changed, 24 insertions(+), 2 deletions(-)
+> As it is already done (with the is_locked to the drivers) and needed for
+> future application, I would like Ido to comment on it before I take action.
+
+It's related to my reply here [1]. AFAICT, we have two classes of device
+drivers:
+
+1. Drivers like mv88e6xxx that report locked entries to the bridge
+driver via 'SWITCHDEV_FDB_ADD_TO_BRIDGE'.
+
+2. Drivers like mlxsw that trap packets that incurred an FDB miss to the
+bridge driver. These packets will cause the bridge driver to emit
+'SWITCHDEV_FDB_ADD_TO_DEVICE' notifications with the locked flag.
+
+If we can agree that locked entries are only meant to signal to user
+space that a certain MAC tried to gain authorization and that the bridge
+should ignore them while forwarding, then there is no point in
+generating the 'SWITCHDEV_FDB_ADD_TO_DEVICE' notifications. We should
+teach the bridge driver to suppress these so that there is no need to
+patch all the device drivers.
+
+[1] https://lore.kernel.org/netdev/YsqLyxTRtUjzDj6D@shredder/
+
 > 
-> diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
-> index 39c565e460c7..76d65b481086 100644
-> --- a/include/uapi/linux/neighbour.h
-> +++ b/include/uapi/linux/neighbour.h
-> @@ -53,6 +53,7 @@ enum {
->  #define NTF_ROUTER	(1 << 7)
->  /* Extended flags under NDA_FLAGS_EXT: */
->  #define NTF_EXT_MANAGED	(1 << 0)
-> +#define NTF_EXT_LOCKED	(1 << 1)
->  
->  /*
->   *	Neighbor Cache Entry States.
-> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-> index e7f4fccb6adb..ee9064a536ae 100644
-> --- a/net/bridge/br_fdb.c
-> +++ b/net/bridge/br_fdb.c
-> @@ -105,6 +105,7 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
->  	struct nda_cacheinfo ci;
->  	struct nlmsghdr *nlh;
->  	struct ndmsg *ndm;
-> +	u32 ext_flags = 0;
->  
->  	nlh = nlmsg_put(skb, portid, seq, type, sizeof(*ndm), flags);
->  	if (nlh == NULL)
-> @@ -125,11 +126,16 @@ static int fdb_fill_info(struct sk_buff *skb, const struct net_bridge *br,
->  		ndm->ndm_flags |= NTF_EXT_LEARNED;
->  	if (test_bit(BR_FDB_STICKY, &fdb->flags))
->  		ndm->ndm_flags |= NTF_STICKY;
-> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
-> +		ext_flags |= NTF_EXT_LOCKED;
->  
->  	if (nla_put(skb, NDA_LLADDR, ETH_ALEN, &fdb->key.addr))
->  		goto nla_put_failure;
->  	if (nla_put_u32(skb, NDA_MASTER, br->dev->ifindex))
->  		goto nla_put_failure;
-> +	if (nla_put_u32(skb, NDA_FLAGS_EXT, ext_flags))
-> +		goto nla_put_failure;
-> +
->  	ci.ndm_used	 = jiffies_to_clock_t(now - fdb->used);
->  	ci.ndm_confirmed = 0;
->  	ci.ndm_updated	 = jiffies_to_clock_t(now - fdb->updated);
-> @@ -171,6 +177,7 @@ static inline size_t fdb_nlmsg_size(void)
->  	return NLMSG_ALIGN(sizeof(struct ndmsg))
->  		+ nla_total_size(ETH_ALEN) /* NDA_LLADDR */
->  		+ nla_total_size(sizeof(u32)) /* NDA_MASTER */
-> +		+ nla_total_size(sizeof(u32)) /* NDA_FLAGS_EXT */
-
-Need to add validation that 'NTF_EXT_LOCKED' is not set in
-'NDA_FLAGS_EXT' in entries installed by user space.
-
->  		+ nla_total_size(sizeof(u16)) /* NDA_VLAN */
->  		+ nla_total_size(sizeof(struct nda_cacheinfo))
->  		+ nla_total_size(0) /* NDA_FDB_EXT_ATTRS */
-> @@ -1082,6 +1089,11 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
->  		modified = true;
->  	}
->  
-> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags)) {
-> +		clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
-> +		modified = true;
-> +	}
-> +
->  	if (fdb_handle_notify(fdb, notify))
->  		modified = true;
->  
-> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
-> index 68b3e850bcb9..3d15548cfda6 100644
-> --- a/net/bridge/br_input.c
-> +++ b/net/bridge/br_input.c
-> @@ -110,8 +110,16 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
->  			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
->  
->  		if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
-> -		    test_bit(BR_FDB_LOCAL, &fdb_src->flags))
-> +		    test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
-> +		    test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags)) {
-> +			if (!fdb_src) {
-> +				unsigned long flags = 0;
-> +
-> +				__set_bit(BR_FDB_ENTRY_LOCKED, &flags);
-> +				br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, flags);
-> +			}
-
-We need a better definition of what 'BR_FDB_ENTRY_LOCKED' means. An
-entry marked with this flag is not good enough to let traffic with this
-SA ingress from a locked port, but if traffic is received from a
-different port with this DA, the bridge will forward it as known
-unicast.
-
-If we are going to tell switchdev drivers to ignore locked entries,
-packets with this DA will be flooded as unknown unicast in hardware. For
-mv88e6xxx you write "The mac address triggering the ATU miss violation
-will be added to the ATU with a zero-DPV". What does it mean? Traffic
-with this DA will be blackholed?
-
-It would be good to agree on one consistent behavior for all hardware
-implementations and the bridge driver. Do you know what happens in other
-implementations (e.g., Cisco)?
-
-FWIW, to me it makes sense to have the bridge ignore locked entries and
-let traffic be flooded. If user space does not want traffic to egress a
-locked port, then it can turn off flooding on the port while it is
-locked.
-
->  			goto drop;
-> +		}
->  	}
->  
->  	nbp_switchdev_frame_mark(p, skb);
-> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
-> index 06e5f6faa431..47a3598d25c8 100644
-> --- a/net/bridge/br_private.h
-> +++ b/net/bridge/br_private.h
-> @@ -251,7 +251,8 @@ enum {
->  	BR_FDB_ADDED_BY_EXT_LEARN,
->  	BR_FDB_OFFLOADED,
->  	BR_FDB_NOTIFY,
-> -	BR_FDB_NOTIFY_INACTIVE
-> +	BR_FDB_NOTIFY_INACTIVE,
-> +	BR_FDB_ENTRY_LOCKED,
->  };
->  
->  struct net_bridge_fdb_key {
-> -- 
-> 2.30.2
+> > 
+> > In any case I'm going to take a look at this patch set more closely and
+> > run the selftest on my Marvell switch, but I can't do this today
+> > unfortunately. I'll return with more comments.
 > 
+> Yes :-)
