@@ -2,45 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC4657167C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jul 2022 12:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8CB5716F2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jul 2022 12:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiGLKDJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Jul 2022 06:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S231899AbiGLKO1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Jul 2022 06:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiGLKCt (ORCPT
+        with ESMTP id S230316AbiGLKOY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jul 2022 06:02:49 -0400
-X-Greylist: delayed 414 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Jul 2022 03:02:48 PDT
-Received: from smtpservice.6wind.com (unknown [185.13.181.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B0252B63D
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jul 2022 03:02:48 -0700 (PDT)
-Received: from bretzel (bretzel.dev.6wind.com [10.17.1.57])
-        by smtpservice.6wind.com (Postfix) with ESMTPS id D9AC7600AB;
-        Tue, 12 Jul 2022 11:55:52 +0200 (CEST)
-Received: from dichtel by bretzel with local (Exim 4.92)
-        (envelope-from <dichtel@6wind.com>)
-        id 1oBCcS-0002qv-Pv; Tue, 12 Jul 2022 11:55:52 +0200
-From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
-To:     "David S . Miller" <davem@davemloft.net>,
+        Tue, 12 Jul 2022 06:14:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8241D2B259;
+        Tue, 12 Jul 2022 03:14:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17634617E0;
+        Tue, 12 Jul 2022 10:14:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD079C3411C;
+        Tue, 12 Jul 2022 10:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1657620860;
+        bh=1Hk1K7MIGQQ/NBBXYMYfhRGqqYMTuBwZrjD/ggEX+lQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UB6gGI542whMEVgjsO8vJ7TUzstubiDd+if3KpmcMFjILhp2KnNjkk7VU1oj62dw7
+         39FPAovqvSCrlQoAVNZRxDXsIJQyj01qLkrQN0ostsymUkgs6J6yy7he4//QoFNVrs
+         /exXB157g3jO6M+b2tBzzyC/lj7L5iXvzTCa/Kmc=
+Date:   Tue, 12 Jul 2022 12:14:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Subject: [PATCH net v2 2/2] selftests/net: test nexthop without gw
-Date:   Tue, 12 Jul 2022 11:55:45 +0200
-Message-Id: <20220712095545.10947-2-nicolas.dichtel@6wind.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220712095545.10947-1-nicolas.dichtel@6wind.com>
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] selftests/net: test nexthop without gw
+Message-ID: <Ys1JefI+co1IFda4@kroah.com>
 References: <9fb5e3df069db50396799a250c4db761b1505dd3.camel@redhat.com>
  <20220712095545.10947-1-nicolas.dichtel@6wind.com>
+ <20220712095545.10947-2-nicolas.dichtel@6wind.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220712095545.10947-2-nicolas.dichtel@6wind.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,161 +57,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This test implement the scenario described in the previous patch.
+On Tue, Jul 12, 2022 at 11:55:45AM +0200, Nicolas Dichtel wrote:
+> This test implement the scenario described in the previous patch.
 
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
----
+"previous patch" does not work well when things are committed to the
+kernel tree.  Please be descriptive.
 
-v1 -> v2:
- - add linux-kselftest@vger.kernel.org
- - clean trailing whitespaces
- - add a 'trap' on exit
- - remove useless sleep
- - remove useless arp off / fixed mac settings
+thanks,
 
- tools/testing/selftests/net/Makefile          |   2 +-
- .../selftests/net/fib_nexthop_nongw.sh        | 119 ++++++++++++++++++
- 2 files changed, 120 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/net/fib_nexthop_nongw.sh
-
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index ddad703ace34..db05b3764b77 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -11,7 +11,7 @@ TEST_PROGS += udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_snd.sh
- TEST_PROGS += udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reuseport_addr_any.sh
- TEST_PROGS += test_vxlan_fdb_changelink.sh so_txtime.sh ipv6_flowlabel.sh
- TEST_PROGS += tcp_fastopen_backup_key.sh fcnal-test.sh l2tp.sh traceroute.sh
--TEST_PROGS += fin_ack_lat.sh fib_nexthop_multiprefix.sh fib_nexthops.sh
-+TEST_PROGS += fin_ack_lat.sh fib_nexthop_multiprefix.sh fib_nexthops.sh fib_nexthop_nongw.sh
- TEST_PROGS += altnames.sh icmp.sh icmp_redirect.sh ip6_gre_headroom.sh
- TEST_PROGS += route_localnet.sh
- TEST_PROGS += reuseaddr_ports_exhausted.sh
-diff --git a/tools/testing/selftests/net/fib_nexthop_nongw.sh b/tools/testing/selftests/net/fib_nexthop_nongw.sh
-new file mode 100755
-index 000000000000..b7b928b38ce4
---- /dev/null
-+++ b/tools/testing/selftests/net/fib_nexthop_nongw.sh
-@@ -0,0 +1,119 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# ns: h1               | ns: h2
-+#   192.168.0.1/24     |
-+#            eth0      |
-+#                      |       192.168.1.1/32
-+#            veth0 <---|---> veth1
-+# Validate source address selection for route without gateway
-+
-+PAUSE_ON_FAIL=no
-+VERBOSE=0
-+ret=0
-+
-+################################################################################
-+# helpers
-+
-+log_test()
-+{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
-+
-+	if [ ${rc} -eq ${expected} ]; then
-+		printf "TEST: %-60s  [ OK ]\n" "${msg}"
-+		nsuccess=$((nsuccess+1))
-+	else
-+		ret=1
-+		nfail=$((nfail+1))
-+		printf "TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+			echo
-+			echo "hit enter to continue, 'q' to quit"
-+			read a
-+			[ "$a" = "q" ] && exit 1
-+		fi
-+	fi
-+
-+	[ "$VERBOSE" = "1" ] && echo
-+}
-+
-+run_cmd()
-+{
-+	local cmd="$*"
-+	local out
-+	local rc
-+
-+	if [ "$VERBOSE" = "1" ]; then
-+		echo "COMMAND: $cmd"
-+	fi
-+
-+	out=$(eval $cmd 2>&1)
-+	rc=$?
-+	if [ "$VERBOSE" = "1" -a -n "$out" ]; then
-+		echo "$out"
-+	fi
-+
-+	[ "$VERBOSE" = "1" ] && echo
-+
-+	return $rc
-+}
-+
-+################################################################################
-+# config
-+setup()
-+{
-+	ip netns add h1
-+	ip -n h1 link set lo up
-+	ip netns add h2
-+	ip -n h2 link set lo up
-+
-+	# Add a fake eth0 to support an ip address
-+	ip -n h1 link add name eth0 type dummy
-+	ip -n h1 link set eth0 up
-+	ip -n h1 address add 192.168.0.1/24 dev eth0
-+
-+	# Configure veths (same @mac, arp off)
-+	ip -n h1 link add name veth0 type veth peer name veth1 netns h2
-+	ip -n h1 link set veth0 up
-+
-+	ip -n h2 link set veth1 up
-+
-+	# Configure @IP in the peer netns
-+	ip -n h2 address add 192.168.1.1/32 dev veth1
-+	ip -n h2 route add default dev veth1
-+
-+	# Add a nexthop without @gw and use it in a route
-+	ip -n h1 nexthop add id 1 dev veth0
-+	ip -n h1 route add 192.168.1.1 nhid 1
-+}
-+
-+cleanup()
-+{
-+	ip netns del h1 2>/dev/null
-+	ip netns del h2 2>/dev/null
-+}
-+
-+trap cleanup EXIT
-+
-+################################################################################
-+# main
-+
-+while getopts :pv o
-+do
-+	case $o in
-+		p) PAUSE_ON_FAIL=yes;;
-+		v) VERBOSE=1;;
-+	esac
-+done
-+
-+cleanup
-+setup
-+
-+run_cmd ip -netns h1 route get 192.168.1.1
-+log_test $? 0 "nexthop: get route with nexthop without gw"
-+run_cmd ip netns exec h1 ping -c1 192.168.1.1
-+log_test $? 0 "nexthop: ping through nexthop without gw"
-+
-+exit $ret
--- 
-2.33.0
-
+greg k-h
