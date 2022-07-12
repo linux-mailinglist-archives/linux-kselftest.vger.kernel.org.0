@@ -2,68 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52048571650
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jul 2022 11:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E8F57167B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jul 2022 12:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiGLJ7T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Jul 2022 05:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S232413AbiGLKDK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Jul 2022 06:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbiGLJ7S (ORCPT
+        with ESMTP id S232711AbiGLKCt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:59:18 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA1F30F4D
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jul 2022 02:59:16 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id q82so7116566pgq.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jul 2022 02:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E3bJNjTQ0sljopXALlhyXxa+mX72VOlGEbg1L7QIj1E=;
-        b=sWuqwMsZhRcRkPdenKadW7Dk/P/7ur4EL9j6sqVJ1bhlRfAY/oc7xmZVG1CiFGk0Ns
-         ljYuR0X/umNI2OYd0XO6XR9zETL1IGaw/Zn/J8+VPfgcB/6atpffIZRhjsK0TILzHjdB
-         B+LnH2U5prvK022gJ9+wZ32aGjsm2fIaVJPaEjCzDWclbcDTZUzvWp7uEisBBdtPYbLT
-         KiWyfu1ocqksvCW4CGzQ2GRXXpi1xWdyRd55/JdRNg/PnoekbukxOj011f5a24tooUea
-         Hm2ftl0+N3xge9PtB31Rps2eG7q9Mmp7SWAdl3fPRVZJSN0h+gtJarWOCsKDlCZzqqoN
-         Az7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E3bJNjTQ0sljopXALlhyXxa+mX72VOlGEbg1L7QIj1E=;
-        b=nqiAMZa2o+PR5ylCalybrks9YggeDESrj86wNVTPCf44s0sLBbdEwUUobdzynQ1hq8
-         aritNmoakpfRkNrGtiJaNBZ4RMuBXbGYCw4AMsL65WN/dxzl5ctpF7Y2JWjuWo4TZQ5Y
-         /i6g64B2O+WBqSCJMbwHMCj9uE69gUrqbi4Ba2ZIesfbf5GDQXSlVPd3r8KGji1Ah8k/
-         Ig/B9WEZgAWltSUg4dxFN0ewN7LX4NvczCQL4I1VbxrpdX/zWz5+Q391KV82lfI0jb6O
-         pwhftYQiwZuyDIBu6V6sCMmEV5Tlo/WvZWcEUm6monHaMDkfBtzAGLkrEJhCblKnEEQM
-         AOtQ==
-X-Gm-Message-State: AJIora8kiTIjGfLabTlfDcGpd/1UmubcTi3FqzIHIIWKXIoHLSJ3iJDe
-        H0/a+Pj93bo4bpTA1ksWJprfNPWFxdF+f0RgIFmTXg==
-X-Google-Smtp-Source: AGRyM1vSzjtgajGp71G/0ie+k3dbRm2QwTG+7RmZ7o5xoHl2yAHh8E/V3nqMqiFQf9cqXYtzhvIWXeuxZ2AenxkhL2U=
-X-Received: by 2002:a65:6a4a:0:b0:40d:dd27:80fd with SMTP id
- o10-20020a656a4a000000b0040ddd2780fdmr20580395pgu.54.1657619956363; Tue, 12
- Jul 2022 02:59:16 -0700 (PDT)
+        Tue, 12 Jul 2022 06:02:49 -0400
+Received: from smtpservice.6wind.com (unknown [185.13.181.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6E0C31DC7
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jul 2022 03:02:48 -0700 (PDT)
+Received: from bretzel (bretzel.dev.6wind.com [10.17.1.57])
+        by smtpservice.6wind.com (Postfix) with ESMTPS id D1E1460046;
+        Tue, 12 Jul 2022 11:55:52 +0200 (CEST)
+Received: from dichtel by bretzel with local (Exim 4.92)
+        (envelope-from <dichtel@6wind.com>)
+        id 1oBCcS-0002qt-PF; Tue, 12 Jul 2022 11:55:52 +0200
+From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        stable@vger.kernel.org, Edwin Brossette <edwin.brossette@6wind.com>
+Subject: [PATCH net v2 1/2] ip: fix dflt addr selection for connected nexthop
+Date:   Tue, 12 Jul 2022 11:55:44 +0200
+Message-Id: <20220712095545.10947-1-nicolas.dichtel@6wind.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <9fb5e3df069db50396799a250c4db761b1505dd3.camel@redhat.com>
+References: <9fb5e3df069db50396799a250c4db761b1505dd3.camel@redhat.com>
 MIME-Version: 1.0
-References: <cover.1657614127.git.guillaume.tucker@collabora.com> <4a66bf3227825bbf9007ffc9c10e52fad9ae453f.1657614127.git.guillaume.tucker@collabora.com>
-In-Reply-To: <4a66bf3227825bbf9007ffc9c10e52fad9ae453f.1657614127.git.guillaume.tucker@collabora.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Tue, 12 Jul 2022 11:59:05 +0200
-Message-ID: <CADYN=9L6-ESg=mxAwXCPwcO1RTE1S5DvigpvL13+tLMWs0wB-g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] selftests: drop KSFT_KHDR_INSTALL make target
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,98 +47,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 12 Jul 2022 at 10:29, Guillaume Tucker
-<guillaume.tucker@collabora.com> wrote:
->
-> Drop the KSFT_KHDR_INSTALL make target now that all use-cases have
-> been removed from the other kselftest Makefiles.
->
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-> ---
->  tools/testing/selftests/Makefile |  1 -
->  tools/testing/selftests/lib.mk   | 38 --------------------------------
->  2 files changed, 39 deletions(-)
->
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 619451e82863..e060777239a4 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -143,7 +143,6 @@ endif
->  # Prepare for headers install
->  include $(top_srcdir)/scripts/subarch.include
->  ARCH           ?= $(SUBARCH)
-> -export KSFT_KHDR_INSTALL_DONE := 1
->  export BUILD
->  export KHDR_INCLUDES
->
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 2a2d240cdc1b..df5f853951f2 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -30,45 +30,7 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
->  TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
->  TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
->
-> -ifdef KSFT_KHDR_INSTALL
-> -top_srcdir ?= ../../../..
-> -include $(top_srcdir)/scripts/subarch.include
-> -ARCH           ?= $(SUBARCH)
-> -
-> -# set default goal to all, so make without a target runs all, even when
-> -# all isn't the first target in the file.
-> -.DEFAULT_GOAL := all
-> -
-> -# Invoke headers install with --no-builtin-rules to avoid circular
-> -# dependency in "make kselftest" case. In this case, second level
-> -# make inherits builtin-rules which will use the rule generate
-> -# Makefile.o and runs into
-> -# "Circular Makefile.o <- prepare dependency dropped."
-> -# and headers_install fails and test compile fails.
-> -# O= KBUILD_OUTPUT cases don't run into this error, since main Makefile
-> -# invokes them as sub-makes and --no-builtin-rules is not necessary,
-> -# but doesn't cause any failures. Keep it simple and use the same
-> -# flags in both cases.
-> -# Note that the support to install headers from lib.mk is necessary
-> -# when test Makefile is run directly with "make -C".
-> -# When local build is done, headers are installed in the default
-> -# INSTALL_HDR_PATH usr/include.
-> -.PHONY: khdr
-> -.NOTPARALLEL:
-> -khdr:
-> -ifndef KSFT_KHDR_INSTALL_DONE
-> -ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
-> -       $(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
-> -else
-> -       $(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$OUTPUT/usr \
-> -               ARCH=$(ARCH) -C $(top_srcdir) headers_install
-> -endif
-> -endif
-> -
-> -all: khdr $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
-> -else
->  all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
-> -endif
->
->  define RUN_TESTS
->         BASE_DIR="$(selfdir)";                  \
+When a nexthop is added, without a gw address, the default scope was set
+to 'host'. Thus, when a source address is selected, 127.0.0.1 may be chosen
+but rejected when the route is used.
 
-Should this be removed as well, since 'khdr' gets droped from file the lib.mk ?
+When using a route without a nexthop id, the scope can be configured in the
+route, thus the problem doesn't exist.
 
-diff --git a/tools/testing/selftests/landlock/Makefile
-b/tools/testing/selftests/landlock/Makefile
-index 1313e44e8fb9..99f88c52d61a 100644
---- a/tools/testing/selftests/landlock/Makefile
-+++ b/tools/testing/selftests/landlock/Makefile
-@@ -13,9 +13,6 @@ include ../lib.mk
+To explain more deeply: when a user creates a nexthop, it cannot specify
+the scope. To create it, the function nh_create_ipv4() calls fib_check_nh()
+with scope set to 0. fib_check_nh() calls fib_check_nh_nongw() wich was
+setting scope to 'host'. Then, nh_create_ipv4() calls
+fib_info_update_nhc_saddr() with scope set to 'host'. The src addr is
+chosen before the route is inserted.
 
- khdr_dir = $(top_srcdir)/usr/include
+When a 'standard' route (ie without a reference to a nexthop) is added,
+fib_create_info() calls fib_info_update_nhc_saddr() with the scope set by
+the user. iproute2 set the scope to 'link' by default.
 
--$(khdr_dir)/linux/landlock.h: khdr
--        @:
--
- $(OUTPUT)/true: true.c
-  $(LINK.c) $< $(LDLIBS) -o $@ -static
+Here is a way to reproduce the problem:
+ip netns add foo
+ip -n foo link set lo up
+ip netns add bar
+ip -n bar link set lo up
+sleep 1
 
+ip -n foo link add name eth0 type dummy
+ip -n foo link set eth0 up
+ip -n foo address add 192.168.0.1/24 dev eth0
 
-Cheers,
-Anders
+ip -n foo link add name veth0 type veth peer name veth1 netns bar
+ip -n foo link set veth0 up
+ip -n bar link set veth1 up
+
+ip -n bar address add 192.168.1.1/32 dev veth1
+ip -n bar route add default dev veth1
+
+ip -n foo nexthop add id 1 dev veth0
+ip -n foo route add 192.168.1.1 nhid 1
+
+Try to get/use the route:
+> $ ip -n foo route get 192.168.1.1
+> RTNETLINK answers: Invalid argument
+> $ ip netns exec foo ping -c1 192.168.1.1
+> ping: connect: Invalid argument
+
+Try without nexthop group (iproute2 sets scope to 'link' by dflt):
+ip -n foo route del 192.168.1.1
+ip -n foo route add 192.168.1.1 dev veth0
+
+Try to get/use the route:
+> $ ip -n foo route get 192.168.1.1
+> 192.168.1.1 dev veth0 src 192.168.0.1 uid 0
+>     cache
+> $ ip netns exec foo ping -c1 192.168.1.1
+> PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
+> 64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.039 ms
+>
+> --- 192.168.1.1 ping statistics ---
+> 1 packets transmitted, 1 received, 0% packet loss, time 0ms
+> rtt min/avg/max/mdev = 0.039/0.039/0.039/0.000 ms
+
+CC: stable@vger.kernel.org
+Fixes: 597cfe4fc339 ("nexthop: Add support for IPv4 nexthops")
+Reported-by: Edwin Brossette <edwin.brossette@6wind.com>
+Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+---
+
+v1 -> v2:
+ - remove useless arp off / fixed mac settings in the description
+
+ net/ipv4/fib_semantics.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
+index a57ba23571c9..20177ecf5bdd 100644
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -1230,7 +1230,7 @@ static int fib_check_nh_nongw(struct net *net, struct fib_nh *nh,
+ 
+ 	nh->fib_nh_dev = in_dev->dev;
+ 	dev_hold_track(nh->fib_nh_dev, &nh->fib_nh_dev_tracker, GFP_ATOMIC);
+-	nh->fib_nh_scope = RT_SCOPE_HOST;
++	nh->fib_nh_scope = RT_SCOPE_LINK;
+ 	if (!netif_carrier_ok(nh->fib_nh_dev))
+ 		nh->fib_nh_flags |= RTNH_F_LINKDOWN;
+ 	err = 0;
+-- 
+2.33.0
+
