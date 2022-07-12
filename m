@@ -2,166 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BD8571D7C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jul 2022 16:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA90571D92
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jul 2022 17:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233351AbiGLO7C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Jul 2022 10:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S233475AbiGLPAG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Jul 2022 11:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiGLO6y (ORCPT
+        with ESMTP id S233850AbiGLO7Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jul 2022 10:58:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88AEE0B7;
-        Tue, 12 Jul 2022 07:58:50 -0700 (PDT)
-Received: from [192.168.42.12] (92.40.179.87.threembb.co.uk [92.40.179.87])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 12 Jul 2022 10:59:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5409531DC9
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jul 2022 07:59:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657637954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zoTGpT5wz2asFihF9G/fqHRbU5urP9svL59pFAfNHLA=;
+        b=F3lYF15Y9OtZBRSNEzgAwR1P04fQbvmRtnCqY8acewcGD/k2yqwUg/U/Ti6shSnr8SSR6F
+        v+UGS1beBCncIihDLCr6Ot6s4x0zV2KX46dgoEZjfo4jt/TpN31iC2MscWIqbRycxSnlL5
+        d/LDElEmmyLjz0CBvYLZmk8dychpuKQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-534-5vbabllaPHGUlWIAX2oLDw-1; Tue, 12 Jul 2022 10:59:02 -0400
+X-MC-Unique: 5vbabllaPHGUlWIAX2oLDw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E86546601A32;
-        Tue, 12 Jul 2022 15:58:46 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657637929;
-        bh=HBR+7cjhP4fVVEqyGTg8INVtO0X5hd7bY9eUZpzH2nM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Q7rZKrTNV+Bxgj3CTfgaTU+5x3dUl1sIVHGaLeRM0FJ23MoSv7LZI4RysqlU85Omi
-         /AYgxbWhuVFZ/EHfnstKlP2dZPF8Cpl4GFrapkGJckAIBVLX7qhd5W1iGG+NH/+jzs
-         3ESowFMqxOhwglqVaSvjj/nojOdX4yoDnr2umIYoGSj9/pZnGclyf15YiLEi5lDXLY
-         63lXYjZYOhLLKVTmbs6AP/reucI43smThber+Dof80LW/780hL8YqcMNr/wi3F73yV
-         LpIUM0soaHTjOZ8Pki5FPJ5lEknM75nJlQsBFyBvnYT//4bqD6eS0yV/ratirl4t93
-         1H4uaMKsNh+cg==
-Message-ID: <950e172d-b45b-af70-972b-146c10b69714@collabora.com>
-Date:   Tue, 12 Jul 2022 15:57:56 +0100
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 25881811E75;
+        Tue, 12 Jul 2022 14:59:01 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.195.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DB9882166B26;
+        Tue, 12 Jul 2022 14:58:57 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v6 00/23] Introduce eBPF support for HID devices
+Date:   Tue, 12 Jul 2022 16:58:27 +0200
+Message-Id: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 3/4] selftests: drop KSFT_KHDR_INSTALL make target
-Content-Language: en-US
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1657614127.git.guillaume.tucker@collabora.com>
- <4a66bf3227825bbf9007ffc9c10e52fad9ae453f.1657614127.git.guillaume.tucker@collabora.com>
- <CADYN=9L6-ESg=mxAwXCPwcO1RTE1S5DvigpvL13+tLMWs0wB-g@mail.gmail.com>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <CADYN=9L6-ESg=mxAwXCPwcO1RTE1S5DvigpvL13+tLMWs0wB-g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/07/2022 10:59, Anders Roxell wrote:
-> On Tue, 12 Jul 2022 at 10:29, Guillaume Tucker
-> <guillaume.tucker@collabora.com> wrote:
->>
->> Drop the KSFT_KHDR_INSTALL make target now that all use-cases have
->> been removed from the other kselftest Makefiles.
->>
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->> ---
->>  tools/testing/selftests/Makefile |  1 -
->>  tools/testing/selftests/lib.mk   | 38 --------------------------------
->>  2 files changed, 39 deletions(-)
->>
->> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
->> index 619451e82863..e060777239a4 100644
->> --- a/tools/testing/selftests/Makefile
->> +++ b/tools/testing/selftests/Makefile
->> @@ -143,7 +143,6 @@ endif
->>  # Prepare for headers install
->>  include $(top_srcdir)/scripts/subarch.include
->>  ARCH           ?= $(SUBARCH)
->> -export KSFT_KHDR_INSTALL_DONE := 1
->>  export BUILD
->>  export KHDR_INCLUDES
->>
->> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
->> index 2a2d240cdc1b..df5f853951f2 100644
->> --- a/tools/testing/selftests/lib.mk
->> +++ b/tools/testing/selftests/lib.mk
->> @@ -30,45 +30,7 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
->>  TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
->>  TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
->>
->> -ifdef KSFT_KHDR_INSTALL
->> -top_srcdir ?= ../../../..
->> -include $(top_srcdir)/scripts/subarch.include
->> -ARCH           ?= $(SUBARCH)
->> -
->> -# set default goal to all, so make without a target runs all, even when
->> -# all isn't the first target in the file.
->> -.DEFAULT_GOAL := all
->> -
->> -# Invoke headers install with --no-builtin-rules to avoid circular
->> -# dependency in "make kselftest" case. In this case, second level
->> -# make inherits builtin-rules which will use the rule generate
->> -# Makefile.o and runs into
->> -# "Circular Makefile.o <- prepare dependency dropped."
->> -# and headers_install fails and test compile fails.
->> -# O= KBUILD_OUTPUT cases don't run into this error, since main Makefile
->> -# invokes them as sub-makes and --no-builtin-rules is not necessary,
->> -# but doesn't cause any failures. Keep it simple and use the same
->> -# flags in both cases.
->> -# Note that the support to install headers from lib.mk is necessary
->> -# when test Makefile is run directly with "make -C".
->> -# When local build is done, headers are installed in the default
->> -# INSTALL_HDR_PATH usr/include.
->> -.PHONY: khdr
->> -.NOTPARALLEL:
->> -khdr:
->> -ifndef KSFT_KHDR_INSTALL_DONE
->> -ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
->> -       $(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
->> -else
->> -       $(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$OUTPUT/usr \
->> -               ARCH=$(ARCH) -C $(top_srcdir) headers_install
->> -endif
->> -endif
->> -
->> -all: khdr $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
->> -else
->>  all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
->> -endif
->>
->>  define RUN_TESTS
->>         BASE_DIR="$(selfdir)";                  \
-> 
-> Should this be removed as well, since 'khdr' gets droped from file the lib.mk ?
-> 
-> diff --git a/tools/testing/selftests/landlock/Makefile
-> b/tools/testing/selftests/landlock/Makefile
-> index 1313e44e8fb9..99f88c52d61a 100644
-> --- a/tools/testing/selftests/landlock/Makefile
-> +++ b/tools/testing/selftests/landlock/Makefile
-> @@ -13,9 +13,6 @@ include ../lib.mk
-> 
->  khdr_dir = $(top_srcdir)/usr/include
-> 
-> -$(khdr_dir)/linux/landlock.h: khdr
-> -        @:
-> -
->  $(OUTPUT)/true: true.c
->   $(LINK.c) $< $(LDLIBS) -o $@ -static
+Hi,
 
+and after a little bit of time, here comes the v6 of the HID-BPF series.
 
-Good point, however I think I'll drop it in PATCH 1/4 "selftests:
-drop khdr make target" as it's already dropped there.  Ideally,
-the khdr dependency mentioned in this PATCH 3/4 should probably
-also be removed in PATCH 1/4.  I'll send a v3 with this.
+Again, for a full explanation of HID-BPF, please refer to the last patch
+in this series (23/23).
 
-Thanks,
-Guillaume
+This version sees some improvements compared to v5 on top of the
+usual addressing of the previous comments:
+- now I think every eBPF core change has a matching selftest added
+- the kfuncs declared in syscall can now actually access the memory of
+  the context
+- the code to retrieve the BTF ID of the various HID hooks is much
+  simpler (just a plain use of the BTF_ID() API instead of
+  loading/unloading of a tracing program)
+- I also added my HID Surface Dial example that I use locally to provide
+  a fuller example to users
+
+Cheers,
+Benjamin
+
+Benjamin Tissoires (23):
+  selftests/bpf: fix config for CLS_BPF
+  bpf/verifier: allow kfunc to read user provided context
+  bpf/verifier: do not clear meta in check_mem_size
+  selftests/bpf: add test for accessing ctx from syscall program type
+  bpf/verifier: allow kfunc to return an allocated mem
+  selftests/bpf: Add tests for kfunc returning a memory pointer
+  bpf: prepare for more bpf syscall to be used from kernel and user
+    space.
+  libbpf: add map_get_fd_by_id and map_delete_elem in light skeleton
+  HID: core: store the unique system identifier in hid_device
+  HID: export hid_report_type to uapi
+  HID: convert defines of HID class requests into a proper enum
+  HID: initial BPF implementation
+  selftests/bpf: add tests for the HID-bpf initial implementation
+  HID: bpf: allocate data memory for device_event BPF programs
+  selftests/bpf/hid: add test to change the report size
+  HID: bpf: introduce hid_hw_request()
+  selftests/bpf: add tests for bpf_hid_hw_request
+  HID: bpf: allow to change the report descriptor
+  selftests/bpf: add report descriptor fixup tests
+  selftests/bpf: Add a test for BPF_F_INSERT_HEAD
+  samples/bpf: add new hid_mouse example
+  HID: bpf: add Surface Dial example
+  Documentation: add HID-BPF docs
+
+ Documentation/hid/hid-bpf.rst                 | 512 +++++++++
+ Documentation/hid/index.rst                   |   1 +
+ drivers/hid/Kconfig                           |   2 +
+ drivers/hid/Makefile                          |   2 +
+ drivers/hid/bpf/Kconfig                       |  19 +
+ drivers/hid/bpf/Makefile                      |  11 +
+ drivers/hid/bpf/entrypoints/Makefile          |  88 ++
+ drivers/hid/bpf/entrypoints/README            |   4 +
+ drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  66 ++
+ .../hid/bpf/entrypoints/entrypoints.lskel.h   | 682 ++++++++++++
+ drivers/hid/bpf/hid_bpf_dispatch.c            | 554 ++++++++++
+ drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
+ drivers/hid/bpf/hid_bpf_jmp_table.c           | 577 ++++++++++
+ drivers/hid/hid-core.c                        |  49 +-
+ include/linux/bpf.h                           |  10 +-
+ include/linux/btf.h                           |  14 +
+ include/linux/hid.h                           |  38 +-
+ include/linux/hid_bpf.h                       | 145 +++
+ include/uapi/linux/hid.h                      |  26 +-
+ include/uapi/linux/hid_bpf.h                  |  25 +
+ kernel/bpf/btf.c                              |  67 +-
+ kernel/bpf/syscall.c                          |  10 +-
+ kernel/bpf/verifier.c                         |  67 +-
+ net/bpf/test_run.c                            |  23 +
+ samples/bpf/.gitignore                        |   2 +
+ samples/bpf/Makefile                          |  27 +
+ samples/bpf/hid_mouse.bpf.c                   | 134 +++
+ samples/bpf/hid_mouse.c                       | 150 +++
+ samples/bpf/hid_surface_dial.bpf.c            | 161 +++
+ samples/bpf/hid_surface_dial.c                | 216 ++++
+ tools/include/uapi/linux/hid.h                |  62 ++
+ tools/include/uapi/linux/hid_bpf.h            |  25 +
+ tools/lib/bpf/skel_internal.h                 |  23 +
+ tools/testing/selftests/bpf/Makefile          |   5 +-
+ tools/testing/selftests/bpf/config            |   5 +-
+ tools/testing/selftests/bpf/prog_tests/hid.c  | 990 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/kfunc_call.c     |  68 ++
+ tools/testing/selftests/bpf/progs/hid.c       | 206 ++++
+ .../selftests/bpf/progs/kfunc_call_test.c     | 116 ++
+ 39 files changed, 5150 insertions(+), 60 deletions(-)
+ create mode 100644 Documentation/hid/hid-bpf.rst
+ create mode 100644 drivers/hid/bpf/Kconfig
+ create mode 100644 drivers/hid/bpf/Makefile
+ create mode 100644 drivers/hid/bpf/entrypoints/Makefile
+ create mode 100644 drivers/hid/bpf/entrypoints/README
+ create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
+ create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
+ create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
+ create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
+ create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
+ create mode 100644 include/linux/hid_bpf.h
+ create mode 100644 include/uapi/linux/hid_bpf.h
+ create mode 100644 samples/bpf/hid_mouse.bpf.c
+ create mode 100644 samples/bpf/hid_mouse.c
+ create mode 100644 samples/bpf/hid_surface_dial.bpf.c
+ create mode 100644 samples/bpf/hid_surface_dial.c
+ create mode 100644 tools/include/uapi/linux/hid.h
+ create mode 100644 tools/include/uapi/linux/hid_bpf.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/hid.c
+
+-- 
+2.36.1
+
