@@ -2,129 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8526B570F91
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jul 2022 03:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E315710BC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Jul 2022 05:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiGLBge (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Jul 2022 21:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        id S230186AbiGLDUP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Jul 2022 23:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiGLBge (ORCPT
+        with ESMTP id S229629AbiGLDUP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:36:34 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D270C2AE1C;
-        Mon, 11 Jul 2022 18:36:32 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 26C1aA8l029362;
-        Tue, 12 Jul 2022 10:36:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 26C1aA8l029362
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1657589771;
-        bh=/DJh0T9UEeSd0UnVmkJ3Yb1uvTEdoJFkOji+14jZ4Ng=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UoSn8bUbb/ZWt7KcKridmJV+Sd0BR5TdoznG8B20/ipOYMKgAyl/WTkjPrVlzRqlQ
-         zYiWb+Z+zzYwi7jjiIHHqQUiTQtrvg7OxltvIpB5zQ4L2ALpMWh4USRAW6UqW3v2oB
-         RUyMkI8QUGuZ/CObljwd1UBo6vBg4lEgJHyw/bEDw/yjcg7RT3ko6ydhWzXvzOKHt8
-         etCvMaTk5YYgYEe1IQVsWeKOlR14oqVTPBvC9zRilWYUYYi523co62dp7I6gRTDxtC
-         7Gako/XtVZ3PzVOWfrp5GJWhblp3jfFoxffHez0PKmmywYbn25pNX/RPcfjwIU1mDo
-         EZoMNRWOlQ9UA==
-X-Nifty-SrcIP: [209.85.221.43]
-Received: by mail-wr1-f43.google.com with SMTP id b26so9161542wrc.2;
-        Mon, 11 Jul 2022 18:36:11 -0700 (PDT)
-X-Gm-Message-State: AJIora+ZogMsHMcBLyahFErYjHjPyZdo+fivR4UgvJlOxSJVllNqk2RI
-        ydMQWfTHwAz/vQIItO/YjcpxS/IWZVMfyYTmIJk=
-X-Google-Smtp-Source: AGRyM1sS0c7XakFYh+QVVsDh5Mp5VGqoOVoPqEqwSPVTCvw1lpzi8qbXdMfY3A5T8s0mm3VXDnQr5bgwD4PEB0vMGAQ=
-X-Received: by 2002:a05:6000:104c:b0:21d:87bf:63a2 with SMTP id
- c12-20020a056000104c00b0021d87bf63a2mr18678986wrx.461.1657589769995; Mon, 11
- Jul 2022 18:36:09 -0700 (PDT)
+        Mon, 11 Jul 2022 23:20:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BFC2E9D6;
+        Mon, 11 Jul 2022 20:20:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB5FB6171C;
+        Tue, 12 Jul 2022 03:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27C1CC341CA;
+        Tue, 12 Jul 2022 03:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657596013;
+        bh=GPm72V6I7awW7B2AYyGa6anWvvTOoOi8OXUNV5KFBuY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=a+8L/36ACBFrvFMz0WVrEEWwZTvd/Z5akpYpd8sN8UCjEJ/mURMZvYKZLvi3a6PqZ
+         B8fqMcE5ObVDK3vDDY2T0J0tKDlIO3NoAF3wqFavUs2mgnWD/FK0a2BOFyX22HvqxE
+         n+uL8G2rga3pkYw3s7bLDJQiEP7Bd8zi33HN6oCb7wUQtXsWXIvL2KZ88CSZjFxfRe
+         Kq3kUXKkGBKiaa0Uj4cTqjNWslCinbEVuW9+GC1427yvSRKRXURxlWmlDEEGTeXn/e
+         t3mnk3miWS48ba7ndIqGAuqe7CF4pfXeXi6INiAUNGtcIKgx12jMWGJwQTAv7CsG5l
+         l3ThhVCF82AOw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05498E45225;
+        Tue, 12 Jul 2022 03:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <cover.1657296695.git.guillaume.tucker@collabora.com> <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
-In-Reply-To: <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 12 Jul 2022 10:35:30 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASe3zQv82pQsTdWtia9nQQm8XGgs_mrUMvbLRkxa0T48Q@mail.gmail.com>
-Message-ID: <CAK7LNASe3zQv82pQsTdWtia9nQQm8XGgs_mrUMvbLRkxa0T48Q@mail.gmail.com>
-Subject: Re: [PATCH 4/4] Makefile: add headers_install to kselftest targets
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>, kernel@collabora.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] selftest: net: add tun to .gitignore
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165759601301.2891.13976917278104910424.git-patchwork-notify@kernel.org>
+Date:   Tue, 12 Jul 2022 03:20:13 +0000
+References: <20220709024141.321683-1-kuba@kernel.org>
+In-Reply-To: <20220709024141.321683-1-kuba@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+        pabeni@redhat.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 9, 2022 at 1:23 AM Guillaume Tucker
-<guillaume.tucker@collabora.com> wrote:
->
-> Add headers_install as a dependency to kselftest targets so that they
-> can be run directly from the top of the tree.  The kselftest Makefile
-> used to try to call headers_install "backwards" but failed due to the
-> relative path not being consistent.
->
-> Now we can either run this directly:
->
->   $ make O=build kselftest-all
->
-> or this:
->
->   $ make O=build headers_install
->   $ make O=build -C tools/testing/selftest all
->
-> The same commands work as well when building directly in the source
-> tree (no O=) or any arbitrary path (relative or absolute).
->
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Fri,  8 Jul 2022 19:41:41 -0700 you wrote:
+> Add missing .gitignore entry.
+> 
+> Fixes: 839b92fede7b ("selftest: tun: add test for NAPI dismantle")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 > ---
->  Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 1a6678d817bd..afc9d739ba44 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1347,10 +1347,10 @@ tools/%: FORCE
->  # Kernel selftest
->
->  PHONY += kselftest
-> -kselftest:
-> +kselftest: headers_install
->         $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+>  tools/testing/selftests/net/.gitignore | 1 +
+>  1 file changed, 1 insertion(+)
 
-Nit.
-Please use 'headers' for in-kernel use of exportedI headers.
+Here is the summary with links:
+  - [net] selftest: net: add tun to .gitignore
+    https://git.kernel.org/netdev/net/c/4a46de446d3f
 
-kselftest: headers
-
-
->
-> -kselftest-%: FORCE
-> +kselftest-%: headers_install FORCE
->         $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
-
-Ditto.
-
-kselftest-%: headers FORCE
-
-
->
->  PHONY += kselftest-merge
-> --
-> 2.30.2
->
-
-
+You are awesome, thank you!
 -- 
-Best Regards
-Masahiro Yamada
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
