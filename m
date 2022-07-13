@@ -2,74 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779BB573C5D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 20:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237C0573DFE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 22:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234904AbiGMSNh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 14:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
+        id S237193AbiGMUqi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 16:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGMSNg (ORCPT
+        with ESMTP id S237152AbiGMUqh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 14:13:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E883F26D0;
-        Wed, 13 Jul 2022 11:13:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DDB261D5A;
-        Wed, 13 Jul 2022 18:13:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE7AC34114;
-        Wed, 13 Jul 2022 18:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657736015;
-        bh=AaUsNxQggnzWiPVjpjcMAaRJhu9wrjZVpBIyOLXibdw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FmIP6/Bd1FekydgfeyGeC1VUHDXWXSm9fS2zdhigJsfsvYez65GrU5wLQRmrsYcNt
-         CrPpF0CYU4HvAJbZPiSYcvU0fLa1dKmkV7MEq3geWPAUl4G6xtJNPfkgn7lBs9qFsf
-         XFUA9omvashJleu4rPueQPtadxAlov49n/KV1Z9XefMcV0auAdzvY+Eu7wRMxTu30n
-         6rMqhZdxwJXZz5fCqlKq6GmZsS+bsTxQ5jRZSYJiG+qlfkmfDU8u+DV1EPgBhIpKN3
-         0PnFLpfbsXOxhIAbceYECa4yzq6NkPYiC/b+uIfseluL5J/kc+OqROWtHzPq3ng0lN
-         yqJLvBE9s0Yfw==
-Date:   Wed, 13 Jul 2022 11:13:33 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 2/2] selftests/net: test nexthop without gw
-Message-ID: <20220713111333.4ffd9f19@kernel.org>
-In-Reply-To: <c4eccb16-3b45-1644-d4b0-ee3fee3810d9@6wind.com>
-References: <9fb5e3df069db50396799a250c4db761b1505dd3.camel@redhat.com>
-        <20220712095545.10947-1-nicolas.dichtel@6wind.com>
-        <20220712095545.10947-2-nicolas.dichtel@6wind.com>
-        <Ys1JefI+co1IFda4@kroah.com>
-        <20220712172515.126dc119@kernel.org>
-        <c4eccb16-3b45-1644-d4b0-ee3fee3810d9@6wind.com>
+        Wed, 13 Jul 2022 16:46:37 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7662B1BE
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 13:46:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version:content-type
+        :content-transfer-encoding; s=k1; bh=vca7nd1WLODw18YJlNvBePUslvp
+        lVqYhcHwVyGI3iSk=; b=QijN5/1vuNqnQeF9AXCPgoHYZGZngr6L1ZMRsc2e+GH
+        06ISyUOVXAQhr60jpQM/OqoCft5f23/I2xvy6MjzTR/M+YTPO/NPpHNDXD6cF4Ig
+        8yTLi2itq56j0s4U+bstBRzZlbmEDFcGmU+HGi3rsWok7RsJdsQdBfFhb45gXbdI
+        =
+Received: (qmail 305555 invoked from network); 13 Jul 2022 22:46:32 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jul 2022 22:46:32 +0200
+X-UD-Smtp-Session: l3s3148p1@LOkJ4bXj5qQgAwDtxwdRAEXXn+yo/Rze
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     John Stultz <jstultz@google.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/9] selftests: timers: fixes and improvements
+Date:   Wed, 13 Jul 2022 22:46:12 +0200
+Message-Id: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 13 Jul 2022 09:36:37 +0200 Nicolas Dichtel wrote:
-> > And please don't resend your patches in reply to the previous version.
-> > Add a lore link to the previous version in the commit message if you
-> > want. In-reply-to breaks the review ordering for us :/  
-> Oh ok, I didn't know that.
+The timer selftests are quite useful for me when enabling timers on new
+SoCs, e.g. like now with the CMT timer on a Renesas R-Car S4-8. During
+development, I needed these fixes and additions to make full use of
+the tests. I think they make all sense upstream, so here they are.
 
-Yeah, I haven't documented it because it's a bit of an oddity 
-and frankly a shortcoming of the tooling on my side. But IDK
-how to "detach" the threads in a way that'd allow me to keep 
-a queue sorted by posting data :(
+Patches are based on v5.19-rc1. Looking forward to comments.
+
+Happy hacking,
+
+   Wolfram
+
+
+Wolfram Sang (9):
+  selftests: timers: valid-adjtimex: build fix for newer toolchains
+  selftests: timers: fix declarations of main()
+  selftests: timers: nanosleep: adapt to kselftest framework
+  selftests: timers: inconsistency-check: adapt to kselftest framework
+  selftests: timers: clocksource-switch: fix passing errors from child
+  selftests: timers: clocksource-switch: sort includes
+  selftests: timers: clocksource-switch: add command line switch to skip
+    sanity check
+  selftests: timers: clocksource-switch: add 'runtime' command line
+    parameter
+  selftests: timers: clocksource-switch: adapt to kselftest framework
+
+ tools/testing/selftests/timers/adjtick.c      |  2 +-
+ tools/testing/selftests/timers/change_skew.c  |  2 +-
+ .../selftests/timers/clocksource-switch.c     | 70 ++++++++++++-------
+ .../selftests/timers/inconsistency-check.c    | 32 +++++----
+ tools/testing/selftests/timers/nanosleep.c    | 18 +++--
+ tools/testing/selftests/timers/raw_skew.c     |  2 +-
+ .../selftests/timers/skew_consistency.c       |  2 +-
+ .../testing/selftests/timers/valid-adjtimex.c |  2 +-
+ 8 files changed, 80 insertions(+), 50 deletions(-)
+
+-- 
+2.35.1
+
