@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34971572E31
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 08:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6CB572E37
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 08:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbiGMGeC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 02:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
+        id S231305AbiGMGfT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 02:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbiGMGeA (ORCPT
+        with ESMTP id S230178AbiGMGfR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:34:00 -0400
+        Wed, 13 Jul 2022 02:35:17 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB026EEB6;
-        Tue, 12 Jul 2022 23:33:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12C4A8526;
+        Tue, 12 Jul 2022 23:35:15 -0700 (PDT)
 Received: from localhost.localdomain (86.166.5.84.rev.sfr.net [84.5.166.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E7D3A6601A34;
-        Wed, 13 Jul 2022 07:33:56 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2E1276601A38;
+        Wed, 13 Jul 2022 07:35:14 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657694037;
-        bh=Bh/K41wvIG4TPoBcy9qS5NVjHErbM3kSr7yTQO5HdGQ=;
+        s=mail; t=1657694114;
+        bh=ko+gnbg7O7P7dW9D/N5Lqjcvm4L0iCayu0mdGjwGvqg=;
         h=From:To:Cc:Subject:Date:From;
-        b=ZkUIHeIvVE+nK75mXrZnTV8XnnkY5xN4jaBLk4AGP1ga7UIw3Gqs/lITrZzNT3NAX
-         8nGbdgW0hsaqMfh/+MG2hoOkjwI1dHVD6Yyc8qWSb0GdKxQiT5iFEZr3rwlHIeM6qu
-         TDGyoVq8+SI7QUXBheDqtg8ZwH83UTfPwWuyQCVCbpS7xAgfjy3FYtMDZUWDV+XqT/
-         g1kTcL8FcZZHnvmDTbvgYJ8IzY2NPJz4tzrO5/tTuu0FKEMxOSzt6jQHhC2cL6epVa
-         nsAYJws3pz829E2ZSOyDaKR+FAdGxPI7K4R1MsA/ygcXNtSAoJacJgeBZNdLkSYPT4
-         52TgQUTW53RFQ==
+        b=XTi7VGFX8LxfBC2xgqC9MOWUepPUjodigpCi2VfUsApAKI8Ctz1SZ/YV8gvSHBoch
+         6fk5enB95UqaM5yEi5OhUDs2o458J9bmLYIk2S8Wy2vdpiptwSoUaZMlqgtoYs+9D6
+         t1ccBxJ7Dx5Dis4vFT7OeNrvXrz24gVz1sR1tX+4ptOqTpjcd0lFL/dvUxp+L1m4Vf
+         V2upTGZgZugQ10sZdDsBZnSo0yAzJbxbuwczu5qhfI2ioTZge8F/m6kKDl/4qgYOBX
+         YJrpJM4lcLhW4I5GMOkd1Da/NywzdJlkNuWaTg3QUr6NIDJ6saWwjP7ZvVrrr2xHu5
+         hwfJ/RlcV4YGw==
 From:   Guillaume Tucker <guillaume.tucker@collabora.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
@@ -41,9 +41,9 @@ To:     Masahiro Yamada <masahiroy@kernel.org>,
 Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
         kernel@collabora.com, linux-kbuild@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] Makefile: replace headers_install with headers for kselftest
-Date:   Wed, 13 Jul 2022 08:33:43 +0200
-Message-Id: <a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com>
+Subject: [PATCH] selftests/landlock: drop deprecated headers dependency
+Date:   Wed, 13 Jul 2022 08:35:01 +0200
+Message-Id: <b79c51ed97219b1c10e2e3f2bcd3269305f0f035.1657694067.git.guillaume.tucker@collabora.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,42 +56,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace headers_install with headers as kselftest uses the header
-files from within the kernel tree rather than from a system-wide
-installation.
-
-We can still run this directly:
-
-  $ make O=build kselftest-all
-
-and when building from the selftests directory:
-
-  $ make O=build headers
-  $ make O=build -C tools/testing/selftests all
+The khdr make target has been removed, so drop it from the landlock
+Makefile dependencies as well as related include paths that are
+standard for headers in the kernel tree.
 
 Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+Reported-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/landlock/Makefile | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index fb2f3bb53a6b..5c934d16664c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1347,10 +1347,10 @@ tools/%: FORCE
- # Kernel selftest
+diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+index 1313e44e8fb9..a6959df28eb0 100644
+--- a/tools/testing/selftests/landlock/Makefile
++++ b/tools/testing/selftests/landlock/Makefile
+@@ -11,13 +11,8 @@ TEST_GEN_PROGS_EXTENDED := true
+ OVERRIDE_TARGETS := 1
+ include ../lib.mk
  
- PHONY += kselftest
--kselftest: headers_install
-+kselftest: headers
- 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+-khdr_dir = $(top_srcdir)/usr/include
+-
+-$(khdr_dir)/linux/landlock.h: khdr
+-	@:
+-
+ $(OUTPUT)/true: true.c
+ 	$(LINK.c) $< $(LDLIBS) -o $@ -static
  
--kselftest-%: headers_install FORCE
-+kselftest-%: headers FORCE
- 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
- 
- PHONY += kselftest-merge
+-$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
+-	$(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
++$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
++	$(LINK.c) $< $(LDLIBS) -o $@ -lcap
 -- 
 2.30.2
 
