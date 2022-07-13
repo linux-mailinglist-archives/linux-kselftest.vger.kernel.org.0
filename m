@@ -2,221 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51B8572AAB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 03:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F4128572B4D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 04:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbiGMBKy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Jul 2022 21:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
+        id S234029AbiGMC1u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Jul 2022 22:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiGMBKw (ORCPT
+        with ESMTP id S234055AbiGMC1s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Jul 2022 21:10:52 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E904D1CB4;
-        Tue, 12 Jul 2022 18:10:46 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id b8so8440881pjo.5;
-        Tue, 12 Jul 2022 18:10:46 -0700 (PDT)
+        Tue, 12 Jul 2022 22:27:48 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AACFD4BE0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jul 2022 19:27:47 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id a12so5940654ilp.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Jul 2022 19:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=OisGpvmsBUcNy/K8e3atLql8+1eBKPZiV0iMxHObDa8=;
-        b=hZfLK385958JuQOh2vnt8AKshEDCVQH50EyT7Vgazcvs6Vaa8CIroI8/ARHMI7deYo
-         UhzJ8tvKuUdstJEjWBfyoJamf5KP7ZXjO6GJOYOP11pE0F3F86F4ILZci8N0vBgnsnj6
-         Jntm6DsdHtj0zkkrl0FUubVisJh0ZTKsD2ofIQXI68+iIw8hl0eOrw0GR+98uCQ8mYyO
-         6XHPPVknzApADwlk36WwzenY7yM4d2v2UAsyKkn8FfqeRirVOfTmqQJT5bZRGATdYkTO
-         r+hzdOVxSHcC0ok8EoGAHH8zwJU4YYgrTXLxkIJFfElUobTGOkFwAGK8aeTtsaBq8aNo
-         /T0A==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cbU9v9plTYYPMcnTfIcPSWQX14jbm9qmi2G0XnJwWTY=;
+        b=anrpZgaBstbJa6blUFrbmicw8U+lvjVWjxgyaFoJUb/SK0I+8SVHOR7jSiZEuH/anv
+         PuyQ7MPwUAfShDlCubNl5nDfa2YLnniS/pZudvQ3Jfji9NXZJan4ISupAjqe2GYgyW8C
+         lXN+D2fhBo+1EMjW/Vtx7bx2QTv38AmHpl8+Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=OisGpvmsBUcNy/K8e3atLql8+1eBKPZiV0iMxHObDa8=;
-        b=HXASiNBrPcBaCJ4bG3KxoQOXs31NWEG2gtDWKdyDVG548oTghdFzJ9SDdT1tKu56na
-         igTLTzp13c3Hv8e7alXfc2VFWLPwe0yh6E2/nHw2MCFOPzMsCMXK7ogkU+ukxs35OAh1
-         0v0Frw7ez/uqWpjcwGX6crKlEiwCKAEKd/5DyXHKIHduI5aOtwv9PJUYarkVHq+r9547
-         Mn8uaLWR+uxdpuSjHa+hk1TC+MqLoqAIx7fJ1ia1IuP0Ev1QFIeMrHV2ywLVMmdYwf56
-         c+IGvgIWi4kbpDMifKKlvvJWs+ctUg9e2c8K3GqrxsIlWsbNDFFII81juvu3MO17YHfV
-         WGFQ==
-X-Gm-Message-State: AJIora/ES7eYNdtALXCgB2RLhUNG5lDPvB8UrKXDN6hoOEQTTHjoMXfL
-        l6vWB4BUniwi89dZURI3Vg0=
-X-Google-Smtp-Source: AGRyM1vAQZRaSWknrD+0/AmwidYVnrRoW/qomRse98W5BtjQCR5E5y77xA1ZjgH06Pxqs6oxuR/PZQ==
-X-Received: by 2002:a17:902:d4c2:b0:16b:ffc5:9705 with SMTP id o2-20020a170902d4c200b0016bffc59705mr771028plg.142.1657674645338;
-        Tue, 12 Jul 2022 18:10:45 -0700 (PDT)
-Received: from localhost.localdomain ([23.91.97.158])
-        by smtp.gmail.com with ESMTPSA id z16-20020aa79490000000b0051c6613b5basm7523415pfk.134.2022.07.12.18.10.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 18:10:45 -0700 (PDT)
-From:   xiaolinkui <xiaolinkui@gmail.com>
-X-Google-Original-From: xiaolinkui <xiaolinkui@kylinos.cn>
-To:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        xiaolinkui@kylinos.cn, xiaolinkui@gmail.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
-Date:   Wed, 13 Jul 2022 09:10:00 +0800
-Message-Id: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cbU9v9plTYYPMcnTfIcPSWQX14jbm9qmi2G0XnJwWTY=;
+        b=1BlT+NyYDcflzb3wYTPy26UX9vo626F81oLZKhEbcst8EXVt0c7o9dxJA4mcBvNH4L
+         CSs0k88QRfBodJTZwoRYONU3cato+ccvlcyB9hFmNHOeortY+1gU/esJHMct2TnPjrJK
+         AKpz4FqZHphKrimmkOgcj+Um0GYoWhjaggInn+6rYUrcNRSA0e14wc7tMgC43XdPGimD
+         zCKkmVBZAyAKRRs0r9yHdKF7CH0NQMw6bMVHHiIGKhHZCWOf1poUT2F6qUVCW9Mdu1v1
+         KbTCFz+Ht974guvSxxwxBfLcTpWXT4DV9mtRe7t+A4PUcDiVu8l1OlfX6yJ8QPSlyvjE
+         lxPA==
+X-Gm-Message-State: AJIora9asO31OTgPMzX3CpA86pFMeIQSMMWux14A6tONiIjtxr5Rs+bY
+        FEhLbEryYFCddaeZlyvcSpYO+g==
+X-Google-Smtp-Source: AGRyM1tUzfKEKaDtA1v9zPGEc9cgjFX1o/mNb41jX7SEWnUF5U4pB4WVjzW2q1/WQhvUpcj5pfrXVg==
+X-Received: by 2002:a05:6e02:184c:b0:2dc:52ef:24cd with SMTP id b12-20020a056e02184c00b002dc52ef24cdmr648158ilv.173.1657679265864;
+        Tue, 12 Jul 2022 19:27:45 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id cs16-20020a056638471000b0033f0e12b862sm4715552jab.172.2022.07.12.19.27.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 19:27:45 -0700 (PDT)
+Subject: Re: [PATCH v2 0/4] Fix kselftest build with sub-directory
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1657614127.git.guillaume.tucker@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <d32187ae-8e8a-72ad-d422-3d3b47101160@linuxfoundation.org>
+Date:   Tue, 12 Jul 2022 20:27:44 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <cover.1657614127.git.guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Linkui Xiao<xiaolinkui@kylinos.cn>
+On 7/12/22 2:29 AM, Guillaume Tucker wrote:
+> Earlier attempts to get "make O=build kselftest-all" to work were
+> not successful as they made undesirable changes to some functions
+> in the top-level Makefile.  This series takes a different
+> approach by removing the root cause of the problem within
+> kselftest, which is when the sub-Makefile tries to install kernel
+> headers "backwards" by calling make with the top-level Makefile.
+> The actual issue comes from the fact that $(srctree) is ".." when
+> building in a sub-directory with "O=build" which then obviously
+> makes "-C $(top_srcdir)" point outside of the real source tree.
+> 
+> With this series, the generic kselftest targets work as expected
+> from the top level with or without a build directory e.g.:
+> 
+>    $ make kselftest-all
+> 
+>    $ make O=build kselftest-all
+> 
+> Then in order to build using the sub-Makefile explicitly, the
+> headers have to be installed first.  This is arguably a valid
+> requirement to have when building a tool from a sub-Makefile.
+> For example, "make -C tools/testing/nvdimm/" fails in a similar
+> way until <asm/rwonce.h> has been generated by a kernel build.
+> 
+> v2: replace headers_install with headers
+> 
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-functions.  This fixes the following warnings from coccicheck:
+I already applied the series. Please send me patches I can apply
+on top of the ones in linux-kselftest next branch.
 
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
-return of 0/1 in function 'decap_v4' with return type bool
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
-return of 0/1 in function 'decap_v6' with return type bool
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
-return of 0/1 in function 'encap_v6' with return type bool
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
-return of 0/1 in function 'parse_tcp' with return type bool
-tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
-return of 0/1 in function 'parse_udp' with return type bool
-
-Generated by: scripts/coccinelle/misc/boolreturn.cocci
-
-Signed-off-by: Linkui Xiao<xiaolinkui@kylinos.cn>
----
- .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index 125d872d7981..ba48fcb98ab2 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
- 	udp = data + off;
- 
- 	if (udp + 1 > data_end)
--		return 0;
-+		return false;
- 	if (!is_icmp) {
- 		pckt->flow.port16[0] = udp->source;
- 		pckt->flow.port16[1] = udp->dest;
-@@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
- 		pckt->flow.port16[0] = udp->dest;
- 		pckt->flow.port16[1] = udp->source;
- 	}
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
- 
- 	tcp = data + off;
- 	if (tcp + 1 > data_end)
--		return 0;
-+		return false;
- 	if (tcp->syn)
- 		pckt->flags |= (1 << 1);
- 	if (!is_icmp) {
-@@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
- 		pckt->flow.port16[0] = tcp->dest;
- 		pckt->flow.port16[1] = tcp->source;
- 	}
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
- 	void *data;
- 
- 	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
--		return 0;
-+		return false;
- 	data = (void *)(long)xdp->data;
- 	data_end = (void *)(long)xdp->data_end;
- 	new_eth = data;
-@@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
- 	old_eth = data + sizeof(struct ipv6hdr);
- 	if (new_eth + 1 > data_end ||
- 	    old_eth + 1 > data_end || ip6h + 1 > data_end)
--		return 0;
-+		return false;
- 	memcpy(new_eth->eth_dest, cval->mac, 6);
- 	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
- 	new_eth->eth_proto = 56710;
-@@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value *cval,
- 	ip6h->saddr.in6_u.u6_addr32[2] = 3;
- 	ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
- 	memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
- 	ip_suffix <<= 15;
- 	ip_suffix ^= pckt->flow.src;
- 	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
--		return 0;
-+		return false;
- 	data = (void *)(long)xdp->data;
- 	data_end = (void *)(long)xdp->data_end;
- 	new_eth = data;
-@@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
- 	old_eth = data + sizeof(struct iphdr);
- 	if (new_eth + 1 > data_end ||
- 	    old_eth + 1 > data_end || iph + 1 > data_end)
--		return 0;
-+		return false;
- 	memcpy(new_eth->eth_dest, cval->mac, 6);
- 	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
- 	new_eth->eth_proto = 8;
-@@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value *cval,
- 		csum += *next_iph_u16++;
- 	iph->check = ~((csum & 0xffff) + (csum >> 16));
- 	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
--		return 0;
--	return 1;
-+		return false;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void **data_end, bool inner_v4)
- 	else
- 		new_eth->eth_proto = 56710;
- 	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
--		return 0;
-+		return false;
- 	*data = (void *)(long)xdp->data;
- 	*data_end = (void *)(long)xdp->data_end;
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
-@@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void **data_end)
- 	memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
- 	new_eth->eth_proto = 8;
- 	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
--		return 0;
-+		return false;
- 	*data = (void *)(long)xdp->data;
- 	*data_end = (void *)(long)xdp->data_end;
--	return 1;
-+	return true;
- }
- 
- static __attribute__ ((noinline))
--- 
-2.17.1
-
+thanks,
+-- Shuah
