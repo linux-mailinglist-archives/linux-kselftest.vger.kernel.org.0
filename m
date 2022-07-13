@@ -2,87 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C80573595
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 13:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298F05735CA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 13:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbiGMLgk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 07:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
+        id S236235AbiGMLs6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 07:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236224AbiGMLgi (ORCPT
+        with ESMTP id S235683AbiGMLs5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 07:36:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B9D3102918
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 04:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657712196;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yrCSuJaHzqqJrDzlPoHK3BCroMA+MPPreiwAH9qdrfA=;
-        b=JDcdVJFSnY3H8mKLTXNgmxEJzQ1kDPKnIpAOxkxsh4HEn/OGu+bz1Cre5/FbErriGM2fpu
-        nV0LkPs5wZj5wg4zENTvIY6RMkymPTZHkqAHwsGfiCaHW7rB6BOj59ZB6paP9H8nUMqvQP
-        SyumZ/4KerX1W63cYbngmMKCkUo7QDQ=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-323-6iMdRDpWOWmOm2-nlQ8SLQ-1; Wed, 13 Jul 2022 07:36:35 -0400
-X-MC-Unique: 6iMdRDpWOWmOm2-nlQ8SLQ-1
-Received: by mail-pg1-f197.google.com with SMTP id h13-20020a63e14d000000b0040df75eaa2eso5102300pgk.21
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 04:36:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yrCSuJaHzqqJrDzlPoHK3BCroMA+MPPreiwAH9qdrfA=;
-        b=lEpWeP99lxu+YauWxcZIcP9/zqdBGLF/NIS53kwUGMBFt3LX3KSvHrfnG0dzyky19w
-         aj51wPlH3meOOXWhsuwnxbqI76N2laGiI9AUl4oc+mMknnwViPkWg0p5bkGatV2jYeDY
-         nAe0Lx8NeJR+nSTUp9o7aEohFIyah5eWtNDTFPsYMjVnNsA2GoZffn+XWzExfV4wGhi/
-         J4hTJvgurmAh4+p6x08yNYN5wArCsfmXcGsayC4a7lGDnVWWWUQhPRlFBOKHSfasUwdn
-         fusIg+6YuBOHTkNGntQmHNbiKtbBH07WeweSntX+r2G0Ozl1j9yUhO90Gv9VkDAL2eld
-         K22A==
-X-Gm-Message-State: AJIora8lKPzrn6wqzkvkjYYVtANlqePEjXuqkZQ73HUds6F8cdw+eeny
-        Dj7Bu279bsJk9kElIpSzwAdQi7z/BCCorxoFLxhi6lA3KEFYmB8+2nCX/Y0VGOQ7ppCHgmUGJnS
-        bi63qE1/Uf42zj+r4IVd8B8bj5TGNe7BLYt3GHhGfBZmK
-X-Received: by 2002:a63:5b16:0:b0:416:1b3b:9562 with SMTP id p22-20020a635b16000000b004161b3b9562mr2640549pgb.146.1657712193984;
-        Wed, 13 Jul 2022 04:36:33 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tMvNaIU5RdJs8xFRKHMRkHgZ6gojSHT6mUC3bNG1PFZd6uvWCEzPNcBAqRmFF+sgNMHsiXK2QJJwUhF0wM9ws=
-X-Received: by 2002:a63:5b16:0:b0:416:1b3b:9562 with SMTP id
- p22-20020a635b16000000b004161b3b9562mr2640529pgb.146.1657712193703; Wed, 13
- Jul 2022 04:36:33 -0700 (PDT)
+        Wed, 13 Jul 2022 07:48:57 -0400
+Received: from smtpservice.6wind.com (unknown [185.13.181.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04B1C45F7E;
+        Wed, 13 Jul 2022 04:48:55 -0700 (PDT)
+Received: from bretzel (bretzel.dev.6wind.com [10.17.1.57])
+        by smtpservice.6wind.com (Postfix) with ESMTPS id B457A60046;
+        Wed, 13 Jul 2022 13:48:54 +0200 (CEST)
+Received: from dichtel by bretzel with local (Exim 4.92)
+        (envelope-from <dichtel@6wind.com>)
+        id 1oBarO-0007ec-KA; Wed, 13 Jul 2022 13:48:54 +0200
+From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        stable@vger.kernel.org, Edwin Brossette <edwin.brossette@6wind.com>
+Subject: [PATCH net v3 1/2] ip: fix dflt addr selection for connected nexthop
+Date:   Wed, 13 Jul 2022 13:48:52 +0200
+Message-Id: <20220713114853.29406-1-nicolas.dichtel@6wind.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
- <20220712145850.599666-13-benjamin.tissoires@redhat.com> <668a2f86-9446-61de-494c-f2d2ee15f09e@isovalent.com>
-In-Reply-To: <668a2f86-9446-61de-494c-f2d2ee15f09e@isovalent.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 13 Jul 2022 13:36:22 +0200
-Message-ID: <CAO-hwJ+23HWjRHx8463uL5hA1HMYcmPD2=63Fv=J__x7zvmLjg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 12/23] HID: initial BPF implementation
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Pu Lehui <pulehui@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,130 +46,95 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 10:48 AM Quentin Monnet <quentin@isovalent.com> wrote:
->
-> On 12/07/2022 15:58, Benjamin Tissoires wrote:
-[...]
-> > diff --git a/drivers/hid/bpf/entrypoints/Makefile b/drivers/hid/bpf/entrypoints/Makefile
-> > new file mode 100644
-> > index 000000000000..dd60a460c6c4
-> > --- /dev/null
-> > +++ b/drivers/hid/bpf/entrypoints/Makefile
-> > @@ -0,0 +1,88 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +OUTPUT := .output
-> > +abs_out := $(abspath $(OUTPUT))
-> > +
-> > +CLANG ?= clang
-> > +LLC ?= llc
-> > +LLVM_STRIP ?= llvm-strip
-> > +
-> > +TOOLS_PATH := $(abspath ../../../../tools)
-> > +BPFTOOL_SRC := $(TOOLS_PATH)/bpf/bpftool
-> > +BPFTOOL_OUTPUT := $(abs_out)/bpftool
-> > +DEFAULT_BPFTOOL := $(OUTPUT)/sbin/bpftool
-> > +BPFTOOL ?= $(DEFAULT_BPFTOOL)
-> > +
-> > +LIBBPF_SRC := $(TOOLS_PATH)/lib/bpf
-> > +LIBBPF_OUTPUT := $(abs_out)/libbpf
-> > +LIBBPF_DESTDIR := $(LIBBPF_OUTPUT)
-> > +LIBBPF_INCLUDE := $(LIBBPF_DESTDIR)/include
-> > +BPFOBJ := $(LIBBPF_OUTPUT)/libbpf.a
-> > +
-> > +INCLUDES := -I$(OUTPUT) -I$(LIBBPF_INCLUDE) -I$(TOOLS_PATH)/include/uapi
-> > +CFLAGS := -g -Wall
-> > +
-> > +VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)                         \
-> > +                  $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)    \
-> > +                  ../../../../vmlinux                                \
-> > +                  /sys/kernel/btf/vmlinux                            \
-> > +                  /boot/vmlinux-$(shell uname -r)
-> > +VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-> > +ifeq ($(VMLINUX_BTF),)
-> > +$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
-> > +endif
-> > +
-> > +ifeq ($(V),1)
-> > +Q =
-> > +msg =
-> > +else
-> > +Q = @
-> > +msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-> > +MAKEFLAGS += --no-print-directory
-> > +submake_extras := feature_display=0
-> > +endif
-> > +
-> > +.DELETE_ON_ERROR:
-> > +
-> > +.PHONY: all clean
-> > +
-> > +all: entrypoints.lskel.h
-> > +
-> > +clean:
-> > +     $(call msg,CLEAN)
-> > +     $(Q)rm -rf $(OUTPUT) entrypoints
-> > +
-> > +entrypoints.lskel.h: $(OUTPUT)/entrypoints.bpf.o | $(BPFTOOL)
-> > +     $(call msg,GEN-SKEL,$@)
-> > +     $(Q)$(BPFTOOL) gen skeleton -L $< > $@
-> > +
-> > +
-> > +$(OUTPUT)/entrypoints.bpf.o: entrypoints.bpf.c $(OUTPUT)/vmlinux.h $(BPFOBJ) | $(OUTPUT)
-> > +     $(call msg,BPF,$@)
-> > +     $(Q)$(CLANG) -g -O2 -target bpf $(INCLUDES)                           \
-> > +              -c $(filter %.c,$^) -o $@ &&                                 \
-> > +     $(LLVM_STRIP) -g $@
-> > +
-> > +$(OUTPUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
-> > +ifeq ($(VMLINUX_H),)
-> > +     $(call msg,GEN,,$@)
-> > +     $(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-> > +else
-> > +     $(call msg,CP,,$@)
-> > +     $(Q)cp "$(VMLINUX_H)" $@
-> > +endif
-> > +
-> > +$(OUTPUT) $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
-> > +     $(call msg,MKDIR,$@)
-> > +     $(Q)mkdir -p $@
-> > +
-> > +$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUTPUT)
-> > +     $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC)                         \
-> > +                 OUTPUT=$(abspath $(dir $@))/ prefix=                       \
-> > +                 DESTDIR=$(LIBBPF_DESTDIR) $(abspath $@) install_headers
-> > +
-> > +$(DEFAULT_BPFTOOL): $(BPFOBJ) | $(BPFTOOL_OUTPUT)
-> > +     $(Q)$(MAKE) $(submake_extras) -C $(BPFTOOL_SRC)                        \
-> > +                 OUTPUT=$(BPFTOOL_OUTPUT)/                                  \
-> > +                 LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/                            \
-> > +                 LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/                          \
-> > +                 prefix= DESTDIR=$(abs_out)/ install-bin
->
-> Hi Benjamin,
->
-> Note that, at other locations where bpftool is needed to generate the
-> vmlinux.h or the skeletons, there is some work in progress to use only
-> the "bootstrap" version of bpftool (the intermediary bpftool binary used
-> to generate skeletons required for the final bpftool binary) [0]. This
-> is enough to generate these objects, it makes compiling the bpftool
-> binary faster, and solves some issues related to cross-compilation. It's
-> probably worth exploring in your case (or as a follow-up) as well.
->
+When a nexthop is added, without a gw address, the default scope was set
+to 'host'. Thus, when a source address is selected, 127.0.0.1 may be chosen
+but rejected when the route is used.
 
-Hi Quentin,
+When using a route without a nexthop id, the scope can be configured in the
+route, thus the problem doesn't exist.
 
-Indeed, I applied a similar patch to [1] (the 3/3 in the series you
-mentioned) and I have the exact same light skeleton.
-I have stashed the changes locally for a future revision (I doubt
-everything will go through in this version ;-P ).
+To explain more deeply: when a user creates a nexthop, it cannot specify
+the scope. To create it, the function nh_create_ipv4() calls fib_check_nh()
+with scope set to 0. fib_check_nh() calls fib_check_nh_nongw() wich was
+setting scope to 'host'. Then, nh_create_ipv4() calls
+fib_info_update_nhc_saddr() with scope set to 'host'. The src addr is
+chosen before the route is inserted.
 
-Cheers,
-Benjamin
+When a 'standard' route (ie without a reference to a nexthop) is added,
+fib_create_info() calls fib_info_update_nhc_saddr() with the scope set by
+the user. iproute2 set the scope to 'link' by default.
 
-> Quentin
+Here is a way to reproduce the problem:
+ip netns add foo
+ip -n foo link set lo up
+ip netns add bar
+ip -n bar link set lo up
+sleep 1
+
+ip -n foo link add name eth0 type dummy
+ip -n foo link set eth0 up
+ip -n foo address add 192.168.0.1/24 dev eth0
+
+ip -n foo link add name veth0 type veth peer name veth1 netns bar
+ip -n foo link set veth0 up
+ip -n bar link set veth1 up
+
+ip -n bar address add 192.168.1.1/32 dev veth1
+ip -n bar route add default dev veth1
+
+ip -n foo nexthop add id 1 dev veth0
+ip -n foo route add 192.168.1.1 nhid 1
+
+Try to get/use the route:
+> $ ip -n foo route get 192.168.1.1
+> RTNETLINK answers: Invalid argument
+> $ ip netns exec foo ping -c1 192.168.1.1
+> ping: connect: Invalid argument
+
+Try without nexthop group (iproute2 sets scope to 'link' by dflt):
+ip -n foo route del 192.168.1.1
+ip -n foo route add 192.168.1.1 dev veth0
+
+Try to get/use the route:
+> $ ip -n foo route get 192.168.1.1
+> 192.168.1.1 dev veth0 src 192.168.0.1 uid 0
+>     cache
+> $ ip netns exec foo ping -c1 192.168.1.1
+> PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
+> 64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=0.039 ms
 >
-> [0]
-> https://lore.kernel.org/all/20220712030813.865410-1-pulehui@huawei.com/t/#u
->
-[1] https://lore.kernel.org/all/20220712030813.865410-4-pulehui@huawei.com/
+> --- 192.168.1.1 ping statistics ---
+> 1 packets transmitted, 1 received, 0% packet loss, time 0ms
+> rtt min/avg/max/mdev = 0.039/0.039/0.039/0.000 ms
+
+CC: stable@vger.kernel.org
+Fixes: 597cfe4fc339 ("nexthop: Add support for IPv4 nexthops")
+Reported-by: Edwin Brossette <edwin.brossette@6wind.com>
+Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+---
+
+v2 -> v3:
+ - no change
+
+v1 -> v2:
+ - remove useless arp off / fixed mac settings in the description
+
+ net/ipv4/fib_semantics.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
+index a57ba23571c9..20177ecf5bdd 100644
+--- a/net/ipv4/fib_semantics.c
++++ b/net/ipv4/fib_semantics.c
+@@ -1230,7 +1230,7 @@ static int fib_check_nh_nongw(struct net *net, struct fib_nh *nh,
+ 
+ 	nh->fib_nh_dev = in_dev->dev;
+ 	dev_hold_track(nh->fib_nh_dev, &nh->fib_nh_dev_tracker, GFP_ATOMIC);
+-	nh->fib_nh_scope = RT_SCOPE_HOST;
++	nh->fib_nh_scope = RT_SCOPE_LINK;
+ 	if (!netif_carrier_ok(nh->fib_nh_dev))
+ 		nh->fib_nh_flags |= RTNH_F_LINKDOWN;
+ 	err = 0;
+-- 
+2.33.0
 
