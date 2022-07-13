@@ -2,98 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B812572F4E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 09:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35571572F91
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 09:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiGMHgn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 03:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S234890AbiGMHsx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 03:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiGMHgm (ORCPT
+        with ESMTP id S234860AbiGMHs3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 03:36:42 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE670E306E
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 00:36:40 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id v14so14248770wra.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 00:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google;
-        h=message-id:date:mime-version:user-agent:reply-to:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=MdAHa4jvV4C61lS/YeKy1KwD7XmY18P8L/Gmr/vIAzo=;
-        b=DvESuBr3QYALhmxjU4nnoks3WVrH9XT5YjCROBtVLRE0nY5cwMX0ZJ+CTXJA5BXiFK
-         ia+NWAnKyPdP318qYQ6DBIgdoLY3S1z7hnYUmDeyw/s8jwdfeUMLJfH3s+8xGbuwmE+r
-         pEV6Qq5jzCOi35k6ktXQCEjxdYvnUvJVzleEE4UkX8UVcxxj3NW1Fs5FLobPLRa3/hzb
-         F8uG56ALzif8WBxhZ6pWG0qMN72Ueh1FHLNTqg4+OQKQSlRaHXOPiAR6L4Nvtfkitfa/
-         tWGwm4zjZVasYlgiG7fBAVcUcjLkqD1C26riGfW8bPsUaJskvIY9B1qf/w/34dvjOa6m
-         BPVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
-         :subject:content-language:to:cc:references:from:organization
-         :in-reply-to:content-transfer-encoding;
-        bh=MdAHa4jvV4C61lS/YeKy1KwD7XmY18P8L/Gmr/vIAzo=;
-        b=lwMqmcRy59D0NEJnTaEzWlG4TFJTdafJNQoghbYy0fnmkLQGxJCSbiQS6VTm08OUM8
-         DiqTyjU99bLtgngTmzsP2uSs2n8IXVsyF8EWBsj/uj1o7DA9TbwPwBPwIwYLfc7JEnHV
-         GeDBch7BPnXi9yRiA3rMg+L5rJ2qoDGpNURUjssM4xbi2+/cTEufVs91YiRttLCeroFD
-         pHSpBXEhVMBskI8giqEq8Hw69phEHZNHxLbd1ScKcvNrMXNjQOJhVFWv1I/Sqk4+KZuy
-         /pGgYZEs2Dh7spX9ivm6oJez6vzwyUmWzcag8WvL2MtLIyfCHNu2lx4gl7/6Uf3JwOWj
-         qf7w==
-X-Gm-Message-State: AJIora+52PE50UuxQhb75fxko2tlJLgnf1A80DvBdsPHgKL70ioOnzAj
-        ph9yWD0a9dHimfKoLd3b6oJoMg==
-X-Google-Smtp-Source: AGRyM1sOpzYUu5kzMZvGmN1S9zzvkkgrHqfKhV0PGfAhm/2tAMlJs21an00rphgazx/bEoC+b/xceQ==
-X-Received: by 2002:a5d:6e88:0:b0:21a:3403:9aa0 with SMTP id k8-20020a5d6e88000000b0021a34039aa0mr1855749wrz.379.1657697799283;
-        Wed, 13 Jul 2022 00:36:39 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:b41:c160:d92e:476:25ee:30ed? ([2a01:e0a:b41:c160:d92e:476:25ee:30ed])
-        by smtp.gmail.com with ESMTPSA id b3-20020a5d4b83000000b0021d6dad334bsm10201905wrt.4.2022.07.13.00.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 00:36:38 -0700 (PDT)
-Message-ID: <c4eccb16-3b45-1644-d4b0-ee3fee3810d9@6wind.com>
-Date:   Wed, 13 Jul 2022 09:36:37 +0200
+        Wed, 13 Jul 2022 03:48:29 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B524BE6332;
+        Wed, 13 Jul 2022 00:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657698506; x=1689234506;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=nUfcHt/iaf3oMSfMyzHxGwWsSmqpbvlJ2JFwYR1oe/M=;
+  b=C4cP7E864jxiXG8f7VB1bNxdXYNG12yHhsNZlDN4+uGv70+0xztfKFhO
+   ukHKXBXu1kiraU7YIGFaenCfBQGF12+KplTVGTDE5pjFlrAu2bDNCandl
+   T8Gh5bxOsB80l3NLxqG6z6o9q05NfddgX+xdoHTH0wbzeRopuEji/FJ9O
+   MwxqbvPhvp/R0Aa9j5ooO1/+8VEZcN8BFz79RyuF1bCjNSfbolylaS6ak
+   3jek3LsAlr7oCc3JOixWVJ2yp1nVSNT/Z744IJKJtHKlCR9BADxTEcqGY
+   aWaRfqH/L7MwQmC9R5lpqwIhG9Z7JXfVNTLoRxoejPMuwEDoiR1ICVjeX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="264928758"
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="264928758"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 00:48:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
+   d="scan'208";a="685067167"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jul 2022 00:48:16 -0700
+Date:   Wed, 13 Jul 2022 15:44:58 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 04/14] mm/shmem: Support memfile_notifier
+Message-ID: <20220713074458.GB2831541@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-5-chao.p.peng@linux.intel.com>
+ <c4112b84-9359-d4c8-1852-0057c074607c@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH net v2 2/2] selftests/net: test nexthop without gw
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <9fb5e3df069db50396799a250c4db761b1505dd3.camel@redhat.com>
- <20220712095545.10947-1-nicolas.dichtel@6wind.com>
- <20220712095545.10947-2-nicolas.dichtel@6wind.com>
- <Ys1JefI+co1IFda4@kroah.com> <20220712172515.126dc119@kernel.org>
-From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Organization: 6WIND
-In-Reply-To: <20220712172515.126dc119@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4112b84-9359-d4c8-1852-0057c074607c@amd.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Jul 12, 2022 at 08:02:34PM +0200, Gupta, Pankaj wrote:
+> On 7/6/2022 10:20 AM, Chao Peng wrote:
+> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > 
+> > Implement shmem as a memfile_notifier backing store. Essentially it
+> > interacts with the memfile_notifier feature flags for userspace
+> > access/page migration/page reclaiming and implements the necessary
+> > memfile_backing_store callbacks.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >   include/linux/shmem_fs.h |   2 +
+> >   mm/shmem.c               | 109 ++++++++++++++++++++++++++++++++++++++-
+> >   2 files changed, 110 insertions(+), 1 deletion(-)
+...
 
-Le 13/07/2022 à 02:25, Jakub Kicinski a écrit :
-> On Tue, 12 Jul 2022 12:14:17 +0200 Greg KH wrote:
->> On Tue, Jul 12, 2022 at 11:55:45AM +0200, Nicolas Dichtel wrote:
->>> This test implement the scenario described in the previous patch.  
->>
->> "previous patch" does not work well when things are committed to the
->> kernel tree.  Please be descriptive.
+> > +#ifdef CONFIG_MIGRATION
+> > +static int shmem_migrate_page(struct address_space *mapping,
+> > +			      struct page *newpage, struct page *page,
+> > +			      enum migrate_mode mode)
+> > +{
+> > +	struct inode *inode = mapping->host;
+> > +	struct shmem_inode_info *info = SHMEM_I(inode);
+> > +
+> > +	if (info->memfile_node.flags & MEMFILE_F_UNMOVABLE)
+> > +		return -EOPNOTSUPP;
+> > +	return migrate_page(mapping, newpage, page, mode);
 > 
-> And please don't resend your patches in reply to the previous version.
-> Add a lore link to the previous version in the commit message if you
-> want. In-reply-to breaks the review ordering for us :/
-Oh ok, I didn't know that.
+> Wondering how well page migrate would work for private pages
+> on shmem memfd based backend?
+
+From high level:
+  - KVM unset MEMFILE_F_UNMOVABLE bit to indicate it capable of
+    migrating a page.
+  - Introduce new 'migrate' callback(s) to memfile_notifier_ops for KVM
+    to register.
+  - The callback is hooked to migrate_page() here.
+  - Once page migration requested, shmem calls into the 'migrate'
+    callback(s) to perform additional steps for encrypted memory (For
+    TDX we will call TDH.MEM.PAGE.RELOCATE).
+
+Chao
+> 
+> > +}
+> > +#endif
+> > +
+> >   const struct address_space_operations shmem_aops = {
+> >   	.writepage	= shmem_writepage,
+> >   	.dirty_folio	= noop_dirty_folio,
+> > @@ -3814,7 +3872,7 @@ const struct address_space_operations shmem_aops = {
+> >   	.write_end	= shmem_write_end,
+> >   #endif
+> >   #ifdef CONFIG_MIGRATION
+> > -	.migratepage	= migrate_page,
+> > +	.migratepage	= shmem_migrate_page,
+> >   #endif
+> >   	.error_remove_page = shmem_error_remove_page,
+> >   };
+> > @@ -3931,6 +3989,51 @@ static struct file_system_type shmem_fs_type = {
+> >   	.fs_flags	= FS_USERNS_MOUNT,
+> >   };
+ 
