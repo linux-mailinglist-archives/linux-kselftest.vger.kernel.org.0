@@ -2,69 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1F6573A0F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 17:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04981573AA4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 17:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236525AbiGMPYr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 11:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
+        id S236353AbiGMPzt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 11:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234650AbiGMPYp (ORCPT
+        with ESMTP id S231824AbiGMPzs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:24:45 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BC145050
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 08:24:44 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id 190so11176520iou.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 08:24:44 -0700 (PDT)
+        Wed, 13 Jul 2022 11:55:48 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6490C4D809
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id iq18-20020a17090afb5200b001ef966d1febso5654930pjb.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=cIzmuCZhcyQbk8eSHv2sqFPZ0r/TfvGha/933Vn+Tqg=;
-        b=FMAPG3lpSqY+4/JOG6woLiJpYlD3Akz7uW2GlrJp4lfUtiQ4uHcP+78MDlN11xnhb3
-         MZdJMDgdEZ6p63mRU7a5Egb0HttFCxlm1GlHz/HqmrT/IkJEbrf1RndiGXBcDJ7pmZTQ
-         tGBeyWcn9eUzSG+diIO5qwz5FH2o1Rji2IUNzSKdpyEwqDEOmamWLpNw6E3IT/rWTfDC
-         s6+utrSezcOmGHTgICZRCXffgedlAUJdXA1+ez2cwS59lJiRC5yAyxhiCBNQedE/c+da
-         KKB1/Q4UskXOepImCPuBs5dm9Q3TW17hdFH8VgxQ1I2Eqp+k31vTBZX1FkOeVWWvtmCG
-         nXJw==
+        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
+        b=TjHjMkxHdrjtTtLaLLkPMs792kod3mIYtSimCy6NVweAsJU75rtvhot4VpXsblBqly
+         qHRf5/L3tn7yMu364MBoudvFOE15V1qz4sWU7IX1ZmSnyAtwoN3kNYw02DuKnsDO5gjp
+         M7RQmANYsVuNDbgNtkXvd3a8DnuUQH+hZV3ikimvffMZd8joeIgwo7GaoFBX8DFrddDF
+         llsAFJQV9aU6qv7H1VvM3a3PUKiZyeNUhvRUKDT5CnUoj9OxYRKgWhY0+MNYPlyo3vp0
+         JKfjLrkj60y7DnOnKgIUy/4L8UmsN/TA25iA1sJPVSruP4sBdSbj5QDwOKoVzrQcwL4a
+         C7Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cIzmuCZhcyQbk8eSHv2sqFPZ0r/TfvGha/933Vn+Tqg=;
-        b=D6JGAPEMr7CZv1M2TbfCio8k/Qdi9j/2oapRXgwefRoccbbxP6XeME/kaJSd69fPGK
-         uUpGrH55i3IywtynI0h8FO8jKX/IczR+z484JoocRicBR2dWY7zzIdBQtPVj4dlgyS1x
-         0EIWNuRQEAkHIBDk51v73pyOqG0I+m5KddX0+IlUrwVAuDNiubhcYh/6OSU56mCo2Wyu
-         4jb2WU2LAJnDkCokWPi58mbskPvrEeIlFNK/RuqD5xjYvyMPcUV+cxr8nv12NYV4Uwx9
-         GHNbXxuQR0bWPg9itM2JWX5sasFYoXwQYbgzrkLw1gg1W0CF9BkVwR3UVahWnahWm8qa
-         4cdA==
-X-Gm-Message-State: AJIora+gVQXQ6rkqydfFYJJkS8s8R8uTXm3x2XH4sNtYLOMbcEmI5PBp
-        1x+nLoe1S83/QNvdiwF/aBEsbPENTOvhA5I2ic7mlA==
-X-Google-Smtp-Source: AGRyM1tGpK1Jb0GzgDSuTPT0r4ZCKW4BCOjdF0Cbi6ycvY5CUshQoiFJjaXVaZHvy4/7CYsR64P2FpdhqSwWviTA0YM=
-X-Received: by 2002:a05:6638:190c:b0:33f:8585:6ef3 with SMTP id
- p12-20020a056638190c00b0033f85856ef3mr1609961jal.153.1657725883559; Wed, 13
- Jul 2022 08:24:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220713005221.1926290-1-davidgow@google.com>
-In-Reply-To: <20220713005221.1926290-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 13 Jul 2022 08:24:32 -0700
-Message-ID: <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
-Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-modules@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
+        b=arjbCdVoj5Mt02mUxwsB1qY6EV4zoF50D/PjPXuXyBRrbYffEBJNPOLUE3OLCj53HT
+         50d5Nznvqe9kQGQY5ZFXhYev+PnYc+UbZe0QBaaUFE7xuFpJvx37pg3j13fKeQ5B4o/L
+         xDv1pTGoisOwPbdacFIs3G6YPwSXo5pGczKf3Y9yPnNdHWnDBMOByct9R0z8RlvRfYPI
+         Lwz2Yij5z+tOAA9MrwYDgydkX7oOum+DEujkBvUdLcXwWQMGfBLN7dVPGD329lr70cP1
+         8Aex00hiIf4p7o686DU9fxlMv4TLknz9QFGa29Sl7qqo9jkLD1+pHg94s64GcyTyDpv/
+         4vVA==
+X-Gm-Message-State: AJIora/ffFYRCwGNJkC2/tF/hd2Cj1WVhsWv0UAm+dS25BFQqb3fQghR
+        gb3f/w/Fq3Z89vrVn3HDfKsMq6w=
+X-Google-Smtp-Source: AGRyM1vCSrU7O6O9FOIV8kUv1lP2Lkoiv9Ln98VM/44THqm2zXjHACWzfrfMXWhmXMTgZeZAsBg2f70=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:902:db02:b0:16c:5568:d740 with SMTP id
+ m2-20020a170902db0200b0016c5568d740mr3785558plx.100.1657727746774; Wed, 13
+ Jul 2022 08:55:46 -0700 (PDT)
+Date:   Wed, 13 Jul 2022 08:55:45 -0700
+In-Reply-To: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
+Message-Id: <Ys7rAaRKbTEzvjFY@google.com>
+Mime-Version: 1.0
+References: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
+Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
+From:   sdf@google.com
+To:     xiaolinkui <xiaolinkui@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        xiaolinkui@kylinos.cn, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,41 +74,171 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
->
-> The new KUnit module handling has KUnit test suites listed in a
-> .kunit_test_suites section of each module. This should be loaded when
-> the module is, but at the moment this only happens if KUnit is built-in.
->
-> Also load this when KUnit is enabled as a module: it'll not be usable
-> unless KUnit is loaded, but such modules are likely to depend on KUnit
-> anyway, so it's unlikely to ever be loaded needlessly.
+On 07/13, xiaolinkui wrote:
+> From: Linkui Xiao<xiaolinkui@kylinos.cn>
+                    ^ space here?
 
-This seems reasonable to me.
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.  This fixes the following warnings from coccicheck:
 
-Question: what happens in this case?
-1. insmod <test-module>
-2. insmod kunit
-3. rmmod <test-module>
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
+> return of 0/1 in function 'decap_v4' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
+> return of 0/1 in function 'decap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
+> return of 0/1 in function 'encap_v6' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
+> return of 0/1 in function 'parse_tcp' with return type bool
+> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
+> return of 0/1 in function 'parse_udp' with return type bool
 
-I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
-for <test-module>, I think?
-But we never called __kunit_test_suites_init().
-My fear is what breaks as a result of this precondition break.
+> Generated by: scripts/coccinelle/misc/boolreturn.cocci
 
-E.g. In the case that CONFIG_KUNIT_DEBUGFS is enabled, this includes a
-call to kunit_debugfs_destroy_suite() with no previous call to
-kunit_debugfs_create_suite().
-That will include a call to debugfs_remove_recursive(suite->debugfs),
-where suite->debugfs is an uninitialized pointer.
+> Signed-off-by: Linkui Xiao<xiaolinkui@kylinos.cn>
 
-Maybe we can treat it as "undefined behavior" for now and proceed with
-this patch.
+This patch likely needs a resend with proper [PATCH bpf] or
+[PATCH bpf-next] subject to end up in patchwork and to be picked up.
 
-In terms of long-term fixes, perhaps insmod kunit could trigger it to
-1. run all built-in tests (IIUC, it doesn't right now)
-2. run all the tests of currently loaded modules
-3. track which modules already ran so if you rmmod + insmod kunit
-again, it won't rerun tests?
+Take a look at Documentation/bpf/bpf_devel_QA.rst section "Q: How do I
+indicate which tree (bpf vs. bpf-next) my patch should be applied to?".
 
-Daniel
+Since that's a cleanup, you most likely want to target bpf-next.
+
+> ---
+>   .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
+>   1 file changed, 15 insertions(+), 15 deletions(-)
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c  
+> b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> index 125d872d7981..ba48fcb98ab2 100644
+> --- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> +++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
+> @@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
+>   	udp = data + off;
+
+>   	if (udp + 1 > data_end)
+> -		return 0;
+> +		return false;
+>   	if (!is_icmp) {
+>   		pckt->flow.port16[0] = udp->source;
+>   		pckt->flow.port16[1] = udp->dest;
+> @@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
+>   		pckt->flow.port16[0] = udp->dest;
+>   		pckt->flow.port16[1] = udp->source;
+>   	}
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
+
+>   	tcp = data + off;
+>   	if (tcp + 1 > data_end)
+> -		return 0;
+> +		return false;
+>   	if (tcp->syn)
+>   		pckt->flags |= (1 << 1);
+>   	if (!is_icmp) {
+> @@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
+>   		pckt->flow.port16[0] = tcp->dest;
+>   		pckt->flow.port16[1] = tcp->source;
+>   	}
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	void *data;
+
+>   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
+> -		return 0;
+> +		return false;
+>   	data = (void *)(long)xdp->data;
+>   	data_end = (void *)(long)xdp->data_end;
+>   	new_eth = data;
+> @@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	old_eth = data + sizeof(struct ipv6hdr);
+>   	if (new_eth + 1 > data_end ||
+>   	    old_eth + 1 > data_end || ip6h + 1 > data_end)
+> -		return 0;
+> +		return false;
+>   	memcpy(new_eth->eth_dest, cval->mac, 6);
+>   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
+>   	new_eth->eth_proto = 56710;
+> @@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	ip6h->saddr.in6_u.u6_addr32[2] = 3;
+>   	ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
+>   	memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	ip_suffix <<= 15;
+>   	ip_suffix ^= pckt->flow.src;
+>   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
+> -		return 0;
+> +		return false;
+>   	data = (void *)(long)xdp->data;
+>   	data_end = (void *)(long)xdp->data_end;
+>   	new_eth = data;
+> @@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   	old_eth = data + sizeof(struct iphdr);
+>   	if (new_eth + 1 > data_end ||
+>   	    old_eth + 1 > data_end || iph + 1 > data_end)
+> -		return 0;
+> +		return false;
+>   	memcpy(new_eth->eth_dest, cval->mac, 6);
+>   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
+>   	new_eth->eth_proto = 8;
+> @@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
+> *cval,
+>   		csum += *next_iph_u16++;
+>   	iph->check = ~((csum & 0xffff) + (csum >> 16));
+>   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
+> -		return 0;
+> -	return 1;
+> +		return false;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void  
+> **data_end, bool inner_v4)
+>   	else
+>   		new_eth->eth_proto = 56710;
+>   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
+> -		return 0;
+> +		return false;
+>   	*data = (void *)(long)xdp->data;
+>   	*data_end = (void *)(long)xdp->data_end;
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> @@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void  
+> **data_end)
+>   	memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
+>   	new_eth->eth_proto = 8;
+>   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
+> -		return 0;
+> +		return false;
+>   	*data = (void *)(long)xdp->data;
+>   	*data_end = (void *)(long)xdp->data_end;
+> -	return 1;
+> +	return true;
+>   }
+
+>   static __attribute__ ((noinline))
+> --
+> 2.17.1
+
