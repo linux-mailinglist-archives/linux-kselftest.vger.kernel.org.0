@@ -2,108 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48295574043
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 01:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F3A574051
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 02:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbiGMX4Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 19:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
+        id S229954AbiGNACx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 20:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiGMX4X (ORCPT
+        with ESMTP id S229495AbiGNACv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 19:56:23 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BC753D3B
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 16:56:22 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id v185so67113ioe.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 16:56:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rarUSimJ/mF7K9bs7wxGLHGhk7WrwOrmEcUJgpe0So4=;
-        b=Xjafh2rCMqjqvg4Flqn/y5Es1fMG2tQTw6i/+6MTtWaHLJtknbNcB6olg2AjMN2ogy
-         mhMd67IzAnbVqX4ZjklB8FvehIWINsuuLSgU1xXnnglK3Ah6YYTKPZoFIb2UqzUZnRw5
-         LCXv41FJtN3tjoCeTTCi6ttIM5jaT7OuqmIe0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rarUSimJ/mF7K9bs7wxGLHGhk7WrwOrmEcUJgpe0So4=;
-        b=JYIMS4m36UtAjG2wpQRJ0V8e1XdrNsM6t3dJG5VilqfloiPxN810w5AV29qH88WZeA
-         pTy1ibxEhTorGb+k5cb9NXtsshHO2nxdaX3SM+GkM2/s8tSXh80XD4F5HDxrVLApqOjJ
-         605Ko/koUZMQ7zVKrVAZA5nmXD7FPymZgVBl3earLnafzPKpwnGbQOJavJ0Zh0FRx/DW
-         SCueS4Thk/xM3j/xU7gMrbkmVlWwzhkCf5WzJznPngZtNagJtD85NR59cASlPxyJucYZ
-         Kwjv/eaSRK41pnvSAvbG7abjfLYJucAHpbLDqrMpnlw0xqwB3ZL/TiHYKcSTsUMIsTeW
-         OjGw==
-X-Gm-Message-State: AJIora9K3a5nW0K8VF/b+vJ3rrO1hVubFc5B0GwmELRnJalCOIE3Xhum
-        xh1SjP3ulrrX+HuQNPZN3nkWiA==
-X-Google-Smtp-Source: AGRyM1vG6hbHN5JsMKBeeBd/CGfxpiHFcReOPVuojm+Qcl6rCFmIIiHk7QZc55gzMegVelUiiW4yxw==
-X-Received: by 2002:a05:6638:d0f:b0:33c:cab4:e9c2 with SMTP id q15-20020a0566380d0f00b0033ccab4e9c2mr3452706jaj.226.1657756582162;
-        Wed, 13 Jul 2022 16:56:22 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x6-20020a056638034600b0033ea1d9858bsm79328jap.36.2022.07.13.16.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 16:56:21 -0700 (PDT)
-Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
-To:     John Stultz <jstultz@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
- <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <dbe428f6-37fd-cba7-2947-e042585d3a42@linuxfoundation.org>
-Date:   Wed, 13 Jul 2022 17:56:21 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 13 Jul 2022 20:02:51 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD820B;
+        Wed, 13 Jul 2022 17:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657756970; x=1689292970;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=26iuG2PU8gROzu7IcUO0TLcA9lykFGbxNWG8zTRrDpg=;
+  b=BHZkgySkaM4voPeSvG7NNKOtqgxUbYRJrXr1AfnhgExX9mFsLr+7Pr2/
+   3b7vvnxQjaDYvWM9dWtWTNRuv2QsuvCQZ3BOFUu/SLAFeHuy8EHRW9zZC
+   aKY3WPVoppxeZ11ysASXWMxpOU7+GlRWbnTqZc8apzW2uxdicC+84K7b0
+   VPys08r5MXjmCLjEjzyZlRZDS100H+m3thriEpbrLDIDhSlvdEV6779fW
+   5ry6ImhEJgYT+J14h+GBOWEcPilenNiQ/exgNNw1Fco7cVixq05kjWd7T
+   pUxLpqDpKZg4Za9vhSIHADmsO1KsUMk0PMQBhufqMSP9kDZcVPCqii9N4
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="311021375"
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="311021375"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 17:02:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
+   d="scan'208";a="593178497"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga007.jf.intel.com with ESMTP; 13 Jul 2022 17:02:39 -0700
+Date:   Thu, 14 Jul 2022 07:59:22 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220713235922.GB2881285@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <b1c12a4b-46f7-081b-242f-005a8824aad1@amd.com>
+ <20220713075738.GC2831541@chaop.bj.intel.com>
+ <13d25d2e-ff79-5762-ddb8-87df56f5cbcf@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13d25d2e-ff79-5762-ddb8-87df56f5cbcf@amd.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/13/22 3:02 PM, John Stultz wrote:
-> On Wed, Jul 13, 2022 at 1:46 PM Wolfram Sang
-> <wsa+renesas@sang-engineering.com> wrote:
->>
->> The timer selftests are quite useful for me when enabling timers on new
->> SoCs, e.g. like now with the CMT timer on a Renesas R-Car S4-8. During
->> development, I needed these fixes and additions to make full use of
->> the tests. I think they make all sense upstream, so here they are.
->>
->> Patches are based on v5.19-rc1. Looking forward to comments.
->>
+On Wed, Jul 13, 2022 at 12:35:56PM +0200, Gupta, Pankaj wrote:
 > 
-> Hey!
->    Thanks so much I really appreciate the effort to make and send out
-> these cleanups. From the initial skim it all looks great (though, some
-> are slightly embarrassing :), and I think some of the extra config
-> args will be quite nice for others to use as well.
+> > > > This is the v7 of this series which tries to implement the fd-based KVM
+> > > > guest private memory. The patches are based on latest kvm/queue branch
+> > > > commit:
+> > > > 
+> > > >     b9b71f43683a (kvm/queue) KVM: x86/mmu: Buffer nested MMU
+> > > > split_desc_cache only by default capacity
+> > > > 
+> > > > Introduction
+> > > > ------------
+> > > > In general this patch series introduce fd-based memslot which provides
+> > > > guest memory through memory file descriptor fd[offset,size] instead of
+> > > > hva/size. The fd can be created from a supported memory filesystem
+> > > > like tmpfs/hugetlbfs etc. which we refer as memory backing store. KVM
+> > > 
+> > > Thinking a bit, As host side fd on tmpfs or shmem will store memory on host
+> > > page cache instead of mapping pages into userspace address space. Can we hit
+> > > double (un-coordinated) page cache problem with this when guest page cache
+> > > is also used?
+> > 
+> > This is my understanding: in host it will be indeed in page cache (in
+> > current shmem implementation) but that's just the way it allocates and
+> > provides the physical memory for the guest. In guest, guest OS will not
+> > see this fd (absolutely), it only sees guest memory, on top of which it
+> > can build its own page cache system for its own file-mapped content but
+> > that is unrelated to host page cache.
 > 
-> Acked-by: John Stultz <jstultz@google.com>
-> 
-> Thanks so much for submitting these.
-> -john
-> 
+> yes. If guest fills its page cache with file backed memory, this at host
+> side(on shmem fd backend) will also fill the host page cache fast. This can
+> have an impact on performance of guest VM's if host goes to memory pressure
+> situation sooner. Or else we end up utilizing way less System RAM.
 
-Thank you both. I can queue these for 5.20-rc1
+(Currently), the file backed guest private memory is long-term pinned
+and not reclaimable, it's in page cache anyway once we allocated it for
+guest. This does not depend on how guest use it (e.g. use it for guest
+page cache or not). 
 
-Wolfram, are you going to send v2 to address John's comment on
-8/9?
-
-thanks,
--- Shuah
+Chao
+> 
+> Thanks,
+> Pankaj
+> 
