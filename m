@@ -2,103 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CC65736CF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 15:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1F6573A0F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 17:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235051AbiGMNEQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 09:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S236525AbiGMPYr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 11:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235802AbiGMNEM (ORCPT
+        with ESMTP id S234650AbiGMPYp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 09:04:12 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E11B109;
-        Wed, 13 Jul 2022 06:04:11 -0700 (PDT)
-Received: from [192.168.0.24] (86.166.5.84.rev.sfr.net [84.5.166.86])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E71D766019BF;
-        Wed, 13 Jul 2022 14:04:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657717449;
-        bh=DJ+Ifi8q1WZKJgWhlUSNwAnvaUire0QYSjxk5nepsmo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=P4hVcmUIXP6LG161pXraZZktponzCwBMPKtf3oM1oGGKt2yogmLj6r/ZcUlJsjO8k
-         gE6ArqhETBVaxuy+ZmSNQtM0PdTKuV0pgotE94ZTROKe8ekKNXRx90N05s1JseLABv
-         h9XlVjq8QZZGJxUpFaRfB/iBZ6mBuD2huvPQq/SyN3PjQ2CQOPwsrxXoxnc9173czn
-         Tb0GZ2fB0v++AozwwI58NAGAuiUVT93FN0DZM/9bwmvZBt2gyHvUhVdUpkUJPyKM0o
-         T/+8bVpHZRQx7NRKeK6fWALNamuh0kEblrur2na9mAXxTZ6gwhowMN6iB4tIuKV+Rc
-         PydcKPiXgXTvA==
-Message-ID: <b2a7c23e-88be-4b44-d98b-a8555131f1a7@collabora.com>
-Date:   Wed, 13 Jul 2022 15:04:09 +0200
+        Wed, 13 Jul 2022 11:24:45 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BC145050
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 08:24:44 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id 190so11176520iou.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 08:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cIzmuCZhcyQbk8eSHv2sqFPZ0r/TfvGha/933Vn+Tqg=;
+        b=FMAPG3lpSqY+4/JOG6woLiJpYlD3Akz7uW2GlrJp4lfUtiQ4uHcP+78MDlN11xnhb3
+         MZdJMDgdEZ6p63mRU7a5Egb0HttFCxlm1GlHz/HqmrT/IkJEbrf1RndiGXBcDJ7pmZTQ
+         tGBeyWcn9eUzSG+diIO5qwz5FH2o1Rji2IUNzSKdpyEwqDEOmamWLpNw6E3IT/rWTfDC
+         s6+utrSezcOmGHTgICZRCXffgedlAUJdXA1+ez2cwS59lJiRC5yAyxhiCBNQedE/c+da
+         KKB1/Q4UskXOepImCPuBs5dm9Q3TW17hdFH8VgxQ1I2Eqp+k31vTBZX1FkOeVWWvtmCG
+         nXJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cIzmuCZhcyQbk8eSHv2sqFPZ0r/TfvGha/933Vn+Tqg=;
+        b=D6JGAPEMr7CZv1M2TbfCio8k/Qdi9j/2oapRXgwefRoccbbxP6XeME/kaJSd69fPGK
+         uUpGrH55i3IywtynI0h8FO8jKX/IczR+z484JoocRicBR2dWY7zzIdBQtPVj4dlgyS1x
+         0EIWNuRQEAkHIBDk51v73pyOqG0I+m5KddX0+IlUrwVAuDNiubhcYh/6OSU56mCo2Wyu
+         4jb2WU2LAJnDkCokWPi58mbskPvrEeIlFNK/RuqD5xjYvyMPcUV+cxr8nv12NYV4Uwx9
+         GHNbXxuQR0bWPg9itM2JWX5sasFYoXwQYbgzrkLw1gg1W0CF9BkVwR3UVahWnahWm8qa
+         4cdA==
+X-Gm-Message-State: AJIora+gVQXQ6rkqydfFYJJkS8s8R8uTXm3x2XH4sNtYLOMbcEmI5PBp
+        1x+nLoe1S83/QNvdiwF/aBEsbPENTOvhA5I2ic7mlA==
+X-Google-Smtp-Source: AGRyM1tGpK1Jb0GzgDSuTPT0r4ZCKW4BCOjdF0Cbi6ycvY5CUshQoiFJjaXVaZHvy4/7CYsR64P2FpdhqSwWviTA0YM=
+X-Received: by 2002:a05:6638:190c:b0:33f:8585:6ef3 with SMTP id
+ p12-20020a056638190c00b0033f85856ef3mr1609961jal.153.1657725883559; Wed, 13
+ Jul 2022 08:24:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 4/4] Makefile: add headers to kselftest targets
-Content-Language: en-US
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1657614127.git.guillaume.tucker@collabora.com>
- <745d1921a4d048ea25d262e33b40aad5ee470614.1657614127.git.guillaume.tucker@collabora.com>
- <Ys6LsqvQC+h3eM46@bergen.fjasle.eu>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <Ys6LsqvQC+h3eM46@bergen.fjasle.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220713005221.1926290-1-davidgow@google.com>
+In-Reply-To: <20220713005221.1926290-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 13 Jul 2022 08:24:32 -0700
+Message-ID: <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
+Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-modules@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 13/07/2022 11:09, Nicolas Schier wrote:
-> On Tue, 12 Jul 2022 09:29 +0100 Guillaume Tucker wrote:
->> Add headers as a dependency to kselftest targets so that they can be
->> run directly from the top of the tree.  The kselftest Makefile used to
->> try to call headers_install "backwards" but failed due to the relative
->> path not being consistent.
->>
->> Now we can either run this directly:
->>
->>   $ make O=build kselftest-all
->>
->> or this:
->>
->>   $ make O=build headers
->>   $ make O=build -C tools/testing/selftests all
->>
->> The same commands work as well when building directly in the source
->> tree (no O=) or any arbitrary path (relative or absolute).
->>
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->> ---
-> You might want to add the 'Reported-by: as you did in 
-> https://lore.kernel.org/linux-kbuild/a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com/ 
+On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
+>
+> The new KUnit module handling has KUnit test suites listed in a
+> .kunit_test_suites section of each module. This should be loaded when
+> the module is, but at the moment this only happens if KUnit is built-in.
+>
+> Also load this when KUnit is enabled as a module: it'll not be usable
+> unless KUnit is loaded, but such modules are likely to depend on KUnit
+> anyway, so it's unlikely to ever be loaded needlessly.
 
-Except I don't know who reported the issue, I think it was just
-very well known.  KernelCI builds have been working around it for
-a couple of years.
+This seems reasonable to me.
 
-The Reported-by in the other patch was about using "headers"
-rather than "headers_install", as a follow-up improvement on top
-of this patch.
+Question: what happens in this case?
+1. insmod <test-module>
+2. insmod kunit
+3. rmmod <test-module>
 
-> Tested-by: Nicolas Schier <nicolas@fjasle.eu>
+I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
+for <test-module>, I think?
+But we never called __kunit_test_suites_init().
+My fear is what breaks as a result of this precondition break.
 
-Thank you!
+E.g. In the case that CONFIG_KUNIT_DEBUGFS is enabled, this includes a
+call to kunit_debugfs_destroy_suite() with no previous call to
+kunit_debugfs_create_suite().
+That will include a call to debugfs_remove_recursive(suite->debugfs),
+where suite->debugfs is an uninitialized pointer.
 
-Guillaume
+Maybe we can treat it as "undefined behavior" for now and proceed with
+this patch.
+
+In terms of long-term fixes, perhaps insmod kunit could trigger it to
+1. run all built-in tests (IIUC, it doesn't right now)
+2. run all the tests of currently loaded modules
+3. track which modules already ran so if you rmmod + insmod kunit
+again, it won't rerun tests?
+
+Daniel
