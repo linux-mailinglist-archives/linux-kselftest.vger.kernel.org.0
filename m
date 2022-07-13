@@ -2,29 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F68573E00
+	by mail.lfdr.de (Postfix) with ESMTP id ACBDE573E01
 	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 22:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237194AbiGMUqi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S237203AbiGMUqi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 13 Jul 2022 16:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237182AbiGMUqh (ORCPT
+        with ESMTP id S237184AbiGMUqh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 13 Jul 2022 16:46:37 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA883136B
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 13:46:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AD431374
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 13:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-type:content-transfer-encoding; s=k1; bh=C
-        3jVyBf6GniopPTZoyMQo27a4Ev3qmbBWb69XgAXuzs=; b=Rtjf4l0TxJXF2izXb
-        a86+RwDpFvKzNYxo+szvnsddqDk/ujOuojmMrX5OxJnrq45SjiRuw6LoiL92UXJc
-        4jXXp0dA1EMfw/VDtusnZ5I3FTSbsEtW+Vx5FVaXnh3f4TDWXdzDlgmwhilkxhJ9
-        2kTTT/4Bt46JPOSvQr9dcmE7A8=
-Received: (qmail 305591 invoked from network); 13 Jul 2022 22:46:33 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jul 2022 22:46:33 +0200
-X-UD-Smtp-Session: l3s3148p1@o6tX4bXjkqYgAwDtxwdRAEXXn+yo/Rze
+        :mime-version:content-transfer-encoding; s=k1; bh=ETa1R8snflFHVr
+        rpwnW5JCL7u57vMzoNpLWO6TprPB8=; b=ttU4wW3wc+S/vURqy04+exCzIE4hL5
+        C0DHgMdxPx4jXC7h9XHez1Kf7XygHq2ibcz3GxLrtP8tkK3cOcMZlyStkDN9NN6d
+        lkglwMhYLoAh2QDoclASPPk0uovORMNiwkL2lOU4pt+NY4W7UhkDUNjHxXQv2iwo
+        knuP2Sp0Z2K3k=
+Received: (qmail 305636 invoked from network); 13 Jul 2022 22:46:34 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jul 2022 22:46:34 +0200
+X-UD-Smtp-Session: l3s3148p1@kPNn4bXjlqYgAwDtxwdRAEXXn+yo/Rze
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-renesas-soc@vger.kernel.org
 Cc:     John Stultz <jstultz@google.com>,
@@ -32,14 +32,13 @@ Cc:     John Stultz <jstultz@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/9] selftests: timers: valid-adjtimex: build fix for newer toolchains
-Date:   Wed, 13 Jul 2022 22:46:13 +0200
-Message-Id: <20220713204623.5443-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 2/9] selftests: timers: fix declarations of main()
+Date:   Wed, 13 Jul 2022 22:46:14 +0200
+Message-Id: <20220713204623.5443-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
 References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -51,30 +50,69 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Toolchains with an include file 'sys/timex.h' based on 3.18 will have a
-'clock_adjtime' definition added, so it can't be static in the code:
+Mixing up argc/argv went unnoticed because they were not used. Still,
+this is worth fixing.
 
-valid-adjtimex.c:43:12: error: static declaration of ‘clock_adjtime’ follows non-static declaration
-
-Fixes: e03a58c320e1 ("kselftests: timers: Add adjtimex SETOFFSET validity tests")
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- tools/testing/selftests/timers/valid-adjtimex.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/timers/adjtick.c          | 2 +-
+ tools/testing/selftests/timers/change_skew.c      | 2 +-
+ tools/testing/selftests/timers/raw_skew.c         | 2 +-
+ tools/testing/selftests/timers/skew_consistency.c | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
-index 5397de708d3c..48b9a803235a 100644
---- a/tools/testing/selftests/timers/valid-adjtimex.c
-+++ b/tools/testing/selftests/timers/valid-adjtimex.c
-@@ -40,7 +40,7 @@
- #define ADJ_SETOFFSET 0x0100
- 
- #include <sys/syscall.h>
--static int clock_adjtime(clockid_t id, struct timex *tx)
-+int clock_adjtime(clockid_t id, struct timex *tx)
- {
- 	return syscall(__NR_clock_adjtime, id, tx);
+diff --git a/tools/testing/selftests/timers/adjtick.c b/tools/testing/selftests/timers/adjtick.c
+index 54d8d87f36b3..47e05fdc32c5 100644
+--- a/tools/testing/selftests/timers/adjtick.c
++++ b/tools/testing/selftests/timers/adjtick.c
+@@ -165,7 +165,7 @@ int check_tick_adj(long tickval)
+ 	return  0;
  }
+ 
+-int main(int argv, char **argc)
++int main(int argc, char **argv)
+ {
+ 	struct timespec raw;
+ 	long tick, max, interval, err;
+diff --git a/tools/testing/selftests/timers/change_skew.c b/tools/testing/selftests/timers/change_skew.c
+index c4eab7124990..992a77f2a74c 100644
+--- a/tools/testing/selftests/timers/change_skew.c
++++ b/tools/testing/selftests/timers/change_skew.c
+@@ -55,7 +55,7 @@ int change_skew_test(int ppm)
+ }
+ 
+ 
+-int main(int argv, char **argc)
++int main(int argc, char **argv)
+ {
+ 	struct timex tx;
+ 	int i, ret;
+diff --git a/tools/testing/selftests/timers/raw_skew.c b/tools/testing/selftests/timers/raw_skew.c
+index b41d8dd0c40c..5beceeed0d11 100644
+--- a/tools/testing/selftests/timers/raw_skew.c
++++ b/tools/testing/selftests/timers/raw_skew.c
+@@ -89,7 +89,7 @@ void get_monotonic_and_raw(struct timespec *mon, struct timespec *raw)
+ 	}
+ }
+ 
+-int main(int argv, char **argc)
++int main(int argc, char **argv)
+ {
+ 	struct timespec mon, raw, start, end;
+ 	long long delta1, delta2, interval, eppm, ppm;
+diff --git a/tools/testing/selftests/timers/skew_consistency.c b/tools/testing/selftests/timers/skew_consistency.c
+index 8066be9aff11..63913f75b384 100644
+--- a/tools/testing/selftests/timers/skew_consistency.c
++++ b/tools/testing/selftests/timers/skew_consistency.c
+@@ -38,7 +38,7 @@
+ 
+ #define NSEC_PER_SEC 1000000000LL
+ 
+-int main(int argv, char **argc)
++int main(int argc, char **argv)
+ {
+ 	struct timex tx;
+ 	int ret, ppm;
 -- 
 2.35.1
 
