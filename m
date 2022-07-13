@@ -2,90 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6CB572E37
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 08:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F563572E4E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 08:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiGMGfT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 02:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S229662AbiGMGiV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 02:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiGMGfR (ORCPT
+        with ESMTP id S229599AbiGMGiU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 02:35:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12C4A8526;
-        Tue, 12 Jul 2022 23:35:15 -0700 (PDT)
-Received: from localhost.localdomain (86.166.5.84.rev.sfr.net [84.5.166.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        Wed, 13 Jul 2022 02:38:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06904D5167;
+        Tue, 12 Jul 2022 23:38:19 -0700 (PDT)
+Received: from [192.168.0.24] (86.166.5.84.rev.sfr.net [84.5.166.86])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2E1276601A38;
-        Wed, 13 Jul 2022 07:35:14 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 254F166015B8;
+        Wed, 13 Jul 2022 07:38:18 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1657694114;
-        bh=ko+gnbg7O7P7dW9D/N5Lqjcvm4L0iCayu0mdGjwGvqg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XTi7VGFX8LxfBC2xgqC9MOWUepPUjodigpCi2VfUsApAKI8Ctz1SZ/YV8gvSHBoch
-         6fk5enB95UqaM5yEi5OhUDs2o458J9bmLYIk2S8Wy2vdpiptwSoUaZMlqgtoYs+9D6
-         t1ccBxJ7Dx5Dis4vFT7OeNrvXrz24gVz1sR1tX+4ptOqTpjcd0lFL/dvUxp+L1m4Vf
-         V2upTGZgZugQ10sZdDsBZnSo0yAzJbxbuwczu5qhfI2ioTZge8F/m6kKDl/4qgYOBX
-         YJrpJM4lcLhW4I5GMOkd1Da/NywzdJlkNuWaTg3QUr6NIDJ6saWwjP7ZvVrrr2xHu5
-         hwfJ/RlcV4YGw==
+        s=mail; t=1657694298;
+        bh=JeMidlcjsMt2NttqZPspM91gWwt1ujhVbq5qh8dmUQQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=gIWYNlnmQZZ3N4WcTGpDAgR7IM1S5P5eavZ4S1331HQNTJ2Txs6276tbW6uFJKlxa
+         NE6oFGeYwMbjpr6oq4osxylO5EH0PxNsl5r+AWzxvx+JiqfY1sv8hT8x0d0Fh3ONyd
+         OBYbeF6wYKXNEDwV43XWQGQLOfY1jycnRK/ujuh6NE2v6kwiEjTPo7w+Zi/31j7UcQ
+         Sd1QDAu4tsludW1wjMaEdY7l/y6Z5hi44OsM7ij5xEfmsE2IKZCRs90x6sUIR/NsE6
+         sbfCv5lOW679WMBHdUnSGNrSbz3Gyf8kKHHaf+MjMmLqOlBGg/HPIHSACN3qkRRvEt
+         2qRlGNqkrrDdg==
+Message-ID: <168ede35-12e0-c535-9d94-23b65a1beb28@collabora.com>
+Date:   Wed, 13 Jul 2022 08:38:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 4/4] Makefile: add headers_install to kselftest targets
+Content-Language: en-US
 From:   Guillaume Tucker <guillaume.tucker@collabora.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Shuah Khan <shuah@kernel.org>,
         Kees Cook <keescook@chromium.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kbuild@vger.kernel.org,
+Cc:     kernel@collabora.com, linux-kbuild@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/landlock: drop deprecated headers dependency
-Date:   Wed, 13 Jul 2022 08:35:01 +0200
-Message-Id: <b79c51ed97219b1c10e2e3f2bcd3269305f0f035.1657694067.git.guillaume.tucker@collabora.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1657296695.git.guillaume.tucker@collabora.com>
+ <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
+In-Reply-To: <4d34d06baf945dc31c78f873771cef3a75b60067.1657296695.git.guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The khdr make target has been removed, so drop it from the landlock
-Makefile dependencies as well as related include paths that are
-standard for headers in the kernel tree.
+On 08/07/2022 18:23, Guillaume Tucker wrote:
+> 
+>   $ make O=build headers_install
+>   $ make O=build -C tools/testing/selftest all
 
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-Reported-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/testing/selftests/landlock/Makefile | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+Typo, it should be selftests:
 
-diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
-index 1313e44e8fb9..a6959df28eb0 100644
---- a/tools/testing/selftests/landlock/Makefile
-+++ b/tools/testing/selftests/landlock/Makefile
-@@ -11,13 +11,8 @@ TEST_GEN_PROGS_EXTENDED := true
- OVERRIDE_TARGETS := 1
- include ../lib.mk
- 
--khdr_dir = $(top_srcdir)/usr/include
--
--$(khdr_dir)/linux/landlock.h: khdr
--	@:
--
- $(OUTPUT)/true: true.c
- 	$(LINK.c) $< $(LDLIBS) -o $@ -static
- 
--$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
--	$(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
-+$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
-+	$(LINK.c) $< $(LDLIBS) -o $@ -lcap
--- 
-2.30.2
+    $ make O=build -C tools/testing/selftests all
 
+Thanks,
+Guillaume
