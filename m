@@ -2,243 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04981573AA4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 17:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779BB573C5D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Jul 2022 20:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236353AbiGMPzt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Jul 2022 11:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
+        id S234904AbiGMSNh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Jul 2022 14:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbiGMPzs (ORCPT
+        with ESMTP id S229437AbiGMSNg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Jul 2022 11:55:48 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6490C4D809
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id iq18-20020a17090afb5200b001ef966d1febso5654930pjb.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Jul 2022 08:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
-        b=TjHjMkxHdrjtTtLaLLkPMs792kod3mIYtSimCy6NVweAsJU75rtvhot4VpXsblBqly
-         qHRf5/L3tn7yMu364MBoudvFOE15V1qz4sWU7IX1ZmSnyAtwoN3kNYw02DuKnsDO5gjp
-         M7RQmANYsVuNDbgNtkXvd3a8DnuUQH+hZV3ikimvffMZd8joeIgwo7GaoFBX8DFrddDF
-         llsAFJQV9aU6qv7H1VvM3a3PUKiZyeNUhvRUKDT5CnUoj9OxYRKgWhY0+MNYPlyo3vp0
-         JKfjLrkj60y7DnOnKgIUy/4L8UmsN/TA25iA1sJPVSruP4sBdSbj5QDwOKoVzrQcwL4a
-         C7Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=piRb7uQECeW9RYchBFA8MO5mKI1hZWhBSuPsCcsEFoc=;
-        b=arjbCdVoj5Mt02mUxwsB1qY6EV4zoF50D/PjPXuXyBRrbYffEBJNPOLUE3OLCj53HT
-         50d5Nznvqe9kQGQY5ZFXhYev+PnYc+UbZe0QBaaUFE7xuFpJvx37pg3j13fKeQ5B4o/L
-         xDv1pTGoisOwPbdacFIs3G6YPwSXo5pGczKf3Y9yPnNdHWnDBMOByct9R0z8RlvRfYPI
-         Lwz2Yij5z+tOAA9MrwYDgydkX7oOum+DEujkBvUdLcXwWQMGfBLN7dVPGD329lr70cP1
-         8Aex00hiIf4p7o686DU9fxlMv4TLknz9QFGa29Sl7qqo9jkLD1+pHg94s64GcyTyDpv/
-         4vVA==
-X-Gm-Message-State: AJIora/ffFYRCwGNJkC2/tF/hd2Cj1WVhsWv0UAm+dS25BFQqb3fQghR
-        gb3f/w/Fq3Z89vrVn3HDfKsMq6w=
-X-Google-Smtp-Source: AGRyM1vCSrU7O6O9FOIV8kUv1lP2Lkoiv9Ln98VM/44THqm2zXjHACWzfrfMXWhmXMTgZeZAsBg2f70=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:902:db02:b0:16c:5568:d740 with SMTP id
- m2-20020a170902db0200b0016c5568d740mr3785558plx.100.1657727746774; Wed, 13
- Jul 2022 08:55:46 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 08:55:45 -0700
-In-Reply-To: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
-Message-Id: <Ys7rAaRKbTEzvjFY@google.com>
-Mime-Version: 1.0
-References: <20220713011000.29090-1-xiaolinkui@kylinos.cn>
-Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool functions
-From:   sdf@google.com
-To:     xiaolinkui <xiaolinkui@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        xiaolinkui@kylinos.cn, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 13 Jul 2022 14:13:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E883F26D0;
+        Wed, 13 Jul 2022 11:13:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DDB261D5A;
+        Wed, 13 Jul 2022 18:13:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE7AC34114;
+        Wed, 13 Jul 2022 18:13:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657736015;
+        bh=AaUsNxQggnzWiPVjpjcMAaRJhu9wrjZVpBIyOLXibdw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FmIP6/Bd1FekydgfeyGeC1VUHDXWXSm9fS2zdhigJsfsvYez65GrU5wLQRmrsYcNt
+         CrPpF0CYU4HvAJbZPiSYcvU0fLa1dKmkV7MEq3geWPAUl4G6xtJNPfkgn7lBs9qFsf
+         XFUA9omvashJleu4rPueQPtadxAlov49n/KV1Z9XefMcV0auAdzvY+Eu7wRMxTu30n
+         6rMqhZdxwJXZz5fCqlKq6GmZsS+bsTxQ5jRZSYJiG+qlfkmfDU8u+DV1EPgBhIpKN3
+         0PnFLpfbsXOxhIAbceYECa4yzq6NkPYiC/b+uIfseluL5J/kc+OqROWtHzPq3ng0lN
+         yqJLvBE9s0Yfw==
+Date:   Wed, 13 Jul 2022 11:13:33 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] selftests/net: test nexthop without gw
+Message-ID: <20220713111333.4ffd9f19@kernel.org>
+In-Reply-To: <c4eccb16-3b45-1644-d4b0-ee3fee3810d9@6wind.com>
+References: <9fb5e3df069db50396799a250c4db761b1505dd3.camel@redhat.com>
+        <20220712095545.10947-1-nicolas.dichtel@6wind.com>
+        <20220712095545.10947-2-nicolas.dichtel@6wind.com>
+        <Ys1JefI+co1IFda4@kroah.com>
+        <20220712172515.126dc119@kernel.org>
+        <c4eccb16-3b45-1644-d4b0-ee3fee3810d9@6wind.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 07/13, xiaolinkui wrote:
-> From: Linkui Xiao<xiaolinkui@kylinos.cn>
-                    ^ space here?
+On Wed, 13 Jul 2022 09:36:37 +0200 Nicolas Dichtel wrote:
+> > And please don't resend your patches in reply to the previous version.
+> > Add a lore link to the previous version in the commit message if you
+> > want. In-reply-to breaks the review ordering for us :/  
+> Oh ok, I didn't know that.
 
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.  This fixes the following warnings from coccicheck:
-
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:407:9-10: WARNING:
-> return of 0/1 in function 'decap_v4' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:389:9-10: WARNING:
-> return of 0/1 in function 'decap_v6' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:290:9-10: WARNING:
-> return of 0/1 in function 'encap_v6' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:264:9-10: WARNING:
-> return of 0/1 in function 'parse_tcp' with return type bool
-> tools/testing/selftests/bpf/progs/test_xdp_noinline.c:242:9-10: WARNING:
-> return of 0/1 in function 'parse_udp' with return type bool
-
-> Generated by: scripts/coccinelle/misc/boolreturn.cocci
-
-> Signed-off-by: Linkui Xiao<xiaolinkui@kylinos.cn>
-
-This patch likely needs a resend with proper [PATCH bpf] or
-[PATCH bpf-next] subject to end up in patchwork and to be picked up.
-
-Take a look at Documentation/bpf/bpf_devel_QA.rst section "Q: How do I
-indicate which tree (bpf vs. bpf-next) my patch should be applied to?".
-
-Since that's a cleanup, you most likely want to target bpf-next.
-
-> ---
->   .../selftests/bpf/progs/test_xdp_noinline.c   | 30 +++++++++----------
->   1 file changed, 15 insertions(+), 15 deletions(-)
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c  
-> b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> index 125d872d7981..ba48fcb98ab2 100644
-> --- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> +++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-> @@ -239,7 +239,7 @@ bool parse_udp(void *data, void *data_end,
->   	udp = data + off;
-
->   	if (udp + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	if (!is_icmp) {
->   		pckt->flow.port16[0] = udp->source;
->   		pckt->flow.port16[1] = udp->dest;
-> @@ -247,7 +247,7 @@ bool parse_udp(void *data, void *data_end,
->   		pckt->flow.port16[0] = udp->dest;
->   		pckt->flow.port16[1] = udp->source;
->   	}
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -261,7 +261,7 @@ bool parse_tcp(void *data, void *data_end,
-
->   	tcp = data + off;
->   	if (tcp + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	if (tcp->syn)
->   		pckt->flags |= (1 << 1);
->   	if (!is_icmp) {
-> @@ -271,7 +271,7 @@ bool parse_tcp(void *data, void *data_end,
->   		pckt->flow.port16[0] = tcp->dest;
->   		pckt->flow.port16[1] = tcp->source;
->   	}
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -287,7 +287,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	void *data;
-
->   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct ipv6hdr)))
-> -		return 0;
-> +		return false;
->   	data = (void *)(long)xdp->data;
->   	data_end = (void *)(long)xdp->data_end;
->   	new_eth = data;
-> @@ -295,7 +295,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	old_eth = data + sizeof(struct ipv6hdr);
->   	if (new_eth + 1 > data_end ||
->   	    old_eth + 1 > data_end || ip6h + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	memcpy(new_eth->eth_dest, cval->mac, 6);
->   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 56710;
-> @@ -314,7 +314,7 @@ bool encap_v6(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	ip6h->saddr.in6_u.u6_addr32[2] = 3;
->   	ip6h->saddr.in6_u.u6_addr32[3] = ip_suffix;
->   	memcpy(ip6h->daddr.in6_u.u6_addr32, dst->dstv6, 16);
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -335,7 +335,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	ip_suffix <<= 15;
->   	ip_suffix ^= pckt->flow.src;
->   	if (bpf_xdp_adjust_head(xdp, 0 - (int)sizeof(struct iphdr)))
-> -		return 0;
-> +		return false;
->   	data = (void *)(long)xdp->data;
->   	data_end = (void *)(long)xdp->data_end;
->   	new_eth = data;
-> @@ -343,7 +343,7 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   	old_eth = data + sizeof(struct iphdr);
->   	if (new_eth + 1 > data_end ||
->   	    old_eth + 1 > data_end || iph + 1 > data_end)
-> -		return 0;
-> +		return false;
->   	memcpy(new_eth->eth_dest, cval->mac, 6);
->   	memcpy(new_eth->eth_source, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 8;
-> @@ -367,8 +367,8 @@ bool encap_v4(struct xdp_md *xdp, struct ctl_value  
-> *cval,
->   		csum += *next_iph_u16++;
->   	iph->check = ~((csum & 0xffff) + (csum >> 16));
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
-> -		return 0;
-> -	return 1;
-> +		return false;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -386,10 +386,10 @@ bool decap_v6(struct xdp_md *xdp, void **data, void  
-> **data_end, bool inner_v4)
->   	else
->   		new_eth->eth_proto = 56710;
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct ipv6hdr)))
-> -		return 0;
-> +		return false;
->   	*data = (void *)(long)xdp->data;
->   	*data_end = (void *)(long)xdp->data_end;
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> @@ -404,10 +404,10 @@ bool decap_v4(struct xdp_md *xdp, void **data, void  
-> **data_end)
->   	memcpy(new_eth->eth_dest, old_eth->eth_dest, 6);
->   	new_eth->eth_proto = 8;
->   	if (bpf_xdp_adjust_head(xdp, (int)sizeof(struct iphdr)))
-> -		return 0;
-> +		return false;
->   	*data = (void *)(long)xdp->data;
->   	*data_end = (void *)(long)xdp->data_end;
-> -	return 1;
-> +	return true;
->   }
-
->   static __attribute__ ((noinline))
-> --
-> 2.17.1
-
+Yeah, I haven't documented it because it's a bit of an oddity 
+and frankly a shortcoming of the tooling on my side. But IDK
+how to "detach" the threads in a way that'd allow me to keep 
+a queue sorted by posting data :(
