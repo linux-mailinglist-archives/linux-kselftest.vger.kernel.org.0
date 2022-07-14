@@ -2,52 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5FC57553E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 20:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF2E575581
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 20:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239259AbiGNSn5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 14:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
+        id S232128AbiGNS54 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 14:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240792AbiGNSnz (ORCPT
+        with ESMTP id S240896AbiGNS5f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 14:43:55 -0400
+        Thu, 14 Jul 2022 14:57:35 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9095BC09
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 11:43:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DEB6B257
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 11:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=Z3n+zODRwFKSwjVwTpt8yZm8eusF
-        qehhdu97RT4GPSI=; b=qEd/asnacONrIi2onhzA925Ih+adr6ph0UzzSkTwbpJb
-        idxbc/BNyz/ucQ9gNO7DAdILKHt1d3kFUn9CLL+LHtCDxpR1yYVoqJuuVbc0Br2d
-        CsZX1/huquVdY9VlRxb5gqOiRAJsW26rfMLlFMRkUpOxsFfXpf+Cw5z59Tpr4/o=
-Received: (qmail 701733 invoked from network); 14 Jul 2022 20:43:49 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 20:43:49 +0200
-X-UD-Smtp-Session: l3s3148p1@5X4/SMjjZoggAwDtxwdRAEXXn+yo/Rze
-Date:   Thu, 14 Jul 2022 20:43:48 +0200
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=O6B474X8P2gxKKp7qXnpFakS0XL
+        VtX/7FNJL6iki3kU=; b=XNplPfaLVlLVZl1NYESMAVjWqAyxa/XruwrOTvEXaA7
+        HEnTSzeuh9HeTt2Yf+VmVbcD45hC2BfR1/ouh8pVtVgLfxAi2rsqgm2pwJoys1Lt
+        OH42mL9E8+AMJvrIICLq0vJv4y170xd57sJmPXKMimDhAd7aY8MFg8H6FmMJ0a8w
+        =
+Received: (qmail 704724 invoked from network); 14 Jul 2022 20:57:30 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 20:57:30 +0200
+X-UD-Smtp-Session: l3s3148p1@4dM8ecjjRsIgAwDtxwdRAEXXn+yo/Rze
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     John Stultz <jstultz@google.com>,
-        linux-renesas-soc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
-Message-ID: <YtBj5NPGi5MUKuvP@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        John Stultz <jstultz@google.com>, linux-renesas-soc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
- <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
- <dbe428f6-37fd-cba7-2947-e042585d3a42@linuxfoundation.org>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2] selftests: timers: clocksource-switch: add 'runtime' command line parameter
+Date:   Thu, 14 Jul 2022 20:57:21 +0200
+Message-Id: <20220714185721.48125-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xtPIlBNOCe85Vi7+"
-Content-Disposition: inline
-In-Reply-To: <dbe428f6-37fd-cba7-2947-e042585d3a42@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
@@ -58,36 +48,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+So the user can decide how long the test should run.
 
---xtPIlBNOCe85Vi7+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Acked-by: John Stultz <jstultz@google.com>
+---
 
+Change since V1:
+* added the new parameter to the help printout
 
-> Wolfram, are you going to send v2 to address John's comment on
-> 8/9?
+ tools/testing/selftests/timers/clocksource-switch.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Yes, will do!
+diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
+index 5256e6215980..577e4b74211a 100644
+--- a/tools/testing/selftests/timers/clocksource-switch.c
++++ b/tools/testing/selftests/timers/clocksource-switch.c
+@@ -124,17 +124,22 @@ int main(int argc, char **argv)
+ 	char orig_clk[512];
+ 	int count, i, status, opt;
+ 	int do_sanity_check = 1;
++	int runtime = 60;
+ 	pid_t pid;
+ 
+ 	/* Process arguments */
+-	while ((opt = getopt(argc, argv, "s")) != -1) {
++	while ((opt = getopt(argc, argv, "st:")) != -1) {
+ 		switch (opt) {
+ 		case 's':
+ 			do_sanity_check = 0;
+ 			break;
++		case 't':
++			runtime = atoi(optarg);
++			break;
+ 		default:
+-			printf("Usage: %s [-s]\n", argv[0]);
++			printf("Usage: %s [-s] [-t <secs>]\n", argv[0]);
+ 			printf("	-s: skip sanity checks\n");
++			printf("	-t: Number of seconds to run\n");
+ 			exit(-1);
+ 		}
+ 	}
+@@ -167,7 +172,7 @@ int main(int argc, char **argv)
+ 	printf("Running Asynchronous Switching Tests...\n");
+ 	pid = fork();
+ 	if (!pid)
+-		return run_tests(60);
++		return run_tests(runtime);
+ 
+ 	while (pid != waitpid(pid, &status, WNOHANG))
+ 		for (i = 0; i < count; i++)
+-- 
+2.35.1
 
-
---xtPIlBNOCe85Vi7+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLQY+QACgkQFA3kzBSg
-KbYx4g//bznmWkrsUuC9E6fK8a7G95+jel2Y8vlStije/5AAyNGlT8+uphWGEPMu
-uM0dTho0woXCY9hi9E1CMrUoFP7JRa1eGcu0qcJJ/tDhbf1CsP5h6r717++mif+r
-omwZkcPh1eZOApZ+a+BO4uOnUSyMwVRNXUHGf4Jfqd1vl6CdEoCtQmlSFNDmb/CC
-LxCJnUfrtMjuIS83gIBF44/Pfm5ERJs/3KUE2uLTwMBAzkqGmdjy7WVyHRmWpga4
-ms0FIae0N4FjNQaIR94uUGVCn/ghyGmTjU+DZ/tbgueOhoi94ZWIERt993UU+u5B
-IGbZFBAXfRy8alNeX/g6qv7E2pfTAiLG0aAyi17uF93E2BE3RWVrLHSYI+Zlhz20
-m8jkWQ7Bn1nScfIIOeMw3KGddb9kkfzAzc4gnAQp/faik2YCCEfkfARfhR1rdb25
-Sj8hjvv6d93IixgnmSoJmmaLolXQIXUzYlqU/FaAMvTuk8k040BU1U3YaRyVqipF
-L7rDOvNlkFzVg70RioEPgoZkFhIP+DrneIf4VM0MxeGlyxMMorgpT/8u9IOTs2JF
-zJKO10UZiH90ha7D/RcsSm5NDh76Rba6BUFTqDa1nV/d9EBa956wjwn/QORyhvjJ
-dT84TVYNK7kdaX9tIonRK+MmPU4D7BzO2xuKnF+kLvE5fyekrso=
-=LxN/
------END PGP SIGNATURE-----
-
---xtPIlBNOCe85Vi7+--
