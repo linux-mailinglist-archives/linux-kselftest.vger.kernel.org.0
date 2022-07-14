@@ -2,96 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEC3574C2B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 13:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E777C574EB3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 15:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238899AbiGNLdD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 07:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
+        id S238551AbiGNNKQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 09:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238900AbiGNLc5 (ORCPT
+        with ESMTP id S231486AbiGNNKQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 07:32:57 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C2F12AE3
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 04:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=NqgLRbDkvKrqZXgEukqPHi1HqSm/
-        5pRJ4jWogOuPtXs=; b=m2HnQ4oEYssWagmMEUhUKw8N6UI14SSxK1b76MfrFTq4
-        P7TT6zWP7VDwtqiDuZTpgLij7LehcagV7Y9u77VgCxByZJ7YFdZLc5JlN1tnVXPS
-        1w1l95QEbZxblDPsg3sysKDduiqniBWmOgUtQAFZI90vQWr5Sk1Ci3rNkyAcJuk=
-Received: (qmail 578553 invoked from network); 14 Jul 2022 13:32:54 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 13:32:54 +0200
-X-UD-Smtp-Session: l3s3148p1@C3czQ8LjrqggAwDtxwdRAEXXn+yo/Rze
-Date:   Thu, 14 Jul 2022 13:32:54 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 8/9] selftests: timers: clocksource-switch: add 'runtime'
- command line parameter
-Message-ID: <Ys/+5sdZdQfwlWwh@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        linux-renesas-soc@vger.kernel.org, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
- <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
- <23526df7-b77d-4223-71ee-51c456dbc236@gmail.com>
+        Thu, 14 Jul 2022 09:10:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629413B97F;
+        Thu, 14 Jul 2022 06:10:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3E3262017;
+        Thu, 14 Jul 2022 13:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55136C3411C;
+        Thu, 14 Jul 2022 13:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657804214;
+        bh=ccXUe53SyOaVkQSaDRX8mNDGXd0zr0+4nl3q/mIG90E=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=JVKJc/mk03E1Mx8s4H7u3EbtJpyU5si+t2W+rKGcyNWByZOVxHAAxiCK9Lq1AX1lX
+         l6J7YbtUY37VzcAo171H/WiZLww4wR69QXRiyKKUlD1GaYq4dr9LQMC6ims1y0dkkA
+         2AcGM6S19pwnweW8BnmZXUgPBR6mUwTtv2AvlkXqp+g+5HlzxHB3AdKTtzzCc4vFyk
+         mSo6Lqcq/NwykIeRWp3u8SyEvE7a+hUjq5miIQA5ZqE2XxoIWI8THmOkV1RXTE0XUz
+         xk2av02UbTz701lL/CbQ8bTArw7Ivl40yHrXG5WQbFV/fW09z2N8jKIudibeu1mtrO
+         i04rDXV9so6Uw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D40CE45225;
+        Thu, 14 Jul 2022 13:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DXoAO6xHabqr8icK"
-Content-Disposition: inline
-In-Reply-To: <23526df7-b77d-4223-71ee-51c456dbc236@gmail.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3 1/2] ip: fix dflt addr selection for connected nexthop
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165780421418.729.15886797244518922619.git-patchwork-notify@kernel.org>
+Date:   Thu, 14 Jul 2022 13:10:14 +0000
+References: <20220713114853.29406-1-nicolas.dichtel@6wind.com>
+In-Reply-To: <20220713114853.29406-1-nicolas.dichtel@6wind.com>
+To:     Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        edumazet@google.com, dsahern@kernel.org,
+        gregkh@linuxfoundation.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        edwin.brossette@6wind.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello:
 
---DXoAO6xHabqr8icK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-> >  		default:
-> >  			printf("Usage: %s [-s]\n", argv[0]);
-> >  			printf("	-s: skip sanity checks\n");
->=20
->    Hm, you probably forgot to update the usage msg?
+On Wed, 13 Jul 2022 13:48:52 +0200 you wrote:
+> When a nexthop is added, without a gw address, the default scope was set
+> to 'host'. Thus, when a source address is selected, 127.0.0.1 may be chosen
+> but rejected when the route is used.
+> 
+> When using a route without a nexthop id, the scope can be configured in the
+> route, thus the problem doesn't exist.
+> 
+> [...]
 
-Yup, thanks!
+Here is the summary with links:
+  - [net,v3,1/2] ip: fix dflt addr selection for connected nexthop
+    https://git.kernel.org/netdev/net/c/747c14307214
+  - [net,v3,2/2] selftests/net: test nexthop without gw
+    https://git.kernel.org/netdev/net/c/cd72e61bad14
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
---DXoAO6xHabqr8icK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLP/uUACgkQFA3kzBSg
-Kbaocg//YV6D4s8raDMrzNSBcJCJ6YOYUMsyzGtyh3rWswhrMWLhENR4ojJI7OJv
-/xr6wNhkgBNVDcdKoX7Rc0Q7OtQzpvT/RvUW8IFw+R+x3YNlIgSeW+E67YJuRU9g
-D2U+YHNoyNpGItY/QEBOI1GOwzu5GLxlbglnRLQMONeDrHuHzCoU+DW8M07Dvp+l
-c+msZ6qgg6w4kjua5YxaMPC+xMcmaXffDMxLeiIclGWKkFdHcuNlIQzXT1xsJQEO
-AOF8SLzp4xasT/+m3l0eo9rnADhqgY+YV4aLSxAMS1dSrAn/wqp72kVMbwyh9FiS
-xZ9J32F8rl3xgnnA+VmL0aGVpL6hfQINTURwHNFYeJdsBrqxnO2XRpTXfdxaWQlx
-UQm/NtoODnF2YbUmDVarjriy+6jeFbcI97VggHEe88L/I+QcxCxnlT7sO6FZQIms
-Vt20ybsJz9m5sFzVGXyeT2q5F7CQKOQdAB2jzvH5LB2Rma+OLrIBGACYMqKlAhc2
-CGWFrNwr1f/wxHkPFd3TToZrK1g8AMpoIAWn0BiTrPUWc3QqBqmd7+Y3F9D8hi1D
-Sc8d8YV1RQOKA8Bz37iqv4dIzNlgGVapKUN4KM+/TDwYXGuI3RsjcYq3QdvpMxr7
-dcEp+tEe0bfbbrQHYGLM+vslzprOkY76w2nEa+7eobnZHHGIzNg=
-=Zvy7
------END PGP SIGNATURE-----
-
---DXoAO6xHabqr8icK--
