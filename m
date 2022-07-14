@@ -2,182 +2,232 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90642575045
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 16:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B3E5750C2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 16:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239916AbiGNOE1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 10:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
+        id S240416AbiGNO1s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 10:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240446AbiGNOEN (ORCPT
+        with ESMTP id S240400AbiGNO1o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 10:04:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D132FD21
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 07:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1657807393;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7XtdxK0LWmb1Jf+89i4Nsc+LkvKFkGHcgSyZX0xXxyI=;
-        b=X+xqTWR/D1QzEYRHcO1y5J38hj6mwz/2AOR8sPy6NhqAJWRmYkS3QWi7OFKgVZsNBUmN9A
-        1XCXffbwj6VQp7pCex+p8XQ4+J72r+2bIhFTFAdbzX4WpyVXTs4WCFyg9ae0dAnXZncNs0
-        PDVHWmLm3QT/MV5JpkVEteSLg9DS1qU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-CQDpbQ6oOP-Qt2xpcR6jHA-1; Thu, 14 Jul 2022 10:03:10 -0400
-X-MC-Unique: CQDpbQ6oOP-Qt2xpcR6jHA-1
-Received: by mail-ed1-f71.google.com with SMTP id w15-20020a056402268f00b0043ac600a6bcso1555100edd.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 07:03:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7XtdxK0LWmb1Jf+89i4Nsc+LkvKFkGHcgSyZX0xXxyI=;
-        b=Ov6pg8QiGCjIV3qSKnzcb6jPGAZi4kM3YfMKruYYpKFmZmUXiPC84SH6SsjNgGE9pl
-         sR8zrza1JjXB9TMASgHYG4qkLgi92WQ5sJ9zvXHrmOcRylvofZQ3M0N+rYf8PQqlQJL8
-         OmnJMzOyXbculPKX0bKnKw+2E+VjsApzhRIGebuRmnja5iT6ZFFvcKsFIhzLVF2FEncZ
-         JQITC25MYB3d1ycP9xF7Gzvxgqp1BRmDAdmbL+kkjIQTCcbsOaT80oi0rVMhps7JlNrp
-         VHuVujlaLW6z0bfcdomrvP8z7GRdk5C98qc80PsG1XrjQSe1thh6de0tehX9vOfZ35/k
-         gfUA==
-X-Gm-Message-State: AJIora9cRUD4Ms0n6vlcgb8BiHNKOYCGtfYLXDBnUigluqjYJfNObVsk
-        pNoqyEM7w6I/mBDtqavo7ApHGQfM6onQmj7ya2zdos/lpMF+xREhtWy85sOecmtX1Sjj+5aVRsS
-        7nz+8QcdX4KhvCeCVACmB7eiqnqCx
-X-Received: by 2002:a05:6402:40ce:b0:43a:918d:a73f with SMTP id z14-20020a05640240ce00b0043a918da73fmr12619738edb.387.1657807387223;
-        Thu, 14 Jul 2022 07:03:07 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t8bK5AXcuJxMiU/pYnK7wAsXNRmsbk7m7pn+eL/yzuEBAI/N/AVsUo8KbNwnQSVLyg0gEIxA==
-X-Received: by 2002:a05:6402:40ce:b0:43a:918d:a73f with SMTP id z14-20020a05640240ce00b0043a918da73fmr12619713edb.387.1657807386962;
-        Thu, 14 Jul 2022 07:03:06 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id b10-20020a1709063caa00b0072ee79bb8ebsm228499ejh.126.2022.07.14.07.03.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 07:03:06 -0700 (PDT)
-Message-ID: <cd5d029c-b396-45ef-917b-92e054659623@redhat.com>
-Date:   Thu, 14 Jul 2022 16:03:00 +0200
+        Thu, 14 Jul 2022 10:27:44 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5B95F126;
+        Thu, 14 Jul 2022 07:27:42 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id E128966C; Thu, 14 Jul 2022 09:27:40 -0500 (CDT)
+Date:   Thu, 14 Jul 2022 09:27:40 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>,
+        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        KP Singh <kpsingh@kernel.org>, revest@chromium.org,
+        jackmanb@chromium.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, shuah@kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com
+Subject: Re: [PATCH v2 0/4] Introduce security_create_user_ns()
+Message-ID: <20220714142740.GA10621@mail.hallyn.com>
+References: <20220707223228.1940249-1-fred@cloudflare.com>
+ <CAJ2a_DezgSpc28jvJuU_stT7V7et-gD7qjy409oy=ZFaUxJneg@mail.gmail.com>
+ <3dbd5b30-f869-b284-1383-309ca6994557@cloudflare.com>
+ <84fbd508-65da-1930-9ed3-f53f16679043@schaufler-ca.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] KVM: selftests: Double check on the current CPU in
- rseq_test
-Content-Language: en-US
-To:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, seanjc@google.com,
-        mathieu.desnoyers@efficios.com, shuah@kernel.org, maz@kernel.org,
-        oliver.upton@linux.dev, shan.gavin@gmail.com
-References: <20220714080642.3376618-1-gshan@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220714080642.3376618-1-gshan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <84fbd508-65da-1930-9ed3-f53f16679043@schaufler-ca.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/14/22 10:06, Gavin Shan wrote:
-> In rseq_test, there are two threads created. Those two threads are
-> 'main' and 'migration_thread' separately. We also have the assumption
-> that non-migration status on 'migration-worker' thread guarantees the
-> same non-migration status on 'main' thread. Unfortunately, the assumption
-> isn't true. The 'main' thread can be migrated from one CPU to another
-> one between the calls to sched_getcpu() and READ_ONCE(__rseq.cpu_id).
-> The following assert is raised eventually because of the mismatched
-> CPU numbers.
+On Fri, Jul 08, 2022 at 09:11:15AM -0700, Casey Schaufler wrote:
+> On 7/8/2022 7:01 AM, Frederick Lawler wrote:
+> > On 7/8/22 7:10 AM, Christian Göttsche wrote:
+> >> ,On Fri, 8 Jul 2022 at 00:32, Frederick Lawler <fred@cloudflare.com>
+> >> wrote:
+> >>>
+> >>> While creating a LSM BPF MAC policy to block user namespace
+> >>> creation, we
+> >>> used the LSM cred_prepare hook because that is the closest hook to
+> >>> prevent
+> >>> a call to create_user_ns().
+> >>>
+> >>> The calls look something like this:
+> >>>
+> >>>      cred = prepare_creds()
+> >>>          security_prepare_creds()
+> >>>              call_int_hook(cred_prepare, ...
+> >>>      if (cred)
+> >>>          create_user_ns(cred)
+> >>>
+> >>> We noticed that error codes were not propagated from this hook and
+> >>> introduced a patch [1] to propagate those errors.
+> >>>
+> >>> The discussion notes that security_prepare_creds()
+> >>> is not appropriate for MAC policies, and instead the hook is
+> >>> meant for LSM authors to prepare credentials for mutation. [2]
+> >>>
+> >>> Ultimately, we concluded that a better course of action is to introduce
+> >>> a new security hook for LSM authors. [3]
+> >>>
+> >>> This patch set first introduces a new security_create_user_ns()
+> >>> function
+> >>> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
+> >>
+> >> Some thoughts:
+> >>
+> >> I.
+> >>
+> >> Why not make the hook more generic, e.g. support all other existing
+> >> and potential future namespaces?
+> >
+> > The main issue with a generic hook is that different namespaces have
+> > different calling contexts. We decided in a previous discussion to
+> > opt-out of a generic hook for this reason. [1]
+> >
+> >> Also I think the naming scheme is <object>_<verb>.
+> >
+> > That's a good call out. I was originally hoping to keep the
+> > security_*() match with the hook name matched with the caller function
+> > to keep things all aligned. If no one objects to renaming the hook, I
+> > can rename the hook for v3.
+> >
+> >>
+> >>      LSM_HOOK(int, 0, namespace_create, const struct cred *cred,
+> >> unsigned int flags)
+> >>
+> >> where flags is a bitmap of CLONE flags from include/uapi/linux/sched.h
+> >> (like CLONE_NEWUSER).
+> >>
+> >> II.
+> >>
+> >> While adding policing for namespaces maybe also add a new hook for
+> >> setns(2)
+> >>
+> >>      LSM_HOOK(int, 0, namespace_join, const struct cred *subj,  const
+> >> struct cred *obj, unsigned int flags)
+> >>
+> >
+> > IIUC, setns() will create a new namespace for the other namespaces
+> > except for user namespace. If we add a security hook for the other
+> > create_*_ns() functions, then we can catch setns() at that point.
+> >
+> >> III.
+> >>
+> >> Maybe even attach a security context to namespaces so they can be
+> >> further governed?
 > 
-> The issue can be reproduced on arm64 system occasionally.
+> That would likely add confusion to the existing security module namespace
+> efforts. SELinux, Smack and AppArmor have all developed namespace models.
+> That, or it could replace the various independent efforts with a single,
 
-Hmm, this does not seem a correct patch - the threads are already 
-synchronizing using seq_cnt, like this:
+I feel like you're attaching more meaning to this than there needs to be.
+I *think* he's just talking about a user_namespace->u_security void*.
+So that for instance while deciding whether to allow some transition,
+selinux could check whether the caller's user namespace was created by
+a task in an selinux context authorized to create user namespaces.
 
-	migration			main
-	----------------------		--------------------------------
-	seq_cnt = 1
-	smp_wmb()
-					snapshot = 0
-					smp_rmb()
-					cpu = sched_getcpu() reads 23
-	sched_setaffinity()
-					rseq_cpu = __rseq.cpuid reads 35
-					smp_rmb()
-					snapshot != seq_cnt -> retry
-	smp_wmb()
-	seq_cnt = 2
+The "user namespaces are DAC and orthogonal to MAC" is of course true
+(where the LSM does not itself tie them together), except that we all
+know that a process running as root in a user namespace gains access to
+often-less-trustworthy code gated under CAP_SYS_ADMIN.
 
-sched_setaffinity() is guaranteed to block until the task is enqueued on 
-an allowed CPU.
+> unified security module namespace effort. There's more work to that than
+> adding a context to a namespace. Treating namespaces as objects is almost,
+> but not quite, solidifying containers as a kernel construct. We know we
+> can't do that.
 
-Can you check that smp_rmb() and smp_wmb() generate correct instructions 
-on arm64?
+What we "can't do" (imo) is to create a "full container" construct which
+ties together the various namespaces and other concepts in a restrictive
+way.
 
-Paolo
-
->    host# uname -r
->    5.19.0-rc6-gavin+
->    host# # cat /proc/cpuinfo | grep processor | tail -n 1
->    processor    : 223
->    host# pwd
->    /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
->    host# for i in `seq 1 100`;   \
->          do echo "--------> $i"; \
->          ./rseq_test; sleep 3;   \
->          done
->    --------> 1
->    --------> 2
->    --------> 3
->    --------> 4
->    --------> 5
->    --------> 6
->    ==== Test Assertion Failure ====
->      rseq_test.c:265: rseq_cpu == cpu
->      pid=3925 tid=3925 errno=4 - Interrupted system call
->         1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
->         2  0x0000ffffb044affb: ?? ??:0
->         3  0x0000ffffb044b0c7: ?? ??:0
->         4  0x0000000000401a6f: _start at ??:?
->      rseq CPU = 4, sched CPU = 27
+> >> SELinux example:
+> >>
+> >>      type domainA_userns_t;
+> >>      type_transition domainA_t domainA_t : namespace domainA_userns_t
+> >> "user";
+> >>      allow domainA_t domainA_userns_t:namespace create;
+> >>
+> >>      # domainB calling setns(2) with domainA as target
+> >>      allow domainB_t domainA_userns_t:namespace join;
 > 
-> This fixes the issue by double-checking on the current CPU after
-> call to READ_ONCE(__rseq.cpu_id) and restarting the test if the
-> two consecutive CPU numbers aren't euqal.
+> While I'm not an expert on SELinux policy, I'd bet a refreshing beverage
+> that there's already a way to achieve this with existing constructs.
+> Smack, which is subject+object MAC couldn't care less about the user
+> namespace configuration. User namespaces are DAC constructs.
 > 
-> Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->   tools/testing/selftests/kvm/rseq_test.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index 4158da0da2bb..74709dd9f5b2 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -207,7 +207,7 @@ int main(int argc, char *argv[])
->   {
->   	int r, i, snapshot;
->   	struct kvm_vm *vm;
-> -	u32 cpu, rseq_cpu;
-> +	u32 cpu, rseq_cpu, last_cpu;
->   
->   	/* Tell stdout not to buffer its content */
->   	setbuf(stdout, NULL);
-> @@ -259,8 +259,9 @@ int main(int argc, char *argv[])
->   			smp_rmb();
->   			cpu = sched_getcpu();
->   			rseq_cpu = READ_ONCE(__rseq.cpu_id);
-> +			last_cpu = sched_getcpu();
->   			smp_rmb();
-> -		} while (snapshot != atomic_read(&seq_cnt));
-> +		} while (snapshot != atomic_read(&seq_cnt) || cpu != last_cpu);
->   
->   		TEST_ASSERT(rseq_cpu == cpu,
->   			    "rseq CPU = %d, sched CPU = %d\n", rseq_cpu, cpu);
-
+> >>
+> >
+> > Links:
+> > 1.
+> > https://lore.kernel.org/all/CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com/
+> >
+> >>>
+> >>> Links:
+> >>> 1.
+> >>> https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+> >>>
+> >>> 2.
+> >>> https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+> >>> 3.
+> >>> https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+> >>>
+> >>> Changes since v1:
+> >>> - Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook
+> >>> patch
+> >>> - Add selinux: Implement create_user_ns hook patch
+> >>> - Change function signature of security_create_user_ns() to only take
+> >>>    struct cred
+> >>> - Move security_create_user_ns() call after id mapping check in
+> >>>    create_user_ns()
+> >>> - Update documentation to reflect changes
+> >>>
+> >>> Frederick Lawler (4):
+> >>>    security, lsm: Introduce security_create_user_ns()
+> >>>    bpf-lsm: Make bpf_lsm_create_user_ns() sleepable
+> >>>    selftests/bpf: Add tests verifying bpf lsm create_user_ns hook
+> >>>    selinux: Implement create_user_ns hook
+> >>>
+> >>>   include/linux/lsm_hook_defs.h                 |  1 +
+> >>>   include/linux/lsm_hooks.h                     |  4 +
+> >>>   include/linux/security.h                      |  6 ++
+> >>>   kernel/bpf/bpf_lsm.c                          |  1 +
+> >>>   kernel/user_namespace.c                       |  5 ++
+> >>>   security/security.c                           |  5 ++
+> >>>   security/selinux/hooks.c                      |  9 ++
+> >>>   security/selinux/include/classmap.h           |  2 +
+> >>>   .../selftests/bpf/prog_tests/deny_namespace.c | 88
+> >>> +++++++++++++++++++
+> >>>   .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
+> >>>   10 files changed, 160 insertions(+)
+> >>>   create mode 100644
+> >>> tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+> >>>   create mode 100644
+> >>> tools/testing/selftests/bpf/progs/test_deny_namespace.c
+> >>>
+> >>> -- 
+> >>> 2.30.2
+> >>>
+> >
