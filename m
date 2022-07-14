@@ -2,98 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BC157472B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 10:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE4D574C26
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 13:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237312AbiGNIhy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 04:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S238870AbiGNLci (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 07:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235898AbiGNIhN (ORCPT
+        with ESMTP id S238857AbiGNLci (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:37:13 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B8B3FA27
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 01:37:12 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bu42so1708455lfb.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 01:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=gaDZ6UkvWmoGLPkb5BiwWKXrxZqJRKNx4T2fn6EvGAM0nTMCvTzxyP4EuJ913j6Iv+
-         SvMX4/pvx4tmhR/0cDdL9pbkcCOAwg/dZQZJjKvYYHG5zoS6pTup2xrhZON7aPFodE61
-         jbdbe7f5x1iqsxnbqtRGk5VVyYe+GfguXyW53v/Jtk7m9BRLrugVau1mwPBhoM15I1rO
-         FgfB/JoMGOti2QefdfOSOcdpcygQeBiN0idXo3yCL6hW5Cz+uWpratECqWcSagxAB5xP
-         zT+sUZ3pJE3RjDVpLi/6z/hZ8yL43zLlaxwdm4ILJ3e9Bke6wVp5k2l7GAKtdogOGzmZ
-         5LQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=RVCqlZrCBDE2yfjxY+zYn+SZUvMimZaW28MMOSSQZoZAqV1NIxiujjFLV6BUtgXMhR
-         ohMF4MAHHA67Dv92hBtK4V2CrWuYfeeTlbSwwmHvfYq4bZRcfu7Hf9T4ZZlCZ1jMr26X
-         i2v5xLubqv0vfECh6Nnk+XF+dbUfczCC53FkQt21+PadVOkAK8w8gA5prgqKg+XGSZ0w
-         dAldSbmUIB1VlCTnEbSU9hx2OSsu9FQ/YCGKtabTV1b93bW3T3Swk+PCNTWl7++tn7vu
-         tCLaOkPlqsh8/910ntaPv3ykwq/9CQ+xiqOwSxRsejLBeP4FNcp7/YObJ59ruoZvv8Ml
-         Drcw==
-X-Gm-Message-State: AJIora+OPCEEXmrFzGaXP5CfLVajQyJaxk99D7IMDW+gu6Mbh0p+GCVF
-        JiKER6x32olnsyVQvFN1DpOcnQ24UQ7PwwRokwxdWPjJXRClVQ==
-X-Google-Smtp-Source: AGRyM1vX4Zd9WIWDxqKGtP81mt11peMiDiT310/qUqT5enM4eeA2HoIqQaHp0s5sIeDBZVZu8TIFwya2pg7lDHDFDeo=
-X-Received: by 2002:a05:6512:4004:b0:48a:12dc:7f63 with SMTP id
- br4-20020a056512400400b0048a12dc7f63mr2033540lfb.131.1657787820892; Thu, 14
- Jul 2022 01:37:00 -0700 (PDT)
+        Thu, 14 Jul 2022 07:32:38 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B239A1B7B8
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 04:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=QF7MlNUqjT2UfEW9YfPAvRYW4tsr
+        xdKIhmgnJ6AkEkI=; b=HKqMpM1AKn0Tjl/qDOcLHPQOUidWaHe+loZMDcxOQeX+
+        Wh39vQfXsMS7VYRoizVYeD//Y4Ncuxn466bnL7pCYxwA1uwDqAOhGwg4uonMMxfC
+        MvNh5oed9JluTbYfh3oYmIE6CO08IIjnp8xVWiecPo5vroo9zhhTVCZ4BP/0eeM=
+Received: (qmail 578448 invoked from network); 14 Jul 2022 13:32:33 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jul 2022 13:32:33 +0200
+X-UD-Smtp-Session: l3s3148p1@QgjvQcLjvKQgAwDtxwdRAEXXn+yo/Rze
+Date:   Thu, 14 Jul 2022 13:32:32 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     John Stultz <jstultz@google.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
+Message-ID: <Ys/+0CVwtTpBNfws@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        John Stultz <jstultz@google.com>, linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+ <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:00
- -0700 (PDT)
-Reply-To: abdwabbomaddahm@gmail.com
-From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
-Date:   Thu, 14 Jul 2022 09:37:00 +0100
-Message-ID: <CAFC-3ieta-vbGq7=-xp9Wgp2Sr8SYhFWTPWR2J6JsyQ_pZJxLQ@mail.gmail.com>
-Subject: Get back to me... URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4789]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdwabbomaddah746[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdwabbomaddah746[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="en0QinxNUHwiuF7U"
+Content-Disposition: inline
+In-Reply-To: <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
-Abd-Wabbo Maddah
+
+--en0QinxNUHwiuF7U
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hey John,
+
+> Acked-by: John Stultz <jstultz@google.com>
+>=20
+> Thanks so much for submitting these.
+
+Glad you like this series. I will wait some more to see if there are
+further review comments. But surely, I will add the missing parameter to
+the help output and add your tags to v2.
+
+Thank you for doing these tools :)
+
+   Wolfram
+
+
+--en0QinxNUHwiuF7U
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLP/tAACgkQFA3kzBSg
+KbZgqBAAl9r+En2Z/stzjSCSrZw83Tb7y+Kjgj2SlsEp37lxn5mIS1nAQa0N+yvL
+3S5zkE1Hj9yJagC7eIcDEv/oFX8zf3SJIAfJQ4NkfDO5ZhRUsiOyUhm81ywgbBCB
+xF4t5upcE7iJ7oeaxqaMEW26eQJOz7bRNec1SzX/jz3mZazfua+PD4ShhyTAaXzn
+xNJn7C3um2ySdmOS8wiLrFLVKqm7LIXmQy9eYzNnbfVf27n8/kM17co7xvYjeARG
+JxBGfhuMBBcayAVeTr2PlTtWzbSkaZkz1S+38KAeQDsJaPJbi8DcHxfBfnPgE88N
+1OabM1TUhN7qohy7VaAooWBL7JJt92aQkB5c0Os2ftHoCmmSELXEgQZz5clnsMD5
++OWzNxOgCX1YNb6aVufraIUxtJhql1HveE84Q014uAUYob+HnY39bGFyruqc7EK2
+QCXCrqjzV0wJjxjxZ8b4Gpo6nIrei9PgxU6TFy1pDvJ6HJypQz2YnbJ5Tx5IXuc3
+c1EIjYfQlODtryWANoqhvyaUQZy4L1Is7UM5iuVXsYhzL/DazqItoBl5dQf5+pmu
+n7h3lNVKThnYUJdXzEujtuMITFTfWW1Y/cyLhthdTnhiBbmFlKktc/9nOf3ykMD6
+1xF7ilgQYOGnyk3VD36Ov7ZtPtYXh2eTyezgquP9+EMsMmYSS7I=
+=ZXu/
+-----END PGP SIGNATURE-----
+
+--en0QinxNUHwiuF7U--
