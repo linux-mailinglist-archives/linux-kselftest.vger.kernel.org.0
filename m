@@ -2,164 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D5957582A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Jul 2022 01:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733BB57582D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Jul 2022 01:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbiGNXuv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 19:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S232445AbiGNXvn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 19:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiGNXuu (ORCPT
+        with ESMTP id S229556AbiGNXvm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:50:50 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663756D9D9;
-        Thu, 14 Jul 2022 16:50:48 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id ay25so1934653wmb.1;
-        Thu, 14 Jul 2022 16:50:48 -0700 (PDT)
+        Thu, 14 Jul 2022 19:51:42 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD126D9EB;
+        Thu, 14 Jul 2022 16:51:41 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id a15so4267130pjs.0;
+        Thu, 14 Jul 2022 16:51:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=14gDsozi2dxw36iEkIGIYX8ruOdQSltClzgyGBSvwFk=;
-        b=QTSLPpcMK6UNDDFzArozTzjeYq/T6FkU0p6ZFqv4CsYkMU8UYFGCmpowTvfGWqdJnh
-         NpJ649Yh6MHohMCeHxVX0VVypptQOczDV13puf7wGqbVtvj+G38QMQR6qtzih2N9VKDL
-         kP8bVj1ZQ1tdrz87DWtY6WbV/wRfu+mYszLGaTqbbNUt+/Rn6Vv0Emg7hlsijzOaqIo2
-         vUMqKhc7UXRkRHKPfaGMrOpsLDmWPtLT/qHqJekrphGjH7tQ1HlP3GTmW6U/ewDFfq5u
-         JLMGa+XoAKJioLjAG09khYm/UC+3OsHfcSEnGc8wRBiaUmzt4DVdjQdToR7esSIKOqpB
-         78UQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=WQOJ87cxhZVY+IyP6bEM7D5o/BRipLCrV6YOLHFhk1w=;
+        b=IIMJ1246IIPKa4Fs/STJlOe4IyjgfiAckNmuhbjPtUIO1nj4eRzEmX0f/jDfkBJXM5
+         r7E6CEGq5UqqbXoicOFChB8yFFa9MNdXKs7zON/jTEW7lvcVeAw4lQh/X1oRNTLeQzSW
+         Wsf7d0XV+lcxH2oeQGXCXj4bOx+fHApevwf7BSbDKrVPLASQSRFeINMBHfI6T7lo1gwD
+         tn8dxzX14KsS14Mo97QiTwIdJLrPCkzw1VC745ROPwvcond6xyH40n5ReE4NADUTbAse
+         vAxo+f7u3jJ1gmPb2xJ/fw+RBT9GxVsEaPE/2hDyyg1iH/EhZ9g2L/pG4qg7HtaVF1gd
+         0CqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=14gDsozi2dxw36iEkIGIYX8ruOdQSltClzgyGBSvwFk=;
-        b=LBpRfxK2Uk+YSMvquNuOaUpzEKGwfoXl4jo/378/KVhdEBtFo/7ysOyAPK+m8YRTRe
-         bfOq2GTdmE+aSMTYLxibBpqzKOMUfXy31fkgh5sFYw0Q2afhQy+hFHu1+Go0+8FxWLFV
-         WIpjCTc8WZkOKlmNmrWSQ0JkgAXPIT+1vffOa1Ynxp0dGib0sRZnER/zYPmFjRryAk3b
-         R7HwtHWX7LfU1vwj9UJatTwwOrO8XsARglpiJ81oREpxzdROHvfGs8/JdRjW/R+QeZhn
-         j/Jp09SThTyKR0f87cY4RIZCqOJ6g6voiwbL3wRACY7G0rsHE+Ceb59C3g+U7cjhPCmx
-         A3dw==
-X-Gm-Message-State: AJIora9fE6tP83jTpSJdWA7v6SP9Sdz8zWHBOh3EL645W/r1nu10KH+E
-        9oYJn0SoJbfqsALePLLUDl7Y5ppKBJk=
-X-Google-Smtp-Source: AGRyM1tDqEf5e0eBYK0ycbdjnJC8BpH0NwXcMd/GEDaYfRLQNhJQWq5NOMETdDU3FmbubBNfcuun5w==
-X-Received: by 2002:a05:600c:4f08:b0:3a1:99ed:4f1f with SMTP id l8-20020a05600c4f0800b003a199ed4f1fmr17363082wmq.199.1657842646873;
-        Thu, 14 Jul 2022 16:50:46 -0700 (PDT)
-Received: from localhost.localdomain (host-95-235-102-55.retail.telecomitalia.it. [95.235.102.55])
-        by smtp.gmail.com with ESMTPSA id a16-20020adfdd10000000b0021d6e917442sm2920854wrm.72.2022.07.14.16.50.39
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=WQOJ87cxhZVY+IyP6bEM7D5o/BRipLCrV6YOLHFhk1w=;
+        b=XIb9ELWtwHZCwszS/86xknNd39OaY2ezkluATFKCyUihqq97SVus9jpe1ZhJ7Y6yv+
+         GjVXfixeWgg1+waxGYX7xbr0KFGj0aDaowE15o0eY3mq/cTnb7Sr+nRtIG/ZKr3A/RXQ
+         4JzsxC9e6kqXTxpe8W4rvIA8O4SwpHmEhG5XzYd8F3Gpjm3CD7DF7ps6vlPCRHT4KTkh
+         N6oNIDAPjQnIcP1+jlQ6KP+j0lMeO/Jkjz1FbM3lMqBZc7dd3XV31IivOA/AuaQB4Zrb
+         BKkZP6vLqhe5JUgiWqMBF8AomXtBZIcutQ5U94T3NgteXd2mZEAqGc44/v4gZl83MmZ2
+         uXZA==
+X-Gm-Message-State: AJIora/0kBft/m03EZ1DiI8ElY6NQMiHGATbtAEdifLu/FDJsC1O9OJq
+        vVgodr9fiug1BFopfjYfvoY=
+X-Google-Smtp-Source: AGRyM1teLs417YHFJ/t2owHCD+vGs4Qr7DfmKbJT20i1kDWBwhWfbe5Bg5RlLbs0eGYr/5Q7QmTJjA==
+X-Received: by 2002:a17:90b:19d3:b0:1f0:addf:8ff4 with SMTP id nm19-20020a17090b19d300b001f0addf8ff4mr8732227pjb.191.1657842700547;
+        Thu, 14 Jul 2022 16:51:40 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t3-20020a6549c3000000b00411acdb1625sm1857442pgs.92.2022.07.14.16.51.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 16:50:45 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] firmware_loader: Replace kmap() with kmap_local_page()
-Date:   Fri, 15 Jul 2022 01:50:30 +0200
-Message-Id: <20220714235030.12732-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.0
+        Thu, 14 Jul 2022 16:51:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 14 Jul 2022 16:51:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/9] drm: selftest: convert drm_format selftest to
+ KUnit
+Message-ID: <20220714235137.GA485839@roeck-us.net>
+References: <20220708203052.236290-1-maira.canal@usp.br>
+ <20220708203052.236290-5-maira.canal@usp.br>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220708203052.236290-5-maira.canal@usp.br>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page().
+On Fri, Jul 08, 2022 at 05:30:47PM -0300, Maíra Canal wrote:
+> Considering the current adoption of the KUnit framework, convert the
+> DRM format selftest to the KUnit API.
+> 
+> Tested-by: David Gow <davidgow@google.com>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Signed-off-by: Maíra Canal <maira.canal@usp.br>
 
-Two main problems with kmap(): (1) It comes with an overhead as mapping
-space is restricted and protected by a global lock for synchronization and
-(2) kmap() also requires global TLB invalidation when the kmapâ€™s pool
-wraps and it might block when the mapping space is fully utilized until a
-slot becomes available.
+This patch results in:
 
-kmap_local_page() is preferred over kmap() and kmap_atomic(). Where it
-cannot mechanically replace the latters, code refactor should be considered
-(special care must be taken if kernel virtual addresses are aliases in
-different contexts).
+Building powerpc:allmodconfig ... failed
+--------------
+Error log:
+drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
+drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of 3712 bytes is larger than 2048 bytes
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
+presumably due to function nesting.
 
-Call kmap_local_page() in firmware_loader wherever kmap() is currently
-used. In firmware_rw() use the helpers copy_{from,to}_page() instead of
-open coding the local mappings + memcpy().
-
-Successfully tested with "firmware" selftests on a QEMU/KVM 32-bits VM
-with 4GB RAM, booting a kernel with HIGHMEM64GB enabled.
-
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
-
-v1->v2: According to the comments from Greg Kroah-Hartman (thanks!),
-extend the commit message adding information about why kmap() should be
-avoided. Delete an unused variable left in the code of v1, which has been
-Reported-by: kernel test robot <lkp@intel.com>
-
- drivers/base/firmware_loader/main.c  |  4 ++--
- drivers/base/firmware_loader/sysfs.c | 10 ++++------
- 2 files changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index ac3f34e80194..7c3590fd97c2 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -435,11 +435,11 @@ static int fw_decompress_xz_pages(struct device *dev, struct fw_priv *fw_priv,
- 
- 		/* decompress onto the new allocated page */
- 		page = fw_priv->pages[fw_priv->nr_pages - 1];
--		xz_buf.out = kmap(page);
-+		xz_buf.out = kmap_local_page(page);
- 		xz_buf.out_pos = 0;
- 		xz_buf.out_size = PAGE_SIZE;
- 		xz_ret = xz_dec_run(xz_dec, &xz_buf);
--		kunmap(page);
-+		kunmap_local(xz_buf.out);
- 		fw_priv->size += xz_buf.out_pos;
- 		/* partial decompression means either end or error */
- 		if (xz_buf.out_pos != PAGE_SIZE)
-diff --git a/drivers/base/firmware_loader/sysfs.c b/drivers/base/firmware_loader/sysfs.c
-index 5b0b85b70b6f..77bad32c481a 100644
---- a/drivers/base/firmware_loader/sysfs.c
-+++ b/drivers/base/firmware_loader/sysfs.c
-@@ -242,19 +242,17 @@ static void firmware_rw(struct fw_priv *fw_priv, char *buffer,
- 			loff_t offset, size_t count, bool read)
- {
- 	while (count) {
--		void *page_data;
- 		int page_nr = offset >> PAGE_SHIFT;
- 		int page_ofs = offset & (PAGE_SIZE - 1);
- 		int page_cnt = min_t(size_t, PAGE_SIZE - page_ofs, count);
- 
--		page_data = kmap(fw_priv->pages[page_nr]);
--
- 		if (read)
--			memcpy(buffer, page_data + page_ofs, page_cnt);
-+			memcpy_from_page(buffer, fw_priv->pages[page_nr],
-+					 page_ofs, page_cnt);
- 		else
--			memcpy(page_data + page_ofs, buffer, page_cnt);
-+			memcpy_to_page(fw_priv->pages[page_nr], page_ofs,
-+				       buffer, page_cnt);
- 
--		kunmap(fw_priv->pages[page_nr]);
- 		buffer += page_cnt;
- 		offset += page_cnt;
- 		count -= page_cnt;
--- 
-2.37.0
-
+Guenter
