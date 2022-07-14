@@ -2,114 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F695746B6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 10:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BC157472B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 10:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiGNI2B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 04:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S237312AbiGNIhy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 04:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233625AbiGNI2A (ORCPT
+        with ESMTP id S235898AbiGNIhN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:28:00 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CB93AE40;
-        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t1so1593102lft.8;
-        Thu, 14 Jul 2022 01:27:59 -0700 (PDT)
+        Thu, 14 Jul 2022 04:37:13 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B8B3FA27
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 01:37:12 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id bu42so1708455lfb.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 01:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
-        b=ZaBl6ghxvOoCi15XY7qnZBNcwSAQq29ipWDnkOjW6Sp5EsSr7uOPMemPswdqcPWkYp
-         6MZiFNq9PAhKgbk0xizQDei8rGueEFZCLniFzvjS2ugzK8lo6oQWrcqd5KgCliZfdO9+
-         12EozpOMgeZApBKc02vGMBtiEoYOGUEuZIh7VrniCktqlKIgt5niU1W2xTXyf1eW4UcO
-         nf7W5NgqChCM9CKHYbWOnpxdX8ncjlitS7vuPeFs9hoMx6ztcL+EON+bB6bSwdJhlOd2
-         CQFNzcgW8kmbUMyica39G2XhqPWzRRcfv/VKFsP1V6D9ivzhgCjyRSLtMdG8T+cWFG7X
-         mS7Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=gaDZ6UkvWmoGLPkb5BiwWKXrxZqJRKNx4T2fn6EvGAM0nTMCvTzxyP4EuJ913j6Iv+
+         SvMX4/pvx4tmhR/0cDdL9pbkcCOAwg/dZQZJjKvYYHG5zoS6pTup2xrhZON7aPFodE61
+         jbdbe7f5x1iqsxnbqtRGk5VVyYe+GfguXyW53v/Jtk7m9BRLrugVau1mwPBhoM15I1rO
+         FgfB/JoMGOti2QefdfOSOcdpcygQeBiN0idXo3yCL6hW5Cz+uWpratECqWcSagxAB5xP
+         zT+sUZ3pJE3RjDVpLi/6z/hZ8yL43zLlaxwdm4ILJ3e9Bke6wVp5k2l7GAKtdogOGzmZ
+         5LQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2pK5vnd3CztnzTkE+rNKn5a3mKucIwku8ySPesIgYDQ=;
-        b=LVpkF89vUI+RzafkCY50kCZK/r/ua+9PjUkzxLYuResSIpDRWlqcyoz2GUDZNxFxpS
-         16oIF5hPLXhykjGT4R+tntizW0b341QGBKg6T7GdE4SIsuTYSaQS6QKwiZ0OFYdQkdNx
-         95GVlp3YxKIeCRguFTAQ/JaXfWjMGLC+lTnbv0PC/HYCca8QZo59I+IidPfM3iJqN/na
-         yS2AJNcseKwpY0TlY/LsJLAzkbJuf1IRkojUiQ9FJyTh7hLeWX1VGyItWEVtwqb7ZbkK
-         3UitlltlQIJfMsiXA4JE81UKm6tJbwMlKxieI6W4GgMXpjR8TjHQZctNQCck7EUJwZOt
-         Puaw==
-X-Gm-Message-State: AJIora8ZDuQK10mB39InRvt/Wi54rorRCAk3oRyIW5lqGvsRWgs6ei/0
-        U8G4DD7vAGjrs4yPWgsKusfAV14c6Xk=
-X-Google-Smtp-Source: AGRyM1t+uRyJiclu/xiFS5ssRkQcD6WpY+R19402VHqaEJtkQFqVPRddhHNT4oZ92QGEmNDMBxg3nA==
-X-Received: by 2002:a05:6512:ea1:b0:489:2930:9f1a with SMTP id bi33-20020a0565120ea100b0048929309f1amr4760060lfb.291.1657787277443;
-        Thu, 14 Jul 2022 01:27:57 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.79.77])
-        by smtp.gmail.com with ESMTPSA id j18-20020a056512345200b00489f0c8bddesm234621lfr.207.2022.07.14.01.27.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 01:27:56 -0700 (PDT)
-Subject: Re: [PATCH 8/9] selftests: timers: clocksource-switch: add 'runtime'
- command line parameter
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
- <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <23526df7-b77d-4223-71ee-51c456dbc236@gmail.com>
-Date:   Thu, 14 Jul 2022 11:27:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=RVCqlZrCBDE2yfjxY+zYn+SZUvMimZaW28MMOSSQZoZAqV1NIxiujjFLV6BUtgXMhR
+         ohMF4MAHHA67Dv92hBtK4V2CrWuYfeeTlbSwwmHvfYq4bZRcfu7Hf9T4ZZlCZ1jMr26X
+         i2v5xLubqv0vfECh6Nnk+XF+dbUfczCC53FkQt21+PadVOkAK8w8gA5prgqKg+XGSZ0w
+         dAldSbmUIB1VlCTnEbSU9hx2OSsu9FQ/YCGKtabTV1b93bW3T3Swk+PCNTWl7++tn7vu
+         tCLaOkPlqsh8/910ntaPv3ykwq/9CQ+xiqOwSxRsejLBeP4FNcp7/YObJ59ruoZvv8Ml
+         Drcw==
+X-Gm-Message-State: AJIora+OPCEEXmrFzGaXP5CfLVajQyJaxk99D7IMDW+gu6Mbh0p+GCVF
+        JiKER6x32olnsyVQvFN1DpOcnQ24UQ7PwwRokwxdWPjJXRClVQ==
+X-Google-Smtp-Source: AGRyM1vX4Zd9WIWDxqKGtP81mt11peMiDiT310/qUqT5enM4eeA2HoIqQaHp0s5sIeDBZVZu8TIFwya2pg7lDHDFDeo=
+X-Received: by 2002:a05:6512:4004:b0:48a:12dc:7f63 with SMTP id
+ br4-20020a056512400400b0048a12dc7f63mr2033540lfb.131.1657787820892; Thu, 14
+ Jul 2022 01:37:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220713204623.5443-9-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:00
+ -0700 (PDT)
+Reply-To: abdwabbomaddahm@gmail.com
+From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
+Date:   Thu, 14 Jul 2022 09:37:00 +0100
+Message-ID: <CAFC-3ieta-vbGq7=-xp9Wgp2Sr8SYhFWTPWR2J6JsyQ_pZJxLQ@mail.gmail.com>
+Subject: Get back to me... URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:12e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4789]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [abdwabbomaddah746[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [abdwabbomaddah746[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello!
-
-On 7/13/22 11:46 PM, Wolfram Sang wrote:
-
-> So the user can decide how long the test should run.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  tools/testing/selftests/timers/clocksource-switch.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
-> index 5256e6215980..a1d0d33738b6 100644
-> --- a/tools/testing/selftests/timers/clocksource-switch.c
-> +++ b/tools/testing/selftests/timers/clocksource-switch.c
-[...]
-> -	while ((opt = getopt(argc, argv, "s")) != -1) {
-> +	while ((opt = getopt(argc, argv, "st:")) != -1) {
->  		switch (opt) {
->  		case 's':
->  			do_sanity_check = 0;
->  			break;
-> +		case 't':
-> +			runtime = atoi(optarg);
-> +			break;
->  		default:
->  			printf("Usage: %s [-s]\n", argv[0]);
->  			printf("	-s: skip sanity checks\n");
-
-   Hm, you probably forgot to update the usage msg?
-
-[...]
-
-MBR, Sergey
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Abd-Wabbo Maddah
