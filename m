@@ -2,81 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F81575713
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 23:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F298F575719
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 23:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240942AbiGNVjZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 17:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S232054AbiGNVlb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 17:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240995AbiGNVjR (ORCPT
+        with ESMTP id S240983AbiGNVla (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 17:39:17 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F341573D;
-        Thu, 14 Jul 2022 14:39:16 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s27so2708732pga.13;
-        Thu, 14 Jul 2022 14:39:16 -0700 (PDT)
+        Thu, 14 Jul 2022 17:41:30 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB39E2C10C
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 14:41:29 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-31c8a1e9e33so30327657b3.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 14:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DgW9kAXC6VaNn9rU3wnHWjSpTrZ8/AEf3hlkouGTzLM=;
-        b=c8mWRbXSajF588i3rM9y0yyoGZfg0NbyGk3jlGOuAtgVjzANWV6yySZGTzenPaeJqz
-         Lr+Z+hmrpiXr84CYm/40hhnRLEn4MHNCK/RFAquVz5gVQZiZw+yyhlIf/4LnKYhylRfn
-         GKYYF+mE08XAFgo709pRl5qxWjI4qzD1LnNHp18EH9lp8bMCpKrdOekGdDKLFJ9Evhn3
-         oBc0R6SLnmZPDvldLIlZFx/9T07rIP/mKbzeWj4y/nWJn9kVolBIrTaG8RWDs6hOf46U
-         Qd7KMF3lpTGOxcxW3nMB1eBy+aPugcSMQhRm0/gtMQWZeyhd0T1UmjnN6XBZugfMMvrs
-         P4yw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XrLJ6t8ylgvZSQuZlmobmLCnVlZPRzZJ+MdpYtHUOJI=;
+        b=Xosv3ScUfv21//1t7/kb8Wskbr5g/+WLejRea8X/qIg4fcT6osyLtoFWd1q65TrZxz
+         feesD9cIQ72VczWllJBOl77MkiNJmE+/vXXrwJbIARFcs7H4HWsl0JvmJvI5JmzTyN3U
+         meKwZc6FIVNI5r3igtveG+zCZ1j1ojRwPdhq0ES07Nfv4SzSwQkHmjd8eu8KL6xOi/fI
+         LRi3I2xpRJ1KhOGYQW0t3TrGtTfQ0unWzgEbvygAc1GceVzHXPM/aZ/jAK7d4Y44MtL6
+         sW1lpoijWw5+VMCETqp+N8fw1Tk56Ozgw2WXd2wlnHobOp2GtLGRpppxH0EVDLF89dQE
+         6bCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DgW9kAXC6VaNn9rU3wnHWjSpTrZ8/AEf3hlkouGTzLM=;
-        b=ElNKoEb1FkH6wRwiex5RX5kxQcjy2ymSZJ5ECiTNp8pqkvHO8Gw4MolXQ7NqtG2mN/
-         ucH+trAtSFWdTZyMEm5PvZYjDbdgO/nSXIIgE+A9VWnUlBnQV/hUaL+izim2GP0z1+Ou
-         faDM9kbbRQJFbtdFsxSZwGmSt1Qn1PDexJqUYzJISHhJ6vXtsmqoopRka2ETElVSwBCU
-         ilTSxBJV9srdlFkDoHoLtJSjmYmK5t99wkvqY6KYWRUwznLx/uldtFuXp7tPP3e/Vyb1
-         lzhaH5YbspamEapbVaaOT03+tEjVAOeFm1D2Lj/BZSIWlN9hKDijZuJ9qVLKRe06kcWP
-         jRGQ==
-X-Gm-Message-State: AJIora+6GySdmHr4X/mq7d8tmpl5pN8Va8EBPTfOKGOZZ7/lF9DwTQQ8
-        RgGdM2VscMdQLB5Q2KeTiYo=
-X-Google-Smtp-Source: AGRyM1sY/NZRxlCCjWjo5j61Gv+szsCKgzp7/Bjo7JYU8bEO3/CBMFYME2TsUz3zfoxhbUOdAfyDbw==
-X-Received: by 2002:a62:864f:0:b0:52a:be82:6b60 with SMTP id x76-20020a62864f000000b0052abe826b60mr10342092pfd.48.1657834756198;
-        Thu, 14 Jul 2022 14:39:16 -0700 (PDT)
-Received: from MacBook-Pro-3.local ([2620:10d:c090:500::1:697a])
-        by smtp.gmail.com with ESMTPSA id g204-20020a6252d5000000b0052aca106b20sm2165289pfb.202.2022.07.14.14.39.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 14:39:15 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 14:39:12 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        memxor@gmail.com
-Subject: Re: [PATCH bpf-next v6 00/23] Introduce eBPF support for HID devices
-Message-ID: <20220714213912.zrotlequhpgxzdl4@MacBook-Pro-3.local>
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XrLJ6t8ylgvZSQuZlmobmLCnVlZPRzZJ+MdpYtHUOJI=;
+        b=xLcL/DHjm3cwjCMpP07rj0ZTgfKoovXpGXypGkmU/uPdWVKMmX3Jwez+ZiktWdrxqQ
+         brNMbY0RdcTXsbwUdJ2tw8shNVCzxz+/qJxkl0BZfuXbKlm1N2YLvUVj+nBw3sO2Qgav
+         ys8J0S/wm3nUdMZgZQD/VpwWZarJXwmvz6+DRZHioyCHLljkKYmJEHOOZI8SmP+wUtGW
+         lrrPC5of4lLM2a7AGPEC0yWcNjqE9aCNQKN1LbkAYRx4LW1h2u3TxrfEsKIHntnCzj+9
+         sDx2FpVYhlZJJaNqaVuh1fIz0vx68J+hJS5WZX8oW10Jh1kIqISDl7MRJgLsd7INmnKk
+         VgzA==
+X-Gm-Message-State: AJIora9+cDHevjhdIVYrTban5dSwR0bXgPznamn2fq8RunM5vv2TdmsW
+        FPQOdfgevAAXviIn2B4tp7cO1ffk2/VV3bb5ZBRHAw==
+X-Google-Smtp-Source: AGRyM1vy8aVzUOhf/QXtZSH2ZHZaYwjbY3A577lPtx9AZ7Gv/zhEApvhp+lI7PzWDsJz53NTrxobz5jH80xVUG689vA=
+X-Received: by 2002:a81:e17:0:b0:31c:a24c:9ee6 with SMTP id
+ 23-20020a810e17000000b0031ca24c9ee6mr12223353ywo.362.1657834888937; Thu, 14
+ Jul 2022 14:41:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220518073232.526443-1-davidgow@google.com> <20220518073232.526443-2-davidgow@google.com>
+ <YoS6rthXi9VRXpkg@elver.google.com> <CABVgOSmyApbC7en25ZBr7hLJye0mOnUY5ETR-VVEWmbaXq3bdQ@mail.gmail.com>
+ <CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com> <CAGS_qxr_+KgqXRG-f9XMWsZ+ASOxSHFy9_4OZKnvS5eZAaAT7g@mail.gmail.com>
+In-Reply-To: <CAGS_qxr_+KgqXRG-f9XMWsZ+ASOxSHFy9_4OZKnvS5eZAaAT7g@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 14 Jul 2022 23:40:53 +0200
+Message-ID: <CANpmjNP-YYB05skVuJkk9CRB=KVvS+5Yd+yTAzXC7MAkKAe4jw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,27 +76,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 04:58:27PM +0200, Benjamin Tissoires wrote:
-> Hi,
-> 
-> and after a little bit of time, here comes the v6 of the HID-BPF series.
-> 
-> Again, for a full explanation of HID-BPF, please refer to the last patch
-> in this series (23/23).
-> 
-> This version sees some improvements compared to v5 on top of the
-> usual addressing of the previous comments:
-> - now I think every eBPF core change has a matching selftest added
-> - the kfuncs declared in syscall can now actually access the memory of
->   the context
-> - the code to retrieve the BTF ID of the various HID hooks is much
->   simpler (just a plain use of the BTF_ID() API instead of
->   loading/unloading of a tracing program)
-> - I also added my HID Surface Dial example that I use locally to provide
->   a fuller example to users
+On Thu, 14 Jul 2022 at 22:23, Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Thu, May 19, 2022 at 6:24 AM Marco Elver <elver@google.com> wrote:
+> > I'd keep it simple for now, and remove both lines i.e. make non-strict
+> > the default. It's easy to just run with --kconfig_add
+> > CONFIG_KCSAN_STRICT=y, along with other variations. I know that
+> > rcutoruture uses KCSAN_STRICT=y by default, so it's already getting
+> > coverage there. ;-)
+>
+> David decided to drop the parent patch (the new QEMU config) now
+> --qemu_args was merged into the kunit tree.
+> Did we want a standalone v2 of this patch?
+>
+> Based on Marco's comments, we'd change:
+> * drop CONFIG_KCSAN_STRICT=y per this comment [1]
+> * drop CONFIG_KCSAN_WEAK_MEMORY per previous comments
+> Then for --qemu_args changes:
+> * add CONFIG_SMP=y explicitly to this file
+> * update the comment to show to include --qemu_args="-smp 8"
+>
+> Does this sound right?
 
-Looking great.
-Before another respin to address bits in patch 12 let's land the first ~8 patches,
-since they're generic useful improvements.
+Yes, sounds good to me, and thanks for remembering this. I'd prefer a
+close-to-default config.
 
-Kumar, could you please help review the verifier bits?
+> [1] Note: there's also patches in kunit now so you could do
+> --kconfig_add=CONFIG_KCSAN_STRICT=n to explicitly disable it. This
+> wasn't possible before. Does that change what we want for the default?
+
+I'd just have KCSAN_STRICT=n by default, and if desired it can be
+added per kconfig_add just the same way.
+
+Thanks,
+-- Marco
