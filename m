@@ -2,91 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE1957454A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 08:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A86574583
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 09:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbiGNGv0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 02:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S234878AbiGNHJL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 03:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiGNGvZ (ORCPT
+        with ESMTP id S235364AbiGNHJE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 02:51:25 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770282871F;
-        Wed, 13 Jul 2022 23:51:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657781484; x=1689317484;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IgFWBJhx8O61e3eZsPUNChi+KMCQ8uSmCcKx5rnwkXU=;
-  b=P9w5pc4mMclIQrRyLhRDH0Z8wSBVdHGaUN/pCOOmAzzLcTHUHNgDbD3l
-   dMzcBW6WMZl75c+6yPLbntx81cMukvX1w6XG4dlDwht+o11e6A7rf0KFw
-   lEhpCK0pG0E4QsDzIIdlrh11LyjziqOs9ZRFKymqQOJaS03H6cS14pXsu
-   m/p8oW2gDtwSxoQFnFQNWLRTJAu1JgXkIVwXikldOU6/qicpyM7d0vSjI
-   Ahe+dvnioI7QhI3loYZZ1YqJwb3HQR3wmjKVpoJpsoYMTl/MoZAWEGBTc
-   hivYKxm5BHJ4uOEZW7bdqaLzq8h9py0jE5dnIgEzJDnRPa4rlAzQyfaka
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10407"; a="268463995"
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="268463995"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 23:51:23 -0700
-X-IronPort-AV: E=Sophos;i="5.92,269,1650956400"; 
-   d="scan'208";a="922953841"
-Received: from unknown (HELO jiezho4x-mobl1.ccr.corp.intel.com) ([10.255.29.31])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 23:51:19 -0700
-From:   Jie2x Zhou <jie2x.zhou@intel.com>
-To:     jie2x.zhou@intel.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        netdev@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] tools/testing/selftests/net/bpf/Makefile: fix fatal error: 'bpf/bpf_helpers.h' file not found
-Date:   Thu, 14 Jul 2022 14:50:03 +0800
-Message-Id: <20220714065003.8388-1-jie2x.zhou@intel.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 14 Jul 2022 03:09:04 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B501903F;
+        Thu, 14 Jul 2022 00:09:03 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id r12so847975qvm.3;
+        Thu, 14 Jul 2022 00:09:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T0TGzHJ/d88sjvucmzrmHfr2w3pyHWB6L9OYmNBsm0w=;
+        b=O2nHyfeeyJtoK+5rSSf9i1yQuTds1Fi3By82z54ItHDp1b/KD3f8tLFmExu8gK7hkT
+         1NdxsX04JPsSuPp2B3xh8HpIGWNzWnaNhRXrumRoOmH4R0H1tdKSCXIC9qqO5JKXVMke
+         JHT2CJz1HIrqe8vsg3fmi6ffwaLkHpZgYYPVou6n78MTrQUZcilkrX2H0ZisVUd/JbL4
+         x2+BDxTyY68LrKoEQ48c0NXE51KYJMh2wiA2AoZg8g63ORkPQTOXkNVSyogadwk0wm7V
+         jfXZNnk1cZiE9y5vgTO4NnODKdn7wL23CEa2A73kaGwFLWWuEBDzsFXOdx7b7pO6lK3m
+         Bz5A==
+X-Gm-Message-State: AJIora/9M8/e+BXHt7GQfThBEPfncHzrNWnH1qjjtJkEOQETyZSGWSrS
+        puYJmI38YHPpN/tr8az6FPW1p8B2oDJpXQ==
+X-Google-Smtp-Source: AGRyM1tnClzyP0ypUH6cJ/Q1DKTs5xvyrdwVNH4AjfK3QF1RIbxw3yLvV9ABmkEA+h2vnqwAqshjhA==
+X-Received: by 2002:ad4:596f:0:b0:473:2ebe:db7e with SMTP id eq15-20020ad4596f000000b004732ebedb7emr6643117qvb.106.1657782542296;
+        Thu, 14 Jul 2022 00:09:02 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id k19-20020ac84793000000b0031ece8b6666sm901796qtq.43.2022.07.14.00.09.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 00:09:01 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id y195so1817054yby.0;
+        Thu, 14 Jul 2022 00:09:01 -0700 (PDT)
+X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
+ l10-20020a056902000a00b0065cb38e6d9fmr7497019ybh.36.1657782541422; Thu, 14
+ Jul 2022 00:09:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220714042221.281187-1-sashal@kernel.org> <20220714042221.281187-39-sashal@kernel.org>
+In-Reply-To: <20220714042221.281187-39-sashal@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 14 Jul 2022 09:08:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
+Message-ID: <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.18 39/41] wireguard: selftests: use virt machine
+ on m68k
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, wireguard@lists.zx2c4.com,
+        netdev <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In tools/testing/selftests run:
-make -C bpf
-make -C net
-fatal error: 'bpf/bpf_helpers.h' file not found
+Hi Sasha,
 
-Add bpf/bpf_helpers.h include path in net/bpf/Makefile.
+On Thu, Jul 14, 2022 at 6:29 AM Sasha Levin <sashal@kernel.org> wrote:
+> From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+>
+> [ Upstream commit 1f2f341a62639c7066ee4c76b7d9ebe867e0a1d5 ]
+>
+> This should be a bit more stable hopefully.
+>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
----
- tools/testing/selftests/net/bpf/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for your patch!
 
-diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
-index 8ccaf8732eb2..07d56d446358 100644
---- a/tools/testing/selftests/net/bpf/Makefile
-+++ b/tools/testing/selftests/net/bpf/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- CLANG ?= clang
-+CCINCLUDE += -I../bpf/tools/include
- CCINCLUDE += -I../../bpf
- CCINCLUDE += -I../../../../lib
- CCINCLUDE += -I../../../../../usr/include/
--- 
-2.36.1
+> --- a/tools/testing/selftests/wireguard/qemu/arch/m68k.config
+> +++ b/tools/testing/selftests/wireguard/qemu/arch/m68k.config
+> @@ -1,10 +1,7 @@
+>  CONFIG_MMU=y
+> +CONFIG_VIRT=y
 
+The m68k virt machine was introduced in v5.19-rc1, so this patch
+must not be backported to v5.18 and earlier.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
