@@ -2,70 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CA0575688
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 22:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF9157568C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Jul 2022 22:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240556AbiGNUqJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 16:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S232159AbiGNUrV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 16:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240678AbiGNUqH (ORCPT
+        with ESMTP id S232494AbiGNUrV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 16:46:07 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4F26D54F
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 13:46:06 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id r70so1290426iod.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 13:46:05 -0700 (PDT)
+        Thu, 14 Jul 2022 16:47:21 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D356D546
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 13:47:20 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id u6so2432483iop.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 13:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uzJm+Sj+EkKmxih+8Av3tySDtz7Tj3n3PPDQES2WsaI=;
-        b=aLtJ+GDDBHB2B/qSZrYgbWNJTuxPN0cULBPboG0K/EllT+YVJ1w8ASTAhu1dQYllnx
-         GVmHYJKBm0GxpTc9auSj7bb20v6ngaTGXVefKgWKg4UyC6nmswoy9o9HTndofHlwCCt6
-         kWyUY7OhJ+HhHKMzEN+H4pSkd/O7gRG84CjhQ=
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=5yRvOTGRnegCHVbLMlYfoPtqBZjcDcdjxcIFgXJXUCY=;
+        b=iJPwVMEVmlDdOGjIdwfPb3QcpmckWwU5zfZ+LxI/bNEFOG6/9CW3Jx6lK9kNMJWD7G
+         80Lmohh26UHNK9omBR0hZuW0wp5QNpk5BqZio+4xjDDfneepPC5T2xVYg8jg5Cy5sPC6
+         +rtTRlBCuYe/Bvx0Ff2Im9iXajwrm2vS9vkhw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=uzJm+Sj+EkKmxih+8Av3tySDtz7Tj3n3PPDQES2WsaI=;
-        b=PGBgBct1wCRJHs+lBybjV6tnG35ayC13hWO0zQboyVVPTypIVBiq9vzJ5aoG8JvcP+
-         CLGq+OLs9h0iyMw2BNtta5R/Jc2bSojvgaCI8l+xcAmX4bERXCzHC2qE7QN/XNtB8iag
-         2ks8NnaSxsbKuK/jUnYDcFsW1oQtKiuB4/ss3mC9aHAZpYoB64eqY7O5LRWgLIfBnWwi
-         B2Cs1Cq6egO6ZqEpvuhuobUwNiGtaK4U4WYMXuXJqU5QY9DPGPjwOvqubjN6JYoNLL8o
-         RVlr2eXljyS11Lav6CB9DiUWVLgmI5E2yCd0hAQVcMRioGyHmlMMOi6I9cnNeEKhMVMC
-         s/pA==
-X-Gm-Message-State: AJIora98xI3Ph4D/gV0X6n50V3d+vWnlsz8EuWSb1yk6fABBWamhgnJU
-        Cxght7n6XeYOPCO4343hHky44Q==
-X-Google-Smtp-Source: AGRyM1upJn5/LTgFtT6WffvFOhpyeyhyBPk3pCyvkzfBPw8df6OQy4noiodPbQhN7cmpxlq3M5M9RQ==
-X-Received: by 2002:a05:6602:2a43:b0:679:47e1:792c with SMTP id k3-20020a0566022a4300b0067947e1792cmr5426813iov.190.1657831565268;
-        Thu, 14 Jul 2022 13:46:05 -0700 (PDT)
+        bh=5yRvOTGRnegCHVbLMlYfoPtqBZjcDcdjxcIFgXJXUCY=;
+        b=2O/JFlaTY4YwIAq7aSRr7mfZIpiNThj+COWlXhqciJ8GiSFSi+plpMYoNepOUNk/cY
+         dhg/OEq3CLr2hRkO1sqMb/GR6VQvJuowJJke3yYE+2FN+hYIrH/xrM9wCewBvgtmOtuW
+         TsYDe+Lmu9RyUl8qJ/u1zS69gG1DTJe93Ckb//v5p9Yz5Xwx5mvBONCXKk8IKzfQ6BYC
+         jZOhGTAKSVr6sT5JmyX5gE9EfnKUJSvK2gs/+B/uMPIcl3HuGDuBFM757ZufTysNxEwf
+         mHTDYBHbCJl5oX1pv4caZ1TR/4MTsV9Wh5ONhKfSXeUVNEiEVHSfYLy7kiom6wrVcvFB
+         sJcA==
+X-Gm-Message-State: AJIora9kwRyjtyFHbtXIUmFELNkztlL3ddpjVGNCkjFdOVbku7aBy7kO
+        K3pgxJQxJnnOZowNnzPoVVb5Jw==
+X-Google-Smtp-Source: AGRyM1vjWGII0bZhPhJVaJRGo6OHgsPZnk4TMLd+wqVlwkc8jmrMUpSfm+11hdWAmeCQuRJvu1qklw==
+X-Received: by 2002:a05:6638:164b:b0:33c:9b6f:457d with SMTP id a11-20020a056638164b00b0033c9b6f457dmr5928163jat.224.1657831639911;
+        Thu, 14 Jul 2022 13:47:19 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id d187-20020a0262c4000000b00335c432c4b9sm1136492jac.136.2022.07.14.13.46.03
+        by smtp.gmail.com with ESMTPSA id e10-20020a921e0a000000b002d79f619517sm972694ile.26.2022.07.14.13.47.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 13:46:04 -0700 (PDT)
-Subject: Re: [PATCH] selftests/landlock: drop deprecated headers dependency
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Thu, 14 Jul 2022 13:47:19 -0700 (PDT)
+Subject: Re: [PATCH 0/9] selftests: timers: fixes and improvements
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        John Stultz <jstultz@google.com>,
+        linux-renesas-soc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <b79c51ed97219b1c10e2e3f2bcd3269305f0f035.1657694067.git.guillaume.tucker@collabora.com>
+References: <20220713204623.5443-1-wsa+renesas@sang-engineering.com>
+ <CANDhNCp3KhGjXSrS4xmqrdPJfxStZOOn+FQxJEEoiXZ39CxDpg@mail.gmail.com>
+ <dbe428f6-37fd-cba7-2947-e042585d3a42@linuxfoundation.org>
+ <YtBj5NPGi5MUKuvP@shikoro>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <83f11117-28f5-9599-f231-61dcfbbacd9a@linuxfoundation.org>
-Date:   Thu, 14 Jul 2022 14:46:02 -0600
+Message-ID: <01cd5e24-7732-3a67-8171-3c99b620d617@linuxfoundation.org>
+Date:   Thu, 14 Jul 2022 14:47:18 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <b79c51ed97219b1c10e2e3f2bcd3269305f0f035.1657694067.git.guillaume.tucker@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <YtBj5NPGi5MUKuvP@shikoro>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,20 +78,17 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/13/22 12:35 AM, Guillaume Tucker wrote:
-> The khdr make target has been removed, so drop it from the landlock
-> Makefile dependencies as well as related include paths that are
-> standard for headers in the kernel tree.
+On 7/14/22 12:43 PM, Wolfram Sang wrote:
 > 
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-> Reported-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
->   tools/testing/selftests/landlock/Makefile | 9 ++-------
->   1 file changed, 2 insertions(+), 7 deletions(-)
+>> Wolfram, are you going to send v2 to address John's comment on
+>> 8/9?
+> 
+> Yes, will do!
 > 
 
-Applied to linux-kselftest next for 5.20-rc1
+All patches now applied to linux-kselftest next for 5.20-rc1
+
+Picked up v1 1-7 and 9 and v2 8
 
 thanks,
 -- Shuah
-
