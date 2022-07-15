@@ -2,58 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733BB57582D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Jul 2022 01:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBDC57585A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Jul 2022 02:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbiGNXvn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Jul 2022 19:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S240955AbiGOADW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Jul 2022 20:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiGNXvm (ORCPT
+        with ESMTP id S240832AbiGOADW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Jul 2022 19:51:42 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD126D9EB;
-        Thu, 14 Jul 2022 16:51:41 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a15so4267130pjs.0;
-        Thu, 14 Jul 2022 16:51:41 -0700 (PDT)
+        Thu, 14 Jul 2022 20:03:22 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC13B72EE9
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 17:03:20 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id fy29so5083319ejc.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Jul 2022 17:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WQOJ87cxhZVY+IyP6bEM7D5o/BRipLCrV6YOLHFhk1w=;
-        b=IIMJ1246IIPKa4Fs/STJlOe4IyjgfiAckNmuhbjPtUIO1nj4eRzEmX0f/jDfkBJXM5
-         r7E6CEGq5UqqbXoicOFChB8yFFa9MNdXKs7zON/jTEW7lvcVeAw4lQh/X1oRNTLeQzSW
-         Wsf7d0XV+lcxH2oeQGXCXj4bOx+fHApevwf7BSbDKrVPLASQSRFeINMBHfI6T7lo1gwD
-         tn8dxzX14KsS14Mo97QiTwIdJLrPCkzw1VC745ROPwvcond6xyH40n5ReE4NADUTbAse
-         vAxo+f7u3jJ1gmPb2xJ/fw+RBT9GxVsEaPE/2hDyyg1iH/EhZ9g2L/pG4qg7HtaVF1gd
-         0CqQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fwraHTEP/uVZ9KCal2b2vqb8PKwKxo0TpTT7XGDLLZE=;
+        b=Ew35vEVTCjHoWMpCvupFCvQMugpO31WL5+yFBGY/4vLy9c/2lHjyL0Qakj48tSo9RH
+         hNkYdoFnwqRm4CGjLZBjKauF7HwHfGWwdC13A/boMmvLWcnyhh4i8G2eTmOcyNcmBCFQ
+         yeSO6zvaQfPtjU23hSBzdEcTDEiS8BtsYVkCCVOdpnAfS95Xcqd83tRWzemWJYIVF0uG
+         FsiLzam4+8VzlAhRc7TuzkTn0CgKium3YJ5axjlQyy4I5FFW0C5IhyyBw1NQz2Wo3RTh
+         41K8Z0Qz6lO5I0SEC11jKfeGJAfHpc1G123IAYHpBuyPwj8qBz3lhqSa+BaX0q9QQqha
+         KXIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=WQOJ87cxhZVY+IyP6bEM7D5o/BRipLCrV6YOLHFhk1w=;
-        b=XIb9ELWtwHZCwszS/86xknNd39OaY2ezkluATFKCyUihqq97SVus9jpe1ZhJ7Y6yv+
-         GjVXfixeWgg1+waxGYX7xbr0KFGj0aDaowE15o0eY3mq/cTnb7Sr+nRtIG/ZKr3A/RXQ
-         4JzsxC9e6kqXTxpe8W4rvIA8O4SwpHmEhG5XzYd8F3Gpjm3CD7DF7ps6vlPCRHT4KTkh
-         N6oNIDAPjQnIcP1+jlQ6KP+j0lMeO/Jkjz1FbM3lMqBZc7dd3XV31IivOA/AuaQB4Zrb
-         BKkZP6vLqhe5JUgiWqMBF8AomXtBZIcutQ5U94T3NgteXd2mZEAqGc44/v4gZl83MmZ2
-         uXZA==
-X-Gm-Message-State: AJIora/0kBft/m03EZ1DiI8ElY6NQMiHGATbtAEdifLu/FDJsC1O9OJq
-        vVgodr9fiug1BFopfjYfvoY=
-X-Google-Smtp-Source: AGRyM1teLs417YHFJ/t2owHCD+vGs4Qr7DfmKbJT20i1kDWBwhWfbe5Bg5RlLbs0eGYr/5Q7QmTJjA==
-X-Received: by 2002:a17:90b:19d3:b0:1f0:addf:8ff4 with SMTP id nm19-20020a17090b19d300b001f0addf8ff4mr8732227pjb.191.1657842700547;
-        Thu, 14 Jul 2022 16:51:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t3-20020a6549c3000000b00411acdb1625sm1857442pgs.92.2022.07.14.16.51.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 16:51:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 14 Jul 2022 16:51:37 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fwraHTEP/uVZ9KCal2b2vqb8PKwKxo0TpTT7XGDLLZE=;
+        b=fJYgkRuIZdAKz2ImTTv58NWx08B2S+qV9z78fLBzkmKacpsgfEo3M02t7H9q2nH/im
+         oKA2xhZuZpw2mE0BRbOHpVzqzXPWv2z9Q0tpHC03Nw+7qlU/HTcNhsI+o7TEE2aeoe6V
+         fy2OCmn7XRv0r7tmWdj6yHyM4H8DMzQ9iFKBUa28QTiLzg2uHwJXgfq9Pn/6HvufDpmP
+         DwcEmzABbLvA6cMYprqrCYYXluwXu/bjEEcnd46lBsc/vYQrKTU+WZ3Hut8GPFwoeCCs
+         XXpbWXPtBxXqsH3Q5H2cFTql/XrLCJHarrhWsvEqS3hznW2qifFm0vDgRtuCUjvNsycS
+         ZE1w==
+X-Gm-Message-State: AJIora/vXL3UKjYePyUHdTgA7a2v6+/50lFH17tXsFKldD7Hf2j8yglF
+        O7sCYSg3DSKTbPxc0YjV7VqIONj4tVhcFTak74hYtA==
+X-Google-Smtp-Source: AGRyM1vbY7PEy17UlotgKN0DNZJDJvWNMdNGydoLgQZD6KQsvix4dz1Cwf5HUOIEMKSPpgkaLf+4J5OUcADUQzkaZiY=
+X-Received: by 2002:a17:907:2718:b0:72b:6b65:37dc with SMTP id
+ w24-20020a170907271800b0072b6b6537dcmr10960045ejk.425.1657843399208; Thu, 14
+ Jul 2022 17:03:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220708203052.236290-1-maira.canal@usp.br> <20220708203052.236290-5-maira.canal@usp.br>
+ <20220714235137.GA485839@roeck-us.net>
+In-Reply-To: <20220714235137.GA485839@roeck-us.net>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 14 Jul 2022 17:03:07 -0700
+Message-ID: <CAGS_qxrhy3=pST9f85fvxubKQShOq1XF6ZHALzMhXDOf5gnaUg@mail.gmail.com>
+Subject: Re: [PATCH v5 4/9] drm: selftest: convert drm_format selftest to KUnit
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
         siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
         leandro.ribeiro@collabora.com, n@nfraprado.net,
@@ -64,50 +66,61 @@ Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         Thomas Zimmermann <tzimmermann@suse.de>,
         michal.winiarski@intel.com,
         Javier Martinez Canillas <javierm@redhat.com>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] drm: selftest: convert drm_format selftest to
- KUnit
-Message-ID: <20220714235137.GA485839@roeck-us.net>
-References: <20220708203052.236290-1-maira.canal@usp.br>
- <20220708203052.236290-5-maira.canal@usp.br>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220708203052.236290-5-maira.canal@usp.br>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 08, 2022 at 05:30:47PM -0300, Maíra Canal wrote:
-> Considering the current adoption of the KUnit framework, convert the
-> DRM format selftest to the KUnit API.
-> 
-> Tested-by: David Gow <davidgow@google.com>
-> Acked-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> Signed-off-by: Maíra Canal <maira.canal@usp.br>
+On Thu, Jul 14, 2022 at 4:51 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Fri, Jul 08, 2022 at 05:30:47PM -0300, Ma=C3=ADra Canal wrote:
+> > Considering the current adoption of the KUnit framework, convert the
+> > DRM format selftest to the KUnit API.
+> >
+> > Tested-by: David Gow <davidgow@google.com>
+> > Acked-by: Daniel Latypov <dlatypov@google.com>
+> > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> > Signed-off-by: Ma=C3=ADra Canal <maira.canal@usp.br>
+>
+> This patch results in:
+>
+> Building powerpc:allmodconfig ... failed
+> --------------
+> Error log:
+> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_forma=
+t_min_pitch':
+> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of 3=
+712 bytes is larger than 2048 bytes
+>
+> presumably due to function nesting.
 
-This patch results in:
+This can happen when there's a lot of KUNIT_EXPECT_* calls in a single func=
+tion.
+See [1] for some related context.
+There were a number of patches that went into 5.18 ([2] and others) to
+try and mitigate this, but it's not always enough.
 
-Building powerpc:allmodconfig ... failed
---------------
-Error log:
-drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
-drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of 3712 bytes is larger than 2048 bytes
+Ideally the compiler would see that the stack-local variables used in
+these macros don't need to stick around, but it doesn't always
+happen...
+One workaround would be to split up the test case functions into smaller ch=
+unks.
 
-presumably due to function nesting.
+[1] https://lore.kernel.org/linux-kselftest/20210929212713.1213476-1-brenda=
+nhiggins@google.com/
+[2] https://lore.kernel.org/linux-kselftest/20220113165931.451305-1-dlatypo=
+v@google.com/
 
-Guenter
+Daniel
