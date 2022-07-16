@@ -2,164 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9696F576BDF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Jul 2022 06:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD57576DFB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Jul 2022 14:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiGPEmn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Jul 2022 00:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58948 "EHLO
+        id S231651AbiGPMmY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Jul 2022 08:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiGPEml (ORCPT
+        with ESMTP id S229606AbiGPMmX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Jul 2022 00:42:41 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98CA3057A;
-        Fri, 15 Jul 2022 21:42:40 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26FKnGJL007823;
-        Fri, 15 Jul 2022 21:42:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=UqoulM3GoNAkqQFdJGKsna5s9DYdbMP2qSNmDo2eZvA=;
- b=RiuACJpiM/B7dwhL8raGNQQEOFiDePaIPr8gvnyDTS6V5WC85ipAh8iXGx2k1dfqA6ZU
- H709MU3gG8A7w5k881nU8jyDspDb56Ss/xgBbG4dqF4i2mFpg/wCR/I8JecT7P4p/Db9
- jBVpABd0OtMkT3C+B/K3Ttxynf4zC/dIIvs= 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3haktcbrma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Jul 2022 21:42:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FY5dw0KRxb839dS+Co6E3F1U/ACDiRQTs2+ASOLD44RGRypakY4sKBQctCT0o7VsrWckyMxX9G36t9cYazLCjaIpUiB6Yvz+e8jJa75IsgixcnlcDV6ghhI6S4Fw22rfybV0cbY+WS/EXk58gLvFBPf6QItFDrRYwsYkEgHT+7BEwMmVsdxLydD8mXg3nKuNGKasIlnqBoKiOmGY8kDhX63LHIG599GdWB3FVOnFzYvjbPRFgUNJ7NRX/P8D4fAKXpPYvH/5W34Y6B4JD4wMLvc9f9WvyBCJ2q9u+Tr04HgPb9b9Ag2X0Jjne3QTXmi1gsPpCbre5u2wHNkk1C0hGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UqoulM3GoNAkqQFdJGKsna5s9DYdbMP2qSNmDo2eZvA=;
- b=R/QC2eZlPi2CSGe0xYgRzpLTleBaA/SVgU2rup3Z9evIOFM7Pu001esOpx1AJd+n3QmoG8jbk3/nJ47Hz3xBqNW/NYhaABz+FAmMqcqSPYOTKFIonsZga5U/SMAkHcQN3mCGLyTBs1qXY246Waup3p3YGj4v9/8Z8fJLmysyc2YR2vTwYoEp8MMZwuk0CysYzYJlfnN2P+vu6JFGko208bhYvgBXopYLw7XpQOdEpIfO3AMImziSiacL5KdCRzj3Zo1BjzGijvQZSUC40A99CT7RjCoMkPSA2IxN/xLTFn/twVzffPeMd102yKcS+s1ays7h5791ROEjYxporAvPpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from DM5PR1501MB2055.namprd15.prod.outlook.com (2603:10b6:4:a1::13)
- by MW4PR15MB4620.namprd15.prod.outlook.com (2603:10b6:303:10d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.19; Sat, 16 Jul
- 2022 04:42:03 +0000
-Received: from DM5PR1501MB2055.namprd15.prod.outlook.com
- ([fe80::acda:cdec:5c2f:af77]) by DM5PR1501MB2055.namprd15.prod.outlook.com
- ([fe80::acda:cdec:5c2f:af77%7]) with mapi id 15.20.5438.014; Sat, 16 Jul 2022
- 04:42:01 +0000
-Message-ID: <de4f4721-fdfc-bfdf-2680-864a7464e56f@fb.com>
-Date:   Fri, 15 Jul 2022 21:41:45 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH bpf-next v6 08/23] libbpf: add map_get_fd_by_id and
- map_delete_elem in light skeleton
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
- <20220712145850.599666-9-benjamin.tissoires@redhat.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220712145850.599666-9-benjamin.tissoires@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR07CA0086.namprd07.prod.outlook.com
- (2603:10b6:a03:12b::27) To DM5PR1501MB2055.namprd15.prod.outlook.com
- (2603:10b6:4:a1::13)
+        Sat, 16 Jul 2022 08:42:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981DF18385;
+        Sat, 16 Jul 2022 05:42:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50BDCB80108;
+        Sat, 16 Jul 2022 12:42:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6CBCC34114;
+        Sat, 16 Jul 2022 12:42:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657975340;
+        bh=HjF+NeyLSXs/BPREprBA9T9P63b0wfvdyRWiqF26LnM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=u23P2EU6qRL1vu6U1ohiYHNRckhBNC8KYLKdsiszyMvWP2H18PzeER3z0ZoCqs8Oz
+         jcDv58i75lMPxVsyThQIDpuusbS1ggqazOvkBjc0XIBMWOOCt6FhnBOHk0SQrwKruJ
+         XSo7j0jgJemcDPs9KTaC7peucwxSOMt4rJMAHkA5uwdtU7P3TVe7D9jWyfRcSJNhkk
+         ZBSZAiI0ucFmL1fK5Dskz6B94ZFS2WZrK5KXL25yE+Q8WIfgxDRTt01tLNXdu4Q7N8
+         DZobomePyEVsHwva8L8DkFKlH7VjnXfoKcEaNJxI9vUeO+aItFS6E/0zfWyfDmlOhH
+         6F5kuracHfOdw==
+From:   Conor Dooley <conor@kernel.org>
+To:     ojeda@kernel.org
+Cc:     gregkh@linuxfoundation.org, jarkko@kernel.org,
+        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, live-patching@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, torvalds@linux-foundation.org
+Subject: Re: [PATCH v7 00/25] Rust support
+Date:   Sat, 16 Jul 2022 13:42:14 +0100
+Message-Id: <20220716124214.329949-1-conor@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220523020209.11810-1-ojeda@kernel.org>
+References: <20220523020209.11810-1-ojeda@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 979c4868-209f-4c79-33b7-08da66e57eee
-X-MS-TrafficTypeDiagnostic: MW4PR15MB4620:EE_
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: k6o/rKbNR6nwwffrBzfxhr+UGSscrsMYCce5CL3gfUhnZ5r/Tlo93PMxHYSD33uAfJQCjV1ueMBcd7UnmKwz/y6UYeJHeL8o84i3k4bhdoYyOGKaqdC+Dzo8Ws82n6sk+xibq/W634mkAF/4gM5OTzwm0Vh8JJiM+ioXqJ+4560lzPnhxvLstDHQoFPa79vNS8+wKoCHD8srPTpCpwyUW4F82DqjyqusKm9o5QIVRPzW1F0tIdjI5ZaEGF9mekFuQjcysnF+7oZY0M+GkwDbQHKtwql5ExP/BKotoDo4oHR677Cm+o1OHcSK+oXxtlSAyaQDO3y1SohwdkXEYSRV4PWCjn5S4YkeVz7g2g9vWQZAtelHoXvjjVywCz/+A4O6mQamqZJv0nXch0ytR5/n4hDJER4GV+iAwS/6AgVHj6VYdZjgaWmI6bpz8usnk20DM10Db8Tvw7CVTtIu0/gNBUMneD2oP1B4e8yVxZOtE8P7EsV5QOGUK8a7IFsHm5vZJvEKdqryUD5FugGiKUYB+gbjYsApVPy4v0RzeAwHls/0xeDtt+DJwEnfcGsnJjOu3luzpssUGpvdRkOedJBWYn/bssWq8QbunXqPnKJzZu4Hv44Bkpxn6OmaSGT5jmk5JM3fLe1Gq2Bno3H2wpnneDwxefzJuSZxIOwhQgq6LIO7gQYq4ADoSQ/pVTIpnv8+AyBjIcw71O3bEosqYlGevraJivTlxAPKALqMDUswr9IZEOJXf8i4Kid2xe2avzMMxh6Br7e/VC7JQ3GJs1yVd4WJf8uNaXmfO3mFeOYqSb+FXZnMUd993Emhxgvh8IH+DkO4P1o/DkPSipzNXLXVs+5tW61qcLriSn5MAqMbwv033LvdsFW1hSjG/W0BP9zQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1501MB2055.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(346002)(376002)(366004)(396003)(6486002)(478600001)(31696002)(38100700002)(921005)(6666004)(6506007)(41300700001)(31686004)(186003)(2616005)(6512007)(36756003)(110136005)(316002)(53546011)(2906002)(4326008)(5660300002)(8936002)(7416002)(66556008)(66476007)(8676002)(66946007)(558084003)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VE9PWDFZT0k2TVA5OGVOOHpaMmprUTgxR0x5aDRDQTkyY1V2SnllMklMbXI2?=
- =?utf-8?B?eTFjanI4NTY2RDhpSTdScWxjZlBxcThETVVMdmVQekl1cHdoQVkvanhJQzJM?=
- =?utf-8?B?U1RNWDJwZEgxRkRqZ1NoaXV5TTB5U1d1ODFWTmZuY0dvQ2JobE0xMVZ5eDRX?=
- =?utf-8?B?Ykw4bEFPT2p3TVBxUWl4NjRLZGJQZHVSTWRoS2svaGFHVldUNHU5cDZoaFZm?=
- =?utf-8?B?REJlMVRHbFdwbk1pdFd6WVRwbHZQWnpOa0grVXlqNGN6NzZTVHVEL0dIZFVp?=
- =?utf-8?B?dXg3RytiN1lWd0pRei91WURUUUtSZGdxZ01VbDEyRkFwK045bi9VOTNrUlRM?=
- =?utf-8?B?bi9hRmhoY05HTUZHWko3UW1nc2c1Y1lKcUpxOXBVdHRrWGpheVpBSzc1dGVK?=
- =?utf-8?B?U1FiTVY1Sm5iUjRLMnN4VENJcmRnbXQ5S1BZUEUyY3ZBOHk5djhhejZwRzVp?=
- =?utf-8?B?aEU2UTFib1NTYlF3V2N1UDE3RjZOTGlIQlNlVEExdVQ3NGdzWDJXeUhFNzFE?=
- =?utf-8?B?NUlFVE9rK1c2TTFFNG1Ua1hHdVdzTVVqV0dJNG1peUJ3UHZaekEvUGx6MEw3?=
- =?utf-8?B?SE5jdWNwbkZEL2diOEZ4eVFhS2JJMzkyZmtVZ1ltZU5TeTJjZVg3TjZHZFhP?=
- =?utf-8?B?Tm5FczJGMHhDTkhvZ2JaYWhDUHk1RGxrcDVndjNJejJtVUVlbnlUY1JLbDFE?=
- =?utf-8?B?L2REeURmbkJrNHUvQ1VPZEplWldXNEljc0pFN016SGgrOXkvWnB3cmwzT29N?=
- =?utf-8?B?eklydS9UaGR1NFVjZUpUSnRCcTNISjVmdlpSdzhXZjJLN3lIUWdkR21JR0FO?=
- =?utf-8?B?cUxGaDZrYlMrUzFXdVA0bWQ4QjZhSDlKT0tLaWVTc3VkUzFNWE1EYVBVVTJ6?=
- =?utf-8?B?MTRHZVRsZUdhdUVQUTgzRVpvc0hVc3Z1WERaYmdiN0NTM0ppWDI4bmxGNFdR?=
- =?utf-8?B?UGI2NGRmU29UZURUdXg3b29HeGxUZit0eitobTcrSzAwWmgvZmZxcis4NHNi?=
- =?utf-8?B?bUJ4NHkrdjNXQVloWjNPWDVYY1NEN2lXbVhoN3lmd3hVMWc0UkttSUZaeTVk?=
- =?utf-8?B?Q0Q2T2VUOXJQeXh4UGJNOXhpVHVnWHQ2cjJ5cXZxQjM2S2QybjE1a1pUTEpj?=
- =?utf-8?B?U2t6OEdKQTVRdDZTSHhUbU9lODZRanFoMnhuVlluNlIxdjlQNkRSL1FzTkRN?=
- =?utf-8?B?VmtuTWUyYkd5Unc2dE1HZ2lzUUVMQUYzd3pkWkpPOEpiY1UvdzVuT3lhZldm?=
- =?utf-8?B?N2ZiUkJ6bDFQYTViblJhV2JSN3dORmxScGZlRHF6bjl6Y1FSTmViOGMvZXRo?=
- =?utf-8?B?cWhrbk5Bc3p2S0ZKeFpiSWZET00rVm9yK1lVd3pGL2I3RVVvT3VlaTEwdTdx?=
- =?utf-8?B?RE9JQjFEVGJFOTVXWjluUGhDVTMzZjlaeWVyYmkzeHJjSGxpT1MwYlZYZDRs?=
- =?utf-8?B?ZTlLUGQ0T2FJTHF2YVk4V0h4ckdrN3o3MEduYXpnSytncmMzR0lCQktkZ1lk?=
- =?utf-8?B?cTZudU1BWG1SSDBpS29XbjFnaEsyNlFLbEFiMCtRWFcyYTAzZWtTdUVpVGo1?=
- =?utf-8?B?RzI0eWlsL1hwaWZwR1c4Mm5GSURvS01xT3dCcGdnSXJPZ2VjeGJ5cm9FdEdM?=
- =?utf-8?B?Y0xUdkozNklWeS9ybWVjb1VFcmZIT3ZrZ3NZQnJ6Z0MwNFgrbXF1WW9ibUxB?=
- =?utf-8?B?YThYMUphRVpkVTNPbEdha1NGSGo3OE9tMVVkTmpZY2w3cTdYbmc5Ui9LNk05?=
- =?utf-8?B?emhTbGhLeWdMbVVYOEQ3UU9kSjVJVWlNZWUvRWgrYkxhM2xzc01NVjBYeVRC?=
- =?utf-8?B?Y21hVGpCWk9Dd2Y0K2lKTDdxc2FsNDdRdWg0b012U253WW1iSjd4Tk1rM2NK?=
- =?utf-8?B?UVh6VXptcVJ0MXYxM3R4RVhUQ3BGcXZIOGRQejUyYUxiUEh3TTBDWU5pN1Z4?=
- =?utf-8?B?NHpIWlZGbmRybkNLd0hVQStTbzZ2Ynp0RnZGTzJkR2hpaXh3Ujh4M0FuQjdi?=
- =?utf-8?B?eFFoMVhLOTBJR2RhWjNYWGo1Y1ZIWTFHRDVxMHUxYWRhdnJ4QjJTRHNMSlkv?=
- =?utf-8?B?NGhFeXJEbUNabE93d2xmbzE1VE84NzlSTzNHeEZGckxKMkRFdUQ1azNNaXVN?=
- =?utf-8?B?a2NDR1pwWGNjR1Zyc1lqL0U1WnBybVUycVBCS2pDYmNYNVkzNHo1TkhUUng1?=
- =?utf-8?B?RkE9PQ==?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 979c4868-209f-4c79-33b7-08da66e57eee
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1501MB2055.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2022 04:42:01.4109
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CjhHFjoX/c2ZY7FyZkffhuLIQps9iHUCfYlfNd7GpL3q6CIp9CluwxU7qsDqRBqr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4620
-X-Proofpoint-GUID: aXCN5Soa21CpcnuGSuBzQWQEQMX-rS31
-X-Proofpoint-ORIG-GUID: aXCN5Soa21CpcnuGSuBzQWQEQMX-rS31
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-16_03,2022-07-15_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hey,
 
+Maybe I am just missing something blatantly obvious here, but trying
+to build rust support in -next fails for me. I am using ClangBuiltLinux
+clang version 15.0.0 5b0788fef86ed7008a11f6ee19b9d86d42b6fcfa and LLD
+15.0.0. Is it just expected that building -next with rust support is
+not a good idea?
+My defconfig is the default RISC-V one plus:
+CONFIG_RUST=y
+CONFIG_SAMPLES=y
+CONFIG_SAMPLES_RUST=y
+CONFIG_SAMPLE_RUST_MINIMAL=y
 
-On 7/12/22 7:58 AM, Benjamin Tissoires wrote:
-> This allows to have a better control over maps from the kernel when
-> preloading eBPF programs.
-> 
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Thanks,
+Conor.
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Fail log:
+  UPD     rust/target.json
+  BINDGEN rust/bindings_generated.rs
+  BINDGEN rust/bindings_helpers_generated.rs
+  RUSTC L rust/core.o
+  EXPORTS rust/exports_core_generated.h
+  RUSTC P rust/libmacros.so
+  RUSTC L rust/compiler_builtins.o
+  RUSTC L rust/alloc.o
+  RUSTC L rust/build_error.o
+  EXPORTS rust/exports_alloc_generated.h
+  RUSTC L rust/kernel.o
+error[E0428]: the name `maple_enode` is defined multiple times
+     --> linux/rust/bindings_generated.rs:18009:1
+      |
+18006 | pub struct maple_enode {
+      | ---------------------- previous definition of the type `maple_enode` here
+...
+18009 | pub type maple_enode = *mut maple_enode;
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `maple_enode` redefined here
+      |
+      = note: `maple_enode` must be defined only once in the type namespace of this module
+
+error[E0428]: the name `maple_pnode` is defined multiple times
+     --> linux/rust/bindings_generated.rs:18015:1
+      |
+18012 | pub struct maple_pnode {
+      | ---------------------- previous definition of the type `maple_pnode` here
+...
+18015 | pub type maple_pnode = *mut maple_pnode;
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `maple_pnode` redefined here
+      |
+      = note: `maple_pnode` must be defined only once in the type namespace of this module
+
+error[E0391]: cycle detected when expanding type alias `bindings::bindings_raw::maple_pnode`
+     --> linux/rust/bindings_generated.rs:18015:29
+      |
+18015 | pub type maple_pnode = *mut maple_pnode;
+      |                             ^^^^^^^^^^^
+      |
+      = note: ...which immediately requires expanding type alias `bindings::bindings_raw::maple_pnode` again
+      = note: type aliases cannot be recursive
+      = help: consider using a struct, enum, or union instead to break the cycle
+      = help: see <https://doc.rust-lang.org/reference/types.html#recursive-types> for more information
+note: cycle used when computing type of `bindings::bindings_raw::maple_range_64::parent`
+     --> linux/rust/bindings_generated.rs:18058:22
+      |
+18058 |     pub parent: *mut maple_pnode,
+      |                      ^^^^^^^^^^^
+
+error[E0391]: cycle detected when expanding type alias `bindings::bindings_raw::maple_enode`
+     --> linux/rust/bindings_generated.rs:18009:29
+      |
+18009 | pub type maple_enode = *mut maple_enode;
+      |                             ^^^^^^^^^^^
+      |
+      = note: ...which immediately requires expanding type alias `bindings::bindings_raw::maple_enode` again
+      = note: type aliases cannot be recursive
+      = help: consider using a struct, enum, or union instead to break the cycle
+      = help: see <https://doc.rust-lang.org/reference/types.html#recursive-types> for more information
+note: cycle used when computing type of `bindings::bindings_raw::maple_topiary::next`
+     --> linux/rust/bindings_generated.rs:18340:20
+      |
+18340 |     pub next: *mut maple_enode,
+      |                    ^^^^^^^^^^^
+
+error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
+     --> linux/rust/bindings_generated.rs:18005:10
+      |
+18005 | #[derive(Copy, Clone)]
+      |          ^^^^
+      |          |
+      |          impl doesn't use only types from inside the current crate
+      |          `*mut [type error]` is not defined in the current crate
+      |
+      = note: define and implement a trait or new type instead
+      = note: this error originates in the derive macro `Copy` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
+     --> linux/rust/bindings_generated.rs:18011:10
+      |
+18011 | #[derive(Copy, Clone)]
+      |          ^^^^
+      |          |
+      |          impl doesn't use only types from inside the current crate
+      |          `*mut [type error]` is not defined in the current crate
+      |
+      = note: define and implement a trait or new type instead
+      = note: this error originates in the derive macro `Copy` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
+     --> linux/rust/bindings_generated.rs:18005:16
+      |
+18005 | #[derive(Copy, Clone)]
+      |                ^^^^^
+      |                |
+      |                impl doesn't use only types from inside the current crate
+      |                `*mut [type error]` is not defined in the current crate
+      |
+      = note: define and implement a trait or new type instead
+      = note: this error originates in the derive macro `Clone` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
+     --> linux/rust/bindings_generated.rs:18011:16
+      |
+18011 | #[derive(Copy, Clone)]
+      |                ^^^^^
+      |                |
+      |                impl doesn't use only types from inside the current crate
+      |                `*mut [type error]` is not defined in the current crate
+      |
+      = note: define and implement a trait or new type instead
+      = note: this error originates in the derive macro `Clone` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: aborting due to 8 previous errors
