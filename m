@@ -2,101 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30024576E5B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Jul 2022 15:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE88F576E05
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Jul 2022 14:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiGPN4N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Jul 2022 09:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S232014AbiGPMqU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Jul 2022 08:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiGPN4M (ORCPT
+        with ESMTP id S229548AbiGPMqS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Jul 2022 09:56:12 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E751F2EE;
-        Sat, 16 Jul 2022 06:56:11 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id a12so3809440ilp.13;
-        Sat, 16 Jul 2022 06:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V4FhIyepvRr1gXawjyEQpzIVadAC7ZxwCjKEzgRh/bc=;
-        b=KdWH1PfnFwqpPxd7W0PxapNamksI04N1J1pzzmASbjhZAa3HLxSSk5HwzaEAseuXpW
-         nNsgKAEAxGvztay7gho66xNc2QCxWwEyGXbCv5lAz3EAhFpFJfuIeY7K76/0vq1k3vCQ
-         2A4ZeWEkN4IZQH1TYyqAVV2R0ANWdmP2osXk1QbS92RBijpvBQo0R3fnlJ87Bav+p7xf
-         FSAfrCYfgPPgpP/Eo2QbIXBrRk5zd4AvPDHrzOq47USph/a5huS67TiBDFyW8noTS6Uh
-         Rr0qFvkmBG2Rj2WAofY8yIfRhbQByw8ah0SxA+yZ2h9GNamE5b2FqVNxaZBPSBZiccV0
-         aKAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V4FhIyepvRr1gXawjyEQpzIVadAC7ZxwCjKEzgRh/bc=;
-        b=OmqNJv4F79HDKtzmwqhBTenlD/euEtgNobwW+wx4fV4suX3whDRHJavCu8Clg7/Bjv
-         oQ/vo6f2efo/WEd6qOyufXnEhlAY4eMlYk+tsDNXMilShiuj6wvtWTxKCbKUsC4yVo3f
-         U5eqQnsH3TRUSdlp7xdBL3/dHthS9ee0r7bnZV9VCUSLvzonZmyhll8BCPhiuBzeOiKs
-         XIhuKGHQRM6ZQEt+7+6IKuSbgBkIISgPgJoNDobLbtKJfpHfRhwOupyiiecx+dlOVfH3
-         MOMGdC9xK4TiFubxMiQshLT+/q/RiaGjnXY1H+6cQgcILTngiTbuQ/vYZuA4915IBlFF
-         rnOw==
-X-Gm-Message-State: AJIora/8kkXUzBujRAWsrzQjiNnPsNm5ORPpe31GQ2tqYIeY2DcdtGyc
-        oJTCaaVEWcwq0bRDwwXd5pslV8Pv+n9c04/pwXRwI0N6RaQ=
-X-Google-Smtp-Source: AGRyM1tr+wIQ9WPj4ffi06adPAclHl6+H10vOy21nRYCi1+gt6eZYnfIg0TqG8PTuM+GqMyjQgVFJxK/0/WWZ5rGrRw=
-X-Received: by 2002:a05:6e02:1c2a:b0:2dc:621e:df15 with SMTP id
- m10-20020a056e021c2a00b002dc621edf15mr9816280ilh.151.1657979771086; Sat, 16
- Jul 2022 06:56:11 -0700 (PDT)
+        Sat, 16 Jul 2022 08:46:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09F5C1FCCA
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 Jul 2022 05:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1657975577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6jdgBr8qPyYQ7wIItqpQ8nbtb9ewBI0uvepqAzRBm0w=;
+        b=iKRmnKrQ/8yPPNDKsbrVC/Mywnnz3IZfHIQuTpiWySU+saORem6mLA/ryqXmluMztYxEhn
+        9Sdn/4cuzC5QPA4e+r9VOs7yCxAvVdM3RbDaCqdZ7L7sPTL0advkL/AwAFT2XPJy+NW18n
+        suv8n4oW1zT41xFrw2y23UW+VtBLeW4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-jVl0NklINweQDDm3TzrjdQ-1; Sat, 16 Jul 2022 08:46:15 -0400
+X-MC-Unique: jVl0NklINweQDDm3TzrjdQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4A358037B7;
+        Sat, 16 Jul 2022 12:46:14 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-37.bne.redhat.com [10.64.54.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED01E492C3B;
+        Sat, 16 Jul 2022 12:46:10 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, seanjc@google.com,
+        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
+        oliver.upton@linux.dev, shan.gavin@gmail.com
+Subject: [PATCH v2] KVM: selftests: Fix target thread to be migrated in rseq_test
+Date:   Sat, 16 Jul 2022 22:45:37 +0800
+Message-Id: <20220716144537.3436743-1-gshan@redhat.com>
 MIME-Version: 1.0
-References: <20220523020209.11810-1-ojeda@kernel.org> <20220716124214.329949-1-conor@kernel.org>
- <CANiq72nYRkHV6N2bGpTz3td=2Vto21apvZW0igTT-mV8TZtB2g@mail.gmail.com> <4a6240da-9003-cd74-cd47-f95ba2d9e7ae@microchip.com>
-In-Reply-To: <4a6240da-9003-cd74-cd47-f95ba2d9e7ae@microchip.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 16 Jul 2022 15:56:00 +0200
-Message-ID: <CANiq72nDcJLSB3pLhkdqGdLitfmqqCUVVfkY5EjP9AcwVv9B4A@mail.gmail.com>
-Subject: Re: [PATCH v7 00/25] Rust support
-To:     Conor.Dooley@microchip.com
-Cc:     Conor Dooley <conor@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        live-patching@vger.kernel.org,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jul 16, 2022 at 3:51 PM <Conor.Dooley@microchip.com> wrote:
->
-> Ah right, sorry for the noise so. I checked the ml but didn't see a
-> report there.
+In rseq_test, there are two threads, which are thread group leader
+and migration worker. The migration worker relies on sched_setaffinity()
+to force migration on the thread group leader. Unfortunately, we
+have wrong parameter (0) passed to sched_getaffinity(). It's actually
+forcing migration on the migration worker instead of the thread group
+leader. It also means migration can happen on the thread group leader
+at any time, which eventually leads to failure as the following logs
+show.
 
-No apologies needed -- thanks to you for the report, instead! :)
+  host# uname -r
+  5.19.0-rc6-gavin+
+  host# # cat /proc/cpuinfo | grep processor | tail -n 1
+  processor    : 223
+  host# pwd
+  /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
+  host# for i in `seq 1 100`;                \
+        do echo "--------> $i"; ./rseq_test; done
+  --------> 1
+  --------> 2
+  --------> 3
+  --------> 4
+  --------> 5
+  --------> 6
+  ==== Test Assertion Failure ====
+    rseq_test.c:265: rseq_cpu == cpu
+    pid=3925 tid=3925 errno=4 - Interrupted system call
+       1  0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
+       2  0x0000ffffb044affb: ?? ??:0
+       3  0x0000ffffb044b0c7: ?? ??:0
+       4  0x0000000000401a6f: _start at ??:?
+    rseq CPU = 4, sched CPU = 27
 
-> Thanks Miguel, good to know! I'll just wait around for a new version.
-> Just been trying to get my CI etc in order for when rust support lands,
-> but it sounds like I should be okay as it's a known problem & not some
-> only-broken-on-riscv thing.
+This fixes the issue by passing correct parameter, tid of the group
+thread leader, to sched_setaffinity().
 
-Yeah, it is a simple `bindgen` issue. Thanks a lot for making the
-effort to prepare your CI in advance!
+Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
+Signed-off-by: Gavin Shan <gshan@redhat.com>
+---
+ tools/testing/selftests/kvm/rseq_test.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Cheers,
-Miguel
+diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
+index 4158da0da2bb..c83ac7b467f8 100644
+--- a/tools/testing/selftests/kvm/rseq_test.c
++++ b/tools/testing/selftests/kvm/rseq_test.c
+@@ -38,6 +38,7 @@ static __thread volatile struct rseq __rseq = {
+  */
+ #define NR_TASK_MIGRATIONS 100000
+ 
++static pid_t rseq_tid;
+ static pthread_t migration_thread;
+ static cpu_set_t possible_mask;
+ static int min_cpu, max_cpu;
+@@ -106,7 +107,8 @@ static void *migration_worker(void *ign)
+ 		 * stable, i.e. while changing affinity is in-progress.
+ 		 */
+ 		smp_wmb();
+-		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
++		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask),
++				      &allowed_mask);
+ 		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
+ 			    errno, strerror(errno));
+ 		smp_wmb();
+@@ -231,6 +233,7 @@ int main(int argc, char *argv[])
+ 	vm = vm_create_default(VCPU_ID, 0, guest_code);
+ 	ucall_init(vm, NULL);
+ 
++	rseq_tid = gettid();
+ 	pthread_create(&migration_thread, NULL, migration_worker, 0);
+ 
+ 	for (i = 0; !done; i++) {
+-- 
+2.23.0
+
