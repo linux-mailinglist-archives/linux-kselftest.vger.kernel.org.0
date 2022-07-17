@@ -2,57 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE294577680
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 15:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F93D57768A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 16:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiGQN76 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 17 Jul 2022 09:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S233048AbiGQODd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Jul 2022 10:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiGQN76 (ORCPT
+        with ESMTP id S229801AbiGQODc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jul 2022 09:59:58 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24BE1400C;
-        Sun, 17 Jul 2022 06:59:56 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id k30so12076063edk.8;
-        Sun, 17 Jul 2022 06:59:56 -0700 (PDT)
+        Sun, 17 Jul 2022 10:03:32 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2B912D36;
+        Sun, 17 Jul 2022 07:03:30 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id k30so12083613edk.8;
+        Sun, 17 Jul 2022 07:03:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=LbXvWfEaQpT3EOvVscba33ymf3op3INZ0urZAjVoQ+c=;
-        b=GOZVLSmxUnmmok7nuMBDud3xiCRYe8eu91x9Qvgxc9cJaBQehuLzC3GA6UqGhwru53
-         BHuY1Kk/C6M+StYzq7IsGg0gOcozgvgbA5Kj2hht9Nav7qPpTWi2k9XSlljKSO+JpJMX
-         Z3Qu9EiRiTn2OIs0tiU7fWX5zVSlzz28tET+tAmXA2y1J7HU7xOF/jJy7ENI8BX6BPXD
-         wHbrmfH7vtJeMT1SfokQhDGBil4sC2dPZfNPVTvOAgXco60vf+iR5YJDthf+rgUV/FT6
-         A+l7WkBrCBx6yEvA/l3Oyt1Evqp+HUgzgYv4l43DAlW5yzcWWIGsHJlF9WgAt/FyIeff
-         8GWA==
+        bh=jMRTq+amxNbsBbaOEm6j4FB9NZ1ewtvtmU0mvf4Nm0M=;
+        b=IOfVoC11XaS/bWBvLr7Vh11vHQNhwzU0vVkGdNo3Legzm2DOd3dsW/pf8Rh9UjPWvX
+         JuW4lEESZ/2apkqE1vo/b/0jvOg/Jf4+7VMt8UaL99wPJ+sn56IuX483kWkcZN3oyoVm
+         XToQ4LXI+rik0Y+WztVuU70lo5i92MQulNSXG7vji4vHLtK/VwnrCQx63blturHmJvML
+         cdzmEn1GlbHtzRPNw4I/rTk14965Bq/tNQPmfHAUuE5JyL3ItbnQrRJuMi9apyDejczM
+         I9t/HENKdlD8vqV7gjUbiCQrU9DiPG1mqk0a1iu25lYshFwxl9SoPiX/JQwBuvT5557j
+         EhWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=LbXvWfEaQpT3EOvVscba33ymf3op3INZ0urZAjVoQ+c=;
-        b=7dgKVAqFUJKiyWLWSJtM6VIT+uybUfq1tPKKPjs8JajjMDnOPmmERy9sKNWquiQoWi
-         qN5oiMTMUedp5J3zeHDNjWVRX+sHxQl9pvoMcYMqyod5sPL3gzm9m4B+nxv9TFtxirMZ
-         o2aLi3b4nsJSnCIK73LYWy6sdPDavuDN/dqURbPA1GU59nmvlp+7NHLgt9AwUDhprJMw
-         1pfme4SRLoGeZJFRdRejZtPcphww7RTHEuPetV+EECbOfuJsm/t+Hj+pQTVX7G2Mfwky
-         sdvFZ/npThr3UyYJRyXShsPHhOP0witj7H0Vx0PVS4uI3mkWadwwEP6nW4uRdYXKvFW0
-         cHnA==
-X-Gm-Message-State: AJIora/EZFIN86r3rQ4EmAjnOfS3mhASn8EkmxH6w3kbkcSH/Q/oWTgZ
-        F7laHLFBBWsEuHRCiR2MG3E=
-X-Google-Smtp-Source: AGRyM1slHNXAJnCxBZ/BWP8T3k0+2yJe1JC18WCLjCcfhqljeNhmrcHHXAAzZTZUlJ/j1k5rsI/uVw==
-X-Received: by 2002:aa7:dd16:0:b0:43a:e850:a245 with SMTP id i22-20020aa7dd16000000b0043ae850a245mr30728413edv.127.1658066395289;
-        Sun, 17 Jul 2022 06:59:55 -0700 (PDT)
+        bh=jMRTq+amxNbsBbaOEm6j4FB9NZ1ewtvtmU0mvf4Nm0M=;
+        b=uS0C73axe89jQHTLqaaXeK14o9vscVluAk0N1Gy8zfgOb9k+g1Phsimld93pBV9Z22
+         PVtsnLGRe/K9g61JE2nZZJs6lndRsPAbpPIs9XjPKpDOharYS979TC4WiDWgen3IEW2k
+         3FPhQtQf3R6INMtFaepoicJ+bBij+/DTuYlS9EsAy9NzhThAHzgQ14orZoRf5t9N7R0j
+         k9/yvzI6//rzUGi15HOuw8EHFjtsAlssIWlSIJ2q5QiUV2dutlnovTx4ziP8qINhiRe0
+         uIxiwZ4FGmFwDoNl/kUKqY7RlR99sY5qYq/vGd8WLnIAbFCk9zdId8Y9CkZ5DS4guprP
+         tW+g==
+X-Gm-Message-State: AJIora8Sw4X6uRu109OBQvc59OfAd1cLHR4xMyj35/WY3xFfPDALM9TH
+        gmGAGULWa59roUnOmLGwT0s=
+X-Google-Smtp-Source: AGRyM1skUAsFAa+uXtacl2f+72Kz0xptC5vppBw7fL50BB6Blny25XGRyWrXql3Nv8Qfibszf1akNA==
+X-Received: by 2002:a05:6402:d0a:b0:437:66ca:c211 with SMTP id eb10-20020a0564020d0a00b0043766cac211mr31694104edb.29.1658066609442;
+        Sun, 17 Jul 2022 07:03:29 -0700 (PDT)
 Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id p4-20020a05640243c400b0043b5fb04e76sm1297707edc.27.2022.07.17.06.59.53
+        by smtp.gmail.com with ESMTPSA id 2-20020a170906218200b0072a815f3344sm4348879eju.137.2022.07.17.07.03.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Jul 2022 06:59:54 -0700 (PDT)
-Date:   Sun, 17 Jul 2022 16:59:51 +0300
+        Sun, 17 Jul 2022 07:03:28 -0700 (PDT)
+Date:   Sun, 17 Jul 2022 17:03:25 +0300
 From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
+To:     Hans S <schultz.hans@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -63,25 +64,22 @@ Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
         Nikolay Aleksandrov <razor@blackwall.org>,
         Shuah Khan <shuah@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
         linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <20220717135951.ho4raw3bzwlgixpb@skbuf>
-References: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
- <20220717125718.mj7b3j3jmltu6gm5@skbuf>
- <a6ec816279b282a4ea72252a7400d5b3@kapio-technology.com>
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+Message-ID: <20220717140325.p5ox5mhqedbyyiz4@skbuf>
+References: <20220630111634.610320-1-hans@kapio-technology.com>
+ <Yr2LFI1dx6Oc7QBo@shredder>
+ <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
+ <Yr778K/7L7Wqwws2@shredder>
+ <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
+ <20220717134610.k3nw6mam256yxj37@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a6ec816279b282a4ea72252a7400d5b3@kapio-technology.com>
+In-Reply-To: <20220717134610.k3nw6mam256yxj37@skbuf>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -92,47 +90,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 03:09:10PM +0200, netdev@kapio-technology.com wrote:
-> On 2022-07-17 14:57, Vladimir Oltean wrote:
-> > On Sun, Jul 17, 2022 at 02:21:47PM +0200, netdev@kapio-technology.com
-> > wrote:
-> > > On 2022-07-13 14:39, Ido Schimmel wrote:
-> > > > On Wed, Jul 13, 2022 at 09:09:58AM +0200, netdev@kapio-technology.com
-> > > > wrote:
-> > > 
-> > > >
-> > > > What are "Storm Prevention" and "zero-DPV" FDB entries?
-> > > 
-> > > They are both FDB entries that at the HW level drops all packets
-> > > having a
-> > > specific SA, thus using minimum resources.
-> > > (thus the name "Storm Prevention" aka, protection against DOS
-> > > attacks. We
-> > > must remember that we operate with CPU based learning.)
-> > 
-> > DPV means Destination Port Vector, and an ATU entry with a DPV of 0
-> > essentially means a FDB entry pointing nowhere, so it will drop the
-> > packet. That's a slight problem with Hans' implementation, the bridge
-> > thinks that the locked FDB entry belongs to port X, but in reality it
-> > matches on all bridged ports (since it matches by FID). FID allocation
-> > in mv88e6xxx is slightly strange, all VLAN-unaware bridge ports,
-> > belonging to any bridge, share the same FID, so the FDB databases are
-> > not exactly isolated from each other.
+On Sun, Jul 17, 2022 at 04:46:10PM +0300, Vladimir Oltean wrote:
+> Here, what happens is that a locked port learns the MAC SA from the
+> traffic it didn't drop, i.e. link-local. In other words, the bridge
+> behaves as expected and instructed: +locked +learning will cause just
+> that. It's the administrator's fault for not disabling learning.
+> It's also the mv88e6xxx driver's fault for not validating the "locked" +
+> "learning" brport flag *combination* until it properly supports "+locked
+> +learning" (the feature you are currently working on).
 > 
-> But if the locked port is vlan aware and has a pvid, it should not block
-> other ports.
+> I'm still confused why we don't just say that "+locked -learning" means
+> plain 802.1X, "+locked +learning" means MAB where we learn locked FDB entries.
 
-I don't understand what you want to say by that. It will block all other
-packets with the same MAC SA that are classified to the same FID.
-In case of VLAN-aware bridges, the mv88e6xxx driver allocates a new FID
-for each VID (see mv88e6xxx_atu_new). In other words, if a locked port
-is VLAN-aware and has a pvid, then whatever the PVID may be, all ports
-in that same VLAN are still blocked in the same way.
-
-> Besides the fid will be zero with vlan unaware afaik, and all with
-> zero fid do not create locked entries.
-
-If by 0 you mean 1 (MV88E6XXX_FID_BRIDGED), then you are correct: ports
-with FID 0 (MV88E6XXX_FID_STANDALONE) should not create locked FDB
-entries, because they are, well, standalone and not bridged.
-Again I don't exactly see the relevance though.
+Or is it the problem that a "+locked +learning" bridge port will learn
+MAC SA from link-local traffic, but it will create FDB entries without
+the locked flag while doing so? The mv88e6xxx driver should react to the
+'locked' flag from both directions (ADD_TO_DEVICE too, not just ADD_TO_BRIDGE).
