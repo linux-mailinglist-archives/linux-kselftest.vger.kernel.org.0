@@ -2,112 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC135777EF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 21:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBAE5778B0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jul 2022 01:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiGQTXF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 17 Jul 2022 15:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
+        id S229719AbiGQXB1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Jul 2022 19:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbiGQTXE (ORCPT
+        with ESMTP id S229535AbiGQXB0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jul 2022 15:23:04 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F289DEFE;
-        Sun, 17 Jul 2022 12:23:03 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id d16so14302239wrv.10;
-        Sun, 17 Jul 2022 12:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qR5n9WUGINQgKnZyU5jQ5QNhAVmTXkoQM4VlFrsXDgk=;
-        b=ROVMbcMOPv+gSbm3EJ0AYvQs8xJipm3EB1VIKbnQn0ywYyjAGUA0Sburuurfmr9fUI
-         rXNM9c07v1017JK3vINOTZx/AP9ykov02Jip4XVZnRtdWqGlyYt0b7KURU1CVr5wzdhp
-         1lvZdqtbFjtmc7jGXNELiIePVrkhIL++Y0v1Aq7AwuWe0ansFrJW49xDHVWY7rdOoYVC
-         7Wsn78PS/3tFE8TP6FafTmxr6V3M3z9c7hZSHZVILX6qzAVgd+KXlezcymqZVSCDuiVV
-         SHKpRhuds0LZqUWv1a1DfGN/NCy+t8089iHEj92aJDiFrtNMqN/wlagxvmDCmnfmd39k
-         fK7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qR5n9WUGINQgKnZyU5jQ5QNhAVmTXkoQM4VlFrsXDgk=;
-        b=t/limwnQZrB0uI1QoVZJiFunrZqrv9z6aPMf26GLGpBfiYSIkh9GvyfJDwZ0SXxfcM
-         R6sJreh67n2GMTassuYfpWpKkd0IqSg1j5D1JqXDDluHOeYX6ssvORTGOEcptiPKa0Lh
-         RwbxAs7BnS3HNnTQBzM9rAGAvSmJoh58RHqBnfJ8KEefYExLity676cFKH8KIvjcxZd8
-         UNRdZzL/KqUnPwXJbTgv0h5G+bspyMACSv4hzC4G9R0tZpHoXqcatirOfoI4J3rrAU3Z
-         S+YpEs72jti4UBGMMgRDCQA09kLiOE1wJ19I6j6/vKld2MwK0mbyGGgKOPfehwFl044z
-         pk/g==
-X-Gm-Message-State: AJIora9VPCvZBEdGzXODqqL0XfTU40fwZc/Xi6mPAbCbncruHB7SDUg9
-        tu6v+32OXMMIdCVy2PdDulYltRmPeuc9rWsZGpo=
-X-Google-Smtp-Source: AGRyM1txFQkvnskZOx8Nkr/djQB1K/63SDxcCZP7vECAW1wAAJ2eJEJotJhzOPoLVauSB6Lzds4zlNU6k6ARgwyQb6w=
-X-Received: by 2002:a5d:6e8e:0:b0:21d:ea5:710f with SMTP id
- k14-20020a5d6e8e000000b0021d0ea5710fmr27515wrz.48.1658085782164; Sun, 17 Jul
- 2022 12:23:02 -0700 (PDT)
+        Sun, 17 Jul 2022 19:01:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D03120BB;
+        Sun, 17 Jul 2022 16:01:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45FB0B80EA5;
+        Sun, 17 Jul 2022 23:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF23EC3411E;
+        Sun, 17 Jul 2022 23:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658098882;
+        bh=qvKpwS2oAz58xErVnVqqeNlH1V1bOLYcNo9RbFb07e8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G7yuCSMHtGjZZKlXxN4KUsT20AvUEHjAm1L1hgW1tcRVsYd9aVugALSYRtxJgfTYt
+         /wXithn7iS/GJz0ArUttX4eO4a8UeWnr4Svp7wIzmR+NsvJS7Z6xiMeZA8dNCqkWhu
+         h+pnz7nDPCANZd2pUTW3d+M8CatYMNmnal5rD8i7uUpxX59QN9ug+8tT6GpT4vDSOO
+         kh49GdtL4Z7v3fGO6VqZvQTphXA8u2yLUfluKUMcYSafBzFz9sqffAvNQx1RRPv8KS
+         GXpXKQSeLV46Av+uPTHWOCxYbqRATTXsAOuqJ+UsVD/8nLXeIbxF0Ki8Ewtvfp2xC4
+         1cVhAccOVyPIw==
+Date:   Sun, 17 Jul 2022 19:01:21 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, wireguard@lists.zx2c4.com,
+        netdev <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH AUTOSEL 5.18 39/41] wireguard: selftests: use virt
+ machine on m68k
+Message-ID: <YtSUwWn1SK+B83v5@sashalap>
+References: <20220714042221.281187-1-sashal@kernel.org>
+ <20220714042221.281187-39-sashal@kernel.org>
+ <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220630111634.610320-1-hans@kapio-technology.com>
- <Yr2LFI1dx6Oc7QBo@shredder> <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
- <Yr778K/7L7Wqwws2@shredder> <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
- <20220717134610.k3nw6mam256yxj37@skbuf> <20220717140325.p5ox5mhqedbyyiz4@skbuf>
- <CAKUejP6g3HxS=Scj-2yhsQRJApxnq1e31Nkcc995s7gzfMJOew@mail.gmail.com> <20220717183852.oi6yg4tgc5vonorp@skbuf>
-In-Reply-To: <20220717183852.oi6yg4tgc5vonorp@skbuf>
-From:   Hans S <schultz.hans@gmail.com>
-Date:   Sun, 17 Jul 2022 21:20:57 +0200
-Message-ID: <CAKUejP7WyL2r03EiZU4hA63u2e=Wz3KM4X=rDdji5pdZ0ptaZg@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
- traffic cannot unlock a locked port
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 8:38 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+On Thu, Jul 14, 2022 at 09:08:49AM +0200, Geert Uytterhoeven wrote:
+>Hi Sasha,
 >
-> On Sun, Jul 17, 2022 at 06:22:57PM +0200, Hans S wrote:
-> > On Sun, Jul 17, 2022 at 4:03 PM Vladimir Oltean <olteanv@gmail.com> wrote:
-> >
-> > Yes, it creates an FDB entry in the bridge without the locked flag
-> > set, and sends an ADD_TO_DEVICE notice with it.
-> > And furthermore link-local packets include of course EAPOL packets, so
-> > that's why +learning is a problem.
+>On Thu, Jul 14, 2022 at 6:29 AM Sasha Levin <sashal@kernel.org> wrote:
+>> From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+>>
+>> [ Upstream commit 1f2f341a62639c7066ee4c76b7d9ebe867e0a1d5 ]
+>>
+>> This should be a bit more stable hopefully.
+>>
+>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
 >
-> So if we fix that, and make the dynamically learned FDB entry be locked
-> because the port is locked (and offload them correctly in mv88e6xxx),
-> what would be the problem, exactly? The +learning is what would allow
-> these locked FDB entries to be created, and would allow the MAB to work.
-> User space may still decide to not authorize this address, and it will
-> remain locked.
+>Thanks for your patch!
+>
+>> --- a/tools/testing/selftests/wireguard/qemu/arch/m68k.config
+>> +++ b/tools/testing/selftests/wireguard/qemu/arch/m68k.config
+>> @@ -1,10 +1,7 @@
+>>  CONFIG_MMU=y
+>> +CONFIG_VIRT=y
+>
+>The m68k virt machine was introduced in v5.19-rc1, so this patch
+>must not be backported to v5.18 and earlier.
 
-The alternative is to have -learning and let the driver only enable
-the PAV to admit the interrupts, which is what this implementation
-does.
-The plus side of this is that having EAPOL packets triggering locked
-entries from the bridge side is not really so nice IMHO. In a
-situation with 802.1X and MAB on the same port, there will then not be
-any triggering of MAB when initiating the 802.1X session, which I
-think is the best option. It then also lessens the confusion between
-hostapd and the daemon that handles MAB sessions.
+I'll drop it, thanks!
+
+-- 
+Thanks,
+Sasha
