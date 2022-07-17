@@ -2,140 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDDC577797
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 19:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7519D5777C9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 20:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiGQRsS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 17 Jul 2022 13:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S229728AbiGQSjA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Jul 2022 14:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiGQRsR (ORCPT
+        with ESMTP id S229681AbiGQSi7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jul 2022 13:48:17 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F26DE0E1
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 Jul 2022 10:48:16 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-10c0e6dd55eso18636621fac.7
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 Jul 2022 10:48:16 -0700 (PDT)
+        Sun, 17 Jul 2022 14:38:59 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855ED26DF;
+        Sun, 17 Jul 2022 11:38:57 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id eq6so12654188edb.6;
+        Sun, 17 Jul 2022 11:38:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wWo5nfiIszKM/pVy4I94cp8djYzE87GUS1z1+3Dj3X8=;
-        b=saLG7Jfv/cpv45n+vut19GSIYCg0J4XcllVl0Aam+FMQb5sH5WDf/oZLHiJNqHixjZ
-         ZZnTfYb2Hd5kBPab1/jtADZ9c+D5U9MuLSLVEc2VvkbWMsQ1wpldAj0rgGiLfKbsIfuI
-         ilvDi6vtACVJ52c+rXIEEkQ7lJAKn/GP/oXoaxMU5wgT9ys2j3Y8FZ52sB+3db2fHGR0
-         ssQ5PK1WKyH1pjuczTuP0UDSIp4/8LpF/bnWiAjuYhIAhGEoQKTknIFKukoY/OrSweo/
-         ilSHXU4ccKOKQA0+tkx3/kVrglt2HndWhkm12mrJvsb/CBD5FIJeysiM651RUk/K+YPn
-         SHjA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rTFmINRCtqE/PJSK+GbEjiZlx18s0u636RQP7OKv+PI=;
+        b=FSw3Uh0aCHj2G4vLpNTO+ihKkjxUkreF/gNi8Cwu8jTP5BYI/PmJN4f5vcm48Llc0R
+         BaDo3GnIbfA/JJNU+Ps7EqK7vtcgHtt6cRTQ9+bUKx1JyHJAiJhMy4wvs2m9j8uIMgud
+         2Ppct74C67RPgKUlKcQcLrjDP666o2f0kPGLHoVPERzXZ+2vN88dFOChUlWYQxm5gNjT
+         Lhc9R58TMeoAjDblGIwoAFWOzPRSGWWPO4t1R7tftZ7ImdUf8H43HDuGWklh9B+KjlMu
+         kbx0DQuCXe0+1Rj1uSv7OinF2S6PY4Z59g0cAgY6DTw1OOy4pptk9e/Zk6K7bZ4XQ4QH
+         uf/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wWo5nfiIszKM/pVy4I94cp8djYzE87GUS1z1+3Dj3X8=;
-        b=YU0GZ2nrjtJlq9ntbIwm0sHI/1ArBcywbGcZz/oso3MzOluOs+YfegytMbU8ebBKiB
-         wGpPUlPh6rJooXwqWjWyEmcuae2qONE6pZywylcSgibh+wn8fHgQArOejSUeEy/RX3kY
-         Uhkw5/yGutm3gwbiLCHou0vx2f4idKGRC842yj/X1gTJad++BWOf1NXyB3ewD7kC6bJ/
-         Wwjxp9W0gJ4e7DrsCVcJ+s6V3NDRvygTAaV6YqGADZjfkjDBiptiT+WYVdCHQbPhiHaU
-         960co7ISzdKTS9d2M/wL57HDnq4vQhe4sMWuM9RflxdB0tpgWnp5jdoqwsMkwYAOvEpb
-         jI6A==
-X-Gm-Message-State: AJIora/gnumm+tunQXuBbAXSwG5PN5kZVZWdHpXweCo8HeoIl/M5unQl
-        BYlQtpP/GAfEiBt+3JvtOQAeLQ==
-X-Google-Smtp-Source: AGRyM1sQBNoOS0lLk6GPha7ctC/wcB/G6Pai9TruWEuZD5rTUvN3LQo6MebMZgKUkaJTNbl4nz6TvQ==
-X-Received: by 2002:a05:6871:b0d:b0:10c:10bf:1276 with SMTP id fq13-20020a0568710b0d00b0010c10bf1276mr12608104oab.185.1658080095178;
-        Sun, 17 Jul 2022 10:48:15 -0700 (PDT)
-Received: from [192.168.1.195] ([187.36.234.139])
-        by smtp.gmail.com with ESMTPSA id x27-20020a9d459b000000b0061c68a35fdfsm2470857ote.9.2022.07.17.10.48.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 10:48:14 -0700 (PDT)
-Message-ID: <99aedd6c-0254-9712-a7d7-d94c0be31086@usp.br>
-Date:   Sun, 17 Jul 2022 14:48:04 -0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rTFmINRCtqE/PJSK+GbEjiZlx18s0u636RQP7OKv+PI=;
+        b=gKKMwn6uy+rX2UkTGo/jEoUksaWlRSsKHPFfjOFo+GAWn+3k0lOy0Fpcf8G9OVpjV2
+         TH13N8KfF4V+yl28qXYxe9Tvke4Dl5hy3DoN5vriyhYIAhzCScI0NMW0xqoOuCXN2iwk
+         4Gsot35pPLntupgfx6b4T5g0iXs7o2VTmvYlkQAr3ggs87HGKYIfNRPrx5JM2hvyhzEn
+         oZDbPZCKoCCnWeRu8ihZZ2IfcB5ws1xGJ+EpoSwUVFKYVT4Mhsppyt2PvyMynWsU3P1p
+         fCOHXMLThms344ymvTynZCMd0k5rBNUG/JzeipjtREc2mvFuC2WyasSHRxXE6o7Bv6S2
+         wzZA==
+X-Gm-Message-State: AJIora9UZkxQfobJ51t6OBMuFwB/Q67cU0/h0JNgKnSMEM4TDal5XzvC
+        5bHBPNfKfxcQUUCTxuecjWByyipSaX0=
+X-Google-Smtp-Source: AGRyM1tk93eaC6IDq42PmwwrpHj5mupJZfCSM0zCfRbWL4Y3LieDgdqQ0zD1eisXUSf+AS2bpT2Gnw==
+X-Received: by 2002:a05:6402:190e:b0:43a:e914:8c11 with SMTP id e14-20020a056402190e00b0043ae9148c11mr31803058edz.281.1658083135892;
+        Sun, 17 Jul 2022 11:38:55 -0700 (PDT)
+Received: from skbuf ([188.25.231.115])
+        by smtp.gmail.com with ESMTPSA id r17-20020a056402035100b0043a6a7048absm7119672edw.95.2022.07.17.11.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Jul 2022 11:38:55 -0700 (PDT)
+Date:   Sun, 17 Jul 2022 21:38:52 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans S <schultz.hans@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+Message-ID: <20220717183852.oi6yg4tgc5vonorp@skbuf>
+References: <20220630111634.610320-1-hans@kapio-technology.com>
+ <Yr2LFI1dx6Oc7QBo@shredder>
+ <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
+ <Yr778K/7L7Wqwws2@shredder>
+ <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
+ <20220717134610.k3nw6mam256yxj37@skbuf>
+ <20220717140325.p5ox5mhqedbyyiz4@skbuf>
+ <CAKUejP6g3HxS=Scj-2yhsQRJApxnq1e31Nkcc995s7gzfMJOew@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 4/9] drm: selftest: convert drm_format selftest to
- KUnit
-Content-Language: en-US
-To:     Daniel Latypov <dlatypov@google.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        michal.winiarski@intel.com,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220708203052.236290-1-maira.canal@usp.br>
- <20220708203052.236290-5-maira.canal@usp.br>
- <20220714235137.GA485839@roeck-us.net>
- <CAGS_qxrhy3=pST9f85fvxubKQShOq1XF6ZHALzMhXDOf5gnaUg@mail.gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
-In-Reply-To: <CAGS_qxrhy3=pST9f85fvxubKQShOq1XF6ZHALzMhXDOf5gnaUg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKUejP6g3HxS=Scj-2yhsQRJApxnq1e31Nkcc995s7gzfMJOew@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/14/22 21:03, Daniel Latypov wrote:
-> On Thu, Jul 14, 2022 at 4:51 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On Fri, Jul 08, 2022 at 05:30:47PM -0300, Maíra Canal wrote:
->>> Considering the current adoption of the KUnit framework, convert the
->>> DRM format selftest to the KUnit API.
->>>
->>> Tested-by: David Gow <davidgow@google.com>
->>> Acked-by: Daniel Latypov <dlatypov@google.com>
->>> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
->>> Signed-off-by: Maíra Canal <maira.canal@usp.br>
->>
->> This patch results in:
->>
->> Building powerpc:allmodconfig ... failed
->> --------------
->> Error log:
->> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
->> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of 3712 bytes is larger than 2048 bytes
->>
->> presumably due to function nesting.
+On Sun, Jul 17, 2022 at 06:22:57PM +0200, Hans S wrote:
+> On Sun, Jul 17, 2022 at 4:03 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+> >
+> > On Sun, Jul 17, 2022 at 04:46:10PM +0300, Vladimir Oltean wrote:
+> > > Here, what happens is that a locked port learns the MAC SA from the
+> > > traffic it didn't drop, i.e. link-local. In other words, the bridge
+> > > behaves as expected and instructed: +locked +learning will cause just
+> > > that. It's the administrator's fault for not disabling learning.
+> > > It's also the mv88e6xxx driver's fault for not validating the "locked" +
+> > > "learning" brport flag *combination* until it properly supports "+locked
+> > > +learning" (the feature you are currently working on).
+> > >
+> > > I'm still confused why we don't just say that "+locked -learning" means
+> > > plain 802.1X, "+locked +learning" means MAB where we learn locked FDB entries.
+> >
+> > Or is it the problem that a "+locked +learning" bridge port will learn
+> > MAC SA from link-local traffic, but it will create FDB entries without
+> > the locked flag while doing so? The mv88e6xxx driver should react to the
+> > 'locked' flag from both directions (ADD_TO_DEVICE too, not just ADD_TO_BRIDGE).
 > 
-> This can happen when there's a lot of KUNIT_EXPECT_* calls in a single function.
-> See [1] for some related context.
-> There were a number of patches that went into 5.18 ([2] and others) to
-> try and mitigate this, but it's not always enough.
-> 
-> Ideally the compiler would see that the stack-local variables used in
-> these macros don't need to stick around, but it doesn't always
-> happen...
+> Yes, it creates an FDB entry in the bridge without the locked flag
+> set, and sends an ADD_TO_DEVICE notice with it.
+> And furthermore link-local packets include of course EAPOL packets, so
+> that's why +learning is a problem.
 
-As a matter of fact, for GCC 12, the warning -Wframe-larger-than=
-doesn't show up due to compiler improvement, but for GCC 11.3, it does.
-
-As I have GCC 12 on my machine, I didn't even get the warning.
-
-Anyway, I'll separate the test into multiple functions to avoid any
-problems related to stack size.
-
-Best Regards,
-- Maíra Canal
-
-> One workaround would be to split up the test case functions into smaller chunks.
-> 
-> [1] https://lore.kernel.org/linux-kselftest/20210929212713.1213476-1-brendanhiggins@google.com/
-> [2] https://lore.kernel.org/linux-kselftest/20220113165931.451305-1-dlatypov@google.com/
-> 
-> Daniel
+So if we fix that, and make the dynamically learned FDB entry be locked
+because the port is locked (and offload them correctly in mv88e6xxx),
+what would be the problem, exactly? The +learning is what would allow
+these locked FDB entries to be created, and would allow the MAB to work.
+User space may still decide to not authorize this address, and it will
+remain locked.
