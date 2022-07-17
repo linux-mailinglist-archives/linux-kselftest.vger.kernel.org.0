@@ -2,67 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BD45772A9
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 03:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 032F857761C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 14:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiGQBMJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Jul 2022 21:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
+        id S231393AbiGQMVw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Jul 2022 08:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbiGQBMI (ORCPT
+        with ESMTP id S229681AbiGQMVv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Jul 2022 21:12:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 454F415A25
-        for <linux-kselftest@vger.kernel.org>; Sat, 16 Jul 2022 18:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658020327;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yvkpx482WEOx0k7AE4fGPI+kXMmx+3JjLrAm+UsDHkI=;
-        b=YxKIY4ULoeufN+OkFBFI9G4C+YwIVikNlwr2BeapEuCO3+usA682oRZG+R/dsE6vZt3p99
-        9aWa9fx65z+4fLAXmPNHQHvXOrJCdYU5yaJDczhgfTNdS5D224iOR4EtWW5L3Duugf7qXl
-        9w4hXqYtPobUcZg0QlWxHSfklVfJucw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-394-9s9Nyz0tNK2LeBZoTUn9Mw-1; Sat, 16 Jul 2022 21:12:03 -0400
-X-MC-Unique: 9s9Nyz0tNK2LeBZoTUn9Mw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 521652932498;
-        Sun, 17 Jul 2022 01:12:03 +0000 (UTC)
-Received: from [10.64.54.37] (vpn2-54-37.bne.redhat.com [10.64.54.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F3C4A40E8B04;
-        Sun, 17 Jul 2022 01:11:59 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2] KVM: selftests: Fix target thread to be migrated in
- rseq_test
-To:     oliver.upton@linux.dev, kvmarm@lists.cs.columbia.edu
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, seanjc@google.com,
-        pbonzini@redhat.com, maz@kernel.org, shuah@kernel.org,
-        shan.gavin@gmail.com
-References: <20220716144537.3436743-1-gshan@redhat.com>
- <385aa28ad559874da8429c40a68570df@linux.dev>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <4bdaa1cd-39f4-97d7-ba33-ee5cdc7d609e@redhat.com>
-Date:   Sun, 17 Jul 2022 13:11:39 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Sun, 17 Jul 2022 08:21:51 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CECE0CA;
+        Sun, 17 Jul 2022 05:21:49 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 4C92718858D8;
+        Sun, 17 Jul 2022 12:21:47 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 4287225032B7;
+        Sun, 17 Jul 2022 12:21:47 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 3C3E9A1E00AE; Sun, 17 Jul 2022 12:21:47 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-In-Reply-To: <385aa28ad559874da8429c40a68570df@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Date:   Sun, 17 Jul 2022 14:21:47 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <Ys69DiAwT0Md+6ai@shredder>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-4-netdev@kapio-technology.com>
+ <20220708084904.33otb6x256huddps@skbuf>
+ <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
+ <20220708091550.2qcu3tyqkhgiudjg@skbuf>
+ <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
+ <20220708115624.rrjzjtidlhcqczjv@skbuf>
+ <723e2995314b41ff323272536ef27341@kapio-technology.com>
+ <YsqPWK67U0+Iw2Ru@shredder>
+ <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+ <Ys69DiAwT0Md+6ai@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,FROM_FMBLA_NEWDOM28,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,111 +71,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Oliver,
+On 2022-07-13 14:39, Ido Schimmel wrote:
+> On Wed, Jul 13, 2022 at 09:09:58AM +0200, netdev@kapio-technology.com 
+> wrote:
 
-On 7/17/22 7:48 AM, oliver.upton@linux.dev wrote:
 > 
-> Thanks for cleaning this up.
-> 
+> What are "Storm Prevention" and "zero-DPV" FDB entries?
 
-Thanks for your review.
+They are both FDB entries that at the HW level drops all packets having 
+a specific SA, thus using minimum resources.
+(thus the name "Storm Prevention" aka, protection against DOS attacks. 
+We must remember that we operate with CPU based learning.)
 
-> July 16, 2022 7:45 AM, "Gavin Shan" <gshan@redhat.com> wrote:
->> In rseq_test, there are two threads, which are thread group leader
->> and migration worker. The migration worker relies on sched_setaffinity()
->> to force migration on the thread group leader.
 > 
-> It may be clearer to describe it as a vCPU thread and a migration worker
-> thread. The meat of this test is to catch a regression in KVM.
+> There is no decision that I'm aware of. I'm simply trying to understand
+> how FDB entries that have 'BR_FDB_ENTRY_LOCKED' set are handled in
+> mv88e6xxx and other devices in this class. We have at least three
+> different implementations to consolidate:
 > 
->> Unfortunately, we have
+> 1. The bridge driver, pure software forwarding. The locked entry is
+> dynamically created by the bridge. Packets received via the locked port
+> with a SA corresponding to the locked entry will be dropped, but will
+> refresh the entry. On the other hand, packets with a DA corresponding 
+> to
+> the locked entry will be forwarded as known unicast through the locked
+> port.
 > 
-> s/we have/the test has the/
+> 2. Hardware implementations like Spectrum that can be programmed to 
+> trap
+> packets that incurred an FDB miss. Like in the first case, the locked
+> entry is dynamically created by the bridge driver and also aged by it.
+> Unlike in the first case, since this entry is not present in hardware,
+> packets with a DA corresponding to the locked entry will be flooded as
+> unknown unicast.
 > 
->> wrong parameter (0) passed to sched_getaffinity().
-> 
-> wrong PID
-> 
-
-Yep, it's much clearer to describe it as vCPU thread and migration worker.
-
->> It's actually
->> forcing migration on the migration worker instead of the thread group
->> leader.
-> 
-> What's missing is _why_ the migration worker is getting moved around by
-> the call. Perhaps instead it is better to state what a PID of 0 implies,
-> for those of us who haven't read their manpages in a while ;-)
-> 
-
-Yes, it's good idea. I will have something like below in next revision :)
-
-     In rseq_test, there are two threads, which are vCPU thread and migration
-     worker separately. Unfortunately, the test has the wrong PID passed to
-     sched_setaffinity() in the migration worker. It forces migration on the
-     migration worker because zeroed PID represents the calling thread, which
-     is the migration worker itself. It means the vCPU thread is never enforced
-     to migration and it can migrate at any time, which eventually leads to
-     failure as the following logs show.
-         :
-         :
-     Fix the issue by passing correct parameter, TID of the vCPU thread, to
-     sched_setaffinity() in the migration worker.
-
-
->> It also means migration can happen on the thread group leader
->> at any time, which eventually leads to failure as the following logs
->> show.
->>
->> host# uname -r
->> 5.19.0-rc6-gavin+
->> host# # cat /proc/cpuinfo | grep processor | tail -n 1
->> processor : 223
->> host# pwd
->> /home/gavin/sandbox/linux.main/tools/testing/selftests/kvm
->> host# for i in `seq 1 100`; \
->> do echo "--------> $i"; ./rseq_test; done
->> --------> 1
->> --------> 2
->> --------> 3
->> --------> 4
->> --------> 5
->> --------> 6
->> ==== Test Assertion Failure ====
->> rseq_test.c:265: rseq_cpu == cpu
->> pid=3925 tid=3925 errno=4 - Interrupted system call
->> 1 0x0000000000401963: main at rseq_test.c:265 (discriminator 2)
->> 2 0x0000ffffb044affb: ?? ??:0
->> 3 0x0000ffffb044b0c7: ?? ??:0
->> 4 0x0000000000401a6f: _start at ??:?
->> rseq CPU = 4, sched CPU = 27
->>
->> This fixes the issue by passing correct parameter, tid of the group
->> thread leader, to sched_setaffinity().
-> 
-> Kernel commit messages should have an imperative tone:
-> 
-> Fix the issue by ...
+> 3. Hardware implementations like mv88e6xxx that fire an interrupt upon
+> FDB miss. Need your help to understand how the above works there and
+> why. Specifically, how locked entries are represented in hardware (if 
+> at
+> all) and what is the significance of not installing corresponding
+> entries in hardware.
 > 
 
-Ok. I've been having my style for long time. Actually, the style was
-shared by some one when I worked for IBM long time ago. I will bear
-it in mind to use imperative expression since now on :)
-
-All your comments will be fixed in next revision, but I would delay
-the posting a bit to see Sean or Paolo have more comments. In that
-case, I can fix all of them at once.
-
->> Fixes: 61e52f1630f5 ("KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs")
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> 
-> With the comments on the commit message addressed:
-> 
-> Reviewed-by: Oliver Upton <oliver.upton@linux.dev>
-> 
-
-Thanks again for your time on this.
-
-Thanks,
-Gavin
+With the mv88e6xxx, a miss violation with the SA occurs when there is no 
+entry. If you then add a normal entry with the SA, the port is open for 
+that SA of course. The zero-DPV entry is an entry that ensures that 
+there is no more miss violation interrupts from that SA, while dropping 
+all entries with the SA.
 
