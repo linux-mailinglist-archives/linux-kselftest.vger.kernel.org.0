@@ -2,85 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167585777E1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 21:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC135777EF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Jul 2022 21:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiGQTM0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 17 Jul 2022 15:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
+        id S231376AbiGQTXF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Jul 2022 15:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiGQTMZ (ORCPT
+        with ESMTP id S231240AbiGQTXE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jul 2022 15:12:25 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA782615B;
-        Sun, 17 Jul 2022 12:12:24 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso10719457pjk.3;
-        Sun, 17 Jul 2022 12:12:24 -0700 (PDT)
+        Sun, 17 Jul 2022 15:23:04 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F289DEFE;
+        Sun, 17 Jul 2022 12:23:03 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id d16so14302239wrv.10;
+        Sun, 17 Jul 2022 12:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vd4RXeTOy0VCuvAN3yoH7JTxP0Cym7SXxM02BMLPeF8=;
-        b=L+G+S+P1ytZ54S7XChoqfsGVVoKFXlRCX6M6xnZLg6bmEVdYppWSa5XjDcPLob0zaD
-         qTltledq5GwicXbJvpaf96iVpFrY5mby4KyNInbrYHIGXOfJLUqBo+ylsbSW5hCbg7kv
-         z4m2UvKRa5sIR2YuKdqj7tdPxXucyMt2lmOLuKDHgWLWvQbos/5JhzEHESqdnL0hNjQU
-         YtI2nLsOR/oHpRRhWmK4uaKnZjUscW0kMurSHlUaFebRzCYPqBlb7gJy2+CIc/ieHrO/
-         cJ4O+AErk2IL/eExWvGhyvmwSsW0I39mKoqeDL36kiELSCpGOeQX8G4THbk7SBwTJFhE
-         z52A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qR5n9WUGINQgKnZyU5jQ5QNhAVmTXkoQM4VlFrsXDgk=;
+        b=ROVMbcMOPv+gSbm3EJ0AYvQs8xJipm3EB1VIKbnQn0ywYyjAGUA0Sburuurfmr9fUI
+         rXNM9c07v1017JK3vINOTZx/AP9ykov02Jip4XVZnRtdWqGlyYt0b7KURU1CVr5wzdhp
+         1lvZdqtbFjtmc7jGXNELiIePVrkhIL++Y0v1Aq7AwuWe0ansFrJW49xDHVWY7rdOoYVC
+         7Wsn78PS/3tFE8TP6FafTmxr6V3M3z9c7hZSHZVILX6qzAVgd+KXlezcymqZVSCDuiVV
+         SHKpRhuds0LZqUWv1a1DfGN/NCy+t8089iHEj92aJDiFrtNMqN/wlagxvmDCmnfmd39k
+         fK7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vd4RXeTOy0VCuvAN3yoH7JTxP0Cym7SXxM02BMLPeF8=;
-        b=E30aPZ+g/RaYXVKwI783OXdH2nU3J8gu1N3GxOeyZ/GsTwR5AOOCRI7Znt1+24uTNN
-         0GACVq0wtCLK2xAz5nlUcRSam1SmqdSiAGs7tXR4b2DrTfCYYP+MqbncuIIiY1bgRLL7
-         jh93pIqHJYkE7QQJKjZhTL7AKPxaOzuAi8aIjeKBFiYNGjaykd0SDhqeBW2o6fy8GSDj
-         KbsrxP0LRpy+mVmGh1OrNtueIYYBU4oHLNJ+EsaOEtSuHz4nd7B7qfmKiC9mdE9MiZ9I
-         VAK5sqqiLRR2Tydxe+MejEor3ARIwXcd9ilvDVgEhRRcGpUU1xKV7jKWtUvbfYqGe6P4
-         7wxA==
-X-Gm-Message-State: AJIora97OObIRhsJ4YtS12WIQiWa+2Egt4s+hUU24fRn7Wg7BRP13SD6
-        sKXxEckhHHkre4CAn1cDZ0U=
-X-Google-Smtp-Source: AGRyM1tKzF5spR+ad/2Fzzlrd80dKgB/zJ4SxJod+jViIfAfNENBZZnWyb43iI70Qp7ZSdO+iGHMgg==
-X-Received: by 2002:a17:90b:4f91:b0:1cd:3a73:3a5d with SMTP id qe17-20020a17090b4f9100b001cd3a733a5dmr27906645pjb.98.1658085144358;
-        Sun, 17 Jul 2022 12:12:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id oa12-20020a17090b1bcc00b001ef8de342b8sm7677799pjb.15.2022.07.17.12.12.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Jul 2022 12:12:20 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ce0c16d0-6c4c-6569-a254-14ae0904b4c7@roeck-us.net>
-Date:   Sun, 17 Jul 2022 12:12:17 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qR5n9WUGINQgKnZyU5jQ5QNhAVmTXkoQM4VlFrsXDgk=;
+        b=t/limwnQZrB0uI1QoVZJiFunrZqrv9z6aPMf26GLGpBfiYSIkh9GvyfJDwZ0SXxfcM
+         R6sJreh67n2GMTassuYfpWpKkd0IqSg1j5D1JqXDDluHOeYX6ssvORTGOEcptiPKa0Lh
+         RwbxAs7BnS3HNnTQBzM9rAGAvSmJoh58RHqBnfJ8KEefYExLity676cFKH8KIvjcxZd8
+         UNRdZzL/KqUnPwXJbTgv0h5G+bspyMACSv4hzC4G9R0tZpHoXqcatirOfoI4J3rrAU3Z
+         S+YpEs72jti4UBGMMgRDCQA09kLiOE1wJ19I6j6/vKld2MwK0mbyGGgKOPfehwFl044z
+         pk/g==
+X-Gm-Message-State: AJIora9VPCvZBEdGzXODqqL0XfTU40fwZc/Xi6mPAbCbncruHB7SDUg9
+        tu6v+32OXMMIdCVy2PdDulYltRmPeuc9rWsZGpo=
+X-Google-Smtp-Source: AGRyM1txFQkvnskZOx8Nkr/djQB1K/63SDxcCZP7vECAW1wAAJ2eJEJotJhzOPoLVauSB6Lzds4zlNU6k6ARgwyQb6w=
+X-Received: by 2002:a5d:6e8e:0:b0:21d:ea5:710f with SMTP id
+ k14-20020a5d6e8e000000b0021d0ea5710fmr27515wrz.48.1658085782164; Sun, 17 Jul
+ 2022 12:23:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] drm/tests: Split up test cases in
- igt_check_drm_format_min_pitch
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20220717184336.1197723-1-mairacanal@riseup.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220717184336.1197723-1-mairacanal@riseup.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220630111634.610320-1-hans@kapio-technology.com>
+ <Yr2LFI1dx6Oc7QBo@shredder> <CAKUejP6LTFuw7d_1C18VvxXDuYaboD-PvSkk_ANSFjjfhyDGkg@mail.gmail.com>
+ <Yr778K/7L7Wqwws2@shredder> <CAKUejP5w0Dn8y9gyDryNYy7LOUytqZsG+qqqC8JhRcvyC13=hQ@mail.gmail.com>
+ <20220717134610.k3nw6mam256yxj37@skbuf> <20220717140325.p5ox5mhqedbyyiz4@skbuf>
+ <CAKUejP6g3HxS=Scj-2yhsQRJApxnq1e31Nkcc995s7gzfMJOew@mail.gmail.com> <20220717183852.oi6yg4tgc5vonorp@skbuf>
+In-Reply-To: <20220717183852.oi6yg4tgc5vonorp@skbuf>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Sun, 17 Jul 2022 21:20:57 +0200
+Message-ID: <CAKUejP7WyL2r03EiZU4hA63u2e=Wz3KM4X=rDdji5pdZ0ptaZg@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 1/1] net: bridge: ensure that link-local
+ traffic cannot unlock a locked port
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,84 +85,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/17/22 11:43, Maíra Canal wrote:
-> The igt_check_drm_format_min_pitch() function had a lot of
-> KUNIT_EXPECT_* calls, all of which ended up allocating and initializing
-> various test assertion structures on the stack.
-> 
-> This behavior was producing -Wframe-larger-than warnings on PowerPC, i386,
-> and MIPS architectures, such as:
-> 
-> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
-> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of
-> 3712 bytes is larger than 2048 bytes
-> 
-> So, the igt_check_drm_format_min_pitch() test case was split into three
-> smaller functions: one testing single plane formats, one testing multiple
-> planes formats, and the other testing tiled formats.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+On Sun, Jul 17, 2022 at 8:38 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> On Sun, Jul 17, 2022 at 06:22:57PM +0200, Hans S wrote:
+> > On Sun, Jul 17, 2022 at 4:03 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+> >
+> > Yes, it creates an FDB entry in the bridge without the locked flag
+> > set, and sends an ADD_TO_DEVICE notice with it.
+> > And furthermore link-local packets include of course EAPOL packets, so
+> > that's why +learning is a problem.
+>
+> So if we fix that, and make the dynamically learned FDB entry be locked
+> because the port is locked (and offload them correctly in mv88e6xxx),
+> what would be the problem, exactly? The +learning is what would allow
+> these locked FDB entries to be created, and would allow the MAB to work.
+> User space may still decide to not authorize this address, and it will
+> remain locked.
 
-I applied the patch to next-20220714 (the fixed file is gone
-in next-20220715) and tested with i386, ppc, and mips compilers.
-The problem is no longer seen after this patch is applied.
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
-
-> ---
->   drivers/gpu/drm/tests/drm_format_test.c | 16 ++++++++++++++--
->   1 file changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tests/drm_format_test.c b/drivers/gpu/drm/tests/drm_format_test.c
-> index 056cb8599d6d..28f2b8f88818 100644
-> --- a/drivers/gpu/drm/tests/drm_format_test.c
-> +++ b/drivers/gpu/drm/tests/drm_format_test.c
-> @@ -91,7 +91,7 @@ static void igt_check_drm_format_block_height(struct kunit *test)
->   	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
->   }
->   
-> -static void igt_check_drm_format_min_pitch(struct kunit *test)
-> +static void igt_check_drm_format_min_pitch_for_single_plane(struct kunit *test)
->   {
->   	const struct drm_format_info *info = NULL;
->   
-> @@ -175,6 +175,11 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->   			(uint64_t)UINT_MAX * 4);
->   	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
->   			(uint64_t)(UINT_MAX - 1) * 4);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_multiple_planes(struct kunit *test)
-> +{
-> +	const struct drm_format_info *info = NULL;
->   
->   	/* Test 2 planes format */
->   	info = drm_format_info(DRM_FORMAT_NV12);
-> @@ -249,6 +254,11 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->   			(uint64_t)(UINT_MAX - 1) / 2);
->   	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2),
->   			(uint64_t)(UINT_MAX - 1) / 2);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_tiled_format(struct kunit *test)
-> +{
-> +	const struct drm_format_info *info = NULL;
->   
->   	/* Test tiled format */
->   	info = drm_format_info(DRM_FORMAT_X0L2);
-> @@ -273,7 +283,9 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->   static struct kunit_case drm_format_tests[] = {
->   	KUNIT_CASE(igt_check_drm_format_block_width),
->   	KUNIT_CASE(igt_check_drm_format_block_height),
-> -	KUNIT_CASE(igt_check_drm_format_min_pitch),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_single_plane),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_multiple_planes),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_tiled_format),
->   	{ }
->   };
->   
-
+The alternative is to have -learning and let the driver only enable
+the PAV to admit the interrupts, which is what this implementation
+does.
+The plus side of this is that having EAPOL packets triggering locked
+entries from the bridge side is not really so nice IMHO. In a
+situation with 802.1X and MAB on the same port, there will then not be
+any triggering of MAB when initiating the 802.1X session, which I
+think is the best option. It then also lessens the confusion between
+hostapd and the daemon that handles MAB sessions.
