@@ -2,93 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBAE5778B0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jul 2022 01:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398A8577918
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jul 2022 02:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiGQXB1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 17 Jul 2022 19:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S229536AbiGRApR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Jul 2022 20:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiGQXB0 (ORCPT
+        with ESMTP id S229535AbiGRApR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Jul 2022 19:01:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D03120BB;
-        Sun, 17 Jul 2022 16:01:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45FB0B80EA5;
-        Sun, 17 Jul 2022 23:01:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF23EC3411E;
-        Sun, 17 Jul 2022 23:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658098882;
-        bh=qvKpwS2oAz58xErVnVqqeNlH1V1bOLYcNo9RbFb07e8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G7yuCSMHtGjZZKlXxN4KUsT20AvUEHjAm1L1hgW1tcRVsYd9aVugALSYRtxJgfTYt
-         /wXithn7iS/GJz0ArUttX4eO4a8UeWnr4Svp7wIzmR+NsvJS7Z6xiMeZA8dNCqkWhu
-         h+pnz7nDPCANZd2pUTW3d+M8CatYMNmnal5rD8i7uUpxX59QN9ug+8tT6GpT4vDSOO
-         kh49GdtL4Z7v3fGO6VqZvQTphXA8u2yLUfluKUMcYSafBzFz9sqffAvNQx1RRPv8KS
-         GXpXKQSeLV46Av+uPTHWOCxYbqRATTXsAOuqJ+UsVD/8nLXeIbxF0Ki8Ewtvfp2xC4
-         1cVhAccOVyPIw==
-Date:   Sun, 17 Jul 2022 19:01:21 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, wireguard@lists.zx2c4.com,
-        netdev <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 5.18 39/41] wireguard: selftests: use virt
- machine on m68k
-Message-ID: <YtSUwWn1SK+B83v5@sashalap>
-References: <20220714042221.281187-1-sashal@kernel.org>
- <20220714042221.281187-39-sashal@kernel.org>
- <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWumKeJmsOsd7_=F-+8znY=0YtH-CbeLN7knSJ1LDOR_w@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 17 Jul 2022 20:45:17 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9248813EB0;
+        Sun, 17 Jul 2022 17:45:14 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 1429F320039A;
+        Sun, 17 Jul 2022 20:45:10 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Sun, 17 Jul 2022 20:45:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1658105110; x=1658191510; bh=9eCT8yjok0
+        PcSR4T5HvuxY2Sn6RNMobB+nq9wlqocDU=; b=Txgoqm8L3eOo97F6L2M1hCzzWs
+        eZ1ANe5/eX/M3qB5ZKrWRI4vAfEaOBH54clcBHo9bsRLf+ogW5P3Ni0pLEbuWUfB
+        aaMPf6Nb9tEjDJkvlV0r/B5BGg+w3klBfR+HgltvUZx8+y7/c4gLvnQ5X3wtFQGv
+        1vv6RYDzhWqic+hY/hovn0opbtb/dj3MEzRgtQxzWTlUMJT2czTAfmQSG1hz7e39
+        QwEREcL8+VGzle+hjZJ6tH4Dmq45iqZdaR1W9+XrX0NwZf62FI5OfdiDiEPFVxiq
+        16zax4Moze54MA/lx9l6yJa+ub1r4LAbvMliFPrEGPC+3jQISgZ+THBIp3uw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1658105110; x=1658191510; bh=9eCT8yjok0PcSR4T5HvuxY2Sn6RN
+        MobB+nq9wlqocDU=; b=18tngN32W7+K7CjfUBw8Ftb5OhGZaov/D6q/jVY1lDqI
+        lvOfiOAtDBBreSofiFmQ71gjlWcuIXK5H+fBAk4UQXFJwvGXyt6LxsZ3LAkO7mPi
+        mftuFQK02EhH3pNPSaiNMIPjumnj5SO6L1oI5XW6a6wWAJPmRcfNTxnjUsm2EHQn
+        6hlMXQJT8xskwpajkQ0bLjTgmaMRRrV7t26YVPqKz5S/XntreGCGjUn2S+N0CYp9
+        hkQG11QZtKv+yDHYS8QvkkAg3Z9Hm5SpVmOZ+wN+xsqJfryuZ/rj7qe+iCyhtmXz
+        CZCZNkYQGbHa08hEBWclVHKfz2mY2gh8OpEqvij9vA==
+X-ME-Sender: <xms:Fq3UYvQ1yZLBY26aY3nfTTYnRxIPYyFXwz0EjSDD4LZ8eoxPWggs2Q>
+    <xme:Fq3UYgxNC-OugEvu8FYfILLTXZwUzEdwWWbThul_0lmQQtQT7jV-84lQSCbNj_FSq
+    ZOAOOgm4VoIPMXxVw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekjedggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpedvvedvieeuteehiefftdfhjeevvdetffevgffhhfeuudffhedvkeef
+    veeiueejleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgurdgr
+    uh
+X-ME-Proxy: <xmx:Fq3UYk3ueDkE8gWGk2gk21Bq1KCHDJERCrXeRatY4ULnUI88ziGRRA>
+    <xmx:Fq3UYvAQdtizsOSm6j5-tjJVvqtctzAO8e5CGZA0gR7VqLfDqEk6dA>
+    <xmx:Fq3UYoiaADdvIc4N8pDf_Z8Z0S3BX5AsBxvAodQAkEX4HmHN6fWBcA>
+    <xmx:Fq3UYtbeYo5nNMmCMWUBTsv0pnBXPWFB01VCpxzTT2NXElz8b4ImqQ>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 26B5A170007E; Sun, 17 Jul 2022 20:45:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-755-g3e1da8b93f-fm-20220708.002-g3e1da8b9
+Mime-Version: 1.0
+Message-Id: <38480b33-3b4d-44d4-bb24-6ab199d0c793@www.fastmail.com>
+In-Reply-To: <20220715040354.2629856-1-davidgow@google.com>
+References: <20220715040354.2629856-1-davidgow@google.com>
+Date:   Mon, 18 Jul 2022 10:14:48 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "David Gow" <davidgow@google.com>,
+        "Brendan Higgins" <brendanhiggins@google.com>,
+        "Daniel Latypov" <dlatypov@google.com>,
+        "Shuah Khan" <skhan@linuxfoundation.org>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Arnd Bergmann" <arnd@arndb.de>
+Cc:     linux-aspeed@lists.ozlabs.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "kbuild test robot" <lkp@intel.com>,
+        linux-kselftest@vger.kernel.org,
+        "Sadiya Kazi" <sadiyakazi@google.com>, kunit-dev@googlegroups.com
+Subject: Re: [PATCH] mmc: sdhci-of-aspeed: test: Fix dependencies when KUNIT=m
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 09:08:49AM +0200, Geert Uytterhoeven wrote:
->Hi Sasha,
->
->On Thu, Jul 14, 2022 at 6:29 AM Sasha Levin <sashal@kernel.org> wrote:
->> From: "Jason A. Donenfeld" <Jason@zx2c4.com>
->>
->> [ Upstream commit 1f2f341a62639c7066ee4c76b7d9ebe867e0a1d5 ]
->>
->> This should be a bit more stable hopefully.
->>
->> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->Thanks for your patch!
->
->> --- a/tools/testing/selftests/wireguard/qemu/arch/m68k.config
->> +++ b/tools/testing/selftests/wireguard/qemu/arch/m68k.config
->> @@ -1,10 +1,7 @@
->>  CONFIG_MMU=y
->> +CONFIG_VIRT=y
->
->The m68k virt machine was introduced in v5.19-rc1, so this patch
->must not be backported to v5.18 and earlier.
 
-I'll drop it, thanks!
 
--- 
-Thanks,
-Sasha
+On Fri, 15 Jul 2022, at 13:33, David Gow wrote:
+> While the sdhci-of-aspeed KUnit tests do work when builtin, and do work
+> when KUnit itself is being built as a module, the two together break.
+>
+> This is because the KUnit tests (understandably) depend on KUnit, so a
+> built-in test cannot build if KUnit is a module.
+>
+> Fix this by adding a dependency on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y),
+> which only excludes this one problematic configuration.
+>
+> This was reported on a nasty openrisc-randconfig run by the kernel test
+> robot, though for some reason (compiler optimisations removing the test
+> code?) I wasn't able to reproduce it locally on x86:
+> https://lore.kernel.org/linux-mm/202207140122.fzhlf60k-lkp@intel.com/T/
+>
+> Fixes: 291cd54e5b05 ("mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>  drivers/mmc/host/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index 10c563999d3d..e63608834411 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -171,6 +171,7 @@ config MMC_SDHCI_OF_ASPEED
+>  config MMC_SDHCI_OF_ASPEED_TEST
+>  	bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
+>  	depends on MMC_SDHCI_OF_ASPEED && KUNIT
+> +	depends on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y)
+
+Should this replace the line above? Isn't it just more constrained?
+
+Regardless, thanks for your work here, the kunit integration with the 
+ASPEED SDHCI driver bothered me a lot when I wrote it.
+
+Andrew
