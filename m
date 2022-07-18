@@ -2,138 +2,432 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E51F57864C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jul 2022 17:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B35757865B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jul 2022 17:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiGRP0o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Jul 2022 11:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
+        id S235472AbiGRP2Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Jul 2022 11:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235409AbiGRP0m (ORCPT
+        with ESMTP id S234321AbiGRP2Y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Jul 2022 11:26:42 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C9D28E3F
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jul 2022 08:26:39 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id x21so9325497plb.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jul 2022 08:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Yt9oE0kz3TmH5FGxe6pEDCKgvRvBbOAA/ay7EMCbyEc=;
-        b=Uff3ivfihawnDb3MVf5QlQ2jPMMai38C6bP4DepEErQNRp/Kc0gYVje6cUTN3mqgBa
-         8e/i6cCNzLQRIo6XA6wMXV8Z208mTTLPAFevNS72jjatByWcRHbhRuXNC/PzoiNVlj0A
-         G9sTexZ1nkBq8bHjUgqFI7BC1X8Fl1pf5ZeLZgS5QdWIqKzWIGGLSvIy/UwP2bykPTMR
-         S0KDUdaMZvJIWXXz6SkPgu1okTxSS3xRe0n7hIARn0g4omp+/4Oqj1iwRKhLmSvwxOC1
-         gHiiZYsDVdI0DS6/yoOU3d2IjW3kS0u9umKDtPmgnjR6gLoFlRAZm1r5c55NFjc5PcWF
-         DbCw==
+        Mon, 18 Jul 2022 11:28:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 765B72981B
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jul 2022 08:28:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658158101;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uJIggZCNpgwvaFQynG/gLraji0AFGkTGy1p5k+g0Igg=;
+        b=fUXd6efS88yD9YIbQANAZrRnNUrVgaPSwkKuSLkG2woN9l3CUOrXL67yra/9xHXDeWzyP+
+        GuuXUao7JCFOxvNFDzVYCnOrLEID3oOEAq3jiTtWEfARKYgpUh2wbxXVtq+5/69RHHTmIX
+        j3DcBeSewE0bPnnEq2vgW+MRypOyTGE=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-567-SqSn2Ks_PMec2BM_RGOodA-1; Mon, 18 Jul 2022 11:28:20 -0400
+X-MC-Unique: SqSn2Ks_PMec2BM_RGOodA-1
+Received: by mail-pl1-f200.google.com with SMTP id s10-20020a170902ea0a00b0016cebf80007so2567701plg.14
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jul 2022 08:28:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yt9oE0kz3TmH5FGxe6pEDCKgvRvBbOAA/ay7EMCbyEc=;
-        b=V5m6Eai80rK0baK/emqPmIwbfxFoSme9MXvPjIySNZ0JJhkDgZx/2FWWb3DUSLVS1+
-         /6TWqC3eDNuGjVCjut/aLqg2c97nT6bpiXFF1ZzoPKuK+KSgZ/N/ZTGKQmlW8nxzcEBC
-         CndlYOnZprcYyULDa3cMqMimyjZUsPT2sv+A/mlYtH+kr/TFEExn6F/X8HvZp3v4HyE4
-         vN6ZlZebGCC6vAxL2/3pNI1e8cN+Y8g140VPJMWUQ9mkaTL6mpnbSi04PmVaBsLUwKPI
-         NwF49bJMpeGHiovFB6PtZ6M2d4fkVbLEP6701gZK83PSR9ip9FqF48skniZd2qSkF8BH
-         b2KA==
-X-Gm-Message-State: AJIora+EcLef1VoRRTDEa9c9L7NDkLIcB+zPogPwGkTvPRfrcZhmS0UL
-        s5xk4/wIev/VOodTNsG+7JAUgA==
-X-Google-Smtp-Source: AGRyM1vgtGvBYkyh0ni5e/mqVLrnNK1+XKLqZyiT0UcMq2k28Wiwo9nZP6ot9un6Y/cxDUraL3c4cg==
-X-Received: by 2002:a17:903:1208:b0:16b:81f6:e992 with SMTP id l8-20020a170903120800b0016b81f6e992mr29233754plh.55.1658157998529;
-        Mon, 18 Jul 2022 08:26:38 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id h14-20020a63e14e000000b004161b3c3388sm8342392pgk.26.2022.07.18.08.26.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 08:26:38 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 15:26:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 07/14] KVM: Use gfn instead of hva for
- mmu_notifier_retry
-Message-ID: <YtV7qpYZoT6jIKHQ@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-8-chao.p.peng@linux.intel.com>
- <d480a850-601b-cda2-b671-04d839c98429@amd.com>
- <20220718132950.GA38104@chaop.bj.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uJIggZCNpgwvaFQynG/gLraji0AFGkTGy1p5k+g0Igg=;
+        b=DipqQDxOuoD64aKI14aBMX1uQCpZR5wiIyzie37Z0xE/6f59M8M2im23iEO5aqp9tY
+         iMGTpeNQbjbhUn52dI9dMHcldV73FlGU0N+FZbiXJXupDPNwhZomurYGU2XbwxN8XLNF
+         KT59zX6KhO0KQWOMowATGIGbs3OLoAQl8twxePhA/salMzoK6F8/e6XcWVIdiXrZLl65
+         H5idXOuoSLLR9v3IILayg66xpJANSEh0nO5qACprJdiuoHOwtLv6BuNwq80t9Qocv0JH
+         iQk12twE+CB3Kn0eGa0FdrWQfOZmy5QFinvQSpF9Z4ACiBQmTsiigzxlcCeHwuXZ6Pj1
+         1asg==
+X-Gm-Message-State: AJIora9oul2aNt3RvbSJwwacSJJHxXit2VER/HLGC7r9VyGTGDc4nBOL
+        ac5zbuTbUtQLEd0/tmxHZMmhf6rUc81g640jLr5zMEEV69eBvSPUW4lKfdwNLMFtQX0+7Y1qPRl
+        fpVuShV7v1yVT4U/X0+i4PPBQedp84ZOjGuDGWWup94IV
+X-Received: by 2002:a17:90a:be0c:b0:1ef:accb:23a5 with SMTP id a12-20020a17090abe0c00b001efaccb23a5mr32798428pjs.113.1658158099084;
+        Mon, 18 Jul 2022 08:28:19 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1s+Ciz742ji5v49qH2+CaRtPsbm4puQ49n/bD7wRBglNUoM2l/vpF6LbwM0y/LI3T+C+zgJdk/B++iZfksG+MQ=
+X-Received: by 2002:a17:90a:be0c:b0:1ef:accb:23a5 with SMTP id
+ a12-20020a17090abe0c00b001efaccb23a5mr32798384pjs.113.1658158098672; Mon, 18
+ Jul 2022 08:28:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718132950.GA38104@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+ <20220712145850.599666-6-benjamin.tissoires@redhat.com> <CAP01T77nCee6R9DL_gHJCrkVgcoJH9n52McKA87KqE3Ud8qwTg@mail.gmail.com>
+In-Reply-To: <CAP01T77nCee6R9DL_gHJCrkVgcoJH9n52McKA87KqE3Ud8qwTg@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 18 Jul 2022 17:28:07 +0200
+Message-ID: <CAO-hwJ+OvU_cn9zUY_4VuhZVLB566DpYmvr2TT+WmgChnfb7+g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 05/23] bpf/verifier: allow kfunc to return an
+ allocated mem
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 18, 2022, Chao Peng wrote:
-> On Fri, Jul 15, 2022 at 01:36:15PM +0200, Gupta, Pankaj wrote:
-> > > Currently in mmu_notifier validate path, hva range is recorded and then
-> > > checked in the mmu_notifier_retry_hva() from page fault path. However
-> > > for the to be introduced private memory, a page fault may not have a hva
-> > 
-> > As this patch appeared in v7, just wondering did you see an actual bug
-> > because of it? And not having corresponding 'hva' occurs only with private
-> > memory because its not mapped to host userspace?
-> 
-> The addressed problem is not new in this version, previous versions I
-> also had code to handle it (just in different way). But the problem is:
-> mmu_notifier/memfile_notifier may be in the progress of invalidating a
-> pfn that obtained earlier in the page fault handler, when happens, we
-> should retry the fault. In v6 I used global mmu_notifier_retry() for
-> memfile_notifier but that can block unrelated mmu_notifer invalidation
-> which has hva range specified.
-> 
-> Sean gave a comment at https://lkml.org/lkml/2022/6/17/1001 to separate
-> memfile_notifier from mmu_notifier but during the implementation I
-> realized we actually can reuse the same code for shared and private
-> memory if both using gpa range and that can simplify the code handling
-> in kvm_zap_gfn_range and some other code (e.g. we don't need two
-> versions for memfile_notifier/mmu_notifier).
+On Sat, Jul 16, 2022 at 10:33 PM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Tue, 12 Jul 2022 at 17:03, Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > When a kfunc is not returning a pointer to a struct but to a plain type,
+> > we can consider it is a valid allocated memory assuming that:
+> > - one of the arguments is either called rdonly_buf_size or
+> >   rdwr_buf_size
+> > - and this argument is a const from the caller point of view
+> >
+> > We can then use this parameter as the size of the allocated memory.
+> >
+> > The memory is either read-only or read-write based on the name
+> > of the size parameter.
+> >
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> >
+> > ---
+> >
+> > changes in v6:
+> > - code review from Kartikeya:
+> >   - remove comment change that had no reasons to be
+> >   - remove handling of PTR_TO_MEM with kfunc releases
+> >   - introduce struct bpf_kfunc_arg_meta
+> >   - do rdonly/rdwr_buf_size check in btf_check_kfunc_arg_match
+> >   - reverted most of the changes in verifier.c
+> >   - make sure kfunc acquire is using a struct pointer, not just a plain
+> >     pointer
+> >   - also forward ref_obj_id to PTR_TO_MEM in kfunc to not use after free
+> >     the allocated memory
+> >
+> > changes in v5:
+> > - updated PTR_TO_MEM comment in btf.c to match upstream
+> > - make it read-only or read-write based on the name of size
+> >
+> > new in v4
+> > ---
+> >  include/linux/bpf.h   | 10 ++++++-
+> >  include/linux/btf.h   | 12 ++++++++
+> >  kernel/bpf/btf.c      | 67 ++++++++++++++++++++++++++++++++++++++++---
+> >  kernel/bpf/verifier.c | 49 +++++++++++++++++++++++--------
+> >  4 files changed, 121 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 2b21f2a3452f..5b8eadb6e7bc 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -1916,12 +1916,20 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
+> >                            const char *func_name,
+> >                            struct btf_func_model *m);
+> >
+> > +struct bpf_kfunc_arg_meta {
+> > +       u64 r0_size;
+> > +       bool r0_rdonly;
+> > +       int ref_obj_id;
+> > +       bool multiple_ref_obj_id;
+> > +};
+> > +
+> >  struct bpf_reg_state;
+> >  int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+> >                                 struct bpf_reg_state *regs);
+> >  int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+> >                               const struct btf *btf, u32 func_id,
+> > -                             struct bpf_reg_state *regs);
+> > +                             struct bpf_reg_state *regs,
+> > +                             struct bpf_kfunc_arg_meta *meta);
+> >  int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
+> >                           struct bpf_reg_state *reg);
+> >  int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_prog *prog,
+> > diff --git a/include/linux/btf.h b/include/linux/btf.h
+> > index 1bfed7fa0428..31da4273c2ec 100644
+> > --- a/include/linux/btf.h
+> > +++ b/include/linux/btf.h
+> > @@ -420,4 +420,16 @@ static inline int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dt
+> >  }
+> >  #endif
+> >
+> > +static inline bool btf_type_is_struct_ptr(struct btf *btf, const struct btf_type *t)
+> > +{
+> > +       /* t comes in already as a pointer */
+> > +       t = btf_type_by_id(btf, t->type);
+> > +
+> > +       /* allow const */
+> > +       if (BTF_INFO_KIND(t->info) == BTF_KIND_CONST)
+> > +               t = btf_type_by_id(btf, t->type);
+>
+> Any specific reason to not allow any other modifiers apart from const?
+> volatile, restrict, typedef..?
+> If not, just use btf_type_skip_modifiers instead.
 
-This should work, though I'm undecided as to whether or not it's a good idea.  KVM
-allows aliasing multiple gfns to a single hva, and so using the gfn could result
-in a much larger range being rejected given the simplistic algorithm for handling
-multiple ranges in kvm_inc_notifier_count().  But I assume such aliasing is uncommon,
-so I'm not sure it's worth optimizing for.
+Good point. Fixed locally
 
-> Adding gpa range for private memory invalidation also relieves the
-> above blocking issue between private memory page fault and mmu_notifier.
+>
+> > +
+> > +       return btf_type_is_struct(t);
+> > +}
+> > +
+> >  #endif
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 4423045b8ff3..552d7bc05a0c 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -6168,10 +6168,36 @@ static bool is_kfunc_arg_mem_size(const struct btf *btf,
+> >         return true;
+> >  }
+> >
+> > +static bool btf_is_kfunc_arg_mem_size(const struct btf *btf,
+> > +                                     const struct btf_param *arg,
+> > +                                     const struct bpf_reg_state *reg,
+> > +                                     const char *name)
+>
+> It would be nicer if we could reuse some code from
+> is_kfunc_arg_mem_size, the only difference is matching suffix vs full
+> string. But don't feel too strongly about it.
+
+I'll see what I can do. There is indeed a lot of code duplication, but
+I wasn't sure how I could express the differences while making it
+obvious.
+
+>
+> > +{
+> > +       int len, target_len = strlen(name);
+> > +       const struct btf_type *t;
+> > +       const char *param_name;
+> > +
+> > +       t = btf_type_skip_modifiers(btf, arg->type, NULL);
+> > +       if (!btf_type_is_scalar(t) || reg->type != SCALAR_VALUE)
+> > +               return false;
+> > +
+> > +       param_name = btf_name_by_offset(btf, arg->name_off);
+> > +       if (str_is_empty(param_name))
+> > +               return false;
+> > +       len = strlen(param_name);
+> > +       if (len != target_len)
+> > +               return false;
+> > +       if (strncmp(param_name, name, target_len))
+> > +               return false;
+> > +
+> > +       return true;
+> > +}
+> > +
+> >  static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >                                     const struct btf *btf, u32 func_id,
+> >                                     struct bpf_reg_state *regs,
+> > -                                   bool ptr_to_mem_ok)
+> > +                                   bool ptr_to_mem_ok,
+> > +                                   struct bpf_kfunc_arg_meta *kfunc_meta)
+> >  {
+> >         enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+> >         struct bpf_verifier_log *log = &env->log;
+> > @@ -6225,6 +6251,30 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >
+> >                 t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+> >                 if (btf_type_is_scalar(t)) {
+> > +                       if (is_kfunc && kfunc_meta) {
+> > +                               bool is_buf_size = false;
+> > +
+> > +                               /* check for any const scalar parameter of name "rdonly_buf_size"
+> > +                                * or "rdwr_buf_size"
+> > +                                */
+> > +                               if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
+> > +                                                             "rdonly_buf_size")) {
+> > +                                       kfunc_meta->r0_rdonly = true;
+> > +                                       is_buf_size = true;
+> > +                               } else if (btf_is_kfunc_arg_mem_size(btf, &args[i], reg,
+> > +                                                                    "rdwr_buf_size"))
+> > +                                       is_buf_size = true;
+> > +
+> > +                               if (is_buf_size) {
+> > +                                       if (kfunc_meta->r0_size) {
+> > +                                               bpf_log(log, "2 or more rdonly/rdwr_buf_size parameters for kfunc");
+> > +                                               return -EINVAL;
+> > +                                       }
+> > +
+> > +                                       kfunc_meta->r0_size = reg->var_off.value;
+>
+> As Yonghong pointed out, you need to ensure the register holds a
+> constant value, by using tnum_is_const(reg->var_off), and giving an
+> error otherwise, because we need a constant size to be set for R0.
+
+Thanks for the hint on how to solve this. It saved me from doing
+searches in the archives :)
+
+As mentioned to Yonghong, I had it in a previous version, but the
+refactoring dropped it :(
+
+>
+> > +                               }
+> > +                       }
+> > +
+> >                         if (reg->type == SCALAR_VALUE)
+> >                                 continue;
+> >                         bpf_log(log, "R%d is not a scalar\n", regno);
+> > @@ -6246,6 +6296,14 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> >                 if (ret < 0)
+> >                         return ret;
+> >
+> > +               /* kptr_get is only valid for kfunc */
+>
+> Invalid comment
+
+oops
+
+>
+> > +               if (kfunc_meta && reg->ref_obj_id) {
+> > +                       /* check for any one ref_obj_id to keep track of memory */
+> > +                       if (kfunc_meta->ref_obj_id)
+> > +                               kfunc_meta->multiple_ref_obj_id = true;
+>
+> Why not just return the error here itself? And then no need to keep
+> the multiple_ref_obj_id member.
+> When you return the error here, you can move a similar check in the if
+> (reg->type == PTR_TO_BTF_ID) block to this place so that we don't do
+> it twice.
+
+Good point. I extracted the block from (reg->type == PTR_TO_BTF_ID)
+here, and at the end did a small "if (kfunc_meta && ref_obj_id)
+kfunc_meta->ref_obj_id = ref_obj_id"
+
+This way this path is done only once for all cases.
+
+Cheers,
+Benjamin
+
+>
+> > +                       kfunc_meta->ref_obj_id = reg->ref_obj_id;
+> > +               }
+> > +
+> >                 /* kptr_get is only true for kfunc */
+> >                 if (i == 0 && kptr_get) {
+> >                         struct bpf_map_value_off_desc *off_desc;
+> > @@ -6441,7 +6499,7 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+> >                 return -EINVAL;
+> >
+> >         is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
+> > -       err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global);
+> > +       err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, NULL);
+> >
+> >         /* Compiler optimizations can remove arguments from static functions
+> >          * or mismatched type can be passed into a global function.
+> > @@ -6454,9 +6512,10 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+> >
+> >  int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+> >                               const struct btf *btf, u32 func_id,
+> > -                             struct bpf_reg_state *regs)
+> > +                             struct bpf_reg_state *regs,
+> > +                             struct bpf_kfunc_arg_meta *meta)
+> >  {
+> > -       return btf_check_func_arg_match(env, btf, func_id, regs, true);
+> > +       return btf_check_func_arg_match(env, btf, func_id, regs, true, meta);
+> >  }
+> >
+> >  /* Convert BTF of a function into bpf_reg_state if possible
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 3adcc0d123af..77556132db15 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -7561,6 +7561,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >  {
+> >         const struct btf_type *t, *func, *func_proto, *ptr_type;
+> >         struct bpf_reg_state *regs = cur_regs(env);
+> > +       struct bpf_kfunc_arg_meta meta = { 0 };
+> >         const char *func_name, *ptr_type_name;
+> >         u32 i, nargs, func_id, ptr_type_id;
+> >         int err, insn_idx = *insn_idx_p;
+> > @@ -7592,7 +7593,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >                                         BTF_KFUNC_TYPE_ACQUIRE, func_id);
+> >
+> >         /* Check the arguments */
+> > -       err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs);
+> > +       err = btf_check_kfunc_arg_match(env, desc_btf, func_id, regs, &meta);
+> >         if (err < 0)
+> >                 return err;
+> >         /* In case of release function, we get register number of refcounted
+> > @@ -7613,7 +7614,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >         /* Check return type */
+> >         t = btf_type_skip_modifiers(desc_btf, func_proto->type, NULL);
+> >
+> > -       if (acq && !btf_type_is_ptr(t)) {
+> > +       if (acq && !btf_type_is_struct_ptr(desc_btf, t)) {
+> >                 verbose(env, "acquire kernel function does not return PTR_TO_BTF_ID\n");
+> >                 return -EINVAL;
+> >         }
+> > @@ -7625,17 +7626,41 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> >                 ptr_type = btf_type_skip_modifiers(desc_btf, t->type,
+> >                                                    &ptr_type_id);
+> >                 if (!btf_type_is_struct(ptr_type)) {
+> > -                       ptr_type_name = btf_name_by_offset(desc_btf,
+> > -                                                          ptr_type->name_off);
+> > -                       verbose(env, "kernel function %s returns pointer type %s %s is not supported\n",
+> > -                               func_name, btf_type_str(ptr_type),
+> > -                               ptr_type_name);
+> > -                       return -EINVAL;
+> > +                       if (!meta.r0_size) {
+> > +                               ptr_type_name = btf_name_by_offset(desc_btf,
+> > +                                                                  ptr_type->name_off);
+> > +                               verbose(env,
+> > +                                       "kernel function %s returns pointer type %s %s is not supported\n",
+> > +                                       func_name,
+> > +                                       btf_type_str(ptr_type),
+> > +                                       ptr_type_name);
+> > +                               return -EINVAL;
+> > +                       }
+> > +
+> > +                       if (meta.multiple_ref_obj_id) {
+> > +                               verbose(env,
+> > +                                       "kernel function %s has multiple memory tracked objects\n",
+> > +                                       func_name);
+> > +                               return -EINVAL;
+> > +                       }
+> > +
+> > +                       mark_reg_known_zero(env, regs, BPF_REG_0);
+> > +                       regs[BPF_REG_0].type = PTR_TO_MEM;
+> > +                       regs[BPF_REG_0].mem_size = meta.r0_size;
+> > +
+> > +                       if (meta.r0_rdonly)
+> > +                               regs[BPF_REG_0].type |= MEM_RDONLY;
+> > +
+> > +                       /* Ensures we don't access the memory after a release_reference() */
+> > +                       if (meta.ref_obj_id)
+> > +                               regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
+> > +               } else {
+> > +                       mark_reg_known_zero(env, regs, BPF_REG_0);
+> > +                       regs[BPF_REG_0].btf = desc_btf;
+> > +                       regs[BPF_REG_0].type = PTR_TO_BTF_ID;
+> > +                       regs[BPF_REG_0].btf_id = ptr_type_id;
+> >                 }
+> > -               mark_reg_known_zero(env, regs, BPF_REG_0);
+> > -               regs[BPF_REG_0].btf = desc_btf;
+> > -               regs[BPF_REG_0].type = PTR_TO_BTF_ID;
+> > -               regs[BPF_REG_0].btf_id = ptr_type_id;
+> > +
+> >                 if (btf_kfunc_id_set_contains(desc_btf, resolve_prog_type(env->prog),
+> >                                               BTF_KFUNC_TYPE_RET_NULL, func_id)) {
+> >                         regs[BPF_REG_0].type |= PTR_MAYBE_NULL;
+> > --
+> > 2.36.1
+> >
+>
+
