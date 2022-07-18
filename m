@@ -2,218 +2,223 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4824E5783C7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jul 2022 15:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D1B578466
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Jul 2022 15:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233955AbiGRNex (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Jul 2022 09:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S235550AbiGRNy1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Jul 2022 09:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233900AbiGRNew (ORCPT
+        with ESMTP id S235620AbiGRNyS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Jul 2022 09:34:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE5C19C3E;
-        Mon, 18 Jul 2022 06:34:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658151291; x=1689687291;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=rHFYZeCUhUEMCyj5v9zq3o/zGTENSXf+B8mm6YmDQ6A=;
-  b=YA9EYCDeqWGfW1UPeaGqPCbNH1VGlfaFYurfw47BjMg/51HVhjZlBkqo
-   3KV7aJ374rocye5HlIm/HEMAaWTi4RSnKoCS2lw1WTMO3EftDEOEUrbTN
-   6jFi3ynXfjcAgvWuWkL1Xq4jsEYK9jjoozTzS4s1ShaseQ3TXehLL3HHV
-   vrEGzA1cQNCj4O36qc0086cNkoXxr4FTbWq/pj9Qv2nK3/outpdbIYPva
-   15l11Eb04u+pZU8eRLlagutnTcKUhN1Ok77sYT2J0nsqM3vhX/5X/5ZU0
-   NMXQjobZssAEmP6p/cnJXNdqprL1e40dS7OMFzxojnVT2s3Tb0kBJ6yWL
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10411"; a="347907674"
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="347907674"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2022 06:34:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,281,1650956400"; 
-   d="scan'208";a="624730241"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga008.jf.intel.com with ESMTP; 18 Jul 2022 06:34:40 -0700
-Date:   Mon, 18 Jul 2022 21:29:50 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 07/14] KVM: Use gfn instead of hva for
- mmu_notifier_retry
-Message-ID: <20220718132950.GA38104@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-8-chao.p.peng@linux.intel.com>
- <d480a850-601b-cda2-b671-04d839c98429@amd.com>
+        Mon, 18 Jul 2022 09:54:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3756295A3
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jul 2022 06:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658152456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pc2COzK5DZ3zqU+q9ucYylkxH5lyMmFL6dLIwCvbYD4=;
+        b=jWt3xxpagLmctREr17L3cPBOl5ITt2lLyISUaExOGsqciE3gZB9ZLpy+0NOxiYYbcHad1S
+        2pX3mhXiupAesP3bI37BF/xCUgWWsF0CRKwqRfpLH9AiaFPQG7flPO1CrJzL17z7luAq+X
+        eqSaRZYVU1rDiD+gnBcChlxpG5YP5qI=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-56-eb8L1wzYMf2KIle1-gn8BQ-1; Mon, 18 Jul 2022 09:54:07 -0400
+X-MC-Unique: eb8L1wzYMf2KIle1-gn8BQ-1
+Received: by mail-pf1-f200.google.com with SMTP id bt6-20020a056a00438600b0052b41c191a4so1263042pfb.19
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jul 2022 06:54:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pc2COzK5DZ3zqU+q9ucYylkxH5lyMmFL6dLIwCvbYD4=;
+        b=zK3IEFstj6umGjeW0AfBGTsjk/ygZLh3nCTsK9AeIktywwbdVljsfWFUSxrw/++eSG
+         A5TY2+LS1mwSrJv+p6zLJ1DaREgVhkVtPM+uxHdAEweZN2XD3qd/vCPNlodkt3raVrAH
+         f439Me8HIVYGB7FtH/J9BXNQoZSTewl8utLrVYGk0J5bPQsI/3q5wvCJVC7Ug2hNJZkT
+         R0DOxcY6U8/ehiAwfV3vHAU0Txhtke3CSeUCwotSNu8EYhW7abwUm8gY8zYemxTXuBSG
+         6oXRQBtls9EApLvcOPAQclhWMGsmW7PzhB6EpdZLI1jBup7TmEvHh3z1jnpOieX5kata
+         ZIaQ==
+X-Gm-Message-State: AJIora/ddliQn92pN5IXIT0Rvfa2+3cAvq3B7BbdhhP2fBbpcW1U6sKK
+        6lIz2FFUHb0iv5oQV6p04WMwyYHQetMIrrq4UYWUbARK0xF1w1Z/ENewgMwlyO6m/QnMzcZeCRA
+        gtcts9kGpKs1VKSOWHNHvArXpO6lOlu01Exiq+OxuHhnu
+X-Received: by 2002:a17:90b:3c0c:b0:1ef:e647:ff48 with SMTP id pb12-20020a17090b3c0c00b001efe647ff48mr38420245pjb.173.1658152446341;
+        Mon, 18 Jul 2022 06:54:06 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tYWWG5+dHj3RDcKvwCfnQ6XdC8dUoOKHbWxuHGS02OBFyhEdIY4FE1XeYYySiizoSxEBwA/mzE4iBKSc2KOic=
+X-Received: by 2002:a17:90b:3c0c:b0:1ef:e647:ff48 with SMTP id
+ pb12-20020a17090b3c0c00b001efe647ff48mr38420212pjb.173.1658152446035; Mon, 18
+ Jul 2022 06:54:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d480a850-601b-cda2-b671-04d839c98429@amd.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220712145850.599666-1-benjamin.tissoires@redhat.com>
+ <20220712145850.599666-3-benjamin.tissoires@redhat.com> <CAP01T766-JGd=6twHYhWDmjVBk7wuuvWMLFyDZ656fka6GW8Cw@mail.gmail.com>
+In-Reply-To: <CAP01T766-JGd=6twHYhWDmjVBk7wuuvWMLFyDZ656fka6GW8Cw@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 18 Jul 2022 15:53:55 +0200
+Message-ID: <CAO-hwJ+RU89t=w5RgJNG=G46veHHF6NiR1zAsec9YuYrX=FF8A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 02/23] bpf/verifier: allow kfunc to read user
+ provided context
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 01:36:15PM +0200, Gupta, Pankaj wrote:
-> > Currently in mmu_notifier validate path, hva range is recorded and then
-> > checked in the mmu_notifier_retry_hva() from page fault path. However
-> > for the to be introduced private memory, a page fault may not have a hva
-> 
-> As this patch appeared in v7, just wondering did you see an actual bug
-> because of it? And not having corresponding 'hva' occurs only with private
-> memory because its not mapped to host userspace?
-
-The addressed problem is not new in this version, previous versions I
-also had code to handle it (just in different way). But the problem is:
-mmu_notifier/memfile_notifier may be in the progress of invalidating a
-pfn that obtained earlier in the page fault handler, when happens, we
-should retry the fault. In v6 I used global mmu_notifier_retry() for
-memfile_notifier but that can block unrelated mmu_notifer invalidation
-which has hva range specified.
-
-Sean gave a comment at https://lkml.org/lkml/2022/6/17/1001 to separate
-memfile_notifier from mmu_notifier but during the implementation I
-realized we actually can reuse the same code for shared and private
-memory if both using gpa range and that can simplify the code handling
-in kvm_zap_gfn_range and some other code (e.g. we don't need two
-versions for memfile_notifier/mmu_notifier).
-
-Adding gpa range for private memory invalidation also relieves the
-above blocking issue between private memory page fault and mmu_notifier.
-
-Chao
-> 
-> Thanks,
-> Pankaj
-> 
-> > associated, checking gfn(gpa) makes more sense. For existing non private
-> > memory case, gfn is expected to continue to work.
-> > 
-> > The patch also fixes a potential bug in kvm_zap_gfn_range() which has
-> > already been using gfn when calling kvm_inc/dec_notifier_count() in
-> > current code.
-> > 
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+On Sat, Jul 16, 2022 at 9:48 PM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Tue, 12 Jul 2022 at 17:02, Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > When a kfunc was trying to access data from context in a syscall eBPF
+> > program, the verifier was rejecting the call.
+> > This is because the syscall context is not known at compile time, and
+> > so we need to check this when actually accessing it.
+> >
+> > Check for the valid memory access and allow such situation to happen.
+> >
+> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> >
 > > ---
-> >   arch/x86/kvm/mmu/mmu.c   |  2 +-
-> >   include/linux/kvm_host.h | 18 ++++++++----------
-> >   virt/kvm/kvm_main.c      |  6 +++---
-> >   3 files changed, 12 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index f7fa4c31b7c5..0d882fad4bc1 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -4182,7 +4182,7 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
-> >   		return true;
-> >   	return fault->slot &&
-> > -	       mmu_notifier_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
-> > +	       mmu_notifier_retry_gfn(vcpu->kvm, mmu_seq, fault->gfn);
-> >   }
-> >   static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index 0bdb6044e316..e9153b54e2a4 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -767,8 +767,8 @@ struct kvm {
-> >   	struct mmu_notifier mmu_notifier;
-> >   	unsigned long mmu_notifier_seq;
-> >   	long mmu_notifier_count;
-> > -	unsigned long mmu_notifier_range_start;
-> > -	unsigned long mmu_notifier_range_end;
-> > +	gfn_t mmu_notifier_range_start;
-> > +	gfn_t mmu_notifier_range_end;
-> >   #endif
-> >   	struct list_head devices;
-> >   	u64 manual_dirty_log_protect;
-> > @@ -1362,10 +1362,8 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
-> >   void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> >   #endif
-> > -void kvm_inc_notifier_count(struct kvm *kvm, unsigned long start,
-> > -				   unsigned long end);
-> > -void kvm_dec_notifier_count(struct kvm *kvm, unsigned long start,
-> > -				   unsigned long end);
-> > +void kvm_inc_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end);
-> > +void kvm_dec_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end);
-> >   long kvm_arch_dev_ioctl(struct file *filp,
-> >   			unsigned int ioctl, unsigned long arg);
-> > @@ -1923,9 +1921,9 @@ static inline int mmu_notifier_retry(struct kvm *kvm, unsigned long mmu_seq)
-> >   	return 0;
-> >   }
-> > -static inline int mmu_notifier_retry_hva(struct kvm *kvm,
-> > +static inline int mmu_notifier_retry_gfn(struct kvm *kvm,
-> >   					 unsigned long mmu_seq,
-> > -					 unsigned long hva)
-> > +					 gfn_t gfn)
-> >   {
-> >   	lockdep_assert_held(&kvm->mmu_lock);
-> >   	/*
-> > @@ -1935,8 +1933,8 @@ static inline int mmu_notifier_retry_hva(struct kvm *kvm,
-> >   	 * positives, due to shortcuts when handing concurrent invalidations.
-> >   	 */
-> >   	if (unlikely(kvm->mmu_notifier_count) &&
-> > -	    hva >= kvm->mmu_notifier_range_start &&
-> > -	    hva < kvm->mmu_notifier_range_end)
-> > +	    gfn >= kvm->mmu_notifier_range_start &&
-> > +	    gfn < kvm->mmu_notifier_range_end)
-> >   		return 1;
-> >   	if (kvm->mmu_notifier_seq != mmu_seq)
-> >   		return 1;
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index da263c370d00..4d7f0e72366f 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -536,8 +536,7 @@ static void kvm_mmu_notifier_invalidate_range(struct mmu_notifier *mn,
-> >   typedef bool (*hva_handler_t)(struct kvm *kvm, struct kvm_gfn_range *range);
-> > -typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
-> > -			     unsigned long end);
-> > +typedef void (*on_lock_fn_t)(struct kvm *kvm, gfn_t start, gfn_t end);
-> >   typedef void (*on_unlock_fn_t)(struct kvm *kvm);
-> > @@ -624,7 +623,8 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
-> >   				locked = true;
-> >   				KVM_MMU_LOCK(kvm);
-> >   				if (!IS_KVM_NULL_FN(range->on_lock))
-> > -					range->on_lock(kvm, range->start, range->end);
-> > +					range->on_lock(kvm, gfn_range.start,
-> > +							    gfn_range.end);
-> >   				if (IS_KVM_NULL_FN(range->handler))
-> >   					break;
-> >   			}
+> >
+> > new in v6
+> > ---
+> >  kernel/bpf/verifier.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 328cfab3af60..f6af57a84247 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -248,6 +248,7 @@ struct bpf_call_arg_meta {
+> >         struct bpf_map *map_ptr;
+> >         bool raw_mode;
+> >         bool pkt_access;
+> > +       bool is_kfunc;
+> >         u8 release_regno;
+> >         int regno;
+> >         int access_size;
+> > @@ -5170,6 +5171,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+> >                                    struct bpf_call_arg_meta *meta)
+> >  {
+> >         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
+> > +       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+> >         u32 *max_access;
+> >
+> >         switch (base_type(reg->type)) {
+> > @@ -5223,6 +5225,19 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+> >                                 env,
+> >                                 regno, reg->off, access_size,
+> >                                 zero_size_allowed, ACCESS_HELPER, meta);
+> > +       case PTR_TO_CTX:
+> > +               /* in case of a kfunc called in a program of type SYSCALL, the context is
+> > +                * user supplied, so not computed statically.
+> > +                * Dynamically check it now
+> > +                */
+> > +               if (prog_type == BPF_PROG_TYPE_SYSCALL && meta && meta->is_kfunc) {
+> > +                       enum bpf_access_type access_t = meta->raw_mode ? BPF_WRITE : BPF_READ;
+>
+> small nit: _t suffix is used for types, so you could probably rename
+> this. maybe atype?
+
+Ack, fixed locally.
+
+>
+> > +
+> > +                       return check_mem_access(env, env->insn_idx, regno, access_size, BPF_B,
+> > +                                               access_t, -1, false);
+>
+> If I read the code correctly, this makes the max_ctx_offset of prog
+> access_size + 1 (off + size_to_bytes(BPF_B)), which is 1 more than the
+> actual size being accessed.
+
+Oh, correct. I am mixing offset and access_size, which creates this :(
+
+>
+> This also messes up check_helper_mem_access when it allows NULL, 0
+> pair to pass (because check is against actual size + 1). We do allow
+> passing NULL when size is 0 for kfuncs (see zero_size_allowed is true
+
+I am a little bit confused by how check_mem_size_reg() treats the case
+when reg->umin_value == 0.
+
+What does it mean to call check_helper_mem_access() with a 0 size if
+we have zero_size_allowed?
+
+Can I just have in the PTR_TO_CTX case: "if (access_size == 0) return
+zero_size_allowed ? 0 : -EINVAL;" or should I only allow the call if
+the ptr in the register is null?
+
+> in check_mem_size_reg), so your hid_hw_request function is missing
+> that NULL check for buf too.
+
+Actually, in hid_hw_request() we ensure buf__sz is greater than 1, so
+buf can not be null. But I agree it doesn't hurt to have that extra
+check to be sure (we are called from a syscall program, so not time
+sensitive).
+
+>
+> In the selftest that checks for failure in loading
+> + bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(*args) + 1);
+> so it will still fail with just sizeof(*args).
+
+Good point.
+
+>
+> Also please add coverage for this case in the next version.
+
+I added both (NULL, 0) and (&args->data, sizeof(*args)) as passing
+tests locally.
+
+And thanks for the review!
+
+Cheers,
+Benjamin
+
+
+>
+> > +               }
+> > +
+> > +               fallthrough;
+> >         default: /* scalar_value or invalid ptr */
+> >                 /* Allow zero-byte read from NULL, regardless of pointer type */
+> >                 if (zero_size_allowed && access_size == 0 &&
+> > @@ -5335,6 +5350,7 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
+> >         WARN_ON_ONCE(regno < BPF_REG_2 || regno > BPF_REG_5);
+> >
+> >         memset(&meta, 0, sizeof(meta));
+> > +       meta.is_kfunc = true;
+> >
+> >         if (may_be_null) {
+> >                 saved_reg = *mem_reg;
+> > --
+> > 2.36.1
+> >
+>
+
