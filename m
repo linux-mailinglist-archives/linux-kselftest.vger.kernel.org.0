@@ -2,174 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4886D578F03
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 02:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FF95790CD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 04:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236639AbiGSAON (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Jul 2022 20:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S236631AbiGSCZg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Jul 2022 22:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236640AbiGSAOC (ORCPT
+        with ESMTP id S233749AbiGSCZf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Jul 2022 20:14:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2FC5DF6
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Jul 2022 17:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658189638;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1wKQgGK8BeGoD+ZzlJLfhSADz2IoDkHod2Zuz9U3oUY=;
-        b=LzNCudYm35amssgO5AXNgwuBczJ5n1OAZjb2HEy9I2xj5dtJRdbflMeUy8pEeY/7v44HVd
-        47SKNyJvmyUG/BQfNA6/P34z6+ZL3eIqSfVeDyH6tlllIX44gOdameygg0o4GpmW2Nm8yH
-        22e9INAaAbSQiuKJg3eMXRQHP0B5whw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-XkZOUjJhMw6uJ_0WPGr90Q-1; Mon, 18 Jul 2022 20:13:57 -0400
-X-MC-Unique: XkZOUjJhMw6uJ_0WPGr90Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9C8D18037AA;
-        Tue, 19 Jul 2022 00:13:56 +0000 (UTC)
-Received: from [10.64.54.37] (vpn2-54-37.bne.redhat.com [10.64.54.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 560002166B26;
-        Tue, 19 Jul 2022 00:13:53 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3] KVM: selftests: Fix target thread to be migrated in
- rseq_test
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, oliver.upton@linux.dev,
-        shuah@kernel.org, maz@kernel.org, pbonzini@redhat.com,
-        shan.gavin@gmail.com
-References: <20220719013540.3477946-1-gshan@redhat.com>
- <YtXw5DKI7z9s1TA6@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <08b942d5-ad06-4c38-ee53-8ff3caf30694@redhat.com>
-Date:   Tue, 19 Jul 2022 12:13:32 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
-MIME-Version: 1.0
-In-Reply-To: <YtXw5DKI7z9s1TA6@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 18 Jul 2022 22:25:35 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A283B96C;
+        Mon, 18 Jul 2022 19:25:32 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 5B9A63200931;
+        Mon, 18 Jul 2022 22:25:29 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Mon, 18 Jul 2022 22:25:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1658197528; x=1658283928; bh=wHVY6i+Yaf
+        5t2+yX0N5Kt7nv5hQLK0Oovx2GIklJtSQ=; b=aTpX4sGwPceYAcol+aRJwJRpUW
+        Ws0qvx10J5oXHkpQBZfDd2szjxbRk2gggw7TMmdyEZxsx3aMMiWA3LmZqfsoqYwc
+        0D1pMO8fr4NxKWDrW8iJ0zBkkZG997AGfIqQHvIJ/gwCn6SoAC7QqjiMFEck0LsR
+        8nZxCm2jGaOkk8BX7jZtLBQN2NjBNXF7ukK8Sxwwx/xl68nocPpDYTLFyBDXyR+8
+        OkphJt3JHytQV7K5Ii1rcm4eyO4g5eyat003iLxCIl2u2T/5PJ+gDRunsBAC1Y/o
+        SKlqHVZ+KGl10INkANhcQKpO8hNdosinPTA2bpJg3rZNsoFkJcUj3gs+5NgA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1658197528; x=1658283928; bh=wHVY6i+Yaf5t2+yX0N5Kt7nv5hQL
+        K0Oovx2GIklJtSQ=; b=pS78PrPFoQbxYdgdgAJreVahHS11jVFvWdMb3BTpyocV
+        X5EccwSepuM+WJzfS3iBN65HO1W+WN6fcKN0p12qSfiAf7STxbnlBoBpN/eUXGLa
+        pil03+GUJM18xxStHOjkzhov4l/bA2mvNqojP3OfYEKa9teXyfGu2FCIGtcW59UX
+        9CNCih44OqbAiYxDeFxDZ5IrHC+Al6wun1/71Aj7xjbbOCqiN8jebNOwOe57dP8+
+        O+ial22JAj0ojjIe38t4IFkLdPF7CX1/udxpADBGcVNxk+AJUsUtlJTVKVcHehlb
+        9/JAbF0Uh5XcLUktjmXLVcpPnBXv8DeyxYlR25tIog==
+X-ME-Sender: <xms:GBbWYu8ZyEgtlAK2eauK7jhuhU6lg45oK9G8OEn-VMsP168n6923IA>
+    <xme:GBbWYuvgyTZyN1rcXXx5O1R8Zw234ebXd_yGyrfI9I20mMLD74nrruGNRyhaXQE_S
+    e4dKaKvO-A9wgI2dQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudekledgheelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpedvvedvieeuteehiefftdfhjeevvdetffevgffhhfeuudffhedvkeef
+    veeiueejleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgurdgr
+    uh
+X-ME-Proxy: <xmx:GBbWYkA-DM7EumxPoo2RxEjArKOUfIEpPjB3TzZzDepky_KiOx8uZQ>
+    <xmx:GBbWYmdtB-Mn7Ls71Sur7OJu5nFEJRqEpJs-wIoFsW_5HziqX6uwVw>
+    <xmx:GBbWYjPjq7-YP3O2dQ28a68ufaUcXYd3JFgHKrOBb1GE-g4a_2gLJQ>
+    <xmx:GBbWYkGo7aUd4jAMXTRZUB4fubtAZ7e7JimyaJdRDd_7SapwObWILQ>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 31304A6007C; Mon, 18 Jul 2022 22:25:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-755-g3e1da8b93f-fm-20220708.002-g3e1da8b9
+Mime-Version: 1.0
+Message-Id: <c7ae6f71-d977-49dd-b4a7-db8351b710e8@www.fastmail.com>
+In-Reply-To: <CABVgOSnhKMKc0_LvHVYPzL5NVnEuL51nQSm+8bZbjO=Q4seYiw@mail.gmail.com>
+References: <20220715040354.2629856-1-davidgow@google.com>
+ <38480b33-3b4d-44d4-bb24-6ab199d0c793@www.fastmail.com>
+ <CABVgOSnhKMKc0_LvHVYPzL5NVnEuL51nQSm+8bZbjO=Q4seYiw@mail.gmail.com>
+Date:   Tue, 19 Jul 2022 11:55:06 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "David Gow" <davidgow@google.com>
+Cc:     "Brendan Higgins" <brendanhiggins@google.com>,
+        "Daniel Latypov" <dlatypov@google.com>,
+        "Shuah Khan" <skhan@linuxfoundation.org>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "kbuild test robot" <lkp@intel.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "Sadiya Kazi" <sadiyakazi@google.com>,
+        "KUnit Development" <kunit-dev@googlegroups.com>
+Subject: Re: [PATCH] mmc: sdhci-of-aspeed: test: Fix dependencies when KUNIT=m
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Sean,
 
-On 7/19/22 9:46 AM, Sean Christopherson wrote:
-> On Tue, Jul 19, 2022, Gavin Shan wrote:
->> ---
->> v3: Improved changelog (Oliver Upon)
-> 
-> Sorry I didn't catch v3, I saw that you waited but just didn't get to this earlier :-/
-> 
 
-Not a problem at all :)
-
->> ---
->>   tools/testing/selftests/kvm/rseq_test.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
+On Tue, 19 Jul 2022, at 11:11, David Gow wrote:
+> On Mon, Jul 18, 2022 at 8:45 AM Andrew Jeffery <andrew@aj.id.au> wrote:
 >>
->> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
->> index 4158da0da2bb..c83ac7b467f8 100644
->> --- a/tools/testing/selftests/kvm/rseq_test.c
->> +++ b/tools/testing/selftests/kvm/rseq_test.c
->> @@ -38,6 +38,7 @@ static __thread volatile struct rseq __rseq = {
->>    */
->>   #define NR_TASK_MIGRATIONS 100000
->>   
->> +static pid_t rseq_tid;
->>   static pthread_t migration_thread;
->>   static cpu_set_t possible_mask;
->>   static int min_cpu, max_cpu;
->> @@ -106,7 +107,8 @@ static void *migration_worker(void *ign)
-> 
-> Pass the target TID to the worker, then there's no need to use a global and no
-> chance of consuming rseq_tid "uninitialized".  The casting to convert gettid() to
-> a "void *" is annoying, but not the end of the world.
-> 
-
-I was thinking of the scheme, but passing the address of a local variable
-for the thread ID. Your suggestion also makes sense to me.
-
->>   		 * stable, i.e. while changing affinity is in-progress.
->>   		 */
->>   		smp_wmb();
->> -		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
->> +		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask),
->> +				      &allowed_mask);
-> 
-> Eh, let this poke out, don't think it's worth wrapping here.
-> 
-
-Ok, I was trying to follow rule of 80-characters per line, even it's
-not strictly needed nowadays. It's also fine not to follow :)
-
-I just picked your code and posted v4:
-
-https://lore.kernel.org/kvmarm/20220719020830.3479482-1-gshan@redhat.com/T/#u
-
-Thanks,
-Gavin
-
-> E.g.
-> 
-> ---
->   tools/testing/selftests/kvm/rseq_test.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index aba7be178dab..a54d4d05a058 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -80,8 +80,9 @@ static int next_cpu(int cpu)
->   	return cpu;
->   }
-> 
-> -static void *migration_worker(void *ign)
-> +static void *migration_worker(void *__rseq_tid)
->   {
-> +	pid_t rseq_tid = (pid_t)(unsigned long)__rseq_tid;
->   	cpu_set_t allowed_mask;
->   	int r, i, cpu;
-> 
-> @@ -104,7 +105,7 @@ static void *migration_worker(void *ign)
->   		 * stable, i.e. while changing affinity is in-progress.
->   		 */
->   		smp_wmb();
-> -		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> +		r = sched_setaffinity(rseq_tid, sizeof(allowed_mask), &allowed_mask);
->   		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
->   			    errno, strerror(errno));
->   		smp_wmb();
-> @@ -227,7 +228,8 @@ int main(int argc, char *argv[])
->   	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
->   	ucall_init(vm, NULL);
-> 
-> -	pthread_create(&migration_thread, NULL, migration_worker, 0);
-> +	pthread_create(&migration_thread, NULL, migration_worker,
-> +		       (void *)(unsigned long)gettid());
-> 
->   	for (i = 0; !done; i++) {
->   		vcpu_run(vcpu);
-> 
-> base-commit: ad6cb756bb497997032df2bda7cbdff076e4a66a
-> --
+>>
+>>
+>> On Fri, 15 Jul 2022, at 13:33, David Gow wrote:
+>> > While the sdhci-of-aspeed KUnit tests do work when builtin, and do work
+>> > when KUnit itself is being built as a module, the two together break.
+>> >
+>> > This is because the KUnit tests (understandably) depend on KUnit, so a
+>> > built-in test cannot build if KUnit is a module.
+>> >
+>> > Fix this by adding a dependency on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y),
+>> > which only excludes this one problematic configuration.
+>> >
+>> > This was reported on a nasty openrisc-randconfig run by the kernel test
+>> > robot, though for some reason (compiler optimisations removing the test
+>> > code?) I wasn't able to reproduce it locally on x86:
+>> > https://lore.kernel.org/linux-mm/202207140122.fzhlf60k-lkp@intel.com/T/
+>> >
+>> > Fixes: 291cd54e5b05 ("mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro")
+>> > Reported-by: kernel test robot <lkp@intel.com>
+>> > Signed-off-by: David Gow <davidgow@google.com>
+>> > ---
+>> >  drivers/mmc/host/Kconfig | 1 +
+>> >  1 file changed, 1 insertion(+)
+>> >
+>> > diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+>> > index 10c563999d3d..e63608834411 100644
+>> > --- a/drivers/mmc/host/Kconfig
+>> > +++ b/drivers/mmc/host/Kconfig
+>> > @@ -171,6 +171,7 @@ config MMC_SDHCI_OF_ASPEED
+>> >  config MMC_SDHCI_OF_ASPEED_TEST
+>> >       bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
+>> >       depends on MMC_SDHCI_OF_ASPEED && KUNIT
+>> > +     depends on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y)
+>>
+>> Should this replace the line above? Isn't it just more constrained?
+>>
 >
+> We need both lines. The first ensures that both KUNIT and
+> MMC_SDHCI_OF_ASPEED are available, and the second just targets the
+> case where KUNIT=m and MMC_SDHCI_OF_ASPEED=y.
+> If we got rid of the first line, we could end up compiling this
+> without KUnit at all (if MMC_SDHCI_OF_ASPEED=m).
 
+Ah, yes. Fair enough!
+
+Acked-by: Andrew Jeffery <andrew@aj.id.au>
