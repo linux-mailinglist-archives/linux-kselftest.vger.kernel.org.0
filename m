@@ -2,21 +2,21 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF1D57A92D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 23:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7396157A92F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 23:45:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240126AbiGSVpW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Jul 2022 17:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S240172AbiGSVpX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Jul 2022 17:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240133AbiGSVpU (ORCPT
+        with ESMTP id S240074AbiGSVpU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 19 Jul 2022 17:45:20 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAA65B7E2;
-        Tue, 19 Jul 2022 14:45:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA5FDE0A0;
+        Tue, 19 Jul 2022 14:45:19 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj5qH002591;
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 26JLj5ZR002592;
         Tue, 19 Jul 2022 23:45:05 +0200
 From:   Willy Tarreau <w@1wt.eu>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
@@ -28,9 +28,9 @@ Cc:     Pranith Kumar <bobby.prani@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH 10/17] selftests/nolibc: recreate and populate /dev and /proc if missing
-Date:   Tue, 19 Jul 2022 23:44:42 +0200
-Message-Id: <20220719214449.2520-12-w@1wt.eu>
+Subject: [PATCH 11/17] selftests/nolibc: condition some tests on /proc existence
+Date:   Tue, 19 Jul 2022 23:44:43 +0200
+Message-Id: <20220719214449.2520-13-w@1wt.eu>
 X-Mailer: git-send-email 2.17.5
 In-Reply-To: <20220719214449.2520-1-w@1wt.eu>
 References: <20220719214449.2520-1-w@1wt.eu>
@@ -42,97 +42,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Most of the time the program will be run alone in an initramfs. There
-is no value in requiring the user to populate /dev and /proc for such
-tests, we can do it ourselves, and it participates to the tests at the
-same time.
-
-What's done here is that when called as init (getpid()==1) we check
-if /dev exists or create it, if /dev/console and /dev/null exists,
-otherwise we try to mount a devtmpfs there, and if it fails we fall
-back to mknod. The console is reopened if stdout was closed. Finally
-/proc is created and mounted if /proc/self cannot be found. This is
-sufficient for most tests.
+If /proc is not available (program run inside a chroot or without
+sufficient permissions), it's better to disable the associated tests.
+Some will be preserved like the ones which check for a failure to
+create some entries there since they're still supposed to fail.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 56 ++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 45793b6f2244..0bbfe0b3b648 100644
+index 0bbfe0b3b648..26d61ec910c1 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -530,6 +530,54 @@ int run_stdlib(int min, int max)
- 	return ret;
- }
+@@ -413,11 +413,15 @@ int test_getdents64(const char *dir)
+ int run_syscall(int min, int max)
+ {
+ 	struct stat stat_buf;
++	int proc;
+ 	int test;
+ 	int tmp;
+ 	int ret = 0;
+ 	void *p1, *p2;
  
-+/* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
-+int prepare(void)
-+{
-+	struct stat stat_buf;
++	/* <proc> indicates whether or not /proc is mounted */
++	proc = stat("/proc", &stat_buf) == 0;
 +
-+	/* It's possible that /dev doesn't even exist or was not mounted, so
-+	 * we'll try to create it, mount it, or create minimal entries into it.
-+	 * We want at least /dev/null and /dev/console.
-+	 */
-+	if (stat("/dev/.", &stat_buf) == 0 || mkdir("/dev", 0755) == 0) {
-+		if (stat("/dev/console", &stat_buf) != 0 ||
-+		    stat("/dev/null", &stat_buf) != 0) {
-+			/* try devtmpfs first, otherwise fall back to manual creation */
-+			if (mount("/dev", "/dev", "devtmpfs", 0, 0) != 0) {
-+				mknod("/dev/console", 0600 | S_IFCHR, makedev(5, 1));
-+				mknod("/dev/null",    0666 | S_IFCHR, makedev(1, 3));
-+			}
-+		}
-+	}
-+
-+	/* If no /dev/console was found before calling init, stdio is closed so
-+	 * we need to reopen it from /dev/console. If it failed above, it will
-+	 * still fail here and we cannot emit a message anyway.
-+	 */
-+	if (close(dup(1)) == -1) {
-+		int fd = open("/dev/console", O_RDWR);
-+
-+		if (fd >= 0) {
-+			if (fd != 0)
-+				dup2(fd, 0);
-+			if (fd != 1)
-+				dup2(fd, 1);
-+			if (fd != 2)
-+				dup2(fd, 2);
-+			if (fd > 2)
-+				close(fd);
-+			puts("\nSuccessfully reopened /dev/console.");
-+		}
-+	}
-+
-+	/* try to mount /proc if not mounted. Silently fail otherwise */
-+	if (stat("/proc/.", &stat_buf) == 0 || mkdir("/proc", 0755) == 0) {
-+		if (stat("/proc/self", &stat_buf) != 0)
-+			mount("/proc", "/proc", "proc", 0, 0);
-+	}
-+
-+	return 0;
-+}
+ 	for (test = min; test >= 0 && test <= max; test++) {
+ 		int llen = 0; // line length
  
- /* This is the definition of known test names, with their functions */
- static struct test test_names[] = {
-@@ -550,6 +598,14 @@ int main(int argc, char **argv, char **envp)
- 
- 	environ = envp;
- 
-+	/* when called as init, it's possible that no console was opened, for
-+	 * example if no /dev file system was provided. We'll check that fd#1
-+	 * was opened, and if not we'll attempt to create and open /dev/console
-+	 * and /dev/null that we'll use for later tests.
-+	 */
-+	if (getpid() == 1)
-+		prepare();
-+
- 	/* the definition of a series of tests comes from either argv[1] or the
- 	 * "NOLIBC_TEST" environment variable. It's made of a comma-delimited
- 	 * series of test names and optional ranges:
+@@ -438,12 +442,12 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(chdir_root);        EXPECT_SYSZR(1, chdir("/")); break;
+ 		CASE_TEST(chdir_dot);         EXPECT_SYSZR(1, chdir(".")); break;
+ 		CASE_TEST(chdir_blah);        EXPECT_SYSER(1, chdir("/blah"), -1, ENOENT); break;
+-		CASE_TEST(chmod_net);         EXPECT_SYSZR(1, chmod("/proc/self/net", 0555)); break;
+-		CASE_TEST(chmod_self);        EXPECT_SYSER(1, chmod("/proc/self", 0555), -1, EPERM); break;
+-		CASE_TEST(chown_self);        EXPECT_SYSER(1, chown("/proc/self", 0, 0), -1, EPERM); break;
++		CASE_TEST(chmod_net);         EXPECT_SYSZR(proc, chmod("/proc/self/net", 0555)); break;
++		CASE_TEST(chmod_self);        EXPECT_SYSER(proc, chmod("/proc/self", 0555), -1, EPERM); break;
++		CASE_TEST(chown_self);        EXPECT_SYSER(proc, chown("/proc/self", 0, 0), -1, EPERM); break;
+ 		CASE_TEST(chroot_root);       EXPECT_SYSZR(1, chroot("/")); break;
+ 		CASE_TEST(chroot_blah);       EXPECT_SYSER(1, chroot("/proc/self/blah"), -1, ENOENT); break;
+-		CASE_TEST(chroot_exe);        EXPECT_SYSER(1, chroot("/proc/self/exe"), -1, ENOTDIR); break;
++		CASE_TEST(chroot_exe);        EXPECT_SYSER(proc, chroot("/proc/self/exe"), -1, ENOTDIR); break;
+ 		CASE_TEST(close_m1);          EXPECT_SYSER(1, close(-1), -1, EBADF); break;
+ 		CASE_TEST(close_dup);         EXPECT_SYSZR(1, close(dup(0))); break;
+ 		CASE_TEST(dup_0);             tmp = dup(0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
+@@ -464,7 +468,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(link_root1);        EXPECT_SYSER(1, link("/", "/"), -1, EEXIST); break;
+ 		CASE_TEST(link_blah);         EXPECT_SYSER(1, link("/proc/self/blah", "/blah"), -1, ENOENT); break;
+ 		CASE_TEST(link_dir);          EXPECT_SYSER(1, link("/", "/blah"), -1, EPERM); break;
+-		CASE_TEST(link_cross);        EXPECT_SYSER(1, link("/proc/self/net", "/blah"), -1, EXDEV); break;
++		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/net", "/blah"), -1, EXDEV); break;
+ 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
+ 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
+ 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
 -- 
 2.17.5
 
