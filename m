@@ -2,95 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD26579540
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 10:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21AA57956B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 10:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiGSIci (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Jul 2022 04:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
+        id S237075AbiGSImM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Jul 2022 04:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiGSIch (ORCPT
+        with ESMTP id S236498AbiGSImK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:32:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882C220D1;
-        Tue, 19 Jul 2022 01:32:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91E3DB81893;
-        Tue, 19 Jul 2022 08:32:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0F3C341C6;
-        Tue, 19 Jul 2022 08:32:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658219554;
-        bh=pplzxYz6sIF7Mjy2044C1CiT3gW+EWOdS76ev7aFkFE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FwKxrFSVQL3hlswBw4lRRBHWH90KbD1z2uO1coRHKpavqBkt+9nh3n0GtVERzfPc6
-         2orAVr7dY8eJGmGWVSVuCLTk6Ot/5ycingm10rYQGCNOgGe7Wpv9VH8fBDB+l+jG+p
-         evypO8rjE60vG4OhVd9PuZOD1lpv5dT2Q9YeCVwLkEOfgfN1/objmmgwMMxJHifuOc
-         cBNIs743ctJu0UmjVd8O1EnHTemThPNu6vD6imLNjUdzY0AZdlAVMJDyx9rpMtzsGl
-         aQQhwgSRaFCIdUVpipsARyiuYboLM1lfvOZG0up8ex3fHmgEDquXiHFdMgzKbFqhp7
-         W2NK4/VcUFMNQ==
-Date:   Tue, 19 Jul 2022 10:32:29 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] ksefltest: pidfd: Fix wait_states: Test terminated by
- timeout
-Message-ID: <20220719083229.b2yn2msrklmo2nb5@wittgenstein>
-References: <20220718025826.29148-1-lizhijian@fujitsu.com>
+        Tue, 19 Jul 2022 04:42:10 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25EB2CDE0
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jul 2022 01:42:07 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id z25so23609728lfr.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Jul 2022 01:42:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Wnu/3vIy/EyKk8Ed8D6cTFH8iy5jebDSZ/AanZy9t/s=;
+        b=do2BHwMsu7F2Z1rq1MpWG2gqnQ1DcjmoS4NUR8B6n3WDVOaTCFynyNxyt7SrK/HPcF
+         eAb5C+TWX4ITxCWjvZyUEut0VRjv/liUxMP9/uqWFoPiH51O9kqVxqdyCF1SKGqwRRYN
+         T75oPSUR8mkUZG6aiELNof7Cki7xb4PA43XK3eDIw/ZyPZQ6PdJtVOWsvNDuOFYcudfv
+         wE3Yw9zDe2wjbyycIDp/TT4XdalYKTI4MVRyYiJB31jqelmjAXki91jHV2sW8AmSfxvS
+         IPYv180w7UDXDdWD/sbn6oD/hRfzAk/2CdPpZMP2QLJcmB0Qc1KD24/VnM7zt68lgAuI
+         Caig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Wnu/3vIy/EyKk8Ed8D6cTFH8iy5jebDSZ/AanZy9t/s=;
+        b=ekU/npxSFyadA7AWRWUocrAysZZfCkULNpGC2C1fTWW2l8ygCsWm390JG4jJ2TW4ka
+         WNf/BitwrYnnBCaIX5t26ZwkVI/lvU4YJ0TGH9cYV4AzrmxVjeXnj7yaj5Qu+3pbl6F/
+         l/J4ks7Uf9lKBqCXZuDwQ7GXzJG8HFrsaTEjHjDe8nmD76wCTrAL/cRBZv+j8nc29aop
+         Iv160+BWgVSgdsMR1NpCKAvD8PJSv8erfcCQ91WprtYFgnjG3WNcANZCDxwj+4pFs+By
+         dqLCgID4RsBqimKYnhcawkGp/lZ9J3GSFt5+WgAWVLtfpYawOjZlRoAdSPrul3yHZ46Y
+         NLKQ==
+X-Gm-Message-State: AJIora8M9FWxpfvw7ffq0gDYq992s33p64zlPINnQhtAMctxNdZErWBW
+        9zu0djQPrEjOROiWhD9ehBGjUWuTsRJIk81gkdG+/w==
+X-Google-Smtp-Source: AGRyM1tIw/nL1JsDz+rLmh9KoRcKXbYbJHhm6a4Q9+Si0H00rIVXplg0s5C+t128uWGdB1HIEC93R143WyiOpvIzb54=
+X-Received: by 2002:a05:6512:2522:b0:489:daa9:467 with SMTP id
+ be34-20020a056512252200b00489daa90467mr17375016lfb.71.1658220126191; Tue, 19
+ Jul 2022 01:42:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220718025826.29148-1-lizhijian@fujitsu.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220715040354.2629856-1-davidgow@google.com>
+In-Reply-To: <20220715040354.2629856-1-davidgow@google.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 19 Jul 2022 10:41:28 +0200
+Message-ID: <CAPDyKFo0AcNayzJa3SZOS4HX3tSBPT57Z+h8cJ9i56uz5ympRw@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-of-aspeed: test: Fix dependencies when KUNIT=m
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, Sadiya Kazi <sadiyakazi@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 02:58:39AM +0000, lizhijian@fujitsu.com wrote:
-> 0Day/LKP observed that the kselftest blocks forever since one of the
-> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
-> the source, we found that it blocks at:
-> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
-> 
-> wait_states has below testing flow:
->   CHILD                 PARENT
->   ---------------+--------------
-> 1 STOP itself
-> 2                   WAIT for CHILD STOPPED
-> 3                   SIGNAL CHILD to CONT
-> 4 CONT
-> 5 STOP itself
-> 5'                  WAIT for CHILD CONT
-> 6                   WAIT for CHILD STOPPED
-> 
-> The problem is that the kernel cannot ensure the order of 5 and 5', once
-> 5's goes first, the test will fail.
-> 
-> we can reproduce it by:
-> $ while true; do make run_tests -C pidfd; done
-> 
-> Introduce a blocking read in child process to make sure the parent can
-> check its WCONTINUED.
-> 
-> CC: Philip Li <philip.li@intel.com>
+On Fri, 15 Jul 2022 at 06:04, David Gow <davidgow@google.com> wrote:
+>
+> While the sdhci-of-aspeed KUnit tests do work when builtin, and do work
+> when KUnit itself is being built as a module, the two together break.
+>
+> This is because the KUnit tests (understandably) depend on KUnit, so a
+> built-in test cannot build if KUnit is a module.
+>
+> Fix this by adding a dependency on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y),
+> which only excludes this one problematic configuration.
+>
+> This was reported on a nasty openrisc-randconfig run by the kernel test
+> robot, though for some reason (compiler optimisations removing the test
+> code?) I wasn't able to reproduce it locally on x86:
+> https://lore.kernel.org/linux-mm/202207140122.fzhlf60k-lkp@intel.com/T/
+>
+> Fixes: 291cd54e5b05 ("mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro")
 > Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
-> I have almost forgotten this patch since the former version post over 6 months
-> ago. This time I just do a rebase and update the comments.
-> V2: rewrite with pipe to avoid usleep
-> ---
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Thanks for sticking with this!
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+I assume this should go together with the other recent kunit patches,
+so please add:
+
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+> ---
+>  drivers/mmc/host/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index 10c563999d3d..e63608834411 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -171,6 +171,7 @@ config MMC_SDHCI_OF_ASPEED
+>  config MMC_SDHCI_OF_ASPEED_TEST
+>         bool "Tests for the ASPEED SDHCI driver" if !KUNIT_ALL_TESTS
+>         depends on MMC_SDHCI_OF_ASPEED && KUNIT
+> +       depends on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y)
+>         default KUNIT_ALL_TESTS
+>         help
+>           Enable KUnit tests for the ASPEED SDHCI driver. Select this
+> --
+> 2.37.0.170.g444d1eabd0-goog
+>
