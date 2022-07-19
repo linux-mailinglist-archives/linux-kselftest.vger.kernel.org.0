@@ -2,109 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D129E579530
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 10:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD26579540
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 10:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235935AbiGSIZz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Jul 2022 04:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S230263AbiGSIci (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Jul 2022 04:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiGSIZy (ORCPT
+        with ESMTP id S229763AbiGSIch (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jul 2022 04:25:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A86865A2;
-        Tue, 19 Jul 2022 01:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658219153; x=1689755153;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CAAeOGWYGAB27VN2UmCW2WgUwGTXzndU5ncbrTlDjyU=;
-  b=P390k6f2/Jctxs+/YX9s4OIBHd7zhPSt53DKL5AKfXdmQDqFFGsGE2FZ
-   txq6AQHeczVVKmhC3u5eb1LajVR45XGBpr67IrpSknSiAWyYHnu/3F6yt
-   oeOp+zRMoT1YlgRzGeW2nz21tzIqg5248/oieSbaiXCXR12e+AgVAiEKf
-   lBNCJ0sZqr8TfLjnBuMF8I+uG4BktZa4jHw9Rit5lyrcT1XUJ4uuGCqQX
-   OolbDAHyQjjqTsiJHDChRf+UMOMjH3DfURkN382W0fteflfKDDeGwhPgs
-   1bgsGqJ/rpM7dvuwRV/rJuujp+ZrQH3/xmnfVwXlKmV1w29TeVts5l3ej
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10412"; a="348122972"
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="348122972"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 01:25:53 -0700
-X-IronPort-AV: E=Sophos;i="5.92,283,1650956400"; 
-   d="scan'208";a="924685104"
-Received: from zhenzhu-mobl1.ccr.corp.intel.com (HELO jiezho4x-mobl1.ccr.corp.intel.com) ([10.255.31.69])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2022 01:25:47 -0700
-From:   Jie2x Zhou <jie2x.zhou@intel.com>
-To:     jie2x.zhou@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 19 Jul 2022 04:32:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882C220D1;
+        Tue, 19 Jul 2022 01:32:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91E3DB81893;
+        Tue, 19 Jul 2022 08:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB0F3C341C6;
+        Tue, 19 Jul 2022 08:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658219554;
+        bh=pplzxYz6sIF7Mjy2044C1CiT3gW+EWOdS76ev7aFkFE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FwKxrFSVQL3hlswBw4lRRBHWH90KbD1z2uO1coRHKpavqBkt+9nh3n0GtVERzfPc6
+         2orAVr7dY8eJGmGWVSVuCLTk6Ot/5ycingm10rYQGCNOgGe7Wpv9VH8fBDB+l+jG+p
+         evypO8rjE60vG4OhVd9PuZOD1lpv5dT2Q9YeCVwLkEOfgfN1/objmmgwMMxJHifuOc
+         cBNIs743ctJu0UmjVd8O1EnHTemThPNu6vD6imLNjUdzY0AZdlAVMJDyx9rpMtzsGl
+         aQQhwgSRaFCIdUVpipsARyiuYboLM1lfvOZG0up8ex3fHmgEDquXiHFdMgzKbFqhp7
+         W2NK4/VcUFMNQ==
+Date:   Tue, 19 Jul 2022 10:32:29 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         Philip Li <philip.li@intel.com>,
         kernel test robot <lkp@intel.com>
-Subject: [PATCH] tools/testing/selftests/bpf/test_xdp_veth.sh: fix Couldn't retrieve pinned program
-Date:   Tue, 19 Jul 2022 16:24:30 +0800
-Message-Id: <20220719082430.9916-1-jie2x.zhou@intel.com>
-X-Mailer: git-send-email 2.20.1
+Subject: Re: [PATCH] ksefltest: pidfd: Fix wait_states: Test terminated by
+ timeout
+Message-ID: <20220719083229.b2yn2msrklmo2nb5@wittgenstein>
+References: <20220718025826.29148-1-lizhijian@fujitsu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220718025826.29148-1-lizhijian@fujitsu.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Before change:
- selftests: bpf: test_xdp_veth.sh
- Couldn't retrieve pinned program '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
- selftests: xdp_veth [SKIP]
-ok 20 selftests: bpf: test_xdp_veth.sh # SKIP
+On Mon, Jul 18, 2022 at 02:58:39AM +0000, lizhijian@fujitsu.com wrote:
+> 0Day/LKP observed that the kselftest blocks forever since one of the
+> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
+> the source, we found that it blocks at:
+> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
+> 
+> wait_states has below testing flow:
+>   CHILD                 PARENT
+>   ---------------+--------------
+> 1 STOP itself
+> 2                   WAIT for CHILD STOPPED
+> 3                   SIGNAL CHILD to CONT
+> 4 CONT
+> 5 STOP itself
+> 5'                  WAIT for CHILD CONT
+> 6                   WAIT for CHILD STOPPED
+> 
+> The problem is that the kernel cannot ensure the order of 5 and 5', once
+> 5's goes first, the test will fail.
+> 
+> we can reproduce it by:
+> $ while true; do make run_tests -C pidfd; done
+> 
+> Introduce a blocking read in child process to make sure the parent can
+> check its WCONTINUED.
+> 
+> CC: Philip Li <philip.li@intel.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> ---
+> I have almost forgotten this patch since the former version post over 6 months
+> ago. This time I just do a rebase and update the comments.
+> V2: rewrite with pipe to avoid usleep
+> ---
 
-After change:
-PING 10.1.1.33 (10.1.1.33) 56(84) bytes of data.
-64 bytes from 10.1.1.33: icmp_seq=1 ttl=64 time=0.320 ms--- 10.1.1.33 ping statistics ---
-1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 0.320/0.320/0.320/0.000 ms
-selftests: xdp_veth [PASS]
-
-In test:
-ls /sys/fs/bpf/test_xdp_veth/progs/redirect_map_0
-ls: cannot access '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
-ls /sys/fs/bpf/test_xdp_veth/progs/
-xdp_redirect_map_0  xdp_redirect_map_1  xdp_redirect_map_2
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
----
- tools/testing/selftests/bpf/test_xdp_veth.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
-index 392d28cc4e58..49936c4c8567 100755
---- a/tools/testing/selftests/bpf/test_xdp_veth.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
-@@ -106,9 +106,9 @@ bpftool prog loadall \
- bpftool map update pinned $BPF_DIR/maps/tx_port key 0 0 0 0 value 122 0 0 0
- bpftool map update pinned $BPF_DIR/maps/tx_port key 1 0 0 0 value 133 0 0 0
- bpftool map update pinned $BPF_DIR/maps/tx_port key 2 0 0 0 value 111 0 0 0
--ip link set dev veth1 xdp pinned $BPF_DIR/progs/redirect_map_0
--ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
--ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
-+ip link set dev veth1 xdp pinned $BPF_DIR/progs/xdp_redirect_map_0
-+ip link set dev veth2 xdp pinned $BPF_DIR/progs/xdp_redirect_map_1
-+ip link set dev veth3 xdp pinned $BPF_DIR/progs/xdp_redirect_map_2
- 
- ip -n ${NS1} link set dev veth11 xdp obj xdp_dummy.o sec xdp
- ip -n ${NS2} link set dev veth22 xdp obj xdp_tx.o sec xdp
--- 
-2.36.1
-
+Thanks for sticking with this!
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
