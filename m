@@ -2,140 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5855796C2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 11:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF575796C9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Jul 2022 11:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237228AbiGSJyi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Jul 2022 05:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
+        id S237363AbiGSJzd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Jul 2022 05:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237267AbiGSJyh (ORCPT
+        with ESMTP id S236799AbiGSJzc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Jul 2022 05:54:37 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3B928E3A;
-        Tue, 19 Jul 2022 02:54:36 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26J8a2RG026646;
-        Tue, 19 Jul 2022 09:54:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2022-7-12;
- bh=VoDcM9eI8zcCKYnnllfF1mZzEJJwa6wFvYEy0SNO/to=;
- b=pVpuh5TaqZwbtQDOl7282WP9JXRXcw6kFqoRoUL6RIhBCwONZITbnEc7Oy/nYMoqd67/
- 0gU2FatCBsHqVvMoHtDVfkcqzWhrd9jC8Gj98jQlhb1GraKW8Akyx3VTtvZN9/J5KoAW
- 7U06N3ch14XPPryuaZJjSXvcXhErDAuavGecagsOtYOP/GhC3JRjS4vwOQ7gUuAeG4qc
- KZazCtTCmQhRIyrS3Hq3Obr5uO2lOEnpMJvxYZoXR3r/j9+EDH/Fj6Z89UKWR/QoIndM
- uMa5k0MqpWwJkmC+RZxwPNzbbmr0544L874wwFjS7YPKXU3ufUlmfS/RveXhIzq/Rj94 pg== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbn7a5pff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Jul 2022 09:54:29 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26J8a8D2002756;
-        Tue, 19 Jul 2022 09:54:28 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1maynhx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Jul 2022 09:54:28 +0000
+        Tue, 19 Jul 2022 05:55:32 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2048.outbound.protection.outlook.com [40.107.102.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E3365FC;
+        Tue, 19 Jul 2022 02:55:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kGSY6hrP+1+VZC5kgl6OwGng/6Q3zE05PYC8CS0cLD85+9kYyQtfTvbEtkzot8svI06AGZ/vceY37C04DJ2EIxSN30PZGcsel4HwEQiAtxVnG+HgYKuFPSBNr3W5kynzYLvAxriSDHcyQTfmMKRCek3BUizbnb8GRiEgIb2sA0sQzJy2AONkxFi0UZx4nlSlAwhGpNn86pO7e9IKU0vQYxr20z4ngvB7cM6dEbthkdgJMgaNyPxfZIFi2KYY2F7EgnnaKQAh8jLtjcIHGmi2cRsMuFPntp+yEYfFTcvZNCGj3XVrC8Ehx/ZOBmDG3Fnnio7df2ikcL62VWPRZU5FKA==
+ b=Lx9RpAkE5S9DX1SyeP3DBYv521p4lBDT10/CvkVZ+qJJIeUnnQlD72zLHFfPDM852gGTAfhVN+8Ue9JphPF27RRbVKV3uJVWBlVRo6zZZSjz992dR54qHbILmscwZ/8+XaaBK4gnbbpHWPXrNTLIev2fw/AicsV3GcNjTm+Wocn/JUlq/LgqyRh/ekBF92SmmJm7p99bc7hLgLMmsDGF7HOq8+wXAcenYVpUSGsIorWAcli0+aIouHFRJHDfOCwcc7AjDjGbBD4EC6snTX/BcE/G30UHf9he8D0MW6W7dtgulB7UAQNa/YfGO1fBOYROZvajtNl3xf+lZ/0qlVm8pg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VoDcM9eI8zcCKYnnllfF1mZzEJJwa6wFvYEy0SNO/to=;
- b=OdgzYoVzi/O/hCw4kc8UrLh7+1HEDJaL4Km4ppxA7whlrjguzE2be4izsrSvXhEdgVxRTV2cBFI3ixmoiEDYwvAp0bREdUdXnPUCay85ZZQghptUEVIu+ePRHAEyFbuWey8z1WMJF9MjsAyL7F3aKT/bIv/c0GbcLInazA9ZDQrF5Ld2iPUK+fpw1st8Jyrhj56vkWeDYBGbNRWjAqaQ911vlrQnNcjpuf6Ei7mHRZIBfJUZH+uZPuJTaWztbxi/AbCwaR1/5jgAvenVAaBKFZQyiIZvG3JZ0Lxx47NnEQfS2Xp7CTKWXiSyd0y3CN8Ffnta2ZC7mSznrKPo+GXnsg==
+ bh=70hmuR1b7NLuxCTwSnix+Ee+8ZrWcZptdWeRZc6YCaA=;
+ b=ZQZf6adb3nNeAdZqxTn6W3o06/9d3n37F/JlGcWyBScip4/GgCsj2LvlwStB5MZKsSyK1twlNuqnJTsUpv5rneocEiDuQTq1HVX24emxc3GXhydPzU8/zBq1BrfuqwXKa26l2aVVUnCyM4WecmCG71wQyHchR6A5lag8r7NxnAA5Pop9DFKGw4DD6QULFOvdd+lgK6U+pIeNWMpMbIdzUbgoXlASWFvw3069+cBwUwcx05oyodW5l2LazzmpoC+26IS93y2zJunixShTonvlV6I4EG5VxDX7K8AfHw/1kJyN6mASQa7gY+BDvSG7mu/AC572jO0QHpLi+t0bXaxRqg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VoDcM9eI8zcCKYnnllfF1mZzEJJwa6wFvYEy0SNO/to=;
- b=vGtxm32zo7z/B3ecJSLL7pK+RxCCVYL6RDn1XP8E32TXrVuw0cg1FZj7I4oElI0EKMwOL+QXIDtNAtRZKlHQZApXb9vnGouVzZHawpVij3zP7e+yFnwPz39IrwMnxBmIIS9fGsQFjLpgT0z+InP8r3HLn8tTOl3GBxFMVU5jZUg=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BY5PR10MB3907.namprd10.prod.outlook.com
- (2603:10b6:a03:1fc::24) with Microsoft SMTP Server (version=TLS1_2,
+ bh=70hmuR1b7NLuxCTwSnix+Ee+8ZrWcZptdWeRZc6YCaA=;
+ b=BtJAAhPUzRS5OQ5bsXi8RlPG7CwKZfTNJ5pAt0lYP3+kL+Dw1JtMDv9Cn0+kiqpDqp3A5NITgbGveLnhr79dgpYhqQbVmRu8JPIBuwLJeuWJ8oJyeSae3vcDOIjO+xBThKXcuktSm5zwK4cvqJFml6g5nRZVMPPEsmwCKZm2HJ0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
+ (2603:10b6:910:1f::11) by SA0PR12MB4381.namprd12.prod.outlook.com
+ (2603:10b6:806:70::14) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.14; Tue, 19 Jul
- 2022 09:54:25 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
- 09:54:25 +0000
-Date:   Tue, 19 Jul 2022 12:54:14 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] KVM: selftests: fix bit test in is_steal_time_supported()
-Message-ID: <YtZ/Rnrm8Y+uPjDq@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-ClientProxiedBy: ZR0P278CA0192.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:44::16) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+ 2022 09:55:27 +0000
+Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
+ ([fe80::1001:3c79:9504:8d6a]) by CY4PR1201MB0181.namprd12.prod.outlook.com
+ ([fe80::1001:3c79:9504:8d6a%10]) with mapi id 15.20.5438.023; Tue, 19 Jul
+ 2022 09:55:27 +0000
+Message-ID: <de1e15b8-b7e7-d077-eff8-0992bd06e38a@amd.com>
+Date:   Tue, 19 Jul 2022 11:55:24 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 13/14] KVM: Enable and expose KVM_MEM_PRIVATE
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-14-chao.p.peng@linux.intel.com>
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+In-Reply-To: <20220706082016.2603916-14-chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0101.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a1::10) To CY4PR1201MB0181.namprd12.prod.outlook.com
+ (2603:10b6:910:1f::11)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 55d36750-5b78-4f40-5946-08da696caa0b
-X-MS-TrafficTypeDiagnostic: BY5PR10MB3907:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4bd929cc-03f5-4b54-7dd4-08da696ccec1
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4381:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yj/hHAPqV2XfvOsLX1Iki/YkT6VUm9dboaFGFlma5/Wvf0ZtaBTFoiY+SoBAQU5ukWnk0/Vi8VTAUvPpoOtEfpEeGYP7vIwH+/z4MvdL2qyWKByLF2FSO14DwHH0R2zqNO2kljeAdZSPkzB7RmHI72ERe522dvaWiYJZn7JEPXR11z2Wb2F0RzK72l0trxxE4dLbm1cXj1pA+OdizkVdUxazLW645bOlpw//8vaq6NCBWfzgO1RWYMSpSeEmNO+nqOqw/6PcIpwlN+D18kdGB4O5YvRHoDPEyvr9OqItowHx9dh4sX3HzqrnPgxV5U3bCVgYxhC9qq8AluQGCAUyo31qYftZ2NhE1i1RrhBkrdyAogNtpXaF/sWDc2sLF32EZ8GVDxIXc6k6zUYUNk37Ki7HaBefKGbZ43AWgG0DkhdjcC/nQDE8POpZEDUQv2kpNdjBC9xZC6rNeVsFNx5+nlqv6JrDyqm8lxzwJ6Fp/GTAbr3dhcAkCG2Hb5Wwkv4BBQfAgSAu6x54B41Qdx0gHK8ax38cPcLGyEwRraGVGiNZQpBXjtokKxBNV2jiswzAnOsbKIMU7Lqd3pbv5kH3k94KpvDO+h3iF0N6KFCITOoGeqY4UeRQP77seZuVM5CZksfXA51wbMEu5UP4e2Vxk80UzbKbd+3U3ZrQKF9yY/tLjh7KcyZViT/4AvHCuaGfHeAb1H0KaZvTCnEZZA9Hv+jjooCd6AndO/g8B/YqpUDkDeHhOVwY7SMRMKIYrQqKvnFt6HjsK2naCYQ3mGmyYqWPfaM50mwbgyzsNjsx3is=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(39860400002)(396003)(346002)(366004)(136003)(66946007)(478600001)(41300700001)(6666004)(8676002)(186003)(83380400001)(110136005)(4326008)(66556008)(6486002)(66476007)(316002)(33716001)(5660300002)(4744005)(44832011)(2906002)(6512007)(9686003)(86362001)(38350700002)(6506007)(38100700002)(8936002)(26005)(52116002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: /HMkfW1GcwHDi7cKT2ZWJBYwORhSPbBjSmLYi/iLf2IlaaMwkN/yTCS1qFNc8vRo+m3R9rE3cAkVVVk9Z+0AOzc38HmGtxjwc2Qc4p1YyC8YZSGyr2trMQ4S4X4K10HBXmZqCqqTkDsxmO79PFBtylS229s67pwzXTQae3QTORkEx/0eRK24JWUBPtcm+76IrZpPq0rk/xfNDvpLghvkCGQZe9Wxvem4l58F/HXFeNNVU6HZORiVvwcF5uwgBLc4jBECnS5YTXe/MNTyjbJoyGw4q2lUQ6p1mjAYI5Np7aftg42NO3JCL18LrCsVpCnBWyks7vw3LC2T3IgTjTeBruFE0XaNUrEPIXQeVfVbJMwlPhAkY89wUhICKg1grDBmPnwBgjEJ4UCK27J5qwpqGoMbhfLfT+YpFhqQ9NL19y1uI40NN0jbKxu/93dAPHuV8OXJchjo8xyq2PXE3Tk1BaimOorwTyV2puV2acfb2P2DvyNkMiD/Yf0WtBcSoC3jubaFxab2xOTWr+OLlBYgVEkf0AOejPWrodkOcnrwoVy0DBTAisL+E1BhKQGfeVlAIcipDqSRWpWAjjjPPCY6DeHlzDq8SkSRyW+RyL/UJP+YPxtLDYCy86ByAWUkc7P9465bRXydK3mkdjKj1RXLrOAEgQNittY4MyUM89otidbrct9QxDpFlY2P0Il7NOMZvSG+g1nvpNX1CeKICaoPC1HKzxLewhSBTvk1gGa7HO1eLYV2whq+J+50D980MIIGFMbrGruWnhEBkgb+bpEFggyv2G48FLUK1hRnN1dcn2/LbDQxRvE8OkbU+8dgPIJKe3PvxQrrDSlYGtLxr3yAVA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1201MB0181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(346002)(136003)(376002)(39860400002)(54906003)(316002)(36756003)(66556008)(31686004)(66946007)(4326008)(8676002)(66476007)(2906002)(41300700001)(6666004)(186003)(83380400001)(6512007)(7406005)(5660300002)(2616005)(7416002)(6486002)(38100700002)(8936002)(31696002)(86362001)(6506007)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WosP+ZCVVrM1F+/X0T2iun1T7xa2JnqfW485j7sBxjGFZ6O/9imXzZs5Z3pa?=
- =?us-ascii?Q?pkFpvTBIcJF0KTBhXV318N5VxC0R8RzaIbVB7lP86ojTajkOsux2SqMPRnbG?=
- =?us-ascii?Q?R5FEzx7SjdjMFDkuuUwK6OWToicHLmO2gV2BBhzobJB2FbFQng0iuA7m2JTk?=
- =?us-ascii?Q?8WEF6dEc5F3/MNs2o6K/XE1Jy8GM82lKl8/PZMRS9liSvrGVakPZc5WsNU/l?=
- =?us-ascii?Q?s85W1k7HPSL0eduqXHWudVeIYr+dYexwWDv8bvwXJlQTmgElPxojqeXmJQmr?=
- =?us-ascii?Q?LooSCj0Nd/TBvO7fkTQgo0uXN5KZ1lmmD8Fdidu875j2wjfYKt3y+vfK6PTT?=
- =?us-ascii?Q?/T+QQJk9iVB/Nh3BtgYp0yOgUb7uggVx4Ow+2IwfZyMtfNuspiXd8i8jmDUa?=
- =?us-ascii?Q?N5BhUgMLWLBMLceNKCf8yQy2TrZnSe+YXRYbqoQdhGyyziekwZsjJVLpI7tK?=
- =?us-ascii?Q?MrG0bDA7wLdCh+NE9R9t+uAKKhAVUfDrIDDHfalwJBrZ2o7INKFlS9zSVqi5?=
- =?us-ascii?Q?uUVjrMCuMq/pxSiZBRLtPzHnyzVVpVK8j9M4PWk0EyF0Ts2ZgcY1Xk4PMIxM?=
- =?us-ascii?Q?csQsZY1u8SUNz4zH7+COLMHm57tylVYGeVwUpgAaUlcJeYI/RnLMgi1GhTN7?=
- =?us-ascii?Q?znHR9LQ5ORYHLdeE1HRb9fdGuIV4KcLjbavTkFqaxKy6UBpVSY4PJE9b92gg?=
- =?us-ascii?Q?+zSwI7JwIqvPsko74AUbhALf6PbH+68d/Zqy3JDTYvN70dxZ21yxfxa/Ji0i?=
- =?us-ascii?Q?BBZMwpWE9oxppkIBg1oFe8h7vztoc+2JtL3Twa5asJ3taTAaqrVyY/dwhVE8?=
- =?us-ascii?Q?++o+h2I5zo68vzQJC+PyUPXJfx/mGed0JaIvKfSXQcO2/nXV6rfSC/aUx1XP?=
- =?us-ascii?Q?mQ+dnVM7sJwVk9fyS2O5+KoKNfz5/3qMr7Aw/2BG+0/FqUzCZcEkCeIoeOLZ?=
- =?us-ascii?Q?TfbIhC1UiOnz+Brnkm+Tohas4t85gfXY1LVAnJT6KKd91XkaEv9ZV86WE31G?=
- =?us-ascii?Q?aYoy0OLcwaUNGQkTCOi8nFq2J0puHeojja/Ru0OHhJ4m0DyttQLRqY6Om3uO?=
- =?us-ascii?Q?4tIx/EAJWcSOm3DY2+yuR2o0/cmlFJb1WAHhEJwRCeadUjMr5ZUhUpjbj/2T?=
- =?us-ascii?Q?/C+LSCep8Fi+8opCt/Q7xj+flXSidNcWR7BVe0+hiMB8bHZu4mbCNY10IiXu?=
- =?us-ascii?Q?MDFi+2bV9gbozxIYrwxsHHa4CSi64jmWoEdyoN8FQYY54a+Y0YHDp7JciS+b?=
- =?us-ascii?Q?hvJxh/SHOvDvEWcm10TA5yWBeSEK+F4igNqj6bgRjJXbU70e773q23SoZTMe?=
- =?us-ascii?Q?SoM5Fs3XFk2ReTPr7sfY8B51+L9Oti1dI75VEU93v4ucsQVGLJG4lS8k22Mb?=
- =?us-ascii?Q?fpWtWir7btPE37KnE1ct3sFS2YkUR4/3Ksa+6x+uE7PQozfRG3EwQ73XkzPL?=
- =?us-ascii?Q?NKAGGZLU2mWhjhKEoqH0FrkatIhZwcpBmZAKUSBjFOTA627kTro5IwiNRBF0?=
- =?us-ascii?Q?VbuKpsZgWOe4eHh7143mjYh4DMHXPaaDq4XGCLvkZo1ZXRtjWXSjf57P+9k8?=
- =?us-ascii?Q?/Lo8K7yjNvEw5utTCC9DkdZuduwLDM5p+qt+w/piuQLLh3ft8+DU+brXmTTJ?=
- =?us-ascii?Q?OA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55d36750-5b78-4f40-5946-08da696caa0b
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dldKZmN2RC8zT29tMEZsZmZiRGhlNVJuVTRuTitEWVlNS1Z3UmQrUDQ3Nk10?=
+ =?utf-8?B?T3VSMGZ3OXljMEdJRHhXRjR4dnd6WDRHUU5GK2JXSTdjeHBwVEVpc0k2YkxD?=
+ =?utf-8?B?NVZZQU5qK1hjKzJBcmdsZGFLT3dZYjdHTXlzOCtxT053ZUxiQTltUDBVZ2hJ?=
+ =?utf-8?B?WjlaYWQ2WjRwblZXbGNjZ1Z4N3Qwayt4TEJOU0tnbE5pM3lLMUtSbFRiMkZO?=
+ =?utf-8?B?YmdaeVZXTHo0OVEvSGI2R3pGa3FNMUtFcTZYOWhreXBvcXRaczVzRUFYQTg1?=
+ =?utf-8?B?cXJhZjhXMjdtSUJ4bFJxR0FUZ0V2aVZFVHlhZkx4M3p1TEMxTjNRVFY2Y1Fw?=
+ =?utf-8?B?OUlBamJ4UDBsVEdQWEZ1NWFadWlrWmxielc5dDVUNE5vZ2x2T1NwcjdyZzdm?=
+ =?utf-8?B?SVZMaWJtTUptd09iaExBL1NvdHRYclhxcWYzVlNvVkg4b0lhaHIwUXl2VjlR?=
+ =?utf-8?B?T1VxYzBuT3BLSkhYc1lUdGlJc0Q2SkNyaGhWUzVYQmlPTGlOVnQ2Z0VBM2xw?=
+ =?utf-8?B?U1ljVno1Z2JzVXViTjVKYU9vUmpKTVdCc3BWOUJMdVQ1M01OMTA3TmFWMjV1?=
+ =?utf-8?B?eWZ5YVk5bElmTnRIVHFqRG45WXdiK3VZR0dIbHU4Q2I3RWtyR00rVVR4ZGJ5?=
+ =?utf-8?B?enl5d2V1ZHZLS1hYMG01SXhOWnRneGVNWnRnc2xtajF0emYvUnZPT0pNUmRh?=
+ =?utf-8?B?UzloMm53Z1EreXJKOThwZ3lGLzBiRzhxVHNZQkE2dWVKMFlvUm5HekdMeTZt?=
+ =?utf-8?B?OTMrVjB2Q0pEMXBCRTdqMnd6NHllTVZwbFRxNnpURDVZenlSQjM1dmtEdUV5?=
+ =?utf-8?B?RERTVmptQUtWaThCM0tOU1g1dVgrVFBNa3U5UTFhZ3RzL3I1eFZaSlV0bGhK?=
+ =?utf-8?B?SHovMnBpYzJib2NMd1d5SG9MWnhnVmg2Z1VFY3ZBdGR0S1M2d1lmU05INDdr?=
+ =?utf-8?B?b1ZBMlljU1gyaDBSbGJMbC8vOERxRUtBVFRwK3R2RGp3OStWcEd6ejBTeTkr?=
+ =?utf-8?B?VTJtR0w1b1o5Y042WGczaXJHSy9FNzl4aGZlbkZ5eEdDckI3aTRuaVFVZ1JN?=
+ =?utf-8?B?T0RRUFd4aHNmMWVWUHFLOGZQTzgxUkY3MU1pY2hOemhZM0tZUmJhSjM3MXJj?=
+ =?utf-8?B?V2Vtcms1Y1JqSDBpSWU2RnBaaDlhR1JQWHAvclVDa2VyalVOQm9wTFhXWVU3?=
+ =?utf-8?B?WTBxanplWG9EeHI4N0xBNm51QWEra0l4Rk0wYmJpcXRYcFpwZWRJamp4NGZF?=
+ =?utf-8?B?TG1rVU0yQm00M2p2ZngxbXRSbHFaV2FIUzkvYkdmRTFuV3lWaFZqS0hvK1ha?=
+ =?utf-8?B?aEhVbDRkMGM2cmF2UTladHdISW1FYWpoSlY0d2JlUnl4WWJzblgrejNCTXhQ?=
+ =?utf-8?B?TllWVGUyWHlzU21XcFQxUnA2UVR2bkZ5bmt1R0Q3RHZNOHUvZm9pNER3MzdN?=
+ =?utf-8?B?N1AxbmpnM1dNVndHaENXazl2SEx4QlhXQ01xRk1JMjRUNTh3bGYrZlhjZk1h?=
+ =?utf-8?B?V0NDelRrc2pNZGM4dnB2akNlZXhHbmwxVHQ3aW9QMlpkOU1YbVR5RmxIVUpQ?=
+ =?utf-8?B?d01yRXhPeGxMZnFIQkNuOGtpZEIrcFBmMlM2V0pjQUlFRUZFUnVQbkxJdTVp?=
+ =?utf-8?B?ZWhiRVAxV1lrN2FFbUtTdmlRWkpOelRXNjZOSm96VTUyYlk4UGkydlV1REZJ?=
+ =?utf-8?B?UU1TcFVvRXZZN2VTdGJjMmduYXZMWkJ6Q0ZHSXAxck5NclEyeTNmWXBSUmJX?=
+ =?utf-8?B?L2lYYU81d01WZXZ2aEdOOWliaTFLOWMvZ0VlUEZmZytTUUphZk5hWUt4WG85?=
+ =?utf-8?B?NHZTSThkQWxPVVRMckthWjA1WHNueUw2WnRVYlN0VGhJeDA2K2xBZ0RIRmVT?=
+ =?utf-8?B?T2tXaVJGcFpzUm9uU1pWRk9BYjJHbUpwZXduZGVvY3BwazduU2ZkT1dDVHlL?=
+ =?utf-8?B?a2FWa08xQlJITGpwYjM5Tys3cEM0NWxBdVJyZVRRdlIycjRRcXlWeVBPeUxi?=
+ =?utf-8?B?djg1N2RoUi9PR0dxNlFVYkNQK0FWQ2RXM3IzQVVzRml5cVVnZ1YwdnRGVmlo?=
+ =?utf-8?B?VGxzL2tXZWJ6dGRYc1dQS1huSVdBZHNDSzYyck5NZVVmRE1kZ1llSm9YUkdt?=
+ =?utf-8?B?MklqSks2VkVOMGw3Yld1SURkcXZTRDB1NDMvYk00VDRZV1FhLzlSdHpkSGJI?=
+ =?utf-8?Q?I1zeQbV+9nPcIqUU5niE94qYCnBZcNz/ENzq1SoKLxN4?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4bd929cc-03f5-4b54-7dd4-08da696ccec1
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR1201MB0181.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 09:54:25.7851
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 09:55:27.6267
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T17aANnsZhnoNbba4DqXdEBQjeF+8ubmEPmP2XvVJayWLAMeaeWTwkjljwhe+kd3gESXoh2w0RpgywuS9ehyjvl00rDy4nS4V+5E8fC/C/w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB3907
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-18_22,2022-07-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 spamscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
- definitions=main-2207190042
-X-Proofpoint-ORIG-GUID: 1rNlqMcBWRslqOvGKRxqrN_H3ZHTxR1p
-X-Proofpoint-GUID: 1rNlqMcBWRslqOvGKRxqrN_H3ZHTxR1p
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-UserPrincipalName: LOIaFtjPSy7IQ1Lv5vvp8ZDHX5hJnliwD9TtquPTxyoyKY2pRmiudDDkheDyWe5gevgC3RyDmEHfHhiFXUtXnA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4381
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,28 +155,238 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The KVM_FEATURE_STEAL_TIME (5) define is the BIT() value so we need to
-do shift for this to work correctly.
+> Register private memslot to fd-based memory backing store and handle the
+> memfile notifiers to zap the existing mappings.
+> 
+> Currently the register is happened at memslot creating time and the
+> initial support does not include page migration/swap.
+> 
+> KVM_MEM_PRIVATE is not exposed by default, architecture code can turn
+> on it by implementing kvm_arch_private_mem_supported().
+> 
+> A 'kvm' reference is added in memslot structure since in
+> memfile_notifier callbacks we can only obtain a memslot reference while
+> kvm is need to do the zapping.
+> 
+> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>   include/linux/kvm_host.h |   1 +
+>   virt/kvm/kvm_main.c      | 117 ++++++++++++++++++++++++++++++++++++---
+>   2 files changed, 109 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 8f56426aa1e3..4e5a0db68799 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -584,6 +584,7 @@ struct kvm_memory_slot {
+>   	struct file *private_file;
+>   	loff_t private_offset;
+>   	struct memfile_notifier notifier;
+> +	struct kvm *kvm;
+>   };
+>   
+>   static inline bool kvm_slot_can_be_private(const struct kvm_memory_slot *slot)
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index bb714c2a4b06..d6f7e074cab2 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -941,6 +941,63 @@ static int kvm_vm_ioctl_set_encrypted_region(struct kvm *kvm, unsigned int ioctl
+>   
+>   	return r;
+>   }
+> +
+> +static void kvm_memfile_notifier_invalidate(struct memfile_notifier *notifier,
+> +					    pgoff_t start, pgoff_t end)
+> +{
+> +	struct kvm_memory_slot *slot = container_of(notifier,
+> +						    struct kvm_memory_slot,
+> +						    notifier);
+> +	unsigned long base_pgoff = slot->private_offset >> PAGE_SHIFT;
+> +	gfn_t start_gfn = slot->base_gfn;
+> +	gfn_t end_gfn = slot->base_gfn + slot->npages;
+> +
+> +
+> +	if (start > base_pgoff)
+> +		start_gfn = slot->base_gfn + start - base_pgoff;
+> +
+> +	if (end < base_pgoff + slot->npages)
+> +		end_gfn = slot->base_gfn + end - base_pgoff;
+> +
+> +	if (start_gfn >= end_gfn)
+> +		return;
+> +
+> +	kvm_zap_gfn_range(slot->kvm, start_gfn, end_gfn);
+> +}
+> +
+> +static struct memfile_notifier_ops kvm_memfile_notifier_ops = {
+> +	.invalidate = kvm_memfile_notifier_invalidate,
+> +};
+> +
+> +#define KVM_MEMFILE_FLAGS (MEMFILE_F_USER_INACCESSIBLE | \
+> +			   MEMFILE_F_UNMOVABLE | \
+> +			   MEMFILE_F_UNRECLAIMABLE)
+> +
+> +static inline int kvm_private_mem_register(struct kvm_memory_slot *slot)
+> +{
+> +	slot->notifier.ops = &kvm_memfile_notifier_ops;
+> +	return memfile_register_notifier(slot->private_file, KVM_MEMFILE_FLAGS,
+> +					 &slot->notifier);
+> +}
+> +
+> +static inline void kvm_private_mem_unregister(struct kvm_memory_slot *slot)
+> +{
+> +	memfile_unregister_notifier(&slot->notifier);
+> +}
+> +
+> +#else /* !CONFIG_HAVE_KVM_PRIVATE_MEM */
+> +
+> +static inline int kvm_private_mem_register(struct kvm_memory_slot *slot)
+> +{
+> +	WARN_ON_ONCE(1);
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline void kvm_private_mem_unregister(struct kvm_memory_slot *slot)
+> +{
+> +	WARN_ON_ONCE(1);
+> +}
+> +
+>   #endif /* CONFIG_HAVE_KVM_PRIVATE_MEM */
+>   
+>   #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
+> @@ -987,6 +1044,11 @@ static void kvm_destroy_dirty_bitmap(struct kvm_memory_slot *memslot)
+>   /* This does not remove the slot from struct kvm_memslots data structures */
+>   static void kvm_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
+>   {
+> +	if (slot->flags & KVM_MEM_PRIVATE) {
+> +		kvm_private_mem_unregister(slot);
+> +		fput(slot->private_file);
+> +	}
+> +
+>   	kvm_destroy_dirty_bitmap(slot);
+>   
+>   	kvm_arch_free_memslot(kvm, slot);
+> @@ -1548,10 +1610,16 @@ bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
+>   	return false;
+>   }
+>   
+> -static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
+> +static int check_memory_region_flags(struct kvm *kvm,
+> +				     const struct kvm_user_mem_region *mem)
+>   {
+>   	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+>   
+> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> +	if (kvm_arch_private_mem_supported(kvm))
+> +		valid_flags |= KVM_MEM_PRIVATE;
+> +#endif
+> +
+>   #ifdef __KVM_HAVE_READONLY_MEM
+>   	valid_flags |= KVM_MEM_READONLY;
+>   #endif
+> @@ -1627,6 +1695,12 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
+>   {
+>   	int r;
+>   
+> +	if (change == KVM_MR_CREATE && new->flags & KVM_MEM_PRIVATE) {
+> +		r = kvm_private_mem_register(new);
+> +		if (r)
+> +			return r;
+> +	}
+> +
+>   	/*
+>   	 * If dirty logging is disabled, nullify the bitmap; the old bitmap
+>   	 * will be freed on "commit".  If logging is enabled in both old and
+> @@ -1655,6 +1729,9 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
+>   	if (r && new && new->dirty_bitmap && (!old || !old->dirty_bitmap))
+>   		kvm_destroy_dirty_bitmap(new);
+>   
+> +	if (r && change == KVM_MR_CREATE && new->flags & KVM_MEM_PRIVATE)
+> +		kvm_private_mem_unregister(new);
+> +
+>   	return r;
+>   }
+>   
+> @@ -1952,7 +2029,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   	int as_id, id;
+>   	int r;
+>   
+> -	r = check_memory_region_flags(mem);
+> +	r = check_memory_region_flags(kvm, mem);
+>   	if (r)
+>   		return r;
+>   
+> @@ -1971,6 +2048,10 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
+>   			mem->memory_size))
+>   		return -EINVAL;
+> +	if (mem->flags & KVM_MEM_PRIVATE &&
+> +		(mem->private_offset & (PAGE_SIZE - 1) ||
+> +		 mem->private_offset > U64_MAX - mem->memory_size))
+> +		return -EINVAL;
+>   	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
+>   		return -EINVAL;
+>   	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
+> @@ -2009,6 +2090,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   		if ((kvm->nr_memslot_pages + npages) < kvm->nr_memslot_pages)
+>   			return -EINVAL;
+>   	} else { /* Modify an existing slot. */
+> +		/* Private memslots are immutable, they can only be deleted. */
+> +		if (mem->flags & KVM_MEM_PRIVATE)
+> +			return -EINVAL;
+>   		if ((mem->userspace_addr != old->userspace_addr) ||
+>   		    (npages != old->npages) ||
+>   		    ((mem->flags ^ old->flags) & KVM_MEM_READONLY))
+> @@ -2037,10 +2121,27 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   	new->npages = npages;
+>   	new->flags = mem->flags;
+>   	new->userspace_addr = mem->userspace_addr;
+> +	if (mem->flags & KVM_MEM_PRIVATE) {
+> +		new->private_file = fget(mem->private_fd);
+> +		if (!new->private_file) {
+> +			r = -EINVAL;
+> +			goto out;
+> +		}
+> +		new->private_offset = mem->private_offset;
+> +	}
+> +
+> +	new->kvm = kvm;
+>   
+>   	r = kvm_set_memslot(kvm, old, new, change);
+>   	if (r)
+> -		kfree(new);
+> +		goto out;
+> +
+> +	return 0;
+> +
+> +out:
+> +	if (new->private_file)
+> +		fput(new->private_file);
+> +	kfree(new);
+>   	return r;
+>   }
+>   EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
+> @@ -4712,12 +4813,10 @@ static long kvm_vm_ioctl(struct file *filp,
+>   			(u32 __user *)(argp + offsetof(typeof(mem), flags))))
+>   			goto out;
+>   
+> -		if (flags & KVM_MEM_PRIVATE) {
+> -			r = -EINVAL;
+> -			goto out;
+> -		}
+> -
+> -		size = sizeof(struct kvm_userspace_memory_region);
+> +		if (flags & KVM_MEM_PRIVATE)
+> +			size = sizeof(struct kvm_userspace_memory_region_ext);
 
-Fixes: 998016048221 ("KVM: selftests: Convert steal_time away from VCPU_ID")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- tools/testing/selftests/kvm/steal_time.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not sure if we use kvm_userspace_memory_region_ext or 
+kvm_user_mem_region, just for readability.
 
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index d122f1e05cdd..b89f0cfa2dc3 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -62,7 +62,7 @@ static bool is_steal_time_supported(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_cpuid_entry2 *cpuid = kvm_get_supported_cpuid_entry(KVM_CPUID_FEATURES);
- 
--	return cpuid && (cpuid->eax & KVM_FEATURE_STEAL_TIME);
-+	return cpuid && (cpuid->eax & (1 << KVM_FEATURE_STEAL_TIME));
- }
- 
- static void steal_time_init(struct kvm_vcpu *vcpu, uint32_t i)
--- 
-2.35.1
+> +		else
+> +			size = sizeof(struct kvm_userspace_memory_region);
+>   
+>   		if (copy_from_user(&mem, argp, size))
+>   			goto out;
 
