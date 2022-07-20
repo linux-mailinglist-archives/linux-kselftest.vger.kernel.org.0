@@ -2,72 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6A857B3EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 11:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FFF57B8E9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 16:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbiGTJci (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 05:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S240821AbiGTOwh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jul 2022 10:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiGTJci (ORCPT
+        with ESMTP id S234729AbiGTOwh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:32:38 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948A45B07F
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 02:32:36 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id id17so3390006wmb.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 02:32:36 -0700 (PDT)
+        Wed, 20 Jul 2022 10:52:37 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7235AE67
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 07:52:35 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id b26so26494108wrc.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 07:52:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vzWr8CCl6K4jKT5gKOHKCbBp9CYkZxAE+GHDrcN/CMc=;
-        b=ptblNQivmQGBTKAvhjeXklCtONHNqKSfRxtzgeF1bfOJPaHnSY+uUW7nd5+Ay1oCTd
-         oCfHRi19ZhjE2TPquz3v4htsEwXuDETsfp9ZNbTjCA5ah0iq9xgZuTYmz9MIPsPpQsou
-         S/6K3jds3I6+w30onjfpmDfLGk/upL7b9Z9Kj+Q5HDIoxqI/G0tvKQUffcnW/CoeVgP8
-         Ct03m61k+uOnItGOK19qSpiuwQDEvPx+sA7/7Mw/jw/FXvKIYaHY9r4e9ZxcdkKdsOgR
-         GebVn2SvUu+QAZ50fBIz4CBbAO7oovDk+++E1NuWO3DnG+/NUTH/pLSOSXFH1zTdzAHG
-         T1Rw==
+         :cc:content-transfer-encoding;
+        bh=PUMNzOcke9F/E6l0+nSlaEl2q/BLzsi49G5O8oR/nQk=;
+        b=05e5XLBmfccOHOTn5Xi23vWg8lqNJPD/R1R0dBx9OAM6rEtAjGyDb7fFMs3y3i/7oD
+         /Ok5WoBVNnLuPSv+vaxNoWo7ozHczx628+bmwDooSBy4Ell7vhkiyYtko7XwBb+kbr/R
+         BAjORV2J0Is7Zf5la7TDJ8tdimEtSTjqnhLmTWTo+VkhDV2SDH+8N+fLRE2KY7wZfezY
+         T+8JyFzZ6P9hW/0ZmdZZ/B/Uv/FqGJI9SKb0Tf0iLP0d+exKHiujMl9frRdeNNWZHTAH
+         i9rgvXBSrNV3XeYyu2mF/sA2JpA/OlBjHP/f6HQ3JwqaawYdWHZ7Uly6ofxMlSylDhlx
+         Vy5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vzWr8CCl6K4jKT5gKOHKCbBp9CYkZxAE+GHDrcN/CMc=;
-        b=q8+/xUb7VoaJkTHRHiPYXG8/6JA8JYRkl/YQAtq85gUYXSmg7gZyljRa7r6LNww0g3
-         kzr7oLA2pNuZ18Sc03G4n03lbgV4lJcz/0eNBuJ6BFbMYTI4zwCXNxeoMlWt4kthcHRc
-         rM384XHx5cUkeTmQU/NxucjaDR3WZEz1KbmkVrXHEwCfx6JOHltn/ju1iDusah1DORw/
-         0rk12mKpY3se2SzchpbF50MI7ovERt1/3MbN0U3vOEgj7Kh5008Q7ycH6DvxxuEvEOkc
-         SIHTA+OXzh65EwAQEyDvt5bQs/aHNB+uCRSegGIvo64CYB+LObTy9ZRkl7yIUkFYi7kB
-         CgPA==
-X-Gm-Message-State: AJIora/eofp2Mbu4+mHNoOJO2FNRypLCRPRO1cMYqPSPyEiyk+mTcB97
-        7X3izAsFsVosUbEK6d50xU4xv+eKg5hhFnPh9cHYAQ==
-X-Google-Smtp-Source: AGRyM1vDMif7d2tIFvV4zCU/lON860YmX8asq31iwtRwC1y4FfhOdoAuEMs/wnsqwBdPw2jfQft6F+0dOarmOwHRmpU=
-X-Received: by 2002:a05:600c:4fcd:b0:3a3:1be9:965c with SMTP id
- o13-20020a05600c4fcd00b003a31be9965cmr2931884wmq.60.1658309555110; Wed, 20
- Jul 2022 02:32:35 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PUMNzOcke9F/E6l0+nSlaEl2q/BLzsi49G5O8oR/nQk=;
+        b=Y+aCSWbug7AHXj/4wKad0m24eqHZa5QPAosUnFjazpw+vhByCkPHHwz7dvtFOsv3Tx
+         fB5b0xIerTHs+AahwAexgowNTKdG1GnUo0c2rvjQ+Z2TXKI3H5Grvh9T/5ICTejo3+mR
+         gOTJcvoB13q2bmMFc2OUEIHoKGD6wjPVgVS5gy+Mt3nHtE2RGX2v/gO6ZS5KWNh9l/3P
+         8PConw7s20MPrHNO/yOj+bUkCnr4YwFAhm7FOHK60XUwtVBv/WGNykjrK+1CQZjAlPfa
+         nrwJhrSrRVoa3h4DZH9XyuIf8FKGUU6hslVU10rZKLoQHONn6CYKyKLPoKqeXpnn7ha8
+         Da/A==
+X-Gm-Message-State: AJIora9ylvyirv3kaYXFpy7CJ3X36zfw0/4pO33AeK4b1Fp+oFprJD6l
+        jE5tPmfR/EfJkCCplCvgiQwxSCyvCcG/xyb2Pc8l
+X-Google-Smtp-Source: AGRyM1vRgjFuWdos6HfR4YAkcb84ehTx76Uq4a7TaHyarDjXm0pNXoiIf0CYV/zUZqhGSCYFaueGHUufPPeJ3RbZVR0=
+X-Received: by 2002:a5d:4f8f:0:b0:21e:4f09:9e15 with SMTP id
+ d15-20020a5d4f8f000000b0021e4f099e15mr1313451wru.55.1658328754216; Wed, 20
+ Jul 2022 07:52:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220713005221.1926290-1-davidgow@google.com> <YtbwixbViJr9zkv8@bombadil.infradead.org>
-In-Reply-To: <YtbwixbViJr9zkv8@bombadil.infradead.org>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 20 Jul 2022 17:32:23 +0800
-Message-ID: <CABVgOSm4=Zz3ypK7uPh3phE9NqOc9mP50Di5pGAdwh2cs538jQ@mail.gmail.com>
-Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-modules@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f9547105e4394789"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20220707223228.1940249-1-fred@cloudflare.com> <20220707223228.1940249-5-fred@cloudflare.com>
+ <CA+EEuAhfMrg=goGhWxVW2=i4Z7mVN4GvfzettvX8T+tFcOPKCw@mail.gmail.com>
+In-Reply-To: <CA+EEuAhfMrg=goGhWxVW2=i4Z7mVN4GvfzettvX8T+tFcOPKCw@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 20 Jul 2022 10:52:23 -0400
+Message-ID: <CAHC9VhSbKct_hY4UNS0oyqsov9ELxXeQc4rqpRO7AuLKfWrGDA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] selinux: Implement create_user_ns hook
+To:     Karl MacMillan <karl@bigbadwolfsecurity.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, andrii@kernel.org,
+        ast@kernel.org, bpf@vger.kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, daniel@iogearbox.net,
+        ebiederm@xmission.com, eparis@parisplace.org,
+        jackmanb@chromium.org, jmorris@namei.org, john.fastabend@gmail.com,
+        kafai@fb.com, kernel-team@cloudflare.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        revest@chromium.org, selinux@vger.kernel.org, serge@hallyn.com,
+        shuah@kernel.org, songliubraving@fb.com,
+        stephen.smalley.work@gmail.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,125 +76,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000f9547105e4394789
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, Jul 20, 2022 at 1:57 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Tue, Jul 19, 2022 at 10:42 PM Karl MacMillan
+<karl@bigbadwolfsecurity.com> wrote:
+> On Thu, Jul 7, 2022 at 6:34 PM Frederick Lawler <fred@cloudflare.com> wro=
+te:
+>>
+>> Unprivileged user namespace creation is an intended feature to enable
+>> sandboxing, however this feature is often used to as an initial step to
+>> perform a privilege escalation attack.
+>>
+>> This patch implements a new namespace { userns_create } access control
+>> permission to restrict which domains allow or deny user namespace
+>> creation. This is necessary for system administrators to quickly protect
+>> their systems while waiting for vulnerability patches to be applied.
+>>
+>> This permission can be used in the following way:
+>>
+>>         allow domA_t domB_t : namespace { userns_create };
 >
-> On Wed, Jul 13, 2022 at 08:52:20AM +0800, David Gow wrote:
-> > The new KUnit module handling has KUnit test suites listed in a
-> > .kunit_test_suites section of each module. This should be loaded when
-> > the module is, but at the moment this only happens if KUnit is built-in.
-> >
 >
-> This commit log does not describe what functionality is broken exactly
-> without this commit. What functionality from kunit is provided when
-> .kunit_test_suites is available?
+> Isn=E2=80=99t this actually domA_t domA_t : namespace . . .
 >
+> I got confused reading this initially trying to figure out what the secon=
+d domain type would be, but looking at the code cleared that up.
 
-Sorry: the explanation is a bit obtuse, I admit.
+Ah, good catch, thanks Karl!
 
-Basically, when kunit itself is built as a module, no tests run. This
-is because the code to load the .kunit_test_suites section is compiled
-out if kunit is not built-in, but it should be present even if kunit
-is built as a module.
-
-> > Also load this when KUnit is enabled as a module: it'll not be usable
-> > unless KUnit is loaded,
->
-> What benefit is there to load a kunit module without kunit?
->
-
-None whatsoever, and it should be impossible. This was just rationale
-for the overhead of loading the section being likely insignificant,
-but it's worded pretty poorly.
-
-> > but such modules are likely to depend on KUnit
-> > anyway, so it's unlikely to ever be loaded needlessly.
-> >
-> > Fixes: 3d6e44623841 ("kunit: unify module and builtin suite definitions")
-> > Signed-off-by: David Gow <davidgow@google.com>
-
-I'll update the commit message when I send a new version of this out.
-
-Cheers,
--- David
-
---000000000000f9547105e4394789
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA0
-kprqb70GhqJ+/ovkrTxBisrd22RaxKnFUDeCUxXIiTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjAwOTMyMzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAcG63GNO+rH8c8WU+oIeF
-JuS9DflsZN5bDTjxcsHAG3gv9eFcfy3VLWpFvzdam3rpee6LBw3nb/aI/W3QtxmSHOet5YaDBgZh
-QmgdWAPP9oUskwg7Du/NwaeCKtXnShMwTIyTrTzyYrFmKfphKLXwoWH3z6r4VCig6c7MWSnuQBpc
-nLCYLzpyxbomF3sGTSNGLfIPbjRuFlgu0RUart76apnUsJKvjs9lBsrquzwIdZv+SWlfpIB4Rc9k
-OCjlOGb4yu/c6LxWHEJonWSWiqHmg1oYkKHa/xO3Hg7f3FSYr/g9gI84TQ7k6fvosnznGZIGMYp9
-2jE63hemtur43JpN5A==
---000000000000f9547105e4394789--
+--=20
+paul-moore.com
