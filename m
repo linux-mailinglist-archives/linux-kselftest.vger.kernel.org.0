@@ -2,160 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE0957B903
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 16:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E48757B945
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 17:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbiGTO6B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 10:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S241144AbiGTPMO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jul 2022 11:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241075AbiGTO56 (ORCPT
+        with ESMTP id S233491AbiGTPML (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 10:57:58 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49884A829
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 07:57:56 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id x185so11169899oig.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 07:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XSU2WUPOvF0fUCTGSGRZkl8WCZhfSChGKTGTEOsuYNI=;
-        b=iGIpbP2d3UEwVFWw5G9dZlMqJx4o8UCPvRj6piZLN7Qixwv38zIteUBoiwtf11TzoJ
-         8pcI1FzJmEI8s8Z8r4wNd/P56A7AMD40p0ifu6Z8wqaycmhnxl9M7kNdXzB8SXogNKD/
-         YVqd80JtH2cgsBKx3SUf9wdgi1qit4j7Py/II=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XSU2WUPOvF0fUCTGSGRZkl8WCZhfSChGKTGTEOsuYNI=;
-        b=IMfuIle6BrgSw+2U9MTNKpApDjx0wsXFH2n5Nz5/7LVg2uhgb7VFjyrrgdtMSH/Fz0
-         +4k77RV4ewUWq4Mtyi0lfxTyVNdDV6EMVeNT3olycNkI013SdhfmTbxrd4nU19JG2SI+
-         T0UGqjQMBqTKtj5kAZFDI+PYpGe3Id/92bIwx1ibaoEeu/bb3F6Y5+cc5t7a1cUtuEZC
-         keKSmN2HFJfabene9yu0nkxf/EGxGkYe6vBRcLz4nQqUvKYsSKRQG+nFGGycMo3kY9fd
-         zxijf/O7hrDGfRq0PR0FicaVP+mx2jed1xA2GpjP5GQ3jv7XUapml/vG8OXVX/4M/fBg
-         WPpw==
-X-Gm-Message-State: AJIora805o6WxnceIwTmoAXbv5yaH0fXuECkp230Z4kmEIVBskzwq0mv
-        5jsnx8jKZNEWQNYp9jECVYEJiA==
-X-Google-Smtp-Source: AGRyM1v5UNxUPAVexBnv65PVVqbWvE8t6MWf9AqqczcauOBSa7XBiaehpgEh3k3h5n6IkYivB27NLA==
-X-Received: by 2002:a05:6808:170c:b0:335:1d14:f99d with SMTP id bc12-20020a056808170c00b003351d14f99dmr2435919oib.243.1658329076048;
-        Wed, 20 Jul 2022 07:57:56 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id z14-20020a9d62ce000000b0061c7a5691f2sm7425058otk.47.2022.07.20.07.57.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Jul 2022 07:57:55 -0700 (PDT)
-Message-ID: <42069251-3ea7-b0c7-4efb-e144c52ebf51@cloudflare.com>
-Date:   Wed, 20 Jul 2022 09:57:53 -0500
+        Wed, 20 Jul 2022 11:12:11 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B313CBE5;
+        Wed, 20 Jul 2022 08:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658329930; x=1689865930;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=q2IlxigBdcwC0dpWUgLpaaCiXj48I0dLaoXRVby3NyA=;
+  b=JVxnA3G31BtwwX7d89ETBKonHVpwhK4I3u2fu7mJk3+lv/F5g+6hMlFI
+   voWmJsThLQ0l5RXtt395CJTthSmFEEBdGsi+WIKvdLBQfX8nbhiXqN9Qe
+   ET1r2bf3pmInDiYPuxddPimaNum33EKgsAH+lFUhKFj3iAXDvMg9CnqO+
+   vbUg1tHuoJbGuxV4ITFJdZzrxtaPSfg7HgpRxUdFv3Yh0+abmruxgGjue
+   629HVUuhoV9SJBPPqHd0Vy74LA1qlNKknRstmM/j/gYARF8cHUiVfdqC0
+   jJC+5Ld3nRSuBOISqtHImJKQsZj3ZHxQBETUIhW6jF55X2aBIpteJWyji
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="285567970"
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="285567970"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 08:12:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
+   d="scan'208";a="595275695"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 20 Jul 2022 08:11:56 -0700
+Date:   Wed, 20 Jul 2022 23:07:06 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <20220720150706.GB124133@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+ <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
+ <20220719140843.GA84779@chaop.bj.intel.com>
+ <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 4/4] selinux: Implement create_user_ns hook
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com
-References: <20220707223228.1940249-1-fred@cloudflare.com>
- <20220707223228.1940249-5-fred@cloudflare.com>
- <CAHC9VhTkvPvqGQjyEKbi2pkKBtRQE=Uat34aoKsxjWU0qkF6CA@mail.gmail.com>
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <CAHC9VhTkvPvqGQjyEKbi2pkKBtRQE=Uat34aoKsxjWU0qkF6CA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/19/22 8:32 PM, Paul Moore wrote:
-> On Thu, Jul 7, 2022 at 6:32 PM Frederick Lawler <fred@cloudflare.com> wrote:
->>
->> Unprivileged user namespace creation is an intended feature to enable
->> sandboxing, however this feature is often used to as an initial step to
->> perform a privilege escalation attack.
->>
->> This patch implements a new namespace { userns_create } access control
->> permission to restrict which domains allow or deny user namespace
->> creation. This is necessary for system administrators to quickly protect
->> their systems while waiting for vulnerability patches to be applied.
->>
->> This permission can be used in the following way:
->>
->>          allow domA_t domB_t : namespace { userns_create };
->>
->> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
->>
->> ---
->> Changes since v1:
->> - Introduce this patch
->> ---
->>   security/selinux/hooks.c            | 9 +++++++++
->>   security/selinux/include/classmap.h | 2 ++
->>   2 files changed, 11 insertions(+)
->>
->> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
->> index beceb89f68d9..73fbcb434fe0 100644
->> --- a/security/selinux/hooks.c
->> +++ b/security/selinux/hooks.c
->> @@ -4227,6 +4227,14 @@ static void selinux_task_to_inode(struct task_struct *p,
->>          spin_unlock(&isec->lock);
->>   }
->>
->> +static int selinux_userns_create(const struct cred *cred)
->> +{
->> +       u32 sid = current_sid();
->> +
->> +       return avc_has_perm(&selinux_state, sid, sid, SECCLASS_NAMESPACE,
->> +                                               NAMESPACE__USERNS_CREATE, NULL);
->> +}
+On Tue, Jul 19, 2022 at 04:23:52PM +0200, Gupta, Pankaj wrote:
 > 
-> As we continue to discuss this, I'm beginning to think that having a
-> dedicated object class for the userns might be a good idea.  I believe
-> I was the one who gave you these code snippets, so feel free to blame
-> me for the respin ;)
+> > > > +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
+> > > > +{
+> > > > +	return false;
+> > > > +}
+> > > 
+> > > Does this function has to be overriden by SEV and TDX to support the private
+> > > regions?
+> > 
+> > Yes it should be overridden by architectures which want to support it.
 > 
+> o.k
+> > 
+> > > 
+> > > > +
+> > > >    static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
+> > > >    {
+> > > >    	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+> > > > @@ -4689,6 +4729,22 @@ static long kvm_vm_ioctl(struct file *filp,
+> > > >    		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+> > > >    		break;
+> > > >    	}
+> > > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > > > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+> > > > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+> > > > +		struct kvm_enc_region region;
+> > > > +
+> > > > +		if (!kvm_arch_private_mem_supported(kvm))
+> > > > +			goto arch_vm_ioctl;
+> > > > +
+> > > > +		r = -EFAULT;
+> > > > +		if (copy_from_user(&region, argp, sizeof(region)))
+> > > > +			goto out;
+> > > > +
+> > > > +		r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
+> > > 
+> > > this is to store private region metadata not only the encrypted region?
+> > 
+> > Correct.
+> 
+> Sorry for not being clear, was suggesting name change of this function from:
+> "kvm_vm_ioctl_set_encrypted_region" to "kvm_vm_ioctl_set_private_region"
 
-No worries, I'll make this change for v3.
+Though I don't have strong reason to change it, I'm fine with this and
+this name matches the above kvm_arch_private_mem_supported perfectly.
 
-> This is what I'm thinking:
+Thanks,
+Chao
 > 
->    static int selinux_userns_create(const struct cred *cred)
->    {
->      u32 sid = current_sid();
+> > 
+> > > 
+> > > Also, seems same ioctl can be used to put other regions (e.g firmware, later
+> > > maybe DAX backend etc) into private memory?
+> > 
+> > Possibly. Depends on what exactly the semantics is. If just want to set
+> > those regions as private current code already support that.
 > 
->      return avc_has_perm(&selinux_state, sid, sid,
->                          SECCLASS_USER_NAMESPACE,
->                          USER_NAMESPACE__CREATE, NULL);
->    }
+> Agree. Sure!
 > 
->> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
->> index ff757ae5f253..9943e85c6b3e 100644
->> --- a/security/selinux/include/classmap.h
->> +++ b/security/selinux/include/classmap.h
->> @@ -254,6 +254,8 @@ const struct security_class_mapping secclass_map[] = {
->>            { COMMON_FILE_PERMS, NULL } },
->>          { "io_uring",
->>            { "override_creds", "sqpoll", NULL } },
->> +       { "namespace",
->> +         { "userns_create", NULL } },
 > 
-> The above would need to change to:
-> 
->    { "user_namespace",
->      { "create", NULL } }
-> 
-
+> Thanks,
+> Pankaj
