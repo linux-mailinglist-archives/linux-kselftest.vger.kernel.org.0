@@ -2,67 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844E457B1F2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 09:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFFB57B3CB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 11:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235321AbiGTHm0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 03:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S234888AbiGTJ0R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jul 2022 05:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiGTHmZ (ORCPT
+        with ESMTP id S229556AbiGTJ0Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 03:42:25 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99D54C608
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 00:42:23 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id n12so12041799wrc.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 00:42:23 -0700 (PDT)
+        Wed, 20 Jul 2022 05:26:16 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20A852E5C
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 02:26:14 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id d8so5304786wrp.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 02:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=QgwZs2dBOTcd13gSB9FHKKLgRMSu5BBmlcktNyWkEj0=;
-        b=Djx2UzN0/14x9DNQyzgpDOQtCs3sXzBi04KJ5tBJgss0x63jVEIe8jeY3ZER+owQZw
-         Wvtlv5BKvFne2AlzSOV/SdM07J4SZh3C4C52/feV73+4anZGXeToQkkBnp9Rw6fwGezt
-         aTrOpbcpy7iuAnj9nRMwnw3F/f/WdOIzOIBJEUlF6QDwzDPixFHYOwyfHUC0zGFzDhVY
-         TR0uzesmt1brBqjuCjqm2YpXiK+vcLsqzCc0Df1C78ntuDYLhW9a3FDeGXh9bCz3sU/4
-         +06A9T+FDYvsjMTrLwCRTcU2EGHNdanOPDDxWUl2o/r32Ym/J/6Ni6qgNJP/r0OFdILb
-         fkrA==
+        bh=R1RT70dVRWCdzYdRHqqEZlWtY1V9zI+ixKXFVkFFnB0=;
+        b=KT2VcTFc2j4N95HkPoMbyWJIFPBzD8UqKVqiLcLot3v+KPDRpgZGmtoboHX0xbmCRd
+         KcTArKuJQJ/8rChv4faRzV1AwehO+O/xFJjzkm0CLCpevE8q8K1Ioj6wAiLR0BQkfLdM
+         IyKeGiX9AGlAeTrrI6p8u95GSqROod5egFsT9PQat9CrrytI/YKDT+wVUcr9xioZDj5/
+         TkarHcaAmxWhULrIYGudKOlkHrnsIreTd46oFTiVumT0P4y58vYlNmCdQuyPxRqTUNZY
+         p2xoai+/52ouk1iiOt/fGADo/Q90d0C2/XKKzXKMEeBS/lp1jNATONrbxr/RinrxQUK6
+         MfbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QgwZs2dBOTcd13gSB9FHKKLgRMSu5BBmlcktNyWkEj0=;
-        b=h7n+lP+kFAsQFLJ4e+NSDeSAbhOMemyp5xxWLcGf5pLixiSK4rEy0tPHN1c18F8AD4
-         Y9UQU8UzeMUysdegYnFqR7EqIYSjx2vF9qz/4kAv34UHx2AQE1yMgVGFZwN1SUR9csp/
-         BXL5lm3Ca+NdHZ7h2q4MsqmqigoEMr6eq9CZlrkjRtFsPur8RmJmQhQB7tigfLyBRCLH
-         56f70v2UQ5p0GNRcTxnGuIJzRa+BCxI2v7H/PHumqD4yyfN0hb86OsO8HXpOgR08uM8x
-         /2OmoJ2EQ2zg4rty6LCKjaA7LkGTppQxXgwrWMv5L5B79U/u2TtOb+JKEmDeKq+Ktmc7
-         Kedw==
-X-Gm-Message-State: AJIora+6qUlWLaYbvmFqG5biwsBc30C3Fhu3eZu3+GL3fwhmSFakkaLB
-        UBKR5FxvIiFU+5nSdbPeaCKGeY/0Oo03Yq6qq+d0ig==
-X-Google-Smtp-Source: AGRyM1vRgR19NCJfJTThyBy72KUy+2l2jUQiKnrXY0BDlmBYKXGX0VUzC3S3g8p+1nnVo40mGHoKiAF4mm2lH8D/lfI=
-X-Received: by 2002:adf:fd4a:0:b0:21d:8b59:dcb1 with SMTP id
- h10-20020adffd4a000000b0021d8b59dcb1mr29801603wrs.622.1658302942294; Wed, 20
- Jul 2022 00:42:22 -0700 (PDT)
+        bh=R1RT70dVRWCdzYdRHqqEZlWtY1V9zI+ixKXFVkFFnB0=;
+        b=R+ZYri/vE/YANsAv4M5lkuGVqTum/QAgoXMdKRt7mIYt8qxIzpbz0Ezd2/ATgdli4n
+         YSzxth5WETFeod9fjoei5X5b50IIczmu436McaTUiG8jMIXKwZ9vkdqVsKIFHaSszyaY
+         nks8OBXZPoQG1dTZPZxEoAg1hn3ioHpNvh4YOei1yExK1FUC3dFGWvadOh0ccBfl75+Q
+         0kMKa4SNZA1gjBy9um5+46Mc3LTkL4VnaA/NvFHxewJVdFCbZB+BHsG6q5KKVpHl9KSD
+         O9rNETE3VrcRHkltOZQax5/HLtAjWJBRLhelU6w6sNEA5nqlZld0XzqiXKqkaTcYj+6G
+         tE0g==
+X-Gm-Message-State: AJIora/qSNUY7XdpmWhC2hN4TKPVBUWYe4CL+WcDkb2Q98Ng4ZmUUCUt
+        XVLtvcmwfhXGxOsdOEatz7fbju3RnuZChIYbZG2491PXrNlARQ==
+X-Google-Smtp-Source: AGRyM1vPUTNYZtrbOlmCgU5sTGfrMq58qQzXIAIOaEzSmiLik6FnswjHhwybz1D8taJr0kvYmoBocRRvMBVhd8uPth4=
+X-Received: by 2002:a5d:4708:0:b0:21e:4eda:5cda with SMTP id
+ y8-20020a5d4708000000b0021e4eda5cdamr301867wrq.337.1658309173441; Wed, 20 Jul
+ 2022 02:26:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220719092214.995965-1-sadiyakazi@google.com>
-In-Reply-To: <20220719092214.995965-1-sadiyakazi@google.com>
+References: <20220713005221.1926290-1-davidgow@google.com> <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
+ <Ytbw1T6uspICqj5B@bombadil.infradead.org>
+In-Reply-To: <Ytbw1T6uspICqj5B@bombadil.infradead.org>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 20 Jul 2022 15:42:11 +0800
-Message-ID: <CABVgOSk2PYruRHnU=VnkNo71J_s+0eysNszkFuLY3VD2DpKXGQ@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: Add CLI args for kunit_tool
-To:     Sadiya Kazi <sadiyakazi@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
+Date:   Wed, 20 Jul 2022 17:26:02 +0800
+Message-ID: <CABVgOSkpT2kqVec2F7BsTF5tyABO43bseETC2Dz238zN+sTfQw@mail.gmail.com>
+Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        linux-modules@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d35c3905e437bd15"
+        boundary="0000000000003a328e05e4393150"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -74,134 +76,95 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000d35c3905e437bd15
+--0000000000003a328e05e4393150
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 19, 2022 at 5:22 PM Sadiya Kazi <sadiyakazi@google.com> wrote:
+On Wed, Jul 20, 2022 at 1:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
 >
-> Run_wrapper.rst was missing some command line arguments. Added
-> additional args in the file. Included all initial review comments.
->
-> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
-> ---
+> On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
+> > On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > The new KUnit module handling has KUnit test suites listed in a
+> > > .kunit_test_suites section of each module. This should be loaded when
+> > > the module is, but at the moment this only happens if KUnit is built-in.
+> > >
+> > > Also load this when KUnit is enabled as a module: it'll not be usable
+> > > unless KUnit is loaded, but such modules are likely to depend on KUnit
+> > > anyway, so it's unlikely to ever be loaded needlessly.
+> >
+> > This seems reasonable to me.
+> >
+> > Question: what happens in this case?
+> > 1. insmod <test-module>
+> > 2. insmod kunit
+> > 3. rmmod <test-module>
+> >
+> > I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
+> > for <test-module>, I think?
+> > But we never called __kunit_test_suites_init().
+> > My fear is what breaks as a result of this precondition break.
 
-This looks pretty good, save for some minor nitpicks below. I also
-echo Ma=C3=ADra's comments, though I'm not _too_ worried about having a
-little bit of duplication if it means we get a complete (or
-nearly-complete) list of arguments here, but still have them described
-in the appropriate part of the rest of the documentation.
+I don't think this should be possible: any module with KUnit tests
+will depend on the 'kunit' module (or, at least, kunit symbols), so
+shouldn't load without kunit already present.
+
+If modprobe is used, kunit will automatically be loaded. If insmod is
+used directly, loading the first module should error out with
+something like:
+[   82.393629] list_test: loading test module taints kernel.
+[   82.409607] list_test: Unknown symbol kunit_binary_ptr_assert_format (err -2)
+[   82.409657] list_test: Unknown symbol kunit_do_failed_assertion (err -2)
+[   82.409799] list_test: Unknown symbol kunit_binary_assert_format (err -2)
+[   82.409820] list_test: Unknown symbol kunit_unary_assert_format (err -2)
+insmod: ERROR: could not insert module
+/lib/modules/5.19.0-rc1-15284-g9ec67db0c271/kernel/lib/list-test.ko:
+Unknown symbol in module
+
+Maybe you could get into some trouble by force-removing modules at
+various points, but you're in undefined behaviour generally at that
+point, so I don't think there's much point going out-of-our-way to try
+to support that.
+
+> >
+> > E.g. In the case that CONFIG_KUNIT_DEBUGFS is enabled, this includes a
+> > call to kunit_debugfs_destroy_suite() with no previous call to
+> > kunit_debugfs_create_suite().
+> > That will include a call to debugfs_remove_recursive(suite->debugfs),
+> > where suite->debugfs is an uninitialized pointer.
+> >
+> > Maybe we can treat it as "undefined behavior" for now and proceed with
+> > this patch.
+> >
+> > In terms of long-term fixes, perhaps insmod kunit could trigger it to
+> > 1. run all built-in tests (IIUC, it doesn't right now)
+> > 2. run all the tests of currently loaded modules
+> > 3. track which modules already ran so if you rmmod + insmod kunit
+> > again, it won't rerun tests?
+>
+> Let's please address these considerations.
+>
+
+Again, I think the module and Kconfig dependencies should prevent
+these situations from ever arising. It shouldn't be possible to have
+any built-in tests if kunit is not itself built-in, so case (1) can't
+occur. Equally, it shouldn't be possible to load any test modules
+before the kunit module is loaded, so (2) can't occur. And rmmod kunit
+will give an error if there are any test modules loaded: "rmmod:
+ERROR: Module kunit is in use by: list_test", so (3) can't occur.
+
+The only similar situation to (3) I can think of is where both the
+test modules and kunit are rmmod-ed and reloaded. I think we'd want to
+re-run the tests in that case, so tracking which modules already ran
+would be counterproductive.
+
+In short, I _think_ what we're doing now should be correct, and the
+cases above are all prevented by module dependencies. But do let me
+know if I'm missing something...
 
 Cheers,
 -- David
 
->  Documentation/dev-tools/kunit/run_wrapper.rst | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->
-> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentatio=
-n/dev-tools/kunit/run_wrapper.rst
-> index 5e560f2c5fca..91f5dda36e83 100644
-> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
-> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-> @@ -257,3 +257,51 @@ command line arguments:
->              added or modified. Instead, enable all tests
->              which have satisfied dependencies by adding
->              ``CONFIG_KUNIT_ALL_TESTS=3Dy`` to your ``.kunitconfig``.
-> +- ``--kunitconfig``: Specifies the path to the ``.kunitconfig`` file.
-> +  This Kconfig fragment enables KUnit tests. The "/.kunitconfig" gets
-> +  appended to the path specified. For example, If a directory path "lib/=
-kunit"
-> +  is given, the complete path will be "lib/kunit/.kunitconfig".
-
-This is definitely a bit confusing: it seems to describe "how it
-works" more than "what is it, and when do you use it". Perhaps
-something more like:
-
-"Specifies a .kunitconfig file to use to build and run with a
-predefined set of tests and their dependencies. (e.g., to run tests
-for a given subsystem). This can be the path to a file, or to a
-directory (in which case a file named ".kunitconfig" in said directory
-will be used.)"
-
-> +
-> +- ``--kconfig_add``: Specifies additional configuration options to be
-> +  appended to the ``.kunitconfig`` file. For example, ``CONFIG_KASAN=3Dy=
-``.
-> +
-> +- ``--arch``: Runs tests with the specified architecture. The architectu=
-re
-> +  specified must match the string passed to the ARCH make parameter.
-> +  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on =
-QEMU.
-> +  Default to 'um'.
-> +
-> +- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
-> +  same argument as passed to the ``CROSS_COMPILE`` variable used by
-> +  Kbuild. This will be the prefix for the toolchain
-> +  binaries such as GCC. For example:
-> +
-> +  - ``sparc64-linux-gnu`` if we have the sparc toolchain installed on
-> +    our system.
-
-This example should be ``sparc64-linux-gnu-`` (with the extra
-hyphen-minus at the end). It's concatenated to produce, e.g.,
-sparc64-linux-gnu-gcc.
-
-> +
-> +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/=
-microblaze-linux``
-> +    if we have downloaded the microblaze toolchain from the 0-day
-> +    website to a specified path in our home directory called toolchains.
-> +
-> +- ``--qemu_config``: Specifies the path to the file containing a
-> +  custom qemu architecture definition. This should be a python file
-> +  containing a QemuArchParams object.
-> +
-> +- ``--qemu_args``: Specifies additional QEMU arguments, for example, "-s=
-mp 8".
-> +
-> +- ``--jobs``: Specifies the number of jobs (commands) to run simultaneou=
-sly.
-> +  By default, this is set to the number of cores on your system.
-> +
-> +- ``--timeout``: Specifies the maximum number of seconds allowed for all=
- tests to run.
-> +  This does not include the time taken to build the tests.
-> +
-> +- ``--kernel_args``: Specifies the kernel command-line arguments. Might =
-be repeated.
-
-Nit: maybe "Specifies _additional_ kernel command-line arguments".
-kunit_tool already sets some.
-
-> +
-> +- ``--run_isolated``: If set, boots the kernel for each individual suite=
-/test.
-> +  This is useful for debugging a non-hermetic test, one that
-> +  might pass/fail based on what ran before it.
-
-
-
-> +
-> +- ``--raw_output``: If set, generates unformatted output from kernel.
-> +  If set to ``--raw_output=3Dkunit``, filters to just KUnit output.
-
---raw_output=3Dkunit is the default if just --raw_output is set. You
-need to specify --raw_output=3Dall for the full kernel output.
-
-> +
-> +- ``--json``: If set, it stores the test results in a JSON format and pr=
-ints to stdout or
-> +  saves to a file if a filename is specified.
-
-Nit: let's remove the first 'it' to be consistent with the previous
-entries. i.e., "If set, stores..."
-
-> --
-> 2.37.0.170.g444d1eabd0-goog
->
-
---000000000000d35c3905e437bd15
+--0000000000003a328e05e4393150
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -268,14 +231,14 @@ OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
 3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
 lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCK
-fw6QY6Kbpl+Cx8AvAu8sJw4Y0IIUN2am4pNi4k3wYDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjAwNzQyMjJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDi
+lHOHniqfhL0SWmohcV+5LiuONdCSzCpOpCAEz4azOjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjAwOTI2MTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAEPPwSKQVi/rgYulroxdd
-XW+ennLNOfkbkQG+cUbYoX90edp1zcpJZFKu7xVEC58t9vCHQsY1wPqlEYMrM1JLnlJ1xkDBiT3Z
-LWCbxHFLvTNWTgvqm6rLNOGnZ9xdBkDBL3gmz4++XMS6FibOJ1PNb8MLyiayaQk3Dx8tbqoDTPZk
-PAYuvTIlOTEKJKuW/iO9rO7BWQRtZhcSzFbLx07RLBXFlsC+ZJAWUfz2gTKsbvkJ2pL1wvrx6bxm
-1FGLlp2lKvH5zcCSIkrp5zfTRU1lduxCuX2KqAUghGHpl54hcg2NIH1jkofAMWM4Nvo1GPynw3aU
-O8mK37V9NbZPaLBOFw==
---000000000000d35c3905e437bd15--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEABdV3+caJ97XIyT5tGUCk
+ltvPscFweSroK7m3nXXUzR/OQM27SLhw86k8a4pWTeEsb74hdMKcvxScvELf75trIy9ZrsNmg36p
+VWtivqDolTF0nJpFVhUyqIgurv0EnRmRS9iI9UBzPOhKlwYVZqXBDvY4SUhQ7DYwu3KM9U/o6Z0T
+o3nDL1Jl2s/bCrXod60x6tC4wlShB3cafyzRoHRAuogx9CpCQCcJ+JoQ8H4N/QfF91IqRdNY5322
+bbsdyR+hBo/MvgoMHYIlpMk4jeuAw9yuD7ketEBuISXb8798LqfErBBVujiYwf/kw+pSyakvwBOE
+YZExTaaglCRKkYJz2A==
+--0000000000003a328e05e4393150--
