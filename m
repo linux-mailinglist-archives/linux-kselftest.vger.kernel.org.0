@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CBE57BF5B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 22:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA1557BF5D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 22:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiGTUx1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 16:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
+        id S229562AbiGTUxc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jul 2022 16:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiGTUx0 (ORCPT
+        with ESMTP id S229452AbiGTUxb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 16:53:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DC4501AC
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 13:53:25 -0700 (PDT)
+        Wed, 20 Jul 2022 16:53:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF965073C
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 13:53:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 633C661CCF
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 20:53:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3498C341C7;
-        Wed, 20 Jul 2022 20:53:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 941AFB821FC
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 20:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438E4C341CB;
+        Wed, 20 Jul 2022 20:53:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658350404;
-        bh=YSKR+0WQX7Mq/SCbbuEVAq76XcSFDwV4GjHw5zpQ0kU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UVjY/dbkeGDpbWCo4StI4S8gb8boPhiEAMQucMLlbTLOjiuX3m5xOEtgVC/9Ks7Nm
-         1vYQx+9VNRYhRrohzUcJwOJ25xXBGwBZKkiPZOOEae2treKY0NxFSznyTgRAbjFlL2
-         4sYFXoBy5+S7YS+oAA9pbHpuFC6JbFH+gCzo229HrE8q0YJFCZjYfuKJUg02x/EFtu
-         42jxivZpVnK1t9StYnJoNPDF0WK+5g2vTQgtf2ZjNNF9xcceN6mX3Sn74jfG/n+4mW
-         dhUR9UiXs5rpMtvGdoSysg628Und+piAyPEezDG972DyvI1ihxB40FUPKEsk1lqBKN
-         biHQ+0lS7pSsA==
+        s=k20201202; t=1658350407;
+        bh=I+iJlcg1R3+8kZpSRC/n6qtGReBtslazilklAayOT/M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GllCerdx//tASznRlmaxykm+kHuzVvf9X7kz1aXLk/w2JLFV9dPGNspBJ+Zj/Srrd
+         56KSDW0gvZbo9aHyW0jxYyk4QdYoO75GJ3bmyG2yca8IpPKgD2OdC1NDxm3xzM+aUD
+         PlSt/fStWJ7pFmPKXl8mOXKNJiTRY7bTYlVrLG1UNzRmwm2BOjLKjqOyyad6MOOr8U
+         sEAjuA75GdWXPhPpCSisHJ/GlOKwoCree0dz/UEv6b9cqEJGt9yoGwwkCVJkn7t/8/
+         GHFZWP1m4++GU4jog0yPOuY7+RQrqjHzbQlwD4Mz12LeSCFtgMNmC7v/6Yn436ZAwU
+         MTzDiB0QBkMsQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
@@ -40,12 +40,14 @@ Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 0/3] arm64/sve: Document our actual SVE syscall ABI
-Date:   Wed, 20 Jul 2022 21:50:10 +0100
-Message-Id: <20220720205013.890942-1-broonie@kernel.org>
+Subject: [PATCH v1 1/3] kselftest/arm64: Correct buffer allocation for SVE Z registers
+Date:   Wed, 20 Jul 2022 21:50:11 +0100
+Message-Id: <20220720205013.890942-2-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220720205013.890942-1-broonie@kernel.org>
+References: <20220720205013.890942-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1257; h=from:subject; bh=YSKR+0WQX7Mq/SCbbuEVAq76XcSFDwV4GjHw5zpQ0kU=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi2GqCaUN7YliFgf8CYHR6UgHSNz4XqUEJESFAKm3x YKohRe6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYthqggAKCRAk1otyXVSH0O/5B/ 9QtVh9u4Ax+Oh8zWGvAGCwcK+isBH0Feons5uKX09WOTv6uDn0poHP/A6BzeTjvEPt8mjw/FfjOn6v olTmiki/uZZHi50dbiS1W2HaB3QRbpP+ry3IF7hY4+UlU981P4MPKZfw0nFeN3/FD9VMLBKBHYjOg9 N/JsvccNc3WDGED0aX0PAmYS0/kg1GmxlyC1f8F82oSYosNBuF9RDZVAQAN/KuIeJf6qlWUWlFNh/X 5Z7MqjxRckK9kUeWYQ+6HZdrgyPjc/HK7Tl/oRyDL72HOVpz25PqB241u3fVB7qcpDKC8jzJp2d5bS +nZRTaicRIfhG5oImWH4CuFolwRnGT
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1407; h=from:subject; bh=I+iJlcg1R3+8kZpSRC/n6qtGReBtslazilklAayOT/M=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi2GqDSwZmFtzJGfQYVzXb1gw/Qngx5RLEW76UtsEo wbOQg2mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYthqgwAKCRAk1otyXVSH0OYdB/ 0RCEulwYlgOQMWHqsEa6M4OTHADL1Nht6LkWXgFEEkWfbgI7El9AhyVlTv0P+7ioQWsah8vn+YlBzx 0IbkLeVk7jO/7eUnMY7nFhYfIBDvrwSsoO+CBLjyuROCR/YUtfN5r96M4Z1cpv6tpyCq6iOE49wFVX wrKM/5YqExhGvGDkdLzkh0XkvZ40ezqkmDbrKn0xBrefsdTZj4Jd1RLKzyqvfQ3cfuo2D8jyZetgHQ i6WwMu9YVTmDqQxv8+AhYhfoIfheoEOypmKqPNLmIRPe3SR5htnUGFq4Jpi8ssh98oLO2Fkx2daJFy 5W3yRJ5eT86E4h5a3YrhBfmzSqRnow
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -57,31 +59,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently our SVE syscall ABI documentation does not reflect the actual
-implemented ABI, it says that register state not shared with FPSIMD
-becomes undefined on syscall when in reality we always clear it. Since
-changing this would cause a change in the observed kernel behaviour
-there is a substantial desire to avoid taking advantage of the
-documented ABI so instead let's document what we actually do so it's
-clear that it is in reality an ABI.
+The buffer used for verifying SVE Z registers allocated enough space for
+16 maximally sized registers rather than 32 due to using the macro for the
+number of P registers. In practice this didn't matter since for historical
+reasons the maximum VQ defined in the ABI is greater the architectural
+maximum so we will always allocate more space than is needed even with
+emulated platforms implementing the architectural maximum. Still, we should
+use the right define.
 
-There has been some pushback on tightening the documentation in the past
-but it is hard to see who that helps, it makes the implementation
-decisions less clear and makes it harder for people to discover and make
-use of the actual ABI. The main practical concern is that qemu's user
-mode does not currently flush the registers.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/abi/syscall-abi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Mark Brown (3):
-  kselftest/arm64: Correct buffer allocation for SVE Z registers
-  arm64/sve: Document our actual ABI for clearing registers on syscall
-  kselftest/arm64: Enforce actual ABI for SVE syscalls
-
- Documentation/arm64/sve.rst                   |  2 +-
- .../testing/selftests/arm64/abi/syscall-abi.c | 61 ++++++++++++-------
- 2 files changed, 41 insertions(+), 22 deletions(-)
-
-
-base-commit: a111daf0c53ae91e71fd2bfe7497862d14132e3e
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
+index b632bfe9e022..95229fa73232 100644
+--- a/tools/testing/selftests/arm64/abi/syscall-abi.c
++++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
+@@ -113,8 +113,8 @@ static int check_fpr(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ }
+ 
+ static uint8_t z_zero[__SVE_ZREG_SIZE(SVE_VQ_MAX)];
+-uint8_t z_in[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
+-uint8_t z_out[SVE_NUM_PREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
++uint8_t z_in[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
++uint8_t z_out[SVE_NUM_ZREGS * __SVE_ZREG_SIZE(SVE_VQ_MAX)];
+ 
+ static void setup_z(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 		    uint64_t svcr)
 -- 
 2.30.2
 
