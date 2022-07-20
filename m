@@ -2,60 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A5F57BB53
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 18:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6E457BBA3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 18:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbiGTQVq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 12:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S233777AbiGTQok (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jul 2022 12:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiGTQVo (ORCPT
+        with ESMTP id S230428AbiGTQoj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:21:44 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8C761B3E
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 09:21:42 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id s206so16842448pgs.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 09:21:42 -0700 (PDT)
+        Wed, 20 Jul 2022 12:44:39 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E1F664ED
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 09:44:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id g17so15477009plh.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 09:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=f0adogo0zxbyENycGDyitWJjrMgz2USumvEVtMapSaM=;
-        b=spGLDNQ08YQPqH7UmhIpiHe2RaM2zw7ODEii6vmP7whH0yk8NhoS7QYoLrpacwnfbW
-         S3VkQABUgvOUZAhV+aAm4mnqaDYIZ6zOWmQpK2Ozj1qZ4yEP8IO8Ogxh+e38++9rhFjG
-         Gncn3BStXeB7j7O3s/y/CX20mihB4UWNCG15aOuY2njFY086JqM16L+H4BlY/AN8pWe8
-         s9ex7tY8xz16AMATUg5JkSGjI8FqtQ1JH/Ckd2eXT2/cGJ188i8q7NwsSTtTXSvKMUHc
-         Y4He+Vu/AgyMtaInE+pTo4N4Wc2xqCJOuE/medBD2cHSdxBx52LLtQTesVoUiLmIcCvV
-         AYCw==
+        bh=NKI6wQLzSjuIgXqGP/STBDd/io3ztt1cS6FImLHwFp4=;
+        b=aYf105zHRqcKnwIvd6ekmpqruUyQToVuka3h99YqNWRmFXkZ7ZVHV8oWNskzAvMx2F
+         hflOC9nxBStxjqtxvcltphe6Q5E58yJ1G2iJfhXNEqLsdIUxBz1Jghs5U/OLu3mGUc1a
+         JRrnyPRUFOER4kSZYOrYSqnkSlzR3XQAIIqK13/lyE2A23HrMPyXlZiOV822mKgY0tgd
+         nTwYcdRpttHY+A4wo2bLHxYVFSJL0sIrCNfPF0RyUS+KwJ64AABEJ8yX01Hb9NjXpaI/
+         s6Pf48SWnWTxK6vMsYlo9rnJGzIsPUCTu5j+IdeVl1yrYnYpbPzLMaw748Y0j9AcRKUU
+         ZGfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=f0adogo0zxbyENycGDyitWJjrMgz2USumvEVtMapSaM=;
-        b=nmCjryZJfcyKr7H+UFiFtVq961wPClqkDkR0PiyxipaQPqGM8qly9RpIcKS335CBRW
-         0EHskXZGNP9i2PsI9hzPtzbBPis+9BTRObwtOxW6JolnyNHSUuwfssas5+FVznm8uWVA
-         PipRxkCYqnX6PHf3Fs9Tv55aQ2oM3+Ehuvp2tJvttZflWRr578PhB9DrY7JSIKqPiYVZ
-         ToQBXlysu3Upvafw18Ug2i3lDGfNgq9NNqG+Svae5vnVUGeVcSul2R7Oe51dowHO2tWz
-         3XRXpH79FII6Z60e64egWzLK9hH/GfiUcVSPCAEZvalLWaO2I5yH3lDE5tAMSihL4UOL
-         cCqQ==
-X-Gm-Message-State: AJIora+2tZTE6xvtHgaRp5EowLpua8pbBVbBtb1Taq3lcpUTHCSGTmDu
-        OLuXH6vyBzN+laDgUwT7bH8uFw==
-X-Google-Smtp-Source: AGRyM1vSVUjKLbGc4Kd7xVml29j/pMq086Pfs5AgzFCjeBxpV+cVQy9BGtwT6tQB+IRvWirFlwJ5Og==
-X-Received: by 2002:a65:6bcc:0:b0:3f6:1815:f541 with SMTP id e12-20020a656bcc000000b003f61815f541mr33324434pgw.183.1658334101831;
-        Wed, 20 Jul 2022 09:21:41 -0700 (PDT)
+        bh=NKI6wQLzSjuIgXqGP/STBDd/io3ztt1cS6FImLHwFp4=;
+        b=B0P9O9pCVuGCDvNr4PBrtRJPzYSP/zxR88m3F80oryyMxZBP8B/GCho4Jfkks/pPMn
+         f/5X5XBuCL1CVQlCPjvR83d0M9Ij6agE87ZTEF3Q++m3sLy0IBbhnTc7bdg/9YZeOgXh
+         91iz99uICzFiT/IZclBbjM05AlTVuLmhB36cfAtaJ1TpGAfEJKhXIcq19ziFhANJTRgz
+         ttN9TUeEY4cDedOoPok3DnCp9RhVEmnDvmVE1ORJpW7XkwJJGkoxVBP1dPiMF+UyLzso
+         gqIeRDNGinVgPwnuf9AwUiW5ngnoVtYkLC5C0vShO3i6DfBOGct+UqCVe5nqfeF1kq9b
+         Jchw==
+X-Gm-Message-State: AJIora9Sm11IfzxoD6l7V781sPvfRljwraEyQOH7+BzbONwO8sxviBKD
+        XsmZmvPw9fd2yJ199bFNxzZFdw==
+X-Google-Smtp-Source: AGRyM1utYrsQFWglg8OIUvJRKtR6LVkU7MbzTy7HM7RFQtBExxPfhBWR/u5swtl61L63cUwi4vupQg==
+X-Received: by 2002:a17:90b:3ec1:b0:1f1:edcf:dd2b with SMTP id rm1-20020a17090b3ec100b001f1edcfdd2bmr6535996pjb.156.1658335476747;
+        Wed, 20 Jul 2022 09:44:36 -0700 (PDT)
 Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id g5-20020a63dd45000000b0041a4d5e7e5fsm3266314pgj.47.2022.07.20.09.21.40
+        by smtp.gmail.com with ESMTPSA id k6-20020aa79986000000b00528c22038f5sm14345128pfh.14.2022.07.20.09.44.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 09:21:41 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 16:21:37 +0000
+        Wed, 20 Jul 2022 09:44:36 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 16:44:32 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -84,18 +83,13 @@ Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
         Muchun Song <songmuchun@bytedance.com>
 Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
  memory regions
-Message-ID: <YtgrkXqP/GIi9ujZ@google.com>
+Message-ID: <Ytgw8HAsKTmZaubv@google.com>
 References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
  <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
- <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
- <20220719140843.GA84779@chaop.bj.intel.com>
- <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
- <20220720150706.GB124133@chaop.bj.intel.com>
- <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
+In-Reply-To: <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -107,88 +101,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 20, 2022, Gupta, Pankaj wrote:
-> 
-> > > > > > +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
+On Wed, Jul 06, 2022, Chao Peng wrote:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 230c8ff9659c..bb714c2a4b06 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -914,6 +914,35 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+>  
+>  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+>  
+> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> +#define KVM_MEM_ATTR_PRIVATE	0x0001
+> +static int kvm_vm_ioctl_set_encrypted_region(struct kvm *kvm, unsigned int ioctl,
+> +					     struct kvm_enc_region *region)
+> +{
+> +	unsigned long start, end;
 
-Use kvm_arch_has_private_mem(), both because "has" makes it obvious this is checking
-a flag of sorts, and to align with other helpers of this nature (and with
-CONFIG_HAVE_KVM_PRIVATE_MEM).
+As alluded to in a different reply, because this will track GPAs instead of HVAs,
+the type needs to be "gpa_t", not "unsigned long".  Oh, actually, they need to
+be gfn_t, since those are what gets shoved into the xarray.
 
-  $ git grep kvm_arch | grep supported | wc -l
-  0
-  $ git grep kvm_arch | grep has | wc -l
-  26
+> +	void *entry;
+> +	int r;
+> +
+> +	if (region->size == 0 || region->addr + region->size < region->addr)
+> +		return -EINVAL;
+> +	if (region->addr & (PAGE_SIZE - 1) || region->size & (PAGE_SIZE - 1))
+> +		return -EINVAL;
+> +
+> +	start = region->addr >> PAGE_SHIFT;
+> +	end = (region->addr + region->size - 1) >> PAGE_SHIFT;
+> +
+> +	entry = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION ?
+> +				xa_mk_value(KVM_MEM_ATTR_PRIVATE) : NULL;
+> +
+> +	r = xa_err(xa_store_range(&kvm->mem_attr_array, start, end,
+> +					entry, GFP_KERNEL_ACCOUNT));
 
-> > > > > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
-> > > > > > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
-> > > > > > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
-> > > > > > +		struct kvm_enc_region region;
-> > > > > > +
-> > > > > > +		if (!kvm_arch_private_mem_supported(kvm))
-> > > > > > +			goto arch_vm_ioctl;
-> > > > > > +
-> > > > > > +		r = -EFAULT;
-> > > > > > +		if (copy_from_user(&region, argp, sizeof(region)))
-> > > > > > +			goto out;
-> > > > > > +
-> > > > > > +		r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
-> > > > > 
-> > > > > this is to store private region metadata not only the encrypted region?
-> > > > 
-> > > > Correct.
-> > > 
-> > > Sorry for not being clear, was suggesting name change of this function from:
-> > > "kvm_vm_ioctl_set_encrypted_region" to "kvm_vm_ioctl_set_private_region"
-> > 
-> > Though I don't have strong reason to change it, I'm fine with this and
-> 
-> Yes, no strong reason, just thought "kvm_vm_ioctl_set_private_region" would
-> depict the actual functionality :)
-> 
-> > this name matches the above kvm_arch_private_mem_supported perfectly.
-> BTW could not understand this, how "kvm_vm_ioctl_set_encrypted_region"
-> matches "kvm_arch_private_mem_supported"?
+IIUC, this series treats memory as shared by default.  I think we should invert
+that and have KVM's ABI be that all guest memory as private by default, i.e.
+require the guest to opt into sharing memory instead of opt out of sharing memory.
 
-Chao is saying that kvm_vm_ioctl_set_private_region() pairs nicely with
-kvm_arch_private_mem_supported(), not that the "encrypted" variant pairs nicely.
+And then the xarray would track which regions are shared.
 
-I also like using "private" instead of "encrypted", though we should probably
-find a different verb than "set", because calling "set_private" when making the
-region shared is confusing.  I'm struggling to come up with a good alternative
-though.
-
-kvm_vm_ioctl_set_memory_region() is already taken by KVM_SET_USER_MEMORY_REGION,
-and that also means that anything with "memory_region" in the name is bound to be
-confusing.
-
-Hmm, and if we move away from "encrypted", it probably makes sense to pass in
-addr+size instead of a kvm_enc_region.
-
-Maybe this?
-
-static int kvm_vm_ioctl_set_or_clear_mem_private(struct kvm *kvm, gpa_t gpa,
-					         gpa_t size, bool set_private)
-
-and then:
-
-#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
-	case KVM_MEMORY_ENCRYPT_REG_REGION:
-	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
-		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-		struct kvm_enc_region region;
-
-		if (!kvm_arch_private_mem_supported(kvm))
-			goto arch_vm_ioctl;
-
-		r = -EFAULT;
-		if (copy_from_user(&region, argp, sizeof(region)))
-			goto out;
-
-		r = kvm_vm_ioctl_set_or_clear_mem_private(kvm, region.addr,
-							  region.size, set);
-		break;
-	}
-#endif
-
-I don't love it, so if someone has a better idea...
+Regarding mem_attr_array, it probably makes sense to explicitly include what it's
+tracking in the name, i.e. name it {private,shared}_mem_array depending on whether
+it's used to track private vs. shared memory.  If we ever need to track metadata
+beyond shared/private then we can tweak the name as needed, e.g. if hardware ever
+supports secondary non-ephemeral encryption keys.
