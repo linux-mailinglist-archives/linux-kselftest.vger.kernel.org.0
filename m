@@ -2,123 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AD257BFFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 00:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991A657C022
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 00:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbiGTWTx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 18:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S230466AbiGTWjT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jul 2022 18:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiGTWTx (ORCPT
+        with ESMTP id S229631AbiGTWjT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 18:19:53 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99ED051422
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 15:19:51 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id o18so17685124pgu.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 15:19:51 -0700 (PDT)
+        Wed, 20 Jul 2022 18:39:19 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43B92634
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 15:39:17 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id d8so8070659wrp.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 15:39:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1ZxyLZ0QxKzQzDRLPibOfpzfI1ZlC+suEMS1udnprk8=;
-        b=BY/258fxiwyb/hCVHWHpPTg2PYUCxJ45zmq8SCD/Y3AhUT46OCJHN/mT+DkG6m01tj
-         34tjvpxtQjJJp/JFHKQY8uM+YMOKSAgtweSqgR1sT4lHyz509usVCuGJYF0Na0765S4d
-         BgZl5NIzuMzo9j0NoUtH8rtyelIa+Ep/60SGw1GjT7p9JV+ktxNRjuKhGGGv206krOXd
-         SvrsO817DqmrqicsJwekKrCioa11PfTSt9GsDvufT2kgDyC/RVmOoRom+p8DGA/hxa3X
-         r3IbOaL3JvDnauAPBfOKpDFHWclcNl6sDgJRUPrRPw5kfWo2SQnZ+AppGwSB6SEmFVlO
-         FpXg==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gjQxo0hKIVF1YVkSJ8Tt3ejloLl3VpIsO9hirXnFH+U=;
+        b=zI4b6Z/wGUUgwWeOD3pQ7dMozzrzLOSSr5UB4/ki36H/h/zC0Qb1NCR/RhxeQdHB+Z
+         3FCKUbPYT5+bU3pmhLvpKxSDvhXulocHKjQJIK9p2OWuINXr0ivOwxxFVq8r2AsYJL0k
+         h2jIEJlNGTvnLKbR2B1DBtIZIcqD7gzg4o3ocXh3FpoC1frMzUOTzgFrhv924XvD3qy6
+         bGkXIyFJEC3lxyxyiCQL50o2Lakud4qBn1yd2/Ofteeaj17Q+3Q2Y9JWICUkKp2nG3tu
+         nmWKI3COxvtxiKvkkyvYG9tb5TN1DQ3EJhT9fkaryBkGsfd6tZY/Q5QUvQapNTufNH1C
+         bPlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1ZxyLZ0QxKzQzDRLPibOfpzfI1ZlC+suEMS1udnprk8=;
-        b=X9j33H1xWIcrzLsdIwFjP4BInt8Ovnk5gYTg2kRA8NvJTFMGQsIyZkckBOKDSd9UkV
-         Sl13IJzX9ZllTtLHfrKk+kA1QtwmaJsSu3f9vZKTJnDPa/Z4nCLQzmU6vgRKFzHf5VtT
-         yGpPY/brw4lluDNzcTaqS/+1Cx8fBPoR+j9lLtpVhfyMuhuEZ4haEooEdJQX6cCwxJh2
-         0EsXasa6UvR/YhFP85hvarO5CKdYLC6JDiJ6LtDpFauNTDrihM9TrpDcJcMbgRaEZvIL
-         uRhI7DGLdpO+RYRSkvoNTi3qAUX5mpJvQz68WMqsOEIED3eEGsa++F8N6xycrcvnbnw2
-         7Crw==
-X-Gm-Message-State: AJIora9OMkM7o4q3Kv6nfPlS+jh+GEgAEGlYGRYl6Z5H0GdsO6vq0NTw
-        McDm3p9uxRiOIzLV69RWeE69oA==
-X-Google-Smtp-Source: AGRyM1sQTtoUHcxxTGn5INxwcSsDTwXdrs+zrCZ2Hxmv+xffsTeoooZDt9v2hmn+vUWnpM4KG/y4hg==
-X-Received: by 2002:a63:1848:0:b0:416:1821:aa0b with SMTP id 8-20020a631848000000b004161821aa0bmr35801786pgy.394.1658355590980;
-        Wed, 20 Jul 2022 15:19:50 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id z28-20020aa7949c000000b0052516db7123sm141228pfk.35.2022.07.20.15.19.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jul 2022 15:19:50 -0700 (PDT)
-Date:   Wed, 20 Jul 2022 22:19:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shauh@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com
-Subject: Re: [RFC V2 PATCH 0/8] selftests: KVM: selftests for fd-based
- approach of supporting private memory
-Message-ID: <Yth/gpebtWkTu4bC@google.com>
-References: <20220511000811.384766-1-vannapurve@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gjQxo0hKIVF1YVkSJ8Tt3ejloLl3VpIsO9hirXnFH+U=;
+        b=01ydouitoK4iU3xq6I+WJwnr7dpG6tOX3Hi4QR1hs008qv5PFueuTDoiX5BIVD1NFq
+         1c/gE/XDUyPWX0t85s0gvtpEMa4TKwXqlzRFhILO4KpiEgbkekNyeC7ImirJzMV0zfIh
+         DlTL3WmhMza9BGKbXFUphrQCkp9TWusk/2zjMiIxLLGi5EjTKWF+y+6OVe/ZZ46N+3Xh
+         skxmAl/+HyDq8hyeyGb0t9Pnk9US6zJveqXjxb0zZ1WnFnxVgzKz17CjrfUB/9Cqn9mT
+         OXOiut7m8Fi7IVjUOLcpCgRxS3Ldd/DI0N0gBX+KIz3qwciOiDUAcu749azSG5jp6SKW
+         RKgg==
+X-Gm-Message-State: AJIora//7M/af+G+/jVBnaocRBJJ8+hcCpJkpuDjLH+6kI8ock7iJ3Fj
+        LWT9Y78mhIKZnKJFYSGBM+7dyqBeZxuIiEaJ1yBD
+X-Google-Smtp-Source: AGRyM1tdrjUF8cXJwhaIP6PHYKjrB2YVUyMErv5SbIcoUCr7yadS90weIQu40rllAkj9qSRNkrh4MkilhnWcTexYRQo=
+X-Received: by 2002:adf:e492:0:b0:21e:45af:5070 with SMTP id
+ i18-20020adfe492000000b0021e45af5070mr5887107wrm.483.1658356756213; Wed, 20
+ Jul 2022 15:39:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511000811.384766-1-vannapurve@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220707223228.1940249-1-fred@cloudflare.com> <CAJ2a_DezgSpc28jvJuU_stT7V7et-gD7qjy409oy=ZFaUxJneg@mail.gmail.com>
+ <3dbd5b30-f869-b284-1383-309ca6994557@cloudflare.com> <84fbd508-65da-1930-9ed3-f53f16679043@schaufler-ca.com>
+ <CAHC9VhQ-mBYH-GwSULDyyQ6mNC6K8GNB4fra0pJ+s0ZnEpCgcg@mail.gmail.com> <f1f8b350-4dc5-b975-3854-ecbf9f4e54ba@schaufler-ca.com>
+In-Reply-To: <f1f8b350-4dc5-b975-3854-ecbf9f4e54ba@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 20 Jul 2022 18:39:05 -0400
+Message-ID: <CAHC9VhTFb7=FUyq4oM8ULtnZpZYj3ztpNhASy3WtHnn6QWwZig@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Introduce security_create_user_ns()
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>,
+        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        KP Singh <kpsingh@kernel.org>, revest@chromium.org,
+        jackmanb@chromium.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, shuah@kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 11, 2022, Vishal Annapurve wrote:
->  tools/testing/selftests/kvm/priv_memfd_test.c | 1359 +++++++++++++++++
+On Wed, Jul 20, 2022 at 5:42 PM Casey Schaufler <casey@schaufler-ca.com> wr=
+ote:
+> On 7/19/2022 6:32 PM, Paul Moore wrote:
+> > On Fri, Jul 8, 2022 at 12:11 PM Casey Schaufler <casey@schaufler-ca.com=
+> wrote:
+> >> On 7/8/2022 7:01 AM, Frederick Lawler wrote:
+> >>> On 7/8/22 7:10 AM, Christian G=C3=B6ttsche wrote:
+> >>>> ,On Fri, 8 Jul 2022 at 00:32, Frederick Lawler <fred@cloudflare.com>
+> >>>> wrote:
 
-Please don't create a megatest.  We have megatests for nVMX and nSVM in KVM-Unit-Test
-and IMO they are a mistake.  E.g. to run a single test instead of the entire suite,
-the KUT tests provide a funky wildcard/filter syntax.  But the names of the tests
-aren't discoverable, so inevitably I have to look at the source code to figure out
-the exact name of the test I want to run.  And don't get me started on sub-tests
-within sub-tests...
+...
 
-AFAICT, what you've proposed here doesn't provide any such filter mechanism.  And
-I would rather we NOT start adding those to selftests, because we'd effectively be
-reinventing the wheel _and_ dealing with strings in C is a pain.  Writing a script
-to find and run all tests is trivial, e.g. grep the .gitignore to find tests for
-the target arch.  Or when the system under test is different than the build system,
-copy the binaries to a dedicated directory and run every binary in that directory.
+> >>>> III.
+> >>>>
+> >>>> Maybe even attach a security context to namespaces so they can be
+> >>>> further governed?
+> >> That would likely add confusion to the existing security module namesp=
+ace
+> >> efforts. SELinux, Smack and AppArmor have all developed namespace mode=
+ls.
+> >
+> > I'm not sure I fully understand what Casey is saying here as SELinux
+> > does not yet have an established namespace model to the best of my
+> > understanding, but perhaps we are talking about different concepts for
+> > the word "namespace"?
+>
+> Stephen Smalley proposed a SELinux namespace model, with patches,
+> some time back. It hasn't been adopted, but I've seen at least one
+> attempt to revive it. You're right that there isn't an established
+> model.
 
-Discovering and running a single test is similarly trivial.  For KUT, it's less
-trivial because running a test involves invoking a VMM command line, and some of
-the tests need specific command line parameters.  But for selftests, except for the
-NX huge page test, they're all standalone and don't need additional setup.
+If it isn't in the mainline kernel, it isn't an established namespace model=
+.
 
-And unlike KUT's nVMX and nSVM tests, which involve running hundreds of little
-sub-tests with only minor differences in setup, these tests are largely independent,
-i.e. you're not really getting much code reuse.
+I ported Stephen's initial namespace patches to new kernels for quite
+some time, look at the working-selinuxns branch in the main SELinux
+repository, but that doesn't mean they are ready for upstreaming.
+Aside from some pretty critical implementation holes, there is the
+much larger conceptual issue of how to deal with persistent filesystem
+objects.  We've discussed that quite a bit among the SELinux
+developers but have yet to arrive at a good-enough solution.  I have
+some thoughts on how we might be able to make forward progress on
+that, but it's wildly off-topic for this patchset discussion.  I
+mostly wanted to make sure I was understanding what you were
+referencing when you talked about a "SELinux namespace model", and it
+is what I suspected ... which I believe is unrelated to the patches
+being discussed here.
 
-And if you split the tests up, then all of the inter-test namespacing goes away,
-e.g. there is zero chance I will ever remember what "PSPAHCT" stands for.
+> >> That, or it could replace the various independent efforts with a singl=
+e,
+> >> unified security module namespace effort.
+> >
+> > We've talked about this before and I just don't see how that could
+> > ever work, the LSM implementations are just too different to do
+> > namespacing at the LSM layer.
+>
+> It's possible that fresh eyes might see options that those who have
+> been staring at the current state and historical proposals may have
+> missed.
 
-+#define PSPAHCT_GUEST_STARTED                          0ULL
-+#define PSPAHCT_GUEST_PRIVATE_MEM_UPDATED              1ULL
-+#define PSPAHCT_GUEST_SHARED_MEM_UPDATED               2ULL
-+#define PSPAHCT_GUEST_PRIVATE_MEM_UPDATED2             3ULL
+That's always a possibility, and I'm definitely open to a clever
+approach that would resolve all the current issues and not paint us
+into a corner in the future, but I haven't seen anything close (or any
+serious effort for that matter).
 
-If you find yourself doing a lot of copy+paste, then we should enhance the APIs
-provided by the core infrastructure.
+... and this still remains way off-topic for a discussion around
+adding a hook to allow LSMs to enforce access controls on user
+namespace creation.
+
+> >   If a LSM is going to namespace
+> > themselves, they need the ability to define what that means without
+> > having to worry about what other LSMs want to do.
+>
+> Possibly. On the other hand, if someone came up with a rational scheme
+> for general xattr namespacing I don't see that anyone would pass it up.
+
+Oh geez ...
+
+Namespacing xattrs is not the same thing as namespacing LSMs.  LSMs
+may make use of xattrs, and namespacing xattrs may make it easier to
+namespace a given LSM, but I'm not aware of an in-tree LSM that would
+be magically namespaced if xattrs were namespaced.
+
+This patchset has nothing to do with xattrs, it deals with adding a
+LSM hook to implement LSM-based access controls for user namespace
+creation.
+
+--=20
+paul-moore.com
