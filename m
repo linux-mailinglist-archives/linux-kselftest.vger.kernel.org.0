@@ -2,133 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337F057BB4C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 18:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A5F57BB53
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 18:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiGTQVO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 12:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S233126AbiGTQVq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jul 2022 12:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235145AbiGTQVO (ORCPT
+        with ESMTP id S229485AbiGTQVo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 12:21:14 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 356A8491E9;
-        Wed, 20 Jul 2022 09:21:10 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 26KGKsKX004192;
-        Wed, 20 Jul 2022 18:20:54 +0200
-Date:   Wed, 20 Jul 2022 18:20:54 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Pranith Kumar <bobby.prani@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Fernanda Ma'rouf" <fernandafmr12@gnuweeb.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [PATCH 00/17] nolibc: add preliminary self tests
-Message-ID: <20220720162054.GB4159@1wt.eu>
-References: <20220719214449.2520-1-w@1wt.eu>
- <67a92005-4e13-909a-1693-dfb86d8114c0@gnuweeb.org>
+        Wed, 20 Jul 2022 12:21:44 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8C761B3E
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 09:21:42 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id s206so16842448pgs.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 09:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f0adogo0zxbyENycGDyitWJjrMgz2USumvEVtMapSaM=;
+        b=spGLDNQ08YQPqH7UmhIpiHe2RaM2zw7ODEii6vmP7whH0yk8NhoS7QYoLrpacwnfbW
+         S3VkQABUgvOUZAhV+aAm4mnqaDYIZ6zOWmQpK2Ozj1qZ4yEP8IO8Ogxh+e38++9rhFjG
+         Gncn3BStXeB7j7O3s/y/CX20mihB4UWNCG15aOuY2njFY086JqM16L+H4BlY/AN8pWe8
+         s9ex7tY8xz16AMATUg5JkSGjI8FqtQ1JH/Ckd2eXT2/cGJ188i8q7NwsSTtTXSvKMUHc
+         Y4He+Vu/AgyMtaInE+pTo4N4Wc2xqCJOuE/medBD2cHSdxBx52LLtQTesVoUiLmIcCvV
+         AYCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f0adogo0zxbyENycGDyitWJjrMgz2USumvEVtMapSaM=;
+        b=nmCjryZJfcyKr7H+UFiFtVq961wPClqkDkR0PiyxipaQPqGM8qly9RpIcKS335CBRW
+         0EHskXZGNP9i2PsI9hzPtzbBPis+9BTRObwtOxW6JolnyNHSUuwfssas5+FVznm8uWVA
+         PipRxkCYqnX6PHf3Fs9Tv55aQ2oM3+Ehuvp2tJvttZflWRr578PhB9DrY7JSIKqPiYVZ
+         ToQBXlysu3Upvafw18Ug2i3lDGfNgq9NNqG+Svae5vnVUGeVcSul2R7Oe51dowHO2tWz
+         3XRXpH79FII6Z60e64egWzLK9hH/GfiUcVSPCAEZvalLWaO2I5yH3lDE5tAMSihL4UOL
+         cCqQ==
+X-Gm-Message-State: AJIora+2tZTE6xvtHgaRp5EowLpua8pbBVbBtb1Taq3lcpUTHCSGTmDu
+        OLuXH6vyBzN+laDgUwT7bH8uFw==
+X-Google-Smtp-Source: AGRyM1vSVUjKLbGc4Kd7xVml29j/pMq086Pfs5AgzFCjeBxpV+cVQy9BGtwT6tQB+IRvWirFlwJ5Og==
+X-Received: by 2002:a65:6bcc:0:b0:3f6:1815:f541 with SMTP id e12-20020a656bcc000000b003f61815f541mr33324434pgw.183.1658334101831;
+        Wed, 20 Jul 2022 09:21:41 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id g5-20020a63dd45000000b0041a4d5e7e5fsm3266314pgj.47.2022.07.20.09.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 09:21:41 -0700 (PDT)
+Date:   Wed, 20 Jul 2022 16:21:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <YtgrkXqP/GIi9ujZ@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
+ <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
+ <20220719140843.GA84779@chaop.bj.intel.com>
+ <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
+ <20220720150706.GB124133@chaop.bj.intel.com>
+ <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <67a92005-4e13-909a-1693-dfb86d8114c0@gnuweeb.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 11:03:58PM +0700, Ammar Faizi wrote:
-> On 7/20/22 4:44 AM, Willy Tarreau wrote:
-> > I'm obviously interested in comments, but really, I don't want to
-> > overdesign something for a first step, it remains a very modest test
-> > program and I'd like that it remains easy to hack on it and to contribute
-> > new tests that are deemed useful.
+On Wed, Jul 20, 2022, Gupta, Pankaj wrote:
 > 
-> I personally hate how the test framework mandates:
+> > > > > > +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
+
+Use kvm_arch_has_private_mem(), both because "has" makes it obvious this is checking
+a flag of sorts, and to align with other helpers of this nature (and with
+CONFIG_HAVE_KVM_PRIVATE_MEM).
+
+  $ git grep kvm_arch | grep supported | wc -l
+  0
+  $ git grep kvm_arch | grep has | wc -l
+  26
+
+> > > > > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > > > > > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+> > > > > > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+> > > > > > +		struct kvm_enc_region region;
+> > > > > > +
+> > > > > > +		if (!kvm_arch_private_mem_supported(kvm))
+> > > > > > +			goto arch_vm_ioctl;
+> > > > > > +
+> > > > > > +		r = -EFAULT;
+> > > > > > +		if (copy_from_user(&region, argp, sizeof(region)))
+> > > > > > +			goto out;
+> > > > > > +
+> > > > > > +		r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
+> > > > > 
+> > > > > this is to store private region metadata not only the encrypted region?
+> > > > 
+> > > > Correct.
+> > > 
+> > > Sorry for not being clear, was suggesting name change of this function from:
+> > > "kvm_vm_ioctl_set_encrypted_region" to "kvm_vm_ioctl_set_private_region"
+> > 
+> > Though I don't have strong reason to change it, I'm fine with this and
 > 
->   "There must be exactly one test per line."
-
-I know, that's a design choice that makes them trivial to add, because
-it's the compiler that assigns the test IDs, and it comes with a non
-negligible benefit.
-
-> which makes the test case, for example, one long liner like this:
+> Yes, no strong reason, just thought "kvm_vm_ioctl_set_private_region" would
+> depict the actual functionality :)
 > 
->   if ((p1 = p2 = sbrk(4096)) != (void *)-1) p2 = sbrk(-4096); EXPECT_SYSZR(1, (p2 == (void *)-1) || p2 == p1); break;
-> 
-> that's ugly and hard to read. Can we get rid of this "one test per line" rule?
+> > this name matches the above kvm_arch_private_mem_supported perfectly.
+> BTW could not understand this, how "kvm_vm_ioctl_set_encrypted_region"
+> matches "kvm_arch_private_mem_supported"?
 
-If you find a better solution, I'm open. What I certainly don't want
-to do is to have to cross-reference IDs with arrays, nor start to stack
-endless if/else that are even more painful to deal with, or have to
-renumber everything by hand once in a while.
+Chao is saying that kvm_vm_ioctl_set_private_region() pairs nicely with
+kvm_arch_private_mem_supported(), not that the "encrypted" variant pairs nicely.
 
-> It would be great if we followed the documented coding style that says:
-> 
->    "Statements longer than 80 columns should be broken into sensible chunks,
->     unless exceeding 80 columns significantly increases readability and does
->     not hide information." [1]
+I also like using "private" instead of "encrypted", though we should probably
+find a different verb than "set", because calling "set_private" when making the
+region shared is confusing.  I'm struggling to come up with a good alternative
+though.
 
-Admittedly this is not core code but debugging code running in userland
-to help developers spot bugs in their code which is somewhere else and
-well maintained. I personally think that the tradeoff is positive here,
-i.e. non-pretty but easily hackable short tests that encourage additions
-and variations. The ease of adding tests allowed me to create 71 of them
-in a single afternoon and two of them brought me bugs in existing code,
-which I think is efficient. But I'm not fond of the approach either, I
-just couldn't produce anything as efficient that was prettier, but I'm
-quite open to being proven wrong by an alternate proposal.
+kvm_vm_ioctl_set_memory_region() is already taken by KVM_SET_USER_MEMORY_REGION,
+and that also means that anything with "memory_region" in the name is bound to be
+confusing.
 
-> What we have here doesn't really increase the readability at all. Maybe
-> it's too late for 5.20, just for next in case we want to fix it.
+Hmm, and if we move away from "encrypted", it probably makes sense to pass in
+addr+size instead of a kvm_enc_region.
 
-The goal was not to increase *readability* but *writability*. We're
-still missing test for most syscalls and I would like them to be added
-quickly so that we can continue to add tested code. The readability I
-care about is understanding the output. When I'm seeing:
+Maybe this?
 
-  ...
-  29 execve_root = -1 EACCES               [OK]
-  30 getdents64_root = -1 EBADF           [FAIL]
-  31 getdents64_null = -1 EBADF  != (-1 ENOTDIR) [FAIL]
-  32 gettimeofday_null = 0                 [OK]
-  ...
+static int kvm_vm_ioctl_set_or_clear_mem_private(struct kvm *kvm, gpa_t gpa,
+					         gpa_t size, bool set_private)
 
-on riscv64, I don't have to search long to figure that we did something
-wrong with getdents64() on this arch and that the error path works
-differently. Similarly, this on mips:
+and then:
 
-  8 kill_CONT = 0                          [OK]
-  9 kill_BADPID = -1 ESRCH                 [OK]
-  10 sbrkdo_page_fault(): sending SIGSEGV to init for invalid read access from 0000000a
-  epc = 0000000a in init[400000+4000]
-  ra  = 0000000a in init[400000+4000]
-  Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+	case KVM_MEMORY_ENCRYPT_REG_REGION:
+	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
+		struct kvm_enc_region region;
 
-tells me that sbrk() definitely doesn't work there.
+		if (!kvm_arch_private_mem_supported(kvm))
+			goto arch_vm_ioctl;
 
-In both cases I know what and where to look without even having to *read*
-that test. This does matter to me, as a developer of the component subject
-to the test.
+		r = -EFAULT;
+		if (copy_from_user(&region, argp, sizeof(region)))
+			goto out;
 
-But again, I'm open to better proposals. I reached the limits of my
-imagination there, but I do value the ability to "yyp" one line, change
-two arguments and gain one extra test for a different combination, and
-I really do not want to lose that simplicity. Note that for more complex
-tests, it's trivial to add a dedicated function and that's what was done
-for getdents64() which also serves as an example.
+		r = kvm_vm_ioctl_set_or_clear_mem_private(kvm, region.addr,
+							  region.size, set);
+		break;
+	}
+#endif
 
-Willy
+I don't love it, so if someone has a better idea...
