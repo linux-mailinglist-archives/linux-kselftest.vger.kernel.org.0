@@ -2,73 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFFB57B3CB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 11:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787B457B3D2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Jul 2022 11:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234888AbiGTJ0R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 05:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        id S231852AbiGTJ3t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Jul 2022 05:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiGTJ0Q (ORCPT
+        with ESMTP id S231542AbiGTJ3s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 05:26:16 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20A852E5C
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 02:26:14 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id d8so5304786wrp.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 02:26:14 -0700 (PDT)
+        Wed, 20 Jul 2022 05:29:48 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72955465D;
+        Wed, 20 Jul 2022 02:29:47 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26K6f8Ti031777;
+        Wed, 20 Jul 2022 09:29:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=oK1oHKWTe+ZVhSt1gQCnST549v6XO4qsHJB62fdEhl4=;
+ b=QBzLv0LkmgR1tKRtnnHBiGo60NNKyR9iRPamURknYzMm3tMGsv02qoKMzaFw0WAF4K+9
+ 84QFDn68qLHWU5PvoSzxsbvadEhcb26BkzEe8Ff0sKLCzlB5UekDurv6W7wOTf0J1zzd
+ eNOYhNwhPZzKEJ2KK7p5kzrRaPFuyHJmtbPcXZUWH7nSyG4Jm6n0KcHQusqnjKslXzpv
+ IHwarWwnot575eQmToQjOatVOl1XP7fbk7HpP4v8LpGd3qetHS2//z/00YLwr7FGdftU
+ 69YTiTBoohY5r3B/A0bpGuoMLHK1vvpRvRB9YKMUIM0ci1M3JSqy6DmTDjlr/Q/UhGrD SQ== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbnvtgye6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 09:29:35 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26K6SI0Z016449;
+        Wed, 20 Jul 2022 09:29:34 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1enak2c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 20 Jul 2022 09:29:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B5ag18/dJn//V9W4z3FXZd7xJC3ypu/9dR6JDbBF3G7nUMulILBzvV+x6Tyeeji2m1q+2jpMzEU+hQf+42aTeoSlW2noPuGzZfQJKkBt+yZ1YterfLxI6EkwWRmQArOCHJb8kshZn2Qk3Op/SL/uSjaMOuCkYOTUBn1LeVe/t3BiLeoE0Ko79P2S/Xrt/X2xgrdMI0jR6p1SM/ZPNZGIcDuSYnbObo5i6lNB5AGu1dGwhtWf2NYiqp6BXJ7PAAuugeQjdwVYu5BwjcNBZnFPVFgDxbTdhdlnAow4Ff9zpesC+L+A9vegp3hzUPzvlStiYRaPn4Mzi/gKus3ux6xjSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oK1oHKWTe+ZVhSt1gQCnST549v6XO4qsHJB62fdEhl4=;
+ b=X59JgyDuUUjP+Kfi5gcsY4ek8QAYc7QUysMbBjcn5BbLc49q+VO8f9YRcMHO4DNjnKcK5YAnKhSIWshRV77XLb3aHC/E4EDO2PiZBXOVhP5jYdPK2UHeZ1SssPy3Rn9YJRZ0HnVKsKcS4UtQg5GX/1RNApJ6/DtsJ3DXQhx5Vnk6gtGI6vqPJIN25aSeuE0B33gy3038mpBYU6sdc0yMiqRRbPFtAekPPdVWj37DrJwETGkaeRZuL+SIvH5q8Mz3XRcVweTLqwX+W61prqIpjryRRqYshw8Ow0f6MKOywlzT0o5ZQnMiOBuCGvVx1MZukMjql1Hs2HOdiozydbKFSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R1RT70dVRWCdzYdRHqqEZlWtY1V9zI+ixKXFVkFFnB0=;
-        b=KT2VcTFc2j4N95HkPoMbyWJIFPBzD8UqKVqiLcLot3v+KPDRpgZGmtoboHX0xbmCRd
-         KcTArKuJQJ/8rChv4faRzV1AwehO+O/xFJjzkm0CLCpevE8q8K1Ioj6wAiLR0BQkfLdM
-         IyKeGiX9AGlAeTrrI6p8u95GSqROod5egFsT9PQat9CrrytI/YKDT+wVUcr9xioZDj5/
-         TkarHcaAmxWhULrIYGudKOlkHrnsIreTd46oFTiVumT0P4y58vYlNmCdQuyPxRqTUNZY
-         p2xoai+/52ouk1iiOt/fGADo/Q90d0C2/XKKzXKMEeBS/lp1jNATONrbxr/RinrxQUK6
-         MfbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R1RT70dVRWCdzYdRHqqEZlWtY1V9zI+ixKXFVkFFnB0=;
-        b=R+ZYri/vE/YANsAv4M5lkuGVqTum/QAgoXMdKRt7mIYt8qxIzpbz0Ezd2/ATgdli4n
-         YSzxth5WETFeod9fjoei5X5b50IIczmu436McaTUiG8jMIXKwZ9vkdqVsKIFHaSszyaY
-         nks8OBXZPoQG1dTZPZxEoAg1hn3ioHpNvh4YOei1yExK1FUC3dFGWvadOh0ccBfl75+Q
-         0kMKa4SNZA1gjBy9um5+46Mc3LTkL4VnaA/NvFHxewJVdFCbZB+BHsG6q5KKVpHl9KSD
-         O9rNETE3VrcRHkltOZQax5/HLtAjWJBRLhelU6w6sNEA5nqlZld0XzqiXKqkaTcYj+6G
-         tE0g==
-X-Gm-Message-State: AJIora/qSNUY7XdpmWhC2hN4TKPVBUWYe4CL+WcDkb2Q98Ng4ZmUUCUt
-        XVLtvcmwfhXGxOsdOEatz7fbju3RnuZChIYbZG2491PXrNlARQ==
-X-Google-Smtp-Source: AGRyM1vPUTNYZtrbOlmCgU5sTGfrMq58qQzXIAIOaEzSmiLik6FnswjHhwybz1D8taJr0kvYmoBocRRvMBVhd8uPth4=
-X-Received: by 2002:a5d:4708:0:b0:21e:4eda:5cda with SMTP id
- y8-20020a5d4708000000b0021e4eda5cdamr301867wrq.337.1658309173441; Wed, 20 Jul
- 2022 02:26:13 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oK1oHKWTe+ZVhSt1gQCnST549v6XO4qsHJB62fdEhl4=;
+ b=MXx0H8GQN/g7O5Y1EK273Z+POYafO7eobASxK6A85OC+S+8It0fEquoVrMpHhDmfi4IUjhy+H1nx7gxyk2skIIe3fwnbn5HGUu9zkI7EdCvrR1OkgcjJRWaE8zsDgwpJyOJZ0p6nJWV/uGvcrKCwoFNJI2Ngf/3pgTxZLc5l8ws=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM6PR10MB4298.namprd10.prod.outlook.com
+ (2603:10b6:5:21f::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.18; Wed, 20 Jul
+ 2022 09:29:32 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::24dc:9f9a:c139:5c97]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::24dc:9f9a:c139:5c97%4]) with mapi id 15.20.5458.018; Wed, 20 Jul 2022
+ 09:29:32 +0000
+Date:   Wed, 20 Jul 2022 12:29:19 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] selftests: memcg: uninitialized variable in
+ test_memcg_reclaim()
+Message-ID: <20220720092918.GD2316@kadam>
+References: <YtZ9Yu6HSQ2sT+O/@kili>
+ <CAJD7tkYCSY1C_iif4dxF9O3dAgZV4u8o9DFGsqeTyaq_FTT+mQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkYCSY1C_iif4dxF9O3dAgZV4u8o9DFGsqeTyaq_FTT+mQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MR1P264CA0056.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:3e::20) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <20220713005221.1926290-1-davidgow@google.com> <CAGS_qxrNKnrWXhOfptz9iL5c_sixhKjpAfR2RLQi1XqL6m2Tpg@mail.gmail.com>
- <Ytbw1T6uspICqj5B@bombadil.infradead.org>
-In-Reply-To: <Ytbw1T6uspICqj5B@bombadil.infradead.org>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 20 Jul 2022 17:26:02 +0800
-Message-ID: <CABVgOSkpT2kqVec2F7BsTF5tyABO43bseETC2Dz238zN+sTfQw@mail.gmail.com>
-Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-modules@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003a328e05e4393150"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b0cc39ca-8e15-4577-fee8-08da6a325a4e
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4298:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9/VYiIyGo1n01MNZ3awb5+WsCb4runUH22QZWGtVFed4jsVBROI3FeNy82PYCPZNnpazBFk8Fqm/Gw05tiPOTS51NO+Va/kPcMV2hNoiZ6qiJChq1T0HpV0GiyZEdWTpIxPytNSpwPyg7O93CzQHQlnzrewjUtxqi7EoK3/QedH0mUOm7TZ+WNdzMJ3aDo5AzfRYc9ts95avycmrG+rMUn7C132J2IiypmCbEmRta0U7SAEtWNOuuUPs06oYsgXabk96eoI+2aJps/EUSI3pboUCnCjyAfrEgoa8uuDXpK1//AyXkIZmCt9oTqImZH9TN9HU+C7swN42eLQKh4D66n0wvZouR7GVaGlNXmSq8k4V/zkT5/uxLRJggGJOT1qnwyc9EcE7dQ/1XPcgPQqXAL3ziJjvfxY/uu31DLEd3JlDTk/dTXFvElVlSujEjt+u/BN+vqey9bm4eoXDJlJkeRWauDhVcz3c/cgDJNiwL2VauMl5vmVs0xrpzyn5vbr+r2mm7EQfK4tVYueWKRspWQz6A4vZehawjIpGiccuBQ5B432WCZgF432xhxN1CTpd1fjXi5lbPJFHpze9GlMrG363WX1khRAkgZsDeveE+AGxQFnOd3MhmM23sLl9iE6e/Tbwlk2pxTLDRjwwn9Z4sqXJYEoeDHM8LhEU9awSSOCajXPBSn+PiLQnYUHY5wLNUGnihaagYhb/sgXHhQivjJiOpMuRzeji073d61OdzXSEhzOi5gk8QC+HF/0igx0AyecsYwrW1VhoRk///rNNxYby5I6NhIubh/xlMIwrCkPddIuKHajJhPUHC8kQC6Bf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(39860400002)(346002)(376002)(366004)(136003)(396003)(2906002)(6486002)(6666004)(38100700002)(38350700002)(6506007)(33716001)(33656002)(66946007)(66476007)(66556008)(52116002)(8676002)(4326008)(9686003)(6512007)(86362001)(26005)(1076003)(5660300002)(8936002)(186003)(44832011)(316002)(4744005)(41300700001)(54906003)(478600001)(7416002)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hWsW3yxsD7vYJizdnGO4oseMpNHHqhamKxKfVSXWBRy1Tt+TLpHbv4iq6Rp1?=
+ =?us-ascii?Q?CPC/WZGaHHk+t/oUEHJHLEjoBn3CyqDybCEYlcI9eTOzXdHsd4GdLaalqEX+?=
+ =?us-ascii?Q?ZEOo9oS4UciuJ9HZ2FP8MhtcQNyMoMu9IX1gzJs63M+Zws5QKvRkVYheGAlH?=
+ =?us-ascii?Q?mx4RNnIC38v/SzdhMKcNAFF/X3sV8dMgOkLI5WaI3s7KOUvovooX/1QNYwPF?=
+ =?us-ascii?Q?k89GqzXsi4QISDn0xhej9LvSVRnwOhIm4/Hm0/TlX3IdC7LyYHF4f0eb2VBZ?=
+ =?us-ascii?Q?+WFyR9YrfUe5cg3FfFrsgVJZquBvEaBkt0lfvBpMH1Lhgt2vGrumb1A19EGQ?=
+ =?us-ascii?Q?9OADkPaE3nhe2/9ERKFhHqcwZ3SP2AZESYhcUKxF0W+uSiI/4GmtDQ0WrcUb?=
+ =?us-ascii?Q?Efyap++b4cmX7OjlZ6RvSbAu1EIPT4vrWCnVCtQpGlIv08yra/P4yE0mOzuP?=
+ =?us-ascii?Q?2TXTZdRRazBXRwoxvTviGseZCAWmIyCWHfMhaKWgpncILTnb+wgxDLYMoZRk?=
+ =?us-ascii?Q?mnnvQ/4iHAnFRSf3vrdupgE3SUHKKgAAe9DaNRxiWE490Af88tqb+OFhBujH?=
+ =?us-ascii?Q?MtjrDeRjw7LJAudYq02gdspOqiwQVIPoGBT7y5B7bUJAJ8I5Ajc7PraYDDLa?=
+ =?us-ascii?Q?xB/xxHypLlHKdRgNAQ8VhEh9Y0CWqVBQAQ4vteosP+ZJjOsLYi3V/Bt363Z9?=
+ =?us-ascii?Q?WqOZVwvNEFwtZFU5uPaTE5ZcZ+RVq0HKKdjadHBc+iG/BwPVTIyOJxceqAHZ?=
+ =?us-ascii?Q?e+XvgIy6Cc0GaYeBVE300rzG0Gb6bFan5EZ2IVkEZwxQVsEk00cDHGujOYNn?=
+ =?us-ascii?Q?9me8ko9PLWJ/JJO7V8C6qcTMl4SJFcELewi298ylAZPJ62GfJfmt6vNy/fVX?=
+ =?us-ascii?Q?NeNHHmmWyJqptzy6Mmfp3bfoeutorWcZLWith4FcelZ8kSctcdC37IY6LEn7?=
+ =?us-ascii?Q?Ev48oaZR/QjwNgTfRPCaNdRCnPIyZFwkFJOlHVECFpEbF6bvNJvjfjiDFmJL?=
+ =?us-ascii?Q?E+RRCm6ffPWQnd6Bf+JODYXh3SRTlyJhyCf+9SfOTy+VI6KrZVGT2YvQyRiM?=
+ =?us-ascii?Q?LqhhYtFd75mNsYFVAXuujPfH30bvSPV8BGN84ZYEgTjOK0IsNqKY3obhWsjL?=
+ =?us-ascii?Q?215XEvAUlzt9mpUtu2hry6ItYY4UT3OfGOfvsX1UCIuUAkcQNkF+9fBTSNWY?=
+ =?us-ascii?Q?etgsDbKOeRBh1L/CV4dTijjjP1fHYctizY61Qvwfrg7dj/6yxsa0SgTsefNx?=
+ =?us-ascii?Q?YUO9rWnbqeApjuqwoR7+4AcjZxtbIKCUva/AgN/fYjLRp2rJ0fBdocJf6B/j?=
+ =?us-ascii?Q?D8MPkSYPKVi9o3ElYVHPjiK7HyH9+XH8Fi2UJqtEOcfXkz2KYdwPnr+l/w8L?=
+ =?us-ascii?Q?YeE3/bChvvcYQXueqB7qJWXuPZ0vzqVNx51q7w8HuIvKNmE8PCUKHWcJh8nn?=
+ =?us-ascii?Q?9P/WKm0bvtJ9K7wMab6SVLrCjWYG2w0D58debSQK0ZVuyBGOLf0lRU/IujjD?=
+ =?us-ascii?Q?JVh5ZVCoeq0/iGqxzO7DQ2YG/9wRTc8sBJmC1GToEFUvS/M42k9Aod5oM+Dp?=
+ =?us-ascii?Q?tU0dg/jgVqrZb9XIrAhLiHQGQgGxmocqGcVNbW0AkUgTMfyOFOiVi8/+GaJw?=
+ =?us-ascii?Q?Wg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0cc39ca-8e15-4577-fee8-08da6a325a4e
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2022 09:29:32.5819
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: n9BgE135GypPmRJY7ZDCGVYVGRLYbVOGLjKpZkBfbE5TlaAPN3C8Ie4EHwKeDJJQzuDlx1Lvb+LLdy8cJnw94KS+rj334jAAqIj15dNMrPc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4298
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-20_05,2022-07-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 mlxlogscore=667
+ suspectscore=0 phishscore=0 adultscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207200039
+X-Proofpoint-GUID: ka_5VC5_HPPN3MVLdaOkAFMeODbQANGv
+X-Proofpoint-ORIG-GUID: ka_5VC5_HPPN3MVLdaOkAFMeODbQANGv
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,169 +156,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000003a328e05e4393150
-Content-Type: text/plain; charset="UTF-8"
+On Tue, Jul 19, 2022 at 10:27:36AM -0700, Yosry Ahmed wrote:
+> 
+> Nit: keep the cleanup_* naming for labels to make it obvious and to be
+> consistent with the rest of the file (e.g. cleanup_free,
+> cleanup_memcg, cleanup_file/cleanup_all). See
+> test_memcg_subtree_control().
+> 
+> I would honestly have one label to cleanup the memcg. Calling
+> cg_destroy() on a non-existent memcg should be fine. rmdir() will just
+> fail silently. All other tests do this and it's easier to read when we
+> have fewer return paths. My advice would be cleanup_file and
+> cleanup_memcg labels.
 
-On Wed, Jul 20, 2022 at 1:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Wed, Jul 13, 2022 at 08:24:32AM -0700, Daniel Latypov wrote:
-> > On Tue, Jul 12, 2022 at 5:52 PM David Gow <davidgow@google.com> wrote:
-> > >
-> > > The new KUnit module handling has KUnit test suites listed in a
-> > > .kunit_test_suites section of each module. This should be loaded when
-> > > the module is, but at the moment this only happens if KUnit is built-in.
-> > >
-> > > Also load this when KUnit is enabled as a module: it'll not be usable
-> > > unless KUnit is loaded, but such modules are likely to depend on KUnit
-> > > anyway, so it's unlikely to ever be loaded needlessly.
-> >
-> > This seems reasonable to me.
-> >
-> > Question: what happens in this case?
-> > 1. insmod <test-module>
-> > 2. insmod kunit
-> > 3. rmmod <test-module>
-> >
-> > I think on 3, we'll call the cleanup code, __kunit_test_suites_exit(),
-> > for <test-module>, I think?
-> > But we never called __kunit_test_suites_init().
-> > My fear is what breaks as a result of this precondition break.
+One error label handling is very bug prone.  You always end up freeing
+things which have not been initialized/allocated.  Or dereferencing
+pointers which are NULL.  Or, since most kernel functions clean up
+after themselves, you end up double freeing things.
 
-I don't think this should be possible: any module with KUnit tests
-will depend on the 'kunit' module (or, at least, kunit symbols), so
-shouldn't load without kunit already present.
-
-If modprobe is used, kunit will automatically be loaded. If insmod is
-used directly, loading the first module should error out with
-something like:
-[   82.393629] list_test: loading test module taints kernel.
-[   82.409607] list_test: Unknown symbol kunit_binary_ptr_assert_format (err -2)
-[   82.409657] list_test: Unknown symbol kunit_do_failed_assertion (err -2)
-[   82.409799] list_test: Unknown symbol kunit_binary_assert_format (err -2)
-[   82.409820] list_test: Unknown symbol kunit_unary_assert_format (err -2)
-insmod: ERROR: could not insert module
-/lib/modules/5.19.0-rc1-15284-g9ec67db0c271/kernel/lib/list-test.ko:
-Unknown symbol in module
-
-Maybe you could get into some trouble by force-removing modules at
-various points, but you're in undefined behaviour generally at that
-point, so I don't think there's much point going out-of-our-way to try
-to support that.
-
-> >
-> > E.g. In the case that CONFIG_KUNIT_DEBUGFS is enabled, this includes a
-> > call to kunit_debugfs_destroy_suite() with no previous call to
-> > kunit_debugfs_create_suite().
-> > That will include a call to debugfs_remove_recursive(suite->debugfs),
-> > where suite->debugfs is an uninitialized pointer.
-> >
-> > Maybe we can treat it as "undefined behavior" for now and proceed with
-> > this patch.
-> >
-> > In terms of long-term fixes, perhaps insmod kunit could trigger it to
-> > 1. run all built-in tests (IIUC, it doesn't right now)
-> > 2. run all the tests of currently loaded modules
-> > 3. track which modules already ran so if you rmmod + insmod kunit
-> > again, it won't rerun tests?
->
-> Let's please address these considerations.
->
-
-Again, I think the module and Kconfig dependencies should prevent
-these situations from ever arising. It shouldn't be possible to have
-any built-in tests if kunit is not itself built-in, so case (1) can't
-occur. Equally, it shouldn't be possible to load any test modules
-before the kunit module is loaded, so (2) can't occur. And rmmod kunit
-will give an error if there are any test modules loaded: "rmmod:
-ERROR: Module kunit is in use by: list_test", so (3) can't occur.
-
-The only similar situation to (3) I can think of is where both the
-test modules and kunit are rmmod-ed and reloaded. I think we'd want to
-re-run the tests in that case, so tracking which modules already ran
-would be counterproductive.
-
-In short, I _think_ what we're doing now should be correct, and the
-cases above are all prevented by module dependencies. But do let me
-know if I'm missing something...
-
-Cheers,
--- David
-
---0000000000003a328e05e4393150
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGH0uAg+eV8wUdHQOJ7
-yfswDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjA2MjAw
-MjAzNTNaFw0yMjEyMTcwMjAzNTNaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv9aO5pJtu5ZPHSb99iASzp2mcnJtk
-JIh8xsJ+fNj9OOm0B7Rbg2l0+F4c19b1DyIzz/DHXIX9Gc55kfd4TBzhITOJmB+WdbaWS8Lnr9gu
-SVO8OISymO6uVA0Lmkfne3zV0TwRtFkEeff0+P+MqdaLutOmOcLQRp8eAzb/TNKToSROBYmBRcuA
-hDOMCVZZozIJ7T4nHBjfOrR+nJ4mjBIDRnDucs4dazypyiYiHYLfedCxp8vldywHMsTxl59Ue9Yk
-RVewDw3HWvWUIMbc+Y636UXdUn4axP1TXN0khUpexMoc5qCHxpBIE/AyeS4WPASlE8uVY9Qg8dT6
-kJmeOT+ZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFDyAvtuc
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDi
-lHOHniqfhL0SWmohcV+5LiuONdCSzCpOpCAEz4azOjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjAwOTI2MTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEABdV3+caJ97XIyT5tGUCk
-ltvPscFweSroK7m3nXXUzR/OQM27SLhw86k8a4pWTeEsb74hdMKcvxScvELf75trIy9ZrsNmg36p
-VWtivqDolTF0nJpFVhUyqIgurv0EnRmRS9iI9UBzPOhKlwYVZqXBDvY4SUhQ7DYwu3KM9U/o6Z0T
-o3nDL1Jl2s/bCrXod60x6tC4wlShB3cafyzRoHRAuogx9CpCQCcJ+JoQ8H4N/QfF91IqRdNY5322
-bbsdyR+hBo/MvgoMHYIlpMk4jeuAw9yuD7ketEBuISXb8798LqfErBBVujiYwf/kw+pSyakvwBOE
-YZExTaaglCRKkYJz2A==
---0000000000003a328e05e4393150--
+regards,
+dan carpenter
