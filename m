@@ -2,133 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E703C57CDBD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 16:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F4957CE7D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 17:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiGUOel (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jul 2022 10:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
+        id S229691AbiGUPFS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jul 2022 11:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiGUOek (ORCPT
+        with ESMTP id S229475AbiGUPFR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:34:40 -0400
-Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCC67D1D7;
-        Thu, 21 Jul 2022 07:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1658414075;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=PG2qkkGH+3URLpHWBiKi5giOZ07YnvDih++ZIHc39wg=;
-        b=NbSnxHxBDJ/9uYTtB4ULDF7Q/3aMzpv9X3qbDKBgJsLn9pcazgDV6zmtaRwdjlwV
-        CDtHv0F9c24CqVBgyKZ0t2dCB85sLVWJJBNMRLSullCeqd56nLCDLC4NXEPEAMb6Cxw
-        3HuEwwcO+ZNt59YDsToVBmnqS1guKrRXChLYY0xw=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1658414075;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=PG2qkkGH+3URLpHWBiKi5giOZ07YnvDih++ZIHc39wg=;
-        b=Xudzm3Lt/bhCmOFMVITh9LnQH2JoC2BFwYejFl65uTjJmkVq1ASYyJFJL+NMXNCK
-        MdosmJFgtgVGUpZ05YYS9P4iwWKOrTSUGOu3Q4Ak4ySAgQdckmOFOa34jhChlK2SgH0
-        XqjHnd5Xio9Jyw0qAhtjTYc0HuCMVaKE+t9zSa6s=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220721
+        Thu, 21 Jul 2022 11:05:17 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31FD6305
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 08:05:14 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id h132so1905731pgc.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 08:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+qHP7skd3Cv7XJJygZVSwGskr21EGyWaFJgDdfd1xqA=;
+        b=oQSFR9+MjkkY1ur4gDW1MTlCrXf3uwlJLfESqNwsf2awYRDW0+8aavy8VzAuy9DB0G
+         JDCIQp1vt5BvWbaqkABHrCn9h2qVHzO/SxEDKgSBlbay4FQdznJ6OWnc4Hc0C/769sBL
+         aq7cj8hP0AUHXUTvnue16TNcqCwcMJHJ1Gz4cj7NXbvObCQklTY4pdJ1ZwEWRYUotwWt
+         BRQpaLf82OEJ9tYyxOPCUOLwadWEY7ln+vmIVrCj1MGptoVCZg53AGjaczk8CTfjFYcd
+         x+IeQO2qzB9zjTUGUovD73lL5DdL7DCL3eyEpBmg3MXYdMfYAAsyQOy2T2yk808kuO5O
+         Wxgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+qHP7skd3Cv7XJJygZVSwGskr21EGyWaFJgDdfd1xqA=;
+        b=mqLX3EaOUP+NciHIpFbVEfIhRxAMfDWnfDXPsQjEnV6yB8twp+k6lpdRiZRe54ZZ9M
+         rY4Stv7HM2+e+1jvD0ZTknAxrhUOCuxRVkHbHgxNNNDYWJCQg9fbcogeClAShV/2VoKj
+         /H5LlI1sZh1bCI1EXBUyV+EEEX2ehVsn7+DCMu7oxXrltzWGVXuGQx6MU905A7Pm2Agu
+         DSqtyE0mEqfyqHUYvC/uVj4jDC0vQ08c8Q7ShyKhYEaRktf5eD2O2bGiuEZPoGt+zo63
+         lMK1WEgEnXd7QWyhE4TOoFxRMA2WzW4gu+LsdFZ0qhCG06GggW4n1CYO55FXCXTP+7Yi
+         WtwA==
+X-Gm-Message-State: AJIora/8rMzTaT7JV/6cE6+m9mskVuVEBFEZNqj1VsQtCf9cNhhtKVEE
+        uKPIbMYWzqIm+J3iOl+slYMuqA==
+X-Google-Smtp-Source: AGRyM1uCSCT3ljh7PToWudc0PHcaebaKp/GEubhDiVG89ItWbH0HuD55vNtJx6Xaam1ITOer8uSeSA==
+X-Received: by 2002:a63:b56:0:b0:41a:495a:2a26 with SMTP id a22-20020a630b56000000b0041a495a2a26mr13293961pgl.411.1658415913932;
+        Thu, 21 Jul 2022 08:05:13 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id a17-20020aa78e91000000b005254e44b748sm1872610pfr.84.2022.07.21.08.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 08:05:13 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 15:05:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
+Message-ID: <YtlrJR3uP6940tjd@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
+ <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
+ <39067d09-b32b-23a6-ae0e-00ac2fe0466c@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <01000182212e8e03-8e41f951-57c0-4802-b961-584f35ba4fbb-000000@email.amazonses.com>
-Date:   Thu, 21 Jul 2022 14:34:35 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.07.21-54.240.48.34
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39067d09-b32b-23a6-ae0e-00ac2fe0466c@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.19.0-rc7
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: a3fd3ca134d9485a0f9a7bdcffd7f8bae27f79d3
-* git describe: next-20220721
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220721
+On Thu, Jul 21, 2022, David Hildenbrand wrote:
+> On 21.07.22 11:44, David Hildenbrand wrote:
+> > On 06.07.22 10:20, Chao Peng wrote:
+> >> Normally, a write to unallocated space of a file or the hole of a sparse
+> >> file automatically causes space allocation, for memfd, this equals to
+> >> memory allocation. This new seal prevents such automatically allocating,
+> >> either this is from a direct write() or a write on the previously
+> >> mmap-ed area. The seal does not prevent fallocate() so an explicit
+> >> fallocate() can still cause allocating and can be used to reserve
+> >> memory.
+> >>
+> >> This is used to prevent unintentional allocation from userspace on a
+> >> stray or careless write and any intentional allocation should use an
+> >> explicit fallocate(). One of the main usecases is to avoid memory double
+> >> allocation for confidential computing usage where we use two memfds to
+> >> back guest memory and at a single point only one memfd is alive and we
+> >> want to prevent memory allocation for the other memfd which may have
+> >> been mmap-ed previously. More discussion can be found at:
+> >>
+> >>   https://lkml.org/lkml/2022/6/14/1255
+> >>
+> >> Suggested-by: Sean Christopherson <seanjc@google.com>
+> >> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> >> ---
+> >>  include/uapi/linux/fcntl.h |  1 +
+> >>  mm/memfd.c                 |  3 ++-
+> >>  mm/shmem.c                 | 16 ++++++++++++++--
+> >>  3 files changed, 17 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+> >> index 2f86b2ad6d7e..98bdabc8e309 100644
+> >> --- a/include/uapi/linux/fcntl.h
+> >> +++ b/include/uapi/linux/fcntl.h
+> >> @@ -43,6 +43,7 @@
+> >>  #define F_SEAL_GROW	0x0004	/* prevent file from growing */
+> >>  #define F_SEAL_WRITE	0x0008	/* prevent writes */
+> >>  #define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
+> >> +#define F_SEAL_AUTO_ALLOCATE	0x0020  /* prevent allocation for writes */
+> > 
+> > Why only "on writes" and not "on reads". IIRC, shmem doesn't support the
+> > shared zeropage, so you'll simply allocate a new page via read() or on
+> > read faults.
+> 
+> Correction: on read() we don't allocate a fresh page. But on read faults
+> we would. So this comment here needs clarification.
 
-## Test Regressions (compared to v5.19-rc6-12429-g4ee7eaa411ee)
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-  - rtc.rtctest.rtc.date_read_loop
-
-
-## Metric Regressions (compared to v5.19-rc6-12429-g4ee7eaa411ee)
-No metric regressions found.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to v5.19-rc6-12429-g4ee7eaa411ee)
-* qemu_arm, kselftest-seccomp
-  - seccomp.seccomp_benchmark
-
-
-## Metric Fixes (compared to v5.19-rc6-12429-g4ee7eaa411ee)
-No metric fixes found.
-
-## Test result summary
-total: 345, pass: 167, fail: 44, skip: 134, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-gpio
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-lib
-* kselftest-membarrier
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Not just the comment, the code too.  The intent of F_SEAL_AUTO_ALLOCATE is very
+much to block _all_ implicit allocations (or maybe just fault-based allocations
+if "implicit" is too broad of a description).
