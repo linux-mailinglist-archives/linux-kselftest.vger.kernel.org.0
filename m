@@ -2,77 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E4457D581
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 23:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9663157D5C0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 23:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbiGUVGl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jul 2022 17:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S233732AbiGUVQV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jul 2022 17:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbiGUVGj (ORCPT
+        with ESMTP id S233773AbiGUVQR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:06:39 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353A8904C2;
-        Thu, 21 Jul 2022 14:06:37 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id q14so2340405iod.3;
-        Thu, 21 Jul 2022 14:06:37 -0700 (PDT)
+        Thu, 21 Jul 2022 17:16:17 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2625E815
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 14:16:15 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 23so2750967pgc.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 14:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UD6/PHsX06ls442kfkXr+sBUg1Zo13esPXVZU+zxxXo=;
-        b=lr6SWiF1ovkDnMS4jHw8tSYu3+iWiLSMv3qzm78VAjM7sA8u4bvPxO6vGOdV5nqnwF
-         /+Kw3jadBLbpDWck7WkFc/OJs2qZ6MNLLtRtWyKiQO3A8qLAqUQPCFazamo+5CLx2H1u
-         QcAamcduJ+sznu75aQRU9jGDkc91SnXJYVAOINK2TVJqM52wESGPChkRIeM2RRF9NPPO
-         uf8Tb8zAuDBhNA+SzREO2bI/zYGnnxbNte8DkFTx2ya06y7cnIp/KoCexh2UVcyn13O+
-         oLA9as2GswecUrbZ5Rt8uKbCvhuLlaQyQs137wbHaXP7ok9VGCwn/oQRDsarBXxRUvFT
-         U7Ig==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=11OqmbhSRizQ74Ch/j9J4lE0a0EnvcFlYhbfmnjs8Cg=;
+        b=RenZ/SKdXZfOHNevGxkMopwKMPWrfJxiCyc9BeId33rQlF1/1vzAERKsROGsgu73PO
+         3Vh+kBwRBR34zv6Cs7ZDNkRpWgwILWeqJwmR13cSjtmU0unAVdR41Nf/NH0jfEogkr2r
+         JHF9df+/fhRXMvvJnH3igBuCM+wK+xZhIdC/GSM24+Vcw7Gc90w73jNaPXTXhKdfuYLT
+         Dku2YQ2CN5mLe0SZz1eF0QJrwRspDs0R8NQZXQX7+lxV0WzhKtPvY+5ITZxdh5gN/3r+
+         nMFKRwOUV1v2Cq34kX1X0GD8LegMqzy3ApouqelaYdqEVdaSzVtSegGXRc/6GHjh0zKx
+         /wJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UD6/PHsX06ls442kfkXr+sBUg1Zo13esPXVZU+zxxXo=;
-        b=koX5wUt/sw4VEwGrQwmn6oODJtt/6VC6PdUVUmScPJKKyfitj/MDYmmT1Y+CkVr71B
-         tJrsi0HRz2PGoWMtvpisPWHQnGjj/+Xjx4M+34dDs2sLV3OdAw4gXwajuQ4u0ND8l1wJ
-         QnFH1tFI91vVvZEpgqPpim5mX8G5VKtUD2SV5eRZkG3shtIrxC8FkJxXvsW6B+hJzI44
-         4MfgZdG+RV8vUQo8uunpaIWUebE+dsvIHm8cKK/QNdqkK5l9bEJQjUWAGFGPqAw1lQ23
-         JeJx2ip5lwiuCD5oxSrEhJyy4wkJ80SbH8Dk19wCqgghQQrA2ZluSoXkBDXuWP/R3NN4
-         uFzQ==
-X-Gm-Message-State: AJIora/REg+X8/QYadrC4lm0pP5wuFbicYXVsJ5e14vo7i0QL4w/EjfL
-        GGOp/CSKpTRTkCRdpQFd0jS07fXVe8Qb3skDTPfIwzqTWyhvtw==
-X-Google-Smtp-Source: AGRyM1uN8l37YfT8hkCKnvwVyvz74b+AfEG+kDrYj5DD7RVMo3dIntZFDDpXM7nlCrOMgEQKChUVSRyOQDvOU3VvY2o=
-X-Received: by 2002:a05:6638:210b:b0:33f:5635:4c4b with SMTP id
- n11-20020a056638210b00b0033f56354c4bmr227538jaj.116.1658437596830; Thu, 21
- Jul 2022 14:06:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=11OqmbhSRizQ74Ch/j9J4lE0a0EnvcFlYhbfmnjs8Cg=;
+        b=b1GTul4Bz9oD5m2W4qyVxKzk5CglPhORIxCpyBKD0A6trbaFIsM28hb1g2RxdzuIG1
+         uPfieouVhX4Z0JlFK0Dz9Cx1PVsRJBGgqBPGtXA2kk3OWtTBIMJoA197DKwzjAnObYde
+         4GaIjfXklz8kt2DTDtGb9/Fp4gxmXFfxYeOPvMcpdApgRM2KdoaaIwEzx4Vys9TeUjQd
+         8zMylmaNDrE22iX/X3cxqBfbBUOGyD+Rid1J1RYIQVjeUaRFg1YjXEZLu1Keini1addE
+         WmjPNNLUEw7nWl6uzrHPZ4du/ZzBwgAqBhc7SgkxbANjDCLWWtdQy81tDD6y19n7BuGg
+         Ntjw==
+X-Gm-Message-State: AJIora8n0HgsbJEOzRks3XcHwjcoi0yqDS6I5ZwSEl+D87nLGjCYNKIk
+        4NfGrBbAkt6Q65mUvTuWqKZHfA==
+X-Google-Smtp-Source: AGRyM1tYVnSFtctc/PTPJVmFsiWSfHQt3N50JGg4333C9oMWtUgpVYWuQQYd9+YZX+C2GpeXrgjMVA==
+X-Received: by 2002:a65:6151:0:b0:412:e419:d651 with SMTP id o17-20020a656151000000b00412e419d651mr289868pgv.378.1658438174487;
+        Thu, 21 Jul 2022 14:16:14 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id h6-20020a056a00000600b00528c6c7bf37sm2213407pfk.129.2022.07.21.14.16.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 14:16:13 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 21:16:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        dave.hansen@linux.intel.com, "H . Peter Anvin" <hpa@zytor.com>,
+        shauh@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        Ricardo Koller <ricarkol@google.com>,
+        Aaron Lewis <aaronlewis@google.com>, wei.w.wang@intel.com,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Quentin Perret <qperret@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Marc Orr <marcorr@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Gonda <pgonda@google.com>,
+        "Nikunj A. Dadhania" <nikunj@amd.com>,
+        Austin Diviness <diviness@google.com>
+Subject: Re: [RFC V2 PATCH 2/8] selftests: kvm: Add a basic selftest to test
+ private memory
+Message-ID: <YtnCGktd8S7gtAQJ@google.com>
+References: <20220511000811.384766-1-vannapurve@google.com>
+ <20220511000811.384766-3-vannapurve@google.com>
+ <YtiJx11AZHslcGnN@google.com>
+ <CAGtprH9BQkcJcpp=uEJJLwM-Z=cW9rsJ7iVKbjv_gisVj8EWGQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com> <20220721153625.1282007-6-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220721153625.1282007-6-benjamin.tissoires@redhat.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Thu, 21 Jul 2022 23:05:59 +0200
-Message-ID: <CAP01T76_CEGR5Vn+7WCah4oLtv4GUYawhC2X5zUDugG1sTB28Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 05/24] bpf/verifier: allow kfunc to return an
- allocated mem
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGtprH9BQkcJcpp=uEJJLwM-Z=cW9rsJ7iVKbjv_gisVj8EWGQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,31 +109,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 21 Jul 2022 at 17:38, Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> For drivers (outside of network), the incoming data is not statically
-> defined in a struct. Most of the time the data buffer is kzalloc-ed
-> and thus we can not rely on eBPF and BTF to explore the data.
->
-> This commit allows to return an arbitrary memory, previously allocated by
-> the driver.
-> An interesting extra point is that the kfunc can mark the exported
-> memory region as read only or read/write.
->
-> So, when a kfunc is not returning a pointer to a struct but to a plain
-> type, we can consider it is a valid allocated memory assuming that:
-> - one of the arguments is either called rdonly_buf_size or
->   rdwr_buf_size
-> - and this argument is a const from the caller point of view
->
-> We can then use this parameter as the size of the allocated memory.
->
-> The memory is either read-only or read-write based on the name
-> of the size parameter.
->
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->
-> ---
+On Thu, Jul 21, 2022, Vishal Annapurve wrote:
+> On Wed, Jul 20, 2022 at 4:03 PM Sean Christopherson <seanjc@google.com> wrote:
+> > ...
+> > > + * which doesn't handle global offset table updates. Calling standard libc
+> > > + * functions would normally result in referring to the global offset table.
+> > > + * Adding O1 here seems to prohibit compiler from replacing the memory
+> > > + * operations with standard libc functions such as memset.
+> > > + */
+> >
+> > Eww.  We should either fix kvm_vm_elf_load() or override the problematic libc
+> > variants.  Playing games with per-function attributes is not maintainable.
+> >
+> 
+> I will try to spend more time on how kvm_vm_elf_load can be modified
+> to handle GOT fixups in different scenarios including
+> statically/dynamically linked sefltest binaries as I currently recall
+> limited information here.
+> 
+> But modifying kvm_vm_elf_load to fixup GOT entries will be
+> insufficient as guest VM code (possibly whole selftest binary) will
+> need to be compiled with flags that allow memset/memcpy
+> implementations to work with specific guest VM configurations e.g. AVX
+> extension. Same concern is outlined in
+> https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/kvm/lib/x86_64/svm.c#L64.
+> 
+> Would it be ok to maintain selftest binary compilation flags based on
+> guest VM configurations?
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+No, we should instead define/implement versions of memset/memcpy that are
+guaranteed to be guest-friendly, either explicitly by selftests are implicitly
+by compiler builtins, e.g. see arch/x86/boot/string.h.
