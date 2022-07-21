@@ -2,102 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9663157D5C0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 23:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193DD57D775
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 01:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbiGUVQV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jul 2022 17:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
+        id S232341AbiGUXy2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jul 2022 19:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233773AbiGUVQR (ORCPT
+        with ESMTP id S229551AbiGUXy0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jul 2022 17:16:17 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2625E815
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 14:16:15 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 23so2750967pgc.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 14:16:15 -0700 (PDT)
+        Thu, 21 Jul 2022 19:54:26 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C2278232
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 16:54:21 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id f3so1303993uaq.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 16:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=11OqmbhSRizQ74Ch/j9J4lE0a0EnvcFlYhbfmnjs8Cg=;
-        b=RenZ/SKdXZfOHNevGxkMopwKMPWrfJxiCyc9BeId33rQlF1/1vzAERKsROGsgu73PO
-         3Vh+kBwRBR34zv6Cs7ZDNkRpWgwILWeqJwmR13cSjtmU0unAVdR41Nf/NH0jfEogkr2r
-         JHF9df+/fhRXMvvJnH3igBuCM+wK+xZhIdC/GSM24+Vcw7Gc90w73jNaPXTXhKdfuYLT
-         Dku2YQ2CN5mLe0SZz1eF0QJrwRspDs0R8NQZXQX7+lxV0WzhKtPvY+5ITZxdh5gN/3r+
-         nMFKRwOUV1v2Cq34kX1X0GD8LegMqzy3ApouqelaYdqEVdaSzVtSegGXRc/6GHjh0zKx
-         /wJg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jtYczuHhIpE7bWu8QNlaqNlPc/Yb6w4amtZYdihwjGs=;
+        b=aSybbqRteJF9FM1MEcuxfiEKcG3cKkUItxrCLrCsmhgJy4Gb0C5Dp2cgVQ4XUaO+oF
+         xDwSwtlT6oMFmf9vRO40yVSKfuMzw3PoaMIidUQqAmGpY3S6XQH0NfW+lbpGJRehAim5
+         KTQrTPvHhfDa0ykkbFYF/MmHTl8c9euFhC6U7FvGEYv6WwcjUSMwgHKG2oxLmHpz03Eb
+         +6JmxGIcyHYAn6J6jUkavfj7qxiUEKF+TD1hXJVH5vhtd0CTcePdQfUReE/EsGs3ZbBl
+         fLglp7wn7r91YMYgebMMcTDVorqh1ghjEROrlRHLcGaqGdd2l4wInpGWqrjxQaPq1XXh
+         INRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=11OqmbhSRizQ74Ch/j9J4lE0a0EnvcFlYhbfmnjs8Cg=;
-        b=b1GTul4Bz9oD5m2W4qyVxKzk5CglPhORIxCpyBKD0A6trbaFIsM28hb1g2RxdzuIG1
-         uPfieouVhX4Z0JlFK0Dz9Cx1PVsRJBGgqBPGtXA2kk3OWtTBIMJoA197DKwzjAnObYde
-         4GaIjfXklz8kt2DTDtGb9/Fp4gxmXFfxYeOPvMcpdApgRM2KdoaaIwEzx4Vys9TeUjQd
-         8zMylmaNDrE22iX/X3cxqBfbBUOGyD+Rid1J1RYIQVjeUaRFg1YjXEZLu1Keini1addE
-         WmjPNNLUEw7nWl6uzrHPZ4du/ZzBwgAqBhc7SgkxbANjDCLWWtdQy81tDD6y19n7BuGg
-         Ntjw==
-X-Gm-Message-State: AJIora8n0HgsbJEOzRks3XcHwjcoi0yqDS6I5ZwSEl+D87nLGjCYNKIk
-        4NfGrBbAkt6Q65mUvTuWqKZHfA==
-X-Google-Smtp-Source: AGRyM1tYVnSFtctc/PTPJVmFsiWSfHQt3N50JGg4333C9oMWtUgpVYWuQQYd9+YZX+C2GpeXrgjMVA==
-X-Received: by 2002:a65:6151:0:b0:412:e419:d651 with SMTP id o17-20020a656151000000b00412e419d651mr289868pgv.378.1658438174487;
-        Thu, 21 Jul 2022 14:16:14 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id h6-20020a056a00000600b00528c6c7bf37sm2213407pfk.129.2022.07.21.14.16.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 14:16:13 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 21:16:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        dave.hansen@linux.intel.com, "H . Peter Anvin" <hpa@zytor.com>,
-        shauh@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        Ricardo Koller <ricarkol@google.com>,
-        Aaron Lewis <aaronlewis@google.com>, wei.w.wang@intel.com,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Quentin Perret <qperret@google.com>,
-        Steven Price <steven.price@arm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Marc Orr <marcorr@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Gonda <pgonda@google.com>,
-        "Nikunj A. Dadhania" <nikunj@amd.com>,
-        Austin Diviness <diviness@google.com>
-Subject: Re: [RFC V2 PATCH 2/8] selftests: kvm: Add a basic selftest to test
- private memory
-Message-ID: <YtnCGktd8S7gtAQJ@google.com>
-References: <20220511000811.384766-1-vannapurve@google.com>
- <20220511000811.384766-3-vannapurve@google.com>
- <YtiJx11AZHslcGnN@google.com>
- <CAGtprH9BQkcJcpp=uEJJLwM-Z=cW9rsJ7iVKbjv_gisVj8EWGQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jtYczuHhIpE7bWu8QNlaqNlPc/Yb6w4amtZYdihwjGs=;
+        b=X4Ly1vbEail9U5sLQA/gt2diUft6NNBbJg20xkG6ijnXEqtRlb0ZUipNMmm3/019yu
+         C2zVioC9uUlcBdA1SwV6avc4fAq+2xhrAMf3XzlTdZEV9kbzAMAOhXGJa9e8iN1SwoJE
+         q/1SClm3zwmsEU6rrsaiyLngEz8cC1lGH+pZfy22yxlKwEMBT+EK14+eKcbUUeW0zChZ
+         fs5Av1wR8b7a3B0O4hn70WHIBx74ib73n8CBzaG4see4ryHf8S65pmmq6vftxUCtAIHG
+         MILDW8uopRPdzbW4hlAZCQWvfRvpZFRiCKOcY7psBqE6XB1mrTe8ZoaQntq1kek2bY2B
+         nRHQ==
+X-Gm-Message-State: AJIora/WJmqd3cr3qih5GsBdiiWQfDvv11M1vNpWEq3ho/MAcKG5oHUz
+        n4u1lNwQb6uwHHT2PAfC08ZeVrKqJEN0omF+FYIXPg==
+X-Google-Smtp-Source: AGRyM1tdx8kLjlcV51jrflrWwGExmOREJd4TjCuKF5p8XGFc3o+TklGRnmVssXjDKp+NGaD1drIjrjgkBk9hTuKzyc0=
+X-Received: by 2002:a9f:2f0f:0:b0:384:26c2:ead1 with SMTP id
+ x15-20020a9f2f0f000000b0038426c2ead1mr277189uaj.107.1658447660782; Thu, 21
+ Jul 2022 16:54:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGtprH9BQkcJcpp=uEJJLwM-Z=cW9rsJ7iVKbjv_gisVj8EWGQ@mail.gmail.com>
+References: <20220721081026.1247067-1-sadiyakazi@google.com>
+In-Reply-To: <20220721081026.1247067-1-sadiyakazi@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 22 Jul 2022 07:54:09 +0800
+Message-ID: <CABVgOS=iOkquTXEPdS1skRj7Bda-H-REDW8mozziEYjn8RnRnw@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: kunit: Add CLI args for kunit_tool
+To:     Sadiya Kazi <sadiyakazi@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -109,34 +74,130 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 21, 2022, Vishal Annapurve wrote:
-> On Wed, Jul 20, 2022 at 4:03 PM Sean Christopherson <seanjc@google.com> wrote:
-> > ...
-> > > + * which doesn't handle global offset table updates. Calling standard libc
-> > > + * functions would normally result in referring to the global offset table.
-> > > + * Adding O1 here seems to prohibit compiler from replacing the memory
-> > > + * operations with standard libc functions such as memset.
-> > > + */
-> >
-> > Eww.  We should either fix kvm_vm_elf_load() or override the problematic libc
-> > variants.  Playing games with per-function attributes is not maintainable.
-> >
-> 
-> I will try to spend more time on how kvm_vm_elf_load can be modified
-> to handle GOT fixups in different scenarios including
-> statically/dynamically linked sefltest binaries as I currently recall
-> limited information here.
-> 
-> But modifying kvm_vm_elf_load to fixup GOT entries will be
-> insufficient as guest VM code (possibly whole selftest binary) will
-> need to be compiled with flags that allow memset/memcpy
-> implementations to work with specific guest VM configurations e.g. AVX
-> extension. Same concern is outlined in
-> https://elixir.bootlin.com/linux/latest/source/tools/testing/selftests/kvm/lib/x86_64/svm.c#L64.
-> 
-> Would it be ok to maintain selftest binary compilation flags based on
-> guest VM configurations?
+On Thu, Jul 21, 2022 at 4:26 PM Sadiya Kazi <sadiyakazi@google.com> wrote:
+>
+> Run_wrapper.rst was missing some command line arguments. Added
+> additional args in the file.
+>
+> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+> ---
+> Changes since V1:
+> https://lore.kernel.org/linux-kselftest/20220719092214.995965-1-sadiyakazi@google.com/
+> - Addressed most of the review comments from Maira and David, except
+>   removing the duplicate arguments as I felt its worth keeping them in
+>   the reference documentation as well as in context. We can improve them
+>   and differentiate their use cases in the future patches.
+>
+>
 
-No, we should instead define/implement versions of memset/memcpy that are
-guaranteed to be guest-friendly, either explicitly by selftests are implicitly
-by compiler builtins, e.g. see arch/x86/boot/string.h.
+Looks good to me. A couple of super-minor suggestions below, and a
+note about how KASAN/UML support hasn't fully landed yet (but I still
+like it as an example, so maybe leave it as-is).
+
+None of these are deal breakers, though, and I'd be okay with this
+going in as-is, as well.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+> ---
+>  Documentation/dev-tools/kunit/run_wrapper.rst | 60 ++++++++++++++++++-
+>  1 file changed, 59 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+> index 5e560f2c5fca..600af7ac5f88 100644
+> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
+> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+> @@ -233,7 +233,7 @@ Command-Line Arguments
+>  ======================
+>
+>  kunit_tool has a number of other command-line arguments which can
+> -be useful for our test environment. Below the most commonly used
+> +be useful for our test environment. Below are the most commonly used
+>  command line arguments:
+>
+>  - ``--help``: Lists all available options. To list common options,
+> @@ -257,3 +257,61 @@ command line arguments:
+>              added or modified. Instead, enable all tests
+>              which have satisfied dependencies by adding
+>              ``CONFIG_KUNIT_ALL_TESTS=y`` to your ``.kunitconfig``.
+> +
+> +- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitconfig``
+> +  file. For example:
+> +
+> +  - ``lib/kunit/.kunitconfig`` can be the path of the file.
+> +
+> +  - ``lib/kunit`` can be the directory in which the file is located.
+> +
+> +  This file is used to build and run with a predefined set of tests
+> +  and their dependencies. For example, to run tests for a given subsystem.
+> +
+> +- ``--kconfig_add``: Specifies additional configuration options to be
+> +  appended to the ``.kunitconfig`` file.
+> +  For example, ``./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y``.
+> +
+
+Just FYI, this example won't work as-is until KASAN for UML is merged.
+It's already sitting in uml/next, so this shouldn't be a problem:
+https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux.git/commit/?h=next&id=5b301409e8bc5d7fad2ee138be44c5c529dd0874
+
+But if you want to try it on 5.19 or the current kunit branch, you'll
+need to add, e.g., --arch=x86_64
+
+> +- ``--arch``: Runs tests on the specified architecture. The architecture
+> +  specified must match the Kbuild ARCH environment variable.
+
+I'm not quite sold on 'must match the Kbuild ARCH environment
+variable'. That seems to imply to me that you need to set ARCH= _and_
+use --arch. Instead, --arch itself sets ARCH=, so the values use the
+same names.
+
+> +  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on QEMU.
+> +  Default is `um`.
+> +
+> +- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
+> +  same argument as passed to the ``CROSS_COMPILE`` variable used by
+> +  Kbuild. This will be the prefix for the toolchain
+> +  binaries such as GCC. For example:
+> +
+> +  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
+> +    our system.
+> +
+> +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux``
+> +    if we have downloaded the microblaze toolchain from the 0-day
+> +    website to a specified path in our home directory called toolchains.
+> +
+> +- ``--qemu_config``: Specifies the path to a file containing a
+> +  custom qemu architecture definition. This should be a python file
+> +  containing a `QemuArchParams` object.
+> +
+> +- ``--qemu_args``: Specifies additional QEMU arguments, for example, "-smp 8".
+> +
+> +- ``--jobs``: Specifies the number of jobs (commands) to run simultaneously.4
+> +  By default, this is set to the number of cores on your system.
+> +
+> +- ``--timeout``: Specifies the maximum number of seconds allowed for all tests to run.
+> +  This does not include the time taken to build the tests.
+> +
+> +- ``--kernel_args``: Specifies additional kernel command-line arguments. Might be repeated.
+
+Nit: maybe "can be repeated"? As it's the reader of this documentation
+who will likely be doing the repeating. Or "may be repeated"?
+> +
+> +- ``--run_isolated``: If set, boots the kernel for each individual suite/test.
+> +  This is useful for debugging a non-hermetic test, one that
+> +  might pass/fail based on what ran before it.
+> +
+> +- ``--raw_output``: If set, generates unformatted output from kernel. Possible options are:
+> +
+> +   - ``all``: To view the full kernel output, use ``--raw_output=all``.
+> +
+> +   - ``kunit``: This is the default option and filters to KUnit output. Use ``--raw_output`` or ``--raw_output=kunit``.
+> +
+> +- ``--json``: If set, stores the test results in a JSON format and prints to `stdout` or
+> +  saves to a file if a filename is specified.
+> --
+> 2.37.0.170.g444d1eabd0-goog
+>
