@@ -2,108 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EABB57D2D6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 19:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91CF57D2ED
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 20:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiGUR66 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jul 2022 13:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S230006AbiGUSCY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jul 2022 14:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiGUR65 (ORCPT
+        with ESMTP id S232142AbiGUSCY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jul 2022 13:58:57 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C24B8AB11
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 10:58:56 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q43-20020a17090a17ae00b001f1f67e053cso2100143pja.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 10:58:56 -0700 (PDT)
+        Thu, 21 Jul 2022 14:02:24 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A258B4B6
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 11:02:22 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id k64-20020a253d43000000b0067080eb57fdso1792163yba.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 11:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wvI0q5HAql8tMPxcnKbiOi/9NxgmmSwnzAAkVZd1GZE=;
-        b=QeJXriKT9c5kzVC7WwOIhi80ckWM6ug8VcaWprkpELe4t4pSILpTjfg8m+cMtOrWBe
-         jmelByXoDseFjzPN05HlM35WJraOgVD8XBmkQsrB5vGpNrj70IhxBhsBNPglHsEpzekf
-         1kG3W212r4FUnxp6h1itgEO/FJ4Uuo3CeYYXkoiOWqCRXrzKR28+BcJbG5kguyytRjkg
-         rjsFU2rMHcaFZYM7jRBwDx3y4TNjRz8cS5RWMgjh+1ofnV6wnx05hcN9heFlTTNfsAVq
-         qUjZMJxGLa9mHYyEFjkrcwiRRdLtgvROz3H/Z1mIRgvYivxLAzSanUXyi85+4NTaGuJS
-         Ssew==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=bwyvk3adYUmO9nGXEI3CWcvpdi62CKirSTxuhR6/nsw=;
+        b=bGIgau+M3Z6by2t8ZG1mDNv/rfxHg71VJ6r02h86mtLkjz3yz7kPA5bRFH/aHFWZKm
+         hDQqHQvSdAhyNgesiCx+I1PS3tUFyNkk28CN3M+KnbO66yRNYW463e4QFLtj+fr97xPr
+         FF6bIMcqjAnvG4x/RD9SJzN/zcisqr/4bMDx5zHsxDi95n0mVEQ190mZiONKTBjW3Uv0
+         QYZvQ6j+dKUlPqpp+XwHjou1cG9ZInz6JCwezLIaUR3306FDHrZvZoVC0EMhmbbeanJ7
+         bIEk7krx/STdj54NTcu+aFHQwzNZFISF/KD3it0WGedpyPnh4YUk6ew4ssLb1wpYDvWz
+         v36w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wvI0q5HAql8tMPxcnKbiOi/9NxgmmSwnzAAkVZd1GZE=;
-        b=TpzdVAl4vKHLi+3Rv7YuSAJgIc3lEoF7QFO8Tn29csBsE1noWwEk5Qe+lWxN42+7AI
-         ccRlOAdsBu2+8clBqF9nCftdHkLw5xyf2+J9V1+HAIACzcUjRYMHfRJKosrWpPjX67vL
-         TgLp64QJxJpg7ohhSLgfIyLA/DC/xUHQtuOJDqFCl40pYv6NMY7E3N25GzZGC4SSaY9p
-         GxY/vYfwcvxJ8Oc8LVIcsb8Ig9hE2Uc0uHF9j67pB0v1ftWUoFqODsA16pRIWh2SWYAC
-         2tsR3Y6x1AGaygmE4yvMdpC2dh5T6sa5jlxWDlERfMyDaQwm1apA+oCr0TgvxiC0YQGy
-         H5iA==
-X-Gm-Message-State: AJIora/pJLjlBVSvKNVRYOK4AQLvOAnnp99/Y7MIbjeQGCdAJFNo7901
-        gCZU+u8JKd8bsy4RLzUQiAadXg==
-X-Google-Smtp-Source: AGRyM1sy1sNPIZTfbcs9D/R5onBZFJSx4EAG07fQgd3u5pHjtvT3tSBi6UiM7uRquYtBlR+3qYzZvg==
-X-Received: by 2002:a17:90b:3d84:b0:1ef:9049:9f43 with SMTP id pq4-20020a17090b3d8400b001ef90499f43mr12682443pjb.45.1658426335405;
-        Thu, 21 Jul 2022 10:58:55 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902684400b0016c1cdd2de3sm1956763pln.281.2022.07.21.10.58.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 10:58:54 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 17:58:50 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <YtmT2irvgInX1kPp@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
- <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
- <20220719140843.GA84779@chaop.bj.intel.com>
- <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
- <20220720150706.GB124133@chaop.bj.intel.com>
- <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
- <YtgrkXqP/GIi9ujZ@google.com>
- <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
- <20220721092906.GA153288@chaop.bj.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721092906.GA153288@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=bwyvk3adYUmO9nGXEI3CWcvpdi62CKirSTxuhR6/nsw=;
+        b=G3vlKw0bhMEBGfy+zgX4qsalVx0hnl/aVK3w7kFAk7Fnl6sXeWb/Bvpxr4b/m3bejm
+         f7zXprM8DhQ3bVu2Ba/g/BHyXloqSZsu2hcVtG8u8pxoMxcB9zXrl3yUCatXSW0i2eDh
+         jbirKLxp+3WI5xbzseyEdtT6g/sSA48JLQzCHuFne39GACH+X5SI2zynvXcPpcfSzr8y
+         h6PGD4Ye5VwtvIVJFQRduGUDonsehsv9Rd5N826Lf3NquGHb+O9Di+LNoqdfYiXa9I4B
+         XTFi0ChBX2wJYCZ3hceoB3zYbMNq1qY8kSwARKBbk05+YPvYzhJqi4SeJjUrs65b2YJx
+         Qu0w==
+X-Gm-Message-State: AJIora9fWYRn6c0RJKuW/FdmFfUmRYF17hQUJ4zVt5YfHBEG+2qXx6PL
+        qk9OMHw6tKYFx2vrGZTpXeJFgTERO4XtNQ==
+X-Google-Smtp-Source: AGRyM1uTOq1N3ksSuvvL7kgVik3r3sJYoVQHO/NLbxfRpEl0mgzzQXgZIDXp9dkO+rAvi+Z4KpB9DvPXFdnyxQ==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a81:9acd:0:b0:31d:2fd7:3331 with SMTP id
+ r196-20020a819acd000000b0031d2fd73331mr47250554ywg.145.1658426542076; Thu, 21
+ Jul 2022 11:02:22 -0700 (PDT)
+Date:   Thu, 21 Jul 2022 18:02:11 +0000
+Message-Id: <20220721180214.3223778-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH 1/4] kunit: string-stream: Simplify resource use
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,79 +65,190 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 21, 2022, Chao Peng wrote:
-> On Thu, Jul 21, 2022 at 03:34:59PM +0800, Wei Wang wrote:
-> > 
-> > 
-> > On 7/21/22 00:21, Sean Christopherson wrote:
-> > Maybe you could tag it with cgs for all the confidential guest support
-> > related stuff: e.g. kvm_vm_ioctl_set_cgs_mem()
-> > 
-> > bool is_private = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-> > ...
-> > kvm_vm_ioctl_set_cgs_mem(, is_private)
-> 
-> If we plan to widely use such abbr. through KVM (e.g. it's well known),
-> I'm fine.
+From: David Gow <davidgow@google.com>
 
-I'd prefer to stay away from "confidential guest", and away from any VM-scoped
-name for that matter.  User-unmappable memmory has use cases beyond hiding guest
-state from the host, e.g. userspace could use inaccessible/unmappable memory to
-harden itself against unintentional access to guest memory.
+Currently, KUnit's string streams are themselves "KUnit resources".
+This is redundant since the stream itself is already allocated with
+kunit_kzalloc() and will thus be freed automatically at the end of the
+test.
 
-> I actually use mem_attr in patch: https://lkml.org/lkml/2022/7/20/610
-> But I also don't quite like it, it's so generic and sounds say nothing.
-> 
-> But I do want a name can cover future usages other than just 
-> private/shared (pKVM for example may have a third state).
+string-stream is only used internally within KUnit, and isn't using the
+extra features that resources provide like reference counting, being
+able to locate them dynamically as "test-local variables", etc.
 
-I don't think there can be a third top-level state.  Memory is either private to
-the guest or it's not.  There can be sub-states, e.g. memory could be selectively
-shared or encrypted with a different key, in which case we'd need metadata to
-track that state.
+Indeed, the resource's refcount is never incremented when the
+pointer is returned. The fact that it's always manually destroyed is
+more evidence that the reference counting is unused.
 
-Though that begs the question of whether or not private_fd is the correct
-terminology.  E.g. if guest memory is backed by a memfd that can't be mapped by
-userspace (currently F_SEAL_INACCESSIBLE), but something else in the kernel plugs
-that memory into a device or another VM, then arguably that memory is shared,
-especially the multi-VM scenario.
+Signed-off-by: David Gow <davidgow@google.com>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ lib/kunit/string-stream.c | 90 +++++++--------------------------------
+ lib/kunit/string-stream.h |  2 +-
+ lib/kunit/test.c          |  2 +-
+ 3 files changed, 18 insertions(+), 76 deletions(-)
 
-For TDX and SNP "private vs. shared" is likely the correct terminology given the
-current specs, but for generic KVM it's probably better to align with whatever
-terminology is used for memfd.  "inaccessible_fd" and "user_inaccessible_fd" are
-a bit odd since the fd itself is accesible.
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index 141789ca8949..a2496abef152 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -12,64 +12,31 @@
+ 
+ #include "string-stream.h"
+ 
+-struct string_stream_fragment_alloc_context {
+-	struct kunit *test;
+-	int len;
+-	gfp_t gfp;
+-};
+ 
+-static int string_stream_fragment_init(struct kunit_resource *res,
+-				       void *context)
++static struct string_stream_fragment *alloc_string_stream_fragment(
++		struct kunit *test, int len, gfp_t gfp)
+ {
+-	struct string_stream_fragment_alloc_context *ctx = context;
+ 	struct string_stream_fragment *frag;
+ 
+-	frag = kunit_kzalloc(ctx->test, sizeof(*frag), ctx->gfp);
++	frag = kunit_kzalloc(test, sizeof(*frag), gfp);
+ 	if (!frag)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+-	frag->test = ctx->test;
+-	frag->fragment = kunit_kmalloc(ctx->test, ctx->len, ctx->gfp);
++	frag->test = test;
++	frag->fragment = kunit_kmalloc(test, len, gfp);
+ 	if (!frag->fragment)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+-	res->data = frag;
+-
+-	return 0;
++	return frag;
+ }
+ 
+-static void string_stream_fragment_free(struct kunit_resource *res)
++static void string_stream_fragment_destroy(struct string_stream_fragment *frag)
+ {
+-	struct string_stream_fragment *frag = res->data;
+-
+ 	list_del(&frag->node);
+ 	kunit_kfree(frag->test, frag->fragment);
+ 	kunit_kfree(frag->test, frag);
+ }
+ 
+-static struct string_stream_fragment *alloc_string_stream_fragment(
+-		struct kunit *test, int len, gfp_t gfp)
+-{
+-	struct string_stream_fragment_alloc_context context = {
+-		.test = test,
+-		.len = len,
+-		.gfp = gfp
+-	};
+-
+-	return kunit_alloc_resource(test,
+-				    string_stream_fragment_init,
+-				    string_stream_fragment_free,
+-				    gfp,
+-				    &context);
+-}
+-
+-static int string_stream_fragment_destroy(struct string_stream_fragment *frag)
+-{
+-	return kunit_destroy_resource(frag->test,
+-				      kunit_resource_instance_match,
+-				      frag);
+-}
+-
+ int string_stream_vadd(struct string_stream *stream,
+ 		       const char *fmt,
+ 		       va_list args)
+@@ -169,48 +136,23 @@ struct string_stream_alloc_context {
+ 	gfp_t gfp;
+ };
+ 
+-static int string_stream_init(struct kunit_resource *res, void *context)
++struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
+ {
+ 	struct string_stream *stream;
+-	struct string_stream_alloc_context *ctx = context;
+ 
+-	stream = kunit_kzalloc(ctx->test, sizeof(*stream), ctx->gfp);
++	stream = kunit_kzalloc(test, sizeof(*stream), gfp);
+ 	if (!stream)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+-	res->data = stream;
+-	stream->gfp = ctx->gfp;
+-	stream->test = ctx->test;
++	stream->gfp = gfp;
++	stream->test = test;
+ 	INIT_LIST_HEAD(&stream->fragments);
+ 	spin_lock_init(&stream->lock);
+ 
+-	return 0;
++	return stream;
+ }
+ 
+-static void string_stream_free(struct kunit_resource *res)
++void string_stream_destroy(struct string_stream *stream)
+ {
+-	struct string_stream *stream = res->data;
+-
+ 	string_stream_clear(stream);
+ }
+-
+-struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
+-{
+-	struct string_stream_alloc_context context = {
+-		.test = test,
+-		.gfp = gfp
+-	};
+-
+-	return kunit_alloc_resource(test,
+-				    string_stream_init,
+-				    string_stream_free,
+-				    gfp,
+-				    &context);
+-}
+-
+-int string_stream_destroy(struct string_stream *stream)
+-{
+-	return kunit_destroy_resource(stream->test,
+-				      kunit_resource_instance_match,
+-				      stream);
+-}
+diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
+index 43f9508a55b4..494dee0f24bd 100644
+--- a/lib/kunit/string-stream.h
++++ b/lib/kunit/string-stream.h
+@@ -46,6 +46,6 @@ int string_stream_append(struct string_stream *stream,
+ 
+ bool string_stream_is_empty(struct string_stream *stream);
+ 
+-int string_stream_destroy(struct string_stream *stream);
++void string_stream_destroy(struct string_stream *stream);
+ 
+ #endif /* _KUNIT_STRING_STREAM_H */
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index b73d5bb5c473..0fb2771ca03e 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -267,7 +267,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+ 
+ 	kunit_print_string_stream(test, stream);
+ 
+-	WARN_ON(string_stream_destroy(stream));
++	string_stream_destroy(stream);
+ }
+ 
+ static void __noreturn kunit_abort(struct kunit *test)
 
-What about "user_unmappable"?  E.g.
+base-commit: 94681e289bf5d10c9db9db143d1a22d8717205c5
+-- 
+2.37.1.359.gd136c6c3e2-goog
 
-  F_SEAL_USER_UNMAPPABLE, MFD_USER_UNMAPPABLE, KVM_HAS_USER_UNMAPPABLE_MEMORY,
-  MEMFILE_F_USER_INACCESSIBLE, user_unmappable_fd, etc...
-
-that gives us flexibility to map the memory from within the kernel, e.g. into
-other VMs or devices.
-
-Hmm, and then keep your original "mem_attr_array" name?  And probably 
-
- int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
- 			       bool is_user_mappable)
-
-Then the x86/mmu code for TDX/SNP private faults could be:
-
-	is_private = !kvm_is_gpa_user_mappable();
-
-	if (fault->is_private != is_private) {
-
-or if we want to avoid mixing up "user_mappable" and "user_unmappable":
-
-	is_private = kvm_is_gpa_user_unmappable();
-
-	if (fault->is_private != is_private) {
-
-though a helper that returns a negative (not mappable) feels kludgy.  And I like
-kvm_is_gpa_user_mappable() because then when there's not "special" memory, it
-defaults to true, which is more intuitive IMO.
-
-And then if the future needs more precision, e.g. user-unmappable memory isn't
-necessarily guest-exclusive, the uAPI names still work even though KVM internals
-will need to be reworked, but that's unavoidable.  E.g. piggybacking
-KVM_MEMORY_ENCRYPT_(UN)REG_REGION doesn't allow for further differentiation,
-so we'd need to _extend_ the uAPI, but the _existing_ uAPI would still be sane.
