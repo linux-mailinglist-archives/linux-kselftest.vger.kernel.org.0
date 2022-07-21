@@ -2,96 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5958757C55C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 09:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDDA57C5CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 10:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiGUHfT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jul 2022 03:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        id S230089AbiGUIFJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jul 2022 04:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiGUHfS (ORCPT
+        with ESMTP id S231489AbiGUIFH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jul 2022 03:35:18 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7590D11B;
-        Thu, 21 Jul 2022 00:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658388917; x=1689924917;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HDZ5ADD7H00ujzYo8f6UW7EI5DQuY8pQPtvATJDvm4I=;
-  b=ipaVH0A1IdlCM4V/RRcDGYVjn28z9hgpjyJ5fTjgRtAUjrvQuOVd0TVd
-   YhQJEBgvRh8MFAzOhGugYZwNo5KmfcybgQp8kf2TJfrJWYRmoLnl8SNaA
-   cDvmVQJqB+4apfkhqjUDLu4PFyykYClif54JQUOIISzf6tP6+dCUZAUER
-   b5xHxFYIawwVSEHUOQ533k2mNaTUXeVTVgpu7h/d00qaJp6VZU02U5FM5
-   o43/eDAx0eV2kM4e150OHmagnEvgW8XCSQlrvMNb8uTGnIn4v+9E2bPPf
-   qLOazo/vmb9apW0ZksEhrzkJRyim7RtZ4mtw4infkYF+HMXrtHzTsp3Rj
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10414"; a="350963821"
-X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
-   d="scan'208";a="350963821"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 00:35:16 -0700
-X-IronPort-AV: E=Sophos;i="5.92,288,1650956400"; 
-   d="scan'208";a="626004190"
-Received: from wangwei-desk.sh.intel.com (HELO [10.239.159.152]) ([10.239.159.152])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2022 00:35:06 -0700
-Message-ID: <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
-Date:   Thu, 21 Jul 2022 15:34:59 +0800
+        Thu, 21 Jul 2022 04:05:07 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD01022D
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 01:05:04 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id k11so635192wrx.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Jul 2022 01:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=6wind.com; s=google;
+        h=message-id:date:mime-version:user-agent:reply-to:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=oMezIl3MODyEWDKeXD47e22fDPTf1Eql4Ed8O/dFGiA=;
+        b=Rn4JYKPKybeoUYZNdX1pt+5kkJs44S0CWgoOMBkI2Upy5D3eyLLCs4Jor5AimJFPmI
+         PuqOeNlX2J1HNVilQYUu8Ee0Rp52mct/wdRaTy3IVqG+YKYyWIhfFrD2RSZ7bmqxvIBw
+         LHOopcZl7qV+nUuiTUxirIMgDTgMW9YX5s9yO5zmV8SH/NL7Br8+0ksSDlHJ08/wxYIB
+         zv0i14yZYGYkv8AfJEEcBUBkVAi3gNS0EpBlSVuEfXoxHApMkEMPLp9Xuqn/HxyPoO5G
+         4LlKoSde4252QEiprKdpKhfRifpLNUc1HMlPBxnhiySjhbxmlres2/WPbjBMnko9Pfk9
+         2dmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
+         :subject:content-language:to:cc:references:from:organization
+         :in-reply-to:content-transfer-encoding;
+        bh=oMezIl3MODyEWDKeXD47e22fDPTf1Eql4Ed8O/dFGiA=;
+        b=24SUVRkXOLskA3Wu86u7RnCU/VlujSmPflWiGXVMLfnTcOmmT/KeB71NVtQdwm37YD
+         HSDqNJ2nN823iVWzULdtNSGG3orZw/2A9k2cQm0MC+7aabOC3OAgogZVXbqL5YVkgvhJ
+         gGVK4tlTdUxTBzxjWFW0thOGUsFeWrs2af55bqgJjQU9tI+53PQ+f1lnu9Zpwie3kaDy
+         g4pFTVDDysLyn8vzSYCT8Nm14O3Xg+tAH5USet9sjvdDNBZhi2wH36qqZOWKiqP3q+9V
+         9RTADWhqFy50QLgh260HorMD8GfSeagq2UKDqbw+uF0sjLxtc8Rzp0SP7PBjml+ZRYtp
+         r9fg==
+X-Gm-Message-State: AJIora+mQ7FZ51SIMP3Xk3zM9tazTTHDGBsEzcDrCUQdOA37cDNZeh6d
+        ulSqcofzt3X7T7Y7ttJ/iNKqbw==
+X-Google-Smtp-Source: AGRyM1ulFq7YfmAN3uAewgqgmv5h6VdKZFvVZqQqdD9xm/gDePXo5J3ZNvQNVxYmeHNE1VfbWQsiWg==
+X-Received: by 2002:a05:6000:68b:b0:21e:5134:c80c with SMTP id bo11-20020a056000068b00b0021e5134c80cmr2726761wrb.625.1658390703127;
+        Thu, 21 Jul 2022 01:05:03 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:956c:3203:b371:1705? ([2a01:e0a:b41:c160:956c:3203:b371:1705])
+        by smtp.gmail.com with ESMTPSA id x15-20020adfdd8f000000b0021d60994b0asm1072918wrl.100.2022.07.21.01.05.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 01:05:02 -0700 (PDT)
+Message-ID: <dd8e2d43-7432-ce01-5dd5-64a69a3789b7@6wind.com>
+Date:   Thu, 21 Jul 2022 10:05:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net] ip_tunnel: allow to inherit from VLAN encapsulated IP
+ frames
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-12-chao.p.peng@linux.intel.com>
- <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
- <20220719140843.GA84779@chaop.bj.intel.com>
- <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
- <20220720150706.GB124133@chaop.bj.intel.com>
- <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com> <YtgrkXqP/GIi9ujZ@google.com>
-From:   Wei Wang <wei.w.wang@linux.intel.com>
-In-Reply-To: <YtgrkXqP/GIi9ujZ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Matthias May <matthias.may@westermo.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, pabeni@redhat.com,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eyal Birger <eyal.birger@gmail.com>,
+        linux-kselftest@vger.kernel.org
+References: <20220705145441.11992-1-matthias.may@westermo.com>
+ <20220705182512.309f205e@kernel.org>
+ <e829d8ae-ad2c-9cf5-88e3-0323e9f32d3c@westermo.com>
+ <20220706131735.4d9f4562@kernel.org>
+ <bcfcb4a9-0a2f-3f12-155c-393ac86a8974@westermo.com>
+ <20220707170145.0666cd4c@kernel.org>
+ <b046ef4e-cb97-2430-ab56-e2b615ac29eb@westermo.com>
+ <20220711112911.6e387608@kernel.org>
+ <331695e3-bfa3-9ea7-3ba9-aebd0689251c@westermo.com>
+ <42015af3-daa5-7435-725e-8197adbbf3b8@6wind.com>
+ <88cbeaff-4300-b2c4-3d00-79918ec88042@westermo.com>
+ <f8eb52c3-40a7-6de2-9496-7a118c4af077@6wind.com>
+ <ba54b498-5388-44c2-9554-953a3cf1b8eb@westermo.com>
+From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Organization: 6WIND
+In-Reply-To: <ba54b498-5388-44c2-9554-953a3cf1b8eb@westermo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,91 +93,26 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
++ linux-kselftest@vger.kernel.org
 
-On 7/21/22 00:21, Sean Christopherson wrote:
-> On Wed, Jul 20, 2022, Gupta, Pankaj wrote:
->>>>>>> +bool __weak kvm_arch_private_mem_supported(struct kvm *kvm)
-> Use kvm_arch_has_private_mem(), both because "has" makes it obvious this is checking
-> a flag of sorts, and to align with other helpers of this nature (and with
-> CONFIG_HAVE_KVM_PRIVATE_MEM).
->
->    $ git grep kvm_arch | grep supported | wc -l
->    0
->    $ git grep kvm_arch | grep has | wc -l
->    26
->
->>>>>>> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
->>>>>>> +	case KVM_MEMORY_ENCRYPT_REG_REGION:
->>>>>>> +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
->>>>>>> +		struct kvm_enc_region region;
->>>>>>> +
->>>>>>> +		if (!kvm_arch_private_mem_supported(kvm))
->>>>>>> +			goto arch_vm_ioctl;
->>>>>>> +
->>>>>>> +		r = -EFAULT;
->>>>>>> +		if (copy_from_user(&region, argp, sizeof(region)))
->>>>>>> +			goto out;
->>>>>>> +
->>>>>>> +		r = kvm_vm_ioctl_set_encrypted_region(kvm, ioctl, &region);
->>>>>> this is to store private region metadata not only the encrypted region?
->>>>> Correct.
->>>> Sorry for not being clear, was suggesting name change of this function from:
->>>> "kvm_vm_ioctl_set_encrypted_region" to "kvm_vm_ioctl_set_private_region"
->>> Though I don't have strong reason to change it, I'm fine with this and
->> Yes, no strong reason, just thought "kvm_vm_ioctl_set_private_region" would
->> depict the actual functionality :)
->>
->>> this name matches the above kvm_arch_private_mem_supported perfectly.
->> BTW could not understand this, how "kvm_vm_ioctl_set_encrypted_region"
->> matches "kvm_arch_private_mem_supported"?
-> Chao is saying that kvm_vm_ioctl_set_private_region() pairs nicely with
-> kvm_arch_private_mem_supported(), not that the "encrypted" variant pairs nicely.
->
-> I also like using "private" instead of "encrypted", though we should probably
-> find a different verb than "set", because calling "set_private" when making the
-> region shared is confusing.  I'm struggling to come up with a good alternative
-> though.
->
-> kvm_vm_ioctl_set_memory_region() is already taken by KVM_SET_USER_MEMORY_REGION,
-> and that also means that anything with "memory_region" in the name is bound to be
-> confusing.
->
-> Hmm, and if we move away from "encrypted", it probably makes sense to pass in
-> addr+size instead of a kvm_enc_region.
->
-> Maybe this?
->
-> static int kvm_vm_ioctl_set_or_clear_mem_private(struct kvm *kvm, gpa_t gpa,
-> 					         gpa_t size, bool set_private)
->
-> and then:
->
-> #ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
-> 	case KVM_MEMORY_ENCRYPT_REG_REGION:
-> 	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
-> 		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-> 		struct kvm_enc_region region;
->
-> 		if (!kvm_arch_private_mem_supported(kvm))
-> 			goto arch_vm_ioctl;
->
-> 		r = -EFAULT;
-> 		if (copy_from_user(&region, argp, sizeof(region)))
-> 			goto out;
->
-> 		r = kvm_vm_ioctl_set_or_clear_mem_private(kvm, region.addr,
-> 							  region.size, set);
-> 		break;
-> 	}
-> #endif
->
-> I don't love it, so if someone has a better idea...
->
-Maybe you could tag it with cgs for all the confidential guest support 
-related stuff:
-e.g. kvm_vm_ioctl_set_cgs_mem()
+Le 20/07/2022 à 17:24, Matthias May a écrit :
+> Hi
+> 
+> I finally got around to do the previously mentioned selftest for gretap, vxlan
+> and geneve.
+> See the bash-script below.
+> 
+> Many of the vxlan/geneve tests are currently failing, with gretap working on
+> net-next
+> because of the fixes i sent.
+> What is the policy on sending selftests that are failing?
+> Are fixes for the failures required in advance?
+I don't know, I've added linux-kselftest@vger.kernel.org to the thread.
 
-bool is_private = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-...
-kvm_vm_ioctl_set_cgs_mem(, is_private)
 
+Regards,
+Nicolas
+
+> 
+> I'm not sure i can fix them.
+> Geneve seems to ignore the 3 upper bits of the DSCP completely.
