@@ -2,143 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E087757CD2F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 16:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E703C57CDBD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 16:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiGUOUJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Jul 2022 10:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
+        id S229738AbiGUOel (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jul 2022 10:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGUOUJ (ORCPT
+        with ESMTP id S229700AbiGUOek (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Jul 2022 10:20:09 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F316EA3;
-        Thu, 21 Jul 2022 07:20:07 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id m8so2344190edd.9;
-        Thu, 21 Jul 2022 07:20:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qXv6CUvSTMfPvvXNvz/Br6ygFjjEQtW3IZorN82JkiU=;
-        b=P+0nQPKeA3PoGFzwFw3rHozuSxcxC8sThvgWr85Jgf8I0HLON9ganDXQeF+CXi03M8
-         QjR7MJw6kirPoUgYH+Giho7PJvp2ReSEvld3BVDqJP1IlxeQfywVwXtpsBRJSXX4+jWb
-         plznFF7jPvGt3gwaqtL2/00LYhCFhrX8Q2iWYZFHKd/mPx6Mpu3FViZ6AsRPoG3iofQI
-         H3FmIsHff9UoPwOJzMMdft7cHqTf5qN4rDyGg8bdoUwiX6nh+bYwn2P7RsU/suilsCsu
-         3pYjs4Ujkes4hhtM+BsOvm8IEzRBpXWF+HOV66ewkbbfBisnVv6XU9Kv1t4SKZAjMJNo
-         0u+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qXv6CUvSTMfPvvXNvz/Br6ygFjjEQtW3IZorN82JkiU=;
-        b=bchfPPGoVgR6mRbVMdStTaaep7JZadvGRQHdRRNwST70mhK69yqckrp7YmIC210KS+
-         WrRcl/lWD1hGZPYIZLz3N7w6+M7TY+o3Bj0aJZAEpjISUw0FsZ70Xvi25MzsqRc3tXM9
-         W1SEiwRTOphZJl30GWnBfhwdYf2rVuELYFLktSB9T7qdoq/DSWRoaw+eBkJvk9Z0y7rQ
-         Q+4s3hgLUZRAuDivTB/YzqNHnaoh8/eqyDGw1raMfWglyvd5A1NVe97bzTwZS1alf3PH
-         PLFmyUZ6vvpqBVJAAUrhk8dBZaMdPmeHDl3Be+Y3Pfsc1mi9C9eYcR4m9oBuoOXh03bW
-         Z30A==
-X-Gm-Message-State: AJIora8GfmBKWXBl5GJ7xDGeBJfcN7KJknS/QECB32pmRq/hY4O0QS96
-        1tC8Ga7R16jpAd/+/lJT+AY=
-X-Google-Smtp-Source: AGRyM1uGxCFM+uC51rrnQKpnRyzGOk2xs0Ei7v+HkEZHqj5CW5fMsFpSjcMs9VwNKiAXPxxspRRC+w==
-X-Received: by 2002:a05:6402:159a:b0:43b:ba6c:d0e2 with SMTP id c26-20020a056402159a00b0043bba6cd0e2mr8810492edv.418.1658413205937;
-        Thu, 21 Jul 2022 07:20:05 -0700 (PDT)
-Received: from skbuf ([188.25.231.115])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05640234cc00b0043bc5ee3ec4sm1105646edc.22.2022.07.21.07.20.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Jul 2022 07:20:04 -0700 (PDT)
-Date:   Thu, 21 Jul 2022 17:20:01 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     netdev@kapio-technology.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <20220721142001.twcmiyvhvlxmp24j@skbuf>
-References: <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
- <YtQosZV0exwyH6qo@shredder>
- <4500e01ec4e2f34a8bbb58ac9b657a40@kapio-technology.com>
- <20220721115935.5ctsbtoojtoxxubi@skbuf>
- <YtlUWGdgViyjF6MK@shredder>
+        Thu, 21 Jul 2022 10:34:40 -0400
+Received: from a48-34.smtp-out.amazonses.com (a48-34.smtp-out.amazonses.com [54.240.48.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCC67D1D7;
+        Thu, 21 Jul 2022 07:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1658414075;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=PG2qkkGH+3URLpHWBiKi5giOZ07YnvDih++ZIHc39wg=;
+        b=NbSnxHxBDJ/9uYTtB4ULDF7Q/3aMzpv9X3qbDKBgJsLn9pcazgDV6zmtaRwdjlwV
+        CDtHv0F9c24CqVBgyKZ0t2dCB85sLVWJJBNMRLSullCeqd56nLCDLC4NXEPEAMb6Cxw
+        3HuEwwcO+ZNt59YDsToVBmnqS1guKrRXChLYY0xw=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1658414075;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=PG2qkkGH+3URLpHWBiKi5giOZ07YnvDih++ZIHc39wg=;
+        b=Xudzm3Lt/bhCmOFMVITh9LnQH2JoC2BFwYejFl65uTjJmkVq1ASYyJFJL+NMXNCK
+        MdosmJFgtgVGUpZ05YYS9P4iwWKOrTSUGOu3Q4Ak4ySAgQdckmOFOa34jhChlK2SgH0
+        XqjHnd5Xio9Jyw0qAhtjTYc0HuCMVaKE+t9zSa6s=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20220721
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YtlUWGdgViyjF6MK@shredder>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <01000182212e8e03-8e41f951-57c0-4802-b961-584f35ba4fbb-000000@email.amazonses.com>
+Date:   Thu, 21 Jul 2022 14:34:35 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.07.21-54.240.48.34
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 04:27:52PM +0300, Ido Schimmel wrote:
-> I tried looking information about MAB online, but couldn't find
-> detailed material that answers my questions, so my answers are based
-> on what I believe is logical, which might be wrong.
+## Build
+* kernel: 5.19.0-rc7
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: a3fd3ca134d9485a0f9a7bdcffd7f8bae27f79d3
+* git describe: next-20220721
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220721
 
-I'm kind of in the same situation here.
+## Test Regressions (compared to v5.19-rc6-12429-g4ee7eaa411ee)
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+  - rtc.rtctest.rtc.date_read_loop
 
-> Currently, the bridge will forward packets to a locked entry which
-> effectively means that an unauthorized host can cause the bridge to
-> direct packets to it and sniff them. Yes, the host can't send any
-> packets through the port (while locked) and can't overtake an existing
-> (unlocked) FDB entry, but it still seems like an odd decision. IMO, the
-> situation in mv88e6xxx is even worse because there an unauthorized host
-> can cause packets to a certain DMAC to be blackholed via its zero-DPV
-> entry.
-> 
-> Another (minor?) issue is that locked entries cannot roam between locked
-> ports. Lets say that my user space MAB policy is to authorize MAC X if
-> it appears behind one of the locked ports swp1-swp4. An unauthorized
-> host behind locked port swp5 can generate packets with SMAC X,
-> preventing the true owner of this MAC behind swp1 from ever being
-> authorized.
 
-In the mv88e6xxx offload implementation, the locked entries eventually
-age out from time to time, practically giving the true owner of the MAC
-address another chance every 5 minutes or so. In the pure software
-implementation of locked FDB entries I'm not quite sure. It wouldn't
-make much sense for the behavior to differ significantly though.
+## Metric Regressions (compared to v5.19-rc6-12429-g4ee7eaa411ee)
+No metric regressions found.
 
-> It seems like the main purpose of these locked entries is to signal to
-> user space the presence of a certain MAC behind a locked port, but they
-> should not be able to affect packet forwarding in the bridge, unlike
-> regular entries.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-So essentially what you want is for br_handle_frame_finish() to treat
-"dst = br_fdb_find_rcu(br, eth_hdr(skb)->h_dest, vid);" as NULL if
-test_bit(BR_FDB_LOCKED, &dst->flags) is true?
 
-> Regarding a separate knob for MAB, I tend to agree we need it. Otherwise
-> we cannot control which locked ports are able to populate the FDB with
-> locked entries. I don't particularly like the fact that we overload an
-> existing flag ("learning") for that. Any reason not to add an explicit
-> flag ("mab")? At least with the current implementation, locked entries
-> cannot roam between locked ports and cannot be refreshed, which differs
-> from regular learning.
+## Test Fixes (compared to v5.19-rc6-12429-g4ee7eaa411ee)
+* qemu_arm, kselftest-seccomp
+  - seccomp.seccomp_benchmark
 
-Well, assuming we model the software bridge closer to mv88e6xxx (where
-locked FDB entries can roam after a certain time), does this change things?
-In the software implementation I think it would make sense for them to
-be able to roam right away (the age-out interval in mv88e6xxx is just a
-compromise between responsiveness to roaming and resistance to DoS).
+
+## Metric Fixes (compared to v5.19-rc6-12429-g4ee7eaa411ee)
+No metric fixes found.
+
+## Test result summary
+total: 345, pass: 167, fail: 44, skip: 134, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-gpio
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-lib
+* kselftest-membarrier
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+
+--
+Linaro LKFT
+https://lkft.linaro.org
