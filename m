@@ -2,114 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A1457C1D1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 03:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D6757C3A0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Jul 2022 06:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbiGUBJP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Jul 2022 21:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
+        id S230114AbiGUEoe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Jul 2022 00:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiGUBJM (ORCPT
+        with ESMTP id S229692AbiGUEoe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Jul 2022 21:09:12 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B5E753B0;
-        Wed, 20 Jul 2022 18:09:11 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id l124so338201pfl.8;
-        Wed, 20 Jul 2022 18:09:11 -0700 (PDT)
+        Thu, 21 Jul 2022 00:44:34 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08887755D
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 21:44:29 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-10d867a8358so903942fac.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Jul 2022 21:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0ZYFWzKGzAB8/eYekT+g2mD9inXTQAbnlNbmq03r374=;
-        b=eIkgq02SGpHqjd/pBkcMCeE3520yFITeIMJc/90z8VXljXIo4qfiYkmZ+fMPtYsC6f
-         yV2VPXYh5GaxAlqdp0yq8g3dQvUZJQE8J16G3rV9i5ifGkWifL0M9CrluZqgghrxg6v7
-         XVWbeATRteCsEsl8bPPfUn0OTyXZu5AHGGkDl12f8/dxDggTJwohmNpDyfL6dHidg6yp
-         3PsNs1nb682zBeKHFR89ET4lwto5Qmk6SDa442wFTmcNq2kWCZF57ewHCIFyXygCWbkH
-         fRHbu1z/R2/rSEfcLGBiXB2jRxG9cQpmUTn8Oiz+zPRAowIky0DRmUgLw4oIPCsaYRyc
-         E2qw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=4GI48oiXQdQ4wM36ABBTSLbZpyQAAePmrwlq8QRxvlY=;
+        b=RIC/JkGNilnyoErFmAbFjKiZnohgeXPytAwffJQsn3Kj3Z2lmrx1aa6Ys8rfidIl1q
+         z/aNTkA1IDkPIsrEHmL11mw5QFJwVQzpbzsoEizpPHSlz3ANWL/tRXqBDnhMdoNW/SgJ
+         jaQVZYaGHmFBBN9xsG22qI9h4j1ZgRd+/9dIrs8FNrOCg+cymSS+vncGZ0KRrpcWC9vz
+         zxAJZi3qRylP1JiC/B7QLNGxFuGSyDDZzb9JqbBKnKtwdCNW+dAqVUZD+fqE7HPlWQ2/
+         Nmlo41a12VVjYwkid4gNHZNfGpD0AwbdeLTsA204ZJOIEp/BKEIGKhU4ygX2Rug/kFFR
+         rgug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0ZYFWzKGzAB8/eYekT+g2mD9inXTQAbnlNbmq03r374=;
-        b=VhSMp+4BQxLMJqd7N51md085uvu3dzkyJI0fqPN7S04LxZTXis4jlAlY8Ae6jze+Vk
-         tHAFyjn4FvQKyBi+4ZuctVXsUI1te7G4Za8MCXx4s2ZqJ8em59oVkROHaGy7yydA30Za
-         JoGm6qahbyY81FBfsQAMrS/cRZtD4mDSTmQyewnH90dGcEOsxCpCUpOj21wwix7pcua/
-         6VKRUwMN/ph28l4rCZH4L6gxa78n85sci5/ruDXGDpCwsuVoDMcCTTqYzdI/qCuFh6ue
-         XYREjaP3e0WUOfz+k2E/od/r1faBSaHneObcnRvvftsbK1KkgNMcV2ekv5J05exQaHtA
-         mdFQ==
-X-Gm-Message-State: AJIora/tcSSN/M1iXBr3o9UjkCA+WFr1c301476SYoXJS+z3XjB7s3vP
-        zbDUIGvEUEqXpF7n7vkbXdoJtDbRKSRWInoFtUM=
-X-Google-Smtp-Source: AGRyM1vW48JwMh27yBs++6AUqzAGU9wpphasnTi/izAwOFDJ7JJHNjqPXx5rqT4NmpWrlMi0Y1qjad7oMKi97a8v+iM=
-X-Received: by 2002:a63:481a:0:b0:411:7951:cbcd with SMTP id
- v26-20020a63481a000000b004117951cbcdmr35813300pga.66.1658365750467; Wed, 20
- Jul 2022 18:09:10 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=4GI48oiXQdQ4wM36ABBTSLbZpyQAAePmrwlq8QRxvlY=;
+        b=58e7IByN+nUPmuWyd9Pe5llZ2QbZGmvzDmpUTeeNclNhIV914jwfpllrgb24DS9Jb8
+         37UP69m4kLY5QUoWXhdqw3xy5jw3TJNodWd0gtsgFL3KDvxMJUgvZnVAStFormSLHZtS
+         /WZUP9sW30f5HCuj+/CHzuv4SzdKi/aWL343pItd+kmMxhbg/206OvaJgZrB1xABKa7Z
+         IAf1u9axpLrRGh5QXlk+BMY+KK04cCMMyTw6KlTQesRPuRjfgZdFvKd6NBNkk/VIBeoj
+         2XF1zaW/wFng0IRdHz6lth33TEhGB3/Wzq9MNNbkn77qpXM6tOsbcqRpU+oVbyPI0qGh
+         svRg==
+X-Gm-Message-State: AJIora8QJr/jZ234sSr9+EFrFDs/gzhcoK3J6NQfGz6lTcbc1Ub77DOs
+        /fJH/aM2T7ZyXgP/5+LxQB8tAXAiRPUx7Y6ZmhQ=
+X-Google-Smtp-Source: AGRyM1szqfOAbkluCptt0Jtmz6QVRJ/Wf0XQRIBVeSfE1/WJovkd2oYmnRHBm49xx9P8W8coSqnvVD2UOgk2HCoX2Oc=
+X-Received: by 2002:a05:6870:f113:b0:10d:36fd:7575 with SMTP id
+ k19-20020a056870f11300b0010d36fd7575mr4109959oac.148.1658378667822; Wed, 20
+ Jul 2022 21:44:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <YtZ8mKJmktA2GaHB@kili>
-In-Reply-To: <YtZ8mKJmktA2GaHB@kili>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Thu, 21 Jul 2022 06:38:59 +0530
-Message-ID: <CAFqt6zY4+=LASCQRCEg_cjEeSw+gJtYMLJtJ1pWL6XPaPB0FOQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/vm: silence uninitialized variable warning
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
+Received: by 2002:a4a:d0c7:0:0:0:0:0 with HTTP; Wed, 20 Jul 2022 21:44:27
+ -0700 (PDT)
+Reply-To: joseph_anya39@yahoo.com
+From:   DR JOSEPH ANYA <drfarmtavaku@gmail.com>
+Date:   Wed, 20 Jul 2022 16:44:27 -1200
+Message-ID: <CALV5LxBoX5TfJi-4YoYuh+D1S4JFpReh=wHXZMr4R9vnAD2pxw@mail.gmail.com>
+Subject: =?UTF-8?B?55u45LqS55CG6Kej?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_99,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:2e listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9972]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [drfarmtavaku[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [joseph_anya39[at]yahoo.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 3:13 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> This code just reads from memory without caring about the data itself.
-
-The caller has put an attempt to at least validate the address read
-from mmap() before
-passing it to read_fault_pages() which looks correct. I think this
-line is not needed.
-
-> However static checkers complain that "tmp" is never properly
-> initialized.  Initialize it to zero and change the name to "dummy" to
-> show that we don't care about the value stored in it.
->
-> Fixes: c4b6cb884011 ("selftests/vm: add hugetlb madvise MADV_DONTNEED MADV_REMOVE test")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-
-Acked-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-
-> ---
->  tools/testing/selftests/vm/hugetlb-madvise.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/vm/hugetlb-madvise.c b/tools/testing/selftests/vm/hugetlb-madvise.c
-> index 6c6af40f5747..3c9943131881 100644
-> --- a/tools/testing/selftests/vm/hugetlb-madvise.c
-> +++ b/tools/testing/selftests/vm/hugetlb-madvise.c
-> @@ -89,10 +89,11 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
->
->  void read_fault_pages(void *addr, unsigned long nr_pages)
->  {
-> -       unsigned long i, tmp;
-> +       unsigned long dummy = 0;
-> +       unsigned long i;
->
->         for (i = 0; i < nr_pages; i++)
-> -               tmp += *((unsigned long *)(addr + (i * huge_page_size)));
-> +               dummy += *((unsigned long *)(addr + (i * huge_page_size)));
->  }
->
->  int main(int argc, char **argv)
-> --
-> 2.35.1
->
->
+LS0gDQrkurLniLHnmoTmnIvlj4ssDQrmiJHmmK/nuqbnkZ/lpKsq5a6J6ZuF5YWI55Sf77yM5Zyo
+DQrkuprooYzpk7booYzlnKjopb/pnZ7jgIIg5oiR5q2j5Zyo6IGU57O75L2g5LiO5oiR5ZCI5L2c
+DQrlj6rmo4DntKLmgLvpop0oMyA5NTDkuIfnvo7lhYMp44CCIOaKvOmHkeaYr+eUsQ0K5oiR5Lus
+5bey5pWF55qE5a6i5oi35LmU5rK744CCIOWwj+OAgiDmiJHlnKjmiJDlip/mlLbliLDotYTph5Hl
+kI7lkJHmgqjmj5Dlh7rmgLvpop3nmoQ0MO+8he+8jOaIkeWQkeaCqOS/neivge+8jOi/meeslOS6
+pOaYk+aYrzEwMO+8heaXoOmjjumZqeWSjOWQiOazleeahOOAgg0K5oiR5a+75rGC5L2g55qE5ZCI
+5LyZ6KaB5rGC6L+Z5Lqb6LWE6YeR77yM5Lul6YG/5YWN6KKr6ZO26KGM5rKh5pS244CCIOiBlOez
+u+aIkeS6huino+abtOWkmue7huiKguOAgg0KDQrmiJHmnJ/lvoXkvaDnmoTntKfmgKXnrZTlpI0N
+Cg0K6Ie05Lul5pyA6Imv5aW955qE6Zeu5YCZ44CCDQrnuqbnkZ/lpKsq5a6J6ZuF5Y2a5aOr44CC
+DQo=
