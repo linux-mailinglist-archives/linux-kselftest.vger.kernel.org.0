@@ -2,80 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D0557E26E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 15:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E41257E436
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 18:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbiGVNlL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Jul 2022 09:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S229593AbiGVQQu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Jul 2022 12:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235110AbiGVNlJ (ORCPT
+        with ESMTP id S232511AbiGVQQs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Jul 2022 09:41:09 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D141EEEA
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 06:41:05 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10d6ddda695so6406722fac.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 06:41:05 -0700 (PDT)
+        Fri, 22 Jul 2022 12:16:48 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B97140F1;
+        Fri, 22 Jul 2022 09:16:47 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id j22so9416460ejs.2;
+        Fri, 22 Jul 2022 09:16:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pn07Pd1IcgyJT99K4/In19Np4gq0Ksq2PMr4YrPpG8g=;
-        b=LOxav/+MNcZIV6eU6iassj8Vuto4qGTrFJ/n+wgWJdawMYlcd6ZZx0GA3RkW3P6jXT
-         PRy5EtikCaOdXf8OinbSLGUDgffuLJcAOG3DMWwNNWzJ69Q0Qb45gmRSF60EcpDNB/Mx
-         fY5CPxZq/X+h+sGpb3srptNJT172CIFjPLKew=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=97WFVBFeJ/mP7POIyyy1UP0JWOMgZ/bOiCTe1ETU5XI=;
+        b=DPr5GbzJ9gljq8DfC08aakia49SnfaLxsujJZQI7oAQIHdY1grFo4OcBO4dxciU+Qa
+         Or/8tRV8tnIpJ6L8w0iBpM939aGWIBdUIb2ZNSxQzwAj0uIZ6XE13dGUGQzsNipcg9ms
+         tNsO/k+a8prGjijrm4qyOaNWV7VDKznCJNtZD37vsxaAynSdg9lFsqrMGb91IKAuu6tt
+         THrcBbNLQrN2V6v1jn3kyOpm7/cv7uoR3GgfFs9r9BnqO4bX4WeoF4WjEVmGvH3fW1Is
+         jL+u6LyLUyyWEepxJfwOJF/sXhEbu3kloQstYAVH+wMbj89Qwd4H8WyGvPErw6PHUx0/
+         Lbog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pn07Pd1IcgyJT99K4/In19Np4gq0Ksq2PMr4YrPpG8g=;
-        b=4lrO6Ivh6bT53eiGDXVozay73Nq4Dmn5j8xF2f422/aWpnb7kisGBzephyjQG5azCI
-         SsJOzhCICELodkMmUlpBmSSFcZBtyUpf/j4tKsH4/QnecIA9lbuVXnjFOMcKzUgCkU0e
-         4geBcRyA8B943F4g9sxtKQDlVfSk8o9Pv3RY0cfUj3nxkZP86IEllk209HJEgLlE7odE
-         VWrC80GFCG1Bl24zdpke0tSfNOH9rHm3Kua7U61BEcjEH/YnQLG6I3lJGGq7n5332N9Y
-         +d4I/o6LakVh1dZYMyRp2d8qPhM6SPiZhCxhv3Juz4TgO/j3zXhEa+XRgk1EllPwW0k6
-         EEpw==
-X-Gm-Message-State: AJIora/4zXPAGbXxwjVLlRufWkJbGU2/w25pROIhLfQeb+DMzsCO/diB
-        HL01ohGuvVOYRFgDgLywmbm0Og==
-X-Google-Smtp-Source: AGRyM1tuw/2HfKvILDi3ZV+Tr1PJfXzEE8zHaGhVzyTwsLHrzVCKSEoPyK1Y81LL9nNGBBCzaHgw2g==
-X-Received: by 2002:a05:6870:f286:b0:10b:8bcc:880a with SMTP id u6-20020a056870f28600b0010b8bcc880amr7683825oap.299.1658497264671;
-        Fri, 22 Jul 2022 06:41:04 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id r83-20020acaf356000000b0032f0fd7e1f8sm1788033oih.39.2022.07.22.06.41.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 06:41:04 -0700 (PDT)
-Message-ID: <3d090a7a-a57f-72b8-a375-c1b1a5c105ec@cloudflare.com>
-Date:   Fri, 22 Jul 2022 08:41:02 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=97WFVBFeJ/mP7POIyyy1UP0JWOMgZ/bOiCTe1ETU5XI=;
+        b=k889UcTzbHcOn3s2Tk+dZ7AMEX08HpvqjQdbFp6PTYSjU+RrELOc1PCyZBM1hCd6Dm
+         s2oisZKynsN8nYNUYka002cZIAf0FD4g1mDpGRECllmmh0NMmd3Sm12jx+PzhPPxQSb2
+         u4Qm4pgMPth7wnHkZ3p8wHqNqTxr8UF9uX62QqD8BjP7C9uL1AxQMLVD+m7yEqZimQW5
+         gSrDKHwTHrO1KkyTb3tNqP/5w2YZINZLzIq9x3g0V1ym2UIKNpzi7VQow1BLNLlk8Oa1
+         KtuZISiFZ0IHHleRYHQppuH2MwbI8gyWMGMPJ+HqVXW+K0ffFow78Xq2X1FofSHHlCuZ
+         D03A==
+X-Gm-Message-State: AJIora+6orXxjz7G992ffRTKj9zy4L9Tzx5QpVKydG2xBMA967RA/X2d
+        rl+51D2u1CrQqYJQkt4Oq25CGPETsJ5wc9LnpOOVjWO7TH4=
+X-Google-Smtp-Source: AGRyM1v1fHCwpN/hlsbBmFOHa0gm/aGOOZHGLRZMX0jdSmOSXL/mCoYZb8NkvX8F2/xv5DnONwmLJbh9lwhOEJ1Cqrg=
+X-Received: by 2002:a17:906:9b86:b0:6fe:d37f:b29d with SMTP id
+ dd6-20020a1709069b8600b006fed37fb29dmr488369ejc.327.1658506605946; Fri, 22
+ Jul 2022 09:16:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 3/4] selftests/bpf: Add tests verifying bpf lsm
- userns_create hook
-Content-Language: en-US
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-References: <20220721172808.585539-1-fred@cloudflare.com>
- <20220721172808.585539-4-fred@cloudflare.com>
- <20220722060706.y6keqvyvzdvkmc6i@kafai-mbp.dhcp.thefacebook.com>
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <20220722060706.y6keqvyvzdvkmc6i@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20220721153625.1282007-3-benjamin.tissoires@redhat.com> <20220722084556.1342406-1-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220722084556.1342406-1-benjamin.tissoires@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 22 Jul 2022 09:16:34 -0700
+Message-ID: <CAADnVQLypx8Yd7L4GByGNEJaWgg0R6ukNV9hz0ge1+ZdW4mdgQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 02/24] bpf/verifier: allow kfunc to read user
+ provided context
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,208 +85,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/22/22 1:07 AM, Martin KaFai Lau wrote:
-> On Thu, Jul 21, 2022 at 12:28:07PM -0500, Frederick Lawler wrote:
->> The LSM hook userns_create was introduced to provide LSM's an
->> opportunity to block or allow unprivileged user namespace creation. This
->> test serves two purposes: it provides a test eBPF implementation, and
->> tests the hook successfully blocks or allows user namespace creation.
->>
->> This tests 4 cases:
->>
->>          1. Unattached bpf program does not block unpriv user namespace
->>             creation.
->>          2. Attached bpf program allows user namespace creation given
->>             CAP_SYS_ADMIN privileges.
->>          3. Attached bpf program denies user namespace creation for a
->>             user without CAP_SYS_ADMIN.
->>          4. The sleepable implementation loads
->>
->> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
->>
->> ---
->> The generic deny_namespace file name is used for future namespace
->> expansion. I didn't want to limit these files to just the create_user_ns
->> hook.
->> Changes since v2:
->> - Rename create_user_ns hook to userns_create
->> Changes since v1:
->> - Introduce this patch
->> ---
->>   .../selftests/bpf/prog_tests/deny_namespace.c | 88 +++++++++++++++++++
->>   .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
->>   2 files changed, 127 insertions(+)
->>   create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
->>   create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/deny_namespace.c b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
->> new file mode 100644
->> index 000000000000..9e4714295008
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
->> @@ -0,0 +1,88 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#define _GNU_SOURCE
->> +#include <test_progs.h>
->> +#include "test_deny_namespace.skel.h"
->> +#include <sched.h>
->> +#include "cap_helpers.h"
->> +
->> +#define STACK_SIZE (1024 * 1024)
-> Does the child need 1M stack space ?
+On Fri, Jul 22, 2022 at 1:46 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> When a kfunc was trying to access data from context in a syscall eBPF
+> program, the verifier was rejecting the call.
+> This is because the syscall context is not known at compile time, and
+> so we need to check this when actually accessing it.
+>
+> Check for the valid memory access and allow such situation to happen.
+>
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
+> ---
+>
+> changes in v8:
+> - fixup comment
+> - return -EACCESS instead of -EINVAL for consistency
+>
+> changes in v7:
+> - renamed access_t into atype
+> - allow zero-byte read
+> - check_mem_access() to the correct offset/size
+>
+> new in v6
+> ---
+>  kernel/bpf/verifier.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7c1e056624f9..c807c5d7085a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -248,6 +248,7 @@ struct bpf_call_arg_meta {
+>         struct bpf_map *map_ptr;
+>         bool raw_mode;
+>         bool pkt_access;
+> +       bool is_kfunc;
+>         u8 release_regno;
+>         int regno;
+>         int access_size;
+> @@ -5170,6 +5171,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+>                                    struct bpf_call_arg_meta *meta)
+>  {
+>         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
+> +       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+>         u32 *max_access;
+>
+>         switch (base_type(reg->type)) {
+> @@ -5223,6 +5225,24 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+>                                 env,
+>                                 regno, reg->off, access_size,
+>                                 zero_size_allowed, ACCESS_HELPER, meta);
+> +       case PTR_TO_CTX:
+> +               /* in case of a kfunc called in a program of type SYSCALL, the context is
+> +                * user supplied, so not computed statically.
+> +                * Dynamically check it now
+> +                */
+> +               if (prog_type == BPF_PROG_TYPE_SYSCALL && meta && meta->is_kfunc) {
 
-No, I can reduce that.
+prog_type check looks a bit odd here.
+Can we generalize with
+if (!env->ops->convert_ctx_access
 
-> 
->> +static char child_stack[STACK_SIZE];
->> +
->> +int clone_callback(void *arg)
-> static
-> 
->> +{
->> +	return 0;
->> +}
->> +
->> +static int create_new_user_ns(void)
->> +{
->> +	int status;
->> +	pid_t cpid;
->> +
->> +	cpid = clone(clone_callback, child_stack + STACK_SIZE,
->> +		     CLONE_NEWUSER | SIGCHLD, NULL);
->> +
->> +	if (cpid == -1)
->> +		return errno;
->> +
->> +	if (cpid == 0)
-> Not an expert in clone() call and it is not clear what 0
-> return value mean from the man page.  Could you explain ?
-> 
+In other words any program type that doesn't have ctx rewrites can
+use helpers to access ctx fields ?
 
-Good catch. This is using the libc clone().
-
->> +		return 0;
->> +
->> +	waitpid(cpid, &status, 0);
->> +	if (WIFEXITED(status))
->> +		return WEXITSTATUS(status);
->> +
->> +	return -1;
->> +}
->> +
->> +static void test_userns_create_bpf(void)
->> +{
->> +	__u32 cap_mask = 1ULL << CAP_SYS_ADMIN;
->> +	__u64 old_caps = 0;
->> +
->> +	ASSERT_OK(create_new_user_ns(), "priv new user ns");
-> Does it need to enable CAP_SYS_ADMIN first ?
-> 
-
-You're right, this should be more explicitly set. I ran tests with the 
-vmtest.sh script supplied with sefltests/bpf which run under root. I 
-should always set CAP_SYS_ADMIN here to be consistent.
-
->> +
->> +	cap_disable_effective(cap_mask, &old_caps);
->> +
->> +	ASSERT_EQ(create_new_user_ns(), EPERM, "unpriv new user ns");
->> +
->> +	if (cap_mask & old_caps)
->> +		cap_enable_effective(cap_mask, NULL);
->> +}
->> +
->> +static void test_unpriv_userns_create_no_bpf(void)
->> +{
->> +	__u32 cap_mask = 1ULL << CAP_SYS_ADMIN;
->> +	__u64 old_caps = 0;
->> +
->> +	cap_disable_effective(cap_mask, &old_caps);
->> +
->> +	ASSERT_OK(create_new_user_ns(), "no-bpf unpriv new user ns");
->> +
->> +	if (cap_mask & old_caps)
->> +		cap_enable_effective(cap_mask, NULL);
->> +}
->> +
->> +void test_deny_namespace(void)
->> +{
->> +	struct test_deny_namespace *skel = NULL;
->> +	int err;
->> +
->> +	if (test__start_subtest("unpriv_userns_create_no_bpf"))
->> +		test_unpriv_userns_create_no_bpf();
->> +
->> +	skel = test_deny_namespace__open_and_load();
->> +	if (!ASSERT_OK_PTR(skel, "skel load"))
->> +		goto close_prog;
->> +
->> +	err = test_deny_namespace__attach(skel);
->> +	if (!ASSERT_OK(err, "attach"))
->> +		goto close_prog;
->> +
->> +	if (test__start_subtest("userns_create_bpf"))
->> +		test_userns_create_bpf();
->> +
->> +	test_deny_namespace__detach(skel);
->> +
->> +close_prog:
->> +	test_deny_namespace__destroy(skel);
->> +}
->> diff --git a/tools/testing/selftests/bpf/progs/test_deny_namespace.c b/tools/testing/selftests/bpf/progs/test_deny_namespace.c
->> new file mode 100644
->> index 000000000000..9ec9dabc8372
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/test_deny_namespace.c
->> @@ -0,0 +1,39 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <linux/bpf.h>
->> +#include <bpf/bpf_helpers.h>
->> +#include <bpf/bpf_tracing.h>
->> +#include <errno.h>
->> +#include <linux/capability.h>
->> +
->> +struct kernel_cap_struct {
->> +	__u32 cap[_LINUX_CAPABILITY_U32S_3];
->> +} __attribute__((preserve_access_index));
->> +
->> +struct cred {
->> +	struct kernel_cap_struct cap_effective;
->> +} __attribute__((preserve_access_index));
->> +
->> +char _license[] SEC("license") = "GPL";
->> +
->> +SEC("lsm/userns_create")
->> +int BPF_PROG(test_userns_create, const struct cred *cred, int ret)
->> +{
->> +	struct kernel_cap_struct caps = cred->cap_effective;
->> +	int cap_index = CAP_TO_INDEX(CAP_SYS_ADMIN);
->> +	__u32 cap_mask = CAP_TO_MASK(CAP_SYS_ADMIN);
->> +
->> +	if (ret)
->> +		return 0;
->> +
->> +	ret = -EPERM;
->> +	if (caps.cap[cap_index] & cap_mask)
->> +		return 0;
->> +
->> +	return -EPERM;
->> +}
->> +
->> +SEC("lsm.s/userns_create")
->> +int BPF_PROG(test_sleepable_userns_create, const struct cred *cred, int ret)
->> +{
-> An empty program is weird.  If the intention is
-> to ensure a sleepable program can attach to userns_create,
-> move the test logic here and remove the non-sleepable
-> program above.
-> 
-
-Sure, I can do that.
-
->> +	return 0;
->> +}
->> -- 
->> 2.30.2
->>
-
+Also why kfunc only?
+It looks safe to allow normal helpers as well.
