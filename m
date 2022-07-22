@@ -2,202 +2,255 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00FF57E4F8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 19:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B0A57E526
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 19:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbiGVRFj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Jul 2022 13:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S235657AbiGVRPt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Jul 2022 13:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiGVRFi (ORCPT
+        with ESMTP id S235585AbiGVRPs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Jul 2022 13:05:38 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9ED220FC;
-        Fri, 22 Jul 2022 10:05:37 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:39236)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oEw5l-007IFI-NJ; Fri, 22 Jul 2022 11:05:33 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:59484 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oEw5k-00AACQ-Cs; Fri, 22 Jul 2022 11:05:33 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-References: <20220721172808.585539-1-fred@cloudflare.com>
-Date:   Fri, 22 Jul 2022 12:05:07 -0500
-In-Reply-To: <20220721172808.585539-1-fred@cloudflare.com> (Frederick Lawler's
-        message of "Thu, 21 Jul 2022 12:28:04 -0500")
-Message-ID: <877d45kri4.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oEw5k-00AACQ-Cs;;;mid=<877d45kri4.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18ocw5vbG1LyqBTp8XMLyREW1cVYxPT3iU=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+        Fri, 22 Jul 2022 13:15:48 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECAB1C93C
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 10:15:47 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id r7-20020aa79627000000b00528beaf82c3so2115221pfg.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 10:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=n2afkeTfe3v6NX+a4LX8KQS9apVldnTaH4FqlKFd5cE=;
+        b=rYRZsPNDk7iY+cJAzYWzPI5DfOv5pG5H98CZzRr1mPd7pSkcUtCj00U/X98BfQ+2Xp
+         zOnLs7E+fOJYxAoZLCluhYc5MSYj/x3VDWAbr86oikWBjC8ObSRrT+AF+6PkK1NWr/qb
+         FSIRUk0agk93yTeUG58h++czK8zn8t8Tx7w5o4AeyNxxnkHSIM3GsZ6hWPorJAOGc0cD
+         F0tsLaadlquno13jRHEdWzKchIL+wzwE1bx/59k+r1yxhycHGMnziRqeaJ86SC0l0IfR
+         fpAaiDHgpxHmZj20YeveZWlcSIqHJGgj785TVarw+zOpM3v7Gipy+EUjVEDayoop8zqS
+         k/PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=n2afkeTfe3v6NX+a4LX8KQS9apVldnTaH4FqlKFd5cE=;
+        b=2UPurlxTigX1bHQw4a9Va34CVEJLeMBUK7JXu4KjoTRKGHQzDABYVsYUOGv06AF7pM
+         IydSlDykd6BHRrMmCPcaECGffF79E6BsO7G8Helm+STktX/kGn3AHPi51r7pmkIkSGJK
+         qMdMxuSEcn1xfZ6o4tZlflmUgfJvFljKihZ2ZrNbs1AOr9aI3V7lAzNlsrZ7lhGSPx3B
+         5SsgNFj8elrk6l/5LMNmn2FRSJubtIL+odLOBlEYZWHbh/NfybMvbJdZtnyyJkcrG5GQ
+         NpVGzj6VKkTxBE/qbBUrVMIxBQ2U0boQDAT0tIXfyYWd8PTmOp48HnD03UREOeN9hWj1
+         kXqA==
+X-Gm-Message-State: AJIora9rbi+xfc9wwU4106ZCZv2qPm/YWjJdgBHmtqHWam3hhgFDtNjQ
+        XGRnv3jqYaHj+Y7xO2Vj2ZNa/enhnRXLPg==
+X-Google-Smtp-Source: AGRyM1v3Qw9ExJryeZJQZ2/oV4569CQWIrgy2Z3zVJxHKCP57A23OZhXtVsNf4/TFJWfxNSa5jpZDXcN7NdTpQ==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:9a83:b0:1f2:23fa:ea2d with SMTP
+ id e3-20020a17090a9a8300b001f223faea2dmr14264586pjp.25.1658510146718; Fri, 22
+ Jul 2022 10:15:46 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 17:15:30 +0000
+Message-Id: <20220722171534.3576419-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v2 1/5] kunit: string-stream: Simplify resource use
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Frederick Lawler <fred@cloudflare.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 776 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (1.5%), b_tie_ro: 10 (1.3%), parse: 1.15
-        (0.1%), extract_message_metadata: 17 (2.2%), get_uri_detail_list: 3.8
-        (0.5%), tests_pri_-1000: 32 (4.1%), tests_pri_-950: 1.35 (0.2%),
-        tests_pri_-900: 1.06 (0.1%), tests_pri_-90: 196 (25.3%), check_bayes:
-        195 (25.1%), b_tokenize: 12 (1.6%), b_tok_get_all: 13 (1.7%),
-        b_comp_prob: 3.9 (0.5%), b_tok_touch_all: 162 (20.8%), b_finish: 0.92
-        (0.1%), tests_pri_0: 504 (65.0%), check_dkim_signature: 1.41 (0.2%),
-        check_dkim_adsp: 3.8 (0.5%), poll_dns_idle: 0.89 (0.1%), tests_pri_10:
-        1.80 (0.2%), tests_pri_500: 7 (0.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Frederick Lawler <fred@cloudflare.com> writes:
+From: David Gow <davidgow@google.com>
 
-> While creating a LSM BPF MAC policy to block user namespace creation, we
-> used the LSM cred_prepare hook because that is the closest hook to prevent
-> a call to create_user_ns().
+Currently, KUnit's string streams are themselves "KUnit resources".
+This is redundant since the stream itself is already allocated with
+kunit_kzalloc() and will thus be freed automatically at the end of the
+test.
 
-That description is wrong.  Your goal his is not to limit access to
-the user namespace.  Your goal is to reduce the attack surface of the
-kernel by not allowing some processes access to a user namespace.
+string-stream is only used internally within KUnit, and isn't using the
+extra features that resources provide like reference counting, being
+able to locate them dynamically as "test-local variables", etc.
 
-You have already said that you don't have concerns about the
-fundamentals of the user namespace, and what it enables only that
-it allows access to exploitable code.
+Indeed, the resource's refcount is never incremented when the
+pointer is returned. The fact that it's always manually destroyed is
+more evidence that the reference counting is unused.
 
-Achieving the protection you seek requires talking and thinking clearly
-about the goal.
+Signed-off-by: David Gow <davidgow@google.com>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+v1 -> v2: no changes
+---
+ lib/kunit/string-stream.c | 90 +++++++--------------------------------
+ lib/kunit/string-stream.h |  2 +-
+ lib/kunit/test.c          |  2 +-
+ 3 files changed, 18 insertions(+), 76 deletions(-)
 
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index 141789ca8949..a2496abef152 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -12,64 +12,31 @@
+ 
+ #include "string-stream.h"
+ 
+-struct string_stream_fragment_alloc_context {
+-	struct kunit *test;
+-	int len;
+-	gfp_t gfp;
+-};
+ 
+-static int string_stream_fragment_init(struct kunit_resource *res,
+-				       void *context)
++static struct string_stream_fragment *alloc_string_stream_fragment(
++		struct kunit *test, int len, gfp_t gfp)
+ {
+-	struct string_stream_fragment_alloc_context *ctx = context;
+ 	struct string_stream_fragment *frag;
+ 
+-	frag = kunit_kzalloc(ctx->test, sizeof(*frag), ctx->gfp);
++	frag = kunit_kzalloc(test, sizeof(*frag), gfp);
+ 	if (!frag)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+-	frag->test = ctx->test;
+-	frag->fragment = kunit_kmalloc(ctx->test, ctx->len, ctx->gfp);
++	frag->test = test;
++	frag->fragment = kunit_kmalloc(test, len, gfp);
+ 	if (!frag->fragment)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+-	res->data = frag;
+-
+-	return 0;
++	return frag;
+ }
+ 
+-static void string_stream_fragment_free(struct kunit_resource *res)
++static void string_stream_fragment_destroy(struct string_stream_fragment *frag)
+ {
+-	struct string_stream_fragment *frag = res->data;
+-
+ 	list_del(&frag->node);
+ 	kunit_kfree(frag->test, frag->fragment);
+ 	kunit_kfree(frag->test, frag);
+ }
+ 
+-static struct string_stream_fragment *alloc_string_stream_fragment(
+-		struct kunit *test, int len, gfp_t gfp)
+-{
+-	struct string_stream_fragment_alloc_context context = {
+-		.test = test,
+-		.len = len,
+-		.gfp = gfp
+-	};
+-
+-	return kunit_alloc_resource(test,
+-				    string_stream_fragment_init,
+-				    string_stream_fragment_free,
+-				    gfp,
+-				    &context);
+-}
+-
+-static int string_stream_fragment_destroy(struct string_stream_fragment *frag)
+-{
+-	return kunit_destroy_resource(frag->test,
+-				      kunit_resource_instance_match,
+-				      frag);
+-}
+-
+ int string_stream_vadd(struct string_stream *stream,
+ 		       const char *fmt,
+ 		       va_list args)
+@@ -169,48 +136,23 @@ struct string_stream_alloc_context {
+ 	gfp_t gfp;
+ };
+ 
+-static int string_stream_init(struct kunit_resource *res, void *context)
++struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
+ {
+ 	struct string_stream *stream;
+-	struct string_stream_alloc_context *ctx = context;
+ 
+-	stream = kunit_kzalloc(ctx->test, sizeof(*stream), ctx->gfp);
++	stream = kunit_kzalloc(test, sizeof(*stream), gfp);
+ 	if (!stream)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+-	res->data = stream;
+-	stream->gfp = ctx->gfp;
+-	stream->test = ctx->test;
++	stream->gfp = gfp;
++	stream->test = test;
+ 	INIT_LIST_HEAD(&stream->fragments);
+ 	spin_lock_init(&stream->lock);
+ 
+-	return 0;
++	return stream;
+ }
+ 
+-static void string_stream_free(struct kunit_resource *res)
++void string_stream_destroy(struct string_stream *stream)
+ {
+-	struct string_stream *stream = res->data;
+-
+ 	string_stream_clear(stream);
+ }
+-
+-struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
+-{
+-	struct string_stream_alloc_context context = {
+-		.test = test,
+-		.gfp = gfp
+-	};
+-
+-	return kunit_alloc_resource(test,
+-				    string_stream_init,
+-				    string_stream_free,
+-				    gfp,
+-				    &context);
+-}
+-
+-int string_stream_destroy(struct string_stream *stream)
+-{
+-	return kunit_destroy_resource(stream->test,
+-				      kunit_resource_instance_match,
+-				      stream);
+-}
+diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
+index 43f9508a55b4..494dee0f24bd 100644
+--- a/lib/kunit/string-stream.h
++++ b/lib/kunit/string-stream.h
+@@ -46,6 +46,6 @@ int string_stream_append(struct string_stream *stream,
+ 
+ bool string_stream_is_empty(struct string_stream *stream);
+ 
+-int string_stream_destroy(struct string_stream *stream);
++void string_stream_destroy(struct string_stream *stream);
+ 
+ #endif /* _KUNIT_STRING_STREAM_H */
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index b73d5bb5c473..0fb2771ca03e 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -267,7 +267,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+ 
+ 	kunit_print_string_stream(test, stream);
+ 
+-	WARN_ON(string_stream_destroy(stream));
++	string_stream_destroy(stream);
+ }
+ 
+ static void __noreturn kunit_abort(struct kunit *test)
 
+base-commit: 94681e289bf5d10c9db9db143d1a22d8717205c5
+-- 
+2.37.1.359.gd136c6c3e2-goog
 
-
-I have a couple of deep and fundamental problems with this approach,
-to limiting access to potentially exploitable code.
-
-1) The first is that unless there is a high probability (say 90%) that at
-   any time the only exploitable code in the kernel can only be accessed
-   by an unprivileged user with the help of user namespaces, attackers
-   will just route around this restriction and so it will achieve
-   nothing in practice, while at the same time incur an extra
-   maintenance burden.
-
-2) The second is that there is a long standing problem with code that
-   gets added to the kernel.  Many times new kernel code because it has
-   the potential to confuse suid root executables that code has been
-   made root only.  Over time that results in more and more code running
-   as root to be able to make use of the useful features of the linux
-   kernel.
-
-   One of the goals of the user namespace is to avoid more and more code
-   migrating to running as root.  To achieve that goal ordinary
-   application developers need to be able to assume that typically user
-   namespaces will be available on linux.
-
-   An assumption that ordinary applications like chromium make today.
-
-   Your intentions seem to be to place a capability check so that only
-   root can use user namespaces or something of the sort.  Thus breaking
-   the general availability of user namespaces for ordinary applications
-   on your systems.
-   
-
-My apologies if this has been addressed somewhere in the conversation
-already.  I don't see these issues addressed in the descriptions of your
-patches.
-
-Until these issues are firmly addressed and you are not proposing a
-patch that can only cause regressions in userspace applications.
-
-Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
-
->
-> The calls look something like this:
->
->     cred = prepare_creds()
->         security_prepare_creds()
->             call_int_hook(cred_prepare, ...
->     if (cred)
->         create_user_ns(cred)
->
-> We noticed that error codes were not propagated from this hook and
-> introduced a patch [1] to propagate those errors.
->
-> The discussion notes that security_prepare_creds()
-> is not appropriate for MAC policies, and instead the hook is
-> meant for LSM authors to prepare credentials for mutation. [2]
->
-> Ultimately, we concluded that a better course of action is to introduce
-> a new security hook for LSM authors. [3]
->
-> This patch set first introduces a new security_create_user_ns() function
-> and userns_create LSM hook, then marks the hook as sleepable in BPF.
->
-> Links:
-> 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
-> 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
-> 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
->
-> Past discussions:
-> V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
-> V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
->
-> Changes since v2:
-> - Rename create_user_ns hook to userns_create
-> - Use user_namespace as an object opposed to a generic namespace object
-> - s/domB_t/domA_t in commit message
-> Changes since v1:
-> - Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
-> - Add selinux: Implement create_user_ns hook patch
-> - Change function signature of security_create_user_ns() to only take
->   struct cred
-> - Move security_create_user_ns() call after id mapping check in
->   create_user_ns()
-> - Update documentation to reflect changes
->
-> Frederick Lawler (4):
->   security, lsm: Introduce security_create_user_ns()
->   bpf-lsm: Make bpf_lsm_userns_create() sleepable
->   selftests/bpf: Add tests verifying bpf lsm userns_create hook
->   selinux: Implement userns_create hook
->
->  include/linux/lsm_hook_defs.h                 |  1 +
->  include/linux/lsm_hooks.h                     |  4 +
->  include/linux/security.h                      |  6 ++
->  kernel/bpf/bpf_lsm.c                          |  1 +
->  kernel/user_namespace.c                       |  5 ++
->  security/security.c                           |  5 ++
->  security/selinux/hooks.c                      |  9 ++
->  security/selinux/include/classmap.h           |  2 +
->  .../selftests/bpf/prog_tests/deny_namespace.c | 88 +++++++++++++++++++
->  .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
->  10 files changed, 160 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
->
-> --
-> 2.30.2
-
-Eric
