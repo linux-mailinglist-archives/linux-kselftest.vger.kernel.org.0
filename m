@@ -2,120 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AFE57E077
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 13:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6251B57E15C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 14:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiGVLFZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Jul 2022 07:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S234549AbiGVMUS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Jul 2022 08:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235277AbiGVLFH (ORCPT
+        with ESMTP id S233944AbiGVMUR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Jul 2022 07:05:07 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C736ABB8FB
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 04:05:02 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id w204so5226152oie.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 04:05:02 -0700 (PDT)
+        Fri, 22 Jul 2022 08:20:17 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AE014002
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 05:20:15 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id b21so3317708qte.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 05:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ClcvuyoVSKPNIGPC6XYZgGXhO5C2e/zHEXJEcPjU7bs=;
-        b=HlbFIggBd1enoF0DBBJXL25iYInfB8KMOgRSOH0Gm/0Rnz/tw3zcqpPOaVNvCo8dbi
-         PMBfY8aZfcU8Opx4xl7RRmXkJY2X4ARJnb7rpmW7Q4n+joakPxlqp0QDoSlHgbgk/BFE
-         DIBwHFIawJ4pXB6oknmtXtXa7zUdC2/n6RZCL/wKNzQj5UeOV58unRrdzWPKcKl7Zet/
-         XiPt/FqWvisQxBNGpdiBKjjyTxE0DRKd/fvm1v36PCjK48TQ2RlYJtmcvJHh1FysUzOg
-         bstiUMl2kzKm9MTcMzOhx9TSs4vVQlBAGqboNRugdoK0CuvQow1/npjvp4Y4PsuSc64y
-         qBfg==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:date:message-id:in-reply-to:references:user-agent
+         :subject:mime-version:content-transfer-encoding;
+        bh=kIKMl7lknNmrR7/g3+eBdSau4//c4Zzr0QaeUiEir7A=;
+        b=cHhHjmlahYQ+EmtKYhfCB8KTNgvpM7+cBXuWAwrqR7qvzNU8+HhLRnTdPxxvFVeHh3
+         1nUaRHsHw8NQy+w+KEbL1WitYxDtz85JVMIVI6ao9QwCutRBsbMgBOX4RICVcuV9E3oe
+         AWc4nmne8ushnOtD6AFil/8ViyNXbqrdkinYxQ3k4aucoZdSrbdYliPQjWq0MBJj/Bn8
+         JL9k1d5L3NzOCtYoIbyj6v7UD2hB1lFi0USJqy10hnlWJwfYP2r/1IG2soYO4rnBxTgq
+         H4IMse2/xdiaEKZwKqcUw9ZoKLvnfHoeFJLzprkjkdjavu6OyvtAFHUEfzaDx+u7Zpd5
+         vOhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:subject:mime-version
          :content-transfer-encoding;
-        bh=ClcvuyoVSKPNIGPC6XYZgGXhO5C2e/zHEXJEcPjU7bs=;
-        b=W8/C+WcEGQQs+z6neBgybCQ6Np6kRFK5zWx/0zDR7ON3jolD8XTAF+Cu+XCoSbggZ+
-         kHs79ciqrTx2tx6aP4mImqBqWNWtI8h8SvbUHOh58dzcMRMOi3YehT2d/O1FCyD7j/dA
-         G7/nS+lKMxMAqSedCoGNg49yCy2zKbxOeKL8DTMraqX1/v1H1TlbRDtYDWtd/re4vBIz
-         9DCK+R29SK+p7iJefm+jGU/OroExi9nFlTnDU2ce7C6/+2SyoWt720HEHUOIcLwPz3P9
-         bjxpHDDem3lXc/kFQGFFhceVOjXbymhjAowFTXSVqFsptNch/cPGsuyFRyQstv8cPh7u
-         WfjA==
-X-Gm-Message-State: AJIora8usvHzl/OfjcfDsVLfVaNLdfeq5NIrZRwAvPNUuKYQbk99UeJi
-        0hRT/kpnWkMrh0Hp8ZK4H283oQ==
-X-Google-Smtp-Source: AGRyM1sOPgZ02x9KlIIK2eI9XwQtYb3a0w3MvEex17vJsjkcLOrRvD2nqiMuPMVayW1gZY+Usy1kiw==
-X-Received: by 2002:a05:6808:201c:b0:33a:a038:ea8b with SMTP id q28-20020a056808201c00b0033aa038ea8bmr1184432oiw.98.1658487902053;
-        Fri, 22 Jul 2022 04:05:02 -0700 (PDT)
-Received: from [192.168.1.195] ([187.36.234.139])
-        by smtp.gmail.com with ESMTPSA id u21-20020a056870421500b001019fb71e4bsm2105289oac.17.2022.07.22.04.04.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 04:05:01 -0700 (PDT)
-Message-ID: <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
-Date:   Fri, 22 Jul 2022 08:04:51 -0300
+        bh=kIKMl7lknNmrR7/g3+eBdSau4//c4Zzr0QaeUiEir7A=;
+        b=5z7KKs50IawTTvHY3ZPCeURRjRJQs6NAlf9IofzAEYRpeBNGE0cXaifrOqYdSr8TJi
+         9RYbLAaC8b0LOojf4S9JST8in/gsAaYMpX990OQ0ziyzZE0JETzGefKcTiBOaJxE8nQw
+         5ZLa5waP8lqc1Pbn8amGzRHQzfxft/rQJtPkZB/pEgAr2Yu8d1etqA/1wnY6L0NeAHEJ
+         2nCzoLhMk36eiKVACI3dBh7WuPH6x3ebDTyWaMxJSGbqdF5gaRrmLiQztaCuBv0p4xWF
+         WTXiCWHYu8FrobBxT8oXjCgAVb8RDlOZ9WK4kYnHhUOb3dGahQ3QTkkELh66jZYEH0sA
+         zS/g==
+X-Gm-Message-State: AJIora8KUZNBZzhLmKluwvA4BKa+1vcpZ2eh7orBv1LpLBy/rBCNnGoL
+        4kXUiRXXSBSXIZvSvQjxeEbM
+X-Google-Smtp-Source: AGRyM1vRv8Pg5YMxgoX//w7Bar4An6ugLUhEpTDVLqgE1K9tMb0kLUN+xQP5nT2rrJ4QhsOwsmCzBg==
+X-Received: by 2002:ac8:7f8e:0:b0:31f:10bc:f5d7 with SMTP id z14-20020ac87f8e000000b0031f10bcf5d7mr140040qtj.561.1658492414525;
+        Fri, 22 Jul 2022 05:20:14 -0700 (PDT)
+Received: from [10.130.209.145] (mobile-166-170-54-234.mycingular.net. [166.170.54.234])
+        by smtp.gmail.com with ESMTPSA id m1-20020a05620a24c100b006b259b5dd12sm3456272qkn.53.2022.07.22.05.20.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 22 Jul 2022 05:20:13 -0700 (PDT)
+From:   Paul Moore <paul@paul-moore.com>
+To:     Martin KaFai Lau <kafai@fb.com>,
+        Frederick Lawler <fred@cloudflare.com>
+CC:     <kpsingh@kernel.org>, <revest@chromium.org>,
+        <jackmanb@chromium.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <jmorris@namei.org>,
+        <serge@hallyn.com>, <stephen.smalley.work@gmail.com>,
+        <eparis@parisplace.org>, <shuah@kernel.org>, <brauner@kernel.org>,
+        <casey@schaufler-ca.com>, <ebiederm@xmission.com>,
+        <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+        <selinux@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <kernel-team@cloudflare.com>, <cgzones@googlemail.com>,
+        <karl@bigbadwolfsecurity.com>
+Date:   Fri, 22 Jul 2022 08:20:10 -0400
+Message-ID: <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+In-Reply-To: <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+References: <20220721172808.585539-1-fred@cloudflare.com>
+ <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+User-Agent: AquaMail/1.37.0 (build: 103700163)
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
-Content-Language: en-US
-To:     Matthew Auld <matthew.william.auld@gmail.com>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?Q?Micha=c5=82_Winiarski?= <michal.winiarski@intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, Arthur Grillo <arthur.grillo@usp.br>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20220708203052.236290-1-maira.canal@usp.br>
- <20220708203052.236290-10-maira.canal@usp.br>
- <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
-In-Reply-To: <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/22/22 07:35, Matthew Auld wrote:
-> On Fri, 8 Jul 2022 at 21:32, Maíra Canal <maira.canal@usp.br> wrote:
+On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
+
+> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>> used the LSM cred_prepare hook because that is the closest hook to preve=
+nt
+>> a call to create_user_ns().
 >>
->> From: Arthur Grillo <arthur.grillo@usp.br>
+>> The calls look something like this:
 >>
->> Considering the current adoption of the KUnit framework, convert the
->> DRM mm selftest to the KUnit API.
-> 
-> Is there a plan to convert the corresponding selftest IGT that was
-> responsible for running this (also drm_buddy) to somehow work with
-> kunit? Previously these IGTs were always triggered as part of
-> intel-gfx CI, but it looks like they are no longer run[1].
-> 
-> [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
+>> cred =3D prepare_creds()
+>> security_prepare_creds()
+>> call_int_hook(cred_prepare, ...
+>> if (cred)
+>> create_user_ns(cred)
+>>
+>> We noticed that error codes were not propagated from this hook and
+>> introduced a patch [1] to propagate those errors.
+>>
+>> The discussion notes that security_prepare_creds()
+>> is not appropriate for MAC policies, and instead the hook is
+>> meant for LSM authors to prepare credentials for mutation. [2]
+>>
+>> Ultimately, we concluded that a better course of action is to introduce
+>> a new security hook for LSM authors. [3]
+>>
+>> This patch set first introduces a new security_create_user_ns() function
+>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+> Patch 1 and 4 still need review from the lsm/security side.
 
-Hi Matthew,
 
-Isabella sent a while ago a patch to IGT adding KUnit compatibility to
-IGT [1], but there wasn't any feedback on the patch. I believe that soon
-she will resend the series in order to make all KUnit DRM tests run on IGT.
+This patchset is in my review queue and assuming everything checks out, I e=
+xpect to merge it after the upcoming merge window closes.
 
-Any feedback on the patch is welcomed so that we can fix this issue as
-soon as possible.
+I would also need an ACK from the BPF LSM folks, but they're CC'd on this p=
+atchset.
 
-[1] https://patchwork.freedesktop.org/patch/489985/
+--
+paul-moore.com
 
-Best Regards,
-- Maíra Canal
+
