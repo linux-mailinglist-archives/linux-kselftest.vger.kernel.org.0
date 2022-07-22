@@ -2,92 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBC557E02F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 12:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AFE57E077
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 13:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiGVKon (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Jul 2022 06:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
+        id S230308AbiGVLFZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Jul 2022 07:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233186AbiGVKom (ORCPT
+        with ESMTP id S235277AbiGVLFH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Jul 2022 06:44:42 -0400
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0FC9BB5C4;
-        Fri, 22 Jul 2022 03:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Gychz
-        J0iPpXunmsp/gWRd2qFA9Qg4Kvr1bpS0rgmKxU=; b=iogwW+rtcIOZjYwa2ViFh
-        pgqXrJjcTtia0/uAiai40DvxEIfUj+FaR788kGfjQ5MFbUFrQGW+UUumP6/g0Q08
-        xBAPrslrO6ms7hzeeEFeVrfUytvuizz4wroGItHm7lwr+yNVHg/lHD27VgdfChzY
-        VZXrXMnppNdy00J07Kvg2Y=
-Received: from localhost.localdomain (unknown [112.97.59.29])
-        by smtp1 (Coremail) with SMTP id GdxpCgDX3580f9piU1cyPw--.23671S2;
-        Fri, 22 Jul 2022 18:43:03 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     tglx@linutronix.de, mingo@redhat.com, shuah@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, peterz@infradead.org, dvhart@infradead.org,
-        dave@stgolabs.net, andrealmeid@igalia.com
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH] selftests: Fix typo 'the the' in comment
-Date:   Fri, 22 Jul 2022 18:42:59 +0800
-Message-Id: <20220722104259.83599-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Jul 2022 07:05:07 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C736ABB8FB
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 04:05:02 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id w204so5226152oie.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 04:05:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ClcvuyoVSKPNIGPC6XYZgGXhO5C2e/zHEXJEcPjU7bs=;
+        b=HlbFIggBd1enoF0DBBJXL25iYInfB8KMOgRSOH0Gm/0Rnz/tw3zcqpPOaVNvCo8dbi
+         PMBfY8aZfcU8Opx4xl7RRmXkJY2X4ARJnb7rpmW7Q4n+joakPxlqp0QDoSlHgbgk/BFE
+         DIBwHFIawJ4pXB6oknmtXtXa7zUdC2/n6RZCL/wKNzQj5UeOV58unRrdzWPKcKl7Zet/
+         XiPt/FqWvisQxBNGpdiBKjjyTxE0DRKd/fvm1v36PCjK48TQ2RlYJtmcvJHh1FysUzOg
+         bstiUMl2kzKm9MTcMzOhx9TSs4vVQlBAGqboNRugdoK0CuvQow1/npjvp4Y4PsuSc64y
+         qBfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ClcvuyoVSKPNIGPC6XYZgGXhO5C2e/zHEXJEcPjU7bs=;
+        b=W8/C+WcEGQQs+z6neBgybCQ6Np6kRFK5zWx/0zDR7ON3jolD8XTAF+Cu+XCoSbggZ+
+         kHs79ciqrTx2tx6aP4mImqBqWNWtI8h8SvbUHOh58dzcMRMOi3YehT2d/O1FCyD7j/dA
+         G7/nS+lKMxMAqSedCoGNg49yCy2zKbxOeKL8DTMraqX1/v1H1TlbRDtYDWtd/re4vBIz
+         9DCK+R29SK+p7iJefm+jGU/OroExi9nFlTnDU2ce7C6/+2SyoWt720HEHUOIcLwPz3P9
+         bjxpHDDem3lXc/kFQGFFhceVOjXbymhjAowFTXSVqFsptNch/cPGsuyFRyQstv8cPh7u
+         WfjA==
+X-Gm-Message-State: AJIora8usvHzl/OfjcfDsVLfVaNLdfeq5NIrZRwAvPNUuKYQbk99UeJi
+        0hRT/kpnWkMrh0Hp8ZK4H283oQ==
+X-Google-Smtp-Source: AGRyM1sOPgZ02x9KlIIK2eI9XwQtYb3a0w3MvEex17vJsjkcLOrRvD2nqiMuPMVayW1gZY+Usy1kiw==
+X-Received: by 2002:a05:6808:201c:b0:33a:a038:ea8b with SMTP id q28-20020a056808201c00b0033aa038ea8bmr1184432oiw.98.1658487902053;
+        Fri, 22 Jul 2022 04:05:02 -0700 (PDT)
+Received: from [192.168.1.195] ([187.36.234.139])
+        by smtp.gmail.com with ESMTPSA id u21-20020a056870421500b001019fb71e4bsm2105289oac.17.2022.07.22.04.04.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 04:05:01 -0700 (PDT)
+Message-ID: <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
+Date:   Fri, 22 Jul 2022 08:04:51 -0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
+Content-Language: en-US
+To:     Matthew Auld <matthew.william.auld@gmail.com>
+Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Micha=c5=82_Winiarski?= <michal.winiarski@intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com, Arthur Grillo <arthur.grillo@usp.br>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20220708203052.236290-1-maira.canal@usp.br>
+ <20220708203052.236290-10-maira.canal@usp.br>
+ <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <maira.canal@usp.br>
+In-Reply-To: <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgDX3580f9piU1cyPw--.23671S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uF4rZry3Ww13tw4xuryDZFb_yoW8Ww15p3
-        y8tr1YkFy0q3W7Ww18Gan3ZF48GF4kJFWxGr1fXryfZ3y5Xas3XFnrKF17JF1agrWkZw1r
-        A3y2gryjvFs7ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEEoGwUUUUU=
-X-Originating-IP: [112.97.59.29]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiJRdGZGAJpKgZ6wAAsH
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Replace 'the the' with 'the' in the comment.
+On 7/22/22 07:35, Matthew Auld wrote:
+> On Fri, 8 Jul 2022 at 21:32, Maíra Canal <maira.canal@usp.br> wrote:
+>>
+>> From: Arthur Grillo <arthur.grillo@usp.br>
+>>
+>> Considering the current adoption of the KUnit framework, convert the
+>> DRM mm selftest to the KUnit API.
+> 
+> Is there a plan to convert the corresponding selftest IGT that was
+> responsible for running this (also drm_buddy) to somehow work with
+> kunit? Previously these IGTs were always triggered as part of
+> intel-gfx CI, but it looks like they are no longer run[1].
+> 
+> [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- .../futex/functional/futex_requeue_pi_signal_restart.c          | 2 +-
- tools/testing/selftests/net/forwarding/vxlan_asymmetric.sh      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Matthew,
 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-index f8c43ce8fe66..c6b8f32990c8 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
- 		/*
- 		 * If res is non-zero, we either requeued the waiter or hit an
- 		 * error, break out and handle it. If it is zero, then the
--		 * signal may have hit before the the waiter was blocked on f1.
-+		 * signal may have hit before the waiter was blocked on f1.
- 		 * Try again.
- 		 */
- 		if (res > 0) {
-diff --git a/tools/testing/selftests/net/forwarding/vxlan_asymmetric.sh b/tools/testing/selftests/net/forwarding/vxlan_asymmetric.sh
-index 0727e2012b68..43469c7de118 100755
---- a/tools/testing/selftests/net/forwarding/vxlan_asymmetric.sh
-+++ b/tools/testing/selftests/net/forwarding/vxlan_asymmetric.sh
-@@ -525,7 +525,7 @@ arp_suppression()
- 
- 	log_test "neigh_suppress: on / neigh exists: yes"
- 
--	# Delete the neighbour from the the SVI. A single ARP request should be
-+	# Delete the neighbour from the SVI. A single ARP request should be
- 	# received by the remote VTEP
- 	RET=0
- 
--- 
-2.25.1
+Isabella sent a while ago a patch to IGT adding KUnit compatibility to
+IGT [1], but there wasn't any feedback on the patch. I believe that soon
+she will resend the series in order to make all KUnit DRM tests run on IGT.
 
+Any feedback on the patch is welcomed so that we can fix this issue as
+soon as possible.
+
+[1] https://patchwork.freedesktop.org/patch/489985/
+
+Best Regards,
+- Maíra Canal
