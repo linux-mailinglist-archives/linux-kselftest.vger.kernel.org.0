@@ -2,82 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E41257E436
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 18:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF6557E450
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 18:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiGVQQu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Jul 2022 12:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
+        id S234838AbiGVQZf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Jul 2022 12:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbiGVQQs (ORCPT
+        with ESMTP id S229593AbiGVQZe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Jul 2022 12:16:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B97140F1;
-        Fri, 22 Jul 2022 09:16:47 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id j22so9416460ejs.2;
-        Fri, 22 Jul 2022 09:16:47 -0700 (PDT)
+        Fri, 22 Jul 2022 12:25:34 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA7574E17
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 09:25:32 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id m12so7381249lfj.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 09:25:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=97WFVBFeJ/mP7POIyyy1UP0JWOMgZ/bOiCTe1ETU5XI=;
-        b=DPr5GbzJ9gljq8DfC08aakia49SnfaLxsujJZQI7oAQIHdY1grFo4OcBO4dxciU+Qa
-         Or/8tRV8tnIpJ6L8w0iBpM939aGWIBdUIb2ZNSxQzwAj0uIZ6XE13dGUGQzsNipcg9ms
-         tNsO/k+a8prGjijrm4qyOaNWV7VDKznCJNtZD37vsxaAynSdg9lFsqrMGb91IKAuu6tt
-         THrcBbNLQrN2V6v1jn3kyOpm7/cv7uoR3GgfFs9r9BnqO4bX4WeoF4WjEVmGvH3fW1Is
-         jL+u6LyLUyyWEepxJfwOJF/sXhEbu3kloQstYAVH+wMbj89Qwd4H8WyGvPErw6PHUx0/
-         Lbog==
+        d=hardline-pl.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2cHLZsYSzu3vlQWq2uTFZBxgK+nHwwF/vJBUwns59Ds=;
+        b=n5bJ2manL/cCWuwR0ZJd2UvjhGDXg9VMCs+OvLl8bGyfqKipgVkFHueBbViZ2lEBA1
+         6NKiKenhcTxri61yQIaTCHoiV6+sOqsgzuGab5gL8C3miq/ows4KAHWtKz6TrXJvEGmf
+         j4Dffqm/p76WMCjN/vqMZ7AG/++q67fMOnnx7kbUwLmSYewy2QwjAYS4w5V8bf3xo54H
+         4wkmllD15xq9EMw/cMlQcIe4twyMyi2w2808mTnrFhPlse51W3MSJ42rC9GL+9+wc0zQ
+         88JuNMU3uUiozQmZoQhCNIpSzTJFN0MeFUMQJbKOOE6ZqdFbVJFwttBW/m5ZhwknQU6a
+         4Xag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=97WFVBFeJ/mP7POIyyy1UP0JWOMgZ/bOiCTe1ETU5XI=;
-        b=k889UcTzbHcOn3s2Tk+dZ7AMEX08HpvqjQdbFp6PTYSjU+RrELOc1PCyZBM1hCd6Dm
-         s2oisZKynsN8nYNUYka002cZIAf0FD4g1mDpGRECllmmh0NMmd3Sm12jx+PzhPPxQSb2
-         u4Qm4pgMPth7wnHkZ3p8wHqNqTxr8UF9uX62QqD8BjP7C9uL1AxQMLVD+m7yEqZimQW5
-         gSrDKHwTHrO1KkyTb3tNqP/5w2YZINZLzIq9x3g0V1ym2UIKNpzi7VQow1BLNLlk8Oa1
-         KtuZISiFZ0IHHleRYHQppuH2MwbI8gyWMGMPJ+HqVXW+K0ffFow78Xq2X1FofSHHlCuZ
-         D03A==
-X-Gm-Message-State: AJIora+6orXxjz7G992ffRTKj9zy4L9Tzx5QpVKydG2xBMA967RA/X2d
-        rl+51D2u1CrQqYJQkt4Oq25CGPETsJ5wc9LnpOOVjWO7TH4=
-X-Google-Smtp-Source: AGRyM1v1fHCwpN/hlsbBmFOHa0gm/aGOOZHGLRZMX0jdSmOSXL/mCoYZb8NkvX8F2/xv5DnONwmLJbh9lwhOEJ1Cqrg=
-X-Received: by 2002:a17:906:9b86:b0:6fe:d37f:b29d with SMTP id
- dd6-20020a1709069b8600b006fed37fb29dmr488369ejc.327.1658506605946; Fri, 22
- Jul 2022 09:16:45 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2cHLZsYSzu3vlQWq2uTFZBxgK+nHwwF/vJBUwns59Ds=;
+        b=Z8LY7rgeoN4oID8FiVT41Hvk6WVa9mZIFm9qC0Z54gNFQ/qiJTHJ0USNI5H/j6yg7t
+         lDAzmERaw2MeQzD7lvvM0tCcqgexW9QdAolmBSKejzZzvv3IRQ3v8CVJzZ9rbsBP53sx
+         2VVwrfg4NuUzsc+vyjEpGlGwZcyiEX8tV0TYI+LbDZKgbDlG8zKQZNIaR8Wi2Nvb0Rk9
+         r14HiGPADDtbi+ANiC2lx5bhUtHaSlKXszM3BD3XfD1VRo3zpSoJnjUfZbYZBXO9XRZn
+         wjMEppbRVS3xUMZAkST6x39gGedeU+fP+qxne4BHcMPixHxHekUDQxxsfuzjRnaD5mqa
+         x1Sw==
+X-Gm-Message-State: AJIora9V/I/5pVleL6TaG6opMxl1TGgkd/9+dhkd/4ElMLiFKJfhwHoV
+        zj7ufU76Revw7FTYOHI5cAe+ZQ==
+X-Google-Smtp-Source: AGRyM1sPLTtJuvAxH41K5c4T5wV2zD6vvOVSwpXKE6dWwQy/OWWh7eYNR6Txk9u9vVFJK0Gagcmh7g==
+X-Received: by 2002:a05:6512:3092:b0:489:dece:5539 with SMTP id z18-20020a056512309200b00489dece5539mr276918lfd.269.1658507130797;
+        Fri, 22 Jul 2022 09:25:30 -0700 (PDT)
+Received: from localhost (89-64-117-232.dynamic.chello.pl. [89.64.117.232])
+        by smtp.gmail.com with ESMTPSA id b1-20020a2eb901000000b0025c8c3747bbsm1209127ljb.37.2022.07.22.09.25.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 09:25:30 -0700 (PDT)
+Date:   Fri, 22 Jul 2022 18:25:29 +0200
+From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal@hardline.pl>
+To:     =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>
+Cc:     Matthew Auld <matthew.william.auld@gmail.com>,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        siqueirajordao@riseup.net, David Airlie <airlied@linux.ie>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org, n@nfraprado.net,
+        Isabella Basso <isabbasso@riseup.net>, andrealmeid@riseup.net,
+        magalilemes00@gmail.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        kunit-dev@googlegroups.com, mwen@igalia.com,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+        tales.aparecida@gmail.com,
+        kernel list <linux-kernel@vger.kernel.org>,
+        leandro.ribeiro@collabora.com,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
+Message-ID: <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
+References: <20220708203052.236290-1-maira.canal@usp.br>
+ <20220708203052.236290-10-maira.canal@usp.br>
+ <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
+ <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
 MIME-Version: 1.0
-References: <20220721153625.1282007-3-benjamin.tissoires@redhat.com> <20220722084556.1342406-1-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220722084556.1342406-1-benjamin.tissoires@redhat.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 22 Jul 2022 09:16:34 -0700
-Message-ID: <CAADnVQLypx8Yd7L4GByGNEJaWgg0R6ukNV9hz0ge1+ZdW4mdgQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 02/24] bpf/verifier: allow kfunc to read user
- provided context
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,72 +91,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 1:46 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> When a kfunc was trying to access data from context in a syscall eBPF
-> program, the verifier was rejecting the call.
-> This is because the syscall context is not known at compile time, and
-> so we need to check this when actually accessing it.
->
-> Check for the valid memory access and allow such situation to happen.
->
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->
-> ---
->
-> changes in v8:
-> - fixup comment
-> - return -EACCESS instead of -EINVAL for consistency
->
-> changes in v7:
-> - renamed access_t into atype
-> - allow zero-byte read
-> - check_mem_access() to the correct offset/size
->
-> new in v6
-> ---
->  kernel/bpf/verifier.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7c1e056624f9..c807c5d7085a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -248,6 +248,7 @@ struct bpf_call_arg_meta {
->         struct bpf_map *map_ptr;
->         bool raw_mode;
->         bool pkt_access;
-> +       bool is_kfunc;
->         u8 release_regno;
->         int regno;
->         int access_size;
-> @@ -5170,6 +5171,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
->                                    struct bpf_call_arg_meta *meta)
->  {
->         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
-> +       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
->         u32 *max_access;
->
->         switch (base_type(reg->type)) {
-> @@ -5223,6 +5225,24 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
->                                 env,
->                                 regno, reg->off, access_size,
->                                 zero_size_allowed, ACCESS_HELPER, meta);
-> +       case PTR_TO_CTX:
-> +               /* in case of a kfunc called in a program of type SYSCALL, the context is
-> +                * user supplied, so not computed statically.
-> +                * Dynamically check it now
-> +                */
-> +               if (prog_type == BPF_PROG_TYPE_SYSCALL && meta && meta->is_kfunc) {
+On Fri, Jul 22, 2022 at 08:04:51AM -0300, Maíra Canal wrote:
+> On 7/22/22 07:35, Matthew Auld wrote:
+> > On Fri, 8 Jul 2022 at 21:32, Maíra Canal <maira.canal@usp.br> wrote:
+> >>
+> >> From: Arthur Grillo <arthur.grillo@usp.br>
+> >>
+> >> Considering the current adoption of the KUnit framework, convert the
+> >> DRM mm selftest to the KUnit API.
+> > 
+> > Is there a plan to convert the corresponding selftest IGT that was
+> > responsible for running this (also drm_buddy) to somehow work with
+> > kunit? Previously these IGTs were always triggered as part of
+> > intel-gfx CI, but it looks like they are no longer run[1].
+> > 
+> > [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
+> 
+> Hi Matthew,
+> 
+> Isabella sent a while ago a patch to IGT adding KUnit compatibility to
+> IGT [1], but there wasn't any feedback on the patch. I believe that soon
+> she will resend the series in order to make all KUnit DRM tests run on IGT.
+> 
+> Any feedback on the patch is welcomed so that we can fix this issue as
+> soon as possible.
+> 
+> [1] https://patchwork.freedesktop.org/patch/489985/
+> 
+> Best Regards,
+> - Maíra Canal
 
-prog_type check looks a bit odd here.
-Can we generalize with
-if (!env->ops->convert_ctx_access
+Hi.
 
-In other words any program type that doesn't have ctx rewrites can
-use helpers to access ctx fields ?
+Instead of going back to using IGT for *unit* tests, it would be a better idea
+to adjust the CI to just run the tests once at "build" time (just like e.g.
+checkpatch).
 
-Also why kfunc only?
-It looks safe to allow normal helpers as well.
+We would then stop executing the same test multiple times on different machines
+(note that both DRM selftests and i915 "mock" selftests are pure unit tests - in
+other words, they don't need the hardware to be present), which would save some
+(small) amount of machine-time that can be utilized to do something that
+actually needs the hardware.
+
+Plus there's no need to maintain the kunit-runner in IGT.
+Note - we're currently going to lose "DMESG-WARN" detection if we go this route,
+but this is something that can be improved on the kunit-side.
+
+-Michał
