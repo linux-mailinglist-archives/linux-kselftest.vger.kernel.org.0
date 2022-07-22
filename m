@@ -2,157 +2,287 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB0D57DB5E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 09:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD16B57DC07
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 10:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234156AbiGVHf3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Jul 2022 03:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S233556AbiGVIPV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Jul 2022 04:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbiGVHf2 (ORCPT
+        with ESMTP id S230429AbiGVIPU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:35:28 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D8B52884
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 00:35:26 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id q26so3598206vsp.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 00:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cIXvAaSW5DBMQmZr/o71wlkcHcjE5t5Cw7BSqv0X5TU=;
-        b=Nhacxl3MXayW7aaoYCXJWsTgzG7gbf4KkzQY+ICMD4yHn8UYPUZJNCsJ6GAYKBYKKO
-         7b1NO321W5m6fG4eTUxm5B4GdORnPGMEa4oOlLf1MrW2c6e9HvwGnMNX9+EvJt5vu/TJ
-         rcwm+Oqvg5k3Vt5J3rCGWtCikThPXVWBrb3Lm83QuB3zUWLtXWNjCEIP/3VZnchywQ5H
-         735jptWUTIrfz69Fq00KQ1wPJCDbX5EPDhyqD3WQnYxxK9xWOL3Sp1JthMHELGqv3utv
-         0R12Wupu7ZvKvKfj29EoNbm4Lt/UbrQAGV1Ic7HPfGSjoAHBu7PrwN3TDCBIyb68vZ7p
-         gKtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cIXvAaSW5DBMQmZr/o71wlkcHcjE5t5Cw7BSqv0X5TU=;
-        b=f9WWUWYKYG8QoTp4xCHw6jBRAnlTLcBJQI8/f9BBSTu+SNxklbTxcnQNwZDmXwQVLT
-         iDdeJTWOVQTvB27tO6r+57vpLAZ19Dv0j6DXphiFVqrI1EOMInKEVNqZNlAtWiT2jFbp
-         t8kzr0WH6cnqyymQWSteF91Ko19XOTHdeoUliFEqpZHkUqZsYt0w5sBkyglP3Nf/j8fP
-         ehe0FeRpI8n42j95N+K3na9MCZXYqaP97EM+KM1WZzZuqgPsAmhkJhmbjHRnRMdm1Fcm
-         Xu1e4HcFrMvdeN+TZxrwCdpGDOPClPf/B7a2JLVvaLSnOK8Q5C2urxWQSLz1mCgUNh7c
-         Ju4A==
-X-Gm-Message-State: AJIora9iS1cCba0RZw8RWVvMBceucDJFNt1TL60Dh7rujkFe7Nh+n78p
-        wlvxtCwVoJ/T/x8zQXo8tIFjz2b94+XOXnEqPME+Bw==
-X-Google-Smtp-Source: AGRyM1vChcaBz2dWLY/qMzpEDulfg11hmEElJ6QknyFZPyhzwQrGsq47B0QWAHXWymoKsaYgUZY56itiw7gyYLEW1MY=
-X-Received: by 2002:a05:6102:381:b0:357:a112:adc7 with SMTP id
- m1-20020a056102038100b00357a112adc7mr624492vsq.38.1658475325123; Fri, 22 Jul
- 2022 00:35:25 -0700 (PDT)
+        Fri, 22 Jul 2022 04:15:20 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C8A15834;
+        Fri, 22 Jul 2022 01:15:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5CE95CE27AA;
+        Fri, 22 Jul 2022 08:15:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA88C341C6;
+        Fri, 22 Jul 2022 08:15:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658477715;
+        bh=wq8AeLzmn31RtGz2c8gYFnNwmHHMpqM6iqim4vaEza4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cngYB1j8u/zgpMZ96HSQTGkq9t1nKNZqoWH2upgMQ1rlhqzYDWggv26aQOsMcHFW+
+         zN2AGbVwOuuj3bAQYjI/RZn2nCgbaQC9mJqZ0f+JmlI32HeWDNy+SMxq3NDuOR5iKR
+         kKnWc85Y0b9bTlPgJQg9MxyQyZZIjd3IBt6B2AxVIQhHYhegeIEYxlb0878W1MIqoj
+         LsLLaBWu5E50Lws/tjgERoTubRX/imJgTpFrCKV7MECnmBnyFzB3mag1enl+zHPEo9
+         p41CnimGKdVgTbDlXZNgKlPVPAgQd7QkciimIRvMW8T2ZrETZK+37yaOX9bEW5rt4i
+         cwIQZNLIgh6OQ==
+Date:   Fri, 22 Jul 2022 10:15:05 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Frederick Lawler <fred@cloudflare.com>
+Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+Subject: Re: [PATCH v3 3/4] selftests/bpf: Add tests verifying bpf lsm
+ userns_create hook
+Message-ID: <20220722081505.klaf3wzg6fnx3typ@wittgenstein>
+References: <20220721172808.585539-1-fred@cloudflare.com>
+ <20220721172808.585539-4-fred@cloudflare.com>
 MIME-Version: 1.0
-References: <20220721180214.3223778-1-dlatypov@google.com> <20220721180214.3223778-4-dlatypov@google.com>
-In-Reply-To: <20220721180214.3223778-4-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 22 Jul 2022 15:35:14 +0800
-Message-ID: <CABVgOSkHCDt4DPRTCpSgWUSa5_5adEoqwW1fNnXyev9fK1eiuQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] kunit: make knuit_kfree() not segfault on invalid inputs
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220721172808.585539-4-fred@cloudflare.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-(Nit: typo in the subject line "knuit_free" --> "kunit_free"
-On Fri, Jul 22, 2022 at 2:02 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> kunit_kfree() can only work on data ("resources") allocated by KUnit.
->
-> Currently for code like this,
-> > void *ptr = kmalloc(4, GFP_KERNEL);
-> > kunit_kfree(test, ptr);
-> kunit_kfree() will segfault.
->
-> It'll try and look up the kunit_resource associated with `ptr` and get a
-> NULL back, but it won't check for this. This means we also segfault if
-> you double-free.
+On Thu, Jul 21, 2022 at 12:28:07PM -0500, Frederick Lawler wrote:
+> The LSM hook userns_create was introduced to provide LSM's an
+> opportunity to block or allow unprivileged user namespace creation. This
+> test serves two purposes: it provides a test eBPF implementation, and
+> tests the hook successfully blocks or allows user namespace creation.
+> 
+> This tests 4 cases:
+> 
+>         1. Unattached bpf program does not block unpriv user namespace
+>            creation.
+>         2. Attached bpf program allows user namespace creation given
+>            CAP_SYS_ADMIN privileges.
+>         3. Attached bpf program denies user namespace creation for a
+>            user without CAP_SYS_ADMIN.
+>         4. The sleepable implementation loads
 
-Personally, I don't think the case of people calling kunit_kfree() on
-pointers allocated with kmalloc() is too worrying, but I do think we
-should error more gracefully in cases like double-frees (and maybe
-handle kfree(NULL) situations).
->
-> Change kunit_kfree() so it'll notice these invalid pointers and respond
-> by failing the test.
->
-> Implementation: kunit_destroy_resource() does what kunit_kfree() does,
-> but is more generic and returns -ENOENT when it can't find the resource.
-> Sadly, unlike just letting it crash, this means we don't get a stack
-> trace. But kunit_kfree() is so infrequently used it shouldn't be hard to
-> track down the bad callsite anyways.
+Sounds good!
 
-One day we should look into printing stacktraces on failed
-expectations... It could be spammy in some cases, but it'd be nice to
-have the option for things like this.
->
-> After this change, the above code gives:
-> > # example_simple_test: EXPECTATION FAILED at lib/kunit/test.c:702
-> > kunit_kfree: 00000000626ec200 already freed or not allocated by kunit
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> 
+> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+> 
 > ---
+> The generic deny_namespace file name is used for future namespace
+> expansion. I didn't want to limit these files to just the create_user_ns
+> hook.
+> Changes since v2:
+> - Rename create_user_ns hook to userns_create
+> Changes since v1:
+> - Introduce this patch
+> ---
+>  .../selftests/bpf/prog_tests/deny_namespace.c | 88 +++++++++++++++++++
+>  .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
+>  2 files changed, 127 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/deny_namespace.c b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+> new file mode 100644
+> index 000000000000..9e4714295008
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+> @@ -0,0 +1,88 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +#include <test_progs.h>
+> +#include "test_deny_namespace.skel.h"
+> +#include <sched.h>
+> +#include "cap_helpers.h"
+> +
+> +#define STACK_SIZE (1024 * 1024)
+> +static char child_stack[STACK_SIZE];
+> +
+> +int clone_callback(void *arg)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int create_new_user_ns(void)
+> +{
+> +	int status;
+> +	pid_t cpid;
+> +
+> +	cpid = clone(clone_callback, child_stack + STACK_SIZE,
+> +		     CLONE_NEWUSER | SIGCHLD, NULL);
+> +
+> +	if (cpid == -1)
+> +		return errno;
+> +
+> +	if (cpid == 0)
+> +		return 0;
 
-Looks good to me: this is both more correct and so much simpler as a
-function. I can live without the nitpicks fixed.
+Martin asked about this already but fwiw, this cannot happen with
+clone(). The clone() function doesn't return twice. It always returns
+the PID of the child process or an error.
 
-Reviewed-by: David Gow <davidgow@google.com>
+> +
+> +	waitpid(cpid, &status, 0);
+> +	if (WIFEXITED(status))
+> +		return WEXITSTATUS(status);
+> +
+> +	return -1;
+> +}
 
-Thanks!
--- David
+You can also just avoid the clone() dance and simply do sm like:
 
->  lib/kunit/test.c | 14 ++------------
->  1 file changed, 2 insertions(+), 12 deletions(-)
->
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 82019a78462e..c7ca87484968 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -698,18 +698,8 @@ static inline bool kunit_kfree_match(struct kunit *test,
->
->  void kunit_kfree(struct kunit *test, const void *ptr)
->  {
-> -       struct kunit_resource *res;
-> -
-> -       res = kunit_find_resource(test, kunit_kfree_match, (void *)ptr);
-> -
-> -       /*
-> -        * Removing the resource from the list of resources drops the
-> -        * reference count to 1; the final put will trigger the free.
-> -        */
-> -       kunit_remove_resource(test, res);
-> -
-> -       kunit_put_resource(res);
-> -
-> +       if (kunit_destroy_resource(test, kunit_kfree_match, (void *)ptr))
-> +               KUNIT_FAIL(test, "kunit_kfree: %px already freed or not allocated by kunit", ptr);
+static int wait_for_pid(pid_t pid)
+{
+	int status, ret;
 
-_Maybe_ we should no-op if ptr is NULL. I think it's legal for
-free()/kfree(), and while I don't see much use of it for kunit tests,
-maybe it'll save someone confusion down the road.
+again:
+	ret = waitpid(pid, &status, 0);
+	if (ret == -1) {
+		if (errno == EINTR)
+			goto again;
 
-But I could live with it either way...
+		return -1;
+	}
 
->  }
->  EXPORT_SYMBOL_GPL(kunit_kfree);
->
-> --
-> 2.37.1.359.gd136c6c3e2-goog
->
+	if (!WIFEXITED(status))
+		return -1;
+
+	return WEXITSTATUS(status);
+}
+
+/* negative return value -> some internal error
+ * positive return value -> userns creation failed
+ * 0                     -> userns creation succeeded
+ */
+static int create_user_ns(void)
+{
+	pid_t pid;
+
+	pid = fork();
+	if (pid < 0)
+		return -1;
+
+	if (pid == 0) {
+		if (unshare(CLONE_NEWUSER))
+			_exit(EXIT_FAILURE);
+		_exit(EXIT_SUCCESS);
+	}
+
+	return wait_for_pid(pid);
+}
+
+Same difference since both codepaths hit the right spot in the kernel.
+
+> +
+> +static void test_userns_create_bpf(void)
+> +{
+> +	__u32 cap_mask = 1ULL << CAP_SYS_ADMIN;
+> +	__u64 old_caps = 0;
+> +
+> +	ASSERT_OK(create_new_user_ns(), "priv new user ns");
+> +
+> +	cap_disable_effective(cap_mask, &old_caps);
+> +
+> +	ASSERT_EQ(create_new_user_ns(), EPERM, "unpriv new user ns");
+> +
+> +	if (cap_mask & old_caps)
+> +		cap_enable_effective(cap_mask, NULL);
+> +}
+> +
+> +static void test_unpriv_userns_create_no_bpf(void)
+> +{
+> +	__u32 cap_mask = 1ULL << CAP_SYS_ADMIN;
+> +	__u64 old_caps = 0;
+> +
+> +	cap_disable_effective(cap_mask, &old_caps);
+> +
+> +	ASSERT_OK(create_new_user_ns(), "no-bpf unpriv new user ns");
+> +
+> +	if (cap_mask & old_caps)
+> +		cap_enable_effective(cap_mask, NULL);
+> +}
+> +
+> +void test_deny_namespace(void)
+> +{
+> +	struct test_deny_namespace *skel = NULL;
+> +	int err;
+> +
+> +	if (test__start_subtest("unpriv_userns_create_no_bpf"))
+> +		test_unpriv_userns_create_no_bpf();
+> +
+> +	skel = test_deny_namespace__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel load"))
+> +		goto close_prog;
+> +
+> +	err = test_deny_namespace__attach(skel);
+> +	if (!ASSERT_OK(err, "attach"))
+> +		goto close_prog;
+> +
+> +	if (test__start_subtest("userns_create_bpf"))
+> +		test_userns_create_bpf();
+> +
+> +	test_deny_namespace__detach(skel);
+> +
+> +close_prog:
+> +	test_deny_namespace__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_deny_namespace.c b/tools/testing/selftests/bpf/progs/test_deny_namespace.c
+> new file mode 100644
+> index 000000000000..9ec9dabc8372
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_deny_namespace.c
+> @@ -0,0 +1,39 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <errno.h>
+> +#include <linux/capability.h>
+> +
+> +struct kernel_cap_struct {
+> +	__u32 cap[_LINUX_CAPABILITY_U32S_3];
+> +} __attribute__((preserve_access_index));
+> +
+> +struct cred {
+> +	struct kernel_cap_struct cap_effective;
+> +} __attribute__((preserve_access_index));
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("lsm/userns_create")
+> +int BPF_PROG(test_userns_create, const struct cred *cred, int ret)
+> +{
+> +	struct kernel_cap_struct caps = cred->cap_effective;
+> +	int cap_index = CAP_TO_INDEX(CAP_SYS_ADMIN);
+> +	__u32 cap_mask = CAP_TO_MASK(CAP_SYS_ADMIN);
+> +
+> +	if (ret)
+> +		return 0;
+> +
+> +	ret = -EPERM;
+> +	if (caps.cap[cap_index] & cap_mask)
+> +		return 0;
+> +
+> +	return -EPERM;
+> +}
+
+Looks nice and simple.
+Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
