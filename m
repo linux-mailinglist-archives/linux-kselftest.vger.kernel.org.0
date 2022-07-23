@@ -2,133 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480B657EC16
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Jul 2022 06:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6100557EC55
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Jul 2022 08:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236669AbiGWE22 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 23 Jul 2022 00:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S231246AbiGWGdl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 23 Jul 2022 02:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiGWE21 (ORCPT
+        with ESMTP id S229708AbiGWGdk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 23 Jul 2022 00:28:27 -0400
-Received: from a8-29.smtp-out.amazonses.com (a8-29.smtp-out.amazonses.com [54.240.8.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6331812AF6;
-        Fri, 22 Jul 2022 21:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1658550505;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
-        bh=GGJWt9rFSxw6NTvnki0eUanQBBApejilO+ZQi+JxA7Y=;
-        b=tY5Ao8Nbwwn1lANPY2uzzttEKC78ZlSG2rHKuANjrNuN60ah96+qDdWiKBOheG+1
-        9JgsoB4WAIfnrhAhvyQk7ugaNXOLMpVvBb4ppJAJgtO39uGtJzfNszXK4VwceTD5WxH
-        CGBP6QJp+M6nYXCOwXDk3WQ/AYzTCdGpygdUGQhw=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1658550505;
-        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
-        bh=GGJWt9rFSxw6NTvnki0eUanQBBApejilO+ZQi+JxA7Y=;
-        b=RqkWgV8w8lIuBNwZGc+UxxUrjO7wf6s80oUvtgRsy3KnbFnkkh3S3QEyR+vejKul
-        lCMKNaj4aGoEtKDMfqpLR6IZL1To16VPivEDut4K009YLt48gzhy7jeZ2zGRbJSQasW
-        eMZ0H/BhWW7TwoRruc3uoRcLUi6YJPL3jnEq/ZXA=
-From:   lkft@linaro.org
-To:     lkft@linaro.org
-Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        linux-next@vger.kernel.org, shuah@kernel.org
-Subject: [REGRESSION] lkft kselftest for next-20220722
+        Sat, 23 Jul 2022 02:33:40 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E225851A09
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 23:33:35 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id b81so2918518vkf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Jul 2022 23:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BfpIOV/6ZvhwkFNNi8F5n6UGeETzcQ0Ic7VQTjCcaxA=;
+        b=T8THoq6U5rrJ6eOYnptWyaffD33E8b6arT8i7Fvu3PMM8WjwopfPP7FK1MCR60/LUT
+         60AtWKe+av+lrxVtHbOkq/NrgxArG9NWpVkOG5aeXSb6XMu6rClL+ux9fBwdxEbNhuqm
+         XUNCmj12Ktce3ApVxwtETXUylNRuzEhZOswTa6YdbyZOHYH78pzWpJWwlf5NQCQNNidK
+         xBojGlWIXKPodPmAwsuVy87Ad/RTWLR9YR08ZcqELX6Hkj5d1MPhq3h/wkOGSXAA75A7
+         cKeoulaRK+6zV4LFnZuO8ZT9RO38M+MBT9hsYhy5WuNHt8vmJ1ZMjH8RCUG7OjKAvB2x
+         nUmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BfpIOV/6ZvhwkFNNi8F5n6UGeETzcQ0Ic7VQTjCcaxA=;
+        b=S+bZ+K1MFiO5ZnLa9S6ijfmVpIPmxsa6850RJ6UefIJ/SIysGIUrvlXJ9cM3TepvQV
+         KhSImB5BotjKIz45deajSoNCXtCyZ0AIrc4kspNex8yCvzuMJM2qeeM7Dvs7J72/kzdB
+         E1pDEkwtA8PJR4r2ACSNbWRZLbzoaC4Ug1Y0tRBefKlylDSc631q22teeQLuUJPtg6Qv
+         MBttMt48SVepCbQWh9m0dJ3dF7o31xsInv+TQnKG+SsaVcGMC2KKtwPsjdt9/mgZHWNM
+         ocuVMfndws0gTHtseaB7m2oMWuN4xQrpPSf+LPDiSyjRgUcKI6o42ZkdC9LHRNyRunPH
+         jBGw==
+X-Gm-Message-State: AJIora+yYiMIUNjRye4QIx/QnzQz2P8IQk6JDSQI32Sor0tYJV2kb4yY
+        WJ8yai8Jb6D5UXcWyMZFvbZYo68vsmBpsA16jERltg==
+X-Google-Smtp-Source: AGRyM1tRd8CzElUHBeDtzmGnV1yUfi7c8RHRAmVBCaCVgIsof/b/Ob6GDs1QKgyF8YI4pAW5kXGdCY+RBq7EcApefuw=
+X-Received: by 2002:a1f:bf54:0:b0:375:fdf2:e014 with SMTP id
+ p81-20020a1fbf54000000b00375fdf2e014mr938673vkf.4.1658558014485; Fri, 22 Jul
+ 2022 23:33:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Message-ID: <0100018229504f6c-f5ff9662-0f95-4090-a6ef-d8701de534d0-000000@email.amazonses.com>
-Date:   Sat, 23 Jul 2022 04:28:25 +0000
-Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
-X-SES-Outgoing: 2022.07.23-54.240.8.29
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
+References: <20220722171534.3576419-1-dlatypov@google.com> <20220722171534.3576419-5-dlatypov@google.com>
+In-Reply-To: <20220722171534.3576419-5-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 23 Jul 2022 14:33:23 +0800
+Message-ID: <CABVgOS=pbEhUn3Hm7hrtQSQcqmj9a5T1MXNgomtbjsFc1RaphA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] kunit: make kunit_kfree(NULL) a no-op to match kfree()
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-## Build
-* kernel: 5.19.0-rc7
-* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-* git branch: master
-* git commit: 18c107a1f120d095404d141dfad8f594bdc44020
-* git describe: next-20220722
-* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220722
+On Sat, Jul 23, 2022 at 1:15 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> The real kfree() function will silently return when given a NULL.
+> So a user might reasonably think they can write the following code:
+>   char *buffer = NULL;
+>   if (param->use_buffer) buffer = kunit_kzalloc(test, 10, GFP_KERNEL);
+>   ...
+>   kunit_kfree(test, buffer);
+>
+> As-is, kunit_kfree() will mark the test as FAILED when buffer is NULL.
+> (And in earlier times, it would segfault).
+>
+> Let's match the semantics of kfree().
+>
+> Suggested-by: David Gow <davidgow@google.com>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+> v1 -> v2: add this patch to the series.
+> ---
 
-## Test Regressions (compared to next-20220721)
-* qemu_arm, kselftest-seccomp
-  - seccomp.seccomp_benchmark
+Thanks! This looks good to me, and worked with a basic test.
 
+Reviewed-by: David Gow <davidgow@google.com>
 
-## Metric Regressions (compared to next-20220721)
-No metric regressions found.
+Cheers,
+-- David
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to next-20220721)
-* qemu_arm, kselftest-rtc
-  - rtc.rtctest
-  - rtc.rtctest.rtc.date_read_loop
-
-
-## Metric Fixes (compared to next-20220721)
-No metric fixes found.
-
-## Test result summary
-total: 345, pass: 168, fail: 43, skip: 134, xfail: 0
-
-## Build Summary
-
-## Test suites summary
-* kselftest-android
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-gpio
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-lib
-* kselftest-membarrier
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-
---
-Linaro LKFT
-https://lkft.linaro.org
+>  lib/kunit/test.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index c7ca87484968..879c8db36cb5 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -698,6 +698,9 @@ static inline bool kunit_kfree_match(struct kunit *test,
+>
+>  void kunit_kfree(struct kunit *test, const void *ptr)
+>  {
+> +       if (!ptr)
+> +               return;
+> +
+>         if (kunit_destroy_resource(test, kunit_kfree_match, (void *)ptr))
+>                 KUNIT_FAIL(test, "kunit_kfree: %px already freed or not allocated by kunit", ptr);
+>  }
+> --
+> 2.37.1.359.gd136c6c3e2-goog
+>
