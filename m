@@ -2,66 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAAF57E6D6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Jul 2022 20:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480B657EC16
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Jul 2022 06:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbiGVSwc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Jul 2022 14:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S236669AbiGWE22 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 23 Jul 2022 00:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbiGVSwa (ORCPT
+        with ESMTP id S229450AbiGWE21 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Jul 2022 14:52:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8DA15717;
-        Fri, 22 Jul 2022 11:52:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF6C6615B1;
-        Fri, 22 Jul 2022 18:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D11C341C6;
-        Fri, 22 Jul 2022 18:52:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658515949;
-        bh=uiTw0wKPq/jzdb0N0fMrtXtSdd1S16S94ztt5XtscTM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RVjGBAVZSy6D45dSNeY2SF7+UhlZ1neRaym4VSM2BD19uIHHRsb1f/dbUT2XAAzBD
-         uGDl0UqymLzIsQTLHQ0pMPZR0C3XfVAcRwdoI3a7rdS0MZUvtPIJ19ufxp3nUvNnC4
-         gMom2IfjvAKnMCEGD+fUHkjLBbVQfAv832D8KHHvZV9nzdLD1+3E2t3nRsJo89sS6I
-         FFPPVPb9hRvriulWruhYGp1xlSyIn8i7BsJH2M7AoAh/VZ4w3+fvpBHD3/y4/VtUdp
-         T2hoVJOonQkXfO6vveYeVmnarrySMBRqy413ajdRm3f68kQHtzdY4HvU8JiAId6fl2
-         PW/qBkCLrvKew==
-Date:   Fri, 22 Jul 2022 11:52:27 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, shuah@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        peterz@infradead.org, dvhart@infradead.org, dave@stgolabs.net,
-        andrealmeid@igalia.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] selftests: Fix typo 'the the' in comment
-Message-ID: <20220722115227.624aa650@kernel.org>
-In-Reply-To: <20220722104259.83599-1-slark_xiao@163.com>
-References: <20220722104259.83599-1-slark_xiao@163.com>
+        Sat, 23 Jul 2022 00:28:27 -0400
+Received: from a8-29.smtp-out.amazonses.com (a8-29.smtp-out.amazonses.com [54.240.8.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6331812AF6;
+        Fri, 22 Jul 2022 21:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1658550505;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=GGJWt9rFSxw6NTvnki0eUanQBBApejilO+ZQi+JxA7Y=;
+        b=tY5Ao8Nbwwn1lANPY2uzzttEKC78ZlSG2rHKuANjrNuN60ah96+qDdWiKBOheG+1
+        9JgsoB4WAIfnrhAhvyQk7ugaNXOLMpVvBb4ppJAJgtO39uGtJzfNszXK4VwceTD5WxH
+        CGBP6QJp+M6nYXCOwXDk3WQ/AYzTCdGpygdUGQhw=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1658550505;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=GGJWt9rFSxw6NTvnki0eUanQBBApejilO+ZQi+JxA7Y=;
+        b=RqkWgV8w8lIuBNwZGc+UxxUrjO7wf6s80oUvtgRsy3KnbFnkkh3S3QEyR+vejKul
+        lCMKNaj4aGoEtKDMfqpLR6IZL1To16VPivEDut4K009YLt48gzhy7jeZ2zGRbJSQasW
+        eMZ0H/BhWW7TwoRruc3uoRcLUi6YJPL3jnEq/ZXA=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: [REGRESSION] lkft kselftest for next-20220722
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <0100018229504f6c-f5ff9662-0f95-4090-a6ef-d8701de534d0-000000@email.amazonses.com>
+Date:   Sat, 23 Jul 2022 04:28:25 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.07.23-54.240.8.29
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 22 Jul 2022 18:42:59 +0800 Slark Xiao wrote:
-> Replace 'the the' with 'the' in the comment.
-> 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
->  .../futex/functional/futex_requeue_pi_signal_restart.c          | 2 +-
->  tools/testing/selftests/net/forwarding/vxlan_asymmetric.sh      | 2 +-
+## Build
+* kernel: 5.19.0-rc7
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 18c107a1f120d095404d141dfad8f594bdc44020
+* git describe: next-20220722
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220722
 
-You need to split this by the subsystem.
+## Test Regressions (compared to next-20220721)
+* qemu_arm, kselftest-seccomp
+  - seccomp.seccomp_benchmark
+
+
+## Metric Regressions (compared to next-20220721)
+No metric regressions found.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220721)
+* qemu_arm, kselftest-rtc
+  - rtc.rtctest
+  - rtc.rtctest.rtc.date_read_loop
+
+
+## Metric Fixes (compared to next-20220721)
+No metric fixes found.
+
+## Test result summary
+total: 345, pass: 168, fail: 43, skip: 134, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+* kselftest-android
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-gpio
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-lib
+* kselftest-membarrier
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+
+--
+Linaro LKFT
+https://lkft.linaro.org
