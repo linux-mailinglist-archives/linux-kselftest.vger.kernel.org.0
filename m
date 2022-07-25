@@ -2,71 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F38A580716
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jul 2022 00:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB295807D4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jul 2022 00:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236932AbiGYWHy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Jul 2022 18:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S237616AbiGYWxm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Jul 2022 18:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236979AbiGYWHu (ORCPT
+        with ESMTP id S231220AbiGYWxk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:07:50 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473F422BD9;
-        Mon, 25 Jul 2022 15:07:49 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1658786866;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NaV3pwTotSWczUCLcr3u0HZUmIVekNWTojKE6SNQdwY=;
-        b=HyMqri5hcE3oLHwylr9oBkM/zKR3PvX87dYccgUggvlny63FjWaA50r4fO69TPGd4B67tv
-        y22aRmG7j6qTt6h+dTc6y0XyReCwaMaHIyHeQLFfO7CIc8mxziVPmiD2xE92K9EYnUwgys
-        cRmFe3KdcT9OLqIlNaT5wP5m51dbZ/M=
-From:   Brendan Higgins <brendan.higgins@linux.dev>
-To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        akpm@linux-foundation.org, brendanhiggins@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendan.higgins@linux.dev>
-Subject: [PATCH v1] MAINTAINERS: kunit: Add David Gow as a maintainer of KUnit
-Date:   Mon, 25 Jul 2022 18:07:37 -0400
-Message-Id: <20220725220737.790976-1-brendan.higgins@linux.dev>
+        Mon, 25 Jul 2022 18:53:40 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F00C1F2D5
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 15:53:39 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id u5so17911383wrm.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 15:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/W5yt/hqpa2H9l51KPyc7KtGFLwJRO5GtKdVuzCYcYE=;
+        b=eRiyLuxpX5qC8hQzrRkg9frLl3gSC//o1oyul/HoGdiNoF4so6toscBjafhGAfLQqp
+         UCQghoJOnPMwYy0xIHbRlsbkOyD4ektNaPpsrnGpnIlwnydmsHdNvVWSDXiObsYavolQ
+         7R9fpfH9/S4xUCE48oVAhrrLdNjiAmJBq47B5m9UMaOVMHUD9QB7mJrifTVcP6fdgeH8
+         wIXb/bkULIJKGTX2mtNfykVdShVFSTtMxCwl2eqvu7rrTu8g5gyuddq7KlYNBQws6Mb2
+         fnbp/R1KutfkZXIE80k12jmE3KUrvJxhFXu33hIrDM9gJvLIwcHEpdtbMY4NQG2VxAbg
+         71dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/W5yt/hqpa2H9l51KPyc7KtGFLwJRO5GtKdVuzCYcYE=;
+        b=huOzS3hRxDsMbCow8lJ7KKlxhBoEav+iUzsgdpdYTi4tzkhuut9joyL0IrGE8EkvS4
+         c+kWOacLzPPR0TysNJw+6/imI3jU5q3mjXvgtUwBpv3Pq32QcbhEQJYLPAkzJqsfDQXc
+         p07U7h4aQs3/XdJaY+vMWCE+3QU/RspRNYCQ/qkOFaiM/v2b+W+w/xYesxH0K3qgXQ36
+         f6xuTFi8/SrBTcXjBcXvLDOReaN/XdkidO0HqqPIvvLT2b9tQo2kpDDYuGPoSaSQTfXS
+         7Ihl9jOjVfG7HWITIozAwWNASrLFas95NmphE/RRc6/LFu9g6DDuCCWubZX8kDd2G/8y
+         JMOQ==
+X-Gm-Message-State: AJIora8RyLs6Zp+lYBMIoPjwbP3jBl0Bn9QMBm0Kk4BRzFV6hfwttUTR
+        +HRGbRgWWKGOHiknTPeeTcdKGROjny5vVlsnbkSC
+X-Google-Smtp-Source: AGRyM1sHda4R7slO2THldYmCB6hufThJf2miVQonTYTic0+WRH9UBEOBbGg/X6g4BlFU1purnp8Q+Tj47z8FJeAvPUY=
+X-Received: by 2002:adf:fb86:0:b0:21e:3cc8:a917 with SMTP id
+ a6-20020adffb86000000b0021e3cc8a917mr9220347wrr.538.1658789617917; Mon, 25
+ Jul 2022 15:53:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220721172808.585539-1-fred@cloudflare.com> <877d45kri4.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <877d45kri4.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 25 Jul 2022 18:53:26 -0400
+Message-ID: <CAHC9VhQXSXWv=+WYwU=Qq0w3rd+zOFPHL5yut1JdV2K=DDRmmg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-David has been a de facto maintainer of KUnit for a long time now.
-Formalize this in the MAINTAINERS file.
+On Fri, Jul 22, 2022 at 1:05 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Frederick Lawler <fred@cloudflare.com> writes:
+>
+> > While creating a LSM BPF MAC policy to block user namespace creation, we
+> > used the LSM cred_prepare hook because that is the closest hook to prevent
+> > a call to create_user_ns().
+>
+> That description is wrong.  Your goal his is not to limit access to
+> the user namespace.  Your goal is to reduce the attack surface of the
+> kernel by not allowing some processes access to a user namespace.
+>
+> You have already said that you don't have concerns about the
+> fundamentals of the user namespace, and what it enables only that
+> it allows access to exploitable code.
+>
+> Achieving the protection you seek requires talking and thinking clearly
+> about the goal.
 
-Signed-off-by: Brendan Higgins <brendan.higgins@linux.dev>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Providing a single concrete goal for a LSM hook is always going to be
+a challenge due to the nature of the LSM layer and the great unknown
+of all the different LSMs that are implemented underneath the LSM
+abstraction.  However, we can make some very general statements such
+that up to this point the LSMs that have been merged into mainline
+generally provide some level of access control, observability, or
+both.  While that may change in the future (the LSM layer does not
+attempt to restrict LSMs to just these two ideas), I think they are
+"good enough" goals for this discussion.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 64379c699903..782da36b524f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10890,6 +10890,7 @@ F:	fs/smbfs_common/
- 
- KERNEL UNIT TESTING FRAMEWORK (KUnit)
- M:	Brendan Higgins <brendanhiggins@google.com>
-+M:	David Gow <davidgow@google.com>
- L:	linux-kselftest@vger.kernel.org
- L:	kunit-dev@googlegroups.com
- S:	Maintained
+In addition to thinking about these goals, I think it also important
+to take a step back and think about the original motivation for the
+LSM and why it, and Linux itself, has proven to be popular with
+everything from the phone in your hand to the datacenter servers
+powering ... pretty much everything :)  Arguably Linux has seen such
+profound success because of its malleability; the open nature of the
+kernel development process has allowed the Linux Kernel to adopt
+capabilities well beyond what any one dev team could produce, and as
+Linux continues to grow in adoption, its ability to flex into new use
+cases only increases.  The kernel namespace concept is an excellent
+example of this: virtualizing core kernel ideas, such as user
+credentials, to provide better, safer solutions.  It is my belief that
+the LSM layer is very much built around this same idea of abstracting
+and extending core kernel concepts, in this case security controls, to
+provide better solutions.  Integrating the LSM into the kernel's
+namespaces is a natural fit, and one that is long overdue.
+
+If we can't find a way to make everyone happy here, let's at least try
+to find a way to make everyone "okay" with adding a LSM hook to the
+user namespace.  If you want to NACK this approach Eric, that's okay,
+but please provide some alternative paths forward that we can discuss.
+
 -- 
-2.37.1.359.gd136c6c3e2-goog
-
+paul-moore.com
