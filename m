@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6365807E3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jul 2022 00:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9EA5807FB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jul 2022 01:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiGYW7w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Jul 2022 18:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S237256AbiGYXIG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Jul 2022 19:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbiGYW7v (ORCPT
+        with ESMTP id S230015AbiGYXIF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jul 2022 18:59:51 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA4924BC0
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 15:59:50 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id t28so6324242vsr.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 15:59:50 -0700 (PDT)
+        Mon, 25 Jul 2022 19:08:05 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DA925EBE
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 16:08:05 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id 125so12112889vsx.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 16:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hXhWP11VTgZqJwya/H8vlJtLSQg5ycDJEbpGIu+f5Ks=;
-        b=JYRFYeYwku2lNiJA3Z45SU/IzsEJ5ANUGcvsSNJXvbVD0pyMltrx/RkdDOY8ZPn/zV
-         vXO4fdE93KXrvYcdfH1d2bSI8IbqfEQyRPhGfHAFlQpaSXXowBfny2TY1NbknBmZmZcR
-         JI5VB8k8bre1YQJnfuZZD54rF6lmyIEX2g/9TLMDADh4QZxsGkEMydhgTgEDk3qNyfoA
-         RCOCf368tnXzSigRLV3Q94Lv8Jl+Qd6GbhGB6JuULSovWUz8Uo6tBTFnhG7ss2IM4Boi
-         AycdALiKptH9P1zGl32Li9kJdn1nn/vaoGb1XKmACIPnWK0q5VuCTu/+Jttou3JeLGk6
-         7E/g==
+        bh=zkY/e+fl3gDMkETHbn5aoTAGlSMWr/d2acilti2HJIQ=;
+        b=UksbqqYWs0jrueBrp20tHnR1kxDEvr2Z9q1AtG5F3Ulcj3m+bomiW4LvkJZB3vmtum
+         fczDohLZ0Xvtz84DB6Unsa5e0i3bVXkpIU2NIK5JIT9VGLl7Fkc09IcHZKXh+6tK7V33
+         oimklE8YY62YNSTjhhNmW3yLrxI5X8dlTof0+HaNtlH6WU5WVW+rOAt9rXpTvQe75hR6
+         fYOclCTkoR1l5FYK1iX7lvyfDAJ4QHRrm3FbpuleLgSdmY+VtKj8ojPx7h4jhDiBlVz5
+         yCHgN0Tf+4m3DsvNs8/AAPKa36n9rBv5O7lauWZQ3CmuFCIQHIQzasUgsQkvoK3aCo2m
+         /f5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hXhWP11VTgZqJwya/H8vlJtLSQg5ycDJEbpGIu+f5Ks=;
-        b=wPDWEE9MkSdxa0SdUsDX9uL3mtt2LFD/q4sC+1+Sz0fE6hANhMM16oJW3hNT0jGfmi
-         vNWvBDsce2VoR9N58QCnayGImKedK1PB7qtJdqi/FM3IeJO+mVqmMuIUCPrECpBhoqfr
-         fdCVZkREor1b2BbE1ED7OQKUfN5PLIM7iZae1vvCzOdCu4LzL4e2jKptlUunAhGooZcc
-         nsDHj5G+jQkAAvjOExzf0ccCEJpBL65IQ0YFG0qFDNfRfkR8ZQUE09IyQJaz8O7/Ksu2
-         b4/5tnWIILXT5aRrO0J2N+9q8NuN3NXWf+7z1cm840YlOcJxbbbnJ/Xsk5y0+9aX4AMY
-         SkMg==
-X-Gm-Message-State: AJIora9wcekehmKCEm+P/g7ZNXemJkBc7vNBmitIxkaXJsySr9lfBFHy
-        UTSZAzkEEFjcOl09zeNJVbdktWJG4b5m7VtlZVgY5w==
-X-Google-Smtp-Source: AGRyM1txeYROppOrJlt4vza3VOJJHwj7jb27wdZfgxrcWQhDyJKy1Vyk0JFPaGUSAAf/L4Qw3wg39/ZxqOXQ6PgCGQE=
-X-Received: by 2002:a67:c191:0:b0:358:5ca6:f98d with SMTP id
- h17-20020a67c191000000b003585ca6f98dmr2307535vsj.71.1658789989378; Mon, 25
- Jul 2022 15:59:49 -0700 (PDT)
+        bh=zkY/e+fl3gDMkETHbn5aoTAGlSMWr/d2acilti2HJIQ=;
+        b=0yZpwP/+Q8AI1w8FKSrdTxn+q/jfrMmYcs8iMMbBwfGXGQJinPTV7KEhj4ZAFpY7yN
+         lHlemK4MMCkzThxQvKj7A8ZEVzC5FnX/S+pEcWhZgTgLl2TEENLR8UYzCDAfdhqgF+2+
+         SCpufDAPWbZPCgp695v9PQbtw9+ceq54bWbe/NhV0eS1foaKyWcBz5S9ZlbPmvQ+jVmi
+         SZF3dUeIcAWQNbYF91m5SmhOPb0P5Ra4d0XutNkpi2x65Jitj9Vgj2D+79vpbQYX+wjC
+         LYc54CtJdPmotl+Qo9kIfBc9MJQ7acHQh1omSEDj+NtfTpQLwU/74WUKUbddZbvH2YAR
+         Otxw==
+X-Gm-Message-State: AJIora9pkScxUaJzht2W2uDebA2HINeXDrYJ5aOr9LS5mEydIvYmv+bF
+        /P9TUoXlqyzaLuJW03iqIZB3OZoVDOPX1EkYHxb88g==
+X-Google-Smtp-Source: AGRyM1trUHx740JXOhF822MVVPBKpyrcjwW+mY3C1BD/Wbgm7+rjQGOkbBdl0CC3P7ZJL6HEK/WWuXmAgxjPqpRCI+A=
+X-Received: by 2002:a67:cb0c:0:b0:357:9897:32d4 with SMTP id
+ b12-20020a67cb0c000000b00357989732d4mr4232909vsl.18.1658790483899; Mon, 25
+ Jul 2022 16:08:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220725215833.789133-1-brendan.higgins@linux.dev>
-In-Reply-To: <20220725215833.789133-1-brendan.higgins@linux.dev>
+References: <20220725220737.790976-1-brendan.higgins@linux.dev>
+In-Reply-To: <20220725220737.790976-1-brendan.higgins@linux.dev>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 26 Jul 2022 06:59:38 +0800
-Message-ID: <CABVgOSnFQdGfZEF5ZryzsBLcK8ZeATjhKbpeYC4_E4unJcJkyg@mail.gmail.com>
-Subject: Re: [PATCH v1] mailmap: add linux.dev alias for Brendan Higgins
+Date:   Tue, 26 Jul 2022 07:07:52 +0800
+Message-ID: <CABVgOSnr_5AubtafbkJQA4sCEnhU8_of+TdPPFinaZEONwXwww@mail.gmail.com>
+Subject: Re: [PATCH v1] MAINTAINERS: kunit: Add David Gow as a maintainer of KUnit
 To:     Brendan Higgins <brendan.higgins@linux.dev>
 Cc:     Shuah Khan <shuah@kernel.org>,
         Daniel Latypov <dlatypov@google.com>,
@@ -62,7 +62,7 @@ Cc:     Shuah Khan <shuah@kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000178cf905e4a92483"
+        boundary="0000000000009096e405e4a941c6"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -74,47 +74,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000178cf905e4a92483
+--0000000000009096e405e4a941c6
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jul 26, 2022 at 5:58 AM Brendan Higgins
+On Tue, Jul 26, 2022 at 6:07 AM Brendan Higgins
 <brendan.higgins@linux.dev> wrote:
 >
-> Because of my new work remote setup at Google, I can no longer use
-> command line tools with my google.com email address, for this reason I
-> got a linux.dev account. So update the mailmap to show the new alias I
-> will be using.
+> David has been a de facto maintainer of KUnit for a long time now.
+> Formalize this in the MAINTAINERS file.
 >
 > Signed-off-by: Brendan Higgins <brendan.higgins@linux.dev>
 > ---
 
-I can confirm that this is the same Brendan we know and love, and that
-he's been complaining about broken email for weeks. :-)
+Thanks very much -- I'm looking forward helping KUnit continue its
+path to world domination!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
+Cheers,
 -- David
 
->  .mailmap | 1 +
+>  MAINTAINERS | 1 +
 >  1 file changed, 1 insertion(+)
 >
-> diff --git a/.mailmap b/.mailmap
-> index 13e4f504e17f..24aca1d3a5f1 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -74,6 +74,7 @@ Boris Brezillon <bbrezillon@kernel.org> <b.brezillon.dev@gmail.com>
->  Boris Brezillon <bbrezillon@kernel.org> <b.brezillon@overkiz.com>
->  Boris Brezillon <bbrezillon@kernel.org> <boris.brezillon@bootlin.com>
->  Boris Brezillon <bbrezillon@kernel.org> <boris.brezillon@free-electrons.com>
-> +Brendan Higgins <brendan.higgins@linux.dev> <brendanhiggins@google.com>
->  Brian Avery <b.avery@hp.com>
->  Brian King <brking@us.ibm.com>
->  Brian Silverman <bsilver16384@gmail.com> <brian.silverman@bluerivertech.com>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 64379c699903..782da36b524f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10890,6 +10890,7 @@ F:      fs/smbfs_common/
+>
+>  KERNEL UNIT TESTING FRAMEWORK (KUnit)
+>  M:     Brendan Higgins <brendanhiggins@google.com>
+> +M:     David Gow <davidgow@google.com>
+>  L:     linux-kselftest@vger.kernel.org
+>  L:     kunit-dev@googlegroups.com
+>  S:     Maintained
 > --
 > 2.37.1.359.gd136c6c3e2-goog
 >
 
---000000000000178cf905e4a92483
+--0000000000009096e405e4a941c6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -181,14 +180,14 @@ OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
 3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
 lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAm
-wxtkNoaeZBSFccr5BHpogYhiScjKRgfyI2PG/CznVzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjUyMjU5NDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA3
+IsAuwDEegL8cJwMbfgpyCcamJKM6Vs55ZlDhewI1uTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjUyMzA4MDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAhoPsNIVbyi0Uk9u1E/rj
-n8QpWQKgRjYWxWB86vwsH8+Y/7o0xNqVKE0mMDfnhnrPfcI9J8mYd9hnMBEw4MUW8CFgqUv6wJb0
-L6qzQk6jVxNizAo22E0Z4LoQjeio8z35vgnjgNxXMSGk6CYuCjfFpqYHcFAMXemg9PwA2ebvj1rj
-gclwdUcfX+d4eU+0g4D8Oq4lzOiOk9g2qKzjkb5W2J05+oC5ikzUHeNsKXZhnQ5bQkdn/Z9Zm0e+
-u1J8Bso1Q/8lIK1ZgodOP9Lqk2epRCMMqbU7UtCk64o0jGtkHOhQUIurmFEpwnzirf4+VfOJ8thG
-F+QIMPs/3vkWBKCulg==
---000000000000178cf905e4a92483--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAG5/vPLvdr7rMdPNDFkh
+kd5mW7JCdkGP6Rnl9/0mSanK9G54kEHWfJaNUGXSkmWqYNaEBR2023ezfcGlAQwabjSI2UpwgkWS
+DR/qjjncMI8H1aBQcJdafQ0UwJfVZHsyJP79k6LLPBISc74ARGNbKOZHdTrK2EgWzJb4iTh9wiFf
+Q+jxYP0s+MO5J+lYY/EnMN59W1ImuYfUUM4ccYYooQQ1oPR9B5Jg73m75cyWLbliNYpWmNPJZXNr
+dVp/LJz4xtpEH4XZIb6RSTKY7IsCwJRKoJje87zoDSS3Hqhj9JjgI3kFVIu2MxhjczES7I1ede1T
+AFucKfOPF8Qs46cMHg==
+--0000000000009096e405e4a941c6--
