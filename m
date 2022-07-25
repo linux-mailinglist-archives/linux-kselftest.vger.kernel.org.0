@@ -2,190 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEEE5802D0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jul 2022 18:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566DC5804E5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Jul 2022 21:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236257AbiGYQhM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Jul 2022 12:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
+        id S230347AbiGYTzu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Jul 2022 15:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236236AbiGYQhL (ORCPT
+        with ESMTP id S229727AbiGYTzu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jul 2022 12:37:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36AE21A80F
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 09:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658767028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uX/CIl3/NQjIza59k4D84Jqt8oVMF3tjMbQv7DGeXfQ=;
-        b=b1yCVj8bq8+JMZ1a5n9a0dxZNwZfxCkJzDYppi3TYb9bs15rRT8upkon+GSIRPTd3FsjrP
-        QMMXw3kWicfOuEGO0aRkXTEsdZdHlzidPM6sjeU5aS5Shwf6P3Ms4cFvCdxJtKRPHK4ic/
-        pwdKIRP3ktRnE1uo9fug9HP2SnBxPqY=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-9--P2iOkoBNW-LqOneJIIOtg-1; Mon, 25 Jul 2022 12:37:07 -0400
-X-MC-Unique: -P2iOkoBNW-LqOneJIIOtg-1
-Received: by mail-pj1-f72.google.com with SMTP id q12-20020a17090a1b0c00b001f2710822e9so3417554pjq.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 09:37:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uX/CIl3/NQjIza59k4D84Jqt8oVMF3tjMbQv7DGeXfQ=;
-        b=Xi45kYXkHzfMnf6f+sUp1qKJEZuaZxxT8VevsKGpu/SQcA/dXApR+zkj9y4Xk0qJTo
-         Dj3wsea3a14lztUI6pGkTH4vIeGpyfdWdnAhsrwEpNcD3YAcqHY1wxcx5aPrWMX4haZs
-         igS8JAo8jcEEMGkRlxVe1wCC/lUxkkuHilBNpTnTwxCWDmx3fhfRSKSnOQYP/J0C6kaC
-         lgLvcLM7SuzMUL1yliGccEgEh/4Gx3LNGMp9PZLq1vWZmfXTE3HYSXHMwDBq0iI/Yzl0
-         NGDq0glbDYOc8YRhfvicadToduhW6x2UWRoz+h1u+01WtbsNEIB+8w54pcgxgWUJdZ0z
-         nAwQ==
-X-Gm-Message-State: AJIora9ONMdEAUmsAc+ZN8gGBND67GBNxhF4taonMpCO3ci5bux2Mm8R
-        IeUrZxc0FffzfBkxTHhsExwcL6qbXzfgMNjOp9SOUo6xRNA1e27LWTasTcWr08k3D0zB0qQFHo/
-        4uOXHsEgrFUQwuDGc0P4f1LkSSzYKDS99zVBuQePdEz+p
-X-Received: by 2002:a17:90b:4a10:b0:1f2:a45c:125 with SMTP id kk16-20020a17090b4a1000b001f2a45c0125mr8074811pjb.246.1658767025434;
-        Mon, 25 Jul 2022 09:37:05 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sPlHp+QRO5zqoXfQQgsIJG2b+XDIphd1zSrT/UPuRkDTksexdZfM2yMaSi/BkdosJi1NznSztsDTzgOqEBrDI=
-X-Received: by 2002:a17:90b:4a10:b0:1f2:a45c:125 with SMTP id
- kk16-20020a17090b4a1000b001f2a45c0125mr8074784pjb.246.1658767025181; Mon, 25
- Jul 2022 09:37:05 -0700 (PDT)
+        Mon, 25 Jul 2022 15:55:50 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E03B1FCD4;
+        Mon, 25 Jul 2022 12:55:49 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4Ls9l850sgzDqp7;
+        Mon, 25 Jul 2022 19:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1658778948; bh=mpReOiN/RY75zoMf4n89mpn8nYOfilNXT1Bz9nVZHtM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=rAOeofzZIFJw8oDhuu0BZeu2ckd7lmZm8zNsIJEIA9AbdBVQI0W1sTbVNuh/U3bRw
+         grCwSfIovVE5E6/eu/tm0eTqIaRHi7LeeGvDETVni3smPsCMj4qbq8cS+y4Mt3MfEN
+         7hlLTnszUc6/pV86yJeeJn2eEJDjmfwzcoBXfPX8=
+X-Riseup-User-ID: 4F0FA5B3531717062ABA367EF50A7BB26B56809C141FF3EF210042EAAD284977
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4Ls9l56ht1z5vgM;
+        Mon, 25 Jul 2022 19:55:45 +0000 (UTC)
+Message-ID: <bd697df8-7482-ec77-4b95-e97d6f4df959@riseup.net>
+Date:   Mon, 25 Jul 2022 16:55:42 -0300
 MIME-Version: 1.0
-References: <20220721153625.1282007-3-benjamin.tissoires@redhat.com>
- <20220722084556.1342406-1-benjamin.tissoires@redhat.com> <CAADnVQLypx8Yd7L4GByGNEJaWgg0R6ukNV9hz0ge1+ZdW4mdgQ@mail.gmail.com>
-In-Reply-To: <CAADnVQLypx8Yd7L4GByGNEJaWgg0R6ukNV9hz0ge1+ZdW4mdgQ@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Mon, 25 Jul 2022 18:36:54 +0200
-Message-ID: <CAO-hwJK5v8An5W48x2TDH=iNb49iEbC8uGwMbdCak0Bjnmea+w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 02/24] bpf/verifier: allow kfunc to read user
- provided context
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v3] Documentation: kunit: Add CLI args for kunit_tool
+Content-Language: en-US
+To:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
+        davidgow@google.com, skhan@linuxfoundation.org, corbet@lwn.net
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220724184758.1723925-1-sadiyakazi@google.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20220724184758.1723925-1-sadiyakazi@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 6:16 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Jul 22, 2022 at 1:46 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > When a kfunc was trying to access data from context in a syscall eBPF
-> > program, the verifier was rejecting the call.
-> > This is because the syscall context is not known at compile time, and
-> > so we need to check this when actually accessing it.
-> >
-> > Check for the valid memory access and allow such situation to happen.
-> >
-> > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >
-> > ---
-> >
-> > changes in v8:
-> > - fixup comment
-> > - return -EACCESS instead of -EINVAL for consistency
-> >
-> > changes in v7:
-> > - renamed access_t into atype
-> > - allow zero-byte read
-> > - check_mem_access() to the correct offset/size
-> >
-> > new in v6
-> > ---
-> >  kernel/bpf/verifier.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 7c1e056624f9..c807c5d7085a 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -248,6 +248,7 @@ struct bpf_call_arg_meta {
-> >         struct bpf_map *map_ptr;
-> >         bool raw_mode;
-> >         bool pkt_access;
-> > +       bool is_kfunc;
-> >         u8 release_regno;
-> >         int regno;
-> >         int access_size;
-> > @@ -5170,6 +5171,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
-> >                                    struct bpf_call_arg_meta *meta)
-> >  {
-> >         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
-> > +       enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
-> >         u32 *max_access;
-> >
-> >         switch (base_type(reg->type)) {
-> > @@ -5223,6 +5225,24 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
-> >                                 env,
-> >                                 regno, reg->off, access_size,
-> >                                 zero_size_allowed, ACCESS_HELPER, meta);
-> > +       case PTR_TO_CTX:
-> > +               /* in case of a kfunc called in a program of type SYSCALL, the context is
-> > +                * user supplied, so not computed statically.
-> > +                * Dynamically check it now
-> > +                */
-> > +               if (prog_type == BPF_PROG_TYPE_SYSCALL && meta && meta->is_kfunc) {
->
-> prog_type check looks a bit odd here.
-> Can we generalize with
-> if (!env->ops->convert_ctx_access
+Hi Sadiya,
 
-Yep, seems to be working fine for my use case and the test cases I
-have in this series.
+On 7/24/22 15:47, Sadiya Kazi wrote:
+> Run_wrapper.rst was missing some command line arguments. Added
+> additional args in the file.
+> 
+> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
 
->
-> In other words any program type that doesn't have ctx rewrites can
-> use helpers to access ctx fields ?
->
-> Also why kfunc only?
-> It looks safe to allow normal helpers as well.
+Usually, when people send their Reviewed-by on a previous version, we
+send the next version with their tags in chronological order [1].
 
-Well, not sure what is happening here, but if I remove the check for
-kfunc, the test for PTR_TO_CTX == NULL and size == 0 gives me a
--EINVAL.
+> ---
+> Changes since v2:
+> https://lore.kernel.org/linux-kselftest/20220721081026.1247067-1-sadiyakazi@google.com/
+> -Added a code block for —kconfig_add argument to make the styling consistent
+> -Slightly changed the words for —arch argument
+> -Changed QEMU to qemu wherever applicable for the cli args
+> -Changed the style for ``-smp 8``
+> -Changed "Might be repeated" to "may be repeated” for kernel_args
+> 
 
-The original reason for kfunc only was because I wanted to scope the
-changes to something I can control, but now I am completely out of
-ideas on why the NULL test fails if it enters the if branch.
+Also, it is a common practice to keep the entire changelog here [1].
 
-Unfortunately I won't have a lot of time this week to tackle this (I
-am on holiday with my family), and next will be tough too (at home but
-doing renovations).
+Other than the error reported-by kernel test robot, looks good to me.
 
-I can send the fixup to remove the prog_type check as I just made sure
-it works with the selftests. But I won't be able to dig further why it
-fails without the kfunc check, because not enough time and
-concentration.
+Reviewed-by: Maíra Canal <mairacanal@riseup.net>
 
-Cheers,
-Benjamin
+[1]
+https://docs.kernel.org/process/submitting-patches.html#the-canonical-patch-format
 
+Best Regards,
+- Maíra Canal
+
+> 
+> 
+> ---
+>  Documentation/dev-tools/kunit/run_wrapper.rst | 61 ++++++++++++++++++-
+>  1 file changed, 60 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+> index 5e560f2c5fca..ed3715fef32d 100644
+> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
+> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+> @@ -233,7 +233,7 @@ Command-Line Arguments
+>  ======================
+>  
+>  kunit_tool has a number of other command-line arguments which can
+> -be useful for our test environment. Below the most commonly used
+> +be useful for our test environment. Below are the most commonly used
+>  command line arguments:
+>  
+>  - ``--help``: Lists all available options. To list common options,
+> @@ -257,3 +257,62 @@ command line arguments:
+>              added or modified. Instead, enable all tests
+>              which have satisfied dependencies by adding
+>              ``CONFIG_KUNIT_ALL_TESTS=y`` to your ``.kunitconfig``.
+> +
+> +- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitconfig``
+> +  file. For example:
+> +
+> +  - ``lib/kunit/.kunitconfig`` can be the path of the file.
+> +
+> +  - ``lib/kunit`` can be the directory in which the file is located.
+> +
+> +  This file is used to build and run with a predefined set of tests
+> +  and their dependencies. For example, to run tests for a given subsystem.
+> +
+> +- ``--kconfig_add``: Specifies additional configuration options to be
+> +  appended to the ``.kunitconfig`` file. For example:
+> +  .. code-block::
+> +	./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y
+> +
+> +- ``--arch``: Runs tests on the specified architecture. The architecture
+> +  argument is same as the Kbuild ARCH environment variable.
+> +  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on qemu.
+> +  Default is `um`.
+> +
+> +- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
+> +  same argument as passed to the ``CROSS_COMPILE`` variable used by
+> +  Kbuild. This will be the prefix for the toolchain
+> +  binaries such as GCC. For example:
+> +
+> +  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
+> +    our system.
+> +
+> +  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/microblaze-linux``
+> +    if we have downloaded the microblaze toolchain from the 0-day
+> +    website to a specified path in our home directory called toolchains.
+> +
+> +- ``--qemu_config``: Specifies the path to a file containing a
+> +  custom qemu architecture definition. This should be a python file
+> +  containing a `QemuArchParams` object.
+> +
+> +- ``--qemu_args``: Specifies additional qemu arguments, for example, ``-smp 8``.
+> +
+> +- ``--jobs``: Specifies the number of jobs (commands) to run simultaneously.
+> +  By default, this is set to the number of cores on your system.
+> +
+> +- ``--timeout``: Specifies the maximum number of seconds allowed for all tests to run.
+> +  This does not include the time taken to build the tests.
+> +
+> +- ``--kernel_args``: Specifies additional kernel command-line arguments. May be repeated.
+> +
+> +- ``--run_isolated``: If set, boots the kernel for each individual suite/test.
+> +  This is useful for debugging a non-hermetic test, one that
+> +  might pass/fail based on what ran before it.
+> +
+> +- ``--raw_output``: If set, generates unformatted output from kernel. Possible options are:
+> +
+> +   - ``all``: To view the full kernel output, use ``--raw_output=all``.
+> +
+> +   - ``kunit``: This is the default option and filters to KUnit output. Use ``--raw_output`` or ``--raw_output=kunit``.
+> +
+> +- ``--json``: If set, stores the test results in a JSON format and prints to `stdout` or
+> +  saves to a file if a filename is specified.
