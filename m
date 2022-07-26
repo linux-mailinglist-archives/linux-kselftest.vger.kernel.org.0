@@ -2,71 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9EA5807FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jul 2022 01:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF2D580A39
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jul 2022 06:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237256AbiGYXIG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Jul 2022 19:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
+        id S230410AbiGZENR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jul 2022 00:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiGYXIF (ORCPT
+        with ESMTP id S229911AbiGZENQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Jul 2022 19:08:05 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DA925EBE
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 16:08:05 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id 125so12112889vsx.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 16:08:05 -0700 (PDT)
+        Tue, 26 Jul 2022 00:13:16 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C44205E4
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 21:13:13 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id j10-20020a62b60a000000b0052b30f6626bso4394385pff.17
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Jul 2022 21:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zkY/e+fl3gDMkETHbn5aoTAGlSMWr/d2acilti2HJIQ=;
-        b=UksbqqYWs0jrueBrp20tHnR1kxDEvr2Z9q1AtG5F3Ulcj3m+bomiW4LvkJZB3vmtum
-         fczDohLZ0Xvtz84DB6Unsa5e0i3bVXkpIU2NIK5JIT9VGLl7Fkc09IcHZKXh+6tK7V33
-         oimklE8YY62YNSTjhhNmW3yLrxI5X8dlTof0+HaNtlH6WU5WVW+rOAt9rXpTvQe75hR6
-         fYOclCTkoR1l5FYK1iX7lvyfDAJ4QHRrm3FbpuleLgSdmY+VtKj8ojPx7h4jhDiBlVz5
-         yCHgN0Tf+4m3DsvNs8/AAPKa36n9rBv5O7lauWZQ3CmuFCIQHIQzasUgsQkvoK3aCo2m
-         /f5Q==
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=VOgQF+G8SNdxv9KXxlnj8cWs1UtKcyFM/CeLPL1cf7A=;
+        b=qLZlSfzMGHj5dcZe2ZQFJyIeQ06FEbm0g27vehG1XYchRmx7b7dFsEJRhLVb8BUQZF
+         0JgQCGyPdVEFFFuhga7lHZebVqdL5fe8YG1dAlgsvgJkgDsmkHNXBtOr4pewYVd331GR
+         BAtr3f9upswaSut4UsqvHYu/To8Slq2GxHDR/Bp8thuQRHXqCniZqli8OqU1PPIXMKu3
+         DweGNS7NoFDDvFSrJTO1egKraeAQ/kM5SE2OuKExQyE2wmO3pVABWgYBIkN5spPdVud9
+         fVyrLBerlex3++Ff0OvH3+Vc7rZU/wzxkTmV3lk2i0IJqhpjNRpUFvkBw8mOa6xt1mNs
+         3e+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zkY/e+fl3gDMkETHbn5aoTAGlSMWr/d2acilti2HJIQ=;
-        b=0yZpwP/+Q8AI1w8FKSrdTxn+q/jfrMmYcs8iMMbBwfGXGQJinPTV7KEhj4ZAFpY7yN
-         lHlemK4MMCkzThxQvKj7A8ZEVzC5FnX/S+pEcWhZgTgLl2TEENLR8UYzCDAfdhqgF+2+
-         SCpufDAPWbZPCgp695v9PQbtw9+ceq54bWbe/NhV0eS1foaKyWcBz5S9ZlbPmvQ+jVmi
-         SZF3dUeIcAWQNbYF91m5SmhOPb0P5Ra4d0XutNkpi2x65Jitj9Vgj2D+79vpbQYX+wjC
-         LYc54CtJdPmotl+Qo9kIfBc9MJQ7acHQh1omSEDj+NtfTpQLwU/74WUKUbddZbvH2YAR
-         Otxw==
-X-Gm-Message-State: AJIora9pkScxUaJzht2W2uDebA2HINeXDrYJ5aOr9LS5mEydIvYmv+bF
-        /P9TUoXlqyzaLuJW03iqIZB3OZoVDOPX1EkYHxb88g==
-X-Google-Smtp-Source: AGRyM1trUHx740JXOhF822MVVPBKpyrcjwW+mY3C1BD/Wbgm7+rjQGOkbBdl0CC3P7ZJL6HEK/WWuXmAgxjPqpRCI+A=
-X-Received: by 2002:a67:cb0c:0:b0:357:9897:32d4 with SMTP id
- b12-20020a67cb0c000000b00357989732d4mr4232909vsl.18.1658790483899; Mon, 25
- Jul 2022 16:08:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220725220737.790976-1-brendan.higgins@linux.dev>
-In-Reply-To: <20220725220737.790976-1-brendan.higgins@linux.dev>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 26 Jul 2022 07:07:52 +0800
-Message-ID: <CABVgOSnr_5AubtafbkJQA4sCEnhU8_of+TdPPFinaZEONwXwww@mail.gmail.com>
-Subject: Re: [PATCH v1] MAINTAINERS: kunit: Add David Gow as a maintainer of KUnit
-To:     Brendan Higgins <brendan.higgins@linux.dev>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000009096e405e4a941c6"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=VOgQF+G8SNdxv9KXxlnj8cWs1UtKcyFM/CeLPL1cf7A=;
+        b=Rg8Z74pHX8PGm0gumkZOtRZcy+wpO/pnSl5SyIcKglokgS9wTAdXEn12igzMfoLnSG
+         3grxHsTeNs4+4fXAOGPjeKIBpTb5SC4lDAnRrhQxzQt2s7Am5hjAc9k3W6qs6p6I9HCc
+         2Wieo7dvVSwpDGJtH+jU+fD81B4xCrjQdgLCKZfoPId6OoTQ+eFI5hUcISKJzBhjZ2bB
+         jIMsAk0lWEEgSmY0wTKTnpQ15pbglEPR1a9fpoLfLwFG4D9vs5CADz/ubbulyjLDqAFp
+         CGCB/EUZPEWsksLqDJRqXbl+jJGX0jx3LRZGx4BT42HvGJY/iLoWy9f2HIu2GmJ78NMB
+         Ohzw==
+X-Gm-Message-State: AJIora9JeApj2w2JcSt4Z901gxqKoKKHjzvw0nV/KH6jaYhiQRdLPh0F
+        HnyDDdGnQDM2wuZtBxICtye+NyN5BfmEdJA0
+X-Google-Smtp-Source: AGRyM1vg1d/+z8ikDa8GdVjfcnaomA/orA9VGjZIdsqU/f5WKSvEZAKhcNt2ka+zCtEWu5HA4j956NpCVzrAQJai
+X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
+ (user=sadiyakazi job=sendgmr) by 2002:a17:90b:3509:b0:1f2:dc98:5976 with SMTP
+ id ls9-20020a17090b350900b001f2dc985976mr4344862pjb.154.1658808792908; Mon,
+ 25 Jul 2022 21:13:12 -0700 (PDT)
+Date:   Tue, 26 Jul 2022 04:12:50 +0000
+Message-Id: <20220726041250.1905521-1-sadiyakazi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.359.gd136c6c3e2-goog
+Subject: [PATCH v4] Documentation: kunit: Add CLI args for kunit_tool
+From:   Sadiya Kazi <sadiyakazi@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, corbet@lwn.net, mairacanal@riseup.net
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,120 +72,137 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000009096e405e4a941c6
-Content-Type: text/plain; charset="UTF-8"
+Some kunit_tool command line arguments are missing in run_wrapper.rst.
+Document them.
 
-On Tue, Jul 26, 2022 at 6:07 AM Brendan Higgins
-<brendan.higgins@linux.dev> wrote:
->
-> David has been a de facto maintainer of KUnit for a long time now.
-> Formalize this in the MAINTAINERS file.
->
-> Signed-off-by: Brendan Higgins <brendan.higgins@linux.dev>
-> ---
-
-Thanks very much -- I'm looking forward helping KUnit continue its
-path to world domination!
-
+Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
 Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
+---
 
-Cheers,
--- David
+Changes since v3:
+https://lore.kernel.org/linux-kselftest/20220724184758.1723925-1-sadiyakazi=
+@google.com/
+-Fixed the indention bug in the run_wrapper.rst file. Thanks for
+catching that(Kernel test robot, Bagas).
+-Updated the commit message.
 
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 64379c699903..782da36b524f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10890,6 +10890,7 @@ F:      fs/smbfs_common/
->
->  KERNEL UNIT TESTING FRAMEWORK (KUnit)
->  M:     Brendan Higgins <brendanhiggins@google.com>
-> +M:     David Gow <davidgow@google.com>
->  L:     linux-kselftest@vger.kernel.org
->  L:     kunit-dev@googlegroups.com
->  S:     Maintained
-> --
-> 2.37.1.359.gd136c6c3e2-goog
->
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220721081026.1247067-1-sadiyakazi=
+@google.com/
+-Added a code block for =E2=80=94kconfig_add argument to make the styling c=
+onsistent
+-Slightly changed the words for =E2=80=94arch argument
+-Changed QEMU to qemu wherever applicable for the cli args
+-Changed the style for ``-smp 8``
+-Changed "Might be repeated" to "may be repeated=E2=80=9D for kernel_args
 
---0000000000009096e405e4a941c6
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Changes since V1:
+https://lore.kernel.org/linux-kselftest/20220719092214.995965-1-sadiyakazi@=
+google.com/
+- Addressed most of the review comments from Maira and David, except
+  removing the duplicate arguments as I felt its worth keeping them in
+  the reference documentation as well as in context. We can improve them
+  and differentiate their use cases in the future patches.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA3
-IsAuwDEegL8cJwMbfgpyCcamJKM6Vs55ZlDhewI1uTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA3MjUyMzA4MDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAG5/vPLvdr7rMdPNDFkh
-kd5mW7JCdkGP6Rnl9/0mSanK9G54kEHWfJaNUGXSkmWqYNaEBR2023ezfcGlAQwabjSI2UpwgkWS
-DR/qjjncMI8H1aBQcJdafQ0UwJfVZHsyJP79k6LLPBISc74ARGNbKOZHdTrK2EgWzJb4iTh9wiFf
-Q+jxYP0s+MO5J+lYY/EnMN59W1ImuYfUUM4ccYYooQQ1oPR9B5Jg73m75cyWLbliNYpWmNPJZXNr
-dVp/LJz4xtpEH4XZIb6RSTKY7IsCwJRKoJje87zoDSS3Hqhj9JjgI3kFVIu2MxhjczES7I1ede1T
-AFucKfOPF8Qs46cMHg==
---0000000000009096e405e4a941c6--
+---
+ Documentation/dev-tools/kunit/run_wrapper.rst | 63 ++++++++++++++++++-
+ 1 file changed, 62 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/=
+dev-tools/kunit/run_wrapper.rst
+index 5e560f2c5fca..cce203138fb7 100644
+--- a/Documentation/dev-tools/kunit/run_wrapper.rst
++++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+@@ -233,7 +233,7 @@ Command-Line Arguments
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ kunit_tool has a number of other command-line arguments which can
+-be useful for our test environment. Below the most commonly used
++be useful for our test environment. Below are the most commonly used
+ command line arguments:
+=20
+ - ``--help``: Lists all available options. To list common options,
+@@ -257,3 +257,64 @@ command line arguments:
+             added or modified. Instead, enable all tests
+             which have satisfied dependencies by adding
+             ``CONFIG_KUNIT_ALL_TESTS=3Dy`` to your ``.kunitconfig``.
++
++- ``--kunitconfig``: Specifies the path or the directory of the ``.kunitco=
+nfig``
++  file. For example:
++
++  - ``lib/kunit/.kunitconfig`` can be the path of the file.
++
++  - ``lib/kunit`` can be the directory in which the file is located.
++
++  This file is used to build and run with a predefined set of tests
++  and their dependencies. For example, to run tests for a given subsystem.
++
++- ``--kconfig_add``: Specifies additional configuration options to be
++  appended to the ``.kunitconfig`` file. For example:
++
++  .. code-block::
++
++	./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=3Dy
++
++- ``--arch``: Runs tests on the specified architecture. The architecture
++  argument is same as the Kbuild ARCH environment variable.
++  For example, i386, x86_64, arm, um, etc. Non-UML architectures run on qe=
+mu.
++  Default is `um`.
++
++- ``--cross_compile``: Specifies the Kbuild toolchain. It passes the
++  same argument as passed to the ``CROSS_COMPILE`` variable used by
++  Kbuild. This will be the prefix for the toolchain
++  binaries such as GCC. For example:
++
++  - ``sparc64-linux-gnu-`` if we have the sparc toolchain installed on
++    our system.
++
++  - ``$HOME/toolchains/microblaze/gcc-9.2.0-nolibc/microblaze-linux/bin/mi=
+croblaze-linux``
++    if we have downloaded the microblaze toolchain from the 0-day
++    website to a specified path in our home directory called toolchains.
++
++- ``--qemu_config``: Specifies the path to a file containing a
++  custom qemu architecture definition. This should be a python file
++  containing a `QemuArchParams` object.
++
++- ``--qemu_args``: Specifies additional qemu arguments, for example, ``-sm=
+p 8``.
++
++- ``--jobs``: Specifies the number of jobs (commands) to run simultaneousl=
+y.
++  By default, this is set to the number of cores on your system.
++
++- ``--timeout``: Specifies the maximum number of seconds allowed for all t=
+ests to run.
++  This does not include the time taken to build the tests.
++
++- ``--kernel_args``: Specifies additional kernel command-line arguments. M=
+ay be repeated.
++
++- ``--run_isolated``: If set, boots the kernel for each individual suite/t=
+est.
++  This is useful for debugging a non-hermetic test, one that
++  might pass/fail based on what ran before it.
++
++- ``--raw_output``: If set, generates unformatted output from kernel. Poss=
+ible options are:
++
++   - ``all``: To view the full kernel output, use ``--raw_output=3Dall``.
++
++   - ``kunit``: This is the default option and filters to KUnit output. Us=
+e ``--raw_output`` or ``--raw_output=3Dkunit``.
++
++- ``--json``: If set, stores the test results in a JSON format and prints =
+to `stdout` or
++  saves to a file if a filename is specified.
+--=20
+2.37.1.359.gd136c6c3e2-goog
+
