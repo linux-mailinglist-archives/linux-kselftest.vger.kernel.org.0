@@ -2,546 +2,245 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A020D58112F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jul 2022 12:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92C35812AF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Jul 2022 14:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbiGZKcF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jul 2022 06:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S238985AbiGZMC6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jul 2022 08:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbiGZKcD (ORCPT
+        with ESMTP id S239036AbiGZMCz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Jul 2022 06:32:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E363E2C104
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Jul 2022 03:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1658831519;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hFx1Zb7iD7+PpndPtB1k00zwvs4HrDroosYNgQJPhqs=;
-        b=Lv5DOWqn+lbfGhD6CZh6qdXS99e0oeExDjTVyxjoyGtbQ0JPHd7ymZoYMOwuISx9bdbzbZ
-        MNHz2jg3RJM2TDOVqvPEfQEp7xEAMfTgfOgPVxNsbJyMVFawCfxgJC0QYVPIcM6P2WHngP
-        GlMzDRXj64ClNHjyVKFPDFvqUnVPXdA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-214-PXEDpvpiMcmr0Kg8I7tkDA-1; Tue, 26 Jul 2022 06:31:57 -0400
-X-MC-Unique: PXEDpvpiMcmr0Kg8I7tkDA-1
-Received: by mail-ed1-f70.google.com with SMTP id z1-20020a05640235c100b0043bca7d9b3eso7675264edc.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Jul 2022 03:31:57 -0700 (PDT)
+        Tue, 26 Jul 2022 08:02:55 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D90F3342E;
+        Tue, 26 Jul 2022 05:02:54 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id 66so10633566vse.4;
+        Tue, 26 Jul 2022 05:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KtaXkWhGacXoZCpMy7nyfriLMatRzT4A6igO1RBUHPo=;
+        b=RbjF1rdPTyO2tw9Yz+mkfpmrUfTHxX4BSGAYDyIu8eDnstEazKhSJWG1VfMkaiWvw6
+         65PgKI6Ce6BOZu4MwbbN7pyFMgXyv3rN8YP5KYvr06r85CqajjrAeJLEZo/xBozzt+vy
+         nFLlEeVewTk7we8Rm+kqwadez/wBkpKI8rtlvaMxI9os9TRuzUQteaDxUB1xoZ+ISDu7
+         BCKMKBjtSyiMoeGC0zNja2EPc12+sdgNwdVJjsyLFP9w7+XVDo4/Q9CKQaC1ZNkMa6BA
+         JZLXAL5cTLwZkX7PdoYsWW4D0VgIsPV3wezdeMdKyCJCfRioqQFdFoCjxE8D+bzLIZUr
+         4LXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hFx1Zb7iD7+PpndPtB1k00zwvs4HrDroosYNgQJPhqs=;
-        b=zVvjBIMflYKbN6GViepLbEvoM7bOmhJ6U1eOn2nQUswwwFfvKNWoTvNySe7YxhedKx
-         x8z4B5yKvpKHAn53rirh5WOahvxluD2p36F+wwZWHJ9+l9o/TKsDqN4yjan2IMelMf84
-         bFLj7wYeOgemWhZgeoOTTdnSczxuHe+lmxuI1MSebdYrH1bSTocN4pN1/uu3d+bkU2C2
-         n9OZxgsEZhxSaZTqsd8jy8tt8si2xrgY7ltvNYCmqF9MrepnUEAMWM5x0P0/+PyhvmVn
-         2QiVsa1q7tDqf8Z5MV54zKvetuO3SUxRrwPvO/xQx+wqbWN/jElklisQ5caOLRDT18Jl
-         kDzg==
-X-Gm-Message-State: AJIora/xCYFkC52wvraAogtRoWTSFpCZAQeKbaCjfzl0Vo8V5I/J1Zlc
-        NBKvrdos2CdTl+BTnnocTRHJKxbZO10+PVbfHRHuHYOyiwyAocrm2Are3XRKopUy+0Vr0iCrYOB
-        wudLvovYlyo6mBDE2eLZgQNOXYZqqdJzWmUtWotw61X7e
-X-Received: by 2002:a17:907:d88:b0:72b:1127:33f5 with SMTP id go8-20020a1709070d8800b0072b112733f5mr13656438ejc.725.1658831516220;
-        Tue, 26 Jul 2022 03:31:56 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1u4UGGnhnJgeiPvBuIFHFKsxVGx98QpZp2ZP3dqHqgZS18l6Vs9BZU69Se7S2v+AeythZIbr5OervmBv6QBuCs=
-X-Received: by 2002:a17:907:d88:b0:72b:1127:33f5 with SMTP id
- go8-20020a1709070d8800b0072b112733f5mr13656415ejc.725.1658831515828; Tue, 26
- Jul 2022 03:31:55 -0700 (PDT)
+        bh=KtaXkWhGacXoZCpMy7nyfriLMatRzT4A6igO1RBUHPo=;
+        b=IK3YwmGr3vvmxhgZKJeYzRhotReKVwt7EEaLQHB1/jRpK4ho6O632IuLqx35I9vG4p
+         NXBi0J4qXLwF73dwxBU+Jy20y+68C7AVd+CpJtZVYOivQSe5GjavVAY4VzMo59Y0/Ivd
+         1EbWPvUgSJ8bEX0GRPRJ7r0Mj2gIUmxOI4SAdo5lZzbsosm6cjrYRrJvpS8IW52RhjcX
+         udRgE3DVJ9lytIxdSbP7zirX0CNnO7fuSgyLxczYaXjlGXdcoXT6Z9zYg9TOF7WLwpaw
+         gLgnJ9jcXTHJvXmfTVXNd58IeggYqTQVjdWmTqL+EtQbEu6hNQY6D77oXTuGdAoLVcoH
+         Xe1A==
+X-Gm-Message-State: AJIora+cHVxQXgVmXA2j9Corc1RCOyVj/Qo2WDQf4AoYWTE/8IAFZCpG
+        CEsuQyBKqxg4yjxQGLiV6eAehinbGqVq2jwZ/pU=
+X-Google-Smtp-Source: AGRyM1ufus2ahum67DnRC7F3xxb3xz3gr3Y+e9Qm4V9dLcVGJNH0Tu8+ofs5fhLcN9Ex2YVcvGyk8j+5LIP2gpBwIYU=
+X-Received: by 2002:a67:c886:0:b0:358:539d:e1a4 with SMTP id
+ v6-20020a67c886000000b00358539de1a4mr3391706vsk.78.1658836972979; Tue, 26 Jul
+ 2022 05:02:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220706205451.4133254-1-jsavitz@redhat.com> <CAA1CXcCHp+zt=34wyFrif+7QtAs9TBOLaL3Nqitz8f_tnR7u9g@mail.gmail.com>
- <CAL1p7m5pLQcvkGajOL8CQiunvye4-8QrDS8oWMShOHmOUFsB-w@mail.gmail.com>
-In-Reply-To: <CAL1p7m5pLQcvkGajOL8CQiunvye4-8QrDS8oWMShOHmOUFsB-w@mail.gmail.com>
-From:   Nico Pache <npache@redhat.com>
-Date:   Tue, 26 Jul 2022 06:31:29 -0400
-Message-ID: <CAA1CXcAQpO+T67RheV5Hv6BZ8n-xEUEwztVzkGe+Z2fEL+uJ2Q@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/vm: enable running select groups of tests
-To:     Joel Savitz <jsavitz@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        linux-kselftest@vger.kernel.org
+References: <20220721172808.585539-1-fred@cloudflare.com> <877d45kri4.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <877d45kri4.fsf@email.froward.int.ebiederm.org>
+From:   Djalal Harouni <tixxdz@gmail.com>
+Date:   Tue, 26 Jul 2022 14:02:26 +0200
+Message-ID: <CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>,
+        KP Singh <kpsingh@kernel.org>, revest@chromium.org,
+        jackmanb@chromium.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        stephen.smalley.work@gmail.com, Eric Paris <eparis@parisplace.org>,
+        Shuah Khan <shuah@kernel.org>, brauner@kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>, bpf@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ok thanks for pointing that out!
+Hi Eric,
 
-Andrew, would it be possible to modify the patch and make the variable
-name VM_SELFTEST_ITEMS?
-
-Cheers,
--- Nico
-
-On Tue, Jul 19, 2022 at 6:28 PM Joel Savitz <jsavitz@redhat.com> wrote:
+On Fri, Jul 22, 2022 at 7:07 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
 >
-> Hello,
+> Frederick Lawler <fred@cloudflare.com> writes:
 >
-> Sorry for the late reply.
+> > While creating a LSM BPF MAC policy to block user namespace creation, we
+> > used the LSM cred_prepare hook because that is the closest hook to prevent
+> > a call to create_user_ns().
 >
-> Setting TEST_ITEMS="xx yy zz" and invoking the script has the same
-> effect as passing -t "xx yy zz" to the script. VM_TEST_ITEMS may be a
-> better env variable name however.
+> That description is wrong.  Your goal his is not to limit access to
+> the user namespace.  Your goal is to reduce the attack surface of the
+> kernel by not allowing some processes access to a user namespace.
 >
-> Best,
-> Joel Savitz
+> You have already said that you don't have concerns about the
+> fundamentals of the user namespace, and what it enables only that
+> it allows access to exploitable code.
 >
-> On Fri, Jul 15, 2022 at 3:55 PM Nico Pache <npache@redhat.com> wrote:
-> >
-> > Hi Andrew and Joel,
-> >
-> > I noticed a flaw in switching to the cmdline argument over the
-> > environment variable. If you are utilizing the exerciser script (in
-> > tools/testing/selftests/run_kselftest.sh), this is not designed to
-> > pass cmdline variables to the individual TEST_PROGS. On the other hand
-> > if we utilize Env. variables we can still specify which tests we'd
-> > like to run. Our infrastructure is designed to utilize this wrapper,
-> > so we inevitably will not be able to use this the way we thought.
-> >
-> > Would you be ok with switching back to the initial approach? If so I
-> > believe making the name more specific would be ideal, ie)
-> > VM_TEST_ITEMS.
-> >
-> > Cheers,
-> > -- Nico
-> >
-> > On Wed, Jul 6, 2022 at 4:55 PM Joel Savitz <jsavitz@redhat.com> wrote:
-> > >
-> > > Our memory management kernel CI testing at Red Hat uses the VM
-> > > selftests and we have run into two problems:
-> > >
-> > > First, our LTP tests overlap with the VM selftests.
-> > >
-> > > We want to avoid unhelpful redundancy in our testing practices.
-> > >
-> > > Second, we have observed the current run_vmtests.sh to report overall
-> > > failure/ambiguous results in the case that a machine lacks the necessary
-> > > hardware to perform one or more of the tests. E.g. ksm tests that
-> > > require more than one numa node.
-> > >
-> > > We want to be able to run the vm selftests suitable to particular hardware.
-> > >
-> > > Add the ability to run one or more groups of vm tests via run_vmtests.sh
-> > > instead of simply all-or-none in order to solve these problems.
-> > >
-> > > Preserve existing default behavior of running all tests when the script
-> > > is invoked with no arguments.
-> > >
-> > > Documentation of test groups is included in the patch as follows:
-> > >
-> > >     # ./run_vmtests.sh [ -h || --help ]
-> > >
-> > >     usage: ./tools/testing/selftests/vm/run_vmtests.sh [ -h | -t "<categories>"]
-> > >       -t: specify specific categories to tests to run
-> > >       -h: display this message
-> > >
-> > >     The default behavior is to run all tests.
-> > >
-> > >     Alternatively, specific groups tests can be run by passing a string
-> > >     to the -t argument containing one or more of the following categories
-> > >     separated by spaces:
-> > >     - mmap
-> > >             tests for mmap(2)
-> > >     - gup_test
-> > >             tests for gup using gup_test interface
-> > >     - userfaultfd
-> > >             tests for  userfaultfd(2)
-> > >     - compaction
-> > >             a test for the patch "Allow compaction of unevictable pages"
-> > >     - mlock
-> > >             tests for mlock(2)
-> > >     - mremap
-> > >             tests for mremap(2)
-> > >     - hugevm
-> > >             tests for very large virtual address space
-> > >     - vmalloc
-> > >             vmalloc smoke tests
-> > >     - hmm
-> > >             hmm smoke tests
-> > >     - madv_populate
-> > >             test memadvise(2) MADV_POPULATE_{READ,WRITE} options
-> > >     - memfd_secret
-> > >             test memfd_secret(2)
-> > >     - process_mrelease
-> > >             test process_mrelease(2)
-> > >     - ksm
-> > >             ksm tests that do not require >=2 NUMA nodes
-> > >     - ksm_numa
-> > >             ksm tests that require >=2 NUMA nodes
-> > >     - pkey
-> > >             memory protection key tests
-> > >     example: ./run_vmtests.sh -t "hmm mmap ksm"
-> > >
-> > > Changes from v2:
-> > >         - rebase onto the mm-everyting branch in
-> > >         https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-> > >         - integrate this functionality with new the tests
-> > >
-> > > Changes from v1:
-> > >         - use a command line argument to pass the test categories to the
-> > >           script instead of an environmet variable
-> > >         - remove novel prints to avoid messing with extant parsers of this
-> > >           script
-> > >         - update the usage text
-> > >
-> > > Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-> > > ---
-> > >  tools/testing/selftests/vm/run_vmtests.sh | 241 +++++++++++++++-------
-> > >  1 file changed, 161 insertions(+), 80 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> > > index d84fe0fa15e1..fb72a1338d07 100755
-> > > --- a/tools/testing/selftests/vm/run_vmtests.sh
-> > > +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> > > @@ -1,6 +1,6 @@
-> > >  #!/bin/bash
-> > >  # SPDX-License-Identifier: GPL-2.0
-> > > -#please run as root
-> > > +# Please run as root
-> > >
-> > >  # Kselftest framework requirement - SKIP code is 4.
-> > >  ksft_skip=4
-> > > @@ -8,15 +8,75 @@ ksft_skip=4
-> > >  mnt=./huge
-> > >  exitcode=0
-> > >
-> > > -#get huge pagesize and freepages from /proc/meminfo
-> > > -while read -r name size unit; do
-> > > -       if [ "$name" = "HugePages_Free:" ]; then
-> > > -               freepgs="$size"
-> > > -       fi
-> > > -       if [ "$name" = "Hugepagesize:" ]; then
-> > > -               hpgsize_KB="$size"
-> > > +usage() {
-> > > +       cat <<EOF
-> > > +usage: ${BASH_SOURCE[0]:-$0} [ -h | -t "<categories>"]
-> > > +  -t: specify specific categories to tests to run
-> > > +  -h: display this message
-> > > +
-> > > +The default behavior is to run all tests.
-> > > +
-> > > +Alternatively, specific groups tests can be run by passing a string
-> > > +to the -t argument containing one or more of the following categories
-> > > +separated by spaces:
-> > > +- mmap
-> > > +       tests for mmap(2)
-> > > +- gup_test
-> > > +       tests for gup using gup_test interface
-> > > +- userfaultfd
-> > > +       tests for  userfaultfd(2)
-> > > +- compaction
-> > > +       a test for the patch "Allow compaction of unevictable pages"
-> > > +- mlock
-> > > +       tests for mlock(2)
-> > > +- mremap
-> > > +       tests for mremap(2)
-> > > +- hugevm
-> > > +       tests for very large virtual address space
-> > > +- vmalloc
-> > > +       vmalloc smoke tests
-> > > +- hmm
-> > > +       hmm smoke tests
-> > > +- madv_populate
-> > > +       test memadvise(2) MADV_POPULATE_{READ,WRITE} options
-> > > +- memfd_secret
-> > > +       test memfd_secret(2)
-> > > +- process_mrelease
-> > > +       test process_mrelease(2)
-> > > +- ksm
-> > > +       ksm tests that do not require >=2 NUMA nodes
-> > > +- ksm_numa
-> > > +       ksm tests that require >=2 NUMA nodes
-> > > +- pkey
-> > > +       memory protection key tests
-> > > +example: ./run_vmtests.sh -t "hmm mmap ksm"
-> > > +EOF
-> > > +       exit 0
-> > > +}
-> > > +
-> > > +
-> > > +while getopts "ht:" OPT; do
-> > > +       case ${OPT} in
-> > > +               "h") usage ;;
-> > > +               "t") TEST_ITEMS=${OPTARG} ;;
-> > > +       esac
-> > > +done
-> > > +shift $((OPTIND -1))
-> > > +
-> > > +# default behavior: run all tests
-> > > +TEST_ITEMS=${TEST_ITEMS:-default}
-> > > +
-> > > +test_selected() {
-> > > +       if [ "$TEST_ITEMS" == "default" ]; then
-> > > +               # If no TEST_ITEMS are specified, run all tests
-> > > +               return 0
-> > >         fi
-> > > -done < /proc/meminfo
-> > > +       echo ${TEST_ITEMS} | grep ${1} 2>&1 >/dev/null
-> > > +       return ${?}
-> > > +}
-> > > +
-> > > +# Hugepage setup only needed for hugetlb tests
-> > > +if test_selected "hugetlb"; then
-> > >
-> > >  # Simple hugetlbfs tests have a hardcoded minimum requirement of
-> > >  # huge pages totaling 256MB (262144KB) in size.  The userfaultfd
-> > > @@ -28,7 +88,17 @@ hpgsize_MB=$((hpgsize_KB / 1024))
-> > >  half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
-> > >  needmem_KB=$((half_ufd_size_MB * 2 * 1024))
-> > >
-> > > -#set proper nr_hugepages
-> > > +# get huge pagesize and freepages from /proc/meminfo
-> > > +while read -r name size unit; do
-> > > +       if [ "$name" = "HugePages_Free:" ]; then
-> > > +               freepgs="$size"
-> > > +       fi
-> > > +       if [ "$name" = "Hugepagesize:" ]; then
-> > > +               hpgsize_KB="$size"
-> > > +       fi
-> > > +done < /proc/meminfo
-> > > +
-> > > +# set proper nr_hugepages
-> > >  if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
-> > >         nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
-> > >         needpgs=$((needmem_KB / hpgsize_KB))
-> > > @@ -57,144 +127,155 @@ else
-> > >         exit 1
-> > >  fi
-> > >
-> > > -#filter 64bit architectures
-> > > +fi # test_selected "hugetlb"
-> > > +
-> > > +# filter 64bit architectures
-> > >  ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
-> > >  if [ -z "$ARCH" ]; then
-> > >         ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
-> > >  fi
-> > >  VADDR64=0
-> > > -echo "$ARCH64STR" | grep "$ARCH" && VADDR64=1
-> > > +echo "$ARCH64STR" | grep "$ARCH" &>/dev/null && VADDR64=1
-> > >
-> > >  # Usage: run_test [test binary] [arbitrary test arguments...]
-> > >  run_test() {
-> > > -       local title="running $*"
-> > > -       local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
-> > > -       printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
-> > > -
-> > > -       "$@"
-> > > -       local ret=$?
-> > > -       if [ $ret -eq 0 ]; then
-> > > -               echo "[PASS]"
-> > > -       elif [ $ret -eq $ksft_skip ]; then
-> > > -               echo "[SKIP]"
-> > > -               exitcode=$ksft_skip
-> > > -       else
-> > > -               echo "[FAIL]"
-> > > -               exitcode=1
-> > > -       fi
-> > > +       if test_selected ${CATEGORY}; then
-> > > +               local title="running $*"
-> > > +               local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
-> > > +               printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
-> > > +
-> > > +               "$@"
-> > > +               local ret=$?
-> > > +               if [ $ret -eq 0 ]; then
-> > > +                       echo "[PASS]"
-> > > +               elif [ $ret -eq $ksft_skip ]; then
-> > > +                       echo "[SKIP]"
-> > > +                       exitcode=$ksft_skip
-> > > +               else
-> > > +                       echo "[FAIL]"
-> > > +                       exitcode=1
-> > > +               fi
-> > > +       fi # test_selected
-> > >  }
-> > >
-> > > -mkdir "$mnt"
-> > > -mount -t hugetlbfs none "$mnt"
-> > > +# setup only needed for hugetlb tests
-> > > +if test_selected "hugetlb"; then
-> > > +       mkdir "$mnt"
-> > > +       mount -t hugetlbfs none "$mnt"
-> > > +fi
-> > >
-> > > -run_test ./hugepage-mmap
-> > > +CATEGORY="hugetlb" run_test ./hugepage-mmap
-> > >
-> > >  shmmax=$(cat /proc/sys/kernel/shmmax)
-> > >  shmall=$(cat /proc/sys/kernel/shmall)
-> > >  echo 268435456 > /proc/sys/kernel/shmmax
-> > >  echo 4194304 > /proc/sys/kernel/shmall
-> > > -run_test ./hugepage-shm
-> > > +CATEGORY="hugetlb" run_test ./hugepage-shm
-> > >  echo "$shmmax" > /proc/sys/kernel/shmmax
-> > >  echo "$shmall" > /proc/sys/kernel/shmall
-> > >
-> > > -run_test ./map_hugetlb
-> > > +CATEGORY="hugetlb" run_test ./map_hugetlb
-> > >
-> > > -run_test ./hugepage-mremap "$mnt"/huge_mremap
-> > > -rm -f "$mnt"/huge_mremap
-> > > +CATEGORY="hugetlb" run_test ./hugepage-mremap "$mnt"/huge_mremap
-> > > +test_selected "hugetlb" && rm -f "$mnt"/huge_mremap
-> > >
-> > > -run_test ./hugepage-vmemmap
-> > > +CATEGORY="hugetlb" run_test ./hugepage-vmemmap
-> > >
-> > > -run_test ./hugetlb-madvise "$mnt"/madvise-test
-> > > -rm -f "$mnt"/madvise-test
-> > > +CATEGORY="hugetlb" run_test ./hugetlb-madvise "$mnt"/madvise-test
-> > > +test_selected "hugetlb" && rm -f "$mnt"/madvise-test
-> > >
-> > > -echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
-> > > -echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
-> > > -echo "      hugetlb regression testing."
-> > > +if test_selected "hugetlb"; then
-> > > +       echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
-> > > +       echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
-> > > +       echo "      hugetlb regression testing."
-> > > +fi
-> > >
-> > > -run_test ./map_fixed_noreplace
-> > > +CATEGORY="mmap" run_test ./map_fixed_noreplace
-> > >
-> > >  # get_user_pages_fast() benchmark
-> > > -run_test ./gup_test -u
-> > > +CATEGORY="gup_test" run_test ./gup_test -u
-> > >  # pin_user_pages_fast() benchmark
-> > > -run_test ./gup_test -a
-> > > +CATEGORY="gup_test" run_test ./gup_test -a
-> > >  # Dump pages 0, 19, and 4096, using pin_user_pages:
-> > > -run_test ./gup_test -ct -F 0x1 0 19 0x1000
-> > > +CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
-> > >
-> > > -run_test ./userfaultfd anon 20 16
-> > > -run_test ./userfaultfd anon:dev 20 16
-> > > +CATEGORY="userfaultfd" run_test ./userfaultfd anon 20 16
-> > > +CATEGORY="userfaultfd" run_test ./userfaultfd anon:dev 20 16
-> > >  # Hugetlb tests require source and destination huge pages. Pass in half the
-> > >  # size ($half_ufd_size_MB), which is used for *each*.
-> > > -run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-> > > -run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
-> > > -run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> > > +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
-> > > +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
-> > > +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> > >  rm -f "$mnt"/uffd-test
-> > > -run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> > > +CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-> > >  rm -f "$mnt"/uffd-test
-> > > -run_test ./userfaultfd shmem 20 16
-> > > -run_test ./userfaultfd shmem:dev 20 16
-> > > -
-> > > -#cleanup
-> > > -umount "$mnt"
-> > > -rm -rf "$mnt"
-> > > -echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
-> > > +CATEGORY="userfaultfd" run_test ./userfaultfd shmem 20 16
-> > > +CATEGORY="userfaultfd" run_test ./userfaultfd shmem:dev 20 16
-> > > +
-> > > +# cleanup (only needed when running hugetlb tests)
-> > > +if test_selected "hugetlb"; then
-> > > +       umount "$mnt"
-> > > +       rm -rf "$mnt"
-> > > +       echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
-> > > +fi
-> > >
-> > > -run_test ./compaction_test
-> > > +CATEGORY="compaction" run_test ./compaction_test
-> > >
-> > > -run_test sudo -u nobody ./on-fault-limit
-> > > +CATEGORY="mlock" run_test sudo -u nobody ./on-fault-limit
-> > >
-> > > -run_test ./map_populate
-> > > +CATEGORY="mmap" run_test ./map_populate
-> > >
-> > > -run_test ./mlock-random-test
-> > > +CATEGORY="mlock" run_test ./mlock-random-test
-> > >
-> > > -run_test ./mlock2-tests
-> > > +CATEGORY="mlock" run_test ./mlock2-tests
-> > >
-> > > -run_test ./mrelease_test
-> > > +CATEGORY="process_mrelease" run_test ./mrelease_test
-> > >
-> > > -run_test ./mremap_test
-> > > +CATEGORY="mremap" run_test ./mremap_test
-> > >
-> > > -run_test ./thuge-gen
-> > > +CATEGORY="hugetlb" run_test ./thuge-gen
-> > >
-> > >  if [ $VADDR64 -ne 0 ]; then
-> > > -       run_test ./virtual_address_range
-> > > +       CATEGORY="hugevm" run_test ./virtual_address_range
-> > >
-> > >         # virtual address 128TB switch test
-> > > -       run_test ./va_128TBswitch.sh
-> > > +       CATEGORY="hugevm" run_test ./va_128TBswitch.sh
-> > >  fi # VADDR64
-> > >
-> > >  # vmalloc stability smoke test
-> > > -run_test ./test_vmalloc.sh smoke
-> > > +CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
-> > >
-> > > -run_test ./mremap_dontunmap
-> > > +CATEGORY="mremap" run_test ./mremap_dontunmap
-> > >
-> > > -run_test ./test_hmm.sh smoke
-> > > +CATEGORY="hmm" run_test ./test_hmm.sh smoke
-> > >
-> > >  # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
-> > > -run_test ./madv_populate
-> > > +CATEGORY="madv_populate" run_test ./madv_populate
-> > >
-> > > -run_test ./memfd_secret
-> > > +CATEGORY="memfd_secret" run_test ./memfd_secret
-> > >
-> > >  # KSM MADV_MERGEABLE test with 10 identical pages
-> > > -run_test ./ksm_tests -M -p 10
-> > > +CATEGORY="ksm" run_test ./ksm_tests -M -p 10
-> > >  # KSM unmerge test
-> > > -run_test ./ksm_tests -U
-> > > +CATEGORY="ksm" run_test ./ksm_tests -U
-> > >  # KSM test with 10 zero pages and use_zero_pages = 0
-> > > -run_test ./ksm_tests -Z -p 10 -z 0
-> > > +CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 0
-> > >  # KSM test with 10 zero pages and use_zero_pages = 1
-> > > -run_test ./ksm_tests -Z -p 10 -z 1
-> > > +CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 1
-> > >  # KSM test with 2 NUMA nodes and merge_across_nodes = 1
-> > > -run_test ./ksm_tests -N -m 1
-> > > +CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
-> > >  # KSM test with 2 NUMA nodes and merge_across_nodes = 0
-> > > -run_test ./ksm_tests -N -m 0
-> > > +CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
-> > >
-> > >  # protection_keys tests
-> > >  if [ -x ./protection_keys_32 ]
-> > >  then
-> > > -       run_test ./protection_keys_32
-> > > +       CATEGORY="pkey" run_test ./protection_keys_32
-> > >  fi
-> > >
-> > >  if [ -x ./protection_keys_64 ]
-> > >  then
-> > > -       run_test ./protection_keys_64
-> > > +       CATEGORY="pkey" run_test ./protection_keys_64
-> > >  fi
-> > >
-> > >  exit $exitcode
-> > > --
-> > > 2.31.1
-> > >
-> >
+> Achieving the protection you seek requires talking and thinking clearly
+> about the goal.
 >
 
+We have valid use cases not specifically related to the attack surface,
+but go into the middle from bpf observability to enforcement. As we want
+to track namespace creation, changes, nesting and per task creds context
+depending on the nature of the workload.
+
+Obvious example is nesting as we want to track namespace creations
+not necessarily user namespace but all to report hierarchies to dashboards,
+then from kubernetes namespace view, we would like some applications to
+setup namespaces privileged or not, but deny other apps creation of nested
+pidns, userns, etc, it depends on users how they setup their kubernetes
+namespaces and labels...
+
+...
+>
+> 2) The second is that there is a long standing problem with code that
+>    gets added to the kernel.  Many times new kernel code because it has
+>    the potential to confuse suid root executables that code has been
+>    made root only.  Over time that results in more and more code running
+>    as root to be able to make use of the useful features of the linux
+>    kernel.
+>
+>    One of the goals of the user namespace is to avoid more and more code
+>    migrating to running as root.  To achieve that goal ordinary
+>    application developers need to be able to assume that typically user
+>    namespaces will be available on linux.
+>
+>    An assumption that ordinary applications like chromium make today.
+
+I don't necessarily disagree with statement 2. and in a perfect world yes.
+But practically as noted by Paul in his email, Linux is flexible and
+speaking about kubernetes world we have multiple workload per
+namespaces, and we would like a solution that we can support in the
+next months.
+
+Also these are features that some user space may use, some may not, we
+will never be able to dictate to all user space applications how to do things.
+
+From bpf side observability or bpf-lsm enforcement it allows to escalate how
+to respond to the task and *make lsm and bpf (bpf-lsm) have a consistent
+design* where they both follow the same path.
+
+It is unfortunate that the security_task_alloc() [1] hook is  _late_ and can't
+be used for context initialization as the credentials and even user namespace
+have already been created. Strictly speaking we have a context that has
+been already created and applied and we can't properly catch it !
+
+There is no way to do that from user space as most bpf based tools
+(observability and enforcement) do not and should not mess up at the
+user space level with the namespace configuration of tasks (/proc...), they
+are external programs to the running tasks, they do not set up the
+environment. Having the hook before the namespaces and creds copying
+allows to properly track this and construct the _right_ context. From lsm
+and bpf-lsm this will definitely offer a better interface that is not prone to
+errors.
+
+We would like an answer here or an alternative hook that is placed before
+the creation/setting of any namespace, credentials or creating new keyring.
+So we can provide bpf-based transparent solutions that work.
+
+[1] https://elixir.bootlin.com/linux/v5.18.13/source/kernel/fork.c#L2216
+
+
+
+> My apologies if this has been addressed somewhere in the conversation
+> already.  I don't see these issues addressed in the descriptions of your
+> patches.
+>
+> Until these issues are firmly addressed and you are not proposing a
+> patch that can only cause regressions in userspace applications.
+>
+> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>
+> >
+> > The calls look something like this:
+> >
+> >     cred = prepare_creds()
+> >         security_prepare_creds()
+> >             call_int_hook(cred_prepare, ...
+> >     if (cred)
+> >         create_user_ns(cred)
+> >
+> > We noticed that error codes were not propagated from this hook and
+> > introduced a patch [1] to propagate those errors.
+> >
+> > The discussion notes that security_prepare_creds()
+> > is not appropriate for MAC policies, and instead the hook is
+> > meant for LSM authors to prepare credentials for mutation. [2]
+> >
+> > Ultimately, we concluded that a better course of action is to introduce
+> > a new security hook for LSM authors. [3]
+> >
+> > This patch set first introduces a new security_create_user_ns() function
+> > and userns_create LSM hook, then marks the hook as sleepable in BPF.
+> >
+> > Links:
+> > 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+> > 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+> > 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+> >
+> > Past discussions:
+> > V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
+> > V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
+> >
+> > Changes since v2:
+> > - Rename create_user_ns hook to userns_create
+> > - Use user_namespace as an object opposed to a generic namespace object
+> > - s/domB_t/domA_t in commit message
+> > Changes since v1:
+> > - Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+> > - Add selinux: Implement create_user_ns hook patch
+> > - Change function signature of security_create_user_ns() to only take
+> >   struct cred
+> > - Move security_create_user_ns() call after id mapping check in
+> >   create_user_ns()
+> > - Update documentation to reflect changes
+> >
+> > Frederick Lawler (4):
+> >   security, lsm: Introduce security_create_user_ns()
+> >   bpf-lsm: Make bpf_lsm_userns_create() sleepable
+> >   selftests/bpf: Add tests verifying bpf lsm userns_create hook
+> >   selinux: Implement userns_create hook
+> >
+> >  include/linux/lsm_hook_defs.h                 |  1 +
+> >  include/linux/lsm_hooks.h                     |  4 +
+> >  include/linux/security.h                      |  6 ++
+> >  kernel/bpf/bpf_lsm.c                          |  1 +
+> >  kernel/user_namespace.c                       |  5 ++
+> >  security/security.c                           |  5 ++
+> >  security/selinux/hooks.c                      |  9 ++
+> >  security/selinux/include/classmap.h           |  2 +
+> >  .../selftests/bpf/prog_tests/deny_namespace.c | 88 +++++++++++++++++++
+> >  .../selftests/bpf/progs/test_deny_namespace.c | 39 ++++++++
+> >  10 files changed, 160 insertions(+)
+> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+> >
+> > --
+> > 2.30.2
+>
+> Eric
