@@ -2,83 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE7A581CB4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 02:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442A8581CFC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 03:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240007AbiG0AN6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jul 2022 20:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S240125AbiG0BRf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jul 2022 21:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239832AbiG0AN5 (ORCPT
+        with ESMTP id S229484AbiG0BRf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Jul 2022 20:13:57 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC83205D6
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Jul 2022 17:13:56 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id q14so12516324iod.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Jul 2022 17:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=R2qD9ax08h9nKFO1+IcTWhLCwKpkzgVVPrZ1uEJXMzU=;
-        b=O39nmq3Fa3xXO2eNr2WDsfIOFsBx/Agfx0G7paz+IEzhMwjHOgWPgKuW9UDzGUGcVN
-         BLCHzlVtcuFd1lHCKyTH+zKIySPD2inblpqIDGJWxaXTvNVSTLqyLqe898w2cBawQap5
-         YVgewCoXMLGo6FU3BwqduskKqmpzpl6u5x9zY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=R2qD9ax08h9nKFO1+IcTWhLCwKpkzgVVPrZ1uEJXMzU=;
-        b=MFEJAaJCDVd2WPdF0kPlg6vb7vaT/kcB+/sP0Wjp8yB8IXsx+73KsqP89EuR6aBRuW
-         urvKruoXEtnKmUyn7Wkal5i3AWWY6Rsw/jbnjUwkvWqBs9FKtpaZTEjaXtUEKlOjDI1+
-         RQOeB/v1tb9YFTvNQzYPz7wYeX5DhJcTkF1+5DkSkH6qaRZcoFZjmOOWlw25whfsiZs6
-         Nnd+jh1aBRtbgxGBQgxer78+8WdVL/clLHBRR8QRIw9pSRWsDWZ/+X1yOP72Ld6A7vP8
-         OAMhV5EpiOC951/876mtjAW6JSS9OuLqzC+0quKj12JjK+wdvLvgCnDWilFDxc8v2jBz
-         5XsA==
-X-Gm-Message-State: AJIora9t61T/KiHfVVDbBDdQUZeexgep0Yb6A7NY6WXxg3tDGMuuSUj/
-        QjKJigR8JdjE+J/uUYbAd0doWw==
-X-Google-Smtp-Source: AGRyM1vH3cJG6PYumk1AjyMd2TV9Hzppapg1EgTQOvu2+RZBu5ZKQdBtQKOp3uTHLvR9/RYndv5f1Q==
-X-Received: by 2002:a02:b697:0:b0:341:5553:ae49 with SMTP id i23-20020a02b697000000b003415553ae49mr7617346jam.109.1658880835497;
-        Tue, 26 Jul 2022 17:13:55 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z27-20020a027a5b000000b003322a709c7esm7272755jad.30.2022.07.26.17.13.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Jul 2022 17:13:54 -0700 (PDT)
-Subject: Re: [PATCH] Makefile: replace headers_install with headers for
- kselftest
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Tim Bird <Tim.Bird@sony.com>, kernel@collabora.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <a7af58feaa6ae6d3b0c8c55972a470cec62341e5.1657693952.git.guillaume.tucker@collabora.com>
- <f35a71d6-bd96-7aa9-c143-39ae88bc85d5@linuxfoundation.org>
- <8fc9d169-78ff-0fe4-67c0-784097861f12@collabora.com>
- <CAK7LNAQ4iMBwu4bOmmOrMudNH49ruz-7AK_H3-ceTixd=G+brQ@mail.gmail.com>
- <81241d70-7952-2f55-9181-d18679068998@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8a3c18c5-2abc-9ea2-0867-95b31d45da1d@linuxfoundation.org>
-Date:   Tue, 26 Jul 2022 18:13:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 26 Jul 2022 21:17:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88132A261;
+        Tue, 26 Jul 2022 18:17:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F5D616D4;
+        Wed, 27 Jul 2022 01:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95DAC433D7;
+        Wed, 27 Jul 2022 01:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658884653;
+        bh=yHdFI7UZExa1GxsmSAJPPFlPx1kKFocZoTBH3mG9NMo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mdshVMdvfzhti6LRuDN6H7FqRhIPEHgJQTuekQbRk/mzcXXE8ynF8tli3utiZLp5O
+         QxJiEvHmZWAdKm0SYEtppBgNd1fXBwwgNxA1xN/58n6z/5G0fZLq1uX8wd9Gu+Ny9s
+         3BZFdmz9bgUxy7tc8D9OXGQTNnxX+AolldBOTMuoHbo/jeOpa7QOB7GpQQczyvNU5w
+         Mb6G9CKihsYC/NAcfU+R9sFAv01z9O5gFdLey2i/K+Dz7mddR0bFAiv8OXIQMYhtc1
+         +saf5fv4mak89IDZ4Wam0A9XfwnyABJR6qN7sfsaT3/bqbqGI+zbkKoRM2ZPP2tLqf
+         rmhz8+MSk3NtQ==
+Message-ID: <40928cfc-150c-8714-bb83-21d325ce93e5@kernel.org>
+Date:   Tue, 26 Jul 2022 19:17:30 -0600
 MIME-Version: 1.0
-In-Reply-To: <81241d70-7952-2f55-9181-d18679068998@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH v6 02/26] tcp: authopt: Remove more unused noops
 Content-Language: en-US
+To:     Leonard Crestez <cdleonard@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Philip Paeps <philip@trouble.is>
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1658815925.git.cdleonard@gmail.com>
+ <2e9007e2f536ef2b8e3dfdaa1dd44dcc6bfc125f.1658815925.git.cdleonard@gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <2e9007e2f536ef2b8e3dfdaa1dd44dcc6bfc125f.1658815925.git.cdleonard@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,37 +74,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/19/22 11:31 AM, Guillaume Tucker wrote:
-> On 19/07/2022 17:06, Masahiro Yamada wrote:
->> On Tue, Jul 19, 2022 at 9:37 PM Guillaume Tucker
->> <guillaume.tucker@collabora.com> wrote:
->>>
-
->>>
->>> Masahiro-san,
->>>
->>> A you OK with applying this in the kbuild tree ahead of the
->>> upcoming merge window?
->>
->>
->> No.
->>
->> This is a fix-up patch on top of the previous one [1],
->> which  was applied to the kselftest tree.
->>
->> This cannot apply to the kbuild tree.
+On 7/26/22 12:15 AM, Leonard Crestez wrote:
+> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+> ---
+>  include/net/tcp_authopt.h | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> OK thank you for confirming.
-> 
-> Shuah, I guess you're happy to apply it to the kselftest tree
-> instead then?
-> 
-
-Sorry for a late response due to time off. Working through my Inbox.
-
-Applied now to linux-kselftest next for 5.20-rc1.
-
-thanks,
--- Shuah
-
-
+> diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
+> index adf325c260d5..bc2cff82830d 100644
+> --- a/include/net/tcp_authopt.h
+> +++ b/include/net/tcp_authopt.h
+> @@ -60,14 +60,10 @@ DECLARE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
+>  void tcp_authopt_clear(struct sock *sk);
+>  int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen);
+>  int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key);
+>  int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen);
+>  #else
+> -static inline int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key)
+> -{
+> -	return -ENOPROTOOPT;
+> -}
+>  static inline void tcp_authopt_clear(struct sock *sk)
+>  {
+>  }
+>  #endif
+>  
+added in the previous patch, so this one should be folded into patch 1
