@@ -2,72 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CB8582121
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 09:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC44582224
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 10:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiG0Hdt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Jul 2022 03:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
+        id S230047AbiG0I35 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Jul 2022 04:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiG0Hdt (ORCPT
+        with ESMTP id S229619AbiG0I34 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Jul 2022 03:33:49 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C6E1403D
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 00:33:46 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id t21so6406690uaq.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 00:33:46 -0700 (PDT)
+        Wed, 27 Jul 2022 04:29:56 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F8945067;
+        Wed, 27 Jul 2022 01:29:55 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id os14so30272224ejb.4;
+        Wed, 27 Jul 2022 01:29:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K9terHDd9pBkdhpb5Lv3MDxyCeJPbC9WTivXosPfkwc=;
-        b=G8MHYFcRGoVn8IWTYMUJRGERsrgiwCYpqbzuMvOUhSpbr8AkUsGiaRKtCgfKzFtbJM
-         rBwDsqY1KnTEEsNLBbI2oNTCfOC2Zqyc/M9Htmv/yBJrybNE5GeEe7Z+iN/5t3o5VyE7
-         ao3WHhq84IJNGIDYAdlWRAg610Q65td9W9zxCttaxtweHhlqYzkM4hm6iCPVPpaYsE2b
-         IJ9YLUM2Oog8Y36nU9bMJM3ajmKtkgcMRldNZfy0dpzZqERRz2uK0yjqcYTyu9TpuEBz
-         mFxYw6GF2nBj/nxyrja8KguYqUnrqdbueBV8f0wl1FipHtOPMwyUNJNXGREr2s1xiUvA
-         cNaQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=90LqK0tDYlhW8mw1jbLiJzHeD5M9TR6TiTXrmORdnOs=;
+        b=okISiEP+PtJfYiUEirmWFvT+EiyVBemKOhG0cra6EYc8SxjT6Ld3XWVhGH6wE3YjPL
+         //MTk2EVguBKcVkcycxLcPMH61oynJ0HMIwEbw0TsEil4E2v4xOfS59ZE6gdsjL4P8Z6
+         XaGofnStM4r5xp6TDYrpSsVACdx2sqU764VOWnhoaSiSKWpbTKioQvXAgx9Ck2iGuQa/
+         80ARrTVPno0j3cJGGOeRyhoDc0wegUJO0o/dhdTOLjLjO5yjeoUKTj+rIXnXfJ8uRhqM
+         /8TlWcua1ktW5LHvMoIXoYaxsHieUoGt6ZuBa3Le7S3E72k6iaYaa73r+U6c+JVoD6VI
+         hfpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K9terHDd9pBkdhpb5Lv3MDxyCeJPbC9WTivXosPfkwc=;
-        b=EkO31Uxc+LIe9Dldxxxv1+9YP/ud3XvSMBhkgWpT4LR/SN3SyviSFBVULxQha/16/Y
-         YNY5/4s5GfONkstDgJX38zPt/7pTwCT7lVTfqeBUiyymZ4cSWj6pSiqoOVWSC+XAVsMO
-         ExPjDOqt48nkgvwUH5gCGrcAE2rUbr/qi5NSmXuVcHPaMAPdMSHipYwjcbc3Sn/oXNto
-         Vw4Z3REgBfnvGIhJ9glIC7mF7ITBI9qHyOyWnyBU5sn+TOHA79qldgacMCurMSzReLFm
-         UgegOaS2iGDOt7QTjSY30jozASf3gxmKDAPzEhbQN7/N8ozZd+Ht3BRSmeguBst+4goE
-         AscA==
-X-Gm-Message-State: AJIora+/Xr+F7TDjXf5qrSTFeuGZjMLeI6DnRjktcaY0QPaSY2M5kZbw
-        U6V5NcHu5Vt+gasDCsZ+fHLysZYdfg5NJjIF2U2pwA==
-X-Google-Smtp-Source: AGRyM1tyrcIEL5rRtfSf0gB+xBL0hOYD1HPltgyDD9tfK7isrIJRcuW4HZ6+26nBiYdGrw+yaTY4EG8VtL5MM98TZdc=
-X-Received: by 2002:ab0:32d8:0:b0:384:cced:87fb with SMTP id
- f24-20020ab032d8000000b00384cced87fbmr1982709uao.52.1658907225945; Wed, 27
- Jul 2022 00:33:45 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=90LqK0tDYlhW8mw1jbLiJzHeD5M9TR6TiTXrmORdnOs=;
+        b=HfFz6eWNGQjeA7QK57Rxoa9JTZrgQmhriuz8+EFWYkFC5eUH0TrdrW9f8WS1rMNPaL
+         whVqyFMSX6tZbztm5Z18++Xt1o5BlmxHVXffwiMl49CyGGh2d2hlTpqxZdPJ28eHz4g+
+         adGuQVOeFUprnBAcQNzlLsKB01fSDhQAqSNQTPjkN+EN4g7MF5Q46LDIVzx0fhLrx6Ol
+         XZODk8UcjptNMVecUs2bNFc+Ut8UXJxVhf0vsp6+N6fgKkKTMHw+DgtPsuhPh3hkZMay
+         lQm10jMOF8KS5yCr4nYfBh20x97PN1/Vilq6TiX6q8UDln+TVvzjgctVjy4o0xzvmzjs
+         ASiw==
+X-Gm-Message-State: AJIora8sohxfAazqlcmcMWVOzaGa83yHDEHpTKj6RDkPtB+sq1+jV8MF
+        aXzR99+ZRtQqB3ZP9IoVVTc=
+X-Google-Smtp-Source: AGRyM1sNTzVUPxdy7HWTJlsYBjJH63nKjJstW2gmAH/G15DWwbey+3gZVLzL1sYPMK+Wgys7gik6iA==
+X-Received: by 2002:a17:906:5d04:b0:722:f46c:b891 with SMTP id g4-20020a1709065d0400b00722f46cb891mr17290342ejt.4.1658910593479;
+        Wed, 27 Jul 2022 01:29:53 -0700 (PDT)
+Received: from ?IPV6:2a04:241e:502:a09c:994d:5eac:a62d:7a76? ([2a04:241e:502:a09c:994d:5eac:a62d:7a76])
+        by smtp.gmail.com with ESMTPSA id u2-20020a1709061da200b0072f42ca2934sm7375578ejh.148.2022.07.27.01.29.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Jul 2022 01:29:53 -0700 (PDT)
+Message-ID: <dd2ca85e-ab29-2973-f129-9afafb405851@gmail.com>
+Date:   Wed, 27 Jul 2022 11:29:50 +0300
 MIME-Version: 1.0
-References: <20220711162713.2467476-1-dlatypov@google.com> <20220711204859.3DDD5C34115@smtp.kernel.org>
- <CAGS_qxqxGfQ5tA063XoRbL1ktimyfmt+CuucJ_rsYVnoi4i7gw@mail.gmail.com>
- <CABVgOS=bm5TmEBd8jxuTPJy426OgC14ryqn4FLQR1pHNf5uhsw@mail.gmail.com> <20220726200741.2DDA2C433C1@smtp.kernel.org>
-In-Reply-To: <20220726200741.2DDA2C433C1@smtp.kernel.org>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 27 Jul 2022 15:33:34 +0800
-Message-ID: <CABVgOS=rvmh1n_-iW9UvYQ95oOvOoOu6m6+FN+2RTUKDEinb0A@mail.gmail.com>
-Subject: Re: [PATCH] clk: explicitly disable CONFIG_UML_PCI_OVER_VIRTIO in .kunitconfig
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Leonard Crestez <cdleonard@gmail.com>
+Subject: Re: [PATCH v6 21/26] selftests: net/fcnal: Initial tcp_authopt
+ support
+To:     Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@kernel.org>
+Cc:     Philip Paeps <philip@trouble.is>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yuchung Cheng <ycheng@google.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Christoph Paasch <cpaasch@apple.com>,
+        Ivan Delalande <colona@arista.com>,
+        Caowangbao <caowangbao@huawei.com>,
+        Priyaranjan Jha <priyarjha@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-clk@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        LKML <linux-kernel@vger.kernel.org>
+References: <cover.1658815925.git.cdleonard@gmail.com>
+ <ad19d5c8a24054d48e1c35bb0ec92075b9f0dc6a.1658815925.git.cdleonard@gmail.com>
+ <CANn89i+ByJsdKLXi982jq0H3irYg_ANSEdmL2zwZ_7G-E_g2eg@mail.gmail.com>
+ <CANn89i+=LVDFx_zjDy6uK+QorR+fosdkb8jqNMO6syqOsS7ZqQ@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CANn89i+=LVDFx_zjDy6uK+QorR+fosdkb8jqNMO6syqOsS7ZqQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,83 +98,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 4:07 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting David Gow (2022-07-11 23:44:08)
-> >
-> > So, as I understand it, casting a regular pointer to an __iomem
-> > pointer (as the clk test does) isn't technically correct, though it
-> > does work on almost every architecture out there. If we want some way
-> > of intercepting I/O access, then then that'll need to be handled by
-> > the various read()/write() functions.
->
-> Yep. It's test code though so it seemed ok at the time.
->
-> >
-> > UML doesn't support iomem at all out of the box, and logic_iomem is a
-> > way of implementing it which allow us to attach handler functions to
-> > blocks of memory, albeit with more constraints about what addresses
-> > get used. Brendan started implementing a "fake hardware" interface on
-> > top of this here, though it's still in-progress:
-> > https://kunit-review.googlesource.com/c/linux/+/5272/4
->
-> Cool.
->
-> >
-> > Ultimately, I think the 'correct' solution here will be
-> > logic_iomem-based, but doing that nicely will probably require one of
-> > two things:
-> > - logic_iomem to support non-UML architectures as well (becoming a
-> > generic "insert a 'fake' device here" system)
-> > - logic_iomem to have some way of "passing through" access to an io
-> > memory region through to the normal underlying memory.
-> >
-> > Ideally, we'll have both, and maybe even defaults which will allow
-> > hacks like this to continue working (perhaps with a warning?). That'll
-> > require some significant (and probably not uncontroversial) work on
-> > how iomem accesses work in general, though, possibly with performance
-> > impact.
->
-> Does it matter to pass through to real iomem? I'd think we wouldn't want
-> to actually affect real hardware in test code. Instead we'd like to fake
-> it and then look at the result, like how the clk test works.
->
 
-The only case I'm worried about is where real iomem is necessary to
-boot to the point where tests run. It won't affect UML, but if you
-were (e.g.) running tests as modules on real hardware (or under qemu),
-and iomem was required to access the disk containing these modules,
-that would be a case for having both real and fake iomem supported on
-the same system.
+On 7/26/22 10:27, Eric Dumazet wrote:
+> On Tue, Jul 26, 2022 at 9:06 AM Eric Dumazet <edumazet@google.com> wrote:
+>>
+>> On Tue, Jul 26, 2022 at 8:16 AM Leonard Crestez <cdleonard@gmail.com> wrote:
+>>>
+>>> Tests are mostly copied from tcp_md5 with minor changes.
+>>>
+>>> It covers VRF support but only based on binding multiple servers: not
+>>> multiple keys bound to different interfaces.
+>>>
+>>> Also add a specific -t tcp_authopt to run only these tests specifically.
+>>>
+>>
+>> Thanks for the test.
+>>
+>> Could you amend the existing TCP MD5 test to make sure dual sockets
+>> mode is working ?
+>>
+>> Apparently, if we have a dual stack listener socket (AF_INET6),
+>> correct incoming IPV4 SYNs are dropped.
 
-Given the sheer number of things which depend on iomem in some regard,
-I suspect this'd affect pretty much every architecture except UML.
+>>   If this is the case, fixing MD5 should happen first ;
 
-> >
-> > The other option of using function redirection on the io read()
-> > write() functions exists, and would be a bit simpler in the
-> > short-term, but would probably result in a lot of tests reimplementing
-> > this, and also would have some performance impacts, as the I/O
-> > accesses wouldn't be able to be inlined if KUNIT is enabled.
-> >
->
-> That sounds OK to me because nobody is enabling KUNIT in production,
-> right?
+I remember looking into this and my conclusion was that ipv4-mapped-ipv6 
+is not worth supporting for AO, at least not in the initial version.
 
-As Daniel noted, Android is looking at enabling KUNIT in production
-(but tainting the system if any actual tests run). That's a pretty
-unusual use-case, though, so it definitely doesn't preclude people
-from redirecting functions, particularly if ftrace-based stubbing is
-used to avoid the overhead when disabled (though I can't recall if
-that works on ARM, so Android might be out of luck for those tests
-anyway...)
+Instead I just wrote a test to check that ipv4-mapped-ipv6 fails for AO:
+https://github.com/cdleonard/tcp-authopt-test/blob/main/tcp_authopt_test/test_verify_capture.py#L191
 
-But yeah, I'm definitely not considering the potential performance
-impact a blocker here, just something to be aware of.
+On a closer look it does appear that support existed for 
+ipv4-mapped-ipv6 in TCP-MD5 but my test didn't actually exercise it 
+correctly so the test had to be fixed.
 
-Either way, neither the stubbing support or the logic_iomem stuff is
-quite ready yet, so disabling CONFIG_UML_PCI_OVER_VIRTIO is the right
-solution in the meantime.
 
-Cheers,
--- David
+Do you think it makes sense to add support for ipv4-mapped-ipv6 for AO? 
+It's not particularly difficult to test, it was skipped due to a lack of 
+application use case and to keep the initial series smaller.
+
+Adding support for this later as a separate commit should be fine. Since 
+ivp4-mapped-ipv6 addresses shouldn't appear on the wire giving them 
+special treatment "later" should raise no compatibility concerns.
+
+
+>> I think that we are very late in the cycle (linux-5.19 should be
+>> released in 5 days), and your patch set should not be merged so late.
+
+This was posted in order to get code reviews, I'm not actually expecting 
+inclusion.
+
+--
+Regards,
+Leonard
