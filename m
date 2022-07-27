@@ -2,101 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442A8581CFC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 03:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981B7581E0B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 05:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240125AbiG0BRf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jul 2022 21:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
+        id S240248AbiG0DPi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Jul 2022 23:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiG0BRf (ORCPT
+        with ESMTP id S240249AbiG0DPe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Jul 2022 21:17:35 -0400
+        Tue, 26 Jul 2022 23:15:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88132A261;
-        Tue, 26 Jul 2022 18:17:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9291F618;
+        Tue, 26 Jul 2022 20:15:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F5D616D4;
-        Wed, 27 Jul 2022 01:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95DAC433D7;
-        Wed, 27 Jul 2022 01:17:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8DAE6179E;
+        Wed, 27 Jul 2022 03:15:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC23C43470;
+        Wed, 27 Jul 2022 03:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658884653;
-        bh=yHdFI7UZExa1GxsmSAJPPFlPx1kKFocZoTBH3mG9NMo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mdshVMdvfzhti6LRuDN6H7FqRhIPEHgJQTuekQbRk/mzcXXE8ynF8tli3utiZLp5O
-         QxJiEvHmZWAdKm0SYEtppBgNd1fXBwwgNxA1xN/58n6z/5G0fZLq1uX8wd9Gu+Ny9s
-         3BZFdmz9bgUxy7tc8D9OXGQTNnxX+AolldBOTMuoHbo/jeOpa7QOB7GpQQczyvNU5w
-         Mb6G9CKihsYC/NAcfU+R9sFAv01z9O5gFdLey2i/K+Dz7mddR0bFAiv8OXIQMYhtc1
-         +saf5fv4mak89IDZ4Wam0A9XfwnyABJR6qN7sfsaT3/bqbqGI+zbkKoRM2ZPP2tLqf
-         rmhz8+MSk3NtQ==
-Message-ID: <40928cfc-150c-8714-bb83-21d325ce93e5@kernel.org>
-Date:   Tue, 26 Jul 2022 19:17:30 -0600
+        s=k20201202; t=1658891728;
+        bh=98m1MP/BsUSS1HT5ZOJ6sMn10injMVph2ZMCGFuPrsc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oIBybeH8Vv+ALbEwqhddGczxN/v8jvBikvgOkDwKuiil0kPdiGk94TnuV4sZxKecY
+         y3nP9COxHmObRFf97kr4k6ZoEmW/T5UEgTzOUfIeIQePXJwOEBVZsrs0DQG1Ql3FOh
+         4/c6gHvBNRb191C8p9xTFKXOe1Mdj6OVu66EPsqA/7dbLdIkWMepLWuarkm+gFYa78
+         URhKcDWPKGh1/WhjSSrLFizYTJN/repVz8wlzLJ5eUlY+0lpf0UxUHw9bVr1nNO7Z6
+         v5qEZfE72B9NiyzhXJUHxHobLYOlJHy+xdG/PlN2w31fbPG50DmP4bWZ743Mvg0ThR
+         uKnp6uSW9iVaQ==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+        borisp@nvidia.com, john.fastabend@gmail.com, maximmi@nvidia.com,
+        tariqt@nvidia.com, vfedorenko@novek.ru,
+        Jakub Kicinski <kuba@kernel.org>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 1/4] selftests: tls: handful of memrnd() and length checks
+Date:   Tue, 26 Jul 2022 20:15:21 -0700
+Message-Id: <20220727031524.358216-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220727031524.358216-1-kuba@kernel.org>
+References: <20220727031524.358216-1-kuba@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.11.0
-Subject: Re: [PATCH v6 02/26] tcp: authopt: Remove more unused noops
-Content-Language: en-US
-To:     Leonard Crestez <cdleonard@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Philip Paeps <philip@trouble.is>
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1658815925.git.cdleonard@gmail.com>
- <2e9007e2f536ef2b8e3dfdaa1dd44dcc6bfc125f.1658815925.git.cdleonard@gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <2e9007e2f536ef2b8e3dfdaa1dd44dcc6bfc125f.1658815925.git.cdleonard@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/26/22 12:15 AM, Leonard Crestez wrote:
-> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
-> ---
->  include/net/tcp_authopt.h | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
-> index adf325c260d5..bc2cff82830d 100644
-> --- a/include/net/tcp_authopt.h
-> +++ b/include/net/tcp_authopt.h
-> @@ -60,14 +60,10 @@ DECLARE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
->  void tcp_authopt_clear(struct sock *sk);
->  int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen);
->  int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key);
->  int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen);
->  #else
-> -static inline int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key)
-> -{
-> -	return -ENOPROTOOPT;
-> -}
->  static inline void tcp_authopt_clear(struct sock *sk)
->  {
->  }
->  #endif
->  
-added in the previous patch, so this one should be folded into patch 1
+Add a handful of memory randomizations and precise length checks.
+Nothing is really broken here, I did this to increase confidence
+when debugging. It does fix a GCC warning, tho. Apparently GCC
+recognizes that memory needs to be initialized for send() but
+does not recognize that for write().
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/tls.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 4ecbac197c46..2cbb12736596 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -644,12 +644,14 @@ TEST_F(tls, splice_from_pipe2)
+ 	int p2[2];
+ 	int p[2];
+ 
++	memrnd(mem_send, sizeof(mem_send));
++
+ 	ASSERT_GE(pipe(p), 0);
+ 	ASSERT_GE(pipe(p2), 0);
+-	EXPECT_GE(write(p[1], mem_send, 8000), 0);
+-	EXPECT_GE(splice(p[0], NULL, self->fd, NULL, 8000, 0), 0);
+-	EXPECT_GE(write(p2[1], mem_send + 8000, 8000), 0);
+-	EXPECT_GE(splice(p2[0], NULL, self->fd, NULL, 8000, 0), 0);
++	EXPECT_EQ(write(p[1], mem_send, 8000), 8000);
++	EXPECT_EQ(splice(p[0], NULL, self->fd, NULL, 8000, 0), 8000);
++	EXPECT_EQ(write(p2[1], mem_send + 8000, 8000), 8000);
++	EXPECT_EQ(splice(p2[0], NULL, self->fd, NULL, 8000, 0), 8000);
+ 	EXPECT_EQ(recv(self->cfd, mem_recv, send_len, MSG_WAITALL), send_len);
+ 	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
+ }
+@@ -683,10 +685,12 @@ TEST_F(tls, splice_to_pipe)
+ 	char mem_recv[TLS_PAYLOAD_MAX_LEN];
+ 	int p[2];
+ 
++	memrnd(mem_send, sizeof(mem_send));
++
+ 	ASSERT_GE(pipe(p), 0);
+-	EXPECT_GE(send(self->fd, mem_send, send_len, 0), 0);
+-	EXPECT_GE(splice(self->cfd, NULL, p[1], NULL, send_len, 0), 0);
+-	EXPECT_GE(read(p[0], mem_recv, send_len), 0);
++	EXPECT_EQ(send(self->fd, mem_send, send_len, 0), send_len);
++	EXPECT_EQ(splice(self->cfd, NULL, p[1], NULL, send_len, 0), send_len);
++	EXPECT_EQ(read(p[0], mem_recv, send_len), send_len);
+ 	EXPECT_EQ(memcmp(mem_send, mem_recv, send_len), 0);
+ }
+ 
+@@ -875,6 +879,8 @@ TEST_F(tls, multiple_send_single_recv)
+ 	char recv_mem[2 * 10];
+ 	char send_mem[10];
+ 
++	memrnd(send_mem, sizeof(send_mem));
++
+ 	EXPECT_GE(send(self->fd, send_mem, send_len, 0), 0);
+ 	EXPECT_GE(send(self->fd, send_mem, send_len, 0), 0);
+ 	memset(recv_mem, 0, total_len);
+@@ -891,6 +897,8 @@ TEST_F(tls, single_send_multiple_recv_non_align)
+ 	char recv_mem[recv_len * 2];
+ 	char send_mem[total_len];
+ 
++	memrnd(send_mem, sizeof(send_mem));
++
+ 	EXPECT_GE(send(self->fd, send_mem, total_len, 0), 0);
+ 	memset(recv_mem, 0, total_len);
+ 
+@@ -936,10 +944,10 @@ TEST_F(tls, recv_peek)
+ 	char buf[15];
+ 
+ 	EXPECT_EQ(send(self->fd, test_str, send_len, 0), send_len);
+-	EXPECT_NE(recv(self->cfd, buf, send_len, MSG_PEEK), -1);
++	EXPECT_EQ(recv(self->cfd, buf, send_len, MSG_PEEK), send_len);
+ 	EXPECT_EQ(memcmp(test_str, buf, send_len), 0);
+ 	memset(buf, 0, sizeof(buf));
+-	EXPECT_NE(recv(self->cfd, buf, send_len, 0), -1);
++	EXPECT_EQ(recv(self->cfd, buf, send_len, 0), send_len);
+ 	EXPECT_EQ(memcmp(test_str, buf, send_len), 0);
+ }
+ 
+-- 
+2.37.1
+
