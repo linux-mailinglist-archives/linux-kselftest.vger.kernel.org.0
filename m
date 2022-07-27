@@ -2,144 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDC858264F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 14:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFF958298C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 17:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiG0MXi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Jul 2022 08:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S231297AbiG0PYQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Jul 2022 11:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiG0MXh (ORCPT
+        with ESMTP id S233785AbiG0PYN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Jul 2022 08:23:37 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1085340BCC;
-        Wed, 27 Jul 2022 05:23:36 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4LtCcR1fjCz9t02;
-        Wed, 27 Jul 2022 12:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1658924615; bh=IMaCWTdqXT8YkmIj6Etf3jBLHcW5BWmhqXKF5qlpBSA=;
+        Wed, 27 Jul 2022 11:24:13 -0400
+X-Greylist: delayed 528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Jul 2022 08:24:10 PDT
+Received: from serv108.segi.ulg.ac.be (serv108.segi.ulg.ac.be [139.165.32.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F8547B95;
+        Wed, 27 Jul 2022 08:24:09 -0700 (PDT)
+Received: from [31.133.137.93] (dhcp-895d.meeting.ietf.org [31.133.137.93])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by serv108.segi.ulg.ac.be (Postfix) with ESMTPSA id 76039200DF96;
+        Wed, 27 Jul 2022 17:15:15 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 serv108.segi.ulg.ac.be 76039200DF96
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uliege.be;
+        s=ulg20190529; t=1658934916;
+        bh=I848GIMG+rr1vSQNnER5ZP2Oz/37p0WtxAU9zeysw/I=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mHuoLyqcZ2xXbY2RELFqf1cY+QgEjEymiCpglmSCHOKc39tzCzijgeYHTa4/tq0tc
-         VmNVAWK1C+u7KeWE4YdvXZBzpHuD8TyPzUXYpPTxKc/DKcMmmHIoApipbjwMERomt3
-         yLx+ezP0lLoAWo9RyjM4rzePTYzdLH2Wjjt6JE/M=
-X-Riseup-User-ID: 73DB5447F23BB85AD30048B0035AAD72E9B41629F89208D7956C15F022DA05B4
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4LtCcJ63s7z1yWm;
-        Wed, 27 Jul 2022 12:23:28 +0000 (UTC)
-Message-ID: <bd1f2c37-fad8-87c5-b5ca-ba56e976c68d@riseup.net>
-Date:   Wed, 27 Jul 2022 09:23:25 -0300
+        b=kQ14gRdmvnxnQkRtSxXOGlkfGEkGd+/lwkS5LaE1/zcdeL5o9gJaxqmMh/gVTcY4U
+         msClq4fhT2aOmVaFcjnQNNkpwNcfkH+K2zE93PkazIdEnzeWsDOdFfKNltlJRTDEe7
+         jbfjoFIB2sZORqQUxpkDVP0Xb81zbBIY9Xlh3u0tQm8lsmGOUr0chyghO03PF1EXoN
+         l0PDUQNZXezrQoKNV9AkJZNc0qXxs9EKhGkH3ri+wSFKLc4NKrfQx0LpUUJ4eWAtxT
+         mc4Z4QShFTtAiq1lwPOzESKqVzlPWFIjzgMHikik5jLEqLXmsDr4ODjpvCsBMU5jdW
+         IstyOlvhX7aOg==
+Message-ID: <8810d090-3fcb-0e93-ce5d-e88abb421dba@uliege.be>
+Date:   Wed, 27 Jul 2022 11:15:13 -0400
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/tests: Split up test cases in
- igt_check_drm_format_min_pitch
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] selftests: net: fix IOAM test skip return code
 Content-Language: en-US
-To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, Guenter Roeck <linux@roeck-us.net>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20220717184336.1197723-1-mairacanal@riseup.net>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220717184336.1197723-1-mairacanal@riseup.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Kleber Sacilotto de Souza <kleber.souza@canonical.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+References: <20220727093742.115882-1-kleber.souza@canonical.com>
+From:   Justin Iurman <justin.iurman@uliege.be>
+In-Reply-To: <20220727093742.115882-1-kleber.souza@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi all,
-
-Friendly ping: is someone available to take this, please?
-
-Best Regards,
-- Maíra Canal
-
-On 7/17/22 15:43, Maíra Canal wrote:
-> The igt_check_drm_format_min_pitch() function had a lot of
-> KUNIT_EXPECT_* calls, all of which ended up allocating and initializing
-> various test assertion structures on the stack.
+On 7/27/22 11:37, Kleber Sacilotto de Souza wrote:
+> The ioam6.sh test script exits with an error code (1) when tests are
+> skipped due to lack of support from userspace/kernel or not enough
+> permissions. It should return the kselftests SKIP code instead.
 > 
-> This behavior was producing -Wframe-larger-than warnings on PowerPC, i386,
-> and MIPS architectures, such as:
-> 
-> drivers/gpu/drm/tests/drm_format_test.c: In function 'igt_check_drm_format_min_pitch':
-> drivers/gpu/drm/tests/drm_format_test.c:271:1: error: the frame size of
-> 3712 bytes is larger than 2048 bytes
-> 
-> So, the igt_check_drm_format_min_pitch() test case was split into three
-> smaller functions: one testing single plane formats, one testing multiple
-> planes formats, and the other testing tiled formats.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+> Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
 > ---
->  drivers/gpu/drm/tests/drm_format_test.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
+>   tools/testing/selftests/net/ioam6.sh | 12 +++++++-----
+>   1 file changed, 7 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/tests/drm_format_test.c b/drivers/gpu/drm/tests/drm_format_test.c
-> index 056cb8599d6d..28f2b8f88818 100644
-> --- a/drivers/gpu/drm/tests/drm_format_test.c
-> +++ b/drivers/gpu/drm/tests/drm_format_test.c
-> @@ -91,7 +91,7 @@ static void igt_check_drm_format_block_height(struct kunit *test)
->  	KUNIT_EXPECT_FALSE(test, drm_format_info_block_height(info, -1));
->  }
->  
-> -static void igt_check_drm_format_min_pitch(struct kunit *test)
-> +static void igt_check_drm_format_min_pitch_for_single_plane(struct kunit *test)
->  {
->  	const struct drm_format_info *info = NULL;
->  
-> @@ -175,6 +175,11 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->  			(uint64_t)UINT_MAX * 4);
->  	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
->  			(uint64_t)(UINT_MAX - 1) * 4);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_multiple_planes(struct kunit *test)
-> +{
-> +	const struct drm_format_info *info = NULL;
->  
->  	/* Test 2 planes format */
->  	info = drm_format_info(DRM_FORMAT_NV12);
-> @@ -249,6 +254,11 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->  			(uint64_t)(UINT_MAX - 1) / 2);
->  	KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2),
->  			(uint64_t)(UINT_MAX - 1) / 2);
-> +}
-> +
-> +static void igt_check_drm_format_min_pitch_for_tiled_format(struct kunit *test)
-> +{
-> +	const struct drm_format_info *info = NULL;
->  
->  	/* Test tiled format */
->  	info = drm_format_info(DRM_FORMAT_X0L2);
-> @@ -273,7 +283,9 @@ static void igt_check_drm_format_min_pitch(struct kunit *test)
->  static struct kunit_case drm_format_tests[] = {
->  	KUNIT_CASE(igt_check_drm_format_block_width),
->  	KUNIT_CASE(igt_check_drm_format_block_height),
-> -	KUNIT_CASE(igt_check_drm_format_min_pitch),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_single_plane),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_multiple_planes),
-> +	KUNIT_CASE(igt_check_drm_format_min_pitch_for_tiled_format),
->  	{ }
->  };
->  
+> diff --git a/tools/testing/selftests/net/ioam6.sh b/tools/testing/selftests/net/ioam6.sh
+> index a2b9fad5a9a6..4ceb401da1bf 100755
+> --- a/tools/testing/selftests/net/ioam6.sh
+> +++ b/tools/testing/selftests/net/ioam6.sh
+> @@ -117,6 +117,8 @@
+>   #        | Schema Data         |                                     |
+>   #        +-----------------------------------------------------------+
+>   
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+>   
+>   ################################################################################
+>   #                                                                              #
+> @@ -211,7 +213,7 @@ check_kernel_compatibility()
+>       echo "SKIP: kernel version probably too old, missing ioam support"
+>       ip link del veth0 2>/dev/null || true
+>       ip netns del ioam-tmp-node || true
+> -    exit 1
+> +    exit $ksft_skip
+>     fi
+>   
+>     ip -netns ioam-tmp-node route add db02::/64 encap ioam6 mode inline \
+> @@ -227,7 +229,7 @@ check_kernel_compatibility()
+>            "without CONFIG_IPV6_IOAM6_LWTUNNEL?"
+>       ip link del veth0 2>/dev/null || true
+>       ip netns del ioam-tmp-node || true
+> -    exit 1
+> +    exit $ksft_skip
+>     fi
+>   
+>     ip link del veth0 2>/dev/null || true
+> @@ -752,20 +754,20 @@ nfailed=0
+>   if [ "$(id -u)" -ne 0 ]
+>   then
+>     echo "SKIP: Need root privileges"
+> -  exit 1
+> +  exit $ksft_skip
+>   fi
+>   
+>   if [ ! -x "$(command -v ip)" ]
+>   then
+>     echo "SKIP: Could not run test without ip tool"
+> -  exit 1
+> +  exit $ksft_skip
+>   fi
+>   
+>   ip ioam &>/dev/null
+>   if [ $? = 1 ]
+>   then
+>     echo "SKIP: iproute2 too old, missing ioam command"
+> -  exit 1
+> +  exit $ksft_skip
+>   fi
+>   
+>   check_kernel_compatibility
+
+LGTM, thanks.
+
+Reviewed-by: Justin Iurman <justin.iurman@uliege.be>
