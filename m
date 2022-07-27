@@ -2,146 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C83E582317
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 11:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B1D582345
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 11:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbiG0J2Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Jul 2022 05:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
+        id S230478AbiG0Jhx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Jul 2022 05:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiG0J15 (ORCPT
+        with ESMTP id S229600AbiG0Jhr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Jul 2022 05:27:57 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962AE47BB9
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 02:27:55 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id y127so2241395yby.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 02:27:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bBFDz2W5xcHE0ZM3OCmaQTYQarGqNZfYlbjkrHAkU7Y=;
-        b=GzP/fohU8r+nSa3pQEBIHnxBWxZwdz999gax3ajvKKV/3qdNXgkMNf+4icGDdVliom
-         bSnb1aJALnTPPwUJAbpGuWaJJZ9qjslqNlGZZAneOAIusIAWv1CUuTznA9SxSf6+mIh2
-         pqhUvsR4XeiSykRLGwKylGq9JxhtxOWhs99agWtcf4xdfPblA4Wo+3WABwYAmdva9L0J
-         WvKFgZo2Q/IJkcXb3a3GjoXn0WD+wzQDWCfiux1tarsXAr2hhDUGBq7rwGFG8tURaiPF
-         pK8/1x0OC8CDhcC+tZW4s05T4/N2tzLIO2a2LvZLqCsmQI478xmdYM+ibJPHWyDy5TvS
-         m9Sw==
+        Wed, 27 Jul 2022 05:37:47 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0277447B9C
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 02:37:45 -0700 (PDT)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 07C893F0B5
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 09:37:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1658914664;
+        bh=hILhH7/kC6Kccs7jjUf20npcM9l6uxbNnqr7pxtXMH8=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=B+qIGBBtBzJ6obhiob11BqwfBd5/VxIa8s578Gq2cewITr1Y/+j1IuNUbsdIDmbvV
+         FhSy278+3U8VBAZ8JOb0IOdxaUnsYKVd6pqvYZkPPVDbT33I9VYixprajE89rkTMju
+         yp9YcjZ5LwLlSw+oo7/bWXSSh/r3IGgR1q+EtxpqkJ9etajzeaXlyBNQRjcNJj1nBm
+         4KO7vIG2jmubU/zs60RmQzjE52U3NWsfp/xKJFCU56kuZxKWTqO6lcc7Sc8GKUFJvd
+         oHPhup/8m80gOod7V2ytTH+Op5FTiekIZtKOpYh+tc6g5JgFUQpt7TNBu+J5L0EnYU
+         HgyBle5k+UacA==
+Received: by mail-ej1-f72.google.com with SMTP id qw22-20020a1709066a1600b0072f43c1f59bso4904967ejc.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 02:37:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bBFDz2W5xcHE0ZM3OCmaQTYQarGqNZfYlbjkrHAkU7Y=;
-        b=MA09Xr5yI+ZjjVzml8dgT21mOdZAnGOuVllybTBgsmclznN/6BVrbxM7zkd4ygYoVb
-         +qeWK6QYXZXDvvWKBa4a5AvjmCTBhuDiWKSe6hamr7PeAG9AvUI9SV/4wqW6Zzxpopkb
-         qH9Ihd9U1saAKu8mUVFYVdTnVhBAGOESMkFRZWz277jW5Mt37W/gDsGMm9LBCkxnGXxS
-         xvVsgpzPn1Qsh4KtaQ8f4XUDesQP3WF9V7ZNpaliSZR5iw5tfekghueMEhEkdwAlujv/
-         UMLS86+DD7AZIvuu8pq7jOqSWLcHDwgO64TKsGrSa/NrN6Ov5S2HbDtgyxQ9ZcDV2iJa
-         9FhA==
-X-Gm-Message-State: AJIora8Seo+kfOUyZv6v9/sxN8X6Ax0KNIKTTap55mBKkT2ZShhBsObU
-        SPY3r+d1cIkFKfqOfa+7qT2cNWpX+nyjt7QzX2HJtA==
-X-Google-Smtp-Source: AGRyM1ug6YIa7Qapp9b4B5y5/JmJxQbX5IwK+4B6dyOrtwMDpXUoAPCGrqsdEXvxbtlSDQIZ8jY0SSTJaKISEH9GcuU=
-X-Received: by 2002:a25:ab84:0:b0:671:748b:ffab with SMTP id
- v4-20020a25ab84000000b00671748bffabmr5212697ybi.427.1658914074600; Wed, 27
- Jul 2022 02:27:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1658815925.git.cdleonard@gmail.com> <ad19d5c8a24054d48e1c35bb0ec92075b9f0dc6a.1658815925.git.cdleonard@gmail.com>
- <CANn89i+ByJsdKLXi982jq0H3irYg_ANSEdmL2zwZ_7G-E_g2eg@mail.gmail.com>
- <CANn89i+=LVDFx_zjDy6uK+QorR+fosdkb8jqNMO6syqOsS7ZqQ@mail.gmail.com> <dd2ca85e-ab29-2973-f129-9afafb405851@gmail.com>
-In-Reply-To: <dd2ca85e-ab29-2973-f129-9afafb405851@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 27 Jul 2022 11:27:43 +0200
-Message-ID: <CANn89iLUuSWFHbZnb9DSJfR58bCU=pq+uPmT6s45=nrDzMWYYg@mail.gmail.com>
-Subject: Re: [PATCH v6 21/26] selftests: net/fcnal: Initial tcp_authopt support
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>, Philip Paeps <philip@trouble.is>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hILhH7/kC6Kccs7jjUf20npcM9l6uxbNnqr7pxtXMH8=;
+        b=rUBkpW5KzlrhIoirSLNbWHca6cLRzR97z0fnxk75PMOWMfDO9yQmNZpGlJbAYn5smG
+         ptn+OQ1J6aB9Qqs8iwNwmcqIhvDGOVIeZa/uw/RSGP0bRQXU6fhL15mlHOQoy+N6/ekG
+         WpnmvLLb7goSKzhnAufBeaZM0Xxey5f2bvo+gAYiQ8Xp9WNf+5LfMmW/rTOcqgzSRBbc
+         2hGLWmXv/8P/YEoSnKH/BwpSXz+smWaBmCzFxk0IxHMg4nrXv1m6nOphxHkXDSXjJmzg
+         eJmKo8V9jxxT3m85IoW6UoAoS42UeiJvr/gWOWBFSqoqYpbM5jv2j9u438LSlF5asDM7
+         m8Tw==
+X-Gm-Message-State: AJIora8PC82K5aSAfp6pSi8B8/sbiLJL2B5PEj/iABMFEZaQZ2ZAhPfd
+        iIzqJdYoE7wxvSxq3708dFVxtWhV49RXM3HBUTNRaPJxPa0jvkh3GfGZ+qT6p+I0vDCxD5AkOLA
+        65w2nywU4OzLY1KfmHc8oKfM0R1UMIc2xp3CkGVIzpz4O+g==
+X-Received: by 2002:aa7:c784:0:b0:43a:caa8:75b9 with SMTP id n4-20020aa7c784000000b0043acaa875b9mr21256938eds.311.1658914663785;
+        Wed, 27 Jul 2022 02:37:43 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tLLbtz3ZSxyKsrW5QpuIdirXzcFPHDjvKcNtHAMHHwrM5te/71ixtY2CwMWYC9MbKlNZozJw==
+X-Received: by 2002:aa7:c784:0:b0:43a:caa8:75b9 with SMTP id n4-20020aa7c784000000b0043acaa875b9mr21256922eds.311.1658914663607;
+        Wed, 27 Jul 2022 02:37:43 -0700 (PDT)
+Received: from callisto.. (p579d80fd.dip0.t-ipconnect.de. [87.157.128.253])
+        by smtp.gmail.com with ESMTPSA id g6-20020a17090669c600b0072a815f569bsm7440928ejs.185.2022.07.27.02.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jul 2022 02:37:43 -0700 (PDT)
+From:   Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Justin Iurman <justin.iurman@uliege.be>,
         Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH] selftests: net: fix IOAM test skip return code
+Date:   Wed, 27 Jul 2022 11:37:42 +0200
+Message-Id: <20220727093742.115882-1-kleber.souza@canonical.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 10:29 AM Leonard Crestez <cdleonard@gmail.com> wrote:
->
->
-> On 7/26/22 10:27, Eric Dumazet wrote:
-> > On Tue, Jul 26, 2022 at 9:06 AM Eric Dumazet <edumazet@google.com> wrote:
-> >>
-> >> On Tue, Jul 26, 2022 at 8:16 AM Leonard Crestez <cdleonard@gmail.com> wrote:
-> >>>
-> >>> Tests are mostly copied from tcp_md5 with minor changes.
-> >>>
-> >>> It covers VRF support but only based on binding multiple servers: not
-> >>> multiple keys bound to different interfaces.
-> >>>
-> >>> Also add a specific -t tcp_authopt to run only these tests specifically.
-> >>>
-> >>
-> >> Thanks for the test.
-> >>
-> >> Could you amend the existing TCP MD5 test to make sure dual sockets
-> >> mode is working ?
-> >>
-> >> Apparently, if we have a dual stack listener socket (AF_INET6),
-> >> correct incoming IPV4 SYNs are dropped.
->
-> >>   If this is the case, fixing MD5 should happen first ;
->
-> I remember looking into this and my conclusion was that ipv4-mapped-ipv6
-> is not worth supporting for AO, at least not in the initial version.
->
-> Instead I just wrote a test to check that ipv4-mapped-ipv6 fails for AO:
-> https://github.com/cdleonard/tcp-authopt-test/blob/main/tcp_authopt_test/test_verify_capture.py#L191
->
-> On a closer look it does appear that support existed for
-> ipv4-mapped-ipv6 in TCP-MD5 but my test didn't actually exercise it
-> correctly so the test had to be fixed.
->
->
-> Do you think it makes sense to add support for ipv4-mapped-ipv6 for AO?
-> It's not particularly difficult to test, it was skipped due to a lack of
-> application use case and to keep the initial series smaller.
+The ioam6.sh test script exits with an error code (1) when tests are
+skipped due to lack of support from userspace/kernel or not enough
+permissions. It should return the kselftests SKIP code instead.
 
-I think this makes sense. ipv4-mapped support is definitely used.
+Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+---
+ tools/testing/selftests/net/ioam6.sh | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
->
-> Adding support for this later as a separate commit should be fine. Since
-> ivp4-mapped-ipv6 addresses shouldn't appear on the wire giving them
-> special treatment "later" should raise no compatibility concerns.
->
->
-> >> I think that we are very late in the cycle (linux-5.19 should be
-> >> released in 5 days), and your patch set should not be merged so late.
->
-> This was posted in order to get code reviews, I'm not actually expecting
-> inclusion.
+diff --git a/tools/testing/selftests/net/ioam6.sh b/tools/testing/selftests/net/ioam6.sh
+index a2b9fad5a9a6..4ceb401da1bf 100755
+--- a/tools/testing/selftests/net/ioam6.sh
++++ b/tools/testing/selftests/net/ioam6.sh
+@@ -117,6 +117,8 @@
+ #        | Schema Data         |                                     |
+ #        +-----------------------------------------------------------+
+ 
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
+ 
+ ################################################################################
+ #                                                                              #
+@@ -211,7 +213,7 @@ check_kernel_compatibility()
+     echo "SKIP: kernel version probably too old, missing ioam support"
+     ip link del veth0 2>/dev/null || true
+     ip netns del ioam-tmp-node || true
+-    exit 1
++    exit $ksft_skip
+   fi
+ 
+   ip -netns ioam-tmp-node route add db02::/64 encap ioam6 mode inline \
+@@ -227,7 +229,7 @@ check_kernel_compatibility()
+          "without CONFIG_IPV6_IOAM6_LWTUNNEL?"
+     ip link del veth0 2>/dev/null || true
+     ip netns del ioam-tmp-node || true
+-    exit 1
++    exit $ksft_skip
+   fi
+ 
+   ip link del veth0 2>/dev/null || true
+@@ -752,20 +754,20 @@ nfailed=0
+ if [ "$(id -u)" -ne 0 ]
+ then
+   echo "SKIP: Need root privileges"
+-  exit 1
++  exit $ksft_skip
+ fi
+ 
+ if [ ! -x "$(command -v ip)" ]
+ then
+   echo "SKIP: Could not run test without ip tool"
+-  exit 1
++  exit $ksft_skip
+ fi
+ 
+ ip ioam &>/dev/null
+ if [ $? = 1 ]
+ then
+   echo "SKIP: iproute2 too old, missing ioam command"
+-  exit 1
++  exit $ksft_skip
+ fi
+ 
+ check_kernel_compatibility
+-- 
+2.34.1
 
-To be clear, I am supporting this work and would like to see it being
-merged hopefully soon ;)
