@@ -2,81 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE70581E47
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 05:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CB8582121
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Jul 2022 09:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbiG0DaS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Jul 2022 23:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
+        id S229580AbiG0Hdt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Jul 2022 03:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiG0DaQ (ORCPT
+        with ESMTP id S229878AbiG0Hdt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Jul 2022 23:30:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E025FC0;
-        Tue, 26 Jul 2022 20:30:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A82B9615BB;
-        Wed, 27 Jul 2022 03:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E4B1C433D7;
-        Wed, 27 Jul 2022 03:30:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658892613;
-        bh=mYmkGhE+TDagfGq63u9eYbxdP+GDgv7ePkP1LSAJqKs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sKmgipJZdaQ3mY02St2TXXPZzxu7vijYNkCk7LXwtRHYCwO3D1sAgIxhuwIQk4csd
-         0Zpjhd5BpGgpA953SKHYygzo1q8HT01vHaSDiMLInHj+pcQ/DCcSNID3tXEoEJAhyG
-         e04y2WF7Ephr5yKViC+ZyXTcaMrtO7KS4kyWI/odJNFLvrOkobyB4YfdU/4GMfyNZm
-         vl6IIJnhFcnDQSsFnWK1TDZchd4j1m/eMN9AKr5VXZYlRjDW27KtI1yCDmoyT1VsUj
-         EJNt6FOyiwuS60UrBlIVz27Zf/a/O72LkAPtWFzO7aFI96CVRQ9Od0ub6o/dzMjZAV
-         HJOx+TkFh751Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7327C43140;
-        Wed, 27 Jul 2022 03:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 27 Jul 2022 03:33:49 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C6E1403D
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 00:33:46 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id t21so6406690uaq.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Jul 2022 00:33:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K9terHDd9pBkdhpb5Lv3MDxyCeJPbC9WTivXosPfkwc=;
+        b=G8MHYFcRGoVn8IWTYMUJRGERsrgiwCYpqbzuMvOUhSpbr8AkUsGiaRKtCgfKzFtbJM
+         rBwDsqY1KnTEEsNLBbI2oNTCfOC2Zqyc/M9Htmv/yBJrybNE5GeEe7Z+iN/5t3o5VyE7
+         ao3WHhq84IJNGIDYAdlWRAg610Q65td9W9zxCttaxtweHhlqYzkM4hm6iCPVPpaYsE2b
+         IJ9YLUM2Oog8Y36nU9bMJM3ajmKtkgcMRldNZfy0dpzZqERRz2uK0yjqcYTyu9TpuEBz
+         mFxYw6GF2nBj/nxyrja8KguYqUnrqdbueBV8f0wl1FipHtOPMwyUNJNXGREr2s1xiUvA
+         cNaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K9terHDd9pBkdhpb5Lv3MDxyCeJPbC9WTivXosPfkwc=;
+        b=EkO31Uxc+LIe9Dldxxxv1+9YP/ud3XvSMBhkgWpT4LR/SN3SyviSFBVULxQha/16/Y
+         YNY5/4s5GfONkstDgJX38zPt/7pTwCT7lVTfqeBUiyymZ4cSWj6pSiqoOVWSC+XAVsMO
+         ExPjDOqt48nkgvwUH5gCGrcAE2rUbr/qi5NSmXuVcHPaMAPdMSHipYwjcbc3Sn/oXNto
+         Vw4Z3REgBfnvGIhJ9glIC7mF7ITBI9qHyOyWnyBU5sn+TOHA79qldgacMCurMSzReLFm
+         UgegOaS2iGDOt7QTjSY30jozASf3gxmKDAPzEhbQN7/N8ozZd+Ht3BRSmeguBst+4goE
+         AscA==
+X-Gm-Message-State: AJIora+/Xr+F7TDjXf5qrSTFeuGZjMLeI6DnRjktcaY0QPaSY2M5kZbw
+        U6V5NcHu5Vt+gasDCsZ+fHLysZYdfg5NJjIF2U2pwA==
+X-Google-Smtp-Source: AGRyM1tyrcIEL5rRtfSf0gB+xBL0hOYD1HPltgyDD9tfK7isrIJRcuW4HZ6+26nBiYdGrw+yaTY4EG8VtL5MM98TZdc=
+X-Received: by 2002:ab0:32d8:0:b0:384:cced:87fb with SMTP id
+ f24-20020ab032d8000000b00384cced87fbmr1982709uao.52.1658907225945; Wed, 27
+ Jul 2022 00:33:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests: net: Fix typo 'the the' in comment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165889261294.20797.8257357342204781894.git-patchwork-notify@kernel.org>
-Date:   Wed, 27 Jul 2022 03:30:12 +0000
-References: <20220725020124.5760-1-slark_xiao@163.com>
-In-Reply-To: <20220725020124.5760-1-slark_xiao@163.com>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220711162713.2467476-1-dlatypov@google.com> <20220711204859.3DDD5C34115@smtp.kernel.org>
+ <CAGS_qxqxGfQ5tA063XoRbL1ktimyfmt+CuucJ_rsYVnoi4i7gw@mail.gmail.com>
+ <CABVgOS=bm5TmEBd8jxuTPJy426OgC14ryqn4FLQR1pHNf5uhsw@mail.gmail.com> <20220726200741.2DDA2C433C1@smtp.kernel.org>
+In-Reply-To: <20220726200741.2DDA2C433C1@smtp.kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 27 Jul 2022 15:33:34 +0800
+Message-ID: <CABVgOS=rvmh1n_-iW9UvYQ95oOvOoOu6m6+FN+2RTUKDEinb0A@mail.gmail.com>
+Subject: Re: [PATCH] clk: explicitly disable CONFIG_UML_PCI_OVER_VIRTIO in .kunitconfig
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Wed, Jul 27, 2022 at 4:07 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting David Gow (2022-07-11 23:44:08)
+> >
+> > So, as I understand it, casting a regular pointer to an __iomem
+> > pointer (as the clk test does) isn't technically correct, though it
+> > does work on almost every architecture out there. If we want some way
+> > of intercepting I/O access, then then that'll need to be handled by
+> > the various read()/write() functions.
+>
+> Yep. It's test code though so it seemed ok at the time.
+>
+> >
+> > UML doesn't support iomem at all out of the box, and logic_iomem is a
+> > way of implementing it which allow us to attach handler functions to
+> > blocks of memory, albeit with more constraints about what addresses
+> > get used. Brendan started implementing a "fake hardware" interface on
+> > top of this here, though it's still in-progress:
+> > https://kunit-review.googlesource.com/c/linux/+/5272/4
+>
+> Cool.
+>
+> >
+> > Ultimately, I think the 'correct' solution here will be
+> > logic_iomem-based, but doing that nicely will probably require one of
+> > two things:
+> > - logic_iomem to support non-UML architectures as well (becoming a
+> > generic "insert a 'fake' device here" system)
+> > - logic_iomem to have some way of "passing through" access to an io
+> > memory region through to the normal underlying memory.
+> >
+> > Ideally, we'll have both, and maybe even defaults which will allow
+> > hacks like this to continue working (perhaps with a warning?). That'll
+> > require some significant (and probably not uncontroversial) work on
+> > how iomem accesses work in general, though, possibly with performance
+> > impact.
+>
+> Does it matter to pass through to real iomem? I'd think we wouldn't want
+> to actually affect real hardware in test code. Instead we'd like to fake
+> it and then look at the result, like how the clk test works.
+>
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+The only case I'm worried about is where real iomem is necessary to
+boot to the point where tests run. It won't affect UML, but if you
+were (e.g.) running tests as modules on real hardware (or under qemu),
+and iomem was required to access the disk containing these modules,
+that would be a case for having both real and fake iomem supported on
+the same system.
 
-On Mon, 25 Jul 2022 10:01:24 +0800 you wrote:
-> Replace 'the the' with 'the' in the comment.
-> 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
->  tools/testing/selftests/net/forwarding/vxlan_asymmetric.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Given the sheer number of things which depend on iomem in some regard,
+I suspect this'd affect pretty much every architecture except UML.
 
-Here is the summary with links:
-  - selftests: net: Fix typo 'the the' in comment
-    https://git.kernel.org/netdev/net-next/c/060468f0ddbb
+> >
+> > The other option of using function redirection on the io read()
+> > write() functions exists, and would be a bit simpler in the
+> > short-term, but would probably result in a lot of tests reimplementing
+> > this, and also would have some performance impacts, as the I/O
+> > accesses wouldn't be able to be inlined if KUNIT is enabled.
+> >
+>
+> That sounds OK to me because nobody is enabling KUNIT in production,
+> right?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+As Daniel noted, Android is looking at enabling KUNIT in production
+(but tainting the system if any actual tests run). That's a pretty
+unusual use-case, though, so it definitely doesn't preclude people
+from redirecting functions, particularly if ftrace-based stubbing is
+used to avoid the overhead when disabled (though I can't recall if
+that works on ARM, so Android might be out of luck for those tests
+anyway...)
 
+But yeah, I'm definitely not considering the potential performance
+impact a blocker here, just something to be aware of.
 
+Either way, neither the stubbing support or the logic_iomem stuff is
+quite ready yet, so disabling CONFIG_UML_PCI_OVER_VIRTIO is the right
+solution in the meantime.
+
+Cheers,
+-- David
