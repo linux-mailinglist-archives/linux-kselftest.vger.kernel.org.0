@@ -2,65 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE816585400
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Jul 2022 18:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C149D585538
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Jul 2022 21:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbiG2Qxg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Jul 2022 12:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S238318AbiG2TCW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Jul 2022 15:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiG2Qxf (ORCPT
+        with ESMTP id S238293AbiG2TCS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Jul 2022 12:53:35 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CED789A4A
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 09:53:35 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id p1so5087702plr.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 09:53:35 -0700 (PDT)
+        Fri, 29 Jul 2022 15:02:18 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F953DF08
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 12:02:17 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id v16-20020a17090abb9000b001f25244c65dso9250887pjr.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 12:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=TF3EWRO/s7oRLySg7yRWvwQY4OMBUykpjv0JGdmzqoI=;
-        b=IDyvjiD2TG6CAa94HaQ6aw1wBWksJ6QiFVYWKSNBmAPR5ncFpwmD4SUwlWGq7jM7M/
-         55v69nNbSl/8Cfq2qPH/cSZMzdnIx+YaFGtdfCjGxCsvHlgUvs93u53bEC90+o0cblLm
-         sObisS6urAQ0flzhZERjAG3GkN8iaqs5Fm3pnE3mCIf4zy5MLQFHIZ7XBh9K73wJnX4R
-         ZvXpxV19sEukwgHMB973U/ymZL5V2Wg9CgENd1wPIkZV7DcmzE0Q11c6Lbdeb5b6RS47
-         MUL9kI1NTA36p6T06niqgFUZUIGq1xb5yrli3/7P66z6GYOz4sGk2B3W54y3SXTKNhfE
-         JDxg==
+        bh=LkO9SgTZ2fPl2HYX0gFonlaXjyZgw7WltwbfzzP2PWU=;
+        b=LcCMO/BfHtLr67gbUfFYeZ2DnL0Qe15D/zjxvFdRRh7VmNk7LN5oMsc24VO/GmbV/U
+         PuV6l97/eHoUtKDyH52SVtPAZ87OnqBus/o63uyQuFgufZzCyq9XsxfOUYAdERS1Jgqd
+         Z8e1N8bqzr0z8QDItDcXKcyyEaabrG/16s5zoaP1WRFBF4Ue7XuTf8xaQCPaAoBgg974
+         KUIBiMYBx36eqSObwBq4p2WXddbpg1bPZ34gDbt+XQiuHO4akXNCCqBoLF/FeCnzUG2i
+         XE9mksL3i7ZMYBmA4SOK8RBlplgWMUQ4wTuOLsTMqyyIK0ibz34Lq8CE9D2iQAq/i5AS
+         iEgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=TF3EWRO/s7oRLySg7yRWvwQY4OMBUykpjv0JGdmzqoI=;
-        b=ZNURPq18Bo75KNPRA6hTOx7HlnFVx4i8c/mD1oWdHx+Fq/qnhC07Cxf3hVlLlMamBr
-         V8LWpKmmlFoeLipDm1LdOcX0kJBXKRc3s1Jnupuqe8WHGgni1Cfd7+X4yyJOBa+hj6MA
-         r2VtUct1oZ18+MCGnhT5P9FjgZq+6d7o2p23kSc3NDyBicW8VqtTMmGoGwVph8NN4ep0
-         EsvWkCc+249OOTwidO7h/UfFAfrmIwsEyULk5lg1zD8cfpg/Jc0ImsoC5cXd7qMgNIz0
-         Xjg5IlK/+tBNTfvt15exkRpJZzF9qMbHQ1xfd3jDJRe9QxMZeNT6w/PAWGDxFN5VUrQq
-         Ltmw==
-X-Gm-Message-State: ACgBeo2wmYHLCXssv0XtAxTKm1WMZY8KBw/pu2M+uL3knF7cmZMl4cy2
-        FYVEk+KERal4x4My+EPtIiZj8A==
-X-Google-Smtp-Source: AA6agR60f+N96/u6gBY5UynYGls2AiK6IodjqvGCdIIcCK9d4sf4K3OuOnAk3JiaBa7GSLmG8LMoTQ==
-X-Received: by 2002:a17:902:7007:b0:16c:f4d8:51a with SMTP id y7-20020a170902700700b0016cf4d8051amr4736390plk.1.1659113614357;
-        Fri, 29 Jul 2022 09:53:34 -0700 (PDT)
+        bh=LkO9SgTZ2fPl2HYX0gFonlaXjyZgw7WltwbfzzP2PWU=;
+        b=djQy3VMG3ggRd1HFenURUdOHYfUIxiGTiyZXXgjb/MRZ+98Zry+YE/orP0DExFV54F
+         4VjthMCYohYPVsBDK/AzW2CT1zoaYMfTnFMXzBla6xRynrx+NQs6YwNmIWKTFpBOl4Uw
+         Wvh4VbxWffqM+xO6ycD8xvdgtqymbbJtG9yBuaaqw1L/vx4hUQZJTb1SHKb0fcT70vKe
+         BYZZWZDAdUIn46doojLfDAlRsYUpQRKGZ6+cxF0Bf47ElsOpSHuLE8NlKF8F93eWz4dV
+         ALumoPdS/eTFTzndWQdLzmmNtPPI/VVsfMjFNt3t8nfvai7Wwv41kQ2mt8Rq7VzWGuCy
+         Do/Q==
+X-Gm-Message-State: ACgBeo1ZxD17McXwT3Pz0V+cAApltvE8j35t8Y+c4sLRDf0d8yIoAHZo
+        UidQ8m+ifX4TGdD6TTdWisTJSQ==
+X-Google-Smtp-Source: AA6agR6iqcQsub1nBR7JRnM5qfcyEbknlTLsOfU5kvnAs7e7vtoc0LC7cubgKQlDwv2I4efPq2wL9Q==
+X-Received: by 2002:a17:90a:2ec5:b0:1f2:ea66:c832 with SMTP id h5-20020a17090a2ec500b001f2ea66c832mr6318473pjs.31.1659121336897;
+        Fri, 29 Jul 2022 12:02:16 -0700 (PDT)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o6-20020a17090a4b4600b001f239783e3dsm6186881pjl.34.2022.07.29.09.53.33
+        by smtp.gmail.com with ESMTPSA id n16-20020a170902e55000b0016d5cf36ff8sm4042180plf.274.2022.07.29.12.02.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 09:53:33 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 16:53:30 +0000
+        Fri, 29 Jul 2022 12:02:16 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 19:02:12 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     Michal Luczaj <mhal@rbox.co>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        pbonzini@redhat.com, shuah@kernel.org
-Subject: Re: [PATCH 2/2] KVM: selftests: x86: Test illegal LEA handling
-Message-ID: <YuQQiv862oWDpgt5@google.com>
-References: <20220729134801.1120-1-mhal@rbox.co>
- <20220729134801.1120-2-mhal@rbox.co>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
+Message-ID: <YuQutJAhKWcsrrYl@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729134801.1120-2-mhal@rbox.co>
+In-Reply-To: <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,27 +100,24 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 29, 2022, Michal Luczaj wrote:
-> + * To trigger the emulator and feed it with LEA, we VM-exit on IO (with a
-> + * single OUTS), then race decoder's instruction fetch - hoping to replace the
-> + * initial IO op with an illegal LEA.
+On Wed, Jul 06, 2022, Chao Peng wrote:
+> The sync mechanism between mmu_notifier and page fault handler employs
+> fields mmu_notifier_seq/count and mmu_notifier_range_start/end. For the
+> to be added private memory, there is the same mechanism needed but not
+> rely on mmu_notifier (It uses new introduced memfile_notifier). This
+> patch renames the existing fields and related helper functions to a
+> neutral name mmu_updating_* so private memory can reuse.
 
-Rather than play games with memory, can't we just require and use force_emulation_prefix
-to force KVM to emulate a bogus LEA encoding?  emulator.c in KVM-unit-tests already has
-most of what you need, e.g. I believe it's just a matter of implementing
-test_illegal_lea().  That test already has test_smsw_reg(), which is darn near the
-same thing, it just expects a different result (success instead of #UD).
+mmu_updating_* is too broad of a term, e.g. page faults and many other operations
+also update the mmu.  Although the name most definitely came from the mmu_notifier,
+it's not completely inaccurate for other sources, e.g. KVM's MMU is still being
+notified of something, even if the source is not the actual mmu_notifier.
 
-diff --git a/x86/emulator.c b/x86/emulator.c
-index cd78e3cb..dd50578d 100644
---- a/x86/emulator.c
-+++ b/x86/emulator.c
-@@ -1193,6 +1193,7 @@ int main(void)
-                test_smsw_reg(mem);
-                test_nop(mem);
-                test_mov_dr(mem);
-+               test_illegal_lea();
-        } else {
-                report_skip("skipping register-only tests, "
-                            "use kvm.force_emulation_prefix=1 to enable");
+If we really want a different name, I'd vote for nomenclature that captures the
+invalidation aspect, which is really what the variables are all trackng, e.g.
+
+  mmu_invalidate_seq
+  mmu_invalidate_in_progress
+  mmu_invalidate_range_start
+  mmu_invalidate_range_end
 
