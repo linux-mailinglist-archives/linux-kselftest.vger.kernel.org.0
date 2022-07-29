@@ -2,61 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27ABC5855C4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Jul 2022 21:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70791585654
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Jul 2022 22:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238936AbiG2TyQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Jul 2022 15:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S229529AbiG2U6s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Jul 2022 16:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238557AbiG2TyP (ORCPT
+        with ESMTP id S230160AbiG2U6s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Jul 2022 15:54:15 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247F288CC7
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 12:54:14 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 70so5529333pfx.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 12:54:14 -0700 (PDT)
+        Fri, 29 Jul 2022 16:58:48 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDCE8B49F
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 13:58:45 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 23so4883442pgc.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Jul 2022 13:58:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=1EqMgjnyhc4WRsC/xGOtxHSz8izgvjHhHYaPjqj6I7s=;
-        b=HLB5f+s+ntjkI17+2jp2WegSk0Ip1A1bt9XeV1pSaqeITXDi12YjSrxcIgZXHrMp59
-         UrkPVO6LhvZWQkYzIfyeY3oLoZKArVvjkRclfgyghVmxV8STbNsdGoFjh3pa12HmBMQl
-         ZtFdRossZIy8OZmwKbexSgbozQy0t+BsKx3y85dydYJVmRQ0UfauaYy+YRuqV7R2JVVT
-         Pwmk0Ug1XScP+SUhKwaLYZwcdNCu+i+DjGxkiIBDdXbnnPgK/7oaJTnfrjbSGXfZjqAn
-         +yrErgsE08MPBUhSKuwXkcKKsySktnGs6hlT7NDtjtcK0DoVRdqMsEYM6+1flcqF3Q78
-         34ag==
+        bh=xSUX4n5EOZoO6EmWZ2h+wwgMii0Rl96zCog8KMwNDpE=;
+        b=IQa/2kQ54sNuJFQTlEtNq5TKTdwkdwyj7A2Lk5GyapXGPHgft6Y4da5hKX8JyLKYUF
+         dxIS0jRo9GG3npqy+Pg4Ln4aI12jIIGtLZP0/UBLco+CF9pVQjURcXwHKbpgIaL6oDo2
+         oHPrpODdXTv5tU6hp5fnQVQaLEOG2clh+Dv38QypiPr2SiCugTXODzmnkYiEw9xwIygg
+         /6eAHyLwoYiqcdVMdT02I9kG8osr3/FmkjgMjspXUgU4nrIqcp177Bu4fYi5UEuFgXNu
+         aPQZj8BQskDnwF3+n8m72EOF8vqFzF/UzjAX2l1tE6KGgebsxuoKxNou4XR1uAj2Xvn9
+         2H6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1EqMgjnyhc4WRsC/xGOtxHSz8izgvjHhHYaPjqj6I7s=;
-        b=LKofzJwnTj+adESt6+lQ0Wr2HLdLJ+pCdzp6q9oyFGqtVMThVrxieVZa3zvzU0Q7v/
-         4dYBnzghvSNl/Rsqzxezf6U8+c1UOudO3jGxhvtsQt1MXxtGN/mfmR8djV6nIuKD2j8V
-         gRTes6d97934XSWayZSFsHcsA7L5lYrCktQEwdyXvWa8ZV4AFNJNx2L2YxQPc3j3GdL5
-         gaAJQ029VbLH8X9XTj2gaU38VkSO0iWJixeahJtReN1N+dK2r7/8IZStLyYJlxYiP8wD
-         bBO648dovq1JqcVVrgqdculOmUxdWLpfM/6fWXJLUWo39WNyo0Gsg34rhrmtEQBdhRD0
-         N4FA==
-X-Gm-Message-State: AJIora8VKMasbm+Xhe8SdeciplMymPYy7nmrSeMaLA5hXTKBVQ3LuAUD
-        JElXwJhVX8hWKwAKPKW/OjtbNg==
-X-Google-Smtp-Source: AGRyM1sksopPXKQjAD2apX+GAbdmTP47VUrtEH0MoOErsIDT2svJe3Hlaz8mC5fBxKu7A6Sbx+StHA==
-X-Received: by 2002:a05:6a00:1d26:b0:52b:f8ab:6265 with SMTP id a38-20020a056a001d2600b0052bf8ab6265mr5063293pfx.54.1659124453469;
-        Fri, 29 Jul 2022 12:54:13 -0700 (PDT)
+        bh=xSUX4n5EOZoO6EmWZ2h+wwgMii0Rl96zCog8KMwNDpE=;
+        b=ggU+gV670rJInvumedOZSEPG+VojbjRtbDHstRPkD2pn1If4wGW+TtoMsgtGEfKp/E
+         qkyvOOMN2Mn0RIlP7CPXdGiuiainJ87lvIF/atgMzINrfS8nt0bT1zJ1z0VE9AgOny9R
+         4lRy2RAIbZgUYkFdSjbayDk0i7YRHSKEzfL2x6du80jzb45GZ4jN691sE9Uaj/LNkNhj
+         6ti1nJtcE3NU5UWMhq4wFNlFZzJIyK1Cp6BHidYvd6/OTi3MzA5oCLhedYPf0a33WtE6
+         AFgCpcCU1XuGw1ICxlk46bTWTlUTIM1xDshD0w8Ui09ihDghiOgmHxAshcgbmXVfQcTc
+         NVTQ==
+X-Gm-Message-State: AJIora//ePcPHKaaaaUs9mcTb3glhFqeVDkzyDm+Q1xqvwtjc0K1ZmYE
+        CZvdGGhDvuepNYZHUyRX8dEwPg==
+X-Google-Smtp-Source: AGRyM1vN6zx5wsr5GVVc5ytEEhaS3cRKGvLGbuTs4y/gxM5vty96tVvmJRlSNJfUJgonhSJqKrn69g==
+X-Received: by 2002:a63:535f:0:b0:41a:ee1c:a15f with SMTP id t31-20020a63535f000000b0041aee1ca15fmr4299865pgl.265.1659128325266;
+        Fri, 29 Jul 2022 13:58:45 -0700 (PDT)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 129-20020a621787000000b00518e1251197sm3332537pfx.148.2022.07.29.12.54.12
+        by smtp.gmail.com with ESMTPSA id b10-20020a1709027e0a00b0016d295888e3sm3999789plm.241.2022.07.29.13.58.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jul 2022 12:54:12 -0700 (PDT)
-Date:   Fri, 29 Jul 2022 19:54:09 +0000
+        Fri, 29 Jul 2022 13:58:44 -0700 (PDT)
+Date:   Fri, 29 Jul 2022 20:58:41 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -83,23 +81,14 @@ Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
         Quentin Perret <qperret@google.com>,
         Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
         Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <YuQ64RgWqdoAAGdY@google.com>
-References: <f02baa37-8d34-5d07-a0ae-300ffefc7fee@amd.com>
- <20220719140843.GA84779@chaop.bj.intel.com>
- <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
- <20220720150706.GB124133@chaop.bj.intel.com>
- <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
- <YtgrkXqP/GIi9ujZ@google.com>
- <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
- <20220721092906.GA153288@chaop.bj.intel.com>
- <YtmT2irvgInX1kPp@google.com>
- <20220725130417.GA304216@chaop.bj.intel.com>
+Subject: Re: [PATCH v7 12/14] KVM: Handle page fault for private memory
+Message-ID: <YuRKAcT3cuEE4GgF@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-13-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220725130417.GA304216@chaop.bj.intel.com>
+In-Reply-To: <20220706082016.2603916-13-chao.p.peng@linux.intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -111,61 +100,170 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 25, 2022, Chao Peng wrote:
-> On Thu, Jul 21, 2022 at 05:58:50PM +0000, Sean Christopherson wrote:
-> > On Thu, Jul 21, 2022, Chao Peng wrote:
-> > > On Thu, Jul 21, 2022 at 03:34:59PM +0800, Wei Wang wrote:
-> > > > 
-> > > > 
-> > > > On 7/21/22 00:21, Sean Christopherson wrote:
-> > > > Maybe you could tag it with cgs for all the confidential guest support
-> > > > related stuff: e.g. kvm_vm_ioctl_set_cgs_mem()
-> > > > 
-> > > > bool is_private = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-> > > > ...
-> > > > kvm_vm_ioctl_set_cgs_mem(, is_private)
-> > > 
-> > > If we plan to widely use such abbr. through KVM (e.g. it's well known),
-> > > I'm fine.
-> > 
-> > I'd prefer to stay away from "confidential guest", and away from any VM-scoped
-> > name for that matter.  User-unmappable memmory has use cases beyond hiding guest
-> > state from the host, e.g. userspace could use inaccessible/unmappable memory to
-> > harden itself against unintentional access to guest memory.
-> > 
-> > > I actually use mem_attr in patch: https://lkml.org/lkml/2022/7/20/610
-> > > But I also don't quite like it, it's so generic and sounds say nothing.
-> > > 
-> > > But I do want a name can cover future usages other than just 
-> > > private/shared (pKVM for example may have a third state).
-> > 
-> > I don't think there can be a third top-level state.  Memory is either private to
-> > the guest or it's not.  There can be sub-states, e.g. memory could be selectively
-> > shared or encrypted with a different key, in which case we'd need metadata to
-> > track that state.
-> > 
-> > Though that begs the question of whether or not private_fd is the correct
-> > terminology.  E.g. if guest memory is backed by a memfd that can't be mapped by
-> > userspace (currently F_SEAL_INACCESSIBLE), but something else in the kernel plugs
-> > that memory into a device or another VM, then arguably that memory is shared,
-> > especially the multi-VM scenario.
-> > 
-> > For TDX and SNP "private vs. shared" is likely the correct terminology given the
-> > current specs, but for generic KVM it's probably better to align with whatever
-> > terminology is used for memfd.  "inaccessible_fd" and "user_inaccessible_fd" are
-> > a bit odd since the fd itself is accesible.
-> > 
-> > What about "user_unmappable"?  E.g.
-> > 
-> >   F_SEAL_USER_UNMAPPABLE, MFD_USER_UNMAPPABLE, KVM_HAS_USER_UNMAPPABLE_MEMORY,
-> >   MEMFILE_F_USER_INACCESSIBLE, user_unmappable_fd, etc...
+On Wed, Jul 06, 2022, Chao Peng wrote:
+> A page fault can carry the private/shared information for
+> KVM_MEM_PRIVATE memslot, this can be filled by architecture code(like
+> TDX code). To handle page fault for such access, KVM maps the page only
+> when this private property matches the host's view on the page.
 > 
-> For KVM I also think user_unmappable looks better than 'private', e.g.
-> user_unmappable_fd/KVM_HAS_USER_UNMAPPABLE_MEMORY sounds more
-> appropriate names. For memfd however, I don't feel that strong to change
-> it from current 'inaccessible' to 'user_unmappable', one of the reason
-> is it's not just about unmappable, but actually also inaccessible
-> through direct ioctls like read()/write().
+> For a successful match, private pfn is obtained with memfile_notifier
+> callbacks from private fd and shared pfn is obtained with existing
+> get_user_pages.
+> 
+> For a failed match, KVM causes a KVM_EXIT_MEMORY_FAULT exit to
+> userspace. Userspace then can convert memory between private/shared from
+> host's view then retry the access.
+> 
+> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c          | 60 ++++++++++++++++++++++++++++++++-
+>  arch/x86/kvm/mmu/mmu_internal.h | 18 ++++++++++
+>  arch/x86/kvm/mmu/mmutrace.h     |  1 +
+>  include/linux/kvm_host.h        | 35 ++++++++++++++++++-
+>  4 files changed, 112 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 545eb74305fe..27dbdd4fe8d1 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3004,6 +3004,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
+>  	if (max_level == PG_LEVEL_4K)
+>  		return PG_LEVEL_4K;
+>  
+> +	if (kvm_mem_is_private(kvm, gfn))
+> +		return max_level;
+> +
+>  	host_level = host_pfn_mapping_level(kvm, gfn, pfn, slot);
+>  	return min(host_level, max_level);
+>  }
+> @@ -4101,10 +4104,52 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
+>  	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
+>  }
+>  
+> +static inline u8 order_to_level(int order)
+> +{
+> +	enum pg_level level;
+> +
+> +	for (level = KVM_MAX_HUGEPAGE_LEVEL; level > PG_LEVEL_4K; level--)
 
-Heh, I _knew_ there had to be a catch.  I agree that INACCESSIBLE is better for
-memfd.
+Curly braces needed for the for-loop.
+
+And I think it makes sense to take in the fault->max_level, that way this is
+slightly more performant when the guest mapping is smaller than the host, e.g.
+
+	for (level = max_level; level > PG_LEVEL_4K; level--)
+		...
+
+	return level;
+
+Though I think I'd vote to avoid a loop entirely and do:
+
+	BUILD_BUG_ON(KVM_MAX_HUGEPAGE_LEVEL > PG_LEVEL_1G);
+
+	if (order > ???)
+		return PG_LEVEL_1G;
+	
+	if (order > ???)
+		return PG_LEVEL_2M;
+
+	return PG_LEVEL_4K;
+
+
+> +		if (order >= page_level_shift(level) - PAGE_SHIFT)
+> +			return level;
+> +	return level;
+> +}
+> +
+> +static int kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
+> +				   struct kvm_page_fault *fault)
+> +{
+> +	int order;
+> +	struct kvm_memory_slot *slot = fault->slot;
+> +	bool private_exist = kvm_mem_is_private(vcpu->kvm, fault->gfn);
+> +
+> +	if (fault->is_private != private_exist) {
+> +		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
+> +		if (fault->is_private)
+> +			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
+> +		else
+> +			vcpu->run->memory.flags = 0;
+> +		vcpu->run->memory.padding = 0;
+> +		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
+> +		vcpu->run->memory.size = PAGE_SIZE;
+> +		return RET_PF_USER;
+> +	}
+> +
+> +	if (fault->is_private) {
+> +		if (kvm_private_mem_get_pfn(slot, fault->gfn, &fault->pfn, &order))
+> +			return RET_PF_RETRY;
+> +		fault->max_level = min(order_to_level(order), fault->max_level);
+> +		fault->map_writable = !(slot->flags & KVM_MEM_READONLY);
+> +		return RET_PF_FIXED;
+> +	}
+> +
+> +	/* Fault is shared, fallthrough. */
+> +	return RET_PF_CONTINUE;
+> +}
+> +
+>  static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  {
+>  	struct kvm_memory_slot *slot = fault->slot;
+>  	bool async;
+> +	int r;
+>  
+>  	/*
+>  	 * Retry the page fault if the gfn hit a memslot that is being deleted
+> @@ -4133,6 +4178,12 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  			return RET_PF_EMULATE;
+>  	}
+>  
+> +	if (kvm_slot_can_be_private(slot)) {
+> +		r = kvm_faultin_pfn_private(vcpu, fault);
+> +		if (r != RET_PF_CONTINUE)
+> +			return r == RET_PF_FIXED ? RET_PF_CONTINUE : r;
+
+I apologize if I've given you conflicting feedback in the past.  Now that this
+returns RET_PF_* directly, I definitely think it makes sense to do:
+
+	if (kvm_slot_can_be_private(slot) &&
+	    fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
+		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
+		if (fault->is_private)
+			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
+		else
+			vcpu->run->memory.flags = 0;
+		vcpu->run->memory.padding = 0;
+		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
+		vcpu->run->memory.size = PAGE_SIZE;
+		return RET_PF_USER;
+	}
+
+	if (fault->is_private)
+		return kvm_faultin_pfn_private(vcpu, fault);
+
+That way kvm_faultin_pfn_private() only handles private faults, and this doesn't
+need to play games with RET_PF_FIXED.
+
+
+> +	}
+> +
+>  	async = false;
+>  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
+>  					  fault->write, &fault->map_writable,
+> @@ -4241,7 +4292,11 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  		read_unlock(&vcpu->kvm->mmu_lock);
+>  	else
+>  		write_unlock(&vcpu->kvm->mmu_lock);
+> -	kvm_release_pfn_clean(fault->pfn);
+> +
+> +	if (fault->is_private)
+> +		kvm_private_mem_put_pfn(fault->slot, fault->pfn);
+> +	else
+> +		kvm_release_pfn_clean(fault->pfn);
+
+AFAIK, we never bottomed out on whether or not this is needed[*].  Can you follow
+up with Kirill to get an answer before posting v8?
+
+[*] https://lore.kernel.org/all/20220620141647.GC2016793@chaop.bj.intel.com
