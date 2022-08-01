@@ -2,85 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD6158742F
+	by mail.lfdr.de (Postfix) with ESMTP id A3051587431
 	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 01:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235122AbiHAXAh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 19:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        id S233760AbiHAXA4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 19:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235495AbiHAXAb (ORCPT
+        with ESMTP id S235098AbiHAXAi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 19:00:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FEC63DC
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 16:00:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 259E1B81890
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 23:00:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130B9C433C1;
-        Mon,  1 Aug 2022 23:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659394823;
-        bh=f46da727UMwp0qF4GcIudvoi5bEzKDylM74tYNSaYaw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lzFJLe6SfQlbp+QzbH+DwVe1DXddJrfbWsEiBzhyNS7mkvZ1pqKjj6X2qy+LjATc5
-         eO/fky+onC420a2dNI/lzxJRJn8lDRWlaftgUtRQemv/q6+L/6+vGkHRlHDMoCtbQQ
-         Fof2nRIlZu6iOEbKfozTnxrUySQ5P93WZavwe+Ley4MF36ahgt/pV+Cg8xXkE5zIaR
-         vqfSmHL1FYHqrtCxu0CqoN+DTqhzhRohWFT5jV7Ltgc3FMfMK4DTbiWgz91WRYm5Q7
-         lw59QOUrFqeMwKBerbYUplfMBcg90dDH120p3xVn54anY90Q2+oukxbYMdOU8oxiGY
-         2LRrOJRHMns5w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH] kselftest/arm64: Fix validation of EXTRA_CONTEXT signal contexts
-Date:   Mon,  1 Aug 2022 23:59:26 +0100
-Message-Id: <20220801225926.3694639-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 1 Aug 2022 19:00:38 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F90A63D6;
+        Mon,  1 Aug 2022 16:00:35 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id z19so11834654plb.1;
+        Mon, 01 Aug 2022 16:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YL23/hoAvzZlOos/Qg6i+1wu9EdaWZsaI3xrm+6DO6Q=;
+        b=P8F59PpCHknKeqciDKWmGNWVwW1uJoxcuQU8SnYQWKlORzxTaETX9UO9+eRlyB93zD
+         7tWrE9Boh9AYaXJEbmmRn9omJRDbZUJYYein05vcRe/smG6Ha6UmrVe9lehRl3B8nDOD
+         pJx2okyyMTUFFJvoruJHTeQvU7YnlkdTi6uVsF74RspUHfS0VhCfai5Wlp749kN2shYd
+         yZLR+CjUHSrg7jj40gm/KCbKFmViyftS3xlFAHFeMYraE/BbY1XAQHSbON4nTvS5JARr
+         MxcftlrPZ443Rx/3enzUb1Lcf+hYONClDf/q78byMAi9+eiynsyxbZF3KqUd/rUA1U2n
+         Y4YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YL23/hoAvzZlOos/Qg6i+1wu9EdaWZsaI3xrm+6DO6Q=;
+        b=KvAsHRPLFeLwthtfcTnl3WF51ysr1NeklO+QlrR6Rk93AvQ3R87B/q6ROwtfFpvZTY
+         XxO1agDR3gy+XnMaEA7154D0VICQpODdLNDIT9EM6DndMl5qZs+im9wmgffk75k/WMZs
+         cEx5GzuYeCaSLa1RzHuiOHgmjtHJIxsWYG9A8eFgH8eSMmG/7YpahOF+FP8OUDwdvn4v
+         NGDu1PosqDehPL0qEom6IoVDDjcBlCiEr/lp9ThxS/w2Ai+YeIYGzciWsYnb4JLiF2ag
+         AM14TwTBBcnnrKpNPoV7/qoJjR93Bfx2iivR9Etb7sf5dYymdJQ81Tbz0u7ohdMRhQK8
+         FnMQ==
+X-Gm-Message-State: ACgBeo2Swh4mEeLtnLyo94QgNy/lrPDus50EOXSxKuCXzCIRQkNmlZ61
+        Xn90kXuXoyJe8t/gE1YU8TMnJHzvark=
+X-Google-Smtp-Source: AA6agR4BZy7lu7xerf1px822n7fdIKzcqc0wI6kmt2nBVxXflYkwF07DEqfBt7RN1eHJotIi5MghsQ==
+X-Received: by 2002:a17:902:ce84:b0:16d:9a19:570c with SMTP id f4-20020a170902ce8400b0016d9a19570cmr19064333plg.132.1659394834871;
+        Mon, 01 Aug 2022 16:00:34 -0700 (PDT)
+Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:f128])
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902d18c00b0016d1d1c376fsm9972159plb.287.2022.08.01.16.00.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 16:00:34 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 16:00:30 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Frederick Lawler <fred@cloudflare.com>
+Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+Subject: Re: [PATCH v4 2/4] bpf-lsm: Make bpf_lsm_userns_create() sleepable
+Message-ID: <20220801230030.w4rgzlncgdrcz7q2@macbook-pro-3.dhcp.thefacebook.com>
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+ <20220801180146.1157914-3-fred@cloudflare.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1431; i=broonie@kernel.org; h=from:subject; bh=f46da727UMwp0qF4GcIudvoi5bEzKDylM74tYNSaYaw=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi6FrO0U5z46d6gsZbaAcnAjate44USWKZeXRxsoj+ Dr5jWn6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYuhazgAKCRAk1otyXVSH0LGFB/ oCGGw9A8Gm1C202pWD36qa1jWj4jgxLXkFUwWKAGmYJwFSoTZTmdG26nsITuTuuxZtvWTEB3h4sKWb Ky+XRHPZV3uTl5mgPnUrgEwyq2beDZ0vNEkOvynRNDmp+mEO9P2OBuUpcphi+ui0WI16CzyojJ2QTj qjRYHvpu5/ePL+G6GCfxqx3OlZovYZtvxL0deTMjoyu9H/A9tOYC9ZfG5OTqTGiqNWSFxSBZjxrgzn vZ5rf/7brk6X8SZJ7+Gd9sEnm5ryRybm2NmDMobnA9xDMeVqIt6te4GbP9NobQ2Aop9JMjHBweS2k6 uZ5VSFE+rxS96rJ7j1fG8a3q1ynFGZ
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220801180146.1157914-3-fred@cloudflare.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently in validate_extra_context() we assert both that the extra data
-pointed to by the EXTRA_CONTEXT is 16 byte aligned and that it immediately
-follows the struct _aarch64_ctx providing the terminator for the linked
-list of contexts in the signal frame. Since struct _aarch64_ctx is an 8
-byte structure which must be 16 byte aligned these cannot both be true. As
-documented in sigcontext.h and implemented by the kernel the extra data
-should be at the next 16 byte aligned address after the terminator so fix
-the validation to match.
+On Mon, Aug 01, 2022 at 01:01:44PM -0500, Frederick Lawler wrote:
+> Users may want to audit calls to security_create_user_ns() and access
+> user space memory. Also create_user_ns() runs without
+> pagefault_disabled(). Therefore, make bpf_lsm_userns_create() sleepable
+> for mandatory access control policies.
+> 
+> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+> Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/signal/testcases/testcases.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We can take this set through bpf-next tree if it's easier.
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.c b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-index b2cce9afaaf3..0b3c9b4b1d39 100644
---- a/tools/testing/selftests/arm64/signal/testcases/testcases.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-@@ -42,7 +42,7 @@ bool validate_extra_context(struct extra_context *extra, char **err)
- 		*err = "Extra DATAP misaligned";
- 	else if (extra->size & 0x0fUL)
- 		*err = "Extra SIZE misaligned";
--	else if (extra->datap != (uint64_t)term + sizeof(*term))
-+	else if (extra->datap != (uint64_t)term + 0x10UL)
- 		*err = "Extra DATAP misplaced (not contiguous)";
- 	if (*err)
- 		return false;
--- 
-2.30.2
-
+Or if it goes through other trees:
+Acked-by: Alexei Starovoitov <ast@kernel.org>
