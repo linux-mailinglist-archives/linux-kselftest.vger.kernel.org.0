@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C196C587013
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 20:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBF758701E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 20:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233995AbiHASCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 14:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S234110AbiHASCz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 14:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbiHASCV (ORCPT
+        with ESMTP id S234132AbiHASCf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:02:21 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED4427CC6
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 11:02:19 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id n8-20020a4ad628000000b00435bf6e372dso2150443oon.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 11:02:19 -0700 (PDT)
+        Mon, 1 Aug 2022 14:02:35 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109CB29810
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 11:02:23 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id s204so13921298oif.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 11:02:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=5eI4oBHRscjr08ZHNzQwOqsOD+3+F4rjZrnwT2lhjk8=;
-        b=uLJivFt0JrijlTz4WiJCVuEF8oDRzf5Y7+H6eH45jC4nOYPshmi66MEhwrgCTE8YjQ
-         yODopqvVSRyhcT85GJMk/fAiiPPldOdUR5F7OuR5KoOm4IRWjSJfjRi8lsTM6R3QM+QD
-         UTvK9WXbkNelJtyCDqvAY/Rpe445Qz2Gi9NSI=
+        bh=DFM28j1evovVIesF7892uqGHd1qTcmZDuJXeotitcvA=;
+        b=tdpMqQ74ueJhZLF3PIkmfBOR4X5EIhlmdyEmHxx+mu54Z6yJXe905lrBIGf829wdcd
+         tYpmmTMjMmz7GxFo+CRUNBPdt4bBxoSbOmputKkrcxGKaZI4C9Uy1WXSZSgUgiWoIa+d
+         NX+fsqqialFm/ytOY0K3SyPgKSeuyk+nIGJ5A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=5eI4oBHRscjr08ZHNzQwOqsOD+3+F4rjZrnwT2lhjk8=;
-        b=p9HwlwlKwjC02JlgupcGKIevZ1a5R8v7/AM7EzERdl0zbixii0t4WGjkrCgJMlWZ22
-         pTf5NbOKOB2UM7CV3mU8rNhAbLPChjihtVsZ0TN45Dsxh6ibFVRJnalZrJDGVjEd9JYU
-         HHrkkuDwHbFGvi7OV8S6TrWO3L9Yi4Wz1EuQJ1HaFty1Qn9i2vVGssmeIgan3HVggdbP
-         rNPq0LIL7VdNQjQiz9ugAua931a4obDjL0+N2vJ3KLi+IHGOkoQlrRK9OMi2aC5/Hhrq
-         6N0hUCfKAPzvUECG9Fz9QEIFwXj5gBDTOzVEvmHy2ib6yk8A02Oo5kDF94qlF0BJjT1G
-         yLBw==
-X-Gm-Message-State: AJIora/oQMpzZylW3JdXAl/ZnnxDd+3i4HdarTgst3IdVVO5RPzdydOZ
-        gv6fSIMYXLXOyHghjSuO/PiHYw==
-X-Google-Smtp-Source: AGRyM1vzfAiBBDDyxwIMaZa0k2G9WulhjNQ80UDh1E2ApA6+RCreR0vgWj58f08ozl+TDSXb29hD7w==
-X-Received: by 2002:a4a:e7d8:0:b0:435:9a05:58b5 with SMTP id y24-20020a4ae7d8000000b004359a0558b5mr5600538oov.54.1659376938810;
-        Mon, 01 Aug 2022 11:02:18 -0700 (PDT)
+        bh=DFM28j1evovVIesF7892uqGHd1qTcmZDuJXeotitcvA=;
+        b=vonAVOmWkzJe8rgK35hnzL6psRDgcNvTGs106rfKPnHLOlICX/SHdD72YgpVoALVWv
+         4C6v743MrlEvAef0dxdkbmHR9y87y46zt6zREyEN4HPGPYxHEh6n8NiUQmuUguYESGdK
+         Zq+7rwy2Bxa5WHe+dv8v0LtRA7SUY9NsSIiMoX6AogBNnQJ+EPbFIbCu7OpNRdow9KxF
+         hPZ1t6LT1L84R4WwhKKgXnnhv5Uev4kNIWcKTaOl9VlpX4xYZEsFuQX0YJNikjsnJqPx
+         /WEC9VBO934V43E49hAeTdc7Q1fnQFCNtmM6atT78tTDUOWuhnc6HI/GRY1daF6cFUNw
+         plqw==
+X-Gm-Message-State: AJIora/b0yOnNjW/YSOYi7P/pndot19iC+COUUXczmaE/3wV2Dh1fjrV
+        U8vGBGdbg6PbOxZX8x3HCwQGvw==
+X-Google-Smtp-Source: AGRyM1vjtPI/ODQpeiZyl8o+45Ndqv7M6XyWUy/E58LADXIUQntSE06XmvHEQbKpW8EldE0lx9iJCA==
+X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id bc28-20020a056808171c00b00334934263efmr6997799oib.63.1659376940639;
+        Mon, 01 Aug 2022 11:02:20 -0700 (PDT)
 Received: from localhost.localdomain ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id n14-20020a9d64ce000000b00618fa37308csm2881348otl.35.2022.08.01.11.02.17
+        by smtp.gmail.com with ESMTPSA id n14-20020a9d64ce000000b00618fa37308csm2881348otl.35.2022.08.01.11.02.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 11:02:18 -0700 (PDT)
+        Mon, 01 Aug 2022 11:02:20 -0700 (PDT)
 From:   Frederick Lawler <fred@cloudflare.com>
 To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
         ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -58,9 +58,9 @@ To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         kernel-team@cloudflare.com, cgzones@googlemail.com,
         karl@bigbadwolfsecurity.com, Frederick Lawler <fred@cloudflare.com>
-Subject: [PATCH v4 2/4] bpf-lsm: Make bpf_lsm_userns_create() sleepable
-Date:   Mon,  1 Aug 2022 13:01:44 -0500
-Message-Id: <20220801180146.1157914-3-fred@cloudflare.com>
+Subject: [PATCH v4 3/4] selftests/bpf: Add tests verifying bpf lsm userns_create hook
+Date:   Mon,  1 Aug 2022 13:01:45 -0500
+Message-Id: <20220801180146.1157914-4-fred@cloudflare.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220801180146.1157914-1-fred@cloudflare.com>
 References: <20220801180146.1157914-1-fred@cloudflare.com>
@@ -76,37 +76,189 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Users may want to audit calls to security_create_user_ns() and access
-user space memory. Also create_user_ns() runs without
-pagefault_disabled(). Therefore, make bpf_lsm_userns_create() sleepable
-for mandatory access control policies.
+The LSM hook userns_create was introduced to provide LSM's an
+opportunity to block or allow unprivileged user namespace creation. This
+test serves two purposes: it provides a test eBPF implementation, and
+tests the hook successfully blocks or allows user namespace creation.
+
+This tests 3 cases:
+
+        1. Unattached bpf program does not block unpriv user namespace
+           creation.
+        2. Attached bpf program allows user namespace creation given
+           CAP_SYS_ADMIN privileges.
+        3. Attached bpf program denies user namespace creation for a
+           user without CAP_SYS_ADMIN.
 
 Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 
 ---
+The generic deny_namespace file name is used for future namespace
+expansion. I didn't want to limit these files to just the create_user_ns
+hook.
 Changes since v3:
-- None
+- Explicitly set CAP_SYS_ADMIN to test namespace is created given
+  permission
+- Simplify BPF test to use sleepable hook only
+- Prefer unshare() over clone() for tests
 Changes since v2:
 - Rename create_user_ns hook to userns_create
 Changes since v1:
-- None
+- Introduce this patch
 ---
- kernel/bpf/bpf_lsm.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../selftests/bpf/prog_tests/deny_namespace.c | 102 ++++++++++++++++++
+ .../selftests/bpf/progs/test_deny_namespace.c |  33 ++++++
+ 2 files changed, 135 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
 
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index c1351df9f7ee..4593437809cc 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -250,6 +250,7 @@ BTF_ID(func, bpf_lsm_task_getsecid_obj)
- BTF_ID(func, bpf_lsm_task_prctl)
- BTF_ID(func, bpf_lsm_task_setscheduler)
- BTF_ID(func, bpf_lsm_task_to_inode)
-+BTF_ID(func, bpf_lsm_userns_create)
- BTF_SET_END(sleepable_lsm_hooks)
- 
- bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+diff --git a/tools/testing/selftests/bpf/prog_tests/deny_namespace.c b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+new file mode 100644
+index 000000000000..1bc6241b755b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+@@ -0,0 +1,102 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <test_progs.h>
++#include "test_deny_namespace.skel.h"
++#include <sched.h>
++#include "cap_helpers.h"
++#include <stdio.h>
++
++static int wait_for_pid(pid_t pid)
++{
++	int status, ret;
++
++again:
++	ret = waitpid(pid, &status, 0);
++	if (ret == -1) {
++		if (errno == EINTR)
++			goto again;
++
++		return -1;
++	}
++
++	if (!WIFEXITED(status))
++		return -1;
++
++	return WEXITSTATUS(status);
++}
++
++/* negative return value -> some internal error
++ * positive return value -> userns creation failed
++ * 0                     -> userns creation succeeded
++ */
++static int create_user_ns(void)
++{
++	pid_t pid;
++
++	pid = fork();
++	if (pid < 0)
++		return -1;
++
++	if (pid == 0) {
++		if (unshare(CLONE_NEWUSER))
++			_exit(EXIT_FAILURE);
++		_exit(EXIT_SUCCESS);
++	}
++
++	return wait_for_pid(pid);
++}
++
++static void test_userns_create_bpf(void)
++{
++	__u32 cap_mask = 1ULL << CAP_SYS_ADMIN;
++	__u64 old_caps = 0;
++
++	cap_enable_effective(cap_mask, &old_caps);
++
++	ASSERT_OK(create_user_ns(), "priv new user ns");
++
++	cap_disable_effective(cap_mask, &old_caps);
++
++	ASSERT_EQ(create_user_ns(), EPERM, "unpriv new user ns");
++
++	if (cap_mask & old_caps)
++		cap_enable_effective(cap_mask, NULL);
++}
++
++static void test_unpriv_userns_create_no_bpf(void)
++{
++	__u32 cap_mask = 1ULL << CAP_SYS_ADMIN;
++	__u64 old_caps = 0;
++
++	cap_disable_effective(cap_mask, &old_caps);
++
++	ASSERT_OK(create_user_ns(), "no-bpf unpriv new user ns");
++
++	if (cap_mask & old_caps)
++		cap_enable_effective(cap_mask, NULL);
++}
++
++void test_deny_namespace(void)
++{
++	struct test_deny_namespace *skel = NULL;
++	int err;
++
++	if (test__start_subtest("unpriv_userns_create_no_bpf"))
++		test_unpriv_userns_create_no_bpf();
++
++	skel = test_deny_namespace__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel load"))
++		goto close_prog;
++
++	err = test_deny_namespace__attach(skel);
++	if (!ASSERT_OK(err, "attach"))
++		goto close_prog;
++
++	if (test__start_subtest("userns_create_bpf"))
++		test_userns_create_bpf();
++
++	test_deny_namespace__detach(skel);
++
++close_prog:
++	test_deny_namespace__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_deny_namespace.c b/tools/testing/selftests/bpf/progs/test_deny_namespace.c
+new file mode 100644
+index 000000000000..09ad5a4ebd1f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_deny_namespace.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <errno.h>
++#include <linux/capability.h>
++
++struct kernel_cap_struct {
++	__u32 cap[_LINUX_CAPABILITY_U32S_3];
++} __attribute__((preserve_access_index));
++
++struct cred {
++	struct kernel_cap_struct cap_effective;
++} __attribute__((preserve_access_index));
++
++char _license[] SEC("license") = "GPL";
++
++SEC("lsm.s/userns_create")
++int BPF_PROG(test_userns_create, const struct cred *cred, int ret)
++{
++	struct kernel_cap_struct caps = cred->cap_effective;
++	int cap_index = CAP_TO_INDEX(CAP_SYS_ADMIN);
++	__u32 cap_mask = CAP_TO_MASK(CAP_SYS_ADMIN);
++
++	if (ret)
++		return 0;
++
++	ret = -EPERM;
++	if (caps.cap[cap_index] & cap_mask)
++		return 0;
++
++	return -EPERM;
++}
 -- 
 2.30.2
 
