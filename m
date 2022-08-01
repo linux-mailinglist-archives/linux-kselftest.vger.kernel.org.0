@@ -2,65 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32128586EEF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 18:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064FA586F53
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 19:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbiHAQow (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 12:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
+        id S232995AbiHARNw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 13:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbiHAQoj (ORCPT
+        with ESMTP id S231466AbiHARNv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:44:39 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98DD419AE
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 09:44:24 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id z187so1218784pfb.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 09:44:24 -0700 (PDT)
+        Mon, 1 Aug 2022 13:13:51 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E105F8D
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 10:13:49 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id 125so8879139iou.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 10:13:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=/N/72EqS23KJbaa2mxsEbDvGNjo+H8tosUTZLuDydCw=;
-        b=VWRdOnIrlwT4RYMJCopgQIxFL5qIBS2UU8KwPid9nz7CXa8xgWkwNfAKmNW0RY41AV
-         2Bx2TtRrwDaZ3qAbpqOnh+zVcyn8JkQoJ5WQawPWYhFdrIUKYm1ihsXudl+a2rW3eXXC
-         8LwDRFHr8abm8tS0XjCLDFzkT7zagWJ3v3CewKwZ++3A/j5ZxLg/aRwNyC0nACGFGbnA
-         XY18Wl54SFaoqZpnbdUSdiF71CaabSMd491fis5Jvdz4iDHJV5WplNaX2NN6zBwaCy+y
-         at0VSSAnuA3rJYnomB5iImhmtPUgL0Fl6V3ErZrjQWtDszYnxKR4j+UPdpWMNH3BZ0CF
-         b8zQ==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=RMpq00zmLmRyLkH3ymS8AD8nFPc9nuPS5SpA8DGRQjc=;
+        b=CzbG8jn3lmpWwZNf2DkfRaHkYPFhpnngD3tqdI3rzFaOFYHZNMm6okjhZb6FbHgpBV
+         MvAiCTK6W4xcrO1x5Yjhl019C5+KjcritcRqSFhQaKoMajPDUHQeWFPDkHYMGeRgY8Vu
+         Vlq+9AkYHWni1BvEapZhFKQ5KeDvskzMF4zzTqigIUCnuDP933nMxj/APjQzuu+RArVP
+         gqfUWjMDhjWL2VnCff9414QnqJgVQzUNvnp9EqGeJ9Iz8m8BDzpuJNlFQ+ROha+Bnafo
+         tluUwY6NGaRCfpXGufNKvA0sFeRiZ78FJK3XduIgR/UnkVscDBe9pPntr4MQx346BtAD
+         SBjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/N/72EqS23KJbaa2mxsEbDvGNjo+H8tosUTZLuDydCw=;
-        b=v5KRpMTrgP36rZOqDu52THVboVsDgHwFpKTWk2ypMCa4syq+LYeVCRM7yjNzkXy3G4
-         WW6mJF/Mpkne0IoGJUVuDZhasgUyfULsWyemN5omhKU6gMrZd5+e/nkcRlh0JAxyqJgK
-         +fl4/hSLxMKwuG/jZvdcr9ft3fPfb3m6/H34g+sHzbzMDV5g+7vrsItkaIqM2Me8fqBA
-         O3GLcEDNqrUwq9X7wXMUwOeN9o6fNPLHZCgNmSbyWG2gSY+zgkyFZ1dplEdh7CKdTkCG
-         zasXJXfp3sCOVvFG1UjxcrN9JQB16377qPGS8hWKBoMrZzN+dipU0w/QgZougSkUlVmy
-         5HeA==
-X-Gm-Message-State: ACgBeo1CYjrs3ca8BRHUXRE/9rx1Yopq9E6b4rbufMrawNCVDlqcJYd2
-        G8gJPP+mIIoucxchdqCTNUIXcQ==
-X-Google-Smtp-Source: AA6agR5mMeooDnWgQ69tsvUPjcyxxs/bW4wUhijkcAcQYx+j8qhlDvsuz3wAt5qGovfLXIgEKUm7Kg==
-X-Received: by 2002:a63:4846:0:b0:41b:b9a7:c661 with SMTP id x6-20020a634846000000b0041bb9a7c661mr10602242pgk.398.1659372263869;
-        Mon, 01 Aug 2022 09:44:23 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902a38700b0016bdcb8fbcdsm9841984pla.47.2022.08.01.09.44.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 09:44:22 -0700 (PDT)
-Date:   Mon, 1 Aug 2022 16:44:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michal Luczaj <mhal@rbox.co>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [kvm-unit-tests PATCH v2] x86: Test illegal LEA handling
-Message-ID: <YugC4rUvdbroNk3M@google.com>
-References: <YuQQiv862oWDpgt5@google.com>
- <20220731204653.2516-1-mhal@rbox.co>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=RMpq00zmLmRyLkH3ymS8AD8nFPc9nuPS5SpA8DGRQjc=;
+        b=TsyWHlasIID6N22tbcftXhFqkQX3lQsJ3gjDdXjvQwdfeIzIu/vo4qYc9gPW2vlCvd
+         kSA6sX3chYZkiv4QRAVcJjK2WkviBiCewEcCBOIcXFR5wPK2VE3hvvW+iHRuR1xckzur
+         YJei9bpqi5wL2xlfsYj6A1+pzNyI6RKQzC/uaMQG7bduqLuq7lcBgFmTK71hPMOFpGyZ
+         /9tGMJ1JOYXWCqaZSANPb+GXrSKyxCGH2I3hflj59b2HXQUQuD7SLQancc1vKcIcJAFw
+         HaGzasjro56asTN4QxpI9UaQFb/5S/UiaD8zP6UBpmCjo0Een70lWmiEtuPVQ6+KMAxU
+         JqGw==
+X-Gm-Message-State: AJIora9vdEUabbptFUYN7YkvqFwYHUQsqmAsNNXpmtD4C1CTSWNb1ehN
+        g+mZyULZ0+nLqlewqFZsR4hZGjuZe17li/gCPbIqbg==
+X-Google-Smtp-Source: AGRyM1us0RojN6/riPQbz3AQEf91WYt9XAWKjIH70t+mubW2Sqp7fsmB2PQ5cQkQI2b+gMYBSBcGhDrF0ZlLMZgjF94=
+X-Received: by 2002:a05:6602:2f03:b0:678:9c7c:97a5 with SMTP id
+ q3-20020a0566022f0300b006789c7c97a5mr5833295iow.32.1659374028847; Mon, 01 Aug
+ 2022 10:13:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220731204653.2516-1-mhal@rbox.co>
+References: <20220719195628.3415852-1-axelrasmussen@google.com>
+ <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
+ <CAJHvVchusMjvhLxYkWpa+iTaHvXYPFHcX7JGP=bW60e_O1jFGA@mail.gmail.com> <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com>
+In-Reply-To: <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Mon, 1 Aug 2022 10:13:12 -0700
+Message-ID: <CAJHvVcghaZjgU6YhoGMehQTDU36S-UL5djG+Bym6Uax=VVoX7g@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Nadav Amit <namit@vmware.com>
+Cc:     "Schaufler, Casey" <casey.schaufler@intel.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,92 +90,124 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jul 31, 2022, Michal Luczaj wrote:
-> Check if the emulator throws #UD on illegal LEA.
+I finished up some other work and got around to writing a v5 today,
+but I ran into a problem with /proc/[pid]/userfaultfd.
 
-Please explicitly state exactly what illegal LEA is being generated.  Requiring
-readers to connect the dots of the LEA opcode and ModR/M encoding is unnecessarily
-mean :-)
- 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
-> v1 -> v2: Instead of racing decoder make use of force_emulation_prefix
-> 
->  x86/emulator.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/x86/emulator.c b/x86/emulator.c
-> index cd78e3c..c3898f2 100644
-> --- a/x86/emulator.c
-> +++ b/x86/emulator.c
-> @@ -895,6 +895,24 @@ static void test_mov_dr(uint64_t *mem)
->  		report(rax == DR6_ACTIVE_LOW, "mov_dr6");
->  }
->  
-> +static void illegal_lea_handler(struct ex_regs *regs)
-> +{
-> +	extern char illegal_lea_cont;
-> +
-> +	++exceptions;
-> +	regs->rip = (ulong)&illegal_lea_cont;
-> +}
-> +
-> +static void test_illegal_lea(uint64_t *mem)
+Files in /proc/[pid]/* are owned by the user/group which started the
+process, and they don't support being chmod'ed.
 
-@mem isn't needed.
+For the userfaultfd device, I think we want the following semantics:
+- For UFFDs created via the device, we want to always allow handling
+kernel mode faults
+- For security, the device should be owned by root:root by default, so
+unprivileged users don't have default access to handle kernel faults
+- But, the system administrator should be able to chown/chmod it, to
+grant access to handling kernel faults for this process more widely.
 
-> +{
-> +	exceptions = 0;
-> +	handle_exception(UD_VECTOR, illegal_lea_handler);
+It could be made to work like that but I think it would involve at least:
 
-No need to use a custom handler (ignore any patterns in emulator.c that suggest
-it's "mandatory", emulator is one of the oldest test).  ASM_TRY() can handle all
-of this without any globals.
+- Special casing userfaultfd in proc_pid_make_inode
+- Updating setattr/getattr for /proc/[pid] to meaningfully store and
+then retrieve uid/gid different from the task's, again probably
+special cased for userfautlfd since we don't want this behavior for
+other files
 
-> +	asm(KVM_FEP ".byte 0x48; .byte 0x8d; .byte 0xc0\n\t"
-> +	    "illegal_lea_cont:" : : : "rax");
+It seems to me such a change might raise eyebrows among procfs folks.
+Before I spend the time to write this up, does this seem like
+something that would obviously be nack'ed?
 
-"emulator" is compatible with 32-bit KUT, drop the REX prefix and clobber "eax"
-instead of "xax".
-
-> +	report(exceptions == 1, "illegal lea");
-
-Be nice to future debuggers.  Call out what is illegal about LEA, capitalize LEA
-to make it more obvious that its an instruction, and print the expected versus
-actual.
-
-> +	handle_exception(UD_VECTOR, 0);
-> +}
-
-So this?
-
-static void test_illegal_lea(void)
-{
-	unsigned int vector;
-
-	asm volatile (ASM_TRY("1f")
-		      KVM_FEP ".byte 0x8d; .byte 0xc0\n\t"
-		      "1:"
-		      : : : "memory", "eax");
-
-	vector = exception_vector();
-	report(vector == UD_VECTOR,
-	       "Wanted #UD on LEA with /reg, got vector = %d", vector);
-}
-
-> +
->  static void test_push16(uint64_t *mem)
->  {
->  	uint64_t rsp1, rsp2;
-> @@ -1193,6 +1211,7 @@ int main(void)
->  		test_smsw_reg(mem);
->  		test_nop(mem);
->  		test_mov_dr(mem);
-> +		test_illegal_lea(mem);
->  	} else {
->  		report_skip("skipping register-only tests, "
->  			    "use kvm.force_emulation_prefix=1 to enable");
-> -- 
-> 2.32.0
-> 
+On Wed, Jul 20, 2022 at 4:21 PM Nadav Amit <namit@vmware.com> wrote:
+>
+> On Jul 20, 2022, at 4:04 PM, Axel Rasmussen <axelrasmussen@google.com> wr=
+ote:
+>
+> > =E2=9A=A0 External Email
+> >
+> > On Wed, Jul 20, 2022 at 3:16 PM Schaufler, Casey
+> > <casey.schaufler@intel.com> wrote:
+> >>> -----Original Message-----
+> >>> From: Axel Rasmussen <axelrasmussen@google.com>
+> >>> Sent: Tuesday, July 19, 2022 12:56 PM
+> >>> To: Alexander Viro <viro@zeniv.linux.org.uk>; Andrew Morton
+> >>> <akpm@linux-foundation.org>; Dave Hansen
+> >>> <dave.hansen@linux.intel.com>; Dmitry V . Levin <ldv@altlinux.org>; G=
+leb
+> >>> Fotengauer-Malinovskiy <glebfm@altlinux.org>; Hugh Dickins
+> >>> <hughd@google.com>; Jan Kara <jack@suse.cz>; Jonathan Corbet
+> >>> <corbet@lwn.net>; Mel Gorman <mgorman@techsingularity.net>; Mike
+> >>> Kravetz <mike.kravetz@oracle.com>; Mike Rapoport <rppt@kernel.org>;
+> >>> Amit, Nadav <namit@vmware.com>; Peter Xu <peterx@redhat.com>;
+> >>> Shuah Khan <shuah@kernel.org>; Suren Baghdasaryan
+> >>> <surenb@google.com>; Vlastimil Babka <vbabka@suse.cz>; zhangyi
+> >>> <yi.zhang@huawei.com>
+> >>> Cc: Axel Rasmussen <axelrasmussen@google.com>; linux-
+> >>> doc@vger.kernel.org; linux-fsdevel@vger.kernel.org; linux-
+> >>> kernel@vger.kernel.org; linux-mm@kvack.org; linux-
+> >>> kselftest@vger.kernel.org
+> >>> Subject: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine gr=
+ained
+> >>> access control
+> >>
+> >> I assume that leaving the LSM mailing list off of the CC is purely
+> >> accidental. Please, please include us in the next round.
+> >
+> > Honestly it just hadn't occurred to me, but I'm more than happy to CC
+> > it on future revisions.
+> >
+> >>> This series is based on torvalds/master.
+> >>>
+> >>> The series is split up like so:
+> >>> - Patch 1 is a simple fixup which we should take in any case (even by=
+ itself).
+> >>> - Patches 2-6 add the feature, configurable selftest support, and doc=
+s.
+> >>>
+> >>> Why not ...?
+> >>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >>>
+> >>> - Why not /proc/[pid]/userfaultfd? The proposed use case for this is =
+for one
+> >>> process to open a userfaultfd which can intercept another process' pa=
+ge
+> >>> faults. This seems to me like exactly what CAP_SYS_PTRACE is for, tho=
+ugh,
+> >>> so I
+> >>> think this use case can simply use a syscall without the powers
+> >>> CAP_SYS_PTRACE
+> >>> grants being "too much".
+> >>>
+> >>> - Why not use a syscall? Access to syscalls is generally controlled b=
+y
+> >>> capabilities. We don't have a capability which is used for userfaultf=
+d access
+> >>> without also granting more / other permissions as well, and adding a =
+new
+> >>> capability was rejected [1].
+> >>>
+> >>> - It's possible a LSM could be used to control access instead. I susp=
+ect
+> >>> adding a brand new one just for this would be rejected,
+> >>
+> >> You won't know if you don't ask.
+> >
+> > Fair enough - I wonder if MM folks (Andrew, Peter, Nadav especially)
+> > would find that approach more palatable than /proc/[pid]/userfaultfd?
+> > Would it make sense from our perspective to propose a userfaultfd- or
+> > MM-specific LSM for controlling access to certain features?
+> >
+> > I remember +Andrea saying Red Hat was also interested in some kind of
+> > access control mechanism like this. Would one or the other approach be
+> > more convenient for you?
+>
+> To reiterate my position - I think that /proc/[pid]/userfaultfd is very
+> natural and can be easily extended to support cross-process access of
+> userfaultfd. The necessary access controls are simple in any case. For
+> cross-process access, they are similar to those that are used for other
+> /proc/[pid]/X such as pagemap.
+>
+> I have little experience with LSM and I do not know how real deployments =
+use
+> them. If they are easier to deploy and people prefer them over some
+> pseudo-file, I cannot argue against them.
+>
+>
