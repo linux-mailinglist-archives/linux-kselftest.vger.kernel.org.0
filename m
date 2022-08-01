@@ -2,85 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7979C586A1F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 14:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15004586B57
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 14:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234004AbiHAMMW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 08:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
+        id S235126AbiHAMwA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 08:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiHAMLv (ORCPT
+        with ESMTP id S235075AbiHAMvq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:11:51 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C932872EC8;
-        Mon,  1 Aug 2022 04:57:17 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id D090A18854E6;
-        Mon,  1 Aug 2022 11:57:10 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id C5E6A25032B7;
-        Mon,  1 Aug 2022 11:57:10 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id BD43CA1E00B7; Mon,  1 Aug 2022 11:57:10 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Mon, 1 Aug 2022 08:51:46 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269352A701
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 05:46:28 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AE9903F137
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 12:46:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1659357983;
+        bh=3bPb0dad/oOvrex03/AgLvrUL+bomAiOTjep52WTUPk=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=nvcjtNhY/7ks2XaqE0ubLyk1X+O7UpOq28nryjAJOhw+tvowKkwrxlYh1MmCUssDg
+         SB3hTNz//GiZKGe/ICKfvSdEm4+5yKFCOc7ioV6D37gPhEeCSwmY5Fl8WfB7siWC3Q
+         eIwbnUzYbsTDaUgWBvteJIr3T6AsIYUxOobM9aqUyF4mTitMGEM3SBPz5GNhz7b88m
+         PeOi1RdHZzhywrWMOjvM/2vqr9vP86HmoJhjju1GERqAUvj7RQFr6nN3vGwmyFtVY0
+         TAcEjtj5YPoyo28OX5vWgbUEiH6e7u+Lt31GtZJqN83A3+lMUuaHhyo/Xq5Kvs9TCm
+         7JJfLgKc/ZIPQ==
+Received: by mail-ed1-f71.google.com with SMTP id j19-20020a05640211d300b0043ddce5c23aso148409edw.14
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 05:46:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3bPb0dad/oOvrex03/AgLvrUL+bomAiOTjep52WTUPk=;
+        b=vLX9OhNdEaluLxrSVSE5ss3GmN/Sn7ZTUk45NdgdcRvfRcfC22UEPID4pO4EVrCSFH
+         DAw2C5rAQqylCTW+0GHxxj3oKeDpBBMJVUTLnpxT3ThXSjRZdO1S0pCFkF7/v0SwHRf1
+         dMICZtT/aG0zDtq9wgtJYVM8lludvsnxh1e+To3aKGo5JzJSBVEwYp+H0lui4OOsAfbP
+         QLT08bd5i5bcQxswd1Q8taGDhHVy2Bw3Pk41XvHfCY17vnan/y2MUo1GSNppmXx5vUjS
+         JszzFGLyxTwLBCydcL+f9qdRBEoK2ng6dQu4If2fYyzBv2W8ZLGwimG6pD5xS2z/7D7E
+         teYA==
+X-Gm-Message-State: AJIora+FTEmbYBWA38iaDOB47BrBS430Ub7DcngUJUHSINVHND5Zc4yo
+        ZuEaVkpBmANW8u+Squ9LbuUDI2GgnKfm8CX3MaUfUWMgbEZum3YdkdYZnwGXZ7JLkLXEy40FKms
+        4N7KFA+Wi9UbP/useqUPYf7JFs1DT8ri8na6DyedbpTEolg==
+X-Received: by 2002:a17:907:1b09:b0:72f:d49e:6924 with SMTP id mp9-20020a1709071b0900b0072fd49e6924mr12342237ejc.15.1659357983396;
+        Mon, 01 Aug 2022 05:46:23 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1siAb2whtG2DzEO1CK9FWYk3yYciUFIkpJRrwW0nZ4E8RV1QembUa/rlHkpipXv6aQPvEOryg==
+X-Received: by 2002:a17:907:1b09:b0:72f:d49e:6924 with SMTP id mp9-20020a1709071b0900b0072fd49e6924mr12342227ejc.15.1659357983161;
+        Mon, 01 Aug 2022 05:46:23 -0700 (PDT)
+Received: from localhost.localdomain (p579d80fd.dip0.t-ipconnect.de. [87.157.128.253])
+        by smtp.gmail.com with ESMTPSA id ay24-20020a056402203800b0043d3e06519fsm4393386edb.57.2022.08.01.05.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 05:46:22 -0700 (PDT)
+From:   Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Justin Iurman <justin.iurman@uliege.be>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [RESEND PATCH] selftests: net: fix IOAM test skip return code
+Date:   Mon,  1 Aug 2022 14:46:15 +0200
+Message-Id: <20220801124615.256416-1-kleber.souza@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Mon, 01 Aug 2022 13:57:10 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <Yt0ouiEcAHs8AqAA@shredder>
-References: <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <648ba6718813bf76e7b973150b73f028@kapio-technology.com>
- <YtQosZV0exwyH6qo@shredder>
- <4500e01ec4e2f34a8bbb58ac9b657a40@kapio-technology.com>
- <20220721115935.5ctsbtoojtoxxubi@skbuf> <YtlUWGdgViyjF6MK@shredder>
- <20220721142001.twcmiyvhvlxmp24j@skbuf> <Yt0ouiEcAHs8AqAA@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <474a24ff806bfb8142f3e65eecc665e7@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-07-24 13:10, Ido Schimmel wrote:
-> On Thu, Jul 21, 2022 at 05:20:01PM +0300, Vladimir Oltean wrote:
->> On Thu, Jul 21, 2022 at 04:27:52PM +0300, Ido Schimmel wrote:
->> > I tried looking information about MAB online, but couldn't find
->> > detailed material that answers my questions, so my answers are based
->> > on what I believe is logical, which might be wrong.
->> 
->> I'm kind of in the same situation here.
-> 
-> :(
-> 
+The ioam6.sh test script exits with an error code (1) when tests are
+skipped due to lack of support from userspace/kernel or not enough
+permissions. It should return the kselftests SKIP code instead.
 
-Sorry for being off here a while... here is my best link regarding MAB. 
-Maybe it can answer some of your questions...
+Reviewed-by: Justin Iurman <justin.iurman@uliege.be>
+Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
+---
 
-https://www.cisco.com/c/en/us/td/docs/solutions/Enterprise/Security/TrustSec_1-99/MAB/MAB_Dep_Guide.html#wp392522
+Notes:
+    - Reposting to CC netdev@
+    - Keeping Justin's Review tag from the original post
+
+ tools/testing/selftests/net/ioam6.sh | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/net/ioam6.sh b/tools/testing/selftests/net/ioam6.sh
+index a2b9fad5a9a6..4ceb401da1bf 100755
+--- a/tools/testing/selftests/net/ioam6.sh
++++ b/tools/testing/selftests/net/ioam6.sh
+@@ -117,6 +117,8 @@
+ #        | Schema Data         |                                     |
+ #        +-----------------------------------------------------------+
+ 
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
+ 
+ ################################################################################
+ #                                                                              #
+@@ -211,7 +213,7 @@ check_kernel_compatibility()
+     echo "SKIP: kernel version probably too old, missing ioam support"
+     ip link del veth0 2>/dev/null || true
+     ip netns del ioam-tmp-node || true
+-    exit 1
++    exit $ksft_skip
+   fi
+ 
+   ip -netns ioam-tmp-node route add db02::/64 encap ioam6 mode inline \
+@@ -227,7 +229,7 @@ check_kernel_compatibility()
+          "without CONFIG_IPV6_IOAM6_LWTUNNEL?"
+     ip link del veth0 2>/dev/null || true
+     ip netns del ioam-tmp-node || true
+-    exit 1
++    exit $ksft_skip
+   fi
+ 
+   ip link del veth0 2>/dev/null || true
+@@ -752,20 +754,20 @@ nfailed=0
+ if [ "$(id -u)" -ne 0 ]
+ then
+   echo "SKIP: Need root privileges"
+-  exit 1
++  exit $ksft_skip
+ fi
+ 
+ if [ ! -x "$(command -v ip)" ]
+ then
+   echo "SKIP: Could not run test without ip tool"
+-  exit 1
++  exit $ksft_skip
+ fi
+ 
+ ip ioam &>/dev/null
+ if [ $? = 1 ]
+ then
+   echo "SKIP: iproute2 too old, missing ioam command"
+-  exit 1
++  exit $ksft_skip
+ fi
+ 
+ check_kernel_compatibility
+-- 
+2.34.1
+
