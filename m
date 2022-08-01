@@ -2,74 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4017D586E9E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 18:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32128586EEF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 18:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiHAQf3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 12:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S233792AbiHAQow (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 12:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiHAQfQ (ORCPT
+        with ESMTP id S234136AbiHAQoj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 12:35:16 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3B930C
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 09:35:10 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id s204so13656486oif.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 09:35:10 -0700 (PDT)
+        Mon, 1 Aug 2022 12:44:39 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98DD419AE
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 09:44:24 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id z187so1218784pfb.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 09:44:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Fto1MpscWUFMNnBCFYXAwkIBHHJszVTIcxuhyhUimb8=;
-        b=FI+OTAEIYz2VsoXDkzo0BCE6i9UMDcLbhJ8KfQlM/Yb9whP/Aso6fJ6y77PQwhSnmh
-         LxrcRuG9r+1+NvdtFo31ZVrKx3dxqveIXaUH1MX9/P2cjvo8vJJiQImvUd5srpvFqSjX
-         gWd329LBF4+LFX44YhtcZ3a9uJTsRResZet1+XcU1+rNQD/w9pcinpKpIdIqvt9yl5gw
-         iXliFpwyHfGGnu7OpXt6GjUGhpaateed5310JLq6R84x7GmQyYp1iRpuyOIIhQXgRxzD
-         S3YHp7JVREAfFsiFCf0AWwsBF5mWhs1fqm12YsQRTrLC8OkjHs5jWq2wHG7W89qukPgb
-         shyw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=/N/72EqS23KJbaa2mxsEbDvGNjo+H8tosUTZLuDydCw=;
+        b=VWRdOnIrlwT4RYMJCopgQIxFL5qIBS2UU8KwPid9nz7CXa8xgWkwNfAKmNW0RY41AV
+         2Bx2TtRrwDaZ3qAbpqOnh+zVcyn8JkQoJ5WQawPWYhFdrIUKYm1ihsXudl+a2rW3eXXC
+         8LwDRFHr8abm8tS0XjCLDFzkT7zagWJ3v3CewKwZ++3A/j5ZxLg/aRwNyC0nACGFGbnA
+         XY18Wl54SFaoqZpnbdUSdiF71CaabSMd491fis5Jvdz4iDHJV5WplNaX2NN6zBwaCy+y
+         at0VSSAnuA3rJYnomB5iImhmtPUgL0Fl6V3ErZrjQWtDszYnxKR4j+UPdpWMNH3BZ0CF
+         b8zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Fto1MpscWUFMNnBCFYXAwkIBHHJszVTIcxuhyhUimb8=;
-        b=13dUT1VB2uumWY6c+FK/TUr9nmMfZedw4XUxzPK4SS2MyzRVYXHHX6swtw2i9hxcoV
-         USxQpoWHjTYp3cai/XDlk6fQWuxnNYcRybyZUlvxc0gWKIxJavX+6LOa7MdgYyN9iXsr
-         MaOsTbNPtP2Q+PMwOG9goNnXA9H9fUicOWKf1sbNKY/Lc4sb/NNKyV97+0fifHVgzz7Y
-         B/KkfuTj2YRXZtdJQhLhyqbhEnnSQSSB3Aoh7etnu877e8o9SAviG9Xd9USShm2CBPSd
-         2P08M8lTTH75Nwqn5+wEQ0qVudIZEwfFnFkf1YXQ2n1SLhMtVph7QZ7nLpFVsY8gDx1M
-         svvw==
-X-Gm-Message-State: AJIora+vIDNOZhKN36NXNiPWd3Kq2/3e+CJQ3wZT7J4Gbbs9tAzT/Z5s
-        K5eGP7GukwDHgbb1ZN+ElCGJUVaHmqrja0hGa2m6
-X-Google-Smtp-Source: AGRyM1sRwoHyAz1+k6JJUYUkUrZCg+t9c/gxOPl7fh2C55+kVa8+g83QHhkhNo8kDmE2GSBbgnazRbcpMAgwbTLYWjE=
-X-Received: by 2002:a05:6808:3087:b0:33a:a6ae:7bf7 with SMTP id
- bl7-20020a056808308700b0033aa6ae7bf7mr7223113oib.41.1659371710188; Mon, 01
- Aug 2022 09:35:10 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=/N/72EqS23KJbaa2mxsEbDvGNjo+H8tosUTZLuDydCw=;
+        b=v5KRpMTrgP36rZOqDu52THVboVsDgHwFpKTWk2ypMCa4syq+LYeVCRM7yjNzkXy3G4
+         WW6mJF/Mpkne0IoGJUVuDZhasgUyfULsWyemN5omhKU6gMrZd5+e/nkcRlh0JAxyqJgK
+         +fl4/hSLxMKwuG/jZvdcr9ft3fPfb3m6/H34g+sHzbzMDV5g+7vrsItkaIqM2Me8fqBA
+         O3GLcEDNqrUwq9X7wXMUwOeN9o6fNPLHZCgNmSbyWG2gSY+zgkyFZ1dplEdh7CKdTkCG
+         zasXJXfp3sCOVvFG1UjxcrN9JQB16377qPGS8hWKBoMrZzN+dipU0w/QgZougSkUlVmy
+         5HeA==
+X-Gm-Message-State: ACgBeo1CYjrs3ca8BRHUXRE/9rx1Yopq9E6b4rbufMrawNCVDlqcJYd2
+        G8gJPP+mIIoucxchdqCTNUIXcQ==
+X-Google-Smtp-Source: AA6agR5mMeooDnWgQ69tsvUPjcyxxs/bW4wUhijkcAcQYx+j8qhlDvsuz3wAt5qGovfLXIgEKUm7Kg==
+X-Received: by 2002:a63:4846:0:b0:41b:b9a7:c661 with SMTP id x6-20020a634846000000b0041bb9a7c661mr10602242pgk.398.1659372263869;
+        Mon, 01 Aug 2022 09:44:23 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x7-20020a170902a38700b0016bdcb8fbcdsm9841984pla.47.2022.08.01.09.44.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 09:44:22 -0700 (PDT)
+Date:   Mon, 1 Aug 2022 16:44:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michal Luczaj <mhal@rbox.co>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [kvm-unit-tests PATCH v2] x86: Test illegal LEA handling
+Message-ID: <YugC4rUvdbroNk3M@google.com>
+References: <YuQQiv862oWDpgt5@google.com>
+ <20220731204653.2516-1-mhal@rbox.co>
 MIME-Version: 1.0
-References: <20220721172808.585539-1-fred@cloudflare.com> <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
- <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
- <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com> <9eee1d03-3153-67d3-fe21-14fcb5fe8d27@schaufler-ca.com>
-In-Reply-To: <9eee1d03-3153-67d3-fe21-14fcb5fe8d27@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 1 Aug 2022 12:34:59 -0400
-Message-ID: <CAHC9VhS9NN9a0=4ANwOf1e74+mKMD5BwE+rKhXcno3dtrZ7GVg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>,
-        Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, songliubraving@fb.com,
-        yhs@fb.com, john.fastabend@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220731204653.2516-1-mhal@rbox.co>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,67 +72,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 11:25 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> On 8/1/2022 6:13 AM, Frederick Lawler wrote:
-> > On 7/22/22 7:20 AM, Paul Moore wrote:
-> >> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
-> >>
-> >>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
-> >>>> While creating a LSM BPF MAC policy to block user namespace
-> >>>> creation, we
-> >>>> used the LSM cred_prepare hook because that is the closest hook to
-> >>>> prevent
-> >>>> a call to create_user_ns().
-> >>>>
-> >>>> The calls look something like this:
-> >>>>
-> >>>> cred = prepare_creds()
-> >>>> security_prepare_creds()
-> >>>> call_int_hook(cred_prepare, ...
-> >>>> if (cred)
-> >>>> create_user_ns(cred)
-> >>>>
-> >>>> We noticed that error codes were not propagated from this hook and
-> >>>> introduced a patch [1] to propagate those errors.
-> >>>>
-> >>>> The discussion notes that security_prepare_creds()
-> >>>> is not appropriate for MAC policies, and instead the hook is
-> >>>> meant for LSM authors to prepare credentials for mutation. [2]
-> >>>>
-> >>>> Ultimately, we concluded that a better course of action is to
-> >>>> introduce
-> >>>> a new security hook for LSM authors. [3]
-> >>>>
-> >>>> This patch set first introduces a new security_create_user_ns()
-> >>>> function
-> >>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
-> >>> Patch 1 and 4 still need review from the lsm/security side.
-> >>
-> >>
-> >> This patchset is in my review queue and assuming everything checks
-> >> out, I expect to merge it after the upcoming merge window closes.
-> >>
-> >> I would also need an ACK from the BPF LSM folks, but they're CC'd on
-> >> this patchset.
-> >
-> > Based on last weeks comments, should I go ahead and put up v4 for
-> > 5.20-rc1 when that drops, or do I need to wait for more feedback?
->
-> As the primary consumer of this hook is BPF I would really expect their
-> reviewed-by before accepting this.
+On Sun, Jul 31, 2022, Michal Luczaj wrote:
+> Check if the emulator throws #UD on illegal LEA.
 
-We love all our in-tree LSMs equally.  As long as there is at least
-one LSM which provides an implementation and has ACK'd the hook, and
-no other LSMs have NACK'd the hook, then I have no problem merging it.
-I doubt it will be necessary in this case, but if we need to tweak the
-hook in the future we can definitely do that; we've done this in the
-past when it has made sense.
+Please explicitly state exactly what illegal LEA is being generated.  Requiring
+readers to connect the dots of the LEA opcode and ModR/M encoding is unnecessarily
+mean :-)
+ 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> ---
+> v1 -> v2: Instead of racing decoder make use of force_emulation_prefix
+> 
+>  x86/emulator.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/x86/emulator.c b/x86/emulator.c
+> index cd78e3c..c3898f2 100644
+> --- a/x86/emulator.c
+> +++ b/x86/emulator.c
+> @@ -895,6 +895,24 @@ static void test_mov_dr(uint64_t *mem)
+>  		report(rax == DR6_ACTIVE_LOW, "mov_dr6");
+>  }
+>  
+> +static void illegal_lea_handler(struct ex_regs *regs)
+> +{
+> +	extern char illegal_lea_cont;
+> +
+> +	++exceptions;
+> +	regs->rip = (ulong)&illegal_lea_cont;
+> +}
+> +
+> +static void test_illegal_lea(uint64_t *mem)
 
-As a reminder, the LSM hooks are *not* part of the "don't break
-userspace" promise.  I know it gets a little muddy with the way the
-BPF LSM works, but just as we don't want to allow one LSM to impact
-the runtime controls on another, we don't want to allow one LSM to
-freeze the hooks for everyone.
+@mem isn't needed.
 
--- 
-paul-moore.com
+> +{
+> +	exceptions = 0;
+> +	handle_exception(UD_VECTOR, illegal_lea_handler);
+
+No need to use a custom handler (ignore any patterns in emulator.c that suggest
+it's "mandatory", emulator is one of the oldest test).  ASM_TRY() can handle all
+of this without any globals.
+
+> +	asm(KVM_FEP ".byte 0x48; .byte 0x8d; .byte 0xc0\n\t"
+> +	    "illegal_lea_cont:" : : : "rax");
+
+"emulator" is compatible with 32-bit KUT, drop the REX prefix and clobber "eax"
+instead of "xax".
+
+> +	report(exceptions == 1, "illegal lea");
+
+Be nice to future debuggers.  Call out what is illegal about LEA, capitalize LEA
+to make it more obvious that its an instruction, and print the expected versus
+actual.
+
+> +	handle_exception(UD_VECTOR, 0);
+> +}
+
+So this?
+
+static void test_illegal_lea(void)
+{
+	unsigned int vector;
+
+	asm volatile (ASM_TRY("1f")
+		      KVM_FEP ".byte 0x8d; .byte 0xc0\n\t"
+		      "1:"
+		      : : : "memory", "eax");
+
+	vector = exception_vector();
+	report(vector == UD_VECTOR,
+	       "Wanted #UD on LEA with /reg, got vector = %d", vector);
+}
+
+> +
+>  static void test_push16(uint64_t *mem)
+>  {
+>  	uint64_t rsp1, rsp2;
+> @@ -1193,6 +1211,7 @@ int main(void)
+>  		test_smsw_reg(mem);
+>  		test_nop(mem);
+>  		test_mov_dr(mem);
+> +		test_illegal_lea(mem);
+>  	} else {
+>  		report_skip("skipping register-only tests, "
+>  			    "use kvm.force_emulation_prefix=1 to enable");
+> -- 
+> 2.32.0
+> 
