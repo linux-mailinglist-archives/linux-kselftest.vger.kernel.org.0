@@ -2,212 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064FA586F53
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 19:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930EC587007
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 20:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiHARNw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 13:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S233661AbiHASCS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 14:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbiHARNv (ORCPT
+        with ESMTP id S233613AbiHASCR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 13:13:51 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E105F8D
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 10:13:49 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id 125so8879139iou.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 10:13:49 -0700 (PDT)
+        Mon, 1 Aug 2022 14:02:17 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BB025C73
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 11:02:15 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-10ec41637b3so6402193fac.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 11:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=RMpq00zmLmRyLkH3ymS8AD8nFPc9nuPS5SpA8DGRQjc=;
-        b=CzbG8jn3lmpWwZNf2DkfRaHkYPFhpnngD3tqdI3rzFaOFYHZNMm6okjhZb6FbHgpBV
-         MvAiCTK6W4xcrO1x5Yjhl019C5+KjcritcRqSFhQaKoMajPDUHQeWFPDkHYMGeRgY8Vu
-         Vlq+9AkYHWni1BvEapZhFKQ5KeDvskzMF4zzTqigIUCnuDP933nMxj/APjQzuu+RArVP
-         gqfUWjMDhjWL2VnCff9414QnqJgVQzUNvnp9EqGeJ9Iz8m8BDzpuJNlFQ+ROha+Bnafo
-         tluUwY6NGaRCfpXGufNKvA0sFeRiZ78FJK3XduIgR/UnkVscDBe9pPntr4MQx346BtAD
-         SBjw==
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=neYCRoMJHZhrkPomT+D8lBoa9lWbM2Zjq7tdhg++BD8=;
+        b=Mhxk6WOQ1kBwvZATBE/fUmbfdcWPONvbLqPeeFwjgpXx30ZOq9K8e9XiO+heooXplM
+         yIxZGuPYi6Y3upntqiTXP/fp9FqKCw4yfTan+k9O5EO5dpK1xku83lnqrHR4EC2zmuYi
+         1Wtv13AgwXk1J74t2M0Zv22JEVrbvaw3bB9ww=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=RMpq00zmLmRyLkH3ymS8AD8nFPc9nuPS5SpA8DGRQjc=;
-        b=TsyWHlasIID6N22tbcftXhFqkQX3lQsJ3gjDdXjvQwdfeIzIu/vo4qYc9gPW2vlCvd
-         kSA6sX3chYZkiv4QRAVcJjK2WkviBiCewEcCBOIcXFR5wPK2VE3hvvW+iHRuR1xckzur
-         YJei9bpqi5wL2xlfsYj6A1+pzNyI6RKQzC/uaMQG7bduqLuq7lcBgFmTK71hPMOFpGyZ
-         /9tGMJ1JOYXWCqaZSANPb+GXrSKyxCGH2I3hflj59b2HXQUQuD7SLQancc1vKcIcJAFw
-         HaGzasjro56asTN4QxpI9UaQFb/5S/UiaD8zP6UBpmCjo0Een70lWmiEtuPVQ6+KMAxU
-         JqGw==
-X-Gm-Message-State: AJIora9vdEUabbptFUYN7YkvqFwYHUQsqmAsNNXpmtD4C1CTSWNb1ehN
-        g+mZyULZ0+nLqlewqFZsR4hZGjuZe17li/gCPbIqbg==
-X-Google-Smtp-Source: AGRyM1us0RojN6/riPQbz3AQEf91WYt9XAWKjIH70t+mubW2Sqp7fsmB2PQ5cQkQI2b+gMYBSBcGhDrF0ZlLMZgjF94=
-X-Received: by 2002:a05:6602:2f03:b0:678:9c7c:97a5 with SMTP id
- q3-20020a0566022f0300b006789c7c97a5mr5833295iow.32.1659374028847; Mon, 01 Aug
- 2022 10:13:48 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=neYCRoMJHZhrkPomT+D8lBoa9lWbM2Zjq7tdhg++BD8=;
+        b=HFK0EIy2n/lehAzdN3DzbgkaYc4QZ4T1DweChXlLrkGL1P+qyEBocPFR7Eab7epe1k
+         I7q2QcLrS6p/Xtj4SWKJVCald/NdpsNkDOVwO6YXyZagDZOq4nPpwcSMth98hEY3jUoB
+         wPCZPph21JNom9iwTInHstF8gqoCWNCpmtzvAeOw3K3a9k3GK9/qBID/Kma3PGTNjD5P
+         ZqAq+CAq1n0IfbcFjiNhrJF+1zbHaKWAgMddSc9oqa2C4x4sJF3HQfybHYd+tVIPIJ7Z
+         Kk6PVa7j39zUoUs/EeJ2SK7Jyy6M1Cj4SSo5+htcD/sWeKg3CuBrJTGSschM28hTJ3ZT
+         XA1g==
+X-Gm-Message-State: AJIora9RMzmritqkYOTnsolxoTwSq0UsmC4lWsCPWtD02UymRe36Z0rI
+        yOuT8UhcxV3qjQ+bJn5iTaoPrA==
+X-Google-Smtp-Source: AGRyM1s00uyA5RxFeoJiOwnWUCMdS5VnKo6fHkNTdsQVmzGj5TtMhEcfqeGl5rB5c+kZha+7htuYfg==
+X-Received: by 2002:a05:6870:4302:b0:10d:c587:d30e with SMTP id w2-20020a056870430200b0010dc587d30emr7992216oah.28.1659376935129;
+        Mon, 01 Aug 2022 11:02:15 -0700 (PDT)
+Received: from localhost.localdomain ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id n14-20020a9d64ce000000b00618fa37308csm2881348otl.35.2022.08.01.11.02.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 11:02:14 -0700 (PDT)
+From:   Frederick Lawler <fred@cloudflare.com>
+To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH v4 0/4] Introduce security_create_user_ns()
+Date:   Mon,  1 Aug 2022 13:01:42 -0500
+Message-Id: <20220801180146.1157914-1-fred@cloudflare.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220719195628.3415852-1-axelrasmussen@google.com>
- <PH7PR11MB6353950F607F7B8F274A3550FD8E9@PH7PR11MB6353.namprd11.prod.outlook.com>
- <CAJHvVchusMjvhLxYkWpa+iTaHvXYPFHcX7JGP=bW60e_O1jFGA@mail.gmail.com> <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com>
-In-Reply-To: <7EF50BE4-84EA-4D57-B58C-6697F1B74904@vmware.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Mon, 1 Aug 2022 10:13:12 -0700
-Message-ID: <CAJHvVcghaZjgU6YhoGMehQTDU36S-UL5djG+Bym6Uax=VVoX7g@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     Nadav Amit <namit@vmware.com>
-Cc:     "Schaufler, Casey" <casey.schaufler@intel.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I finished up some other work and got around to writing a v5 today,
-but I ran into a problem with /proc/[pid]/userfaultfd.
+While creating a LSM BPF MAC policy to block user namespace creation, we
+used the LSM cred_prepare hook because that is the closest hook to prevent
+a call to create_user_ns().
 
-Files in /proc/[pid]/* are owned by the user/group which started the
-process, and they don't support being chmod'ed.
+The calls look something like this:
 
-For the userfaultfd device, I think we want the following semantics:
-- For UFFDs created via the device, we want to always allow handling
-kernel mode faults
-- For security, the device should be owned by root:root by default, so
-unprivileged users don't have default access to handle kernel faults
-- But, the system administrator should be able to chown/chmod it, to
-grant access to handling kernel faults for this process more widely.
+    cred = prepare_creds()
+        security_prepare_creds()
+            call_int_hook(cred_prepare, ...
+    if (cred)
+        create_user_ns(cred)
 
-It could be made to work like that but I think it would involve at least:
+We noticed that error codes were not propagated from this hook and
+introduced a patch [1] to propagate those errors.
 
-- Special casing userfaultfd in proc_pid_make_inode
-- Updating setattr/getattr for /proc/[pid] to meaningfully store and
-then retrieve uid/gid different from the task's, again probably
-special cased for userfautlfd since we don't want this behavior for
-other files
+The discussion notes that security_prepare_creds()
+is not appropriate for MAC policies, and instead the hook is
+meant for LSM authors to prepare credentials for mutation. [2]
 
-It seems to me such a change might raise eyebrows among procfs folks.
-Before I spend the time to write this up, does this seem like
-something that would obviously be nack'ed?
+Ultimately, we concluded that a better course of action is to introduce
+a new security hook for LSM authors. [3]
 
-On Wed, Jul 20, 2022 at 4:21 PM Nadav Amit <namit@vmware.com> wrote:
->
-> On Jul 20, 2022, at 4:04 PM, Axel Rasmussen <axelrasmussen@google.com> wr=
-ote:
->
-> > =E2=9A=A0 External Email
-> >
-> > On Wed, Jul 20, 2022 at 3:16 PM Schaufler, Casey
-> > <casey.schaufler@intel.com> wrote:
-> >>> -----Original Message-----
-> >>> From: Axel Rasmussen <axelrasmussen@google.com>
-> >>> Sent: Tuesday, July 19, 2022 12:56 PM
-> >>> To: Alexander Viro <viro@zeniv.linux.org.uk>; Andrew Morton
-> >>> <akpm@linux-foundation.org>; Dave Hansen
-> >>> <dave.hansen@linux.intel.com>; Dmitry V . Levin <ldv@altlinux.org>; G=
-leb
-> >>> Fotengauer-Malinovskiy <glebfm@altlinux.org>; Hugh Dickins
-> >>> <hughd@google.com>; Jan Kara <jack@suse.cz>; Jonathan Corbet
-> >>> <corbet@lwn.net>; Mel Gorman <mgorman@techsingularity.net>; Mike
-> >>> Kravetz <mike.kravetz@oracle.com>; Mike Rapoport <rppt@kernel.org>;
-> >>> Amit, Nadav <namit@vmware.com>; Peter Xu <peterx@redhat.com>;
-> >>> Shuah Khan <shuah@kernel.org>; Suren Baghdasaryan
-> >>> <surenb@google.com>; Vlastimil Babka <vbabka@suse.cz>; zhangyi
-> >>> <yi.zhang@huawei.com>
-> >>> Cc: Axel Rasmussen <axelrasmussen@google.com>; linux-
-> >>> doc@vger.kernel.org; linux-fsdevel@vger.kernel.org; linux-
-> >>> kernel@vger.kernel.org; linux-mm@kvack.org; linux-
-> >>> kselftest@vger.kernel.org
-> >>> Subject: [PATCH v4 0/5] userfaultfd: add /dev/userfaultfd for fine gr=
-ained
-> >>> access control
-> >>
-> >> I assume that leaving the LSM mailing list off of the CC is purely
-> >> accidental. Please, please include us in the next round.
-> >
-> > Honestly it just hadn't occurred to me, but I'm more than happy to CC
-> > it on future revisions.
-> >
-> >>> This series is based on torvalds/master.
-> >>>
-> >>> The series is split up like so:
-> >>> - Patch 1 is a simple fixup which we should take in any case (even by=
- itself).
-> >>> - Patches 2-6 add the feature, configurable selftest support, and doc=
-s.
-> >>>
-> >>> Why not ...?
-> >>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>
-> >>> - Why not /proc/[pid]/userfaultfd? The proposed use case for this is =
-for one
-> >>> process to open a userfaultfd which can intercept another process' pa=
-ge
-> >>> faults. This seems to me like exactly what CAP_SYS_PTRACE is for, tho=
-ugh,
-> >>> so I
-> >>> think this use case can simply use a syscall without the powers
-> >>> CAP_SYS_PTRACE
-> >>> grants being "too much".
-> >>>
-> >>> - Why not use a syscall? Access to syscalls is generally controlled b=
-y
-> >>> capabilities. We don't have a capability which is used for userfaultf=
-d access
-> >>> without also granting more / other permissions as well, and adding a =
-new
-> >>> capability was rejected [1].
-> >>>
-> >>> - It's possible a LSM could be used to control access instead. I susp=
-ect
-> >>> adding a brand new one just for this would be rejected,
-> >>
-> >> You won't know if you don't ask.
-> >
-> > Fair enough - I wonder if MM folks (Andrew, Peter, Nadav especially)
-> > would find that approach more palatable than /proc/[pid]/userfaultfd?
-> > Would it make sense from our perspective to propose a userfaultfd- or
-> > MM-specific LSM for controlling access to certain features?
-> >
-> > I remember +Andrea saying Red Hat was also interested in some kind of
-> > access control mechanism like this. Would one or the other approach be
-> > more convenient for you?
->
-> To reiterate my position - I think that /proc/[pid]/userfaultfd is very
-> natural and can be easily extended to support cross-process access of
-> userfaultfd. The necessary access controls are simple in any case. For
-> cross-process access, they are similar to those that are used for other
-> /proc/[pid]/X such as pagemap.
->
-> I have little experience with LSM and I do not know how real deployments =
-use
-> them. If they are easier to deploy and people prefer them over some
-> pseudo-file, I cannot argue against them.
->
->
+This patch set first introduces a new security_create_user_ns() function
+and userns_create LSM hook, then marks the hook as sleepable in BPF.
+
+Links:
+1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+
+Past discussions:
+V3: https://lore.kernel.org/all/20220721172808.585539-1-fred@cloudflare.com/
+V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
+V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
+
+Changes since v3:
+- Explicitly set CAP_SYS_ADMIN to test namespace is created given
+  permission
+- Simplify BPF test to use sleepable hook only
+- Prefer unshare() over clone() for tests
+Changes since v2:
+- Rename create_user_ns hook to userns_create
+- Use user_namespace as an object opposed to a generic namespace object
+- s/domB_t/domA_t in commit message
+Changes since v1:
+- Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+- Add selinux: Implement create_user_ns hook patch
+- Change function signature of security_create_user_ns() to only take
+  struct cred
+- Move security_create_user_ns() call after id mapping check in
+  create_user_ns()
+- Update documentation to reflect changes
+
+Frederick Lawler (4):
+  security, lsm: Introduce security_create_user_ns()
+  bpf-lsm: Make bpf_lsm_userns_create() sleepable
+  selftests/bpf: Add tests verifying bpf lsm userns_create hook
+  selinux: Implement userns_create hook
+
+ include/linux/lsm_hook_defs.h                 |   1 +
+ include/linux/lsm_hooks.h                     |   4 +
+ include/linux/security.h                      |   6 ++
+ kernel/bpf/bpf_lsm.c                          |   1 +
+ kernel/user_namespace.c                       |   5 +
+ security/security.c                           |   5 +
+ security/selinux/hooks.c                      |   9 ++
+ security/selinux/include/classmap.h           |   2 +
+ .../selftests/bpf/prog_tests/deny_namespace.c | 102 ++++++++++++++++++
+ .../selftests/bpf/progs/test_deny_namespace.c |  33 ++++++
+ 10 files changed, 168 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+
+-- 
+2.30.2
+
