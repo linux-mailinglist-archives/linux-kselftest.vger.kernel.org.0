@@ -2,153 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15004586B57
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 14:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F9C586B9B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 15:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiHAMwA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 08:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S231565AbiHANN7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 09:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235075AbiHAMvq (ORCPT
+        with ESMTP id S231315AbiHANN5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 08:51:46 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269352A701
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 05:46:28 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AE9903F137
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 12:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1659357983;
-        bh=3bPb0dad/oOvrex03/AgLvrUL+bomAiOTjep52WTUPk=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=nvcjtNhY/7ks2XaqE0ubLyk1X+O7UpOq28nryjAJOhw+tvowKkwrxlYh1MmCUssDg
-         SB3hTNz//GiZKGe/ICKfvSdEm4+5yKFCOc7ioV6D37gPhEeCSwmY5Fl8WfB7siWC3Q
-         eIwbnUzYbsTDaUgWBvteJIr3T6AsIYUxOobM9aqUyF4mTitMGEM3SBPz5GNhz7b88m
-         PeOi1RdHZzhywrWMOjvM/2vqr9vP86HmoJhjju1GERqAUvj7RQFr6nN3vGwmyFtVY0
-         TAcEjtj5YPoyo28OX5vWgbUEiH6e7u+Lt31GtZJqN83A3+lMUuaHhyo/Xq5Kvs9TCm
-         7JJfLgKc/ZIPQ==
-Received: by mail-ed1-f71.google.com with SMTP id j19-20020a05640211d300b0043ddce5c23aso148409edw.14
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 05:46:23 -0700 (PDT)
+        Mon, 1 Aug 2022 09:13:57 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FB72529E
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 06:13:55 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so13546566fac.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 06:13:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=S4v2xzmivjkPNxxCfifaPK4xR7fi1R2DYRzw0gzDhqk=;
+        b=aU/EMjwvPmQHuC3EBkgE95P1u4OscFyLNRNnnObQ+qrX4FI5VdaEavlkuJv0eLaafS
+         LRfaSM+ftYFZBzQXUQVTjMlxhJ82TBVrX2MBIhQvsXC+TEYUHrHEHfxiIZvTEcQvnkne
+         otTWe5IN176ijSIBTW+IPCt5doE2JAB8vJu0Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3bPb0dad/oOvrex03/AgLvrUL+bomAiOTjep52WTUPk=;
-        b=vLX9OhNdEaluLxrSVSE5ss3GmN/Sn7ZTUk45NdgdcRvfRcfC22UEPID4pO4EVrCSFH
-         DAw2C5rAQqylCTW+0GHxxj3oKeDpBBMJVUTLnpxT3ThXSjRZdO1S0pCFkF7/v0SwHRf1
-         dMICZtT/aG0zDtq9wgtJYVM8lludvsnxh1e+To3aKGo5JzJSBVEwYp+H0lui4OOsAfbP
-         QLT08bd5i5bcQxswd1Q8taGDhHVy2Bw3Pk41XvHfCY17vnan/y2MUo1GSNppmXx5vUjS
-         JszzFGLyxTwLBCydcL+f9qdRBEoK2ng6dQu4If2fYyzBv2W8ZLGwimG6pD5xS2z/7D7E
-         teYA==
-X-Gm-Message-State: AJIora+FTEmbYBWA38iaDOB47BrBS430Ub7DcngUJUHSINVHND5Zc4yo
-        ZuEaVkpBmANW8u+Squ9LbuUDI2GgnKfm8CX3MaUfUWMgbEZum3YdkdYZnwGXZ7JLkLXEy40FKms
-        4N7KFA+Wi9UbP/useqUPYf7JFs1DT8ri8na6DyedbpTEolg==
-X-Received: by 2002:a17:907:1b09:b0:72f:d49e:6924 with SMTP id mp9-20020a1709071b0900b0072fd49e6924mr12342237ejc.15.1659357983396;
-        Mon, 01 Aug 2022 05:46:23 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1siAb2whtG2DzEO1CK9FWYk3yYciUFIkpJRrwW0nZ4E8RV1QembUa/rlHkpipXv6aQPvEOryg==
-X-Received: by 2002:a17:907:1b09:b0:72f:d49e:6924 with SMTP id mp9-20020a1709071b0900b0072fd49e6924mr12342227ejc.15.1659357983161;
-        Mon, 01 Aug 2022 05:46:23 -0700 (PDT)
-Received: from localhost.localdomain (p579d80fd.dip0.t-ipconnect.de. [87.157.128.253])
-        by smtp.gmail.com with ESMTPSA id ay24-20020a056402203800b0043d3e06519fsm4393386edb.57.2022.08.01.05.46.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 05:46:22 -0700 (PDT)
-From:   Kleber Sacilotto de Souza <kleber.souza@canonical.com>
-To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Justin Iurman <justin.iurman@uliege.be>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [RESEND PATCH] selftests: net: fix IOAM test skip return code
-Date:   Mon,  1 Aug 2022 14:46:15 +0200
-Message-Id: <20220801124615.256416-1-kleber.souza@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=S4v2xzmivjkPNxxCfifaPK4xR7fi1R2DYRzw0gzDhqk=;
+        b=6nLiqfCqY8DE7CjWpetb6tZqRsVmwslJpMasCwk0p8FmlqWTy4etv7GUYeR4JLB2F8
+         ZPhCqFRiKaUy1JONx7+oUnkB1AZXzNtJMPRN3CD0wuRCFg5v7UtthMAwdWJtsE9YCpov
+         qySxfbJM/DkD+yjVDeUeTBSBo0yqvXVXSp+PiMmmhxkdeGA/JtCmelzkn6BkVzCDUGX4
+         Yy4nc+qKc/igZnzfiKi6vC68j2L0Vt2ogGIti7ilprFY4vjZLKTR8C5ycaCQMqrCSJt+
+         7ix15keYKxCUO48Wj0jBKWPRDxh+F3Jp0PUFGuR51yOFYquxrdg+9RcVEA4K5sFbhOSi
+         dTWA==
+X-Gm-Message-State: AJIora8xeI92L3a/54KShtVesqD2XfTWdvLldTftqakZq39QU7aoLURX
+        DT2Kpp6Aa9oBiyzuXUPkZctMwg==
+X-Google-Smtp-Source: AGRyM1vAYe6eYSqkhNEffp5nkSzS3sTGEFR4Fq4tFcvvlB80G4i7/GERIpfxWhXyvbYGQjvJ5+67TQ==
+X-Received: by 2002:a05:6870:f149:b0:de:e873:4a46 with SMTP id l9-20020a056870f14900b000dee8734a46mr6761101oac.286.1659359635202;
+        Mon, 01 Aug 2022 06:13:55 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id 22-20020aca2816000000b00339ff117f38sm2400911oix.53.2022.08.01.06.13.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Aug 2022 06:13:54 -0700 (PDT)
+Message-ID: <a4db1154-94bc-9833-1665-a88a5eee48de@cloudflare.com>
+Date:   Mon, 1 Aug 2022 08:13:57 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>, Martin KaFai Lau <kafai@fb.com>
+Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+References: <20220721172808.585539-1-fred@cloudflare.com>
+ <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+ <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ioam6.sh test script exits with an error code (1) when tests are
-skipped due to lack of support from userspace/kernel or not enough
-permissions. It should return the kselftests SKIP code instead.
+On 7/22/22 7:20 AM, Paul Moore wrote:
+> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
+> 
+>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+>>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>>> used the LSM cred_prepare hook because that is the closest hook to prevent
+>>> a call to create_user_ns().
+>>>
+>>> The calls look something like this:
+>>>
+>>> cred = prepare_creds()
+>>> security_prepare_creds()
+>>> call_int_hook(cred_prepare, ...
+>>> if (cred)
+>>> create_user_ns(cred)
+>>>
+>>> We noticed that error codes were not propagated from this hook and
+>>> introduced a patch [1] to propagate those errors.
+>>>
+>>> The discussion notes that security_prepare_creds()
+>>> is not appropriate for MAC policies, and instead the hook is
+>>> meant for LSM authors to prepare credentials for mutation. [2]
+>>>
+>>> Ultimately, we concluded that a better course of action is to introduce
+>>> a new security hook for LSM authors. [3]
+>>>
+>>> This patch set first introduces a new security_create_user_ns() function
+>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+>> Patch 1 and 4 still need review from the lsm/security side.
+> 
+> 
+> This patchset is in my review queue and assuming everything checks out, I expect to merge it after the upcoming merge window closes.
+> 
+> I would also need an ACK from the BPF LSM folks, but they're CC'd on this patchset.
+> 
 
-Reviewed-by: Justin Iurman <justin.iurman@uliege.be>
-Signed-off-by: Kleber Sacilotto de Souza <kleber.souza@canonical.com>
----
+Based on last weeks comments, should I go ahead and put up v4 for 
+5.20-rc1 when that drops, or do I need to wait for more feedback?
 
-Notes:
-    - Reposting to CC netdev@
-    - Keeping Justin's Review tag from the original post
-
- tools/testing/selftests/net/ioam6.sh | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/net/ioam6.sh b/tools/testing/selftests/net/ioam6.sh
-index a2b9fad5a9a6..4ceb401da1bf 100755
---- a/tools/testing/selftests/net/ioam6.sh
-+++ b/tools/testing/selftests/net/ioam6.sh
-@@ -117,6 +117,8 @@
- #        | Schema Data         |                                     |
- #        +-----------------------------------------------------------+
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
- 
- ################################################################################
- #                                                                              #
-@@ -211,7 +213,7 @@ check_kernel_compatibility()
-     echo "SKIP: kernel version probably too old, missing ioam support"
-     ip link del veth0 2>/dev/null || true
-     ip netns del ioam-tmp-node || true
--    exit 1
-+    exit $ksft_skip
-   fi
- 
-   ip -netns ioam-tmp-node route add db02::/64 encap ioam6 mode inline \
-@@ -227,7 +229,7 @@ check_kernel_compatibility()
-          "without CONFIG_IPV6_IOAM6_LWTUNNEL?"
-     ip link del veth0 2>/dev/null || true
-     ip netns del ioam-tmp-node || true
--    exit 1
-+    exit $ksft_skip
-   fi
- 
-   ip link del veth0 2>/dev/null || true
-@@ -752,20 +754,20 @@ nfailed=0
- if [ "$(id -u)" -ne 0 ]
- then
-   echo "SKIP: Need root privileges"
--  exit 1
-+  exit $ksft_skip
- fi
- 
- if [ ! -x "$(command -v ip)" ]
- then
-   echo "SKIP: Could not run test without ip tool"
--  exit 1
-+  exit $ksft_skip
- fi
- 
- ip ioam &>/dev/null
- if [ $? = 1 ]
- then
-   echo "SKIP: iproute2 too old, missing ioam command"
--  exit 1
-+  exit $ksft_skip
- fi
- 
- check_kernel_compatibility
--- 
-2.34.1
+> --
+> paul-moore.com
+> 
+> 
 
