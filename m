@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1AD58700C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 20:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C196C587013
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Aug 2022 20:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbiHASCV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 14:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S233995AbiHASCd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 14:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbiHASCT (ORCPT
+        with ESMTP id S232991AbiHASCV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 14:02:19 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C70252A1
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 11:02:17 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so14531246fac.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 11:02:17 -0700 (PDT)
+        Mon, 1 Aug 2022 14:02:21 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED4427CC6
+        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 11:02:19 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id n8-20020a4ad628000000b00435bf6e372dso2150443oon.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 11:02:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=qEASjFQgHEXoxjCsMlwe3mWZuEgE+ke0lwJ4HSwmC1o=;
-        b=IfFAjRq+tt0+0QkOil6iDkdm5PR1dhXxMMxF03kiwCYv+F35KXZll/Aos3m0bfnTPi
-         ovfmDfsxJ2/RIRYdW+e+N27wxkP57PDcj+IKBbsr/h0smuJR0MFpmf3MmZUA0r9ow4fk
-         1RWQ/JoDadNY0VcpELObOrpway7EKWAzd/7Us=
+        bh=5eI4oBHRscjr08ZHNzQwOqsOD+3+F4rjZrnwT2lhjk8=;
+        b=uLJivFt0JrijlTz4WiJCVuEF8oDRzf5Y7+H6eH45jC4nOYPshmi66MEhwrgCTE8YjQ
+         yODopqvVSRyhcT85GJMk/fAiiPPldOdUR5F7OuR5KoOm4IRWjSJfjRi8lsTM6R3QM+QD
+         UTvK9WXbkNelJtyCDqvAY/Rpe445Qz2Gi9NSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=qEASjFQgHEXoxjCsMlwe3mWZuEgE+ke0lwJ4HSwmC1o=;
-        b=zpU1mKk7lVwSlABDvw90M+fa5R8UFgD1imAv95hid16lc1u+4WDzxbrR1KAd9FDY7k
-         0AXVDtnS9syFvhq9utWkVeWt5+3UjXiwdax+gIVOsb9OTGHOhDAAoD6MDr8uJQnysjQO
-         ak1velJkDUYgAcqwXKbao2qtBkCCykDkBftJvj0fZ9GGJnn9GSskn1OJroApHG0ovZp5
-         zKl0gpbzQIbaJU0ydrYHmiw6ZQDf5LWzPkuzcABIMwmaZZhIpRrOn5jYv/gu7t990zgA
-         hAgi8zKWFZC7LBXXJHyDoGuW/MBYHxvOiA2AM/i5OcZUBqxMhmLs+BsV216j6UckEzDR
-         OW6A==
-X-Gm-Message-State: AJIora/8bgyKWOda8BDv1eks6qwUvJGBOAPhH1ktaRLuh2SqGqPTHPfu
-        yyxShQpT4gIPjL1D4LBottTQJg==
-X-Google-Smtp-Source: AGRyM1sD4g9Y9q/qyaXFCXmpcHuPT+pZOrtXQ6KE1YfTchLBWdjWov0aG3GFbThSnBywcxw6nVYfgw==
-X-Received: by 2002:a05:6870:d59c:b0:101:7e59:d723 with SMTP id u28-20020a056870d59c00b001017e59d723mr8156224oao.165.1659376936978;
-        Mon, 01 Aug 2022 11:02:16 -0700 (PDT)
+        bh=5eI4oBHRscjr08ZHNzQwOqsOD+3+F4rjZrnwT2lhjk8=;
+        b=p9HwlwlKwjC02JlgupcGKIevZ1a5R8v7/AM7EzERdl0zbixii0t4WGjkrCgJMlWZ22
+         pTf5NbOKOB2UM7CV3mU8rNhAbLPChjihtVsZ0TN45Dsxh6ibFVRJnalZrJDGVjEd9JYU
+         HHrkkuDwHbFGvi7OV8S6TrWO3L9Yi4Wz1EuQJ1HaFty1Qn9i2vVGssmeIgan3HVggdbP
+         rNPq0LIL7VdNQjQiz9ugAua931a4obDjL0+N2vJ3KLi+IHGOkoQlrRK9OMi2aC5/Hhrq
+         6N0hUCfKAPzvUECG9Fz9QEIFwXj5gBDTOzVEvmHy2ib6yk8A02Oo5kDF94qlF0BJjT1G
+         yLBw==
+X-Gm-Message-State: AJIora/oQMpzZylW3JdXAl/ZnnxDd+3i4HdarTgst3IdVVO5RPzdydOZ
+        gv6fSIMYXLXOyHghjSuO/PiHYw==
+X-Google-Smtp-Source: AGRyM1vzfAiBBDDyxwIMaZa0k2G9WulhjNQ80UDh1E2ApA6+RCreR0vgWj58f08ozl+TDSXb29hD7w==
+X-Received: by 2002:a4a:e7d8:0:b0:435:9a05:58b5 with SMTP id y24-20020a4ae7d8000000b004359a0558b5mr5600538oov.54.1659376938810;
+        Mon, 01 Aug 2022 11:02:18 -0700 (PDT)
 Received: from localhost.localdomain ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id n14-20020a9d64ce000000b00618fa37308csm2881348otl.35.2022.08.01.11.02.15
+        by smtp.gmail.com with ESMTPSA id n14-20020a9d64ce000000b00618fa37308csm2881348otl.35.2022.08.01.11.02.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 11:02:16 -0700 (PDT)
+        Mon, 01 Aug 2022 11:02:18 -0700 (PDT)
 From:   Frederick Lawler <fred@cloudflare.com>
 To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
         ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -58,9 +58,9 @@ To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         kernel-team@cloudflare.com, cgzones@googlemail.com,
         karl@bigbadwolfsecurity.com, Frederick Lawler <fred@cloudflare.com>
-Subject: [PATCH v4 1/4] security, lsm: Introduce security_create_user_ns()
-Date:   Mon,  1 Aug 2022 13:01:43 -0500
-Message-Id: <20220801180146.1157914-2-fred@cloudflare.com>
+Subject: [PATCH v4 2/4] bpf-lsm: Make bpf_lsm_userns_create() sleepable
+Date:   Mon,  1 Aug 2022 13:01:44 -0500
+Message-Id: <20220801180146.1157914-3-fred@cloudflare.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220801180146.1157914-1-fred@cloudflare.com>
 References: <20220801180146.1157914-1-fred@cloudflare.com>
@@ -76,142 +76,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Preventing user namespace (privileged or otherwise) creation comes in a
-few of forms in order of granularity:
-
-        1. /proc/sys/user/max_user_namespaces sysctl
-        2. OS specific patch(es)
-        3. CONFIG_USER_NS
-
-To block a task based on its attributes, the LSM hook cred_prepare is a
-good candidate for use because it provides more granular control, and
-it is called before create_user_ns():
-
-        cred = prepare_creds()
-                security_prepare_creds()
-                        call_int_hook(cred_prepare, ...
-        if (cred)
-                create_user_ns(cred)
-
-Since security_prepare_creds() is meant for LSMs to copy and prepare
-credentials, access control is an unintended use of the hook. Therefore
-introduce a new function security_create_user_ns() with an accompanying
-userns_create LSM hook.
-
-This hook takes the prepared creds for LSM authors to write policy
-against. On success, the new namespace is applied to credentials,
-otherwise an error is returned.
+Users may want to audit calls to security_create_user_ns() and access
+user space memory. Also create_user_ns() runs without
+pagefault_disabled(). Therefore, make bpf_lsm_userns_create() sleepable
+for mandatory access control policies.
 
 Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 
 ---
 Changes since v3:
-- No changes
+- None
 Changes since v2:
 - Rename create_user_ns hook to userns_create
 Changes since v1:
-- Changed commit wording
-- Moved execution to be after id mapping check
-- Changed signature to only accept a const struct cred *
+- None
 ---
- include/linux/lsm_hook_defs.h | 1 +
- include/linux/lsm_hooks.h     | 4 ++++
- include/linux/security.h      | 6 ++++++
- kernel/user_namespace.c       | 5 +++++
- security/security.c           | 5 +++++
- 5 files changed, 21 insertions(+)
+ kernel/bpf/bpf_lsm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index eafa1d2489fd..7ff93cb8ca8d 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -223,6 +223,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigned long arg2,
- 	 unsigned long arg3, unsigned long arg4, unsigned long arg5)
- LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
- 	 struct inode *inode)
-+LSM_HOOK(int, 0, userns_create, const struct cred *cred)
- LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
- LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
- 	 u32 *secid)
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 91c8146649f5..54fe534d0e01 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -799,6 +799,10 @@
-  *	security attributes, e.g. for /proc/pid inodes.
-  *	@p contains the task_struct for the task.
-  *	@inode contains the inode structure for the inode.
-+ * @userns_create:
-+ *	Check permission prior to creating a new user namespace.
-+ *	@cred points to prepared creds.
-+ *	Return 0 if successful, otherwise < 0 error code.
-  *
-  * Security hooks for Netlink messaging.
-  *
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 7fc4e9f49f54..a195bf33246a 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -435,6 +435,7 @@ int security_task_kill(struct task_struct *p, struct kernel_siginfo *info,
- int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
- 			unsigned long arg4, unsigned long arg5);
- void security_task_to_inode(struct task_struct *p, struct inode *inode);
-+int security_create_user_ns(const struct cred *cred);
- int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
- void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
- int security_msg_msg_alloc(struct msg_msg *msg);
-@@ -1185,6 +1186,11 @@ static inline int security_task_prctl(int option, unsigned long arg2,
- static inline void security_task_to_inode(struct task_struct *p, struct inode *inode)
- { }
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index c1351df9f7ee..4593437809cc 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -250,6 +250,7 @@ BTF_ID(func, bpf_lsm_task_getsecid_obj)
+ BTF_ID(func, bpf_lsm_task_prctl)
+ BTF_ID(func, bpf_lsm_task_setscheduler)
+ BTF_ID(func, bpf_lsm_task_to_inode)
++BTF_ID(func, bpf_lsm_userns_create)
+ BTF_SET_END(sleepable_lsm_hooks)
  
-+static inline int security_create_user_ns(const struct cred *cred)
-+{
-+	return 0;
-+}
-+
- static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
- 					  short flag)
- {
-diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-index 5481ba44a8d6..3f464bbda0e9 100644
---- a/kernel/user_namespace.c
-+++ b/kernel/user_namespace.c
-@@ -9,6 +9,7 @@
- #include <linux/highuid.h>
- #include <linux/cred.h>
- #include <linux/securebits.h>
-+#include <linux/security.h>
- #include <linux/keyctl.h>
- #include <linux/key-type.h>
- #include <keys/user-type.h>
-@@ -113,6 +114,10 @@ int create_user_ns(struct cred *new)
- 	    !kgid_has_mapping(parent_ns, group))
- 		goto fail_dec;
- 
-+	ret = security_create_user_ns(new);
-+	if (ret < 0)
-+		goto fail_dec;
-+
- 	ret = -ENOMEM;
- 	ns = kmem_cache_zalloc(user_ns_cachep, GFP_KERNEL);
- 	if (!ns)
-diff --git a/security/security.c b/security/security.c
-index 188b8f782220..ec9b4696e86c 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1903,6 +1903,11 @@ void security_task_to_inode(struct task_struct *p, struct inode *inode)
- 	call_void_hook(task_to_inode, p, inode);
- }
- 
-+int security_create_user_ns(const struct cred *cred)
-+{
-+	return call_int_hook(userns_create, 0, cred);
-+}
-+
- int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
- {
- 	return call_int_hook(ipc_permission, 0, ipcp, flag);
+ bool bpf_lsm_is_sleepable_hook(u32 btf_id)
 -- 
 2.30.2
 
