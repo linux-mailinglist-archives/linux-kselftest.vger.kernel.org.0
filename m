@@ -2,94 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1667588453
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 00:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C7E5884B1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 01:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237241AbiHBWaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Aug 2022 18:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S236002AbiHBXIg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Aug 2022 19:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237248AbiHBWaE (ORCPT
+        with ESMTP id S236006AbiHBXIT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:30:04 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41D9558F5
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 15:29:46 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id f22so8341565edc.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Aug 2022 15:29:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nt4PXjotTawRx9pQyNbVwREiDBb+yvN1pKjWnXAYa7E=;
-        b=k21vaPYO3PBf3TdXzucVl6smIURDRlEOU1yWSdRwFVWrjJcBTAgBWf972w4noHOmEo
-         qtE3zWZbm2PlR93udpDPS8M9t+wcFdGoM8zMjPy0EE84T5Bjb27vx3mD7ZFWLou3j4Xe
-         Zb30W+UNrpf8NKpESqvHNp1PIhdrxKsU/hDTF8qVXegJ70IIzkxXh9ArGpU/2TwUW8ii
-         vga1Ix8HCEOlcrkPtK9IxK/Iureb/koiSNNJvcrCOSk0W9UzOacgM2WmESksKTlIfP3h
-         vxbHt0nW+0jYzn3vPPA9jzyEinKxpZwA26L05BCw888IdYxU+5Abqcl0bJgcIET+liWV
-         EiGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nt4PXjotTawRx9pQyNbVwREiDBb+yvN1pKjWnXAYa7E=;
-        b=ME6gbJXx6dHtQbhso4+034J1r/nwqcOCwM1DEhqGP69dUmGvgC3gcdMacozbDCxcBe
-         Lb8kqlJLZw0HdNSGI4lNP1hVmjzVgRH+VRd/KJQZqxxYUJtwN7d9QWUWZP8KG09FDgSa
-         hOCyW7VE1RmTXF07nVzWbY8HmopaQVBY+R+4Zh4esR4XnYFcWY3++pt5UvjBlfRCbmq6
-         vpvfC7k3Nk6B0rLuF+eMwZ6KPKXRP+3QV8nKt6nAXpvQOSAfm6it83ve2uxbXPn2D9PN
-         147fG4AOZtVncUml1HLyPal+Qz1/k5FxQoi7JQ0GTTtHHGW4Qs/eVy+Yb1IFNyWykwe6
-         KRMA==
-X-Gm-Message-State: ACgBeo1nxgR/goPq0u4sz5w2y+vOWztAKk6CHyV9EkVsrJa57n3usPD2
-        fx1FET06xV4elzWCUB+bSjXmk+ZaSb7MHe0M1jE7m6ovxL7cRg==
-X-Google-Smtp-Source: AA6agR7diXu6NWBhqw9P2LB3kLSFApdVDiifLmRG6e6KRnD1E6WkHi9LZBbwS1HdeEB9G+Gpg782c1GCnusBxyRkEFU=
-X-Received: by 2002:a05:6402:4385:b0:43d:4820:4532 with SMTP id
- o5-20020a056402438500b0043d48204532mr17896002edc.233.1659479385307; Tue, 02
- Aug 2022 15:29:45 -0700 (PDT)
+        Tue, 2 Aug 2022 19:08:19 -0400
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [IPv6:2a0c:5a00:149::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BEC56B91;
+        Tue,  2 Aug 2022 16:08:04 -0700 (PDT)
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+        by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <mhal@rbox.co>)
+        id 1oJ0zX-00FE56-Tu; Wed, 03 Aug 2022 01:07:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+        s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+        Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+        bh=x49fAc268tlpuw1XluflDWncJ+4FstdBuY+I7rVJPPM=; b=o7cSUUuv2zKE4ad7W/HVjS26VR
+        s7m/rQOYHv2cbOmw0L/W6fxjJm/p5b4pvMESow57E7AgOcMpDy9omlhU1jnrdsLODO/QRC6HDGvxi
+        FO6oP69ke7VnDpcKJMChw/o4zeLpUbtVFmxw4Y5/Pa0rRh9/MKrMDsIAXCFgSISTB61Y+MYDXioxV
+        wdlogPzUZvzSopDjkQkYmMLNUSqRcR32VSJhvqhmhcfpf0DpZ+5Tk7PSD8DQhs9H4KQ8AsvN5FYRa
+        FdTorJIJ1uhQywY1hLlubUz1Ky5HR0dTBo6mpb9aVDxqwRlz4kuiwLodAYGEWQs37chJQImdkYzKK
+        hgJ2K7MQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <mhal@rbox.co>)
+        id 1oJ0zX-00028W-Hf; Wed, 03 Aug 2022 01:07:59 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1oJ0zP-0006qc-BD; Wed, 03 Aug 2022 01:07:51 +0200
+Message-ID: <c2001bfa-7602-e99a-dc41-1d9d993581ac@rbox.co>
+Date:   Wed, 3 Aug 2022 01:07:50 +0200
 MIME-Version: 1.0
-References: <20220802212621.420840-1-mairacanal@riseup.net> <20220802212621.420840-4-mairacanal@riseup.net>
-In-Reply-To: <20220802212621.420840-4-mairacanal@riseup.net>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 2 Aug 2022 15:29:33 -0700
-Message-ID: <CAGS_qxrbs0K3J5+u3_setrd2NOqE4ADCmuGG-i+5KNoeBb9g6w@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] kunit: Use KUNIT_EXPECT_MEMEQ macro
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
-        airlied@linux.ie, daniel@ffwll.ch, davem@davemloft.net,
-        kuba@kernel.org, jose.exposito89@gmail.com, javierm@redhat.com,
-        andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Thunderbird
+From:   Michal Luczaj <mhal@rbox.co>
+Subject: Re: [kvm-unit-tests PATCH v2] x86: Test illegal LEA handling
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <YuQQiv862oWDpgt5@google.com> <20220731204653.2516-1-mhal@rbox.co>
+ <YugC4rUvdbroNk3M@google.com>
+Content-Language: pl-PL
+In-Reply-To: <YugC4rUvdbroNk3M@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 2, 2022 at 2:27 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
-te:
->
-> Use KUNIT_EXPECT_MEMEQ to compare memory blocks in replacement of the
-> KUNIT_EXPECT_EQ macro. Therefor, the statement
->
->     KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
->
-> is replaced by:
->
->     KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
->
-> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+On 8/1/22 18:44, Sean Christopherson wrote:
+> On Sun, Jul 31, 2022, Michal Luczaj wrote:
+>> +{
+>> +	exceptions = 0;
+>> +	handle_exception(UD_VECTOR, illegal_lea_handler);
+> 
+> No need to use a custom handler (ignore any patterns in emulator.c that suggest
+> it's "mandatory", emulator is one of the oldest test).  ASM_TRY() can handle all
+> of this without any globals.
+> ...
+> static void test_illegal_lea(void)
+> {
+> 	unsigned int vector;
+> 
+> 	asm volatile (ASM_TRY("1f")
+> 		      KVM_FEP ".byte 0x8d; .byte 0xc0\n\t"
+> 		      "1:"
+> 		      : : : "memory", "eax");
+> 
+> 	vector = exception_vector();
+> 	report(vector == UD_VECTOR,
+> 	       "Wanted #UD on LEA with /reg, got vector = %d", vector);
+> }
 
-Acked-by: Daniel Latypov <dlatypov@google.com>
+I must be missing something important. There is
+`handle_exception(UD_VECTOR, 0)` early in `main()` which simply undoes
+`handle_exception(6, check_exception_table)` set by `setup_idt()`. If
+there's no more exception table walk for #UD, `ASM_TRY` alone can't
+possibly work, am I corrent?
 
-I didn't go and find the appropriate commit from the drm tree to base
-this on, so I couldn't apply it locally.
-But looking at the diff itself, looks good!
+If so, am I supposed to restore the `check_exception_table()` handler? Or
+maybe using `test_for_exception()` would be more elegant:
+
+static void illegal_lea(void *unused)
+{
+	asm volatile(KVM_FEP ".byte 0x8d, 0xc0" : : : "memory", "eax");
+}
+
+static void test_illegal_lea(void)
+{
+	bool fault;
+
+	fault = test_for_exception(UD_VECTOR, &illegal_lea, NULL);
+	report(fault, "Wanted #UD on LEA with /reg");
+}
+
+Thanks for hints,
+Michal
