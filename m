@@ -2,220 +2,268 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9F1587A27
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 11:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FCF587A68
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 12:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236151AbiHBJ5L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Aug 2022 05:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
+        id S236531AbiHBKNw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Aug 2022 06:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235957AbiHBJ5K (ORCPT
+        with ESMTP id S233452AbiHBKNv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Aug 2022 05:57:10 -0400
-X-Greylist: delayed 351 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 Aug 2022 02:57:08 PDT
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [IPv6:2001:1600:3:17::42af])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BA148C9B
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 02:57:08 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Lxqxs33g8zMptYk;
-        Tue,  2 Aug 2022 11:51:13 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Lxqxr590Qzlqwsl;
-        Tue,  2 Aug 2022 11:51:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1659433873;
-        bh=1zHRiAqo3P/dojkNK+hYHzjUFBL4CkZLzF7FK2fml6I=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=yubBe6Oo6HwAr99wsPmEZJALzIaciq9i8qNhdXbQ62s5yam2Z21lr4NT1c76h4xVp
-         EZndDrz2aLGgYqsCnIkP3v6gXa79Prd3jd3wRVYwWxZK9FxtMha8El+S/oYz018ZQv
-         h+Go38FAOlZssRp0+iylAHifHtozQjL+VPDlDORk=
-Message-ID: <2838c247-0648-3828-efb3-e11d7a0616b2@digikod.net>
-Date:   Tue, 2 Aug 2022 11:51:12 +0200
+        Tue, 2 Aug 2022 06:13:51 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9354B48D;
+        Tue,  2 Aug 2022 03:13:49 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6F5291884456;
+        Tue,  2 Aug 2022 10:13:47 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 3FCBB25032B7;
+        Tue,  2 Aug 2022 10:13:47 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 367BAA1E00B9; Tue,  2 Aug 2022 10:13:47 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-References: <430ef132-2ac7-e1be-68ed-3d9c27382143@linuxfoundation.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.20-rc1
-In-Reply-To: <430ef132-2ac7-e1be-68ed-3d9c27382143@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Date:   Tue, 02 Aug 2022 12:13:47 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 2/6] net: switchdev: add support for
+ offloading of fdb locked flag
+In-Reply-To: <20220708085403.sk7znfad3x2mnxeh@skbuf>
+References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+ <20220707152930.1789437-3-netdev@kapio-technology.com>
+ <20220708085403.sk7znfad3x2mnxeh@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <0d884212b8df03e5cf03c4b2e5ea3e3d@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On 2022-07-08 10:54, Vladimir Oltean wrote:
 
-This change breaks the Landlock test build when performed on the 
-tools/testing/selftests/landlock directory because the 
-(non-system/up-to-date) kernel headers aren't found. Looking at the use 
-of top_srcdir and HDR_PATH, it seems that multiple subsystems are using 
-this feature. I consider this change a regression.
+>>  	struct dsa_db db;
+>>  };
+>> 
+>> @@ -131,6 +132,7 @@ struct dsa_switchdev_event_work {
+>>  	unsigned char addr[ETH_ALEN];
+>>  	u16 vid;
+>>  	bool host_addr;
+>> +	bool is_locked;
+> 
+> drop
+> 
+>>  };
+>> 
+>>  enum dsa_standalone_event {
+>> @@ -232,7 +234,7 @@ int dsa_port_vlan_msti(struct dsa_port *dp,
+>>  		       const struct switchdev_vlan_msti *msti);
+>>  int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu);
+>>  int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
+>> -		     u16 vid);
+>> +		     u16 vid, bool is_locked);
+> 
+> drop
+> 
+>>  int dsa_port_fdb_del(struct dsa_port *dp, const unsigned char *addr,
+>>  		     u16 vid);
+>>  int dsa_port_standalone_host_fdb_add(struct dsa_port *dp,
+>> diff --git a/net/dsa/port.c b/net/dsa/port.c
+>> index 3738f2d40a0b..8bdac9aabe5d 100644
+>> --- a/net/dsa/port.c
+>> +++ b/net/dsa/port.c
+>> @@ -35,6 +35,7 @@ static void dsa_port_notify_bridge_fdb_flush(const 
+>> struct dsa_port *dp, u16 vid)
+>>  	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
+>>  	struct switchdev_notifier_fdb_info info = {
+>>  		.vid = vid,
+>> +		.is_locked = false,
+> 
+> drop
+> 
+>>  	};
+>> 
+>>  	/* When the port becomes standalone it has already left the bridge.
+>> @@ -950,12 +951,13 @@ int dsa_port_mtu_change(struct dsa_port *dp, int 
+>> new_mtu)
+>>  }
+>> 
+>>  int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
+>> -		     u16 vid)
+>> +		     u16 vid, bool is_locked)
+> 
+> drop
+> 
+>>  {
+>>  	struct dsa_notifier_fdb_info info = {
+>>  		.dp = dp,
+>>  		.addr = addr,
+>>  		.vid = vid,
+>> +		.is_locked = is_locked,
+> 
+> drop
+> 
+>>  		.db = {
+>>  			.type = DSA_DB_BRIDGE,
+>>  			.bridge = *dp->bridge,
+>> @@ -979,6 +981,7 @@ int dsa_port_fdb_del(struct dsa_port *dp, const 
+>> unsigned char *addr,
+>>  		.dp = dp,
+>>  		.addr = addr,
+>>  		.vid = vid,
+>> +		.is_locked = false,
+> 
+> drop
+> 
+>>  		.db = {
+>>  			.type = DSA_DB_BRIDGE,
+>>  			.bridge = *dp->bridge,
+>> @@ -999,6 +1002,7 @@ static int dsa_port_host_fdb_add(struct dsa_port 
+>> *dp,
+>>  		.dp = dp,
+>>  		.addr = addr,
+>>  		.vid = vid,
+>> +		.is_locked = false,
+> 
+> drop
+> 
+>>  		.db = db,
+>>  	};
+>> 
+>> @@ -1050,6 +1054,7 @@ static int dsa_port_host_fdb_del(struct dsa_port 
+>> *dp,
+>>  		.dp = dp,
+>>  		.addr = addr,
+>>  		.vid = vid,
+>> +		.is_locked = false,
+> 
+> drop
+> 
+>>  		.db = db,
+>>  	};
+>> 
+>> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+>> index 801a5d445833..905b15e4eab9 100644
+>> --- a/net/dsa/slave.c
+>> +++ b/net/dsa/slave.c
+>> @@ -2784,6 +2784,7 @@ static void 
+>> dsa_slave_switchdev_event_work(struct work_struct *work)
+>>  		container_of(work, struct dsa_switchdev_event_work, work);
+>>  	const unsigned char *addr = switchdev_work->addr;
+>>  	struct net_device *dev = switchdev_work->dev;
+>> +	bool is_locked = switchdev_work->is_locked;
+> 
+> drop
+> 
+>>  	u16 vid = switchdev_work->vid;
+>>  	struct dsa_switch *ds;
+>>  	struct dsa_port *dp;
+>> @@ -2799,7 +2800,7 @@ static void 
+>> dsa_slave_switchdev_event_work(struct work_struct *work)
+>>  		else if (dp->lag)
+>>  			err = dsa_port_lag_fdb_add(dp, addr, vid);
+>>  		else
+>> -			err = dsa_port_fdb_add(dp, addr, vid);
+>> +			err = dsa_port_fdb_add(dp, addr, vid, is_locked);
+> 
+> drop
+> 
+>>  		if (err) {
+>>  			dev_err(ds->dev,
+>>  				"port %d failed to add %pM vid %d to fdb: %d\n",
+>> @@ -2907,6 +2908,7 @@ static int dsa_slave_fdb_event(struct net_device 
+>> *dev,
+>>  	ether_addr_copy(switchdev_work->addr, fdb_info->addr);
+>>  	switchdev_work->vid = fdb_info->vid;
+>>  	switchdev_work->host_addr = host_addr;
+>> +	switchdev_work->is_locked = fdb_info->is_locked;
+> 
+> drop
+> 
+>> 
+>>  	dsa_schedule_work(&switchdev_work->work);
+>> 
+>> diff --git a/net/dsa/switch.c b/net/dsa/switch.c
+>> index 2b56218fc57c..32b1e7ac6373 100644
+>> --- a/net/dsa/switch.c
+>> +++ b/net/dsa/switch.c
+>> @@ -234,7 +234,7 @@ static int dsa_port_do_mdb_del(struct dsa_port 
+>> *dp,
+>>  }
+>> 
+>>  static int dsa_port_do_fdb_add(struct dsa_port *dp, const unsigned 
+>> char *addr,
+>> -			       u16 vid, struct dsa_db db)
+>> +			       u16 vid, bool is_locked, struct dsa_db db)
+> 
+> drop
+> 
+>>  {
+>>  	struct dsa_switch *ds = dp->ds;
+>>  	struct dsa_mac_addr *a;
+>> @@ -398,7 +398,7 @@ static int dsa_switch_host_fdb_add(struct 
+>> dsa_switch *ds,
+>>  	dsa_switch_for_each_port(dp, ds) {
+>>  		if (dsa_port_host_address_match(dp, info->dp)) {
+>>  			err = dsa_port_do_fdb_add(dp, info->addr, info->vid,
+>> -						  info->db);
+>> +						  false, info->db);
+> 
+> drop
+> 
+>>  			if (err)
+>>  				break;
+>>  		}
+>> @@ -437,7 +437,7 @@ static int dsa_switch_fdb_add(struct dsa_switch 
+>> *ds,
+>>  	if (!ds->ops->port_fdb_add)
+>>  		return -EOPNOTSUPP;
+>> 
+>> -	return dsa_port_do_fdb_add(dp, info->addr, info->vid, info->db);
+>> +	return dsa_port_do_fdb_add(dp, info->addr, info->vid, 
+>> info->is_locked, info->db);
+> 
+> drop
+> 
+>>  }
+>> 
+>>  static int dsa_switch_fdb_del(struct dsa_switch *ds,
+>> --
+>> 2.30.2
+>> 
 
-It also removes the check on up-to-date kernel headers (thanks to the 
-Makefile's target timestamp).
+Hi Vladimir and Ido,
 
-I wasn't CCed for this change impacting Landlock [1]. Please keep in 
-mind to add at least maintainers and related mailing-lists for changes 
-on related subsystems.
+I can either ignore locked entries early or late in the dsa/switchdev 
+layers.
 
-The following patch almost revert commit a917dd94b832 
-("selftests/landlock: drop deprecated headers dependency") and partially 
-fixes commit 49de12ba06ef ("selftests: drop KSFT_KHDR_INSTALL make target"):
+If I ignore early, I think it should be in br_switchdev_fdb_notify() in 
+net/bridge/br_switchdev.c.
+If I ignore late, I would think that it should be jut before sending it 
+to the driver(s), e.g. in dsa_port_do_fdb_add() in net/dsa/switch.c.
 
---- a/tools/testing/selftests/landlock/Makefile
-+++ b/tools/testing/selftests/landlock/Makefile
-@@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
-  TEST_GEN_PROGS_EXTENDED := true
+There is of course pros and cons of both options, but if the flag is 
+never to be sent to the driver, then it should be ignored early.
 
-  OVERRIDE_TARGETS := 1
-+top_srcdir = ../../../..
-  include ../lib.mk
-
-+khdr_dir = $(top_srcdir)/usr/include
-+
-  $(OUTPUT)/true: true.c
-  	$(LINK.c) $< $(LDLIBS) -o $@ -static
-
--$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
--	$(LINK.c) $< $(LDLIBS) -o $@ -lcap
-+$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h 
-../kselftest_harness.h common.h
-+	$(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
-
-
-This doesn't fix the header timestamp check though.
-
-Regards,
-  Mickaël
-
-[1] 
-https://lore.kernel.org/all/b79c51ed97219b1c10e2e3f2bcd3269305f0f035.1657694067.git.guillaume.tucker@collabora.com/
-
-
-On 02/08/2022 00:03, Shuah Khan wrote:
-> Hi Linus,
-> 
-> Please pull the following Kselftest update for Linux 5.20-rc1.
-> 
-> This Kselftest update for Linux 5.20-rc1 consists of:
-> 
-> - timers test build fixes and cleanups for new tool chains
-> - removing khdr from kselftest framework and main Makefile
-> - changes to test output messages to improve reports
-> 
-> Please not that this update also included main Makefile change
-> to kselftest build logic in it.
-> 
-> diff is attached.
-> 
-> thanks,
-> -- Shuah
-> 
-> ----------------------------------------------------------------
-> The following changes since commit 03c765b0e3b4cb5063276b086c76f7a612856a9a:
-> 
->     Linux 5.19-rc4 (2022-06-26 14:22:10 -0700)
-> 
-> are available in the Git repository at:
-> 
->     git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-5.20-rc1
-> 
-> for you to fetch changes up to 4062eba9f3d072e72645860fbc5d160428a75c50:
-> 
->     Makefile: replace headers_install with headers for kselftest (2022-07-26 18:06:33 -0600)
-> 
-> ----------------------------------------------------------------
-> linux-kselftest-next-5.20-rc1
-> 
-> This Kselftest update for Linux 5.20-rc1 consists of:
-> 
-> - timers test build fixes and cleanups for new tool chains
-> - removing khdr from kselftest framework and main Makefile
-> - changes to test output messages to improve reports
-> 
-> ----------------------------------------------------------------
-> Gautam (2):
->         kselftests: Enable the echo command to print newlines in Makefile
->         kselftests/damon: add support for cases where debugfs cannot be read
-> 
-> Gautam Menghani (3):
->         selftests: Make the usage formatting consistent in kselftest_deps.sh
->         selftests/drivers/gpu: Add error messages to drm_mm.sh
->         selftests/kcmp: Make the test output consistent and clear
-> 
-> Guillaume Tucker (6):
->         selftests: drop khdr make target
->         selftests: stop using KSFT_KHDR_INSTALL
->         selftests: drop KSFT_KHDR_INSTALL make target
->         Makefile: add headers_install to kselftest targets
->         selftests/landlock: drop deprecated headers dependency
->         Makefile: replace headers_install with headers for kselftest
-> 
-> Johannes Holland (1):
->         selftests/tpm2: increase timeout for kselftests
-> 
-> Soumya Negi (1):
->         selftests: drivers/dma-buf: Improve message in selftest summary
-> 
-> Wolfram Sang (9):
->         selftests: timers: valid-adjtimex: build fix for newer toolchains
->         selftests: timers: fix declarations of main()
->         selftests: timers: nanosleep: adapt to kselftest framework
->         selftests: timers: inconsistency-check: adapt to kselftest framework
->         selftests: timers: clocksource-switch: fix passing errors from child
->         selftests: timers: clocksource-switch: sort includes
->         selftests: timers: clocksource-switch: add command line switch to skip sanity check
->         selftests: timers: clocksource-switch: add 'runtime' command line parameter
->         selftests: timers: clocksource-switch: adapt to kselftest framework
-> 
-> Xiang wangx (1):
->         userfaultfd/selftests: Fix typo in comment
-> 
-> Zan Aziz (1):
->         selftests:timers: globals don't need initialization to 0
-> 
->    Makefile                                           |  4 +-
->    tools/testing/selftests/Makefile                   | 30 +--------
->    tools/testing/selftests/arm64/mte/Makefile         |  1 -
->    tools/testing/selftests/arm64/signal/Makefile      |  1 -
->    .../testing/selftests/arm64/signal/test_signals.h  |  4 +-
->    tools/testing/selftests/damon/_chk_dependency.sh   | 10 +++
->    tools/testing/selftests/drivers/dma-buf/udmabuf.c  |  3 +-
->    tools/testing/selftests/drivers/gpu/drm_mm.sh      |  4 +-
->    .../selftests/drivers/s390x/uvdevice/Makefile      |  1 -
->    tools/testing/selftests/futex/functional/Makefile  |  1 -
->    tools/testing/selftests/kcmp/kcmp_test.c           |  6 +-
->    tools/testing/selftests/kselftest_deps.sh          |  2 +-
->    tools/testing/selftests/kvm/Makefile               |  1 -
->    tools/testing/selftests/landlock/Makefile          | 10 +--
->    tools/testing/selftests/lib.mk                     | 38 ------------
->    tools/testing/selftests/net/Makefile               |  1 -
->    tools/testing/selftests/net/mptcp/Makefile         |  1 -
->    tools/testing/selftests/tc-testing/Makefile        |  1 -
->    tools/testing/selftests/timers/adjtick.c           |  2 +-
->    .../testing/selftests/timers/alarmtimer-suspend.c  |  2 +-
->    tools/testing/selftests/timers/change_skew.c       |  2 +-
->    .../testing/selftests/timers/clocksource-switch.c  | 71 ++++++++++++++--------
->    .../testing/selftests/timers/inconsistency-check.c | 32 +++++-----
->    tools/testing/selftests/timers/nanosleep.c         | 18 +++---
->    tools/testing/selftests/timers/raw_skew.c          |  2 +-
->    tools/testing/selftests/timers/skew_consistency.c  |  2 +-
->    tools/testing/selftests/timers/valid-adjtimex.c    |  2 +-
->    tools/testing/selftests/tpm2/settings              |  1 +
->    tools/testing/selftests/vm/Makefile                |  1 -
->    tools/testing/selftests/vm/userfaultfd.c           |  2 +-
->    30 files changed, 111 insertions(+), 145 deletions(-)
->    create mode 100644 tools/testing/selftests/tpm2/settings
-> ----------------------------------------------------------------
+If ignored late most of this patch should not be dropped.
