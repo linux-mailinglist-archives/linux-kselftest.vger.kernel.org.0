@@ -2,227 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7EE5883BE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 23:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B29E5883D5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 23:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233066AbiHBVrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Aug 2022 17:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
+        id S232190AbiHBV5y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Aug 2022 17:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiHBVrf (ORCPT
+        with ESMTP id S231194AbiHBV5x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Aug 2022 17:47:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6DB2610E
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 14:47:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74EB4B8211E
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 21:47:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24831C43142
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 21:47:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659476851;
-        bh=bw7ZR3OubmcRjpwNuSpXxWiUDJEe/z23F1fjfbai/Z8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NZutemEtOXr8jMR8C0MKtM+kB8mMBW10kCtoSnrbWtLh81V4e73v5GXY4o8Zg6IV9
-         j5uruWwiP0h89Ak08bzZfbSbQvH3WR9VYbcrYkT3KV3jxZoWYYy/DYkzJAPHi+6P6Q
-         3llG1KIJ2QFQD09swNXRZHtNVAJeHbw+dcNACQ0I52u6t6+srIrOigS3utL6T8xkSw
-         tdAy3AkWRzH6jvqrqf0r+pQgBMYlLlLGSiWBzR26/kHZ2SfIrCHnsgJkX6MnJyVTJ0
-         L06F/oji7QnsXZWF4V97stNJJu1ciLagTR3oqGUnFmBKvABDAd7l2GW22fAC3YAZF3
-         44hGvLGgpY0DA==
-Received: by mail-yb1-f171.google.com with SMTP id j63so25563390ybb.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Aug 2022 14:47:31 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2GeGoSm8jX8ENnBww/4XrSAIKK6lb2UsQbuoxvc933paU3vBYy
-        kKMB5up6bf4sY3LJyyHD2th2L9EJycmAz8sSPn2JHg==
-X-Google-Smtp-Source: AA6agR4fnI8EaqJu29BFVOEueN1dznAYAG7hl+whc2++wbcE3Ahd5U9wkn2b/VFuz0XOU8vk11ZqrjSnAeTTXExhUt8=
-X-Received: by 2002:a81:9148:0:b0:328:2c96:eaed with SMTP id
- i69-20020a819148000000b003282c96eaedmr1782937ywg.314.1659476838933; Tue, 02
- Aug 2022 14:47:18 -0700 (PDT)
+        Tue, 2 Aug 2022 17:57:53 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E491B782
+        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 14:57:52 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id e13so337704edj.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Aug 2022 14:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iErLUqQt0QpWnjCPSCabDR6OOKvgu8mEY10yTyCcHLg=;
+        b=YtOAJ/9dRfKsfmxdRQChT6LeIzaAmIN1IXVER+bUFlzRTjdkQd1fVBBtmpPo8/09CJ
+         +jYJlwdnnY5mBKg6eY+TbHgNQbmwghsNgYxFV5llylDF3n8foSg9ThNqBFtyMG0awlZx
+         r7xJM70/Bhah7X6YbwBs+sb1Lo99xoc6z/hQAE2mFdKYECs+QSXlJyMM/a2gcAzr/lH6
+         Nv5xj1Aa+LaOSGCHYScrdlmCjLqAnm5PCVyChxLX/q5SC9BXrfbh/DpLvfArWtJBtmoi
+         MaMdBJ8O8vYMjGhcAAowIT8zELBJreF082j+43qCvLHkD5VL9aqSvCYfuWNcDdM6zqt3
+         AhCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iErLUqQt0QpWnjCPSCabDR6OOKvgu8mEY10yTyCcHLg=;
+        b=LBewGGdwo74NNDNUq+G7oZ61vEq5k4eUdz/YxIVxp2++iGoUTz+XOk1eH+sc7ai6eP
+         n4uiQ2GQMbIQiNM6grjno+eYlZPFDCX+9A9LOTYKqQnhwygxrtOeVP50zPK0+ProSYNf
+         kldaYV3nGvkKpQ0yvmKsqnLRzJWw0+COBRnNrPQ/UIf2NWV+JYIJRbXbS3m4C6WhG3Z+
+         +AlvVU22YWgqtLdIOJpga8KrUuhg+of0f56dC4FmAVfBtWeaz3jNSrS3nlP4OdghaskZ
+         CzQgiKQMpjoEL4L5Ouqo8s1pN26QPL1iWMpu2p0UKszNHF2Bd1f1Wx1/HA7nsU1sXmTI
+         qrVw==
+X-Gm-Message-State: ACgBeo3ujiNWnKH+GpqnvCKlTJ7QvdN3JUjo0nJQm5VDIdpBQlOUox2s
+        DlhgdbgThrMkBD1/vQF1oA5paSpUFUhI52BRrSxe2Q==
+X-Google-Smtp-Source: AA6agR7Iq/NhQ4VL1e2mBRNVeVHP/OQ/xEhKiETJ37KAE2ZtD20dq/lcNTdMrvjwAUaMXOKqzd1xH3c4eI/GaTuBgP0=
+X-Received: by 2002:a05:6402:4385:b0:43d:4820:4532 with SMTP id
+ o5-20020a056402438500b0043d48204532mr17798591edc.233.1659477470934; Tue, 02
+ Aug 2022 14:57:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <20220801180146.1157914-2-fred@cloudflare.com>
-In-Reply-To: <20220801180146.1157914-2-fred@cloudflare.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 2 Aug 2022 23:47:08 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
-Message-ID: <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] security, lsm: Introduce security_create_user_ns()
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+References: <20220802212621.420840-1-mairacanal@riseup.net> <20220802212621.420840-3-mairacanal@riseup.net>
+In-Reply-To: <20220802212621.420840-3-mairacanal@riseup.net>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 2 Aug 2022 14:57:39 -0700
+Message-ID: <CAGS_qxqBCjcX1iL9D_1pCM47pN+OwRG7=Pfd2DWyzwFNFJhkgg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] kunit: Add KUnit memory block assertions to the example_all_expect_macros_test
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
+        airlied@linux.ie, daniel@ffwll.ch, davem@davemloft.net,
+        kuba@kernel.org, jose.exposito89@gmail.com, javierm@redhat.com,
+        andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
+On Tue, Aug 2, 2022 at 2:26 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
+te:
 >
-> Preventing user namespace (privileged or otherwise) creation comes in a
-> few of forms in order of granularity:
->
->         1. /proc/sys/user/max_user_namespaces sysctl
->         2. OS specific patch(es)
->         3. CONFIG_USER_NS
->
-> To block a task based on its attributes, the LSM hook cred_prepare is a
-> good candidate for use because it provides more granular control, and
-> it is called before create_user_ns():
->
->         cred = prepare_creds()
->                 security_prepare_creds()
->                         call_int_hook(cred_prepare, ...
->         if (cred)
->                 create_user_ns(cred)
->
-> Since security_prepare_creds() is meant for LSMs to copy and prepare
-> credentials, access control is an unintended use of the hook. Therefore
-> introduce a new function security_create_user_ns() with an accompanying
-> userns_create LSM hook.
->
-> This hook takes the prepared creds for LSM authors to write policy
-> against. On success, the new namespace is applied to credentials,
-> otherwise an error is returned.
->
-> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> Increament the example_all_expect_macros_test with the
 
-Reviewed-by: KP Singh <kpsingh@kernel.org>
+nit: typo ("Increment")
+But "Augment" would be a bit more idiomatic here
 
-This looks useful, and I would also like folks to consider the
-observability aspects of BPF LSM as
-brought up here:
+Sorry I didn't catch this one in v1.
 
-https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/
-
-Frederick, what about adding the observability aspects to the commit
-description as well.
-
-- KP
-
+> KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros by creating a test
+> with memory block assertions.
 >
+> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+
+Thanks!
+Just a couple very small nits (one above, one below).
+
 > ---
-> Changes since v3:
-> - No changes
-> Changes since v2:
-> - Rename create_user_ns hook to userns_create
-> Changes since v1:
-> - Changed commit wording
-> - Moved execution to be after id mapping check
-> - Changed signature to only accept a const struct cred *
+> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to =
+make
+> it easier for users to infer the right size unit (Daniel Latypov).
+> - Replace a constant number of array elements for ARRAY_SIZE() (Andr=C3=
+=A9 Almeida).
+> - Rename "array" and "expected" variables to "array1" and "array2" (Danie=
+l Latypov).
 > ---
->  include/linux/lsm_hook_defs.h | 1 +
->  include/linux/lsm_hooks.h     | 4 ++++
->  include/linux/security.h      | 6 ++++++
->  kernel/user_namespace.c       | 5 +++++
->  security/security.c           | 5 +++++
->  5 files changed, 21 insertions(+)
+>  lib/kunit/kunit-example-test.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index eafa1d2489fd..7ff93cb8ca8d 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -223,6 +223,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigned long arg2,
->          unsigned long arg3, unsigned long arg4, unsigned long arg5)
->  LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
->          struct inode *inode)
-> +LSM_HOOK(int, 0, userns_create, const struct cred *cred)
->  LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
->  LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
->          u32 *secid)
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 91c8146649f5..54fe534d0e01 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -799,6 +799,10 @@
->   *     security attributes, e.g. for /proc/pid inodes.
->   *     @p contains the task_struct for the task.
->   *     @inode contains the inode structure for the inode.
-> + * @userns_create:
-> + *     Check permission prior to creating a new user namespace.
-> + *     @cred points to prepared creds.
-> + *     Return 0 if successful, otherwise < 0 error code.
->   *
->   * Security hooks for Netlink messaging.
->   *
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 7fc4e9f49f54..a195bf33246a 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -435,6 +435,7 @@ int security_task_kill(struct task_struct *p, struct kernel_siginfo *info,
->  int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
->                         unsigned long arg4, unsigned long arg5);
->  void security_task_to_inode(struct task_struct *p, struct inode *inode);
-> +int security_create_user_ns(const struct cred *cred);
->  int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
->  void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
->  int security_msg_msg_alloc(struct msg_msg *msg);
-> @@ -1185,6 +1186,11 @@ static inline int security_task_prctl(int option, unsigned long arg2,
->  static inline void security_task_to_inode(struct task_struct *p, struct inode *inode)
->  { }
->
-> +static inline int security_create_user_ns(const struct cred *cred)
-> +{
-> +       return 0;
-> +}
-> +
->  static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
->                                           short flag)
+> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-tes=
+t.c
+> index f8fe582c9e36..8a9b0eeb1934 100644
+> --- a/lib/kunit/kunit-example-test.c
+> +++ b/lib/kunit/kunit-example-test.c
+> @@ -86,6 +86,9 @@ static void example_mark_skipped_test(struct kunit *tes=
+t)
+>   */
+>  static void example_all_expect_macros_test(struct kunit *test)
 >  {
-> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-> index 5481ba44a8d6..3f464bbda0e9 100644
-> --- a/kernel/user_namespace.c
-> +++ b/kernel/user_namespace.c
-> @@ -9,6 +9,7 @@
->  #include <linux/highuid.h>
->  #include <linux/cred.h>
->  #include <linux/securebits.h>
-> +#include <linux/security.h>
->  #include <linux/keyctl.h>
->  #include <linux/key-type.h>
->  #include <keys/user-type.h>
-> @@ -113,6 +114,10 @@ int create_user_ns(struct cred *new)
->             !kgid_has_mapping(parent_ns, group))
->                 goto fail_dec;
->
-> +       ret = security_create_user_ns(new);
-> +       if (ret < 0)
-> +               goto fail_dec;
+> +       const u32 array1[] =3D { 0x0F, 0xFF };
+> +       const u32 array2[] =3D { 0x1F, 0xFF };
 > +
->         ret = -ENOMEM;
->         ns = kmem_cache_zalloc(user_ns_cachep, GFP_KERNEL);
->         if (!ns)
-> diff --git a/security/security.c b/security/security.c
-> index 188b8f782220..ec9b4696e86c 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1903,6 +1903,11 @@ void security_task_to_inode(struct task_struct *p, struct inode *inode)
->         call_void_hook(task_to_inode, p, inode);
->  }
+>         /* Boolean assertions */
+>         KUNIT_EXPECT_TRUE(test, true);
+>         KUNIT_EXPECT_FALSE(test, false);
+> @@ -109,6 +112,10 @@ static void example_all_expect_macros_test(struct ku=
+nit *test)
+>         KUNIT_EXPECT_STREQ(test, "hi", "hi");
+>         KUNIT_EXPECT_STRNEQ(test, "hi", "bye");
 >
-> +int security_create_user_ns(const struct cred *cred)
-> +{
-> +       return call_int_hook(userns_create, 0, cred);
-> +}
-> +
->  int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
->  {
->         return call_int_hook(ipc_permission, 0, ipcp, flag);
-> --
-> 2.30.2
->
+> +       /* Memory block assertions */
+> +       KUNIT_EXPECT_MEMEQ(test, array1, array1, sizeof(u32) * ARRAY_SIZE=
+(array1));
+> +       KUNIT_EXPECT_MEMNEQ(test, array1, array2, sizeof(u32) * ARRAY_SIZ=
+E(array1));
+
+Note: the following would be equivalent
+  KUNIT_EXPECT_MEMEQ(test, array1, array1, sizeof(array1));
+  KUNIT_EXPECT_MEMNEQ(test, array1, array2, sizeof(array1));
+I think now we've dropped the use of "array equal", sizeof() is also
+generally more appropriate.
+
+We could also optionally prefix these with
+  KUNIT_ASSERT_EQ(test, sizeof(array1), sizeof(array2));
+if we want to be extra paranoid here, but I don't think that's really neces=
+sary.
