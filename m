@@ -2,110 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C29E588023
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 18:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F071588064
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 18:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiHBQTz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Aug 2022 12:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S238211AbiHBQj1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Aug 2022 12:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiHBQTy (ORCPT
+        with ESMTP id S239089AbiHBQjK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Aug 2022 12:19:54 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6109BC38;
-        Tue,  2 Aug 2022 09:19:53 -0700 (PDT)
-Received: from mx0.riseup.net (mx0-pn.riseup.net [10.0.1.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mx0.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4Ly0ZK0plSzDrnq;
-        Tue,  2 Aug 2022 16:19:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1659457193; bh=31MhJt5fjArXpYyU6KYJb6a/trvSJzJjG6BpGBq8ddk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EaV5+pOCQ5si0XL6vFU7fHVHdVqn1ByGOTq/15dP9HDr5e35FqaO7lpCxVtngctY2
-         caHn82jEKJjnnE4q2gRuFhwG9KoGcFJn6IaThQXrrYJ+vY8H+oQx9DUT0ErbZTOlyQ
-         tPq0pYmAKQe1m9Fb++nptqA3ZN54wLU2kldDYjGs=
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Ly0ZC2XWGz9t2X;
-        Tue,  2 Aug 2022 16:19:47 +0000 (UTC)
-X-Riseup-User-ID: BD0BA3B43EF72C3702A87119B35DE3ABB262086C22E4790838CF34584D80F0C1
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4Ly0Z64kscz5vTk;
-        Tue,  2 Aug 2022 16:19:42 +0000 (UTC)
-Message-ID: <5c9038fd-a247-d0d3-841c-ba1e606bc309@riseup.net>
-Date:   Tue, 2 Aug 2022 13:19:41 -0300
+        Tue, 2 Aug 2022 12:39:10 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CD143338
+        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 09:39:00 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id o3so13968761ple.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Aug 2022 09:39:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=YLolmPC/4W6Ekt5KXSGhTlaQ+SvTrN9uL1784FHTktA=;
+        b=DEczoNtVTMwIsaw8yg11wYkQuI9LeTuQwFeOQ0oJ03m1tMW/YgHdOnTv17v8+A6WTV
+         U7hpMystc0MLLmDXYDMaROWkoGrECN3+IY7Ia+Z09cQyp/+2thONhPGLIYnqECJRrXhr
+         dDHRlXhlBA0o0w24sHNoK99DkncCME85F/XcNTjXnZbY1/vtUg34rxTUMG/OWYQ4HMcI
+         iIFe/Qw/lNcBgMnxPgPuAhy90CFyCy84wOdE8NkRPB91ulC5zTuJcdVgjk8H0EgOjoUm
+         FnlRd5MiMQxVvv/M1kuZRL91q7QvdBIT05QOREIPMw2HWyehKvsTbH9WC464J4D8ov37
+         YsWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=YLolmPC/4W6Ekt5KXSGhTlaQ+SvTrN9uL1784FHTktA=;
+        b=BLUEI9DroOrdpr96bQlNIfyk5If0BcEvqj5ZOMu5sBP7QcTxcF9PJtXNdRQQdKA2I+
+         LOggyePBT/4cs/RsGDp83tvwtfMufs5xl/UWc72EPO1H9/NqmAkCudrgwZPgm1Ya7Rv7
+         WWYJgj4Z6C0M3/C3qlOg8TvLZTVQVUWVrzBaDyER/5gPiftFt60OqsKOhyHtkbqzfCGV
+         nw423KZtfBlAjvyyFRrc6DrkSqjQ/IaXWLSKLR9FJAkshPc10UagK9g3Q7g9wtmtdWXq
+         hTQVq7Q2ijLDiMiqSw7lsrJ8SRlrLSyb9t2NCq3rmYWPHyY8pqUjkOgLrAhE4FdJIm+G
+         wObw==
+X-Gm-Message-State: ACgBeo2OKtb4Gza38U1EeS4SBxWPSvLCqft9jr0EeuNeETRuCAdeYZmG
+        wGsbr6vnZvyYfMasme7nr9hZOg==
+X-Google-Smtp-Source: AA6agR5iAjFP2q7X1PbZvwrW6P6B4ILkh92ieVBGwE4LPz6Qma2k0ZREMBEhxOJKazpAhnjrSGkWTg==
+X-Received: by 2002:a17:902:dac6:b0:16d:bdf5:7084 with SMTP id q6-20020a170902dac600b0016dbdf57084mr22165713plx.55.1659458340177;
+        Tue, 02 Aug 2022 09:39:00 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l15-20020a17090aec0f00b001f216407204sm11136513pjy.36.2022.08.02.09.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Aug 2022 09:38:59 -0700 (PDT)
+Date:   Tue, 2 Aug 2022 16:38:55 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
+ memory regions
+Message-ID: <YulTH7bL4MwT5v5K@google.com>
+References: <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
+ <20220720150706.GB124133@chaop.bj.intel.com>
+ <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
+ <YtgrkXqP/GIi9ujZ@google.com>
+ <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
+ <20220721092906.GA153288@chaop.bj.intel.com>
+ <YtmT2irvgInX1kPp@google.com>
+ <20220725130417.GA304216@chaop.bj.intel.com>
+ <YuQ64RgWqdoAAGdY@google.com>
+ <Yuh0ikhoh+tCK6VW@google.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH 2/3] kunit: add KUnit array assertions to the
- example_all_expect_macros_test
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-Cc:     melissa.srw@gmail.com, daniel@ffwll.ch, javierm@redhat.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        jose.exposito89@gmail.com, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, davidgow@google.com,
-        davem@davemloft.net, Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, airlied@linux.ie, kuba@kernel.org
-References: <20220802161206.228707-1-mairacanal@riseup.net>
- <20220802161206.228707-3-mairacanal@riseup.net>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@riseup.net>
-In-Reply-To: <20220802161206.228707-3-mairacanal@riseup.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yuh0ikhoh+tCK6VW@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-Às 13:12 de 02/08/22, Maíra Canal escreveu:
-> Increament the example_all_expect_macros_test with the
-> KUNIT_EXPECT_ARREQ and KUNIT_EXPECT_ARRNEQ macros by creating a test
-> with array assertions.
+On Tue, Aug 02, 2022, Sean Christopherson wrote:
+> I think we should avoid UNMAPPABLE even on the KVM side of things for the core
+> memslots functionality and instead be very literal, e.g.
 > 
-> Signed-off-by: Maíra Canal <mairacanal@riseup.net>
-> ---
->  lib/kunit/kunit-example-test.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> 	KVM_HAS_FD_BASED_MEMSLOTS
+> 	KVM_MEM_FD_VALID
 > 
-> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-> index f8fe582c9e36..fc81a45d9cbc 100644
-> --- a/lib/kunit/kunit-example-test.c
-> +++ b/lib/kunit/kunit-example-test.c
-> @@ -86,6 +86,9 @@ static void example_mark_skipped_test(struct kunit *test)
->   */
->  static void example_all_expect_macros_test(struct kunit *test)
->  {
-> +	const u32 array[] = { 0x0F, 0xFF };
-> +	const u32 expected[] = { 0x1F, 0xFF };
-> +
->  	/* Boolean assertions */
->  	KUNIT_EXPECT_TRUE(test, true);
->  	KUNIT_EXPECT_FALSE(test, false);
-> @@ -109,6 +112,10 @@ static void example_all_expect_macros_test(struct kunit *test)
->  	KUNIT_EXPECT_STREQ(test, "hi", "hi");
->  	KUNIT_EXPECT_STRNEQ(test, "hi", "bye");
->  
-> +	/* Array assertions */
-> +	KUNIT_EXPECT_ARREQ(test, expected, expected, 2);
-> +	KUNIT_EXPECT_ARRNEQ(test, array, expected, 2);
+> We'll still need KVM_HAS_USER_UNMAPPABLE_MEMORY, but it won't be tied directly to
+> the memslot.  Decoupling the two thingis will require a bit of extra work, but the
+> code impact should be quite small, e.g. explicitly query and propagate
+> MEMFILE_F_USER_INACCESSIBLE to kvm_memory_slot to track if a memslot can be private.
+> And unless I'm missing something, it won't require an additional memslot flag.
+> The biggest oddity (if we don't also add KVM_MEM_PRIVATE) is that KVM would
+> effectively ignore the hva for fd-based memslots for VM types that don't support
+> private memory, i.e. userspace can't opt out of using the fd-based backing, but that
+> doesn't seem like a deal breaker.
 
-ARRAY_SIZE() is usually better than constants is this case.
+Hrm, but basing private memory on top of a generic FD_VALID would effectively require
+shared memory to use hva-based memslots for confidential VMs.  That'd yield a very
+weird API, e.g. non-confidential VMs could be backed entirely by fd-based memslots,
+but confidential VMs would be forced to use hva-based memslots.
 
-> +
->  	/*
->  	 * There are also ASSERT variants of all of the above that abort test
->  	 * execution if they fail. Useful for memory allocations, etc.
+Ignore this idea for now.  If there's an actual use case for generic fd-based memory
+then we'll want a separate flag, fd, and offset, i.e. that support could be added
+independent of KVM_MEM_PRIVATE.
