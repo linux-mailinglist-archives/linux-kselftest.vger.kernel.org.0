@@ -2,221 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CE75874E2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 02:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AE75875AD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Aug 2022 04:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234760AbiHBAtX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Aug 2022 20:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S235719AbiHBC4q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 1 Aug 2022 22:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiHBAtW (ORCPT
+        with ESMTP id S235798AbiHBC4p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Aug 2022 20:49:22 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE324CE0D
-        for <linux-kselftest@vger.kernel.org>; Mon,  1 Aug 2022 17:49:19 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id w10so12027486plq.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Aug 2022 17:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=fYrbrS8yv9H/RvUOOyuHQrSi1loIQEHWMZ/8CZZ3RXc=;
-        b=gO0RsnmpomRU40aaGuswU5stzk1dV4NDc3pxJ6zSc9zcDzvqVHJEsaTU46TCCnnEDM
-         VIM2Q44ozglwDHGobO6GUhmj4taro6Si7I5uJlkeFvBIDIYNgCZMO9DNDT/Fr4nlOf8j
-         FKfGYbL8I576CFY482PM+hUdjOGAEqqzJXYVPR8s7R687SE/sN2YRJ0jIEeCCsAk1y6f
-         DVn0KhP6WN2ELlJd8pOY+UaucR7IsHDggLN+juJdfB22mcm/n8UKO1ldaQKA7IYzA1tt
-         upHroORCIR8C9toovIJlWRMZF59BNixyWef3Z9805sHHgrSaCK+JCYEP+TBUe8H+AEPS
-         tz/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=fYrbrS8yv9H/RvUOOyuHQrSi1loIQEHWMZ/8CZZ3RXc=;
-        b=sr/nqopf3lllXwFSB9mcoV5UxzCfnkGKeFL9cinh7umZYIdv9TFP62MguU7LwyEYrw
-         iZiOqqH2jGjLZyDa050y1tAdsKppJzbu3aSjs9Z9vSQA7BzDoY2v3+1IKabOOexxEByF
-         GfuS7BdgNFMt3zQlLUZfc6B4nerbkJQhteeDZ/nyqtyZGk+rNlcDn1R7XAIONGePlUdM
-         MGMQz3ROeqeuaEnhYJ7sVtU6TIgx+xYIvCUZM3H8pfpK/MOy8tyvZGT0Ay+d0/x+Wm1g
-         MFfPe0Vru7b65YPJR/q25HdIHYiC3JcjVu4SyPAmjWfYFjzohvL62uHRFl7Be7oIGcNL
-         dGXg==
-X-Gm-Message-State: ACgBeo0USDnujpMyd880nka5LgcAAF0pioBvIBkvu9eobKXtRSYnJBOU
-        C/EuC7XkpCbD+2ts7qkAi3i7WA==
-X-Google-Smtp-Source: AA6agR5NFcyJ/Eqf8Y9BodOFj30Va8ngMe4AFfAM05tfz+rj1jrOYkiljXtYcYQIlQH1KwHfCRTqmw==
-X-Received: by 2002:a17:903:1209:b0:16c:ece7:f68b with SMTP id l9-20020a170903120900b0016cece7f68bmr19190691plh.112.1659401359068;
-        Mon, 01 Aug 2022 17:49:19 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b0016c4147e48asm5966869plg.219.2022.08.01.17.49.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 17:49:18 -0700 (PDT)
-Date:   Tue, 2 Aug 2022 00:49:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <Yuh0ikhoh+tCK6VW@google.com>
-References: <20220719140843.GA84779@chaop.bj.intel.com>
- <36e671d2-6b95-8e4f-c2ac-fee4b2670c6e@amd.com>
- <20220720150706.GB124133@chaop.bj.intel.com>
- <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
- <YtgrkXqP/GIi9ujZ@google.com>
- <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
- <20220721092906.GA153288@chaop.bj.intel.com>
- <YtmT2irvgInX1kPp@google.com>
- <20220725130417.GA304216@chaop.bj.intel.com>
- <YuQ64RgWqdoAAGdY@google.com>
+        Mon, 1 Aug 2022 22:56:45 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4BF1D0C0;
+        Mon,  1 Aug 2022 19:56:44 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:58770)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oIi5J-005Yj0-0R; Mon, 01 Aug 2022 20:56:41 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:43358 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oIi5G-006Hfs-Eh; Mon, 01 Aug 2022 20:56:40 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Frederick Lawler <fred@cloudflare.com>
+Cc:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+In-Reply-To: <20220801180146.1157914-1-fred@cloudflare.com> (Frederick
+        Lawler's message of "Mon, 1 Aug 2022 13:01:42 -0500")
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Mon, 01 Aug 2022 21:56:28 -0500
+Message-ID: <87les7cq03.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuQ64RgWqdoAAGdY@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oIi5G-006Hfs-Eh;;;mid=<87les7cq03.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19344Ku5G6V0XI6p6QH6VsN2tkU429jDfA=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Frederick Lawler <fred@cloudflare.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1907 ms - load_scoreonly_sql: 0.30 (0.0%),
+        signal_user_changed: 16 (0.9%), b_tie_ro: 13 (0.7%), parse: 2.4 (0.1%),
+         extract_message_metadata: 29 (1.5%), get_uri_detail_list: 4.2 (0.2%),
+        tests_pri_-1000: 47 (2.5%), tests_pri_-950: 1.73 (0.1%),
+        tests_pri_-900: 1.37 (0.1%), tests_pri_-90: 85 (4.4%), check_bayes: 82
+        (4.3%), b_tokenize: 19 (1.0%), b_tok_get_all: 12 (0.6%), b_comp_prob:
+        4.1 (0.2%), b_tok_touch_all: 40 (2.1%), b_finish: 1.35 (0.1%),
+        tests_pri_0: 1690 (88.6%), check_dkim_signature: 1.08 (0.1%),
+        check_dkim_adsp: 9 (0.5%), poll_dns_idle: 7 (0.3%), tests_pri_10: 4.4
+        (0.2%), tests_pri_500: 24 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 29, 2022, Sean Christopherson wrote:
-> On Mon, Jul 25, 2022, Chao Peng wrote:
-> > On Thu, Jul 21, 2022 at 05:58:50PM +0000, Sean Christopherson wrote:
-> > > On Thu, Jul 21, 2022, Chao Peng wrote:
-> > > > On Thu, Jul 21, 2022 at 03:34:59PM +0800, Wei Wang wrote:
-> > > > > 
-> > > > > 
-> > > > > On 7/21/22 00:21, Sean Christopherson wrote:
-> > > > > Maybe you could tag it with cgs for all the confidential guest support
-> > > > > related stuff: e.g. kvm_vm_ioctl_set_cgs_mem()
-> > > > > 
-> > > > > bool is_private = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-> > > > > ...
-> > > > > kvm_vm_ioctl_set_cgs_mem(, is_private)
-> > > > 
-> > > > If we plan to widely use such abbr. through KVM (e.g. it's well known),
-> > > > I'm fine.
-> > > 
-> > > I'd prefer to stay away from "confidential guest", and away from any VM-scoped
-> > > name for that matter.  User-unmappable memmory has use cases beyond hiding guest
-> > > state from the host, e.g. userspace could use inaccessible/unmappable memory to
-> > > harden itself against unintentional access to guest memory.
-> > > 
-> > > > I actually use mem_attr in patch: https://lkml.org/lkml/2022/7/20/610
-> > > > But I also don't quite like it, it's so generic and sounds say nothing.
-> > > > 
-> > > > But I do want a name can cover future usages other than just 
-> > > > private/shared (pKVM for example may have a third state).
-> > > 
-> > > I don't think there can be a third top-level state.  Memory is either private to
-> > > the guest or it's not.  There can be sub-states, e.g. memory could be selectively
-> > > shared or encrypted with a different key, in which case we'd need metadata to
-> > > track that state.
-> > > 
-> > > Though that begs the question of whether or not private_fd is the correct
-> > > terminology.  E.g. if guest memory is backed by a memfd that can't be mapped by
-> > > userspace (currently F_SEAL_INACCESSIBLE), but something else in the kernel plugs
-> > > that memory into a device or another VM, then arguably that memory is shared,
-> > > especially the multi-VM scenario.
-> > > 
-> > > For TDX and SNP "private vs. shared" is likely the correct terminology given the
-> > > current specs, but for generic KVM it's probably better to align with whatever
-> > > terminology is used for memfd.  "inaccessible_fd" and "user_inaccessible_fd" are
-> > > a bit odd since the fd itself is accesible.
-> > > 
-> > > What about "user_unmappable"?  E.g.
-> > > 
-> > >   F_SEAL_USER_UNMAPPABLE, MFD_USER_UNMAPPABLE, KVM_HAS_USER_UNMAPPABLE_MEMORY,
-> > >   MEMFILE_F_USER_INACCESSIBLE, user_unmappable_fd, etc...
-> > 
-> > For KVM I also think user_unmappable looks better than 'private', e.g.
-> > user_unmappable_fd/KVM_HAS_USER_UNMAPPABLE_MEMORY sounds more
-> > appropriate names. For memfd however, I don't feel that strong to change
-> > it from current 'inaccessible' to 'user_unmappable', one of the reason
-> > is it's not just about unmappable, but actually also inaccessible
-> > through direct ioctls like read()/write().
-> 
-> Heh, I _knew_ there had to be a catch.  I agree that INACCESSIBLE is better for
-> memfd.
+Frederick Lawler <fred@cloudflare.com> writes:
 
-Thought about this some more...
+> While creating a LSM BPF MAC policy to block user namespace creation, we
+> used the LSM cred_prepare hook because that is the closest hook to prevent
+> a call to create_user_ns().
 
-I think we should avoid UNMAPPABLE even on the KVM side of things for the core
-memslots functionality and instead be very literal, e.g.
+Re-nack for all of the same reasons.
+AKA This can only break the users of the user namespace.
 
-	KVM_HAS_FD_BASED_MEMSLOTS
-	KVM_MEM_FD_VALID
+Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-We'll still need KVM_HAS_USER_UNMAPPABLE_MEMORY, but it won't be tied directly to
-the memslot.  Decoupling the two thingis will require a bit of extra work, but the
-code impact should be quite small, e.g. explicitly query and propagate
-MEMFILE_F_USER_INACCESSIBLE to kvm_memory_slot to track if a memslot can be private.
-And unless I'm missing something, it won't require an additional memslot flag.
-The biggest oddity (if we don't also add KVM_MEM_PRIVATE) is that KVM would
-effectively ignore the hva for fd-based memslots for VM types that don't support
-private memory, i.e. userspace can't opt out of using the fd-based backing, but that
-doesn't seem like a deal breaker.
+You aren't fixing what your problem you are papering over it by denying
+access to the user namespace.
 
-Decoupling private memory from fd-based memslots will allow using fd-based memslots
-for backing VMs even if the memory is user mappable, which opens up potentially
-interesting use cases.  It would also allow testing some parts of fd-based memslots
-with existing VMs.
+Nack Nack Nack.
 
-The big advantage of KVM's hva-based memslots is that KVM doesn't care what's backing
-a memslot, and so (in thoery) enabling new backing stores for KVM is free.  It's not
-always free, but at this point I think we've eliminated most of the hiccups, e.g. x86's
-MMU should no longer require additional enlightenment to support huge pages for new
-backing types.
+Stop.
 
-On the flip-side, a big disadvantage of hva-based memslots is that KVM doesn't
-_know_ what's backing a memslot.  This is one of the major reasons, if not _the_
-main reason at this point, why KVM binds a VM to a single virtual address space.
-Running with different hva=>pfn mappings would either be completely unsafe or
-prohibitively expensive (nearly impossible?) to ensure.
+Go back to the drawing board.
 
-With fd-based memslots, KVM essentially binds a memslot directly to the backing
-store.  This allows KVM to do a "deep" comparison of a memslot between two address
-spaces simply by checking that the backing store is the same.  For intra-host/copyless
-migration (to upgrade the userspace VMM), being able to do a deep comparison would
-theoretically allow transferring KVM's page tables between VMs instead of forcing
-the target VM to rebuild the page tables.  There are memcg complications (and probably
-many others) for transferring page tables, but I'm pretty sure it could work.
+Do not pass go.
 
-I don't have a concrete use case (this is a recent idea on my end), but since we're
-already adding fd-based memory, I can't think of a good reason not make it more generic
-for not much extra cost.  And there are definitely classes of VMs for which fd-based
-memory would Just Work, e.g. large VMs that are never oversubscribed on memory don't
-need to support reclaim, so the fact that fd-based memslots won't support page aging
-(among other things) right away is a non-issue.
+Do not collect $200.
+
+
+> The calls look something like this:
+>
+>     cred = prepare_creds()
+>         security_prepare_creds()
+>             call_int_hook(cred_prepare, ...
+>     if (cred)
+>         create_user_ns(cred)
+>
+> We noticed that error codes were not propagated from this hook and
+> introduced a patch [1] to propagate those errors.
+>
+> The discussion notes that security_prepare_creds()
+> is not appropriate for MAC policies, and instead the hook is
+> meant for LSM authors to prepare credentials for mutation. [2]
+>
+> Ultimately, we concluded that a better course of action is to introduce
+> a new security hook for LSM authors. [3]
+>
+> This patch set first introduces a new security_create_user_ns() function
+> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+>
+> Links:
+> 1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+> 2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+> 3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+>
+> Past discussions:
+> V3: https://lore.kernel.org/all/20220721172808.585539-1-fred@cloudflare.com/
+> V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
+> V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
+>
+> Changes since v3:
+> - Explicitly set CAP_SYS_ADMIN to test namespace is created given
+>   permission
+> - Simplify BPF test to use sleepable hook only
+> - Prefer unshare() over clone() for tests
+> Changes since v2:
+> - Rename create_user_ns hook to userns_create
+> - Use user_namespace as an object opposed to a generic namespace object
+> - s/domB_t/domA_t in commit message
+> Changes since v1:
+> - Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+> - Add selinux: Implement create_user_ns hook patch
+> - Change function signature of security_create_user_ns() to only take
+>   struct cred
+> - Move security_create_user_ns() call after id mapping check in
+>   create_user_ns()
+> - Update documentation to reflect changes
+>
+> Frederick Lawler (4):
+>   security, lsm: Introduce security_create_user_ns()
+>   bpf-lsm: Make bpf_lsm_userns_create() sleepable
+>   selftests/bpf: Add tests verifying bpf lsm userns_create hook
+>   selinux: Implement userns_create hook
+>
+>  include/linux/lsm_hook_defs.h                 |   1 +
+>  include/linux/lsm_hooks.h                     |   4 +
+>  include/linux/security.h                      |   6 ++
+>  kernel/bpf/bpf_lsm.c                          |   1 +
+>  kernel/user_namespace.c                       |   5 +
+>  security/security.c                           |   5 +
+>  security/selinux/hooks.c                      |   9 ++
+>  security/selinux/include/classmap.h           |   2 +
+>  .../selftests/bpf/prog_tests/deny_namespace.c | 102 ++++++++++++++++++
+>  .../selftests/bpf/progs/test_deny_namespace.c |  33 ++++++
+>  10 files changed, 168 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+
+Eric
