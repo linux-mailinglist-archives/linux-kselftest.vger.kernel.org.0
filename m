@@ -2,94 +2,241 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B7D5883DE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 00:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0925A58842E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 00:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbiHBWJJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Aug 2022 18:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
+        id S236103AbiHBWZI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Aug 2022 18:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234462AbiHBWJH (ORCPT
+        with ESMTP id S232051AbiHBWZH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Aug 2022 18:09:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABBB1D0E1
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 15:09:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A48C7B81F38
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 22:09:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54278C433D7
-        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 22:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659478144;
-        bh=FcdHNfXuQiJB9HM66+G68cqs7BlM13zGpj+qnB1hK7Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mwc0mJ/Uagxs63fdJ+TLVG3mhnFR4VGPxxOjmn5oiMB8BQud58sGsuAPuA24OkUhF
-         997xHQkIq6P2In0oUqnXvW4avG4GxfsQHBbJFkWAu1yF6ZIMcGOg93CoxQga5vSR+o
-         eTgI07G4JLKJ9kETODLdvZX3i8ZmDlIctv7rmJF5CrNIirBCAxjwvhHeUzFZeeRmfH
-         U2zDHnBz/u+RSon9OzX+HeJEo2qB9OK/IOJu75UWUMcMd6XHp5rSPUF1rL+ORpz55I
-         rfJA0UzdiKngh2f145eitGYoz/MvP1S68gKxsIDgTHjhGDFPFqkObZxaYIQuP5jzlo
-         Asq0za7Wvsvtg==
-Received: by mail-yb1-f169.google.com with SMTP id r3so25700320ybr.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Aug 2022 15:09:04 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1EY6L4GzTq/xMZwWjILl8P1Yvv88tTX+zPYfDOeMotwQJzNHI3
-        NRMfDFyZKxINDPhohLALpk/hsBXSIKLFfV4o2OvZYw==
-X-Google-Smtp-Source: AA6agR6ZWQQsYK03aDTp4UgsRj0FlS39f5Llvh0WRP0M8eyLjhhx3O7M9XERlWsQl+Kc/FPxwU7DIeUW6BkyNdZDstw=
-X-Received: by 2002:a81:14c7:0:b0:328:25f0:9c89 with SMTP id
- 190-20020a8114c7000000b0032825f09c89mr2602862ywu.476.1659478133089; Tue, 02
- Aug 2022 15:08:53 -0700 (PDT)
+        Tue, 2 Aug 2022 18:25:07 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C90753D1A
+        for <linux-kselftest@vger.kernel.org>; Tue,  2 Aug 2022 15:25:06 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id kb8so13773508ejc.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Aug 2022 15:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K9zCr1Ua5Z5qld+qZnE6ufAcMkPILK5j4hP/Kmv7z4Q=;
+        b=fPeWFzpguMC2ok/r6m5/wFGNI4Vpwps2mjYbnuB72rg3CWEdNIanju6umfeRlVyIHj
+         o53Z8VliqtA8T9G6X+DjIsaIXr+QtA/ZRgLs48fqtcySgf5BE5cV9FHYo73gX/N4PoL9
+         DfmeZ/+cOAqleFYDQpG1Zwtenkbnum5NfzeyxEs+O0ZhUabRpVKkDB2BKkds3RPlVfEA
+         ghZTxrgXhh6G9umrx1PBlSs3LrDlqtr51QEPXvoxhUSDUowltkXISgfkjZPLoNa06901
+         Ns1yQxD6dwkcvCRnH8zWzMEcSuY5Ayf1gLS8ucp2y5i+eX6AeId2Ry8VVkfkoADGKEe3
+         N0+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K9zCr1Ua5Z5qld+qZnE6ufAcMkPILK5j4hP/Kmv7z4Q=;
+        b=gYeL+PIIoL3VG0Q/7lvXnWkUojzYxerVjvyBqonya22b8BmbxYE4y04zJXIw6KN6ze
+         s7M20OWk80NYooOHyFPDsydaj93pmvolpk9lDPI3UmokqnizWHCwZhCTzgSZ7tALnctK
+         gbkoGWZpZK3t2lkRiOeYwLsLHd/+/NvvlIeVEc/Uyg83aWKJWbH3TK8KuDaL206BKWR+
+         fQxtOPruR3qkVzqxj4InmHOeSpOZilOgT5umZOUMjNpb3msrT+yp2bvfu6UbiUjlbnfp
+         44o1FuD8K25jv/imwlKWANJ1SB+0RNeRs5kgIJrkWAG+Wyb2v1VO6nWUZgtaM9wAuXhW
+         2aGA==
+X-Gm-Message-State: ACgBeo2+J35JTN/L43muIBvOB7TnmS0+cn36WIrx8yCCIdJJbQoIQY0J
+        jGVS3cwkRVnZ6nIKLoXHr0OEsE+GR+fPwAdfGrYiFw==
+X-Google-Smtp-Source: AA6agR7m/4yk72Yrra1mZ03lh/mGJ8i/zB89ellNcKdmgT0x1mIJ//kyaqU7IU0LpmUKUNhe5IiDLngr8Zk5BMlPqEE=
+X-Received: by 2002:a17:907:7b89:b0:730:8649:983c with SMTP id
+ ne9-20020a1709077b8900b007308649983cmr8717759ejc.542.1659479104597; Tue, 02
+ Aug 2022 15:25:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <20220801180146.1157914-4-fred@cloudflare.com>
-In-Reply-To: <20220801180146.1157914-4-fred@cloudflare.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Wed, 3 Aug 2022 00:08:42 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4_MrbS-2S_R3KSZnL8h9pWnP6ih5ccKPGYxZTaESMZ2g@mail.gmail.com>
-Message-ID: <CACYkzJ4_MrbS-2S_R3KSZnL8h9pWnP6ih5ccKPGYxZTaESMZ2g@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] selftests/bpf: Add tests verifying bpf lsm
- userns_create hook
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+References: <20220802212621.420840-1-mairacanal@riseup.net> <20220802212621.420840-2-mairacanal@riseup.net>
+In-Reply-To: <20220802212621.420840-2-mairacanal@riseup.net>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 2 Aug 2022 15:24:53 -0700
+Message-ID: <CAGS_qxq_meFFwLQV+_aEL+kr-q6x0WNeq7OS99bq_MyES5T98w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] kunit: Introduce KUNIT_EXPECT_MEMEQ and
+ KUNIT_EXPECT_MEMNEQ macros
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
+        airlied@linux.ie, daniel@ffwll.ch, davem@davemloft.net,
+        kuba@kernel.org, jose.exposito89@gmail.com, javierm@redhat.com,
+        andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
+On Tue, Aug 2, 2022 at 2:26 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
+te:
 >
-> The LSM hook userns_create was introduced to provide LSM's an
-> opportunity to block or allow unprivileged user namespace creation. This
-> test serves two purposes: it provides a test eBPF implementation, and
-> tests the hook successfully blocks or allows user namespace creation.
+> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_E=
+Q
+> or KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp
+> function, such as:
+>     KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
 >
-> This tests 3 cases:
+> Although this usage produces correct results for the test cases, when
+> the expectation fails, the error message is not very helpful,
+> indicating only the return of the memcmp function.
 >
->         1. Unattached bpf program does not block unpriv user namespace
->            creation.
->         2. Attached bpf program allows user namespace creation given
->            CAP_SYS_ADMIN privileges.
->         3. Attached bpf program denies user namespace creation for a
->            user without CAP_SYS_ADMIN.
+> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
+> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a specified size.
+> In case of expectation failure, those macros print the hex dump of the
+> memory blocks, making it easier to debug test failures for memory blocks.
 >
-> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+> That said, the expectation
+>
+>     KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+>
+> would translate to the expectation
+>
+>     KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
+>
+> Signed-off-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
 
-Looks good to me (Also checked it on vmtest.sh)
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Thanks, this is nice to have and I think the clarity issues have been resol=
+ved.
 
-Acked-by: KP Singh <kpsingh@kernel.org>
+Some various optional nits about whitespace below.
+I'd see if anyone has any complaints about the output format before
+wasting any time on those nits.
+
+Looking at example output now, I see
+    Expected array2 =3D=3D array1, but
+        array2 =3D=3D
+<1f> 00 00 00 ff 00 00 00
+        array1 =3D=3D
+<0f> 00 00 00 ff 00 00 00
+    not ok 4 - example_all_expect_macros_test
+
+Looks good to me.
+
+> ---
+> v1 -> v2:
+> - Change "determinated" to "specified" (Daniel Latypov).
+> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to =
+make
+> it easier for users to infer the right size unit (Daniel Latypov).
+> - Mark the different bytes on the failure message with a <> (Daniel Latyp=
+ov).
+> ---
+>  include/kunit/assert.h | 35 +++++++++++++++++++
+>  include/kunit/test.h   | 76 ++++++++++++++++++++++++++++++++++++++++++
+>  lib/kunit/assert.c     | 54 ++++++++++++++++++++++++++++++
+>  3 files changed, 165 insertions(+)
+>
+> diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+> index 4b52e12c2ae8..a54f5253b997 100644
+> --- a/include/kunit/assert.h
+> +++ b/include/kunit/assert.h
+> @@ -256,4 +256,39 @@ void kunit_binary_str_assert_format(const struct kun=
+it_assert *assert,
+>                                     const struct va_format *message,
+>                                     struct string_stream *stream);
+>
+> +
+> +#define KUNIT_INIT_MEM_ASSERT_STRUCT(text_, left_val, right_val, size_) =
+\
+> +       {                                                                =
+ \
+> +               .assert =3D { .format =3D kunit_mem_assert_format },   \
+> +               .text =3D text_,                                         =
+   \
+> +               .left_value =3D left_val,                                =
+   \
+> +               .right_value =3D right_val, .size =3D size_,             =
+     \
+> +       }
+
+very nit: the trailing \s aren't quite lined up.
+In this particular case, I'm planning on deleting this block in the
+future, so it doesn't matter too much.
+
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 8ffcd7de9607..1925d648eec8 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -684,6 +684,36 @@ do {                                                =
+                              \
+>                         ##__VA_ARGS__);                                  =
+      \
+>  } while (0)
+>
+> +#define KUNIT_MEM_ASSERTION(test,                                     \
+
+very nit: the trailing \s are also a bit out of line here.
+We can fix this particular line by just adding another \t after "test,"
+
+In general, lining these up is just a matter of adding a \t after the
+text and then maybe add or delete some of the " "s before the \s.
+E.g. with vim's `:set list`, after lining up the \s, I get
+
+#define KUNIT_MEM_ASSERTION(test,^I^I^I^I^I       \$
+^I^I^I^I   assert_type,^I^I^I^I       \$
+^I^I^I^I   left,^I^I^I^I       \$
+^I^I^I^I   op,^I^I^I^I^I       \$
+^I^I^I^I   right,^I^I^I^I       \$
+^I^I^I^I   size,^I^I                       \$
+^I^I^I^I   fmt,^I^I^I^I^I       \$
+^I^I^I^I   ...)^I^I^I^I^I       \$
+do {^I^I^I^I^I^I^I^I^I       \$
+^Iconst void *__left =3D (left);^I^I^I^I^I       \$
+...
+
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index d00d6d181ee8..abd434bc7ec6 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -204,3 +204,57 @@ void kunit_binary_str_assert_format(const struct kun=
+it_assert *assert,
+>         kunit_assert_print_msg(message, stream);
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
+> +
+> +/* Adds a hexdump of a buffer to a string_stream comparing it with
+> + * a second buffer. The different bytes are marked with <>.
+> + */
+> +static void kunit_assert_hexdump(struct string_stream *stream,
+> +               const void *buf, const void *compared_buf, const size_t l=
+en)
+> +{
+> +       size_t i;
+> +       const u8 *buf1 =3D buf;
+> +       const u8 *buf2 =3D compared_buf;
+> +
+> +       for (i =3D 0; i < len; ++i) {
+> +               if (i % 16)
+> +                       string_stream_add(stream, " ");
+> +               else if (i)
+> +                       string_stream_add(stream, "\n ");
+> +
+> +               if (buf1[i] !=3D buf2[i])
+> +                       string_stream_add(stream, "<%02x>", buf1[i]);
+> +               else
+> +                       string_stream_add(stream, "%02x", buf1[i]);
+> +       }
+> +}
+> +
+> +void kunit_mem_assert_format(const struct kunit_assert *assert,
+> +                                   const struct va_format *message,
+> +                                   struct string_stream *stream)
+
+very nit: the func above doesn't line up the params, but I don't think
+it matters too much.
+It uses \t\t whereas this one is \t\t\t + some spaces.
+
+I think it'd be fine if they were consistent with each other, or if
+you're willing to mess around with spaces, we could get the parameters
+to line up.
+(e.g. see how kunit_binary_ptr_assert_format and others do their line break=
+s)
