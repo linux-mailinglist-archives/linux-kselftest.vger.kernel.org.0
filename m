@@ -2,89 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCF8589226
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 20:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A84B589234
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 20:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237313AbiHCSVV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Aug 2022 14:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
+        id S238031AbiHCSY0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Aug 2022 14:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbiHCSVU (ORCPT
+        with ESMTP id S234341AbiHCSYZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Aug 2022 14:21:20 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBA11583A
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Aug 2022 11:21:19 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id pm17so11726307pjb.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Aug 2022 11:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=nsqh0CIbwvJ/pgXSEB6oG4Xy1/woHrUtn/IceLa3N0o=;
-        b=Mz7gnu/VZCsDdtuvgzoWWrZTyBOivrPLG1HNJ+EOLit/5tJ/Xiahx1DIxiLjo95pbf
-         RexuAaGX8IeAIu9IinuPXQdSjBPX2mDsVVYCCThWPPEEPOiwxkTnRNC0l7Yk6GMz11jD
-         NWzbZn4FYbhn5O4VetrsjMKxxVhWt8sXSictshJmlEKoCWRm7sVWeSriiEK7Y4rlkn+5
-         /+B79Z4ExSGtJBY+K0J6QeqD+B6MmslHI4xNwWaawrssbEY+JiPLvTzwuOFgt13/Wqh8
-         yEBx94gSJC/S1W0syyNwJMK1HPX9xphMR3G7vdr4r7kCFAP17Mq0hZGh2SW3KDjMPDrs
-         tUIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=nsqh0CIbwvJ/pgXSEB6oG4Xy1/woHrUtn/IceLa3N0o=;
-        b=hMMhA1F/7w6Tq7+H9wymo0yLFEAbH4+XCM0S87qhMnwuuE5Om5FxxgC3U1X65dL41o
-         y25vY5ADXF24NXtB62mairW+NCuBXdJR6PMEobmmIUcWUptKwdxVr++/iBpZcNKdVhtn
-         OCNbCglHzAquEf3sI2S1A7nVvDMKD6rPTTKB0hbBM+4PJ/yXzngsei0WwAHnyV8rGxAN
-         sIUP21HjKQ7lsKixsZBqPfGbztGSWTGxDOejJJFbQO+fQO108jjvX5/LReCsTIOCzyIW
-         Q9B5jxkO26DfaANue1MuBJL9tUKWA7UrvRlu5Yi7dZDJ6ZzLETCkeNRohDlP0wxSfXH8
-         aFsQ==
-X-Gm-Message-State: ACgBeo22bv9RymbbF4mAZaZbabdXnNWJG2Oq/T/yfyk+zLTrCZWx5doC
-        53+Z4QB2A+KlEeuIQ7EL6rvt/sLe8woEMA==
-X-Google-Smtp-Source: AA6agR4YSibnTcRYrFz2ZoDNodfpJuyX4JLT+iJz7Yvex1VpFcHWlYEO9XxUz12BN03Te3VybjNJjw==
-X-Received: by 2002:a17:902:f688:b0:16f:28:ea27 with SMTP id l8-20020a170902f68800b0016f0028ea27mr10761229plg.151.1659550879177;
-        Wed, 03 Aug 2022 11:21:19 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l16-20020a170903121000b0016bfbd99f64sm2299900plh.118.2022.08.03.11.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 11:21:18 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 18:21:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michal Luczaj <mhal@rbox.co>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [kvm-unit-tests PATCH 2/4] x86: emulator.c cleanup: Use ASM_TRY
- for the UD_VECTOR cases
-Message-ID: <Yuq8mumnrww9rlnz@google.com>
-References: <Yum2LpZS9vtCaCBm@google.com>
- <20220803172508.1215-1-mhal@rbox.co>
- <20220803172508.1215-2-mhal@rbox.co>
+        Wed, 3 Aug 2022 14:24:25 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1776A1A81B;
+        Wed,  3 Aug 2022 11:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=U+pZAt+03n4M/57/5mcFyucbdPfZpXw4ftAJua0/l+c=; b=X19H3L/oBBa6iDbkLjtYBELFBy
+        KHeac8DchWOnDab6QhjQbMq1yUenwo7v2Fw08EwEq0v0/io7xD2nN/NqzXZpMyogp26wYkwE/6w/c
+        S5X5iU5Ihu/KPHfIWld8UZbpG3IhxTowhGXISmAvyr6WtNpr9xp6iYEFFD+jn7QfQpfM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oJJ2C-00CMaM-4v; Wed, 03 Aug 2022 20:23:56 +0200
+Date:   Wed, 3 Aug 2022 20:23:56 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Adel Abouchaev <adel.abushaev@gmail.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
+        shuah@kernel.org, imagedong@tencent.com, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC net-next 1/6] net: Documentation on QUIC kernel Tx crypto.
+Message-ID: <Yuq9PMIfmX0UsYtL@lunn.ch>
+References: <adel.abushaev@gmail.com>
+ <20220803164045.3585187-1-adel.abushaev@gmail.com>
+ <20220803164045.3585187-2-adel.abushaev@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220803172508.1215-2-mhal@rbox.co>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220803164045.3585187-2-adel.abushaev@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 03, 2022, Michal Luczaj wrote:
-> For #UD handling use ASM_TRY() instead of handle_exception().
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
-> I've noticed test_illegal_movbe() does not execute with KVM_FEP.
-> Just making sure: is it intentional?
+> +Statistics
+> +==========
+> +
+> +QUIC Tx offload to the kernel has counters reflected in /proc/net/quic_stat:
+> +
+> +  QuicCurrTxSw  - number of currently active kernel offloaded QUIC connections
+> +  QuicTxSw      - accumulative total number of offloaded QUIC connections
+> +  QuicTxSwError - accumulative total number of errors during QUIC Tx offload to
+> +                  kernel
 
-It's intentional.  FEP isn't needed because KVM emulates MOVBE on #UD when it's
-not supported by the host, e.g. to allow migrating to an older host.
+netlink messages please, not /proc for statistics. netlink is the
+preferred way to configure and report about the network stack.
 
-	GP(EmulateOnUD | ModRM, &three_byte_0f_38_f0),
-	GP(EmulateOnUD | ModRM, &three_byte_0f_38_f1),
+	 Andrew
