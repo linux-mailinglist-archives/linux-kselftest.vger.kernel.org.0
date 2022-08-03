@@ -2,64 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B73A589344
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 22:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA21589351
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 22:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237799AbiHCUcb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Aug 2022 16:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
+        id S238782AbiHCUfu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Aug 2022 16:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiHCUca (ORCPT
+        with ESMTP id S238754AbiHCUfr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Aug 2022 16:32:30 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD0D5B7AF
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Aug 2022 13:32:27 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id m8so22830569edd.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Aug 2022 13:32:27 -0700 (PDT)
+        Wed, 3 Aug 2022 16:35:47 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5410C5B7BB
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Aug 2022 13:35:46 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id uj29so20319145ejc.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Aug 2022 13:35:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=f0bwgO5Y6DZvlx+aNQfiCPBi+5cjtr/D/YquyyJnj2Y=;
-        b=YlLbkAWLnaGvgbUZknMUXGio9T544H9Q8guK7U9X3g5XNnPDRkYIs8s62FnCLUOTFL
-         tXtP5R1mN4sIJqQiBO6t1CDgfdrsvNoSiVd9NbyQ3tRMGy4tvCoaHwCDHn0LFQlVwFIl
-         y02noIyhQE/HQo3DM0vEUSn4eAdmq+fISCuvNApGaODeclvuCo9ynWDnK9cicFOtPKc1
-         h8UN9z2fsIBphM1RGy/06PXlMIJncsKRMoPGwl229Q1+yOkKT2nm1tMvswHWFTOtbRB6
-         fqgTfJC4t3G+TXzQm/sDNF5HFnsZJzyUr2SOFbdHW6X5EQqscyriJ+r+vSIAmRKnSe0O
-         ghrg==
+        bh=Ut3pi8cayU++0GSGO54GljP1BR6nTHkf4mesrBKLYYA=;
+        b=Ig8uG7D7SQeo3AQ8b8GvGsJyHUlyGNbXrjLnJsGssVXhbRpS9Uhnjw1fcV0EkPhRXO
+         takrvQM5C1AuVQiSbWmBKV/dbWhOzBYicDIuZBssniivGUViQ5aAJk8/5g5+RLJoQ+4u
+         ESp/lyA1Y0abiRNY6EyVarzn1Xw6U+CGh2cuUhvJfgrU1D9fhswRbarZ2jrGdUrVJf84
+         gfEl4QKSLvRePRYhGb5YGqc10Ihrv0FShrARKau4lFvB1u0FUt42chEClh5Vh0L47j3R
+         oDxH/Oibm2MTwlKqCLtbP/hC4/q5G6lWtrmZaafX9cDqJjkX1pzz8kOpdU3mCKJyEE0b
+         +hwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=f0bwgO5Y6DZvlx+aNQfiCPBi+5cjtr/D/YquyyJnj2Y=;
-        b=HXtiZunHaJK/AN41sadD/yrFts510SgRoVKcPaA+1tVnRn/aYWoYjMyx5S49kVHHWG
-         xu/d17mn3OSKlaphPrMmFbv/LzLF3sg6DIjanMyG6k1TE2UFH8mtSvvn+JoqsbDk9Y6D
-         1bnTNmdq5FMOzUQZC/LaMAtk++k58Y5LbOsbHjE33EiZ1PVzw8T+a5dCxy/VFH5VfCOY
-         y3rz2YL/+tESOaa/kBNEKoTTZj4F9bc8AP4U71yWsW7g7ex3CuRF6wQAGftjq/GU/JVf
-         S22veph+F0MlvOERJhEcM8dwIUF6tVnmHNILTmo8Izp7kIH0POISO+gtk3g1UsvmUKGC
-         LREg==
-X-Gm-Message-State: ACgBeo14MNGzCyyeblQfcglXMNSLF2XGwJFHStOiQH98KzMLqmnDSeYO
-        Dpvh3h0+Ak2ENA466yjFEY2uVeoboJvi1yaiS/ZNGw==
-X-Google-Smtp-Source: AA6agR6HWU92GtJAYExC2AMgER8UwS9Iax4Ao3eTMs6yxLQvwgm+Tsb/m5yFI+dWOCBmPKO2p6CvihXc/q25NTwQfVo=
-X-Received: by 2002:a05:6402:4302:b0:43e:18c7:e003 with SMTP id
- m2-20020a056402430200b0043e18c7e003mr7574346edc.198.1659558746011; Wed, 03
- Aug 2022 13:32:26 -0700 (PDT)
+        bh=Ut3pi8cayU++0GSGO54GljP1BR6nTHkf4mesrBKLYYA=;
+        b=jZ65HIke3gvi/SuoARSVeOec3M2vCMvwbPbe3jtM06BWnF+RrUT2ez09E/f31NHAib
+         kI3gaS2If6wxq5yFUvZhUH8MCkzb2kT3lUTmiuVxMVBmKqLJEGG9wMcKvft3UAo2bobf
+         Zq9lzgzICn7heroI7ybuBNNydZnLfgnYdfEsmh+/Ld5lIzp7gfG/nVHxqF6NxrwEHuKE
+         NW0HOcwdulJ2nd0A8JoV+IsuFXu8fpzItxOFyvuo3H4O4B6zHNBfr16t+aBdJIwDWVYD
+         AgZoHGYAVs1KoRZYO02i7BfXOUQ9VEcXwKbQBLVL8btn9AfEY0PT4S9Rs5aFwuGtCmUO
+         8Pag==
+X-Gm-Message-State: ACgBeo3QllLO/RcirzN3J2owS7Y8z2C+7dlwkd2mQanRxP3SjxwftzwP
+        D/laazNWILb7UtvJe+9REJamYnHN9ACnJn5Eyoxg6A==
+X-Google-Smtp-Source: AA6agR4rci+47W6uIwtnAZ4XTxeilLBmi8neIg2vdL5uiCYrUmfa+mIzMW+SHI5G4zdbCyQxdDEp36YqTxz6Ne0Xmo0=
+X-Received: by 2002:a17:907:9726:b0:730:9e04:f738 with SMTP id
+ jg38-20020a170907972600b007309e04f738mr8431225ejc.631.1659558944675; Wed, 03
+ Aug 2022 13:35:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220713005221.1926290-1-davidgow@google.com>
-In-Reply-To: <20220713005221.1926290-1-davidgow@google.com>
+References: <20220715040354.2629856-1-davidgow@google.com>
+In-Reply-To: <20220715040354.2629856-1-davidgow@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 3 Aug 2022 16:32:14 -0400
-Message-ID: <CAFd5g46zd2wU6L1LUmxeS=adpukPyoD65yfopMeQCMpt9iYL0Q@mail.gmail.com>
-Subject: Re: [PATCH] module: kunit: Load .kunit_test_suites section when CONFIG_KUNIT=m
+Date:   Wed, 3 Aug 2022 16:35:33 -0400
+Message-ID: <CAFd5g44h5viRSA_CU=4A0bPyj8yxQ8KgEVHKb=-JZENQwaGEnA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-of-aspeed: test: Fix dependencies when KUNIT=m
 To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        linux-modules@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, Sadiya Kazi <sadiyakazi@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -72,17 +73,24 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 8:52 PM David Gow <davidgow@google.com> wrote:
+On Fri, Jul 15, 2022 at 12:04 AM David Gow <davidgow@google.com> wrote:
 >
-> The new KUnit module handling has KUnit test suites listed in a
-> .kunit_test_suites section of each module. This should be loaded when
-> the module is, but at the moment this only happens if KUnit is built-in.
+> While the sdhci-of-aspeed KUnit tests do work when builtin, and do work
+> when KUnit itself is being built as a module, the two together break.
 >
-> Also load this when KUnit is enabled as a module: it'll not be usable
-> unless KUnit is loaded, but such modules are likely to depend on KUnit
-> anyway, so it's unlikely to ever be loaded needlessly.
+> This is because the KUnit tests (understandably) depend on KUnit, so a
+> built-in test cannot build if KUnit is a module.
 >
-> Fixes: 3d6e44623841 ("kunit: unify module and builtin suite definitions")
+> Fix this by adding a dependency on (MMC_SDHCI_OF_ASPEED=m || KUNIT=y),
+> which only excludes this one problematic configuration.
+>
+> This was reported on a nasty openrisc-randconfig run by the kernel test
+> robot, though for some reason (compiler optimisations removing the test
+> code?) I wasn't able to reproduce it locally on x86:
+> https://lore.kernel.org/linux-mm/202207140122.fzhlf60k-lkp@intel.com/T/
+>
+> Fixes: 291cd54e5b05 ("mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro")
+> Reported-by: kernel test robot <lkp@intel.com>
 > Signed-off-by: David Gow <davidgow@google.com>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
