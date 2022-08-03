@@ -2,108 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD06588FCD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 17:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19DF5890A3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 18:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236424AbiHCPxH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Aug 2022 11:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
+        id S235127AbiHCQk5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Aug 2022 12:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238425AbiHCPwi (ORCPT
+        with ESMTP id S231527AbiHCQk4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Aug 2022 11:52:38 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A4654CA7
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Aug 2022 08:51:32 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d20so9405250pfq.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Aug 2022 08:51:32 -0700 (PDT)
+        Wed, 3 Aug 2022 12:40:56 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FAA13CD9;
+        Wed,  3 Aug 2022 09:40:55 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id c139so16959285pfc.2;
+        Wed, 03 Aug 2022 09:40:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=nQ/PVBdgsWcgdstxLD2wNHSv0oGBQkwDPYWARWt/BZk=;
-        b=UqknoREV8mEy68zQSBU2lbsWwGYJTvDQqRAleSTHvyIJ9duv+KK5mptQRpjJ4+gqwT
-         NxHvbORsCprsREjtYZh1buxFH+7EmVZpQLTV3+hYE+0dFCTXjJEnC3b96X8evdOb5AvE
-         k4iA+m9355bZUR/pB9mbPpAtkahMb5UJRUeDN+StvBc9wiJ05Fv5gikb+f1UBTkXZ9Wb
-         T3uxjZMlPupTU7GmMz1t23PVXrEuoowTqTk0zL5Hyru097c+kpaUrTX0+tZJiyZrRiOO
-         fkDHAGmtMrFQ7XABTAs6+c7PxqPyw3Ku9zCqwf6gSHK8zwJF3t1nJjjVSt++BhLBcJPe
-         c9cg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=plBH5pz1kX322+xbVZ52UtO9XzB3g5pnJVIVfiUhluQ=;
+        b=KvdwfZGxKAj7YuLChZ56WyD9qv4UcBjE4HFQxqIobbSpUZ5R3nToqHka89cWqPYAnt
+         FxeDjyilVe8bvEuKbQDpa2dFfxqasjS7xWbv4b9yyhFHp6Oy/4WaPerT9KtaHVDlZcig
+         zTxvnk1h4dLLyvGdpRxap0jwLzhmqodEnbV0MUI8TvHY9ka1+YBfPeEXWs9eTwOlxqiD
+         dMnWaTW87CGWHNfbxAoqi7L5max1iKLLE7nx7QV8NNEmy6kPDJUQErkGGPSBa0343oFh
+         kBzrtQUrSN9Z2kHBLk2I4tRc/jNC1LTc8hZvT/4VO+26inb4PTJTGJoiEeCdZtVRHVxV
+         C9rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=nQ/PVBdgsWcgdstxLD2wNHSv0oGBQkwDPYWARWt/BZk=;
-        b=UmdJlWEHdiRNoRjJ+5B13OgNMSkcZOiBsTCwf0gmz1XzPyTDTxqGNPJkXr0698M83B
-         T8lGr7DvexvLaN5QqKOObpjXx7JVHoPUrbI8nzXq5+Jm0IxwvgIcA8Zb/ZjZIkPi5kFO
-         vohSW52lbbY9Jayc2SlPXjB6D5fLeipeyAXYD4tBBE6u1u9vJ6u2bWofCOGsbkAnOYqv
-         K9dFKPdUafLbQqRLF1ziQfY8/0MBhlDOdY8wcs/spcm3I+H8c3r3Kmipd4TzOUocQ871
-         XmhM9kdhyvIK3Ja15M1dI/dheewo7WC61kFESjrpILtG2pzB69upQtiwpejr5F40Sn6J
-         76Pw==
-X-Gm-Message-State: AJIora+nbB1JbnxFXH9UJ0TPUGjw0fC/NJfSGGmVn/eULrNq+sW5LV6D
-        QaF8BJSpGQqk15/RnxafVQkAaQ==
-X-Google-Smtp-Source: AGRyM1uDNFXI+kxeHIg+ULHnKLrtLVM3YAsuBREDsfvLxR8PwpGaMsjug1I+UmNiUr91nJEzTB4ZRg==
-X-Received: by 2002:a63:d014:0:b0:41a:13b3:69d9 with SMTP id z20-20020a63d014000000b0041a13b369d9mr21261764pgf.202.1659541889184;
-        Wed, 03 Aug 2022 08:51:29 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x187-20020a6231c4000000b0052c4b3e6f6asm13535782pfx.97.2022.08.03.08.51.28
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=plBH5pz1kX322+xbVZ52UtO9XzB3g5pnJVIVfiUhluQ=;
+        b=YOwdFE+++TQJWU1qVGXdNbhVw1aLlFFT1tKYJucboNkBvz1tuE2gzADHUvbBZjEM3P
+         p4MzpyaNDfMs16V+G4M5Hd19jiDakxYsGHGoe0mxk5HAte7E2WLZQ8zsFvZFZxZE3FRa
+         hqJXqRj2OWnC1Ws49NdrN1B6w8KsfSlgobv9+QWI9/bJrl2XcTM/zr+KwKQDxE0Kreeb
+         MVBdyUvRbFCBWyQV0IoU7f4oNsHRCZT/PyUj6CqzUkJIYbDcbN5Am63GET7OT1hb1E/a
+         YCVz9kQV8QyWMLpd6pfSkBPkJkVeNhb8nOqLt4nj3BfeMFiJtkeqWEIQ6S2493aqOj6X
+         p5NA==
+X-Gm-Message-State: AJIora8Y0Qjxyi/RVpNaz8F8cDDF0ZHKsxiswk+QCsrOlGO4pnk/q0Wi
+        uCkRSW4hv+3kV6c/g8ffRGpZKtdTlt5fTnAO
+X-Google-Smtp-Source: AGRyM1tPRq9StTkyP8E5BpBDQnpGfYSyLpJvuqlbuSZmRLGpcEtlRZ1o0OGknQAgZKhjmkUWRlMfiw==
+X-Received: by 2002:a05:6a00:a11:b0:52b:fb6f:b614 with SMTP id p17-20020a056a000a1100b0052bfb6fb614mr26242645pfh.33.1659544855312;
+        Wed, 03 Aug 2022 09:40:55 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-009.fbsv.net. [2a03:2880:ff:9::face:b00c])
+        by smtp.gmail.com with ESMTPSA id b10-20020a170902d50a00b0016dc1df9bf7sm2219695plg.27.2022.08.03.09.40.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 08:51:28 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 15:51:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Wei Wang <wei.w.wang@linux.intel.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 11/14] KVM: Register/unregister the guest private
- memory regions
-Message-ID: <YuqZfPvRo+3GvLF1@google.com>
-References: <d0fd229d-afa6-c66d-3e55-09ac5877453e@amd.com>
- <YtgrkXqP/GIi9ujZ@google.com>
- <45ae9f57-d595-f202-abb5-26a03a2ca131@linux.intel.com>
- <20220721092906.GA153288@chaop.bj.intel.com>
- <YtmT2irvgInX1kPp@google.com>
- <20220725130417.GA304216@chaop.bj.intel.com>
- <YuQ64RgWqdoAAGdY@google.com>
- <Yuh0ikhoh+tCK6VW@google.com>
- <YulTH7bL4MwT5v5K@google.com>
- <20220803094827.GA607465@chaop.bj.intel.com>
+        Wed, 03 Aug 2022 09:40:55 -0700 (PDT)
+From:   Adel Abouchaev <adel.abushaev@gmail.com>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        corbet@lwn.net, dsahern@kernel.org, shuah@kernel.org,
+        imagedong@tencent.com, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [RFC net-next 0/6] net: support QUIC crypto
+Date:   Wed,  3 Aug 2022 09:40:39 -0700
+Message-Id: <20220803164045.3585187-1-adel.abushaev@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Adel Abouchaev <adel.abushaev@gmail.com>
+References: <Adel Abouchaev <adel.abushaev@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220803094827.GA607465@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,105 +72,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 03, 2022, Chao Peng wrote:
-> On Tue, Aug 02, 2022 at 04:38:55PM +0000, Sean Christopherson wrote:
-> > On Tue, Aug 02, 2022, Sean Christopherson wrote:
-> > > I think we should avoid UNMAPPABLE even on the KVM side of things for the core
-> > > memslots functionality and instead be very literal, e.g.
-> > > 
-> > > 	KVM_HAS_FD_BASED_MEMSLOTS
-> > > 	KVM_MEM_FD_VALID
-> > > 
-> > > We'll still need KVM_HAS_USER_UNMAPPABLE_MEMORY, but it won't be tied directly to
-> > > the memslot.  Decoupling the two thingis will require a bit of extra work, but the
-> > > code impact should be quite small, e.g. explicitly query and propagate
-> > > MEMFILE_F_USER_INACCESSIBLE to kvm_memory_slot to track if a memslot can be private.
-> > > And unless I'm missing something, it won't require an additional memslot flag.
-> > > The biggest oddity (if we don't also add KVM_MEM_PRIVATE) is that KVM would
-> > > effectively ignore the hva for fd-based memslots for VM types that don't support
-> > > private memory, i.e. userspace can't opt out of using the fd-based backing, but that
-> > > doesn't seem like a deal breaker.
-> 
-> I actually love this idea. I don't mind adding extra code for potential
-> usage other than confidential VMs if we can have a workable solution for
-> it.
-> 
-> > 
-> > Hrm, but basing private memory on top of a generic FD_VALID would effectively require
-> > shared memory to use hva-based memslots for confidential VMs.  That'd yield a very
-> > weird API, e.g. non-confidential VMs could be backed entirely by fd-based memslots,
-> > but confidential VMs would be forced to use hva-based memslots.
-> 
-> It would work if we can treat userspace_addr as optional for
-> KVM_MEM_FD_VALID, e.g. userspace can opt in to decide whether needing
-> the mappable part or not for a regular VM and we can enforce KVM for
-> confidential VMs. But the u64 type of userspace_addr doesn't allow us to
-> express a 'null' value so sounds like we will end up needing another
-> flag anyway.
-> 
-> In concept, we could have three cofigurations here:
->   1. hva-only: without any flag and use userspace_addr;
->   2. fd-only:  another new flag is needed and use fd/offset;
->   3. hva/fd mixed: both userspace_addr and fd/offset is effective.
->      KVM_MEM_PRIVATE is a subset of it for confidential VMs. Not sure
->      regular VM also wants this.
+QUIC requires end to end encryption of the data. The application usually
+prepares the data in clear text, encrypts and calls send() which implies
+multiple copies of the data before the packets hit the networking stack.
+Similar to kTLS, QUIC kernel offload of cryptography reduces the memory
+pressure by reducing the number of copies.
 
-My mental model breaks things down slightly differently, though the end result is
-more or less the same. 
+The scope of kernel support is limited to the symmetric cryptography,
+leaving the handshake to the user space library. For QUIC in particular,
+the application packets that require symmetric cryptography are the 1RTT
+packets with short headers. Kernel will encrypt the application packets
+on transmission and decrypt on receive. This series implements Tx only,
+because in QUIC server applications Tx outweighs Rx by orders of
+magnitude.
 
-After this series, there will be two types of memory: private and "regular" (I'm
-trying to avoid "shared").  "Regular" memory is always hva-based (userspace_addr),
-and private always fd-based (fd+offset).
+Supporting the combination of QUIC and GSO requires the application to
+correctly place the data and the kernel to correctly slice it. The
+encryption process appends an arbitrary number of bytes (tag) to the end
+of the message to authenticate it. The GSO value should include this
+overhead, the offload would then subtract the tag size to parse the
+input on Tx before chunking and encrypting it.
 
-In the future, if we want to support fd-based memory for "regular" memory, then
-as you said we'd need to add a new flag, and a new fd+offset pair.
+With the kernel cryptography, the buffer copy operation is conjoined
+with the encryption operation. The memory bandwidth is reduced by 5-8%.
+When devices supporting QUIC encryption in hardware come to the market,
+we will be able to free further 7% of CPU utilization which is used
+today for crypto operations.
 
-At that point, we'd have two new (relatively to current) flags:
 
-  KVM_MEM_PRIVATE_FD_VALID
-  KVM_MEM_FD_VALID
+Adel Abouchaev (6):
+  Documentation on QUIC kernel Tx crypto.
+  Define QUIC specific constants, control and data plane structures
+  Add UDP ULP operations, initialization and handling prototype
+    functions.
+  Implement QUIC offload functions
+  Add flow counters and Tx processing error counter
+  Add self tests for ULP operations, flow setup and crypto tests
 
-along with two new pairs of fd+offset (private_* and "regular").  Mapping those
-to your above list:
-  
-  1.  Neither *_FD_VALID flag set.
-  2a. Both PRIVATE_FD_VALID and FD_VALID are set
-  2b. FD_VALID is set and the VM doesn't support private memory
-  3.  Only PRIVATE_FD_VALID is set (which private memory support in the VM).
+ Documentation/networking/quic.rst      |  176 +++
+ include/net/inet_sock.h                |    2 +
+ include/net/netns/mib.h                |    3 +
+ include/net/quic.h                     |   59 +
+ include/net/snmp.h                     |    6 +
+ include/net/udp.h                      |   33 +
+ include/uapi/linux/quic.h              |   61 +
+ include/uapi/linux/snmp.h              |   11 +
+ include/uapi/linux/udp.h               |    4 +
+ net/Kconfig                            |    1 +
+ net/Makefile                           |    1 +
+ net/ipv4/Makefile                      |    3 +-
+ net/ipv4/udp.c                         |   14 +
+ net/ipv4/udp_ulp.c                     |  190 ++++
+ net/quic/Kconfig                       |   16 +
+ net/quic/Makefile                      |    8 +
+ net/quic/quic_main.c                   | 1446 ++++++++++++++++++++++++
+ net/quic/quic_proc.c                   |   45 +
+ tools/testing/selftests/net/.gitignore |    1 +
+ tools/testing/selftests/net/Makefile   |    2 +-
+ tools/testing/selftests/net/quic.c     | 1024 +++++++++++++++++
+ tools/testing/selftests/net/quic.sh    |   45 +
+ 22 files changed, 3149 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/networking/quic.rst
+ create mode 100644 include/net/quic.h
+ create mode 100644 include/uapi/linux/quic.h
+ create mode 100644 net/ipv4/udp_ulp.c
+ create mode 100644 net/quic/Kconfig
+ create mode 100644 net/quic/Makefile
+ create mode 100644 net/quic/quic_main.c
+ create mode 100644 net/quic/quic_proc.c
+ create mode 100644 tools/testing/selftests/net/quic.c
+ create mode 100755 tools/testing/selftests/net/quic.sh
 
-Thus, "regular" VMs can't have a mix in a single memslot because they can't use
-private memory.
+-- 
+2.30.2
 
-> There is no direct relationship between unmappable and fd-based since
-> even fd-based can also be mappable for regular VM?
-
-Yep.
-
-> > Ignore this idea for now.  If there's an actual use case for generic fd-based memory
-> > then we'll want a separate flag, fd, and offset, i.e. that support could be added
-> > independent of KVM_MEM_PRIVATE.
-> 
-> If we ignore this idea now (which I'm also fine), do you still think we
-> need change KVM_MEM_PRIVATE to KVM_MEM_USER_UNMAPPBLE?
-
-Hmm, no.  After working through this, I think it's safe to say KVM_MEM_USER_UNMAPPABLE
-is bad name because we could end up with "regular" memory that's backed by an
-inaccessible (unmappable) file.
-
-One alternative would be to call it KVM_MEM_PROTECTED.  That shouldn't cause
-problems for the known use of "private" (TDX and SNP), and it gives us a little
-wiggle room, e.g. if we ever get a use case where VMs can share memory that is
-otherwise protected.
-
-That's a pretty big "if" though, and odds are good we'd need more memslot flags and
-fd+offset pairs to allow differentiating "private" vs. "protected-shared" without
-forcing userspace to punch holes in memslots, so I don't know that hedging now will
-buy us anything.
-
-So I'd say that if people think KVM_MEM_PRIVATE brings additional and meaningful
-clarity over KVM_MEM_PROTECTECD, then lets go with PRIVATE.  But if PROTECTED is
-just as good, go with PROTECTED as it gives us a wee bit of wiggle room for the
-future.
-
-Note, regardless of what name we settle on, I think it makes to do the
-KVM_PRIVATE_MEM_SLOTS => KVM_INTERNAL_MEM_SLOTS rename.
