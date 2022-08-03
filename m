@@ -2,100 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B410588ED0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 16:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440DA588F41
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 17:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235971AbiHCOma (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Aug 2022 10:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S238019AbiHCPUl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Aug 2022 11:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236147AbiHCOm1 (ORCPT
+        with ESMTP id S238093AbiHCPUh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Aug 2022 10:42:27 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9542A434
-        for <linux-kselftest@vger.kernel.org>; Wed,  3 Aug 2022 07:42:22 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso2260198pjo.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Aug 2022 07:42:22 -0700 (PDT)
+        Wed, 3 Aug 2022 11:20:37 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6452E9C4
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Aug 2022 08:20:35 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id c20-20020a9d4814000000b0061cecd22af4so12333879otf.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Aug 2022 08:20:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=WbLojLDf4bnSMua5Syjpq38ZqCfDt7KDJFslMAkFjxI=;
-        b=S8oyKUBy69riYkQuhYnwr0bc7Xvahe0VOOFXz4BtcQ0Obxpsdkj/f3ARt4Mt/OUsCb
-         DsrJXH1aF/JgDNByaDUbxmaljW2v3JxByMH8iLWSiayTU5HbZCNMaZqiqvwzNiTOjjYT
-         dSe2qtNn5OyY/2iIiipeDJWnj9+8KugXVn/Gh1KEZyNk2izo4jPnWiscetPUQPS9YA5a
-         KuaMdniensvSwTajg+cFCupR8Fse6ozUzNza11V9wBVMEgrMl8EoawPzLyociiYgPofZ
-         qs4D88AaLCVfbZBTf1QVpfkIjxi1VjVXMa7LR98wadzIA8n6LRzLHGWMpdZ6eyKnF0ic
-         g4CA==
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=RPqGFZtbNqgICpWV/6VvhSR6n3AOi6dZZb+5V7yogyQ=;
+        b=eKxcY/wUV1t5iGFQOTkC3uUqXsNlO3wJPUXpinu2/pZFiIuEZDbShMVl1SWFB8VMKG
+         dN33busgN2TumcApmrWbU9bmxspzUC3EobauqLvOHnBA8X1FgGKATmogtCPRFVJX7swX
+         jnEljBTuf+JFh+gnVMEfcFQpvfPapnczKgq9A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=WbLojLDf4bnSMua5Syjpq38ZqCfDt7KDJFslMAkFjxI=;
-        b=QzjCDp2FltAICwvQUeV16odOnaAmwUOBxwrMmOPsKHkk/jfdrsYwwNZ03kAIbLiz4V
-         KTjzoTV+Mvh+1nrijwJFmlrD0LfPGbpM/U8Jj4neSsaAnVDHcDHygL/3iE2OdAVaUai+
-         jmtic1NZRt+Z+mzrfbKWfiNE7kriDLtNC17ble8zYuPFs1qunUmSoC2n46qxmkOI2I0w
-         XH3nifX8nBYNH1l0J+uZ0Fk26b406EMZbcxKd2T4UAi0KICJukp6Nhdxx3n651DBIqM2
-         y+Cqq7ZQhtlBy9/miHSj7VzB6z3+qZ8LSlA9ejqm7nzvKofQIx+5pzJc+P2Vl9DwidRN
-         uWvw==
-X-Gm-Message-State: ACgBeo1ZjYS2AZk2fWxPNWGPve8hv52MJlZdIEYLGjfk+GfmNEoGF7uF
-        6hY2O3eBJDbnl8M9Y4cNEHEPQg==
-X-Google-Smtp-Source: AA6agR4YfMFOGAmga5CfWpVWHyya4teDhnGUJy+qkkGHA09bRr9mP40ayb7pIQHXCvX5PQKdF82pIw==
-X-Received: by 2002:a17:90b:350c:b0:1f5:e4b:2884 with SMTP id ls12-20020a17090b350c00b001f50e4b2884mr5338018pjb.46.1659537741705;
-        Wed, 03 Aug 2022 07:42:21 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u62-20020a627941000000b0052ac12e7596sm3118097pfc.114.2022.08.03.07.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Aug 2022 07:42:20 -0700 (PDT)
-Date:   Wed, 3 Aug 2022 14:42:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 09/14] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <YuqJSQI3gas/k56X@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-10-chao.p.peng@linux.intel.com>
- <YuQ6QWcdZLdStkWl@google.com>
- <20220803100835.GD607465@chaop.bj.intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=RPqGFZtbNqgICpWV/6VvhSR6n3AOi6dZZb+5V7yogyQ=;
+        b=4g1h0eW0DKCsqVaG6YVkSu17ViIyIvQlfogpPqvn+MNWMJ397qYFEouHp82VMWjXw2
+         Mq1PCwBoIxTGrnI/+9zvzMbZCmnArD53JAYbiXxgsetmP2C8A5PYutZwuxtCT5fyfCIh
+         cgjA0WV8DvAWvrAhPGjQYFoF/hjWrkW8NfVRw2h3wrz4BQEnF2ox57xKoZrlllJbipNM
+         lkjc+V2WBboWfoAvwXDkHi952J58a8vzKWASdu1E7YEnqIcAvcQaflJrKnNJXNR3dv0D
+         8hmbXyZi1OHCyoGx4DJduIXm+Do7DbZpwuA7NHuVQ/mGVO/xA0d+jf2/ipspz1FGVepr
+         X7pA==
+X-Gm-Message-State: AJIora+eU503nqEMfv/i/nFJ8BZ6nMwjyE5rhu85K+v9arsJeYj7Sm3R
+        swCpyGs+pv9FLPcFW1jzbpv9kg==
+X-Google-Smtp-Source: AGRyM1vhYxujzT2YaLXCnoBJSDqDHPUJMnPpsU0AX9VW0hT0pmIMq5BAvFR7alVbeYb7pUS4X0XAlA==
+X-Received: by 2002:a9d:6007:0:b0:61c:ecd2:ac55 with SMTP id h7-20020a9d6007000000b0061cecd2ac55mr8737434otj.32.1659540034249;
+        Wed, 03 Aug 2022 08:20:34 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id fo22-20020a0568709a1600b0010eaeee89a1sm3056992oab.46.2022.08.03.08.20.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 08:20:33 -0700 (PDT)
+Message-ID: <aad6c2cb-abdd-b066-9d1d-d0f415256ae6@cloudflare.com>
+Date:   Wed, 3 Aug 2022 10:20:32 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220803100835.GD607465@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 0/4] Introduce security_create_user_ns()
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, songliubraving@fb.com,
+        yhs@fb.com, john.fastabend@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
+        tixxdz@gmail.com
+References: <20220721172808.585539-1-fred@cloudflare.com>
+ <20220722061137.jahbjeucrljn2y45@kafai-mbp.dhcp.thefacebook.com>
+ <18225d94bf0.28e3.85c95baa4474aabc7814e68940a78392@paul-moore.com>
+ <87a68mcouk.fsf@email.froward.int.ebiederm.org>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <87a68mcouk.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,46 +86,97 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 03, 2022, Chao Peng wrote:
-> On Fri, Jul 29, 2022 at 07:51:29PM +0000, Sean Christopherson wrote:
-> > On Wed, Jul 06, 2022, Chao Peng wrote:
-> > > @@ -1332,9 +1332,18 @@ yet and must be cleared on entry.
-> > >  	__u64 userspace_addr; /* start of the userspace allocated memory */
-> > >    };
-> > >  
-> > > +  struct kvm_userspace_memory_region_ext {
-> > > +	struct kvm_userspace_memory_region region;
-> > > +	__u64 private_offset;
-> > > +	__u32 private_fd;
-> > > +	__u32 pad1;
-> > > +	__u64 pad2[14];
-> > > +};
-> > > +
-> > >    /* for kvm_memory_region::flags */
-> > >    #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
-> > >    #define KVM_MEM_READONLY	(1UL << 1)
-> > > +  #define KVM_MEM_PRIVATE		(1UL << 2)
-> > 
-> > Very belatedly following up on prior feedback...
-> > 
-> >   | I think a flag is still needed, the problem is private_fd can be safely
-> >   | accessed only when this flag is set, e.g. without this flag, we can't
-> >   | copy_from_user these new fields since they don't exist for previous
-> >   | kvm_userspace_memory_region callers.
-> > 
-> > I forgot about that aspect of things.  We don't technically need a dedicated
-> > PRIVATE flag to handle that, but it does seem to be the least awful soltuion.
-> > We could either add a generic KVM_MEM_EXTENDED_REGION or an entirely new
-> > ioctl(), e.g. KVM_SET_USER_MEMORY_REGION2, but in both approaches there's a decent
-> > chance that we'll end up needed individual "this field is valid" flags anways.
-> > 
-> > E.g. if KVM requires pad1 and pad2 to be zero to carve out future extensions,
-> > then we're right back here if some future extension needs to treat '0' as a legal
-> > input.
+On 8/2/22 4:33 PM, Eric W. Biederman wrote:
+> Paul Moore <paul@paul-moore.com> writes:
 > 
-> I had such practice (always rejecting none-zero 'pad' value when
-> introducing new user APIs) in other project previously, but I rarely
-> see that in KVM.
+>> On July 22, 2022 2:12:03 AM Martin KaFai Lau <kafai@fb.com> wrote:
+>>
+>>> On Thu, Jul 21, 2022 at 12:28:04PM -0500, Frederick Lawler wrote:
+>>>> While creating a LSM BPF MAC policy to block user namespace creation, we
+>>>> used the LSM cred_prepare hook because that is the closest hook to prevent
+>>>> a call to create_user_ns().
+>>>>
+>>>> The calls look something like this:
+>>>>
+>>>> cred = prepare_creds()
+>>>> security_prepare_creds()
+>>>> call_int_hook(cred_prepare, ...
+>>>> if (cred)
+>>>> create_user_ns(cred)
+>>>>
+>>>> We noticed that error codes were not propagated from this hook and
+>>>> introduced a patch [1] to propagate those errors.
+>>>>
+>>>> The discussion notes that security_prepare_creds()
+>>>> is not appropriate for MAC policies, and instead the hook is
+>>>> meant for LSM authors to prepare credentials for mutation. [2]
+>>>>
+>>>> Ultimately, we concluded that a better course of action is to introduce
+>>>> a new security hook for LSM authors. [3]
+>>>>
+>>>> This patch set first introduces a new security_create_user_ns() function
+>>>> and userns_create LSM hook, then marks the hook as sleepable in BPF.
+>>> Patch 1 and 4 still need review from the lsm/security side.
+>>
+>>
+>> This patchset is in my review queue and assuming everything checks
+>> out, I expect to merge it after the upcoming merge window closes.
+> 
+> It doesn't even address my issues with the last patchset.
 
-Ya, KVM often uses flags to indicate the validity of a field specifically so that
-KVM doesn't misinterpret a '0' from an older userspace as an intended value.
+Are you referring to [1], and with regards to [2], is the issue that the 
+wording could be improved for both the cover letter and patch 1/4?
+
+Ultimately, the goal of CF is to leverage and use user namespaces and 
+block tasks whose meta information do not align with our allow list 
+criteria. Yes, there is a higher goal of restricting our attack surface. 
+Yes, people will find ways around security. The point is to have 
+multiple levels of security, and this patch series allows people to add 
+another level.
+
+Calling this hook a regression is not true since there's no actual 
+regression in the code. What would constitute a perceived regression is 
+an admin imposing such a SELinux or BPF restriction within their 
+company, but developers in that company ideally would try to work with 
+the admin to enable user namespaces for certain use cases, or 
+alternatively do what you don't want given current tooling: always run 
+code as root. That's where this hook comes in: let people observe and 
+enforce how they see fit. The average enthusiasts would see no impact.
+
+I was requested to add _some_ test to BPF and to add a SELinux 
+implementation. The low hanging fruit for a test to prove that the hook 
+is capable of doing _something_ was to simply just block outright, and 
+provide _some example_ of use. It doesn't make sense for us to write a 
+test that outlines specifically what CF or others are doing because that 
+would put too much emphasis on an implementation detail that doesn't 
+matter to prove that the hook works.
+
+Without Djalal's comment, I can't defend an observability use case that 
+we're not currently leveraging. We have it now, so therefore I'll defend 
+it per KP's suggestion[3] in v5.
+
+By not responding to the email discussions, we can't accurately gauge 
+what should or should not be in the descriptions. No one here 
+necessarily disagrees with some of the points you made, and others have 
+appropriately responded. As others have also wrote, you're not proposing 
+alternatives. How do you expect us to work with that?
+
+Please, let us know which bits and pieces ought to be included in the 
+descriptions, and let us know what things we should call out caveats to 
+that would satisfy your concerns.
+
+Links:
+1. 
+https://lore.kernel.org/all/01368386-521f-230b-1d49-de19377c27d1@cloudflare.com/
+2. 
+https://lore.kernel.org/all/877d45kri4.fsf@email.froward.int.ebiederm.org/#t
+3. 
+https://lore.kernel.org/all/CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com/
+4. 
+https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/#t
+
+> 
+> So it has my NACK.
+> 
+> Eric
+
