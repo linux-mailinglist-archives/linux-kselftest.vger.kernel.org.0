@@ -2,116 +2,244 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98F5588A40
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 12:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C2D588CC3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 15:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237141AbiHCKSH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Aug 2022 06:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S237920AbiHCNNd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Aug 2022 09:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiHCKSD (ORCPT
+        with ESMTP id S237981AbiHCNNa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Aug 2022 06:18:03 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8E0B3C;
-        Wed,  3 Aug 2022 03:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1659521882; x=1691057882;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=wFam+LDcRbKILr0ubXYReeOGRVLmWUy4n8feDpXT4KY=;
-  b=jixmJUcG97PKX5ZUa28+bVmJitLlvDDyE5XCz7Ngn6Sxs2fCCk346OQh
-   /e7FPrzxv/OdN4siefyhkCmDrmkJFuKi1quptgBEu6/s5XmygcajKBJyS
-   ZrsivssBk6Q7Shs30NldTHjA62ZsniOd/HXGIDXlrTKGtCc5gAS4ZwvNo
-   qo42XvQaBejZVxpSQUtCDI1QrL1sCc3Xo8xti8W/but3T4lGXOid1a2+Z
-   es7fB9RoKojXChzirRk7Rdgt+2K7OkYwaS65MVYx5fSlXPS65iNPv2qhQ
-   +W/GCziMYhi4xBvRcr6NoRpWxw/cDdJjsMT1swi02fnY9YKHgpQp6glME
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10427"; a="351350449"
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="351350449"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2022 03:18:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,213,1654585200"; 
-   d="scan'208";a="631095811"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga008.jf.intel.com with ESMTP; 03 Aug 2022 03:17:51 -0700
-Date:   Wed, 3 Aug 2022 18:13:04 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
-Message-ID: <20220803101304.GE607465@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
- <YuQutJAhKWcsrrYl@google.com>
+        Wed, 3 Aug 2022 09:13:30 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23439186E9
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Aug 2022 06:13:17 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id s83so413818oie.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Aug 2022 06:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=0qI80nKbtNInC7TnaqV1RRwJ5MKOkQCfQlYI1Abu+68=;
+        b=jtodadUycK+1LkDSYjWv8XqXchbrV8seFLSfpmqa6P3sOQ/of4IOcRUxXS1Bd4JQBX
+         YhmbqlC+yxW9CTOk4i0D6sxWl0tLx5O0b/6PobzrrG7Khc1GwbaSCbDxfaFKRBlVF//X
+         yBzwRrxphm+rRMuCnO5lQIVW1fkXROZV4I73U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=0qI80nKbtNInC7TnaqV1RRwJ5MKOkQCfQlYI1Abu+68=;
+        b=FzLVcLznZ1XhYqqAr7Xpk9ycHac7OXDrURrpuRDKw+jEopCo92rrTJ+7kzxRqBm0r7
+         EY4pxuDs/2xTPnpAOcPGUX/tGz4Rv7UpzFYhW5Br1AvKmc8+iqVLqIPDdWboaO/M72S/
+         cUPubVLwcqzhEEpcnkmuI8HCffMooOdaQa7ck4qpFABx6MkEabM+IlA5mi23rvIDihJN
+         ezDpsgqR0ZYuZlBtzwChOhNItuAPyRhAsVyDGZMYpAi7hkv7orGxXS9RqVkEhRIIVq24
+         LP/PUiWjScFwZO9NfpUK/LCnvTTbahcWp2P0Tb4jyn9tFxcRfmsJTHlX/7aKcYNpValK
+         RKOw==
+X-Gm-Message-State: ACgBeo0IjMqqIpD6T1gghDBZiScvskNFaH4c9dJN2MDZ5G9M1LVUPYNE
+        hfo7wS2/aR200eZnL656SPKxLA==
+X-Google-Smtp-Source: AA6agR4YcT+i543RaZOzyZZrxoYafQeMyJMNwQPlZAZ5N2PjqYDcx6ffwBEUmWSpOvruLmyqiKyulA==
+X-Received: by 2002:a05:6808:143:b0:33a:d513:1443 with SMTP id h3-20020a056808014300b0033ad5131443mr1620237oie.43.1659532396382;
+        Wed, 03 Aug 2022 06:13:16 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id t26-20020a0568080b3a00b0033a3e6e7ce9sm3539763oij.10.2022.08.03.06.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 06:13:16 -0700 (PDT)
+Message-ID: <11578cfd-3d19-8bda-b36e-5e522e7c4490@cloudflare.com>
+Date:   Wed, 3 Aug 2022 08:13:15 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YuQutJAhKWcsrrYl@google.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 1/4] security, lsm: Introduce security_create_user_ns()
+Content-Language: en-US
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+ <20220801180146.1157914-2-fred@cloudflare.com>
+ <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <CACYkzJ4x90DamdN4dRCn1gZuAHLqJNy4MoP=qTX+44Bqx1uxSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 29, 2022 at 07:02:12PM +0000, Sean Christopherson wrote:
-> On Wed, Jul 06, 2022, Chao Peng wrote:
-> > The sync mechanism between mmu_notifier and page fault handler employs
-> > fields mmu_notifier_seq/count and mmu_notifier_range_start/end. For the
-> > to be added private memory, there is the same mechanism needed but not
-> > rely on mmu_notifier (It uses new introduced memfile_notifier). This
-> > patch renames the existing fields and related helper functions to a
-> > neutral name mmu_updating_* so private memory can reuse.
+On 8/2/22 4:47 PM, KP Singh wrote:
+> On Mon, Aug 1, 2022 at 8:02 PM Frederick Lawler <fred@cloudflare.com> wrote:
+>>
+>> Preventing user namespace (privileged or otherwise) creation comes in a
+>> few of forms in order of granularity:
+>>
+>>          1. /proc/sys/user/max_user_namespaces sysctl
+>>          2. OS specific patch(es)
+>>          3. CONFIG_USER_NS
+>>
+>> To block a task based on its attributes, the LSM hook cred_prepare is a
+>> good candidate for use because it provides more granular control, and
+>> it is called before create_user_ns():
+>>
+>>          cred = prepare_creds()
+>>                  security_prepare_creds()
+>>                          call_int_hook(cred_prepare, ...
+>>          if (cred)
+>>                  create_user_ns(cred)
+>>
+>> Since security_prepare_creds() is meant for LSMs to copy and prepare
+>> credentials, access control is an unintended use of the hook. Therefore
+>> introduce a new function security_create_user_ns() with an accompanying
+>> userns_create LSM hook.
+>>
+>> This hook takes the prepared creds for LSM authors to write policy
+>> against. On success, the new namespace is applied to credentials,
+>> otherwise an error is returned.
+>>
+>> Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+>> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 > 
-> mmu_updating_* is too broad of a term, e.g. page faults and many other operations
-> also update the mmu.  Although the name most definitely came from the mmu_notifier,
-> it's not completely inaccurate for other sources, e.g. KVM's MMU is still being
-> notified of something, even if the source is not the actual mmu_notifier.
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
 > 
-> If we really want a different name, I'd vote for nomenclature that captures the
-> invalidation aspect, which is really what the variables are all trackng, e.g.
+> This looks useful, and I would also like folks to consider the
+> observability aspects of BPF LSM as
+> brought up here:
 > 
->   mmu_invalidate_seq
->   mmu_invalidate_in_progress
->   mmu_invalidate_range_start
->   mmu_invalidate_range_end
+> https://lore.kernel.org/all/CAEiveUdPhEPAk7Y0ZXjPsD=Vb5hn453CHzS9aG-tkyRa8bf_eg@mail.gmail.com/
+> 
+> Frederick, what about adding the observability aspects to the commit
+> description as well.
 
-Looks good to me. Thanks.
+Agreed. I'll include that in v5.
 
-Chao
+> 
+> - KP
+> 
+>>
+>> ---
+>> Changes since v3:
+>> - No changes
+>> Changes since v2:
+>> - Rename create_user_ns hook to userns_create
+>> Changes since v1:
+>> - Changed commit wording
+>> - Moved execution to be after id mapping check
+>> - Changed signature to only accept a const struct cred *
+>> ---
+>>   include/linux/lsm_hook_defs.h | 1 +
+>>   include/linux/lsm_hooks.h     | 4 ++++
+>>   include/linux/security.h      | 6 ++++++
+>>   kernel/user_namespace.c       | 5 +++++
+>>   security/security.c           | 5 +++++
+>>   5 files changed, 21 insertions(+)
+>>
+>> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+>> index eafa1d2489fd..7ff93cb8ca8d 100644
+>> --- a/include/linux/lsm_hook_defs.h
+>> +++ b/include/linux/lsm_hook_defs.h
+>> @@ -223,6 +223,7 @@ LSM_HOOK(int, -ENOSYS, task_prctl, int option, unsigned long arg2,
+>>           unsigned long arg3, unsigned long arg4, unsigned long arg5)
+>>   LSM_HOOK(void, LSM_RET_VOID, task_to_inode, struct task_struct *p,
+>>           struct inode *inode)
+>> +LSM_HOOK(int, 0, userns_create, const struct cred *cred)
+>>   LSM_HOOK(int, 0, ipc_permission, struct kern_ipc_perm *ipcp, short flag)
+>>   LSM_HOOK(void, LSM_RET_VOID, ipc_getsecid, struct kern_ipc_perm *ipcp,
+>>           u32 *secid)
+>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+>> index 91c8146649f5..54fe534d0e01 100644
+>> --- a/include/linux/lsm_hooks.h
+>> +++ b/include/linux/lsm_hooks.h
+>> @@ -799,6 +799,10 @@
+>>    *     security attributes, e.g. for /proc/pid inodes.
+>>    *     @p contains the task_struct for the task.
+>>    *     @inode contains the inode structure for the inode.
+>> + * @userns_create:
+>> + *     Check permission prior to creating a new user namespace.
+>> + *     @cred points to prepared creds.
+>> + *     Return 0 if successful, otherwise < 0 error code.
+>>    *
+>>    * Security hooks for Netlink messaging.
+>>    *
+>> diff --git a/include/linux/security.h b/include/linux/security.h
+>> index 7fc4e9f49f54..a195bf33246a 100644
+>> --- a/include/linux/security.h
+>> +++ b/include/linux/security.h
+>> @@ -435,6 +435,7 @@ int security_task_kill(struct task_struct *p, struct kernel_siginfo *info,
+>>   int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
+>>                          unsigned long arg4, unsigned long arg5);
+>>   void security_task_to_inode(struct task_struct *p, struct inode *inode);
+>> +int security_create_user_ns(const struct cred *cred);
+>>   int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag);
+>>   void security_ipc_getsecid(struct kern_ipc_perm *ipcp, u32 *secid);
+>>   int security_msg_msg_alloc(struct msg_msg *msg);
+>> @@ -1185,6 +1186,11 @@ static inline int security_task_prctl(int option, unsigned long arg2,
+>>   static inline void security_task_to_inode(struct task_struct *p, struct inode *inode)
+>>   { }
+>>
+>> +static inline int security_create_user_ns(const struct cred *cred)
+>> +{
+>> +       return 0;
+>> +}
+>> +
+>>   static inline int security_ipc_permission(struct kern_ipc_perm *ipcp,
+>>                                            short flag)
+>>   {
+>> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
+>> index 5481ba44a8d6..3f464bbda0e9 100644
+>> --- a/kernel/user_namespace.c
+>> +++ b/kernel/user_namespace.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/highuid.h>
+>>   #include <linux/cred.h>
+>>   #include <linux/securebits.h>
+>> +#include <linux/security.h>
+>>   #include <linux/keyctl.h>
+>>   #include <linux/key-type.h>
+>>   #include <keys/user-type.h>
+>> @@ -113,6 +114,10 @@ int create_user_ns(struct cred *new)
+>>              !kgid_has_mapping(parent_ns, group))
+>>                  goto fail_dec;
+>>
+>> +       ret = security_create_user_ns(new);
+>> +       if (ret < 0)
+>> +               goto fail_dec;
+>> +
+>>          ret = -ENOMEM;
+>>          ns = kmem_cache_zalloc(user_ns_cachep, GFP_KERNEL);
+>>          if (!ns)
+>> diff --git a/security/security.c b/security/security.c
+>> index 188b8f782220..ec9b4696e86c 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -1903,6 +1903,11 @@ void security_task_to_inode(struct task_struct *p, struct inode *inode)
+>>          call_void_hook(task_to_inode, p, inode);
+>>   }
+>>
+>> +int security_create_user_ns(const struct cred *cred)
+>> +{
+>> +       return call_int_hook(userns_create, 0, cred);
+>> +}
+>> +
+>>   int security_ipc_permission(struct kern_ipc_perm *ipcp, short flag)
+>>   {
+>>          return call_int_hook(ipc_permission, 0, ipcp, flag);
+>> --
+>> 2.30.2
+>>
+
