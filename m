@@ -2,131 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC4B58943B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Aug 2022 23:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CC85894A1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Aug 2022 01:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238490AbiHCV7a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Aug 2022 17:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S236749AbiHCXIQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Aug 2022 19:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238501AbiHCV72 (ORCPT
+        with ESMTP id S231713AbiHCXIP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Aug 2022 17:59:28 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513EC5C9D6;
-        Wed,  3 Aug 2022 14:59:27 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Lym3f4tmrz9t4M;
-        Wed,  3 Aug 2022 21:59:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1659563966; bh=46QMNNu+FK8isynfWdGkGqc+HS477sp2/1QXbvEgpxg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lwKy0nEglZFjSrWXbCi+YN3PgxPSU54SKWCfW0GdbtSrKpbGhjKsq34U29UBrAIJ4
-         cJSIzAxnHVl0CimnwMxd5lksKmH/p0BN5TuHnyX7TWEDjlqONoolucf8xBFVHN9/gz
-         kmLdLAfsOamGY0mxo/jP6D6vr/OjdnKeyrlDPIHg=
-X-Riseup-User-ID: 932639AD08357356C2A742C45BE4863C0B8E1F17DB734F891B927579ABF1588D
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4Lym3Z104Sz1ySb;
-        Wed,  3 Aug 2022 21:59:21 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
-        Daniel Latypov <dlatypov@google.com>, airlied@linux.ie,
-        daniel@ffwll.ch, davem@davemloft.net, kuba@kernel.org,
-        jose.exposito89@gmail.com, javierm@redhat.com
-Cc:     andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH v3 3/3] kunit: Use KUNIT_EXPECT_MEMEQ macro
-Date:   Wed,  3 Aug 2022 18:58:55 -0300
-Message-Id: <20220803215855.258704-4-mairacanal@riseup.net>
-In-Reply-To: <20220803215855.258704-1-mairacanal@riseup.net>
-References: <20220803215855.258704-1-mairacanal@riseup.net>
+        Wed, 3 Aug 2022 19:08:15 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66934D833
+        for <linux-kselftest@vger.kernel.org>; Wed,  3 Aug 2022 16:08:14 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso13139477otb.6
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Aug 2022 16:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=zK33He6y28I2A9IcjFpGLeX6JG4yyriF39hUBO95RxU=;
+        b=cNbtWAh9PYV+AhaqpPHWspWjIZUyRV6dWb78y3lddg5jfwOucE3VftBWAmYjru2+Ia
+         i6hTWOVSobiSioHAlIsXVsHMvwTx8Etkv0HfP6yEfZ4cWyshUaYtgH6VNT25v+XddRiA
+         unwClFJy1DZMyAIm6AiZ/vNdEvpuSOSRR6N7A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zK33He6y28I2A9IcjFpGLeX6JG4yyriF39hUBO95RxU=;
+        b=5DbiCflm2KVdAeqE3CWWWg91GpfMGe6pYcpxHICRbRSDz5i1Ioa5E56sK9RpjftZes
+         oCX3qlun7YTwwNfFG0mGBCPzAkZwZomIekonV26D72obciSrqixEsoI72JYj4qhOPZxn
+         tzTClJF1yj0h0pu25CZa1BCYqWeE65cYKY5rj7maGfIjJAeO95vgAlEPGYR3hjAVxhay
+         WSZyEJZE4Ws1eB8S60JqjyV4GgPDGPzF1cfgKoGeqEaVjbOVZPXXAPR48oPw2U2OYEdE
+         K+5Mwy/Sr4OrR3Lg7u2d6j/kLV7/64t1bQm97PM9ACvC37xfI2Z8uHJETIRyVsjPVWdN
+         jRRA==
+X-Gm-Message-State: AJIora8LEkX+SGhxjYftUuJ55IXRPrAb5NRweeTycV70df1VRIrnVENX
+        OAVdroMXsNngFaQhfYEi2I4tuQ==
+X-Google-Smtp-Source: AGRyM1tPuti8ZQ0UO1fbTpjB5tLkNS+5eRQ4uoNezs4/RqKsJQVjN40F0a5Om7/CKEcZSIIF3a9nig==
+X-Received: by 2002:a9d:61d7:0:b0:61c:7bed:ce14 with SMTP id h23-20020a9d61d7000000b0061c7bedce14mr10041161otk.366.1659568093984;
+        Wed, 03 Aug 2022 16:08:13 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id bd37-20020a056870d7a500b000f5e89a9c60sm4714494oab.3.2022.08.03.16.08.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Aug 2022 16:08:13 -0700 (PDT)
+Subject: Re: [PATCH] selftests/landlock: fix broken include of
+ linux/landlock.h
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Guillaume <guillaume.tucker@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <677a5a8f-87df-dde6-0adc-292858e4b5bd@linuxfoundation.org>
+Date:   Wed, 3 Aug 2022 17:08:12 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use KUNIT_EXPECT_MEMEQ to compare memory blocks in replacement of the
-KUNIT_EXPECT_EQ macro. Therefor, the statement
+On 8/3/22 2:13 PM, Guillaume Tucker wrote:
+> Revert part of the earlier changes to fix the kselftest build when
+> using a sub-directory from the top of the tree as this broke the
+> landlock test build as a side-effect when building with "make -C
+> tools/testing/selftests/landlock".
+> 
+> Reported-by: Mickaël Salaün <mic@digikod.net>
+> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
+> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+> ---
+>   tools/testing/selftests/landlock/Makefile | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
 
-    KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+Thank you. Now applied to linux-kselftest next for the next pull request.
 
-is replaced by:
-
-    KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
-
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
-Acked-by: Daniel Latypov <dlatypov@google.com>
----
-v1 -> v2:
-- Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to make
-it easier for users to infer the right size unit (Daniel Latypov).
-
-v2 -> v3: No changes.
----
- drivers/gpu/drm/tests/drm_format_helper_test.c | 6 +++---
- net/core/dev_addr_lists_test.c                 | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-index 26ecf3b4b137..482136282273 100644
---- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-+++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-@@ -217,7 +217,7 @@ static void xrgb8888_to_rgb332_test(struct kunit *test)
-
- 	drm_fb_xrgb8888_to_rgb332(dst, result->dst_pitch, src, &fb,
- 				  &params->clip);
--	KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, dst, result->expected, dst_size);
- }
-
- static void xrgb8888_to_rgb565_test(struct kunit *test)
-@@ -245,11 +245,11 @@ static void xrgb8888_to_rgb565_test(struct kunit *test)
-
- 	drm_fb_xrgb8888_to_rgb565(dst, result->dst_pitch, src, &fb,
- 				  &params->clip, false);
--	KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, dst, result->expected, dst_size);
-
- 	drm_fb_xrgb8888_to_rgb565(dst, result->dst_pitch, src, &fb,
- 				  &params->clip, true);
--	KUNIT_EXPECT_EQ(test, memcmp(dst, result->expected_swab, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, dst, result->expected_swab, dst_size);
- }
-
- static struct kunit_case drm_format_helper_test_cases[] = {
-diff --git a/net/core/dev_addr_lists_test.c b/net/core/dev_addr_lists_test.c
-index 049cfbc58aa9..90e7e3811ae7 100644
---- a/net/core/dev_addr_lists_test.c
-+++ b/net/core/dev_addr_lists_test.c
-@@ -71,11 +71,11 @@ static void dev_addr_test_basic(struct kunit *test)
-
- 	memset(addr, 2, sizeof(addr));
- 	eth_hw_addr_set(netdev, addr);
--	KUNIT_EXPECT_EQ(test, 0, memcmp(netdev->dev_addr, addr, sizeof(addr)));
-+	KUNIT_EXPECT_MEMEQ(test, netdev->dev_addr, addr, sizeof(addr));
-
- 	memset(addr, 3, sizeof(addr));
- 	dev_addr_set(netdev, addr);
--	KUNIT_EXPECT_EQ(test, 0, memcmp(netdev->dev_addr, addr, sizeof(addr)));
-+	KUNIT_EXPECT_MEMEQ(test, netdev->dev_addr, addr, sizeof(addr));
- }
-
- static void dev_addr_test_sync_one(struct kunit *test)
---
-2.37.1
-
+thanks,
+-- Shuah
