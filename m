@@ -2,66 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCAD589EB0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Aug 2022 17:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FB9589F9A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Aug 2022 18:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239846AbiHDPaO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Aug 2022 11:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S230177AbiHDQ6E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Aug 2022 12:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232202AbiHDPaN (ORCPT
+        with ESMTP id S236308AbiHDQ6C (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Aug 2022 11:30:13 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1868A3B7;
-        Thu,  4 Aug 2022 08:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=HWzgi6uBWpB5rhqNaRtoiEzQti+73ocf7Ubun9+AjiQ=; b=pS
-        z7K2lW0Dt1zpz7H6lCRzQQQCOgmmTp1z36PT1CD5wQlc3G56UVXANJO7L48LGWgkzUfBX0kAXlTBM
-        25WrUYC1f1JvnChQf8l4aP8j+hfivOL+6sjsmCgQ4gxJkFJRxTOl5kGtVKqwLgBWDANNUy+rbdNfI
-        J8ILrgdK9QZorBk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oJcnO-00CRC6-Fq; Thu, 04 Aug 2022 17:29:58 +0200
-Date:   Thu, 4 Aug 2022 17:29:58 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Adel Abouchaev <adel.abushaev@gmail.com>
+        Thu, 4 Aug 2022 12:58:02 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7508167CB8;
+        Thu,  4 Aug 2022 09:58:01 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id u133so26065pfc.10;
+        Thu, 04 Aug 2022 09:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=kcSGs+fZuWMXLT8zv9vm9AaTYUZcm+hY8x4vuZxcqO4=;
+        b=KGtRlv4dcnACfh2AWJWv+FJR7v3O72dX7m83WhrgoTl3oSgJBk/pmKKaW3j0dcdfbd
+         f5YMdxxVKOh1Ndf7yjXllO/4i72QPQjiXSxCcOzJTieTj33LipenWCHkX804ZQVeP7oo
+         7uySwlS5+DENHUJ8D7ii+D8tG2h/dW7JIvc9hao4fqPhZPLUmDlk7tpdZe1R88Can+/C
+         IRoqVDCG99gC8yt2pxX9JyENJns/9HcolNbk+5VSh/TUKlgXoo6oLfytCoPQw1+F2hTb
+         y97x/CAmiEK6WZG4b9CMmc1UmmhRCnuD5JGeE6Xdzn7SvcqQHasazmZRQmD26RfhUuZQ
+         vzRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=kcSGs+fZuWMXLT8zv9vm9AaTYUZcm+hY8x4vuZxcqO4=;
+        b=Q+udMhLhjLOalGtUGEosPV6nEIDyeyFAcZ++poR3rX/EDTpOVgfmezbHw0Xo3/SDlI
+         Shg5E31A5zLCTNiaRT7g0bxLJXXAyXgAbql3Fb+kG4cX/n1yssbpm9GPbeapeehdQpXY
+         P20flEcXixw0SmdEAEqrS9n6m1VHuKGf8Jpx7LHQkltoE9Azd0uuJ1D3oYhXD65qrzE5
+         ichdF4WDpxYyGKFDEiML9U7tcfBPx9fGYFNouViSKGRlbr7Z671rUE/1atz3p5jogBGY
+         Sn3zX5qvP6jetrc138AJjsBrIAd/ttqda65uhDR7Q8vXBKtJg+1gDLiH9gk8XDSZaSY8
+         I4Xw==
+X-Gm-Message-State: ACgBeo3nCFoJMxP5L2aeskLWWZfgaHh+zKoi1vxM0mLYzafnRrUYz2rE
+        Ia+eWkTFDPYxRee1CRvQvok=
+X-Google-Smtp-Source: AA6agR4Aogd2F75JVozSzkz3uRZ/PBrMX9MpACR5b1bkQvz18Y8JaiotVwjnYzL+BeNVLlvnlB6Sdw==
+X-Received: by 2002:a63:5f09:0:b0:41c:da4f:e498 with SMTP id t9-20020a635f09000000b0041cda4fe498mr2378174pgb.276.1659632280734;
+        Thu, 04 Aug 2022 09:58:00 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c083:3603:1885:b229:3257:6535? ([2620:10d:c090:500::1:a8ba])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902ecc100b0016cf714d029sm1154466plh.288.2022.08.04.09.57.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Aug 2022 09:58:00 -0700 (PDT)
+Message-ID: <7c42bf11-8a30-3220-9d52-34b46b68888f@gmail.com>
+Date:   Thu, 4 Aug 2022 09:57:58 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [RFC net-next 1/6] net: Documentation on QUIC kernel Tx crypto.
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
 Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
         pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
         shuah@kernel.org, imagedong@tencent.com, netdev@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC net-next 1/6] net: Documentation on QUIC kernel Tx crypto.
-Message-ID: <Yuvl9uKX8z0dh5YY@lunn.ch>
 References: <adel.abushaev@gmail.com>
  <20220803164045.3585187-1-adel.abushaev@gmail.com>
- <20220803164045.3585187-2-adel.abushaev@gmail.com>
- <Yuq9PMIfmX0UsYtL@lunn.ch>
- <4a757ba1-7b8e-6012-458e-217056eaee63@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ <20220803164045.3585187-2-adel.abushaev@gmail.com> <Yuq9PMIfmX0UsYtL@lunn.ch>
+ <4a757ba1-7b8e-6012-458e-217056eaee63@gmail.com> <Yuvl9uKX8z0dh5YY@lunn.ch>
+From:   Adel Abouchaev <adel.abushaev@gmail.com>
+In-Reply-To: <Yuvl9uKX8z0dh5YY@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4a757ba1-7b8e-6012-458e-217056eaee63@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 03, 2022 at 11:51:59AM -0700, Adel Abouchaev wrote:
-> Andrew,
-> 
->    Could you add more to your comment? The /proc was used similarly to kTLS.
-> Netlink is better, though, unsure how ULP stats would fit in it.
+Looking at 
+https://github.com/shemminger/iproute2/blob/main/misc/ss.c#L589 the ss.c 
+still uses proc/.
 
-How do tools like ss(1) retrieve the protocol summary statistics? Do
-they still use /proc, or netlink?
+Adel.
 
-     Andrew
+On 8/4/22 8:29 AM, Andrew Lunn wrote:
+> On Wed, Aug 03, 2022 at 11:51:59AM -0700, Adel Abouchaev wrote:
+>> Andrew,
+>>
+>>  Â Â  Could you add more to your comment? The /proc was used similarly to kTLS.
+>> Netlink is better, though, unsure how ULP stats would fit in it.
+> How do tools like ss(1) retrieve the protocol summary statistics? Do
+> they still use /proc, or netlink?
+>
+>       Andrew
