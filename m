@@ -2,150 +2,195 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D7B58AA55
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 13:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BC958AAA1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 14:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiHELuH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Aug 2022 07:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S240152AbiHEMS0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Aug 2022 08:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237309AbiHELuG (ORCPT
+        with ESMTP id S232176AbiHEMSZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 07:50:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7404076978
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 04:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659700204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VB+wZX4czUIneiXsFWS1r94G+mlqIsZGN1WlJ2Gc89s=;
-        b=eOJc0fsOcONDhTFDWVLrDdUEEgQFPQfoMgnBDfo/r5bUHF8/aDWTGs9N1LN7nKBWH61Xw1
-        SFtnuH9dRKcZLj5Iwe2f/hMorG1s39dHTgOXsp0KB8t/lvs0J6FwFE7G9WJrs+LnSQG+wM
-        9dTDtXqHbjXG0FMHwECH1ITvgEf6lmY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-343-Q2EvlSWlNRStuYfhFhFJ0g-1; Fri, 05 Aug 2022 07:50:03 -0400
-X-MC-Unique: Q2EvlSWlNRStuYfhFhFJ0g-1
-Received: by mail-ed1-f72.google.com with SMTP id y16-20020a056402359000b0043db5186943so1484230edc.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 04:50:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=VB+wZX4czUIneiXsFWS1r94G+mlqIsZGN1WlJ2Gc89s=;
-        b=IeGk78OybzXX4zkvFzdsWrZyBBSrqTo6n9gw9xElR7PSzWF2fTVQnr56NG1NeOiYQJ
-         vLesjZax/DlKgIqHV3JWo50fzMKHfYvMbQJ1A7hI+wErJkBuK15nCHWefqE7nxhDCBZE
-         3/K5sBpljTU2BtNLCuVfzZ8JSN/Vi05mNhXrUCYekfET0kJciMaLr807tcR3MwDHj1TJ
-         6xcaQJ4CyIxb5WcJL0N8M0js3k0QvztLwlTutPe74lGlT42as25xfK4BmaQsyW6KUyTp
-         y5cPNII+OgYLS6hN24CMeTvVzEwT5rtAd6pjJvYc/eBlmqMiUyOeuF9JiWNULSHj4ZVP
-         3XfQ==
-X-Gm-Message-State: ACgBeo0Fv3o1PQEULNvRgLX1m/xtU6mDsrat1WKYKZdhaBauB3o5/iYw
-        dzH0MADaOtItHsCCPcc/xTtXa8DR6dsytCeIb7hGc0cOcbEcuOegmnUWYgLGEqKQwymONFhcdA2
-        PnIKDVZVPRrg8W+aU02LUl6YRD1Ks
-X-Received: by 2002:a17:906:dc90:b0:72f:c504:45c with SMTP id cs16-20020a170906dc9000b0072fc504045cmr5033085ejc.386.1659700202153;
-        Fri, 05 Aug 2022 04:50:02 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR49r0X1ME51F4w0wTcquJPOGKMjaedea4wgdCSxYdo15mZ+VIVx6YgNv8K2DBKlB6MTnm03Ow==
-X-Received: by 2002:a17:906:dc90:b0:72f:c504:45c with SMTP id cs16-20020a170906dc9000b0072fc504045cmr5033077ejc.386.1659700201921;
-        Fri, 05 Aug 2022 04:50:01 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id l18-20020a1709063d3200b006fee98045cdsm1536734ejf.10.2022.08.05.04.50.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 04:50:01 -0700 (PDT)
-Message-ID: <9109bc62-a56d-0c6f-3326-3e43fc9ac6a1@redhat.com>
-Date:   Fri, 5 Aug 2022 13:50:00 +0200
+        Fri, 5 Aug 2022 08:18:25 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8059928709;
+        Fri,  5 Aug 2022 05:18:24 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4Lzl4D619vz9rwt;
+        Fri,  5 Aug 2022 12:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1659701903; bh=x4KMxTVE17HVu5TEjEC0MsTy0o85wBRihPIa06Wqnpk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=diQYDxzk0nNAXQ207Ib5FkeMqAOz/YYT2h3pv6GQrDZU0bgwcDDodCQANfqIjGPta
+         hcvSY7nBo5fZK3gqlip4XMqw6KFDXYojUoDZpnSE7meWScnUBW4eeY60h4lPay0rDB
+         GmgZFJIZ6JsPgTOZPkXOLJXr+zi9qnlZug6vAdKk=
+X-Riseup-User-ID: 8F1703E09777E2DBB8AB9A0A3D112253BDA56237E670C033CB6579E5EBADACAE
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4Lzl474xqXz1yWd;
+        Fri,  5 Aug 2022 12:18:15 +0000 (UTC)
+Message-ID: <ad483719-24b2-3207-cdcc-f5055d7a8895@riseup.net>
+Date:   Fri, 5 Aug 2022 09:18:12 -0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [kvm-unit-tests PATCH 4/4] x86: Extend ASM_TRY to handle #UD
- thrown by FEP-triggered emulator
+Subject: Re: [PATCH v3 0/3] Introduce KUNIT_EXPECT_MEMEQ and
+ KUNIT_EXPECT_MEMNEQ macros
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Michal Luczaj <mhal@rbox.co>
-Cc:     kvm@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <Yum2LpZS9vtCaCBm@google.com> <20220803172508.1215-1-mhal@rbox.co>
- <20220803172508.1215-4-mhal@rbox.co> <Yuq7gMTpRqGlVdcW@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yuq7gMTpRqGlVdcW@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220803215855.258704-1-mairacanal@riseup.net>
+ <CABVgOS=Yq2+uDw_iVK11eqBjEB-BErEr6naYpTswtTvyehAzYw@mail.gmail.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <CABVgOS=Yq2+uDw_iVK11eqBjEB-BErEr6naYpTswtTvyehAzYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/3/22 20:16, Sean Christopherson wrote:
->> While here, I've also took the opportunity to merge both 32 and 64-bit
->> versions of ASM_TRY() (.dc.a for .long and .quad), but perhaps there
->> were some reasons for not using .dc.a?
-> This should be a separate patch, and probably as the very last patch in case dc.a
-> isn't viable for whatever reason.  I've never seen/used dc.a so I really have no
-> idea whether or not it's ok to use.
+On 8/5/22 01:44, David Gow wrote:
+> On Thu, Aug 4, 2022 at 5:59 AM Maíra Canal <mairacanal@riseup.net> wrote:
+>>
+>> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_EQ or
+>> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp function,
+>> such as:
+>>   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+>>
+>> Although this usage produces correct results for the test cases, if the
+>> expectation fails the error message is not very helpful, indicating only the
+>> return of the memcmp function.
+>>
+>> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
+>> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size. In
+>> case of expectation failure, those macros print the hex dump of the memory
+>> blocks, making it easier to debug test failures for memory blocks.
+>>
+>> Other than the style changes, this v3 brings alignment to the bytes, making
+>> it easier to identify the faulty bytes. So, on the previous version, the
+>> output from a failure would be:
+>> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gpu/drm/tests/drm_format_helper_test.c:248
+>> [14:27:42] Expected dst == result->expected, but
+>> [14:27:42] dst ==
+>> [14:27:42] 33 0a <60> 12 00 a8 00 00 <00> 00 8e 6b <33> 0a 60 12
+>> [14:27:42] 00 00 <00> 00 00 a8 <8e> 6b 33 0a 00 00 <00> 00
+>> [14:27:42] result->expected ==
+>> [14:27:42] 33 0a <61> 12 00 a8 00 00 <01> 00 8e 6b <31> 0a 60 12
+>> [14:27:42] 00 00 <01> 00 00 a8 <81> 6b 33 0a 00 00 <01> 00
+>>
+>> Now, with the alignment, the output is:
+>> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gpu/drm/tests/drm_format_helper_test.c:248
+>> [14:27:42] Expected dst == result->expected, but
+>> [14:27:42] dst ==
+>> [14:27:42] 33  0a <60> 12  00  a8  00  00 <00> 00  8e  6b <33> 0a  60  12
+>> [14:27:42] 00  00 <00> 00  00  a8 <8e> 6b  33  0a  00  00 <00> 00
+>> [14:27:42] result->expected ==
+>> [14:27:42] 33  0a <61> 12  00  a8  00  00 <01> 00  8e  6b <31> 0a  60  12
+>> [14:27:42] 00  00 <01> 00  00  a8 <81> 6b  33  0a  00  00 <01> 00
+>>
+>> Moreover, on the raw output, there were some indentation problems. Those
+>> problems were solved with the use of KUNIT_SUBSUBTEST_INDENT.
+>>
+>> The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
+>> KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
+>> expectations on the kunit-example-test.c. And the last patch replaces the
+>> KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
+>>
+>> Best Regards,
+>> - Maíra Canal
+>>
+>> v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2749-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
+>>
+>> - Change "determinated" to "specified" (Daniel Latypov).
+>> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to make
+>> it easier for users to infer the right size unit (Daniel Latypov).
+>> - Mark the different bytes on the failure message with a <> (Daniel Latypov).
+>> - Replace a constant number of array elements for ARRAY_SIZE() (André Almeida).
+>> - Rename "array" and "expected" variables to "array1" and "array2" (Daniel Latypov).
+>>
+>> v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.420840-1-mairacanal@riseup.net/T/#t
+>>
+>> - Make the bytes aligned at output.
+>> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel Latypov).
+>> - Line up the trailing \ at macros using tabs (Daniel Latypov).
+>> - Line up the params to the functions (Daniel Latypov).
+>> - Change "Increament" to "Augment" (Daniel Latypov).
+>> - Use sizeof() for array sizes (Daniel Latypov).
+>>
+>> Maíra Canal (3):
+>>   kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
+>>   kunit: Add KUnit memory block assertions to the example_all_expect_macros_test
+>>   kunit: Use KUNIT_EXPECT_MEMEQ macro
+>>
+>>  .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
+>>  include/kunit/assert.h                        | 34 +++++++++
+>>  include/kunit/test.h                          | 76 +++++++++++++++++++
+>>  lib/kunit/assert.c                            | 56 ++++++++++++++
+>>  lib/kunit/kunit-example-test.c                |  7 ++
+>>  net/core/dev_addr_lists_test.c                |  4 +-
+>>  6 files changed, 178 insertions(+), 5 deletions(-)
+>>
+>> --
+>> 2.37.1
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220803215855.258704-1-mairacanal%40riseup.net.
+> 
+> These patches look pretty good to me overall, but I was unable to
+> apply v3 to test -- it looks like the mail client has wrapped some
+> lines or something...
+> 
+> davidgow@slicestar:~/linux-kselftest$ git am
+> ./v3_20220803_mairacanal_introduce_kunit_expect_memeq_and_kunit_expect_memneq_macros.mbx
+> Applying: kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
+> error: corrupt patch at line 24
+> Patch failed at 0001 kunit: Introduce KUNIT_EXPECT_MEMEQ and
+> KUNIT_EXPECT_MEMNEQ macros
+> 
+> Checkpatch also picks up an issue:
+> ERROR: patch seems to be corrupt (line wrapped?)
+> #62: FILE: include/kunit/assert.h:255:
+>                                    const struct va_format *message,
+> 
+> v2 applied clearnly, so it seems to be specific to v3.
 
-Yes, for now I'll squash this, which is similar to Michal's idea but 
-using the trusty double underscore prefix:
+I'll check this issue and submit a v4. Thank you!
 
-diff --git a/lib/x86/desc.h b/lib/x86/desc.h
-index 2a285eb..5b21820 100644
---- a/lib/x86/desc.h
-+++ b/lib/x86/desc.h
-@@ -81,11 +81,12 @@ typedef struct  __attribute__((packed)) {
-  } tss64_t;
+> 
+> In general, I like the patches, though. While I think there are a few
+> places it'd be slightly suboptimale if it's being used to compare more
+> structured data, such as the prospect of comparing padding between
+> elements, as well as the output formatting not being ideal. It's
+> perfect for the cases where memcmp() otherwise would be used, though.
 
-  #ifdef __x86_64
--#define ASM_TRY(catch)			\
-+#define __ASM_TRY(prefix, catch)	\
-  	"movl $0, %%gs:4 \n\t"		\
-  	".pushsection .data.ex \n\t"	\
-  	".quad 1111f, " catch "\n\t"	\
-  	".popsection \n\t"		\
-+	prefix "\n\t"			\
-  	"1111:"
-  #else
-  #define ASM_TRY(catch)			\
-@@ -96,6 +97,8 @@ typedef struct  __attribute__((packed)) {
-  	"1111:"
-  #endif
+Do you any take on how to make the output formatting more ideal?
 
-+#define ASM_TRY(catch) __ASM_TRY("", catch)
-+
-  /*
-   * selector     32-bit                        64-bit
-   * 0x00         NULL descriptor               NULL descriptor
-diff --git a/x86/emulator.c b/x86/emulator.c
-index df0bc49..6d2f166 100644
---- a/x86/emulator.c
-+++ b/x86/emulator.c
-@@ -19,6 +19,7 @@ static int exceptions;
+Best Regards,
+- Maíra Canal
 
-  /* Forced emulation prefix, used to invoke the emulator 
-unconditionally. */
-  #define KVM_FEP "ud2; .byte 'k', 'v', 'm';"
-+#define ASM_TRY_FEP(catch) __ASM_TRY(KVM_FEP, catch)
-
-  struct regs {
-  	u64 rax, rbx, rcx, rdx;
-@@ -900,8 +901,8 @@ static void test_illegal_lea(void)
-  {
-  	unsigned int vector;
-
--	asm volatile (ASM_TRY("1f")
--		      KVM_FEP ".byte 0x8d; .byte 0xc0\n\t"
-+	asm volatile (ASM_TRY_FEP("1f")
-+		      ".byte 0x8d; .byte 0xc0\n\t"
-  		      "1:"
-  		      : : : "memory", "eax");
-
-
-and the __ASM_SEL() idea can be sent as a separate patch.
-
+> 
+> Cheers,
+> -- David
