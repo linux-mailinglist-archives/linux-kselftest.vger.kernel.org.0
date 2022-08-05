@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AFC58B290
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Aug 2022 01:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5922E58B293
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Aug 2022 01:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238710AbiHEXCF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Aug 2022 19:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S238581AbiHEXCG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Aug 2022 19:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238483AbiHEXCD (ORCPT
+        with ESMTP id S238634AbiHEXCF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 19:02:03 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91785C9D6
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 16:02:01 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id c139so3447725pfc.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 16:02:01 -0700 (PDT)
+        Fri, 5 Aug 2022 19:02:05 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490C95FAD1
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 16:02:03 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y141so3422395pfb.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 16:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kylehuey.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=0IQUf1XbUyKScDj19IIOVRrRzAluObv3VpeYozO/xMU=;
-        b=EJZAxUC98UB2M+84zuoAM0XjqIyYi2AQeV1Fd5+0Vvw6uoCjCWVHeKuPonMk0YY+ku
-         BKhK3+Tx5i44lWmmDoV0CkPv4ya2uS53DuUmf2IqSUtIbI4FEwAiR4+jT15nZnL6ADKB
-         bT1IBFEczYLCyJ7vzN9kaJkLQXRAab3X0FxAIPW0kjo40/I3wkVDmZCyQqIND2A0fa6g
-         LHwjYH+HZnbwIHLUVc6VEG2SDp5DIfuSYzsXAw9HyBxF76n/G3XWqeC2s5MUhoULWvu5
-         KPlSDFGTOlslLON3ZbZwgNYLyrPyMnitShLtmdhpUC057WYEIpOwajxSlGgRe4bDj/On
-         Pbmw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=nFYDqdYlKjDN/X9hygUy8BrADildhN55ltpacqhkjvk=;
+        b=Ub3SJjm4lKtLgOBKlk6F0NN6b1z1p0/7UOM205dCDKd00WpkwlCyMquyC48vh26HIN
+         AVj+rJuIZ/MSzJYPOHfeasr/8Ptjd9hcbaG7mCh4CcKVIV6KGlLp4LMDfRQLpK0V2uFI
+         sa6gu0npzlMwUn4NaoewDvikeJhWC4WItKEoeY1ka87GBAp0Pggs5I83tZDz3A183AP0
+         bry8r1oFq0y9dkh7Fnnv9EjGJyJUw8dBejX7HxmYZFF7oFUqAk68mv8/sjxcCYCkeucJ
+         6KImTMRFEdsmYxb1zT2bEAwb4/oO3nsdvGQYoLB3JZ5jI2Pnz6Zf+4/wNEfb3aGzP6pY
+         1QaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=0IQUf1XbUyKScDj19IIOVRrRzAluObv3VpeYozO/xMU=;
-        b=wj1VKYYFz6gcto9o+AT/9wetVWYnXQ6W8/YmuSPJ+feYOf5c2H0tQsNbJEp+/wdeEn
-         RjWfUQm0WQS+4zyCiAllyTnacUKRP1+8406gMstG8+RhnR1rRzKesZW3ulGR/IoRepEg
-         VAkBqM8wu+uCFJOXEYmmejor5krm9wJKMeqZKMg1yeGAbIzwS0wsVPRI+D13ajzX6W5v
-         2sngoykW3R8GXPwAl/hme+O5CK+J8shQPUpj8rxS2H9SN7iwLWq2k2Cb0wI1fdEArc1z
-         3PJkQP+ee+s/q+vzqIUp7mppc09AuuTna9InIXL46ZUlW25V7ey7EWrzSsFZcUezFAnD
-         bGcA==
-X-Gm-Message-State: ACgBeo2hj8tbv9p48FN1ZOl2T/H49czpsFE7ixg1lFkLvZDpZgKKLMBK
-        zr6RnBJtIAkTHki22EybjQTguQ==
-X-Google-Smtp-Source: AA6agR5eSrbNndEhmiX61O4JBJpwyAE+Y8vYnb1AdQLWqRg9V496J01SOhjaem2A0ePwXcb+2e88Ng==
-X-Received: by 2002:a05:6a00:8cb:b0:52c:6962:2782 with SMTP id s11-20020a056a0008cb00b0052c69622782mr8944542pfu.81.1659740521052;
-        Fri, 05 Aug 2022 16:02:01 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=nFYDqdYlKjDN/X9hygUy8BrADildhN55ltpacqhkjvk=;
+        b=C8jJY1jZJjxRSjnxaOk3Kw/THqUSFbHNeqj/0O2DFBrfMouQDirlqTUCwEo1zvszkI
+         ZE22x8FgCYws8hLcKMaYX0tyj22VT/QoeqzKQ7uzmEvjU13ekdXMwfbLAyRKeSQMvMPN
+         DTp48wv3US7+DWqgsBAeZ1lFfUq9Ut7KXTAOwOdISmHWuG2VRmWAo5LMD3sD1CZDg7Pi
+         bSFgNfZL4BJ0ijrO6XL0NC/8dcfzpGFBpWYq/uozJvnsUb3qTB3gEd7JZkULc3YlCkas
+         OSmPfbRseDHoApAEta0Wtu0V6AZv3fsh0rLV6pNK/sZ/1DedRd6kKOERUBYG6/3xCqn1
+         YibQ==
+X-Gm-Message-State: ACgBeo0XVqz/gf5roBDCSxpJ42q2nBEw/BArkrhPVL8O5sOTKhkuZQ4S
+        0d+UvFEQ54TIwKx0zO0KDoYgOg==
+X-Google-Smtp-Source: AA6agR4bTfP1/w3A+DEkFJCGOJfEqaQeFteArUJJ+Jh14QBa7OAVShI1FIYTgY0tQSaGOH4Gxk7IoQ==
+X-Received: by 2002:a05:6a00:1248:b0:52b:ca7:f2b6 with SMTP id u8-20020a056a00124800b0052b0ca7f2b6mr8878508pfi.82.1659740522715;
+        Fri, 05 Aug 2022 16:02:02 -0700 (PDT)
 Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
-        by smtp.gmail.com with ESMTPSA id g18-20020a635652000000b0041af82dacf7sm1958702pgm.73.2022.08.05.16.01.59
+        by smtp.gmail.com with ESMTPSA id g18-20020a635652000000b0041af82dacf7sm1958702pgm.73.2022.08.05.16.02.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 16:02:00 -0700 (PDT)
+        Fri, 05 Aug 2022 16:02:02 -0700 (PDT)
 From:   Kyle Huey <me@kylehuey.com>
 X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
@@ -61,17 +61,18 @@ Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Robert O'Callahan <robert@ocallahan.org>,
         David Manouchehri <david.manouchehri@riseup.net>,
-        Kyle Huey <me@kylehuey.com>, Borislav Petkov <bp@suse.de>,
-        kvm@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v4 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
-Date:   Fri,  5 Aug 2022 16:01:57 -0700
-Message-Id: <20220805230158.39378-1-khuey@kylehuey.com>
+        Kyle Huey <me@kylehuey.com>
+Subject: [PATCH v4 2/2] selftests/vm/pkeys: Add a regression test for setting PKRU through ptrace
+Date:   Fri,  5 Aug 2022 16:01:58 -0700
+Message-Id: <20220805230158.39378-2-khuey@kylehuey.com>
 X-Mailer: git-send-email 2.37.0
+In-Reply-To: <20220805230158.39378-1-khuey@kylehuey.com>
+References: <20220805230158.39378-1-khuey@kylehuey.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,182 +82,155 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Kyle Huey <me@kylehuey.com>
 
-When management of the PKRU register was moved away from XSTATE, emulation
-of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
-for APIs that write XSTATE. This can be seen by running gdb and executing
-`p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
-write to the PKRU register (which gdb performs through ptrace) is ignored.
-
-There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
-sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
-make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
-down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
-and sigreturn pass in pointers to the appropriate PKRU value.
-
-This also adds code to initialize the PKRU value to the hardware init value
-(namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
-This is a change to the current KVM_SET_XSAVE behavior.
-
-Changelog since v3:
-- The v3 patch is now part 1 of 2.
-- Adds a selftest in part 2 of 2.
-
-Changelog since v2:
-- Removed now unused variables in fpu_copy_uabi_to_guest_fpstate
-
-Changelog since v1:
-- Handles the error case of copy_to_buffer().
+This tests PTRACE_SETREGSET with NT_X86_XSTATE modifying PKRU directly and
+removing the PKRU bit from XSTATE_BV.
 
 Signed-off-by: Kyle Huey <me@kylehuey.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
-Cc: stable@vger.kernel.org # 5.14+
-Fixes: e84ba47e313d ("x86/fpu: Hook up PKRU into ptrace()")
 ---
- arch/x86/kernel/fpu/core.c   | 13 +------------
- arch/x86/kernel/fpu/regset.c |  2 +-
- arch/x86/kernel/fpu/signal.c |  2 +-
- arch/x86/kernel/fpu/xstate.c | 28 +++++++++++++++++++++++-----
- arch/x86/kernel/fpu/xstate.h |  4 ++--
- 5 files changed, 28 insertions(+), 21 deletions(-)
+ tools/testing/selftests/vm/pkey-x86.h        | 12 +++
+ tools/testing/selftests/vm/protection_keys.c | 88 +++++++++++++++++++-
+ 2 files changed, 98 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 3b28c5b25e12..46b935bc87c8 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
- {
- 	struct fpstate *kstate = gfpu->fpstate;
- 	const union fpregs_state *ustate = buf;
--	struct pkru_state *xpkru;
--	int ret;
- 
- 	if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
- 		if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
-@@ -406,16 +404,7 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
- 	if (ustate->xsave.header.xfeatures & ~xcr0)
- 		return -EINVAL;
- 
--	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
--	if (ret)
--		return ret;
--
--	/* Retrieve PKRU if not in init state */
--	if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
--		xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
--		*vpkru = xpkru->pkru;
--	}
--	return 0;
-+	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
+index b078ce9c6d2a..72c14cd3ddc7 100644
+--- a/tools/testing/selftests/vm/pkey-x86.h
++++ b/tools/testing/selftests/vm/pkey-x86.h
+@@ -104,6 +104,18 @@ static inline int cpu_has_pkeys(void)
+ 	return 1;
  }
- EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
- #endif /* CONFIG_KVM */
-diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-index 75ffaef8c299..6d056b68f4ed 100644
---- a/arch/x86/kernel/fpu/regset.c
-+++ b/arch/x86/kernel/fpu/regset.c
-@@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
- 	}
  
- 	fpu_force_restore(fpu);
--	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
-+	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
- 
- out:
- 	vfree(tmpbuf);
-diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
-index 91d4b6de58ab..558076dbde5b 100644
---- a/arch/x86/kernel/fpu/signal.c
-+++ b/arch/x86/kernel/fpu/signal.c
-@@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
- 
- 	fpregs = &fpu->fpstate->regs;
- 	if (use_xsave() && !fx_only) {
--		if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
-+		if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
- 			return false;
- 	} else {
- 		if (__copy_from_user(&fpregs->fxsave, buf_fx,
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index c8340156bfd2..e01d3514ae68 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
- 
- 
- static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
--			       const void __user *ubuf)
-+			       const void __user *ubuf, u32 *pkru)
++static inline int cpu_max_xsave_size(void)
++{
++	unsigned long XSTATE_CPUID = 0xd;
++	unsigned int eax;
++	unsigned int ebx;
++	unsigned int ecx;
++	unsigned int edx;
++
++	__cpuid_count(XSTATE_CPUID, 0, eax, ebx, ecx, edx);
++	return ecx;
++}
++
+ static inline u32 pkey_bit_position(int pkey)
  {
- 	struct xregs_state *xsave = &fpstate->regs.xsave;
- 	unsigned int offset, size;
-@@ -1235,6 +1235,24 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
- 	for (i = 0; i < XFEATURE_MAX; i++) {
- 		mask = BIT_ULL(i);
- 
-+		if (i == XFEATURE_PKRU) {
-+			/*
-+			 * Retrieve PKRU if not in init state, otherwise
-+			 * initialize it.
-+			 */
-+			if (hdr.xfeatures & mask) {
-+				struct pkru_state xpkru = {0};
-+
-+				if (copy_from_buffer(&xpkru, xstate_offsets[i],
-+						     sizeof(xpkru), kbuf, ubuf))
-+					return -EFAULT;
-+
-+				*pkru = xpkru.pkru;
-+			} else {
-+				*pkru = 0;
-+			}
-+		}
-+
- 		if (hdr.xfeatures & mask) {
- 			void *dst = __raw_xsave_addr(xsave, i);
- 
-@@ -1264,9 +1282,9 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
-  * Convert from a ptrace standard-format kernel buffer to kernel XSAVE[S]
-  * format and copy to the target thread. Used by ptrace and KVM.
+ 	return pkey * PKEY_BITS_PER_PKEY;
+diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+index 291bc1e07842..27759d3ed9cd 100644
+--- a/tools/testing/selftests/vm/protection_keys.c
++++ b/tools/testing/selftests/vm/protection_keys.c
+@@ -18,12 +18,13 @@
+  *	do a plain mprotect() to a mprotect_pkey() area and make sure the pkey sticks
+  *
+  * Compile like this:
+- *	gcc      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+- *	gcc -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
++ *	gcc -mxsave      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
++ *	gcc -mxsave -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
   */
--int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
-+int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru)
- {
--	return copy_uabi_to_xstate(fpstate, kbuf, NULL);
-+	return copy_uabi_to_xstate(fpstate, kbuf, NULL, pkru);
+ #define _GNU_SOURCE
+ #define __SANE_USERSPACE_TYPES__
+ #include <errno.h>
++#include <linux/elf.h>
+ #include <linux/futex.h>
+ #include <time.h>
+ #include <sys/time.h>
+@@ -1550,6 +1551,86 @@ void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
+ 	do_not_expect_pkey_fault("plain read on recently PROT_EXEC area");
  }
  
- /*
-@@ -1274,10 +1292,10 @@ int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
-  * XSAVE[S] format and copy to the target thread. This is called from the
-  * sigreturn() and rt_sigreturn() system calls.
-  */
--int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate,
-+int copy_sigframe_from_user_to_xstate(struct task_struct *tsk,
- 				      const void __user *ubuf)
++#if defined(__i386__) || defined(__x86_64__)
++void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
++{
++	pid_t child;
++	int status, ret;
++	int pkey_offset = pkey_reg_xstate_offset();
++	size_t xsave_size = cpu_max_xsave_size();
++	void *xsave;
++	u32 *pkey_register;
++	u64 *xstate_bv;
++	struct iovec iov;
++
++	child = fork();
++	pkey_assert(child >= 0);
++	dprintf3("[%d] fork() ret: %d\n", getpid(), child);
++	if (!child) {
++		u32 pkey_register = read_pkey_reg();
++
++		ptrace(PTRACE_TRACEME, 0, 0, 0);
++		raise(SIGSTOP);
++
++		/*
++		 * need __read_pkey_reg() version so we do not do shadow_pkey_reg
++		 * checking
++		 */
++		if (pkey_register == __read_pkey_reg())
++			exit(1);
++
++		raise(SIGSTOP);
++
++		exit(__read_pkey_reg());
++	}
++
++	pkey_assert(child == waitpid(child, &status, 0));
++	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
++	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
++
++	xsave = (void *)malloc(xsave_size);
++	pkey_assert(xsave > 0);
++
++	iov.iov_base = xsave;
++	iov.iov_len = xsave_size;
++	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
++	pkey_assert(ret == 0);
++
++	pkey_register = (u32 *)(xsave + pkey_offset);
++	pkey_assert(*pkey_register == read_pkey_reg());
++
++	*pkey_register = !read_pkey_reg();
++
++	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
++	pkey_assert(ret == 0);
++
++	ret = ptrace(PTRACE_CONT, child, 0, 0);
++	pkey_assert(ret == 0);
++
++	pkey_assert(child == waitpid(child, &status, 0));
++	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
++	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
++
++	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
++	pkey_assert(ret == 0);
++
++	xstate_bv = (u64 *)(xsave + 512);
++	*xstate_bv &= ~(1 << 9);
++
++	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
++	pkey_assert(ret == 0);
++
++	ret = ptrace(PTRACE_CONT, child, 0, 0);
++	pkey_assert(ret == 0);
++
++	pkey_assert(child == waitpid(child, &status, 0));
++	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
++	pkey_assert(WIFEXITED(status));
++	pkey_assert(WEXITSTATUS(status) == 0);
++	free(xsave);
++}
++#endif
++
+ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
  {
--	return copy_uabi_to_xstate(fpstate, NULL, ubuf);
-+	return copy_uabi_to_xstate(tsk->thread.fpu.fpstate, NULL, ubuf, &tsk->thread.pkru);
- }
+ 	int size = PAGE_SIZE;
+@@ -1585,6 +1666,9 @@ void (*pkey_tests[])(int *ptr, u16 pkey) = {
+ 	test_pkey_syscalls_bad_args,
+ 	test_pkey_alloc_exhaust,
+ 	test_pkey_alloc_free_attach_pkey0,
++#if defined(__i386__) || defined(__x86_64__)
++	test_ptrace_modifies_pkru,
++#endif
+ };
  
- static bool validate_independent_components(u64 mask)
-diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
-index 5ad47031383b..a4ecb04d8d64 100644
---- a/arch/x86/kernel/fpu/xstate.h
-+++ b/arch/x86/kernel/fpu/xstate.h
-@@ -46,8 +46,8 @@ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
- 				      u32 pkru_val, enum xstate_copy_mode copy_mode);
- extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
- 				    enum xstate_copy_mode mode);
--extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf);
--extern int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate, const void __user *ubuf);
-+extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
-+extern int copy_sigframe_from_user_to_xstate(struct task_struct *tsk, const void __user *ubuf);
- 
- 
- extern void fpu__init_cpu_xstate(void);
+ void run_tests_once(void)
 -- 
 2.37.0
 
