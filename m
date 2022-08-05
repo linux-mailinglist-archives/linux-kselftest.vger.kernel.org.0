@@ -2,71 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1E458B09D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 21:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD7458B264
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Aug 2022 00:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241364AbiHET7h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Aug 2022 15:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
+        id S241549AbiHEWVd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Aug 2022 18:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240859AbiHET7g (ORCPT
+        with ESMTP id S240503AbiHEWVb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 15:59:36 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD661E3C6
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 12:59:35 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso9193563pjq.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 12:59:35 -0700 (PDT)
+        Fri, 5 Aug 2022 18:21:31 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D5E1AD90
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 15:21:30 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f3959ba41so31859387b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 15:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=QWBm7lqUfCm1gEiD6q+yqH0sezQKK+ZMj4BJuVRBJdk=;
-        b=qEpk93t1+HB2zZDgqU94m7lSWi878nc3XrE45Y2MX6mcUpmfVDhwFRuFILBIUKh5s2
-         dX3sXkw++IGfGudzBxIcvBuJI0DPBYyquChZ4VF5IAPPYbBuxxU5roFf/GAoHojQSjzT
-         oWZJh240TBtujRK0DNWC4bPtTXjI5sfR1H/kJDf2tas+Y3rr/9r54yuOBTeuYk4Gk0te
-         evcVLDQTwDSYcg7w9dTPeBrl24LDh+/I1l2NLkeeemwBJNdMhy8XgcS6cfrfIeqSYtUt
-         RD4R60OSGQ73+hWCw9Nl1B2km6C+3GjYvNJEk3YuZ7AscGFoyjzjzPhVPrtV6djgw9lI
-         l8rQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=vA6JwiPIQ35idH1LwuHfAoXwWih02NenmEQERtaUlQk=;
+        b=jhXFbm4GcOo7tzG+m2t/JAjwLoRiHbKfayX9CRJ+Z1nBjUfj/kt8Ulq1F0LhapnHWU
+         vQlRbYT/RRAr/19sZxiy7+Gw5YKLAuSi4obedsMyt5ePFm2VbgAXa76LqWzI0gy3+k7G
+         auoB2i1RLoWlA1oVdLXZeqvneSg9IDJwiQbvRGCr9hOj2w857WdGRB+BjlL6R4waJY4P
+         UezKtbOhs+xqa+UUczDURSiB9HsJ+jdEiKKrN79HQVMKHizSOYPwBCpveob6fId8+EHN
+         bXZmZjRBWoxEGFljMetZFd/jY81w8X/1pO15hW5wCu1fcpJu1QQ4WMOAumNIK4XDuGno
+         KpcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=QWBm7lqUfCm1gEiD6q+yqH0sezQKK+ZMj4BJuVRBJdk=;
-        b=BfUtLT+e+pSwBQa066/ux/TnMYpQHv9AhviAZ2JLpMWp6ZiFP7k3PE83W0LnrRnfR5
-         cKaLanLAMHHYXIxh3KCbRlNJapgoOr0Ff1NDZHflvEjkH/qLkADww7PoDs9k6aqy3nMq
-         bFH5FKPWIP52dOH+u1KNYbrdX5/iLQBgFYyqenpOossAeLCMfaNGthypsXV5HoPEPnhL
-         nIJSLtN8RPHGRBusPROjI9hQLcynQk9RrRk37UjfKEsyX6FKQt2Jw4BXu4C4+BBQJYV3
-         pUR0QQ2kj6Szc53YLE/gHUAHe2OXOpMwKXinjJXCjW45zpN4J/P92lVskTbXMMUZmLCx
-         Pk8Q==
-X-Gm-Message-State: ACgBeo3Y4WxQlJwtFD3JM+5USe5Y3qNgbvZlIhW/CSTh7c9uuvD6i6DT
-        vNVqWBl8M4IbUiHJpPTjiFX2jA==
-X-Google-Smtp-Source: AA6agR6hPDsYpzfLfbDVz6nqPYj5F+irxuz9Zv5G2qnYofzc5OQEFOB2B/m/fQm3dWRDga+ztSAonw==
-X-Received: by 2002:a17:902:aa48:b0:16f:1364:788b with SMTP id c8-20020a170902aa4800b0016f1364788bmr8387357plr.109.1659729574798;
-        Fri, 05 Aug 2022 12:59:34 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x134-20020a62868c000000b0052e67e9402dsm3436825pfd.106.2022.08.05.12.59.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 12:59:34 -0700 (PDT)
-Date:   Fri, 5 Aug 2022 19:59:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michal Luczaj <mhal@rbox.co>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
-        shuah <shuah@kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>
-Subject: Re: [kvm-unit-tests PATCH 2/4] x86: emulator.c cleanup: Use ASM_TRY
- for the UD_VECTOR cases
-Message-ID: <Yu12o0mKMUdnQ8Ol@google.com>
-References: <ae0a0049-8db0-501b-79e4-cd32758156fb@redhat.com>
- <E1oK2U0-0000qn-CI@rmmprod05.runbox>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1oK2U0-0000qn-CI@rmmprod05.runbox>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=vA6JwiPIQ35idH1LwuHfAoXwWih02NenmEQERtaUlQk=;
+        b=onjbzw9Yw/WLUzJznIGZPL8CMedMOhe37XWelTkIzoB8PaykxbNgHjb2c+BLij9Jvx
+         aa9T4SJbWRWwPDmRs8c2CahtYZNNW5hJYog+Iy+YKAsIepWytX19+FMRVbU4nqsQ4GE3
+         zXXjwt2JAsbtcq2XoWLwAnHiewdOnU7mCnHP4ARpt6xFuHPx4UTe2/f3KnO9jpABXw9u
+         x4upHDTDmfP90vpAvAn8mh00TPM/sgIlcT1tvFPAVtBv0aCVpmK1gec8/GFe2UpNuUXF
+         o6b31AB1dthWaBOx878Tfhuui2UmmU3HpeOzhYAQkemylQklaJwoSQLJW+5KCtUed6w5
+         G4Ng==
+X-Gm-Message-State: ACgBeo3ii9ccydARLZxiuVhPNjPziFRjDca8cJXBEzkqXw64eFQFatEg
+        UpWRKd4IxxYuT3kVTsNgbuLU76hseAc=
+X-Google-Smtp-Source: AA6agR5/FcLDV3dK7SdDaErdRpC2Y/obPbr0lLOpjjFPaMlZeqQoYgCKLv8ONTsUzWRhe9Uj92AsbR6yrYs=
+X-Received: from jeffxud.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:e37])
+ (user=jeffxu job=sendgmr) by 2002:a05:6902:13c7:b0:671:7cb2:9a82 with SMTP id
+ y7-20020a05690213c700b006717cb29a82mr7285411ybu.334.1659738090124; Fri, 05
+ Aug 2022 15:21:30 -0700 (PDT)
+Date:   Fri,  5 Aug 2022 22:21:21 +0000
+Message-Id: <20220805222126.142525-1-jeffxu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v2 0/5] mm/memfd: MFD_NOEXEC for memfd_create
+From:   <jeffxu@google.com>
+To:     skhan@linuxfoundation.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
+        Jeff Xu <jeffxu@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +68,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 05, 2022, Michal Luczaj wrote:
-> On Fri, 5 Aug 2022 13:42:40 +0200, Paolo Bonzini <pbonzini@redhat.com> wrote:
-> > On 8/3/22 20:21, Sean Christopherson wrote:
-> > >> I've noticed test_illegal_movbe() does not execute with KVM_FEP.
-> > >> Just making sure: is it intentional?
-> > > It's intentional.  FEP isn't needed because KVM emulates MOVBE on #UD when it's
-> > > not supported by the host, e.g. to allow migrating to an older host.
-> > > 
-> > > 	GP(EmulateOnUD | ModRM, &three_byte_0f_38_f0),
-> > > 	GP(EmulateOnUD | ModRM, &three_byte_0f_38_f1),
-> > > 
-> > 
-> > *puts historian hat on*
-> > 
-> > The original reason was to test Linux using MOVBE even on non-Atom 
-> > machines, when MOVBE was only on Atoms. :)
-> 
-> So the emulator's logic for MOVBE is meant to be tested only when the
-> guest supports MOVBE while the host does not?
+From: Jeff Xu <jeffxu@chromium.org>
 
-Ah, I see what you're asking.  No, it's perfectly legal to test MOVBE emulation
-on hosts that support MOVBE, i.e. using FEP is allowed.  But because KVM emulates
-MOVBE on #UD and the KUT testcase is guaranteed to generate a #UD (barring a
-hardware bug), there's no need to use FEP.  And not using FEP is advantageous
-because it avoids depending on an opt-in non-production module param.
+Hi,
+
+This v2 series MFD_NOEXEC, this series includes:
+1> address comments in V1
+2> add sysctl (vm.mfd_noexec) to change the default file permissions
+    of memfd_create to be non-executable.
+
+Below are cover-level for v1:
+
+The default file permissions on a memfd include execute bits, which
+means that such a memfd can be filled with a executable and passed to
+the exec() family of functions. This is undesirable on systems where all
+code is verified and all filesystems are intended to be mounted noexec,
+since an attacker may be able to use a memfd to load unverified code and
+execute it.
+
+Additionally, execution via memfd is a common way to avoid scrutiny for
+malicious code, since it allows execution of a program without a file
+ever appearing on disk. This attack vector is not totally mitigated with
+this new flag, since the default memfd file permissions must remain
+executable to avoid breaking existing legitimate uses, but it should be
+possible to use other security mechanisms to prevent memfd_create calls
+without MFD_NOEXEC on systems where it is known that executable memfds
+are not necessary.
+
+This patch series adds a new MFD_NOEXEC flag for memfd_create(), which
+allows creation of non-executable memfds, and as part of the
+implementation of this new flag, it also adds a new F_SEAL_EXEC seal,
+which will prevent modification of any of the execute bits of a sealed
+memfd.
+
+I am not sure if this is the best way to implement the desired behavior
+(for example, the F_SEAL_EXEC seal is really more of an implementation
+detail and feels a bit clunky to expose), so suggestions are welcome
+for alternate approaches.
+
+v1: https://lwn.net/Articles/890096/
+
+Daniel Verkamp (4):
+  mm/memfd: add F_SEAL_EXEC
+  mm/memfd: add MFD_NOEXEC flag to memfd_create
+  selftests/memfd: add tests for F_SEAL_EXEC
+  selftests/memfd: add tests for MFD_NOEXEC
+
+Jeff Xu (1):
+  sysctl: add support for mfd_noexec
+
+ include/linux/mm.h                         |   4 +
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   1 +
+ kernel/sysctl.c                            |   9 ++
+ mm/memfd.c                                 |  39 ++++-
+ mm/shmem.c                                 |   6 +
+ tools/testing/selftests/memfd/memfd_test.c | 163 ++++++++++++++++++++-
+ 7 files changed, 221 insertions(+), 2 deletions(-)
+
+
+base-commit: 9e2f40233670c70c25e0681cb66d50d1e2742829
+-- 
+2.37.1.559.g78731f0fdb-goog
+
