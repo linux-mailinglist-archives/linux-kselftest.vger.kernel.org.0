@@ -2,63 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0458258AF3F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 19:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228EF58AF85
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 20:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241215AbiHERzu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Aug 2022 13:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S240682AbiHESGL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Aug 2022 14:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241489AbiHERzq (ORCPT
+        with ESMTP id S229697AbiHESGK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 13:55:46 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110CAE0E9;
-        Fri,  5 Aug 2022 10:55:45 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z22so4288157edd.6;
-        Fri, 05 Aug 2022 10:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3pDyPaXmSjg1dfYYTVcD5twgm0VJEcQCaH5PzUebh+o=;
-        b=NasTXfyIKwSXshhH6uRWdhVe4jCKkDoBRipCni1OVWDHHkSZE8iK0Vhw289lgKT2uv
-         qS6eMQm42wwQy1UZM4kkyrdch99ditPm3awIimLr82sU3if3bt8aw/xZpAu/zujUoS54
-         cekJu+G0f5hLStL7JaE8TqYvMOIiGi/Jpq7aUtENnLq1amafw+ZX0Y2XkXTjLvABPgZy
-         B2U3SlVeDIS9e9u0kjZ4XgI66qvYPgtf+Dc14Ob180027TtXQXfKeB9PzzQrAjBFtZj5
-         NCEt46wYh/AQ0HNsMQk9lnmN60NZeyIIR4J9rMfvYs5Q3+KGn6pMjwuXrHIEpd4ll7dC
-         5XQA==
+        Fri, 5 Aug 2022 14:06:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E49FC74E08
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 11:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659722768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gTG5sYKz5wYWpj0OuPtAuT0vzoUTMIRW2UW4E5SQLSQ=;
+        b=EqtatFDulK1RwYEUXVMucgeZtcmVXqtT8a4mf7nysaZnENR/B78tcR/PjnyTpZs7euqc4r
+        /xsrR39d50VVRXAPVuQ+Fry6vuDwWyRKOM9Nc8HfsLjvPZQjxweQffVfEiqPz5dhr2xZqE
+        oFEPcIKVnFDX4tLmD5mv3ASVCl9MFrw=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-Cxoia1AONoW-H59y4o3Y-Q-1; Fri, 05 Aug 2022 14:06:06 -0400
+X-MC-Unique: Cxoia1AONoW-H59y4o3Y-Q-1
+Received: by mail-wm1-f71.google.com with SMTP id n30-20020a05600c501e00b003a3264465ebso3575672wmr.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 11:06:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3pDyPaXmSjg1dfYYTVcD5twgm0VJEcQCaH5PzUebh+o=;
-        b=TVlx1kQ+ha3dWHQG8yoWH5f/MhMl/SOMwkbKc0Qb06cl3SA4nN3h4wptGqxB7i9qUc
-         sJGHAs7gb6itmZxkzn8PZdteNdCtSM0QyeDqXLxB+3NDeGCvirpN5KdRp5ySspcUwfx3
-         gyj1WhNz/xPWvlXw7Z3XeKrSg3/XwxXtaygwD4YvFrXcP1Gb/2Ra2+3e3ZLD2onnXjMz
-         yA8KUwYuvfh4o5kQHUqQjpiKcv6W5yrVP6tXsvR8Y5hqwfFNmtTmj26UiGKBQXVueuk/
-         R0LlCXaAPxffPeCOgrnCagzMjaKxTxnVavBli9qKRDc4+phh5CI7e/1Nz12rsj0wVGQ+
-         zV5g==
-X-Gm-Message-State: ACgBeo2phJFfYh2nwdG4n7DvZeWHLPGjrvxqqA6arqu/6XQckarWDOTj
-        OyYKRgQ//b0uCruObqkQ/lIjOgr2WQxwjA==
-X-Google-Smtp-Source: AA6agR5VWBwmuMByhlGp2jZk5km25TlB77WRs6fSjW6q6o8glqXJyrvjZip6gTq1ZgU4MWVWBbx1Kw==
-X-Received: by 2002:a05:6402:5518:b0:43a:9e32:b6fc with SMTP id fi24-20020a056402551800b0043a9e32b6fcmr8004431edb.252.1659722143505;
-        Fri, 05 Aug 2022 10:55:43 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id b11-20020a17090630cb00b0072b36cbcdaasm1809391ejb.92.2022.08.05.10.55.39
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=gTG5sYKz5wYWpj0OuPtAuT0vzoUTMIRW2UW4E5SQLSQ=;
+        b=wWd50yLgavyIvGK84p8pxGTmFR5d8R1DY8v+f60WHkKzHHoxtzwx5h1lNww1IgAKmT
+         rEDMUJdBIixzC2UV2iqsjIanGrqFPq/+02qLCjYh0xfDOTUYfgktgH5NwiDT9JKHPQo5
+         vX7ShTx8UvhB1IcW1rmORArhT7120rnHsHk09TP33kTMoLE+CWTIAa7+9MOqMnwJiXXn
+         S/N9lm0+a+qZ809d1YLgGl3LP1fGxCEg6kh22mAxJAqwy9ldW+a+v84Ty+HHOlb1g96T
+         08php2kQ3bSIZCR86eamqzi0UuxZ3S/82w3bMKgu9SRr6aRsdIi9W7dQMonHRGUdJePh
+         8mgw==
+X-Gm-Message-State: ACgBeo3FJ8DcxrAgwOryySoOvvdKkcrw6mwfPeRgRFiq0m2K0wLdvieC
+        VZKnIz+AB1+InM9uNM4uol9r5uPM6fEa2430lY+B7mNx8L6kPa8Q/IMEWFE1mbpN6JGx7Zgfvql
+        WY2pEkSxz2RUFpaMce+N5t0nNtfSn
+X-Received: by 2002:a05:6000:811:b0:220:6262:ac66 with SMTP id bt17-20020a056000081100b002206262ac66mr4741197wrb.529.1659722765758;
+        Fri, 05 Aug 2022 11:06:05 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4YiYJd4RGqr8HPcVnnEu37Kzz2xizPBJ/DFAoYEPdnVgyVJMfvEXwBl3Yrl6juKrdXAyBEpQ==
+X-Received: by 2002:a05:6000:811:b0:220:6262:ac66 with SMTP id bt17-20020a056000081100b002206262ac66mr4741186wrb.529.1659722765470;
+        Fri, 05 Aug 2022 11:06:05 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c190600b003a31b79dc0esm26070221wmq.1.2022.08.05.11.06.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 10:55:42 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
-Date:   Fri, 5 Aug 2022 19:55:38 +0200
+        Fri, 05 Aug 2022 11:06:05 -0700 (PDT)
+Message-ID: <a2b8fa73-4efd-426f-abcd-7975ff9a7101@redhat.com>
+Date:   Fri, 5 Aug 2022 20:06:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
+To:     Paolo Bonzini <pbonzini@redhat.com>,
         Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
@@ -92,35 +97,41 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
 References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
  <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
  <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/21/22 11:44, David Hildenbrand wrote:
+On 05.08.22 19:55, Paolo Bonzini wrote:
+> On 7/21/22 11:44, David Hildenbrand wrote:
+>>
+>> Also, I*think*  you can place pages via userfaultfd into shmem. Not
+>> sure if that would count "auto alloc", but it would certainly bypass
+>> fallocate().
 > 
-> Also, I*think*  you can place pages via userfaultfd into shmem. Not
-> sure if that would count "auto alloc", but it would certainly bypass
-> fallocate().
+> Yeah, userfaultfd_register would probably have to forbid this for 
+> F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for 
+> this, adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then 
+> userfault_register would do something like 
+> memfile_node_get_flags(vma->vm_file) and check the result.
 
-Yeah, userfaultfd_register would probably have to forbid this for 
-F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for 
-this, adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then 
-userfault_register would do something like 
-memfile_node_get_flags(vma->vm_file) and check the result.
+An alternative is to simply have the shmem allocation fail in a similar
+way. Maybe it does already, I haven't checked (don't think so).
 
-This means moving this patch later, after "mm: Introduce memfile_notifier".
 
+-- 
 Thanks,
 
-Paolo
+David / dhildenb
+
