@@ -2,195 +2,339 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BC958AAA1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 14:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22DF58AB67
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 15:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240152AbiHEMS0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Aug 2022 08:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S235890AbiHENL5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Aug 2022 09:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbiHEMSZ (ORCPT
+        with ESMTP id S237641AbiHENL4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 08:18:25 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8059928709;
-        Fri,  5 Aug 2022 05:18:24 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Lzl4D619vz9rwt;
-        Fri,  5 Aug 2022 12:18:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1659701903; bh=x4KMxTVE17HVu5TEjEC0MsTy0o85wBRihPIa06Wqnpk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=diQYDxzk0nNAXQ207Ib5FkeMqAOz/YYT2h3pv6GQrDZU0bgwcDDodCQANfqIjGPta
-         hcvSY7nBo5fZK3gqlip4XMqw6KFDXYojUoDZpnSE7meWScnUBW4eeY60h4lPay0rDB
-         GmgZFJIZ6JsPgTOZPkXOLJXr+zi9qnlZug6vAdKk=
-X-Riseup-User-ID: 8F1703E09777E2DBB8AB9A0A3D112253BDA56237E670C033CB6579E5EBADACAE
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4Lzl474xqXz1yWd;
-        Fri,  5 Aug 2022 12:18:15 +0000 (UTC)
-Message-ID: <ad483719-24b2-3207-cdcc-f5055d7a8895@riseup.net>
-Date:   Fri, 5 Aug 2022 09:18:12 -0300
+        Fri, 5 Aug 2022 09:11:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EDA3140E2
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 06:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659705114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AyPKB0mAxCNUUWTYUlhhyb+rMbnmnQZaMJrhaPpuC5o=;
+        b=jLeDzlBvA0O0+t8H3tlOppr0/0yWLvgHZ5tfUaJtif0/W6Bu4y+ykUTWbqptEjCyOpSR37
+        O9F1cfSb0zOxTImWP/gBBlsHgYbGc1yoctI+wKkGl+87iOdDkiAt27e48EtAmva2JmGmlE
+        o/JMBkTgUduhK7EsxWrUNYIRzqZjt9o=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-544-Y0hAZPwTN4yvd95VWrY_qQ-1; Fri, 05 Aug 2022 09:11:51 -0400
+X-MC-Unique: Y0hAZPwTN4yvd95VWrY_qQ-1
+Received: by mail-wr1-f69.google.com with SMTP id c7-20020adfc6c7000000b0021db3d6961bso474911wrh.23
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 06:11:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=AyPKB0mAxCNUUWTYUlhhyb+rMbnmnQZaMJrhaPpuC5o=;
+        b=S4NLJoeIWnXjrCtcFtFZ14AOSJT3eAVbO47ZzxcjtRefuI8akWKzYLNauFpHJMuRsu
+         M/s+dnScdUtimi+q6A2/ihL8xEmIQ93nAEvfhArrh4axPCqGLpekwHi0wvZGc/a4bXe8
+         8S+ZHS1ZPjlAA97U9ebVv618DHcUfUxXJ6zGs6VxelNHq+WfZVGe0lEBNkYl9HxPYH3M
+         pAbCf62Y05qmSzRPaUgjKuFSaHBmmwlbVDx7eHNEu+XS1BZKlEG68RSEpyBhHensnVYS
+         J1v9e4RHImopXckyE9hWIDOvV7NyjBwBG3/BGBlRm4EYYdhHCNxE7vUEQp5/WKlrOTjS
+         gyhQ==
+X-Gm-Message-State: ACgBeo24VN1iRRRAFJTXD7IowrPN2F9vtVCeoekzBuime109tOrWRr1B
+        oagb4DZvL1MI/6BMA6LLKXU7Dz0R3kEZfLKKeUiluh+L0sG65e3jJCfYOPWkiXgH3gV1+X4ap+P
+        XHWFxLXDEog49DunG52Wjmur8SHhw
+X-Received: by 2002:a05:600c:22d8:b0:3a5:1450:669e with SMTP id 24-20020a05600c22d800b003a51450669emr4266322wmg.102.1659705109372;
+        Fri, 05 Aug 2022 06:11:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4maTuPBUIPkvn2YU8/xJs1p/whDw6HWacNW7NECuUlgU3tCxwmiRypaxnYb/j68PL3fr0dTA==
+X-Received: by 2002:a05:600c:22d8:b0:3a5:1450:669e with SMTP id 24-20020a05600c22d800b003a51450669emr4266282wmg.102.1659705109038;
+        Fri, 05 Aug 2022 06:11:49 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
+        by smtp.gmail.com with ESMTPSA id b21-20020a05600c06d500b0039c5ab7167dsm8505998wmn.48.2022.08.05.06.11.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 06:11:48 -0700 (PDT)
+Message-ID: <c0c10ef9-b811-f259-9117-f056612c8bd1@redhat.com>
+Date:   Fri, 5 Aug 2022 15:11:46 +0200
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 0/3] Introduce KUNIT_EXPECT_MEMEQ and
- KUNIT_EXPECT_MEMNEQ macros
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220803215855.258704-1-mairacanal@riseup.net>
- <CABVgOS=Yq2+uDw_iVK11eqBjEB-BErEr6naYpTswtTvyehAzYw@mail.gmail.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <CABVgOS=Yq2+uDw_iVK11eqBjEB-BErEr6naYpTswtTvyehAzYw@mail.gmail.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-3-chao.p.peng@linux.intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v7 02/14] selftests/memfd: Add tests for
+ F_SEAL_AUTO_ALLOCATE
+In-Reply-To: <20220706082016.2603916-3-chao.p.peng@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/5/22 01:44, David Gow wrote:
-> On Thu, Aug 4, 2022 at 5:59 AM Maíra Canal <mairacanal@riseup.net> wrote:
->>
->> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_EQ or
->> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp function,
->> such as:
->>   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
->>
->> Although this usage produces correct results for the test cases, if the
->> expectation fails the error message is not very helpful, indicating only the
->> return of the memcmp function.
->>
->> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
->> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size. In
->> case of expectation failure, those macros print the hex dump of the memory
->> blocks, making it easier to debug test failures for memory blocks.
->>
->> Other than the style changes, this v3 brings alignment to the bytes, making
->> it easier to identify the faulty bytes. So, on the previous version, the
->> output from a failure would be:
->> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gpu/drm/tests/drm_format_helper_test.c:248
->> [14:27:42] Expected dst == result->expected, but
->> [14:27:42] dst ==
->> [14:27:42] 33 0a <60> 12 00 a8 00 00 <00> 00 8e 6b <33> 0a 60 12
->> [14:27:42] 00 00 <00> 00 00 a8 <8e> 6b 33 0a 00 00 <00> 00
->> [14:27:42] result->expected ==
->> [14:27:42] 33 0a <61> 12 00 a8 00 00 <01> 00 8e 6b <31> 0a 60 12
->> [14:27:42] 00 00 <01> 00 00 a8 <81> 6b 33 0a 00 00 <01> 00
->>
->> Now, with the alignment, the output is:
->> [14:27:42] # xrgb8888_to_rgb565_test: EXPECTATION FAILED at drivers/gpu/drm/tests/drm_format_helper_test.c:248
->> [14:27:42] Expected dst == result->expected, but
->> [14:27:42] dst ==
->> [14:27:42] 33  0a <60> 12  00  a8  00  00 <00> 00  8e  6b <33> 0a  60  12
->> [14:27:42] 00  00 <00> 00  00  a8 <8e> 6b  33  0a  00  00 <00> 00
->> [14:27:42] result->expected ==
->> [14:27:42] 33  0a <61> 12  00  a8  00  00 <01> 00  8e  6b <31> 0a  60  12
->> [14:27:42] 00  00 <01> 00  00  a8 <81> 6b  33  0a  00  00 <01> 00
->>
->> Moreover, on the raw output, there were some indentation problems. Those
->> problems were solved with the use of KUNIT_SUBSUBTEST_INDENT.
->>
->> The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
->> KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
->> expectations on the kunit-example-test.c. And the last patch replaces the
->> KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
->>
->> Best Regards,
->> - Maíra Canal
->>
->> v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2749-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
->>
->> - Change "determinated" to "specified" (Daniel Latypov).
->> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to make
->> it easier for users to infer the right size unit (Daniel Latypov).
->> - Mark the different bytes on the failure message with a <> (Daniel Latypov).
->> - Replace a constant number of array elements for ARRAY_SIZE() (André Almeida).
->> - Rename "array" and "expected" variables to "array1" and "array2" (Daniel Latypov).
->>
->> v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.420840-1-mairacanal@riseup.net/T/#t
->>
->> - Make the bytes aligned at output.
->> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel Latypov).
->> - Line up the trailing \ at macros using tabs (Daniel Latypov).
->> - Line up the params to the functions (Daniel Latypov).
->> - Change "Increament" to "Augment" (Daniel Latypov).
->> - Use sizeof() for array sizes (Daniel Latypov).
->>
->> Maíra Canal (3):
->>   kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
->>   kunit: Add KUnit memory block assertions to the example_all_expect_macros_test
->>   kunit: Use KUNIT_EXPECT_MEMEQ macro
->>
->>  .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
->>  include/kunit/assert.h                        | 34 +++++++++
->>  include/kunit/test.h                          | 76 +++++++++++++++++++
->>  lib/kunit/assert.c                            | 56 ++++++++++++++
->>  lib/kunit/kunit-example-test.c                |  7 ++
->>  net/core/dev_addr_lists_test.c                |  4 +-
->>  6 files changed, 178 insertions(+), 5 deletions(-)
->>
->> --
->> 2.37.1
->>
->> --
->> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
->> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
->> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220803215855.258704-1-mairacanal%40riseup.net.
+On 06.07.22 10:20, Chao Peng wrote:
+> Add tests to verify sealing memfds with the F_SEAL_AUTO_ALLOCATE works
+> as expected.
 > 
-> These patches look pretty good to me overall, but I was unable to
-> apply v3 to test -- it looks like the mail client has wrapped some
-> lines or something...
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  tools/testing/selftests/memfd/memfd_test.c | 166 +++++++++++++++++++++
+>  1 file changed, 166 insertions(+)
 > 
-> davidgow@slicestar:~/linux-kselftest$ git am
-> ./v3_20220803_mairacanal_introduce_kunit_expect_memeq_and_kunit_expect_memneq_macros.mbx
-> Applying: kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
-> error: corrupt patch at line 24
-> Patch failed at 0001 kunit: Introduce KUNIT_EXPECT_MEMEQ and
-> KUNIT_EXPECT_MEMNEQ macros
-> 
-> Checkpatch also picks up an issue:
-> ERROR: patch seems to be corrupt (line wrapped?)
-> #62: FILE: include/kunit/assert.h:255:
->                                    const struct va_format *message,
-> 
-> v2 applied clearnly, so it seems to be specific to v3.
+> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+> index 94df2692e6e4..b849ece295fd 100644
+> --- a/tools/testing/selftests/memfd/memfd_test.c
+> +++ b/tools/testing/selftests/memfd/memfd_test.c
+> @@ -9,6 +9,7 @@
+>  #include <fcntl.h>
+>  #include <linux/memfd.h>
+>  #include <sched.h>
+> +#include <setjmp.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <signal.h>
+> @@ -232,6 +233,31 @@ static void mfd_fail_open(int fd, int flags, mode_t mode)
+>  	}
+>  }
+>  
+> +static void mfd_assert_fallocate(int fd)
+> +{
+> +	int r;
+> +
+> +	r = fallocate(fd, 0, 0, mfd_def_size);
+> +	if (r < 0) {
+> +		printf("fallocate(ALLOC) failed: %m\n");
+> +		abort();
+> +	}
+> +}
+> +
+> +static void mfd_assert_punch_hole(int fd)
+> +{
+> +	int r;
+> +
+> +	r = fallocate(fd,
+> +		      FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+> +		      0,
+> +		      mfd_def_size);
+> +	if (r < 0) {
+> +		printf("fallocate(PUNCH_HOLE) failed: %m\n");
+> +		abort();
+> +	}
+> +}
+> +
+>  static void mfd_assert_read(int fd)
+>  {
+>  	char buf[16];
+> @@ -594,6 +620,94 @@ static void mfd_fail_grow_write(int fd)
+>  	}
+>  }
+>  
+> +static void mfd_assert_hole_write(int fd)
+> +{
+> +	ssize_t l;
+> +	void *p;
+> +	char *p1;
+> +
+> +	/*
+> +	 * huegtlbfs does not support write, but we want to
+> +	 * verify everything else here.
+> +	 */
+> +	if (!hugetlbfs_test) {
+> +		/* verify direct write() succeeds */
+> +		l = write(fd, "\0\0\0\0", 4);
+> +		if (l != 4) {
+> +			printf("write() failed: %m\n");
+> +			abort();
+> +		}
+> +	}
+> +
+> +	/* verify mmaped write succeeds */
+> +	p = mmap(NULL,
+> +		 mfd_def_size,
+> +		 PROT_READ | PROT_WRITE,
+> +		 MAP_SHARED,
+> +		 fd,
+> +		 0);
+> +	if (p == MAP_FAILED) {
+> +		printf("mmap() failed: %m\n");
+> +		abort();
+> +	}
+> +	p1 = (char *)p + mfd_def_size - 1;
+> +	*p1 = 'H';
+> +	if (*p1 != 'H') {
+> +		printf("mmaped write failed: %m\n");
+> +		abort();
+> +
+> +	}
+> +	munmap(p, mfd_def_size);
+> +}
+> +
+> +sigjmp_buf jbuf, *sigbuf;
+> +static void sig_handler(int sig, siginfo_t *siginfo, void *ptr)
+> +{
+> +	if (sig == SIGBUS) {
+> +		if (sigbuf)
+> +			siglongjmp(*sigbuf, 1);
+> +		abort();
+> +	}
+> +}
+> +
+> +static void mfd_fail_hole_write(int fd)
+> +{
+> +	ssize_t l;
+> +	void *p;
+> +	char *p1;
+> +
+> +	/* verify direct write() fails */
+> +	l = write(fd, "data", 4);
+> +	if (l > 0) {
+> +		printf("expected failure on write(), but got %d: %m\n", (int)l);
+> +		abort();
+> +	}
+> +
+> +	/* verify mmaped write fails */
+> +	p = mmap(NULL,
+> +		 mfd_def_size,
+> +		 PROT_READ | PROT_WRITE,
+> +		 MAP_SHARED,
+> +		 fd,
+> +		 0);
+> +	if (p == MAP_FAILED) {
+> +		printf("mmap() failed: %m\n");
+> +		abort();
+> +	}
+> +
+> +	sigbuf = &jbuf;
+> +	if (sigsetjmp(*sigbuf, 1))
+> +		goto out;
+> +
+> +	/* Below write should trigger SIGBUS signal */
+> +	p1 = (char *)p + mfd_def_size - 1;
+> +	*p1 = 'H';
 
-I'll check this issue and submit a v4. Thank you!
+Maybe you want to verify separately, that bothj
 
-> 
-> In general, I like the patches, though. While I think there are a few
-> places it'd be slightly suboptimale if it's being used to compare more
-> structured data, such as the prospect of comparing padding between
-> elements, as well as the output formatting not being ideal. It's
-> perfect for the cases where memcmp() otherwise would be used, though.
+> +	printf("failed to receive SIGBUS for mmaped write: %m\n");
+> +	abort();
+> +out:
+> +	munmap(p, mfd_def_size);
+> +}
+> +
+>  static int idle_thread_fn(void *arg)
+>  {
+>  	sigset_t set;
+> @@ -880,6 +994,57 @@ static void test_seal_resize(void)
+>  	close(fd);
+>  }
+>  
+> +/*
+> + * Test F_SEAL_AUTO_ALLOCATE
+> + * Test whether F_SEAL_AUTO_ALLOCATE actually prevents allocation.
+> + */
+> +static void test_seal_auto_allocate(void)
+> +{
+> +	struct sigaction act;
+> +	int fd;
+> +
+> +	printf("%s SEAL-AUTO-ALLOCATE\n", memfd_str);
+> +
+> +	memset(&act, 0, sizeof(act));
+> +	act.sa_sigaction = sig_handler;
+> +	act.sa_flags = SA_SIGINFO;
+> +	if (sigaction(SIGBUS, &act, 0)) {
+> +		printf("sigaction() failed: %m\n");
+> +		abort();
+> +	}
+> +
+> +	fd = mfd_assert_new("kern_memfd_seal_auto_allocate",
+> +			    mfd_def_size,
+> +			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
+> +
+> +	/* read/write should pass if F_SEAL_AUTO_ALLOCATE not set */
+> +	mfd_assert_read(fd);
+> +	mfd_assert_hole_write(fd);
+> +
+> +	mfd_assert_has_seals(fd, 0);
+> +	mfd_assert_add_seals(fd, F_SEAL_AUTO_ALLOCATE);
+> +	mfd_assert_has_seals(fd, F_SEAL_AUTO_ALLOCATE);
+> +
+> +	/* read/write should pass for pre-allocated area */
+> +	mfd_assert_read(fd);
+> +	mfd_assert_hole_write(fd);
+> +
+> +	mfd_assert_punch_hole(fd);
+> +
+> +	/* read should pass, write should fail in hole */
+> +	mfd_assert_read(fd);
+> +	mfd_fail_hole_write(fd);
+> +
+> +	mfd_assert_fallocate(fd);
+> +
+> +	/* read/write should pass after fallocate */
+> +	mfd_assert_read(fd);
+> +	mfd_assert_hole_write(fd);
+> +
+> +	close(fd);
+> +}
 
-Do you any take on how to make the output formatting more ideal?
+What might make sense is to verify for the following operations:
+* read()
+* write()
+* read via mmap
+* write via mmap
 
-Best Regards,
-- Maíra Canal
+After sealing on a hole, that there is *still* a hole and that only the
+read() might succeed, with a comment stating that shmem optimized for
+read on holes by reading from the shared zeropage.
 
-> 
-> Cheers,
-> -- David
+I'd suggest decoupling hole_write from hole_mmap_write and similarly
+have hole_read and hole_mmap_read.
+
+You should be able to use fstat() to obtain the number of allocated
+blocks to check that fairly easily.
+
+-- 
+Thanks,
+
+David / dhildenb
+
