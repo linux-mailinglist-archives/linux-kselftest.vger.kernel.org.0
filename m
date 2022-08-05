@@ -2,122 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D9F58B08C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 21:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1E458B09D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 21:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241229AbiHETyq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Aug 2022 15:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
+        id S241364AbiHET7h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Aug 2022 15:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiHETyp (ORCPT
+        with ESMTP id S240859AbiHET7g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 15:54:45 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D2E10FFB;
-        Fri,  5 Aug 2022 12:54:40 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id tl27so6800338ejc.1;
-        Fri, 05 Aug 2022 12:54:40 -0700 (PDT)
+        Fri, 5 Aug 2022 15:59:36 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD661E3C6
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 12:59:35 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso9193563pjq.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 12:59:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uNNCMzM6wGgvKylIcV8lYZcNxMUBwXushcdpJCRFwXA=;
-        b=e6zKPWvo6IkiM49qZMgVKOQWfbZ4SrSe6FffLSmDWP8fLIdlY1yC8OE/wQSvLo7meO
-         H+G1B1j8KGTDWa3VYpZ9mL+EiFelSvWjLwXE7DG8n8DQ+D5rzmDidw5gGMSxEtzBTYay
-         CLtkEm9skbWSrqajt3PPDuzophplCTD2rEc2ozvNuGxaWnQx2yPBCEFUqeaSi77JFMf/
-         Lw2RNp9XxDE8YMazE5oWBsI9D+FoaBUwg1aWZoHlGg3LGNcIATEAW1twLhw3HNGCMwn7
-         vwJyZXFiNu98nw+DG5ql1wkGSRaTKJ8FnxsEEAQxBwk2IlQrhE2vSCh672yBPBlGzRGv
-         RtWw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=QWBm7lqUfCm1gEiD6q+yqH0sezQKK+ZMj4BJuVRBJdk=;
+        b=qEpk93t1+HB2zZDgqU94m7lSWi878nc3XrE45Y2MX6mcUpmfVDhwFRuFILBIUKh5s2
+         dX3sXkw++IGfGudzBxIcvBuJI0DPBYyquChZ4VF5IAPPYbBuxxU5roFf/GAoHojQSjzT
+         oWZJh240TBtujRK0DNWC4bPtTXjI5sfR1H/kJDf2tas+Y3rr/9r54yuOBTeuYk4Gk0te
+         evcVLDQTwDSYcg7w9dTPeBrl24LDh+/I1l2NLkeeemwBJNdMhy8XgcS6cfrfIeqSYtUt
+         RD4R60OSGQ73+hWCw9Nl1B2km6C+3GjYvNJEk3YuZ7AscGFoyjzjzPhVPrtV6djgw9lI
+         l8rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uNNCMzM6wGgvKylIcV8lYZcNxMUBwXushcdpJCRFwXA=;
-        b=0RjUpMCrVyar1nwWqr9Ws+duYx/0HXjYpl9Gj+cHR8FF0sGcMPNSQojNtf3pK70SFA
-         qUqmfGosMBcTfQX2abSfGkgwx6BfejzYqep4JuGHA2nNREckc5FgtXReQYPvXS0Rprpi
-         hjh5/X1mY2DALri16RMatRMSQqhiM1W1yALcAiSCEfUDgOQmK1oKYS3YuSr0StSA/DzV
-         fzPh7axUsMX/B61swxVJlULayT+NGaVbO2OZFAmkP3cMtEBZSG9rH3WXGbT0T/AEOa/U
-         h4KpqHaH9nDrRB9KyRln2RS0VCX7l3b/8mWRi+rtFnk8qKPv2eOR60BMsOCB2Yj0+Fzh
-         nfkw==
-X-Gm-Message-State: ACgBeo07GdJoqRg7dh+8WskaxfZe6Nj9naSGF454IgCZEgZZ4KTO8heJ
-        7Rb/CIR3ReR+TT2aY3Q++vc=
-X-Google-Smtp-Source: AA6agR69gHdIOk66u3DOAUGxbgd3W9IYbjKGJ4TRriMkRlw9SK3I2HFpGUjJDA71iNteqeGQVxRwjg==
-X-Received: by 2002:a17:907:2719:b0:730:a5e7:9da7 with SMTP id w25-20020a170907271900b00730a5e79da7mr6558802ejk.26.1659729279246;
-        Fri, 05 Aug 2022 12:54:39 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id 2-20020a170906200200b0073100dfa7b0sm947743ejo.8.2022.08.05.12.54.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 12:54:38 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <ec3fe997-37d8-22b5-65f1-72f08a16474f@redhat.com>
-Date:   Fri, 5 Aug 2022 21:54:35 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=QWBm7lqUfCm1gEiD6q+yqH0sezQKK+ZMj4BJuVRBJdk=;
+        b=BfUtLT+e+pSwBQa066/ux/TnMYpQHv9AhviAZ2JLpMWp6ZiFP7k3PE83W0LnrRnfR5
+         cKaLanLAMHHYXIxh3KCbRlNJapgoOr0Ff1NDZHflvEjkH/qLkADww7PoDs9k6aqy3nMq
+         bFH5FKPWIP52dOH+u1KNYbrdX5/iLQBgFYyqenpOossAeLCMfaNGthypsXV5HoPEPnhL
+         nIJSLtN8RPHGRBusPROjI9hQLcynQk9RrRk37UjfKEsyX6FKQt2Jw4BXu4C4+BBQJYV3
+         pUR0QQ2kj6Szc53YLE/gHUAHe2OXOpMwKXinjJXCjW45zpN4J/P92lVskTbXMMUZmLCx
+         Pk8Q==
+X-Gm-Message-State: ACgBeo3Y4WxQlJwtFD3JM+5USe5Y3qNgbvZlIhW/CSTh7c9uuvD6i6DT
+        vNVqWBl8M4IbUiHJpPTjiFX2jA==
+X-Google-Smtp-Source: AA6agR6hPDsYpzfLfbDVz6nqPYj5F+irxuz9Zv5G2qnYofzc5OQEFOB2B/m/fQm3dWRDga+ztSAonw==
+X-Received: by 2002:a17:902:aa48:b0:16f:1364:788b with SMTP id c8-20020a170902aa4800b0016f1364788bmr8387357plr.109.1659729574798;
+        Fri, 05 Aug 2022 12:59:34 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x134-20020a62868c000000b0052e67e9402dsm3436825pfd.106.2022.08.05.12.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Aug 2022 12:59:34 -0700 (PDT)
+Date:   Fri, 5 Aug 2022 19:59:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michal Luczaj <mhal@rbox.co>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
+        shuah <shuah@kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>
+Subject: Re: [kvm-unit-tests PATCH 2/4] x86: emulator.c cleanup: Use ASM_TRY
+ for the UD_VECTOR cases
+Message-ID: <Yu12o0mKMUdnQ8Ol@google.com>
+References: <ae0a0049-8db0-501b-79e4-cd32758156fb@redhat.com>
+ <E1oK2U0-0000qn-CI@rmmprod05.runbox>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
- <YuQutJAhKWcsrrYl@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YuQutJAhKWcsrrYl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1oK2U0-0000qn-CI@rmmprod05.runbox>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/29/22 21:02, Sean Christopherson wrote:
-> If we really want a different name, I'd vote for nomenclature that captures the
-> invalidation aspect, which is really what the variables are all trackng, e.g.
+On Fri, Aug 05, 2022, Michal Luczaj wrote:
+> On Fri, 5 Aug 2022 13:42:40 +0200, Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > On 8/3/22 20:21, Sean Christopherson wrote:
+> > >> I've noticed test_illegal_movbe() does not execute with KVM_FEP.
+> > >> Just making sure: is it intentional?
+> > > It's intentional.  FEP isn't needed because KVM emulates MOVBE on #UD when it's
+> > > not supported by the host, e.g. to allow migrating to an older host.
+> > > 
+> > > 	GP(EmulateOnUD | ModRM, &three_byte_0f_38_f0),
+> > > 	GP(EmulateOnUD | ModRM, &three_byte_0f_38_f1),
+> > > 
+> > 
+> > *puts historian hat on*
+> > 
+> > The original reason was to test Linux using MOVBE even on non-Atom 
+> > machines, when MOVBE was only on Atoms. :)
 > 
->    mmu_invalidate_seq
->    mmu_invalidate_in_progress
->    mmu_invalidate_range_start
->    mmu_invalidate_range_end
-> 
+> So the emulator's logic for MOVBE is meant to be tested only when the
+> guest supports MOVBE while the host does not?
 
-Agreed, and this can of course be committed separately if Chao Peng 
-sends it outside this series.
-
-Paolo
+Ah, I see what you're asking.  No, it's perfectly legal to test MOVBE emulation
+on hosts that support MOVBE, i.e. using FEP is allowed.  But because KVM emulates
+MOVBE on #UD and the KUT testcase is guaranteed to generate a #UD (barring a
+hardware bug), there's no need to use FEP.  And not using FEP is advantageous
+because it avoids depending on an opt-in non-production module param.
