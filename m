@@ -2,110 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228EF58AF85
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 20:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D4D58B017
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 20:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240682AbiHESGL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Aug 2022 14:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
+        id S241020AbiHESzr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Aug 2022 14:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiHESGK (ORCPT
+        with ESMTP id S236448AbiHESzq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 14:06:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E49FC74E08
-        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 11:06:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659722768;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gTG5sYKz5wYWpj0OuPtAuT0vzoUTMIRW2UW4E5SQLSQ=;
-        b=EqtatFDulK1RwYEUXVMucgeZtcmVXqtT8a4mf7nysaZnENR/B78tcR/PjnyTpZs7euqc4r
-        /xsrR39d50VVRXAPVuQ+Fry6vuDwWyRKOM9Nc8HfsLjvPZQjxweQffVfEiqPz5dhr2xZqE
-        oFEPcIKVnFDX4tLmD5mv3ASVCl9MFrw=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-436-Cxoia1AONoW-H59y4o3Y-Q-1; Fri, 05 Aug 2022 14:06:06 -0400
-X-MC-Unique: Cxoia1AONoW-H59y4o3Y-Q-1
-Received: by mail-wm1-f71.google.com with SMTP id n30-20020a05600c501e00b003a3264465ebso3575672wmr.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Aug 2022 11:06:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=gTG5sYKz5wYWpj0OuPtAuT0vzoUTMIRW2UW4E5SQLSQ=;
-        b=wWd50yLgavyIvGK84p8pxGTmFR5d8R1DY8v+f60WHkKzHHoxtzwx5h1lNww1IgAKmT
-         rEDMUJdBIixzC2UV2iqsjIanGrqFPq/+02qLCjYh0xfDOTUYfgktgH5NwiDT9JKHPQo5
-         vX7ShTx8UvhB1IcW1rmORArhT7120rnHsHk09TP33kTMoLE+CWTIAa7+9MOqMnwJiXXn
-         S/N9lm0+a+qZ809d1YLgGl3LP1fGxCEg6kh22mAxJAqwy9ldW+a+v84Ty+HHOlb1g96T
-         08php2kQ3bSIZCR86eamqzi0UuxZ3S/82w3bMKgu9SRr6aRsdIi9W7dQMonHRGUdJePh
-         8mgw==
-X-Gm-Message-State: ACgBeo3FJ8DcxrAgwOryySoOvvdKkcrw6mwfPeRgRFiq0m2K0wLdvieC
-        VZKnIz+AB1+InM9uNM4uol9r5uPM6fEa2430lY+B7mNx8L6kPa8Q/IMEWFE1mbpN6JGx7Zgfvql
-        WY2pEkSxz2RUFpaMce+N5t0nNtfSn
-X-Received: by 2002:a05:6000:811:b0:220:6262:ac66 with SMTP id bt17-20020a056000081100b002206262ac66mr4741197wrb.529.1659722765758;
-        Fri, 05 Aug 2022 11:06:05 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4YiYJd4RGqr8HPcVnnEu37Kzz2xizPBJ/DFAoYEPdnVgyVJMfvEXwBl3Yrl6juKrdXAyBEpQ==
-X-Received: by 2002:a05:6000:811:b0:220:6262:ac66 with SMTP id bt17-20020a056000081100b002206262ac66mr4741186wrb.529.1659722765470;
-        Fri, 05 Aug 2022 11:06:05 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:fb00:f5c3:24b2:3d03:9d52? (p200300cbc706fb00f5c324b23d039d52.dip0.t-ipconnect.de. [2003:cb:c706:fb00:f5c3:24b2:3d03:9d52])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05600c190600b003a31b79dc0esm26070221wmq.1.2022.08.05.11.06.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Aug 2022 11:06:05 -0700 (PDT)
-Message-ID: <a2b8fa73-4efd-426f-abcd-7975ff9a7101@redhat.com>
-Date:   Fri, 5 Aug 2022 20:06:03 +0200
+        Fri, 5 Aug 2022 14:55:46 -0400
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [IPv6:2a0c:5a00:149::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD42DF53
+        for <linux-kselftest@vger.kernel.org>; Fri,  5 Aug 2022 11:55:44 -0700 (PDT)
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+        by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <mhal@rbox.co>)
+        id 1oK2U1-003cGR-5M
+        for linux-kselftest@vger.kernel.org; Fri, 05 Aug 2022 20:55:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+        s=selector1; h=Message-Id:In-Reply-To:Date:Subject:CC:To:From:MIME-Version:
+        Content-Transfer-Encoding:Content-Type;
+        bh=Re2VYOmUvCPJIl2+PrIKUcavLpF01PTLx7a9jzfSfHY=; b=IJ4RSb0ufgyOQ+YFh9ycQX/J4I
+        SfdZMZuhEUaZiVD+oA8GYGkUddYmaXzUoPRyVyrJffSeJIJjWqAFw+sB/DE9MX1r8aGOpR/CFId4I
+        vD7JX1V0C5/nmZJ2vdb2hndQ7+DSml4q0Ep4vBv9B3WjXY/4Hlt6PB5RMwlWutVbwzFjw83xfvKtj
+        CcQ6K9Fwd6raA4RVz4+WezUcVIwJbpw9yRzqVFa/ZqnXqliY/m2fpLX7VsG0l4XierP8rkkSJT8Jv
+        B71w9nrzCvgeXeVVHH/q2YqqzHrXKCUlF7tujbRshzV4VYpR63/7LyTbSVF/i48o8v9JHkl8AhXiE
+        qqBcnf7w==;
+Received: from [10.9.9.127] (helo=rmmprod05.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <mhal@rbox.co>)
+        id 1oK2U0-00041Z-E0; Fri, 05 Aug 2022 20:55:40 +0200
+Received: from mail by rmmprod05.runbox with local (Exim 4.86_2)
+        (envelope-from <mhal@rbox.co>)
+        id 1oK2U0-0000qn-CI; Fri, 05 Aug 2022 20:55:40 +0200
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
- <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
- <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Received: from [Authenticated alias (604044)] by runbox.com with http
+ (RMM6); Fri, 05 Aug 2022 18:55:40 GMT
+From:   "Michal Luczaj" <mhal@rbox.co>
+To:     "Paolo Bonzini" <pbonzini@redhat.com>
+CC:     "Sean Christopherson" <seanjc@google.com>,
+        "kvm" <kvm@vger.kernel.org>, "shuah" <shuah@kernel.org>,
+        "linux-kselftest" <linux-kselftest@vger.kernel.org>
+Subject: Re: [kvm-unit-tests PATCH 2/4] x86: emulator.c cleanup: Use
+ ASM_TRY for the UD_VECTOR cases
+Date:   Fri, 05 Aug 2022 20:55:40 +0200 (CEST)
+X-RMM-Aliasid: 604044
+X-Mailer: RMM6
+In-Reply-To: <ae0a0049-8db0-501b-79e4-cd32758156fb@redhat.com>
+Message-Id: <E1oK2U0-0000qn-CI@rmmprod05.runbox>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,25 +65,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 05.08.22 19:55, Paolo Bonzini wrote:
-> On 7/21/22 11:44, David Hildenbrand wrote:
->>
->> Also, I*think*  you can place pages via userfaultfd into shmem. Not
->> sure if that would count "auto alloc", but it would certainly bypass
->> fallocate().
-> 
-> Yeah, userfaultfd_register would probably have to forbid this for 
-> F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for 
-> this, adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then 
-> userfault_register would do something like 
-> memfile_node_get_flags(vma->vm_file) and check the result.
+On Fri, 5 Aug 2022 13:42:40 +0200, Paolo Bonzini <pbonzini@redhat.com> wrot=
+e:
+> On 8/3/22 20:21, Sean Christopherson wrote:
+> >> I've noticed test_illegal_movbe() does not execute with KVM_FEP.
+> >> Just making sure: is it intentional?
+> > It's intentional.  FEP isn't needed because KVM emulates MOVBE on #UD w=
+hen it's
+> > not supported by the host, e.g. to allow migrating to an older host.
+> >=20
+> > 	GP(EmulateOnUD | ModRM, &three_byte_0f_38_f0),
+> > 	GP(EmulateOnUD | ModRM, &three_byte_0f_38_f1),
+> >=20
+>=20
+> *puts historian hat on*
+>=20
+> The original reason was to test Linux using MOVBE even on non-Atom=20
+> machines, when MOVBE was only on Atoms. :)
 
-An alternative is to simply have the shmem allocation fail in a similar
-way. Maybe it does already, I haven't checked (don't think so).
+So the emulator's logic for MOVBE is meant to be tested only when the
+guest supports MOVBE while the host does not?
 
-
--- 
-Thanks,
-
-David / dhildenb
-
+Michal
