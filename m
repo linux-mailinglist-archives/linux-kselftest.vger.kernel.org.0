@@ -2,118 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E45B58A151
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Aug 2022 21:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8B458A512
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Aug 2022 05:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbiHDTih (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Aug 2022 15:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S232718AbiHEDhd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Aug 2022 23:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbiHDTig (ORCPT
+        with ESMTP id S231169AbiHEDhc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Aug 2022 15:38:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB8E6E2C3;
-        Thu,  4 Aug 2022 12:38:34 -0700 (PDT)
-Received: from [192.168.43.224] (92.40.178.239.threembb.co.uk [92.40.178.239])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BC6A66601BFA;
-        Thu,  4 Aug 2022 20:38:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1659641913;
-        bh=YR06TcNC313+o+tpJhkeCXhA11OnSzpwetPY80MPTq8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eCtIdWnL2e3j3b9gdVcogqaPJdIXpTMgJxLBj4dlqklzGGr+zjNymQNEg7n7pyu4d
-         GHPEo9M+McUemcrv9Otu2/Z3Fn3IP7VHZBgkh8JdXIgkRumV3jUOUH5bWWDLXChCj1
-         3kyMMD36iE+unBbMXx/uLjMr6ij+L+dRnYM/tSRs0lFwcSU2llcza8j3lFy/3rL3QO
-         B0pR71xhOFsP6GtYzQ9WcKE/BEq9TueMWvOGCDNenJsuNwqohBwmv/Qunff/g1u9PP
-         DO2U1/v78mnY1VI+v/I3DZXZ2f0mQesixMRx4sbXDY5m4+YPxTM8M6VhekCvZUBjIl
-         oNSnzdAWn2foQ==
-Message-ID: <76a2ac43-6e3d-0b62-7c8c-eec5f247f8f8@collabora.com>
-Date:   Thu, 4 Aug 2022 21:38:34 +0200
+        Thu, 4 Aug 2022 23:37:32 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276DE402CA;
+        Thu,  4 Aug 2022 20:37:31 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 73so1601398pgb.9;
+        Thu, 04 Aug 2022 20:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=7gYv8IMV91W9y/lcsTiz87dVJJBW1JRelvY6T6GX6L4=;
+        b=hENNQgpKrEI+hW7pjDNc0ybLrgcN8NHOupZ3nHmLpaYslXr8fcCw0XCSTqh+UOFnhy
+         kEePYoiQUvwfECIrstCMZOW8+XdEO1Q31IV2QlbEIBXinOPofYtEMVFBWjG2zAy4szOu
+         ieY7jsue3JUMuJeUMIAc1x6xkBydZKUqQCbZ8OPtZ9o4Dvdq95QOZEjs/LKDb7JTt7+o
+         8pxCxO6hU0e/Sj1B4hwXOSzBFIGlA0SWg66xQ9r3axVeEB3xxPDyvNPbDRxRLVmNf5S1
+         xIfpBWgffeFHgMzUsb15UF7Vy+RbqIzMljY4PaWuj6ndS+ac94r6ZKgtyTxKxu/D67Ng
+         9ZUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=7gYv8IMV91W9y/lcsTiz87dVJJBW1JRelvY6T6GX6L4=;
+        b=Nq+2Aiu2/X1QZrRJBaskrIP+9rGdw+mD7FML+An/YXBULHK3Yu9cQbSsVYLQ48xbfx
+         2mgkSeuct08ja5Pml6HVDq7Av4ewLeSgogIQv8fV8vCcXiRQ1vbtCDw8/7YaRWjLJg+Y
+         yNTLPV6UltSBTtROfCbP0o47sIxkcbdBHVv+z4jLrbOupSVG6W95NpIlzdpD0/wx34Vu
+         hBwN1hMa/CYjPAZ2GdOHDjplPfavW2i0kQq/gg8j2iGTAGD3hucWNOPgEwzlyQyeBmNJ
+         o9hE65C8dG/GQOMA5TuWYxkMOvVKgkvS2pCyB+b6VyHYeC6Bd3wAoWNZxeaQZytC5oOQ
+         lVeQ==
+X-Gm-Message-State: ACgBeo1jNB1N/ypYhpYqbooVT30XOht1nfSEvEFXVPQZdHmQO5Iwiwvk
+        gYfJNkFZeQ3aQCk5heuvzxQ=
+X-Google-Smtp-Source: AA6agR5+I9peXzqIMLZOPVwpQwXGqZExtS4C/K3Vc0d6mhzL5s/asNcYSS4pW+Lwfz7Hm7uCMPctdA==
+X-Received: by 2002:a05:6a00:2195:b0:52e:6157:904d with SMTP id h21-20020a056a00219500b0052e6157904dmr4900948pfi.44.1659670650557;
+        Thu, 04 Aug 2022 20:37:30 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-92.three.co.id. [180.214.233.92])
+        by smtp.gmail.com with ESMTPSA id e15-20020a170902784f00b0016c59b38254sm1753982pln.127.2022.08.04.20.37.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Aug 2022 20:37:30 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id C9CF2103824; Fri,  5 Aug 2022 10:37:26 +0700 (WIB)
+Date:   Fri, 5 Aug 2022 10:37:26 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Adel Abouchaev <adel.abushaev@gmail.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
+        shuah@kernel.org, imagedong@tencent.com, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC net-next 0/6] net: support QUIC crypto
+Message-ID: <YuyQdjEu01sxZA5e@debian.me>
+References: <adel.abushaev@gmail.com>
+ <20220801195228.723273-1-adel.abushaev@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] selftests/landlock: fix broken include of
- linux/landlock.h
-Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
- <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220801195228.723273-1-adel.abushaev@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 04/08/2022 12:36, Mickaël Salaün wrote:
+On Mon, Aug 01, 2022 at 12:52:22PM -0700, Adel Abouchaev wrote:
+> QUIC requires end to end encryption of the data. The application usually
+> prepares the data in clear text, encrypts and calls send() which implies
+> multiple copies of the data before the packets hit the networking stack.
+> Similar to kTLS, QUIC kernel offload of cryptography reduces the memory
+> pressure by reducing the number of copies.
 > 
-> On 03/08/2022 22:13, Guillaume Tucker wrote:
->> Revert part of the earlier changes to fix the kselftest build when
->> using a sub-directory from the top of the tree as this broke the
->> landlock test build as a side-effect when building with "make -C
->> tools/testing/selftests/landlock".
->>
->> Reported-by: Mickaël Salaün <mic@digikod.net>
->> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
->> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->> ---
->>   tools/testing/selftests/landlock/Makefile | 7 +++++--
->>   1 file changed, 5 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
->> index a6959df28eb0..02868ac3bc71 100644
->> --- a/tools/testing/selftests/landlock/Makefile
->> +++ b/tools/testing/selftests/landlock/Makefile
->> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
->>   TEST_GEN_PROGS_EXTENDED := true
->>     OVERRIDE_TARGETS := 1
->> +top_srcdir := ../../../..
+> The scope of kernel support is limited to the symmetric cryptography,
+> leaving the handshake to the user space library. For QUIC in particular,
+> the application packets that require symmetric cryptography are the 1RTT
+> packets with short headers. Kernel will encrypt the application packets
+> on transmission and decrypt on receive. This series implements Tx only,
+> because in QUIC server applications Tx outweighs Rx by orders of
+> magnitude.
 > 
-> Not sure it changes much, but most other selftests Makefiles use "top_srcdir = ../../../.." (without ":="). Why this change?
+> Supporting the combination of QUIC and GSO requires the application to
+> correctly place the data and the kernel to correctly slice it. The
+> encryption process appends an arbitrary number of bytes (tag) to the end
+> of the message to authenticate it. The GSO value should include this
+> overhead, the offload would then subtract the tag size to parse the
+> input on Tx before chunking and encrypting it.
+> 
+> With the kernel cryptography, the buffer copy operation is conjoined
+> with the encryption operation. The memory bandwidth is reduced by 5-8%.
+> When devices supporting QUIC encryption in hardware come to the market,
+> we will be able to free further 7% of CPU utilization which is used
+> today for crypto operations.
+> 
 
-I didn't simply apply your diff but edited the file by hand to
-test various combinations and see what side effects it might
-have.  So when I added top_srcdir I typed it by hand and used :=
-as a reflex since it's the standard way of assigning variables.
-Using = instead only makes a difference when the r-value has
-something dynamic as it will be re-evaluated every time it's
-used.  So for constant values, I guess it's more of a question of
-coding style and conventions.  Maybe all the top_srcdir variables
-should be changed to := but that's unnecessary churn...  Either
-way, it's benign.
+Hi,
 
-Shuah, feel free to change this back to = in this particular case
-if it's more consistent with other Makefiles.  Consistency is
-often better than arbitrary rules.  Or conversely, change to :=
-for the khdr_dir definition...  Entirely up to you I think.
+I can't apply this series on top of current net-next. On what commit on
+net-next this series is based?
 
-Thanks,
-Guillaume
-
->>   include ../lib.mk
->>   +khdr_dir = $(top_srcdir)/usr/include
->> +
->>   $(OUTPUT)/true: true.c
->>       $(LINK.c) $< $(LDLIBS) -o $@ -static
->>   -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
->> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
->> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
->> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
-
+-- 
+An old man doll... just what I always wanted! - Clara
