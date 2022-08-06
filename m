@@ -2,76 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9BB58B37D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Aug 2022 05:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2862258B49C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Aug 2022 10:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238653AbiHFDFa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Aug 2022 23:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S229743AbiHFIwf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 6 Aug 2022 04:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237883AbiHFDF3 (ORCPT
+        with ESMTP id S229609AbiHFIwe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Aug 2022 23:05:29 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4AF64E7;
-        Fri,  5 Aug 2022 20:05:28 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id h28so3703097pfq.11;
-        Fri, 05 Aug 2022 20:05:28 -0700 (PDT)
+        Sat, 6 Aug 2022 04:52:34 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3F411C0F;
+        Sat,  6 Aug 2022 01:52:33 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id x21so5938092edd.3;
+        Sat, 06 Aug 2022 01:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=n8+NipbWf5CWfrx8TWjHTrF2OSwrvOKYX0gdYlyE18s=;
-        b=bwYBu4cJI+oS6w8DfxAZJ+BPnr1rph8YlalgAVpgFmLEEuEjt7QQz+eAuAfslm5d38
-         d8s/L4uufpveOI04Nlqvj/MatovUFco/zMIfvQ64nE8SgUnUWfCePeNpmrHfIvFR7IVa
-         KxM8DLeL5q7QTbEpZi6ZpEHxQ4nuYfu05teDBTHJ6oRCy9AUoUt8ke53G4Wv4o0InnAk
-         fN3ZXDZDXRA39MbOatQ4k/Vzh1mowqpqAAWkIai8CrsSOV+WB6FGlvqUynwuXvGt5O8K
-         rP0KUdSEMF6MnJAF4ERReEuUa12KmDkiM+bVT0aEceQnE1ogoqTuAPdbEncTw5u8J7T/
-         LONg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8fIC7ahPt/yl/Wyy4QWb7dX1zPPvhwOFguvsp8IXkz8=;
+        b=WiebgT5b2J4a0+leH+elpcb5xrOH20I+e99nRYnioqk0cPGLYuSR65D/V5ao0bRQN6
+         lpooaDZR1Gb26N2xT9OQjoK3+ONLmWGohPc3ssSa2n7ltPgoX1Avn2Z6xhvfe+7eCLN9
+         /V+TyRhiIFdTc+ZDrjcxfs0Mq91wD8GYPY2SougDba7OXMhWYIiHqYBYQhE+PPO8QoaF
+         3r9h3RVMvyPHPH+Do2dzzmwqjdsn+gX9FBDIrn1d90/oTwFV8p1TdnnDd1wZ4bOcn36m
+         jXkopJvRk3vyLhTvvGIuM55ghDEZHv0QvX91GJyZ73YDfQ0VMJe+P6P169teRsYlCZ/o
+         Yu2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=n8+NipbWf5CWfrx8TWjHTrF2OSwrvOKYX0gdYlyE18s=;
-        b=LlbI00pB7/Y51lnMXimR3W4heB76MCjImJs1cswl1JzCDLAM1ai22SK5dndWJ6RLeP
-         yaqNeVunGE+RKgxHHhh2qV7BNP0W8aRFgqFz12A50gwuCvAWDMnxDK2UAvSeqvUcNdtx
-         UBJDiGeUPCaRyWyz2AFNu0cmTFRlbJe5+MvmF1Jxs1ogkIpzhzCu59foUIfvyMyaZqx1
-         bTg0BqSgiqhAw6+4fW+mBqqRBHvCNF3VGKOXmv7WMa/HhwcUAv4rKWvNkNIqDdi59nn2
-         G/fvXxvQat+tI4Vxz61dNIOJ042JcFax0Wuz1G2R4oX+HYpWOg5h/3aEa0Wsq4a+O7Sm
-         W6bQ==
-X-Gm-Message-State: ACgBeo28TPPm+Yts5A3RpeniVT55CRqbRVgK0oPVuCXSaEpcKps1l4RI
-        pGca0DtC7stucpCerH9mdHxyZN+q3DWuIA==
-X-Google-Smtp-Source: AA6agR7JM3+A4pqK31PRlWohLglDPElRKVIbnsggDucP6UdSPQVF1qMguMCUZHO5L2rtr0gTi/rcaw==
-X-Received: by 2002:a05:6a00:23d0:b0:52e:74be:d52 with SMTP id g16-20020a056a0023d000b0052e74be0d52mr9508368pfc.62.1659755127673;
-        Fri, 05 Aug 2022 20:05:27 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-80.three.co.id. [180.214.232.80])
-        by smtp.gmail.com with ESMTPSA id o190-20020a6341c7000000b0040c40b022fbsm2102035pga.94.2022.08.05.20.05.26
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=8fIC7ahPt/yl/Wyy4QWb7dX1zPPvhwOFguvsp8IXkz8=;
+        b=JZTP3XuVcd3MrBu6nt8o1y7mM/X1WUaSFBWtfhBaW4CmlLGB11ztjFXpaXnbi5zEiP
+         Avpfo+pmx6dlm3i74ye/Kq8k1NiMXKJMhklFXfXB0C36KnNplJtH7LmcJ4A6ua4Ygyok
+         S5XWrxR/XnVwVV36SvNl90TwFf6jDqlPUuyOKatlBaeGBXNAvPqbiqHdPUejKLthfUIC
+         KYA2Lzf7I1s94xarqJgos7MOyosoz2RqxQeyU1obQjm5efRV2C/XeN9tGMmUek/3NGGr
+         ZKTxulHPHqCzb72tHqEhoQcoScbc+U7RrIj0H/hTWyHrwV2uD8qatTs6ra+Q2Wvkj1V5
+         bA5Q==
+X-Gm-Message-State: ACgBeo1g9YxOYgLyngRL+X0//wcZ9Txp52tJCYw+GSq+Djt07QBn8fY6
+        Lqzgt9LFIO/8UIpuM57+vi0=
+X-Google-Smtp-Source: AA6agR7I3BPzMaJLhn7mIBm8oYPE933dMZssupMAVRo2LmXHgjANUX3pIUiEIg0GbYRxMFeejYFBKQ==
+X-Received: by 2002:a05:6402:2691:b0:43d:ba10:854b with SMTP id w17-20020a056402269100b0043dba10854bmr9583625edd.158.1659775951887;
+        Sat, 06 Aug 2022 01:52:31 -0700 (PDT)
+Received: from gmail.com (195-38-112-141.pool.digikabel.hu. [195.38.112.141])
+        by smtp.gmail.com with ESMTPSA id m17-20020a1709062ad100b0072b7d76211dsm2434804eje.107.2022.08.06.01.52.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Aug 2022 20:05:27 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7FEFC1006CD; Sat,  6 Aug 2022 10:05:21 +0700 (WIB)
-Date:   Sat, 6 Aug 2022 10:05:21 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Adel Abouchaev <adel.abushaev@gmail.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
-        shuah@kernel.org, imagedong@tencent.com, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [RFC net-next v2 1/6] Documentation on QUIC kernel Tx crypto.
-Message-ID: <Yu3acQf/xS6g/bdH@debian.me>
-References: <adel.abushaev@gmail.com>
- <20220806001153.1461577-1-adel.abushaev@gmail.com>
- <20220806001153.1461577-2-adel.abushaev@gmail.com>
+        Sat, 06 Aug 2022 01:52:31 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 6 Aug 2022 10:52:29 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Kyle Huey <me@kylehuey.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>
+Subject: Re: [PATCH v4 2/2] selftests/vm/pkeys: Add a regression test for
+ setting PKRU through ptrace
+Message-ID: <Yu4rzf9XI6NzHwne@gmail.com>
+References: <20220805230158.39378-1-khuey@kylehuey.com>
+ <20220805230158.39378-2-khuey@kylehuey.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-        protocol="application/pgp-signature"; boundary="A3X+hUfrymK5EW66"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220806001153.1461577-2-adel.abushaev@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220805230158.39378-2-khuey@kylehuey.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,271 +83,151 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---A3X+hUfrymK5EW66
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+* Kyle Huey <me@kylehuey.com> wrote:
 
-On Fri, Aug 05, 2022 at 05:11:48PM -0700, Adel Abouchaev wrote:
-> Adding Documentation/networking/quic.rst file to describe kernel QUIC
-> code.
->=20
-
-Better say "Add documentation for kernel QUIC code".
-
-> diff --git a/Documentation/networking/index.rst b/Documentation/networkin=
-g/index.rst
-> index 03b215bddde8..656fa1dac26b 100644
-> --- a/Documentation/networking/index.rst
-> +++ b/Documentation/networking/index.rst
-> @@ -90,6 +90,7 @@ Contents:
->     plip
->     ppp_generic
->     proc_net_tcp
-> +   quic
->     radiotap-headers
->     rds
->     regulatory
-> diff --git a/Documentation/networking/quic.rst b/Documentation/networking=
-/quic.rst
-> new file mode 100644
-> index 000000000000..416099b80e60
-> --- /dev/null
-> +++ b/Documentation/networking/quic.rst
-> @@ -0,0 +1,186 @@
-> +.. _kernel_quic:
+> From: Kyle Huey <me@kylehuey.com>
+> 
+> This tests PTRACE_SETREGSET with NT_X86_XSTATE modifying PKRU directly and
+> removing the PKRU bit from XSTATE_BV.
+> 
+> Signed-off-by: Kyle Huey <me@kylehuey.com>
+> ---
+>  tools/testing/selftests/vm/pkey-x86.h        | 12 +++
+>  tools/testing/selftests/vm/protection_keys.c | 88 +++++++++++++++++++-
+>  2 files changed, 98 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/pkey-x86.h b/tools/testing/selftests/vm/pkey-x86.h
+> index b078ce9c6d2a..72c14cd3ddc7 100644
+> --- a/tools/testing/selftests/vm/pkey-x86.h
+> +++ b/tools/testing/selftests/vm/pkey-x86.h
+> @@ -104,6 +104,18 @@ static inline int cpu_has_pkeys(void)
+>  	return 1;
+>  }
+>  
+> +static inline int cpu_max_xsave_size(void)
+> +{
+> +	unsigned long XSTATE_CPUID = 0xd;
+> +	unsigned int eax;
+> +	unsigned int ebx;
+> +	unsigned int ecx;
+> +	unsigned int edx;
 > +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +KERNEL QUIC
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +	__cpuid_count(XSTATE_CPUID, 0, eax, ebx, ecx, edx);
+> +	return ecx;
+> +}
 > +
-> +Overview
-> +=3D=3D=3D=3D=3D=3D=3D=3D
+>  static inline u32 pkey_bit_position(int pkey)
+>  {
+>  	return pkey * PKEY_BITS_PER_PKEY;
+> diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+> index 291bc1e07842..27759d3ed9cd 100644
+> --- a/tools/testing/selftests/vm/protection_keys.c
+> +++ b/tools/testing/selftests/vm/protection_keys.c
+> @@ -18,12 +18,13 @@
+>   *	do a plain mprotect() to a mprotect_pkey() area and make sure the pkey sticks
+>   *
+>   * Compile like this:
+> - *	gcc      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+> - *	gcc -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+> + *	gcc -mxsave      -o protection_keys    -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+> + *	gcc -mxsave -m32 -o protection_keys_32 -O2 -g -std=gnu99 -pthread -Wall protection_keys.c -lrt -ldl -lm
+>   */
+>  #define _GNU_SOURCE
+>  #define __SANE_USERSPACE_TYPES__
+>  #include <errno.h>
+> +#include <linux/elf.h>
+>  #include <linux/futex.h>
+>  #include <time.h>
+>  #include <sys/time.h>
+> @@ -1550,6 +1551,86 @@ void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
+>  	do_not_expect_pkey_fault("plain read on recently PROT_EXEC area");
+>  }
+>  
+> +#if defined(__i386__) || defined(__x86_64__)
+> +void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
+> +{
+> +	pid_t child;
+> +	int status, ret;
+> +	int pkey_offset = pkey_reg_xstate_offset();
+> +	size_t xsave_size = cpu_max_xsave_size();
+> +	void *xsave;
+> +	u32 *pkey_register;
+> +	u64 *xstate_bv;
+> +	struct iovec iov;
 > +
-> +QUIC is a secure general-purpose transport protocol that creates a state=
-ful
-> +interaction between a client and a server. QUIC provides end-to-end inte=
-grity
-> +and confidentiality. Refer to RFC 9000 for more information on QUIC.
+> +	child = fork();
+> +	pkey_assert(child >= 0);
+> +	dprintf3("[%d] fork() ret: %d\n", getpid(), child);
+> +	if (!child) {
+> +		u32 pkey_register = read_pkey_reg();
 > +
-> +The kernel Tx side offload covers the encryption of the application stre=
-ams
-> +in the kernel rather than in the application. These packets are 1RTT pac=
-kets
-> +in QUIC connection. Encryption of every other packets is still done by t=
-he
-> +QUIC library in user space.
+> +		ptrace(PTRACE_TRACEME, 0, 0, 0);
+> +		raise(SIGSTOP);
 > +
+> +		/*
+> +		 * need __read_pkey_reg() version so we do not do shadow_pkey_reg
+> +		 * checking
+> +		 */
+> +		if (pkey_register == __read_pkey_reg())
+> +			exit(1);
 > +
+> +		raise(SIGSTOP);
 > +
-> +User Interface
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +Creating a QUIC connection
-> +--------------------------
-> +
-> +QUIC connection originates and terminates in the application, using one =
-of many
-> +available QUIC libraries. The code instantiates QUIC client and QUIC ser=
-ver in
-> +some form and configures them to use certain addresses and ports for the
-> +source and destination. The client and server negotiate the set of keys =
-to
-> +protect the communication during different phases of the connection, mai=
-ntain
-> +the connection and perform congestion control.
-> +
-> +Requesting to add QUIC Tx kernel encryption to the connection
-> +-------------------------------------------------------------
-> +
-> +Each flow that should be encrypted by the kernel needs to be registered =
-with
-> +the kernel using socket API. A setsockopt() call on the socket creates an
-> +association between the QUIC connection ID of the flow with the encrypti=
-on
-> +parameters for the crypto operations:
-> +
-> +.. code-block:: c
-> +
-> +	struct quic_connection_info conn_info;
-> +	char conn_id[5] =3D {0x01, 0x02, 0x03, 0x04, 0x05};
-> +	const size_t conn_id_len =3D sizeof(conn_id);
-> +	char conn_key[16] =3D {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-> +			     0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
-> +	char conn_iv[12] =3D {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-> +			    0x08, 0x09, 0x0a, 0x0b};
-> +	char conn_hdr_key[16] =3D {0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x=
-17,
-> +				 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
-> +				};
-> +
-> +	conn_info.cipher_type =3D TLS_CIPHER_AES_GCM_128;
-> +
-> +	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
-> +	conn_info.key.conn_id_length =3D 5;
-> +	memcpy(&conn_info.key.conn_id[QUIC_MAX_CONNECTION_ID_SIZE
-> +				      - conn_id_len],
-> +	       &conn_id, conn_id_len);
-> +
-> +	memcpy(&conn_info.payload_key, conn_key, sizeof(conn_key));
-> +	memcpy(&conn_info.payload_iv, conn_iv, sizeof(conn_iv));
-> +	memcpy(&conn_info.header_key, conn_hdr_key, sizeof(conn_hdr_key));
-> +
-> +	setsockopt(fd, SOL_UDP, UDP_QUIC_ADD_TX_CONNECTION, &conn_info,
-> +		   sizeof(conn_info));
-> +
-> +
-> +Requesting to remove QUIC Tx kernel crypto offload control messages
-> +-------------------------------------------------------------------
-> +
-> +All flows are removed when the socket is closed. To request an explicit =
-remove
-> +of the offload for the connection during the lifetime of the socket the =
-process
-> +is similar to adding the flow. Only the connection ID and its length are
-> +necessary to supply to remove the connection from the offload:
-> +
-> +.. code-block:: c
-> +
-> +	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
-> +	conn_info.key.conn_id_length =3D 5;
-> +	memcpy(&conn_info.key.conn_id[QUIC_MAX_CONNECTION_ID_SIZE
-> +				      - conn_id_len],
-> +	       &conn_id, conn_id_len);
-> +	setsockopt(fd, SOL_UDP, UDP_QUIC_DEL_TX_CONNECTION, &conn_info,
-> +		   sizeof(conn_info));
-> +
-> +Sending QUIC application data
-> +-----------------------------
-> +
-> +For QUIC Tx encryption offload, the application should use sendmsg() soc=
-ket
-> +call and provide ancillary data with information on connection ID length=
- and
-> +offload flags for the kernel to perform the encryption and GSO support if
-> +requested.
-> +
-> +.. code-block:: c
-> +
-> +	size_t cmsg_tx_len =3D sizeof(struct quic_tx_ancillary_data);
-> +	uint8_t cmsg_buf[CMSG_SPACE(cmsg_tx_len)];
-> +	struct quic_tx_ancillary_data * anc_data;
-> +	size_t quic_data_len =3D 4500;
-> +	struct cmsghdr * cmsg_hdr;
-> +	char quic_data[9000];
-> +	struct iovec iov[2];
-> +	int send_len =3D 9000;
-> +	struct msghdr msg;
-> +	int err;
-> +
-> +	iov[0].iov_base =3D quic_data;
-> +	iov[0].iov_len =3D quic_data_len;
-> +	iov[1].iov_base =3D quic_data + 4500;
-> +	iov[1].iov_len =3D quic_data_len;
-> +
-> +	if (client.addr.sin_family =3D=3D AF_INET) {
-> +		msg.msg_name =3D &client.addr;
-> +		msg.msg_namelen =3D sizeof(client.addr);
-> +	} else {
-> +		msg.msg_name =3D &client.addr6;
-> +		msg.msg_namelen =3D sizeof(client.addr6);
+> +		exit(__read_pkey_reg());
 > +	}
 > +
-> +	msg.msg_iov =3D iov;
-> +	msg.msg_iovlen =3D 2;
-> +	msg.msg_control =3D cmsg_buf;
-> +	msg.msg_controllen =3D sizeof(cmsg_buf);
-> +	cmsg_hdr =3D CMSG_FIRSTHDR(&msg);
-> +	cmsg_hdr->cmsg_level =3D IPPROTO_UDP;
-> +	cmsg_hdr->cmsg_type =3D UDP_QUIC_ENCRYPT;
-> +	cmsg_hdr->cmsg_len =3D CMSG_LEN(cmsg_tx_len);
-> +	anc_data =3D CMSG_DATA(cmsg_hdr);
-> +	anc_data->flags =3D 0;
-> +	anc_data->next_pkt_num =3D 0x0d65c9;
-> +	anc_data->conn_id_length =3D conn_id_len;
-> +	err =3D sendmsg(self->sfd, &msg, 0);
+> +	pkey_assert(child == waitpid(child, &status, 0));
+> +	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
+> +	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
 > +
-> +QUIC Tx offload in kernel will read the data from userspace, encrypt and
-> +copy it to the ciphertext within the same operation.
+> +	xsave = (void *)malloc(xsave_size);
+> +	pkey_assert(xsave > 0);
 > +
+> +	iov.iov_base = xsave;
+> +	iov.iov_len = xsave_size;
+> +	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
+> +	pkey_assert(ret == 0);
 > +
-> +Sending QUIC application data with GSO
-> +--------------------------------------
-> +When GSO is in use, the kernel will use the GSO fragment size as the tar=
-get
-> +for ciphertext. The packets from the user space should align on the boun=
-dary
-> +of GSO fragment size minus the size of the tag for the chosen cipher. Fo=
-r the
-> +GSO fragment 1200, the plain packets should follow each other at every 1=
-184
-> +bytes, given the tag size of 16. After the encryption, the rest of the U=
-DP
-> +and IP stacks will follow the defined value of GSO fragment which will i=
-nclude
-> +the trailing tag bytes.
+> +	pkey_register = (u32 *)(xsave + pkey_offset);
+> +	pkey_assert(*pkey_register == read_pkey_reg());
 > +
-> +To set up GSO fragmentation:
+> +	*pkey_register = !read_pkey_reg();
 > +
-> +.. code-block:: c
+> +	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
+> +	pkey_assert(ret == 0);
 > +
-> +	setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
-> +		   sizeof(frag_size));
+> +	ret = ptrace(PTRACE_CONT, child, 0, 0);
+> +	pkey_assert(ret == 0);
 > +
-> +If the GSO fragment size is provided in ancillary data within the sendms=
-g()
-> +call, the value in ancillary data will take precedence over the segment =
-size
-> +provided in setsockopt to split the payload into packets. This is consis=
-tent
-> +with the UDP stack behavior.
+> +	pkey_assert(child == waitpid(child, &status, 0));
+> +	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
+> +	pkey_assert(WIFSTOPPED(status) && WSTOPSIG(status) == SIGSTOP);
 > +
-> +Integrating to userspace QUIC libraries
-> +---------------------------------------
+> +	ret = ptrace(PTRACE_GETREGSET, child, (void *)NT_X86_XSTATE, &iov);
+> +	pkey_assert(ret == 0);
 > +
-> +Userspace QUIC libraries integration would depend on the implementation =
-of the
-> +QUIC protocol. For MVFST library, the control plane is integrated into t=
-he
-> +handshake callbacks to properly configure the flows into the socket; and=
- the
-> +data plane is integrated into the methods that perform encryption and se=
-nd
-> +the packets to the batch scheduler for transmissions to the socket.
+> +	xstate_bv = (u64 *)(xsave + 512);
+> +	*xstate_bv &= ~(1 << 9);
 > +
-> +MVFST library can be found at https://github.com/facebookincubator/mvfst.
+> +	ret = ptrace(PTRACE_SETREGSET, child, (void *)NT_X86_XSTATE, &iov);
+> +	pkey_assert(ret == 0);
 > +
-> +Statistics
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +	ret = ptrace(PTRACE_CONT, child, 0, 0);
+> +	pkey_assert(ret == 0);
 > +
-> +QUIC Tx offload to the kernel has counters
-> +(``/proc/net/quic_stat``):
-> +
-> +- ``QuicCurrTxSw`` -
-> +  number of currently active kernel offloaded QUIC connections
-> +- ``QuicTxSw`` -
-> +  accumulative total number of offloaded QUIC connections
-> +- ``QuicTxSwError`` -
-> +  accumulative total number of errors during QUIC Tx offload to kernel
-> +
+> +	pkey_assert(child == waitpid(child, &status, 0));
+> +	dprintf3("[%d] waitpid(%d) status: %x\n", getpid(), child, status);
+> +	pkey_assert(WIFEXITED(status));
+> +	pkey_assert(WEXITSTATUS(status) == 0);
+> +	free(xsave);
 
-The documentation looks OK (no new warnings).
+LGTM.
 
-Thanks.
+May I ask for a bit more in terms of testing the ABI: writing some 
+non-trivial (not all-zero and not all-ones) value into the PKRU register, 
+forcing the child task to go through a FPU save/restore context switch
+and then reading it back and verifying the value, or something like that?
 
---=20
-An old man doll... just what I always wanted! - Clara
+Thanks,
 
---A3X+hUfrymK5EW66
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTsebsWCPCpxY9T92n/R0PGQ3AzwAUCYu3aZgAKCRD/R0PGQ3Az
-wPHCAXsHJlkoC4SvIiMU7ZdQdMPDxZwiHOCbcuky0UhYBzntVQ1MOsfx1jly/6Fz
-7iAwAJEBgK2BgMFiyRoOhzqY3c3rlMCIejvb2x856Zjrg1aM8FyhR2lSx20HLxXW
-x3ZXNjiIRw==
-=Y0/a
------END PGP SIGNATURE-----
-
---A3X+hUfrymK5EW66--
+	Ingo
