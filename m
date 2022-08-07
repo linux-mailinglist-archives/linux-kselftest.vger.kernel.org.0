@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4679958BB3C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Aug 2022 16:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2E358BB3F
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Aug 2022 16:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbiHGO3C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 7 Aug 2022 10:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S230020AbiHGO3D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 7 Aug 2022 10:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiHGO3B (ORCPT
+        with ESMTP id S231958AbiHGO3B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 7 Aug 2022 10:29:01 -0400
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [IPv6:2a0c:5a00:149::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552DD63CF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5536963E6;
         Sun,  7 Aug 2022 07:28:59 -0700 (PDT)
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
         by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <mhal@rbox.co>)
-        id 1oKhGy-007pnx-Di; Sun, 07 Aug 2022 16:28:56 +0200
+        id 1oKhGy-007po1-Sd; Sun, 07 Aug 2022 16:28:56 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
         s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Subject:Cc:To:From;
-        bh=vW0skxzzr6i2Gd196B0hHDou57V5BdI+dFA4selfauQ=; b=EJTjvkZDsxTlToBRR34s7xt0PB
-        K3lp/sNWUaBN0GZlgWJ6j7I/rwZqT+mOO2LdJScCIt2yKQNR4xEzO8BEr+MQACETh/C8Y9ybKtLr+
-        zUZGTJxsXnRedNAPYMneuL+GncYNyIekEWaXavyyLl51l7JR+gJZytNsW8vsOeResEJFtwxfDGdhM
-        0w122uYNhVQCPwXrOYTD++J8rX02iJxyph/9z1QDXlWQv4lIHjqqEgTN8imSRx49od3+uB9YoUBoT
-        eMGiUtjKT1ZMZXXiNLznbulLZ0c7T4VSvtVo3HWXQj9Z1vmRZSAB/u2Ley9Bqr6uDmSLq9Vtm/OjS
-        cX6Mz51A==;
+        bh=SkDyDNdlUoRerspo76l+6X16aQ22d3uzCxkG0Mkdu60=; b=AlYXYxAl5dI3DkFoJ8tTUwrC9Z
+        /wJ02i4wsGSKCST4LbpK9CL5WwQbUm/abcF8xRMo8O170fofrAUKlfNMYLWR3+NgMmyenrTkuXNhI
+        iQ5HC7FRvC+aSSqJauMAEqd8DHLyXHjbg5c0WB8gVunggNMnDslH3ruNsN98pntpj6JELgj2LzVqa
+        fG+K1LmtEqQ0bXsev+RXzRTV5/xq8zR3D9t4VjM4E+trifSpAcmq/+EGPrJCBFzAhkWDvkbL+AEDt
+        ir8793TcCGgpOn8ybmxq4MGgcAxL9dVQpoRvvX+Tngn0T1vNkWI4GvTgY5qSS3TiGU3cDI5RMGej4
+        r6MUeisQ==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
         (envelope-from <mhal@rbox.co>)
-        id 1oKhGy-0005Np-10; Sun, 07 Aug 2022 16:28:56 +0200
+        id 1oKhGy-0007jG-KC; Sun, 07 Aug 2022 16:28:56 +0200
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.90_1)
-        id 1oKhGu-0002az-2f; Sun, 07 Aug 2022 16:28:52 +0200
+        id 1oKhGw-0002az-6x; Sun, 07 Aug 2022 16:28:54 +0200
 From:   Michal Luczaj <mhal@rbox.co>
 To:     seanjc@google.com
 Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
         linux-kselftest@vger.kernel.org, mhal@rbox.co
-Subject: [kvm-unit-tests PATCH v2 4/5] x86: Dedup 32-bit vs. 64-bit ASM_TRY() by stealing kernel's __ASM_SEL()
-Date:   Sun,  7 Aug 2022 16:28:31 +0200
-Message-Id: <20220807142832.1576-5-mhal@rbox.co>
+Subject: [kvm-unit-tests PATCH v2 5/5] x86: Test emulator's handling of LEA with /reg
+Date:   Sun,  7 Aug 2022 16:28:32 +0200
+Message-Id: <20220807142832.1576-6-mhal@rbox.co>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220807142832.1576-1-mhal@rbox.co>
 References: <20220807142832.1576-1-mhal@rbox.co>
@@ -58,77 +58,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+LEA with a register-direct source operand is illegal. Verify that the
+emulator raises #UD.
 
-Steal the kernel's __ASM_SEL() implementation and use it to consolidate
-ASM_TRY().  The only difference between the 32-bit and 64-bit versions is
-the size of the address stored in the table.
-
-No functional change intended.
-
+Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- lib/x86/desc.h      | 22 ++++++----------------
- lib/x86/processor.h | 12 ++++++++++++
- 2 files changed, 18 insertions(+), 16 deletions(-)
+v1 -> v2: Use ASM_TRY_FEP()
 
-diff --git a/lib/x86/desc.h b/lib/x86/desc.h
-index 8854fcc..5bb6fcb 100644
---- a/lib/x86/desc.h
-+++ b/lib/x86/desc.h
-@@ -80,23 +80,13 @@ typedef struct  __attribute__((packed)) {
- 	u16 iomap_base;
- } tss64_t;
+ x86/emulator.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/x86/emulator.c b/x86/emulator.c
+index 0eb7c1a..dc91ce3 100644
+--- a/x86/emulator.c
++++ b/x86/emulator.c
+@@ -897,6 +897,20 @@ static void test_mov_dr(uint64_t *mem)
+ 		report(rax == DR6_ACTIVE_LOW, "mov_dr6");
+ }
  
--#ifdef __x86_64
--#define __ASM_TRY(prefix, catch)	\
--	"movl $0, %%gs:4 \n\t"		\
--	".pushsection .data.ex \n\t"	\
--	".quad 1111f, " catch "\n\t"	\
--	".popsection \n\t"		\
--	prefix				\
-+#define __ASM_TRY(prefix, catch)				\
-+	"movl $0, %%gs:4 \n\t"					\
-+	".pushsection .data.ex \n\t"				\
-+	__ASM_SEL(.long, .quad) " 1111f,  " catch "\n\t"	\
-+	".popsection \n\t"					\
-+	prefix							\
- 	"1111:"
--#else
--#define __ASM_TRY(prefix, catch)	\
--	"movl $0, %%gs:4 \n\t"		\
--	".pushsection .data.ex \n\t"	\
--	".long 1111f, " catch "\n\t"	\
--	".popsection \n\t"		\
--	prefix				\
--	"1111:"
--#endif
- 
- #define ASM_TRY(catch) __ASM_TRY("", catch)
- 
-diff --git a/lib/x86/processor.h b/lib/x86/processor.h
-index 0324220..30e2de8 100644
---- a/lib/x86/processor.h
-+++ b/lib/x86/processor.h
-@@ -19,6 +19,18 @@
- #  define S "4"
- #endif
- 
-+#ifdef __ASSEMBLY__
-+#define __ASM_FORM(x, ...)	x,## __VA_ARGS__
-+#else
-+#define __ASM_FORM(x, ...)	" " xstr(x,##__VA_ARGS__) " "
-+#endif
++static void test_illegal_lea(void)
++{
++	unsigned int vector;
 +
-+#ifndef __x86_64__
-+#define __ASM_SEL(a,b)		__ASM_FORM(a)
-+#else
-+#define __ASM_SEL(a,b)		__ASM_FORM(b)
-+#endif
++	asm volatile (ASM_TRY_FEP("1f")
++		      ".byte 0x8d; .byte 0xc0\n\t"
++		      "1:"
++		      : : : "memory", "eax");
 +
- #define DB_VECTOR 1
- #define BP_VECTOR 3
- #define UD_VECTOR 6
++	vector = exception_vector();
++	report(vector == UD_VECTOR,
++	       "Wanted #UD on LEA with /reg, got vector = %u", vector);
++}
++
+ static void test_push16(uint64_t *mem)
+ {
+ 	uint64_t rsp1, rsp2;
+@@ -1188,6 +1202,7 @@ int main(void)
+ 		test_smsw_reg(mem);
+ 		test_nop(mem);
+ 		test_mov_dr(mem);
++		test_illegal_lea();
+ 	} else {
+ 		report_skip("skipping register-only tests, "
+ 			    "use kvm.force_emulation_prefix=1 to enable");
 -- 
 2.37.1
 
