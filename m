@@ -2,126 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB35D58CD32
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Aug 2022 19:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EC158CE1A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Aug 2022 20:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244161AbiHHR5e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Aug 2022 13:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
+        id S244000AbiHHS4t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Aug 2022 14:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244164AbiHHR5B (ORCPT
+        with ESMTP id S243680AbiHHS4t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:57:01 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FAF18389
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 Aug 2022 10:56:33 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3231401769dso84291637b3.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Aug 2022 10:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=D9R60mZ4udMapF+NpFfSHyOa59OoX0uMh+RPjpQzj1Q=;
-        b=eNRxM030DKLOhrtL5bqYSMNughx6a2UFrcdYQNOMy2xGwEM8RIYbzDgO0Qr+cRrlG7
-         leQpFy4g/mdb/tV0YTxYoL1QksZqc0IxxJg0F3wxsSX1ccKSaYzblLNYO6keoTM8Req6
-         cajjuxZ1ZB7s1XMrbeIoJVspmPJzRx4I6ee+JExSGu3vzVquaX6zNwS1ls9m58bW6oRu
-         w2kL8A1B7NhrHkoLMksRCh7L7msDEXutktd6wE5DOs2Sfh1C/tAS+/lhZV9YGI6OI1HK
-         ZpwKo2QlPJonELBxUwyauzx1CTN7Nbn2HpJzaUwn7+t1OTlJI0M0LNoOhXINFzQgP+n9
-         Y/Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=D9R60mZ4udMapF+NpFfSHyOa59OoX0uMh+RPjpQzj1Q=;
-        b=YzocddBB+Zy2ZHORnivb/3OUZYhSBd8cXxQvsekBCZM+n2ckrqB8eIiHAbf3JmCUBg
-         2xHH9N0AUBIYjA0XW6Dg+G7bWre5DW41mCI41d33DZYvL2F6IImlEA2stqjz/AP8BR7h
-         ArwUf3vvlkx1ifmkntbU8Afm7s+CaCvYiOqYTLV2ZJZ6tofeWmdkA/aTD1kWYdDOAEXo
-         gDvhhsevC8cnuWJ1cFyE7au9Lt5G+QbHsYDWqTluWUWCdywGuiBnOHef4MqZe6cznS84
-         8KkqR2zBhfTfZPcczMOKyZEThrEkE9ESEl0+1+DgxiGqKhHKV+A6KEtfhEZndsv2pSOZ
-         lJ9w==
-X-Gm-Message-State: ACgBeo1mlYQT5S/58auySjfI4cI/4QQ3oFrPN6XPkhqiEylqfLshqT8/
-        0ZOy9X610x53K526y3ToSausYz2utDMtwfekTtHE
-X-Google-Smtp-Source: AA6agR5KTaywCydCwtykG2+H6b+nQdzztDWi7EZVgv5coCe9zqkxOlqe6qANypuRRJkuoUBTS0lz5yfLxOdFKFcdDmID
-X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:7a2a:3bb5:f3a0:3bbc])
- (user=axelrasmussen job=sendgmr) by 2002:a0d:e881:0:b0:31f:3bff:2224 with
- SMTP id r123-20020a0de881000000b0031f3bff2224mr19837540ywe.302.1659981393328;
- Mon, 08 Aug 2022 10:56:33 -0700 (PDT)
-Date:   Mon,  8 Aug 2022 10:56:14 -0700
-In-Reply-To: <20220808175614.3885028-1-axelrasmussen@google.com>
-Message-Id: <20220808175614.3885028-6-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20220808175614.3885028-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v5 5/5] selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-security-module@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 8 Aug 2022 14:56:49 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6B61834B;
+        Mon,  8 Aug 2022 11:56:48 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:35272)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oL7vh-00BiRy-6H; Mon, 08 Aug 2022 12:56:45 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:45314 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oL7vf-00HUDL-GZ; Mon, 08 Aug 2022 12:56:44 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+        <87les7cq03.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+Date:   Mon, 08 Aug 2022 13:56:18 -0500
+In-Reply-To: <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+        (Paul Moore's message of "Tue, 2 Aug 2022 22:10:07 -0400")
+Message-ID: <87wnbia7jh.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1oL7vf-00HUDL-GZ;;;mid=<87wnbia7jh.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+Nfaifvy48ZLTWFCOzOsrcFXZE8jWgnyo=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Paul Moore <paul@paul-moore.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1107 ms - load_scoreonly_sql: 0.09 (0.0%),
+        signal_user_changed: 12 (1.1%), b_tie_ro: 10 (0.9%), parse: 1.45
+        (0.1%), extract_message_metadata: 23 (2.1%), get_uri_detail_list: 3.2
+        (0.3%), tests_pri_-1000: 59 (5.3%), tests_pri_-950: 1.94 (0.2%),
+        tests_pri_-900: 1.62 (0.1%), tests_pri_-90: 105 (9.5%), check_bayes:
+        102 (9.3%), b_tokenize: 13 (1.2%), b_tok_get_all: 15 (1.3%),
+        b_comp_prob: 8 (0.7%), b_tok_touch_all: 59 (5.3%), b_finish: 1.30
+        (0.1%), tests_pri_0: 881 (79.6%), check_dkim_signature: 1.57 (0.1%),
+        check_dkim_adsp: 12 (1.1%), poll_dns_idle: 0.42 (0.0%), tests_pri_10:
+        2.4 (0.2%), tests_pri_500: 15 (1.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This new mode was recently added to the userfaultfd selftest. We want to
-exercise both userfaultfd(2) as well as /dev/userfaultfd, so add both
-test cases to the script.
+Paul Moore <paul@paul-moore.com> writes:
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Acked-by: Peter Xu <peterx@redhat.com>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/vm/run_vmtests.sh | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+> On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>> Frederick Lawler <fred@cloudflare.com> writes:
+>>
+>> > While creating a LSM BPF MAC policy to block user namespace creation, we
+>> > used the LSM cred_prepare hook because that is the closest hook to prevent
+>> > a call to create_user_ns().
+>>
+>> Re-nack for all of the same reasons.
+>> AKA This can only break the users of the user namespace.
+>>
+>> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>>
+>> You aren't fixing what your problem you are papering over it by denying
+>> access to the user namespace.
+>>
+>> Nack Nack Nack.
+>>
+>> Stop.
+>>
+>> Go back to the drawing board.
+>>
+>> Do not pass go.
+>>
+>> Do not collect $200.
+>
+> If you want us to take your comments seriously Eric, you need to
+> provide the list with some constructive feedback that would allow
+> Frederick to move forward with a solution to the use case that has
+> been proposed.  You response above may be many things, but it is
+> certainly not that.
 
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index b8e7f6f38d64..e780e76c26b8 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -120,13 +120,16 @@ run_test ./gup_test -a
- # Dump pages 0, 19, and 4096, using pin_user_pages:
- run_test ./gup_test -ct -F 0x1 0 19 0x1000
- 
--run_test ./userfaultfd anon 20 16
--# Hugetlb tests require source and destination huge pages. Pass in half the
--# size ($half_ufd_size_MB), which is used for *each*.
--run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
--run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
--rm -f "$mnt"/uffd-test
--run_test ./userfaultfd shmem 20 16
-+uffd_mods=("" ":dev")
-+for mod in "${uffd_mods[@]}"; do
-+	run_test ./userfaultfd anon${mod} 20 16
-+	# Hugetlb tests require source and destination huge pages. Pass in half
-+	# the size ($half_ufd_size_MB), which is used for *each*.
-+	run_test ./userfaultfd hugetlb${mod} "$half_ufd_size_MB" 32
-+	run_test ./userfaultfd hugetlb_shared${mod} "$half_ufd_size_MB" 32 "$mnt"/uffd-test
-+	rm -f "$mnt"/uffd-test
-+	run_test ./userfaultfd shmem${mod} 20 16
-+done
- 
- #cleanup
- umount "$mnt"
--- 
-2.37.1.559.g78731f0fdb-goog
+I did provide constructive feedback.  My feedback to his problem
+was to address the real problem of bugs in the kernel.
+
+It is not a constructive approach to shoot the messenger
+and is not a constructive approach to blow me off every time you
+reply.
+
+I have proposed that is there is a subsystem that is unduly buggy we
+stop it from being enabled with a user-namespaces.
+
+Further this is a hook really should have extra-ordinary requirements,
+as all it can do is add additional failure modes to something that
+does not really fail.  AKA all it can do is break-userspace.
+
+As such I need to see a justification on why it makes sense to
+break-userspace.
+
+> We've heard from different users now that there are very real use
+> cases for this LSM hook.  I understand you are concerned about adding
+ > additional controls to user namespaces, but these are controls
+> requested by real users, and the controls being requested (LSM hooks,
+> with BPF and SELinux implementations) are configurable by the *users*
+> at *runtime*.  This patchset does not force additional restrictions on
+> user namespaces, it provides a mechanism that *users* can leverage to
+> add additional granularity to the access controls surrounding user
+> namespaces.
+
+But that is not the problem that cloudfare encountered and are trying to
+solve.
+
+At least that is not what I was told when I asked early in the review
+cycle.
+
+All saying that is user-configurable does is shift the blame from the
+kernel maintainers to the users.  Shift the responsibility from people
+who should have enough expertise to know what is going on to people
+who are by definition have other concerns, so are less likely to be as
+well informed, and less likely to come up with good solutions.
+
+> Eric, if you have a different approach in mind to adding a LSM hook to
+> user namespace creation I think we would all very much like to hear
+> about it.  However, if you do not have any suggestions along those
+> lines, and simply want to NACK any effort to add a LSM hook to user
+> namespace creation, I think we all understand your point of view and
+> respectfully disagree.  Barring any new approaches or suggestions, I
+> think Frederick's patches look reasonable and I still plan on merging
+> them into the LSM next branch when the merge window closes.
+
+
+But it is my code you are planning to merge this into, and your are
+asking me to support something.
+
+I admit I have not had time to read everything.  I am sick and tired
+and quite frankly very tired that people are busy wanting to shoot
+the messenger to the fact that there are bugs in the kernel.
+
+I am speaking up and engaging as best as I can with objections that
+are not hot-air.
+
+You are very much proposing to merge code that can only cause
+regressions and cause me grief.  At least that is all I see.  I don't
+see anything in the change descriptions of the change that refutes that.
+
+I don't see any interaction in fact with my concerns.
+
+In fact your last reply was to completely blow off my request on how to
+address the concerns that inspired this patch and to say other people
+have a use too.
+
+At this point I am happy to turn your request around and ask that you
+address my concerns and not blow them off.  As I have seen no
+constructive engagement with my concerns.   I think that is reasonable
+as by definition I will get the support issues when some LSM has some
+ill-thought out idea of how things should work and I get the bug report.
+
+Eric
+
+
+
+
 
