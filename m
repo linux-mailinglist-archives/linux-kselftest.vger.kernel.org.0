@@ -2,142 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2200D58CCF2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Aug 2022 19:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29AA58CD19
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Aug 2022 19:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244159AbiHHRqh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Aug 2022 13:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S238087AbiHHR4Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Aug 2022 13:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244593AbiHHRqP (ORCPT
+        with ESMTP id S243967AbiHHR4X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Aug 2022 13:46:15 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35DF21C
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 Aug 2022 10:46:10 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id 17so9171523plj.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Aug 2022 10:46:10 -0700 (PDT)
+        Mon, 8 Aug 2022 13:56:23 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883B465D0
+        for <linux-kselftest@vger.kernel.org>; Mon,  8 Aug 2022 10:56:21 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f4b76446aso82732787b3.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Aug 2022 10:56:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WT0gvMZYO/av++KMudc6Dk4HO66L8Urniksc21Z/06c=;
-        b=HqrXaad1rdwTwFVLqtIf2gsOjqqHSCtra1Op2I+Ip1+B6FPHxPEzwTFH7bXQwHcgET
-         670AgcycqxHJDRROfj5zyTe5NwQtZFhFxYR5FYTupki7enfM8YtWwCxJCV7/nQfmy4cJ
-         IxrZhtFvvcJ66LqIrfUAMfkK7CmlRw5Rv0KXw=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=Cc9MnKZgg+ibpM+8ko+H6oPbsb5pSszzVfc8aWAiJho=;
+        b=CuZZbvD5Zahb/IdAJlGMq6TjrBJztj0YEMjFy1GDqtnvIuRgcS3v68E3duGOAKy9ZI
+         G8RZ8aO4qjpoPamGGTX/yXwZtJYZA9tE2+zu1lpZzgJxyGqaROdcTNy6KDYH/gn8GlBl
+         OK9P5YQmRNSF8mnTNiXxrL6tZMZBYYI43OYaNzyUfaJ8SbRAZ1NY5BdMWxwJQ8KOXh7g
+         vLGH9Rt8pKH/LbwuCSLIvldly2jpYP8B1ol4S0ku18YHUYKAvixREO0RHydd6liWSMOF
+         nO8BjEvRkW65PhcVRIInf5oIayFp0HeIrIGy890JIh4JKojBBx6cUnqO6hlVkr6N5mlG
+         +v1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WT0gvMZYO/av++KMudc6Dk4HO66L8Urniksc21Z/06c=;
-        b=1D1/0tpX7YphFMM6yOQmdKNzsDpystvnODFa6zWWYNuUnkyria6whmLIwZaUnTmOSc
-         m/MT40KQkd5MCyURsomniRlMxodkUfxylGzwz8LxXX/MvcrOV4mEOI3h2YMqRB0MNT6Q
-         6kDLs2NDdG/SKtVVub0s/NA52ZnuZjto2SxFZv66AKhrTvsLxhwk91AgmIFMROggZ/BJ
-         fnWNucDpP94aQ5yadaYC2VcYQS074udwzg49uPTtJ4a8slF+toQn+nIfquP6Z+738aIT
-         wu/pygv3v+91ijXiZ3LYOuXllywL7pw696YnN3McHggIQzeu4ieCroBH+Hha7kLR/mk1
-         2QzQ==
-X-Gm-Message-State: ACgBeo0ZBC+/BJdiWYjTdTBHoc1zFGC5GY6Ti2RcLe8MfMe+8zr/+YQp
-        PWh20GG6B6Fkn7k84r5q9aQCfg==
-X-Google-Smtp-Source: AA6agR55vq+x0LDDr8mxEbc8OnrHWhZtkoyD+AcW+LYABM9JFgkRs4j4RTu6F017ikC4JmT33xQogA==
-X-Received: by 2002:a17:90b:3c4c:b0:1f3:3d62:39e2 with SMTP id pm12-20020a17090b3c4c00b001f33d6239e2mr29906557pjb.88.1659980770387;
-        Mon, 08 Aug 2022 10:46:10 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d15-20020a17090ad98f00b001f200eabc65sm8394142pjv.41.2022.08.08.10.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Aug 2022 10:46:09 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 10:46:08 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     jeffxu@google.com
-Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        mnissler@chromium.org, jannh@google.com,
-        Jeff Xu <jeffxu@chromium.org>, linux-hardening@vger.kernel.org,
-        Aleksa Sarai <cyphar@cyphar.com>, dev@opencontainers.org,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v2 0/5] mm/memfd: MFD_NOEXEC for memfd_create
-Message-ID: <202208081018.9C782F184C@keescook>
-References: <20220805222126.142525-1-jeffxu@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805222126.142525-1-jeffxu@google.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=Cc9MnKZgg+ibpM+8ko+H6oPbsb5pSszzVfc8aWAiJho=;
+        b=n7C37cLgbwMy+aIB157+mR9ZpuoLhOIM9VJcol1j96vdXFlEUQoTSeyiLVwAhH003b
+         KBd9pmdFyCeLkkM5pfgaL+Kf3JhNUg1s0qT0rardpwfZfG8FRSIT1beN8QYKkUgzjhxy
+         CK+YC453Y1fhLjRimq0CJvLl6TarZQ7KaXEuGc6BTfpxniNi7KU8kJp1EA5695GVwM1P
+         xeI5GJ+TSelp+JVDwpIYoc8ksSbfBDeawtMq9HidKk3sV5Wy+fuhmGvEUwld8PMiqhsp
+         mNulgcN80du41qOr1Ai0tBLfpub+JL341lmGhi8K7U5I4EVSwDL118NMkObqH3TfKgUr
+         XQ/g==
+X-Gm-Message-State: ACgBeo2/wcrex9B4TBTnAzMzuw74EPk0kz8obdbcIbRHjHMPRochdlxD
+        cY4P2F423qNfDzvJlBTfJexLZz4SmmebG+YWJAW/
+X-Google-Smtp-Source: AA6agR5ZeAOTjT1MgizrsRrqipaGPwGw1lTbPlW+A4euRXqJ+TiAsxPXTDq8OQCto6H+3SZ+teGzadIyEt2uvg0SCG6F
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:7a2a:3bb5:f3a0:3bbc])
+ (user=axelrasmussen job=sendgmr) by 2002:a81:5946:0:b0:31f:4ec0:17af with
+ SMTP id n67-20020a815946000000b0031f4ec017afmr19660191ywb.217.1659981380782;
+ Mon, 08 Aug 2022 10:56:20 -0700 (PDT)
+Date:   Mon,  8 Aug 2022 10:56:09 -0700
+Message-Id: <20220808175614.3885028-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v5 0/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 10:21:21PM +0000, jeffxu@google.com wrote:
-> This v2 series MFD_NOEXEC, this series includes:
-> 1> address comments in V1
-> 2> add sysctl (vm.mfd_noexec) to change the default file permissions
->     of memfd_create to be non-executable.
-> 
-> Below are cover-level for v1:
-> 
-> The default file permissions on a memfd include execute bits, which
-> means that such a memfd can be filled with a executable and passed to
-> the exec() family of functions. This is undesirable on systems where all
-> code is verified and all filesystems are intended to be mounted noexec,
-> since an attacker may be able to use a memfd to load unverified code and
-> execute it.
+This series is based on torvalds/master.
 
-I would absolutely like to see some kind of protection here. However,
-I'd like a more specific threat model. What are the cases where the X
-bit has been abused (e.g.[1])? What are the cases where the X bit is
-needed (e.g.[2])? With those in mind, it should be possible to draw
-a clear line between the two cases. (e.g. we need to avoid a confused
-deputy attack where an "unprivileged" user can pass an executable memfd
-to a "privileged" user. How those privileges are defined may matter a
-lot based on how memfds are being used. For example, can runc's use of
-executable memfds be distinguished from an attacker's?)
+The series is split up like so:
+- Patch 1 is a simple fixup which we should take in any case (even by itself).
+- Patches 2-5 add the feature, configurable selftest support, and docs.
 
-> Additionally, execution via memfd is a common way to avoid scrutiny for
-> malicious code, since it allows execution of a program without a file
-> ever appearing on disk. This attack vector is not totally mitigated with
-> this new flag, since the default memfd file permissions must remain
-> executable to avoid breaking existing legitimate uses, but it should be
-> possible to use other security mechanisms to prevent memfd_create calls
-> without MFD_NOEXEC on systems where it is known that executable memfds
-> are not necessary.
+Why not ...?
+============
 
-This reminds me of dealing with non-executable stacks. There ended up
-being three states:
+- Why not /proc/[pid]/userfaultfd? Two main points (additional discussion [1]):
 
-- requested to be executable (PT_GNU_STACK X)
-- requested to be non-executable (PT_GNU_STACK NX)
-- undefined (no PT_GNU_STACK)
+    - /proc/[pid]/* files are all owned by the user/group of the process, and
+      they don't really support chmod/chown. So, without extending procfs it
+      doesn't solve the problem this series is trying to solve.
 
-The first two are clearly defined, but the third needed a lot of special
-handling. For a "safe by default" world, the third should be "NX", but
-old stuff depended on it being "X".
+    - The main argument *for* this was to support creating UFFDs for remote
+      processes. But, that use case clearly calls for CAP_SYS_PTRACE, so to
+      support this we could just use the UFFD syscall as-is.
 
-Here, we have a bit being present or not, so we only have a binary
-state. I'd much rather the default be NX (no bit set) instead of making
-every future (safe) user of memfd have to specify MFD_NOEXEC.
+- Why not use a syscall? Access to syscalls is generally controlled by
+  capabilities. We don't have a capability which is used for userfaultfd access
+  without also granting more / other permissions as well, and adding a new
+  capability was rejected [2].
 
-It's also easier on a filtering side to say "disallow memfd_create with
-MFD_EXEC", but how do we deal with the older software?
+    - It's possible a LSM could be used to control access instead, but I have
+      some concerns. I don't think this approach would be as easy to use,
+      particularly if we were to try to solve this with something heavyweight
+      like SELinux. Maybe we could pursue adding a new LSM specifically for
+      this user case, but it may be too narrow of a case to justify that.
 
-If the default perms of memfd_create()'s exec bit is controlled by a
-sysctl and the sysctl is set to "leave it executable", how does a user
-create an NX memfd? (i.e. setting MFD_EXEC means "exec" and not setting
-it means "exec" also.) Are two bits needed? Seems wasteful.
-MFD_I_KNOW_HOW_TO_SET_EXEC | MFD_EXEC, etc...
+Changelog
+=========
 
-For F_SEAL_EXEC, it seems this should imply F_SEAL_WRITE if forced
-executable to avoid WX mappings (i.e. provide W^X from the start).
+v4->v5:
+  - Call userfaultfd_syscall_allowed() directly in the syscall, so we don't
+    have to plumb a flag into new_userfaultfd(). [Nadav]
+  - Refactored run_vmtests.sh to loop over UFFD test mods. [Nadav]
+  - Reworded cover letter.
+  - Picked up some Acked-by's.
 
--Kees
+v3->v4:
+  - Picked up an Acked-by on 5/5.
+  - Updated cover letter to cover "why not ...".
+  - Refactored userfaultfd_allowed() into userfaultfd_syscall_allowed(). [Peter]
+  - Removed obsolete comment from a previous version. [Peter]
+  - Refactored userfaultfd_open() in selftest. [Peter]
+  - Reworded admin-guide documentation. [Mike, Peter]
+  - Squashed 2 commits adding /dev/userfaultfd to selftest and making selftest
+    configurable. [Peter]
+  - Added "syscall" test modifier (the default behavior) to selftest. [Peter]
 
-[1] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
-[2] https://lwn.net/Articles/781013/
+v2->v3:
+  - Rebased onto linux-next/akpm-base, in order to be based on top of the
+    run_vmtests.sh refactor which was merged previously.
+  - Picked up some Reviewed-by's.
+  - Fixed ioctl definition (_IO instead of _IOWR), and stopped using
+    compat_ptr_ioctl since it is unneeded for ioctls which don't take a pointer.
+  - Removed the "handle_kernel_faults" bool, simplifying the code. The result is
+    logically equivalent, but simpler.
+  - Fixed userfaultfd selftest so it returns KSFT_SKIP appropriately.
+  - Reworded documentation per Shuah's feedback on v2.
+  - Improved example usage for userfaultfd selftest.
 
--- 
-Kees Cook
+v1->v2:
+  - Add documentation update.
+  - Test *both* userfaultfd(2) and /dev/userfaultfd via the selftest.
+
+[1]: https://patchwork.kernel.org/project/linux-mm/cover/20220719195628.3415852-1-axelrasmussen@google.com/
+[2]: https://lore.kernel.org/lkml/686276b9-4530-2045-6bd8-170e5943abe4@schaufler-ca.com/T/
+
+Axel Rasmussen (5):
+  selftests: vm: add hugetlb_shared userfaultfd test to run_vmtests.sh
+  userfaultfd: add /dev/userfaultfd for fine grained access control
+  userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+  userfaultfd: update documentation to describe /dev/userfaultfd
+  selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
+
+ Documentation/admin-guide/mm/userfaultfd.rst | 41 ++++++++++-
+ Documentation/admin-guide/sysctl/vm.rst      |  3 +
+ fs/userfaultfd.c                             | 73 +++++++++++++++-----
+ include/uapi/linux/userfaultfd.h             |  4 ++
+ tools/testing/selftests/vm/run_vmtests.sh    | 15 ++--
+ tools/testing/selftests/vm/userfaultfd.c     | 69 +++++++++++++++---
+ 6 files changed, 172 insertions(+), 33 deletions(-)
+
+--
+2.37.1.559.g78731f0fdb-goog
+
