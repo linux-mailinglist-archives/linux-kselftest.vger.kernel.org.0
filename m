@@ -2,193 +2,299 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EC158CE1A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Aug 2022 20:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1926B58CE42
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Aug 2022 21:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244000AbiHHS4t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Aug 2022 14:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
+        id S244180AbiHHTFJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Aug 2022 15:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243680AbiHHS4t (ORCPT
+        with ESMTP id S233008AbiHHTFH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Aug 2022 14:56:49 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6B61834B;
-        Mon,  8 Aug 2022 11:56:48 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:35272)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oL7vh-00BiRy-6H; Mon, 08 Aug 2022 12:56:45 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:45314 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oL7vf-00HUDL-GZ; Mon, 08 Aug 2022 12:56:44 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
-References: <20220801180146.1157914-1-fred@cloudflare.com>
-        <87les7cq03.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
-Date:   Mon, 08 Aug 2022 13:56:18 -0500
-In-Reply-To: <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
-        (Paul Moore's message of "Tue, 2 Aug 2022 22:10:07 -0400")
-Message-ID: <87wnbia7jh.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 8 Aug 2022 15:05:07 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE67A473;
+        Mon,  8 Aug 2022 12:05:04 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id c24so4528918pgg.11;
+        Mon, 08 Aug 2022 12:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=bqzZknWZx8mYrqqJwFyD4G/xhi3NYM4Tt8vviY2t9qU=;
+        b=TwY85Fv1lXAHCobRF3tsAO5HN9S5NNI0VPD3CUXrxauf2nXsv+B70iFISutjzkIliZ
+         nGPAvniREpq7ga0vKE9Ba2k/gREJFMrFMYK3eVoQfeoYm35IOoUFjjEm7/Y5u9veTznl
+         UrO+FEPHwkZfjUd6DOAX8dxaI9DJbhh3LlPK9ZBWUYTi5EZrjZkSmxufu94gWvoYU0gA
+         GghFZihuF5oXlnj+iP/Y6Fhc+qGHpK8WqcQaK7bAjK3+45u0QqW2qPafszcHuoLWL5J5
+         UELGa8v9yLo/QQhWV58lM5g14Od29BKqJ14azMTex9lkjiQdvqtXdez7woyK2hIXBG/R
+         Ow1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=bqzZknWZx8mYrqqJwFyD4G/xhi3NYM4Tt8vviY2t9qU=;
+        b=TYHP8CcgbHxto6/Ar4XKX1Nz6iixHjDxX7niIvL5kk68YZnCSFgXwNEFqIx801kDHj
+         x9eBvCmSEXjSmR0ZZMhO9++BYsWLPyTYPvEACbBWyfM6ZE4sN3fpLoXzLYAJtz++Q2pl
+         nzvmh983WJvmOqcZNsLgMMJ53+CBYH1f5dhLA/3/eBWGSTAN17c52+XcJY6jMUzleOBS
+         /t/H5re36KuUGLsDHP/qldniw81VU+tdcnPp0939wKCF9ynmTQijXqgXqutBGkQUuWu3
+         LyrhmkMZi0wqvY5Olix5AEQdCUwMWNSxZ/GWGnP6PFnMWCH1x2prLst/yJqIOtyIiHUT
+         ONlQ==
+X-Gm-Message-State: ACgBeo00tXuh3KDN/qvnINFKn7Gdj6wVXLRewBG1LtAk7KHjih2qb6Pa
+        Z7Lm7DHYQvMj363xVfT0kEi6fxN+DMyolwd+
+X-Google-Smtp-Source: AA6agR4pgLTfE6pk3s5PUjRdFlznozEMVbIfGVhBiOmanwJrE/aQFd43RvBLolucAPi0dEmT5kt84w==
+X-Received: by 2002:a63:e616:0:b0:41b:8f2c:1065 with SMTP id g22-20020a63e616000000b0041b8f2c1065mr16312216pgh.244.1659985503938;
+        Mon, 08 Aug 2022 12:05:03 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c083:3603:1885:b229:3257:6535? ([2620:10d:c090:500::3:1ef1])
+        by smtp.gmail.com with ESMTPSA id c7-20020a170903234700b0016a7b9558f7sm9197823plh.136.2022.08.08.12.05.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 12:05:03 -0700 (PDT)
+Message-ID: <97789971-7cf5-ede1-11e2-df6494e75e44@gmail.com>
+Date:   Mon, 8 Aug 2022 12:05:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oL7vf-00HUDL-GZ;;;mid=<87wnbia7jh.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+Nfaifvy48ZLTWFCOzOsrcFXZE8jWgnyo=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [RFC net-next v2 1/6] Documentation on QUIC kernel Tx crypto.
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
+        shuah@kernel.org, imagedong@tencent.com, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <adel.abushaev@gmail.com>
+ <20220806001153.1461577-1-adel.abushaev@gmail.com>
+ <20220806001153.1461577-2-adel.abushaev@gmail.com>
+ <Yu3acQf/xS6g/bdH@debian.me>
+From:   Adel Abouchaev <adel.abushaev@gmail.com>
+In-Reply-To: <Yu3acQf/xS6g/bdH@debian.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Paul Moore <paul@paul-moore.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1107 ms - load_scoreonly_sql: 0.09 (0.0%),
-        signal_user_changed: 12 (1.1%), b_tie_ro: 10 (0.9%), parse: 1.45
-        (0.1%), extract_message_metadata: 23 (2.1%), get_uri_detail_list: 3.2
-        (0.3%), tests_pri_-1000: 59 (5.3%), tests_pri_-950: 1.94 (0.2%),
-        tests_pri_-900: 1.62 (0.1%), tests_pri_-90: 105 (9.5%), check_bayes:
-        102 (9.3%), b_tokenize: 13 (1.2%), b_tok_get_all: 15 (1.3%),
-        b_comp_prob: 8 (0.7%), b_tok_touch_all: 59 (5.3%), b_finish: 1.30
-        (0.1%), tests_pri_0: 881 (79.6%), check_dkim_signature: 1.57 (0.1%),
-        check_dkim_adsp: 12 (1.1%), poll_dns_idle: 0.42 (0.0%), tests_pri_10:
-        2.4 (0.2%), tests_pri_500: 15 (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> writes:
+Updated the commit message, will be visible in v3.
 
-> On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->> Frederick Lawler <fred@cloudflare.com> writes:
+On 8/5/22 8:05 PM, Bagas Sanjaya wrote:
+> On Fri, Aug 05, 2022 at 05:11:48PM -0700, Adel Abouchaev wrote:
+>> Adding Documentation/networking/quic.rst file to describe kernel QUIC
+>> code.
 >>
->> > While creating a LSM BPF MAC policy to block user namespace creation, we
->> > used the LSM cred_prepare hook because that is the closest hook to prevent
->> > a call to create_user_ns().
->>
->> Re-nack for all of the same reasons.
->> AKA This can only break the users of the user namespace.
->>
->> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
->>
->> You aren't fixing what your problem you are papering over it by denying
->> access to the user namespace.
->>
->> Nack Nack Nack.
->>
->> Stop.
->>
->> Go back to the drawing board.
->>
->> Do not pass go.
->>
->> Do not collect $200.
+> Better say "Add documentation for kernel QUIC code".
 >
-> If you want us to take your comments seriously Eric, you need to
-> provide the list with some constructive feedback that would allow
-> Frederick to move forward with a solution to the use case that has
-> been proposed.  You response above may be many things, but it is
-> certainly not that.
-
-I did provide constructive feedback.  My feedback to his problem
-was to address the real problem of bugs in the kernel.
-
-It is not a constructive approach to shoot the messenger
-and is not a constructive approach to blow me off every time you
-reply.
-
-I have proposed that is there is a subsystem that is unduly buggy we
-stop it from being enabled with a user-namespaces.
-
-Further this is a hook really should have extra-ordinary requirements,
-as all it can do is add additional failure modes to something that
-does not really fail.  AKA all it can do is break-userspace.
-
-As such I need to see a justification on why it makes sense to
-break-userspace.
-
-> We've heard from different users now that there are very real use
-> cases for this LSM hook.  I understand you are concerned about adding
- > additional controls to user namespaces, but these are controls
-> requested by real users, and the controls being requested (LSM hooks,
-> with BPF and SELinux implementations) are configurable by the *users*
-> at *runtime*.  This patchset does not force additional restrictions on
-> user namespaces, it provides a mechanism that *users* can leverage to
-> add additional granularity to the access controls surrounding user
-> namespaces.
-
-But that is not the problem that cloudfare encountered and are trying to
-solve.
-
-At least that is not what I was told when I asked early in the review
-cycle.
-
-All saying that is user-configurable does is shift the blame from the
-kernel maintainers to the users.  Shift the responsibility from people
-who should have enough expertise to know what is going on to people
-who are by definition have other concerns, so are less likely to be as
-well informed, and less likely to come up with good solutions.
-
-> Eric, if you have a different approach in mind to adding a LSM hook to
-> user namespace creation I think we would all very much like to hear
-> about it.  However, if you do not have any suggestions along those
-> lines, and simply want to NACK any effort to add a LSM hook to user
-> namespace creation, I think we all understand your point of view and
-> respectfully disagree.  Barring any new approaches or suggestions, I
-> think Frederick's patches look reasonable and I still plan on merging
-> them into the LSM next branch when the merge window closes.
-
-
-But it is my code you are planning to merge this into, and your are
-asking me to support something.
-
-I admit I have not had time to read everything.  I am sick and tired
-and quite frankly very tired that people are busy wanting to shoot
-the messenger to the fact that there are bugs in the kernel.
-
-I am speaking up and engaging as best as I can with objections that
-are not hot-air.
-
-You are very much proposing to merge code that can only cause
-regressions and cause me grief.  At least that is all I see.  I don't
-see anything in the change descriptions of the change that refutes that.
-
-I don't see any interaction in fact with my concerns.
-
-In fact your last reply was to completely blow off my request on how to
-address the concerns that inspired this patch and to say other people
-have a use too.
-
-At this point I am happy to turn your request around and ask that you
-address my concerns and not blow them off.  As I have seen no
-constructive engagement with my concerns.   I think that is reasonable
-as by definition I will get the support issues when some LSM has some
-ill-thought out idea of how things should work and I get the bug report.
-
-Eric
-
-
-
-
-
+>> diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
+>> index 03b215bddde8..656fa1dac26b 100644
+>> --- a/Documentation/networking/index.rst
+>> +++ b/Documentation/networking/index.rst
+>> @@ -90,6 +90,7 @@ Contents:
+>>      plip
+>>      ppp_generic
+>>      proc_net_tcp
+>> +   quic
+>>      radiotap-headers
+>>      rds
+>>      regulatory
+>> diff --git a/Documentation/networking/quic.rst b/Documentation/networking/quic.rst
+>> new file mode 100644
+>> index 000000000000..416099b80e60
+>> --- /dev/null
+>> +++ b/Documentation/networking/quic.rst
+>> @@ -0,0 +1,186 @@
+>> +.. _kernel_quic:
+>> +
+>> +===========
+>> +KERNEL QUIC
+>> +===========
+>> +
+>> +Overview
+>> +========
+>> +
+>> +QUIC is a secure general-purpose transport protocol that creates a stateful
+>> +interaction between a client and a server. QUIC provides end-to-end integrity
+>> +and confidentiality. Refer to RFC 9000 for more information on QUIC.
+>> +
+>> +The kernel Tx side offload covers the encryption of the application streams
+>> +in the kernel rather than in the application. These packets are 1RTT packets
+>> +in QUIC connection. Encryption of every other packets is still done by the
+>> +QUIC library in user space.
+>> +
+>> +
+>> +
+>> +User Interface
+>> +==============
+>> +
+>> +Creating a QUIC connection
+>> +--------------------------
+>> +
+>> +QUIC connection originates and terminates in the application, using one of many
+>> +available QUIC libraries. The code instantiates QUIC client and QUIC server in
+>> +some form and configures them to use certain addresses and ports for the
+>> +source and destination. The client and server negotiate the set of keys to
+>> +protect the communication during different phases of the connection, maintain
+>> +the connection and perform congestion control.
+>> +
+>> +Requesting to add QUIC Tx kernel encryption to the connection
+>> +-------------------------------------------------------------
+>> +
+>> +Each flow that should be encrypted by the kernel needs to be registered with
+>> +the kernel using socket API. A setsockopt() call on the socket creates an
+>> +association between the QUIC connection ID of the flow with the encryption
+>> +parameters for the crypto operations:
+>> +
+>> +.. code-block:: c
+>> +
+>> +	struct quic_connection_info conn_info;
+>> +	char conn_id[5] = {0x01, 0x02, 0x03, 0x04, 0x05};
+>> +	const size_t conn_id_len = sizeof(conn_id);
+>> +	char conn_key[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+>> +			     0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+>> +	char conn_iv[12] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+>> +			    0x08, 0x09, 0x0a, 0x0b};
+>> +	char conn_hdr_key[16] = {0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+>> +				 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
+>> +				};
+>> +
+>> +	conn_info.cipher_type = TLS_CIPHER_AES_GCM_128;
+>> +
+>> +	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
+>> +	conn_info.key.conn_id_length = 5;
+>> +	memcpy(&conn_info.key.conn_id[QUIC_MAX_CONNECTION_ID_SIZE
+>> +				      - conn_id_len],
+>> +	       &conn_id, conn_id_len);
+>> +
+>> +	memcpy(&conn_info.payload_key, conn_key, sizeof(conn_key));
+>> +	memcpy(&conn_info.payload_iv, conn_iv, sizeof(conn_iv));
+>> +	memcpy(&conn_info.header_key, conn_hdr_key, sizeof(conn_hdr_key));
+>> +
+>> +	setsockopt(fd, SOL_UDP, UDP_QUIC_ADD_TX_CONNECTION, &conn_info,
+>> +		   sizeof(conn_info));
+>> +
+>> +
+>> +Requesting to remove QUIC Tx kernel crypto offload control messages
+>> +-------------------------------------------------------------------
+>> +
+>> +All flows are removed when the socket is closed. To request an explicit remove
+>> +of the offload for the connection during the lifetime of the socket the process
+>> +is similar to adding the flow. Only the connection ID and its length are
+>> +necessary to supply to remove the connection from the offload:
+>> +
+>> +.. code-block:: c
+>> +
+>> +	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
+>> +	conn_info.key.conn_id_length = 5;
+>> +	memcpy(&conn_info.key.conn_id[QUIC_MAX_CONNECTION_ID_SIZE
+>> +				      - conn_id_len],
+>> +	       &conn_id, conn_id_len);
+>> +	setsockopt(fd, SOL_UDP, UDP_QUIC_DEL_TX_CONNECTION, &conn_info,
+>> +		   sizeof(conn_info));
+>> +
+>> +Sending QUIC application data
+>> +-----------------------------
+>> +
+>> +For QUIC Tx encryption offload, the application should use sendmsg() socket
+>> +call and provide ancillary data with information on connection ID length and
+>> +offload flags for the kernel to perform the encryption and GSO support if
+>> +requested.
+>> +
+>> +.. code-block:: c
+>> +
+>> +	size_t cmsg_tx_len = sizeof(struct quic_tx_ancillary_data);
+>> +	uint8_t cmsg_buf[CMSG_SPACE(cmsg_tx_len)];
+>> +	struct quic_tx_ancillary_data * anc_data;
+>> +	size_t quic_data_len = 4500;
+>> +	struct cmsghdr * cmsg_hdr;
+>> +	char quic_data[9000];
+>> +	struct iovec iov[2];
+>> +	int send_len = 9000;
+>> +	struct msghdr msg;
+>> +	int err;
+>> +
+>> +	iov[0].iov_base = quic_data;
+>> +	iov[0].iov_len = quic_data_len;
+>> +	iov[1].iov_base = quic_data + 4500;
+>> +	iov[1].iov_len = quic_data_len;
+>> +
+>> +	if (client.addr.sin_family == AF_INET) {
+>> +		msg.msg_name = &client.addr;
+>> +		msg.msg_namelen = sizeof(client.addr);
+>> +	} else {
+>> +		msg.msg_name = &client.addr6;
+>> +		msg.msg_namelen = sizeof(client.addr6);
+>> +	}
+>> +
+>> +	msg.msg_iov = iov;
+>> +	msg.msg_iovlen = 2;
+>> +	msg.msg_control = cmsg_buf;
+>> +	msg.msg_controllen = sizeof(cmsg_buf);
+>> +	cmsg_hdr = CMSG_FIRSTHDR(&msg);
+>> +	cmsg_hdr->cmsg_level = IPPROTO_UDP;
+>> +	cmsg_hdr->cmsg_type = UDP_QUIC_ENCRYPT;
+>> +	cmsg_hdr->cmsg_len = CMSG_LEN(cmsg_tx_len);
+>> +	anc_data = CMSG_DATA(cmsg_hdr);
+>> +	anc_data->flags = 0;
+>> +	anc_data->next_pkt_num = 0x0d65c9;
+>> +	anc_data->conn_id_length = conn_id_len;
+>> +	err = sendmsg(self->sfd, &msg, 0);
+>> +
+>> +QUIC Tx offload in kernel will read the data from userspace, encrypt and
+>> +copy it to the ciphertext within the same operation.
+>> +
+>> +
+>> +Sending QUIC application data with GSO
+>> +--------------------------------------
+>> +When GSO is in use, the kernel will use the GSO fragment size as the target
+>> +for ciphertext. The packets from the user space should align on the boundary
+>> +of GSO fragment size minus the size of the tag for the chosen cipher. For the
+>> +GSO fragment 1200, the plain packets should follow each other at every 1184
+>> +bytes, given the tag size of 16. After the encryption, the rest of the UDP
+>> +and IP stacks will follow the defined value of GSO fragment which will include
+>> +the trailing tag bytes.
+>> +
+>> +To set up GSO fragmentation:
+>> +
+>> +.. code-block:: c
+>> +
+>> +	setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
+>> +		   sizeof(frag_size));
+>> +
+>> +If the GSO fragment size is provided in ancillary data within the sendmsg()
+>> +call, the value in ancillary data will take precedence over the segment size
+>> +provided in setsockopt to split the payload into packets. This is consistent
+>> +with the UDP stack behavior.
+>> +
+>> +Integrating to userspace QUIC libraries
+>> +---------------------------------------
+>> +
+>> +Userspace QUIC libraries integration would depend on the implementation of the
+>> +QUIC protocol. For MVFST library, the control plane is integrated into the
+>> +handshake callbacks to properly configure the flows into the socket; and the
+>> +data plane is integrated into the methods that perform encryption and send
+>> +the packets to the batch scheduler for transmissions to the socket.
+>> +
+>> +MVFST library can be found at https://github.com/facebookincubator/mvfst.
+>> +
+>> +Statistics
+>> +==========
+>> +
+>> +QUIC Tx offload to the kernel has counters
+>> +(``/proc/net/quic_stat``):
+>> +
+>> +- ``QuicCurrTxSw`` -
+>> +  number of currently active kernel offloaded QUIC connections
+>> +- ``QuicTxSw`` -
+>> +  accumulative total number of offloaded QUIC connections
+>> +- ``QuicTxSwError`` -
+>> +  accumulative total number of errors during QUIC Tx offload to kernel
+>> +
+> The documentation looks OK (no new warnings).
+>
+> Thanks.
+>
