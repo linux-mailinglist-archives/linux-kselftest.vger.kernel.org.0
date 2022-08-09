@@ -2,111 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5E858E333
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 00:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8404E58E355
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 00:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiHIW3r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 18:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
+        id S229529AbiHIWk2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 18:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiHIW3p (ORCPT
+        with ESMTP id S229485AbiHIWk0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 18:29:45 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC88B61DAA;
-        Tue,  9 Aug 2022 15:29:44 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLXj7-0000cV-RM; Wed, 10 Aug 2022 00:29:29 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLXj7-000JS6-3F; Wed, 10 Aug 2022 00:29:29 +0200
-Subject: Re: [PATCH v9 03/10] btf: Handle dynamic pointer parameter in kfuncs
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Joanne Koong <joannelkoong@gmail.com>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-4-roberto.sassu@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <6fca828f-9117-2a1a-b386-6167fc3384aa@iogearbox.net>
-Date:   Wed, 10 Aug 2022 00:29:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 9 Aug 2022 18:40:26 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C029F5C9FF
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 15:40:25 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10d845dcf92so15703320fac.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Aug 2022 15:40:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=1P7bSaIcMszYR+JCa8vqV0slOGBPYXltybusx5DtRDM=;
+        b=ymJZNj+3ZRh6BJ8sdJOKWq3WWbUkXw6pah7LZ66RWLPU/lUKblHjIWaSbD/M/HlxZG
+         XvRNSo3oVXm145SSS41Ho65tqsFjNeoaSyRIP0bW6D/OrQGUY/gDwhF2RxO+RUiMyfX8
+         raLd9fpQ1xyculvAnmt5+WPihY3ElIT/hyo2mQADbhYzhsin1meT8LB/8oVNtwdYglR2
+         8BXLy2uW5Fa5RgTdW9YWJ9qrdQxzYFC7yR7a+zVgLQlWAzRxP+H9g8KpL7B+wKqVG4DB
+         gCXguHSRTkIZ5oafCKhLHLSwYLU2AXjEnpPWXLLbU4c91UgqdOJ2Ccc/AD0eJ2fxHc/n
+         nDPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=1P7bSaIcMszYR+JCa8vqV0slOGBPYXltybusx5DtRDM=;
+        b=q7qj8Cqlah5R6MzRTye9jeKQicvUjNGTi3NSRdlmGRvsgPwtuhBLIe0SAa/XnTIdjP
+         C9+9MZEhdr4oqZJMizB0a1ucgIfNAHcZM4ydxV03fi9sPDG4tLcRYe2GvTDs5qEuKez+
+         WpMl4/LjTFYVoGE0EfvqThdzuuUBjpe3rLcUbCu+JKFk4lxDyJsYkyd21ApEQblhJUhZ
+         I32tmi4yi1MCJKfGVMLtNys8/rPOKW/ie3QB9jyBdJzAYtRmisGXeBLrV36kdM/QuA9y
+         Af4sK9m7kFfRwdsHx0JgHRdtfXKpIdOa8HmS52+vYc8yGeyCGvPKyV31Oi3JLgLNhdOn
+         jZEA==
+X-Gm-Message-State: ACgBeo21RIBhtKFwjWNwdfZpzwxxQLBhvzo8fCTWW/oXFwfuot6ZTZy5
+        YsolQK7gvFk+6H1PtxbSmziHjxQtmOCwMsR5uwyk
+X-Google-Smtp-Source: AA6agR4ClJpq8r9ZKoAk/K/rs8TO1cCIg6yZNX6VC6EIP7MbESfv7l10f5WE4D8xn0xBGSvYXyQ13bhBRsm1jf8wpUM=
+X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
+ k8-20020a056870958800b00101c003bfe6mr292354oao.41.1660084825048; Tue, 09 Aug
+ 2022 15:40:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220809134603.1769279-4-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26622/Tue Aug  9 09:53:52 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+ <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+ <877d3ia65v.fsf@email.froward.int.ebiederm.org> <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com>
+ <87czd95rjc.fsf@email.froward.int.ebiederm.org> <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
+ <87a68dccyu.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87a68dccyu.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 9 Aug 2022 18:40:14 -0400
+Message-ID: <CAHC9VhRkHuwjrtOoK+vn9zzERU2TM_2PEbQGRAZsr-D1pFv9GQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/9/22 3:45 PM, Roberto Sassu wrote:
-[...]
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 67dfc728fbf8..17cca396c89f 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -6363,6 +6363,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->   
->   			if (is_kfunc) {
->   				bool arg_mem_size = i + 1 < nargs && is_kfunc_arg_mem_size(btf, &args[i + 1], &regs[regno + 1]);
-> +				bool arg_dynptr = btf_type_is_struct(ref_t) &&
-> +						  !strcmp(ref_tname, "bpf_dynptr_kern");
->   
->   				/* Permit pointer to mem, but only when argument
->   				 * type is pointer to scalar, or struct composed
-> @@ -6372,6 +6374,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->   				 */
->   				if (!btf_type_is_scalar(ref_t) &&
->   				    !__btf_type_is_scalar_struct(log, btf, ref_t, 0) &&
-> +				    !arg_dynptr &&
->   				    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
->   					bpf_log(log,
->   						"arg#%d pointer type %s %s must point to %sscalar, or struct with scalar\n",
-> @@ -6379,6 +6382,20 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->   					return -EINVAL;
->   				}
->   
-> +				/* Assume initialized dynptr. */
+On Tue, Aug 9, 2022 at 5:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+> >
+> > What level of due diligence would satisfy you Eric?
+>
+> Having a real conversation about what a change is doing and to talk
+> about it's merits and it's pro's and cons.  I can't promise I would be
+> convinced but that is the kind of conversation it would take.
 
-This comment is a bit misleading, too, given we don't assume but enforce it. I'd probably
-just fold this into above one where we permit pointer to mem given the test there gets
-extended anyway, so the comment should be in line with the tests.
+Earlier today you talked about due diligence to ensure that userspace
+won't break and I provided my reasoning on why userspace would not
+break (at least not because of this change).  Userspace might be
+blocked from creating a new user namespace due to a security policy,
+but that would be the expected and desired outcome, not breakage.  As
+far as your most recent comment regarding merit and pros/cons, I
+believe we have had that discussion (quite a few times already); it
+just seems you are not satisfied with the majority's conclusion.
 
-> +				if (arg_dynptr) {
-> +					if (!is_dynptr_reg_valid_init(env, reg,
-> +							ARG_PTR_TO_DYNPTR)) {
-> +						bpf_log(log,
-> +							"arg#%d pointer type %s %s must be initialized\n",
-> +							i, btf_type_str(ref_t),
-> +							ref_tname);
-> +						return -EINVAL;
-> +					}
-> +
-> +					continue;
-> +				}
-> +
->   				/* Check for mem, len pair */
->   				if (arg_mem_size) {
->   					if (check_kfunc_mem_size_reg(env, &regs[regno + 1], regno + 1)) {
+Personally, I'm not sure there is anything more I can do to convince
+you that this patchset is reasonable; I'm going to leave it to others
+at this point, or we can all simply agree to disagree for the moment.
+Just as you haven't heard a compelling argument for this patchset, I
+haven't heard a compelling argument against it.  Barring some
+significant new discussion point, or opinion, I still plan on merging
+this into the LSM next branch when the merge window closes next week
+so it has time to go through a full round of linux-next testing.
+Assuming no unresolvable problems are found during the additional
+testing I plan to send it to Linus during the v6.1 merge window and
+I'm guessing we will get to go through this all again.  It's less than
+ideal, but I think this is where we are at right now.
 
+-- 
+paul-moore.com
