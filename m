@@ -2,131 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46F458E1D9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 23:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C274258E1ED
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 23:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiHIVip (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 17:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S229803AbiHIVlU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 17:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiHIVif (ORCPT
+        with ESMTP id S229489AbiHIVlQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 17:38:35 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11FD65665
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 14:38:34 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id b4so12920203pji.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Aug 2022 14:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=o8zzCiEtSfxFlAxZzKI7HqSYHHhfKIfxoT6ysA2mwRQ=;
-        b=mz0Fjqu9dzg7nU0PCSUBlYeJVZ9gb/NvoAjp4klMVPqMWGBhoN7T4Z0A+Z5dI9GQUf
-         nxY8R3gRW2W8Mae+vrr6Ov/btiZ6+vE6BrY4Kb0G+XnUcpHcplU/LqFC9QnvoIdHE0Bu
-         /g+230V6KN4RaDF9l6q2AfbJ23OtFDrDFA/ZMoH1TKvz1vpKNLrWVhnVtBHLzuUnvgWh
-         pTqM3Ksr4fhJ+B6dQYaaJwgY5DL1KZxkL90D8RAM62drfSjOX14jlDF7PTkcKwENBXt2
-         MtUmXKj5VBSQVKk2fMfgtzxlsBv5KLSPjbe0t1StTlu3+6htVnbMD0KVSeQgELY8ybIb
-         afPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=o8zzCiEtSfxFlAxZzKI7HqSYHHhfKIfxoT6ysA2mwRQ=;
-        b=fkRQ3kzP85yHsIP3vIXVrv+ynVPGrr0Jj56HQzyDa4GHbYvBk+dQfc82sX23qQwKal
-         GJLVysfkXJTs3yhv1BmZimn2DS7TmKVctxkwRdgjJsdiEjjjHQAAHv8ARexW9FGyav3t
-         OvTRaFjyNCJTjMrxblcD51FeLNdD1544YG+fFEDyCKsw7VigS/r6sH/6KnAdNYsC5ZW2
-         M8E+u4nF7znT4XskzAFfwcZ0WMUSfchclvFzwYjDT4U24rO3N5pB+J6VDRPTySeT9w7i
-         FrZH2HC/yZppAKiIoZFxG4XTM5ldHt8DeczaRS0PmzH5us6weVHwcFNn+XIbDOCiJpOd
-         rhcw==
-X-Gm-Message-State: ACgBeo3rRNEQoAlcnF5WEcmBJXSg1Sp/eoA3Oxehxbw8AA867f+pO+Gx
-        +spjlL9L1I6OueNViyN1hWSqLQ==
-X-Google-Smtp-Source: AA6agR4J/HhURqfPvPpi43Q7Bija6xPtnqX55byjC51oilG8jZwpXiNOXRPE6CWpwE3OWAgXLExSyw==
-X-Received: by 2002:a17:902:8b87:b0:16f:1bb7:984a with SMTP id ay7-20020a1709028b8700b0016f1bb7984amr24756042plb.113.1660081114308;
-        Tue, 09 Aug 2022 14:38:34 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b0016f1204cde8sm11219119plk.301.2022.08.09.14.38.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 14:38:33 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 21:38:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Gavin Shan <gshan@redhat.com>, shuah <shuah@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        kvmarm@lists.cs.columbia.edu, KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, maz <maz@kernel.org>,
-        oliver upton <oliver.upton@linux.dev>,
-        andrew jones <andrew.jones@linux.dev>, yihyu@redhat.com,
-        shan gavin <shan.gavin@gmail.com>
-Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
-Message-ID: <YvLT1fd8ddybF5Uw@google.com>
-References: <20220809060627.115847-1-gshan@redhat.com>
- <20220809060627.115847-2-gshan@redhat.com>
- <8735e6ncxw.fsf@oldenburg.str.redhat.com>
- <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
- <87o7wtnay6.fsf@oldenburg.str.redhat.com>
- <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
- <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
- <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com>
+        Tue, 9 Aug 2022 17:41:16 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E3A5D0E8;
+        Tue,  9 Aug 2022 14:41:14 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:53108)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oLWyM-00E7HV-Jn; Tue, 09 Aug 2022 15:41:11 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:49148 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1oLWyL-003L0d-Hd; Tue, 09 Aug 2022 15:41:10 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+        <87les7cq03.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+        <87wnbia7jh.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+        <877d3ia65v.fsf@email.froward.int.ebiederm.org>
+        <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com>
+        <87czd95rjc.fsf@email.froward.int.ebiederm.org>
+        <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
+Date:   Tue, 09 Aug 2022 16:40:41 -0500
+In-Reply-To: <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
+        (Paul Moore's message of "Tue, 9 Aug 2022 12:47:03 -0400")
+Message-ID: <87a68dccyu.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1oLWyL-003L0d-Hd;;;mid=<87a68dccyu.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18KQ9aFqAGQLWmWStMCKmpNtmakBekivvk=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Paul Moore <paul@paul-moore.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 491 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 10 (1.9%), b_tie_ro: 8 (1.7%), parse: 0.95 (0.2%),
+         extract_message_metadata: 12 (2.4%), get_uri_detail_list: 1.51 (0.3%),
+         tests_pri_-1000: 8 (1.6%), tests_pri_-950: 1.25 (0.3%),
+        tests_pri_-900: 1.04 (0.2%), tests_pri_-90: 96 (19.6%), check_bayes:
+        94 (19.2%), b_tokenize: 8 (1.6%), b_tok_get_all: 8 (1.7%),
+        b_comp_prob: 2.7 (0.6%), b_tok_touch_all: 72 (14.7%), b_finish: 0.74
+        (0.2%), tests_pri_0: 339 (68.9%), check_dkim_signature: 0.55 (0.1%),
+        check_dkim_adsp: 3.1 (0.6%), poll_dns_idle: 1.34 (0.3%), tests_pri_10:
+        3.6 (0.7%), tests_pri_500: 17 (3.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 09, 2022, Mathieu Desnoyers wrote:
-> ----- On Aug 9, 2022, at 8:21 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
-> 
-> > ----- Gavin Shan <gshan@redhat.com> wrote:
-> >> Hi Florian,
-> >> 
-> >> On 8/9/22 5:16 PM, Florian Weimer wrote:
-> >> >>> __builtin_thread_pointer doesn't work on all architectures/GCC
-> >> >>> versions.
-> >> >>> Is this a problem for selftests?
-> >> >>>
-> >> >>
-> >> >> It's a problem as the test case is running on all architectures. I think I
-> >> >> need introduce our own __builtin_thread_pointer() for where it's not
-> >> >> supported: (1) PowerPC  (2) x86 without GCC 11
-> >> >>
-> >> >> Please let me know if I still have missed cases where
-> >> >> __buitin_thread_pointer() isn't supported?
-> >> > 
-> >> > As far as I know, these are the two outliers that also have rseq
-> >> > support.  The list is a bit longer if we also consider non-rseq
-> >> > architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
-> >> > about the Linux architectures without glibc support).
-> >> > 
-> >> 
-> >> For kvm/selftests, there are 3 architectures involved actually. So we
-> >> just need consider 4 cases: aarch64, x86, s390 and other. For other
-> >> case, we just use __builtin_thread_pointer() to maintain code's
-> >> integrity, but it's not called at all.
-> >> 
-> >> I think kvm/selftest is always relying on glibc if I'm correct.
-> > 
-> > All those are handled in the rseq selftests and in librseq. Why duplicate all
-> > that logic again?
-> 
-> More to the point, considering that we have all the relevant rseq registration
-> code in tools/testing/selftests/rseq/rseq.c already, and the relevant thread
-> pointer getter code in tools/testing/selftests/rseq/rseq-*thread-pointer.h,
-> is there an easy way to get test applications in tools/testing/selftests/kvm
-> and in tools/testing/selftests/rseq to share that common code ?
-> 
-> Keeping duplicated compatibility code is bad for long-term maintainability.
+Paul Moore <paul@paul-moore.com> writes:
+>
+> What level of due diligence would satisfy you Eric?
 
-Any reason not to simply add tools/lib/rseq.c and then expose a helper to get the
-registered rseq struct?
+Having a real conversation about what a change is doing and to talk
+about it's merits and it's pro's and cons.  I can't promise I would be
+convinced but that is the kind of conversation it would take.
+
+I was not trying to place an insurmountable barrier I was simply looking
+to see if people had been being careful and doing what is generally
+accepted for submitting a kernel patch.  From all I can see that has
+completely not happened here.
+
+> If that isn't the case, and this request is being made in good faith
+
+Again you are calling me a liar. I really don't appreciate that.
+
+As for something already returning an error.  The setuid system call
+also has error returns, and enforcing RLIMIT_NPROC caused sendmail to
+misbehave.
+
+I bring up the past in this way only to illustrate that things can
+happen.  That simply examining the kernel and not thinking about
+userspace really isn't enough.
+
+I am also concerned about the ecosystem effects of adding random access
+control checks to a system call that does not perform access control
+checks.
+
+As I said this patch is changing a rather fundamental design decision by
+adding an access control.  A design decision that for the most part has
+worked out quite well, and has allowed applications to add sandboxing
+support to themselves without asking permission to anyone.
+
+Adding an access control all of a sudden means application developers
+are having to ask for permission to things that are perfectly safe,
+and it means many parts of the kernel gets less love both in use
+and in maintenance.
+
+It might be possible to convince me that design decision needs to
+change, or that what is being proposed is small enough it does not
+practically change that design decision.
+
+Calling me a liar is not the way to change my mind.  Ignoring me
+and pushing this through without addressing my concerns is not
+the way to change my mind.
+
+I honestly I want what I asked for at the start.  I want discussion of
+what problems are being solved so we can talk about the problem or
+problems and if this is even the appropriate solution to them.
+
+Eric
+
