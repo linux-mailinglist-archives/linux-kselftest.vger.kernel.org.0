@@ -2,61 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E632C58D39F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 08:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B8F58D3B6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 08:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiHIGTF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 02:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S229760AbiHIGZz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 02:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbiHIGTE (ORCPT
+        with ESMTP id S229593AbiHIGZy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 02:19:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A419C1F63F
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 Aug 2022 23:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660025942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y89Epe8YZWt9n1WdqArIxaVxwXsnFyTQCv3vV90xjO4=;
-        b=dm7FxVHWNpAXbiuZFGFLO3Y4mkh42LCyYSHKrJm8ZBoD8uvDIBdjcdiBkUEVPEFzghg4aG
-        8FnDMryiO8mePQrJ+95pcGpCe6w/kZzO+uWokZiIW/jH3ImNhAsvZ7Ds3b16g+GxVUSAM3
-        818zoN3RwX5Ze8jMumG+7PH5onx85YY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-8U-CvfAyNaSLQ6MiMT10HA-1; Tue, 09 Aug 2022 02:18:59 -0400
-X-MC-Unique: 8U-CvfAyNaSLQ6MiMT10HA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1506101AA69;
-        Tue,  9 Aug 2022 06:18:58 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.193.65])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B91CB141512B;
-        Tue,  9 Aug 2022 06:18:56 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: tools/testing/selftests/kvm/rseq_test and glibc 2.35
-References: <875yj2n2r0.fsf@oldenburg.str.redhat.com>
-        <465d3599-2433-7f6e-66fc-b4018ba258cf@redhat.com>
-Date:   Tue, 09 Aug 2022 08:18:54 +0200
-In-Reply-To: <465d3599-2433-7f6e-66fc-b4018ba258cf@redhat.com> (Gavin Shan's
-        message of "Tue, 9 Aug 2022 11:47:43 +1000")
-Message-ID: <877d3indm9.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Tue, 9 Aug 2022 02:25:54 -0400
+Received: from a48-37.smtp-out.amazonses.com (a48-37.smtp-out.amazonses.com [54.240.48.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9CBF4D;
+        Mon,  8 Aug 2022 23:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660026352;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=t1d2KTH8m0XlbsxykujzGa28SCCTEDlVz3j05Smhax0=;
+        b=DMoCJTzz+2A81Vf4MkQ7Abu+V9WlBnUHBxnsy2Etcenq8AluGUyTf2sxtAmx0ET0
+        2hxnX6nQsr94P1KyQt8c+4nw3fHABx4PCAqz2ai8MwZLp9Vj5LZLwChZXiBZXr9NKU1
+        JL1jMvljiOLV6r1USRRA7D40A244ti2KYnzTl+qo=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660026352;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=t1d2KTH8m0XlbsxykujzGa28SCCTEDlVz3j05Smhax0=;
+        b=SaBIgaJULQUvHcfrGUZvQ/IW1O4qXA5+7FcY9ybMAc+NdQvy0YFRc7WJ7iGSH6J8
+        VXc25vcDh5krLYuFVLB+mIdoeaoucnMSd0hppI+A01zx57Rpl19U506SoEX1PJYYbus
+        JZnTcRig85SIlfWN8BDZHRuwPYtMJwhvbQOIAJmo=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220809
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <010001828147f0da-d1512f2a-e1e4-4f51-892b-782aa8ba1e32-000000@email.amazonses.com>
+Date:   Tue, 9 Aug 2022 06:25:51 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.08.09-54.240.48.37
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,56 +52,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* Gavin Shan:
+## Build
+* kernel: 5.19.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 6c8f479764ebe2848589de3249743ea552ed2495
+* git describe: next-20220809
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220809
 
-> Hi Florian,
->
-> On 8/9/22 2:01 AM, Florian Weimer wrote:
->> It has come to my attention that the KVM rseq test apparently needs to
->> be ported to glibc 2.35.  The background is that on aarch64, rseq is the
->> only way to get a practically useful sched_getcpu.  (There's no hidden
->> per-task CPU state the vDSO could reveal as the CPU ID.)
->> 
->
-> Yes, kvm/selftests/rseq needs to support glibc 2.35. The question is
-> about glibc 2.34 or 2.35 because kvm/selftest/rseq fails on glibc 2.34
->
-> I would guess upstream-glibc-2.35 feature is enabled on downstream
-> glibc-2.34?
->
-> # ./rseq_test
-> ==== Test Assertion Failure ====
->   rseq_test.c:60: !r
->   pid=112043 tid=112043 errno=22 - Invalid argument
->      1	0x0000000000401973: main at rseq_test.c:226
->      2	0x0000ffff84b6c79b: ?? ??:0
->      3	0x0000ffff84b6c86b: ?? ??:0
->      4	0x0000000000401b6f: _start at ??:?
->   rseq failed, errno = 22 (Invalid argument)
-> # rpm -aq | grep glibc-2
-> glibc-2.34-39.el9.aarch64
+## Test Regressions (compared to next-20220808)
+No test regressions found.
 
-Yes, we have enabled it downstream.
+## Metric Regressions (compared to next-20220808)
+No metric regressions found.
 
-  glibc: Restartable sequences interfaces and sched_getcpu accelerated
-  by default
-  <https://bugzilla.redhat.com/show_bug.cgi?id=2085529>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-However,
 
-  GLIBC_TUNABLES=glibc.pthread.rseq=0 ./rseq_test
+## Test Fixes (compared to next-20220808)
+No test fixes found.
 
-should still work (we added the ability to disable rseq registration
-precisely to enable scenarios like this), but tunables are an optional
-glibc feature, so the upstream kernel should probably still be fixed.
+## Metric Fixes (compared to next-20220808)
+No metric fixes found.
 
-> Mathieu and Florian, the fixes have been posted. It would be nice for you
-> to review if you have free cycles :)
-> 
-> https://lore.kernel.org/kvmarm/20220809060627.115847-1-gshan@redhat.com/T/#t
+## Test result summary
+total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
 
-Excellent.  I'm going to have a look.
+## Build Summary
 
-Thanks,
-Florian
+## Test suites summary
 
+--
+Linaro LKFT
+https://lkft.linaro.org
