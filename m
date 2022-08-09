@@ -2,220 +2,317 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA96A58DD62
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 19:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499BF58DD8D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 19:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245027AbiHIRnr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 13:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S1343969AbiHIR7K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 13:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239318AbiHIRno (ORCPT
+        with ESMTP id S1343904AbiHIR65 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:43:44 -0400
-Received: from sonic302-28.consmr.mail.ne1.yahoo.com (sonic302-28.consmr.mail.ne1.yahoo.com [66.163.186.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB032AB
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 10:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660067021; bh=/lt1B0+3gQrk+qA1hOIwkyMvMFHUu5Vs4KYKvJUHQl0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Np7RIKJ8nioFbX5GbfRt3ebD8T3+td1+plR9qt9Zdaywa/bVR0bEn+hLZKn3ZBaxaKe0vHbeQ/5kIZTyWRfxYYSZkZBx7v+LzHHrl9O9HClutGcsypgoVus1GFtU0a+VaAaw/6IDXfiJGukxhsrcihEh/Jxn2iV94f9S38FiwzPC6+hqV/uUhimVPwKnAWXmeyPObk2f8wvq7mn2YxNiIOvKR86YINb6zgflF5kZ6bjJJNJ4+C498sg9EB5v6g78JGwUFBFhDKeLrWQhvGqj0TnFTw3XhR0Lt6TfH+Fw4rydfO+MQ0ST+Oudb2uoati20Nt26n1k9as67AqTtKlbyw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660067021; bh=uONldD82uJIMHRNSZFAd7sXZw7QJJL30/SLvpBnBisf=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=EBo1DMjAJejmgpmdW/ISlEcSmXQkNwkc5UMYj9dKLykL6YBVRKomf27hujfr/NeNzkrzjFd4JFboTwVi+YO74dX8lYdyn7R1e+xqQi8NrzbpSUQM+ImO8lY7Ku7zU4TzFU1OmEvdrBh8YhLa0Rp0zcqP6cLG6vvrgL1n57eQPSF8I4uVQjw4jc/ebgp0i0/oSW+B0YQbhbR0367GMf2vkcEwHnVe5uWF14qlkkWAr4+x4MEnsqbQrwG4QP+VXYjX5dQBm6BIg+ARwYWIUuDgTkYyfpkANGr3Zrngm1yUHD0m9QPh+QHPVUIiYvmruZZe93GXpjknChAH7rlgHhXXsA==
-X-YMail-OSG: lUepY3QVM1mIg3ykFRX_VkPtsNFoVtCtjt5uOD3dzMLdddnv9KWKxEVYna37dIj
- MlVgSM5gQr6lXH25dBht6CJawo2Tg71t9s5Pxpe1PwbfYytbWNh3q3Ax6eX7WT2H66_8RzV2kIHH
- atXAS62gp4q2XDJBfVrzDWX8y5x.qDb3iYnPL3SqeDp_RlTryrT7woLpko4yVI5NFZEd2JnGCCNB
- I7M2jmfSrP9sfHJFoit_JWlALPqVFpoWLeR9aPxz1YYN.J7Y0CFmKGQs2E__LYDZ2DQjMwJPp9lc
- QVkAimnUGLt__Idf1dwEHdM9M8y2WhixPTFYI13qSudAahsXVCdrXb5.aJZxBIbbcODhMzPDHqMH
- PqotkRcjH1iCm5f4Je5MAVmciEOTUFrBPQMQ4k8SL0RCQ12yxfNUn.GXpOwuSzCx0bnvGzOt3_KQ
- cQBRCLZQ6RQ5OoyK6TxyBkILjBUfyMO3Q1lNI7r4cS0SM9eCLYrfedKC37riUh_ajb.dCDjleiRk
- LH.AQnImWQOfrh6ENhcnsdo0uZmRoo6CYLVBAF0ljqA4DzNXEnlsidYkbt.dXLJQUSVNwRF7DlQ_
- GvgZW_DG6aPvrMurZdi1i6.8QIRi6XB_DZQozqoQjWRca0x8eCG7uW9avqrIwjK0oWyaKccG2Jwz
- NlOr7OI5_61cYKT6Mn0V9OxLm0kZGYuVQpz_di47GBnL2qNIhI8lgZd5PYp0nRpiYnLkKen4qxeO
- 2xREPO0k0JyKaHO8vcs40YhSBnE6BuknHvOKZAqj3w0wuYfQ1RjuBkOD4lgJepDvbwUJrcSJVB6w
- qSRL91H4zhF3a3GQJIojHlz6DJJ9MdiM9aNsvXo8G97EjA1KGCCnmAHPyb5OQ88ii8KQjRaqKP1T
- rO93P4H77GGN_aw2rq5FrjUiAVg_ad63SapQQjyK68Pxj3UVhAhCXSNaQQGVypcK0nae1xnZvUre
- OhIB_A8gWAK.ZuGndmvYlABVgrTMxkfe03N_mihVew72.uekMni4y5U8UVv8ce.SzPuWZOrFYWc1
- GTD7MMj.91.NxViJXTu1qFdRR4VrAMa3k7VCzXxYWjb5TxoFVEiPHfLD9yMatIgRE3ONMEurFu1N
- 9oT9RdjrxSUJnfUO5NKRVkMICfn44Q6pe6q1jZ_ngrRlweTP9JA2HUYa0l96o85TZI7WkWx_mXDi
- HPXS2Q8Zyg2pY9x5m4ekts9kZrE4Y0irJeacSnh3iJc6iMML6fUQkAT7tn1L1yuShjcDdf1qbnqW
- bofbnDIcFjqzNBatHWKQc6w4JXY7tjVeZEbYaQfMepskqJRA_eJ_LJPPThLGnRsQ5JPQRTu_YtMZ
- R1MxMjSTbqTc7gGlnNyo4PnnDgUgJkESaMlQ8FCuNJVqRk_7tM.zx2P.2ljR7GcI1rGggCqlNULZ
- .t03NAlb6gx1yOVQFKL4h.l.ybG098cEmfBTQbxLZxpgBAi4c0MmhWju_Ad2Sh6aKBM8_FGkkjKy
- 9Tid9pnxjYDTyTE.ZAGSB42nZZSvjwW_SywtYkCp4awlX02VQOdM6WuQDM74TqHm4txipnpgny_e
- ubhl70.9uN_P_xljIzBQksJdb1iiKVfyS_PwXbLEnrzyc7BVJIOjuPuDNHU4F_A3TEJsV_eIt7V6
- OzXVwLz_XQ.v43k6AcHE2KVoZlb.z3pb6g_1ibv.CP2vCoVfpNRTzUYe790EZmsuNAllAmJcrZRM
- N21O6Y4gIn2PnY.CkJQ.dFzoVosQ5sAbs492A2Nrnf4CsMC9BGSGw.FN7DQK76kI40wklGgM.hUk
- 2WenM1oeHkBeKre06_ReJ8Z2XuTzV9Zg_hXre0aF83dId1HQpsnwiVQ4AfQ0AbfzdhNuWXoJT_uy
- Ihht0rFxCkW0ZfBYRgtn8jv.4Y5NHz2k6QhRzhQYzmYF9HQgYenChmM4Na1J2KW_1VB5sze8g6Qj
- FSwVPJ3ywpGzNjpdbjpuoNVF0tcwYb5KBJdKaiz2ne1QAheWPDFHNkWnaWwA8PGgXbz4IOHzs0wG
- 06hhIuJnhguvfuAE4J7puqmFFuWMH3jorhRh9QElKPe33e4x6Xc5bU6qukKpau2UIBic5YLcCf7U
- T5kUIPnNjJK.1jcfQLuq8ozQMFS4pJnT5gdKmPF.yBwu0z0usOkD03cYuFJRMLfC486yJdS5NqSb
- 13l3elNPXafdvKwZhXXzkgh7gsL8dDrsJa1BfoOVncypNVDUo03_aibhjIoFDvygsuOuYAnI0zci
- hzzjbQ4VIfCWlGM0t5CorbJudWwQ3e3.8uDvO.PT0hwI-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Tue, 9 Aug 2022 17:43:41 +0000
-Received: by hermes--production-bf1-7586675c46-95jxt (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID aa23cd124b564927be4f82c5e8078940;
-          Tue, 09 Aug 2022 17:43:35 +0000 (UTC)
-Message-ID: <f38216d8-8ee4-d6fd-a5b1-0d21013e09c6@schaufler-ca.com>
-Date:   Tue, 9 Aug 2022 10:43:30 -0700
+        Tue, 9 Aug 2022 13:58:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB80526105
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 10:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660067933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=09PduL8Bxz81WATsNd44JrQ3EwyDrrI3zDl7S+d/+nU=;
+        b=LlE3iROLxlwW/zX6ZD7jADUZUOpOFYjyars7ImwovVFwHdRnG2/6ww2AIEJsouuINEpkXw
+        Swclr3yyi+4QGtvo2uhT0jCfzxxhWUYUXVrP6dqTRp/dYbTE7ZiVPbhhamYOd68mmIJ/a/
+        Xw/GhvHzagBjawOaUcNur+wZ6DTnnq8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-MFeBuG6OOMaxGaB2klZi_w-1; Tue, 09 Aug 2022 13:58:52 -0400
+X-MC-Unique: MFeBuG6OOMaxGaB2klZi_w-1
+Received: by mail-qk1-f197.google.com with SMTP id n15-20020a05620a294f00b006b5768a0ed0so10656209qkp.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Aug 2022 10:58:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=09PduL8Bxz81WATsNd44JrQ3EwyDrrI3zDl7S+d/+nU=;
+        b=8R3aPBfED6vXsW+SFsjHKBFk+G3Cg6YolJFIVE2od1G/wOAFMOQjnx6Ck66tRZbZ3d
+         07xSwIWPjSi2lbiqye4oubWzbek2j+dUf3/skhBtNWrQNc1ZwKEUfOK6Z1YBK1WtyooF
+         /6PUjHQuXaJET+tNWJnug36cDUVF9HX/8PMsJEB+LY2/dQHl1wz6Sc2ERqr+uUuL61ac
+         /POUJMoJGuaXw5y0DjzMxgNd28SDqAL/sGhZU+SXCgaArBdVN01ZMUsjRcyUIkWbgaXU
+         UiXpjWeVNpSVwiU9LiNjXGIikCNDrItFkVmqlWfZ7vAyUl47bTOM7dsK54HUJyDvalFx
+         aMWQ==
+X-Gm-Message-State: ACgBeo2xuyGFj9qdK9KDSw7IQ1v0RkTLP9wkANDNtyptHScoq3qDtFQy
+        4eZTvkPg1VIx3aJrMeYdB3EIg+oLWRUzmJk7XJi7uygxc19S9ex+GgwSJYgjw+b3V1PZA9XYQ4e
+        9i1h0BTy/0UC50UJnAFbVYCGL0O32
+X-Received: by 2002:a05:6214:5098:b0:476:b536:3308 with SMTP id kk24-20020a056214509800b00476b5363308mr20615766qvb.81.1660067932221;
+        Tue, 09 Aug 2022 10:58:52 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7oPyfJWfTABDCpAON4FDDHUZg1fgqWSPEtwElsZqbu+JeG21LUxNMaLpon4QMXifDE0JbcFw==
+X-Received: by 2002:a05:6214:5098:b0:476:b536:3308 with SMTP id kk24-20020a056214509800b00476b5363308mr20615739qvb.81.1660067931874;
+        Tue, 09 Aug 2022 10:58:51 -0700 (PDT)
+Received: from [192.168.98.18] ([107.12.98.143])
+        by smtp.gmail.com with ESMTPSA id a127-20020a379885000000b006af039ff090sm11607104qke.97.2022.08.09.10.58.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 10:58:51 -0700 (PDT)
+Message-ID: <c51343e9-3b39-5874-b44c-c15c310cbde8@redhat.com>
+Date:   Tue, 9 Aug 2022 13:58:50 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+Subject: Re: [RFC net] bonding: 802.3ad: fix no transmission of LACPDUs
 Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
-        casey@schaufler-ca.com
-References: <20220801180146.1157914-1-fred@cloudflare.com>
- <87les7cq03.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
- <87wnbia7jh.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
- <877d3ia65v.fsf@email.froward.int.ebiederm.org>
- <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com>
- <87czd95rjc.fsf@email.froward.int.ebiederm.org>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <87czd95rjc.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc:     netdev@vger.kernel.org, Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <c2f698e6f73e6e78232ab4ded065c3828d245dbd.1660065706.git.jtoppins@redhat.com>
+ <12990.1660066616@famine>
+From:   Jonathan Toppins <jtoppins@redhat.com>
+In-Reply-To: <12990.1660066616@famine>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20491 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/9/2022 9:07 AM, Eric W. Biederman wrote:
-> Paul Moore <paul@paul-moore.com> writes:
->
->> On Mon, Aug 8, 2022 at 3:43 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->>> "Eric W. Biederman" <ebiederm@xmission.com> writes:
->>>> Paul Moore <paul@paul-moore.com> writes:
->>>>
->>>>>> I did provide constructive feedback.  My feedback to his problem
->>>>>> was to address the real problem of bugs in the kernel.
->>>>> We've heard from several people who have use cases which require
->>>>> adding LSM-level access controls and observability to user namespace
->>>>> creation.  This is the problem we are trying to solve here; if you do
->>>>> not like the approach proposed in this patchset please suggest another
->>>>> implementation that allows LSMs visibility into user namespace
->>>>> creation.
->>>> Please stop, ignoring my feedback, not detailing what problem or
->>>> problems you are actually trying to be solved, and threatening to merge
->>>> code into files that I maintain that has the express purpose of breaking
->>>> my users.
->>>>
->>>> You just artificially constrained the problems, so that no other
->>>> solution is acceptable.  On that basis alone I am object to this whole
->>>> approach to steam roll over me and my code.
->>> If you want an example of what kind of harm it can cause to introduce a
->>> failure where no failure was before I invite you to look at what
->>> happened with sendmail when setuid was modified to fail, when changing
->>> the user of a process would cause RLIMIT_NPROC to be exceeded.
->> I think we are all familiar with the sendmail capabilities bug and the
->> others like it, but using that as an excuse to block additional access
->> controls seems very weak.  The Linux Kernel is very different from
->> when the sendmail bug hit (what was that, ~20 years ago?), with
->> advancements in capabilities and other discretionary controls, as well
->> as mandatory access controls which have enabled Linux to be certified
->> through a number of third party security evaluations.
-> If you are familiar with scenarios like that then why is there not
-> being due diligence performed to ensure that userspace won't break?
->
-> Certainly none of the paperwork you are talking about does that kind
-> of checking and it most definitely is not happening before the code
-> gets merged. 
->
-> I am saying that performing that due diligence should be a requirement
-> before anyone even thinks about merging a patch that adds permission
-> checks where no existed before.
->
-> Sometimes changes to fix security bugs can get away with adding new
-> restrictions because we know with a very very high degree of probability
-> that the only thing that will break will be exploit code.  In the rare
-> case when real world applications are broken such changes need to be
-> reverted or adapted.  No one has even made the argument that only
-> exploit code will be affected.
->
-> So I am sorry I am the one who has to be the one to get in the way of a
-> broken process with semantic review,  but due diligence has not been
-> done.  So I am say no way this code should be merged.
->
->
-> In addition to actually breaking existing userspace, I think there is a
-> very real danger of breaking userspace, I think there is a very real
-> danger of breaking network effects by making such a large change to the
-> design of user namespaces.
->
->
->>> I am not arguing that what you are proposing is that bad but unexpected
->>> failures cause real problems, and at a minimum that needs a better
->>> response than: "There is at least one user that wants a failure here".
->> Let me fix that for you: "There are multiple users who want to have
->> better visibility and access control for user namespace creation."
-> Visibility sure.  Design a proper hook for that.  All the proposed hook
-> can do is print an audit message.  It can't allocate or manage any state
-> as there is not the corresponding hook when a user namespace is freed.
-> So the proposed hook is not appropriate for increasing visibility.
->
->
-> Access control.  Not a chance unless it is carefully designed and
-> reviewed.  There is a very large cost to adding access control where
-> it has not previously existed.
->
-> I talk about that cost as people breaking my users as that is how I see
-> it.  I don't see any discussion on why I am wrong.
->
-> If we are going to add an access controls I want to see someone point
-> out something that is actually semantically a problem.  What motivates
-> an access control?
+On 8/9/22 13:36, Jay Vosburgh wrote:
+> Jonathan Toppins <jtoppins@redhat.com> wrote:
+> 
+>> Running the script in
+>> `tools/testing/selftests/net/bonding/bond-break-lacpdu-tx.sh` puts
+>> bonding into a state where it never transmits LACPDUs.
+>>
+>> line 53: echo 65535 > /sys/class/net/fbond/bonding/ad_actor_sys_prio
+>> setting bond param: ad_actor_sys_prio
+>> given:
+>>     params.ad_actor_system = 0
+>> call stack:
+>>     bond_option_ad_actor_sys_prio()
+>>     -> bond_3ad_update_ad_actor_settings()
+>>        -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
+>>        -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
+>>             params.ad_actor_system == 0
+>> results:
+>>      ad.system.sys_mac_addr = bond->dev->dev_addr
+>>
+>> line 59: ip link set fbond address 52:54:00:3B:7C:A6
+>> setting bond MAC addr
+>> call stack:
+>>     bond->dev->dev_addr = new_mac
+>>
+>> line 63: echo 65535 > /sys/class/net/fbond/bonding/ad_actor_sys_prio
+>> setting bond param: ad_actor_sys_prio
+>> given:
+>>     params.ad_actor_system = 0
+>> call stack:
+>>     bond_option_ad_actor_sys_prio()
+>>     -> bond_3ad_update_ad_actor_settings()
+>>        -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
+>>        -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
+>>             params.ad_actor_system == 0
+>> results:
+>>      ad.system.sys_mac_addr = bond->dev->dev_addr
+>>
+>> line 71: ip link set veth1-bond down master fbond
+>> given:
+>>     params.ad_actor_system = 0
+>>     params.mode = BOND_MODE_8023AD
+>>     ad.system.sys_mac_addr == bond->dev->dev_addr
+>> call stack:
+>>     bond_enslave
+>>     -> bond_3ad_initialize(); because first slave
+>>        -> if ad.system.sys_mac_addr != bond->dev->dev_addr
+>>           return
+>> results:
+>>      Nothing is run in bond_3ad_initialize() because dev_add equals
+>>      sys_mac_addr leaving the global ad_ticks_per_sec zero as it is
+>>      never initialized anywhere else.
+>>
+>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>> ---
+>> MAINTAINERS                                   |  1 +
+>> drivers/net/bonding/bond_3ad.c                |  2 +-
+>> .../net/bonding/bond-break-lacpdu-tx.sh       | 88 +++++++++++++++++++
+>> 3 files changed, 90 insertions(+), 1 deletion(-)
+>> create mode 100644 tools/testing/selftests/net/bonding/bond-break-lacpdu-tx.sh
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 386178699ae7..6e7cebc1bca3 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -3636,6 +3636,7 @@ F:	Documentation/networking/bonding.rst
+>> F:	drivers/net/bonding/
+>> F:	include/net/bond*
+>> F:	include/uapi/linux/if_bonding.h
+>> +F:	tools/testing/selftests/net/bonding/
+>>
+>> BOSCH SENSORTEC BMA400 ACCELEROMETER IIO DRIVER
+>> M:	Dan Robertson <dan@dlrobertson.com>
+>> diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+>> index d7fb33c078e8..e357bc6b8e05 100644
+>> --- a/drivers/net/bonding/bond_3ad.c
+>> +++ b/drivers/net/bonding/bond_3ad.c
+>> @@ -84,7 +84,7 @@ enum ad_link_speed_type {
+>> static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
+>> 	0, 0, 0, 0, 0, 0
+>> };
+>> -static u16 ad_ticks_per_sec;
+>> +static u16 ad_ticks_per_sec = 1000/AD_TIMER_INTERVAL;
+> 
+> 	How does this resolve the problem?  Does bond_3ad_initialize
+> actually run, or is this change sort of jump-starting things?
 
-Smack has no interest in using the proposed hook because user namespaces
-are neither subjects nor objects. They are collections of DAC and/or
-privilege configuration alternatives. Or something like that. From the
-viewpoint of a security module that only implements old fashioned MAC
-there is no value in constraining user namespaces.
+It is jump-starting things. Really bond_3ad_initialize() should be 
+fixed, but it seemed this change would be easier from a backporting 
+perspective. The real issue seems to be bond_3ad_initialize() checks to 
+make sure the "bond is not initialized yet" and if this check fails no 
+initialization is done, which seems incorrect. Some minimal amount of 
+initialization it seems needs to be done.
 
-SELinux, on the other hand, seeks to be comprehensive well beyond
-controlling accesses between subjects and objects. Asking the question
-"should there be a control on this operation?" seems sufficient to justify
-adding the control to SELinux policy. This is characteristic of
-"Fine Grain" control.
+This is also an order of execution bug, as I tried to layout in the 
+commit message. Basically setting fbond's MAC and then resetting the 
+option ad_actor_sys_prio causes the if check in bond_3ad_initialize() to 
+not execute anything. We first saw this when using NetworkManager as for 
+some reason NetworkManager was setting options twice, this is being 
+looked at as well.
 
-So I'm of two minds on this. I don't need the hook, but I also understand
-why SELinux and BPF want it. I don't necessarily agree with their logic,
-but it is consistent with existing behavior. Any system that uses either
-of those security modules needs to be ready for unexpected denials based
-on any potential security concern. Keeping namespaces completely orthogonal
-to LSM seems doomed to failure eventually.
+I am open to other possible fixes, I just chose the one that appeared to 
+be the easiest to backport, hence the RFC.
 
->
-> So far the only answer I have received is people want to reduce the
-> attack surface of the kernel.  I don't possibly see how reducing the
-> attack surface by removing user namespaces makes the probability of
-> having an exploitable kernel bug, anything approaching zero.
->
-> So I look at the calculus.  Chance of actually breaking userspace, or
-> preventing people with a legitimate use from using user namespaces > 0%.
-> Chance of actually preventing a determined attacker from exploiting the
-> kernel < 1%.  Amount of work to maintain, non-zero, and I really don't
-> like it.
->
-> Lots of work to achieve nothing but breaking some of my users.
->
-> So please stop trying to redesign my subsystem and cause me headaches,
-> unless you are going to do the due diligence necessary to do so
-> responsibly.
->
-> Eric
+> 
+>> static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
+>>
+>> static const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned =
+>> diff --git a/tools/testing/selftests/net/bonding/bond-break-lacpdu-tx.sh b/tools/testing/selftests/net/bonding/bond-break-lacpdu-tx.sh
+>> new file mode 100644
+>> index 000000000000..be9f1b64e89e
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/net/bonding/bond-break-lacpdu-tx.sh
+>> @@ -0,0 +1,88 @@
+>> +#!/bin/sh
+>> +
+>> +# Regression Test:
+>> +#   Verify LACPDUs get transmitted after setting the MAC address of
+>> +#   the bond.
+>> +#
+>> +# https://bugzilla.redhat.com/show_bug.cgi?id=2020773
+>> +#
+>> +#       +---------+
+>> +#       | fab-br0 |
+>> +#       +---------+
+>> +#            |
+>> +#       +---------+
+>> +#       |  fbond  |
+>> +#       +---------+
+>> +#        |       |
+>> +#    +------+ +------+
+>> +#    |veth1 | |veth2 |
+>> +#    +------+ +------+
+>> +#
+>> +# We use veths instead of physical interfaces
+>> +
+>> +set -e
+>> +#set -x
+>> +tmp=$(mktemp -q dump.XXXXXX)
+>> +cleanup() {
+>> +	ip link del fab-br0 >/dev/null 2>&1 || :
+>> +	ip link del fbond  >/dev/null 2>&1 || :
+>> +	ip link del veth1-bond  >/dev/null 2>&1 || :
+>> +	ip link del veth2-bond  >/dev/null 2>&1 || :
+>> +	modprobe -r bonding  >/dev/null 2>&1 || :
+>> +	rm -f -- ${tmp}
+>> +}
+>> +
+>> +trap cleanup 0 1 2
+>> +cleanup
+>> +sleep 1
+>> +
+>> +# create the bridge
+>> +ip link add fab-br0 address 52:54:00:3B:7C:A6 mtu 1500 type bridge \
+>> +	forward_delay 15
+>> +
+>> +# create the bond
+>> +ip link add fbond type bond
+>> +ip link set fbond up
+>> +
+>> +# set bond sysfs parameters
+>> +ip link set fbond down
+>> +echo 802.3ad           > /sys/class/net/fbond/bonding/mode
+>> +echo 200               > /sys/class/net/fbond/bonding/miimon
+>> +echo 1                 > /sys/class/net/fbond/bonding/xmit_hash_policy
+>> +echo 65535             > /sys/class/net/fbond/bonding/ad_actor_sys_prio
+>> +echo stable            > /sys/class/net/fbond/bonding/ad_select
+>> +echo slow              > /sys/class/net/fbond/bonding/lacp_rate
+>> +echo any               > /sys/class/net/fbond/bonding/arp_all_targets
+> 
+> 	Having a test case is very nice; would it be possible to avoid
+> using sysfs, though?  I believe all of these parameters are available
+> via /sbin/ip.
+
+I can convert the test case to `ip link`, it doesn't appear the method 
+of configuration would cause a difference in the result.
+
+> 
+> 	Also, is setting "arp_all_targets" necessary for the test?
+
+Its probably not, I probably do not need to configure most of these 
+options because most are default values. I can work on trimming it down 
+even more.
+
+> 
+> 	-J
+> 
+>> +
+>> +# set bond address
+>> +ip link set fbond address 52:54:00:3B:7C:A6
+>> +ip link set fbond up
+>> +
+>> +# set again bond sysfs parameters
+>> +echo 65535             > /sys/class/net/fbond/bonding/ad_actor_sys_prio
+>> +
+>> +# create veths
+>> +ip link add name veth1-bond type veth peer name veth1-end
+>> +ip link add name veth2-bond type veth peer name veth2-end
+>> +
+>> +# add ports
+>> +ip link set fbond master fab-br0
+>> +ip link set veth1-bond down master fbond
+>> +ip link set veth2-bond down master fbond
+>> +
+>> +# bring up
+>> +ip link set veth1-end up
+>> +ip link set veth2-end up
+>> +ip link set fab-br0 up
+>> +ip link set fbond up
+>> +ip addr add dev fab-br0 10.0.0.3
+>> +
+>> +tcpdump -n -i veth1-end -e ether proto 0x8809 >${tmp} 2>&1 &
+>> +sleep 60
+>> +pkill tcpdump >/dev/null 2>&1
+>> +num=$(grep "packets captured" ${tmp} | awk '{print $1}')
+>> +if test "$num" -gt 0; then
+>> +	echo "PASS, captured ${num}"
+>> +else
+>> +	echo "FAIL"
+>> +fi
+>> -- 
+>> 2.31.1
+>>
+> 
+> ---
+> 	-Jay Vosburgh, jay.vosburgh@canonical.com
+> 
+
