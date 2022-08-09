@@ -2,62 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8857258DC8D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 18:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC81658DCBC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 19:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242649AbiHIQzF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 12:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S245144AbiHIREH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 13:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243307AbiHIQzE (ORCPT
+        with ESMTP id S245274AbiHIREG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:55:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A083522B17;
-        Tue,  9 Aug 2022 09:55:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28D58B81658;
-        Tue,  9 Aug 2022 16:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C91DC433C1;
-        Tue,  9 Aug 2022 16:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660064100;
-        bh=K8o8qgPrj5J9A6+GrMQpiR8pTGn1sY02He1mKx0vTq0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jTE0oYw3+67b/0pE6Q41QON9uh/4DdFmcAh9hJFZg3bMY9/1Kl1xs0LFPJQr+3N8b
-         +gIQzRv3kpEAnXPAAdSLldfDCRa/+1QhAeNhUoQpcZLzIhfEGBmVL5BMxbmzXDPZQf
-         M8ip9LZjsDdy6ctxu3aQJ6k/4528n7KDv1LEqijhySaVGHZ0rfIRwl1j8p/HUvXZPC
-         /E4vdgoZmfCFaVP1DV1ud0izZgkUbzDvzzt12eYtn3N/N265upkq2E5hi3GJ4c/iq8
-         J23vH4L3LZEbnN0fPWVDvsMdx6Ae95pEZHxPirBzvzPLwUFeZy/D/KxWuklsuxmVuu
-         ALjVGxmDAJWWA==
-Date:   Tue, 9 Aug 2022 19:54:57 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, corbet@lwn.net,
-        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org, bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark
- a function to be sleepable
-Message-ID: <YvKRYRjJdXbAWL6Y@kernel.org>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-2-roberto.sassu@huawei.com>
+        Tue, 9 Aug 2022 13:04:06 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C6523F
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 10:04:04 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id f14so9220785qkm.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Aug 2022 10:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wK2UgiO0xmPm9gijXHdgykd9J2+++2+6yb4/6WYnghc=;
+        b=Qd2j159QFh2Ba9yZo2y6muhNd/MB6kx1pzreSiNh/IP8NYWmhVkxCntqx++BPMqkYa
+         afojxFFSXsVdw3irQaSLsOSlvHg4zmyHko5zytdVke0ShLA5lXIf5+WJ+saTzEUy8jLk
+         NlJnzoN2xfcUmzN+pImB1NmT9eYiOqGsnNN+s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wK2UgiO0xmPm9gijXHdgykd9J2+++2+6yb4/6WYnghc=;
+        b=x7lpYTy/zPs09eaz/QR3TgGDMxWAG4sB2qQkh6Gce9geQYM43ZNO+Npay4KMjsRRZc
+         yfPALmOhW1x95RE3uQqzio2Q1In/RKzX8LQm5oygrH4Krf0eNaOubLrkiN0Xiqm6p9mF
+         5kVnpXyfqz5GrsG5QhK3R3k1Mp0bRT2MxCJpBOUUAcFLNCu3wBGeYxh8QTVw3CZfQJkQ
+         9NGSuGrg4G0APWQt+LVIh+sQN02Fe6j9+P0DajQ4MIwvhYkW8IlMrmTXrEIqwHf0S6/m
+         U5ReJPI3q7HVvyteGZgvKzWccnwmuIFOjajszHq8Jy6xHi74u8rU1xGHtIWV4NVvvxmm
+         TmuA==
+X-Gm-Message-State: ACgBeo253a1s022icne1wc/hjM6rZTHzEZcUJvKkW75QfGAGg++IKCJF
+        k6IRgsSp763urEE79XNyB0U22jniulJm2hbhASltoA==
+X-Google-Smtp-Source: AA6agR5hqFK/rP1CLKlAqc+pNfT72uqlNlIbvr0GiCDZaizK6zy4eTXbYO7r2AkEzj0Uuu/VQkXwfJzymxc6m94w6eI=
+X-Received: by 2002:a05:620a:371e:b0:6b8:b7a4:42c8 with SMTP id
+ de30-20020a05620a371e00b006b8b7a442c8mr18416821qkb.608.1660064643348; Tue, 09
+ Aug 2022 10:04:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809134603.1769279-2-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <Yo4xb2w+FHhUtJNw@FVFF77S0Q05N> <0f8fe661-c450-ccd8-761f-dbfff449c533@huawei.com>
+ <Yo9REdx3nsgbZunE@FVFF77S0Q05N> <40fda0b0-0efc-ea1b-96d5-e51a4d1593dd@huawei.com>
+ <Yp4s7eNGvb2CNtPp@FVFF77S0Q05N.cambridge.arm.com> <55c1b9d6-1d53-9752-fb03-00f60ed15db7@huawei.com>
+In-Reply-To: <55c1b9d6-1d53-9752-fb03-00f60ed15db7@huawei.com>
+From:   Florent Revest <revest@chromium.org>
+Date:   Tue, 9 Aug 2022 19:03:52 +0200
+Message-ID: <CABRcYmKEn7eajowROwZKerngf0eo0jddNzYgFp82tAqgu0BAxg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/6] arm64: ftrace: Add ftrace direct call support
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        hpa@zytor.com, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        cj.chengjian@huawei.com, huawei.libin@huawei.com,
+        xiexiuqi@huawei.com, liwei391@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,95 +100,144 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 03:45:54PM +0200, Roberto Sassu wrote:
-> From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> 
-> From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> 
-> This allows to declare a kfunc as sleepable and prevents its use in
-> a non sleepable program.
+On Thu, Jun 9, 2022 at 6:27 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+> On 6/7/2022 12:35 AM, Mark Rutland wrote:
+> > On Thu, May 26, 2022 at 10:48:05PM +0800, Xu Kuohai wrote:
+> >> On 5/26/2022 6:06 PM, Mark Rutland wrote:
+> >>> On Thu, May 26, 2022 at 05:45:03PM +0800, Xu Kuohai wrote:
+> >>>> On 5/25/2022 9:38 PM, Mark Rutland wrote:
+> >>>>> On Wed, May 18, 2022 at 09:16:33AM -0400, Xu Kuohai wrote:
+> >>>>>> As noted in that thread, I have a few concerns which equally apply here:
+> >>>>>
+> >>>>> * Due to the limited range of BL instructions, it's not always possible to
+> >>>>>   patch an ftrace call-site to branch to an arbitrary trampoline. The way this
+> >>>>>   works for ftrace today relies upon knowingthe set of trampolines at
+> >>>>>   compile-time, and allocating module PLTs for those, and that approach cannot
+> >>>>>   work reliably for dynanically allocated trampolines.
+> >>>>
+> >>>> Currently patch 5 returns -ENOTSUPP when long jump is detected, so no
+> >>>> bpf trampoline is constructed for out of range patch-site:
+> >>>>
+> >>>> if (is_long_jump(orig_call, image))
+> >>>>    return -ENOTSUPP;
+> >>>
+> >>> Sure, my point is that in practice that means that (from the user's PoV) this
+> >>> may randomly fail to work, and I'd like something that we can ensure works
+> >>> consistently.
+> >>>
+> >>
+> >> OK, should I suspend this work until you finish refactoring ftrace?
+> >
+> > Yes; I'd appreciate if we could hold on this for a bit.
+> >
+> > I think with some ground work we can avoid most of the painful edge cases and
+> > might be able to avoid the need for custom trampolines.
+> >
+>
+> I'v read your WIP code, but unfortunately I didn't find any mechanism to
+> replace bpf trampoline in your code, sorry.
+>
+> It looks like bpf trampoline and ftrace works can be done at the same
+> time. I think for now we can just attach bpf trampoline to bpf prog.
+> Once your ftrace work is done, we can add support for attaching bpf
+> trampoline to regular kernel function. Is this OK?
 
-Nit: "Declare a kfunc as sleepable and prevent its use in a
-non-sleepable program."
+Hey Mark and Xu! :)
 
-It's missing the part *how* the patch accomplishes its goals.
+I'm interested in this feature too and would be happy to help.
 
-> 
-> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Signed-off-by: Hao Luo <haoluo@google.com>
-> ---
->  Documentation/bpf/kfuncs.rst | 6 ++++++
->  include/linux/btf.h          | 1 +
->  kernel/bpf/btf.c             | 9 +++++++++
->  3 files changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index c0b7dae6dbf5..c8b21de1c772 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -146,6 +146,12 @@ that operate (change some property, perform some operation) on an object that
->  was obtained using an acquire kfunc. Such kfuncs need an unchanged pointer to
->  ensure the integrity of the operation being performed on the expected object.
->  
-> +2.4.6 KF_SLEEPABLE flag
-> +-----------------------
-> +
-> +The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can only
-> +be called by sleepable BPF programs (BPF_F_SLEEPABLE).
-> +
->  2.5 Registering the kfuncs
->  --------------------------
->  
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index cdb376d53238..976cbdd2981f 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -49,6 +49,7 @@
->   * for this case.
->   */
->  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
-> +#define KF_SLEEPABLE   (1 << 5) /* kfunc may sleep */
->  
->  struct btf;
->  struct btf_member;
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 7e64447659f3..d3e4c86b8fcd 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -6175,6 +6175,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  {
->  	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
->  	bool rel = false, kptr_get = false, trusted_arg = false;
-> +	bool sleepable = false;
->  	struct bpf_verifier_log *log = &env->log;
->  	u32 i, nargs, ref_id, ref_obj_id = 0;
->  	bool is_kfunc = btf_is_kernel(btf);
-> @@ -6212,6 +6213,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  		rel = kfunc_flags & KF_RELEASE;
->  		kptr_get = kfunc_flags & KF_KPTR_GET;
->  		trusted_arg = kfunc_flags & KF_TRUSTED_ARGS;
-> +		sleepable = kfunc_flags & KF_SLEEPABLE;
->  	}
->  
->  	/* check that BTF function arguments match actual types that the
-> @@ -6419,6 +6421,13 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
->  			func_name);
->  		return -EINVAL;
->  	}
-> +
-> +	if (sleepable && !env->prog->aux->sleepable) {
-> +		bpf_log(log, "kernel function %s is sleepable but the program is not\n",
-> +			func_name);
-> +		return -EINVAL;
-> +	}
-> +
->  	/* returns argument register number > 0 in case of reference release kfunc */
->  	return rel ? ref_regno : 0;
->  }
-> -- 
-> 2.25.1
-> 
+I've been trying to understand what you both have in mind to figure out a way
+forward, please correct me if I got anything wrong! :)
 
-BR, Jarkko
+
+It looks like, currently, there are three places where an indirection to BPF is
+technically possible. Chronologically these are:
+
+- the function's patchsite (currently there are 2 nops, this could become 4
+  nops with Mark's series on per call-site ops)
+
+- the ftrace ops (currently called by iterating over a global list but could be
+  called more directly with Mark's series on per-call-site ops or by
+  dynamically generated branches with Wang's series on dynamic trampolines)
+
+- a ftrace trampoline tail call (currently, this is after restoring a full
+  pt_regs but this could become an args only restoration with Mark's series on
+  DYNAMIC_FTRACE_WITH_ARGS)
+
+
+If we first consider the situation when only a BPF program is attached to a
+kernel function:
+- Using the patchsite for indirection (proposed by Xu, same as on x86)
+   Pros:
+   - We have BPF trampolines anyway because they are required for orthogonal
+     features such as calling BPF programs as functions, so jumping into that
+     existing JITed code is straightforward
+   - This has the minimum overhead (eg: these trampolines only save the actual
+     number of args used by the function in ctx and avoid indirect calls)
+   Cons:
+   - If the BPF trampoline is JITed outside BL's limits, attachment can
+     randomly fail
+
+- Using a ftrace op for indirection (proposed by Mark)
+  Pros:
+  - BPF doesn't need to care about BL's range, ftrace_caller will be in range
+  Cons:
+  - The ftrace trampoline would first save all args in an ftrace_regs only for
+    the BPF op to then re-save them in a BPF ctx array (as per BPF calling
+    convention) so we'd effectively have to do the work of saving args twice
+  - BPF currently uses DYNAMIC_FTRACE_WITH_DIRECT_CALLS APIs. Either arm64
+    should implement DIRECT_CALLS with... an indirect call :) (that is, the
+    arch_ftrace_set_direct_caller op would turn back its ftrace_regs into
+    arguments for the BPF trampoline) or BPF would need to use a different
+    ftrace API just on arm64 (to define new ops, which, unless if they would be
+    dynamically JITed, wouldn't be as performant as the existing BPF
+    trampolines)
+
+- Using a ftrace trampoline tail call for indirection (not discussed yet iiuc)
+  Pros:
+  - BPF also doesn't need to care about BL's range
+  - This also leverages the existing BPF trampolines
+  Cons:
+  - This also does the work of saving/restoring arguments twice
+  - DYNAMIC_FTRACE_WITH_DIRECT_CALLS depends on DYNAMIC_FTRACE_WITH_REGS now
+    although in practice the registers kept by DYNAMIC_FTRACE_WITH_ARGS
+    should be enough to call BPF trampolines
+
+If we consider the situation when both ftrace ops and BPF programs are attached
+to a kernel function:
+- Using the patchsite for indirection can't solve this
+
+- Using a ftrace op for indirection (proposed by Mark) or using a ftrace
+  trampoline tail call as an indirection (proposed by Xu, same as on x86) have
+  the same pros & cons as in the BPF only situation except that this time we
+  pay the cost of registers saving twice for good reasons (we need args in both
+  ftrace_regs and the BPF ctx array formats anyway)
+
+
+Unless I'm missing something, it sounds like the following approach would work:
+- Always patch patchsites with calls to ftrace trampolines (within BL ranges)
+- Always go through ops and have arch_ftrace_set_direct_caller set
+  ftrace_regs->direct_call (instead of pt_regs->orig_x0 in this patch)
+- If ftrace_regs->direct_call != 0 at the end of the ftrace trampoline, tail
+  call it
+
+Once Mark's series on DYNAMIC_FTRACE_WITH_ARGS is merged, we would need to have
+DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+  depend on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
+BPF trampolines (the only users of this API now) only care about args to the
+attachment point anyway so I think this would work transparently ?
+
+Once Mark's series on per-callsite ops is merged, the second step (going
+through ops) would be significantly faster in the situation where only one
+program is used, therefore one arch_ftrace_set_direct_caller op.
+
+Once Wang's series on dynamic trampolines is merged, the second step (going
+through ops) would also be significantly faster in the case when multiple ops
+are attached.
+
+
+What are your thoughts? If this sounds somewhat sane, I'm happy to help out
+with the implementation as well :)
+
+Thanks!
+Florent
