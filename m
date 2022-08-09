@@ -2,115 +2,248 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8404E58E355
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 00:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51ED758E368
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 00:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiHIWk2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 18:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S229599AbiHIWxo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 18:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiHIWk0 (ORCPT
+        with ESMTP id S229436AbiHIWxn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 18:40:26 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C029F5C9FF
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 15:40:25 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10d845dcf92so15703320fac.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Aug 2022 15:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1P7bSaIcMszYR+JCa8vqV0slOGBPYXltybusx5DtRDM=;
-        b=ymJZNj+3ZRh6BJ8sdJOKWq3WWbUkXw6pah7LZ66RWLPU/lUKblHjIWaSbD/M/HlxZG
-         XvRNSo3oVXm145SSS41Ho65tqsFjNeoaSyRIP0bW6D/OrQGUY/gDwhF2RxO+RUiMyfX8
-         raLd9fpQ1xyculvAnmt5+WPihY3ElIT/hyo2mQADbhYzhsin1meT8LB/8oVNtwdYglR2
-         8BXLy2uW5Fa5RgTdW9YWJ9qrdQxzYFC7yR7a+zVgLQlWAzRxP+H9g8KpL7B+wKqVG4DB
-         gCXguHSRTkIZ5oafCKhLHLSwYLU2AXjEnpPWXLLbU4c91UgqdOJ2Ccc/AD0eJ2fxHc/n
-         nDPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1P7bSaIcMszYR+JCa8vqV0slOGBPYXltybusx5DtRDM=;
-        b=q7qj8Cqlah5R6MzRTye9jeKQicvUjNGTi3NSRdlmGRvsgPwtuhBLIe0SAa/XnTIdjP
-         C9+9MZEhdr4oqZJMizB0a1ucgIfNAHcZM4ydxV03fi9sPDG4tLcRYe2GvTDs5qEuKez+
-         WpMl4/LjTFYVoGE0EfvqThdzuuUBjpe3rLcUbCu+JKFk4lxDyJsYkyd21ApEQblhJUhZ
-         I32tmi4yi1MCJKfGVMLtNys8/rPOKW/ie3QB9jyBdJzAYtRmisGXeBLrV36kdM/QuA9y
-         Af4sK9m7kFfRwdsHx0JgHRdtfXKpIdOa8HmS52+vYc8yGeyCGvPKyV31Oi3JLgLNhdOn
-         jZEA==
-X-Gm-Message-State: ACgBeo21RIBhtKFwjWNwdfZpzwxxQLBhvzo8fCTWW/oXFwfuot6ZTZy5
-        YsolQK7gvFk+6H1PtxbSmziHjxQtmOCwMsR5uwyk
-X-Google-Smtp-Source: AA6agR4ClJpq8r9ZKoAk/K/rs8TO1cCIg6yZNX6VC6EIP7MbESfv7l10f5WE4D8xn0xBGSvYXyQ13bhBRsm1jf8wpUM=
-X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
- k8-20020a056870958800b00101c003bfe6mr292354oao.41.1660084825048; Tue, 09 Aug
- 2022 15:40:25 -0700 (PDT)
+        Tue, 9 Aug 2022 18:53:43 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E8A6612C;
+        Tue,  9 Aug 2022 15:53:41 -0700 (PDT)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oLY6F-000BWl-D5; Wed, 10 Aug 2022 00:53:23 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oLY6E-000IAn-NK; Wed, 10 Aug 2022 00:53:22 +0200
+Subject: Re: [PATCH v9 06/10] bpf: Add bpf_lookup_*_key() and bpf_key_put()
+ kfuncs
+To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
+ <20220809134603.1769279-7-roberto.sassu@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2b1d62ad-af4b-4694-ecc8-639fbd821a05@iogearbox.net>
+Date:   Wed, 10 Aug 2022 00:53:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
- <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
- <877d3ia65v.fsf@email.froward.int.ebiederm.org> <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com>
- <87czd95rjc.fsf@email.froward.int.ebiederm.org> <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
- <87a68dccyu.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87a68dccyu.fsf@email.froward.int.ebiederm.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 9 Aug 2022 18:40:14 -0400
-Message-ID: <CAHC9VhRkHuwjrtOoK+vn9zzERU2TM_2PEbQGRAZsr-D1pFv9GQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220809134603.1769279-7-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26622/Tue Aug  9 09:53:52 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 5:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> Paul Moore <paul@paul-moore.com> writes:
-> >
-> > What level of due diligence would satisfy you Eric?
->
-> Having a real conversation about what a change is doing and to talk
-> about it's merits and it's pro's and cons.  I can't promise I would be
-> convinced but that is the kind of conversation it would take.
+On 8/9/22 3:45 PM, Roberto Sassu wrote:
+> Add the bpf_lookup_user_key(), bpf_lookup_system_key() and bpf_key_put()
+> kfuncs, to respectively search a key with a given serial and flags, obtain
+> a key from a pre-determined ID defined in include/linux/verification.h, and
+> cleanup.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   include/linux/bpf.h      |   6 ++
+>   kernel/trace/bpf_trace.c | 151 +++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 157 insertions(+)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 0d56c23cc504..564b9e0b8c16 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2572,4 +2572,10 @@ static inline void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype) {}
+>   static inline void bpf_cgroup_atype_put(int cgroup_atype) {}
+>   #endif /* CONFIG_BPF_LSM */
+>   
+> +#ifdef CONFIG_KEYS
+> +struct bpf_key {
+> +	struct key *key;
+> +	bool valid_ptr;
+> +};
+> +#endif /* CONFIG_KEYS */
+>   #endif /* _LINUX_BPF_H */
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 68e5cdd24cef..33ca4cfe6e26 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -20,6 +20,7 @@
+>   #include <linux/fprobe.h>
+>   #include <linux/bsearch.h>
+>   #include <linux/sort.h>
+> +#include <linux/key.h>
+>   
+>   #include <net/bpf_sk_storage.h>
+>   
+> @@ -1181,6 +1182,156 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
+>   	.arg1_type	= ARG_PTR_TO_CTX,
+>   };
+>   
+> +#ifdef CONFIG_KEYS
+> +__diag_push();
+> +__diag_ignore_all("-Wmissing-prototypes",
+> +		  "kfuncs which will be used in BPF programs");
+> +
+> +/**
+> + * bpf_lookup_user_key - lookup a key by its serial
+> + * @serial: key serial
+> + * @flags: lookup-specific flags
+> + *
+> + * Search a key with a given *serial* and the provided *flags*. The
+> + * returned key, if found, has the reference count incremented by
+> + * one, and is stored in a bpf_key structure, returned to the caller.
+> + * The bpf_key structure must be passed to bpf_key_put() when done
+> + * with it, so that the key reference count is decremented and the
+> + * bpf_key structure is freed.
+> + *
+> + * Permission checks are deferred to the time the key is used by
+> + * one of the available key-specific kfuncs.
+> + *
+> + * Set *flags* with 1, to attempt creating a requested special
+> + * keyring (e.g. session keyring), if it doesn't yet exist. Set
+> + * *flags* with 2 to lookup a key without waiting for the key
+> + * construction, and to retrieve uninstantiated keys (keys without
+> + * data attached to them).
+> + *
+> + * Return: a bpf_key pointer with a valid key pointer if the key is found, a
+> + *         NULL pointer otherwise.
+> + */
+> +noinline __weak struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags)
 
-Earlier today you talked about due diligence to ensure that userspace
-won't break and I provided my reasoning on why userspace would not
-break (at least not because of this change).  Userspace might be
-blocked from creating a new user namespace due to a security policy,
-but that would be the expected and desired outcome, not breakage.  As
-far as your most recent comment regarding merit and pros/cons, I
-believe we have had that discussion (quite a few times already); it
-just seems you are not satisfied with the majority's conclusion.
+Why the need for noinline and the __weak here and below? (If indeed needed this
+should probably be explained in the commit desc.)
 
-Personally, I'm not sure there is anything more I can do to convince
-you that this patchset is reasonable; I'm going to leave it to others
-at this point, or we can all simply agree to disagree for the moment.
-Just as you haven't heard a compelling argument for this patchset, I
-haven't heard a compelling argument against it.  Barring some
-significant new discussion point, or opinion, I still plan on merging
-this into the LSM next branch when the merge window closes next week
-so it has time to go through a full round of linux-next testing.
-Assuming no unresolvable problems are found during the additional
-testing I plan to send it to Linus during the v6.1 merge window and
-I'm guessing we will get to go through this all again.  It's less than
-ideal, but I think this is where we are at right now.
+> +{
+> +	key_ref_t key_ref;
+> +	struct bpf_key *bkey;
+> +
+> +	/* Keep in sync with include/linux/key.h. */
+> +	if (flags > (KEY_LOOKUP_PARTIAL << 1) - 1)
 
--- 
-paul-moore.com
+Can't we just simplify and test flags & ~(KEY_LOOKUP_CREATE|KEY_LOOKUP_PARTIAL)?
+
+> +		return NULL;
+> +
+> +	/* Permission check is deferred until actual kfunc using the key. */
+> +	key_ref = lookup_user_key(serial, flags, KEY_DEFER_PERM_CHECK);
+> +	if (IS_ERR(key_ref))
+> +		return NULL;
+> +
+> +	bkey = kmalloc(sizeof(*bkey), GFP_KERNEL);
+> +	if (!bkey) {
+> +		key_put(key_ref_to_ptr(key_ref));
+> +		return bkey;
+
+nit: just return NULL probably cleaner
+
+> +	}
+> +
+> +	bkey->key = key_ref_to_ptr(key_ref);
+> +	bkey->valid_ptr = true;
+
+nit: I'd probably rename s/valid_ptr/has_ref/.
+
+> +	return bkey;
+> +}
+> +
+> +/**
+> + * bpf_lookup_system_key - lookup a key by a system-defined ID
+> + * @id: key ID
+> + *
+> + * Obtain a bpf_key structure with a key pointer set to the passed key ID.
+> + * The key pointer is marked as invalid, to prevent bpf_key_put() from
+> + * attempting to decrement the key reference count on that pointer. The key
+> + * pointer set in such way is currently understood only by
+> + * verify_pkcs7_signature().
+> + *
+> + * Set *id* to one of the values defined in include/linux/verification.h:
+> + * 0 for the primary keyring (immutable keyring of system keys); 1 for both
+> + * the primary and secondary keyring (where keys can be added only if they
+> + * are vouched for by existing keys in those keyrings); 2 for the platform
+> + * keyring (primarily used by the integrity subsystem to verify a kexec'ed
+> + * kerned image and, possibly, the initramfs signature).
+> + *
+> + * Return: a bpf_key pointer with an invalid key pointer set from the
+> + *         pre-determined ID on success, a NULL pointer otherwise
+> + */
+> +noinline __weak struct bpf_key *bpf_lookup_system_key(u64 id)
+> +{
+> +	struct bpf_key *bkey;
+> +
+> +	/* Keep in sync with defs in include/linux/verification.h. */
+> +	if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
+> +		return NULL;
+> +
+> +	bkey = kmalloc(sizeof(*bkey), GFP_KERNEL);
+
+nit: Can't this be GFP_ATOMIC? Then bpf_lookup_system_key doesn't need KF_SLEEPABLE
+attribute, fwiw. Overall, the bpf_lookup_{system,user}_key() look reasonable.
+
+> +	if (!bkey)
+> +		return bkey;
+> +
+> +	bkey->key = (struct key *)(unsigned long)id;
+> +	bkey->valid_ptr = false;
+> +
+> +	return bkey;
+> +}
+> +
+> +/**
+> + * bpf_key_put - decrement key reference count if key is valid and free bpf_key
+> + * @bkey: bpf_key structure
+> + *
+> + * Decrement the reference count of the key inside *bkey*, if the pointer
+> + * is valid, and free *bkey*.
+> + */
+> +noinline __weak void bpf_key_put(struct bpf_key *bkey)
+> +{
+> +	if (bkey->valid_ptr)
+> +		key_put(bkey->key);
+> +
+> +	kfree(bkey);
+> +}
+> +
+> +__diag_pop();
+> +
+> +BTF_SET8_START(key_kfunc_set)
+> +BTF_ID_FLAGS(func, bpf_lookup_user_key, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, bpf_lookup_system_key,
+> +	     KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
+> +BTF_SET8_END(key_kfunc_set)
+> +
+> +static const struct btf_kfunc_id_set bpf_key_kfunc_set = {
+> +	.owner = THIS_MODULE,
+> +	.set = &key_kfunc_set,
+> +};
+> +#endif /* CONFIG_KEYS */
+> +
+> +const struct btf_kfunc_id_set *kfunc_sets[] = {
+> +#ifdef CONFIG_KEYS
+> +	&bpf_key_kfunc_set,
+> +#endif /* CONFIG_KEYS */
+> +};
