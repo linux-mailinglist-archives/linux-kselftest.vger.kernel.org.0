@@ -2,125 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7646E58D04B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 00:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A73158D08A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 01:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244471AbiHHWrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Aug 2022 18:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        id S244449AbiHHXrQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Aug 2022 19:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237145AbiHHWrg (ORCPT
+        with ESMTP id S243624AbiHHXrP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Aug 2022 18:47:36 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF28D1903A
-        for <linux-kselftest@vger.kernel.org>; Mon,  8 Aug 2022 15:47:32 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-10e615a36b0so12200140fac.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Aug 2022 15:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Xgr1zcvVw2pumc5i5OyXUSrHvFDN2EKwHe94fGDtFRc=;
-        b=SpIxuRBySHLiJnzlZCqbG6d10oLBSB6+sdgZ2x0xGqg9Qwam4ErXCCwXAKSMe60/qQ
-         LXKVAHne5E6sMcti6T8BzKOmUlluVg+91nYIVsD/0Gx3/1Rh2GpuPw9yoGoFsgMlDreE
-         Hyl7ji9Dex0sOxkL7gyZ6yKDSJMbl0988qMpWHJVC/avb0dk6uwrDgie4XTtnptBThSh
-         Up1jSUYskmN+BE7RpU+76YeIe2h9UEMKds5itTlwRZM2KUpbnrIwFoatEQqlk2f3vpqS
-         XUCZ38YIDNDrGV3oUTW23sBHHU+JWpi09zppu2VYozxXeu5uN48iLjgdfOfOEWtu5/ZA
-         oTxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Xgr1zcvVw2pumc5i5OyXUSrHvFDN2EKwHe94fGDtFRc=;
-        b=azIhGer2eeTNmYH7Z67GIhFxgcjYTO0ChuUsD2NvUGuQN1eqfdiNorTQG2bFUIZI3u
-         /FSA7v7DiWr72l9+mOuQDjNpRpeFBqecbwUBYdbAfhIDET5BnxTUM8L8AUKwaH1Vg9rF
-         nb3HO0vgylhgvJbX/P2WwoskBDqBqCzRHNmAmeZA/HbcGdFVbos3C5aOJrfWrBqxf6PP
-         cO3T/BbDZbfZB3Ly+nJ8lfRWeQpppEUUJdy6EGKlIxbaKOs0KY3paI0VWBc8t3WASVoz
-         wrKxpJRdmBw1KpT9tNQkLBoFArwkBNsCQTXslp71nKEbh/pDBlJTInearXzduALNx9tq
-         dcOQ==
-X-Gm-Message-State: ACgBeo1qD9DgUIoRpqdE4OQqCCpDSLUQgmobTvyI5dDNO1DEtVQ8W5nf
-        RaViKjiZEFJRwbpgQbBJtO2dUp7N/GCfkStjjHkV
-X-Google-Smtp-Source: AA6agR4xuYwVmCC3J5R5EIaV2vMNU+sZEdEaDmuaoGD6OS/1cZ5bdac1//FK/Z+H/JjLJ5ZJ0b1/X9olSD/ppX1e9zM=
-X-Received: by 2002:a05:6870:b41e:b0:116:5dc7:192a with SMTP id
- x30-20020a056870b41e00b001165dc7192amr2571672oap.136.1659998852083; Mon, 08
- Aug 2022 15:47:32 -0700 (PDT)
+        Mon, 8 Aug 2022 19:47:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F8611C10B
+        for <linux-kselftest@vger.kernel.org>; Mon,  8 Aug 2022 16:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660002433;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X5KqcD8vx4696/tvPTBo340K93s7EUOcDjiDbh4jg8c=;
+        b=Vfb8EzXjo32pAUb4aNz5d8kdrOa1fwksHmEmBZRB4XDmzUh5v9SZdTP7yMVN2b0bhkjOXU
+        tDHSPLCzdPG5OzguuAjhm3WLXKP6ylZKzedGX2s7rPf8Sl54zaBm6WBWtAO8CBqXdNOz5B
+        PvLxnnJf/HqsksHW/3xA5pjqhc2ZDZQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-wWST4vMdPgCqHfXORRJARA-1; Mon, 08 Aug 2022 19:47:10 -0400
+X-MC-Unique: wWST4vMdPgCqHfXORRJARA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 09E21811E84;
+        Mon,  8 Aug 2022 23:47:10 +0000 (UTC)
+Received: from [10.64.54.20] (vpn2-54-20.bne.redhat.com [10.64.54.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7559918ECC;
+        Mon,  8 Aug 2022 23:47:07 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: tools/testing/selftests/kvm/rseq_test and glibc 2.35
+To:     Florian Weimer <fweimer@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <875yj2n2r0.fsf@oldenburg.str.redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <465d3599-2433-7f6e-66fc-b4018ba258cf@redhat.com>
+Date:   Tue, 9 Aug 2022 11:47:43 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
- <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
- <877d3ia65v.fsf@email.froward.int.ebiederm.org> <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 8 Aug 2022 18:47:21 -0400
-Message-ID: <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <875yj2n2r0.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 3:43 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> "Eric W. Biederman" <ebiederm@xmission.com> writes:
-> > Paul Moore <paul@paul-moore.com> writes:
-> >
-> >>> I did provide constructive feedback.  My feedback to his problem
-> >>> was to address the real problem of bugs in the kernel.
-> >>
-> >> We've heard from several people who have use cases which require
-> >> adding LSM-level access controls and observability to user namespace
-> >> creation.  This is the problem we are trying to solve here; if you do
-> >> not like the approach proposed in this patchset please suggest another
-> >> implementation that allows LSMs visibility into user namespace
-> >> creation.
-> >
-> > Please stop, ignoring my feedback, not detailing what problem or
-> > problems you are actually trying to be solved, and threatening to merge
-> > code into files that I maintain that has the express purpose of breaking
-> > my users.
-> >
-> > You just artificially constrained the problems, so that no other
-> > solution is acceptable.  On that basis alone I am object to this whole
-> > approach to steam roll over me and my code.
->
-> If you want an example of what kind of harm it can cause to introduce a
-> failure where no failure was before I invite you to look at what
-> happened with sendmail when setuid was modified to fail, when changing
-> the user of a process would cause RLIMIT_NPROC to be exceeded.
+Hi Florian,
 
-I think we are all familiar with the sendmail capabilities bug and the
-others like it, but using that as an excuse to block additional access
-controls seems very weak.  The Linux Kernel is very different from
-when the sendmail bug hit (what was that, ~20 years ago?), with
-advancements in capabilities and other discretionary controls, as well
-as mandatory access controls which have enabled Linux to be certified
-through a number of third party security evaluations.
+On 8/9/22 2:01 AM, Florian Weimer wrote:
+> It has come to my attention that the KVM rseq test apparently needs to
+> be ported to glibc 2.35.  The background is that on aarch64, rseq is the
+> only way to get a practically useful sched_getcpu.  (There's no hidden
+> per-task CPU state the vDSO could reveal as the CPU ID.)
+> 
 
-> I am not arguing that what you are proposing is that bad but unexpected
-> failures cause real problems, and at a minimum that needs a better
-> response than: "There is at least one user that wants a failure here".
+Yes, kvm/selftests/rseq needs to support glibc 2.35. The question is
+about glibc 2.34 or 2.35 because kvm/selftest/rseq fails on glibc 2.34
 
-Let me fix that for you: "There are multiple users who want to have
-better visibility and access control for user namespace creation."
+I would guess upstream-glibc-2.35 feature is enabled on downstream
+glibc-2.34?
 
---
-paul-moore.com
+# ./rseq_test
+==== Test Assertion Failure ====
+   rseq_test.c:60: !r
+   pid=112043 tid=112043 errno=22 - Invalid argument
+      1	0x0000000000401973: main at rseq_test.c:226
+      2	0x0000ffff84b6c79b: ?? ??:0
+      3	0x0000ffff84b6c86b: ?? ??:0
+      4	0x0000000000401b6f: _start at ??:?
+   rseq failed, errno = 22 (Invalid argument)
+# rpm -aq | grep glibc-2
+glibc-2.34-39.el9.aarch64
+
+
+> The main rseq tests have already been adjusted via:
+> 
+> commit 233e667e1ae3e348686bd9dd0172e62a09d852e1
+> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Date:   Mon Jan 24 12:12:45 2022 -0500
+> 
+>      selftests/rseq: Uplift rseq selftests for compatibility with glibc-2.35
+>      
+>      glibc-2.35 (upcoming release date 2022-02-01) exposes the rseq per-thread
+>      data in the TCB, accessible at an offset from the thread pointer, rather
+>      than through an actual Thread-Local Storage (TLS) variable, as the
+>      Linux kernel selftests initially expected.
+>      
+>      The __rseq_abi TLS and glibc-2.35's ABI for per-thread data cannot
+>      actively coexist in a process, because the kernel supports only a single
+>      rseq registration per thread.
+>      
+>      Here is the scheme introduced to ensure selftests can work both with an
+>      older glibc and with glibc-2.35+:
+>      
+>      - librseq exposes its own "rseq_offset, rseq_size, rseq_flags" ABI.
+>      
+>      - librseq queries for glibc rseq ABI (__rseq_offset, __rseq_size,
+>        __rseq_flags) using dlsym() in a librseq library constructor. If those
+>        are found, copy their values into rseq_offset, rseq_size, and
+>        rseq_flags.
+>      
+>      - Else, if those glibc symbols are not found, handle rseq registration
+>        from librseq and use its own IE-model TLS to implement the rseq ABI
+>        per-thread storage.
+>      
+>      Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>      Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>      Link: https://lkml.kernel.org/r/20220124171253.22072-8-mathieu.desnoyers@efficios.com
+> 
+> But I don't see a similar adjustment for
+> tools/testing/selftests/kvm/rseq_test.c.  As an additional wrinkle,
+> you'd have to start calling getcpu (glibc function or system call)
+> because comparing rseq.cpu_id against sched_getcpu won't test anything
+> anymore once glibc implements sched_getcpu using rseq.
+> 
+> We noticed this because our downstream glibc version, while based on
+> 2.34, enables rseq registration by default.  To facilitate coordination
+> with rseq application usage, we also backported the __rseq_* ABI
+> symbols, so the selftests could use that even in our downstream version.
+> (We enable the glibc tunables downstream, but they are an optional
+> glibc feature, so it's probably better in the long run to fix the kernel
+> selftests rather than using the tunables as a workaround.)
+> 
+
+Thanks for the pointer. It makes sense. So it means rseq registration has
+been done by glibc TLS? In this case, kvm/selftests/rseq is unable to
+register again.
+
+I will come up something similiar for kvm/selftest/rseq.
+
+Thanks,
+Gavin
+
