@@ -2,155 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B0658E08C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 22:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A8658E15F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Aug 2022 22:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242698AbiHIUC6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 16:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S229479AbiHIUyJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 16:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346132AbiHIUAy (ORCPT
+        with ESMTP id S229917AbiHIUxm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:00:54 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C769CF9;
-        Tue,  9 Aug 2022 13:00:51 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id CA12218849F2;
-        Tue,  9 Aug 2022 20:00:49 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id B35F725032B7;
-        Tue,  9 Aug 2022 20:00:49 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id A6770A1A0047; Tue,  9 Aug 2022 20:00:49 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Tue, 9 Aug 2022 16:53:42 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EBD15FDB
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 13:53:41 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id x10so12442237plb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Aug 2022 13:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=pJblVN/EwDKnGoYTvY52rorYjnKswwmvjLRNuq3g3VE=;
+        b=GbUPKddyRcffK7GnxZeqqcUioCOBYjZYcND1JWvpTTanaun1D9fGTvEAbdn125PW6m
+         JLjs5YyKKh7edLtHVT0tHekB/pNop76ht7souklms4QnoaKiHs8glUoRTRM+Mfo8T9Wd
+         Q8JXLAja5U0d1nkYehhAvAfuKo06DjcO+uoxCK8jXyV1FA9g3aXQEBfaTLKZJ6FVL/Mt
+         NMgBfRYESMHWHpBAQGqe86ARj9HVA94d7TsUE/YkyfA1kBd8DX8QSHykjK5j4xexTJPv
+         k3mNOu14Dx9T3iSZbwK0WM2QonrbFR+wdYL0qCqooRcYs3zUHOlu/GhNspIACNbPZ6x3
+         ZDBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=pJblVN/EwDKnGoYTvY52rorYjnKswwmvjLRNuq3g3VE=;
+        b=S0MpgB9h0JWTrn/NfVWet8L6Ke8bWTKyhmInCLCQP68YZrRIUU7VIVg94v+cDJm+Hh
+         WjuQ92MDjOOo57NHUMnOY3OoJ2N/iMhY/IqSjps69bLR4HjTLkQoPy3+XgiouNOFOF3k
+         xO74U8Ej7NJ+twS2Au9B1cBf5oSUcmVjjvk7XqBb9yq4ljhaPzyqfr8fv1+MslFFMS2d
+         I1eKltGsh2a3Ov5TJN1ICwgIjHYGC6gNv1N/pO38/bOmI9V5PsVDjgYR2SEhsm91O0Tm
+         7tJheMmhNgr5HpwEsh/eDGezyiICiXJC02Po7NWd1FAxjFxFesxy5+5W1mVj3JrxHgfT
+         3Ulg==
+X-Gm-Message-State: ACgBeo3xJ3pyBGZeUxNGnnPzOFCZ44aEJnmKzP1JviZCy4UXDd9nc5AQ
+        pT9Mnog+KQr/tBTBntbO3U/5MQ==
+X-Google-Smtp-Source: AA6agR5zPiBVnYt1kAUuxrAkMt0LXjWgm1wd+WLRJjf0RsoJ/oyZpNSqLwA3FNlryMJpO0oPIuNAIg==
+X-Received: by 2002:a17:902:eb8a:b0:16d:c75a:c40b with SMTP id q10-20020a170902eb8a00b0016dc75ac40bmr25435222plg.102.1660078420716;
+        Tue, 09 Aug 2022 13:53:40 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u8-20020a170902e5c800b00170a359eb0esm5711482plf.63.2022.08.09.13.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 13:53:40 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 20:53:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     Florian Weimer <fweimer@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
+        oliver.upton@linux.dev, andrew.jones@linux.dev,
+        mathieu.desnoyers@efficios.com, yihyu@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH 2/2] KVM: selftests: Use getcpu() instead of
+ sched_getcpu() in rseq_test
+Message-ID: <YvLJUEOcxaZKW0y1@google.com>
+References: <20220809060627.115847-1-gshan@redhat.com>
+ <20220809060627.115847-3-gshan@redhat.com>
+ <87y1vxncv1.fsf@oldenburg.str.redhat.com>
+ <87mtcdnaxe.fsf@oldenburg.str.redhat.com>
+ <ea2ef1a2-0fd8-448b-d7ca-254603518823@redhat.com>
 MIME-Version: 1.0
-Date:   Tue, 09 Aug 2022 22:00:49 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YvIm+OvXvxbH6POv@shredder>
-References: <20220708084904.33otb6x256huddps@skbuf>
- <e6f418705e19df370c8d644993aa9a6f@kapio-technology.com>
- <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <79683d9cf122e22b66b5da3bbbb0ee1f@kapio-technology.com>
- <YvIm+OvXvxbH6POv@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea2ef1a2-0fd8-448b-d7ca-254603518823@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-08-09 11:20, Ido Schimmel wrote:
-> On Mon, Aug 01, 2022 at 05:33:49PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-07-13 14:39, Ido Schimmel wrote:
->> 
->> >
->> > What are "Storm Prevention" and "zero-DPV" FDB entries?
->> >
->> 
->> For the zero-DPV entries, I can summarize:
->> 
->> Since a CPU can become saturated from constant SA Miss Violations from 
->> a
->> denied source, source MAC address are masked by loading a zero-DPV
->> (Destination Port Vector) entry in the ATU. As the address now appears 
->> in
->> the database it will not cause more Miss Violations. ANY port trying 
->> to send
->> a frame to this unauthorized address is discarded. Any locked port 
->> trying to
->> use this unauthorized address has its frames discarded too (as the 
->> ports SA
->> bit is not set in the ATU entry).
+On Tue, Aug 09, 2022, Gavin Shan wrote:
+> On 8/9/22 5:17 PM, Florian Weimer wrote:
+> > * Florian Weimer:
+> > 
+> > > * Gavin Shan:
+> > > 
+> > > > sched_getcpu() is glibc dependent and it can simply return the CPU
+> > > > ID from the registered rseq information, as Florian Weimer pointed.
+> > > > In this case, it's pointless to compare the return value from
+> > > > sched_getcpu() and that fetched from the registered rseq information.
+> > > > 
+> > > > Fix the issue by replacing sched_getcpu() with getcpu(), as Florian
+> > > > suggested. The comments are modified accordingly.
+> > > 
+> > > Note that getcpu was added in glibc 2.29, so perhaps you need to perform
+> > > a direct system call?
+> > 
+> > One more thing: syscall(__NR_getcpu) also has the advantage that it
+> > wouldn't have to be changed again if node IDs become available via rseq
+> > and getcpu is implemented using that.
+> > 
+> > Thanks,
+> > Florian
+> > 
 > 
-> What happens to unlocked ports that have learning enabled and are 
-> trying
-> to use this address as SMAC? AFAICT, at least in the bridge driver, the
-> locked entry will roam, but will keep the "locked" flag, which is
-> probably not what we want. Let's see if we can agree on these semantics
-> for a "locked" entry:
+> Thanks, Florian. It makes sense to me to use syscall(__NR_getcpu) in
+> next revision. Thanks for your quick review :)
 
-The next version of this will block forwarding to locked entries in the 
-bridge, so they will behave like the zero-DPV entries.
-
-> 
-> 1. It discards packets with matching DMAC, regardless of ingress port. 
-> I
-> read the document [1] you linked to in a different reply and could not
-> find anything against this approach, so this might be fine or at least
-> not very significant.
-> 
-> Note that this means that "locked" entries need to be notified to 
-> device
-> drivers so that they will install a matching entry in the HW FDB.
-
-Okay, so as V4 does (just without the error noted).
-
-> 
-> 2. It is not refreshed and has ageing enabled. That is, after initial
-> installation it will be removed by the bridge driver after configured
-> ageing time unless converted to a regular (unlocked) entry.
-> 
-> I assume this allows you to remove the timer implementation from your
-> driver and let the bridge driver notify you about the removal of this
-> entry.
-
-Okay, but only if the scheme is not so that the driver creates the 
-locked entries itself, unless you indicate that the driver notifies the 
-bridge, which then notifies back to the driver and installs the zero-DPV 
-entry? If not I think the current implementation for the mv88e6xxx is 
-fine.
-
-> 
-> 3. With regards to roaming, the entry cannot roam between locked ports
-> (they need to have learning disabled anyway), but can roam to an
-> unlocked port, in which case it becomes a regular entry that can roam
-> and age.
-> 
-> If we agree on these semantics, then I can try to verify that at least
-> Spectrum can support them (it seems mv88e6xxx can).
-
-The consensus here is that at least for the mv88e6xxx, learning should 
-be on and link local learning should be blocked by the userspace setting 
-you pointed to earlier.
-
-> 
-> P.S. Sorry for the delay, I'm busy with other tasks at the moment.
-
-I understand :-)
-
-> 
-> [1] 
-> https://www.cisco.com/c/en/us/td/docs/solutions/Enterprise/Security/TrustSec_1-99/MAB/MAB_Dep_Guide.html#wp392522
++1, and definitely add a comment to prevent future "cleanup".
