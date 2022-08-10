@@ -2,119 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6003D58E431
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 02:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8EE58E437
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 02:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiHJAqH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 20:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S229513AbiHJAwF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 20:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiHJAqE (ORCPT
+        with ESMTP id S229456AbiHJAwE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 20:46:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB3024B4BA
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 17:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660092361;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S/MAn6qAg/Jsbs3sbj308t0Whag8V+DOtIapBcO490g=;
-        b=JGzN7HUkemSs5/rkHWzwXuSsXBxqonPlbreNMjjufGbp4y3DWhQvbL3bWrAMMOOa86UqlG
-        m3wBCFqg2syrhWkL+kHerg+DhyJJvJMoRNgTMsIiab/aLSy9hKuiU+1D+ejZIQbA/JyOKL
-        +QYc8VfLZR2pWat2KOJND0aqkt3OlzA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-XoWcY8H1PiqgLZYkjOgRSg-1; Tue, 09 Aug 2022 20:45:58 -0400
-X-MC-Unique: XoWcY8H1PiqgLZYkjOgRSg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2ADD8039A1;
-        Wed, 10 Aug 2022 00:45:57 +0000 (UTC)
-Received: from [10.64.54.189] (vpn2-54-189.bne.redhat.com [10.64.54.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B797492C3B;
-        Wed, 10 Aug 2022 00:45:53 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Use getcpu() instead of
- sched_getcpu() in rseq_test
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Florian Weimer <fweimer@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
-        oliver.upton@linux.dev, andrew.jones@linux.dev,
-        mathieu.desnoyers@efficios.com, yihyu@redhat.com,
-        shan.gavin@gmail.com
-References: <20220809060627.115847-1-gshan@redhat.com>
- <20220809060627.115847-3-gshan@redhat.com>
- <87y1vxncv1.fsf@oldenburg.str.redhat.com>
- <87mtcdnaxe.fsf@oldenburg.str.redhat.com>
- <ea2ef1a2-0fd8-448b-d7ca-254603518823@redhat.com>
- <YvLJUEOcxaZKW0y1@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <2f8f9062-3e89-7a09-02c4-ab1b2dc07356@redhat.com>
-Date:   Wed, 10 Aug 2022 10:45:50 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Tue, 9 Aug 2022 20:52:04 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3D374E14;
+        Tue,  9 Aug 2022 17:52:03 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z2so17203982edc.1;
+        Tue, 09 Aug 2022 17:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Il1Pi56tAdbHD2xkzMpWzGBdztzd5zgrSb7IoS2zT/U=;
+        b=FkIsMzd+v0083XugBqAhPXZbO1+72jhsZHlw61FcLI/wavV+QldtPeUl3OCyrp3Fyh
+         rhAQdPX6jx45sT0czdTuoyR4h4UMXOXYwZyHsQszuQnRbHvpbEzMmxgRiSA3QEaM4mBs
+         SKnFU5ejLzWtXKmbxN0Pv3GwI6XLv0/y97ibV5XVZh9PpNh9njFEPsRyWFQKgVwo42SK
+         NOv+UA+ZWUQRCDhdQALBJTWOeVt+T6mbPxZ31MNAfAPfMd+Nn+IFB7c5Ic20smmRk/GZ
+         IatX2zC7jb3XV6vxFp30NlaQJISIXCVKNKMc6255KHq7r6W83s3bHHAcV8ZBnIOpZTnc
+         Q3zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Il1Pi56tAdbHD2xkzMpWzGBdztzd5zgrSb7IoS2zT/U=;
+        b=RkPuR3xKm1Yy1S9fNO4QQta6e5zXhgYKcoHzIyv7iSws68N1tSDTFxmk24OsPyhTEB
+         YjuqrtRAgmaufFvIdBXMhWlphuQL9ziwnfswTtv6cy3tqaACrNH0GVCSTwiZ1b4NbC2g
+         aWtnZ9WmVW9oevVlNhbpEd/ntRW9y2kglJmFmJ1ywoaZ4sQChZGk8PKfZ7nxRZYYYAYK
+         xg3Opz/uuUk6JSsmvdjsssZjnlfDzh/7nWNXY0cMsBBp7+XFOa6tBaSQAlI+v6QhuATM
+         6VnnN6EgfIESj/l5KSeeW+qBNgFaIRXbcAd8Q+2MMdQ7oOuUbFw8HhI2oeRbnaz48rSo
+         MIIA==
+X-Gm-Message-State: ACgBeo0rDDfMQB09McPgc3JNMh7yCZJBe70UzdqzhZnbnip6sojPdrji
+        INfF+0FcXo/ICe/Ag79nzVEkMdHwjZuJ5jSqn/M=
+X-Google-Smtp-Source: AA6agR6sLH6713PplNbjRmTeKN+KUJlbDRD64uMge0GGzpH/dD2DRuAtHnMwxGID1u5AP+Pk550sA76uQe/IBLWBCeE=
+X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id
+ ef11-20020a05640228cb00b0043bc6d7ef92mr24499717edb.333.1660092722224; Tue, 09
+ Aug 2022 17:52:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YvLJUEOcxaZKW0y1@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+ <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+ <877d3ia65v.fsf@email.froward.int.ebiederm.org> <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com>
+ <87czd95rjc.fsf@email.froward.int.ebiederm.org> <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
+ <87a68dccyu.fsf@email.froward.int.ebiederm.org> <CAHC9VhRkHuwjrtOoK+vn9zzERU2TM_2PEbQGRAZsr-D1pFv9GQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhRkHuwjrtOoK+vn9zzERU2TM_2PEbQGRAZsr-D1pFv9GQ@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 9 Aug 2022 17:51:50 -0700
+Message-ID: <CAADnVQJcvwb_5dY-FomsDzJWZQG_5EWLmjBFJYNqomd0f9XO+w@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederick Lawler <fred@cloudflare.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        eparis@parisplace.org, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        selinux@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/10/22 6:53 AM, Sean Christopherson wrote:
-> On Tue, Aug 09, 2022, Gavin Shan wrote:
->> On 8/9/22 5:17 PM, Florian Weimer wrote:
->>> * Florian Weimer:
->>>
->>>> * Gavin Shan:
->>>>
->>>>> sched_getcpu() is glibc dependent and it can simply return the CPU
->>>>> ID from the registered rseq information, as Florian Weimer pointed.
->>>>> In this case, it's pointless to compare the return value from
->>>>> sched_getcpu() and that fetched from the registered rseq information.
->>>>>
->>>>> Fix the issue by replacing sched_getcpu() with getcpu(), as Florian
->>>>> suggested. The comments are modified accordingly.
->>>>
->>>> Note that getcpu was added in glibc 2.29, so perhaps you need to perform
->>>> a direct system call?
->>>
->>> One more thing: syscall(__NR_getcpu) also has the advantage that it
->>> wouldn't have to be changed again if node IDs become available via rseq
->>> and getcpu is implemented using that.
->>>
->>> Thanks,
->>> Florian
->>>
->>
->> Thanks, Florian. It makes sense to me to use syscall(__NR_getcpu) in
->> next revision. Thanks for your quick review :)
-> 
-> +1, and definitely add a comment to prevent future "cleanup".
-> 
+On Tue, Aug 9, 2022 at 3:40 PM Paul Moore <paul@paul-moore.com> wrote:
+>
+> On Tue, Aug 9, 2022 at 5:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > Paul Moore <paul@paul-moore.com> writes:
+> > >
+> > > What level of due diligence would satisfy you Eric?
+> >
+> > Having a real conversation about what a change is doing and to talk
+> > about it's merits and it's pro's and cons.  I can't promise I would be
+> > convinced but that is the kind of conversation it would take.
+>
+> Earlier today you talked about due diligence to ensure that userspace
+> won't break and I provided my reasoning on why userspace would not
+> break (at least not because of this change).  Userspace might be
+> blocked from creating a new user namespace due to a security policy,
+> but that would be the expected and desired outcome, not breakage.  As
+> far as your most recent comment regarding merit and pros/cons, I
+> believe we have had that discussion (quite a few times already); it
+> just seems you are not satisfied with the majority's conclusion.
+>
+> Personally, I'm not sure there is anything more I can do to convince
+> you that this patchset is reasonable; I'm going to leave it to others
+> at this point, or we can all simply agree to disagree for the moment.
+> Just as you haven't heard a compelling argument for this patchset, I
+> haven't heard a compelling argument against it.  Barring some
+> significant new discussion point, or opinion, I still plan on merging
+> this into the LSM next branch when the merge window closes next week
+> so it has time to go through a full round of linux-next testing.
+> Assuming no unresolvable problems are found during the additional
+> testing I plan to send it to Linus during the v6.1 merge window and
+> I'm guessing we will get to go through this all again.  It's less than
+> ideal, but I think this is where we are at right now.
 
-Yep, I will have something like below in next revision:
-
-     /*
-      * We have to perform direct system call for getcpu() because it's not
-      * available until glic 2.29.
-      */
-
-Thanks,
-Gavin
-
++1
