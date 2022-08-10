@@ -2,100 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE9658E93C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 11:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A728358E95E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 11:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiHJJDY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Aug 2022 05:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S231405AbiHJJOp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Aug 2022 05:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbiHJJDR (ORCPT
+        with ESMTP id S232060AbiHJJO3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:03:17 -0400
+        Wed, 10 Aug 2022 05:14:29 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AB1176465
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 02:03:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBAB086C22
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 02:14:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660122195;
+        s=mimecast20190719; t=1660122867;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zDfT4OTVP3mlZybmyw3sBtbkZmpGAIdes/TJqqs05cY=;
-        b=K41H2IPUCe719RNH+3PxUB4HiOEMzqAiee70EBMEGPSp+05paCus67bm6WKAsbeu5BpVQS
-        wNVujc69GzXls0AaUIWivGtx5X9Nm+/StgrSCVgF9u/z3YcGHqRvDIXabKYN0pTIoxdqdM
-        f+pb2iJqDG8dGHrVZifT+JOO55CEu9w=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BrnJHJ9Mo9d6LF8fLd160jO7vgau2DqXTrpWN+Q+1lI=;
+        b=V7m6Ek5juphGldT+tKh1lJ8HSlWLnF81YR8Ao+8PS9nJ62UbhgGOGL0bENZQB+Q2od0AoS
+        7eMMUthVqtRJM8nhxU5Y2lXWrV2baicKxrgaakMjnVd73cwgVuTWwBPznfWvBZv92AxO2F
+        zaV/mpBum9QjhA03c5lX3zanU1OWDQ4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-IzMQTaq2M8iyTRfiz5ZFDw-1; Wed, 10 Aug 2022 05:03:14 -0400
-X-MC-Unique: IzMQTaq2M8iyTRfiz5ZFDw-1
-Received: by mail-wr1-f69.google.com with SMTP id w20-20020adf8bd4000000b002237e71d4e4so142342wra.21
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 02:03:14 -0700 (PDT)
+ us-mta-257-N6Xgnw7NMLq3i6zbHm2jjg-1; Wed, 10 Aug 2022 05:14:26 -0400
+X-MC-Unique: N6Xgnw7NMLq3i6zbHm2jjg-1
+Received: by mail-ej1-f72.google.com with SMTP id qb27-20020a1709077e9b00b0073160a55fd7so2382274ejc.17
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 02:14:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=zDfT4OTVP3mlZybmyw3sBtbkZmpGAIdes/TJqqs05cY=;
-        b=oW0stK9QehvCbdR1ACX59gJUSH8FQIIMi2HHyk0fTGf7Zl2A31VzkBC5ujonVV7U42
-         IC6ZudlTA7OV4WUDTzpKQ487LyeVbCpaXYUnGp08FRI66wAWspUW3fMvIr56xRD0Zigw
-         OkIbhbsDH0CdNYQ+gKJDzN8Akgs0sAdMKIK6oHKzAjRgc68T2ym0GIF3ZMju7snzqaAi
-         EjAZ0MAEk/E093ceX9VQtCpyBi7DRyJbUtoRFQdfevaLn9k6qdSwMD1EYKK3rwCi5t2F
-         KX1mRPkECxV4iQkk9odp0cw5SVhGNQ7Y1iY3Ol7mNjb96oGbSWaaV47SguUMtCKAiQYU
-         ZRQw==
-X-Gm-Message-State: ACgBeo0eTx4GJjxUlBLlpz8lxm6tj2FQRVZipXWs6jlhdxu0cnt2Z/ge
-        ULdPQlAeDrHqOPTAv7ilRkfevuZlqjimklBk990MIOw8GMafeoNVXjApjCZ2gR+JCKZdvkx7GdV
-        5kfZ8EX5+C9jMUbf+qqlt2jiVF5mC
-X-Received: by 2002:a5d:5a94:0:b0:221:6cec:2589 with SMTP id bp20-20020a5d5a94000000b002216cec2589mr15124097wrb.336.1660122193183;
-        Wed, 10 Aug 2022 02:03:13 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7B/fed6AkUKvETZNZzY2Aw/ljCBjLPi20tQHr8C2p9Bwqnl1tq+PpkGuYpyjcrSsB3Ep52mA==
-X-Received: by 2002:a5d:5a94:0:b0:221:6cec:2589 with SMTP id bp20-20020a5d5a94000000b002216cec2589mr15124042wrb.336.1660122192829;
-        Wed, 10 Aug 2022 02:03:12 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:1600:a3ce:b459:ef57:7b93? (p200300cbc7071600a3ceb459ef577b93.dip0.t-ipconnect.de. [2003:cb:c707:1600:a3ce:b459:ef57:7b93])
-        by smtp.gmail.com with ESMTPSA id i9-20020a05600c050900b003a3187a2d4csm1655413wmc.22.2022.08.10.02.03.11
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=BrnJHJ9Mo9d6LF8fLd160jO7vgau2DqXTrpWN+Q+1lI=;
+        b=Wn08Iap7cbIQXWqRc4IHA57riroso3UmA1in5GXY8RnxKDsXGTm9lquzolHhUjFm7W
+         ueA36/okzUly0brx2h2ChKgvDUo8stHlEdwe7vxeys+OTtV+Vxc/nRET9luRV3hZX5Sj
+         YQfbiw3uAkg3Cev/0htR3AxJWlkxHCJsHyFiS9yCRhh9xlvZcsy2zP2gfUiZ4LMqR9U8
+         3YVUVcezCVWWXjPXyewZ1x0pBFmglVKPDA4eQYmmEBQjyyT9b5uUwdsXqTU5OjbeJ6V5
+         JHZckkMElXVhISTbeVd1z/r7HHIcnkXvm5iBbyYrXJlx+9v5BGSALNoVUf/4mQ7kpcSo
+         l01Q==
+X-Gm-Message-State: ACgBeo0xeFfV30ukocv/d7BRMjqUnPNmpx9GjWmXMfaIVu/MmxeHQTFE
+        P0cBCOP9siJ/L2REWdu2qC+R6unH8SVo+8EM+z49m8HECDWo/uaQzcU/wnUawEo6Ir9SZMksCae
+        KNMIbWWMKJ1Cz5HBZCVcn7xDDAfcf
+X-Received: by 2002:a05:6402:1cc4:b0:440:5af8:41c9 with SMTP id ds4-20020a0564021cc400b004405af841c9mr17458854edb.339.1660122865384;
+        Wed, 10 Aug 2022 02:14:25 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4bQLwz0ay5kkw96DxJDx6+n/9y/Y6jEQ5yxdYJMMBH3d4Jv3191+PBY5JzY9jgLVspgmOkjg==
+X-Received: by 2002:a05:6402:1cc4:b0:440:5af8:41c9 with SMTP id ds4-20020a0564021cc400b004405af841c9mr17458830edb.339.1660122865199;
+        Wed, 10 Aug 2022 02:14:25 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id r17-20020a17090609d100b0073145afd156sm162913eje.80.2022.08.10.02.14.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 02:03:12 -0700 (PDT)
-Message-ID: <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com>
-Date:   Wed, 10 Aug 2022 11:03:11 +0200
+        Wed, 10 Aug 2022 02:14:24 -0700 (PDT)
+Message-ID: <bb97efaf-4f58-c192-a489-e71ebbebce8c@redhat.com>
+Date:   Wed, 10 Aug 2022 11:14:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+ Thunderbird/91.12.0
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:ABI/API" <linux-api@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, krisman@collabora.com
-Cc:     kernel@collabora.com
-References: <20220726161854.276359-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 0/5] Add process_memwatch syscall
-In-Reply-To: <20220726161854.276359-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Gavin Shan <gshan@redhat.com>
+Cc:     Florian Weimer <fweimer@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org,
+        oliver upton <oliver.upton@linux.dev>,
+        andrew jones <andrew.jones@linux.dev>, seanjc@google.com,
+        yihyu@redhat.com, shan gavin <shan.gavin@gmail.com>
+References: <20220809060627.115847-1-gshan@redhat.com>
+ <20220809060627.115847-2-gshan@redhat.com>
+ <8735e6ncxw.fsf@oldenburg.str.redhat.com>
+ <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
+ <87o7wtnay6.fsf@oldenburg.str.redhat.com>
+ <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
+ <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
+In-Reply-To: <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
@@ -107,75 +92,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26.07.22 18:18, Muhammad Usama Anjum wrote:
-> Hello,
+On 8/9/22 14:21, Mathieu Desnoyers wrote:
+>> For kvm/selftests, there are 3 architectures involved actually. So we
+>> just need consider 4 cases: aarch64, x86, s390 and other. For other
+>> case, we just use __builtin_thread_pointer() to maintain code's
+>> integrity, but it's not called at all.
+>>
+>> I think kvm/selftest is always relying on glibc if I'm correct.
+> All those are handled in the rseq selftests and in librseq. Why duplicate all that logic again?
 
-Hi,
+Yeah, rseq_test should reuse librseq code.  The simplest way,
+if slightly hackish, is to do something like
 
-> 
-> This patch series implements a new syscall, process_memwatch. Currently,
-> only the support to watch soft-dirty PTE bit is added. This syscall is
-> generic to watch the memory of the process. There is enough room to add
-> more operations like this to watch memory in the future.
-> 
-> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
-> procfs file. The soft-dirty PTE bit for the memory in a process can be
-> cleared by writing to the clear_refs file. This series adds features that
-> weren't possible through the Proc FS interface.
-> - There is no atomic get soft-dirty PTE bit status and clear operation
->   possible.
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 690b499c3471..6c192b0ec304 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -37,6 +37,7 @@ ifeq ($(ARCH),riscv)
+  	UNAME_M := riscv
+  endif
+  
+  LIBKVM += lib/assert.c
+  LIBKVM += lib/elf.c
+  LIBKVM += lib/guest_modes.c
+@@ -198,7 +199,7 @@ endif
+  CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+  	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
+  	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+-	-I$(<D) -Iinclude/$(UNAME_M) -I.. $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
++	-I$(<D) -Iinclude/$(UNAME_M) -I.. $(EXTRA_CFLAGS) $(KHDR_INCLUDES) -I../rseq
+  
+  no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
+          $(CC) -Werror -no-pie -x c - -o "$$TMP", -no-pie)
 
-Such an interface might be easy to add, no?
 
-> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
+and just #include "../rseq/rseq.c" in rseq_test.c.
 
-Same.
-
-So I'm curious why we need a new syscall for that.
-
-> 
-> Historically, soft-dirty PTE bit tracking has been used in the CRIU
-> project. The Proc FS interface is enough for that as I think the process
-> is frozen. We have the use case where we need to track the soft-dirty
-> PTE bit for running processes. We need this tracking and clear mechanism
-> of a region of memory while the process is running to emulate the
-> getWriteWatch() syscall of Windows. This syscall is used by games to keep
-> track of dirty pages and keep processing only the dirty pages. This
-> syscall can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information.
-> 
-> As in the current kernel there is no way to clear a part of memory (instead
-> of clearing the Soft-Dirty bits for the entire processi) and get+clear
-> operation cannot be performed atomically, there are other methods to mimic
-> this information entirely in userspace with poor performance:
-> - The mprotect syscall and SIGSEGV handler for bookkeeping
-> - The userfaultfd syscall with the handler for bookkeeping
-
-You write "poor performance". Did you actually implement a prototype
-using userfaultfd-wp? Can you share numbers for comparison?
-
-Adding an new syscall just for handling a corner case feature
-(soft-dirty, which we all love, of course) needs good justification.
-
-> 
->         long process_memwatch(int pidfd, unsigned long start, int len,
->                               unsigned int flags, void *vec, int vec_len);
-> 
-> This syscall can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information. The following operations are
-> supported in this syscall:
-> - Get the pages that are soft-dirty.
-> - Clear the pages which are soft-dirty.
-> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
-> soft-dirty PTE bit
-
-Huh, why? VM_SOFTDIRTY is an internal implementation detail and should
-remain such.
-
-VM_SOFTDIRTY translates to "all pages in this VMA are soft-dirty".
-
--- 
 Thanks,
 
-David / dhildenb
+Paolo
 
