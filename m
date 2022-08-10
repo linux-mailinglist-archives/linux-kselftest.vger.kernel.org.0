@@ -2,91 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8EE58E437
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 02:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4FC58E47C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 03:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiHJAwF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 20:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S229756AbiHJB1P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 21:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiHJAwE (ORCPT
+        with ESMTP id S230093AbiHJB1I (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 20:52:04 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3D374E14;
-        Tue,  9 Aug 2022 17:52:03 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z2so17203982edc.1;
-        Tue, 09 Aug 2022 17:52:03 -0700 (PDT)
+        Tue, 9 Aug 2022 21:27:08 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D025FADD;
+        Tue,  9 Aug 2022 18:27:05 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id w14so12903564plp.9;
+        Tue, 09 Aug 2022 18:27:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Il1Pi56tAdbHD2xkzMpWzGBdztzd5zgrSb7IoS2zT/U=;
-        b=FkIsMzd+v0083XugBqAhPXZbO1+72jhsZHlw61FcLI/wavV+QldtPeUl3OCyrp3Fyh
-         rhAQdPX6jx45sT0czdTuoyR4h4UMXOXYwZyHsQszuQnRbHvpbEzMmxgRiSA3QEaM4mBs
-         SKnFU5ejLzWtXKmbxN0Pv3GwI6XLv0/y97ibV5XVZh9PpNh9njFEPsRyWFQKgVwo42SK
-         NOv+UA+ZWUQRCDhdQALBJTWOeVt+T6mbPxZ31MNAfAPfMd+Nn+IFB7c5Ic20smmRk/GZ
-         IatX2zC7jb3XV6vxFp30NlaQJISIXCVKNKMc6255KHq7r6W83s3bHHAcV8ZBnIOpZTnc
-         Q3zQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=aMmzBt/TBT59uBGgogc8HNMQteHV+aheJkP8yVZzq38=;
+        b=fHR57LZaM+eGHS8Kvxf+MdiXJkXyfzeDA4Vk/JzKtfiCwZRhUPn3KWl3V/q5iDdKsc
+         W8D739RIOCAwDUAPBW8YWUqDrgyxZjSutzq05wRMOmau4JEosK7H8fP+E/aziyBkAe3H
+         z9kqGn2u3QRBMPACkLT/3w5p+AggUYLCpI0zQGhK0aGHDoDEPx7Hqwzd8xXXrzWJo5V7
+         Ispcan8lwNq7IRwPlVyN6ACGl0WM+I7dIJF3tTT7yrqj/72PG/PCryz7adTZwXkMdA6X
+         Q9W8loZpzQtQlaSzAZWmHkxv+6EQAAcyXW9/KDemK3AW7tAjubV2CWwoIcj3V9qQYeiS
+         GEUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Il1Pi56tAdbHD2xkzMpWzGBdztzd5zgrSb7IoS2zT/U=;
-        b=RkPuR3xKm1Yy1S9fNO4QQta6e5zXhgYKcoHzIyv7iSws68N1tSDTFxmk24OsPyhTEB
-         YjuqrtRAgmaufFvIdBXMhWlphuQL9ziwnfswTtv6cy3tqaACrNH0GVCSTwiZ1b4NbC2g
-         aWtnZ9WmVW9oevVlNhbpEd/ntRW9y2kglJmFmJ1ywoaZ4sQChZGk8PKfZ7nxRZYYYAYK
-         xg3Opz/uuUk6JSsmvdjsssZjnlfDzh/7nWNXY0cMsBBp7+XFOa6tBaSQAlI+v6QhuATM
-         6VnnN6EgfIESj/l5KSeeW+qBNgFaIRXbcAd8Q+2MMdQ7oOuUbFw8HhI2oeRbnaz48rSo
-         MIIA==
-X-Gm-Message-State: ACgBeo0rDDfMQB09McPgc3JNMh7yCZJBe70UzdqzhZnbnip6sojPdrji
-        INfF+0FcXo/ICe/Ag79nzVEkMdHwjZuJ5jSqn/M=
-X-Google-Smtp-Source: AA6agR6sLH6713PplNbjRmTeKN+KUJlbDRD64uMge0GGzpH/dD2DRuAtHnMwxGID1u5AP+Pk550sA76uQe/IBLWBCeE=
-X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id
- ef11-20020a05640228cb00b0043bc6d7ef92mr24499717edb.333.1660092722224; Tue, 09
- Aug 2022 17:52:02 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=aMmzBt/TBT59uBGgogc8HNMQteHV+aheJkP8yVZzq38=;
+        b=IkF2+3l8e1MyzCBewAmrGFtkjrOoU86tD+AliXj5GfkR3QfaqnQfVlCFfBZYA7/xVe
+         bXWjSo2as4mZNvy5aVhr3iTwMh9iGj4g0v2aGUOQEolwwGPlOU/h5V8KrfK1e6UTxgnf
+         6BvNwdoFpwPiJpDDnmFx7UZqPo2My8ZYjd3j2ZFnaJUnk2rZPIs1BjLm2Qb3O01RFU6Q
+         h9WHTwETJp4Taz/2/FWx/JrmuE79mzZamfAEWZ7IMxB9/IvC8tsh1s9r6OAczNC1jrHP
+         xrpg994FMJWqp9M3QYu2KWMCZkgy/cbYj73kYm+a9mBTzl2+FBaEmmaumYoEbXSUDe6H
+         0dVg==
+X-Gm-Message-State: ACgBeo2+WiaufJ1ktCf+FmCQit5f0DbAVJr7pnUwCJXBHS9229O7bJpd
+        raeu6VGo6jpbTspMTlVKil0=
+X-Google-Smtp-Source: AA6agR5ttwmHSdAARFoSlrXLSeIVikShFhitZkshbZZxVg5OnVr/Y53jsTLQPRB5rC2ztDWn9l7ikw==
+X-Received: by 2002:a17:902:c24c:b0:16d:d5d4:aa84 with SMTP id 12-20020a170902c24c00b0016dd5d4aa84mr25307703plg.36.1660094825222;
+        Tue, 09 Aug 2022 18:27:05 -0700 (PDT)
+Received: from Laptop-X1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id h3-20020a17090a580300b001f2ef2f9c6fsm223336pji.56.2022.08.09.18.27.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 18:27:04 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 09:26:57 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Jonathan Toppins <jtoppins@redhat.com>
+Cc:     netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC net] bonding: 802.3ad: fix no transmission of LACPDUs
+Message-ID: <YvMJYb0VDJW+6CRh@Laptop-X1>
+References: <c2f698e6f73e6e78232ab4ded065c3828d245dbd.1660065706.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
- <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
- <877d3ia65v.fsf@email.froward.int.ebiederm.org> <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com>
- <87czd95rjc.fsf@email.froward.int.ebiederm.org> <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
- <87a68dccyu.fsf@email.froward.int.ebiederm.org> <CAHC9VhRkHuwjrtOoK+vn9zzERU2TM_2PEbQGRAZsr-D1pFv9GQ@mail.gmail.com>
-In-Reply-To: <CAHC9VhRkHuwjrtOoK+vn9zzERU2TM_2PEbQGRAZsr-D1pFv9GQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 9 Aug 2022 17:51:50 -0700
-Message-ID: <CAADnVQJcvwb_5dY-FomsDzJWZQG_5EWLmjBFJYNqomd0f9XO+w@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Frederick Lawler <fred@cloudflare.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        eparis@parisplace.org, Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        selinux@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        karl@bigbadwolfsecurity.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2f698e6f73e6e78232ab4ded065c3828d245dbd.1660065706.git.jtoppins@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -97,37 +76,16 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 3:40 PM Paul Moore <paul@paul-moore.com> wrote:
->
-> On Tue, Aug 9, 2022 at 5:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > Paul Moore <paul@paul-moore.com> writes:
-> > >
-> > > What level of due diligence would satisfy you Eric?
-> >
-> > Having a real conversation about what a change is doing and to talk
-> > about it's merits and it's pro's and cons.  I can't promise I would be
-> > convinced but that is the kind of conversation it would take.
->
-> Earlier today you talked about due diligence to ensure that userspace
-> won't break and I provided my reasoning on why userspace would not
-> break (at least not because of this change).  Userspace might be
-> blocked from creating a new user namespace due to a security policy,
-> but that would be the expected and desired outcome, not breakage.  As
-> far as your most recent comment regarding merit and pros/cons, I
-> believe we have had that discussion (quite a few times already); it
-> just seems you are not satisfied with the majority's conclusion.
->
-> Personally, I'm not sure there is anything more I can do to convince
-> you that this patchset is reasonable; I'm going to leave it to others
-> at this point, or we can all simply agree to disagree for the moment.
-> Just as you haven't heard a compelling argument for this patchset, I
-> haven't heard a compelling argument against it.  Barring some
-> significant new discussion point, or opinion, I still plan on merging
-> this into the LSM next branch when the merge window closes next week
-> so it has time to go through a full round of linux-next testing.
-> Assuming no unresolvable problems are found during the additional
-> testing I plan to send it to Linus during the v6.1 merge window and
-> I'm guessing we will get to go through this all again.  It's less than
-> ideal, but I think this is where we are at right now.
+On Tue, Aug 09, 2022 at 01:21:46PM -0400, Jonathan Toppins wrote:
+> ---
+>  MAINTAINERS                                   |  1 +
+>  drivers/net/bonding/bond_3ad.c                |  2 +-
+>  .../net/bonding/bond-break-lacpdu-tx.sh       | 88 +++++++++++++++++++
 
-+1
+Hi Jon,
+
+You need a Makefile in this folder and set TEST_PROGS so we can generate the
+test in kselftest-list.txt.
+
+Thanks
+Hangbin
