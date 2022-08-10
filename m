@@ -2,56 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CA658E397
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 01:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D066058E422
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 02:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229831AbiHIXKJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 19:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
+        id S229527AbiHJAh4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 20:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiHIXKI (ORCPT
+        with ESMTP id S229490AbiHJAhz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:10:08 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1F96D563;
-        Tue,  9 Aug 2022 16:10:07 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLYMC-0001nA-An; Wed, 10 Aug 2022 01:09:52 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLYMB-0004DM-M1; Wed, 10 Aug 2022 01:09:51 +0200
-Subject: Re: [PATCH v9 07/10] bpf: Add bpf_verify_pkcs7_signature() kfunc
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-8-roberto.sassu@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <6526d645-3a3e-fa4a-91a5-7da1e76a4b1d@iogearbox.net>
-Date:   Wed, 10 Aug 2022 01:09:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 9 Aug 2022 20:37:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C56157820D
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 17:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660091871;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gI8W3vKU6gx264pJaXZH00m10/hIkZkbLO7K9QwADAU=;
+        b=cTKVvPk2yBlttuCOl7JUT/6nDbyzPmwP8aVqEXhkFsMQ3E/qKuJ4yKcLWKYLbQc4BFjGb/
+        1O5qblJvaIpPJKVMTyEEoJEY8KKP1YE0UeHrR7zP9UW5ACz8myhJ59SvGIn7Bzk4rqtgwo
+        hZrWcUSF0GJNWquYleGZ+wNyOnvgB+I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-eDbrPmK5OK6ImuSrx8J66w-1; Tue, 09 Aug 2022 20:37:48 -0400
+X-MC-Unique: eDbrPmK5OK6ImuSrx8J66w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA5863802AC2;
+        Wed, 10 Aug 2022 00:37:47 +0000 (UTC)
+Received: from [10.64.54.189] (vpn2-54-189.bne.redhat.com [10.64.54.189])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 10C089459C;
+        Wed, 10 Aug 2022 00:37:42 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
+To:     Sean Christopherson <seanjc@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     shuah <shuah@kernel.org>, Florian Weimer <fweimer@redhat.com>,
+        kvmarm@lists.cs.columbia.edu, KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, maz <maz@kernel.org>,
+        oliver upton <oliver.upton@linux.dev>,
+        andrew jones <andrew.jones@linux.dev>, yihyu@redhat.com,
+        shan gavin <shan.gavin@gmail.com>
+References: <20220809060627.115847-1-gshan@redhat.com>
+ <20220809060627.115847-2-gshan@redhat.com>
+ <8735e6ncxw.fsf@oldenburg.str.redhat.com>
+ <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
+ <87o7wtnay6.fsf@oldenburg.str.redhat.com>
+ <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
+ <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
+ <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com>
+ <YvLT1fd8ddybF5Uw@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <8c1f33b4-a5a1-fcfa-4521-36253ffa22c8@redhat.com>
+Date:   Wed, 10 Aug 2022 10:37:40 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-In-Reply-To: <20220809134603.1769279-8-roberto.sassu@huawei.com>
+In-Reply-To: <YvLT1fd8ddybF5Uw@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26622/Tue Aug  9 09:53:52 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,87 +81,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/9/22 3:46 PM, Roberto Sassu wrote:
-[...]
-> For bpf_key structures obtained from the former lookup function,
-> bpf_verify_pkcs7_signature() completes the permission check deferred by
-> that function by calling key_validate(). key_task_permission() is already
-> called by the PKCS#7 code.
+Hi Mathieu and Sean,
+
+On 8/10/22 7:38 AM, Sean Christopherson wrote:
+> On Tue, Aug 09, 2022, Mathieu Desnoyers wrote:
+>> ----- On Aug 9, 2022, at 8:21 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+>>> ----- Gavin Shan <gshan@redhat.com> wrote:
+>>>> On 8/9/22 5:16 PM, Florian Weimer wrote:
+>>>>>>> __builtin_thread_pointer doesn't work on all architectures/GCC
+>>>>>>> versions.
+>>>>>>> Is this a problem for selftests?
+>>>>>>>
+>>>>>>
+>>>>>> It's a problem as the test case is running on all architectures. I think I
+>>>>>> need introduce our own __builtin_thread_pointer() for where it's not
+>>>>>> supported: (1) PowerPC  (2) x86 without GCC 11
+>>>>>>
+>>>>>> Please let me know if I still have missed cases where
+>>>>>> __buitin_thread_pointer() isn't supported?
+>>>>>
+>>>>> As far as I know, these are the two outliers that also have rseq
+>>>>> support.  The list is a bit longer if we also consider non-rseq
+>>>>> architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
+>>>>> about the Linux architectures without glibc support).
+>>>>>
+>>>>
+>>>> For kvm/selftests, there are 3 architectures involved actually. So we
+>>>> just need consider 4 cases: aarch64, x86, s390 and other. For other
+>>>> case, we just use __builtin_thread_pointer() to maintain code's
+>>>> integrity, but it's not called at all.
+>>>>
+>>>> I think kvm/selftest is always relying on glibc if I'm correct.
+>>>
+>>> All those are handled in the rseq selftests and in librseq. Why duplicate all
+>>> that logic again?
+>>
+>> More to the point, considering that we have all the relevant rseq registration
+>> code in tools/testing/selftests/rseq/rseq.c already, and the relevant thread
+>> pointer getter code in tools/testing/selftests/rseq/rseq-*thread-pointer.h,
+>> is there an easy way to get test applications in tools/testing/selftests/kvm
+>> and in tools/testing/selftests/rseq to share that common code ?
+>>
+>> Keeping duplicated compatibility code is bad for long-term maintainability.
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->   kernel/trace/bpf_trace.c | 56 ++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 56 insertions(+)
+> Any reason not to simply add tools/lib/rseq.c and then expose a helper to get the
+> registered rseq struct?
 > 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 33ca4cfe6e26..79ba8c96735a 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -21,6 +21,7 @@
->   #include <linux/bsearch.h>
->   #include <linux/sort.h>
->   #include <linux/key.h>
-> +#include <linux/verification.h>
->   
->   #include <net/bpf_sk_storage.h>
->   
-> @@ -1290,6 +1291,47 @@ noinline __weak void bpf_key_put(struct bpf_key *bkey)
->   	kfree(bkey);
->   }
->   
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +/**
-> + * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-> + * @data_ptr: data to verify
-> + * @sig_ptr: signature of the data
-> + * @trusted_keyring: keyring with keys trusted for signature verification
-> + *
-> + * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
-> + * with keys in a keyring referenced by *trusted_keyring*.
-> + *
-> + * Return: 0 on success, a negative value on error.
-> + */
-> +noinline __weak int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
 
-nit: see comment on prev patch for noinline and __weak
+There are couple of reasons, not to share tools/testing/selftests/rseq/librseq.so
+or add tools/lib/librseq.so. Please let me know if the arguments making sense
+to you?
 
-> +					       struct bpf_dynptr_kern *sig_ptr,
-> +					       struct bpf_key *trusted_keyring)
-> +{
-> +	int ret;
-> +
-> +	if (trusted_keyring->valid_ptr) {
-> +		/*
-> +		 * Do the permission check deferred in bpf_lookup_user_key().
-> +		 *
-> +		 * A call to key_task_permission() here would be redundant, as
-> +		 * it is already done by keyring_search() called by
-> +		 * find_asymmetric_key().
-> +		 */
+- By design, selftests/rseq and selftests/kvm are parallel. It's going to introduce
+   unnecessary dependency for selftests/kvm to use selftests/rseq/librseq.so. To me,
+   it makes the maintainability even harder.
 
-In this patch and previous one, you describe that calling key_validate() is
-deferred, but you should also provide the actual rationale for readers on
-"why" we need to do it.
+- What selftests/kvm needs is rseq-thread-pointer.h, which accounts for ~5% of
+   functionalities, provided by selftests/rseq/librseq.so.
 
-> +		ret = key_validate(trusted_keyring->key);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	return verify_pkcs7_signature(data_ptr->data,
-> +				      bpf_dynptr_get_size(data_ptr),
-> +				      sig_ptr->data,
-> +				      bpf_dynptr_get_size(sig_ptr),
-> +				      trusted_keyring->key,
-> +				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-> +				      NULL);
-> +}
-> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
-> +
->   __diag_pop();
->   
->   BTF_SET8_START(key_kfunc_set)
-> @@ -1303,11 +1345,25 @@ static const struct btf_kfunc_id_set bpf_key_kfunc_set = {
->   	.owner = THIS_MODULE,
->   	.set = &key_kfunc_set,
->   };
+- I'm not too much familiar with selftests/rseq, but it seems it need heavy
+   rework before it can become tools/lib/librseq.so. However, I'm not sure if
+   the effort is worthwhile. The newly added library is fully used by
+   testtests/rseq. ~5% of that is going to be used by selftests/kvm.
+   In this case, we still have cross-dependency issue.
+
+I personally prefer not to use selftests/rseq/librseq.so or add tools/lib/librseq.so,
+but I need your feedback. Please share your thoughts.
+Thanks,
+Gavin
+
