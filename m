@@ -2,88 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FAED58E9A3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 11:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1236F58E9B9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 11:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbiHJJae (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Aug 2022 05:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S231975AbiHJJhP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Aug 2022 05:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbiHJJab (ORCPT
+        with ESMTP id S231587AbiHJJhO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:30:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBD1260A;
-        Wed, 10 Aug 2022 02:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660123830; x=1691659830;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=zHygXbTWCyPOJ+4aJpksT5a9YTzKkpyV1mfD/3Fs2Cg=;
-  b=JpAhHRjiVNQiy83F70gwisr6MF3gEDtSJy+qDfOk2lHMyEsCRxI/aosk
-   lYaVYequjkGeOsXkEQXgB8ebcVeovnXl0uXqPLEioH9NesaT+4VFQIOV0
-   blTcyJKDJTneMm5mouhbl4ME+zMoRU5D1I7YxHfZPoL09mVr5NdiTeDCK
-   l3fLPrLCTv71x8qb+f+GWjxZrCe4s+1tRJwxRlVgAy+PEEDzXYiLl7kLb
-   HHcaY+4oeZ1VvpPeEyFviJfs9HS4qfPbeuWYMGo6MM4kgM3CRjM8qeD1M
-   BfysjD5+GcBKVJdH9TyFPgqNe/gvQOv57xn43ITFbRk61T3y8+skcytIK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="316987586"
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="316987586"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 02:30:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="664821304"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Aug 2022 02:30:18 -0700
-Date:   Wed, 10 Aug 2022 17:25:32 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 04/14] mm/shmem: Support memfile_notifier
-Message-ID: <20220810092532.GD862421@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-5-chao.p.peng@linux.intel.com>
- <a34d88b9-a4b9-cb9e-91d9-c5a89449fcd5@redhat.com>
+        Wed, 10 Aug 2022 05:37:14 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EEC84EC7;
+        Wed, 10 Aug 2022 02:37:12 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so1599801pjm.3;
+        Wed, 10 Aug 2022 02:37:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=78dgYlqKO0ZvQjJz+sJd0671q+NGfvnDDEssu3bBwM0=;
+        b=lQI08ncjvuLNvOWEIrCzsgcKgE2diNiQhT8iO8FvSLLMxYi9mCiO67CSzRUITu8LrB
+         6Qinn3mOIdhfO4Yo8lA+blRSETuEGrdp3nzbzud4oM7pAaR3zKLqTHJ1s2MVZSi24aPO
+         5lZAGgQnL717sdNqp2JFkR5rElvLbyQNeq4/cH7sJ6VfImDKU5rh8YgqAFAZr6rGxHCb
+         cnQFjNUNFbhSznox4mcKEGPNdKFO+wP8WWLeswx3i+TuwBVYZFkzNVQiqbu25QrsuTCr
+         DvZ7BEhcyuW5Nc/Gx2Humrtm3BxIPoHzopFS+r4rLMm7GQ3en8r9Ao1/fODPXoSVd/OM
+         SJuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=78dgYlqKO0ZvQjJz+sJd0671q+NGfvnDDEssu3bBwM0=;
+        b=pukuQfNqG8278BXUX3CTmYW4KNJ+XkjMHCIzXaTU0P3LqC9ArmxyDNet3+2aO8AzNE
+         qR9+AuI8zJpKVeDzul4GGY1GaGpV1kqzDA6DoueJLcvnOli/ocwlW23rOx166E16scrR
+         Z69MSNvl4tMzRyZ2BUUQn6uKNfzCXF3HjOrPHCOwEC5EQU22Hlrrr6ukEBWOBr7zzFZ5
+         xnFVVt9PqWwNIEiHViGiZeoqIl/uFOJ5JW0XXYl7sDcjg4RbFc+ibSjnN0rOx35OJBHy
+         wBwvevJW6hbxVK/uu8bJu2vEO9xzNl9KMUSwLj76XuEaa4yYwQ07iY+ktbO+2KIZrA6b
+         fxcg==
+X-Gm-Message-State: ACgBeo0lOz8QVaxvBpOHMN8lq+/TiknfOcBzdLuQpsIWFr4xRPImcsBW
+        UfXuU7rFPIreVefcPC+raiQ=
+X-Google-Smtp-Source: AA6agR7YjYI12tnWvDGyWPfOPcugQ8xdwNLGNRCSJzyQgzH6ZBvqYbBkOtqw4ycTVf9Dab7Eme6PpA==
+X-Received: by 2002:a17:90b:b13:b0:1f3:7ab:35b2 with SMTP id bf19-20020a17090b0b1300b001f307ab35b2mr2813942pjb.118.1660124231738;
+        Wed, 10 Aug 2022 02:37:11 -0700 (PDT)
+Received: from engine.. ([106.212.112.163])
+        by smtp.gmail.com with ESMTPSA id p14-20020a17090a2c4e00b001f754cd508dsm1130979pjm.35.2022.08.10.02.37.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 02:37:11 -0700 (PDT)
+From:   Piyush Thange <pthange19@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     shuah@kernel.org, vladimir.oltean@nxp.com, idosch@nvidia.com,
+        petrm@nvidia.com, troglobit@gmail.com, amcohen@nvidia.com,
+        tobias@waldekranz.com, po-hsu.lin@canonical.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Piyush Thange <pthange19@gmail.com>
+Subject: [PATCH] selftests:net:forwarding: Included install command
+Date:   Wed, 10 Aug 2022 15:05:08 +0530
+Message-Id: <20220810093508.33790-1-pthange19@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a34d88b9-a4b9-cb9e-91d9-c5a89449fcd5@redhat.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,109 +74,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 03:26:02PM +0200, David Hildenbrand wrote:
-> On 06.07.22 10:20, Chao Peng wrote:
-> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > 
-> > Implement shmem as a memfile_notifier backing store. Essentially it
-> > interacts with the memfile_notifier feature flags for userspace
-> > access/page migration/page reclaiming and implements the necessary
-> > memfile_backing_store callbacks.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > ---
-> 
-> [...]
-> 
-> > +#ifdef CONFIG_MEMFILE_NOTIFIER
-> > +static struct memfile_node *shmem_lookup_memfile_node(struct file *file)
-> > +{
-> > +	struct inode *inode = file_inode(file);
-> > +
-> > +	if (!shmem_mapping(inode->i_mapping))
-> > +		return NULL;
-> > +
-> > +	return  &SHMEM_I(inode)->memfile_node;
-> > +}
-> > +
-> > +
-> > +static int shmem_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
-> > +			 int *order)
-> > +{
-> > +	struct page *page;
-> > +	int ret;
-> > +
-> > +	ret = shmem_getpage(file_inode(file), offset, &page, SGP_WRITE);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	unlock_page(page);
-> > +	*pfn = page_to_pfn_t(page);
-> > +	*order = thp_order(compound_head(page));
-> > +	return 0;
-> > +}
-> > +
-> > +static void shmem_put_pfn(pfn_t pfn)
-> > +{
-> > +	struct page *page = pfn_t_to_page(pfn);
-> > +
-> > +	if (!page)
-> > +		return;
-> > +
-> > +	put_page(page);
-> 
-> 
-> Why do we export shmem_get_pfn/shmem_put_pfn and not simply
-> 
-> get_folio()
-> 
-> and let the caller deal with putting the folio? What's the reason to
-> 
-> a) Operate on PFNs and not folios
-> b) Have these get/put semantics?
+If the execution is skipped due to "jq not installed" message then
+the installation methods on different OS's have been provided with
+this message.
 
-We have a design assumption that somedays this can even support non-page
-based backing stores. There are some discussions:
-  https://lkml.org/lkml/2022/3/28/1440
-I should add document for this two callbacks.
+Signed-off-by: Piyush Thange <pthange19@gmail.com>
+---
+ tools/testing/selftests/net/forwarding/lib.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> 
-> > +}
-> > +
-> > +static struct memfile_backing_store shmem_backing_store = {
-> > +	.lookup_memfile_node = shmem_lookup_memfile_node,
-> > +	.get_pfn = shmem_get_pfn,
-> > +	.put_pfn = shmem_put_pfn,
-> > +};
-> > +#endif /* CONFIG_MEMFILE_NOTIFIER */
-> > +
-> >  void __init shmem_init(void)
-> >  {
-> >  	int error;
-> > @@ -3956,6 +4059,10 @@ void __init shmem_init(void)
-> >  	else
-> >  		shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
-> >  #endif
-> > +
-> > +#ifdef CONFIG_MEMFILE_NOTIFIER
-> > +	memfile_register_backing_store(&shmem_backing_store);
-> 
-> Can we instead prove a dummy function that does nothing without
-> CONFIG_MEMFILE_NOTIFIER?
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 37ae49d47853..c4121856fe06 100755
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -152,6 +152,14 @@ require_command()
 
-Sounds good.
+ 	if [[ ! -x "$(command -v "$cmd")" ]]; then
+ 		echo "SKIP: $cmd not installed"
++		if [[ $cmd == "jq" ]]; then
++			echo " Install on Debian based systems"
++			echo "	sudo apt -y install jq"
++			echo " Install on RHEL based systems"
++			echo "	sudo yum -y install jq"
++			echo " Install on Fedora based systems"
++			echo "	sudo dnf -y install jq"
++		fi
+ 		exit $ksft_skip
+ 	fi
+ }
+--
+2.37.1
 
-Chao
-> 
-> > +#endif
-> >  	return;
-> >  
-> >  out1:
-> 
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-> 
