@@ -2,34 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0F358EED1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 16:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C894758EEE1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 16:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbiHJOwn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Aug 2022 10:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S232902AbiHJO6t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Aug 2022 10:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231980AbiHJOwm (ORCPT
+        with ESMTP id S232748AbiHJO6s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:52:42 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCADF74CF8;
-        Wed, 10 Aug 2022 07:52:40 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2tFt5ZZZz67y8S;
-        Wed, 10 Aug 2022 22:52:34 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 10 Aug 2022 16:52:38 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 10 Aug 2022 16:52:38 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-CC:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Wed, 10 Aug 2022 10:58:48 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AA2753B2
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 07:58:47 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso1121682wmq.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 07:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=BqfACkhwAWP9NRXH+qghT2ZCWYZmFePzRNh6qpDv98Y=;
+        b=nHP8P6YcWU8257oudlhd8RfKMaaMHLA4pfv48irGmWc0Uu4/ML7Zx6fBtx6ZumQIMp
+         i1Shj79/kbTs3nRmRmfa/uhMQA3oyLWWvzCCZG/ax0n+Y+2/BDoTQymVclDr3OdWyeHi
+         NT0gczx4C6PJwJkY38KiYweLeShEu7SSrnkxn6pr3xj/DC2WHncuNuXfyMRA7dO2Zipv
+         Bzu+n50FX3Y+AiY1NbgX2tCcN7d1UloZLDBayfQ/8HsBlkLnnNkyvK5J/p7JfclmIYgY
+         7MUoBsBcnU8NYdVfMNrsQdYCYJZxVBUHV7x/9r6O+HSoAZVbGoAnQVQodVu9FJPNcwGD
+         V7fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=BqfACkhwAWP9NRXH+qghT2ZCWYZmFePzRNh6qpDv98Y=;
+        b=a6LY3UH87nqSf3SsJemWcyXmubGJhDir1yfKl4BfFXe7FXiSWd2rRAcVrh6zX+NIBu
+         WE+OTD62lF8B/FrNZeaWOr7ps5ZDVzTKiP8ckVu7B6HrFOTYiZFs7yuMO1DfFKnYKxeh
+         eO8hkyBjJy0ZoD58jC0Yk4YG7PmU9DCO7tzYOWn2t6l5MvDuMVUzxp9fJofu5MZRGSVC
+         gpdJ2MllSpuMeynFd+7sO+mAxuNIYQ1e4Kszu2T2nqlgvDJ5exLBRRus/IXzBDNKlkmr
+         ZwxZ31EX+gz5ImsJUKA9hYdmFLElMbJd0HarnmzXjvt8t82wixhxlnGzpld6/UDQHqnR
+         FH0Q==
+X-Gm-Message-State: ACgBeo1PDNXv//YkQWHWxJYqEMgJh08lSaqq9eaZqX0A9txHoB2ZdThm
+        2E595QaGnlF9Il23VbQ0uDOmQi6DLz1cWB9VV83K0A==
+X-Google-Smtp-Source: AA6agR5WuP6xwJAiTVFsRVVFH5xgiWOKm009pwYL5WdGG1ScSz7ubiU7aJojf133NxPrFFrNUdCIM3mcnruLRy+t/5g=
+X-Received: by 2002:a05:600c:1e05:b0:3a5:b441:e9c with SMTP id
+ ay5-20020a05600c1e0500b003a5b4410e9cmr2058339wmb.24.1660143525421; Wed, 10
+ Aug 2022 07:58:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
+ <20220809134603.1769279-2-roberto.sassu@huawei.com> <YvKRYRjJdXbAWL6Y@kernel.org>
+ <c9e73d7aa51a47c585b935a41dbf1924@huawei.com> <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
+In-Reply-To: <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 10 Aug 2022 07:58:09 -0700
+Message-ID: <CAJD7tkbcLU11u3w4DhqnUbbUE_QW60fBLoZngWTXHe9qTbonNw@mail.gmail.com>
+Subject: Re: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark a
+ function to be sleepable
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
         "andrii@kernel.org" <andrii@kernel.org>,
         "martin.lau@linux.dev" <martin.lau@linux.dev>,
         "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
@@ -52,79 +82,146 @@ CC:     Jarkko Sakkinen <jarkko@kernel.org>,
         "linux-security-module@vger.kernel.org" 
         <linux-security-module@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: RE: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark a
- function to be sleepable
-Thread-Topic: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark
- a function to be sleepable
-Thread-Index: AQHYq/aDa3kCDLsk5EK6T80CaXl/sK2mqA6AgAF8nfD//+wHAIAAA64AgAAlKhA=
-Date:   Wed, 10 Aug 2022 14:52:38 +0000
-Message-ID: <294f7bc395a04a129703a522c42d021e@huawei.com>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-2-roberto.sassu@huawei.com>
- <YvKRYRjJdXbAWL6Y@kernel.org> <c9e73d7aa51a47c585b935a41dbf1924@huawei.com>
- <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
- <e807779b-e72b-e197-b833-43373e87d3df@iogearbox.net>
-In-Reply-To: <e807779b-e72b-e197-b833-43373e87d3df@iogearbox.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.45.144.193]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-PiBGcm9tOiBEYW5pZWwgQm9ya21hbm4gW21haWx0bzpkYW5pZWxAaW9nZWFyYm94Lm5ldF0NCj4g
-U2VudDogV2VkbmVzZGF5LCBBdWd1c3QgMTAsIDIwMjIgNDozOSBQTQ0KPiBPbiA4LzEwLzIyIDQ6
-MjUgUE0sIEJlbmphbWluIFRpc3NvaXJlcyB3cm90ZToNCj4gPiBPbiBXZWQsIEF1ZyAxMCwgMjAy
-MiBhdCAzOjQ0IFBNIFJvYmVydG8gU2Fzc3UNCj4gPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT4g
-d3JvdGU6DQo+ID4+PiBGcm9tOiBKYXJra28gU2Fra2luZW4gW21haWx0bzpqYXJra29Aa2VybmVs
-Lm9yZ10NCj4gPj4+IFNlbnQ6IFR1ZXNkYXksIEF1Z3VzdCA5LCAyMDIyIDY6NTUgUE0NCj4gPj4+
-IE9uIFR1ZSwgQXVnIDA5LCAyMDIyIGF0IDAzOjQ1OjU0UE0gKzAyMDAsIFJvYmVydG8gU2Fzc3Ug
-d3JvdGU6DQo+ID4+Pj4gRnJvbTogQmVuamFtaW4gVGlzc29pcmVzIDxiZW5qYW1pbi50aXNzb2ly
-ZXNAcmVkaGF0LmNvbT4NCj4gPj4+Pg0KPiA+Pj4+IEZyb206IEJlbmphbWluIFRpc3NvaXJlcyA8
-YmVuamFtaW4udGlzc29pcmVzQHJlZGhhdC5jb20+DQo+ID4+Pj4NCj4gPj4+PiBUaGlzIGFsbG93
-cyB0byBkZWNsYXJlIGEga2Z1bmMgYXMgc2xlZXBhYmxlIGFuZCBwcmV2ZW50cyBpdHMgdXNlIGlu
-DQo+ID4+Pj4gYSBub24gc2xlZXBhYmxlIHByb2dyYW0uDQo+ID4+Pg0KPiA+Pj4gTml0OiAiRGVj
-bGFyZSBhIGtmdW5jIGFzIHNsZWVwYWJsZSBhbmQgcHJldmVudCBpdHMgdXNlIGluIGENCj4gPj4+
-IG5vbi1zbGVlcGFibGUgcHJvZ3JhbS4iDQo+ID4+Pg0KPiA+Pj4gSXQncyBtaXNzaW5nIHRoZSBw
-YXJ0ICpob3cqIHRoZSBwYXRjaCBhY2NvbXBsaXNoZXMgaXRzIGdvYWxzLg0KPiA+Pg0KPiA+PiBJ
-IHdpbGwgYWRkOg0KPiA+Pg0KPiA+PiBJZiBhbiBlQlBGIHByb2dyYW0gaXMgZ29pbmcgdG8gY2Fs
-bCBhIGtmdW5jIGRlY2xhcmVkIGFzIHNsZWVwYWJsZSwNCj4gPj4gZUJQRiB3aWxsIGxvb2sgYXQg
-dGhlIGVCUEYgcHJvZ3JhbSBmbGFncy4gSWYgQlBGX0ZfU0xFRVBBQkxFIGlzDQo+ID4+IG5vdCBz
-ZXQsIGV4ZWN1dGlvbiBvZiB0aGF0IHByb2dyYW0gaXMgZGVuaWVkLg0KPiA+DQo+ID4gQWxsIHRo
-b3NlIGNoYW5nZXMgYXJlIGxvb2tpbmcgZ29vZCB0byBtZS4NCj4gPg0KPiA+IFRoYW5rcyBhIGxv
-dCBmb3Iga2VlcGluZyBwdXNoaW5nIG9uIHRoaXMgcGF0Y2ggOikNCj4gDQo+IFRoaXMgc2luZ2xl
-IG9uZSBmcm9tIHRoZSBzZXJpZXMgZ290IGFscmVhZHkgYXBwbGllZCBoZXJlOg0KPiANCj4gICAg
-aHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvYnBmL2JwZi0N
-Cj4gbmV4dC5naXQvY29tbWl0Lz9pZD1mYTk2YjI0MjA0YWY0MjI3NGVjMTNkZmIyZjJlNjk5MGQ3
-NTEwZTU1DQoNCk9rLCBub3cgSSB1bmRlcnN0b29kIHRoZSBtZXJnZSBtZXNzYWdlIGJldHRlci4N
-Cg0KUm9iZXJ0bw0KDQo+ID4+Pj4gU2lnbmVkLW9mZi1ieTogQmVuamFtaW4gVGlzc29pcmVzIDxi
-ZW5qYW1pbi50aXNzb2lyZXNAcmVkaGF0LmNvbT4NCj4gPj4+PiBDby1kZXZlbG9wZWQtYnk6IFlv
-c3J5IEFobWVkIDx5b3NyeWFobWVkQGdvb2dsZS5jb20+DQo+ID4+Pj4gU2lnbmVkLW9mZi1ieTog
-WW9zcnkgQWhtZWQgPHlvc3J5YWhtZWRAZ29vZ2xlLmNvbT4NCj4gPj4+PiBTaWduZWQtb2ZmLWJ5
-OiBIYW8gTHVvIDxoYW9sdW9AZ29vZ2xlLmNvbT4NCj4gPj4+PiAtLS0NCj4gPj4+PiAgIERvY3Vt
-ZW50YXRpb24vYnBmL2tmdW5jcy5yc3QgfCA2ICsrKysrKw0KPiA+Pj4+ICAgaW5jbHVkZS9saW51
-eC9idGYuaCAgICAgICAgICB8IDEgKw0KPiA+Pj4+ICAga2VybmVsL2JwZi9idGYuYyAgICAgICAg
-ICAgICB8IDkgKysrKysrKysrDQo+ID4+Pj4gICAzIGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlv
-bnMoKykNCj4gPj4+Pg0KPiA+Pj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2JwZi9rZnVu
-Y3MucnN0IGIvRG9jdW1lbnRhdGlvbi9icGYva2Z1bmNzLnJzdA0KPiA+Pj4+IGluZGV4IGMwYjdk
-YWU2ZGJmNS4uYzhiMjFkZTFjNzcyIDEwMDY0NA0KPiA+Pj4+IC0tLSBhL0RvY3VtZW50YXRpb24v
-YnBmL2tmdW5jcy5yc3QNCj4gPj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2JwZi9rZnVuY3MucnN0
-DQo+ID4+Pj4gQEAgLTE0Niw2ICsxNDYsMTIgQEAgdGhhdCBvcGVyYXRlIChjaGFuZ2Ugc29tZSBw
-cm9wZXJ0eSwgcGVyZm9ybQ0KPiBzb21lDQo+ID4+PiBvcGVyYXRpb24pIG9uIGFuIG9iamVjdCB0
-aGF0DQo+ID4+Pj4gICB3YXMgb2J0YWluZWQgdXNpbmcgYW4gYWNxdWlyZSBrZnVuYy4gU3VjaCBr
-ZnVuY3MgbmVlZCBhbiB1bmNoYW5nZWQNCj4gcG9pbnRlcg0KPiA+Pj4gdG8NCj4gPj4+PiAgIGVu
-c3VyZSB0aGUgaW50ZWdyaXR5IG9mIHRoZSBvcGVyYXRpb24gYmVpbmcgcGVyZm9ybWVkIG9uIHRo
-ZSBleHBlY3RlZA0KPiBvYmplY3QuDQo=
+On Wed, Aug 10, 2022 at 7:26 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> On Wed, Aug 10, 2022 at 3:44 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+> >
+> > > From: Jarkko Sakkinen [mailto:jarkko@kernel.org]
+> > > Sent: Tuesday, August 9, 2022 6:55 PM
+> > > On Tue, Aug 09, 2022 at 03:45:54PM +0200, Roberto Sassu wrote:
+> > > > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > >
+> > > > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > >
+> > > > This allows to declare a kfunc as sleepable and prevents its use in
+> > > > a non sleepable program.
+> > >
+> > > Nit: "Declare a kfunc as sleepable and prevent its use in a
+> > > non-sleepable program."
+> > >
+> > > It's missing the part *how* the patch accomplishes its goals.
+> >
+> > I will add:
+> >
+> > If an eBPF program is going to call a kfunc declared as sleepable,
+> > eBPF will look at the eBPF program flags. If BPF_F_SLEEPABLE is
+> > not set, execution of that program is denied.
+>
+> All those changes are looking good to me.
+>
+> Thanks a lot for keeping pushing on this patch :)
+
+Multiple series other than the HID one started resending your patch
+once you dropped it, it's obviously needed :) Thanks for sending it in
+the first place :)
+
+>
+> Cheers,
+> Benjamin
+>
+> >
+> > Roberto
+> >
+> > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > > Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
+> > > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > > ---
+> > > >  Documentation/bpf/kfuncs.rst | 6 ++++++
+> > > >  include/linux/btf.h          | 1 +
+> > > >  kernel/bpf/btf.c             | 9 +++++++++
+> > > >  3 files changed, 16 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> > > > index c0b7dae6dbf5..c8b21de1c772 100644
+> > > > --- a/Documentation/bpf/kfuncs.rst
+> > > > +++ b/Documentation/bpf/kfuncs.rst
+> > > > @@ -146,6 +146,12 @@ that operate (change some property, perform some
+> > > operation) on an object that
+> > > >  was obtained using an acquire kfunc. Such kfuncs need an unchanged pointer
+> > > to
+> > > >  ensure the integrity of the operation being performed on the expected object.
+> > > >
+> > > > +2.4.6 KF_SLEEPABLE flag
+> > > > +-----------------------
+> > > > +
+> > > > +The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can
+> > > only
+> > > > +be called by sleepable BPF programs (BPF_F_SLEEPABLE).
+> > > > +
+> > > >  2.5 Registering the kfuncs
+> > > >  --------------------------
+> > > >
+> > > > diff --git a/include/linux/btf.h b/include/linux/btf.h
+> > > > index cdb376d53238..976cbdd2981f 100644
+> > > > --- a/include/linux/btf.h
+> > > > +++ b/include/linux/btf.h
+> > > > @@ -49,6 +49,7 @@
+> > > >   * for this case.
+> > > >   */
+> > > >  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer
+> > > arguments */
+> > > > +#define KF_SLEEPABLE   (1 << 5) /* kfunc may sleep */
+> > > >
+> > > >  struct btf;
+> > > >  struct btf_member;
+> > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > > > index 7e64447659f3..d3e4c86b8fcd 100644
+> > > > --- a/kernel/bpf/btf.c
+> > > > +++ b/kernel/bpf/btf.c
+> > > > @@ -6175,6 +6175,7 @@ static int btf_check_func_arg_match(struct
+> > > bpf_verifier_env *env,
+> > > >  {
+> > > >     enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+> > > >     bool rel = false, kptr_get = false, trusted_arg = false;
+> > > > +   bool sleepable = false;
+> > > >     struct bpf_verifier_log *log = &env->log;
+> > > >     u32 i, nargs, ref_id, ref_obj_id = 0;
+> > > >     bool is_kfunc = btf_is_kernel(btf);
+> > > > @@ -6212,6 +6213,7 @@ static int btf_check_func_arg_match(struct
+> > > bpf_verifier_env *env,
+> > > >             rel = kfunc_flags & KF_RELEASE;
+> > > >             kptr_get = kfunc_flags & KF_KPTR_GET;
+> > > >             trusted_arg = kfunc_flags & KF_TRUSTED_ARGS;
+> > > > +           sleepable = kfunc_flags & KF_SLEEPABLE;
+> > > >     }
+> > > >
+> > > >     /* check that BTF function arguments match actual types that the
+> > > > @@ -6419,6 +6421,13 @@ static int btf_check_func_arg_match(struct
+> > > bpf_verifier_env *env,
+> > > >                     func_name);
+> > > >             return -EINVAL;
+> > > >     }
+> > > > +
+> > > > +   if (sleepable && !env->prog->aux->sleepable) {
+> > > > +           bpf_log(log, "kernel function %s is sleepable but the program is
+> > > not\n",
+> > > > +                   func_name);
+> > > > +           return -EINVAL;
+> > > > +   }
+> > > > +
+> > > >     /* returns argument register number > 0 in case of reference release
+> > > kfunc */
+> > > >     return rel ? ref_regno : 0;
+> > > >  }
+> > > > --
+> > > > 2.25.1
+> > > >
+> > >
+> > > BR, Jarkko
+> >
+>
