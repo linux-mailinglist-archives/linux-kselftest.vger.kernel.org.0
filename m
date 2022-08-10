@@ -2,156 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AE458EA1B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 11:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5D358EA26
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 11:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiHJJza (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Aug 2022 05:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
+        id S229455AbiHJJ7W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Aug 2022 05:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiHJJz1 (ORCPT
+        with ESMTP id S229446AbiHJJ7V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:55:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D76F326AE8
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 02:55:25 -0700 (PDT)
+        Wed, 10 Aug 2022 05:59:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DA106EF19
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 02:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660125325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        s=mimecast20190719; t=1660125559;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=m5UKomJJr5XDUN8t2Kmb7khiadiUQsrzaj90s+j66gQ=;
-        b=XauGWYwm2YHllDCVya8h3dh2VCxcMp2eXLrGwCCuukmjOLrdAx5dk/CMcpX/u+Lxbe24xF
-        6/yzLXImuFsBVkN5tVXkNKcIczY4r9o46GIbAr0lLA4DDNQc4p7aNcS4wjx+f70N3f13Je
-        hmRhx8eqHVUmTxMEGhGKI3mOSI+l6LM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8foxS5OTM5HYev6CZ4Rcys+eRHI332c6y7bWUfe28UQ=;
+        b=Vc8GwjkG18VgnnxTiA9VEWTa2sDHWXftAF9u5SPu04+M8ernJ5zEedYfJK0VGpMC0p3BWs
+        298f2U6sZiWyw019aB/RvGjxM9MgRkHfU7byAfwuffyX1hKZ+t9HOociXVmNmjy7XQtr7Z
+        OquxeQkUP/GwBYuWvBN+/Gt6pomnReo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-hQ4f6v0HM9yGZE1UsEaTUw-1; Wed, 10 Aug 2022 05:55:23 -0400
-X-MC-Unique: hQ4f6v0HM9yGZE1UsEaTUw-1
-Received: by mail-wm1-f71.google.com with SMTP id v130-20020a1cac88000000b003a4f057ed9fso7187438wme.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 02:55:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=m5UKomJJr5XDUN8t2Kmb7khiadiUQsrzaj90s+j66gQ=;
-        b=L/n2p8JmFI5UcJjaHvUhNjI4kSlaPEYxmYy1KTk4CbogQmsUe8ML8Ki61k7iPiCxZQ
-         nc2xA9eVUqu/DkkpJWHuTUd9gYn5799PVmAFhVVBY7osH3qtVqLbxVtqxdzXXxsS4lbw
-         cA3pQEaCWp3bqzLtHUW5d0/Nf7wXoYYucHxHiwT5vpMlC/s5O8foxvDyyK5hugeXAbEW
-         gGVTj56GzlXQ1H3IVcb78yNTFRPZtysDKcNKo/bG6oY1O5Q30W5Ua+pZJhVWzBgwsfbO
-         GtUxnqayiGFvwoIZNGHlzINgDEQAxLG4/Eqk7iAWefO9ctsky0x9NzHgojuxDnrYJHw+
-         j8DA==
-X-Gm-Message-State: ACgBeo3+Hi0F7EkczzeQT1asvm32S04QPohlRRNck0zipb4rO22yo3oB
-        Rvbex5W818gWS1FF5um3vaWeOcq3Fc8LOgCyPxRaQqIVkwpRBkJc/7LQysM6poECuIMy6JO4f3o
-        4fFKdhamw/ki4LYJqWrgKcS+J7Src
-X-Received: by 2002:a5d:64e4:0:b0:222:d4da:c2e1 with SMTP id g4-20020a5d64e4000000b00222d4dac2e1mr7468944wri.15.1660125322331;
-        Wed, 10 Aug 2022 02:55:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR57ng+8LAmFqiWIYkxzU0qIaLTw96OSbpCj25JDzNCtyJxE1FXqxz6BaUC8mUFwvCSeHhucCg==
-X-Received: by 2002:a5d:64e4:0:b0:222:d4da:c2e1 with SMTP id g4-20020a5d64e4000000b00222d4dac2e1mr7468880wri.15.1660125322007;
-        Wed, 10 Aug 2022 02:55:22 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:1600:a3ce:b459:ef57:7b93? (p200300cbc7071600a3ceb459ef577b93.dip0.t-ipconnect.de. [2003:cb:c707:1600:a3ce:b459:ef57:7b93])
-        by smtp.gmail.com with ESMTPSA id l3-20020a05600c4f0300b003a4bb3f9bc6sm1837127wmq.41.2022.08.10.02.55.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 02:55:21 -0700 (PDT)
-Message-ID: <64ab9678-c72d-b6d9-8532-346cc9c06814@redhat.com>
-Date:   Wed, 10 Aug 2022 11:55:19 +0200
+ us-mta-608-LYXixRy1MdShMhEGEMMVFg-1; Wed, 10 Aug 2022 05:59:16 -0400
+X-MC-Unique: LYXixRy1MdShMhEGEMMVFg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F5AC811E81;
+        Wed, 10 Aug 2022 09:59:15 +0000 (UTC)
+Received: from [10.64.54.77] (vpn2-54-77.bne.redhat.com [10.64.54.77])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D98C02166B29;
+        Wed, 10 Aug 2022 09:59:10 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Florian Weimer <fweimer@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org,
+        oliver upton <oliver.upton@linux.dev>,
+        andrew jones <andrew.jones@linux.dev>, seanjc@google.com,
+        yihyu@redhat.com, shan gavin <shan.gavin@gmail.com>
+References: <20220809060627.115847-1-gshan@redhat.com>
+ <20220809060627.115847-2-gshan@redhat.com>
+ <8735e6ncxw.fsf@oldenburg.str.redhat.com>
+ <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
+ <87o7wtnay6.fsf@oldenburg.str.redhat.com>
+ <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
+ <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
+ <bb97efaf-4f58-c192-a489-e71ebbebce8c@redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <5be21a93-8a28-0214-59f0-21b56b0946a2@redhat.com>
+Date:   Wed, 10 Aug 2022 19:59:07 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 05/14] mm/memfd: Introduce MFD_INACCESSIBLE flag
+In-Reply-To: <bb97efaf-4f58-c192-a489-e71ebbebce8c@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-6-chao.p.peng@linux.intel.com>
- <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
- <20220810093741.GE862421@chaop.bj.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220810093741.GE862421@chaop.bj.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10.08.22 11:37, Chao Peng wrote:
-> On Fri, Aug 05, 2022 at 03:28:50PM +0200, David Hildenbrand wrote:
->> On 06.07.22 10:20, Chao Peng wrote:
->>> Introduce a new memfd_create() flag indicating the content of the
->>> created memfd is inaccessible from userspace through ordinary MMU
->>> access (e.g., read/write/mmap). However, the file content can be
->>> accessed via a different mechanism (e.g. KVM MMU) indirectly.
+Hi Paolo,
+
+On 8/10/22 7:14 PM, Paolo Bonzini wrote:
+> On 8/9/22 14:21, Mathieu Desnoyers wrote:
+>>> For kvm/selftests, there are 3 architectures involved actually. So we
+>>> just need consider 4 cases: aarch64, x86, s390 and other. For other
+>>> case, we just use __builtin_thread_pointer() to maintain code's
+>>> integrity, but it's not called at all.
 >>>
->>> It provides semantics required for KVM guest private memory support
->>> that a file descriptor with this flag set is going to be used as the
->>> source of guest memory in confidential computing environments such
->>> as Intel TDX/AMD SEV but may not be accessible from host userspace.
->>>
->>> The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
->>> also impossible for a memfd created with this flag.
->>
->> It's kind of weird to have it that way. Why should the user have to
->> care? It's the notifier requirement to have that, no?
->>
->> Why can't we handle that when register a notifier? If anything is
->> already mapped, fail registering the notifier if the notifier has these
->> demands. If registering succeeds, block it internally.
->>
->> Or what am I missing? We might not need the memfile set flag semantics
->> eventually and would not have to expose such a flag to user space.
+>>> I think kvm/selftest is always relying on glibc if I'm correct.
+>> All those are handled in the rseq selftests and in librseq. Why duplicate all that logic again?
 > 
-> This makes sense if doable. The major concern was: is there a reliable
-> way to detect this (already mapped) at the time of memslot registering.
+> Yeah, rseq_test should reuse librseq code.  The simplest way,
+> if slightly hackish, is to do something like
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 690b499c3471..6c192b0ec304 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -37,6 +37,7 @@ ifeq ($(ARCH),riscv)
+>       UNAME_M := riscv
+>   endif
+> 
+>   LIBKVM += lib/assert.c
+>   LIBKVM += lib/elf.c
+>   LIBKVM += lib/guest_modes.c
+> @@ -198,7 +199,7 @@ endif
+>   CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+>       -fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
+>       -I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+> -    -I$(<D) -Iinclude/$(UNAME_M) -I.. $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+> +    -I$(<D) -Iinclude/$(UNAME_M) -I.. $(EXTRA_CFLAGS) $(KHDR_INCLUDES) -I../rseq
+> 
+>   no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
+>           $(CC) -Werror -no-pie -x c - -o "$$TMP", -no-pie)
+> 
+> 
+> and just #include "../rseq/rseq.c" in rseq_test.c.
+> 
 
-If too complicated, we could simplify to "was this ever mapped" and fail
-for now. Hooking into shmem_mmap() might be sufficient for that to get
-notified about the first mmap.
+Thank you. It's really a nice idea. I think it's best way to share
+"../rseq/rseq.c". In this way, we needn't to rely on "../rseq/librseq.so",
+which is compiled by "../rseq/Makefile".
 
-As an alternative, mapping_mapped() or similar *might* do what we want.
+I will modify the code accordingly in v2 :)
 
-
-
--- 
 Thanks,
-
-David / dhildenb
+Gavin
 
