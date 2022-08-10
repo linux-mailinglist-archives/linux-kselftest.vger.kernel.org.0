@@ -2,34 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E925358EE8E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 16:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0F358EED1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 16:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232563AbiHJOj3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Aug 2022 10:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
+        id S232775AbiHJOwn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Aug 2022 10:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232689AbiHJOjV (ORCPT
+        with ESMTP id S231980AbiHJOwm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:39:21 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E815354649;
-        Wed, 10 Aug 2022 07:39:14 -0700 (PDT)
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLmrH-0007L9-Nn; Wed, 10 Aug 2022 16:38:55 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oLmrG-000Ego-Vy; Wed, 10 Aug 2022 16:38:55 +0200
-Subject: Re: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark a
- function to be sleepable
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Wed, 10 Aug 2022 10:52:42 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCADF74CF8;
+        Wed, 10 Aug 2022 07:52:40 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2tFt5ZZZz67y8S;
+        Wed, 10 Aug 2022 22:52:34 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 10 Aug 2022 16:52:38 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 10 Aug 2022 16:52:38 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+CC:     Jarkko Sakkinen <jarkko@kernel.org>,
         "ast@kernel.org" <ast@kernel.org>,
         "andrii@kernel.org" <andrii@kernel.org>,
         "martin.lau@linux.dev" <martin.lau@linux.dev>,
@@ -55,24 +54,30 @@ Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Yosry Ahmed <yosryahmed@google.com>
+Subject: RE: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark a
+ function to be sleepable
+Thread-Topic: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark
+ a function to be sleepable
+Thread-Index: AQHYq/aDa3kCDLsk5EK6T80CaXl/sK2mqA6AgAF8nfD//+wHAIAAA64AgAAlKhA=
+Date:   Wed, 10 Aug 2022 14:52:38 +0000
+Message-ID: <294f7bc395a04a129703a522c42d021e@huawei.com>
 References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
  <20220809134603.1769279-2-roberto.sassu@huawei.com>
  <YvKRYRjJdXbAWL6Y@kernel.org> <c9e73d7aa51a47c585b935a41dbf1924@huawei.com>
  <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <e807779b-e72b-e197-b833-43373e87d3df@iogearbox.net>
-Date:   Wed, 10 Aug 2022 16:38:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ <e807779b-e72b-e197-b833-43373e87d3df@iogearbox.net>
+In-Reply-To: <e807779b-e72b-e197-b833-43373e87d3df@iogearbox.net>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26623/Wed Aug 10 09:55:07 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.45.144.193]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,53 +85,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/10/22 4:25 PM, Benjamin Tissoires wrote:
-> On Wed, Aug 10, 2022 at 3:44 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->>> From: Jarkko Sakkinen [mailto:jarkko@kernel.org]
->>> Sent: Tuesday, August 9, 2022 6:55 PM
->>> On Tue, Aug 09, 2022 at 03:45:54PM +0200, Roberto Sassu wrote:
->>>> From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->>>>
->>>> From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->>>>
->>>> This allows to declare a kfunc as sleepable and prevents its use in
->>>> a non sleepable program.
->>>
->>> Nit: "Declare a kfunc as sleepable and prevent its use in a
->>> non-sleepable program."
->>>
->>> It's missing the part *how* the patch accomplishes its goals.
->>
->> I will add:
->>
->> If an eBPF program is going to call a kfunc declared as sleepable,
->> eBPF will look at the eBPF program flags. If BPF_F_SLEEPABLE is
->> not set, execution of that program is denied.
-> 
-> All those changes are looking good to me.
-> 
-> Thanks a lot for keeping pushing on this patch :)
-
-This single one from the series got already applied here:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=fa96b24204af42274ec13dfb2f2e6990d7510e55
-
->>>> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->>>> Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
->>>> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
->>>> Signed-off-by: Hao Luo <haoluo@google.com>
->>>> ---
->>>>   Documentation/bpf/kfuncs.rst | 6 ++++++
->>>>   include/linux/btf.h          | 1 +
->>>>   kernel/bpf/btf.c             | 9 +++++++++
->>>>   3 files changed, 16 insertions(+)
->>>>
->>>> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
->>>> index c0b7dae6dbf5..c8b21de1c772 100644
->>>> --- a/Documentation/bpf/kfuncs.rst
->>>> +++ b/Documentation/bpf/kfuncs.rst
->>>> @@ -146,6 +146,12 @@ that operate (change some property, perform some
->>> operation) on an object that
->>>>   was obtained using an acquire kfunc. Such kfuncs need an unchanged pointer
->>> to
->>>>   ensure the integrity of the operation being performed on the expected object.
+PiBGcm9tOiBEYW5pZWwgQm9ya21hbm4gW21haWx0bzpkYW5pZWxAaW9nZWFyYm94Lm5ldF0NCj4g
+U2VudDogV2VkbmVzZGF5LCBBdWd1c3QgMTAsIDIwMjIgNDozOSBQTQ0KPiBPbiA4LzEwLzIyIDQ6
+MjUgUE0sIEJlbmphbWluIFRpc3NvaXJlcyB3cm90ZToNCj4gPiBPbiBXZWQsIEF1ZyAxMCwgMjAy
+MiBhdCAzOjQ0IFBNIFJvYmVydG8gU2Fzc3UNCj4gPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT4g
+d3JvdGU6DQo+ID4+PiBGcm9tOiBKYXJra28gU2Fra2luZW4gW21haWx0bzpqYXJra29Aa2VybmVs
+Lm9yZ10NCj4gPj4+IFNlbnQ6IFR1ZXNkYXksIEF1Z3VzdCA5LCAyMDIyIDY6NTUgUE0NCj4gPj4+
+IE9uIFR1ZSwgQXVnIDA5LCAyMDIyIGF0IDAzOjQ1OjU0UE0gKzAyMDAsIFJvYmVydG8gU2Fzc3Ug
+d3JvdGU6DQo+ID4+Pj4gRnJvbTogQmVuamFtaW4gVGlzc29pcmVzIDxiZW5qYW1pbi50aXNzb2ly
+ZXNAcmVkaGF0LmNvbT4NCj4gPj4+Pg0KPiA+Pj4+IEZyb206IEJlbmphbWluIFRpc3NvaXJlcyA8
+YmVuamFtaW4udGlzc29pcmVzQHJlZGhhdC5jb20+DQo+ID4+Pj4NCj4gPj4+PiBUaGlzIGFsbG93
+cyB0byBkZWNsYXJlIGEga2Z1bmMgYXMgc2xlZXBhYmxlIGFuZCBwcmV2ZW50cyBpdHMgdXNlIGlu
+DQo+ID4+Pj4gYSBub24gc2xlZXBhYmxlIHByb2dyYW0uDQo+ID4+Pg0KPiA+Pj4gTml0OiAiRGVj
+bGFyZSBhIGtmdW5jIGFzIHNsZWVwYWJsZSBhbmQgcHJldmVudCBpdHMgdXNlIGluIGENCj4gPj4+
+IG5vbi1zbGVlcGFibGUgcHJvZ3JhbS4iDQo+ID4+Pg0KPiA+Pj4gSXQncyBtaXNzaW5nIHRoZSBw
+YXJ0ICpob3cqIHRoZSBwYXRjaCBhY2NvbXBsaXNoZXMgaXRzIGdvYWxzLg0KPiA+Pg0KPiA+PiBJ
+IHdpbGwgYWRkOg0KPiA+Pg0KPiA+PiBJZiBhbiBlQlBGIHByb2dyYW0gaXMgZ29pbmcgdG8gY2Fs
+bCBhIGtmdW5jIGRlY2xhcmVkIGFzIHNsZWVwYWJsZSwNCj4gPj4gZUJQRiB3aWxsIGxvb2sgYXQg
+dGhlIGVCUEYgcHJvZ3JhbSBmbGFncy4gSWYgQlBGX0ZfU0xFRVBBQkxFIGlzDQo+ID4+IG5vdCBz
+ZXQsIGV4ZWN1dGlvbiBvZiB0aGF0IHByb2dyYW0gaXMgZGVuaWVkLg0KPiA+DQo+ID4gQWxsIHRo
+b3NlIGNoYW5nZXMgYXJlIGxvb2tpbmcgZ29vZCB0byBtZS4NCj4gPg0KPiA+IFRoYW5rcyBhIGxv
+dCBmb3Iga2VlcGluZyBwdXNoaW5nIG9uIHRoaXMgcGF0Y2ggOikNCj4gDQo+IFRoaXMgc2luZ2xl
+IG9uZSBmcm9tIHRoZSBzZXJpZXMgZ290IGFscmVhZHkgYXBwbGllZCBoZXJlOg0KPiANCj4gICAg
+aHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvYnBmL2JwZi0N
+Cj4gbmV4dC5naXQvY29tbWl0Lz9pZD1mYTk2YjI0MjA0YWY0MjI3NGVjMTNkZmIyZjJlNjk5MGQ3
+NTEwZTU1DQoNCk9rLCBub3cgSSB1bmRlcnN0b29kIHRoZSBtZXJnZSBtZXNzYWdlIGJldHRlci4N
+Cg0KUm9iZXJ0bw0KDQo+ID4+Pj4gU2lnbmVkLW9mZi1ieTogQmVuamFtaW4gVGlzc29pcmVzIDxi
+ZW5qYW1pbi50aXNzb2lyZXNAcmVkaGF0LmNvbT4NCj4gPj4+PiBDby1kZXZlbG9wZWQtYnk6IFlv
+c3J5IEFobWVkIDx5b3NyeWFobWVkQGdvb2dsZS5jb20+DQo+ID4+Pj4gU2lnbmVkLW9mZi1ieTog
+WW9zcnkgQWhtZWQgPHlvc3J5YWhtZWRAZ29vZ2xlLmNvbT4NCj4gPj4+PiBTaWduZWQtb2ZmLWJ5
+OiBIYW8gTHVvIDxoYW9sdW9AZ29vZ2xlLmNvbT4NCj4gPj4+PiAtLS0NCj4gPj4+PiAgIERvY3Vt
+ZW50YXRpb24vYnBmL2tmdW5jcy5yc3QgfCA2ICsrKysrKw0KPiA+Pj4+ICAgaW5jbHVkZS9saW51
+eC9idGYuaCAgICAgICAgICB8IDEgKw0KPiA+Pj4+ICAga2VybmVsL2JwZi9idGYuYyAgICAgICAg
+ICAgICB8IDkgKysrKysrKysrDQo+ID4+Pj4gICAzIGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlv
+bnMoKykNCj4gPj4+Pg0KPiA+Pj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2JwZi9rZnVu
+Y3MucnN0IGIvRG9jdW1lbnRhdGlvbi9icGYva2Z1bmNzLnJzdA0KPiA+Pj4+IGluZGV4IGMwYjdk
+YWU2ZGJmNS4uYzhiMjFkZTFjNzcyIDEwMDY0NA0KPiA+Pj4+IC0tLSBhL0RvY3VtZW50YXRpb24v
+YnBmL2tmdW5jcy5yc3QNCj4gPj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2JwZi9rZnVuY3MucnN0
+DQo+ID4+Pj4gQEAgLTE0Niw2ICsxNDYsMTIgQEAgdGhhdCBvcGVyYXRlIChjaGFuZ2Ugc29tZSBw
+cm9wZXJ0eSwgcGVyZm9ybQ0KPiBzb21lDQo+ID4+PiBvcGVyYXRpb24pIG9uIGFuIG9iamVjdCB0
+aGF0DQo+ID4+Pj4gICB3YXMgb2J0YWluZWQgdXNpbmcgYW4gYWNxdWlyZSBrZnVuYy4gU3VjaCBr
+ZnVuY3MgbmVlZCBhbiB1bmNoYW5nZWQNCj4gcG9pbnRlcg0KPiA+Pj4gdG8NCj4gPj4+PiAgIGVu
+c3VyZSB0aGUgaW50ZWdyaXR5IG9mIHRoZSBvcGVyYXRpb24gYmVpbmcgcGVyZm9ybWVkIG9uIHRo
+ZSBleHBlY3RlZA0KPiBvYmplY3QuDQo=
