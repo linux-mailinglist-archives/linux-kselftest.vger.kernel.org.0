@@ -2,151 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D066058E422
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 02:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6003D58E431
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 02:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiHJAh4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 20:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
+        id S229637AbiHJAqH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 20:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiHJAhz (ORCPT
+        with ESMTP id S229605AbiHJAqE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 20:37:55 -0400
+        Tue, 9 Aug 2022 20:46:04 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C56157820D
-        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 17:37:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB3024B4BA
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 17:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660091871;
+        s=mimecast20190719; t=1660092361;
         h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gI8W3vKU6gx264pJaXZH00m10/hIkZkbLO7K9QwADAU=;
-        b=cTKVvPk2yBlttuCOl7JUT/6nDbyzPmwP8aVqEXhkFsMQ3E/qKuJ4yKcLWKYLbQc4BFjGb/
-        1O5qblJvaIpPJKVMTyEEoJEY8KKP1YE0UeHrR7zP9UW5ACz8myhJ59SvGIn7Bzk4rqtgwo
-        hZrWcUSF0GJNWquYleGZ+wNyOnvgB+I=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=S/MAn6qAg/Jsbs3sbj308t0Whag8V+DOtIapBcO490g=;
+        b=JGzN7HUkemSs5/rkHWzwXuSsXBxqonPlbreNMjjufGbp4y3DWhQvbL3bWrAMMOOa86UqlG
+        m3wBCFqg2syrhWkL+kHerg+DhyJJvJMoRNgTMsIiab/aLSy9hKuiU+1D+ejZIQbA/JyOKL
+        +QYc8VfLZR2pWat2KOJND0aqkt3OlzA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-3-eDbrPmK5OK6ImuSrx8J66w-1; Tue, 09 Aug 2022 20:37:48 -0400
-X-MC-Unique: eDbrPmK5OK6ImuSrx8J66w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-115-XoWcY8H1PiqgLZYkjOgRSg-1; Tue, 09 Aug 2022 20:45:58 -0400
+X-MC-Unique: XoWcY8H1PiqgLZYkjOgRSg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA5863802AC2;
-        Wed, 10 Aug 2022 00:37:47 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2ADD8039A1;
+        Wed, 10 Aug 2022 00:45:57 +0000 (UTC)
 Received: from [10.64.54.189] (vpn2-54-189.bne.redhat.com [10.64.54.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 10C089459C;
-        Wed, 10 Aug 2022 00:37:42 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B797492C3B;
+        Wed, 10 Aug 2022 00:45:53 +0000 (UTC)
 Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
-To:     Sean Christopherson <seanjc@google.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     shuah <shuah@kernel.org>, Florian Weimer <fweimer@redhat.com>,
-        kvmarm@lists.cs.columbia.edu, KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, maz <maz@kernel.org>,
-        oliver upton <oliver.upton@linux.dev>,
-        andrew jones <andrew.jones@linux.dev>, yihyu@redhat.com,
-        shan gavin <shan.gavin@gmail.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Use getcpu() instead of
+ sched_getcpu() in rseq_test
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Florian Weimer <fweimer@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
+        oliver.upton@linux.dev, andrew.jones@linux.dev,
+        mathieu.desnoyers@efficios.com, yihyu@redhat.com,
+        shan.gavin@gmail.com
 References: <20220809060627.115847-1-gshan@redhat.com>
- <20220809060627.115847-2-gshan@redhat.com>
- <8735e6ncxw.fsf@oldenburg.str.redhat.com>
- <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
- <87o7wtnay6.fsf@oldenburg.str.redhat.com>
- <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
- <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
- <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com>
- <YvLT1fd8ddybF5Uw@google.com>
+ <20220809060627.115847-3-gshan@redhat.com>
+ <87y1vxncv1.fsf@oldenburg.str.redhat.com>
+ <87mtcdnaxe.fsf@oldenburg.str.redhat.com>
+ <ea2ef1a2-0fd8-448b-d7ca-254603518823@redhat.com>
+ <YvLJUEOcxaZKW0y1@google.com>
 From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <8c1f33b4-a5a1-fcfa-4521-36253ffa22c8@redhat.com>
-Date:   Wed, 10 Aug 2022 10:37:40 +1000
+Message-ID: <2f8f9062-3e89-7a09-02c4-ab1b2dc07356@redhat.com>
+Date:   Wed, 10 Aug 2022 10:45:50 +1000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.0
 MIME-Version: 1.0
-In-Reply-To: <YvLT1fd8ddybF5Uw@google.com>
+In-Reply-To: <YvLJUEOcxaZKW0y1@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mathieu and Sean,
-
-On 8/10/22 7:38 AM, Sean Christopherson wrote:
-> On Tue, Aug 09, 2022, Mathieu Desnoyers wrote:
->> ----- On Aug 9, 2022, at 8:21 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
->>> ----- Gavin Shan <gshan@redhat.com> wrote:
->>>> On 8/9/22 5:16 PM, Florian Weimer wrote:
->>>>>>> __builtin_thread_pointer doesn't work on all architectures/GCC
->>>>>>> versions.
->>>>>>> Is this a problem for selftests?
->>>>>>>
->>>>>>
->>>>>> It's a problem as the test case is running on all architectures. I think I
->>>>>> need introduce our own __builtin_thread_pointer() for where it's not
->>>>>> supported: (1) PowerPC  (2) x86 without GCC 11
->>>>>>
->>>>>> Please let me know if I still have missed cases where
->>>>>> __buitin_thread_pointer() isn't supported?
->>>>>
->>>>> As far as I know, these are the two outliers that also have rseq
->>>>> support.  The list is a bit longer if we also consider non-rseq
->>>>> architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
->>>>> about the Linux architectures without glibc support).
->>>>>
->>>>
->>>> For kvm/selftests, there are 3 architectures involved actually. So we
->>>> just need consider 4 cases: aarch64, x86, s390 and other. For other
->>>> case, we just use __builtin_thread_pointer() to maintain code's
->>>> integrity, but it's not called at all.
->>>>
->>>> I think kvm/selftest is always relying on glibc if I'm correct.
+On 8/10/22 6:53 AM, Sean Christopherson wrote:
+> On Tue, Aug 09, 2022, Gavin Shan wrote:
+>> On 8/9/22 5:17 PM, Florian Weimer wrote:
+>>> * Florian Weimer:
 >>>
->>> All those are handled in the rseq selftests and in librseq. Why duplicate all
->>> that logic again?
+>>>> * Gavin Shan:
+>>>>
+>>>>> sched_getcpu() is glibc dependent and it can simply return the CPU
+>>>>> ID from the registered rseq information, as Florian Weimer pointed.
+>>>>> In this case, it's pointless to compare the return value from
+>>>>> sched_getcpu() and that fetched from the registered rseq information.
+>>>>>
+>>>>> Fix the issue by replacing sched_getcpu() with getcpu(), as Florian
+>>>>> suggested. The comments are modified accordingly.
+>>>>
+>>>> Note that getcpu was added in glibc 2.29, so perhaps you need to perform
+>>>> a direct system call?
+>>>
+>>> One more thing: syscall(__NR_getcpu) also has the advantage that it
+>>> wouldn't have to be changed again if node IDs become available via rseq
+>>> and getcpu is implemented using that.
+>>>
+>>> Thanks,
+>>> Florian
+>>>
 >>
->> More to the point, considering that we have all the relevant rseq registration
->> code in tools/testing/selftests/rseq/rseq.c already, and the relevant thread
->> pointer getter code in tools/testing/selftests/rseq/rseq-*thread-pointer.h,
->> is there an easy way to get test applications in tools/testing/selftests/kvm
->> and in tools/testing/selftests/rseq to share that common code ?
->>
->> Keeping duplicated compatibility code is bad for long-term maintainability.
+>> Thanks, Florian. It makes sense to me to use syscall(__NR_getcpu) in
+>> next revision. Thanks for your quick review :)
 > 
-> Any reason not to simply add tools/lib/rseq.c and then expose a helper to get the
-> registered rseq struct?
+> +1, and definitely add a comment to prevent future "cleanup".
 > 
 
-There are couple of reasons, not to share tools/testing/selftests/rseq/librseq.so
-or add tools/lib/librseq.so. Please let me know if the arguments making sense
-to you?
+Yep, I will have something like below in next revision:
 
-- By design, selftests/rseq and selftests/kvm are parallel. It's going to introduce
-   unnecessary dependency for selftests/kvm to use selftests/rseq/librseq.so. To me,
-   it makes the maintainability even harder.
+     /*
+      * We have to perform direct system call for getcpu() because it's not
+      * available until glic 2.29.
+      */
 
-- What selftests/kvm needs is rseq-thread-pointer.h, which accounts for ~5% of
-   functionalities, provided by selftests/rseq/librseq.so.
-
-- I'm not too much familiar with selftests/rseq, but it seems it need heavy
-   rework before it can become tools/lib/librseq.so. However, I'm not sure if
-   the effort is worthwhile. The newly added library is fully used by
-   testtests/rseq. ~5% of that is going to be used by selftests/kvm.
-   In this case, we still have cross-dependency issue.
-
-I personally prefer not to use selftests/rseq/librseq.so or add tools/lib/librseq.so,
-but I need your feedback. Please share your thoughts.
 Thanks,
 Gavin
 
