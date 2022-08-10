@@ -2,209 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FE858E8EF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 10:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9561D58E900
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 10:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbiHJIlA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Aug 2022 04:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S231777AbiHJIpU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Aug 2022 04:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbiHJIku (ORCPT
+        with ESMTP id S230104AbiHJIpT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:40:50 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE45E2BB0C;
-        Wed, 10 Aug 2022 01:40:47 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3CB0B188494E;
-        Wed, 10 Aug 2022 08:40:46 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 344BB25032B7;
-        Wed, 10 Aug 2022 08:40:46 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 2B1A7A1A004D; Wed, 10 Aug 2022 08:40:46 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Wed, 10 Aug 2022 04:45:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44221ADA5;
+        Wed, 10 Aug 2022 01:45:16 -0700 (PDT)
+Received: from [192.168.10.7] (unknown [39.45.206.166])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B0486601BE2;
+        Wed, 10 Aug 2022 09:45:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660121114;
+        bh=1473869Iv8iu6o+SiEUIxAN5ZWzArP8lHuuYZHC8TEQ=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=VOT3kbYiY90iOsNmwjPKDRcrnhA+Nq+dHr2wUdQ3dp9YXfPoB45lsModbPKyApHkC
+         FqBlOolHNZDE+WjJGbgYXMW9exPj0qxxJb+ixSAn890nshpejAJA9F3VE931As8+sK
+         x6005gi8H2dMEftgItMtJpNFHI5E0rwISEYaEmkXVeTFZsMdGLpUv/fZqScFXLHSxt
+         PrF69uDmhxQOiOzlllAlwWiKiu/Fnpy2Sm4c8YBdhu2x/lEV3arOPAJ+3fOIT9prrM
+         lCuNUMzEy2M93qUld/dgvNQf3T9IPenUsGD5zceoYOZ52JX0DIPo7GXaVwqTNv8Pbd
+         48dFgrtPO/2BQ==
+Message-ID: <a5122af2-90e2-39c5-2d6a-57a4ab8d8f24@collabora.com>
+Date:   Wed, 10 Aug 2022 13:45:00 +0500
 MIME-Version: 1.0
-Date:   Wed, 10 Aug 2022 10:40:45 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com
+Subject: Re: [PATCH 0/5] Add process_memwatch syscall
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YvNcitNnyFxTw8bs@shredder>
-References: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <79683d9cf122e22b66b5da3bbbb0ee1f@kapio-technology.com>
- <YvIm+OvXvxbH6POv@shredder>
- <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
- <YvNcitNnyFxTw8bs@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <2491232d5c017d94ca3213197a3fb283@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list:ABI/API" <linux-api@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, krisman@collabora.com
+References: <20220726161854.276359-1-usama.anjum@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220726161854.276359-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-08-10 09:21, Ido Schimmel wrote:
-> On Tue, Aug 09, 2022 at 10:00:49PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-08-09 11:20, Ido Schimmel wrote:
->> > On Mon, Aug 01, 2022 at 05:33:49PM +0200, netdev@kapio-technology.com
->> > wrote:
->> > > On 2022-07-13 14:39, Ido Schimmel wrote:
->> > >
->> > > >
->> > > > What are "Storm Prevention" and "zero-DPV" FDB entries?
->> > > >
->> > >
->> > > For the zero-DPV entries, I can summarize:
->> > >
->> > > Since a CPU can become saturated from constant SA Miss Violations
->> > > from a
->> > > denied source, source MAC address are masked by loading a zero-DPV
->> > > (Destination Port Vector) entry in the ATU. As the address now
->> > > appears in
->> > > the database it will not cause more Miss Violations. ANY port trying
->> > > to send
->> > > a frame to this unauthorized address is discarded. Any locked port
->> > > trying to
->> > > use this unauthorized address has its frames discarded too (as the
->> > > ports SA
->> > > bit is not set in the ATU entry).
->> >
->> > What happens to unlocked ports that have learning enabled and are trying
->> > to use this address as SMAC? AFAICT, at least in the bridge driver, the
->> > locked entry will roam, but will keep the "locked" flag, which is
->> > probably not what we want. Let's see if we can agree on these semantics
->> > for a "locked" entry:
->> 
->> The next version of this will block forwarding to locked entries in 
->> the
->> bridge, so they will behave like the zero-DPV entries.
+On 7/26/22 9:18 PM, Muhammad Usama Anjum wrote:
+> Hello,
 > 
-> I'm talking about roaming, not forwarding. Let's say you have a locked
-> entry with MAC X pointing to port Y. Now you get a packet with SMAC X
-> from port Z which is unlocked. Will the FDB entry roam to port Z? I
-> think it should, but at least in current implementation it seems that
-> the "locked" flag will not be reset and having locked entries pointing
-> to an unlocked port looks like a bug.
+> This patch series implements a new syscall, process_memwatch. Currently,
+> only the support to watch soft-dirty PTE bit is added. This syscall is
+> generic to watch the memory of the process. There is enough room to add
+> more operations like this to watch memory in the future.
+> 
+> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
+> procfs file. The soft-dirty PTE bit for the memory in a process can be
+> cleared by writing to the clear_refs file. This series adds features that
+> weren't possible through the Proc FS interface.
+> - There is no atomic get soft-dirty PTE bit status and clear operation
+>   possible.
+> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
+> 
+> Historically, soft-dirty PTE bit tracking has been used in the CRIU
+> project. The Proc FS interface is enough for that as I think the process
+> is frozen. We have the use case where we need to track the soft-dirty
+> PTE bit for running processes. We need this tracking and clear mechanism
+> of a region of memory while the process is running to emulate the
+> getWriteWatch() syscall of Windows. This syscall is used by games to keep
+> track of dirty pages and keep processing only the dirty pages. This
+> syscall can be used by the CRIU project and other applications which
+> require soft-dirty PTE bit information.
+> 
+> As in the current kernel there is no way to clear a part of memory (instead
+> of clearing the Soft-Dirty bits for the entire processi) and get+clear
+> operation cannot be performed atomically, there are other methods to mimic
+> this information entirely in userspace with poor performance:
+> - The mprotect syscall and SIGSEGV handler for bookkeeping
+> - The userfaultfd syscall with the handler for bookkeeping
+> 
+>         long process_memwatch(int pidfd, unsigned long start, int len,
+>                               unsigned int flags, void *vec, int vec_len);
+Any thoughts?
+
+> 
+> This syscall can be used by the CRIU project and other applications which
+> require soft-dirty PTE bit information. The following operations are
+> supported in this syscall:
+> - Get the pages that are soft-dirty.
+> - Clear the pages which are soft-dirty.
+> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
+> soft-dirty PTE bit
+> 
+> There are two decisions which have been taken about how to get the output
+> from the syscall.
+> - Return offsets of the pages from the start in the vec
+> - Stop execution when vec is filled with dirty pages
+> These two arguments doesn't follow the mincore() philosophy where the
+> output array corresponds to the address range in one to one fashion, hence
+> the output buffer length isn't passed and only a flag is set if the page
+> is present. This makes mincore() easy to use with less control. We are
+> passing the size of the output array and putting return data consecutively
+> which is offset of dirty pages from the start. The user can convert these
+> offsets back into the dirty page addresses easily. Suppose, the user want
+> to get first 10 dirty pages from a total memory of 100 pages. He'll
+> allocate output buffer of size 10 and process_memwatch() syscall will
+> abort after finding the 10 pages. This behaviour is needed to support
+> Windows' getWriteWatch(). The behaviour like mincore() can be achieved by
+> passing output buffer of 100 size. This interface can be used for any
+> desired behaviour.
+> 
+> Regards,
+> Muhammad Usama Anjum
+> 
+> Muhammad Usama Anjum (5):
+>   fs/proc/task_mmu: make functions global to be used in other files
+>   mm: Implement process_memwatch syscall
+>   mm: wire up process_memwatch syscall for x86
+>   selftests: vm: add process_memwatch syscall tests
+>   mm: add process_memwatch syscall documentation
+> 
+>  Documentation/admin-guide/mm/soft-dirty.rst   |  48 +-
+>  arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+>  arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+>  fs/proc/task_mmu.c                            |  84 +--
+>  include/linux/mm_inline.h                     |  99 +++
+>  include/linux/syscalls.h                      |   3 +-
+>  include/uapi/asm-generic/unistd.h             |   5 +-
+>  include/uapi/linux/memwatch.h                 |  12 +
+>  kernel/sys_ni.c                               |   1 +
+>  mm/Makefile                                   |   2 +-
+>  mm/memwatch.c                                 | 285 ++++++++
+>  tools/include/uapi/asm-generic/unistd.h       |   5 +-
+>  .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+>  tools/testing/selftests/vm/.gitignore         |   1 +
+>  tools/testing/selftests/vm/Makefile           |   2 +
+>  tools/testing/selftests/vm/memwatch_test.c    | 635 ++++++++++++++++++
+>  16 files changed, 1098 insertions(+), 87 deletions(-)
+>  create mode 100644 include/uapi/linux/memwatch.h
+>  create mode 100644 mm/memwatch.c
+>  create mode 100644 tools/testing/selftests/vm/memwatch_test.c
 > 
 
-Remember that zero-DPV entries blackhole (mask) the MAC, so whenever a 
-packet appears with the same MAC on another port it is just dropped in 
-the HW, so there is no possibility of doing any CPU processing in this 
-case. Only after the timeout (5 min) can the MAC get a normal ATU on an 
-open port.
-For the bridge to do what you suggest, a FDB search would be needed 
-afaics, and this might be in a process sensitive part of the code, thus 
-leading to too heavy a cost.
-
->> 
->> >
->> > 1. It discards packets with matching DMAC, regardless of ingress port. I
->> > read the document [1] you linked to in a different reply and could not
->> > find anything against this approach, so this might be fine or at least
->> > not very significant.
->> >
->> > Note that this means that "locked" entries need to be notified to device
->> > drivers so that they will install a matching entry in the HW FDB.
->> 
->> Okay, so as V4 does (just without the error noted).
->> 
->> >
->> > 2. It is not refreshed and has ageing enabled. That is, after initial
->> > installation it will be removed by the bridge driver after configured
->> > ageing time unless converted to a regular (unlocked) entry.
->> >
->> > I assume this allows you to remove the timer implementation from your
->> > driver and let the bridge driver notify you about the removal of this
->> > entry.
->> 
->> Okay, but only if the scheme is not so that the driver creates the 
->> locked
->> entries itself, unless you indicate that the driver notifies the 
->> bridge,
->> which then notifies back to the driver and installs the zero-DPV 
->> entry? If
->> not I think the current implementation for the mv88e6xxx is fine.
-> 
-> I don't see a problem in having the driver notifying the bridge about
-> the installation of this entry and the bridge notifying the driver that
-> the entry needs to be removed. It removes complexity from device 
-> drivers
-> like mv88e6xxx and doesn't add extra complexity to the bridge driver.
-> 
-> Actually, there is one complication, 'SWITCHDEV_FDB_ADD_TO_BRIDGE' will
-> add the locked entry as externally learned, which means the bridge will
-> not age it. Might need something like this:
-> 
-> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-> index e7f4fccb6adb..5f73d0b44ed9 100644
-> --- a/net/bridge/br_fdb.c
-> +++ b/net/bridge/br_fdb.c
-> @@ -530,7 +530,8 @@ void br_fdb_cleanup(struct work_struct *work)
->  		unsigned long this_timer = f->updated + delay;
-> 
->  		if (test_bit(BR_FDB_STATIC, &f->flags) ||
-> -		    test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &f->flags)) {
-> +		    (test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &f->flags) &&
-> +		     !test_bit(BR_FDB_ENTRY_LOCKED, &f->flags))) {
->  			if (test_bit(BR_FDB_NOTIFY, &f->flags)) {
->  				if (time_after(this_timer, now))
->  					work_delay = min(work_delay,
-> 
-
-There is a case of ownership of the FDB/ATU entry, which if I remember 
-correctly, will point to the current implementation being the right way 
-to do it, thus having the driver keeping ownership of the entry and 
-thereby also ageing it, but I think Vladimir should have his say here.
-
->> 
->> >
->> > 3. With regards to roaming, the entry cannot roam between locked ports
->> > (they need to have learning disabled anyway), but can roam to an
->> > unlocked port, in which case it becomes a regular entry that can roam
->> > and age.
->> >
->> > If we agree on these semantics, then I can try to verify that at least
->> > Spectrum can support them (it seems mv88e6xxx can).
->> 
->> The consensus here is that at least for the mv88e6xxx, learning should 
->> be on
->> and link local learning should be blocked by the userspace setting you
->> pointed to earlier.
-> 
-> Why learning needs to be on in the bridge (not mv88e6xxx) driver?
-
-I think it is seen as 'cheating' to enable learning only in the driver 
-behind the scenes, so kind of hackish. E.g. 'bridge -d link show' will 
-then report 'learning off', while learning is on in the driver.
-And learning needs to be on for the driver as discussed earlier, which 
-only gives rise to the link local learning problem, which is then solved 
-by the user space setting.
+-- 
+Muhammad Usama Anjum
