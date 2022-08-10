@@ -2,76 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14C958E4ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 04:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13F458E599
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Aug 2022 05:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiHJCl5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Aug 2022 22:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51352 "EHLO
+        id S230163AbiHJDp6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Aug 2022 23:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiHJCl4 (ORCPT
+        with ESMTP id S230025AbiHJDp5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Aug 2022 22:41:56 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2CB7C8;
-        Tue,  9 Aug 2022 19:41:54 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d16so13010980pll.11;
-        Tue, 09 Aug 2022 19:41:54 -0700 (PDT)
+        Tue, 9 Aug 2022 23:45:57 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BDC491DB
+        for <linux-kselftest@vger.kernel.org>; Tue,  9 Aug 2022 20:45:55 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id o123so13933836vsc.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Aug 2022 20:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=nj31zRAcKvVnp3PgbO4ukzFmFeztnmbSMQraO9gq1VE=;
-        b=GlVlmgaXgKkOszzcjWlNMF0Brvnp8/3rYUyIKZ77MkT4tssDCq5itH57hGBSs9hpPp
-         2f42P8MA6+VIE46i9QP4m3KDP/ZcVgQV8HCHeJ7L+bFYjWA1ug5ppTYJIR2GVKABiayX
-         r5x17WWVy2F54aDwr65loSQkzk4k5EgWOpUH7ohAhm+8l6DW9/HVvVX47xdkvf1UbNT6
-         b4mDp5WO9vukyNKydz85F+bDa6OfYadtBALQwrzSG4KxHByOeFU0q9Q3Yx3mews61JNt
-         /QBMq/vmDT1koH9LHdKmQCPBCBLR9LI0MjRxqCumxs+f2geqSKvbhhoO10soNiVau0TO
-         +vrg==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=KW8ybOJFichyl+rL+B899j3HSHwvcdsvy2PdBohQB9I=;
+        b=E/y0/jft2wIPxHH4A5nTLopi7mdsnl2/bFJHZt05CvjZAr1BHT3KkAeldBbd6CzAY4
+         57QNhsaCDQk8J0tTcHt4rtYNdaFLc91e1nGyw4gBsyEiY/SmfmTorGSiztQKVWEYkn02
+         yBLt3iPhz48bUN6W56AymPGxJmbLXWHVKjmjlzqLDeCEPrvdHw4KjG8gHZOUGOy2fFQ9
+         FPD1WKw2tjidpZ4jaOQ0kbNOJjpdxOoCVGPfJ3NJGbavhb3Bh0nZogAPkVP8I15nlUvk
+         b7UcruiRkPkAehmZc0CO9kTwNiycoejpg0BTgIOEwGXtqDQy5EPVx5Q+l1axQCYuQd2g
+         qy4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=nj31zRAcKvVnp3PgbO4ukzFmFeztnmbSMQraO9gq1VE=;
-        b=hyWOV9DBRgH/Oa54dgZrppyKxokhpDdHDTyvJXne08k5MnZsygNODrBmG9Kljz06V/
-         do77+cAhK8bKykuH7YUFM2uPvmbMUHgl3RDk5vvEtzOUPLrXVvtYe43ep8pCa0UujORx
-         pYO6Yk4W0VZVDrbk8xt3QXMo6CEl5TbpEwTHoPpvOZ78PuBkPmBFAW/arOwSNQrE1xNu
-         raAXOSf3YoyzLvVzEils21BpMcyaMO67oSB+hNMQN1YTGeYI3maB8Z/jyx4YtTQLA0eb
-         wbJdQ1AjhT4F5MGUndIMxvIt7w6ZACmW7Z7qzBoErksYPr8k4T1BxOCm/OOoUz7YpNc2
-         4Lyg==
-X-Gm-Message-State: ACgBeo3jTYwDNLfzBl+hBwIpR4jKABOCXGQIdKkxR7t7vnlYp1fKqwRM
-        QZgqDTZjT0VFXpS8exAgrs8=
-X-Google-Smtp-Source: AA6agR64j1huylvw0Y1mqBNgafi4nxg6R9Vq19nYKoI4ywCsIOrdnjlJxQpjBCzqlb3H+tfPUYSxPg==
-X-Received: by 2002:a17:90a:de8a:b0:1f4:f1ef:816d with SMTP id n10-20020a17090ade8a00b001f4f1ef816dmr1399941pjv.104.1660099313565;
-        Tue, 09 Aug 2022 19:41:53 -0700 (PDT)
-Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:3fd1])
-        by smtp.gmail.com with ESMTPSA id b3-20020a62a103000000b0052e6854e665sm596286pff.109.2022.08.09.19.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 19:41:52 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 19:41:48 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, corbet@lwn.net,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 07/10] bpf: Add bpf_verify_pkcs7_signature() kfunc
-Message-ID: <20220810024148.e73df6dyurwt5d4u@macbook-pro-3.dhcp.thefacebook.com>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-8-roberto.sassu@huawei.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=KW8ybOJFichyl+rL+B899j3HSHwvcdsvy2PdBohQB9I=;
+        b=siNdVcvWCWdw9s9OX3nucr3JTXQ6aIRKelXuYQtBR08IUK+RvopLfiOhRBOpWnjZn2
+         yoOXN4MpbXfCwmk1C0Kgp44FWVh2xfUYkxRg1/Mg8d+D6ZC7/Pxh5EeaOycJFd+K3rv0
+         Z+99nvigZ9yS+elrcdybFL2Df/iAWg+cGIdaPr+H7mvmEazYw7Yz2Ezz+uH/8ZJh0ME8
+         +2bpVbH6ia4ypibZTmxdiB9zIsUCTYQW+1oby84p/3/S833nR1w7SAI4qcS6hZ7Q71Pd
+         NuOIoxkKnQtgnz4eOKweETbr3TZtGVVjxrd72Dgcx4W1OT/Jo7jWwdTboCLEXenpq8/i
+         JKCA==
+X-Gm-Message-State: ACgBeo018k8lZdkmcANYJDpWCEy6RVKnNt7rBX7ulOAfjmG2WtR2WxjL
+        fRjD+0Bozc26ZHP4EEoJQu9Qjy3tAn5+zAkLtKXklw==
+X-Google-Smtp-Source: AA6agR4Fs4XJ4C8ExqkOl2T320CK+M9XWX8GvmKn+P9Th7az4ltDyGarR+0gM+fMtLZiqvvDSckJDQb8eqfj/DDwnJ8=
+X-Received: by 2002:a67:c885:0:b0:38a:7a34:cbca with SMTP id
+ v5-20020a67c885000000b0038a7a34cbcamr1535612vsk.22.1660103154624; Tue, 09 Aug
+ 2022 20:45:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809134603.1769279-8-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220808125237.277126-1-mairacanal@riseup.net>
+In-Reply-To: <20220808125237.277126-1-mairacanal@riseup.net>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 10 Aug 2022 11:45:43 +0800
+Message-ID: <CABVgOS=ziJi0+_6GVt0RCr9YzW+VUBWBwrMAnMAb1W35JnjnJw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] kunit: Introduce KUNIT_EXPECT_MEMEQ and
+ KUNIT_EXPECT_MEMNEQ macros
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,117 +82,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 03:46:00PM +0200, Roberto Sassu wrote:
-> Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security modules
-> the ability to check the validity of a signature against supplied data, by
-> using user-provided or system-provided keys as trust anchor.
-> 
-> The new kfunc makes it possible to enforce mandatory policies, as eBPF
-> programs might be allowed to make security decisions only based on data
-> sources the system administrator approves.
-> 
-> The caller should provide the data to be verified and the signature as eBPF
-> dynamic pointers (to minimize the number of parameters) and a bpf_key
-> structure containing a reference to the keyring with keys trusted for
-> signature verification, obtained from bpf_lookup_user_key() or
-> bpf_lookup_system_key().
-> 
-> For bpf_key structures obtained from the former lookup function,
-> bpf_verify_pkcs7_signature() completes the permission check deferred by
-> that function by calling key_validate(). key_task_permission() is already
-> called by the PKCS#7 code.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  kernel/trace/bpf_trace.c | 56 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 33ca4cfe6e26..79ba8c96735a 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -21,6 +21,7 @@
->  #include <linux/bsearch.h>
->  #include <linux/sort.h>
->  #include <linux/key.h>
-> +#include <linux/verification.h>
->  
->  #include <net/bpf_sk_storage.h>
->  
-> @@ -1290,6 +1291,47 @@ noinline __weak void bpf_key_put(struct bpf_key *bkey)
->  	kfree(bkey);
->  }
->  
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +/**
-> + * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-> + * @data_ptr: data to verify
-> + * @sig_ptr: signature of the data
-> + * @trusted_keyring: keyring with keys trusted for signature verification
-> + *
-> + * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
-> + * with keys in a keyring referenced by *trusted_keyring*.
-> + *
-> + * Return: 0 on success, a negative value on error.
-> + */
-> +noinline __weak int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-> +					       struct bpf_dynptr_kern *sig_ptr,
-> +					       struct bpf_key *trusted_keyring)
-> +{
-> +	int ret;
-> +
-> +	if (trusted_keyring->valid_ptr) {
-> +		/*
-> +		 * Do the permission check deferred in bpf_lookup_user_key().
-> +		 *
-> +		 * A call to key_task_permission() here would be redundant, as
-> +		 * it is already done by keyring_search() called by
-> +		 * find_asymmetric_key().
-> +		 */
-> +		ret = key_validate(trusted_keyring->key);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	return verify_pkcs7_signature(data_ptr->data,
-> +				      bpf_dynptr_get_size(data_ptr),
-> +				      sig_ptr->data,
-> +				      bpf_dynptr_get_size(sig_ptr),
-> +				      trusted_keyring->key,
-> +				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-> +				      NULL);
-> +}
-> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
-> +
->  __diag_pop();
->  
->  BTF_SET8_START(key_kfunc_set)
-> @@ -1303,11 +1345,25 @@ static const struct btf_kfunc_id_set bpf_key_kfunc_set = {
->  	.owner = THIS_MODULE,
->  	.set = &key_kfunc_set,
->  };
-> +
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +BTF_SET8_START(verify_sig_kfunc_set)
-> +BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
-> +BTF_SET8_END(verify_sig_kfunc_set)
-> +
-> +static const struct btf_kfunc_id_set bpf_verify_sig_kfunc_set = {
-> +	.owner = THIS_MODULE,
-> +	.set = &verify_sig_kfunc_set,
-> +};
-> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
->  #endif /* CONFIG_KEYS */
->  
->  const struct btf_kfunc_id_set *kfunc_sets[] = {
->  #ifdef CONFIG_KEYS
->  	&bpf_key_kfunc_set,
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +	&bpf_verify_sig_kfunc_set,
-> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
->  #endif /* CONFIG_KEYS */
->  };
+On Mon, Aug 8, 2022 at 8:53 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
+te:
+>
+> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_E=
+Q or
+> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp functio=
+n,
+> such as:
+>   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+>
+> Although this usage produces correct results for the test cases, if the
+> expectation fails the error message is not very helpful, indicating only =
+the
+> return of the memcmp function.
+>
+> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
+> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size. I=
+n
+> case of expectation failure, those macros print the hex dump of the memor=
+y
+> blocks, making it easier to debug test failures for memory blocks.
+>
+> The v4 doesn't bring many changes. The output is aligned just like the pr=
+evious
+> version but it fixes some mail client problems (sorry about that) and men=
+tions
+> that this macros are not recommended for structured data.
+>
+> The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
+> KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
+> expectations on the kunit-example-test.c. And the last patch replaces the
+> KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
+>
+> Best Regards,
+> - Ma=C3=ADra Canal
+>
+> v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2749=
+-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
+>
+> - Change "determinated" to "specified" (Daniel Latypov).
+> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to =
+make
+> it easier for users to infer the right size unit (Daniel Latypov).
+> - Mark the different bytes on the failure message with a <> (Daniel Latyp=
+ov).
+> - Replace a constant number of array elements for ARRAY_SIZE() (Andr=C3=
+=A9 Almeida).
+> - Rename "array" and "expected" variables to "array1" and "array2" (Danie=
+l Latypov).
+>
+> v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.420840-1=
+-mairacanal@riseup.net/T/#t
+>
+> - Make the bytes aligned at output.
+> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel L=
+atypov).
+> - Line up the trailing \ at macros using tabs (Daniel Latypov).
+> - Line up the params to the functions (Daniel Latypov).
+> - Change "Increament" to "Augment" (Daniel Latypov).
+> - Use sizeof() for array sizes (Daniel Latypov).
+> - Add Daniel Latypov's tags.
+>
+> v3 -> v4: https://lore.kernel.org/linux-kselftest/CABVgOSm_59Yr82deQm2C=
+=3D18jjSv_akmn66zs4jxx3hfziXPeHg@mail.gmail.com/T/#t
+>
+> - Fix wrapped lines by the mail client (David Gow).
+> - Mention on documentation that KUNIT_EXPECT_MEMEQ is not recommended for
+> structured data (David Gow).
+> - Add Muhammad Usama Anjum's tag.
+>
 
-Why different sets?
-The loop over the set from the previous patch can be removed if it's just one set.
-Each kfunc can be ifdef-ed independently.
+Thanks very much! I've looked through and tested this, and it looks great t=
+o me.
+
+This entire series is
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+
+> Ma=C3=ADra Canal (3):
+>   kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
+>   kunit: Add KUnit memory block assertions to the example_all_expect_macr=
+os_test
+>   kunit: Use KUNIT_EXPECT_MEMEQ macro
+>
+>  .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
+>  include/kunit/assert.h                        | 34 ++++++++
+>  include/kunit/test.h                          | 84 +++++++++++++++++++
+>  lib/kunit/assert.c                            | 56 +++++++++++++
+>  lib/kunit/kunit-example-test.c                |  7 ++
+>  net/core/dev_addr_lists_test.c                |  4 +-
+>  6 files changed, 186 insertions(+), 5 deletions(-)
+>
+> --
+> 2.37.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kunit-dev/20220808125237.277126-1-mairacanal%40riseup.net.
