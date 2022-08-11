@@ -2,47 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C535902CB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 18:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972DB590314
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 18:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235996AbiHKQQu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Aug 2022 12:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S237634AbiHKQTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Aug 2022 12:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237738AbiHKQQH (ORCPT
+        with ESMTP id S237633AbiHKQSv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:16:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543ACA9279;
-        Thu, 11 Aug 2022 08:59:16 -0700 (PDT)
+        Thu, 11 Aug 2022 12:18:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A424962DF;
+        Thu, 11 Aug 2022 09:01:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E28DB82176;
-        Thu, 11 Aug 2022 15:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A068C433C1;
-        Thu, 11 Aug 2022 15:59:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64668B82166;
+        Thu, 11 Aug 2022 16:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36660C433B5;
+        Thu, 11 Aug 2022 16:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660233553;
-        bh=2IiCj9loBdPxItUWBTy7ake8Mzudtca41aWcUxZnxsQ=;
+        s=k20201202; t=1660233658;
+        bh=o19kBgzOZ6Nf2Slumy4yFLH0CGl+Wyk7gAV0NC4RciQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lrJUfna0FjCgs9YEHfLd+F4GJvYGnCJF/2i4DIdQQri7Wz4N4dcSMea0KbmM10xeE
-         4Nb52764jnMo5NdbBA5eYLc0LN4dDzRZ/fsCVCW0lmFWSeD2QRDBL2q57xQv/ePMoX
-         5xD3aeVNzKrPsrR6ioEhmNb1Bi8QE3DlLMrJ1YH/vPgyhHKn48X5n/TsUyLPk2wDXU
-         9W2lYap1c83HiX+ZnlAPAqK/1K2tDlp3jhUs+aLyiHWYL/ljL3aRc8jl9KfMioTjQo
-         ag0nhj16T1x0EuO6tV0s00PCFTDNYXvToPJXBPxbN2YSEwEOS+x9fzt1wvCJdfKRCM
-         4nHCEsnT3NQDA==
+        b=q2B9CyTXnXRsKPDlq5hV77Rq3fwSlo0iV/huazhGYeiOqIsnqnM8dsiNj7er3qmvO
+         u7TYq6BvjIxX1r/SiDzjOVUaAjPyzT3UmTNlOm63tuKqPVebVeb8rYUTmPAxOK9HA8
+         daEg57C9mLXT5QxTonUctHkfpUd/OT/TP7HMcXgKgsPqq5g2WGroTAckchzuhqZyUr
+         7yMRQFxFNhh611PUcGbjwVbZnGC/K265zf0lE91ijsUZBCVB39J3ATPlTSVLNoP3u/
+         tVVpqyPvXYVTipLIH0XDbvvNmOc2v3Wp4l82QQdeqmlyTpp23/nYSOfMq7qpm3EBX6
+         uKdiVjrSXzv/Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Petr Machata <petrm@nvidia.com>, Amit Cohen <amcohen@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        "David S . Miller" <davem@davemloft.net>,
+Cc:     Gautam <gautammenghani201@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        danieller@nvidia.com, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 22/69] selftests: mlxsw: resource_scale: Allow skipping a test
-Date:   Thu, 11 Aug 2022 11:55:31 -0400
-Message-Id: <20220811155632.1536867-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 39/69] kselftests: Enable the echo command to print newlines in Makefile
+Date:   Thu, 11 Aug 2022 11:55:48 -0400
+Message-Id: <20220811155632.1536867-39-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811155632.1536867-1-sashal@kernel.org>
 References: <20220811155632.1536867-1-sashal@kernel.org>
@@ -60,68 +58,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Petr Machata <petrm@nvidia.com>
+From: Gautam <gautammenghani201@gmail.com>
 
-[ Upstream commit 8cad339db339a39cb82b1188e4be4070a433abac ]
+[ Upstream commit 3297a4df805d4263506b6dfec4d1bbeff8862dd8 ]
 
-The scale tests are currently testing two things: that some number of
-instances of a given resource can actually be created; and that when an
-attempt is made to create more than the supported amount, the failures are
-noted and handled gracefully.
+In the install section of the main Makefile of kselftests, the echo
+command is used with -n flag, which disables the printing of new line
+due to which the output contains "\n" chars as follows:
 
-Sometimes the scale test depends on more than one resource. In particular,
-a following patch will add a RIF counter scale test, which depends on the
-number of RIF counters that can be bound, and also on the number of RIFs
-that can be created.
+  Emit Tests for alsa\nSkipping non-existent dir: arm64
+  Emit Tests for breakpoints\nEmit Tests for capabilities\n
 
-When the test is limited by the auxiliary resource and not by the primary
-one, there's no point trying to run the overflow test, because it would be
-testing exhaustion of the wrong resource.
+This patch fixes the above bug by using the -e flag.
 
-To support this use case, when the $test_get_target yields 0, skip the test
-instead.
-
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Amit Cohen <amcohen@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Gautam <gautammenghani201@gmail.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh | 5 +++++
- .../selftests/drivers/net/mlxsw/spectrum/resource_scale.sh   | 4 ++++
- 2 files changed, 9 insertions(+)
+ tools/testing/selftests/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh
-index 50654f8a8c37..14b7a080312b 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum-2/resource_scale.sh
-@@ -39,6 +39,11 @@ for current_test in ${TESTS:-$ALL_TESTS}; do
- 	for should_fail in 0 1; do
- 		RET=0
- 		target=$(${current_test}_get_target "$should_fail")
-+		if ((target == 0)); then
-+			log_test_skip "'$current_test' should_fail=$should_fail test"
-+			continue
-+		fi
-+
- 		${current_test}_setup_prepare
- 		setup_wait $num_netifs
- 		${current_test}_test "$target" "$should_fail"
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh b/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
-index b9b8274643de..4dafd86eb417 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/spectrum/resource_scale.sh
-@@ -41,6 +41,10 @@ for current_test in ${TESTS:-$ALL_TESTS}; do
- 		for should_fail in 0 1; do
- 			RET=0
- 			target=$(${current_test}_get_target "$should_fail")
-+			if ((target == 0)); then
-+				log_test_skip "'$current_test' [$profile] should_fail=$should_fail test"
-+				continue
-+			fi
- 			${current_test}_setup_prepare
- 			setup_wait $num_netifs
- 			${current_test}_test "$target" "$should_fail"
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 14206d1d1efe..5fe0bd7e05d8 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -235,7 +235,7 @@ ifdef INSTALL_PATH
+ 	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+-		echo -n "Emit Tests for $$TARGET\n"; \
++		echo -ne "Emit Tests for $$TARGET\n"; \
+ 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+ 			-C $$TARGET emit_tests >> $(TEST_LIST); \
+ 	done;
 -- 
 2.35.1
 
