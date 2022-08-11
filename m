@@ -2,45 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972DB590314
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 18:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2A0590348
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 18:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237634AbiHKQTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Aug 2022 12:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S237770AbiHKQV3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Aug 2022 12:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237633AbiHKQSv (ORCPT
+        with ESMTP id S237959AbiHKQVD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:18:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A424962DF;
-        Thu, 11 Aug 2022 09:01:00 -0700 (PDT)
+        Thu, 11 Aug 2022 12:21:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A1DB1B8D;
+        Thu, 11 Aug 2022 09:03:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64668B82166;
-        Thu, 11 Aug 2022 16:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36660C433B5;
-        Thu, 11 Aug 2022 16:00:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEF0060F39;
+        Thu, 11 Aug 2022 16:03:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D871C433D6;
+        Thu, 11 Aug 2022 16:03:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660233658;
-        bh=o19kBgzOZ6Nf2Slumy4yFLH0CGl+Wyk7gAV0NC4RciQ=;
+        s=k20201202; t=1660233804;
+        bh=YQ9TIrcgL3Lgs2QmjYnfZswOi+9m7X4sON/9SPtXGQc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q2B9CyTXnXRsKPDlq5hV77Rq3fwSlo0iV/huazhGYeiOqIsnqnM8dsiNj7er3qmvO
-         u7TYq6BvjIxX1r/SiDzjOVUaAjPyzT3UmTNlOm63tuKqPVebVeb8rYUTmPAxOK9HA8
-         daEg57C9mLXT5QxTonUctHkfpUd/OT/TP7HMcXgKgsPqq5g2WGroTAckchzuhqZyUr
-         7yMRQFxFNhh611PUcGbjwVbZnGC/K265zf0lE91ijsUZBCVB39J3ATPlTSVLNoP3u/
-         tVVpqyPvXYVTipLIH0XDbvvNmOc2v3Wp4l82QQdeqmlyTpp23/nYSOfMq7qpm3EBX6
-         uKdiVjrSXzv/Q==
+        b=WT8oVuhlreUffzqaK+SkZVUnDwPb1Mj2NpNIlAgCVyHITx1VOJcsmr7DMmkmwMbPL
+         x6p5zGIle0y2bo5ct0KVrLArQTJuF/h2MXxqKEUUNbFfJVlgdy0kToeDA0bhk/yt9R
+         YDZC26h0fzDp93xO5SvaCOyIqD40O4PP+W3W6mDHAKbT6MqkvCrRTOC9pUFfHtt4kz
+         blIfD07Rsj7+Gp3xCfOcUHa732Mrg8a552Ye1unnxE/+ZIu3bg6Li2a96T3GYvkzWD
+         nGmyHyC/aDtLPPzrUOA3MDCx2RRUMiKeQqMbmaY3k6FNCwVtbu+UYyrID3fkB55MYM
+         7eiI5vKp/bkPA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gautam <gautammenghani201@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+Cc:     Jie2x Zhou <jie2x.zhou@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        john.fastabend@gmail.com, andrii@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 39/69] kselftests: Enable the echo command to print newlines in Makefile
-Date:   Thu, 11 Aug 2022 11:55:48 -0400
-Message-Id: <20220811155632.1536867-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 59/69] bpf/selftests: Fix couldn't retrieve pinned program in xdp veth test
+Date:   Thu, 11 Aug 2022 11:56:08 -0400
+Message-Id: <20220811155632.1536867-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811155632.1536867-1-sashal@kernel.org>
 References: <20220811155632.1536867-1-sashal@kernel.org>
@@ -58,39 +62,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Gautam <gautammenghani201@gmail.com>
+From: Jie2x Zhou <jie2x.zhou@intel.com>
 
-[ Upstream commit 3297a4df805d4263506b6dfec4d1bbeff8862dd8 ]
+[ Upstream commit f664f9c6b4a1bb9a10af812df0fbbf6aac28fcc6 ]
 
-In the install section of the main Makefile of kselftests, the echo
-command is used with -n flag, which disables the printing of new line
-due to which the output contains "\n" chars as follows:
+Before change:
 
-  Emit Tests for alsa\nSkipping non-existent dir: arm64
-  Emit Tests for breakpoints\nEmit Tests for capabilities\n
+  selftests: bpf: test_xdp_veth.sh
+  Couldn't retrieve pinned program '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
+  selftests: xdp_veth [SKIP]
+  ok 20 selftests: bpf: test_xdp_veth.sh # SKIP
 
-This patch fixes the above bug by using the -e flag.
+After change:
 
-Signed-off-by: Gautam <gautammenghani201@gmail.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+  PING 10.1.1.33 (10.1.1.33) 56(84) bytes of data.
+  64 bytes from 10.1.1.33: icmp_seq=1 ttl=64 time=0.320 ms
+  --- 10.1.1.33 ping statistics ---
+  1 packets transmitted, 1 received, 0% packet loss, time 0ms
+  rtt min/avg/max/mdev = 0.320/0.320/0.320/0.000 ms
+  selftests: xdp_veth [PASS]
+
+For the test case, the following can be found:
+
+  ls /sys/fs/bpf/test_xdp_veth/progs/redirect_map_0
+  ls: cannot access '/sys/fs/bpf/test_xdp_veth/progs/redirect_map_0': No such file or directory
+  ls /sys/fs/bpf/test_xdp_veth/progs/
+  xdp_redirect_map_0  xdp_redirect_map_1  xdp_redirect_map_2
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220719082430.9916-1-jie2x.zhou@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_xdp_veth.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 14206d1d1efe..5fe0bd7e05d8 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -235,7 +235,7 @@ ifdef INSTALL_PATH
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
--		echo -n "Emit Tests for $$TARGET\n"; \
-+		echo -ne "Emit Tests for $$TARGET\n"; \
- 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
- 			-C $$TARGET emit_tests >> $(TEST_LIST); \
- 	done;
+diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
+index a3a1eaee26ea..73a9e1b22290 100755
+--- a/tools/testing/selftests/bpf/test_xdp_veth.sh
++++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
+@@ -103,9 +103,9 @@ bpftool prog loadall \
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 0 0 0 0 value 122 0 0 0
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 1 0 0 0 value 133 0 0 0
+ bpftool map update pinned $BPF_DIR/maps/tx_port key 2 0 0 0 value 111 0 0 0
+-ip link set dev veth1 xdp pinned $BPF_DIR/progs/redirect_map_0
+-ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
+-ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
++ip link set dev veth1 xdp pinned $BPF_DIR/progs/xdp_redirect_map_0
++ip link set dev veth2 xdp pinned $BPF_DIR/progs/xdp_redirect_map_1
++ip link set dev veth3 xdp pinned $BPF_DIR/progs/xdp_redirect_map_2
+ 
+ ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp
+ ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
 -- 
 2.35.1
 
