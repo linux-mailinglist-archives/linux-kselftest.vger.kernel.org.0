@@ -2,45 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0E2590046
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 17:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A015900CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 17:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236283AbiHKPiI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Aug 2022 11:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
+        id S235319AbiHKPqZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Aug 2022 11:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236096AbiHKPhk (ORCPT
+        with ESMTP id S235247AbiHKPpR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:37:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826BD9F196;
-        Thu, 11 Aug 2022 08:33:44 -0700 (PDT)
+        Thu, 11 Aug 2022 11:45:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356158C46E;
+        Thu, 11 Aug 2022 08:39:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90B986163F;
-        Thu, 11 Aug 2022 15:33:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30960C43140;
-        Thu, 11 Aug 2022 15:33:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA0D6B82151;
+        Thu, 11 Aug 2022 15:39:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE73FC433D6;
+        Thu, 11 Aug 2022 15:39:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660232023;
-        bh=sW9/BVq1NOOXPAPbiJb2cjdXlpcN+f+YNR/SBBFSBfw=;
+        s=k20201202; t=1660232369;
+        bh=unky3ptO3FDMumLgteG75EQI1lgFJwkv56YH0pqh2BQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=caUlRVg6L3THsxezQTHcRg8sPBuXomVAykFn/IPF+C8Ss5MyEoleH45elPL1NTrJ9
-         FnG3GLtE4yTlzsDdiKjN/5eCzaxOXsrzaEsjy+a0wPjvo9M8uYqAhLXTyekIijNV+/
-         FF2mAoOVnzY6c3sGUZFLsTYrsZQNlK4P501UaMFTz+rjcS5wztH4QTDVlcN9GK1cNV
-         8B+0mt6LZA2nWhSZDIRi9i8g66U7K3otOz/grjNo7HDSblJkHFLxuYsM595hzMgt6y
-         U56eUnHpzrHHhIjPsdZgMszNeN4rH8II/j8211/PNuT3nHRNkvyb11C+2F9acHqBub
-         3cUNEEhDnQ3mA==
+        b=lZIXKIMivxQxH6dAbtol5a5PPdJVaqyT4nrDSbb8KPJ0aXVoqDFDGffJ3JdZcj/W1
+         cmbWW69h4x9wSc5SwzjNTfZLSbLboWAJWcNiJuq1rmNWudouqGlSJM7I5jKf/OasyM
+         Ue3K/TT77odDeAy96MdIYsgGU4sAxDsLCVPW2gZZKAUOJIf/LYf05bl8t9E5BDBivj
+         iSdHFl7L08/w84K6DY/Jdqyjcvzxne/V2yDJHm2cEE/M9V546tMmFO9e32itfZhrwo
+         eo491eznnDTNdFCe2s7nDHjV9e1OKYs33Wuc5PZpE0KT+GQFRTyNtV9yL8goS1wudf
+         uesQA13KhElSg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gautam <gautammenghani201@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 050/105] kselftests: Enable the echo command to print newlines in Makefile
-Date:   Thu, 11 Aug 2022 11:27:34 -0400
-Message-Id: <20220811152851.1520029-50-sashal@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+        daniel@iogearbox.net, shuah@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.19 071/105] selftests/bpf: Do not attach kprobe_multi bench to bpf_dispatcher_xdp_func
+Date:   Thu, 11 Aug 2022 11:27:55 -0400
+Message-Id: <20220811152851.1520029-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811152851.1520029-1-sashal@kernel.org>
 References: <20220811152851.1520029-1-sashal@kernel.org>
@@ -58,39 +61,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Gautam <gautammenghani201@gmail.com>
+From: Jiri Olsa <jolsa@kernel.org>
 
-[ Upstream commit 3297a4df805d4263506b6dfec4d1bbeff8862dd8 ]
+[ Upstream commit 7fb27a56b9ebd8a77d9dd188e8a42bff99bc3443 ]
 
-In the install section of the main Makefile of kselftests, the echo
-command is used with -n flag, which disables the printing of new line
-due to which the output contains "\n" chars as follows:
+Alexei reported crash by running test_progs -j on system
+with 32 cpus.
 
-  Emit Tests for alsa\nSkipping non-existent dir: arm64
-  Emit Tests for breakpoints\nEmit Tests for capabilities\n
+It turned out the kprobe_multi bench test that attaches all
+ftrace-able functions will race with bpf_dispatcher_update,
+that calls bpf_arch_text_poke on bpf_dispatcher_xdp_func,
+which is ftrace-able function.
 
-This patch fixes the above bug by using the -e flag.
+Ftrace is not aware of this update so this will cause
+ftrace_bug with:
 
-Signed-off-by: Gautam <gautammenghani201@gmail.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+  WARNING: CPU: 6 PID: 1985 at
+  arch/x86/kernel/ftrace.c:94 ftrace_verify_code+0x27/0x50
+  ...
+  ftrace_replace_code+0xa3/0x170
+  ftrace_modify_all_code+0xbd/0x150
+  ftrace_startup_enable+0x3f/0x50
+  ftrace_startup+0x98/0xf0
+  register_ftrace_function+0x20/0x60
+  register_fprobe_ips+0xbb/0xd0
+  bpf_kprobe_multi_link_attach+0x179/0x430
+  __sys_bpf+0x18a1/0x2440
+  ...
+  ------------[ ftrace bug ]------------
+  ftrace failed to modify
+  [<ffffffff818d9380>] bpf_dispatcher_xdp_func+0x0/0x10
+   actual:   ffffffe9:7b:ffffff9c:77:1e
+  Setting ftrace call site to call ftrace function
+
+It looks like we need some way to hide some functions
+from ftrace, but meanwhile we workaround this by skipping
+bpf_dispatcher_xdp_func from kprobe_multi bench test.
+
+Reported-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220714082316.479181-1-jolsa@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index de11992dc577..52e31437f1a3 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -253,7 +253,7 @@ ifdef INSTALL_PATH
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
--		echo -n "Emit Tests for $$TARGET\n"; \
-+		echo -ne "Emit Tests for $$TARGET\n"; \
- 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
- 			-C $$TARGET emit_tests >> $(TEST_LIST); \
- 	done;
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index 5b93d5d0bd93..48681bf73e0b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -364,6 +364,8 @@ static int get_syms(char ***symsp, size_t *cntp)
+ 			continue;
+ 		if (!strncmp(name, "rcu_", 4))
+ 			continue;
++		if (!strcmp(name, "bpf_dispatcher_xdp_func"))
++			continue;
+ 		if (!strncmp(name, "__ftrace_invalid_address__",
+ 			     sizeof("__ftrace_invalid_address__") - 1))
+ 			continue;
 -- 
 2.35.1
 
