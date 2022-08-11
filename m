@@ -2,76 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA5B58F501
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 01:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435D358F599
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 03:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbiHJX5v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Aug 2022 19:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S229924AbiHKBlQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Aug 2022 21:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbiHJX5u (ORCPT
+        with ESMTP id S229488AbiHKBlP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:57:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B25B6B670
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Aug 2022 16:57:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660175868;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YkaDvS1GtXz21uszXexDjRybO4QCX+ccRTITPMo9eXE=;
-        b=PY87bIuB5xDUlCZ3BEgEA5D9rvsbLUUwgG+NWuQGTuSfVQXAIfEqmwJGZeZAHEoinPD2Fo
-        aPVpJOR4zkup/oSMC0OFO7dhF6cmcY/uaOlz7loxCjKEj+4aunlr4TnAmPhvv7mDv4P5Cj
-        cHCElAcwGsB/IoOtZVNaprR4i5rOAhg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-252-e1rY7k2YO5CQOlhqspYqBw-1; Wed, 10 Aug 2022 19:57:40 -0400
-X-MC-Unique: e1rY7k2YO5CQOlhqspYqBw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0D8F18A64F7;
-        Wed, 10 Aug 2022 23:57:39 +0000 (UTC)
-Received: from [10.64.54.77] (vpn2-54-77.bne.redhat.com [10.64.54.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6BDA0C15BA3;
-        Wed, 10 Aug 2022 23:57:35 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2 1/2] KVM: selftests: Make rseq compatible with
- glibc-2.35
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     kvmarm <kvmarm@lists.cs.columbia.edu>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
+        Wed, 10 Aug 2022 21:41:15 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C5B844FE;
+        Wed, 10 Aug 2022 18:41:12 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id h132so15888998pgc.10;
+        Wed, 10 Aug 2022 18:41:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=F6hxhK/CjlN1f5v5Y2g2kDzYo8Q8zwKdylN6nrbEMvU=;
+        b=ic+8ScICKjjbdXIQQQmthij281I3mSRMks3Wz+5PmPGiGjve/0Mhj6uJHW1C1OjV49
+         5dhtxWSiJpNuJ4+u/PT+J4y0S29qrn/kl6QgtlDQtaFaKNXFfotD9Y5odxIsOYNxDM5l
+         J7R41PfhBLdPrayfFvDdBVB2MYqh8S4DudkAVWtJcxktwa8nBrRGTaxtOaLgXThhd/hV
+         Fi3Ef7T557Gx2t5tXOK/JCsboXGvZOuhthyyJj0lUtoFz9uUHYAmV+HwtDZ1Bs36IA+C
+         d4R6msDSug80BQWdnojMkESuKlA0YuJAsUSJEHSAKYUFcTLZ1xbmb9xE7YFBAvkN5+VW
+         H3nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=F6hxhK/CjlN1f5v5Y2g2kDzYo8Q8zwKdylN6nrbEMvU=;
+        b=ysum7JKUjl8pQMG+jD4rqBPW8Cjvf0WYGXJgAHuSK/dHY0lp9VtP+TpMbcdsCOf9XC
+         bJzfUJZnwkkHnasDqaoBj/PDSbQrptJJiETA54speZ+bKHf3FKb2V/52M2CgG6h+gSYS
+         HUieZ42CZu1AKughuUFmN6zU9hIYLprHUEhGwZQIcju/4DTTK/tBrUyCj1c0SyXk6Qmm
+         UIZMUVpJigGxeb3bA17a6bhyrYEbSe9cS03FtvxO7ddP8PRRxIKz3770Yu19o9jviMek
+         yLuxG64p4qZd3Lb8hOky3DDAi7xEjjJ3NfgpaPFsUX5HLsZjFb8Qf12eG/RMNDHQZj7I
+         Dz4A==
+X-Gm-Message-State: ACgBeo3FQy1rebjH5eR5tqmXNBnMgvhrXi2WPJ2JJ6AacHE5C2TrhcBc
+        K/50VeOKIDguEr6v0phgNds=
+X-Google-Smtp-Source: AA6agR5i4m+EV/NKTsVlOHb/dJE8NZ1qD2gdYXDUfRbMq2kX6GDB3kvaCOXOJmrSZhtfLN6xJuAOeA==
+X-Received: by 2002:a63:8ac3:0:b0:41b:ba48:e3f6 with SMTP id y186-20020a638ac3000000b0041bba48e3f6mr24089927pgd.567.1660182072334;
+        Wed, 10 Aug 2022 18:41:12 -0700 (PDT)
+Received: from Laptop-X1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id b17-20020a621b11000000b0052da33fe7d2sm2818830pfb.95.2022.08.10.18.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 18:41:11 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 09:41:03 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Piyush Thange <pthange19@gmail.com>, davem <davem@davemloft.net>,
+        edumazet <edumazet@google.com>, kuba <kuba@kernel.org>,
+        pabeni <pabeni@redhat.com>, shuah <shuah@kernel.org>,
+        "vladimir.oltean" <vladimir.oltean@nxp.com>,
+        idosch <idosch@nvidia.com>, petrm <petrm@nvidia.com>,
+        troglobit <troglobit@gmail.com>, amcohen <amcohen@nvidia.com>,
+        tobias <tobias@waldekranz.com>,
+        "po-hsu.lin" <po-hsu.lin@canonical.com>,
+        netdev <netdev@vger.kernel.org>,
         linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        shan gavin <shan.gavin@gmail.com>, maz <maz@kernel.org>,
-        andrew jones <andrew.jones@linux.dev>,
-        yihyu <yihyu@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        oliver upton <oliver.upton@linux.dev>
-References: <20220810104114.6838-1-gshan@redhat.com>
- <20220810104114.6838-2-gshan@redhat.com>
- <876568572.367.1660134156963.JavaMail.zimbra@efficios.com>
- <1e41a634-0419-e0a8-364c-2e30ed2dbe4d@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <234b81a0-d7eb-ee92-3ed3-ce2abf566b63@redhat.com>
-Date:   Thu, 11 Aug 2022 09:57:32 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Subject: Re: [PATCH] selftests:net:forwarding: Included install command
+Message-ID: <YvReL0HkZt639BoO@Laptop-X1>
+References: <20220810093508.33790-1-pthange19@gmail.com>
+ <182872c2de1.4461d55242061.8862004854197621952@siddh.me>
 MIME-Version: 1.0
-In-Reply-To: <1e41a634-0419-e0a8-364c-2e30ed2dbe4d@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <182872c2de1.4461d55242061.8862004854197621952@siddh.me>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,56 +82,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/10/22 10:29 PM, Paolo Bonzini wrote:
-> On 8/10/22 14:22, Mathieu Desnoyers wrote:
->>>
->>>     /*
->>>      * Create and run a dummy VM that immediately exits to userspace via
->>> @@ -256,7 +244,7 @@ int main(int argc, char *argv[])
->>>              */
->>>             smp_rmb();
->>>             cpu = sched_getcpu();
->>> -            rseq_cpu = READ_ONCE(__rseq.cpu_id);
->>> +            rseq_cpu = READ_ONCE(__rseq->cpu_id);
->> #include <rseq.h>
->>
->> and use
->>
->> rseq_current_cpu_raw().
+On Wed, Aug 10, 2022 at 03:23:15PM +0530, Siddh Raman Pant wrote:
+> On Wed, 10 Aug 2022 15:05:08 +0530  Piyush Thange <pthange19@gmail.com>  wrote:
+> > If the execution is skipped due to "jq not installed" message then
+> > the installation methods on different OS's have been provided with
+> > this message.
+> > 
+> > Signed-off-by: Piyush Thange <pthange19@gmail.com>
+> > ---
+> >  tools/testing/selftests/net/forwarding/lib.sh | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+> > index 37ae49d47853..c4121856fe06 100755
+> > --- a/tools/testing/selftests/net/forwarding/lib.sh
+> > +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> > @@ -152,6 +152,14 @@ require_command()
+> > 
+> >  	if [[ ! -x "$(command -v "$cmd")" ]]; then
+> >  		echo "SKIP: $cmd not installed"
+> > +		if [[ $cmd == "jq" ]]; then
+> > +			echo " Install on Debian based systems"
+> > +			echo "	sudo apt -y install jq"
+> > +			echo " Install on RHEL based systems"
+> > +			echo "	sudo yum -y install jq"
+> > +			echo " Install on Fedora based systems"
+> > +			echo "	sudo dnf -y install jq"
+> > +		fi
+> >  		exit $ksft_skip
+> >  	fi
+> >  }
+> > --
+> > 2.37.1
 > 
-> Thanks, I squashed it and queued it for -rc1 (tested on both
-> glibc 2.34 and 2.35).
-> 
+> This is very specific to `jq` command. What's special with `jq` and not
+> others? If methods have to be shown, they should be shown for all the
+> programs which are not installed.
 
-Paolo, Thanks for the makeup, which looks good to me :)
+Agree. The user could decide if jq should be install via REQUIRE_JQ. There are
+also other cmds that vendor may not build by default. I didn't see any
+selftests need to handle the installation. The users should takes care of it.
 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index 84e8425edc2c..987a76674f4f 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -29,7 +29,6 @@
->   #define NR_TASK_MIGRATIONS 100000
-> 
->   static pthread_t migration_thread;
-> -static struct rseq_abi *__rseq;
->   static cpu_set_t possible_mask;
->   static int min_cpu, max_cpu;
->   static bool done;
-> @@ -218,7 +217,6 @@ int main(int argc, char *argv[])
->       r = rseq_register_current_thread();
->       TEST_ASSERT(!r, "rseq_register_current_thread failed, errno = %d (%s)",
->               errno, strerror(errno));
-> -    __rseq = rseq_get_abi();
-> 
->       /*
->        * Create and run a dummy VM that immediately exits to userspace via
-> @@ -256,7 +254,7 @@ int main(int argc, char *argv[])
->                */
->               smp_rmb();
->               cpu = sched_getcpu();
-> -            rseq_cpu = READ_ONCE(__rseq->cpu_id);
-> +            rseq_cpu = rseq_current_cpu_raw();
->               smp_rmb();
->           } while (snapshot != atomic_read(&seq_cnt));
-> 
+require_command() has takes care most of the needed cmds. If we want to
+improve the user's experience for the needed cmds. I think add the needed cmds
+to README file is better.
 
+Thanks
+Hangbin
