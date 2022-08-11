@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14185903FA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 18:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5FD59045E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 18:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238342AbiHKQ1z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Aug 2022 12:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
+        id S238494AbiHKQce (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Aug 2022 12:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238128AbiHKQ0c (ORCPT
+        with ESMTP id S238278AbiHKQaa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:26:32 -0400
+        Thu, 11 Aug 2022 12:30:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F38F9F747;
-        Thu, 11 Aug 2022 09:08:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337E2B69D4;
+        Thu, 11 Aug 2022 09:09:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC7A8B821AC;
-        Thu, 11 Aug 2022 16:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDFE2C433D6;
-        Thu, 11 Aug 2022 16:08:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95659B821B5;
+        Thu, 11 Aug 2022 16:09:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B52CDC433D7;
+        Thu, 11 Aug 2022 16:09:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660234082;
+        s=k20201202; t=1660234176;
         bh=fy3VHjvN6ckJiTwIvXjYSIJM0uxtMVkbt09SBSZ2Ih4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E8osoCdwJTMgG30WVjV1iZ2pfN036llMx++L0H3NKi+aVM9cdkO6LkiQNI4vs1JEw
-         /M84W+8/WSwirTtRcGIiBv9vzoaieCpW7wgqqOwh2yGrlRfqauQnBCjjXhUE9xe5BJ
-         kq+ZZg9LgKTXsA+Uf0ypJnbV6lxtJnGpJfQ17RM6JeIg2tqDrqVJRcpiM6aMldvjep
-         nY8H+Rrkvdpk/gyF2KTn5JZ8UjkOpGT6pAfXFqVbIqGXzci9NhG1uWbjkQ8n5uC6bq
-         HbGnJN9uehIydUfQMU+muTAGi5+m2k5dF5PK1LG19OL8OiU8J0ldcbLQmJoTV5HVJj
-         WfAYRSWD5Y+LQ==
+        b=K0saBF6TFLyuhZ476wnbja6/gDmCwOhYg43r5Khl2ATaFa4QU9hvneBaXfUlY0l1t
+         c/BvWVPR/z8YLPa4wVB9kgvZ7Giwz3Y91a4+I3eIbUDNSZRiPRWFxP3bwVgP8lb+AN
+         AfCEpPWZ3qsRhgImvnvV09Wb07xqEUx1cJMdUDLQvd+foA0lx9n1GP/LlCXa7LIS1a
+         yjFDPgxWIeYPeAXDBV6WUP40PZd7o/LB1nB5AVNQkpcPFLgwrqhNjhVqbPeElk1eCQ
+         trJHhooeKI1xDwad44pJuEC8JwfuDqBXnH3pJZ1RmGfkT/jC2+GJt8zTpKq5exiFP+
+         Wyms734HwPtMQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jie2x Zhou <jie2x.zhou@intel.com>,
@@ -42,12 +42,12 @@ Cc:     Jie2x Zhou <jie2x.zhou@intel.com>,
         john.fastabend@gmail.com, andrii@kernel.org, shuah@kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 40/46] bpf/selftests: Fix couldn't retrieve pinned program in xdp veth test
-Date:   Thu, 11 Aug 2022 12:04:04 -0400
-Message-Id: <20220811160421.1539956-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 22/25] bpf/selftests: Fix couldn't retrieve pinned program in xdp veth test
+Date:   Thu, 11 Aug 2022 12:08:17 -0400
+Message-Id: <20220811160826.1541971-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811160421.1539956-1-sashal@kernel.org>
-References: <20220811160421.1539956-1-sashal@kernel.org>
+In-Reply-To: <20220811160826.1541971-1-sashal@kernel.org>
+References: <20220811160826.1541971-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
