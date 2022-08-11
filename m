@@ -2,63 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B1258FC27
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 14:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA4C58FD51
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 15:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbiHKM2F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Aug 2022 08:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
+        id S235334AbiHKNWh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Aug 2022 09:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbiHKM2E (ORCPT
+        with ESMTP id S235108AbiHKNWf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:28:04 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954758E996
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Aug 2022 05:28:02 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z22so22732752edd.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Aug 2022 05:28:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=3MRcVxkQskaoR9Gu8vTdfe3SAmvath2jQNxcSxuvW1Y=;
-        b=NHGbxl9pUrdbk/qb8xkMm4zoxhQhX6Rs444HQVekSH5HLue8co3CqoPnGbERLio2dM
-         LGx24QotE4kcbcEEhmgdmUCglkMRj9LUgkSP/KpiNA700mP6h94Dn1d/wFOg8IXrTV5Q
-         7t8086tWE8qBuYhtW+ve33VVpMjT6RO9u3JV6fo+OXTJ5nEqqLqt5Xfar1N/31vDl+kb
-         /Qc9CeYpCrRSPvgdT5jKrAYi+Bis7pm8rvEJBRuOqCqT9rTRlL5ZiL661wC2BrmdE5CH
-         +f94perJ/2Z6mBI0Mqi+Tsy+mMxy6HBFjWyJQNFav6rilu1dhdspBsJwb60836MPgNiY
-         wunw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=3MRcVxkQskaoR9Gu8vTdfe3SAmvath2jQNxcSxuvW1Y=;
-        b=JIMh+d7j98thUP5tu73oKQ/0Gg10DI6kTDZoRSuOQlorTYqBtgRD+I143qxm2pBZ69
-         QTQ8476AcFPPvTfUOxctclMdi8IllKM/hZtgVUt9MlrW0GLKg5WAgxz9LrmSQVje82y3
-         CF6zzQ3bw2teyh34smwOY91/Jgd5psWkbPbxExmegQ1ZBYckmr4KT+0/tvCaQURyCGkC
-         7FnwVfR9XAC31ZqM9rtpb0rN8UWBdLtJCGzhCbsFBUe1VWl17OrziPI8kqucfleWN+Wy
-         7jFmNW8AUW2iRUIKwzKKxMoA8X9Q2yEN2Z0dqMrVeuqcVl4wru53KRwLq8GqvouhoEP7
-         A1Dw==
-X-Gm-Message-State: ACgBeo1kQlu73f54bkWH9ZDmiBK4qmz49Yg7vwLEtAiA4LLv0IHpHfzw
-        U254SOHRtsDYL34fiFmv+7kGZQ==
-X-Google-Smtp-Source: AA6agR6+Oii1v3EbiMDbdYw7/ayqCsy6sGwTAVm4xglPzXzpkb8k3QGndmL9Qe4QpGf4syQIGgATXw==
-X-Received: by 2002:a05:6402:3583:b0:43d:6943:44a with SMTP id y3-20020a056402358300b0043d6943044amr30188049edc.409.1660220881001;
-        Thu, 11 Aug 2022 05:28:01 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id v20-20020a170906381400b007307d099ed7sm3440458ejc.121.2022.08.11.05.27.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 05:27:59 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 12:27:56 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
+        Thu, 11 Aug 2022 09:22:35 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1864816AE;
+        Thu, 11 Aug 2022 06:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660224153; x=1691760153;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=TXGp2l7srz7CG/35HC62yaH3SzOuZ/KTY0IN1dEpGAI=;
+  b=T5Vzi5QzJt1rxP32GUX/mrs4MWVVTlwuxjMi9Y89Am1NkOMIJGTnmTNd
+   Zdg6TTt9BernHTVXvKdFu70eG2bDgOCyY2Tj7pJqxNSBByrt4YQuF1DVh
+   ySRvMMo6Bqi+PwOJXo7qFkt5EZjjljg1mMZ+4DyR5NxOPWuVZ3vmWA90X
+   L2+DuVmzXchnKnjwWqaCWWg+M0nfRWTXBNSMoHgoSYhOU7qUQeUr1XeCs
+   0Mz38l6tm5lLClygUQcHARxAM0uo6S45FtDw0Zaf0syOJvBHvIxgh3eHU
+   qIR8fakSdWch+/EOw1YROjUJuDqi1vAnIEBsIraZu7CQtL4STibM3njJg
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292602176"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="292602176"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 06:22:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="608920719"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Aug 2022 06:22:23 -0700
+Date:   Thu, 11 Aug 2022 21:17:38 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
@@ -79,49 +68,76 @@ Cc:     David Hildenbrand <david@redhat.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
         ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Michael Roth <michael.roth@amd.com>,
-        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
-        Will Deacon <will@kernel.org>, Fuad Tabba <tabba@google.com>
-Subject: Re: [PATCH v7 03/14] mm: Introduce memfile_notifier
-Message-ID: <YvT1zOQtTQl2t300@google.com>
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 05/14] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Message-ID: <20220811131738.GA916119@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
 References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
- <13394075-fca0-6f2b-92a2-f1291fcec9a3@redhat.com>
- <20220810092232.GC862421@chaop.bj.intel.com>
- <00f1aa03-bc82-ffce-569b-e2d5c459992c@redhat.com>
- <YvPC87FMgF7uac7z@google.com>
+ <20220706082016.2603916-6-chao.p.peng@linux.intel.com>
+ <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
+ <20220810093741.GE862421@chaop.bj.intel.com>
+ <64ab9678-c72d-b6d9-8532-346cc9c06814@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YvPC87FMgF7uac7z@google.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <64ab9678-c72d-b6d9-8532-346cc9c06814@redhat.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+CC Fuad
-
-On Wednesday 10 Aug 2022 at 14:38:43 (+0000), Sean Christopherson wrote:
-> > I understand Sean's suggestion about abstracting, but if the new name
-> > makes it harder to grasp and there isn't really an alternative to memfd
-> > in sight, I'm not so sure I enjoy the tried abstraction here.
+On Wed, Aug 10, 2022 at 11:55:19AM +0200, David Hildenbrand wrote:
+> On 10.08.22 11:37, Chao Peng wrote:
+> > On Fri, Aug 05, 2022 at 03:28:50PM +0200, David Hildenbrand wrote:
+> >> On 06.07.22 10:20, Chao Peng wrote:
+> >>> Introduce a new memfd_create() flag indicating the content of the
+> >>> created memfd is inaccessible from userspace through ordinary MMU
+> >>> access (e.g., read/write/mmap). However, the file content can be
+> >>> accessed via a different mechanism (e.g. KVM MMU) indirectly.
+> >>>
+> >>> It provides semantics required for KVM guest private memory support
+> >>> that a file descriptor with this flag set is going to be used as the
+> >>> source of guest memory in confidential computing environments such
+> >>> as Intel TDX/AMD SEV but may not be accessible from host userspace.
+> >>>
+> >>> The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
+> >>> also impossible for a memfd created with this flag.
+> >>
+> >> It's kind of weird to have it that way. Why should the user have to
+> >> care? It's the notifier requirement to have that, no?
+> >>
+> >> Why can't we handle that when register a notifier? If anything is
+> >> already mapped, fail registering the notifier if the notifier has these
+> >> demands. If registering succeeds, block it internally.
+> >>
+> >> Or what am I missing? We might not need the memfile set flag semantics
+> >> eventually and would not have to expose such a flag to user space.
+> > 
+> > This makes sense if doable. The major concern was: is there a reliable
+> > way to detect this (already mapped) at the time of memslot registering.
 > 
-> ARM's pKVM implementation is potentially (hopefully) going to switch to this API
-> (as a consumer) sooner than later.  If they anticipate being able to use memfd,
-> then there's unlikely to be a second backing type any time soon.
+> If too complicated, we could simplify to "was this ever mapped" and fail
+> for now. Hooking into shmem_mmap() might be sufficient for that to get
+> notified about the first mmap.
 > 
-> Quentin, Will?
+> As an alternative, mapping_mapped() or similar *might* do what we want.
 
-Yep, Fuad is currently trying to port the pKVM mm stuff on top of this
-series to see how well it fits, so stay tuned. I think there is still
-some room for discussion around page conversions (private->shared etc),
-and we'll need a clearer idea of what the code might look like to have a
-constructive discussion, but so far it does seem like using a memfd (the
-new private one or perhaps just memfd_secret, to be discussed) + memfd
-notifiers is a promising option.
+mapping_mapped() sounds the right one, I remember SEV people want first
+map then unmap. "was this ever mapped" may not work for them.
+
+Thanks,
+Chao
+> 
+> 
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
