@@ -2,98 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD0A58F731
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 07:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAD658F7B8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Aug 2022 08:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbiHKFJZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Aug 2022 01:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        id S234173AbiHKGiF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Aug 2022 02:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiHKFJY (ORCPT
+        with ESMTP id S233698AbiHKGhq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Aug 2022 01:09:24 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69EE83BEB;
-        Wed, 10 Aug 2022 22:09:23 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id p125so12043126pfp.2;
-        Wed, 10 Aug 2022 22:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=DZrxMuUWLyOOGOzou+/YbJCnEI+s6JajXm/D/EndXY0=;
-        b=A213iWRXguE8DZnpQIMCrIlREr6BNeY4UQGwFU3+PYimUNEcvxJJw745lEfZYjDOwC
-         pJhyRN+HKo7MdLzRQ0VGBFR0DvPdMDYGxRvVe5d3srZwI7YG9GTpe2J2fgUgIJtqPZbU
-         3Yy1Wng6CTobUIFcGP6KXOR0njOIjtvQJH2y6voZFeXExvMyEHCwSpzUY4wqFTPv1kBx
-         RWpGI5dv6Ig07hVwydmV61S6Dmbf3EEVmlWl5sL04ETo7yiQdiTLeeReJoD/dtKFC73n
-         zKAY2J4vX8Teg2OUP4Ty01m0cSBCh5Su788OlbfCe5tCgtpTqaYkkvkfNEDWIwexvhI/
-         +x9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=DZrxMuUWLyOOGOzou+/YbJCnEI+s6JajXm/D/EndXY0=;
-        b=KdLGMdHjDFIL16Ah03x8KKzYU/LAOvCjtpp6b3bwuFxHAdNfBofMgrr8Luo4x3K/pR
-         Yr/XCKCbau9aaIfj0v/pQg0/WUtUmb3biRbzs9mew0/Y3gyOYyGs10tZ2kVm2aeZN0jy
-         4tn0URYu8y3MLrvUarAVxzPt5mpT3tDeYINGiMMqMzxurLbpUsMAjOXQOEu9UaiRm4xY
-         5Fk2wpvh//eMfR7iovaMPhLxWtDpgaWlXYGVxaG3xNsGP0InFpQV3iPkqgzY7Z+vUp87
-         /WIR/rgw0UKIXcAviytjM4/MXUXDsMTnZ6wy/uDY+oOxtGbsp+4GEgKvItjX/WJchnql
-         oitw==
-X-Gm-Message-State: ACgBeo1co8YabiFO+JsuygEMRfGVA6zuOaCSM6akEabbVUvXBJpXTAVW
-        Ie2OXToX24pQGs5/0lwwmBY=
-X-Google-Smtp-Source: AA6agR4CYIBep1Qc6b2rxtOzCLCWjyelWDv+c6Jn1ykqtKYdC0nWTbjGrVaVzqh2oca2PBbd0hVOCA==
-X-Received: by 2002:a65:6556:0:b0:41c:9c36:98fa with SMTP id a22-20020a656556000000b0041c9c3698famr25928505pgw.491.1660194563312;
-        Wed, 10 Aug 2022 22:09:23 -0700 (PDT)
-Received: from localhost ([2405:6580:97e0:3100:ae94:2ee7:59a:4846])
-        by smtp.gmail.com with ESMTPSA id w3-20020a170902e88300b0016be96e07d1sm14005662plg.121.2022.08.10.22.09.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 22:09:22 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 14:09:21 +0900
-From:   Benjamin Poirier <benjamin.poirier@gmail.com>
-To:     Hans Schultz <netdev@kapio-technology.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+        Thu, 11 Aug 2022 02:37:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C887B792;
+        Wed, 10 Aug 2022 23:37:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FA186147D;
+        Thu, 11 Aug 2022 06:37:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879F9C433D6;
+        Thu, 11 Aug 2022 06:37:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660199864;
+        bh=x207FYSJa7cUI/hPBLKm3lge12rqi5SLownAS+tQ2PU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P+gz12zRt5PPNOeWI+8t9bPR8S3Wg0llsJEQL75p3c3ObZtjpVcEja24kRPpKHaSH
+         A7u36ZwEgsKuqUTM+QsKNT9DbzKD+AtLtfNrlmrROJtaOabDHtqkeeS9q/jCu9EHaO
+         wu/zfMTKnLPxH5oeH+sYqXsGllBvIWZWFSSxR9lg7JfGw/B6ArK/gLFIqyGIXRGJTi
+         OKMla3FHwxm+r94GKQReLlM2nKQys9csaUkAr1r4GkqQXw0A/GTCzeRPuAXavfQypG
+         Oh7Am6CJIyakRhP9DRWOGTnQ29hQQaLDShSgU14EFHxlTF6y34SB8R7fe7ppvpYn7T
+         DIT5KA1GEeiFg==
+Date:   Thu, 11 Aug 2022 09:37:25 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 0/6] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-Message-ID: <YvSPAatX80jGiS3x@d3>
-References: <20220707152930.1789437-1-netdev@kapio-technology.com>
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 2/5] userfaultfd: add /dev/userfaultfd for fine
+ grained access control
+Message-ID: <YvSjpYOM4m5JG0xQ@kernel.org>
+References: <20220808175614.3885028-1-axelrasmussen@google.com>
+ <20220808175614.3885028-3-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220707152930.1789437-1-netdev@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220808175614.3885028-3-axelrasmussen@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-07-07 17:29 +0200, Hans Schultz wrote:
-> This patch set extends the locked port feature for devices
-> that are behind a locked port, but do not have the ability to
-> authorize themselves as a supplicant using IEEE 802.1X.
-> Such devices can be printers, meters or anything related to
-> fixed installations. Instead of 802.1X authorization, devices
-> can get access based on their MAC addresses being whitelisted.
-                                                    ^
+On Mon, Aug 08, 2022 at 10:56:11AM -0700, Axel Rasmussen wrote:
+> Historically, it has been shown that intercepting kernel faults with
+> userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
+> of time) can be exploited, or at least can make some kinds of exploits
+> easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
+> changed things so, in order for kernel faults to be handled by
+> userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
+> must be configured so that any unprivileged user can do it.
+> 
+> In a typical implementation of a hypervisor with live migration (take
+> QEMU/KVM as one such example), we do indeed need to be able to handle
+> kernel faults. But, both options above are less than ideal:
+> 
+> - Toggling the sysctl increases attack surface by allowing any
+>   unprivileged user to do it.
+> 
+> - Granting the live migration process CAP_SYS_PTRACE gives it this
+>   ability, but *also* the ability to "observe and control the
+>   execution of another process [...], and examine and change [its]
+>   memory and registers" (from ptrace(2)). This isn't something we need
+>   or want to be able to do, so granting this permission violates the
+>   "principle of least privilege".
+> 
+> This is all a long winded way to say: we want a more fine-grained way to
+> grant access to userfaultfd, without granting other additional
+> permissions at the same time.
+> 
+> To achieve this, add a /dev/userfaultfd misc device. This device
+> provides an alternative to the userfaultfd(2) syscall for the creation
+> of new userfaultfds. The idea is, any userfaultfds created this way will
+> be able to handle kernel faults, without the caller having any special
+> capabilities. Access to this mechanism is instead restricted using e.g.
+> standard filesystem permissions.
+> 
+> Acked-by: Nadav Amit <namit@vmware.com>
+> Acked-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Please consider using the alternate vocabulary discussed in
-Documentation/process/coding-style.rst §4.
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+
+> ---
+>  fs/userfaultfd.c                 | 73 +++++++++++++++++++++++++-------
+>  include/uapi/linux/userfaultfd.h |  4 ++
+>  2 files changed, 61 insertions(+), 16 deletions(-)
+
+-- 
+Sincerely yours,
+Mike.
