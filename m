@@ -2,124 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172045912E6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Aug 2022 17:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA8059131B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Aug 2022 17:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239050AbiHLPaE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Aug 2022 11:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S237898AbiHLPeD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Aug 2022 11:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239046AbiHLPaD (ORCPT
+        with ESMTP id S229664AbiHLPeC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Aug 2022 11:30:03 -0400
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [IPv6:2001:1600:3:17::42af])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB3D7C77E
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Aug 2022 08:29:59 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4M47045hnZzMqDVK;
-        Fri, 12 Aug 2022 17:29:56 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4M47041ZGnzlrKd0;
-        Fri, 12 Aug 2022 17:29:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1660318196;
-        bh=os1y2RaZXpvAPI4x/Kt6ufZlR7Y3TXa/5EBs1HgStPQ=;
-        h=Date:From:To:Cc:References:Subject:In-Reply-To:From;
-        b=NjjQHOj4WEACVa+xDGjILXnFy5XnjPmlCEtyh2SaOS2Lled9uOoY+Cgv2IWI6Kv2G
-         eQEgBhSQe7WKHruYwnS/X77IzbcZYHD8tmLasVjBJtE7KLZGUP4srfc+zLJ6gGCdA7
-         BKQ3nDXlPorpPTJHUivrmF8vV8ovr241v/5Y/5CU=
-Message-ID: <c0c65ade-1d2a-5466-2c12-8e016904817f@digikod.net>
-Date:   Fri, 12 Aug 2022 17:29:55 +0200
+        Fri, 12 Aug 2022 11:34:02 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB4F491F8;
+        Fri, 12 Aug 2022 08:34:00 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6265F1884D2E;
+        Fri, 12 Aug 2022 15:33:58 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 5798525032B7;
+        Fri, 12 Aug 2022 15:33:58 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 4A623A1A0051; Fri, 12 Aug 2022 15:33:58 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, Tim.Bird@sony.com,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
- <f1fc4e6e-e2a6-3ec7-2d3b-215111a4b9ae@digikod.net>
- <76a2ac43-6e3d-0b62-7c8c-eec5f247f8f8@collabora.com>
- <3de9a64e-6f27-8f76-9626-6ee082d382ea@digikod.net>
-Subject: Re: [PATCH] selftests/landlock: fix broken include of
- linux/landlock.h
-In-Reply-To: <3de9a64e-6f27-8f76-9626-6ee082d382ea@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 12 Aug 2022 17:33:58 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <YvTn847P/Ga3Ulb0@shredder>
+References: <20220708115624.rrjzjtidlhcqczjv@skbuf>
+ <723e2995314b41ff323272536ef27341@kapio-technology.com>
+ <YsqPWK67U0+Iw2Ru@shredder>
+ <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+ <Ys69DiAwT0Md+6ai@shredder>
+ <79683d9cf122e22b66b5da3bbbb0ee1f@kapio-technology.com>
+ <YvIm+OvXvxbH6POv@shredder>
+ <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
+ <YvNcitNnyFxTw8bs@shredder>
+ <2491232d5c017d94ca3213197a3fb283@kapio-technology.com>
+ <YvTn847P/Ga3Ulb0@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <a36d6891ce8e961c24987a424b6d7b66@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Shuah, do you plan to send a pull request before merge window closes?
+On 2022-08-11 13:28, Ido Schimmel wrote:
+>> >
+>> > I'm talking about roaming, not forwarding. Let's say you have a locked
+>> > entry with MAC X pointing to port Y. Now you get a packet with SMAC X
+>> > from port Z which is unlocked. Will the FDB entry roam to port Z? I
+>> > think it should, but at least in current implementation it seems that
+>> > the "locked" flag will not be reset and having locked entries pointing
+>> > to an unlocked port looks like a bug.
+>> >
 
-On 05/08/2022 19:16, Mickaël Salaün wrote:
-> 
-> On 04/08/2022 21:38, Guillaume Tucker wrote:
->> On 04/08/2022 12:36, Mickaël Salaün wrote:
->>>
->>> On 03/08/2022 22:13, Guillaume Tucker wrote:
->>>> Revert part of the earlier changes to fix the kselftest build when
->>>> using a sub-directory from the top of the tree as this broke the
->>>> landlock test build as a side-effect when building with "make -C
->>>> tools/testing/selftests/landlock".
->>>>
->>>> Reported-by: Mickaël Salaün <mic@digikod.net>
->>>> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers dependency")
->>>> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
->>>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->>>> ---
->>>>     tools/testing/selftests/landlock/Makefile | 7 +++++--
->>>>     1 file changed, 5 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
->>>> index a6959df28eb0..02868ac3bc71 100644
->>>> --- a/tools/testing/selftests/landlock/Makefile
->>>> +++ b/tools/testing/selftests/landlock/Makefile
->>>> @@ -9,10 +9,13 @@ TEST_GEN_PROGS := $(src_test:.c=)
->>>>     TEST_GEN_PROGS_EXTENDED := true
->>>>       OVERRIDE_TARGETS := 1
->>>> +top_srcdir := ../../../..
->>>
->>> Not sure it changes much, but most other selftests Makefiles use "top_srcdir = ../../../.." (without ":="). Why this change?
->>
->> I didn't simply apply your diff but edited the file by hand to
->> test various combinations and see what side effects it might
->> have.  So when I added top_srcdir I typed it by hand and used :=
->> as a reflex since it's the standard way of assigning variables.
->> Using = instead only makes a difference when the r-value has
->> something dynamic as it will be re-evaluated every time it's
->> used.  So for constant values, I guess it's more of a question of
->> coding style and conventions.  Maybe all the top_srcdir variables
->> should be changed to := but that's unnecessary churn...  Either
->> way, it's benign.
->>
->> Shuah, feel free to change this back to = in this particular case
->> if it's more consistent with other Makefiles.  Consistency is
->> often better than arbitrary rules.  Or conversely, change to :=
->> for the khdr_dir definition...  Entirely up to you I think.
-> 
-> Looks good to me, thanks! Shuah, feel free to add
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> 
->>
->> Thanks,
->> Guillaume
->>
->>>>     include ../lib.mk
->>>>     +khdr_dir = $(top_srcdir)/usr/include
->>>> +
->>>>     $(OUTPUT)/true: true.c
->>>>         $(LINK.c) $< $(LDLIBS) -o $@ -static
->>>>     -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
->>>> -    $(LINK.c) $< $(LDLIBS) -o $@ -lcap
->>>> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_harness.h common.h
->>>> +    $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
->>
+Yes, now I have tried to test with a case like this using the bridge and 
+have verified the locked entry pointing to an unlocked port, which I 
+agree seems to be a bug, which I will get fixed.
