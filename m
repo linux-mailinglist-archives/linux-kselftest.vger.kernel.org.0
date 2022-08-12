@@ -2,159 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB30590E2C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Aug 2022 11:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C93D590F24
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Aug 2022 12:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbiHLJds (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Aug 2022 05:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S238370AbiHLKT6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Aug 2022 06:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiHLJdp (ORCPT
+        with ESMTP id S233226AbiHLKT5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:33:45 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2041.outbound.protection.outlook.com [40.107.95.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD49111825;
-        Fri, 12 Aug 2022 02:33:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T6WKJwpW+GOm0AAdpG8laCWlDrmYPcrZFzkhWpnFlv4goz54MsHn3e91a6VYDft+5bCq2D3UwspXKBS67FYKlHIAKU723gubhdfSWlX8+82BYBFsdOcXLYqInq7fx+r6wzal0OUXJCn3DTLNMbSMl9vPn4Z6sHT9TLnWIKlPhRGz/o9LJd2ttzquxcx7nTDGnDFeC2LQFBDl+JfEbADbaujTJotXdUYJ4qTfHU4PFkCAadyjPo2/RjjIFNBc+rQT1YWXAQAbNLu8H9wB0FZhq0eLBkjK9GHYDHzNxZf8zm36F+qMmc1GQm0+NX6GrWRsT9Bb4X2OAXdtTPgiL9W+Lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0SMQghi0SSPcHFTKNwQZZGT0IxnzxoHZ82tpqNwX9Lk=;
- b=kbs19VWuqquyYLN7dplplzPKpZv/FaF2f5xQYOho6hQ8Vl07XdPE7JRr7tOYAJ4Woi76mSvqC9hyh6KC0M0jXnJ+Ltkr4ucBxQhxObYa9ZX99Z/ZuaegDHjSyK7bMJPv4b83bYYBBdD8BLBqbSXwQsKXJq6ARF6KKFpQQXxzQvxurn8ENqHpBW6lum+prbig+1fT+G6ogGs01XlWzyKXRpiE6yMyIG+ln7pdQTDiOFkvrtnGhbFZFozog26SgXO8g/JM372NclZ1tL6Qf81EhhmHq6k0AgnU7ZA44saGR7HgLt5y8jZxi7in43HbEBc9FGc4Q+c07cpTZX/7ewMDIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0SMQghi0SSPcHFTKNwQZZGT0IxnzxoHZ82tpqNwX9Lk=;
- b=GBOhVYZNfLEmPlqBw+CzAakIgbrOXjl33k6goGqiNz1jJKj95hgFIHzjjSfwdJxLCX9SFluK5Vj303p6fG1Zn4K6welEEznfzN3jdquqeiwXbR6t+twCTrNXx9Aq/anlqFOWftTPL9HtPGvKEKaZkqQ21XIsm9duw/qOEEw7FDU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
- (2603:10b6:910:1f::11) by CH2PR12MB4822.namprd12.prod.outlook.com
- (2603:10b6:610:6::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Fri, 12 Aug
- 2022 09:33:39 +0000
-Received: from CY4PR1201MB0181.namprd12.prod.outlook.com
- ([fe80::1001:3c79:9504:8d6a]) by CY4PR1201MB0181.namprd12.prod.outlook.com
- ([fe80::1001:3c79:9504:8d6a%10]) with mapi id 15.20.5504.020; Fri, 12 Aug
- 2022 09:33:38 +0000
-Message-ID: <411625ac-a8d0-e823-2f91-2d8c0bf9f4cf@amd.com>
-Date:   Fri, 12 Aug 2022 11:33:26 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Content-Language: en-US
-To:     "Nikunj A. Dadhania" <nikunj@amd.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, bharata@amd.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-fsdevel@vger.kernel.org
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <b21f41e5-0322-bbfb-b9c2-db102488592d@amd.com>
- <9e86daea-5619-a216-fe02-0562cf14c501@amd.com>
- <9dc91ce8-4cb6-37e6-4c25-27a72dc11dd0@amd.com>
- <422b9f97-fdf5-54bf-6c56-3c45eff5e174@amd.com>
- <1407c70c-0c0b-6955-10bb-d44c5928f2d9@amd.com>
- <1136925c-2e37-6af4-acac-be8bed9f6ed5@amd.com>
- <1b02db9d-f2f1-94dd-6f37-59481525abff@amd.com>
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-In-Reply-To: <1b02db9d-f2f1-94dd-6f37-59481525abff@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0156.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::17) To CY4PR1201MB0181.namprd12.prod.outlook.com
- (2603:10b6:910:1f::11)
+        Fri, 12 Aug 2022 06:19:57 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AC8AB4C6;
+        Fri, 12 Aug 2022 03:19:56 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M406C0phVz67yJP;
+        Fri, 12 Aug 2022 18:19:47 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 12:19:52 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <mykolal@fb.com>,
+        <corbet@lwn.net>, <dhowells@redhat.com>, <jarkko@kernel.org>,
+        <rostedt@goodmis.org>, <mingo@redhat.com>, <paul@paul-moore.com>,
+        <jmorris@namei.org>, <serge@hallyn.com>, <shuah@kernel.org>
+CC:     <bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <keyrings@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature verification
+Date:   Fri, 12 Aug 2022 12:18:53 +0200
+Message-ID: <20220812101902.2846182-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 13463a36-8fc2-4db7-0c91-08da7c45bc6d
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4822:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Pc3ONFv9qrQmmZwO9QzfSfSc2im2sUf5dI6Dvf4KPAewb6A7+7Go6k0xKwClkznrcpJsjC6xeTPKvRnBKQv+Uon99EhTK51yRCRv8GseqgX1Jzukw7/lE6puCkZIKJeMKZ99NlM1zwhrPAMBCQBvP4qbocvtBncVLnIJ8V2KB7asM8cN8qJnj34Aa3iZXo+iYE8JD28JlfuRh2uTHPINfWvxc3nNRc6330AWqQWp+4ZD0kg5AmH/yY4KLlx9eXKm1nAFhJNr/LOUK0sto1REN+ltNSx2TzUWSkRrR9tn/zK5r1cci8mEyhdWCF1+aN4LGfhW4F24NUy//95jnDKe6a3iNhuJ6d2Mv5ujmbHstvAofw0CizsFyEPsPish15hdROUwuTRChrDsHGCxtEmVh9TRJ3N6z3GD3wIkjqudKCgn7+uln6OddhF+LT+eCKmTmQbHmuh/tMIlV2EjgZ/mb0B9xeq0rOU0rV7eyRsSGjpNwr2doESoiL6/qiiViaA6pKUH49IJKri3g8CEjkrdEfBZ73LLrAe1qWmN+FMUV8+rTrtV0Ayx7CMDUgMt42aV6BOsceDx3UiuY7lWmjwDf4jEFDWTK3oQCmVRysKMRQXBvZd5bcves8J8XV8r1Hq0i3Gy7KFgyVz9ccrVnSdFh3QVT321J7eBBEA+LM7nlHowDc9TvpFH8U1QdywdTHZdJhy78YXpct5TrW8amvsx21iBAXZezM6gcYOQ4n2gCDU1xe0QWt5xT5fBYMaDrAjAM3UYo52rkGexRJh3etAQEmvYHm1W6RTRHn9dj6ZZ6gxA/FKjoYSfUxD4g9OgViYWDqH8Nu5FTdqc34gO2N6pog==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1201MB0181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(346002)(136003)(366004)(39860400002)(66556008)(8676002)(2906002)(5660300002)(66476007)(66946007)(316002)(31686004)(7406005)(7416002)(26005)(8936002)(478600001)(38100700002)(31696002)(186003)(86362001)(4326008)(41300700001)(6486002)(83380400001)(6666004)(36756003)(110136005)(6506007)(54906003)(6512007)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWhMcWpqWlJLR21YblByTDhXeDZiRFYwK0xhOWtNS3gxTEswL2lmamM0RFdr?=
- =?utf-8?B?clpEa00xZzJrNVNCOU1paDZyUUs2R0tPTDRRQXR0czJUbkRSOTBZUE55S1FS?=
- =?utf-8?B?SEhHQUp6NTBBdXQyazV1TVdlTzY4WjY3cFg3T2NMajBMMFo1YlhsbmwxVDdN?=
- =?utf-8?B?QmZudXQ1d1J4ZmlSeE5EUkNGTk0rdVFzUVJIbkJwZWszTGl6RUQzU3dRZXdo?=
- =?utf-8?B?SDlBck5UbUtDV29DdUViZkF6NUExVGU5d1NibVl4NnFucXgyNkwzMFFHc3Bz?=
- =?utf-8?B?QzdlaWNaVEhJbFBxeDZjRlFIVXRrcFVvWmpTUUFoaUVHdkZKTWU4VUpMdjhG?=
- =?utf-8?B?bmJIbXVoTWVFSUQ3NFFTR2lyK1htbEt3SllWZm9pd2IvdThhODVvN3VFWVFh?=
- =?utf-8?B?Rm8wWGJ5bzN3WUZkTlFnYk8yQ0N3aVl0ZDV4aEVaTUpmZStQY0N6dGxnOGhn?=
- =?utf-8?B?U3RyMk9wTFU3MTB1M0dXM016S210WXRPbWRGdVhOeHhPNUlOaEd0VVNBTTds?=
- =?utf-8?B?QTliamVoOGZwaGJMVndCK0FLUlR1ZDFDa3IvbUMxZ0dhOTdjcUxINlRKbkRo?=
- =?utf-8?B?cTcvN1hxdGRrSHMxTFUvRTk1VVlTcHlJMWovNEZtd0pzaEZjalNOT0ZpTjl4?=
- =?utf-8?B?amZnclBFNWFyckVLUGYxTWF0UWxac0gwZmFEMkNhWkt0a0JoOFo1RjVsT1Q5?=
- =?utf-8?B?cGdHSUZPR3NUKy8wTmw3S0NHR2hPSkVKa3hDb2pWUGJTSnVCNkc4em1ENk51?=
- =?utf-8?B?YnBMWnVxdWdKdjM1ZDlUaTdwNjVoTE5Na09qSUJoRmNKMUw0bWhnaXc5UUVX?=
- =?utf-8?B?OEFDZmswb2R2SDY1dnRJeEpoc2lVSGJQNEF6NkZwWEFVY25rVHNYRFY0VFVC?=
- =?utf-8?B?dUlVeEVQMTJOT0JXS1VPTFZoN1Y5MllrYWVsN0JTd0dWUXpqUjBTbkw0Umdx?=
- =?utf-8?B?QmRUSUNacHNLdkdqWWRKUitVV05PM1J3MENObVZyaXY1U1dpNFpmakkzeHlQ?=
- =?utf-8?B?R0pTRldndGlTZDlLalpBb25JK2wyNitCa0J1b3I3QlFSNXVZREZkVERzOTFV?=
- =?utf-8?B?Qytzb082Sk1WZk1zNmdqV1JpSldyb29mZzdISjcrV0VGOVc2bGdYdi95TDN1?=
- =?utf-8?B?cmdBZ1RMZ3ZkZDRDNVVnQ3YwMW1KK3RLeHZoUXAyUUwwSVlkMjV4TWQ4K3N1?=
- =?utf-8?B?d0UvZ2NpZ0FsaUJ5STBlVDdOWjVoclM4b2hERGN3UUJmcGF6bGdmRmFoMFJ5?=
- =?utf-8?B?dUhDVmp6NkFxUjJxT2o1TEQwNEU1YjIyUWhQOUR4RG4rK3poWkhLMldZc3BB?=
- =?utf-8?B?cXVjUGNGUlVGVVZHSjdkSHBrdWtkUFNySXlqYWNLZ3FqdEgvd1J6ejQ5ZHl1?=
- =?utf-8?B?UnRjMTUrM0dNUk9rWDBzZGFxSEUvSFFrT2dQdVMzWnRrZDN2cld1cEgrbE0r?=
- =?utf-8?B?UGtIUEc5bDBXVmI0cFZYSi9Lb2JUdUZWYXNXODN2YXpiVUlWbnlycEU3anNK?=
- =?utf-8?B?dVZDbXpxSk9XTVZLUUt6YW4rSlVVaS9VclBkYkNidTgzbWZpeDFxdldmUS91?=
- =?utf-8?B?Yk5xUmw3MHhTL3YxUjhIQ1ROcjU3NFkvV2dyK0NndHRQck9NcU51dG9Lc2Ra?=
- =?utf-8?B?Sk1sN0F1Rk1ISEI0VTl3K25UNXFBZkJjTElBRzZuVjdNcHNTSklLYkpYaDZW?=
- =?utf-8?B?d0tHR3RTeUtFWVBOTXk2c2dhbUxGUVZsTWJyYkNkdHZ4Qy9ob0VGdERnUFlM?=
- =?utf-8?B?V3Q4enREdEhOWDRFYndMY1ZkK0ZzNmNPZkdNdTNRQkxvTzE2RmZlRTlrSGxY?=
- =?utf-8?B?YW05TlFGaVlRcjJsTGROSGFBcTU2UDEzVTdiOE9Ob0s3TDM0U3JIekJIcUxo?=
- =?utf-8?B?eC81WWVtakhMb3lXMWJ6T3Q3UU9SR3VINE9kWW1USmNzeDhOd3JVUlhpcEFj?=
- =?utf-8?B?N2pXUnRrbFNDY3ByeGpTQnRHSEJSMjNQS1BPTUcrYzFSdWEwMXdVR2ZtQ0kw?=
- =?utf-8?B?YmMwTjY2YTVDNFhjUkhDcUpuNWhLUWFZdnRlSFEvWG9vTnptY2ZzUGtQczJu?=
- =?utf-8?B?VXk0V1BrKzdRT0l1M1JwcXdjdmZaczlBK1JZOFdIK2E0UUZ3K1B5UFJ3anNY?=
- =?utf-8?Q?Fjeo=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13463a36-8fc2-4db7-0c91-08da7c45bc6d
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR1201MB0181.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 09:33:38.5634
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gJsj+R+D+/5ME9JGIE3EPb/6B5kSNOpTHB9W6kHRZNMKskQlF+2RKP1IlgMKLXZ0uUVZzuIn0ePjvCEP0KbAxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4822
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,42 +55,252 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
->>>>>>>
->>>>>>> However, fallocate() preallocates full guest memory before starting the guest.
->>>>>>> With this behaviour guest memory is *not* demand pinned. Is there a way to
->>>>>>> prevent fallocate() from reserving full guest memory?
->>>>>>
->>>>>> Isn't the pinning being handled by the corresponding host memory backend with mmu > notifier and architecture support while doing the memory operations e.g page> migration and swapping/reclaim (not supported currently AFAIU). But yes, we need> to allocate entire guest memory with the new flags MEMFILE_F_{UNMOVABLE, UNRECLAIMABLE etc}.
->>>>>
->>>>> That is correct, but the question is when does the memory allocated, as these flags are set,
->>>>> memory is neither moved nor reclaimed. In current scenario, if I start a 32GB guest, all 32GB is
->>>>> allocated.
->>>>
->>>> I guess so if guest memory is private by default.
->>>>
->>>> Other option would be to allocate memory as shared by default and
->>>> handle on demand allocation and RMPUPDATE with page state change event. But still that would be done at guest boot time, IIUC.
->>>
->>> Sorry! Don't want to hijack the other thread so replying here.
->>>
->>> I thought the question is for SEV SNP. For SEV, maybe the hypercall with the page state information can be used to allocate memory as we use it or something like quota based memory allocation (just thinking).
->>
->> But all this would have considerable performance overhead (if by default memory is shared) and used mostly at boot time.
-> 
->> So, preallocating memory (default memory private) seems better approach for both SEV & SEV SNP with later page management (pinning, reclaim) taken care by host memory backend & architecture together.
-> 
-> I am not sure how will pre-allocating memory help, even if guest would not use full memory it will be pre-allocated. Which if I understand correctly is not expected.
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
 
-For SEV I am also not very sure what would be the best way.
-There could be a tradeoff between memory pinning and performance.
-As I was also thinking about "Async page fault" aspect of guest
-in my previous reply. Details needs to be figure out.
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
 
-Quoting my previous reply here:
-"Or maybe later we can think of something like allowing direct page 
-fault on host memory access for *SEV* guest as there is no strict 
-requirement for memory integrity guarantee and the performance overhead."
+After a discussion in the eBPF mailing list, it was decided that the stated
+goal should be accomplished by introducing four new kfuncs:
+bpf_lookup_user_key() and bpf_lookup_system_key(), for retrieving a keyring
+with keys trusted for signature verification, respectively from its serial
+and from a pre-determined ID; bpf_key_put(), to release the reference
+obtained with the former two kfuncs, bpf_verify_pkcs7_signature(), for
+verifying PKCS#7 signatures.
 
-Thanks,
-Pankaj
+Other than the key serial, bpf_lookup_user_key() also accepts key lookup
+flags, that influence the behavior of the lookup. bpf_lookup_system_key()
+accepts pre-determined IDs defined in include/linux/verification.h.
+
+bpf_key_put() accepts the new bpf_key structure, introduced to tell whether
+the other structure member, a key pointer, is valid or not. The reason is
+that verify_pkcs7_signature() also accepts invalid pointers, set with the
+pre-determined ID, to select a system-defined keyring. key_put() must be
+called only for valid key pointers.
+
+Since the two key lookup functions allocate memory and one increments a key
+reference count, they must be used in conjunction with bpf_key_put(). The
+latter must be called only if the lookup functions returned a non-NULL
+pointer. The verifier denies the execution of eBPF programs that don't
+respect this rule.
+
+The two key lookup functions should be used in alternative, depending on
+the use case. While bpf_lookup_user_key() provides great flexibility, it
+seems suboptimal in terms of security guarantees, as even if the eBPF
+program is assumed to be trusted, the serial used to obtain the key pointer
+might come from untrusted user space not choosing one that the system
+administrator approves to enforce a mandatory policy.
+
+bpf_lookup_system_key() instead provides much stronger guarantees,
+especially if the pre-determined ID is not passed by user space but is
+hardcoded in the eBPF program, and that program is signed. In this case,
+bpf_verify_pkcs7_signature() will always perform signature verification
+with a key that the system administrator approves, i.e. the primary,
+secondary or platform keyring.
+
+Nevertheless, key permission checks need to be done accurately. Since
+bpf_lookup_user_key() cannot determine how a key will be used by other
+kfuncs, it has to defer the permission check to the actual kfunc using the
+key. It does it by calling lookup_user_key() with KEY_DEFER_PERM_CHECK as
+needed permission. Later, bpf_verify_pkcs7_signature(), if called,
+completes the permission check by calling key_validate(). It does not need
+to call key_task_permission() with permission KEY_NEED_SEARCH, as it is
+already done elsewhere by the key subsystem. Future kfuncs using the
+bpf_key structure need to implement the proper checks as well.
+
+Finally, the last kfunc, bpf_verify_pkcs7_signature(), accepts the data and
+signature to verify as eBPF dynamic pointers, to minimize the number of
+kfunc parameters, and the keyring with keys for signature verification as a
+bpf_key structure, returned by one of the two key lookup functions.
+
+bpf_lookup_user_key() and bpf_verify_pkcs7_signature() can be called only
+from sleepable programs, because of memory allocation and crypto
+operations. For example, the lsm.s/bpf attach point is suitable,
+fexit/array_map_update_elem is not.
+
+The correctness of implementation of the new kfuncs and of their usage is
+checked with the introduced tests.
+
+The patch set includes a patch from another author (dependency) for sake of
+completeness. It is organized as follows.
+
+Patch 1 from KP Singh allows kfuncs to be used by LSM programs. Patch 2
+allows dynamic pointers to be used as kfunc parameters. Patch 3 exports
+bpf_dynptr_get_size(), to obtain the real size of data carried by a dynamic
+pointer. Patch 4 makes available for new eBPF kfuncs some key-related
+definitions. Patch 5 introduces the bpf_lookup_*_key() and bpf_key_put()
+kfuncs. Patch 6 introduces the bpf_verify_pkcs7_signature() kfunc. Finally,
+patches 7-9 introduce the tests.
+
+Changelog
+
+v10:
+ - Introduce key_lookup_flags_check() and system_keyring_id_check() inline
+   functions to check parameters (suggested by KP)
+ - Fix descriptions and comment of key-related kfuncs (suggested by KP)
+ - Register kfunc set only once (suggested by Alexei)
+ - Move needed kernel options to the architecture-independent configuration
+   for testing
+
+v9:
+ - Drop patch to introduce KF_SLEEPABLE kfunc flag (already merged)
+ - Rename valid_ptr member of bpf_key to has_ref (suggested by Daniel)
+ - Check dynamic pointers in kfunc definition with bpf_dynptr_kern struct
+   definition instead of string, to detect structure renames (suggested by
+   Daniel)
+ - Explicitly say that we permit initialized dynamic pointers in kfunc
+   definition (suggested by Daniel)
+ - Remove noinline __weak from kfuncs definition (reported by Daniel)
+ - Simplify key lookup flags check in bpf_lookup_user_key() (suggested by
+   Daniel)
+ - Explain the reason for deferring key permission check (suggested by
+   Daniel)
+ - Allocate memory with GFP_ATOMIC in bpf_lookup_system_key(), and remove
+   KF_SLEEPABLE kfunc flag from kfunc declaration (suggested by Daniel)
+ - Define only one kfunc set and remove the loop for registration
+   (suggested by Alexei)
+
+v8:
+ - Define the new bpf_key structure to carry the key pointer and whether
+   that pointer is valid or not (suggested by Daniel)
+ - Drop patch to mark a kfunc parameter with the __maybe_null suffix
+ - Improve documentation of kfuncs
+ - Introduce bpf_lookup_system_key() to obtain a key pointer suitable for
+   verify_pkcs7_signature() (suggested by Daniel)
+ - Use the new kfunc registration API
+ - Drop patch to test the __maybe_null suffix
+ - Add tests for bpf_lookup_system_key()
+
+v7:
+ - Add support for using dynamic and NULL pointers in kfunc (suggested by
+   Alexei)
+ - Add new kfunc-related tests
+
+v6:
+ - Switch back to key lookup helpers + signature verification (until v5),
+   and defer permission check from bpf_lookup_user_key() to
+   bpf_verify_pkcs7_signature()
+ - Add additional key lookup test to illustrate the usage of the
+   KEY_LOOKUP_CREATE flag and validate the flags (suggested by Daniel)
+ - Make description of flags of bpf_lookup_user_key() more user-friendly
+   (suggested by Daniel)
+ - Fix validation of flags parameter in bpf_lookup_user_key() (reported by
+   Daniel)
+ - Rename bpf_verify_pkcs7_signature() keyring-related parameters to
+   user_keyring and system_keyring to make their purpose more clear
+ - Accept keyring-related parameters of bpf_verify_pkcs7_signature() as
+   alternatives (suggested by KP)
+ - Replace unsigned long type with u64 in helper declaration (suggested by
+   Daniel)
+ - Extend the bpf_verify_pkcs7_signature() test by calling the helper
+   without data, by ensuring that the helper enforces the keyring-related
+   parameters as alternatives, by ensuring that the helper rejects
+   inaccessible and expired keyrings, and by checking all system keyrings
+ - Move bpf_lookup_user_key() and bpf_key_put() usage tests to
+   ref_tracking.c (suggested by John)
+ - Call bpf_lookup_user_key() and bpf_key_put() only in sleepable programs
+
+v5:
+ - Move KEY_LOOKUP_ to include/linux/key.h
+   for validation of bpf_verify_pkcs7_signature() parameter
+ - Remove bpf_lookup_user_key() and bpf_key_put() helpers, and the
+   corresponding tests
+ - Replace struct key parameter of bpf_verify_pkcs7_signature() with the
+   keyring serial and lookup flags
+ - Call lookup_user_key() and key_put() in bpf_verify_pkcs7_signature()
+   code, to ensure that the retrieved key is used according to the
+   permission requested at lookup time
+ - Clarified keyring precedence in the description of
+   bpf_verify_pkcs7_signature() (suggested by John)
+ - Remove newline in the second argument of ASSERT_
+ - Fix helper prototype regular expression in bpf_doc.py
+
+v4:
+ - Remove bpf_request_key_by_id(), don't return an invalid pointer that
+   other helpers can use
+ - Pass the keyring ID (without ULONG_MAX, suggested by Alexei) to
+   bpf_verify_pkcs7_signature()
+ - Introduce bpf_lookup_user_key() and bpf_key_put() helpers (suggested by
+   Alexei)
+ - Add lookup_key_norelease test, to ensure that the verifier blocks eBPF
+   programs which don't decrement the key reference count
+ - Parse raw PKCS#7 signature instead of module-style signature in the
+   verify_pkcs7_signature test (suggested by Alexei)
+ - Parse kernel module in user space and pass raw PKCS#7 signature to the
+   eBPF program for signature verification
+
+v3:
+ - Rename bpf_verify_signature() back to bpf_verify_pkcs7_signature() to
+   avoid managing different parameters for each signature verification
+   function in one helper (suggested by Daniel)
+ - Use dynamic pointers and export bpf_dynptr_get_size() (suggested by
+   Alexei)
+ - Introduce bpf_request_key_by_id() to give more flexibility to the caller
+   of bpf_verify_pkcs7_signature() to retrieve the appropriate keyring
+   (suggested by Alexei)
+ - Fix test by reordering the gcc command line, always compile sign-file
+ - Improve helper support check mechanism in the test
+
+v2:
+ - Rename bpf_verify_pkcs7_signature() to a more generic
+   bpf_verify_signature() and pass the signature type (suggested by KP)
+ - Move the helper and prototype declaration under #ifdef so that user
+   space can probe for support for the helper (suggested by Daniel)
+ - Describe better the keyring types (suggested by Daniel)
+ - Include linux/bpf.h instead of vmlinux.h to avoid implicit or
+   redeclaration
+ - Make the test selfcontained (suggested by Alexei)
+
+v1:
+ - Don't define new map flag but introduce simple wrapper of
+   verify_pkcs7_signature() (suggested by Alexei and KP)
+
+KP Singh (1):
+  bpf: Allow kfuncs to be used in LSM programs
+
+Roberto Sassu (8):
+  btf: Handle dynamic pointer parameter in kfuncs
+  bpf: Export bpf_dynptr_get_size()
+  KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+  bpf: Add bpf_lookup_*_key() and bpf_key_put() kfuncs
+  bpf: Add bpf_verify_pkcs7_signature() kfunc
+  selftests/bpf: Add verifier tests for bpf_lookup_*_key() and
+    bpf_key_put()
+  selftests/bpf: Add additional tests for bpf_lookup_*_key()
+  selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc
+
+ include/linux/bpf.h                           |   7 +
+ include/linux/bpf_verifier.h                  |   3 +
+ include/linux/key.h                           |  11 +
+ include/linux/verification.h                  |   8 +
+ kernel/bpf/btf.c                              |  23 +
+ kernel/bpf/helpers.c                          |   2 +-
+ kernel/bpf/verifier.c                         |   4 +-
+ kernel/trace/bpf_trace.c                      | 180 ++++++++
+ security/keys/internal.h                      |   2 -
+ tools/testing/selftests/bpf/Makefile          |  14 +-
+ tools/testing/selftests/bpf/config            |   6 +
+ tools/testing/selftests/bpf/config.x86_64     |   5 -
+ .../selftests/bpf/prog_tests/lookup_key.c     | 112 +++++
+ .../bpf/prog_tests/verify_pkcs7_sig.c         | 399 ++++++++++++++++++
+ .../selftests/bpf/progs/test_lookup_key.c     |  46 ++
+ .../bpf/progs/test_verify_pkcs7_sig.c         | 100 +++++
+ tools/testing/selftests/bpf/test_verifier.c   |   3 +-
+ .../selftests/bpf/verifier/ref_tracking.c     | 139 ++++++
+ .../testing/selftests/bpf/verify_sig_setup.sh | 104 +++++
+ 19 files changed, 1154 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lookup_key.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_lookup_key.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+ create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
+
+-- 
+2.25.1
