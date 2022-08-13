@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34716591897
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Aug 2022 06:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786E45918A0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Aug 2022 06:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237044AbiHMEVU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 13 Aug 2022 00:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S237719AbiHMEV3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 13 Aug 2022 00:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236313AbiHMEVS (ORCPT
+        with ESMTP id S237356AbiHMEVX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 13 Aug 2022 00:21:18 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4D914012;
-        Fri, 12 Aug 2022 21:21:15 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id s129so2593559vsb.11;
-        Fri, 12 Aug 2022 21:21:15 -0700 (PDT)
+        Sat, 13 Aug 2022 00:21:23 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE91313F9B;
+        Fri, 12 Aug 2022 21:21:18 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id j2so2624477vsp.1;
+        Fri, 12 Aug 2022 21:21:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=gNs9sey591WPnXbNPiS1OcGYuvQlyk8T1glh4KMvcRM=;
-        b=dNHnkRdXtFsuE2N/jkVbPN5WpeUIbdQ4mrP2miILjOgcFqac+pQ84PPzJHdkP6HvgZ
-         H4tw54xJsL7wreN7LdeLVtri1m584bZMz23SEQ8TboJzOPmhYVP7rThIAld4ugqNiaF7
-         2cu6ghx4EtR/3CnSnlZpoaJeeAPJXfqAlMHsq1hJHxkMmovFsBr5y5W57jvgX9NVZPb1
-         cqydruhAvo3738kkLEqZV8JcrzTDIinDdNxfycwjwGrgH33ijQpZd5lIXHHKa2QWCCd9
-         BitWc0yhonIt3PAf7d19PIw0ke9x7iC/PZrhWCx7KlGxJMPcBhCXM3nn4cD1pfxagIjZ
-         mnEg==
+        bh=RI0CJJBq8KUXBhWRmxHVc6zRcB3gwN2DmCRZwDgGjR0=;
+        b=UrZNi4i5m0mQYV+2gurqXQKVcPQEK1TcTrdzFxacXRVk9GEw4r9uDbILBfRCHMjAJc
+         NVvE6jJNcXRDtCztR3Rja2U8RlH/DmYOHTZcLxyOBlO5LttAuLGv71QxP1c88U+ZKf3w
+         1lPnThdYb2d6YXfrrZFcTHjOMDAYIvbwz7Q175l5sewUHGDCPoGtQj79VvWnWpzdiBp+
+         jxFWW6oDg/XkOt3YnvhwiK9g322n5oZY57xwT+0DHB58/2mGCDiRmVCMJHX0ZfMMBSbB
+         y8NFsYhhdbiPFZvmnLaUq03IdhBNR8uyoAPmKCzemmz3DvwD+ZN7GNXXGc7xOw5ovF4r
+         Z7uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=gNs9sey591WPnXbNPiS1OcGYuvQlyk8T1glh4KMvcRM=;
-        b=dEzj7EonvEGVCCmaOMpLaUqdQPiXz7X/Zth5qGSqSzkAfZLhXD2hooKuKb0BK+N6ee
-         RDDjvBpP7bBdSxi60ug9sECZkG/swBu72lBu8JWZThlzHl1rJdJKNH63nFQlnk67OteE
-         GAyfq130d+ON1JS0GCnkH3FoKkoshvSzaSf12b2wSZB0+6WuQ4GHFs8nilqr1PBzYFFW
-         GcJZSefkz5FoSUuxLn3LnKkV17av1KqyZOh1ST9BUfJlc+x0BpKmkofaqQJKVaT09FeO
-         9Mi23a0fFZDz6G256V0Yjyw6WJtP+J681pp6sCyj0B08YGW/v/VdoLttNgS6jAMKrdtr
-         OMsw==
-X-Gm-Message-State: ACgBeo0nUhp0Ftby7VPYAAwusfScoC4CR+vnVKfGAuEKFFQdXPbC66Bu
-        GmVryW/DIEaQvtJurnkBIsVLgbiUSQnhHQ==
-X-Google-Smtp-Source: AA6agR7IsNjHqelxS6j3S91zn+3jnq5utB+yK8vXp0LUgaFtFzXde4mcTj9QgZs89AvfKxsePmfFtQ==
-X-Received: by 2002:a05:6102:5094:b0:388:6903:5f09 with SMTP id bl20-20020a056102509400b0038869035f09mr3084636vsb.46.1660364474383;
-        Fri, 12 Aug 2022 21:21:14 -0700 (PDT)
+        bh=RI0CJJBq8KUXBhWRmxHVc6zRcB3gwN2DmCRZwDgGjR0=;
+        b=wXuALHBtMCK/TuO+962rKT4maCFHOIuWiWgbmAnQ6FW7bzdYyoCJB5KZoxqTz2t4su
+         nrwAORSlQTdIiDhw4WHcslX4u1tBA4pzM0KVKUdUGSNKCFwtS5PLbzcuEEQDdOJHeGzC
+         xwnQ+GgZWquf5fixJg8GODoSHd1gY7u16REOfDJECjlG/C/arnVYTAX/YKKB17I10Kaq
+         WKG0FF9uJSlm+IVMHRFUKZqEotz/hHqYYqS8BHvmkTJQgW3YSFqqB7phLBSDyoLsVVXt
+         qJ6jZnkr54pLOSxWjSqEzZxxQbJlroF3EB3Tl3tq5DvjLbVZ9aVCd4ZeMA63B5mbVOp+
+         GZuw==
+X-Gm-Message-State: ACgBeo22vOTCr81qn+ddmqHBIBRsLAguXca/Mf6lRFWEcNV65ni8K/7J
+        HI1ws14GUGzLT4HFkFf4HkA=
+X-Google-Smtp-Source: AA6agR7DgSzX2jpz7lbIPIm2l7xQ1ilyJ/8kXZLtNoGiBDnsrO/TuMZ8C8Q8JWKkxk1V7IfhlIX2uA==
+X-Received: by 2002:a67:b84f:0:b0:388:cbb3:25af with SMTP id o15-20020a67b84f000000b00388cbb325afmr3029624vsh.52.1660364477953;
+        Fri, 12 Aug 2022 21:21:17 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14c:4c2:8202::1003])
-        by smtp.gmail.com with ESMTPSA id cz10-20020a056102290a00b0038712af0dbesm2434646vsb.22.2022.08.12.21.21.11
+        by smtp.gmail.com with ESMTPSA id cz10-20020a056102290a00b0038712af0dbesm2434646vsb.22.2022.08.12.21.21.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 21:21:13 -0700 (PDT)
+        Fri, 12 Aug 2022 21:21:17 -0700 (PDT)
 From:   Tales Aparecida <tales.aparecida@gmail.com>
 To:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
         corbet@lwn.net
@@ -57,9 +57,9 @@ Cc:     Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
         tales.aparecida@gmail.com, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] Documentation: KUnit: Fix non-uml anchor
-Date:   Sat, 13 Aug 2022 01:20:54 -0300
-Message-Id: <20220813042055.136832-4-tales.aparecida@gmail.com>
+Subject: [PATCH 4/4] Documentation: Kunit: Add ref for other kinds of tests
+Date:   Sat, 13 Aug 2022 01:20:55 -0300
+Message-Id: <20220813042055.136832-5-tales.aparecida@gmail.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220813042055.136832-1-tales.aparecida@gmail.com>
 References: <20220813042055.136832-1-tales.aparecida@gmail.com>
@@ -75,74 +75,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The section was rewritten but its anchor got left behind.
-Fix the anchor and add some references to running on QEMU.
+Add an organic link to the "other kinds of tests" in the index page
 
 Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
 ---
- Documentation/dev-tools/kunit/faq.rst         | 6 +++---
- Documentation/dev-tools/kunit/run_wrapper.rst | 2 ++
- Documentation/dev-tools/kunit/usage.rst       | 4 ++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ Documentation/dev-tools/kunit/faq.rst   | 2 ++
+ Documentation/dev-tools/kunit/index.rst | 2 ++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
-index 172e239791a8..f1b4cef68ced 100644
+index f1b4cef68ced..fae426f2634a 100644
 --- a/Documentation/dev-tools/kunit/faq.rst
 +++ b/Documentation/dev-tools/kunit/faq.rst
-@@ -31,7 +31,8 @@ For the most part, the KUnit core framework (what we use to write the tests)
- can compile to any architecture. It compiles like just another part of the
- kernel and runs when the kernel boots, or when built as a module, when the
- module is loaded.  However, there is infrastructure, like the KUnit Wrapper
--(``tools/testing/kunit/kunit.py``) that does not support other architectures.
-+(``tools/testing/kunit/kunit.py``) that might not support some architectures
-+(see :ref:`kunit-on-qemu`).
+@@ -39,6 +39,8 @@ more work than using KUnit on UML.
  
- In short, yes, you can run KUnit on other architectures, but it might require
- more work than using KUnit on UML.
-@@ -95,8 +96,7 @@ things to try.
-    seeing. When tests are built-in, they will execute when the kernel boots, and
-    modules will automatically execute associated tests when loaded. Test results
-    can be collected from ``/sys/kernel/debug/kunit/<test suite>/results``, and
--   can be parsed with ``kunit.py parse``. For more details, see "KUnit on
--   non-UML architectures" in Documentation/dev-tools/kunit/usage.rst.
-+   can be parsed with ``kunit.py parse``. For more details, see :ref:`kunit-on-qemu`.
+ For more information, see :ref:`kunit-on-non-uml`.
  
- If none of the above tricks help, you are always welcome to email any issues to
- kunit-dev@googlegroups.com.
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-index db1e867820e7..a1070def284f 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -165,6 +165,8 @@ example: if we only want to run KUnit resource tests, use:
- 
- This uses the standard glob format with wildcard characters.
- 
-+.. _kunit-on-qemu:
++.. _kinds-of-tests:
 +
- Run Tests on qemu
- =================
+ What is the difference between a unit test and other kinds of tests?
+ ====================================================================
+ Most existing tests for the Linux kernel would be categorized as an integration
+diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+index 595205348d2d..bc91ad7b8961 100644
+--- a/Documentation/dev-tools/kunit/index.rst
++++ b/Documentation/dev-tools/kunit/index.rst
+@@ -95,6 +95,8 @@ Unit Testing Advantages
+ - Improves code quality.
+ - Encourages writing testable code.
  
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 44158eecb51e..2737863ef365 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -165,6 +165,8 @@ built as a module).
- 
- For more information, see Documentation/dev-tools/kunit/api/test.rst.
- 
-+.. _kunit-on-non-uml:
++Read also :ref:`kinds-of-tests`.
 +
- Writing Tests For Other Architectures
- -------------------------------------
- 
-@@ -544,8 +546,6 @@ By reusing the same ``cases`` array from above, we can write the test as a
- 		{}
- 	};
- 
--.. _kunit-on-non-uml:
--
- Exiting Early on Failed Expectations
- ------------------------------------
+ How do I use it?
+ ================
  
 -- 
 2.37.1
