@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865B359191A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Aug 2022 09:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730C859191E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Aug 2022 09:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237447AbiHMHEM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 13 Aug 2022 03:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S237399AbiHMHEU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 13 Aug 2022 03:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiHMHEM (ORCPT
+        with ESMTP id S237787AbiHMHEQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 13 Aug 2022 03:04:12 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E349A2BB19
-        for <linux-kselftest@vger.kernel.org>; Sat, 13 Aug 2022 00:04:10 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id l7so1081849ual.9
-        for <linux-kselftest@vger.kernel.org>; Sat, 13 Aug 2022 00:04:10 -0700 (PDT)
+        Sat, 13 Aug 2022 03:04:16 -0400
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F63B2C118
+        for <linux-kselftest@vger.kernel.org>; Sat, 13 Aug 2022 00:04:15 -0700 (PDT)
+Received: by mail-ua1-x929.google.com with SMTP id b4so1075366uaw.11
+        for <linux-kselftest@vger.kernel.org>; Sat, 13 Aug 2022 00:04:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=JkpTd2lx/Y7WIS3TAJAROUSBlo87wCC8feGuimexJrU=;
-        b=iBq9V+8jyPDvnsS6vDhVT3IXGpCn1lPIa10ZJQORFgVkAh2frhQoVcDNGRB7iszfOF
-         GRMnX3drN/zleyVRCmpT0OZPLbTC8VfYjXec7/EbiceGDYpCyrvMSFxuly7VjfqojhmO
-         /QDokrp4VoObEEkYTWH4x68bDP/M6CUO2doxXY1mCqerGwJ1hkawaIKLC7OoGU+2t9Ih
-         iyi/QBRaqJFUpfu9Y0tJTpskoktlV28y2pXSu4tFpeyqXF3gUsXCoHBHqCG0x+1gKJRx
-         9NkBs8wcGENBPkV+qy5WJWhGEEASyilzGphNhtJ/U14bhWbgdfghkDynZZbbfcv3SyHc
-         BAXQ==
+        bh=n6unzkMB+igovGd/N3Lmf9qIEooFEjcH1LoCEhXEzXw=;
+        b=V6OIjJc3Hl4zd6HU1AaqlRhU3ZErFcGqkSq2Of7dfbA0NxAT5RkG1ELqCBHQUGix1f
+         1xxbDQ72KvCZJNpdlQhf2dloG2mDSTWkQeiS7mpfXpKokELCWjmVGZx2jDKHqpgpS5DN
+         j80jpxiouFHum0RhsFWD2FIlhlSUY359PJDi8JtuuuGzurW2PNTokxvbFArfjzntIlry
+         Q3QRrAGdKqlo6+13fT3EQT8w8oTU0xn1eWsshpCcWWMcMO9am/3iDCfqHJofTIbKTOWZ
+         QduUS8bUr6LUe2nLpgNDEB+Se35Vq1pFhKMCH3wDyQ5BDn7XogdxrT889L1C3/fn6hE+
+         jOOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=JkpTd2lx/Y7WIS3TAJAROUSBlo87wCC8feGuimexJrU=;
-        b=RMpqzVExEk5UvI0mlEWeagX1NcCD3p0W1dySSa672GFW3RmtvGDDxohRt4mMieHvz3
-         BAPKRJezX8ecT9fM5BlEtdllL94YtUxcchtW7LFH955xk2zqeH5DQGoncPpyJSNg15YD
-         cZB/leCI+LInnUo0IK/i0DR4/0ktJ3virfqHh3ShTHU5PVdhFIK6PLjGLlh2J20hLv+L
-         hqjGKHdoqz2usfRyuMBp+bjZFz4IGt00wQ5TNdA+97eJ1Y4VUpNlF3cAACKNg1EG05FP
-         xuktTe3J2LJ+LAmOgrSiOILYPuJho/PMIiSZc6fnaqJUYPDJqQNWsuZ1euDUeIUoUX+s
-         g45g==
-X-Gm-Message-State: ACgBeo26jzQTJMy/7NP5jDBvm21XLBHwCtR2qpmdole6bi32Xcz64Q/r
-        XCxeIP/BPUJGLnxZo1Je9iwqDV1dxfVNC369H19Pqg==
-X-Google-Smtp-Source: AA6agR41YD78B4nu4AR0tYVIBqSQG9S7hcXRV4eYHlV+7JUByAnffHbhVyk+rl8KL0U+a6vZaWfjp+MODklq+hln5L4=
-X-Received: by 2002:ab0:2359:0:b0:387:2dff:87d5 with SMTP id
- h25-20020ab02359000000b003872dff87d5mr3299629uao.104.1660374249998; Sat, 13
- Aug 2022 00:04:09 -0700 (PDT)
+        bh=n6unzkMB+igovGd/N3Lmf9qIEooFEjcH1LoCEhXEzXw=;
+        b=cplAU2WFLSWmcon7Vf6QXqPhC46shSEq2HBdmPFci1NTIVilP33haHb9A23I426tVe
+         pTOusJYrxTWFPuXMUuvmfQoIt22pH8p/jaVtok/CDMrHoH0PzNxGlM3jNRh2FrctHkwT
+         L8ggol0dcCk/clsJRPObJCmtHigyciO8F4peC1aVo4AWUkCBhNKQOOMdkgw1hEFEqrM1
+         Q4kTKSVMdf/tdhKTNxJCEh86rMphWn5hMkdn5e8ZEdTgA1wmQ12MRFEU2RQMLrd0RUuo
+         mwB/JVy0wptzS7oU4zevCfqR/ni+TXTSsjYNCpYLWwFonU2QyDiBf9tEguUntGOZBdRf
+         r37A==
+X-Gm-Message-State: ACgBeo3QAQgw0T5MpgrVOtaZD6fQ+pbhavpuXLnCJ8HVU0xKM9k+jcYV
+        8nqB9Xbr9cNVCH1EkDPKAc3Kj9xyEh27LksgTt73lA==
+X-Google-Smtp-Source: AA6agR4+TAqJvoK3QwBlLYti6Cb5uIJmUO3U8oAj5JnbIw8xpaQ3yL6xTv50X22bo5u9MoLE2qWtnPK/QnJFsKIOSkA=
+X-Received: by 2002:a05:6130:1102:b0:38c:49b4:bbc3 with SMTP id
+ ce2-20020a056130110200b0038c49b4bbc3mr3445825uab.107.1660374254393; Sat, 13
+ Aug 2022 00:04:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220813042055.136832-1-tales.aparecida@gmail.com> <20220813042055.136832-2-tales.aparecida@gmail.com>
-In-Reply-To: <20220813042055.136832-2-tales.aparecida@gmail.com>
+References: <20220813042055.136832-1-tales.aparecida@gmail.com> <20220813042055.136832-3-tales.aparecida@gmail.com>
+In-Reply-To: <20220813042055.136832-3-tales.aparecida@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 13 Aug 2022 15:03:58 +0800
-Message-ID: <CABVgOS=WKEos8XH3VAXUiUmcvABiy07jYFZN9nL95XCiARuvqw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] Documentation: kunit: fix trivial typo
+Date:   Sat, 13 Aug 2022 15:04:02 +0800
+Message-ID: <CABVgOSm5f6-tXt1uctB02UiE1Ho=rz2i4wPFoJ6vBLRaWJmtFg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] Documentation: Kunit: Fix inconsistent titles
 To:     Tales Aparecida <tales.aparecida@gmail.com>
 Cc:     Sadiya Kazi <sadiyakazi@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
@@ -65,7 +65,8 @@ Cc:     Sadiya Kazi <sadiyakazi@google.com>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a417d705e61a01a7"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -77,49 +78,125 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+--000000000000a417d705e61a01a7
+Content-Type: text/plain; charset="UTF-8"
+
 On Sat, Aug 13, 2022 at 12:21 PM Tales Aparecida
 <tales.aparecida@gmail.com> wrote:
 >
-> Missing closing block-quote
+> Use the same wording when citing and describing Kunit parts.
 >
 > Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
 > ---
 
-This is fine. A couple of minor nitpicks:
-1. A slightly more descriptive commit title would be nice (e.g. "fix
-missing quote in run_wrapper")
-2. The whole --jobs=`nproc --all` bit shouldn't be necessary anymore,
-thanks to: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ad659ccb5412874c6a89d3588cb18857c00e9d0f
-
-Neither of those seem worth sending another version out for, but may
-be worth keeping in mind in the future.
+Nice catch! This is clearer.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
-
->  Documentation/dev-tools/kunit/run_wrapper.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/dev-tools/kunit/architecture.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-> index cce203138fb7..db1e867820e7 100644
-> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
-> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-> @@ -30,7 +30,7 @@ We may want to use the following options:
+> diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation/dev-tools/kunit/architecture.rst
+> index cf9e6e3eeae4..8efe792bdcb9 100644
+> --- a/Documentation/dev-tools/kunit/architecture.rst
+> +++ b/Documentation/dev-tools/kunit/architecture.rst
+> @@ -6,8 +6,8 @@ KUnit Architecture
 >
->  .. code-block::
+>  The KUnit architecture can be divided into two parts:
 >
-> -       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all
-> +       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=`nproc --all`
+> -- Kernel testing library
+> -- kunit_tool (Command line test harness)
+> +- `In-Kernel Testing Framework`_
+> +- `kunit_tool (Command Line Test Harness)`_
 >
->  - ``--timeout`` sets a maximum amount of time for tests to run.
->  - ``--jobs`` sets the number of threads to build the kernel.
+>  In-Kernel Testing Framework
+>  ===========================
 > --
 > 2.37.1
 >
 > --
 > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220813042055.136832-2-tales.aparecida%40gmail.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220813042055.136832-3-tales.aparecida%40gmail.com.
+
+--000000000000a417d705e61a01a7
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
+bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
+TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
+TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
+CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
+El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
+A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
+MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
+MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
+MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
+BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
+Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
+l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
+pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
+6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
++w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
+BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
+S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
+bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
+ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
+q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
+hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGH0uAg+eV8wUdHQOJ7
+yfswDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
+c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjA2MjAw
+MjAzNTNaFw0yMjEyMTcwMjAzNTNaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
+b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv9aO5pJtu5ZPHSb99iASzp2mcnJtk
+JIh8xsJ+fNj9OOm0B7Rbg2l0+F4c19b1DyIzz/DHXIX9Gc55kfd4TBzhITOJmB+WdbaWS8Lnr9gu
+SVO8OISymO6uVA0Lmkfne3zV0TwRtFkEeff0+P+MqdaLutOmOcLQRp8eAzb/TNKToSROBYmBRcuA
+hDOMCVZZozIJ7T4nHBjfOrR+nJ4mjBIDRnDucs4dazypyiYiHYLfedCxp8vldywHMsTxl59Ue9Yk
+RVewDw3HWvWUIMbc+Y636UXdUn4axP1TXN0khUpexMoc5qCHxpBIE/AyeS4WPASlE8uVY9Qg8dT6
+kJmeOT+ZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
+DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFDyAvtuc
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBs
+lMRwPKCgIdNQIiLjnvSYCJa+QYaXxEvRy1tEQjjb/jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MTMwNzA0MTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAVCq2gNJKOOZ9uppE+uhv
+JHaziRd57JqRrGoPNJNZmz5GP8oMn7xoqGTrqjRWvBZyIKjzW8WY+mcozO+S+1Jlub7UxLjYv7fF
+UXjL9peVp3Jc6EKJiQfZjR0+ajHyUN7XRiBwwe+t6lYDwHsWj8rpJilwCRYybfJE+tJlhqd0Q8wM
+WHlaBs0oCfVXuVgaCcC3W4zM6L22+FSIiNzRACrgpzXl+XwBC7W4FOkYNpNZYtnViMJt9N9AFecu
+R4FimC9QFEUT1Un9TF7itVk/1/Au/0iyn3Ao1Yfyd/NohZFiZL2ig0NiQwH5zEmYw0dxodquEIG0
+UzmvemfIZuuij7N7cg==
+--000000000000a417d705e61a01a7--
