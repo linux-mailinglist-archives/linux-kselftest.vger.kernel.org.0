@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43D6591B5E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Aug 2022 17:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34762591BCA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Aug 2022 17:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239475AbiHMP1N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 13 Aug 2022 11:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S239828AbiHMP6L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 13 Aug 2022 11:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbiHMP1M (ORCPT
+        with ESMTP id S239594AbiHMP6K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 13 Aug 2022 11:27:12 -0400
+        Sat, 13 Aug 2022 11:58:10 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D78186D7;
-        Sat, 13 Aug 2022 08:27:08 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1660404405ts23mexm
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9BBA458;
+        Sat, 13 Aug 2022 08:58:05 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1660406280t1mc0nal
 Received: from localhost.localdomain ( [110.188.55.240])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 13 Aug 2022 23:26:36 +0800 (CST)
+        id ; Sat, 13 Aug 2022 23:57:52 +0800 (CST)
 X-QQ-SSF: 0100000000200080H000B00A0000020
-X-QQ-FEAT: LE7C6P2vL8RBQc0pNvlq+InLMsfwEzbGkHDriDjF08MA10MxdJf/+1ydnBF/g
-        kfNOJ8w/wjDVnNE5Kk+tfTedy5jsCDqmEMF2+G2GSopK87Ak5QQ3sE8VegSfJenw2vT+Gxx
-        6XQtuSQ8aogq9nt6WyWupdDUWQzrPiQAmZkFJefmYQ9WpGv2MilxKb2oIzAmpUEWCBHbVod
-        l6Monz++jCFveqRJgpAm/T2YxRvG+wacwBoGxqoGdDVDKYvK8dlxFyaaCk02NyaeG8lB/8R
-        ynHJMf5EGPkDTtD+aK2SCqIZZJW30+BOU3L+ZybkmgZUM3pPePQYA48wZLzJbKvuJ+2VThP
-        BsoWRb2PBizdC9FrffXyyyf+5OGs5ytC8Cp4UbRdxEiyZbwSNN2gPmGqzsWTA==
+X-QQ-FEAT: +ynUkgUhZJkha1rBwRz8Vc/0uJx1dDkEumqKrXgbOOaB1epQK1/6DQ645CptU
+        XloZA27Q5CnEwCT7krJab/TVRcXbsm+u80jxqan9mEqkTM3egKZkWex9Bjq9UmrEO4gT2W+
+        hsGrBfK0CzkQ8dB4qjQPl9BIPxmRxmSfnFGAtiDH7rb5ECUx+nAMmD1iIVsF9nS0wVJ9HKH
+        VfHKIR6xtOibKwblyFI6ib2ENaWCgZQsmABaaNRoUTwicmfUj3vKsPI52Vb1s8kb6WEJRJ5
+        lunXRHX6Hy3Mo7Vl0usIVVBYqXl8RZCNDbEX/WilHvnruXKP7umJHNeG2yPa2ucC4/NMcJn
+        56h7I3I9wJDwZcaDmpYZ89nrukXBSME5grCAzrxgA0QKPoKbnL9VpYuCue3hw==
 X-QQ-GoodBg: 0
 From:   min tang <tangmin@cdjrlc.com>
 To:     shuah@kernel.org
-Cc:     jstultz@google.com, tglx@linutronix.de, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         min tang <tangmin@cdjrlc.com>
-Subject: [PATCH] selftests/timers: Unneeded semicolon
-Date:   Sat, 13 Aug 2022 23:26:24 +0800
-Message-Id: <20220813152624.4478-1-tangmin@cdjrlc.com>
+Subject: [PATCH] KVM: Unneeded semicolon
+Date:   Sat, 13 Aug 2022 23:57:40 +0800
+Message-Id: <20220813155740.5359-1-tangmin@cdjrlc.com>
 X-Mailer: git-send-email 2.17.1
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
@@ -47,26 +47,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is no semicolon after '}' in line 75.
+There is no semicolon after '}' in line 232.
 
 Signed-off-by: min tang <tangmin@cdjrlc.com>
 ---
- tools/testing/selftests/timers/nsleep-lat.c | 2 +-
+ tools/testing/selftests/kvm/access_tracking_perf_test.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/timers/nsleep-lat.c b/tools/testing/selftests/timers/nsleep-lat.c
-index eb3e79ed7b4a..a7ca9825e106 100644
---- a/tools/testing/selftests/timers/nsleep-lat.c
-+++ b/tools/testing/selftests/timers/nsleep-lat.c
-@@ -72,7 +72,7 @@ char *clockstring(int clockid)
- 		return "CLOCK_BOOTTIME_ALARM";
- 	case CLOCK_TAI:
- 		return "CLOCK_TAI";
--	};
-+	}
- 	return "UNKNOWN_CLOCKID";
- }
+diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+index d8909032317a..c9c20d942beb 100644
+--- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
++++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+@@ -230,7 +230,7 @@ static void vcpu_thread_main(struct perf_test_vcpu_args *vcpu_args)
+ 		case ITERATION_MARK_IDLE:
+ 			mark_vcpu_memory_idle(vm, vcpu_id);
+ 			break;
+-		};
++		}
  
+ 		vcpu_last_completed_iteration[vcpu_id] = current_iteration;
+ 	}
 -- 
 2.17.1
 
