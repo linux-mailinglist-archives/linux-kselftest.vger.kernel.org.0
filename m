@@ -2,103 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE0B592305
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Aug 2022 17:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A81592368
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Aug 2022 18:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241997AbiHNPwq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Aug 2022 11:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S240862AbiHNQVN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Aug 2022 12:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241912AbiHNPuj (ORCPT
+        with ESMTP id S241079AbiHNQUp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Aug 2022 11:50:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2C71CFC0;
-        Sun, 14 Aug 2022 08:36:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9180DB80B27;
-        Sun, 14 Aug 2022 15:36:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BFDEC433C1;
-        Sun, 14 Aug 2022 15:35:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660491359;
-        bh=dw9NfNEJ5qccYg24V+CXWiMF5Lo5klkFrzq5j7gswkY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LZwMD50g+ebCmrygnuzFBDn62JAmqyQLtdRzIgtmiZ+eSws/Te1v89Y9F3AnKBRw1
-         Yn5TXFCI3HVc8GYgvnUFji4Ql3GaNmGobP7wDs3KsOVX19HxHHdo5icUuSz/6H3hBo
-         UVpx7ovzoCqzn39TtclM+OgvYSe8zBCuJbvmYL++xcKmNQAO9Wisl7XUeyPMlatvAC
-         H09FSvItf2O5EtYK9uLiBwjKBtR92oLOzdqffeTPdDr730OOntvONLzs6MjufhpqZt
-         YkWxRFmuia8TLw9YTrjsdUsi176xcUAiDiKtk3jMrpvFO0koVw9mtzL+KVOHg507H8
-         A6tQ8Qw9tkxJA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>, mingo@redhat.com,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 15/21] selftests/kprobe: Do not test for GRP/ without event failures
-Date:   Sun, 14 Aug 2022 11:35:25 -0400
-Message-Id: <20220814153531.2379705-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814153531.2379705-1-sashal@kernel.org>
-References: <20220814153531.2379705-1-sashal@kernel.org>
+        Sun, 14 Aug 2022 12:20:45 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455D7F35;
+        Sun, 14 Aug 2022 09:09:29 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id A8678F8A; Sun, 14 Aug 2022 10:55:08 -0500 (CDT)
+Date:   Sun, 14 Aug 2022 10:55:08 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+Message-ID: <20220814155508.GA7991@mail.hallyn.com>
+References: <20220801180146.1157914-1-fred@cloudflare.com>
+ <87les7cq03.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+ <87wnbia7jh.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Mon, Aug 08, 2022 at 03:16:16PM -0400, Paul Moore wrote:
+> On Mon, Aug 8, 2022 at 2:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > Paul Moore <paul@paul-moore.com> writes:
+> > > On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > >> Frederick Lawler <fred@cloudflare.com> writes:
+> > >>
+> > >> > While creating a LSM BPF MAC policy to block user namespace creation, we
+> > >> > used the LSM cred_prepare hook because that is the closest hook to prevent
+> > >> > a call to create_user_ns().
+> > >>
+> > >> Re-nack for all of the same reasons.
+> > >> AKA This can only break the users of the user namespace.
+> > >>
+> > >> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> > >>
+> > >> You aren't fixing what your problem you are papering over it by denying
+> > >> access to the user namespace.
+> > >>
+> > >> Nack Nack Nack.
+> > >>
+> > >> Stop.
+> > >>
+> > >> Go back to the drawing board.
+> > >>
+> > >> Do not pass go.
+> > >>
+> > >> Do not collect $200.
+> > >
+> > > If you want us to take your comments seriously Eric, you need to
+> > > provide the list with some constructive feedback that would allow
+> > > Frederick to move forward with a solution to the use case that has
+> > > been proposed.  You response above may be many things, but it is
+> > > certainly not that.
+> >
+> > I did provide constructive feedback.  My feedback to his problem
+> > was to address the real problem of bugs in the kernel.
+> 
+> We've heard from several people who have use cases which require
+> adding LSM-level access controls and observability to user namespace
+> creation.  This is the problem we are trying to solve here; if you do
+> not like the approach proposed in this patchset please suggest another
+> implementation that allows LSMs visibility into user namespace
+> creation.
 
-[ Upstream commit f5eab65ff2b76449286d18efc7fee3e0b72f7d9b ]
+Regarding the observability - can someone concisely lay out why just
+auditing userns creation would not suffice?  Userspace could decide
+what to report based on whether the creating user_ns == /proc/1/ns/user...
 
-A new feature is added where kprobes (and other probes) do not need to
-explicitly state the event name when creating a probe. The event name will
-come from what is being attached.
-
-That is:
-
-  # echo 'p:foo/ vfs_read' > kprobe_events
-
-Will no longer error, but instead create an event:
-
-  # cat kprobe_events
- p:foo/p_vfs_read_0 vfs_read
-
-This should not be tested as an error case anymore. Remove it from the
-selftest as now this feature "breaks" the selftest as it no longer fails
-as expected.
-
-Link: https://lore.kernel.org/all/1656296348-16111-1-git-send-email-quic_linyyuan@quicinc.com/
-Link: https://lkml.kernel.org/r/20220712161707.6dc08a14@gandalf.local.home
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc       | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index ef1e9bafb098..728c2762ee58 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -24,7 +24,6 @@ check_error 'p:^/bar vfs_read'		# NO_GROUP_NAME
- check_error 'p:^12345678901234567890123456789012345678901234567890123456789012345/bar vfs_read'	# GROUP_TOO_LONG
- 
- check_error 'p:^foo.1/bar vfs_read'	# BAD_GROUP_NAME
--check_error 'p:foo/^ vfs_read'		# NO_EVENT_NAME
- check_error 'p:foo/^12345678901234567890123456789012345678901234567890123456789012345 vfs_read'	# EVENT_TOO_LONG
- check_error 'p:foo/^bar.1 vfs_read'	# BAD_EVENT_NAME
- 
--- 
-2.35.1
-
+Regarding limiting the tweaking of otherwise-privileged code by
+unprivileged users, i wonder whether we could instead add smarts to
+ns_capable().  Point being, uid mapping would still work, but we'd
+break the "privileged against resources you own" part of user
+namespaces.  I would want it to default to allow, but then when a
+0-day is found which requires reaching ns_capable() code, admins 
+could easily prevent exploitation until reboot from a fixed kernel.
