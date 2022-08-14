@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808B4592100
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Aug 2022 17:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCFB5921B9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Aug 2022 17:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240595AbiHNPcw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Aug 2022 11:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S241099AbiHNPjT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Aug 2022 11:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240596AbiHNPcF (ORCPT
+        with ESMTP id S240943AbiHNPhR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Aug 2022 11:32:05 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF2A1ADB8;
-        Sun, 14 Aug 2022 08:29:56 -0700 (PDT)
+        Sun, 14 Aug 2022 11:37:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C9320BEE;
+        Sun, 14 Aug 2022 08:32:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 316F8CE0B69;
-        Sun, 14 Aug 2022 15:29:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BACC433D6;
-        Sun, 14 Aug 2022 15:29:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FD6EB80B27;
+        Sun, 14 Aug 2022 15:32:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58795C433D6;
+        Sun, 14 Aug 2022 15:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660490992;
+        s=k20201202; t=1660491141;
         bh=2F6ETMZsAJ9BEr8L3pUMUUvrKg/3pNm/yewanihTYIE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BXPOKN4PYlcN2AKnnjrgfK+2I77Iv0iKIWvczHA7sE7kfm+j6351tgBpkTAZZkZNV
-         KXs4JGkOGNfSzVsJhV/q65K55Of+gmq56j7+Rz3KFoYaBvRzBYMyRSlXg5mLmZnt+8
-         xIkXDzwXhEx7mFAhONexClzF98yE3EOKTUQ/U1zB/y7Ng0vMMlGmH3ZOx9t7Wo6TW6
-         ftlRcFqihGP2pyXnNj/D1DhHXh7q18D6yPlmO3zttPgjDa/N5s1H7o7KVsfRjqdG4J
-         aI4EGxpSQ3UTqUC81mEgS1Cn7GK0MSFemlBKr2xVAE+5r5ZaWr6cNnfAMW7fkYQzLR
-         Rt9dXYGIUK1ag==
+        b=rJiyHNVCa1QKmFXs36rGoD0Na9Hxp5RgidT+YtCw1YfLVceIQrviH7rtK5/JNGzkq
+         c4DoEDkDUp2sQvE4U1R/6e5ALNeZ8ZS2ZXKTTuggbCD0KL3YUcAWZVkHDDZk3dJlHN
+         KlYppQSFRj6iu2OVJJLbGzYAOYmES7IRFUnAo8xNdOHB5EqEDxeI0ocv7wMOVD26Uy
+         5Gztl9vQhke7/AcZwn+bgqsR+bimgjTZCn2RzlQAqV3cbGu8OZkppVH1YpUWgNyuIw
+         n7rmFFodWk0BRAiTrWGzhLqToeU1DpLWmW+tzwbKLHhLUAWFKQdnB42ZrGzFrtzKSS
+         rOZxwEwr5FK4A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>, mingo@redhat.com,
         shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 50/64] selftests/kprobe: Do not test for GRP/ without event failures
-Date:   Sun, 14 Aug 2022 11:24:23 -0400
-Message-Id: <20220814152437.2374207-50-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 44/56] selftests/kprobe: Do not test for GRP/ without event failures
+Date:   Sun, 14 Aug 2022 11:30:14 -0400
+Message-Id: <20220814153026.2377377-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814152437.2374207-1-sashal@kernel.org>
-References: <20220814152437.2374207-1-sashal@kernel.org>
+In-Reply-To: <20220814153026.2377377-1-sashal@kernel.org>
+References: <20220814153026.2377377-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
