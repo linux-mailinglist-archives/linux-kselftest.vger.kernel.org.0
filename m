@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A045922A6
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Aug 2022 17:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE0B592305
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Aug 2022 17:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241189AbiHNPtZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Aug 2022 11:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
+        id S241997AbiHNPwq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Aug 2022 11:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241202AbiHNPrJ (ORCPT
+        with ESMTP id S241912AbiHNPuj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Aug 2022 11:47:09 -0400
+        Sun, 14 Aug 2022 11:50:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD741B7FB;
-        Sun, 14 Aug 2022 08:35:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2C71CFC0;
+        Sun, 14 Aug 2022 08:36:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAD8CB80B77;
-        Sun, 14 Aug 2022 15:35:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7BEAC433D6;
-        Sun, 14 Aug 2022 15:35:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9180DB80B27;
+        Sun, 14 Aug 2022 15:36:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BFDEC433C1;
+        Sun, 14 Aug 2022 15:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660491319;
-        bh=2F6ETMZsAJ9BEr8L3pUMUUvrKg/3pNm/yewanihTYIE=;
+        s=k20201202; t=1660491359;
+        bh=dw9NfNEJ5qccYg24V+CXWiMF5Lo5klkFrzq5j7gswkY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pN5ZyUEP6tEORwd8uh9BXxE2j8PrV0y8NJbRtBU5XDjyycEMNMB4WIlQ7xEsNQ3o6
-         HtDgcfqxRmfkpwrZT5dcYnzL9YEwuxOm2z20dg5PlNAfhoaHwEVePt1bgbNWmARg41
-         tjZdJYWM4Upowqcx3ieeo+F9d4CX9b5B+ZjkYlDFb489CJqbzUtvS8eaYn39jgVvBx
-         2qUS89q1mAzOpT1Cm+9VSorHVmIjupAP38kmmPn65uXTOwjlGxeZyaPev77fSfw16l
-         dRkWnSWpp3h9Jz8HECuUeGlc8v47TnNApGMjq/yFnTVRxP89Ojek/cTeQx6X/jA5Ly
-         Y9X2oQ+di90XQ==
+        b=LZwMD50g+ebCmrygnuzFBDn62JAmqyQLtdRzIgtmiZ+eSws/Te1v89Y9F3AnKBRw1
+         Yn5TXFCI3HVc8GYgvnUFji4Ql3GaNmGobP7wDs3KsOVX19HxHHdo5icUuSz/6H3hBo
+         UVpx7ovzoCqzn39TtclM+OgvYSe8zBCuJbvmYL++xcKmNQAO9Wisl7XUeyPMlatvAC
+         H09FSvItf2O5EtYK9uLiBwjKBtR92oLOzdqffeTPdDr730OOntvONLzs6MjufhpqZt
+         YkWxRFmuia8TLw9YTrjsdUsi176xcUAiDiKtk3jMrpvFO0koVw9mtzL+KVOHg507H8
+         A6tQ8Qw9tkxJA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>, mingo@redhat.com,
         shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 24/31] selftests/kprobe: Do not test for GRP/ without event failures
-Date:   Sun, 14 Aug 2022 11:34:24 -0400
-Message-Id: <20220814153431.2379231-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 15/21] selftests/kprobe: Do not test for GRP/ without event failures
+Date:   Sun, 14 Aug 2022 11:35:25 -0400
+Message-Id: <20220814153531.2379705-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814153431.2379231-1-sashal@kernel.org>
-References: <20220814153431.2379231-1-sashal@kernel.org>
+In-Reply-To: <20220814153531.2379705-1-sashal@kernel.org>
+References: <20220814153531.2379705-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 deletion(-)
 
 diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-index fa928b431555..7c02509c71d0 100644
+index ef1e9bafb098..728c2762ee58 100644
 --- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
 +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_syntax_errors.tc
-@@ -21,7 +21,6 @@ check_error 'p:^/bar vfs_read'		# NO_GROUP_NAME
+@@ -24,7 +24,6 @@ check_error 'p:^/bar vfs_read'		# NO_GROUP_NAME
  check_error 'p:^12345678901234567890123456789012345678901234567890123456789012345/bar vfs_read'	# GROUP_TOO_LONG
  
  check_error 'p:^foo.1/bar vfs_read'	# BAD_GROUP_NAME
