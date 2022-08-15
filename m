@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B864592F54
+	by mail.lfdr.de (Postfix) with ESMTP id 42F49592F53
 	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 15:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiHONDv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Aug 2022 09:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S232355AbiHONDy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Aug 2022 09:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232336AbiHONDu (ORCPT
+        with ESMTP id S232399AbiHONDx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:03:50 -0400
+        Mon, 15 Aug 2022 09:03:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C9D13E9D
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 06:03:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C18713F1E
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 06:03:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44411B80D2B
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 13:03:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69378C43470;
-        Mon, 15 Aug 2022 13:03:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DE79B80DBE
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 13:03:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E91C433C1;
+        Mon, 15 Aug 2022 13:03:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660568627;
-        bh=2Si0x5Wt8X911XbNVwx9q2J5SXvI/CwwHwm3xOjswWI=;
+        s=k20201202; t=1660568629;
+        bh=kNdHaT/qXo9Kq6Jc4eiXI0BUtp2IIIBIqz43Sl64nEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mdTQ43NgSaVvH6bY3z2XQla0O+3FLlmPY6n6/Qzs9XZZVLUUSgJrERYz2CbUhXy9L
-         xQkq4Q3DtMwTP3wYo9F6WrVvlNoDIK8ZeB8CvTsGzpTgNZzOf+8mX2vgmiG6DOrrE2
-         WRuwfTRCu1Fd2a9ySKG72e7onjVbEI3jYwyVNNnBmdHGDF5r/7S0krn7GW89vHqO6q
-         AnOy7o2v1WTHk63s+fuCe8QCYd4OZrlo3zC9yyF29Q5lPL72X8q1StsuuXAHXGzbD/
-         qsmUeHcgI744o2aj8w7/WUrlqr4pCN89mli7F/MagcyoFvT2A6UE1y52Ms4jQYsGPq
-         IRD21hpmLCt5g==
+        b=PPxJiV/qqyhw9KSXL+PxrwYtEdsihmluKqsJeuPUzyzOAd25OzEYHJLMFNL9ys/N/
+         aETHOq8+33plC17/bkzzA3UrFXBkl0kC8kN+Lf8+iA0o34eUJZC4DPWyX/NDPHT6bX
+         v3Gda9hAJM7DziX8T5/zOvqyTYYEWUIrxQzSZSu0/jtGJmae8Wc8r4aAqJzeG+PH07
+         +LA0J+XMMNfgxLMVA9O991fKeJ8q3124JMom7zQfJR0cDm7XAzaj0Fk4M5GMthEJGm
+         GU01w+x3v7ym8h6FTEuF5LdOJ+QgXduuvMbLNNGdpRLSGpx4lYzA86yt9Wkv9uycvC
+         SRpmosPF4YnBA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 2/4] kselftest/arm64: Count SIGUSR2 deliveries in FP stress tests
-Date:   Mon, 15 Aug 2022 14:02:00 +0100
-Message-Id: <20220815130202.204725-3-broonie@kernel.org>
+Subject: [PATCH v1 3/4] kselftest/arm64: Install signal handlers before output in FP stress tests
+Date:   Mon, 15 Aug 2022 14:02:01 +0100
+Message-Id: <20220815130202.204725-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220815130202.204725-1-broonie@kernel.org>
 References: <20220815130202.204725-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3816; i=broonie@kernel.org; h=from:subject; bh=2Si0x5Wt8X911XbNVwx9q2J5SXvI/CwwHwm3xOjswWI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi+kPInn+GZTzehYWYbpnfF1/guI9H2jGyssDUk+4Z ffBe6jGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYvpDyAAKCRAk1otyXVSH0JQ3B/ 47NrUNfZIMRqlr4f/lpSDCcdhux4LiULW/Nz21Rqs3B73D9jvXWQo3jK0P+TCtDxf4gDNWa2An9UPx GnkQdqTSfk0L2VRUvEgBflsw9f1BJ4QMmgKQvhyBUbeLjcqvjNSH2A3wlCZnkkCaiADwYL2nAZGuNB sPfE5KAp82ggZ1nzeC9w8z5Iw2/E3V9T5GFkpj85WsVO7VWRzlN+qvhJrL3GX8K05XQF7P6Vnile9w XLQUH7cVP9zO4XJeM5ElUrZ2OQ7RPKdixr7yA3AWfR8/5neswJp6CruLsD8sd0TCnf+nXtOT5eUCnv MeVh2safEw/4wGETfWxYYP73e2V3rc
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4901; i=broonie@kernel.org; h=from:subject; bh=kNdHaT/qXo9Kq6Jc4eiXI0BUtp2IIIBIqz43Sl64nEs=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi+kPJQi1NRIvlvkjpPxaq0uvNtOfGYvSkbW0u6zLK Ry5YQ6mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYvpDyQAKCRAk1otyXVSH0MTgB/ wP/j7QroSJw8QwgInMAiq8evLha53kC78RbtCYO+8SqngPSEmRwpvgzY9+lo7OplbUKZWuKuaIP6/5 nEvuFZaq/eYCKvBhjrtYKnETwUKs4bhUp8ouE81rgNrdORv8tMow9wyQNKVPytORgYgA2WPp6/FacB l9xYm5XxNOkxKpLHi4a5koZMCV88G23ldSoMhvHoFMzBpM+SgHI6DSd+ugh7D+GgT254T5EsEpb0/E YSL2Y/bQ4fO6x5dMHBzVifx6YodWOS/1hMiuYpGgKSOxlLWI1OErXD6ViA4J1CxEqOkgMhl13BQrJv m0dC2Jvs4jphq/2w9IWP5goj6mbpn3
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,91 +58,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the floating point stress tests mostly support testing that the
-data they are checking can be disrupted from a signal handler triggered by
-SIGUSR1. This is not properly implemented for all the tests and in testing
-is frequently modified to just handle the signal without corrupting data in
-order to ensure that signal handling does not corrupt data. Directly support
-this usage by installing a SIGUSR2 handler which simply counts the signal
-delivery.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
+To interface more robustly with other processes install the signal handers
+in the floating point stress tests before we produce any output, this
+means that a parent process can know that if it has seen any output from
+the test then the test is ready to handle incoming signals.
 ---
- tools/testing/selftests/arm64/fp/asm-offsets.h |  1 +
- tools/testing/selftests/arm64/fp/fpsimd-test.S | 15 +++++++++++++++
- tools/testing/selftests/arm64/fp/sve-test.S    | 15 +++++++++++++++
- tools/testing/selftests/arm64/fp/za-test.S     | 15 +++++++++++++++
- 4 files changed, 46 insertions(+)
+ .../testing/selftests/arm64/fp/fpsimd-test.S  | 48 +++++++++----------
+ tools/testing/selftests/arm64/fp/sve-test.S   | 48 +++++++++----------
+ tools/testing/selftests/arm64/fp/za-test.S    | 48 +++++++++----------
+ 3 files changed, 72 insertions(+), 72 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/asm-offsets.h b/tools/testing/selftests/arm64/fp/asm-offsets.h
-index a180851496ec..757b2fd75dd7 100644
---- a/tools/testing/selftests/arm64/fp/asm-offsets.h
-+++ b/tools/testing/selftests/arm64/fp/asm-offsets.h
-@@ -3,6 +3,7 @@
- #define sa_handler 0
- #define sa_mask_sz 8
- #define SIGUSR1 10
-+#define SIGUSR2 12
- #define SIGTERM 15
- #define SIGINT 2
- #define SIGABRT 6
 diff --git a/tools/testing/selftests/arm64/fp/fpsimd-test.S b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-index e21e8ea52c7e..f0f92192351a 100644
+index f0f92192351a..918d04885a33 100644
 --- a/tools/testing/selftests/arm64/fp/fpsimd-test.S
 +++ b/tools/testing/selftests/arm64/fp/fpsimd-test.S
-@@ -151,6 +151,15 @@ function irritator_handler
- 	ret
- endfunction
- 
-+function tickle_handler
-+	// Increment the signal count (x23):
-+	ldr	x0, [x2, #ucontext_regs + 8 * 23]
-+	add	x0, x0, #1
-+	str	x0, [x2, #ucontext_regs + 8 * 23]
+@@ -216,6 +216,30 @@ endfunction
+ .globl _start
+ function _start
+ _start:
++	mov	x23, #0		// signal count
 +
-+	ret
-+endfunction
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
 +
- function terminate_handler
- 	mov	w21, w0
- 	mov	x20, x2
-@@ -255,6 +264,12 @@ _start:
- 	orr	w2, w2, #SA_NODEFER
- 	bl	setsignal
- 
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
 +	mov	w0, #SIGUSR2
 +	adr	x1, tickle_handler
 +	mov	w2, #SA_SIGINFO
 +	orr	w2, w2, #SA_NODEFER
 +	bl	setsignal
 +
+ 	// Sanity-check and report the vector length
+ 
+ 	mov	x19, #128
+@@ -246,30 +270,6 @@ _start:
+ 	mov	x0, x20
+ 	bl	putdecn
+ 
+-	mov	x23, #0		// Irritation signal count
+-
+-	mov	w0, #SIGINT
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGTERM
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR1
+-	adr	x1, irritator_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR2
+-	adr	x1, tickle_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
  	mov	x22, #0		// generation number, increments per iteration
  .Ltest_loop:
  
 diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index 589264231a2d..79c56e6c5b23 100644
+index 79c56e6c5b23..2a18cb4c528c 100644
 --- a/tools/testing/selftests/arm64/fp/sve-test.S
 +++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -314,6 +314,15 @@ function irritator_handler
- 	ret
- endfunction
- 
-+function tickle_handler
-+	// Increment the signal count (x23):
-+	ldr	x0, [x2, #ucontext_regs + 8 * 23]
-+	add	x0, x0, #1
-+	str	x0, [x2, #ucontext_regs + 8 * 23]
+@@ -379,6 +379,30 @@ endfunction
+ .globl _start
+ function _start
+ _start:
++	mov	x23, #0		// Irritation signal count
 +
-+	ret
-+endfunction
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
 +
- function terminate_handler
- 	mov	w21, w0
- 	mov	x20, x2
-@@ -423,6 +432,12 @@ _start:
- 	orr	w2, w2, #SA_NODEFER
- 	bl	setsignal
- 
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
 +	mov	w0, #SIGUSR2
 +	adr	x1, tickle_handler
 +	mov	w2, #SA_SIGINFO
@@ -150,38 +167,102 @@ index 589264231a2d..79c56e6c5b23 100644
 +	bl	setsignal
 +
  #ifdef SSVE
+ 	puts	"Streaming mode "
+ 	smstart_sm
+@@ -414,30 +438,6 @@ _start:
+ 	mov	x0, x20
+ 	bl	putdecn
+ 
+-	mov	x23, #0		// Irritation signal count
+-
+-	mov	w0, #SIGINT
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGTERM
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR1
+-	adr	x1, irritator_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR2
+-	adr	x1, tickle_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+ #ifdef SSVE
  	smstart_sm		// syscalls will have exited streaming mode
  #endif
 diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
-index 2dd358f9edf2..901839107205 100644
+index 901839107205..53c54af65704 100644
 --- a/tools/testing/selftests/arm64/fp/za-test.S
 +++ b/tools/testing/selftests/arm64/fp/za-test.S
-@@ -167,6 +167,15 @@ function irritator_handler
- 	ret
- endfunction
- 
-+function tickle_handler
-+	// Increment the signal count (x23):
-+	ldr	x0, [x2, #ucontext_regs + 8 * 23]
-+	add	x0, x0, #1
-+	str	x0, [x2, #ucontext_regs + 8 * 23]
+@@ -232,6 +232,30 @@ endfunction
+ .globl _start
+ function _start
+ _start:
++	mov	x23, #0		// signal count
 +
-+	ret
-+endfunction
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
 +
- function terminate_handler
- 	mov	w21, w0
- 	mov	x20, x2
-@@ -273,6 +282,12 @@ _start:
- 	orr	w2, w2, #SA_NODEFER
- 	bl	setsignal
- 
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
 +	mov	w0, #SIGUSR2
 +	adr	x1, tickle_handler
 +	mov	w2, #SA_SIGINFO
 +	orr	w2, w2, #SA_NODEFER
 +	bl	setsignal
 +
+ 	puts	"Streaming mode "
+ 	smstart_za
+ 
+@@ -264,30 +288,6 @@ _start:
+ 	mov	x0, x20
+ 	bl	putdecn
+ 
+-	mov	x23, #0		// Irritation signal count
+-
+-	mov	w0, #SIGINT
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGTERM
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR1
+-	adr	x1, irritator_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR2
+-	adr	x1, tickle_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
  	mov	x22, #0		// generation number, increments per iteration
  .Ltest_loop:
  	rdsvl	0, 8
