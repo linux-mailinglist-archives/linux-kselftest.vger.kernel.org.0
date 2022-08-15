@@ -2,145 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A9B5932C6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 18:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8895932E2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 18:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiHOQKv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Aug 2022 12:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
+        id S231871AbiHOQUs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Aug 2022 12:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiHOQKm (ORCPT
+        with ESMTP id S232490AbiHOQUl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:10:42 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6D52AFC;
-        Mon, 15 Aug 2022 09:10:41 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNcfR-000Fjv-ND; Mon, 15 Aug 2022 18:10:17 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oNcfR-00074J-23; Mon, 15 Aug 2022 18:10:17 +0200
-Subject: Re: [PATCH v11 0/9] bpf: Add kfuncs for PKCS#7 signature verification
-To:     Roberto Sassu <roberto.sassu@huawei.com>, ast@kernel.org,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        mykolal@fb.com, corbet@lwn.net, dhowells@redhat.com,
-        jarkko@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220812101902.2846182-1-roberto.sassu@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <14032690-e7a9-9d14-1ec1-14dd3503037c@iogearbox.net>
-Date:   Mon, 15 Aug 2022 18:10:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 15 Aug 2022 12:20:41 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA3515FC0
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 09:20:36 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-10ea9ef5838so8667735fac.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 09:20:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=BSoTNICrMj7u/TGLx7cm1e33DdNye1p3mIhcbsI607s=;
+        b=KInnq098LCWs5kg+cX63AWfFPPNfgicW4dz+z/PeD/+DN4q0G1c4WxPhxdS0HovuP6
+         Gw20+HN0SO+KQ+dpOPTgZ40IlusbkswAnwxW4ppuftQgEHziJp1APc6lf78h5nLctEqK
+         jJBxZ2sv/gFyKvOO4233k+8J81NsYuEOlODUQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=BSoTNICrMj7u/TGLx7cm1e33DdNye1p3mIhcbsI607s=;
+        b=TFaHJdOtwpW2sYrJnJM5rcclGzOoPk4EQv38C7qbUzwrisowzDqXPSTwF0OZvhM1bo
+         Bb7dH/y6tde1YFd8qf2ANEt8jnBQaNEAfSseGFiR/tL4y34ElURfGXVMHSqIqH1+rieH
+         ZA6lSGjWZvWspum8vBO3ShOrlZoEARcZJ/Z/qAwjfQubkPadWSUUu1cfwPERDZ9PPBgN
+         kwr6tJqz11g5o+spygtx/O7Bd7EiwNdAooegf3Hswhaan8/bx7pinqEeL6FVbFWcOR7b
+         jord4oSy6z188YsLPQNWLWE+ZCpEs+Or4Vd2LCc1Cv3J3iF6/gqTG1A1to3y8o0IzWB5
+         iK/Q==
+X-Gm-Message-State: ACgBeo3ZeXcmQjX5d4qdW7+3hYw8O8aBwxgtPOJc0JVIuXOqb8sbSkeh
+        9ShIJOo1L8f/yjpMnkd+/X8Z4w==
+X-Google-Smtp-Source: AA6agR78nAzd1nRQswnX5CWOif43etOxtDbBfDmKa4nzMrWkz8NAms1Thrx+XPtPcVl4miGYXiqyuQ==
+X-Received: by 2002:a05:6870:d60a:b0:10e:4333:d773 with SMTP id a10-20020a056870d60a00b0010e4333d773mr7168256oaq.78.1660580435563;
+        Mon, 15 Aug 2022 09:20:35 -0700 (PDT)
+Received: from localhost.localdomain ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id x91-20020a9d37e4000000b00636ee04e7aesm2163371otb.67.2022.08.15.09.20.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 09:20:35 -0700 (PDT)
+From:   Frederick Lawler <fred@cloudflare.com>
+To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, tixxdz@gmail.com,
+        Frederick Lawler <fred@cloudflare.com>
+Subject: [PATCH v5 0/4] Introduce security_create_user_ns()
+Date:   Mon, 15 Aug 2022 11:20:24 -0500
+Message-Id: <20220815162028.926858-1-fred@cloudflare.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220812101902.2846182-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26628/Mon Aug 15 09:51:41 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/12/22 12:18 PM, Roberto Sassu wrote:
-> One of the desirable features in security is the ability to restrict import
-> of data to a given system based on data authenticity. If data import can be
-> restricted, it would be possible to enforce a system-wide policy based on
-> the signing keys the system owner trusts.
-> 
-[...]
-> Changelog
-> 
-> v10:
->   - Introduce key_lookup_flags_check() and system_keyring_id_check() inline
->     functions to check parameters (suggested by KP)
->   - Fix descriptions and comment of key-related kfuncs (suggested by KP)
->   - Register kfunc set only once (suggested by Alexei)
->   - Move needed kernel options to the architecture-independent configuration
->     for testing
+While user namespaces do not make the kernel more vulnerable, they are however
+used to initiate exploits. Some users do not want to block namespace creation
+for the entirety of the system, which some distributions provide. Instead, we
+needed a way to have some applications be blocked, and others allowed. This is
+not possible with those tools. Managing hierarchies also did not fit our case
+because we're determining which tasks are allowed based on their attributes.
 
-Looks like from BPF CI side, the selftest throws a WARN in test_progs / test_progs-no_alu32
-and subsequently fails with error, ptal:
+While exploring a solution, we first leveraged the LSM cred_prepare hook
+because that is the closest hook to prevent a call to create_user_ns().
 
-   https://github.com/kernel-patches/bpf/runs/7804422038?check_suite_focus=true
+The calls look something like this:
 
-   [...]
-   #235     verif_scale_xdp_loop:OK
-   #236     verif_stats:OK
-   #237     verif_twfw:OK
-   [  760.448652] ------------[ cut here ]------------
-   [  760.449506] WARNING: CPU: 3 PID: 930 at crypto/rsa-pkcs1pad.c:544 pkcs1pad_verify+0x184/0x190
-   [  760.450806] Modules linked in: bpf_testmod(OE) [last unloaded: bpf_testmod]
-   [  760.452340] CPU: 3 PID: 930 Comm: keyctl Tainted: G           OE      5.19.0-g9f0260338e31-dirty #1
-   [  760.453626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-   [  760.454801] RIP: 0010:pkcs1pad_verify+0x184/0x190
-   [  760.455380] Code: 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc 48 89 df 89 c6 5b 41 5c 41 5d 41 5e 41 5f 5d e9 a5 04 00 00 0f 0b b8 ea ff ff ff eb d4 <0f> 0b b8 ea ff ff ff eb cb 0f 0b 90 0f 1f 44 00 00 53 48 89 fb c7
-   [  760.456866] RSP: 0018:ffffad55478dbb58 EFLAGS: 00000246
-   [  760.457684] RAX: ffff9b3c43c42458 RBX: ffff9b3c48975b00 RCX: 0000000000000000
-   [  760.458672] RDX: ffffffffa7277438 RSI: ffffffffa5275510 RDI: 0000000000000000
-   [  760.459670] RBP: ffffad55478dbcf8 R08: 0000000000000002 R09: 0000000000000000
-   [  760.460688] R10: ffffad55478dbc20 R11: ffffffffa44dde10 R12: ffff9b3c43de2e80
-   [  760.461695] R13: ffff9b3c58459ea0 R14: ffff9b3c44d59600 R15: ffffad55478dbc20
-   [  760.462270] FS:  00007ff1ee0eb740(0000) GS:ffff9b3cf9cc0000(0000) knlGS:0000000000000000
-   [  760.462722] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-   [  760.463026] CR2: 000055b9a4c17588 CR3: 0000000107bb2000 CR4: 00000000000006e0
-   [  760.464039] Call Trace:
-   [  760.464465]  <TASK>
-   [  760.464749]  public_key_verify_signature+0x4a2/0x570
-   [  760.465623]  x509_check_for_self_signed+0x4e/0xd0
-   [  760.465937]  x509_cert_parse+0x193/0x220
-   [  760.466656]  x509_key_preparse+0x20/0x1f0
-   [  760.466975]  asymmetric_key_preparse+0x43/0x80
-   [  760.467552]  key_create_or_update+0x24e/0x510
-   [  760.468366]  __x64_sys_add_key+0x19b/0x220
-   [  760.468704]  ? syscall_enter_from_user_mode+0x24/0x1f0
-   [  760.469056]  do_syscall_64+0x43/0x90
-   [  760.469657]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-   [  760.470413] RIP: 0033:0x7ff1edf0ba9d
-   [  760.470832] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d cb e2 0e 00 f7 d8 64 89 01 48
-   [  760.472742] RSP: 002b:00007ffe635e7a18 EFLAGS: 00000246 ORIG_RAX: 00000000000000f8
-   [  760.473355] RAX: ffffffffffffffda RBX: 00007ffe635e7be0 RCX: 00007ff1edf0ba9d
-   [  760.474523] RDX: 000055982fed80c0 RSI: 00007ffe635e7f17 RDI: 00007ffe635e7f0c
-   [  760.475500] RBP: 00007ffe635e7a38 R08: 00000000fffffffd R09: 0000000000000000
-   [  760.475913] R10: 0000000000000355 R11: 0000000000000246 R12: 0000000000000000
-   [  760.476594] R13: 00007ffe635e7bd8 R14: 000055982fed48ae R15: 000055982fed76e8
-   [  760.477579]  </TASK>
-   [  760.477769] irq event stamp: 4727
-   [  760.477963] hardirqs last  enabled at (4735): [<ffffffffa4101df5>] __up_console_sem+0x75/0xa0
-   [  760.479036] hardirqs last disabled at (4744): [<ffffffffa4a31cca>] sysvec_apic_timer_interrupt+0xa/0xb0
-   [  760.480403] softirqs last  enabled at (4762): [<ffffffffa4085172>] __irq_exit_rcu+0xb2/0x140
-   [  760.480869] softirqs last disabled at (4755): [<ffffffffa4085172>] __irq_exit_rcu+0xb2/0x140
-   [  760.481706] ---[ end trace 0000000000000000 ]---
-   Generating a RSA private key
-   .+++++
-   ..................................................+++++
-   writing new private key to '/tmp/verify_sigXdOL5V/signing_key.pem'
-   -----
-   add_key: Invalid argument
-   test_verify_pkcs7_sig:PASS:mkdtemp 0 nsec
-   test_verify_pkcs7_sig:FAIL:_run_setup_process unexpected error: 1 (errno 126)
-   #238     verify_pkcs7_sig:FAIL
-   #239     vmlinux:OK
-   #240     xdp:OK
-   #241/1   xdp_adjust_frags/xdp_adjust_frags:OK
-   #241     xdp_adjust_frags:OK
-   #242/1   xdp_adjust_tail/xdp_adjust_tail_shrink:OK
-   #242/2   xdp_adjust_tail/xdp_adjust_tail_grow:OK
-   [...]
+    cred = prepare_creds()
+        security_prepare_creds()
+            call_int_hook(cred_prepare, ...
+    if (cred)
+        create_user_ns(cred)
+
+We noticed that error codes were not propagated from this hook and
+introduced a patch [1] to propagate those errors.
+
+The discussion notes that security_prepare_creds() is not appropriate for
+MAC policies, and instead the hook is meant for LSM authors to prepare
+credentials for mutation. [2]
+
+Additionally, cred_prepare hook is not without problems. Handling the clone3
+case is a bit more tricky due to the user space pointer passed to it. This
+makes checking the syscall subject to a possible TOCTTOU attack.
+
+Ultimately, we concluded that a better course of action is to introduce
+a new security hook for LSM authors. [3]
+
+This patch set first introduces a new security_create_user_ns() function
+and userns_create LSM hook, then marks the hook as sleepable in BPF. The
+following patches after include a BPF test and a patch for an SELinux
+implementation.
+
+We want to encourage use of user namespaces, and also cater the needs
+of users/administrators to observe and/or control access. There is no
+expectation of an impact on user space applications because access control 
+is opt-in, and users wishing to observe within a LSM context 
+
+
+Links:
+1. https://lore.kernel.org/all/20220608150942.776446-1-fred@cloudflare.com/
+2. https://lore.kernel.org/all/87y1xzyhub.fsf@email.froward.int.ebiederm.org/
+3. https://lore.kernel.org/all/9fe9cd9f-1ded-a179-8ded-5fde8960a586@cloudflare.com/
+
+Past discussions:
+V4: https://lore.kernel.org/all/20220801180146.1157914-1-fred@cloudflare.com/
+V3: https://lore.kernel.org/all/20220721172808.585539-1-fred@cloudflare.com/
+V2: https://lore.kernel.org/all/20220707223228.1940249-1-fred@cloudflare.com/
+V1: https://lore.kernel.org/all/20220621233939.993579-1-fred@cloudflare.com/
+
+Changes since v4:
+- Update commit description
+- Update cover letter
+Changes since v3:
+- Explicitly set CAP_SYS_ADMIN to test namespace is created given
+  permission
+- Simplify BPF test to use sleepable hook only
+- Prefer unshare() over clone() for tests
+Changes since v2:
+- Rename create_user_ns hook to userns_create
+- Use user_namespace as an object opposed to a generic namespace object
+- s/domB_t/domA_t in commit message
+Changes since v1:
+- Add selftests/bpf: Add tests verifying bpf lsm create_user_ns hook patch
+- Add selinux: Implement create_user_ns hook patch
+- Change function signature of security_create_user_ns() to only take
+  struct cred
+- Move security_create_user_ns() call after id mapping check in
+  create_user_ns()
+- Update documentation to reflect changes
+
+Frederick Lawler (4):
+  security, lsm: Introduce security_create_user_ns()
+  bpf-lsm: Make bpf_lsm_userns_create() sleepable
+  selftests/bpf: Add tests verifying bpf lsm userns_create hook
+  selinux: Implement userns_create hook
+
+ include/linux/lsm_hook_defs.h                 |   1 +
+ include/linux/lsm_hooks.h                     |   4 +
+ include/linux/security.h                      |   6 ++
+ kernel/bpf/bpf_lsm.c                          |   1 +
+ kernel/user_namespace.c                       |   5 +
+ security/security.c                           |   5 +
+ security/selinux/hooks.c                      |   9 ++
+ security/selinux/include/classmap.h           |   2 +
+ .../selftests/bpf/prog_tests/deny_namespace.c | 102 ++++++++++++++++++
+ .../selftests/bpf/progs/test_deny_namespace.c |  33 ++++++
+ 10 files changed, 168 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/deny_namespace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_deny_namespace.c
+
+-- 
+2.30.2
+
