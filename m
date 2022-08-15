@@ -2,66 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8202A5927A1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 03:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDA55927CD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 04:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiHOB4x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Aug 2022 21:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S232606AbiHOCdI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Aug 2022 22:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiHOB4w (ORCPT
+        with ESMTP id S232573AbiHOCdG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Aug 2022 21:56:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CCA12629;
-        Sun, 14 Aug 2022 18:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FEEE60FAF;
-        Mon, 15 Aug 2022 01:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3F0C433D6;
-        Mon, 15 Aug 2022 01:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1660528610;
-        bh=E+POgprZP2CXzwYKE7pYCzxT7PkjComH27PjV4PNA+g=;
-        h=Date:From:To:Subject:In-Reply-To:References:From;
-        b=JkuXSqpApuALY+WTVmNWc38heLV2+d1KIWHSrKHb5TYB5LLyo5ziGtWNbovjFhrLp
-         0oUU+Dqsii9Sa4INM9Sj4HLMzwyrSl+/8BJOjfA5icmwbGXJdXZj+JZema/lrnkN1I
-         bkQgZ5+YIRhWL6Xm97vuo6M4VWLa4g4C46vtuuJo=
-Date:   Sun, 14 Aug 2022 18:56:49 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Nico Pache <npache@redhat.com>
-Subject: Re: [PATCH] selftests/vm: enable running select groups of tests
-Message-Id: <20220814185649.3303b34cfabcaf450c661b4b@linux-foundation.org>
-In-Reply-To: <20220814185503.bf75150dee058db574797d07@linux-foundation.org>
-References: <20220705185605.3889110-1-jsavitz@redhat.com>
-        <20220814185503.bf75150dee058db574797d07@linux-foundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 14 Aug 2022 22:33:06 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29F613D48
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Aug 2022 19:33:03 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10dc1b16c12so6950447fac.6
+        for <linux-kselftest@vger.kernel.org>; Sun, 14 Aug 2022 19:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=rKW04FaMDWlNTKaTacFyl18vVqIzuIE+w07IJVIvyZM=;
+        b=0jUHyBYurBxt6DRoAGI0tPLbdwq8QIJsKw7J6a4Op/+9xD+nIyf0dK0wJ7rPnfTq2i
+         NSJvgBTl+8AkLsBjYlKlyuaxDMkNUlYhs/+z2HQnC5hHxmTcduBCI+AHAwPc+R7t9trj
+         KXAijqp+0i9YdXfrzZqpprg6bYtuy30+eIQM05alUjdeky6TD3PDUne1lBj2I32oWOG6
+         ez2BRA/6nu/5Q4AjgERGga2f76iujz1PeWL9w0Vbht1AOF6TtFmcWZT/4icZI3P+1tiZ
+         12Rp1ZxPzP9Jqw/ddSAaGrl2xTsxCHQJjehriM7ybsI4vUgaqO/2H/uoGhsNDT3ppDQz
+         4jcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=rKW04FaMDWlNTKaTacFyl18vVqIzuIE+w07IJVIvyZM=;
+        b=Gjv2C/qMG4czX+zp0SPqofHspGAt/MZhzTBOYNdUPWldv54cXWmz3Yu2XKEQPZs6kh
+         gFBMHEHyzqnj5YPstpZyEtKMdmcpoZjY8pqOzvXKsN883BsKcsuuRqt9y9fllqPQNccr
+         0xr3TOSccmlje6NMvdkxoDTYCa46j03IyAxKqS1N+mbWV+Qm+pmebpgccZpE0GBKgaO/
+         NaCrIRXk7RChhr7k0xF2RQNmLCFXXLEOfbrhYO7KPUgvgg0QDk6sJ3jViePIgMGK+/sO
+         Wb2qGh4GecnOgHKEtwuxP6aqpJfnZSWc9gkf9BL7SSuLm/MI2+STEXKoM8tH86IpFR8y
+         Gtgg==
+X-Gm-Message-State: ACgBeo0Qvrn2gzD8JcvTnIbRHGaYJNSLyP9cGqf2AJwv5HJItAK7VSlJ
+        lBJeYeW2HE36ZNx8TmY3fJAZQobMAKIc7oVA+vK9
+X-Google-Smtp-Source: AA6agR7bLEQJ7JYxjJc7rtmw4f9ZOcgrB6hJHBerZqztI0P/WghbS9WDob88ogRFpEs/NuLS6Tn9yZ9JlaNb+LVvaqA=
+X-Received: by 2002:a05:6870:b41e:b0:116:5dc7:192a with SMTP id
+ x30-20020a056870b41e00b001165dc7192amr6039900oap.136.1660530782624; Sun, 14
+ Aug 2022 19:33:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+ <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+ <20220814155508.GA7991@mail.hallyn.com>
+In-Reply-To: <20220814155508.GA7991@mail.hallyn.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sun, 14 Aug 2022 22:32:51 -0400
+Message-ID: <CAHC9VhRSCXCM51xpOT95G_WVi=UQ44gNV=uvvG23p8wn16uYSA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 14 Aug 2022 18:55:03 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+On Sun, Aug 14, 2022 at 11:55 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> On Mon, Aug 08, 2022 at 03:16:16PM -0400, Paul Moore wrote:
+> > On Mon, Aug 8, 2022 at 2:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > Paul Moore <paul@paul-moore.com> writes:
+> > > > On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > >> Frederick Lawler <fred@cloudflare.com> writes:
+> > > >>
+> > > >> > While creating a LSM BPF MAC policy to block user namespace creation, we
+> > > >> > used the LSM cred_prepare hook because that is the closest hook to prevent
+> > > >> > a call to create_user_ns().
+> > > >>
+> > > >> Re-nack for all of the same reasons.
+> > > >> AKA This can only break the users of the user namespace.
+> > > >>
+> > > >> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> > > >>
+> > > >> You aren't fixing what your problem you are papering over it by denying
+> > > >> access to the user namespace.
+> > > >>
+> > > >> Nack Nack Nack.
+> > > >>
+> > > >> Stop.
+> > > >>
+> > > >> Go back to the drawing board.
+> > > >>
+> > > >> Do not pass go.
+> > > >>
+> > > >> Do not collect $200.
+> > > >
+> > > > If you want us to take your comments seriously Eric, you need to
+> > > > provide the list with some constructive feedback that would allow
+> > > > Frederick to move forward with a solution to the use case that has
+> > > > been proposed.  You response above may be many things, but it is
+> > > > certainly not that.
+> > >
+> > > I did provide constructive feedback.  My feedback to his problem
+> > > was to address the real problem of bugs in the kernel.
+> >
+> > We've heard from several people who have use cases which require
+> > adding LSM-level access controls and observability to user namespace
+> > creation.  This is the problem we are trying to solve here; if you do
+> > not like the approach proposed in this patchset please suggest another
+> > implementation that allows LSMs visibility into user namespace
+> > creation.
+>
+> Regarding the observability - can someone concisely lay out why just
+> auditing userns creation would not suffice?  Userspace could decide
+> what to report based on whether the creating user_ns == /proc/1/ns/user...
 
-> On Tue,  5 Jul 2022 14:56:05 -0400 Joel Savitz <jsavitz@redhat.com> wrote:
-> 
-> > Add the ability to run one or more groups of vm tests (specified
-> > by the environment variable TEST_ITEMS). Preserve existing default
-> > behavior of running all tests when TEST_ITEMS is empty or "default".
-> 
-> Why are we doing this?   Please describe the use case - something I
-> can add to the changelog.
+One of the selling points of the BPF LSM is that it allows for various
+different ways of reporting and logging beyond audit.  However, even
+if it was limited to just audit I believe that provides some useful
+justification as auditing fork()/clone() isn't quite the same and
+could be difficult to do at scale in some configurations.  I haven't
+personally added a BPF LSM program to the kernel so I can't speak to
+the details on what is possible, but I'm sure others on the To/CC line
+could help provide more information if that is important to you.
 
-Old patch version, please ignore.
+> Regarding limiting the tweaking of otherwise-privileged code by
+> unprivileged users, i wonder whether we could instead add smarts to
+> ns_capable().
+
+The existing security_capable() hook is eventually called by ns_capable():
+
+  ns_capable()
+    ns_capable_common()
+      security_capable(const struct cred *cred,
+                       struct user_namespace *ns,
+                       int cap,
+                       unsigned int opts);
+
+... I'm not sure what additional smarts would be useful here?
+
+[side note: SELinux does actually distinguish between capability
+checks in the initial user namespace vs child namespaces]
+
+> Point being, uid mapping would still work, but we'd
+> break the "privileged against resources you own" part of user
+> namespaces.  I would want it to default to allow, but then when a
+> 0-day is found which requires reaching ns_capable() code, admins
+> could easily prevent exploitation until reboot from a fixed kernel.
+
+That assumes that everything you care about is behind a capability
+check, which is probably going to be correct in a lot of the cases,
+but I think it would be a mistake to assume that is always going to be
+true.
+
+--
+paul-moore.com
