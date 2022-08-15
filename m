@@ -2,152 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774405932F0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 18:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 194CF593316
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 18:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbiHOQVi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Aug 2022 12:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S232856AbiHOQZG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Aug 2022 12:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbiHOQUq (ORCPT
+        with ESMTP id S230452AbiHOQYx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:20:46 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD86313CE0
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 09:20:42 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id o15-20020a9d718f000000b00638c1348012so748907otj.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 09:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=U3OK8Oqnf2K0vdWXT1jn4LVlcHC3Qy4QXRttGxzPtuo=;
-        b=XU3mICcICTtNu7uN8K5AA/UUF9eGokgmjP4mS51xOSo4TbR6mIgICfjf3JleWSCsnD
-         3bKxTlmLlhl3CdsgdqLQhB63ngHK/3WAjkc9apGYatsqocuIO2tLcXn8aGkf/AKiaTLs
-         sTT1sq/iMyXBWFfe2c4PBoNmB/mESTtAqL4LQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=U3OK8Oqnf2K0vdWXT1jn4LVlcHC3Qy4QXRttGxzPtuo=;
-        b=cgXy+fcYYgp2JGyQLoMLd6a9pxdFvqwpXf+ud5z7uaBLQRfBD13wRiqcxpSa2iA0WW
-         cTDhu5QXz6tUZ0wehbfNmJb8M8kzzcMwcxwROodf1d5zwEQuKSHGrhtQJo7FEKSf4okH
-         r/EAkjDFfH80hG7KCZU20QE5yTHy2gvgUOBxjbDOdUjHhOrhkGGLYLtjGFnZIZJnHPkz
-         lh8q1myqr/VeSVXThY14ZwqylEZOpcsG0pb7npQosQQ+VLKQhi7lUpwU9L61kfM3me0s
-         tbVzDtpnKMKS3lnOoljh+FXcsA/n+yOX0o1CnImz82ETePl7+Gebi7B7AR0z99z0EQTc
-         DcrQ==
-X-Gm-Message-State: ACgBeo1R4C5de14kNzyUeDPmIXOcXfTwRzdv/OpNeiZoXFjHVmiL1eiw
-        g/SQTkYTpwokT12xxOtPaiRkuQ==
-X-Google-Smtp-Source: AA6agR4zqUyCOz7UeYx3gb/1BVfk3brb7qMNS9yuuT17I/dl5o+tdGlomKfd9D9Qo+BAH1l8rlRK4A==
-X-Received: by 2002:a05:6830:10c9:b0:636:d88f:1299 with SMTP id z9-20020a05683010c900b00636d88f1299mr6217405oto.134.1660580441763;
-        Mon, 15 Aug 2022 09:20:41 -0700 (PDT)
-Received: from localhost.localdomain ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id x91-20020a9d37e4000000b00636ee04e7aesm2163371otb.67.2022.08.15.09.20.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 09:20:41 -0700 (PDT)
-From:   Frederick Lawler <fred@cloudflare.com>
-To:     kpsingh@kernel.org, revest@chromium.org, jackmanb@chromium.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, ebiederm@xmission.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com, tixxdz@gmail.com,
-        Frederick Lawler <fred@cloudflare.com>
-Subject: [PATCH v5 4/4] selinux: Implement userns_create hook
-Date:   Mon, 15 Aug 2022 11:20:28 -0500
-Message-Id: <20220815162028.926858-5-fred@cloudflare.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220815162028.926858-1-fred@cloudflare.com>
-References: <20220815162028.926858-1-fred@cloudflare.com>
+        Mon, 15 Aug 2022 12:24:53 -0400
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30F523163
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 09:22:44 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 4B6F2240101
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 18:22:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1660580562; bh=8cGb0tGMTUr7aYZYRErGqjYF93EXWmZWACaf8PVKdlk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Vw+w5Bf0GCOe6almLc4jUmkz5H6QtQprOieEFee5V7NDSGA18FKjJ0FNQ48kR9U2o
+         3MFAjJkXds7I5vSnFz8eKCcyYUa/mbpl2gL9c0g3Lz0lBAKAH/f162w9O2/CTXeD+n
+         1aVKlm5N4xId/MFsp60uOyC8pOuEwAEdyIQILwTO1wfj3SeMoCrEySp5iHgdMTn8EP
+         z7BG7ZT2ly+J2eG5JGPuLKfvOYn+qvJLq/3seXhDtoCjwdE0WoLrLv8Sug3YFfnTd2
+         pwauHHXwgmtJ/LxaJ3024b9ytUPQDEtKJ28WhddppNo7PaKC2cQTNS3tbHTRRH5Wey
+         KVHOZLaO9IvSQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4M601L6wxkz6tn9;
+        Mon, 15 Aug 2022 18:22:30 +0200 (CEST)
+Date:   Mon, 15 Aug 2022 16:22:27 +0000
+From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v10 5/9] bpf: Add bpf_lookup_*_key() and bpf_key_put()
+ kfuncs
+Message-ID: <20220815162227.clqx44cwka7yt2u3@muellerd-fedora-PC2BDTX9>
+References: <20220810165932.2143413-1-roberto.sassu@huawei.com>
+ <20220810165932.2143413-6-roberto.sassu@huawei.com>
+ <20220810213351.wm5utltm67q4i6lu@MacBook-Pro-3.local.dhcp.thefacebook.com>
+ <2415f4931a364541b2e6d14a8185ffbb@huawei.com>
+ <f7d401d6ec6c47cbb358046a2d3ca5e8@huawei.com>
+ <20220811235222.inghj73tf6vudoyw@vaio>
+ <bff9efc2121046d78e50f0a270d13dc3@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bff9efc2121046d78e50f0a270d13dc3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Unprivileged user namespace creation is an intended feature to enable
-sandboxing, however this feature is often used to as an initial step to
-perform a privilege escalation attack.
+On Fri, Aug 12, 2022 at 08:11:00AM +0000, Roberto Sassu wrote:
+> > From: Daniel Müller [mailto:deso@posteo.net]
+> > Sent: Friday, August 12, 2022 1:52 AM
+> > On Thu, Aug 11, 2022 at 12:02:57PM +0000, Roberto Sassu wrote:
+> > > > From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
+> > > > Sent: Thursday, August 11, 2022 9:47 AM
+> > > > > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
+> > > > > Sent: Wednesday, August 10, 2022 11:34 PM
+> > > > > On Wed, Aug 10, 2022 at 06:59:28PM +0200, Roberto Sassu wrote:
+> > > > > > +
+> > > > > > +static int __init bpf_key_sig_kfuncs_init(void)
+> > > > > > +{
+> > > > > > +	int ret;
+> > > > > > +
+> > > > > > +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
+> > > > > > +					&bpf_key_sig_kfunc_set);
+> > > > > > +	if (!ret)
+> > > > > > +		return 0;
+> > > > > > +
+> > > > > > +	return register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
+> > > > > > +					 &bpf_key_sig_kfunc_set);
+> > > > >
+> > > > > Isn't this a watery water ?
+> > > > > Don't you have a patch 1 ?
+> > > > > What am I missing ?
+> > > >
+> > > > Uhm, yes. I had doubts too. That was what also KP did.
+> > > >
+> > > > It makes sense to register once, since we mapped LSM to
+> > > > TRACING.
+> > > >
+> > > > Will resend only this patch. And I will figure out why CI failed.
+> > >
+> > > Adding in CC Daniel Müller, which worked on this.
+> > >
+> > > I think the issue is that some kernel options are set to =m.
+> > > This causes the CI to miss all kernel modules, since they are
+> > > not copied to the virtual machine that executes the tests.
+> > >
+> > > I'm testing this patch:
+> > >
+> > > https://github.com/robertosassu/libbpf-
+> > ci/commit/b665e001b58c4ddb792a2a68098ea5dc6936b15c
+> > 
+> > I commented on the pull request. Would it make sense to adjust the
+> > kernel configuration in this repository instead? I am worried that
+> > otherwise everybody may need a similar work around, depending on how
+> > selftests are ultimately run.
+> 
+> The issue seems specific of the eBPF CI. Others might be able to use
+> kernel modules.
+> 
+> Either choice is fine for me.
 
-This patch implements a new user_namespace { create } access control
-permission to restrict which domains allow or deny user namespace
-creation. This is necessary for system administrators to quickly protect
-their systems while waiting for vulnerability patches to be applied.
+I understand that depending on how tests are run, kernel modules may be
+available to be loaded. My point is that I am not aware of anything that we
+would loose by having the functionality built-in to begin with (others can
+correct me). So it seems as if that's an easy way to sidestep any issues of that
+sort from the start and, hence, would be my preference.
 
-This permission can be used in the following way:
-
-        allow domA_t domA_t : user_namespace { create };
-
-Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-
----
-Changes since v4:
-- None
-Changes since v3:
-- None
-Changes since v2:
-- Rename create_user_ns hook to userns_create
-- Use user_namespace as an object opposed to a generic namespace object
-- s/domB_t/domA_t in commit message
-Changes since v1:
-- Introduce this patch
----
- security/selinux/hooks.c            | 9 +++++++++
- security/selinux/include/classmap.h | 2 ++
- 2 files changed, 11 insertions(+)
-
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 79573504783b..b9f1078450b3 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -4221,6 +4221,14 @@ static void selinux_task_to_inode(struct task_struct *p,
- 	spin_unlock(&isec->lock);
- }
- 
-+static int selinux_userns_create(const struct cred *cred)
-+{
-+	u32 sid = current_sid();
-+
-+	return avc_has_perm(&selinux_state, sid, sid, SECCLASS_USER_NAMESPACE,
-+						USER_NAMESPACE__CREATE, NULL);
-+}
-+
- /* Returns error only if unable to parse addresses */
- static int selinux_parse_skb_ipv4(struct sk_buff *skb,
- 			struct common_audit_data *ad, u8 *proto)
-@@ -7111,6 +7119,7 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(task_movememory, selinux_task_movememory),
- 	LSM_HOOK_INIT(task_kill, selinux_task_kill),
- 	LSM_HOOK_INIT(task_to_inode, selinux_task_to_inode),
-+	LSM_HOOK_INIT(userns_create, selinux_userns_create),
- 
- 	LSM_HOOK_INIT(ipc_permission, selinux_ipc_permission),
- 	LSM_HOOK_INIT(ipc_getsecid, selinux_ipc_getsecid),
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index ff757ae5f253..0bff55bb9cde 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -254,6 +254,8 @@ const struct security_class_mapping secclass_map[] = {
- 	  { COMMON_FILE_PERMS, NULL } },
- 	{ "io_uring",
- 	  { "override_creds", "sqpoll", NULL } },
-+	{ "user_namespace",
-+	  { "create", NULL } },
- 	{ NULL }
-   };
- 
--- 
-2.30.2
-
+Thanks,
+Daniel
