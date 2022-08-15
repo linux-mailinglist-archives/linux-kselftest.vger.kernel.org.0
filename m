@@ -2,169 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDA55927CD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 04:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59ADB592D14
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 12:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbiHOCdI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Aug 2022 22:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
+        id S230317AbiHOJQc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Aug 2022 05:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbiHOCdG (ORCPT
+        with ESMTP id S229947AbiHOJQb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Aug 2022 22:33:06 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29F613D48
-        for <linux-kselftest@vger.kernel.org>; Sun, 14 Aug 2022 19:33:03 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-10dc1b16c12so6950447fac.6
-        for <linux-kselftest@vger.kernel.org>; Sun, 14 Aug 2022 19:33:03 -0700 (PDT)
+        Mon, 15 Aug 2022 05:16:31 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9846C1C929;
+        Mon, 15 Aug 2022 02:16:30 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id z12so8361731wrs.9;
+        Mon, 15 Aug 2022 02:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=rKW04FaMDWlNTKaTacFyl18vVqIzuIE+w07IJVIvyZM=;
-        b=0jUHyBYurBxt6DRoAGI0tPLbdwq8QIJsKw7J6a4Op/+9xD+nIyf0dK0wJ7rPnfTq2i
-         NSJvgBTl+8AkLsBjYlKlyuaxDMkNUlYhs/+z2HQnC5hHxmTcduBCI+AHAwPc+R7t9trj
-         KXAijqp+0i9YdXfrzZqpprg6bYtuy30+eIQM05alUjdeky6TD3PDUne1lBj2I32oWOG6
-         ez2BRA/6nu/5Q4AjgERGga2f76iujz1PeWL9w0Vbht1AOF6TtFmcWZT/4icZI3P+1tiZ
-         12Rp1ZxPzP9Jqw/ddSAaGrl2xTsxCHQJjehriM7ybsI4vUgaqO/2H/uoGhsNDT3ppDQz
-         4jcg==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=m6s8qUOEVr22U83noP/tVr9KuoftkbcmVdQXPhi8USo=;
+        b=MF2Hsx8eRQ+ddABJaioZXRQkbWdBoSBaxKAlFAtxBrkr8Y+evgMunZB9CIJAF7CTis
+         stE192n7C2pOoxiHxpjyZD+eVUXLI4vM0OM8xIjLmhsccYDVK0TI7vCRa07kjUZso7UF
+         Eh+AieL3Wmiva9tOR551uh3GIxxuzblsd8uoI7v95052ZPbjwsj7CcVscCHTQm01jydj
+         KlravQklA25nDStpW77CFH0K44ST5NwZTQgIRUe/zZj0j5dCy4TEc1G0hQ7Gx2jCa95L
+         F38YwRAvs6LkVcUzDl8XfsSjuORZVmL5B5hKiYev7Zo85/SM30v+xrLFbeDiJCs2MI2m
+         X0pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=rKW04FaMDWlNTKaTacFyl18vVqIzuIE+w07IJVIvyZM=;
-        b=Gjv2C/qMG4czX+zp0SPqofHspGAt/MZhzTBOYNdUPWldv54cXWmz3Yu2XKEQPZs6kh
-         gFBMHEHyzqnj5YPstpZyEtKMdmcpoZjY8pqOzvXKsN883BsKcsuuRqt9y9fllqPQNccr
-         0xr3TOSccmlje6NMvdkxoDTYCa46j03IyAxKqS1N+mbWV+Qm+pmebpgccZpE0GBKgaO/
-         NaCrIRXk7RChhr7k0xF2RQNmLCFXXLEOfbrhYO7KPUgvgg0QDk6sJ3jViePIgMGK+/sO
-         Wb2qGh4GecnOgHKEtwuxP6aqpJfnZSWc9gkf9BL7SSuLm/MI2+STEXKoM8tH86IpFR8y
-         Gtgg==
-X-Gm-Message-State: ACgBeo0Qvrn2gzD8JcvTnIbRHGaYJNSLyP9cGqf2AJwv5HJItAK7VSlJ
-        lBJeYeW2HE36ZNx8TmY3fJAZQobMAKIc7oVA+vK9
-X-Google-Smtp-Source: AA6agR7bLEQJ7JYxjJc7rtmw4f9ZOcgrB6hJHBerZqztI0P/WghbS9WDob88ogRFpEs/NuLS6Tn9yZ9JlaNb+LVvaqA=
-X-Received: by 2002:a05:6870:b41e:b0:116:5dc7:192a with SMTP id
- x30-20020a056870b41e00b001165dc7192amr6039900oap.136.1660530782624; Sun, 14
- Aug 2022 19:33:02 -0700 (PDT)
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=m6s8qUOEVr22U83noP/tVr9KuoftkbcmVdQXPhi8USo=;
+        b=LSmCx4rRsaj4riI12m3X8DSsKHX2pKjY73RVGDevtPWrfu0uB7RlsM/h+v2TXxgyWz
+         nVx8c9bvkCwYH/qbXNsNHijuN3wtoUawDl6LcubOqdfewvKgMa4UowguVIRgj/tY1ZXs
+         T55ctvy0MXemP/mz4SYuRqo9+2f8QrxVtwJ+Y+mjfrmP2OHHVINbjMbrg0QQzoypqj8y
+         O2L5XV5tgTRU56ui0BiRax/lnYuFvwfyI/WN4bPnzpddOXDM9hHmcu+mDFeaZcrB6pJu
+         zDUBbUWSpNz1yGP9ZEfMC2GQT4A8yWy7hO5zCywW3nlCBhs2Vss3fjhmUfOwzvx5CXsm
+         Jm/w==
+X-Gm-Message-State: ACgBeo2n0U1TNUv2TpDonO+RtSMH9Ft4WKylloXvJ8SKQhGFryAcSmuY
+        /142WYzlOdZKeenBilKbiMAK4BYmMoAJ0S5t2Os=
+X-Google-Smtp-Source: AA6agR7gXKfN77SzaLMeTdFqtiYsU6lHUssHitQUEdOJvdjGY3TuA/oL4/qRV4Y4Mvuh1kkL7uhP1tchGqpTQTr4jPk=
+X-Received: by 2002:a5d:6b12:0:b0:21f:1568:c7e1 with SMTP id
+ v18-20020a5d6b12000000b0021f1568c7e1mr8151636wrw.532.1660554989136; Mon, 15
+ Aug 2022 02:16:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
- <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
- <20220814155508.GA7991@mail.hallyn.com>
-In-Reply-To: <20220814155508.GA7991@mail.hallyn.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Sun, 14 Aug 2022 22:32:51 -0400
-Message-ID: <CAHC9VhRSCXCM51xpOT95G_WVi=UQ44gNV=uvvG23p8wn16uYSA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
-        casey@schaufler-ca.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-team@cloudflare.com,
-        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+From:   Ramon Fried <rfried.dev@gmail.com>
+Date:   Mon, 15 Aug 2022 12:16:16 +0300
+Message-ID: <CAGi-RUKv-8zyku-3pjXdjxbyMP_X_YV5rd6y2wyaCOJJ9UOQAw@mail.gmail.com>
+Subject: Running kunit tests on platform devices
+To:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 11:55 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> On Mon, Aug 08, 2022 at 03:16:16PM -0400, Paul Moore wrote:
-> > On Mon, Aug 8, 2022 at 2:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > Paul Moore <paul@paul-moore.com> writes:
-> > > > On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > > >> Frederick Lawler <fred@cloudflare.com> writes:
-> > > >>
-> > > >> > While creating a LSM BPF MAC policy to block user namespace creation, we
-> > > >> > used the LSM cred_prepare hook because that is the closest hook to prevent
-> > > >> > a call to create_user_ns().
-> > > >>
-> > > >> Re-nack for all of the same reasons.
-> > > >> AKA This can only break the users of the user namespace.
-> > > >>
-> > > >> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> > > >>
-> > > >> You aren't fixing what your problem you are papering over it by denying
-> > > >> access to the user namespace.
-> > > >>
-> > > >> Nack Nack Nack.
-> > > >>
-> > > >> Stop.
-> > > >>
-> > > >> Go back to the drawing board.
-> > > >>
-> > > >> Do not pass go.
-> > > >>
-> > > >> Do not collect $200.
-> > > >
-> > > > If you want us to take your comments seriously Eric, you need to
-> > > > provide the list with some constructive feedback that would allow
-> > > > Frederick to move forward with a solution to the use case that has
-> > > > been proposed.  You response above may be many things, but it is
-> > > > certainly not that.
-> > >
-> > > I did provide constructive feedback.  My feedback to his problem
-> > > was to address the real problem of bugs in the kernel.
-> >
-> > We've heard from several people who have use cases which require
-> > adding LSM-level access controls and observability to user namespace
-> > creation.  This is the problem we are trying to solve here; if you do
-> > not like the approach proposed in this patchset please suggest another
-> > implementation that allows LSMs visibility into user namespace
-> > creation.
->
-> Regarding the observability - can someone concisely lay out why just
-> auditing userns creation would not suffice?  Userspace could decide
-> what to report based on whether the creating user_ns == /proc/1/ns/user...
+Hi.
+I implemented a test suite that checks a platform driver, that's the
+only way I can test interrupts behavior in the code.
+Because it's a platform, I can't use kunit_test_suite(), so I call
+__kunit_test_suites_init() as part of the platform driver probe
+function.
 
-One of the selling points of the BPF LSM is that it allows for various
-different ways of reporting and logging beyond audit.  However, even
-if it was limited to just audit I believe that provides some useful
-justification as auditing fork()/clone() isn't quite the same and
-could be difficult to do at scale in some configurations.  I haven't
-personally added a BPF LSM program to the kernel so I can't speak to
-the details on what is possible, but I'm sure others on the To/CC line
-could help provide more information if that is important to you.
+This works fine but has the following problems.
+"TAP version 14" string is not printed and it's impossible to parse
+the results using the script.
+In addition, the suite is not displayed in /sys/kernel/debug/kunit.
 
-> Regarding limiting the tweaking of otherwise-privileged code by
-> unprivileged users, i wonder whether we could instead add smarts to
-> ns_capable().
+It would be my pleasure to provide a patch that fixes this, I just
+wanted to make sure that my testing strategy makes sense.
 
-The existing security_capable() hook is eventually called by ns_capable():
-
-  ns_capable()
-    ns_capable_common()
-      security_capable(const struct cred *cred,
-                       struct user_namespace *ns,
-                       int cap,
-                       unsigned int opts);
-
-... I'm not sure what additional smarts would be useful here?
-
-[side note: SELinux does actually distinguish between capability
-checks in the initial user namespace vs child namespaces]
-
-> Point being, uid mapping would still work, but we'd
-> break the "privileged against resources you own" part of user
-> namespaces.  I would want it to default to allow, but then when a
-> 0-day is found which requires reaching ns_capable() code, admins
-> could easily prevent exploitation until reboot from a fixed kernel.
-
-That assumes that everything you care about is behind a capability
-check, which is probably going to be correct in a lot of the cases,
-but I think it would be a mistake to assume that is always going to be
-true.
-
---
-paul-moore.com
+Thanks,
+Ramon
