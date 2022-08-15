@@ -2,80 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ADB592D14
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 12:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C512D592BB7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 12:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbiHOJQc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Aug 2022 05:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S241635AbiHOJWX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Aug 2022 05:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiHOJQb (ORCPT
+        with ESMTP id S241986AbiHOJWA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:16:31 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9846C1C929;
-        Mon, 15 Aug 2022 02:16:30 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id z12so8361731wrs.9;
-        Mon, 15 Aug 2022 02:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=m6s8qUOEVr22U83noP/tVr9KuoftkbcmVdQXPhi8USo=;
-        b=MF2Hsx8eRQ+ddABJaioZXRQkbWdBoSBaxKAlFAtxBrkr8Y+evgMunZB9CIJAF7CTis
-         stE192n7C2pOoxiHxpjyZD+eVUXLI4vM0OM8xIjLmhsccYDVK0TI7vCRa07kjUZso7UF
-         Eh+AieL3Wmiva9tOR551uh3GIxxuzblsd8uoI7v95052ZPbjwsj7CcVscCHTQm01jydj
-         KlravQklA25nDStpW77CFH0K44ST5NwZTQgIRUe/zZj0j5dCy4TEc1G0hQ7Gx2jCa95L
-         F38YwRAvs6LkVcUzDl8XfsSjuORZVmL5B5hKiYev7Zo85/SM30v+xrLFbeDiJCs2MI2m
-         X0pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=m6s8qUOEVr22U83noP/tVr9KuoftkbcmVdQXPhi8USo=;
-        b=LSmCx4rRsaj4riI12m3X8DSsKHX2pKjY73RVGDevtPWrfu0uB7RlsM/h+v2TXxgyWz
-         nVx8c9bvkCwYH/qbXNsNHijuN3wtoUawDl6LcubOqdfewvKgMa4UowguVIRgj/tY1ZXs
-         T55ctvy0MXemP/mz4SYuRqo9+2f8QrxVtwJ+Y+mjfrmP2OHHVINbjMbrg0QQzoypqj8y
-         O2L5XV5tgTRU56ui0BiRax/lnYuFvwfyI/WN4bPnzpddOXDM9hHmcu+mDFeaZcrB6pJu
-         zDUBbUWSpNz1yGP9ZEfMC2GQT4A8yWy7hO5zCywW3nlCBhs2Vss3fjhmUfOwzvx5CXsm
-         Jm/w==
-X-Gm-Message-State: ACgBeo2n0U1TNUv2TpDonO+RtSMH9Ft4WKylloXvJ8SKQhGFryAcSmuY
-        /142WYzlOdZKeenBilKbiMAK4BYmMoAJ0S5t2Os=
-X-Google-Smtp-Source: AA6agR7gXKfN77SzaLMeTdFqtiYsU6lHUssHitQUEdOJvdjGY3TuA/oL4/qRV4Y4Mvuh1kkL7uhP1tchGqpTQTr4jPk=
-X-Received: by 2002:a5d:6b12:0:b0:21f:1568:c7e1 with SMTP id
- v18-20020a5d6b12000000b0021f1568c7e1mr8151636wrw.532.1660554989136; Mon, 15
- Aug 2022 02:16:29 -0700 (PDT)
+        Mon, 15 Aug 2022 05:22:00 -0400
+Received: from a8-35.smtp-out.amazonses.com (a8-35.smtp-out.amazonses.com [54.240.8.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C873C2A7;
+        Mon, 15 Aug 2022 02:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660555316;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=xFqraFA6lGmUu0wYMye/OBvTkGaFcGmFu9hbEp/wo44=;
+        b=Gncdjke6xFirgu+vxM5ciR105bzITV0i01UzWOa2vTwjMiLSAVIlpd8alPGE0mH+
+        LswfP8SJWiXEcIhL9Y+nzrQ8P7dL8dVVyxKevnusDHUNGejDzJhLeTNTRHeDCMzUTZi
+        zF+NpaP8CFnKCGLBWmwV1YNlt2zWk4Fl3ADyKu90=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660555316;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=xFqraFA6lGmUu0wYMye/OBvTkGaFcGmFu9hbEp/wo44=;
+        b=Uvfz+oldhTD9PkJn3Bxry/aRBMLXlfO7xVy6WeqxQOq0b8F0vKPJB0nCDGLqFsIj
+        WLB0jx4OWxBFzT9Bwkq4yVIORLPxWuKVGAdUGImP3MxQEKkTcy+Yl9SWv9E6hAxeSbz
+        jwkvA1bhzEgvAcrnTzFx1yVurBQBcF51i6l6TWAo=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220815
 MIME-Version: 1.0
-From:   Ramon Fried <rfried.dev@gmail.com>
-Date:   Mon, 15 Aug 2022 12:16:16 +0300
-Message-ID: <CAGi-RUKv-8zyku-3pjXdjxbyMP_X_YV5rd6y2wyaCOJJ9UOQAw@mail.gmail.com>
-Subject: Running kunit tests on platform devices
-To:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <01000182a0cf4b92-f1608483-7e1c-4b32-93c9-5c1dfe12c9c2-000000@email.amazonses.com>
+Date:   Mon, 15 Aug 2022 09:21:56 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.08.15-54.240.8.35
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi.
-I implemented a test suite that checks a platform driver, that's the
-only way I can test interrupts behavior in the code.
-Because it's a platform, I can't use kunit_test_suite(), so I call
-__kunit_test_suites_init() as part of the platform driver probe
-function.
+## Build
+* kernel: 5.19.0
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: fa96acf505e0e5f4774e273d97cee65fffcf53e6
+* git describe: next-20220815
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220815
 
-This works fine but has the following problems.
-"TAP version 14" string is not printed and it's impossible to parse
-the results using the script.
-In addition, the suite is not displayed in /sys/kernel/debug/kunit.
+## Test Regressions (compared to next-20220812)
+No test regressions found.
 
-It would be my pleasure to provide a patch that fixes this, I just
-wanted to make sure that my testing strategy makes sense.
+## Metric Regressions (compared to next-20220812)
+No metric regressions found.
 
-Thanks,
-Ramon
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220812)
+No test fixes found.
+
+## Metric Fixes (compared to next-20220812)
+No metric fixes found.
+
+## Test result summary
+total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+
+--
+Linaro LKFT
+https://lkft.linaro.org
