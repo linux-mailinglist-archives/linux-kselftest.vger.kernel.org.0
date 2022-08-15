@@ -2,148 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194CF593316
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 18:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6830C593329
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 18:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbiHOQZG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Aug 2022 12:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S231958AbiHOQ0J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Aug 2022 12:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiHOQYx (ORCPT
+        with ESMTP id S239369AbiHOQZq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:24:53 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30F523163
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 09:22:44 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 4B6F2240101
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 18:22:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1660580562; bh=8cGb0tGMTUr7aYZYRErGqjYF93EXWmZWACaf8PVKdlk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Vw+w5Bf0GCOe6almLc4jUmkz5H6QtQprOieEFee5V7NDSGA18FKjJ0FNQ48kR9U2o
-         3MFAjJkXds7I5vSnFz8eKCcyYUa/mbpl2gL9c0g3Lz0lBAKAH/f162w9O2/CTXeD+n
-         1aVKlm5N4xId/MFsp60uOyC8pOuEwAEdyIQILwTO1wfj3SeMoCrEySp5iHgdMTn8EP
-         z7BG7ZT2ly+J2eG5JGPuLKfvOYn+qvJLq/3seXhDtoCjwdE0WoLrLv8Sug3YFfnTd2
-         pwauHHXwgmtJ/LxaJ3024b9ytUPQDEtKJ28WhddppNo7PaKC2cQTNS3tbHTRRH5Wey
-         KVHOZLaO9IvSQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4M601L6wxkz6tn9;
-        Mon, 15 Aug 2022 18:22:30 +0200 (CEST)
-Date:   Mon, 15 Aug 2022 16:22:27 +0000
-From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 5/9] bpf: Add bpf_lookup_*_key() and bpf_key_put()
- kfuncs
-Message-ID: <20220815162227.clqx44cwka7yt2u3@muellerd-fedora-PC2BDTX9>
-References: <20220810165932.2143413-1-roberto.sassu@huawei.com>
- <20220810165932.2143413-6-roberto.sassu@huawei.com>
- <20220810213351.wm5utltm67q4i6lu@MacBook-Pro-3.local.dhcp.thefacebook.com>
- <2415f4931a364541b2e6d14a8185ffbb@huawei.com>
- <f7d401d6ec6c47cbb358046a2d3ca5e8@huawei.com>
- <20220811235222.inghj73tf6vudoyw@vaio>
- <bff9efc2121046d78e50f0a270d13dc3@huawei.com>
+        Mon, 15 Aug 2022 12:25:46 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4EE237DA
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 09:24:56 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id w196so9052825oiw.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 09:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=7ou0ECd+4fAETC6hUkJMnLd+W0E7PsRe0P5UWcQigd4=;
+        b=r+RpI+fMnzNHCFytU8UQ6nqIGDekSiKjvnTfzmwojHh6GqRmNJHdQWc6O9nDgRuDwk
+         Ga4Ox1wL7y+uei52ve+yaSwaRkPBWWK8kqCr1An7bmrmYToxs6UCkJZV80xos3sHRGSk
+         1vb+TaKwN50PHglyQ3nYnXzvU/XY9FJHBOhzferuzdGK9MfLCapVAOf5z0fZO3+BFEoi
+         RMggn+oUSSpJEGUoJClAZTewxIpvaALlukAXUMyVSpgfCQf+c5s7lwpf1GKxNuG6zxsC
+         +n+gmU13vGpz5lSoxFz0KKCz9uOA1nyVoeMWst3sc5wUYv+Xc3HsNEJYy8Eb10zYNlRW
+         sBwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=7ou0ECd+4fAETC6hUkJMnLd+W0E7PsRe0P5UWcQigd4=;
+        b=wscRXwVdij06D3Lew8uHXbUoV4TPnyZo0YDXXYNophaw0kTGS769OBpUq25zaP5A0b
+         1mOMre1ArBAvmQrjXNzmWSBYo7nmNd7QNJAyMpPIgzvogo8AUq7/wY3QbjQFuBe8So+h
+         m/cpts9sGlSW6a0hpMJAsF+o6pNdn7TxYG3rnC8HAw+iMoTq1VoJCRVVAZy7MrPY7vc3
+         pi/1u2w726oPNPrqeO/FWJEkUKNNTNa8P1jg/5U+YYBpmbGwnXenLoghxrPHV0PDzxnJ
+         IepkETGC/Y4izTOqIyjeVnkpfUbRUxCfMTvi3XwvCoT/+iOxk9pSktOR5zeR/UQeX0lh
+         FkAw==
+X-Gm-Message-State: ACgBeo0bywJdxWH7bmXXkXBs239Rhzuvje55R59tHDFzo6V/FYvKQ3Ue
+        mkpIZmeVUqo6ryuUxErnp1IK/cypVj2guyvPwtT1
+X-Google-Smtp-Source: AA6agR7KPHU1UFRQrkzLWmW555Jup4By1WQs4vqqr4MrHP0gT04wxxp0WpKGu1ttrDKgzeH3Ubo1pUQ7WuULUJjuKuQ=
+X-Received: by 2002:aca:b7d5:0:b0:343:c478:91c6 with SMTP id
+ h204-20020acab7d5000000b00343c47891c6mr5194559oif.136.1660580695486; Mon, 15
+ Aug 2022 09:24:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bff9efc2121046d78e50f0a270d13dc3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+ <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+ <20220814155508.GA7991@mail.hallyn.com> <CAHC9VhRSCXCM51xpOT95G_WVi=UQ44gNV=uvvG23p8wn16uYSA@mail.gmail.com>
+ <20220815154102.GA20944@mail.hallyn.com>
+In-Reply-To: <20220815154102.GA20944@mail.hallyn.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 15 Aug 2022 12:24:44 -0400
+Message-ID: <CAHC9VhTj9BHxa=NmnoOdT-iJ-o_cZP4RbWZ7kvA7VY_viN_hvw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 08:11:00AM +0000, Roberto Sassu wrote:
-> > From: Daniel Müller [mailto:deso@posteo.net]
-> > Sent: Friday, August 12, 2022 1:52 AM
-> > On Thu, Aug 11, 2022 at 12:02:57PM +0000, Roberto Sassu wrote:
-> > > > From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
-> > > > Sent: Thursday, August 11, 2022 9:47 AM
-> > > > > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
-> > > > > Sent: Wednesday, August 10, 2022 11:34 PM
-> > > > > On Wed, Aug 10, 2022 at 06:59:28PM +0200, Roberto Sassu wrote:
-> > > > > > +
-> > > > > > +static int __init bpf_key_sig_kfuncs_init(void)
-> > > > > > +{
-> > > > > > +	int ret;
-> > > > > > +
-> > > > > > +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-> > > > > > +					&bpf_key_sig_kfunc_set);
-> > > > > > +	if (!ret)
-> > > > > > +		return 0;
-> > > > > > +
-> > > > > > +	return register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
-> > > > > > +					 &bpf_key_sig_kfunc_set);
+On Mon, Aug 15, 2022 at 11:41 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> On Sun, Aug 14, 2022 at 10:32:51PM -0400, Paul Moore wrote:
+> > On Sun, Aug 14, 2022 at 11:55 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> > > On Mon, Aug 08, 2022 at 03:16:16PM -0400, Paul Moore wrote:
+> > > > On Mon, Aug 8, 2022 at 2:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > > > Paul Moore <paul@paul-moore.com> writes:
+> > > > > > On Mon, Aug 1, 2022 at 10:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > > > > >> Frederick Lawler <fred@cloudflare.com> writes:
+> > > > > >>
+> > > > > >> > While creating a LSM BPF MAC policy to block user namespace creation, we
+> > > > > >> > used the LSM cred_prepare hook because that is the closest hook to prevent
+> > > > > >> > a call to create_user_ns().
+> > > > > >>
+> > > > > >> Re-nack for all of the same reasons.
+> > > > > >> AKA This can only break the users of the user namespace.
+> > > > > >>
+> > > > > >> Nacked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> > > > > >>
+> > > > > >> You aren't fixing what your problem you are papering over it by denying
+> > > > > >> access to the user namespace.
+> > > > > >>
+> > > > > >> Nack Nack Nack.
+> > > > > >>
+> > > > > >> Stop.
+> > > > > >>
+> > > > > >> Go back to the drawing board.
+> > > > > >>
+> > > > > >> Do not pass go.
+> > > > > >>
+> > > > > >> Do not collect $200.
+> > > > > >
+> > > > > > If you want us to take your comments seriously Eric, you need to
+> > > > > > provide the list with some constructive feedback that would allow
+> > > > > > Frederick to move forward with a solution to the use case that has
+> > > > > > been proposed.  You response above may be many things, but it is
+> > > > > > certainly not that.
 > > > > >
-> > > > > Isn't this a watery water ?
-> > > > > Don't you have a patch 1 ?
-> > > > > What am I missing ?
+> > > > > I did provide constructive feedback.  My feedback to his problem
+> > > > > was to address the real problem of bugs in the kernel.
 > > > >
-> > > > Uhm, yes. I had doubts too. That was what also KP did.
-> > > >
-> > > > It makes sense to register once, since we mapped LSM to
-> > > > TRACING.
-> > > >
-> > > > Will resend only this patch. And I will figure out why CI failed.
+> > > > We've heard from several people who have use cases which require
+> > > > adding LSM-level access controls and observability to user namespace
+> > > > creation.  This is the problem we are trying to solve here; if you do
+> > > > not like the approach proposed in this patchset please suggest another
+> > > > implementation that allows LSMs visibility into user namespace
+> > > > creation.
 > > >
-> > > Adding in CC Daniel Müller, which worked on this.
-> > >
-> > > I think the issue is that some kernel options are set to =m.
-> > > This causes the CI to miss all kernel modules, since they are
-> > > not copied to the virtual machine that executes the tests.
-> > >
-> > > I'm testing this patch:
-> > >
-> > > https://github.com/robertosassu/libbpf-
-> > ci/commit/b665e001b58c4ddb792a2a68098ea5dc6936b15c
-> > 
-> > I commented on the pull request. Would it make sense to adjust the
-> > kernel configuration in this repository instead? I am worried that
-> > otherwise everybody may need a similar work around, depending on how
-> > selftests are ultimately run.
-> 
-> The issue seems specific of the eBPF CI. Others might be able to use
-> kernel modules.
-> 
-> Either choice is fine for me.
+> > > Regarding the observability - can someone concisely lay out why just
+> > > auditing userns creation would not suffice?  Userspace could decide
+> > > what to report based on whether the creating user_ns == /proc/1/ns/user...
+> >
+> > One of the selling points of the BPF LSM is that it allows for various
+> > different ways of reporting and logging beyond audit.  However, even
+> > if it was limited to just audit I believe that provides some useful
+> > justification as auditing fork()/clone() isn't quite the same and
+> > could be difficult to do at scale in some configurations.  I haven't
+> > personally added a BPF LSM program to the kernel so I can't speak to
+> > the details on what is possible, but I'm sure others on the To/CC line
+> > could help provide more information if that is important to you.
+> >
+> > > Regarding limiting the tweaking of otherwise-privileged code by
+> > > unprivileged users, i wonder whether we could instead add smarts to
+> > > ns_capable().
+> >
+> > The existing security_capable() hook is eventually called by ns_capable():
+> >
+> >   ns_capable()
+> >     ns_capable_common()
+> >       security_capable(const struct cred *cred,
+> >                        struct user_namespace *ns,
+> >                        int cap,
+> >                        unsigned int opts);
+> >
+> > ... I'm not sure what additional smarts would be useful here?
+>
+> Oh - i wasn't necessarily thinking of an LSM.  I was picturing a
+> sysctl next to unprivileged_userns_clone.  But you're right, looks
+> like an LSM could already do this.  Of course, there's an issue early
+> on in that the root user in the new namespace couldn't setuid, so
+> the uid mapping is still limited.  So this idea probably isn't worth
+> the characters we've typed about it so far, sorry.
 
-I understand that depending on how tests are run, kernel modules may be
-available to be loaded. My point is that I am not aware of anything that we
-would loose by having the functionality built-in to begin with (others can
-correct me). So it seems as if that's an easy way to sidestep any issues of that
-sort from the start and, hence, would be my preference.
+No harm, no foul.  This thread has already reached record lows with
+respect to usefulness-vs-characters ratio, a few more isn't going to
+hurt anything ;)
 
-Thanks,
-Daniel
+> > [side note: SELinux does actually distinguish between capability
+> > checks in the initial user namespace vs child namespaces]
+> >
+> > > Point being, uid mapping would still work, but we'd
+> > > break the "privileged against resources you own" part of user
+> > > namespaces.  I would want it to default to allow, but then when a
+> > > 0-day is found which requires reaching ns_capable() code, admins
+> > > could easily prevent exploitation until reboot from a fixed kernel.
+> >
+> > That assumes that everything you care about is behind a capability
+> > check, which is probably going to be correct in a lot of the cases,
+> > but I think it would be a mistake to assume that is always going to be
+> > true.
+>
+> I might be thinking wrongly, but if it's not behind a capability check,
+> then it seems to me it's not an exploit that can only be reached by
+> becoming root in a user namespace, which means disabling user namespace
+> creation by unprivileged users will not stop the attack.
+
+I was primarily thinking about two things: subj/obj relationships
+which are really not addressed with capability checks, and unrelated
+problems which aren't the fault of the user namespace but could be
+somehow made easier through some of the unique situations offered by
+user namespaces.  There are exploits that often require chaining
+together multiple "things" to trigger the necessary flaw, and
+sometimes the most immediate way to stop such an attack is to apply
+additional controls to one of these intermediate steps.  Frekerick's
+work puts the necessary infrastructure in place so we can do that with
+user namespaces.
+
+-- 
+paul-moore.com
