@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E18592FFD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 15:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03539592FFF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Aug 2022 15:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242413AbiHONdV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Aug 2022 09:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        id S242444AbiHONdW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Aug 2022 09:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242981AbiHONdB (ORCPT
+        with ESMTP id S243003AbiHONdF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:33:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F29017053
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 06:33:00 -0700 (PDT)
+        Mon, 15 Aug 2022 09:33:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F33417053
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 06:33:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C7E160EC2
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 13:33:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DA6C4347C;
-        Mon, 15 Aug 2022 13:32:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBC36B80EBB
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Aug 2022 13:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE32C43140;
+        Mon, 15 Aug 2022 13:32:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660570379;
-        bh=+LI8T2tA3D0W4jHBlk8SZzjrz3GUYnCv7SGlY2zQn2Q=;
+        s=k20201202; t=1660570381;
+        bh=/WFb/N5O8AgUjIFzL8VcJC649OnWoCnCH7PCPPopE9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r1GmFRBFM0w+tDwWi23iCgrRV4kJa2wKqSBSZieRVWbZjH2NiSGHIAYlMi5934kJc
-         HZ4mbYoUR5FCNDj2c+r+kWAPUtQxZr+NcewuWTlsh32OHfYSfZwLVdgxwG/+f4fb8z
-         puJXvCD+gHxn7BP//8f7v0CoKz+ds8raakUo2YGDCyZ4r2F1aWlulhObL88MjXfaRj
-         NaGye+1BYexCl3/1qNfMGmMiykPqx375L147hGO6+Q7q7HRTENH7MF9w5UhQj+eJPe
-         T8Yye6IPYS+gZetzGbAKwAHZ62Df7/xq+Jb4JQ7UkHrPSNQcxWV3HTY44HQ65XpM0N
-         jKPDjXDDhJA8g==
+        b=iPL8OkTAmKG1hGzqzcIKGuqDDwu3BQ+IGbCnpSb3UyimTJfzkdA0IYDA48lA3ztA1
+         9/7NZs6zY+VrZThMBc5al4rny7NAqlQ3J142viRHEK5f+afFggnkMBAqabhVJ5BYCR
+         i83Z7R9+zGNCAKJpFYw4yk9ftn0ZX6hTeqwppNinIkvx3c4wBw7xndTNxAZJDg9YSo
+         Av1TZoDTM4Gdg8o0JsyH4pEgaEuOGIQoVqwBStQM6/Gs4lzAft5oUMEROtzbkbURh3
+         8IFrdC/sb5KmbDoYG/Laj/gTB6q+iHL1zvcmuzgAY6gp0m/UU1iYc4O/xBX23QaIlr
+         4qR2us7bV8g+g==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 06/10] kselftest/arm64: Only validate each signal context once
-Date:   Mon, 15 Aug 2022 14:32:32 +0100
-Message-Id: <20220815133236.235464-7-broonie@kernel.org>
+Subject: [PATCH v1 07/10] kselftest/arm64: Validate contents of EXTRA_CONTEXT blocks
+Date:   Mon, 15 Aug 2022 14:32:33 +0100
+Message-Id: <20220815133236.235464-8-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220815133236.235464-1-broonie@kernel.org>
 References: <20220815133236.235464-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3258; i=broonie@kernel.org; h=from:subject; bh=+LI8T2tA3D0W4jHBlk8SZzjrz3GUYnCv7SGlY2zQn2Q=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi+krwJUXK/s/g3rF4Rh7MBT99qYdZEnt7xAeJcKyV 7ykOlU6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYvpK8AAKCRAk1otyXVSH0L8rB/ 9/XHTCkhHe24fXfDewMBsFjhJxRy0vhgiB1aPOa9ssT5vDJkpaiuFpoithcaX0KYt+pAOSiZC5Bdax yhTCEDMEKLqDjwbMe+4Q6/STB36uEtXkUzg0eVp/G4o6QqT7BIf0C9ZguhrAYzollZl6HX5fyNbHVa /QvWZOGnZiLe5aH0ztl7lmnujeOX4/b8/7+xZxVYk2RS01u2++kRidYcPIP0nFpQmnqEvsP6AvSbPF bDG/rJePfmrGW+JiKHJ/+WQ3W5DhJfNFSL2W8wVXUeGRIOMjApyeo5h3AJ/uThP6PlJ9pcNIg3Xym7 1i+MRNmUpUiQnT1JT/l55qtGSNQ8BR
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2567; i=broonie@kernel.org; h=from:subject; bh=/WFb/N5O8AgUjIFzL8VcJC649OnWoCnCH7PCPPopE9s=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi+krxyKH9XTGK6DuYhZ+zZkKmkU3wcSyOtiyMcOTO t5F2Yu+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYvpK8QAKCRAk1otyXVSH0EbBB/ 9Y0tPy0Lm2REqQMvTlkO2i1hqRvqNXjkwjzVEeR9J98ZoAY2r3OKtcnTpXbRAMiugk55R/lwsxeDkC 2zrTXRuBQ3cYyx0S8nImhejdkKTIHGASa8BSZE2rkm/9Y2e9rCOyFPf+pHN5ySFV8BlSVQAeWDqkkj iHYyO5ZW9qslJ+Z0FiIGaeAN56QCgWO7ZG60R6+K+68PjlXTKDhSAhHUDZJcmhVNsJ4vOGWua6vkGj ze2QdjiTaZItRfi2jCPU8oG9rYD5BI9Tsq5vZYOjU6JC44dTGLVrNFC8n6QBMsIO3iKmnu8Mgwjr2o lPg59aDZfiiamWm0K/x+pF6Ij7mxVK
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,97 +58,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently for the more complex signal context types we validate the context
-specific details the end of the parsing loop validate_reserved() if we've
-ever seen a context of that type. This is currently merely a bit inefficient
-but will get a bit awkward when we start parsing extra_context, at which
-point we will need to reset the head to advance into the extra space that
-extra_context provides. Instead only do the more detailed checks on each
-context type the first time we see that context type.
+Currently in validate_reserved() we check the basic form and contents of
+an EXTRA_CONTEXT block but do not actually validate anything inside the
+data block it provides. Extend the validation to do so, when we get to the
+terminator for the main data block reset and start walking the extra data
+block instead.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../arm64/signal/testcases/testcases.c        | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ .../arm64/signal/testcases/testcases.c        | 25 ++++++++++++++++---
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.c b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-index 16dc916939f9..0b3c9b4b1d39 100644
+index 0b3c9b4b1d39..e1c625b20ac4 100644
 --- a/tools/testing/selftests/arm64/signal/testcases/testcases.c
 +++ b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-@@ -105,6 +105,7 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 	bool terminated = false;
- 	size_t offs = 0;
- 	int flags = 0;
-+	int new_flags;
- 	struct extra_context *extra = NULL;
- 	struct sve_context *sve = NULL;
- 	struct za_context *za = NULL;
-@@ -120,6 +121,8 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 			return false;
- 		}
+@@ -25,7 +25,8 @@ struct _aarch64_ctx *get_header(struct _aarch64_ctx *head, uint32_t magic,
+ 	return found;
+ }
  
-+		new_flags = 0;
+-bool validate_extra_context(struct extra_context *extra, char **err)
++bool validate_extra_context(struct extra_context *extra, char **err,
++			    void **extra_data, size_t *extra_size)
+ {
+ 	struct _aarch64_ctx *term;
+ 
+@@ -47,6 +48,9 @@ bool validate_extra_context(struct extra_context *extra, char **err)
+ 	if (*err)
+ 		return false;
+ 
++	*extra_data = (void *)extra->datap;
++	*extra_size = extra->size;
 +
+ 	return true;
+ }
+ 
+@@ -111,6 +115,8 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 	struct za_context *za = NULL;
+ 	struct _aarch64_ctx *head =
+ 		(struct _aarch64_ctx *)uc->uc_mcontext.__reserved;
++	void *extra_data = NULL;
++	size_t extra_sz = 0;
+ 
+ 	if (!err)
+ 		return false;
+@@ -125,10 +131,20 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
+ 
  		switch (head->magic) {
  		case 0:
- 			if (head->size)
-@@ -133,7 +136,7 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 			else if (head->size !=
- 				 sizeof(struct fpsimd_context))
- 				*err = "Bad size for fpsimd_context";
--			flags |= FPSIMD_CTX;
-+			new_flags |= FPSIMD_CTX;
+-			if (head->size)
++			if (head->size) {
+ 				*err = "Bad size for terminator";
+-			else
++			} else if (extra_data) {
++				/* End of main data, walking the extra data */
++				head = extra_data;
++				resv_sz = extra_sz;
++				offs = 0;
++
++				extra_data = NULL;
++				extra_sz = 0;
++				continue;
++			} else {
+ 				terminated = true;
++			}
  			break;
- 		case ESR_MAGIC:
- 			if (head->size != sizeof(struct esr_context))
-@@ -144,14 +147,14 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 				*err = "Multiple SVE_MAGIC";
- 			/* Size is validated in validate_sve_context() */
- 			sve = (struct sve_context *)head;
--			flags |= SVE_CTX;
-+			new_flags |= SVE_CTX;
- 			break;
- 		case ZA_MAGIC:
- 			if (flags & ZA_CTX)
- 				*err = "Multiple ZA_MAGIC";
- 			/* Size is validated in validate_za_context() */
- 			za = (struct za_context *)head;
--			flags |= ZA_CTX;
-+			new_flags |= ZA_CTX;
- 			break;
- 		case EXTRA_MAGIC:
- 			if (flags & EXTRA_CTX)
-@@ -159,7 +162,7 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 			else if (head->size !=
- 				 sizeof(struct extra_context))
- 				*err = "Bad size for extra_context";
--			flags |= EXTRA_CTX;
-+			new_flags |= EXTRA_CTX;
- 			extra = (struct extra_context *)head;
- 			break;
- 		case KSFT_BAD_MAGIC:
-@@ -192,16 +195,18 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
- 			return false;
+ 		case FPSIMD_MAGIC:
+ 			if (flags & FPSIMD_CTX)
+@@ -196,7 +212,8 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
  		}
  
--		if (flags & EXTRA_CTX)
-+		if (new_flags & EXTRA_CTX)
- 			if (!validate_extra_context(extra, err))
+ 		if (new_flags & EXTRA_CTX)
+-			if (!validate_extra_context(extra, err))
++			if (!validate_extra_context(extra, err,
++						    &extra_data, &extra_sz))
  				return false;
--		if (flags & SVE_CTX)
-+		if (new_flags & SVE_CTX)
+ 		if (new_flags & SVE_CTX)
  			if (!validate_sve_context(sve, err))
- 				return false;
--		if (flags & ZA_CTX)
-+		if (new_flags & ZA_CTX)
- 			if (!validate_za_context(za, err))
- 				return false;
- 
-+		flags |= new_flags;
-+
- 		head = GET_RESV_NEXT_HEAD(head);
- 	}
- 
 -- 
 2.30.2
 
