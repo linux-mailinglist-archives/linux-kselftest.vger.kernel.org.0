@@ -2,126 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668F8597990
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 00:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26727597A91
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 02:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241556AbiHQWP2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Aug 2022 18:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S231939AbiHRAUy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Aug 2022 20:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242179AbiHQWP0 (ORCPT
+        with ESMTP id S231510AbiHRAUw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Aug 2022 18:15:26 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB2AA98D5;
-        Wed, 17 Aug 2022 15:15:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WLbtjsSSnhFhQ+gIo20W9kBqg5pHBJ5270ZnXIFpRsujJeu6XKyQDqE5kweirJBIslmywEDmvagCTWmCSbQZllaWlEZJ6Nd6jo+KsOnBQb9wLPnz3Bg/nWCcuCwCqR8oq6DK3VKy5+kHnj4iFXdxIxd2MjTcVWQ/Uq9P/UwQcodXjh28l9vtbRNkGx1ltF3jpc57Khj96WVKIOeScuxXZnmBK0hpJXzz+FNklzIEWgQUzaQo1rvqnVaB7dSyIHhDQNnKZsDongAwxvIk+OYsyNR+TIqj3YTkASzz/sXlLqEG7w2VREHyiZ0tH0y+U/dhd2Kuzyt5K0Z02HcwEanHMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dqRyi/vCUC+sRPTFSSX0a1p+jvtjzQL/ztKZPCKdHRQ=;
- b=WiPQ+dL5Oajzz/is8zOilBduKov8JHEOLjJ08r8l/MSl/JuTeFCgD9JM4Vhep31Y8D0+ddYd6k+iGYf1PSlpvWh2f6xeNmGPP5tvEoDBdD/NLCmh3+LHzeMCGBh9axCVpZcAiKi5dG005YInrVJAN9CRbUqqagTFPCqoDqq6NOw7uW9AI5ylsSNPIpNqvk3CeeVPX1y7QbY/SQ4tt2BgSYOrNhpwK+tVFfHXcoDGEUQx+oDsuoM3OjDdER1L3EKnQvoKr3qCVEznucC3vOvsECWqW5Pz8R+4mPzCgHI7QrKOVbutDCTu6TkrcxJ1FEHQ8eStox2jItxHswfb2hNMuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dqRyi/vCUC+sRPTFSSX0a1p+jvtjzQL/ztKZPCKdHRQ=;
- b=FLBrDX1rj1jkAqnJbr6PmKN3UP97Ath9CMLAQbW7p+OBZaCurKO/B9WJIGTiJg1NOHJPoyv0dmq6vDfXLegGTX8Xg9/8swbu48t8Blx34EjhaIn51B9BgCrMvGhXHdwyy67MwOhAQulCuqdiR3vhM2kE31GewAkkSoVQEMY2LDXLNi3LVahIEFUK2eptWAh2j32rMWW9QGXkp5AshhRLV2vn34SZS9F26iUl3uRCiJdnj21zAL5MFxmJmt5pTXiTbjbATkoz+sNxJ/CLnGd698QDdmTlXFCBHjo7eAhrOs8IAuxOvD82U2Zh6YTy6MrwrJMOWm1wDvijK4rIzgXCvg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by MW4PR12MB5644.namprd12.prod.outlook.com (2603:10b6:303:189::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Wed, 17 Aug
- 2022 22:15:22 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%9]) with mapi id 15.20.5525.011; Wed, 17 Aug 2022
- 22:15:22 +0000
-Message-ID: <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
-Date:   Wed, 17 Aug 2022 15:15:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] selftests/vm: fix inability to build any vm tests
-Content-Language: en-US
-To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Wed, 17 Aug 2022 20:20:52 -0400
+X-Greylist: delayed 1199 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 Aug 2022 17:20:51 PDT
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03BEA1D11;
+        Wed, 17 Aug 2022 17:20:51 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7B68B580556;
+        Wed, 17 Aug 2022 19:41:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 17 Aug 2022 19:41:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1660779685; x=1660786885; bh=NI
+        aAYd9poCwuCaReO0KiItjGT5b3278AiQgPlMaoGH8=; b=PuKLpG0lACFDSWgEO8
+        rwPWX4M0HQpSuEdYRtGzQptcaolkieS2EgsFIwpoZyncFWpZckNeFIzIIYOqO8zc
+        9BpZgvlyinTevkQRn/C/ka6JMZsh8Ts9cHQWdeYq9ybnuk1SQZpubaUGZQB9t1lM
+        qk4rSx6j+tUOfRKOd3g94hTTtthwjyy2FqigUkFALmNMXV3xaGruqjoeP5+34xuk
+        J1Cinr4a4qem9KNGhx+lzwXQAr8UJisToeNsfhj8HLQwy0xeOfa5U42VQCIa7k9W
+        qZ8iK9otGm9LKKwttomxp7Dv3pSQF6Et1ZTaIBSz7M8flKM1wmlzQBaAB4PFaBIk
+        k9IQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660779685; x=1660786885; bh=NIaAYd9poCwuCaReO0KiItjGT5b3
+        278AiQgPlMaoGH8=; b=WGuGDaggU/a6pga7pL9w3WYTfRF/tux3G1kX0A3mQjNG
+        OC+VxEFGbO+smOA+p7iGMZ3GoMIsMcaWl3/NDeaFMGDz77QMAzUSQkUiUmCGJkRW
+        xHDUodL0TH5AF7G//emEtkunMR0IZ4l2d7XmME00+CIEmSs0g9HkS3qnHI4slsRN
+        HLEINl4PWiLW8DvpQUTe/0aF8/PdVhKDH0qkmMtKQaNXy1O+iZNm5MWAKX+BYowx
+        KuXbnGKaeKu5x2AZgYGthwUdYmgJrzE5cQQyW5v4ZXRMkJgZP9HwjqtkEwDmOL4I
+        VHlt+Z4I/oeTtr+VVKyUXBqBYFKb61xw+pnbo22rNA==
+X-ME-Sender: <xms:pHz9YkXNQXrutmOXLT8qKC8bAkDrafNZwTbHHUvk4uGruAWRz8lSXw>
+    <xme:pHz9YomAAobQndykgGisfSvrEaUbnwRxPnhjaRnRKcy7rwe8iA--U-9p8AJVY1ht3
+    CHYDQX82TnQfowOqrY>
+X-ME-Received: <xmr:pHz9YoYoOJJ3U6PUwRm1npi6IHWY-81B3GDPi_Hh-Sh04EiF8v9DMalIOFzMmXc0odStsA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehjedgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:pHz9YjURvYrPk7ln2G6y5jzbE1QNYYzGLgRztyxiICy4kfvUbUjaNg>
+    <xmx:pHz9Yum1Ff9XGpoiOlx7NWmi_AWkZcUFRDXkPoeuriI3uxXSxr406w>
+    <xmx:pHz9YodmYF_t-pLZ3YNAgjRYP3doKC47u2BG16XkOANkKS6FtmEg2Q>
+    <xmx:pXz9YoADMoiV4yerQswAA91U22gwFiEMHVgZT94HO2C4gO2O9zUMXQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 Aug 2022 19:41:23 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id E5075104A77; Thu, 18 Aug 2022 02:41:20 +0300 (+03)
+Date:   Thu, 18 Aug 2022 02:41:20 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220817211356.273019-1-axelrasmussen@google.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220817211356.273019-1-axelrasmussen@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR13CA0034.namprd13.prod.outlook.com
- (2603:10b6:a03:180::47) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
+Message-ID: <20220817234120.mw2j3cgshmuyo2vw@box.shutemov.name>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
+ <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
+ <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0b1f6373-6bbd-4489-12eb-08da809dfa78
-X-MS-TrafficTypeDiagnostic: MW4PR12MB5644:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G0ZaT5eIvbPYDj9HXO6L7USxjyhdaiwh6h66qRV6DeY0APBs+noP0oAM/WvsjAgBM6ctkcTbMuL7xcr89ySPf20a/2wYBHzpM3S2ZLO231MtXnYMiyP6zypNjl7p8Y22cO4oSs3/83QMMeSqxFjIlL0lyhg89aLVSjXFlS4WMWs+Vlu6cC9OtRVagrDrIw6kqBX8IlpG4DUtYyXoUCEu1T5XLYGi9NYDBj0urd3NalFKgQMXM5Qw2eeqGds8nz1Fh2I+XapDp1lX41MP+6A0XeZC2p+v+N3b+4NJhjvnRq+71cpvPbdeTJj2CEzTJroFrACCw03MaF3Ms6VMsoZseYIxIIRMHFWT1FxTh6E2nPoUTECFZcVfM0XcoNIONY928cGpi9XdPxKzFfWFOVMvlVoR2yOjyQpNpCRsBXV059OJuIuAY4dhOSxiTJn4hT6hNjaG+avlid0aP3P+4N8MMu5XAG96Ax/hryJ3T69/17OhQiKQZb+pCdK4Z2a96chE87wm7x1VmK9tzhukRuX4d+gwRVFlHXpllVjhsqM9uR/bTqvqDjCLJBYYxUiliHih6hFUYf7Y6BUKa35S8fByrBybX1pSyhY6uMmaEzMtpGOhTsun6Efk2L/C3xhVOhvwvO91BKhTbqfmgtl9VIRxAU2VmccUR9KwSyz1uW7gXN25NIDhudbNaCQGoRG9oUu6zJWVAEZu214J1DctWvp5mcNwBrPv7WBLzYKRtgJDB8JA8B/8rp0gfcUiViaZ1sVtKgnqLXk2P4qmPsjlDHfCCaPi8Q3Y1UDcE+672/wWqio=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(396003)(376002)(39860400002)(136003)(53546011)(478600001)(41300700001)(2906002)(86362001)(6506007)(5660300002)(186003)(2616005)(31696002)(26005)(6512007)(38100700002)(8676002)(8936002)(6486002)(36756003)(31686004)(83380400001)(110136005)(66946007)(66556008)(4326008)(66476007)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFMzYmJrM1g3a3hSOWY5ckJSVGxnVnJmUjFCSVFJOXg0d2Y5MXFxOGc0ZDgv?=
- =?utf-8?B?Qm5HY0ZDMU5WbGhqbFgzQmF6RG5pUzZtSWZEWTMvK2M3QTREN2xneWFNejUw?=
- =?utf-8?B?OFNnU0VIS1g4L3QvaHVNS3V1bVRFN3JkL0xWUkM0TzJxTzlqQUo0c2lnSlZW?=
- =?utf-8?B?bEJUNDh6S0xPSUhUWmdWSVdrclN1Myt4Qlp4ak9JdTR1WFoyYU9DSXVDV2RW?=
- =?utf-8?B?SXRCd3BMaThGNGk3OXZ3Wkd6YVFZaEhpMjB0eTlDYVdZUzJhbHlwMXJBNGxZ?=
- =?utf-8?B?OS9uZFNQNDM2RGtiU2IyYndPNjBtYmYwVUd2d05mYkg5Q1h3MkFIQUkyK3k3?=
- =?utf-8?B?NXhaY3NtM20rVHQyK3ZsK2NjZnhGenZEaG9oZTNPd0R0VGlEYmRXOFd5Q3Vy?=
- =?utf-8?B?MWY5RWZheWJuYkpVMERSamFvbDRseFlmUnMvdUZQL3RYYmdiWVVqa1JXVG53?=
- =?utf-8?B?L01NazVZZWJPMkdrWFNRSVh1bC9IUEM2RGNzaVhXSjRzVUVlNTRmaTNKcDdL?=
- =?utf-8?B?VXdaTUhoSHd0N1RsN3N1VU1KL3NUMHRVYWRjTnM2VlM3eGJrQWplN0REREZn?=
- =?utf-8?B?VXNkYkFSMnIwV0V3Q3MyOGtXdU51bGFtMW9hZ0ZVMVVKbGZlblI1K05nTzBj?=
- =?utf-8?B?c2NiWjAxcEI5WHlOdEp5M2xMOG5PSDF2c3J3NFBwWlVMdDE0dWpCS2VUTzYz?=
- =?utf-8?B?REJrcFZTanhCQWVmbjJITmtSSVRoRzFDMEpKNE9XRmc5dmJtYlc4QzVacVhS?=
- =?utf-8?B?VUNZaHFtR3lNSWZ5blczaGlJSU9BcTEyL0J5U25rZVp4Y0N1cUNFeHFySGxM?=
- =?utf-8?B?VlFjT1Q2a3hrT0dYdzJUNE80b0tmZEl6ZWhnaWRhNWlWemNqL2hnMzhMc3B2?=
- =?utf-8?B?eWZiWmlNSkYwU3NHUGJzSFR4SmhLK3dKOTJmSHlaamwwMWpYUnRaZGErNXlk?=
- =?utf-8?B?U2F6Z3A1NUVyTXdDemVXWDJ2ZmNidzNTSUYxY1pkZ0Vlb3lVUDRRTFJiblly?=
- =?utf-8?B?VURvTlorNDd4bXcxNnNheVA0OEIxa2YxY0Z3Z21tZ1ZrN005Mk84L05rc1JZ?=
- =?utf-8?B?T2xJS094cTEyR3pFMnhhb25RcXhzU052R2tFZnE0UytwWmtJUGNtY1N5eVNZ?=
- =?utf-8?B?YWN2WmdRRDRCT2REMzBSY1oreVl1KzB4NkE2NHFOSnJUTHY0R0VIZlpVTlpF?=
- =?utf-8?B?Qml0bjRUS2EyT1lmZHBGdm9VdWFYZGROZTRDM3phRUVVNmZVMmlkbDlXTFYy?=
- =?utf-8?B?THdYVUJVNjNXbDE3VTcxNzJZU2RLZy9PRXZxK1Q1Um8ydWNKYVRkNFRZRlVF?=
- =?utf-8?B?TGxBalN1WEJsWE9wbjlIVlkwRWl1bGhCMGVQc1lWbVIxWjI2d3dKWHNLSkxX?=
- =?utf-8?B?ajNWdy8xWHluRHUxdEV4d04zbFlWemp3Vk5SRXdWVzBTOFgvbFhLQ29vQU83?=
- =?utf-8?B?VVZEV3FIUng3L0FmdkRQSTJ4Z2hmU2k5N3dwN2t2ZXV4OWhDWEtSOU9QTmJS?=
- =?utf-8?B?d0kxNlQ2eXFzV0ZKcFV2ZG9nSCtxZ2diMjA4WFRMUGtDdXJnVHZldG1YY2xp?=
- =?utf-8?B?NUpqRGwzN044S0dlRll6dHlWdWJEVGJBK0dMM01HNGxkeVE0dHZFQ3pxY09M?=
- =?utf-8?B?RjE3RnVuUHlUWGF3aThpVkliZTdrUG51TFdTck1qL2s3ZGgxOTZ5NmhOU2Zt?=
- =?utf-8?B?SUthUVdOOTVlZTJhNHRWZkdPQksvZFhVVHI5eXBhSHllOGpmcGJteWJBUElL?=
- =?utf-8?B?QUc2bFdjLy9LS3d1aFd5YjlhbnhkblpzLzhhcW55WVpPaGJkcWVtZlRLQ0sx?=
- =?utf-8?B?TTZzUEFBZmhWbE81UytoVllPSTJQR1JyRmxNaWRHVm54Rmhxa3JPSW5pMC9Q?=
- =?utf-8?B?aWFkYTg3YXNLVGc5bGRkQ09BeUhHdEt0dnNRTDdZYlN6Myt1K1FOU1ZGUkhJ?=
- =?utf-8?B?RjZiVkZZOGJKcHZsZDZ3a2RBNGNVeXdINjk2ZEErRHVRMFhGeGUxYk1QY3dI?=
- =?utf-8?B?N3drb0ZMWVdUZ0xacllqYUJPdHV5KzVOc2dRTHg1Vk5WWlRpMWNJdkgxTU83?=
- =?utf-8?B?MXJlbmpDQWNiYmZ1VmVMNitmRk1heTlqd0JoSVdVQVhINUJLYjJrbE9YUmU0?=
- =?utf-8?Q?FWqWQN8+ggTa8vdFZyoK7WD6x?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b1f6373-6bbd-4489-12eb-08da809dfa78
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2022 22:15:22.8458
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KiC+pYUh92vAbC6yYSJ+7lIVamvVIgxXPwJWs5TZ8IaPdL+5x1YXQ//xtZKNESwKlSpcp/Oca2bdEsRpUwDHpg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5644
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,69 +119,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/17/22 14:13, Axel Rasmussen wrote:
-> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->   tools/testing/selftests/vm/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Aug 05, 2022 at 07:55:38PM +0200, Paolo Bonzini wrote:
+> On 7/21/22 11:44, David Hildenbrand wrote:
+> > 
+> > Also, I*think*  you can place pages via userfaultfd into shmem. Not
+> > sure if that would count "auto alloc", but it would certainly bypass
+> > fallocate().
 > 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index d9fa6a9ea584..f2a12494f2d8 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -1,7 +1,7 @@
->   # SPDX-License-Identifier: GPL-2.0
->   # Makefile for vm selftests
->   
-> -LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
-> +LOCAL_HDRS += $(selfdir)/vm/local_config.h $(selfdir)/../../../mm/gup_test.h
+> Yeah, userfaultfd_register would probably have to forbid this for
+> F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for this,
+> adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then userfault_register
+> would do something like memfile_node_get_flags(vma->vm_file) and check the
+> result.
 
-Hi Alex,
+I donno, memory allocation with userfaultfd looks pretty intentional to
+me. Why would F_SEAL_AUTO_ALLOCATE prevent it?
 
-Thanks for fixing up this build, it's always frustrating to finally
-finish working on something, only to find that the selftests build is
-broken!
+Maybe we would need it in the future for post-copy migration or something?
 
-This looks correct, and also I've tested it locally, and it works. So
-please feel free to add:
+Or existing practises around userfaultfd touch memory randomly and
+therefore incompatible with F_SEAL_AUTO_ALLOCATE intent?
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+Note, that userfaultfd is only relevant for shared memory as it requires
+VMA which we don't have for MFD_INACCESSIBLE.
 
-
-A couple of follow-up thoughts:
-
-1) I recalled that hmm-tests.c in the same directory also needs
-gup_test.h, and wondered if that was covered. And it turns out the the
-relative "up and over" include path is done in hmm-tests.c itself,
-instead of in the Makefile, like this:
-
-/*
-  * This is a private UAPI to the kernel test module so it isn't exported
-  * in the usual include/uapi/... directory.
-  */
-#include "../../../../lib/test_hmm_uapi.h"
-#include "../../../../mm/gup_test.h"
-
-It would be nice (maybe follow-up polishing for someone) if this were
-done once, instead of twice (or more?) via different (source code vs.
-Makefile) mechanisms.
-
-2) Commit f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
-claims that it is now required to "make headers_install" before building
-the selftests. However, after applying your fix (not to imply that there
-is anything wrong with the fix; it's fine), I am still able to build
-vm/selftests, directly after a top-level "make clean".
-
-I believe that this is because the selftests are directly including
-gup_test.h, via relative up-and-over paths. And I recall (and also did a
-quick dry run, to be sure) that this internal gup_test.h header is not
-part of the headers_install list. So that seems to be all working as
-intended. But I wanted to say all of this out loud, in order to be sure
-I fully understand these build steps.
-
-
-thanks,
 -- 
-John Hubbard
-NVIDIA
+  Kiryl Shutsemau / Kirill A. Shutemov
