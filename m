@@ -2,102 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23519596B69
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Aug 2022 10:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57AE596C04
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Aug 2022 11:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiHQIeW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Aug 2022 04:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
+        id S230107AbiHQJ1U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Aug 2022 05:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiHQIeW (ORCPT
+        with ESMTP id S229705AbiHQJ1U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:34:22 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696AA4D274;
-        Wed, 17 Aug 2022 01:34:20 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r16so6147749wrm.6;
-        Wed, 17 Aug 2022 01:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=P8ZUO6V2KNOkYdxLtrlQAlfU03xMErqXxjLAC+qSY1k=;
-        b=LvGtIr23u6IOczpxEdJkuDvtZWJFg2EiyPw2Kof+Vk7jDEXAozxeSlH9UW/3DEsFRQ
-         sKmtO1ZRSuTBvQvCZn/gFM1V2A+MXWJoE5rCuMwdyxCcOm/6yGQUtdxr2nlVyY1L/nnO
-         Hc1mfcDDIWK3qHs/Fp9ojMc03Os1A0WM2/HbXVMmrBsCDTCFv9ZH8uaCHTPCt4kVd44e
-         6nzibmRRLnW/NPzaoOikOv2qYFig9IXiSoz4FCzAb3Ov6ciCrqLKrUcCyz2biI/dJpg0
-         WQMp3iYlVqr5JCD0UbwrnCuyyO0VAunwttotVQ5Yr2T7bIWhjg6PhvqEhril9Z7eGcwl
-         7azA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=P8ZUO6V2KNOkYdxLtrlQAlfU03xMErqXxjLAC+qSY1k=;
-        b=cYM9pXrI8YlodbWgZAALQk+kENHUSdm9YYSzl5zVZXRQQw0UP7yKuY0hVcwjjdnqqZ
-         UcDskh/8FGBHBFA10nSCLndM/KPiZVH5TTMw1HWXbG9GoyRrgpV+s7fVRHqzGV0nbRrg
-         hIGisp0a9YLIlskXnDloeHl/eAPXlvzIf6SipA6w9/FK35fczrp/xOMiqcx6TFKRizXc
-         xSruhseAgncjz70osqMLYe0HJDM079cQwYsljrnxhl/zPTKZ4XnuKWmuZSTRCGMkbkgI
-         GYGhtKj8RjwC+xWD3E/8PkvfeRComK/biEMbFL70CQGW+8VfZC4L8ELelM40DB1+xxkh
-         QfrA==
-X-Gm-Message-State: ACgBeo3uXkHB9PYPL4r+wYsOEKo7dV+z+GsUSzSigo0s7cb4OmF4fa3T
-        79DFCbskggM3wXh+GPyPlHw=
-X-Google-Smtp-Source: AA6agR6hZ9mpFa3dqJCDYX3Y0+uFAo+ADFuKqcLC3sOqv47exRzKdQm7lXD0AiRDV6YyCBSMHc1SRg==
-X-Received: by 2002:adf:f905:0:b0:224:f876:c001 with SMTP id b5-20020adff905000000b00224f876c001mr8961785wrr.201.1660725258966;
-        Wed, 17 Aug 2022 01:34:18 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id ay39-20020a05600c1e2700b003a5fcae64d4sm1487241wmb.29.2022.08.17.01.34.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 01:34:18 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests/bpf: Fix spelling mistake "succesful" -> "successful"
-Date:   Wed, 17 Aug 2022 09:34:17 +0100
-Message-Id: <20220817083417.50884-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 17 Aug 2022 05:27:20 -0400
+Received: from a48-37.smtp-out.amazonses.com (a48-37.smtp-out.amazonses.com [54.240.48.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45C25AC60;
+        Wed, 17 Aug 2022 02:27:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=r5f3hr7pzmhv6xwu5spgpns3mj2fddpz; d=linaro.org; t=1660728437;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+        bh=f5lcVFI/ID9ncrhLvlh7H+e+AzV1rO8p9fQyoibhIKE=;
+        b=YrMFD25nDWscTM1au2oZumg1+4jR0rC1xpO6jwY+3YRVN5ch99b2EqpK5cFhVV2Q
+        IH2nXBbjsDY/f7Fos4yMbAjuDqyeaNoPGJMMZ/70uynlcf/DfADYIYvvgUqdBQRnKio
+        6znzTjJeMX4EBDiz4ETJM66nrtxLCfh+UQPfkJZw=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1660728437;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+        bh=f5lcVFI/ID9ncrhLvlh7H+e+AzV1rO8p9fQyoibhIKE=;
+        b=QxaEMaAAXFlh2GJmM8pmj+hJeYPuFNg4EFr8x1VqDEzKOMNXlDGouDG08H7rDtpw
+        7TUAuBL/VGKcSmJCe1bfk0UrIFKpaOvm80ZMM3rJ0k2YI8N8uOVcPHmCPS8aupwOPIi
+        VIZ0hxUeRHH+eP2Ar0mQYPdg8Fr2pXLzwB4pgkC8=
+From:   lkft@linaro.org
+To:     lkft@linaro.org
+Cc:     lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        linux-next@vger.kernel.org, shuah@kernel.org
+Subject: lkft kselftest for next-20220817
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Message-ID: <01000182ab20eb3a-7b68d1d6-880f-417d-8d12-6c85bf28874e-000000@email.amazonses.com>
+Date:   Wed, 17 Aug 2022 09:27:17 +0000
+Feedback-ID: 1.us-east-1.MCLpz+6YeXzvh9aTd6J8upg22bI0XPzIkR2gghvgyqQ=:AmazonSES
+X-SES-Outgoing: 2022.08.17-54.240.48.37
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is a spelling mistake in an ASSERT_OK literal string. Fix it.
+## Build
+* kernel: 6.0.0-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+* git branch: master
+* git commit: 95d10484d66e54d5c01e36389e9318221fb8f60b
+* git describe: next-20220817
+* test details: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220817
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/kfunc_call.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+## Test Regressions (compared to next-20220816)
+No test regressions found.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index 351fafa006fb..eede7c304f86 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -109,7 +109,7 @@ static void test_destructive(void)
- {
- 	__u64 save_caps = 0;
- 
--	ASSERT_OK(test_destructive_open_and_load(), "succesful_load");
-+	ASSERT_OK(test_destructive_open_and_load(), "successful_load");
- 
- 	if (!ASSERT_OK(cap_disable_effective(1ULL << CAP_SYS_BOOT, &save_caps), "drop_caps"))
- 		return;
--- 
-2.37.1
+## Metric Regressions (compared to next-20220816)
+No metric regressions found.
 
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+
+## Test Fixes (compared to next-20220816)
+No test fixes found.
+
+## Metric Fixes (compared to next-20220816)
+No metric fixes found.
+
+## Test result summary
+total: 0, pass: 0, fail: 0, skip: 0, xfail: 0
+
+## Build Summary
+
+## Test suites summary
+
+--
+Linaro LKFT
+https://lkft.linaro.org
