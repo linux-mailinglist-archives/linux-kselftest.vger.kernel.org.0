@@ -2,120 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE91596AF4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Aug 2022 10:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23519596B69
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Aug 2022 10:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiHQIKO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Aug 2022 04:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
+        id S230039AbiHQIeW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Aug 2022 04:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiHQIKI (ORCPT
+        with ESMTP id S229951AbiHQIeW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Aug 2022 04:10:08 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2264D24C;
-        Wed, 17 Aug 2022 01:10:06 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id x19so293386plc.5;
-        Wed, 17 Aug 2022 01:10:06 -0700 (PDT)
+        Wed, 17 Aug 2022 04:34:22 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696AA4D274;
+        Wed, 17 Aug 2022 01:34:20 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id r16so6147749wrm.6;
+        Wed, 17 Aug 2022 01:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=yDyqXXuN5rFWHjE/u6lA6dNFJY0ydf5Bv6weQesHpqQ=;
-        b=G4iZu8kyTF8Phd/KPNzRcRZjC3rK20PbbPKdSDgBBYre6kr/7C4KCnjlxGmtQ/N9o4
-         hU/WwhXlTtq7l00OBoiu+cBz7kC4Kxik07W34up2RsAf66OmiNTImZMluELf+MfVloAr
-         Y/o9TIb1qzd6xOO2d8ooV9OZXkWrXr66kgXfxYIxYSw1e7slziQ62yXPVXFZvrZELXXb
-         EsAn2OWB50OStemwwvrjyN84g78zhYsb7Etm5kasilu0PunW0NmPhqVssZtrN0qejPI8
-         bl6GyJ3COZztOl6nfZM1tE19ZMO4F8hTsmeOgz72Oj6LC4HaTBWdtCJnRDF7PiJYA2c9
-         HZdA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=P8ZUO6V2KNOkYdxLtrlQAlfU03xMErqXxjLAC+qSY1k=;
+        b=LvGtIr23u6IOczpxEdJkuDvtZWJFg2EiyPw2Kof+Vk7jDEXAozxeSlH9UW/3DEsFRQ
+         sKmtO1ZRSuTBvQvCZn/gFM1V2A+MXWJoE5rCuMwdyxCcOm/6yGQUtdxr2nlVyY1L/nnO
+         Hc1mfcDDIWK3qHs/Fp9ojMc03Os1A0WM2/HbXVMmrBsCDTCFv9ZH8uaCHTPCt4kVd44e
+         6nzibmRRLnW/NPzaoOikOv2qYFig9IXiSoz4FCzAb3Ov6ciCrqLKrUcCyz2biI/dJpg0
+         WQMp3iYlVqr5JCD0UbwrnCuyyO0VAunwttotVQ5Yr2T7bIWhjg6PhvqEhril9Z7eGcwl
+         7azA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=yDyqXXuN5rFWHjE/u6lA6dNFJY0ydf5Bv6weQesHpqQ=;
-        b=v9UlhbHSMbMyMrRX98oixo3QAGvcOIXNXJ684TMHXH11KeiVAVW79rW8kB7p8jzVID
-         QrnDgpE+mIL4qtiREMfxtRWigj5cE9A/yDnYADDttjR9pQMm8FwsvdhAPlLDYgcLb1IO
-         pmE86qngvbZPa/CPGrVvUJMCDo2zvo29K5lq/xoOkixNoICJ9tG8+VfEo5+W17QlK2sD
-         Msh6DIU21eEBXOXyplJD1effofWGpqpDATSpgOHpjAtbTDXCBgT1EqYf/N+MqHrtSk+j
-         wzw4N6U7g4H8zQhs6JCeRSNsywVexJ9vJVp8i0twpreDxxuZUXtqQFJ7o13XhNEKAyGC
-         yEwg==
-X-Gm-Message-State: ACgBeo0KQyuQvU9IFUmwUuT57GirgjiO9fM5rLBSMEwwn7I1hC6GJuFb
-        Fk+bqbokgBqvck1C/y2g2Ndzqu0lBOc=
-X-Google-Smtp-Source: AA6agR4Q1ekOzxu8bNgBdEWsUOpMG80+bN++7dVn0UiLLFkrbLbpLJRyjmFeIHN9N9PojENdJCGPMA==
-X-Received: by 2002:a17:902:cf43:b0:172:86f3:586a with SMTP id e3-20020a170902cf4300b0017286f3586amr5533184plg.71.1660723806255;
-        Wed, 17 Aug 2022 01:10:06 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-75.three.co.id. [180.214.232.75])
-        by smtp.gmail.com with ESMTPSA id p4-20020a631e44000000b00429e093cbadsm58164pgm.10.2022.08.17.01.10.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Aug 2022 01:10:05 -0700 (PDT)
-Message-ID: <68e3a841-3c03-9d70-8c89-b7c05788e077@gmail.com>
-Date:   Wed, 17 Aug 2022 15:09:58 +0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=P8ZUO6V2KNOkYdxLtrlQAlfU03xMErqXxjLAC+qSY1k=;
+        b=cYM9pXrI8YlodbWgZAALQk+kENHUSdm9YYSzl5zVZXRQQw0UP7yKuY0hVcwjjdnqqZ
+         UcDskh/8FGBHBFA10nSCLndM/KPiZVH5TTMw1HWXbG9GoyRrgpV+s7fVRHqzGV0nbRrg
+         hIGisp0a9YLIlskXnDloeHl/eAPXlvzIf6SipA6w9/FK35fczrp/xOMiqcx6TFKRizXc
+         xSruhseAgncjz70osqMLYe0HJDM079cQwYsljrnxhl/zPTKZ4XnuKWmuZSTRCGMkbkgI
+         GYGhtKj8RjwC+xWD3E/8PkvfeRComK/biEMbFL70CQGW+8VfZC4L8ELelM40DB1+xxkh
+         QfrA==
+X-Gm-Message-State: ACgBeo3uXkHB9PYPL4r+wYsOEKo7dV+z+GsUSzSigo0s7cb4OmF4fa3T
+        79DFCbskggM3wXh+GPyPlHw=
+X-Google-Smtp-Source: AA6agR6hZ9mpFa3dqJCDYX3Y0+uFAo+ADFuKqcLC3sOqv47exRzKdQm7lXD0AiRDV6YyCBSMHc1SRg==
+X-Received: by 2002:adf:f905:0:b0:224:f876:c001 with SMTP id b5-20020adff905000000b00224f876c001mr8961785wrr.201.1660725258966;
+        Wed, 17 Aug 2022 01:34:18 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id ay39-20020a05600c1e2700b003a5fcae64d4sm1487241wmb.29.2022.08.17.01.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 01:34:18 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/bpf: Fix spelling mistake "succesful" -> "successful"
+Date:   Wed, 17 Aug 2022 09:34:17 +0100
+Message-Id: <20220817083417.50884-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [net-next 0/6] net: support QUIC crypto
-Content-Language: en-US
-To:     Adel Abouchaev <adel.abushaev@gmail.com>, kuba@kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        corbet@lwn.net, dsahern@kernel.org, shuah@kernel.org,
-        imagedong@tencent.com, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <Adel Abouchaev <adel.abushaev@gmail.com>
- <20220816181150.3507444-1-adel.abushaev@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220816181150.3507444-1-adel.abushaev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/17/22 01:11, Adel Abouchaev wrote:
-> QUIC requires end to end encryption of the data. The application usually
-> prepares the data in clear text, encrypts and calls send() which implies
-> multiple copies of the data before the packets hit the networking stack.
-> Similar to kTLS, QUIC kernel offload of cryptography reduces the memory
-> pressure by reducing the number of copies.
-> 
-> The scope of kernel support is limited to the symmetric cryptography,
-> leaving the handshake to the user space library. For QUIC in particular,
-> the application packets that require symmetric cryptography are the 1RTT
-> packets with short headers. Kernel will encrypt the application packets
-> on transmission and decrypt on receive. This series implements Tx only,
-> because in QUIC server applications Tx outweighs Rx by orders of
-> magnitude.
-> 
-> Supporting the combination of QUIC and GSO requires the application to
-> correctly place the data and the kernel to correctly slice it. The
-> encryption process appends an arbitrary number of bytes (tag) to the end
-> of the message to authenticate it. The GSO value should include this
-> overhead, the offload would then subtract the tag size to parse the
-> input on Tx before chunking and encrypting it.
-> 
-> With the kernel cryptography, the buffer copy operation is conjoined
-> with the encryption operation. The memory bandwidth is reduced by 5-8%.
-> When devices supporting QUIC encryption in hardware come to the market,
-> we will be able to free further 7% of CPU utilization which is used
-> today for crypto operations.
-> 
+There is a spelling mistake in an ASSERT_OK literal string. Fix it.
 
-Hmmm...
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/kfunc_call.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I can't cleanly applied this series on top of current net-next. Exactly
-on what commit this series is based on?
-
-Also, I see two whitespace warnings when applying. Please fixup and resend.
-When resending, don't forget to pass --base to git-format-patch(1).
-
-Thanks.
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index 351fafa006fb..eede7c304f86 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -109,7 +109,7 @@ static void test_destructive(void)
+ {
+ 	__u64 save_caps = 0;
+ 
+-	ASSERT_OK(test_destructive_open_and_load(), "succesful_load");
++	ASSERT_OK(test_destructive_open_and_load(), "successful_load");
+ 
+ 	if (!ASSERT_OK(cap_disable_effective(1ULL << CAP_SYS_BOOT, &save_caps), "drop_caps"))
+ 		return;
 -- 
-An old man doll... just what I always wanted! - Clara
+2.37.1
+
