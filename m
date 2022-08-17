@@ -2,99 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AD8597477
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Aug 2022 18:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A4E597524
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Aug 2022 19:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240934AbiHQQtJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Aug 2022 12:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S240161AbiHQReu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Aug 2022 13:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240758AbiHQQtI (ORCPT
+        with ESMTP id S236240AbiHQRer (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Aug 2022 12:49:08 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465FD3205F
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 09:49:04 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id j23-20020aa78017000000b0052ee4264488so5178747pfi.16
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 09:49:04 -0700 (PDT)
+        Wed, 17 Aug 2022 13:34:47 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED419F0E5;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gp7so13087473pjb.4;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=V3NBUo76d+nSkiXzGrnX3CxBe6y+rnd620DH//raoE8=;
-        b=hvogyBn0sSM54fuD8N0P/mxmPgFGNdUD6dNtW+ddHvFycjAhLdzROp4c1SZIpbo00z
-         Kz6clBm2pqns1I1DKHD+KMSjjsDxKCTd/E7a9Pp9VTs40VWfCBroMPJWfiY5R4nx+ZNR
-         JBFWQeHXTVZDKgX2gTYjMG3D8HevTocU0/AY7hun/hd3JNdXm/RAsTtOJK3PvvGparZ8
-         mWBhyd+S11HN3qwTyjJNWS8kfhBfifgjx7KOVyZeT7gW1lMgH6lq9p2SLkl6WjVJEu+j
-         SniOzJ60Oj9hXd16HZffDezHHroI1UR7TA8rGTDpQaUmmzK1PoUb4Mr2yky0NwPzIs6f
-         GnTQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=284A91xJpS6nwRvx67VF7YSoP83e6JuEnTUJYB3raPg=;
+        b=bYb4QUNP3jcTW6w5gDojVQgeXieFUswJifAM9vhjd5FVyK6aT/pZ1TVAJ5dVh0bdGC
+         aXbTIhrFz+1A2lDCIfmBaGWPy8SxJvhCvjNoezyYG4Mxudr+RR03FBD6SfcLo2zT+jxd
+         bOzysazjUG8D7hoyV8Wfb3h+0ZUi+pi/+pb3NqUns1qH2tYAbaoUi/xMg2KnOaV6HIwl
+         wF7ggN2pke5cdFaWc1/ty05TbtcDMG4kSYFLdAWr9uCNaZNKf3y65ww6hZPkZvMVi5Rx
+         2cuBoB1OrziAclyREuyqHWWBhEsrhutWB0p7R6xLN54BMQf6fnHp5yV3xuzvmyCEhqwh
+         0GRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=V3NBUo76d+nSkiXzGrnX3CxBe6y+rnd620DH//raoE8=;
-        b=BjfSrnwitN8DE2RCrIZe6hKoYE9brLttDP30FdRcScvETG+7wRMxWgzUIRW4tG2ET5
-         qELCzkp1vkxfo+NZY5AJs2Ova4B73/l1oBTy1iVX7fufOIt0KOs/uaT+VAXk+1nTNGvY
-         5Jf0JKEHCfNb1BCD0eFEdrYUmrpBmOd/Xjd4nPT2SUlziTr7CliKtL8YS1fuglv8TnAm
-         j2wBtzyGt/GvmYqEH8hUIWD/uYMvlHkTz5HjNcQyNtz1hV09JR8k8hvQqPMRAEYe3p15
-         e7u6OSEfIDL+dsM6v3lNHBgdF8sgzNtnuoV4TJW7TyaIbCO6RM30UESrXf5Bxitan7NW
-         GzrQ==
-X-Gm-Message-State: ACgBeo3nrOBKtTRIc41RktqtWe1/W8Z9jnuAFIqG1IMlpc3HXyvLXROw
-        L/rGPeHT5eGdEmJtuVQFF5DU5s+v4Awpppk=
-X-Google-Smtp-Source: AA6agR5Bxevt9UGS9B1lT/22JmsWAqFZG0tVJOO5Kx0X0PD4ZUtiOiYSH2h2a/pzbdQu5l4BVzdSh+aGx1IMECdm
-X-Received: from joefradley-custom-96.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:831])
- (user=joefradley job=sendgmr) by 2002:aa7:9f02:0:b0:52d:6ae1:d631 with SMTP
- id g2-20020aa79f02000000b0052d6ae1d631mr26893608pfr.41.1660754943688; Wed, 17
- Aug 2022 09:49:03 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 09:48:50 -0700
-In-Reply-To: <20220817164851.3574140-1-joefradley@google.com>
-Message-Id: <20220817164851.3574140-3-joefradley@google.com>
-Mime-Version: 1.0
-References: <20220817164851.3574140-1-joefradley@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH 2/2] kunit: no longer call module_info(test, "Y") for kunit modules
-From:   Joe Fradley <joefradley@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     Joe Fradley <joefradley@google.com>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=284A91xJpS6nwRvx67VF7YSoP83e6JuEnTUJYB3raPg=;
+        b=30oH6tvq8eCxVXJirTuaQYp7WLN0zMOtRadKL5F2ztr8Ye9fZjoxKQrfkxdFuvej+Y
+         FMlE5U0Zl5OX2/R6oOrghZItLLIhtBJ53D8jfUwPKONo/r5G4MIX4L0GOHa+s+RkK+Jk
+         zUBY3huinCGJjAO5KrwOAzQl+XTz8nJ6zXBlDANMk6I+nkaOnXNIGHV5LZ4FNn9t/mvg
+         HG1TzTB/BV1unCqwqDoSJfM5S3VPgNiUWuyQdYRUrsHrTqAGLAAQRQKmQEAjxkKGC4hA
+         SFjw7fst5O3Bt5GNXEv6a6F2V/BBuoyVoetGXhDNm6QeC/iyZX5yDL+x4sh609HcYnDZ
+         oi3A==
+X-Gm-Message-State: ACgBeo3xqpqLXsK2QOVMeiuMMV1KKI3KramEiO3A838AsNVWKo3R7pDL
+        oEZ4DedyvtYksNXM5Iz3rMohYxSQGZo=
+X-Google-Smtp-Source: AA6agR77E6Bi90PS6CwHLsHj14t+4aZgUalGnRDUpaOb2EZ4IhtQuUC4Pu11YPiVtnY2Q5XTCJifMg==
+X-Received: by 2002:a17:90a:5517:b0:1f8:a7ce:ac33 with SMTP id b23-20020a17090a551700b001f8a7ceac33mr4870074pji.83.1660757686216;
+        Wed, 17 Aug 2022 10:34:46 -0700 (PDT)
+Received: from biggie ([103.230.148.189])
+        by smtp.gmail.com with ESMTPSA id i190-20020a6254c7000000b0052d4f2e2f6asm10696208pfb.119.2022.08.17.10.34.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 10:34:45 -0700 (PDT)
+Date:   Wed, 17 Aug 2022 23:04:39 +0530
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     chenxiang66@hisilicon.com, shuah@kernel.org, liaoyu15@huawei.com
+Cc:     song.bao.hua@hisilicon.com, tiantao6@hisilicon.com,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/dma: Add a .gitignore file containing name of
+ executable
+Message-ID: <Yv0mr+vGANGYcxio@biggie>
+References: <20220724145931.32556-1-gautammenghani201@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220724145931.32556-1-gautammenghani201@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Because KUnit test execution is not a guarantee with the kunit.enable
-parameter we want to be careful to only taint the kernel only if an
-actual test runs. Calling module_info(test, "Y") for every KUnit module
-automatically causes the kernel to be tainted upon module load. Therefore,
-we're removing this call and relying on the KUnit framework to taint the
-kernel or not.
+On Sun, Jul 24, 2022 at 08:29:31PM +0530, Gautam Menghani wrote:
+> The dma tests in kselftests are missing a .gitignore file, which leads
+> to the dma_map_benchmark executable file showing up in "git status".
+> This patch adds a .gitignore file containing the executable name.
+> 
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+>  tools/testing/selftests/dma/.gitignore | 1 +
+>  1 file changed, 1 insertion(+)
+>  create mode 100644 tools/testing/selftests/dma/.gitignore
+> 
+> diff --git a/tools/testing/selftests/dma/.gitignore b/tools/testing/selftests/dma/.gitignore
+> new file mode 100644
+> index 000000000000..668e2f8be2f7
+> --- /dev/null
+> +++ b/tools/testing/selftests/dma/.gitignore
+> @@ -0,0 +1 @@
+> +dma_map_benchmark
+> -- 
+> 2.34.1
+> 
+Hi,
 
-Signed-off-by: Joe Fradley <joefradley@google.com>
----
- include/kunit/test.h | 1 -
- 1 file changed, 1 deletion(-)
+Please review the above patch and let me know if any changes are required.
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index c958855681cc..f23d3954aa17 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -251,7 +251,6 @@ static inline int kunit_run_all_tests(void)
- #endif /* IS_BUILTIN(CONFIG_KUNIT) */
- 
- #define __kunit_test_suites(unique_array, ...)				       \
--	MODULE_INFO(test, "Y");						       \
- 	static struct kunit_suite *unique_array[]			       \
- 	__aligned(sizeof(struct kunit_suite *))				       \
- 	__used __section(".kunit_test_suites") = { __VA_ARGS__ }
--- 
-2.37.1.595.g718a3a8f04-goog
-
+Thanks,
+Gautam
