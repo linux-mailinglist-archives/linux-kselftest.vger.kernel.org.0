@@ -2,111 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AD3597738
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Aug 2022 21:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14391597764
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Aug 2022 22:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238759AbiHQT6b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Aug 2022 15:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
+        id S238545AbiHQUJz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Aug 2022 16:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241364AbiHQT63 (ORCPT
+        with ESMTP id S238004AbiHQUJs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Aug 2022 15:58:29 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B30B4AA;
-        Wed, 17 Aug 2022 12:58:18 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:36312)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oOPB9-004XQI-B8; Wed, 17 Aug 2022 13:58:15 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:46360 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oOPB8-00F3nh-DV; Wed, 17 Aug 2022 13:58:14 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com, tixxdz@gmail.com
-References: <20220815162028.926858-1-fred@cloudflare.com>
-        <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
-        <8735dux60p.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
-Date:   Wed, 17 Aug 2022 14:57:40 -0500
-In-Reply-To: <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
-        (Paul Moore's message of "Wed, 17 Aug 2022 12:01:39 -0400")
-Message-ID: <871qte8wy3.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 17 Aug 2022 16:09:48 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3101707C;
+        Wed, 17 Aug 2022 13:09:47 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id r15-20020a17090a1bcf00b001fabf42a11cso1665106pjr.3;
+        Wed, 17 Aug 2022 13:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=OMLQK+bB28GP1BYxwXfZjj/ffD/QvSECuf9uKxzzyg8=;
+        b=oG9fUL3NelPte1UzZGQfj8810HxQpzvC+JvheiCHU1a26N0A5543ttHw50UjbGoeII
+         lycIfnI08TQH9Nv+h7p+q9sCPRpEXRLL+XAraL86FPUJAfm89KTn/s6A0IMZfqYC9fh3
+         1/SjUL6ySk6O8kwg4j9t5m+2fWI4FRPc8yM6IGhkNujPFdXRxHJ+dYxhV4EaAcYDNRGC
+         H8YX8E08aYNvMvUclnwzIOk9XeWwhIlBwSrFk2zJ/6SV08kxVlqiKAuKghf4yO24yKxC
+         peg+b1Sd0QH8dw2u29ZTwdbsQCcOUspZLHyMaufwZtEXm9GxN6ea9BAAPu6MmU3sL+Ih
+         xT3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=OMLQK+bB28GP1BYxwXfZjj/ffD/QvSECuf9uKxzzyg8=;
+        b=3UpuuD6gAx9DR/7vBBalY2om3Hzg+WJtYIMk/0dl09Di7aa4LXqdUaGFZABkfKVNyQ
+         BqA772Kf1LEgLp4iXTpLEvPtKw/BAfLqX/wzlFugV9Tq56h8hJ47bnq+YZuHQGqBR4bb
+         mZjeZl/RCz3l8gIaD84c6A1szGB6UUx7JeppHSTnba564w+JqkSLqDZPziDcREy4Xdt0
+         wf8srjwHiH8rQNzzPTDx0x28JJrs+0Cy7GlmPmyaU/elsGgA28W0l1Xr+NwIOt0rEcyA
+         y932z0VuK7RUaHi+iiyFbYAT8m0/7B8yg7opKRhNlMQTnTAWkTKIosVPlZ1PZ+Wwd80W
+         Fgew==
+X-Gm-Message-State: ACgBeo2N4V7zw8WR9TE+RD0g52i7gka1epw31fGLmc9mZdIhWx9NtyMf
+        QTvM6EGnwDNJ9BzKrGKMLKc=
+X-Google-Smtp-Source: AA6agR6TfJAgaWebzxeSTK6qvngdSuLxfysK21V1xKujdVtIa3GoYs5OGuiYdlC82cSySphWzGCD5w==
+X-Received: by 2002:a17:90a:1912:b0:1f7:8c6c:4fde with SMTP id 18-20020a17090a191200b001f78c6c4fdemr5466437pjg.8.1660766986529;
+        Wed, 17 Aug 2022 13:09:46 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-002.fbsv.net. [2a03:2880:ff:2::face:b00c])
+        by smtp.gmail.com with ESMTPSA id b23-20020aa79517000000b0052bae7b2af8sm10876830pfp.201.2022.08.17.13.09.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Aug 2022 13:09:46 -0700 (PDT)
+From:   Adel Abouchaev <adel.abushaev@gmail.com>
+To:     kuba@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        corbet@lwn.net, dsahern@kernel.org, shuah@kernel.org,
+        imagedong@tencent.com, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [net-next v2 0/6] net: support QUIC crypto
+Date:   Wed, 17 Aug 2022 13:09:34 -0700
+Message-Id: <20220817200940.1656747-1-adel.abushaev@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Adel Abouchaev <adel.abushaev@gmail.com>
+References: <Adel Abouchaev <adel.abushaev@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oOPB8-00F3nh-DV;;;mid=<871qte8wy3.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/Z6TDdGlJ2fmDTXjd+QwmHz1uEXKk+3OY=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Paul Moore <paul@paul-moore.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 379 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 4.7 (1.2%), b_tie_ro: 3.2 (0.8%), parse: 1.06
-        (0.3%), extract_message_metadata: 10 (2.7%), get_uri_detail_list: 1.36
-        (0.4%), tests_pri_-1000: 6 (1.7%), tests_pri_-950: 1.05 (0.3%),
-        tests_pri_-900: 0.82 (0.2%), tests_pri_-90: 71 (18.6%), check_bayes:
-        69 (18.3%), b_tokenize: 5 (1.4%), b_tok_get_all: 8 (2.0%),
-        b_comp_prob: 1.60 (0.4%), b_tok_touch_all: 52 (13.6%), b_finish: 0.79
-        (0.2%), tests_pri_0: 222 (58.5%), check_dkim_signature: 0.36 (0.1%),
-        check_dkim_adsp: 1.70 (0.4%), poll_dns_idle: 46 (12.1%), tests_pri_10:
-        2.5 (0.7%), tests_pri_500: 57 (15.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> writes:
+QUIC requires end to end encryption of the data. The application usually
+prepares the data in clear text, encrypts and calls send() which implies
+multiple copies of the data before the packets hit the networking stack.
+Similar to kTLS, QUIC kernel offload of cryptography reduces the memory
+pressure by reducing the number of copies.
 
-> At the end of the v4 patchset I suggested merging this into lsm/next
-> so it could get a full -rc cycle in linux-next, assuming no issues
-> were uncovered during testing
+The scope of kernel support is limited to the symmetric cryptography,
+leaving the handshake to the user space library. For QUIC in particular,
+the application packets that require symmetric cryptography are the 1RTT
+packets with short headers. Kernel will encrypt the application packets
+on transmission and decrypt on receive. This series implements Tx only,
+because in QUIC server applications Tx outweighs Rx by orders of
+magnitude.
 
-What in the world can be uncovered in linux-next for code that has no in
-tree users.
+Supporting the combination of QUIC and GSO requires the application to
+correctly place the data and the kernel to correctly slice it. The
+encryption process appends an arbitrary number of bytes (tag) to the end
+of the message to authenticate it. The GSO value should include this
+overhead, the offload would then subtract the tag size to parse the
+input on Tx before chunking and encrypting it.
 
-That is one of my largest problems.  I want to talk about the users and
-the use cases and I don't get dialog.  Nor do I get hey look back there
-you missed it.
+With the kernel cryptography, the buffer copy operation is conjoined
+with the encryption operation. The memory bandwidth is reduced by 5-8%.
+When devices supporting QUIC encryption in hardware come to the market,
+we will be able to free further 7% of CPU utilization which is used
+today for crypto operations.
 
-Since you don't want to rehash this.  I will just repeat my conclusion
-that the patchset appears to introduce an ineffective defense that will
-achieve nothing in the defense of the kernel, and so all it will achieve
-a code maintenance burden and to occasionally break legitimate users of
-the user namespace.
+Adel Abouchaev (6):
+  Documentation on QUIC kernel Tx crypto.
+  Define QUIC specific constants, control and data plane structures
+  Add UDP ULP operations, initialization and handling prototype
+    functions.
+  Implement QUIC offload functions
+  Add flow counters and Tx processing error counter
+  Add self tests for ULP operations, flow setup and crypto tests
 
-Further the process is broken.  You are changing the semantics of an
-operation with the introduction of a security hook.  That needs a
-man-page and discussion on linux-abi.  In general of the scrutiny we
-give to new systems and changed system calls.  As this change
-fundamentally changes the semantics of creating a user namespace.
+ Documentation/networking/index.rst     |    1 +
+ Documentation/networking/quic.rst      |  185 ++++
+ include/net/inet_sock.h                |    2 +
+ include/net/netns/mib.h                |    3 +
+ include/net/quic.h                     |   63 ++
+ include/net/snmp.h                     |    6 +
+ include/net/udp.h                      |   33 +
+ include/uapi/linux/quic.h              |   60 +
+ include/uapi/linux/snmp.h              |    9 +
+ include/uapi/linux/udp.h               |    4 +
+ net/Kconfig                            |    1 +
+ net/Makefile                           |    1 +
+ net/ipv4/Makefile                      |    3 +-
+ net/ipv4/udp.c                         |   15 +
+ net/ipv4/udp_ulp.c                     |  192 ++++
+ net/quic/Kconfig                       |   16 +
+ net/quic/Makefile                      |    8 +
+ net/quic/quic_main.c                   | 1417 ++++++++++++++++++++++++
+ net/quic/quic_proc.c                   |   45 +
+ tools/testing/selftests/net/.gitignore |    4 +-
+ tools/testing/selftests/net/Makefile   |    3 +-
+ tools/testing/selftests/net/quic.c     | 1153 +++++++++++++++++++
+ tools/testing/selftests/net/quic.sh    |   46 +
+ 23 files changed, 3267 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/networking/quic.rst
+ create mode 100644 include/net/quic.h
+ create mode 100644 include/uapi/linux/quic.h
+ create mode 100644 net/ipv4/udp_ulp.c
+ create mode 100644 net/quic/Kconfig
+ create mode 100644 net/quic/Makefile
+ create mode 100644 net/quic/quic_main.c
+ create mode 100644 net/quic/quic_proc.c
+ create mode 100644 tools/testing/selftests/net/quic.c
+ create mode 100755 tools/testing/selftests/net/quic.sh
 
-Skipping that part of the process is not simply disagree that is being
-irresponsible.
 
-Eric
+base-commit: fd78d07c7c35de260eb89f1be4a1e7487b8092ad
+-- 
+2.30.2
+
