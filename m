@@ -2,170 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3254597E24
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 07:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3772A597E96
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 08:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242734AbiHRFki (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 01:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        id S243636AbiHRGZT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 02:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243180AbiHRFkg (ORCPT
+        with ESMTP id S241336AbiHRGZS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 01:40:36 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE31F73916
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 22:40:34 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id h21so440077qta.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Aug 2022 22:40:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc;
-        bh=c4YN6O08AaYBNToE2Um1itfC+MNp00Kd+ydM+T0W7ko=;
-        b=IZg9hsqi4ssQ7fuSUIn7+iozROcN5MvemR4pWibTfFN+hfgd52YevwqpQv+32PXVtk
-         tMKwa30Shd3IsjRcMLHYaAnJfl/UHy6ihTpMO5jxCGTVmCK8t9Q/fI2uh+GiuGiPBmQT
-         hK2VF/OtxMLDbC/ytFlCkss/tfpwYlp5+ZwaMpzIEC+P6HlTmxeljMnHhkBQPeC4di9d
-         T2u0GkCtVLOLm6jsVJ/3uxGfDAAj5JLx6gR6GsoWNUhw61Zp1rHlGIeQeHfYiVPTdajB
-         O6i+/DSqdHmANKvtofbV85bdjkpgDV6mKg5DiLTieyv2rXLbetaIRb7kxG6T1BLHQnBp
-         SkEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc;
-        bh=c4YN6O08AaYBNToE2Um1itfC+MNp00Kd+ydM+T0W7ko=;
-        b=gw7Ssm/T4pBkAtR7QImkK2MkjhFUDz9brNhK80Y7LCWKp5lHOI9khIq7yy0H44gmql
-         rx3h2X3XLUaaSaWrX7zJwhUphApLHTUufLPB5m6N/b71Sko2MjGqsObUPITi2HRq+SRS
-         2ZrW53l91UumxNGtb9g9KH81owdXBp1ffg46LhrmueWIcmaXfBlVdFW+Ebqnbn6p/q1y
-         28wE2ToWO5Z0q6MG0S1+d8pOU81ilK9dVR4dr8KPQiNAv6kCr8LwBrh1u54C8k4vb1LJ
-         NX14aPZjhnb8wfsy7eFwlYQmt2XfcwDFiVjtOL0xVlPpHXirnuTvxcYywnjSEKOxnnND
-         1ppw==
-X-Gm-Message-State: ACgBeo1qTr/Kt+ML0lS+d8OAyfiN8gAwIc5lnBqUD7pxLDtBWQBZzfQf
-        g3Ag71Up+Mt5GSQHjGFgC7pU2g==
-X-Google-Smtp-Source: AA6agR4Fw98jiMqwiSkyP6cz6JD/D6jUG7NFWUxowXwEedXtNOOsMzX1sD0rCuxeyRSGmm1fcXkVkw==
-X-Received: by 2002:a05:622a:1745:b0:343:5e40:47b1 with SMTP id l5-20020a05622a174500b003435e4047b1mr1310585qtk.120.1660801233516;
-        Wed, 17 Aug 2022 22:40:33 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id m1-20020a05620a290100b006b95f832aebsm787055qkp.96.2022.08.17.22.40.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Aug 2022 22:40:33 -0700 (PDT)
-Date:   Wed, 17 Aug 2022 22:40:12 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
+        Thu, 18 Aug 2022 02:25:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FDBA722F;
+        Wed, 17 Aug 2022 23:25:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DF36B82000;
+        Thu, 18 Aug 2022 06:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96D2EC433C1;
+        Thu, 18 Aug 2022 06:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660803915;
+        bh=4gvlEkh6Gf9B8U8HDVHnkdoKBgZHMvuPetp86ALLLD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D97PB2Pg0uiwHhUpm6vOjyTtCc3AB5uMgbZP5v/aOWtKvM8eQ4Kt06DBV4NB8ARb7
+         aHv4JPmtoQXzsOiclH78vLUYKc4ScxH+PsnRWJLeJ6qPMytiFonsA9ALSftUmy8SId
+         HqNCpSlU6C8g8i4UHGLgIqqahFqPJLZsqIm4f8Lc=
+Date:   Thu, 18 Aug 2022 08:25:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-In-Reply-To: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
-Message-ID: <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v6 2/5] userfaultfd: add /dev/userfaultfd for fine
+ grained access control
+Message-ID: <Yv3bRwh/M8WVkQBs@kroah.com>
+References: <20220817214728.489904-1-axelrasmussen@google.com>
+ <20220817214728.489904-3-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817214728.489904-3-axelrasmussen@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 6 Jul 2022, Chao Peng wrote:
-> This is the v7 of this series which tries to implement the fd-based KVM
-> guest private memory.
+On Wed, Aug 17, 2022 at 02:47:25PM -0700, Axel Rasmussen wrote:
+>  static int __init userfaultfd_init(void)
+>  {
+> +	WARN_ON(misc_register(&userfaultfd_misc));
 
-Here at last are my reluctant thoughts on this patchset.
+Please no.
 
-fd-based approach for supporting KVM guest private memory: fine.
+Spell this out and properly error out if there is an issue:
+	int ret;
 
-Use or abuse of memfd and shmem.c: mistaken.
+	ret = misc_register(&userfaultfd_misc);
+	if (ret)
+		return ret;
 
-memfd_create() was an excellent way to put together the initial prototype.
+Handle issues properly, don't paper over them with WARN_ON().
 
-But since then, TDX in particular has forced an effort into preventing
-(by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
+thanks,
 
-Are any of the shmem.c mods useful to existing users of shmem.c? No.
-Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
-
-What use do you have for a filesystem here?  Almost none.
-IIUC, what you want is an fd through which QEMU can allocate kernel
-memory, selectively free that memory, and communicate fd+offset+length
-to KVM.  And perhaps an interface to initialize a little of that memory
-from a template (presumably copied from a real file on disk somewhere).
-
-You don't need shmem.c or a filesystem for that!
-
-If your memory could be swapped, that would be enough of a good reason
-to make use of shmem.c: but it cannot be swapped; and although there
-are some references in the mailthreads to it perhaps being swappable
-in future, I get the impression that will not happen soon if ever.
-
-If your memory could be migrated, that would be some reason to use
-filesystem page cache (because page migration happens to understand
-that type of memory): but it cannot be migrated.
-
-Some of these impressions may come from earlier iterations of the
-patchset (v7 looks better in several ways than v5).  I am probably
-underestimating the extent to which you have taken on board other
-usages beyond TDX and SEV private memory, and rightly want to serve
-them all with similar interfaces: perhaps there is enough justification
-for shmem there, but I don't see it.  There was mention of userfaultfd
-in one link: does that provide the justification for using shmem?
-
-I'm afraid of the special demands you may make of memory allocation
-later on - surprised that huge pages are not mentioned already;
-gigantic contiguous extents? secretmem removed from direct map?
-
-Here's what I would prefer, and imagine much easier for you to maintain;
-but I'm no system designer, and may be misunderstanding throughout.
-
-QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
-the fallocate syscall interface itself) to allocate and free the memory,
-ioctl for initializing some of it too.  KVM in control of whether that
-fd can be read or written or mmap'ed or whatever, no need to prevent it
-in shmem.c, no need for flags, seals, notifications to and fro because
-KVM is already in control and knows the history.  If shmem actually has
-value, call into it underneath - somewhat like SysV SHM, and /dev/zero
-mmap, and i915/gem make use of it underneath.  If shmem has nothing to
-add, just allocate and free kernel memory directly, recorded in your
-own xarray.
-
-With that /dev/kvm_something subject to access controls and LSMs -
-which I cannot find for memfd_create().  Full marks for including the
-MFD_INACCESSIBLE manpage update, and for Cc'ing linux-api: but I'd
-have expected some doubts from that direction already.
-
-Hugh
+greg k-h
