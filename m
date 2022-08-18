@@ -2,176 +2,237 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C145659853C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 16:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE8B59862B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 16:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245747AbiHROFz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 10:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S1343628AbiHROlu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 10:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245133AbiHROF0 (ORCPT
+        with ESMTP id S1343617AbiHROle (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:05:26 -0400
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6236F542;
-        Thu, 18 Aug 2022 07:05:23 -0700 (PDT)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id BBD2A77A; Thu, 18 Aug 2022 09:05:21 -0500 (CDT)
-Date:   Thu, 18 Aug 2022 09:05:21 -0500
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-team@cloudflare.com, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com, tixxdz@gmail.com
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-Message-ID: <20220818140521.GA1000@mail.hallyn.com>
-References: <20220815162028.926858-1-fred@cloudflare.com>
- <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
+        Thu, 18 Aug 2022 10:41:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C65DBA9F4
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 07:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660833692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pXyPb8ie44mgN3nyP6ok6kS6T5MRdJAreHuUq8jouGM=;
+        b=ExgmzRRaaSEgvwgKdmTG4rCgDXy1AmTWIEbZ0wplnL2O6MX3W8mws3ntcfBAT3x4J2WGu4
+        ujavPZ81Ms37OCOVACejVqhZtY3iRO3lp5n9xH5VW6KnaTwfxD3dpsHKEr62WEFwToUKDW
+        eXEWRLgssOvRo7d6S4WFljbAoC5vvPo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-F4esNa3GNv6ire3Nqnskmw-1; Thu, 18 Aug 2022 10:41:26 -0400
+X-MC-Unique: F4esNa3GNv6ire3Nqnskmw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 754523C025C6;
+        Thu, 18 Aug 2022 14:41:26 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.33.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 31FE1404C6DE;
+        Thu, 18 Aug 2022 14:41:26 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     netdev@vger.kernel.org, jay.vosburgh@canonical.com
+Cc:     liuhangbin@gmail.com, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH net v4 1/3] selftests: include bonding tests into the kselftest infra
+Date:   Thu, 18 Aug 2022 10:41:10 -0400
+Message-Id: <3258bfc0586d79b1420526e7f718a678c62aefd9.1660832962.git.jtoppins@redhat.com>
+In-Reply-To: <cover.1660832962.git.jtoppins@redhat.com>
+References: <cover.1660832962.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 04:24:28PM -0500, Eric W. Biederman wrote:
-> Paul Moore <paul@paul-moore.com> writes:
-> 
-> > On Wed, Aug 17, 2022 at 4:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >> Paul Moore <paul@paul-moore.com> writes:
-> >> > On Wed, Aug 17, 2022 at 3:58 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >> >> Paul Moore <paul@paul-moore.com> writes:
-> >> >>
-> >> >> > At the end of the v4 patchset I suggested merging this into lsm/next
-> >> >> > so it could get a full -rc cycle in linux-next, assuming no issues
-> >> >> > were uncovered during testing
-> >> >>
-> >> >> What in the world can be uncovered in linux-next for code that has no in
-> >> >> tree users.
-> >> >
-> >> > The patchset provides both BPF LSM and SELinux implementations of the
-> >> > hooks along with a BPF LSM test under tools/testing/selftests/bpf/.
-> >> > If no one beats me to it, I plan to work on adding a test to the
-> >> > selinux-testsuite as soon as I'm done dealing with other urgent
-> >> > LSM/SELinux issues (io_uring CMD passthrough, SCTP problems, etc.); I
-> >> > run these tests multiple times a week (multiple times a day sometimes)
-> >> > against the -rcX kernels with the lsm/next, selinux/next, and
-> >> > audit/next branches applied on top.  I know others do similar things.
-> >>
-> >> A layer of hooks that leaves all of the logic to userspace is not an
-> >> in-tree user for purposes of understanding the logic of the code.
-> >
-> > The BPF LSM selftests which are part of this patchset live in-tree.
-> > The SELinux hook implementation is completely in-tree with the
-> > subject/verb/object relationship clearly described by the code itself.
-> > After all, the selinux_userns_create() function consists of only two
-> > lines, one of which is an assignment.  Yes, it is true that the
-> > SELinux policy lives outside the kernel, but that is because there is
-> > no singular SELinux policy for everyone.  From a practical
-> > perspective, the SELinux policy is really just a configuration file
-> > used to setup the kernel at runtime; it is not significantly different
-> > than an iptables script, /etc/sysctl.conf, or any of the other myriad
-> > of configuration files used to configure the kernel during boot.
-> 
-> I object to adding the new system configuration knob.
+This creates a test collection in drivers/net/bonding for bonding
+specific kernel selftests.
 
-I do strongly sympathize with Eric's points.  It will be very easy, once
-user namespace creation has been further restricted in some distros, to
-say "well see this stuff is silly" and go back to simply requiring root
-to create all containers and namespaces, which is generally quite a bit
-easier anywway.  And then, of course, give everyone root so they can
-start containers.
+The first test is a reproducer that provisions a bond and given the
+specific order in how the ip-link(8) commands are issued the bond never
+transmits an LACPDU frame on any of its slaves.
 
-As Eric said,
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
 
- | Further adding a random failure mode to user namespace creation if it is
- | used at all will just encourage userspace to use a setuid application to
- | perform the namespace creation instead.  Creating a less secure system
- | overall.
+Notes:
+    v2:
+     * fully integrated the test into the kselftests infrastructure
+     * moved the reproducer to under
+       tools/testing/selftests/drivers/net/bonding
+     * reduced the test to its minimial amount and used ip-link(8) for
+       all bond interface configuration
+    v3:
+     * rebase to latest net/master
+     * remove `#set -x` requested by Hangbin
+    v4:
+     * no changes
 
-However, I'm also looking at e.g. CVE-2022-2588 and CVE-2022-2586, and
-yes there are two issues which do require discussion (three if you
-count reportability, which is mainly a tool in guarding against the others).
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ .../selftests/drivers/net/bonding/Makefile    |  6 ++
+ .../net/bonding/bond-break-lacpdu-tx.sh       | 81 +++++++++++++++++++
+ .../selftests/drivers/net/bonding/config      |  1 +
+ .../selftests/drivers/net/bonding/settings    |  1 +
+ 6 files changed, 91 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/net/bonding/Makefile
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
+ create mode 100644 tools/testing/selftests/drivers/net/bonding/config
+ create mode 100644 tools/testing/selftests/drivers/net/bonding/settings
 
-The first is, indeed, configuration knobs.  There are tools, including
-chrome, which use user namespaces to make things better.  The hope is
-that more and more tools will do so.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f2d64020399b..e5fb14dc302d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3672,6 +3672,7 @@ F:	Documentation/networking/bonding.rst
+ F:	drivers/net/bonding/
+ F:	include/net/bond*
+ F:	include/uapi/linux/if_bonding.h
++F:	tools/testing/selftests/net/bonding/
+ 
+ BOSCH SENSORTEC BMA400 ACCELEROMETER IIO DRIVER
+ M:	Dan Robertson <dan@dlrobertson.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 10b34bb03bc1..c2064a35688b 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -12,6 +12,7 @@ TARGETS += cpu-hotplug
+ TARGETS += damon
+ TARGETS += drivers/dma-buf
+ TARGETS += drivers/s390x/uvdevice
++TARGETS += drivers/net/bonding
+ TARGETS += efivarfs
+ TARGETS += exec
+ TARGETS += filesystems
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+new file mode 100644
+index 000000000000..ab6c54b12098
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0
++# Makefile for net selftests
++
++TEST_PROGS := bond-break-lacpdu-tx.sh
++
++include ../../../lib.mk
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh b/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
+new file mode 100755
+index 000000000000..47ab90596acb
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
+@@ -0,0 +1,81 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++# Regression Test:
++#   Verify LACPDUs get transmitted after setting the MAC address of
++#   the bond.
++#
++# https://bugzilla.redhat.com/show_bug.cgi?id=2020773
++#
++#       +---------+
++#       | fab-br0 |
++#       +---------+
++#            |
++#       +---------+
++#       |  fbond  |
++#       +---------+
++#        |       |
++#    +------+ +------+
++#    |veth1 | |veth2 |
++#    +------+ +------+
++#
++# We use veths instead of physical interfaces
++
++set -e
++tmp=$(mktemp -q dump.XXXXXX)
++cleanup() {
++	ip link del fab-br0 >/dev/null 2>&1 || :
++	ip link del fbond  >/dev/null 2>&1 || :
++	ip link del veth1-bond  >/dev/null 2>&1 || :
++	ip link del veth2-bond  >/dev/null 2>&1 || :
++	modprobe -r bonding  >/dev/null 2>&1 || :
++	rm -f -- ${tmp}
++}
++
++trap cleanup 0 1 2
++cleanup
++sleep 1
++
++# create the bridge
++ip link add fab-br0 address 52:54:00:3B:7C:A6 mtu 1500 type bridge \
++	forward_delay 15
++
++# create the bond
++ip link add fbond type bond mode 4 miimon 200 xmit_hash_policy 1 \
++	ad_actor_sys_prio 65535 lacp_rate fast
++
++# set bond address
++ip link set fbond address 52:54:00:3B:7C:A6
++ip link set fbond up
++
++# set again bond sysfs parameters
++ip link set fbond type bond ad_actor_sys_prio 65535
++
++# create veths
++ip link add name veth1-bond type veth peer name veth1-end
++ip link add name veth2-bond type veth peer name veth2-end
++
++# add ports
++ip link set fbond master fab-br0
++ip link set veth1-bond down master fbond
++ip link set veth2-bond down master fbond
++
++# bring up
++ip link set veth1-end up
++ip link set veth2-end up
++ip link set fab-br0 up
++ip link set fbond up
++ip addr add dev fab-br0 10.0.0.3
++
++tcpdump -n -i veth1-end -e ether proto 0x8809 >${tmp} 2>&1 &
++sleep 15
++pkill tcpdump >/dev/null 2>&1
++rc=0
++num=$(grep "packets captured" ${tmp} | awk '{print $1}')
++if test "$num" -gt 0; then
++	echo "PASS, captured ${num}"
++else
++	echo "FAIL"
++	rc=1
++fi
++exit $rc
+diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
+new file mode 100644
+index 000000000000..dc1c22de3c92
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/config
+@@ -0,0 +1 @@
++CONFIG_BONDING=y
+diff --git a/tools/testing/selftests/drivers/net/bonding/settings b/tools/testing/selftests/drivers/net/bonding/settings
+new file mode 100644
+index 000000000000..867e118223cd
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/settings
+@@ -0,0 +1 @@
++timeout=60
+-- 
+2.31.1
 
-The second is damage control.  When an 0day has been announced, things
-change.  You can say "well the bug was there all along", but it is
-different when every lazy ne'erdowell can pick an exploit off a mailing
-list and use it against a product for which spinning a new version with
-a new kernel and getting customers to update is probably a months-long
-endeavor.  Some of these products do in fact require namespaces (user
-and otherwise) as part of their function.  And - to my chagrin - I suspect
-most of them create usernamespace as the root user, before possibly processing
-untrusted user input, so unprivileged_userns_clone isn't a good fit.
-
-SELinux (and LSMs in generaly) do in fact seem like a useful place to
-add some configuration, because they tend to assign different domains
-to tasks with different purposes and trust levels.  But another such
-place is the init system / service manager.  And in most cases these
-days, this will use cgroups to collect tasks of certain types.  So I
-wonder (this is ALMOST ENTIRELY thinking out loud, not thought through
-sufficiently) whether we should be setting a cgroup.nslock or
-somesuch.
-
-Of course, kernel livepatch is another potentially useful mitigation.
-Currently that's not possible for everyone.
-
-Maybe there is a more fundamental way we can approach this.  Part of me
-still likes the idea of splitting the id mapping and capability-in-userns
-parts, but that's not sufficient.  Maybe looking over all the relevant
-CVEs would give a better hint.
-
-Eric, you said
-
- | If the concern is to reduce the attack surface everything this
- | proposed hook can do is already possible with the security_capable
- | security hook.
-
-I suppose I could envision an LSM which gets activated when we find
-out there was a net-ns-exacerbated 0-day, which refuses CAP_NET_ADMIN
-for a task not in init_user_ns?  Ideally it would be more flexible
-than that.
-
-> idea.  What is userspace going to do with this new feature that makes it
-> worth maintaining in the kernel?
-> 
-> That is always the conversation we have when adding new features, and
-> that is exactly the conversation that has not happened here.
-
-Eric and Paul, I wonder, will you - or some people you'd like to represent
-you - be at plumbers in September?  Should there be a BOF session there?  (I
-won't be there, but could join over video)  I think a brainstorming session 
-for solutions to the above problems would be good.
-
-> Adding a layer of indirection should not exempt a new feature from
-> needing to justify itself.
-> 
-> Eric
