@@ -2,237 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE8B59862B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 16:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C91598716
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 17:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343628AbiHROlu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 10:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
+        id S1343519AbiHRPLY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 11:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343617AbiHROle (ORCPT
+        with ESMTP id S1344122AbiHRPLT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:41:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C65DBA9F4
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 07:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660833692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pXyPb8ie44mgN3nyP6ok6kS6T5MRdJAreHuUq8jouGM=;
-        b=ExgmzRRaaSEgvwgKdmTG4rCgDXy1AmTWIEbZ0wplnL2O6MX3W8mws3ntcfBAT3x4J2WGu4
-        ujavPZ81Ms37OCOVACejVqhZtY3iRO3lp5n9xH5VW6KnaTwfxD3dpsHKEr62WEFwToUKDW
-        eXEWRLgssOvRo7d6S4WFljbAoC5vvPo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-588-F4esNa3GNv6ire3Nqnskmw-1; Thu, 18 Aug 2022 10:41:26 -0400
-X-MC-Unique: F4esNa3GNv6ire3Nqnskmw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 754523C025C6;
-        Thu, 18 Aug 2022 14:41:26 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.33.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 31FE1404C6DE;
-        Thu, 18 Aug 2022 14:41:26 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     netdev@vger.kernel.org, jay.vosburgh@canonical.com
-Cc:     liuhangbin@gmail.com, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH net v4 1/3] selftests: include bonding tests into the kselftest infra
-Date:   Thu, 18 Aug 2022 10:41:10 -0400
-Message-Id: <3258bfc0586d79b1420526e7f718a678c62aefd9.1660832962.git.jtoppins@redhat.com>
-In-Reply-To: <cover.1660832962.git.jtoppins@redhat.com>
-References: <cover.1660832962.git.jtoppins@redhat.com>
+        Thu, 18 Aug 2022 11:11:19 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E79ABE4CC
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 08:11:18 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10cf9f5b500so2119516fac.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 08:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=GANP9vLRwQ2YLUROnRwlZNpTwcMjsaJ3VgtSa/PtcQA=;
+        b=0qFr3gX8grFcH8xmET6oC1qTaE9YXfJGFQ2GhO7NEnI8UJe/rml2OLbEr4Jw1nQKgR
+         d12kPSjSQe3qNmXickEgFu68t4SIk6+fn1KvnQautrJRDdPKcPRfC9kt1hvPEgu+ijXD
+         7iHrt1dL8Pek8n+C/DBvnSz5bNp5udDpG9vzcJ4mjVl2uLAsjvPjxzZNC3uc1Sn9d8BN
+         jgZh1sTFXRnSeYNTo+wlZfynZ0xcbCj8IKq0w2RsVpncFi6U9vN4TxyRRKmoNsvJJQvH
+         8z5x3IrwifZWro1HnNJlG0tBICYV2T1LywfHD7Dw228ev4nd3JbJBYgF/S7hFYBg6Rd0
+         xVCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=GANP9vLRwQ2YLUROnRwlZNpTwcMjsaJ3VgtSa/PtcQA=;
+        b=02EtBCo3MXkz4gsTeSRfOKG35EtcA1vN4XyjpfWXnZmYIFEgt2RwRpCZY9AAtbitEw
+         MMNeWCtiWcejMOjiYblVOQQS4Ipz94XRcd6DYDwOta4NnxubWPs09K/nl70TiqId8EvX
+         oppQFJOrz97ypEocti0r2QWuPTvrMfpYE+L7FL3RPoaj+BigABVlI6oPmlOWD7bAUKN2
+         STAYQbzzXxH1+kPtIOyOZlWvDFTh7KhKYLcORVZSIsLfUVjnzEAH85GXSX4jrpj2TBy+
+         aebfFTjpD842kFcT6rx11WRqT4xkwTh7mGVu+vCRLCqdvXQP8Eg40i1wmSkp74qZ8yX/
+         towg==
+X-Gm-Message-State: ACgBeo05XEGJjcUbOHGdkfFFtKjO4kCWWC7a0+fqw3QIlFavBD46UHHl
+        FJVovp3SkPNF8S/aT3vY0bKYrclc9AUlZM6WcXFw
+X-Google-Smtp-Source: AA6agR66YXOH5oppw7egFiDoyCC8ej5Sf5Kmv975mn8bSRsO6rpaEhSZQdqJw2zGnbq9Y7af7ZLG1mLeF4J63BZuPNo=
+X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
+ x13-20020a056870a78d00b0011c437bec70mr1643477oao.136.1660835477277; Thu, 18
+ Aug 2022 08:11:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220815162028.926858-1-fred@cloudflare.com> <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
+In-Reply-To: <20220818140521.GA1000@mail.hallyn.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 18 Aug 2022 11:11:06 -0400
+Message-ID: <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org, brauner@kernel.org,
+        casey@schaufler-ca.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-team@cloudflare.com,
+        cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
+        tixxdz@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This creates a test collection in drivers/net/bonding for bonding
-specific kernel selftests.
+On Thu, Aug 18, 2022 at 10:05 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> On Wed, Aug 17, 2022 at 04:24:28PM -0500, Eric W. Biederman wrote:
+> > Paul Moore <paul@paul-moore.com> writes:
+> > > On Wed, Aug 17, 2022 at 4:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > >> Paul Moore <paul@paul-moore.com> writes:
+> > >> > On Wed, Aug 17, 2022 at 3:58 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > >> >> Paul Moore <paul@paul-moore.com> writes:
+> > >> >>
+> > >> >> > At the end of the v4 patchset I suggested merging this into lsm/next
+> > >> >> > so it could get a full -rc cycle in linux-next, assuming no issues
+> > >> >> > were uncovered during testing
+> > >> >>
+> > >> >> What in the world can be uncovered in linux-next for code that has no in
+> > >> >> tree users.
+> > >> >
+> > >> > The patchset provides both BPF LSM and SELinux implementations of the
+> > >> > hooks along with a BPF LSM test under tools/testing/selftests/bpf/.
+> > >> > If no one beats me to it, I plan to work on adding a test to the
+> > >> > selinux-testsuite as soon as I'm done dealing with other urgent
+> > >> > LSM/SELinux issues (io_uring CMD passthrough, SCTP problems, etc.); I
+> > >> > run these tests multiple times a week (multiple times a day sometimes)
+> > >> > against the -rcX kernels with the lsm/next, selinux/next, and
+> > >> > audit/next branches applied on top.  I know others do similar things.
+> > >>
+> > >> A layer of hooks that leaves all of the logic to userspace is not an
+> > >> in-tree user for purposes of understanding the logic of the code.
+> > >
+> > > The BPF LSM selftests which are part of this patchset live in-tree.
+> > > The SELinux hook implementation is completely in-tree with the
+> > > subject/verb/object relationship clearly described by the code itself.
+> > > After all, the selinux_userns_create() function consists of only two
+> > > lines, one of which is an assignment.  Yes, it is true that the
+> > > SELinux policy lives outside the kernel, but that is because there is
+> > > no singular SELinux policy for everyone.  From a practical
+> > > perspective, the SELinux policy is really just a configuration file
+> > > used to setup the kernel at runtime; it is not significantly different
+> > > than an iptables script, /etc/sysctl.conf, or any of the other myriad
+> > > of configuration files used to configure the kernel during boot.
+> >
+> > I object to adding the new system configuration knob.
+>
+> I do strongly sympathize with Eric's points.  It will be very easy, once
+> user namespace creation has been further restricted in some distros, to
+> say "well see this stuff is silly" and go back to simply requiring root
+> to create all containers and namespaces, which is generally quite a bit
+> easier anywway.  And then, of course, give everyone root so they can
+> start containers.
 
-The first test is a reproducer that provisions a bond and given the
-specific order in how the ip-link(8) commands are issued the bond never
-transmits an LACPDU frame on any of its slaves.
+That's assuming a lot.  Many years have passed since namespaces were
+first introduced, and awareness of good security practices has
+improved, perhaps not as much as any of us would like, but to say that
+distros, system builders, and even users are the same as they were so
+many years ago is a bit of a stretch in my opinion.
 
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
+However, even ignoring that for a moment, do we really want to go to a
+place where we dictate how users compose and secure their systems?
+Linux "took over the world" because it offered a level of flexibility
+that wasn't really possible before, and it has flourished because it
+has kept that mentality.  The Linux Kernel can be shoehorned onto most
+hardware that you can get your hands on these days, with driver
+support for most anything you can think to plug into the system.  Do
+you want a single-user environment with no per-user separation?  We
+can do that.  Do you want a traditional DAC based system that leans
+heavy on ACLs and capabilities?  We can do that.  Do you want a
+container host that allows you to carve up the system with a high
+degree of granularity thanks to the different namespaces?  We can do
+that.  How about a system that leverages the LSM to enforce a least
+privilege ideal, even on the most privileged root user?  We can do
+that too.  This patchset is about giving distro, system builders, and
+users another choice in how they build their system.  We've seen both
+in this patchset and in previously failed attempts that there is a
+definite want from a user perspective for functionality such as this,
+and I think it's time we deliver it in the upstream kernel so they
+don't have to keep patching their own systems with out-of-tree
+patches.
 
-Notes:
-    v2:
-     * fully integrated the test into the kselftests infrastructure
-     * moved the reproducer to under
-       tools/testing/selftests/drivers/net/bonding
-     * reduced the test to its minimial amount and used ip-link(8) for
-       all bond interface configuration
-    v3:
-     * rebase to latest net/master
-     * remove `#set -x` requested by Hangbin
-    v4:
-     * no changes
+> Eric and Paul, I wonder, will you - or some people you'd like to represent
+> you - be at plumbers in September?  Should there be a BOF session there?  (I
+> won't be there, but could join over video)  I think a brainstorming session
+> for solutions to the above problems would be good.
 
- MAINTAINERS                                   |  1 +
- tools/testing/selftests/Makefile              |  1 +
- .../selftests/drivers/net/bonding/Makefile    |  6 ++
- .../net/bonding/bond-break-lacpdu-tx.sh       | 81 +++++++++++++++++++
- .../selftests/drivers/net/bonding/config      |  1 +
- .../selftests/drivers/net/bonding/settings    |  1 +
- 6 files changed, 91 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/net/bonding/Makefile
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
- create mode 100644 tools/testing/selftests/drivers/net/bonding/config
- create mode 100644 tools/testing/selftests/drivers/net/bonding/settings
+Regardless of if Eric or I will be at LPC, it is doubtful that all of
+the people who have participated in this discussion will be able to
+attend, and I think it's important that the users who are asking for
+this patchset have a chance to be heard in each forum where this is
+discussed.  While conferences are definitely nice - I definitely
+missed them over the past couple of years - we can't use them as a
+crutch to help us reach a conclusion on this issue; we've debated much
+more difficult things over the mailing lists, I see no reason why this
+would be any different.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f2d64020399b..e5fb14dc302d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3672,6 +3672,7 @@ F:	Documentation/networking/bonding.rst
- F:	drivers/net/bonding/
- F:	include/net/bond*
- F:	include/uapi/linux/if_bonding.h
-+F:	tools/testing/selftests/net/bonding/
- 
- BOSCH SENSORTEC BMA400 ACCELEROMETER IIO DRIVER
- M:	Dan Robertson <dan@dlrobertson.com>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 10b34bb03bc1..c2064a35688b 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -12,6 +12,7 @@ TARGETS += cpu-hotplug
- TARGETS += damon
- TARGETS += drivers/dma-buf
- TARGETS += drivers/s390x/uvdevice
-+TARGETS += drivers/net/bonding
- TARGETS += efivarfs
- TARGETS += exec
- TARGETS += filesystems
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-new file mode 100644
-index 000000000000..ab6c54b12098
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for net selftests
-+
-+TEST_PROGS := bond-break-lacpdu-tx.sh
-+
-+include ../../../lib.mk
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh b/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
-new file mode 100755
-index 000000000000..47ab90596acb
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh
-@@ -0,0 +1,81 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Regression Test:
-+#   Verify LACPDUs get transmitted after setting the MAC address of
-+#   the bond.
-+#
-+# https://bugzilla.redhat.com/show_bug.cgi?id=2020773
-+#
-+#       +---------+
-+#       | fab-br0 |
-+#       +---------+
-+#            |
-+#       +---------+
-+#       |  fbond  |
-+#       +---------+
-+#        |       |
-+#    +------+ +------+
-+#    |veth1 | |veth2 |
-+#    +------+ +------+
-+#
-+# We use veths instead of physical interfaces
-+
-+set -e
-+tmp=$(mktemp -q dump.XXXXXX)
-+cleanup() {
-+	ip link del fab-br0 >/dev/null 2>&1 || :
-+	ip link del fbond  >/dev/null 2>&1 || :
-+	ip link del veth1-bond  >/dev/null 2>&1 || :
-+	ip link del veth2-bond  >/dev/null 2>&1 || :
-+	modprobe -r bonding  >/dev/null 2>&1 || :
-+	rm -f -- ${tmp}
-+}
-+
-+trap cleanup 0 1 2
-+cleanup
-+sleep 1
-+
-+# create the bridge
-+ip link add fab-br0 address 52:54:00:3B:7C:A6 mtu 1500 type bridge \
-+	forward_delay 15
-+
-+# create the bond
-+ip link add fbond type bond mode 4 miimon 200 xmit_hash_policy 1 \
-+	ad_actor_sys_prio 65535 lacp_rate fast
-+
-+# set bond address
-+ip link set fbond address 52:54:00:3B:7C:A6
-+ip link set fbond up
-+
-+# set again bond sysfs parameters
-+ip link set fbond type bond ad_actor_sys_prio 65535
-+
-+# create veths
-+ip link add name veth1-bond type veth peer name veth1-end
-+ip link add name veth2-bond type veth peer name veth2-end
-+
-+# add ports
-+ip link set fbond master fab-br0
-+ip link set veth1-bond down master fbond
-+ip link set veth2-bond down master fbond
-+
-+# bring up
-+ip link set veth1-end up
-+ip link set veth2-end up
-+ip link set fab-br0 up
-+ip link set fbond up
-+ip addr add dev fab-br0 10.0.0.3
-+
-+tcpdump -n -i veth1-end -e ether proto 0x8809 >${tmp} 2>&1 &
-+sleep 15
-+pkill tcpdump >/dev/null 2>&1
-+rc=0
-+num=$(grep "packets captured" ${tmp} | awk '{print $1}')
-+if test "$num" -gt 0; then
-+	echo "PASS, captured ${num}"
-+else
-+	echo "FAIL"
-+	rc=1
-+fi
-+exit $rc
-diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
-new file mode 100644
-index 000000000000..dc1c22de3c92
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/config
-@@ -0,0 +1 @@
-+CONFIG_BONDING=y
-diff --git a/tools/testing/selftests/drivers/net/bonding/settings b/tools/testing/selftests/drivers/net/bonding/settings
-new file mode 100644
-index 000000000000..867e118223cd
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/settings
-@@ -0,0 +1 @@
-+timeout=60
 -- 
-2.31.1
-
+paul-moore.com
