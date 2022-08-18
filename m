@@ -2,187 +2,211 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E9D598C25
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 20:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E371B598CDB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 21:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238585AbiHRSzs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 14:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
+        id S1344351AbiHRTst (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 15:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiHRSzr (ORCPT
+        with ESMTP id S243080AbiHRTso (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:55:47 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2085.outbound.protection.outlook.com [40.107.223.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666A6BFAA6;
-        Thu, 18 Aug 2022 11:55:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P509bn2PtG3xtVX/w63HZatsRnLkwj0teFaTR4ePO17hBAu8Omwe9N3Acg77jMRynGyHeVJcy/SmV1oFP20sgQhi1YbnYlTQTiXqQH/QePKAldBeMZGlTLNHt6kz+FfyhusWr+XDduDIs7a702+t7/CaD8tG511nwWW7IYHyABcqIhv7aFQ93suuPUF0VgFBPmYZYdmwBYXXk+Fpe8BsIWQjixsFA+uFrl3EN6eLtrXZPQQL8yZBWb48mRYVTstamHvcFev+5VTrSnHzuoifYNf5PxZBo4Sk906pAp/IvdcytvxoDS5VfZL4yCpco3M1GqLt3xyvZjzt7xtCVhcXwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rfB21sXzxaLZiBdXgJI4q6xDHypQmirp5Rp5iExqf98=;
- b=c4YrtlixN1MFiLbcvJP+5GLhRQswJs8hhaa39EP1iGBJp7qDFeoWnaLw4nQLezJBOQJ2bFYctWSpqrO2wS0akyIfcSPVIr+MLPOCSig8gQND387xsMit1xk/3fhjIjDBAd7vluq9X1dZVuxNYYHl+cQWPWbldWnZ9nJNe4ftJyyA+jvEXxF1F/4/hmfNxNX7VcLtuakTtkIXaP8SYN0WJFgO+4oFlcEmlKWU7J+T7LxJrmxTgLKlRfj50aVa7ckkI140rrqu5Ysrm/gWMjd7RHyHXC8fYqtGPM4mbAPj2jA6BQh4g1Yq+9vtKshKjctRLXFmN/9Cdl/nmGpj6nNIxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rfB21sXzxaLZiBdXgJI4q6xDHypQmirp5Rp5iExqf98=;
- b=XZYnNCs7LY9PjmIHIIFoNRVTj9lDUdqHCJY2agJXo1J+VF96rA8xSa6LMkkEHe8NzuicyHhgvtnaIrANAgVnr/TJmqLsbTPFqwkzc0GdsF4hTMHz38LobUDxf8hcIAq/kerm7c7sTrxBG9JpNe7PthWb0IduCw9RwfsFUmeLUwDduGfnp42WLswZmNXE+pQvzjka9O99x+vvpiraPJnrcXC34eRelMoXsVR8zsflSP41WuoqQ4LEMylE8SppQ2j+LSqMiu5t3b5Co3ZBetKXxdRwCAB/GsDXJQYbx+fOw+LSKPt5LI1fDikLYCBBNLoRPx1+xS5SAzZ0CHNpeXbkzg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by DM5PR12MB2582.namprd12.prod.outlook.com (2603:10b6:4:b5::37) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 18 Aug
- 2022 18:55:44 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5546.016; Thu, 18 Aug 2022
- 18:55:44 +0000
-Message-ID: <251cf8bf-a649-2812-1aa6-39c7b23d5e03@nvidia.com>
-Date:   Thu, 18 Aug 2022 11:55:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] selftests/vm: fix inability to build any vm tests
-Content-Language: en-US
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220817211356.273019-1-axelrasmussen@google.com>
- <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
- <CAJHvVcgktSjo5CncC25+2j1amXvn3TjnsfOCV6CxNDp5joey9Q@mail.gmail.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CAJHvVcgktSjo5CncC25+2j1amXvn3TjnsfOCV6CxNDp5joey9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR03CA0012.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::17) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Thu, 18 Aug 2022 15:48:44 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14655C941
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 12:48:39 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-32a09b909f6so70254317b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 12:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=pN7pqer4VDQBcNszwXCuWriKzSK5JQuQKVaTrQYaltM=;
+        b=eJZZyDCvZFocEY1mnX4gNhf3oRrBiDSGvqtESvQlFghziy9F09FK0NXWYew7+Kje/t
+         EYiUjzXF8F1SfwY5eTJn/SlOMC0eAYlX6vXlI6BBe3iss3srKpP32vCLpr1Tm1oKMUMN
+         zg87bqYehNGX06yEK48vPXzcnNUkWK0MFSTmjqiX9GT4kQYkEBsKVx36aCMAt82aWbJe
+         I3tpfUL3jqS3znRjqVz6Nais3mhbhgsyExZDigC6az9B/idmpcCqQsrbFUurVcbQ03qr
+         VBPmy9U+vgbenggQVkmWLrNUBZx6y+nko5YSj1QAgdiIO6xqEJT7OVRswPbW8u68PuP3
+         71lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=pN7pqer4VDQBcNszwXCuWriKzSK5JQuQKVaTrQYaltM=;
+        b=3iOT8BPl/4FRaF2eh2xMfNPLxMTOGs9Sy1wQ1Xrao4jdidG0tnNbFjDKgYRzSbr3ds
+         uTGkAcslDVx973RWx5rixiHmk3AnlM5tmgVJhmVPD2Gga1KlwN+wnjpMOMJ7ZNY7nYMi
+         /7NmGzYIBVcB34L+uz/xJN3t9sIKglbBQab6JD/w3UtUQYAFpJ84kK3r4vah9iqBunSH
+         FPjUj0RnR4/EiJEriYGFB+R0hkJ5s80qv06+pRO9vlbFcs1Gq5h+IdcPZV/OkcqYZsYR
+         37TdCm/Wet2sY1mh4H0OJlzOywioSEOYjag5iSHVRDvxuVmhJzPQwYX9H2gWsdw5uVKH
+         ezBQ==
+X-Gm-Message-State: ACgBeo3T6a9/h8OBw7NamGSOLJcu/+h3eUCfIO37BN9rikk8glYZbjVL
+        gFMy9ECCqlXH+taVJOnOiuAjlGY/njWgDNmPUti8Jw==
+X-Google-Smtp-Source: AA6agR4vFLdh+IPAYOERtSDAXoJ0znqtPFPClNRqMqibtcNloaQO1xQtmwFz06X3LDoLAF00jqv2MeLkBbP6KHyle2c=
+X-Received: by 2002:a25:bd3:0:b0:691:d47a:be78 with SMTP id
+ 202-20020a250bd3000000b00691d47abe78mr4145138ybl.574.1660852118761; Thu, 18
+ Aug 2022 12:48:38 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5b2ec4da-c607-491d-b888-08da814b413f
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2582:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yqbIC5w4zeMx4Kr7exBg4Eih7gVGsNk4F1LhXcJe0/Sop0wq4DLThCo0eXoOfcKpmVsFrbb8LHWwjaO9065P5bFaONSNMVjcDrfb4csCG3q9B/W0jFFcBpGxu13JPdK4UzBmENVYxg3/tTwuGPAMRPw1fG6B9Z2BOxhvtbY2dqWAKwEtFIvK+dxryy9QnlSsun9Dt3/czsB1/lEd7t0oO2Mrc4mTdmrJgxXzobeLO7HtMU3NW+EoOrEhgFlKPflxk5dc/gT8R1gKPxp46XaAv8umn+AWqFkrEeIYWq98plsnYnVVDjwc9TkaYc3g3lGj9ggYLpM8fkstyRjVSQWqH/zgE1F/VoefhUD4RfyfddAptxYzy24oZE449MW50/mg/ZZXiGwNsKlbq9jEM0j0fV99NvK1Z80i2wbFoRd3YdGGmnYd6y9ECte4gjSIxDNT2uVbBfP2bnYm2KHp00/8x3pVPmE9/8i7CpLlTj3072ZoGu8H6YO2S1Z9i2Py2MHloujH35XVBm16KosfrVg3hbTAp3cxNQeQuvKSBrnn5ZWFzx3oqXAvYpCjq4nwJqbfEI+R37B0D5vldF0qSNS8ZJR6krSIbGOv1hCc7cYdRLz6RIg4Hv+2ym/cvAwkoqglmIEfCMOHdRa32Y4eWO2bfwz1SLUJLpn4vHVfhPIHo6AeKYYdUVB+M9MG3RuIG+/RnWhfutaGw7VXLnEM6t+OWMj+cqlDW+0RN++7o6hRvHCuOVHXqBx4CLjHq7pS8sEquxtZ/i30lu6f+5jqcMXEJJEw3ESrLWBDWvBqqEPfhJg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(346002)(39860400002)(396003)(376002)(54906003)(38100700002)(41300700001)(2616005)(186003)(53546011)(478600001)(6486002)(31696002)(6916009)(316002)(26005)(6666004)(86362001)(66556008)(8936002)(31686004)(6506007)(6512007)(2906002)(4326008)(66946007)(8676002)(5660300002)(66476007)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0xVcmhTY2pwbzZaVytMdDdKWjlLNXRQNjdEMU1TUVQ4YWgzbDRPeGxnbUY3?=
- =?utf-8?B?NThBRFJoRlh6S0dqRE1YTG05d0lBNmVhMmIwYXVnWm9yWUJNakRJdmtCYTFW?=
- =?utf-8?B?OU5oTXkrY2NydHpLN2x5aWNKZHhqUkhzNXd6dk95QUd1WURKSElrS1lOMXFx?=
- =?utf-8?B?T2l6U2JjTjVDOFlKSUs0Y0NYMVBIeUF6eC9tZU9HREZsV0lSR05CNEFSYVE1?=
- =?utf-8?B?dm5QWFAvRiszYjB1clVGbVBCMDFlcW1iVWI1MFZBbVE2c3FqUUtzM0ozL1VK?=
- =?utf-8?B?VzR0NU5QZEIzQ0tRTjB2TUh2a056dU1uMkR3UlRzN2lWT0R1UEpJT2pSZUVi?=
- =?utf-8?B?NzdzVEM2bDh1OE5RSGZsNnN3U0F0RTJ1OGZYTGNyVExicE1MMDd0RUhWVlFX?=
- =?utf-8?B?OXQ0RjRRSTJ6cEZCZjR4dndsWkFiYlhPWTQ5anZMclVCbTA5UXgrcUErTjZj?=
- =?utf-8?B?WUtLT0FkNDFpeXd0a1JIYjVQR3lzZUxJY0FGb3FjU1NPcnRiYy9sc1BoeGhN?=
- =?utf-8?B?Z2xONWkxdmxsTldUNVdYL3MzTmZTc2t4SzgyR3RZTTZlRG1aNUxLdTdWY2pu?=
- =?utf-8?B?cHNSRk5YTVc0cTROdWVIdUdWelk0M2hndVcvaG5hNnNOaThPSi91TU5TSyt0?=
- =?utf-8?B?aGZOU29PTnovSXd1TWZXbVh5aDlrcHlPTkF3aDdaZFdlT3FNMTJhY1dNYXZH?=
- =?utf-8?B?QkIwWHo5TGlPVEZIeCt1TUl0RmVEUXFxMEd2Z3pINWxLZmtoNjUzYVhEQWls?=
- =?utf-8?B?MFprcWRlWFZpeXZPc0FObGQzVXBZQmxuMXVsbjlGVit1c1FvWDRRbG81RXFD?=
- =?utf-8?B?bXJPKzQvMEx3TUhMOFR6WVl0akl6WWZjejFTRjJ1K3hDVjROWkRITUlWUTlx?=
- =?utf-8?B?SDcxb3pxeVVTR3NRM0J4WGV0cFpFQmlMSStkNzV5c05VU3diQmgrVmVFTS8x?=
- =?utf-8?B?blgrcGhEK1Z2RTU0ckFnOTJSZUwwUUY4Sk1wRjUwVVBOcDFnaHVZb1N2KzdR?=
- =?utf-8?B?cEduRmRsUTF0Mjc5UU15emx2VnlNWXBXUDBzdkVIY3d5dUF0T0YzT0FJdGRQ?=
- =?utf-8?B?dStLNnlJTTBIWWdMeExkWkh5MWZXMDZpYWliSHFnazVHL2VwR04rNWxOZTVo?=
- =?utf-8?B?N05PMVlsSXo3azVzNmZLQlNKcjFxMnpueWsvWW1QOVppcG9lU1N5bGRMMVUy?=
- =?utf-8?B?bllCOUt6ZFkvTzlPSlVwWFlKRS9kWjJSTmhtT1NXR2xDazBUeE1zNEsxN3lO?=
- =?utf-8?B?Y1lacWNVOUJjVnFJQTk1aXhtZ2lKOTRZdm9BSVJtVDNoTW5TR3BSVFoxUTZP?=
- =?utf-8?B?OHZHNDQ5MXNqeEx5Y0x6TVhERThBSWMvQXNrYlhFdU5GZmFoSXpHZ1lENGd4?=
- =?utf-8?B?bzNqeDdDbTJhSzk0eFo2cXVaSFVZUWtodGF2MjVURmV4cmdqbDBwYjFnWHNT?=
- =?utf-8?B?U3VIRnJzL0h4eDlXM2g3YXpYb1oxRmg4R2pPTnZXeTYvdkk1dDcwWFVUa1Fq?=
- =?utf-8?B?ZVBiWVJ2UTZ3dHRja29uVFZVbFFIb2k3TC9VdzBockptb2pzbklPcksrdDlk?=
- =?utf-8?B?bFlnYTg3ajU1MEhZNjRwbGZMdFNZZDM1OGlTREZTR3hLN2tNZ0U4Qlh4WkMx?=
- =?utf-8?B?UWJMMWg5eFdldmxqaURTMUpnU25LK0pWazljT25iL0xKazBuNUZFT25MN1VB?=
- =?utf-8?B?eks0UWdIYnNycDJ1Vm5VTjdVOVIrem9uRUYybFl4MlFlWTlsOVNPcE1vZ2xZ?=
- =?utf-8?B?OEI2WXhBaDYybm5nMXZPWUZYemxqTDJvMUkyTmNKUDUzLzdaUkdsc3RwYTE0?=
- =?utf-8?B?MFlESUhZV1N0dEdBaU9NL0xuekJKdzF6QjlyeUtOQjJObHFxZHpxQ0ZPS0Va?=
- =?utf-8?B?U0d1WSt4Y3FORGdSbGFFZUFseGVPbHNlWGFZQjB2aVFzbUhnVFZnQWxKY1Yz?=
- =?utf-8?B?YWxnc3ZyWTRBUVBIdDBhMDlnQ3NxbnR5N1FpY21pNHJZalJ0ZjNnc1VvVkx2?=
- =?utf-8?B?ZHNxZ2t6cXZMNjBxaHNqaUZkd2NrZWRvRW01TG9hWjREVEFZNjZNNTZ4SGtN?=
- =?utf-8?B?N3E1N0tJSkJubmphNVRGQnp2eDJ4NmpoUDQraFk5eThFcklOYUxVVUhYblRK?=
- =?utf-8?Q?vfoBtMxzxxq6pEz9mDsN3Ap3C?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b2ec4da-c607-491d-b888-08da814b413f
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 18:55:44.5134
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OG4erW98s4+gj9WNy8B8b+0hDLXKkWEXhLUPPIzC0OzyysUf6kMLOLjItYXl89tvEz21uOSGyP39IcoOg6hn0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2582
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220808141538.102394-1-khuey@kylehuey.com> <87ilmpzunz.ffs@tglx>
+In-Reply-To: <87ilmpzunz.ffs@tglx>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Thu, 18 Aug 2022 12:48:23 -0700
+Message-ID: <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/18/22 10:58, Axel Rasmussen wrote:
->> 1) I recalled that hmm-tests.c in the same directory also needs
->> gup_test.h, and wondered if that was covered. And it turns out the the
->> relative "up and over" include path is done in hmm-tests.c itself,
->> instead of in the Makefile, like this:
->>
->> /*
->>    * This is a private UAPI to the kernel test module so it isn't exported
->>    * in the usual include/uapi/... directory.
->>    */
->> #include "../../../../lib/test_hmm_uapi.h"
->> #include "../../../../mm/gup_test.h"
->>
->> It would be nice (maybe follow-up polishing for someone) if this were
->> done once, instead of twice (or more?) via different (source code vs.
->> Makefile) mechanisms.
-> 
-> Hmm, I suppose the way to clean this up would be to have the Makefile
-> compute this once, and pass in "-I $(selfdir)/../../.." to the
-> compiler so we could just "#include <mm/gup_test.h>" directly?
+On Thu, Aug 18, 2022 at 3:57 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Kyle!
 
-Yes, it's better to have the Makefile know where the include paths are,
-rather than each source file, so that looks better.
+Hi.
 
-But hold on, now I see that selftests/vm/Makefile already uses what is
-effectively a src_topdir, anyway! Here:
+> On Mon, Aug 08 2022 at 07:15, Kyle Huey wrote:
+> > When management of the PKRU register was moved away from XSTATE, emulation
+> > of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+> > for APIs that write XSTATE. This can be seen by running gdb and executing
+> > `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+> > write to the PKRU register (which gdb performs through ptrace) is ignored.
+> >
+> > There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
+> > sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
+> > make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
+> > down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
+> > and sigreturn pass in pointers to the appropriate PKRU value.
+> >
+> > This also adds code to initialize the PKRU value to the hardware init value
+> > (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
+> > This is a change to the current KVM_SET_XSAVE behavior.
+>
+> You are stating a fact here, but provide 0 justification why this is
+> correct.
 
-CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+Well, the justification is that this *is* the behavior we want for
+ptrace/sigreturn, and it's very likely the existing KVM_SET_XSAVE
+behavior in this edge case is an oversight rather than intentional,
+and in the absence of confirmation that KVM wants the existing
+behavior (the KVM mailing list and maintainer are CCd) one correct
+code path is better than one correct code path and one buggy code
+path.
 
-...which makes me think that real fix for the original problem should be
-simply this:
+> >
+> > Changelog since v4:
+>
+> Can you please put the change log past the --- seperator line, so it
+> gets stripped off when the patch is applied? That spares manual fixups.
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 947fc72413e9..d44c72b3abe3 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -40,6 +40,7 @@ ifeq (0,$(MAKELEVEL))
-      endif
-  endif
-  selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
-+top_srcdir = $(selfdir)/../../..
+Ok.
 
-  # The following are built by lib.mk common compile rules.
-  # TEST_CUSTOM_PROGS should be used by tests that require
+> >
+> > Signed-off-by: Kyle Huey <me@kylehuey.com>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Borislav Petkov <bp@suse.de>
+> > Cc: kvm@vger.kernel.org # For edge case behavior of KVM_SET_XSAVE
+> > Cc: stable@vger.kernel.org # 5.14+
+> > Fixes: e84ba47e313d ("x86/fpu: Hook up PKRU into ptrace()")
+>
+> Can you please use the documented tag ordering?
+>
+> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#patch-submission-notes
 
+Ok.
 
-...and then the follow up cleanup can use top_srcdir to cleanup CFLAGS and
-also pull the relative paths out of the source files and into the Makefile.
+> > @@ -1235,6 +1235,24 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+> >       for (i = 0; i < XFEATURE_MAX; i++) {
+> >               mask = BIT_ULL(i);
+> >
+> > +             if (i == XFEATURE_PKRU) {
+> > +                     /*
+> > +                      * Retrieve PKRU if not in init state, otherwise
+> > +                      * initialize it.
+> > +                      */
+> > +                     if (hdr.xfeatures & mask) {
+> > +                             struct pkru_state xpkru = {0};
+> > +
+> > +                             if (copy_from_buffer(&xpkru, xstate_offsets[i],
+> > +                                                  sizeof(xpkru), kbuf, ubuf))
+> > +                                     return -EFAULT;
+> > +
+> > +                             *pkru = xpkru.pkru;
+> > +                     } else {
+> > +                             *pkru = 0;
+> > +                     }
+> > +             }
+>
+> That's really horrible and there is no point in copying the stuff from
+> the buffer twice:
+>
+> @@ -1246,6 +1246,15 @@ static int copy_uabi_to_xstate(struct fp
+>                 }
+>         }
+>
+> +       /* Update the user protection key storage */
+> +       *pkru = 0;
+> +       if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+> +               struct pkru_state *xpkru;
+> +
+> +               xpkru = get_xsave_addr(xsave, XFEATURE_PKRU);
+> +               *pkru = xpkru->pkru;
+> +       }
+> +
+>
+> Hmm?
 
+It took me a bit to figure out what this is actually trying to do. To
+work, it would need to come at the very end of copy_uabi_to_xstate
+after xsave->header.xfeatures is updated. If you just want to avoid
+two copies I would counter-propose this though:
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+@@ -1235,7 +1235,19 @@ static int copy_uabi_to_xstate(struct fpstate
+*fpstate, const void *kbuf,
+        for (i = 0; i < XFEATURE_MAX; i++) {
+                mask = BIT_ULL(i);
+
+-               if (hdr.xfeatures & mask) {
++               if (i == XFEATURE_PKRU) {
++                       /* Update the user protection key storage */
++                       *pkru = 0;
++                       if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
++                               struct pkru_state xpkru = {0};
++
++                               if (copy_from_buffer(&xpkru, xstate_offsets[i],
++                                                    sizeof(xpkru), kbuf, ubuf))
++                                       return -EFAULT;
++
++                               *pkru = xpkru.pkru;
++                       }
++               } else if (hdr.xfeatures & mask) {
+                        void *dst = __raw_xsave_addr(xsave, i);
+
+                        offset = xstate_offsets[i];
+
+Thoughts? This avoids a second copy and avoids having to calculate the
+offset into the (now potentially compressed) XSTATE.
+
+- Kyle
+
+>
+> Thanks,
+>
+>         tglx
