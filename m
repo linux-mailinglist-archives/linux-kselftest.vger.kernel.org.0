@@ -2,354 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D0F598C0D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 20:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E9D598C25
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 20:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239418AbiHRSyB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 14:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S238585AbiHRSzs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 14:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239324AbiHRSyA (ORCPT
+        with ESMTP id S230250AbiHRSzr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 14:54:00 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC72F501AC;
-        Thu, 18 Aug 2022 11:53:58 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso3038414wma.2;
-        Thu, 18 Aug 2022 11:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=8WO9HL2c2NqU95pngV5GpcHf00yCayPpvaZNx/fy4Qg=;
-        b=UbCFQNesxAG/TMAva+KxIhwUYfVzWv9gUtIty6rIcwZhJUeg94eD6pHJnPEjSnAaTP
-         VLNBSxOAWoszSycCRx0G2oBgnX1GiwZdNppAZRXP3GKuMr11AV6YdUWcyeIXg7JUQe1k
-         EdQlKsNgEB36LuBWJ8qfnjY+AEmPJKRWHxGwhTDlBn8U3+EzKP4ltNDfcNSHUAys0j1p
-         YkeAlyJ/ZIt6Ikt+ItKqOGPLZspZziU+6TE/NfiQuv0/QBiE490/6BELVp0ln34amb0e
-         fw6+XvKwnlej9kDMqFPFF/fnhbxR6pFWns+eUAQh+htwsab7tpELxZ/k1LRudQU3tUj+
-         FJ+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8WO9HL2c2NqU95pngV5GpcHf00yCayPpvaZNx/fy4Qg=;
-        b=aR/l/KgZk/oclocXZK0Az0wMf4exBDxnqKvoTUomK6zZWhp1HvpawPOLIIcPdXNUrx
-         KmeHgS69peD2hfCEsEmsA41VaMPFz/vrsxNYpGWtT5bswpwMcfe9JoEjfGPdQfRF/Yo8
-         cKtOfptQVV6KTgST6+4V+M+SnJ1thAyWCECCqy64Ldfce0K0O18OOABNSOvE5gBnK+/m
-         wux8t+O6xd3yzuUBejr+U3qb8EUCzRuCHuU6eUhWyzyguOw2MUzrFPtDK6LLoDsbLEzH
-         EQk9k71Ritc4HLT/aNkvjMqw84+YNBgyJb8wAqI0vCr3RASNxWgyOpAISZTWIqSiqWhY
-         hPvg==
-X-Gm-Message-State: ACgBeo0f1aWlZv9qxkF8RAUzduWhFL2y5iDYcQPEH3QXsY0RzP+lhHgk
-        EI9cV4C+I9N3ukL6m/hMIwG1nULNhTKFJdOz9gc=
-X-Google-Smtp-Source: AA6agR46oRNeeGo27+7ipy9Q22youWVJtPxD+mUVYW0JIxbV7pnrzYdTTnH7mQzLg7sPvqq1Wkntl3khnXg+3ZbKUkY=
-X-Received: by 2002:a05:600c:20a:b0:3a5:a700:17d with SMTP id
- 10-20020a05600c020a00b003a5a700017dmr2678817wmi.148.1660848837489; Thu, 18
- Aug 2022 11:53:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAGi-RUKv-8zyku-3pjXdjxbyMP_X_YV5rd6y2wyaCOJJ9UOQAw@mail.gmail.com>
- <CABVgOSnxa=H5A-0U0QRCAv+OWCGb0zN_f7gP5FmhGjRy7NCUSw@mail.gmail.com>
- <CAGi-RUL46gA_0ah_TTJVpc9RRS8nvd7yoqt=OLXxvUjL6TAvyQ@mail.gmail.com> <443632b6-c589-ef62-2385-3e8406680343@gmail.com>
-In-Reply-To: <443632b6-c589-ef62-2385-3e8406680343@gmail.com>
-From:   Ramon Fried <rfried.dev@gmail.com>
-Date:   Thu, 18 Aug 2022 21:53:45 +0300
-Message-ID: <CAGi-RULAXRc0NZYMEokvS-P=zuNos==fm-8PvCiu83vVmw47HQ@mail.gmail.com>
-Subject: Re: Running kunit tests on platform devices
-To:     CAGi-RUL46gA_0ah_TTJVpc9RRS8nvd7yoqt=OLXxvUjL6TAvyQ@mail.gmail.com
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
+        Thu, 18 Aug 2022 14:55:47 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2085.outbound.protection.outlook.com [40.107.223.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666A6BFAA6;
+        Thu, 18 Aug 2022 11:55:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P509bn2PtG3xtVX/w63HZatsRnLkwj0teFaTR4ePO17hBAu8Omwe9N3Acg77jMRynGyHeVJcy/SmV1oFP20sgQhi1YbnYlTQTiXqQH/QePKAldBeMZGlTLNHt6kz+FfyhusWr+XDduDIs7a702+t7/CaD8tG511nwWW7IYHyABcqIhv7aFQ93suuPUF0VgFBPmYZYdmwBYXXk+Fpe8BsIWQjixsFA+uFrl3EN6eLtrXZPQQL8yZBWb48mRYVTstamHvcFev+5VTrSnHzuoifYNf5PxZBo4Sk906pAp/IvdcytvxoDS5VfZL4yCpco3M1GqLt3xyvZjzt7xtCVhcXwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rfB21sXzxaLZiBdXgJI4q6xDHypQmirp5Rp5iExqf98=;
+ b=c4YrtlixN1MFiLbcvJP+5GLhRQswJs8hhaa39EP1iGBJp7qDFeoWnaLw4nQLezJBOQJ2bFYctWSpqrO2wS0akyIfcSPVIr+MLPOCSig8gQND387xsMit1xk/3fhjIjDBAd7vluq9X1dZVuxNYYHl+cQWPWbldWnZ9nJNe4ftJyyA+jvEXxF1F/4/hmfNxNX7VcLtuakTtkIXaP8SYN0WJFgO+4oFlcEmlKWU7J+T7LxJrmxTgLKlRfj50aVa7ckkI140rrqu5Ysrm/gWMjd7RHyHXC8fYqtGPM4mbAPj2jA6BQh4g1Yq+9vtKshKjctRLXFmN/9Cdl/nmGpj6nNIxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rfB21sXzxaLZiBdXgJI4q6xDHypQmirp5Rp5iExqf98=;
+ b=XZYnNCs7LY9PjmIHIIFoNRVTj9lDUdqHCJY2agJXo1J+VF96rA8xSa6LMkkEHe8NzuicyHhgvtnaIrANAgVnr/TJmqLsbTPFqwkzc0GdsF4hTMHz38LobUDxf8hcIAq/kerm7c7sTrxBG9JpNe7PthWb0IduCw9RwfsFUmeLUwDduGfnp42WLswZmNXE+pQvzjka9O99x+vvpiraPJnrcXC34eRelMoXsVR8zsflSP41WuoqQ4LEMylE8SppQ2j+LSqMiu5t3b5Co3ZBetKXxdRwCAB/GsDXJQYbx+fOw+LSKPt5LI1fDikLYCBBNLoRPx1+xS5SAzZ0CHNpeXbkzg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by DM5PR12MB2582.namprd12.prod.outlook.com (2603:10b6:4:b5::37) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 18 Aug
+ 2022 18:55:44 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5546.016; Thu, 18 Aug 2022
+ 18:55:44 +0000
+Message-ID: <251cf8bf-a649-2812-1aa6-39c7b23d5e03@nvidia.com>
+Date:   Thu, 18 Aug 2022 11:55:40 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] selftests/vm: fix inability to build any vm tests
+Content-Language: en-US
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220817211356.273019-1-axelrasmussen@google.com>
+ <190edda8-1f37-0fa5-1cc1-ada97518698a@nvidia.com>
+ <CAJHvVcgktSjo5CncC25+2j1amXvn3TjnsfOCV6CxNDp5joey9Q@mail.gmail.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <CAJHvVcgktSjo5CncC25+2j1amXvn3TjnsfOCV6CxNDp5joey9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR03CA0012.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::17) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5b2ec4da-c607-491d-b888-08da814b413f
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2582:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yqbIC5w4zeMx4Kr7exBg4Eih7gVGsNk4F1LhXcJe0/Sop0wq4DLThCo0eXoOfcKpmVsFrbb8LHWwjaO9065P5bFaONSNMVjcDrfb4csCG3q9B/W0jFFcBpGxu13JPdK4UzBmENVYxg3/tTwuGPAMRPw1fG6B9Z2BOxhvtbY2dqWAKwEtFIvK+dxryy9QnlSsun9Dt3/czsB1/lEd7t0oO2Mrc4mTdmrJgxXzobeLO7HtMU3NW+EoOrEhgFlKPflxk5dc/gT8R1gKPxp46XaAv8umn+AWqFkrEeIYWq98plsnYnVVDjwc9TkaYc3g3lGj9ggYLpM8fkstyRjVSQWqH/zgE1F/VoefhUD4RfyfddAptxYzy24oZE449MW50/mg/ZZXiGwNsKlbq9jEM0j0fV99NvK1Z80i2wbFoRd3YdGGmnYd6y9ECte4gjSIxDNT2uVbBfP2bnYm2KHp00/8x3pVPmE9/8i7CpLlTj3072ZoGu8H6YO2S1Z9i2Py2MHloujH35XVBm16KosfrVg3hbTAp3cxNQeQuvKSBrnn5ZWFzx3oqXAvYpCjq4nwJqbfEI+R37B0D5vldF0qSNS8ZJR6krSIbGOv1hCc7cYdRLz6RIg4Hv+2ym/cvAwkoqglmIEfCMOHdRa32Y4eWO2bfwz1SLUJLpn4vHVfhPIHo6AeKYYdUVB+M9MG3RuIG+/RnWhfutaGw7VXLnEM6t+OWMj+cqlDW+0RN++7o6hRvHCuOVHXqBx4CLjHq7pS8sEquxtZ/i30lu6f+5jqcMXEJJEw3ESrLWBDWvBqqEPfhJg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(346002)(39860400002)(396003)(376002)(54906003)(38100700002)(41300700001)(2616005)(186003)(53546011)(478600001)(6486002)(31696002)(6916009)(316002)(26005)(6666004)(86362001)(66556008)(8936002)(31686004)(6506007)(6512007)(2906002)(4326008)(66946007)(8676002)(5660300002)(66476007)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a0xVcmhTY2pwbzZaVytMdDdKWjlLNXRQNjdEMU1TUVQ4YWgzbDRPeGxnbUY3?=
+ =?utf-8?B?NThBRFJoRlh6S0dqRE1YTG05d0lBNmVhMmIwYXVnWm9yWUJNakRJdmtCYTFW?=
+ =?utf-8?B?OU5oTXkrY2NydHpLN2x5aWNKZHhqUkhzNXd6dk95QUd1WURKSElrS1lOMXFx?=
+ =?utf-8?B?T2l6U2JjTjVDOFlKSUs0Y0NYMVBIeUF6eC9tZU9HREZsV0lSR05CNEFSYVE1?=
+ =?utf-8?B?dm5QWFAvRiszYjB1clVGbVBCMDFlcW1iVWI1MFZBbVE2c3FqUUtzM0ozL1VK?=
+ =?utf-8?B?VzR0NU5QZEIzQ0tRTjB2TUh2a056dU1uMkR3UlRzN2lWT0R1UEpJT2pSZUVi?=
+ =?utf-8?B?NzdzVEM2bDh1OE5RSGZsNnN3U0F0RTJ1OGZYTGNyVExicE1MMDd0RUhWVlFX?=
+ =?utf-8?B?OXQ0RjRRSTJ6cEZCZjR4dndsWkFiYlhPWTQ5anZMclVCbTA5UXgrcUErTjZj?=
+ =?utf-8?B?WUtLT0FkNDFpeXd0a1JIYjVQR3lzZUxJY0FGb3FjU1NPcnRiYy9sc1BoeGhN?=
+ =?utf-8?B?Z2xONWkxdmxsTldUNVdYL3MzTmZTc2t4SzgyR3RZTTZlRG1aNUxLdTdWY2pu?=
+ =?utf-8?B?cHNSRk5YTVc0cTROdWVIdUdWelk0M2hndVcvaG5hNnNOaThPSi91TU5TSyt0?=
+ =?utf-8?B?aGZOU29PTnovSXd1TWZXbVh5aDlrcHlPTkF3aDdaZFdlT3FNMTJhY1dNYXZH?=
+ =?utf-8?B?QkIwWHo5TGlPVEZIeCt1TUl0RmVEUXFxMEd2Z3pINWxLZmtoNjUzYVhEQWls?=
+ =?utf-8?B?MFprcWRlWFZpeXZPc0FObGQzVXBZQmxuMXVsbjlGVit1c1FvWDRRbG81RXFD?=
+ =?utf-8?B?bXJPKzQvMEx3TUhMOFR6WVl0akl6WWZjejFTRjJ1K3hDVjROWkRITUlWUTlx?=
+ =?utf-8?B?SDcxb3pxeVVTR3NRM0J4WGV0cFpFQmlMSStkNzV5c05VU3diQmgrVmVFTS8x?=
+ =?utf-8?B?blgrcGhEK1Z2RTU0ckFnOTJSZUwwUUY4Sk1wRjUwVVBOcDFnaHVZb1N2KzdR?=
+ =?utf-8?B?cEduRmRsUTF0Mjc5UU15emx2VnlNWXBXUDBzdkVIY3d5dUF0T0YzT0FJdGRQ?=
+ =?utf-8?B?dStLNnlJTTBIWWdMeExkWkh5MWZXMDZpYWliSHFnazVHL2VwR04rNWxOZTVo?=
+ =?utf-8?B?N05PMVlsSXo3azVzNmZLQlNKcjFxMnpueWsvWW1QOVppcG9lU1N5bGRMMVUy?=
+ =?utf-8?B?bllCOUt6ZFkvTzlPSlVwWFlKRS9kWjJSTmhtT1NXR2xDazBUeE1zNEsxN3lO?=
+ =?utf-8?B?Y1lacWNVOUJjVnFJQTk1aXhtZ2lKOTRZdm9BSVJtVDNoTW5TR3BSVFoxUTZP?=
+ =?utf-8?B?OHZHNDQ5MXNqeEx5Y0x6TVhERThBSWMvQXNrYlhFdU5GZmFoSXpHZ1lENGd4?=
+ =?utf-8?B?bzNqeDdDbTJhSzk0eFo2cXVaSFVZUWtodGF2MjVURmV4cmdqbDBwYjFnWHNT?=
+ =?utf-8?B?U3VIRnJzL0h4eDlXM2g3YXpYb1oxRmg4R2pPTnZXeTYvdkk1dDcwWFVUa1Fq?=
+ =?utf-8?B?ZVBiWVJ2UTZ3dHRja29uVFZVbFFIb2k3TC9VdzBockptb2pzbklPcksrdDlk?=
+ =?utf-8?B?bFlnYTg3ajU1MEhZNjRwbGZMdFNZZDM1OGlTREZTR3hLN2tNZ0U4Qlh4WkMx?=
+ =?utf-8?B?UWJMMWg5eFdldmxqaURTMUpnU25LK0pWazljT25iL0xKazBuNUZFT25MN1VB?=
+ =?utf-8?B?eks0UWdIYnNycDJ1Vm5VTjdVOVIrem9uRUYybFl4MlFlWTlsOVNPcE1vZ2xZ?=
+ =?utf-8?B?OEI2WXhBaDYybm5nMXZPWUZYemxqTDJvMUkyTmNKUDUzLzdaUkdsc3RwYTE0?=
+ =?utf-8?B?MFlESUhZV1N0dEdBaU9NL0xuekJKdzF6QjlyeUtOQjJObHFxZHpxQ0ZPS0Va?=
+ =?utf-8?B?U0d1WSt4Y3FORGdSbGFFZUFseGVPbHNlWGFZQjB2aVFzbUhnVFZnQWxKY1Yz?=
+ =?utf-8?B?YWxnc3ZyWTRBUVBIdDBhMDlnQ3NxbnR5N1FpY21pNHJZalJ0ZjNnc1VvVkx2?=
+ =?utf-8?B?ZHNxZ2t6cXZMNjBxaHNqaUZkd2NrZWRvRW01TG9hWjREVEFZNjZNNTZ4SGtN?=
+ =?utf-8?B?N3E1N0tJSkJubmphNVRGQnp2eDJ4NmpoUDQraFk5eThFcklOYUxVVUhYblRK?=
+ =?utf-8?Q?vfoBtMxzxxq6pEz9mDsN3Ap3C?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b2ec4da-c607-491d-b888-08da814b413f
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 18:55:44.5134
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OG4erW98s4+gj9WNy8B8b+0hDLXKkWEXhLUPPIzC0OzyysUf6kMLOLjItYXl89tvEz21uOSGyP39IcoOg6hn0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2582
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 9:08 PM Tales Lelo da Aparecida
-<tales.aparecida@gmail.com> wrote:
->
-> On 17/08/2022 09:19, Ramon Fried wrote:
-> > On Wed, Aug 17, 2022 at 7:43 AM David Gow <davidgow@google.com> wrote:
-> >>
-> >> On Mon, Aug 15, 2022 at 5:16 PM Ramon Fried <rfried.dev@gmail.com> wrote:
-> >>>
-> >>> Hi.
-> >>> I implemented a test suite that checks a platform driver, that's the
-> >>> only way I can test interrupts behavior in the code.
-> >>> Because it's a platform, I can't use kunit_test_suite(), so I call
-> >>> __kunit_test_suites_init() as part of the platform driver probe
-> >>> function.
-> >>>
-> >>> This works fine but has the following problems.
-> >>> "TAP version 14" string is not printed and it's impossible to parse
-> >>> the results using the script.
-> >>> In addition, the suite is not displayed in /sys/kernel/debug/kunit.
-> >>>
-> >>> It would be my pleasure to provide a patch that fixes this, I just
-> >>> wanted to make sure that my testing strategy makes sense.
-> >>>
-> >>> Thanks,
-> >>> Ramon
-> >>>
-> >> Hi Ramon,
-> >>
-> >> Thanks for reaching out. Calling __kunit_test_suites_init() directly
-> >> is not something we'd recommend (and are trying desperately to remove
-> >> existing uses), so several of the issues re: the "TAP version 14"
-> >> string et al are side effects of calling what is supposed to be an
-> >> internal KUnit function manually.
-> >>
-> >> That being said, we definitely do want to make testing platform
-> >> drivers as convenient as possible. I'm not sure why kunit_test_suite()
-> >> doesn't work for you for platform drivers: are you just missing some
-> >> way of instantiating the device from within a test context?
-> >>
-> >> I know Brendan has experimented with some hardware faking code, for
-> >> which there's some example use here:
-> >> https://kunit-review.googlesource.com/c/linux/+/5275
-> >> (Note that you'll need to look at the other patches in the 'relation
-> >> chain' for dependencies.)
-> >>
-> >> Equally, I've experimented a bit with testing old soundcard drivers
-> >> (via a platform device) here, which may be an easier way to look
-> >> through:
-> >> https://github.com/sulix/linux/commit/4e1620c86553b9edde7f032318cf417dc13e4d26
-> >>
-> >> Note that neither of those examples are anything other than
-> >> experiments, so may not work as-is, or be ideal.
-> >>
-> >> Otherwise, we're always happy to accept patches, though again, if
-> >> there's any way of getting your tests working without a direct call to
-> >> __kunit_test_suites_init() --- even if that would require patches to
-> >> work --- that'd be preferable on our end.
-> >>
-> >> Cheers,
-> >> -- David
-> > Hi David,
-> > Thanks for replying.
-> > I looked at the examples you shared, and they all fake the actual device.
-> > My intention is to actually interact with the real device. - get a
-> > real interrupt, etc.
-> > Is it wrong, was the intention that the platform device be mocked ?
-> > Thanks,
-> > Ramon.
-> >
->
-> Hi, Ramon,
->
-> I particularly don't condemn writing tests that require hardware, but
-> they're best avoided, mostly to facilitate running those tests.
->
-> Can you share your code?
-Sure.
-> I would be happy to take a look if its not a problem for you!
->
-> Kind regards,
-> Tales
+On 8/18/22 10:58, Axel Rasmussen wrote:
+>> 1) I recalled that hmm-tests.c in the same directory also needs
+>> gup_test.h, and wondered if that was covered. And it turns out the the
+>> relative "up and over" include path is done in hmm-tests.c itself,
+>> instead of in the Makefile, like this:
+>>
+>> /*
+>>    * This is a private UAPI to the kernel test module so it isn't exported
+>>    * in the usual include/uapi/... directory.
+>>    */
+>> #include "../../../../lib/test_hmm_uapi.h"
+>> #include "../../../../mm/gup_test.h"
+>>
+>> It would be nice (maybe follow-up polishing for someone) if this were
+>> done once, instead of twice (or more?) via different (source code vs.
+>> Makefile) mechanisms.
+> 
+> Hmm, I suppose the way to clean this up would be to have the Makefile
+> compute this once, and pass in "-I $(selfdir)/../../.." to the
+> compiler so we could just "#include <mm/gup_test.h>" directly?
+
+Yes, it's better to have the Makefile know where the include paths are,
+rather than each source file, so that looks better.
+
+But hold on, now I see that selftests/vm/Makefile already uses what is
+effectively a src_topdir, anyway! Here:
+
+CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+
+...which makes me think that real fix for the original problem should be
+simply this:
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 947fc72413e9..d44c72b3abe3 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -40,6 +40,7 @@ ifeq (0,$(MAKELEVEL))
+      endif
+  endif
+  selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
++top_srcdir = $(selfdir)/../../..
+
+  # The following are built by lib.mk common compile rules.
+  # TEST_CUSTOM_PROGS should be used by tests that require
 
 
-// SPDX-License-Identifier: GPL-2.0
-#include <linux/nr_hwsw_queues.h>
-#include <linux/module.h>
-#include <kunit/test.h>
-#include <linux/device.h>
-#include <linux/dma-mapping.h>
-#include <linux/platform_device.h>
-#include <linux/of_address.h>
-#include <linux/irq.h>
-#include <linux/interrupt.h>
+...and then the follow up cleanup can use top_srcdir to cleanup CFLAGS and
+also pull the relative paths out of the source files and into the Makefile.
 
-#define ASPEN_HW_SW_QUEUES_OFFSET 0x02300000
-#define ASPEN_HW_SW_QUEUES_SIZE 0x80000
 
-#define HW_SW_QUEUES_TEST_SINGLE_QUEUE_CFG_REG_MEMORY_MAP_SIZE (0x1000)
-#define HW_SW_QUEUES_TEST_QUEUES_CFG_REG_MEMORY_MAP_SIZE (0x2000)
-
-#define HW_SW_QUEUES_TEST_HW2SW_QUEUE_CFG_OFFSET (0)
-#define HW_SW_QUEUES_TEST_HW2SW_QUEUE_COMMON_CFG_OFFSET (0x40)
-
-#define HW_SW_QUEUES_TEST_SW2HW_QUEUE_CFG_OFFSET (0x1000)
-#define HW_SW_QUEUES_TEST_SW2HW_QUEUE_COMMON_CFG_OFFSET (0x1020)
-
-#define QUEUE_DEPTH_MIN_SIZE (256)
-#define QUEUE_DEPTH_MAX_SIZE (1024)
-#define QUEUE_ELEM_MIN_SIZE (8)
-#define QUEUE_ELEM_MAX_SIZE (64)
-#define HW_SW_QUEUES_TEST_SINGLE_QUEUE_DATA_REG_MEMORY_MAP_SIZE \
-(QUEUE_DEPTH_MAX_SIZE * QUEUE_ELEM_MAX_SIZE)
-#define HW_SW_QUEUES_TEST_QUEUES_DATA_REG_MEMORY_MAP_SIZE \
-(HW_SW_QUEUES_TEST_SINGLE_QUEUE_DATA_REG_MEMORY_MAP_SIZE * 2)
-
-#define HW_SW_QUEUES_TEST_HW2SW_QUEUE_DATA_OFFSET (0x2000)
-#define HW_SW_QUEUES_TEST_SW2HW_QUEUE_DATA_OFFSET
-(HW_SW_QUEUES_TEST_HW2SW_QUEUE_DATA_OFFSET + \
-HW_SW_QUEUES_TEST_SINGLE_QUEUE_DATA_REG_MEMORY_MAP_SIZE)
-
-struct queue_element {
-u64 value1;
-};
-
-struct test_context {
-struct nr_sw_hw_queue sw_hw_queue;
-struct nr_hw_sw_queue hw_sw_queue;
-volatile bool irq_occurred;
-};
-
-struct suite_context {
-struct platform_device *pdev;
-};
-
-static struct suite_context g_context;
-
-irqreturn_t hw_sw_queue_irq_handler(int irq, void *ctx)
-{
-struct kunit *test = ctx;
-struct test_context *context = test->priv;
-
-kunit_info(test, "IRQ handler\n");
-
-nr_hw_sw_consume(&context->hw_sw_queue, 1);
-nr_hw_sw_queue_clear_irq(&context->hw_sw_queue, 0);
-
-context->irq_occurred = true;
-
-return IRQ_HANDLED;
-}
-
-static void hw_sw_queues_simple_irq_test(struct kunit *test)
-{
-struct test_context *context = test->priv;
-int ret;
-void *addr;
-
-kunit_info(test, "Executing test\n");
-
-context->irq_occurred = false;
-
-KUNIT_EXPECT_EQ(test, nr_hw_sw_queue_init(&context->hw_sw_queue), 0);
-KUNIT_EXPECT_EQ(test, nr_sw_hw_queue_init(&context->sw_hw_queue), 0);
-
-nr_hw_sw_queue_unmask_irq(&context->hw_sw_queue);
-nr_hw_sw_queue_enable(&context->hw_sw_queue);
-nr_sw_hw_queue_enable(&context->sw_hw_queue);
-
-ret = request_threaded_irq(context->hw_sw_queue.irq, hw_sw_queue_irq_handler,
-   NULL, IRQF_SHARED  | IRQF_TRIGGER_HIGH, "hw_sw_irq", test);
-
-KUNIT_EXPECT_EQ(test, ret, 0);
-
-nr_sw_hw_get_next_free_entry(&context->sw_hw_queue, &addr);
-nr_sw_hw_produce(&context->sw_hw_queue, 1);
-
-KUNIT_EXPECT_EQ(test, ret, 0);
-
-while (!context->irq_occurred)
-;
-}
-
-static int hw_sw_queues_test_init(struct kunit *test)
-{
-struct test_context *context;
-
-context = kzalloc(sizeof(*context), GFP_KERNEL);
-test->priv = context;
-
-kunit_info(test, "initializing\n");
-
-context->hw_sw_queue.common.element_size = sizeof(struct queue_element);
-context->hw_sw_queue.common.queue_depth = 8;
-context->hw_sw_queue.common.config_base = ioremap(ASPEN_HW_SW_QUEUES_OFFSET,
-  ASPEN_HW_SW_QUEUES_SIZE);
-context->hw_sw_queue.irq_threshold = 1;
-context->hw_sw_queue.irq = platform_get_irq(g_context.pdev, 0);
-if (context->hw_sw_queue.irq < 0)
-return -1;
-
-context->sw_hw_queue.common.element_size = sizeof(struct queue_element);
-context->sw_hw_queue.common.queue_depth = 8;
-context->sw_hw_queue.common.config_base =
-context->hw_sw_queue.common.config_base +
-HW_SW_QUEUES_TEST_SW2HW_QUEUE_CFG_OFFSET;
-
-context->hw_sw_queue.common.virtual_base =
-context->hw_sw_queue.common.config_base +
-HW_SW_QUEUES_TEST_HW2SW_QUEUE_DATA_OFFSET;
-context->hw_sw_queue.common.physical_base = ASPEN_HW_SW_QUEUES_OFFSET +
-HW_SW_QUEUES_TEST_HW2SW_QUEUE_DATA_OFFSET;
-
-context->sw_hw_queue.common.virtual_base =
-context->hw_sw_queue.common.config_base +
-HW_SW_QUEUES_TEST_SW2HW_QUEUE_DATA_OFFSET;
-context->sw_hw_queue.common.physical_base = ASPEN_HW_SW_QUEUES_OFFSET +
-HW_SW_QUEUES_TEST_SW2HW_QUEUE_DATA_OFFSET;
-
-return 0;
-}
-
-static void hw_sw_queues_test_exit(struct kunit *test)
-{
-struct test_context *context = test->priv;
-
-kunit_info(test, "deinitializing\n");
-iounmap(context->hw_sw_queue.common.config_base);
-free_irq(context->hw_sw_queue.irq, test);
-
-kfree(context);
-}
-
-static struct kunit_case hw_sw_queues_test_cases[] = {
-KUNIT_CASE(hw_sw_queues_simple_irq_test),
-{}
-};
-
-static struct kunit_suite nr_hwsw_queues_test_suite = {
-.name = "nr_hwsw_queues",
-.init = hw_sw_queues_test_init,
-.exit = hw_sw_queues_test_exit,
-.test_cases = hw_sw_queues_test_cases,
-};
-
-static struct kunit_suite *nr_hwsw_queues_test_suites[] = {
-&nr_hwsw_queues_test_suite,
-NULL
-};
-
-static int nr_hw_sw_queues_test_probe(struct platform_device *pdev)
-{
-g_context.pdev = pdev;
-pr_info("TAP version 14\n");
-pr_info("1..1\n");
-return __kunit_test_suites_init(nr_hwsw_queues_test_suites);
-}
-
-static int nr_hw_sw_queues_test_remove(struct platform_device *pdev)
-{
-__kunit_test_suites_exit(nr_hwsw_queues_test_suites);
-return 0;
-}
-
-static const struct of_device_id nr_hw_sw_queues_test_of_match[] = {
-{.compatible = "nr,hw_sw_queus_test",},
-{},
-};
-
-MODULE_DEVICE_TABLE(of, nr_hw_sw_queues_test_of_match);
-
-static struct platform_driver nr_hw_sw_queues_test = {
-.driver = {
-.name  = "nr_hw_sw_queues_test",
-.of_match_table = nr_hw_sw_queues_test_of_match,
-},
-.probe = nr_hw_sw_queues_test_probe,
-.remove = nr_hw_sw_queues_test_remove,
-};
-
-module_platform_driver(nr_hw_sw_queues_test);
-MODULE_LICENSE("GPL");
+thanks,
+-- 
+John Hubbard
+NVIDIA
