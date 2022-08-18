@@ -2,89 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5D2598409
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 15:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C145659853C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 16:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245038AbiHRNYy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 09:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S245747AbiHROFz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 10:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245047AbiHRNYp (ORCPT
+        with ESMTP id S245133AbiHROF0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 09:24:45 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A00D5722E;
-        Thu, 18 Aug 2022 06:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660829074; x=1692365074;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5TUL0pMN1Ch62fh0N5bHXldv3b4lhkGVjVf4Q20K7N8=;
-  b=af/BoiSPNPjYdKoxzwvWQjR04f450FFqdvSqTtbYlKSF+bXLbM7dBxul
-   8PnI3RY2FleRWHpdaa3hTAJMMBHjSDf7/9peNbvrJGfy4K98ikKV2nqhY
-   W1IXett9S+pL5UysC8cCbVRgd5YTJnUTn9RxH6B1a+GuhB6LPqEZZZDkU
-   +mAA9ZIKN37uYxkTmO0Ckumj2itTgIfFAQGQ5UBlmPVkgJaMypGNwVk14
-   5oWbjszXN5VwxNqm6fiWWLJmEX2pbW+QtfEH0D0+yQLAITSCaTjQmx42E
-   tU8kRPN80gMfuHYVsH/A2TRkgUGO+jS4S4P+Od9qsl7CJDmvhk4oVqqk6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="279720468"
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="279720468"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 06:24:33 -0700
-X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
-   d="scan'208";a="604253471"
-Received: from geigerri-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.215.246])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 06:24:24 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 68132104AA0; Thu, 18 Aug 2022 16:24:21 +0300 (+03)
-Date:   Thu, 18 Aug 2022 16:24:21 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220818132421.6xmjqduempmxnnu2@box>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+        Thu, 18 Aug 2022 10:05:26 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6236F542;
+        Thu, 18 Aug 2022 07:05:23 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id BBD2A77A; Thu, 18 Aug 2022 09:05:21 -0500 (CDT)
+Date:   Thu, 18 Aug 2022 09:05:21 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, tixxdz@gmail.com
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+Message-ID: <20220818140521.GA1000@mail.hallyn.com>
+References: <20220815162028.926858-1-fred@cloudflare.com>
+ <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,88 +59,119 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> On Wed, 6 Jul 2022, Chao Peng wrote:
-> > This is the v7 of this series which tries to implement the fd-based KVM
-> > guest private memory.
+On Wed, Aug 17, 2022 at 04:24:28PM -0500, Eric W. Biederman wrote:
+> Paul Moore <paul@paul-moore.com> writes:
 > 
-> Here at last are my reluctant thoughts on this patchset.
+> > On Wed, Aug 17, 2022 at 4:56 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >> Paul Moore <paul@paul-moore.com> writes:
+> >> > On Wed, Aug 17, 2022 at 3:58 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >> >> Paul Moore <paul@paul-moore.com> writes:
+> >> >>
+> >> >> > At the end of the v4 patchset I suggested merging this into lsm/next
+> >> >> > so it could get a full -rc cycle in linux-next, assuming no issues
+> >> >> > were uncovered during testing
+> >> >>
+> >> >> What in the world can be uncovered in linux-next for code that has no in
+> >> >> tree users.
+> >> >
+> >> > The patchset provides both BPF LSM and SELinux implementations of the
+> >> > hooks along with a BPF LSM test under tools/testing/selftests/bpf/.
+> >> > If no one beats me to it, I plan to work on adding a test to the
+> >> > selinux-testsuite as soon as I'm done dealing with other urgent
+> >> > LSM/SELinux issues (io_uring CMD passthrough, SCTP problems, etc.); I
+> >> > run these tests multiple times a week (multiple times a day sometimes)
+> >> > against the -rcX kernels with the lsm/next, selinux/next, and
+> >> > audit/next branches applied on top.  I know others do similar things.
+> >>
+> >> A layer of hooks that leaves all of the logic to userspace is not an
+> >> in-tree user for purposes of understanding the logic of the code.
+> >
+> > The BPF LSM selftests which are part of this patchset live in-tree.
+> > The SELinux hook implementation is completely in-tree with the
+> > subject/verb/object relationship clearly described by the code itself.
+> > After all, the selinux_userns_create() function consists of only two
+> > lines, one of which is an assignment.  Yes, it is true that the
+> > SELinux policy lives outside the kernel, but that is because there is
+> > no singular SELinux policy for everyone.  From a practical
+> > perspective, the SELinux policy is really just a configuration file
+> > used to setup the kernel at runtime; it is not significantly different
+> > than an iptables script, /etc/sysctl.conf, or any of the other myriad
+> > of configuration files used to configure the kernel during boot.
 > 
-> fd-based approach for supporting KVM guest private memory: fine.
-> 
-> Use or abuse of memfd and shmem.c: mistaken.
-> 
-> memfd_create() was an excellent way to put together the initial prototype.
-> 
-> But since then, TDX in particular has forced an effort into preventing
-> (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
-> 
-> Are any of the shmem.c mods useful to existing users of shmem.c? No.
-> Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
-> 
-> What use do you have for a filesystem here?  Almost none.
-> IIUC, what you want is an fd through which QEMU can allocate kernel
-> memory, selectively free that memory, and communicate fd+offset+length
-> to KVM.  And perhaps an interface to initialize a little of that memory
-> from a template (presumably copied from a real file on disk somewhere).
-> 
-> You don't need shmem.c or a filesystem for that!
-> 
-> If your memory could be swapped, that would be enough of a good reason
-> to make use of shmem.c: but it cannot be swapped; and although there
-> are some references in the mailthreads to it perhaps being swappable
-> in future, I get the impression that will not happen soon if ever.
-> 
-> If your memory could be migrated, that would be some reason to use
-> filesystem page cache (because page migration happens to understand
-> that type of memory): but it cannot be migrated.
+> I object to adding the new system configuration knob.
 
-Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
-theoretically possible, but I'm not aware of any plans as of now.
+I do strongly sympathize with Eric's points.  It will be very easy, once
+user namespace creation has been further restricted in some distros, to
+say "well see this stuff is silly" and go back to simply requiring root
+to create all containers and namespaces, which is generally quite a bit
+easier anywway.  And then, of course, give everyone root so they can
+start containers.
 
-[1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
+As Eric said,
 
-> Some of these impressions may come from earlier iterations of the
-> patchset (v7 looks better in several ways than v5).  I am probably
-> underestimating the extent to which you have taken on board other
-> usages beyond TDX and SEV private memory, and rightly want to serve
-> them all with similar interfaces: perhaps there is enough justification
-> for shmem there, but I don't see it.  There was mention of userfaultfd
-> in one link: does that provide the justification for using shmem?
+ | Further adding a random failure mode to user namespace creation if it is
+ | used at all will just encourage userspace to use a setuid application to
+ | perform the namespace creation instead.  Creating a less secure system
+ | overall.
+
+However, I'm also looking at e.g. CVE-2022-2588 and CVE-2022-2586, and
+yes there are two issues which do require discussion (three if you
+count reportability, which is mainly a tool in guarding against the others).
+
+The first is, indeed, configuration knobs.  There are tools, including
+chrome, which use user namespaces to make things better.  The hope is
+that more and more tools will do so.
+
+The second is damage control.  When an 0day has been announced, things
+change.  You can say "well the bug was there all along", but it is
+different when every lazy ne'erdowell can pick an exploit off a mailing
+list and use it against a product for which spinning a new version with
+a new kernel and getting customers to update is probably a months-long
+endeavor.  Some of these products do in fact require namespaces (user
+and otherwise) as part of their function.  And - to my chagrin - I suspect
+most of them create usernamespace as the root user, before possibly processing
+untrusted user input, so unprivileged_userns_clone isn't a good fit.
+
+SELinux (and LSMs in generaly) do in fact seem like a useful place to
+add some configuration, because they tend to assign different domains
+to tasks with different purposes and trust levels.  But another such
+place is the init system / service manager.  And in most cases these
+days, this will use cgroups to collect tasks of certain types.  So I
+wonder (this is ALMOST ENTIRELY thinking out loud, not thought through
+sufficiently) whether we should be setting a cgroup.nslock or
+somesuch.
+
+Of course, kernel livepatch is another potentially useful mitigation.
+Currently that's not possible for everyone.
+
+Maybe there is a more fundamental way we can approach this.  Part of me
+still likes the idea of splitting the id mapping and capability-in-userns
+parts, but that's not sufficient.  Maybe looking over all the relevant
+CVEs would give a better hint.
+
+Eric, you said
+
+ | If the concern is to reduce the attack surface everything this
+ | proposed hook can do is already possible with the security_capable
+ | security hook.
+
+I suppose I could envision an LSM which gets activated when we find
+out there was a net-ns-exacerbated 0-day, which refuses CAP_NET_ADMIN
+for a task not in init_user_ns?  Ideally it would be more flexible
+than that.
+
+> idea.  What is userspace going to do with this new feature that makes it
+> worth maintaining in the kernel?
 > 
-> I'm afraid of the special demands you may make of memory allocation
-> later on - surprised that huge pages are not mentioned already;
-> gigantic contiguous extents? secretmem removed from direct map?
+> That is always the conversation we have when adding new features, and
+> that is exactly the conversation that has not happened here.
 
-The design allows for extension to hugetlbfs if needed. Combination of
-MFD_INACCESSIBLE | MFD_HUGETLB should route this way. There should be zero
-implications for shmem. It is going to be separate struct memfile_backing_store.
+Eric and Paul, I wonder, will you - or some people you'd like to represent
+you - be at plumbers in September?  Should there be a BOF session there?  (I
+won't be there, but could join over video)  I think a brainstorming session 
+for solutions to the above problems would be good.
 
-I'm not sure secretmem is a fit here as we want to extend MFD_INACCESSIBLE
-to be movable if platform supports it and secretmem is not migratable by
-design (without direct mapping fragmentations).
-
-> Here's what I would prefer, and imagine much easier for you to maintain;
-> but I'm no system designer, and may be misunderstanding throughout.
+> Adding a layer of indirection should not exempt a new feature from
+> needing to justify itself.
 > 
-> QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
-> the fallocate syscall interface itself) to allocate and free the memory,
-> ioctl for initializing some of it too.  KVM in control of whether that
-> fd can be read or written or mmap'ed or whatever, no need to prevent it
-> in shmem.c, no need for flags, seals, notifications to and fro because
-> KVM is already in control and knows the history.  If shmem actually has
-> value, call into it underneath - somewhat like SysV SHM, and /dev/zero
-> mmap, and i915/gem make use of it underneath.  If shmem has nothing to
-> add, just allocate and free kernel memory directly, recorded in your
-> own xarray.
-
-I guess shim layer on top of shmem *can* work. I don't see immediately why
-it would not. But I'm not sure it is right direction. We risk creating yet
-another parallel VM with own rules/locking/accounting that opaque to
-core-mm.
-
-Note that on machines that run TDX guests such memory would likely be the
-bulk of memory use. Treating it as a fringe case may bite us one day.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> Eric
