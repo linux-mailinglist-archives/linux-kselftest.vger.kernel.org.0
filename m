@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1725989F0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 19:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AD45989B2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 19:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345401AbiHRRHY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 13:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S1345329AbiHRRJD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 13:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345534AbiHRRF2 (ORCPT
+        with ESMTP id S1343967AbiHRRHD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 13:05:28 -0400
+        Thu, 18 Aug 2022 13:07:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54C5CD506
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 10:01:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E043CCD521
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 10:02:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EAFB616D2
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7816DC433D6;
-        Thu, 18 Aug 2022 17:01:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B2C96168E
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:02:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD53C4347C;
+        Thu, 18 Aug 2022 17:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660842117;
-        bh=4SS1HhiCCSG9y1tYIhTUgiCAE3c544P3f86asq/gm0U=;
+        s=k20201202; t=1660842119;
+        bh=2FRY03mI0lys9sGvaqOL1d+m6IEPqOMSpUOGBSMSQvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q97AzCFYBMA7iQeS+U6HEnU7FliQDvF7L5Kw0Y6XfRUzVKNB7H7gp6KMBkpftKDqU
-         AUkma6yYyRAtEjmQWU9LBwD0HOLSnJR0LQEAyAvfBzsUlbZVrdIg4DOS2XXjNE91UQ
-         eU6NkUWdRCZOLLvuqWvCH8hpRdaAeNbp0qjbU81EmrDJr+4kZsF7Uh8uETxPBg+cL3
-         6j68lDEreppkv8pxKl4FymI/YM3NUVbpkOJ0iheyxr6wfEYjbTUDO8JSX585K3x3xq
-         AiDj7uCJiy8QAAjT2UwGquG0qaqfO7PtRSMDO7u81fgtIxo8GT1nwCSW8C1E1RuVnm
-         ismJquYiVzN3A==
+        b=IjaiVxjvHaN03NFwnWJy7poX6ByIpFJVZr1JlxHLvKOTL1JP5ALyzeaOYYJMNNwPG
+         qFHZEX0hHg3TT6sDtHl1aG5bNasXaOzQZRifN5gtuKtmyn+QxUvnOJpotWBBfor18Q
+         p4a5z68vSZ5JRhLj+eDi0ls5daH2h57GoN4ciFiS1XyztsRp/hPWc9IYPRQ0rQEPu6
+         HFurjAN6ddxHVWphunoWTZCzYXHBgelvDU3MuY0FZ4DfiqpfTACZJuf6jbfiD19D9U
+         vnBebAduALY3vgTNPuphO94CGEMKwKS4Xpsdf+lLS9/m7YYx3mBQgGTjMDWWealVJQ
+         6ux9xvszgGYMA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -41,14 +41,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Luis Machado <luis.machado@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 2/4] arm64/ptrace: Document extension of NT_ARM_TLS to cover TPIDR2_EL0
-Date:   Thu, 18 Aug 2022 18:01:09 +0100
-Message-Id: <20220818170111.351889-3-broonie@kernel.org>
+Subject: [PATCH v3 3/4] arm64/ptrace: Support access to TPIDR2_EL0
+Date:   Thu, 18 Aug 2022 18:01:10 +0100
+Message-Id: <20220818170111.351889-4-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220818170111.351889-1-broonie@kernel.org>
 References: <20220818170111.351889-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1023; i=broonie@kernel.org; h=from:subject; bh=4SS1HhiCCSG9y1tYIhTUgiCAE3c544P3f86asq/gm0U=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi/nBUG54LoL/yWs5q4ClkhlcssbMavyJEG2YIqqRj 7oMMUOKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYv5wVAAKCRAk1otyXVSH0HHLB/ 9Kh4cwNJM4bg3HtqTlqPr/DTTwEh5IVptnLGPWYuA+fb7C4FlQ/KwkHeyZncDbkwzaX3wJ8uTtJKRk 1wWJWLWGk/Mppa8UQ7YMogLtp6HIi5rq/Gb87usuVfGRVePQhRHY43oIYGl585rUPCpwKC15xZmT8O K6LYm7T0ffn1TVEt5+3OgKM5W69WZRr7s+i9s4eOnQMX1zVPO1cN2j0wbBiW6q71+iuDt8y0ts4sMm mPvBB1m6+mVKeVd3n44sq7Fpej3KZDJOaIElwDW7XGc7MosrLeabfjzWVO+sWlLtbNgqraqvqykXgb 0wfSkJC597nmyMCc/TML726SONhElC
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2582; i=broonie@kernel.org; h=from:subject; bh=2FRY03mI0lys9sGvaqOL1d+m6IEPqOMSpUOGBSMSQvQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBi/nBVQMafCiH+QCdldmhTo64O7Q+ILMFCMDTFcI+g htpp3pWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYv5wVQAKCRAk1otyXVSH0HcuB/ oC/dZU+eNN95c5lhQxi1/VTmS1mi5YAGvCnXGnWud2T0GgAkoWzH8biGXzLXH1IvxIsZLyHxF51t++ PaCaaJvXZAYlQ3nAg/rZfMda8opkjGTbprTYBnF4og0dPnuRcunUH8D/oDuJmnPjZz+PAQY2arj14Y lT76wvK9bjJS4URfVuZHJPCXZrIz/Q+3cPGVwfOuwG0rYIrTsTaMA/+y57pLU243BVpNBARaCJUYnW aQ7K9gYsG9qqflkr+2Yczjcb4FhvgV3y8b6wXpa8msJMzFPMhVQP20Mdr0wP1HiK5hU6Jg/l7K8/6Z Lgg3G+0GG+4xqS+xqBjHQ0vpGJMr6R
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,30 +61,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In order to allow debuggers to discover lazily saved SME state we need
-to provide access to TPIDR2_EL0, we will extend the existing NT_ARM_TLS
-used for TPIDR to also include TPIDR2_EL0 as the second register in the
-regset.
+SME introduces an additional EL0 register, TPIDR2_EL0, intended for use
+by userspace as part of the SME. Provide ptrace access to it through the
+existing NT_ARM_TLS regset used for TPIDR_EL0 by expanding it to two
+registers with TPIDR2_EL0 being the second one.
+
+Existing programs that query the size of the register set will be able
+to observe the increased size of the register set. Programs that assume
+the register set is single register will see no change. On systems that
+do not support SME TPIDR2_EL0 will read as 0 and writes will be ignored,
+support for SME should be queried via hwcaps as normal.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/arm64/sme.rst | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm64/kernel/ptrace.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/arm64/sme.rst b/Documentation/arm64/sme.rst
-index 937147f58cc5..16d2db4c2e2e 100644
---- a/Documentation/arm64/sme.rst
-+++ b/Documentation/arm64/sme.rst
-@@ -331,6 +331,9 @@ The regset data starts with struct user_za_header, containing:
-   been read if a PTRACE_GETREGSET of NT_ARM_ZA were executed for each thread
-   when the coredump was generated.
+diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+index 21da83187a60..82feabba3911 100644
+--- a/arch/arm64/kernel/ptrace.c
++++ b/arch/arm64/kernel/ptrace.c
+@@ -666,10 +666,18 @@ static int fpr_set(struct task_struct *target, const struct user_regset *regset,
+ static int tls_get(struct task_struct *target, const struct user_regset *regset,
+ 		   struct membuf to)
+ {
++	int ret;
++
+ 	if (target == current)
+ 		tls_preserve_current_state();
  
-+* The NT_ARM_TLS note will be extended to two registers, the second register
-+  will contain TPIDR2_EL0 on systems that support SME and will be read as
-+  zero with writes ignored otherwise.
+-	return membuf_store(&to, target->thread.uw.tp_value);
++	ret = membuf_store(&to, target->thread.uw.tp_value);
++	if (system_supports_tpidr2())
++		ret = membuf_store(&to, target->thread.tpidr2_el0);
++	else
++		ret = membuf_zero(&to, sizeof(u64));
++
++	return ret;
+ }
  
- 9.  System runtime configuration
- --------------------------------
+ static int tls_set(struct task_struct *target, const struct user_regset *regset,
+@@ -677,13 +685,20 @@ static int tls_set(struct task_struct *target, const struct user_regset *regset,
+ 		   const void *kbuf, const void __user *ubuf)
+ {
+ 	int ret;
+-	unsigned long tls = target->thread.uw.tp_value;
++	unsigned long tls[2];
+ 
+-	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &tls, 0, -1);
++	tls[0] = target->thread.uw.tp_value;
++	if (system_supports_sme())
++		tls[1] = target->thread.tpidr2_el0;
++
++	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, tls, 0, count);
+ 	if (ret)
+ 		return ret;
+ 
+-	target->thread.uw.tp_value = tls;
++	target->thread.uw.tp_value = tls[0];
++	if (system_supports_sme())
++		target->thread.tpidr2_el0 = tls[1];
++
+ 	return ret;
+ }
+ 
+@@ -1392,7 +1407,7 @@ static const struct user_regset aarch64_regsets[] = {
+ 	},
+ 	[REGSET_TLS] = {
+ 		.core_note_type = NT_ARM_TLS,
+-		.n = 1,
++		.n = 2,
+ 		.size = sizeof(void *),
+ 		.align = sizeof(void *),
+ 		.regset_get = tls_get,
 -- 
 2.30.2
 
