@@ -2,148 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24186597AB1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 02:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F364597B70
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 04:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242407AbiHRAf4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Aug 2022 20:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
+        id S242710AbiHRCSp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Aug 2022 22:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235429AbiHRAfz (ORCPT
+        with ESMTP id S240595AbiHRCSp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Aug 2022 20:35:55 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10olkn2037.outbound.protection.outlook.com [40.92.41.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2115A7233;
-        Wed, 17 Aug 2022 17:35:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KhObhCVFCr+1la65Gb0aiHN4ZPIIMQB+rBfPUjQbO903495Ib0XiVWc05VKnxLR4jNB+OxmyRGZRuDnmzVU494YnTrK5/cHswm2nTTbQ99gxrJ9dE/2Q9EZCgY0Oi5vGYjtjOSr0uEtuqtmChgRRdjxD5nKxH1gA0H3gA4p56MK40LlrM3d5PMZRmElSs8pteyZW8qY4k4OYKT5660mXaLatukbpT/WoVwwsLLdx38q54f4qoaDtMWr7zLpq23F1zzPCHuq8nOQJSu9i45nC7d3FpJyXJEBDrKPIKytgvu45p9mocXS0TkFsA4HM4VVYtjMyNbgkved1gjl2xfhGvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZEI1JStEANaO+aOQ9wAbvzr5ZQFarw6qX+QNAB6sEns=;
- b=fhvoVCrp38B76COUmF2PVC372MdNPOH1k0aIip0SxtQG8YeNmyxL2+zb2GdqXu+2LNRjjKDCFeaV6K5bcBwY0PrbheGxnCVon10dEdUme21H1WaYuu8mu/gXUNuCT86nWKWNuK1Fl5xB2+wM2Uc3wkS0WUA8hzCaRwC28qYJv52WEL2cizVJq0LtAZGROc2VpvWwiyIN1rGwNJM0ep/cluBFFYLj8Br2cXNHq0zgZWgTmxP0j5s1XIfweXXVJmN9+qK3Z4nZ5XgvLwOkBeCuYJ0AS5bIhsRFMJKZlmt49f9Gqf9dDf89cgkCh9GMbZzwdVoCWRN/9QMw0DKOPSAOww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZEI1JStEANaO+aOQ9wAbvzr5ZQFarw6qX+QNAB6sEns=;
- b=JxzhCNKI0BnoL5FZZmCI47G0Qkv03M7Qs3ibE9hYM0/rKnBiG2TVbkwxPhVOr3rQbLBVgjV8/sOlOiTbRelpd0x9SlXCJLxyG6WixwFcfrEqTPRuy3oV8vzNTnK1Exj7MAYAi9P4tB+jllwy3IAF5wLF2nuw43Q+TIkuATsT3SzhcODXfHM3mu+LJ/jHluRVQp4HSC7DjHa8qf0eV5R7kyf3ox+Eph1VJiu46vrDoxDZrTtW4O2QCnRS3BJtJQndCZF/zXkJIFm7jXathvgduPn/8Z4T6zhV0NYQVlYP8buRs4E/iO0vPqnXihfZSQfGAW1Du35Ryg5tKEAb+1m5RQ==
-Received: from MN2PR15MB2622.namprd15.prod.outlook.com (2603:10b6:208:121::22)
- by PH0PR15MB5142.namprd15.prod.outlook.com (2603:10b6:510:12b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Thu, 18 Aug
- 2022 00:35:50 +0000
-Received: from MN2PR15MB2622.namprd15.prod.outlook.com
- ([fe80::2476:6854:fc5a:4d96]) by MN2PR15MB2622.namprd15.prod.outlook.com
- ([fe80::2476:6854:fc5a:4d96%7]) with mapi id 15.20.5525.019; Thu, 18 Aug 2022
- 00:35:50 +0000
-From:   Jonathan Chapman-Moore <jdm7dv@outlook.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "jackmanb@chromium.org" <jackmanb@chromium.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kafai@fb.com" <kafai@fb.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "eparis@parisplace.org" <eparis@parisplace.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
-        "cgzones@googlemail.com" <cgzones@googlemail.com>,
-        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
-        "tixxdz@gmail.com" <tixxdz@gmail.com>
-Subject: RE: [PATCH v5 0/4] Introduce security_create_user_ns()
-Thread-Topic: [PATCH v5 0/4] Introduce security_create_user_ns()
-Thread-Index: AQHYsMMXyK6PHfO+lkObpfzehugo062yExMAgAEiYkeAAA5JgIAAQuDmgAADiYCAAAxeS4AAAyGAgAAJZeGAAAJNgIAALcKw
-Date:   Thu, 18 Aug 2022 00:35:49 +0000
-Message-ID: <MN2PR15MB2622E8357FDB67B8222D47119A6D9@MN2PR15MB2622.namprd15.prod.outlook.com>
-References: <20220815162028.926858-1-fred@cloudflare.com>
- <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
- <CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-tmn:  [h1OqrPXj+ttbmlPl0gnm237a4Sjse7LF]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c0e02009-49d8-4cd9-7ac3-08da80b199c5
-x-ms-traffictypediagnostic: PH0PR15MB5142:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: impd1vfxHc8v220FL81xTzvgqtoBlkg4zP0B4qlfOZoqrm/kpJqGhHOR+aFmGvsjcsVwcFqF0l+qP0LQc4tD0OUv5kxtx5QxKKRQiGYLazu0+emOJzVhmNt88SU90wj9dqSrNEjxczqlmpJyRaOIbmhNhWRCmLXdoDPJH3lHC3N+AOncSwhhTKmqZIFVH/wSqiz56fI6S0W7GS2dCwdcbWQL/d8+KHo7J0htQGxR1k78bG2DsT7pI2BGE1GTQnWZmL8gfEIxWbAkASidX60QOm3ZdkGGBxwehZvH43EDXwpaYHtspxlvIpBVUzkeIlSCzVBuU4cup7BKbi+WyfNTWFRU3MOnKOq06m5lftNK7+dhqMx4Lt7EhWTy44gohE+R96ave0qozefVCzLCBm5Y7bf7NrnSDABD6ZrZ0qOSkz7QxspPlANTqR4GcypFIsNEP2m8TZZsZ/2zJANIM2EyPAFVap1vN9yW/yLzxwsuZYt150aUCbqJEvPqFX+Sw4Y9BlP9jN3U0KJjheQq7GKr0Q9h2gYM3fRtWA/QhuBPt65KAmDASzQT1Dedn/c3MKcuPhveRMivmuzrYcL9/MI1pba6lmkiuVVzJqqZ4U7BL0jyf0rIV/GKZ01q873ynKKNKiIk/KVC4fwoBduuaRI/gWjaPzTKKPSNDZLvvaEoJLGUCR3Z8PgkrwzNrtxLe6JI4nIE+ozOTICjjQ/98wx+nQ==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UmNHQTVreCs3b2M1d242ZFhrazlseVFnUFRxa3lMWnVNbG4yOW1DMGZXaXEv?=
- =?utf-8?B?Y1ZFL1FNM2pZdnVKWUNDRk5DQXpsdEUwL0pDNmN1OEtVVDg4QU9IbGZ5NThs?=
- =?utf-8?B?aFdUeGxXSzNUQUswdUlEVFR0c1VTVXA1NTBCT21wdjlqNysydStWOVRScXRL?=
- =?utf-8?B?OVUyMXhxZ1cySllZQTdpY2lKekliVU13dUVFaEhYckhJRXhRMng2eDRWcmsr?=
- =?utf-8?B?TnJidGloY2JLenJtSkllaGNFck9kNVZPc2lWVnJLVDVrVjdZUHV6ZFRkOU9I?=
- =?utf-8?B?ZEozRlJQQ2JBdElXTm9kQmJkYWF2WllSSXkveWc2bld4cjNEVFdSd2VyN0w2?=
- =?utf-8?B?Sk8yWTRMdDZNS1BuUFNKN2RzRmtET1hEdWNNZk1mWkV5ZzB6OGFxZzhDTkNj?=
- =?utf-8?B?aU45VHBUZzBtT1RKdXY5MVFGNzVuc3RDMisxYjVhR0Q4WlNXRnQ2MDRjSGhz?=
- =?utf-8?B?M3YyMDNCcERpRXRYWUFrVjJUakRyakNIM05lYjVpSmM5UjNuWFF2c0tjWHpi?=
- =?utf-8?B?b2pYZnE0UDI2aXo5MGZHNHV2NjB0K3FpaVl2U0VUNnE5bmJ1cnYrVWtGZThs?=
- =?utf-8?B?cW1wVDFVcitCSWVjaVlQNXY4Qi9UQnk5YWZIUkpWTGNpUUgyL291SjJKZGZv?=
- =?utf-8?B?cXlGdkdobGUvb0xBZ0VMZ1JLYU13UnljK25VVHRBOXRGUmphY2UwdHc2ODlx?=
- =?utf-8?B?S1ZVTWwvQ2o1VWNwQzRVNEFQNmxuRlY1L1pFQTAxZEpYQjJ5TUJGN2s5TXZI?=
- =?utf-8?B?VWhkQktDUnh4SjB3ZXM4QXUwRDN3ZncvcitrTGhjVzhsMXcxYi9XbVZxU05o?=
- =?utf-8?B?dytnUUQreWFRbEc0ZG9FSjRlaU9DMTQxcS9NNFp5dnlvVGJ6eWNvYlFDNEFK?=
- =?utf-8?B?K1lra1hrL2U3azhXL3E1YVArVEVpR1AvTExTckZFMnZTaXNpYi9TdFdoRndO?=
- =?utf-8?B?WUtHYVRFcjdMRzJYRFp5b09JQXpwV3BYZ1VJSnZPcytncldWODhCYmtxcFpJ?=
- =?utf-8?B?eGU5L3Yra2lHMERmUlNGL1FYa1Z0WnRlbExCTFJrSy81YmFyUC9vNDdhb0RU?=
- =?utf-8?B?NEZ1eW9Xc1lVUG5NRElKMGI3S25WZnl4Wld0VE9lOEpVMzNYeXVBMHJFUENN?=
- =?utf-8?B?OHVabTgvNHZZQVlZNXVlZWM3VHU3RUJQdlR6Rkt2dzlQNkZ5WGo5U1BuanZS?=
- =?utf-8?B?SyttODV4WGNDck4vOGZYbGRzdnUraVBOeTlBWUVmaHltcU40TFFra25HNytN?=
- =?utf-8?B?dFRQRDhJUWtsMnpTeFI5eGxzc2E0YWd1d2l5RlZGME15NklUbXlKZ0ZCZUh3?=
- =?utf-8?B?b0VBeVBicmJpWTVYeTNaTy85bWZBVW5rRFR6WUdTSW51dXRTV254R3RhMFlu?=
- =?utf-8?B?NXMrd3FpUktPWmZUaHU5YTFnemtKNmNCZkdxazM2bGpybVRqeDdIdEVNQ0Mw?=
- =?utf-8?B?RzlYVGtIOHVOb20wYTdOQTRFVWNDMWprUWlhRFJ5VTI0L2xmbnJZUFBnVHNE?=
- =?utf-8?B?VEN3RGZ0M1dPSWQreXQvM3h0ZDRpaUNkYjcwN2FjVzZrOFFUcEw0TWpBaXRO?=
- =?utf-8?B?RUIyMExUczN6VC9Ncm52VGVVWjdJaDA2aTdYRTlZNkNHanJSdnVHT2VkUWNp?=
- =?utf-8?B?SHU1R1NMNUltWFBIZXVkT29sU2lOOGdmK01tVnAzc1RMTW1RclEvRVpxYmFx?=
- =?utf-8?Q?btzpxOtkAxoc5vYlr5Xg?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 17 Aug 2022 22:18:45 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845C242AFD;
+        Wed, 17 Aug 2022 19:18:43 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id 130so283305pfv.13;
+        Wed, 17 Aug 2022 19:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=L6wchhCs7RCHw4m9lweaJN6ZBZNWWOIcKvLVnf0uZZQ=;
+        b=kx0bPU3AP5HeVClj7yO8QgXJTHh0Z9BBQgnP9ZlHDuxC/kCsQgLyHMg13F90mIBYTj
+         29e0VizSXDrGzNn001fvQFge7GfG928eE1NJgQQqxic+al+MBbT2ceojGMxz27cgqgc2
+         qUhf6OTFiuHLhGKDdXQ5U0wf9hdl8V6yrjR6l2QyWWu8InHDaTU1JTW6PovECxYslqfe
+         fbkdCUXPw5Mz5h8/T+ub9qDA+DxlbBOZUgFQ3XllRytFDJ/NzsR37D4hb82OVWkS7Ub+
+         rrkydQniB1tFQqgD6N/dCO5dmaJFIwwq8SpxNdH9JRDWcuIGCPCOHKWwu5Okte57+2V8
+         XUvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=L6wchhCs7RCHw4m9lweaJN6ZBZNWWOIcKvLVnf0uZZQ=;
+        b=hzXtFolYhnje8yl0jf1LpMN8hDDREMIOy0c7AN30p9WhM75XQoHUhW8sTw4B09ZaNh
+         hWAui9NLKsO0dckjihAyUUGJuyc431Tjbkf+3sxFQCjkgPcBsPsCA8A0KiK3ct/vfCsa
+         Q6VRpIXAodRtaCaiaUTkYV/i55MqyYr/I9IW9ofupxkK3mZDzFx0a6Z4KWr9ZS/OaRn+
+         54KguwrbMqK7KhaEljzsh18H5YTYMPATBC9nLoMiJ9ZofxtRRyfOG/ax/mMrb1Tu8a6o
+         1yFf5wBYL1A03vcnLdgF19xkSryXQlRWB3irVtBq4kcybXxXKunr71UQ5mYGyPpOjATM
+         H3bg==
+X-Gm-Message-State: ACgBeo3jQqMUWK4llm089L6pXx1Opl5UtSpIWltxdvawhQ+EaqnWNkVb
+        3Cj8B9Ob1xZ90omnSzhQ4U4=
+X-Google-Smtp-Source: AA6agR6JzHBmHZYIC9VrcFSpi51ulwPagGgumM1lFX7TT5WyG5nl9+BwkMlCmzuiZullyHOpcJy7cQ==
+X-Received: by 2002:a63:1624:0:b0:41a:9dea:1c80 with SMTP id w36-20020a631624000000b0041a9dea1c80mr849410pgl.400.1660789122972;
+        Wed, 17 Aug 2022 19:18:42 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-61.three.co.id. [116.206.12.61])
+        by smtp.gmail.com with ESMTPSA id v1-20020a622f01000000b0052d98fbf8f3sm224240pfv.56.2022.08.17.19.18.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Aug 2022 19:18:42 -0700 (PDT)
+Message-ID: <c26cdb19-2e9c-adfd-7890-67fb08e3d2ff@gmail.com>
+Date:   Thu, 18 Aug 2022 09:18:35 +0700
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR15MB2622.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0e02009-49d8-4cd9-7ac3-08da80b199c5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2022 00:35:50.3456
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB5142
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [net-next v2 0/6] net: support QUIC crypto
+Content-Language: en-US
+To:     Adel Abouchaev <adel.abushaev@gmail.com>, kuba@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        corbet@lwn.net, dsahern@kernel.org, shuah@kernel.org,
+        imagedong@tencent.com, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <Adel Abouchaev <adel.abushaev@gmail.com>
+ <20220817200940.1656747-1-adel.abushaev@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220817200940.1656747-1-adel.abushaev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -151,66 +78,86 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SGksDQoNClBsZWFzZSByZW1vdmUgbWUgZnJvbSB0aGlzIGxpc3QgYW5kIHN0b3AgaGFyYXNzaW5n
-IG1lLg0KDQpKb25hdGhhbiBNb29yZQ0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJv
-bTogUGF1bCBNb29yZSA8cGF1bEBwYXVsLW1vb3JlLmNvbT4gDQpTZW50OiBXZWRuZXNkYXksIEF1
-Z3VzdCAxNywgMjAyMiA1OjUxIFBNDQpUbzogRXJpYyBXLiBCaWVkZXJtYW4gPGViaWVkZXJtQHht
-aXNzaW9uLmNvbT4NCkNjOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRhdGlv
-bi5vcmc+OyBGcmVkZXJpY2sgTGF3bGVyIDxmcmVkQGNsb3VkZmxhcmUuY29tPjsga3BzaW5naEBr
-ZXJuZWwub3JnOyByZXZlc3RAY2hyb21pdW0ub3JnOyBqYWNrbWFuYkBjaHJvbWl1bS5vcmc7IGFz
-dEBrZXJuZWwub3JnOyBkYW5pZWxAaW9nZWFyYm94Lm5ldDsgYW5kcmlpQGtlcm5lbC5vcmc7IGth
-ZmFpQGZiLmNvbTsgc29uZ2xpdWJyYXZpbmdAZmIuY29tOyB5aHNAZmIuY29tOyBqb2huLmZhc3Rh
-YmVuZEBnbWFpbC5jb207IGptb3JyaXNAbmFtZWkub3JnOyBzZXJnZUBoYWxseW4uY29tOyBzdGVw
-aGVuLnNtYWxsZXkud29ya0BnbWFpbC5jb207IGVwYXJpc0BwYXJpc3BsYWNlLm9yZzsgc2h1YWhA
-a2VybmVsLm9yZzsgYnJhdW5lckBrZXJuZWwub3JnOyBjYXNleUBzY2hhdWZsZXItY2EuY29tOyBi
-cGZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1zZWN1cml0eS1tb2R1bGVAdmdlci5rZXJuZWwub3Jn
-OyBzZWxpbnV4QHZnZXIua2VybmVsLm9yZzsgbGludXgta3NlbGZ0ZXN0QHZnZXIua2VybmVsLm9y
-ZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsg
-a2VybmVsLXRlYW1AY2xvdWRmbGFyZS5jb207IGNnem9uZXNAZ29vZ2xlbWFpbC5jb207IGthcmxA
-YmlnYmFkd29sZnNlY3VyaXR5LmNvbTsgdGl4eGR6QGdtYWlsLmNvbQ0KU3ViamVjdDogUmU6IFtQ
-QVRDSCB2NSAwLzRdIEludHJvZHVjZSBzZWN1cml0eV9jcmVhdGVfdXNlcl9ucygpDQoNCk9uIFdl
-ZCwgQXVnIDE3LCAyMDIyIGF0IDU6MjQgUE0gRXJpYyBXLiBCaWVkZXJtYW4gPGViaWVkZXJtQHht
-aXNzaW9uLmNvbT4gd3JvdGU6DQo+IEkgb2JqZWN0IHRvIGFkZGluZyB0aGUgbmV3IHN5c3RlbSBj
-b25maWd1cmF0aW9uIGtub2IuDQo+DQo+IEVzcGVjaWFsbHkgd2hlbiBJIGRvbid0IHNlZSBwZW9w
-bGUgZXhwbGFpbmluZyB3aHkgc3VjaCBhIGtub2IgaXMgYSBnb29kDQo+IGlkZWEuICBXaGF0IGlz
-IHVzZXJzcGFjZSBnb2luZyB0byBkbyB3aXRoIHRoaXMgbmV3IGZlYXR1cmUgdGhhdCBtYWtlcyBp
-dA0KPiB3b3J0aCBtYWludGFpbmluZyBpbiB0aGUga2VybmVsPw0KDQpGcm9tIGh0dHBzOi8vbG9y
-ZS5rZXJuZWwub3JnL2FsbC9DQUVpdmVVZFBoRVBBazdZMFpYalBzRD1WYjVobjQ1M0NIelM5YUct
-dGt5UmE4YmZfZWdAbWFpbC5nbWFpbC5jb20vDQoNCiAiV2UgaGF2ZSB2YWxpZCB1c2UgY2FzZXMg
-bm90IHNwZWNpZmljYWxseSByZWxhdGVkIHRvIHRoZQ0KICBhdHRhY2sgc3VyZmFjZSwgYnV0IGdv
-IGludG8gdGhlIG1pZGRsZSBmcm9tIGJwZiBvYnNlcnZhYmlsaXR5DQogIHRvIGVuZm9yY2VtZW50
-LiBBcyB3ZSB3YW50IHRvIHRyYWNrIG5hbWVzcGFjZSBjcmVhdGlvbiwgY2hhbmdlcywNCiAgbmVz
-dGluZyBhbmQgcGVyIHRhc2sgY3JlZHMgY29udGV4dCBkZXBlbmRpbmcgb24gdGhlIG5hdHVyZSBv
-Zg0KICB0aGUgd29ya2xvYWQuIg0KIC1EamFsYWwgSGFyb3VuaQ0KDQpGcm9tIGh0dHBzOi8vbG9y
-ZS5rZXJuZWwub3JnL2xpbnV4LXNlY3VyaXR5LW1vZHVsZS9DQUxydz1uR1Qwa2NIaDR3eUJ3VUYt
-UTgrdjhEZ255RUpNNTV2Zm1BQndmVTY3RVFuPWdAbWFpbC5nbWFpbC5jb20vDQoNCiAiW1ddZSBk
-byB3YW50IHRvIGVtYnJhY2UgdXNlciBuYW1lc3BhY2VzIGluIG91ciBjb2RlIGFuZCBzb21lIG9m
-DQogIG91ciB3b3JrbG9hZHMgYWxyZWFkeSBkZXBlbmQgb24gaXQuIEhlbmNlIHdlIGRpZG4ndCBh
-Z3JlZSB0bw0KICBEZWJpYW4ncyBhcHByb2FjaCBvZiBqdXN0IGhhdmluZyBhIGdsb2JhbCBzeXNj
-dGwuIEJ1dCB0aGVyZSBpcw0KICAib3VyIGNvZGUiIGFuZCB0aGVyZSBpcyAidGhpcmQgcGFydHki
-IGNvZGUsIHdoaWNoIG1pZ2h0IG5vdCBldmVuDQogIGJlIG9wZW4gc291cmNlIGR1ZSB0byB2YXJp
-b3VzIHJlYXNvbnMuIEFuZCB3aGlsZSB0aGUgcGF0aCBleGlzdHMNCiAgZm9yIHRoYXQgY29kZSB0
-byBkbyBzb21ldGhpbmcgYmFkIC0gd2Ugd2FudCB0byBibG9jayBpdC4iDQogLUlnbmF0IEtvcmNo
-YWdpbg0KDQpGcm9tIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LXNlY3VyaXR5LW1vZHVs
-ZS9DQUhDOVZoU0ttcW41d3hGM0JaNjdaKy1DVjdzWnpkbk8rSk9EcTQ4clpKNFdBZThVTEFAbWFp
-bC5nbWFpbC5jb20vDQoNCiAiSSd2ZSBoZWFyZCB5b3UgdGFsayBhYm91dCBidWdzIGJlaW5nIHRo
-ZSBvbmx5IHJlYXNvbiB3aHkgcGVvcGxlDQogIHdvdWxkIHdhbnQgdG8gZXZlciBibG9jayB1c2Vy
-IG5hbWVzcGFjZXMsIGJ1dCBJIHRoaW5rIHdlJ3ZlIGFsbA0KICBzZWVuIHVzZSBjYXNlcyBub3cg
-d2hlcmUgaXQgZ29lcyBiZXlvbmQgdGhhdC4gIEhvd2V2ZXIsIGV2ZW4gaWYNCiAgaXQgZGlkbid0
-LCB0aGUgbmVlZCB0byBidWlsZCBoaWdoIGNvbmZpZGVuY2UvYXNzdXJhbmNlIHN5c3RlbXMNCiAg
-d2hlcmUgYmlnIGNodW5rcyBvZiBmdW5jdGlvbmFsaXR5IGNhbiBiZSBkaXNhYmxlZCBiYXNlZCBv
-biBhDQogIHNlY3VyaXR5IHBvbGljeSBpcyBhIHZlcnkgcmVhbCB1c2UgY2FzZSwgYW5kIHRoaXMg
-cGF0Y2hzZXQgd291bGQNCiAgaGVscCBlbmFibGUgdGhhdC4iDQogLVBhdWwgTW9vcmUgKHdpdGgg
-YXBvbG9naWVzIGZvciBzZWxmLXF1b3RpbmcpDQoNCkZyb20gaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
-cmcvbGludXgtc2VjdXJpdHktbW9kdWxlL0NBSEM5VmhSU0NYQ001MXhwT1Q5NUdfV1ZpPVVRNDRn
-TlY9dXZ2RzIzcDh3bjE2dVlTQUBtYWlsLmdtYWlsLmNvbS8NCg0KICJPbmUgb2YgdGhlIHNlbGxp
-bmcgcG9pbnRzIG9mIHRoZSBCUEYgTFNNIGlzIHRoYXQgaXQgYWxsb3dzIGZvcg0KICB2YXJpb3Vz
-IGRpZmZlcmVudCB3YXlzIG9mIHJlcG9ydGluZyBhbmQgbG9nZ2luZyBiZXlvbmQgYXVkaXQuDQog
-IEhvd2V2ZXIsIGV2ZW4gaWYgaXQgd2FzIGxpbWl0ZWQgdG8ganVzdCBhdWRpdCBJIGJlbGlldmUg
-dGhhdA0KICBwcm92aWRlcyBzb21lIHVzZWZ1bCBqdXN0aWZpY2F0aW9uIGFzIGF1ZGl0aW5nIGZv
-cmsoKS9jbG9uZSgpDQogIGlzbid0IHF1aXRlIHRoZSBzYW1lIGFuZCBjb3VsZCBiZSBkaWZmaWN1
-bHQgdG8gZG8gYXQgc2NhbGUgaW4NCiAgc29tZSBjb25maWd1cmF0aW9ucy4iDQogLVBhdWwgTW9v
-cmUgKG15IGFwb2xvZ2llcyBhZ2FpbikNCg0KRnJvbSBodHRwczovL2xvcmUua2VybmVsLm9yZy9s
-aW51eC1zZWN1cml0eS1tb2R1bGUvMjAyMjA3MjIwODIxNTkuamd2dzdqZ2RzM3F3Znlxa0B3aXR0
-Z2Vuc3RlaW4vDQoNCiAiTmljZSBhbmQgc3RyYWlnaHRmb3J3YXJkLiINCiAtQ2hyaXN0aWFuIEJy
-YXVuZXINCg0KLS0gDQpwYXVsLW1vb3JlLmNvbQ0K
+On 8/18/22 03:09, Adel Abouchaev wrote:
+> QUIC requires end to end encryption of the data. The application usually
+> prepares the data in clear text, encrypts and calls send() which implies
+> multiple copies of the data before the packets hit the networking stack.
+> Similar to kTLS, QUIC kernel offload of cryptography reduces the memory
+> pressure by reducing the number of copies.
+> 
+> The scope of kernel support is limited to the symmetric cryptography,
+> leaving the handshake to the user space library. For QUIC in particular,
+> the application packets that require symmetric cryptography are the 1RTT
+> packets with short headers. Kernel will encrypt the application packets
+> on transmission and decrypt on receive. This series implements Tx only,
+> because in QUIC server applications Tx outweighs Rx by orders of
+> magnitude.
+> 
+> Supporting the combination of QUIC and GSO requires the application to
+> correctly place the data and the kernel to correctly slice it. The
+> encryption process appends an arbitrary number of bytes (tag) to the end
+> of the message to authenticate it. The GSO value should include this
+> overhead, the offload would then subtract the tag size to parse the
+> input on Tx before chunking and encrypting it.
+> 
+> With the kernel cryptography, the buffer copy operation is conjoined
+> with the encryption operation. The memory bandwidth is reduced by 5-8%.
+> When devices supporting QUIC encryption in hardware come to the market,
+> we will be able to free further 7% of CPU utilization which is used
+> today for crypto operations.
+> 
+> Adel Abouchaev (6):
+>   Documentation on QUIC kernel Tx crypto.
+>   Define QUIC specific constants, control and data plane structures
+>   Add UDP ULP operations, initialization and handling prototype
+>     functions.
+>   Implement QUIC offload functions
+>   Add flow counters and Tx processing error counter
+>   Add self tests for ULP operations, flow setup and crypto tests
+> 
+>  Documentation/networking/index.rst     |    1 +
+>  Documentation/networking/quic.rst      |  185 ++++
+>  include/net/inet_sock.h                |    2 +
+>  include/net/netns/mib.h                |    3 +
+>  include/net/quic.h                     |   63 ++
+>  include/net/snmp.h                     |    6 +
+>  include/net/udp.h                      |   33 +
+>  include/uapi/linux/quic.h              |   60 +
+>  include/uapi/linux/snmp.h              |    9 +
+>  include/uapi/linux/udp.h               |    4 +
+>  net/Kconfig                            |    1 +
+>  net/Makefile                           |    1 +
+>  net/ipv4/Makefile                      |    3 +-
+>  net/ipv4/udp.c                         |   15 +
+>  net/ipv4/udp_ulp.c                     |  192 ++++
+>  net/quic/Kconfig                       |   16 +
+>  net/quic/Makefile                      |    8 +
+>  net/quic/quic_main.c                   | 1417 ++++++++++++++++++++++++
+>  net/quic/quic_proc.c                   |   45 +
+>  tools/testing/selftests/net/.gitignore |    4 +-
+>  tools/testing/selftests/net/Makefile   |    3 +-
+>  tools/testing/selftests/net/quic.c     | 1153 +++++++++++++++++++
+>  tools/testing/selftests/net/quic.sh    |   46 +
+>  23 files changed, 3267 insertions(+), 3 deletions(-)
+>  create mode 100644 Documentation/networking/quic.rst
+>  create mode 100644 include/net/quic.h
+>  create mode 100644 include/uapi/linux/quic.h
+>  create mode 100644 net/ipv4/udp_ulp.c
+>  create mode 100644 net/quic/Kconfig
+>  create mode 100644 net/quic/Makefile
+>  create mode 100644 net/quic/quic_main.c
+>  create mode 100644 net/quic/quic_proc.c
+>  create mode 100644 tools/testing/selftests/net/quic.c
+>  create mode 100755 tools/testing/selftests/net/quic.sh
+> 
+> 
+> base-commit: fd78d07c7c35de260eb89f1be4a1e7487b8092ad
+
+Applied, but based on f86d1fbbe78588 ("Merge tag 'net-next-6.0' of
+git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next") instead,
+since this series fails to apply on the specified base-commit tag.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
