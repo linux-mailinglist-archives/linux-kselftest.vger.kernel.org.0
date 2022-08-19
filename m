@@ -2,60 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F4D59A6E1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 22:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB3159A762
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 23:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351759AbiHSUMw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Aug 2022 16:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S1351890AbiHSUwp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Aug 2022 16:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351749AbiHSUMu (ORCPT
+        with ESMTP id S1352117AbiHSUw2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 16:12:50 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A3910650F
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id c4so3288937iof.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
+        Fri, 19 Aug 2022 16:52:28 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABC61095A0
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 13:52:11 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-324966c28e5so94380707b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 13:52:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
-        b=FamF99POPr6PtKGcfiAFaDyK/px9/QEUZ9jAWq0VuRMjBQuH/SIEycINUXdEisf8wJ
-         GB5Fp0sV/9jsr8SHRoKkycJAodjombPVpppk1giNuh7jurYysChORzMPgyHKQdBRx6Yi
-         bMQ8CZykRl92tAcPu+aCfb2R1BHuyiGBmYyICNbj6NOdCbqR0y056zBRI5sucULdSXWP
-         iBSs6go4YjTUccStqlOuQrHTd0ys3ntGBcGxqR0SgI4W+Fz4sL7vOXN4324d30h8iu/T
-         k8P9H+ggVIlKLOTUU3V6HrleaFRS/uGb9Vw8lQ57cl7kluTFPaNsmbjckIsP6sE3O2xR
-         GObw==
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=eTc1s2RdgTuEwcKjsTePj9b05rEPFXKmnvQrewsDJGY=;
+        b=Nh1KlEtqEMn+hz2bIHnZ1kTqSWg4bFjXv6426Y5hVUaoK7tELNU6W6NXVhT/c1Na8B
+         fuTHgP3mOi8dFIyL/t/7MR439z7H1866ZEiSu3evBzrFy/m2ATYaGY43afxovuVkWSYa
+         eUMrsrRTeeysD/TdHp8rDI01P26G/e5fl/KQ1dmFVglltS2WT+x/wxMcnMAZO6mOE6mS
+         U/WqdM3oqVEoKKbZgJm/7OvM3mjKkmGyip4ewKKTi7I9PF6xYTGUYcHfEJNikdH4WT4a
+         MpcZ4QApDWJwg3WW3fPg2tVSwWrwdqItoUXqWKdaFCWofAq4S++j3fXkowc6Bqhr0eJL
+         PyKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
-        b=pNuABZzUKCi/hHkBV6ZnU9FGfI99KpMDJAGBjpumSGIaGZNbVM66P+eFMblX9pXM6x
-         YhH41dOA6AKQpemvyRjgtQuvez3xjeY2w8Hq3zET+QpSPS0l1ALHDSdlCGAxOWIDs5MZ
-         LilOR7qpBAQHo+qqMixnlDuJJT65VmORpuVMxhmb+vLYbhw+aBqY9/lF99SYXmD3qyJO
-         IznehdtzZ2jhTyJ/0bljzL7T5oeWj600bsTmkZkUGgIn9QPbycR0X9AeV61VlCCSBg99
-         bH0lulV98ETwbY64XtAS6gYOefKPwNnsVz6avK/6EE5yiVM5+gQTjIg172c2ON79jhQR
-         QnaQ==
-X-Gm-Message-State: ACgBeo0v5MSbfGcLNO5CoL/JV2vkEFcXmZMINB8SO9hzomoa0XSj/edI
-        911EEovwohPrbNCakDANCxg+HrJlq4yYFk/51vjoqg==
-X-Google-Smtp-Source: AA6agR7vH6bU/CcMRlqauAdte2pei9jmt+xQRqGJlV8ch8ekID2WY8/GjnEURxqW3LnsWWhfJJAGPXkSfSDz0FeaHIw=
-X-Received: by 2002:a05:6638:34a8:b0:343:4d0a:5984 with SMTP id
- t40-20020a05663834a800b003434d0a5984mr4292780jal.167.1660939967732; Fri, 19
- Aug 2022 13:12:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220817214728.489904-1-axelrasmussen@google.com>
- <20220817214728.489904-3-axelrasmussen@google.com> <Yv3bnouKb7242Ama@kroah.com>
-In-Reply-To: <Yv3bnouKb7242Ama@kroah.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 19 Aug 2022 13:12:10 -0700
-Message-ID: <CAJHvVcjd3GtjJ2yr0gNDGHCqc8RZUYXCYaj8eEgo1TTLBjNYSQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] userfaultfd: add /dev/userfaultfd for fine grained
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=eTc1s2RdgTuEwcKjsTePj9b05rEPFXKmnvQrewsDJGY=;
+        b=R6q54AzesPGQ0qTkdR7cXyf9dHQfprB9wo1JugYzjgWi694NplgrsHq8aJ9qNx0eAx
+         Fgf65sAGTHLaAXn5gn4bDhE31L3QOXVCArZDyLU52iqw+pZWmFL9M+Eyk8TTGlWAV2IP
+         mVNVChhQPb9fgXLuOd2LyDYLc3sfXmsUxrRIz4zw5GwoyYjWhsACQsqjNsTqtWnWXHRu
+         QdWAZXTpLwhnwEkUhGN9hUHYwR5+1d+dhuzCD5ZuF9XRQ73UcpKCQ2enRNbobLP7N7zs
+         fXP7qKKATYBrziJ+YluqA72yC9BXq4FymaOU5nJxWJhobBazIP3Q4UzgNyAIdK72b9Wm
+         KZww==
+X-Gm-Message-State: ACgBeo34TepiGsjU07P6qfEWPSz7jo4tYRkeaVg2At9oNltMVIh9pvtt
+        W2fyKD4ebzKZLDg9OP4XCXDkRYLgOHAeH0ENaQxg
+X-Google-Smtp-Source: AA6agR4b2XoIeOCXoCjZGpZkJrGU7AMU94GLykkhA0lq3SZnfOWk/HjBS2z/dEdSyrE29ST3Ztb9NOzOGHkiN3F/NreF
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:baf:4c5:18b:2c4b])
+ (user=axelrasmussen job=sendgmr) by 2002:a5b:2c8:0:b0:671:7cc8:219c with SMTP
+ id h8-20020a5b02c8000000b006717cc8219cmr9358273ybp.325.1660942330377; Fri, 19
+ Aug 2022 13:52:10 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 13:51:56 -0700
+Message-Id: <20220819205201.658693-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH v7 0/5] userfaultfd: add /dev/userfaultfd for fine grained
  access control
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "Dmitry V . Levin" <ldv@altlinux.org>,
@@ -67,70 +64,119 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
         Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-security-module@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
+        Vlastimil Babka <vbabka@suse.cz>, zhangyi <yi.zhang@huawei.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 11:26 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Aug 17, 2022 at 02:47:25PM -0700, Axel Rasmussen wrote:
-> > +static int userfaultfd_dev_open(struct inode *inode, struct file *file)
-> > +{
-> > +     return 0;
->
-> If your open does nothing, no need to list it here at all, right?
->
-> > +}
-> > +
-> > +static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
-> > +{
-> > +     if (cmd != USERFAULTFD_IOC_NEW)
-> > +             return -EINVAL;
-> > +
-> > +     return new_userfaultfd(flags);
-> > +}
-> > +
-> > +static const struct file_operations userfaultfd_dev_fops = {
-> > +     .open = userfaultfd_dev_open,
-> > +     .unlocked_ioctl = userfaultfd_dev_ioctl,
-> > +     .compat_ioctl = userfaultfd_dev_ioctl,
->
-> Why do you need to set compat_ioctl?  Shouldn't it just default to the
-> existing one?
+This series is based on torvalds/master.
 
-I took some more time looking at this today, and I think it actually
-has to be the way it is.
+The series is split up like so:
+- Patch 1 is a simple fixup which we should take in any case (even by itself).
+- Patches 2-5 add the feature, configurable selftest support, and docs.
 
-I didn't find anywhere we noticed compat_ioctl unset, and default to
-the "normal" one (e.g. see the compat ioctl syscall definition in
-fs/ioctl.c). It looks to me like it really does need some value. It's
-common to use compat_ptr_ioctl for this, but since we're interpreting
-the arg as a scalar not as a pointer, doing that here would be
-incorrect.
+Why not ...?
+============
 
-It looks like there are other existing examples that do it the same
-way, e.g. seccomp_notify_ops in linux/seccomp.c.
+- Why not /proc/[pid]/userfaultfd? Two main points (additional discussion [1]):
 
->
-> And why is this a device node at all?  Shouldn't the syscall handle all
-> of this (to be honest, I didn't read anything but the misc code, sorry.)
->
-> thanks,
->
-> greg k-h
+    - /proc/[pid]/* files are all owned by the user/group of the process, and
+      they don't really support chmod/chown. So, without extending procfs it
+      doesn't solve the problem this series is trying to solve.
+
+    - The main argument *for* this was to support creating UFFDs for remote
+      processes. But, that use case clearly calls for CAP_SYS_PTRACE, so to
+      support this we could just use the UFFD syscall as-is.
+
+- Why not use a syscall? Access to syscalls is generally controlled by
+  capabilities. We don't have a capability which is used for userfaultfd access
+  without also granting more / other permissions as well, and adding a new
+  capability was rejected [2].
+
+    - It's possible a LSM could be used to control access instead, but I have
+      some concerns. I don't think this approach would be as easy to use,
+      particularly if we were to try to solve this with something heavyweight
+      like SELinux. Maybe we could pursue adding a new LSM specifically for
+      this user case, but it may be too narrow of a case to justify that.
+
+Changelog
+=========
+
+v6->v7:
+  - Handle misc_register() failure properly by propagating the error instead if
+    just WARN_ON-ing. [Greg]
+  - Remove no-op open function from file_operations, since its caller detects
+    the lack of an open implementation and proceeds normally anyway. [Greg]
+
+v5->v6:
+  - Modified selftest to exit with KSFT_SKIP *only* when features are
+    unsupported, exiting with 1 in other error cases. [Mike]
+  - Improved wording in two spots in the documentation. [Mike]
+  - Picked up some Acked-by's.
+
+v4->v5:
+  - Call userfaultfd_syscall_allowed() directly in the syscall, so we don't
+    have to plumb a flag into new_userfaultfd(). [Nadav]
+  - Refactored run_vmtests.sh to loop over UFFD test mods. [Nadav]
+  - Reworded cover letter.
+  - Picked up some Acked-by's.
+
+v3->v4:
+  - Picked up an Acked-by on 5/5.
+  - Updated cover letter to cover "why not ...".
+  - Refactored userfaultfd_allowed() into userfaultfd_syscall_allowed(). [Peter]
+  - Removed obsolete comment from a previous version. [Peter]
+  - Refactored userfaultfd_open() in selftest. [Peter]
+  - Reworded admin-guide documentation. [Mike, Peter]
+  - Squashed 2 commits adding /dev/userfaultfd to selftest and making selftest
+    configurable. [Peter]
+  - Added "syscall" test modifier (the default behavior) to selftest. [Peter]
+
+v2->v3:
+  - Rebased onto linux-next/akpm-base, in order to be based on top of the
+    run_vmtests.sh refactor which was merged previously.
+  - Picked up some Reviewed-by's.
+  - Fixed ioctl definition (_IO instead of _IOWR), and stopped using
+    compat_ptr_ioctl since it is unneeded for ioctls which don't take a pointer.
+  - Removed the "handle_kernel_faults" bool, simplifying the code. The result is
+    logically equivalent, but simpler.
+  - Fixed userfaultfd selftest so it returns KSFT_SKIP appropriately.
+  - Reworded documentation per Shuah's feedback on v2.
+  - Improved example usage for userfaultfd selftest.
+
+v1->v2:
+  - Add documentation update.
+  - Test *both* userfaultfd(2) and /dev/userfaultfd via the selftest.
+
+[1]: https://patchwork.kernel.org/project/linux-mm/cover/20220719195628.3415852-1-axelrasmussen@google.com/
+[2]: https://lore.kernel.org/lkml/686276b9-4530-2045-6bd8-170e5943abe4@schaufler-ca.com/T/
+
+Axel Rasmussen (5):
+  selftests: vm: add hugetlb_shared userfaultfd test to run_vmtests.sh
+  userfaultfd: add /dev/userfaultfd for fine grained access control
+  userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+  userfaultfd: update documentation to describe /dev/userfaultfd
+  selftests: vm: add /dev/userfaultfd test cases to run_vmtests.sh
+
+ Documentation/admin-guide/mm/userfaultfd.rst | 41 ++++++++++-
+ Documentation/admin-guide/sysctl/vm.rst      |  3 +
+ fs/userfaultfd.c                             | 71 +++++++++++++-----
+ include/uapi/linux/userfaultfd.h             |  4 ++
+ tools/testing/selftests/vm/run_vmtests.sh    | 15 ++--
+ tools/testing/selftests/vm/userfaultfd.c     | 76 +++++++++++++++++---
+ 6 files changed, 176 insertions(+), 34 deletions(-)
+
+--
+2.37.1.595.g718a3a8f04-goog
+
