@@ -2,88 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281F659A6C0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 21:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F4D59A6E1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 22:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351134AbiHSTuV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Aug 2022 15:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S1351759AbiHSUMw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Aug 2022 16:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350778AbiHSTuS (ORCPT
+        with ESMTP id S1351749AbiHSUMu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:50:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E63D9D50;
-        Fri, 19 Aug 2022 12:50:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D1E761662;
-        Fri, 19 Aug 2022 19:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A60B3C433D7;
-        Fri, 19 Aug 2022 19:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660938615;
-        bh=LAjuJGvkE8Z2C6wwzs8qNrfSrFH7nv0QtOWOjNoYOcg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=NCkw5me/r0alD75rVsN75X6pnJs+KYrZeeSgVg/0yKThN8DcTHxiEIBVCKXRdKuX5
-         Xz8RP6dpXXGc8k1fYIzQDoae3A95pPJk8LXNCLJjyzcQH1UJpV6h/9U8/sU2Z1NJIq
-         m/RDr1YVHpADYwXVW4W6D0669xoaHOXSRWZB88pyeghuJdZvaK4omoJNnGkzbk/r3/
-         ngMzRmg0aa7z0exJUJ5GhKe0D48EYqinUC+jbmIagySW50Pmx8Dm+iZltk7WAhDHS5
-         qgyJfsYFsPlbhc1LVX6GCIhZXtuOnAQZDJ5NdTyJUrZzXpL/tAzcnKaoQ4m/gxbtzJ
-         WDPBxzZ+EN61g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F400E2A05E;
-        Fri, 19 Aug 2022 19:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 19 Aug 2022 16:12:50 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A3910650F
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id c4so3288937iof.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 13:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
+        b=FamF99POPr6PtKGcfiAFaDyK/px9/QEUZ9jAWq0VuRMjBQuH/SIEycINUXdEisf8wJ
+         GB5Fp0sV/9jsr8SHRoKkycJAodjombPVpppk1giNuh7jurYysChORzMPgyHKQdBRx6Yi
+         bMQ8CZykRl92tAcPu+aCfb2R1BHuyiGBmYyICNbj6NOdCbqR0y056zBRI5sucULdSXWP
+         iBSs6go4YjTUccStqlOuQrHTd0ys3ntGBcGxqR0SgI4W+Fz4sL7vOXN4324d30h8iu/T
+         k8P9H+ggVIlKLOTUU3V6HrleaFRS/uGb9Vw8lQ57cl7kluTFPaNsmbjckIsP6sE3O2xR
+         GObw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=TWnGx0tsPzDsYWN5IvwyG0/F4n3/lHDuvrydVsnCdTg=;
+        b=pNuABZzUKCi/hHkBV6ZnU9FGfI99KpMDJAGBjpumSGIaGZNbVM66P+eFMblX9pXM6x
+         YhH41dOA6AKQpemvyRjgtQuvez3xjeY2w8Hq3zET+QpSPS0l1ALHDSdlCGAxOWIDs5MZ
+         LilOR7qpBAQHo+qqMixnlDuJJT65VmORpuVMxhmb+vLYbhw+aBqY9/lF99SYXmD3qyJO
+         IznehdtzZ2jhTyJ/0bljzL7T5oeWj600bsTmkZkUGgIn9QPbycR0X9AeV61VlCCSBg99
+         bH0lulV98ETwbY64XtAS6gYOefKPwNnsVz6avK/6EE5yiVM5+gQTjIg172c2ON79jhQR
+         QnaQ==
+X-Gm-Message-State: ACgBeo0v5MSbfGcLNO5CoL/JV2vkEFcXmZMINB8SO9hzomoa0XSj/edI
+        911EEovwohPrbNCakDANCxg+HrJlq4yYFk/51vjoqg==
+X-Google-Smtp-Source: AA6agR7vH6bU/CcMRlqauAdte2pei9jmt+xQRqGJlV8ch8ekID2WY8/GjnEURxqW3LnsWWhfJJAGPXkSfSDz0FeaHIw=
+X-Received: by 2002:a05:6638:34a8:b0:343:4d0a:5984 with SMTP id
+ t40-20020a05663834a800b003434d0a5984mr4292780jal.167.1660939967732; Fri, 19
+ Aug 2022 13:12:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][V2][next] selftests/bpf: Fix spelling mistake "succesful"
- (kfunc_call.c)
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166093861551.5341.18369741765265253800.git-patchwork-notify@kernel.org>
-Date:   Fri, 19 Aug 2022 19:50:15 +0000
-References: <20220817213242.101277-1-colin.i.king@gmail.com>
-In-Reply-To: <20220817213242.101277-1-colin.i.king@gmail.com>
-To:     Colin King (gmail) <colin.i.king@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220817214728.489904-1-axelrasmussen@google.com>
+ <20220817214728.489904-3-axelrasmussen@google.com> <Yv3bnouKb7242Ama@kroah.com>
+In-Reply-To: <Yv3bnouKb7242Ama@kroah.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Fri, 19 Aug 2022 13:12:10 -0700
+Message-ID: <CAJHvVcjd3GtjJ2yr0gNDGHCqc8RZUYXCYaj8eEgo1TTLBjNYSQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] userfaultfd: add /dev/userfaultfd for fine grained
+ access control
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-security-module@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On Wed, Aug 17, 2022 at 11:26 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Aug 17, 2022 at 02:47:25PM -0700, Axel Rasmussen wrote:
+> > +static int userfaultfd_dev_open(struct inode *inode, struct file *file)
+> > +{
+> > +     return 0;
+>
+> If your open does nothing, no need to list it here at all, right?
+>
+> > +}
+> > +
+> > +static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
+> > +{
+> > +     if (cmd != USERFAULTFD_IOC_NEW)
+> > +             return -EINVAL;
+> > +
+> > +     return new_userfaultfd(flags);
+> > +}
+> > +
+> > +static const struct file_operations userfaultfd_dev_fops = {
+> > +     .open = userfaultfd_dev_open,
+> > +     .unlocked_ioctl = userfaultfd_dev_ioctl,
+> > +     .compat_ioctl = userfaultfd_dev_ioctl,
+>
+> Why do you need to set compat_ioctl?  Shouldn't it just default to the
+> existing one?
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+I took some more time looking at this today, and I think it actually
+has to be the way it is.
 
-On Wed, 17 Aug 2022 22:32:42 +0100 you wrote:
-> There is a spelling mistake in an ASSERT_OK literal string. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
-> V2: change subject line as per Mykola Lysenko's recommendation
-> ---
->  tools/testing/selftests/bpf/prog_tests/kfunc_call.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I didn't find anywhere we noticed compat_ioctl unset, and default to
+the "normal" one (e.g. see the compat ioctl syscall definition in
+fs/ioctl.c). It looks to me like it really does need some value. It's
+common to use compat_ptr_ioctl for this, but since we're interpreting
+the arg as a scalar not as a pointer, doing that here would be
+incorrect.
 
-Here is the summary with links:
-  - [V2,next] selftests/bpf: Fix spelling mistake "succesful" (kfunc_call.c)
-    https://git.kernel.org/bpf/bpf-next/c/e918cd231ee6
+It looks like there are other existing examples that do it the same
+way, e.g. seccomp_notify_ops in linux/seccomp.c.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>
+> And why is this a device node at all?  Shouldn't the syscall handle all
+> of this (to be honest, I didn't read anything but the misc code, sorry.)
+>
+> thanks,
+>
+> greg k-h
