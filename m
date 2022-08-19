@@ -2,68 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05FA59965A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 09:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 759255996B1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 10:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347207AbiHSHrg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Aug 2022 03:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
+        id S1347314AbiHSIA3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Aug 2022 04:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347198AbiHSHre (ORCPT
+        with ESMTP id S1347320AbiHSIAY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 03:47:34 -0400
-Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57C6D75A4
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 00:47:32 -0700 (PDT)
-Received: by mail.fadrush.pl (Postfix, from userid 1002)
-        id 0912222735; Fri, 19 Aug 2022 07:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
-        t=1660895251; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
-        h=Date:From:To:Subject:From;
-        b=cycDGsvjU+52ZDdSPTEOtp3+dHFrt2SXsiTIkOOdxGwfhhiyeBZnbhjF9BJ62/r/9
-         l7UEMz52GWcVvtVDuPAkh+YXG9VT+IYOz/BFpiKxF6LE8k4a4IEv1ffjEqS+XX8fTt
-         3Cr0sfhzekHrA22XUXO5eaodbJPoOu3oOlRFm8cmEDGa3Q8eQ/DYCyJQzKAMgrYDm9
-         G5A4QlUwNvDW1h07k6LW/yN5q+HaJ13eI2UjK/9Y3DW0Vw6VbuR/TeEn3gw68pd/s+
-         i912h1a2LBV4rGhjQuuBN6uadQCHEiC1RFdo+zwWOa+g90baL5/YkNMWNCizctOJyQ
-         KS0woQAD1A3Uw==
-Received: by mail.fadrush.pl for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 07:46:09 GMT
-Message-ID: <20220819064500-0.1.14.8nup.0.ndha8o0agc@fadrush.pl>
-Date:   Fri, 19 Aug 2022 07:46:09 GMT
-From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
-X-Mailer: mail.fadrush.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 19 Aug 2022 04:00:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1E71F618;
+        Fri, 19 Aug 2022 01:00:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65240616D4;
+        Fri, 19 Aug 2022 08:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6791C433B5;
+        Fri, 19 Aug 2022 08:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660896021;
+        bh=dXB7Dmr6Olnqm8i/ag5x25/j/xOuKOYp7Zqy3xYbF1k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bPzGRNloxET7jCjbmwuPekfurJU+YIanGSes6+FQxRyOaXDN7NleDvVk0kCSGm+mj
+         Nvy+u3VuCbER8OL+RbU4KnLqA6HRIfjiQ7u8R5gsfEHDNpnzogYoaC5TjC7KhI9nGl
+         3u6j0LMPpZx/z/OYomSHy1cBWXgHYDxR1vDcP0ZfPUIOgSJjWLT9uKP94QaW4rEyq0
+         Uw510IEA5cxLKQKuP025ixhomp3R0zWPbgu8jqG/fWOoVRppxVNpkOQSMy+fdBPeIl
+         fYw4MU6pTlU+kolvweUV5rWvIr/LtPt8krly8NS3/oMs0OxtW71SdawKlOlX4geM01
+         EzczQKfP6wZiA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oOwvT-004D7a-Dh;
+        Fri, 19 Aug 2022 09:00:19 +0100
+Date:   Fri, 19 Aug 2022 09:00:18 +0100
+Message-ID: <87lerkwtm5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net,
+        james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
+        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory tracking
+In-Reply-To: <20220819005601.198436-2-gshan@redhat.com>
+References: <20220819005601.198436-1-gshan@redhat.com>
+        <20220819005601.198436-2-gshan@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, drjones@redhat.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Fri, 19 Aug 2022 01:55:57 +0100,
+Gavin Shan <gshan@redhat.com> wrote:
+> 
+> The ring-based dirty memory tracking has been available and enabled
+> on x86 for a while. The feature is beneficial when the number of
+> dirty pages is small in a checkpointing system or live migration
+> scenario. More details can be found from fb04a1eddb1a ("KVM: X86:
+> Implement ring-based dirty memory tracking").
+> 
+> This enables the ring-based dirty memory tracking on ARM64. It's
+> notable that no extra reserved ring entries are needed on ARM64
+> because the huge pages are always split into base pages when page
+> dirty tracking is enabled.
 
-kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
-proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
-stwa firmie stabilny rozw=C3=B3j.=20
+Can you please elaborate on this? Adding a per-CPU ring of course
+results in extra memory allocation, so there must be a subtle
+x86-specific detail that I'm not aware of...
 
-Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
-a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
-nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
-po rozwoju firmy.
+> 
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
+> ---
+>  Documentation/virt/kvm/api.rst    | 2 +-
+>  arch/arm64/include/uapi/asm/kvm.h | 1 +
+>  arch/arm64/kvm/Kconfig            | 1 +
+>  arch/arm64/kvm/arm.c              | 8 ++++++++
+>  4 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index abd7c32126ce..19fa1ac017ed 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8022,7 +8022,7 @@ regardless of what has actually been exposed through the CPUID leaf.
+>  8.29 KVM_CAP_DIRTY_LOG_RING
+>  ---------------------------
+>  
+> -:Architectures: x86
+> +:Architectures: x86, arm64
+>  :Parameters: args[0] - size of the dirty log ring
+>  
+>  KVM is capable of tracking dirty memory using ring buffers that are
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index 3bb134355874..7e04b0b8d2b2 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -43,6 +43,7 @@
+>  #define __KVM_HAVE_VCPU_EVENTS
+>  
+>  #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
+> +#define KVM_DIRTY_LOG_PAGE_OFFSET 64
 
-Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
-nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
-adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
-j=C4=85 je innym.
+For context, the documentation says:
 
-Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
-o=C5=9Bwiadczonego doradcy finansowego?
+<quote>
+- if KVM_CAP_DIRTY_LOG_RING is available, a number of pages at
+  KVM_DIRTY_LOG_PAGE_OFFSET * PAGE_SIZE. [...]
+</quote>
+
+What is the reason for picking this particular value?
 
 
-Pozdrawiam
-Jakub Olejniczak
+>  
+>  #define KVM_REG_SIZE(id)						\
+>  	(1U << (((id) & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT))
+> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> index 815cc118c675..0309b2d0f2da 100644
+> --- a/arch/arm64/kvm/Kconfig
+> +++ b/arch/arm64/kvm/Kconfig
+> @@ -32,6 +32,7 @@ menuconfig KVM
+>  	select KVM_VFIO
+>  	select HAVE_KVM_EVENTFD
+>  	select HAVE_KVM_IRQFD
+> +	select HAVE_KVM_DIRTY_RING
+>  	select HAVE_KVM_MSI
+>  	select HAVE_KVM_IRQCHIP
+>  	select HAVE_KVM_IRQ_ROUTING
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 986cee6fbc7f..3de6b9b39db7 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -866,6 +866,14 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>  		if (!ret)
+>  			ret = 1;
+>  
+> +		/* Force vcpu exit if its dirty ring is soft-full */
+> +		if (unlikely(vcpu->kvm->dirty_ring_size &&
+> +			     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
+> +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+> +			trace_kvm_dirty_ring_exit(vcpu);
+> +			ret = 0;
+> +		}
+> +
+
+Why can't this be moved to kvm_vcpu_exit_request() instead? I would
+also very much like the check to be made a common helper with x86.
+
+A seemingly approach would be to make this a request on dirty log
+insertion, and avoid the whole "check the log size" on every run,
+which adds pointless overhead to unsuspecting users (aka everyone).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
