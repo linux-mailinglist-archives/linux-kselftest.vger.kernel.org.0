@@ -2,57 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D2A599708
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 10:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F595997B2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 10:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347053AbiHSIR3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Aug 2022 04:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S1347103AbiHSIhS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Aug 2022 04:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347286AbiHSIQ6 (ORCPT
+        with ESMTP id S1347405AbiHSIgw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 04:16:58 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789B3E0947
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 01:16:56 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id v128so3772717vsb.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 01:16:56 -0700 (PDT)
+        Fri, 19 Aug 2022 04:36:52 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3943C61B1B
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 01:34:43 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id m21so1524941uab.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 01:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=E7vInUdmlvrFCkUyEmTe4ZEEX0FvIIBOpwo7oLWSO2w=;
-        b=Dx79meg3/bx5x08oSWGcD4GE2uAP0/9mILTeNX6iZOsHYTZEKYlTLfNDtNBU4SxUAX
-         uw+WRU3eS3VsW6o2rnmktPCsqnyvBFUDzU7d+P3LGNzf/JhRpfXaW4cqSYjfrJLFFhG/
-         PeH4aSBWeBqmmakbgJ4PYTBLgfc6ssMbGlTqnmMlS71XEQrpAXy5VcGtmWfVnEVZPapR
-         XzUeYesiheNmDQam708vU8G5QUHR+KvmW0dDEIWB6z54x+fk7itqIVPj7lh+urWMUKxL
-         Yb2cTvjvlKQfoeuMx9nsZ1QQy0ExOOqutD+JlWcOY3/gBLbOlf+G68onu0PbgUagfAFV
-         XxPQ==
+        bh=gnG5n7t7kM5tLQ6GvelrUae9g4PaSqFMlXyOhSVJavI=;
+        b=JEx6HlrizOBmU3wWPsl9Wjt1GbkqjdLM3pW9b2A4JWopo4gfyCBcawoics3lNcb0YS
+         NT3ucX8+fUruztlys6R9pBsL0iwo7NEI+gt4BnbMipUno6Da4pqwJisnquZZUWL6F0Be
+         /Yl17Ye+dWt/SA6Cw175X0sgtbakN0svk2VkkxUzhBWZBJAzf/rQhyjYLrHk0EnC6k2I
+         YtLrFbG+DplTEdR4Lmq4s0Gzf38rA9MqC0OSBD0wFp6dWT6DggMSQ1l8gFFowSn0cRET
+         Uj6sh5QtMG2dBM9ZKBzNGD2ZgfgZzex95Bf5FNdX1XL1slfStQVcHjwi7S+iVwq0jg1n
+         zQ/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=E7vInUdmlvrFCkUyEmTe4ZEEX0FvIIBOpwo7oLWSO2w=;
-        b=IrDOcJcjtID8znlr3bh1377oIdMzRt9az5u9Svc7pWsm06OCLl0EH73nDXtDJaIcAs
-         aQb0r5nDyrnZcKdX5MfPXfu9/80pYISXEH8h+dRSxS90DOggFR4wTJSMKqNAS17qRSYX
-         QUWAHfE0eAg736ugmzQHvYny2Qhx7Bu8efIGg5+Aqc0P24qgpF5rWbQoEgCCvHO0L4hn
-         TuYzjkAmVP2GJRagC4mFZn4SHjLlZ9O0+Bji0J5O3THSXKEvcHNoxYpAHStRdO+vBR7i
-         MqkwhA4D0cyHdWd6ebYY3RySjE9qGuWpW1BAFI3QQFgdfU19xX8JcyFxzYcpEb7XXXsX
-         IW3w==
-X-Gm-Message-State: ACgBeo3rMrpYNx89N500L4ywicJMxtRhXWRUVeHub3+SC7qIyKDt1TtU
-        JmnbUqL5rhz1CqRCmre3tp+ciRb0WiQXtUOY6QcwQw==
-X-Google-Smtp-Source: AA6agR5w0WXgE74yhLOGIaPwSTS442Sw34gDIQQ7RnLk5mfeK0AfHtHKf585bmhIpgKJO2Qz46GaEPrcAuuheXpa8U0=
-X-Received: by 2002:a05:6102:2146:b0:38f:f3d6:51da with SMTP id
- h6-20020a056102214600b0038ff3d651damr1820810vsg.38.1660897015447; Fri, 19 Aug
- 2022 01:16:55 -0700 (PDT)
+        bh=gnG5n7t7kM5tLQ6GvelrUae9g4PaSqFMlXyOhSVJavI=;
+        b=xXoVJ4rwcvP76c0j43OxnWF8AYYl31FL4ApJRZaui90gF046KFZlKgX4RHShx0Y5sF
+         4+/+FxCovVP6gQn+qALPs1TXxcVKy0FaZPJwXA2EknTNuQ1BRaondjTpi77GcEKifszO
+         lCD3BTsN2NfGHh1++s/QANFsqLl0vm/lq2M9WfGEECfqUZGJCHiJ1YaMFbIOYJU9QIt4
+         DY1o7j9JDz2Eezj/sznZo/F+R+kOEpt7h0i3gH0EQnbvMiRCBfjXG4JyD9maVLWtMr28
+         PZFpd9FaXvm4q9a8lsbvCWNlkIn7+TJFmaf8kePdShIyJnsNjX6m1d0f/l4hT02QbfU3
+         Rt+w==
+X-Gm-Message-State: ACgBeo3A7bBChQGCiVZaECxToSZzj1M49wE6BpQ0zcj2MainFdkG+Dre
+        BiauDNcBxShY/DfhY14b2gM+8i+YbszlcFeZaXVM6g==
+X-Google-Smtp-Source: AA6agR6js/rZ7cAl5nKI4lPs0swl+3Wn3I7GmyFLifwGBDzbErMpFq+37uj8xdHx2xP5xOZ1ORWrqjlx4iguaeloXiA=
+X-Received: by 2002:ab0:3b09:0:b0:39a:82bc:88e5 with SMTP id
+ n9-20020ab03b09000000b0039a82bc88e5mr2276360uaw.26.1660898082867; Fri, 19 Aug
+ 2022 01:34:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220817164851.3574140-1-joefradley@google.com> <20220817164851.3574140-2-joefradley@google.com>
-In-Reply-To: <20220817164851.3574140-2-joefradley@google.com>
+References: <20220817164851.3574140-1-joefradley@google.com> <20220817164851.3574140-3-joefradley@google.com>
+In-Reply-To: <20220817164851.3574140-3-joefradley@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 19 Aug 2022 16:16:43 +0800
-Message-ID: <CABVgOSkFLNRDgo0=E9qxbi0rZziYEiPTpknEffFkzdv09wRk8A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: add kunit.enable to enable/disable KUnit test
-To:     Joe Fradley <joefradley@google.com>, Nico Pache <npache@redhat.com>
+Date:   Fri, 19 Aug 2022 16:34:31 +0800
+Message-ID: <CABVgOSkRRMDz14cpsYBi7SaefbOhGc9V+z+pY_tULkk12Fb-EA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: no longer call module_info(test, "Y") for
+ kunit modules
+To:     Joe Fradley <joefradley@google.com>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         kernel-team@android.com,
@@ -62,7 +63,7 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         <linux-kselftest@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a22a2005e693b8ee"
+        boundary="000000000000405ad005e693f8e1"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -74,199 +75,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000a22a2005e693b8ee
+--000000000000405ad005e693f8e1
 Content-Type: text/plain; charset="UTF-8"
 
-+Nico Pache in case this could be useful with kernel/kunit packaging.
-
-On Thu, Aug 18, 2022 at 12:49 AM 'Joe Fradley' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
+On Thu, Aug 18, 2022 at 12:49 AM Joe Fradley <joefradley@google.com> wrote:
 >
-> This patch adds the kunit.enable module parameter that will need to be
-> set to true in addition to KUNIT being enabled for KUnit tests to run.
-> The default value is true giving backwards compatibility. However, for
-> the production+testing use case the new config option
-> KUNIT_ENABLE_DEFAULT_DISABLED can be enabled to default kunit.enable to
-> false requiring the tester to opt-in by passing kunit.enable=1 to
-> the kernel.
+> Because KUnit test execution is not a guarantee with the kunit.enable
+> parameter we want to be careful to only taint the kernel only if an
+> actual test runs. Calling module_info(test, "Y") for every KUnit module
+> automatically causes the kernel to be tainted upon module load. Therefore,
+> we're removing this call and relying on the KUnit framework to taint the
+> kernel or not.
 >
 > Signed-off-by: Joe Fradley <joefradley@google.com>
 > ---
 
-Thanks for sending this out.
+Thanks!
 
-I'm generally in support of the idea, and the implementation is okay,
-but there are a few small usability issues or bits of futureproofing
-we could do.
+This definitely fixes an assumption I'd had about KUnit-usage which
+definitely doesn't hold: that all KUnit tests would be in their own
+modules (or at least that those modules wouldn't need to be loaded on
+otherwise production systems). Given this isn't the case for a number
+of modules (thuderbolt, apparmor, probably soon amdgpu), it makles
+sense to get rid of this and only taint the kernel when the test is
+actually run, not just when it's loaded.
 
-On the first front, this doesn't integrate well with kunit_tool: if
-built-in tests are disabled, it will print the test header and test
-plan, but no results, which confuses the kunit_tool parser.
-In addition, maybe it'd be nice to have kunit_tool automatically pass
-kunit.enable=1 to any kernels it boots. Equally, a few minor
-naming/description suggestions.
+This could be considered a fix for c272612cb4a2 ("kunit: Taint the
+kernel when KUnit tests are run"), as it'd already be possible to
+load, e.g., thunderbolt, but prevent the tests from executing with a
+filter glob which doesn't match any tests. That possibly shouldn't
+taint the kernel.
 
-More details in comments below.
-
-On the second topic, I think we need to work out exactly how we can
-evolve this to make it as useful as possible upstream going forward.
-In general, while there's nothing fundamentally wrong with having
-tests disabled at runtime, it is going to be a very niche feature, as
-for most users the correct solution here is to build a new kernel,
-without KUnit.
-
-My feeling is that the real distinction worth making here is that
-tests can be compiled in and loaded (e.g., if tests are embedded in a
-non-test module, like apparmor, or thunderbolt, or (soon) amdgpu), but
-won't execute automatically. Now, at the moment there's no way to
-manually trigger a test. so this distinction isn't yet important, but
-we may want to add something down the line, such as the ability to
-trigger a test via debugfs (this was proposed as part of the original
-debugfs support packages), or the ability to change the value of this
-'enable' flag at runtime, and then load a specific test.
-
-Maybe that involves some further changes to the implementation (at its
-most extreme, it could involve moving the checks out into the module
-loader and the kernel_init_freeable() function, though I don't think
-that's _necessary_), but for the most part, it probably just involves
-describing and documenting this change as such.
-
-Would something like that still serve Android's purposes? Or is it
-critically important that the idea behind this is "if this is set to
-false, there should be no way of running KUnit tests", and having a
-manual way to trigger them down the line would defeat the point?
+Reviewed-by: David Gow <davidgow@google.com>
+Fixes: c272612cb4a2 ("kunit: Taint the kernel when KUnit tests are run")
 
 Cheers,
 -- David
 
->  .../admin-guide/kernel-parameters.txt         |  6 ++++++
->  lib/kunit/Kconfig                             |  8 ++++++++
->  lib/kunit/test.c                              | 20 +++++++++++++++++++
->  3 files changed, 34 insertions(+)
+>  include/kunit/test.h | 1 -
+>  1 file changed, 1 deletion(-)
 >
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index d7f30902fda0..ab4c7d133c38 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -2436,6 +2436,12 @@
->                         0: force disabled
->                         1: force enabled
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index c958855681cc..f23d3954aa17 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -251,7 +251,6 @@ static inline int kunit_run_all_tests(void)
+>  #endif /* IS_BUILTIN(CONFIG_KUNIT) */
 >
-> +       kunit.enable=   [KUNIT] Enable executing KUnit tests. Requires
-> +                       CONFIG_KUNIT to be set to be fully enabled. The
-> +                       default value can be overridden to disabled via
-> +                       KUNIT_ENABLE_DEFAULT_DISABLED.
-> +                       Default is 1 (enabled)
-> +
->         kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
->                         Default is 0 (don't ignore, but inject #GP)
->
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index 0b5dfb001bac..5d6db58dbe9b 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -59,4 +59,12 @@ config KUNIT_ALL_TESTS
->
->           If unsure, say N.
->
-> +config KUNIT_ENABLE_DEFAULT_DISABLED
-> +       bool "Require boot parameter to enable KUnit test execution"
-> +       help
-> +         Sets the default value of the kernel parameter kunit.enable to 0
-> +         (disabled). This means to fully enable kunit, config KUNIT needs
-> +         to be enabled along with `kunit.enable=1` passed to the kernel. This
-> +         allows KUnit to be opt-in at boot time.
-> +
-
-Hmm... would it make more sense to have this be DEFAULT_ENABLED and
-have the default value of the config option be y instead?
-Personally, I think that'd avoid the double-negative, and so might be clearer.
-
->  endif # KUNIT
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index b73d5bb5c473..e6f98e16e8ae 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -54,6 +54,17 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
->  EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
->  #endif
->
-> +/*
-> + * Enable KUnit tests to run.
-> + */
-> +#ifdef CONFIG_KUNIT_ENABLE_DEFAULT_DISABLED
-> +static bool enable_param;
-> +#else
-> +static bool enable_param = true;
-> +#endif
-> +module_param_named(enable, enable_param, bool, 0);
-> +MODULE_PARM_DESC(enable, "Enable KUnit tests to run");
-
-Maybe "Enable KUnit tests" is simpler than adding "to run", which
-reads a bit awkwardly.
-
-If we were to treat this variable as specifically enabling the "run
-tests on boot" and/or "module load", then that could be worked into
-the description, too.
-
-> +
->  /*
->   * KUnit statistic mode:
->   * 0 - disabled
-> @@ -590,6 +601,12 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
->  {
->         unsigned int i;
->
-> +       if (!enable_param && num_suites > 0) {
-> +               pr_info("kunit: deactivated, cannot load %s\n",
-> +                       suites != NULL && suites[0] != NULL ? suites[0]->name : "NULL");
-> +               return -EPERM;
-> +       }
-> +
-
-This mostly works, but has a few small issues:
-- KUnit will still print the header and a test plan, so kunit_tool
-will report a large number of "crashed" tests when no results are
-forthcoming.
-  It should be posible to add a similar check in kunit_run_all_tests()
-to handle that case:
-https://elixir.bootlin.com/linux/latest/source/lib/kunit/executor.c#L246
-  You can test this with:
-./tools/testing/kunit/kunit.py run --kconfig_add
-CONFIG_KUNIT_ENABLE_DEFAULT_DISABLED=y
-
-- The message is not ideal: it only refers to the first suite in the
-module (or built into the kernel). and "cannot load" is not really
-applicable to built-in tests.
-  Maybe the goal should be less to "not load test modules" but more to
-"allow test modules to load, but don't run the tests in them".
-  Thoughts?
-
-- If we were to treat this as "tests load, but don't run
-automatically", then we probably don't want this to be an EPERM...
-
->         for (i = 0; i < num_suites; i++) {
->                 kunit_init_suite(suites[i]);
->                 kunit_run_tests(suites[i]);
-> @@ -607,6 +624,9 @@ void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites)
->  {
->         unsigned int i;
->
-> +       if (!enable_param)
-> +               return;
-> +
->         for (i = 0; i < num_suites; i++)
->                 kunit_exit_suite(suites[i]);
->
+>  #define __kunit_test_suites(unique_array, ...)                                \
+> -       MODULE_INFO(test, "Y");                                                \
+>         static struct kunit_suite *unique_array[]                              \
+>         __aligned(sizeof(struct kunit_suite *))                                \
+>         __used __section(".kunit_test_suites") = { __VA_ARGS__ }
 > --
 > 2.37.1.595.g718a3a8f04-goog
 >
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220817164851.3574140-2-joefradley%40google.com.
 
---000000000000a22a2005e693b8ee
+--000000000000405ad005e693f8e1
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -333,14 +198,14 @@ OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
 3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
 lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDz
-xo1VAZWG+wAYf1wH1odk1wTPrkhUqDPIX96/qV2pIDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA4MTkwODE2NTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA3
+FKMv0rb2xHk3DirulJdRHhbiP8FNxamZGB5WRakw5zAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MTkwODM0NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEApeieXGvz5LrRXkpSHC3R
-Txb6UrSaAHEpZ4vrRVeIZ8wqN0Qv/5+p2XgEhIuYcPg385HXLk/nkKWB5skT0rPut90tMQcZPxIw
-Cz4BMjQ6ur2XAVrLZtyPnhEbMV9kYx5UFGdyfC8R7qi9KH51O9h6wNC/qG+xx91iFoSpRk74FHu+
-B/5K+5d8zsJBeeGcUO2jxUjW3+AxcaomET6Ya8+NbOzW7v8Wpas6Lo+32/2F0q8QSKsmNvsa1chM
-CS9h/VS5rkfIo/pHk1P6Pvr31pU7SMfPPZihZ+SYqpnN1H6ImEUVO0nQZJpj1cGy0CgW79nnDeTu
-C15gnBvF5E2ss9EgBA==
---000000000000a22a2005e693b8ee--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEARxi3ltyQ8jHqlPurYczC
+i2+KJDMHF+h9W9WJcsMRyKiTil0H9OU7RjgwTq8tCpOAVjXjIJeyVOjdfo8rVrHQ+GHSANAIhIdD
+kOCq+yQcBAYummKaWCxpFduYmiQQ/4Zv+m5FKmGOnEQOiNE2tnZhVe8mtITb5gFPX5bRdh7uNORG
+QjIHlZGjI0ZG9P9svV7L+mYwn3/DM2Q9+zCFfH1bGmc9vgomSTvvEZK6JD6KK9ZeMFXf52vZrLU/
+IwYNK/QpUnbsTzBVJi6rA8NxtlL/3xGyS9rTy/VhrfsShoFnpdEK9UyscMTkZvHCkbT09byDX4O5
+C8AUgQ8TBDWRJoUgyQ==
+--000000000000405ad005e693f8e1--
