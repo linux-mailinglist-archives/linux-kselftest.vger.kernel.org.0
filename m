@@ -2,77 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60A2598F82
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Aug 2022 23:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9985991AD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 02:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345944AbiHRV1S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 17:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S229899AbiHSAUi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 20:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347084AbiHRV1A (ORCPT
+        with ESMTP id S239470AbiHSAUf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 17:27:00 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E31DEA8AB
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 14:19:15 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a8so2848013pjg.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 14:19:15 -0700 (PDT)
+        Thu, 18 Aug 2022 20:20:35 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93751CE311
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:20:33 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g18so3206306pju.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:20:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=tTJTjqw4MggpWtxGKCzfbFeqFxFbwJEwUmHLuAFNlC4=;
-        b=KLY0b+bh0hfzUpqKcJhe/wX0zYM3DwWqLn+1EFPX/z/mvu9FX8S6481IG9EwIwKlr0
-         sksbXHJQ4Kh7CSdeJ54/AGd442l6xfwUSwbgjuIY7cPkTmb/P8QcpBZsFw1/AEgW7BxO
-         Z7vFc1cM6wHyTLrXmXs4BpPTKJqKJm4CDzUsmuDRJO5YqQ2oTdhgmDQfcISIZdvLXi+a
-         iIdIuaNiTdK6EZBOyO8Sqr7BsD7W8hLLdMZHw8f/Q35ywyTfALa1cNGq5gHNhppDaPfZ
-         O+kBBnOCDICeLF6quWO+kUt7vyDNo8jD0dQqib2ZIPNPKJ57Uq0YHy8r7Fi2W5SNMe/A
-         HD3w==
+        bh=pEgXnTJKFJrTL3CTka16XSJbg6kxwB4cnfOI/Ofjlz4=;
+        b=jQOCWpbvee03T0P8xijjOYN3zJfdX6BqWq3GiUDY54GeiB2kYOpPOdypH/gNOYaODr
+         ix4Q5zM5HRdkrH8VNhhYaqC4bGm3TWrsr3zotxk6UhP/oyxM/RNGcU3wIqmpKytWvU4a
+         BTREDH/HNF59rmTBvSdbCesgF6GRyz5K9//B1DM9fRziLLn/FELyxzGGJ6BTGO4HJJrl
+         o0UAtZhP3o05JqW/WffSD/W7KBey1RzgtF0ZEqIKFPy09PHnweIeH6czpkeJBsdR0KF6
+         StCY9jf29Uto9xBg0n+/eHlcuPQ9Rk2xvxAOK7+9vgIk182YafaVSJIp8WTK07eIFh8d
+         mv/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=tTJTjqw4MggpWtxGKCzfbFeqFxFbwJEwUmHLuAFNlC4=;
-        b=Hr+X/P0ABpI+bVO2KXk9w+H14UPaN/qEkzOSgKrZeYflKajUjsJxRgiuJq/h+ofowS
-         bjLrsawwQ0iAEwV7oFqV5RkaC/Mf4DbaEbkLCi2EcicYi4dLLH1CjiAne/s6KiRSaOhR
-         jSp0NTK5Qrg6aJGPuXhppeOo5NX8LY0ijLe3cvpGQ3bIxWq9jzc711E8c/rahQ2EQxAr
-         aPCUxpBLGN2NwE4H3iBJz4enVs6vChvJ6zmMLm2ZepeZz/u9a+hjqiNgo30Lyvvqduif
-         MCeLr2ur3J4DjCwHhyA1VVet8+pvWWq9nfG9OVSEIroNRvfZREkmYmI4MZ7EhGm5imCp
-         8Zbg==
-X-Gm-Message-State: ACgBeo1xI7IS0qYEbkNoxBnYsgoAhdIDxOinDOK2XFU1lYlY7qrCwCUc
-        1e/HvjxE8WlhmHoyxy/kj9wS/Q==
-X-Google-Smtp-Source: AA6agR6y0AhMETJyQ+vXl0SNQkEBxWGMTcxU9uSEZQLV6JUuiIN57zfeFgll2QLSPF2S39iiIToTNg==
-X-Received: by 2002:a17:90b:4c4b:b0:1f4:d176:aa5a with SMTP id np11-20020a17090b4c4b00b001f4d176aa5amr4899401pjb.233.1660857553755;
-        Thu, 18 Aug 2022 14:19:13 -0700 (PDT)
+        bh=pEgXnTJKFJrTL3CTka16XSJbg6kxwB4cnfOI/Ofjlz4=;
+        b=cU1jke3r7da6V2pEzLx/ewzKZ56AL4URuKWr6gxwumzNAXj6F2mMjpijxnecn0T8U4
+         CQWPSQaZspFFVAiENyLrpvhoXR3TmLEzmqBFFQFqItqt13R18CreQwEt2s2xt67hiXhl
+         2skrTxq0HP+57EFOJtU2l96Np7uCAKDjKZGCYkH6vLULrAOPa+8QDYRIQk90yv5n1DJl
+         OBb6wW97DiyjkcxLC3po38qtUpMuvXUFzBS/ZditpUWtwxCElsNwRYqRhc1VuAtx9IAK
+         AKBTEFTqNfRV1XDBuZdThAjHq8tboB83Lda957M8iXKzEogfNYxbi2mr1wDGg3+WFOMv
+         99Rw==
+X-Gm-Message-State: ACgBeo2YMv5YKgX1CgWwxwO4hmmtWUqnckfua1pLFqsobHTiyBrNmyNx
+        lpT8/ZV023jENnL0bqj1i4O9Nw==
+X-Google-Smtp-Source: AA6agR7cPKIHabvzPHesQ7mysYM4f98Not26hLuTLYt6okFI7nMH1sNNM2K+QGI7RxRYoX8JypicJA==
+X-Received: by 2002:a17:902:7208:b0:172:a9d6:527 with SMTP id ba8-20020a170902720800b00172a9d60527mr4900702plb.32.1660868432853;
+        Thu, 18 Aug 2022 17:20:32 -0700 (PDT)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h8-20020a170902f54800b0016ee328fd61sm1819751plf.198.2022.08.18.14.19.13
+        by smtp.gmail.com with ESMTPSA id l4-20020a170903244400b0016bedcced2fsm1984501pls.35.2022.08.18.17.20.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 14:19:13 -0700 (PDT)
-Date:   Thu, 18 Aug 2022 21:19:09 +0000
+        Thu, 18 Aug 2022 17:20:32 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 00:20:28 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     Kyle Huey <me@kylehuey.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written by
- ptrace.
-Message-ID: <Yv6szXuKGv75wWmm@google.com>
-References: <20220808141538.102394-1-khuey@kylehuey.com>
- <87ilmpzunz.ffs@tglx>
- <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com>
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <Yv7XTON3MwuC1Q3U@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com>
+In-Reply-To: <20220818132421.6xmjqduempmxnnu2@box>
 X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -84,57 +102,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 18, 2022, Kyle Huey wrote:
-> On Thu, Aug 18, 2022 at 3:57 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> > On Mon, Aug 08 2022 at 07:15, Kyle Huey wrote:
-> > > When management of the PKRU register was moved away from XSTATE, emulation
-> > > of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
-> > > for APIs that write XSTATE. This can be seen by running gdb and executing
-> > > `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
-> > > write to the PKRU register (which gdb performs through ptrace) is ignored.
-> > >
-> > > There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
-> > > sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
-> > > make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
-> > > down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
-> > > and sigreturn pass in pointers to the appropriate PKRU value.
-> > >
-> > > This also adds code to initialize the PKRU value to the hardware init value
-> > > (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
-> > > This is a change to the current KVM_SET_XSAVE behavior.
-> >
-> > You are stating a fact here, but provide 0 justification why this is
-> > correct.
+On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
+> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> > On Wed, 6 Jul 2022, Chao Peng wrote:
+> > But since then, TDX in particular has forced an effort into preventing
+> > (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
+> > 
+> > Are any of the shmem.c mods useful to existing users of shmem.c? No.
+> > Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
+
+But QEMU and other VMMs are users of shmem and memfd.  The new features certainly
+aren't useful for _all_ existing users, but I don't think it's fair to say that
+they're not useful for _any_ existing users.
+
+> > What use do you have for a filesystem here?  Almost none.
+> > IIUC, what you want is an fd through which QEMU can allocate kernel
+> > memory, selectively free that memory, and communicate fd+offset+length
+> > to KVM.  And perhaps an interface to initialize a little of that memory
+> > from a template (presumably copied from a real file on disk somewhere).
+> > 
+> > You don't need shmem.c or a filesystem for that!
+> > 
+> > If your memory could be swapped, that would be enough of a good reason
+> > to make use of shmem.c: but it cannot be swapped; and although there
+> > are some references in the mailthreads to it perhaps being swappable
+> > in future, I get the impression that will not happen soon if ever.
+> > 
+> > If your memory could be migrated, that would be some reason to use
+> > filesystem page cache (because page migration happens to understand
+> > that type of memory): but it cannot be migrated.
 > 
-> Well, the justification is that this *is* the behavior we want for
-> ptrace/sigreturn, and it's very likely the existing KVM_SET_XSAVE
-> behavior in this edge case is an oversight rather than intentional,
-> and in the absence of confirmation that KVM wants the existing
-> behavior (the KVM mailing list and maintainer are CCd) one correct
-> code path is better than one correct code path and one buggy code
-> path.
+> Migration support is in pipeline. It is part of TDX 1.5 [1]. 
 
-Sorry, I missed the KVM-relevant flags.
+And this isn't intended for just TDX (or SNP, or pKVM).  We're not _that_ far off
+from being able to use UPM for "regular" VMs as a way to provide defense-in-depth
+without having to take on the overhead of confidential VMs.  At that point,
+migration and probably even swap are on the table.
 
-Hrm, the current behavior has been KVM ABI for a very long time.
+> And swapping theoretically possible, but I'm not aware of any plans as of
+> now.
 
-It's definitely odd because all other components will be initialized due to their
-bits being cleared in the header during kvm_load_guest_fpu(), and it probably
-wouldn't cause problems in practice as most VMMs likely do "all or nothing" loads.
-But, in theory, userspace could save/restore a subset of guest XSTATE and rely on
-the kernel not overwriting guest PKRU when its bit is cleared in the header.
+Ya, I highly doubt confidential VMs will ever bother with swap.
 
-All that said, I don't see any reason to force KVM to change at this time, it's
-trivial enough to handle KVM's oddities while providing sane behavior for others.
-Nullify the pointer in the guest path and then update copy_uabi_to_xstate() to
-play nice with a NULL pointer, e.g. 
+> > I'm afraid of the special demands you may make of memory allocation
+> > later on - surprised that huge pages are not mentioned already;
+> > gigantic contiguous extents? secretmem removed from direct map?
+> 
+> The design allows for extension to hugetlbfs if needed. Combination of
+> MFD_INACCESSIBLE | MFD_HUGETLB should route this way. There should be zero
+> implications for shmem. It is going to be separate struct memfile_backing_store.
+> 
+> I'm not sure secretmem is a fit here as we want to extend MFD_INACCESSIBLE
+> to be movable if platform supports it and secretmem is not migratable by
+> design (without direct mapping fragmentations).
 
-	/*
-	 * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
-	 * in the header.  KVM's odd ABI is to leave PKRU untouched in this
-	 * case (all other components are eventually re-initialized).
-	 */
-	if (!(kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU))
-		vpkru = NULL;
+But secretmem _could_ be a fit.  If a use case wants to unmap guest private memory
+from both userspace and the kernel then KVM should absolutely be able to support
+that, but at the same time I don't want to have to update KVM to enable secretmem
+(and I definitely don't want KVM poking into the directmap itself).
 
-	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+MFD_INACCESSIBLE should only say "this memory can't be mapped into userspace",
+any other properties should be completely separate, e.g. the inability to migrate
+pages is effective a restriction from KVM (acting on behalf of TDX/SNP), it's not
+a fundamental property of MFD_INACCESSIBLE.
