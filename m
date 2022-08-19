@@ -2,89 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A4559A5FC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 21:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6882459A669
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 21:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350779AbiHSTHl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Aug 2022 15:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S1351334AbiHSTUO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Aug 2022 15:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350622AbiHSTHi (ORCPT
+        with ESMTP id S1349802AbiHSTTs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 15:07:38 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90962109A22
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 12:07:37 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso8417427pjk.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 12:07:37 -0700 (PDT)
+        Fri, 19 Aug 2022 15:19:48 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0011141BE
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 12:19:33 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33352499223so90810327b3.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Aug 2022 12:19:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=DHHhnraoY65tyRhzZg5vQ0+h6PvziDksTsOW2++v8Zs=;
-        b=RPjmo2FxtGyLR8PYNrQ0WpMsIJGmf9vuJNzD3hcTlkiWIceSPrxTlQdWlGLXoPWmeZ
-         QE8kzIm93mhy6fbK94/1CVsj3VUeiVVL9xd6IjE6nh8u+p3xHnEhzuSU0z+FeitWBm+u
-         IT9bWa+bVqb8v01iZG+o6UeShRs5ZnjrIhqUg=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=7jW9JSFdBkYgLRSlwkmM/JIttkYceIPDZWewEa3r/u8=;
+        b=oR+QcvLsAx7r4XQNN3cL0Twl29NyDz8147I+ryzAyb527+xnsfUFeLqIySHJ854uy6
+         ifH5GSNUxqLNTHZJIeGfD/3JXqZN8VpCi9HVpQ2fhFh+7fp1MKED4pUCnMP9FHX7Fco3
+         zkuh6QuX8n2LVfXK3Vb6ZiWkTTAFWETBsHj5R2e5uxY6TwbeZ67/O8q9UxiBX1GMQEM1
+         bt/E54Z4WsqFvIW9H+kN6PCddfpJYitM9/XHsCODdiIMc7pIbiT2CkjRGpPhQ7DJCqWi
+         htrgbPkPU8Kj5Q1ngR1iVrLmBHp+vZguUJ3nXGw2WVxx9hf+vPmWnueCPSxgycGDaVbS
+         jlqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=DHHhnraoY65tyRhzZg5vQ0+h6PvziDksTsOW2++v8Zs=;
-        b=z6Os1pw5Wa/SRDXEbVIBaZYm8z+xQ5V1V6QQ+9f/hnX+4M8suDN7OXOeqBBttjVxsd
-         mrO0xXG4D6hlzKj8peU5r6mMYuxmAXuikDuNf772IKTzhJOgqAvtFh85PQzF63Cs2Y/d
-         8MOksi4A4Yj9kTsdM72GhPJgEU+B27LIYInmiTcbDd+6Az0rDGn3vaqXcLMIE0gGHlZC
-         Lj+2eH6XKLywUNJJMSywhOiozsDgYTO1Qz6c9fYa/3H6aaGeDk+XPTf2j44t2mNbEZ8S
-         ZKeDgcT6VCeUB7NgiVf95BrK5NyTXVKnr6QHhxq9ZJL+mCbJM42QNnAIe1z/iCJuajb6
-         7c+g==
-X-Gm-Message-State: ACgBeo2rVmpP8xzYh47W7//LqM4KZ9sq0RGwwIvMhqEXzcqxqRgxFKM0
-        DwR35Al2ATN3w/6eYgqrpaFaIA==
-X-Google-Smtp-Source: AA6agR6K8ZeFu5uVrPpEanR+fcoa22K2szNXPWdkjPu9h6Z5dqzuI/cjW0mM8eCRai82tKvovNirIQ==
-X-Received: by 2002:a17:902:c40a:b0:16e:cc02:b9ab with SMTP id k10-20020a170902c40a00b0016ecc02b9abmr8595584plk.81.1660936057093;
-        Fri, 19 Aug 2022 12:07:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001f216407204sm3522272pjj.36.2022.08.19.12.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 12:07:36 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 12:07:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: fix a couple missing .gitignore entries
-Message-ID: <202208191207.56B7DDE@keescook>
-References: <20220819190558.477166-1-axelrasmussen@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819190558.477166-1-axelrasmussen@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=7jW9JSFdBkYgLRSlwkmM/JIttkYceIPDZWewEa3r/u8=;
+        b=Ns2PBxLQ+QapTpuZzEvr9uvexzNvFDywp+vWRhQyBCTj+2yB9lg0WKmBC2vnQUDy7D
+         GEtMJLgVN2rq7CdkOq/la1SzPj9fpudRkGtMoDapvwo/go1WNAjHEMiRoNXAfrGVJT5d
+         sQvO77xpNSlqenIJdMzJV3uV2fY2ZIpA2uh3HRXypMvULyuwnmlNct22WSpCNrZ1hRJl
+         NcBlPur41poXm8iCcgXl5MjL7IH1caN8hqSlrlA5TWzUHnfCl7qcrC6Sy37C9Bu+zAIf
+         dJausE3oTXSU//58v8pFPQnyt+xR61wdL6+0K7HcMjPwfrHPjtnGwuyPcuKCOHyYQ0dD
+         cQfQ==
+X-Gm-Message-State: ACgBeo3GxcRPWej+jnWmGHl75qp/qd7L0S5aAcECgOb0UO4zmTX0K0/L
+        1/F6+ZyS3yB9WsfXnXShKXfQVxahSlzgc4zk3F1R
+X-Google-Smtp-Source: AA6agR4VD42sceVnWm58Z+eDpzGYApQVQC8yQTgPQxRlFe0oL38C+92/Nyrf7mt8jHbHD4sASoH0kBeSt4AWuHk9DBj1
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2d4:203:676:8328:93fe:a318])
+ (user=axelrasmussen job=sendgmr) by 2002:a05:6902:154d:b0:67b:7908:9660 with
+ SMTP id r13-20020a056902154d00b0067b79089660mr8579721ybu.607.1660936772678;
+ Fri, 19 Aug 2022 12:19:32 -0700 (PDT)
+Date:   Fri, 19 Aug 2022 12:19:28 -0700
+Message-Id: <20220819191929.480108-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH v2 1/2] selftests/vm: fix inability to build any vm tests
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        "=?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?=" <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 12:05:58PM -0700, Axel Rasmussen wrote:
-> Some recent commits added new test binaries, but forgot to add those to
-> .gitignore. Now, after one does "make -C tools/testing/selftests", one
-> ends up with some untracked files in the kernel tree.
-> 
-> Add the test binaries to .gitignore, to avoid this minor annoyance.
-> 
-> Fixes: d8b6171bd58a ("selftests/io_uring: test zerocopy send")
-> Fixes: 6342140db660 ("selftests/timens: add a test for vfork+exit")
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+When we stopped using KSFT_KHDR_INSTALL, a side effect is we also
+changed the value of `top_srcdir`. This can be seen by looking at the
+code removed by commit 49de12ba06ef
+("selftests: drop KSFT_KHDR_INSTALL make target").
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+(Note though that this commit didn't break this, technically the one
+before it did since that's the one that stopped KSFT_KHDR_INSTALL from
+being used, even though the code was still there.)
 
+Previously lib.mk reconfigured `top_srcdir` when KSFT_KHDR_INSTALL was
+being used. Now, that's no longer the case.
+
+As a result, the path to gup_test.h in vm/Makefile was wrong, and
+since it's a dependency of all of the vm binaries none of them could
+be built. Instead, we'd get an "error" like:
+
+    make[1]: *** No rule to make target
+        '/[...]/tools/testing/selftests/vm/compaction_test', needed by
+	'all'.  Stop.
+
+So, modify lib.mk so it once again sets top_srcdir to the root of the
+kernel tree.
+
+Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/lib.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 947fc72413e9..d44c72b3abe3 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -40,6 +40,7 @@ ifeq (0,$(MAKELEVEL))
+     endif
+ endif
+ selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
++top_srcdir = $(selfdir)/../../..
+ 
+ # The following are built by lib.mk common compile rules.
+ # TEST_CUSTOM_PROGS should be used by tests that require
 -- 
-Kees Cook
+2.37.1.595.g718a3a8f04-goog
+
