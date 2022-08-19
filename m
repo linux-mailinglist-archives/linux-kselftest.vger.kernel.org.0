@@ -2,166 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9985991AD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 02:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1630599225
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Aug 2022 02:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiHSAUi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Aug 2022 20:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
+        id S244417AbiHSA4u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Aug 2022 20:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239470AbiHSAUf (ORCPT
+        with ESMTP id S241842AbiHSA4s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Aug 2022 20:20:35 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93751CE311
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:20:33 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g18so3206306pju.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=pEgXnTJKFJrTL3CTka16XSJbg6kxwB4cnfOI/Ofjlz4=;
-        b=jQOCWpbvee03T0P8xijjOYN3zJfdX6BqWq3GiUDY54GeiB2kYOpPOdypH/gNOYaODr
-         ix4Q5zM5HRdkrH8VNhhYaqC4bGm3TWrsr3zotxk6UhP/oyxM/RNGcU3wIqmpKytWvU4a
-         BTREDH/HNF59rmTBvSdbCesgF6GRyz5K9//B1DM9fRziLLn/FELyxzGGJ6BTGO4HJJrl
-         o0UAtZhP3o05JqW/WffSD/W7KBey1RzgtF0ZEqIKFPy09PHnweIeH6czpkeJBsdR0KF6
-         StCY9jf29Uto9xBg0n+/eHlcuPQ9Rk2xvxAOK7+9vgIk182YafaVSJIp8WTK07eIFh8d
-         mv/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=pEgXnTJKFJrTL3CTka16XSJbg6kxwB4cnfOI/Ofjlz4=;
-        b=cU1jke3r7da6V2pEzLx/ewzKZ56AL4URuKWr6gxwumzNAXj6F2mMjpijxnecn0T8U4
-         CQWPSQaZspFFVAiENyLrpvhoXR3TmLEzmqBFFQFqItqt13R18CreQwEt2s2xt67hiXhl
-         2skrTxq0HP+57EFOJtU2l96Np7uCAKDjKZGCYkH6vLULrAOPa+8QDYRIQk90yv5n1DJl
-         OBb6wW97DiyjkcxLC3po38qtUpMuvXUFzBS/ZditpUWtwxCElsNwRYqRhc1VuAtx9IAK
-         AKBTEFTqNfRV1XDBuZdThAjHq8tboB83Lda957M8iXKzEogfNYxbi2mr1wDGg3+WFOMv
-         99Rw==
-X-Gm-Message-State: ACgBeo2YMv5YKgX1CgWwxwO4hmmtWUqnckfua1pLFqsobHTiyBrNmyNx
-        lpT8/ZV023jENnL0bqj1i4O9Nw==
-X-Google-Smtp-Source: AA6agR7cPKIHabvzPHesQ7mysYM4f98Not26hLuTLYt6okFI7nMH1sNNM2K+QGI7RxRYoX8JypicJA==
-X-Received: by 2002:a17:902:7208:b0:172:a9d6:527 with SMTP id ba8-20020a170902720800b00172a9d60527mr4900702plb.32.1660868432853;
-        Thu, 18 Aug 2022 17:20:32 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170903244400b0016bedcced2fsm1984501pls.35.2022.08.18.17.20.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 17:20:32 -0700 (PDT)
-Date:   Fri, 19 Aug 2022 00:20:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <Yv7XTON3MwuC1Q3U@google.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
+        Thu, 18 Aug 2022 20:56:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B197EDF096
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Aug 2022 17:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660870605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0mjtjKvaCKjFD+8hWTDMS94mOG+sVGwcb17W8u/FnUA=;
+        b=VFgPfJn5YpXYG24LEh5mlvuWIeLIILB54WPfhqP1Tl+dOYqU33U192yFA+BzpnWnopA40h
+        XBhvkFrrP6Sc+/4iKEnsR1PeaOmZ/f1engJzHGqnWeyBKDlT6/4RmkPJiAfaupdbcwaVsT
+        MRTKDsI4DYHMnbqAnfdUVeNDEAZ4Y+o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-317--evnGzXCP_CdJVefZLfQyg-1; Thu, 18 Aug 2022 20:56:42 -0400
+X-MC-Unique: -evnGzXCP_CdJVefZLfQyg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D370802D2C;
+        Fri, 19 Aug 2022 00:56:41 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-16.bne.redhat.com [10.64.54.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 51086C15BB8;
+        Fri, 19 Aug 2022 00:56:31 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, peterx@redhat.com,
+        pbonzini@redhat.com, corbet@lwn.net, maz@kernel.org,
+        james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
+        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+Subject: [PATCH v1 0/5] KVM: arm64: Enable ring-based dirty memory tracking
+Date:   Fri, 19 Aug 2022 08:55:56 +0800
+Message-Id: <20220819005601.198436-1-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818132421.6xmjqduempmxnnu2@box>
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
-> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> > On Wed, 6 Jul 2022, Chao Peng wrote:
-> > But since then, TDX in particular has forced an effort into preventing
-> > (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
-> > 
-> > Are any of the shmem.c mods useful to existing users of shmem.c? No.
-> > Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
+This series enables the ring-based dirty memory tracking for ARM64. 
+The feature has been available and enabled on x86 for a while. It
+is beneficial when the number of dirty pages is small in a checkpointing
+system or live migration scenario. More details can be found from
+fb04a1eddb1a ("KVM: X86: Implement ring-based dirty memory tracking").
 
-But QEMU and other VMMs are users of shmem and memfd.  The new features certainly
-aren't useful for _all_ existing users, but I don't think it's fair to say that
-they're not useful for _any_ existing users.
+The generic part has been comprehensive enough, meaning there isn't too
+much work, needed to extend it to ARM64. 
 
-> > What use do you have for a filesystem here?  Almost none.
-> > IIUC, what you want is an fd through which QEMU can allocate kernel
-> > memory, selectively free that memory, and communicate fd+offset+length
-> > to KVM.  And perhaps an interface to initialize a little of that memory
-> > from a template (presumably copied from a real file on disk somewhere).
-> > 
-> > You don't need shmem.c or a filesystem for that!
-> > 
-> > If your memory could be swapped, that would be enough of a good reason
-> > to make use of shmem.c: but it cannot be swapped; and although there
-> > are some references in the mailthreads to it perhaps being swappable
-> > in future, I get the impression that will not happen soon if ever.
-> > 
-> > If your memory could be migrated, that would be some reason to use
-> > filesystem page cache (because page migration happens to understand
-> > that type of memory): but it cannot be migrated.
-> 
-> Migration support is in pipeline. It is part of TDX 1.5 [1]. 
+- PATCH[1]   enables the feature on ARM64
+- PATCH[2-5] improves kvm/selftests/dirty_log_test
 
-And this isn't intended for just TDX (or SNP, or pKVM).  We're not _that_ far off
-from being able to use UPM for "regular" VMs as a way to provide defense-in-depth
-without having to take on the overhead of confidential VMs.  At that point,
-migration and probably even swap are on the table.
+Testing
+=======
 
-> And swapping theoretically possible, but I'm not aware of any plans as of
-> now.
+- kvm/selftests/dirty_log_test
+- Live migration by QEMU
+- Host with 4KB or 64KB base page size
 
-Ya, I highly doubt confidential VMs will ever bother with swap.
+Gavin Shan (5):
+  KVM: arm64: Enable ring-based dirty memory tracking
+  KVM: selftests: Use host page size to map ring buffer in
+    dirty_log_test
+  KVM: selftests: Dirty host pages in dirty_log_test
+  KVM: selftests: Clear dirty ring states between two modes in
+    dirty_log_test
+  KVM: selftests: Automate choosing dirty ring size in dirty_log_test
 
-> > I'm afraid of the special demands you may make of memory allocation
-> > later on - surprised that huge pages are not mentioned already;
-> > gigantic contiguous extents? secretmem removed from direct map?
-> 
-> The design allows for extension to hugetlbfs if needed. Combination of
-> MFD_INACCESSIBLE | MFD_HUGETLB should route this way. There should be zero
-> implications for shmem. It is going to be separate struct memfile_backing_store.
-> 
-> I'm not sure secretmem is a fit here as we want to extend MFD_INACCESSIBLE
-> to be movable if platform supports it and secretmem is not migratable by
-> design (without direct mapping fragmentations).
+ Documentation/virt/kvm/api.rst               |   2 +-
+ arch/arm64/include/uapi/asm/kvm.h            |   1 +
+ arch/arm64/kvm/Kconfig                       |   1 +
+ arch/arm64/kvm/arm.c                         |   8 ++
+ tools/testing/selftests/kvm/dirty_log_test.c | 101 ++++++++++++++-----
+ tools/testing/selftests/kvm/lib/kvm_util.c   |   2 +-
+ 6 files changed, 88 insertions(+), 27 deletions(-)
 
-But secretmem _could_ be a fit.  If a use case wants to unmap guest private memory
-from both userspace and the kernel then KVM should absolutely be able to support
-that, but at the same time I don't want to have to update KVM to enable secretmem
-(and I definitely don't want KVM poking into the directmap itself).
+-- 
+2.23.0
 
-MFD_INACCESSIBLE should only say "this memory can't be mapped into userspace",
-any other properties should be completely separate, e.g. the inability to migrate
-pages is effective a restriction from KVM (acting on behalf of TDX/SNP), it's not
-a fundamental property of MFD_INACCESSIBLE.
