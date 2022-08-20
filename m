@@ -2,129 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E056859A9FC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Aug 2022 02:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA6159AA25
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Aug 2022 02:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244880AbiHTAOO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Aug 2022 20:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
+        id S244404AbiHTAbZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Aug 2022 20:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244299AbiHTAON (ORCPT
+        with ESMTP id S243430AbiHTAbW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Aug 2022 20:14:13 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDC04E875;
-        Fri, 19 Aug 2022 17:14:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JihxgWR8J4QxOI3+XneqEq4N6mDfW+ekbt4JzX6wp259Lml/Edp7+RhURYovE9zPG7VEYorFc4hr0Fuq2lyQTWPK9VdKpDNJSur/DRpRYWSgNc/qXtSay68hmPI8i7q1WxduIw/CPFzKWM72OxDQ0Zkt9WT2c143lXYsclk5iY/3KN8vpR1SGxAdB2wDyPjYVvIzZtGRL4YPsYoHcuJyudmajnsdAp/HQUrMzZJBvsn5QR4HqASp9wCC3YHJy4A/bb+mQT+R96UfdPISomlVE65vPDDgd2GEyBFjpowu7S0bSt8gJmMoG2qeuN1WkUW5awDqASAegVUM8ET8S17ykw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mWZol1S8wksbAdUAgv1sWZ2nTtSKCrOgqvGVel4v5Ak=;
- b=Y7hTsGcrrXxdSshQGlKDCnc5QHR1XS45OnrSpy09SD16LbYO/x0C/BqTsbVIdsjrN1QiezD3KWlNx20hDuHvX/dXlDc3fCOLcji3mm8Ow32GBL5MNcSBI8RZAULYH1XkoNOB4tSTgAs3dyZYo6LShh1mws84qL0NtgLmhIfkl6RJ5mcXxSmwTIJTgloiJIPlbIS2MGfabTpfTUuclMN4wGPj7Ek2GO/ieqfYIgxdZkWdiAYQSn/y6CzWqWJRGMZ4wEftgkeCIgcNsLX/rFbZElUK5cms84n1kpU33XTYtGuTvFQfANqioWePnbd57qhUWYyGlE3QYCEjx329zR5LNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mWZol1S8wksbAdUAgv1sWZ2nTtSKCrOgqvGVel4v5Ak=;
- b=QxWB1C2QJRPt0/DuSCZcA3mjgWAVGE8a3gn0deii72+bOB8WFmOf+x7FeNiApA8nIhZ0bSCBLod3kmIGcirOg5l6D87o1nurE+npjdpXewrmuAzMROquH65ryJPr/PqlNs+F3H0/C1CqWi+GRQh6i+NqWfa/qMYcR3yb8C5MyXrKANWaIuZ4hFtC6mZ4pjiRQPU7KzxiItPVRuOx8/doZmJ2/A0HfxOvbA5Pw5VJfNH86A3+jBWC1LLpzsUsUsZsJhJhxMRLT5rvV799zkF9+vY4BTmTGfBA3LQl0HzkLJB2BNmSLCc9YlBBwP6cYpHubGS0YGO+5E58N+h2pKqULA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by CY4PR12MB1797.namprd12.prod.outlook.com (2603:10b6:903:124::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Sat, 20 Aug
- 2022 00:14:09 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%8]) with mapi id 15.20.5546.019; Sat, 20 Aug 2022
- 00:14:09 +0000
-Message-ID: <ddfc77ae-eb64-79cd-ff7b-baa939cc26f2@nvidia.com>
-Date:   Fri, 19 Aug 2022 17:14:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 2/2] selftests/vm: use top_srcdir instead of
- recomputing relative paths
-Content-Language: en-US
-To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Fri, 19 Aug 2022 20:31:22 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B53CD75A7;
+        Fri, 19 Aug 2022 17:31:21 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id B568F2B06109;
+        Fri, 19 Aug 2022 20:27:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 19 Aug 2022 20:27:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1660955226; x=1660962426; bh=Ez
+        /o4Y2tKPtSFWobOA9rtOb1803iS6GsFqfxsG8DlJY=; b=J1sLkmgnpr1IHCnks/
+        TncIKoSB2iyU0SQevspoXfStE4ASIgQdckNGUnnM/awsZSGl4C1OntcVqK7/k6GN
+        7MSjjDs4ekjAcVE+UiN4FV8UYvaOTuNRtiiNc8A7Gdofv7Wcl8WW4OdSu7hQ5H6u
+        87XLbJBCU8T4KH2G+fsweFV8DvsgD+iciohXgKhjcDHX8ltZp+zNkLq27kM76xWJ
+        huGQLOI4IkShGKA8o9tEYXYWPU+T3SRdig6WezhCpy2YrI/VHxs3O3U1mctqpx5Y
+        oXy/xII3UEv87xctnWoObigXtWZRkBZiSZdc0Zino9Vx5QVaJSszorGVbLYaInZr
+        /HbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660955226; x=1660962426; bh=Ez/o4Y2tKPtSFWobOA9rtOb1803i
+        S6GsFqfxsG8DlJY=; b=LNehmM1meXB0YoTHnShkMvfy937G8WXxFT7hfxmGyt++
+        PDxFoAQ4iSTNBXCIJTcEmSBLxdeOSCW6p0H0vv+vTvpBjtW+faYjtIayEEzIBR3q
+        yYLDKoID5MvfhaJ99WM0jq7rE6i1By1VkqeU5vNyspT2RJoU3nHDD8+vrjOfipYX
+        HEj9FsycHMbsdze6a489AhRV5IN26Y7/u61+q00CGOH6sPXrBaXEqFp39J3+rO2I
+        O2v1SptYfuDPPfsBnsgZHBvq3fAYD/zBtbjWfsUHdmFXZSHFPVmW7kvXBcAGKa6P
+        6lnIVgRpdUm1uoSVVSvnGPmE88yqpjg89yYpLqGYaA==
+X-ME-Sender: <xms:WCoAYzYYyJ1_A8aO3bPjr6duCBycn0g3AcBLPTdfc6L9WTzaxQUFSQ>
+    <xme:WCoAYybvsGHzNSyTiRvcRJbGrj4BvBDntAUHY8KLu7GIdlV1fqIZFpvqAcd3hvxOK
+    r8ehKJS_dTdFokEjTk>
+X-ME-Received: <xmr:WCoAY19PmvEJ89tphPfNdcXzfc0He-WP8ErI_IqcwrwkS98oDdOBEigKokMjo7oeLURCng>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeivddgfeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeethffguefftdejudekgfehuefhjefhhfdthfeg
+    ieeuffelieffffeiteejjeekudenucffohhmrghinhepihhnthgvlhdrtghomhdpmhgvmh
+    drphgrghgvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:WCoAY5qRelQbeh57Ik8xZ-drGYmnFqmHk8OznvzoIQwedvfRbcEp8A>
+    <xmx:WCoAY-oePBlhJPU7QZD9W5q0eF-6ETuoGJzR7DfDVZTNXeLPYMHeQA>
+    <xmx:WCoAY_QB_q4ec1TDL0nSLZHaOMCqsMbqI0X-evTJ4FLEWFkbLwvGug>
+    <xmx:WioAY5FLZ70rhK9mBhIZFrgqiW3vNsh_ksUFobn7XxJ6IQC0IchE01xMYbE>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 Aug 2022 20:27:03 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 3F27B10418C; Sat, 20 Aug 2022 03:27:00 +0300 (+03)
+Date:   Sat, 20 Aug 2022 03:27:00 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220819191929.480108-1-axelrasmussen@google.com>
- <20220819191929.480108-2-axelrasmussen@google.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20220819191929.480108-2-axelrasmussen@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0354.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::29) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1e93cd70-c049-4c03-8f79-08da8240e756
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1797:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pBQW3tmSH9QeBFFer8jk8Qmqo3Pfvd8fasoYiYy2kchv++gU70+biKf7s1ZgHOyNF1aDKz9btrMX1WEdowGTfhtfPjyF5MCdSgzZlINeXTJvwBxzIkQpJriNXVPMYhmpBH+0/LQyHPUpjj3kHnqhaapGHG3oXR2dlnq7L7/D/vEUe6tiFjEYXGqavhFP3X9IymiIQbL6/EKhAd35WD8/Y31O7l3pMTvbFgQ0d9au0Jtqps02l89XOYhTVdYxmIfUgWOrDkQSvU3iHh1HewBf1C2OHEwtbnw8mIwsD7S0HSVN64mRQm5NIUqenUBrE+8e1pWGc8vpR2/teqPY67twhQ4ocrOkrjE17K26qm9wJrHL1gCQMp4LLoU7BTCFEVCCith350ZjPyj4Xn4bVbA+tNdCC9Y8mN9pGuA2AJWwF5+M8OM1/S8bcacFSRZUsTKVSOUsvSDJoUFPLPKLV4hGOgtnHxU5A62RqiR6Y2/60Uyqq4ODKqb0EEuIMPzDpLNetH4cIyb0Jbfu4Y9N8E22a31zeNjRb4Z4WRfmUV3HwY1/Xmuvhu2RPC1F1/ACN0zZ0P9cYUOpl10tRa+LfihgdUZtH35FEXDXWic1YRrW9PlZvJQvg6iJsEsTGi4X0Tctmh9a99eDxIqwk85MFy4lKNTaRMgGRGjWNeugOoE/U2Ds0PdUZb5eAW7Hm5W4Des4R0FkdXg5srpZ52rsT+cS+onwMyUOW+0NlDuTbRoBMHUIjpcocM9KYyE20lUYmk6v1N/U01Fa8bIsmxhQxtEuawNYCuZOZNeC7mRNB0P52Vw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(478600001)(53546011)(6486002)(6512007)(66946007)(6506007)(8676002)(66476007)(66556008)(41300700001)(31686004)(36756003)(2906002)(86362001)(31696002)(26005)(110136005)(316002)(38100700002)(186003)(83380400001)(2616005)(5660300002)(4326008)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M3VRd1FSSEtiZ1VCSVZ4OVE3UFhYajd1VC9RVnJzKzRXc21Nd0k2UkdDYWJ5?=
- =?utf-8?B?NFYrM1hFSFJRUHlQZ1FLcVNheUFQdzlxTnY0ZXljbVJuMnBUZTFSVTloSHY2?=
- =?utf-8?B?TlcxcEMvRGNONzFIWDJoTUFpOXNvSzJkWjJweTlMUGJyRmkrZFkrV2RyVDRw?=
- =?utf-8?B?TE5qN2Q3bWtaMWVIcFBGQUJBdnBaRC8yaTJIS3JtOTJ0VEZIZW93WEIzNzRF?=
- =?utf-8?B?dFduZDYrcmZNRHFoM3hNdDRNVWtLRkdzN1ZJTW5DSWhQNGVJQlQ4SHdXQ0pH?=
- =?utf-8?B?UUQ3bkdYaFczVHpBYld1ODh6UzQ1N1UreWIwcUZ1R09LSVpKcXRiMWVSKy9O?=
- =?utf-8?B?MWtlRjhuY1Rwc2FXOUxsWjVjclJqOUJhQWY0TnlQK3lybTNXM1JKc0Q0NTBk?=
- =?utf-8?B?VkloNjBlZzlGVWlibTdTRlhIRzh4MHZYU2dMblEvNUQ2TGE5eE1EcVV4cHkx?=
- =?utf-8?B?WE9CQU5vVEpNMGZqNklNRUdkc0hIME1GMlZoM0RMc1B5a2FRODZYWXBJcG14?=
- =?utf-8?B?cVVNMURvWWNlY1d4OUU1RytyTWdWMUwyUXVUSm9PbUhoRlptYUVaemRlQkV5?=
- =?utf-8?B?ckVaRWpabDlxdm53K0VCbVBtZXBSTW5RZm1SckVzdlJFdTNZMFBsdEhvQ2Z0?=
- =?utf-8?B?dXR5TlIrYjRFNHlYdmVQMGxqZXQ3TThwWFVhK1ZubW1ES2p1bTFpTDAwdUJD?=
- =?utf-8?B?YitGa0E0cDNidkNOT2tDc3YvcGVjdElnOTVxYit3VUdOUERaYXRON3ZacnBL?=
- =?utf-8?B?Mm9hYW92YkdXUHZVVTB3c1VXa3l2Zlh5QWUrZXoweU8wOEFUSDZKK1Y2MFRw?=
- =?utf-8?B?ZUtaRzl1WDk1MGdTVUFIbUliVXlrSGQrbm9TNVRLaU10Q1FhN1dVQU1RTHdx?=
- =?utf-8?B?cS83MXlCQTFPbTc5N3drcGh6QXVJWUlQZnRDdTVNREgwdDVGVllqSzI4cVN1?=
- =?utf-8?B?eTIrelpPUEFINGNwTGpJVmtjVjNOME50YXozWUNTM3ExSktVVjdvTElIa2JZ?=
- =?utf-8?B?eHNVY0N2UjdsZGZVejd6dlJhc2kybTU3alNOcnhZRm9VZDJrbkJVUkc4dk9t?=
- =?utf-8?B?QlVMVy9xaldKWDVGd3JaVWp6SHFwR0g2c2V1ajZkck12eXJlRmlEZ0NaTC9Y?=
- =?utf-8?B?YVBwOGl4SGtXZTB0WENUUG53cStYMFoyVG1MbFVKZm5IL1FuZngvdVFjdjds?=
- =?utf-8?B?cmRpNEl1c3E3MFFESFhQMHFmTE9JZUo1ODBXMG9XVDdzT1Rvcjc2cDRXOTFK?=
- =?utf-8?B?TUZ6cW5Ma0M5cXMrL1oyUDBHT3dnOEsvKzIzSVNDVmcxVUQ2akNDem9YcDQ4?=
- =?utf-8?B?Qitqd3MrcUNEdkVUNmVwdHdjN1hOUUs4bk1jWkk1WWJ4bG9MSzhMTW5Hb0N4?=
- =?utf-8?B?UkhtRkdGU1RRa0QwMnRjdGFVUnhublhOOWVQemhETTBLT0lFYTVwc0hJZURz?=
- =?utf-8?B?eW1RcEZSVEdkeDN2cWNMamUyQmQ5aXhIVi9DSDExUGQ4K0g2WStJV21nUW1F?=
- =?utf-8?B?K1JXUWhiWHcxeDl6NU5WTkN5YWlsWTBTNXJyd2prOVlDVmo1Y2xxRzk4NFlx?=
- =?utf-8?B?MzNQNnpOMTc1ajJJdjRjVGRKRUFUcU5Jbm9tUWxEOUxER1JUOXZ3dEo1RFZy?=
- =?utf-8?B?SERvcERLcDNuVzNVb3daNkFvbHliU2dQRiszdUFXdm1FVk14QW9sSElPeUU0?=
- =?utf-8?B?VUozQXNVMXlnZmZXaFdNQzk1MGRUVVVxOG9GR2pyZlVRTndkbzBhUzBOUlZy?=
- =?utf-8?B?S3pvRWNKZDZ6ZWdCVDc3bHFlUzRJazFrKzFIN3pQRVE0V2h4SEEzRHdSWW43?=
- =?utf-8?B?ZHZmdjFlRC83TE1xazlsZkpoZXVmdVBNQ0hyM3Y1Ly91UElFcGRYKy84b1Mz?=
- =?utf-8?B?WC9kZWNHUi83NUx1REZaTFRhSjhiNjVOVkhxbTViUmkzK2xqVWdiQmwzUDNX?=
- =?utf-8?B?ZXlQd1FtTXg4TEN4Tk9UWFMyQlpBekJGeXM0K2FlNnZvV1RIN1IvQmNMSkZM?=
- =?utf-8?B?YmVvTkpHaW5IMG1BZFdrTUlkbnBNcmlOc0gya1hhL1VsdDVOdTdoZXFJRHJT?=
- =?utf-8?B?VU5FOEo0bkI5ZHJFckpST2ZySElYVERyNnZ5T2tzYzYxcWxQQ2ZtcDV5NnFz?=
- =?utf-8?Q?UGdcqZ/V/2oOkZRKWzg8Vhqtx?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e93cd70-c049-4c03-8f79-08da8240e756
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2022 00:14:09.8179
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aS5j1mQmnvFNtRJRRrNtggjkCSiEAAKoMQmde5d7q11T46wF8HNU4Nhe1h9EQ+667G8+h4ses5v/f0Ff6uMWcQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1797
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,86 +120,151 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/19/22 12:19, Axel Rasmussen wrote:
-> In various places both in t/t/s/v/Makefile as well as some of the test
-> sources, we were referring to headers or directories using some fairly
-> long relative paths.
+On Thu, Aug 18, 2022 at 08:00:41PM -0700, Hugh Dickins wrote:
+> On Thu, 18 Aug 2022, Kirill A . Shutemov wrote:
+> > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> > > 
+> > > If your memory could be swapped, that would be enough of a good reason
+> > > to make use of shmem.c: but it cannot be swapped; and although there
+> > > are some references in the mailthreads to it perhaps being swappable
+> > > in future, I get the impression that will not happen soon if ever.
+> > > 
+> > > If your memory could be migrated, that would be some reason to use
+> > > filesystem page cache (because page migration happens to understand
+> > > that type of memory): but it cannot be migrated.
+> > 
+> > Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
+> > theoretically possible, but I'm not aware of any plans as of now.
+> > 
+> > [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
 > 
-> Since we have a working top_srcdir variable though, which refers to the
-> root of the kernel tree, we can clean up all of these "up and over"
-> relative paths, just relying on the single variable instead.
+> I always forget, migration means different things to different audiences.
+> As an mm person, I was meaning page migration, whereas a virtualization
+> person thinks VM live migration (which that reference appears to be about),
+> a scheduler person task migration, an ornithologist bird migration, etc.
 > 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->   tools/testing/selftests/vm/Makefile    | 2 +-
->   tools/testing/selftests/vm/gup_test.c  | 2 +-
->   tools/testing/selftests/vm/hmm-tests.c | 4 ++--
->   tools/testing/selftests/vm/ksm_tests.c | 2 +-
->   4 files changed, 5 insertions(+), 5 deletions(-)
+> But you're an mm person too: you may have cited that reference in the
+> knowledge that TDX 1.5 Live Migration will entail page migration of the
+> kind I'm thinking of.  (Anyway, it's not important to clarify that here.)
 
+TDX 1.5 brings both.
 
-Very nice, thank you for the extra cleanup here.
+In TDX speak, mm migration called relocation. See TDH.MEM.PAGE.RELOCATE.
 
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+> > > Some of these impressions may come from earlier iterations of the
+> > > patchset (v7 looks better in several ways than v5).  I am probably
+> > > underestimating the extent to which you have taken on board other
+> > > usages beyond TDX and SEV private memory, and rightly want to serve
+> > > them all with similar interfaces: perhaps there is enough justification
+> > > for shmem there, but I don't see it.  There was mention of userfaultfd
+> > > in one link: does that provide the justification for using shmem?
+> > > 
+> > > I'm afraid of the special demands you may make of memory allocation
+> > > later on - surprised that huge pages are not mentioned already;
+> > > gigantic contiguous extents? secretmem removed from direct map?
+> > 
+> > The design allows for extension to hugetlbfs if needed. Combination of
+> > MFD_INACCESSIBLE | MFD_HUGETLB should route this way. There should be zero
+> > implications for shmem. It is going to be separate struct memfile_backing_store.
+> 
+> Last year's MFD_HUGEPAGE proposal would have allowed you to do it with
+> memfd via tmpfs without needing to involve hugetlbfs; but you may prefer
+> the determinism of hugetlbfs, relying on /proc/sys/vm/nr_hugepages etc.
+> 
+> But I've yet to see why you want to involve this or that filesystem
+> (with all its filesystem-icity suppressed) at all.  The backing store
+> is host memory, and tmpfs and hugetlbfs just impose their own
+> idiosyncrasies on how that memory is allocated; but I think you would
+> do better to choose your own idiosyncrasies in allocation directly -
+> you don't need a different "backing store" to choose between 4k or 2M
+> or 1G or whatever allocations.
 
-thanks,
+These idiosyncrasies are well known: user who used hugetlbfs may want to
+get direct replacement that would tap into the same hugetlb reserves and
+get the same allocation guarantees. Admins know where to look if ENOMEM
+happens.
+
+For THP, admin may know how to tweak allocation/defrag policy for his
+liking and how to track if they are allocated.
+
+> tmpfs and hugetlbfs and page cache are designed around sharing memory:
+> TDX is designed around absolutely not sharing memory; and the further
+> uses which Sean foresees appear not to need it as page cache either.
+> 
+> Except perhaps for page migration reasons.  It's somewhat incidental,  
+> but of course page migration knows how to migrate page cache, so
+> masquerading as page cache will give a short cut to page migration,
+> when page migration becomes at all possible.
+> 
+> > 
+> > I'm not sure secretmem is a fit here as we want to extend MFD_INACCESSIBLE
+> > to be movable if platform supports it and secretmem is not migratable by
+> > design (without direct mapping fragmentations).
+> > 
+> > > Here's what I would prefer, and imagine much easier for you to maintain;
+> > > but I'm no system designer, and may be misunderstanding throughout.
+> > > 
+> > > QEMU gets fd from opening /dev/kvm_something, uses ioctls (or perhaps
+> > > the fallocate syscall interface itself) to allocate and free the memory,
+> > > ioctl for initializing some of it too.  KVM in control of whether that
+> > > fd can be read or written or mmap'ed or whatever, no need to prevent it
+> > > in shmem.c, no need for flags, seals, notifications to and fro because
+> > > KVM is already in control and knows the history.  If shmem actually has
+> > > value, call into it underneath - somewhat like SysV SHM, and /dev/zero
+> > > mmap, and i915/gem make use of it underneath.  If shmem has nothing to
+> > > add, just allocate and free kernel memory directly, recorded in your
+> > > own xarray.
+> > 
+> > I guess shim layer on top of shmem *can* work. I don't see immediately why
+> > it would not. But I'm not sure it is right direction. We risk creating yet
+> > another parallel VM with own rules/locking/accounting that opaque to
+> > core-mm.
+> 
+> You are already proposing a new set of rules, foreign to how tmpfs works
+> for others.  You're right that KVM allocating large amounts of memory,
+> opaque to core-mm, carries risk: and you'd be right to say that shmem.c
+> provides some clues (security_vm_enough_memory checks, memcg charging,
+> user_shm_lock accounting) on what to remember.
+
+That's a nice list of clues that would need to be re-implemented somewhere
+else to get competent solution.
+
+> But I'm not up to the job of being the one to police you there,
+> and you don't want to be waiting on me either.
+
+> To take a rather silly example: Ted just added chattr support to tmpfs,
+> and it fits in well.  But I don't now want to have to decide whether
+> "chattr +i" FS_IMMUTABLE_FL is or is not compatible with
+> MEMFILE_F_USER_INACCESSIBLE.  They are from different worlds,
+> and I'd prefer KVM to carry the weight of imposing INACCESSIBLE:
+> which seems easily done if it manages the fd, without making the
+> memory allocated to that fd accessible to those who hold the fd.
+
+From a quick look, these are orthogonal. But it is not your point.
+
+Yes, INACCESSIBLE is increase of complexity which you do not want to deal
+with in shmem.c. It get it.
+
+I will try next week to rework it as shim to top of shmem. Does it work
+for you?
+
+But I think it is wrong to throw it over the fence to KVM folks and say it
+is your problem. Core MM has to manage it.
+
+> > Note that on machines that run TDX guests such memory would likely be the
+> > bulk of memory use. Treating it as a fringe case may bite us one day.
+> 
+> Yes, I suspected that machines running TDX guests might well consume
+> most of the memory that way, but glad(?) to hear it confirmed.
+> 
+> I am not suggesting that this memory be treated as a fringe case, rather
+> the reverse: a different case, not something to hide away inside shmem.c.
+> 
+> Is there a notion that /proc/meminfo "Shmem:" is going to be a good hint
+> of this usage?  Whether or not it's also included in "Shmem:", I expect
+> that its different characteristics will deserve its own display.
+
+That's the hint users know about from previous experience.
+
 -- 
-John Hubbard
-NVIDIA
-
-> 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index d9fa6a9ea584..d516b8c38eed 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -25,7 +25,7 @@ MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/p
->   # LDLIBS.
->   MAKEFLAGS += --no-builtin-rules
->   
-> -CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
-> +CFLAGS = -Wall -I $(top_srcdir) -I $(top_srcdir)/usr/include $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
->   LDLIBS = -lrt -lpthread
->   TEST_GEN_FILES = compaction_test
->   TEST_GEN_FILES += gup_test
-> diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
-> index a309876d832f..e43879291dac 100644
-> --- a/tools/testing/selftests/vm/gup_test.c
-> +++ b/tools/testing/selftests/vm/gup_test.c
-> @@ -10,7 +10,7 @@
->   #include <sys/types.h>
->   #include <pthread.h>
->   #include <assert.h>
-> -#include "../../../../mm/gup_test.h"
-> +#include <mm/gup_test.h>
->   #include "../kselftest.h"
->   
->   #include "util.h"
-> diff --git a/tools/testing/selftests/vm/hmm-tests.c b/tools/testing/selftests/vm/hmm-tests.c
-> index 529f53b40296..98b949c279be 100644
-> --- a/tools/testing/selftests/vm/hmm-tests.c
-> +++ b/tools/testing/selftests/vm/hmm-tests.c
-> @@ -35,8 +35,8 @@
->    * This is a private UAPI to the kernel test module so it isn't exported
->    * in the usual include/uapi/... directory.
->    */
-> -#include "../../../../lib/test_hmm_uapi.h"
-> -#include "../../../../mm/gup_test.h"
-> +#include <lib/test_hmm_uapi.h>
-> +#include <mm/gup_test.h>
->   
->   struct hmm_buffer {
->   	void		*ptr;
-> diff --git a/tools/testing/selftests/vm/ksm_tests.c b/tools/testing/selftests/vm/ksm_tests.c
-> index f5e4e0bbd081..0d85be2350fa 100644
-> --- a/tools/testing/selftests/vm/ksm_tests.c
-> +++ b/tools/testing/selftests/vm/ksm_tests.c
-> @@ -11,7 +11,7 @@
->   #include <err.h>
->   
->   #include "../kselftest.h"
-> -#include "../../../../include/vdso/time64.h"
-> +#include <include/vdso/time64.h>
->   #include "util.h"
->   
->   #define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
-
+  Kiryl Shutsemau / Kirill A. Shutemov
