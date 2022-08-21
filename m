@@ -2,59 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D229059B434
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Aug 2022 16:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09D259B4BD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Aug 2022 16:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231371AbiHUODM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Aug 2022 10:03:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        id S229561AbiHUO7s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Aug 2022 10:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiHUOCQ (ORCPT
+        with ESMTP id S229460AbiHUO7s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Aug 2022 10:02:16 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9837A237FE;
-        Sun, 21 Aug 2022 07:02:15 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        Sun, 21 Aug 2022 10:59:48 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054D3193F6
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Aug 2022 07:59:46 -0700 (PDT)
+Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4M9cck5gfZz9sCN;
-        Sun, 21 Aug 2022 14:02:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1661090535; bh=gAM4PdmlKYJueNZRxYQai5rsrcd4RNBV226N43DwD9Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CVLUh0Ly9AZ8LR2aeZvecWY2WSJLcPIilOQEIKr4Eb31cdkpeDTHjzP1D/DxnqRIY
-         Aw9pqGzIUjpli5kcZrnr6binnIvWJwX3RT9bZ+uc/+3wWJaHlxZnXqzSjjYkh0hkga
-         sxdPrpozkwfakKYnyltDfZr+QtRfBkj1fpUvyRak=
-X-Riseup-User-ID: E09EF545CEE7E54C355B6B896712ABD947769DA975F4710F7F3DD886C5666953
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M9ccg0KR5z5vQt;
-        Sun, 21 Aug 2022 14:02:10 +0000 (UTC)
-Message-ID: <b791c1ce-dd81-f864-dfe2-962ad5ac5d41@riseup.net>
-Date:   Sun, 21 Aug 2022 11:02:07 -0300
-MIME-Version: 1.0
-Subject: Re: [PATCH v2 4/5] lib/cpumask_kunit: log mask contents
-Content-Language: en-US
-To:     Sander Vanheule <sander@svanheule.net>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id E6E0530F38F;
+        Sun, 21 Aug 2022 16:59:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1661093985;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0L/1zZPXwT3KhPUeRIuxAhL42kC36ci9w7jqdIOHPso=;
+        b=B32SzHgQIDMetyv1Y75FzA1V6HOZKUguuPJwBxGPLn4uCXPDtzJKS99ys0FM4+YD+R4fch
+        Dogtpnqj+FUuxGUu5peMG3cotX1wcLZnbgmE0WmyM5pM2PIQJNUA44XAONDm0f9rZQ37u4
+        roX4g8Cm5F9pFCijNmghDoK52iKcfVgWA24JQw7t8bK9fnZaU7dstgWgr3NXhGNdpamzyu
+        5h7ziDW4lL3I5tsjj2WU/DVXESeI1wYIwDGvI4ReZ7zUKsF8hgtbvfjVip4U3pYA3YXUvS
+        /5k9292/tSHSRUPb+V4yWWiYg97T/odCY51fJU3a1/mzC355vJYfK5n2di72GA==
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
         David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-References: <cover.1661007338.git.sander@svanheule.net>
- <98cb4e5323c2059506e93cb39c32ba471031e487.1661007339.git.sander@svanheule.net>
- <YwFWHj0p/Uc0njme@yury-laptop>
- <49f6eaa7e8586e4eba39d636ef034fc1626e3bc2.camel@svanheule.net>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <49f6eaa7e8586e4eba39d636ef034fc1626e3bc2.camel@svanheule.net>
-Content-Type: text/plain; charset=UTF-8
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc:     linux-kernel@vger.kernel.org,
+        Sander Vanheule <sander@svanheule.net>
+Subject: [PATCH] kunit: fix assert_type for KUNIT_EXPECT_LE_MSG()
+Date:   Sun, 21 Aug 2022 16:59:40 +0200
+Message-Id: <20220821145940.277394-1-sander@svanheule.net>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,81 +57,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+When replacing KUNIT_BINARY_LE_MSG_ASSERTION() with
+KUNIT_BINARY_INT_ASSERTION() for KUNIT_EXPECT_LE_MSG(), the assert_type
+parameter was changed from KUNIT_EXPECTATION to KUNIT_ASSERTION.  This
+causes KUNIT_EXPECT_LE_MSG() and KUNIT_ASSERT_LE_MSG() to behave the
+same way, and tests after a failed KUNIT_EXPECT_LE_MSG() are not run.
 
+Call KUNIT_BINARY_INT_ASSERTIO() with KUNIT_EXPECTATION for again match
+the documented behavior for KUNIT_EXPECT_* macros.
 
-On 8/21/22 10:13, Sander Vanheule wrote:
-> On Sat, 2022-08-20 at 14:46 -0700, Yury Norov wrote:
->> On Sat, Aug 20, 2022 at 05:03:12PM +0200, Sander Vanheule wrote:
->>> For extra context, log the contents of the masks under test.  This
->>> should help with finding out why a certain test fails.
->>>
->>> Link:
->>> https://lore.kernel.org/lkml/CABVgOSkPXBc-PWk1zBZRQ_Tt+Sz1ruFHBj3ixojymZF=Vi4tpQ@mail.gmail.com/
->>> Suggested-by: David Gow <davidgow@google.com>
->>> Signed-off-by: Sander Vanheule <sander@svanheule.net>
->>> Reviewed-by: David Gow <davidgow@google.com>
->>> ---
->>>  lib/cpumask_kunit.c | 10 ++++++++++
->>>  1 file changed, 10 insertions(+)
->>>
->>> diff --git a/lib/cpumask_kunit.c b/lib/cpumask_kunit.c
->>> index 4d353614d853..0f8059a5e93b 100644
->>> --- a/lib/cpumask_kunit.c
->>> +++ b/lib/cpumask_kunit.c
->>> @@ -51,6 +51,10 @@
->>>  static cpumask_t mask_empty;
->>>  static cpumask_t mask_all;
->>>  
->>> +#define STR_MASK(m)                    #m
->>> +#define TEST_CPUMASK_PRINT(test, mask) \
->>> +       kunit_info(test, "%s = '%*pbl'\n", STR_MASK(mask), nr_cpumask_bits,
->>> cpumask_bits(mask))
->>> +
->>>  static void test_cpumask_weight(struct kunit *test)
->>>  {
->>>         KUNIT_EXPECT_TRUE(test, cpumask_empty(&mask_empty));
->>> @@ -103,6 +107,9 @@ static void test_cpumask_iterators_builtin(struct kunit
->>> *test)
->>>         /* Ensure the dynamic masks are stable while running the tests */
->>>         cpu_hotplug_disable();
->>>  
->>> +       TEST_CPUMASK_PRINT(test, cpu_online_mask);
->>> +       TEST_CPUMASK_PRINT(test, cpu_present_mask);
->>> +
->>>         EXPECT_FOR_EACH_CPU_BUILTIN_EQ(test, online);
->>>         EXPECT_FOR_EACH_CPU_BUILTIN_EQ(test, present);
->>>  
->>> @@ -114,6 +121,9 @@ static int test_cpumask_init(struct kunit *test)
->>>         cpumask_clear(&mask_empty);
->>>         cpumask_setall(&mask_all);
->>>  
->>> +       TEST_CPUMASK_PRINT(test, &mask_all);
->>> +       TEST_CPUMASK_PRINT(test, cpu_possible_mask);
->>> +
->>
->> It sort of breaks the rule of silence. Can you make this print conditional
->> on a test failure? If everything is OK, who wants to look into details? 
-> 
-> I will change the macros to the _MSG versions, and log the mask there.
-> 
-> I implemented this with kunit_info() as David proposed. AFAICT I can't call 
-> kunit_info() only when the test fails, because the EXPECT_ macros don't return
-> any result.
+Fixes: 40f39777ce4f ("kunit: decrease macro layering for integer asserts")
+Signed-off-by: Sander Vanheule <sander@svanheule.net>
+---
+ include/kunit/test.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Maybe you can use KUNIT_EXPECT_EQ_MSG to print a more detailed error and
-avoid printing the info when the test doesn't fail.
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index c958855681cc..617ec995671d 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -826,7 +826,7 @@ do {									       \
+ 
+ #define KUNIT_EXPECT_LE_MSG(test, left, right, fmt, ...)		       \
+ 	KUNIT_BINARY_INT_ASSERTION(test,				       \
+-				   KUNIT_ASSERTION,			       \
++				   KUNIT_EXPECTATION,			       \
+ 				   left, <=, right,			       \
+ 				   fmt,					       \
+ 				    ##__VA_ARGS__)
+-- 
+2.37.2
 
-Best Regards,
-- Maíra Canal
-
-> 
-> Best,
-> Sander
-> 
->>
->>>         return 0;
->>>  }
->>>  
->>> -- 
->>> 2.37.2
-> 
