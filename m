@@ -2,137 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C1D59B3E9
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Aug 2022 15:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4956E59B408
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Aug 2022 15:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiHUN2B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Aug 2022 09:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S230293AbiHUNnK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Aug 2022 09:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiHUN17 (ORCPT
+        with ESMTP id S229787AbiHUNnJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Aug 2022 09:27:59 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A5E1EADF
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Aug 2022 06:27:58 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 2143530F327;
-        Sun, 21 Aug 2022 15:27:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1661088477;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vvsu5VPNuHA39zj3/LpeneZN62u/9ZSx0U+NwaMKuhs=;
-        b=jQhs/igJ9gB/XJnu8JrKd49u/9IiXhQegyGvjj/zMkqyMBEIEb0eqHglov/+9J/rVQuV9W
-        pZ3kKkjP4sNHT+mfE4dsDQKd98o8ebcNrqBp7QiOaekWy51cnDzc6gvUkIK7svY8/Ch0sZ
-        1NE0LUrdu6qxlja1MvTSsMs+U66rwXHxX0mfn8mVz+1TyBDvZJhgmfQ6lyeixGk1bXxD6n
-        Lzd0v2YCY3IGiczeP6aLAt1c9hDv4fVW49VPNOk2O6q/BcO+ZJJGWRtVfZjfxo1FhiOlMV
-        OcPuW+6wRCt5KljOmgAUkbr9t1xDYb7yzOUqPs4wwmHu3wo9Ur0rvnN+WAtn5Q==
-Message-ID: <84564f0f7db4a58ab7cd5314685ca2413c1d7081.camel@svanheule.net>
-Subject: Re: [PATCH v2 1/5] lib/test_cpumask: drop cpu_possible_mask full
- test
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
-        =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Sun, 21 Aug 2022 15:27:56 +0200
-In-Reply-To: <CAAH8bW9yZUMn2shYAB1LaDyzgFMYtWCRUXxq=bMCiFys=gzKig@mail.gmail.com>
-References: <cover.1661007338.git.sander@svanheule.net>
-         <6dfd4d3a4d77f97f13ab3f22bc53c96c38ba908e.1661007339.git.sander@svanheule.net>
-         <YwFToOOFKsr/mL7X@yury-laptop>
-         <9f28529005867512105182f8fa2b0f7b0d14b30d.camel@svanheule.net>
-         <CAAH8bW9yZUMn2shYAB1LaDyzgFMYtWCRUXxq=bMCiFys=gzKig@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Sun, 21 Aug 2022 09:43:09 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DDA22BFB;
+        Sun, 21 Aug 2022 06:43:07 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id EE37018846D4;
+        Sun, 21 Aug 2022 13:43:04 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id E76D125032B7;
+        Sun, 21 Aug 2022 13:43:04 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id DC96FA1A004D; Sun, 21 Aug 2022 13:43:04 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Sun, 21 Aug 2022 15:43:04 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <YwHZ1J9DZW00aJDU@shredder>
+References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
+ <YvkM7UJ0SX+jkts2@shredder>
+ <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
+ <YwHZ1J9DZW00aJDU@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <ce4266571b2b47ae8d56bd1f790cb82a@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Yury,
+On 2022-08-21 09:08, Ido Schimmel wrote:
+> On Fri, Aug 19, 2022 at 11:51:11AM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-08-14 16:55, Ido Schimmel wrote:
+>> > On Fri, Aug 12, 2022 at 02:29:48PM +0200, netdev@kapio-technology.com
+>> > wrote:
+>> > > On 2022-08-11 13:28, Ido Schimmel wrote:
+>> > >
+>> > > > > > I'm talking about roaming, not forwarding. Let's say you have a locked
+>> > > > > > entry with MAC X pointing to port Y. Now you get a packet with SMAC X
+>> > > > > > from port Z which is unlocked. Will the FDB entry roam to port Z? I
+>> > > > > > think it should, but at least in current implementation it seems that
+>> > > > > > the "locked" flag will not be reset and having locked entries pointing
+>> > > > > > to an unlocked port looks like a bug.
+>> 
+>> I have made the locked entries sticky in the bridge, so that they 
+>> don't move
+>> to other ports.
+> 
+> Please make sure that this design choice is explained in the commit
+> message. To be clear, it cannot be "this is how device X happens to
+> work".
+> 
 
-Replying back in plaintext, as you sent an HTML message.
+The real issue I think is that the locked entry should mask the MAC 
+address involved (as the description I gave for zero-DPV entries and 
+actually also storm prevention entries ensure), so that there is no 
+forwarding to the address on any port, otherwise it will allow one-way 
+traffic to a host that is not trusted. Thus flooding of unknown unicast 
+on a locked port should of course be disabled ('flood off'), so that 
+there is no way of sending to an unauthorized silent host behind the 
+locked port.
 
-On Sun, 2022-08-21 at 09:18 -0400, Yury Norov wrote:
->=20
->=20
-> On Sun, Aug 21, 2022, 09:08 Sander Vanheule <sander@svanheule.net> wrote:
-> > Hi Yury,
-> >=20
-> > On Sat, 2022-08-20 at 14:35 -0700, Yury Norov wrote:
-> > > On Sat, Aug 20, 2022 at 05:03:09PM +0200, Sander Vanheule wrote:
-> > > > When the number of CPUs that can possibly be brought online is know=
-n at
-> > > > boot time, e.g. when HOTPLUG is disabled, nr_cpu_ids may be smaller=
- than
-> > > > NR_CPUS. In that case, cpu_possible_mask would not be completely fi=
-lled,
-> > > > and cpumask_full(cpu_possible_mask) can return false for valid syst=
-em
-> > > > configurations.
-> > >=20
-> > > It doesn't mean we can just give up. You can check validity of possib=
-le
-> > > cpumask like this:=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_EQ(test, nr_c=
-pu_ids, cpumask_first_zero(&mask_all))
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_EQ(test, NR_C=
-PUS, cpumask_first(&mask_all))
-> >=20
-> > Did you mean cpu_possible_mask, or mask_all?
->=20
-> cpu_possble_as of curse.
->=20
-> > For cpu_possible_mask, these tests are in test_cpumask_first(), albeit =
-under
-> > a
-> > slightly different form. Together with the tests in test_cpumask_weight=
-()
-> > and
-> > test_cpumask_last(), cpu_possible_mask is already one of the more
-> > constrained
-> > masks.
-> >=20
-> >=20
-> > For mask_all, the mask is filled up with nr_cpumask_bits <=3D NR_CPUS. =
-I could
-> > add
-> > cpumask_first(), cpumask_first_zero(), and cpumask_last() tests though.
-> >=20
-> > More tests could be also added for cpu_all_mask, since this does have a=
-ll
-> > NR_CPUS bits set, but I think that belongs in a separate patch.
-> >=20
-> > I think the extra mask_all and cpu_all_mask test are out of scope for t=
-his
-> > patch, but they could be added in another patch (for 6.1).
->=20
-> If you think that possible mask is tested by other parts, then can you no=
-tice
-> that in comments?
+The issue with the locked entry appearing on another SW bridge port from 
+where it originated, I think is more of a cosmetic bug, though I could 
+be mistaken. But adding the sticky flag to locked entries ensures that 
+they do not move to another port.
 
-Sure, I'll update the commit message to note the other constraints on
-cpu_possible_mask.
+This of course does that instant roaming is not possible, but I think 
+that the right approach is to use the ageing out of entries to allow the 
+station move/roaming.
 
-Best,
-Sander
+The case of unwanted traffic to a MAC behind a locked port with a locked 
+entry is what I would regard as more worthy of a selftest. The sticky 
+flag I know will ensure that the locked entries do not move to other 
+ports, and since it is only in the bridge this can be tested (e.g. using 
+'bridge fdb show dev DEV'), I think that the test would be superfluos. 
+What do you think of that and my other consideration for a test?
 
+
+>> I have now created the flag to enable Mac-Auth/MAB with iproute2:
+>> bridge link set dev DEV macauth on|off
+> 
+> You have 'macauth' here, but 'mab' in the output below. They need to
+> match. I prefer the latter unless you have a good reason to use
+> 'macauth'.
+> 
+>> 
+>> with the example output from 'bridge -d link show dev DEV' when 
+>> macauth is
+>> enabled:
+>> 1: ethX: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master br0 state
+>> forwarding priority 32 cost 19
+>>     hairpin off guard off root_block off fastleave off learning on 
+>> flood off
+>> mcast_flood on bcast_flood on mcast_router 1 mcast_to_unicast off
+>> neigh_suppress off vlan_tunnel off isolated off locked mab on
+>> 
+>> The flag itself in the code is called BR_PORT_MACAUTH.
+>> 
+>> >
+>> > Fine by me, but I'm not sure everyone agrees.
+
+I will change it in iproute2 to:
+bridge link set dev DEV mab on|off
