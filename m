@@ -2,203 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC22259B579
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Aug 2022 18:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782C759B69C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Aug 2022 00:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiHUQkE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Aug 2022 12:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
+        id S231328AbiHUWWq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Aug 2022 18:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbiHUQkC (ORCPT
+        with ESMTP id S229541AbiHUWWp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Aug 2022 12:40:02 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB072186C3
-        for <linux-kselftest@vger.kernel.org>; Sun, 21 Aug 2022 09:39:59 -0700 (PDT)
-Received: from [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd] (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
+        Sun, 21 Aug 2022 18:22:45 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D59A183B1;
+        Sun, 21 Aug 2022 15:22:44 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 36E7530F40D;
-        Sun, 21 Aug 2022 18:39:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1661099997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=btYU0hY8FQEp2zkTFhPT21xYKh/ZrlHIaS3DTYBgHhk=;
-        b=v/U9Uirf+4zpQTGdFbZWMp2SD96Q5Enw+AAp2oiyq//MlT5f5u+viebdwcHvmncoMsJsj+
-        mjUA5L8J1kRQF6POcwxLQIRovTYSoR3IOn6aKc4azPaO/sk2T9uAw41K1lgsWErLKmAbCJ
-        hC+JSxEXBABuQzVSHiR2c1tUooAeogaFO4dXNgIqabxG0OyThAimRJkMZkn+vxseVh+s0l
-        mDaaMA9t10wKjfgkfh0YYX/+1xIj87jk8WBlCeWXnDooK8T4Tch3YSh4j/mnkRZEUqLMgn
-        oaCQuT/N4/RRAwUEIsTk4zfAOEYmx+8nCZi2CNbH44qY876Av0nwQ7VrckEy+w==
-Message-ID: <100b2b54ff0839d4ddff70d43d5efa6d04300a78.camel@svanheule.net>
-Subject: Re: [PATCH v2 4/5] lib/cpumask_kunit: log mask contents
-From:   Sander Vanheule <sander@svanheule.net>
-To:     =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4M9qkB3q3RzDr9K;
+        Sun, 21 Aug 2022 22:22:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1661120563; bh=ccrF4EfkahHpt/9Pba8wQctpnDNAB+Jj9k09ArPwhpc=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+        b=Uiv66D+U+gLOe7JE6i/oAl/E0FWpEbo+VZnWG24uszi9cNT1zkOpc8pufuhTFZ9lN
+         MONx1BfcGTjtuMpMB2ydJ3EM7TveoQ6vG30WQlY5Oalfp9Wy56W/RPOs32B8HVdv/0
+         4H0cTd/hcAahRWzr89TMVLCtK9O4eq5WYQK7fz6w=
+X-Riseup-User-ID: 8AD00409068A65E08A13AA40A73B9388512B00AE92B6AD68FCA47EEA686532D1
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4M9qk239Jyz5vY6;
+        Sun, 21 Aug 2022 22:22:33 +0000 (UTC)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
+From:   Isabella Basso <isabbasso@riseup.net>
+In-Reply-To: <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
+Date:   Sun, 21 Aug 2022 19:22:30 -0300
+Cc:     =?utf-8?Q?Ma=C3=ADra_Canal?= <maira.canal@usp.br>,
+        Matthew Auld <matthew.william.auld@gmail.com>,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        Rodrigo Siqueira <siqueirajordao@riseup.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org, n@nfraprado.net,
+        andrealmeid@riseup.net, magalilemes00@gmail.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        kunit-dev@googlegroups.com, mwen@igalia.com,
         David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 21 Aug 2022 18:39:53 +0200
-In-Reply-To: <b791c1ce-dd81-f864-dfe2-962ad5ac5d41@riseup.net>
-References: <cover.1661007338.git.sander@svanheule.net>
-         <98cb4e5323c2059506e93cb39c32ba471031e487.1661007339.git.sander@svanheule.net>
-         <YwFWHj0p/Uc0njme@yury-laptop>
-         <49f6eaa7e8586e4eba39d636ef034fc1626e3bc2.camel@svanheule.net>
-         <b791c1ce-dd81-f864-dfe2-962ad5ac5d41@riseup.net>
-Content-Type: text/plain; charset="UTF-8"
+        Shuah Khan <skhan@linuxfoundation.org>,
+        =?utf-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
+        tales.aparecida@gmail.com,
+        kernel list <linux-kernel@vger.kernel.org>,
+        leandro.ribeiro@collabora.com,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-Id: <52481C88-9CD7-4E4F-ABCB-1EFC01E4B4D0@riseup.net>
+References: <20220708203052.236290-1-maira.canal@usp.br>
+ <20220708203052.236290-10-maira.canal@usp.br>
+ <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
+ <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
+ <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
+To:     =?utf-8?Q?Micha=C5=82_Winiarski?= <michal@hardline.pl>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ma=C3=ADra,
+Hi Micha=C5=82,
 
-On Sun, 2022-08-21 at 11:02 -0300, Ma=C3=ADra Canal wrote:
+While I totally understand your point, we have talked about this in our =
+GSoC
+meetings with mentors, and have found a few reasons as to why a KUnit =
+runner
+integrated to IGT might be really useful.=20
+
+> Am 22/07/2022 um 1:25 PM schrieb Micha=C5=82 Winiarski =
+<michal@hardline.pl>:
 >=20
+> On Fri, Jul 22, 2022 at 08:04:51AM -0300, Ma=C3=ADra Canal wrote:
+>> On 7/22/22 07:35, Matthew Auld wrote:
+>>> On Fri, 8 Jul 2022 at 21:32, Ma=C3=ADra Canal <maira.canal@usp.br> =
+wrote:
+>>>>=20
+>>>> From: Arthur Grillo <arthur.grillo@usp.br>
+>>>>=20
+>>>> Considering the current adoption of the KUnit framework, convert =
+the
+>>>> DRM mm selftest to the KUnit API.
+>>>=20
+>>> Is there a plan to convert the corresponding selftest IGT that was
+>>> responsible for running this (also drm_buddy) to somehow work with
+>>> kunit? Previously these IGTs were always triggered as part of
+>>> intel-gfx CI, but it looks like they are no longer run[1].
+>>>=20
+>>> [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
+>>=20
+>> Hi Matthew,
+>>=20
+>> Isabella sent a while ago a patch to IGT adding KUnit compatibility =
+to
+>> IGT [1], but there wasn't any feedback on the patch. I believe that =
+soon
+>> she will resend the series in order to make all KUnit DRM tests run =
+on IGT.
+>>=20
+>> Any feedback on the patch is welcomed so that we can fix this issue =
+as
+>> soon as possible.
+>>=20
+>> [1] https://patchwork.freedesktop.org/patch/489985/
+>>=20
+>> Best Regards,
+>> - Ma=C3=ADra Canal
 >=20
-> On 8/21/22 10:13, Sander Vanheule wrote:
-> > On Sat, 2022-08-20 at 14:46 -0700, Yury Norov wrote:
-> > > On Sat, Aug 20, 2022 at 05:03:12PM +0200, Sander Vanheule wrote:
-> > > > For extra context, log the contents of the masks under test.=C2=A0 =
-This
-> > > > should help with finding out why a certain test fails.
-> > > >=20
-> > > > Link:
-> > > > https://lore.kernel.org/lkml/CABVgOSkPXBc-PWk1zBZRQ_Tt+Sz1ruFHBj3ix=
-ojymZF=3DVi4tpQ@mail.gmail.com/
-> > > > Suggested-by: David Gow <davidgow@google.com>
-> > > > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > > > Reviewed-by: David Gow <davidgow@google.com>
-> > > > ---
-> > > > =C2=A0lib/cpumask_kunit.c | 10 ++++++++++
-> > > > =C2=A01 file changed, 10 insertions(+)
-> > > >=20
-> > > > diff --git a/lib/cpumask_kunit.c b/lib/cpumask_kunit.c
-> > > > index 4d353614d853..0f8059a5e93b 100644
-> > > > --- a/lib/cpumask_kunit.c
-> > > > +++ b/lib/cpumask_kunit.c
-> > > > @@ -51,6 +51,10 @@
-> > > > =C2=A0static cpumask_t mask_empty;
-> > > > =C2=A0static cpumask_t mask_all;
-> > > > =C2=A0
-> > > > +#define STR_MASK(m)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-#m
-> > > > +#define TEST_CPUMASK_PRINT(test, mask)=C2=A0\
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kunit_info(test, "%s =3D=
- '%*pbl'\n", STR_MASK(mask),
-> > > > nr_cpumask_bits,
-> > > > cpumask_bits(mask))
-> > > > +
-> > > > =C2=A0static void test_cpumask_weight(struct kunit *test)
-> > > > =C2=A0{
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_TRUE(t=
-est, cpumask_empty(&mask_empty));
-> > > > @@ -103,6 +107,9 @@ static void test_cpumask_iterators_builtin(stru=
-ct
-> > > > kunit
-> > > > *test)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Ensure the dynam=
-ic masks are stable while running the tests
-> > > > */
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cpu_hotplug_disable=
-();
-> > > > =C2=A0
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0TEST_CPUMASK_PRINT(test,=
- cpu_online_mask);
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0TEST_CPUMASK_PRINT(test,=
- cpu_present_mask);
-> > > > +
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0EXPECT_FOR_EACH_CPU=
-_BUILTIN_EQ(test, online);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0EXPECT_FOR_EACH_CPU=
-_BUILTIN_EQ(test, present);
-> > > > =C2=A0
-> > > > @@ -114,6 +121,9 @@ static int test_cpumask_init(struct kunit *test=
-)
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cpumask_clear(&mask=
-_empty);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cpumask_setall(&mas=
-k_all);
-> > > > =C2=A0
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0TEST_CPUMASK_PRINT(test,=
- &mask_all);
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0TEST_CPUMASK_PRINT(test,=
- cpu_possible_mask);
-> > > > +
-> > >=20
-> > > It sort of breaks the rule of silence. Can you make this print condit=
-ional
-> > > on a test failure? If everything is OK, who wants to look into detail=
-s?=20
-> >=20
-> > I will change the macros to the _MSG versions, and log the mask there.
-> >=20
-> > I implemented this with kunit_info() as David proposed. AFAICT I can't =
-call=20
-> > kunit_info() only when the test fails, because the EXPECT_ macros don't
-> > return
-> > any result.
+> Hi.
 >=20
-> Maybe you can use KUNIT_EXPECT_EQ_MSG to print a more detailed error and
-> avoid printing the info when the test doesn't fail.
+> Instead of going back to using IGT for *unit* tests, it would be a =
+better idea
+> to adjust the CI to just run the tests once at "build" time (just like =
+e.g.
+> checkpatch).
 
-Yes, this is what I currently have for use with the _MSG() variants of the
-macros:
+First, I=E2=80=99d like to point out that there would be some inherent =
+overhead in
+doing so, which might actually not be worth it, as KUnit tool would need =
+to
+compile HEAD in the UML arch, then we=E2=80=99d have to re-compile =
+everything to a real
+machine=E2=80=99s architecture, like x86_64 (in the least), having in =
+mind still that
+arch-dependent issues would not show up when we run tests in UML, so =
+there=E2=80=99s
+still a downside to it even if it=E2=80=99s quick enough.
 
-+#define MASK_MSG(m)                    \
-+       "%s contains %sCPUs %*pbl", #m, (cpumask_weight(m) ? "" : "no "), n=
-r_cpumask_bits, cpumask_bits(m)
-+
+Even if we don=E2=80=99t run them as UML and instead use a VM, there=E2=80=
+=99s a VM being run
+just for a couple of tests, which might be slower than adding a step to =
+a
+dedicated machine that=E2=80=99s (probably) already available, plus the =
+setup and
+hardware needed to run a VM inside of a CI runner are overheads in =
+themselves,
+needing dedicated, modern machines.
 
-For example, with (bogus) KUNIT_EXPECT_TRUE_MSG(test, ..., MASK_MSG(mask)) =
-this
-becomes (trimmed):
+> We would then stop executing the same test multiple times on different =
+machines
+> (note that both DRM selftests and i915 "mock" selftests are pure unit =
+tests - in
+> other words, they don't need the hardware to be present), which would =
+save some
+> (small) amount of machine-time that can be utilized to do something =
+that
+> actually needs the hardware.
 
-$ ./tools/testing/kunit/kunit.py run  --build_dir=3Dbuild-um cpumask
-[...]
-[18:15:33] # test_cpumask_weight: EXPECTATION FAILED at lib/cpumask_kunit.c=
-:60
-[18:15:33] Expected cpumask_empty(((struct cpumask *)(1 ? (cpu_all_bits) : =
-(void *)sizeof(__check_is_bitmap(cpu_all_bits))))) to be true, but is false
-[18:15:33]=20
-[18:15:33] cpu_all_mask contains CPUs 0
-[18:15:33] # test_cpumask_weight: EXPECTATION FAILED at lib/cpumask_kunit.c=
-:61
-[18:15:33] Expected cpumask_full(&mask_empty) to be true, but is false
-[18:15:33]=20
-[18:15:33] &mask_empty contains no CPUs
-[18:15:33] not ok 1 - test_cpumask_weight
-[18:15:33] [FAILED] test_cpumask_weight
-[...]
+I totally agree with your solution in regards to arch-independent tests, =
+though.
 
-Or on a real system:
-[    1.246805]     # test_cpumask_weight: EXPECTATION FAILED at lib/cpumask=
-_kunit.c:59
-[    1.246805]     Expected cpumask_empty(((struct cpumask *)(1 ? (cpu_all_=
-bits) : (void *)sizeof(__check_is_bitmap(cpu_all_bits))))) to be true, but =
-is false
-[    1.246805]=20
-[    1.246805] cpu_all_mask contains CPUs 0-1
-[    1.249756]     not ok 1 - test_cpumask_weight
+> Plus there's no need to maintain the kunit-runner in IGT.
+> Note - we're currently going to lose "DMESG-WARN" detection if we go =
+this route,
+> but this is something that can be improved on the kunit-side.
+>=20
+> -Micha=C5=82
 
-I will send an updated series tomorrow, in case David or others have more m=
-ore comments.
+There=E2=80=99s also a point to be made on maintaining such a runner if =
+we think about
+companies like AMD, as they rely heavily on IGT, so they have lots of =
+tests
+written in there, and it'd be difficult for them to accommodate one more
+non-trivial thing to their CI. Plus I think this might be a good =
+starting point
+for them to transition their CI to a KUnit-centered approach without =
+stressing
+engineers unnecessarily.
 
-Best,
-Sander
+Cheers,
+=E2=80=94
+Isabella
+
