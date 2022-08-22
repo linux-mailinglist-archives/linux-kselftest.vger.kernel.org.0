@@ -2,400 +2,316 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C67A159CAD2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Aug 2022 23:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27AA59CAFF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Aug 2022 23:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238014AbiHVV2p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Aug 2022 17:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S238249AbiHVVmZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Aug 2022 17:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiHVV2o (ORCPT
+        with ESMTP id S238228AbiHVVmX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Aug 2022 17:28:44 -0400
-Received: from smtp-bc0d.mail.infomaniak.ch (smtp-bc0d.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162C214D29
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Aug 2022 14:28:41 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MBQTM3XRkzMqFPq;
-        Mon, 22 Aug 2022 23:28:39 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MBQTL412Mzlh8T9;
-        Mon, 22 Aug 2022 23:28:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1661203719;
-        bh=NBvnN0srp4NU2AmIbBfbmmq73i/WpK5gIAqBELOHKtc=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=UsmjGpiHfRt/FNVIh+JeakOHFgFNE/sKs98PrTcIg3CJju90lshevJQ+FP4+GU1LR
-         8IIpeRm2yS37pXgdtOyWVoN6JHeACXoOyiREIIdU9a8aIv9GDgEm016GbbSu/ehY8p
-         w5xzQfsANpmEtfgbBUvsYdQ9hpieM7K3zsvT8q3k=
-Message-ID: <223344b1-036a-2f25-727f-6262e1b7a763@digikod.net>
-Date:   Mon, 22 Aug 2022 23:28:37 +0200
-MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org, corbet@lwn.net,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220822114701.26975-1-xiujianfeng@huawei.com>
- <20220822114701.26975-4-xiujianfeng@huawei.com> <YwPQpz0lV5CVBVeK@nuc>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [PATCH -next 3/5] landlock/selftests: add selftests for chmod and
- chown
-In-Reply-To: <YwPQpz0lV5CVBVeK@nuc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 Aug 2022 17:42:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88CB564D2;
+        Mon, 22 Aug 2022 14:42:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3ADABB81982;
+        Mon, 22 Aug 2022 21:42:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F27C433C1;
+        Mon, 22 Aug 2022 21:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661204538;
+        bh=m3afk3mljkvownoqx6MC00ioq6Fmulwr4fb2KxjYoHM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PYqyst0c/Rsc+ShBpyzFzAilHnFn3hycljOEIChGLUbJhQIsLJgPvnhh+7FgjHZRU
+         nslyP/dSlL0Q4A+e0GgacIWJ65CO0qqnm0LTOvPiQ8TkudfxcnVN7Ua24PBegg6/08
+         HszYQM7XTYA8iW6ZSOlny9jOOPFo5Wwp/zXizabqwYB3BwNxV+lZwITw1jKtcYBT4t
+         K+UqcBl3HhRozYVIOllwNBqIsXsg+n3ShVXuHmB+gre0VjUlYRbPe8vv6etglQy9wT
+         ClUPKAQRNS3QYE4GHr4zqqZjEVzasMPBJR2JRO9XOZjlRZkmFm+XkGzo7tzSNDzzzZ
+         FIUdpa3iZS+Pg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oQFBY-004xE0-EA;
+        Mon, 22 Aug 2022 22:42:16 +0100
+Date:   Mon, 22 Aug 2022 22:42:15 +0100
+Message-ID: <87fshovtu0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net,
+        james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
+        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory tracking
+In-Reply-To: <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+References: <20220819005601.198436-1-gshan@redhat.com>
+        <20220819005601.198436-2-gshan@redhat.com>
+        <87lerkwtm5.wl-maz@kernel.org>
+        <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, drjones@redhat.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Agree with Günther's review. :)
+Hi Gavin,
+
+On Mon, 22 Aug 2022 02:58:20 +0100,
+Gavin Shan <gshan@redhat.com> wrote:
+>=20
+> Hi Marc,
+>=20
+> On 8/19/22 6:00 PM, Marc Zyngier wrote:
+> > On Fri, 19 Aug 2022 01:55:57 +0100,
+> > Gavin Shan <gshan@redhat.com> wrote:
+> >>=20
+> >> The ring-based dirty memory tracking has been available and enabled
+> >> on x86 for a while. The feature is beneficial when the number of
+> >> dirty pages is small in a checkpointing system or live migration
+> >> scenario. More details can be found from fb04a1eddb1a ("KVM: X86:
+> >> Implement ring-based dirty memory tracking").
+> >>=20
+> >> This enables the ring-based dirty memory tracking on ARM64. It's
+> >> notable that no extra reserved ring entries are needed on ARM64
+> >> because the huge pages are always split into base pages when page
+> >> dirty tracking is enabled.
+> >=20
+> > Can you please elaborate on this? Adding a per-CPU ring of course
+> > results in extra memory allocation, so there must be a subtle
+> > x86-specific detail that I'm not aware of...
+> >=20
+>=20
+> Sure. I guess it's helpful to explain how it works in next revision.
+> Something like below:
+>=20
+> This enables the ring-based dirty memory tracking on ARM64. The feature
+> is enabled by CONFIG_HAVE_KVM_DIRTY_RING, detected and enabled by
+> CONFIG_HAVE_KVM_DIRTY_RING. A ring buffer is created on every vcpu and
+> each entry is described by 'struct kvm_dirty_gfn'. The ring buffer is
+> pushed by host when page becomes dirty and pulled by userspace. A vcpu
+> exit is forced when the ring buffer becomes full. The ring buffers on
+> all vcpus can be reset by ioctl command KVM_RESET_DIRTY_RINGS.
+>=20
+> Yes, I think so. Adding a per-CPU ring results in extra memory allocation.
+> However, it's avoiding synchronization among multiple vcpus when dirty
+> pages happen on multiple vcpus. More discussion can be found from [1]
+
+Oh, I totally buy the relaxation of the synchronisation (though I
+doubt this will have any visible effect until we have something like
+Oliver's patches to allow parallel faulting).
+
+But it is the "no extra reserved ring entries are needed on ARM64"
+argument that I don't get yet.
 
 
-On 22/08/2022 20:53, Günther Noack wrote:
-> On Mon, Aug 22, 2022 at 07:46:59PM +0800, Xiu Jianfeng wrote:
->> Add the following simple testcases:
->> 1. chmod/fchmod: remove S_IWUSR and restore S_IWUSR with or without
->> restriction.
->> 2. chown/fchown: set original uid and gid with or without restriction,
->> because chown needs CAP_CHOWN and testcase framework don't have this
->> capability, setting original uid and gid is ok to cover landlock
->> function.
->>
->> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->> ---
->>   tools/testing/selftests/landlock/fs_test.c | 228 +++++++++++++++++++++
->>   1 file changed, 228 insertions(+)
->>
->> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
->> index 5b55b93b5570..f47b4ccd2b26 100644
->> --- a/tools/testing/selftests/landlock/fs_test.c
->> +++ b/tools/testing/selftests/landlock/fs_test.c
->> @@ -59,6 +59,9 @@ static const char file2_s2d3[] = TMP_DIR "/s2d1/s2d2/s2d3/f2";
->>
->>   static const char dir_s3d1[] = TMP_DIR "/s3d1";
->>   static const char file1_s3d1[] = TMP_DIR "/s3d1/f1";
->> +static const char file2_s3d1[] = TMP_DIR "/s3d1/f2";
->> +static const char file3_s3d1[] = TMP_DIR "/s3d1/f3";
->> +
->>   /* dir_s3d2 is a mount point. */
->>   static const char dir_s3d2[] = TMP_DIR "/s3d1/s3d2";
->>   static const char dir_s3d3[] = TMP_DIR "/s3d1/s3d2/s3d3";
->> @@ -211,6 +214,8 @@ static void create_layout1(struct __test_metadata *const _metadata)
->>   	create_file(_metadata, file2_s2d3);
->>
->>   	create_file(_metadata, file1_s3d1);
->> +	create_file(_metadata, file2_s3d1);
->> +	create_file(_metadata, file3_s3d1);
->>   	create_directory(_metadata, dir_s3d2);
->>   	set_cap(_metadata, CAP_SYS_ADMIN);
->>   	ASSERT_EQ(0, mount("tmp", dir_s3d2, "tmpfs", 0, "size=4m,mode=700"));
->> @@ -234,6 +239,8 @@ static void remove_layout1(struct __test_metadata *const _metadata)
->>   	EXPECT_EQ(0, remove_path(file1_s2d1));
->>
->>   	EXPECT_EQ(0, remove_path(file1_s3d1));
->> +	EXPECT_EQ(0, remove_path(file2_s3d1));
->> +	EXPECT_EQ(0, remove_path(file3_s3d1));
->>   	EXPECT_EQ(0, remove_path(dir_s3d3));
->>   	set_cap(_metadata, CAP_SYS_ADMIN);
->>   	umount(dir_s3d2);
->> @@ -3272,6 +3279,227 @@ TEST_F_FORK(layout1, truncate)
->>   	EXPECT_EQ(0, test_creat(file_in_dir_w));
->>   }
->>
->> +static int test_chmod(const char *path)
-> 
-> Nitpicks:
->   - const char *const path
->   - short documentation? :)
-> 
->> +{
->> +	int ret;
->> +	struct stat st;
->> +	mode_t mode;
->> +
->> +	ret = stat(path, &st);
->> +	if (ret < 0)
->> +		return errno;
->> +	/* save original mode in order to restore */
->> +	mode = st.st_mode & 0777;
->> +	/* remove S_IWUSR */
->> +	ret = chmod(path, mode & ~0200);
->> +	if (ret < 0)
->> +		return errno;
->> +	ret = stat(path, &st);
->> +	if (ret < 0)
->> +		return errno;
->> +	/* check if still has S_IWUSR */
->> +	if (st.st_mode & 0200)
->> +		return -EFAULT;
->> +	/* restore the original mode */
->> +	ret = chmod(path, mode);
->> +	if (ret < 0)
->> +		return errno;
->> +	return 0;
->> +}
-> 
-> I would argue this can be simpler, with the following reasoning:
-> 
->   - Does the file have the right mode after chmod()?
-> 
->     I claim that fs_test should care only about the question of whether
->     EACCES is returned or not. If fs_test were to also check for the
->     side effects of these operations, it would eventually contain tests
->     for the full file system API, not just for Landlock. That seems out
->     of scope :)
-> 
->   - Undoing the chmod() operation
-> 
->     I'm not sure whether it's worth the effort to restore the exact
->     state before that function returns. As long as the flags suffice to
->     remove the test directory at the end, it probably doesn't matter
->     much what exact mode they have?
-> 
-> I think this could just be
-> 
->    if (chmod(path, mode) < 0)
->            return errno;
->    return 0
-> 
-> and it would be a bit simpler to understand :)
-> 
-> The same argument applies also to the other test_...() functions.
-> 
->> +static int test_fchmod(const char *path)
-> 
-> I initially took the same approach for test_ftruncate() but eventually
-> settled on using an approach where the file is open()ed before
-> restricting the thread with Landlock. This eliminates the potential
-> confusion where test_ftruncate() returns an error but the caller can't
-> distinguish whether the error is from open() or from ftruncate(). It
-> also makes fchmod testable even in scenarios where the file cannot be
-> opened because of missing Landlock rights.
-> 
->> +{
->> +	int ret, fd;
->> +	struct stat st;
->> +	mode_t mode;
->> +
->> +	ret = stat(path, &st);
->> +	if (ret < 0)
->> +		return errno;
->> +	/* save original mode in order to restore */
->> +	mode = st.st_mode & 0777;
->> +
->> +	fd = openat(AT_FDCWD, path, O_RDWR | O_CLOEXEC);
->> +	if (fd < 0)
->> +		return errno;
->> +	/* remove S_IWUSR */
->> +	ret = fchmod(fd, mode & ~0200);
->> +	if (ret < 0)
->> +		goto err;
->> +	ret = stat(path, &st);
->> +	if (ret < 0)
->> +		goto err;
->> +	/* check if still has S_IWUSR */
->> +	if (st.st_mode & 0200) {
->> +		ret = -1;
->> +		errno = -EFAULT;
->> +		goto err;
->> +	}
->> +	/* restore the original mode */
->> +	ret = fchmod(fd, mode);
->> +err:
->> +	if (close(fd) < 0)
->> +		return errno;
->> +	return ret ? errno : 0;
->> +}
-> 
->> +static int test_chown(const char *path)
->> +{
->> +	int ret;
->> +	struct stat st;
->> +
->> +	ret = stat(path, &st);
->> +	if (ret < 0)
->> +		return errno;
->> +	/*
->> +	 * chown needs CAP_CHOWN to modify uid and/or gid, however
->> +	 * there is no such capability when the testcases framework
->> +	 * setup, so just chown to original uid/gid, which can also
->> +	 * cover the function in landlock.
->> +	 */
->> +	ret = chown(path, st.st_uid, st.st_gid);
->> +	if (ret < 0)
->> +		return errno;
->> +	return 0;
->> +}
->> +
->> +static int test_fchown(const char *path)
->> +{
->> +	int ret, fd;
->> +	struct stat st;
->> +
->> +	ret = stat(path, &st);
->> +	if (ret < 0)
->> +		return errno;
->> +	fd = openat(AT_FDCWD, path, O_RDWR | O_CLOEXEC);
->> +	if (fd < 0)
->> +		return errno;
->> +	/*
->> +	 * fchown needs CAP_CHOWN to modify uid and/or gid, however
->> +	 * there is no such capability when the testcases framework
->> +	 * setup, so just fchown to original uid/gid, which can also
->> +	 * cover the function in landlock.
->> +	 */
->> +	ret = fchown(fd, st.st_uid, st.st_gid);
->> +	if (close(fd) < 0)
->> +		return errno;
->> +	return ret ? errno : 0;
->> +}
->> +
->> +TEST_F_FORK(layout1, unhandled_chmod)
->> +{
->> +	const struct rule rules[] = {
->> +		{
->> +			.path = file2_s3d1,
->> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
->> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
->> +		},
->> +		{
->> +			.path = file3_s3d1,
->> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
->> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
->> +		},
->> +		{},
->> +	};
->> +	const int ruleset_fd =
->> +		create_ruleset(_metadata, ACCESS_RW, rules);
->> +
->> +	ASSERT_LE(0, ruleset_fd);
->> +	enforce_ruleset(_metadata, ruleset_fd);
->> +	ASSERT_EQ(0, close(ruleset_fd));
->> +
->> +	ASSERT_EQ(0, test_chmod(file2_s3d1));
->> +	ASSERT_EQ(0, test_fchmod(file2_s3d1));
->> +	ASSERT_EQ(0, test_chmod(file3_s3d1));
->> +	ASSERT_EQ(0, test_chmod(dir_s3d1));
-> 
-> *optional* because the existing tests are already inconsistent about it
-> 
-> These four ASSERT_EQ() calls are independent scenarios and could be
-> done with EXPECT_EQ(), which would be more in line with the approach
-> that this test framework takes. (Same for the other tests below)
-> 
-> Compare previous discussion at:
-> https://lore.kernel.org/all/Yvd3+fy+mDBop+YA@nuc/
-> 
->> +}
->> +
->> +TEST_F_FORK(layout1, chmod)
->> +{
->> +	const struct rule rules[] = {
->> +		{
->> +			.path = file2_s3d1,
->> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
->> +				  LANDLOCK_ACCESS_FS_WRITE_FILE |
->> +				  LANDLOCK_ACCESS_FS_CHMOD,
->> +		},
->> +		{
->> +			.path = file3_s3d1,
->> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
->> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
->> +		},
->> +		{},
->> +	};
->> +	const int ruleset_fd =
->> +		create_ruleset(_metadata, ACCESS_RW | LANDLOCK_ACCESS_FS_CHMOD, rules);
->> +
->> +	ASSERT_LE(0, ruleset_fd);
->> +	enforce_ruleset(_metadata, ruleset_fd);
->> +	ASSERT_EQ(0, close(ruleset_fd));
->> +
->> +	ASSERT_EQ(0, test_chmod(file2_s3d1));
->> +	ASSERT_EQ(0, test_fchmod(file2_s3d1));
->> +	ASSERT_EQ(EACCES, test_chmod(file3_s3d1));
->> +	ASSERT_EQ(EACCES, test_chmod(dir_s3d1));
->> +}
->> +
->> +TEST_F_FORK(layout1, no_chown)
-> 
-> "unhandled_chown" to be consistent with the other one above?
-> 
->> +{
->> +	const struct rule rules[] = {
->> +		{
->> +			.path = file2_s3d1,
->> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
->> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
->> +		},
->> +		{
->> +			.path = file3_s3d1,
->> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
->> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
->> +		},
->> +		{},
->> +	};
->> +	const int ruleset_fd =
->> +		create_ruleset(_metadata, ACCESS_RW, rules);
->> +
->> +	ASSERT_LE(0, ruleset_fd);
->> +	enforce_ruleset(_metadata, ruleset_fd);
->> +	ASSERT_EQ(0, close(ruleset_fd));
->> +
->> +	ASSERT_EQ(0, test_chown(file2_s3d1));
->> +	ASSERT_EQ(0, test_fchown(file2_s3d1));
->> +	ASSERT_EQ(0, test_chown(file3_s3d1));
->> +	ASSERT_EQ(0, test_chown(dir_s3d1));
->> +}
->> +
->> +TEST_F_FORK(layout1, chown)
->> +{
->> +	const struct rule rules[] = {
->> +		{
->> +			.path = file2_s3d1,
->> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
->> +				  LANDLOCK_ACCESS_FS_WRITE_FILE |
->> +				  LANDLOCK_ACCESS_FS_CHOWN,
-> 
-> It might be useful to also check a scenario where the chown right is
-> granted on a directory (and as a consequence, both the directory
-> itself as well as its contents can be chowned)?  (Same for chmod)
-> 
->> +		},
->> +		{
->> +			.path = file3_s3d1,
->> +			.access = LANDLOCK_ACCESS_FS_READ_FILE |
->> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
->> +		},
->> +		{},
->> +	};
->> +	const int ruleset_fd =
->> +		create_ruleset(_metadata, ACCESS_RW | LANDLOCK_ACCESS_FS_CHOWN, rules);
->> +
->> +	ASSERT_LE(0, ruleset_fd);
->> +	enforce_ruleset(_metadata, ruleset_fd);
->> +	ASSERT_EQ(0, close(ruleset_fd));
->> +
->> +	ASSERT_EQ(0, test_chown(file2_s3d1));
->> +	ASSERT_EQ(0, test_fchown(file2_s3d1));
->> +	ASSERT_EQ(EACCES, test_chown(file3_s3d1));
->> +	ASSERT_EQ(EACCES, test_chown(dir_s3d1));
->> +}
->> +
->>   /* clang-format off */
->>   FIXTURE(layout1_bind) {};
->>   /* clang-format on */
->> --
->> 2.17.1
->>
-> 
-> --
+>
+> [1] https://patchwork.kernel.org/project/kvm/patch/BL2PR08MB4812F929A2760=
+BC40EA757CF0630@BL2PR08MB481.namprd08.prod.outlook.com/
+> (comment#8 from Radim Kr=C4=8Dm=C3=A1=C5=99 on May 3, 2016, 2:11 p.m. UTC)
+>=20
+>=20
+> >>=20
+> >> Signed-off-by: Gavin Shan <gshan@redhat.com>
+> >> ---
+> >>   Documentation/virt/kvm/api.rst    | 2 +-
+> >>   arch/arm64/include/uapi/asm/kvm.h | 1 +
+> >>   arch/arm64/kvm/Kconfig            | 1 +
+> >>   arch/arm64/kvm/arm.c              | 8 ++++++++
+> >>   4 files changed, 11 insertions(+), 1 deletion(-)
+> >>=20
+> >> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/a=
+pi.rst
+> >> index abd7c32126ce..19fa1ac017ed 100644
+> >> --- a/Documentation/virt/kvm/api.rst
+> >> +++ b/Documentation/virt/kvm/api.rst
+> >> @@ -8022,7 +8022,7 @@ regardless of what has actually been exposed thr=
+ough the CPUID leaf.
+> >>   8.29 KVM_CAP_DIRTY_LOG_RING
+> >>   ---------------------------
+> >>   -:Architectures: x86
+> >> +:Architectures: x86, arm64
+> >>   :Parameters: args[0] - size of the dirty log ring
+> >>     KVM is capable of tracking dirty memory using ring buffers that
+> >> are
+> >> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/ua=
+pi/asm/kvm.h
+> >> index 3bb134355874..7e04b0b8d2b2 100644
+> >> --- a/arch/arm64/include/uapi/asm/kvm.h
+> >> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> >> @@ -43,6 +43,7 @@
+> >>   #define __KVM_HAVE_VCPU_EVENTS
+> >>     #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
+> >> +#define KVM_DIRTY_LOG_PAGE_OFFSET 64
+> >=20
+> > For context, the documentation says:
+> >=20
+> > <quote>
+> > - if KVM_CAP_DIRTY_LOG_RING is available, a number of pages at
+> >    KVM_DIRTY_LOG_PAGE_OFFSET * PAGE_SIZE. [...]
+> > </quote>
+> >=20
+> > What is the reason for picking this particular value?
+> >=20
+>=20
+> It's inherited from x86. I don't think it has to be this particular
+> value.  The value is used to distinguish the region's owners like
+> kvm_run, KVM_PIO_PAGE_OFFSET, KVM_COALESCED_MMIO_PAGE_OFFSET, and
+> KVM_DIRTY_LOG_PAGE_OFFSET.
+>=20
+> How about to have 2 for KVM_DIRTY_LOG_PAGE_OFFSET in next revision?
+> The virtual area is cheap, I guess it's also nice to use x86's
+> pattern to have 64 for KVM_DIRTY_LOG_PAGE_OFFSET.
+>=20
+>     #define KVM_COALESCED_MMIO_PAGE_OFFSET   1
+>     #define KVM_DIRTY_LOG_PAGE_OFFSET        2
+
+Given that this is just an offset in the vcpu "file", I don't think it
+matters that much. 64 definitely allows for some struct vcpu growth,
+and it doesn't hurt to be compatible with x86 (for once...).
+
+>=20
+> >>     #define KVM_REG_SIZE(id)
+> >> \
+> >>   	(1U << (((id) & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT))
+> >> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> >> index 815cc118c675..0309b2d0f2da 100644
+> >> --- a/arch/arm64/kvm/Kconfig
+> >> +++ b/arch/arm64/kvm/Kconfig
+> >> @@ -32,6 +32,7 @@ menuconfig KVM
+> >>   	select KVM_VFIO
+> >>   	select HAVE_KVM_EVENTFD
+> >>   	select HAVE_KVM_IRQFD
+> >> +	select HAVE_KVM_DIRTY_RING
+> >>   	select HAVE_KVM_MSI
+> >>   	select HAVE_KVM_IRQCHIP
+> >>   	select HAVE_KVM_IRQ_ROUTING
+> >> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> >> index 986cee6fbc7f..3de6b9b39db7 100644
+> >> --- a/arch/arm64/kvm/arm.c
+> >> +++ b/arch/arm64/kvm/arm.c
+> >> @@ -866,6 +866,14 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+> >>   		if (!ret)
+> >>   			ret =3D 1;
+> >>   +		/* Force vcpu exit if its dirty ring is soft-full */
+> >> +		if (unlikely(vcpu->kvm->dirty_ring_size &&
+> >> +			     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
+> >> +			vcpu->run->exit_reason =3D KVM_EXIT_DIRTY_RING_FULL;
+> >> +			trace_kvm_dirty_ring_exit(vcpu);
+> >> +			ret =3D 0;
+> >> +		}
+> >> +
+> >=20
+> > Why can't this be moved to kvm_vcpu_exit_request() instead? I would
+> > also very much like the check to be made a common helper with x86.
+> >=20
+> > A seemingly approach would be to make this a request on dirty log
+> > insertion, and avoid the whole "check the log size" on every run,
+> > which adds pointless overhead to unsuspecting users (aka everyone).
+> >=20
+>=20
+> I though of having the check in kvm_vcpu_exit_request(). The various
+> exit reasons are prioritized. x86 gives KVM_EXIT_DIRTY_RING_FULL the
+> highest priority and ARM64 is just to follow. I don't think it really
+> matters. I will improve it accordingly in next revision:
+>=20
+> - Change kvm_dirty_ring_soft_full() to something as below in dirty_ring.c
+>=20
+>   bool kvm_dirty_ring_soft_full(struct kvm_vcpu *vcpu)
+>   {
+>        struct kvm *kvm =3D vcpu->vcpu;
+>        struct kvm_dirty_ring *ring =3D &vcpu->dirty_ring;
+>=20
+>        if (unlikely(kvm->dirty_ring_size &&
+>                     kvm_dirty_ring_used(ring) >=3D ring->soft_limit)) {
+>            vcpu->run->exit_reason =3D KVM_EXIT_DIRTY_RING_FULL;
+>            trace_kvm_dirty_ring_exit(vcpu);
+>            return true;
+>        }
+>=20
+>        return false;
+>   }
+>=20
+> - Use the modified kvm_dirty_ring_soft_full() in kvm_vcpu_exit_request().
+>=20
+> Userspace needs KVM_EXIT_DIRTY_RING_FULL to collect the dirty log in time.
+> Otherwise, the dirty log in the ring buffer will be overwritten. I'm not
+> sure if anything else I missed?
+
+I'm fine with the above, but what I really wanted is a request from
+the dirty-ring insertion, instead of a check in kvm_vpcu_exit_request.
+Something like this (which obviously doesn't compile, but you'll get
+the idea):
+
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 986cee6fbc7f..0b41feb6fb7d 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -747,6 +747,12 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
+=20
+ 		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
+ 			return kvm_vcpu_suspend(vcpu);
++
++		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu)) {
++			vcpu->run->exit_reason =3D KVM_EXIT_DIRTY_RING_FULL;
++			trace_kvm_dirty_ring_exit(vcpu);
++			return 0;
++		}
+ 	}
+=20
+ 	return 1;
+diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
+index f4c2a6eb1666..08b2f01164fa 100644
+--- a/virt/kvm/dirty_ring.c
++++ b/virt/kvm/dirty_ring.c
+@@ -149,6 +149,7 @@ int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_di=
+rty_ring *ring)
+=20
+ void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
+ {
++	struct kvm_vcpu *vcpu =3D container_of(ring, struct kvm_vcpu, dirty_ring);
+ 	struct kvm_dirty_gfn *entry;
+=20
+ 	/* It should never get full */
+@@ -166,6 +167,9 @@ void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u=
+32 slot, u64 offset)
+ 	kvm_dirty_gfn_set_dirtied(entry);
+ 	ring->dirty_index++;
+ 	trace_kvm_dirty_ring_push(ring, slot, offset);
++
++	if (kvm_dirty_ring_soft_full(vcpu))
++		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
+ }
+=20
+ struct page *kvm_dirty_ring_get_page(struct kvm_dirty_ring *ring, u32 offs=
+et)
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
