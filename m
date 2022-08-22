@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CE559B7B1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Aug 2022 04:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2492D59B79F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Aug 2022 04:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbiHVCaf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S232391AbiHVCaf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Sun, 21 Aug 2022 22:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiHVCa3 (ORCPT
+        with ESMTP id S232463AbiHVCac (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Aug 2022 22:30:29 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2202520BD4;
-        Sun, 21 Aug 2022 19:30:28 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id o198so1117245vko.4;
-        Sun, 21 Aug 2022 19:30:28 -0700 (PDT)
+        Sun, 21 Aug 2022 22:30:32 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D186021830;
+        Sun, 21 Aug 2022 19:30:31 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id c3so9787409vsc.6;
+        Sun, 21 Aug 2022 19:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=ASKzNR3OVr0x/auTLjHZPWrTcHhp/uvCLAxf9+B1KJY=;
-        b=UDsAnzPXw283JlQUcitS9QnSZsILv9uj16dtK+BvvdxBHgylz1PESQwpnP6RR4Y78T
-         J6IZcg2CWZHbndDWcBjldrz3nWEp3Yjadf43698DtIWiNY7WFGY1VsU1aNKPIIrZ2c1G
-         TJOib7hiqBg3KD+wlXtdWvUc3PcLb3uxRox+YPnCA57H7EWq02lpsgnf9+RRG8NfdYY4
-         vF34ERaKLkuHttgc5KnJ6Ju1+lvKxviuB384WAQgTeYAwo7BWfjBCfXawVRm2qsYGyOJ
-         fG/jhUgQyd34eP+cjVYqaGGXXxVstCCYHwwOR3vv18eV05qibKMfOEAzvCpu1aCGmShL
-         6vzw==
+        bh=x027gD9Q590MYEegm4t4IJAQG82OSt6Oxw8CWkrsRdY=;
+        b=fdMojUkEIMj6VvFshDtCCFB/Q+etuu3zE2OKrxEgHerfajDL6wZ1xY2gjG7doX4ELi
+         WyWuFqKfE6Kyg4785ZrkGVcPmzuL918+fo0r/A1UXX3f6tVuSwsnxEATIXm12WaMUNBE
+         J9QD0QMutCnYz9zmjwb0ahp3A849EyR2sydEFnbauVbKwQIyBrFAOuupxiNPAV5SsmJj
+         1+iu4C2GopNy81d2DOLpGgy5RIfoPME0Xmyl2Y2SPp8W9uI2mp8sVPqCC8ZZBrlY34rz
+         u8K7FKbIcJozS2zaMryf0YaiHloBTGnQinNsjyIKfYyTz8bkyb/3oemy6Rucc5EgyLdm
+         IXVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=ASKzNR3OVr0x/auTLjHZPWrTcHhp/uvCLAxf9+B1KJY=;
-        b=nZRR4A8mNO/5/9We2b41UPfBXGrZJUNJWC1ZCd4AZ43OssqmSgQ+JvFLn+7s19A9tX
-         ru0KDHgjcUlc3a/NNm8o3+3MDd9D3mTW91MC8ZNDTeat62O/OSZPMzjexvGUzErNOvM4
-         JWOAc/2SIwIAa2YzomqlvYgyMCYe6A4Xtw8OwAo3iqLcrSKrHJKg9egqh480Q/VgIxE/
-         +RZN/wsCouDOyIivLabNnP4/gUOjKSVSB8Kvu8abin4Yj//ndpU7lbuNqO8ncBIX7B1P
-         KqShcd5aRGnaTUHjHEbOKkUsSNUiS9ZWOBMm6/5ifR1UpnRR+k3J/8Ei9vHF7/XQ0fZE
-         ajPw==
-X-Gm-Message-State: ACgBeo1cPP9gjkc1LJTBFgPD3D9WLoqKWy3+tapmFTnP2PjMZF8Meyin
-        MyGu0ONVYk0WkrM97gC/jCE=
-X-Google-Smtp-Source: AA6agR60IQ0+5Kgby8Gfqv4jS5SE/LjLzFRcDfSQeDi+FRI40t2fkA9fFctG9FyaxKVti2SZIfEwGg==
-X-Received: by 2002:a1f:adc7:0:b0:377:c12:78ef with SMTP id w190-20020a1fadc7000000b003770c1278efmr6669359vke.19.1661135427212;
-        Sun, 21 Aug 2022 19:30:27 -0700 (PDT)
+        bh=x027gD9Q590MYEegm4t4IJAQG82OSt6Oxw8CWkrsRdY=;
+        b=qIPo6/xiDa6EQ1rTxc12pM1yzJJkEjc4txafx0r5MR5J90HwiK7W4WoQk5Hg62oPhd
+         WcTiVTMQTYwEhTTm83CmAO8Y+vWPy3QMOq685lILqlJLKhaWp4nXtAky/RqXwT5RbDdd
+         3ydz38zgOkuPjPTZSvAy73l66i3qi9ypvYIhpgqJleGKmDxqEBoQJjPogvf5zTRBilz1
+         OKOTxpxl+VMKpVFjB6N/hjQLYHBiKPBao4idfWunSriSIVEhelsV+0Dsdym+WvZygCOW
+         eBByfCiDaCbVBBfQ9xmlcFaEUelHrm+vKNHDZ7lFxAkxPjQMPZZpEUQR5m9X1S39JCrD
+         NXeQ==
+X-Gm-Message-State: ACgBeo3zEuZaRYudR6lGRHCkvL73oj+GbZ8ITVjgqEdnnE91+sj63XQg
+        O2BhTGYUn2KNHzfOa6ICclk=
+X-Google-Smtp-Source: AA6agR4O6gKYfi05v0t+dgGWyKTuTWLoTgs6S6tdxiHyTufbJpPFYG6Sw/hmpbM3FfDDap+bgXdz8w==
+X-Received: by 2002:a05:6102:3a0c:b0:390:3a5b:dbcc with SMTP id b12-20020a0561023a0c00b003903a5bdbccmr3603654vsu.23.1661135430926;
+        Sun, 21 Aug 2022 19:30:30 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14c:4c2:8202::1001])
-        by smtp.gmail.com with ESMTPSA id y125-20020a1f3283000000b00378fe8518dcsm8330853vky.51.2022.08.21.19.30.23
+        by smtp.gmail.com with ESMTPSA id y125-20020a1f3283000000b00378fe8518dcsm8330853vky.51.2022.08.21.19.30.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 19:30:26 -0700 (PDT)
+        Sun, 21 Aug 2022 19:30:30 -0700 (PDT)
 From:   Tales Aparecida <tales.aparecida@gmail.com>
 To:     Sadiya Kazi <sadiyakazi@google.com>
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -57,14 +57,13 @@ Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         mwen@igalia.com, andrealmeid@riseup.net, mairacanal@riseup.net,
         Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
         tales.aparecida@gmail.com
-Subject: [PATCH v2 2/8] Documentation: KUnit: avoid repeating "kunit.py run" in start.rst
-Date:   Sun, 21 Aug 2022 23:26:40 -0300
-Message-Id: <20220822022646.98581-3-tales.aparecida@gmail.com>
+Subject: [PATCH v2 3/8] Documentation: KUnit: add note about mrproper in start.rst
+Date:   Sun, 21 Aug 2022 23:26:41 -0300
+Message-Id: <20220822022646.98581-4-tales.aparecida@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220822022646.98581-1-tales.aparecida@gmail.com>
 References: <20220822022646.98581-1-tales.aparecida@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -76,92 +75,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Combine two sections mentioning "kunit.py run" to streamline the
-getting-started guide. Update "kunit.py run" expected output in
-the guide and run_wrapper.
+The "Getting Started" guide should be beginner-friendly, therefore
+add a note about the requirement of a clean source tree when running
+kunit_tool for the first time, and its related error.
 
 Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
 
 ---
 Notes:
-    Update the expected output and the note that follows it (Maíra Canal and
-    Sadiya Kazi). The output was updated on the commit: 45ba7a893ad8
-    ("kunit: kunit_tool: Separate out config/build/exec/parse")
-    Add word "step" to note and fix the case of "kernel".
+    Edit note following suggestions (Sadiya Kazi)
 ---
- Documentation/dev-tools/kunit/run_wrapper.rst |  2 +-
- Documentation/dev-tools/kunit/start.rst       | 38 ++++++++-----------
- 2 files changed, 16 insertions(+), 24 deletions(-)
+ Documentation/dev-tools/kunit/start.rst | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-index 518cf87ea732..6b33caf6c8ab 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -22,7 +22,7 @@ We should see the following:
- 
- .. code-block::
- 
--	Generating .config...
-+	Configuring KUnit Kernel ...
- 	Building KUnit kernel...
- 	Starting KUnit kernel...
- 
 diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index e730df1f468e..2e31350a85e1 100644
+index 2e31350a85e1..9beec7d6ac4b 100644
 --- a/Documentation/dev-tools/kunit/start.rst
 +++ b/Documentation/dev-tools/kunit/start.rst
-@@ -19,7 +19,21 @@ can run kunit_tool:
+@@ -19,6 +19,22 @@ can run kunit_tool:
  
  	./tools/testing/kunit/kunit.py run
  
--For more information on this wrapper, see:
-+If everything worked correctly, you should see the following:
-+
-+.. code-block::
-+
-+	Configuring KUnit Kernel ...
-+	Building KUnit Kernel ...
-+	Starting KUnit Kernel ...
-+
-+The tests will pass or fail.
-+
 +.. note ::
-+   Because it is building a lot of sources for the first time,
-+   the ``Building KUnit Kernel`` step may take a while.
++	You may see the following error:
++	"The source tree is not clean, please run 'make ARCH=um mrproper'"
 +
-+For detailed information on this wrapper, see:
- Documentation/dev-tools/kunit/run_wrapper.rst.
++	This happens because internally kunit.py specifies ``.kunit``
++	(default option) as the build directory in the command ``make O=output/dir``
++	through the argument ``--build_dir``.  Hence, before starting an
++	out-of-tree build, the source tree must be clean.
++
++	There is also the same caveat mentioned in the "Build directory for
++	the kernel" section of the :doc:`admin-guide </admin-guide/README>`,
++	that is, its use, it must be used for all invocations of ``make``.
++	The good news is that it can indeed be solved by running
++	``make ARCH=um mrproper``, just be aware that this will delete the
++	current configuration and all generated files.
++
+ If everything worked correctly, you should see the following:
  
- Creating a ``.kunitconfig``
-@@ -74,28 +88,6 @@ you if you have not included dependencies for the options used.
-    tools like ``make menuconfig O=.kunit``. As long as its a superset of
-    ``.kunitconfig``, kunit.py won't overwrite your changes.
- 
--Running Tests (KUnit Wrapper)
-------------------------------
--1. To make sure that everything is set up correctly, invoke the Python
--   wrapper from your kernel repository:
--
--.. code-block:: bash
--
--	./tools/testing/kunit/kunit.py run
--
--If everything worked correctly, you should see the following:
--
--.. code-block::
--
--	Generating .config ...
--	Building KUnit Kernel ...
--	Starting KUnit Kernel ...
--
--The tests will pass or fail.
--
--.. note ::
--   Because it is building a lot of sources for the first time, the
--   ``Building KUnit kernel`` may take a while.
- 
- Running Tests without the KUnit Wrapper
- =======================================
+ .. code-block::
 -- 
 2.37.2
 
