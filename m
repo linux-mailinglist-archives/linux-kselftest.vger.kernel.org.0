@@ -2,190 +2,246 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782C759B69C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Aug 2022 00:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC9359B762
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Aug 2022 04:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiHUWWq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 21 Aug 2022 18:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S232147AbiHVB6n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 21 Aug 2022 21:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiHUWWp (ORCPT
+        with ESMTP id S232118AbiHVB6j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 21 Aug 2022 18:22:45 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D59A183B1;
-        Sun, 21 Aug 2022 15:22:44 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4M9qkB3q3RzDr9K;
-        Sun, 21 Aug 2022 22:22:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1661120563; bh=ccrF4EfkahHpt/9Pba8wQctpnDNAB+Jj9k09ArPwhpc=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=Uiv66D+U+gLOe7JE6i/oAl/E0FWpEbo+VZnWG24uszi9cNT1zkOpc8pufuhTFZ9lN
-         MONx1BfcGTjtuMpMB2ydJ3EM7TveoQ6vG30WQlY5Oalfp9Wy56W/RPOs32B8HVdv/0
-         4H0cTd/hcAahRWzr89TMVLCtK9O4eq5WYQK7fz6w=
-X-Riseup-User-ID: 8AD00409068A65E08A13AA40A73B9388512B00AE92B6AD68FCA47EEA686532D1
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M9qk239Jyz5vY6;
-        Sun, 21 Aug 2022 22:22:33 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
-From:   Isabella Basso <isabbasso@riseup.net>
-In-Reply-To: <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
-Date:   Sun, 21 Aug 2022 19:22:30 -0300
-Cc:     =?utf-8?Q?Ma=C3=ADra_Canal?= <maira.canal@usp.br>,
-        Matthew Auld <matthew.william.auld@gmail.com>,
-        Arthur Grillo <arthur.grillo@usp.br>,
-        Rodrigo Siqueira <siqueirajordao@riseup.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kselftest@vger.kernel.org, n@nfraprado.net,
-        andrealmeid@riseup.net, magalilemes00@gmail.com,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        kunit-dev@googlegroups.com, mwen@igalia.com,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?utf-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>,
-        tales.aparecida@gmail.com,
-        kernel list <linux-kernel@vger.kernel.org>,
-        leandro.ribeiro@collabora.com,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <52481C88-9CD7-4E4F-ABCB-1EFC01E4B4D0@riseup.net>
-References: <20220708203052.236290-1-maira.canal@usp.br>
- <20220708203052.236290-10-maira.canal@usp.br>
- <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
- <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
- <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
-To:     =?utf-8?Q?Micha=C5=82_Winiarski?= <michal@hardline.pl>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 21 Aug 2022 21:58:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF0210FC9
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Aug 2022 18:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661133516;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Krkj7XTnCtjViG9b8n/OBoFVjFdMc6CFu64n/j38mOw=;
+        b=GzgxjqxmeoIJx2tjETMTMlI3wK6YgT1hoe6S5Ar5grrwVfUcEFYKPy0HEwtDZ3NS2BFBYI
+        XxXl7qDYCZ10o5PgfT6MfBUOqG/1sln/K0w30w6EXU8QRAGYR5UecFZ6sMeGqbBOY1E+9Q
+        olXjbqTuPTkTg+jJjQ0eaajDBkWMokg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-cjhPf0ltNzSeEla4-Qi79A-1; Sun, 21 Aug 2022 21:58:33 -0400
+X-MC-Unique: cjhPf0ltNzSeEla4-Qi79A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 49F8F8032F1;
+        Mon, 22 Aug 2022 01:58:32 +0000 (UTC)
+Received: from [10.64.54.16] (vpn2-54-16.bne.redhat.com [10.64.54.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4DF624010D42;
+        Mon, 22 Aug 2022 01:58:24 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
+ tracking
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net,
+        james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
+        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+References: <20220819005601.198436-1-gshan@redhat.com>
+ <20220819005601.198436-2-gshan@redhat.com> <87lerkwtm5.wl-maz@kernel.org>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+Date:   Mon, 22 Aug 2022 11:58:20 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
+MIME-Version: 1.0
+In-Reply-To: <87lerkwtm5.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Micha=C5=82,
+Hi Marc,
 
-While I totally understand your point, we have talked about this in our =
-GSoC
-meetings with mentors, and have found a few reasons as to why a KUnit =
-runner
-integrated to IGT might be really useful.=20
+On 8/19/22 6:00 PM, Marc Zyngier wrote:
+> On Fri, 19 Aug 2022 01:55:57 +0100,
+> Gavin Shan <gshan@redhat.com> wrote:
+>>
+>> The ring-based dirty memory tracking has been available and enabled
+>> on x86 for a while. The feature is beneficial when the number of
+>> dirty pages is small in a checkpointing system or live migration
+>> scenario. More details can be found from fb04a1eddb1a ("KVM: X86:
+>> Implement ring-based dirty memory tracking").
+>>
+>> This enables the ring-based dirty memory tracking on ARM64. It's
+>> notable that no extra reserved ring entries are needed on ARM64
+>> because the huge pages are always split into base pages when page
+>> dirty tracking is enabled.
+> 
+> Can you please elaborate on this? Adding a per-CPU ring of course
+> results in extra memory allocation, so there must be a subtle
+> x86-specific detail that I'm not aware of...
+> 
 
-> Am 22/07/2022 um 1:25 PM schrieb Micha=C5=82 Winiarski =
-<michal@hardline.pl>:
->=20
-> On Fri, Jul 22, 2022 at 08:04:51AM -0300, Ma=C3=ADra Canal wrote:
->> On 7/22/22 07:35, Matthew Auld wrote:
->>> On Fri, 8 Jul 2022 at 21:32, Ma=C3=ADra Canal <maira.canal@usp.br> =
-wrote:
->>>>=20
->>>> From: Arthur Grillo <arthur.grillo@usp.br>
->>>>=20
->>>> Considering the current adoption of the KUnit framework, convert =
-the
->>>> DRM mm selftest to the KUnit API.
->>>=20
->>> Is there a plan to convert the corresponding selftest IGT that was
->>> responsible for running this (also drm_buddy) to somehow work with
->>> kunit? Previously these IGTs were always triggered as part of
->>> intel-gfx CI, but it looks like they are no longer run[1].
->>>=20
->>> [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
->>=20
->> Hi Matthew,
->>=20
->> Isabella sent a while ago a patch to IGT adding KUnit compatibility =
-to
->> IGT [1], but there wasn't any feedback on the patch. I believe that =
-soon
->> she will resend the series in order to make all KUnit DRM tests run =
-on IGT.
->>=20
->> Any feedback on the patch is welcomed so that we can fix this issue =
-as
->> soon as possible.
->>=20
->> [1] https://patchwork.freedesktop.org/patch/489985/
->>=20
->> Best Regards,
->> - Ma=C3=ADra Canal
->=20
-> Hi.
->=20
-> Instead of going back to using IGT for *unit* tests, it would be a =
-better idea
-> to adjust the CI to just run the tests once at "build" time (just like =
-e.g.
-> checkpatch).
+Sure. I guess it's helpful to explain how it works in next revision.
+Something like below:
 
-First, I=E2=80=99d like to point out that there would be some inherent =
-overhead in
-doing so, which might actually not be worth it, as KUnit tool would need =
-to
-compile HEAD in the UML arch, then we=E2=80=99d have to re-compile =
-everything to a real
-machine=E2=80=99s architecture, like x86_64 (in the least), having in =
-mind still that
-arch-dependent issues would not show up when we run tests in UML, so =
-there=E2=80=99s
-still a downside to it even if it=E2=80=99s quick enough.
+This enables the ring-based dirty memory tracking on ARM64. The feature
+is enabled by CONFIG_HAVE_KVM_DIRTY_RING, detected and enabled by
+CONFIG_HAVE_KVM_DIRTY_RING. A ring buffer is created on every vcpu and
+each entry is described by 'struct kvm_dirty_gfn'. The ring buffer is
+pushed by host when page becomes dirty and pulled by userspace. A vcpu
+exit is forced when the ring buffer becomes full. The ring buffers on
+all vcpus can be reset by ioctl command KVM_RESET_DIRTY_RINGS.
 
-Even if we don=E2=80=99t run them as UML and instead use a VM, there=E2=80=
-=99s a VM being run
-just for a couple of tests, which might be slower than adding a step to =
-a
-dedicated machine that=E2=80=99s (probably) already available, plus the =
-setup and
-hardware needed to run a VM inside of a CI runner are overheads in =
-themselves,
-needing dedicated, modern machines.
+Yes, I think so. Adding a per-CPU ring results in extra memory allocation.
+However, it's avoiding synchronization among multiple vcpus when dirty
+pages happen on multiple vcpus. More discussion can be found from [1]
 
-> We would then stop executing the same test multiple times on different =
-machines
-> (note that both DRM selftests and i915 "mock" selftests are pure unit =
-tests - in
-> other words, they don't need the hardware to be present), which would =
-save some
-> (small) amount of machine-time that can be utilized to do something =
-that
-> actually needs the hardware.
+[1] https://patchwork.kernel.org/project/kvm/patch/BL2PR08MB4812F929A2760BC40EA757CF0630@BL2PR08MB481.namprd08.prod.outlook.com/
+(comment#8 from Radim Krčmář on May 3, 2016, 2:11 p.m. UTC)
 
-I totally agree with your solution in regards to arch-independent tests, =
-though.
 
-> Plus there's no need to maintain the kunit-runner in IGT.
-> Note - we're currently going to lose "DMESG-WARN" detection if we go =
-this route,
-> but this is something that can be improved on the kunit-side.
->=20
-> -Micha=C5=82
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   Documentation/virt/kvm/api.rst    | 2 +-
+>>   arch/arm64/include/uapi/asm/kvm.h | 1 +
+>>   arch/arm64/kvm/Kconfig            | 1 +
+>>   arch/arm64/kvm/arm.c              | 8 ++++++++
+>>   4 files changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>> index abd7c32126ce..19fa1ac017ed 100644
+>> --- a/Documentation/virt/kvm/api.rst
+>> +++ b/Documentation/virt/kvm/api.rst
+>> @@ -8022,7 +8022,7 @@ regardless of what has actually been exposed through the CPUID leaf.
+>>   8.29 KVM_CAP_DIRTY_LOG_RING
+>>   ---------------------------
+>>   
+>> -:Architectures: x86
+>> +:Architectures: x86, arm64
+>>   :Parameters: args[0] - size of the dirty log ring
+>>   
+>>   KVM is capable of tracking dirty memory using ring buffers that are
+>> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+>> index 3bb134355874..7e04b0b8d2b2 100644
+>> --- a/arch/arm64/include/uapi/asm/kvm.h
+>> +++ b/arch/arm64/include/uapi/asm/kvm.h
+>> @@ -43,6 +43,7 @@
+>>   #define __KVM_HAVE_VCPU_EVENTS
+>>   
+>>   #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
+>> +#define KVM_DIRTY_LOG_PAGE_OFFSET 64
+> 
+> For context, the documentation says:
+> 
+> <quote>
+> - if KVM_CAP_DIRTY_LOG_RING is available, a number of pages at
+>    KVM_DIRTY_LOG_PAGE_OFFSET * PAGE_SIZE. [...]
+> </quote>
+> 
+> What is the reason for picking this particular value?
+> 
 
-There=E2=80=99s also a point to be made on maintaining such a runner if =
-we think about
-companies like AMD, as they rely heavily on IGT, so they have lots of =
-tests
-written in there, and it'd be difficult for them to accommodate one more
-non-trivial thing to their CI. Plus I think this might be a good =
-starting point
-for them to transition their CI to a KUnit-centered approach without =
-stressing
-engineers unnecessarily.
+It's inherited from x86. I don't think it has to be this particular value.
+The value is used to distinguish the region's owners like kvm_run, KVM_PIO_PAGE_OFFSET,
+KVM_COALESCED_MMIO_PAGE_OFFSET, and KVM_DIRTY_LOG_PAGE_OFFSET.
 
-Cheers,
-=E2=80=94
-Isabella
+How about to have 2 for KVM_DIRTY_LOG_PAGE_OFFSET in next revision?
+The virtual area is cheap, I guess it's also nice to use x86's
+pattern to have 64 for KVM_DIRTY_LOG_PAGE_OFFSET.
+
+     #define KVM_COALESCED_MMIO_PAGE_OFFSET   1
+     #define KVM_DIRTY_LOG_PAGE_OFFSET        2
+
+>>   
+>>   #define KVM_REG_SIZE(id)						\
+>>   	(1U << (((id) & KVM_REG_SIZE_MASK) >> KVM_REG_SIZE_SHIFT))
+>> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+>> index 815cc118c675..0309b2d0f2da 100644
+>> --- a/arch/arm64/kvm/Kconfig
+>> +++ b/arch/arm64/kvm/Kconfig
+>> @@ -32,6 +32,7 @@ menuconfig KVM
+>>   	select KVM_VFIO
+>>   	select HAVE_KVM_EVENTFD
+>>   	select HAVE_KVM_IRQFD
+>> +	select HAVE_KVM_DIRTY_RING
+>>   	select HAVE_KVM_MSI
+>>   	select HAVE_KVM_IRQCHIP
+>>   	select HAVE_KVM_IRQ_ROUTING
+>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+>> index 986cee6fbc7f..3de6b9b39db7 100644
+>> --- a/arch/arm64/kvm/arm.c
+>> +++ b/arch/arm64/kvm/arm.c
+>> @@ -866,6 +866,14 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>>   		if (!ret)
+>>   			ret = 1;
+>>   
+>> +		/* Force vcpu exit if its dirty ring is soft-full */
+>> +		if (unlikely(vcpu->kvm->dirty_ring_size &&
+>> +			     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
+>> +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+>> +			trace_kvm_dirty_ring_exit(vcpu);
+>> +			ret = 0;
+>> +		}
+>> +
+> 
+> Why can't this be moved to kvm_vcpu_exit_request() instead? I would
+> also very much like the check to be made a common helper with x86.
+> 
+> A seemingly approach would be to make this a request on dirty log
+> insertion, and avoid the whole "check the log size" on every run,
+> which adds pointless overhead to unsuspecting users (aka everyone).
+> 
+
+I though of having the check in kvm_vcpu_exit_request(). The various
+exit reasons are prioritized. x86 gives KVM_EXIT_DIRTY_RING_FULL the
+highest priority and ARM64 is just to follow. I don't think it really
+matters. I will improve it accordingly in next revision:
+
+- Change kvm_dirty_ring_soft_full() to something as below in dirty_ring.c
+
+   bool kvm_dirty_ring_soft_full(struct kvm_vcpu *vcpu)
+   {
+        struct kvm *kvm = vcpu->vcpu;
+        struct kvm_dirty_ring *ring = &vcpu->dirty_ring;
+
+        if (unlikely(kvm->dirty_ring_size &&
+                     kvm_dirty_ring_used(ring) >= ring->soft_limit)) {
+            vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+            trace_kvm_dirty_ring_exit(vcpu);
+            return true;
+        }
+
+        return false;
+   }
+
+- Use the modified kvm_dirty_ring_soft_full() in kvm_vcpu_exit_request().
+
+Userspace needs KVM_EXIT_DIRTY_RING_FULL to collect the dirty log in time.
+Otherwise, the dirty log in the ring buffer will be overwritten. I'm not
+sure if anything else I missed?
+
+Thanks,
+Gavin
+
+
+
+
 
