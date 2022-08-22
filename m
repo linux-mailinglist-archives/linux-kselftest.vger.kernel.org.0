@@ -2,81 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE3659CBD8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 01:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D7959CBF2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 01:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiHVXAI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Aug 2022 19:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S237939AbiHVXMw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Aug 2022 19:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbiHVXAI (ORCPT
+        with ESMTP id S238118AbiHVXMv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Aug 2022 19:00:08 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C49C4DF13
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Aug 2022 16:00:06 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id o123so12813893vsc.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Aug 2022 16:00:06 -0700 (PDT)
+        Mon, 22 Aug 2022 19:12:51 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2C9474C4;
+        Mon, 22 Aug 2022 16:12:48 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id w29so6238854pfj.3;
+        Mon, 22 Aug 2022 16:12:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=CM+r2jDGi3Z1TY+2nDEEa9bz6Cg3yXP3SO7YhqCHkfo=;
-        b=Fr4ZUOwdWXPMWZ0VIHwPHNgnoI5vRT/AKqrE1La5ulyUniUsetq7t6w4qi4Tj30KgQ
-         aujMKcxmiWsb3YvpamUxbl8zMbQJJbv1lsgsyWYXtBqwUGVgpV2Ydzp1NdfAUnMkovb2
-         lIG66WjOS9iJKkXJLidAFbWQthLLWYlTUg7QI0vTlpePU0jcFWQoI3qBJiKJxSBBKJzI
-         /TSaEZxLBRFc7HzsZro7nHfqq5FJdPwiaZFUIvnj9rKwwXaqHHfg2ewEb3/+WyJThfJ5
-         YlW5CrXOD4oDXH94xu4+GKkDslxcKAjdavOsENDv+vxICJgtGpTqmDNJuttyCBg7if6i
-         A/8w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=RJgmW2b+G8hXZiK3ZuEGABCQXwn51u/i1lC21liP/hM=;
+        b=jmj/omCdwVIDuiWAp4qQLVmEt6FUbOlW0MvTdUyY90z419tVNF+7hGAm22OUgI7XhL
+         68zqoxK9CeaBCdEe4aViSysskDc/iKcCOoNhojtXcC5Pddokca2kR2PfBKkSi85pgfPK
+         g/j+JEqJEMSH032a4ZijbnlxKYuJjc8NTDAZwtnqQC9JzNNsET06Jod6dr/dB8chp8r8
+         LeQJNWsdylf05m+yBL//WT6mfFv/a/nYak8ipa7VSIA2JRxv1o6THqPug6LM/Mu3S5Hb
+         Oh2naRDNd/YrChLNim2mjGvvHjwvrSau9cuOIK5ZE/5l5cqajpL09QdvidM41dKdFK/j
+         Ld1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=CM+r2jDGi3Z1TY+2nDEEa9bz6Cg3yXP3SO7YhqCHkfo=;
-        b=TFSj9thQqugx7ancBaXvFopRUruZU3xe99We5p6mJ+fwkw2Sgx8D/yR5VFA177EbI3
-         6YYOJ2PbT6y9qRCPjgA3dqkTsi/x1/JEbDVqEvjEgPcCUbZ7H26j/uJfz6l7VKehRhxZ
-         u2wAhv8xkRcT4ImGHy9vhceA5rvvcbvijfgA7fzHmn3w1d5QfCchsPyQJsKZcYI91z51
-         NgcATBTM8W7+nimH/8RseuyYk0ZpA3qWqxsTXZCsg6lEukHUlzy8fKxZx21egGaPmfsk
-         Yu4zISF6eAWQAPVNsdiakQtofyWyoa7a1Hvs4n1pBQ/TJA2zM7M2INg4Vgz0e0K492tZ
-         k8gA==
-X-Gm-Message-State: ACgBeo3LH7QIwXW3/eod/A2vegm3nVOIc1pUK6Af6Or2SXFQJYKLNYlY
-        nN1f3qdFjeALn7vhdPwb+wxZ5KpCwIVSKHNL0gX9Ag==
-X-Google-Smtp-Source: AA6agR4ntjaDOEyCR2SDMeJVOZxMHCydD8GIIAaP1VehTb6mhepvnStH8hXJl00Zruvm8pbCQA7Bu0zLne8+bUujE48=
-X-Received: by 2002:a67:b009:0:b0:38a:e0f2:4108 with SMTP id
- z9-20020a67b009000000b0038ae0f24108mr8469258vse.9.1661209205446; Mon, 22 Aug
- 2022 16:00:05 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=RJgmW2b+G8hXZiK3ZuEGABCQXwn51u/i1lC21liP/hM=;
+        b=RlzgEzr2sqjSHFsyydP94F3HyIELUmzQB93XkRKzUI1BbKqZ99yFQphoe7PwY7i8bW
+         xShnkGrqEcUdL6wlZOXHZQD34SBvSFeYT8lTXGReZ7ZYhJLlzalb+Em8VRpk8EzyylkJ
+         SrG3fn3TkY3azo/atfvzLN6T3EM60QqyKm3sVV4fZ1UtsEM9A3Loqd5LvyNX+kilfOcN
+         rOwKrrkavrU7E7PdEt8nM+zpXzZZeTd/DPQgWfftoThibwed38se+MgVQojTIX1ZBgAW
+         FDPC1fm/3C8suO1dEnoNfjZtp+dJrqMtbv0Ev0fr4kIWKaaz9phkQpHMOF/AD2Z+SbTy
+         rQBQ==
+X-Gm-Message-State: ACgBeo1jWTu10vd2X5yqVYlxbAvuotx1yBEIRi5rSz48tN7afvl1GMtq
+        6QqLhe1fougiQV3ZNUd9a1K2wDMfIKK//VFdFzg=
+X-Google-Smtp-Source: AA6agR5g2knT+beY1JhsSfxLCH4lKMBaFfm1MSAs1YRElEg3QqXt7JjCt0Bmo9/fYFDI8GqyedTmwgAW60MNvgaP+bI=
+X-Received: by 2002:a63:cf0b:0:b0:419:f140:2876 with SMTP id
+ j11-20020a63cf0b000000b00419f1402876mr18445354pgg.303.1661209967533; Mon, 22
+ Aug 2022 16:12:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220531223100.510392-1-surenb@google.com> <20220531223100.510392-2-surenb@google.com>
- <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
- <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com> <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
-In-Reply-To: <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 22 Aug 2022 16:59:29 -0600
-Message-ID: <CAOUHufa1zc3fMWsyyz1uB6_gsgVPk1Hw_T31WzWK58QVgsQSAQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
+References: <20220819053234.241501-1-tales.aparecida@gmail.com>
+ <20220819053234.241501-8-tales.aparecida@gmail.com> <CAGS_qxoVuRPF39kcVBWGuhnmaixfLAkPN6HaDRyuXmDHqmWPXg@mail.gmail.com>
+ <CAGVoLp6CQO=Vw20GYYoYUEZr4BJM5FS8H8Fi3TgS0aXWVie4Lg@mail.gmail.com> <CAGS_qxrGVHWiEQz5b+zWz0JYmUwxnsVaoa_8SYOxb7nsRZ=iSw@mail.gmail.com>
+In-Reply-To: <CAGS_qxrGVHWiEQz5b+zWz0JYmUwxnsVaoa_8SYOxb7nsRZ=iSw@mail.gmail.com>
+From:   Tales <tales.aparecida@gmail.com>
+Date:   Mon, 22 Aug 2022 20:12:09 -0300
+Message-ID: <CAGVoLp5zv5CR_Jo-dboaYF+7_8whV=rvfJHRGeVhNRTn6LzMoA@mail.gmail.com>
+Subject: Re: [PATCH 7/8] lib: overflow: update reference to kunit-tool
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Sadiya Kazi <sadiyakazi@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        linux-doc@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, David Gow <davidgow@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
+        Melissa Wen <mwen@igalia.com>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Magali Lemes <magalilemes00@gmail.com>,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,70 +83,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 4:48 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+Em seg., 22 de ago. de 2022 =C3=A0s 19:52, Daniel Latypov
+<dlatypov@google.com> escreveu:
 >
-> On Mon, 22 Aug 2022 16:33:51 -0600 Yu Zhao <yuzhao@google.com> wrote:
+> On Mon, Aug 22, 2022 at 3:35 PM Tales <tales.aparecida@gmail.com> wrote:
+> >
+> > Hi Daniel,
+> >
+> > Em seg., 22 de ago. de 2022 =C3=A0s 17:09, Daniel Latypov
+> > <dlatypov@google.com> escreveu:
+> > >
+> > > On Thu, Aug 18, 2022 at 10:33 PM Tales Aparecida
+> > > <tales.aparecida@gmail.com> wrote:
+> > > >
+> > > > Replace URL with an updated path to the full Documentation page
+> > > >
+> > > > Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+> > > > ---
+> > > >  lib/overflow_kunit.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+> > > > index 7e3e43679b73..78075106c0df 100644
+> > > > --- a/lib/overflow_kunit.c
+> > > > +++ b/lib/overflow_kunit.c
+> > > > @@ -1,7 +1,7 @@
+> > > >  // SPDX-License-Identifier: GPL-2.0 OR MIT
+> > > >  /*
+> > > >   * Test cases for arithmetic overflow checks. See:
+> > > > - * https://www.kernel.org/doc/html/latest/dev-tools/kunit/kunit-to=
+ol.html#configuring-building-and-running-tests
+> > > > + * "Running tests with kunit_tool" at Documentation/dev-tools/kuni=
+t/start.rst
+> > >
+> > > Oh, I thought I had sent a patch out for this.
+> > > The rewritten version of the patch is
+> > > https://www.kernel.org/doc/html/latest/dev-tools/kunit/run_wrapper.ht=
+ml
+> > > That's what I was intending to rewrite this line to point to.
+> > >
+> > > But if people like a Documentation/ path to start.rst instead, that a=
+lso works.
+> > >
+> > > Daniel
+> >
+> > You are absolutely right! You did send and I wasn't aware, sorry.
+> > https://lore.kernel.org/all/20220603195626.121922-1-dlatypov@google.com=
+/
+> > I guess it stalled after that discussion about *where* it should be app=
+lied,
+> > I got a green flag in IRC and didn't do my due diligence carefully,
+> > just tried to find pending patches at linux-kselftest which wasn't
+> > CC'd
 >
-> > > --- a/mm/vmscan.c~mm-delete-unused-mmf_oom_victim-flag-fix
-> > > +++ a/mm/vmscan.c
-> > > @@ -3429,9 +3429,6 @@ static bool should_skip_mm(struct mm_str
-> > >         if (size < MIN_LRU_BATCH)
-> > >                 return true;
-> > >
-> > > -       if (mm_is_oom_victim(mm))
-> > > -               return true;
-> > > -
-> > >         return !mmget_not_zero(mm);
-> > >  }
-> > >
-> > > @@ -4127,9 +4124,6 @@ restart:
-> > >
-> > >                 walk_pmd_range(&val, addr, next, args);
-> > >
-> > > -               if (mm_is_oom_victim(args->mm))
-> > > -                       return 1;
-> > > -
-> > >                 /* a racy check to curtail the waiting time */
-> > >                 if (wq_has_sleeper(&walk->lruvec->mm_state.wait))
-> > >                         return 1;
-> > > _
-> > >
-> > > Please confirm?
-> >
-> > LGTM.  The deleted checks are not about correctness.
+> Oh right, it was that series where I didn't cc linux-kselftest.
+> That was my bad, sorry.
 >
-> OK, for now.
+> But I had forgotten to include a patch in that series to update this
+> file still, afaict.
+> I could revive that series and add on a version of this patch, if we want=
+?
 >
-> > I've queued
-> >
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -3402,7 +3402,7 @@ static bool should_skip_mm(struct mm_struct *mm,
-> > struct lru_gen_mm_walk *walk)
-> >         if (size < MIN_LRU_BATCH)
-> >                 return true;
-> >
-> > -       if (mm_is_oom_victim(mm))
-> > +       if (test_bit(MMF_OOM_REAP_QUEUED, &mm->flags))
-> >                 return true;
-> >
-> >         return !mmget_not_zero(mm);
-> > @@ -4109,7 +4109,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned
-> > long start, unsigned long end,
-> >
-> >                 walk_pmd_range(&val, addr, next, args);
-> >
-> > -               if (mm_is_oom_victim(args->mm))
-> > +               if (test_bit(MMF_OOM_REAP_QUEUED, &args->mm->flags))
-> >                         return 1;
-> >
-> >                 /* a racy check to curtail the waiting time */
->
-> Oh.  Why?  What does this change do?
+> Daniel
 
-The MMF_OOM_REAP_QUEUED flag is similar to the deleted MMF_OOM_VICTIM
-flag, but it's set at a later stage during an OOM kill.
-
-When either is set, the OOM reaper is probably already freeing the
-memory of this mm_struct, or at least it's going to. So there is no
-need to dwell on it in the reclaim path, hence not about correctness.
+I can bring your patches in my V3, if you don't mind! :D
