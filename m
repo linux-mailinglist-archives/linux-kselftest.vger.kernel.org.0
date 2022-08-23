@@ -2,171 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C339C59D1F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 09:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F093059D263
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 09:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240048AbiHWHYu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Aug 2022 03:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S240990AbiHWHhO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Aug 2022 03:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbiHWHYs (ORCPT
+        with ESMTP id S240813AbiHWHhG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Aug 2022 03:24:48 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2059.outbound.protection.outlook.com [40.107.212.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253B962A94;
-        Tue, 23 Aug 2022 00:24:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jGvRJH3UrJCYJxJJ7ishAFycZZEJXGaK556+I1QT66Hk+5h7Eo1B476/XQNpj+wO9qFiojYGrFUcOh89kIQuNftJ5y5zy4Rnn/OzXkvbtO3Or7A7PZwqixHilb4t/7TaYnp62SnGEjE4bqvXvNFa1311EmXifD3QzLK8IZtUMuVrrhjvd0g0QKTB4gLNGZ747Ai/2Vfs1nAJ3MjCWQLf55l5EVsQIdyB2s2to+UFtmn4rGGBuyYkhuSw/jUR1xHTJuOMRQUkhp+10cVYIba/AyZ409YS+GWxTDDIqs1j1V7f17C+mHLV/83zieviRqe3+3JPGKmIB6HNi2tBRzn4rQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+sEku82Dbcvg5O6a4FBAiTuhF4cRolUjE0Q0ZzxIAe0=;
- b=OoOKtPxIui5fykbrleoBXYnmltF8h/ABUbEgzyJQez61wciA220EBIaGt1CrbLJZaz+Z/9TTlper5ExAfEc+V1A28Y5nBXK25Rohh12eE8AdaBicC5jH2+4A+KRj7H8casTbZRxAst3OGPLiyeNs8uxgIbOokDn8r3j33MdqU0f22tt6nDeG3rLDBZcoiCIMH7Z70NgRaW7pdV8K/2xJCeNsWmMWsrC1sOlWx7/znrJ8o0m8ImpuYCubPA5IWHr8O9eQfk8ElZqZ6Gf9TY+jQQd9sxaqS/g5/AePIvIyxzuZJogKVQdhCmkwuGEyqg+5yICoX7iqKHCbm2alSbH6SQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+sEku82Dbcvg5O6a4FBAiTuhF4cRolUjE0Q0ZzxIAe0=;
- b=KRUFwJDvmysHH5Eo2esSGeYAr/gS0mGplQsIJnH9AQ48U7MZJsBvkJ0KPFgUQ5klnmquvRKd1iBTPEPsLMgkNaAJlnX4ynJ6zweztWVPlnSdnsVYysP69lpdHgc7gbsq4J0awsNKETxGehqsmWvkDi674mQfCQxoLHtft+DAfDBvhsaCPI6zmv7oikOzC2Mo/KgOpxa/04+pAJuCtml4h9gP/HayiPjGt5C3IOUE9fIlCPsYz7zhFGi5TNDqCIBvZErys3FC30gCDlNlfwvjxCRrrAidOczX8wcbmlpcrWlx5FA6sZENUwjqf2/Db/ZrHOhuAZgC4oA22t2kGN4bRg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6163.namprd12.prod.outlook.com (2603:10b6:208:3e9::22)
- by DM6PR12MB5519.namprd12.prod.outlook.com (2603:10b6:5:1b5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Tue, 23 Aug
- 2022 07:24:45 +0000
-Received: from IA1PR12MB6163.namprd12.prod.outlook.com
- ([fe80::a52c:c6f5:f9f4:59cc]) by IA1PR12MB6163.namprd12.prod.outlook.com
- ([fe80::a52c:c6f5:f9f4:59cc%5]) with mapi id 15.20.5546.022; Tue, 23 Aug 2022
- 07:24:45 +0000
-Date:   Tue, 23 Aug 2022 10:24:38 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     netdev@kapio-technology.com
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <YwSAtgS7fgHNLMEy@shredder>
-References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
- <YvkM7UJ0SX+jkts2@shredder>
- <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
- <YwHZ1J9DZW00aJDU@shredder>
- <ce4266571b2b47ae8d56bd1f790cb82a@kapio-technology.com>
- <YwMW4iGccDu6jpaZ@shredder>
- <c2822d6dd66a1239ff8b7bfd06019008@kapio-technology.com>
- <YwR4MQ2xOMlvKocw@shredder>
- <9dcb4db4a77811308c56fe5b9b7c5257@kapio-technology.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9dcb4db4a77811308c56fe5b9b7c5257@kapio-technology.com>
-X-ClientProxiedBy: VI1PR0302CA0023.eurprd03.prod.outlook.com
- (2603:10a6:800:e9::33) To IA1PR12MB6163.namprd12.prod.outlook.com
- (2603:10b6:208:3e9::22)
+        Tue, 23 Aug 2022 03:37:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83AE63F3A
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 00:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661240225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HohlDOM1an5R3Aeg0WJ6GQRtA32+l/PSRz3n64TVcFI=;
+        b=Y8lHcwEaMTgdjbG/tbKrjI3w+ZvyXb0YQLp2zDUbZ5Bdo/bo1kmLGljTthBQmARyjPuwLj
+        Xoxosn/rXX0xRLHgu7UUU5SNMLvOmPUINur5IeF6Q3nt0wY60JBdVWbP9QjgMSzctFDWdH
+        H+15TnZF/5yk/2tu5t0ZUgGHM2fRXDw=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-467-ycq6qzfZOaCzmIx33uXSOA-1; Tue, 23 Aug 2022 03:37:01 -0400
+X-MC-Unique: ycq6qzfZOaCzmIx33uXSOA-1
+Received: by mail-wr1-f69.google.com with SMTP id w20-20020adf8bd4000000b002237e71d4e4so2052787wra.21
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 00:37:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=HohlDOM1an5R3Aeg0WJ6GQRtA32+l/PSRz3n64TVcFI=;
+        b=3/3o35V+yZRuwv3UEXSTbJTjsEX6kezHdR5IsXSmaSN50sPkeNhuUg5dgwpv1v4x8E
+         UqkdqDgfDB8OGprRfVWnqgHT9RkLY5LD2lN6AIzbMgOv9yg23m9+efSAXWj23XW6vNyu
+         KqgZoD1Aly/NMHy2vqUXhsvFq0pI4N+bfzbnTN2aH3Z9LsCD83uSL5nMnX0YQSezq9UK
+         T++migBFExhFMdTWdDaUWxVyPYhMWZhCFj0Zei8QjaEPu5Js3j9CHnQFFDZqoALlFC9e
+         nS4LGICSi/yI0lp5fGSckNR2q79JM5hC6h//yU52yFRn0Hqi7ibpgfQLhzE5QC4HcMd7
+         CtGA==
+X-Gm-Message-State: ACgBeo3qfHckinRjmMM+a1+6jDuxxdXaGR3JPVAnR/pOW3bc59G/DSVG
+        DonDGof/y9eHTuBkyL48Z0H9EYdHXJGImuSbZHmiYlT2jhrK18q225X+XpzXAs7n/RjC0Dmk9M1
+        HFkoXffSRE9gmOCMhBOTGpDnSjsT6
+X-Received: by 2002:a05:600c:4e04:b0:3a5:a34e:ae81 with SMTP id b4-20020a05600c4e0400b003a5a34eae81mr1210649wmq.147.1661240219938;
+        Tue, 23 Aug 2022 00:36:59 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4NUFG4IFicJqv+j50eM5lq6Rzd1ri/9X+RKdy6Bv7oWpP5THIKdol8DYBnS2vZ39y/40KufQ==
+X-Received: by 2002:a05:600c:4e04:b0:3a5:a34e:ae81 with SMTP id b4-20020a05600c4e0400b003a5a34eae81mr1210635wmq.147.1661240219655;
+        Tue, 23 Aug 2022 00:36:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:1600:c48b:1fab:a330:5182? (p200300cbc70b1600c48b1faba3305182.dip0.t-ipconnect.de. [2003:cb:c70b:1600:c48b:1fab:a330:5182])
+        by smtp.gmail.com with ESMTPSA id u18-20020adfdb92000000b0021eaf4138aesm16379582wri.108.2022.08.23.00.36.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Aug 2022 00:36:59 -0700 (PDT)
+Message-ID: <8f6f428b-85e6-a188-7f32-512b6aae0abf@redhat.com>
+Date:   Tue, 23 Aug 2022 09:36:57 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dbcc84f5-cef2-4458-90ae-08da84d88dae
-X-MS-TrafficTypeDiagnostic: DM6PR12MB5519:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gH3x8iFrPG27IEkLVJ9itvXOZ4zRBxnP3z4g76eNuqz3YZqjl5OHnmsy4xzQ1e21SpybeUV7DOxrhNtXbPbuqdDx/k/tQkhuZkuoSZH53wg1Y9bfel/Sk+nH+fdnKEpQLQyvZXpkqEP92Sgdi/SLNxhggjHvbf+QL5cN15cdbz+9FCKKiQ7kyL+tULW7uK3QssKSW6nz9ppUvQyoW6KFQPRKdNpP9p6iqbpoA+5xyOL0D3nA+6+OZ7/EI6pD62d0YT8n4EPIKZ19CbjQISPSZQ7r7GyEqbqIkJmy6l8DifqwKUK9t6ZYbQsqZHJCRcDZYCuzEbMqJWePHrSVk4tYarL/1STu4tt1LBUy4XhJQvyf0vPV0bl1RpcgnxcPOjBxRkM6eXbIRvKK+sgOofpiO2WmxXc669ovr5e7rmSew9RAw6eNLTNVU+xH1VSE0V/xsIbWSIkAa5jzfdhyR/PN7NbV0y8vvMTkOBaDc9DajgCAWlt1/zNOazqRaAT+YZ2jwn4iiZgbmToPSihQGArnfL0wcKpjC2BvY3uHnq2sUnLXyW9AQbOMoR2b1AFFhJRlPfCC/ITo1eX5vb5c2G+koujfBcJGeeoXcDmgf1JexC83/TQMc1etGc8bnK1lBlz3z4IwOgZp8uEXbR1MwHgZdQ9iEBUXJ7eCDd7QxXSpSFLQTQJN94H+XB3iCLcfWxSQxGEZQibE4sMG7PYsbM4yRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6163.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(376002)(136003)(39860400002)(396003)(346002)(366004)(2906002)(5660300002)(33716001)(8676002)(4326008)(66556008)(66476007)(66946007)(316002)(6666004)(6506007)(6916009)(54906003)(41300700001)(9686003)(53546011)(478600001)(6486002)(26005)(6512007)(38100700002)(86362001)(186003)(8936002)(7416002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?25TaRi5FLTw7hxUwP8haF7NTwS3vfZS0Wh368T1dOihphSO2Uea0dVOfc67o?=
- =?us-ascii?Q?Jw7kjdFX7pslWaI9OhSHuB3SS+Lb6PoxJ8l+bpmHgw2N//czQ7kl/RgFwoIz?=
- =?us-ascii?Q?MDy6OSuVFAu810bfFIJhxNKuyD4Wpd6j6DxXpXku3Y8Cupc/OYdJBYdBv9gt?=
- =?us-ascii?Q?RncGw1h6M6ToTAPEZ3RnUmRFXJUgciZV+uSWWD0hAVFkbyeYebme3JJx+bx5?=
- =?us-ascii?Q?X3RV2PW+UL4cgNqaA5b0LAFyKR4gqOameQsT9WDTW2GOXbnSTI8jXlHOEHkE?=
- =?us-ascii?Q?FXKu7+3vpoXulM06U7tTFMaeMd6b4qO3xsi8ezw5K11G6bUJaNdx82RWnLbR?=
- =?us-ascii?Q?BS1dBOmPx1DrqFyduwt6fsDzHQIuLFvmIpvI0KnibyJNceczRh3LAwyiU37O?=
- =?us-ascii?Q?w4QYIiZm2amUkDn+CwZRMKAQLV/tXlpjWo2h5NCkQhSPJmFm7pAO0av7Ihs3?=
- =?us-ascii?Q?GGjxhSRRcfDcYYhRoU08rF/9Gi8s9FMNRyxTVa8o/62JT4SnETfwrqLzqw7B?=
- =?us-ascii?Q?nJFKeZJyOc8b95r5RfbwWQqwSHAo9yW4pmTw4tlYabLtYBk8p4WBxniODbnc?=
- =?us-ascii?Q?zUNPAn2tZJG4Oq0VuQ7qVQYIBS/afn5mhJh6YhEXf1WzFwgE4OabdOwc4yEy?=
- =?us-ascii?Q?RgglLjHRFSKD9yPKri/lNn1qGEOFfbr8HgikWBoJWjON6wp5/BZ5YewCqI8U?=
- =?us-ascii?Q?ggUJbnrd6swBH56GWOWm1OLPkZOQcWmsjMmmS0Q+7IkV3mnqffTPltkU9PEj?=
- =?us-ascii?Q?ljOX5cbgW6YKRC8PL9tbmJL4mBZ374INUNP5Q7poK0UDO7izJYYqI79ckDgs?=
- =?us-ascii?Q?Ye4PtfhiZkWzCKfzy7DW9nRhwg/fMhYKrlAu5QzKQkhGqcF521x5F1lJHbK7?=
- =?us-ascii?Q?U0LuHDGQZVLx0v2lp/hHnz5JbfZso1sqiw6AjlS+g2cCGhf9w+oHnYW4Fsf9?=
- =?us-ascii?Q?VJoa95TisqUwtrvz+93zGGwIsU+VeSztmT12avSMYxCf8/ChN8ZvHpa3MNn4?=
- =?us-ascii?Q?nVsaFT+9qvhtYF9WIxUgQZwTXHrgqtYEjeJWZfQQtQGeUEk0VckC11WXsmqO?=
- =?us-ascii?Q?3ohsaHyz3N+h24shuAs3hNvZkl2/zvcjpM0IjFDb6iD3DOVH5fSXiQWi2oVl?=
- =?us-ascii?Q?xCjHA/WppxRN1COBJGwzHxpwMJcBftBiroTJbnU21AuuSEfV9edTDdYcvhcq?=
- =?us-ascii?Q?cK2i4Rai2uwLiOXnWf30Ad/UTPyGAgz/7kCQe2kj2o/Pxvhfezl8WXALApBU?=
- =?us-ascii?Q?tWd32U81I1czKyueiieb6yrtrw5C3tFfCg7M3meGxZaOtkxSaQzumBpRNmCB?=
- =?us-ascii?Q?s49jA0gUmEqqftPkPL78SgI6eHKg72xYz7bf77Z5z4kmlqayw3nt/OvirnSE?=
- =?us-ascii?Q?/9ePAOSxEKhTs/KzLzzD1KNpb8HcfyaFokzzaIAH5oZqJKhLu6MYJIkLTts7?=
- =?us-ascii?Q?caAE8xKb5xAhh9D+gzTfgpKyPQ74BEsFGbZPH5v5tPd2tTv84puASKxym1AA?=
- =?us-ascii?Q?DCJVODqrduLKIuEhU0MVHe6I9BkHTgoG11SGDGKLkstGuZpeNG+6pJjDnr/8?=
- =?us-ascii?Q?+676ctdIWoc1DscctfgWLEyihXTif+lfDlAU9gK4?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dbcc84f5-cef2-4458-90ae-08da84d88dae
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6163.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2022 07:24:45.2907
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X4ZCjY8QCRaXFlYKcmV5wNcfkP1IvsExmprgcLgUMDAQ8Hvko9W6/1sNd3PPmoTrr5CzlbsHWi5idYnD1gmbnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5519
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
+ <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
+ <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
+ <20220817234120.mw2j3cgshmuyo2vw@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220817234120.mw2j3cgshmuyo2vw@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 09:13:54AM +0200, netdev@kapio-technology.com wrote:
-> On 2022-08-23 08:48, Ido Schimmel wrote:
-> > On Mon, Aug 22, 2022 at 09:49:28AM +0200, netdev@kapio-technology.com
-> > wrote:
+On 18.08.22 01:41, Kirill A. Shutemov wrote:
+> On Fri, Aug 05, 2022 at 07:55:38PM +0200, Paolo Bonzini wrote:
+>> On 7/21/22 11:44, David Hildenbrand wrote:
+>>>
+>>> Also, I*think*  you can place pages via userfaultfd into shmem. Not
+>>> sure if that would count "auto alloc", but it would certainly bypass
+>>> fallocate().
+>>
+>> Yeah, userfaultfd_register would probably have to forbid this for
+>> F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for this,
+>> adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then userfault_register
+>> would do something like memfile_node_get_flags(vma->vm_file) and check the
+>> result.
 > 
-> > > As I am not familiar with roaming in this context, I need to know
-> > > how the SW
-> > > bridge should behave in this case.
-> > 
+> I donno, memory allocation with userfaultfd looks pretty intentional to
+> me. Why would F_SEAL_AUTO_ALLOCATE prevent it?
 > 
-> > > In this case, is the roaming only between locked ports or does the
-> > > roaming include that the entry can move to a unlocked port, resulting
-> > > in the locked flag getting removed?
-> > 
-> > Any two ports. If the "locked" entry in mv88e6xxx cannot move once
-> > installed, then the "sticky" flag accurately describes it.
-> > 
+
+Can't we say the same about a write()?
+
+> Maybe we would need it in the future for post-copy migration or something?
 > 
-> But since I am also doing the SW bridge implementation without mv88e6xxx I
-> need it to function according to needs.
-> Thus the locked entries created in the bridge I shall not put the sticky
-> flag on, but there will be the situation where a locked entry can move to an
-> unlocked port, which we regarded as a bug. 
+> Or existing practises around userfaultfd touch memory randomly and
+> therefore incompatible with F_SEAL_AUTO_ALLOCATE intent?
+> 
+> Note, that userfaultfd is only relevant for shared memory as it requires
+> VMA which we don't have for MFD_INACCESSIBLE.
 
-I do not regard this as a bug. It makes sense to me that an authorized
-port can cause an entry pointing to an unauthorized port to roam to
-itself. Just like normal learned entries. What I considered as a bug is
-the fact that the "locked" flag is not cleared when roaming to an
-authorized port.
+This feature (F_SEAL_AUTO_ALLOCATE) is independent of all the lovely
+encrypted VM stuff, so it doesn't matter how it relates to MFD_INACCESSIBLE.
 
-> In that case there is two possibilities, the locked entry can move to
-> an unlocked port with the locked flag being removed or the locked
-> entry can only move to another locked port?
+-- 
+Thanks,
 
-My suggestion is to allow roaming and maintain / clear the "locked" flag
-based on whether the new destination port is locked or not.
+David / dhildenb
+
