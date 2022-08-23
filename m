@@ -2,120 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A463159EF68
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 00:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4EC59EFA5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 01:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbiHWWsX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Aug 2022 18:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
+        id S229445AbiHWXXw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Aug 2022 19:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbiHWWsU (ORCPT
+        with ESMTP id S231467AbiHWXXu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Aug 2022 18:48:20 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26ED8B2E4
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 15:48:16 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id z22-20020a630a56000000b0041b98176de9so6725777pgk.15
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 15:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=YHBqbQM3NMY0cCrSntfkljesc8TAC/U4AG8R+VgzY3A=;
-        b=O6VMZWlXVxl9lfPpxPjKWilGV07sUHi4GKZV0gZX1Gi2ZF7dN+73ZJ/PK0Sa1jwLCk
-         tWszWgO9rxX+fbVFHqYkehQqb2wrkVqGRUty1VpJFrJ1VttT3vVIWTh8cWd2TMVD4pVi
-         ZZ3V0qE4frtaEiKuUAymKgGXB3tpSxUqf7oeCG3oy+9iq1VH2RWR1y+IOD1n7hOsbeTb
-         UKbmIX5Feo7H7ML7Wkk8jFv3IyTcmmR3TeTlTlycH3AE1ZYIi2L+aJj2b74i96zn0VUn
-         qfk1zDrcVxMUDFm3hbvH/6ZJJR1XzhvTzG7x7uVCM0r/mSn/m11MqrlXpCdVdBPgHEhv
-         Hu3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=YHBqbQM3NMY0cCrSntfkljesc8TAC/U4AG8R+VgzY3A=;
-        b=u/CmJsR34uiFfMFxPxx8sfXuuItdAGvy/jHzsf2/60254JT5DlR9XxAYmmEa9DZ1sU
-         mGigyrphVW176l8+fdmh6q0/cmZX3cx2p5nhlnGe79fqwaM8pfBHB70ShrjzsdIGyXNv
-         1NNZ3kF5wVRUvYsAVZwxg7Nvc/lLO6AUgsWrRoxIm6oIGI+xa5WlfRdZOSAnp87Xgu+m
-         Bv9esBduhwcGGQYlxqu6XldT+fWQxHX+JWyrUF7Zw7gLx7VGnJbU2tj8uotxAYNJVCA+
-         E1jqk7Ga8Fn8tXxYXt/+LUm6ru5kemmh48zVNkFVrr6a7Rhw9TbtEmyqbz2G/C+EM5Tp
-         Oghg==
-X-Gm-Message-State: ACgBeo19JNrJ2mtfwCjunk8oucRZ21fBplvyFEFldjqUjS1WXp9KxKRn
-        41akcYKDWEfFF8hV8DfjVP8z8QwZ5Q==
-X-Google-Smtp-Source: AA6agR4/Tw3x1nc5MgOSIj9wYmOp31p/sL5WQ6wQTxMTGs1JLO43iiGd6CU2gmPX6d61M3Y0Ckx07mWGfQ==
-X-Received: from adelg-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:d1f])
- (user=adelg job=sendgmr) by 2002:a05:6a00:10c2:b0:4f7:5af4:47b6 with SMTP id
- d2-20020a056a0010c200b004f75af447b6mr22564043pfu.6.1661294895970; Tue, 23 Aug
- 2022 15:48:15 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 22:48:11 +0000
-Message-Id: <20220823224811.12758-1-adelg@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH] selftests: remove unused variable in close_range test
-From:   Andrew Delgadilo <adelg@google.com>
-To:     Shuah Khan <shuah@kernel.org>, Andrew Delgadillo <adelg@google.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 19:23:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AA5895EB;
+        Tue, 23 Aug 2022 16:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661297029; x=1692833029;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=4B/TRj1BZONwzy5151e2R6Dce0IveHMSY69LyGwAY6I=;
+  b=TpazPvRMWKrwvnNdnSGQczRw4h4Bvcdq1x2sn6xRJZqWjUwFjzRrm457
+   3FBQjbFC8Ua67nIVF5sZTefqtTB7yNnA13fRsMUbPpx7Y5SB4wNuxalL/
+   k4BnjUpixB4wfRy3VfIITHZRSY0/Fbx//EJQtiUVWmZEHTy0O9bKSfNHF
+   agvq4CDzbAlcV96lPhRtfExVoFxgD7/ZQjSKbj8hSv9vV9tY2SN1g+g8e
+   tt3Br9Si3+UeDnqFaR9hHzL7FOaJGbjG79n9IEQ+sHcwgUQWRg/SJDT/M
+   XxkzA+dIfN6pkLNaoB919mra81kl58f3Y3Q1wpjoyok6Nc9trdQSlpInr
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="355547572"
+X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
+   d="scan'208";a="355547572"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2022 16:23:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,259,1654585200"; 
+   d="scan'208";a="605831224"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by orsmga007.jf.intel.com with ESMTP; 23 Aug 2022 16:23:47 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     kvm@vger.kernel.org, pbonzini@redhat.com
+Cc:     linux-kernel@vger.kernel.org, yang.zhong@intel.com,
+        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH 2/2] selftests: kvm: Use the KVM API to enable dynamic XSTATE features
+Date:   Tue, 23 Aug 2022 16:14:02 -0700
+Message-Id: <20220823231402.7839-3-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220823231402.7839-1-chang.seok.bae@intel.com>
+References: <20220823231402.7839-1-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrew Delgadillo <adelg@google.com>
+Use the KVM_X86_XCOMP_GUEST_PERM attribute, instead of the x86-specific prctl()
+options.
 
-commit 2c5db60e46ad ("tests: add close_range() tests") adds the
-close_range test under the core namespace. In its current form, the
-close_range test has an unused variable, namely, ret. For those building
-with -Werror,-Wall, this breaks the build.
-
-Without this patch:
-$ make -C tools/testing/selftests/ TARGETS=core V=1 CFLAGS="-Werror -Wall"
-> make: Entering directory '/.../kernel-src/tools/testing/selftests'
-> make[1]: Entering directory '/.../kernel-src/tools/testing/selftests/core'
-> gcc -Werror -Wall    close_range_test.c  -o /.../kernel-src/tools/testing/selftests/core/close_range_test
-> close_range_test.c: In function 'core_close_range':
-> close_range_test.c:55:16: error: unused variable 'ret' [-Werror=unused-variable]
->   55 |         int i, ret;
->      |                ^~~
-> cc1: all warnings being treated as errors
-> make[1]: *** [../lib.mk:135: /.../kernel-src/tools/testing/selftests/core/close_range_test] Error 1
-> make[1]: Leaving directory '/.../kernel-src/tools/testing/selftests/core'
-> make: *** [Makefile:155: all] Error 2
-> make: Leaving directory '/.../kernel-src/tools/testing/selftests'
-
-With this patch:
-$ make -C tools/testing/selftests/ TARGETS=core V=1 CFLAGS="-Werror -Wall"
-> make: Entering directory '/.../kernel-src/tools/testing/selftests'
-> make[1]: Entering directory '/.../kernel-src/tools/testing/selftests/core'
-> gcc -Werror -Wall    close_range_test.c  -o /.../kernel-src/tools/testing/selftests/core/close_range_test
-> make[1]: Leaving directory '/.../kernel-src/tools/testing/selftests/core'
-> make: Leaving directory '/.../kernel-src/tools/testing/selftests'
-
-Fixes: 2c5db60e46ad ("tests: add close_range() tests")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Delgadillo <adelg@google.com>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Yang Zhong <yang.zhong@intel.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
 ---
- tools/testing/selftests/core/close_range_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/arch/x86/include/uapi/asm/kvm.h         |  1 +
+ .../selftests/kvm/lib/x86_64/processor.c      | 22 ++++++++++++++-----
+ 2 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
-index 749239930ca83..17c76c6c13cb9 100644
---- a/tools/testing/selftests/core/close_range_test.c
-+++ b/tools/testing/selftests/core/close_range_test.c
-@@ -52,7 +52,7 @@ static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
+diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
+index 46de10a809ec..6ab9a2b38061 100644
+--- a/tools/arch/x86/include/uapi/asm/kvm.h
++++ b/tools/arch/x86/include/uapi/asm/kvm.h
+@@ -461,6 +461,7 @@ struct kvm_sync_regs {
  
- TEST(core_close_range)
- {
--	int i, ret;
-+	int i;
- 	int open_fds[101];
+ /* attributes for system fd (group 0) */
+ #define KVM_X86_XCOMP_GUEST_SUPP	0
++#define KVM_X86_XCOMP_GUEST_PERM	1
  
- 	for (i = 0; i < ARRAY_SIZE(open_fds); i++) {
+ struct kvm_vmx_nested_state_data {
+ 	__u8 vmcs12[KVM_STATE_NESTED_VMX_VMCS_SIZE];
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 2e6e61bbe81b..b67f28676d15 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -593,8 +593,6 @@ void __vm_xsave_require_permission(int bit, const char *name)
+ 
+ 	kvm_fd = open_kvm_dev_path_or_exit();
+ 	rc = __kvm_ioctl(kvm_fd, KVM_GET_DEVICE_ATTR, &attr);
+-	close(kvm_fd);
+-
+ 	if (rc == -1 && (errno == ENXIO || errno == EINVAL))
+ 		__TEST_REQUIRE(0, "KVM_X86_XCOMP_GUEST_SUPP not supported");
+ 
+@@ -603,13 +601,25 @@ void __vm_xsave_require_permission(int bit, const char *name)
+ 	__TEST_REQUIRE(bitmask & (1ULL << bit),
+ 		       "Required XSAVE feature '%s' not supported", name);
+ 
+-	TEST_REQUIRE(!syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_GUEST_PERM, bit));
++	attr.attr = KVM_X86_XCOMP_GUEST_PERM;
++	attr.addr = (unsigned long) bit;
++	rc = __kvm_ioctl(kvm_fd, KVM_SET_DEVICE_ATTR, &attr);
++	if (rc == -1 && (errno == ENXIO || errno == EINVAL))
++		__TEST_REQUIRE(0, "KVM_X86_XCOMP_GUEST_PERM not supported");
+ 
+-	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_GUEST_PERM, &bitmask);
+-	TEST_ASSERT(rc == 0, "prctl(ARCH_GET_XCOMP_GUEST_PERM) error: %ld", rc);
++	TEST_ASSERT(rc == 0, "KVM_SET_DEVICE_ATTR(0, KVM_X86_XCOMP_GUEST_PERM) error: %ld", rc);
++
++	attr.addr = (unsigned long) &bitmask;
++	rc = __kvm_ioctl(kvm_fd, KVM_GET_DEVICE_ATTR, &attr);
++	if (rc == -1 && (errno == ENXIO || errno == EINVAL))
++		__TEST_REQUIRE(0, "KVM_X86_XCOMP_GUEST_PERM not supported");
++
++	TEST_ASSERT(rc == 0, "KVM_GET_DEVICE_ATTR(0, KVM_X86_XCOMP_GUEST_PERM) error: %ld", rc);
+ 	TEST_ASSERT(bitmask & (1ULL << bit),
+-		    "prctl(ARCH_REQ_XCOMP_GUEST_PERM) failure bitmask=0x%lx",
++		    "KVM_GET_DEVICE_ATTR(0, KVM_X86_XCOMP_GUEST_PERM) failure bitmask=0x%lx",
+ 		    bitmask);
++
++	close(kvm_fd);
+ }
+ 
+ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
 -- 
-2.37.1.595.g718a3a8f04-goog
+2.17.1
 
