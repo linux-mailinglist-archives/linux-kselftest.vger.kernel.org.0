@@ -2,72 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392AE59ED02
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 22:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A6459EDA6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 22:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiHWUEA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Aug 2022 16:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S234120AbiHWUna (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Aug 2022 16:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbiHWUDo (ORCPT
+        with ESMTP id S234036AbiHWUnH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Aug 2022 16:03:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCAAA722B;
-        Tue, 23 Aug 2022 12:17:09 -0700 (PDT)
+        Tue, 23 Aug 2022 16:43:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE6B64C5;
+        Tue, 23 Aug 2022 13:35:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 203E5B820D5;
-        Tue, 23 Aug 2022 19:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B64C433C1;
-        Tue, 23 Aug 2022 19:17:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CADCB81F3B;
+        Tue, 23 Aug 2022 20:35:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F85C433D7;
+        Tue, 23 Aug 2022 20:35:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661282226;
-        bh=fq3Ha77vc5Ypa6cpCTtel7vNoAw8OmOKU6kZ246w/xA=;
+        s=k20201202; t=1661286931;
+        bh=0JNK622xWgO/a9K2BWJzsLD+0hXBjzLzKVy98NParO4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QnVz4fG5gwuIFr0FHxxiw7OBZ520UriTeNfUA/74w7LcZdpRdu/hI5E4MHcHAxQiu
-         0zWksqekczGyB35pvjWZso76Uc3iAtXkEe91P307IsHQSCPSoYBNFgIJ4p39EtlVbN
-         vPRIaAE969DC53EyT/bd3nylA9e2gd+EShA2CJPVwpPgNrbEtDIW9jQq8KhXKNok/S
-         oJ5buZ1be8Hhdk+teR5+DN5L4H5szV2POnl3ozEPm5slAsDr2XmBLmiLv/32qIPUj7
-         hddaaIsiz6TTfy7/3L9txOsfY39vDqH6oHa62u9cMH/u//qhBPYR2gzTrPyc0avr0P
-         RO0tr6rirDnMw==
+        b=H6sJwrSDAGGP51crSveoiDT/qRVGGPOt/wIzeSIv0HjAmTS88tXrmCfkeFkG1Jekk
+         t9klrKPWCizqfa3R1G+i5fVMKc65sMDQL4Vavg2QHzN4WCUoxMAyOCAsGMXFdfancV
+         u0fQK06VgJaHtzinJ0QcUQucPds/aLc5zvNHBYdTqziY8YL6dxLOB1UBDOa8iEwVFe
+         peZI1qOoU/LPxWonuZ7bclgwVgXf+azagqSkQ1ZX7OY1SAlYUjeuohe2ILhCmv2olG
+         K9ScYIc9GY38dAIni7CybxbgfdXtj7MsxVX9ntIelXPPPMJwVqzAQ6bBeIB8ma44Al
+         NMSVwhtwoHzVw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1oQZOa-005HGi-Ai;
-        Tue, 23 Aug 2022 20:17:04 +0100
-Date:   Tue, 23 Aug 2022 20:17:03 +0100
-Message-ID: <87bksawz0w.wl-maz@kernel.org>
+        id 1oQacS-005I5Q-K9;
+        Tue, 23 Aug 2022 21:35:28 +0100
+Date:   Tue, 23 Aug 2022 21:35:27 +0100
+Message-ID: <87a67uwve8.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Peter Xu <peterx@redhat.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
 Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
         linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        linux-kselftest@vger.kernel.org, peterx@redhat.com,
+        pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com,
+        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
         catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
         seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
         bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
         shan.gavin@gmail.com
 Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory tracking
-In-Reply-To: <YwTc++Lz6lh3aR4F@xz-m1.local>
+In-Reply-To: <YwTn2r6FLCx9mAU7@google.com>
 References: <20220819005601.198436-1-gshan@redhat.com>
         <20220819005601.198436-2-gshan@redhat.com>
         <87lerkwtm5.wl-maz@kernel.org>
         <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
         <87fshovtu0.wl-maz@kernel.org>
-        <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
-        <YwTc++Lz6lh3aR4F@xz-m1.local>
+        <YwTn2r6FLCx9mAU7@google.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: peterx@redhat.com, gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, drjones@redhat.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, peterx@redhat.com, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, drjones@redhat.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -80,113 +79,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 23 Aug 2022 14:58:19 +0100,
-Peter Xu <peterx@redhat.com> wrote:
+On Tue, 23 Aug 2022 15:44:42 +0100,
+Oliver Upton <oliver.upton@linux.dev> wrote:
 > 
-> On Tue, Aug 23, 2022 at 03:22:17PM +1000, Gavin Shan wrote:
-> > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > index 986cee6fbc7f..0b41feb6fb7d 100644
-> > > --- a/arch/arm64/kvm/arm.c
-> > > +++ b/arch/arm64/kvm/arm.c
-> > > @@ -747,6 +747,12 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
-> > >   		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
-> > >   			return kvm_vcpu_suspend(vcpu);
-> > > +
-> > > +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu)) {
-> > > +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
-> > > +			trace_kvm_dirty_ring_exit(vcpu);
-> > > +			return 0;
-> > > +		}
-> > >   	}
-> > >   	return 1;
-> > > diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-> > > index f4c2a6eb1666..08b2f01164fa 100644
-> > > --- a/virt/kvm/dirty_ring.c
-> > > +++ b/virt/kvm/dirty_ring.c
-> > > @@ -149,6 +149,7 @@ int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
-> > >   void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
-> > >   {
-> > > +	struct kvm_vcpu *vcpu = container_of(ring, struct kvm_vcpu, dirty_ring);
-> > >   	struct kvm_dirty_gfn *entry;
-> > >   	/* It should never get full */
-> > > @@ -166,6 +167,9 @@ void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
-> > >   	kvm_dirty_gfn_set_dirtied(entry);
-> > >   	ring->dirty_index++;
-> > >   	trace_kvm_dirty_ring_push(ring, slot, offset);
-> > > +
-> > > +	if (kvm_dirty_ring_soft_full(vcpu))
-> > > +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
-> > >   }
-> > >   struct page *kvm_dirty_ring_get_page(struct kvm_dirty_ring *ring, u32 offset)
-> > > 
+> On Mon, Aug 22, 2022 at 10:42:15PM +0100, Marc Zyngier wrote:
+> > Hi Gavin,
 > > 
-> > Ok, thanks for the details, Marc. I will adopt your code in next revision :)
+> > On Mon, 22 Aug 2022 02:58:20 +0100,
+> > Gavin Shan <gshan@redhat.com> wrote:
+> > > 
+> > > Hi Marc,
+> > > 
+> > > On 8/19/22 6:00 PM, Marc Zyngier wrote:
+> > > > On Fri, 19 Aug 2022 01:55:57 +0100,
+> > > > Gavin Shan <gshan@redhat.com> wrote:
+> > > >> 
+> > > >> The ring-based dirty memory tracking has been available and enabled
+> > > >> on x86 for a while. The feature is beneficial when the number of
+> > > >> dirty pages is small in a checkpointing system or live migration
+> > > >> scenario. More details can be found from fb04a1eddb1a ("KVM: X86:
+> > > >> Implement ring-based dirty memory tracking").
+> > > >> 
+> > > >> This enables the ring-based dirty memory tracking on ARM64. It's
+> > > >> notable that no extra reserved ring entries are needed on ARM64
+> > > >> because the huge pages are always split into base pages when page
+> > > >> dirty tracking is enabled.
+> > > > 
+> > > > Can you please elaborate on this? Adding a per-CPU ring of course
+> > > > results in extra memory allocation, so there must be a subtle
+> > > > x86-specific detail that I'm not aware of...
+> > > > 
+> > > 
+> > > Sure. I guess it's helpful to explain how it works in next revision.
+> > > Something like below:
+> > > 
+> > > This enables the ring-based dirty memory tracking on ARM64. The feature
+> > > is enabled by CONFIG_HAVE_KVM_DIRTY_RING, detected and enabled by
+> > > CONFIG_HAVE_KVM_DIRTY_RING. A ring buffer is created on every vcpu and
+> > > each entry is described by 'struct kvm_dirty_gfn'. The ring buffer is
+> > > pushed by host when page becomes dirty and pulled by userspace. A vcpu
+> > > exit is forced when the ring buffer becomes full. The ring buffers on
+> > > all vcpus can be reset by ioctl command KVM_RESET_DIRTY_RINGS.
+> > > 
+> > > Yes, I think so. Adding a per-CPU ring results in extra memory allocation.
+> > > However, it's avoiding synchronization among multiple vcpus when dirty
+> > > pages happen on multiple vcpus. More discussion can be found from [1]
+> > 
+> > Oh, I totally buy the relaxation of the synchronisation (though I
+> > doubt this will have any visible effect until we have something like
+> > Oliver's patches to allow parallel faulting).
+> > 
 > 
-> Note that there can be a slight difference with the old/new code, in that
-> an (especially malicious) userapp can logically ignore the DIRTY_RING_FULL
-> vmexit and keep kicking VCPU_RUN with the new code.
-> 
-> Unlike the old code, the 2nd/3rd/... KVM_RUN will still run in the new code
-> until the next dirty pfn being pushed to the ring, then it'll request ring
-> full exit again.
-> 
-> Each time it exits the ring grows 1.
-> 
-> At last iiuc it can easily hit the ring full and trigger the warning at the
-> entry of kvm_dirty_ring_push():
-> 
-> 	/* It should never get full */
-> 	WARN_ON_ONCE(kvm_dirty_ring_full(ring));
+> Heh, yeah I need to get that out the door. I'll also note that Gavin's
+> changes are still relevant without that series, as we do write unprotect
+> in parallel at PTE granularity after commit f783ef1c0e82 ("KVM: arm64:
+> Add fast path to handle permission relaxation during dirty logging").
 
-Hmmm, yes. Well spotted.
-
-> We did that because kvm_dirty_ring_push() was previously designed to not be
-> able to fail at all (e.g., in the old bitmap world we never will fail too).
-> We can't because we can't lose any dirty page or migration could silently
-> fail too (consider when we do user exit due to ring full and migration just
-> completed; there could be unsynced pages on src/dst).
-> 
-> So even though the old approach will need to read kvm->dirty_ring_size for
-> every entrance which is a pity, it will avoid issue above.
-
-I don't think we really need this check on the hot path. All we need
-is to make the request sticky until userspace gets their act together
-and consumes elements in the ring. Something like:
-
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 986cee6fbc7f..e8ed5e1af159 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -747,6 +747,14 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
- 
- 		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
- 			return kvm_vcpu_suspend(vcpu);
-+
-+		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
-+		    kvm_dirty_ring_soft_full(vcpu)) {
-+			kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
-+			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
-+			trace_kvm_dirty_ring_exit(vcpu);
-+			return 0;
-+		}
- 	}
- 
- 	return 1;
-
-
-However, I'm a bit concerned by the reset side of things. It iterates
-over the vcpus and expects the view of each ring to be consistent,
-even if userspace is hacking at it from another CPU. For example, I
-can't see what guarantees that the kernel observes the writes from
-userspace in the order they are being performed (the documentation
-provides no requirements other than "it must collect the dirty GFNs in
-sequence", which doesn't mean much from an ordering perspective).
-
-I can see that working on a strongly ordered architecture, but on
-something as relaxed as ARM, the CPUs may^Wwill aggressively reorder
-stuff that isn't explicitly ordered. I have the feeling that a CAS
-operation on both sides would be enough, but someone who actually
-understands how this works should have a look...
+Ah, true. Now if only someone could explain how the whole
+producer-consumer thing works without a trace of a barrier, that'd be
+great...
 
 Thanks,
 
