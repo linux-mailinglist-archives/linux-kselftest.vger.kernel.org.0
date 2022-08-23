@@ -2,135 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4604459CD49
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 02:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F1459CDC7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 03:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbiHWAoD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Aug 2022 20:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S238940AbiHWBZr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Aug 2022 21:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235448AbiHWAoC (ORCPT
+        with ESMTP id S233491AbiHWBZq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Aug 2022 20:44:02 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D42619008
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Aug 2022 17:44:00 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id g8so7530160plq.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Aug 2022 17:44:00 -0700 (PDT)
+        Mon, 22 Aug 2022 21:25:46 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8938857E12;
+        Mon, 22 Aug 2022 18:25:44 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so13126902pjf.2;
+        Mon, 22 Aug 2022 18:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc;
-        bh=X6HTLxYGft4RiDl5n5FaEdJltxWAPE5OTaVMo/traPc=;
-        b=lJhfWvz3nnu8b85BYBRYSo6fccWb6irR5yuDVEh2Ju9PeixIUatbvhEXtn0fFAavYj
-         kDNM1Ck+piaKcVwkX8DjWlTULMhur3Nk/77EhjkoSxq4yQ04AydTPV8+lhUoZ3PI/9W4
-         QTRqTWhyOjATvmK28aWH1RUt/rddawukYoe/YubAYscyZQD1cqzkFMS7ZprNxkLHZM4d
-         POAcdSnONo8lbFIUj2fCtyQiwI5DHMSpDigG1CU9fuZOwFd+8m0y9E+VyhTc7cJ+xmfV
-         5byqHl5NQE80lVmFR3P5+9wDYb8yr5FlmhjnlBQXxB3oVgkJgpEdlOP5zPZX6YGitG+j
-         s2PA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=zUw74NM1PF7THinMe6GlF9fUaFjzhhz/u/PvpW+nALE=;
+        b=Q64HD9FubVrlP5FmJOhxKQUOt96oa1y4u811xQjDNizh82sETFqtDd7YBhlyq7Fdxb
+         rLbPDmVH9HGNC5K/UDeLYv14kfMyzYjVa50MOJ3QGeHCfs4+qrFqcTtzZArm4uraIU/C
+         Nvrv9grRvmRE9oXrd0tzcZWKDezpB1lWXwmfxeu/1emkEXRpVPM/7arbKBomI1miyiS1
+         hy+2xHiijPE8GCpoe5wjF/dscpP7+aowXMXjkAsfFbEH43jZ108/WVH0r9AZlzcMQqx9
+         hVVjlHJU7iqLQKQKcheYNF9PR/qe1ORY2lIlJGzxRCAvGY1+/1jjiSLaSTUkLSyqVi90
+         uW+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=X6HTLxYGft4RiDl5n5FaEdJltxWAPE5OTaVMo/traPc=;
-        b=NOVLYIy5052UDXdmBq6a2R2PZu2DHbLJCNS+9xaFcC0UsBg3UlMpPetl3O7PknMxIK
-         vZOy9IZC/5ddwSR3Zz7+X0d41zqkZhsWxjsyDuhuDEAk/WAjknh0zyJsvGMr7btmZ0su
-         VsMFsBTszzNajRZyFpS0tQ77YvYNkHKnBiIeMhFNADQRfEEFQDs77s/Eht6Fl6V8/cku
-         LPvrxS0/wyejsY/xID6FZujzEkkIL7rcRwvi2mh3CBamcU0QFlNl2snscjtQz8sJWZsj
-         jvzSlrvhjka+S3vL841057IWRYBinRrTyl2p2zfpuMv0Ao3TWlc6LOzkUfK4U4pboNIj
-         VsaA==
-X-Gm-Message-State: ACgBeo0WUF0WEJ4I8XYREkxopBYaQKcAftpjWW8ATXv+3rSPXLyVMCx9
-        a6qdkUa5oj9MsK1QWxpTovVRCQ==
-X-Google-Smtp-Source: AA6agR5rs0iHCG9rjD6X8pcV+A3GDa9lvICypcMFXbMCvSw0W+HRaI+wgTlS76CLQZl1gra1eAfIJg==
-X-Received: by 2002:a17:903:1246:b0:171:5033:85c with SMTP id u6-20020a170903124600b001715033085cmr22297293plh.146.1661215439980;
-        Mon, 22 Aug 2022 17:43:59 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0016d338160d6sm9071377plh.155.2022.08.22.17.43.58
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=zUw74NM1PF7THinMe6GlF9fUaFjzhhz/u/PvpW+nALE=;
+        b=Xwicifs0XYamrE5uEXARQ0O+rvs9DfdwfuznrzftFxPvmxE5c/sZtC6SWIC4P5D+x+
+         t2wugjjIguIzAB6qkyx0d/kX5Nv7s/bv9ZhBLWh0WL+FaWLZsd9TKMkSkKCfJXjqILUC
+         mES1anJuno4CTHQhwiQJqmm8uxQ34OxeJL1i2jTU+5dIIf3HawhI878QJavcM8OCmHCo
+         Txo8Xctnf9uOZdKrN+UYfjwtQStLPwnCL+rr8hvm04NVEcbH8XzmS8seICuhOJfCwSWz
+         aT+gqayCn5EXzpfe3YBB8Ca/etcqI6byfylLm/D5twU9Ma/nbLMt6RvnA+XCLMRdcqvL
+         15KA==
+X-Gm-Message-State: ACgBeo0yAtxRa+c7WmLpG4AdzoOIzDG3JvRHY98EM1KoJSK8FBAZofZb
+        Zerx4sPtVH/dAjJx2zhbyyg=
+X-Google-Smtp-Source: AA6agR6cK3+6tkV4eQf/7WDt9r9QaUp4zK5IzLni0B+GqaZ9vscYfOKokN6RflRUU0B5j2K2m/fZsQ==
+X-Received: by 2002:a17:902:9886:b0:172:bb36:70f1 with SMTP id s6-20020a170902988600b00172bb3670f1mr21126201plp.139.1661217943863;
+        Mon, 22 Aug 2022 18:25:43 -0700 (PDT)
+Received: from localhost ([192.55.55.51])
+        by smtp.gmail.com with ESMTPSA id d10-20020a17090ab30a00b001fb53587166sm1055886pjr.28.2022.08.22.18.25.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 17:43:59 -0700 (PDT)
-Message-ID: <630422cf.170a0220.a6167.0766@mx.google.com>
-Date:   Mon, 22 Aug 2022 17:43:59 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 22 Aug 2022 18:25:43 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 18:25:41 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Nikunj A. Dadhania" <nikunj@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
+        bharata@amd.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-fsdevel@vger.kernel.org,
+        isaku.yamahata@gmail.com
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220823012541.GA2147148@ls.amr.corp.intel.com>
+References: <422b9f97-fdf5-54bf-6c56-3c45eff5e174@amd.com>
+ <1407c70c-0c0b-6955-10bb-d44c5928f2d9@amd.com>
+ <1136925c-2e37-6af4-acac-be8bed9f6ed5@amd.com>
+ <1b02db9d-f2f1-94dd-6f37-59481525abff@amd.com>
+ <20220815130411.GA1073443@chaop.bj.intel.com>
+ <f0094f31-9669-47b5-eb52-6754a13ce757@amd.com>
+ <20220816122457.2fjyd4uz5hp5cani@box.shutemov.name>
+ <f95f35af-4824-2a2a-7cd0-71d1fda6867a@amd.com>
+ <Yvu54I7Y+/ybVyec@google.com>
+ <20220817152719.g7pgu34syekzkha5@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: linux-kselftest-next-6.0-rc2-1-gab7039dbcc61
-Subject: kselftest/next build: 8 builds: 0 failed,
- 8 passed (linux-kselftest-next-6.0-rc2-1-gab7039dbcc61)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220817152719.g7pgu34syekzkha5@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 8 builds: 0 failed, 8 passed (linux-kselftest-next-6.=
-0-rc2-1-gab7039dbcc61)
+On Wed, Aug 17, 2022 at 10:27:19AM -0500,
+Michael Roth <michael.roth@amd.com> wrote:
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/linux-kselftest-next-6.0-rc2-1-gab7039dbcc61/
+> > I think the best approach is to turn KVM_TDX_INIT_MEM_REGION into a generic
+> > vCPU-scoped ioctl() that allows userspace to pre-map guest memory.  Supporting
+> > initializing guest private memory with a source page can be implemented via a
+> > flag.  That also gives KVM line of sight to in-place "conversion", e.g. another
+> > flag could be added to say that the dest is also the source.
+> 
+> So is this proposed ioctl only intended to handle the initial encrypted
+> payload, and the KVM_MEMORY_ENCRYPT_{REG,UNREG}_REGION ioctls would
+> still be used for conversions post-boot?
 
-Tree: kselftest
-Branch: next
-Git Describe: linux-kselftest-next-6.0-rc2-1-gab7039dbcc61
-Git Commit: ab7039dbcc61229aa635357b847a643973497561
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-15) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 0 w=
-arnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----
-For more info write to <info@kernelci.org>
+Yes.  It is called before running any vcpu.  At run time (after running vcpus),
+KVM_MEMORY_ENCRYPT_{REG,UNREG}_REGION is used.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
