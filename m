@@ -2,129 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F1459CDC7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 03:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9582959CE00
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 03:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238940AbiHWBZr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Aug 2022 21:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
+        id S233371AbiHWBmU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Aug 2022 21:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiHWBZq (ORCPT
+        with ESMTP id S234840AbiHWBmS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Aug 2022 21:25:46 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8938857E12;
-        Mon, 22 Aug 2022 18:25:44 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so13126902pjf.2;
-        Mon, 22 Aug 2022 18:25:44 -0700 (PDT)
+        Mon, 22 Aug 2022 21:42:18 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6945A811
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Aug 2022 18:42:16 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id w13so5898780pgq.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Aug 2022 18:42:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=zUw74NM1PF7THinMe6GlF9fUaFjzhhz/u/PvpW+nALE=;
-        b=Q64HD9FubVrlP5FmJOhxKQUOt96oa1y4u811xQjDNizh82sETFqtDd7YBhlyq7Fdxb
-         rLbPDmVH9HGNC5K/UDeLYv14kfMyzYjVa50MOJ3QGeHCfs4+qrFqcTtzZArm4uraIU/C
-         Nvrv9grRvmRE9oXrd0tzcZWKDezpB1lWXwmfxeu/1emkEXRpVPM/7arbKBomI1miyiS1
-         hy+2xHiijPE8GCpoe5wjF/dscpP7+aowXMXjkAsfFbEH43jZ108/WVH0r9AZlzcMQqx9
-         hVVjlHJU7iqLQKQKcheYNF9PR/qe1ORY2lIlJGzxRCAvGY1+/1jjiSLaSTUkLSyqVi90
-         uW+g==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc;
+        bh=DE7PJ+b2iF6rQvtIr13Yh8sxsnueuaHEz7LipeCEi4Y=;
+        b=OwCKcYoDQZNZxT4ls0PAeUxu9pSwniocKwQhSBy8jN+HMPNHp1+UJLl+d+bRsuauyc
+         NS8oW6V0UiOHGSqoD5DUBf8jB0W/YfVEdUcMy+kq8wfnE17LrPzmHGhhfHHD6atbjp2a
+         gL7jpEkBSQuJ/VBBl7EuQoQgOl5KY8KZfCJPPdQjaHYsED33SkG/QsQ2XwvecLgLqUuT
+         eVp6MEm7g8rcPXGnZequ/ophaHiKhhVqBxbzXgkIgolek52AaNm3aCLEWpgOu6qj/Tcc
+         k5/z73k4AQzN/f7jr0OXqq5l6ONMU3WG6fN/tHoA/ua/gxdocKzD3EZIUSsr8sHPem48
+         KM9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=zUw74NM1PF7THinMe6GlF9fUaFjzhhz/u/PvpW+nALE=;
-        b=Xwicifs0XYamrE5uEXARQ0O+rvs9DfdwfuznrzftFxPvmxE5c/sZtC6SWIC4P5D+x+
-         t2wugjjIguIzAB6qkyx0d/kX5Nv7s/bv9ZhBLWh0WL+FaWLZsd9TKMkSkKCfJXjqILUC
-         mES1anJuno4CTHQhwiQJqmm8uxQ34OxeJL1i2jTU+5dIIf3HawhI878QJavcM8OCmHCo
-         Txo8Xctnf9uOZdKrN+UYfjwtQStLPwnCL+rr8hvm04NVEcbH8XzmS8seICuhOJfCwSWz
-         aT+gqayCn5EXzpfe3YBB8Ca/etcqI6byfylLm/D5twU9Ma/nbLMt6RvnA+XCLMRdcqvL
-         15KA==
-X-Gm-Message-State: ACgBeo0yAtxRa+c7WmLpG4AdzoOIzDG3JvRHY98EM1KoJSK8FBAZofZb
-        Zerx4sPtVH/dAjJx2zhbyyg=
-X-Google-Smtp-Source: AA6agR6cK3+6tkV4eQf/7WDt9r9QaUp4zK5IzLni0B+GqaZ9vscYfOKokN6RflRUU0B5j2K2m/fZsQ==
-X-Received: by 2002:a17:902:9886:b0:172:bb36:70f1 with SMTP id s6-20020a170902988600b00172bb3670f1mr21126201plp.139.1661217943863;
-        Mon, 22 Aug 2022 18:25:43 -0700 (PDT)
-Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id d10-20020a17090ab30a00b001fb53587166sm1055886pjr.28.2022.08.22.18.25.43
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=DE7PJ+b2iF6rQvtIr13Yh8sxsnueuaHEz7LipeCEi4Y=;
+        b=A1UMkfq6Hk/8zt1q8PsR92hHsHPEtXMDEYBINgGcLtsq8WTMz/OOvoE/GxMZwGYZja
+         JdokF3FgnLYHkK2FXjEK7zMJ5mbgVn0i2PW0BiheSaguvEjVvn/dq661m+oo9dIw4qOC
+         vORKtVjxnBrAwlNEsxa6xo+iTxofIst0Z3nbe0weV0jIwPf1XnINOlhfJPAxoNQqcsNF
+         lOGjTYn+ZPQKu3F2ETDj2qAAS45lsxp/Z839H1jNG8MeTAQvFCeiPpoA9c0MqXi2CKco
+         od9I+xCailZG4zwD48d63ZxE3O/xqBT/WCYxybbuTZGGIpd997qRSU5bdNfwb2iQnNsS
+         /6+A==
+X-Gm-Message-State: ACgBeo1O4KCRwI+UC/MfexMxrnB+/OybejjkazdVudaY9Oc9zghYxbVh
+        Or8ZUxg/1AV4hLpQoMicsmMUlR30aLtWoQB+
+X-Google-Smtp-Source: AA6agR7qFvU6q8qCfvjBzy9VbG+IaiFUTlSNklXZIPLUJON1p6p6p7kaJLKfiE/LFD8ASJtW0k3cnQ==
+X-Received: by 2002:a63:484e:0:b0:429:411b:1d8c with SMTP id x14-20020a63484e000000b00429411b1d8cmr18838944pgk.623.1661218936286;
+        Mon, 22 Aug 2022 18:42:16 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c25-20020a631c59000000b0041b29fd0626sm7970224pgm.88.2022.08.22.18.42.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Aug 2022 18:25:43 -0700 (PDT)
-Date:   Mon, 22 Aug 2022 18:25:41 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        "Nikunj A. Dadhania" <nikunj@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
-        bharata@amd.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-fsdevel@vger.kernel.org,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220823012541.GA2147148@ls.amr.corp.intel.com>
-References: <422b9f97-fdf5-54bf-6c56-3c45eff5e174@amd.com>
- <1407c70c-0c0b-6955-10bb-d44c5928f2d9@amd.com>
- <1136925c-2e37-6af4-acac-be8bed9f6ed5@amd.com>
- <1b02db9d-f2f1-94dd-6f37-59481525abff@amd.com>
- <20220815130411.GA1073443@chaop.bj.intel.com>
- <f0094f31-9669-47b5-eb52-6754a13ce757@amd.com>
- <20220816122457.2fjyd4uz5hp5cani@box.shutemov.name>
- <f95f35af-4824-2a2a-7cd0-71d1fda6867a@amd.com>
- <Yvu54I7Y+/ybVyec@google.com>
- <20220817152719.g7pgu34syekzkha5@amd.com>
+        Mon, 22 Aug 2022 18:42:15 -0700 (PDT)
+Message-ID: <63043077.630a0220.a5e3e.ead0@mx.google.com>
+Date:   Mon, 22 Aug 2022 18:42:15 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220817152719.g7pgu34syekzkha5@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: linux-kselftest-next-6.0-rc2-1-gab7039dbcc61
+Subject: kselftest/next kselftest-lib: 7 runs,
+ 1 regressions (linux-kselftest-next-6.0-rc2-1-gab7039dbcc61)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 10:27:19AM -0500,
-Michael Roth <michael.roth@amd.com> wrote:
+kselftest/next kselftest-lib: 7 runs, 1 regressions (linux-kselftest-next-6=
+.0-rc2-1-gab7039dbcc61)
 
-> > I think the best approach is to turn KVM_TDX_INIT_MEM_REGION into a generic
-> > vCPU-scoped ioctl() that allows userspace to pre-map guest memory.  Supporting
-> > initializing guest private memory with a source page can be implemented via a
-> > flag.  That also gives KVM line of sight to in-place "conversion", e.g. another
-> > flag could be added to say that the dest is also the source.
-> 
-> So is this proposed ioctl only intended to handle the initial encrypted
-> payload, and the KVM_MEMORY_ENCRYPT_{REG,UNREG}_REGION ioctls would
-> still be used for conversions post-boot?
+Regressions Summary
+-------------------
 
-Yes.  It is called before running any vcpu.  At run time (after running vcpus),
-KVM_MEMORY_ENCRYPT_{REG,UNREG}_REGION is used.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+platform             | arch  | lab          | compiler | defconfig         =
+  | regressions
+---------------------+-------+--------------+----------+-------------------=
+--+------------
+meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-10   | defconfig+kselftes=
+t | 1          =
+
+
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/linu=
+x-kselftest-next-6.0-rc2-1-gab7039dbcc61/plan/kselftest-lib/
+
+  Test:     kselftest-lib
+  Tree:     kselftest
+  Branch:   next
+  Describe: linux-kselftest-next-6.0-rc2-1-gab7039dbcc61
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      ab7039dbcc61229aa635357b847a643973497561 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform             | arch  | lab          | compiler | defconfig         =
+  | regressions
+---------------------+-------+--------------+----------+-------------------=
+--+------------
+meson-g12b-odroid-n2 | arm64 | lab-baylibre | gcc-10   | defconfig+kselftes=
+t | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6304220408d7d305ea355646
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/next/linux-kselftest=
+-next-6.0-rc2-1-gab7039dbcc61/arm64/defconfig+kselftest/gcc-10/lab-baylibre=
+/kselftest-lib-meson-g12b-odroid-n2.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/linux-kselftest=
+-next-6.0-rc2-1-gab7039dbcc61/arm64/defconfig+kselftest/gcc-10/lab-baylibre=
+/kselftest-lib-meson-g12b-odroid-n2.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20220812.0/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-lib.login: https://kernelci.org/test/case/id/6304220408d7d305=
+ea355647
+        new failure (last pass: v6.0-rc1-1-gf1227dc7d0411) =
+
+ =20
