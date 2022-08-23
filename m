@@ -2,105 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D27859E803
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 18:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E2959E7A7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 18:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245450AbiHWQrJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Aug 2022 12:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
+        id S245040AbiHWQh6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Aug 2022 12:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344146AbiHWQqu (ORCPT
+        with ESMTP id S245016AbiHWQhY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:46:50 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18C294EC2
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 07:25:08 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id v65-20020a626144000000b0052f89472f54so6125795pfb.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 07:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=QWKuLGeQgOwRURxq7JoMTU3dLzHqHHHK1oS3f4BccKo=;
-        b=GrRVd//5LW1PqHd4+nmw6iQxSDEv6SZl5rq7HvG1ZJxkWdbroNR0IQv8QL0Ed2zy2Z
-         XS84YhajnhHij1m6VLGokiI4brAmotcy4aU9GAHbjNRHu9oBai/BGZOVsHo05UwBQG/t
-         DT9BwpLi9hZP9gRnX6seb5nEuJSf+RB0AnnlqoHS/kQp50pVUaKGGK/H3pC1JeY0I5bd
-         5GerYP1n64mD7BCQimQCl8T/9JMDBQT/r3nNdE8DpBOqR5445aSzh3U0nLHwsqlRWAvb
-         y+Hkp3MQklnI9vQcisuFfVEd1nvAAqK7tWeo1RwG9Nh5gA9jiQu5y0hP87d1B8tXblgP
-         3GXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=QWKuLGeQgOwRURxq7JoMTU3dLzHqHHHK1oS3f4BccKo=;
-        b=I8FDWz51nJZ6UN4hCJQInomfq9Ng7fTob37goYvS5O387rCe7b4mGV61vEN7PDuLjt
-         KrFuDfOkAecDoocIm2kQXKgFw7iIBCVq8+QFMiXLOa2pH8YurMukEjuxhUnEiQ8Ixx8n
-         STetMFjDI+ovdoKWz0hcLYaMJ688co34BQLrvhV+OvyFY8MsXz6TTDVzj9L4Tx1LP3x+
-         leRwNjXLXfW3ku4eND7ptkU/MtJyhsbTJsxsA+lUlBrO/5vXoDEiDjvyG0kgwTIlqT4n
-         R14CXm2OYOK5rd1eauNAt7naojM60aDNOcI1wQ50DmDnabB5BYw7q/bSeBNfP2geBsJL
-         f0AQ==
-X-Gm-Message-State: ACgBeo0PHaA7phQBBJujG97G+2W/V6xt1HSYjitamS+h13yMhMeT8yvH
-        w26sS3DbdoP6CjMv4kAV+4iW5R+HfznWSgg=
-X-Google-Smtp-Source: AA6agR7/i5co66jtp2HCxpHPVsfI+WFBs/BqAssIQ+wYlUCD1tfwcs4GkOkSfZf6nev2LPSvgvuPF9Dk/9obk25L
-X-Received: from joefradley-custom-96.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:831])
- (user=joefradley job=sendgmr) by 2002:a17:902:7003:b0:172:cbb0:9af8 with SMTP
- id y3-20020a170902700300b00172cbb09af8mr17254972plk.57.1661264708208; Tue, 23
- Aug 2022 07:25:08 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 07:24:55 -0700
-In-Reply-To: <20220823142456.3977086-1-joefradley@google.com>
-Message-Id: <20220823142456.3977086-3-joefradley@google.com>
-Mime-Version: 1.0
-References: <20220823142456.3977086-1-joefradley@google.com>
-X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2 2/2] kunit: no longer call module_info(test, "Y") for kunit modules
-From:   Joe Fradley <joefradley@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     Joe Fradley <joefradley@google.com>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 23 Aug 2022 12:37:24 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C7D6D54D;
+        Tue, 23 Aug 2022 07:44:51 -0700 (PDT)
+Date:   Tue, 23 Aug 2022 09:44:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661265889;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wYTxuO09xQHamH8HB9DanmNLqgTyS7iN+66gFB/iGcs=;
+        b=KzS2iPpdIzfHDC3yepdSeojEKRrJeBGV61JZxpWQCWAB5NKd2i2D94pZKSuDM3G2eJ+izs
+        YH21AVjrNOZyMSuuQy6w0ir/+3q7zjahK2l6toOyZkSk/VUDgyVAMtk9rvwdQk0szY003u
+        jUrrEx4Pa3dRbNvCt5aPDinF0ofcJvA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, peterx@redhat.com,
+        pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com,
+        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, drjones@redhat.com, dmatlack@google.com,
+        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
+ tracking
+Message-ID: <YwTn2r6FLCx9mAU7@google.com>
+References: <20220819005601.198436-1-gshan@redhat.com>
+ <20220819005601.198436-2-gshan@redhat.com>
+ <87lerkwtm5.wl-maz@kernel.org>
+ <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+ <87fshovtu0.wl-maz@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87fshovtu0.wl-maz@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Because KUnit test execution is not a guarantee with the kunit.enable
-parameter we want to be careful to only taint the kernel when actual
-tests run. Calling module_info(test, "Y") for every KUnit module
-automatically causes the kernel to be tainted upon module load. Therefore,
-we're removing this call and relying on the KUnit framework to taint the
-kernel or not.
+On Mon, Aug 22, 2022 at 10:42:15PM +0100, Marc Zyngier wrote:
+> Hi Gavin,
+> 
+> On Mon, 22 Aug 2022 02:58:20 +0100,
+> Gavin Shan <gshan@redhat.com> wrote:
+> > 
+> > Hi Marc,
+> > 
+> > On 8/19/22 6:00 PM, Marc Zyngier wrote:
+> > > On Fri, 19 Aug 2022 01:55:57 +0100,
+> > > Gavin Shan <gshan@redhat.com> wrote:
+> > >> 
+> > >> The ring-based dirty memory tracking has been available and enabled
+> > >> on x86 for a while. The feature is beneficial when the number of
+> > >> dirty pages is small in a checkpointing system or live migration
+> > >> scenario. More details can be found from fb04a1eddb1a ("KVM: X86:
+> > >> Implement ring-based dirty memory tracking").
+> > >> 
+> > >> This enables the ring-based dirty memory tracking on ARM64. It's
+> > >> notable that no extra reserved ring entries are needed on ARM64
+> > >> because the huge pages are always split into base pages when page
+> > >> dirty tracking is enabled.
+> > > 
+> > > Can you please elaborate on this? Adding a per-CPU ring of course
+> > > results in extra memory allocation, so there must be a subtle
+> > > x86-specific detail that I'm not aware of...
+> > > 
+> > 
+> > Sure. I guess it's helpful to explain how it works in next revision.
+> > Something like below:
+> > 
+> > This enables the ring-based dirty memory tracking on ARM64. The feature
+> > is enabled by CONFIG_HAVE_KVM_DIRTY_RING, detected and enabled by
+> > CONFIG_HAVE_KVM_DIRTY_RING. A ring buffer is created on every vcpu and
+> > each entry is described by 'struct kvm_dirty_gfn'. The ring buffer is
+> > pushed by host when page becomes dirty and pulled by userspace. A vcpu
+> > exit is forced when the ring buffer becomes full. The ring buffers on
+> > all vcpus can be reset by ioctl command KVM_RESET_DIRTY_RINGS.
+> > 
+> > Yes, I think so. Adding a per-CPU ring results in extra memory allocation.
+> > However, it's avoiding synchronization among multiple vcpus when dirty
+> > pages happen on multiple vcpus. More discussion can be found from [1]
+> 
+> Oh, I totally buy the relaxation of the synchronisation (though I
+> doubt this will have any visible effect until we have something like
+> Oliver's patches to allow parallel faulting).
+> 
 
-Signed-off-by: Joe Fradley <joefradley@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
-Changes since v1:
-- Added David's and Brendan's Reviewed-by for tags.
+Heh, yeah I need to get that out the door. I'll also note that Gavin's
+changes are still relevant without that series, as we do write unprotect
+in parallel at PTE granularity after commit f783ef1c0e82 ("KVM: arm64:
+Add fast path to handle permission relaxation during dirty logging").
 
- include/kunit/test.h | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index ee6bf4ecbd89..512089e5ce4e 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -253,7 +253,6 @@ static inline int kunit_run_all_tests(void)
- #endif /* IS_BUILTIN(CONFIG_KUNIT) */
- 
- #define __kunit_test_suites(unique_array, ...)				       \
--	MODULE_INFO(test, "Y");						       \
- 	static struct kunit_suite *unique_array[]			       \
- 	__aligned(sizeof(struct kunit_suite *))				       \
- 	__used __section(".kunit_test_suites") = { __VA_ARGS__ }
--- 
-2.37.1.595.g718a3a8f04-goog
-
+--
+Thanks,
+Oliver
