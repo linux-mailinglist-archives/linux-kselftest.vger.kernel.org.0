@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754DB59E979
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 19:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52BD59E964
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Aug 2022 19:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbiHWR0X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Aug 2022 13:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S234044AbiHWR0Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Aug 2022 13:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235542AbiHWRZr (ORCPT
+        with ESMTP id S235604AbiHWRZr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 23 Aug 2022 13:25:47 -0400
 Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443518E452;
-        Tue, 23 Aug 2022 08:02:57 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MBsll2BJhz9v7Hg;
-        Tue, 23 Aug 2022 22:57:39 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39E911A39;
+        Tue, 23 Aug 2022 08:03:09 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MBslz5sGsz9v7J7;
+        Tue, 23 Aug 2022 22:57:51 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBnIhqd6wRjjU5GAA--.52413S9;
-        Tue, 23 Aug 2022 16:02:29 +0100 (CET)
+        by APP2 (Coremail) with SMTP id GxC2BwBnIhqd6wRjjU5GAA--.52413S10;
+        Tue, 23 Aug 2022 16:02:41 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
@@ -33,19 +33,18 @@ Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
         keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v13 07/10] selftests/bpf: Compile kernel with everything as built-in
-Date:   Tue, 23 Aug 2022 17:00:32 +0200
-Message-Id: <20220823150035.711534-8-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v13 08/10] selftests/bpf: Add verifier tests for bpf_lookup_*_key() and bpf_key_put()
+Date:   Tue, 23 Aug 2022 17:00:33 +0200
+Message-Id: <20220823150035.711534-9-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220823150035.711534-1-roberto.sassu@huaweicloud.com>
 References: <20220823150035.711534-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBnIhqd6wRjjU5GAA--.52413S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr4xtr4xCr45XF1fKw4fAFb_yoW5WrW8pw
-        n3A3y8JFWrtF1YyrW7CrWDGFZ5K3ZrXFW7Gw17Jr15uw18Jw4kJr18KFWUGrWDXa9rZr4r
-        AF97KF13AF1UJ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: GxC2BwBnIhqd6wRjjU5GAA--.52413S10
+X-Coremail-Antispam: 1UD129KBjvJXoWxtw4UAFyUXw48KF4DWrWUtwb_yoWxAr1Dp3
+        WfX3WjyF1kXF4aqrykKryIvFyagFZ8X343GasFv39rZa97Jw4xXw43ta15Wr9xtrWrXrWF
+        v3W2kan7ua4UX37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
         Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -59,11 +58,11 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGr4xtr4xCr45XF1fKw4fAFb_yoW5WrW8pw
         AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI
         42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
         80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQANBF1jj4I6SwABsL
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQANBF1jj4I6SwACsI
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,95 +71,197 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Since the eBPF CI does not support kernel modules, change the kernel config
-to compile everything as built-in.
+Add verifier tests for bpf_lookup_*_key() and bpf_key_put(), to ensure that
+acquired key references stored in the bpf_key structure are released, that
+a non-NULL bpf_key pointer is passed to bpf_key_put(), and that key
+references are not leaked.
+
+Also, slightly modify test_verifier.c, to find the BTF ID of the attach
+point for the LSM program type (currently, it is done only for TRACING).
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Acked-by: Daniel Müller <deso@posteo.net>
 ---
- tools/testing/selftests/bpf/config        | 26 +++++++++++------------
- tools/testing/selftests/bpf/config.x86_64 |  2 +-
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/test_verifier.c   |   3 +-
+ .../selftests/bpf/verifier/ref_tracking.c     | 139 ++++++++++++++++++
+ 3 files changed, 142 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 3fc46f9cfb22..0fdd11e6b742 100644
+index 0fdd11e6b742..add5a5a919b4 100644
 --- a/tools/testing/selftests/bpf/config
 +++ b/tools/testing/selftests/bpf/config
-@@ -7,9 +7,9 @@ CONFIG_BPF_LSM=y
- CONFIG_BPF_STREAM_PARSER=y
- CONFIG_BPF_SYSCALL=y
- CONFIG_CGROUP_BPF=y
--CONFIG_CRYPTO_HMAC=m
--CONFIG_CRYPTO_SHA256=m
--CONFIG_CRYPTO_USER_API_HASH=m
-+CONFIG_CRYPTO_HMAC=y
-+CONFIG_CRYPTO_SHA256=y
-+CONFIG_CRYPTO_USER_API_HASH=y
- CONFIG_DYNAMIC_FTRACE=y
- CONFIG_FPROBE=y
- CONFIG_FTRACE_SYSCALLS=y
-@@ -24,30 +24,30 @@ CONFIG_IP_NF_FILTER=y
- CONFIG_IP_NF_RAW=y
- CONFIG_IP_NF_TARGET_SYNPROXY=y
- CONFIG_IPV6=y
--CONFIG_IPV6_FOU=m
--CONFIG_IPV6_FOU_TUNNEL=m
-+CONFIG_IPV6_FOU=y
-+CONFIG_IPV6_FOU_TUNNEL=y
- CONFIG_IPV6_GRE=y
+@@ -30,6 +30,7 @@ CONFIG_IPV6_GRE=y
  CONFIG_IPV6_SEG6_BPF=y
--CONFIG_IPV6_SIT=m
-+CONFIG_IPV6_SIT=y
+ CONFIG_IPV6_SIT=y
  CONFIG_IPV6_TUNNEL=y
++CONFIG_KEYS=y
  CONFIG_LIRC=y
  CONFIG_LWTUNNEL=y
  CONFIG_MPLS=y
--CONFIG_MPLS_IPTUNNEL=m
--CONFIG_MPLS_ROUTING=m
-+CONFIG_MPLS_IPTUNNEL=y
-+CONFIG_MPLS_ROUTING=y
- CONFIG_MPTCP=y
- CONFIG_NET_CLS_ACT=y
- CONFIG_NET_CLS_BPF=y
--CONFIG_NET_CLS_FLOWER=m
--CONFIG_NET_FOU=m
-+CONFIG_NET_CLS_FLOWER=y
-+CONFIG_NET_FOU=y
- CONFIG_NET_FOU_IP_TUNNELS=y
- CONFIG_NET_IPGRE=y
- CONFIG_NET_IPGRE_DEMUX=y
- CONFIG_NET_IPIP=y
--CONFIG_NET_MPLS_GSO=m
-+CONFIG_NET_MPLS_GSO=y
- CONFIG_NET_SCH_INGRESS=y
- CONFIG_NET_SCHED=y
--CONFIG_NETDEVSIM=m
-+CONFIG_NETDEVSIM=y
- CONFIG_NETFILTER=y
- CONFIG_NETFILTER_SYNPROXY=y
- CONFIG_NETFILTER_XT_CONNMARK=y
-@@ -60,7 +60,7 @@ CONFIG_NF_DEFRAG_IPV6=y
- CONFIG_RC_CORE=y
- CONFIG_SECURITY=y
- CONFIG_SECURITYFS=y
--CONFIG_TEST_BPF=m
-+CONFIG_TEST_BPF=y
- CONFIG_USERFAULTFD=y
- CONFIG_VXLAN=y
- CONFIG_XDP_SOCKETS=y
-diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
-index f0859a1d37ab..ce70c9509204 100644
---- a/tools/testing/selftests/bpf/config.x86_64
-+++ b/tools/testing/selftests/bpf/config.x86_64
-@@ -47,7 +47,7 @@ CONFIG_CPU_IDLE_GOV_LADDER=y
- CONFIG_CPUSETS=y
- CONFIG_CRC_T10DIF=y
- CONFIG_CRYPTO_BLAKE2B=y
--CONFIG_CRYPTO_DEV_VIRTIO=m
-+CONFIG_CRYPTO_DEV_VIRTIO=y
- CONFIG_CRYPTO_SEQIV=y
- CONFIG_CRYPTO_XXHASH=y
- CONFIG_DCB=y
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index f9d553fbf68a..2dbcbf363c18 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -1498,7 +1498,8 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		opts.log_level = DEFAULT_LIBBPF_LOG_LEVEL;
+ 	opts.prog_flags = pflags;
+ 
+-	if (prog_type == BPF_PROG_TYPE_TRACING && test->kfunc) {
++	if ((prog_type == BPF_PROG_TYPE_TRACING ||
++	     prog_type == BPF_PROG_TYPE_LSM) && test->kfunc) {
+ 		int attach_btf_id;
+ 
+ 		attach_btf_id = libbpf_find_vmlinux_btf_id(test->kfunc,
+diff --git a/tools/testing/selftests/bpf/verifier/ref_tracking.c b/tools/testing/selftests/bpf/verifier/ref_tracking.c
+index 57a83d763ec1..f18ce867271f 100644
+--- a/tools/testing/selftests/bpf/verifier/ref_tracking.c
++++ b/tools/testing/selftests/bpf/verifier/ref_tracking.c
+@@ -84,6 +84,145 @@
+ 	.errstr = "Unreleased reference",
+ 	.result = REJECT,
+ },
++{
++	"reference tracking: acquire/release user key reference",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_1, -3),
++	BPF_MOV64_IMM(BPF_REG_2, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_LSM,
++	.kfunc = "bpf",
++	.expected_attach_type = BPF_LSM_MAC,
++	.flags = BPF_F_SLEEPABLE,
++	.fixup_kfunc_btf_id = {
++		{ "bpf_lookup_user_key", 2 },
++		{ "bpf_key_put", 5 },
++	},
++	.result = ACCEPT,
++},
++{
++	"reference tracking: acquire/release system key reference",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_1, 1),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_LSM,
++	.kfunc = "bpf",
++	.expected_attach_type = BPF_LSM_MAC,
++	.flags = BPF_F_SLEEPABLE,
++	.fixup_kfunc_btf_id = {
++		{ "bpf_lookup_system_key", 1 },
++		{ "bpf_key_put", 4 },
++	},
++	.result = ACCEPT,
++},
++{
++	"reference tracking: release user key reference without check",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_1, -3),
++	BPF_MOV64_IMM(BPF_REG_2, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_LSM,
++	.kfunc = "bpf",
++	.expected_attach_type = BPF_LSM_MAC,
++	.flags = BPF_F_SLEEPABLE,
++	.errstr = "arg#0 pointer type STRUCT bpf_key must point to scalar, or struct with scalar",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_lookup_user_key", 2 },
++		{ "bpf_key_put", 4 },
++	},
++	.result = REJECT,
++},
++{
++	"reference tracking: release system key reference without check",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_1, 1),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_LSM,
++	.kfunc = "bpf",
++	.expected_attach_type = BPF_LSM_MAC,
++	.flags = BPF_F_SLEEPABLE,
++	.errstr = "arg#0 pointer type STRUCT bpf_key must point to scalar, or struct with scalar",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_lookup_system_key", 1 },
++		{ "bpf_key_put", 3 },
++	},
++	.result = REJECT,
++},
++{
++	"reference tracking: release with NULL key pointer",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_1, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_LSM,
++	.kfunc = "bpf",
++	.expected_attach_type = BPF_LSM_MAC,
++	.flags = BPF_F_SLEEPABLE,
++	.errstr = "arg#0 pointer type STRUCT bpf_key must point to scalar, or struct with scalar",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_key_put", 1 },
++	},
++	.result = REJECT,
++},
++{
++	"reference tracking: leak potential reference to user key",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_1, -3),
++	BPF_MOV64_IMM(BPF_REG_2, 0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_LSM,
++	.kfunc = "bpf",
++	.expected_attach_type = BPF_LSM_MAC,
++	.flags = BPF_F_SLEEPABLE,
++	.errstr = "Unreleased reference",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_lookup_user_key", 2 },
++	},
++	.result = REJECT,
++},
++{
++	"reference tracking: leak potential reference to system key",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_1, 1),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_LSM,
++	.kfunc = "bpf",
++	.expected_attach_type = BPF_LSM_MAC,
++	.flags = BPF_F_SLEEPABLE,
++	.errstr = "Unreleased reference",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_lookup_system_key", 1 },
++	},
++	.result = REJECT,
++},
+ {
+ 	"reference tracking: release reference without check",
+ 	.insns = {
 -- 
 2.25.1
 
