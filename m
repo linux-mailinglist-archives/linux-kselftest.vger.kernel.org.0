@@ -2,68 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE9459F3EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 09:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 856DD59F412
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 09:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbiHXHH2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Aug 2022 03:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
+        id S235327AbiHXHQk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Aug 2022 03:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiHXHH2 (ORCPT
+        with ESMTP id S231668AbiHXHQj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Aug 2022 03:07:28 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A77885FE2;
-        Wed, 24 Aug 2022 00:07:26 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 84B0B1884C76;
-        Wed, 24 Aug 2022 07:07:23 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 6880E25032B8;
-        Wed, 24 Aug 2022 07:07:23 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 5802FA1A0052; Wed, 24 Aug 2022 07:07:23 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Wed, 24 Aug 2022 03:16:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2309322D;
+        Wed, 24 Aug 2022 00:16:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A711B820D8;
+        Wed, 24 Aug 2022 07:16:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA9DBC433D6;
+        Wed, 24 Aug 2022 07:16:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661325396;
+        bh=SG4pItFavxLFek9T12nP+I7YvMHy0NfLi3Oa+f9zCO0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LzwBf2sji2vMVXeenNfWp/ekWKLV+3Kj/PPjtBD8vSdal734cITyGwYsIviBbLdfQ
+         eavfh1IaOhqvLrs0bAMdThVoPoxUMT2GNlkT1IednP+jgj/JrxbVTZGFqJjsTbtnwV
+         uPg9pIdw0ipAenTknzHjGmU5aS1nkzcVIUz2CMAyN0Hn+JSXax1D+PhRzTY00k0AVA
+         qZ2sZlSDljkrAxObgue93o08PSfZswaXJ1eyCn7TaL+JOKV7jNihaffdpCethZaajL
+         4DduHY1cvRtcw7KfqQklqzbkGMw/FYYsjkZOoO3l/YwFilQh6eijd74VXO9E9XqW9P
+         4Zjy5R4YBvKKA==
+Date:   Wed, 24 Aug 2022 09:16:30 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Andrew Delgadilo <adelg@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] selftests: remove unused variable in close_range test
+Message-ID: <20220824071630.foz2k6ycwdn5vsdw@wittgenstein>
+References: <20220823224811.12758-1-adelg@google.com>
 MIME-Version: 1.0
-Date:   Wed, 24 Aug 2022 09:07:23 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YwTJ5f5RzkC/DSdi@shredder>
-References: <YvkM7UJ0SX+jkts2@shredder>
- <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
- <YwHZ1J9DZW00aJDU@shredder>
- <ce4266571b2b47ae8d56bd1f790cb82a@kapio-technology.com>
- <YwMW4iGccDu6jpaZ@shredder>
- <c2822d6dd66a1239ff8b7bfd06019008@kapio-technology.com>
- <YwR4MQ2xOMlvKocw@shredder>
- <9dcb4db4a77811308c56fe5b9b7c5257@kapio-technology.com>
- <YwSAtgS7fgHNLMEy@shredder>
- <553c573ad6a2ddfccfc47c7847cc5fb7@kapio-technology.com>
- <YwTJ5f5RzkC/DSdi@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <5390cb1d1485db40a71bb3fbf674b67a@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220823224811.12758-1-adelg@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +54,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-08-23 14:36, Ido Schimmel wrote:
-> On Tue, Aug 23, 2022 at 09:37:54AM +0200, netdev@kapio-technology.com 
-> wrote:
+On Tue, Aug 23, 2022 at 10:48:11PM +0000, Andrew Delgadilo wrote:
+> From: Andrew Delgadillo <adelg@google.com>
 > 
-> "learning on locked on" is really a misconfiguration, but it can also
-> happen today and entries do not roam with the "locked" flag for the
-> simple reason that it does not exist. I see two options:
+> commit 2c5db60e46ad ("tests: add close_range() tests") adds the
+> close_range test under the core namespace. In its current form, the
+> close_range test has an unused variable, namely, ret. For those building
+> with -Werror,-Wall, this breaks the build.
 > 
-> 1. Do not clear / set "locked" flag during roaming. Given learning
-> should be disabled on locked ports, then the only half interesting case
-> is roaming to an unlocked port. Keeping the "locked" flag basically
-> means "if you were to lock the port, then the presence of this entry is
-> not enough to let traffic with the SA be forwarded by the bridge".
-> Unlikely that anyone will do that.
+> Without this patch:
+> $ make -C tools/testing/selftests/ TARGETS=core V=1 CFLAGS="-Werror -Wall"
+> > make: Entering directory '/.../kernel-src/tools/testing/selftests'
+> > make[1]: Entering directory '/.../kernel-src/tools/testing/selftests/core'
+> > gcc -Werror -Wall    close_range_test.c  -o /.../kernel-src/tools/testing/selftests/core/close_range_test
+> > close_range_test.c: In function 'core_close_range':
+> > close_range_test.c:55:16: error: unused variable 'ret' [-Werror=unused-variable]
+> >   55 |         int i, ret;
+> >      |                ^~~
+> > cc1: all warnings being treated as errors
+> > make[1]: *** [../lib.mk:135: /.../kernel-src/tools/testing/selftests/core/close_range_test] Error 1
+> > make[1]: Leaving directory '/.../kernel-src/tools/testing/selftests/core'
+> > make: *** [Makefile:155: all] Error 2
+> > make: Leaving directory '/.../kernel-src/tools/testing/selftests'
 > 
-> 2. Always set "locked" flag for learned entries (new & roamed) on 
-> locked
-> ports and clear it for learned entries on unlocked ports.
+> With this patch:
+> $ make -C tools/testing/selftests/ TARGETS=core V=1 CFLAGS="-Werror -Wall"
+> > make: Entering directory '/.../kernel-src/tools/testing/selftests'
+> > make[1]: Entering directory '/.../kernel-src/tools/testing/selftests/core'
+> > gcc -Werror -Wall    close_range_test.c  -o /.../kernel-src/tools/testing/selftests/core/close_range_test
+> > make[1]: Leaving directory '/.../kernel-src/tools/testing/selftests/core'
+> > make: Leaving directory '/.../kernel-src/tools/testing/selftests'
 > 
-> Both options are consistent in how they treat the "locked" flag (either
-> always do nothing or always set/clear) and both do not impact the
-> integrity of the solution when configured correctly (disabling learning
-> on locked ports). I guess users will find option 2 easier to understand
-> / work with.
+> Fixes: 2c5db60e46ad ("tests: add close_range() tests")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Andrew Delgadillo <adelg@google.com>
+> ---
 
-Roaming to a locked port with an entry without the locked bit set would 
-open the port for said MAC without necessary authorization. Thus I think 
-that the only real option is the 2. case.
+Thanks,
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
