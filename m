@@ -2,65 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9185E59FD32
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 16:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9FC59FD7D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 16:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238112AbiHXOZf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Aug 2022 10:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S239346AbiHXOpf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Aug 2022 10:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239215AbiHXOZd (ORCPT
+        with ESMTP id S239173AbiHXOp0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Aug 2022 10:25:33 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452E614097;
-        Wed, 24 Aug 2022 07:25:30 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id w138so14022837pfc.10;
-        Wed, 24 Aug 2022 07:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=yJOiwlr5dN415WVoIAxDSomoqMBK4mBmdE1V5KIJNj0=;
-        b=iRPyxRAWmjmKn8q42Yo0vAkVoU9QNM1gpKJwVA5WZzxqH77PVAGtqJhpnMkhAxmMXd
-         A/szJntskmzkODi0jCwd2JBMG4iYC2PQLlOra5qWSVzBp9P8VLkp2wd8jErJBp72zqZI
-         8o5UtPR4b1RlAml0LZ+O8SiRrpTIEojxlgVyvXaMP07d9P5NuLYC5KvoEx5TCOL+yLzY
-         E5m2wFKXhy//OyvSw1SDRZQc57sTqeQW0RCc/p6fDsjLc0ASSgLqBtXQhUd50XlJUHJ0
-         8C7hIxJe8m7t60ZDznVUhabEiktoUt+gOzWYscLpDriZCEHaJRoOgnnvfdqZ7E2dsZWf
-         f+ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=yJOiwlr5dN415WVoIAxDSomoqMBK4mBmdE1V5KIJNj0=;
-        b=rUywW4nNt9mg3Ns8LQjO/mRUwIUJd4A7reoh1Omp7F7N0C1cJiuz4v+BlZqe8OSdOs
-         vOdNQX5v5ALCBxCI9MmYsrHj8vyBkmG/oDDhQ5zxdb/MGhXgMnWKwm7kxL2LNWE04xSt
-         PbA/swDywLbqgmx33afTBkhiVZAzzOiLTpM0+LfVyCZww+G6zm9/C9PA+Gt1fyjGprb3
-         TkF8Rg292VO+GYxz6xrehOo1lZ+HjfKjCHG9gfdRR8FjtniLQuprWRHoIsgTTDWiVYm7
-         Qbo0qo4GwsEIxQ0yevW1krETiKBhWIzpWFeQmb6kPqPqBOyYKVegeKnljCfTWp5b5Rb8
-         IaWA==
-X-Gm-Message-State: ACgBeo0ogblWh7KSKyi2keshIj2em+3ayF+y2K6dM/SV1hjIBdxiKE7v
-        gKsemWnxHNPsEDmnTO9GcfI=
-X-Google-Smtp-Source: AA6agR6tAbgks5XjT6jCn0g0eHPA3B+ctqLbI3P6s6S0pj9lVQz+r8iXOxYq2A8ITySt/CEhTBEMFw==
-X-Received: by 2002:a65:588d:0:b0:42a:2778:164f with SMTP id d13-20020a65588d000000b0042a2778164fmr23490088pgu.616.1661351130348;
-        Wed, 24 Aug 2022 07:25:30 -0700 (PDT)
-Received: from localhost.localdomain (124244014158.ctinets.com. [124.244.14.158])
-        by smtp.gmail.com with ESMTPSA id s21-20020a170903201500b0016bf5557690sm7821800pla.4.2022.08.24.07.25.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 07:25:29 -0700 (PDT)
-From:   Hoi Pok Wu <wuhoipok@gmail.com>
-To:     shuah@kernel.org, corbet@lwn.net
-Cc:     Hoi Pok Wu <wuhoipok@gmail.com>, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] docs:kselftest: fix kselftest_module.h path of example module
-Date:   Wed, 24 Aug 2022 22:25:05 +0800
-Message-Id: <20220824142505.145612-1-wuhoipok@gmail.com>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 24 Aug 2022 10:45:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC756491EF;
+        Wed, 24 Aug 2022 07:45:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A3F0B82566;
+        Wed, 24 Aug 2022 14:45:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E537C433D6;
+        Wed, 24 Aug 2022 14:45:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661352321;
+        bh=qY2vG3+Z/E0B6oHoQ9h18OUyySDy00/TSuXF4/r7CPk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TQhxtmzdMQK0FrBoBHBL1Dc/y4bbiR9u+9GD+uVbzvd3vD7+nQdzeDZiOkDTNR3fa
+         odWVOcLiopRH6Fi9Qo1oWtX28M3GC6BPOw4+Ami2R1lCFbHmsgx9ul52R31X8Mgz+j
+         VUBvgsLsLR3oJ44Lsg07vFrX+6glVLohc21uiMfaU/eEA2AjTWGDNmtggmTfxY5UTs
+         8SDRb9Mq4LwhAaiddXwUGVu5vnCO+9xaOO4/DYlhnqcqKmTThT4orqC89/VPL9lJrm
+         cY2QKR6HqNwqVCN8rasyFLM5+kkAtM0eGv5r+xUIlCCHC1MsrIvv/tnJLi0KPZJJSV
+         GZWjF9zrDrFjQ==
+Received: from [12.191.126.171] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oQrd9-005Smi-0D;
+        Wed, 24 Aug 2022 15:45:19 +0100
+Date:   Wed, 24 Aug 2022 15:45:11 +0100
+Message-ID: <87y1vdr98o.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, dmatlack@google.com, bgardon@google.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory tracking
+In-Reply-To: <YwVgaGp3HOGzC8k2@xz-m1.local>
+References: <20220819005601.198436-1-gshan@redhat.com>
+        <20220819005601.198436-2-gshan@redhat.com>
+        <87lerkwtm5.wl-maz@kernel.org>
+        <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+        <87fshovtu0.wl-maz@kernel.org>
+        <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+        <YwTc++Lz6lh3aR4F@xz-m1.local>
+        <87bksawz0w.wl-maz@kernel.org>
+        <YwVEoM1pj2MPCELp@xz-m1.local>
+        <878rnewpaw.wl-maz@kernel.org>
+        <YwVgaGp3HOGzC8k2@xz-m1.local>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 12.191.126.171
+X-SA-Exim-Rcpt-To: peterx@redhat.com, gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,26 +83,154 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-"module.h" does not exist in kselftest, it should be "kselftest_module.h".
+On Wed, 24 Aug 2022 00:19:04 +0100,
+Peter Xu <peterx@redhat.com> wrote:
+> 
+> On Tue, Aug 23, 2022 at 11:47:03PM +0100, Marc Zyngier wrote:
+> > On Tue, 23 Aug 2022 22:20:32 +0100,
+> > Peter Xu <peterx@redhat.com> wrote:
+> > > 
+> > > On Tue, Aug 23, 2022 at 08:17:03PM +0100, Marc Zyngier wrote:
+> > > > I don't think we really need this check on the hot path. All we need
+> > > > is to make the request sticky until userspace gets their act together
+> > > > and consumes elements in the ring. Something like:
+> > > > 
+> > > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > > > index 986cee6fbc7f..e8ed5e1af159 100644
+> > > > --- a/arch/arm64/kvm/arm.c
+> > > > +++ b/arch/arm64/kvm/arm.c
+> > > > @@ -747,6 +747,14 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
+> > > >  
+> > > >  		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
+> > > >  			return kvm_vcpu_suspend(vcpu);
+> > > > +
+> > > > +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
+> > > > +		    kvm_dirty_ring_soft_full(vcpu)) {
+> > > > +			kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
+> > > > +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
+> > > > +			trace_kvm_dirty_ring_exit(vcpu);
+> > > > +			return 0;
+> > > > +		}
+> > > >  	}
+> > > >  
+> > > >  	return 1;
+> > > 
+> > > Right, this seems working.  We can also use kvm_test_request() here.
+> > > 
+> > > > 
+> > > > 
+> > > > However, I'm a bit concerned by the reset side of things. It iterates
+> > > > over the vcpus and expects the view of each ring to be consistent,
+> > > > even if userspace is hacking at it from another CPU. For example, I
+> > > > can't see what guarantees that the kernel observes the writes from
+> > > > userspace in the order they are being performed (the documentation
+> > > > provides no requirements other than "it must collect the dirty GFNs in
+> > > > sequence", which doesn't mean much from an ordering perspective).
+> > > > 
+> > > > I can see that working on a strongly ordered architecture, but on
+> > > > something as relaxed as ARM, the CPUs may^Wwill aggressively reorder
+> > > > stuff that isn't explicitly ordered. I have the feeling that a CAS
+> > > > operation on both sides would be enough, but someone who actually
+> > > > understands how this works should have a look...
+> > > 
+> > > I definitely don't think I 100% understand all the ordering things since
+> > > they're complicated.. but my understanding is that the reset procedure
+> > > didn't need memory barrier (unlike pushing, where we have explicit wmb),
+> > > because we assumed the userapp is not hostile so logically it should only
+> > > modify the flags which is a 32bit field, assuming atomicity guaranteed.
+> > 
+> > Atomicity doesn't guarantee ordering, unfortunately.
+> 
+> Right, sorry to be misleading.  The "atomicity" part I was trying to say
+> the kernel will always see consistent update on the fields.
+>
+> The ordering should also be guaranteed, because things must happen with
+> below sequence:
+> 
+>   (1) kernel publish dirty GFN data (slot, offset)
+>   (2) kernel publish dirty GFN flag (set to DIRTY)
+>   (3) user sees DIRTY, collects (slots, offset)
+>   (4) user sets it to RESET
+>   (5) kernel reads RESET
 
-Signed-off-by: Hoi Pok Wu <wuhoipok@gmail.com>
----
- Documentation/dev-tools/kselftest.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Maybe. Maybe not. The reset could well be sitting in the CPU write
+buffer for as long as it wants and not be seen by the kernel if the
+read occurs on another CPU. And that's the crucial bit: single-CPU is
+fine, but cross CPU isn't. Unfortunately, the userspace API is per-CPU
+on collection, and global on reset (this seems like a bad decision,
+but it is too late to fix this).
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index e87973763b91..12b575b76b20 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -320,7 +320,7 @@ A bare bones test module might look like this:
- 
-    #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
--   #include "../tools/testing/selftests/kselftest/module.h"
-+   #include "../tools/testing/selftests/kselftest_module.h"
- 
-    KSTM_MODULE_GLOBALS();
- 
+> 
+> So the ordering of single-entry is guaranteed in that when (5) happens it
+> must be after stablized (1+2).
+> 
+> > Take the
+> > following example: CPU0 is changing a bunch of flags for GFNs A, B, C,
+> > D that exist in the ring in that order, and CPU1 performs an ioctl to
+> > reset the page state.
+> > 
+> > CPU0:
+> >     write_flag(A, KVM_DIRTY_GFN_F_RESET)
+> >     write_flag(B, KVM_DIRTY_GFN_F_RESET)
+> >     write_flag(C, KVM_DIRTY_GFN_F_RESET)
+> >     write_flag(D, KVM_DIRTY_GFN_F_RESET)
+> >     [...]
+> > 
+> > CPU1:
+> >    ioctl(KVM_RESET_DIRTY_RINGS)
+> > 
+> > Since CPU0 writes do not have any ordering, CPU1 can observe the
+> > writes in a sequence that have nothing to do with program order, and
+> > could for example observe that GFN A and D have been reset, but not B
+> > and C. This in turn breaks the logic in the reset code (B, C, and D
+> > don't get reset), despite userspace having followed the spec to the
+> > letter. If each was a store-release (which is the case on x86), it
+> > wouldn't be a problem, but nothing calls it in the documentation.
+> > 
+> > Maybe that's not a big deal if it is expected that each CPU will issue
+> > a KVM_RESET_DIRTY_RINGS itself, ensuring that it observe its own
+> > writes. But expecting this to work across CPUs without any barrier is
+> > wishful thinking.
+> 
+> I see what you meant...
+> 
+> Firstly I'm actually curious whether that'll really happen if the gfns are
+> collected in something like a for loop:
+> 
+>   for(i = 0; i < N; i++)
+>     collect_dirty_gfn(ring, i);
+> 
+> Because since all the gfps to be read will depend on variable "i", IIUC no
+> reordering should happen, but I'm not really sure, so more of a pure
+> question.
+
+'i' has no influence on the write ordering. Each write targets a
+different address, there is no inter-write dependencies (this concept
+doesn't exist other than for writes to the same address), so they can
+be reordered at will.
+
+If you want a proof of this, head to http://diy.inria.fr/www/ and run
+the MP.litmus test (which conveniently gives you a reduction of this
+problem) on both the x86 and AArch64 models. You will see that the
+reordering isn't allowed on x86, but definitely allowed on arm64.
+
+> Besides, the other thing to mention is that I think it is fine the RESET
+> ioctl didn't recycle all the gfns got set to reset state.  Taking above
+> example of GFNs A-D, if when reaching the RESET ioctl only A & D's flags
+> are updated, the ioctl will recycle gfn A but stop at gfn B assuming B-D
+> are not reset.  But IMHO it's okay because it means we reset partial of the
+> gfns not all of them, and it's safe to do so.  It means the next ring full
+> event can come earlier because we recycled less, but that's functionally
+> safe to me.
+
+It may be safe, but it isn't what the userspace API promises. In other
+words, without further straightening of the API, this doesn't work as
+expected on relaxed memory architectures. So before this gets enabled
+on arm64, this whole ordering issue must be addressed.
+
+Thanks,
+
+	M.
+
 -- 
-2.37.2
-
+Without deviation from the norm, progress is not possible.
