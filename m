@@ -2,140 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2C459F682
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 11:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B51F59F6BC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 11:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbiHXJlg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Aug 2022 05:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
+        id S235470AbiHXJrH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Aug 2022 05:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235585AbiHXJlf (ORCPT
+        with ESMTP id S235439AbiHXJqo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Aug 2022 05:41:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D763133345
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Aug 2022 02:41:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661334093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rXZAbOi80OJv3uidummRV0C+m8Czemv1wTSXuU14uGc=;
-        b=N27Ewjd9B6KTvQuYFsvuwoBGrU3Dhf4T+6maws7V99qNznKp5Oi2Qy4tJUJFu+nudpWLSN
-        r/SV0s69SksVE3MN/veXkM2fyZDEZfWyih2ISvzr5NdqVEtrUS4bK4OKPQGKNq2MunqiGi
-        a65xLpVqxCHUBADCYGNBcfCyBc1dKOA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-425-bxdDysM5MHu9uBPV3ghlRQ-1; Wed, 24 Aug 2022 05:41:32 -0400
-X-MC-Unique: bxdDysM5MHu9uBPV3ghlRQ-1
-Received: by mail-wm1-f71.google.com with SMTP id x16-20020a1c7c10000000b003a5cefa5578so297571wmc.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Aug 2022 02:41:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=rXZAbOi80OJv3uidummRV0C+m8Czemv1wTSXuU14uGc=;
-        b=0qvwXYKsZHvgUc+UvdXlBVg5hsCbDb+mmm4Km2hUxhwH8Wh+AgkFdLfWWWj8MIq8x4
-         CE1dtLNeYqsNXIMIo0CZ/j7CsC93DR1KOeiItTkDhU3rxSmCk7MqclHfE/Bvk/TsJmEw
-         FqBNV8YwibCCzO8bK4Gw63SX4cYmHu4uQ7F0eLuPdiXRFhEKmyjhLi0IVF8uCplhiDjN
-         8GcIWbXqTo589MNgN3CuWrvW+J7/g8geYQqDJkHrSgamLj2z04b+Fw/IZ3Cmr+bGWAU+
-         LQy7GNDeESDsW11KQimJqqOEh0CIWx3HjZGNT3XRlUQALgiy1dXaGxB51h85bB+z2B2o
-         sH7Q==
-X-Gm-Message-State: ACgBeo1s8BQ0McQ/SDlhybsucdTRyKcLRRks9Zq8XWL/QBu8RHrFeVKO
-        OA9pJ7p93AATpGun3/FVE1Jv3dww/jaf72yFKWsRe8z8XCr3Gz1T8LsJelJLh32zJeFOk1y3cTB
-        /ayMDl8J79h+B1RGoi+55QeNRwsbc
-X-Received: by 2002:adf:e4d0:0:b0:225:2947:3a5f with SMTP id v16-20020adfe4d0000000b0022529473a5fmr15483096wrm.387.1661334090890;
-        Wed, 24 Aug 2022 02:41:30 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6A/ocXjWVRFdjan3P7MYJXQ6e2K34PdNA3e511oLDRA0aYA/dzfItM+B5KpyFeSSw6ofRRhg==
-X-Received: by 2002:adf:e4d0:0:b0:225:2947:3a5f with SMTP id v16-20020adfe4d0000000b0022529473a5fmr15483088wrm.387.1661334090693;
-        Wed, 24 Aug 2022 02:41:30 -0700 (PDT)
-Received: from [192.168.110.200] (82-65-22-26.subs.proxad.net. [82.65.22.26])
-        by smtp.gmail.com with ESMTPSA id bh19-20020a05600c3d1300b003a2f6367049sm1335730wmb.48.2022.08.24.02.41.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Aug 2022 02:41:29 -0700 (PDT)
-Message-ID: <ecb5c967-9913-73e0-65a6-e35893eee411@redhat.com>
-Date:   Wed, 24 Aug 2022 11:41:28 +0200
+        Wed, 24 Aug 2022 05:46:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709B561D56;
+        Wed, 24 Aug 2022 02:46:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661334403; x=1692870403;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=8HINI0FFOmHZ98p+KrUxRjOuWiCSe4IMz6bvZat9QRk=;
+  b=VEC2IPRa4/nMxztM1aPX5KBq3uRmsrlx84vpGJo30JMhOjT7NCbbKyxF
+   p2nDnlQykp8sW2liM3a5kwU+T+xrFOsb7xXSZlWsBLhcm5/H+GLgxTuuI
+   NkFBKFmBojUBrrwcGGDgYT2z4NH7B8N+irzrcTplevbIUF9M8M/LdxeCd
+   Vju+BLkMplOOV6mxETkiKY4xYdPyJHFE/bfzJIUd9HGQR0jKHk1On0r/8
+   1IrPOLICOuvhwYTmhfImFMH/8+1/xzBd922Ju6I6kiHBrIzlE/lrELGqU
+   hgZbixw+f7qeibeBzUbBTgvCtzpArDa4r2z0Bnjom5Rd6ZQT7mkTzPdjH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10448"; a="294708544"
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="294708544"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2022 02:46:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,260,1654585200"; 
+   d="scan'208";a="605977030"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 24 Aug 2022 02:46:32 -0700
+Date:   Wed, 24 Aug 2022 17:41:49 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220824094149.GA1383966@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <Yv7XTON3MwuC1Q3U@google.com>
+ <226ab26d-9aa8-dce2-c7f0-9e3f5b65b63@google.com>
+ <b2743a3a-a1b4-2d2e-98be-87b58ad387cf@redhat.com>
+ <YwT6x2g9jcMH60LI@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v7 13/24] HID: initial BPF implementation
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
- <20220721153625.1282007-14-benjamin.tissoires@redhat.com>
- <YuKaG18WXkkQlu8e@kroah.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-In-Reply-To: <YuKaG18WXkkQlu8e@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwT6x2g9jcMH60LI@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Greg,
-
-On 7/28/22 16:15, Greg KH wrote:
-> On Thu, Jul 21, 2022 at 05:36:14PM +0200, Benjamin Tissoires wrote:
->> diff --git a/drivers/hid/bpf/Kconfig b/drivers/hid/bpf/Kconfig
->> new file mode 100644
->> index 000000000000..423c02e4c5db
->> --- /dev/null
->> +++ b/drivers/hid/bpf/Kconfig
->> @@ -0,0 +1,18 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +menu "HID-BPF support"
->> +	#depends on x86_64
+On Tue, Aug 23, 2022 at 04:05:27PM +0000, Sean Christopherson wrote:
+> On Tue, Aug 23, 2022, David Hildenbrand wrote:
+> > On 19.08.22 05:38, Hugh Dickins wrote:
+> > > On Fri, 19 Aug 2022, Sean Christopherson wrote:
+> > >> On Thu, Aug 18, 2022, Kirill A . Shutemov wrote:
+> > >>> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> > >>>> On Wed, 6 Jul 2022, Chao Peng wrote:
+> > >>>> But since then, TDX in particular has forced an effort into preventing
+> > >>>> (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
+> > >>>>
+> > >>>> Are any of the shmem.c mods useful to existing users of shmem.c? No.
+> > >>>> Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
+> > >>
+> > >> But QEMU and other VMMs are users of shmem and memfd.  The new features certainly
+> > >> aren't useful for _all_ existing users, but I don't think it's fair to say that
+> > >> they're not useful for _any_ existing users.
+> > > 
+> > > Okay, I stand corrected: there exist some users of memfd_create()
+> > > who will also have use for "INACCESSIBLE" memory.
+> > 
+> > As raised in reply to the relevant patch, I'm not sure if we really have
+> > to/want to expose MFD_INACCESSIBLE to user space. I feel like this is a
+> > requirement of specific memfd_notifer (memfile_notifier) implementations
+> > -- such as TDX that will convert the memory and MCE-kill the machine on
+> > ordinary write access. We might be able to set/enforce this when
+> > registering a notifier internally instead, and fail notifier
+> > registration if a condition isn't met (e.g., existing mmap).
+> >
+> > So I'd be curious, which other users of shmem/memfd would benefit from
+> > (MMU)-"INACCESSIBLE" memory obtained via memfd_create()?
 > 
-> Is this comment still needed?
+> I agree that there's no need to expose the inaccessible behavior via uAPI.  Making
+> it a kernel-internal thing that's negotiated/resolved when KVM binds to the fd
+> would align INACCESSIBLE with the UNMOVABLE and UNRECLAIMABLE flags (and any other
+> flags that get added in the future).
+> 
+> AFAICT, the user-visible flag is a holdover from the early RFCs and doesn't provide
+> any unique functionality.
 
-Nope. It was required a few months ago, but I think we now have 
-trampoline support also for aarch64, which are the 2 main architectures 
-we care right now.
-
-Dropping this from the series.
-
-Cheers,
-Benjamin
+That's also what I'm thinking. And I don't see problem immediately if
+user has populated the fd at the binding time. Actually that looks an
+advantage for previously discussed guest payload pre-loading.
 
 > 
->> +
->> +config HID_BPF
->> +	bool "HID-BPF support"
->> +	default HID_SUPPORT
->> +	depends on BPF && BPF_SYSCALL
->> +	help
->> +	This option allows to support eBPF programs on the HID subsystem.
->> +	eBPF programs can fix HID devices in a lighter way than a full
->> +	kernel patch and allow a lot more flexibility.
->> +
->> +	For documentation, see Documentation/hid/hid-bpf.rst
->> +
->> +	If unsure, say Y.
->> +
->> +endmenu
-> 
+> If we go that route, we might want to have shmem/memfd require INACCESSIBLE to be
+> set for the initial implementation.  I.e. disallow binding without INACCESSIBLE
+> until there's a use case.
 
+I can do that.
+
+Chao
