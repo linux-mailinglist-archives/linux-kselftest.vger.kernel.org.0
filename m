@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B355A0436
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Aug 2022 00:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0D25A0438
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Aug 2022 00:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiHXWlS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Aug 2022 18:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
+        id S230045AbiHXWlX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Aug 2022 18:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiHXWlR (ORCPT
+        with ESMTP id S229798AbiHXWlV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Aug 2022 18:41:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9490B58B41
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Aug 2022 15:41:16 -0700 (PDT)
+        Wed, 24 Aug 2022 18:41:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6899459254
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Aug 2022 15:41:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3066D6198C
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Aug 2022 22:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E02C4347C;
-        Wed, 24 Aug 2022 22:41:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24A04B826C7
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Aug 2022 22:41:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14077C433B5;
+        Wed, 24 Aug 2022 22:41:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661380875;
-        bh=mvOc/8cUdGxzIqrwz0EePKC3ZU/yxeDw11W9Ibm+0ns=;
+        s=k20201202; t=1661380877;
+        bh=iho2djtRhDbfxqjfHfG89LpdrLeoz0UBV3Z/8njN3p0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SQSjnF9rITLb2IuE3Cj6MlxbSAnxBzXfgyGRGers+9oWD/Ichp7u7xzkf6+q9AUbp
-         RBxzXBy/7p+aAH1fsSr8n8O6jrCTR52qkb6SJZ8gy/5iEu1YKcZiepYjHf2nmns8UJ
-         aAtKxd7C1Up1dmjHwqFuhiKMTHlBPZx4md5Twn1bd+U4lE8KLfQOynndCtTn3k99oU
-         JKxsZOp8WDqXmut+J4lbbxXiAhNImbY4nyYYk6/RQrlM+DPiK7O4XqH4khtnACHSe3
-         H3gIMVXxBbyJQmbTy3X/rxL3jYf6Avo+gy2qXNhEjHB1znKAS1TWyRL70XoxEuX3eq
-         2jO72pxFdcKxA==
+        b=tDI4rdUzN9yDgPka3VRHDky1PunEcUr9Alm1LU4kGKvXyFJ7YHEPiSF2n2OUbRujE
+         qo2GG+V0vvLruyHdqDLtqL3okoW1C3WeqdLj1K2VcMURMJCv8Cj19PCKPpr6jltSII
+         22X8CfS3tdm8n0z01mRxfaXV8gGjdEQ0Yw3ufilRCn7/GfklLL5j+NCfRPwJsJTxsF
+         d2x7LraqjCsbHvVa1oin5Er7+B2FrRWVIGKdHlwWM1TDbTs7NK7RxRjIin9dJXu7nA
+         ziD+9X+cSVijshVAAV2RmGoZh7f2Fg/jgzj/sKayhWUe3y5y2al0WRCQVRXqi+taYc
+         LmY5dndW3l46Q==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -39,14 +39,14 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 1/2] kselftest/arm64: Tighten up validation of ZA signal context
-Date:   Wed, 24 Aug 2022 23:40:25 +0100
-Message-Id: <20220824224026.848932-2-broonie@kernel.org>
+Subject: [PATCH v1 2/2] kselftest/arm64: Add a test for signal frames with ZA disabled
+Date:   Wed, 24 Aug 2022 23:40:26 +0100
+Message-Id: <20220824224026.848932-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220824224026.848932-1-broonie@kernel.org>
 References: <20220824224026.848932-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1874; i=broonie@kernel.org; h=from:subject; bh=mvOc/8cUdGxzIqrwz0EePKC3ZU/yxeDw11W9Ibm+0ns=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjBqjYq554edjZ4LhfZqZf9K7H9cXh++0PwGRZBP38 y9uOMC+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYwao2AAKCRAk1otyXVSH0FGBB/ 4upwzalcnX23mIAnLF7QF+HpoTLt8GncMPb2f8p4v56plI7sb5x9sIXugNrW+Ces5AX6SQTmIBX12L 6zyKKg9+ukqkReTNbZC11gwBumfAM4dgbeN3iUVEh51QBqDPfKt1NdWcvcdHTqGsF8+ZOaGFm3Gmzu evA/hqR6YhJTcnJ7tkYw7n7kDIaqkAv+61t03F+5foXw3nNNR/BroKj5YbyFaQxM3Wwm+6KF82q3eI eQ0wqdYGDqzCJbdo1xHmmnygwfFCsG67a5O99WF01EjnF4gWLtdeWElVJxT/BJ64/4HZW8kZPrVtBU VqK3TJi+n+HDs2yo7uw/S0WnD0dTtY
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3267; i=broonie@kernel.org; h=from:subject; bh=iho2djtRhDbfxqjfHfG89LpdrLeoz0UBV3Z/8njN3p0=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjBqjZ3OrybsFfa//wTPFMuFZjpQMJkhLh0Qj9ttPh DI05uumJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYwao2QAKCRAk1otyXVSH0AgaCA CFP9csGNfzeu8fe1aG0jWNaqa0BKykXVy21nCLfdmmu4avyia3Yw3n1aIJO8MkaISpITPe0IQ0DqcT NqUzmZJHY86lGqjxtSFHsT1Xk6Et0DhKk7LEDhHIqKZwXL/IUjs0HvNtLscU031VUwV7wcM0F3ZA7A 8aJAO5k7f3uBo11RwGHN+hjvuwerG669jn2mOy7zr2xaL0pskQoThXfBroyPVPaDjUaSobZytWvKQ4 aElKxNvR0WDqjFkC8nC9xpBPuMFIjDIlXKPcez/bGJxOV7oJUFd3Ht2rIvhyhiKYE5AhdCLb1BjIg8 2qQP2AjKnDSdsoGeQFCIvmBAcmf1Lq
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,55 +59,140 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently we accept any size for the ZA signal context that the shared
-code will accept which means we don't verify that any data is present.
-Since we have enabled ZA we know that there must be data so strengthen
-the check to only accept a signal frame with data, and while we're at it
-since we enabled ZA but did not set any data we know that ZA must contain
-zeros, confirm that.
+When ZA is disabled there should be no register data in the ZA signal
+frame, add a test case which confirms that this is the case.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../selftests/arm64/signal/testcases/za_regs.c   | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ .../arm64/signal/testcases/za_no_regs.c       | 119 ++++++++++++++++++
+ 1 file changed, 119 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/za_no_regs.c
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/za_regs.c b/tools/testing/selftests/arm64/signal/testcases/za_regs.c
-index b94e4f99fcac..2514cb7de525 100644
---- a/tools/testing/selftests/arm64/signal/testcases/za_regs.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/za_regs.c
-@@ -52,6 +52,8 @@ static void setup_za_regs(void)
- 	asm volatile(".inst 0xd503457f" : : : );
- }
- 
-+static char zeros[ZA_SIG_REGS_SIZE(SVE_VQ_MAX)];
+diff --git a/tools/testing/selftests/arm64/signal/testcases/za_no_regs.c b/tools/testing/selftests/arm64/signal/testcases/za_no_regs.c
+new file mode 100644
+index 000000000000..4d6f94b6178f
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/za_no_regs.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021 ARM Limited
++ *
++ * Verify that the ZA register context in signal frames is set up as
++ * expected.
++ */
 +
- static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
- 			 unsigned int vl)
- {
-@@ -87,10 +89,22 @@ static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
- 		return 1;
- 	}
- 
--	/* The actual size validation is done in get_current_context() */
-+	if (head->size != ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(vl))) {
-+		fprintf(stderr, "ZA context size %u, expected %lu\n",
-+			head->size, ZA_SIG_CONTEXT_SIZE(sve_vq_from_vl(vl)));
++#include <signal.h>
++#include <ucontext.h>
++#include <sys/prctl.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++static union {
++	ucontext_t uc;
++	char buf[1024 * 128];
++} context;
++static unsigned int vls[SVE_VQ_MAX];
++unsigned int nvls = 0;
++
++static bool sme_get_vls(struct tdescr *td)
++{
++	int vq, vl;
++
++	/*
++	 * Enumerate up to SME_VQ_MAX vector lengths
++	 */
++	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
++		vl = prctl(PR_SME_SET_VL, vq * 16);
++		if (vl == -1)
++			return false;
++
++		vl &= PR_SME_VL_LEN_MASK;
++
++		/* Skip missing VLs */
++		vq = sve_vq_from_vl(vl);
++
++		vls[nvls++] = vl;
++	}
++
++	/* We need at least one VL */
++	if (nvls < 1) {
++		fprintf(stderr, "Only %d VL supported\n", nvls);
++		return false;
++	}
++
++	return true;
++}
++
++static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
++			 unsigned int vl)
++{
++	size_t offset;
++	struct _aarch64_ctx *head = GET_BUF_RESV_HEAD(context);
++	struct za_context *za;
++
++	fprintf(stderr, "Testing VL %d\n", vl);
++
++	if (prctl(PR_SME_SET_VL, vl) != vl) {
++		fprintf(stderr, "Failed to set VL\n");
 +		return 1;
 +	}
 +
- 	fprintf(stderr, "Got expected size %u and VL %d\n",
- 		head->size, za->vl);
- 
-+	/* We didn't load any data into ZA so it should be all zeros */
-+	if (memcmp(zeros, (char *)za + ZA_SIG_REGS_OFFSET,
-+		   ZA_SIG_REGS_SIZE(sve_vq_from_vl(za->vl))) != 0) {
-+		fprintf(stderr, "ZA data invalid\n");
++	/*
++	 * Get a signal context which should have a SVE frame and registers
++	 * in it.
++	 */
++	if (!get_current_context(td, &context.uc, sizeof(context)))
++		return 1;
++
++	head = get_header(head, ZA_MAGIC, GET_BUF_RESV_SIZE(context), &offset);
++	if (!head) {
++		fprintf(stderr, "No ZA context\n");
 +		return 1;
 +	}
 +
- 	return 0;
- }
- 
++	za = (struct za_context *)head;
++	if (za->vl != vl) {
++		fprintf(stderr, "Got VL %d, expected %d\n", za->vl, vl);
++		return 1;
++	}
++
++	if (head->size != ZA_SIG_REGS_OFFSET) {
++		fprintf(stderr, "Context size %u, expected %lu\n",
++			head->size, ZA_SIG_REGS_OFFSET);
++		return 1;
++	}
++
++	/* The actual size validation is done in get_current_context() */
++	fprintf(stderr, "Got expected size %u and VL %d\n",
++		head->size, za->vl);
++
++	return 0;
++}
++
++static int sme_regs(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++{
++	int i;
++
++	for (i = 0; i < nvls; i++) {
++		if (do_one_sme_vl(td, si, uc, vls[i]))
++			return 1;
++	}
++
++	td->pass = 1;
++
++	return 0;
++}
++
++struct tdescr tde = {
++	.name = "ZA registers - ZA disabled",
++	.descr = "Check ZA context with ZA disabled",
++	.feats_required = FEAT_SME,
++	.timeout = 3,
++	.init = sme_get_vls,
++	.run = sme_regs,
++};
 -- 
 2.30.2
 
