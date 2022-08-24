@@ -2,231 +2,222 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A8859EF99
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 01:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F94059F069
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 02:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiHWXTO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Aug 2022 19:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S229590AbiHXAqN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Aug 2022 20:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiHWXTN (ORCPT
+        with ESMTP id S231516AbiHXAqM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Aug 2022 19:19:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1496C74D
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 16:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661296750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ejd2XqlPIsLaN92xua+1YOCeIUPLipE6EMcANIURHpk=;
-        b=GaRBxrW7Se08u39DZdK8ByMaOQVXRtkTe70bkf5M1TxrF50rczUQPAdx6a8ZqW8djylJfA
-        wFsV+46uqnkzAeYbntY+/JkrCF/y+F6aAdelTM7lD0uekIla1OCSlI6lXZdq+0/wfMtQfA
-        eSg2KUOIKmjatZ/c4MC2efo3nl9AQxQ=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-592-5gCAIMr3PwirNkuID42CxQ-1; Tue, 23 Aug 2022 19:19:09 -0400
-X-MC-Unique: 5gCAIMr3PwirNkuID42CxQ-1
-Received: by mail-qk1-f198.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso13499376qkp.21
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 16:19:09 -0700 (PDT)
+        Tue, 23 Aug 2022 20:46:12 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A40219F
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 17:46:09 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id d8so9522449lfq.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Aug 2022 17:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hardline-pl.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=+7YC01QZWr2H+Z11+QtNy0peh5GHhPgH8/H+v7UwPXM=;
+        b=jYus24zPijQN5JdrsH5VT1VZPIGdLNSvI5RgeZRHZYlKU/Bb2LSdSpWy4+S9il+dus
+         qCVLvQuBWMzx7ZLbQYbhCgxCfnUanvLgIRc8rgkIADx+sqcmUfn90EP5ZTNzT07z2YOH
+         vofXJYPpoxv3QLCdn6x4bmcs42nnXWi0H01cUyAEhLOYsw4jw+UPlcyCQy3FGptJ63Ap
+         30PbsLQ1e+kA/By/DcH3+fjcrJh/nOV8E8o2I31zlSIs9QWwbKLGJhlDLbPf3fB0wgS0
+         EvVQ7gTXn7JlcfrZ9eX0XSmSbfYLPROtTVPSChYJUp0WuNSVfrpUw+5E9a0w6cLBCW9a
+         8NZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Ejd2XqlPIsLaN92xua+1YOCeIUPLipE6EMcANIURHpk=;
-        b=wsZCvlHB27svzQb0gbajp7TyDI+oUJFWvDY4SuSeTqetL62bQ7lg5tSrFxBAhmRLDB
-         g+UpHxGt48GYShB0EAEVwAWuIg95Rq/thKN4dOmkSEY4uB2RDu0Tg2imo76196HRu9uk
-         IxT+5Pxt0cW27f7s0FsQVMyo1X9WjrfoP2nbbFDgcHYM4J9R2jQ6YkqUkt1ZNSi2tgHa
-         zHcobAj25uJdsGgoVM9Z8M1oMU/G+e9MK4xJOOOlh+iPqshHHouaEjA+T3z0SXcPZ2X7
-         SAaEdEYHxTCTMxyJE3fLgau8vYDhqzy2+QD9u1I8+O0JWeOq9jnM057pvLw/UN8Lngkf
-         CqSw==
-X-Gm-Message-State: ACgBeo2/fG+DjCYW670n7MSqohYifRrgiEhEqfjzEVsCWTJZWl1pe0gp
-        LFwOMx0hXgaD28D6rzK9H6r3yrERoni85JrSHvUZ5ewLA7DdwkNSnTeTDLSRf6Mgs+gN9bsdR8L
-        2l7jVo/hovEP3f2PVVDSogtlMGg+V
-X-Received: by 2002:a37:b243:0:b0:6bc:3d04:623f with SMTP id b64-20020a37b243000000b006bc3d04623fmr4888014qkf.672.1661296748660;
-        Tue, 23 Aug 2022 16:19:08 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR68qAn5UZduxSvc7YFRPNkyTTJD1EBYt7TKsqkGY0aznLoNst64fUxKKLOOcY75RG0ZX5cbHQ==
-X-Received: by 2002:a37:b243:0:b0:6bc:3d04:623f with SMTP id b64-20020a37b243000000b006bc3d04623fmr4887979qkf.672.1661296748284;
-        Tue, 23 Aug 2022 16:19:08 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id dm33-20020a05620a1d6100b006b5f8f32a8fsm15149348qkb.114.2022.08.23.16.19.05
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=+7YC01QZWr2H+Z11+QtNy0peh5GHhPgH8/H+v7UwPXM=;
+        b=ssF7Lx9QFxqMz4zz0hgWQ073NXvOe9azYaO6XlpHikhEabqeXabhl6EIKF8rs35oxx
+         H31taGE4sEtW/vGQzIQr2/gBxtBbQylcznbO6oIvRVcidfqvPfjEWZa4wPEvw2AwHSgM
+         Oq26detjHcOfHWZ1POLoDs/EFMbk4Wb5ziXhGJespnNaoYDhJxAkkGurTVm7EVVwDsx2
+         0z6J477AEV/RE839Nu9kKCTq8vZ8yOzj5XuUS9HskCPxD3izvd5yBzujoCal176OliNX
+         V2ZwOKi4HIDut/tZHqBtUDknMOTd7DgNPm6p7JVgt6xzi8y/cG6Xy2E73VoA8ewSx/RI
+         YOLA==
+X-Gm-Message-State: ACgBeo2q0jROIEXlMtBLQp7jS5J2StFxuwyN7sAgzGM2TQ7tkXkt1tRj
+        Hb35L+zv6SR1WpanCDHRj+0NhQ==
+X-Google-Smtp-Source: AA6agR7sRImMNaAM0Jb12p84NAKhEUSyFvm3ewFa1xEzGiE/jRI1uZfhA1nP8y5VGI92jbu3qrZy4w==
+X-Received: by 2002:a05:6512:1155:b0:48a:fb9a:32d8 with SMTP id m21-20020a056512115500b0048afb9a32d8mr9530380lfg.672.1661301967470;
+        Tue, 23 Aug 2022 17:46:07 -0700 (PDT)
+Received: from localhost (89-64-119-148.dynamic.chello.pl. [89.64.119.148])
+        by smtp.gmail.com with ESMTPSA id g21-20020a2eb5d5000000b00261c19bbb6asm2007841ljn.97.2022.08.23.17.46.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Aug 2022 16:19:07 -0700 (PDT)
-Date:   Tue, 23 Aug 2022 19:19:04 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-        seanjc@google.com, dmatlack@google.com, bgardon@google.com,
-        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-Message-ID: <YwVgaGp3HOGzC8k2@xz-m1.local>
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com>
- <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org>
- <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
- <YwTc++Lz6lh3aR4F@xz-m1.local>
- <87bksawz0w.wl-maz@kernel.org>
- <YwVEoM1pj2MPCELp@xz-m1.local>
- <878rnewpaw.wl-maz@kernel.org>
+        Tue, 23 Aug 2022 17:46:06 -0700 (PDT)
+Date:   Wed, 24 Aug 2022 02:46:06 +0200
+From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal@hardline.pl>
+To:     Isabella Basso <isabbasso@riseup.net>
+Cc:     =?utf-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>,
+        Matthew Auld <matthew.william.auld@gmail.com>,
+        Arthur Grillo <arthur.grillo@usp.br>,
+        Rodrigo Siqueira <siqueirajordao@riseup.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org, n@nfraprado.net,
+        andrealmeid@riseup.net, magalilemes00@gmail.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        kunit-dev@googlegroups.com, mwen@igalia.com,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+        tales.aparecida@gmail.com,
+        kernel list <linux-kernel@vger.kernel.org>,
+        leandro.ribeiro@collabora.com,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Subject: Re: [PATCH v5 9/9] drm: selftest: convert drm_mm selftest to KUnit
+Message-ID: <20220824004606.ufca7rrd4s4xrkms@macragge.hardline.pl>
+References: <20220708203052.236290-1-maira.canal@usp.br>
+ <20220708203052.236290-10-maira.canal@usp.br>
+ <CAM0jSHNG8Ozs+NpvwMK6zvbRm3Ve=Wa1_H7jS0uQ8FeAWgvyoA@mail.gmail.com>
+ <b1ae4f77-4e24-24c9-fd87-abcd612a3533@usp.br>
+ <20220722162529.wy4ox7pyjhno66lz@macragge.hardline.pl>
+ <52481C88-9CD7-4E4F-ABCB-1EFC01E4B4D0@riseup.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <878rnewpaw.wl-maz@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <52481C88-9CD7-4E4F-ABCB-1EFC01E4B4D0@riseup.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 23, 2022 at 11:47:03PM +0100, Marc Zyngier wrote:
-> On Tue, 23 Aug 2022 22:20:32 +0100,
-> Peter Xu <peterx@redhat.com> wrote:
+On Sun, Aug 21, 2022 at 07:22:30PM -0300, Isabella Basso wrote:
+> Hi Michał,
+> 
+> While I totally understand your point, we have talked about this in our GSoC
+> meetings with mentors, and have found a few reasons as to why a KUnit runner
+> integrated to IGT might be really useful. 
+> 
+> > Am 22/07/2022 um 1:25 PM schrieb Michał Winiarski <michal@hardline.pl>:
 > > 
-> > On Tue, Aug 23, 2022 at 08:17:03PM +0100, Marc Zyngier wrote:
-> > > I don't think we really need this check on the hot path. All we need
-> > > is to make the request sticky until userspace gets their act together
-> > > and consumes elements in the ring. Something like:
-> > > 
-> > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > index 986cee6fbc7f..e8ed5e1af159 100644
-> > > --- a/arch/arm64/kvm/arm.c
-> > > +++ b/arch/arm64/kvm/arm.c
-> > > @@ -747,6 +747,14 @@ static int check_vcpu_requests(struct kvm_vcpu *vcpu)
-> > >  
-> > >  		if (kvm_check_request(KVM_REQ_SUSPEND, vcpu))
-> > >  			return kvm_vcpu_suspend(vcpu);
-> > > +
-> > > +		if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
-> > > +		    kvm_dirty_ring_soft_full(vcpu)) {
-> > > +			kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
-> > > +			vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
-> > > +			trace_kvm_dirty_ring_exit(vcpu);
-> > > +			return 0;
-> > > +		}
-> > >  	}
-> > >  
-> > >  	return 1;
+> > On Fri, Jul 22, 2022 at 08:04:51AM -0300, Maíra Canal wrote:
+> >> On 7/22/22 07:35, Matthew Auld wrote:
+> >>> On Fri, 8 Jul 2022 at 21:32, Maíra Canal <maira.canal@usp.br> wrote:
+> >>>> 
+> >>>> From: Arthur Grillo <arthur.grillo@usp.br>
+> >>>> 
+> >>>> Considering the current adoption of the KUnit framework, convert the
+> >>>> DRM mm selftest to the KUnit API.
+> >>> 
+> >>> Is there a plan to convert the corresponding selftest IGT that was
+> >>> responsible for running this (also drm_buddy) to somehow work with
+> >>> kunit? Previously these IGTs were always triggered as part of
+> >>> intel-gfx CI, but it looks like they are no longer run[1].
+> >>> 
+> >>> [1] https://gitlab.freedesktop.org/drm/intel/-/issues/6433
+> >> 
+> >> Hi Matthew,
+> >> 
+> >> Isabella sent a while ago a patch to IGT adding KUnit compatibility to
+> >> IGT [1], but there wasn't any feedback on the patch. I believe that soon
+> >> she will resend the series in order to make all KUnit DRM tests run on IGT.
+> >> 
+> >> Any feedback on the patch is welcomed so that we can fix this issue as
+> >> soon as possible.
+> >> 
+> >> [1] https://patchwork.freedesktop.org/patch/489985/
+> >> 
+> >> Best Regards,
+> >> - Maíra Canal
 > > 
-> > Right, this seems working.  We can also use kvm_test_request() here.
+> > Hi.
 > > 
-> > > 
-> > > 
-> > > However, I'm a bit concerned by the reset side of things. It iterates
-> > > over the vcpus and expects the view of each ring to be consistent,
-> > > even if userspace is hacking at it from another CPU. For example, I
-> > > can't see what guarantees that the kernel observes the writes from
-> > > userspace in the order they are being performed (the documentation
-> > > provides no requirements other than "it must collect the dirty GFNs in
-> > > sequence", which doesn't mean much from an ordering perspective).
-> > > 
-> > > I can see that working on a strongly ordered architecture, but on
-> > > something as relaxed as ARM, the CPUs may^Wwill aggressively reorder
-> > > stuff that isn't explicitly ordered. I have the feeling that a CAS
-> > > operation on both sides would be enough, but someone who actually
-> > > understands how this works should have a look...
+> > Instead of going back to using IGT for *unit* tests, it would be a better idea
+> > to adjust the CI to just run the tests once at "build" time (just like e.g.
+> > checkpatch).
+> 
+> First, I’d like to point out that there would be some inherent overhead in
+> doing so, which might actually not be worth it, as KUnit tool would need to
+> compile HEAD in the UML arch, then we’d have to re-compile everything to a real
+> machine’s architecture, like x86_64 (in the least), having in mind still that
+> arch-dependent issues would not show up when we run tests in UML, so there’s
+> still a downside to it even if it’s quick enough.
+> 
+> Even if we don’t run them as UML and instead use a VM, there’s a VM being run
+> just for a couple of tests, which might be slower than adding a step to a
+> dedicated machine that’s (probably) already available, plus the setup and
+> hardware needed to run a VM inside of a CI runner are overheads in themselves,
+> needing dedicated, modern machines.
+
+No - we don't need a dedicated machine for running kunit - the machine that we
+just used to compile the code is perfectly fine.
+Builders used in CI systems usually have beefy server-grade CPUs - pretty good
+candidates for running unit tests (even with virtualization overhead).
+Plus - if the unit tests fail, we can consider skipping the deployment and
+not run any regular tests (just like the case where build has failed).
+Meanwhile, one of the "dedicated machines" (ones that are used to run the tests)
+can actually be a low-power device (think tablet). And if the test ends up
+crashing the kernel, it needs to be rebooted. VMs are much easier to work with,
+especially with kunit.py abstracting away all of the qemu interactions.
+
+> 
+> > We would then stop executing the same test multiple times on different machines
+> > (note that both DRM selftests and i915 "mock" selftests are pure unit tests - in
+> > other words, they don't need the hardware to be present), which would save some
+> > (small) amount of machine-time that can be utilized to do something that
+> > actually needs the hardware.
+> 
+> I totally agree with your solution in regards to arch-independent tests, though.
+
+There are no arch-specific kunit tests in DRM-core. There shouldn't be any
+arch-specific code in DRM-core. Same thing for drivers (at least for the purpose
+of COMPILE_TEST and by extension, running kunit).
+All of DRM kunit tests should pass on all architectures supported by kunit.
+
+> 
+> > Plus there's no need to maintain the kunit-runner in IGT.
+> > Note - we're currently going to lose "DMESG-WARN" detection if we go this route,
+> > but this is something that can be improved on the kunit-side.
 > > 
-> > I definitely don't think I 100% understand all the ordering things since
-> > they're complicated.. but my understanding is that the reset procedure
-> > didn't need memory barrier (unlike pushing, where we have explicit wmb),
-> > because we assumed the userapp is not hostile so logically it should only
-> > modify the flags which is a 32bit field, assuming atomicity guaranteed.
+> > -Michał
 > 
-> Atomicity doesn't guarantee ordering, unfortunately.
+> There’s also a point to be made on maintaining such a runner if we think about
+> companies like AMD, as they rely heavily on IGT, so they have lots of tests
+> written in there, and it'd be difficult for them to accommodate one more
+> non-trivial thing to their CI. Plus I think this might be a good starting point
+> for them to transition their CI to a KUnit-centered approach without stressing
+> engineers unnecessarily.
 
-Right, sorry to be misleading.  The "atomicity" part I was trying to say
-the kernel will always see consistent update on the fields.
+I agree with the IGT-compatibility angle, however, that would only apply to test
+content that gets converted from selftests to kunit (just like DRM selftests),
+not newly introduced test content (as is the case with amdgpu).
+I also wouldn't call interpreting exit code of "kunit.py run (...)" something
+that's difficult to be added to various CI pipelines.
+Also - do we really want to transition to KUnit-centered approach?
+Regular IGTs are actually about exercising the HW through driver uAPI from
+userspace, not about isolated unit testing (which is what KUnit is about).
+Then we have selftests, which are implemented on the kernel side, and are about
+internal implementation. Selftests may or may not require HW to operate (if HW
+is needed, we're usually doing more of a functional/integration testing, if not
+- it's most likely going to be a pure unit test).
+I view regular IGTs and KUnit (and kselftests that are not isolated, and need
+the HW to be present) as complementary mechanisms, not something to be replaced
+(in other words - we only want to transition unit tests to KUnit).
 
-The ordering should also be guaranteed, because things must happen with
-below sequence:
+When it comes to transition, I'm just worried that once the IGT KTAP parser is
+adopted, the transition to kunit.py @ build time will never happen, and we'll
+end up maintaining custom DRM-specific solution instead of participating in
+wider kernel community.
 
-  (1) kernel publish dirty GFN data (slot, offset)
-  (2) kernel publish dirty GFN flag (set to DIRTY)
-  (3) user sees DIRTY, collects (slots, offset)
-  (4) user sets it to RESET
-  (5) kernel reads RESET
-
-So the ordering of single-entry is guaranteed in that when (5) happens it
-must be after stablized (1+2).
-
-> Take the
-> following example: CPU0 is changing a bunch of flags for GFNs A, B, C,
-> D that exist in the ring in that order, and CPU1 performs an ioctl to
-> reset the page state.
-> 
-> CPU0:
->     write_flag(A, KVM_DIRTY_GFN_F_RESET)
->     write_flag(B, KVM_DIRTY_GFN_F_RESET)
->     write_flag(C, KVM_DIRTY_GFN_F_RESET)
->     write_flag(D, KVM_DIRTY_GFN_F_RESET)
->     [...]
-> 
-> CPU1:
->    ioctl(KVM_RESET_DIRTY_RINGS)
-> 
-> Since CPU0 writes do not have any ordering, CPU1 can observe the
-> writes in a sequence that have nothing to do with program order, and
-> could for example observe that GFN A and D have been reset, but not B
-> and C. This in turn breaks the logic in the reset code (B, C, and D
-> don't get reset), despite userspace having followed the spec to the
-> letter. If each was a store-release (which is the case on x86), it
-> wouldn't be a problem, but nothing calls it in the documentation.
-> 
-> Maybe that's not a big deal if it is expected that each CPU will issue
-> a KVM_RESET_DIRTY_RINGS itself, ensuring that it observe its own
-> writes. But expecting this to work across CPUs without any barrier is
-> wishful thinking.
-
-I see what you meant...
-
-Firstly I'm actually curious whether that'll really happen if the gfns are
-collected in something like a for loop:
-
-  for(i = 0; i < N; i++)
-    collect_dirty_gfn(ring, i);
-
-Because since all the gfps to be read will depend on variable "i", IIUC no
-reordering should happen, but I'm not really sure, so more of a pure
-question.
-
-Besides, the other thing to mention is that I think it is fine the RESET
-ioctl didn't recycle all the gfns got set to reset state.  Taking above
-example of GFNs A-D, if when reaching the RESET ioctl only A & D's flags
-are updated, the ioctl will recycle gfn A but stop at gfn B assuming B-D
-are not reset.  But IMHO it's okay because it means we reset partial of the
-gfns not all of them, and it's safe to do so.  It means the next ring full
-event can come earlier because we recycled less, but that's functionally
-safe to me.
+-Michał
 
 > 
-> > IIRC we used to discuss similar questions on "what if the user is hostile
-> > and wants to hack the process by messing up with the ring", and our
-> > conclusion was as long as the process wouldn't mess up anything outside
-> > itself it should be okay. E.g. It should not be able to either cause the
-> > host to misfunction, or trigger kernel warnings in dmesg, etc..
+> Cheers,
+> —
+> Isabella
 > 
-> I'm not even discussing safety here. I'm purely discussing the
-> interactions between userspace and kernel based on the documentation
-> and the existing kernel code.
-
-I see.  Please let me know if above makes sense.
-
-Thanks!
-
--- 
-Peter Xu
-
