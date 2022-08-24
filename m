@@ -2,61 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C1F5A02B7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 22:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5A85A0315
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Aug 2022 22:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235537AbiHXU32 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Aug 2022 16:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S239057AbiHXU5Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Aug 2022 16:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237076AbiHXU31 (ORCPT
+        with ESMTP id S230515AbiHXU5X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Aug 2022 16:29:27 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DCC6B17A;
-        Wed, 24 Aug 2022 13:29:23 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C7A9E188444D;
-        Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id BEA8025032B7;
-        Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id B7D589EC0004; Wed, 24 Aug 2022 20:29:20 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-MIME-Version: 1.0
-Date:   Wed, 24 Aug 2022 22:29:20 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YwHZ1J9DZW00aJDU@shredder>
-References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
- <YvkM7UJ0SX+jkts2@shredder>
- <34dd1318a878494e7ab595f8727c7d7d@kapio-technology.com>
- <YwHZ1J9DZW00aJDU@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <7016ed2ce9a30537e4278e37878900d8@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 24 Aug 2022 16:57:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF9A59267;
+        Wed, 24 Aug 2022 13:57:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE31CB826B6;
+        Wed, 24 Aug 2022 20:57:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7E5C433D6;
+        Wed, 24 Aug 2022 20:57:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661374636;
+        bh=qM0hODjskpwb8x7NIPhJ6OvYS94mu8gyRtyJsdL5qbc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WKWbhn9ebHbZ2iDprTkgAxT0HGOGVyijsRF2LE8IUHP7lZK/KRbPBixXcC6IMyQ/o
+         IiWahFF8wh+Of+babvKKdHCxBt/nrCu30JKP94TZkTDUprcFCLN1dYa3XtehR+fmHA
+         /S4DR1i/6njbLlr/PyQRJ1eiA/dkz6Z808gZSZyGwoMyWwm42hAnE1rhEEl1NP9CIL
+         Tnou1IeIhBIzmu3HtFyRuEvTbxEg1PIaM6UzVthy3jp6ROfmJRpTSFQHGS7aDEYA3k
+         gEVg14UNCy9692EJv7aPsTsvuPiawl/cUTzj46qSd6xFAT71gXhD8QGNy9tXKAgTJd
+         zVlmsMZSUyZwg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oQxR4-005Wpl-4q;
+        Wed, 24 Aug 2022 21:57:14 +0100
+Date:   Wed, 24 Aug 2022 21:57:13 +0100
+Message-ID: <877d2xweae.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, dmatlack@google.com, bgardon@google.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory tracking
+In-Reply-To: <YwZQHqS5DZBloYPZ@xz-m1.local>
+References: <87lerkwtm5.wl-maz@kernel.org>
+        <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+        <87fshovtu0.wl-maz@kernel.org>
+        <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+        <YwTc++Lz6lh3aR4F@xz-m1.local>
+        <87bksawz0w.wl-maz@kernel.org>
+        <YwVEoM1pj2MPCELp@xz-m1.local>
+        <878rnewpaw.wl-maz@kernel.org>
+        <YwVgaGp3HOGzC8k2@xz-m1.local>
+        <87y1vdr98o.wl-maz@kernel.org>
+        <YwZQHqS5DZBloYPZ@xz-m1.local>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: peterx@redhat.com, gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,45 +83,127 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-08-21 09:08, Ido Schimmel wrote:
+On Wed, 24 Aug 2022 17:21:50 +0100,
+Peter Xu <peterx@redhat.com> wrote:
 > 
-> I assume you want a hub to simulate multiple MACs behind the same port.
-> You don't need a hub for that. You can set the MAC using mausezahn. See
-> '-a' option:
+> On Wed, Aug 24, 2022 at 03:45:11PM +0100, Marc Zyngier wrote:
+> > On Wed, 24 Aug 2022 00:19:04 +0100,
+> > Peter Xu <peterx@redhat.com> wrote:
+> > > 
+> > > On Tue, Aug 23, 2022 at 11:47:03PM +0100, Marc Zyngier wrote:
+> > > > Atomicity doesn't guarantee ordering, unfortunately.
+> > > 
+> > > Right, sorry to be misleading.  The "atomicity" part I was trying to say
+> > > the kernel will always see consistent update on the fields.
+> > >
+> > > The ordering should also be guaranteed, because things must happen with
+> > > below sequence:
+> > > 
+> > >   (1) kernel publish dirty GFN data (slot, offset)
+> > >   (2) kernel publish dirty GFN flag (set to DIRTY)
+> > >   (3) user sees DIRTY, collects (slots, offset)
+> > >   (4) user sets it to RESET
+> > >   (5) kernel reads RESET
+> > 
+> > Maybe. Maybe not. The reset could well be sitting in the CPU write
+> > buffer for as long as it wants and not be seen by the kernel if the
+> > read occurs on another CPU. And that's the crucial bit: single-CPU is
+> > fine, but cross CPU isn't. Unfortunately, the userspace API is per-CPU
+> > on collection, and global on reset (this seems like a bad decision,
+> > but it is too late to fix this).
 > 
-> "
->    -a <src-mac|keyword>
->        Use specified source MAC address with hexadecimal notation such
-> as 00:00:aa:bb:cc:dd.  By default the interface MAC address will be
-> used. The  keywords  ''rand''
->        and  ''own''  refer to a random MAC address (only unicast
-> addresses are created) and the own address, respectively. You can also
-> use the keywords mentioned below
->        although broadcast-type source addresses are officially invalid.
-> "
+> Regarding the last statement, that's something I had question too and
+> discussed with Paolo, even though at that time it's not a outcome of
+> discussing memory ordering issues.
 > 
+> IIUC the initial design was trying to avoid tlb flush flood when vcpu
+> number is large (each RESET per ring even for one page will need all vcpus
+> to flush, so O(N^2) flushing needed). With global RESET it's O(N).  So
+> it's kind of a trade-off, and indeed until now I'm not sure which one is
+> better.  E.g., with per-ring reset, we can have locality too in userspace,
+> e.g. the vcpu thread might be able to recycle without holding global locks.
 
+I don't get that. On x86, each CPU must perform the TLB invalidation
+(there is an IPI for that). So whether you do a per-CPU scan of the
+ring or a global scan is irrelevant: each entry you find in any of the
+rings must result in a global invalidation, since you've updated the
+PTE to make the page RO.
 
-Ido, I am not so known to the selftests, so I am wondering why I don't 
-see either check_err or check_fail fail, whichever I use, when I think 
-they should and then they are not really checking...
+The same is true on ARM, except that the broadcast is done in HW
+instead of being tracked in SW.
 
+Buy anyway, this is all moot. The API is what it is, and it isn't
+going to change any time soon. All we can do is add some
+clarifications to the API for the more relaxed architectures, and make
+sure the kernel behaves accordingly.
 
-         local mac=10:20:30:30:20:10
+[...]
 
+> > It may be safe, but it isn't what the userspace API promises.
+> 
+> The document says:
+> 
+>   After processing one or more entries in the ring buffer, userspace calls
+>   the VM ioctl KVM_RESET_DIRTY_RINGS to notify the kernel about it, so that
+>   the kernel will reprotect those collected GFNs.  Therefore, the ioctl
+>   must be called *before* reading the content of the dirty pages.
+> 
+> I'd say it's not an explicit promise, but I think I agree with you that at
+> least it's unclear on the behavior.
 
-         $MZ $h1 -t udp -a $mac -b rand
-         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 
-locked"
-         check_err $? "MAB station move: no locked entry on first 
-injection"
+This is the least problematic part of the documentation. The bit I
+literally choke on is this:
 
-         $MZ $h2 -t udp -a $mac -b rand
-         bridge fdb show dev $swp1 | grep -q "$mac vlan 1 master br0 
-locked"
-         check_err $? "MAB station move: locked entry did not move"
+<quote>
+It's not necessary for userspace to harvest the all dirty GFNs at once.
+However it must collect the dirty GFNs in sequence, i.e., the userspace
+program cannot skip one dirty GFN to collect the one next to it.
+</quote>
 
-What is wrong here?
+This is the core of the issue. Without ordering rules, the consumer on
+the other side cannot observe the updates correctly, even if userspace
+follows the above to the letter. Of course, the kernel itself must do
+the right thing (I guess it amounts to the kernel doing a
+load-acquire, and userspace doing a store-release -- effectively
+emulating x86...).
 
-For a mv88e6xxx test I guess I can make a check to verify that this 
-driver is in use?
+> Since we have a global recycle mechanism, most likely the app (e.g. current
+> qemu impl) will use the same thread to collect/reset dirty GFNs, and
+> trigger the RESET ioctl().  In that case it's safe, IIUC, because no
+> cross-core ops.
+> 
+> QEMU even guarantees this by checking it (kvm_dirty_ring_reap_locked):
+> 
+>     if (total) {
+>         ret = kvm_vm_ioctl(s, KVM_RESET_DIRTY_RINGS);
+>         assert(ret == total);
+>     }
+> 
+> I think the assert() should never trigger as mentioned above.  But ideally
+> maybe it should just be a loop until cleared gfns match total.
+
+Right. If userspace calls the ioctl on every vcpu, then things should
+work correctly. It is only that the overhead is higher than what it
+should be if multiple vcpus perform a reset at the same time.
+
+>
+> > In other words, without further straightening of the API, this doesn't
+> > work as expected on relaxed memory architectures. So before this gets
+> > enabled on arm64, this whole ordering issue must be addressed.
+> 
+> How about adding some more documentation for KVM_RESET_DIRTY_RINGS on the
+> possibility of recycling partial of the pages, especially when collection
+> and the ioctl() aren't done from the same thread?
+
+I'd rather tell people about the ordering rules. That will come at
+zero cost on x86.
+
+> Any suggestions will be greatly welcomed.
+
+I'll write a couple of patch when I get the time, most likely next
+week. Gavin will hopefully be able to take them as part of his series.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
