@@ -2,179 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E3B5A1BF1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 00:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC5E5A1C15
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 00:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244304AbiHYWLK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Aug 2022 18:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S232671AbiHYWSC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Aug 2022 18:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235432AbiHYWLI (ORCPT
+        with ESMTP id S229462AbiHYWSC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Aug 2022 18:11:08 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DAE4623E
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Aug 2022 15:11:04 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id s199so24987544oie.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Aug 2022 15:11:04 -0700 (PDT)
+        Thu, 25 Aug 2022 18:18:02 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0F1956A6;
+        Thu, 25 Aug 2022 15:18:01 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11c9af8dd3eso26369575fac.10;
+        Thu, 25 Aug 2022 15:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=aL/AGV/8w/lD0tdUyUfzE8bvL9UFhy5bQRgnqnJx79U=;
-        b=A2e2m7ezoKBimHZ8/7VLP9dvWoH+EEf72LSF6b2eTN1goiRhAcaNEsH4aMIAdBMdDV
-         Sw/W7FpIPVqOMojVjC6ABvS48bY7IGsqTB01A6M4cCeZegPyYFUg8EvR7s2s2aFc3LfC
-         z98HdbmOEF6zR2mb4maMNOTJIQx37xA1hXWqy0Flnmpa2q0qc0mZ4IjJcJjpsZqyBmBD
-         rjFiFyzF51Ai9kLcPbBi7LM4LWruE51HRS6Gbc7TLQMhiWeLDnQON4DYd5MxrMEUZmvg
-         /tbF2C/V+pKnI850Af/7RerFaYyycqS4Iek09hpd2OxY6oJVEZTGKeKOi62YstibIH/C
-         kMRg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=NplIUhMLfPOec8AZZdsvB3N3SHtQQbKwWNlCDqLOTGU=;
+        b=SlPWJVV5zZdLa4gstqqlzR1+hBQ5WNclTHjetSzqvpgyYhB4c/jVIiIV09TVkn9kGY
+         SnA/ZXIO6/XeruRDnmWdzwIZWifGm3jeNp93O0l41jq16dLNi9aXePfqcqqLmkePLkKd
+         ViPButwdAaKmnlS5kgVHpf+HIaFaDBx3C5v57Bq8x3UrPnHwgTGemAKhlh/CY02ykg9x
+         5jzBuKcZFQugaBNmwrXaRyx04xPy+nAye+fQnX5QFuWbtettZ8J9iP/uNpVmz90g91ld
+         eKzVHiD8YHdABe7lSGoefMrTVdTch7T0FU3aHVXzSEjSbJdCaHo/q/wp9XhAlDPeRhmQ
+         ym4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=aL/AGV/8w/lD0tdUyUfzE8bvL9UFhy5bQRgnqnJx79U=;
-        b=pvLu5mUecniTXVQuZYgR2M99pTJe4JIcNULeHuoUrtITUEXKoAyOQXEgL4TCS/FT3U
-         NU/soN55R/Zbyvsr8yviP6i9WllX2g5DewEOAWBhZiUyHLgLfESWih6fkrZIt+86tGFN
-         qGr5asZFKXTD0NkGeskLGLhTrslWxoSlOjyYuT0vye8sDAa00SLTITYGnbTw2s16Kd8S
-         +6ebIKmFb4k+H1AJoYQxQk3Hfy2b/PRxyyG0Ad95j0Zo+s+SmnYYvnvdZH+m/32jbjYu
-         fYEdZqV+bmbYLcvCYEp7Nx1oG+YmHhjTnnilUineGpip6R/PPYC6PHJT4Z7Q9qdPqsAr
-         SlzA==
-X-Gm-Message-State: ACgBeo2683xqeNwVvUITr9hn9pIC2SKeiJYVGKaej5kehuSvR1TSnNsc
-        BuGf5buLrHgf2SWgbESWOpgnXnpQRk3mD8yJ4K7R
-X-Google-Smtp-Source: AA6agR7SFEI7mDvYGEHKi8Bu9KDrgCXC7VjP4nzg+lnkg6FGxIcsxnYfGpmklXE7YULxMoUHaKN27KPpfrqqlTcOa3s=
-X-Received: by 2002:aca:b7d5:0:b0:343:c478:91c6 with SMTP id
- h204-20020acab7d5000000b00343c47891c6mr444622oif.136.1661465463480; Thu, 25
- Aug 2022 15:11:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
- <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
- <20220819144537.GA16552@mail.hallyn.com> <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
- <875yigp4tp.fsf@email.froward.int.ebiederm.org> <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
- <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
-In-Reply-To: <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 25 Aug 2022 18:10:52 -0400
-Message-ID: <CAHC9VhS4ROEY6uBwJPaTKX_bLiDRCyFJ9_+_08gFP0VWF_s-bQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-To:     Song Liu <songliubraving@fb.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "jackmanb@chromium.org" <jackmanb@chromium.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=NplIUhMLfPOec8AZZdsvB3N3SHtQQbKwWNlCDqLOTGU=;
+        b=wVq2T+P0ttLrfIj55UJcxU4gUoO9cKYHUDL+cLFBRWxI95q7reeKmXOLwk2rXOzBsZ
+         ANawGw4dokJrpSLyzC9yF2fgYAxD2GsYKe1UvRmjVabLM10j4gCGWw0UOPIAdn3S9rOZ
+         RGJRdiyMXLqUNmc/SMX1dTll72lbTfNm2v4Sd300yTIq353qhaxTV8ouGLRgLZk3/jis
+         Mv4Aup/jbvrPjc4CKo1ZY1ywP52TFTRS7cMcvwl/gdzAmMNMVOvICqf4j0oxvdN6fv9N
+         EoO/qo4Syw1fELBJG3aFSksEoe23EZciVuMfw4bv0KjU7QKy9IiI/QEFsIMquVA54dXu
+         h8vA==
+X-Gm-Message-State: ACgBeo0MWkFarm+vs8K25+UVc57t0Qnu47Lm2ktyh6PM6isyEutpAAxy
+        8S1bFBKY2hsREgmbn6moRjJRMCcb0Ik=
+X-Google-Smtp-Source: AA6agR5uQXYiGy90D0OFm5Nyz97HD/CT/9F+CFp4q0vUBJBAi105LAeM9Yetjtp1p1WWN1m6oH119w==
+X-Received: by 2002:a05:6870:171c:b0:10e:40b9:8cd0 with SMTP id h28-20020a056870171c00b0010e40b98cd0mr553037oae.283.1661465879036;
+        Thu, 25 Aug 2022 15:17:59 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
+        by smtp.gmail.com with ESMTPSA id i19-20020a056871029300b0011c8c2c9020sm247722oae.33.2022.08.25.15.17.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 15:17:58 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "eparis@parisplace.org" <eparis@parisplace.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
-        "cgzones@googlemail.com" <cgzones@googlemail.com>,
-        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
-        "tixxdz@gmail.com" <tixxdz@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type conflict
+Date:   Thu, 25 Aug 2022 16:17:49 -0600
+Message-Id: <20220825221751.258958-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 5:58 PM Song Liu <songliubraving@fb.com> wrote:
-> > On Aug 25, 2022, at 12:19 PM, Paul Moore <paul@paul-moore.com> wrote:
-> >
-> > On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >> Paul Moore <paul@paul-moore.com> writes:
-> >>> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> >>>> I am hoping we can come up with
-> >>>> "something better" to address people's needs, make everyone happy, and
-> >>>> bring forth world peace.  Which would stack just fine with what's here
-> >>>> for defense in depth.
-> >>>>
-> >>>> You may well not be interested in further work, and that's fine.  I need
-> >>>> to set aside a few days to think on this.
-> >>>
-> >>> I'm happy to continue the discussion as long as it's constructive; I
-> >>> think we all are.  My gut feeling is that Frederick's approach falls
-> >>> closest to the sweet spot of "workable without being overly offensive"
-> >>> (*cough*), but if you've got an additional approach in mind, or an
-> >>> alternative approach that solves the same use case problems, I think
-> >>> we'd all love to hear about it.
-> >>
-> >> I would love to actually hear the problems people are trying to solve so
-> >> that we can have a sensible conversation about the trade offs.
-> >
-> > Here are several taken from the previous threads, it's surely not a
-> > complete list, but it should give you a good idea:
-> >
-> > https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
-> >
-> >> As best I can tell without more information people want to use
-> >> the creation of a user namespace as a signal that the code is
-> >> attempting an exploit.
-> >
-> > Some use cases are like that, there are several other use cases that
-> > go beyond this; see all of our previous discussions on this
-> > topic/patchset.  As has been mentioned before, there are use cases
-> > that require improved observability, access control, or both.
-> >
-> >> As such let me propose instead of returning an error code which will let
-> >> the exploit continue, have the security hook return a bool.  With true
-> >> meaning the code can continue and on false it will trigger using SIGSYS
-> >> to terminate the program like seccomp does.
-> >
-> > Having the kernel forcibly exit the process isn't something that most
-> > LSMs would likely want.  I suppose we could modify the hook/caller so
-> > that *if* an LSM wanted to return SIGSYS the system would kill the
-> > process, but I would want that to be something in addition to
-> > returning an error code like LSMs normally do (e.g. EACCES).
->
-> I am new to user_namespace and security work, so please pardon me if
-> anything below is very wrong.
->
-> IIUC, user_namespace is a tool that enables trusted userspace code to
-> control the behavior of untrusted (or less trusted) userspace code.
-> Failing create_user_ns() doesn't make the system more reliable.
-> Specifically, we call create_user_ns() via two paths: fork/clone and
-> unshare. For both paths, we need the userspace to use user_namespace,
-> and to honor failed create_user_ns().
->
-> On the other hand, I would echo that killing the process is not
-> practical in some use cases. Specifically, allowing the application to
-> run in a less secure environment for a short period of time might be
-> much better than killing it and taking down the whole service. Of
-> course, there are other cases that security is more important, and
-> taking down the whole service is the better choice.
->
-> I guess the ultimate solution is a way to enforce using user_namespace
-> in the kernel (if it ever makes sense...).
+There is a potential for us to hit a type conflict when including
+netinet/tcp.h with sys/socket.h, we can replace both of these includes
+with linux/tcp.h to avoid this conflict.
 
-The LSM framework, and the BPF and SELinux LSM implementations in this
-patchset, provide a mechanism to do just that: kernel enforced access
-controls using flexible security policies which can be tailored by the
-distro, solution provider, or end user to meet the specific needs of
-their use case.
+Fixes errors like:
+In file included from /usr/include/netinet/tcp.h:91,
+                 from progs/bind4_prog.c:10:
+/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
+   34 | typedef __INT8_TYPE__ int8_t;
+      |                       ^~~~~~
+In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
+                 from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
+                 from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
+                 from progs/bind4_prog.c:9:
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
+   24 | typedef __int8_t int8_t;
+      |                  ^~~~~~
+/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
+   43 | typedef __INT64_TYPE__ int64_t;
+      |                        ^~~~~~~
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
+   27 | typedef __int64_t int64_t;
+      |                   ^~~~~~~
+make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o] Error 1
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ tools/testing/selftests/bpf/progs/bind4_prog.c | 3 +--
+ tools/testing/selftests/bpf/progs/bind6_prog.c | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c b/tools/testing/selftests/bpf/progs/bind4_prog.c
+index 474c6a62078a..6bd20042fd53 100644
+--- a/tools/testing/selftests/bpf/progs/bind4_prog.c
++++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
+@@ -6,8 +6,7 @@
+ #include <linux/bpf.h>
+ #include <linux/in.h>
+ #include <linux/in6.h>
+-#include <sys/socket.h>
+-#include <netinet/tcp.h>
++#include <linux/tcp.h>
+ #include <linux/if.h>
+ #include <errno.h>
+ 
+diff --git a/tools/testing/selftests/bpf/progs/bind6_prog.c b/tools/testing/selftests/bpf/progs/bind6_prog.c
+index c19cfa869f30..f37617b35a55 100644
+--- a/tools/testing/selftests/bpf/progs/bind6_prog.c
++++ b/tools/testing/selftests/bpf/progs/bind6_prog.c
+@@ -6,8 +6,7 @@
+ #include <linux/bpf.h>
+ #include <linux/in.h>
+ #include <linux/in6.h>
+-#include <sys/socket.h>
+-#include <netinet/tcp.h>
++#include <linux/tcp.h>
+ #include <linux/if.h>
+ #include <errno.h>
+ 
 -- 
-paul-moore.com
+2.34.1
+
