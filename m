@@ -2,78 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C4E5A0A10
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Aug 2022 09:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E255A0C68
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Aug 2022 11:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236525AbiHYHW7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Aug 2022 03:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
+        id S239195AbiHYJUN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Aug 2022 05:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233647AbiHYHW6 (ORCPT
+        with ESMTP id S238498AbiHYJUI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Aug 2022 03:22:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF83A1D31;
-        Thu, 25 Aug 2022 00:22:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E641561901;
-        Thu, 25 Aug 2022 07:22:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3630C433C1;
-        Thu, 25 Aug 2022 07:22:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661412176;
-        bh=FZL6dNpPI/YKsRnZLNyMo4D7gdJtSXb/mNkH8Nlircs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ha5zOtk0AvY7x3EA510ExFs2Re0tF/qCrDWbj8ScuZmL1dRJ/pCwzPTJ1HofG6kaL
-         LwrifvXSDr2EJZFsFOq5BYmD3ZPtJhQA9mz12KYgxwET8INYKABD3MDe3a9iWm1oNG
-         U0gz1uULE3YJPQ679T93gSvpNaY1U4yRiXxd6ONs=
-Date:   Thu, 25 Aug 2022 09:22:52 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kernel@collabora.com
-Subject: Re: [PATCH v2 2/4] fs/proc/task_mmu: Implement IOCTL to get and
- clear soft dirty PTE bit
-Message-ID: <YwcjTOgKD22TXwYk@kroah.com>
-References: <20220825070926.2922471-1-usama.anjum@collabora.com>
- <20220825070926.2922471-3-usama.anjum@collabora.com>
+        Thu, 25 Aug 2022 05:20:08 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5599D1EEF5;
+        Thu, 25 Aug 2022 02:20:01 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MCy341C90z9xtnC;
+        Thu, 25 Aug 2022 17:14:40 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCXZhKWPgdjPLJKAA--.36169S2;
+        Thu, 25 Aug 2022 10:19:31 +0100 (CET)
+Message-ID: <1b8fbdb220d1806e622c56e65bd283a5c3212fab.camel@huaweicloud.com>
+Subject: Re: [PATCH v13 00/10] bpf: Add kfuncs for PKCS#7 signature
+ verification
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 25 Aug 2022 11:19:14 +0200
+In-Reply-To: <20220823150035.711534-1-roberto.sassu@huaweicloud.com>
+References: <20220823150035.711534-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825070926.2922471-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwCXZhKWPgdjPLJKAA--.36169S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYU7kC6x804xWl14x267AKxVWrJVCq3wAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY
+        04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFYFCUU
+        UUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj35I-gAAsw
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 12:09:24PM +0500, Muhammad Usama Anjum wrote:
-> - The flags can be specified in the flags field. Currently only one
->   PAGEMAP_SD_NO_REUSED_REGIONS is supported which can be specified to
->   ignore the VMA dirty flags.
+On Tue, 2022-08-23 at 17:00 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> One of the desirable features in security is the ability to restrict
+> import
+> of data to a given system based on data authenticity. If data import
+> can be
+> restricted, it would be possible to enforce a system-wide policy
+> based on
+> the signing keys the system owner trusts.
 
-You forgot to check that all other bits in that flag are set to 0
-properly, otherwise you can never add a new bit to the field ever as you
-can't expect userspace got it right and did not accidentaly set it
-already.
+Hi
 
-There is kernel documentation on how to add a new ioctl, you might want
-to read up on that first before resending this.
+is there anything else I need to do, other than rebasing the patches to
+the latest eBPF code?
 
-thanks,
+Thanks
 
-greg k-h
+Roberto
+
