@@ -2,131 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2755A0778
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Aug 2022 04:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B8E5A0862
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Aug 2022 07:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbiHYCxH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Aug 2022 22:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
+        id S233371AbiHYFQm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Aug 2022 01:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiHYCxG (ORCPT
+        with ESMTP id S229642AbiHYFQl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Aug 2022 22:53:06 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F439CCD2;
-        Wed, 24 Aug 2022 19:53:06 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id r69so16697173pgr.2;
-        Wed, 24 Aug 2022 19:53:06 -0700 (PDT)
+        Thu, 25 Aug 2022 01:16:41 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870CC9E697;
+        Wed, 24 Aug 2022 22:16:40 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id w28so14438341qtc.7;
+        Wed, 24 Aug 2022 22:16:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=ZBRn3glusYyDDS6wNhVu2goiaQqoWM1kcfMmuuxqfeo=;
-        b=MPAY3R16cIl2HRQO0QjpATwvz0RbCN/3Oxj+pPn5MM8V8xA2H4ipSi8OnNAnaswXlT
-         E4rI3X57BYoJeGQ9kQ2JDf4Ci0JVCQoYjfHG/lgQjwiWv+9x8YdxzeHawlD8QxC/8qBq
-         EGPYi8hgbB3Yy+M7wvDqpiIiGnrNC4bMz6TKpIbNvAMFJNFywMw2SiSTY+Vu6sNkN8ZD
-         igO2r+RUqlQ19SlqFs4QEwN+msWM39iffaA/ttpZk0cBOqz6TcF6zaWzOl0+FFlmBty6
-         1GrNnZ2UEF6DIMiQw+lvkxuV9jPR5VS0QYNCy4GA1d4vkctOUFbv3hQfaxplYJwPJwOD
-         nsMA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/IezxT3YpP/ZjkPS+Sq1V7sUV/YNLeMEPS9rX6LVw9Q=;
+        b=UkOOJVih0dAjblIhangVtEHpzEmp4UPcqY6Jw4xE2aaNGGq2l77AtJAVTUqUrFwKht
+         G139yS8e6ugVaSeXJNnI3oAejgh7RwSHiurVUfkTf2AO0JhM5CmWg3AePjLa/pBnAw2w
+         Sr5W8zL5xdCDO2QbW29tt9xLbwyh/u6EmNcXJbTlN4ebBSlGpkwRRj8l8HOIGAyUPOxS
+         eMM52r0/u5aniYyAMEX9rdzEUKuM006h+f20jZ10Kj0L59aHy3WoF63Sh0r/lMxy6AUN
+         /4Szbh9fmnx2XiQIRZgkeHzZrF7SAV8DDtcEc/Y0wxC+z2e2i1fmJuxTfGv1euLwITmO
+         bcLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=ZBRn3glusYyDDS6wNhVu2goiaQqoWM1kcfMmuuxqfeo=;
-        b=PiG/FXj0DfEK65Jgw0PJlkQGjFcnccA9nfbBAID/DASLs66EREIKRvJXvZ1m0h13JA
-         PBN/UgGBQ4XcLs0yakpw48FzvJkBLkvYt/vmV6EjTdG5AnYmyoRgEIXdeTxTJymfNU9c
-         HDGpBRsGIJStzGj9OWSHpmzweOibNE/B3YqxgS8qTSoRKelWR61sTf/td1pMOp+wppGF
-         IZDACT3be2eDuxt3E3GLM73cTJEJKu0ayxBiLYR1YMI5pfLlltmXaFK6LW4lIjYULnlB
-         E3YIbd6xA5mN4PDcX3uWfAyR7OP6wLXNFR1FGyIGVOaa9p4gZx0ZY0mt+CNTZqwgtrc4
-         kA1w==
-X-Gm-Message-State: ACgBeo39xET9po7cldyGjZ9EwUOHdGw5Z73RFZjDOpgW+SVwXX7ylYUh
-        fTtxIa/HVv4BQlnM8YqyTSU=
-X-Google-Smtp-Source: AA6agR5Q0ST3Yu6ZCFGqnW+CQmNOuUqjcWQ4lT5jynnps9v76ptvuDUKqgDW5F7Vj338dAtgMAQa3Q==
-X-Received: by 2002:a65:6b8e:0:b0:42a:162c:e3a0 with SMTP id d14-20020a656b8e000000b0042a162ce3a0mr1539015pgw.464.1661395985677;
-        Wed, 24 Aug 2022 19:53:05 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-33.three.co.id. [116.206.28.33])
-        by smtp.gmail.com with ESMTPSA id qi3-20020a17090b274300b001f3162e4e55sm2170817pjb.35.2022.08.24.19.53.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Aug 2022 19:53:05 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 8E1C9103C07; Thu, 25 Aug 2022 09:53:00 +0700 (WIB)
-Date:   Thu, 25 Aug 2022 09:52:59 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/IezxT3YpP/ZjkPS+Sq1V7sUV/YNLeMEPS9rX6LVw9Q=;
+        b=Frsg4vkoif/WLlfucV5Wc5C9IO39qGl4okbO53Y0tIxCvbPHN5V0B+sw/JONjofYmn
+         Mk6As4AZmJYa8NtYzTI3b8xfGLiBJtxOBe/CWLbP1RvfBtj92huw0WALH8FEgqFY50+w
+         T6prDfui6JgFH5c7XjHeaxWlX/lWtpFqJublA1doV8vMQgHxoJoQu4C0MRMBAyxgPxZF
+         CZQjb2CR4k6T0i2mbkaAQgO9z/GrBfCZlFpomay569wceSw5f3cf/hclq3PlT6PsJ6wW
+         qqSRi9KdEoOlt7u8Yo5rkQI5j/6xeVX0aafSH5yXfpRxXA/5ArblQjDkJoXZblTPRx5q
+         urUg==
+X-Gm-Message-State: ACgBeo3MyfzbKAhi34XJwCP3i/7qV71am1Q5/0hH0ihn8TeknXbxfNno
+        jET881dUldtiyH7mXZFpiPFncR2thxJr2+9Ld9s=
+X-Google-Smtp-Source: AA6agR7dbvdf53Ku9mgcjUs4w/KuJACzIcGua7jYnSSH0TxPDmQdTjWK2m3y3o+6vlS9a275sNagDjSQn0pOZNAGvxE=
+X-Received: by 2002:ac8:7fc5:0:b0:343:681d:c3fb with SMTP id
+ b5-20020ac87fc5000000b00343681dc3fbmr2273958qtk.157.1661404599568; Wed, 24
+ Aug 2022 22:16:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220824110632.1592592-1-eyal.birger@gmail.com>
+ <166136161501.22569.15129561246366098327.git-patchwork-notify@kernel.org> <CAADnVQKeaFwU_f9WYMh91HwLuU4NJnmM5OW9dLfq9sXuB6_kbw@mail.gmail.com>
+In-Reply-To: <CAADnVQKeaFwU_f9WYMh91HwLuU4NJnmM5OW9dLfq9sXuB6_kbw@mail.gmail.com>
+From:   Eyal Birger <eyal.birger@gmail.com>
+Date:   Thu, 25 Aug 2022 08:16:29 +0300
+Message-ID: <CAHsH6GvRyRiQ3KWN49b6aKRZuubHqqdD=B1BBjiczg3XsaH-kA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next,v3] selftests/bpf: add lwt ip encap tests to test_progs
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     patchwork-bot+netdevbpf@kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 24/24] Documentation: add HID-BPF docs
-Message-ID: <YwbkC9v83gk0Eq/d@debian.me>
-References: <20220721153625.1282007-1-benjamin.tissoires@redhat.com>
- <20220721153625.1282007-25-benjamin.tissoires@redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fd9AMyEzaCZxSJic"
-Content-Disposition: inline
-In-Reply-To: <20220721153625.1282007-25-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Aug 25, 2022 at 5:06 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Aug 24, 2022 at 10:20 AM <patchwork-bot+netdevbpf@kernel.org> wrote:
+> >
+> > Hello:
+> >
+> > This patch was applied to bpf/bpf-next.git (master)
+> > by Daniel Borkmann <daniel@iogearbox.net>:
+> >
+> > On Wed, 24 Aug 2022 14:06:32 +0300 you wrote:
+> > > Port test_lwt_ip_encap.sh tests onto test_progs.
+> > >
+> > > In addition, this commit adds "egress_md" tests which test a similar
+> > > flow as egress tests only they use gre devices in collect_md mode
+> > > for encapsulation and set the tunnel key using bpf_set_tunnel_key().
+> > >
+> > > This introduces minor changes to the test setup and test_lwt_ip_encap.c:
+> > >
+> > > [...]
+> >
+> > Here is the summary with links:
+> >   - [bpf-next,v3] selftests/bpf: add lwt ip encap tests to test_progs
+> >     https://git.kernel.org/bpf/bpf-next/c/a8df1b0636af
+> >
+> > You are awesome, thank you!
+>
+> Sorry. I had to revert this patch.
+> It added 1 min 40 seconds to test_progs that I manually run
+> every time I apply patches.
+> Essentially it doubled the test_progs run-time.
+> Please find a way to test the same functionality in a few seconds.
 
---fd9AMyEzaCZxSJic
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry about that! I ported some of the delays from the original script
+in an effort to improve robustness which is probably the bulk of the run time.
+I'll find a different approach.
 
-On Thu, Jul 21, 2022 at 05:36:25PM +0200, Benjamin Tissoires wrote:
-> +When (and why) to use HID-BPF
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> +
-> +We can enumerate several use cases for when using HID-BPF is better than
-> +using a standard kernel driver fix:
-> +
-
-Better say "There are several use cases when using HID-BPF is better
-than standard kernel driver fix:"
-
-> +When a BPF program needs to emit input events, it needs to talk HID, and=
- rely
-> +on the HID kernel processing to translate the HID data into input events.
-> +
-
-talk to HID?
-
-Otherwise the documentation LGTM (no new warnings caused by the doc).
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---fd9AMyEzaCZxSJic
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYwbkBwAKCRD2uYlJVVFO
-oz3rAQCgczCdX57yjfzPE8zpu9jiwd33nPbcTmawxaCDNeO/owEAgYmMVll2dF0j
-zQo9yKz4+kiQWQNTPR3m6sXcj3WDsQU=
-=Ww1R
------END PGP SIGNATURE-----
-
---fd9AMyEzaCZxSJic--
+Eyal.
