@@ -2,31 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6ABB5A18A2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Aug 2022 20:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE465A195C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Aug 2022 21:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241532AbiHYSRB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Aug 2022 14:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S243616AbiHYTTX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Aug 2022 15:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243478AbiHYSQo (ORCPT
+        with ESMTP id S243607AbiHYTTX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Aug 2022 14:16:44 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31862BD1FF;
-        Thu, 25 Aug 2022 11:16:00 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:35250)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oRHOW-005Rga-9i; Thu, 25 Aug 2022 12:15:56 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:36814 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1oRHOU-00DcQ7-Hr; Thu, 25 Aug 2022 12:15:55 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Paul Moore <paul@paul-moore.com>
+        Thu, 25 Aug 2022 15:19:23 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F2ABC828
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Aug 2022 12:19:21 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11d2dcc31dbso18022629fac.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Aug 2022 12:19:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=e8Gq1eg55USHCL83Reobt5ibzPL8cvMuV1NX5De9ZYY=;
+        b=O7VCw6m6DYZ9SRwwETgBSqa1zuOS859jqBgpBIVSG63HOg7KKdU/QyOTg3x2mMKLlZ
+         /sk+enC4j9MprDEgOepuTKPmBoZ+sG3JQUyandbIfwWBmTyew+NcfQNlQxrCLf562JLt
+         CBDBuBCbwtrJNQe3ltgbUG8+lxI+qESJLbZ0QjttHTgIelL4DCFUrpjqekdSpJmnnmqw
+         5+qWUz8Dkm4iat2Vs0aOfyU5R/QMPzUhEaDtsp239vjwfrvwNLroQmHWmjQKOUL6AgDf
+         0aK+BsUrax9MV0QeahftRbTrPT7WR2Q4AhsrTUIGzz3L/CutBwNsczdrnoWMGQfm8Wko
+         Shzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=e8Gq1eg55USHCL83Reobt5ibzPL8cvMuV1NX5De9ZYY=;
+        b=krrhe47XZW1KSOe6UWmelV2Fiz6wTRbdsHoezTBJIX/pxjH47f3zbhHyXD7TbwQApn
+         5vxZzgxoScyonU9LLmc/WzSPaqNVVLvR2t4cD/kQ+ii/JBh5mtcqWY49i0E0gceWRBat
+         Wm+waKpOLGoOsyTKA59PnZPwX/VGtLMHJ9xQq2qDOQXR/KlNkv98kzb+TckO7CR3F631
+         1ACudC+Y9pnWVf86sqxM+U65fuK32PdsEIhQ6NbZXs/xseiiruuQ0FlHjtDJFvPLCAkL
+         P41B1/1k8YDj4si9O011NT9bn85b61guxM/KXc6skIRr/DcGOxnM0vUz8fhGVV4LfwZJ
+         K3HA==
+X-Gm-Message-State: ACgBeo3bsA6MfDDhWXejSEBZN+jzOZ7jTU7l0N4yoHFsFHvxXftfNra6
+        kKZZt6MIcMdKc8ItlSu7kQQhnNtiBFHN3n7ZBA2p
+X-Google-Smtp-Source: AA6agR6ZnOvsjUOSNSEGS0LaKYyBUDvqU+sEg8pLS8j9NOxMj3Auk1GEnVJgv+Dn6EqNkIafEGAYyEbTIhKpOvto32I=
+X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
+ x13-20020a056870a78d00b0011c437bec70mr257186oao.136.1661455160511; Thu, 25
+ Aug 2022 12:19:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
+ <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+ <20220819144537.GA16552@mail.hallyn.com> <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+ <875yigp4tp.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <875yigp4tp.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 25 Aug 2022 15:19:09 -0400
+Message-ID: <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
@@ -41,106 +74,62 @@ Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
         netdev@vger.kernel.org, kernel-team@cloudflare.com,
         cgzones@googlemail.com, karl@bigbadwolfsecurity.com,
         tixxdz@gmail.com
-In-Reply-To: <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
-        (Paul Moore's message of "Fri, 19 Aug 2022 17:10:29 -0400")
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
-        <8735dux60p.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
-        <871qte8wy3.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
-        <8735du7fnp.fsf@email.froward.int.ebiederm.org>
-        <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
-        <87tu6a4l83.fsf@email.froward.int.ebiederm.org>
-        <20220818140521.GA1000@mail.hallyn.com>
-        <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
-        <20220819144537.GA16552@mail.hallyn.com>
-        <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Thu, 25 Aug 2022 13:15:46 -0500
-Message-ID: <875yigp4tp.fsf@email.froward.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1oRHOU-00DcQ7-Hr;;;mid=<875yigp4tp.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+SG3YsTIgmOSCWJtea0hxDJibtwIu7XJw=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Paul Moore <paul@paul-moore.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1139 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 9 (0.8%), b_tie_ro: 8 (0.7%), parse: 1.08 (0.1%),
-        extract_message_metadata: 15 (1.3%), get_uri_detail_list: 1.83 (0.2%),
-        tests_pri_-1000: 9 (0.8%), tests_pri_-950: 1.31 (0.1%),
-        tests_pri_-900: 1.08 (0.1%), tests_pri_-90: 178 (15.6%), check_bayes:
-        166 (14.5%), b_tokenize: 9 (0.8%), b_tok_get_all: 10 (0.9%),
-        b_comp_prob: 3.1 (0.3%), b_tok_touch_all: 139 (12.2%), b_finish: 1.00
-        (0.1%), tests_pri_0: 912 (80.0%), check_dkim_signature: 0.67 (0.1%),
-        check_dkim_adsp: 4.0 (0.4%), poll_dns_idle: 0.44 (0.0%), tests_pri_10:
-        1.75 (0.2%), tests_pri_500: 7 (0.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Paul Moore <paul@paul-moore.com> writes:
-
-> On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
->>  I am hoping we can come up with
->> "something better" to address people's needs, make everyone happy, and
->> bring forth world peace.  Which would stack just fine with what's here
->> for defense in depth.
->>
->> You may well not be interested in further work, and that's fine.  I need
->> to set aside a few days to think on this.
+On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+> > On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> >>  I am hoping we can come up with
+> >> "something better" to address people's needs, make everyone happy, and
+> >> bring forth world peace.  Which would stack just fine with what's here
+> >> for defense in depth.
+> >>
+> >> You may well not be interested in further work, and that's fine.  I need
+> >> to set aside a few days to think on this.
+> >
+> > I'm happy to continue the discussion as long as it's constructive; I
+> > think we all are.  My gut feeling is that Frederick's approach falls
+> > closest to the sweet spot of "workable without being overly offensive"
+> > (*cough*), but if you've got an additional approach in mind, or an
+> > alternative approach that solves the same use case problems, I think
+> > we'd all love to hear about it.
 >
-> I'm happy to continue the discussion as long as it's constructive; I
-> think we all are.  My gut feeling is that Frederick's approach falls
-> closest to the sweet spot of "workable without being overly offensive"
-> (*cough*), but if you've got an additional approach in mind, or an
-> alternative approach that solves the same use case problems, I think
-> we'd all love to hear about it.
+> I would love to actually hear the problems people are trying to solve so
+> that we can have a sensible conversation about the trade offs.
 
-I would love to actually hear the problems people are trying to solve so
-that we can have a sensible conversation about the trade offs.
+Here are several taken from the previous threads, it's surely not a
+complete list, but it should give you a good idea:
 
-As best I can tell without more information people want to use
-the creation of a user namespace as a signal that the code is
-attempting an exploit.
+https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
 
-As such let me propose instead of returning an error code which will let
-the exploit continue, have the security hook return a bool.  With true
-meaning the code can continue and on false it will trigger using SIGSYS
-to terminate the program like seccomp does.
+> As best I can tell without more information people want to use
+> the creation of a user namespace as a signal that the code is
+> attempting an exploit.
 
-I am not super fond of that idea, but it means that userspace code is
-not expected to deal with the situation, and the only conversation a
-userspace application developer needs to enter into with a system
-administrator or security policy developer is one to prove they are not
-exploit code.  Plus it makes much more sense to kill an exploit
-immediately instead of letting it run.
+Some use cases are like that, there are several other use cases that
+go beyond this; see all of our previous discussions on this
+topic/patchset.  As has been mentioned before, there are use cases
+that require improved observability, access control, or both.
 
+> As such let me propose instead of returning an error code which will let
+> the exploit continue, have the security hook return a bool.  With true
+> meaning the code can continue and on false it will trigger using SIGSYS
+> to terminate the program like seccomp does.
 
-In general when addressing code coverage concerns I think it makes more
-sense to use the security hooks to implement some variety of the principle
-of least privilege and only give applications access to the kernel
-facilities they are known to use.
+Having the kernel forcibly exit the process isn't something that most
+LSMs would likely want.  I suppose we could modify the hook/caller so
+that *if* an LSM wanted to return SIGSYS the system would kill the
+process, but I would want that to be something in addition to
+returning an error code like LSMs normally do (e.g. EACCES).
 
-As far as I can tell creating a user namespace does not increase the
-attack surface.  It is the creation of the other namespaces from a user
-namespace that begins to do that.  So in general I would think
-restrictions should be in places they matter.
-
-Just like the bugs that have exploits that involve the user namespace
-are not user namespace bugs, but instead they are bugs in other
-subsystems that just happen to go through the user namespace as the
-easiest path to the buggy code, not the only path to the buggy code.
-
-Eric
-
+-- 
+paul-moore.com
