@@ -2,156 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFAAF5A23CD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 11:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B795A23E4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 11:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245629AbiHZJLI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 05:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S240510AbiHZJN0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 05:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245623AbiHZJLH (ORCPT
+        with ESMTP id S233000AbiHZJNZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 05:11:07 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBACCD529
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 02:11:04 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id z72so687398iof.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 02:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=9WfR61mwlG7xEw+rTgThfNinRNgyKs7+mef9MefL6PA=;
-        b=EhvIqLiC9BX9tHc9a+BQqpydsPIjtHyKBmBx0sofnPbgUlRgpWlCGxWIpp5JbnuFup
-         2kZoVj99EcwjkfBHBUZg2oipu8wdizJwB4NoGLsfzUAFh/Tk2zvveA8DFExtjEyQ8Dc/
-         /pVtcCgigmLtsj7Cwo14GVv+Ocdqf7No5PvDs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9WfR61mwlG7xEw+rTgThfNinRNgyKs7+mef9MefL6PA=;
-        b=vX5jeOL6PN/NX/GxzBm9w5oekIYF5n/dUCFdDEa2kCywAWgGu50PtDbQTr2719BIO1
-         Ge9fgBWFguX60cVMi3c/YiGUMx9CSpWZJW50jIuxR0u9UxOwJeb4WY6U/EVlWthe7NSx
-         WlBIn6oiBmM4pTh/gVOfsBucfjJa179ElhxlseMpa6yuJsZOwvbcdqqfovEj6/Uy+7en
-         4mmxtFF4TdM5iW2bmkl7m3dfrPiu/XiKR6PIAuyr0SDKsT5+BTfUx1OaHNWfiR9WczGS
-         EsbxE/ZdsJtCeb2Qu+msHGD8hZpDuceNHm7O5iS+7bDtZ/w/n9Hpn+9bL00yD6zucs+U
-         lazg==
-X-Gm-Message-State: ACgBeo2hCDHs7iEoxP7CneCrC0OcLLlEfM4XBedirouJ+0XK+Gr2iWGq
-        +BsnYVO9ZfXxjn8x47KlMdeRONDN+hW04ZP0pjGrQQ==
-X-Google-Smtp-Source: AA6agR6HH6H4gQKe9WI6NZj2d6w2XPDgEj2DZxqfhfzNbm4v9sn+/Pw662xyRmYU8yITLrnZeY2UhvE0P3+pTftDpXg=
-X-Received: by 2002:a05:6638:1244:b0:34a:1104:afa with SMTP id
- o4-20020a056638124400b0034a11040afamr3321877jas.244.1661505063405; Fri, 26
- Aug 2022 02:11:03 -0700 (PDT)
+        Fri, 26 Aug 2022 05:13:25 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A285DCD78F;
+        Fri, 26 Aug 2022 02:13:23 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDYrv5GwNz9v7Gy;
+        Fri, 26 Aug 2022 17:07:59 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwCnXxeKjghjdBVRAA--.23684S2;
+        Fri, 26 Aug 2022 10:12:54 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        corbet@lwn.net, dhowells@redhat.com, jarkko@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v14 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h and add flags check function
+Date:   Fri, 26 Aug 2022 11:12:28 +0200
+Message-Id: <20220826091228.1701185-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
+References: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
 MIME-Version: 1.0
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
- <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
- <20220819144537.GA16552@mail.hallyn.com> <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
- <875yigp4tp.fsf@email.froward.int.ebiederm.org> <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
-In-Reply-To: <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
-From:   Ignat Korchagin <ignat@cloudflare.com>
-Date:   Fri, 26 Aug 2022 10:10:51 +0100
-Message-ID: <CALrw=nHRFC-Ws2j-MJAs50oznfRC5fG3a3opmYRkxQCtK61EEg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, shuah@kernel.org,
-        Christian Brauner <brauner@kernel.org>, casey@schaufler-ca.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>, cgzones@googlemail.com,
-        karl@bigbadwolfsecurity.com, tixxdz@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwCnXxeKjghjdBVRAA--.23684S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urW3JFWUGryftw1rWr4fuFg_yoW8uF1kpF
+        yUCa4rKry8GFy2g3s3GFsIya1ag3yfGr17AFZIgwn0vF9ag3y8Jrn7GF43GF15urWruFy2
+        qr42ga15uw1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj4JQwgAFsx
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 8:19 PM Paul Moore <paul@paul-moore.com> wrote:
->
-> On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> > Paul Moore <paul@paul-moore.com> writes:
-> > > On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> > >>  I am hoping we can come up with
-> > >> "something better" to address people's needs, make everyone happy, and
-> > >> bring forth world peace.  Which would stack just fine with what's here
-> > >> for defense in depth.
-> > >>
-> > >> You may well not be interested in further work, and that's fine.  I need
-> > >> to set aside a few days to think on this.
-> > >
-> > > I'm happy to continue the discussion as long as it's constructive; I
-> > > think we all are.  My gut feeling is that Frederick's approach falls
-> > > closest to the sweet spot of "workable without being overly offensive"
-> > > (*cough*), but if you've got an additional approach in mind, or an
-> > > alternative approach that solves the same use case problems, I think
-> > > we'd all love to hear about it.
-> >
-> > I would love to actually hear the problems people are trying to solve so
-> > that we can have a sensible conversation about the trade offs.
->
-> Here are several taken from the previous threads, it's surely not a
-> complete list, but it should give you a good idea:
->
-> https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
->
-> > As best I can tell without more information people want to use
-> > the creation of a user namespace as a signal that the code is
-> > attempting an exploit.
->
-> Some use cases are like that, there are several other use cases that
-> go beyond this; see all of our previous discussions on this
-> topic/patchset.  As has been mentioned before, there are use cases
-> that require improved observability, access control, or both.
->
-> > As such let me propose instead of returning an error code which will let
-> > the exploit continue, have the security hook return a bool.  With true
-> > meaning the code can continue and on false it will trigger using SIGSYS
-> > to terminate the program like seccomp does.
->
-> Having the kernel forcibly exit the process isn't something that most
-> LSMs would likely want.  I suppose we could modify the hook/caller so
-> that *if* an LSM wanted to return SIGSYS the system would kill the
-> process, but I would want that to be something in addition to
-> returning an error code like LSMs normally do (e.g. EACCES).
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-I would also add here that seccomp allows more flexibility than just
-delivering SIGSYS to a violating application. We can program seccomp
-bpf to:
-  * deliver a signal
-  * return a CUSTOM error code (and BTW somehow this does not trigger
-any requirements to change userapi or document in manpages: in my toy
-example in [1] I'm delivering ENETDOWN from a uname(2) system call,
-which is not documented in the man pages, but totally valid from a
-seccomp usage perspective)
-  * do-nothing, but log the action
+In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
+kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
+validate the kfunc parameters.
 
-So I would say the seccomp reference supports the current approach
-more than the alternative approach of delivering SIGSYS as technically
-an LSM implementation of the hook (at least in-kernel one) can chose
-to deliver a signal to a task via kernel-api, but BPF-LSM (and others)
-can deliver custom error codes and log the actions as well.
+Also, introduce key_lookup_flags_valid() to check if the caller set in the
+argument only defined flags. Introduce it directly in include/linux/key.h,
+to reduce the risk that the check is not in sync with currently defined
+flags.
 
-Ignat
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Reviewed-by: KP Singh <kpsingh@kernel.org>
+---
+ include/linux/key.h      | 16 ++++++++++++++++
+ security/keys/internal.h |  2 --
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-> --
-> paul-moore.com
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 7febc4881363..e679dbf0c940 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -88,6 +88,22 @@ enum key_need_perm {
+ 	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
+ };
+ 
++#define KEY_LOOKUP_CREATE	0x01
++#define KEY_LOOKUP_PARTIAL	0x02
++
++/**
++ * key_lookup_flags_valid - detect if provided key lookup flags are valid
++ * @flags: key lookup flags.
++ *
++ * Verify whether or not the caller set in the argument only defined flags.
++ *
++ * Return: true if flags are valid, false if not.
++ */
++static inline bool key_lookup_flags_valid(u64 flags)
++{
++	return !(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL));
++}
++
+ struct seq_file;
+ struct user_struct;
+ struct signal_struct;
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 9b9cf3b6fcbb..3c1e7122076b 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
+ 
+ extern bool lookup_user_key_possessed(const struct key *key,
+ 				      const struct key_match_data *match_data);
+-#define KEY_LOOKUP_CREATE	0x01
+-#define KEY_LOOKUP_PARTIAL	0x02
+ 
+ extern long join_session_keyring(const char *name);
+ extern void key_change_session_keyring(struct callback_head *twork);
+-- 
+2.25.1
 
-[1]: https://blog.cloudflare.com/sandboxing-in-linux-with-zero-lines-of-code/
