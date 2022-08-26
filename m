@@ -2,179 +2,382 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399B75A2A3E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 17:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE805A2A4D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 17:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233141AbiHZPCW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 11:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S231171AbiHZPGu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 11:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbiHZPCS (ORCPT
+        with ESMTP id S230070AbiHZPGt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:02:18 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F254D9D7A
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 08:02:15 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id m21-20020a9d6ad5000000b00638df677850so1177551otq.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 08:02:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=tRhd/2/uHL0VX0F4GeRi6SnOKLBFJo3Q7T6F3F0TR3s=;
-        b=orhQFJnsjMOMEl1XYB+lStIgrX4ra7SL0ABeZSgcWzIJcW65G6IzHoIBENxN8sseM4
-         CoAsY/870bHVS0FlrCS9ipyA4VCGdNf5nQmNvDdLVx/azkoX2x2btuKOCv48mV3Y+ylC
-         hjOEY0WAesEQlmTkAi55NKTX05lKq3t4syAEoUszo9ZiAbZqfxhsJM1fiF+/x+BAX6xJ
-         OhogR1k6QWDtXqvaxG0/7agNJPwoah7vt6vcOG6dsUJJ8o8LNiRCMkdEVCa8OF1yY7jg
-         gaR+VqCefuGhBiOdD9DAtM6o+3mqXrjCWTrlKKX3Ss8zz4QhR0+UGbOcoaRVxTModdNe
-         kJBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=tRhd/2/uHL0VX0F4GeRi6SnOKLBFJo3Q7T6F3F0TR3s=;
-        b=xaWlNnHLMDbZl2HGr++71wKKxhp5TsxlWPy5DHbSqP9LRn6Z795iMbI1dy4SIzDkCA
-         DW22Tuu5K7Qxng6N5WNZtdbdOgrk/1HiWA2Cr6xKvENLBGOXpZo738x1oBt6UtVUkjIF
-         FUmt2M4kcnhZQsOQ/iDPBnuwEPjy5dXwPe9lrSrN3E/vl+rAe5x3nM8HPoelTFDD70PF
-         qzM2ShekPU1DHfWV33xeDHYdOj6ZZil21QtveIRiXfLuI08HYR/asAeiLQV3h5aCMXgS
-         UE+n3VsAS45NE2f8UvSrJ7hu8dS2QldIWB7E3vb9KxfD976GtW3QHZtCc3TUfYsQpIjQ
-         sJ7g==
-X-Gm-Message-State: ACgBeo1MJK+KIssnUAHQdsP6kOKOmN1mIDixjRhO/e2TkLZAvPIgYgs4
-        lDdPsUvDlBM4R1ydRENQc48pwRIH2O84gVFdwZf5
-X-Google-Smtp-Source: AA6agR56pOHGSBiz/+WZK6L4lhfNAe2FeRxCZVmxSMGb8hKzyXQdARkr25+BXbcIUJSAKIdw0+UELoCxFiaeDXQtsyg=
-X-Received: by 2002:a9d:2de3:0:b0:638:e210:c9da with SMTP id
- g90-20020a9d2de3000000b00638e210c9damr1506204otb.69.1661526134578; Fri, 26
- Aug 2022 08:02:14 -0700 (PDT)
+        Fri, 26 Aug 2022 11:06:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F59C1205;
+        Fri, 26 Aug 2022 08:06:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661526408; x=1693062408;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ci/7C4DxmDC5s5TH//OjIbWxIR3YdcZiyAKle+74TYA=;
+  b=fOPPhti/x9R9wYel9mmZGMatfTZFJhBhYw5D8jWt9uah9gIq69yjE1zL
+   oQGoV/QPVxKCCMRffVhfh28zwCJXQFt9qSxZ5Wl5HOyPezfu71ZLE3E7b
+   f2Cu644ATmkUAd25gv4Ylz3585wjT+lL9VaYy+xRPjpb3Lh/Jd+Z7QxDR
+   aSl9NjeoNz5W+6ruCPkpmsu2ljvsZVEatHkwQe2tQRLZnHX2WkV3OvIVq
+   qMJz30xLvGDtnjNuzagIWmskLnYzMvBWIpnQC1R0YrWGh14bqJwoTD1iB
+   ttMTGGqCah1Z4lSlIxk3uNCmPTPIlAHKXuDuFk3MeBC0GJUvUlonXMDBY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10451"; a="277537968"
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="277537968"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 08:06:48 -0700
+X-IronPort-AV: E=Sophos;i="5.93,265,1654585200"; 
+   d="scan'208";a="678889576"
+Received: from kimdavid-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.252.129.184])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2022 08:06:46 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v11 1/3] x86/tdx: Add TDX Guest attestation interface driver
+Date:   Fri, 26 Aug 2022 08:06:36 -0700
+Message-Id: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
- <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
- <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
- <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
- <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
- <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
- <20220819144537.GA16552@mail.hallyn.com> <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
- <875yigp4tp.fsf@email.froward.int.ebiederm.org> <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
- <0D14C118-E644-4D7B-84C0-CA7752DC0605@fb.com> <CAHC9VhS4ROEY6uBwJPaTKX_bLiDRCyFJ9_+_08gFP0VWF_s-bQ@mail.gmail.com>
- <ABA58A31-E4BE-445A-B98C-F462D2ED7679@fb.com>
-In-Reply-To: <ABA58A31-E4BE-445A-B98C-F462D2ED7679@fb.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 26 Aug 2022 11:02:03 -0400
-Message-ID: <CAHC9VhRU-b8LC3722tBHAzd6atrgiSAaGm16sRf_M7hywWFOOA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
-To:     Song Liu <songliubraving@fb.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "revest@chromium.org" <revest@chromium.org>,
-        "jackmanb@chromium.org" <jackmanb@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "stephen.smalley.work@gmail.com" <stephen.smalley.work@gmail.com>,
-        "eparis@parisplace.org" <eparis@parisplace.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "kernel-team@cloudflare.com" <kernel-team@cloudflare.com>,
-        "cgzones@googlemail.com" <cgzones@googlemail.com>,
-        "karl@bigbadwolfsecurity.com" <karl@bigbadwolfsecurity.com>,
-        "tixxdz@gmail.com" <tixxdz@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 6:42 PM Song Liu <songliubraving@fb.com> wrote:
-> > On Aug 25, 2022, at 3:10 PM, Paul Moore <paul@paul-moore.com> wrote:
-> > On Thu, Aug 25, 2022 at 5:58 PM Song Liu <songliubraving@fb.com> wrote:
+Attestation is used to verify the TDX guest trustworthiness to other
+entities before provisioning secrets to the guest. For example, a key
+server may request for attestation before releasing the encryption keys
+to mount the encrypted rootfs or secondary drive.
 
-...
+During the TDX guest launch, the initial contents (including the
+firmware image) and configuration of the guest are recorded by the
+Intel TDX module in build time measurement register (MRTD). After TDX
+guest is created, run-time measurement registers (RTMRs) can be used by
+the guest software to extend the measurements. TDX supports 4 RTMR
+registers, and TDG.MR.RTMR.EXTEND TDCALL is used to update the RTMR
+registers securely. RTMRs are mainly used to record measurements
+related to sections like the kernel image, command line parameters,
+initrd, ACPI tables, firmware data, configuration firmware volume (CFV)
+of TDVF, etc. For complete details, please refer to TDX Virtual
+Firmware design specification, sec titled "TD Measurement".
 
-> >> I am new to user_namespace and security work, so please pardon me if
-> >> anything below is very wrong.
-> >>
-> >> IIUC, user_namespace is a tool that enables trusted userspace code to
-> >> control the behavior of untrusted (or less trusted) userspace code.
-> >> Failing create_user_ns() doesn't make the system more reliable.
-> >> Specifically, we call create_user_ns() via two paths: fork/clone and
-> >> unshare. For both paths, we need the userspace to use user_namespace,
-> >> and to honor failed create_user_ns().
-> >>
-> >> On the other hand, I would echo that killing the process is not
-> >> practical in some use cases. Specifically, allowing the application to
-> >> run in a less secure environment for a short period of time might be
-> >> much better than killing it and taking down the whole service. Of
-> >> course, there are other cases that security is more important, and
-> >> taking down the whole service is the better choice.
-> >>
-> >> I guess the ultimate solution is a way to enforce using user_namespace
-> >> in the kernel (if it ever makes sense...).
-> >
-> > The LSM framework, and the BPF and SELinux LSM implementations in this
-> > patchset, provide a mechanism to do just that: kernel enforced access
-> > controls using flexible security policies which can be tailored by the
-> > distro, solution provider, or end user to meet the specific needs of
-> > their use case.
->
-> In this case, I wouldn't call the kernel is enforcing access control.
-> (I might be wrong). There are 3 components here: kernel, LSM, and
-> trusted userspace (whoever calls unshare).
+At TDX guest runtime, the Intel TDX module reuses the Intel SGX
+attestation infrastructure to provide support for attesting to these
+measurements as described below.
 
-The LSM layer, and the LSMs themselves are part of the kernel; look at
-the changes in this patchset to see the LSM, BPF LSM, and SELinux
-kernel changes.  Explaining how the different LSMs work is quite a bit
-beyond the scope of this discussion, but there is plenty of
-information available online that should be able to serve as an
-introduction, not to mention the kernel source itself.  However, in
-very broad terms you can think of the individual LSMs as somewhat
-analogous to filesystem drivers, e.g. ext4, and the LSM itself as the
-VFS layer.
+The attestation process consists of two steps: TDREPORT generation and
+Quote generation.
 
-> AFAICT, kernel simply passes
-> the decision made by LSM (BPF or SELinux) to the trusted userspace. It
-> is up to the trusted userspace to honor the return value of unshare().
+TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
+the TDX module which contains guest-specific information (such as build
+and boot measurements), platform security version, and the MAC to
+protect the integrity of the TDREPORT. The guest kernel uses
+TDCALL[TDG.MR.REPORT] to get the TDREPORT from the TDX module. A
+user-provided 64-Byte REPORTDATA is used as input and included in the
+TDREPORT. Typically it can be some nonce provided by attestation
+service so the TDREPORT can be verified uniquely. More details about
+the TDREPORT can be found in Intel TDX Module specification, section
+titled "TDG.MR.REPORT Leaf".
 
-With a LSM enabled and enforcing a security policy on user namespace
-creation, which appears to be the case of most concern, the kernel
-would make a decision on the namespace creation based on various
-factors (e.g. for SELinux this would be the calling process' security
-domain and the domain's permission set as determined by the configured
-security policy) and if the operation was rejected an error code would
-be returned to userspace and the operation rejected.  It is the exact
-same thing as what would happen if the calling process is chrooted or
-doesn't have a proper UID/GID mapping.  Don't forget that the
-create_user_ns() function already enforces a security policy and
-returns errors to userspace; this patchset doesn't add anything new in
-that regard, it just allows for a richer and more flexible security
-policy to be built on top of the existing constraints.
+TDREPORT by design can only be verified on the local platform as the
+MAC key is bound to the platform. To support remote verification of
+the TDREPORT, TDX leverages Intel SGX Quote Enclave (QE) to verify
+the TDREPORT locally and convert it to a remote verifiable Quote.
 
-> If the userspace simply ignores unshare failures, or does not call
-> unshare(CLONE_NEWUSER), kernel and LSM cannot do much about it, right?
+After getting the TDREPORT, the second step of the attestation process
+is to send it to the QE to generate the Quote. TDX doesn't support SGX
+inside the guest, so the QE can be deployed in the host, or in another
+legacy VM with SGX support. QE checks the integrity of TDREPORT and if
+it is valid, a certified quote signing key is used to sign the Quote.
+How to send the TDREPORT to QE and receive the Quote is implementation
+and deployment specific.
 
-The process is still subject to any security policies that are active
-and being enforced by the kernel.  A malicious or misconfigured
-application can still be constrained by the kernel using both the
-kernel's legacy Discretionary Access Controls (DAC) as well as the
-more comprehensive Mandatory Access Controls (MAC) provided by many of
-the LSMs.
+Implement a basic guest misc driver to allow userspace to get the
+TDREPORT. After getting TDREPORT, the userspace attestation software
+can choose whatever communication channel available (i.e. vsock or
+hypercall) to send the TDREPORT to QE and receive the Quote.
 
+Also note that explicit access permissions are not enforced in this
+driver because the quote and measurements are not a secret. However
+the access permissions of the device node can be used to set any
+desired access policy. The udev default is usually root access
+only.
+
+Operations like getting TDREPORT or Quote generation involves sending
+a blob of data as input and getting another blob of data as output. It
+was considered to use a sysfs interface for this, but it doesn't fit
+well into the standard sysfs model for configuring values. It would be
+possible to do read/write on files, but it would need multiple file
+descriptors, which would be somewhat messy. IOCTLs seems to be the best
+fitting and simplest model for this use case. This is similar to AMD
+SEV platform, which also uses IOCTL interface to support attestation.
+
+Any distribution enabling TDX is also expected to need attestation. So
+enable it by default with TDX guest support.
+
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Acked-by: Kai Huang <kai.huang@intel.com>
+Acked-by: Wander Lairson Costa <wander@redhat.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+---
+
+Changes since v10:
+ * Replaced TD/TD Guest usage with TDX Guest or Guest.
+ * Removed unnecessary comments.
+ * Added more validation to user input in tdx_get_report().
+ * Used u64_to_user_ptr when reading user u64 pointers.
+ * Fixed commit log as per review comments.
+
+Changes since v9:
+ * Dropped the cover letter. Since this patch set only adds
+   TDREPORT support, the commit log itself has all the required details.
+ * Dropped the Quote support and event IRQ support as per Dave's
+   review suggestion.
+ * Dropped attest.c and moved its contents to tdx.c
+ * Updated commit log and comments to reflect latest changes.
+
+Changes since v8:
+ * Please refer to https://lore.kernel.org/all/ \
+   20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+
+ arch/x86/coco/tdx/tdx.c         | 114 ++++++++++++++++++++++++++++++++
+ arch/x86/include/uapi/asm/tdx.h |  51 ++++++++++++++
+ 2 files changed, 165 insertions(+)
+ create mode 100644 arch/x86/include/uapi/asm/tdx.h
+
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index 928dcf7a20d9..0888bdf93a4e 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -5,16 +5,21 @@
+ #define pr_fmt(fmt)     "tdx: " fmt
+ 
+ #include <linux/cpufeature.h>
++#include <linux/miscdevice.h>
++#include <linux/mm.h>
++#include <linux/io.h>
+ #include <asm/coco.h>
+ #include <asm/tdx.h>
+ #include <asm/vmx.h>
+ #include <asm/insn.h>
+ #include <asm/insn-eval.h>
+ #include <asm/pgtable.h>
++#include <uapi/asm/tdx.h>
+ 
+ /* TDX module Call Leaf IDs */
+ #define TDX_GET_INFO			1
+ #define TDX_GET_VEINFO			3
++#define TDX_GET_REPORT			4
+ #define TDX_ACCEPT_PAGE			6
+ 
+ /* TDX hypercall Leaf IDs */
+@@ -34,6 +39,10 @@
+ #define VE_GET_PORT_NUM(e)	((e) >> 16)
+ #define VE_IS_IO_STRING(e)	((e) & BIT(4))
+ 
++#define DRIVER_NAME	"tdx-guest"
++
++static struct miscdevice tdx_misc_dev;
++
+ /*
+  * Wrapper for standard use of __tdx_hypercall with no output aside from
+  * return code.
+@@ -775,3 +784,108 @@ void __init tdx_early_init(void)
+ 
+ 	pr_info("Guest detected\n");
+ }
++
++static long tdx_get_report(void __user *argp)
++{
++	u8 *reportdata, *tdreport;
++	struct tdx_report_req req;
++	long ret;
++
++	if (copy_from_user(&req, argp, sizeof(req)))
++		return -EFAULT;
++
++	/*
++	 * Per TDX Module 1.0 specification, section titled
++	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
++	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
++	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as
++	 * 0. Also check for valid user pointers.
++	 */
++	if (!req.reportdata || !req.tdreport || req.subtype ||
++		req.rpd_len != TDX_REPORTDATA_LEN ||
++		req.tdr_len != TDX_REPORT_LEN)
++		return -EINVAL;
++
++	reportdata = kmalloc(req.rpd_len, GFP_KERNEL);
++	if (!reportdata)
++		return -ENOMEM;
++
++	tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
++	if (!tdreport) {
++		kfree(reportdata);
++		return -ENOMEM;
++	}
++
++	if (copy_from_user(reportdata, u64_to_user_ptr(req.reportdata),
++			   req.rpd_len)) {
++		ret = -EFAULT;
++		goto out;
++	}
++
++	/*
++	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
++	 *
++	 * Get the TDREPORT using REPORTDATA as input. Refer to
++	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
++	 * Specification for detailed information.
++	 */
++	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
++				virt_to_phys(reportdata), req.subtype,
++				0, NULL);
++	if (ret) {
++		ret = -EIO;
++		goto out;
++	}
++
++	if (copy_to_user(u64_to_user_ptr(req.tdreport), tdreport, req.tdr_len))
++		ret = -EFAULT;
++
++out:
++	kfree(reportdata);
++	kfree(tdreport);
++	return ret;
++}
++static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
++			    unsigned long arg)
++{
++	void __user *argp = (void __user *)arg;
++	long ret = -EINVAL;
++
++	switch (cmd) {
++	case TDX_CMD_GET_REPORT:
++		ret = tdx_get_report(argp);
++		break;
++	default:
++		pr_debug("cmd %d not supported\n", cmd);
++		break;
++	}
++
++	return ret;
++}
++
++static const struct file_operations tdx_guest_fops = {
++	.owner		= THIS_MODULE,
++	.unlocked_ioctl	= tdx_guest_ioctl,
++	.llseek		= no_llseek,
++};
++
++static int __init tdx_guest_init(void)
++{
++	int ret;
++
++	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return -EIO;
++
++	tdx_misc_dev.name = DRIVER_NAME;
++	tdx_misc_dev.minor = MISC_DYNAMIC_MINOR;
++	tdx_misc_dev.fops = &tdx_guest_fops;
++
++	ret = misc_register(&tdx_misc_dev);
++	if (ret) {
++		pr_err("misc device registration failed\n");
++		return ret;
++	}
++
++	return 0;
++}
++device_initcall(tdx_guest_init)
+diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
+new file mode 100644
+index 000000000000..c1667b20fe20
+--- /dev/null
++++ b/arch/x86/include/uapi/asm/tdx.h
+@@ -0,0 +1,51 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _UAPI_ASM_X86_TDX_H
++#define _UAPI_ASM_X86_TDX_H
++
++#include <linux/types.h>
++#include <linux/ioctl.h>
++
++/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
++#define TDX_REPORTDATA_LEN              64
++
++/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
++#define TDX_REPORT_LEN                  1024
++
++/**
++ * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
++ *
++ * @subtype        : Subtype of TDREPORT (fixed as 0 by TDX Module
++ *                   specification, but added a parameter to handle
++ *                   future extension).
++ * @reportdata     : User-defined REPORTDATA to be included into
++ *                   TDREPORT. Typically it can be some nonce
++ *                   provided by attestation service, so the
++ *                   generated TDREPORT can be uniquely verified.
++ * @rpd_len        : Length of the REPORTDATA (fixed as 64 bytes by
++ *                   the TDX Module specification, but parameter is
++ *                   added to handle future extension).
++ * @tdreport       : TDREPORT output from TDCALL[TDG.MR.REPORT].
++ * @tdr_len        : Length of the TDREPORT (fixed as 1024 bytes by
++ *                   the TDX Module specification, but a parameter
++ *                   is added to accommodate future extension).
++ *
++ * Used in TDX_CMD_GET_REPORT IOCTL request.
++ */
++struct tdx_report_req {
++	__u8  subtype;
++	__u64 reportdata;
++	__u32 rpd_len;
++	__u64 tdreport;
++	__u32 tdr_len;
++};
++
++/*
++ * TDX_CMD_GET_REPORT - Get TDREPORT using TDCALL[TDG.MR.REPORT]
++ *
++ * Return 0 on success, -EIO on TDCALL execution failure, and
++ * standard errno on other general error cases.
++ *
++ */
++#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, __u64)
++
++#endif /* _UAPI_ASM_X86_TDX_H */
 -- 
-paul-moore.com
+2.25.1
+
