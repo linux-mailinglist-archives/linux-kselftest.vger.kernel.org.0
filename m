@@ -2,66 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705C15A2187
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 09:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1455F5A21AA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 09:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244863AbiHZHPF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 03:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S245096AbiHZHWN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 03:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbiHZHPE (ORCPT
+        with ESMTP id S234047AbiHZHWM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:15:04 -0400
+        Fri, 26 Aug 2022 03:22:12 -0400
 Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A59963B2;
-        Fri, 26 Aug 2022 00:14:55 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDWDD2JYwz9v7Gl;
-        Fri, 26 Aug 2022 15:09:32 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37302C10A;
+        Fri, 26 Aug 2022 00:22:10 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDWNZ51Pzz9v7Gh;
+        Fri, 26 Aug 2022 15:16:46 +0800 (CST)
 Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwCXUhrFcghjHMlQAA--.57474S2;
-        Fri, 26 Aug 2022 08:14:27 +0100 (CET)
-Message-ID: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
-Subject: Re: [PATCH v12 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+        by APP1 (Coremail) with SMTP id LxC2BwDnthJ4dAhj+iNOAA--.37625S2;
+        Fri, 26 Aug 2022 08:21:41 +0100 (CET)
+Message-ID: <67c4a5e7cf363a6c9b79a436690c4c3f469652de.camel@huaweicloud.com>
+Subject: Re: [PATCH v13 05/10] bpf: Add bpf_lookup_*_key() and bpf_key_put()
+ kfuncs
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        corbet@lwn.net, dhowells@redhat.com, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Fri, 26 Aug 2022 09:14:09 +0200
-In-Reply-To: <YwhTiGOhzvv+CYYq@kernel.org>
-References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
-         <20220818152929.402605-5-roberto.sassu@huaweicloud.com>
-         <YwhTiGOhzvv+CYYq@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, Shuah Khan <shuah@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Daniel =?ISO-8859-1?Q?M=FCller?= <deso@posteo.net>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 26 Aug 2022 09:21:25 +0200
+In-Reply-To: <CAPhsuW5iVRSCQsMRC7bGHw=ZHW1Y7y0SccQG-i-7=umHF2yJEQ@mail.gmail.com>
+References: <20220823150035.711534-1-roberto.sassu@huaweicloud.com>
+         <20220823150035.711534-6-roberto.sassu@huaweicloud.com>
+         <CAPhsuW5iVRSCQsMRC7bGHw=ZHW1Y7y0SccQG-i-7=umHF2yJEQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwCXUhrFcghjHMlQAA--.57474S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF15tryxWrWrCrWkXr15CFg_yoW8ur1DpF
-        W8G3Wj9F18Cry7A3s3JwnFyw1agrs7Gr17Xr9xWwn5ZanIqrn2qrn2gF15uFy5CrW09w1I
-        qFWjga17ur1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+X-CM-TRANSID: LxC2BwDnthJ4dAhj+iNOAA--.37625S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uryUZry5Jw4ftr1fCF4fGrg_yoW8XF1fpF
+        W8CF4FkFs5Ka47CF9av3WavrySgw4v9r17K3srWr1Utr9Fkr1kGr4kCr4a9ry5Arn29r18
+        WryYgF43Cry5Z37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
         vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj35RKQAAsh
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQZ2-UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj35RKgABsj
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -72,79 +85,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2022-08-26 at 08:42 +0300, Jarkko Sakkinen wrote:
-> On Thu, Aug 18, 2022 at 05:29:23PM +0200, 
-> roberto.sassu@huaweicloud.com wrote:
+On Thu, 2022-08-25 at 22:56 -0700, Song Liu wrote:
+> On Tue, Aug 23, 2022 at 8:02 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
 > > From: Roberto Sassu <roberto.sassu@huawei.com>
 > > 
-> > In preparation for the patch that introduces the
-> > bpf_lookup_user_key() eBPF
-> > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
-> > able to
-> > validate the kfunc parameters.
+> > Add the bpf_lookup_user_key(), bpf_lookup_system_key() and
+> > bpf_key_put()
+> > kfuncs, to respectively search a key with a given key handle serial
+> > number
+> > and flags, obtain a key from a pre-determined ID defined in
+> > include/linux/verification.h, and cleanup.
 > > 
-> > Also, introduce key_lookup_flags_check() directly in
-> > include/linux/key.h,
-> > to reduce the risk that the check is not in sync with currently
-> > defined
-> > flags.
-> 
-> Missing the description what the heck this function even is.
-> 
-> Please, explain that.
-
-Hi Jarkko
-
-sorry, forgot to update the commit description. Will do it.
-
-> Also, the short subject is misleading because this *just*
-> does not move flags.
-> 
+> > Introduce system_keyring_id_check() to validate the keyring ID
+> > parameter of
+> > bpf_lookup_system_key().
+> > 
 > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Reviewed-by: KP Singh <kpsingh@kernel.org>
 > > ---
-> >  include/linux/key.h      | 11 +++++++++++
-> >  security/keys/internal.h |  2 --
-> >  2 files changed, 11 insertions(+), 2 deletions(-)
+> >  include/linux/bpf.h          |   6 ++
+> >  include/linux/verification.h |   8 +++
+> >  kernel/trace/bpf_trace.c     | 135
+> > +++++++++++++++++++++++++++++++++++
+> >  3 files changed, 149 insertions(+)
 > > 
-> > diff --git a/include/linux/key.h b/include/linux/key.h
-> > index 7febc4881363..b5bbae77a9e7 100644
-> > --- a/include/linux/key.h
-> > +++ b/include/linux/key.h
-> > @@ -88,6 +88,17 @@ enum key_need_perm {
-> >  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
-> > deferred */
-> >  };
-> >  
-> > +#define KEY_LOOKUP_CREATE	0x01
-> > +#define KEY_LOOKUP_PARTIAL	0x02
-> > +
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 6041304b402e..991da09a5858 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -2586,4 +2586,10 @@ static inline void bpf_cgroup_atype_get(u32
+> > attach_btf_id, int cgroup_atype) {}
+> >  static inline void bpf_cgroup_atype_put(int cgroup_atype) {}
+> >  #endif /* CONFIG_BPF_LSM */
+> > 
+> > +#ifdef CONFIG_KEYS
 > 
-> /*
->  * Explain what the heck this function is.
->  */
-> > +static inline int key_lookup_flags_check(u64 flags)
-> > +{
-> > +	if (flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
-> > +		return -EINVAL;
-> > +
-> > +	return 0;
-> > +}
+> Do we need to declare struct key here?
 > 
-> This is essentially a boolean function, right?
-> 
-> I.e. the implementation can be just:
-> 
-> !!(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
+> > +struct bpf_key {
+> > +       struct key *key;
+> > +       bool has_ref;
+> > +};
+> > +#endif /* CONFIG_KEYS */
+> >  #endif /* _LINUX_BPF_H */
+> > 
 
-Absolutely fine with that, if you prefer.
-
-> Not even sure if this is needed in the first place, or
-> would it be better just to open code it. How many call
-> sites does it have anyway?
-> 
-
-Daniel preferred to have this check here.
+If there is a better place, I will move there.
 
 Thanks
 
