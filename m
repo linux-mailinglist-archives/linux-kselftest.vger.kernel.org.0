@@ -2,68 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85D35A1FF5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 06:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C80E05A1FFC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 06:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiHZEo1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 00:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
+        id S244749AbiHZEsD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 00:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiHZEo0 (ORCPT
+        with ESMTP id S234047AbiHZEsC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 00:44:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9095ACD7BF;
-        Thu, 25 Aug 2022 21:44:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A58861213;
-        Fri, 26 Aug 2022 04:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8352DC43470;
-        Fri, 26 Aug 2022 04:44:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661489064;
-        bh=4N8fPCLRY0UexBXJAqFPSEHIzy69pdn6c8F8jMvXR9Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cXInsFTHRfzVz1wHf0VyPiqittp9vsH83QQSStSF8IxS1wR+u+eJrlOs7O13at2JB
-         m0ykf227jYkk9zaC2jCRocxYYkZNbsrcLWGHEu95l4/BS4qbcJUHsKFs6NrL+BCt7r
-         BlkBXoR3JQOdJWg4mupd2lqEu0bV6SBU2P3wtw9qVkpyIHZFGHNucodxR5vKWlk6DP
-         iVdX+lUDLz+fJGzcjni+voh58TZXBmGIZgB9pffcrbBXrQHRjfWvhl+O9/kGMQtmhl
-         80JmZKwIFhSIN9x62nom1huzVG1F6tjwrASxDeFP3lTE3NkDjNAJGkN48LNo/una8k
-         bfNy/h6GPrO5Q==
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-33da3a391d8so9093737b3.2;
-        Thu, 25 Aug 2022 21:44:24 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1EoNOz/JhG/6DCl/PAo2JBKx1hRcWqwS7bJUXQepDimYFCIqRW
-        xVVtYvGY1sNFvSkZ7SmlPwdq/vUlGGkid5CY15Y=
-X-Google-Smtp-Source: AA6agR4MDZmrsC5Uxn3zRbjFxQlt07AElD6GVU1pkSWFqAbJ95iB+LZEJu60nircguFmmJ/14u22E/A0G5sTSnfzHkQ=
-X-Received: by 2002:a25:6003:0:b0:68c:870b:2405 with SMTP id
- u3-20020a256003000000b0068c870b2405mr6043270ybb.9.1661489063554; Thu, 25 Aug
- 2022 21:44:23 -0700 (PDT)
+        Fri, 26 Aug 2022 00:48:02 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2240CCE32E
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Aug 2022 21:48:01 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-33da3a391d8so9217577b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Aug 2022 21:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=baSv0Pn8NKV4CT1RoqMfXK68o2fQcY24x27HhvXMUKI=;
+        b=b8WDemlJLBj3xJVS55uRQRlMy8umsRJbhI12sqSfOUsT5xTdCa1HUm4mqB0iqbIr0E
+         zv/DDPBDFLkikkKkFsmxRWayUv0WIvQLVCd/yFWkHr01Sg9cnnspTdtZFbGN5fl4QAw3
+         wqOtb+LMi6DoOCmdVAB0ZQv4QMZMuimTMJDgdRi8r4d56suCWXh/Pc0c3d3Jnyg5fqGF
+         3XBfP608utZYOXm5DYkTwVqfL30d0HxuPjvxynt/WqjWbLXImnAIDS8klUgQGRAXe5Ci
+         /kyFUvjCA03Snep08L14NN4YkqpeoVCxlqyGm226cbAb8vn6LifW5PdEXlTjlMIuiQ5j
+         7H3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=baSv0Pn8NKV4CT1RoqMfXK68o2fQcY24x27HhvXMUKI=;
+        b=atVZfe5WTsXB9is7eYMGzvhIfmjuCPfkNxoxjMDYd5sws+AgCkvhvJdIEjTfxPxGc2
+         FvWO1+xhnfWPdE8AnqqSEVZOsemEFwGkbHUPlHXBsCjRU8p0Bk0B9DNqoFPkeFzNPexn
+         ZOWK7o/d9LfVX3vBxBqSlwbKN1/JBpPgSVfFQ1JmnicxG205NcUU4FdTfmM1j4OjaQQ2
+         /Ndqxud4ZrnpXNs6N7dAGC1eeUX40aBTDglqCpAYQlKMjbfV2LUskQ41c16RO7WTvbFh
+         ExyHPK8G5TDNDyx0JR8oxBPkcsxHWrSM/GVzeYFJ/8U23yIEwiqBRVKt8SRKdPLSHdz+
+         o/ug==
+X-Gm-Message-State: ACgBeo3CTSBRIQpzip+xrH3zbbVHE0Z8bBOK7mWrAnkprpWlJAJWMdon
+        ns5yRvp1mG7SoohmW5Z09I7/1KBF3BZEJ+tEPWXD1g==
+X-Google-Smtp-Source: AA6agR4McKR6po1Apga0nlBk1nr9dK1oPOWcrPMDqNvo03xzIJbG6rtBn+uTwlQxr2Ttr8yi9z0nmrOHrVlnhcLXWZc=
+X-Received: by 2002:a0d:d0c1:0:b0:33d:77db:eadf with SMTP id
+ s184-20020a0dd0c1000000b0033d77dbeadfmr6920136ywd.26.1661489280272; Thu, 25
+ Aug 2022 21:48:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220826035141.737919-1-james.hilliard1@gmail.com>
-In-Reply-To: <20220826035141.737919-1-james.hilliard1@gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 25 Aug 2022 21:44:13 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5vg=ea6kvteCGdZAvrkpBvXp6s+Wga+fhG-Bm_ybTsqg@mail.gmail.com>
-Message-ID: <CAPhsuW5vg=ea6kvteCGdZAvrkpBvXp6s+Wga+fhG-Bm_ybTsqg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: declare subprog_noise as static in tailcall_bpf2bpf4
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220808141538.102394-1-khuey@kylehuey.com> <87ilmpzunz.ffs@tglx>
+ <CAP045Ao7hb4kXajkWnMxqawBzFGUZJtSuRRn1kbmjOF=mcTcoA@mail.gmail.com> <Yv6szXuKGv75wWmm@google.com>
+In-Reply-To: <Yv6szXuKGv75wWmm@google.com>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Thu, 25 Aug 2022 21:47:49 -0700
+Message-ID: <CAP045Aqspm6rRnM9ks_w6SS5CZ6R5TPqLras8aNjfG_2TUmWgg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, kvm@vger.kernel.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,38 +77,69 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 8:52 PM James Hilliard
-<james.hilliard1@gmail.com> wrote:
+On Thu, Aug 18, 2022 at 2:19 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> Due to bpf_map_lookup_elem being declared static we need to also
-> declare subprog_noise as static.
+> On Thu, Aug 18, 2022, Kyle Huey wrote:
+> > On Thu, Aug 18, 2022 at 3:57 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > > On Mon, Aug 08 2022 at 07:15, Kyle Huey wrote:
+> > > > When management of the PKRU register was moved away from XSTATE, emulation
+> > > > of PKRU's existence in XSTATE was added for APIs that read XSTATE, but not
+> > > > for APIs that write XSTATE. This can be seen by running gdb and executing
+> > > > `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected kernels (5.14+) the
+> > > > write to the PKRU register (which gdb performs through ptrace) is ignored.
+> > > >
+> > > > There are three relevant APIs: PTRACE_SETREGSET with NT_X86_XSTATE,
+> > > > sigreturn, and KVM_SET_XSAVE. KVM_SET_XSAVE has its own special handling to
+> > > > make PKRU writes take effect (in fpu_copy_uabi_to_guest_fpstate). Push that
+> > > > down into copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE
+> > > > and sigreturn pass in pointers to the appropriate PKRU value.
+> > > >
+> > > > This also adds code to initialize the PKRU value to the hardware init value
+> > > > (namely 0) if the PKRU bit is not set in the XSTATE header to match XRSTOR.
+> > > > This is a change to the current KVM_SET_XSAVE behavior.
+> > >
+> > > You are stating a fact here, but provide 0 justification why this is
+> > > correct.
+> >
+> > Well, the justification is that this *is* the behavior we want for
+> > ptrace/sigreturn, and it's very likely the existing KVM_SET_XSAVE
+> > behavior in this edge case is an oversight rather than intentional,
+> > and in the absence of confirmation that KVM wants the existing
+> > behavior (the KVM mailing list and maintainer are CCd) one correct
+> > code path is better than one correct code path and one buggy code
+> > path.
 >
-> Fixes the following error:
-> progs/tailcall_bpf2bpf4.c:26:9: error: 'bpf_map_lookup_elem' is static but used in inline function 'subprog_noise' which is not static [-Werror]
->    26 |         bpf_map_lookup_elem(&nop_table, &key);
->       |         ^~~~~~~~~~~~~~~~~~~
+> Sorry, I missed the KVM-relevant flags.
 >
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Hrm, the current behavior has been KVM ABI for a very long time.
+>
+> It's definitely odd because all other components will be initialized due to their
+> bits being cleared in the header during kvm_load_guest_fpu(), and it probably
+> wouldn't cause problems in practice as most VMMs likely do "all or nothing" loads.
+> But, in theory, userspace could save/restore a subset of guest XSTATE and rely on
+> the kernel not overwriting guest PKRU when its bit is cleared in the header.
 
-Acked-by: Song Liu <song@kernel.org>
+This seems extremely conservative, but ok. As you note, PKRU is the
+only XSTATE component you could theoretically do this subset
+save/restore with in the KVM ABI since all the others really do have
+their hardware behavior.
 
-> ---
->  tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> All that said, I don't see any reason to force KVM to change at this time, it's
+> trivial enough to handle KVM's oddities while providing sane behavior for others.
+> Nullify the pointer in the guest path and then update copy_uabi_to_xstate() to
+> play nice with a NULL pointer, e.g.
 >
-> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-> index b67e8022d500..a017d6b2f1dd 100644
-> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-> @@ -19,7 +19,7 @@ struct {
->  int count = 0;
->  int noise = 0;
->
-> -__always_inline int subprog_noise(void)
-> +static __always_inline int subprog_noise(void)
->  {
->         __u32 key = 0;
->
-> --
-> 2.34.1
->
+>         /*
+>          * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
+>          * in the header.  KVM's odd ABI is to leave PKRU untouched in this
+>          * case (all other components are eventually re-initialized).
+>          */
+>         if (!(kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU))
+>                 vpkru = NULL;
+
+You meant ustate->... here (since this is before the copy now), but
+yes, ok, I will do that.
+
+>         return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+
+- Kyle
