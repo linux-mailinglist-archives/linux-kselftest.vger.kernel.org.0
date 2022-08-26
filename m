@@ -2,283 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D7B5A2318
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 10:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAAF5A23CD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 11:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245178AbiHZIgY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 04:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S245629AbiHZJLI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 05:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236026AbiHZIgY (ORCPT
+        with ESMTP id S245623AbiHZJLH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:36:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CC05925A;
-        Fri, 26 Aug 2022 01:36:20 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MDY5d2BjJzmVZY;
-        Fri, 26 Aug 2022 16:33:57 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 26 Aug 2022 16:36:18 +0800
-Subject: Re: [PATCH -next 2/5] landlock: add chmod and chown support
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
-CC:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
-        <shuah@kernel.org>, <corbet@lwn.net>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-References: <20220822114701.26975-1-xiujianfeng@huawei.com>
- <20220822114701.26975-3-xiujianfeng@huawei.com> <YwPKG3G9PlStYPkz@nuc>
- <5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net>
- <6d6edd60-5ed7-0f5d-d641-75e006c0e60e@huawei.com>
- <8cb3b7df-fb2f-3e3f-7805-4b14cf1bdf90@digikod.net>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <c447b4d3-8bc7-5277-5d49-7f4ffd0b5a5b@huawei.com>
-Date:   Fri, 26 Aug 2022 16:36:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Fri, 26 Aug 2022 05:11:07 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBACCD529
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 02:11:04 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id z72so687398iof.12
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 02:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=9WfR61mwlG7xEw+rTgThfNinRNgyKs7+mef9MefL6PA=;
+        b=EhvIqLiC9BX9tHc9a+BQqpydsPIjtHyKBmBx0sofnPbgUlRgpWlCGxWIpp5JbnuFup
+         2kZoVj99EcwjkfBHBUZg2oipu8wdizJwB4NoGLsfzUAFh/Tk2zvveA8DFExtjEyQ8Dc/
+         /pVtcCgigmLtsj7Cwo14GVv+Ocdqf7No5PvDs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=9WfR61mwlG7xEw+rTgThfNinRNgyKs7+mef9MefL6PA=;
+        b=vX5jeOL6PN/NX/GxzBm9w5oekIYF5n/dUCFdDEa2kCywAWgGu50PtDbQTr2719BIO1
+         Ge9fgBWFguX60cVMi3c/YiGUMx9CSpWZJW50jIuxR0u9UxOwJeb4WY6U/EVlWthe7NSx
+         WlBIn6oiBmM4pTh/gVOfsBucfjJa179ElhxlseMpa6yuJsZOwvbcdqqfovEj6/Uy+7en
+         4mmxtFF4TdM5iW2bmkl7m3dfrPiu/XiKR6PIAuyr0SDKsT5+BTfUx1OaHNWfiR9WczGS
+         EsbxE/ZdsJtCeb2Qu+msHGD8hZpDuceNHm7O5iS+7bDtZ/w/n9Hpn+9bL00yD6zucs+U
+         lazg==
+X-Gm-Message-State: ACgBeo2hCDHs7iEoxP7CneCrC0OcLLlEfM4XBedirouJ+0XK+Gr2iWGq
+        +BsnYVO9ZfXxjn8x47KlMdeRONDN+hW04ZP0pjGrQQ==
+X-Google-Smtp-Source: AA6agR6HH6H4gQKe9WI6NZj2d6w2XPDgEj2DZxqfhfzNbm4v9sn+/Pw662xyRmYU8yITLrnZeY2UhvE0P3+pTftDpXg=
+X-Received: by 2002:a05:6638:1244:b0:34a:1104:afa with SMTP id
+ o4-20020a056638124400b0034a11040afamr3321877jas.244.1661505063405; Fri, 26
+ Aug 2022 02:11:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <8cb3b7df-fb2f-3e3f-7805-4b14cf1bdf90@digikod.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHC9VhTuxxRfJg=Ax5z87Jz6tq1oVRcppB444dHM2gP-FZrkTQ@mail.gmail.com>
+ <8735dux60p.fsf@email.froward.int.ebiederm.org> <CAHC9VhSHJNLS-KJ-Rz1R12PQbqACSksLYLbymF78d5hMkSGc-g@mail.gmail.com>
+ <871qte8wy3.fsf@email.froward.int.ebiederm.org> <CAHC9VhSU_sqMQwdoh0nAFdURqs_cVFbva8=otjcZUo8s+xyC9A@mail.gmail.com>
+ <8735du7fnp.fsf@email.froward.int.ebiederm.org> <CAHC9VhQuRNxzgVeNhDy=p5+RHz5+bTH6zFdU=UvvEhyH1e962A@mail.gmail.com>
+ <87tu6a4l83.fsf@email.froward.int.ebiederm.org> <20220818140521.GA1000@mail.hallyn.com>
+ <CAHC9VhRqBxtV04ARQFPWpMf1aFZo0HP_HiJ+8VpXAT-zXF6UXw@mail.gmail.com>
+ <20220819144537.GA16552@mail.hallyn.com> <CAHC9VhSZ0aaa3k3704j8_9DJvSNRy-0jfXpy1ncs2Jmo8H0a7g@mail.gmail.com>
+ <875yigp4tp.fsf@email.froward.int.ebiederm.org> <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+In-Reply-To: <CAHC9VhTN09ZabnQnsmbSjKgb8spx7_hkh4Z+mq5ArQmfPcVqAg@mail.gmail.com>
+From:   Ignat Korchagin <ignat@cloudflare.com>
+Date:   Fri, 26 Aug 2022 10:10:51 +0100
+Message-ID: <CALrw=nHRFC-Ws2j-MJAs50oznfRC5fG3a3opmYRkxQCtK61EEg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     "Serge E. Hallyn" <serge@hallyn.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, shuah@kernel.org,
+        Christian Brauner <brauner@kernel.org>, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com, tixxdz@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Thu, Aug 25, 2022 at 8:19 PM Paul Moore <paul@paul-moore.com> wrote:
+>
+> On Thu, Aug 25, 2022 at 2:15 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> > Paul Moore <paul@paul-moore.com> writes:
+> > > On Fri, Aug 19, 2022 at 10:45 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> > >>  I am hoping we can come up with
+> > >> "something better" to address people's needs, make everyone happy, and
+> > >> bring forth world peace.  Which would stack just fine with what's here
+> > >> for defense in depth.
+> > >>
+> > >> You may well not be interested in further work, and that's fine.  I need
+> > >> to set aside a few days to think on this.
+> > >
+> > > I'm happy to continue the discussion as long as it's constructive; I
+> > > think we all are.  My gut feeling is that Frederick's approach falls
+> > > closest to the sweet spot of "workable without being overly offensive"
+> > > (*cough*), but if you've got an additional approach in mind, or an
+> > > alternative approach that solves the same use case problems, I think
+> > > we'd all love to hear about it.
+> >
+> > I would love to actually hear the problems people are trying to solve so
+> > that we can have a sensible conversation about the trade offs.
+>
+> Here are several taken from the previous threads, it's surely not a
+> complete list, but it should give you a good idea:
+>
+> https://lore.kernel.org/linux-security-module/CAHC9VhQnPAsmjmKo-e84XDJ1wmaOFkTKPjjztsOa9Yrq+AeAQA@mail.gmail.com/
+>
+> > As best I can tell without more information people want to use
+> > the creation of a user namespace as a signal that the code is
+> > attempting an exploit.
+>
+> Some use cases are like that, there are several other use cases that
+> go beyond this; see all of our previous discussions on this
+> topic/patchset.  As has been mentioned before, there are use cases
+> that require improved observability, access control, or both.
+>
+> > As such let me propose instead of returning an error code which will let
+> > the exploit continue, have the security hook return a bool.  With true
+> > meaning the code can continue and on false it will trigger using SIGSYS
+> > to terminate the program like seccomp does.
+>
+> Having the kernel forcibly exit the process isn't something that most
+> LSMs would likely want.  I suppose we could modify the hook/caller so
+> that *if* an LSM wanted to return SIGSYS the system would kill the
+> process, but I would want that to be something in addition to
+> returning an error code like LSMs normally do (e.g. EACCES).
 
-在 2022/8/24 19:44, Mickaël Salaün 写道:
-> 
-> On 23/08/2022 14:50, xiujianfeng wrote:
->>
->>
->> 在 2022/8/23 5:07, Mickaël Salaün 写道:
->>>
->>> On 22/08/2022 20:25, Günther Noack wrote:
->>>> Hi!
->>>>
->>>> Thanks for sending this patch set! :)
->>>>
->>>> On Mon, Aug 22, 2022 at 07:46:58PM +0800, Xiu Jianfeng wrote:
->>>>> Add two flags LANDLOCK_ACCESS_FS_CHMOD and LANDLOCK_ACCESS_FS_CHOWN to
->>>>> support restriction to chmod(2) and chown(2) with landlock.
->>>>>
->>>>> Also change the landlock ABI version from 3 to 4.
->>>>>
->>>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->>>>> ---
->>>>>    include/uapi/linux/landlock.h                |  8 ++++++--
->>>>>    security/landlock/fs.c                       | 16 +++++++++++++++-
->>>>>    security/landlock/limits.h                   |  2 +-
->>>>>    security/landlock/syscalls.c                 |  2 +-
->>>>>    tools/testing/selftests/landlock/base_test.c |  2 +-
->>>>>    tools/testing/selftests/landlock/fs_test.c   |  6 ++++--
->>>>>    6 files changed, 28 insertions(+), 8 deletions(-)
->>>>>
->>>>> diff --git a/include/uapi/linux/landlock.h
->>>>> b/include/uapi/linux/landlock.h
->>>>> index 735b1fe8326e..5ce633c92722 100644
->>>>> --- a/include/uapi/linux/landlock.h
->>>>> +++ b/include/uapi/linux/landlock.h
->>>>> @@ -141,13 +141,15 @@ struct landlock_path_beneath_attr {
->>>>>     *   directory) parent.  Otherwise, such actions are denied with
->>>>> errno set to
->>>>>     *   EACCES.  The EACCES errno prevails over EXDEV to let user 
->>>>> space
->>>>>     *   efficiently deal with an unrecoverable error.
->>>>> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a file.
->>>>> + * - %LANDLOCK_ACCESS_FS_CHOWN: Change the owner and/or group of a
->>>>> file.
->>>
->>> This section talk about "access rights that only apply to the content of
->>> a directory, not the directory itself", which is not correct (see
->>> LANDLOCK_ACCESS_FS_READ_DIR). I'd like these access rights to remain
->>> here but this kernel patch and the related tests need some changes.
->>>
->>> What about a LANDLOCK_ACCESS_FS_CHGRP? I'm not sure if we need to
->>> differentiate these actions or not, but we need arguments to choose.
->>>
->>>
->>>>>     *
->>>>>     * .. warning::
->>>>>     *
->>>>>     *   It is currently not possible to restrict some file-related
->>>>> actions
->>>>>     *   accessible through these syscall families: 
->>>>> :manpage:`chdir(2)`,
->>>>> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
->>>>> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`, 
->>>>> :manpage:`utime(2)`,
->>>>> + *   :manpage:`stat(2)`, :manpage:`flock(2)`,
->>>>> + *   :manpage:`setxattr(2)`, :manpage:`utime(2)`,
->>>>
->>>> *formatting nit*
->>>> We could fill up the full line width here
->>>>
->>>>>     *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`, 
->>>>> :manpage:`access(2)`.
->>>>>     *   Future Landlock evolutions will enable to restrict them.
->>>>>     */
->>>>> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
->>>>>    #define LANDLOCK_ACCESS_FS_MAKE_SYM            (1ULL << 12)
->>>>>    #define LANDLOCK_ACCESS_FS_REFER            (1ULL << 13)
->>>>>    #define LANDLOCK_ACCESS_FS_TRUNCATE            (1ULL << 14)
->>>>> +#define LANDLOCK_ACCESS_FS_CHMOD            (1ULL << 15)
->>>>> +#define LANDLOCK_ACCESS_FS_CHOWN            (1ULL << 16)
->>>>>    /* clang-format on */
->>>>>
->>>>>    #endif /* _UAPI_LINUX_LANDLOCK_H */
->>>>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
->>>>> index c57f581a9cd5..c25d5f89c8be 100644
->>>>> --- a/security/landlock/fs.c
->>>>> +++ b/security/landlock/fs.c
->>>>> @@ -147,7 +147,9 @@ static struct landlock_object
->>>>> *get_inode_object(struct inode *const inode)
->>>>>        LANDLOCK_ACCESS_FS_EXECUTE | \
->>>>>        LANDLOCK_ACCESS_FS_WRITE_FILE | \
->>>>>        LANDLOCK_ACCESS_FS_READ_FILE | \
->>>>> -    LANDLOCK_ACCESS_FS_TRUNCATE)
->>>>> +    LANDLOCK_ACCESS_FS_TRUNCATE | \
->>>>> +    LANDLOCK_ACCESS_FS_CHMOD | \
->>>>> +    LANDLOCK_ACCESS_FS_CHOWN)
->>>>>    /* clang-format on */
->>>>>
->>>>>    /*
->>>>> @@ -1146,6 +1148,16 @@ static int hook_path_truncate(const struct
->>>>> path *const path)
->>>>>        return current_check_access_path(path,
->>>>> LANDLOCK_ACCESS_FS_TRUNCATE);
->>>>>    }
->>>>>
->>>>> +static int hook_path_chmod(const struct path *const dir, umode_t 
->>>>> mode)
->>>
->>> This is not a "dir" but a "path".
->>>
->>>
->>>>> +{
->>>>> +    return current_check_access_path(dir, LANDLOCK_ACCESS_FS_CHMOD);
->>>>> +}
->>>>> +
->>>>> +static int hook_path_chown(const struct path *const dir, kuid_t uid,
->>>>> kgid_t gid)
->>>
->>> Same here.
->>>
->>>
->>>>> +{
->>>>> +    return current_check_access_path(dir, LANDLOCK_ACCESS_FS_CHOWN);
->>>>> +}
->>>>
->>>> One implication of this approach is that the chown+chmod right on a
->>>> directory's contents are always going together with the same rights on
->>>> the directory itself.
->>>>
->>>> For example, if you grant chmod+chown access rights for "datadir/",
->>>> the command "chmod 0600 datadir/file1" will work, but so will the
->>>> command "chmod 0600 datadir". But the approach of checking just the
->>>> parent directory's rights is also inflexible if you think through the
->>>> kinds of rights you can grant with it. (It would also not be possible
->>>> to grant chmod+chown on individual files.)
->>>
->>> Good point. For an initial chmod/chown/chgrp access right, I'd prefer to
->>> be able to set these access rights on a directory but only for its
->>> content, not the directory itself. I think it is much safer and should
->>> be enough for the majority of use cases, but let me know if I'm missing
->>> something. I'm not sure being able to change the root directory access
->>> rights may be a good idea anyway (even for containers). ;)
->>>
->>> A path_beneath rule enables to identify a file hierarchy (i.e. the
->>> content of a directory), not to make modifications visible outside of
->>> the directory identifying the hierarchy (hence the "parent_fd" field),
->>> which would be the case with the current chmod/chown access rights.
->>>
->>>
->>>>
->>>> Do you have any thoughts on how to resolve this if this flexibility
->>>> might be needed?
->>>>
->>>> I wonder whether the right way to resolve this would be to give users
->>>> a way to make that distinction at the level of landlock_add_rule(),
->>>> with an API like this (note the additional flag):
->>>>
->>>>     err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
->>>>                             &path_beneath, LANDLOCK_STRICTLY_BENEATH);
->>>>                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
->>>>
->>>> Multiple calls of landlock_add_rule() on the same file are already
->>>> today joining the requested access rights, so it would be possible to
->>>> mix-and-match "strict beneath" with "beneath" rights on the same
->>>> directory, and it would work in the same way for other access rights
->>>> as well.
->>>
->>> This kind of option is interesting. For now, some access rights are kind
->>> of "doubled" to enable to differentiate between a file and a directory
->>> (i.e. READ_DIR/READ_FILE, REMOVE_DIR/REMOVE_FILE, WRITE_FILE/MAKE_*)
->>> when it may be useful, but this is different.
->>>
->>> I think this "strictly beneath" behavior should be the default, which is
->>> currently the case.
->>>
->>>
->>>>
->>>> To be clear: I'm proposing this approach not because I think it should
->>>> be part of this patch set, but because it would be good to have a way
->>>> forward if that kind of flexibility is needed in the future.
->>>>
->>>> Does that seem reasonable?
->>>
->>> This is the kind of questions that made such access rights not
->>> appropriate for the initial version of Landlock. But we should talk
->>> about that now.
->>
->> Hi Günther and Mickaël,
->>
->> Thanks for your comments, so I think the conclusion here is that we have
->> to make sure that in this patchset chown/chmod access rights can be set
->> on a directory only for its content, not the directory itself, right?
->> any good idea about how to implement this? :)
-> 
-> In such hook code, you need to get the parent directory of the path 
-> argument. This require to use and refactor the 
-> check_access_path_dual/jump_up part in a dedicated helper (and take care 
-> of all the corner cases).
-> .
+I would also add here that seccomp allows more flexibility than just
+delivering SIGSYS to a violating application. We can program seccomp
+bpf to:
+  * deliver a signal
+  * return a CUSTOM error code (and BTW somehow this does not trigger
+any requirements to change userapi or document in manpages: in my toy
+example in [1] I'm delivering ENETDOWN from a uname(2) system call,
+which is not documented in the man pages, but totally valid from a
+seccomp usage perspective)
+  * do-nothing, but log the action
 
-Sorry, I don't quite understand what you mean, but I have another idea, 
-how about this?
+So I would say the seccomp reference supports the current approach
+more than the alternative approach of delivering SIGSYS as technically
+an LSM implementation of the hook (at least in-kernel one) can chose
+to deliver a signal to a task via kernel-api, but BPF-LSM (and others)
+can deliver custom error codes and log the actions as well.
 
-static int hook_path_chown(const struct path *const path, kuid_t uid, 
-kgid_t gid)
-{
-         int ret;
-         struct dentry *parent_dentry;
-         struct path eff_path;
+Ignat
 
-         eff_path = *path;
-         path_get(&eff_path);
-         if (d_is_dir(eff_path.dentry)) {
-                 parent_dentry = dget_parent(eff_path.dentry);
-                 dput(eff_path.dentry);
-                 eff_path.dentry = parent_dentry;
-         }
-         ret = current_check_access_path(&eff_path, 
-LANDLOCK_ACCESS_FS_CHGRP);
-         path_put(&eff_path);
+> --
+> paul-moore.com
 
-         return ret;
-}
-
-
+[1]: https://blog.cloudflare.com/sandboxing-in-linux-with-zero-lines-of-code/
