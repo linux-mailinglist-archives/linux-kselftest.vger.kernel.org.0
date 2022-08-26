@@ -2,56 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81C25A201F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 07:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89055A203B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 07:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244788AbiHZFH2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 01:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        id S244491AbiHZFQa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 01:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiHZFH1 (ORCPT
+        with ESMTP id S229662AbiHZFQ3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 01:07:27 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CDEA2638;
-        Thu, 25 Aug 2022 22:07:25 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-11dca1c9c01so801674fac.2;
-        Thu, 25 Aug 2022 22:07:25 -0700 (PDT)
+        Fri, 26 Aug 2022 01:16:29 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63C76A4B4;
+        Thu, 25 Aug 2022 22:16:27 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id w19so1082512ejc.7;
+        Thu, 25 Aug 2022 22:16:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=w20zjdl+2nu5ShzHX4Z1KBMqL8hO9v7+2YJmoH4D5mY=;
-        b=kUTbxhHEjbo4zW+okG7rb9E4aD4KhkUGNRgn5nojzrYRzVHJNx0R1s2PXzcxMokE8o
-         Hg3dl4pVEDa3e/Vh83xwlZ50SCRZbv8i8JJ4+a94hHTWFBKN2ElwlMIOQJS8gzw+qwFa
-         fCGq0yQSdLJ7qVdy1TmV5QzWLHGT9MHZCdzfiMKnYhSUbCchsGFupZ0quAZMJjX3c5jA
-         mjha+vjyb66XnQIWmtr0FBP4zUj7qWVbfPRaKYQ2ldg3B/75C3lcGaRhVgHl28vApg+E
-         4uYr34hDMNKWS7v9CK7mtUadNRDs3ZE3PBc7U5Ejij/NyAiCdiRHJKB1bMamtBz4ybUJ
-         zsRQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=lK9A6HApSBZz4Q8ytvV3N4o8vcU6tZHo4HuclO+ZHvs=;
+        b=L0/cvHT0Ml5scIBeMcDx9EkRPSLMkAQcp1Vo3CWs/Ru1P55rSqeddvraugU4IWQ3TY
+         Ot/C98VePC/bofOrq9SE6zqxw8fHEWvbcpGD3mIts5vrkqH2muvr6JdpSWK7ei3mKjaR
+         W2/XpsCmZ4pqTtSF9KYdOHuj6OgUlx2aAAPpDNszBRlcoIOOlFw9QcCLT7XnRB7RRZ3b
+         rIV9a0H+K0QT5WyeeCivIz+DZSXOyIr+V7DSIPiqb9k9BopCZyC37QPyesNTCit0PL3X
+         kfL81CLlSr5VmLQ2PJ9lwjzNVHkn6bLIEBZS4hEcnEAJAZ36Dik5WUhc/vdXxLzfQuBH
+         i2MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=w20zjdl+2nu5ShzHX4Z1KBMqL8hO9v7+2YJmoH4D5mY=;
-        b=NXrTJvMm3O8p8CYCqBTqjAO45tJcy59MQilV90ABtnnvx8htEOOoCF2j/nXfuv9zx/
-         sEmGjfPWfRXWH3gJ3ufTeMrqcvN0+LCVZMmTln7bjU8xos25UAkYolJ6dwI5BZ+dt52q
-         LsEP5MxqgjR9+6Sq0obb8cv5xfjA5sdlLXs6gyobYt3czABQ18rPyjnmpIyywwd3oRxq
-         jGYMHSNAgiLt1N7NQE+5szD4Zt7pkL3k9qR8nlEzgAGMuyjuq7ZBHP52aP4NX7NqNAR0
-         yvhnn9uA0PjqkZxvHih27EpJrP+4nRLTjBbY3vZK2VF7Yf/w9iHKrG1p+2BcwPWvZm1f
-         G4Yg==
-X-Gm-Message-State: ACgBeo0qWhVtAjUSPDV7eDogWtmGviSiZ2ZTS6Lyor5WbkaoSmCu0xER
-        +FV2Emfxvyx8MMHGl6PEdtq6Hs0tnU+yWw==
-X-Google-Smtp-Source: AA6agR5+Ss5IaYjMhtBRgd1+RKZlzCdDB+yjD23ZZCCwyE7f+/dzn+z97B8G9NadBdCIT3tx1XAgKw==
-X-Received: by 2002:a05:6870:f6a8:b0:11b:d4d1:1459 with SMTP id el40-20020a056870f6a800b0011bd4d11459mr966633oab.245.1661490444152;
-        Thu, 25 Aug 2022 22:07:24 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
-        by smtp.gmail.com with ESMTPSA id v18-20020a4aa512000000b0044b0465bd07sm616918ook.20.2022.08.25.22.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 22:07:23 -0700 (PDT)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=lK9A6HApSBZz4Q8ytvV3N4o8vcU6tZHo4HuclO+ZHvs=;
+        b=kVvlc89MSBUs/hj8ayfgOQC0yUOroi3TDs+6nj8+Mn/Vppnl4KxtBHAmIq5a0JXM6C
+         8CrruD+IGBYhtliHP9Ve5L3aCZAVLA/1xFA8l97c7PvogtKv08o4pHfTVQTLIRwyJGTz
+         eRCfz8SGmvY0jxAj21XByFKxF4wiW7kYbCSJhwuNnPeFihkE3NYhcdXR85u5Gt5EvF0x
+         IvKPf0+d1f5rkkHnkwQ+sdDaR0/06421mrN/fcejBjYYq90KdfW/QWOCzSqCLv4/q85V
+         EMSSgWxO5mRQPr7P9vnBD/6m4ETu7LtKZEX8KnjzIDKqXYbcYxDsk+wJPEiAC0yxLEBi
+         WkDA==
+X-Gm-Message-State: ACgBeo0KgyM3/fafRGyx0Nz33jkQSqm48hF+0CDysOjwb7FszdZ59cZz
+        EyHe8DuvRu/DDYClREyxcd68SrNwSSm/6gmISwg=
+X-Google-Smtp-Source: AA6agR7glaQ8aAClz71uXqYoxJoS3u5VVPWthMELBdpN4xlGkOx6c6XDVcwzkRfCixx9/UBtx2rpsPL5pQzztn3jk+M=
+X-Received: by 2002:a17:906:ef90:b0:730:9cd8:56d7 with SMTP id
+ ze16-20020a170906ef9000b007309cd856d7mr4157955ejb.94.1661490986121; Thu, 25
+ Aug 2022 22:16:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
+ <20220818152929.402605-3-roberto.sassu@huaweicloud.com> <YwhSCE0H+JfUe4Ew@kernel.org>
+In-Reply-To: <YwhSCE0H+JfUe4Ew@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 25 Aug 2022 22:16:14 -0700
+Message-ID: <CAADnVQJbTzfe28ife1+vg+ByLfyLBTCoEZW_eg8TEw838JGaog@mail.gmail.com>
+Subject: Re: [PATCH v12 02/10] btf: Handle dynamic pointer parameter in kfuncs
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     roberto.sassu@huaweicloud.com, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
@@ -60,65 +63,56 @@ Cc:     James Hilliard <james.hilliard1@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/bpf: fix type conflict in test_tc_dtime
-Date:   Thu, 25 Aug 2022 23:06:59 -0600
-Message-Id: <20220826050703.869571-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mykola Lysenko <mykolal@fb.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        keyrings@vger.kernel.org,
+        LSM List <linux-security-module@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The sys/socket.h header isn't required to build test_tc_dtime and may
-cause a type conflict.
+On Thu, Aug 25, 2022 at 9:54 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+> > -                                  enum bpf_arg_type arg_type)
+> > +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+> > +                           enum bpf_arg_type arg_type)
+> >  {
+> >       struct bpf_func_state *state = func(env, reg);
+> >       int spi = get_spi(reg->off);
+> > --
+> > 2.25.1
+> >
+>
+> Might be niticking but generally I'd consider splitting
+> exports as commits of their own.
 
-Fixes the following error:
-In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
-                 from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
-                 from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
-                 from progs/test_tc_dtime.c:18:
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: error: conflicting types for 'int8_t'; have '__int8_t' {aka 'signed char'}
-   24 | typedef __int8_t int8_t;
-      |                  ^~~~~~
-In file included from progs/test_tc_dtime.c:5:
-/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'char'}
-   34 | typedef __INT8_TYPE__ int8_t;
-      |                       ^~~~~~
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: error: conflicting types for 'int64_t'; have '__int64_t' {aka 'long long int'}
-   27 | typedef __int64_t int64_t;
-      |                   ^~~~~~~
-/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long int'}
-   43 | typedef __INT64_TYPE__ int64_t;
-      |                        ^~~~~~~
-make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/test_tc_dtime.o] Error 1
+-static bool
++bool
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- tools/testing/selftests/bpf/progs/test_tc_dtime.c | 1 -
- 1 file changed, 1 deletion(-)
+into a separate commit?
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_dtime.c b/tools/testing/selftests/bpf/progs/test_tc_dtime.c
-index b596479a9ebe..125beec31834 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_dtime.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_dtime.c
-@@ -15,7 +15,6 @@
- #include <linux/udp.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
--#include <sys/socket.h>
- 
- /* veth_src --- veth_src_fwd --- veth_det_fwd --- veth_dst
-  *           |                                 |
--- 
-2.34.1
-
+I guess it makes sense for people whose salary depends on
+number of commits.
+We don't play these games.
