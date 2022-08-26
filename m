@@ -2,154 +2,283 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858B75A22DF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 10:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D7B5A2318
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 10:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240352AbiHZIWX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 04:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S245178AbiHZIgY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 04:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343505AbiHZIWS (ORCPT
+        with ESMTP id S236026AbiHZIgY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 04:22:18 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16862D4F5C;
-        Fri, 26 Aug 2022 01:22:15 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id c16-20020a17090aa61000b001fb3286d9f7so7110651pjq.1;
-        Fri, 26 Aug 2022 01:22:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=fbBxa9mjs9/LeuC1VMhijkCQf3EzJL3oe0B8rWAVysQ=;
-        b=ljneAyibOjyTC05FF6LRfcf4yjqy4gzmq8rkiD/zwxZA/iHd4zBVAWAhkVRJ7V8pr+
-         f04/6gZ4lNPXteJyUUR6WV0ZSB3xd8+yvpSx1lDjW71Nn5u/2aYiCb2B9IJnev/S5AAQ
-         ynWLnSRupPEDX05rNFTnb7a/DWOeFxiYRih5x34K3fBDn2gJvb3CmTc7cBnzuKeiIl5x
-         SqdKLvHUGkogPH0/ZKnHJUPIQ7Y4GwJkZpvhXYHZxB8aGPBo6bvu3E8/jKyz/PVz78Id
-         GJ/1ngJlzLd+KotOBKUrXz+92/SC5Uf3Ix9/VMaAK9raZe8E4PIGkPPkVRAyIDCTpnfX
-         Ci2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=fbBxa9mjs9/LeuC1VMhijkCQf3EzJL3oe0B8rWAVysQ=;
-        b=TgzkcNixo37PXvy6PALP+iTL+ow6HBrrFyKXXIM9b4VrKTox9hn4A/m1Uog+EVSF0f
-         E5CrFC6Dy9gUB4kjJQAUdz/VX6vyMgQ36Y0CBlJrIJLBid3cDO2zG9e8NeWIYcvKqvDp
-         rl9Xcoe6I9tuL+OVllgGg09+eS7xHdlxvDcjehEXPnx07phnltrCBtucLw2t1UjDWL51
-         BzjxkhNNa/8rv1UYkZcfV6Te4E0JkzXIR0PUJmfDUiePojuBrPou8hMiYF45lPSulAuF
-         ko0P7HE1AdYB37qH3GWKQ+67AP/Id18ixt2n7iD78r0pR8tKLmXQtr5z1GWKhN4lqtNQ
-         N50A==
-X-Gm-Message-State: ACgBeo2mJFn2nA6clQpjcHv+nJ8to1loZB3fNYSjmm3/B9f49ZuaOdFa
-        HteMgxy3oqVwu8STF9aj9lI=
-X-Google-Smtp-Source: AA6agR6iJyn0D0eTSc4C3/t2P0r0WATvM3cuFa/W+c4RXrwLlHoQREeqpitVd1G27l3pppCEmhjjTg==
-X-Received: by 2002:a17:90a:8415:b0:1fa:ae71:560d with SMTP id j21-20020a17090a841500b001faae71560dmr3230337pjn.191.1661502134566;
-        Fri, 26 Aug 2022 01:22:14 -0700 (PDT)
-Received: from [192.168.43.80] (subs09a-223-255-225-73.three.co.id. [223.255.225.73])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170902e54600b0016dbb878f8asm949476plf.82.2022.08.26.01.22.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Aug 2022 01:22:14 -0700 (PDT)
-Message-ID: <e819de52-9b35-a698-0b45-80a9b063cf0c@gmail.com>
-Date:   Fri, 26 Aug 2022 15:22:08 +0700
+        Fri, 26 Aug 2022 04:36:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CC05925A;
+        Fri, 26 Aug 2022 01:36:20 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MDY5d2BjJzmVZY;
+        Fri, 26 Aug 2022 16:33:57 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 26 Aug 2022 16:36:18 +0800
+Subject: Re: [PATCH -next 2/5] landlock: add chmod and chown support
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+CC:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <shuah@kernel.org>, <corbet@lwn.net>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20220822114701.26975-1-xiujianfeng@huawei.com>
+ <20220822114701.26975-3-xiujianfeng@huawei.com> <YwPKG3G9PlStYPkz@nuc>
+ <5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net>
+ <6d6edd60-5ed7-0f5d-d641-75e006c0e60e@huawei.com>
+ <8cb3b7df-fb2f-3e3f-7805-4b14cf1bdf90@digikod.net>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <c447b4d3-8bc7-5277-5d49-7f4ffd0b5a5b@huawei.com>
+Date:   Fri, 26 Aug 2022 16:36:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 4/4] mm: add documentation of the new ioctl on pagemap
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Cc:     kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20220826064535.1941190-1-usama.anjum@collabora.com>
- <20220826064535.1941190-5-usama.anjum@collabora.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220826064535.1941190-5-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <8cb3b7df-fb2f-3e3f-7805-4b14cf1bdf90@digikod.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/26/22 13:45, Muhammad Usama Anjum wrote:
->  The soft-dirty is a bit on a PTE which helps to track which pages a task
-> -writes to. In order to do this tracking one should
-> +writes to.
-> +
-> +Using Proc FS
-> +-------------
-> +
-> +In order to do this tracking one should
->  
->    1. Clear soft-dirty bits from the task's PTEs.
->  
-> @@ -20,6 +25,41 @@ writes to. In order to do this tracking one should
->       64-bit qword is the soft-dirty one. If set, the respective PTE was
->       written to since step 1.
->  
-> +Using IOCTL
-> +-----------
-> +
-> +The IOCTL on the ``/proc/PID/pagemap`` can be can be used to find the dirty pages
-> +atomically. The following commands are supported::
-> +
-> +	MEMWATCH_SD_GET
-> +		Get the page offsets which are soft dirty.
-> +
-> +	MEMWATCH_SD_CLEAR
-> +		Clear the pages which are soft dirty.
-> +
-> +	MEMWATCH_SD_GET_AND_CLEAR
-> +		Get and clear the pages which are soft dirty.
-> +
+Hi,
 
-Definition lists are enough, no need to use code block.
+在 2022/8/24 19:44, Mickaël Salaün 写道:
+> 
+> On 23/08/2022 14:50, xiujianfeng wrote:
+>>
+>>
+>> 在 2022/8/23 5:07, Mickaël Salaün 写道:
+>>>
+>>> On 22/08/2022 20:25, Günther Noack wrote:
+>>>> Hi!
+>>>>
+>>>> Thanks for sending this patch set! :)
+>>>>
+>>>> On Mon, Aug 22, 2022 at 07:46:58PM +0800, Xiu Jianfeng wrote:
+>>>>> Add two flags LANDLOCK_ACCESS_FS_CHMOD and LANDLOCK_ACCESS_FS_CHOWN to
+>>>>> support restriction to chmod(2) and chown(2) with landlock.
+>>>>>
+>>>>> Also change the landlock ABI version from 3 to 4.
+>>>>>
+>>>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>>>> ---
+>>>>>    include/uapi/linux/landlock.h                |  8 ++++++--
+>>>>>    security/landlock/fs.c                       | 16 +++++++++++++++-
+>>>>>    security/landlock/limits.h                   |  2 +-
+>>>>>    security/landlock/syscalls.c                 |  2 +-
+>>>>>    tools/testing/selftests/landlock/base_test.c |  2 +-
+>>>>>    tools/testing/selftests/landlock/fs_test.c   |  6 ++++--
+>>>>>    6 files changed, 28 insertions(+), 8 deletions(-)
+>>>>>
+>>>>> diff --git a/include/uapi/linux/landlock.h
+>>>>> b/include/uapi/linux/landlock.h
+>>>>> index 735b1fe8326e..5ce633c92722 100644
+>>>>> --- a/include/uapi/linux/landlock.h
+>>>>> +++ b/include/uapi/linux/landlock.h
+>>>>> @@ -141,13 +141,15 @@ struct landlock_path_beneath_attr {
+>>>>>     *   directory) parent.  Otherwise, such actions are denied with
+>>>>> errno set to
+>>>>>     *   EACCES.  The EACCES errno prevails over EXDEV to let user 
+>>>>> space
+>>>>>     *   efficiently deal with an unrecoverable error.
+>>>>> + * - %LANDLOCK_ACCESS_FS_CHMOD: Change the file mode bits of a file.
+>>>>> + * - %LANDLOCK_ACCESS_FS_CHOWN: Change the owner and/or group of a
+>>>>> file.
+>>>
+>>> This section talk about "access rights that only apply to the content of
+>>> a directory, not the directory itself", which is not correct (see
+>>> LANDLOCK_ACCESS_FS_READ_DIR). I'd like these access rights to remain
+>>> here but this kernel patch and the related tests need some changes.
+>>>
+>>> What about a LANDLOCK_ACCESS_FS_CHGRP? I'm not sure if we need to
+>>> differentiate these actions or not, but we need arguments to choose.
+>>>
+>>>
+>>>>>     *
+>>>>>     * .. warning::
+>>>>>     *
+>>>>>     *   It is currently not possible to restrict some file-related
+>>>>> actions
+>>>>>     *   accessible through these syscall families: 
+>>>>> :manpage:`chdir(2)`,
+>>>>> - *   :manpage:`stat(2)`, :manpage:`flock(2)`, :manpage:`chmod(2)`,
+>>>>> - *   :manpage:`chown(2)`, :manpage:`setxattr(2)`, 
+>>>>> :manpage:`utime(2)`,
+>>>>> + *   :manpage:`stat(2)`, :manpage:`flock(2)`,
+>>>>> + *   :manpage:`setxattr(2)`, :manpage:`utime(2)`,
+>>>>
+>>>> *formatting nit*
+>>>> We could fill up the full line width here
+>>>>
+>>>>>     *   :manpage:`ioctl(2)`, :manpage:`fcntl(2)`, 
+>>>>> :manpage:`access(2)`.
+>>>>>     *   Future Landlock evolutions will enable to restrict them.
+>>>>>     */
+>>>>> @@ -167,6 +169,8 @@ struct landlock_path_beneath_attr {
+>>>>>    #define LANDLOCK_ACCESS_FS_MAKE_SYM            (1ULL << 12)
+>>>>>    #define LANDLOCK_ACCESS_FS_REFER            (1ULL << 13)
+>>>>>    #define LANDLOCK_ACCESS_FS_TRUNCATE            (1ULL << 14)
+>>>>> +#define LANDLOCK_ACCESS_FS_CHMOD            (1ULL << 15)
+>>>>> +#define LANDLOCK_ACCESS_FS_CHOWN            (1ULL << 16)
+>>>>>    /* clang-format on */
+>>>>>
+>>>>>    #endif /* _UAPI_LINUX_LANDLOCK_H */
+>>>>> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+>>>>> index c57f581a9cd5..c25d5f89c8be 100644
+>>>>> --- a/security/landlock/fs.c
+>>>>> +++ b/security/landlock/fs.c
+>>>>> @@ -147,7 +147,9 @@ static struct landlock_object
+>>>>> *get_inode_object(struct inode *const inode)
+>>>>>        LANDLOCK_ACCESS_FS_EXECUTE | \
+>>>>>        LANDLOCK_ACCESS_FS_WRITE_FILE | \
+>>>>>        LANDLOCK_ACCESS_FS_READ_FILE | \
+>>>>> -    LANDLOCK_ACCESS_FS_TRUNCATE)
+>>>>> +    LANDLOCK_ACCESS_FS_TRUNCATE | \
+>>>>> +    LANDLOCK_ACCESS_FS_CHMOD | \
+>>>>> +    LANDLOCK_ACCESS_FS_CHOWN)
+>>>>>    /* clang-format on */
+>>>>>
+>>>>>    /*
+>>>>> @@ -1146,6 +1148,16 @@ static int hook_path_truncate(const struct
+>>>>> path *const path)
+>>>>>        return current_check_access_path(path,
+>>>>> LANDLOCK_ACCESS_FS_TRUNCATE);
+>>>>>    }
+>>>>>
+>>>>> +static int hook_path_chmod(const struct path *const dir, umode_t 
+>>>>> mode)
+>>>
+>>> This is not a "dir" but a "path".
+>>>
+>>>
+>>>>> +{
+>>>>> +    return current_check_access_path(dir, LANDLOCK_ACCESS_FS_CHMOD);
+>>>>> +}
+>>>>> +
+>>>>> +static int hook_path_chown(const struct path *const dir, kuid_t uid,
+>>>>> kgid_t gid)
+>>>
+>>> Same here.
+>>>
+>>>
+>>>>> +{
+>>>>> +    return current_check_access_path(dir, LANDLOCK_ACCESS_FS_CHOWN);
+>>>>> +}
+>>>>
+>>>> One implication of this approach is that the chown+chmod right on a
+>>>> directory's contents are always going together with the same rights on
+>>>> the directory itself.
+>>>>
+>>>> For example, if you grant chmod+chown access rights for "datadir/",
+>>>> the command "chmod 0600 datadir/file1" will work, but so will the
+>>>> command "chmod 0600 datadir". But the approach of checking just the
+>>>> parent directory's rights is also inflexible if you think through the
+>>>> kinds of rights you can grant with it. (It would also not be possible
+>>>> to grant chmod+chown on individual files.)
+>>>
+>>> Good point. For an initial chmod/chown/chgrp access right, I'd prefer to
+>>> be able to set these access rights on a directory but only for its
+>>> content, not the directory itself. I think it is much safer and should
+>>> be enough for the majority of use cases, but let me know if I'm missing
+>>> something. I'm not sure being able to change the root directory access
+>>> rights may be a good idea anyway (even for containers). ;)
+>>>
+>>> A path_beneath rule enables to identify a file hierarchy (i.e. the
+>>> content of a directory), not to make modifications visible outside of
+>>> the directory identifying the hierarchy (hence the "parent_fd" field),
+>>> which would be the case with the current chmod/chown access rights.
+>>>
+>>>
+>>>>
+>>>> Do you have any thoughts on how to resolve this if this flexibility
+>>>> might be needed?
+>>>>
+>>>> I wonder whether the right way to resolve this would be to give users
+>>>> a way to make that distinction at the level of landlock_add_rule(),
+>>>> with an API like this (note the additional flag):
+>>>>
+>>>>     err = landlock_add_rule(ruleset_fd, LANDLOCK_RULE_PATH_BENEATH,
+>>>>                             &path_beneath, LANDLOCK_STRICTLY_BENEATH);
+>>>>                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>>
+>>>> Multiple calls of landlock_add_rule() on the same file are already
+>>>> today joining the requested access rights, so it would be possible to
+>>>> mix-and-match "strict beneath" with "beneath" rights on the same
+>>>> directory, and it would work in the same way for other access rights
+>>>> as well.
+>>>
+>>> This kind of option is interesting. For now, some access rights are kind
+>>> of "doubled" to enable to differentiate between a file and a directory
+>>> (i.e. READ_DIR/READ_FILE, REMOVE_DIR/REMOVE_FILE, WRITE_FILE/MAKE_*)
+>>> when it may be useful, but this is different.
+>>>
+>>> I think this "strictly beneath" behavior should be the default, which is
+>>> currently the case.
+>>>
+>>>
+>>>>
+>>>> To be clear: I'm proposing this approach not because I think it should
+>>>> be part of this patch set, but because it would be good to have a way
+>>>> forward if that kind of flexibility is needed in the future.
+>>>>
+>>>> Does that seem reasonable?
+>>>
+>>> This is the kind of questions that made such access rights not
+>>> appropriate for the initial version of Landlock. But we should talk
+>>> about that now.
+>>
+>> Hi Günther and Mickaël,
+>>
+>> Thanks for your comments, so I think the conclusion here is that we have
+>> to make sure that in this patchset chown/chmod access rights can be set
+>> on a directory only for its content, not the directory itself, right?
+>> any good idea about how to implement this? :)
+> 
+> In such hook code, you need to get the parent directory of the path 
+> argument. This require to use and refactor the 
+> check_access_path_dual/jump_up part in a dedicated helper (and take care 
+> of all the corner cases).
+> .
 
-> +The struct :c:type:`pagemap_sd_args` is used as the argument. In this struct:
-> +
-> +  1. The range is specified through start and len. The len argument need not be
-> +     the multiple of the page size, but since the information is returned for the
-> +     whole pages, len is effectively rounded up to the next multiple of the page
-> +     size.
-> +
-> +  2. The output buffer and size is specified in vec and vec_len. The offsets of
-> +     the dirty pages from start are returned in vec. The ioctl returns when the
-> +     whole range has been searched or vec is completely filled. The whole range
-> +     isn't cleared if vec fills up completely.
-> +
-> +  3. The flags can be specified in flags field. Currently only one flag,
-> +     PAGEMAP_SD_NO_REUSED_REGIONS is supported which can be specified to ignore
-> +     the VMA dirty flags for better performance. This flag shows only those pages
-> +     dirty which have been written to by the user. All new allocations aren't returned
-> +     to be dirty.
-> +
-> +Explanation
-> +-----------
->  
->  Internally, to do this tracking, the writable bit is cleared from PTEs
->  when the soft-dirty bit is cleared. So, after this, when the task tries to
+Sorry, I don't quite understand what you mean, but I have another idea, 
+how about this?
 
-I'd like to see identifier keywords (such as filename, function and variable name)
-are consistently formatted either with inline code (``identifier``) or no
-formatting (all or nothing).
+static int hook_path_chown(const struct path *const path, kuid_t uid, 
+kgid_t gid)
+{
+         int ret;
+         struct dentry *parent_dentry;
+         struct path eff_path;
 
--- 
-An old man doll... just what I always wanted! - Clara
+         eff_path = *path;
+         path_get(&eff_path);
+         if (d_is_dir(eff_path.dentry)) {
+                 parent_dentry = dget_parent(eff_path.dentry);
+                 dput(eff_path.dentry);
+                 eff_path.dentry = parent_dentry;
+         }
+         ret = current_check_access_path(&eff_path, 
+LANDLOCK_ACCESS_FS_CHGRP);
+         path_put(&eff_path);
+
+         return ret;
+}
+
+
