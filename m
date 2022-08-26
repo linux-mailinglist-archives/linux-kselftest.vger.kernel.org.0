@@ -2,75 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F53B5A20B5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 08:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9CE5A2112
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 08:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiHZGOM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 02:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
+        id S245058AbiHZGp7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 02:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiHZGOM (ORCPT
+        with ESMTP id S245071AbiHZGp6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:14:12 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38934BCC38;
-        Thu, 25 Aug 2022 23:14:08 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id a65so678098pfa.1;
-        Thu, 25 Aug 2022 23:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=h6vPwvG1eOkQpAC5Em2N5b6VPCfvePS3xQSt2oOQck4=;
-        b=hm+bW9uGuVV9IQnmCk3BOzBf0iilvnUqTXRZaVhny7OquF+nPI51w1ezQOuQ7eeckr
-         YvZ6i7oqlf81Lc3vQ/WtSUpdRY+nIoZJzqQunkkqEO+Hm/Yr4RgUflRS60qPmu1In6em
-         H8LUA2EjRpBcEGeNxNx+WXnKKJa4N4gW8JTwPEpa505Zkt8l6+wNJEciDDQxzi0PfvfU
-         eEoEwvE1cMQfK5WCife6UJnTWhkCx6RJ8HSf9CnFxFZrLz71WSkEfjIfdRR28Zqv4Sjr
-         R6uAFfHEYMSS8LKa8jhLkWmoutgubzfuOxiHwfgCO27s9QUfMRtxS5lCi+tzfO8shti0
-         jbSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=h6vPwvG1eOkQpAC5Em2N5b6VPCfvePS3xQSt2oOQck4=;
-        b=WnVHcsNrcgy3EElJ0Mx7QVxocvKz+fiaFvHCw9J1pFzOzkIb1HDyekG9t5sE+/Z3FA
-         cXovIghEpAh7FRVziTKkcOh1098aiC4Mr2W0octFzj2oh1W57duAwzfwOSwkeJpj6xsb
-         fYigqgNt7vi3yG10WAlKZgq5vaMRXOiyLSCUNxKuhQBz8f0rl3Tf5RYNzpdMjGcNlq+5
-         hB+bliMB4HTMZCnhDso8zI4bazA2h/PhI+gUJ6zPE2x/R38lWuafBXcybP7eyCzczmJC
-         ojuxnBoEq5Fk2SKpTyGTeWYrpqZctzajW3oABGV8wvcL0r0/O8KglwDEh/cEUCUBDm4Y
-         aZOQ==
-X-Gm-Message-State: ACgBeo1wwsKLZnWIE52JN2B8UPA67stTBxUt/VykU6PkWkXEAIoJ1hG4
-        Q6gsNRqJH/kxudaNJ0Cr3P3Cg4qVe++z2WDjXvI=
-X-Google-Smtp-Source: AA6agR5oDZJR/frhZRnlNnAattouhZlDZJe50IAr5qsbrG2E6Lhav8BG/MU7GCv7+pk20zQVLxQCvml4Am01ngIr8ao=
-X-Received: by 2002:a63:fb4a:0:b0:429:8605:6ebf with SMTP id
- w10-20020a63fb4a000000b0042986056ebfmr2051552pgj.225.1661494447719; Thu, 25
- Aug 2022 23:14:07 -0700 (PDT)
+        Fri, 26 Aug 2022 02:45:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE43BB6AC;
+        Thu, 25 Aug 2022 23:45:56 -0700 (PDT)
+Received: from lenovo.Home (unknown [39.53.61.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6AEE46601EC5;
+        Fri, 26 Aug 2022 07:45:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661496354;
+        bh=IN7X9l9wVicY4dNzgT/RD/PEIb50SV6fqcw6KEssYKM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T8/ooc3a3tld/c4fwpKspyWrUR2soAQzKuW/L+DKrbYypHWjVrXM+SUdBmh8/fHzI
+         DFa5ZP+jexhPLfQedos91GOw8g+1c6WadRNE+yl3R7Jf6BHW0j6biDvOmzXdO/JX8T
+         smoyd2C9JzIOb3d+bzcztDUC3I3Etl256JgVWbqWL51yoopp/X9xoDqSNQHZGXN4Ou
+         6itnGfHTMPsmKLxMGhgtdC+HbvvEdLI1V71EIIPiB6gkzuEN8u7p30zpDpZ8eUJR93
+         BQXJsR02swvyM3pHHVKw8NERJD4J0Ub5W7zcvGfjpLRmMYOLjPdJHctaZ3acZIUQ+x
+         XTEAdZAh0+a0g==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list),
+        linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM),
+        linux-mm@kvack.org (open list:MEMORY MANAGEMENT),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+Date:   Fri, 26 Aug 2022 11:45:31 +0500
+Message-Id: <20220826064535.1941190-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220825221751.258958-1-james.hilliard1@gmail.com>
- <20220826051630.glhrbdhiybtqwc4p@kafai-mbp.dhcp.thefacebook.com>
- <CADvTj4rQdnd=V0tENFGCTtpTESwSCcwK+h3i9nZ75M+TywNWzA@mail.gmail.com> <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Fri, 26 Aug 2022 00:13:54 -0600
-Message-ID: <CADvTj4qNR+m2fQMMf9+=hMruhon8G_7yFC2_43-qhZ9X7ZW=8A@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type conflict
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,94 +63,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 11:49 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> On Thu, Aug 25, 2022 at 11:31:15PM -0600, James Hilliard wrote:
-> > On Thu, Aug 25, 2022 at 11:16 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> > >
-> > > On Thu, Aug 25, 2022 at 04:17:49PM -0600, James Hilliard wrote:
-> > > > There is a potential for us to hit a type conflict when including
-> > > > netinet/tcp.h with sys/socket.h, we can replace both of these includes
-> > > > with linux/tcp.h to avoid this conflict.
-> > > >
-> > > > Fixes errors like:
-> > > > In file included from /usr/include/netinet/tcp.h:91,
-> > > >                  from progs/bind4_prog.c:10:
-> > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
-> > > >    34 | typedef __INT8_TYPE__ int8_t;
-> > > >       |                       ^~~~~~
-> > > > In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
-> > > >                  from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
-> > > >                  from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
-> > > >                  from progs/bind4_prog.c:9:
-> > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
-> > > >    24 | typedef __int8_t int8_t;
-> > > >       |                  ^~~~~~
-> > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
-> > > >    43 | typedef __INT64_TYPE__ int64_t;
-> > > >       |                        ^~~~~~~
-> > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
-> > > >    27 | typedef __int64_t int64_t;
-> > > >       |                   ^~~~~~~
-> > > > make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o] Error 1
-> > > >
-> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > > ---
-> > > >  tools/testing/selftests/bpf/progs/bind4_prog.c | 3 +--
-> > > >  tools/testing/selftests/bpf/progs/bind6_prog.c | 3 +--
-> > > >  2 files changed, 2 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c b/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > index 474c6a62078a..6bd20042fd53 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
-> > > > @@ -6,8 +6,7 @@
-> > > >  #include <linux/bpf.h>
-> > > >  #include <linux/in.h>
-> > > >  #include <linux/in6.h>
-> > > > -#include <sys/socket.h>
-> > > > -#include <netinet/tcp.h>
-> > > These includes look normal to me.  What environment is hitting this.
-> >
-> > I was hitting this error with GCC 13(GCC master branch).
-> These two includes (<sys/socket.h> and <netinet/tcp.h>) are normal,
-> so does it mean all existing programs need to change to use gcc 13 ?
 
-Well I think it's mostly just an issue getting hit with GCC-BPF as it
-looks to me like a cross compilation host/target header conflict.
+Hello,
 
->
-> >
-> > > I don't prefer the selftest writers need to remember this rule.
-> > >
-> > > Beside, afaict, tcp.h should be removed because
-> > > I don't see this test needs it.  I tried removing it
-> > > and it works fine.  It should be removed instead of replacing it
-> > > with another unnecessary tcp.h.
-> >
-> > Oh, that does also appear to work, thought I had tried that already but I guess
-> > I hadn't, sent a v2 with them removed:
-> > https://lore.kernel.org/bpf/20220826052925.980431-1-james.hilliard1@gmail.com/T/#u
-> >
-> > >
-> > > > +#include <linux/tcp.h>
-> > > >  #include <linux/if.h>
-> > > >  #include <errno.h>
-> > > >
-> > > > diff --git a/tools/testing/selftests/bpf/progs/bind6_prog.c b/tools/testing/selftests/bpf/progs/bind6_prog.c
-> > > > index c19cfa869f30..f37617b35a55 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/bind6_prog.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/bind6_prog.c
-> > > > @@ -6,8 +6,7 @@
-> > > >  #include <linux/bpf.h>
-> > > >  #include <linux/in.h>
-> > > >  #include <linux/in6.h>
-> > > > -#include <sys/socket.h>
-> > > > -#include <netinet/tcp.h>
-> > > > +#include <linux/tcp.h>
-> > > >  #include <linux/if.h>
-> > > >  #include <errno.h>
-> > > >
-> > > > --
-> > > > 2.34.1
-> > > >
+This patch series implements a new ioctl on the pagemap proc fs file to
+get, clear and perform both get and clear at the same time atomically on
+the specified range of the memory.
+
+Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
+procfs file. The soft-dirty PTE bit for the whole memory range of the
+process can be cleared by writing to the clear_refs file. This series
+adds features that weren't present earlier.
+- There is no atomic get soft-dirty PTE bit status and clear operation
+  present.
+- The soft-dirty PTE bit of only a part of memory cannot be cleared.
+
+Historically, soft-dirty PTE bit tracking has been used in the CRIU
+project. The proc fs interface is enough for that as I think the process
+is frozen. We have the use case where we need to track the soft-dirty
+PTE bit for the running processes. We need this tracking and clear
+mechanism of a region of memory while the process is running to emulate
+the getWriteWatch() syscall of Windows. This syscall is used by games to
+keep track of dirty pages and keep processing only the dirty pages. This
+new ioctl can be used by the CRIU project and other applications which
+require soft-dirty PTE bit information.
+
+As in the current kernel there is no way to clear a part of memory (instead
+of clearing the Soft-Dirty bits for the entire process) and get+clear
+operation cannot be performed atomically, there are other methods to mimic
+this information entirely in userspace with poor performance:
+- The mprotect syscall and SIGSEGV handler for bookkeeping
+- The userfaultfd syscall with the handler for bookkeeping
+Some benchmarks can be seen [1].
+
+This ioctl can be used by the CRIU project and other applications which
+require soft-dirty PTE bit information. The following operations are
+supported in this ioctl:
+- Get the pages that are soft-dirty.
+- Clear the pages which are soft-dirty.
+- The optional flag to ignore the VM_SOFTDIRTY and only track per page
+soft-dirty PTE bit
+
+There are two decisions which have been taken about how to get the output
+from the syscall.
+- Return offsets of the pages from the start in the vec
+- Stop execution when vec is filled with dirty pages
+These two arguments doesn't follow the mincore() philosophy where the
+output array corresponds to the address range in one to one fashion, hence
+the output buffer length isn't passed and only a flag is set if the page
+is present. This makes mincore() easy to use with less control. We are
+passing the size of the output array and putting return data consecutively
+which is offset of dirty pages from the start. The user can convert these
+offsets back into the dirty page addresses easily. Suppose, the user want
+to get first 10 dirty pages from a total memory of 100 pages. He'll
+allocate output buffer of size 10 and the ioctl will abort after finding the
+10 pages. This behaviour is needed to support Windows' getWriteWatch(). The
+behaviour like mincore() can be achieved by passing output buffer of 100
+size. This interface can be used for any desired behaviour.
+
+[1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+
+Regards,
+Muhammad Usama Anjum
+
+Muhammad Usama Anjum (4):
+  fs/proc/task_mmu: update functions to clear the soft-dirty PTE bit
+  fs/proc/task_mmu: Implement IOCTL to get and clear soft dirty PTE bit
+  selftests: vm: add pagemap ioctl tests
+  mm: add documentation of the new ioctl on pagemap
+
+ Documentation/admin-guide/mm/soft-dirty.rst |  42 +-
+ fs/proc/task_mmu.c                          | 342 ++++++++++-
+ include/uapi/linux/fs.h                     |  23 +
+ tools/include/uapi/linux/fs.h               |  23 +
+ tools/testing/selftests/vm/.gitignore       |   1 +
+ tools/testing/selftests/vm/Makefile         |   2 +
+ tools/testing/selftests/vm/pagemap_ioctl.c  | 649 ++++++++++++++++++++
+ 7 files changed, 1050 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
+
+-- 
+2.30.2
+
