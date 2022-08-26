@@ -2,60 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABBE5A21EA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 09:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B255A21ED
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 09:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245429AbiHZHaw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 03:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
+        id S245368AbiHZHbD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 03:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245450AbiHZHa3 (ORCPT
+        with ESMTP id S245384AbiHZHal (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:30:29 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB70815A32
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 00:30:24 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id k2so864352vsk.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 00:30:24 -0700 (PDT)
+        Fri, 26 Aug 2022 03:30:41 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CE680F65
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 00:30:36 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id q14so291980vke.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 00:30:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=uSTjAxCS3xB4Gb+cioSl20UGm9tIyfFJwwmLXB6rKnE=;
-        b=tJqbckZAmQrN8sup9kMRTi6mzXEkOwz4sDw2KBSlRzmPW7oh0SIUVlnCJXpcwM6DDq
-         Sc2yinGrdv3X76dzcp7R6FDP1EqVZpaBXmVnetuffS5rgPuem225Uyubs/IZxezWTZbo
-         kn8RAL5NLi5MDsYBFWNKnnV+qzXpuTxF3uR6NMPQZpWULhY9slDRrrlmEQxjcU2TCNFs
-         Zmm+VcHNCptG0vCSM0K4kk1cqRaZP73805sR6F1rqz8jNWHJ1wXYQYicrkLqKgBzjShw
-         a7gJSqw4J9cr2Gjoqh8xCDz5OKMR9bmC8wml1fRtAG20YnOCW67O+pq1sIfGlqQNktUT
-         1c3w==
+        bh=JzH/yBDiPGSVsvTOboccFU6n8q0C55ZuWOg9ua6bKxs=;
+        b=iLd6fz7nmh1CNlltwZT4WYAQcz4I54iIEcVKGzZSAHyfqS2ySPW44/7T6e2R4ttgs6
+         lnXGNal8mb6JhdY4H8rEetcawv5W0Rj4qNaTHEFHcIzJFdcH5tV8AM2MpnrkbXyPOKxb
+         qKc5KxV/ooDO3LTibFDmGR7P24AontyNOak3K4q3FRqoT5Hkh+nopF5T880jHopSSuyU
+         /khtGjI6w2SBl9AARhVJ15vmttXJ5litQbIvhvoMINoZTwQ+OlR3sIjlRl+C70poH/G0
+         S5XHjYUcjWu0kwX0BhaLkbv2gKAhodxvLpjOgnnMcaPREP35MgpijuyP+bTomhA2EZOi
+         PGFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=uSTjAxCS3xB4Gb+cioSl20UGm9tIyfFJwwmLXB6rKnE=;
-        b=qd/FSpyLYJCrpGUyoba9OJ0d4V8nswKzeCBOQrqPTrbtEp3SPDVmfyD3P0BwayyWt0
-         N1beszBx9tz2tvq/OnVj1axUZa3RmRKG4dQgjCsx3Bs8rN9WLOGn2LvRbeDbOyu3+VM2
-         ML2XRjhJIgI2TLrHYggqdZZiypLHZCBP8qJ0iXVQsBODCLy1cBbTvvtQxMY+Dchw6XR7
-         zfCtKbCBA40YiN/hKi13qiVFvnlnEm2Vzj5ss46wxhmVR30JnO9Nm4oOYcrrXaDENbUu
-         s+n2xSF7FSOf2Sb74HIG5b1HSXk/KcfwQyA3yyWhUHsnXnZ3eexSlmeLGkKcvD5HnOzD
-         /WDg==
-X-Gm-Message-State: ACgBeo1M9XWBSqq4A1XR7EP6GlYPK9YXvibTQjsUvC+nqQ05Spz8zqOa
-        qLX8diK4BcQiBpjyvXSD8bE1Q0odoFhzNG4Tj8T/wQ==
-X-Google-Smtp-Source: AA6agR7t3WpllY3bDzln7kJj831QZ0OAlLfAjHefM23sEsrabUR59rjfcPPvhEZRRSTppeaw1Km9En+9AIdzlkgYrXQ=
-X-Received: by 2002:a05:6102:2146:b0:38f:f3d6:51da with SMTP id
- h6-20020a056102214600b0038ff3d651damr2721125vsg.38.1661499024271; Fri, 26 Aug
- 2022 00:30:24 -0700 (PDT)
+        bh=JzH/yBDiPGSVsvTOboccFU6n8q0C55ZuWOg9ua6bKxs=;
+        b=cJwoslpzueGop64KzVKCAMiiOfX2KVAhJ5drVg8hBGxBN3Nzi1iHKNnFYg1SyuDo0f
+         /BAwkr0qgYYqwFzZtC/JYjaLUgwF8wCfAMoz46wLY7sAeLHa6E8fnYkaa4KsyIWR+hqZ
+         BfKPp4j5rGAkAN+L7P4TmjplIoa9uH5SzTn/IO0Gud9xIxuDOPhAY8E+G19nZYd9F5ZH
+         tbLtNz61I4pGEdYralmfg6GZCWqE+nWU9gY/xFLLjxzF76joddcVFUu7Yzd4jUi1ndbc
+         68S0BrfS6l66wnSiBaGmML7gMatmNbHR9Le0oYgpwLZOEEXjmlmexjGZ1zyO3Sctydb8
+         VZJw==
+X-Gm-Message-State: ACgBeo3WZ0WIMACVwibEgLpCU/2VsVvBwYDd1UNMjHutcnDgh1Z9G90O
+        A4KQ+PgYhKFrbnF2Gu7/nTQnxqnZKdw/cwqd729csQ==
+X-Google-Smtp-Source: AA6agR6+hMVRSBVwb1X5RxsUTb7998H3zRB+TNRJlKgaL3GMrJjUWnK1MlcyJ9doAB9j4TB/lS0il6sWtJsws5Y3m44=
+X-Received: by 2002:a1f:b248:0:b0:377:aa0c:941 with SMTP id
+ b69-20020a1fb248000000b00377aa0c0941mr2815228vkf.37.1661499035088; Fri, 26
+ Aug 2022 00:30:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220822022646.98581-1-tales.aparecida@gmail.com> <20220822022646.98581-6-tales.aparecida@gmail.com>
-In-Reply-To: <20220822022646.98581-6-tales.aparecida@gmail.com>
+References: <20220822022646.98581-1-tales.aparecida@gmail.com> <20220822022646.98581-7-tales.aparecida@gmail.com>
+In-Reply-To: <20220822022646.98581-7-tales.aparecida@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 26 Aug 2022 15:30:12 +0800
-Message-ID: <CABVgOSk4e=UZaH+7mSTiFtxHHoQ9PXo7vg8+_PcZYxnbtDDvbw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/8] Documentation: KUnit: add intro to the
- getting-started page
+Date:   Fri, 26 Aug 2022 15:30:23 +0800
+Message-ID: <CABVgOSkSMY3ek=5xQL-jPkP53vUCyQXGYmJbwK527fePEEiSxw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/8] Documentation: KUnit: update links in the index page
 To:     Tales Aparecida <tales.aparecida@gmail.com>
 Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
@@ -68,7 +66,7 @@ Cc:     Sadiya Kazi <sadiyakazi@google.com>,
         =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
         Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000027e2f005e71fe363"
+        boundary="000000000000cd717905e71fe3ae"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -80,27 +78,24 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000027e2f005e71fe363
+--000000000000cd717905e71fe3ae
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Mon, Aug 22, 2022 at 10:30 AM Tales Aparecida
 <tales.aparecida@gmail.com> wrote:
 >
-> Describe the objective of the Getting Started page, which should be a
-> brief and beginner-friendly walkthrough for running and writing tests,
-> showing the reader where to find detailed instructions in other pages.
+> Replace out-of-date external links with references to the kernel
+> documentation, replacing TAP webpage for the more appropriate KTAP
+> documentation and the UML webpage by its documentation.
 >
 > Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
-> Reviewed-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
->
-> ---
-> Notes:
->     Remove recommendation about having compiled the kernel before using
->     kunit_tool. I changed my mind about it after Tim Bird's highlight.
 > ---
 
-This is fine.
+Thanks. These links are definitely better.
+
+(I'm a little sad about losing the link to the TAP page, but it's
+linked-to from the KTAP page, so it's fine.)
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -108,32 +103,54 @@ Cheers,
 -- David
 
 
->  Documentation/dev-tools/kunit/start.rst | 4 ++++
->  1 file changed, 4 insertions(+)
+>  Documentation/dev-tools/kunit/index.rst | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 >
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-=
-tools/kunit/start.rst
-> index adf782507999..75fd05286396 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -4,6 +4,10 @@
->  Getting Started
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-=
+tools/kunit/index.rst
+> index d7187282ba28..f5d13f1d37be 100644
+> --- a/Documentation/dev-tools/kunit/index.rst
+> +++ b/Documentation/dev-tools/kunit/index.rst
+> @@ -28,10 +28,10 @@ KUnit (Kernel unit testing framework) provides a comm=
+on framework for
+>  unit tests within the Linux kernel. Using KUnit, you can define groups
+>  of test cases called test suites. The tests either run on kernel boot
+>  if built-in, or load as a module. KUnit automatically flags and reports
+> -failed test cases in the kernel log. The test results appear in `TAP
+> -(Test Anything Protocol) format <https://testanything.org/>`_. It is ins=
+pired by
+> -JUnit, Python=E2=80=99s unittest.mock, and GoogleTest/GoogleMock (C++ un=
+it testing
+> -framework).
+> +failed test cases in the kernel log. The test results appear in
+> +:doc:`KTAP (Kernel - Test Anything Protocol) format</dev-tools/ktap>`.
+> +It is inspired by JUnit, Python=E2=80=99s unittest.mock, and GoogleTest/=
+GoogleMock
+> +(C++ unit testing framework).
 >
-> +This page contains an overview of the kunit_tool and KUnit framework,
-> +teaching how to run existing tests and then how to write a simple test c=
-ase,
-> +and covers common problems users face when using KUnit for the first tim=
-e.
-> +
->  Installing Dependencies
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->  KUnit has the same dependencies as the Linux kernel. As long as you can
+>  KUnit tests are part of the kernel, written in the C (programming)
+>  language, and test parts of the Kernel implementation (example: a C
+> @@ -45,8 +45,9 @@ internal system functionality. KUnit runs in kernel spa=
+ce and is not
+>  restricted to things exposed to user-space.
+>
+>  In addition, KUnit has kunit_tool, a script (``tools/testing/kunit/kunit=
+.py``)
+> -that configures the Linux kernel, runs KUnit tests under QEMU or UML (`U=
+ser Mode
+> -Linux <http://user-mode-linux.sourceforge.net/>`_), parses the test resu=
+lts and
+> +that configures the Linux kernel, runs KUnit tests under QEMU or UML
+> +(:doc:`User Mode Linux </virt/uml/user_mode_linux_howto_v2>`),
+> +parses the test results and
+>  displays them in a user friendly manner.
+>
+>  Features
 > --
 > 2.37.2
 >
 
---00000000000027e2f005e71fe363
+--000000000000cd717905e71fe3ae
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -200,14 +217,14 @@ OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
 3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
 lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB8
-SAdCXFIW4/L7MXqIeP4q4B9U3OHsZZxCiREUHux7CzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA4MjYwNzMwMjRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA5
+ZDKaDUwVMj1tl9wyLinlP3j9YrShiwQUlSVTa2k1ujAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MjYwNzMwMzVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAgIYngVRYtnumXwdHhHvJ
-GoL/A6pAHex4h1bEisAAQp+NCS0H7f+o4ovcSMLRJ2+aNw3jhw/wjMOXuVtU37OplMN0ULr+2H4X
-wW6Eiiq8R5jXCzuZqTsfI+I/HWHRRDxvwDEORvvweD4mvcFLibt/2FMgNxSSN/OS1Cuqu9Mv6mJX
-Oj3L+6K7gZbrPNBztnxEfjDmxxoVaT8BJ9U9hEYTe3lXPk8EkS3UA/VaYLJhiQBH39VqKst8zJL0
-fqrAkdZIej7jVjTsxKwdJCcuiilfuEy5TXm4r0rqpZnl5Zk/GmwShyw9Og4/p2/cMFgy6K9JmeJA
-S81EZEYCXa3reSRH2Q==
---00000000000027e2f005e71fe363--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAnpZKHveGGwup1DczYAhp
+380hJmwlJG48XK0hGqKIEDaPYOFavzstbt/uh1guK8IFksHkfFt+IERpRgJ0em754KGj07YhmdY4
+W3Lgh9rF7vI6icv4WJqSSZjFV5cMtisizjaYO/vkU6b4KVlKtYrY0oMYk4PsKYVxUg8zlWaYQv1m
+A04vsvkBAVc73azlqz3J/gLEt6LOEXst/cRhcErL6HaOzgKlqKfLBRzV+WuvKcw8zHScy0QODK2+
+GnceMqvvLtgPMPmE2uzu1+pnhaVlB6NklRLB7E/AmLTXZC0EoPht5fLU4NxJsgwUR3A0EfWx2gIx
+G5+q/mNJ77x3LiXNHg==
+--000000000000cd717905e71fe3ae--
