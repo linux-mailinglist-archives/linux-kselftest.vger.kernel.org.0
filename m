@@ -2,214 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4825A20A2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 08:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F53B5A20B5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 08:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiHZGFt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 02:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S229838AbiHZGOM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 02:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244621AbiHZGFs (ORCPT
+        with ESMTP id S232033AbiHZGOM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 02:05:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26713204F
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Aug 2022 23:05:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661493946;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lqh2n2750WP3Dgy6fwmu8zFAJxbNa0Ek7hJYWPU2vOg=;
-        b=aSDPCfIIGfndBi88FMpGG6HPQkrsPqNe3wxt8KQudjNte5+O5L9NcO0y9kCLk+I3CA5715
-        By7KpGe36LLowYJzDhB88vaIWTDX72EPESED835Gu/ETGpVQKFi1KsNO38ct1T0/kHPxL4
-        s7USfmDIQR5Wti34sW3lzyNRSg94YqE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-XrZySnM_PJeUU444C_7XHw-1; Fri, 26 Aug 2022 02:05:39 -0400
-X-MC-Unique: XrZySnM_PJeUU444C_7XHw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E497885A58A;
-        Fri, 26 Aug 2022 06:05:38 +0000 (UTC)
-Received: from [10.64.54.16] (vpn2-54-16.bne.redhat.com [10.64.54.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2893E945DD;
-        Fri, 26 Aug 2022 06:05:30 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-To:     Marc Zyngier <maz@kernel.org>, Peter Xu <peterx@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        pbonzini@redhat.com, corbet@lwn.net, james.morse@arm.com,
-        alexandru.elisei@arm.com, suzuki.poulose@arm.com,
-        oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org,
-        shuah@kernel.org, seanjc@google.com, dmatlack@google.com,
-        bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com,
-        shan.gavin@gmail.com
-References: <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org>
- <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
- <YwTc++Lz6lh3aR4F@xz-m1.local> <87bksawz0w.wl-maz@kernel.org>
- <YwVEoM1pj2MPCELp@xz-m1.local> <878rnewpaw.wl-maz@kernel.org>
- <YwVgaGp3HOGzC8k2@xz-m1.local> <87y1vdr98o.wl-maz@kernel.org>
- <YwZQHqS5DZBloYPZ@xz-m1.local> <877d2xweae.wl-maz@kernel.org>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <78c613e8-b600-119e-0d33-b049dd7c35ce@redhat.com>
-Date:   Fri, 26 Aug 2022 16:05:28 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Fri, 26 Aug 2022 02:14:12 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38934BCC38;
+        Thu, 25 Aug 2022 23:14:08 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id a65so678098pfa.1;
+        Thu, 25 Aug 2022 23:14:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=h6vPwvG1eOkQpAC5Em2N5b6VPCfvePS3xQSt2oOQck4=;
+        b=hm+bW9uGuVV9IQnmCk3BOzBf0iilvnUqTXRZaVhny7OquF+nPI51w1ezQOuQ7eeckr
+         YvZ6i7oqlf81Lc3vQ/WtSUpdRY+nIoZJzqQunkkqEO+Hm/Yr4RgUflRS60qPmu1In6em
+         H8LUA2EjRpBcEGeNxNx+WXnKKJa4N4gW8JTwPEpa505Zkt8l6+wNJEciDDQxzi0PfvfU
+         eEoEwvE1cMQfK5WCife6UJnTWhkCx6RJ8HSf9CnFxFZrLz71WSkEfjIfdRR28Zqv4Sjr
+         R6uAFfHEYMSS8LKa8jhLkWmoutgubzfuOxiHwfgCO27s9QUfMRtxS5lCi+tzfO8shti0
+         jbSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=h6vPwvG1eOkQpAC5Em2N5b6VPCfvePS3xQSt2oOQck4=;
+        b=WnVHcsNrcgy3EElJ0Mx7QVxocvKz+fiaFvHCw9J1pFzOzkIb1HDyekG9t5sE+/Z3FA
+         cXovIghEpAh7FRVziTKkcOh1098aiC4Mr2W0octFzj2oh1W57duAwzfwOSwkeJpj6xsb
+         fYigqgNt7vi3yG10WAlKZgq5vaMRXOiyLSCUNxKuhQBz8f0rl3Tf5RYNzpdMjGcNlq+5
+         hB+bliMB4HTMZCnhDso8zI4bazA2h/PhI+gUJ6zPE2x/R38lWuafBXcybP7eyCzczmJC
+         ojuxnBoEq5Fk2SKpTyGTeWYrpqZctzajW3oABGV8wvcL0r0/O8KglwDEh/cEUCUBDm4Y
+         aZOQ==
+X-Gm-Message-State: ACgBeo1wwsKLZnWIE52JN2B8UPA67stTBxUt/VykU6PkWkXEAIoJ1hG4
+        Q6gsNRqJH/kxudaNJ0Cr3P3Cg4qVe++z2WDjXvI=
+X-Google-Smtp-Source: AA6agR5oDZJR/frhZRnlNnAattouhZlDZJe50IAr5qsbrG2E6Lhav8BG/MU7GCv7+pk20zQVLxQCvml4Am01ngIr8ao=
+X-Received: by 2002:a63:fb4a:0:b0:429:8605:6ebf with SMTP id
+ w10-20020a63fb4a000000b0042986056ebfmr2051552pgj.225.1661494447719; Thu, 25
+ Aug 2022 23:14:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <877d2xweae.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220825221751.258958-1-james.hilliard1@gmail.com>
+ <20220826051630.glhrbdhiybtqwc4p@kafai-mbp.dhcp.thefacebook.com>
+ <CADvTj4rQdnd=V0tENFGCTtpTESwSCcwK+h3i9nZ75M+TywNWzA@mail.gmail.com> <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20220826054944.5bcx7unsyx4ts6ok@kafai-mbp.dhcp.thefacebook.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Fri, 26 Aug 2022 00:13:54 -0600
+Message-ID: <CADvTj4qNR+m2fQMMf9+=hMruhon8G_7yFC2_43-qhZ9X7ZW=8A@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix bind{4,6} tcp/socket header type conflict
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Marc,
+On Thu, Aug 25, 2022 at 11:49 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> On Thu, Aug 25, 2022 at 11:31:15PM -0600, James Hilliard wrote:
+> > On Thu, Aug 25, 2022 at 11:16 PM Martin KaFai Lau <kafai@fb.com> wrote:
+> > >
+> > > On Thu, Aug 25, 2022 at 04:17:49PM -0600, James Hilliard wrote:
+> > > > There is a potential for us to hit a type conflict when including
+> > > > netinet/tcp.h with sys/socket.h, we can replace both of these includes
+> > > > with linux/tcp.h to avoid this conflict.
+> > > >
+> > > > Fixes errors like:
+> > > > In file included from /usr/include/netinet/tcp.h:91,
+> > > >                  from progs/bind4_prog.c:10:
+> > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
+> > > >    34 | typedef __INT8_TYPE__ int8_t;
+> > > >       |                       ^~~~~~
+> > > > In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
+> > > >                  from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
+> > > >                  from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
+> > > >                  from progs/bind4_prog.c:9:
+> > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
+> > > >    24 | typedef __int8_t int8_t;
+> > > >       |                  ^~~~~~
+> > > > /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
+> > > >    43 | typedef __INT64_TYPE__ int64_t;
+> > > >       |                        ^~~~~~~
+> > > > /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
+> > > >    27 | typedef __int64_t int64_t;
+> > > >       |                   ^~~~~~~
+> > > > make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o] Error 1
+> > > >
+> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > > ---
+> > > >  tools/testing/selftests/bpf/progs/bind4_prog.c | 3 +--
+> > > >  tools/testing/selftests/bpf/progs/bind6_prog.c | 3 +--
+> > > >  2 files changed, 2 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c b/tools/testing/selftests/bpf/progs/bind4_prog.c
+> > > > index 474c6a62078a..6bd20042fd53 100644
+> > > > --- a/tools/testing/selftests/bpf/progs/bind4_prog.c
+> > > > +++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
+> > > > @@ -6,8 +6,7 @@
+> > > >  #include <linux/bpf.h>
+> > > >  #include <linux/in.h>
+> > > >  #include <linux/in6.h>
+> > > > -#include <sys/socket.h>
+> > > > -#include <netinet/tcp.h>
+> > > These includes look normal to me.  What environment is hitting this.
+> >
+> > I was hitting this error with GCC 13(GCC master branch).
+> These two includes (<sys/socket.h> and <netinet/tcp.h>) are normal,
+> so does it mean all existing programs need to change to use gcc 13 ?
 
-On 8/25/22 6:57 AM, Marc Zyngier wrote:
-> On Wed, 24 Aug 2022 17:21:50 +0100,
-> Peter Xu <peterx@redhat.com> wrote:
->>
->> On Wed, Aug 24, 2022 at 03:45:11PM +0100, Marc Zyngier wrote:
->>> On Wed, 24 Aug 2022 00:19:04 +0100,
->>> Peter Xu <peterx@redhat.com> wrote:
->>>>
->>>> On Tue, Aug 23, 2022 at 11:47:03PM +0100, Marc Zyngier wrote:
->>>>> Atomicity doesn't guarantee ordering, unfortunately.
->>>>
->>>> Right, sorry to be misleading.  The "atomicity" part I was trying to say
->>>> the kernel will always see consistent update on the fields.
->>>>
->>>> The ordering should also be guaranteed, because things must happen with
->>>> below sequence:
->>>>
->>>>    (1) kernel publish dirty GFN data (slot, offset)
->>>>    (2) kernel publish dirty GFN flag (set to DIRTY)
->>>>    (3) user sees DIRTY, collects (slots, offset)
->>>>    (4) user sets it to RESET
->>>>    (5) kernel reads RESET
->>>
->>> Maybe. Maybe not. The reset could well be sitting in the CPU write
->>> buffer for as long as it wants and not be seen by the kernel if the
->>> read occurs on another CPU. And that's the crucial bit: single-CPU is
->>> fine, but cross CPU isn't. Unfortunately, the userspace API is per-CPU
->>> on collection, and global on reset (this seems like a bad decision,
->>> but it is too late to fix this).
->>
->> Regarding the last statement, that's something I had question too and
->> discussed with Paolo, even though at that time it's not a outcome of
->> discussing memory ordering issues.
->>
->> IIUC the initial design was trying to avoid tlb flush flood when vcpu
->> number is large (each RESET per ring even for one page will need all vcpus
->> to flush, so O(N^2) flushing needed). With global RESET it's O(N).  So
->> it's kind of a trade-off, and indeed until now I'm not sure which one is
->> better.  E.g., with per-ring reset, we can have locality too in userspace,
->> e.g. the vcpu thread might be able to recycle without holding global locks.
-> 
-> I don't get that. On x86, each CPU must perform the TLB invalidation
-> (there is an IPI for that). So whether you do a per-CPU scan of the
-> ring or a global scan is irrelevant: each entry you find in any of the
-> rings must result in a global invalidation, since you've updated the
-> PTE to make the page RO.
-> 
-> The same is true on ARM, except that the broadcast is done in HW
-> instead of being tracked in SW.
-> 
-> Buy anyway, this is all moot. The API is what it is, and it isn't
-> going to change any time soon. All we can do is add some
-> clarifications to the API for the more relaxed architectures, and make
-> sure the kernel behaves accordingly.
-> 
-> [...]
-> 
->>> It may be safe, but it isn't what the userspace API promises.
->>
->> The document says:
->>
->>    After processing one or more entries in the ring buffer, userspace calls
->>    the VM ioctl KVM_RESET_DIRTY_RINGS to notify the kernel about it, so that
->>    the kernel will reprotect those collected GFNs.  Therefore, the ioctl
->>    must be called *before* reading the content of the dirty pages.
->>
->> I'd say it's not an explicit promise, but I think I agree with you that at
->> least it's unclear on the behavior.
-> 
-> This is the least problematic part of the documentation. The bit I
-> literally choke on is this:
-> 
-> <quote>
-> It's not necessary for userspace to harvest the all dirty GFNs at once.
-> However it must collect the dirty GFNs in sequence, i.e., the userspace
-> program cannot skip one dirty GFN to collect the one next to it.
-> </quote>
-> 
-> This is the core of the issue. Without ordering rules, the consumer on
-> the other side cannot observe the updates correctly, even if userspace
-> follows the above to the letter. Of course, the kernel itself must do
-> the right thing (I guess it amounts to the kernel doing a
-> load-acquire, and userspace doing a store-release -- effectively
-> emulating x86...).
-> 
->> Since we have a global recycle mechanism, most likely the app (e.g. current
->> qemu impl) will use the same thread to collect/reset dirty GFNs, and
->> trigger the RESET ioctl().  In that case it's safe, IIUC, because no
->> cross-core ops.
->>
->> QEMU even guarantees this by checking it (kvm_dirty_ring_reap_locked):
->>
->>      if (total) {
->>          ret = kvm_vm_ioctl(s, KVM_RESET_DIRTY_RINGS);
->>          assert(ret == total);
->>      }
->>
->> I think the assert() should never trigger as mentioned above.  But ideally
->> maybe it should just be a loop until cleared gfns match total.
-> 
-> Right. If userspace calls the ioctl on every vcpu, then things should
-> work correctly. It is only that the overhead is higher than what it
-> should be if multiple vcpus perform a reset at the same time.
-> 
->>
->>> In other words, without further straightening of the API, this doesn't
->>> work as expected on relaxed memory architectures. So before this gets
->>> enabled on arm64, this whole ordering issue must be addressed.
->>
->> How about adding some more documentation for KVM_RESET_DIRTY_RINGS on the
->> possibility of recycling partial of the pages, especially when collection
->> and the ioctl() aren't done from the same thread?
-> 
-> I'd rather tell people about the ordering rules. That will come at
-> zero cost on x86.
-> 
->> Any suggestions will be greatly welcomed.
-> 
-> I'll write a couple of patch when I get the time, most likely next
-> week. Gavin will hopefully be able to take them as part of his series.
-> 
+Well I think it's mostly just an issue getting hit with GCC-BPF as it
+looks to me like a cross compilation host/target header conflict.
 
-Thanks, Marc. Please let me know where I can check out the patches
-when they're ready. I can include the patches into this series in
-next revision :)
-
-Thanks,
-Gavin
-
-
+>
+> >
+> > > I don't prefer the selftest writers need to remember this rule.
+> > >
+> > > Beside, afaict, tcp.h should be removed because
+> > > I don't see this test needs it.  I tried removing it
+> > > and it works fine.  It should be removed instead of replacing it
+> > > with another unnecessary tcp.h.
+> >
+> > Oh, that does also appear to work, thought I had tried that already but I guess
+> > I hadn't, sent a v2 with them removed:
+> > https://lore.kernel.org/bpf/20220826052925.980431-1-james.hilliard1@gmail.com/T/#u
+> >
+> > >
+> > > > +#include <linux/tcp.h>
+> > > >  #include <linux/if.h>
+> > > >  #include <errno.h>
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/progs/bind6_prog.c b/tools/testing/selftests/bpf/progs/bind6_prog.c
+> > > > index c19cfa869f30..f37617b35a55 100644
+> > > > --- a/tools/testing/selftests/bpf/progs/bind6_prog.c
+> > > > +++ b/tools/testing/selftests/bpf/progs/bind6_prog.c
+> > > > @@ -6,8 +6,7 @@
+> > > >  #include <linux/bpf.h>
+> > > >  #include <linux/in.h>
+> > > >  #include <linux/in6.h>
+> > > > -#include <sys/socket.h>
+> > > > -#include <netinet/tcp.h>
+> > > > +#include <linux/tcp.h>
+> > > >  #include <linux/if.h>
+> > > >  #include <errno.h>
+> > > >
+> > > > --
+> > > > 2.34.1
+> > > >
