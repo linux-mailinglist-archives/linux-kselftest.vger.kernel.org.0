@@ -2,157 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3161E5A2B59
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 17:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C8C5A2BB3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 17:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344094AbiHZPf6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 11:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
+        id S1344663AbiHZPuR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 11:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243036AbiHZPfw (ORCPT
+        with ESMTP id S1344732AbiHZPtw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 11:35:52 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9263131ECD;
-        Fri, 26 Aug 2022 08:35:45 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MDkMv6kHZz9xFm3;
-        Fri, 26 Aug 2022 23:31:55 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwAHJREl6AhjIoFPAA--.24624S2;
-        Fri, 26 Aug 2022 16:35:16 +0100 (CET)
-Message-ID: <bb4bdd90017d5772bdc31dfac93f2e86c6c61b82.camel@huaweicloud.com>
-Subject: Re: [PATCH v12 02/10] btf: Handle dynamic pointer parameter in
- kfuncs
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel =?ISO-8859-1?Q?M=FCller?= <deso@posteo.net>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Joanne Koong <joannelkoong@gmail.com>
-Date:   Fri, 26 Aug 2022 17:34:57 +0200
-In-Reply-To: <YwjcItv0q8GdzPbb@kernel.org>
-References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
-         <20220818152929.402605-3-roberto.sassu@huaweicloud.com>
-         <YwhSCE0H+JfUe4Ew@kernel.org>
-         <CAADnVQJbTzfe28ife1+vg+ByLfyLBTCoEZW_eg8TEw838JGaog@mail.gmail.com>
-         <YwheJqUDLOxL3iTi@kernel.org> <YwjcItv0q8GdzPbb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwAHJREl6AhjIoFPAA--.24624S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KrWUCrW8JF18Xw17JF45Awb_yoW8ZFyDpa
-        ykAa9Fkr4UJr45CwnFqF4FyFnavr1Fqr1kury5J34FvFyqgrnFgFs2qw1Yka45Gr4kCF18
-        Xa10qry7X3W5AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAQBF1jj4JUwgAAsw
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 26 Aug 2022 11:49:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F7260E3;
+        Fri, 26 Aug 2022 08:49:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B19FEB831BF;
+        Fri, 26 Aug 2022 15:49:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FA0AC433D6;
+        Fri, 26 Aug 2022 15:49:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661528984;
+        bh=K54SpPn1dkF1YSkCv3pZX5DMshbcliLagDP1w7JkHK8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XyGtAHQC8bDQuh5z3roeuf3F7oOT/o24TT23/VB0gxzu/pRzuOmh7+qQIrWBSiYxX
+         +SIitVbdoYfIY2BQgQwcAGyXLjkqcYnDRsh24xpK5O2FuH5dbgYZ0Jyr2YPTWu3Sj9
+         B/PjOu5a0atbxONek8h/twl3bXND9jqNDTZmChRmPscKr3KwBiDyjvgf0dIAwxZBkU
+         xA0G/XSK7CrIGEMFg0RobNRKgCJNxfikx8UWoZevnrrdT8+2IFDGIsrhtq/yuhRWuH
+         +aJqN0S38A6pFafmjSqOO0plKjcIyGKVTyP51CRHkix/OOEWXrvSNjaExHGVOoMIMn
+         Tx3NWbRclwQuQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oRbaY-005zap-Bd;
+        Fri, 26 Aug 2022 16:49:42 +0100
+Date:   Fri, 26 Aug 2022 16:49:41 +0100
+Message-ID: <8735djvwbu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Peter Xu <peterx@redhat.com>, Gavin Shan <gshan@redhat.com>,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+        seanjc@google.com, dmatlack@google.com, bgardon@google.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory tracking
+In-Reply-To: <9e7cb09c-82c5-9492-bccd-5511f5bede26@redhat.com>
+References: <20220819005601.198436-1-gshan@redhat.com>
+        <20220819005601.198436-2-gshan@redhat.com>
+        <87lerkwtm5.wl-maz@kernel.org>
+        <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
+        <87fshovtu0.wl-maz@kernel.org>
+        <171d0159-4698-354b-8b2f-49d920d03b1b@redhat.com>
+        <YwTc++Lz6lh3aR4F@xz-m1.local>
+        <87bksawz0w.wl-maz@kernel.org>
+        <YwVEoM1pj2MPCELp@xz-m1.local>
+        <878rnewpaw.wl-maz@kernel.org>
+        <9e7cb09c-82c5-9492-bccd-5511f5bede26@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, peterx@redhat.com, gshan@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, corbet@lwn.net, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, seanjc@google.com, dmatlack@google.com, bgardon@google.com, ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2022-08-26 at 17:43 +0300, Jarkko Sakkinen wrote:
-> On Fri, Aug 26, 2022 at 08:46:14AM +0300, Jarkko Sakkinen wrote:
-> > On Thu, Aug 25, 2022 at 10:16:14PM -0700, Alexei Starovoitov wrote:
-> > > On Thu, Aug 25, 2022 at 9:54 PM Jarkko Sakkinen <
-> > > jarkko@kernel.org> wrote:
-> > > > > -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env
-> > > > > *env, struct bpf_reg_state *reg,
-> > > > > -                                  enum bpf_arg_type
-> > > > > arg_type)
-> > > > > +bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
-> > > > > struct bpf_reg_state *reg,
-> > > > > +                           enum bpf_arg_type arg_type)
-> > > > >  {
-> > > > >       struct bpf_func_state *state = func(env, reg);
-> > > > >       int spi = get_spi(reg->off);
-> > > > > --
-> > > > > 2.25.1
-> > > > > 
-> > > > 
-> > > > Might be niticking but generally I'd consider splitting
-> > > > exports as commits of their own.
-> > > 
-> > > -static bool
-> > > +bool
-> > > 
-> > > into a separate commit?
-> > > 
-> > > I guess it makes sense for people whose salary depends on
-> > > number of commits.
-> > > We don't play these games.
+On Fri, 26 Aug 2022 11:50:24 +0100,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> On 8/24/22 00:47, Marc Zyngier wrote:
+> >> I definitely don't think I 100% understand all the ordering things since
+> >> they're complicated.. but my understanding is that the reset procedure
+> >> didn't need memory barrier (unlike pushing, where we have explicit wmb),
+> >> because we assumed the userapp is not hostile so logically it should only
+> >> modify the flags which is a 32bit field, assuming atomicity guaranteed.
+> > Atomicity doesn't guarantee ordering, unfortunately. Take the
+> > following example: CPU0 is changing a bunch of flags for GFNs A, B, C,
+> > D that exist in the ring in that order, and CPU1 performs an ioctl to
+> > reset the page state.
 > > 
-> > What kind of argument is that anyway.
+> > CPU0:
+> >      write_flag(A, KVM_DIRTY_GFN_F_RESET)
+> >      write_flag(B, KVM_DIRTY_GFN_F_RESET)
+> >      write_flag(C, KVM_DIRTY_GFN_F_RESET)
+> >      write_flag(D, KVM_DIRTY_GFN_F_RESET)
+> >      [...]
+> > 
+> > CPU1:
+> >     ioctl(KVM_RESET_DIRTY_RINGS)
+> > 
+> > Since CPU0 writes do not have any ordering, CPU1 can observe the
+> > writes in a sequence that have nothing to do with program order, and
+> > could for example observe that GFN A and D have been reset, but not B
+> > and C. This in turn breaks the logic in the reset code (B, C, and D
+> > don't get reset), despite userspace having followed the spec to the
+> > letter. If each was a store-release (which is the case on x86), it
+> > wouldn't be a problem, but nothing calls it in the documentation.
+> > 
+> > Maybe that's not a big deal if it is expected that each CPU will issue
+> > a KVM_RESET_DIRTY_RINGS itself, ensuring that it observe its own
+> > writes. But expecting this to work across CPUs without any barrier is
+> > wishful thinking.
 > 
-> "Separate each *logical change* into a separate patch." [*]
+> Agreed, but that's a problem for userspace to solve.  If userspace
+> wants to reset the fields in different CPUs, it has to synchronize
+> with its own invoking of the ioctl.
 
-The logical change, as per the patch subject, is allowing the
-possibility of including eBPF dynamic pointers in a kfunc definition.
-It requires to call an existing function that was already defined
-elsewhere.
+userspace has no choice. It cannot order on its own the reads that the
+kernel will do to *other* rings.
 
-Maybe I'm wrong, but I don't see only exporting a function definition
-to an include file as a logical change. To me, the changes in this
-patch are clearly connected. Or even better, they tell why the function
-definition has been exported, that would not appear if moving the
-function definition is a standalone patch.
+> That is, CPU0 must ensure that a ioctl(KVM_RESET_DIRTY_RINGS) is done
+> after (in the memory-ordering sense) its last write_flag(D,
+> KVM_DIRTY_GFN_F_RESET).  If there's no such ordering, there's no
+> guarantee that the write_flag will have any effect.
 
-> 
-> To add, generally any user space visible space should be an
-> isolated patch.
+The problem isn't on CPU0 The problem is that CPU1 does observe
+inconsistent data on arm64, and I don't think this difference in
+behaviour is acceptable. Nothing documents this, and there is a baked
+in assumption that there is a strong ordering between writes as well
+as between writes and read.
 
-As far as I understood, definitions visible to user space should be in
-include/uapi.
+> The main reason why I preferred a global KVM_RESET_DIRTY_RINGS ioctl
+> was because it takes kvm->slots_lock so the execution would be
+> serialized anyway.  Turning slots_lock into an rwsem would be even
+> worse because it also takes kvm->mmu_lock (since slots_lock is a
+> mutex, at least two concurrent invocations won't clash with each other
+> on the mmu_lock).
 
-> 
-> Please, stop posting nonsense.
+Whatever the reason, the behaviour should be identical on all
+architectures. As is is, it only really works on x86, and I contend
+this is a bug that needs fixing.
 
-If I may, saying this does not encourage people to try to submit their
-code. I feel it is a bit strong, and I kindly ask you to express your
-opinion in a more gentle way.
+Thankfully, this can be done at zero cost for x86, and at that of a
+set of load-acquires on other architectures.
 
-Thanks
+	M.
 
-Roberto
-
+-- 
+Without deviation from the norm, progress is not possible.
