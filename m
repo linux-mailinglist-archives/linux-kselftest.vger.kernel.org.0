@@ -2,206 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5335A215A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 09:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705C15A2187
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Aug 2022 09:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244963AbiHZHCE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Aug 2022 03:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S244863AbiHZHPF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Aug 2022 03:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244842AbiHZHCD (ORCPT
+        with ESMTP id S233000AbiHZHPE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:02:03 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897D0BB035
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 00:02:01 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id x66so270755vkb.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Aug 2022 00:02:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=nEabPsOrfYIMhLxx05ZPFuViw/9YEltnfAc5V7jPU8Y=;
-        b=GoGHP2fc8TPWRBSwYhJT0A2pjKQ6EYia5E3YUnE89wE9RmYi/MjAI4pumXLJ0jqvLu
-         KZYfQ75tv0GECZ+gKVlTqvz1MituCgVmiP2PRixe+UpnVi8yTM2yhYo0UXxJv0oWdtgx
-         9iOfWVanXK7JvEP9y4M53ABCt1iaDhIoMGeaaFFtZKn6Wv7bMcRXdR7kWislZTzuyIG8
-         qgE/reBdacRkEAQg5vgqf99AwOANjkS6Kcuprv9gLZVGirR5oJ+N1n56Ajx/6yNj3dZ4
-         WRkFUn3W9i2Bi+djZGU76iUtyD93je9wZRDAin18bcaE844dJpeHh3o7vYz76iNHNi4v
-         2Olw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=nEabPsOrfYIMhLxx05ZPFuViw/9YEltnfAc5V7jPU8Y=;
-        b=GEdhDoHjQPeOt5DfQqvRGu3VHcmA0i+pNxmnGZWEv+Rh3fiKZeyJYvLKgLvogV/6Ok
-         9manQ94d1QUAwZTzLZqefz8x5BhIKYU5XHJuRetCrFT/UXZkdxrkMV4Os/z1OGfXE26P
-         jqf0yE7PaBDTg9k7n0Amm0NhmVneqaYPvb1C+9vhbd3EL3oYRJNYG7byV9JVv30Pvfum
-         PO30l2V36X0h6RjwYQPXgbN8g2/HmTBV5bfhdoAZg/I+VV/iLHX6b1BUfF8URjjEbqyc
-         SnpCfLdA3ptCZH4nYvcMFkO4P3sJIOkk79CRD/MEjO/NYw1/BMH2xNMBfbhVGOkUaKGA
-         xjiA==
-X-Gm-Message-State: ACgBeo3tJ63YghwiFAC/rn8VoYeDV8YG3KwSUg/C7ZZu/e4S8xW23nxY
-        B+cWgysvac4tenFmztc1RxDlk8nRo0uGIq1N/Kf9wg==
-X-Google-Smtp-Source: AA6agR5YIgRD7icrEPbMo91EGOok4fOYKpDJ8hyhpp8YDdFqB05P37vSLYM6jMxTZZTheFfN3bRbXt/+bNfyIynoR4k=
-X-Received: by 2002:a05:6122:178a:b0:380:c120:6760 with SMTP id
- o10-20020a056122178a00b00380c1206760mr2698897vkf.7.1661497320522; Fri, 26 Aug
- 2022 00:02:00 -0700 (PDT)
+        Fri, 26 Aug 2022 03:15:04 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A59963B2;
+        Fri, 26 Aug 2022 00:14:55 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MDWDD2JYwz9v7Gl;
+        Fri, 26 Aug 2022 15:09:32 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwCXUhrFcghjHMlQAA--.57474S2;
+        Fri, 26 Aug 2022 08:14:27 +0100 (CET)
+Message-ID: <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com>
+Subject: Re: [PATCH v12 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        corbet@lwn.net, dhowells@redhat.com, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri, 26 Aug 2022 09:14:09 +0200
+In-Reply-To: <YwhTiGOhzvv+CYYq@kernel.org>
+References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
+         <20220818152929.402605-5-roberto.sassu@huaweicloud.com>
+         <YwhTiGOhzvv+CYYq@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-References: <20220819053234.241501-1-tales.aparecida@gmail.com>
- <20220819053234.241501-3-tales.aparecida@gmail.com> <f0c491f2-39fd-b778-bc63-99b3338c6d8a@riseup.net>
-In-Reply-To: <f0c491f2-39fd-b778-bc63-99b3338c6d8a@riseup.net>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 26 Aug 2022 15:01:46 +0800
-Message-ID: <CABVgOSmbU+rrQsKYjiGcx95yJ-hyr5SS9W-oDCHRyH6Sfe_Cvg@mail.gmail.com>
-Subject: Re: [PATCH 2/8] Documentation: KUnit: avoid repeating "kunit.py run"
- in start.rst
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     Tales Aparecida <tales.aparecida@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, andrealmeid@riseup.net,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000009a7be605e71f7de7"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwCXUhrFcghjHMlQAA--.57474S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF15tryxWrWrCrWkXr15CFg_yoW8ur1DpF
+        W8G3Wj9F18Cry7A3s3JwnFyw1agrs7Gr17Xr9xWwn5ZanIqrn2qrn2gF15uFy5CrW09w1I
+        qFWjga17ur1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAQBF1jj35RKQAAsh
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000009a7be605e71f7de7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Fri, 2022-08-26 at 08:42 +0300, Jarkko Sakkinen wrote:
+> On Thu, Aug 18, 2022 at 05:29:23PM +0200, 
+> roberto.sassu@huaweicloud.com wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > In preparation for the patch that introduces the
+> > bpf_lookup_user_key() eBPF
+> > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> > able to
+> > validate the kfunc parameters.
+> > 
+> > Also, introduce key_lookup_flags_check() directly in
+> > include/linux/key.h,
+> > to reduce the risk that the check is not in sync with currently
+> > defined
+> > flags.
+> 
+> Missing the description what the heck this function even is.
+> 
+> Please, explain that.
 
-On Fri, Aug 19, 2022 at 7:04 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wr=
-ote:
->
-> Hi Tales
->
-> On 8/19/22 02:32, Tales Aparecida wrote:
-> > Combine two sections mentioning "kunit.py run" to streamline the
-> > getting-started guide.
-> >
-> > Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
+Hi Jarkko
+
+sorry, forgot to update the commit description. Will do it.
+
+> Also, the short subject is misleading because this *just*
+> does not move flags.
+> 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > Reviewed-by: KP Singh <kpsingh@kernel.org>
 > > ---
-> >  Documentation/dev-tools/kunit/start.rst | 38 ++++++++++---------------
-> >  1 file changed, 15 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/de=
-v-tools/kunit/start.rst
-> > index e730df1f468e..165d7964aa13 100644
-> > --- a/Documentation/dev-tools/kunit/start.rst
-> > +++ b/Documentation/dev-tools/kunit/start.rst
-> > @@ -19,7 +19,21 @@ can run kunit_tool:
-> >
-> >       ./tools/testing/kunit/kunit.py run
-> >
-> > -For more information on this wrapper, see:
-> > +If everything worked correctly, you should see the following:
+> >  include/linux/key.h      | 11 +++++++++++
+> >  security/keys/internal.h |  2 --
+> >  2 files changed, 11 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/linux/key.h b/include/linux/key.h
+> > index 7febc4881363..b5bbae77a9e7 100644
+> > --- a/include/linux/key.h
+> > +++ b/include/linux/key.h
+> > @@ -88,6 +88,17 @@ enum key_need_perm {
+> >  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
+> > deferred */
+> >  };
+> >  
+> > +#define KEY_LOOKUP_CREATE	0x01
+> > +#define KEY_LOOKUP_PARTIAL	0x02
 > > +
-> > +.. code-block::
+> 
+> /*
+>  * Explain what the heck this function is.
+>  */
+> > +static inline int key_lookup_flags_check(u64 flags)
+> > +{
+> > +	if (flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
+> > +		return -EINVAL;
 > > +
-> > +     Generating .config ...
->
-> When I run ./tools/testing/kunit/kunit.py run, I usually see
-> "Configuring KUnit Kernel ..." instead of "Generating .config ...".
-> Maybe there was a change in the code that didn't reflect on the docs.
->
+> > +	return 0;
+> > +}
+> 
+> This is essentially a boolean function, right?
+> 
+> I.e. the implementation can be just:
+> 
+> !!(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
 
-FYI, The "Generating .config..." message will only appear if there's
-no .config file present in the build dir. Since this is the case the
-first time kunit_tool is used, it makes sense to mention it here in
-the "Getting Started" docs, IMHO.
+Absolutely fine with that, if you prefer.
 
-Cheers,
--- David
+> Not even sure if this is needed in the first place, or
+> would it be better just to open code it. How many call
+> sites does it have anyway?
+> 
 
---0000000000009a7be605e71f7de7
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Daniel preferred to have this check here.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDM
-Cizit2CYi+Po7iHI61hdM1Pz0e4JuL/NYSBisvlyqDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA4MjYwNzAyMDBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAMGvx4tgK1pbYQPA3f6dN
-/EmQiFaWBkpct8WQ7tbAYfntprvSVMYN9IVOwKxse16btWChe7ASzsXptVNdEqH9yKcB7CA96LWB
-lN6pMf6pIkCgSZ0v71YNDlNEbMTDUnyM+m9OLqdRaAHj2xQqhnXUGM0/Kgu59xHt6MIRQqWDVedx
-g+6fyoFYLqe2SIdk0F8TBwWxLvihKt/g6+pebA+KZRlZZPHWdQ4RAqEIJEDiu2e6kPZB3ITDCa12
-LmBulaE+HTIzmv5xgAKUaj8e36Gd38wqgicZbUvWoPYOxKTMDA4ghAOLUWS9RqaqHhZischB2+Tl
-V/O+hCTfM8WrKPbBHQ==
---0000000000009a7be605e71f7de7--
+Thanks
+
+Roberto
+
