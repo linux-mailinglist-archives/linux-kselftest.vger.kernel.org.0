@@ -2,65 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5F65A3800
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Aug 2022 15:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693715A3851
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Aug 2022 17:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbiH0Ny2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 27 Aug 2022 09:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S232200AbiH0PTR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 27 Aug 2022 11:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiH0Ny1 (ORCPT
+        with ESMTP id S230024AbiH0PTP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 27 Aug 2022 09:54:27 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61592FFEF
-        for <linux-kselftest@vger.kernel.org>; Sat, 27 Aug 2022 06:54:25 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id se27so41887ejb.8
-        for <linux-kselftest@vger.kernel.org>; Sat, 27 Aug 2022 06:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=8CiaLkECx3krBdKp6oIvGxj9L4zpqrT521rHLsVwe9c=;
-        b=g1jkYz6hbaud7MJPfP0jk8kKHIWsdovgRzcgSUPODZpbjnDzLbWqeUUvMfhcoOvP2o
-         htWSK5oUojOo772tVxb2ovafBDv5nHDssuSAXh0GJ8cr7DNbVH/vcT15T6DsrywtkG5L
-         9N2MXav1SOO5iaoM2/si+QncOtmAC0ORMqsdfWEui/zHqOVusXm259fNbVucOTCO+opN
-         5uXJo1y/7kZboMlhv5jq7zi5Bl/1QIwfHlz+GnMU49Cg/+iICR3oJzR79/HXC4KyJO1N
-         JcH24SsTQu4KQUwyRQaXQbX4+AADrP7Ie842gQXGkPCgI4H7n1r5lA5bPBLHy+glgCN6
-         L/Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=8CiaLkECx3krBdKp6oIvGxj9L4zpqrT521rHLsVwe9c=;
-        b=etArQw2kKZO3VFZUJmHUsNMjSHb9hBlYnLTL9Wp1lVlE2EfMPPRKl9rHRSxceiB1ac
-         TDYhzZ0qBKjDi2Q2Bav9OAKUSufd+jSlWv0nAeobtiM5uS6RIwPRPZSETXToYaAw2iC9
-         xCHT6vfN4Sj4/mJcu7+Wdo2EGVV5is89hiemToULdbE3MIlsCnUUuF2AnV5IxPprG1HU
-         gCHVvFCQQZDjx+R4XnZjaXQCXA3CU1JY4Z4RCJSiqiiRbqCNCWJstx2AMb0Fy+AH4xCM
-         0jSZg3EF8OKU+O8g1F/TKUQUQGSKZKfM3keMzGQqPtZ5VjrUSe+f0cX233PhR06Xoizv
-         kPTQ==
-X-Gm-Message-State: ACgBeo2b18VbFiHCiBVbQq0CUF5xqaHLUWzVU/O8NpVLLPWcymnEEwZc
-        DZeX9aF7zv73x5XheOoCyYOErA==
-X-Google-Smtp-Source: AA6agR7Ggm9FNAtOJDfVc+2duDQAqokmt0wFwHO5MhLEgQCeXkyrdXp9PBkVxYqT3pzjDOoS/CBgwA==
-X-Received: by 2002:a17:906:6a03:b0:730:a20e:cf33 with SMTP id qw3-20020a1709066a0300b00730a20ecf33mr8607603ejc.620.1661608464159;
-        Sat, 27 Aug 2022 06:54:24 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id c17-20020a17090618b100b007311eb42e40sm2107674ejf.54.2022.08.27.06.54.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Aug 2022 06:54:23 -0700 (PDT)
-Message-ID: <d1de0337-ae16-7dca-b212-1a4e85129c31@blackwall.org>
-Date:   Sat, 27 Aug 2022 16:54:21 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
- extend locked port feature
-Content-Language: en-US
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Hans Schultz <netdev@kapio-technology.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
+        Sat, 27 Aug 2022 11:19:15 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF583FA01;
+        Sat, 27 Aug 2022 08:19:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jf8iD2VWNWSNak9AyPCaRymwgAZtN253+nVlElfkOhhDPQvmxwkuHS47qmvSRm/frrEWH5hnPfa3KT02Cxtm5dlMX7SA7Id2UbTr1g1Q2oU/s2Skf/W+Rd+INgicWdnXT7QiXagSbxKJWXJ25I6JIiYZDZtu7i8TI1xSKonMuQ76A0RG/vso2kJZDO4UQUlPq5h4u6V2dpDca7MQyRQlelMm2qQ91t/x3b3ZuqbT2n3uBmSbblq959yvdwYdp64iBjthd0OG2++sl834ypdMzFodyze7mFtHpVAS5GtmSTj7Wmf5MQrojO4EOHkv0Qz0/iGDrhpWKRkIijNFif3/dA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=khDW3a22wMfvB0Ciwx9Vs3jJCDNLmXL+yGA1akJm1XY=;
+ b=kF/BWFPlvbUlL0P2b3TC2DHG0MS7sVq/tRSPX8EJYl8qevQj3tCTJQIC3fObN3a3RzDqQgn24Sac0MEHnyrYWu1dcQzKZNxq8mnsqGhfoMSmn9kHEdMN7mEFNPhbNKUNLSlin+35KZ5hIYa1PN/uMwntSqk/L1x9+WLDdVmouRzjplvjtt1xvrt/0IgEQW9Ypmip4J5BQaTkWwMY/ssAvUiGdSBn4e3sgzaLe53qJH6wGMLvYrZWLo7lLYZd9rGtIfSCJTiPy2xL/AbDk6vnbRRozNHo18PlCWOqDTrKwoSNHjgG88KJVh8Pohu7h5r5+f660oNTeyY/scbbEZkR4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=khDW3a22wMfvB0Ciwx9Vs3jJCDNLmXL+yGA1akJm1XY=;
+ b=UWbEkhMjMveErCXb/dIh2QodYKPBO417vT7ckPjxFXAV0lAsdgJA+xkLUt9h1dgvnxnMmIzdymvk9x6M+855Wd6FW0tEUTISolG0RgoZqFvmIWsr+Q7bhBSXJbuMWIb/m5QGNZiRBGZwNMkseBQHT82zY7EAB/ZcBaCpJE828FOYov8WIQT/8t3iYpGTB1FA1VmyODppnpDLF/idFs6XzAJ7yr/OB8NLJm1LnN7UUnSuUPhDLAGgIl3lBNyv7yIgyA7Kh1TNPJ988b+Eaxj4F5WwG/apE3efkGaNH6AFTJF24bfo39VV20CJH/u5LFPqeQeH7Oo5XwxpGeho7bAQ3g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7SPRMB0001.namprd12.prod.outlook.com (2603:10b6:510:13c::20)
+ by DS7PR12MB6237.namprd12.prod.outlook.com (2603:10b6:8:97::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Sat, 27 Aug
+ 2022 15:19:13 +0000
+Received: from PH7SPRMB0001.namprd12.prod.outlook.com
+ ([fe80::3ca6:ba11:2893:980e]) by PH7SPRMB0001.namprd12.prod.outlook.com
+ ([fe80::3ca6:ba11:2893:980e%6]) with mapi id 15.20.5504.025; Sat, 27 Aug 2022
+ 15:19:12 +0000
+Date:   Sat, 27 Aug 2022 18:19:06 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -78,101 +62,278 @@ Cc:     Hans Schultz <netdev@kapio-technology.com>, davem@davemloft.net,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Jiri Pirko <jiri@resnulli.us>,
         Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
         Christian Marangi <ansuelsmth@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Yuwei Wang <wangyuweihx@gmail.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag
+ to extend locked port feature
+Message-ID: <Ywo16vHMqxxszWzX@shredder>
 References: <20220826114538.705433-1-netdev@kapio-technology.com>
  <20220826114538.705433-2-netdev@kapio-technology.com>
- <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
- <YwoZdzVCkMV8vGtl@shredder>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <YwoZdzVCkMV8vGtl@shredder>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826114538.705433-2-netdev@kapio-technology.com>
+X-ClientProxiedBy: VI1P194CA0047.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:803:3c::36) To PH7SPRMB0001.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 15e2b5d1-4848-43c9-f89a-08da883f7f38
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6237:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j0WJVMo0TAEqv5AoEqKjE4AOqM2VvBRjGovGWwYSOjt/afdtmR/dDWjePsAB2OfzmUjDhcELVAQOgiRDO6krWeWGOd0IFGIe5p1ckJCWEHgAELabbkD/Yj9H671q7BKAwAVAzJ3kgKIbFEwHy88XNY3tzcg/FtBN9ZshfHproMVkSguVwWZRHIQlxAtEs0WU0GApGa3SxeBv7BWp4ywXgT+4kimiJxvqprAR/8gghRPbT27cyp0Tk+eeh25D7uQEB1uk0UgmyqHByFNxxowZEgxX1KKHWDsCbcN5WJYl6wmkeTPc0n+WbafjsJna51rMCpuJenV/NlUpMw25Id20wZeDs6qti7tdvidO5IMaAPat1BsTduXDY2RIAXP2YtS6258iPy80UrJ/gcTevDB/bw1qJ8kPHx7K+O4C+AXLtSfIKZXEZzzyJe1ovHGQclqrpk/759SiHCd9bse6rmf13l/GOrqaX5LoJ/82XDn6ENJiiwWbF8Xhv5dvHrk/5+mAKxjvjd5tQGHxAv2d2VveKM4UcJC36EUsBd1rBV02wwZFOyKY2DUacH/4z/W76iVC1z+5MGVZCKrlHlJQ4R395bDhs9wSzpOozORTABEIDzrKO1bVEVe0XxZ+BInG9ZAOwhJL10CR4X9YanXZqQXZ/fBJlEUEEf1HyIiOWd2xWMvADRAZs13W+XYGQv5QrdzOX89335tmxKEhDD2rTvO33A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7SPRMB0001.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(136003)(376002)(39860400002)(366004)(346002)(396003)(86362001)(38100700002)(316002)(54906003)(6916009)(2906002)(6666004)(7406005)(66476007)(66946007)(7416002)(5660300002)(66556008)(8676002)(4326008)(66574015)(186003)(83380400001)(478600001)(26005)(6486002)(6506007)(33716001)(41300700001)(9686003)(6512007)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SfuhZGFnQAImrWAeAkGECEgRIvjJ68mh8cgX3EQLLWB2kBwsX+ZldV9lX0Nl?=
+ =?us-ascii?Q?ZQj/MWVRj3fYkBi73CMd8E03R9h9BDOY18JQM2t3877IhLxfF/1HLrvzW9c/?=
+ =?us-ascii?Q?zPjvkQwXOMRSK3u27MlTgIOsNPMS2rivemu42f1XLaqQbK2mv2z5pkrbwJiw?=
+ =?us-ascii?Q?UBb90L4jYEDtjbx6BpQEWoKS/XMDEqDBfTAeoFhQqsEBrXso0cC6/TuJRPlX?=
+ =?us-ascii?Q?rurFFd9MAqebKyjA5FlfGNzTVOWGSHef7t1SScm4GWcJe13bjHWG2o+4BxsC?=
+ =?us-ascii?Q?gY6tucENe3e59o6tNWMMojAxK0lNBVMpq6BDIapIsRKrrE3vsUFQDhCVrhMH?=
+ =?us-ascii?Q?cy9r3h+c6mEK15hTR2HWtojcIa63DsS2/RTDWqvKTolf2e/Wy6JS3gJx8wUH?=
+ =?us-ascii?Q?Eq735/toSCM51TLEIJH7TifLWVZrkC6eNEr8up8r2nvUp1L3v4wQYQQD3my3?=
+ =?us-ascii?Q?U7uRwTgmBVaEKChi56OMT9EiSx19DY3D4teDZ4jLLpIuEWaVmy2ozurXMsKO?=
+ =?us-ascii?Q?xqewB1v/AJTLqfWTf9GrL1WQV0OdY4yiP9OZMmuQ6iXAZ4omk6az4W8ab636?=
+ =?us-ascii?Q?dRJl1xn6rLucEHlQDpaV1a+V/875KAtKO0Wm/35g+1OeyiZnUSp+3D0TSBG5?=
+ =?us-ascii?Q?S3HQn/cHjeh6KV5somefB5W6L7rsEnSJ+v6dgAJjmkK9BDUXtjIuzP1fFInV?=
+ =?us-ascii?Q?Y0QVlW2hkDBvmJY33TpfDH7P+qsCjgs0wwS0N/iMBlJ/qRQfB17vVQyPouhz?=
+ =?us-ascii?Q?zfRUrwHzDHeawrEM8ry79lo7WMDH6EhKmtYuN9gaHPiuugReRVNp89yZgU7H?=
+ =?us-ascii?Q?IPHoj/jXnIL2V/LhOLKB1ra1olO6bMD4OB9GxoX5JTmHmpYwzwnjy7lmpwzU?=
+ =?us-ascii?Q?8I598CM44jom1aAmZt4lLGMZ3jUYJq7oLhhm8RjXRHDk4kU/eoB8u0qtbd6b?=
+ =?us-ascii?Q?jeO/iNr55EWfM40707EFkhYKa1ut3b6TPyNtzyl4eV9J1ociy09tIbllL5QP?=
+ =?us-ascii?Q?aNKh8WZeTX5QAG3L8pfv9y/R70gImn48mrE6blEOH/wkYviao9nY0oN8vUsw?=
+ =?us-ascii?Q?9eJKVg6UlVEhremWtJO9PaapEaGQHGORh7Xd8pi1nOlDa0r9kOLjGMLtEgWb?=
+ =?us-ascii?Q?Sf8PAB7Kx7bjtem8KgPX2I9DDIdC5DYeJnHUiATjLVVEMpY1he/iV0zmxvgD?=
+ =?us-ascii?Q?aN01HzyTG2L2H8QyS2p5GTSLB2MpYAfk+0OTQksRlU7lzSVNvYt4wXlToU5H?=
+ =?us-ascii?Q?x8f+b+7A96uYOFG950Rojrx5/ulGdIA1TxLp8W8sU4zgrBj+LHLJBJRQ5OAr?=
+ =?us-ascii?Q?fz+yi4iDRuYKfgjA9oAG/+LWB9ntIMFb++ULTNygZL2aUTPCYKxqG6m9rone?=
+ =?us-ascii?Q?nfTr0LM7HKfGQhqx3ryvIkTM45b9dAWi7Qz8M2FUm0pcDZt7kuLrp7kTWR7G?=
+ =?us-ascii?Q?BLDqS4BDIFdjfxMkctKp3IcTFwm+Xm2Xz8ttBjy1dPmQMV8WCdAn1qCG7TRl?=
+ =?us-ascii?Q?1t6ieFhXGs+dvrxA084a80bbM8y48mBk3rXstoSxz6MzQ74wI4Uhaei3621u?=
+ =?us-ascii?Q?uDAFbehtGavsbTlWxWTYv3CFLvtFdMqnwp+aQc75?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15e2b5d1-4848-43c9-f89a-08da883f7f38
+X-MS-Exchange-CrossTenant-AuthSource: PH7SPRMB0001.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2022 15:19:12.8227
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ++3F6nq+ng4J/JYiUvatWkhvY2+u9CEhARtCL6b9lP94OlJOlXpl7tzE3lWnn8CMLaq9uxnZ9s5+bCebr7V8KA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6237
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 27/08/2022 16:17, Ido Schimmel wrote:
-> On Sat, Aug 27, 2022 at 02:30:25PM +0300, Nikolay Aleksandrov wrote:
->> On 26/08/2022 14:45, Hans Schultz wrote:
->> Please add the blackhole flag in a separate patch.
-> 
-> +1
-> 
-> [...]
-> 
->>> @@ -185,6 +196,9 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
->>>  		if (test_bit(BR_FDB_LOCAL, &dst->flags))
->>>  			return br_pass_frame_up(skb);
->>>  
->>> +		if (test_bit(BR_FDB_BLACKHOLE, &dst->flags))
->>> +			goto drop;
->>> +
->> Not happy about adding a new test in arguably the most used fast-path, but I don't see
->> a better way to do blackhole right now. Could you please make it an unlikely() ?
->>
->> I guess the blackhole flag will be allowed for user-space to set at some point, why
->> not do it from the start?
->>
->> Actually adding a BR_FDB_LOCAL and BR_FDB_BLACKHOLE would be a conflict above -
->> the packet will be received. So you should move the blackhole check above the
->> BR_FDB_LOCAL one if user-space is allowed to set it to any entry.
-> 
-> Agree about unlikely() and making it writeable from user space from the
-> start. This flag is different from the "locked" flag that should only be
-> ever set by the kernel.
-> 
-> Regarding BR_FDB_LOCAL, I think BR_FDB_BLACKHOLE should only be allowed
-> with BR_FDB_LOCAL as these entries are similar in the following ways:
-> 
-> 1. It doesn't make sense to associate a blackhole entry with a specific
-> port. The packet will never be forwarded to this port, but dropped by
-> the bridge. This means user space will add them on the bridge itself:
-> 
+On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
+> diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
+> index a998bf761635..bc1440a56b70 100644
+> --- a/include/uapi/linux/neighbour.h
+> +++ b/include/uapi/linux/neighbour.h
+> @@ -52,7 +52,9 @@ enum {
+>  #define NTF_STICKY	(1 << 6)
+>  #define NTF_ROUTER	(1 << 7)
+>  /* Extended flags under NDA_FLAGS_EXT: */
+> -#define NTF_EXT_MANAGED	(1 << 0)
+> +#define NTF_EXT_MANAGED		(1 << 0)
+> +#define NTF_EXT_LOCKED		(1 << 1)
+> +#define NTF_EXT_BLACKHOLE	(1 << 2)
 
-Right, good point.
+A few lines below in the file there is a comment explaining
+NTF_EXT_MANAGED. Please document NTF_EXT_LOCKED and NTF_EXT_BLACKHOLE as
+well.
 
-> # bridge fdb add 00:11:22:33:44:55 dev br0 self local blackhole
-> 
-> 2. If you agree that these entries should not be associated with a
-> specific port, then it also does not make sense to subject them to
-> ageing and roaming, just like existing local/permanent entries.
-> 
-> The above allows us to push the new check under the BR_FDB_LOCAL check:
-> 
+>  
+>  /*
+>   *	Neighbor Cache Entry States.
 
-hmm.. so only the driver will be allowed to add non-BR_FDB_LOCAL blackhole
-entries with locked flag set as well, that sounds ok as they will be extern_learn
-and enforced by it. It is a little discrepancy as we cannot add similar entries in SW
-but it really doesn't make any sense to have blackhole fdbs pointing to a port.
-SW won't be able to have a locked entry w/ blackhole set, but I like that it is hidden
-in the fdb local case when fwding and that's good enough for me.
+[...]
 
+> @@ -1082,6 +1095,16 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
+>  		modified = true;
+>  	}
+>  
+> +	if (test_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags)) {
+> +		clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags);
+> +		modified = true;
+> +	}
+
+Should be able to use test_and_clear_bit():
+
+diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+index e7f4fccb6adb..e5561ee2bfac 100644
+--- a/net/bridge/br_fdb.c
++++ b/net/bridge/br_fdb.c
+@@ -1082,6 +1082,9 @@ static int fdb_add_entry(struct net_bridge *br, struct net_bridge_port *source,
+                modified = true;
+        }
+ 
++       if (test_and_clear_bit(BR_FDB_ENTRY_LOCKED, &fdb->flags))
++               modified = true;
++
+        if (fdb_handle_notify(fdb, notify))
+                modified = true;
+
+> +
+> +	if (test_bit(BR_FDB_BLACKHOLE, &fdb->flags)) {
+> +		clear_bit(BR_FDB_BLACKHOLE, &fdb->flags);
+> +		modified = true;
+> +	}
+
+This will need to change to allow user space to set the flag.
+
+> +
+>  	if (fdb_handle_notify(fdb, notify))
+>  		modified = true;
+>  
+> @@ -1178,6 +1201,12 @@ int br_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
+>  		vg = nbp_vlan_group(p);
+>  	}
+>  
+> +	if (tb[NDA_FLAGS_EXT] &&
+> +	    (nla_get_u32(tb[NDA_FLAGS_EXT]) & (NTF_EXT_LOCKED | NTF_EXT_BLACKHOLE))) {
+> +		pr_info("bridge: RTM_NEWNEIGH has invalid extended flags\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	if (tb[NDA_FDB_EXT_ATTRS]) {
+>  		attr = tb[NDA_FDB_EXT_ATTRS];
+>  		err = nla_parse_nested(nfea_tb, NFEA_MAX, attr,
 > diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
-> index 68b3e850bcb9..4357445529a5 100644
+> index 68b3e850bcb9..3d48aa7fa778 100644
 > --- a/net/bridge/br_input.c
 > +++ b/net/bridge/br_input.c
-> @@ -182,8 +182,11 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
->         if (dst) {
->                 unsigned long now = jiffies;
+> @@ -110,8 +110,19 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+>  			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
 >  
-> -               if (test_bit(BR_FDB_LOCAL, &dst->flags))
-> +               if (test_bit(BR_FDB_LOCAL, &dst->flags)) {
-> +                       if (unlikely(test_bit(BR_FDB_BLACKHOLE, &dst->flags)))
-> +                               goto drop;
->                         return br_pass_frame_up(skb);
-> +               }
->  
->                 if (now != dst->used)
->                         dst->used = now;
+>  		if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
+> -		    test_bit(BR_FDB_LOCAL, &fdb_src->flags))
+> +		    test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
+> +		    test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags)) {
+> +			if (!fdb_src || (READ_ONCE(fdb_src->dst) != p &&
+> +					 (p->flags & BR_LEARNING))) {
 
+It looks like you are allowing a locked port to:
+
+1. Overtake a local entry. Actually, it will be rejected by
+br_fdb_update() with a rate limited error message, but best to avoid it.
+
+2. Overtake an entry pointing to an unlocked port. There is no reason
+for an authorized port to lose communication because an unauthorized
+port decided to spoof its MAC.
+
+> +				unsigned long flags = 0;
+> +
+> +				if (p->flags & BR_PORT_MAB) {
+> +					__set_bit(BR_FDB_ENTRY_LOCKED, &flags);
+> +					br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, flags);
+> +				}
+> +			}
+>  			goto drop;
+> +		}
+>  	}
+
+How about the below (untested):
+
+diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+index 68b3e850bcb9..9143a94a1c57 100644
+--- a/net/bridge/br_input.c
++++ b/net/bridge/br_input.c
+@@ -109,9 +109,18 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+                struct net_bridge_fdb_entry *fdb_src =
+                        br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
+ 
+-               if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
+-                   test_bit(BR_FDB_LOCAL, &fdb_src->flags))
++               if (!fdb_src) {
++                       if (p->flags & BR_PORT_MAB) {
++                               __set_bit(BR_FDB_ENTRY_LOCKED, &flags);
++                               br_fdb_update(br, p, eth_hdr(skb)->h_source,
++                                             vid, flags);
++                       }
++                       goto drop;
++               } else if (READ_ONCE(fdb_src->dst) != p ||
++                          test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
++                          test_bit(BR_FDB_LOCKED, &fdb_src->flags)) {
+                        goto drop;
++               }
+        }
+
+The semantics are very clear, IMO. On FDB miss, add a locked FDB entry
+and drop the packet. On FDB mismatch, drop the packet.
+
+Entry can roam from an unauthorized port to an authorized port, but not
+the other way around. Not sure what is the use case for allowing roaming
+between unauthorized ports. 
+
+Note that with the above, locked entries are not refreshed and will
+therefore age out unless replaced by user space.
+
+>  
+>  	nbp_switchdev_frame_mark(p, skb);
+> @@ -943,6 +946,10 @@ static int br_setport(struct net_bridge_port *p, struct nlattr *tb[],
+>  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS, BR_NEIGH_SUPPRESS);
+>  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+>  	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
+> +	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
+> +
+> +	if (!(p->flags & BR_PORT_LOCKED))
+> +		p->flags &= ~BR_PORT_MAB;
+
+Any reason not to emit an error if MAB is enabled while the port is
+unlocked? Something like this (untested):
+
+diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+index 5aeb3646e74c..18353a4c29e1 100644
+--- a/net/bridge/br_netlink.c
++++ b/net/bridge/br_netlink.c
+@@ -944,6 +944,12 @@ static int br_setport(struct net_bridge_port *p, struct nlattr *tb[],
+        br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+        br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
+ 
++       if (!(p->flags & BR_PORT_LOCKED) && (p->flags & BR_PORT_MAB)) {
++               NL_SET_ERR_MSG(extack, "MAB cannot be enabled when port is unlocked");
++               p->flags = old_flags;
++               return -EINVAL;
++       }
++
+        changed_mask = old_flags ^ p->flags;
+ 
+        err = br_switchdev_set_port_flag(p, p->flags, changed_mask, extack);
+
+>  
+>  	changed_mask = old_flags ^ p->flags;
+>  
+> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+> index 06e5f6faa431..048e4afbc5a0 100644
+> --- a/net/bridge/br_private.h
+> +++ b/net/bridge/br_private.h
+> @@ -251,7 +251,9 @@ enum {
+>  	BR_FDB_ADDED_BY_EXT_LEARN,
+>  	BR_FDB_OFFLOADED,
+>  	BR_FDB_NOTIFY,
+> -	BR_FDB_NOTIFY_INACTIVE
+> +	BR_FDB_NOTIFY_INACTIVE,
+> +	BR_FDB_ENTRY_LOCKED,
+> +	BR_FDB_BLACKHOLE,
+>  };
+>  
+>  struct net_bridge_fdb_key {
+> -- 
+> 2.30.2
+> 
