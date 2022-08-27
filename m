@@ -2,42 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79455A359B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Aug 2022 09:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7562C5A35AA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Aug 2022 09:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiH0Hdq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 27 Aug 2022 03:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        id S232059AbiH0Hpc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 27 Aug 2022 03:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiH0Hdp (ORCPT
+        with ESMTP id S229448AbiH0Hpb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 27 Aug 2022 03:33:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68B3D5E8D;
-        Sat, 27 Aug 2022 00:33:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70AD961038;
-        Sat, 27 Aug 2022 07:33:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD40C433D6;
-        Sat, 27 Aug 2022 07:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661585622;
-        bh=giZkjh8xIX7OLdiLms+YBs4HrAHKy5n6GgXJJ9Rxw5M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GotHA4ufyuPS6D6vahpustucrULvYRqVwd9McC0OV5QK1NjS7qPTaw1Ed7PjWFo0Q
-         EDAwn8TeHLSfhfwrasMB6pDk6cdLipLPNsaufe/yHangc1TFUP9MzlV8ar3n5/91Sd
-         Df776/jGiXQsxyggHcW8D/LGVVYHySCD9y58E3XI=
-Date:   Sat, 27 Aug 2022 09:33:56 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Sat, 27 Aug 2022 03:45:31 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CAE766E;
+        Sat, 27 Aug 2022 00:45:29 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id f24so705549plr.1;
+        Sat, 27 Aug 2022 00:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=MW9XiDm5TEyHTMt64geez1Y9EaOyTSWqr/veHEG1pHc=;
+        b=mMytdrhGcNtVe4F+FPJ9h2qtSgm7tV8neZRZp6lQ+Z8nnBKXe98u0mhTCiPlRbcf5e
+         /1KnomukCs/u1WC+ABAupLGqlDEmDK1SS50VMs3QXiQGyiFhyD37Pe8X3+nPNWOdGwbe
+         Q8caIRb5jCyig2tdoQ4ZFC9/rBOBy2pyVTL232xc5mYcy+VdH/gzG9QN1MPuY6iB4hKk
+         uHLyxtHD1APTDStoLT7E7RRXgs1owHveJ/YjdCupOZgGK2ptBB+pFD4dQBsMb15uvPV1
+         7REeP8EYtRzTwJ1hFDkfTdofCPYtS1VwpGuGM0oytY3qfDl6YJLcORo1fx6b4wAcZrQS
+         41pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=MW9XiDm5TEyHTMt64geez1Y9EaOyTSWqr/veHEG1pHc=;
+        b=eqRiIZNODHDkgXsejs1TrfCHli75iPSlTAkaD9Wz4nCFhXvXpk3bk9ICZwBZnqHlt3
+         qv2I1q/GZbk1KawwjC+j0RPmRerWT1mfZpnWV3SOUZWaOVRLTHoyCztHGoOIgIVIZBMc
+         iN7mHQk4wevLZ3ACZCdp+Uz2M2/9k9Lv8Zwf1FxdCWZzvYvmWmqd2RFzPZNX6k/E6yYx
+         FdQdpE2muzPSYtSIswG4s7x7tFjoBtoZ5RPROBMsC2axQPfPBi0mhgTwuUqtYZ84uIPy
+         nyBXyGLK+48W3HT0fhYSNkUSIf/kYn9XJmCW51NIU7YuImCO7R1t5dJh5XWTO/TeqwwE
+         lpig==
+X-Gm-Message-State: ACgBeo3Ktgn+Cf2AuWHftUDqWZAhNl94yHh0j2YAz7PVbJD5mZSnNrTP
+        6jEpN3OlQLE6Klhz161/APE=
+X-Google-Smtp-Source: AA6agR6pWBF3LlPGmIDMdGX5wvr1eaXH0qxppIqaWpGF9U1YXO1vUH1JDjoO0TswSaQZWWhXRfNlwg==
+X-Received: by 2002:a17:90a:c789:b0:1fa:6bc0:77f6 with SMTP id gn9-20020a17090ac78900b001fa6bc077f6mr8447416pjb.1.1661586328877;
+        Sat, 27 Aug 2022 00:45:28 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-9.three.co.id. [180.214.232.9])
+        by smtp.gmail.com with ESMTPSA id p8-20020a170902780800b00172de80fec4sm2884558pll.69.2022.08.27.00.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Aug 2022 00:45:28 -0700 (PDT)
+Message-ID: <a1ec9c94-e69b-78c0-ea0f-31cceee8452a@gmail.com>
+Date:   Sat, 27 Aug 2022 14:45:19 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v11 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
 To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Tony Luck <tony.luck@intel.com>,
         Andi Kleen <ak@linux.intel.com>,
@@ -48,25 +76,22 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         khalid.elmously@canonical.com, philip.cox@canonical.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: Re: [PATCH v11 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Message-ID: <YwnI5A4SRoWWUMx+@kroah.com>
 References: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
 In-Reply-To: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 08:06:36AM -0700, Kuppuswamy Sathyanarayanan wrote:
+On 8/26/22 22:06, Kuppuswamy Sathyanarayanan wrote:
 > Attestation is used to verify the TDX guest trustworthiness to other
 > entities before provisioning secrets to the guest. For example, a key
 > server may request for attestation before releasing the encryption keys
@@ -138,257 +163,13 @@ On Fri, Aug 26, 2022 at 08:06:36AM -0700, Kuppuswamy Sathyanarayanan wrote:
 > Any distribution enabling TDX is also expected to need attestation. So
 > enable it by default with TDX guest support.
 > 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Reviewed-by: Andi Kleen <ak@linux.intel.com>
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Acked-by: Kai Huang <kai.huang@intel.com>
-> Acked-by: Wander Lairson Costa <wander@redhat.com>
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> ---
-> 
-> Changes since v10:
->  * Replaced TD/TD Guest usage with TDX Guest or Guest.
->  * Removed unnecessary comments.
->  * Added more validation to user input in tdx_get_report().
->  * Used u64_to_user_ptr when reading user u64 pointers.
->  * Fixed commit log as per review comments.
-> 
-> Changes since v9:
->  * Dropped the cover letter. Since this patch set only adds
->    TDREPORT support, the commit log itself has all the required details.
->  * Dropped the Quote support and event IRQ support as per Dave's
->    review suggestion.
->  * Dropped attest.c and moved its contents to tdx.c
->  * Updated commit log and comments to reflect latest changes.
-> 
-> Changes since v8:
->  * Please refer to https://lore.kernel.org/all/ \
->    20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com/
-> 
->  arch/x86/coco/tdx/tdx.c         | 114 ++++++++++++++++++++++++++++++++
->  arch/x86/include/uapi/asm/tdx.h |  51 ++++++++++++++
->  2 files changed, 165 insertions(+)
->  create mode 100644 arch/x86/include/uapi/asm/tdx.h
-> 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 928dcf7a20d9..0888bdf93a4e 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -5,16 +5,21 @@
->  #define pr_fmt(fmt)     "tdx: " fmt
->  
->  #include <linux/cpufeature.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/mm.h>
-> +#include <linux/io.h>
->  #include <asm/coco.h>
->  #include <asm/tdx.h>
->  #include <asm/vmx.h>
->  #include <asm/insn.h>
->  #include <asm/insn-eval.h>
->  #include <asm/pgtable.h>
-> +#include <uapi/asm/tdx.h>
->  
->  /* TDX module Call Leaf IDs */
->  #define TDX_GET_INFO			1
->  #define TDX_GET_VEINFO			3
-> +#define TDX_GET_REPORT			4
->  #define TDX_ACCEPT_PAGE			6
->  
->  /* TDX hypercall Leaf IDs */
-> @@ -34,6 +39,10 @@
->  #define VE_GET_PORT_NUM(e)	((e) >> 16)
->  #define VE_IS_IO_STRING(e)	((e) & BIT(4))
->  
-> +#define DRIVER_NAME	"tdx-guest"
 
-KBUILD_MODNAME?
+On what tree this patch series is based on?
 
-> +static struct miscdevice tdx_misc_dev;
+And as this series is multi-patch, it's customary to have cover letter
+(or [PATCH 0/?]).
 
-Why not actually set the values here, instead of in the code down below?
+Thanks.
 
-> +
->  /*
->   * Wrapper for standard use of __tdx_hypercall with no output aside from
->   * return code.
-> @@ -775,3 +784,108 @@ void __init tdx_early_init(void)
->  
->  	pr_info("Guest detected\n");
->  }
-> +
-> +static long tdx_get_report(void __user *argp)
-> +{
-> +	u8 *reportdata, *tdreport;
-> +	struct tdx_report_req req;
-> +	long ret;
-> +
-> +	if (copy_from_user(&req, argp, sizeof(req)))
-> +		return -EFAULT;
-> +
-> +	/*
-> +	 * Per TDX Module 1.0 specification, section titled
-> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
-> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
-> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as
-> +	 * 0. Also check for valid user pointers.
-> +	 */
-> +	if (!req.reportdata || !req.tdreport || req.subtype ||
-> +		req.rpd_len != TDX_REPORTDATA_LEN ||
-> +		req.tdr_len != TDX_REPORT_LEN)
-> +		return -EINVAL;
-> +
-> +	reportdata = kmalloc(req.rpd_len, GFP_KERNEL);
-> +	if (!reportdata)
-> +		return -ENOMEM;
-> +
-> +	tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
-> +	if (!tdreport) {
-> +		kfree(reportdata);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	if (copy_from_user(reportdata, u64_to_user_ptr(req.reportdata),
-> +			   req.rpd_len)) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
-> +	 *
-> +	 * Get the TDREPORT using REPORTDATA as input. Refer to
-> +	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
-> +	 * Specification for detailed information.
-> +	 */
-> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
-> +				virt_to_phys(reportdata), req.subtype,
-> +				0, NULL);
-> +	if (ret) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
-> +
-> +	if (copy_to_user(u64_to_user_ptr(req.tdreport), tdreport, req.tdr_len))
-> +		ret = -EFAULT;
-> +
-> +out:
-> +	kfree(reportdata);
-> +	kfree(tdreport);
-> +	return ret;
-> +}
-> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
-> +			    unsigned long arg)
-> +{
-> +	void __user *argp = (void __user *)arg;
-> +	long ret = -EINVAL;
-> +
-> +	switch (cmd) {
-> +	case TDX_CMD_GET_REPORT:
-> +		ret = tdx_get_report(argp);
-> +		break;
-> +	default:
-> +		pr_debug("cmd %d not supported\n", cmd);
-> +		break;
-
-Wrong error value for an invalid ioctl.
-
-You all know this, how did this slip through?
-
-:(
-
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct file_operations tdx_guest_fops = {
-> +	.owner		= THIS_MODULE,
-> +	.unlocked_ioctl	= tdx_guest_ioctl,
-> +	.llseek		= no_llseek,
-> +};
-> +
-> +static int __init tdx_guest_init(void)
-> +{
-> +	int ret;
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
-> +		return -EIO;
-> +
-> +	tdx_misc_dev.name = DRIVER_NAME;
-> +	tdx_misc_dev.minor = MISC_DYNAMIC_MINOR;
-> +	tdx_misc_dev.fops = &tdx_guest_fops;
-
-Again, set this in the definition above, and you will be fine.
-
-> +
-> +	ret = misc_register(&tdx_misc_dev);
-> +	if (ret) {
-> +		pr_err("misc device registration failed\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +device_initcall(tdx_guest_init)
-> diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
-> new file mode 100644
-> index 000000000000..c1667b20fe20
-> --- /dev/null
-> +++ b/arch/x86/include/uapi/asm/tdx.h
-> @@ -0,0 +1,51 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_ASM_X86_TDX_H
-> +#define _UAPI_ASM_X86_TDX_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/ioctl.h>
-> +
-> +/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
-> +#define TDX_REPORTDATA_LEN              64
-> +
-> +/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
-> +#define TDX_REPORT_LEN                  1024
-> +
-> +/**
-> + * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
-> + *
-> + * @subtype        : Subtype of TDREPORT (fixed as 0 by TDX Module
-> + *                   specification, but added a parameter to handle
-> + *                   future extension).
-> + * @reportdata     : User-defined REPORTDATA to be included into
-> + *                   TDREPORT. Typically it can be some nonce
-> + *                   provided by attestation service, so the
-> + *                   generated TDREPORT can be uniquely verified.
-> + * @rpd_len        : Length of the REPORTDATA (fixed as 64 bytes by
-> + *                   the TDX Module specification, but parameter is
-> + *                   added to handle future extension).
-> + * @tdreport       : TDREPORT output from TDCALL[TDG.MR.REPORT].
-> + * @tdr_len        : Length of the TDREPORT (fixed as 1024 bytes by
-> + *                   the TDX Module specification, but a parameter
-> + *                   is added to accommodate future extension).
-> + *
-> + * Used in TDX_CMD_GET_REPORT IOCTL request.
-> + */
-> +struct tdx_report_req {
-> +	__u8  subtype;
-> +	__u64 reportdata;
-
-Unaligned data?  That's really how the chip works?  That feels very odd.
-
-Or do you require the hole here that the compiler added?  If so, you
-can't always rely on that, properly pad things out.
-
-
-> +	__u32 rpd_len;
-> +	__u64 tdreport;
-> +	__u32 tdr_len;
-
-Again, check for holes.
-
-And as this comes directly from hardware, what is the endian-ness of
-these values?
-
-thanks,
-
-greg k-h
+-- 
+An old man doll... just what I always wanted! - Clara
