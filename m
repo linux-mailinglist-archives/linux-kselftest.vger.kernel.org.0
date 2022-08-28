@@ -2,73 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDA15A3D70
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Aug 2022 14:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46F25A3D77
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Aug 2022 14:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiH1MAj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Aug 2022 08:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
+        id S229448AbiH1MEp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 28 Aug 2022 08:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiH1MAe (ORCPT
+        with ESMTP id S229688AbiH1MEn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Aug 2022 08:00:34 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF4F18B31;
-        Sun, 28 Aug 2022 05:00:31 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 829B718845C3;
-        Sun, 28 Aug 2022 12:00:29 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 797F325032B7;
-        Sun, 28 Aug 2022 12:00:29 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 6C87D9EC0008; Sun, 28 Aug 2022 12:00:29 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Sun, 28 Aug 2022 08:04:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C3C1CFCF
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Aug 2022 05:04:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40841B80B22
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Aug 2022 12:04:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D921AC433B5
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Aug 2022 12:04:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661688279;
+        bh=EPbkOq8JPEc2kCjTiNGhxLiypn6VkEpuIIxi7EoZbZ0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SHAE+kGe2sPxFytEMt95ciLuQ+18eacjczlKIjy44AFd4UEoXYe01I/7x9RXuUiaL
+         Lh0xeXhH8x1IxacIkT1oe6NXLdIVp7M+W0MmgsMjkVfEVTLfkTx/91XGQ60ZV6m47S
+         lEMjN340CoOKfGn+bofyy7jYNGSeCj8uQXLhqMFNgpifExeVu7cwfd8Qymz3wX69RM
+         E4laPXbt9RAg/8OBKxNrKX7KdzgQK9DbT5zI3DqeOuWplLDH5+JdyrKfCeNci0D+ee
+         /qGKjunCYPpJKnKbaJds/8RPKFNJH44hlP5PZhs9FbPQ5GDG6fB3mNclT0bDGWj0p+
+         TJyU69cbQXBxQ==
+Received: by mail-qk1-f172.google.com with SMTP id g16so4323186qkl.11
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Aug 2022 05:04:39 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1z5D3E7z9iBGGFamHt0DRUxkbExyCzeabo7igsq8+oSflxYfWa
+        IYIUf431YA9N4CZzQe3wPpmN2No9tyYmjAzF531Yfw==
+X-Google-Smtp-Source: AA6agR4FMRX+TaApxmom9KAlHmydRBHrD8YHW7gavrNzM2Rz3w+Of9yKXe9ON7GTG1+MKtNv47+OtaQujsqaLkSoGgs=
+X-Received: by 2002:a05:620a:45a3:b0:6bb:d296:aa0d with SMTP id
+ bp35-20020a05620a45a300b006bbd296aa0dmr5219938qkb.525.1661688267813; Sun, 28
+ Aug 2022 05:04:27 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Sun, 28 Aug 2022 14:00:29 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <YwpgvkojEdytzCAB@shredder>
-References: <20220826114538.705433-1-netdev@kapio-technology.com>
- <20220826114538.705433-7-netdev@kapio-technology.com>
- <YwpgvkojEdytzCAB@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <7654860e4d7d43c15d482c6caeb6a773@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
+ <20220818152929.402605-5-roberto.sassu@huaweicloud.com> <YwhTiGOhzvv+CYYq@kernel.org>
+ <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com> <YwrntbSJUs2cA7Xn@kernel.org>
+In-Reply-To: <YwrntbSJUs2cA7Xn@kernel.org>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Sun, 28 Aug 2022 14:04:17 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ5zb2L18=ABUO-AnGBi-PG7SZpEA_1vGZWd4S2nC2wzPQ@mail.gmail.com>
+Message-ID: <CACYkzJ5zb2L18=ABUO-AnGBi-PG7SZpEA_1vGZWd4S2nC2wzPQ@mail.gmail.com>
+Subject: Re: [PATCH v12 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        mykolal@fb.com, corbet@lwn.net, dhowells@redhat.com,
+        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,42 +73,93 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-08-27 20:21, Ido Schimmel wrote:
-> On Fri, Aug 26, 2022 at 01:45:38PM +0200, Hans Schultz wrote:
->> +locked_port_mab()
->> +{
->> +	RET=0
->> +	check_locked_port_support || return 0
->> +
->> +	ping_do $h1 192.0.2.2
->> +	check_err $? "MAB: Ping did not work before locking port"
->> +
->> +	bridge link set dev $swp1 locked on
->> +	bridge link set dev $swp1 learning on
-> 
-> "locked on learning on" is counter intuitive and IMO very much a
-> misconfiguration that we should have disallowed when the "locked" 
-> option
-> was introduced. It is my understanding that the only reason we are even
-> talking about it is because mv88e6xxx needs it for MAB for some reason.
+On Sun, Aug 28, 2022 at 5:57 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Fri, Aug 26, 2022 at 09:14:09AM +0200, Roberto Sassu wrote:
+> > On Fri, 2022-08-26 at 08:42 +0300, Jarkko Sakkinen wrote:
+> > > On Thu, Aug 18, 2022 at 05:29:23PM +0200,
+> > > roberto.sassu@huaweicloud.com wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > >
+> > > > In preparation for the patch that introduces the
+> > > > bpf_lookup_user_key() eBPF
+> > > > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> > > > able to
+> > > > validate the kfunc parameters.
+> > > >
+> > > > Also, introduce key_lookup_flags_check() directly in
+> > > > include/linux/key.h,
+> > > > to reduce the risk that the check is not in sync with currently
+> > > > defined
+> > > > flags.
+> > >
+> > > Missing the description what the heck this function even is.
+> > >
+> > > Please, explain that.
+> >
+> > Hi Jarkko
+> >
+> > sorry, forgot to update the commit description. Will do it.
+> >
+> > > Also, the short subject is misleading because this *just*
+> > > does not move flags.
+> > >
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > Reviewed-by: KP Singh <kpsingh@kernel.org>
+> > > > ---
+> > > >  include/linux/key.h      | 11 +++++++++++
+> > > >  security/keys/internal.h |  2 --
+> > > >  2 files changed, 11 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/key.h b/include/linux/key.h
+> > > > index 7febc4881363..b5bbae77a9e7 100644
+> > > > --- a/include/linux/key.h
+> > > > +++ b/include/linux/key.h
+> > > > @@ -88,6 +88,17 @@ enum key_need_perm {
+> > > >   KEY_DEFER_PERM_CHECK,   /* Special: permission check is
+> > > > deferred */
+> > > >  };
+> > > >
+> > > > +#define KEY_LOOKUP_CREATE        0x01
+> > > > +#define KEY_LOOKUP_PARTIAL       0x02
+> > > > +
+> > >
+> > > /*
+> > >  * Explain what the heck this function is.
+> > >  */
+> > > > +static inline int key_lookup_flags_check(u64 flags)
+> > > > +{
+> > > > + if (flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
+> > > > +         return -EINVAL;
+> > > > +
+> > > > + return 0;
+> > > > +}
+> > >
+> > > This is essentially a boolean function, right?
+> > >
+> > > I.e. the implementation can be just:
+> > >
+> > > !!(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
+> >
+> > Absolutely fine with that, if you prefer.
+>
+> It can be either, it more depends on if a new function
+> is needed in the first place.
+>
+> E.g. if you are worried about maintaining you could just
+> as well define a constant containing the mask, right?
 
-As the way mv88e6xxx implements "learning off" is to remove port 
-association for ingress packets on a port, but that breaks many other 
-things such as refreshing ATU entries and violation interrupts, so it is 
-needed and the question is then what is the worst to have 'learning on' 
-on a locked port or to have the locked port enabling learning in the 
-driver silently?
++1 A mask is better.
 
-Opinions seem to differ. Note that even on locked ports without MAB, 
-port association on ingress is still needed in future as I have a 
-dynamic ATU patch set coming, that uses age out violation and hardware 
-refreshing to let the hardware keep the dynamic entries as long as the 
-authorized station is sending, but will age the entry out if the station 
-keeps silent for the ageing time. But that patch set is dependent on 
-this patch set, and I don't think I can send it before this is 
-accepted...
-
-> Please avoid leaking this implementation detail to user space and
-> instead use the "MAB" flag to enable learning if you need it in
-> mv88e6xxx.
-> 
+>
+> >
+> > > Not even sure if this is needed in the first place, or
+> > > would it be better just to open code it. How many call
+> > > sites does it have anyway?
+> > >
+> >
+> > Daniel preferred to have this check here.
+>
+> How many call sites?
+>
+> BR, Jarkko
