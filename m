@@ -2,164 +2,197 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46F25A3D77
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Aug 2022 14:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03D95A3F17
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Aug 2022 20:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiH1MEp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Aug 2022 08:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
+        id S229895AbiH1S0s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 28 Aug 2022 14:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiH1MEn (ORCPT
+        with ESMTP id S229633AbiH1S0s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Aug 2022 08:04:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C3C1CFCF
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Aug 2022 05:04:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40841B80B22
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Aug 2022 12:04:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D921AC433B5
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Aug 2022 12:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661688279;
-        bh=EPbkOq8JPEc2kCjTiNGhxLiypn6VkEpuIIxi7EoZbZ0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SHAE+kGe2sPxFytEMt95ciLuQ+18eacjczlKIjy44AFd4UEoXYe01I/7x9RXuUiaL
-         Lh0xeXhH8x1IxacIkT1oe6NXLdIVp7M+W0MmgsMjkVfEVTLfkTx/91XGQ60ZV6m47S
-         lEMjN340CoOKfGn+bofyy7jYNGSeCj8uQXLhqMFNgpifExeVu7cwfd8Qymz3wX69RM
-         E4laPXbt9RAg/8OBKxNrKX7KdzgQK9DbT5zI3DqeOuWplLDH5+JdyrKfCeNci0D+ee
-         /qGKjunCYPpJKnKbaJds/8RPKFNJH44hlP5PZhs9FbPQ5GDG6fB3mNclT0bDGWj0p+
-         TJyU69cbQXBxQ==
-Received: by mail-qk1-f172.google.com with SMTP id g16so4323186qkl.11
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Aug 2022 05:04:39 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1z5D3E7z9iBGGFamHt0DRUxkbExyCzeabo7igsq8+oSflxYfWa
-        IYIUf431YA9N4CZzQe3wPpmN2No9tyYmjAzF531Yfw==
-X-Google-Smtp-Source: AA6agR4FMRX+TaApxmom9KAlHmydRBHrD8YHW7gavrNzM2Rz3w+Of9yKXe9ON7GTG1+MKtNv47+OtaQujsqaLkSoGgs=
-X-Received: by 2002:a05:620a:45a3:b0:6bb:d296:aa0d with SMTP id
- bp35-20020a05620a45a300b006bbd296aa0dmr5219938qkb.525.1661688267813; Sun, 28
- Aug 2022 05:04:27 -0700 (PDT)
+        Sun, 28 Aug 2022 14:26:48 -0400
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F866BC87;
+        Sun, 28 Aug 2022 11:26:47 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MG28j6SPTz9sCN;
+        Sun, 28 Aug 2022 18:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1661711206; bh=cVZKV733FhwSJ9ann5TaxDwpk2a9uxqmV7l6k2LLnyA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U8giS/jsUXGNNlx9tL6PfLaLwB+1FJ2qEoArbjQEoIseotQceUjApFUtA2Xn4yEnm
+         mrlawU81y2hJKRdtSo4Bm7LUOOBtFyT62u6snNDPRvcPaITBMgvMOSj29natpjuaSz
+         CW7JVRAXnf13ld7OxycqXhnonyai3DfV6iGxQa4w=
+X-Riseup-User-ID: 632E099168EDC2B6EA5082995449A6C79448FAD18ED28205D4B018B63EC3B43B
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4MG28b1j5Qz20SJ;
+        Sun, 28 Aug 2022 18:26:39 +0000 (UTC)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
+To:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Gow <davidgow@google.com>, brendanhiggins@google.com,
+        Arthur Grillo <arthur.grillo@usp.br>
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] drm/mm: Reduce stack frame usage in __igt_reserve
+Date:   Sun, 28 Aug 2022 15:25:43 -0300
+Message-Id: <20220828182543.155415-1-mairacanal@riseup.net>
 MIME-Version: 1.0
-References: <20220818152929.402605-1-roberto.sassu@huaweicloud.com>
- <20220818152929.402605-5-roberto.sassu@huaweicloud.com> <YwhTiGOhzvv+CYYq@kernel.org>
- <acae432697e854748d9a44c732ec8cab807d9d46.camel@huaweicloud.com> <YwrntbSJUs2cA7Xn@kernel.org>
-In-Reply-To: <YwrntbSJUs2cA7Xn@kernel.org>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Sun, 28 Aug 2022 14:04:17 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ5zb2L18=ABUO-AnGBi-PG7SZpEA_1vGZWd4S2nC2wzPQ@mail.gmail.com>
-Message-ID: <CACYkzJ5zb2L18=ABUO-AnGBi-PG7SZpEA_1vGZWd4S2nC2wzPQ@mail.gmail.com>
-Subject: Re: [PATCH v12 04/10] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        mykolal@fb.com, corbet@lwn.net, dhowells@redhat.com,
-        rostedt@goodmis.org, mingo@redhat.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
-        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 5:57 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Fri, Aug 26, 2022 at 09:14:09AM +0200, Roberto Sassu wrote:
-> > On Fri, 2022-08-26 at 08:42 +0300, Jarkko Sakkinen wrote:
-> > > On Thu, Aug 18, 2022 at 05:29:23PM +0200,
-> > > roberto.sassu@huaweicloud.com wrote:
-> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > >
-> > > > In preparation for the patch that introduces the
-> > > > bpf_lookup_user_key() eBPF
-> > > > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
-> > > > able to
-> > > > validate the kfunc parameters.
-> > > >
-> > > > Also, introduce key_lookup_flags_check() directly in
-> > > > include/linux/key.h,
-> > > > to reduce the risk that the check is not in sync with currently
-> > > > defined
-> > > > flags.
-> > >
-> > > Missing the description what the heck this function even is.
-> > >
-> > > Please, explain that.
-> >
-> > Hi Jarkko
-> >
-> > sorry, forgot to update the commit description. Will do it.
-> >
-> > > Also, the short subject is misleading because this *just*
-> > > does not move flags.
-> > >
-> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > Reviewed-by: KP Singh <kpsingh@kernel.org>
-> > > > ---
-> > > >  include/linux/key.h      | 11 +++++++++++
-> > > >  security/keys/internal.h |  2 --
-> > > >  2 files changed, 11 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/key.h b/include/linux/key.h
-> > > > index 7febc4881363..b5bbae77a9e7 100644
-> > > > --- a/include/linux/key.h
-> > > > +++ b/include/linux/key.h
-> > > > @@ -88,6 +88,17 @@ enum key_need_perm {
-> > > >   KEY_DEFER_PERM_CHECK,   /* Special: permission check is
-> > > > deferred */
-> > > >  };
-> > > >
-> > > > +#define KEY_LOOKUP_CREATE        0x01
-> > > > +#define KEY_LOOKUP_PARTIAL       0x02
-> > > > +
-> > >
-> > > /*
-> > >  * Explain what the heck this function is.
-> > >  */
-> > > > +static inline int key_lookup_flags_check(u64 flags)
-> > > > +{
-> > > > + if (flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
-> > > > +         return -EINVAL;
-> > > > +
-> > > > + return 0;
-> > > > +}
-> > >
-> > > This is essentially a boolean function, right?
-> > >
-> > > I.e. the implementation can be just:
-> > >
-> > > !!(flags & ~(KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL))
-> >
-> > Absolutely fine with that, if you prefer.
->
-> It can be either, it more depends on if a new function
-> is needed in the first place.
->
-> E.g. if you are worried about maintaining you could just
-> as well define a constant containing the mask, right?
+The struct drm_mm is being allocated on the stack, which is causing the
+following -Wframe-larger-than warning on ARM:
 
-+1 A mask is better.
+../drivers/gpu/drm/tests/drm_mm_test.c:344:12: error: stack frame size
+(1064) exceeds limit (1024) in '__igt_reserve' [-Werror,-Wframe-larger-than]
 
->
-> >
-> > > Not even sure if this is needed in the first place, or
-> > > would it be better just to open code it. How many call
-> > > sites does it have anyway?
-> > >
-> >
-> > Daniel preferred to have this check here.
->
-> How many call sites?
->
-> BR, Jarkko
+static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+           ^
+1 error generated.
+
+So, fix this warning by dynamically allocating the struct drm_mm.
+
+Fixes: fc8d29e298cf ("drm: selftest: convert drm_mm selftest to KUnit")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+---
+ drivers/gpu/drm/tests/drm_mm_test.c | 33 ++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+index 1e2c1aa524bd..fbd8dcbc12ee 100644
+--- a/drivers/gpu/drm/tests/drm_mm_test.c
++++ b/drivers/gpu/drm/tests/drm_mm_test.c
+@@ -344,7 +344,7 @@ static bool check_reserve_boundaries(struct kunit *test, struct drm_mm *mm,
+ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ {
+ 	DRM_RND_STATE(prng, random_seed);
+-	struct drm_mm mm;
++	struct drm_mm *mm;
+ 	struct drm_mm_node tmp, *nodes, *node, *next;
+ 	unsigned int *order, n, m, o = 0;
+ 	int ret, err;
+@@ -366,17 +366,20 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 	nodes = vzalloc(array_size(count, sizeof(*nodes)));
+ 	KUNIT_ASSERT_TRUE(test, nodes);
+ 
++	mm = kunit_kzalloc(test, sizeof(struct drm_mm), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, mm);
++
+ 	ret = -EINVAL;
+-	drm_mm_init(&mm, 0, count * size);
++	drm_mm_init(mm, 0, count * size);
+ 
+-	if (!check_reserve_boundaries(test, &mm, count, size))
++	if (!check_reserve_boundaries(test, mm, count, size))
+ 		goto out;
+ 
+ 	for (n = 0; n < count; n++) {
+ 		nodes[n].start = order[n] * size;
+ 		nodes[n].size = size;
+ 
+-		err = drm_mm_reserve_node(&mm, &nodes[n]);
++		err = drm_mm_reserve_node(mm, &nodes[n]);
+ 		if (err) {
+ 			KUNIT_FAIL(test, "reserve failed, step %d, start %llu\n",
+ 				   n, nodes[n].start);
+@@ -390,23 +393,23 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 			goto out;
+ 		}
+ 
+-		if (!expect_reserve_fail(test, &mm, &nodes[n]))
++		if (!expect_reserve_fail(test, mm, &nodes[n]))
+ 			goto out;
+ 	}
+ 
+ 	/* After random insertion the nodes should be in order */
+-	if (!assert_continuous(test, &mm, size))
++	if (!assert_continuous(test, mm, size))
+ 		goto out;
+ 
+ 	/* Repeated use should then fail */
+ 	drm_random_reorder(order, count, &prng);
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(test, &mm, set_node(&tmp, order[n] * size, 1)))
++		if (!expect_reserve_fail(test, mm, set_node(&tmp, order[n] * size, 1)))
+ 			goto out;
+ 
+ 		/* Remove and reinsert should work */
+ 		drm_mm_remove_node(&nodes[order[n]]);
+-		err = drm_mm_reserve_node(&mm, &nodes[order[n]]);
++		err = drm_mm_reserve_node(mm, &nodes[order[n]]);
+ 		if (err) {
+ 			KUNIT_FAIL(test, "reserve failed, step %d, start %llu\n",
+ 				   n, nodes[n].start);
+@@ -415,16 +418,16 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 		}
+ 	}
+ 
+-	if (!assert_continuous(test, &mm, size))
++	if (!assert_continuous(test, mm, size))
+ 		goto out;
+ 
+ 	/* Overlapping use should then fail */
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(test, &mm, set_node(&tmp, 0, size * count)))
++		if (!expect_reserve_fail(test, mm, set_node(&tmp, 0, size * count)))
+ 			goto out;
+ 	}
+ 	for (n = 0; n < count; n++) {
+-		if (!expect_reserve_fail(test, &mm, set_node(&tmp, size * n, size * (count - n))))
++		if (!expect_reserve_fail(test, mm, set_node(&tmp, size * n, size * (count - n))))
+ 			goto out;
+ 	}
+ 
+@@ -437,7 +440,7 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 
+ 		for (m = 0; m < n; m++) {
+ 			node = &nodes[order[(o + m) % count]];
+-			err = drm_mm_reserve_node(&mm, node);
++			err = drm_mm_reserve_node(mm, node);
+ 			if (err) {
+ 				KUNIT_FAIL(test, "reserve failed, step %d/%d, start %llu\n",
+ 					   m, n, node->start);
+@@ -448,15 +451,15 @@ static int __igt_reserve(struct kunit *test, unsigned int count, u64 size)
+ 
+ 		o += n;
+ 
+-		if (!assert_continuous(test, &mm, size))
++		if (!assert_continuous(test, mm, size))
+ 			goto out;
+ 	}
+ 
+ 	ret = 0;
+ out:
+-	drm_mm_for_each_node_safe(node, next, &mm)
++	drm_mm_for_each_node_safe(node, next, mm)
+ 		drm_mm_remove_node(node);
+-	drm_mm_takedown(&mm);
++	drm_mm_takedown(mm);
+ 	vfree(nodes);
+ 	kfree(order);
+ err:
+-- 
+2.37.2
+
