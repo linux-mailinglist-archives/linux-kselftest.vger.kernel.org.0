@@ -2,32 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C165A4622
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 11:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF775A4674
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 11:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiH2Jcf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 05:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        id S229726AbiH2JvU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 05:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiH2Jcd (ORCPT
+        with ESMTP id S229669AbiH2JvU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:32:33 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65405466D;
-        Mon, 29 Aug 2022 02:32:31 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 22BC1188493F;
-        Mon, 29 Aug 2022 09:32:30 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 10FD125032B7;
-        Mon, 29 Aug 2022 09:32:30 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 0C1E59EC0005; Mon, 29 Aug 2022 09:32:30 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Mon, 29 Aug 2022 05:51:20 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5100458B5A
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 02:51:18 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id u9so14601641ejy.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 02:51:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=SlYMUlG2qSvFZB0N2mq5+Vuwq77kZgSrLYVLPhtOEnc=;
+        b=VA8mRlDIJuRpUjAr2wap2tw76G9iqQ95P1eKHRbi0MXQ+y5IRx86u42xLbqDa3N5Uw
+         WBpv8t9zipWs3CctFwvBsrOIu5XtbCOP1buoXyRAK4MLU31Yw5ngEBFKEMkK8zVonfRa
+         j0ONoFy8E5axclexgQI8Deix+KM6vUXYS29+vk/m2cgOGWRgF4irThnGgYZYmbUaOgFL
+         UAiaDDzB1hu/DAZMMj9RMnoiMeWabPFTFH2n9WQhu3VNwHXDNrCWsZF6emYbnh58OVDq
+         r+pUZaGHVx50qLZUXUjESZfGWi8gRrSNSOgOjZjybuBNJVt27lkMLyDAdhTM/SlwI1T9
+         rD/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=SlYMUlG2qSvFZB0N2mq5+Vuwq77kZgSrLYVLPhtOEnc=;
+        b=Qy1oWtdgKWndGOI1Yda3RR9nHLRUNmHrjNay6sxbvlU7YVfnmKoKthBPpKmc6itXDz
+         ecxyixOblZ6UX399+OKAUtpsj3fkT2dB4owabJ+8Uu0qDp1uSlhb3JikKbd15GD0LV1O
+         WNtKNwCbW95Tf1cRaB/pbXI6YUaGIu7yuPS8/zEAE5se4kUlTqSdKrbKn5QaKfZ+7tka
+         xuM4TcioGPRBLqDB/OUJbutVFJEgq0uCeB2VTRUz/N3PKTRq6FD8PIq7KpuOj8OCd7hH
+         q0sJC+177W7AGGzaFBSRdiGDEg20cEwokJBNRXpQ3ylYX+QoByv2EX65FBQG+Tq+uiNd
+         zFXw==
+X-Gm-Message-State: ACgBeo37qSl7mnpm9/6DSszySE7ss+dIcLc75h9bB+9+8Eg4Mio3Bp8s
+        Y6PrI2FrlYQAz7hFGe5ssbrdEQ==
+X-Google-Smtp-Source: AA6agR7M8nHmvMXeLrqK9slD36AnzRPtNtaEGwJrWTLaeYi3Ldj3MRdNNKrrHzv2HbakO0uElrxasg==
+X-Received: by 2002:a17:907:2d23:b0:730:acf0:4907 with SMTP id gs35-20020a1709072d2300b00730acf04907mr13239673ejc.700.1661766676786;
+        Mon, 29 Aug 2022 02:51:16 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id z2-20020a170906240200b0073c23616cb1sm4374177eja.12.2022.08.29.02.51.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 02:51:16 -0700 (PDT)
+Message-ID: <4749d6b6-c20c-fd20-f904-accee3f1947a@blackwall.org>
+Date:   Mon, 29 Aug 2022 12:51:14 +0300
 MIME-Version: 1.0
-Date:   Mon, 29 Aug 2022 11:32:29 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
+Content-Language: en-US
+To:     Ido Schimmel <idosch@nvidia.com>, netdev@kapio-technology.com
 Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -46,85 +77,62 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Jiri Pirko <jiri@resnulli.us>,
         Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
         Christian Marangi <ansuelsmth@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Yuwei Wang <wangyuweihx@gmail.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
- extend locked port feature
-In-Reply-To: <Ywo16vHMqxxszWzX@shredder>
 References: <20220826114538.705433-1-netdev@kapio-technology.com>
  <20220826114538.705433-2-netdev@kapio-technology.com>
  <Ywo16vHMqxxszWzX@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <42392a323bdc5324e1e4682fca378c90@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+ <dd9a4156fe421f6be3a49f5b928ef77e@kapio-technology.com>
+ <YwxwPJOx/n5SHZM5@shredder>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <YwxwPJOx/n5SHZM5@shredder>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-08-27 17:19, Ido Schimmel wrote:
-> On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
-> How about the below (untested):
+On 29/08/2022 10:52, Ido Schimmel wrote:
+> On Sun, Aug 28, 2022 at 12:23:30PM +0200, netdev@kapio-technology.com wrote:
+>> On 2022-08-27 17:19, Ido Schimmel wrote:
+>>> On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
+>>>>
+>>>>  	nbp_switchdev_frame_mark(p, skb);
+>>>> @@ -943,6 +946,10 @@ static int br_setport(struct net_bridge_port
+>>>> *p, struct nlattr *tb[],
+>>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS,
+>>>> BR_NEIGH_SUPPRESS);
+>>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+>>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
+>>>> +	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
+>>>> +
+>>>> +	if (!(p->flags & BR_PORT_LOCKED))
+>>>> +		p->flags &= ~BR_PORT_MAB;
+>>
+>> The reason for this is that I wanted it to be so that if you have MAB
+>> enabled (and locked of course) and unlock the port, it will automatically
+>> clear both flags instead of having to first disable MAB and then unlock the
+>> port.
 > 
-> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
-> index 68b3e850bcb9..9143a94a1c57 100644
-> --- a/net/bridge/br_input.c
-> +++ b/net/bridge/br_input.c
-> @@ -109,9 +109,18 @@ int br_handle_frame_finish(struct net *net,
-> struct sock *sk, struct sk_buff *skb
->                 struct net_bridge_fdb_entry *fdb_src =
->                         br_fdb_find_rcu(br, eth_hdr(skb)->h_source, 
-> vid);
+> User space can just do:
 > 
-> -               if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
-> -                   test_bit(BR_FDB_LOCAL, &fdb_src->flags))
-> +               if (!fdb_src) {
-> +                       if (p->flags & BR_PORT_MAB) {
-> +                               __set_bit(BR_FDB_ENTRY_LOCKED, &flags);
-> +                               br_fdb_update(br, p, 
-> eth_hdr(skb)->h_source,
-> +                                             vid, flags);
-> +                       }
-> +                       goto drop;
-> +               } else if (READ_ONCE(fdb_src->dst) != p ||
-> +                          test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
-> +                          test_bit(BR_FDB_LOCKED, &fdb_src->flags)) {
->                         goto drop;
-> +               }
->         }
+> # bridge link set dev swp1 locked off mab off
 > 
-> The semantics are very clear, IMO. On FDB miss, add a locked FDB entry
-> and drop the packet. On FDB mismatch, drop the packet.
-> 
-> Entry can roam from an unauthorized port to an authorized port, but not
-> the other way around. Not sure what is the use case for allowing 
-> roaming
-> between unauthorized ports.
-> 
-> Note that with the above, locked entries are not refreshed and will
-> therefore age out unless replaced by user space.
-> 
+> I prefer not to push such logic into the kernel and instead fail
+> explicitly. I won't argue if more people are in favor.
 
-Okay I was under the impression that entries should be able to roam 
-freely between authorized and unauthorized ports in the bridge as long 
-as the locked flag is on when roaming to the MAB enabled port. As you 
-know roaming is not a big issue with mv88e6xxx.
++1
 
-As I see this code, an entry cannot roam to an authorized port as there 
-is no update after the port mismatch check and the packet is dropped as 
-it should in this case in the locked section.
-
+I prefer to fail explicitly too, actually I also had a comment about this but
+somehow have managed to delete it before sending my review. :)
