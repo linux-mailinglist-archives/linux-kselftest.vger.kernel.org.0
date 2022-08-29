@@ -2,295 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BAD5A5072
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D915A508C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiH2Pqu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 11:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S230164AbiH2PsG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 11:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiH2Pqt (ORCPT
+        with ESMTP id S230100AbiH2Pr6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:46:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0833586892
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 08:46:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA92EB81101
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 15:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D7CC433B5;
-        Mon, 29 Aug 2022 15:46:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661788004;
-        bh=VECdJO+0n+ndS0guBWqDx9b7Eiz+afsJreVpJ6xfPxg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DkkR6WQ22jLnkxbEefBmyU3O0w5tcRzxB2NUK55wvqxhpQRktnK4VRqszFQyWzZSJ
-         7+R0vYiHM5WnN6MTVZSInnxJnmqqGW5Pl6egKuvzC7wwh+Lu2xfW35Eo3cDM2y66hG
-         az0IhDAp/rNm1M1CThhq7L+XCL+KVrHPMIR3JQctzIFQhtZ5PaCff29kp2VVvIoBZK
-         J+IRrT7A+tMl89uLqzxKejRa9DKtGmQ9FiPvLYXFx7qLBdpy5XRCc2ZrfHoSdwfRZe
-         1EA3IWgx6cYGwZ7lZHZrxpVFoUls+FWakjOXa9AGcQTl9IrbNUfhmNdN/SVpbxoSqP
-         X5pcPqb3aRBpA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2] kselftest/arm64: Add simple hwcap validation
-Date:   Mon, 29 Aug 2022 16:46:02 +0100
-Message-Id: <20220829154602.827275-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Mon, 29 Aug 2022 11:47:58 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE3997539;
+        Mon, 29 Aug 2022 08:47:42 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id q81so6880629iod.9;
+        Mon, 29 Aug 2022 08:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=F8MIYXd/Xz7kSxyNJ7px1zHhNcsXalbvXrm8i70TLIA=;
+        b=MkC5UdWU6+Imh87+mJ22IPOYrjSDsKYj/4VTRMkEYgobRDMqGcUTHShvbFDDhzGCfI
+         hpEMw+y8vqipvOg/wJovZPsZG4SsWXV1vZ6MbVJyhmEGIvj90u6lj00dcPgD/FIEr6Cw
+         8f/Zjm2hz5bMd5oWcReckBHYB5sNYrAQaC89N2DEqP8CJPCHkVQcOTiDQifnFV5wV5d+
+         epLlyF8v3F6Ih0aOOFpW7B4sYL5E+bgt+EZKZH/abLc7eaPsnUMZlTYe2u44rHyb7BvX
+         grt6lZvl574TTY2+i/FHE03X4OEF7srQy3bLB3jQHoNkiYPSqsuvBfSgRKHN9mC/9VYG
+         ij0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=F8MIYXd/Xz7kSxyNJ7px1zHhNcsXalbvXrm8i70TLIA=;
+        b=puJ6IsDpqy/1mLrjxN69iI2mWtEomQ4cUA9GRxUUIZt5i1uxifdL903jefrOtHcC9+
+         5whIO5O68LPTZ7FMhNuDt+WlL9tdG6wXzI2CIemIE65Rh97xseIvuGAGiSepEZMKqHrq
+         0VX17t/G/cgE5+jDMmqdF/a2zT9flrUMriqLylCST5DfPwwTcn/qQPG5K3fxT/D2RDr/
+         J/9TF11qffvw5iBH3Ss+qAI2LIQutGADfsMW/Y60YsC5UaI5OHW9c8n/Fag8FAipll4j
+         rwj1HDdw/HhgjANlRlFmc0qEnRxX/Ybh84OXclZuB+Gq3ipZ2FtFmGhNdp89SEtNbS3z
+         TXAg==
+X-Gm-Message-State: ACgBeo0+dLUVM7tGp3fNlOxnfDn1bsnXeDeBatws14l9NkEMEf6w7l7S
+        6ZmMVclKfj3qqnh9nVb8+LS3tOzk4E+ZwA==
+X-Google-Smtp-Source: AA6agR7gk30EK0FrDgzRs3klB18ZOu2JkuAeAChQM6pSN6AXzyQX/5WN+1EMghi/8BQ9UMFKU0OGFg==
+X-Received: by 2002:a6b:2ac4:0:b0:688:3a14:2002 with SMTP id q187-20020a6b2ac4000000b006883a142002mr8837385ioq.62.1661788060553;
+        Mon, 29 Aug 2022 08:47:40 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
+        by smtp.gmail.com with ESMTPSA id f33-20020a05663832a100b0034294118e1bsm4452576jav.126.2022.08.29.08.47.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 08:47:39 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/bpf: Fix connect4_prog tcp/socket header type conflict
+Date:   Mon, 29 Aug 2022 09:47:09 -0600
+Message-Id: <20220829154710.3870139-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6478; i=broonie@kernel.org; h=from:subject; bh=VECdJO+0n+ndS0guBWqDx9b7Eiz+afsJreVpJ6xfPxg=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjDN84bA4qJntJO2JrghOrWHze/T8LWMU81yMQ2Ldq hVGb3yWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYwzfOAAKCRAk1otyXVSH0N8wB/ 4/mvURBnYqcU1SRzleAzM+RX7Ih0gb1Sq/9NooLQJXN5+bH3J+JLOPbWLwIKVf3EvmHWOUpN6+np1s kqi/77BahbCt+CQpiUeG+xjGZW0BB/kozSR/us92P4nY06D8iLfr+97L7SiiEYF5uvpjjagiNlGRPB /DKEA+apbc4VytyOPLC1ELROdj+3zrGWPdT38bQ+VrSSSly9INeRPCjYoyHFEwVs2wpJ27DmAC+3zm ZHO51XHlT6YFXOHkuw49r3Xqyd/mjryYQOHgUrjJ8sAsjnWsB7zualqCo28FuIZLMnmU3Sz/JFN4y7 AQStEMm9gq2Vjjh7Hv9+cGmHwZNxfM
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some trivial hwcap validation which checks that /proc/cpuinfo and
-AT_HWCAP agree with each other and can verify that for extensions that can
-generate a SIGILL due to adding new instructions one appears or doesn't
-appear as expected. I've added SVE and SME, other capabilities can be
-added later if this gets merged.
+There is a potential for us to hit a type conflict when including
+netinet/tcp.h and sys/socket.h, we can replace both of these includes
+with linux/tcp.h and bpf_tcp_helpers.h to avoid this conflict.
 
-This isn't super exciting but on the other hand took very little time to
-write and should be handy when verifying that you wired up AT_HWCAP
-properly.
+Fixes the following error:
+In file included from /usr/include/netinet/tcp.h:91,
+                 from progs/connect4_prog.c:11:
+/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
+   34 | typedef __INT8_TYPE__ int8_t;
+      |                       ^~~~~~
+In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
+                 from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
+                 from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
+                 from progs/connect4_prog.c:10:
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
+   24 | typedef __int8_t int8_t;
+      |                  ^~~~~~
+/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
+   43 | typedef __INT64_TYPE__ int64_t;
+      |                        ^~~~~~~
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
+   27 | typedef __int64_t int64_t;
+      |                   ^~~~~~~
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- tools/testing/selftests/arm64/abi/.gitignore |   1 +
- tools/testing/selftests/arm64/abi/Makefile   |   2 +-
- tools/testing/selftests/arm64/abi/hwcap.c    | 188 +++++++++++++++++++
- 3 files changed, 190 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/arm64/abi/hwcap.c
+Changes v1 -> v2:
+  - use bpf_tcp_helpers.h so we can use SOL_TCP
+---
+ tools/testing/selftests/bpf/progs/connect4_prog.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/abi/.gitignore b/tools/testing/selftests/arm64/abi/.gitignore
-index b9e54417250d..c31d34d48a30 100644
---- a/tools/testing/selftests/arm64/abi/.gitignore
-+++ b/tools/testing/selftests/arm64/abi/.gitignore
-@@ -1,2 +1,3 @@
-+hwcap
- syscall-abi
- tpidr2
-diff --git a/tools/testing/selftests/arm64/abi/Makefile b/tools/testing/selftests/arm64/abi/Makefile
-index c8d7f2495eb2..e60752eb8334 100644
---- a/tools/testing/selftests/arm64/abi/Makefile
-+++ b/tools/testing/selftests/arm64/abi/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (C) 2021 ARM Limited
+diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
+index b241932911db..23d85f5027d3 100644
+--- a/tools/testing/selftests/bpf/progs/connect4_prog.c
++++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
+@@ -7,13 +7,13 @@
+ #include <linux/bpf.h>
+ #include <linux/in.h>
+ #include <linux/in6.h>
+-#include <sys/socket.h>
+-#include <netinet/tcp.h>
++#include <linux/tcp.h>
+ #include <linux/if.h>
+ #include <errno.h>
  
--TEST_GEN_PROGS := syscall-abi tpidr2
-+TEST_GEN_PROGS := hwcap syscall-abi tpidr2
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
++#include "bpf_tcp_helpers.h"
  
- include ../../lib.mk
- 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-new file mode 100644
-index 000000000000..8b5c646cea63
---- /dev/null
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -0,0 +1,188 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 ARM Limited.
-+ */
-+
-+#include <errno.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/auxv.h>
-+#include <sys/prctl.h>
-+#include <asm/hwcap.h>
-+#include <asm/sigcontext.h>
-+#include <asm/unistd.h>
-+
-+#include "../../kselftest.h"
-+
-+#define TESTS_PER_HWCAP 2
-+
-+/*
-+ * Function expected to generate SIGILL when the feature is not
-+ * supported and return when it is supported. If SIGILL is generated
-+ * then the handler must be able to skip over the instruction safely.
-+ *
-+ * Note that it is expected that for many architecture extensions
-+ * there are no specific traps due to no architecture state being
-+ * added so we may not fault if running on a kernel which doesn't know
-+ * to add the hwcap.
-+ */
-+typedef void (*sigill_fn)(void);
-+
-+static void sme_sigill(void)
-+{
-+	/* RDSVL x0, #0 */
-+	asm volatile(".inst 0x04bf5800" : : : "x0");
-+}
-+
-+static void sve_sigill(void)
-+{
-+	/* RDVL x0, #0 */
-+	asm volatile(".inst 0x04bf5000" : : : "x0");
-+}
-+
-+static const struct hwcap_data {
-+	const char *name;
-+	unsigned long at_hwcap;
-+	unsigned long hwcap_bit;
-+	const char *cpuinfo;
-+	sigill_fn sigill_fn;
-+	bool sigill_reliable;
-+} hwcaps[] = {
-+	{
-+		.name = "SME",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_SME,
-+		.cpuinfo = "sme",
-+		.sigill_fn = sme_sigill,
-+		.sigill_reliable = true,
-+	},
-+	{
-+		.name = "SVE",
-+		.at_hwcap = AT_HWCAP,
-+		.hwcap_bit = HWCAP_SVE,
-+		.cpuinfo = "sve",
-+		.sigill_fn = sve_sigill,
-+		.sigill_reliable = true,
-+	},
-+};
-+
-+static bool seen_sigill;
-+
-+static void handle_sigill(int sig, siginfo_t *info, void *context)
-+{
-+	ucontext_t *uc = context;
-+
-+	seen_sigill = true;
-+
-+	/* Skip over the offending instruction */
-+	uc->uc_mcontext.pc += 4;
-+}
-+
-+bool cpuinfo_present(const char *name)
-+{
-+	FILE *f;
-+	char buf[2048], name_space[30], name_newline[30];
-+	char *s;
-+
-+	/*
-+	 * The feature should appear with a leading space and either a
-+	 * trailing space or a newline.
-+	 */
-+	snprintf(name_space, sizeof(name_space), " %s ", name);
-+	snprintf(name_newline, sizeof(name_newline), " %s\n", name);
-+
-+	f = fopen("/proc/cpuinfo", "r");
-+	if (!f) {
-+		ksft_print_msg("Failed to open /proc/cpuinfo\n");
-+		return false;
-+	}
-+
-+	while (fgets(buf, sizeof(buf), f)) {
-+		/* Features: line? */
-+		if (strncmp(buf, "Features\t:", strlen("Features\t:")) != 0)
-+			continue;
-+
-+		/* All CPUs should be symmetric, don't read any more */
-+		fclose(f);
-+
-+		s = strstr(buf, name_space);
-+		if (s)
-+			return true;
-+		s = strstr(buf, name_newline);
-+		if (s)
-+			return true;
-+
-+		return false;
-+	}
-+
-+	ksft_print_msg("Failed to find Features in /proc/cpuinfo\n");
-+	fclose(f);
-+	return false;
-+}
-+
-+int main(void)
-+{
-+	const struct hwcap_data *hwcap;
-+	int i, ret;
-+	bool have_cpuinfo, have_hwcap;
-+	struct sigaction sa;
-+
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(hwcaps) * TESTS_PER_HWCAP);
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.sa_sigaction = handle_sigill;
-+	sa.sa_flags = SA_RESTART | SA_SIGINFO;
-+	sigemptyset(&sa.sa_mask);
-+	ret = sigaction(SIGILL, &sa, NULL);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("Failed to install SIGILL handler: %s (%d)\n",
-+				   strerror(errno), errno);
-+
-+	for (i = 0; i < ARRAY_SIZE(hwcaps); i++) {
-+		hwcap = &hwcaps[i];
-+
-+		have_hwcap = getauxval(hwcaps->at_hwcap) & hwcap->hwcap_bit;
-+		have_cpuinfo = cpuinfo_present(hwcap->cpuinfo);
-+
-+		if (have_hwcap)
-+			ksft_print_msg("%s present", hwcap->name);
-+
-+		ksft_test_result(have_hwcap == have_cpuinfo,
-+				 "cpuinfo_match_%s\n", hwcap->name);
-+
-+		if (hwcap->sigill_fn) {
-+			seen_sigill = false;
-+			hwcap->sigill_fn();
-+
-+			if (have_hwcap) {
-+				/* Should be able to use the extension */
-+				ksft_test_result(!seen_sigill, "sigill_%s\n",
-+						 hwcap->name);
-+			} else if (hwcap->sigill_reliable) {
-+				/* Guaranteed a SIGILL */
-+				ksft_test_result(seen_sigill, "sigill_%s\n",
-+						 hwcap->name);
-+			} else {
-+				/* Missing SIGILL might be fine */
-+				ksft_print_msg("SIGILL %sreported for %s\n",
-+					       seen_sigill ? "" : "not ",
-+					       hwcap->name);
-+				ksft_test_result_skip("sigill_%s\n",
-+						      hwcap->name);
-+			}
-+		} else {
-+			ksft_test_result_skip("sigill_%s\n",
-+					      hwcap->name);
-+		}
-+	}
-+
-+	ksft_print_cnts();
-+
-+	return 0;
-+}
-
-base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
+ #define SRC_REWRITE_IP4		0x7f000004U
+ #define DST_REWRITE_IP4		0x7f000001U
 -- 
-2.30.2
+2.34.1
 
