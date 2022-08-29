@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470BF5A5068
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99245A5069
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiH2PpT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 11:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
+        id S229566AbiH2PpV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 11:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiH2PpS (ORCPT
+        with ESMTP id S229815AbiH2PpU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:45:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7C12B199
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 08:45:17 -0700 (PDT)
+        Mon, 29 Aug 2022 11:45:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F9F2F005
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 08:45:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C6DCB81106
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 15:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379DBC433C1;
-        Mon, 29 Aug 2022 15:45:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA548611B1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 15:45:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4654C4347C;
+        Mon, 29 Aug 2022 15:45:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661787915;
-        bh=fBxL1nzlY8qeFhnm7QsFfEvtJ4Mb/hUggbozRGaqApM=;
+        s=k20201202; t=1661787918;
+        bh=2Si0x5Wt8X911XbNVwx9q2J5SXvI/CwwHwm3xOjswWI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CQidzeZH43tP5nLkoGlHQDK41L+EJc8IM4s+F8lt4yy/IlXrpzLrBidJ8L/ii9JWC
-         1NlpPx2tglLbE+DmNb8G4ylUIo6zT7U5ExvfNcKM85wvlFGD+dDxCo+2SDNfokJlpK
-         ap8/Pe9mzkTmr298g49bmurt74EB6XxeaPqrivdn/uO2GQJGcAVHPwSDuJ4pL5Qqoy
-         4BMuCsTHLXid/3Ot2VdJyvgUX9Z4LN6qEOQPD6m7RRZf9YFvkJCO1zyomYw2KIycr2
-         AS7oFjqo7Sn720pMTGDTj8H+Y5sCwTc6KwuzK2yKTsWMU06xQK3ccmKHhbV6JU3VwN
-         yEzVebUcB2bag==
+        b=agHb+qe2ugVbsOvGHzdP4Pa30awiCk+MNshp0+p/Ic0I2S+b1btaaMRR2T1JxmDpT
+         I1KDfcnYU+Uc3ct/USjjCtidIFR0SM7dAi2gcnMzTFHoqJHQDdn7JHRcw2OoIUMjkq
+         XsLm8N40HkJ/XBRETCJbpJPWp94YHhjEAAOeISjmDsFcKa4otB8JYsogYhMZyCACp8
+         GyCiGLzxzJJSohIHUu7ryTV3ZT0DyYrl/NYl7eD1oGIAkVCfSKkN5vaOnEA1oynVEz
+         l3aYA9OMXtQ+8VtUlQ9VZXH2s7iZM+CEOiuxZWXQ+r3h0liMxyTvfzmIPKDczOGiTH
+         CqfxkxHfk1/eg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 1/4] kselftest/arm64: Always encourage preemption for za-test
-Date:   Mon, 29 Aug 2022 16:44:49 +0100
-Message-Id: <20220829154452.824870-2-broonie@kernel.org>
+Subject: [PATCH v2 2/4] kselftest/arm64: Count SIGUSR2 deliveries in FP stress tests
+Date:   Mon, 29 Aug 2022 16:44:50 +0100
+Message-Id: <20220829154452.824870-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220829154452.824870-1-broonie@kernel.org>
 References: <20220829154452.824870-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=916; i=broonie@kernel.org; h=from:subject; bh=fBxL1nzlY8qeFhnm7QsFfEvtJ4Mb/hUggbozRGaqApM=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjDN7x88WNfyOa5FHhYX6WLftaPWxS0aXpEVmXAFKj 1ozMyeaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYwze8QAKCRAk1otyXVSH0IKbB/ 9J2Ke+yDKi+kgQur1HTAKNtlZa0690GRTraoZCG0GE0DCWUShtOYQ9Fiz7Wfzg+1fA6kEgLiSZfva3 J8cM8Ah5v6EkG8CfLZDsvfJ6YV5p1+TxvQFQDtTxWtYUW+F8oP9ypPdpM7klRcj1W5eSgPLuFW3IiT 3mDHF+1atEtD7xCNI7jSabQI78IWiINjQ8IVAZ74wIVAM2A6eKROGHiKyskaos15HzTRDCTUqP0QNA A5jU00rPiz5dJkr8F+kaUr1IkHK/Mu+gxJi0elCbp9hLQBwvpax0yFcOCe50FfSNKR4MYhgIyEYbbQ FPTkuXXSpguSRo0Cn+CgklhdkzAlDZ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3816; i=broonie@kernel.org; h=from:subject; bh=2Si0x5Wt8X911XbNVwx9q2J5SXvI/CwwHwm3xOjswWI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjDN7ynn+GZTzehYWYbpnfF1/guI9H2jGyssDUk+4Z ffBe6jGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYwze8gAKCRAk1otyXVSH0Du/B/ 9lGhbCs+1c7F1XWhxmFI3+ZmoQ4oNAg/Qej615uubhz/T0CvUcB0cxPx7WG/A98WZvJS1GEjmooU+O 4q9UoNGR3MlVobibSiNglpca4Eg5xlkGFrTUtpFJrssmySzhWVLLC6hsYawN3ani0FqUo6mKvPePkH pjU1+A1Sp0BTSg6NndFivx8IeiQycJozqK080WnDit3oUNpmbUdQJcBSRdLAeE1S9mbTq34/BnV5Ck PRrA1tiUhR2MZn77Vl5uTMjvssVxER5fGa/IvkwByAcRiJTn/6yx6b4GpgY5kmvJEyVrWBJa8MqNpf Dwo+OWGc1agggo0Pn+MT50xdZ76A1f
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,33 +58,133 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since we now have an explicit test for the syscall ABI there is no need for
-za-test to cover getpid() so just unconditionally do sched_yield() like we
-do in fpsimd-test.
+Currently the floating point stress tests mostly support testing that the
+data they are checking can be disrupted from a signal handler triggered by
+SIGUSR1. This is not properly implemented for all the tests and in testing
+is frequently modified to just handle the signal without corrupting data in
+order to ensure that signal handling does not corrupt data. Directly support
+this usage by installing a SIGUSR2 handler which simply counts the signal
+delivery.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/za-test.S | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ tools/testing/selftests/arm64/fp/asm-offsets.h |  1 +
+ tools/testing/selftests/arm64/fp/fpsimd-test.S | 15 +++++++++++++++
+ tools/testing/selftests/arm64/fp/sve-test.S    | 15 +++++++++++++++
+ tools/testing/selftests/arm64/fp/za-test.S     | 15 +++++++++++++++
+ 4 files changed, 46 insertions(+)
 
+diff --git a/tools/testing/selftests/arm64/fp/asm-offsets.h b/tools/testing/selftests/arm64/fp/asm-offsets.h
+index a180851496ec..757b2fd75dd7 100644
+--- a/tools/testing/selftests/arm64/fp/asm-offsets.h
++++ b/tools/testing/selftests/arm64/fp/asm-offsets.h
+@@ -3,6 +3,7 @@
+ #define sa_handler 0
+ #define sa_mask_sz 8
+ #define SIGUSR1 10
++#define SIGUSR2 12
+ #define SIGTERM 15
+ #define SIGINT 2
+ #define SIGABRT 6
+diff --git a/tools/testing/selftests/arm64/fp/fpsimd-test.S b/tools/testing/selftests/arm64/fp/fpsimd-test.S
+index e21e8ea52c7e..f0f92192351a 100644
+--- a/tools/testing/selftests/arm64/fp/fpsimd-test.S
++++ b/tools/testing/selftests/arm64/fp/fpsimd-test.S
+@@ -151,6 +151,15 @@ function irritator_handler
+ 	ret
+ endfunction
+ 
++function tickle_handler
++	// Increment the signal count (x23):
++	ldr	x0, [x2, #ucontext_regs + 8 * 23]
++	add	x0, x0, #1
++	str	x0, [x2, #ucontext_regs + 8 * 23]
++
++	ret
++endfunction
++
+ function terminate_handler
+ 	mov	w21, w0
+ 	mov	x20, x2
+@@ -255,6 +264,12 @@ _start:
+ 	orr	w2, w2, #SA_NODEFER
+ 	bl	setsignal
+ 
++	mov	w0, #SIGUSR2
++	adr	x1, tickle_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
+ 	mov	x22, #0		// generation number, increments per iteration
+ .Ltest_loop:
+ 
+diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
+index 589264231a2d..79c56e6c5b23 100644
+--- a/tools/testing/selftests/arm64/fp/sve-test.S
++++ b/tools/testing/selftests/arm64/fp/sve-test.S
+@@ -314,6 +314,15 @@ function irritator_handler
+ 	ret
+ endfunction
+ 
++function tickle_handler
++	// Increment the signal count (x23):
++	ldr	x0, [x2, #ucontext_regs + 8 * 23]
++	add	x0, x0, #1
++	str	x0, [x2, #ucontext_regs + 8 * 23]
++
++	ret
++endfunction
++
+ function terminate_handler
+ 	mov	w21, w0
+ 	mov	x20, x2
+@@ -423,6 +432,12 @@ _start:
+ 	orr	w2, w2, #SA_NODEFER
+ 	bl	setsignal
+ 
++	mov	w0, #SIGUSR2
++	adr	x1, tickle_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
+ #ifdef SSVE
+ 	smstart_sm		// syscalls will have exited streaming mode
+ #endif
 diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
-index 9ab6f9cd9623..2dd358f9edf2 100644
+index 2dd358f9edf2..901839107205 100644
 --- a/tools/testing/selftests/arm64/fp/za-test.S
 +++ b/tools/testing/selftests/arm64/fp/za-test.S
-@@ -287,12 +287,7 @@ _start:
- 	subs	x21, x21, #1
- 	b.ne	0b
+@@ -167,6 +167,15 @@ function irritator_handler
+ 	ret
+ endfunction
  
--	and	x8, x22, #127		// Every 128 interations...
--	cbz	x8, 0f
--	mov	x8, #__NR_getpid	// (otherwise minimal syscall)
--	b	1f
--0:
--	mov	x8, #__NR_sched_yield	// ...encourage preemption
-+	mov	x8, #__NR_sched_yield	// encourage preemption
- 1:
- 	svc	#0
++function tickle_handler
++	// Increment the signal count (x23):
++	ldr	x0, [x2, #ucontext_regs + 8 * 23]
++	add	x0, x0, #1
++	str	x0, [x2, #ucontext_regs + 8 * 23]
++
++	ret
++endfunction
++
+ function terminate_handler
+ 	mov	w21, w0
+ 	mov	x20, x2
+@@ -273,6 +282,12 @@ _start:
+ 	orr	w2, w2, #SA_NODEFER
+ 	bl	setsignal
  
++	mov	w0, #SIGUSR2
++	adr	x1, tickle_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
+ 	mov	x22, #0		// generation number, increments per iteration
+ .Ltest_loop:
+ 	rdsvl	0, 8
 -- 
 2.30.2
 
