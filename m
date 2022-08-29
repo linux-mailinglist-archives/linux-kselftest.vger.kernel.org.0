@@ -2,79 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7BE5A4FD5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7216F5A4FE1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiH2PIb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 11:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S229646AbiH2PKS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 11:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiH2PI3 (ORCPT
+        with ESMTP id S229494AbiH2PKR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:08:29 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33B791D02;
-        Mon, 29 Aug 2022 08:08:25 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C72CE188476A;
-        Mon, 29 Aug 2022 15:08:23 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id BB7E325032B7;
-        Mon, 29 Aug 2022 15:08:23 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id AD1409EC0002; Mon, 29 Aug 2022 15:08:23 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Mon, 29 Aug 2022 11:10:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027181C90A;
+        Mon, 29 Aug 2022 08:10:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93C0A61124;
+        Mon, 29 Aug 2022 15:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DB7B6C433D7;
+        Mon, 29 Aug 2022 15:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661785813;
+        bh=8DV5Al8uoRA23fJEzAcTio890uhpNVpl6xlcOCvBmOk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WFM/Ps2NBtafeEoYeYpmBQHEE68FMJRCQRfmcUxLmd+UFR+tLTseqXe7oezu+7Emf
+         49O8nJxUTM5nF/wdgumB7C57b4ybNwnlRHSSpkyLnUi24TyJOTbbUEttLHCWhKTqas
+         8LHUdbSXXa3OoSG+pdXIWTjnZum4JNy/c/7MVC4eJYCTGwovm5dQJVF1rxMqq4AY5p
+         VcSyF7di044RkRrwXLy/enF9gn1dCfw8S2HJtywEkeRc3TCBzWbZZj8Zt/mAVXFYJC
+         mKsbFDFZHOfQ4kCJ4GhdypbfZhyB6uR8Cb4G/37EQ2KKiqfoGm0ayO1rvw7sVzm4Tj
+         ttmSULO+s18sA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B991DE924D4;
+        Mon, 29 Aug 2022 15:10:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Date:   Mon, 29 Aug 2022 17:08:23 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <YwzPJ2oCYJQHOsXD@shredder>
-References: <20220826114538.705433-1-netdev@kapio-technology.com>
- <20220826114538.705433-7-netdev@kapio-technology.com>
- <YwpgvkojEdytzCAB@shredder>
- <7654860e4d7d43c15d482c6caeb6a773@kapio-technology.com>
- <YwxtVhlPjq+M9QMY@shredder>
- <2967ccc234bb672f5440a4b175b73768@kapio-technology.com>
- <Ywyj1VF1wlYqlHb6@shredder>
- <9e1a9eb218bbaa0d36cb98ff5d4b97d7@kapio-technology.com>
- <YwzPJ2oCYJQHOsXD@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <69db7606896c77924c11a6c175c4b1a6@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] selftests/bpf: Fix bind{4,6} tcp/socket header type
+ conflict
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166178581375.25237.2019041652775863863.git-patchwork-notify@kernel.org>
+Date:   Mon, 29 Aug 2022 15:10:13 +0000
+References: <20220826052925.980431-1-james.hilliard1@gmail.com>
+In-Reply-To: <20220826052925.980431-1-james.hilliard1@gmail.com>
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org, andrii@kernel.org, mykolal@fb.com,
+        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,21 +62,46 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-08-29 16:37, Ido Schimmel wrote:
-> On Mon, Aug 29, 2022 at 02:04:42PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-08-29 13:32, Ido Schimmel wrote:
->> Port association is needed for MAB to work at all on mv88e6xxx, but 
->> for
->> 802.1X port association is only needed for dynamic ATU entries.
-> 
-> Ageing of dynamic entries in the bridge requires learning to be on as
-> well, but in these test cases you are only using static entries and
-> there is no reason to enable learning in the bridge for that. I prefer
-> not to leak this mv88e6xxx implementation detail to user space and
-> instead have the driver enable port association based on whether
-> "learning" or "mab" is on.
-> 
+Hello:
 
-Then it makes most sense to have the mv88e6xxx driver enable port 
-association when then port is locked, as it does now.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Thu, 25 Aug 2022 23:29:22 -0600 you wrote:
+> There is a potential for us to hit a type conflict when including
+> netinet/tcp.h with sys/socket.h, we can remove these as they are not
+> actually needed.
+> 
+> Fixes errors like:
+> In file included from /usr/include/netinet/tcp.h:91,
+>                  from progs/bind4_prog.c:10:
+> /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
+>    34 | typedef __INT8_TYPE__ int8_t;
+>       |                       ^~~~~~
+> In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
+>                  from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
+>                  from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
+>                  from progs/bind4_prog.c:9:
+> /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
+>    24 | typedef __int8_t int8_t;
+>       |                  ^~~~~~
+> /home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
+>    43 | typedef __INT64_TYPE__ int64_t;
+>       |                        ^~~~~~~
+> /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
+>    27 | typedef __int64_t int64_t;
+>       |                   ^~~~~~~
+> make: *** [Makefile:537: /home/buildroot/bpf-next/tools/testing/selftests/bpf/bpf_gcc/bind4_prog.o] Error 1
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] selftests/bpf: Fix bind{4,6} tcp/socket header type conflict
+    https://git.kernel.org/bpf/bpf-next/c/3721359d3907
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
