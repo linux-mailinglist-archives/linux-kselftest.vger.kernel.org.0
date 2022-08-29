@@ -2,100 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF775A4674
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 11:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E2A5A475C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 12:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiH2JvU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 05:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S229536AbiH2KkN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 06:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiH2JvU (ORCPT
+        with ESMTP id S229717AbiH2KkK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 05:51:20 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5100458B5A
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 02:51:18 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id u9so14601641ejy.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 02:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=SlYMUlG2qSvFZB0N2mq5+Vuwq77kZgSrLYVLPhtOEnc=;
-        b=VA8mRlDIJuRpUjAr2wap2tw76G9iqQ95P1eKHRbi0MXQ+y5IRx86u42xLbqDa3N5Uw
-         WBpv8t9zipWs3CctFwvBsrOIu5XtbCOP1buoXyRAK4MLU31Yw5ngEBFKEMkK8zVonfRa
-         j0ONoFy8E5axclexgQI8Deix+KM6vUXYS29+vk/m2cgOGWRgF4irThnGgYZYmbUaOgFL
-         UAiaDDzB1hu/DAZMMj9RMnoiMeWabPFTFH2n9WQhu3VNwHXDNrCWsZF6emYbnh58OVDq
-         r+pUZaGHVx50qLZUXUjESZfGWi8gRrSNSOgOjZjybuBNJVt27lkMLyDAdhTM/SlwI1T9
-         rD/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=SlYMUlG2qSvFZB0N2mq5+Vuwq77kZgSrLYVLPhtOEnc=;
-        b=Qy1oWtdgKWndGOI1Yda3RR9nHLRUNmHrjNay6sxbvlU7YVfnmKoKthBPpKmc6itXDz
-         ecxyixOblZ6UX399+OKAUtpsj3fkT2dB4owabJ+8Uu0qDp1uSlhb3JikKbd15GD0LV1O
-         WNtKNwCbW95Tf1cRaB/pbXI6YUaGIu7yuPS8/zEAE5se4kUlTqSdKrbKn5QaKfZ+7tka
-         xuM4TcioGPRBLqDB/OUJbutVFJEgq0uCeB2VTRUz/N3PKTRq6FD8PIq7KpuOj8OCd7hH
-         q0sJC+177W7AGGzaFBSRdiGDEg20cEwokJBNRXpQ3ylYX+QoByv2EX65FBQG+Tq+uiNd
-         zFXw==
-X-Gm-Message-State: ACgBeo37qSl7mnpm9/6DSszySE7ss+dIcLc75h9bB+9+8Eg4Mio3Bp8s
-        Y6PrI2FrlYQAz7hFGe5ssbrdEQ==
-X-Google-Smtp-Source: AA6agR7M8nHmvMXeLrqK9slD36AnzRPtNtaEGwJrWTLaeYi3Ldj3MRdNNKrrHzv2HbakO0uElrxasg==
-X-Received: by 2002:a17:907:2d23:b0:730:acf0:4907 with SMTP id gs35-20020a1709072d2300b00730acf04907mr13239673ejc.700.1661766676786;
-        Mon, 29 Aug 2022 02:51:16 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id z2-20020a170906240200b0073c23616cb1sm4374177eja.12.2022.08.29.02.51.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 02:51:16 -0700 (PDT)
-Message-ID: <4749d6b6-c20c-fd20-f904-accee3f1947a@blackwall.org>
-Date:   Mon, 29 Aug 2022 12:51:14 +0300
+        Mon, 29 Aug 2022 06:40:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BF76389;
+        Mon, 29 Aug 2022 03:40:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5652233681;
+        Mon, 29 Aug 2022 10:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661769605; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YyrUyc//S6lyu1GkaA3SvkFVh044FLWZiRnNfMaJfiQ=;
+        b=sealo4JgszYzk3Q2SF7jDXyb+wUABg85KYwx49/EUGKvkBaXX/kTf9TlfzGXDN+Mu5ulPn
+        ZURHB3vlh8kKMdn4Y1jckgKOOqFh2+/xM4JaQVl79/OQrNHxgVezqk+h2rceWlN/QWiB8Q
+        sucYahKq9QPP3O6pIx7HJFlTcccMynI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 32DCF133A6;
+        Mon, 29 Aug 2022 10:40:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uxstCoWXDGO7SQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 29 Aug 2022 10:40:05 +0000
+Date:   Mon, 29 Aug 2022 12:40:04 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
+        Christoph Hellwig <hch@infradead.org>, oleg@redhat.com,
+        David Hildenbrand <david@redhat.com>,
+        Jann Horn <jannh@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
+Message-ID: <YwyXhH6k1JVgKBVl@dhcp22.suse.cz>
+References: <20220531223100.510392-1-surenb@google.com>
+ <20220531223100.510392-2-surenb@google.com>
+ <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
+ <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com>
+ <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
+ <CAOUHufa1zc3fMWsyyz1uB6_gsgVPk1Hw_T31WzWK58QVgsQSAQ@mail.gmail.com>
+ <20220822161603.9e19edfe2daaea3bf591910a@linux-foundation.org>
+ <CAOUHufbyWwkOAJTD4G82sLcwE_33Yy=s4Q+gGBujwXvEBZ8iqA@mail.gmail.com>
+ <YwSRf3LZ7gXwWaNN@dhcp22.suse.cz>
+ <CAOUHufbauOoXshmfbBYAnPVYkrZ=jFA2wpPotXNnOjoWVRa5qQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
- extend locked port feature
-Content-Language: en-US
-To:     Ido Schimmel <idosch@nvidia.com>, netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-References: <20220826114538.705433-1-netdev@kapio-technology.com>
- <20220826114538.705433-2-netdev@kapio-technology.com>
- <Ywo16vHMqxxszWzX@shredder>
- <dd9a4156fe421f6be3a49f5b928ef77e@kapio-technology.com>
- <YwxwPJOx/n5SHZM5@shredder>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <YwxwPJOx/n5SHZM5@shredder>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOUHufbauOoXshmfbBYAnPVYkrZ=jFA2wpPotXNnOjoWVRa5qQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,36 +85,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29/08/2022 10:52, Ido Schimmel wrote:
-> On Sun, Aug 28, 2022 at 12:23:30PM +0200, netdev@kapio-technology.com wrote:
->> On 2022-08-27 17:19, Ido Schimmel wrote:
->>> On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
->>>>
->>>>  	nbp_switchdev_frame_mark(p, skb);
->>>> @@ -943,6 +946,10 @@ static int br_setport(struct net_bridge_port
->>>> *p, struct nlattr *tb[],
->>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS,
->>>> BR_NEIGH_SUPPRESS);
->>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
->>>>  	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
->>>> +	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
->>>> +
->>>> +	if (!(p->flags & BR_PORT_LOCKED))
->>>> +		p->flags &= ~BR_PORT_MAB;
->>
->> The reason for this is that I wanted it to be so that if you have MAB
->> enabled (and locked of course) and unlock the port, it will automatically
->> clear both flags instead of having to first disable MAB and then unlock the
->> port.
+On Sun 28-08-22 13:50:09, Yu Zhao wrote:
+> On Tue, Aug 23, 2022 at 2:36 AM Michal Hocko <mhocko@suse.com> wrote:
+[...]
+> > You cannot really make any
+> > assumptions about oom_reaper and how quickly it is going to free the
+> > memory.
 > 
-> User space can just do:
-> 
-> # bridge link set dev swp1 locked off mab off
-> 
-> I prefer not to push such logic into the kernel and instead fail
-> explicitly. I won't argue if more people are in favor.
+> Agreed. But here we are talking about heuristics, not dependencies on
+> certain behaviors. Assume we are playing a guessing game: there are
+> multiple mm_structs available for reclaim, would the oom-killed ones
+> be more profitable on average? I'd say no, because I assume it's more
+> likely than unlikely that the oom reaper is doing/to do its work. Note
+> that the assumption is about likelihood, hence arguably valid.
 
-+1
+Well, my main counter argument would be that we do not really want to
+carve last resort mechanism (which the oom reaper is) into any heuristic
+because any future changes into that mechanism will be much harder to
+justify and change. There is a cost of the maintenance that should be
+considered. While you might be right that this change would be
+beneficial, there is no actual proof of that. Historically we've had
+several examples of such a behavior which was really hard to change
+later on because the effect would be really hard to evaluate.
 
-I prefer to fail explicitly too, actually I also had a comment about this but
-somehow have managed to delete it before sending my review. :)
+-- 
+Michal Hocko
+SUSE Labs
