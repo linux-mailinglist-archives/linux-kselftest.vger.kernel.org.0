@@ -2,94 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB855A3F95
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Aug 2022 22:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 947375A4036
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 02:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiH1UO2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Aug 2022 16:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
+        id S229462AbiH2AJq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 28 Aug 2022 20:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiH1UO1 (ORCPT
+        with ESMTP id S229446AbiH2AJp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Aug 2022 16:14:27 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D4A11C07;
-        Sun, 28 Aug 2022 13:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661717666; x=1693253666;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rO3IvTkqA5van28FZL0bDHUA5WA49U4FvaK1jBtX1vk=;
-  b=IVS1AYDyet41iEV4vf6oeg8OM5W9kN3JKXMFEyQkM3XD1oupZ+sHMA8k
-   FqABGj9PqDEdbSh385HRshVUD0pCWMxoEAUCvqfmo9NvPxBhk5Ka7gaux
-   J6KokyP++Y5YccJcwJ8kLAp8GtuYyy17me8ag4bZjFaCqVTd68+raZL1e
-   fiQhC0blogfNwxnSs5qE7TnJS70VzFaNmX1QWjTmRDkdKJyUgwkH3J9UT
-   bW85SEjO8CQDSbHcP8boVeFUD1jDDv68/lzhnwzZBfW++yH0UDVCCNJMm
-   /wxpSVF+Q8ATSK4jRNC6e5nTDVKHX3uW2D6dzexyLFlTtbGAh3gTpN6Xy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10453"; a="281735123"
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="281735123"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 13:14:25 -0700
-X-IronPort-AV: E=Sophos;i="5.93,271,1654585200"; 
-   d="scan'208";a="672132378"
-Received: from pranathi-mobl.amr.corp.intel.com (HELO [10.209.82.24]) ([10.209.82.24])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2022 13:14:24 -0700
-Message-ID: <dcf53e6b-d60f-5d6b-029a-38df68d66302@intel.com>
-Date:   Sun, 28 Aug 2022 13:14:24 -0700
+        Sun, 28 Aug 2022 20:09:45 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1F3248CD;
+        Sun, 28 Aug 2022 17:09:43 -0700 (PDT)
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4MG9mN6RdszDrb2;
+        Mon, 29 Aug 2022 00:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1661731782; bh=VtjZAMq50WDc2JV4qsxMbdF++DZSjSFlkdTI6UQoXDY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gacBh53FIDLeBgCB3F02Dnz+WYlWLlO+dBjxpGmzhriX1FYoFmcqQwMu8ikMoTeCK
+         p9w150jy9tCu9ra1BO/Wd5M0hlAgsmTz36jLFeNZve4X9yYyeF+ZWp+AMOhAci38MW
+         EiIq5rHscVUjUaDetm5CcoDtWd7JkK1rMP0Xr80g=
+X-Riseup-User-ID: EC7CA0391D2F46489D39CE88BE1AB6243E7EDC666D6266A7CD73F85762F41ADD
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MG9mG0L4Zz5vkC;
+        Mon, 29 Aug 2022 00:09:33 +0000 (UTC)
+From:   Isabella Basso <isabbasso@riseup.net>
+To:     igt-dev@lists.freedesktop.org
+Cc:     magalilemes00@gmail.com, maira.canal@usp.br,
+        tales.aparecida@gmail.com, rodrigo.siqueira@amd.com,
+        mwen@igalia.com, andrealmeid@riseup.net, twoerner@gmail.com,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        kunit-dev@googlegroups.com, davidgow@google.com,
+        dlatypov@google.com, brendanhiggins@google.com, daniel@ffwll.ch,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, daniel@fooishbar.org,
+        linux-kernel@vger.kernel.org, Isabella Basso <isabbasso@riseup.net>
+Subject: [PATCH i-g-t v2 0/4] Add support for KUnit tests
+Date:   Sun, 28 Aug 2022 21:09:16 -0300
+Message-Id: <20220829000920.38185-1-isabbasso@riseup.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v11 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220826150638.2397576-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/26/22 08:06, Kuppuswamy Sathyanarayanan wrote:
-> +struct tdx_report_req {
-> +	__u8  subtype;
-> +	__u64 reportdata;
-> +	__u32 rpd_len;
-> +	__u64 tdreport;
-> +	__u32 tdr_len;
-> +};
+This patch series was first developed as part of the LKCamp hackathon
+that happened last year[1], mainly focusing on refactoring DRM tests to
+use KUnit.
 
-Please do take a look at how the compiler ends up building that structure.
+KUnit[2][3] is a unified test framework that provides helper tools,
+simplifying their development and execution. Using an x86-64 machine
+it's possible to run tests in the host's kernel natively using user-mode
+Linux[4] (aka UML), which simplifies usage in a wide variety of
+scenarios, including integration to CI.
 
-If you sized things to "save space", the way the compiler treats that
-structure may surprise you.  You might also want to look at how a 32-bit
-compile deals with it versus a 64-bit one.
+As the tool's adoption widens into graphics testing territory, I and
+LKCamp members figured it would be important to support it in IGT, as
+it's a core tool for GPU drivers maintainers.
+
+I have then added KUnit support into IGT mainly following the KTAP
+specs, and it can be tested using patch 4/4 in this series together with
+a DRM selftests patch series available at [5].
+
+Changes since v1:
+- Major rework of parsing function structure:
+  - It is not longer recursive
+  - Adapt kselftests functions and structs to be used with KUnit
+- Switch DRM selftests to KUnit parsing as they're updated in the kernel
+- Replace AMD KUnit tests by DRM selftests
+
+[1]: https://groups.google.com/g/kunit-dev/c/YqFR1q2uZvk/m/IbvItSfHBAAJ
+[2]: https://kunit.dev
+[3]: https://docs.kernel.org/dev-tools/kunit/index.html
+[4]: http://user-mode-linux.sourceforge.net
+[5]: https://lore.kernel.org/all/20220708203052.236290-1-maira.canal@usp.br/
+
+Isabella Basso (4):
+  lib/igt_kmod: rename kselftest functions to ktest
+  lib/igt_kmod.c: check if module is builtin before attempting to unload
+    it
+  lib/igt_kmod: add compatibility for KUnit
+  tests: DRM selftests: switch to KUnit
+
+ lib/igt_kmod.c       | 315 +++++++++++++++++++++++++++++++++++++++++--
+ lib/igt_kmod.h       |  14 +-
+ tests/drm_buddy.c    |   7 +-
+ tests/drm_mm.c       |   7 +-
+ tests/kms_selftest.c |  12 +-
+ 5 files changed, 329 insertions(+), 26 deletions(-)
+
+-- 
+2.37.2
+
