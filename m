@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C21E5A5798
+	by mail.lfdr.de (Postfix) with ESMTP id 93BE65A5799
 	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 01:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbiH2Xck (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 19:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        id S229651AbiH2Xcl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 19:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiH2Xcj (ORCPT
+        with ESMTP id S229488AbiH2Xcj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 29 Aug 2022 19:32:39 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894F48277E;
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB3282848;
         Mon, 29 Aug 2022 16:32:38 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-11e7e0a63e2so12131211fac.4;
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-11c5505dba2so12935167fac.13;
         Mon, 29 Aug 2022 16:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=xoXh8ocpfMOZ1Y+oIk1mmqUrQZ2HCwgZSU9pbCZXcUU=;
-        b=dCzoA1XHZW63yGO+g0NNeyXHlrLVSMEuXI+XxWvoAWv8hrm5MQQLoS4ATQJyqWHF7Y
-         1XgCiBFAFy7OmGZnH4MrYpcm0+ybF8Q1FK3GMVa0XeVJpEwk/3cwp0cBBFtTcb8Z9ky7
-         6R6vNP3dOmvG0/X+rEx44HP5AWw2oWCLUGvtaYe+PDEB5X6U1jY22hNBl47Tc99uDnDi
-         xTyWr71EtbHwLFd71njm+6iItgL9ZQ2EhvINQ3/PKQ6c9WfT52i5Xs5LDxfkDaZGncEu
-         hvc1ykTGsEAYQmZUzYfbo2kIjRlzNx88h/y47hSPSqrG//5Gm4MMSyW2WApR75duZkNz
-         /cFQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=zCCrxwttgbjoHUFJXgo6b/XsRuRpmo/BC4fXPdswmEY=;
+        b=kz3FwI+wQpYmECto1j3t7UVr+XwvZi9hNcExNwUFXNxa5r/hFFG8/DswIEPj7xVSBU
+         qWHiaRhMEEy8z+D1svO+bGldvLZBTRjbdJj0LfL3ty+A5jPOvT8jVKz456ZHzjWHTuGR
+         bP1Wv/vTiqQWYfOxbuKUaHvtuCpG624OILzqCkvUDCf6kuZ/IHpYWkf0odGha8jhEy2C
+         DKPmqH8/bKMF/54p0eEG89FDEDV9vAbqihLxosQm9+YQDNmQLSSY6+N6KlYygsigO1ZO
+         WK5uLjfq2po8cSa30xwtujNdvGLU88SAfjT4tNAtohSQNupNKdP7Bf+R95c95/8R6qKn
+         z7qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=xoXh8ocpfMOZ1Y+oIk1mmqUrQZ2HCwgZSU9pbCZXcUU=;
-        b=YYnmyqijnkGfGpLIqaCyiBz1c4z6QH1HK2XzR85eGYtNpHFEmKJicKQYKVjlfdl7Nf
-         ScvNxXgkYd/vZjHMPqHwSrp+/ARcIV90EeCPlR9IO7cQ53HoFGdeXUGYd2KDIGmsaQHY
-         ruQbmrg3w6hYrbPsuwHGTb6+9Xwx/xBxaRtXWp7dEMnRgfg5WlubPT2SZ/Sn20oF3Upz
-         edYwSHpjbFSjhFLQdAs/gGa3vMQE1LgGszkVvFerGEsswrXgTcf3tM6wJQNwQ+C2euiE
-         M2uOu2eDRnjuE9My06Cwc4Y4QbLeRsAz+Wb8NDxC/x/ba45an0Te8Pcoz64hsdHmchBX
-         1sKQ==
-X-Gm-Message-State: ACgBeo0IwBYiykr6GhCTt95/J26DWIZRSf2rgwMZgVhUGblAArSh7dd8
-        mios7MllEdO0p5TB6MZP6Hg=
-X-Google-Smtp-Source: AA6agR684yaS9cpQNtGRER3KWnVZDAjnT4rlV+8VqYHlWewg0RGeeztZZOTTfFVjVUE1r1qYrPjFgw==
-X-Received: by 2002:a05:6870:14c3:b0:fb:46b4:5b3f with SMTP id l3-20020a05687014c300b000fb46b45b3fmr8605594oab.56.1661815956816;
-        Mon, 29 Aug 2022 16:32:36 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=zCCrxwttgbjoHUFJXgo6b/XsRuRpmo/BC4fXPdswmEY=;
+        b=P+7OWO/Ei4h5KpTG7Iy2Qk8I3LzebePF8lx+/mcMg5UxwDdkAlj75x/pQCCHzobnwC
+         kPJNM8a0AV4096WP/7HA0x9E/Q/iHBqxBov2gVUwhNa4QMR9fpq0yDY/BeFFZ9+uBBLO
+         4oAkX3hRyZ+q23UwH/Gr6VeRM4vLgrxaBd4Jy6gTxhcZR66OUryxxt0QAf4f+eYwdsZZ
+         6Uh0fOMMvIqwEla1e69fnfQQjD8IH7hwWfKGLHLhuQ9lqJVuGM4XLY6Qh59RDbrun/1e
+         eHgtgW4jgsZkG3ebh0WIfz0tjvC6nmwcznuD7pTGgypIR2vTKaO7fakgPEEcJpYqGOdx
+         Jl3A==
+X-Gm-Message-State: ACgBeo12o2OD7D8sUbv7+s3oLzweXkIU7staKSDY9c6hA9bTNJ9wUcAH
+        sTT+w7RN0nUwgA1KTvZb5iObOkS0368=
+X-Google-Smtp-Source: AA6agR4Xp2gdmkaqUZy4gjFgnGcMvbPg7exr/0seoU1LHcMYmt7U8xiB6w5TKWzNoQSGQ5UCZPW0cQ==
+X-Received: by 2002:a05:6870:240d:b0:11e:ff35:5ce8 with SMTP id n13-20020a056870240d00b0011eff355ce8mr3069268oap.232.1661815958106;
+        Mon, 29 Aug 2022 16:32:38 -0700 (PDT)
 Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:dd06:f7b4:b579:6561])
-        by smtp.gmail.com with ESMTPSA id bu28-20020a0568300d1c00b0063b24357269sm4183611otb.13.2022.08.29.16.32.35
+        by smtp.gmail.com with ESMTPSA id bu28-20020a0568300d1c00b0063b24357269sm4183611otb.13.2022.08.29.16.32.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 16:32:36 -0700 (PDT)
+        Mon, 29 Aug 2022 16:32:37 -0700 (PDT)
 From:   frowand.list@gmail.com
 To:     Frank Rowand <frowand.list@gmail.com>,
         David Gow <davidgow@google.com>,
@@ -59,10 +59,12 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
         kernelci@groups.io, kunit-dev@googlegroups.com,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] begin KTAP spec v2 process
-Date:   Mon, 29 Aug 2022 18:31:48 -0500
-Message-Id: <20220829233150.3564612-1-frowand.list@gmail.com>
+Subject: [PATCH v3 1/2] ktap_v2: change version to 2-rc in KTAP specification
+Date:   Mon, 29 Aug 2022 18:31:49 -0500
+Message-Id: <20220829233150.3564612-2-frowand.list@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220829233150.3564612-1-frowand.list@gmail.com>
+References: <20220829233150.3564612-1-frowand.list@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,33 +79,40 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Frank Rowand <frank.rowand@sony.com>
 
-The process to create version 2 of the KTAP Specification is documented
-in email discussions.  I am attempting to capture this information at
+Prepare KTAP Specification for the process of creating version 2.
 
-   https://elinux.org/Test_Results_Format_Notes#KTAP_version_2
+The version will remain "2-rc" until the final commit to complete
+Version 2.  Adding the "-rc" ensures that none of the development
+versions will be mistaken for the completed version 2.
 
-I am already not following the suggested process, which says:
-"...please try to follow this principal of one major topic per email
-thread."  I think that is ok in this case because the two patches
-are related and (hopefully) not controversial.
+After this commit, Sphinx complains that we now need more '=' signs:
 
-Changes since patch version 2:
-   - correct version 1 change text
-   - version 1 patch 2/2 had not yet been applied when I created version 2,
-     refresh version 2 patch 2/2 for new context
+  Documentation/dev-tools/ktap.rst:3: WARNING: Title overline too short.
+  ===================================================
+  The Kernel Test Anything Protocol (KTAP), version 2-rc
+  ===================================================
 
-Changes since patch version 1:
-   - drop patch 2/2.  Jonathan Corbet has already applied this patch
-     into version 1 of the Specification
-   - add new patch 2/2
+This warning will disappear in the final commit for the release of
+version 2, when the "-rc" is removed.
 
-Frank Rowand (2):
-  ktap_v2: change version to 2-rc in KTAP specification
-  ktap_v2: change "version 1" to "version 2" in examples
+Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+---
+ Documentation/dev-tools/ktap.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/dev-tools/ktap.rst | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
+diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+index d0a9565b0f44..b9a57ceddd4f 100644
+--- a/Documentation/dev-tools/ktap.rst
++++ b/Documentation/dev-tools/ktap.rst
+@@ -1,7 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+ ===================================================
+-The Kernel Test Anything Protocol (KTAP), version 1
++The Kernel Test Anything Protocol (KTAP), version 2-rc
+ ===================================================
+ 
+ TAP, or the Test Anything Protocol is a format for specifying test results used
 -- 
 Frank Rowand <frank.rowand@sony.com>
 
