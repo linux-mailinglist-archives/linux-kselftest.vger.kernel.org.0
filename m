@@ -2,136 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D915A508C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0B45A50A8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiH2PsG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 11:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
+        id S229625AbiH2Puj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 11:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiH2Pr6 (ORCPT
+        with ESMTP id S229566AbiH2Pui (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:47:58 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE3997539;
-        Mon, 29 Aug 2022 08:47:42 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id q81so6880629iod.9;
-        Mon, 29 Aug 2022 08:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=F8MIYXd/Xz7kSxyNJ7px1zHhNcsXalbvXrm8i70TLIA=;
-        b=MkC5UdWU6+Imh87+mJ22IPOYrjSDsKYj/4VTRMkEYgobRDMqGcUTHShvbFDDhzGCfI
-         hpEMw+y8vqipvOg/wJovZPsZG4SsWXV1vZ6MbVJyhmEGIvj90u6lj00dcPgD/FIEr6Cw
-         8f/Zjm2hz5bMd5oWcReckBHYB5sNYrAQaC89N2DEqP8CJPCHkVQcOTiDQifnFV5wV5d+
-         epLlyF8v3F6Ih0aOOFpW7B4sYL5E+bgt+EZKZH/abLc7eaPsnUMZlTYe2u44rHyb7BvX
-         grt6lZvl574TTY2+i/FHE03X4OEF7srQy3bLB3jQHoNkiYPSqsuvBfSgRKHN9mC/9VYG
-         ij0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=F8MIYXd/Xz7kSxyNJ7px1zHhNcsXalbvXrm8i70TLIA=;
-        b=puJ6IsDpqy/1mLrjxN69iI2mWtEomQ4cUA9GRxUUIZt5i1uxifdL903jefrOtHcC9+
-         5whIO5O68LPTZ7FMhNuDt+WlL9tdG6wXzI2CIemIE65Rh97xseIvuGAGiSepEZMKqHrq
-         0VX17t/G/cgE5+jDMmqdF/a2zT9flrUMriqLylCST5DfPwwTcn/qQPG5K3fxT/D2RDr/
-         J/9TF11qffvw5iBH3Ss+qAI2LIQutGADfsMW/Y60YsC5UaI5OHW9c8n/Fag8FAipll4j
-         rwj1HDdw/HhgjANlRlFmc0qEnRxX/Ybh84OXclZuB+Gq3ipZ2FtFmGhNdp89SEtNbS3z
-         TXAg==
-X-Gm-Message-State: ACgBeo0+dLUVM7tGp3fNlOxnfDn1bsnXeDeBatws14l9NkEMEf6w7l7S
-        6ZmMVclKfj3qqnh9nVb8+LS3tOzk4E+ZwA==
-X-Google-Smtp-Source: AA6agR7gk30EK0FrDgzRs3klB18ZOu2JkuAeAChQM6pSN6AXzyQX/5WN+1EMghi/8BQ9UMFKU0OGFg==
-X-Received: by 2002:a6b:2ac4:0:b0:688:3a14:2002 with SMTP id q187-20020a6b2ac4000000b006883a142002mr8837385ioq.62.1661788060553;
-        Mon, 29 Aug 2022 08:47:40 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-138-207.hlrn.qwest.net. [71.33.138.207])
-        by smtp.gmail.com with ESMTPSA id f33-20020a05663832a100b0034294118e1bsm4452576jav.126.2022.08.29.08.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 08:47:39 -0700 (PDT)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     James Hilliard <james.hilliard1@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/bpf: Fix connect4_prog tcp/socket header type conflict
-Date:   Mon, 29 Aug 2022 09:47:09 -0600
-Message-Id: <20220829154710.3870139-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 29 Aug 2022 11:50:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FD886718
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 08:50:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2EF561045
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 15:50:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E62AAC433C1;
+        Mon, 29 Aug 2022 15:50:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661788235;
+        bh=8u7wzWCBYbPHjL/T7zjkuOofXMJVGIZuJLQLYujweWY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sCF6mUZ18Eo4AVw+q7c1kiZXY9G24WOM3v3fHwPYff0hzLVKwDR+2gTARwdaWVnXn
+         B2kjN9pdz/qh/tZi4DQ1YEGPvAf4VpCVwIuUfNiNlXq9kGuQ558NzMqUpGbR6sZAq+
+         o+aJ718y0TEVzbfO4NnToisxCY4Yeu2Ki2BeEH3nn0RNXvgzeR7t72OJ5YU52kbpVp
+         XK+q30waSaYbps/VizPItd8p+lWGwdcwyMupjrSuZ5FypCSVr9BEa4kKnxTwKDA6mj
+         txLabvM5PVfDmbcZb3885TMhZJfjLWc87UPgJ0qCfA5852HCuNHoeV9cLxL4ksI0Th
+         ivX472rms+i7g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v4 0/4] arm64/sme: ptrace support for TPIDR2_EL0
+Date:   Mon, 29 Aug 2022 16:49:17 +0100
+Message-Id: <20220829154921.837871-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1567; i=broonie@kernel.org; h=from:subject; bh=8u7wzWCBYbPHjL/T7zjkuOofXMJVGIZuJLQLYujweWY=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjDN/9Vw0Uuw9uxB+mkYETRApTXVmSRJzLcx1ANY9j sjf1TdmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYwzf/QAKCRAk1otyXVSH0Ja2B/ wMqdtCon0gnIY9YnAy+XJ6oFYFXrpGIWt484TLFvjFmcP4zf9q0tBfre5UgkzLD5SVZ44tZz1HDIsC pLUvHOgMzds/mh5yXC1NuI6HgGGT3vzdDtoJwdjWJPyh69wJs1Nf5J/Pz+7ijVJ/Lw9vtXo3Gs7Ry1 kuwERb079a+CJAAxDORODhbdWADIvlDDs+bPBG3MnJIq6XHzDwS4/OWlT9AUYwnLr4Rw5L5fnh4zS8 w+yh9hKwHL0p4kDw0UOKJ9H3ywT+g3CA+jNUoBxgJwd9avJmlfl9OVkRUUDHKdFI0tsygnNFPiuYVe WuwWFbRUsPolpOd2z4uBqgfEaG3EPw
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is a potential for us to hit a type conflict when including
-netinet/tcp.h and sys/socket.h, we can replace both of these includes
-with linux/tcp.h and bpf_tcp_helpers.h to avoid this conflict.
+When SME was initially merged we did not add support for TPIDR2_EL0 to
+the ptrace interface, creating difficulties for debuggers in accessing
+lazy save state for ZA. This series implements that support, extending
+the existing NT_ARM_TLS regset to support the register when available,
+and adds kselftest coverage for the existing and new NT_ARM_TLS
+functionality.
 
-Fixes the following error:
-In file included from /usr/include/netinet/tcp.h:91,
-                 from progs/connect4_prog.c:11:
-/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:34:23: error: conflicting types for 'int8_t'; have 'char'
-   34 | typedef __INT8_TYPE__ int8_t;
-      |                       ^~~~~~
-In file included from /usr/include/x86_64-linux-gnu/sys/types.h:155,
-                 from /usr/include/x86_64-linux-gnu/bits/socket.h:29,
-                 from /usr/include/x86_64-linux-gnu/sys/socket.h:33,
-                 from progs/connect4_prog.c:10:
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:24:18: note: previous declaration of 'int8_t' with type 'int8_t' {aka 'signed char'}
-   24 | typedef __int8_t int8_t;
-      |                  ^~~~~~
-/home/buildroot/opt/cross/lib/gcc/bpf/13.0.0/include/stdint.h:43:24: error: conflicting types for 'int64_t'; have 'long int'
-   43 | typedef __INT64_TYPE__ int64_t;
-      |                        ^~~~~~~
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:27:19: note: previous declaration of 'int64_t' with type 'int64_t' {aka 'long long int'}
-   27 | typedef __int64_t int64_t;
-      |                   ^~~~~~~
+Existing programs that query the size of the register set will be able
+to observe the increased size of the register set. Programs that assume
+the register set is single register will see no change. On systems that
+do not support SME TPIDR2_EL0 will read as 0 and writes will be ignored,
+support for SME should be queried via hwcaps as normal.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - use bpf_tcp_helpers.h so we can use SOL_TCP
----
- tools/testing/selftests/bpf/progs/connect4_prog.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v4:
+ - Rebase onto v6.0-rc3.
+v3:
+ - Fix copyright date on test program.
+v2:
+ - Rebase onto v6.0-rc1.
 
-diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
-index b241932911db..23d85f5027d3 100644
---- a/tools/testing/selftests/bpf/progs/connect4_prog.c
-+++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
-@@ -7,13 +7,13 @@
- #include <linux/bpf.h>
- #include <linux/in.h>
- #include <linux/in6.h>
--#include <sys/socket.h>
--#include <netinet/tcp.h>
-+#include <linux/tcp.h>
- #include <linux/if.h>
- #include <errno.h>
- 
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
-+#include "bpf_tcp_helpers.h"
- 
- #define SRC_REWRITE_IP4		0x7f000004U
- #define DST_REWRITE_IP4		0x7f000001U
+Mark Brown (4):
+  kselftest/arm64: Add test coverage for NT_ARM_TLS
+  arm64/ptrace: Document extension of NT_ARM_TLS to cover TPIDR2_EL0
+  arm64/ptrace: Support access to TPIDR2_EL0
+  kselftest/arm64: Add coverage of TPIDR2_EL0 ptrace interface
+
+ Documentation/arm64/sme.rst                  |   3 +
+ arch/arm64/kernel/ptrace.c                   |  25 +-
+ tools/testing/selftests/arm64/abi/.gitignore |   1 +
+ tools/testing/selftests/arm64/abi/Makefile   |   2 +-
+ tools/testing/selftests/arm64/abi/ptrace.c   | 241 +++++++++++++++++++
+ 5 files changed, 266 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/abi/ptrace.c
+
+
+base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
 -- 
-2.34.1
+2.30.2
 
