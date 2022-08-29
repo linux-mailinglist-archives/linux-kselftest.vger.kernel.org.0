@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338755A4586
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 10:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C165A4622
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 11:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiH2IzW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 04:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S229959AbiH2Jcf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 05:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiH2IzV (ORCPT
+        with ESMTP id S229671AbiH2Jcd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 04:55:21 -0400
+        Mon, 29 Aug 2022 05:32:33 -0400
 Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11F013F33;
-        Mon, 29 Aug 2022 01:55:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65405466D;
+        Mon, 29 Aug 2022 02:32:31 -0700 (PDT)
 Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 00ECB18848CB;
-        Mon, 29 Aug 2022 08:55:16 +0000 (UTC)
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 22BC1188493F;
+        Mon, 29 Aug 2022 09:32:30 +0000 (UTC)
 Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id EC9B325032B7;
-        Mon, 29 Aug 2022 08:55:15 +0000 (UTC)
+        by mailout.gigahost.dk (Postfix) with ESMTP id 10FD125032B7;
+        Mon, 29 Aug 2022 09:32:30 +0000 (UTC)
 Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id DE5709EC0003; Mon, 29 Aug 2022 08:55:15 +0000 (UTC)
+        id 0C1E59EC0005; Mon, 29 Aug 2022 09:32:30 +0000 (UTC)
 X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Date:   Mon, 29 Aug 2022 10:55:15 +0200
+Date:   Mon, 29 Aug 2022 11:32:29 +0200
 From:   netdev@kapio-technology.com
 To:     Ido Schimmel <idosch@nvidia.com>
 Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
@@ -55,16 +55,14 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <YwxtVhlPjq+M9QMY@shredder>
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
+In-Reply-To: <Ywo16vHMqxxszWzX@shredder>
 References: <20220826114538.705433-1-netdev@kapio-technology.com>
- <20220826114538.705433-7-netdev@kapio-technology.com>
- <YwpgvkojEdytzCAB@shredder>
- <7654860e4d7d43c15d482c6caeb6a773@kapio-technology.com>
- <YwxtVhlPjq+M9QMY@shredder>
+ <20220826114538.705433-2-netdev@kapio-technology.com>
+ <Ywo16vHMqxxszWzX@shredder>
 User-Agent: Gigahost Webmail
-Message-ID: <c1123f1b242ea037867a5ec7130232f4@kapio-technology.com>
+Message-ID: <42392a323bdc5324e1e4682fca378c90@kapio-technology.com>
 X-Sender: netdev@kapio-technology.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -78,53 +76,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-08-29 09:40, Ido Schimmel wrote:
-> On Sun, Aug 28, 2022 at 02:00:29PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-08-27 20:21, Ido Schimmel wrote:
->> > "locked on learning on" is counter intuitive and IMO very much a
->> > misconfiguration that we should have disallowed when the "locked" option
->> > was introduced. It is my understanding that the only reason we are even
->> > talking about it is because mv88e6xxx needs it for MAB for some reason.
->> 
->> As the way mv88e6xxx implements "learning off" is to remove port 
->> association
->> for ingress packets on a port, but that breaks many other things such 
->> as
->> refreshing ATU entries and violation interrupts, so it is needed and 
->> the
->> question is then what is the worst to have 'learning on' on a locked 
->> port or
->> to have the locked port enabling learning in the driver silently?
->> 
->> Opinions seem to differ. Note that even on locked ports without MAB, 
->> port
->> association on ingress is still needed in future as I have a dynamic 
->> ATU
->> patch set coming, that uses age out violation and hardware refreshing 
->> to let
->> the hardware keep the dynamic entries as long as the authorized 
->> station is
->> sending, but will age the entry out if the station keeps silent for 
->> the
->> ageing time. But that patch set is dependent on this patch set, and I 
->> don't
->> think I can send it before this is accepted...
+On 2022-08-27 17:19, Ido Schimmel wrote:
+> On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
+> How about the below (untested):
+> 
+> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+> index 68b3e850bcb9..9143a94a1c57 100644
+> --- a/net/bridge/br_input.c
+> +++ b/net/bridge/br_input.c
+> @@ -109,9 +109,18 @@ int br_handle_frame_finish(struct net *net,
+> struct sock *sk, struct sk_buff *skb
+>                 struct net_bridge_fdb_entry *fdb_src =
+>                         br_fdb_find_rcu(br, eth_hdr(skb)->h_source, 
+> vid);
+> 
+> -               if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
+> -                   test_bit(BR_FDB_LOCAL, &fdb_src->flags))
+> +               if (!fdb_src) {
+> +                       if (p->flags & BR_PORT_MAB) {
+> +                               __set_bit(BR_FDB_ENTRY_LOCKED, &flags);
+> +                               br_fdb_update(br, p, 
+> eth_hdr(skb)->h_source,
+> +                                             vid, flags);
+> +                       }
+> +                       goto drop;
+> +               } else if (READ_ONCE(fdb_src->dst) != p ||
+> +                          test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
+> +                          test_bit(BR_FDB_LOCKED, &fdb_src->flags)) {
+>                         goto drop;
+> +               }
+>         }
+> 
+> The semantics are very clear, IMO. On FDB miss, add a locked FDB entry
+> and drop the packet. On FDB mismatch, drop the packet.
+> 
+> Entry can roam from an unauthorized port to an authorized port, but not
+> the other way around. Not sure what is the use case for allowing 
+> roaming
+> between unauthorized ports.
+> 
+> Note that with the above, locked entries are not refreshed and will
+> therefore age out unless replaced by user space.
 > 
 
-> # bridge link set dev swp1 learning on locked on
-> # bridge link set dev swp2 learning on locked on
+Okay I was under the impression that entries should be able to roam 
+freely between authorized and unauthorized ports in the bridge as long 
+as the locked flag is on when roaming to the MAB enabled port. As you 
+know roaming is not a big issue with mv88e6xxx.
 
-As we must think in how most drivers work, which I am not knowledgeable 
-of, I think that it is probably the best to think of the way mv88e6xxx 
-works as an outlier.
-If that is true, then I think the best option is to go with:
-#bridge link set dev $swp1 learning off locked on
-#bridge link set dev $swp2 learning off locked on
+As I see this code, an entry cannot roam to an authorized port as there 
+is no update after the port mismatch check and the packet is dropped as 
+it should in this case in the locked section.
 
-Then the cleanup side will just be:
-#bridge link set dev $swp1 locked off
-#bridge link set dev $swp2 locked off
-
-The state 'learning off' is then consistent with the behavior of both 
-the bridge and driver after the cleanup.
