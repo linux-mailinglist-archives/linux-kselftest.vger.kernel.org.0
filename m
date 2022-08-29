@@ -2,185 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9210D5A50AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF78C5A50A5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 17:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiH2Pvd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 11:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S229753AbiH2PuM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 11:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiH2Pvc (ORCPT
+        with ESMTP id S229566AbiH2PuK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:51:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F3C8A6FA
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 08:51:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3C38611C6
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Aug 2022 15:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB809C433D6;
-        Mon, 29 Aug 2022 15:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661788290;
-        bh=5JvLo0UnJeyCZ1yxO1+Xnv5AbjhocOYtyL3ng59uNM8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CIxfyRixFzSP4Ukr2U48e+cIQMszx0z6HA1ZpkORTNAhgf8Fjc3zkKTotstfMa7jC
-         TYA6EWw8TYJ1kP7V523k0jDyvsE9937aaeof898PEl4naH+sCMkfIOWAeJ98e9atTY
-         HhWdWBr9AklL3in/awMUYDdrHbYyi9jsmkn7J9BXT9gYEjb+hcQKBtD1NR89lsc7bh
-         p+F1Onu/3yeoRqiYLMLjB1mnLkj4pj0p5CYp+khNbE7kFzj869A74k8LXcDLt79PjM
-         KYpCs3jKrzKnpRgHyyRe77GmtqBRZUvEnigUc9xvvGjuQvEu0UP6mRnRd65GW8PhNE
-         fgBKorBImPFdg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Alan Hayward <alan.hayward@arm.com>,
-        Luis Machado <luis.machado@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v4 4/4] kselftest/arm64: Add coverage of TPIDR2_EL0 ptrace interface
-Date:   Mon, 29 Aug 2022 16:49:21 +0100
-Message-Id: <20220829154921.837871-5-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220829154921.837871-1-broonie@kernel.org>
-References: <20220829154921.837871-1-broonie@kernel.org>
+        Mon, 29 Aug 2022 11:50:10 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77CD47B8C;
+        Mon, 29 Aug 2022 08:50:08 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id h13-20020a17090a648d00b001fdb9003787so3657598pjj.4;
+        Mon, 29 Aug 2022 08:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=taWUzi4UHNfxICa8CAve34OKJtJJKSkD21g1k9CF/lA=;
+        b=bnPj20mJnripHXQ/GXvCmT3YEOJYNbHJkMkHYD8cOZCdgZEOncfbxWW7i8XLvWPDT9
+         zo7UAer/yx8HxZEp6Ek/u3o1cgFe35r8AtlRmiq+gnwHIYY3ElFXHTfkh42rzH90I0gm
+         m/EMCBdk4lYUnl+11n2bG2S26YwT9UUc7clJqCaOcBVqBNXDfjqjBXSTIWzj+HCUqNRT
+         qNi5LZLElki9RY4b5b3yiHAvuR27ALlvvOYFsLNrMBm/IaeBjZTU0cbFAdz6Op1dbc5g
+         vR5QTAQp4RnYAWwNN5+5Z+fLbZcrIJeil/1JSrt4lN/ooVCdEX4XSMfU5YjzWrZSny/h
+         xGvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=taWUzi4UHNfxICa8CAve34OKJtJJKSkD21g1k9CF/lA=;
+        b=XRGc0TwrOeazTzCvZoEERvnWxfW2/8pIxXS89pXdwulgIz6hcnl5WCL2thudximj4T
+         47Wbem/M6Rxh6sIijXz4RqLhmJo002pW5rIJPf6AVaMx8vgZkrpsf8aB4TzUm/E4iZI7
+         cMXJpQqx6HP7pMi7wsv5SHqSZkEtKap1hxALbiGRPdgHuwPX/67Ab8JOFJCHZO3fpGhj
+         UabpjeagJNcq8toFLKO68TlBhJFC+pZMnoGswnGdJc6tS4JJ25CRudEUAibhnNJMVEk5
+         c4wmI2B/aLo2Cj9VC24KRV7kx1tP0vjOPA3PmhAvMgM18ZeIHhb/Sci6bZoVHjnw3Qm+
+         fTVw==
+X-Gm-Message-State: ACgBeo3pQH9t4WZCT6ruaHKDIo3CNmHGGTgyFFp/Ccts/2o7utY80YmG
+        eJ+nEI5cwG0XbtgCyRkMm6ulmR0br4C0IBSGPFA=
+X-Google-Smtp-Source: AA6agR4Z7lZcBO08T5IU5jtduvQotk3IRF4XS9ujug0Qp2Q/1F53ezAKf+Bg8HsYE1WjtYp8IpfZMYcn4CE3dbBTQe8=
+X-Received: by 2002:a17:90a:d714:b0:1fd:ea53:b924 with SMTP id
+ y20-20020a17090ad71400b001fdea53b924mr2976795pju.70.1661788208072; Mon, 29
+ Aug 2022 08:50:08 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3913; i=broonie@kernel.org; h=from:subject; bh=5JvLo0UnJeyCZ1yxO1+Xnv5AbjhocOYtyL3ng59uNM8=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjDOAAB28b/VVGFj2CZ8OO+K9TBKMw+RoDC2fFs8kM irPZVW6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYwzgAAAKCRAk1otyXVSH0Mz0B/ 4r5JX6xz2NggAebmjtdpJ8fIalwxptGK5c+xWCVUu0KF2EUmvcGkWM659dLrIWPHvT+ttV3ysPnTp0 q6XLqd739g5orSIBJtZ9hnjDYVp6EpUtqCS9F4D0qb9/O5z+6O3h49uOMK17NWFOGT74swCL/8UWL4 zRpdLQME07BqU7TUTzh8Rocezgh80NGZgzUy9zmfz/V4u5bf/qmZ/UjgLUHQQ59K2r3p0FpmMe7WqC spF3A98qQvfQx41iRAbBMsIQlJgjP0g9u7eXmg+xvpXcItFnAPYJV0ILIkvI8LYQeejYKWCYHHVezY zI8GtET/pq5aDToqe3kCJr7/pnzWHY
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220826055025.1018491-1-james.hilliard1@gmail.com> <e3d9f936-926c-8cd4-1a21-4c2894bf22b6@iogearbox.net>
+In-Reply-To: <e3d9f936-926c-8cd4-1a21-4c2894bf22b6@iogearbox.net>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Mon, 29 Aug 2022 09:49:55 -0600
+Message-ID: <CADvTj4qBmZyzoSsHVYcg1mLvBRqCr59dWJk2t_mf7njUesa+dA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix connect4_prog tcp/socket header type conflict
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Extend the ptrace test support for NT_ARM_TLS to cover TPIDR2_EL0 - on
-systems that support SME the NT_ARM_TLS regset can be up to 2 elements
-long with the second element containing TPIDR2_EL0. On systems
-supporting SME we verify that this value can be read and written while
-on systems that do not support SME we verify correct truncation of reads
-and writes.
+On Mon, Aug 29, 2022 at 9:11 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 8/26/22 7:50 AM, James Hilliard wrote:
+> [...]
+> > diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > index b241932911db..0f68b8d756b3 100644
+> > --- a/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > +++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
+> > @@ -7,8 +7,7 @@
+> >   #include <linux/bpf.h>
+> >   #include <linux/in.h>
+> >   #include <linux/in6.h>
+> > -#include <sys/socket.h>
+> > -#include <netinet/tcp.h>
+> > +#include <linux/tcp.h>
+> >   #include <linux/if.h>
+> >   #include <errno.h>
+>
+> Can't we just add:
+>
+> #include "bpf_tcp_helpers.h"
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/abi/ptrace.c | 82 +++++++++++++++++++++-
- 1 file changed, 79 insertions(+), 3 deletions(-)
+Yeah, that seems to work, changed in v2:
+https://lore.kernel.org/bpf/20220829154710.3870139-1-james.hilliard1@gmail.com/
 
-diff --git a/tools/testing/selftests/arm64/abi/ptrace.c b/tools/testing/selftests/arm64/abi/ptrace.c
-index a74157dcc4fc..be952511af22 100644
---- a/tools/testing/selftests/arm64/abi/ptrace.c
-+++ b/tools/testing/selftests/arm64/abi/ptrace.c
-@@ -20,9 +20,9 @@
- 
- #include "../../kselftest.h"
- 
--#define EXPECTED_TESTS 3
-+#define EXPECTED_TESTS 7
- 
--#define MAX_TPIDRS 1
-+#define MAX_TPIDRS 2
- 
- static bool have_sme(void)
- {
-@@ -34,7 +34,8 @@ static void test_tpidr(pid_t child)
- 	uint64_t read_val[MAX_TPIDRS];
- 	uint64_t write_val[MAX_TPIDRS];
- 	struct iovec read_iov, write_iov;
--	int ret;
-+	bool test_tpidr2 = false;
-+	int ret, i;
- 
- 	read_iov.iov_base = read_val;
- 	write_iov.iov_base = write_val;
-@@ -54,6 +55,81 @@ static void test_tpidr(pid_t child)
- 	ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_TLS, &read_iov);
- 	ksft_test_result(ret == 0 && write_val[0] == read_val[0],
- 			 "verify_tpidr_one\n");
-+
-+	/* If we have TPIDR2 we should be able to read it */
-+	read_iov.iov_len = sizeof(read_val);
-+	ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_TLS, &read_iov);
-+	if (ret == 0) {
-+		/* If we have SME there should be two TPIDRs */
-+		if (read_iov.iov_len >= sizeof(read_val))
-+			test_tpidr2 = true;
-+
-+		if (have_sme() && test_tpidr2) {
-+			ksft_test_result(test_tpidr2, "count_tpidrs\n");
-+		} else {
-+			ksft_test_result(read_iov.iov_len % sizeof(uint64_t) == 0,
-+					 "count_tpidrs\n");
-+		}
-+	} else {
-+		ksft_test_result_fail("count_tpidrs\n");
-+	}
-+
-+	if (test_tpidr2) {
-+		/* Try to write new values to all known TPIDRs... */
-+		write_iov.iov_len = sizeof(write_val);
-+		for (i = 0; i < MAX_TPIDRS; i++)
-+			write_val[i] = read_val[i] + 1;
-+		ret = ptrace(PTRACE_SETREGSET, child, NT_ARM_TLS, &write_iov);
-+
-+		ksft_test_result(ret == 0 &&
-+				 write_iov.iov_len == sizeof(write_val),
-+				 "tpidr2_write\n");
-+
-+		/* ...then read them back */
-+		read_iov.iov_len = sizeof(read_val);
-+		ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_TLS, &read_iov);
-+
-+		if (have_sme()) {
-+			/* Should read back the written value */
-+			ksft_test_result(ret == 0 &&
-+					 read_iov.iov_len >= sizeof(read_val) &&
-+					 memcmp(read_val, write_val,
-+						sizeof(read_val)) == 0,
-+					 "tpidr2_read\n");
-+		} else {
-+			/* TPIDR2 should read as zero */
-+			ksft_test_result(ret == 0 &&
-+					 read_iov.iov_len >= sizeof(read_val) &&
-+					 read_val[0] == write_val[0] &&
-+					 read_val[1] == 0,
-+					 "tpidr2_read\n");
-+		}
-+
-+		/* Writing only TPIDR... */
-+		write_iov.iov_len = sizeof(uint64_t);
-+		memcpy(write_val, read_val, sizeof(read_val));
-+		write_val[0] += 1;
-+		ret = ptrace(PTRACE_SETREGSET, child, NT_ARM_TLS, &write_iov);
-+
-+		if (ret == 0) {
-+			/* ...should leave TPIDR2 untouched */
-+			read_iov.iov_len = sizeof(read_val);
-+			ret = ptrace(PTRACE_GETREGSET, child, NT_ARM_TLS,
-+				     &read_iov);
-+
-+			ksft_test_result(ret == 0 &&
-+					 read_iov.iov_len >= sizeof(read_val) &&
-+					 memcmp(read_val, write_val,
-+						sizeof(read_val)) == 0,
-+					 "write_tpidr_only\n");
-+		} else {
-+			ksft_test_result_fail("write_tpidr_only\n");
-+		}
-+	} else {
-+		ksft_test_result_skip("tpidr2_write\n");
-+		ksft_test_result_skip("tpidr2_read\n");
-+		ksft_test_result_skip("write_tpidr_only\n");
-+	}
- }
- 
- static int do_child(void)
--- 
-2.30.2
-
+>
+> It does define SOL_TCP already and is used also in other prog tests. I presume this
+> would avoid the need the change all the below.
+>
+> > @@ -52,7 +51,7 @@ static __inline int verify_cc(struct bpf_sock_addr *ctx,
+> >       char buf[TCP_CA_NAME_MAX];
+> >       int i;
+> >
+> > -     if (bpf_getsockopt(ctx, SOL_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
+> > +     if (bpf_getsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
+> >               return 1;
+> >
+> >       for (i = 0; i < TCP_CA_NAME_MAX; i++) {
+> > @@ -70,12 +69,12 @@ static __inline int set_cc(struct bpf_sock_addr *ctx)
+> >       char reno[TCP_CA_NAME_MAX] = "reno";
+> >       char cubic[TCP_CA_NAME_MAX] = "cubic";
+> >
+> > -     if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
+> > +     if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
+> >               return 1;
+> >       if (verify_cc(ctx, reno))
+> >               return 1;
+> >
+> > -     if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
+> > +     if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
+> >               return 1;
+> >       if (verify_cc(ctx, cubic))
+> >               return 1;
+> > @@ -113,15 +112,15 @@ static __inline int set_keepalive(struct bpf_sock_addr *ctx)
+> >       if (bpf_setsockopt(ctx, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof(one)))
+> >               return 1;
+> >       if (ctx->type == SOCK_STREAM) {
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPIDLE, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPIDLE, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPINTVL, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPINTVL, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_KEEPCNT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_KEEPCNT, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_SYNCNT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_SYNCNT, &one, sizeof(one)))
+> >                       return 1;
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_USER_TIMEOUT, &one, sizeof(one)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_USER_TIMEOUT, &one, sizeof(one)))
+> >                       return 1;
+> >       }
+> >       if (bpf_setsockopt(ctx, SOL_SOCKET, SO_KEEPALIVE, &zero, sizeof(zero)))
+> > @@ -135,7 +134,7 @@ static __inline int set_notsent_lowat(struct bpf_sock_addr *ctx)
+> >       int lowat = 65535;
+> >
+> >       if (ctx->type == SOCK_STREAM) {
+> > -             if (bpf_setsockopt(ctx, SOL_TCP, TCP_NOTSENT_LOWAT, &lowat, sizeof(lowat)))
+> > +             if (bpf_setsockopt(ctx, IPPROTO_TCP, TCP_NOTSENT_LOWAT, &lowat, sizeof(lowat)))
+> >                       return 1;
+> >       }
+> >
+> >
+>
