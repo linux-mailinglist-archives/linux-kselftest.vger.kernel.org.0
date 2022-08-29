@@ -2,127 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBAC5A4772
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 12:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA37E5A47CF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Aug 2022 13:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiH2Kp2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 06:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S230059AbiH2LCN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 07:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiH2Kp1 (ORCPT
+        with ESMTP id S230033AbiH2LBv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 06:45:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1B81AD99;
-        Mon, 29 Aug 2022 03:45:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 00D2D21AEF;
-        Mon, 29 Aug 2022 10:45:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661769925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LDkt1HM7O2vv+7snReLnfVNzSWfCCrT2+rmvr+iyOUs=;
-        b=rEwBVkQJETkWFa7ePfs3KRQRNk7ilQ8FeL1Yv0AjYCq1PoPlqrlp8Q6GqzYu7VcFsvxY8X
-        3EVoSiEkbNwebWgVm0qpGUTicZAcMqwRPdtVROJ5498fxkQtmoXERv94OEvoJBB8JCD7h9
-        EHjFAEBAXxeEx1qEweb7sJmw/Xdk7jI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CCA99133A6;
-        Mon, 29 Aug 2022 10:45:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Xa2ML8SYDGPsSwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 29 Aug 2022 10:45:24 +0000
-Date:   Mon, 29 Aug 2022 12:45:23 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>, brauner@kernel.org,
-        Christoph Hellwig <hch@infradead.org>, oleg@redhat.com,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, shuah@kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH RESEND v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
-Message-ID: <YwyYwxVOv0p736gf@dhcp22.suse.cz>
-References: <20220531223100.510392-2-surenb@google.com>
- <20220822152119.96d40c884078229ee3e6b25e@linux-foundation.org>
- <CAOUHufbysRjhX_AiFirjvWCR129t4_bELd1wFQG+fBsZpzhgYw@mail.gmail.com>
- <20220822154822.366a9e4527b748cf99d98637@linux-foundation.org>
- <CAOUHufa1zc3fMWsyyz1uB6_gsgVPk1Hw_T31WzWK58QVgsQSAQ@mail.gmail.com>
- <20220822161603.9e19edfe2daaea3bf591910a@linux-foundation.org>
- <CAOUHufbyWwkOAJTD4G82sLcwE_33Yy=s4Q+gGBujwXvEBZ8iqA@mail.gmail.com>
- <YwSRf3LZ7gXwWaNN@dhcp22.suse.cz>
- <CAOUHufbauOoXshmfbBYAnPVYkrZ=jFA2wpPotXNnOjoWVRa5qQ@mail.gmail.com>
- <YwyXhH6k1JVgKBVl@dhcp22.suse.cz>
+        Mon, 29 Aug 2022 07:01:51 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87CE1D0C1;
+        Mon, 29 Aug 2022 04:01:31 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 24F0C1884980;
+        Mon, 29 Aug 2022 11:01:29 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 0C5DA25032B7;
+        Mon, 29 Aug 2022 11:01:29 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id E0ADE9EC0003; Mon, 29 Aug 2022 11:01:28 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwyXhH6k1JVgKBVl@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 29 Aug 2022 13:01:28 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag to
+ extend locked port feature
+In-Reply-To: <Ywo16vHMqxxszWzX@shredder>
+References: <20220826114538.705433-1-netdev@kapio-technology.com>
+ <20220826114538.705433-2-netdev@kapio-technology.com>
+ <Ywo16vHMqxxszWzX@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <63c78aabe2683b9639717c1a74dbdacc@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 29-08-22 12:40:05, Michal Hocko wrote:
-> On Sun 28-08-22 13:50:09, Yu Zhao wrote:
-> > On Tue, Aug 23, 2022 at 2:36 AM Michal Hocko <mhocko@suse.com> wrote:
-> [...]
-> > > You cannot really make any
-> > > assumptions about oom_reaper and how quickly it is going to free the
-> > > memory.
-> > 
-> > Agreed. But here we are talking about heuristics, not dependencies on
-> > certain behaviors. Assume we are playing a guessing game: there are
-> > multiple mm_structs available for reclaim, would the oom-killed ones
-> > be more profitable on average? I'd say no, because I assume it's more
-> > likely than unlikely that the oom reaper is doing/to do its work. Note
-> > that the assumption is about likelihood, hence arguably valid.
-> 
-> Well, my main counter argument would be that we do not really want to
-> carve last resort mechanism (which the oom reaper is) into any heuristic
-> because any future changes into that mechanism will be much harder to
-> justify and change. There is a cost of the maintenance that should be
-> considered. While you might be right that this change would be
-> beneficial, there is no actual proof of that. Historically we've had
-> several examples of such a behavior which was really hard to change
-> later on because the effect would be really hard to evaluate.
+On 2022-08-27 17:19, Ido Schimmel wrote:
+> On Fri, Aug 26, 2022 at 01:45:33PM +0200, Hans Schultz wrote:
 
-Forgot to mention the recent change as a clear example of the change
-which would be have a higher burden to evaluate. e4a38402c36e
-("oom_kill.c: futex: delay the OOM reaper to allow time for proper futex
-cleanup") has changed the wake up logic to be triggered after a timeout.
-This means that the task will be sitting there on the queue without any
-actual reclaim done on it. The timeout itself can be changed in the
-future and I would really hate to argue that changeing it from $FOO to
-$FOO + epsilon breaks a very subtle dependency somewhere deep in the
-reclaim path. From the oom reaper POV any timeout is reasonable becaude
-this is the _last_ resort to resolve OOM stall/deadlock when the victim
-cannot exit on its own for whatever reason. This is a considerably
-different objective from "we want to optimize which taks to scan to
-reclaim efficiently".
+How about this?
 
-See my point?
--- 
-Michal Hocko
-SUSE Labs
+diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+index 1064a5b2d478..82bb50851716 100644
+--- a/net/bridge/br_input.c
++++ b/net/bridge/br_input.c
+@@ -103,8 +103,19 @@ int br_handle_frame_finish(struct net *net, struct 
+sock *sk, struct sk_buff *skb
+                         br_fdb_find_rcu(br, eth_hdr(skb)->h_source, 
+vid);
+
+                 if (!fdb_src || READ_ONCE(fdb_src->dst) != p ||
+-                   test_bit(BR_FDB_LOCAL, &fdb_src->flags))
++                   test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
++                   test_bit(BR_FDB_ENTRY_LOCKED, &fdb_src->flags)) {
++                       if (!fdb_src || ((READ_ONCE(fdb_src->dst) != p) 
+&&
++                                        
+(!unlikely(test_bit(BR_FDB_LOCAL, &fdb_src->flags))))) {
++                               unsigned long flags = 0;
++
++                               if (p->flags & BR_PORT_MAB) {
++                                       __set_bit(BR_FDB_ENTRY_LOCKED, 
+&flags);
++                                       br_fdb_update(br, p, 
+eth_hdr(skb)->h_source, vid, flags);
++                               }
++                       }
+                         goto drop;
++               }
+         }
+
+         nbp_switchdev_frame_mark(p, skb);
+
+It will allow roaming to a MAB enabled port (no roaming to a simply 
+locked port should be allowed of course), and it will not change a local 
+entry and not rely on 'learning on' on the locked port of course.
+Roaming to an unlocked port will also be allowed, and the locked flag 
+will be removed in this case according to code in br_fdb_update().
