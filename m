@@ -2,190 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050015A667B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 16:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0895A66D2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 17:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiH3Om1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Aug 2022 10:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S229882AbiH3PEJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Aug 2022 11:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbiH3OmZ (ORCPT
+        with ESMTP id S229469AbiH3PEI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:42:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1628CB9595
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 07:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661870544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+te87sYtTGczNabgaJy1Pj2NfLsGoso4jkdFkum7FlU=;
-        b=JQow7zpE+FROg8wR5hYkrIvtDA9BEUXnTSEnIEcCiFl7q3slaTV50pOfuAR8jh1Nlrkc6E
-        rFyGC2NfRRPLV8PncJPmVmeyh8Y+z57eIWy9qocGGc/f7WNNhW80f+9dpJP/yg3wyPGxG6
-        s13hJjnbS/QnIMeWE7Ryk+rp4DQkOgs=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-631-QxXswnVJMneJJptFman20A-1; Tue, 30 Aug 2022 10:42:20 -0400
-X-MC-Unique: QxXswnVJMneJJptFman20A-1
-Received: by mail-qt1-f197.google.com with SMTP id o22-20020ac85a56000000b0034481129ce6so8931021qta.19
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 07:42:20 -0700 (PDT)
+        Tue, 30 Aug 2022 11:04:08 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2B710D4F7;
+        Tue, 30 Aug 2022 08:04:07 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-11f4e634072so3103805fac.13;
+        Tue, 30 Aug 2022 08:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=hhxGpGZOo1QkKgu0Jh3XJCpCjGiOYNk5xiHfSDFKE2M=;
+        b=CLHm2GaHZnxZVDILj0oTkcJJxMFxEJTWeSIVl9Obxd54useZBSb731VjmvPjDUAoow
+         Wt0ast15UHFz9ukxLfKrT9tY2Nu+FbNcA5Gi6ClU2SLLKMoMEErILBwTwjVJPMTtc2Ek
+         +7tMQGZavtW3RZCCRSIDhYxT2ic8S7aY5BaUXsqKm+ElPzjkW6vZveamdgRBVEAi9D/f
+         +U1bS9/rlKhTBFPCc/sd9GeHOcUwEOzQ0yoB+zXMYF8sPWVQKesaxlDJ2zEeRUewnpqm
+         GiNzplQCAYcIpncvo9wE2178+OT+NCS/6IqzVs1FEPUJ01gHRJaMDDXLeFMDzk2rWyzf
+         KXGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=+te87sYtTGczNabgaJy1Pj2NfLsGoso4jkdFkum7FlU=;
-        b=cOSR0Ep6bynI10x5Z/Y2ZBeLmyD93HMdClrj4bHB3Y+v2HRE5ppyhGRjjItJIJY8LB
-         18QoOzGlUPkFLBqs5PQ6xgtMEdNnIDdwh01rZn1peJ38Fyx4EqZAHANsi9p68x/5zzHl
-         ua+IxY8ReB6n1rk9yaoBrNekX6FFlGSsnJOQC0hXWMx4G4+sCAEx+9rdm8Z+6goNsHMz
-         6+lRazCR1Q6HTF6S0Grs8pUidG4xTKvB2JNoxyqwDeQiyVFmAIn72VEU3+6BWih+NAtH
-         mH9OGdtjqdZ4oKDGFyvslA/GGZDMZ1P28UEYcnJmbUxZf78iT/ScDAgfNwH8MHP3vyNp
-         B6pg==
-X-Gm-Message-State: ACgBeo2Jw72uHFpRv8dFkRBgkpGK05SwDIcb8cZ/Qr/mfLhUdzNR6jPo
-        thWV1KR7stOhvWDRg2HglkB5l/3lHH0jlIOhtVn7oVYYijv7QMfEZ1OHUfELurFIVHnGCDqZFAi
-        DDclkocAzaSl9XnLp6UH5u2kTg9BZ
-X-Received: by 2002:a05:622a:1a0d:b0:343:6284:cbc8 with SMTP id f13-20020a05622a1a0d00b003436284cbc8mr15163359qtb.341.1661870540147;
-        Tue, 30 Aug 2022 07:42:20 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6D8op/R0BZbn270yGLNeyiqE7221aPAIVz7ZsIkOvVsCOIjnQ86kAB8hellaaWH315TLq1vg==
-X-Received: by 2002:a05:622a:1a0d:b0:343:6284:cbc8 with SMTP id f13-20020a05622a1a0d00b003436284cbc8mr15163320qtb.341.1661870539902;
-        Tue, 30 Aug 2022 07:42:19 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac86b46000000b00339b8a5639csm7064707qts.95.2022.08.30.07.42.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 07:42:19 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 10:42:16 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, corbet@lwn.net,
-        james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        shuah@kernel.org, seanjc@google.com, drjones@redhat.com,
-        dmatlack@google.com, bgardon@google.com, ricarkol@google.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-Message-ID: <Yw4hyEAyivKT35vQ@xz-m1.local>
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com>
- <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org>
- <YwTn2r6FLCx9mAU7@google.com>
- <87a67uwve8.wl-maz@kernel.org>
- <99364855-b4e9-8a69-e1ca-ed09d103e4c8@redhat.com>
- <874jxzvxak.wl-maz@kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=hhxGpGZOo1QkKgu0Jh3XJCpCjGiOYNk5xiHfSDFKE2M=;
+        b=4XbQwJuqHtEyIGUcREEdu1mLoSEZALGauvZHE2j+4Qw4z0LtRxHzB6ktiOFHEZlXWq
+         UdLsagQbNUonVwJ1Bu71CHXx8FHHaXNZOE2PvVmtcnR65N2pL21iVRBv6h+4XXxeKBCo
+         m00c42SJG/jM1YpfqvfyYtp2ztewdkXOYCaf5d2fEyh8ErmxzerYKprQ5ETzUY/KudOS
+         ATl9krYsNAmAjspfeKc5Y9P6JAp7+cTUsbAEug3ADZ9rKjsiLcre4pOyei4sC07/HMPA
+         D4e1rucYINp9jNmxwi8+iF2JfhPtM29Xo+zN703GvKVulJzig6QF8lQsG1sBqQ2DZZaW
+         qJtQ==
+X-Gm-Message-State: ACgBeo2LRUeShtIiuPrNE7AlLaweVkzKtn8F4KHTz6pLvEOuuHInRZE7
+        F895BPmQEam3grrGoje5AQA=
+X-Google-Smtp-Source: AA6agR4107wgLXwJjaeNUC1fcgtoLNBNi5rRvTQp1CztaP3LMtbbOwhf59nLftHdgpPUzvb+EKKtsQ==
+X-Received: by 2002:a05:6808:2215:b0:344:c8d1:27df with SMTP id bd21-20020a056808221500b00344c8d127dfmr10074066oib.151.1661871846829;
+        Tue, 30 Aug 2022 08:04:06 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:1485:e42c:9c81:f760? ([2600:1700:2442:6db0:1485:e42c:9c81:f760])
+        by smtp.gmail.com with ESMTPSA id x3-20020a4aaa03000000b0044b46c639easm6840970oom.18.2022.08.30.08.04.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 08:04:06 -0700 (PDT)
+Message-ID: <49ed5b56-2c98-e0c1-eedd-bba3dabe08c8@gmail.com>
+Date:   Tue, 30 Aug 2022 10:04:05 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <874jxzvxak.wl-maz@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 1/2] ktap_v2: change version to 2-rc in KTAP
+ specification
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220829233150.3564612-1-frowand.list@gmail.com>
+ <20220829233150.3564612-2-frowand.list@gmail.com>
+ <eaf6c56b-c329-2d02-7599-ca83dbe20b0b@gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <eaf6c56b-c329-2d02-7599-ca83dbe20b0b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 04:28:51PM +0100, Marc Zyngier wrote:
-> On Fri, 26 Aug 2022 11:58:08 +0100,
-> Paolo Bonzini <pbonzini@redhat.com> wrote:
-> > 
-> > On 8/23/22 22:35, Marc Zyngier wrote:
-> > >> Heh, yeah I need to get that out the door. I'll also note that Gavin's
-> > >> changes are still relevant without that series, as we do write unprotect
-> > >> in parallel at PTE granularity after commit f783ef1c0e82 ("KVM: arm64:
-> > >> Add fast path to handle permission relaxation during dirty logging").
-> > > 
-> > > Ah, true. Now if only someone could explain how the whole
-> > > producer-consumer thing works without a trace of a barrier, that'd be
-> > > great...
-> > 
-> > Do you mean this?
-> >
-> > void kvm_dirty_ring_push(struct kvm_dirty_ring *ring, u32 slot, u64 offset)
+On 8/29/22 20:48, Bagas Sanjaya wrote:
+> On 8/30/22 06:31, frowand.list@gmail.com wrote:
+>> From: Frank Rowand <frank.rowand@sony.com>
+>>
+>> Prepare KTAP Specification for the process of creating version 2.
+>>
+>> The version will remain "2-rc" until the final commit to complete
+>> Version 2.  Adding the "-rc" ensures that none of the development
+>> versions will be mistaken for the completed version 2.
+>>
+>> After this commit, Sphinx complains that we now need more '=' signs:
+>>
+>>   Documentation/dev-tools/ktap.rst:3: WARNING: Title overline too short.
+>>   ===================================================
+>>   The Kernel Test Anything Protocol (KTAP), version 2-rc
+>>   ===================================================
+>>
+>> This warning will disappear in the final commit for the release of
+>> version 2, when the "-rc" is removed.
+>>
 > 
-> Of course not. I mean this:
+> I don't see that -rc stripping in patch [2/2], so please fix the Sphinx
+> warning above in this patch.
 > 
-> static int kvm_vm_ioctl_reset_dirty_pages(struct kvm *kvm)
-> {
-> 	unsigned long i;
-> 	struct kvm_vcpu *vcpu;
-> 	int cleared = 0;
-> 
-> 	if (!kvm->dirty_ring_size)
-> 		return -EINVAL;
-> 
-> 	mutex_lock(&kvm->slots_lock);
-> 
-> 	kvm_for_each_vcpu(i, vcpu, kvm)
-> 		cleared += kvm_dirty_ring_reset(vcpu->kvm, &vcpu->dirty_ring);
-> [...]
-> }
-> 
-> and this
-> 
-> int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
-> {
-> 	u32 cur_slot, next_slot;
-> 	u64 cur_offset, next_offset;
-> 	unsigned long mask;
-> 	int count = 0;
-> 	struct kvm_dirty_gfn *entry;
-> 	bool first_round = true;
-> 
-> 	/* This is only needed to make compilers happy */
-> 	cur_slot = cur_offset = mask = 0;
-> 
-> 	while (true) {
-> 		entry = &ring->dirty_gfns[ring->reset_index & (ring->size - 1)];
-> 
-> 		if (!kvm_dirty_gfn_harvested(entry))
-> 			break;
-> [...]
-> 
-> }
-> 
-> which provides no ordering whatsoever when a ring is updated from one
-> CPU and reset from another.
 
-Marc,
+The "final commit for the release of version 2" is not in this patch
+series, but will be sometime in the future after all of the other
+various patch series to make the changes to create version 2, and we
+agree that we have reached the time to finalize and release version 2.
 
-I thought we won't hit this as long as we properly take care of other
-orderings of (a) gfn push, and (b) gfn collect, but after a second thought
-I think it's indeed logically possible that with a reversed ordering here
-we can be reading some garbage gfn before (a) happens butt also read the
-valid flag after (b).
-
-It seems we must have all the barriers correctly applied always.  If that's
-correct, do you perhaps mean something like this to just add the last piece
-of barrier?
-
-===8<===
-diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-index f4c2a6eb1666..ea620bfb012d 100644
---- a/virt/kvm/dirty_ring.c
-+++ b/virt/kvm/dirty_ring.c
-@@ -84,7 +84,7 @@ static inline void kvm_dirty_gfn_set_dirtied(struct kvm_dirty_gfn *gfn)
- 
- static inline bool kvm_dirty_gfn_harvested(struct kvm_dirty_gfn *gfn)
- {
--       return gfn->flags & KVM_DIRTY_GFN_F_RESET;
-+       return smp_load_acquire(&gfn->flags) & KVM_DIRTY_GFN_F_RESET;
- }
- 
- int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
-===8<===
-
-Thanks,
-
--- 
-Peter Xu
-
+-Frank
