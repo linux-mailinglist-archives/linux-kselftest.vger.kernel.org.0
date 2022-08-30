@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FAB5A70F3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 00:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8775A70F8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 00:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiH3WnW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Aug 2022 18:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        id S232172AbiH3Wn3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Aug 2022 18:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiH3WnQ (ORCPT
+        with ESMTP id S231666AbiH3WnT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:43:16 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D94172869
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:14 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 136-20020a63008e000000b0042d707c94fbso1757417pga.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:14 -0700 (PDT)
+        Tue, 30 Aug 2022 18:43:19 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AAC73324
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:17 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id n1-20020a170902d2c100b0017520dd4a0eso1749658plc.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=+fxq/Nava99rJhdF98nlLDcbHMSZkK7JwuVLQ9+L7LI=;
-        b=DHoNLClh8yhyoZiS/SOMsIl2aIpcJVxVV9GzQMVByyHDqoNx9nRUYK3wjKzOHhK0e2
-         Ve3zejRFM1b/U/lUIsZhvyCBprcOZliQNCImj2hhSVKWglHjW7hU2xd1iw4LisE5ZcF/
-         uMmSLVuMNtDcimD5pKzi1h7xa+NjhczDQF0+LA2q+Tj/evqyt1Blo/vp/M9piIdnjawa
-         kUo4CwWgul6o1em8VllsdzIuhJdp0U7KDGYgXhOQLTkbnBD7K+kPu4F7Z/uzdEJ8/r5P
-         6yOxb0YMQl7IPsWr1/eIW5lLZArDYe5KiZ/rhyvx0ThyfD7ofsUrXb6n6DOcVlBpF6tb
-         W9ag==
+        bh=2fODE+rP/n4IhsKmyo9TrmeTKfUIF5nKP0v2EkUrneo=;
+        b=gbNNPUBOKBKap2s5shHHjkVzc/iNv8XHjMpvm09nylSEQ3SOdpxMf259plptLgOyhm
+         qtBnC5ARhX9mqeSUEQxwbwuiVXzeMEEAIsNqGvXWYo4cqOY+Vq10bLL0/E/u117bHK1I
+         BppB22ajOfm+RKivJWNiOP4n6ezKLNCsf/eBjzeNYmUBoiTwWRYoGrABmFQhHfdANFR8
+         xc1V/n47Al7DVl2uTC7HoRXD3hwb0eWA8BBGtjplkqwmjVe1rbwtJJdWIr9ER/UOLK8x
+         BsStvO82puuasYylYs10rEkZa8kjaQb1W/tseZoyMgSIsRHmFNCCa5zWJT5GNmRtA45f
+         3i6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=+fxq/Nava99rJhdF98nlLDcbHMSZkK7JwuVLQ9+L7LI=;
-        b=JHlqNsr9gqbF58pZwz7qrxhnkvHFgIXlNbY5WXIZCUsBslMEVE22jULBdkdIkYmWN7
-         dCRkaasIWRu84sSYInKA5oO/I2j3IVk07ZWyre0/BfepfmsXb/U4bXCoi+aYzC5UfzSJ
-         XjQ8RaYoBeVVWNEeGVcDcS4RoHFG2cJ89o+widpIbUtzHO9GU4u/LKrh68ONKrIZiMnJ
-         9d04KHGpgUYrkFgtYuLFSlVb2p/kOffdKGQIrW022JywCpixe/7oQ4ObGV7fJHdDRBFI
-         NwClTG53hgKrefEjFyRg2DQyNS57J3Jhdc4GmnAoyNf9MJB/0VzdJiUyRz7qimg2LvlF
-         IAyA==
-X-Gm-Message-State: ACgBeo0ks6zeX6azgC7DxJY75kw4Sx959jOwtngQHOYSYGf52eTZFFPO
-        EyUULUGgMPV9bt6+D1fbkSeLKUQJaUbQbw5i
-X-Google-Smtp-Source: AA6agR6RJsD1NAYvHIDVRGOYRaxfpafbYixbKpI62dXEqhoHdt0NLNK3jfnQP9gQFc6+VnKg/he2n/SEEQ0HNsGL
+        bh=2fODE+rP/n4IhsKmyo9TrmeTKfUIF5nKP0v2EkUrneo=;
+        b=hYgZf8F1WyEZbL7txGjZAl/hN/N/JHACbiiLKxKDRvXN+dStyUFuwONeTNyNPxfUds
+         2+RTUssnT+SkRJcLBywCyUHt82OcGUNc/kVuF+WAcPwGH8ZemJUd2vWmAzZAn5YYo+XP
+         4T8Ewg9WIdMYoInsletenhlos99/JpMVbLJl0cNDHOv6Fg+L0JnWQj/WTb2zICv4iTtl
+         u42/wlcn7OrWq8ZGRxG2T23uK2wGG7lx+LFcaoKFYQs/9dfAcxwDfewrfhjBMAIctpTw
+         DtbJozyTpmZDrFentPisHMFGhGnds52KW8+9MqDbSiEdctKhPggnWiE/hlT0WMgnaxnU
+         B2GA==
+X-Gm-Message-State: ACgBeo0fdiRT9j91y8IWyV7a9R65kJmiX7GgzdvNTv4v/ZAYcy1TfJw2
+        W6nb7dEkJx0tYa1hRfhhmK5Di5W7ofIT0LKG
+X-Google-Smtp-Source: AA6agR6s8cwIw86sUzfNeW1dAbiwVvALjW5Jj3PJi8QbYI7h65XJwdYYtjA2IhmoCKLUNMKH83DOkyjt1ks1NcY1
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:aa7:81c6:0:b0:535:2aea:e29f with SMTP
- id c6-20020aa781c6000000b005352aeae29fmr23476929pfn.78.1661899393921; Tue, 30
- Aug 2022 15:43:13 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 22:42:52 +0000
+ (user=vannapurve job=sendgmr) by 2002:a17:902:e883:b0:175:22e8:f30a with SMTP
+ id w3-20020a170902e88300b0017522e8f30amr4205183plg.127.1661899397359; Tue, 30
+ Aug 2022 15:43:17 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 22:42:53 +0000
 In-Reply-To: <20220830224259.412342-1-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20220830224259.412342-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830224259.412342-2-vannapurve@google.com>
-Subject: [RFC V2 PATCH 1/8] selftests: kvm: x86_64: Add support for pagetable tracking
+Message-ID: <20220830224259.412342-3-vannapurve@google.com>
+Subject: [RFC V2 PATCH 2/8] kvm: Add HVA range operator
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -78,345 +78,98 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add support for mapping guest pagetable pages to a contiguous guest virtual
-address range and sharing the physical to virtual mappings with the guest
-in a pre-defined format.
-
-This functionality will allow the guests to modify their page table
-entries. One such usecase for CC VMs is to toggle encryption bit in
-their ptes to switch from encrypted to shared memory and vice a versa.
+Introduce HVA range operator so that other KVM subsystems
+can operate on HVA range.
 
 Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 ---
- .../selftests/kvm/include/kvm_util_base.h     | 105 ++++++++++++++++++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  78 ++++++++++++-
- .../selftests/kvm/lib/x86_64/processor.c      |  32 ++++++
- 3 files changed, 214 insertions(+), 1 deletion(-)
+ include/linux/kvm_host.h |  6 +++++
+ virt/kvm/kvm_main.c      | 48 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index dfe454f228e7..f57ced56da1b 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -74,6 +74,11 @@ struct vm_memcrypt {
- 	int8_t enc_bit;
- };
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 4508fa0e8fb6..c860e6d6408d 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1398,6 +1398,12 @@ void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+ void kvm_mmu_updating_begin(struct kvm *kvm, gfn_t start, gfn_t end);
+ void kvm_mmu_updating_end(struct kvm *kvm, gfn_t start, gfn_t end);
  
-+struct pgt_page {
-+	vm_paddr_t paddr;
-+	struct list_head list;
-+};
++typedef int (*kvm_hva_range_op_t)(struct kvm *kvm,
++				struct kvm_gfn_range *range, void *data);
 +
- struct kvm_vm {
- 	int mode;
- 	unsigned long type;
-@@ -98,6 +103,10 @@ struct kvm_vm {
- 	vm_vaddr_t handlers;
- 	uint32_t dirty_ring_size;
- 	struct vm_memcrypt memcrypt;
-+	struct list_head pgt_pages;
-+	bool track_pgt_pages;
-+	uint32_t num_pgt_pages;
-+	vm_vaddr_t pgt_vaddr_start;
- 
- 	/* Cache of information for binary stats interface */
- 	int stats_fd;
-@@ -184,6 +193,23 @@ struct vm_guest_mode_params {
- 	unsigned int page_size;
- 	unsigned int page_shift;
- };
++int kvm_vm_do_hva_range_op(struct kvm *kvm, unsigned long hva_start,
++		unsigned long hva_end, kvm_hva_range_op_t handler, void *data);
 +
-+/*
-+ * Structure shared with the guest containing information about:
-+ * - Starting virtual address for num_pgt_pages physical pagetable
-+ *   page addresses tracked via paddrs array
-+ * - page size of the guest
-+ *
-+ * Guest can walk through its pagetables using this information to
-+ *   read/modify pagetable attributes.
-+ */
-+struct guest_pgt_info {
-+	uint64_t num_pgt_pages;
-+	uint64_t pgt_vaddr_start;
-+	uint64_t page_size;
-+	uint64_t paddrs[];
-+};
-+
- extern const struct vm_guest_mode_params vm_guest_mode_params[];
- 
- int open_path_or_exit(const char *path, int flags);
-@@ -394,6 +420,49 @@ void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
- 
- struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
- vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
-+void vm_map_page_table(struct kvm_vm *vm, vm_vaddr_t vaddr_min);
-+
-+/*
-+ * function called by guest code to translate physical address of a pagetable
-+ * page to guest virtual address.
-+ *
-+ * input args:
-+ *	gpgt_info - pointer to the guest_pgt_info structure containing info
-+ *		about guest virtual address mappings for guest physical
-+ *		addresses of page table pages.
-+ *	pgt_pa - physical address of guest page table page to be translated
-+ *		to a virtual address.
-+ *
-+ * output args: none
-+ *
-+ * return:
-+ *	pointer to the pagetable page, null in case physical address is not
-+ *	tracked via given guest_pgt_info structure.
-+ */
-+void *guest_code_get_pgt_vaddr(struct guest_pgt_info *gpgt_info, uint64_t pgt_pa);
-+
-+/*
-+ * Allocate and setup a page to be shared with guest containing guest_pgt_info
-+ * structure.
-+ *
-+ * Note:
-+ *	1) vm_set_pgt_alloc_tracking function should be used to start tracking
-+ *		of physical page table page allocation.
-+ *	2) This function should be invoked after needed pagetable pages are
-+ *		mapped to the VM using virt_pg_map.
-+ *
-+ * input args:
-+ *	vm - virtual machine
-+ *	vaddr_min - Minimum guest virtual address to start mapping the
-+ *		guest_pgt_info structure page(s).
-+ *
-+ * output args: none
-+ *
-+ * return:
-+ *	virtual address mapping guest_pgt_info structure.
-+ */
-+vm_vaddr_t vm_setup_pgt_info_buf(struct kvm_vm *vm, vm_vaddr_t vaddr_min);
-+
- vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
- vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
- vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm);
-@@ -647,10 +716,46 @@ void kvm_gsi_routing_write(struct kvm_vm *vm, struct kvm_irq_routing *routing);
- 
- const char *exit_reason_str(unsigned int exit_reason);
- 
-+#ifdef __x86_64__
-+/*
-+ * Guest called function to get a pointer to pte corresponding to a given
-+ * guest virtual address and pointer to the guest_pgt_info structure.
-+ *
-+ * input args:
-+ *	gpgt_info - pointer to guest_pgt_info structure containing information
-+ *		about guest virtual addresses mapped to pagetable physical
-+ *		addresses.
-+ *	vaddr - guest virtual address
-+ *
-+ * output args: none
-+ *
-+ * return:
-+ *	pointer to the pte corresponding to guest virtual address,
-+ *	Null if pte is not found
-+ */
-+uint64_t *guest_code_get_pte(struct guest_pgt_info *gpgt_info, uint64_t vaddr);
-+#endif
-+
- vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
- 			     uint32_t memslot);
- vm_paddr_t vm_phy_pages_alloc(struct kvm_vm *vm, size_t num,
- 			      vm_paddr_t paddr_min, uint32_t memslot);
-+
-+/*
-+ * Enable tracking of physical guest pagetable pages for the given vm.
-+ * This function should be called right after vm creation before any pages are
-+ * mapped into the VM using vm_alloc_* / vm_vaddr_alloc* functions.
-+ *
-+ * input args:
-+ *	vm - virtual machine
-+ *
-+ * output args: none
-+ *
-+ * return:
-+ *	None
-+ */
-+void vm_set_pgt_alloc_tracking(struct kvm_vm *vm);
-+
- vm_paddr_t vm_alloc_page_table(struct kvm_vm *vm);
- 
- /*
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index f153c71d6988..243d04a3d4b6 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -155,6 +155,7 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages)
- 	TEST_ASSERT(vm != NULL, "Insufficient Memory");
- 
- 	INIT_LIST_HEAD(&vm->vcpus);
-+	INIT_LIST_HEAD(&vm->pgt_pages);
- 	vm->regions.gpa_tree = RB_ROOT;
- 	vm->regions.hva_tree = RB_ROOT;
- 	hash_init(vm->regions.slot_hash);
-@@ -573,6 +574,7 @@ void kvm_vm_free(struct kvm_vm *vmp)
- {
- 	int ctr;
- 	struct hlist_node *node;
-+	struct pgt_page *entry, *nentry;
- 	struct userspace_mem_region *region;
- 
- 	if (vmp == NULL)
-@@ -588,6 +590,9 @@ void kvm_vm_free(struct kvm_vm *vmp)
- 	hash_for_each_safe(vmp->regions.slot_hash, ctr, node, region, slot_node)
- 		__vm_mem_region_delete(vmp, region, false);
- 
-+	list_for_each_entry_safe(entry, nentry, &vmp->pgt_pages, list)
-+		free(entry);
-+
- 	/* Free sparsebit arrays. */
- 	sparsebit_free(&vmp->vpages_valid);
- 	sparsebit_free(&vmp->vpages_mapped);
-@@ -1195,9 +1200,24 @@ vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
- /* Arbitrary minimum physical address used for virtual translation tables. */
- #define KVM_GUEST_PAGE_TABLE_MIN_PADDR 0x180000
- 
-+void vm_set_pgt_alloc_tracking(struct kvm_vm *vm)
-+{
-+	vm->track_pgt_pages = true;
-+}
-+
- vm_paddr_t vm_alloc_page_table(struct kvm_vm *vm)
- {
--	return vm_phy_page_alloc(vm, KVM_GUEST_PAGE_TABLE_MIN_PADDR, 0);
-+	struct pgt_page *pgt;
-+	vm_paddr_t paddr = vm_phy_page_alloc(vm, KVM_GUEST_PAGE_TABLE_MIN_PADDR, 0);
-+
-+	if (vm->track_pgt_pages) {
-+		pgt = calloc(1, sizeof(*pgt));
-+		TEST_ASSERT(pgt != NULL, "Insufficient memory");
-+		pgt->paddr = addr_gpa2raw(vm, paddr);
-+		list_add(&pgt->list, &vm->pgt_pages);
-+		vm->num_pgt_pages++;
-+	}
-+	return paddr;
+ long kvm_arch_dev_ioctl(struct file *filp,
+ 			unsigned int ioctl, unsigned long arg);
+ long kvm_arch_vcpu_ioctl(struct file *filp,
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 7597949fe031..16cb9ab59143 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -647,6 +647,54 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+ 	return (int)ret;
  }
  
- /*
-@@ -1286,6 +1306,27 @@ static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
- 	return pgidx_start * vm->page_size;
- }
- 
-+void vm_map_page_table(struct kvm_vm *vm, vm_vaddr_t vaddr_min)
++int kvm_vm_do_hva_range_op(struct kvm *kvm, unsigned long hva_start,
++		unsigned long hva_end, kvm_hva_range_op_t handler, void *data)
 +{
-+	struct pgt_page *pgt_page_entry;
-+	vm_vaddr_t vaddr;
++	int ret = 0;
++	struct kvm_gfn_range gfn_range;
++	struct kvm_memory_slot *slot;
++	struct kvm_memslots *slots;
++	int i, idx;
 +
-+	/* Stop tracking further pgt pages, mapping pagetable may itself need
-+	 * new pages.
-+	 */
-+	vm->track_pgt_pages = false;
-+	vm_vaddr_t vaddr_start = vm_vaddr_unused_gap(vm,
-+		vm->num_pgt_pages * vm->page_size, vaddr_min);
-+	vaddr = vaddr_start;
-+	list_for_each_entry(pgt_page_entry, &vm->pgt_pages, list) {
-+		/* Map the virtual page. */
-+		virt_pg_map(vm, vaddr, addr_raw2gpa(vm, pgt_page_entry->paddr));
-+		sparsebit_set(vm->vpages_mapped, vaddr >> vm->page_shift);
-+		vaddr += vm->page_size;
++	if (WARN_ON_ONCE(hva_end <= hva_start))
++		return -EINVAL;
++
++	idx = srcu_read_lock(&kvm->srcu);
++
++	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
++		struct interval_tree_node *node;
++
++		slots = __kvm_memslots(kvm, i);
++		kvm_for_each_memslot_in_hva_range(node, slots,
++					  hva_start, hva_end - 1) {
++			unsigned long start, end;
++
++			slot = container_of(node, struct kvm_memory_slot,
++				hva_node[slots->node_idx]);
++			start = max(hva_start, slot->userspace_addr);
++			end = min(hva_end, slot->userspace_addr +
++						  (slot->npages << PAGE_SHIFT));
++
++			/*
++			 * {gfn(page) | page intersects with [hva_start, hva_end)} =
++			 * {gfn_start, gfn_start+1, ..., gfn_end-1}.
++			 */
++			gfn_range.start = hva_to_gfn_memslot(start, slot);
++			gfn_range.end = hva_to_gfn_memslot(end + PAGE_SIZE - 1, slot);
++			gfn_range.slot = slot;
++
++			ret = handler(kvm, &gfn_range, data);
++			if (ret)
++				goto e_ret;
++		}
 +	}
-+	vm->pgt_vaddr_start = vaddr_start;
++
++e_ret:
++	srcu_read_unlock(&kvm->srcu, idx);
++
++	return ret;
 +}
 +
- /*
-  * VM Virtual Address Allocate Shared/Encrypted
-  *
-@@ -1345,6 +1386,41 @@ vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_
- 	return _vm_vaddr_alloc(vm, sz, vaddr_min, false);
- }
- 
-+void *guest_code_get_pgt_vaddr(struct guest_pgt_info *gpgt_info,
-+		uint64_t pgt_pa)
-+{
-+	uint64_t num_pgt_pages = gpgt_info->num_pgt_pages;
-+	uint64_t pgt_vaddr_start = gpgt_info->pgt_vaddr_start;
-+	uint64_t page_size = gpgt_info->page_size;
-+
-+	for (uint32_t i = 0; i < num_pgt_pages; i++) {
-+		if (gpgt_info->paddrs[i] == pgt_pa)
-+			return (void *)(pgt_vaddr_start + i * page_size);
-+	}
-+	return NULL;
-+}
-+
-+vm_vaddr_t vm_setup_pgt_info_buf(struct kvm_vm *vm, vm_vaddr_t vaddr_min)
-+{
-+	struct pgt_page *pgt_page_entry;
-+	struct guest_pgt_info *gpgt_info;
-+	uint64_t info_size = sizeof(*gpgt_info) + (sizeof(uint64_t) * vm->num_pgt_pages);
-+	uint64_t num_pages = align_up(info_size, vm->page_size);
-+	vm_vaddr_t buf_start = vm_vaddr_alloc(vm, num_pages, vaddr_min);
-+	uint32_t i = 0;
-+
-+	gpgt_info = (struct guest_pgt_info *)addr_gva2hva(vm, buf_start);
-+	gpgt_info->num_pgt_pages = vm->num_pgt_pages;
-+	gpgt_info->pgt_vaddr_start = vm->pgt_vaddr_start;
-+	gpgt_info->page_size = vm->page_size;
-+	list_for_each_entry(pgt_page_entry, &vm->pgt_pages, list) {
-+		gpgt_info->paddrs[i] = pgt_page_entry->paddr;
-+		i++;
-+	}
-+	TEST_ASSERT((i == vm->num_pgt_pages), "pgt entries mismatch with the counter");
-+	return buf_start;
-+}
-+
- /*
-  * VM Virtual Address Allocate Pages
-  *
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 09d757a0b148..02252cabf9ec 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -217,6 +217,38 @@ void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
- 	__virt_pg_map(vm, vaddr, paddr, PG_LEVEL_4K);
- }
- 
-+uint64_t *guest_code_get_pte(struct guest_pgt_info *gpgt_info, uint64_t vaddr)
-+{
-+	uint16_t index[4];
-+	uint64_t *pml4e, *pdpe, *pde, *pte;
-+	uint64_t pgt_paddr = get_cr3();
-+	uint64_t page_size = gpgt_info->page_size;
-+
-+	index[0] = (vaddr >> 12) & 0x1ffu;
-+	index[1] = (vaddr >> 21) & 0x1ffu;
-+	index[2] = (vaddr >> 30) & 0x1ffu;
-+	index[3] = (vaddr >> 39) & 0x1ffu;
-+
-+	pml4e = guest_code_get_pgt_vaddr(gpgt_info, pgt_paddr);
-+	GUEST_ASSERT(pml4e && (pml4e[index[3]] & PTE_PRESENT_MASK));
-+
-+	pgt_paddr = (PTE_GET_PFN(pml4e[index[3]]) * page_size);
-+	pdpe = guest_code_get_pgt_vaddr(gpgt_info, pgt_paddr);
-+	GUEST_ASSERT(pdpe && (pdpe[index[2]] & PTE_PRESENT_MASK) &&
-+		!(pdpe[index[2]] & PTE_LARGE_MASK));
-+
-+	pgt_paddr = (PTE_GET_PFN(pdpe[index[2]]) * page_size);
-+	pde = guest_code_get_pgt_vaddr(gpgt_info, pgt_paddr);
-+	GUEST_ASSERT(pde && (pde[index[1]] & PTE_PRESENT_MASK) &&
-+		!(pde[index[1]] & PTE_LARGE_MASK));
-+
-+	pgt_paddr = (PTE_GET_PFN(pde[index[1]]) * page_size);
-+	pte = guest_code_get_pgt_vaddr(gpgt_info, pgt_paddr);
-+	GUEST_ASSERT(pte && (pte[index[0]] & PTE_PRESENT_MASK));
-+
-+	return (uint64_t *)&pte[index[0]];
-+}
-+
- static uint64_t *_vm_get_page_table_entry(struct kvm_vm *vm,
- 					  struct kvm_vcpu *vcpu,
- 					  uint64_t vaddr)
+ static __always_inline int kvm_handle_hva_range(struct mmu_notifier *mn,
+ 						unsigned long start,
+ 						unsigned long end,
 -- 
 2.37.2.672.g94769d06f0-goog
 
