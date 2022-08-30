@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054A65A70FD
+	by mail.lfdr.de (Postfix) with ESMTP id 9807D5A70FF
 	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 00:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbiH3Wnp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Aug 2022 18:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S231617AbiH3Wnq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Aug 2022 18:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiH3WnY (ORCPT
+        with ESMTP id S231788AbiH3Wn2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:43:24 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511D58050A
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:21 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id z8-20020a17090abd8800b001fd5f11fca7so8177604pjr.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:21 -0700 (PDT)
+        Tue, 30 Aug 2022 18:43:28 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E8F7FFA7
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:25 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id n18-20020a25d612000000b0069661a1dc48so811263ybg.20
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:43:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=72P9i6U+1Dr4e9vSKI1gPWv6Lo3gM5hWP8wyM1fHGL0=;
-        b=BmsjrGFWHc6Y2fjLh0Guc+hSkU6LRLDr7ZN+urJtAfJo95/yn8UtEUaA70RAyPcwJM
-         eEJbzhv3Xr6tLaVaI+SWn5OUmXgPH67zijb6AQI/RVZXxJhHWJ0vv83NKZbLcGm3A6n2
-         JG1d3U32+PPI+dIUPMz2XWqz7Hu8ha7qzMHGuEcjWHizAmgB7MOYAoel5QpUdu/31AAV
-         bMl6W1aLYSjEywBO7oap4TzR3PW31n9rJbdFV+Eslv700pf3UfKhHVc/F+t7mUxeXuxU
-         ILWWvuw8/K0JiX+VZbAUAnrgUo9ixRflWR9XK1Dj9ERFmYsdHCi5YD8zbUj26WBY07ly
-         StgQ==
+        bh=FnC2MODp1Ilbo/3qVuV673Djb8hUYYAKXHPp7uV/l3U=;
+        b=QPd795t1C0ahrsS55brxetoonol6V2jAppY01knmBO6dTEexYKdxvNbkTSQcIcPS0g
+         2kVquW8pntnzZ8ayf2KGc74LWg1ImA0LODvDVKrQ5RNE9iPAZqoluWZufVPBUn48fc67
+         kW1IFw4yDbnloy5QQ/STgOmCIxz9plIKPFM0HDvfvRd0xIR/a+XXnVcrsaDE4dXMXlvp
+         2IrquyFJf8Ta/3dM4DHzEUE06trbxbXXW3PUtdEzPpNE9l9jhx85/6oghBZ5fuiPnSIa
+         HihGAukLvraBpoNRHwoZwUflCiTPtuG2KVmnc5uUF0aSGnXsPpEIuWMW3HwQM/7lAwtJ
+         qghA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=72P9i6U+1Dr4e9vSKI1gPWv6Lo3gM5hWP8wyM1fHGL0=;
-        b=dbp5O0OWSe9hmEk17hSaqVeI/g3uKw6ZK3SVASdyt2PJ8J4FHg79hjk2WyXtRih9Vf
-         p7g4oNjapHjBCQj2473een7kpr7BjsYLVjEJcdK9E6dXOYHUnfXsv/9SmpyRciMlGwDn
-         sGilgosetPIKhNaj2hBmUWh6l+gK+YRsVA1GXja3AToE97Y853m9cDqC+TA8pBgK/0Ja
-         nnfv4/v6O7xizVzjWUWZqbuWDtv/MNVSYF9BO98fo2FZmmutX2EYZ7PDNYBbcxzrzKRn
-         l6anoL4mCf6UFwKSwFRX7PXxRqpuMV60iXhsArExfq5VpDHbvWTtpedTrdRsHQelR3TJ
-         WvLg==
-X-Gm-Message-State: ACgBeo3N2HVShtVUsXXu22+4/HED0ecKUoX3WIqEbvorkcF9LD28YIBv
-        LM28IXxPTD4hANFSuBSRaZ7ZQ3cU1ENfKC+7
-X-Google-Smtp-Source: AA6agR694skgUA9ff0wN7YLAz9d1J3Zwv7gfGw4NDsA/Q5y26oGB9uvpFpTcJTINj3D3/2tLzNcd9gkmf5zQAIEi
+        bh=FnC2MODp1Ilbo/3qVuV673Djb8hUYYAKXHPp7uV/l3U=;
+        b=BKIHvrSwwBndBF8uvi1ZasQkg9u4jO8/iNF/O++7pkFRcaXNQrSVSWa6sEZ6sb3wr6
+         NchOpmrO4gi8qTZtisX5qmJQgFgiQO+ehJ4JuPm2cfcZgU4CaG5+NcI39nnlGmQlsnNf
+         QIhlAIVqHtSm+0VmxHvamD45QbvXMbPF4K6fAXYP4KNy2q0dOxX/yq5gzZW8HGpYohzD
+         76PuGz9pnpHaV2Q5LWak2HRB+hnom5xoGI/kMnvE7yNLZZtdpuIQUyJWuTivf4ShXUpu
+         dvo/lexh3HkgwUNGuy7oZzI4c1hP7xcw6xWKBNpfJ2sXtZHYXanbztyaw3plVCJR6GVi
+         FDZA==
+X-Gm-Message-State: ACgBeo0jfxMdeWY3RzVdOFNBCTgkvM8w/ZP8AsrPqYXxyCbVJIhAkynm
+        FrFqAMTBx+0FxSaEFJERMsrgIR/p7KwxSj+y
+X-Google-Smtp-Source: AA6agR7J2g4yWWCjTXSW8bJGJNJQDF4Q6cZWWSd4WOmEIBPpC8PfIDGdBXAbKzkcTBd8rZjpqBovURMzodQSv4dn
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:902:ef50:b0:171:516d:d2ce with SMTP
- id e16-20020a170902ef5000b00171516dd2cemr22222790plx.171.1661899400834; Tue,
- 30 Aug 2022 15:43:20 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 22:42:54 +0000
+ (user=vannapurve job=sendgmr) by 2002:a81:bb43:0:b0:33d:cdd9:aa56 with SMTP
+ id a3-20020a81bb43000000b0033dcdd9aa56mr15659487ywl.240.1661899403835; Tue,
+ 30 Aug 2022 15:43:23 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 22:42:55 +0000
 In-Reply-To: <20220830224259.412342-1-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20220830224259.412342-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830224259.412342-4-vannapurve@google.com>
-Subject: [RFC V2 PATCH 3/8] arch: x86: sev: Populate private memory fd during LAUNCH_UPDATE_DATA
+Message-ID: <20220830224259.412342-5-vannapurve@google.com>
+Subject: [RFC V2 PATCH 4/8] selftests: kvm: sev: Support memslots with private memory
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -78,236 +78,76 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This change adds handling of HVA ranges to copy contents
-to private memory while doing sev launch update data.
-
-mem_attr array is updated during LAUNCH_UPDATE_DATA to ensure
-that encrypted memory is marked as private.
+Introduce an additional helper API to create a SEV VM with private
+memory memslots.
 
 Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 ---
- arch/x86/kvm/svm/sev.c   | 99 ++++++++++++++++++++++++++++++++++++----
- include/linux/kvm_host.h |  2 +
- virt/kvm/kvm_main.c      | 39 ++++++++++------
- 3 files changed, 116 insertions(+), 24 deletions(-)
+ tools/testing/selftests/kvm/include/x86_64/sev.h |  2 ++
+ tools/testing/selftests/kvm/lib/x86_64/sev.c     | 15 ++++++++++++---
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 309bcdb2f929..673dca318cd4 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -492,23 +492,22 @@ static unsigned long get_num_contig_pages(unsigned long idx,
- 	return pages;
+diff --git a/tools/testing/selftests/kvm/include/x86_64/sev.h b/tools/testing/selftests/kvm/include/x86_64/sev.h
+index b6552ea1c716..628801707917 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/sev.h
++++ b/tools/testing/selftests/kvm/include/x86_64/sev.h
+@@ -38,6 +38,8 @@ void kvm_sev_ioctl(struct sev_vm *sev, int cmd, void *data);
+ struct kvm_vm *sev_get_vm(struct sev_vm *sev);
+ uint8_t sev_get_enc_bit(struct sev_vm *sev);
+ 
++struct sev_vm *sev_vm_create_with_flags(uint32_t policy, uint64_t npages,
++	uint32_t memslot_flags);
+ struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages);
+ void sev_vm_free(struct sev_vm *sev);
+ void sev_vm_launch(struct sev_vm *sev);
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev.c b/tools/testing/selftests/kvm/lib/x86_64/sev.c
+index 44b5ce5cd8db..6a329ea17f9f 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/sev.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/sev.c
+@@ -171,7 +171,8 @@ void sev_vm_free(struct sev_vm *sev)
+ 	free(sev);
  }
  
--static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
-+int sev_launch_update_shared_gfn_handler(struct kvm *kvm,
-+	struct kvm_gfn_range *range, struct kvm_sev_cmd *argp)
+-struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
++struct sev_vm *sev_vm_create_with_flags(uint32_t policy, uint64_t npages,
++	uint32_t memslot_flags)
  {
- 	unsigned long vaddr, vaddr_end, next_vaddr, npages, pages, size, i;
- 	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
--	struct kvm_sev_launch_update_data params;
- 	struct sev_data_launch_update_data data;
- 	struct page **inpages;
- 	int ret;
- 
--	if (!sev_guest(kvm))
--		return -ENOTTY;
--
--	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
--		return -EFAULT;
-+	vaddr = gfn_to_hva_memslot(range->slot, range->start);
-+	if (kvm_is_error_hva(vaddr)) {
-+		pr_err("vaddr is erroneous 0x%lx\n", vaddr);
-+		return -EINVAL;
+ 	struct sev_vm *sev;
+ 	struct kvm_vm *vm;
+@@ -188,9 +189,12 @@ struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
+ 	vm->vpages_mapped = sparsebit_alloc();
+ 	vm_set_memory_encryption(vm, true, true, sev->enc_bit);
+ 	pr_info("SEV cbit: %d\n", sev->enc_bit);
+-	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, npages, 0);
+-	sev_register_user_region(sev, addr_gpa2hva(vm, 0),
++	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, npages,
++		memslot_flags);
++	if (!(memslot_flags & KVM_MEM_PRIVATE)) {
++		sev_register_user_region(sev, addr_gpa2hva(vm, 0),
+ 				 npages * vm->page_size);
 +	}
  
--	vaddr = params.uaddr;
--	size = params.len;
-+	size = (range->end - range->start) << PAGE_SHIFT;
- 	vaddr_end = vaddr + size;
- 
- 	/* Lock the user memory. */
-@@ -560,6 +559,88 @@ static int sev_launch_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 	return ret;
+ 	pr_info("SEV guest created, policy: 0x%x, size: %lu KB\n",
+ 		sev->sev_policy, npages * vm->page_size / 1024);
+@@ -198,6 +202,11 @@ struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
+ 	return sev;
  }
  
-+int sev_launch_update_priv_gfn_handler(struct kvm *kvm,
-+	struct kvm_gfn_range *range, struct kvm_sev_cmd *argp)
++struct sev_vm *sev_vm_create(uint32_t policy, uint64_t npages)
 +{
-+	struct sev_data_launch_update_data data;
-+	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-+	gfn_t gfn;
-+	kvm_pfn_t pfn;
-+	struct kvm_memory_slot *memslot = range->slot;
-+	int ret = 0;
-+
-+	data.reserved = 0;
-+	data.handle = sev->handle;
-+
-+	for (gfn = range->start; gfn < range->end; gfn++) {
-+		int order;
-+		void *kvaddr;
-+
-+		ret = kvm_private_mem_get_pfn(memslot,
-+			gfn, &pfn, &order);
-+		if (ret)
-+			return ret;
-+
-+		kvaddr = pfn_to_kaddr(pfn);
-+		if (!virt_addr_valid(kvaddr)) {
-+			pr_err("Invalid kvaddr 0x%lx\n", (uint64_t)kvaddr);
-+			ret = -EINVAL;
-+			goto e_ret;
-+		}
-+
-+		ret = kvm_read_guest_page(kvm, gfn, kvaddr, 0, PAGE_SIZE);
-+		if (ret) {
-+			pr_err("guest read failed 0x%lx\n", ret);
-+			goto e_ret;
-+		}
-+
-+		if (!this_cpu_has(X86_FEATURE_SME_COHERENT))
-+			clflush_cache_range(kvaddr, PAGE_SIZE);
-+
-+		data.len = PAGE_SIZE;
-+		data.address = __sme_set(pfn << PAGE_SHIFT);
-+		ret = sev_issue_cmd(kvm, SEV_CMD_LAUNCH_UPDATE_DATA, &data, &argp->error);
-+		if (ret)
-+			goto e_ret;
-+
-+		kvm_private_mem_put_pfn(memslot, pfn);
-+	}
-+	kvm_vm_set_region_attr(kvm, range->start, range->end,
-+		true /* priv_attr */);
-+
-+	return ret;
-+
-+e_ret:
-+	kvm_private_mem_put_pfn(memslot, pfn);
-+	return ret;
++	return sev_vm_create_with_flags(policy, npages, 0);
 +}
 +
-+int sev_launch_update_gfn_handler(struct kvm *kvm,
-+	struct kvm_gfn_range *range, void *data)
-+{
-+	struct kvm_sev_cmd *argp = (struct kvm_sev_cmd *)data;
-+
-+	if (kvm_slot_can_be_private(range->slot))
-+		return sev_launch_update_priv_gfn_handler(kvm, range, argp);
-+
-+	return sev_launch_update_shared_gfn_handler(kvm, range, argp);
-+}
-+
-+static int sev_launch_update_data(struct kvm *kvm,
-+		struct kvm_sev_cmd *argp)
-+{
-+	struct kvm_sev_launch_update_data params;
-+
-+	if (!sev_guest(kvm))
-+		return -ENOTTY;
-+
-+	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
-+		return -EFAULT;
-+
-+	return kvm_vm_do_hva_range_op(kvm, params.uaddr, params.uaddr + params.len,
-+		sev_launch_update_gfn_handler, argp);
-+}
-+
- static int sev_es_sync_vmsa(struct vcpu_svm *svm)
+ void sev_vm_launch(struct sev_vm *sev)
  {
- 	struct sev_es_save_area *save = svm->sev_es.vmsa;
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index c860e6d6408d..5d0054e957b4 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -980,6 +980,8 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
- void kvm_exit(void);
- 
- void kvm_get_kvm(struct kvm *kvm);
-+int kvm_vm_set_region_attr(struct kvm *kvm, unsigned long gfn_start,
-+	unsigned long gfn_end, bool priv_attr);
- bool kvm_get_kvm_safe(struct kvm *kvm);
- void kvm_put_kvm(struct kvm *kvm);
- bool file_is_kvm(struct file *file);
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 16cb9ab59143..9463737c2172 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -981,7 +981,7 @@ static int kvm_vm_populate_private_mem(struct kvm *kvm, unsigned long gfn_start,
- 	}
- 
- 	mutex_lock(&kvm->slots_lock);
--	for (gfn = gfn_start; gfn <= gfn_end; gfn++) {
-+	for (gfn = gfn_start; gfn < gfn_end; gfn++) {
- 		int order;
- 		void *kvaddr;
- 
-@@ -1012,12 +1012,29 @@ static int kvm_vm_populate_private_mem(struct kvm *kvm, unsigned long gfn_start,
- }
- #endif
- 
-+int kvm_vm_set_region_attr(struct kvm *kvm, unsigned long gfn_start,
-+	unsigned long gfn_end, bool priv_attr)
-+{
-+	int r;
-+	void *entry;
-+	unsigned long index;
-+
-+	entry = priv_attr ? xa_mk_value(KVM_MEM_ATTR_PRIVATE) : NULL;
-+
-+	for (index = gfn_start; index < gfn_end; index++) {
-+		r = xa_err(xa_store(&kvm->mem_attr_array, index, entry,
-+				GFP_KERNEL_ACCOUNT));
-+		if (r)
-+			break;
-+	}
-+
-+	return r;
-+}
-+
- static int kvm_vm_ioctl_set_encrypted_region(struct kvm *kvm, unsigned int ioctl,
- 					     struct kvm_enc_region *region)
- {
- 	unsigned long start, end;
--	unsigned long index;
--	void *entry;
- 	int r;
- 
- 	if (region->size == 0 || region->addr + region->size < region->addr)
-@@ -1026,22 +1043,14 @@ static int kvm_vm_ioctl_set_encrypted_region(struct kvm *kvm, unsigned int ioctl
- 		return -EINVAL;
- 
- 	start = region->addr >> PAGE_SHIFT;
--	end = (region->addr + region->size - 1) >> PAGE_SHIFT;
--
--	entry = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION ?
--				xa_mk_value(KVM_MEM_ATTR_PRIVATE) : NULL;
--
--	for (index = start; index <= end; index++) {
--		r = xa_err(xa_store(&kvm->mem_attr_array, index, entry,
--				GFP_KERNEL_ACCOUNT));
--		if (r)
--			break;
--	}
-+	end = (region->addr + region->size) >> PAGE_SHIFT;
-+	r = kvm_vm_set_region_attr(kvm, start, end,
-+		(ioctl == KVM_MEMORY_ENCRYPT_REG_REGION));
- 
- 	kvm_zap_gfn_range(kvm, start, end + 1);
- 
- #ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
--	if (!kvm->vm_entry_attempted && (ioctl == KVM_MEMORY_ENCRYPT_REG_REGION))
-+	if (!r && !kvm->vm_entry_attempted && (ioctl == KVM_MEMORY_ENCRYPT_REG_REGION))
- 		r = kvm_vm_populate_private_mem(kvm, start, end);
- #endif
- 
+ 	struct kvm_sev_launch_start ksev_launch_start = {0};
 -- 
 2.37.2.672.g94769d06f0-goog
 
