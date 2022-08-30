@@ -2,56 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D305B5A7082
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 00:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DDA5A7083
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 00:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbiH3WUM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Aug 2022 18:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
+        id S231913AbiH3WUN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Aug 2022 18:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiH3WUL (ORCPT
+        with ESMTP id S231797AbiH3WUL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 30 Aug 2022 18:20:11 -0400
 Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DA424088
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:20:06 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id j11-20020a17090a738b00b001faeb619f6eso5201376pjg.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:20:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072E02655B
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:20:07 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id q9-20020a17090aa00900b001fd93514a68so6046697pjp.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 15:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date;
-        bh=UI4OmQmR9sQA7gmj1l+KCwWtd2GoCQ+O3NdQp7yrdNo=;
-        b=Y2OIwO5LuS2HwhMYuCBYf0GYwKgdpiShKssh+aazZImIauEqH6JXAftS3gtKk9/LnQ
-         NBmgdT1OIICuONG4IFO7Eb49mhSttApoTZy+JK9wATYKy+b3wPGIgx3E21JuIAIdDzwS
-         9WPXD+b6jWGMwiB7vpZNFpimGl8LXSjbUkkwVblWgmll9j//5mI7OCKrqS+0hExal78Z
-         RKEheQl5WqfD8/xJyQDTR6QiwL3rwl0jo7vHe7lZFztEJLAGcy1NYvDLWEOVuqaYSZQf
-         ByDZQqUcdub0BN/1mv/F0EjecxKyltRpbAqHOnWMGyCLyOHnPS+BRbDsODC0xQOODBfA
-         XXsg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=/1/sdSVljrZtE+cOlvr7FEjtfDcy2AsBCQfMmau9WfQ=;
+        b=Hl5NJHIIf9AjxMn6KkyCTnFp1wbi9nT9TChdGDiN1QnlBXWMcbuTu/orvkNm/XT6X6
+         x+yi9M5RODBfwi/1eZg7fqFXu8DstSIpVwVVk1PZHjDV8IhyrpZvy2K4WYJft72eyPfZ
+         AnwR8ehdBDS5R5ohZHvImQuYc3s6Nj3pMj5WlsPhC9RssJcPIZkhF+OODAeStTz2b/iJ
+         1yN1+NJPHEf+wblVhbTKJ1CAbiPm7LtWcpo8+sfVTLwsded6UwMxIrSmWG35wtNUiMAq
+         DNUn2AjMXNEWMoAfEivES+z26jvGelo4VfDMKN/KRE7q0o66Vbgg7cGEXiaWnk3g7+jK
+         dKMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=UI4OmQmR9sQA7gmj1l+KCwWtd2GoCQ+O3NdQp7yrdNo=;
-        b=YPuNSvNylUtPX/UT0NfBMNSZ83N2DZdpm8dVWweD8N16FXaKdmBcVyigz5bKBX0gxl
-         3VU/puG2rghouDaghY0JpkYSMauEiFcwH6F7nPw+LcCBKJKdLcimUhm6cscEtKhn0Ki/
-         cO6UhaMn5jS5BgjgvRphaGE/R+txek/DQRYEHnrqeifVvI7MfX4+ME60mn4EFDOz2wEA
-         OyoNJ2MrTneMN8LFvqvB83PRuQEHEwBeHK6G0V1I/nM4m5b8nbJxkrdbEgaDXOdFX9cH
-         Z27ozgiNopiYyRj10jUgu9tWPf8bJzyCU10ERf6ncIPAT1u5Xj9zcBRXzmAH5BHiyKfp
-         23YQ==
-X-Gm-Message-State: ACgBeo3oFJ1EdonSIACCBZ7lI7hRy0xNcj/sqJYyndOflKaS7NNURpO5
-        J1s3wzwN/575Y8g+TNfBdD5LAZ8KpusMJl1UcL43aISaGllPcVUnqt07hHB7D7KwUxHHXQF6UwD
-        /stTnXPn34rhCTe9z47BklHPeZVE9BrZTXrnJMUwjEQJUB0Eo4TKMTnxkpB6Jm80w0jBgaEo=
-X-Google-Smtp-Source: AA6agR6Uzvh0P1N76w4nQ1rBpLF+zuxzX4pnDRJPPty9seQHvvtRyVj+1CTXhTL90+PuLdcTGp65xHvyhw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=/1/sdSVljrZtE+cOlvr7FEjtfDcy2AsBCQfMmau9WfQ=;
+        b=7ByUhR9WmilstaZn3jrUuPBf3LgHYA2skqxRPb8pfGlEL4ufqkeARHtse4xPawgxWC
+         SH1DgjAVEK5HJGYhLpjfZQ/59WfigAjBvn45CVlNhCYzuikjnsTe3fQHgHrTTYl22TZp
+         Vuoe+RQtsVKMc02s3W38g3gl2dq4Gr9eQKrlnb8OEnyBGpCDp0dtzaUb6ghtphIMDa7l
+         zZbiw7QUNKM7BdZBShAdzwFQu+ecnX8WJCltbfRK43zEiYFdeNJPCYSXrHZvoxq91pwH
+         T0OklgTgQ/1kXtqJXL9au5LR5EvpeGI7H3lEmyw+BKKOlUGEDoBciOcCXR5tSsLxHtxQ
+         sKew==
+X-Gm-Message-State: ACgBeo1eF5psqG4/cBOPQNdjAZ94wT8ayrlhU4BmZGmOdXN0JCXJA6US
+        ER5ipDhvAmuVqm+bA9DZCq3o2QN1kpmAaWbf+zn2PUwMM9NCC4WLdbP8O4igVeEZOIX9X/0T950
+        Vk/DEqDWB/HjSJryCjZpZrEXOgg6jnsBVyvvZT0kkQlCHpGF8bcX2csPEFyueGUGg1ifSxmg=
+X-Google-Smtp-Source: AA6agR6eeDtQGXqnkPM1B1p4L+32NSn7HTIayprlj+H2vAC0mW1iQTGm+kZwcup5REG0kEuCvw/zSq/9hQ==
 X-Received: from sagi.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:241b])
- (user=sagis job=sendgmr) by 2002:a05:6a00:21c5:b0:52b:fc9c:295b with SMTP id
- t5-20020a056a0021c500b0052bfc9c295bmr23563210pfj.56.1661898005406; Tue, 30
- Aug 2022 15:20:05 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 22:19:43 +0000
+ (user=sagis job=sendgmr) by 2002:a17:902:c613:b0:174:7a32:f76 with SMTP id
+ r19-20020a170902c61300b001747a320f76mr15784815plr.165.1661898007252; Tue, 30
+ Aug 2022 15:20:07 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 22:19:44 +0000
+In-Reply-To: <20220830222000.709028-1-sagis@google.com>
 Mime-Version: 1.0
+References: <20220830222000.709028-1-sagis@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220830222000.709028-1-sagis@google.com>
-Subject: [RFC PATCH v2 00/17] TDX KVM selftests
+Message-ID: <20220830222000.709028-2-sagis@google.com>
+Subject: [RFC PATCH v2 01/17] KVM: selftests: Add support for creating
+ non-default type VMs
 From:   Sagi Shahar <sagis@google.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -95,107 +98,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+From: Erdem Aktas <erdemaktas@google.com>
 
-This is v2 of the patch series for TDX selftests.
+Currently vm_create function only creates KVM_VM_TYPE_DEFAULT type VMs.
+Adding type parameter to ____vm_create to create new VM types.
 
-It is based on v5.19-rc8 and Intel's V8 of the TDX host patches which
-was proposed in https://lkml.org/lkml/2022/8/8/877
-
-The tree can be found at
-https://github.com/googleprodkernel/linux-cc/tree/selftests
-
-Major changes vrom v1:
-- rebased to v5.19
-- added helpers for success and failure reporting
-- added additional test cases
-
+Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+Signed-off-by: Sagi Shahar <sagis@google.com>
+Signed-off-by: Ryan Afranji <afranji@google.com>
 ---
-TDX stands for Trust Domain Extensions which isolates VMs from the
-virtual-machine manager (VMM)/hypervisor and any other software on the
-platform.
+ tools/testing/selftests/kvm/include/kvm_util_base.h | 6 ++++--
+ tools/testing/selftests/kvm/lib/kvm_util.c          | 6 +++---
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-Intel has recently submitted a set of RFC patches for KVM support for
-TDX and more information can be found on the latest TDX Support
-Patches: https://lkml.org/lkml/2022/8/8/877
-
-Due to the nature of the confidential computing environment that TDX
-provides, it is very difficult to verify/test the KVM support. TDX
-requires UEFI and the guest kernel to be enlightened which are all under
-development.
-
-We are working on a set of selftests to close this gap and be able to
-verify the KVM functionality to support TDX lifecycle and GHCI [1]
-interface.
-
-We are looking for any feedback on:
-- Patch series itself
-- Any suggestion on how we should approach testing TDX functionality.
-Does selftests seems reasonable or should we switch to using KVM
-unit tests. I would be happy to get some perspective on how KVM unit
-tests can help us more.
-- Any test case or scenario that we should add.
-- Anything else I have not thought of yet.
-
-Current patch series provide the following capabilities:
-
-- Provide helper functions to create a TD (Trusted Domain) using the KVM
-  ioctls
-- Provide helper functions to create a guest image that can include any
-  testing code
-- Provide helper functions and wrapper functions to write testing code
-  using GHCI interface
-- Add a test case that verifies TDX life cycle
-- Add a test case that verifies TDX GHCI port IO
-
-TODOs:
-- Use existing function to create page tables dynamically
-  (ie __virt_pg_map())
-- Remove arbitrary defined magic numbers for data structure offsets
-- Add TDVMCALL for error reporting
-- Add additional test cases as some listed below
-- Add #VE handlers to help testing more complicated test cases
-
----
-Erdem Aktas (4):
-  KVM: selftests: Add support for creating non-default type VMs
-  KVM: selftest: Add helper functions to create TDX VMs
-  KVM: selftest: Adding TDX life cycle test.
-  KVM: selftest: Adding test case for TDX port IO
-
-Roger Wang (1):
-  KVM: selftest: TDX: Add TDG.VP.INFO test
-
-Ryan Afranji (2):
-  KVM: selftest: TDX: Verify the behavior when host consumes a TD
-    private memory
-  KVM: selftest: TDX: Add shared memory test
-
-Sagi Shahar (10):
-  KVM: selftest: TDX: Add report_fatal_error test
-  KVM: selftest: TDX: Add basic TDX CPUID test
-  KVM: selftest: TDX: Add basic get_td_vmcall_info test
-  KVM: selftest: TDX: Add TDX IO writes test
-  KVM: selftest: TDX: Add TDX IO reads test
-  KVM: selftest: TDX: Add TDX MSR read/write tests
-  KVM: selftest: TDX: Add TDX HLT exit test
-  KVM: selftest: TDX: Add TDX MMIO reads test
-  KVM: selftest: TDX: Add TDX MMIO writes test
-  KVM: selftest: TDX: Add TDX CPUID TDVMCALL test
-
- tools/testing/selftests/kvm/Makefile          |    2 +
- .../selftests/kvm/include/kvm_util_base.h     |   12 +-
- .../selftests/kvm/include/x86_64/processor.h  |    1 +
- tools/testing/selftests/kvm/lib/kvm_util.c    |    6 +-
- .../selftests/kvm/lib/x86_64/processor.c      |   27 +
- tools/testing/selftests/kvm/lib/x86_64/tdx.h  |  495 +++++
- .../selftests/kvm/lib/x86_64/tdx_lib.c        |  373 ++++
- .../selftests/kvm/x86_64/tdx_vm_tests.c       | 1666 +++++++++++++++++
- 8 files changed, 2577 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx.h
- create mode 100644 tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c
- create mode 100644 tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
-
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index 24fde97f6121..2de7a7a2e56b 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -26,6 +26,8 @@
+ 
+ #define NSEC_PER_SEC 1000000000L
+ 
++#define KVM_VM_TYPE_DEFAULT	0
++
+ typedef uint64_t vm_paddr_t; /* Virtual Machine (Guest) physical address */
+ typedef uint64_t vm_vaddr_t; /* Virtual Machine (Guest) virtual address */
+ 
+@@ -642,13 +644,13 @@ vm_paddr_t vm_alloc_page_table(struct kvm_vm *vm);
+  * __vm_create() does NOT create vCPUs, @nr_runnable_vcpus is used purely to
+  * calculate the amount of memory needed for per-vCPU data, e.g. stacks.
+  */
+-struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages);
++struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages, int type);
+ struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint32_t nr_runnable_vcpus,
+ 			   uint64_t nr_extra_pages);
+ 
+ static inline struct kvm_vm *vm_create_barebones(void)
+ {
+-	return ____vm_create(VM_MODE_DEFAULT, 0);
++	return ____vm_create(VM_MODE_DEFAULT, 0, KVM_VM_TYPE_DEFAULT);
+ }
+ 
+ static inline struct kvm_vm *vm_create(uint32_t nr_runnable_vcpus)
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 9889fe0d8919..ac10ad8919a6 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -143,7 +143,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+ _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+ 	       "Missing new mode params?");
+ 
+-struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages)
++struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages, int type)
+ {
+ 	struct kvm_vm *vm;
+ 
+@@ -159,7 +159,7 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode, uint64_t nr_pages)
+ 	hash_init(vm->regions.slot_hash);
+ 
+ 	vm->mode = mode;
+-	vm->type = 0;
++	vm->type = type;
+ 
+ 	vm->pa_bits = vm_guest_mode_params[mode].pa_bits;
+ 	vm->va_bits = vm_guest_mode_params[mode].va_bits;
+@@ -294,7 +294,7 @@ struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint32_t nr_runnable_vcpus,
+ 						 nr_extra_pages);
+ 	struct kvm_vm *vm;
+ 
+-	vm = ____vm_create(mode, nr_pages);
++	vm = ____vm_create(mode, nr_pages, KVM_VM_TYPE_DEFAULT);
+ 
+ 	kvm_vm_elf_load(vm, program_invocation_name);
+ 
 -- 
 2.37.2.789.g6183377224-goog
 
