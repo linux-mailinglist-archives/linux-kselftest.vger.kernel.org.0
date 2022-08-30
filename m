@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD115A68AE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 18:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42865A68DA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 18:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbiH3QrE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Aug 2022 12:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
+        id S229691AbiH3Qye (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Aug 2022 12:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiH3QrB (ORCPT
+        with ESMTP id S229550AbiH3Qyd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:47:01 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F350FB654D;
-        Tue, 30 Aug 2022 09:46:53 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id r4so14978309edi.8;
-        Tue, 30 Aug 2022 09:46:53 -0700 (PDT)
+        Tue, 30 Aug 2022 12:54:33 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF3FE6F;
+        Tue, 30 Aug 2022 09:54:32 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id cu2so23485671ejb.0;
+        Tue, 30 Aug 2022 09:54:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=1AFNZlzSZWcJdvdgruC16P+i1WUA5VJSb9W5RFFvucA=;
-        b=hMFE98nV+X9JQJiBf12uyzGf/BQr/ijcGk+8ElRrwVaOXjvyT7/FpAqdjSUiQtO0kc
-         NWJfEPRsnVPRj/VviMCoTYRkObelu28uFnJIZrgASCkr5cfe0jFOJlDMAm/rSj11S4o5
-         D3EYd17vDD8TfRIJa1fdFcneMVZMJDY7Iv7DreaTOazf4UkNggzUftnjErfkrZvyJWIQ
-         WuOqwkZ/20XubWwTe6HitbUv2O8JPsJkecqmJulgtG/tDewU3LYm5B3Ckm1Wir7LwkFe
-         mJxyjeFWzwEMqKNiQpeHRmjzaO7RhRhf6GvE1JPe4Yja0/qtnT9XuZuEAtz/jGsOneW7
-         OJsg==
+        bh=f+s1k0QulyVXl2cK6VcOd5dpUM4UDZztKU/w4k+ArrM=;
+        b=ci58jmQlGnU2jB4nlRYAOnSraJY1ggplK67rwPALlfMK1VRtx4W6BJUOC7DmxpTfr0
+         6rwi8kdaQBT+oT5MNxkLj+CmrZ3P3sqAGLAE3KK3NkF7zkpt1iSEcsZc72KOlv3tMNdP
+         ebsqwYz4DKdKwVEs6+7taCAxp2dw4n3qdyZOjKjbcCNLzISL/A+lxVnEoXkQUrZHRwyt
+         eH5qb1SfE0jQi/mUY7MJ0BRbVivlbUKvRuVQ8A2O5ic1UzDA3ZFmeTwsdESpYtu0yl0O
+         dKh5+0NrNDAm/xjuAaqi/vAsZ9YljZpPuYFdl7Fg4bErSTbou1VZaPKRlT3m6v07NhAX
+         4g4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=1AFNZlzSZWcJdvdgruC16P+i1WUA5VJSb9W5RFFvucA=;
-        b=V9waGUy1QjFI9Ymzls2OqvMAs1F/vx+nTZKgiN8RVEnBB+rirWCWwREI8Lnd5ubI52
-         pHhKgooWrDVDUzk/fgmHEl6z0KEl4/g2TteNAetbWa2Bi+FKMoQ/fawJdNR1qN93Ma6+
-         ZmrJivLbOBwWYxr2H61nQ/xf8UbHqOcdRSh0NtMWPAg6dgODWrTohZ8ZsIOoMzD0JW4P
-         5K4O9N/6kOWV33KyOR+1KZbZpuaFlEShCOrL/VI1JVFgk6oOTn0v8y5zD/KBjAJE57/6
-         6BOMdKJpAf/HlotYj8XVnQWdMRWh05EjUZbYp4r1XBouqK6rrG44rOf0O5ByJVUcfRhz
-         kBmg==
-X-Gm-Message-State: ACgBeo3H9dxdF3aZHPCsA9d35Oa/PEjruVrUBZqlgJiZODHdCJrkl/e9
-        UC9cXQdPuIFHUI4ekLL83Sge1MG/pfgalzbJveo=
-X-Google-Smtp-Source: AA6agR6zCvjUuBANcNe0mySzUsgSK/SNXbtQUEhStfMzOX91Gs6XvPn4gSOPAnZR3ZLFJFG1aUZzJb1GFKYF5/6XJVo=
-X-Received: by 2002:a05:6402:1e8c:b0:448:8776:d813 with SMTP id
- f12-20020a0564021e8c00b004488776d813mr7041452edf.15.1661878012245; Tue, 30
- Aug 2022 09:46:52 -0700 (PDT)
+        bh=f+s1k0QulyVXl2cK6VcOd5dpUM4UDZztKU/w4k+ArrM=;
+        b=8F+EYyEE4o0zzVMRYbq2qRr4s7q18KggU5L0K1DSdOTUMPk7VkmHkS0lVGLg/cssul
+         ke01VapQywVcUbOy0VY2Cnj7M8OPztHt7D26Yb/AfHZT6ZaGcmXtPO/so7bh1Xx9xPv1
+         PIWzKokFj8Jur1NyOPVHsWFmPUluvbs42mpUSJV1NC7KY3IWO3+LdEz5WNjKWuTOwXse
+         rTLb5UkSuJmq/0Ra7XVuyZDqeaHOtTSn31k4of5wzH7Qy8mi4tOpvSf79nQ2LQIaEJQZ
+         DgGWn4EUp/6oOYsVKTd+Jmp9xO9WFn+5fX4jFokvf7U4HmeampOAKiQm0nO4Z3k5ZAjo
+         5VXg==
+X-Gm-Message-State: ACgBeo0tijqCI6PZiTnWW/8A+P0JklZNx7EK76rcuryfhaMpHbI9M/Pr
+        Hm8x9++mE0ME0uEX8lmEY79UlXW5aDKUPS84Mt8=
+X-Google-Smtp-Source: AA6agR7SC44Sm+boGLEfKHaUzccEMv81eM5eoBTV4ajaGZB8+mYygPKcBYZWDV9QOhempE3NPLc7H827Z67nhgtqRSM=
+X-Received: by 2002:a17:906:ef8f:b0:731:4a01:7781 with SMTP id
+ ze15-20020a170906ef8f00b007314a017781mr18235299ejb.268.1661878471414; Tue, 30
+ Aug 2022 09:54:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830161716.754078-1-roberto.sassu@huaweicloud.com> <20220830161716.754078-3-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220830161716.754078-3-roberto.sassu@huaweicloud.com>
+References: <20220830161716.754078-1-roberto.sassu@huaweicloud.com> <20220830161716.754078-13-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220830161716.754078-13-roberto.sassu@huaweicloud.com>
 From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Tue, 30 Aug 2022 09:46:41 -0700
-Message-ID: <CAJnrk1bL2MSN81ORrkm9JcFQh3qsJ1jVGXEycSjyhk+Jv_Bz2Q@mail.gmail.com>
-Subject: Re: [PATCH v14 02/12] bpf: Move dynptr type check to is_dynptr_type_expected()
+Date:   Tue, 30 Aug 2022 09:54:20 -0700
+Message-ID: <CAJnrk1ZzLkc_TBpqejSOYOpLOVgtPJty2X_3v8i4UgDLR+59VQ@mail.gmail.com>
+Subject: Re: [PATCH v14 12/12] selftests/bpf: Add verifier tests for dynamic
+ pointers parameters in kfuncs
 To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
@@ -75,134 +76,105 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 9:18 AM Roberto Sassu
+On Tue, Aug 30, 2022 at 9:22 AM Roberto Sassu
 <roberto.sassu@huaweicloud.com> wrote:
 >
 > From: Roberto Sassu <roberto.sassu@huawei.com>
 >
-> Move dynptr type check to is_dynptr_type_expected() from
-> is_dynptr_reg_valid_init(), so that callers can better determine the cause
-> of a negative result (dynamic pointer not valid/initialized, dynamic
-> pointer of the wrong type).
+> Add verifier tests to ensure that only supported dynamic pointer types are
+> accepted, that the passed argument is actually a dynamic pointer, and that
+> the passed argument is a pointer to the stack.
 >
-> Also, splitting makes the code more readable, since checking the dynamic
-> pointer type is not necessarily related to validity and initialization.
-
-I think it'd be helpful to also include that btf will be using these
-functions, which seems like the main motivation behind why this change
-is needed.
-
->
-> Split the validity/initialization and dynamic pointer type check also in
-> the verifier, and adjust the expected error message in the test (a test for
-> an unexpected dynptr type passed to a helper cannot be added due to missing
-> suitable helpers, but this case has been tested manually).
-
-The bpf_ringbuf_submit_dynptr() and bpf_ringbuf_discard_dynptr()
-helpers take in only ringbuf-type dynptrs, so either of these would
-work for testing the case where an incorrect dynptr type is passed in
-:)
-
->
-> Cc: Joanne Koong <joannelkoong@gmail.com>
-> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  kernel/bpf/verifier.c                         | 35 ++++++++++++++-----
->  .../testing/selftests/bpf/prog_tests/dynptr.c |  2 +-
->  2 files changed, 28 insertions(+), 9 deletions(-)
+>  .../bpf/verifier/kfunc_dynptr_param.c         | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/verifier/kfunc_dynptr_param.c
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 0194a36d0b36..1b913db252a3 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -779,8 +779,8 @@ static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_
->         return true;
->  }
->
-> -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-> -                                    enum bpf_arg_type arg_type)
-> +static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
-> +                                    struct bpf_reg_state *reg)
->  {
->         struct bpf_func_state *state = func(env, reg);
->         int spi = get_spi(reg->off);
-> @@ -796,11 +796,24 @@ static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_re
->                         return false;
->         }
->
-> +       return true;
-> +}
-> +
-> +static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
-> +                                   struct bpf_reg_state *reg,
-> +                                   enum bpf_arg_type arg_type)
+> diff --git a/tools/testing/selftests/bpf/verifier/kfunc_dynptr_param.c b/tools/testing/selftests/bpf/verifier/kfunc_dynptr_param.c
+> new file mode 100644
+> index 000000000000..8abb8d566321
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/verifier/kfunc_dynptr_param.c
+> @@ -0,0 +1,72 @@
 > +{
-> +       struct bpf_func_state *state = func(env, reg);
-> +       int spi = get_spi(reg->off);
-> +       enum bpf_dynptr_type dynptr_type;
+> +       "kfunc dynamic pointer param: type not supported",
+> +       .insns = {
+> +       BPF_ST_MEM(BPF_DW, BPF_REG_10, -16, 0),
+> +       BPF_MOV64_REG(BPF_REG_6, BPF_REG_10),
+> +       BPF_ALU64_IMM(BPF_ADD, BPF_REG_6, -16),
+> +       BPF_LD_MAP_FD(BPF_REG_1, 0),
+> +       BPF_MOV64_IMM(BPF_REG_2, 8),
+> +       BPF_MOV64_IMM(BPF_REG_3, 0),
+> +       BPF_MOV64_REG(BPF_REG_4, BPF_REG_6),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ringbuf_reserve_dynptr),
+> +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
+> +       BPF_MOV64_REG(BPF_REG_2, BPF_REG_6),
+> +       BPF_MOV64_IMM(BPF_REG_3, 0),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
+> +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
+> +       BPF_MOV64_IMM(BPF_REG_2, 0),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ringbuf_discard_dynptr),
+> +       BPF_MOV64_IMM(BPF_REG_0, 0),
+> +       BPF_EXIT_INSN(),
+> +       },
+> +       .fixup_map_ringbuf = { 3 },
+> +       .prog_type = BPF_PROG_TYPE_LSM,
+> +       .kfunc = "bpf",
+> +       .expected_attach_type = BPF_LSM_MAC,
+> +       .flags = BPF_F_SLEEPABLE,
+> +       .errstr = "arg#0 pointer type STRUCT bpf_dynptr_kern points to unsupported dynamic pointer type",
+> +       .result = REJECT,
+> +       .fixup_kfunc_btf_id = {
+> +               { "bpf_verify_pkcs7_signature", 12 },
+> +       },
+> +},
+> +{
+> +       "kfunc dynamic pointer param: arg not a dynamic pointer",
+> +       .insns = {
+> +       BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+> +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
+> +       BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
+> +       BPF_MOV64_REG(BPF_REG_2, BPF_REG_1),
+> +       BPF_MOV64_IMM(BPF_REG_3, 0),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
+> +       BPF_EXIT_INSN(),
+> +       },
+> +       .prog_type = BPF_PROG_TYPE_LSM,
+> +       .kfunc = "bpf",
+> +       .expected_attach_type = BPF_LSM_MAC,
+> +       .flags = BPF_F_SLEEPABLE,
+> +       .errstr = "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and initialized",
+> +       .result = REJECT,
+> +       .fixup_kfunc_btf_id = {
+> +               { "bpf_verify_pkcs7_signature", 5 },
+> +       },
+> +},
+> +{
+> +       "kfunc dynamic pointer param: arg not a pointer to stack",
+> +       .insns = {
+> +       BPF_MOV64_IMM(BPF_REG_1, 0),
+> +       BPF_MOV64_IMM(BPF_REG_2, 0),
+> +       BPF_MOV64_IMM(BPF_REG_3, 0),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
+> +       BPF_EXIT_INSN(),
+> +       },
+> +       .prog_type = BPF_PROG_TYPE_LSM,
+> +       .kfunc = "bpf",
+> +       .expected_attach_type = BPF_LSM_MAC,
+> +       .flags = BPF_F_SLEEPABLE,
+> +       .errstr = "arg#0 pointer type STRUCT bpf_dynptr_kern not to stack",
+> +       .result = REJECT,
+> +       .fixup_kfunc_btf_id = {
+> +               { "bpf_verify_pkcs7_signature", 3 },
+> +       },
+> +},
 
-nit: the above 2 lines should be swapped to maintain reverse christmas
-tree order of declarations
+Is this logic testable in plain C BPF code? I tend to side with Andrii
+[0] about finding these kinds of tests hard to maintain and read.
 
-> +
->         /* ARG_PTR_TO_DYNPTR takes any type of dynptr */
->         if (arg_type == ARG_PTR_TO_DYNPTR)
->                 return true;
->
-> -       return state->stack[spi].spilled_ptr.dynptr.type == arg_to_dynptr_type(arg_type);
-> +       dynptr_type = arg_to_dynptr_type(arg_type);
-> +
-> +       return state->stack[spi].spilled_ptr.dynptr.type == dynptr_type;
->  }
->
->  /* The reg state of a pointer or a bounded scalar was saved when
-> @@ -6050,21 +6063,27 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
->                         }
->
->                         meta->uninit_dynptr_regno = regno;
-> -               } else if (!is_dynptr_reg_valid_init(env, reg, arg_type)) {
-> +               } else if (!is_dynptr_reg_valid_init(env, reg)) {
-> +                       verbose(env,
-> +                               "Expected an initialized dynptr as arg #%d\n",
-> +                               arg + 1);
-> +                       return -EINVAL;
-> +               } else if (!is_dynptr_type_expected(env, reg, arg_type)) {
->                         const char *err_extra = "";
->
->                         switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
->                         case DYNPTR_TYPE_LOCAL:
-> -                               err_extra = "local ";
-> +                               err_extra = "local";
->                                 break;
->                         case DYNPTR_TYPE_RINGBUF:
-> -                               err_extra = "ringbuf ";
-> +                               err_extra = "ringbuf";
->                                 break;
->                         default:
-> +                               err_extra = "<unknown>";
->                                 break;
->                         }
-> -
-> -                       verbose(env, "Expected an initialized %sdynptr as arg #%d\n",
-> +                       verbose(env,
-> +                               "Expected a dynptr of type %s as arg #%d\n",
->                                 err_extra, arg + 1);
->                         return -EINVAL;
->                 }
-> diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-> index bcf80b9f7c27..8fc4e6c02bfd 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-> @@ -30,7 +30,7 @@ static struct {
->         {"invalid_helper2", "Expected an initialized dynptr as arg #3"},
->         {"invalid_write1", "Expected an initialized dynptr as arg #1"},
->         {"invalid_write2", "Expected an initialized dynptr as arg #3"},
-> -       {"invalid_write3", "Expected an initialized ringbuf dynptr as arg #1"},
-> +       {"invalid_write3", "Expected an initialized dynptr as arg #1"},
->         {"invalid_write4", "arg 1 is an unacquired reference"},
->         {"invalid_read1", "invalid read from stack"},
->         {"invalid_read2", "cannot pass in dynptr at an offset"},
+[0] https://lore.kernel.org/bpf/CAEf4BzZJvr+vcO57TK94GM7B5=k2wPgAub4BBJf1Uz0xNpCPVg@mail.gmail.com/
+
 > --
 > 2.25.1
 >
