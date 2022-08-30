@@ -2,109 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2805E5A58FA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 03:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532835A5990
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 04:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiH3Bso (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Aug 2022 21:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
+        id S229807AbiH3CxG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Aug 2022 22:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiH3Bsl (ORCPT
+        with ESMTP id S229651AbiH3CxF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:48:41 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155698E4EB;
-        Mon, 29 Aug 2022 18:48:40 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id i5-20020a17090a2a0500b001fd8708ffdfso7207107pjd.2;
-        Mon, 29 Aug 2022 18:48:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=oWRjAoIaNlvdmLgKZycNNcfP1/D8Ayewqywa9DRQlk0=;
-        b=O4dLmmX7YLVw0az9Yp2rt5msHE4Ki55aS6v/djl/z6QNnJLaQvR1oavdPwZU8IMNDN
-         CkCnh1iFH1TA8llLbYtEYKur6bCNuqGcojzMivNV12bgD87vK8naSwa8vXMXvHrpslFw
-         Z0lHGqSLEjjzZGd36B9KAazOrumUCVv5gL2nRKpRuHtNDeASBm3dDDHQm+zbplDghmjl
-         RNkdn3HKpKurjRFUyBTRNCTnDdREjim734yHSDkMudXOP6V22shM3yiCqiYVCd/qbnmD
-         tFoKmrh0a5Lch1q39JrzWQV35Eg87r9gzFja7BWXgK510rbKVwN/lPEMgvuLLsM/JtQs
-         LyhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=oWRjAoIaNlvdmLgKZycNNcfP1/D8Ayewqywa9DRQlk0=;
-        b=Q/XQfJxoHBmzbgTEoklq1l8vb+7zEg9c5xmYIWXySfwwXv3bQmt6UUNfgVGcJylK4z
-         DPTCjFPSqYCwW4J28c9P49i5PYStMYYtJv6lBE/daccpX2unNjZlf3LmiUB0nqePQEKK
-         xJ+JV5ttHDFFuINOSyOSr6j4fw/ruttW9riLNjYSZdF/NIPAvLllKTLsLgMyWe/sHYAM
-         5vG+ggl0mEs3kQtu5YkseAk6WObeZU0ITvJub7TWbiQlfjxCZwBomB/wB/eCuCytYZGU
-         wNhRfiS4+DHh3APzgYLKKat5q5JdpVsV2OrrWZMhWU+Y8hwhjamUHbDD9SNJyW9nUxvc
-         liaQ==
-X-Gm-Message-State: ACgBeo38VKjwuDU0RFE4R/HgC72I+lclKAldUgYfrw9/7lLDjGsyY5mK
-        HBf9AzpXrBqYI4G4Y6CVl0E=
-X-Google-Smtp-Source: AA6agR6GNAplD0brROKngQhSCYkkCE/mWRRADuQJpXk+CTtGyDr7TLlfQ6Euy/rMgaGtimJiUChUmw==
-X-Received: by 2002:a17:90a:e4cb:b0:1fd:9626:c7cf with SMTP id e11-20020a17090ae4cb00b001fd9626c7cfmr13752581pju.103.1661824119128;
-        Mon, 29 Aug 2022 18:48:39 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-91.three.co.id. [180.214.232.91])
-        by smtp.gmail.com with ESMTPSA id u23-20020a1709026e1700b0016cf3f124e1sm8277871plk.234.2022.08.29.18.48.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 18:48:38 -0700 (PDT)
-Message-ID: <eaf6c56b-c329-2d02-7599-ca83dbe20b0b@gmail.com>
-Date:   Tue, 30 Aug 2022 08:48:32 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 1/2] ktap_v2: change version to 2-rc in KTAP
- specification
-Content-Language: en-US
-To:     frowand.list@gmail.com, David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@groups.io, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        Mon, 29 Aug 2022 22:53:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3711E7B7B5;
+        Mon, 29 Aug 2022 19:53:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0BFE61476;
+        Tue, 30 Aug 2022 02:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCEDC433C1;
+        Tue, 30 Aug 2022 02:53:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661827984;
+        bh=wQ5Dru6/oa9ffz6dr3xOWZsCMwvrrx/xunl61P65KnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LsoelcCaNVQW5CRnYsiKN6Ej3YlOTb0T6DWHOzO1EaZs1BMRaqzpZTuffMk6iUkgV
+         bVTrufuqhhym9pKMjTzMoZE9PtYoumz3f3QyghxXgU3/Ar9qGrvEW6yovXlUySQzOw
+         TkjgydCnPNgeqsSsszIJysS7IvUgAQGoMHDIpcUCl6uwH01H3sNXZSCEQZtxfhkME6
+         n8H7B0aYIjFW0bpHascN9tksmosZd3icsij0SVA8g8rvt9Si2lwdgVhAvP7lLmGNS+
+         6A1lkaPcq6GV5FeVpUAmxMn0HKPHieW0kG1gpHcBTJNWMYYFaYj+1Yn92MmFDuE90R
+         oan/gLTpvPzxQ==
+Date:   Tue, 30 Aug 2022 05:52:55 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dhanuka Warusadura <wdnuka@gmail.com>
+Cc:     dave.hansen@linux.intel.com, shuah@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220829233150.3564612-1-frowand.list@gmail.com>
- <20220829233150.3564612-2-frowand.list@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220829233150.3564612-2-frowand.list@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] selftests/sgx: Fix OpenSSL deprecated warning for
+ ERR_get_error_line
+Message-ID: <Yw17hyrjX1AiELZG@kernel.org>
+References: <20220828061859.181061-1-wdnuka@gmail.com>
+ <Ywyt4tvHrK4r48RK@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Ywyt4tvHrK4r48RK@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/30/22 06:31, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
+On Mon, Aug 29, 2022 at 03:15:30PM +0300, Jarkko Sakkinen wrote:
+> On Sun, Aug 28, 2022 at 11:48:59AM +0530, Dhanuka Warusadura wrote:
+> > These changes fix the "error: ‘ERR_get_error_line’ is deprecated:
+> > Since OpenSSL 3.0" warning.
+> > 
+> > Signed-off-by: Dhanuka Warusadura <wdnuka@gmail.com>
+> > ---
+> >  tools/testing/selftests/sgx/sigstruct.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> > index 50c5ab1aa6fa..671d9b58e274 100644
+> > --- a/tools/testing/selftests/sgx/sigstruct.c
+> > +++ b/tools/testing/selftests/sgx/sigstruct.c
+> > @@ -136,7 +136,7 @@ static bool check_crypto_errors(void)
+> >  			break;
+> >  
+> >  		had_errors = true;
+> > -		err = ERR_get_error_line(&filename, &line);
+> > +		err = ERR_peek_last_error_line(&filename, &line);
+> >  		ERR_error_string_n(err, str, sizeof(str));
+> >  		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
+> >  	}
+> > -- 
+> > 2.37.2
+> > 
 > 
-> Prepare KTAP Specification for the process of creating version 2.
-> 
-> The version will remain "2-rc" until the final commit to complete
-> Version 2.  Adding the "-rc" ensures that none of the development
-> versions will be mistaken for the completed version 2.
-> 
-> After this commit, Sphinx complains that we now need more '=' signs:
-> 
->   Documentation/dev-tools/ktap.rst:3: WARNING: Title overline too short.
->   ===================================================
->   The Kernel Test Anything Protocol (KTAP), version 2-rc
->   ===================================================
-> 
-> This warning will disappear in the final commit for the release of
-> version 2, when the "-rc" is removed.
-> 
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-I don't see that -rc stripping in patch [2/2], so please fix the Sphinx
-warning above in this patch.
+Actually NAK.
 
--- 
-An old man doll... just what I always wanted! - Clara
+This fix is not complete:
+
+sigstruct.c: In function ‘get_modulus’:
+sigstruct.c:151:9: error: ‘RSA_get0_key’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+  151 |         RSA_get0_key(key, &n, NULL, NULL);
+      |         ^~~~~~~~~~~~
+In file included from /usr/include/openssl/x509.h:36,
+                 from /usr/include/openssl/pem.h:23,
+                 from sigstruct.c:16:
+/usr/include/openssl/rsa.h:217:28: note: declared here
+  217 | OSSL_DEPRECATEDIN_3_0 void RSA_get0_key(const RSA *r,
+      |                            ^~~~~~~~~~~~
+sigstruct.c: In function ‘gen_sign_key’:
+sigstruct.c:168:9: error: ‘PEM_read_bio_RSAPrivateKey’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declaration
+]
+  168 |         key = PEM_read_bio_RSAPrivateKey(bio, NULL, NULL, NULL);
+      |         ^~~
+/usr/include/openssl/pem.h:447:1: note: declared here
+  447 | DECLARE_PEM_rw_cb_attr(OSSL_DEPRECATEDIN_3_0, RSAPrivateKey, RSA)
+      | ^~~~~~~~~~~~~~~~~~~~~~
+sigstruct.c: In function ‘encl_measure’:
+sigstruct.c:364:9: error: ‘RSA_sign’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+  364 |         if (!RSA_sign(NID_sha256, digest, SHA256_DIGEST_LENGTH,
+      |         ^~
+/usr/include/openssl/rsa.h:348:27: note: declared here
+  348 | OSSL_DEPRECATEDIN_3_0 int RSA_sign(int type, const unsigned char *m,
+      |                           ^~~~~~~~
+sigstruct.c:377:9: error: ‘RSA_free’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+  377 |         RSA_free(key);
+      |         ^~~~~~~~
+/usr/include/openssl/rsa.h:293:28: note: declared here
+  293 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
+      |                            ^~~~~~~~
+sigstruct.c:382:9: error: ‘RSA_free’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+  382 |         RSA_free(key);
+      |         ^~~~~~~~
+/usr/include/openssl/rsa.h:293:28: note: declared here
+  293 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
+      |                            ^~~~~~~~
+cc1: all warnings being treated as errors
+make: *** [Makefile:39: /home/jarkko/work/linux-sgx/tools/testing/selftests/sgx/sigstruct.o] Error 1
+
+BR, Jarkko
