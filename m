@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0785A6822
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 18:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2EC15A6827
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 18:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiH3QUG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Aug 2022 12:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S229990AbiH3QUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Aug 2022 12:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiH3QTj (ORCPT
+        with ESMTP id S231184AbiH3QTz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:19:39 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58A7B6028;
-        Tue, 30 Aug 2022 09:19:37 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MHC6q3g3kz9xFg3;
-        Wed, 31 Aug 2022 00:14:11 +0800 (CST)
+        Tue, 30 Aug 2022 12:19:55 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE99C10B8;
+        Tue, 30 Aug 2022 09:19:48 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MHC712lzjz9v7GV;
+        Wed, 31 Aug 2022 00:14:21 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDHQl0ZOA5jLmYNAA--.2866S9;
-        Tue, 30 Aug 2022 17:19:08 +0100 (CET)
+        by APP2 (Coremail) with SMTP id GxC2BwDHQl0ZOA5jLmYNAA--.2866S10;
+        Tue, 30 Aug 2022 17:19:20 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
@@ -34,18 +34,19 @@ Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         deso@posteo.net, memxor@gmail.com,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v14 07/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
-Date:   Tue, 30 Aug 2022 18:17:11 +0200
-Message-Id: <20220830161716.754078-8-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v14 08/12] selftests/bpf: Compile kernel with everything as built-in
+Date:   Tue, 30 Aug 2022 18:17:12 +0200
+Message-Id: <20220830161716.754078-9-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220830161716.754078-1-roberto.sassu@huaweicloud.com>
 References: <20220830161716.754078-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDHQl0ZOA5jLmYNAA--.2866S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr1xZw47AFykZFWfGFyrCrg_yoW5uF18pF
-        W0gr4S9rykJr1ftFyfAa1fuF1Fka1vqw17GwnrA3s3uFnYgr17Z3WxtF4UW3sYkry8JrZF
-        vrWIqr1akr13WaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: GxC2BwDHQl0ZOA5jLmYNAA--.2866S10
+X-Coremail-Antispam: 1UD129KBjvJXoWxGr4xtr4xCr45XF1fKw4fAFb_yoW5WrW8pw
+        n3A3y8JFWrtF1YyrW7CrWDGFZ5K3ZrXFW7Gw17Jr15uw18Jw4kJr18KFWUGrWDXa9rZr4r
+        AF97KF13AF1UJ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
         Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -60,11 +61,11 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxAr1xZw47AFykZFWfGFyrCrg_yoW5uF18pF
         c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
         AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
         pf9x07j7GYLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4Jv4wAFs-
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4Jv4wAGs8
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,93 +74,95 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security modules
-the ability to check the validity of a signature against supplied data, by
-using user-provided or system-provided keys as trust anchor.
-
-The new kfunc makes it possible to enforce mandatory policies, as eBPF
-programs might be allowed to make security decisions only based on data
-sources the system administrator approves.
-
-The caller should provide the data to be verified and the signature as eBPF
-dynamic pointers (to minimize the number of parameters) and a bpf_key
-structure containing a reference to the keyring with keys trusted for
-signature verification, obtained from bpf_lookup_user_key() or
-bpf_lookup_system_key().
-
-For bpf_key structures obtained from the former lookup function,
-bpf_verify_pkcs7_signature() completes the permission check deferred by
-that function by calling key_validate(). key_task_permission() is already
-called by the PKCS#7 code.
+Since the eBPF CI does not support kernel modules, change the kernel config
+to compile everything as built-in.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Acked-by: KP Singh <kpsingh@kernel.org>
+Acked-by: Daniel Müller <deso@posteo.net>
 ---
- kernel/trace/bpf_trace.c | 45 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ tools/testing/selftests/bpf/config        | 26 +++++++++++------------
+ tools/testing/selftests/bpf/config.x86_64 |  2 +-
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 901a96621235..a533acb5593c 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1294,12 +1294,57 @@ void bpf_key_put(struct bpf_key *bkey)
- 	kfree(bkey);
- }
- 
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+/**
-+ * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-+ * @data_ptr: data to verify
-+ * @sig_ptr: signature of the data
-+ * @trusted_keyring: keyring with keys trusted for signature verification
-+ *
-+ * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
-+ * with keys in a keyring referenced by *trusted_keyring*.
-+ *
-+ * Return: 0 on success, a negative value on error.
-+ */
-+int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-+			       struct bpf_dynptr_kern *sig_ptr,
-+			       struct bpf_key *trusted_keyring)
-+{
-+	int ret;
-+
-+	if (trusted_keyring->has_ref) {
-+		/*
-+		 * Do the permission check deferred in bpf_lookup_user_key().
-+		 * See bpf_lookup_user_key() for more details.
-+		 *
-+		 * A call to key_task_permission() here would be redundant, as
-+		 * it is already done by keyring_search() called by
-+		 * find_asymmetric_key().
-+		 */
-+		ret = key_validate(trusted_keyring->key);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return verify_pkcs7_signature(data_ptr->data,
-+				      bpf_dynptr_get_size(data_ptr),
-+				      sig_ptr->data,
-+				      bpf_dynptr_get_size(sig_ptr),
-+				      trusted_keyring->key,
-+				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-+				      NULL);
-+}
-+#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
-+
- __diag_pop();
- 
- BTF_SET8_START(key_sig_kfunc_set)
- BTF_ID_FLAGS(func, bpf_lookup_user_key, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_lookup_system_key, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
-+#endif
- BTF_SET8_END(key_sig_kfunc_set)
- 
- static const struct btf_kfunc_id_set bpf_key_sig_kfunc_set = {
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 3fc46f9cfb22..0fdd11e6b742 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -7,9 +7,9 @@ CONFIG_BPF_LSM=y
+ CONFIG_BPF_STREAM_PARSER=y
+ CONFIG_BPF_SYSCALL=y
+ CONFIG_CGROUP_BPF=y
+-CONFIG_CRYPTO_HMAC=m
+-CONFIG_CRYPTO_SHA256=m
+-CONFIG_CRYPTO_USER_API_HASH=m
++CONFIG_CRYPTO_HMAC=y
++CONFIG_CRYPTO_SHA256=y
++CONFIG_CRYPTO_USER_API_HASH=y
+ CONFIG_DYNAMIC_FTRACE=y
+ CONFIG_FPROBE=y
+ CONFIG_FTRACE_SYSCALLS=y
+@@ -24,30 +24,30 @@ CONFIG_IP_NF_FILTER=y
+ CONFIG_IP_NF_RAW=y
+ CONFIG_IP_NF_TARGET_SYNPROXY=y
+ CONFIG_IPV6=y
+-CONFIG_IPV6_FOU=m
+-CONFIG_IPV6_FOU_TUNNEL=m
++CONFIG_IPV6_FOU=y
++CONFIG_IPV6_FOU_TUNNEL=y
+ CONFIG_IPV6_GRE=y
+ CONFIG_IPV6_SEG6_BPF=y
+-CONFIG_IPV6_SIT=m
++CONFIG_IPV6_SIT=y
+ CONFIG_IPV6_TUNNEL=y
+ CONFIG_LIRC=y
+ CONFIG_LWTUNNEL=y
+ CONFIG_MPLS=y
+-CONFIG_MPLS_IPTUNNEL=m
+-CONFIG_MPLS_ROUTING=m
++CONFIG_MPLS_IPTUNNEL=y
++CONFIG_MPLS_ROUTING=y
+ CONFIG_MPTCP=y
+ CONFIG_NET_CLS_ACT=y
+ CONFIG_NET_CLS_BPF=y
+-CONFIG_NET_CLS_FLOWER=m
+-CONFIG_NET_FOU=m
++CONFIG_NET_CLS_FLOWER=y
++CONFIG_NET_FOU=y
+ CONFIG_NET_FOU_IP_TUNNELS=y
+ CONFIG_NET_IPGRE=y
+ CONFIG_NET_IPGRE_DEMUX=y
+ CONFIG_NET_IPIP=y
+-CONFIG_NET_MPLS_GSO=m
++CONFIG_NET_MPLS_GSO=y
+ CONFIG_NET_SCH_INGRESS=y
+ CONFIG_NET_SCHED=y
+-CONFIG_NETDEVSIM=m
++CONFIG_NETDEVSIM=y
+ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_SYNPROXY=y
+ CONFIG_NETFILTER_XT_CONNMARK=y
+@@ -60,7 +60,7 @@ CONFIG_NF_DEFRAG_IPV6=y
+ CONFIG_RC_CORE=y
+ CONFIG_SECURITY=y
+ CONFIG_SECURITYFS=y
+-CONFIG_TEST_BPF=m
++CONFIG_TEST_BPF=y
+ CONFIG_USERFAULTFD=y
+ CONFIG_VXLAN=y
+ CONFIG_XDP_SOCKETS=y
+diff --git a/tools/testing/selftests/bpf/config.x86_64 b/tools/testing/selftests/bpf/config.x86_64
+index f0859a1d37ab..ce70c9509204 100644
+--- a/tools/testing/selftests/bpf/config.x86_64
++++ b/tools/testing/selftests/bpf/config.x86_64
+@@ -47,7 +47,7 @@ CONFIG_CPU_IDLE_GOV_LADDER=y
+ CONFIG_CPUSETS=y
+ CONFIG_CRC_T10DIF=y
+ CONFIG_CRYPTO_BLAKE2B=y
+-CONFIG_CRYPTO_DEV_VIRTIO=m
++CONFIG_CRYPTO_DEV_VIRTIO=y
+ CONFIG_CRYPTO_SEQIV=y
+ CONFIG_CRYPTO_XXHASH=y
+ CONFIG_DCB=y
 -- 
 2.25.1
 
