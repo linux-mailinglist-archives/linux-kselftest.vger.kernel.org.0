@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF5E5A5E39
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 10:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE2E5A5E3A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Aug 2022 10:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbiH3IeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Aug 2022 04:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
+        id S231611AbiH3IeZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Aug 2022 04:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiH3IeM (ORCPT
+        with ESMTP id S231598AbiH3IeN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:34:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FA2C6FFC;
-        Tue, 30 Aug 2022 01:34:08 -0700 (PDT)
+        Tue, 30 Aug 2022 04:34:13 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAD5D020C;
+        Tue, 30 Aug 2022 01:34:09 -0700 (PDT)
 Received: from canpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MH0pv2WL3zYd34;
-        Tue, 30 Aug 2022 16:29:43 +0800 (CST)
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MH0s95SvDznTXf;
+        Tue, 30 Aug 2022 16:31:41 +0800 (CST)
 Received: from ubuntu1804.huawei.com (10.67.174.63) by
  canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 16:34:06 +0800
+ 15.1.2375.24; Tue, 30 Aug 2022 16:34:07 +0800
 From:   Zhao Gongyi <zhaogongyi@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC:     <shuah@kernel.org>, <akpm@linux-foundation.org>,
         <akinobu.mita@gmail.com>, Zhao Gongyi <zhaogongyi@huawei.com>
-Subject: [PATCH -next 4/5] selftests/cpu-hotplug: Reserve one cpu online at least
-Date:   Tue, 30 Aug 2022 16:30:27 +0800
-Message-ID: <20220830083028.45504-5-zhaogongyi@huawei.com>
+Subject: [PATCH -next 5/5] selftests/cpu-hotplug: Add log info when test success
+Date:   Tue, 30 Aug 2022 16:30:28 +0800
+Message-ID: <20220830083028.45504-6-zhaogongyi@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220830083028.45504-1-zhaogongyi@huawei.com>
 References: <20220830083028.45504-1-zhaogongyi@huawei.com>
@@ -47,77 +47,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Considering that we can not offline all cpus in any cases,
-we need to reserve one cpu online when the test offline all
-hotpluggable online cpus, otherwise the test will fail forever.
-
-Fixes: d89dffa976bc ("fault-injection: add selftests for cpu
-and memory hotplug")
+Add log information when run full test successfully.
 
 Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
 ---
- .../selftests/cpu-hotplug/cpu-on-off-test.sh  | 40 ++++++++++---------
- 1 file changed, 22 insertions(+), 18 deletions(-)
+ tools/testing/selftests/cpu-hotplug/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-index ade75d920cd6..7cdab8aad93e 100755
---- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-+++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-@@ -123,6 +123,25 @@ offline_cpu_expect_success()
- 	fi
- }
+diff --git a/tools/testing/selftests/cpu-hotplug/Makefile b/tools/testing/selftests/cpu-hotplug/Makefile
+index d8be047ee5b6..8b66c4738344 100644
+--- a/tools/testing/selftests/cpu-hotplug/Makefile
++++ b/tools/testing/selftests/cpu-hotplug/Makefile
+@@ -6,6 +6,6 @@ TEST_PROGS := cpu-on-off-test.sh
+ include ../lib.mk
 
-+online_all_hot_pluggable_cpus()
-+{
-+	for cpu in `hotplaggable_offline_cpus`; do
-+		online_cpu_expect_success $cpu
-+	done
-+}
-+
-+offline_all_hot_pluggable_cpus()
-+{
-+	local reserve_cpu=$online_max
-+	for cpu in `hotpluggable_online_cpus`; do
-+		# Reserve one cpu oneline at least.
-+		if [ $cpu -eq $reserve_cpu ];then
-+			continue
-+		fi
-+		offline_cpu_expect_success $cpu
-+	done
-+}
-+
- allcpus=0
- online_cpus=0
- online_max=0
-@@ -171,25 +190,10 @@ else
- 	echo -e "\t online all offline cpus"
- fi
+ run_full_test:
+-	@/bin/bash ./cpu-on-off-test.sh -a || echo "cpu-hotplug selftests: [FAIL]"
++	@/bin/bash ./cpu-on-off-test.sh -a && echo "cpu-hotplug selftests: [PASS]" || echo "cpu-hotplug selftests: [FAIL]"
 
--#
--# Online all hot-pluggable CPUs
--#
--for cpu in `hotplaggable_offline_cpus`; do
--	online_cpu_expect_success $cpu
--done
-+online_all_hot_pluggable_cpus
-
--#
--# Offline all hot-pluggable CPUs
--#
--for cpu in `hotpluggable_online_cpus`; do
--	offline_cpu_expect_success $cpu
--done
-+offline_all_hot_pluggable_cpus
-
--#
--# Online all hot-pluggable CPUs again
--#
--for cpu in `hotplaggable_offline_cpus`; do
--	online_cpu_expect_success $cpu
--done
-+online_all_hot_pluggable_cpus
-
- exit $retval
+ clean:
 --
 2.17.1
 
