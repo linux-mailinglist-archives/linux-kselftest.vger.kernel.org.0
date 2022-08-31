@@ -2,164 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B3E5A7134
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 00:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4BA5A732C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 03:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiH3W5n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Aug 2022 18:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S229923AbiHaBGb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Aug 2022 21:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiH3W5l (ORCPT
+        with ESMTP id S229720AbiHaBGa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:57:41 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B36F7D7A0;
-        Tue, 30 Aug 2022 15:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661900260; x=1693436260;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=OAXq88zplJgIg7r/tckAk1F6XjVbhJwpBam3+ltHKE0=;
-  b=TqQr+b3wt8K6GgKlwUe9UemQj4n8W7cETfLcTmD+GFZMCGQ2mkwBHK5H
-   WeclO2R/2biPQx55nrpoU105t0SGY9iI0rgI5TWwFlKovqd94bViM9cQS
-   EpcuMEdMr3xC7ogKCN5ooZn1+1ztxI/xEI6D05aT51jH0PB3aObZ0lH2Q
-   H4NJ5Hju/6du/b5ODlfJ3MUMyMho4E/dc6swFBmDQ8mH6SepSIQ7Aaipy
-   sDb7ttqRwa8oIcth9SIx0aJChqT6m9Aq9l8+jTE01A3L1G63u2MjIcEo5
-   eyssRpVUtUz8eal831FS18tbT8A4BqoTHiXxK73dtYhM8PER6kZYj2JzD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="278341920"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="278341920"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 15:57:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="645025640"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga001.jf.intel.com with ESMTP; 30 Aug 2022 15:57:39 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 30 Aug 2022 15:57:39 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 30 Aug 2022 15:57:38 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 30 Aug 2022 15:57:38 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 30 Aug 2022 15:57:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UjyoiXOJKUmEAb5VGEsvmemRh0V3Kb3i6g3XnU83LZm4x3vuRc5/yBYQ/PjWjdukVjrGiSwvLKH8TLo8DSujmQlYV1bRc8vEDmAjfpPezLrbRWFeZ5JxwR5XaujfubmVwuW6yCbiM5HFVKUjsQdHBsnw5gXzOlHKPzCJB1C+IZicdg24kT5yZD5LDl1IvtQ2vTBHfEcfK9XNaprATXXywuFVcBA2LGtGFTpPr373sJPUmceRFuRExU2Yc4ZUG9xAQEqeIxN97PqbJOsvHty9+44X1FhCw3szstwlLpRbx5bH0WIwajyM8wozug7Oo6Xr3w3Onc7fd/jY5VSc/exMjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wbHqP365cXquLETt8PEoAY0w+5zUjoxiLeq84CJO4ZI=;
- b=DLwag5t21/3dLrQK2LY8a3fa6XG8lgLygE+5ntEZYMY8+RXUbBAWJAeA5sql3Gsuyw/1QSovq6/VCuAxtZVaFa+efrVyZ+soxqOXBzJjfQ5L4nlABA7vsGNPpxHwU8X6ifvMDwgSVq0sd2IOMAl/cYAvF3gTrHp8TRFBJiEEMhjybyObGxTvME0nATlOz4dqSxWTa1N+WMPv/D70asIuqvs+h97DrduwOc113apk5PXci7l35Zk/HQVCBWGgIr4b2nNZIwNgNsYkB9FmUPs74BPKN+5LgmSUG/aqFuN8WF7ofRUUCHcINheHv6aBOcknFD4uJtKSooJFLhVCZRgG7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by SN6PR11MB3487.namprd11.prod.outlook.com (2603:10b6:805:c3::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.19; Tue, 30 Aug
- 2022 22:57:27 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a824:112:52f7:5743]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a824:112:52f7:5743%11]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
- 22:57:27 +0000
-Message-ID: <64498c9f-a6e1-6379-ca8e-d751fb239bec@intel.com>
-Date:   Tue, 30 Aug 2022 15:57:24 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.0
-Subject: Re: [PATCH 6/6] selftests/sgx: Add a bpftrace script for tracking
- allocation errors
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>, <linux-sgx@vger.kernel.org>
-CC:     Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Shuah Khan" <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20220830031206.13449-1-jarkko@kernel.org>
- <20220830031206.13449-7-jarkko@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20220830031206.13449-7-jarkko@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR06CA0069.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::46) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Tue, 30 Aug 2022 21:06:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9942B8B996;
+        Tue, 30 Aug 2022 18:06:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B07AB81E3C;
+        Wed, 31 Aug 2022 01:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E30C433C1;
+        Wed, 31 Aug 2022 01:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661907985;
+        bh=YLuTWHxVazs1KoCb5btrgvDSnJ3sBn4DkOAbtk/lGm0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DfhgaJaXVT9xtK7HSh/llDbnCKM5AfnSbYYUIxne26eToHASsfsLPWF9LQbAVA4AX
+         Pym82wAmeIkGWK9OnlnsI2DIYxKv57KNPf7E3pWKy0eDHCccgqyTUdo90JPJNdhEG1
+         axrJcf3Cu+L7vLNoq7aICHJvrV+ZggR7OqOTJD+6JneH9fC4YncJG4zwDR5ns8FNgK
+         NW4r+Xi+sP5+5oS1tPdFoV70c+s7BwfkudVWYODOgv+dozm876N1sq5we9D4Geasho
+         GD3x4dtVQUTFB6YZ++BurAqKrq3+MoMPQjlqU/ZojbCRzeQT0X3dDsEzWNZuDWSt4G
+         lhXMvvXeBgu0g==
+Date:   Wed, 31 Aug 2022 04:06:21 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dhanuka <wdnuka@gmail.com>
+Cc:     dave.hansen@linux.intel.com, shuah@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/sgx: Fix OpenSSL deprecated warning for
+ ERR_get_error_line
+Message-ID: <Yw60DQEbmQDKka9G@kernel.org>
+References: <20220828061859.181061-1-wdnuka@gmail.com>
+ <Ywyt4tvHrK4r48RK@kernel.org>
+ <Yw17hyrjX1AiELZG@kernel.org>
+ <86e2c049-b289-8b1f-9fc2-8938abefa7d4@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5938e17b-92f1-4e6c-41da-08da8adb026d
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3487:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SLrFzhUsAyecZRpzo42NKgHcquHSFaRYw6IGbQWnbZsB6S03x6lVw17BQv5ZT2iWJxaqVchxu53fyZJhHrv2ZFF6YzNvYiWlgs7bUKNfdlLUmCfsN2eH/9a5PBk5hTGrZTLKhiO1A99YSTzXhbqg6v5MQgUhWqwcd89Ju8nKrDGW7x14jhZagu6SvO0qZIus3jy8rGhIMfAWyzjioXetQkqcFwp0FtvQAYPutN3jm1Wwkpopjt7nhoYlyejr/kKfRorvNNhVl51MsQcRVeseWqGYr9Lrss6eoGRS8D67ypkzXij3ImqWirfr1xh6J82WKu7Y/ElS8aVHIMaHly3o0nCMicZsXUFm2xyNaTgJo7SZNeMsRvH+9+7gEXkBJsbjoT7CAYVeMbAr41BPsVssV9HBvebhiAZaTDB3hp3SwEzUcTMXutrUNXageigLDfeUAvQd1rMKCaJMPz4+N+4/16X9ImL29tCQ9FqcnGiI5EuuGKNeCRSNYH6nR5aKDnfRVEpton0DiJfBBDS7KjGXPgKZOq1Y/8IDynbDalwHoe7HanmSh1lz26yAHxVuZL+gSBiX5DAkOJJDlkSlgk0+Erf58vgwhx3T2vSgA9v/xh6Z+z67CDeeutHxq3t1QFd1alH9E2OZNfErGGFUuiXEywZzhtA3B+umGWmqOYnO4nEq/vJMEz6CWXk1CuFKF01hFciX+IzgkJHEHn4hzZu94tkSFEHGch2wnV3EV/0ZCUPs7687rjc8knPFfxY26hrCK6CXI/DsEwi8Hj3JdC1FuXPE8HcX2D6VLD1dP+4ZFmA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(136003)(396003)(346002)(366004)(4326008)(2906002)(66556008)(8676002)(31686004)(66946007)(66476007)(53546011)(4744005)(6506007)(26005)(316002)(54906003)(6512007)(6486002)(41300700001)(478600001)(6666004)(8936002)(86362001)(2616005)(186003)(36756003)(44832011)(31696002)(5660300002)(38100700002)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1FUeTFnaFl1MlFPelBaYzJWOW1Kd2tKaTBLZExGSUovUDJTR25ZcFlPUCtV?=
- =?utf-8?B?dm92V0w1T0M5OVNpZjNNblNpM0F0QlJWbUJxVVY1SEZvWlBXRWdMdkZSYkMx?=
- =?utf-8?B?QmJPcENqSE9yMzBtZll0L09NMnhia2RkZGJTRDdhRHBqTVFlMFRsektLMnRa?=
- =?utf-8?B?alNOdUdaTXgvVE9ONHZFTy9DamVhbmpqY3EwWVFiUUpYTEpDNlhtRGZvUm82?=
- =?utf-8?B?ZncyeWkwbkRmRWx0UUQzNkx3bHdrTUhoUXozZkErTmlsaHFsRlZMR1lYUTVF?=
- =?utf-8?B?akFPeWI1ZXdzNko1cUFyeU1JalZyUEN4Wm1ENm9hMzhCcTZreWJRWDRmeHFX?=
- =?utf-8?B?d2x0dURzbG1UM2xZM2t3MGNFWTZuV2g2TDRHSjlGSkZtVFIrNnh2ejdkbmFQ?=
- =?utf-8?B?cjhTb0s5WlE0dm5EUEF0Q0JSK0pMQ05JemdENXhoUklQeC9yWWltVTZlZG9O?=
- =?utf-8?B?RVNGRkV1TXdxZEpxdmtMaUVDbnB0MDUxcGltVkxKZ0QwOXcvbTQyV3pGZzRZ?=
- =?utf-8?B?eWk0V000NGIxcDdJSmlMb25VV3NyTHdBUTRIVkZaTCtXNW5xYndpaVl1M1dU?=
- =?utf-8?B?QklrYkswTTliTnUyUnRIcHllMFVMdEg1S0p2WXNXYm5ITFhRUkxQZG5WZEFy?=
- =?utf-8?B?dkNvZzdPY2lLbEplOWpSekJ3a2tyNVh6WXZFTytydU1WYW9MVG43eXg4aEF2?=
- =?utf-8?B?dVRtczk1RDRMZ0FiZEU5V2VDZkN2RWh6R21pWFQrUk02VFg3STZtOTNUWWZF?=
- =?utf-8?B?OTA2K0QvWDdUb1BJODZBY2xYajQyendBYngzMk1QUG94dHgxWUZJbDlyeUlT?=
- =?utf-8?B?ekVsVEI4UDFqQm9YR0svVE1EbkwrUkxIY1pnODFEdG9LUWpOSmtMcTBkajc2?=
- =?utf-8?B?TFF4d2NoZXRmWnJSWU1JZUlTUVo0WnBDMmdTRnM2dW1yYVRzUEVLamJHNkVR?=
- =?utf-8?B?SFZlWmp4YWZQc3RwWUlNaGNYVUFZbExVaTVJRUZXazFETUlkRHBwYVJGU3NG?=
- =?utf-8?B?dlRpZlh2d0Ntamd0S3JSUXFFem9wdlpKZHcxUGcrV3pkWVhOQTVST1MveVQ0?=
- =?utf-8?B?MjdGS1pPZFR3RUpEOGVOOE42TURvM2tNaGdUb3pEU1dEV0Y0OXFXVGtMeTVp?=
- =?utf-8?B?VEtxcDZCSHk4ZmdtditWSzUzbWl4QSs3VTFrUnZKKzlFRElpeE4vS2lMdlZw?=
- =?utf-8?B?cVpFVkZkTTYrTmo3TjBMM2FMWGZicXkvakpMQ1FybVlvYkZhdE4vVVZXK2VI?=
- =?utf-8?B?NmVxMDY5QjJ0YmRqS2FKUmZieW1uMDBEeGZhWXdPcW5Nek9aNlVla1dBd0JW?=
- =?utf-8?B?RWROYmhqNzdieEgyUXlFcU1SSVdIeFdtRW9DdkgzU2pJTXl5NEhVUFJEb0FQ?=
- =?utf-8?B?S055STlvdVpIeUdaUVNlK0YrbEZZSW1KdDl2UEV4VjJNNkpwZGlZQ1dtazhZ?=
- =?utf-8?B?SXdMdE42TXMyMnVkN3RJTHdTTmJPekVGSE1OckV6S0VwdHJUQXpsdWdGS21O?=
- =?utf-8?B?ZGJ3U1laV3dHT3FGUlpvY3pxRlY4NnYySGVwSCtiUUxyM3BRTW8yVkhlQUlP?=
- =?utf-8?B?d0ozQm5sQkdLR3Ava2JLUmUwRTRKaFU1UldTR2xXaCtRS0FhSGhxWkdSbFh6?=
- =?utf-8?B?RHYwZnJqWFRlOU9LZkFaSjhSSXFwMGJ6a21ZYzRwSGNtdjZTMnE0OVNXdG13?=
- =?utf-8?B?ZFc4R1hJajRvSW5FaWNhU3ZNRzk5ZTE4Y205SkFzNTVkdlJKZkhmQVVHT2ZJ?=
- =?utf-8?B?N0g2Qm9ndS9zVTl3TTlkclAyUTV6bGlqMGUwZ3FQanFzSktqSnNLU2E3czFy?=
- =?utf-8?B?bGp6WjhoTlk5eUgyUTZsN0J0eXA2R1dhL3NTQ3U4NGRMMGVyQTEzRktQZ2th?=
- =?utf-8?B?djgzcHVvellaL3ZqRWlFTlEvb2kydk5WNitYOU1rWFoycm5CMDJmTTV3eGNh?=
- =?utf-8?B?d1MrRHVPNXpkVGJTZmkyb083YkM3bjJxYWpMZldDQVFhM2RuaWhIVVlpOWVZ?=
- =?utf-8?B?THgwa00wN3grRlU5eEhySVhpSW5jU2FFMUljUVMvY1IyRnFhenFqd1RvWlRi?=
- =?utf-8?B?c2hsU2F3R1krd3dneGhjUFhkWVZsVDBFQjloT3Awem9CV1dhZUd0eWpFQjcv?=
- =?utf-8?B?czFrYTByYks0S3JYL1B4MW5mUjMrWEV0aGpHK3BkQmlpUzJVMFFIQU1aK3hQ?=
- =?utf-8?B?a2c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5938e17b-92f1-4e6c-41da-08da8adb026d
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2022 22:57:27.0625
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: znA3njhY0ecmgw5imU9NLAv1Rpw2Siem1GyI/v0Rn19hUD6S0pg6ixrK5zwPxzQxbxcJZG4BXAkq9LriAdwPO4sOnxZWhb+Kw6szHUKD/KI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3487
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <86e2c049-b289-8b1f-9fc2-8938abefa7d4@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -167,31 +60,89 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jarkko,
-
-On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
->  tools/testing/selftests/sgx/alloc-error.bt | 7 +++++++
->  1 file changed, 7 insertions(+)
->  create mode 100644 tools/testing/selftests/sgx/alloc-error.bt
+On Tue, Aug 30, 2022 at 11:18:03AM +0000, Dhanuka wrote:
+> On 8/30/22 02:52, Jarkko Sakkinen wrote:
+> > On Mon, Aug 29, 2022 at 03:15:30PM +0300, Jarkko Sakkinen wrote:
+> > > On Sun, Aug 28, 2022 at 11:48:59AM +0530, Dhanuka Warusadura wrote:
+> > > > These changes fix the "error: ‘ERR_get_error_line’ is deprecated:
+> > > > Since OpenSSL 3.0" warning.
+> > > > 
+> > > > Signed-off-by: Dhanuka Warusadura <wdnuka@gmail.com>
+> > > > ---
+> > > >   tools/testing/selftests/sgx/sigstruct.c | 2 +-
+> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> > > > index 50c5ab1aa6fa..671d9b58e274 100644
+> > > > --- a/tools/testing/selftests/sgx/sigstruct.c
+> > > > +++ b/tools/testing/selftests/sgx/sigstruct.c
+> > > > @@ -136,7 +136,7 @@ static bool check_crypto_errors(void)
+> > > >   			break;
+> > > >   		had_errors = true;
+> > > > -		err = ERR_get_error_line(&filename, &line);
+> > > > +		err = ERR_peek_last_error_line(&filename, &line);
+> > > >   		ERR_error_string_n(err, str, sizeof(str));
+> > > >   		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
+> > > >   	}
+> > > > -- 
+> > > > 2.37.2
+> > > > 
+> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > Actually NAK.
+> > 
+> > This fix is not complete:
+> > 
+> > sigstruct.c: In function ‘get_modulus’:
+> > sigstruct.c:151:9: error: ‘RSA_get0_key’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+> >    151 |         RSA_get0_key(key, &n, NULL, NULL);
+> >        |         ^~~~~~~~~~~~
+> > In file included from /usr/include/openssl/x509.h:36,
+> >                   from /usr/include/openssl/pem.h:23,
+> >                   from sigstruct.c:16:
+> > /usr/include/openssl/rsa.h:217:28: note: declared here
+> >    217 | OSSL_DEPRECATEDIN_3_0 void RSA_get0_key(const RSA *r,
+> >        |                            ^~~~~~~~~~~~
+> > sigstruct.c: In function ‘gen_sign_key’:
+> > sigstruct.c:168:9: error: ‘PEM_read_bio_RSAPrivateKey’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declaration
+> > ]
+> >    168 |         key = PEM_read_bio_RSAPrivateKey(bio, NULL, NULL, NULL);
+> >        |         ^~~
+> > /usr/include/openssl/pem.h:447:1: note: declared here
+> >    447 | DECLARE_PEM_rw_cb_attr(OSSL_DEPRECATEDIN_3_0, RSAPrivateKey, RSA)
+> >        | ^~~~~~~~~~~~~~~~~~~~~~
+> > sigstruct.c: In function ‘encl_measure’:
+> > sigstruct.c:364:9: error: ‘RSA_sign’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+> >    364 |         if (!RSA_sign(NID_sha256, digest, SHA256_DIGEST_LENGTH,
+> >        |         ^~
+> > /usr/include/openssl/rsa.h:348:27: note: declared here
+> >    348 | OSSL_DEPRECATEDIN_3_0 int RSA_sign(int type, const unsigned char *m,
+> >        |                           ^~~~~~~~
+> > sigstruct.c:377:9: error: ‘RSA_free’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+> >    377 |         RSA_free(key);
+> >        |         ^~~~~~~~
+> > /usr/include/openssl/rsa.h:293:28: note: declared here
+> >    293 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
+> >        |                            ^~~~~~~~
+> > sigstruct.c:382:9: error: ‘RSA_free’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+> >    382 |         RSA_free(key);
+> >        |         ^~~~~~~~
+> > /usr/include/openssl/rsa.h:293:28: note: declared here
+> >    293 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
+> >        |                            ^~~~~~~~
+> > cc1: all warnings being treated as errors
+> > make: *** [Makefile:39: /home/jarkko/work/linux-sgx/tools/testing/selftests/sgx/sigstruct.o] Error 1
+> > 
+> > BR, Jarkko
 > 
-> diff --git a/tools/testing/selftests/sgx/alloc-error.bt b/tools/testing/selftests/sgx/alloc-error.bt
-> new file mode 100644
-> index 000000000000..9268d50dea29
-> --- /dev/null
-> +++ b/tools/testing/selftests/sgx/alloc-error.bt
-> @@ -0,0 +1,7 @@
-> +kr:sgx_alloc_epc_page /(uint64)retval >= (uint64)(-4095)/ {
-> +		 printf("sgx_alloc_epc_page: retval=%d\n", (int64)retval);
-> +}
-> +
-> +kr:sgx_encl_page_alloc /(uint64)retval >= (uint64)(-4095)/ {
-> +		 printf("sgx_encl_page_alloc: retval=%d\n", (int64)retval);
-> +}
+> Thanks for the review.
+> 
+> But, my intention was to just fix the `ERR_get_error_line` deprecated
+> warning (as mentioned in the commit header) and not all the OpenSSL
+> deprecated warnings found in `sigstruct.c`
+> 
+> Do I need to fix all these OpenSSL deprecated warnings in `sigstruct.c` in
+> order to get this patch merged?
 
+Yes, it is incomplete as it is.
 
-Could there be a snippet of comments in this new file to guide users
-on how to use this script?
-
-Reinette
+BR, Jarkko
