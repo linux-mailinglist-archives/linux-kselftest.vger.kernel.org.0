@@ -2,497 +2,250 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECE85A79D3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 11:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6FB5A7A13
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 11:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbiHaJNI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Aug 2022 05:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S230509AbiHaJW4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Aug 2022 05:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiHaJMy (ORCPT
+        with ESMTP id S229658AbiHaJWz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:12:54 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37234B959E
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 02:12:50 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-11eb8b133fbso18307359fac.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 02:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=2AurYSM1bnx6rUKp3T4fU2Ap+P4TodGdt/6QzDzwNPU=;
-        b=Hxyt+/QtP6nwwzEIypsCXHSN2VBvFxzde5VXSMplI6ma4CNiOt87DkIWgFMZVyhJwh
-         X6+9mGCV1xSAjJ9lff4r2GkeKHp0yIfbcxvVV+1MG3PNKnCOI/n7uJ5OVjtiUyAjxwHp
-         qhIqLwF4rdAcMN9z2z45ruit5DsIMcwdlJEgwZieaSuB8P9d2/b+saUW8pzR+Ttof5KL
-         Tbd991Tdudh1MHpMCVsll6t5oWllB/pgQCe10VGFRGd7BSWvVhKMRPMdlmUShpCL8DTH
-         nqxFNSY0zHXp7FBEwAe33H1/cDkqdA33xUnsgWJdQ25EOpDYl7jIOcRp5X0qeQJyRU+F
-         cqew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=2AurYSM1bnx6rUKp3T4fU2Ap+P4TodGdt/6QzDzwNPU=;
-        b=cJFHUgiSujNPajyhXbj8SHwTFI1Eb13udUchRjGYTLMiJEGtlJO8PAgLWtAg1LD0W8
-         4bQ3SVOE7ng0C6PDPnwqPSqn1Mg3Tm61xi0XvsHXhlUH8s4qRGT5Psn7aSDRzRP/hR1m
-         k/4fgTuZgbugyZDQhGcL+3flHEA4lqgFY7elOGbMtLyPLsisI8Sk91s6bIch8kNbqvL0
-         BsOwFeI15anv8rYZ42NwlQGE1+awQk0WEIoksXeovKGg7pWO7yNq0FhFc44nqi/Klsxf
-         rWYHtUenlP64Z3/tpEelDDP1G2m/TNDrqmh7HWPWFfpJSYgm62F1OinPZqsVvCm/H2xj
-         cQqw==
-X-Gm-Message-State: ACgBeo3fITIUjYVd/c8I3RV91puMp93PaeJxPKDpFz0WPNywncTPXrLU
-        Ti/eAY7kvd+QiJlv++6Zramh7bFZHjLSYWA09pF4UTJqDW+4WN3q
-X-Google-Smtp-Source: AA6agR7BaRI4klWWKRrsSz/BRDg1gBObZsSbpa6c6muZHtwvynBjweQjZin3DpAAGze9FncYXHkeRU1pTdeNBizgPo8=
-X-Received: by 2002:a05:6870:4783:b0:118:81e3:27ec with SMTP id
- c3-20020a056870478300b0011881e327ecmr967419oaq.146.1661937169260; Wed, 31 Aug
- 2022 02:12:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <CA+EHjTy6NF=BkCqK0vhXLdtKZMahp55JUMSfxN96-NT3YiMXYQ@mail.gmail.com> <20220829151756.GB1586678@chaop.bj.intel.com>
-In-Reply-To: <20220829151756.GB1586678@chaop.bj.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Wed, 31 Aug 2022 10:12:12 +0100
-Message-ID: <CA+EHjTxgKJ=9UP=DWtNsSgD2FtvBMYrUbcS=9h5j8Tmk57WqxQ@mail.gmail.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
+        Wed, 31 Aug 2022 05:22:55 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4C0BE0B;
+        Wed, 31 Aug 2022 02:22:52 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MHdqS5Q52z9v7Yy;
+        Wed, 31 Aug 2022 17:17:24 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnY15BKA9j0y0QAA--.24163S2;
+        Wed, 31 Aug 2022 10:22:22 +0100 (CET)
+Message-ID: <e3c7321ed035f00e8e70f832915065ea67d9ef3b.camel@huaweicloud.com>
+Subject: Re: [PATCH v14 02/12] bpf: Move dynptr type check to
+ is_dynptr_type_expected()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Joanne Koong <joannelkoong@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 31 Aug 2022 11:22:05 +0200
+In-Reply-To: <CAJnrk1bL2MSN81ORrkm9JcFQh3qsJ1jVGXEycSjyhk+Jv_Bz2Q@mail.gmail.com>
+References: <20220830161716.754078-1-roberto.sassu@huaweicloud.com>
+         <20220830161716.754078-3-roberto.sassu@huaweicloud.com>
+         <CAJnrk1bL2MSN81ORrkm9JcFQh3qsJ1jVGXEycSjyhk+Jv_Bz2Q@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwDnY15BKA9j0y0QAA--.24163S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XFyxKw4xAFy5AF15XF4fKrg_yoW7AFWUpa
+        n7GayUXF4ktF42vw17tF4DAFy5KrW8WrWrCrZYva40yFn7Zr9xZF15Kr17Wr9YkFyDCw4f
+        Z340vFZ8Zw15AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj3515gABsa
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Chao,
+On Tue, 2022-08-30 at 09:46 -0700, Joanne Koong wrote:
+> On Tue, Aug 30, 2022 at 9:18 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Move dynptr type check to is_dynptr_type_expected() from
+> > is_dynptr_reg_valid_init(), so that callers can better determine
+> > the cause
+> > of a negative result (dynamic pointer not valid/initialized,
+> > dynamic
+> > pointer of the wrong type).
+> > 
+> > Also, splitting makes the code more readable, since checking the
+> > dynamic
+> > pointer type is not necessarily related to validity and
+> > initialization.
+> 
+> I think it'd be helpful to also include that btf will be using these
+> functions, which seems like the main motivation behind why this
+> change
+> is needed.
 
-Thank you for your reply.
+Ok, added.
 
-On Mon, Aug 29, 2022 at 4:23 PM Chao Peng <chao.p.peng@linux.intel.com> wro=
-te:
->
-> On Fri, Aug 26, 2022 at 04:19:25PM +0100, Fuad Tabba wrote:
-> > Hi,
-> >
-> > On Wed, Jul 6, 2022 at 9:24 AM Chao Peng <chao.p.peng@linux.intel.com> =
-wrote:
-> > >
-> > > This is the v7 of this series which tries to implement the fd-based K=
-VM
-> > > guest private memory. The patches are based on latest kvm/queue branc=
-h
-> > > commit:
-> > >
-> > >   b9b71f43683a (kvm/queue) KVM: x86/mmu: Buffer nested MMU
-> > > split_desc_cache only by default capacity
-> > >
-> > > Introduction
-> > > ------------
-> > > In general this patch series introduce fd-based memslot which provide=
-s
-> > > guest memory through memory file descriptor fd[offset,size] instead o=
-f
-> > > hva/size. The fd can be created from a supported memory filesystem
-> > > like tmpfs/hugetlbfs etc. which we refer as memory backing store. KVM
-> > > and the the memory backing store exchange callbacks when such memslot
-> > > gets created. At runtime KVM will call into callbacks provided by the
-> > > backing store to get the pfn with the fd+offset. Memory backing store
-> > > will also call into KVM callbacks when userspace punch hole on the fd
-> > > to notify KVM to unmap secondary MMU page table entries.
-> > >
-> > > Comparing to existing hva-based memslot, this new type of memslot all=
-ows
-> > > guest memory unmapped from host userspace like QEMU and even the kern=
-el
-> > > itself, therefore reduce attack surface and prevent bugs.
-> > >
-> > > Based on this fd-based memslot, we can build guest private memory tha=
-t
-> > > is going to be used in confidential computing environments such as In=
-tel
-> > > TDX and AMD SEV. When supported, the memory backing store can provide
-> > > more enforcement on the fd and KVM can use a single memslot to hold b=
-oth
-> > > the private and shared part of the guest memory.
-> > >
-> > > mm extension
-> > > ---------------------
-> > > Introduces new MFD_INACCESSIBLE flag for memfd_create(), the file
-> > > created with these flags cannot read(), write() or mmap() etc via nor=
-mal
-> > > MMU operations. The file content can only be used with the newly
-> > > introduced memfile_notifier extension.
-> > >
-> > > The memfile_notifier extension provides two sets of callbacks for KVM=
- to
-> > > interact with the memory backing store:
-> > >   - memfile_notifier_ops: callbacks for memory backing store to notif=
-y
-> > >     KVM when memory gets invalidated.
-> > >   - backing store callbacks: callbacks for KVM to call into memory
-> > >     backing store to request memory pages for guest private memory.
-> > >
-> > > The memfile_notifier extension also provides APIs for memory backing
-> > > store to register/unregister itself and to trigger the notifier when =
-the
-> > > bookmarked memory gets invalidated.
-> > >
-> > > The patchset also introduces a new memfd seal F_SEAL_AUTO_ALLOCATE to
-> > > prevent double allocation caused by unintentional guest when we only
-> > > have a single side of the shared/private memfds effective.
-> > >
-> > > memslot extension
-> > > -----------------
-> > > Add the private fd and the fd offset to existing 'shared' memslot so
-> > > that both private/shared guest memory can live in one single memslot.
-> > > A page in the memslot is either private or shared. Whether a guest pa=
-ge
-> > > is private or shared is maintained through reusing existing SEV ioctl=
-s
-> > > KVM_MEMORY_ENCRYPT_{UN,}REG_REGION.
-> > >
-> >
-> > I'm on the Android pKVM team at Google, and we've been looking into
-> > how this approach fits with what we've been doing with pkvm/arm64.
-> > I've had a go at porting your patches, along with some fixes and
-> > additions so it would go on top of our latest pkvm patch series [1] to
-> > see how well this proposal fits with what we=E2=80=99re doing. You can =
-find
-> > the ported code at this link [2].
-> >
-> > In general, an fd-based approach fits very well with pKVM for the
-> > reasons you mention. It means that we don't necessarily need to map
-> > the guest memory, and with the new extensions it allows the host
-> > kernel to control whether to restrict migration and swapping.
->
-> Good to hear that.
->
-> >
-> > For pKVM, we would also need the guest private memory not to be
-> > GUP=E2=80=99able by the kernel so that userspace can=E2=80=99t trick th=
-e kernel into
-> > accessing guest private memory in a context where it isn=E2=80=99t prep=
-ared to
-> > handle the fault injected by the hypervisor. We=E2=80=99re looking at w=
-hether
-> > we could use memfd_secret to achieve this, or maybe whether extending
-> > your work might solve the problem.
->
-> This is interesting and can be a valuable addition to this series.
+> > Split the validity/initialization and dynamic pointer type check
+> > also in
+> > the verifier, and adjust the expected error message in the test (a
+> > test for
+> > an unexpected dynptr type passed to a helper cannot be added due to
+> > missing
+> > suitable helpers, but this case has been tested manually).
+> 
+> The bpf_ringbuf_submit_dynptr() and bpf_ringbuf_discard_dynptr()
+> helpers take in only ringbuf-type dynptrs, so either of these would
+> work for testing the case where an incorrect dynptr type is passed in
+> :)
 
-I'll keep you posted as it goes. I think with the work that you've
-already put in, it wouldn't require that much more.
+Uhm, that didn't work.
 
-> >
-> > However, during the porting effort, the main issue we've encountered
-> > is that many of the details of this approach seem to be targeted at
-> > TDX/SEV and don=E2=80=99t readily align with the design of pKVM. My kno=
-wledge
-> > on TDX is very rudimentary, so please bear with me if I get things
-> > wrong.
->
-> No doubt this series is initially designed for confidential computing
-> usages, but pKVM can definitely extend it if it finds useful.
->
-> >
-> > The idea of the memslot having two references to the backing memory,
-> > the (new) private_fd (a file descriptor) as well as the userspace_addr
-> > (a memory address), with the meaning changing depending on whether the
-> > memory is private or shared. Both can potentially be live at the same
-> > time, but only one is used by the guest depending on whether the
-> > memory is shared or private. For pKVM, the memory region is the same,
-> > and whether the underlying physical page is shared or private is
-> > determined by the hypervisor based on the initial configuration of the
-> > VM and also in response to hypercalls from the guest.
->
-> For confidential computing usages, this is actually the same. The shared
-> or private is determined by initial configuration or guest hypercalls.
->
-> > So at least from
-> > our side, having a private_fd isn't the best fit, but rather just
-> > having an fd instead of a userspace_addr.
->
-> Let me understand this a bit: pKVM basically wants to maintain the
-> shared and private memory in only one fd, and not use userspace_addr at
-> all, right? Any blocking for pKVM to use private_fd + userspace_addr
-> instead?
-> >
-> > Moreover, something which was discussed here before [3], is the
-> > ability to share in-place. For pKVM/arm64, the conversion between
-> > shared and private involves only changes to the stage-2 page tables,
-> > which are controlled by the hypervisor. Android supports this in-place
-> > conversion already, and I think that the cost of copying for many
-> > use-cases that would involve large amounts of data would be big. We
-> > will measure the relative costs in due course, but in the meantime
-> > we=E2=80=99re nervous about adopting a new user ABI which doesn=E2=80=
-=99t appear to
-> > cater for in-place conversion; having just the fd would simplify that
-> > somewhat
->
-> I understand there is difficulty to achieve that with the current
-> private_fd + userspace_addr (they basically in two separate fds), but is
-> it possible for pKVM to extend this? Brainstorming for example, pKVM can
-> ignore userspace_addr and only use private_fd to cover both shared and
-> private memory, or pKVM introduce new KVM memslot flag?
+If I initialize a local dynptr, and call bpf_ringbuf_submit_dynptr(), I
+get:
 
-It's not that there's anything blocking pKVM from doing that. It's
-that the disconnect of using a memory address for the shared memory,
-and a file descriptor for the private memory doesn't really make sense
-for pKVM. I see how it makes sense for TDX and the Intel-specific
-implementation. It just seems that this is baking in an
-implementation-specific aspect as a part of the KVM general api, and
-the worry is that this might have some unintended consequences in the
-future.
+arg 1 is an unacquired reference
 
-> >
-> > In the memfd approach, what is the plan for being able to initialize
-> > guest private memory from the host? In my port of this patch series,
-> > I've added an fcntl() command that allows setting INACCESSIBLE after
-> > the memfd has been created. So the memory can be mapped, initialized,
-> > then unmapped. Of course there is no way to enforce that the memory is
-> > unmapped from userspace before being used as private memory, but the
-> > hypervisor will take care of the stage-2 mapping and so a user access
-> > to the private memory would result in a SEGV regardless of the flag
->
-> There is discussion on removing MFD_INACCESSIBLE and delaying the
-> alignment of the flag to the KVM/backing store binding time
-> (https://lkml.kernel.org/lkml/20220824094149.GA1383966@chaop.bj.intel.com=
-/).
->
-> Creating new API like what you are playing with fcntl() also works if it
-> turns out the MFD_INACCESSIBLE has to be set at the memfd_create time.
+The only way to make this work was to create a custom helper, with
+OBJ_RELEASE removed.
 
-That makes sense.
+> > Cc: Joanne Koong <joannelkoong@gmail.com>
+> > Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  kernel/bpf/verifier.c                         | 35 ++++++++++++++-
+> > ----
+> >  .../testing/selftests/bpf/prog_tests/dynptr.c |  2 +-
+> >  2 files changed, 28 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 0194a36d0b36..1b913db252a3 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -779,8 +779,8 @@ static bool is_dynptr_reg_valid_uninit(struct
+> > bpf_verifier_env *env, struct bpf_
+> >         return true;
+> >  }
+> > 
+> > -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> > struct bpf_reg_state *reg,
+> > -                                    enum bpf_arg_type arg_type)
+> > +static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> > +                                    struct bpf_reg_state *reg)
+> >  {
+> >         struct bpf_func_state *state = func(env, reg);
+> >         int spi = get_spi(reg->off);
+> > @@ -796,11 +796,24 @@ static bool is_dynptr_reg_valid_init(struct
+> > bpf_verifier_env *env, struct bpf_re
+> >                         return false;
+> >         }
+> > 
+> > +       return true;
+> > +}
+> > +
+> > +static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
+> > +                                   struct bpf_reg_state *reg,
+> > +                                   enum bpf_arg_type arg_type)
+> > +{
+> > +       struct bpf_func_state *state = func(env, reg);
+> > +       int spi = get_spi(reg->off);
+> > +       enum bpf_dynptr_type dynptr_type;
+> 
+> nit: the above 2 lines should be swapped to maintain reverse
+> christmas
+> tree order of declarations
 
-> >
-> > Now, moving on to implementation-specific issues in this patch series
-> > that I have encountered:
-> >
-> > - There are a couple of small issues in porting the patches, some of
-> > which have been mentioned already by others. I will point out the rest
-> > in direct replies to these patches.
->
-> Thanks.
->
-> >
-> > - MEMFILE_F_UNRECLAIMABLE and MEMFILE_F_UNMOVABLE are never set in
-> > this patch series. MFD_INACCESSIBLE only sets
-> > MEMFILE_F_USER_INACCESSIBLE. Is this intentional?
->
-> It gets set in kvm_private_mem_register() of patch 13, basically those
-> flags are expected to be set by architecture code.
->
-> >
-> > - Nothing in this patch series enforces that MFD_INACCESSIBLE or that
-> > any of the MEMFILE_F_* flags are set for the file descriptor to be
-> > used as a private_fd. Is this also intentional?
->
-> With KVM_MEM_PRIVATE memslot flag, the MEMFILE_F_* are enforced by the
-> architecture code.
+Ok.
 
-Right. I was expecting them to be in the mem_fd, but I see now how
-they are being set and enforced in patch 13. This makes a lot of sense
-now. Thanks!
+Thanks
 
-> >
-> > Most of us working on pKVM will be at KVM forum Dublin in September,
-> > so it would be great if we could have a chat (and/or beer!) face to
-> > face sometime during the conference to help us figure out an
-> > upstreamable solution for Android
->
-> I would like to, but currently I have no travel plan due to COVID-19 :(
-> We can have more online discussions anyway.
+Roberto
 
-Of course! We'll continue this online, and hopefully we will get a
-chance to meet in person soon.
+> 
+> > +
+> >         /* ARG_PTR_TO_DYNPTR takes any type of dynptr */
+> >         if (arg_type == ARG_PTR_TO_DYNPTR)
+> >                 return true;
+> > 
+> > -       return state->stack[spi].spilled_ptr.dynptr.type ==
+> > arg_to_dynptr_type(arg_type);
+> > +       dynptr_type = arg_to_dynptr_type(arg_type);
+> > +
+> > +       return state->stack[spi].spilled_ptr.dynptr.type ==
+> > dynptr_type;
+> >  }
+> > 
+> >  /* The reg state of a pointer or a bounded scalar was saved when
+> > @@ -6050,21 +6063,27 @@ static int check_func_arg(struct
+> > bpf_verifier_env *env, u32 arg,
+> >                         }
+> > 
+> >                         meta->uninit_dynptr_regno = regno;
+> > -               } else if (!is_dynptr_reg_valid_init(env, reg,
+> > arg_type)) {
+> > +               } else if (!is_dynptr_reg_valid_init(env, reg)) {
+> > +                       verbose(env,
+> > +                               "Expected an initialized dynptr as
+> > arg #%d\n",
+> > +                               arg + 1);
+> > +                       return -EINVAL;
+> > +               } else if (!is_dynptr_type_expected(env, reg,
+> > arg_type)) {
+> >                         const char *err_extra = "";
+> > 
+> >                         switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
+> >                         case DYNPTR_TYPE_LOCAL:
+> > -                               err_extra = "local ";
+> > +                               err_extra = "local";
+> >                                 break;
+> >                         case DYNPTR_TYPE_RINGBUF:
+> > -                               err_extra = "ringbuf ";
+> > +                               err_extra = "ringbuf";
+> >                                 break;
+> >                         default:
+> > +                               err_extra = "<unknown>";
+> >                                 break;
+> >                         }
+> > -
+> > -                       verbose(env, "Expected an initialized
+> > %sdynptr as arg #%d\n",
+> > +                       verbose(env,
+> > +                               "Expected a dynptr of type %s as
+> > arg #%d\n",
+> >                                 err_extra, arg + 1);
+> >                         return -EINVAL;
+> >                 }
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> > b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> > index bcf80b9f7c27..8fc4e6c02bfd 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> > @@ -30,7 +30,7 @@ static struct {
+> >         {"invalid_helper2", "Expected an initialized dynptr as arg
+> > #3"},
+> >         {"invalid_write1", "Expected an initialized dynptr as arg
+> > #1"},
+> >         {"invalid_write2", "Expected an initialized dynptr as arg
+> > #3"},
+> > -       {"invalid_write3", "Expected an initialized ringbuf dynptr
+> > as arg #1"},
+> > +       {"invalid_write3", "Expected an initialized dynptr as arg
+> > #1"},
+> >         {"invalid_write4", "arg 1 is an unacquired reference"},
+> >         {"invalid_read1", "invalid read from stack"},
+> >         {"invalid_read2", "cannot pass in dynptr at an offset"},
+> > --
+> > 2.25.1
+> > 
 
-Cheers,
-/fuad
-
-
-> Thanks,
-> Chao
-> >
-> > Cheers,
-> > /fuad
-> >
-> > [1] https://lore.kernel.org/all/20220630135747.26983-1-will@kernel.org/
-> > [2] https://android-kvm.googlesource.com/linux/+/refs/heads/tabba/fdmem
-> > [3] https://lore.kernel.org/all/YkcTTY4YjQs5BRhE@google.com/
-> >
-> >
-> > > Test
-> > > ----
-> > > To test the new functionalities of this patch TDX patchset is needed.
-> > > Since TDX patchset has not been merged so I did two kinds of test:
-> > >
-> > > -  Regresion test on kvm/queue (this patchset)
-> > >    Most new code are not covered. Code also in below repo:
-> > >    https://github.com/chao-p/linux/tree/privmem-v7
-> > >
-> > > -  New Funational test on latest TDX code
-> > >    The patch is rebased to latest TDX code and tested the new
-> > >    funcationalities. See below repos:
-> > >    Linux: https://github.com/chao-p/linux/tree/privmem-v7-tdx
-> > >    QEMU: https://github.com/chao-p/qemu/tree/privmem-v7
-> > >
-> > > An example QEMU command line for TDX test:
-> > > -object tdx-guest,id=3Dtdx,debug=3Doff,sept-ve-disable=3Doff \
-> > > -machine confidential-guest-support=3Dtdx \
-> > > -object memory-backend-memfd-private,id=3Dram1,size=3D${mem} \
-> > > -machine memory-backend=3Dram1
-> > >
-> > > Changelog
-> > > ----------
-> > > v7:
-> > >   - Move the private/shared info from backing store to KVM.
-> > >   - Introduce F_SEAL_AUTO_ALLOCATE to avoid double allocation.
-> > >   - Rework on the sync mechanism between zap/page fault paths.
-> > >   - Addressed other comments in v6.
-> > > v6:
-> > >   - Re-organzied patch for both mm/KVM parts.
-> > >   - Added flags for memfile_notifier so its consumers can state their
-> > >     features and memory backing store can check against these flags.
-> > >   - Put a backing store reference in the memfile_notifier and move pf=
-n_ops
-> > >     into backing store.
-> > >   - Only support boot time backing store register.
-> > >   - Overall KVM part improvement suggested by Sean and some others.
-> > > v5:
-> > >   - Removed userspace visible F_SEAL_INACCESSIBLE, instead using an
-> > >     in-kernel flag (SHM_F_INACCESSIBLE for shmem). Private fd can onl=
-y
-> > >     be created by MFD_INACCESSIBLE.
-> > >   - Introduced new APIs for backing store to register itself to
-> > >     memfile_notifier instead of direct function call.
-> > >   - Added the accounting and restriction for MFD_INACCESSIBLE memory.
-> > >   - Added KVM API doc for new memslot extensions and man page for the=
- new
-> > >     MFD_INACCESSIBLE flag.
-> > >   - Removed the overlap check for mapping the same file+offset into
-> > >     multiple gfns due to perf consideration, warned in document.
-> > >   - Addressed other comments in v4.
-> > > v4:
-> > >   - Decoupled the callbacks between KVM/mm from memfd and use new
-> > >     name 'memfile_notifier'.
-> > >   - Supported register multiple memslots to the same backing store.
-> > >   - Added per-memslot pfn_ops instead of per-system.
-> > >   - Reworked the invalidation part.
-> > >   - Improved new KVM uAPIs (private memslot extension and memory
-> > >     error) per Sean's suggestions.
-> > >   - Addressed many other minor fixes for comments from v3.
-> > > v3:
-> > >   - Added locking protection when calling
-> > >     invalidate_page_range/fallocate callbacks.
-> > >   - Changed memslot structure to keep use useraddr for shared memory.
-> > >   - Re-organized F_SEAL_INACCESSIBLE and MEMFD_OPS.
-> > >   - Added MFD_INACCESSIBLE flag to force F_SEAL_INACCESSIBLE.
-> > >   - Commit message improvement.
-> > >   - Many small fixes for comments from the last version.
-> > >
-> > > Links to previous discussions
-> > > -----------------------------
-> > > [1] Original design proposal:
-> > > https://lkml.kernel.org/kvm/20210824005248.200037-1-seanjc@google.com=
-/
-> > > [2] Updated proposal and RFC patch v1:
-> > > https://lkml.kernel.org/linux-fsdevel/20211111141352.26311-1-chao.p.p=
-eng@linux.intel.com/
-> > > [3] Patch v5: https://lkml.org/lkml/2022/5/19/861
-> > >
-> > > Chao Peng (12):
-> > >   mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
-> > >   selftests/memfd: Add tests for F_SEAL_AUTO_ALLOCATE
-> > >   mm: Introduce memfile_notifier
-> > >   mm/memfd: Introduce MFD_INACCESSIBLE flag
-> > >   KVM: Rename KVM_PRIVATE_MEM_SLOTS to KVM_INTERNAL_MEM_SLOTS
-> > >   KVM: Use gfn instead of hva for mmu_notifier_retry
-> > >   KVM: Rename mmu_notifier_*
-> > >   KVM: Extend the memslot to support fd-based private memory
-> > >   KVM: Add KVM_EXIT_MEMORY_FAULT exit
-> > >   KVM: Register/unregister the guest private memory regions
-> > >   KVM: Handle page fault for private memory
-> > >   KVM: Enable and expose KVM_MEM_PRIVATE
-> > >
-> > > Kirill A. Shutemov (1):
-> > >   mm/shmem: Support memfile_notifier
-> > >
-> > >  Documentation/virt/kvm/api.rst             |  77 +++++-
-> > >  arch/arm64/kvm/mmu.c                       |   8 +-
-> > >  arch/mips/include/asm/kvm_host.h           |   2 +-
-> > >  arch/mips/kvm/mmu.c                        |  10 +-
-> > >  arch/powerpc/include/asm/kvm_book3s_64.h   |   2 +-
-> > >  arch/powerpc/kvm/book3s_64_mmu_host.c      |   4 +-
-> > >  arch/powerpc/kvm/book3s_64_mmu_hv.c        |   4 +-
-> > >  arch/powerpc/kvm/book3s_64_mmu_radix.c     |   6 +-
-> > >  arch/powerpc/kvm/book3s_hv_nested.c        |   2 +-
-> > >  arch/powerpc/kvm/book3s_hv_rm_mmu.c        |   8 +-
-> > >  arch/powerpc/kvm/e500_mmu_host.c           |   4 +-
-> > >  arch/riscv/kvm/mmu.c                       |   4 +-
-> > >  arch/x86/include/asm/kvm_host.h            |   3 +-
-> > >  arch/x86/kvm/Kconfig                       |   3 +
-> > >  arch/x86/kvm/mmu.h                         |   2 -
-> > >  arch/x86/kvm/mmu/mmu.c                     |  74 +++++-
-> > >  arch/x86/kvm/mmu/mmu_internal.h            |  18 ++
-> > >  arch/x86/kvm/mmu/mmutrace.h                |   1 +
-> > >  arch/x86/kvm/mmu/paging_tmpl.h             |   4 +-
-> > >  arch/x86/kvm/x86.c                         |   2 +-
-> > >  include/linux/kvm_host.h                   | 105 +++++---
-> > >  include/linux/memfile_notifier.h           |  91 +++++++
-> > >  include/linux/shmem_fs.h                   |   2 +
-> > >  include/uapi/linux/fcntl.h                 |   1 +
-> > >  include/uapi/linux/kvm.h                   |  37 +++
-> > >  include/uapi/linux/memfd.h                 |   1 +
-> > >  mm/Kconfig                                 |   4 +
-> > >  mm/Makefile                                |   1 +
-> > >  mm/memfd.c                                 |  18 +-
-> > >  mm/memfile_notifier.c                      | 123 ++++++++++
-> > >  mm/shmem.c                                 | 125 +++++++++-
-> > >  tools/testing/selftests/memfd/memfd_test.c | 166 +++++++++++++
-> > >  virt/kvm/Kconfig                           |   3 +
-> > >  virt/kvm/kvm_main.c                        | 272 ++++++++++++++++++-=
---
-> > >  virt/kvm/pfncache.c                        |  14 +-
-> > >  35 files changed, 1074 insertions(+), 127 deletions(-)
-> > >  create mode 100644 include/linux/memfile_notifier.h
-> > >  create mode 100644 mm/memfile_notifier.c
-> > >
-> > > --
-> > > 2.25.1
-> > >
