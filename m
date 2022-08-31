@@ -2,66 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842C75A897B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 01:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710FD5A8982
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 01:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiHaXYy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Aug 2022 19:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
+        id S230136AbiHaXcz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Aug 2022 19:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbiHaXYw (ORCPT
+        with ESMTP id S230168AbiHaXcx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Aug 2022 19:24:52 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C04E31
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 16:24:46 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id e195so7298663iof.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 16:24:46 -0700 (PDT)
+        Wed, 31 Aug 2022 19:32:53 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADCFE58B6
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 16:32:53 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11f11d932a8so19458226fac.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 16:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=8cRj+wC2SekV3g/lnG7OaUo/IWIUcAUM42NCJCbEaVU=;
-        b=SEtJIjyCH/OQa4i3YC29am3HN/68LbFFcD8vT8/EgqO7o/yoqct/Ln6fk4qC3798Fx
-         5ztkrHm3A1FboO+14txXalKKEuSSxOzdiErfBgd2jU1l0EqOoiPC3wUMhQScId2Va1sK
-         NuEAUpvc6YxwuZOjsNsdCt71L3tNBatIKZ8FA=
+        bh=Ogeaj4/rQI298p/BADarmzrOcFA0fwNfK92i/ULTfFg=;
+        b=ZweDwQk10QrYBEDjHiMYDmRQtjwYnUzgonUGz5ZR430VZk0hZdZAiXRKKtHlAIDehy
+         +QJpvDrZkY32lifNAeVL2FcHl7JhtiFefL7uVQlLWKdoSyVVZxQX7vL7EB4J1GmaYgnc
+         JPIwI7KWACD3udn2oJhkuNE2OAmA10FAcBEik=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=8cRj+wC2SekV3g/lnG7OaUo/IWIUcAUM42NCJCbEaVU=;
-        b=JcC2fUEH7E75Vc+9lCrCNYwk/PRJJM3zeUe3xhT9Yfz/HhpYz8u6mHxnB/x3siF2YI
-         da3Bk9MtyyNBtOVXwJHoibjDCHjEx1LKbjv7KVInr/PVJFfXKYiSjCeuS3mluakO+xrP
-         smN/YkcNDWHTez1HzrmX3e3v97B1Zyd5UWpKKy9N3XONw6cBsmQ8keshpbh4svzlzDY5
-         K+5QwiATQLB0KvxeHjc2b1IWN+5uooFzZs67chzGiIK2jwcwmHr20gKWkTx6YaZ0J5lb
-         ZgxCL92GUmqVl1cuDAPqRccm7LZeldsHd92oUEna7pC7Tnlw5/VO3FLCBBnq52xTl6xW
-         J8HA==
-X-Gm-Message-State: ACgBeo1TFNKkYvT2EeE2pRUZoUBSqVAYYEIH/Vpf7M5z4H+OW1gzUWIf
-        vn1epKG24CsqYBm0V2UyCRWtxw==
-X-Google-Smtp-Source: AA6agR6BSPk7/+YsbbZIlw+OGbPqkbKXQL4XEMzHSTuIGuf6xHGdNRGueexsToUvLpKCm9bGe4r6YQ==
-X-Received: by 2002:a05:6638:4197:b0:349:fc58:d66a with SMTP id az23-20020a056638419700b00349fc58d66amr15951690jab.101.1661988286255;
-        Wed, 31 Aug 2022 16:24:46 -0700 (PDT)
+        bh=Ogeaj4/rQI298p/BADarmzrOcFA0fwNfK92i/ULTfFg=;
+        b=0cZ3uWcM+wrs4aCT+zHunsBznGzec3ul5hesSs2w8OCeJFIpAhSe1S8PS6WFry8XLu
+         lwvnKLCQ1B0b1lGD+WgxcBP7tj95mUQTzibGnhU6FS0U4rZyovkeMkGo2HV/jlVh1EJq
+         PxP09IOAEfR4ZM/6b+6t5j/mZl9ukmDOSyu8TETBzZsWfYyVbYUb9YaSjHu0hX/p0z1D
+         P5S9VNjkkhCyMsCC/4O8c9PJua6Pq2YDoZqER0blPu1EJuNLOyh5k43k0SBOF6uL1emD
+         UB7sFZZWQ03/3Og7uGg/L+i6fQvNQwdKyKEizsx4A03AYNGufO8NF2S8Wkjkv1E5SUC4
+         kp+w==
+X-Gm-Message-State: ACgBeo2NSVk2RQklPB5M+aWOcfBoiybdtqnlyliPVGsie+JDGtzN1yfB
+        rrXan1Cuf4Czv3nLg3XbdR6vjfIfY6ZXgQ==
+X-Google-Smtp-Source: AA6agR7gjrv4SZv6qQ6ra1AxQVJiB18C+lGX1hyTzmjgrLU98OFcAcEbkNAGyk+kxp8Lvv8Gdw5NwQ==
+X-Received: by 2002:a05:6870:2046:b0:11e:525d:ef9f with SMTP id l6-20020a056870204600b0011e525def9fmr2641628oad.163.1661988772369;
+        Wed, 31 Aug 2022 16:32:52 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id u190-20020a0223c7000000b00343617e8368sm7417114jau.99.2022.08.31.16.24.45
+        by smtp.gmail.com with ESMTPSA id c8-20020a544e88000000b0034536748843sm7976371oiy.3.2022.08.31.16.32.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 16:24:45 -0700 (PDT)
-Message-ID: <8552fc36-305f-d365-a2a0-b341bee14323@linuxfoundation.org>
-Date:   Wed, 31 Aug 2022 17:24:45 -0600
+        Wed, 31 Aug 2022 16:32:52 -0700 (PDT)
+Message-ID: <61795f45-bc48-7be8-5787-cdf6ec4b761c@linuxfoundation.org>
+Date:   Wed, 31 Aug 2022 17:32:51 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH -next 2/5] selftests/cpu-hotplug: Replace exit with return
+Subject: Re: [PATCH -next 3/5] selftests/cpu-hotplug: Delete fault injection
+ related code
 Content-Language: en-US
 To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
 Cc:     shuah@kernel.org, akpm@linux-foundation.org,
         akinobu.mita@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
 References: <20220830083028.45504-1-zhaogongyi@huawei.com>
- <20220830083028.45504-3-zhaogongyi@huawei.com>
+ <20220830083028.45504-4-zhaogongyi@huawei.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220830083028.45504-3-zhaogongyi@huawei.com>
+In-Reply-To: <20220830083028.45504-4-zhaogongyi@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,77 +76,74 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 8/30/22 02:30, Zhao Gongyi wrote:
-> Replace exit with return to avoid some offline cpu
-> left when offline cpus fail.
+> Delete fault injection related code since the module has been deleted.
 > 
-
-Some cpus will be left in offline state when online
-function exits ...
-
-Can you state this clearly in the change log.
-
 > Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
 > ---
->   .../selftests/cpu-hotplug/cpu-on-off-test.sh        | 13 ++++++++-----
->   1 file changed, 8 insertions(+), 5 deletions(-)
+>   tools/testing/selftests/cpu-hotplug/config    |   1 -
+>   .../selftests/cpu-hotplug/cpu-on-off-test.sh  | 105 +-----------------
+>   2 files changed, 2 insertions(+), 104 deletions(-)
+>   delete mode 100644 tools/testing/selftests/cpu-hotplug/config
 > 
+> diff --git a/tools/testing/selftests/cpu-hotplug/config b/tools/testing/selftests/cpu-hotplug/config
+> deleted file mode 100644
+> index d4aca2ad5069..000000000000
+> --- a/tools/testing/selftests/cpu-hotplug/config
+> +++ /dev/null
+> @@ -1 +0,0 @@
+> -CONFIG_NOTIFIER_ERROR_INJECTION=y
 > diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> index 1169ef82b55e..19028c4c9758 100755
+> index 19028c4c9758..ade75d920cd6 100755
 > --- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
 > +++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> @@ -4,6 +4,7 @@
->   SYSFS=
->   # Kselftest framework requirement - SKIP code is 4.
->   ksft_skip=4
-> +retval=0
-> 
->   prerequisite()
->   {
-> @@ -102,10 +103,10 @@ online_cpu_expect_success()
-> 
->   	if ! online_cpu $cpu; then
->   		echo $FUNCNAME $cpu: unexpected fail >&2
-> -		exit 1
-> +		let retval=$retval+1
->   	elif ! cpu_is_online $cpu; then
->   		echo $FUNCNAME $cpu: unexpected offline >&2
-> -		exit 1
-> +		let retval=$retval+1
+> @@ -110,19 +110,6 @@ online_cpu_expect_success()
 >   	fi
 >   }
 > 
-> @@ -128,10 +129,10 @@ offline_cpu_expect_success()
-> 
->   	if ! offline_cpu $cpu; then
->   		echo $FUNCNAME $cpu: unexpected fail >&2
+> -online_cpu_expect_fail()
+> -{
+> -	local cpu=$1
+> -
+> -	if online_cpu $cpu 2> /dev/null; then
+> -		echo $FUNCNAME $cpu: unexpected success >&2
 > -		exit 1
-> +		let retval=$retval+1
->   	elif ! cpu_is_offline $cpu; then
->   		echo $FUNCNAME $cpu: unexpected offline >&2
+> -	elif ! cpu_is_offline $cpu; then
+> -		echo $FUNCNAME $cpu: unexpected online >&2
 > -		exit 1
-> +		let retval=$retval+1
->   	fi
->   }
-> 
-> @@ -201,7 +202,7 @@ if [ $allcpus -eq 0 ]; then
->   		offline_cpu_expect_success $present_max
->   		online_cpu $present_max
->   	fi
-> -	exit 0
-> +	exit $retval
->   else
->   	echo "Full scope test: all hotplug cpus"
->   	echo -e "\t online all offline cpus"
-> @@ -291,3 +292,5 @@ done
-> 
->   echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_DOWN_PREPARE/error
->   /sbin/modprobe -q -r cpu-notifier-error-inject
-> +
-> +exit $retval
+> -	fi
+> -}
+> -
 
-This retval can be ksft_skip value if 4 of them fail. The test
-result will be incorrect in this case and will be reported as
-a skip. Let's avoid that case.
+Keep this code - this could be useful to test the case of running
+online test on cpu that is online and expect that to fail.
+
+>   offline_cpu_expect_success()
+>   {
+>   	local cpu=$1
+> @@ -136,22 +123,7 @@ offline_cpu_expect_success()
+>   	fi
+>   }
+> 
+> -offline_cpu_expect_fail()
+> -{
+> -	local cpu=$1
+> -
+> -	if offline_cpu $cpu 2> /dev/null; then
+> -		echo $FUNCNAME $cpu: unexpected success >&2
+> -		exit 1
+> -	elif ! cpu_is_online $cpu; then
+> -		echo $FUNCNAME $cpu: unexpected offline >&2
+> -		exit 1
+> -	fi
+> -}
+> -
+
+Keep this code - this could be useful to test the case of running
+offline test on cpu that is offline and expect that to fail.
+
+Remove just the fault injection code and these aren't really specific
+to fault injection even though they are currently being used by the
+fault injection path.
 
 thanks,
 -- Shuah
