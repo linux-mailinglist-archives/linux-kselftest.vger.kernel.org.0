@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C3425A7580
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 07:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7565C5A754F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 06:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbiHaFJh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Aug 2022 01:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S230372AbiHaE6t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Aug 2022 00:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiHaFJh (ORCPT
+        with ESMTP id S229457AbiHaE6s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Aug 2022 01:09:37 -0400
+        Wed, 31 Aug 2022 00:58:48 -0400
 Received: from nifty-ride.212-227-211-85.plesk.page (unknown [212.227.211.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD76CB603F
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 22:09:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF474B5E51
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Aug 2022 21:58:47 -0700 (PDT)
 Received: by nifty-ride.212-227-211-85.plesk.page (Postfix, from userid 10001)
-        id 233692C6A31; Wed, 31 Aug 2022 02:28:25 +0000 (UTC)
+        id C92962C22C9; Wed, 31 Aug 2022 02:28:26 +0000 (UTC)
 To:     linux-kselftest@vger.kernel.org
 Subject: Copie de : Bild: Investieren Sie einmal 250 $ und erhalten Sie ab 1000 $ pro Tag
-Date:   Wed, 31 Aug 2022 02:28:25 +0000
+Date:   Wed, 31 Aug 2022 02:28:26 +0000
 From:   Galerie Raymond Dreyfus <gaelle@ruegama.net>
 Reply-To: JosephZem <linux-kselftest@vger.kernel.org>
-Message-ID: <2401ad5fc29297a5da587133f202a62d@www.raymond-dreyfus.com>
+Message-ID: <5a77f3e98e7d12333b594b0d86eadaa9@www.raymond-dreyfus.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
