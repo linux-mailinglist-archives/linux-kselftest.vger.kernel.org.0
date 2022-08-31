@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2E65A8487
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 19:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD4E5A848A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 19:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbiHaRjC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Aug 2022 13:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S232067AbiHaRjQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Aug 2022 13:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiHaRjA (ORCPT
+        with ESMTP id S231984AbiHaRjE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:39:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12734D2B35;
-        Wed, 31 Aug 2022 10:38:56 -0700 (PDT)
+        Wed, 31 Aug 2022 13:39:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E73CD2B35;
+        Wed, 31 Aug 2022 10:39:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0CBC61B2D;
-        Wed, 31 Aug 2022 17:38:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B713AC433D6;
-        Wed, 31 Aug 2022 17:38:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F23AB8220A;
+        Wed, 31 Aug 2022 17:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD46C433C1;
+        Wed, 31 Aug 2022 17:38:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661967535;
-        bh=D4Glj29cxfnVnFmKHs1c6BviC0rnND3GsRwXno+BkJg=;
+        s=k20201202; t=1661967539;
+        bh=sWEr2xMf9c7ybMRCB7FvcjLwjU8c0HJfCMDxZvDmsi4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KX/srS6ckLaWAZMBkZejP8bz4OBnd1u5xiKsDL7QqFNsw3GTqDygqyYVX9/9beCrC
-         8KiteNhCWiq63Q018cVHSu6QiOnF5M4FM+vuDEGfEr8A7zDUb9/f/7I9ShxxpnURY1
-         3Km7rAteVli4YiCLFkRDMQctQ8iEupdlpivbFWbbG/jqLJFUnkV1+kw7fSiSyR0hPz
-         saaNXzPNtiz50xQl1wuXR1ATI7SbvJBmKLFwTWNl0nGTAiTH6NrQyHRRnq6EpTVXzc
-         2Ze03wpM3qFQOLgqAGJ9jmmWdynRCziWZe2uUEJxEVmcMakZ0QW2gdKSni9xW4oSJv
-         RW3tBTl2Fx23Q==
+        b=hKOF7i2CshRktPzeGXQwfSNA4H3HLA2mer2CnxVIJhQunFzZuaf0PO3W7onzBsAfR
+         YpQMKnOqABfenu8nfZyRuAjLt6xmYs8CBqsUXKdYGaI7QGeOcN+vI0JHg8/rzMNnT9
+         2gvuJnD2blULZZCCMPQEzPiWqIa02mvUnd+uE36C0HcOC5ExzTtAvXOuOPcvmElh5W
+         cyMwpDoqq06AohcnYM72QSQp0yiszyHi8eP0B9qlNJkFnWIyC6ujvKoMeknBak0j2N
+         h8OLnBeOSIHDlL0JZ14E14sYq2wTb4waF+lQcFOL6UJtpresw+YBAcGz0RqjvTg8+Z
+         eIPPt+47ljMig==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-sgx@vger.kernel.org
 Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
@@ -41,11 +41,11 @@ Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
         Paul Menzel <pmenzel@molgen.mpg.de>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 5/6] selftests/sgx: retry the ioctls returned with EAGAIN
-Date:   Wed, 31 Aug 2022 20:38:28 +0300
-Message-Id: <20220831173829.126661-6-jarkko@kernel.org>
+        linux-kernel@vger.kernel.org (open list),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH v2 6/6] selftests/sgx: Add a bpftrace script for tracking allocation errors
+Date:   Wed, 31 Aug 2022 20:38:29 +0300
+Message-Id: <20220831173829.126661-7-jarkko@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220831173829.126661-1-jarkko@kernel.org>
 References: <20220831173829.126661-1-jarkko@kernel.org>
@@ -61,107 +61,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Haitao Huang <haitao.huang@linux.intel.com>
-
-For EMODT and EREMOVE ioctls with a large range, kernel
-may not finish in one shot and return EAGAIN error code
-and count of bytes of EPC pages on that operations are
-finished successfully.
-
-Change the unclobbered_vdso_oversubscribed_remove test
-to rerun the ioctls in a loop, updating offset and length
-using the byte count returned in each iteration.
-
-Signed-off-by: Haitao Huang <haitao.huang@linux.intel.com>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
 v2:
-* Changed branching in EAGAIN condition so that else branch
-  is not required.
-* Addressed Reinette's feedback:
-  https://lore.kernel.org/linux-sgx/5d19be91-3aef-5cbe-6063-3ff3dbd5572b@intel.com/
+* Added comments.
 ---
- tools/testing/selftests/sgx/main.c | 42 ++++++++++++++++++++++++------
- 1 file changed, 34 insertions(+), 8 deletions(-)
+ tools/testing/selftests/sgx/alloc-error.bt | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+ create mode 100644 tools/testing/selftests/sgx/alloc-error.bt
 
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index c5aa9f323745..f42941da3bbe 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -395,6 +395,7 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
- 	struct encl_segment *heap;
- 	unsigned long total_mem;
- 	int ret, errno_save;
-+	unsigned long count;
- 	unsigned long addr;
- 	unsigned long i;
- 
-@@ -458,16 +459,30 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
- 	modt_ioc.offset = heap->offset;
- 	modt_ioc.length = heap->size;
- 	modt_ioc.page_type = SGX_PAGE_TYPE_TRIM;
--
-+	count = 0;
- 	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
- 	       heap->size);
--	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
--	errno_save = ret == -1 ? errno : 0;
-+	do {
-+		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+diff --git a/tools/testing/selftests/sgx/alloc-error.bt b/tools/testing/selftests/sgx/alloc-error.bt
+new file mode 100644
+index 000000000000..0cc8b2e41852
+--- /dev/null
++++ b/tools/testing/selftests/sgx/alloc-error.bt
+@@ -0,0 +1,9 @@
++/* EPC allocation */
++kr:sgx_alloc_epc_page /(uint64)retval >= (uint64)(-4095)/ {
++		 printf("sgx_alloc_epc_page: retval=%d\n", (int64)retval);
++}
 +
-+		errno_save = ret == -1 ? errno : 0;
-+		if (errno_save != EAGAIN)
-+			break;
-+
-+		EXPECT_EQ(modt_ioc.result, 0);
-+
-+		count += modt_ioc.count;
-+		modt_ioc.offset += modt_ioc.count;
-+		modt_ioc.length -= modt_ioc.count;
-+		modt_ioc.result = 0;
-+		modt_ioc.count = 0;
-+	} while (modt_ioc.length != 0);
- 
- 	EXPECT_EQ(ret, 0);
- 	EXPECT_EQ(errno_save, 0);
- 	EXPECT_EQ(modt_ioc.result, 0);
--	EXPECT_EQ(modt_ioc.count, heap->size);
-+	count += modt_ioc.count;
-+	EXPECT_EQ(count, heap->size);
- 
- 	/* EACCEPT all removed pages. */
- 	addr = self->encl.encl_base + heap->offset;
-@@ -495,15 +510,26 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
- 
- 	remove_ioc.offset = heap->offset;
- 	remove_ioc.length = heap->size;
--
-+	count = 0;
- 	TH_LOG("Removing %zd bytes from enclave may take a while ...",
- 	       heap->size);
--	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_REMOVE_PAGES, &remove_ioc);
--	errno_save = ret == -1 ? errno : 0;
-+	do {
-+		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_REMOVE_PAGES, &remove_ioc);
-+
-+		errno_save = ret == -1 ? errno : 0;
-+		if (errno_save != EAGAIN)
-+			break;
-+
-+		count += remove_ioc.count;
-+		remove_ioc.offset += remove_ioc.count;
-+		remove_ioc.length -= remove_ioc.count;
-+		remove_ioc.count = 0;
-+	} while (remove_ioc.length != 0);
- 
- 	EXPECT_EQ(ret, 0);
- 	EXPECT_EQ(errno_save, 0);
--	EXPECT_EQ(remove_ioc.count, heap->size);
-+	count += remove_ioc.count;
-+	EXPECT_EQ(count, heap->size);
- }
- 
- TEST_F(enclave, clobbered_vdso)
++/* kzalloc for struct sgx_encl_page */
++kr:sgx_encl_page_alloc /(uint64)retval >= (uint64)(-4095)/ {
++		 printf("sgx_encl_page_alloc: retval=%d\n", (int64)retval);
++}
 -- 
 2.37.2
 
