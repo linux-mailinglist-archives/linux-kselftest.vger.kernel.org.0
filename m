@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5AF5A83A0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 18:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D575A83A6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 18:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbiHaQ4W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Aug 2022 12:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
+        id S231475AbiHaQ4i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Aug 2022 12:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbiHaQ4H (ORCPT
+        with ESMTP id S229591AbiHaQ4U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:56:07 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAD5D99F1;
-        Wed, 31 Aug 2022 09:56:02 -0700 (PDT)
+        Wed, 31 Aug 2022 12:56:20 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3153FDC0AE;
+        Wed, 31 Aug 2022 09:56:16 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MHqtM75Rpz9xFgJ;
-        Thu,  1 Sep 2022 00:50:35 +0800 (CST)
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MHqtZ2WXLz9xHvF;
+        Thu,  1 Sep 2022 00:50:46 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBX0lxfkg9jJXIRAA--.5993S4;
-        Wed, 31 Aug 2022 17:55:34 +0100 (CET)
+        by APP2 (Coremail) with SMTP id GxC2BwBX0lxfkg9jJXIRAA--.5993S5;
+        Wed, 31 Aug 2022 17:55:46 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
@@ -35,20 +35,20 @@ Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
         deso@posteo.net, memxor@gmail.com,
         Roberto Sassu <roberto.sassu@huawei.com>,
         Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v15 02/12] bpf: Move dynptr type check to is_dynptr_type_expected()
-Date:   Wed, 31 Aug 2022 18:54:35 +0200
-Message-Id: <20220831165445.1071641-3-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v15 03/12] btf: Allow dynamic pointer parameters in kfuncs
+Date:   Wed, 31 Aug 2022 18:54:36 +0200
+Message-Id: <20220831165445.1071641-4-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
 References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBX0lxfkg9jJXIRAA--.5993S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxWryxKryktry5trW5JryrJFb_yoWrCw4DpF
-        s7u39FqrW0yF42vw1ftF4kArZ8Kry8WrW5CrZ5A340yFyxZr98uF15Kr17Xrn5KFWkCw43
-        Aw10vay5Aw1UJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: GxC2BwBX0lxfkg9jJXIRAA--.5993S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxKrWDAF1fKw1DKr4DKrykKrg_yoW7ZFWkpF
+        4fC3s2vr4kJr4xuwnrAF45ArW5Kay0q347CrWrC34FyF17XryDXF1UKry8Z3sYkrWkC3Wx
+        Ar1Fg3y5ua4xArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
         A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
         w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
         W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
@@ -60,8 +60,8 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxWryxKryktry5trW5JryrJFb_yoWrCw4DpF
         ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
         xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
         0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07j7hLnUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBF1jj4J6BAAAsJ
+        07jzE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj357EwAAsg
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -74,116 +74,155 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Move dynptr type check to is_dynptr_type_expected() from
-is_dynptr_reg_valid_init(), so that callers can better determine the cause
-of a negative result (dynamic pointer not valid/initialized, dynamic
-pointer of the wrong type). It will be useful for example for BTF, to
-restrict which dynamic pointer types can be passed to kfuncs, as initially
-only the local type will be supported.
+Allow dynamic pointers (struct bpf_dynptr_kern *) to be specified as
+parameters in kfuncs. Also, ensure that dynamic pointers passed as argument
+are valid and initialized, are a pointer to the stack, and of the type
+local. More dynamic pointer types can be supported in the future.
 
-Also, splitting makes the code more readable, since checking the dynamic
-pointer type is not necessarily related to validity and initialization.
+To properly detect whether a parameter is of the desired type, introduce
+the stringify_struct() macro to compare the returned structure name with
+the desired name. In addition, protect against structure renames, by
+halting the build with BUILD_BUG_ON(), so that developers have to revisit
+the code.
 
-Split the validity/initialization and dynamic pointer type check also in
-the verifier, and adjust the expected error message in the test (a test for
-an unexpected dynptr type passed to a helper cannot be added due to missing
-suitable helpers, but this case has been tested manually).
+To check if a dynamic pointer passed to the kfunc is valid and initialized,
+and if its type is local, export the existing functions
+is_dynptr_reg_valid_init() and is_dynptr_type_expected().
 
 Cc: Joanne Koong <joannelkoong@gmail.com>
 Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- kernel/bpf/verifier.c                         | 35 ++++++++++++++-----
- .../testing/selftests/bpf/prog_tests/dynptr.c |  2 +-
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ include/linux/bpf_verifier.h |  5 +++++
+ include/linux/btf.h          |  9 +++++++++
+ kernel/bpf/btf.c             | 33 +++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c        | 10 +++++-----
+ 4 files changed, 52 insertions(+), 5 deletions(-)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 1fdddbf3546b..dd58dfccd025 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -571,6 +571,11 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
+ 			     u32 regno);
+ int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		   u32 regno, u32 mem_size);
++bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
++			      struct bpf_reg_state *reg);
++bool is_dynptr_type_expected(struct bpf_verifier_env *env,
++			     struct bpf_reg_state *reg,
++			     enum bpf_arg_type arg_type);
+ 
+ /* this lives here instead of in bpf.h because it needs to dereference tgt_prog */
+ static inline u64 bpf_trampoline_compute_key(const struct bpf_prog *tgt_prog,
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index ad93c2d9cc1c..f546d368ac5d 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -52,6 +52,15 @@
+ #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
+ #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
+ 
++/*
++ * Return the name of the passed struct, if exists, or halt the build if for
++ * example the structure gets renamed. In this way, developers have to revisit
++ * the code using that structure name, and update it accordingly.
++ */
++#define stringify_struct(x)			\
++	({ BUILD_BUG_ON(sizeof(struct x) < 0);	\
++	   __stringify(x); })
++
+ struct btf;
+ struct btf_member;
+ struct btf_type;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index e49b3b6d48ad..4266bff5fada 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6362,15 +6362,20 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 
+ 			if (is_kfunc) {
+ 				bool arg_mem_size = i + 1 < nargs && is_kfunc_arg_mem_size(btf, &args[i + 1], &regs[regno + 1]);
++				bool arg_dynptr = btf_type_is_struct(ref_t) &&
++						  !strcmp(ref_tname,
++							  stringify_struct(bpf_dynptr_kern));
+ 
+ 				/* Permit pointer to mem, but only when argument
+ 				 * type is pointer to scalar, or struct composed
+ 				 * (recursively) of scalars.
+ 				 * When arg_mem_size is true, the pointer can be
+ 				 * void *.
++				 * Also permit initialized local dynamic pointers.
+ 				 */
+ 				if (!btf_type_is_scalar(ref_t) &&
+ 				    !__btf_type_is_scalar_struct(log, btf, ref_t, 0) &&
++				    !arg_dynptr &&
+ 				    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
+ 					bpf_log(log,
+ 						"arg#%d pointer type %s %s must point to %sscalar, or struct with scalar\n",
+@@ -6378,6 +6383,34 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 					return -EINVAL;
+ 				}
+ 
++				if (arg_dynptr) {
++					if (reg->type != PTR_TO_STACK) {
++						bpf_log(log, "arg#%d pointer type %s %s not to stack\n",
++							i, btf_type_str(ref_t),
++							ref_tname);
++						return -EINVAL;
++					}
++
++					if (!is_dynptr_reg_valid_init(env, reg)) {
++						bpf_log(log,
++							"arg#%d pointer type %s %s must be valid and initialized\n",
++							i, btf_type_str(ref_t),
++							ref_tname);
++						return -EINVAL;
++					}
++
++					if (!is_dynptr_type_expected(env, reg,
++							ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL)) {
++						bpf_log(log,
++							"arg#%d pointer type %s %s points to unsupported dynamic pointer type\n",
++							i, btf_type_str(ref_t),
++							ref_tname);
++						return -EINVAL;
++					}
++
++					continue;
++				}
++
+ 				/* Check for mem, len pair */
+ 				if (arg_mem_size) {
+ 					if (check_kfunc_mem_size_reg(env, &regs[regno + 1], regno + 1)) {
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0194a36d0b36..bebb64423acb 100644
+index bebb64423acb..3ada6e63e2c9 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
 @@ -779,8 +779,8 @@ static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_
  	return true;
  }
  
--static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
--				     enum bpf_arg_type arg_type)
-+static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
-+				     struct bpf_reg_state *reg)
+-static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+-				     struct bpf_reg_state *reg)
++bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
++			      struct bpf_reg_state *reg)
  {
  	struct bpf_func_state *state = func(env, reg);
  	int spi = get_spi(reg->off);
-@@ -796,11 +796,24 @@ static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_re
- 			return false;
- 	}
- 
-+	return true;
-+}
-+
-+static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
-+				    struct bpf_reg_state *reg,
-+				    enum bpf_arg_type arg_type)
-+{
-+	struct bpf_func_state *state = func(env, reg);
-+	enum bpf_dynptr_type dynptr_type;
-+	int spi = get_spi(reg->off);
-+
- 	/* ARG_PTR_TO_DYNPTR takes any type of dynptr */
- 	if (arg_type == ARG_PTR_TO_DYNPTR)
- 		return true;
- 
--	return state->stack[spi].spilled_ptr.dynptr.type == arg_to_dynptr_type(arg_type);
-+	dynptr_type = arg_to_dynptr_type(arg_type);
-+
-+	return state->stack[spi].spilled_ptr.dynptr.type == dynptr_type;
+@@ -799,9 +799,9 @@ static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+ 	return true;
  }
  
- /* The reg state of a pointer or a bounded scalar was saved when
-@@ -6050,21 +6063,27 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			}
- 
- 			meta->uninit_dynptr_regno = regno;
--		} else if (!is_dynptr_reg_valid_init(env, reg, arg_type)) {
-+		} else if (!is_dynptr_reg_valid_init(env, reg)) {
-+			verbose(env,
-+				"Expected an initialized dynptr as arg #%d\n",
-+				arg + 1);
-+			return -EINVAL;
-+		} else if (!is_dynptr_type_expected(env, reg, arg_type)) {
- 			const char *err_extra = "";
- 
- 			switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
- 			case DYNPTR_TYPE_LOCAL:
--				err_extra = "local ";
-+				err_extra = "local";
- 				break;
- 			case DYNPTR_TYPE_RINGBUF:
--				err_extra = "ringbuf ";
-+				err_extra = "ringbuf";
- 				break;
- 			default:
-+				err_extra = "<unknown>";
- 				break;
- 			}
--
--			verbose(env, "Expected an initialized %sdynptr as arg #%d\n",
-+			verbose(env,
-+				"Expected a dynptr of type %s as arg #%d\n",
- 				err_extra, arg + 1);
- 			return -EINVAL;
- 		}
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-index bcf80b9f7c27..8fc4e6c02bfd 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -30,7 +30,7 @@ static struct {
- 	{"invalid_helper2", "Expected an initialized dynptr as arg #3"},
- 	{"invalid_write1", "Expected an initialized dynptr as arg #1"},
- 	{"invalid_write2", "Expected an initialized dynptr as arg #3"},
--	{"invalid_write3", "Expected an initialized ringbuf dynptr as arg #1"},
-+	{"invalid_write3", "Expected an initialized dynptr as arg #1"},
- 	{"invalid_write4", "arg 1 is an unacquired reference"},
- 	{"invalid_read1", "invalid read from stack"},
- 	{"invalid_read2", "cannot pass in dynptr at an offset"},
+-static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
+-				    struct bpf_reg_state *reg,
+-				    enum bpf_arg_type arg_type)
++bool is_dynptr_type_expected(struct bpf_verifier_env *env,
++			     struct bpf_reg_state *reg,
++			     enum bpf_arg_type arg_type)
+ {
+ 	struct bpf_func_state *state = func(env, reg);
+ 	enum bpf_dynptr_type dynptr_type;
 -- 
 2.25.1
 
