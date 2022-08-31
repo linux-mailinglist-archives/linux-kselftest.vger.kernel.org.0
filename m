@@ -2,113 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C745A8281
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 17:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14BD5A82DD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Aug 2022 18:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbiHaP5A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Aug 2022 11:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S231926AbiHaQR2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Aug 2022 12:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbiHaP4k (ORCPT
+        with ESMTP id S231343AbiHaQR0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:56:40 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C793ABFEBE;
-        Wed, 31 Aug 2022 08:56:23 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MHpYS0HrPz9xHv8;
-        Wed, 31 Aug 2022 23:50:52 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD3n5N7hA9jAUoRAA--.35375S2;
-        Wed, 31 Aug 2022 16:55:52 +0100 (CET)
-Message-ID: <827bd5dc3b1ee88b14af53f4575da1b62c8ae452.camel@huaweicloud.com>
-Subject: Re: [PATCH v14 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
- and set KEY_LOOKUP_FLAGS_ALL
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        David Howells <dhowells@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        keyrings@vger.kernel.org,
-        LSM List <linux-security-module@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel =?ISO-8859-1?Q?M=FCller?= <deso@posteo.net>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 31 Aug 2022 17:55:35 +0200
-In-Reply-To: <CAADnVQLCyts0JZ7_=rTp8vP67ET4PjVsZ0Cis0XKUpeCdC13LA@mail.gmail.com>
-References: <20220830161716.754078-1-roberto.sassu@huaweicloud.com>
-         <20220830161716.754078-6-roberto.sassu@huaweicloud.com>
-         <Yw7NKJfhyJqIWUcx@kernel.org> <Yw7o43Ivfo3jRwQg@kernel.org>
-         <cad9a20cadc074cf15dcd0d8eb63b43c98a2f13d.camel@huaweicloud.com>
-         <CAADnVQLCyts0JZ7_=rTp8vP67ET4PjVsZ0Cis0XKUpeCdC13LA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 31 Aug 2022 12:17:26 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC97DC7B82
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 09:17:25 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-11ee4649dfcso18811328fac.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 09:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=686yqyz15WcAe19p1RSiWp4rGukhfeVW4c13nzq/ZBg=;
+        b=pzHklyjlaVKSVk0F7QkOvEokdGUn1nAa+C+rU2Zpt3LfdREQD/SLrqB62f1qrxBYGt
+         asVopJVcz3cvPhGY8DRimPwTooiNgRJXfElx6H9tV5JB3AGGOSYli58E02woQ8IZyFFG
+         WVHO6J7VO82IbW63UU4mLZywmaqrqrcNF2Qn76/PMZ/A5q/keO58rXQQZDqtNu9UkVgF
+         Gc8vbBA54Gm3MxCqeTmJu/leG48+TeC7kzR4YgJ+AIFE/hVWdArSgjtzEU6tjGXFOBG4
+         cNxwGyk5M/p63hIWqbm6fIMYtRNeN2WY1baxt+TODYoFW2Evs0gL0cPf6iVs0Gsk88Nw
+         J/iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=686yqyz15WcAe19p1RSiWp4rGukhfeVW4c13nzq/ZBg=;
+        b=YSqnC1Y1YkXmZyksZa4aLE3Vq9FZ6GnlN+pyniJGM4kfnRvS3ZLAiKkoHNZM7cczyE
+         BJL0ojIOv96dL4Rsh92CogJB965TkT76c8PnLSQuLLNLSgB/K82Y3ZG4aEpOV4WPC7mX
+         fSMlFc7mcebCakctzcIcvhfFyOxgfETn56OHh9sYsx5mfXWAPcqnhMcu+NAniQCtueNM
+         /LBNQ5L3mGpgr8rG+k9bmWhTSZDNYHacyy07gIisUnm+Pjx5qmggqso7+gwDpiLuFUmt
+         D+WoumeUh/H+M5EHy6aa+7DGzKnj31xqHZaxcqCrMj/Ja66ZTH1KB9DQSejxy27BvqIO
+         GoWA==
+X-Gm-Message-State: ACgBeo0Emcb7pWJ1pbSmqH3HlL8wpkONNHIsJur2RfayjGUDBfCMxBY9
+        wJn1FWdUT84zQT6Qz5sDEUG6lgHHsbmNf6b/frSfIQ==
+X-Google-Smtp-Source: AA6agR4Klh8aMsFIsvjGYZiAAcmTScaNnG3yfe9Ho+c99cPGWW3sFacLNoQfpvuitCb2L2Rmr40M6d7wF+cvtUcgGPg=
+X-Received: by 2002:aca:170f:0:b0:343:171f:3596 with SMTP id
+ j15-20020aca170f000000b00343171f3596mr1491289oii.181.1661962644939; Wed, 31
+ Aug 2022 09:17:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwD3n5N7hA9jAUoRAA--.35375S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4xtw48Kw1fGF17Jr45trb_yoWxZFb_Ar
-        yrArs3Jrn7CFWktF90g3s7GFZrJF1UJr1fX3Z8Kw4ak398JF4Utr4F9ryfXrZ5Ka1fXFZ5
-        Gr45GF9aqa42gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb7xYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj356zAAAs+
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220831143150.304406-1-cui.jinpeng2@zte.com.cn>
+In-Reply-To: <20220831143150.304406-1-cui.jinpeng2@zte.com.cn>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 31 Aug 2022 09:17:14 -0700
+Message-ID: <CALMp9eT1yz0q1xn2nPtKBbnx_ixX4ivFk=qOayz70k_hxooaoQ@mail.gmail.com>
+Subject: Re: [PATCH linux-next] KVM: selftests: remove redundant variable tsc_val
+To:     cgel.zte@gmail.com
+Cc:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
+        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2022-08-31 at 08:33 -0700, Alexei Starovoitov wrote:
-> On Wed, Aug 31, 2022 at 2:24 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > > > > +#define KEY_LOOKUP_CREATE        0x01
-> > > > > +#define KEY_LOOKUP_PARTIAL       0x02
-> > > > > +#define KEY_LOOKUP_FLAGS_ALL     (KEY_LOOKUP_CREATE |
-> > > > > KEY_LOOKUP_PARTIAL)
-> > > > 
-> > > > IMHO this could be just KEY_LOOKUP_ALL.
-> 
-> Since this is supposed to be kernel internal flags
-> please make them enum, so that bpf progs can auto-adjust
-> (with the help of CORE) to changes in this enum.
-> With #define there is no way for bpf prog to know
-> when #define changed in the future kernels.
+On Wed, Aug 31, 2022 at 7:31 AM <cgel.zte@gmail.com> wrote:
+>
+> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+>
+> Return value directly from expression instead of
+> getting value from redundant variable tsc_val.
 
-Ok, will add in the next version.
+Nit: I think you mean 'superfluous' rather than 'redundant'?
 
-Thanks
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+> ---
+>  tools/testing/selftests/kvm/include/x86_64/processor.h | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> index 0cbc71b7af50..75920678f34d 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> @@ -237,7 +237,6 @@ static inline uint64_t get_desc64_base(const struct desc64 *desc)
+>  static inline uint64_t rdtsc(void)
+>  {
+>         uint32_t eax, edx;
+> -       uint64_t tsc_val;
+>         /*
+>          * The lfence is to wait (on Intel CPUs) until all previous
+>          * instructions have been executed. If software requires RDTSC to be
+> @@ -245,8 +244,8 @@ static inline uint64_t rdtsc(void)
+>          * execute LFENCE immediately after RDTSC
+>          */
+>         __asm__ __volatile__("lfence; rdtsc; lfence" : "=a"(eax), "=d"(edx));
+> -       tsc_val = ((uint64_t)edx) << 32 | eax;
+> -       return tsc_val;
+> +
+> +       return ((uint64_t)edx) << 32 | eax;
+>  }
 
-Roberto
-
+This does beg the question: "Why?"
