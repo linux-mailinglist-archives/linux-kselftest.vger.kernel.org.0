@@ -2,544 +2,295 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0759B5A8E58
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 08:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAF35A8EEA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 08:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiIAGhW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 02:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S233027AbiIAG6X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 02:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbiIAGhV (ORCPT
+        with ESMTP id S233038AbiIAG6V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:37:21 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E05C1210
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:37:19 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id m66so16776540vsm.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:37:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ZN3L+PoTPUpuUxHFLZCvo6zCxSxPDvjoOtr8auSXbjE=;
-        b=ri7KA3tItGTHqnM6pYMlVms2QC/xUYgLCNNyyLmtiYgJ0Or0jWB9LDbTmYLrHLoXYe
-         rpRVPic4QxDsZwSkfHWQNGCAeWQUWyibWDp1Kn1RDU7a4deXVo7mMCILpL2q4Ri0HQei
-         xAJ5bA+SIyQQ2oBJy7dm4HYMln5WQpzzU58MZH5IScFG/c9O27R19EfQotNxbaOJXaqp
-         ELvbiCmxH9pT5nX7iezRgUhCMH5T9IR8QOhHZk4b4QPMxwy+7t7ASti37qbl+OeGGjVc
-         kZX2wZrjvXiUHPxmSnkfa0JYrzVa4PS1bbLz2JF2/Hu9r/MoS7DRdL8O44Mycm6qMQv7
-         44bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZN3L+PoTPUpuUxHFLZCvo6zCxSxPDvjoOtr8auSXbjE=;
-        b=KU+57YwOZrVUWhYbtgZ9cb8NKUDOn1ZXDnKQttQFXIjgM1kmFwQOyG5BXZy0iK1RuZ
-         +AycB7qdUOB2gRmx34BCuNf1fGe9c4KcUPo+X373iYmVyGrmPtZgPedGjwRlGKqTfk1r
-         2VIYlwJU13wGWj3MjezxrCTcmAOfoZISWcjhlRoCywadqWdPJdbeVxazy0P7mqofwrpX
-         UgHZRRSqap730LHG4bfqn1LmE+axrpZlF1ax37D0vNO3RkCKc3diyWvplL1tokpxl5kX
-         I7bwrm1rkS7ihu5n/RtW0LNnOjgFNxFVoX+c4oeIJna5CcpN4LWPiSxHuQR6fYS5fFh9
-         E0+Q==
-X-Gm-Message-State: ACgBeo3SWIuZBNolrF6dFRvxxcPTy0A2nlLs9sDglIK1WICTwPfbNDpC
-        k2Eabg0GKqreexwNreoFqhtmnva6HHsR+TeWO6YqUw==
-X-Google-Smtp-Source: AA6agR4NAV19QWIHoFEXU6O+uthAhDMaD87xdUwCVjxquvOW+2ucg/oF3TA8+SwqtmHQeMF+H6kECODeanHrPnTUA0g=
-X-Received: by 2002:a05:6102:38c6:b0:390:e7e4:8a7e with SMTP id
- k6-20020a05610238c600b00390e7e48a7emr5592768vst.38.1662014238449; Wed, 31 Aug
- 2022 23:37:18 -0700 (PDT)
+        Thu, 1 Sep 2022 02:58:21 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC7AD11E5;
+        Wed, 31 Aug 2022 23:58:18 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MJBZ93wPyz9v7Hg;
+        Thu,  1 Sep 2022 14:52:49 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwA3s13fVxBjZcATAA--.7637S2;
+        Thu, 01 Sep 2022 07:57:48 +0100 (CET)
+Message-ID: <2b2242f8d09378fbec49d4f7e29960d5e50d0a68.camel@huaweicloud.com>
+Subject: Re: [PATCH v15 12/12] selftests/bpf: Add tests for dynamic pointers
+ parameters in kfuncs
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 01 Sep 2022 08:57:30 +0200
+In-Reply-To: <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
+References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
+         <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-References: <20220829000920.38185-1-isabbasso@riseup.net> <20220829000920.38185-4-isabbasso@riseup.net>
-In-Reply-To: <20220829000920.38185-4-isabbasso@riseup.net>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 1 Sep 2022 14:37:06 +0800
-Message-ID: <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
-Subject: Re: [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility for KUnit
-To:     Isabella Basso <isabbasso@riseup.net>
-Cc:     igt-dev@lists.freedesktop.org, magalilemes00@gmail.com,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        Rodrigo Siqueira <rodrigo.siqueira@amd.com>, mwen@igalia.com,
-        andrealmeid@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        leandro.ribeiro@collabora.com, n@nfraprado.net,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        daniel@fooishbar.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000050f3d005e797d857"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwA3s13fVxBjZcATAA--.7637S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF4kCF18Zr4UJrWUKr1kAFb_yoWxGF13pa
+        yrGFy29rWIq3W7Wr13XF4IvF4fKr48Zr1akrZFq34xAr1DXryxWF48Kr45Jwn5K395Xw45
+        Zw1Sgr4rCr4Uta7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgACBF1jj3589gAEsF
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000050f3d005e797d857
-Content-Type: text/plain; charset="UTF-8"
+On Wed, 2022-08-31 at 18:54 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Add tests to ensure that only supported dynamic pointer types are
+> accepted,
+> that the passed argument is actually a dynamic pointer, and that the
+> passed
+> argument is a pointer to the stack.
 
-On Mon, Aug 29, 2022 at 8:10 AM Isabella Basso <isabbasso@riseup.net> wrote:
->
-> This adds functions for both executing the tests as well as parsing (K)TAP
-> kmsg output, as per the KTAP spec [1].
->
-> [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
->
-> Signed-off-by: Isabella Basso <isabbasso@riseup.net>
+Sorry, forgot to add this test to the deny list of s390.
+
+I also rebased to the latest commit.
+
+Let me know if I should resend.
+
+Thanks
+
+Roberto
+
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
-
-Thanks very much for sending these patches out again.
-
-Alas, I don't have a particularly useful igt setup to test this
-properly, but I've left a couple of notes from trying it on my laptop
-here.
-
-
->  lib/igt_kmod.c | 290 +++++++++++++++++++++++++++++++++++++++++++++++++
->  lib/igt_kmod.h |   2 +
->  2 files changed, 292 insertions(+)
->
-> diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
-> index 97cac7f5..93cdfcc5 100644
-> --- a/lib/igt_kmod.c
-> +++ b/lib/igt_kmod.c
-> @@ -25,6 +25,7 @@
->  #include <signal.h>
->  #include <errno.h>
->  #include <sys/utsname.h>
-> +#include <limits.h>
->
->  #include "igt_aux.h"
->  #include "igt_core.h"
-> @@ -32,6 +33,8 @@
->  #include "igt_sysfs.h"
->  #include "igt_taints.h"
->
-> +#define BUF_LEN 4096
-> +
->  /**
->   * SECTION:igt_kmod
->   * @short_description: Wrappers around libkmod for module loading/unloading
-> @@ -713,6 +716,293 @@ void igt_kselftest_get_tests(struct kmod_module *kmod,
->         kmod_module_info_free_list(pre);
->  }
->
-> +/**
-> + * lookup_value:
-> + * @haystack: the string to search in
-> + * @needle: the string to search for
+>  .../bpf/prog_tests/kfunc_dynptr_param.c       | 102
+> ++++++++++++++++++
+>  .../bpf/progs/test_kfunc_dynptr_param.c       |  57 ++++++++++
+>  2 files changed, 159 insertions(+)
+>  create mode 100644
+> tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+>  create mode 100644
+> tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> 
+> diff --git
+> a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+> b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+> new file mode 100644
+> index 000000000000..732897faf36b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+> @@ -0,0 +1,102 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 Facebook
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
 > + *
-> + * Returns: the value of the needle in the haystack, or -1 if not found.
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 > + */
-> +static long lookup_value(const char *haystack, const char *needle)
+> +
+> +#include <test_progs.h>
+> +#include "test_kfunc_dynptr_param.skel.h"
+> +
+> +static size_t log_buf_sz = 1048576; /* 1 MB */
+> +static char obj_log_buf[1048576];
+> +
+> +static struct {
+> +	const char *prog_name;
+> +	const char *expected_err_msg;
+> +} kfunc_dynptr_tests[] = {
+> +	{"dynptr_type_not_supp",
+> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern points to
+> unsupported dynamic pointer type"},
+> +	{"not_valid_dynptr",
+> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and
+> initialized"},
+> +	{"not_ptr_to_stack", "arg#0 pointer type STRUCT bpf_dynptr_kern
+> not to stack"},
+> +};
+> +
+> +static bool kfunc_not_supported;
+> +
+> +static int libbpf_print_cb(enum libbpf_print_level level, const char
+> *fmt,
+> +			   va_list args)
 > +{
-> +       const char *needle_rptr;
-> +       char *needle_end;
-> +       long num;
+> +	if (strcmp(fmt, "libbpf: extern (func ksym) '%s': not found in
+> kernel or module BTFs\n"))
+> +		return 0;
 > +
-> +       needle_rptr = strcasestr(haystack, needle);
+> +	if (strcmp(va_arg(args, char *), "bpf_verify_pkcs7_signature"))
+> +		return 0;
 > +
-> +       if (needle_rptr == NULL)
-> +               return -1;
-> +
-> +       /* skip search string and whitespaces after it */
-> +       needle_rptr += strlen(needle);
-> +
-> +       num = strtol(needle_rptr, &needle_end, 10);
-> +
-> +       if (needle_rptr == needle_end)
-> +               return -1;
-> +
-> +       if (num == LONG_MIN || num == LONG_MAX)
-> +               return 0;
-> +
-> +       return num > 0 ? num : 0;
+> +	kfunc_not_supported = true;
+> +	return 0;
 > +}
 > +
-> +static int find_next_tap_subtest(char *record, char *test_name,
-> +                                bool is_subtest)
+> +static void verify_fail(const char *prog_name, const char
+> *expected_err_msg)
 > +{
-> +       const char *name_lookup_str,
-> +             *lend, *version_rptr, *name_rptr;
-> +       long test_count;
+> +	struct test_kfunc_dynptr_param *skel;
+> +	LIBBPF_OPTS(bpf_object_open_opts, opts);
+> +	libbpf_print_fn_t old_print_cb;
+> +	struct bpf_program *prog;
+> +	int err;
 > +
-> +       name_lookup_str = "test: ";
+> +	opts.kernel_log_buf = obj_log_buf;
+> +	opts.kernel_log_size = log_buf_sz;
+> +	opts.kernel_log_level = 1;
 > +
-> +       version_rptr = strcasestr(record, "TAP version ");
-> +       name_rptr = strcasestr(record, name_lookup_str);
+> +	skel = test_kfunc_dynptr_param__open_opts(&opts);
+> +	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open_opts"))
+> +		goto cleanup;
 > +
-> +       /*
-> +        * total test count will almost always appear as 0..N at the beginning
-> +        * of a run, so we use it as indication of a run
-> +        */
-> +       test_count = lookup_value(record, "..");
+> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
+> +	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
+> +		goto cleanup;
 > +
-> +       /* no count found, so this is probably not starting a (sub)test */
-> +       if (test_count < 0) {
-> +               if (name_rptr != NULL) {
-> +                       if (test_name[0] == '\0')
-> +                               strncpy(test_name,
-> +                                       name_rptr + strlen(name_lookup_str),
-> +                                       BUF_LEN);
-> +                       else if (strcmp(test_name, name_rptr + strlen(name_lookup_str)) == 0)
-> +                               return 0;
-> +                       else
-> +                               test_name[0] = '\0';
+> +	bpf_program__set_autoload(prog, true);
 > +
-> +               }
-> +               return -1;
-> +       }
+> +	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
 > +
-> +       /*
-> +        * "(K)TAP version XX" should be the first line on all (sub)tests as per
-> +        * https://www.kernel.org/doc/html/latest/dev-tools/ktap.html#version-lines
-> +        * but actually isn't, as it currently depends on whoever writes the
-> +        * test to print this info
-
-FYI: we're really trying to fix cases of "missing version lines",
-largely by making the kunit_test_suites() macro work in more
-circumstances.
-
-So while it may be worth still handling the case where this is
-missing, I don't think there are any tests in the latest versions of
-the kernel which should have this missing.
-
-> +        */
-> +       if (version_rptr == NULL)
-> +               igt_info("Missing test version string\n");
+> +	kfunc_not_supported = false;
 > +
-> +       if (name_rptr == NULL) {
-> +               /* we have to keep track of the name string, as it might be
-> +                * contained in a line read previously */
-> +               if (test_name[0] == '\0') {
-> +                       igt_info("Missing test name string\n");
+> +	old_print_cb = libbpf_set_print(libbpf_print_cb);
+> +	err = test_kfunc_dynptr_param__load(skel);
+> +	libbpf_set_print(old_print_cb);
 > +
-> +                       if (is_subtest)
-> +                               igt_info("Running %ld subtests...\n", test_count);
-> +                       else
-> +                               igt_info("Running %ld tests...\n", test_count);
-> +               } else {
-> +                       lend = strchrnul(test_name, '\n');
+> +	if (err < 0 && kfunc_not_supported) {
+> +		fprintf(stderr,
+> +		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not
+> supported\n",
+> +		  __func__);
+> +		test__skip();
+> +		goto cleanup;
+> +	}
 > +
-> +                       if (*lend == '\0') {
-> +                               if (is_subtest)
-> +                                       igt_info("Executing %ld subtests in: %s\n",
-> +                                                test_count, test_name);
-> +                               else
-> +                                       igt_info("Executing %ld tests in: %s\n",
-> +                                                test_count, test_name);
-> +                               return test_count;
-> +                       }
+> +	if (!ASSERT_ERR(err, "unexpected load success"))
+> +		goto cleanup;
 > +
-> +                       if (is_subtest)
-> +                               igt_info("Executing %ld subtests in: %.*s\n",
-> +                                        test_count, (int)(lend - test_name),
-> +                                        test_name);
-> +                       else
-> +                               igt_info("Executing %ld tests in: %.*s\n",
-> +                                        test_count, (int)(lend - test_name),
-> +                                        test_name);
-> +                       test_name[0] = '\0';
-> +               }
-> +       } else {
-> +               name_rptr += strlen(name_lookup_str);
-> +               lend = strchrnul(name_rptr, '\n');
-> +               /*
-> +                * as the test count comes after the test name we need not check
-> +                * for a long line again
-> +                */
-> +               if (is_subtest)
-> +                       igt_info("Executing %ld subtests in: %.*s\n",
-> +                                test_count, (int)(lend - name_rptr),
-> +                                name_rptr);
-> +               else
-> +                       igt_info("Executing %ld tests in: %.*s\n",
-> +                                test_count, (int)(lend - name_rptr),
-> +                                name_rptr);
-> +       }
+> +	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg),
+> "expected_err_msg")) {
+> +		fprintf(stderr, "Expected err_msg: %s\n",
+> expected_err_msg);
+> +		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
+> +	}
 > +
-> +       return test_count;
+> +cleanup:
+> +	test_kfunc_dynptr_param__destroy(skel);
 > +}
 > +
-> +static void parse_kmsg_for_tap(const char *lstart, char *lend,
-> +                              int *sublevel, bool *failed_tests)
+> +void test_kfunc_dynptr_param(void)
 > +{
-> +       const char *nok_rptr, *comment_start, *value_parse_start;
+> +	int i;
 > +
-> +       nok_rptr = strstr(lstart, "not ok ");
-> +       if (nok_rptr != NULL) {
-> +               igt_warn("kmsg> %.*s\n",
-> +                        (int)(lend - lstart), lstart);
-> +               *failed_tests = true;
-> +               return;
-> +       }
+> +	for (i = 0; i < ARRAY_SIZE(kfunc_dynptr_tests); i++) {
+> +		if
+> (!test__start_subtest(kfunc_dynptr_tests[i].prog_name))
+> +			continue;
 > +
-> +       comment_start = strchrnul(lstart, '#');
-> +
-> +       /* check if we're still in a subtest */
-> +       if (*comment_start != '\0') {
-> +               comment_start++;
-> +               value_parse_start = comment_start;
-> +
-> +               if (lookup_value(value_parse_start, "fail: ") > 0) {
-> +                       igt_warn("kmsg> %.*s\n",
-> +                                (int)(lend - comment_start), comment_start);
-> +                       *failed_tests = true;
-> +                       (*sublevel)--;
-> +                       return;
-> +               }
-> +       }
-> +
-> +       igt_info("kmsg> %.*s\n",
-> +                (int)(lend - lstart), lstart);
+> +		verify_fail(kfunc_dynptr_tests[i].prog_name,
+> +			    kfunc_dynptr_tests[i].expected_err_msg);
+> +	}
 > +}
+> diff --git
+> a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> new file mode 100644
+> index 000000000000..2f09f91a1576
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> @@ -0,0 +1,57 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
-> +static void igt_kunit_subtests(int fd, char *record,
-> +                              int *sublevel, bool *failed_tests)
-> +{
-> +       char test_name[BUF_LEN + 1], *lend;
-> +
-> +       lend = NULL;
-> +       test_name[0] = '\0';
-> +       test_name[BUF_LEN] = '\0';
-> +
-> +       while (*sublevel >= 0) {
-> +               const char *lstart;
-> +               ssize_t r;
-> +
-> +               if (lend != NULL && *lend != '\0')
-> +                       lseek(fd, (int) (lend - record), SEEK_CUR);
-> +
-> +               r = read(fd, record, BUF_LEN);
-> +
-> +               if (r <= 0) {
-> +                       switch (errno) {
-> +                       case EINTR:
-> +                               continue;
-> +                       case EPIPE:
-> +                               igt_warn("kmsg truncated: too many messages. \
-> +                                        You may want to increase log_buf_len \
-> +                                        in your boot options\n");
-> +                               continue;
-> +                       case !EAGAIN:
-> +                               igt_warn("kmsg truncated: unknown error (%m)\n");
-> +                               *sublevel = -1;
-> +                       default:
-> +                               break;
-> +                       }
-> +                       break;
-> +               }
-> +
-> +               lend = strchrnul(record, '\n');
-> +
-> +               /* in case line > 4096 */
-> +               if (*lend == '\0')
-> +                       continue;
-> +
-> +               if (find_next_tap_subtest(record, test_name, *sublevel > 0) != -1)
-> +                       (*sublevel)++;
-> +
-> +               if (*sublevel > 0) {
-> +                       lstart = strchrnul(record, ';');
-> +
-> +                       if (*lstart == '\0') {
-> +                               igt_warn("kmsg truncated: output malformed (%m)\n");
-> +                               igt_fail(IGT_EXIT_FAILURE);
-> +                       }
-> +
-> +                       lstart++;
-> +                       while (isspace(*lstart))
-> +                               lstart++;
-> +
-> +                       parse_kmsg_for_tap(lstart, lend, sublevel, failed_tests);
-> +               }
-> +       }
-> +
-> +       if (*failed_tests || *sublevel < 0)
-> +               igt_fail(IGT_EXIT_FAILURE);
-> +       else
-> +               igt_success();
-> +}
-> +
-> +/**
-> + * igt_kunit:
-> + * @module_name: the name of the module
-> + * @opts: options to load the module
+> +/*
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
 > + *
-> + * Loads the kunit module, parses its dmesg output, then unloads it
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 > + */
-> +void igt_kunit(const char *module_name, const char *opts)
+> +
+> +#include "vmlinux.h"
+> +#include <errno.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +struct bpf_dynptr {
+> +	__u64 :64;
+> +	__u64 :64;
+> +} __attribute__((aligned(8)));
+> +
+> +extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
+> +				      struct bpf_dynptr *sig_ptr,
+> +				      struct bpf_key *trusted_keyring)
+> __ksym;
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_RINGBUF);
+> +} ringbuf SEC(".maps");
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("?lsm.s/bpf")
+> +int BPF_PROG(dynptr_type_not_supp, int cmd, union bpf_attr *attr,
+> +	     unsigned int size)
 > +{
-> +       struct igt_ktest tst;
-> +       char record[BUF_LEN + 1];
-> +       bool failed_tests = false;
-> +       int sublevel = 0;
+> +	char write_data[64] = "hello there, world!!";
+> +	struct bpf_dynptr ptr;
 > +
-> +       record[BUF_LEN] = '\0';
+> +	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(write_data), 0,
+> &ptr);
 > +
-> +       /* get normalized module name */
-> +       if (igt_ktest_init(&tst, module_name) != 0) {
-> +               igt_warn("Unable to initialize ktest for %s\n", module_name);
-> +               return;
-> +       }
-> +
-> +       if (igt_ktest_begin(&tst) != 0) {
-> +               igt_warn("Unable to begin ktest for %s\n", module_name);
-> +
-> +               igt_ktest_fini(&tst);
-> +               return;
-> +       }
-> +
-> +       if (tst.kmsg < 0) {
-> +               igt_warn("Could not open /dev/kmsg");
-> +               goto unload;
-> +       }
-> +
-> +       if (lseek(tst.kmsg, 0, SEEK_END)) {
-> +               igt_warn("Could not seek the end of /dev/kmsg");
-> +               goto unload;
-> +       }
-> +
-> +       /* The kunit module is required for running any kunit tests */
-> +       if (igt_kmod_load("kunit", NULL) != 0) {
-> +               igt_warn("Unable to load kunit module\n");
-> +               goto unload;
-> +       }
-
-Do you want to _require_ KUnit be built as a module, rather than built-in here?
-
-Equally, does this need to mark a failure (or at least "SKIPPED")
-rather than success, in the case it fails.
-
-> +
-> +       if (igt_kmod_load(module_name, opts) != 0) {
-> +               igt_warn("Unable to load %s module\n", module_name);
-> +               goto unload;
-> +       }
-
-As above, should this record a failure, or skip?
-
-> +
-> +       igt_kunit_subtests(tst.kmsg, record, &sublevel, &failed_tests);
-> +unload:
-> +       igt_kmod_unload("kunit", 0);
-
-Do you want to unconditionally unload the KUnit module here? It's safe
-(maybe even safer) to leave it loaded between runs of KUnit tests.
-
-Equally, how would you handle the case where KUnit is already loaded?
-
-> +
-> +       igt_ktest_end(&tst);
-> +
-> +       igt_ktest_fini(&tst);
+> +	return bpf_verify_pkcs7_signature(&ptr, &ptr, NULL);
 > +}
 > +
->  static int open_parameters(const char *module_name)
->  {
->         char path[256];
-> diff --git a/lib/igt_kmod.h b/lib/igt_kmod.h
-> index ceb10cd0..737143c1 100644
-> --- a/lib/igt_kmod.h
-> +++ b/lib/igt_kmod.h
-> @@ -45,6 +45,8 @@ int __igt_i915_driver_unload(char **whom);
->  int igt_amdgpu_driver_load(const char *opts);
->  int igt_amdgpu_driver_unload(void);
->
-> +void igt_kunit(const char *module_name, const char *opts);
+> +SEC("?lsm.s/bpf")
+> +int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr,
+> unsigned int size)
+> +{
+> +	unsigned long val;
 > +
->  void igt_kselftests(const char *module_name,
->                     const char *module_options,
->                     const char *result_option,
-> --
-> 2.37.2
->
+> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
+> +					  (struct bpf_dynptr *)&val,
+> NULL);
+> +}
+> +
+> +SEC("?lsm.s/bpf")
+> +int BPF_PROG(not_ptr_to_stack, int cmd, union bpf_attr *attr,
+> unsigned int size)
+> +{
+> +	unsigned long val;
+> +
+> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)val,
+> +					  (struct bpf_dynptr *)val,
+> NULL);
+> +}
 
-Regardless, thanks very much. Hopefully I'll get a chance to play with
-igt a bit more and actually get the tests running. :-)
-
-Cheers,
--- David
-
---00000000000050f3d005e797d857
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAT
-RyBcXrTOEAP2f/+NfBlL7nTa06Tef6ZoLoWBtIKhmjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA5MDEwNjM3MThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASpjSj1HUnHQR5Q76k7l/
-eUA9Kjgtkr3Ue3Qe7Z1uKMQV0MMJLfFAOBT1SwMNgut+v9LwVO/O68gFhlAFy3SmF1DFVin1hZl9
-PNuTS+6AYwyegqGXuJWqaMcYAOn2Uo8ewoYvru73SbAULuSEBQpMqzHYTsZa47RwFcWNfaPf25ZI
-I04ld4dvq88MDm/j4dl9oajFGI7kuEYJmCP7z7rnzDDzhf4sm2YqnqgoMW0W0ghecRmzwNnS+O/X
-Dmm7vvlPufd7LFa8k8NCMm48Nb0PfFmZCC34N4PZ2HdZ7OuFfZPbCxhIM2UF6ElhYEAmn7tTaiI8
-pm+e2VZ18ul6Ac5hzg==
---00000000000050f3d005e797d857--
