@@ -2,71 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710FD5A8982
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 01:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70985A89EC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 02:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiHaXcz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Aug 2022 19:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S229638AbiIAAqg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Aug 2022 20:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiHaXcx (ORCPT
+        with ESMTP id S229459AbiIAAqf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Aug 2022 19:32:53 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADCFE58B6
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 16:32:53 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11f11d932a8so19458226fac.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 16:32:53 -0700 (PDT)
+        Wed, 31 Aug 2022 20:46:35 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF35BE97E0;
+        Wed, 31 Aug 2022 17:46:33 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id v4so14920441pgi.10;
+        Wed, 31 Aug 2022 17:46:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Ogeaj4/rQI298p/BADarmzrOcFA0fwNfK92i/ULTfFg=;
-        b=ZweDwQk10QrYBEDjHiMYDmRQtjwYnUzgonUGz5ZR430VZk0hZdZAiXRKKtHlAIDehy
-         +QJpvDrZkY32lifNAeVL2FcHl7JhtiFefL7uVQlLWKdoSyVVZxQX7vL7EB4J1GmaYgnc
-         JPIwI7KWACD3udn2oJhkuNE2OAmA10FAcBEik=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=hVUDBmAm8ghtBWsJyFWWPpx9AOLq04Rjhtv04IS+LAE=;
+        b=KkhaBQQLRgaV9ZczziOecu+Xs+rhwwll/IJzTX19g2xivKtRYZJtM8Q0W7jEwxrt+K
+         Ykvxa5OYoMZ03ztdeDBKJvGA2xobgv/RxH9DfWlHJ3LbXNtlZ6mJ3/BGNKwbp488Lfu6
+         FGfhSKw6gA+QMWDQ0MhjM9sMfu0yqWjbCR14Or+gXeohOxpyQRnr7cexhKhbGZt9xFu+
+         feZFCHPuc4jNv/NJoi6E7cJJsWZv+82rvctAH/ofQicG/5QkmM0gdDtzow1PSmw9wHIi
+         4hgl61KgWjpPMHsOKZiE1c8DDnaD+IeyWW/5Q4PAgYmjIX1pmY0u4ezvYCIF5P4insrv
+         t8qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc;
-        bh=Ogeaj4/rQI298p/BADarmzrOcFA0fwNfK92i/ULTfFg=;
-        b=0cZ3uWcM+wrs4aCT+zHunsBznGzec3ul5hesSs2w8OCeJFIpAhSe1S8PS6WFry8XLu
-         lwvnKLCQ1B0b1lGD+WgxcBP7tj95mUQTzibGnhU6FS0U4rZyovkeMkGo2HV/jlVh1EJq
-         PxP09IOAEfR4ZM/6b+6t5j/mZl9ukmDOSyu8TETBzZsWfYyVbYUb9YaSjHu0hX/p0z1D
-         P5S9VNjkkhCyMsCC/4O8c9PJua6Pq2YDoZqER0blPu1EJuNLOyh5k43k0SBOF6uL1emD
-         UB7sFZZWQ03/3Og7uGg/L+i6fQvNQwdKyKEizsx4A03AYNGufO8NF2S8Wkjkv1E5SUC4
-         kp+w==
-X-Gm-Message-State: ACgBeo2NSVk2RQklPB5M+aWOcfBoiybdtqnlyliPVGsie+JDGtzN1yfB
-        rrXan1Cuf4Czv3nLg3XbdR6vjfIfY6ZXgQ==
-X-Google-Smtp-Source: AA6agR7gjrv4SZv6qQ6ra1AxQVJiB18C+lGX1hyTzmjgrLU98OFcAcEbkNAGyk+kxp8Lvv8Gdw5NwQ==
-X-Received: by 2002:a05:6870:2046:b0:11e:525d:ef9f with SMTP id l6-20020a056870204600b0011e525def9fmr2641628oad.163.1661988772369;
-        Wed, 31 Aug 2022 16:32:52 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c8-20020a544e88000000b0034536748843sm7976371oiy.3.2022.08.31.16.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 16:32:52 -0700 (PDT)
-Message-ID: <61795f45-bc48-7be8-5787-cdf6ec4b761c@linuxfoundation.org>
-Date:   Wed, 31 Aug 2022 17:32:51 -0600
+        bh=hVUDBmAm8ghtBWsJyFWWPpx9AOLq04Rjhtv04IS+LAE=;
+        b=BSJoWggM20aLIKpxUKRSCohKKv7Akr9WS20wjWtxTcRWmUGMv5iA/cH4q021rwQmgs
+         sLSvnwi50++ug9J/oUBe/gIIUeiki/AB/SP2HSOtk5cqehGMXqMR0dlypP9llI7/sgFE
+         DEkP3LpW1+rFwANiSv3Cjqq6OLPfEMZbY4sb98M/E+WeVvnajjMFavYqOuJk3vzSxzDx
+         FuTSsFBsuvJKBQWrgpM6Llx9F5wyPWbNmvUvunInpROi8m9x1QtUXTrBTT5+Zty3RlAM
+         LgocL7OImy2Tc/RUHqnc84AsyXLbCBVX+4nwG/Z6Pw85rt/lpmnlEDdX0cadZnfmi9/4
+         5YXQ==
+X-Gm-Message-State: ACgBeo1ROi2DmNFu7KD2uOciVHSGP/6PPyNwp3EV7nD4aNJjyPcYQLt2
+        bQtRahL1OZsX7kDkUfVoy4c=
+X-Google-Smtp-Source: AA6agR7n6Cs/4GNYEYUbQFQwGHzVEtICF+tay1Z22HLpsobG0RBA8mK4KCLwmvjDJmsGPmrpMJIF5g==
+X-Received: by 2002:a63:2cc6:0:b0:41c:5f9c:e15c with SMTP id s189-20020a632cc6000000b0041c5f9ce15cmr23641691pgs.241.1661993193126;
+        Wed, 31 Aug 2022 17:46:33 -0700 (PDT)
+Received: from localhost ([192.55.55.51])
+        by smtp.gmail.com with ESMTPSA id v11-20020a1709029a0b00b00172bd7505e6sm12181964plp.12.2022.08.31.17.46.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 17:46:32 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 17:46:31 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Ryan Afranji <afranji@google.com>,
+        Roger Wang <runanwang@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Ben Gardon <bgardon@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Peter Xu <peterx@redhat.com>, Oliver Upton <oupton@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Yang Zhong <yang.zhong@intel.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Yanan Wang <wangyanan55@huawei.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Like Xu <like.xu@linux.intel.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        isaku.yamahata@gmail.com
+Subject: Re: [RFC PATCH v2 03/17] KVM: selftest: Adding TDX life cycle test.
+Message-ID: <20220901004631.GC2711697@ls.amr.corp.intel.com>
+References: <20220830222000.709028-1-sagis@google.com>
+ <20220830222000.709028-4-sagis@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next 3/5] selftests/cpu-hotplug: Delete fault injection
- related code
-Content-Language: en-US
-To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org, akpm@linux-foundation.org,
-        akinobu.mita@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220830083028.45504-1-zhaogongyi@huawei.com>
- <20220830083028.45504-4-zhaogongyi@huawei.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20220830083028.45504-4-zhaogongyi@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220830222000.709028-4-sagis@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,75 +103,131 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/30/22 02:30, Zhao Gongyi wrote:
-> Delete fault injection related code since the module has been deleted.
-> 
-> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
-> ---
->   tools/testing/selftests/cpu-hotplug/config    |   1 -
->   .../selftests/cpu-hotplug/cpu-on-off-test.sh  | 105 +-----------------
->   2 files changed, 2 insertions(+), 104 deletions(-)
->   delete mode 100644 tools/testing/selftests/cpu-hotplug/config
-> 
-> diff --git a/tools/testing/selftests/cpu-hotplug/config b/tools/testing/selftests/cpu-hotplug/config
-> deleted file mode 100644
-> index d4aca2ad5069..000000000000
-> --- a/tools/testing/selftests/cpu-hotplug/config
-> +++ /dev/null
-> @@ -1 +0,0 @@
-> -CONFIG_NOTIFIER_ERROR_INJECTION=y
-> diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> index 19028c4c9758..ade75d920cd6 100755
-> --- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> +++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-> @@ -110,19 +110,6 @@ online_cpu_expect_success()
->   	fi
->   }
-> 
-> -online_cpu_expect_fail()
-> -{
-> -	local cpu=$1
-> -
-> -	if online_cpu $cpu 2> /dev/null; then
-> -		echo $FUNCNAME $cpu: unexpected success >&2
-> -		exit 1
-> -	elif ! cpu_is_offline $cpu; then
-> -		echo $FUNCNAME $cpu: unexpected online >&2
-> -		exit 1
-> -	fi
-> -}
-> -
+On Tue, Aug 30, 2022 at 10:19:46PM +0000,
+Sagi Shahar <sagis@google.com> wrote:
 
-Keep this code - this could be useful to test the case of running
-online test on cpu that is online and expect that to fail.
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx.h b/tools/testing/selftests/kvm/lib/x86_64/tdx.h
+> index 61b997dfc420..d5de52657112 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/tdx.h
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx.h
+> @@ -51,6 +51,12 @@
+>  #define _PAGE_RW            (1UL<<1)       /* writeable */
+>  #define _PAGE_PS            (1UL<<7)       /* page size bit*/
+>  
+> +#define TDX_INSTRUCTION_IO 30
+> +
+> +#define TDX_SUCCESS_PORT 0x30
+> +#define TDX_IO_READ 0
+> +#define TDX_IO_WRITE 1
+> +
+>  #define GDT_ENTRY(flags, base, limit)				\
+>  		((((base)  & 0xff000000ULL) << (56-24)) |	\
+>  		 (((flags) & 0x0000f0ffULL) << 40) |		\
+> @@ -83,4 +89,147 @@ void prepare_source_image(struct kvm_vm *vm, void *guest_code,
+>  			  size_t guest_code_size,
+>  			  uint64_t guest_code_signature);
+>  
+> +/*
+> + * Generic TDCALL function that can be used to communicate with TDX module or
+> + * VMM.
+> + * Input operands: rax, rbx, rcx, rdx, r8-r15, rbp, rsi, rdi
+> + * Output operands: rax, r8-r15, rbx, rdx, rdi, rsi
+> + * rcx is actually a bitmap to tell TDX module which register values will be
+> + * exposed to the VMM.
+> + * XMM0-XMM15 registers can be used as input operands but the current
+> + * implementation does not support it yet.
+> + */
+> +static inline void tdcall(struct kvm_regs *regs)
+> +{
+> +	asm volatile (
+> +			"mov %13, %%rax;\n\t"
+> +			"mov %14, %%rbx;\n\t"
+> +			"mov %15, %%rcx;\n\t"
+> +			"mov %16, %%rdx;\n\t"
+> +			"mov %17, %%r8;\n\t"
+> +			"mov %18, %%r9;\n\t"
+> +			"mov %19, %%r10;\n\t"
+> +			"mov %20, %%r11;\n\t"
+> +			"mov %21, %%r12;\n\t"
+> +			"mov %22, %%r13;\n\t"
+> +			"mov %23, %%r14;\n\t"
+> +			"mov %24, %%r15;\n\t"
+> +			"mov %25, %%rbp;\n\t"
+> +			"mov %26, %%rsi;\n\t"
+> +			"mov %27, %%rdi;\n\t"
+> +			".byte 0x66, 0x0F, 0x01, 0xCC;\n\t"
+> +			"mov %%rax, %0;\n\t"
+> +			"mov %%rbx, %1;\n\t"
+> +			"mov %%rdx, %2;\n\t"
+> +			"mov %%r8, %3;\n\t"
+> +			"mov %%r9, %4;\n\t"
+> +			"mov %%r10, %5;\n\t"
+> +			"mov %%r11, %6;\n\t"
+> +			"mov %%r12, %7;\n\t"
+> +			"mov %%r13, %8;\n\t"
+> +			"mov %%r14, %9;\n\t"
+> +			"mov %%r15, %10;\n\t"
+> +			"mov %%rsi, %11;\n\t"
+> +			"mov %%rdi, %12;\n\t"
+> +			: "=m" (regs->rax), "=m" (regs->rbx), "=m" (regs->rdx),
+> +			"=m" (regs->r8), "=m" (regs->r9), "=m" (regs->r10),
+> +			"=m" (regs->r11), "=m" (regs->r12), "=m" (regs->r13),
+> +			"=m" (regs->r14), "=m" (regs->r15), "=m" (regs->rsi),
+> +			"=m" (regs->rdi)
+> +			: "m" (regs->rax), "m" (regs->rbx), "m" (regs->rcx),
+> +			"m" (regs->rdx), "m" (regs->r8), "m" (regs->r9),
+> +			"m" (regs->r10), "m" (regs->r11), "m" (regs->r12),
+> +			"m" (regs->r13), "m" (regs->r14), "m" (regs->r15),
+> +			"m" (regs->rbp), "m" (regs->rsi), "m" (regs->rdi)
+> +			: "rax", "rbx", "rcx", "rdx", "r8", "r9", "r10", "r11",
+> +			"r12", "r13", "r14", "r15", "rbp", "rsi", "rdi");
+> +}
 
->   offline_cpu_expect_success()
->   {
->   	local cpu=$1
-> @@ -136,22 +123,7 @@ offline_cpu_expect_success()
->   	fi
->   }
-> 
-> -offline_cpu_expect_fail()
-> -{
-> -	local cpu=$1
-> -
-> -	if offline_cpu $cpu 2> /dev/null; then
-> -		echo $FUNCNAME $cpu: unexpected success >&2
-> -		exit 1
-> -	elif ! cpu_is_online $cpu; then
-> -		echo $FUNCNAME $cpu: unexpected offline >&2
-> -		exit 1
-> -	fi
-> -}
-> -
+Sometimes compiler (my gcc is (Ubuntu 11.1.0-1ubuntu1~20.04) 11.1.0) doesn't like
+clobering the frame pointer as follows. (I edited the caller site for other test.)
 
-Keep this code - this could be useful to test the case of running
-offline test on cpu that is offline and expect that to fail.
+   x86_64/tdx_vm_tests.c:343:1: error: bp cannot be used in ‘asm’ here
 
-Remove just the fault injection code and these aren't really specific
-to fault injection even though they are currently being used by the
-fault injection path.
+I ended up the following workaround.  I didn't use pushq/popq pair because
+I didn't want to play with offset in the stack of the caller.
 
-thanks,
--- Shuah
+
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx.h b/tools/testing/selftests/kvm/lib/x86_64/tdx.h
+index aa6961c6f304..8ddf3b64f003 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/tdx.h
++++ b/tools/testing/selftests/kvm/lib/x86_64/tdx.h
+@@ -122,7 +122,11 @@ void prepare_source_image(struct kvm_vm *vm, void *guest_code,
+  */
+ static inline void tdcall(struct kvm_regs *regs)
+ {
++       unsigned long saved_rbp = 0;
++
+        asm volatile (
++               /* gcc complains that frame pointer %rbp can't be clobbered. */
++                       "movq %%rbp, %28;\n\t"
+                        "mov %13, %%rax;\n\t"
+                        "mov %14, %%rbx;\n\t"
+                        "mov %15, %%rcx;\n\t"
+@@ -152,6 +156,8 @@ static inline void tdcall(struct kvm_regs *regs)
+                        "mov %%r15, %10;\n\t"
+                        "mov %%rsi, %11;\n\t"
+                        "mov %%rdi, %12;\n\t"
++                       "movq %28, %%rbp\n\t"
++                       "movq $0, %28\n\t"
+                        : "=m" (regs->rax), "=m" (regs->rbx), "=m" (regs->rdx),
+                        "=m" (regs->r8), "=m" (regs->r9), "=m" (regs->r10),
+                        "=m" (regs->r11), "=m" (regs->r12), "=m" (regs->r13),
+@@ -161,9 +167,10 @@ static inline void tdcall(struct kvm_regs *regs)
+                        "m" (regs->rdx), "m" (regs->r8), "m" (regs->r9),
+                        "m" (regs->r10), "m" (regs->r11), "m" (regs->r12),
+                        "m" (regs->r13), "m" (regs->r14), "m" (regs->r15),
+-                       "m" (regs->rbp), "m" (regs->rsi), "m" (regs->rdi)
++                       "m" (regs->rbp), "m" (regs->rsi), "m" (regs->rdi),
++                       "m" (saved_rbp)
+                        : "rax", "rbx", "rcx", "rdx", "r8", "r9", "r10", "r11",
+-                       "r12", "r13", "r14", "r15", "rbp", "rsi", "rdi");
++                         "r12", "r13", "r14", "r15", "rsi", "rdi");
+ }
+
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
