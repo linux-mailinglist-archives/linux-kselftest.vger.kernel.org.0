@@ -2,119 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2405A930A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 11:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C465A940A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 12:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbiIAJXr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 05:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S233795AbiIAKPO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 06:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234171AbiIAJXp (ORCPT
+        with ESMTP id S233136AbiIAKPI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:23:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA6612D532;
-        Thu,  1 Sep 2022 02:23:41 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2818oTDk007722;
-        Thu, 1 Sep 2022 09:23:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=oSpC5mfTK/eTWZhpCaXSlm6QucnN1qjlhlAhzjYSCDA=;
- b=lkPKs22EYOgbXnJIrshh6Ab9d8Ui1y5c5rtXlhCY4lXzlb6H7cTAGeVyd2Ew2/8LHrGe
- 08XkvABk1MyZplmP1F7aa2nb4Y5tfD3lQL0ryBaNorLVp9PSEXARUTlTm7uBDQwfra/x
- RHRF3icGVmWL9BS1jFqTsSQzT0bUAcjduUdtG2/JG+otLAxA+thRYMABIh+niskWrTs5
- Jx+dmW5vi083Y5iPXoovqq4xvPyz2L1zWOaAxgoVrtQEBDCjnunIPnjSHFultP+4OIDQ
- En3z8zE36x/fTL7+1xeK7EfbtcTISXp4Imrm9YN11HM6BKXgSupMEycCoEDOP6VgMrnZ +w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jask195en-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 09:23:31 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28190mY8022084;
-        Thu, 1 Sep 2022 09:23:31 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jask195dj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 09:23:31 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2819MLJa017370;
-        Thu, 1 Sep 2022 09:23:28 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3j7ahhvrsu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 09:23:28 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2819NPSi32244048
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Sep 2022 09:23:25 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A78AA404D;
-        Thu,  1 Sep 2022 09:23:25 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A31BAA4053;
-        Thu,  1 Sep 2022 09:23:22 +0000 (GMT)
-Received: from tarunpc.ibmuc.com (unknown [9.43.6.31])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Sep 2022 09:23:22 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     akpm@linux-foundation.org, shuah@kernel.org,
-        axelrasmussen@google.com
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, aneesh.kumar@linux.ibm.com,
-        Tarun Sahu <tsahu@linux.ibm.com>
-Subject: [PATCH] selftest: vm: remove deleted local_config.* from .gitignore
-Date:   Thu,  1 Sep 2022 14:53:15 +0530
-Message-Id: <20220901092315.33619-1-tsahu@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 1 Sep 2022 06:15:08 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33E721E38
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Sep 2022 03:15:05 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id lx1so33601088ejb.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Sep 2022 03:15:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:from:to:cc;
+        bh=epf+Q54XZk9zXGQT4gxazcQCwv6mPJH3vEMEJMYkLpQ=;
+        b=svWAOc6qtTPFNYvoedLJ0EIDEBYH3VtuN1KYrRdz/3ux3M262vUBk9X9A7+PD/sRBo
+         P8KzzDb3pp0d+okHiisztAe7LJelmTgk6//R4KBTId+WZpF9yvtrYQ+lUhNcK/S4BS6H
+         HSkja6e/5Qw8GRVwqPB+r+8/xcBZqHyiN0P7SvWyPCIRG6rZziKGJMO/DmZVXHRyncPw
+         zrTYtyGxxl2NSyXh0b5e8CaTHgnjK2Nc+0tWWdrL3WHo2jkgHXa/6GrxzJlHjdOo3z3b
+         Oou0im51I/7GRaOj2tr9le0YMylGFAlZdp4pDT12DEdgp+9LvmLMbvaC0b5bXcA+beRa
+         uqqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc;
+        bh=epf+Q54XZk9zXGQT4gxazcQCwv6mPJH3vEMEJMYkLpQ=;
+        b=qgga+ZLr4+lW8AGVOZV+/M/bcQA+028i9pJs+NzB0/xH47JzyYyM613QzdQxW+csOY
+         ICXHjPmNaMvC4EEguwiwh6ItM7+CU1ZrwcPvOX4brr141l+2rN/UENp/CHq1LZSrLiVQ
+         GJ0cgDWl7/wPDNd39sOMVo3HyiOGw+gIktkHfcUIiRogD5KXV5CuYL9kQWRzLQMp+qpD
+         gzu5f6ePjw8J7aKcaWJzRLMrjGarzlQzUfddPQMvhgfUTQb1ktFKbFVxDge/0OUlDbDe
+         6tVTDqUlqNHHyjYLPXOAB9MsBgjutVN8TOpX8MbbdhKY7PDMvHfjHsqzF/DsuTdtuCgj
+         xJrQ==
+X-Gm-Message-State: ACgBeo3ufL/En8P8QkyWxNK+HSz3LMoVmqIdQodSb6LNmPVSEY8D8hkq
+        1akTIUNTySytxcyWjzJRwBBrye9ZYxmvKw==
+X-Google-Smtp-Source: AA6agR74hR8VaeJjFAVTZB4MQZJXrrmv36R1guca2wRROCvCmMqo8rBjX09cx+YesnyaqkBZQPKS0g==
+X-Received: by 2002:a17:906:38f:b0:742:1f68:7058 with SMTP id b15-20020a170906038f00b007421f687058mr9223162eja.743.1662027304180;
+        Thu, 01 Sep 2022 03:15:04 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:d4bf:4e1a:6131:785b? ([2a02:578:8593:1200:d4bf:4e1a:6131:785b])
+        by smtp.gmail.com with ESMTPSA id dy17-20020a05640231f100b0043cc66d7accsm1084568edb.36.2022.09.01.03.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 03:15:03 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------RMx9DqSYj6g7kmVmU6k70eT3"
+Message-ID: <fe9280ff-50b3-805a-07ef-0227cbec13e8@tessares.net>
+Date:   Thu, 1 Sep 2022 12:15:02 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rsrvjOzlMhuFJjMrWE2gRcX6unwHEljk
-X-Proofpoint-GUID: CjDuGkUjmAorZRs14t50ojyzlRmXt3kg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_06,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- spamscore=0 phishscore=0 bulkscore=0 mlxlogscore=762 mlxscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209010040
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] selftests: net: sort .gitignore file
+Content-Language: en-GB
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220829184748.1535580-1-axelrasmussen@google.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220829184748.1535580-1-axelrasmussen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit d2d6cba5d6623245a80cc151008cce825c8b6248 ("selftest: vm: remove
-orphaned references to local_config.{h,mk}") took care of removing
-orphaned references. This commit remove local_config from .gitignore.
+This is a multi-part message in MIME format.
+--------------RMx9DqSYj6g7kmVmU6k70eT3
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Parent Patch
-Commit 69007f156ba7aead6c75b0046958ad3396f5aed1 ("Kselftests: remove
-support of libhugetlbfs from kselftests")
+Hello,
 
+On 29/08/2022 20:47, Axel Rasmussen wrote:
+> This is the result of `sort tools/testing/selftests/net/.gitignore`, but
+> preserving the comment at the top.
 
-Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
----
- tools/testing/selftests/vm/.gitignore | 1 -
- 1 file changed, 1 deletion(-)
+FYI, we got a small conflict (as expected by Jakub) when merging -net in
+net-next in the MPTCP tree due to this patch applied in -net:
 
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 31e5eea2a9b9..7b9dc2426f18 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -30,7 +30,6 @@ map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
- memfd_secret
--local_config.*
- soft-dirty
- split_huge_page_test
- ksm_tests
+  5a3a59981027 ("selftests: net: sort .gitignore file")
+
+and these ones from net-next:
+
+  c35ecb95c448 ("selftests/net: Add test for timing a bind request to a
+port with a populated bhash entry")
+  1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and
+sk_connect_zero_addr")
+
+The conflict has been resolved on our side[1] and the resolution we
+suggest is attached to this email: new entries have been added in the
+list respecting the alphabetical order.
+
+I'm sharing this thinking it can help others but if it only creates
+noise, please tell me! :-)
+
+Cheers,
+Matt
+
+[1] https://github.com/multipath-tcp/mptcp_net-next/commit/4151695b70b6
 -- 
-2.31.1
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
+--------------RMx9DqSYj6g7kmVmU6k70eT3
+Content-Type: text/x-patch; charset=UTF-8;
+ name="4151695b70b6889c0be046fc6b861f4fba2efff7.patch"
+Content-Disposition: attachment;
+ filename="4151695b70b6889c0be046fc6b861f4fba2efff7.patch"
+Content-Transfer-Encoding: base64
 
+ZGlmZiAtLWNjIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC8uZ2l0aWdub3JlCmluZGV4
+IGJlYzVjZjk2OTg0YyxkZTdkNWNjMTVmODUuLjNkN2FkZWU3YTNlNgotLS0gYS90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQvLmdpdGlnbm9yZQorKysgYi90b29scy90ZXN0aW5nL3Nl
+bGZ0ZXN0cy9uZXQvLmdpdGlnbm9yZQpAQEAgLTEsNyAtMSwxNSArMSwxNiBAQEAKICAjIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkKKytiaW5kX2JoYXNoCisgY21z
+Z19zZW5kZXIKKyBmaW5fYWNrX2xhdAorIGdybworIGh3dHN0YW1wX2NvbmZpZworIGlvYW02
+X3BhcnNlcgorIGlwX2RlZnJhZwogIGlwc2VjCisgaXB2Nl9mbG93bGFiZWwKKyBpcHY2X2Zs
+b3dsYWJlbF9tZ3IKICBtc2dfemVyb2NvcHkKLSBzb2NrZXQKKyBuZXR0ZXN0CiAgcHNvY2tf
+ZmFub3V0CiAgcHNvY2tfc25kCiAgcHNvY2tfdHBhY2tldApAQEAgLTExLDM1IC0yMCwyMyAr
+MjEsMjUgQEBAIHJldXNlcG9ydF9icAogIHJldXNlcG9ydF9icGZfY3B1CiAgcmV1c2Vwb3J0
+X2JwZl9udW1hCiAgcmV1c2Vwb3J0X2R1YWxzdGFjawotIHJldXNlYWRkcl9jb25mbGljdAot
+IHRjcF9tbWFwCi0gdWRwZ3NvCi0gdWRwZ3NvX2JlbmNoX3J4Ci0gdWRwZ3NvX2JlbmNoX3R4
+Ci0gdGNwX2lucQotIHRscwotIHR4cmluZ19vdmVyd3JpdGUKLSBpcF9kZWZyYWcKLSBpcHY2
+X2Zsb3dsYWJlbAotIGlwdjZfZmxvd2xhYmVsX21ncgotIHNvX3R4dGltZQotIHRjcF9mYXN0
+b3Blbl9iYWNrdXBfa2V5Ci0gbmV0dGVzdAotIGZpbl9hY2tfbGF0Ci0gcmV1c2VhZGRyX3Bv
+cnRzX2V4aGF1c3RlZAotIGh3dHN0YW1wX2NvbmZpZwogIHJ4dGltZXN0YW1wCi0gdGltZXN0
+YW1waW5nCi0gdHh0aW1lc3RhbXAKKytza19iaW5kX3NlbmR0b19saXN0ZW4KKytza19jb25u
+ZWN0X3plcm9fYWRkcgorIHNvY2tldAogIHNvX25ldG5zX2Nvb2tpZQorIHNvX3R4dGltZQor
+IHN0cmVzc19yZXVzZXBvcnRfbGlzdGVuCisgdGFwCisgdGNwX2Zhc3RvcGVuX2JhY2t1cF9r
+ZXkKKyB0Y3BfaW5xCisgdGNwX21tYXAKICB0ZXN0X3VuaXhfb29iCi0gZ3JvCi0gaW9hbTZf
+cGFyc2VyCisgdGltZXN0YW1waW5nCisgdGxzCiAgdG9lcGxpdHoKICB0dW4KLSBjbXNnX3Nl
+bmRlcgorIHR4cmluZ19vdmVyd3JpdGUKKyB0eHRpbWVzdGFtcAorIHVkcGdzbworIHVkcGdz
+b19iZW5jaF9yeAorIHVkcGdzb19iZW5jaF90eAogIHVuaXhfY29ubmVjdAotIHRhcAotIGJp
+bmRfYmhhc2gKLSBza19iaW5kX3NlbmR0b19saXN0ZW4KLSBza19jb25uZWN0X3plcm9fYWRk
+cgo=
+
+--------------RMx9DqSYj6g7kmVmU6k70eT3--
