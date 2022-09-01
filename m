@@ -2,86 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0FF5A8C37
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 06:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0759B5A8E58
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 08:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiIAEP3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 00:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S232923AbiIAGhW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 02:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiIAEP1 (ORCPT
+        with ESMTP id S232724AbiIAGhV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 00:15:27 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649F52ED58;
-        Wed, 31 Aug 2022 21:15:22 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id s11so20884543edd.13;
-        Wed, 31 Aug 2022 21:15:22 -0700 (PDT)
+        Thu, 1 Sep 2022 02:37:21 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E05C1210
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:37:19 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id m66so16776540vsm.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:37:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5JSpU1QR2YVELHFzvSSyyf2pVK2J22SigUM2w1BDKSc=;
-        b=HHTdkimlsO8d5i+9a9C62dYNhCVIDoasqJPBl+1Ci5DORlMl5s0ewUa1M2r76LeL9P
-         57MCShbyOsPYCJC8qsLDv6gJEOPOFxdec7Y5kjfjUR38G61oO8WbbJyt9ILu9rsonr6P
-         4f4/aoh3yPQXpzlrcp1jw38/FQ8lIJ9gmV3QzCKzlVWMR/nUOPcYfG44XW5rUGl1lwBT
-         Fq+SjXsYQo5yV8fGJmIGB/fDcAlVZg9BUZ6MoqvdoTbIBriGCvS08R/hvGD7R0XdaL5C
-         ZHiUQJYPOp+H1rfgwTCgiLadQWKjkZVwpN7MLf7fCfA8rKz6fPo4A5OyHofUejikBBxg
-         HXig==
+         :mime-version:from:to:cc:subject:date;
+        bh=ZN3L+PoTPUpuUxHFLZCvo6zCxSxPDvjoOtr8auSXbjE=;
+        b=ri7KA3tItGTHqnM6pYMlVms2QC/xUYgLCNNyyLmtiYgJ0Or0jWB9LDbTmYLrHLoXYe
+         rpRVPic4QxDsZwSkfHWQNGCAeWQUWyibWDp1Kn1RDU7a4deXVo7mMCILpL2q4Ri0HQei
+         xAJ5bA+SIyQQ2oBJy7dm4HYMln5WQpzzU58MZH5IScFG/c9O27R19EfQotNxbaOJXaqp
+         ELvbiCmxH9pT5nX7iezRgUhCMH5T9IR8QOhHZk4b4QPMxwy+7t7ASti37qbl+OeGGjVc
+         kZX2wZrjvXiUHPxmSnkfa0JYrzVa4PS1bbLz2JF2/Hu9r/MoS7DRdL8O44Mycm6qMQv7
+         44bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5JSpU1QR2YVELHFzvSSyyf2pVK2J22SigUM2w1BDKSc=;
-        b=5Fk6ynNKZDXzn+c7Z+ZzSSy/R65hb2TaZA1C3IdqgMCCqkvNbrbRfLFfibTHpxIg3G
-         Cq0lsgmRF/osfcC56pCULfvf6L62J2nZgSw6lXhS6QhAmYUjM6zmU9K9FiJJ44qnHz6j
-         qoZaroBZ0spNnfqA9eGJyuXYMC5rICRMn4YmtE5BTLbv3pgg3zA7mQLmlo51ktnRkNFJ
-         7JuCRt1BrCCN2E6EPtngd7hPiWYuUXBjzcgVNESbtPkl+ioFfa+esYDAYpllBHu7BPiO
-         sVQ1ExEemb6b2aaUiMcFZHC8PKm/kK48t6ALQZ+lQ8gwawDOWMhCoE36AcUlbG4/5IT+
-         D8yA==
-X-Gm-Message-State: ACgBeo13xKFxfBoMb9S2x5lNgVCDMNm8mCFOEZ8dZsV4X90+GqLk1jRx
-        6zuDuMO5c1Byu3PxOXvrcfeapinhehW6mJUtmQQ=
-X-Google-Smtp-Source: AA6agR4qfIZbsIxB5vAtgKbtbizFNfSi9/4OOkflwc7Ld+WvJXNJpXsrW4Es6OlINw66dA2471PUDgLTa9cjvXB6L2s=
-X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id
- ef11-20020a05640228cb00b0043bc6d7ef92mr27420244edb.333.1662005720762; Wed, 31
- Aug 2022 21:15:20 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZN3L+PoTPUpuUxHFLZCvo6zCxSxPDvjoOtr8auSXbjE=;
+        b=KU+57YwOZrVUWhYbtgZ9cb8NKUDOn1ZXDnKQttQFXIjgM1kmFwQOyG5BXZy0iK1RuZ
+         +AycB7qdUOB2gRmx34BCuNf1fGe9c4KcUPo+X373iYmVyGrmPtZgPedGjwRlGKqTfk1r
+         2VIYlwJU13wGWj3MjezxrCTcmAOfoZISWcjhlRoCywadqWdPJdbeVxazy0P7mqofwrpX
+         UgHZRRSqap730LHG4bfqn1LmE+axrpZlF1ax37D0vNO3RkCKc3diyWvplL1tokpxl5kX
+         I7bwrm1rkS7ihu5n/RtW0LNnOjgFNxFVoX+c4oeIJna5CcpN4LWPiSxHuQR6fYS5fFh9
+         E0+Q==
+X-Gm-Message-State: ACgBeo3SWIuZBNolrF6dFRvxxcPTy0A2nlLs9sDglIK1WICTwPfbNDpC
+        k2Eabg0GKqreexwNreoFqhtmnva6HHsR+TeWO6YqUw==
+X-Google-Smtp-Source: AA6agR4NAV19QWIHoFEXU6O+uthAhDMaD87xdUwCVjxquvOW+2ucg/oF3TA8+SwqtmHQeMF+H6kECODeanHrPnTUA0g=
+X-Received: by 2002:a05:6102:38c6:b0:390:e7e4:8a7e with SMTP id
+ k6-20020a05610238c600b00390e7e48a7emr5592768vst.38.1662014238449; Wed, 31 Aug
+ 2022 23:37:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
- <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
- <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
- <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com>
- <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com> <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com>
-In-Reply-To: <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 31 Aug 2022 21:15:09 -0700
-Message-ID: <CAADnVQLuL045Sxdvh8kfcNkmD55+Wz8fHU3RtH+oQyOgePU5Pw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
- read user provided context
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220829000920.38185-1-isabbasso@riseup.net> <20220829000920.38185-4-isabbasso@riseup.net>
+In-Reply-To: <20220829000920.38185-4-isabbasso@riseup.net>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 1 Sep 2022 14:37:06 +0800
+Message-ID: <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
+Subject: Re: [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility for KUnit
+To:     Isabella Basso <isabbasso@riseup.net>
+Cc:     igt-dev@lists.freedesktop.org, magalilemes00@gmail.com,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        Tales Aparecida <tales.aparecida@gmail.com>,
+        Rodrigo Siqueira <rodrigo.siqueira@amd.com>, mwen@igalia.com,
+        andrealmeid@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        daniel@fooishbar.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000050f3d005e797d857"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,298 +79,467 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 10:56 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Wed, Aug 31, 2022 at 6:37 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Tue, Aug 30, 2022 at 7:29 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > On Fri, Aug 26, 2022 at 3:51 AM Kumar Kartikeya Dwivedi
-> > > <memxor@gmail.com> wrote:
-> > > >
-> > > > On Fri, 26 Aug 2022 at 03:42, Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > On Wed, Aug 24, 2022 at 6:41 AM Benjamin Tissoires
-> > > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > > >
-> > > > > > When a function was trying to access data from context in a syscall eBPF
-> > > > > > program, the verifier was rejecting the call unless it was accessing the
-> > > > > > first element.
-> > > > > > This is because the syscall context is not known at compile time, and
-> > > > > > so we need to check this when actually accessing it.
-> > > > > >
-> > > > > > Check for the valid memory access if there is no convert_ctx callback,
-> > > > > > and allow such situation to happen.
-> > > > > >
-> > > > > > There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
-> > > > > > will check that the types are matching, which is a good thing, but to
-> > > > > > have an accurate result, it hides the fact that the context register may
-> > > > > > be null. This makes env->prog->aux->max_ctx_offset being set to the size
-> > > > > > of the context, which is incompatible with a NULL context.
-> > > > > >
-> > > > > > Solve that last problem by storing max_ctx_offset before the type check
-> > > > > > and restoring it after.
-> > > > > >
-> > > > > > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > > > >
-> > > > > > ---
-> > > > > >
-> > > > > > changes in v9:
-> > > > > > - rewrote the commit title and description
-> > > > > > - made it so all functions can make use of context even if there is
-> > > > > >   no convert_ctx
-> > > > > > - remove the is_kfunc field in bpf_call_arg_meta
-> > > > > >
-> > > > > > changes in v8:
-> > > > > > - fixup comment
-> > > > > > - return -EACCESS instead of -EINVAL for consistency
-> > > > > >
-> > > > > > changes in v7:
-> > > > > > - renamed access_t into atype
-> > > > > > - allow zero-byte read
-> > > > > > - check_mem_access() to the correct offset/size
-> > > > > >
-> > > > > > new in v6
-> > > > > > ---
-> > > > > >  kernel/bpf/btf.c      | 11 ++++++++++-
-> > > > > >  kernel/bpf/verifier.c | 19 +++++++++++++++++++
-> > > > > >  2 files changed, 29 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > > > > index 903719b89238..386300f52b23 100644
-> > > > > > --- a/kernel/bpf/btf.c
-> > > > > > +++ b/kernel/bpf/btf.c
-> > > > > > @@ -6443,8 +6443,8 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
-> > > > > >  {
-> > > > > >         struct bpf_prog *prog = env->prog;
-> > > > > >         struct btf *btf = prog->aux->btf;
-> > > > > > +       u32 btf_id, max_ctx_offset;
-> > > > > >         bool is_global;
-> > > > > > -       u32 btf_id;
-> > > > > >         int err;
-> > > > > >
-> > > > > >         if (!prog->aux->func_info)
-> > > > > > @@ -6457,9 +6457,18 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
-> > > > > >         if (prog->aux->func_info_aux[subprog].unreliable)
-> > > > > >                 return -EINVAL;
-> > > > > >
-> > > > > > +       /* subprogs arguments are not actually accessing the data, we need
-> > > > > > +        * to check for the types if they match.
-> > > > > > +        * Store the max_ctx_offset and restore it after btf_check_func_arg_match()
-> > > > > > +        * given that this function will have a side effect of changing it.
-> > > > > > +        */
-> > > > > > +       max_ctx_offset = env->prog->aux->max_ctx_offset;
-> > > > > > +
-> > > > > >         is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-> > > > > >         err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
-> > > > > >
-> > > > > > +       env->prog->aux->max_ctx_offset = max_ctx_offset;
-> > > > >
-> > > > > I don't understand this.
-> > > > > If we pass a ctx into a helper and it's going to
-> > > > > access [0..N] bytes from it why do we need to hide it?
-> > > > > max_ctx_offset will be used later raw_tp, tp, syscall progs
-> > > > > to determine whether it's ok to load them.
-> > > > > By hiding the actual size of access somebody can construct
-> > > > > a prog that reads out of bounds.
-> > > > > How is this related to NULL-ness property?
-> > > >
-> > > > Same question, was just typing exactly the same thing.
-> > >
-> > > The test I have that is failing in patch 2/23 is the following, with
-> > > args being set to NULL by userspace:
-> > >
-> > > SEC("syscall")
-> > > int kfunc_syscall_test_null(struct syscall_test_args *args)
-> > > {
-> > >        bpf_kfunc_call_test_mem_len_pass1(args, 0);
-> > >
-> > >        return 0;
-> > > }
-> > >
-> > > Basically:
-> > > if userspace declares the following:
-> > >  DECLARE_LIBBPF_OPTS(bpf_test_run_opts, syscall_topts,
-> > >                .ctx_in = NULL,
-> > >                .ctx_size_in = 0,
-> > >        );
-> > >
-> > > The verifier is happy with the current released kernel:
-> > > kfunc_syscall_test_fail() never dereferences the ctx pointer, it just
-> > > passes it around to bpf_kfunc_call_test_mem_len_pass1(), which in turn
-> > > is also happy because it says it is not accessing the data at all (0
-> > > size memory parameter).
-> > >
-> > > In the current code, check_helper_mem_access() actually returns
-> > > -EINVAL, but doesn't change max_ctx_offset (it's still at the value of
-> > > 0 here). The program is now marked as unreliable, but the verifier
-> > > goes on.
-> > >
-> > > When adding this patch, if we declare a syscall eBPF (or any other
-> > > function that doesn't have env->ops->convert_ctx_access), the previous
-> > > "test" is failing because this ensures the syscall program has to have
-> > > a valid ctx pointer.
-> > > btf_check_func_arg_match() now calls check_mem_access() which
-> > > basically validates the fact that the program can dereference the ctx.
-> > >
-> > > So now, without the max_ctx_offset store/restore, the verifier
-> > > enforces that the provided ctx is not null.
-> > >
-> > > What I thought that would happen was that if we were to pass a NULL
-> > > context from userspace, but the eBPF program dereferences it (or in
-> > > that case have a subprog or a function call that dereferences it),
-> > > then max_ctx_offset would still be set to the proper value because of
-> > > that internal dereference, and so the verifier would reject with
-> > > -EINVAL the call to the eBPF program.
-> > >
-> > > If I add another test that has the following ebpf prog (with ctx_in
-> > > being set to NULL by the userspace):
-> > >
-> > > SEC("syscall")
-> > > int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
-> > > {
-> > >        bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-> > >
-> > >        return 0;
-> > > }
-> > >
-> > > Then the call of the program is actually failing with -EINVAL, even
-> > > with this patch.
-> > >
-> > > But again, if setting from userspace a ctx of NULL with a 0 size is
-> > > not considered as valid, then we can just drop that hunk and add a
-> > > test to enforce it.
-> >
-> > PTR_TO_CTX in the verifier always means valid pointer.
-> > All code paths in the verifier assumes that it's not NULL.
-> > Pointer to skb, to xdp, to pt_regs, etc.
-> > The syscall prog type is little bit special, since it
-> > makes sense not to pass any argument to such prog.
-> > So ctx_size_in == 0 is enforced after the verification:
-> > if (ctx_size_in < prog->aux->max_ctx_offset ||
-> >     ctx_size_in > U16_MAX)
-> >           return -EINVAL;
-> > The verifier should be able to proceed assuming ctx != NULL
-> > and remember max max_ctx_offset.
-> > If max_ctx_offset == 4 and ctx_size_in == 0 then
-> > it doesn't matter whether the actual 'ctx' pointer is NULL
-> > or points to a valid memory.
-> > So it's ok for the verifier to assume ctx != NULL everywhere.
->
-> Ok, thanks for the detailed explanation.
->
-> >
-> > Back to the issue at hand.
-> > With this patch the line:
-> >     bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-> > will be seen as access_size == sizeof(*args), right?
-> > So this part:
-> > +                       if (access_size == 0)
-> > +                               return zero_size_allowed ? 0 : -EACCES;
-> >
-> > will be skipped and
-> > the newly added check_mem_access() will call check_ctx_access()
-> > which will call syscall_prog_is_valid_access() and it will say
-> > that any off < U16_MAX is fine and will simply
-> > record max max_ctx_offset.
-> > The ctx_size_in < prog->aux->max_ctx_offset check is done later.
->
-> Yep, this is correct and this is working now, with a proper error (and
-> no, this is not the error I am trying to fix, see below):
->
-> eBPF prog:
-> ```
->   SEC("?syscall")
->   int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
->   {
->           bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
->           return 0;
->   }
-> ```
->
-> before this patch (1/23):
-> * with ctx not NULL:
-> libbpf: prog 'kfunc_syscall_test_null_fail': BPF program load failed:
-> Invalid argument
-> R1 type=ctx expected=fp
-> arg#0 arg#1 memory, len pair leads to invalid memory access
->
->  => this is not correct, we expect the program to be loaded (and it is
-> expected, this is the bug that is fixed)
->
-> * Same result with ctx being NULL from the caller
->
-> With just the hunk in kernel/bpf/verifier.c (so without touching max_ctx_offset:
-> * with ctx not NULL:
-> program is loaded, and executed correctly
->
-> * with ctx being NULL:
-> program is now loaded, but execution returns -EINVAL, as expected
->
-> So this case is fully solved by just the hunk in verifier.c
->
-> With the full patch:
-> same results, with or without ctx being set to NULL, so no side effects.
->
-> >
-> > So when you're saying:
-> > "call of the program is actually failing with -EINVAL"
-> > that's the check you're referring to?
->
-> No. I am referring to the following eBPF program:
-> ```
->   SEC("syscall")
->   int kfunc_syscall_test_null(struct syscall_test_args *args)
->   {
->            return 0;
->   }
-> ```
->
-> (no calls, just the declaration of a program)
->
-> This one is supposed to be loaded and properly run whatever the
-> context is, right?
+--00000000000050f3d005e797d857
+Content-Type: text/plain; charset="UTF-8"
 
-Got it. Yes. Indeed.
-The if (!env->ops->convert_ctx_access)
-hunk alone would break existing progs because of
-side effect of max_ctx_offset.
-We have this unfortunate bit of code:
-                ret = btf_check_subprog_arg_match(env, subprog, regs);
-                if (ret == -EFAULT)
-                        /* unlikely verifier bug. abort.
-                         * ret == 0 and ret < 0 are sadly acceptable for
-                         * main() function due to backward compatibility.
-                         * Like socket filter program may be written as:
-                         * int bpf_prog(struct pt_regs *ctx)
-                         * and never dereference that ctx in the program.
-                         * 'struct pt_regs' is a type mismatch for socket
-                         * filter that should be using 'struct __sk_buff'.
-                         */
-                        goto out;
+On Mon, Aug 29, 2022 at 8:10 AM Isabella Basso <isabbasso@riseup.net> wrote:
+>
+> This adds functions for both executing the tests as well as parsing (K)TAP
+> kmsg output, as per the KTAP spec [1].
+>
+> [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
+>
+> Signed-off-by: Isabella Basso <isabbasso@riseup.net>
+> ---
 
-because btf_check_subprog_arg_match() is used to match arguments
-for calling into a function and when the verifier just starts
-to analyze a function.
-Before this patch the btf_check_subprog_arg_match() would just
-EINVAL on your above example and will proceed,
-but with the patch the non zero max_ctx_offset will
-disallow execution later and break things.
-I think we need to clean up this bit of code.
-Just save/restore of max_ctx_offset isn't going to work.
-How about adding a flag to btf_check_subprog_arg_match
-to indicate whether the verifier is processing 'call' insn
-or just starting processing a function body and
-then do
-if (ptr_to_mem_ok && processing_call) ?
-Still feels like a hack.
-Maybe btf_check_func_arg_match() needs to be split to
-disambiguate calling vs processing the body ?
-And may cleanup the rest of that function ?
-Like all of if (is_kfunc) applies only to 'calling' case.
-Other ideas?
+Thanks very much for sending these patches out again.
+
+Alas, I don't have a particularly useful igt setup to test this
+properly, but I've left a couple of notes from trying it on my laptop
+here.
+
+
+>  lib/igt_kmod.c | 290 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  lib/igt_kmod.h |   2 +
+>  2 files changed, 292 insertions(+)
+>
+> diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
+> index 97cac7f5..93cdfcc5 100644
+> --- a/lib/igt_kmod.c
+> +++ b/lib/igt_kmod.c
+> @@ -25,6 +25,7 @@
+>  #include <signal.h>
+>  #include <errno.h>
+>  #include <sys/utsname.h>
+> +#include <limits.h>
+>
+>  #include "igt_aux.h"
+>  #include "igt_core.h"
+> @@ -32,6 +33,8 @@
+>  #include "igt_sysfs.h"
+>  #include "igt_taints.h"
+>
+> +#define BUF_LEN 4096
+> +
+>  /**
+>   * SECTION:igt_kmod
+>   * @short_description: Wrappers around libkmod for module loading/unloading
+> @@ -713,6 +716,293 @@ void igt_kselftest_get_tests(struct kmod_module *kmod,
+>         kmod_module_info_free_list(pre);
+>  }
+>
+> +/**
+> + * lookup_value:
+> + * @haystack: the string to search in
+> + * @needle: the string to search for
+> + *
+> + * Returns: the value of the needle in the haystack, or -1 if not found.
+> + */
+> +static long lookup_value(const char *haystack, const char *needle)
+> +{
+> +       const char *needle_rptr;
+> +       char *needle_end;
+> +       long num;
+> +
+> +       needle_rptr = strcasestr(haystack, needle);
+> +
+> +       if (needle_rptr == NULL)
+> +               return -1;
+> +
+> +       /* skip search string and whitespaces after it */
+> +       needle_rptr += strlen(needle);
+> +
+> +       num = strtol(needle_rptr, &needle_end, 10);
+> +
+> +       if (needle_rptr == needle_end)
+> +               return -1;
+> +
+> +       if (num == LONG_MIN || num == LONG_MAX)
+> +               return 0;
+> +
+> +       return num > 0 ? num : 0;
+> +}
+> +
+> +static int find_next_tap_subtest(char *record, char *test_name,
+> +                                bool is_subtest)
+> +{
+> +       const char *name_lookup_str,
+> +             *lend, *version_rptr, *name_rptr;
+> +       long test_count;
+> +
+> +       name_lookup_str = "test: ";
+> +
+> +       version_rptr = strcasestr(record, "TAP version ");
+> +       name_rptr = strcasestr(record, name_lookup_str);
+> +
+> +       /*
+> +        * total test count will almost always appear as 0..N at the beginning
+> +        * of a run, so we use it as indication of a run
+> +        */
+> +       test_count = lookup_value(record, "..");
+> +
+> +       /* no count found, so this is probably not starting a (sub)test */
+> +       if (test_count < 0) {
+> +               if (name_rptr != NULL) {
+> +                       if (test_name[0] == '\0')
+> +                               strncpy(test_name,
+> +                                       name_rptr + strlen(name_lookup_str),
+> +                                       BUF_LEN);
+> +                       else if (strcmp(test_name, name_rptr + strlen(name_lookup_str)) == 0)
+> +                               return 0;
+> +                       else
+> +                               test_name[0] = '\0';
+> +
+> +               }
+> +               return -1;
+> +       }
+> +
+> +       /*
+> +        * "(K)TAP version XX" should be the first line on all (sub)tests as per
+> +        * https://www.kernel.org/doc/html/latest/dev-tools/ktap.html#version-lines
+> +        * but actually isn't, as it currently depends on whoever writes the
+> +        * test to print this info
+
+FYI: we're really trying to fix cases of "missing version lines",
+largely by making the kunit_test_suites() macro work in more
+circumstances.
+
+So while it may be worth still handling the case where this is
+missing, I don't think there are any tests in the latest versions of
+the kernel which should have this missing.
+
+> +        */
+> +       if (version_rptr == NULL)
+> +               igt_info("Missing test version string\n");
+> +
+> +       if (name_rptr == NULL) {
+> +               /* we have to keep track of the name string, as it might be
+> +                * contained in a line read previously */
+> +               if (test_name[0] == '\0') {
+> +                       igt_info("Missing test name string\n");
+> +
+> +                       if (is_subtest)
+> +                               igt_info("Running %ld subtests...\n", test_count);
+> +                       else
+> +                               igt_info("Running %ld tests...\n", test_count);
+> +               } else {
+> +                       lend = strchrnul(test_name, '\n');
+> +
+> +                       if (*lend == '\0') {
+> +                               if (is_subtest)
+> +                                       igt_info("Executing %ld subtests in: %s\n",
+> +                                                test_count, test_name);
+> +                               else
+> +                                       igt_info("Executing %ld tests in: %s\n",
+> +                                                test_count, test_name);
+> +                               return test_count;
+> +                       }
+> +
+> +                       if (is_subtest)
+> +                               igt_info("Executing %ld subtests in: %.*s\n",
+> +                                        test_count, (int)(lend - test_name),
+> +                                        test_name);
+> +                       else
+> +                               igt_info("Executing %ld tests in: %.*s\n",
+> +                                        test_count, (int)(lend - test_name),
+> +                                        test_name);
+> +                       test_name[0] = '\0';
+> +               }
+> +       } else {
+> +               name_rptr += strlen(name_lookup_str);
+> +               lend = strchrnul(name_rptr, '\n');
+> +               /*
+> +                * as the test count comes after the test name we need not check
+> +                * for a long line again
+> +                */
+> +               if (is_subtest)
+> +                       igt_info("Executing %ld subtests in: %.*s\n",
+> +                                test_count, (int)(lend - name_rptr),
+> +                                name_rptr);
+> +               else
+> +                       igt_info("Executing %ld tests in: %.*s\n",
+> +                                test_count, (int)(lend - name_rptr),
+> +                                name_rptr);
+> +       }
+> +
+> +       return test_count;
+> +}
+> +
+> +static void parse_kmsg_for_tap(const char *lstart, char *lend,
+> +                              int *sublevel, bool *failed_tests)
+> +{
+> +       const char *nok_rptr, *comment_start, *value_parse_start;
+> +
+> +       nok_rptr = strstr(lstart, "not ok ");
+> +       if (nok_rptr != NULL) {
+> +               igt_warn("kmsg> %.*s\n",
+> +                        (int)(lend - lstart), lstart);
+> +               *failed_tests = true;
+> +               return;
+> +       }
+> +
+> +       comment_start = strchrnul(lstart, '#');
+> +
+> +       /* check if we're still in a subtest */
+> +       if (*comment_start != '\0') {
+> +               comment_start++;
+> +               value_parse_start = comment_start;
+> +
+> +               if (lookup_value(value_parse_start, "fail: ") > 0) {
+> +                       igt_warn("kmsg> %.*s\n",
+> +                                (int)(lend - comment_start), comment_start);
+> +                       *failed_tests = true;
+> +                       (*sublevel)--;
+> +                       return;
+> +               }
+> +       }
+> +
+> +       igt_info("kmsg> %.*s\n",
+> +                (int)(lend - lstart), lstart);
+> +}
+> +
+> +static void igt_kunit_subtests(int fd, char *record,
+> +                              int *sublevel, bool *failed_tests)
+> +{
+> +       char test_name[BUF_LEN + 1], *lend;
+> +
+> +       lend = NULL;
+> +       test_name[0] = '\0';
+> +       test_name[BUF_LEN] = '\0';
+> +
+> +       while (*sublevel >= 0) {
+> +               const char *lstart;
+> +               ssize_t r;
+> +
+> +               if (lend != NULL && *lend != '\0')
+> +                       lseek(fd, (int) (lend - record), SEEK_CUR);
+> +
+> +               r = read(fd, record, BUF_LEN);
+> +
+> +               if (r <= 0) {
+> +                       switch (errno) {
+> +                       case EINTR:
+> +                               continue;
+> +                       case EPIPE:
+> +                               igt_warn("kmsg truncated: too many messages. \
+> +                                        You may want to increase log_buf_len \
+> +                                        in your boot options\n");
+> +                               continue;
+> +                       case !EAGAIN:
+> +                               igt_warn("kmsg truncated: unknown error (%m)\n");
+> +                               *sublevel = -1;
+> +                       default:
+> +                               break;
+> +                       }
+> +                       break;
+> +               }
+> +
+> +               lend = strchrnul(record, '\n');
+> +
+> +               /* in case line > 4096 */
+> +               if (*lend == '\0')
+> +                       continue;
+> +
+> +               if (find_next_tap_subtest(record, test_name, *sublevel > 0) != -1)
+> +                       (*sublevel)++;
+> +
+> +               if (*sublevel > 0) {
+> +                       lstart = strchrnul(record, ';');
+> +
+> +                       if (*lstart == '\0') {
+> +                               igt_warn("kmsg truncated: output malformed (%m)\n");
+> +                               igt_fail(IGT_EXIT_FAILURE);
+> +                       }
+> +
+> +                       lstart++;
+> +                       while (isspace(*lstart))
+> +                               lstart++;
+> +
+> +                       parse_kmsg_for_tap(lstart, lend, sublevel, failed_tests);
+> +               }
+> +       }
+> +
+> +       if (*failed_tests || *sublevel < 0)
+> +               igt_fail(IGT_EXIT_FAILURE);
+> +       else
+> +               igt_success();
+> +}
+> +
+> +/**
+> + * igt_kunit:
+> + * @module_name: the name of the module
+> + * @opts: options to load the module
+> + *
+> + * Loads the kunit module, parses its dmesg output, then unloads it
+> + */
+> +void igt_kunit(const char *module_name, const char *opts)
+> +{
+> +       struct igt_ktest tst;
+> +       char record[BUF_LEN + 1];
+> +       bool failed_tests = false;
+> +       int sublevel = 0;
+> +
+> +       record[BUF_LEN] = '\0';
+> +
+> +       /* get normalized module name */
+> +       if (igt_ktest_init(&tst, module_name) != 0) {
+> +               igt_warn("Unable to initialize ktest for %s\n", module_name);
+> +               return;
+> +       }
+> +
+> +       if (igt_ktest_begin(&tst) != 0) {
+> +               igt_warn("Unable to begin ktest for %s\n", module_name);
+> +
+> +               igt_ktest_fini(&tst);
+> +               return;
+> +       }
+> +
+> +       if (tst.kmsg < 0) {
+> +               igt_warn("Could not open /dev/kmsg");
+> +               goto unload;
+> +       }
+> +
+> +       if (lseek(tst.kmsg, 0, SEEK_END)) {
+> +               igt_warn("Could not seek the end of /dev/kmsg");
+> +               goto unload;
+> +       }
+> +
+> +       /* The kunit module is required for running any kunit tests */
+> +       if (igt_kmod_load("kunit", NULL) != 0) {
+> +               igt_warn("Unable to load kunit module\n");
+> +               goto unload;
+> +       }
+
+Do you want to _require_ KUnit be built as a module, rather than built-in here?
+
+Equally, does this need to mark a failure (or at least "SKIPPED")
+rather than success, in the case it fails.
+
+> +
+> +       if (igt_kmod_load(module_name, opts) != 0) {
+> +               igt_warn("Unable to load %s module\n", module_name);
+> +               goto unload;
+> +       }
+
+As above, should this record a failure, or skip?
+
+> +
+> +       igt_kunit_subtests(tst.kmsg, record, &sublevel, &failed_tests);
+> +unload:
+> +       igt_kmod_unload("kunit", 0);
+
+Do you want to unconditionally unload the KUnit module here? It's safe
+(maybe even safer) to leave it loaded between runs of KUnit tests.
+
+Equally, how would you handle the case where KUnit is already loaded?
+
+> +
+> +       igt_ktest_end(&tst);
+> +
+> +       igt_ktest_fini(&tst);
+> +}
+> +
+>  static int open_parameters(const char *module_name)
+>  {
+>         char path[256];
+> diff --git a/lib/igt_kmod.h b/lib/igt_kmod.h
+> index ceb10cd0..737143c1 100644
+> --- a/lib/igt_kmod.h
+> +++ b/lib/igt_kmod.h
+> @@ -45,6 +45,8 @@ int __igt_i915_driver_unload(char **whom);
+>  int igt_amdgpu_driver_load(const char *opts);
+>  int igt_amdgpu_driver_unload(void);
+>
+> +void igt_kunit(const char *module_name, const char *opts);
+> +
+>  void igt_kselftests(const char *module_name,
+>                     const char *module_options,
+>                     const char *result_option,
+> --
+> 2.37.2
+>
+
+Regardless, thanks very much. Hopefully I'll get a chance to play with
+igt a bit more and actually get the tests running. :-)
+
+Cheers,
+-- David
+
+--00000000000050f3d005e797d857
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAT
+RyBcXrTOEAP2f/+NfBlL7nTa06Tef6ZoLoWBtIKhmjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA5MDEwNjM3MThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASpjSj1HUnHQR5Q76k7l/
+eUA9Kjgtkr3Ue3Qe7Z1uKMQV0MMJLfFAOBT1SwMNgut+v9LwVO/O68gFhlAFy3SmF1DFVin1hZl9
+PNuTS+6AYwyegqGXuJWqaMcYAOn2Uo8ewoYvru73SbAULuSEBQpMqzHYTsZa47RwFcWNfaPf25ZI
+I04ld4dvq88MDm/j4dl9oajFGI7kuEYJmCP7z7rnzDDzhf4sm2YqnqgoMW0W0ghecRmzwNnS+O/X
+Dmm7vvlPufd7LFa8k8NCMm48Nb0PfFmZCC34N4PZ2HdZ7OuFfZPbCxhIM2UF6ElhYEAmn7tTaiI8
+pm+e2VZ18ul6Ac5hzg==
+--00000000000050f3d005e797d857--
