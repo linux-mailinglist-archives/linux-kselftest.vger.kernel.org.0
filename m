@@ -2,145 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E985A8F0A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 09:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB3B5A92CC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 11:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbiIAHCB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 03:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S232786AbiIAJNw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 05:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbiIAHBA (ORCPT
+        with ESMTP id S234213AbiIAJNs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:01:00 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237221928D;
-        Thu,  1 Sep 2022 00:00:45 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MJBcz4dNGz9v7HB;
-        Thu,  1 Sep 2022 14:55:15 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwD3n5N0WBBjL7ITAA--.38593S2;
-        Thu, 01 Sep 2022 08:00:16 +0100 (CET)
-Message-ID: <af509503e534dfbb5b4943d97fbdb27f3e8914fc.camel@huaweicloud.com>
-Subject: Re: [PATCH v15 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
- and define KEY_LOOKUP_ALL
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
+        Thu, 1 Sep 2022 05:13:48 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C931110DBB;
+        Thu,  1 Sep 2022 02:13:47 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2819DJQN021032;
+        Thu, 1 Sep 2022 09:13:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=c0O72IriMhGNyoc4XXzXY45UKftdfkl2lH0WpbycS1s=;
+ b=RN2sIWE3kaHuANfmWKtqf8YhNKmGa9i3ZK0LndsqJB9Kr4UhEAfOQZNOjt8c3x1yCb+u
+ 3QtX5wrPr0NRMuxvfbMfiC8A28VOHv7hBVVAyXwCMPrhZlO70+pFsoZRdqQYmB6kiDFa
+ K4Ky5QY7cO4Fv1M3kCLSByRafuvI0GTRIxW9Ts6VGgWa+JphQpo6L2WnVx07wPXlpPAX
+ 9MFSt5RrbaiFRJnYOScqBBoPhrbdqLlcPa5gKUezAxVg2egkZOLSJDIF5Nl+iNEC69qt
+ y3k6PV9rVO9nfDmsqyTZBlnl2XyrpiHhfX8Gra1GRzhgqAUJlqMmuhUkv8FI6Wm86R/L RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jaswjg08t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 09:13:41 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2819DSIk021258;
+        Thu, 1 Sep 2022 09:13:41 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jaswjg08b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 09:13:41 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28195n3i022602;
+        Thu, 1 Sep 2022 09:13:39 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 3j7aw9cs27-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 09:13:39 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2819AJY236045234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Sep 2022 09:10:19 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E69B1A4053;
+        Thu,  1 Sep 2022 09:13:36 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 57940A404D;
+        Thu,  1 Sep 2022 09:13:33 +0000 (GMT)
+Received: from tarunpc (unknown [9.43.6.31])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Sep 2022 09:13:33 +0000 (GMT)
+Message-ID: <7fec6d15f69751422de1e20cf13b5a3f839da2d1.camel@linux.ibm.com>
+Subject: Re: [PATCH] selftest: vm: remove orphaned references to
+ local_config.{h,mk}
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+Reply-To: tsahu@linux.ibm.com
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "Zach O'Keefe" <zokeefe@google.com>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 01 Sep 2022 09:00:00 +0200
-In-Reply-To: <20220831165445.1071641-6-roberto.sassu@huaweicloud.com>
-References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
-         <20220831165445.1071641-6-roberto.sassu@huaweicloud.com>
+        aneesh.kumar@linux.ibm.com
+Date:   Thu, 01 Sep 2022 14:43:31 +0530
+In-Reply-To: <20220831211526.2743216-1-axelrasmussen@google.com>
+References: <20220831211526.2743216-1-axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
-MIME-Version: 1.0
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwD3n5N0WBBjL7ITAA--.38593S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF1DurW8Zr4DXrW5KrWkCrg_yoW8KryrpF
-        WDC3WFkryjyry293s7GanFya1Fk398Gr12kF9Fgwn0vFsag34xtr1xKF4ruF1FyrW7ur12
-        grsF9ayUuw4DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
-        CF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOlksDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj4J80AAAsY
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: xckYG2GaperRmTQSv92VmzrzhFwfrrCM
+X-Proofpoint-ORIG-GUID: LiICgCKO7R9bbFuHYXHIKfMWcNQPitE5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_06,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ bulkscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=999 clxscore=1011 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209010040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2022-08-31 at 18:54 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Wed, 2022-08-31 at 14:15 -0700, Axel Rasmussen wrote:
+> Note: this commit is intended to apply to mm-unstable, the commit
+> being
+> fixed only exists in that branch for now.
 > 
-> In preparation for the patch that introduces the
-> bpf_lookup_user_key() eBPF
-> kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
-> able to
-> validate the kfunc parameters. Add them to enum key_lookup_flag, so
-> that
-> all the current ones and the ones defined in the future are
-> automatically
-> exported through BTF and available to eBPF programs.
+> Commit b4efb234e53cc60ccdc855190be9f35918687412 ("Kselftests: remove
+> support of libhugetlbfs from kselftests") removed the rule describing
+> how to build local_config.{h,mk}, but it left two references to these
+> files lingering around. The result is, none of the selftests could be
+> built due to dependencies with no rule for how to build them.
 > 
-> Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking whether
-> a
-> variable contains only defined flags.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: KP Singh <kpsingh@kernel.org>
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-Jarkko, I kept your ack although the code slightly changed to use the
-enum instead of #define.
-
-If you have more comments/suggestions, please let me know.
-
-Thanks
-
-Roberto
-
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 > ---
->  include/linux/key.h      | 6 ++++++
->  security/keys/internal.h | 2 --
->  2 files changed, 6 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/vm/Makefile | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/include/linux/key.h b/include/linux/key.h
-> index 7febc4881363..d84171f90cbd 100644
-> --- a/include/linux/key.h
-> +++ b/include/linux/key.h
-> @@ -88,6 +88,12 @@ enum key_need_perm {
->  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
-> deferred */
->  };
+> diff --git a/tools/testing/selftests/vm/Makefile
+> b/tools/testing/selftests/vm/Makefile
+> index b52f2cc51482..4ae879f70f4c 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -1,9 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # Makefile for vm selftests
 >  
-> +enum key_lookup_flag {
-> +	KEY_LOOKUP_CREATE = 0x01,	/* Create special keyrings if they
-> don't exist */
-> +	KEY_LOOKUP_PARTIAL = 0x02,	/* Permit partially
-> constructed keys to be found */
-> +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL), /*
-> OR of previous flags */
-> +};
-> +
->  struct seq_file;
->  struct user_struct;
->  struct signal_struct;
-> diff --git a/security/keys/internal.h b/security/keys/internal.h
-> index 9b9cf3b6fcbb..3c1e7122076b 100644
-> --- a/security/keys/internal.h
-> +++ b/security/keys/internal.h
-> @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct
-> key_type *type,
+> -LOCAL_HDRS += $(selfdir)/vm/local_config.h
+> $(top_srcdir)/mm/gup_test.h
+> -
+> -include local_config.mk
+> +LOCAL_HDRS += $(top_srcdir)/mm/gup_test.h
 >  
->  extern bool lookup_user_key_possessed(const struct key *key,
->  				      const struct key_match_data
-> *match_data);
-> -#define KEY_LOOKUP_CREATE	0x01
-> -#define KEY_LOOKUP_PARTIAL	0x02
->  
->  extern long join_session_keyring(const char *name);
->  extern void key_change_session_keyring(struct callback_head *twork);
+>  uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e
+> 's/ppc64.*/ppc64/')
+
+Thanks, Alex. When I looked why it built in my case, The local_config
+was part of .gitignore which "git clean" ignored and they resided there
+and source was built without any problem. 
+I have submitted a new patch for updated .gitignore.
+
+
 
