@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EDF5A8A84
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 03:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EFD5A8A8C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 03:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbiIABUj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Aug 2022 21:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S232406AbiIABWs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Aug 2022 21:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbiIABUi (ORCPT
+        with ESMTP id S232069AbiIABWs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Aug 2022 21:20:38 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C6181690;
-        Wed, 31 Aug 2022 18:20:37 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id 76so16103646pfy.3;
-        Wed, 31 Aug 2022 18:20:37 -0700 (PDT)
+        Wed, 31 Aug 2022 21:22:48 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F875136B28;
+        Wed, 31 Aug 2022 18:22:47 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id m2so15719756pls.4;
+        Wed, 31 Aug 2022 18:22:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=j6hcngYlpvs5vhfu0mW47DQwHIYzAccUtyEnKVrv4bk=;
-        b=Ig9Jz4jFpQYi8elhuz6NJZGp+7tykwAd+nejNRkApGgSCIGRxS9VSxgP40TfiKEoXH
-         jVEGavejFbJKhMGtTtw6DgNifjj4+qZMIN+G/LNuLMf1grvfxCFz1bTjy8ZV3vyowdSv
-         fhR+7g4wulbwNCcPK6RUiqXS0MdUJ6QoA27l8UJMy+5Wi4rexR/yDBcz/IrUcBkrZlvq
-         oP1iDMKbU4KCvvmfrcrqwQ7rAraaU48gkzG0opBzFQSdzWGSaAhTFyTY4yAam+v6dZ+o
-         xpYxDlTtusVBFCqjMWkOAZDTgaQjYjsJVqxQjWUzfGnHhEtXc52amf6gQHHeISjvtulj
-         7GIQ==
+        bh=+0+HN/s3K0NpAKgv9NYnh6iIwfvsfyIVk74B+Fut/KA=;
+        b=MkbNQwUFQQkP11Q9RtytsGbyDyXzFBP7LCHqeZAailwaE79eaqZ7E45hmx9+iqEROB
+         5wUqNnEIEgkJPcJHdITxhEnflFwaBCrWwvwxtP1P9cSqIU/px2OPPnKReJHTEp3GNTTi
+         e82q7oBauXVi00CpeuiDPwHCVGy/Pbr9ZICorZ7kxUxTXcCItfDMH8YOpre8+dvAAQ7h
+         uZq7r+HiHQmEPxFlBjZlD5VvFie6XBdWsjxaUTIQteDxJLmLOxbbuVgKDO/9UCmn7WNR
+         g51pQI1ndppnYAVBrwhy4TmQXgAofi90zAoQebdsc2FfpmTmkjmcYYxhXIwWm4+ljobf
+         BEYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=j6hcngYlpvs5vhfu0mW47DQwHIYzAccUtyEnKVrv4bk=;
-        b=o84xAQ4vEnEUQecRTIk9Zlt2avPO0QxbiYBqLXr+H3FcM9Wl8Vo+4beMLTd2irWFs2
-         O1zCNP/iwHUZapvfAgG1f7BwxBXp6kwpMQvG87MDH9752RYRRfrc0QAwGOfGKW/ECRRp
-         P+raAAyQ4oRTicEOZ4nKyb/1E2I9FFdSx9RWPPyBrS1h36UyjORQ8+CMt58Kjushhezu
-         9RXOYaaNvG0bNTpZ/HkNuXyfdfn2Ux/VAR7vJv2P05YFmLwnIUhVGfF9KN509a6IUtiD
-         m1DeInJBBV1mtH3nWIwOPbUWHthjgHLBG7ZjFvpuVYWaUO9hfoKnq28Ptn7HjZ0xeFSA
-         AD4A==
-X-Gm-Message-State: ACgBeo2bbs3hs2SCNKyIsin3e6t3xxlkoX8gEjS8HG8h2LqCkMmF79Mf
-        CrKvxG3GCgJebQDw1rwAqUE=
-X-Google-Smtp-Source: AA6agR6davf04hg04CsbracjQnxa6NDVqvhJ2bCajCUXxLblO7l7GGadazUwNB0kHWiXtXbDC293Og==
-X-Received: by 2002:a63:1043:0:b0:429:fd41:b7cb with SMTP id 3-20020a631043000000b00429fd41b7cbmr23574082pgq.442.1661995236799;
-        Wed, 31 Aug 2022 18:20:36 -0700 (PDT)
+        bh=+0+HN/s3K0NpAKgv9NYnh6iIwfvsfyIVk74B+Fut/KA=;
+        b=UebzIThmpuw22jq0dQxPGcgg7hzJC9OUG11PeVrNqe25t8pNarfdbT4alyMb8eVUkR
+         YwMjycRYUWKalQG9dFsxxDrz6IAUeTNWr0EakZb4GdJ3JaXhrl9t9/liZ1sps/rrcNRB
+         txY/GnnlHrtac6f48DBxw0vu+vS/m2Z0FhA1g2weww4AyREDt9uW2IsQx6hKuCuOcQKI
+         CRmoP1D1EeE4oII6Ur5bbs7TmXM7tge4cZ4hnibD4ycG+nYlegZhQsmvfXLsAMuvzYmp
+         v68w3Mn+kJDIp84MeofNrMdu84cpfZrG7wfX3R+Wj+MdGWqtZgIimP6hbQVAfUcZ/Y2G
+         r8/A==
+X-Gm-Message-State: ACgBeo15dD6KiN8n4Atp87kqBB2Uqo91lcPCNnMeJ1uPs51dughsnIpR
+        eqU/o3cka549HVxgmZaeMDo=
+X-Google-Smtp-Source: AA6agR5fLlXmiGovBn0OOghPlUNEt6hr4NypsWyDoBd1v0zdLj94IQUHJQwMPC3VbsoEK19W2ze0Rg==
+X-Received: by 2002:a17:902:d4c4:b0:170:9fdb:4a2a with SMTP id o4-20020a170902d4c400b001709fdb4a2amr27456600plg.137.1661995366819;
+        Wed, 31 Aug 2022 18:22:46 -0700 (PDT)
 Received: from localhost ([192.55.55.51])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090322cb00b00172dd10f64fsm6473650plg.263.2022.08.31.18.20.36
+        by smtp.gmail.com with ESMTPSA id c9-20020a170902d48900b001755ac7dd0asm307368plg.290.2022.08.31.18.22.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 18:20:36 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 18:20:34 -0700
+        Wed, 31 Aug 2022 18:22:46 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 18:22:45 -0700
 From:   Isaku Yamahata <isaku.yamahata@gmail.com>
 To:     Sagi Shahar <sagis@google.com>
 Cc:     linux-kselftest@vger.kernel.org,
@@ -84,7 +84,7 @@ Cc:     linux-kselftest@vger.kernel.org,
         isaku.yamahata@gmail.com
 Subject: Re: [RFC PATCH v2 02/17] KVM: selftest: Add helper functions to
  create TDX VMs
-Message-ID: <20220901012034.GD2711697@ls.amr.corp.intel.com>
+Message-ID: <20220901012245.GE2711697@ls.amr.corp.intel.com>
 References: <20220830222000.709028-1-sagis@google.com>
  <20220830222000.709028-3-sagis@google.com>
 MIME-Version: 1.0
@@ -103,75 +103,135 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, Aug 30, 2022 at 10:19:45PM +0000,
 Sagi Shahar <sagis@google.com> wrote:
-
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> index f35626df1dea..2a6e28c769f2 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> @@ -8,6 +8,7 @@
->  #include "test_util.h"
->  #include "kvm_util.h"
->  #include "processor.h"
+...
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c b/tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c
+> new file mode 100644
+> index 000000000000..72bf2ff24a29
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c
+> @@ -0,0 +1,338 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/stringify.h>
+> +#include "asm/kvm.h"
 > +#include "tdx.h"
->  
->  #ifndef NUM_INTERRUPTS
->  #define NUM_INTERRUPTS 256
-> @@ -641,6 +642,32 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
->  	return vcpu;
->  }
->  
-> +/*
-> + * Adds a vCPU to a TD (Trusted Domain) with minimum  defaults. It will not set
-> + * up any general purpose registers as they will be initialized by the TDX. In
-> + * TDX, vCPUs RIP is set to 0xFFFFFFF0. See Intel TDX EAS Section "Initial State
-> + * of Guest GPRs" for more information on vCPUs initial register values when
-> + * entering the TD first time.
-> + *
-> + * Input Args:
-> + *   vm - Virtual Machine
-> + *   vcpuid - The id of the VCPU to add to the VM.
-> + */
-> +struct kvm_vcpu *vm_vcpu_add_tdx(struct kvm_vm *vm, uint32_t vcpu_id)
+> +#include <stdlib.h>
+> +#include <malloc.h>
+> +#include "processor.h"
+> +#include <string.h>
+> +
+> +char *tdx_cmd_str[] = {
+> +	"KVM_TDX_CAPABILITIES",
+> +	"KVM_TDX_INIT_VM",
+> +	"KVM_TDX_INIT_VCPU",
+> +	"KVM_TDX_INIT_MEM_REGION",
+> +	"KVM_TDX_FINALIZE_VM"
+> +};
+> +
+> +#define TDX_MAX_CMD_STR (ARRAY_SIZE(tdx_cmd_str))
+> +#define EIGHT_INT3_INSTRUCTIONS 0xCCCCCCCCCCCCCCCC
+> +
+> +#define XFEATURE_LBR		15
+> +#define XFEATURE_XTILECFG	17
+> +#define XFEATURE_XTILEDATA	18
+> +#define XFEATURE_MASK_LBR	(1 << XFEATURE_LBR)
+> +#define XFEATURE_MASK_XTILECFG	(1 << XFEATURE_XTILECFG)
+> +#define XFEATURE_MASK_XTILEDATA	(1 << XFEATURE_XTILEDATA)
+> +#define XFEATURE_MASK_XTILE	(XFEATURE_MASK_XTILECFG | XFEATURE_MASK_XTILEDATA)
+> +
+> +
+> +static void tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
 > +{
-> +	struct kvm_mp_state mp_state;
-> +	struct kvm_vcpu *vcpu;
+> +	struct kvm_tdx_cmd tdx_cmd;
+> +	int r;
 > +
-> +	vcpu = __vm_vcpu_add(vm, vcpu_id);
-> +	initialize_td_vcpu(vcpu);
+> +	TEST_ASSERT(ioctl_no < TDX_MAX_CMD_STR, "Unknown TDX CMD : %d\n",
+> +		    ioctl_no);
 > +
-> +	/* Setup the MP state */
-> +	mp_state.mp_state = 0;
-> +	vcpu_mp_state_set(vcpu, &mp_state);
-> +
-> +	return vcpu;
+> +	memset(&tdx_cmd, 0x0, sizeof(tdx_cmd));
+> +	tdx_cmd.id = ioctl_no;
+> +	tdx_cmd.flags = flags;
+> +	tdx_cmd.data = (uint64_t)data;
+> +	r = ioctl(fd, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd);
+> +	TEST_ASSERT(r == 0, "%s failed: %d  %d", tdx_cmd_str[ioctl_no], r,
+> +		    errno);
 > +}
 > +
+> +static struct tdx_cpuid_data get_tdx_cpuid_data(struct kvm_vm *vm)
+> +{
+> +	static struct tdx_cpuid_data cpuid_data;
+> +	int ret, i;
+> +
+> +	if (cpuid_data.cpuid.nent)
+> +		return cpuid_data;
+> +
+> +	memset(&cpuid_data, 0, sizeof(cpuid_data));
+> +	cpuid_data.cpuid.nent = KVM_MAX_CPUID_ENTRIES;
+> +	ret = ioctl(vm->kvm_fd, KVM_GET_SUPPORTED_CPUID, &cpuid_data);
+> +	if (ret) {
+> +		TEST_FAIL("KVM_GET_SUPPORTED_CPUID failed %d %d\n",
+> +		    ret, errno);
+> +		cpuid_data.cpuid.nent = 0;
+> +		return cpuid_data;
+> +	}
+> +
+> +	for (i = 0; i < KVM_MAX_CPUID_ENTRIES; i++) {
+> +		struct kvm_cpuid_entry2 *e = &cpuid_data.entries[i];
+> +
+> +		/* TDX doesn't support LBR and AMX features yet.
+> +		 * Disable those bits from the XCR0 register.
+> +		 */
+> +		if (e->function == 0xd && (e->index == 0)) {
+> +			e->eax &= ~XFEATURE_MASK_LBR;
+> +			e->eax &= ~XFEATURE_MASK_XTILE;
+> +		}
+> +	}
+> +
+> +	return cpuid_data;
+> +}
 
-It's better to use symbolic value.  I know this is copied from vmx version, though.
+CET also needs adjust.  How about the followings?
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 3bb7dc5a55ea..4009bc926e33 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -636,7 +636,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
-        vcpu_regs_set(vcpu, &regs);
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c b/tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c
+index 1c3e47006cd2..123db9b76f82 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/tdx_lib.c
+@@ -25,7 +25,7 @@ char *tdx_cmd_str[] = {
+ #define XFEATURE_MASK_XTILECFG (1 << XFEATURE_XTILECFG)
+ #define XFEATURE_MASK_XTILEDATA        (1 << XFEATURE_XTILEDATA)
+ #define XFEATURE_MASK_XTILE    (XFEATURE_MASK_XTILECFG | XFEATURE_MASK_XTILEDATA)
+-
++#define XFEATURE_MASK_CET      ((1 << 11) | (1 << 12))
  
-        /* Setup the MP state */
--       mp_state.mp_state = 0;
-+       mp_state.mp_state = KVM_MP_STATE_RUNNABLE;
-        vcpu_mp_state_set(vcpu, &mp_state);
+ static int __tdx_ioctl(int fd, int ioctl_no, uint32_t flags, void *data)
+ {
+@@ -72,12 +72,26 @@ static struct tdx_cpuid_data get_tdx_cpuid_data(struct kvm_vm *vm)
+        for (i = 0; i < KVM_MAX_CPUID_ENTRIES; i++) {
+                struct kvm_cpuid_entry2 *e = &cpuid_data.entries[i];
  
-        return vcpu;
-@@ -662,7 +662,7 @@ struct kvm_vcpu *vm_vcpu_add_tdx(struct kvm_vm *vm, uint32_t vcpu_id)
-        initialize_td_vcpu(vcpu);
- 
-        /* Setup the MP state */
--       mp_state.mp_state = 0;
-+       mp_state.mp_state = KVM_MP_STATE_RUNNABLE;
-        vcpu_mp_state_set(vcpu, &mp_state);
- 
-        return vcpu;
-
+-               /* TDX doesn't support LBR and AMX features yet.
++               /* TDX doesn't support LBR yet.
+                 * Disable those bits from the XCR0 register.
+                 */
+                if (e->function == 0xd && (e->index == 0)) {
+                        e->eax &= ~XFEATURE_MASK_LBR;
+-                       e->eax &= ~XFEATURE_MASK_XTILE;
++
++                       /*
++                        * TDX modules requires both CET_{U, S} to be set even
++                        * if only one is supported.
++                        */
++                       if (e->eax & XFEATURE_MASK_CET) {
++                               e->eax |= XFEATURE_MASK_CET;
++                       }
++                       /*
++                        * TDX module requires both XTILE_{CFG, DATA} to be set.
++                        * Both bits are required for AMX to be functional.
++                        */
++                       if ((e->eax & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE) {
++                               e->eax &= ~XFEATURE_MASK_XTILE;
++                       }
+                }
+        }
 
 -- 
 Isaku Yamahata <isaku.yamahata@gmail.com>
