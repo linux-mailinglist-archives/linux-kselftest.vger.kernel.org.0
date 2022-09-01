@@ -2,295 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAF35A8EEA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 08:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2F05A8EF2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 08:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbiIAG6X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 02:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S232649AbiIAG7j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 02:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbiIAG6V (ORCPT
+        with ESMTP id S233341AbiIAG7g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:58:21 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC7AD11E5;
-        Wed, 31 Aug 2022 23:58:18 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MJBZ93wPyz9v7Hg;
-        Thu,  1 Sep 2022 14:52:49 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwA3s13fVxBjZcATAA--.7637S2;
-        Thu, 01 Sep 2022 07:57:48 +0100 (CET)
-Message-ID: <2b2242f8d09378fbec49d4f7e29960d5e50d0a68.camel@huaweicloud.com>
-Subject: Re: [PATCH v15 12/12] selftests/bpf: Add tests for dynamic pointers
- parameters in kfuncs
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 01 Sep 2022 08:57:30 +0200
-In-Reply-To: <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
-References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
-         <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 1 Sep 2022 02:59:36 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBEF122058
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:22 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso1586821pjk.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=SVF6PLCQYqQfDJ1mbN1yYxWEY7a8snySanblxKa0G2g=;
+        b=EQ/HtONlIP3lRAqKj+jLTa8iFP06eGdSTaZLe5lHLgIDfq9K7upKcsMHo7HNyzsSkF
+         0ZLJjdRLAFIchTJ6/V08SQ7BFOgs+yr6wqZgVTTZbPc60qYf6bUBktAdTV0xCmLO8+rb
+         TYtDclkULIsMF+oVCmKnFv6cIQg8YhK8pUZys=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=SVF6PLCQYqQfDJ1mbN1yYxWEY7a8snySanblxKa0G2g=;
+        b=A1/A3MdBag12A2CumXRSd6rTWr19X8v2GkPcSDIiLPEBHlczLWIysSR555iOORhXDf
+         y3rnYvcKLdjuVFO0ncoT9sL/bYRjXyWvL1LL4H+cZae9uvWQLK4mwF/W98O28C0A2MpM
+         FoXVa6f59vixAQ52kXPFjQgNjS30NZe71mAz66yt8KKYqxmm6TmXspP+hTy52oZueywi
+         4lkjCe4rppOU6gG3vQHncJORdL+vEsE7hePJcdtzrQZOgUFmCGzsDFwQeZy2AYuOgnIa
+         Pv8WFIRTYM0Uarm6JfK6BGUUDyCXgIVVxl6gyYCumbA9FMnOY4ZcU/Wje41ZUup1rL1C
+         vLAg==
+X-Gm-Message-State: ACgBeo3jGjID0LI5qUHdA8YI5MrX0gesSbRVA3V4YPcHzj/dHpbjJg26
+        KbCRVNdOzhCBRfqivXHkSYGY6g==
+X-Google-Smtp-Source: AA6agR5ZHgeSnW5XK+mgnShl1BdOSPwjqbKb94qG4dgHKo3KiQskBMRdrJtDtsttOZ30SOZ9HrF0LA==
+X-Received: by 2002:a17:90b:1b0d:b0:1fe:3993:2a82 with SMTP id nu13-20020a17090b1b0d00b001fe39932a82mr5096208pjb.155.1662015559648;
+        Wed, 31 Aug 2022 23:59:19 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d65-20020a623644000000b0052d40c4c06esm12497770pfa.39.2022.08.31.23.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 23:59:17 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH 0/2] fortify: Add run-time WARN for cross-field memcpy()
+Date:   Wed, 31 Aug 2022 23:59:12 -0700
+Message-Id: <20220901065914.1417829-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwA3s13fVxBjZcATAA--.7637S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF4kCF18Zr4UJrWUKr1kAFb_yoWxGF13pa
-        yrGFy29rWIq3W7Wr13XF4IvF4fKr48Zr1akrZFq34xAr1DXryxWF48Kr45Jwn5K395Xw45
-        Zw1Sgr4rCr4Uta7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgACBF1jj3589gAEsF
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=713; h=from:subject; bh=LeTil4IEruxaVe7mWfrPpEi0Vfjy7lWn1LjQi8mvjkw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEFhCZb05sz6D+GQp3RqFe9s96Vb19uXf8nu3+B/3 K+EZyvaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxBYQgAKCRCJcvTf3G3AJi02D/ 9A5CVWpB/R+rtBo9Hz69xc6KVgu9rGAbBRmVMjtYWVn4jtOxiPSLL8QvW0t+F8vkIgPS+RUnSfjZ/0 hAU1oLluzNcqNPSj+L+o3ZE3lT5Xiyqcr8goXd36TwOHZWUaEmUTsNqpOyacfC2URgDVGGv3f81HXC m5U4bxfDPCb5BT8oEEhXs+EnMqs5M71OKC4aVhtwv9NPX9Ah4fm2tSgVrp56GMEu+7maQGY0qwBxhB dW7MjQ4glVMJHiL+cIr1k4cv8G6rbH5Gim5R1TBsLDoalZws0NMeanliOh2uEJVju/0SPCvE/48Opw t/00snJqhXKOz5vO1+BvO58eGBDmkPVMKt9wNfagz81UM8FIZ00SJJdt4bHPvKyFFBJF4MbBUOLZTI cjc9glqVRIUaXO3FKCtPshmj8y8mIyieEWgi6QjZfK71EmSGyLVJK98BR5QnRZL08xI+iVEy0oqVSV HwoOnj8kFFns7arwq/q0lqlZhNBcVyS0WEI/gJ89LxMimKXuzoPesmuYtiHxx2HhJH+k2TRQpQpLE3 LbkkMEsGVvNwFnbEAFH/vrV+nAv7gFgoI/ncQT3bBwBjeZRSG12fXhXZrpT+j66OTFoxqr5kh09A1F 4ckTG6O2Wm6QL3oG/QSk+zkNQMRReyyLNpOsiB4/UEAF9Bmss0e2PtJ6+GBQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2022-08-31 at 18:54 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Add tests to ensure that only supported dynamic pointer types are
-> accepted,
-> that the passed argument is actually a dynamic pointer, and that the
-> passed
-> argument is a pointer to the stack.
+Hi,
 
-Sorry, forgot to add this test to the deny list of s390.
+I'm hoping to at least get this into -next to see how noisy it ends up
+being. I've tracked down several false positives that are getting fixed,
+but I'd like to see this get wider testing. For details, see patch 1,
+but this is the run-time half of the recent FORTIFY_SOURCE memcpy()
+bounds checking work.
 
-I also rebased to the latest commit.
+-Kees
 
-Let me know if I should resend.
+Kees Cook (2):
+  fortify: Add run-time WARN for cross-field memcpy()
+  lkdtm: Update tests for memcpy() run-time warnings
 
-Thanks
+ drivers/misc/lkdtm/fortify.c            | 96 +++++++++++++++++++++----
+ include/linux/fortify-string.h          | 70 +++++++++++++++++-
+ tools/testing/selftests/lkdtm/tests.txt |  8 ++-
+ 3 files changed, 155 insertions(+), 19 deletions(-)
 
-Roberto
-
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  .../bpf/prog_tests/kfunc_dynptr_param.c       | 102
-> ++++++++++++++++++
->  .../bpf/progs/test_kfunc_dynptr_param.c       |  57 ++++++++++
->  2 files changed, 159 insertions(+)
->  create mode 100644
-> tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
->  create mode 100644
-> tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> 
-> diff --git
-> a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> new file mode 100644
-> index 000000000000..732897faf36b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> @@ -0,0 +1,102 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Facebook
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + */
-> +
-> +#include <test_progs.h>
-> +#include "test_kfunc_dynptr_param.skel.h"
-> +
-> +static size_t log_buf_sz = 1048576; /* 1 MB */
-> +static char obj_log_buf[1048576];
-> +
-> +static struct {
-> +	const char *prog_name;
-> +	const char *expected_err_msg;
-> +} kfunc_dynptr_tests[] = {
-> +	{"dynptr_type_not_supp",
-> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern points to
-> unsupported dynamic pointer type"},
-> +	{"not_valid_dynptr",
-> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and
-> initialized"},
-> +	{"not_ptr_to_stack", "arg#0 pointer type STRUCT bpf_dynptr_kern
-> not to stack"},
-> +};
-> +
-> +static bool kfunc_not_supported;
-> +
-> +static int libbpf_print_cb(enum libbpf_print_level level, const char
-> *fmt,
-> +			   va_list args)
-> +{
-> +	if (strcmp(fmt, "libbpf: extern (func ksym) '%s': not found in
-> kernel or module BTFs\n"))
-> +		return 0;
-> +
-> +	if (strcmp(va_arg(args, char *), "bpf_verify_pkcs7_signature"))
-> +		return 0;
-> +
-> +	kfunc_not_supported = true;
-> +	return 0;
-> +}
-> +
-> +static void verify_fail(const char *prog_name, const char
-> *expected_err_msg)
-> +{
-> +	struct test_kfunc_dynptr_param *skel;
-> +	LIBBPF_OPTS(bpf_object_open_opts, opts);
-> +	libbpf_print_fn_t old_print_cb;
-> +	struct bpf_program *prog;
-> +	int err;
-> +
-> +	opts.kernel_log_buf = obj_log_buf;
-> +	opts.kernel_log_size = log_buf_sz;
-> +	opts.kernel_log_level = 1;
-> +
-> +	skel = test_kfunc_dynptr_param__open_opts(&opts);
-> +	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open_opts"))
-> +		goto cleanup;
-> +
-> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-> +	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-> +		goto cleanup;
-> +
-> +	bpf_program__set_autoload(prog, true);
-> +
-> +	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
-> +
-> +	kfunc_not_supported = false;
-> +
-> +	old_print_cb = libbpf_set_print(libbpf_print_cb);
-> +	err = test_kfunc_dynptr_param__load(skel);
-> +	libbpf_set_print(old_print_cb);
-> +
-> +	if (err < 0 && kfunc_not_supported) {
-> +		fprintf(stderr,
-> +		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not
-> supported\n",
-> +		  __func__);
-> +		test__skip();
-> +		goto cleanup;
-> +	}
-> +
-> +	if (!ASSERT_ERR(err, "unexpected load success"))
-> +		goto cleanup;
-> +
-> +	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg),
-> "expected_err_msg")) {
-> +		fprintf(stderr, "Expected err_msg: %s\n",
-> expected_err_msg);
-> +		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
-> +	}
-> +
-> +cleanup:
-> +	test_kfunc_dynptr_param__destroy(skel);
-> +}
-> +
-> +void test_kfunc_dynptr_param(void)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(kfunc_dynptr_tests); i++) {
-> +		if
-> (!test__start_subtest(kfunc_dynptr_tests[i].prog_name))
-> +			continue;
-> +
-> +		verify_fail(kfunc_dynptr_tests[i].prog_name,
-> +			    kfunc_dynptr_tests[i].expected_err_msg);
-> +	}
-> +}
-> diff --git
-> a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> new file mode 100644
-> index 000000000000..2f09f91a1576
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + */
-> +
-> +#include "vmlinux.h"
-> +#include <errno.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +struct bpf_dynptr {
-> +	__u64 :64;
-> +	__u64 :64;
-> +} __attribute__((aligned(8)));
-> +
-> +extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
-> +				      struct bpf_dynptr *sig_ptr,
-> +				      struct bpf_key *trusted_keyring)
-> __ksym;
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_RINGBUF);
-> +} ringbuf SEC(".maps");
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(dynptr_type_not_supp, int cmd, union bpf_attr *attr,
-> +	     unsigned int size)
-> +{
-> +	char write_data[64] = "hello there, world!!";
-> +	struct bpf_dynptr ptr;
-> +
-> +	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(write_data), 0,
-> &ptr);
-> +
-> +	return bpf_verify_pkcs7_signature(&ptr, &ptr, NULL);
-> +}
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr,
-> unsigned int size)
-> +{
-> +	unsigned long val;
-> +
-> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
-> +					  (struct bpf_dynptr *)&val,
-> NULL);
-> +}
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(not_ptr_to_stack, int cmd, union bpf_attr *attr,
-> unsigned int size)
-> +{
-> +	unsigned long val;
-> +
-> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)val,
-> +					  (struct bpf_dynptr *)val,
-> NULL);
-> +}
+-- 
+2.34.1
 
