@@ -2,105 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2D45AA07C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 21:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18F25AA09C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 22:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233277AbiIATzX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 15:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
+        id S232418AbiIAUF2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 16:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234587AbiIATzW (ORCPT
+        with ESMTP id S232420AbiIAUF2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:55:22 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9184B3AE5B
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Sep 2022 12:55:19 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id h78so15518550iof.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Sep 2022 12:55:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=seI1koEC25ypVGd7T1UjIwUU3cFD+MV5D0arikaOKag=;
-        b=mzcebpbWdcmzlubeGcDuaw+53g7e5bWwmRlay5XuQCuH3R/t0JaasCCMwM64OhQ8C0
-         Qj8qMRkKOagiQjpH+nVAooZugFtBFIZcSUg/ZoOIEeiF+ewsGDfW5Xojf9q5HCf4t956
-         PFhD3GO7Z/XVxDSRp5TuShiPr/FFsO9VDyAwZ7plwo+K5WQ0gFWxLBD/6x4a2LKPbz8j
-         BiFNQ+f/1SKSq9n+C1xM3Zej61fBZKP0ddqpVHJJoDvqdQbB82KS514IxM3cVsORj0X6
-         2qGXWXJrP3ahNVwr4ON0I31cXTL/f6Up+m0FJxwLrZnqHmDuAmgHF8t8sj+xxtUA1yzv
-         H7Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=seI1koEC25ypVGd7T1UjIwUU3cFD+MV5D0arikaOKag=;
-        b=PRTMq8UlWaojkeXSboY47/RQafHyi7D7S4MvcsmWIZuqIcVloy+bOrgtL/6rrOleGY
-         E6qsPqnCoD3njrS9Zh0EbJJ0EQnYjZWwDkzzE/vivpbd7Zg34LjRftmeWNePL0gUHA/F
-         ZQ+4fOXXX/jQKGgprytC3hJkZu9EeSxMoxYe+YFTBFiiseHS2ZhmiiHXMPfHSyJX9aUU
-         7UctBzMz1dYHOoczfy4rvYjH2LTfLLYqmO6HJmZ8fo56v2fP9n9O69HqUhjEeNv0rciY
-         m6xr+2Oyb7k2tRWd+2vvPAE1TeM6a1YsqCeExF40SC2SxkktJ3bgypMz8ks4UDGskJvi
-         fM/A==
-X-Gm-Message-State: ACgBeo3etmFuJnRWmuEKRMyHCYM7BKKrQ0yhU6nye539e4dP7IIndS+A
-        9yGjrDPEgrwKLPfvLdo5z2VvKX84okQRLm021LA2CejHuQY=
-X-Google-Smtp-Source: AA6agR6E8CWIjgzNAAEwAB1E6jFOLB0toIoj0r0vr72SzwiSp/lagdot9Pv8Elb1B+6+1/bL+SDvb2Xedw6RH/MYQ+o=
-X-Received: by 2002:a5d:8b47:0:b0:689:a436:81d2 with SMTP id
- c7-20020a5d8b47000000b00689a43681d2mr15417264iot.138.1662062118567; Thu, 01
- Sep 2022 12:55:18 -0700 (PDT)
+        Thu, 1 Sep 2022 16:05:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACD653014;
+        Thu,  1 Sep 2022 13:05:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE28B61EB8;
+        Thu,  1 Sep 2022 20:05:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCA9C433C1;
+        Thu,  1 Sep 2022 20:05:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662062726;
+        bh=iOc9+0GNgABm7fesjder0qm3JUPhsUZuIxj/BUlS0DY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uLCKRs84bnUbq3xsodIbWHV1rtb9Yjdug6UHeGa0RoKvn32PnxRfPUWUt1tJWXDMp
+         t2uUe7vlx3Kp8TfWGck0MSL4wmTCEZWlIif4W04OAkWN2jTRNr84MCyJKuwoKg3Fyr
+         KLbuHVW8iWbGWSwVXN8Fhzf8fAx11mIEOJPbkvSV1ydcXehE+g4Wf4hulJxpCLpJTx
+         MWTqE+3CUK91jok+H0IcrlhGEmyhmTpmcEShWRLMxYb0cfQ7lP8spNFzIckDCTo72s
+         jbqyvgVJj9hpGJIJyt7Uugeu0dDlbiWG+Cz/p0mCWybjHyIx7w68zv5RMaX0+SrMtV
+         aQprBRIBlH2UQ==
+Date:   Thu, 1 Sep 2022 13:05:23 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] fortify: Add run-time WARN for cross-field memcpy()
+Message-ID: <YxEQg+fOpaPuS/NH@dev-arch.thelio-3990X>
+References: <20220901065914.1417829-1-keescook@chromium.org>
 MIME-Version: 1.0
-References: <20220901092315.33619-1-tsahu@linux.ibm.com>
-In-Reply-To: <20220901092315.33619-1-tsahu@linux.ibm.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 1 Sep 2022 12:54:42 -0700
-Message-ID: <CAJHvVciwa4x8sQag0a5dmq2GbmpMs3bYEVCW4g_Ro_o_GVtQTg@mail.gmail.com>
-Subject: Re: [PATCH] selftest: vm: remove deleted local_config.* from .gitignore
-To:     Tarun Sahu <tsahu@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, aneesh.kumar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901065914.1417829-1-keescook@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thanks for the cleanup! For what it's worth:
+Hi Kees,
 
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+On Wed, Aug 31, 2022 at 11:59:12PM -0700, Kees Cook wrote:
+> Hi,
+> 
+> I'm hoping to at least get this into -next to see how noisy it ends up
+> being. I've tracked down several false positives that are getting fixed,
+> but I'd like to see this get wider testing. For details, see patch 1,
+> but this is the run-time half of the recent FORTIFY_SOURCE memcpy()
+> bounds checking work.
+> 
+> -Kees
+> 
+> Kees Cook (2):
+>   fortify: Add run-time WARN for cross-field memcpy()
+>   lkdtm: Update tests for memcpy() run-time warnings
+> 
+>  drivers/misc/lkdtm/fortify.c            | 96 +++++++++++++++++++++----
+>  include/linux/fortify-string.h          | 70 +++++++++++++++++-
+>  tools/testing/selftests/lkdtm/tests.txt |  8 ++-
+>  3 files changed, 155 insertions(+), 19 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
 
-On Thu, Sep 1, 2022 at 2:23 AM Tarun Sahu <tsahu@linux.ibm.com> wrote:
->
-> Commit d2d6cba5d6623245a80cc151008cce825c8b6248 ("selftest: vm: remove
-> orphaned references to local_config.{h,mk}") took care of removing
-> orphaned references. This commit remove local_config from .gitignore.
->
-> Parent Patch
-> Commit 69007f156ba7aead6c75b0046958ad3396f5aed1 ("Kselftests: remove
-> support of libhugetlbfs from kselftests")
->
->
-> Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
-> ---
->  tools/testing/selftests/vm/.gitignore | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-> index 31e5eea2a9b9..7b9dc2426f18 100644
-> --- a/tools/testing/selftests/vm/.gitignore
-> +++ b/tools/testing/selftests/vm/.gitignore
-> @@ -30,7 +30,6 @@ map_fixed_noreplace
->  write_to_hugetlbfs
->  hmm-tests
->  memfd_secret
-> -local_config.*
->  soft-dirty
->  split_huge_page_test
->  ksm_tests
-> --
-> 2.31.1
->
+I took these two patches for a spin on four of my test machines (one
+arm64 and three x86_64, kernel compiled with tip of tree clang) and I
+did not see any warnings. Not to say there are not any lurking but my
+set of drivers did not appear to trigger anything.
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+Cheers,
+Nathan
