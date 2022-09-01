@@ -2,72 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF6C5A8EF0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 08:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9BA5A8EF1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 08:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiIAG7d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 02:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S233406AbiIAG7h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 02:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbiIAG7c (ORCPT
+        with ESMTP id S233354AbiIAG7f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:59:32 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3813122056
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:19 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id u22so16240143plq.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:19 -0700 (PDT)
+        Thu, 1 Sep 2022 02:59:35 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8234A120334
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:21 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id c66so6389899pfc.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Aug 2022 23:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=5zD63//05MgDrU1w2Zt/sYyNIOeJWPHdLsrxWSODUj8=;
-        b=HQ6lKT5/JNpOCSjvFQwqq00+XvPUxGpOvaNcglNbskGo44IxmXcllioc/YL57N/QAn
-         7TspqWbtM/e9SKH9BKSCQEU2CElxpJBiU4AQMiVmQOFQxDIeSxHgClcwubT6Hn+DMA61
-         HsHhVtFcb2M81RxDwQzlbQfXdPUn7vdVbIT2E=
+        bh=xYFfyHD1RFDP4AJmjNoTHOrZhyKAtKo+QsQqKyJN3oU=;
+        b=XSmAs/VdvPt1L89oP6IwazVnWBIN+a1h4Ns4rwKMHcOeDh0ackRWr26X4tAED7gx2l
+         5blIfVFN0S2xCzOwp0BbVQ19nULcqqnLE2vuPNKp9TvIr0Grj+kPytOA3G+CUZlgjt7E
+         4he92MoNhnTpwqq64UtbpgAy6BcuHZEoFI8xs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=5zD63//05MgDrU1w2Zt/sYyNIOeJWPHdLsrxWSODUj8=;
-        b=WlpY95OAaz9RZrxxua4E+MVNyJro1zaDWEGGRJ3P0lhCSKYgNi9FpbKMEYn0dbVe3s
-         sMetJD15PSKoQ/CFlACppyiXa5Vzi+GLo4+BEoo9Qf+nszDRJU1htY4NTpaUWYgNngLD
-         e0x055d4ishCk0MZBNs9/zNJlyf7IWCUK9o3P0wqSEny0T5XPUr0c3B41GnkuW7TMokF
-         FRb5PHv5FjXeyjRcNmEng/p9JXvcb8BxFqvWjDZ8pqF8QXe3GSTn5NuDXOqFcZdWnXyZ
-         X34cAS70lDDD2GB8RizcsjQRBxgr2oTHmCN7QABpgY1Zbcb0IQcLaLR7nE2znj11mh4C
-         /Hfw==
-X-Gm-Message-State: ACgBeo1BfpolndvXCDFypWIngtuUrvepT37W+8VZRIzW5Q20kertpRBj
-        Dh9ff1nbVBMftc+lNUZfLL0BUg==
-X-Google-Smtp-Source: AA6agR79zSsv1/U0SFzruYx6/A01jNuVR2BpWmQ8aUjcwvh+CcCv4tLcaj4m9F4AB6asLudvZSc8bQ==
-X-Received: by 2002:a17:903:189:b0:175:4643:f862 with SMTP id z9-20020a170903018900b001754643f862mr5762738plg.5.1662015558557;
-        Wed, 31 Aug 2022 23:59:18 -0700 (PDT)
+        bh=xYFfyHD1RFDP4AJmjNoTHOrZhyKAtKo+QsQqKyJN3oU=;
+        b=3ReRXFjTCukMDheG3Dl0v7XIVCFSKRImSU5xJbOVOIY9u/Bak7UGPR5HdfQh9jRQy3
+         TTqAHyQDng3KWtjwpojrVW164RMw9t1se97lL/5M66MuNGCvHpGV5KyVGd0+TKUSs+5R
+         X9KxuxT/1zg1jgTe7PHUaipTuoeHL2sCpIFvMKzNZg1u5mKv55IRVpFI8QVFHaoZA/88
+         LwEItkbsKpHzSy4XmCoaEHBscUqwFFr0Pcr0hh/lYUlPbRzd3prwLA1qnQcAEhAouF3z
+         S5MiqmuRcYvTxJ0Ly3r4hLmBpXUKa6Xj1AsO+99YPtsB7VgWI2VbWI/T42XSNe1wHIC8
+         trPA==
+X-Gm-Message-State: ACgBeo0J9fvmyacxIj+PCwHa1LCvqWJV+ZyMcA6/5KiXg+3QPzy7EHRM
+        YvcflsSTSWbCVuod3lcrerk2cQ==
+X-Google-Smtp-Source: AA6agR4LEiVZMQQRnQvEdW2n9bb9YQvtrCipJM9dDVtZ9Rv/9ayJTt9S25Wf5gapVvxroYsJgUr4hQ==
+X-Received: by 2002:a63:6c42:0:b0:3fe:465:7a71 with SMTP id h63-20020a636c42000000b003fe04657a71mr24973379pgc.101.1662015559068;
+        Wed, 31 Aug 2022 23:59:19 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g16-20020aa796b0000000b005385555e647sm6755525pfk.155.2022.08.31.23.59.17
+        by smtp.gmail.com with ESMTPSA id q13-20020a170902dacd00b00174d4fabe76sm4817868plx.214.2022.08.31.23.59.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 31 Aug 2022 23:59:17 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH 1/2] fortify: Add run-time WARN for cross-field memcpy()
-Date:   Wed, 31 Aug 2022 23:59:13 -0700
-Message-Id: <20220901065914.1417829-2-keescook@chromium.org>
+        linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH 2/2] lkdtm: Update tests for memcpy() run-time warnings
+Date:   Wed, 31 Aug 2022 23:59:14 -0700
+Message-Id: <20220901065914.1417829-3-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220901065914.1417829-1-keescook@chromium.org>
 References: <20220901065914.1417829-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7128; h=from:subject; bh=OPwd1urZjnL/sFRYREYgKX+k6ufc3hbn/XSHlj88wUI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEFhCSODVZ7smkPYeLq9P5OfRFSY7/eAHjZtzAi0c 9ubXhbeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxBYQgAKCRCJcvTf3G3AJkegD/ 42Irslmz7F4CdoTT2NyeRtfSgtC1K1407SWEtirPWZccQIc+N6GUB80PLbQJjmmiAt2/NFD33QnF0G 0az0JfTpknG/8+KzwK0rElQigW7Q59NMGBvPBEHYyAwKGNk020gCYhBkxjoIfUG5pSYlNu4GlhxZaI ibXhD3X8y7O6MPgetoZmWPytbvBY0cOAekj1kOVl2+RzBlTO5aHfsgPNeWrk3Beol6WzvRnRNoKEQe R7kbNQ0mW+HMo7Ya220KgkOgKWpGw6esRQCUT2yiqMXBLvNAjx7plsVdDoRmW4cG3milj6YUil8hIO Z+XhKduxTaZtTstV89QNNejf72Qs73zWLw3BVPTu4Z49MgHe7dPjlTtWDsdLMOCIxXWScGxgPi8CvO rJAGEg/f3t0mViDRlm3h0OvDINW0sZkWVm4nB8mMYLdI2td3FBJQhQt0fYWf6sqoC8UYQoBeRR2TmR Nn665Gh0RROl2PZadPeZ7nl3oSO8/RLY6hme9C419x3DxY3zLt3yoI1E0QapHuCiR5nywYwXSj4125 Yr3Qx0BH3eG2n0I4EOCWwww9KjJW0F34DP196a4S6hHvDI/9D6upT3WhtPdcLTsn8FBofeS8pKiWEm A9rSpJyqMB/k1glXp6qUElRYNHTfmzLECKreOXE2mYXTOb8UKU/rDWG2DblA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6007; h=from:subject; bh=IUZVdxvxMIlH+Jar34T6ukh1akodoplD+BZw40+sie0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEFhCriO8rPE7BLGJP/5HmYqPff+d086juOOW7NOq 9FW0xZWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxBYQgAKCRCJcvTf3G3AJg/jD/ 9XzCIlv1K4/cB0L3iCzihH3aB1mjNOPS4P5dNlJ5HW5HEYKycGrlMM0sxqwmOE83L6WDSMkv1uXAE3 7ih8fHyySD+v/Z70/4yAx+1FBdXxZPbn5qadFE+68n7f9gYYh9iBCMy32nyuqiSZT+UomB4vVHHEVi +DCoYfNSuoQL4jpswA/IOQuNHYnFTK26pciQ48Sj3SHepddAHK1yyLGCSbsS14aQ79a2YwU4B+ovGf Mw/6NJw7ApAefccLF493ET8/RBeJHoD06Bx9/Uf1A2TdLmgD6XorkY6OpUYv+pFp/qOtARKfFBoyR7 2rIkJjnWops7tgvb7DK2X7pZB5YmosIzpQYPmkMnNDif/4f4RtBKXMLNOSPWUn4Y0e0W7eK+zNbm3s GXbaM0SKIwRiexVGztSWqe8F3dnXEhqszygD7ie545+mDVSU30biu1c9flplndlFkE3FXRTM/ltdwc S6WRLffAaMVgR9NtIW5kyvhBCtCw/vv/acKxiUGq5R0m5i/oUWk873waMe3lqwFNF/nqe5EwPs6yRk g+ibZPHsXWFWcCQlqKOvXPZs3x5ZX4s4FIx8uJQlLpI1NxbOZIAFCjWDwCwnUGD+oOQpogBG5e5YMP ca5++Z9nJR8ryxF+Yull2mLouOBXEWkMYbb5jZiCTevwwQa1oqLDqYqlZ4Lw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,195 +74,186 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Enable run-time checking of dynamic memcpy() and memmove() lengths,
-issuing a WARN when a write would exceed the size of the target struct
-member, when built with CONFIG_FORTIFY_SOURCE=y. This would have
-caught all of the memcpy()-based buffer overflows in the last 3 years,
-specifically covering all the cases where the destination buffer size
-is known at compile time.
+Clarify the LKDTM FORTIFY tests, and add tests for the mem*() family of
+functions, now that run-time checking is distinct.
 
-This change ONLY adds a run-time warning. As false positives are currently
-still expected, this will not block the overflow. The new warnings will
-look like this:
-
-  memcpy: detected field-spanning write (size N) of single field "var->dest" (size M)
-  WARNING: CPU: n PID: pppp at source/file/path.c:nr function+0xXX/0xXX [module]
-
-There may be false positives in the kernel where intentional
-field-spanning writes are happening. These need to be addressed
-similarly to how the compile-time cases were addressed: add a
-struct_group(), split the memcpy(), or some other refactoring.
-
-In order to make counting/investigating instances of added runtime checks
-easier, each instance includes the destination variable name as a WARN
-argument, prefixed with 'field "'. Therefore, on an x86_64 defconfig
-build, it is trivial to inspect the build artifacts to find instances.
-For example on an x86_64 defconfig build, there are 78 new run-time
-memcpy() bounds checks added:
-
-  $ for i in vmlinux $(find . -name '*.ko'); do \
-      strings "$i" | grep '^field "'; done | wc -l
-  78
-
-Simple cases where a destination buffer is known to be a dynamic size
-do not generate a WARN. For example:
-
-struct normal_flex_array {
-	void *a;
-	int b;
-	u32 c;
-	size_t array_size;
-	u8 flex_array[];
-};
-
-struct normal_flex_array *instance;
-...
-/* These will be ignored for run-time bounds checking. */
-memcpy(instance, src, len);
-memcpy(instance->flex_array, src, len);
-
-However, one of the dynamic-sized destination cases is irritatingly
-unable to be detected by the compiler: when using memcpy() to target
-a composite struct member which contains a trailing flexible array
-struct. For example:
-
-struct wrapper {
-	int foo;
-	char bar;
-	struct normal_flex_array embedded;
-};
-
-struct wrapper *instance;
-...
-/* This will incorrectly WARN when len > sizeof(instance->embedded) */
-memcpy(&instance->embedded, src, len);
-
-These cases end up appearing to the compiler to be sized as if the
-flexible array had 0 elements. :( For more details see:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101832
-https://godbolt.org/z/vW6x8vh4P
-
-These "composite flexible array structure destination" cases will be
-need to be flushed out and addressed on a case-by-case basis.
-
-Regardless, for the general case of using memcpy() on flexible array
-destinations, future APIs will be created to handle common cases. Those
-can be used to migrate away from open-coded memcpy() so that proper
-error handling (instead of trapping) can be used.
-
-As mentioned, none of these bounds checks block any overflows
-currently. For users that have tested their workloads, do not encounter
-any warnings, and wish to make these checks stop any overflows, they
-can use a big hammer and set the sysctl panic_on_warn=1.
-
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/fortify-string.h | 70 ++++++++++++++++++++++++++++++++--
- 1 file changed, 67 insertions(+), 3 deletions(-)
+ drivers/misc/lkdtm/fortify.c            | 96 +++++++++++++++++++++----
+ tools/testing/selftests/lkdtm/tests.txt |  8 ++-
+ 2 files changed, 88 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index 3b401fa0f374..ca3626c41785 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -3,6 +3,7 @@
- #define _LINUX_FORTIFY_STRING_H_
+diff --git a/drivers/misc/lkdtm/fortify.c b/drivers/misc/lkdtm/fortify.c
+index 080293fa3c52..015927665678 100644
+--- a/drivers/misc/lkdtm/fortify.c
++++ b/drivers/misc/lkdtm/fortify.c
+@@ -10,28 +10,31 @@
  
- #include <linux/const.h>
-+#include <linux/bug.h>
+ static volatile int fortify_scratch_space;
  
- #define __FORTIFY_INLINE extern __always_inline __gnu_inline __overloadable
- #define __RENAME(x) __asm__(#x)
-@@ -319,7 +320,7 @@ __FORTIFY_INLINE void fortify_memset_chk(__kernel_size_t size,
-  * V = vulnerable to run-time overflow (will need refactoring to solve)
-  *
-  */
--__FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
-+__FORTIFY_INLINE bool fortify_memcpy_chk(__kernel_size_t size,
- 					 const size_t p_size,
- 					 const size_t q_size,
- 					 const size_t p_size_field,
-@@ -368,16 +369,79 @@ __FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
- 	if ((p_size != (size_t)(-1) && p_size < size) ||
- 	    (q_size != (size_t)(-1) && q_size < size))
- 		fortify_panic(func);
+-static void lkdtm_FORTIFIED_OBJECT(void)
++static void lkdtm_FORTIFY_STR_OBJECT(void)
+ {
+ 	struct target {
+ 		char a[10];
+-	} target[2] = {};
++		int foo;
++	} target[3] = {};
+ 	/*
+ 	 * Using volatile prevents the compiler from determining the value of
+ 	 * 'size' at compile time. Without that, we would get a compile error
+ 	 * rather than a runtime error.
+ 	 */
+-	volatile int size = 11;
++	volatile int size = 20;
 +
-+	/*
-+	 * Warn when writing beyond destination field size.
-+	 *
-+	 * We must ignore p_size_field == 0 for existing 0-element
-+	 * fake flexible arrays, until they are all converted to
-+	 * proper flexible arrays.
-+	 *
-+	 * The implementation of __builtin_object_size() behaves
-+	 * like sizeof() when not directly referencing a flexible
-+	 * array member, which means there will be many bounds checks
-+	 * that will appear at run-time, without a way for them to be
-+	 * detected at compile-time (as can be done when the destination
-+	 * is specifically the flexible array member).
-+	 * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101832
-+	 */
-+	if (p_size_field != 0 && p_size_field != (size_t)(-1) &&
-+	    p_size != p_size_field && p_size_field < size)
-+		return true;
-+
-+	return false;
++	pr_info("trying to strcmp() past the end of a struct\n");
+ 
+-	pr_info("trying to read past the end of a struct\n");
++	strncpy(target[0].a, target[1].a, size);
+ 
+ 	/* Store result to global to prevent the code from being eliminated */
+-	fortify_scratch_space = memcmp(&target[0], &target[1], size);
++	fortify_scratch_space = target[0].a[3];
+ 
+-	pr_err("FAIL: fortify did not block an object overread!\n");
++	pr_err("FAIL: fortify did not block a strncpy() object write overflow!\n");
+ 	pr_expected_config(CONFIG_FORTIFY_SOURCE);
  }
  
- #define __fortify_memcpy_chk(p, q, size, p_size, q_size,		\
- 			     p_size_field, q_size_field, op) ({		\
- 	size_t __fortify_size = (size_t)(size);				\
--	fortify_memcpy_chk(__fortify_size, p_size, q_size,		\
--			   p_size_field, q_size_field, #op);		\
-+	WARN_ONCE(fortify_memcpy_chk(__fortify_size, p_size, q_size,	\
-+				     p_size_field, q_size_field, #op),	\
-+		  #op ": detected field-spanning write (size %zu) of single %s (size %zu)\n", \
-+		  __fortify_size,					\
-+		  "field \"" #p "\" at " __FILE__ ":" __stringify(__LINE__), \
-+		  p_size_field);					\
- 	__underlying_##op(p, q, __fortify_size);			\
- })
+-static void lkdtm_FORTIFIED_SUBOBJECT(void)
++static void lkdtm_FORTIFY_STR_MEMBER(void)
+ {
+ 	struct target {
+ 		char a[10];
+@@ -44,7 +47,7 @@ static void lkdtm_FORTIFIED_SUBOBJECT(void)
+ 	strscpy(src, "over ten bytes", size);
+ 	size = strlen(src) + 1;
  
-+/*
-+ * Notes about compile-time buffer size detection:
-+ *
-+ * With these types...
-+ *
-+ *	struct middle {
-+ *		u16 a;
-+ *		u8 middle_buf[16];
-+ *		int b;
-+ *	};
-+ *	struct end {
-+ *		u16 a;
-+ *		u8 end_buf[16];
-+ *	};
-+ *	struct flex {
-+ *		int a;
-+ *		u8 flex_buf[];
-+ *	};
-+ *
-+ *	void func(TYPE *ptr) { ... }
-+ *
-+ * Cases where destination size cannot be currently detected:
-+ * - the size of ptr's object (seemingly by design, gcc & clang fail):
-+ *	__builtin_object_size(ptr, 1) == -1
-+ * - the size of flexible arrays in ptr's obj (by design, dynamic size):
-+ *	__builtin_object_size(ptr->flex_buf, 1) == -1
-+ * - the size of ANY array at the end of ptr's obj (gcc and clang bug):
-+ *	__builtin_object_size(ptr->end_buf, 1) == -1
-+ *	https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836
-+ *
-+ * Cases where destination size is currently detected:
-+ * - the size of non-array members within ptr's object:
-+ *	__builtin_object_size(ptr->a, 1) == 2
-+ * - the size of non-flexible-array in the middle of ptr's obj:
-+ *	__builtin_object_size(ptr->middle_buf, 1) == 16
-+ *
-+ */
+-	pr_info("trying to strncpy past the end of a member of a struct\n");
++	pr_info("trying to strncpy() past the end of a struct member...\n");
+ 
+ 	/*
+ 	 * strncpy(target.a, src, 20); will hit a compile error because the
+@@ -56,7 +59,72 @@ static void lkdtm_FORTIFIED_SUBOBJECT(void)
+ 	/* Store result to global to prevent the code from being eliminated */
+ 	fortify_scratch_space = target.a[3];
+ 
+-	pr_err("FAIL: fortify did not block an sub-object overrun!\n");
++	pr_err("FAIL: fortify did not block a strncpy() struct member write overflow!\n");
++	pr_expected_config(CONFIG_FORTIFY_SOURCE);
 +
- /*
-  * __builtin_object_size() must be captured here to avoid evaluating argument
-  * side-effects further into the macro layers.
++	kfree(src);
++}
++
++static void lkdtm_FORTIFY_MEM_OBJECT(void)
++{
++	int before[10];
++	struct target {
++		char a[10];
++		int foo;
++	} target = {};
++	int after[10];
++	/*
++	 * Using volatile prevents the compiler from determining the value of
++	 * 'size' at compile time. Without that, we would get a compile error
++	 * rather than a runtime error.
++	 */
++	volatile int size = 20;
++
++	memset(before, 0, sizeof(before));
++	memset(after, 0, sizeof(after));
++	fortify_scratch_space = before[5];
++	fortify_scratch_space = after[5];
++
++	pr_info("trying to memcpy() past the end of a struct\n");
++
++	pr_info("0: %zu\n", __builtin_object_size(&target, 0));
++	pr_info("1: %zu\n", __builtin_object_size(&target, 1));
++	pr_info("s: %d\n", size);
++	memcpy(&target, &before, size);
++
++	/* Store result to global to prevent the code from being eliminated */
++	fortify_scratch_space = target.a[3];
++
++	pr_err("FAIL: fortify did not block a memcpy() object write overflow!\n");
++	pr_expected_config(CONFIG_FORTIFY_SOURCE);
++}
++
++static void lkdtm_FORTIFY_MEM_MEMBER(void)
++{
++	struct target {
++		char a[10];
++		char b[10];
++	} target;
++	volatile int size = 20;
++	char *src;
++
++	src = kmalloc(size, GFP_KERNEL);
++	strscpy(src, "over ten bytes", size);
++	size = strlen(src) + 1;
++
++	pr_info("trying to memcpy() past the end of a struct member...\n");
++
++	/*
++	 * strncpy(target.a, src, 20); will hit a compile error because the
++	 * compiler knows at build time that target.a < 20 bytes. Use a
++	 * volatile to force a runtime error.
++	 */
++	memcpy(target.a, src, size);
++
++	/* Store result to global to prevent the code from being eliminated */
++	fortify_scratch_space = target.a[3];
++
++	pr_err("FAIL: fortify did not block a memcpy() struct member write overflow!\n");
+ 	pr_expected_config(CONFIG_FORTIFY_SOURCE);
+ 
+ 	kfree(src);
+@@ -67,7 +135,7 @@ static void lkdtm_FORTIFIED_SUBOBJECT(void)
+  * strscpy and generate a panic because there is a write overflow (i.e. src
+  * length is greater than dst length).
+  */
+-static void lkdtm_FORTIFIED_STRSCPY(void)
++static void lkdtm_FORTIFY_STRSCPY(void)
+ {
+ 	char *src;
+ 	char dst[5];
+@@ -136,9 +204,11 @@ static void lkdtm_FORTIFIED_STRSCPY(void)
+ }
+ 
+ static struct crashtype crashtypes[] = {
+-	CRASHTYPE(FORTIFIED_OBJECT),
+-	CRASHTYPE(FORTIFIED_SUBOBJECT),
+-	CRASHTYPE(FORTIFIED_STRSCPY),
++	CRASHTYPE(FORTIFY_STR_OBJECT),
++	CRASHTYPE(FORTIFY_STR_MEMBER),
++	CRASHTYPE(FORTIFY_MEM_OBJECT),
++	CRASHTYPE(FORTIFY_MEM_MEMBER),
++	CRASHTYPE(FORTIFY_STRSCPY),
+ };
+ 
+ struct crashtype_category fortify_crashtypes = {
+diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+index 65e53eb0840b..607b8d7e3ea3 100644
+--- a/tools/testing/selftests/lkdtm/tests.txt
++++ b/tools/testing/selftests/lkdtm/tests.txt
+@@ -75,7 +75,9 @@ USERCOPY_KERNEL
+ STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+ CFI_FORWARD_PROTO
+ CFI_BACKWARD call trace:|ok: control flow unchanged
+-FORTIFIED_STRSCPY
+-FORTIFIED_OBJECT
+-FORTIFIED_SUBOBJECT
++FORTIFY_STRSCPY detected buffer overflow
++FORTIFY_STR_OBJECT detected buffer overflow
++FORTIFY_STR_MEMBER detected buffer overflow
++FORTIFY_MEM_OBJECT detected buffer overflow
++FORTIFY_MEM_MEMBER detected field-spanning write
+ PPC_SLB_MULTIHIT Recovered
 -- 
 2.34.1
 
