@@ -2,446 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA535A9D77
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 18:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4DA5A9E18
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 19:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbiIAQsF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 12:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
+        id S233353AbiIARfk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 13:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbiIAQsC (ORCPT
+        with ESMTP id S233178AbiIARfT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:48:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B337D9834F
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Sep 2022 09:48:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662050880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JmSTZNuoR5/0BLeN7G1KPisKeeRorhWXxUEtlv0SKGg=;
-        b=EInNRLD/ShoVHoC+qC8nvhLqeBqMrK2mYZ1Xunag6uDPzVo42+gGrR5TJvtt9BwikvXr78
-        iZPl6y9FmoqWWwVhCdVccdJIVc1194+DzCz5nJqJH0f1wEmgJqU3Cd7TaWzWRgGToTFPyb
-        MWC04EYwHPfmXY97h+C5GmfL29+l96I=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-473-0eyMhDboMyqB33DtLonbPQ-1; Thu, 01 Sep 2022 12:47:58 -0400
-X-MC-Unique: 0eyMhDboMyqB33DtLonbPQ-1
-Received: by mail-pj1-f71.google.com with SMTP id r6-20020a17090a2e8600b001fbb51e5cc1so1678764pjd.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Sep 2022 09:47:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JmSTZNuoR5/0BLeN7G1KPisKeeRorhWXxUEtlv0SKGg=;
-        b=BD8UQDbiEk4NvVuXGYEeMOL9ZGXqwFgaZLAJQgvJOoxkGeaaOoe8txr+NIq931dTzi
-         kj3ZIyj8r+c8SQLfqqNglJfzJ1PFlc1sbrZk5vfZx5tlxZ+f7zIXAw3rQfSj3byGAtTa
-         w+PosKOt7V2TMgJriAGNvD6sGDzAwVWBlt/+lgS8Hzch6vlqh8QypsF9jYJLkXcevlE4
-         LeDEtVf6YbqwJSnPQWtvdX3rngSnKMjdvfEKAOkQBzaVq9CfSb5UiChRtFzOePylXoXY
-         xEuZzMby1qh9hm1e+6viq39pQdWeAjbLqKA7T/vxszEeAFacgoAqtdY5yEPNOoVLuiQY
-         KfYg==
-X-Gm-Message-State: ACgBeo3FWIhRvhkqE/GltLMWgfaAK+YfTuT3EcduTXAFCoVQRsuxVSBP
-        x2mY+1cDHYWgOx8M3lOxRKo1nhPLnXuKhphKnBLB2ao/uIB/woMcgjDu6h1oqIPkJkhVRhAgqke
-        0XI7SbPbF8HxXpsw9vjWo6f6rWcwx49Wk5RV5m+88x5ma
-X-Received: by 2002:a17:903:120c:b0:172:728a:3b24 with SMTP id l12-20020a170903120c00b00172728a3b24mr31230811plh.61.1662050877620;
-        Thu, 01 Sep 2022 09:47:57 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5V9baM7wbECIOLU2cc4dJ4lH8MVOMc1IGV9dE9JUZaUiy83PnHLzx+/7PJ3+AQ4GLfQUWhZJDTtOuHTUEUFkY=
-X-Received: by 2002:a17:903:120c:b0:172:728a:3b24 with SMTP id
- l12-20020a170903120c00b00172728a3b24mr31230768plh.61.1662050877195; Thu, 01
- Sep 2022 09:47:57 -0700 (PDT)
+        Thu, 1 Sep 2022 13:35:19 -0400
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc0f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDDC9C50F
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Sep 2022 10:34:29 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MJSpD2KxYzMqK1f;
+        Thu,  1 Sep 2022 19:34:12 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MJSpC0M5lzlh8TN;
+        Thu,  1 Sep 2022 19:34:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1662053652;
+        bh=o/v/WCsruLFuIKPLYfYVi2ZWkfCBoZTi3cgn9QP8x2I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lxSMPoQjcyoYGPH2mJTUzxKF7Ho3MUUpp+fWEFqTQ8uzen1kRgFn9QuD+UtiBMvEW
+         ogKQt0Rv1c0+NKP8Lu+L8IxKLcP/2SlmPj7KlIizHPH/6PpMYnoQfEdWjFbXVdCu/s
+         LRxd+4c+cKCcHjUi+4MagOS5S7RdvtzEa3ogkYco=
+Message-ID: <4b69a4ac-28ab-16aa-14b1-04a6f64d5490@digikod.net>
+Date:   Thu, 1 Sep 2022 19:34:10 +0200
 MIME-Version: 1.0
-References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
- <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
- <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
- <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com>
- <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
- <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com> <CAADnVQLuL045Sxdvh8kfcNkmD55+Wz8fHU3RtH+oQyOgePU5Pw@mail.gmail.com>
-In-Reply-To: <CAADnVQLuL045Sxdvh8kfcNkmD55+Wz8fHU3RtH+oQyOgePU5Pw@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 1 Sep 2022 18:47:45 +0200
-Message-ID: <CAO-hwJJJJRtoq2uTXRKCck6QSH8SFDSTpHmvTyOieczY7bdm8g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
- read user provided context
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH -next v2 3/6] landlock: add chmod and chown support
+Content-Language: en-US
+To:     xiujianfeng <xiujianfeng@huawei.com>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, corbet@lwn.net,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+ <20220827111215.131442-4-xiujianfeng@huawei.com> <Ywpw66EYRDTQIyTx@nuc>
+ <de8834b6-0ff2-1a81-f2d3-af33103e9942@huawei.com>
+ <de4620d2-3268-b3cc-71dd-acbbd204435e@digikod.net>
+ <2f286496-f4f8-76f7-2fb6-cc3dd5ffdeaa@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <2f286496-f4f8-76f7-2fb6-cc3dd5ffdeaa@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 6:15 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Aug 31, 2022 at 10:56 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > On Wed, Aug 31, 2022 at 6:37 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Tue, Aug 30, 2022 at 7:29 AM Benjamin Tissoires
-> > > <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > > > On Fri, Aug 26, 2022 at 3:51 AM Kumar Kartikeya Dwivedi
-> > > > <memxor@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, 26 Aug 2022 at 03:42, Alexei Starovoitov
-> > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > >
-> > > > > > On Wed, Aug 24, 2022 at 6:41 AM Benjamin Tissoires
-> > > > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > > > >
-> > > > > > > When a function was trying to access data from context in a syscall eBPF
-> > > > > > > program, the verifier was rejecting the call unless it was accessing the
-> > > > > > > first element.
-> > > > > > > This is because the syscall context is not known at compile time, and
-> > > > > > > so we need to check this when actually accessing it.
-> > > > > > >
-> > > > > > > Check for the valid memory access if there is no convert_ctx callback,
-> > > > > > > and allow such situation to happen.
-> > > > > > >
-> > > > > > > There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
-> > > > > > > will check that the types are matching, which is a good thing, but to
-> > > > > > > have an accurate result, it hides the fact that the context register may
-> > > > > > > be null. This makes env->prog->aux->max_ctx_offset being set to the size
-> > > > > > > of the context, which is incompatible with a NULL context.
-> > > > > > >
-> > > > > > > Solve that last problem by storing max_ctx_offset before the type check
-> > > > > > > and restoring it after.
-> > > > > > >
-> > > > > > > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > > > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > > > > >
-> > > > > > > ---
-> > > > > > >
-> > > > > > > changes in v9:
-> > > > > > > - rewrote the commit title and description
-> > > > > > > - made it so all functions can make use of context even if there is
-> > > > > > >   no convert_ctx
-> > > > > > > - remove the is_kfunc field in bpf_call_arg_meta
-> > > > > > >
-> > > > > > > changes in v8:
-> > > > > > > - fixup comment
-> > > > > > > - return -EACCESS instead of -EINVAL for consistency
-> > > > > > >
-> > > > > > > changes in v7:
-> > > > > > > - renamed access_t into atype
-> > > > > > > - allow zero-byte read
-> > > > > > > - check_mem_access() to the correct offset/size
-> > > > > > >
-> > > > > > > new in v6
-> > > > > > > ---
-> > > > > > >  kernel/bpf/btf.c      | 11 ++++++++++-
-> > > > > > >  kernel/bpf/verifier.c | 19 +++++++++++++++++++
-> > > > > > >  2 files changed, 29 insertions(+), 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > > > > > index 903719b89238..386300f52b23 100644
-> > > > > > > --- a/kernel/bpf/btf.c
-> > > > > > > +++ b/kernel/bpf/btf.c
-> > > > > > > @@ -6443,8 +6443,8 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
-> > > > > > >  {
-> > > > > > >         struct bpf_prog *prog = env->prog;
-> > > > > > >         struct btf *btf = prog->aux->btf;
-> > > > > > > +       u32 btf_id, max_ctx_offset;
-> > > > > > >         bool is_global;
-> > > > > > > -       u32 btf_id;
-> > > > > > >         int err;
-> > > > > > >
-> > > > > > >         if (!prog->aux->func_info)
-> > > > > > > @@ -6457,9 +6457,18 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
-> > > > > > >         if (prog->aux->func_info_aux[subprog].unreliable)
-> > > > > > >                 return -EINVAL;
-> > > > > > >
-> > > > > > > +       /* subprogs arguments are not actually accessing the data, we need
-> > > > > > > +        * to check for the types if they match.
-> > > > > > > +        * Store the max_ctx_offset and restore it after btf_check_func_arg_match()
-> > > > > > > +        * given that this function will have a side effect of changing it.
-> > > > > > > +        */
-> > > > > > > +       max_ctx_offset = env->prog->aux->max_ctx_offset;
-> > > > > > > +
-> > > > > > >         is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-> > > > > > >         err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
-> > > > > > >
-> > > > > > > +       env->prog->aux->max_ctx_offset = max_ctx_offset;
-> > > > > >
-> > > > > > I don't understand this.
-> > > > > > If we pass a ctx into a helper and it's going to
-> > > > > > access [0..N] bytes from it why do we need to hide it?
-> > > > > > max_ctx_offset will be used later raw_tp, tp, syscall progs
-> > > > > > to determine whether it's ok to load them.
-> > > > > > By hiding the actual size of access somebody can construct
-> > > > > > a prog that reads out of bounds.
-> > > > > > How is this related to NULL-ness property?
-> > > > >
-> > > > > Same question, was just typing exactly the same thing.
-> > > >
-> > > > The test I have that is failing in patch 2/23 is the following, with
-> > > > args being set to NULL by userspace:
-> > > >
-> > > > SEC("syscall")
-> > > > int kfunc_syscall_test_null(struct syscall_test_args *args)
-> > > > {
-> > > >        bpf_kfunc_call_test_mem_len_pass1(args, 0);
-> > > >
-> > > >        return 0;
-> > > > }
-> > > >
-> > > > Basically:
-> > > > if userspace declares the following:
-> > > >  DECLARE_LIBBPF_OPTS(bpf_test_run_opts, syscall_topts,
-> > > >                .ctx_in = NULL,
-> > > >                .ctx_size_in = 0,
-> > > >        );
-> > > >
-> > > > The verifier is happy with the current released kernel:
-> > > > kfunc_syscall_test_fail() never dereferences the ctx pointer, it just
-> > > > passes it around to bpf_kfunc_call_test_mem_len_pass1(), which in turn
-> > > > is also happy because it says it is not accessing the data at all (0
-> > > > size memory parameter).
-> > > >
-> > > > In the current code, check_helper_mem_access() actually returns
-> > > > -EINVAL, but doesn't change max_ctx_offset (it's still at the value of
-> > > > 0 here). The program is now marked as unreliable, but the verifier
-> > > > goes on.
-> > > >
-> > > > When adding this patch, if we declare a syscall eBPF (or any other
-> > > > function that doesn't have env->ops->convert_ctx_access), the previous
-> > > > "test" is failing because this ensures the syscall program has to have
-> > > > a valid ctx pointer.
-> > > > btf_check_func_arg_match() now calls check_mem_access() which
-> > > > basically validates the fact that the program can dereference the ctx.
-> > > >
-> > > > So now, without the max_ctx_offset store/restore, the verifier
-> > > > enforces that the provided ctx is not null.
-> > > >
-> > > > What I thought that would happen was that if we were to pass a NULL
-> > > > context from userspace, but the eBPF program dereferences it (or in
-> > > > that case have a subprog or a function call that dereferences it),
-> > > > then max_ctx_offset would still be set to the proper value because of
-> > > > that internal dereference, and so the verifier would reject with
-> > > > -EINVAL the call to the eBPF program.
-> > > >
-> > > > If I add another test that has the following ebpf prog (with ctx_in
-> > > > being set to NULL by the userspace):
-> > > >
-> > > > SEC("syscall")
-> > > > int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
-> > > > {
-> > > >        bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-> > > >
-> > > >        return 0;
-> > > > }
-> > > >
-> > > > Then the call of the program is actually failing with -EINVAL, even
-> > > > with this patch.
-> > > >
-> > > > But again, if setting from userspace a ctx of NULL with a 0 size is
-> > > > not considered as valid, then we can just drop that hunk and add a
-> > > > test to enforce it.
-> > >
-> > > PTR_TO_CTX in the verifier always means valid pointer.
-> > > All code paths in the verifier assumes that it's not NULL.
-> > > Pointer to skb, to xdp, to pt_regs, etc.
-> > > The syscall prog type is little bit special, since it
-> > > makes sense not to pass any argument to such prog.
-> > > So ctx_size_in == 0 is enforced after the verification:
-> > > if (ctx_size_in < prog->aux->max_ctx_offset ||
-> > >     ctx_size_in > U16_MAX)
-> > >           return -EINVAL;
-> > > The verifier should be able to proceed assuming ctx != NULL
-> > > and remember max max_ctx_offset.
-> > > If max_ctx_offset == 4 and ctx_size_in == 0 then
-> > > it doesn't matter whether the actual 'ctx' pointer is NULL
-> > > or points to a valid memory.
-> > > So it's ok for the verifier to assume ctx != NULL everywhere.
-> >
-> > Ok, thanks for the detailed explanation.
-> >
-> > >
-> > > Back to the issue at hand.
-> > > With this patch the line:
-> > >     bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-> > > will be seen as access_size == sizeof(*args), right?
-> > > So this part:
-> > > +                       if (access_size == 0)
-> > > +                               return zero_size_allowed ? 0 : -EACCES;
-> > >
-> > > will be skipped and
-> > > the newly added check_mem_access() will call check_ctx_access()
-> > > which will call syscall_prog_is_valid_access() and it will say
-> > > that any off < U16_MAX is fine and will simply
-> > > record max max_ctx_offset.
-> > > The ctx_size_in < prog->aux->max_ctx_offset check is done later.
-> >
-> > Yep, this is correct and this is working now, with a proper error (and
-> > no, this is not the error I am trying to fix, see below):
-> >
-> > eBPF prog:
-> > ```
-> >   SEC("?syscall")
-> >   int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
-> >   {
-> >           bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-> >           return 0;
-> >   }
-> > ```
-> >
-> > before this patch (1/23):
-> > * with ctx not NULL:
-> > libbpf: prog 'kfunc_syscall_test_null_fail': BPF program load failed:
-> > Invalid argument
-> > R1 type=ctx expected=fp
-> > arg#0 arg#1 memory, len pair leads to invalid memory access
-> >
-> >  => this is not correct, we expect the program to be loaded (and it is
-> > expected, this is the bug that is fixed)
-> >
-> > * Same result with ctx being NULL from the caller
-> >
-> > With just the hunk in kernel/bpf/verifier.c (so without touching max_ctx_offset:
-> > * with ctx not NULL:
-> > program is loaded, and executed correctly
-> >
-> > * with ctx being NULL:
-> > program is now loaded, but execution returns -EINVAL, as expected
-> >
-> > So this case is fully solved by just the hunk in verifier.c
-> >
-> > With the full patch:
-> > same results, with or without ctx being set to NULL, so no side effects.
-> >
-> > >
-> > > So when you're saying:
-> > > "call of the program is actually failing with -EINVAL"
-> > > that's the check you're referring to?
-> >
-> > No. I am referring to the following eBPF program:
-> > ```
-> >   SEC("syscall")
-> >   int kfunc_syscall_test_null(struct syscall_test_args *args)
-> >   {
-> >            return 0;
-> >   }
-> > ```
-> >
-> > (no calls, just the declaration of a program)
-> >
-> > This one is supposed to be loaded and properly run whatever the
-> > context is, right?
->
-> Got it. Yes. Indeed.
-> The if (!env->ops->convert_ctx_access)
-> hunk alone would break existing progs because of
-> side effect of max_ctx_offset.
-> We have this unfortunate bit of code:
->                 ret = btf_check_subprog_arg_match(env, subprog, regs);
->                 if (ret == -EFAULT)
->                         /* unlikely verifier bug. abort.
->                          * ret == 0 and ret < 0 are sadly acceptable for
->                          * main() function due to backward compatibility.
->                          * Like socket filter program may be written as:
->                          * int bpf_prog(struct pt_regs *ctx)
->                          * and never dereference that ctx in the program.
->                          * 'struct pt_regs' is a type mismatch for socket
->                          * filter that should be using 'struct __sk_buff'.
->                          */
->                         goto out;
->
-> because btf_check_subprog_arg_match() is used to match arguments
-> for calling into a function and when the verifier just starts
-> to analyze a function.
-> Before this patch the btf_check_subprog_arg_match() would just
-> EINVAL on your above example and will proceed,
-> but with the patch the non zero max_ctx_offset will
-> disallow execution later and break things.
-> I think we need to clean up this bit of code.
-> Just save/restore of max_ctx_offset isn't going to work.
-> How about adding a flag to btf_check_subprog_arg_match
-> to indicate whether the verifier is processing 'call' insn
-> or just starting processing a function body and
-> then do
-> if (ptr_to_mem_ok && processing_call) ?
-> Still feels like a hack.
-> Maybe btf_check_func_arg_match() needs to be split to
-> disambiguate calling vs processing the body ?
+CCing linux-fsdevel@vger.kernel.org
 
-Just to be sure I understand the problem correctly:
-btf_check_subprog_arg_match() is called twice only in verifier.c
-  - first time (in do_check_common()):
-               /* 1st arg to a function */
-               regs[BPF_REG_1].type = PTR_TO_CTX;
-               mark_reg_known_zero(env, regs, BPF_REG_1);
-               ret = btf_check_subprog_arg_match(env, subprog, regs);
 
-AFAICT this call is the "starting processing a function body", and
-thus we should only match whether the function definition is correct
-compared to the BTF (whether the program is correctly defined or not),
-and thus should not have side effects like changing max_ctx_offset
+On 01/09/2022 15:06, xiujianfeng wrote:
+> Hi,
+> 
+> 在 2022/8/30 0:01, Mickaël Salaün 写道:
+>>
+>> On 29/08/2022 03:17, xiujianfeng wrote:
+>>>
+>>> Hi,
+>>>
+>>> 在 2022/8/28 3:30, Günther Noack 写道:
+>>>> Hello!
+>>>>
+>>>> the mapping between Landlock rights to LSM hooks is now as follows in
+>>>> your patch set:
+>>>>
+>>>> * LANDLOCK_ACCESS_FS_CHMOD controls hook_path_chmod
+>>>> * LANDLOCK_ACCESS_FS_CHGRP controls hook_path_chown
+>>>>      (this hook can restrict both the chown(2) and chgrp(2) syscalls)
+>>>>
+>>>> Is this the desired mapping?
+>>>>
+>>>> The previous discussion I found on the topic was in
+>>>>
+>>>> [1]
+>>>> https://lore.kernel.org/all/5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net/
+>>>>
+>>>> [2]
+>>>> https://lore.kernel.org/all/b1d69dfa-6d93-2034-7854-e2bc4017d20e@schaufler-ca.com/
+>>>>
+>>>> [3]
+>>>> https://lore.kernel.org/all/c369c45d-5aa8-3e39-c7d6-b08b165495fd@digikod.net/
+>>>>
+>>>>
+>>>> In my understanding the main arguments were the ones in [2] and [3].
+>>>>
+>>>> There were no further responses to [3], so I was under the impression
+>>>> that we were gravitating towards an approach where the
+>>>> file-metadata-modification operations were grouped more coarsely?
+>>>>
+>>>> For example with the approach suggested in [3], which would be to
+>>>> group the operations coarsely into (a) one Landlock right for
+>>>> modifying file metadata that is used in security contexts, and (b) one
+>>>> Landlock right for modifying metadata that was used in non-security
+>>>> contexts. That would mean that there would be:
+>>>>
+>>>> (a) LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES to control the
+>>>> following operations:
+>>>>      * chmod(2)-variants through hook_path_chmod,
+>>>>      * chown(2)-variants and chgrp(2)-variants through hook_path_chown,
+>>>>      * setxattr(2)-variants and removexattr(2)-variants for extended
+>>>>        attributes that are not "user extended attributes" as described in
+>>>>        xattr(7) through hook_inode_setxattr and hook_inode_removexattr
+>>>>
+>>>> (b) LANDLOCK_ACCESS_FS_MODIFY_NON_SECURITY_ATTRIBUTES to control the
+>>>> following operations:
+>>>>      * utimes(2) and other operations for setting other non-security
+>>>>        sensitive attributes, probably through hook_inode_setattr(?)
+>>>>      * xattr modifications like above, but for the "user extended
+>>>>        attributes", though hook_inode_setxattr and hook_inode_removexattr
+>>>>
+>>>> In my mind, this would be a sensible grouping, and it would also help
+>>>> to decouple the userspace-exposed API from the underlying
+>>>> implementation, as Casey suggested to do in [2].
+>>>>
+>>>> Specifically for this patch set, if you want to use this grouping, you
+>>>> would only need to add one new Landlock right
+>>>> (LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES) as described above
+>>>> under (a) (and maybe we can find a shorter name for it... :))?
+>>>>
+>>>> Did I miss any operations here that would be necessary to restrict?
+>>>>
+>>>> Would that make sense to you? Xiu, what is your opinion on how this
+>>>> should be grouped? Do you have use cases in mind where a more
+>>>> fine-grained grouping would be required?
+>>>
+>>> I apologize I may missed that discussion when I prepared v2:(
+>>>
+>>> Yes, agreed, this grouping is more sensible and resonnable. so in this
+>>> patchset only one right will be added, and I suppose the first commit
+>>> which expand access_mask_t to u32 can be droped.
+>>>
+>>>>
+>>>> —Günther
+>>>>
+>>>> P.S.: Regarding utimes: The hook_inode_setattr hook *also* gets called
+>>>> on a variety on attribute changes including file ownership, file size
+>>>> and file mode, so it might potentially interact with a bunch of other
+>>>> existing Landlock rights. Maybe that is not the right approach. In any
+>>>> case, it seems like it might require more thinking and it might be
+>>>> sensible to do that in a separate patch set IMHO.
+>>>
+>>> Thanks for you reminder, that seems it's more complicated to support
+>>> utimes, so I think we'd better not support it in this patchset.
+>>
+>> The issue with this approach is that it makes it impossible to properly
+>> group such access rights. Indeed, to avoid inconsistencies and much more
+>> complexity, we cannot extend a Landlock access right once it is defined.
+>>
+>> We also need to consider that file ownership and permissions have a
+>> default (e.g. umask), which is also a way to set them. How to
+>> consistently manage that? What if the application wants to protect its
+>> files with chmod 0400?
+> 
+> what do you mean by this? do you mean that we should have a set of
+> default permissions for files created by applications within the
+> sandbox, so that it can update metadata of its own file.
 
-  - second time (in __check_func_call()):
-          func_info_aux = env->prog->aux->func_info_aux;
-          if (func_info_aux)
-                  is_global = func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-          err = btf_check_subprog_arg_match(env, subprog, caller->regs);
+I mean that we need a consistent access control system, and for this we 
+need to consider all the ways an extended attribute can be set.
 
-This time we are in the "processing 'call' insn" part and this is
-where we need to also ensure that the register we access is correctly
-set, so max_ctx_offset needs to be updated.
+We can either extend the meaning of current access rights (controlled 
+with a ruleset flag for compatibility reasons), or create new access 
+rights. I think it would be better to add new dedicated rights to make 
+it more explicit and flexible.
 
-If the above is correct, then yes, it would make sense to me to have 2
-distinct functions: one to check for the args types only (does the
-function definition in the problem matches BTF), and one to check for
-its use.
-Behind the scenes, btf_check_subprog_arg_match() calls
-btf_check_func_arg_match() which is the one function with entangled
-arguments type checking and actually assessing that the values
-provided are correct.
+I'm not sure about the right approach to properly control file 
+permission. We need to think about it. Do you have some ideas?
 
-I can try to split that  btf_check_func_arg_match() into 2 distinct
-functions, though I am not sure I'll get it right.
-Maybe the hack about having "processing_call" for
-btf_check_func_arg_match() only will be good enough as a first step
-towards a better solution?
+BTW, utimes can be controlled with the inode_setattr() LSM hook. Being 
+able to control arbitrary file time modification could be part of the 
+FS_WRITE_SAFE_METADATA, but modification and access time should always 
+be updated according to the file operation.
 
-> And may cleanup the rest of that function ?
-> Like all of if (is_kfunc) applies only to 'calling' case.
-> Other ideas?
->
 
-I was trying to understand the problem most of today, and the only
-other thing I could think of was "why is the assumption that
-PTR_TO_CTX is not NULL actually required?". But again, this question
-is "valid" in the function declaration part, but not in the caller
-insn part. So I think splitting btf_check_subprog_arg_match() in 2 is
-probably the best.
+> 
+>>
+>> About the naming, I think we can start with:
+>> - LANDLOCK_ACCESS_FS_READ_METADATA (read any file/dir metadata);
+>> - LANDLOCK_ACCESS_FS_WRITE_SAFE_METADATA: change file times, user xattr;
+> 
+> do you mean we should have permission controls on metadata level or
+> operation level? e.g. should we allow update on user xattr but deny
+> update on security xattr? or should we disallow update on any xattr?
+> 
+>> - LANDLOCK_ACCESS_FS_WRITE_UNSAFE_METADATA: interpreted by the kernel
+>> (could change non-Landlock DAC or MAC, which could be considered as a
+>> policy bypass; or other various xattr that might be interpreted by
+>> filesystems), this should be denied most of the time.
+> 
+> do you mean FS_WRITE_UNSAFE_METADATA is security-related? and
+> FS_WRITE_SAFE_METADATA is non-security-related?
 
-Cheers,
-Benjamin
-
+Yes, FS_WRITE_UNSAFE_METADATA would be for security related 
+xattr/chmod/chown, and FS_WRITE_SAFE_METADATA for non-security xattr. 
+Both are mutually exclusive. This would involve the inode_setattr and 
+inode_setxattr LSM hooks. Looking at the calling sites, it seems 
+possible to replace all inode arguments with paths.
