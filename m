@@ -2,76 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6135A9F77
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 20:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2D45AA07C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Sep 2022 21:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbiIAS5l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 14:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        id S233277AbiIATzX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 15:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiIAS5k (ORCPT
+        with ESMTP id S234587AbiIATzW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:57:40 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EBA74B8A
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Sep 2022 11:57:39 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id a9so7247776ilh.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Sep 2022 11:57:39 -0700 (PDT)
+        Thu, 1 Sep 2022 15:55:22 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9184B3AE5B
+        for <linux-kselftest@vger.kernel.org>; Thu,  1 Sep 2022 12:55:19 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id h78so15518550iof.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Sep 2022 12:55:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=nia9jI2O88KcphJGb5RxJpwde9w47ORDSNyakk4/vu4=;
-        b=hg8tXGlRx/SHRdCMcUjwsB9CQwcZ1IenwElcgFvFC8TAzOIuj/aoS1YyRlxk5vauL0
-         msx5OMOm8pzSFwsfukf2yerhoTmxXHpUiLcMFp8GjtPNwoOUdFUC9SKV01PcBc0fcMsC
-         aB+G8hQSkYpnaA2IAd8P2pmZ3Z4wg5OPTmRwM=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=seI1koEC25ypVGd7T1UjIwUU3cFD+MV5D0arikaOKag=;
+        b=mzcebpbWdcmzlubeGcDuaw+53g7e5bWwmRlay5XuQCuH3R/t0JaasCCMwM64OhQ8C0
+         Qj8qMRkKOagiQjpH+nVAooZugFtBFIZcSUg/ZoOIEeiF+ewsGDfW5Xojf9q5HCf4t956
+         PFhD3GO7Z/XVxDSRp5TuShiPr/FFsO9VDyAwZ7plwo+K5WQ0gFWxLBD/6x4a2LKPbz8j
+         BiFNQ+f/1SKSq9n+C1xM3Zej61fBZKP0ddqpVHJJoDvqdQbB82KS514IxM3cVsORj0X6
+         2qGXWXJrP3ahNVwr4ON0I31cXTL/f6Up+m0FJxwLrZnqHmDuAmgHF8t8sj+xxtUA1yzv
+         H7Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=nia9jI2O88KcphJGb5RxJpwde9w47ORDSNyakk4/vu4=;
-        b=gooRRHTDb67HIc0+6tFcSgI5XJnrGDyuAgT61esZBaGtHKEM3OSJigt2WfnSzQN2w6
-         DoqVngJC2o8cnWARas9FGiOFTz5Da3MsGpXpCmM0jEgcctNF9zMkkInqF2SsW6QHmWAM
-         Mh5e0IgHJWrX7yD+SyVzrZU20QR7ykX77jk6jVRxuxHWF1/qLxGnFUaKfT9CJN17GSBy
-         fufVoqV4wPUUUEGrekcpyAr+mEmi3GVsXR6DCBQIxJRwFXJfO+UsVafJiCoYOjBju41W
-         dP6D7iilmzufSOaC9on49aa0ng+MeP9TT50DgjWYFXY/BZ5BfKdlB4NQSZAJVjIyFrTy
-         d7qQ==
-X-Gm-Message-State: ACgBeo3Fm7/63a4DbLUTKyOsTRLCn0zQRNhe+PKqMLm50cFleV2JDKTQ
-        OTU0OmLeUq4/lmj5De44k40rx9VfMJ94eQ==
-X-Google-Smtp-Source: AA6agR7dw1ZlZ/aQIVwXijEoBDwRoQ/vPMU/DT6/0bpcHuPPUyUq35r2u4ojDWcQq1/WRafGqsNBzA==
-X-Received: by 2002:a05:6e02:1849:b0:2ee:6664:9301 with SMTP id b9-20020a056e02184900b002ee66649301mr385667ilv.266.1662058658824;
-        Thu, 01 Sep 2022 11:57:38 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i1-20020a056602134100b006887640a5edsm9345405iov.23.2022.09.01.11.57.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 11:57:38 -0700 (PDT)
-Message-ID: <cb8b16a1-a7d6-1b04-c748-3f2d802b54e5@linuxfoundation.org>
-Date:   Thu, 1 Sep 2022 12:57:37 -0600
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=seI1koEC25ypVGd7T1UjIwUU3cFD+MV5D0arikaOKag=;
+        b=PRTMq8UlWaojkeXSboY47/RQafHyi7D7S4MvcsmWIZuqIcVloy+bOrgtL/6rrOleGY
+         E6qsPqnCoD3njrS9Zh0EbJJ0EQnYjZWwDkzzE/vivpbd7Zg34LjRftmeWNePL0gUHA/F
+         ZQ+4fOXXX/jQKGgprytC3hJkZu9EeSxMoxYe+YFTBFiiseHS2ZhmiiHXMPfHSyJX9aUU
+         7UctBzMz1dYHOoczfy4rvYjH2LTfLLYqmO6HJmZ8fo56v2fP9n9O69HqUhjEeNv0rciY
+         m6xr+2Oyb7k2tRWd+2vvPAE1TeM6a1YsqCeExF40SC2SxkktJ3bgypMz8ks4UDGskJvi
+         fM/A==
+X-Gm-Message-State: ACgBeo3etmFuJnRWmuEKRMyHCYM7BKKrQ0yhU6nye539e4dP7IIndS+A
+        9yGjrDPEgrwKLPfvLdo5z2VvKX84okQRLm021LA2CejHuQY=
+X-Google-Smtp-Source: AA6agR6E8CWIjgzNAAEwAB1E6jFOLB0toIoj0r0vr72SzwiSp/lagdot9Pv8Elb1B+6+1/bL+SDvb2Xedw6RH/MYQ+o=
+X-Received: by 2002:a5d:8b47:0:b0:689:a436:81d2 with SMTP id
+ c7-20020a5d8b47000000b00689a43681d2mr15417264iot.138.1662062118567; Thu, 01
+ Sep 2022 12:55:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] tools: Add new "test" taint to kernel-chktaint
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Joe Fradley <joefradley@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Jonathan Corbet <corbet@lwn.net>, kernel-team@android.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220824041933.822838-1-joefradley@google.com>
- <CABVgOSki72Yqb1DBSCgi-qk+FbNniL4GX+19MXwq=K9VEzAyoA@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CABVgOSki72Yqb1DBSCgi-qk+FbNniL4GX+19MXwq=K9VEzAyoA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220901092315.33619-1-tsahu@linux.ibm.com>
+In-Reply-To: <20220901092315.33619-1-tsahu@linux.ibm.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 1 Sep 2022 12:54:42 -0700
+Message-ID: <CAJHvVciwa4x8sQag0a5dmq2GbmpMs3bYEVCW4g_Ro_o_GVtQTg@mail.gmail.com>
+Subject: Re: [PATCH] selftest: vm: remove deleted local_config.* from .gitignore
+To:     Tarun Sahu <tsahu@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, aneesh.kumar@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +69,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/23/22 22:41, David Gow wrote:
-> On Wed, Aug 24, 2022 at 12:19 PM Joe Fradley <joefradley@google.com> wrote:
->>
->> Commit c272612cb4a2 ("kunit: Taint the kernel when KUnit tests are run")
->> added a new taint flag for when in-kernel tests run. This commit adds
->> recognition of this new flag in kernel-chktaint.
->>
+Thanks for the cleanup! For what it's worth:
 
-What happens without this change? It isn't clear what this change is
-fixing.
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 
->> Reviewed-by: David Gow <davidgow@google.com>
->> Signed-off-by: Joe Fradley <joefradley@google.com>
->> ---
->> Changes in v2:
->> - based off of kselftest/kunit branch
->> - Added David's Reviewed-by tag
->>
-> 
-> This still looks good to me.
-> 
-> Unless anyone objects, I guess we'll take this through the KUnit
-> branch (which, after all, is where the taint was originally added).
-> I've added it to the list for 6.1, but it technically could be
-> considered a fix for 6.0 as well.
-> 
-
-I can definitely take this for Linux 6.0 with additional information
-on the problems seen without this change.
-
-thanks,
--- Shuah
-
+On Thu, Sep 1, 2022 at 2:23 AM Tarun Sahu <tsahu@linux.ibm.com> wrote:
+>
+> Commit d2d6cba5d6623245a80cc151008cce825c8b6248 ("selftest: vm: remove
+> orphaned references to local_config.{h,mk}") took care of removing
+> orphaned references. This commit remove local_config from .gitignore.
+>
+> Parent Patch
+> Commit 69007f156ba7aead6c75b0046958ad3396f5aed1 ("Kselftests: remove
+> support of libhugetlbfs from kselftests")
+>
+>
+> Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
+> ---
+>  tools/testing/selftests/vm/.gitignore | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+> index 31e5eea2a9b9..7b9dc2426f18 100644
+> --- a/tools/testing/selftests/vm/.gitignore
+> +++ b/tools/testing/selftests/vm/.gitignore
+> @@ -30,7 +30,6 @@ map_fixed_noreplace
+>  write_to_hugetlbfs
+>  hmm-tests
+>  memfd_secret
+> -local_config.*
+>  soft-dirty
+>  split_huge_page_test
+>  ksm_tests
+> --
+> 2.31.1
+>
