@@ -2,179 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA905AA434
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 02:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F005AA534
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 03:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbiIBATz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 20:19:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S232810AbiIBBqA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Sep 2022 21:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiIBATy (ORCPT
+        with ESMTP id S232014AbiIBBp6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 20:19:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D512DF1
-        for <linux-kselftest@vger.kernel.org>; Thu,  1 Sep 2022 17:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662077990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dO2Mn5n5WZ/MoIF+K7eeDvmnGSBHo08xkcQ+P3b4bKQ=;
-        b=BdKTBxvozNixSzd2DnYAHMSbF/kQq49nkYRu66226UvaHF7tGUKyclZmQhk96X+PfkarJu
-        CJSJkO3VhTVZAWIRjtzJAa+9VbtoIFjIjHSBFJzv8MyWo6qpGym0XOz2wE9oNh5LQ9EuKN
-        ls06qT2NQakTUd4/8/B8AqrABdCRseo=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-386-Dcg9oD02O9un78kaKBHeNg-1; Thu, 01 Sep 2022 20:19:49 -0400
-X-MC-Unique: Dcg9oD02O9un78kaKBHeNg-1
-Received: by mail-ej1-f70.google.com with SMTP id gb33-20020a170907962100b00741496e2da1so185064ejc.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Sep 2022 17:19:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=dO2Mn5n5WZ/MoIF+K7eeDvmnGSBHo08xkcQ+P3b4bKQ=;
-        b=CkH2oOCjC059qxxUYGSissn84kwhnv6E94E++HE+gck8U6XL1Mwh1cfJw0m3Z5E0/L
-         e3uF7yNsz2IlU5XDA5ABmthbh+yqASwTYqEzbCXTcet/nDrCdumnUfGLaXnBC+Ry3XNk
-         8iQiFV4pb9/RUn8PvwWg8B5chfstlhSPwU19k2lH+uSPgBRlHjj4M5zdIWPyoMJdkmaj
-         AqQM2eqy6rK7VE4Uhtb0sKb7ICe+Gjxjz5dv+6x1sibzU0njAiN4np0V/zR6mz8ReqrH
-         /qbdi16xgBAL9DCM4VpVcfpG4EXweqX1swmCASzrUDYHW/8fGC3TGRc4lhNL+26zdwdh
-         nm9Q==
-X-Gm-Message-State: ACgBeo2DJmkzzGOYQl1cUEX6a0z/jHFHtcsV4NkrHsJLRxGHJZcve582
-        1+XTv8sFuV9JJl2tZKNMhykq4yDj1YtLoxjk0K8ep9ewxmO5IGrnQMkfRs4J+RC8NSn9muxHOZ2
-        CZCRm9poULFLw1ehO0h+M3jWa2rK8
-X-Received: by 2002:a17:906:4795:b0:73d:d6e8:52a7 with SMTP id cw21-20020a170906479500b0073dd6e852a7mr23729561ejc.59.1662077988839;
-        Thu, 01 Sep 2022 17:19:48 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR71etqoXM4HGXVz/MwtlqW3T8BbNkFPT5a/e9qOoDZWnrG77GI6lD81PpRdFOR9EqVhGDa/oA==
-X-Received: by 2002:a17:906:4795:b0:73d:d6e8:52a7 with SMTP id cw21-20020a170906479500b0073dd6e852a7mr23729550ejc.59.1662077988617;
-        Thu, 01 Sep 2022 17:19:48 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id lb14-20020a170907784e00b00741a0c3f4cdsm352041ejc.189.2022.09.01.17.19.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 17:19:48 -0700 (PDT)
-Message-ID: <44a42d03-4dd1-3f1c-3a60-7c2a6a7d417a@redhat.com>
-Date:   Fri, 2 Sep 2022 02:19:46 +0200
+        Thu, 1 Sep 2022 21:45:58 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2080.outbound.protection.outlook.com [40.107.223.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E917749B7F;
+        Thu,  1 Sep 2022 18:45:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MRhcKmpTQKX++jQLhfU9OmNDxzbe7/iZA0tJvYHkpgOBJ5TTluoyUgo/hTS45HhMBQVuw7dPULf2ulCFGfEKMMLsb7SdboIewFvGaoL7pGbZ43rINZa7/o8XRDL5NVtI9EzMGkLXV6qeC8iTVS5IMsH+4uDojstwnvjn0sOThZf9fby7x9rzme0Sz63FbZCN+XjypiHAtxe/sRsf7H9wT0MAfcFgSO64Dzv8xDb3OnQhhL9OfP8fCdCX86AtPOC8hXFgaJxmaULg+GRm/tVnhY2oMhi9pmwbvQeD+v714zZL6mbfnWDQWCw3TfY97IR8QAFGYkVCO4aKDVpSZYJxug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4+svzPgV6xUfAOFvrMmMfUOGCeojwOXOOXD5YCLh7nA=;
+ b=CzalhSbNw78fHrHxIksSc1L6uNWYaBSBXTuP3jgciaJhlXN4QJKEZ6uWDpcZWGb+i2vzV+PEMq/v++TcsuaC7KaGtXQFVu+HtY2K9f0zo1VQ/kK7X67QfP/bxI8O7H7fRQ87QmMRipOZY86rMt1Gzz34SpM9JzHrOpsKkSUtueuZGfcAbDWt5MxydRP1B3YFAs7YfLUMmOqWkBQLHW+BiPleyZt2ZYbd97jVQMXeCpV+HNZi78sjNqVOzyrnKvmOa8NrNqqqMWYLUyKTF7IoxUSrAz1GZNWfN429st2Wl0FFAxZSAqqju2Y37Lqg1nfaYJAIk5hNmnQYOEKNhtwaoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4+svzPgV6xUfAOFvrMmMfUOGCeojwOXOOXD5YCLh7nA=;
+ b=eaKEvH1kt4QsuEjDoFx+elKGAKPM1vvn1pRUfjmirrq5u55cIoN0t0kLZxNdcaE4FQMgI7Q+efThtG4AlxOSXWP7V6J6b5Agu+eKoRqbXr3no2FtYJhI1xkh85DWhhpoHTE1mzUpGWRN6z+/q0bZzCkLPW3T9VzmuKK2Ocbln3rU88cuyj4kK5BSZWgXkVvc7rtDRUPgsLaYWLQFwZfODxRLjauexarT9NpkKRIakgEGcFR2rT1pDFGx0qRRMfRolfisQeoI5PXamjhctyVqu+tysHt0OOuxULI1CZKsGtJ05+/MGsRlMXoRwsMNRYkV1xFn5faPpm6DLDGMIw0Y7Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4373.namprd12.prod.outlook.com (2603:10b6:208:261::8)
+ by SA1PR12MB6728.namprd12.prod.outlook.com (2603:10b6:806:257::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Fri, 2 Sep
+ 2022 01:45:55 +0000
+Received: from MN2PR12MB4373.namprd12.prod.outlook.com
+ ([fe80::51f3:15f4:a31a:7406]) by MN2PR12MB4373.namprd12.prod.outlook.com
+ ([fe80::51f3:15f4:a31a:7406%5]) with mapi id 15.20.5588.010; Fri, 2 Sep 2022
+ 01:45:55 +0000
+From:   Benjamin Poirier <bpoirier@nvidia.com>
+To:     netdev@vger.kernel.org
+Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Toppins <jtoppins@redhat.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net v2 0/3] Unsync addresses from ports when stopping aggregated devices
+Date:   Fri,  2 Sep 2022 10:45:13 +0900
+Message-Id: <20220902014516.184930-1-bpoirier@nvidia.com>
+X-Mailer: git-send-email 2.37.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYAPR01CA0076.jpnprd01.prod.outlook.com
+ (2603:1096:404:2c::16) To MN2PR12MB4373.namprd12.prod.outlook.com
+ (2603:10b6:208:261::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, Marc Zyngier <maz@kernel.org>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, corbet@lwn.net,
-        james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
-        shuah@kernel.org, seanjc@google.com, drjones@redhat.com,
-        dmatlack@google.com, bgardon@google.com, ricarkol@google.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-References: <20220819005601.198436-1-gshan@redhat.com>
- <20220819005601.198436-2-gshan@redhat.com> <87lerkwtm5.wl-maz@kernel.org>
- <41fb5a1f-29a9-e6bb-9fab-4c83a2a8fce5@redhat.com>
- <87fshovtu0.wl-maz@kernel.org> <YwTn2r6FLCx9mAU7@google.com>
- <87a67uwve8.wl-maz@kernel.org>
- <99364855-b4e9-8a69-e1ca-ed09d103e4c8@redhat.com>
- <874jxzvxak.wl-maz@kernel.org> <Yw4hyEAyivKT35vQ@xz-m1.local>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v1 1/5] KVM: arm64: Enable ring-based dirty memory
- tracking
-In-Reply-To: <Yw4hyEAyivKT35vQ@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ac0925f1-503a-4965-d2c4-08da8c84e054
+X-MS-TrafficTypeDiagnostic: SA1PR12MB6728:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tR9kWg/bYi+6CDqzt2VG9XpN05YniigdqszBDkNU5rGUk/V32ewAwuB19UR8ls9HeRbd294Qxq6fdu8hHlALHxsBVV+VEKWx62j7OKI7u4yzQlwY9P7D6QLuIr7kiqdn6dyYYs1gdxt3skHUFsLRjbQEJVpg6Eat/BSMI7qM7G9K8Vhr1Ltw5quWl5EcdFxZmgSVmjVbDTW9LMVnZX0o8QTxQRbExC4NFmoRiy+k6zuKu36wvzm7tMbsxbqZlUUj5kOqxQo+CkXm9/C89Mh9Fm6xIeWGaUrU4O/TYpzECpjJ/NvjBlDwYVvc79SsGvOpOjpV5tozr9KHFAp2c64DVn7JShJxHwN/nGTMhGp7PJHBMCkFecURxk7eWxosOlYBM/af9s2N3RmeMd9X1ZOviHtnW9T2tOvWR2488kCWbIeKaO5S15MpEKKD9bcoCfy4s8v4tAuVzzVsVc6gF3BQ7ZC+2fjb5ntzOaP52OnLY/7HL+1otRXDX+hq/N6z4UF+hgLbsaFC+emOkEOrPlGtZSWSn4jd2eYtKOfEOKyP37h9YTYdCe7auGA2hUr+2YjcO1r7f9DQYxUfrjsmj0m6hAaVzLwBd2xpAMjnKyw5HguA1h0Ncs1zskzeunWu497ihqCtyg6pB/95BbhdBOc4HMTGX6Ip1XTA5lCrbXWTW2dzoY95icLV1Ip8umeUFO+M71zUZDBjbNEieSb9Hv+m1w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(39860400002)(396003)(376002)(136003)(8936002)(5660300002)(6916009)(66946007)(66556008)(66476007)(8676002)(2906002)(36756003)(4326008)(316002)(54906003)(478600001)(7416002)(6486002)(41300700001)(83380400001)(26005)(6512007)(86362001)(6506007)(2616005)(186003)(6666004)(1076003)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z+ONIeJJS5E5dz531jtTF851HQ8O7ZUhzaIGvaMUqGdD+eyoNZXDq2Lf3I1f?=
+ =?us-ascii?Q?92lk/OiKJcq5tIvoWsbrTzvX3M2sB9LMAPj8Nu4yjzyh/4Qkuv9SPIUEtg29?=
+ =?us-ascii?Q?bqXFmuLGC1Pq2akiBo7l8HK8VpB+mf+/BV5e1g614ONXgyz34xQRtaNqeyZk?=
+ =?us-ascii?Q?7oGdl4UHQcHOTvGTdkcpLcNgbu5luBT0Q5D7OmupXxuo6JI5ZdZIMT8V/ugl?=
+ =?us-ascii?Q?DXuqEd3mex5JWOzfq/DpT2SX4TgmyX7dZL19RruMGFiegufYtYk8XltqkM4P?=
+ =?us-ascii?Q?85e2R0f2yVbekv96nviS4zQ+1AxLBTFrSQ6IxBAkxmsDe3GJYR0+sCjx0om1?=
+ =?us-ascii?Q?47RL0YPjxGrGDnWVnCE/fIJMHCqj4g7JCRMdgdNNu5z+xvyRbqvldm98U4Dl?=
+ =?us-ascii?Q?C/FjaepW8n4F34YxTzhGNC4TdQiYFcBiLBxXWJkC3pR4OqA4IU0E9yXD5zlA?=
+ =?us-ascii?Q?T5zbn63PPnn/HZ28dS5t9IRXH/4HtBE/ewWYz+zi9ZTROqz2eUiIgHLzuMyL?=
+ =?us-ascii?Q?QWxMXuKr/4qzkewJxGYETNU1JOTzdyw4rp2LHMjB8vzS/VrBSOJHcZybLK8y?=
+ =?us-ascii?Q?u1CpajuTLBlTnoquc4G6iDKLPizg/gDO/X1lEGZtkvc0RFR0w4QGDufLnZjL?=
+ =?us-ascii?Q?BLhrhNd31kvflleYPRSRNO3FXqnp77VGsupEHPt2vNq+mdWTSWPPXmb5RhiP?=
+ =?us-ascii?Q?Iryj8mmvhnTdayi83qhDmNPkhGIU0b3xP38mSXhl0GzsZvqH5tyodt2QPEj3?=
+ =?us-ascii?Q?HGUsHO/M0k06GxAtKQ5jj8ECVMhdUtUqldjgywXgvymKEoaBfiDHrFMRg4LR?=
+ =?us-ascii?Q?JiK0YV3k66zZMrVB/ImBtAkJ+dqO68oaUoLFYD9r2qWIAiYXlfBLP90PnpBE?=
+ =?us-ascii?Q?4wlIatJI21mAUheh+WtVJ7yXxu8qUHvbRQE9yHAxnV12/uu0OHN1CsqbP/0Q?=
+ =?us-ascii?Q?n1b0z6632OFbcFRPztKyicTopGafpOwvlF3Sgs1gwe4xkFPwZ2LLbqU79F/U?=
+ =?us-ascii?Q?s97spu2SQpR3IwrBe54N30O+/3b4xTyZWtb+rMzbzZlIBIC3Xv+1ZrUHlfQu?=
+ =?us-ascii?Q?v3G7sqPaG18tRHD/m3Bk2VVSOW1/xXMmxaM2s+ZHPp5/vMOP3YYcD2AEmUe0?=
+ =?us-ascii?Q?ZUbcgRGbYPAdWQNkXDaAVDDqguB2rLarSskPEYnlh2BI8/GBuQFWvJQqPzIZ?=
+ =?us-ascii?Q?ti5vlrVYjRWDtamHKababwX8ILCzORBwx70Eguc0A7Q+24i9yrZQNIRTLAO7?=
+ =?us-ascii?Q?Nb7JnVfNjyiSnefhrkHozRuzK18F9mUCjvZqfptZIX4cQS+vxLbdKx6hr8Ef?=
+ =?us-ascii?Q?pnCcc6P94Wz3u1uCQIIz3Tu0aLqoMnnZo++K1Fq8NI+jQcwRhUiInPPfYMBV?=
+ =?us-ascii?Q?bjA/00zPKviKpkSwEzYZNSxCBbtp9mCRLj3RWVk4wkOKYt2YHKeqCovcW5Aq?=
+ =?us-ascii?Q?7GP+aeYNOdyTlbDVWFRG6BplNkz8zp9CH2DPXdT49kCOMZdMGpVdt4bGcBkY?=
+ =?us-ascii?Q?Z7XmY8OEpco+8jXXcbnw+/QRP1VYk+yJLqk6ZlCdTAC4dhv8P5B2hs2KyTR1?=
+ =?us-ascii?Q?dgnFmFqJ6m8kBVMp6QsycI2gh+KhDUS3OSu0VlkK?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac0925f1-503a-4965-d2c4-08da8c84e054
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4373.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2022 01:45:55.5917
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C5Khdsq+9r8g/wzlZr6IOBVPksoExypwN01I2aivwYNBje5GBP7Yk+fPnXf++h4YeMlvwUafNkohpfybV7U1Rw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6728
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/30/22 16:42, Peter Xu wrote:
-> Marc,
-> 
-> I thought we won't hit this as long as we properly take care of other
-> orderings of (a) gfn push, and (b) gfn collect, but after a second thought
-> I think it's indeed logically possible that with a reversed ordering here
-> we can be reading some garbage gfn before (a) happens butt also read the
-> valid flag after (b).
-> 
-> It seems we must have all the barriers correctly applied always.  If that's
-> correct, do you perhaps mean something like this to just add the last piece
-> of barrier?
+This series fixes similar problems in the bonding and team drivers.
 
-Okay, so I thought about it some more and it's quite tricky.
+Because of missing dev_{uc,mc}_unsync() calls, addresses added to
+underlying devices may be leftover after the aggregated device is deleted.
+Add the missing calls and a few related tests.
 
-Strictly speaking, the synchronization is just between userspace and 
-kernel. The fact that the actual producer of dirty pages is in another 
-CPU is a red herring, because reset only cares about harvested pages.
+v2:
+* fix selftest installation, see patch 3
 
-In other words, the dirty page ring is essentially two ring buffers in 
-one and we only care about the "harvested ring", not the "produced ring".
+Benjamin Poirier (3):
+  net: bonding: Unsync device addresses on ndo_stop
+  net: team: Unsync device addresses on ndo_stop
+  net: Add tests for bonding and team address list management
 
-On the other hand, it may happen that userspace has set more RESET flags 
-while the ioctl is ongoing:
+ MAINTAINERS                                   |  1 +
+ drivers/net/bonding/bond_main.c               | 31 ++++---
+ drivers/net/team/team.c                       |  8 ++
+ tools/testing/selftests/Makefile              |  1 +
+ .../selftests/drivers/net/bonding/Makefile    |  5 +-
+ .../selftests/drivers/net/bonding/config      |  1 +
+ .../drivers/net/bonding/dev_addr_lists.sh     | 89 +++++++++++++++++++
+ .../selftests/drivers/net/bonding/lag_lib.sh  | 63 +++++++++++++
+ .../selftests/drivers/net/team/Makefile       |  6 ++
+ .../testing/selftests/drivers/net/team/config |  3 +
+ .../drivers/net/team/dev_addr_lists.sh        | 51 +++++++++++
+ 11 files changed, 248 insertions(+), 11 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh
+ create mode 100644 tools/testing/selftests/drivers/net/bonding/lag_lib.sh
+ create mode 100644 tools/testing/selftests/drivers/net/team/Makefile
+ create mode 100644 tools/testing/selftests/drivers/net/team/config
+ create mode 100755 tools/testing/selftests/drivers/net/team/dev_addr_lists.sh
 
-
-     CPU0                     CPU1               CPU2
-                                                 fill gfn0
-                                                 store-rel flags for gfn0
-                                                 fill gfn1
-                                                 store-rel flags for gfn1
-     load-acq flags for gfn0
-     set RESET for gfn0
-     load-acq flags for gfn1
-     set RESET for gfn1
-     do ioctl! ----------->
-                              ioctl(RESET_RINGS)
-                                                 fill gfn2
-                                                 store-rel flags for gfn2
-     load-acq flags for gfn2
-     set RESET for gfn2
-                              process gfn0
-                              process gfn1
-                              process gfn2
-     do ioctl!
-     etc.
-
-The three load-acquire in CPU0 synchronize with the three store-release 
-in CPU2, but CPU0 and CPU1 are only synchronized up to gfn1 and CPU1 may 
-miss gfn2's fields other than flags.
-
-The kernel must be able to cope with invalid values of the fields, and 
-userspace will invoke the ioctl once more.  However, once the RESET flag 
-is cleared on gfn2, it is lost forever, therefore in the above scenario 
-CPU1 must read the correct value of gfn2's fields.
-
-Therefore RESET must be set with a store-release, that will synchronize 
-with a load-acquire in CPU1 as you suggested.
-
-Paolo
-
-> diff --git a/virt/kvm/dirty_ring.c b/virt/kvm/dirty_ring.c
-> index f4c2a6eb1666..ea620bfb012d 100644
-> --- a/virt/kvm/dirty_ring.c
-> +++ b/virt/kvm/dirty_ring.c
-> @@ -84,7 +84,7 @@ static inline void kvm_dirty_gfn_set_dirtied(struct kvm_dirty_gfn *gfn)
->  
->  static inline bool kvm_dirty_gfn_harvested(struct kvm_dirty_gfn *gfn)
->  {
-> -       return gfn->flags & KVM_DIRTY_GFN_F_RESET;
-> +       return smp_load_acquire(&gfn->flags) & KVM_DIRTY_GFN_F_RESET;
->  }
->  
->  int kvm_dirty_ring_reset(struct kvm *kvm, struct kvm_dirty_ring *ring)
-> ===8<===
-> 
-> Thanks,
-> 
-> -- 
-> Peter Xu
-> 
+-- 
+2.37.2
 
