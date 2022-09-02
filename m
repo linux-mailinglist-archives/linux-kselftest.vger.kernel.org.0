@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612BD5AB288
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 15:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A385AB2A8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 16:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236961AbiIBN73 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 09:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
+        id S238848AbiIBOBW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 10:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbiIBN60 (ORCPT
+        with ESMTP id S238914AbiIBN7V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:58:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D385B9416
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:21 -0700 (PDT)
+        Fri, 2 Sep 2022 09:59:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151A1125EB7
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125447;
+        s=mimecast20190719; t=1662125454;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=u/iwA17ZERkgbiXcJLFTL9bEmC83+5kLJfjvauN4RS8=;
-        b=f66fKGBpAveyA/zYRAAcQjCzFkK5/EH+9p7Sr5OuLWZ/Rmzj9fA+mJdn+N+f6QrZrfkcBk
-        oZ8JpIntvGNYEokHH28Ou/ujwujDmUwv+c+8mrY7tQyU8Gji9zbP5xyXvrIhNTwdUVaLAb
-        lWXn20OSiGRwB9C3Z3XPXUiAVDkoU8Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=fGoC5EFZdYb7kgErKusS52L2gMWltL5gu62vtgz6j3M=;
+        b=VHRng4i3XAIF0l2WMEIQggnZVYKrtKM2MCLBiHZBO7oBFEzPa0Ihz663emeFfuvF7VdUB5
+        nWJJL8tb9I4EkN2xEgh/+RLnwe4E+MhCughfTpwB6Pu8a394lkp9lrTSazp3KKMa9wIRgH
+        6mIoljyLs9KhrE42h5MIX+iR9Y+glSc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-652-CsWZLsPXMtS1WxaTdWnBVQ-1; Fri, 02 Sep 2022 09:30:41 -0400
-X-MC-Unique: CsWZLsPXMtS1WxaTdWnBVQ-1
+ us-mta-661-mvNt0U0ONVeaafl8pwJ53A-1; Fri, 02 Sep 2022 09:30:50 -0400
+X-MC-Unique: mvNt0U0ONVeaafl8pwJ53A-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 98EA3101A54E;
-        Fri,  2 Sep 2022 13:30:40 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 87A302823801;
+        Fri,  2 Sep 2022 13:30:48 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E9139492CA2;
-        Fri,  2 Sep 2022 13:30:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5C5A5492C3B;
+        Fri,  2 Sep 2022 13:30:45 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,16 +56,16 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 14/23] HID: bpf: allocate data memory for device_event BPF programs
-Date:   Fri,  2 Sep 2022 15:29:29 +0200
-Message-Id: <20220902132938.2409206-15-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 16/23] HID: bpf: introduce hid_hw_request()
+Date:   Fri,  2 Sep 2022 15:29:31 +0200
+Message-Id: <20220902132938.2409206-17-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,345 +74,235 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We need to also be able to change the size of the report.
-Reducing it is easy, because we already have the incoming buffer that is
-big enough, but extending it is harder.
-
-Pre-allocate a buffer that is big enough to handle all reports of the
-device, and use that as the primary buffer for BPF programs.
-To be able to change the size of the buffer, we change the device_event
-API and request it to return the size of the buffer.
+This function can not be called under IRQ, thus it is only available
+while in SEC("syscall").
+For consistency, this function requires a HID-BPF context to work with,
+and so we also provide a helper to create one based on the HID unique
+ID.
 
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
----
+--
 
 no changes in v10
 
-no changes in v9
+changes in v9:
+- fixed kfunc declaration aaccording to latest upstream changes
 
 no changes in v8
 
-no changes in v7
+changes in v7:
+- hid_bpf_allocate_context: remove unused variable
+- ensures buf is not NULL
 
-no changes in v6
+changes in v6:
+- rename parameter size into buf__sz to teach the verifier about
+  the actual buffer size used by the call
+- remove the allocated data in the user created context, it's not used
 
 new-ish in v5
 ---
- drivers/hid/bpf/hid_bpf_dispatch.c  | 116 +++++++++++++++++++++++++---
- drivers/hid/bpf/hid_bpf_jmp_table.c |   4 +-
- drivers/hid/hid-core.c              |  12 ++-
- include/linux/hid_bpf.h             |  37 +++++++--
- 4 files changed, 151 insertions(+), 18 deletions(-)
+ drivers/hid/bpf/hid_bpf_dispatch.c | 132 +++++++++++++++++++++++++++++
+ drivers/hid/hid-core.c             |   2 +
+ include/linux/hid_bpf.h            |  13 ++-
+ 3 files changed, 146 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index 600b00fdf6c1..33c6b3df6472 100644
+index 33c6b3df6472..85186640e5af 100644
 --- a/drivers/hid/bpf/hid_bpf_dispatch.c
 +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -28,8 +28,9 @@ EXPORT_SYMBOL(hid_bpf_ops);
-  *
-  * @ctx: The HID-BPF context
-  *
-- * @return %0 on success and keep processing; a negative error code to interrupt
-- * the processing of this event
-+ * @return %0 on success and keep processing; a positive value to change the
-+ * incoming size buffer; a negative error code to interrupt the processing
-+ * of this event
-  *
-  * Declare an %fmod_ret tracing bpf program to this function and attach this
-  * program through hid_bpf_attach_prog() to have this helper called for
-@@ -44,23 +45,43 @@ __weak noinline int hid_bpf_device_event(struct hid_bpf_ctx *ctx)
- }
- ALLOW_ERROR_INJECTION(hid_bpf_device_event, ERRNO);
- 
--int
-+u8 *
- dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type, u8 *data,
--			      u32 size, int interrupt)
-+			      u32 *size, int interrupt)
- {
- 	struct hid_bpf_ctx_kern ctx_kern = {
- 		.ctx = {
- 			.hid = hdev,
- 			.report_type = type,
--			.size = size,
-+			.allocated_size = hdev->bpf.allocated_data,
-+			.size = *size,
- 		},
--		.data = data,
-+		.data = hdev->bpf.device_data,
- 	};
-+	int ret;
- 
- 	if (type >= HID_REPORT_TYPES)
--		return -EINVAL;
-+		return ERR_PTR(-EINVAL);
-+
-+	/* no program has been attached yet */
-+	if (!hdev->bpf.device_data)
-+		return data;
-+
-+	memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
-+	memcpy(ctx_kern.data, data, *size);
-+
-+	ret = hid_bpf_prog_run(hdev, HID_BPF_PROG_TYPE_DEVICE_EVENT, &ctx_kern);
-+	if (ret < 0)
-+		return ERR_PTR(ret);
-+
-+	if (ret) {
-+		if (ret > ctx_kern.ctx.allocated_size)
-+			return ERR_PTR(-EINVAL);
- 
--	return hid_bpf_prog_run(hdev, HID_BPF_PROG_TYPE_DEVICE_EVENT, &ctx_kern);
-+		*size = ret;
-+	}
-+
-+	return ctx_kern.data;
- }
- EXPORT_SYMBOL_GPL(dispatch_hid_bpf_device_event);
- 
-@@ -83,7 +104,7 @@ hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr
- 
- 	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
- 
--	if (rdwr_buf_size + offset > ctx->size)
-+	if (rdwr_buf_size + offset > ctx->allocated_size)
- 		return NULL;
- 
- 	return ctx_kern->data + offset;
-@@ -110,6 +131,51 @@ static int device_match_id(struct device *dev, const void *id)
- 	return hdev->id == *(int *)id;
- }
- 
-+static int __hid_bpf_allocate_data(struct hid_device *hdev, u8 **data, u32 *size)
-+{
-+	u8 *alloc_data;
-+	unsigned int i, j, max_report_len = 0;
-+	size_t alloc_size = 0;
-+
-+	/* compute the maximum report length for this device */
-+	for (i = 0; i < HID_REPORT_TYPES; i++) {
-+		struct hid_report_enum *report_enum = hdev->report_enum + i;
-+
-+		for (j = 0; j < HID_MAX_IDS; j++) {
-+			struct hid_report *report = report_enum->report_id_hash[j];
-+
-+			if (report)
-+				max_report_len = max(max_report_len, hid_report_len(report));
-+		}
-+	}
-+
-+	/*
-+	 * Give us a little bit of extra space and some predictability in the
-+	 * buffer length we create. This way, we can tell users that they can
-+	 * work on chunks of 64 bytes of memory without having the bpf verifier
-+	 * scream at them.
-+	 */
-+	alloc_size = DIV_ROUND_UP(max_report_len, 64) * 64;
-+
-+	alloc_data = kzalloc(alloc_size, GFP_KERNEL);
-+	if (!alloc_data)
-+		return -ENOMEM;
-+
-+	*data = alloc_data;
-+	*size = alloc_size;
-+
-+	return 0;
-+}
-+
-+static int hid_bpf_allocate_event_data(struct hid_device *hdev)
-+{
-+	/* hdev->bpf.device_data is already allocated, abort */
-+	if (hdev->bpf.device_data)
-+		return 0;
-+
-+	return __hid_bpf_allocate_data(hdev, &hdev->bpf.device_data, &hdev->bpf.allocated_data);
-+}
-+
- /**
-  * hid_bpf_attach_prog - Attach the given @prog_fd to the given HID device
-  *
-@@ -125,7 +191,7 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
- {
- 	struct hid_device *hdev;
- 	struct device *dev;
--	int prog_type = hid_bpf_get_prog_attach_type(prog_fd);
-+	int err, prog_type = hid_bpf_get_prog_attach_type(prog_fd);
- 
- 	if (!hid_bpf_ops)
- 		return -EINVAL;
-@@ -145,6 +211,12 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
- 
- 	hdev = to_hid_device(dev);
- 
-+	if (prog_type == HID_BPF_PROG_TYPE_DEVICE_EVENT) {
-+		err = hid_bpf_allocate_event_data(hdev);
-+		if (err)
-+			return err;
-+	}
-+
+@@ -220,9 +220,141 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
  	return __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
  }
  
-@@ -158,6 +230,30 @@ static const struct btf_kfunc_id_set hid_bpf_syscall_kfunc_set = {
- 	.set   = &hid_bpf_syscall_kfunc_ids,
- };
- 
-+int hid_bpf_connect_device(struct hid_device *hdev)
++/**
++ * hid_bpf_allocate_context - Allocate a context to the given HID device
++ *
++ * @hid_id: the system unique identifier of the HID device
++ *
++ * @returns A pointer to &struct hid_bpf_ctx on success, %NULL on error.
++ */
++noinline struct hid_bpf_ctx *
++hid_bpf_allocate_context(unsigned int hid_id)
 +{
-+	struct hid_bpf_prog_list *prog_list;
++	struct hid_device *hdev;
++	struct hid_bpf_ctx_kern *ctx_kern = NULL;
++	struct device *dev;
 +
-+	rcu_read_lock();
-+	prog_list = rcu_dereference(hdev->bpf.progs[HID_BPF_PROG_TYPE_DEVICE_EVENT]);
-+	rcu_read_unlock();
++	if (!hid_bpf_ops)
++		return NULL;
 +
-+	/* only allocate BPF data if there are programs attached */
-+	if (!prog_list)
-+		return 0;
++	dev = bus_find_device(hid_bpf_ops->bus_type, NULL, &hid_id, device_match_id);
++	if (!dev)
++		return NULL;
 +
-+	return hid_bpf_allocate_event_data(hdev);
++	hdev = to_hid_device(dev);
++
++	ctx_kern = kzalloc(sizeof(*ctx_kern), GFP_KERNEL);
++	if (!ctx_kern)
++		return NULL;
++
++	ctx_kern->ctx.hid = hdev;
++
++	return &ctx_kern->ctx;
 +}
-+EXPORT_SYMBOL_GPL(hid_bpf_connect_device);
 +
-+void hid_bpf_disconnect_device(struct hid_device *hdev)
++/**
++ * hid_bpf_release_context - Release the previously allocated context @ctx
++ *
++ * @ctx: the HID-BPF context to release
++ *
++ */
++noinline void
++hid_bpf_release_context(struct hid_bpf_ctx *ctx)
 +{
-+	kfree(hdev->bpf.device_data);
-+	hdev->bpf.device_data = NULL;
-+	hdev->bpf.allocated_data = 0;
-+}
-+EXPORT_SYMBOL_GPL(hid_bpf_disconnect_device);
++	struct hid_bpf_ctx_kern *ctx_kern;
 +
- void hid_bpf_destroy_device(struct hid_device *hdev)
- {
- 	if (!hdev)
-diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bpf_jmp_table.c
-index 05225ff3cc27..0f20deab81ff 100644
---- a/drivers/hid/bpf/hid_bpf_jmp_table.c
-+++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
-@@ -123,8 +123,10 @@ int hid_bpf_prog_run(struct hid_device *hdev, enum hid_bpf_prog_type type,
++	if (!ctx)
++		return;
++
++	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
++
++	kfree(ctx_kern);
++}
++
++/**
++ * hid_bpf_hw_request - Communicate with a HID device
++ *
++ * @ctx: the HID-BPF context previously allocated in hid_bpf_allocate_context()
++ * @buf: a %PTR_TO_MEM buffer
++ * @buf__sz: the size of the data to transfer
++ * @rtype: the type of the report (%HID_INPUT_REPORT, %HID_FEATURE_REPORT, %HID_OUTPUT_REPORT)
++ * @reqtype: the type of the request (%HID_REQ_GET_REPORT, %HID_REQ_SET_REPORT, ...)
++ *
++ * @returns %0 on success, a negative error code otherwise.
++ */
++noinline int
++hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
++		   enum hid_report_type rtype, enum hid_class_request reqtype)
++{
++	struct hid_device *hdev = (struct hid_device *)ctx->hid; /* discard const */
++	struct hid_report *report;
++	struct hid_report_enum *report_enum;
++	u8 *dma_data;
++	u32 report_len;
++	int ret;
++
++	/* check arguments */
++	if (!ctx || !hid_bpf_ops || !buf)
++		return -EINVAL;
++
++	switch (rtype) {
++	case HID_INPUT_REPORT:
++	case HID_OUTPUT_REPORT:
++	case HID_FEATURE_REPORT:
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	switch (reqtype) {
++	case HID_REQ_GET_REPORT:
++	case HID_REQ_GET_IDLE:
++	case HID_REQ_GET_PROTOCOL:
++	case HID_REQ_SET_REPORT:
++	case HID_REQ_SET_IDLE:
++	case HID_REQ_SET_PROTOCOL:
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	if (buf__sz < 1)
++		return -EINVAL;
++
++	report_enum = hdev->report_enum + rtype;
++	report = hid_bpf_ops->hid_get_report(report_enum, buf);
++	if (!report)
++		return -EINVAL;
++
++	report_len = hid_report_len(report);
++
++	if (buf__sz > report_len)
++		buf__sz = report_len;
++
++	dma_data = kmemdup(buf, buf__sz, GFP_KERNEL);
++	if (!dma_data)
++		return -ENOMEM;
++
++	ret = hid_bpf_ops->hid_hw_raw_request(hdev,
++					      dma_data[0],
++					      dma_data,
++					      buf__sz,
++					      rtype,
++					      reqtype);
++
++	if (ret > 0)
++		memcpy(buf, dma_data, ret);
++
++	kfree(dma_data);
++	return ret;
++}
++
+ /* for syscall HID-BPF */
+ BTF_SET8_START(hid_bpf_syscall_kfunc_ids)
+ BTF_ID_FLAGS(func, hid_bpf_attach_prog)
++BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE)
++BTF_ID_FLAGS(func, hid_bpf_hw_request)
+ BTF_SET8_END(hid_bpf_syscall_kfunc_ids)
  
- 		ctx_kern->ctx.index = idx;
- 		err = __hid_bpf_tail_call(&ctx_kern->ctx);
--		if (err)
-+		if (err < 0)
- 			break;
-+		if (err)
-+			ctx_kern->ctx.retval = err;
- 	}
- 
-  out_unlock:
+ static const struct btf_kfunc_id_set hid_bpf_syscall_kfunc_set = {
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 0d0bd8fc69c7..cadd21a6f995 100644
+index cadd21a6f995..9d86f6fb5a45 100644
 --- a/drivers/hid/hid-core.c
 +++ b/drivers/hid/hid-core.c
-@@ -2040,9 +2040,11 @@ int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data
- 	report_enum = hid->report_enum + type;
- 	hdrv = hid->driver;
+@@ -2917,6 +2917,8 @@ int hid_check_keys_pressed(struct hid_device *hid)
+ EXPORT_SYMBOL_GPL(hid_check_keys_pressed);
  
--	ret = dispatch_hid_bpf_device_event(hid, type, data, size, interrupt);
--	if (ret)
-+	data = dispatch_hid_bpf_device_event(hid, type, data, &size, interrupt);
-+	if (IS_ERR(data)) {
-+		ret = PTR_ERR(data);
- 		goto unlock;
-+	}
- 
- 	if (!size) {
- 		dbg_hid("empty report\n");
-@@ -2157,6 +2159,10 @@ int hid_connect(struct hid_device *hdev, unsigned int connect_mask)
- 	int len;
- 	int ret;
- 
-+	ret = hid_bpf_connect_device(hdev);
-+	if (ret)
-+		return ret;
-+
- 	if (hdev->quirks & HID_QUIRK_HIDDEV_FORCE)
- 		connect_mask |= (HID_CONNECT_HIDDEV_FORCE | HID_CONNECT_HIDDEV);
- 	if (hdev->quirks & HID_QUIRK_HIDINPUT_FORCE)
-@@ -2258,6 +2264,8 @@ void hid_disconnect(struct hid_device *hdev)
- 	if (hdev->claimed & HID_CLAIMED_HIDRAW)
- 		hidraw_disconnect(hdev);
- 	hdev->claimed = 0;
-+
-+	hid_bpf_disconnect_device(hdev);
- }
- EXPORT_SYMBOL_GPL(hid_disconnect);
- 
+ static struct hid_bpf_ops hid_ops = {
++	.hid_get_report = hid_get_report,
++	.hid_hw_raw_request = hid_hw_raw_request,
+ 	.owner = THIS_MODULE,
+ 	.bus_type = &hid_bus_type,
+ };
 diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
-index 5d53b12c6ea0..1707e4492d7a 100644
+index 1707e4492d7a..ef76894f7705 100644
 --- a/include/linux/hid_bpf.h
 +++ b/include/linux/hid_bpf.h
-@@ -29,15 +29,32 @@ struct hid_device;
-  *         a bigger index).
-  * @hid: the ``struct hid_device`` representing the device itself
-  * @report_type: used for ``hid_bpf_device_event()``
-+ * @allocated_size: Allocated size of data.
-+ *
-+ *                  This is how much memory is available and can be requested
-+ *                  by the HID program.
-+ *                  Note that for ``HID_BPF_RDESC_FIXUP``, that memory is set to
-+ *                  ``4096`` (4 KB)
-  * @size: Valid data in the data field.
-  *
-  *        Programs can get the available valid size in data by fetching this field.
-+ *        Programs can also change this value by returning a positive number in the
-+ *        program.
-+ *        To discard the event, return a negative error code.
-+ *
-+ *        ``size`` must always be less or equal than ``allocated_size`` (it is enforced
-+ *        once all BPF programs have been run).
-+ * @retval: Return value of the previous program.
-  */
- struct hid_bpf_ctx {
- 	__u32 index;
- 	const struct hid_device *hid;
-+	__u32 allocated_size;
- 	enum hid_report_type report_type;
--	__s32 size;
-+	union {
-+		__s32 retval;
-+		__s32 size;
-+	};
+@@ -61,11 +61,15 @@ struct hid_bpf_ctx {
+ int hid_bpf_device_event(struct hid_bpf_ctx *ctx);
+ 
+ /* Following functions are kfunc that we export to BPF programs */
+-/* only available in tracing */
++/* available everywhere in HID-BPF */
+ __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t __sz);
+ 
+ /* only available in syscall */
+ int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags);
++int hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
++		       enum hid_report_type rtype, enum hid_class_request reqtype);
++struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id);
++void hid_bpf_release_context(struct hid_bpf_ctx *ctx);
+ 
+ /*
+  * Below is HID internal
+@@ -84,7 +88,14 @@ enum hid_bpf_prog_type {
+ 	HID_BPF_PROG_TYPE_MAX,
  };
  
- /* Following functions are tracepoints that BPF programs can attach to */
-@@ -81,6 +98,12 @@ struct hid_bpf_prog_list {
- 
- /* stored in each device */
- struct hid_bpf {
-+	u8 *device_data;		/* allocated when a bpf program of type
-+					 * SEC(f.../hid_bpf_device_event) has been attached
-+					 * to this HID device
-+					 */
-+	u32 allocated_data;
++struct hid_report_enum;
 +
- 	struct hid_bpf_prog_list __rcu *progs[HID_BPF_PROG_TYPE_MAX];	/* attached BPF progs */
- 	bool destroyed;			/* prevents the assignment of any progs */
- 
-@@ -88,13 +111,17 @@ struct hid_bpf {
+ struct hid_bpf_ops {
++	struct hid_report *(*hid_get_report)(struct hid_report_enum *report_enum, const u8 *data);
++	int (*hid_hw_raw_request)(struct hid_device *hdev,
++				  unsigned char reportnum, __u8 *buf,
++				  size_t len, enum hid_report_type rtype,
++				  enum hid_class_request reqtype);
+ 	struct module *owner;
+ 	struct bus_type *bus_type;
  };
- 
- #ifdef CONFIG_HID_BPF
--int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
--				  u32 size, int interrupt);
-+u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
-+				  u32 *size, int interrupt);
-+int hid_bpf_connect_device(struct hid_device *hdev);
-+void hid_bpf_disconnect_device(struct hid_device *hdev);
- void hid_bpf_destroy_device(struct hid_device *hid);
- void hid_bpf_device_init(struct hid_device *hid);
- #else /* CONFIG_HID_BPF */
--static inline int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
--						u32 size, int interrupt) { return 0; }
-+static inline u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
-+						u32 *size, int interrupt) { return 0; }
-+static inline int hid_bpf_connect_device(struct hid_device *hdev) { return 0; }
-+static inline void hid_bpf_disconnect_device(struct hid_device *hdev) {}
- static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
- static inline void hid_bpf_device_init(struct hid_device *hid) {}
- #endif /* CONFIG_HID_BPF */
 -- 
 2.36.1
 
