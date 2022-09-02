@@ -2,147 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284C05AAE01
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 14:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838A85AAFAF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 14:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235577AbiIBMDW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 08:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S237280AbiIBMmX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 08:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235817AbiIBMDN (ORCPT
+        with ESMTP id S237278AbiIBMlH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:03:13 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BE6C8886
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 05:03:09 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id u18so2014597wrq.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Sep 2022 05:03:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=QD0f458hOs+Yc5mX36c226dEAIGqQyTyl2jnPRNMycE=;
-        b=Nhb1ahfA74o2s885SBr3+p7hcg6A5trn06OdOOEsjKKjFz3xUQjTC+3l3BPw4x4Qki
-         98tFbxCk29ZzNK7mwS9hdQLBXJ2U0PXMZ5YRU8SPhG0NBqBWxaUaS2FNC5qauktJkfRo
-         9rZdTHGIQ0cizhHhmN3DsASDHBBg2+6yta30EzY18XTF2GzhyvwTT5WtHS4pUXNOokWM
-         smV7YZ+D6cPPo9D1W/B0l/nDLsvOJ9pu2LT2+CSwck8KGk/8IsyKQWUrmcdEhVm+kqjm
-         6yIn4isWEbDRvmS5iiZ93glHw6Qy+ZKUoLeE6TwLCCFch0cQkdmvcpJL0LY/GNtpb4EI
-         zZtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=QD0f458hOs+Yc5mX36c226dEAIGqQyTyl2jnPRNMycE=;
-        b=yrvtqDf6u3oOwhE7Hu6kQ57Txzr8CC3vYzca7ElUy0E91/Clu9AteXUOWnSGC0juGc
-         R/eITIwA6/62yTOLYMXmZwg3ZMAkVvjwpvaAqf825R6Dg/g8Q+xWbYt+u3YvNxAeN6zF
-         7mGMbBcEGEf0QkmwkUi9A62gmDBSaFfaycHFQXnVTZRPuIz0PGPDaFZrrI0sFXrgk6xU
-         LR399perwWYmWj/85DRqpOtn0rOVDxwYfqU0nM7KvL0LYyNvsnReisqST/gH8GW7tFRw
-         x+j6lWS/aXQgSgRZTGCzB28wyLcEKB5LLqrmBjgUNNHNLfKRKEiHw9FhAza2lCntB8WF
-         Yfjg==
-X-Gm-Message-State: ACgBeo3Hh7ojanRzlD8+48vsWlhfWlAXXU1nhaq7M7sDrHcavzpkHu5L
-        DepDyU00nBLVJq3P9LQbJVxwtw==
-X-Google-Smtp-Source: AA6agR6NBs+WZRiv1NUV1OsVl1k+nVX/H7sz5z2SKboCwbDVO74A7WpVLMgN0Co/JBUiwBZUjdmenA==
-X-Received: by 2002:a05:6000:799:b0:226:e3e9:e482 with SMTP id bu25-20020a056000079900b00226e3e9e482mr10057791wrb.219.1662120188014;
-        Fri, 02 Sep 2022 05:03:08 -0700 (PDT)
-Received: from [10.44.2.26] (84-199-106-91.ifiber.telenet-ops.be. [84.199.106.91])
-        by smtp.gmail.com with ESMTPSA id s8-20020a1cf208000000b003a83fda1dc5sm1894953wmc.44.2022.09.02.05.03.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 05:03:06 -0700 (PDT)
-Message-ID: <695db55b-959c-0165-b35d-338ba36fa0e4@tessares.net>
-Date:   Fri, 2 Sep 2022 14:03:04 +0200
+        Fri, 2 Sep 2022 08:41:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3798E868D;
+        Fri,  2 Sep 2022 05:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662121886; x=1693657886;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fDpXS+mwMN4S7KTgnVwvjs5feZwWXlXraJAIEBzDX2M=;
+  b=X5d4yMTdb9rqtJD/vFsu0rl5cEeihbax9+NUBhn3Tz/9DdE4C77fA9/x
+   GoZxapb2TGuT6GuW9i0/rpEFS202ZVzf43K/cWLgLOHFal5NcV2llukp5
+   hX93eW6BqcrWARumP4aPweBKwUO4zGhuhVSB1mVvFnix2jUoMwJODE0A3
+   IjSrGO3s0+ewxi+P4F9JbmuTxkYsiRVkI6qi7Zqs2115FRKiEpVRzjmmR
+   4CGGTnIPsPPChV5v0UoXcmiamjo+uaDcv5GNc24O8JU0Y1KkhBbb/xVJn
+   RW0T3o4nBWLF0srw1o5c96COprmU6l6nr/Z5RnWNsI2MP8/yLkYTGjHeu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="382268005"
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="382268005"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:30:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
+   d="scan'208";a="674338766"
+Received: from azmijews-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.45.129])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 05:30:12 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 5AC6D10484B; Fri,  2 Sep 2022 15:30:10 +0300 (+03)
+Date:   Fri, 2 Sep 2022 15:30:10 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
+        Elena Reshetova <elena.reshetova@intel.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220902123010.zfyv6apmo3v67a2i@box.shutemov.name>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+ <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
+ <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
+ <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
+ <20220902102757.GB1712673@chaop.bj.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] selftests: net: sort .gitignore file
-Content-Language: en-GB
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220829184748.1535580-1-axelrasmussen@google.com>
- <fe9280ff-50b3-805a-07ef-0227cbec13e8@tessares.net>
- <20220901130529.2f364617@kernel.org>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20220901130529.2f364617@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220902102757.GB1712673@chaop.bj.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jakub,
-
-On 01/09/2022 22:05, Jakub Kicinski wrote:
-> On Thu, 1 Sep 2022 12:15:02 +0200 Matthieu Baerts wrote:
->> Hello,
->>
->> On 29/08/2022 20:47, Axel Rasmussen wrote:
->>> This is the result of `sort tools/testing/selftests/net/.gitignore`, but
->>> preserving the comment at the top.  
->>
->> FYI, we got a small conflict (as expected by Jakub) when merging -net in
->> net-next in the MPTCP tree due to this patch applied in -net:
->>
->>   5a3a59981027 ("selftests: net: sort .gitignore file")
->>
->> and these ones from net-next:
->>
->>   c35ecb95c448 ("selftests/net: Add test for timing a bind request to a
->> port with a populated bhash entry")
->>   1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and
->> sk_connect_zero_addr")
->>
->> The conflict has been resolved on our side[1] and the resolution we
->> suggest is attached to this email: new entries have been added in the
->> list respecting the alphabetical order.
+On Fri, Sep 02, 2022 at 06:27:57PM +0800, Chao Peng wrote:
+> > +	if (flags & MFD_INACCESSIBLE) {
+> > +		struct file *inaccessible_file;
+> > +
+> > +		inaccessible_file = memfd_mkinaccessible(file);
+> > +		if (IS_ERR(inaccessible_file)) {
+> > +			error = PTR_ERR(inaccessible_file);
+> > +			goto err_file;
+> > +		}
 > 
-> Yup, that was my plan as well. Apologies for the trouble, I thought
-> since the conflict will only exist for a day I'd be the only one
-> suffering.
-
-That's alright, it was not difficult to resolve :)
-
-We do the sync everyday around 6AM UTC time:
-
-
-https://github.com/multipath-tcp/mptcp_net-next/actions/workflows/update-tg-tree.yml
-
-If you prefer and if we have issues on a Thursday, we can also wait for
-the next day before looking at these conflicts and report them.
-
-> I think we should also sort the Makefile FWIW.
-> Perhaps it's better done during the merge window.
-
-Indeed, that would make sense to do them at this period but I also
-understand such clean-up are useful to reduce conflicts later.
-
-Such conflicts created by the clean-up are also easy to resolve so no
-need to worry to much I think.
-
->> I'm sharing this thinking it can help others but if it only creates
->> noise, please tell me! :-)
+> The new file should alse be marked as O_LARGEFILE otherwise setting the
+> initial size greater than 2^31 on the fd will be refused by ftruncate().
 > 
->> [1] https://github.com/multipath-tcp/mptcp_net-next/commit/4151695b70b6
-> 
-> It is useful, thanks!
+> +               inaccessible_file->f_flags |= O_LARGEFILE;
+> +
 
-I'm glad it is! (Sharing them is also useful for us to avoid diverging
-our tree from net and net-next if the conflicts are resolved differently
-:) )
+Good catch. Thanks.
 
-Cheers,
-Matt
+I will modify memfd_mkinaccessible() to do this.
+
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+  Kiryl Shutsemau / Kirill A. Shutemov
