@@ -2,189 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4775AAC7A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 12:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7343D5AACA7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 12:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235900AbiIBKc5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 06:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
+        id S235543AbiIBKj4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 06:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235841AbiIBKcu (ORCPT
+        with ESMTP id S235127AbiIBKjz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 06:32:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAF1B0292;
-        Fri,  2 Sep 2022 03:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662114770; x=1693650770;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=Ws38xTyai1UArcptdFTCO63DRGm+K11UNHn/R44NQ2A=;
-  b=Mb/5VAfA17yHlt35Ao2Hl/TpXeVFkd3x+CULkkBnLJPuHRW2iPXaCxsi
-   mN/6BInmSKgsBEOz3veXRo7SzXTljMuFuuSpMuM0B6Q7KDJIXhc9yBT+0
-   xFhL1/LtWLTIlRwe0fPfrc6eOD2/ZB0V1IAB3CYHLOmFogOXNdWWgMaWh
-   r4/jx2GM5q+oD6SWo43ztbUngcDGYo4zatmjx2sqiBVqLR3ZxMkDzGcL8
-   yJc71Tu+A3zbMjUvhKRH+5pPec3nGAOAaffKFu2Y2nsl0T70SxnGIunQ+
-   Npw1jHYBTwsGAt7tJ9C8evXPgAsEqOI2BHugwGjvvoGBdZvnS+yIBEgtI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="278969000"
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="278969000"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2022 03:32:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,283,1654585200"; 
-   d="scan'208";a="608945519"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 02 Sep 2022 03:32:39 -0700
-Date:   Fri, 2 Sep 2022 18:27:57 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Hugh Dickins <hughd@google.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Fri, 2 Sep 2022 06:39:55 -0400
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453BB65C5;
+        Fri,  2 Sep 2022 03:39:52 -0700 (PDT)
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 2B301161137;
+        Fri,  2 Sep 2022 10:39:51 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id A87392000F;
+        Fri,  2 Sep 2022 10:39:49 +0000 (UTC)
+Message-ID: <026c08d9ab841ef626f80d968a532dea94a37c62.camel@perches.com>
+Subject: Re: [RFC PATCH v1] checkpatch: Handle FILE pointer type
+From:   Joe Perches <joe@perches.com>
+To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Andy Whitcroft <apw@canonical.com>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
-        Elena Reshetova <elena.reshetova@intel.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220902102757.GB1712673@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
- <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
- <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
- <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
+        Jerome Forissier <jerome.forissier@linaro.org>
+Date:   Fri, 02 Sep 2022 03:39:48 -0700
+In-Reply-To: <b079d162-fa10-8cf0-bfc9-91f72a440e34@digikod.net>
+References: <20220901145948.1456353-1-mic@digikod.net>
+         <4f958a0c7c0aa2fce613371348477c002aa58e90.camel@perches.com>
+         <b028cf83798fd562f5d1b992d2651d53e21acaa2.camel@perches.com>
+         <b079d162-fa10-8cf0-bfc9-91f72a440e34@digikod.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: A87392000F
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: 16ymibe4ikt4e3kg6ygzxk33f84tttkb
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19qhTNQ0fbgwDVM/BvlOV2+Wq8OFI4n/iw=
+X-HE-Tag: 1662115189-711019
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 05:24:39PM +0300, Kirill A . Shutemov wrote:
-> On Sat, Aug 20, 2022 at 10:15:32PM -0700, Hugh Dickins wrote:
-> > > I will try next week to rework it as shim to top of shmem. Does it work
-> > > for you?
+On Fri, 2022-09-02 at 11:04 +0200, Mickaël Salaün wrote:
+> On 01/09/2022 20:22, Joe Perches wrote:
+> > On Thu, 2022-09-01 at 11:49 -0400, Joe Perches wrote:
+> > > On Thu, 2022-09-01 at 16:59 +0200, Mickaël Salaün wrote:
+> > > > When using a "FILE *" type, checkpatch considers this an error.  Fix
+> > > > this by explicitly defining "FILE" as a common type.
+> > > []
+> > > > Another error may be throw when we use FIXTURE_{DATA,VARIANT}() structs,
+> > > > as defined in kselftest_harness.h .
+> > > []
+> > > > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > > []
+> > > > @@ -576,10 +576,17 @@ our $typeKernelTypedefs = qr{(?x:
+> > > >   	(?:__)?(?:u|s|be|le)(?:8|16|32|64)|
+> > > >   	atomic_t
+> > > >   )};
+> > > > +our $typeStdioTypedefs = qr{(?x:
+> > > > +	FILE
+> > > > +)};
+> > > 
+> > > I'm fine with this.
+> > > 
+> > > > +# our $typeKselftestHarnessTypedefs = qr{(?x:
+> > > > +# 	FIXTURE_(?:DATA|VARIANT)\($Ident\)
+> > > > +# )};
+> > > 
+> > > But not this.  Random userspace typedefs should likely
+> > > be kept in some local version of checkpatch.
+> > > 
+> > > Or maybe add a command line option like --additional_typedefs=<file>.
 > > 
-> > Yes, please do, thanks.  It's a compromise between us: the initial TDX
-> > case has no justification to use shmem at all, but doing it that way
-> > will help you with some of the infrastructure, and will probably be
-> > easiest for KVM to extend to other more relaxed fd cases later.
+> > Oops.  I forgot it already exists:
+> > 
+> >    --typedefsfile             Read additional types from this file
+> > 
+> > commit 75ad8c575a5ad105e2afc2051c68abceb9c65431
+> > Author: Jerome Forissier <jerome.forissier@linaro.org>
+> > Date:   Mon May 8 15:56:00 2017 -0700
+> > 
+> >      checkpatch: add --typedefsfile
+> >      
+> >      When using checkpatch on out-of-tree code, it may occur that some
+> >      project-specific types are used, which will cause spurious warnings.
+> >      Add the --typedefsfile option as a way to extend the known types and
+> >      deal with this issue.
 > 
-> Okay, below is my take on the shim approach.
-> 
-> I don't hate how it turned out. It is easier to understand without
-> callback exchange thing.
-> 
-> The only caveat is I had to introduce external lock to protect against
-> race between lookup and truncate. Otherwise, looks pretty reasonable to me.
-> 
-> I did very limited testing. And it lacks integration with KVM, but API
-> changed not substantially, any it should be easy to adopt.
+> This doesn't work for the FIXTURE_DATA() case.
 
-I have integrated this patch with other KVM patches and verified the
-functionality works well in TDX environment with a minor fix below.
+checkpatch is a stupid little script.
+It's not a c preprocessor nor a syntax complete compiler.
+It's really easy for macros to make its output invalid.
+If you feed obfuscated c to checkpatch, it'd be confused.
+(Same is true for tools like coccinelle btw, though cocci is far better)
+checkpatch will never be comprehensive nor perfect.
+It's expected its users will use their common sense about its
+output message validity.
 
-> 
-> Any comments?
-> 
+> And I'm not sure how 
+> contributors would know that they need to use this option with a 
+> specific file.
 
-...
+--help exists
 
-> diff --git a/mm/memfd.c b/mm/memfd.c
-> index 08f5f8304746..1853a90f49ff 100644
-> --- a/mm/memfd.c
-> +++ b/mm/memfd.c
-> @@ -261,7 +261,8 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
->  #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
->  #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
->  
-> -#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
-> +#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | \
-> +		       MFD_INACCESSIBLE)
->  
->  SYSCALL_DEFINE2(memfd_create,
->  		const char __user *, uname,
-> @@ -283,6 +284,14 @@ SYSCALL_DEFINE2(memfd_create,
->  			return -EINVAL;
->  	}
->  
-> +	/* Disallow sealing when MFD_INACCESSIBLE is set. */
-> +	if ((flags & MFD_INACCESSIBLE) && (flags & MFD_ALLOW_SEALING))
-> +		return -EINVAL;
-> +
-> +	/* TODO: add hugetlb support */
-> +	if ((flags & MFD_INACCESSIBLE) && (flags & MFD_HUGETLB))
-> +		return -EINVAL;
-> +
->  	/* length includes terminating zero */
->  	len = strnlen_user(uname, MFD_NAME_MAX_LEN + 1);
->  	if (len <= 0)
-> @@ -331,10 +340,24 @@ SYSCALL_DEFINE2(memfd_create,
->  		*file_seals &= ~F_SEAL_SEAL;
->  	}
->  
-> +	if (flags & MFD_INACCESSIBLE) {
-> +		struct file *inaccessible_file;
-> +
-> +		inaccessible_file = memfd_mkinaccessible(file);
-> +		if (IS_ERR(inaccessible_file)) {
-> +			error = PTR_ERR(inaccessible_file);
-> +			goto err_file;
-> +		}
+Maybe Documentation/dev-tools/checkpatch.rst could be expanded for
+--verbose mode.
 
-The new file should alse be marked as O_LARGEFILE otherwise setting the
-initial size greater than 2^31 on the fd will be refused by ftruncate().
-
-+               inaccessible_file->f_flags |= O_LARGEFILE;
-+
-
-> +
-> +		file = inaccessible_file;
-> +	}
-> +
->  	fd_install(fd, file);
->  	kfree(name);
->  	return fd;
->  
-> +err_file:
-> +	fput(file);
->  err_fd:
->  	put_unused_fd(fd);
->  err_name:
