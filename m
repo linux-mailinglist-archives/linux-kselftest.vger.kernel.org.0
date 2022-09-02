@@ -2,93 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC52A5AADF2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 14:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284C05AAE01
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 14:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbiIBMAY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 08:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S235577AbiIBMDW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 08:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiIBMAY (ORCPT
+        with ESMTP id S235817AbiIBMDN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 08:00:24 -0400
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33DE1E3C1;
-        Fri,  2 Sep 2022 05:00:22 -0700 (PDT)
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id 1E9891A11CC;
-        Fri,  2 Sep 2022 12:00:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id A19246000A;
-        Fri,  2 Sep 2022 12:00:19 +0000 (UTC)
-Message-ID: <7591cea9e718f6abfee14f08e97937b1c2722dd6.camel@perches.com>
-Subject: Re: [PATCH v2] checkpatch: Handle FILE pointer type
-From:   Joe Perches <joe@perches.com>
-To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Date:   Fri, 02 Sep 2022 05:00:18 -0700
-In-Reply-To: <20220902111923.1488671-1-mic@digikod.net>
-References: <20220902111923.1488671-1-mic@digikod.net>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Fri, 2 Sep 2022 08:03:13 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BE6C8886
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 05:03:09 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id u18so2014597wrq.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Sep 2022 05:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=QD0f458hOs+Yc5mX36c226dEAIGqQyTyl2jnPRNMycE=;
+        b=Nhb1ahfA74o2s885SBr3+p7hcg6A5trn06OdOOEsjKKjFz3xUQjTC+3l3BPw4x4Qki
+         98tFbxCk29ZzNK7mwS9hdQLBXJ2U0PXMZ5YRU8SPhG0NBqBWxaUaS2FNC5qauktJkfRo
+         9rZdTHGIQ0cizhHhmN3DsASDHBBg2+6yta30EzY18XTF2GzhyvwTT5WtHS4pUXNOokWM
+         smV7YZ+D6cPPo9D1W/B0l/nDLsvOJ9pu2LT2+CSwck8KGk/8IsyKQWUrmcdEhVm+kqjm
+         6yIn4isWEbDRvmS5iiZ93glHw6Qy+ZKUoLeE6TwLCCFch0cQkdmvcpJL0LY/GNtpb4EI
+         zZtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=QD0f458hOs+Yc5mX36c226dEAIGqQyTyl2jnPRNMycE=;
+        b=yrvtqDf6u3oOwhE7Hu6kQ57Txzr8CC3vYzca7ElUy0E91/Clu9AteXUOWnSGC0juGc
+         R/eITIwA6/62yTOLYMXmZwg3ZMAkVvjwpvaAqf825R6Dg/g8Q+xWbYt+u3YvNxAeN6zF
+         7mGMbBcEGEf0QkmwkUi9A62gmDBSaFfaycHFQXnVTZRPuIz0PGPDaFZrrI0sFXrgk6xU
+         LR399perwWYmWj/85DRqpOtn0rOVDxwYfqU0nM7KvL0LYyNvsnReisqST/gH8GW7tFRw
+         x+j6lWS/aXQgSgRZTGCzB28wyLcEKB5LLqrmBjgUNNHNLfKRKEiHw9FhAza2lCntB8WF
+         Yfjg==
+X-Gm-Message-State: ACgBeo3Hh7ojanRzlD8+48vsWlhfWlAXXU1nhaq7M7sDrHcavzpkHu5L
+        DepDyU00nBLVJq3P9LQbJVxwtw==
+X-Google-Smtp-Source: AA6agR6NBs+WZRiv1NUV1OsVl1k+nVX/H7sz5z2SKboCwbDVO74A7WpVLMgN0Co/JBUiwBZUjdmenA==
+X-Received: by 2002:a05:6000:799:b0:226:e3e9:e482 with SMTP id bu25-20020a056000079900b00226e3e9e482mr10057791wrb.219.1662120188014;
+        Fri, 02 Sep 2022 05:03:08 -0700 (PDT)
+Received: from [10.44.2.26] (84-199-106-91.ifiber.telenet-ops.be. [84.199.106.91])
+        by smtp.gmail.com with ESMTPSA id s8-20020a1cf208000000b003a83fda1dc5sm1894953wmc.44.2022.09.02.05.03.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 05:03:06 -0700 (PDT)
+Message-ID: <695db55b-959c-0165-b35d-338ba36fa0e4@tessares.net>
+Date:   Fri, 2 Sep 2022 14:03:04 +0200
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: A19246000A
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] selftests: net: sort .gitignore file
+Content-Language: en-GB
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220829184748.1535580-1-axelrasmussen@google.com>
+ <fe9280ff-50b3-805a-07ef-0227cbec13e8@tessares.net>
+ <20220901130529.2f364617@kernel.org>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220901130529.2f364617@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: cn8fpz4gidom5be91pcx9ywmgu7e7pax
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/IgcKs53YVW32I39B6pP1mbdA0ggHUt6Y=
-X-HE-Tag: 1662120019-604117
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 2022-09-02 at 13:19 +0200, Mickaël Salaün wrote:
-> When using a "FILE *" type, checkpatch considers this an error:
->   ERROR: need consistent spacing around '*' (ctx:WxV)
->   #32: FILE: f.c:8:
->   +static void a(FILE *const b)
-[]
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Hi Jakub,
 
-Acked-by: Joe Perches <joe@perches.com>
-
-> Link: https://lore.kernel.org/r/20220902111923.1488671-1-mic@digikod.net
-> ---
-> Changes since v1:
-> https://lore.kernel.org/r/20220901145948.1456353-1-mic@digikod.net
-> * Remove the FIXTURE_{DATA,VARIANT}() comments.
-> * Improve commit description.
-> ---
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> @@ -576,10 +576,14 @@ our $typeKernelTypedefs = qr{(?x:
->  	(?:__)?(?:u|s|be|le)(?:8|16|32|64)|
->  	atomic_t
->  )};
-> +our $typeStdioTypedefs = qr{(?x:
-> +	FILE
-> +)};
->  our $typeTypedefs = qr{(?x:
->  	$typeC99Typedefs\b|
->  	$typeOtherOSTypedefs\b|
-> -	$typeKernelTypedefs\b
-> +	$typeKernelTypedefs\b|
-> +	$typeStdioTypedefs\b
->  )};
->  
->  our $zero_initializer = qr{(?:(?:0[xX])?0+$Int_type?|NULL|false)\b};
+On 01/09/2022 22:05, Jakub Kicinski wrote:
+> On Thu, 1 Sep 2022 12:15:02 +0200 Matthieu Baerts wrote:
+>> Hello,
+>>
+>> On 29/08/2022 20:47, Axel Rasmussen wrote:
+>>> This is the result of `sort tools/testing/selftests/net/.gitignore`, but
+>>> preserving the comment at the top.  
+>>
+>> FYI, we got a small conflict (as expected by Jakub) when merging -net in
+>> net-next in the MPTCP tree due to this patch applied in -net:
+>>
+>>   5a3a59981027 ("selftests: net: sort .gitignore file")
+>>
+>> and these ones from net-next:
+>>
+>>   c35ecb95c448 ("selftests/net: Add test for timing a bind request to a
+>> port with a populated bhash entry")
+>>   1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and
+>> sk_connect_zero_addr")
+>>
+>> The conflict has been resolved on our side[1] and the resolution we
+>> suggest is attached to this email: new entries have been added in the
+>> list respecting the alphabetical order.
 > 
-> base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
+> Yup, that was my plan as well. Apologies for the trouble, I thought
+> since the conflict will only exist for a day I'd be the only one
+> suffering.
 
+That's alright, it was not difficult to resolve :)
+
+We do the sync everyday around 6AM UTC time:
+
+
+https://github.com/multipath-tcp/mptcp_net-next/actions/workflows/update-tg-tree.yml
+
+If you prefer and if we have issues on a Thursday, we can also wait for
+the next day before looking at these conflicts and report them.
+
+> I think we should also sort the Makefile FWIW.
+> Perhaps it's better done during the merge window.
+
+Indeed, that would make sense to do them at this period but I also
+understand such clean-up are useful to reduce conflicts later.
+
+Such conflicts created by the clean-up are also easy to resolve so no
+need to worry to much I think.
+
+>> I'm sharing this thinking it can help others but if it only creates
+>> noise, please tell me! :-)
+> 
+>> [1] https://github.com/multipath-tcp/mptcp_net-next/commit/4151695b70b6
+> 
+> It is useful, thanks!
+
+I'm glad it is! (Sharing them is also useful for us to avoid diverging
+our tree from net and net-next if the conflicts are resolved differently
+:) )
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
