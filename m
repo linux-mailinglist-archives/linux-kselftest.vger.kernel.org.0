@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0A05AB2AF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 16:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAD35AB27A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 15:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238413AbiIBOBx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 10:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
+        id S236839AbiIBN71 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 09:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238551AbiIBN7o (ORCPT
+        with ESMTP id S238747AbiIBN6o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:59:44 -0400
+        Fri, 2 Sep 2022 09:58:44 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7F66F57C
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C4E2DABD
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125419;
+        s=mimecast20190719; t=1662125418;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1pceN/reEy6W1dhR2JsqTpMwghob87xpvrMYVrihi74=;
-        b=K7pUmJ9Qv8Fz4sVun08Tk5dQNuvDduw/XPtd/MdgQmacVVcVFE0NdNWDqIDaaQmjLX6KsV
-        8QVh1FLlOM1vVVeE6nw8VV+pUBLRaVLo9jHulHcNbbmfua+Jda/xEg8UMQ8p3nw4In05YW
-        Gaz21GQ0YhLC6Zjb6QU+b27AOPkxRmc=
+        bh=bC0Kw7kfTxOXFsmn4/dN6pihWblDj+jyGbCd41TYnXA=;
+        b=c5tFu1XtSvFdfSo7ZWsNkxtsA3JekCi8eV+6ovxmbsCJQTLX2kqKKWL52qLNOatKKnEp6f
+        ZVowrZkYa7i/OqGBs0Qx3v5iv1ipM1wOr51sscFTAfOwvyZVT9ZhfZqmgCSaX7GVR7Ugog
+        IOZIDHRo1ubMkDIP1kfi+fpH0exnZMM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-283-rLQeVlcFPh2IQzebM1E06A-1; Fri, 02 Sep 2022 09:30:14 -0400
-X-MC-Unique: rLQeVlcFPh2IQzebM1E06A-1
+ us-mta-359-sR0Nfe7dMzuhyfjZKMQuPA-1; Fri, 02 Sep 2022 09:30:16 -0400
+X-MC-Unique: sR0Nfe7dMzuhyfjZKMQuPA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 854F0101E167;
-        Fri,  2 Sep 2022 13:30:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F755823F13;
+        Fri,  2 Sep 2022 13:30:15 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F3445492C3B;
-        Fri,  2 Sep 2022 13:30:07 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C2427492CA2;
+        Fri,  2 Sep 2022 13:30:11 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 07/23] selftests/bpf: Add tests for kfunc returning a memory pointer
-Date:   Fri,  2 Sep 2022 15:29:22 +0200
-Message-Id: <20220902132938.2409206-8-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 08/23] HID: core: store the unique system identifier in hid_device
+Date:   Fri,  2 Sep 2022 15:29:23 +0200
+Message-Id: <20220902132938.2409206-9-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -74,309 +74,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We add 2 new kfuncs that are following the RET_PTR_TO_MEM
-capability from the previous commit.
-Then we test them in selftests:
-the first tests are testing valid case, and are not failing,
-and the later ones are actually preventing the program to be loaded
-because they are wrong.
+This unique identifier is currently used only for ensuring uniqueness in
+sysfs. However, this could be handful for userspace to refer to a specific
+hid_device by this id.
 
-To work around that, we mark the failing ones as not autoloaded
-(with SEC("?tc")), and we manually enable them one by one, ensuring
-the verifier rejects them.
+2 use cases are in my mind: LEDs (and their naming convention), and
+HID-BPF.
 
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-changes in v10:
-- use new definition for tests
-- remove the Makefile change, it was done before
-- renamed the failed tests to be more explicit
-- add 2 more test cases for return mem: oob access and non const access
-- add one more test case for an invalid acquire function returning an
-  int pointer
+no changes in v10
 
-changes in v9:
-- updated to match upstream (net/bpf/test_run.c id sets is now using
-  flags)
+no changes in v9
 
 no changes in v8
 
-changes in v7:
-- removed stray include/linux/btf.h change
+no changes in v7
 
-new in v6
+no changes in v6
+
+new in v5
 ---
- net/bpf/test_run.c                            |  36 ++++++
- .../selftests/bpf/prog_tests/kfunc_call.c     |   6 +
- .../selftests/bpf/progs/kfunc_call_fail.c     | 121 ++++++++++++++++++
- .../selftests/bpf/progs/kfunc_call_test.c     |  33 +++++
- 4 files changed, 196 insertions(+)
+ drivers/hid/hid-core.c | 4 +++-
+ include/linux/hid.h    | 2 ++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index f16baf977a21..13d578ce2a09 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -606,6 +606,38 @@ noinline void bpf_kfunc_call_memb1_release(struct prog_test_member1 *p)
- 	WARN_ON_ONCE(1);
- }
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index b7f5566e338d..a00dd43db8bf 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2739,10 +2739,12 @@ int hid_add_device(struct hid_device *hdev)
+ 			hid_warn(hdev, "bad device descriptor (%d)\n", ret);
+ 	}
  
-+static int *__bpf_kfunc_call_test_get_mem(struct prog_test_ref_kfunc *p, const int size)
-+{
-+	if (size > 2 * sizeof(int))
-+		return NULL;
++	hdev->id = atomic_inc_return(&id);
 +
-+	return (int *)p;
-+}
-+
-+noinline int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size)
-+{
-+	return __bpf_kfunc_call_test_get_mem(p, rdwr_buf_size);
-+}
-+
-+noinline int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size)
-+{
-+	return __bpf_kfunc_call_test_get_mem(p, rdonly_buf_size);
-+}
-+
-+/* the next 2 ones can't be really used for testing expect to ensure
-+ * that the verifier rejects the call.
-+ * Acquire functions must return struct pointers, so these ones are
-+ * failing.
-+ */
-+noinline int *bpf_kfunc_call_test_acq_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size)
-+{
-+	return __bpf_kfunc_call_test_get_mem(p, rdonly_buf_size);
-+}
-+
-+noinline void bpf_kfunc_call_int_mem_release(int *p)
-+{
-+}
-+
- noinline struct prog_test_ref_kfunc *
- bpf_kfunc_call_test_kptr_get(struct prog_test_ref_kfunc **pp, int a, int b)
- {
-@@ -712,6 +744,10 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_memb_acquire, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_kfunc_call_memb_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_kfunc_call_memb1_release, KF_RELEASE)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_get_rdwr_mem, KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_get_rdonly_mem, KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_acq_rdonly_mem, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_int_mem_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_kptr_get, KF_ACQUIRE | KF_RET_NULL | KF_KPTR_GET)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass_ctx)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass1)
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index 84798979f3a7..f3e5cc53a6d8 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -35,11 +35,17 @@ static struct kfunc_test_params kfunc_tests[] = {
- 	 */
- 	{"kfunc_syscall_test_fail", -EINVAL, syscall_null_ctx_test, "processed 4 insns"},
- 	{"kfunc_syscall_test_null_fail", -EINVAL, syscall_null_ctx_test, "processed 4 insns"},
-+	{"kfunc_call_test_get_mem_fail_rdonly", 0, tc_test, "R0 cannot write into rdonly_mem"},
-+	{"kfunc_call_test_get_mem_fail_use_after_free", 0, tc_test, "invalid mem access 'scalar'"},
-+	{"kfunc_call_test_get_mem_fail_oob", 0, tc_test, "min value is outside of the allowed memory range"},
-+	{"kfunc_call_test_get_mem_fail_not_const", 0, tc_test, "is not a const"},
-+	{"kfunc_call_test_mem_acquire_fail", 0, tc_test, "acquire kernel function does not return PTR_TO_BTF_ID"},
+ 	/* XXX hack, any other cleaner solution after the driver core
+ 	 * is converted to allow more than 20 bytes as the device name? */
+ 	dev_set_name(&hdev->dev, "%04X:%04X:%04X.%04X", hdev->bus,
+-		     hdev->vendor, hdev->product, atomic_inc_return(&id));
++		     hdev->vendor, hdev->product, hdev->id);
  
- 	/* success cases */
- 	{"kfunc_call_test1", 12, tc_test, NULL},
- 	{"kfunc_call_test2", 3, tc_test, NULL},
- 	{"kfunc_call_test_ref_btf_id", 0, tc_test, NULL},
-+	{"kfunc_call_test_get_mem", 42, tc_test, NULL},
- 	{"kfunc_syscall_test", 0, syscall_test, NULL},
- 	{"kfunc_syscall_test_null", 0, syscall_null_ctx_test, NULL},
+ 	hid_debug_register(hdev, dev_name(&hdev->dev));
+ 	ret = device_add(&hdev->dev);
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index 4363a63b9775..a43dd17bc78f 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -658,6 +658,8 @@ struct hid_device {							/* device report descriptor */
+ 	struct list_head debug_list;
+ 	spinlock_t  debug_list_lock;
+ 	wait_queue_head_t debug_wait;
++
++	unsigned int id;						/* system unique id */
  };
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-index 4168027f2ab1..b98313d391c6 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-@@ -3,7 +3,13 @@
- #include <vmlinux.h>
- #include <bpf/bpf_helpers.h>
  
-+extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
-+extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
- extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
-+extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
-+extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
-+extern int *bpf_kfunc_call_test_acq_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
-+extern void bpf_kfunc_call_int_mem_release(int *p) __ksym;
- 
- struct syscall_test_args {
- 	__u8 data[16];
-@@ -36,4 +42,119 @@ int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
- 	return 0;
- }
- 
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_rdonly(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
-+		if (p)
-+			p[0] = 42; /* this is a read-only buffer, so -EACCES */
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_use_after_free(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdwr_mem(pt, 2 * sizeof(int));
-+		if (p) {
-+			p[0] = 42;
-+			ret = p[1]; /* 108 */
-+		} else {
-+			ret = -1;
-+		}
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	if (p)
-+		ret = p[0]; /* p is not valid anymore */
-+
-+	return ret;
-+}
-+
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_oob(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
-+		if (p)
-+			ret = p[2 * sizeof(int)]; /* oob access, so -EACCES */
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
-+int not_const_size = 2 * sizeof(int);
-+
-+SEC("?tc")
-+int kfunc_call_test_get_mem_fail_not_const(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdonly_mem(pt, not_const_size); /* non const size, -EINVAL */
-+		if (p)
-+			ret = p[0];
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
-+SEC("?tc")
-+int kfunc_call_test_mem_acquire_fail(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		/* we are failing on this one, because we are not acquiring a PTR_TO_BTF_ID (a struct ptr) */
-+		p = bpf_kfunc_call_test_acq_rdonly_mem(pt, 2 * sizeof(int));
-+		if (p)
-+			ret = p[0];
-+		else
-+			ret = -1;
-+
-+		bpf_kfunc_call_int_mem_release(p);
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-index 94c05267e5e7..56c96f7969f0 100644
---- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-+++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-@@ -14,6 +14,8 @@ extern void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
- extern void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
- extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
- extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
-+extern int *bpf_kfunc_call_test_get_rdwr_mem(struct prog_test_ref_kfunc *p, const int rdwr_buf_size) __ksym;
-+extern int *bpf_kfunc_call_test_get_rdonly_mem(struct prog_test_ref_kfunc *p, const int rdonly_buf_size) __ksym;
- 
- SEC("tc")
- int kfunc_call_test2(struct __sk_buff *skb)
-@@ -130,4 +132,35 @@ int kfunc_syscall_test_null(struct syscall_test_args *args)
- 	return 0;
- }
- 
-+SEC("tc")
-+int kfunc_call_test_get_mem(struct __sk_buff *skb)
-+{
-+	struct prog_test_ref_kfunc *pt;
-+	unsigned long s = 0;
-+	int *p = NULL;
-+	int ret = 0;
-+
-+	pt = bpf_kfunc_call_test_acquire(&s);
-+	if (pt) {
-+		p = bpf_kfunc_call_test_get_rdwr_mem(pt, 2 * sizeof(int));
-+		if (p) {
-+			p[0] = 42;
-+			ret = p[1]; /* 108 */
-+		} else {
-+			ret = -1;
-+		}
-+
-+		if (ret >= 0) {
-+			p = bpf_kfunc_call_test_get_rdonly_mem(pt, 2 * sizeof(int));
-+			if (p)
-+				ret = p[0]; /* 42 */
-+			else
-+				ret = -1;
-+		}
-+
-+		bpf_kfunc_call_test_release(pt);
-+	}
-+	return ret;
-+}
-+
- char _license[] SEC("license") = "GPL";
+ #define to_hid_device(pdev) \
 -- 
 2.36.1
 
