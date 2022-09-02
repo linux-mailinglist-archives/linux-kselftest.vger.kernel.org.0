@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAD35AB27A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 15:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4221F5AB27B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 15:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236839AbiIBN71 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 09:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
+        id S236307AbiIBN7Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 09:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238747AbiIBN6o (ORCPT
+        with ESMTP id S238741AbiIBN6n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:58:44 -0400
+        Fri, 2 Sep 2022 09:58:43 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C4E2DABD
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF45EDA3ED
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125418;
+        s=mimecast20190719; t=1662125445;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bC0Kw7kfTxOXFsmn4/dN6pihWblDj+jyGbCd41TYnXA=;
-        b=c5tFu1XtSvFdfSo7ZWsNkxtsA3JekCi8eV+6ovxmbsCJQTLX2kqKKWL52qLNOatKKnEp6f
-        ZVowrZkYa7i/OqGBs0Qx3v5iv1ipM1wOr51sscFTAfOwvyZVT9ZhfZqmgCSaX7GVR7Ugog
-        IOZIDHRo1ubMkDIP1kfi+fpH0exnZMM=
+        bh=fCPhsYotoB8FwxxQ6G8njzdsQ+qxsod3YHUxpf4SITc=;
+        b=CuLqFjQh3FhwHJAokgL4GLMIbZ5A6PayktY1kIIILjiPoDK0uPpMKk+WKL3jHlHPNedIq+
+        D2V66hqzpMnpTt2mwgwsAJNrSF6QqkJwyv1ik6wGUz3Vih7ttSaCZa6rULOvlk546FibeW
+        9jA0JKBpzsYv/iObvmSwHbHruBeXo7E=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-359-sR0Nfe7dMzuhyfjZKMQuPA-1; Fri, 02 Sep 2022 09:30:16 -0400
-X-MC-Unique: sR0Nfe7dMzuhyfjZKMQuPA-1
+ us-mta-247-FwYFBwSpMCmRXeQPdqzoTA-1; Fri, 02 Sep 2022 09:30:29 -0400
+X-MC-Unique: FwYFBwSpMCmRXeQPdqzoTA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F755823F13;
-        Fri,  2 Sep 2022 13:30:15 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15F59823F1E;
+        Fri,  2 Sep 2022 13:30:28 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C2427492CA2;
-        Fri,  2 Sep 2022 13:30:11 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D1C19492CA2;
+        Fri,  2 Sep 2022 13:30:23 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 08/23] HID: core: store the unique system identifier in hid_device
-Date:   Fri,  2 Sep 2022 15:29:23 +0200
-Message-Id: <20220902132938.2409206-9-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 11/23] HID: Kconfig: split HID support and hid-core compilation
+Date:   Fri,  2 Sep 2022 15:29:26 +0200
+Message-Id: <20220902132938.2409206-12-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -74,12 +74,18 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This unique identifier is currently used only for ensuring uniqueness in
-sysfs. However, this could be handful for userspace to refer to a specific
-hid_device by this id.
+Currently, we step into drivers/hid/ based on the value of
+CONFIG_HID.
 
-2 use cases are in my mind: LEDs (and their naming convention), and
-HID-BPF.
+However, that value is a tristate, meaning that it can be a module.
+
+As per the documentation, if we jump into the subdirectory by
+following an obj-m, we can not compile anything inside that
+subdirectory in vmlinux. It is considered as a bug.
+
+To make things more friendly to HID-BPF, split HID (the HID core
+parameter) from HID_SUPPORT (do we want any kind of HID support in the
+system?), and make this new config a boolean.
 
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
@@ -92,47 +98,76 @@ no changes in v9
 
 no changes in v8
 
-no changes in v7
-
-no changes in v6
-
-new in v5
+new in v7
 ---
- drivers/hid/hid-core.c | 4 +++-
- include/linux/hid.h    | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/Makefile    |  2 +-
+ drivers/hid/Kconfig | 20 +++++++++++---------
+ 2 files changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index b7f5566e338d..a00dd43db8bf 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -2739,10 +2739,12 @@ int hid_add_device(struct hid_device *hdev)
- 			hid_warn(hdev, "bad device descriptor (%d)\n", ret);
- 	}
- 
-+	hdev->id = atomic_inc_return(&id);
+diff --git a/drivers/Makefile b/drivers/Makefile
+index 057857258bfd..a24e6be80764 100644
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -137,7 +137,7 @@ obj-$(CONFIG_CRYPTO)		+= crypto/
+ obj-$(CONFIG_SUPERH)		+= sh/
+ obj-y				+= clocksource/
+ obj-$(CONFIG_DCA)		+= dca/
+-obj-$(CONFIG_HID)		+= hid/
++obj-$(CONFIG_HID_SUPPORT)	+= hid/
+ obj-$(CONFIG_PPC_PS3)		+= ps3/
+ obj-$(CONFIG_OF)		+= of/
+ obj-$(CONFIG_SSB)		+= ssb/
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 6ce92830b5d1..4f24e42372dc 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -2,12 +2,18 @@
+ #
+ # HID driver configuration
+ #
+-menu "HID support"
+-     depends on INPUT
++menuconfig HID_SUPPORT
++	bool "HID bus support"
++	default y
++	depends on INPUT
++	help
++	  This option adds core support for human interface device (HID).
++	  You will also need drivers from the following menu to make use of it.
 +
- 	/* XXX hack, any other cleaner solution after the driver core
- 	 * is converted to allow more than 20 bytes as the device name? */
- 	dev_set_name(&hdev->dev, "%04X:%04X:%04X.%04X", hdev->bus,
--		     hdev->vendor, hdev->product, atomic_inc_return(&id));
-+		     hdev->vendor, hdev->product, hdev->id);
++if HID_SUPPORT
  
- 	hid_debug_register(hdev, dev_name(&hdev->dev));
- 	ret = device_add(&hdev->dev);
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 4363a63b9775..a43dd17bc78f 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -658,6 +658,8 @@ struct hid_device {							/* device report descriptor */
- 	struct list_head debug_list;
- 	spinlock_t  debug_list_lock;
- 	wait_queue_head_t debug_wait;
-+
-+	unsigned int id;						/* system unique id */
- };
+ config HID
+-	tristate "HID bus support"
+-	depends on INPUT
++	tristate "HID bus core support"
+ 	default y
+ 	help
+ 	  A human interface device (HID) is a type of computer device that
+@@ -24,8 +30,6 @@ config HID
  
- #define to_hid_device(pdev) \
+ 	  If unsure, say Y.
+ 
+-if HID
+-
+ config HID_BATTERY_STRENGTH
+ 	bool "Battery level reporting for HID devices"
+ 	depends on HID
+@@ -1324,8 +1328,6 @@ config HID_KUNIT_TEST
+ 
+ endmenu
+ 
+-endif # HID
+-
+ source "drivers/hid/usbhid/Kconfig"
+ 
+ source "drivers/hid/i2c-hid/Kconfig"
+@@ -1336,4 +1338,4 @@ source "drivers/hid/amd-sfh-hid/Kconfig"
+ 
+ source "drivers/hid/surface-hid/Kconfig"
+ 
+-endmenu
++endif # HID_SUPPORT
 -- 
 2.36.1
 
