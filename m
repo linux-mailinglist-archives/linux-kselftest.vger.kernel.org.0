@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CD45AB2AC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 16:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 703F95AB2E9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 16:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238861AbiIBOB1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 10:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S238861AbiIBOFb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 10:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238922AbiIBN7W (ORCPT
+        with ESMTP id S238884AbiIBOEo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:59:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8061403E7
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:46 -0700 (PDT)
+        Fri, 2 Sep 2022 10:04:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5ED216D158
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:33:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125471;
+        s=mimecast20190719; t=1662125595;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c/JXn9nRI881aEzm+1dO0moEwYjgXFCa8N44x/9G0hs=;
-        b=KGcHdU/Gzfv6yI8dfEIEFgTxB2dvpUeGvdCMB9ze0fUyvU8BvSNm3aPH8nKgXd8qqQWGa5
-        F3+7NBh5GWOiUZHz76+OZ6OdBBt2a09kD8MT++lKFxiuOCjnmWxiYqJkJakymrmwwKaUgl
-        MO+tN7gmE5HMGfgm6YxsF/LfYUQrXs8=
+        bh=nHk5BTlmONqv6fEHgegmNNqBCjtFGaXUYYFXNjhPeHw=;
+        b=GUj1Zqq/PMenlTkrdztcPrTSZOQkgYC2Y6k4FYvhIfbmVdi53fDg7bhMjB+QYA14+C/X96
+        quwmhRvZz7qlKbzIr9yfeMA58ie0ifsn2eE2ZglsasfltpLQigIigf/wklelD3MVILyPeO
+        DsuhOCvvGyaGCRwuD74k3KoNPcmWaQQ=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-529-0sWtvqnjMs-qO2Q_PFVgXg-1; Fri, 02 Sep 2022 09:31:05 -0400
-X-MC-Unique: 0sWtvqnjMs-qO2Q_PFVgXg-1
+ us-mta-434-Ac5ZtnOcPti7L1bTbu94bw-1; Fri, 02 Sep 2022 09:29:52 -0400
+X-MC-Unique: Ac5ZtnOcPti7L1bTbu94bw-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C24D3811E80;
-        Fri,  2 Sep 2022 13:31:03 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF56485A58F;
+        Fri,  2 Sep 2022 13:29:51 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9B007492C3B;
-        Fri,  2 Sep 2022 13:30:59 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 98605492CA2;
+        Fri,  2 Sep 2022 13:29:48 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,16 +56,16 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 20/23] selftests/bpf: Add a test for BPF_F_INSERT_HEAD
-Date:   Fri,  2 Sep 2022 15:29:35 +0200
-Message-Id: <20220902132938.2409206-21-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 02/23] bpf: split btf_check_subprog_arg_match in two
+Date:   Fri,  2 Sep 2022 15:29:17 +0200
+Message-Id: <20220902132938.2409206-3-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,253 +74,171 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Insert 3 programs to check that we are doing the correct thing:
-'2', '1', '3' are inserted, but '1' is supposed to be executed first.
+btf_check_subprog_arg_match() was used twice in verifier.c:
+- when checking for the type mismatches between a (sub)prog declaration
+  and BTF
+- when checking the call of a subprog to see if the provided arguments
+  are correct and valid
+
+This is problematic when we check if the first argument of a program
+(pointer to ctx) is correctly accessed:
+To be able to ensure we access a valid memory in the ctx, the verifier
+assumes the pointer to context is not null.
+This has the side effect of marking the program accessing the entire
+context, even if the context is never dereferenced.
+
+For example, by checking the context access with the current code, the
+following eBPF program would fail with -EINVAL if the ctx is set to null
+from the userspace:
+
+```
+SEC("syscall")
+int prog(struct my_ctx *args) {
+  return 0;
+}
+```
+
+In that particular case, we do not want to actually check that the memory
+is correct while checking for the BTF validity, but we just want to
+ensure that the (sub)prog definition matches the BTF we have.
+
+So split btf_check_subprog_arg_match() in two so we can actually check
+for the memory used when in a call, and ignore that part when not.
+
+Note that a further patch is in preparation to disentangled
+btf_check_func_arg_match() from these two purposes, and so right now we
+just add a new hack around that by adding a boolean to this function.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-no changes in v10
-
-no changes in v9
-
-no changes in v8
-
-no changes in v7
-
-changes in v6:
-- fixed copy/paste in ASSERT_OK and test execution order
-
-changes in v5:
-- use the new API
-
-not in v4
-
-changes in v3:
-- use the new hid_get_data API
-
-new in v2
+new in v10
 ---
- tools/testing/selftests/bpf/prog_tests/hid.c | 107 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/hid.c      |  54 +++++++++-
- 2 files changed, 160 insertions(+), 1 deletion(-)
+ include/linux/bpf.h   |  2 ++
+ kernel/bpf/btf.c      | 54 +++++++++++++++++++++++++++++++++++++++----
+ kernel/bpf/verifier.c |  2 +-
+ 3 files changed, 52 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
-index 9dc5f0038472..a86e16554e68 100644
---- a/tools/testing/selftests/bpf/prog_tests/hid.c
-+++ b/tools/testing/selftests/bpf/prog_tests/hid.c
-@@ -9,6 +9,7 @@
- #include <dirent.h>
- #include <poll.h>
- #include <stdbool.h>
-+#include <linux/hid_bpf.h>
- #include <linux/hidraw.h>
- #include <linux/uhid.h>
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9c1674973e03..c9c72a089579 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1943,6 +1943,8 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
+ struct bpf_reg_state;
+ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+ 				struct bpf_reg_state *regs);
++int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
++			   struct bpf_reg_state *regs);
+ int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+ 			      const struct btf *btf, u32 func_id,
+ 			      struct bpf_reg_state *regs,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 903719b89238..eca9ea78ee5f 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6170,7 +6170,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 				    const struct btf *btf, u32 func_id,
+ 				    struct bpf_reg_state *regs,
+ 				    bool ptr_to_mem_ok,
+-				    u32 kfunc_flags)
++				    u32 kfunc_flags,
++				    bool processing_call)
+ {
+ 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+ 	bool rel = false, kptr_get = false, trusted_arg = false;
+@@ -6356,7 +6357,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 					reg_ref_tname);
+ 				return -EINVAL;
+ 			}
+-		} else if (ptr_to_mem_ok) {
++		} else if (ptr_to_mem_ok && processing_call) {
+ 			const struct btf_type *resolve_ret;
+ 			u32 type_size;
  
-@@ -83,6 +84,7 @@ static u8 feature_data[] = { 1, 2 };
- struct attach_prog_args {
- 	int prog_fd;
- 	unsigned int hid;
-+	unsigned int flags;
- 	int retval;
- };
- 
-@@ -770,6 +772,109 @@ static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
- 	return ret;
+@@ -6431,7 +6432,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 	return rel ? ref_regno : 0;
  }
  
-+/*
-+ * Attach hid_insert{0,1,2} to the given uhid device,
-+ * retrieve and open the matching hidraw node,
-+ * inject one event in the uhid device,
-+ * check that the programs have been inserted in the correct order.
-+ */
-+static int test_hid_attach_flags(int uhid_fd, int dev_id)
-+{
-+	struct hid *hid_skel = NULL;
-+	u8 buf[64] = {0};
-+	int hidraw_fd = -1;
-+	int hid_id, attach_fd, err = -EINVAL;
-+	struct attach_prog_args args = {
-+		.retval = -1,
-+	};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
+-/* Compare BTF of a function with given bpf_reg_state.
++/* Compare BTF of a function declaration with given bpf_reg_state.
+  * Returns:
+  * EFAULT - there is a verifier bug. Abort verification.
+  * EINVAL - there is a type mismatch or BTF is not available.
+@@ -6458,7 +6459,50 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+ 		return -EINVAL;
+ 
+ 	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
+-	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
++	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0, false);
 +
-+	/* locate the uevent file of the created device */
-+	hid_id = get_hid_id(dev_id);
-+	if (!ASSERT_GE(hid_id, 0, "locate uhid device id"))
-+		goto cleanup;
-+
-+	args.hid = hid_id;
-+
-+	hid_skel = hid__open();
-+	if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
-+		goto cleanup;
-+
-+	bpf_program__set_autoload(hid_skel->progs.hid_test_insert1, true);
-+	bpf_program__set_autoload(hid_skel->progs.hid_test_insert2, true);
-+	bpf_program__set_autoload(hid_skel->progs.hid_test_insert3, true);
-+
-+	err = hid__load(hid_skel);
-+	if (!ASSERT_OK(err, "hid_skel_load"))
-+		goto cleanup;
-+
-+	attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
-+	if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
-+		err = attach_fd;
-+		goto cleanup;
-+	}
-+
-+	/* attach hid_test_insert2 program */
-+	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert2);
-+	args.flags = HID_BPF_FLAG_NONE;
-+	args.retval = 1;
-+	err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert2"))
-+		goto cleanup;
-+
-+	/* then attach hid_test_insert1 program before the previous*/
-+	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert1);
-+	args.flags = HID_BPF_FLAG_INSERT_HEAD;
-+	args.retval = 1;
-+	err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert1"))
-+		goto cleanup;
-+
-+	/* finally attach hid_test_insert3 at the end */
-+	args.prog_fd = bpf_program__fd(hid_skel->progs.hid_test_insert3);
-+	args.flags = HID_BPF_FLAG_NONE;
-+	args.retval = 1;
-+	err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+	if (!ASSERT_EQ(args.retval, 0, "attach_hid_test_insert3"))
-+		goto cleanup;
-+
-+	hidraw_fd = open_hidraw(dev_id);
-+	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
-+		goto cleanup;
-+
-+	/* inject one event */
-+	buf[0] = 1;
-+	send_event(uhid_fd, buf, 6);
-+
-+	/* read the data from hidraw */
-+	memset(buf, 0, sizeof(buf));
-+	err = read(hidraw_fd, buf, sizeof(buf));
-+	if (!ASSERT_EQ(err, 6, "read_hidraw"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[1], 1, "hid_test_insert1"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[2], 2, "hid_test_insert2"))
-+		goto cleanup;
-+
-+	if (!ASSERT_EQ(buf[3], 3, "hid_test_insert3"))
-+		goto cleanup;
-+
-+	err = 0;
-+
-+ cleanup:
-+	if (hidraw_fd >= 0)
-+		close(hidraw_fd);
-+
-+	hid__destroy(hid_skel);
-+
++	/* Compiler optimizations can remove arguments from static functions
++	 * or mismatched type can be passed into a global function.
++	 * In such cases mark the function as unreliable from BTF point of view.
++	 */
++	if (err)
++		prog->aux->func_info_aux[subprog].unreliable = true;
 +	return err;
 +}
 +
- /*
-  * Attach hid_rdesc_fixup to the given uhid device,
-  * retrieve and open the matching hidraw node,
-@@ -866,6 +971,8 @@ void serial_test_hid_bpf(void)
- 	ASSERT_OK(err, "hid_change_report");
- 	err = test_hid_user_raw_request_call(uhid_fd, dev_id);
- 	ASSERT_OK(err, "hid_user_raw_request");
-+	err = test_hid_attach_flags(uhid_fd, dev_id);
-+	ASSERT_OK(err, "hid_attach_flags");
++/* Compare BTF of a function call with given bpf_reg_state.
++ * Returns:
++ * EFAULT - there is a verifier bug. Abort verification.
++ * EINVAL - there is a type mismatch or BTF is not available.
++ * 0 - BTF matches with what bpf_reg_state expects.
++ * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
++ *
++ * NOTE: the code is duplicated from btf_check_subprog_arg_match()
++ * because btf_check_func_arg_match() is still doing both. Once that
++ * function is split in 2, we can call from here btf_check_subprog_arg_match()
++ * first, and then treat the calling part in a new code path.
++ */
++int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
++			   struct bpf_reg_state *regs)
++{
++	struct bpf_prog *prog = env->prog;
++	struct btf *btf = prog->aux->btf;
++	bool is_global;
++	u32 btf_id;
++	int err;
++
++	if (!prog->aux->func_info)
++		return -EINVAL;
++
++	btf_id = prog->aux->func_info[subprog].type_id;
++	if (!btf_id)
++		return -EFAULT;
++
++	if (prog->aux->func_info_aux[subprog].unreliable)
++		return -EINVAL;
++
++	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
++	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0, true);
  
- 	/*
- 	 * this test should be run last because we disconnect/reconnect
-diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
-index 815ff94321c9..eb869a80c254 100644
---- a/tools/testing/selftests/bpf/progs/hid.c
-+++ b/tools/testing/selftests/bpf/progs/hid.c
-@@ -21,6 +21,7 @@ extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
- struct attach_prog_args {
- 	int prog_fd;
- 	unsigned int hid;
-+	unsigned int flags;
- 	int retval;
- };
- 
-@@ -60,7 +61,7 @@ int attach_prog(struct attach_prog_args *ctx)
+ 	/* Compiler optimizations can remove arguments from static functions
+ 	 * or mismatched type can be passed into a global function.
+@@ -6474,7 +6518,7 @@ int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
+ 			      struct bpf_reg_state *regs,
+ 			      u32 kfunc_flags)
  {
- 	ctx->retval = hid_bpf_attach_prog(ctx->hid,
- 					  ctx->prog_fd,
--					  0);
-+					  ctx->flags);
- 	return 0;
+-	return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags);
++	return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags, true);
  }
  
-@@ -152,3 +153,54 @@ int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hid_ctx)
- 
- 	return sizeof(rdesc) + 73;
- }
-+
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_test_insert1, struct hid_bpf_ctx *hid_ctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* we need to be run first */
-+	if (data[2] || data[3])
-+		return -1;
-+
-+	data[1] = 1;
-+
-+	return 0;
-+}
-+
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_test_insert2, struct hid_bpf_ctx *hid_ctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* after insert0 and before insert2 */
-+	if (!data[1] || data[3])
-+		return -1;
-+
-+	data[2] = 2;
-+
-+	return 0;
-+}
-+
-+SEC("?fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_test_insert3, struct hid_bpf_ctx *hid_ctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 4 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	/* at the end */
-+	if (!data[1] || !data[2])
-+		return -1;
-+
-+	data[3] = 3;
-+
-+	return 0;
-+}
+ /* Convert BTF of a function into bpf_reg_state if possible
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0194a36d0b36..d27fae3ce949 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6626,7 +6626,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	func_info_aux = env->prog->aux->func_info_aux;
+ 	if (func_info_aux)
+ 		is_global = func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
+-	err = btf_check_subprog_arg_match(env, subprog, caller->regs);
++	err = btf_check_subprog_call(env, subprog, caller->regs);
+ 	if (err == -EFAULT)
+ 		return err;
+ 	if (is_global) {
 -- 
 2.36.1
 
