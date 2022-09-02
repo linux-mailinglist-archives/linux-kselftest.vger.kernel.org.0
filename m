@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0A85AB284
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 15:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590975AB261
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 15:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236722AbiIBN7a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 09:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        id S236260AbiIBN5d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 09:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238754AbiIBN6o (ORCPT
+        with ESMTP id S236281AbiIBN5B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 09:58:44 -0400
+        Fri, 2 Sep 2022 09:57:01 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5037117AF9
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:31:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E19482865
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 06:30:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662125390;
+        s=mimecast20190719; t=1662125408;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=46mxyRINAwXH1hQbHvRS6x0ECDUnr04nQdzD2pI2obU=;
-        b=XyjE2j0fO7/ZTMLZ/J6aq7jmehc4vJipL+//Z+p4NIflnTOHXAnGENcN2V+p1alPvvQEfy
-        1Xcii7+4hgbNdpNxMq2xJL8iaKmXFAkk8XvGASYYKb67JenArwqOynDSQzAsoDhxtw8Vm/
-        yqH8h1vFLg8yP8yRjKkSZkQ+fAmrDbM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=VUKUUQjEeN9deUgONQ69Pygk6MyShH73lTMPk6bWnlU=;
+        b=U5FyaHsY/1Ge6FUevAOwquxs7KuPk/w2NJpZHz/neM8TGZxG95qX1K7Apazh7p2ibYpf3u
+        maMHIHVfSFpvphypyVDr11VLlxmcfcDe5OvoJKFU4ekBGj7QwadnJa7UfB7nYWayhRPlGp
+        4pkNbRyB+8J5vf1iB3bW5k3aYuHNrLE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-199-DAMr-CBTN7ePSwB02vo_dQ-1; Fri, 02 Sep 2022 09:29:49 -0400
-X-MC-Unique: DAMr-CBTN7ePSwB02vo_dQ-1
+ us-mta-483-Zxgn3Cl-NRmBb9C41GflPQ-1; Fri, 02 Sep 2022 09:30:05 -0400
+X-MC-Unique: Zxgn3Cl-NRmBb9C41GflPQ-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5CABF18A64EB;
-        Fri,  2 Sep 2022 13:29:48 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D5C22919EC0;
+        Fri,  2 Sep 2022 13:30:04 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3486D492C3B;
-        Fri,  2 Sep 2022 13:29:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E9E64492C3B;
+        Fri,  2 Sep 2022 13:29:59 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v10 01/23] selftests/bpf: regroup and declare similar kfuncs selftests in an array
-Date:   Fri,  2 Sep 2022 15:29:16 +0200
-Message-Id: <20220902132938.2409206-2-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v10 05/23] bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
+Date:   Fri,  2 Sep 2022 15:29:20 +0200
+Message-Id: <20220902132938.2409206-6-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -74,15 +74,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Similar to tools/testing/selftests/bpf/prog_tests/dynptr.c:
-we declare an array of tests that we run one by one in a for loop.
+net/bpf/test_run.c is already presenting 20 kfuncs.
+net/netfilter/nf_conntrack_bpf.c is also presenting an extra 10 kfuncs.
 
-Followup patches will add more similar-ish tests, so avoid a lot of copy
-paste by grouping the declaration in an array.
+Given that all the kfuncs are regrouped into one unique set, having
+only 2 space left prevent us to add more selftests.
 
-To be able to call bpf_object__find_program_by_name(), we need to use
-plain libbpf calls, and not light skeletons. So also change the Makefile
-to not generate light skeletons.
+Bump it to 64 for now.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
@@ -90,118 +88,22 @@ Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 new in v10
 ---
- tools/testing/selftests/bpf/Makefile          |  2 +-
- .../selftests/bpf/prog_tests/kfunc_call.c     | 56 +++++++++++++------
- 2 files changed, 39 insertions(+), 19 deletions(-)
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index eecad99f1735..b19b0b35aec8 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -351,7 +351,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		test_subskeleton.skel.h test_subskeleton_lib.skel.h	\
- 		test_usdt.skel.h
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index eca9ea78ee5f..8280c1a8dbce 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -208,7 +208,7 @@ enum btf_kfunc_hook {
+ };
  
--LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
-+LSKELS := fentry_test.c fexit_test.c fexit_sleep.c \
- 	test_ringbuf.c atomics.c trace_printk.c trace_vprintk.c \
- 	map_ptr_kern.c core_kern.c core_kern_overflow.c
- # Generate both light skeleton and libbpf skeleton for these
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index eede7c304f86..21e347f46c93 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -2,16 +2,28 @@
- /* Copyright (c) 2021 Facebook */
- #include <test_progs.h>
- #include <network_helpers.h>
--#include "kfunc_call_test.lskel.h"
-+#include "kfunc_call_test.skel.h"
- #include "kfunc_call_test_subprog.skel.h"
- #include "kfunc_call_test_subprog.lskel.h"
- #include "kfunc_call_destructive.skel.h"
+ enum {
+-	BTF_KFUNC_SET_MAX_CNT = 32,
++	BTF_KFUNC_SET_MAX_CNT = 64,
+ 	BTF_DTOR_KFUNC_MAX_CNT = 256,
+ };
  
- #include "cap_helpers.h"
- 
--static void test_main(void)
-+struct kfunc_test_params {
-+	const char *prog_name;
-+	int retval;
-+};
-+
-+static struct kfunc_test_params kfunc_tests[] = {
-+	{"kfunc_call_test1", 12},
-+	{"kfunc_call_test2", 3},
-+	{"kfunc_call_test_ref_btf_id", 0},
-+};
-+
-+static void verify_success(struct kfunc_test_params *param)
- {
--	struct kfunc_call_test_lskel *skel;
-+	struct kfunc_call_test *skel;
-+	struct bpf_program *prog;
- 	int prog_fd, err;
- 	LIBBPF_OPTS(bpf_test_run_opts, topts,
- 		.data_in = &pkt_v4,
-@@ -19,26 +31,35 @@ static void test_main(void)
- 		.repeat = 1,
- 	);
- 
--	skel = kfunc_call_test_lskel__open_and_load();
-+	skel = kfunc_call_test__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "skel"))
- 		return;
- 
--	prog_fd = skel->progs.kfunc_call_test1.prog_fd;
--	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "bpf_prog_test_run(test1)");
--	ASSERT_EQ(topts.retval, 12, "test1-retval");
-+	prog = bpf_object__find_program_by_name(skel->obj, param->prog_name);
-+	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-+		goto cleanup;
- 
--	prog_fd = skel->progs.kfunc_call_test2.prog_fd;
-+	prog_fd = bpf_program__fd(prog);
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "bpf_prog_test_run(test2)");
--	ASSERT_EQ(topts.retval, 3, "test2-retval");
-+	if (!ASSERT_OK(err, param->prog_name))
-+		goto cleanup;
- 
--	prog_fd = skel->progs.kfunc_call_test_ref_btf_id.prog_fd;
--	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "bpf_prog_test_run(test_ref_btf_id)");
--	ASSERT_EQ(topts.retval, 0, "test_ref_btf_id-retval");
-+	ASSERT_EQ(topts.retval, param->retval, "retval");
-+
-+cleanup:
-+	kfunc_call_test__destroy(skel);
-+}
-+
-+static void test_main(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(kfunc_tests); i++) {
-+		if (!test__start_subtest(kfunc_tests[i].prog_name))
-+			continue;
- 
--	kfunc_call_test_lskel__destroy(skel);
-+		verify_success(&kfunc_tests[i]);
-+	}
- }
- 
- static void test_subprog(void)
-@@ -121,8 +142,7 @@ static void test_destructive(void)
- 
- void test_kfunc_call(void)
- {
--	if (test__start_subtest("main"))
--		test_main();
-+	test_main();
- 
- 	if (test__start_subtest("subprog"))
- 		test_subprog();
 -- 
 2.36.1
 
