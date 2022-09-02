@@ -2,84 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DD55AA6A6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 05:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D9E5AA7E2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 08:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235399AbiIBDvZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Sep 2022 23:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S235198AbiIBGPr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 02:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235422AbiIBDvL (ORCPT
+        with ESMTP id S233121AbiIBGPq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Sep 2022 23:51:11 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F17953037;
-        Thu,  1 Sep 2022 20:50:55 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id n202so701813iod.6;
-        Thu, 01 Sep 2022 20:50:55 -0700 (PDT)
+        Fri, 2 Sep 2022 02:15:46 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0875B7B1FC;
+        Thu,  1 Sep 2022 23:15:46 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id u9-20020a17090a1f0900b001fde6477464so4553392pja.4;
+        Thu, 01 Sep 2022 23:15:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=E+LJ1geH9sHZ7zNZY9aNOFdRivMlaRJnVrHaJZ75NKo=;
-        b=nRy9G0eht6ytO52NCU/doiQCtMeaRAV6V7krSlmSA9qcUj7j3ecvqgG1ge+ubUm4hy
-         5zTEUU2+pN2G9UjF/E1TmIyiq2Gtmx0YhQVHIuwxsTaygjYaZSspj1di9q324yvyHLOs
-         onkk7PntBDcPqCBMReGZ5Kx+7NwYsGoO6vm00HM1pp3JzxLVuDF5vGFxvOLmqc1dnknH
-         vdmXethcA7SAPx10M2RQkjSXVHxCcjMzI/ZvksBqpGZsPJvqn0pJGHV0vOSCiSGioJS/
-         UbfCnamfaV1Into6YeCLtbsjys6xcHUKFr2MT9AU/SAm9XZXLaA3eLvR/YlyAKFCnfHy
-         Fgpg==
+        bh=uI8Pg9oik5wbpVQ38T64kzAVrJGjyN0eDmTJ2VrDPKY=;
+        b=fNTPySEIj7KPHE8EqHb7fXpGGv3hZywUzfShG7i8VtqGxdwFl91S3gAwihJ3wKmYmv
+         fePtXkjMkl6cwwfO6/CRfKl1tJ80PAuOhcwpb68fGDnbA8kfwBcXGCv/dXpRLGckVx5R
+         hyc6aN049B2ZDpiGFn+wHoAFZSPaNRyCV4QtOI+du1TAy9yusHnCGOWjfUSmnJ1nDYob
+         aGPpJy1f38QXODEpYrK0jw7RrzJACxZ2Z0DiodSBQbUpqmkWmyOGMN2m6nr5PT4iMFXK
+         F+PyJ3XmLcjQQc3McB9rfb33aek6HzLYapwHgE6uqVQ1cnx6n0KmVecxjaTMyC3QsRoN
+         DbNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=E+LJ1geH9sHZ7zNZY9aNOFdRivMlaRJnVrHaJZ75NKo=;
-        b=AgEYTiyfAdDw0NWjJPXEVo7Tj2KSOOPbBouarQIE8qToZJe3D+wri0Eudj9KY5xwN3
-         352IgrPwPnyY5RuoRM5O/IlkOlv4tUJENMaX1sKyTTf2H+gJ947XHZUcsrAIXlf3urhF
-         TADQYSBamnrlGT0n7OPzT1jcFRQXrw4sVBBpVUJeqJXtHxg5B2Dph0b/rMrfxEGqZn0P
-         gbv6EizHn7/EfBRL33dnK5YDa6UzPWvemF9bUvarXinCenDGRD/SvfZzFQKeV0tRzHB3
-         OG8qbcpX1gD9LoQF3EytG+xmYXaDaBDW2G+DOi0NASgJgnPsRn/OnCsyZ4mUfIU+okMw
-         iI+A==
-X-Gm-Message-State: ACgBeo0jX18X2szq0twvLakogsDczJSfB+fszslNj+eS1zLIdRxaWTt0
-        J4R0xLfZkhc2BhecvTH2bRwXl0pBQAqda1qliRg=
-X-Google-Smtp-Source: AA6agR7DtugthLRfnyg7YwsykX98zovzEb5HyhodkBFu5mzFBonF8cErMKxWUkl202KP0GIgPA2dBHRGOzjeT5EVFI4=
-X-Received: by 2002:a6b:2ac4:0:b0:688:3a14:2002 with SMTP id
- q187-20020a6b2ac4000000b006883a142002mr15979839ioq.62.1662090654002; Thu, 01
- Sep 2022 20:50:54 -0700 (PDT)
+        bh=uI8Pg9oik5wbpVQ38T64kzAVrJGjyN0eDmTJ2VrDPKY=;
+        b=Hpl1T4m5femT916PIDmrMgY/U3wrcV3iqIS70Q3hGtgsCAT1sG7OXoq26r2F3v2qKt
+         CPXhIbW6cGjpVbgkjQGi55o8PZREIlGtG2poebI7F+SZXiPbrq8ATL2M1GComhd2XdTN
+         G4sCvcj2TfKHIPOSizCUVcFIkc0xGX5ch+Ir6Fq2m0IRfA4DW3NAfbKShAOddKpWGiUZ
+         KbypQ4SKy/hWQ9Hg4hR6lMXvMhKKbKu/rq3t3G0dOaEYUGNArU+1RT798mfoH8LHs60F
+         modlXvdHOYNHopOUs61UBPsa4SwUWOOy0ElOEnaEhv76lLovpSCH+ZKsJQ4Ug39DG5Ux
+         uTFA==
+X-Gm-Message-State: ACgBeo3f2+z7pRGjPPeUQoy+236QgLSjaAekxuPAdVKynrtu+aju7bUQ
+        m6tWqs1K37L/CQImMaU5UHIAqQxNrDgwW9UnbrQ=
+X-Google-Smtp-Source: AA6agR4aNy6J7kNSnprb9Q1xqC9EzkQCAYpnyQ0QXI5eye0pGuYALcheSxUW1hji1p74i5LzI0u3pgrgAc3dLum3kyY=
+X-Received: by 2002:a17:90b:350f:b0:1fb:479b:8e51 with SMTP id
+ ls15-20020a17090b350f00b001fb479b8e51mr3185156pjb.46.1662099345453; Thu, 01
+ Sep 2022 23:15:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
- <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
- <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
- <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com>
- <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
- <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com>
- <CAADnVQLuL045Sxdvh8kfcNkmD55+Wz8fHU3RtH+oQyOgePU5Pw@mail.gmail.com> <CAO-hwJJJJRtoq2uTXRKCck6QSH8SFDSTpHmvTyOieczY7bdm8g@mail.gmail.com>
-In-Reply-To: <CAO-hwJJJJRtoq2uTXRKCck6QSH8SFDSTpHmvTyOieczY7bdm8g@mail.gmail.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Fri, 2 Sep 2022 05:50:18 +0200
-Message-ID: <CAP01T77SJyiDxv0A++_mNw7JZ-Mzh4B1FAM6zLiP6n75MNY0uQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
- read user provided context
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
+References: <20220901202645.1463552-1-irogers@google.com>
+In-Reply-To: <20220901202645.1463552-1-irogers@google.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Fri, 2 Sep 2022 08:15:34 +0200
+Message-ID: <CAJ8uoz0RXAFPfu1v_1UuV-iUZ846ZbHNNB=oCQ=sV=pbLSzvxw@mail.gmail.com>
+Subject: Re: [PATCH v1] selftests/xsk: Avoid use-after-free on ctx
+To:     Ian Rogers <irogers@google.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -91,45 +80,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 1 Sept 2022 at 18:48, Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
+On Thu, Sep 1, 2022 at 10:56 PM Ian Rogers <irogers@google.com> wrote:
 >
-> [...]
-> If the above is correct, then yes, it would make sense to me to have 2
-> distinct functions: one to check for the args types only (does the
-> function definition in the problem matches BTF), and one to check for
-> its use.
-> Behind the scenes, btf_check_subprog_arg_match() calls
-> btf_check_func_arg_match() which is the one function with entangled
-> arguments type checking and actually assessing that the values
-> provided are correct.
->
-> I can try to split that  btf_check_func_arg_match() into 2 distinct
-> functions, though I am not sure I'll get it right.
+> The put lowers the reference count to 0 and frees ctx, reading it
+> afterwards is invalid. Move the put after the uses and determine the
+> last use by the reference count being 1.
 
-FYI, I've already split them into separate functions in my tree
-because it had become super ugly at this point with all the new
-support and I refactored it to add the linked list helpers support
-using kfuncs (which requires some special handling for the args), so I
-think you can just leave it with a "processing_call" check in for your
-series for now.
+Thanks for spotting and fixing this Ian.
 
-> Maybe the hack about having "processing_call" for
-> btf_check_func_arg_match() only will be good enough as a first step
-> towards a better solution?
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+
+> Fixes: 39e940d4abfa ("selftests/xsk: Destroy BPF resources only when ctx refcount drops to 0")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/testing/selftests/bpf/xsk.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> > And may cleanup the rest of that function ?
-> > Like all of if (is_kfunc) applies only to 'calling' case.
-> > Other ideas?
-> >
+> diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
+> index f2721a4ae7c5..0b3ff49c740d 100644
+> --- a/tools/testing/selftests/bpf/xsk.c
+> +++ b/tools/testing/selftests/bpf/xsk.c
+> @@ -1237,15 +1237,15 @@ void xsk_socket__delete(struct xsk_socket *xsk)
+>         ctx = xsk->ctx;
+>         umem = ctx->umem;
 >
-> I was trying to understand the problem most of today, and the only
-> other thing I could think of was "why is the assumption that
-> PTR_TO_CTX is not NULL actually required?". But again, this question
-> is "valid" in the function declaration part, but not in the caller
-> insn part. So I think splitting btf_check_subprog_arg_match() in 2 is
-> probably the best.
+> -       xsk_put_ctx(ctx, true);
+> -
+> -       if (!ctx->refcount) {
+> +       if (ctx->refcount == 1) {
+>                 xsk_delete_bpf_maps(xsk);
+>                 close(ctx->prog_fd);
+>                 if (ctx->has_bpf_link)
+>                         close(ctx->link_fd);
+>         }
 >
-> Cheers,
-> Benjamin
+> +       xsk_put_ctx(ctx, true);
+> +
+>         err = xsk_get_mmap_offsets(xsk->fd, &off);
+>         if (!err) {
+>                 if (xsk->rx) {
+> --
+> 2.37.2.789.g6183377224-goog
 >
