@@ -2,50 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688A05ABF59
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Sep 2022 16:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EA25ABF63
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Sep 2022 16:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiICO1j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 3 Sep 2022 10:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S229662AbiICOrg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 3 Sep 2022 10:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiICO1d (ORCPT
+        with ESMTP id S229516AbiICOrf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 3 Sep 2022 10:27:33 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2075.outbound.protection.outlook.com [40.107.220.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA94E46;
-        Sat,  3 Sep 2022 07:27:32 -0700 (PDT)
+        Sat, 3 Sep 2022 10:47:35 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2076.outbound.protection.outlook.com [40.107.96.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9864C57573;
+        Sat,  3 Sep 2022 07:47:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J3BqDwWV5jndyHorQLlkuBTqMARP5mtjkiaEdP4G5bl6bBj3gx7bSJtcUGkBvam2ygEEbBkXa4hbMVlFGvCQZc9tZ8V2MJm2OkLZz0cxsbxJ50DW39i2b0eImfY2fn6SWRNH/dIfFikvjh2Iz66KMemu5tOPcwpz2Vl4jSfVA2VVLoQ6Nr0ZOkAt393EeCUZ1DLFD6ee428TyKWs0wEHRAWlGMntqwrL6kJscpqWm0pAS+sQo16whSrIRQ21+XkMo8Aw0LDc5TCHvmp5/UI7oAJQv4sb0xJTUKH7F6J4mOGffQrlzuAqIOYbegP5ciiSFtn/1TdO1uJjfZUVQSP2EQ==
+ b=J/nz80ptUJtdNp6fdXPYgUgYMkqdhJra7UpQv5kFl92Xuxa7YZ7kBgnBh/HlqamPXZBpLIPLm+JOsZVQsUEBUSdNIj4rgvpX/lJ8UyEyvhwielKxz2NzlMdcMI6ScSwCmKOqqczm9M7snf5c9ag1dc0ulTBAa7fQshYJ2fN9IcxvPLX3ntmh32bwSj2nDPOyIoKQxypNdyWIJ2Hnvk5LduTCxDOv8SCVDEesWypnudkXTqIaWR2ovTgNmA5drHlCHAxbBtjZK7I74bCqW60jy/HBGOlu5rkTAmFmciGxgW6kVoUSb/PnBAmmh5Vux76ZI4mEcYL+RJRwgxM2/Nsjmg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WHAKHgWjZAOaaPp2HHLGjzbEtlsjTXqeR6A1s5GRr4c=;
- b=m8iXRwa0jXO+NJQ/NAn0nTCcyKl4NZfuAwrVHw1MwwITWVFmyp7UYy4GPHyM4mC7yNOyOXymsPn0pik+eSt/b9p4eZ4hYYLH87jsjJGSpKyhxBX8KpSAmW12LyPSwL6f7uMTcbsdOXjjTRwfjb+5ZxKsd8rhQX0yCfF1doQ/jQPpx0ezKO3vS3Tw+P26KwAYCepSAxJ8deu+2jUCZoJxe+/14bTcp3Rl1zttMuUEsaXzPNgbqrbsHKGGQipYcpyKL8N+TCuUu14nx2ipiVuE7SmILo6LM2moF7mh11cesPD7ynjZeQw6oO6eMdVjlY2DR3uUnW3bXgIUYsH3cCvHIg==
+ bh=//S8YGU7HPCZ1fW1TPlMZPJ9muiJj7+Yrq8yGv8R0+o=;
+ b=jr3NXCn6S6JpkV+/5KfE3N/MFIQj069goTcJfCEH4RH84SMbKzrzw3Ig0hLFsLCnFoNRXvZYXpKWD758189Ew41OVS5or16LTUJ1CrZwcF22FgRvv7PyEAIY3RGDE5fQGef76+WL2AVqV35v6Pqoj+u/qRfgq6k8fyYdBFOOUHhuMQ/nhbaLRLJy45coUN3xjpQYJoSW3JVsDUrXIEcwrrP0zRlbbovoWXl1eURL57Yf8QkHei3WwhCkUDh5WleNJDs51eIDGCGCtAnO4VOpTS8t1EfObP9KAADPZhp5y+F58R1M6D5pjv5PtSURFuC+DjaQUo5u6yWGifLOxZpkDw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WHAKHgWjZAOaaPp2HHLGjzbEtlsjTXqeR6A1s5GRr4c=;
- b=ZunKZ7m1QohTUL/Ww3q/sFCuKC1YP9l0QpgkUEnwh21DBf5nDFJhToJGm7AuUUnOGKVnYUY9tfV0ma5VZr9zZjNYMpNXSvtNEIwuBSi9Z8kweiQp+sCMLDHL+S2g8YVIQs9L8OvRQ0WrQfk8DUuP+qZEhH9z7O9Bgr/jqaqQbeQUvUWjQ8KiuUxOWHhNy0pfBe/Wpp2Lsb7LNm8YHqi9HTeAkebQUNEZm3jYl9pB/Gl9i7hHHDhdk8gFc4+4e5VEzT6NxEaL8JXUOcwAMiZblCXVLjJauvfD192ebK8w37ZBniYrz1b5BLbpOQZ3Am0/7EEJUf6ytJ0vz0RgZZygSA==
+ bh=//S8YGU7HPCZ1fW1TPlMZPJ9muiJj7+Yrq8yGv8R0+o=;
+ b=HvDU4SjSHVcKGce6ZRYB2U1v5VsW5RaCTmC/PYtcZoRBjbLTSmOVzCcxNFMzmTh/A7GlhyXnUqSq6MGQ9LWV3XOCXGhDFyVB7Ylz4r6dFnGjT99e4lO+voHbjhc5aVHAo/gCIzjm/tB+JV0FBFuuHKA2YhyXAnpcwyuzdC3QrHqAL8+Rn9NMmVMw506lKlRMPevWh0ZBKAOhd1362kg46uQhhFiYpKTmDamWI3D6ZDYZ6/FP/lofvBik27W3OLW/UMGt7FrhOgarO82YZfv1Vkc0sJ8SVPNp4Fg63fYBmEzcqfU0rmaUsN50xUbfW+59dhe3VIn4binaXZ1RV8jpdw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from PH7SPRMB0001.namprd12.prod.outlook.com (2603:10b6:510:13c::20)
- by LV2PR12MB5800.namprd12.prod.outlook.com (2603:10b6:408:178::12) with
+ by CH0PR12MB5234.namprd12.prod.outlook.com (2603:10b6:610:d1::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Sat, 3 Sep
- 2022 14:27:31 +0000
+ 2022 14:47:33 +0000
 Received: from PH7SPRMB0001.namprd12.prod.outlook.com
  ([fe80::3ca6:ba11:2893:980e]) by PH7SPRMB0001.namprd12.prod.outlook.com
  ([fe80::3ca6:ba11:2893:980e%6]) with mapi id 15.20.5504.025; Sat, 3 Sep 2022
- 14:27:30 +0000
-Date:   Sat, 3 Sep 2022 17:27:24 +0300
+ 14:47:33 +0000
+Date:   Sat, 3 Sep 2022 17:47:27 +0300
 From:   Ido Schimmel <idosch@nvidia.com>
 To:     netdev@kapio-technology.com
-Cc:     Nikolay Aleksandrov <razor@blackwall.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -63,76 +62,82 @@ Cc:     Nikolay Aleksandrov <razor@blackwall.org>, davem@davemloft.net,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Jiri Pirko <jiri@resnulli.us>,
         Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
         Christian Marangi <ansuelsmth@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Yuwei Wang <wangyuweihx@gmail.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 1/6] net: bridge: add locked entry fdb flag
- to extend locked port feature
-Message-ID: <YxNkTIYg5eZR6o79@shredder>
-References: <20220826114538.705433-1-netdev@kapio-technology.com>
- <20220826114538.705433-2-netdev@kapio-technology.com>
- <e9eb5b72-073a-f182-13b7-37fc53611d5f@blackwall.org>
- <972663825881d135d19f9e391b2b7587@kapio-technology.com>
- <Ywzlfzns/vDDiKB1@shredder>
- <c9f474f0761f77d093db88da05d536cb@kapio-technology.com>
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+Message-ID: <YxNo/0+/Sbg9svid@shredder>
+References: <YwpgvkojEdytzCAB@shredder>
+ <7654860e4d7d43c15d482c6caeb6a773@kapio-technology.com>
+ <YwxtVhlPjq+M9QMY@shredder>
+ <2967ccc234bb672f5440a4b175b73768@kapio-technology.com>
+ <Ywyj1VF1wlYqlHb6@shredder>
+ <9e1a9eb218bbaa0d36cb98ff5d4b97d7@kapio-technology.com>
+ <YwzPJ2oCYJQHOsXD@shredder>
+ <69db7606896c77924c11a6c175c4b1a6@kapio-technology.com>
+ <YwzjPcQjfLPk3q/k@shredder>
+ <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c9f474f0761f77d093db88da05d536cb@kapio-technology.com>
-X-ClientProxiedBy: VI1PR04CA0083.eurprd04.prod.outlook.com
- (2603:10a6:803:64::18) To PH7SPRMB0001.namprd12.prod.outlook.com
+In-Reply-To: <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
+X-ClientProxiedBy: VI1P194CA0016.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:800:be::26) To PH7SPRMB0001.namprd12.prod.outlook.com
  (2603:10b6:510:13c::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ce7d7b87-cb03-4be7-e836-08da8db86f38
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5800:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff7a252f-a920-49ce-4bf8-08da8dbb3bb9
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5234:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SabiY0UnTzVKsN6PSH/NjywdRMA3RfGtbOwC1nibYIZJBOcbvAXKolMzOTWAi0GiYzsvOMHHEkkRNObczFenMwuWeM2KvCaGLjecnZ4J984Z2LAl3kVMGka7QeoDrd1XZbbkMaIe24UgjJTDKFHjG6+VGPMJlAYOG5qZx7e+HVj9I0b1EHCN/alSKZg+w+grKtPB/gPEpkcoL5AYoOX19n1DyoVZoboliTlUnexnvA5u4ztVouSZ+0RGNXC5+3lf495WN+zI5MfqIj22ZPNI8Io2flFfzjJza7s+lV8FzaXl4c+p8Y3YuHFssBNezNaYlMsKUwZSXQSj1EcMSx2MEHr24fXFAAB2wC5PJWfW7jEoPR8qhtBhjNkE9chTVdmvW1OXm/BcDJHKhEanlbQZeD8azANdckKeICcxDL8dP6LM6RZmv35s9ozEUS1aCtdr/B7i2UKmvSL6zvLJia7r6/TKvtBAinw33WF9zKA/y58ZuDUwtxgZwiTP+ePvN73a0jJ3RJ1U0JLUE7qajm9ItovFgeGvxe1iamrFcU28dVGLtlB4MUSmZ/UI7yJEGLIGRsv1FuZAESqW9OoZ4406EtDOYtl2B9lKbAD8AXpH57mFKOxYop1UjJzjr2te2ITSa1yKcck6VlJsua1Ynyfn+dRjQNf2oN2qm9VsuVnG4+o/Tbljsbq/7C05IYOxe1RK+i55ksLLE8c/41U4nKn9P8HBPQO+xg8Y4FCmjM1FUZoXiKKlrXr8gkk/I4NmAn2Z8RxoBAnBMSehZ6wx4aheNw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7SPRMB0001.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(39860400002)(376002)(346002)(136003)(396003)(366004)(7406005)(5660300002)(38100700002)(8936002)(186003)(4326008)(66556008)(66946007)(2906002)(66476007)(7416002)(86362001)(6916009)(8676002)(966005)(316002)(33716001)(6506007)(6512007)(6666004)(53546011)(83380400001)(478600001)(9686003)(54906003)(26005)(41300700001)(6486002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: vg4cRqWosMfdio+iuzZcynU4i0dMHKZOzD+8o0afNUj3rQlNCSS4UGSnnaPWGPCP7DPHdQPYZs2s4hYN1Nx+77U14E/cDvN/Q4LwdHpEuaS51XKitKvL8EN+TQUgJx4YL+/DxdRjW5POu0JpMjbGoS5rcMxs5/ugHHM9zTTAIQVN6OAZMfq/M4+XMXO6/i8FZl9tjrp2BgKklgiZFUB2zGLHpjWtYAkyGDFgArjXCcIU2If82NoUn4uK+alBhvwiOTnLp7bc5vgUr1oR0u6yND8VkzHZuCrde6FUnV4FmEQxRit9zy4so+/YXfhpkcJemGpuvQ6+IhfHM8eg7VhEbSpiwjI0Fsa/SEaWWhkeYlr8jYP2DeqQXVQtBX/3vMw1aeS8S8QRKEsi2d4Z0tzgqXqfsDyWIWglbaWJcY9eBwutsexqLSPeDHd8PNr6lg1c5L2fjSV9D0NEsE3NGnaJhvIOOFL5ikRVQTcaYc/Ky68l9QdhfMzeYsUVkcPHtrpDq9kHreDow8fskrcriuiXBnAWU8LF0nC1kcSQIv8uEYE60PhgDZfS6Z84A0t6ZBazVbfanqO5IWzX3Dp9KAhySQSXzZxfON7UMKkSVlFUtPSEiQEguAVSpI+HE+/ZuEvRI/CRilIJT6nMP7CgAOJs6nIngjXWExzWMWO9xXBEtm0CdCAWLzPQYUQyJ0fLlUJiNueTNxBEj4NKDgR0k5tTkQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7SPRMB0001.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(366004)(39860400002)(346002)(396003)(376002)(136003)(4326008)(83380400001)(8676002)(66946007)(66476007)(66556008)(5660300002)(8936002)(7416002)(7406005)(6506007)(26005)(53546011)(6666004)(478600001)(6486002)(41300700001)(186003)(6512007)(9686003)(316002)(6916009)(86362001)(54906003)(33716001)(38100700002)(2906002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ze7P5EUqGM/+Kzf8ftn7A/d8R/jH3BxO3VDn0zGPhf3PxxuREvIdmcsdvD4P?=
- =?us-ascii?Q?2UrpCZpQHyAw0zAleEUuguseFNPKsj7Imgbk5qNazKTQdRJ7C0Nn/t52ZQFQ?=
- =?us-ascii?Q?NCYH81LJWtSrwkJ3Jxt3sMXHcMln7iEvwMXCzgJkhNBQ0kzkoQC/dZCxCUnh?=
- =?us-ascii?Q?OTFTDFcSj+ZkY7dOHofDu32aWxDp9Wm6XvwIFTjvZH3FnavXPTlm6LXi2ev8?=
- =?us-ascii?Q?MUG5PsajgJ0JwHrtpBiV0kD+E5j4Kq5HCOn6UaCitkXmpraFyzfBW/CyrLDc?=
- =?us-ascii?Q?UNR5gkpMXiAGk1zdBwELAy20w5NTsbfKFC6BDOD8WQR0nRN14DbliAZ1yxeA?=
- =?us-ascii?Q?ygepWyIBk57ceMVuwPky/NX9/olg3RxiyjCWCOgVMJUqZLQjYRoIkIlzIVfX?=
- =?us-ascii?Q?Vpy+8ekfOf8PDgiSSKHLoj0X5pn3N88ypSYitnC3qZ5ZIxHU8mAYAIZGi+9c?=
- =?us-ascii?Q?rvrH3MCtgj2akXjqHYqw7NRhFla/cNlxzj3q3YWMV/wxEPTL4ojut2W9wmHx?=
- =?us-ascii?Q?vAX0867SVqpIRrotHOyURSKIU8d6c1BvlTOVWwgdTQiqSxKZXMKrUUYRZO8d?=
- =?us-ascii?Q?L3WJ5pQrkHCo7c7CU+f1jKyJkDKo3a72oHwcgQx8RvjkI+8EFQ3B42ovIDlh?=
- =?us-ascii?Q?d1DMD1uXrJjd0Le5kGcAcApCESajoF3493dlz/zQiLF5gBvL5zQrVgXDoYnP?=
- =?us-ascii?Q?19l9VIs/8ZxG67Jc0y5Radifmh2/XbQNAHlCap3a3F9REscgbfBQ64Ic++3K?=
- =?us-ascii?Q?FiNcFdVizP+GS3PXZIxm67bWvRnf3mID9A5exbH1WjW6hs1OMi2c7lxX+Dyz?=
- =?us-ascii?Q?u/S6gJZhuiRWbqcopwRgPS8lHUIINMCMfAarLbXFMPF5lchynyao1ieboWN0?=
- =?us-ascii?Q?3J/dKZydoE4CVS9f9a0B7xRG4pAHyeX4qB4cgA9x30/n3vBiA8D5KITPFZCV?=
- =?us-ascii?Q?fBhA3dHV13lwU5JxOWSxiRL6mtYDdi35ImHFvOybLFBR1LZTxtCcd75859LI?=
- =?us-ascii?Q?F7801KgmIlB9AMa89gfBBWglst6BLsj2oWDCG2rHmAeQ4M0qBVgbfzvnI87N?=
- =?us-ascii?Q?8y8Pux9Ts2E1ko/ZDku/yMSH7BRVtoGHjjpgx0GpiBt5UrqOftnkO57a+LD1?=
- =?us-ascii?Q?UW3zrt6Fm/eStq8xsfo2+X0AHbQSOG8aI/L5GxISxumYXIMmznZztH2vnJVU?=
- =?us-ascii?Q?trLALW1RD3IPrkWSSuWMZ+gBZadglXQBFd6a+QsHUoZx2wD9kbPQFOLgcPAX?=
- =?us-ascii?Q?VoeIyc506976bjtXAOjWXNxkZcRtkDPNc9VS0x2ODULpD+ZquzccVyEMB46X?=
- =?us-ascii?Q?+aD93SksjG1ziWDWiJeZsi06IF3lgt9ENAdxpUpCPwjJdUdpv765bd9xBIoe?=
- =?us-ascii?Q?2NANzPGHiFm2Cm8WZLG0qWCiBpN6DrgLlHgJ0/zjl7om7s3UXHZJGqD7T1vu?=
- =?us-ascii?Q?+KNdbmPCGBnhaVnlQij3d22l78m56JhQT4ceoL0VgMe3iGDk6CT9CbDmYZPr?=
- =?us-ascii?Q?x5jNftVn6PD3Gbzzj/Xz8jk6nuGvnlI8/TrOBpi8378p5l+nPURGjKxBVq9v?=
- =?us-ascii?Q?6HqQ2/w5W82ndwBPZMYHrThLpUmoR+vYE9OTKK9Z?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ipCueTJAd9ejXskW0/DswyC6Ay7q2FlUsOsrU6bStDshex8FvnOf6n1BDB14?=
+ =?us-ascii?Q?L8dlKOCWzq/HUba/YXLHGB6y55s0X34iICfGTkpp6o6ysrEchlXVDeP6+Yg+?=
+ =?us-ascii?Q?X3Oo54ftMNIKNiSOKp86av8EYxxDYdOnfbmOpeIGSAXmagbMxYwlsxMBqMEP?=
+ =?us-ascii?Q?oi7uGz99hQcFzktNwr+NZhj/oOFWRC6rGWCaDC5Rp1uobylbrrOAceFlDcXg?=
+ =?us-ascii?Q?Xp3yTisGld3zqhhLAWfvXqRnLPq9/KuhweF5654EL5yIA5MRrkuBjSCk0jvx?=
+ =?us-ascii?Q?zT9fpI8nIWMoFru+jIb0PQZ1zdaS3ZpVtX3IIQsUFIhrhpeeOON7yzOe50Kf?=
+ =?us-ascii?Q?PyUBsVDi5z83y/Icd3kNvMBqRxmv8aOPAZAptyFEKXJHLB4YNbW1PETnLVLQ?=
+ =?us-ascii?Q?N/U1Cdy441Ngqu7ADICEnfvzrRbkiMvEFR6CQB+GEeOI+LcQ6HWm/vWYSEqm?=
+ =?us-ascii?Q?8zCD9az//9sFxIBB8IZlXW9FlI/K8fq/E2eMWjhGF1KbeTI/UcKgIloeBpfb?=
+ =?us-ascii?Q?bXW52aUr8UI92stk5d1PH3gbRaezsySm4wMJVX0aOyfWJHxsQx7jLKzflC9j?=
+ =?us-ascii?Q?cfcOT7fQa97EqN6TRCACn91KNJgOir9H1PZMPwdvlENZsmQushza1lwIXH/E?=
+ =?us-ascii?Q?mcfnycyB4lCUhNqwo1wI9vYStXbbRqn8glAHbbszuKrxJfvGorDitOt641nM?=
+ =?us-ascii?Q?29unSnYBRMnoZ4dz+hE9VZEi2w0HSqmQtgrsHbJW+TiXHd01xGT6KyprrKLj?=
+ =?us-ascii?Q?sIpPDZpCxTYZsPAbQvIRjNg9wRZWn7MSEnCJHrWUNO/dXQlEIityHEvlgP/9?=
+ =?us-ascii?Q?DApqTcYfFs81toOxvPh+jgtgqtWJk9CvbuwvXNN3p/HTgF7w1Ml2a9K7p3dY?=
+ =?us-ascii?Q?2+2Jev4yKufCg42YSPrHRNEHCigCWEuroZ13siS4sSwJQu9jNmV8lnZuNfuF?=
+ =?us-ascii?Q?WB95HdNm0XWTBdZ6CB4ktz0M+0IPmH9SWdKHmqgjLPGUUqPN0XGFtFkzTt8R?=
+ =?us-ascii?Q?KcLLQIxoN+AiUX+Y/qH82jEJT+NATW2oxlPApkZMLAU6j5ykIe/SlsUUyGaD?=
+ =?us-ascii?Q?HgJnuLb1wObraiuHvwSMK/ZF9aaJAbD2IJg1Fpj165Qm90cLCub8NEzGabmN?=
+ =?us-ascii?Q?qc8tChsUbvnTB6mNEm2+ydXohYpVdG27b2pSin3YnZ08xZ6HKa4Y7uW+UwG9?=
+ =?us-ascii?Q?A8qVr2MY5ZfC6MPXap6Nwqrm1llXXqYPsT+s06mpxDk/aiJBSNAB0N/+TqhA?=
+ =?us-ascii?Q?xTe7qIxuitP/2C7ZfZPEe+qpJIZDpOF2DbLWviXBFjvY+7CwcmkyTp+fzmDI?=
+ =?us-ascii?Q?d+kJsspbpXln2lm94h/2OjyeLZgpdxBl6zYlSmInW2yQptxWX2XwDcg/IU+1?=
+ =?us-ascii?Q?vj7TzDvKPOQd732k8Xq6J2x+gvEZ5UhOTCjQ6LJyzabb4qQhmV1wWAinQBON?=
+ =?us-ascii?Q?QfVV0GClk24GIQi8S4yQaQRA5nk98hA8dwHPTcOHvPTTe8hApsfoteZS4yYC?=
+ =?us-ascii?Q?0TpnnNwlPJ3GAmvlSUo1U2AKApsQrJ8W1CssPHftY/wCD5rtmlctRjSOpqCw?=
+ =?us-ascii?Q?F1iO9ky/Rw3ln2vUxK8XZaGRBZm+HqGWq3eeJ+Wf?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce7d7b87-cb03-4be7-e836-08da8db86f38
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff7a252f-a920-49ce-4bf8-08da8dbb3bb9
 X-MS-Exchange-CrossTenant-AuthSource: PH7SPRMB0001.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2022 14:27:30.8345
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2022 14:47:32.9090
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vl4YXdQNRVlSblRqkMr5tvg3OJwy8TGlB8kXkgUQXEFKuaQG6F4TRucEupphAjRVv3qdCk+Ru3WbzKoz1GtBhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5800
+X-MS-Exchange-CrossTenant-UserPrincipalName: rkid4jbzCxjABPX5LM9qKezQeYjQ7l/L1wVCSvD2TRq/M0Bc2c2zWgytc/o00th5mgHNd7MmmQE7isrMwq26TA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5234
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -143,38 +148,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 04:19:16PM +0200, netdev@kapio-technology.com wrote:
-> On 2022-08-29 18:12, Ido Schimmel wrote:
-> > On Mon, Aug 29, 2022 at 04:02:46PM +0200, netdev@kapio-technology.com
+On Mon, Aug 29, 2022 at 06:13:14PM +0200, netdev@kapio-technology.com wrote:
+> On 2022-08-29 18:03, Ido Schimmel wrote:
+> > On Mon, Aug 29, 2022 at 05:08:23PM +0200, netdev@kapio-technology.com
 > > wrote:
-> > > On 2022-08-27 13:30, Nikolay Aleksandrov wrote:
-> > > > On 26/08/2022 14:45, Hans Schultz wrote:
+> > > On 2022-08-29 16:37, Ido Schimmel wrote:
+> > > > On Mon, Aug 29, 2022 at 02:04:42PM +0200, netdev@kapio-technology.com
+> > > > wrote:
+> > > > > On 2022-08-29 13:32, Ido Schimmel wrote:
+> > > > > Port association is needed for MAB to work at all on mv88e6xxx, but
+> > > > > for
+> > > > > 802.1X port association is only needed for dynamic ATU entries.
 > > > >
-> > > > Hi,
-> > > > Please add the blackhole flag in a separate patch.
-> > > > A few more comments and questions below..
+> > > > Ageing of dynamic entries in the bridge requires learning to be on as
+> > > > well, but in these test cases you are only using static entries and
+> > > > there is no reason to enable learning in the bridge for that. I prefer
+> > > > not to leak this mv88e6xxx implementation detail to user space and
+> > > > instead have the driver enable port association based on whether
+> > > > "learning" or "mab" is on.
 > > > >
 > > > 
-> > > Hi,
-> > > if userspace is to set this flag I think I need to change stuff in
-> > > rtnetlink.c, as I will need to extent struct ndmsg with a new u32
-> > > entry as
-> > > the old u8 flags is full.
+> > > Then it makes most sense to have the mv88e6xxx driver enable port
+> > > association when then port is locked, as it does now.
 > > 
-> > You cannot extend 'struct ndmsg'. That's why 'NDA_FLAGS_EXT' was
-> > introduced. See:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2c611ad97a82b51221bb0920cc6cac0b1d4c0e52
-> > 
-> > 'NTF_EXT_BLACKHOLE' belongs in 'NDA_FLAGS_EXT' like you have it now, but
-> > the kernel should not reject it in br_fdb_add().
-> > 
-> > > Maybe this is straight forward, but I am not so sure as I don't know
-> > > that
-> > > code too well. Maybe someone can give me a hint...?
+> > As you wish, but like you wrote "802.1X port association is only needed
+> > for dynamic ATU entries" and in this case user space needs to enable
+> > learning (for refresh only) so you can really key off learning on
+> > "learning || mab". User space can decide to lock the port and work with
+> > static entries and then learning is not required.
 > 
-> The question I have is if I can use nlh_flags to send the extended flags
-> further on to fdb_add_entry(), where I expect to need it?
+> I will of course remove all "learning on" in the selftests, which is what I
+> think you are referring to. In the previous I am referring to the code in
+> the driver itself which I understand shall turn on port association with
+> locked ports, e.g. no need for "learning on" when using the feature in
+> general outside selftests...
 
-A separate argument looks cleaner to me.
+"learning on" is needed when dynamic FDB entries are used to authorize
+hosts. Without learning being enabled, the bridge driver (or the
+underlying hardware) will not refresh the entries during forwarding and
+they will age out, resulting in packet loss until the hosts are
+re-authorized.
 
-> (the extended flags are u32, while nlh_flags are u16)
+Given the current test cases only use static entries, there is no need
+to enable learning on locked ports. This will change when test cases are
+added with dynamic entries.
+
+Regarding mv88e6xxx, my understanding is that you also need learning
+enabled for MAB (I assume for the violation interrupts). Therefore, for
+mv88e6xxx, learning can be enabled if learning is on or MAB is on.
+Enabling it based on whether the port is locked or not seems inaccurate.
