@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0965AB966
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Sep 2022 22:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71905ABC09
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Sep 2022 03:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiIBUW5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 2 Sep 2022 16:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
+        id S230494AbiICB3I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 2 Sep 2022 21:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiIBUWz (ORCPT
+        with ESMTP id S230302AbiICB3I (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 2 Sep 2022 16:22:55 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B878D4194
-        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 13:22:54 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id x25-20020aa79199000000b005358eeebf49so1549081pfa.17
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Sep 2022 13:22:54 -0700 (PDT)
+        Fri, 2 Sep 2022 21:29:08 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B13EEF0C
+        for <linux-kselftest@vger.kernel.org>; Fri,  2 Sep 2022 18:29:07 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id f128-20020a636a86000000b004340efec1faso36062pgc.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Sep 2022 18:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=VO4316zOsORf2Uk2FcihVa3sZo/VeghEP6jJC+IpIj8=;
-        b=aS6ToNCDUF06z9bRz6zv6YV3jgOFWelq7UAzgYNJviw6uC0SS/56AP3BJ+971SYb3h
-         QYv4Vjgy4oiV0RHzlnht3DE+qQEgJmrDNZ1LjTN26cG+lFyIqxPdNfHYfOlv4jp8NClJ
-         WbuZKWjKU169UdUXHVs9/oUZykyQYCAITM+ZEKz2KGWUTrbxiH3ZDhSjPz8+GEcvzpTs
-         rBSUyVAkfSn98rLMtF43yhVPKwOa2ATkWjSUENZF47Mi/1HZ0iJgnjtPTtqqzz7u9RvK
-         6gtCQ3wzaK+RvR+7k5KYDEozAavv3I4KcJyBy/c6evpOLR+y+q4ETLCSZtd+NyeJrJUj
-         SXXQ==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=zLFYPEVszfNpW6dCutbkzHT/LYTZJZBJHTuaDoaj/cE=;
+        b=jduT6xdjGBEpUaZZI4/ZP9lwMs8afG7T8AbeScf86NEDtTl3FPIPdc5ZefkA3jIrDj
+         Bwb3/DP5hlGZY0WU3YZpC5AglW3nbor5Zb/S961uBOb3PUmk7Udw1GQ54mX1dNwk2jPI
+         noQNbXLcB4uoecphVEXOx8qyF64OLSPdkp5kRKQ40qZtBN9TNL8jJOLNR5Qj1qWQf22C
+         VZf2Oer2GQYEIYNZQgsTsx8MKpiIT0bwQfRO4eB4SchDYHhXAng2I65osVf2BG7qAN7I
+         PaEOhkYpuXWewR8O1cB7p9EM3Jjvlow8cWj5mMfdLwCu8QGWMEC+jR2eMfeJ2zXg6bmN
+         VquQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=VO4316zOsORf2Uk2FcihVa3sZo/VeghEP6jJC+IpIj8=;
-        b=g9Fkusloi8ixhJV3TdQ8FXaRDlzjZ4hiZflci3DkTdZhFVN3IpCYcy4Fj/3EtFCHRV
-         rS5CRpf5WoUP9xMIlcr4FL0/GMW9P6v7TVqRu89pi5dI6OuANwpxSQush7P6telmBzAj
-         GTXcKDFIIhi4CxO7gOP2PYhzmorpqIh8QeHxs9lq+1VXg2SMR1HsbTobAffJULedoPOZ
-         bevSA1M82H/Bd29yGtUNK2EhPD/M2UrTs/oPuVDcDTvCVoFvDmm+Pl4Gl1lS4UyghUSa
-         nkUzxZBiH2P2XsoCTY2sqZE4thVHJZOTig2RPWhZC0ILdfxNNhDJWitRjYVxO+l/D5/y
-         tX7w==
-X-Gm-Message-State: ACgBeo2k+7e4AuFC5Zg76tjo1v1KLYs/oAt22Z6fnjG1+VK6obHUt2wT
-        kp3XiEHHf7l8vyb5A47xWmjSVOt1p6huQQ==
-X-Google-Smtp-Source: AA6agR4R8tHVImHlmN9xsGKIhRwYJnGPXfT0zcxu0ikbKsnIRgBAarhAcF2NT1OXO4dtk5XQ3YYIdN0ny5gUjw==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a63:6cc4:0:b0:41a:ff04:661f with SMTP id
- h187-20020a636cc4000000b0041aff04661fmr31918456pgc.600.1662150173568; Fri, 02
- Sep 2022 13:22:53 -0700 (PDT)
-Date:   Fri,  2 Sep 2022 13:22:48 -0700
-In-Reply-To: <20220902202248.3061262-1-dlatypov@google.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=zLFYPEVszfNpW6dCutbkzHT/LYTZJZBJHTuaDoaj/cE=;
+        b=yQNsr9TehDb/giSLGQRynyrcMb6gUUmxP+PLRE8vRBvKBchqiJa3Vh7oeLsFo4itcZ
+         AhkhBLtXXcoZMMR7QKuCE6IgU5sOdvU2gL1sxuD08WAca/z1CDjdVWb4KoIxn4ZSQnA3
+         COxJSS9NVaFISkujsXfQUstPJ+nfpMZ2zlqVZme7BcMykEaurda+tRYXkPQikkuHVc0+
+         w/Xzw2aHNROEsxWpqUN1gjUzg3GgGwIIN3OeqDytKlZ4i2sIIj2wZJnZsGILI/8ruh2u
+         aEPGGvxTwoDey37cFv3SA1V9r/tlyS4bgH09qFta1DzxEDlMhP6oPjAiD3V2rWuLkZ02
+         B6xQ==
+X-Gm-Message-State: ACgBeo3TfebFSmQBZRAP/1LI7UxpBCWgZZgcaT7qkTSMLoRRIWn6FWIj
+        40sHBkSo8BobWCoBCqm3ky2xNSN8aGfvJy9f
+X-Google-Smtp-Source: AA6agR66rzFlSrfpXOBJSYUMRES0YBW3NRHNhBL90Jx4+4OKfXFQ2RxhLBsioUbgHaLkY0WBRQnAVizY/BrawuDR
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:a62:27c1:0:b0:536:32d2:d098 with SMTP
+ id n184-20020a6227c1000000b0053632d2d098mr39234197pfn.63.1662168546414; Fri,
+ 02 Sep 2022 18:29:06 -0700 (PDT)
+Date:   Sat,  3 Sep 2022 01:28:44 +0000
 Mime-Version: 1.0
-References: <20220902202248.3061262-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220902202248.3061262-2-dlatypov@google.com>
-Subject: [PATCH 2/2] kunit: tool: rename all_test_uml.config, use it for --alltests
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
+Message-ID: <20220903012849.938069-1-vannapurve@google.com>
+Subject: [V1 PATCH 0/5] Execute hypercalls from guests according to cpu type
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
+        seanjc@google.com, oupton@google.com, peterx@redhat.com,
+        vkuznets@redhat.com, drjones@redhat.com, dmatlack@google.com,
+        Vishal Annapurve <vannapurve@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,334 +69,122 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Context:
-1. all_tests_uml.config used to be UML specific back when users to
-   manually specify CONFIG_VIRTIO_UML=y to enable CONFIG_PCI=y.
-2. --alltests used allyesconfig along with a curated list of options to
-   disable. It's only ever worked for brief periods of time and has
-   perennially been broken due to compile issues.
+This series is posted in context of the discussion at:
+https://lore.kernel.org/lkml/Ywa9T+jKUpaHLu%2Fl@google.com/
 
-Now all_tests_uml.config should work across ~all architectures.
-Let's instead use this to implement --alltests.
+Major changes:
+1) Move common startup logic to a single common main function in
+kvm_util.c
+2) Introduce following APIs:
+	kvm_arch_main: to perform arch specific common startup.
+	kvm_post_vm_load: to update the guest memory state to convey
+		common information to guests.
+3) For x86, capture cpu type at startup and pass on the cpu type to
+guest after guest elf is loaded.
+4) Execute hypercall instruction from within guest VMs according to the
+cpu type. This will help prevent an extra kvm exit during hypercall
+execution.
 
-Note: if anyone was using all_tests_uml.config, this change breaks them.
-I think that's unlikely since it was added in 5.19 and was a lot to
-type: --kunitconfig=tools/testing/kunit/configs/all_tests_uml.config.
-We could make it a symlink to the new name, but I don't think the
-caution is warranted here.
+Vishal Annapurve (5):
+  selftests: kvm: move common startup logic to kvm_util.c
+  selftests: kvm: Introduce kvm_arch_main and helpers
+  selftests: kvm: x86: Execute vmcall/vmmcall according to CPU type
+  selftests: kvm: delete svm_vmcall_test
+  selftests: kvm: Execute vmcall/vmmcall as per cpu type
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- ...{all_tests_uml.config => all_tests.config} |  0
- .../kunit/configs/broken_on_uml.config        | 44 -------------------
- tools/testing/kunit/kunit.py                  | 24 +++++-----
- tools/testing/kunit/kunit_kernel.py           | 29 +-----------
- tools/testing/kunit/kunit_tool_test.py        | 26 ++++++++---
- 5 files changed, 33 insertions(+), 90 deletions(-)
- rename tools/testing/kunit/configs/{all_tests_uml.config => all_tests.config} (100%)
- delete mode 100644 tools/testing/kunit/configs/broken_on_uml.config
+ tools/testing/selftests/kvm/.gitignore        |  1 -
+ .../selftests/kvm/aarch64/arch_timer.c        |  5 +-
+ .../selftests/kvm/aarch64/debug-exceptions.c  |  2 +-
+ .../selftests/kvm/aarch64/get-reg-list.c      |  2 +-
+ .../selftests/kvm/aarch64/hypercalls.c        |  4 +-
+ .../testing/selftests/kvm/aarch64/psci_test.c |  2 +-
+ .../selftests/kvm/aarch64/vcpu_width_config.c |  2 +-
+ .../testing/selftests/kvm/aarch64/vgic_init.c |  2 +-
+ .../testing/selftests/kvm/aarch64/vgic_irq.c  |  5 +-
+ .../selftests/kvm/access_tracking_perf_test.c |  4 +-
+ .../selftests/kvm/demand_paging_test.c        |  7 +-
+ .../selftests/kvm/dirty_log_perf_test.c       |  4 +-
+ tools/testing/selftests/kvm/dirty_log_test.c  |  4 +-
+ .../selftests/kvm/hardware_disable_test.c     |  2 +-
+ .../selftests/kvm/include/kvm_util_base.h     | 15 ++++
+ .../selftests/kvm/include/x86_64/processor.h  | 10 +++
+ .../selftests/kvm/include/x86_64/vmx.h        |  9 ---
+ .../selftests/kvm/kvm_binary_stats_test.c     |  3 +-
+ .../selftests/kvm/kvm_create_max_vcpus.c      |  4 +-
+ .../selftests/kvm/kvm_page_table_test.c       |  4 +-
+ .../selftests/kvm/lib/aarch64/processor.c     |  8 ++
+ tools/testing/selftests/kvm/lib/elf.c         |  2 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 12 +++
+ .../selftests/kvm/lib/riscv/processor.c       |  8 ++
+ .../selftests/kvm/lib/s390x/processor.c       |  8 ++
+ tools/testing/selftests/kvm/lib/sparsebit.c   |  2 +-
+ .../selftests/kvm/lib/x86_64/perf_test_util.c |  2 +-
+ .../selftests/kvm/lib/x86_64/processor.c      | 38 +++++++++-
+ .../selftests/kvm/max_guest_memory_test.c     |  2 +-
+ .../kvm/memslot_modification_stress_test.c    |  4 +-
+ .../testing/selftests/kvm/memslot_perf_test.c |  9 +--
+ tools/testing/selftests/kvm/rseq_test.c       |  7 +-
+ tools/testing/selftests/kvm/s390x/memop.c     |  4 +-
+ tools/testing/selftests/kvm/s390x/resets.c    |  4 +-
+ .../selftests/kvm/s390x/sync_regs_test.c      |  5 +-
+ tools/testing/selftests/kvm/s390x/tprot.c     |  2 +-
+ .../selftests/kvm/set_memory_region_test.c    |  7 +-
+ tools/testing/selftests/kvm/steal_time.c      |  4 +-
+ .../kvm/system_counter_offset_test.c          |  2 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |  2 +-
+ .../testing/selftests/kvm/x86_64/cpuid_test.c |  2 +-
+ .../kvm/x86_64/cr4_cpuid_sync_test.c          |  6 +-
+ .../testing/selftests/kvm/x86_64/debug_regs.c |  4 +-
+ .../kvm/x86_64/emulator_error_test.c          |  7 +-
+ .../testing/selftests/kvm/x86_64/evmcs_test.c |  2 +-
+ .../selftests/kvm/x86_64/fix_hypercall_test.c |  2 +-
+ .../kvm/x86_64/get_msr_index_features.c       |  2 +-
+ .../selftests/kvm/x86_64/hyperv_clock.c       |  2 +-
+ .../selftests/kvm/x86_64/hyperv_cpuid.c       |  7 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |  2 +-
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |  2 +-
+ .../selftests/kvm/x86_64/kvm_clock_test.c     |  2 +-
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |  2 +-
+ .../kvm/x86_64/max_vcpuid_cap_test.c          |  3 +-
+ .../selftests/kvm/x86_64/mmio_warning_test.c  |  4 +-
+ .../selftests/kvm/x86_64/monitor_mwait_test.c |  3 +-
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c |  4 +-
+ .../selftests/kvm/x86_64/platform_info_test.c |  7 +-
+ .../kvm/x86_64/pmu_event_filter_test.c        |  7 +-
+ .../selftests/kvm/x86_64/set_boot_cpu_id.c    |  2 +-
+ .../selftests/kvm/x86_64/set_sregs_test.c     |  7 +-
+ .../selftests/kvm/x86_64/sev_migrate_tests.c  |  3 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |  4 +-
+ .../testing/selftests/kvm/x86_64/state_test.c | 10 +--
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c   |  3 +-
+ .../kvm/x86_64/svm_nested_soft_inject_test.c  |  7 +-
+ .../selftests/kvm/x86_64/svm_vmcall_test.c    | 74 -------------------
+ .../selftests/kvm/x86_64/sync_regs_test.c     |  7 +-
+ .../kvm/x86_64/triple_fault_event_test.c      |  2 +-
+ .../selftests/kvm/x86_64/tsc_msrs_test.c      |  4 +-
+ .../selftests/kvm/x86_64/tsc_scaling_sync.c   |  3 +-
+ .../kvm/x86_64/ucna_injection_test.c          |  2 +-
+ .../selftests/kvm/x86_64/userspace_io_test.c  |  6 +-
+ .../kvm/x86_64/userspace_msr_exit_test.c      |  7 +-
+ .../kvm/x86_64/vmx_apic_access_test.c         |  5 +-
+ .../kvm/x86_64/vmx_close_while_nested_test.c  |  2 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |  4 +-
+ .../vmx_exception_with_invalid_guest_state.c  |  2 +-
+ .../x86_64/vmx_invalid_nested_guest_state.c   |  2 +-
+ .../selftests/kvm/x86_64/vmx_msrs_test.c      |  2 +-
+ .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |  5 +-
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |  2 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |  4 +-
+ .../kvm/x86_64/vmx_set_nested_state_test.c    |  3 +-
+ .../kvm/x86_64/vmx_tsc_adjust_test.c          |  5 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |  4 +-
+ .../selftests/kvm/x86_64/xapic_state_test.c   |  2 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    | 67 +++++++----------
+ .../selftests/kvm/x86_64/xen_vmcall_test.c    | 17 +++--
+ .../selftests/kvm/x86_64/xss_msr_test.c       |  2 +-
+ 90 files changed, 223 insertions(+), 339 deletions(-)
+ delete mode 100644 tools/testing/selftests/kvm/x86_64/svm_vmcall_test.c
 
-diff --git a/tools/testing/kunit/configs/all_tests_uml.config b/tools/testing/kunit/configs/all_tests.config
-similarity index 100%
-rename from tools/testing/kunit/configs/all_tests_uml.config
-rename to tools/testing/kunit/configs/all_tests.config
-diff --git a/tools/testing/kunit/configs/broken_on_uml.config b/tools/testing/kunit/configs/broken_on_uml.config
-deleted file mode 100644
-index 690870043ac0..000000000000
---- a/tools/testing/kunit/configs/broken_on_uml.config
-+++ /dev/null
-@@ -1,44 +0,0 @@
--# These are currently broken on UML and prevent allyesconfig from building
--# CONFIG_STATIC_LINK is not set
--# CONFIG_UML_NET_VECTOR is not set
--# CONFIG_UML_NET_VDE is not set
--# CONFIG_UML_NET_PCAP is not set
--# CONFIG_NET_PTP_CLASSIFY is not set
--# CONFIG_IP_VS is not set
--# CONFIG_BRIDGE_EBT_BROUTE is not set
--# CONFIG_BRIDGE_EBT_T_FILTER is not set
--# CONFIG_BRIDGE_EBT_T_NAT is not set
--# CONFIG_MTD_NAND_CADENCE is not set
--# CONFIG_MTD_NAND_NANDSIM is not set
--# CONFIG_BLK_DEV_NULL_BLK is not set
--# CONFIG_BLK_DEV_RAM is not set
--# CONFIG_SCSI_DEBUG is not set
--# CONFIG_NET_VENDOR_XILINX is not set
--# CONFIG_NULL_TTY is not set
--# CONFIG_PTP_1588_CLOCK is not set
--# CONFIG_PINCTRL_EQUILIBRIUM is not set
--# CONFIG_DMABUF_SELFTESTS is not set
--# CONFIG_COMEDI is not set
--# CONFIG_XIL_AXIS_FIFO is not set
--# CONFIG_EXFAT_FS is not set
--# CONFIG_STM_DUMMY is not set
--# CONFIG_FSI_MASTER_ASPEED is not set
--# CONFIG_JFS_FS is not set
--# CONFIG_UBIFS_FS is not set
--# CONFIG_CRAMFS is not set
--# CONFIG_CRYPTO_DEV_SAFEXCEL is not set
--# CONFIG_CRYPTO_DEV_AMLOGIC_GXL is not set
--# CONFIG_KCOV is not set
--# CONFIG_LKDTM is not set
--# CONFIG_REED_SOLOMON_TEST is not set
--# CONFIG_TEST_RHASHTABLE is not set
--# CONFIG_TEST_MEMINIT is not set
--# CONFIG_NETWORK_PHY_TIMESTAMPING is not set
--# CONFIG_DEBUG_INFO_BTF is not set
--# CONFIG_PTP_1588_CLOCK_INES is not set
--# CONFIG_QCOM_CPR is not set
--# CONFIG_RESET_BRCMSTB_RESCAL is not set
--# CONFIG_RESET_INTEL_GW is not set
--# CONFIG_ADI_AXI_ADC is not set
--# CONFIG_DEBUG_PAGEALLOC is not set
--# CONFIG_PAGE_POISONING is not set
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index e132b0654029..eca3ebe1d3a9 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -44,7 +44,6 @@ class KunitConfigRequest:
- @dataclass
- class KunitBuildRequest(KunitConfigRequest):
- 	jobs: int
--	alltests: bool
- 
- @dataclass
- class KunitParseRequest:
-@@ -55,7 +54,6 @@ class KunitParseRequest:
- class KunitExecRequest(KunitParseRequest):
- 	build_dir: str
- 	timeout: int
--	alltests: bool
- 	filter_glob: str
- 	kernel_args: Optional[List[str]]
- 	run_isolated: Optional[str]
-@@ -90,8 +88,7 @@ def build_tests(linux: kunit_kernel.LinuxSourceTree,
- 	stdout.print_with_timestamp('Building KUnit Kernel ...')
- 
- 	build_start = time.time()
--	success = linux.build_kernel(request.alltests,
--				     request.jobs,
-+	success = linux.build_kernel(request.jobs,
- 				     request.build_dir,
- 				     request.make_options)
- 	build_end = time.time()
-@@ -118,7 +115,7 @@ def _list_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest)
- 		args.extend(request.kernel_args)
- 
- 	output = linux.run_kernel(args=args,
--			   timeout=None if request.alltests else request.timeout,
-+			   timeout=request.timeout,
- 			   filter_glob=request.filter_glob,
- 			   build_dir=request.build_dir)
- 	lines = kunit_parser.extract_tap_lines(output)
-@@ -165,7 +162,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
- 		test_start = time.time()
- 		run_result = linux.run_kernel(
- 			args=request.kernel_args,
--			timeout=None if request.alltests else request.timeout,
-+			timeout=request.timeout,
- 			filter_glob=filter_glob,
- 			build_dir=request.build_dir)
- 
-@@ -288,7 +285,7 @@ def add_common_opts(parser) -> None:
- 			    help='X=Y make option, can be repeated.',
- 			    action='append', metavar='X=Y')
- 	parser.add_argument('--alltests',
--			    help='Run all KUnit tests through allyesconfig',
-+			    help='Run all KUnit tests via tools/testing/kunit/configs/all_tests.config',
- 			    action='store_true')
- 	parser.add_argument('--kunitconfig',
- 			     help='Path to Kconfig fragment that enables KUnit tests.'
-@@ -381,8 +378,14 @@ def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree
- 		for arg in cli_args.qemu_args:
- 			qemu_args.extend(shlex.split(arg))
- 
-+	kunitconfigs = cli_args.kunitconfig if cli_args.kunitconfig else []
-+	if cli_args.alltests:
-+		# Prepend so user-specified options take prio if we ever allow
-+		# --kunitconfig options to have differing options.
-+		kunitconfigs = [kunit_kernel.ALL_TESTS_CONFIG_PATH] + kunitconfigs
-+
- 	return kunit_kernel.LinuxSourceTree(cli_args.build_dir,
--			kunitconfig_paths=cli_args.kunitconfig,
-+			kunitconfig_paths=kunitconfigs,
- 			kconfig_add=cli_args.kconfig_add,
- 			arch=cli_args.arch,
- 			cross_compile=cli_args.cross_compile,
-@@ -441,7 +444,6 @@ def main(argv):
- 		request = KunitRequest(build_dir=cli_args.build_dir,
- 				       make_options=cli_args.make_options,
- 				       jobs=cli_args.jobs,
--				       alltests=cli_args.alltests,
- 				       raw_output=cli_args.raw_output,
- 				       json=cli_args.json,
- 				       timeout=cli_args.timeout,
-@@ -469,8 +471,7 @@ def main(argv):
- 		linux = tree_from_args(cli_args)
- 		request = KunitBuildRequest(build_dir=cli_args.build_dir,
- 					    make_options=cli_args.make_options,
--					    jobs=cli_args.jobs,
--					    alltests=cli_args.alltests)
-+					    jobs=cli_args.jobs)
- 		result = config_and_build_tests(linux, request)
- 		stdout.print_with_timestamp((
- 			'Elapsed time: %.3fs\n') % (
-@@ -483,7 +484,6 @@ def main(argv):
- 						build_dir=cli_args.build_dir,
- 						json=cli_args.json,
- 						timeout=cli_args.timeout,
--						alltests=cli_args.alltests,
- 						filter_glob=cli_args.filter_glob,
- 						kernel_args=cli_args.kernel_args,
- 						run_isolated=cli_args.run_isolated)
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index f5c26ea89714..eb62a9b035cb 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -25,7 +25,7 @@ KCONFIG_PATH = '.config'
- KUNITCONFIG_PATH = '.kunitconfig'
- OLD_KUNITCONFIG_PATH = 'last_used_kunitconfig'
- DEFAULT_KUNITCONFIG_PATH = 'tools/testing/kunit/configs/default.config'
--BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
-+ALL_TESTS_CONFIG_PATH = 'tools/testing/kunit/configs/all_tests.config'
- UML_KCONFIG_PATH = 'tools/testing/kunit/configs/arch_uml.config'
- OUTFILE_PATH = 'test.log'
- ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
-@@ -57,9 +57,6 @@ class LinuxSourceTreeOperations:
- 	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
- 		return base_kunitconfig
- 
--	def make_allyesconfig(self, build_dir: str, make_options) -> None:
--		raise ConfigError('Only the "um" arch is supported for alltests')
--
- 	def make_olddefconfig(self, build_dir: str, make_options) -> None:
- 		command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, 'olddefconfig']
- 		if self._cross_compile:
-@@ -144,26 +141,6 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
- 		kconfig.merge_in_entries(base_kunitconfig)
- 		return kconfig
- 
--	def make_allyesconfig(self, build_dir: str, make_options) -> None:
--		stdout.print_with_timestamp(
--			'Enabling all CONFIGs for UML...')
--		command = ['make', 'ARCH=um', 'O=' + build_dir, 'allyesconfig']
--		if make_options:
--			command.extend(make_options)
--		process = subprocess.Popen(
--			command,
--			stdout=subprocess.DEVNULL,
--			stderr=subprocess.STDOUT)
--		process.wait()
--		stdout.print_with_timestamp(
--			'Disabling broken configs to run KUnit tests...')
--
--		with open(get_kconfig_path(build_dir), 'a') as config:
--			with open(BROKEN_ALLCONFIG_PATH, 'r') as disable:
--				config.write(disable.read())
--		stdout.print_with_timestamp(
--			'Starting Kernel with all configs takes a few minutes...')
--
- 	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
- 		"""Runs the Linux UML binary. Must be named 'linux'."""
- 		linux_bin = os.path.join(build_dir, 'linux')
-@@ -343,10 +320,8 @@ class LinuxSourceTree:
- 		os.remove(kconfig_path)
- 		return self.build_config(build_dir, make_options)
- 
--	def build_kernel(self, alltests, jobs, build_dir: str, make_options) -> bool:
-+	def build_kernel(self, jobs, build_dir: str, make_options) -> bool:
- 		try:
--			if alltests:
--				self._ops.make_allyesconfig(build_dir, make_options)
- 			self._ops.make_olddefconfig(build_dir, make_options)
- 			self._ops.make(jobs, build_dir, make_options)
- 		except (ConfigError, BuildError) as e:
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 446ac432d9a4..e2cd2cc2e98f 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -549,7 +549,7 @@ class KUnitMainTest(unittest.TestCase):
- 	def test_build_passes_args_pass(self):
- 		kunit.main(['build'])
- 		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
--		self.linux_source_mock.build_kernel.assert_called_once_with(False, kunit.get_default_jobs(), '.kunit', None)
-+		self.linux_source_mock.build_kernel.assert_called_once_with(kunit.get_default_jobs(), '.kunit', None)
- 		self.assertEqual(self.linux_source_mock.run_kernel.call_count, 0)
- 
- 	def test_exec_passes_args_pass(self):
-@@ -664,7 +664,7 @@ class KUnitMainTest(unittest.TestCase):
- 		build_dir = '.kunit'
- 		jobs = kunit.get_default_jobs()
- 		kunit.main(['build', '--build_dir', build_dir])
--		self.linux_source_mock.build_kernel.assert_called_once_with(False, jobs, build_dir, None)
-+		self.linux_source_mock.build_kernel.assert_called_once_with(jobs, build_dir, None)
- 
- 	def test_exec_builddir(self):
- 		build_dir = '.kunit'
-@@ -695,6 +695,18 @@ class KUnitMainTest(unittest.TestCase):
- 						qemu_config_path=None,
- 						extra_qemu_args=[])
- 
-+	def test_config_alltests(self):
-+		kunit.main(['config', '--kunitconfig=mykunitconfig', '--alltests'])
-+		# Just verify that we parsed and initialized it correctly here.
-+		self.mock_linux_init.assert_called_once_with('.kunit',
-+						kunitconfig_paths=[kunit_kernel.ALL_TESTS_CONFIG_PATH, 'mykunitconfig'],
-+						kconfig_add=None,
-+						arch='um',
-+						cross_compile=None,
-+						qemu_config_path=None,
-+						extra_qemu_args=[])
-+
-+
- 	@mock.patch.object(kunit_kernel, 'LinuxSourceTree')
- 	def test_run_multiple_kunitconfig(self, mock_linux_init):
- 		mock_linux_init.return_value = self.linux_source_mock
-@@ -712,7 +724,7 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run', '--kconfig_add=CONFIG_KASAN=y', '--kconfig_add=CONFIG_KCSAN=y'])
- 		# Just verify that we parsed and initialized it correctly here.
- 		self.mock_linux_init.assert_called_once_with('.kunit',
--						kunitconfig_paths=None,
-+						kunitconfig_paths=[],
- 						kconfig_add=['CONFIG_KASAN=y', 'CONFIG_KCSAN=y'],
- 						arch='um',
- 						cross_compile=None,
-@@ -723,7 +735,7 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run', '--arch=x86_64', '--qemu_args', '-m 2048'])
- 		# Just verify that we parsed and initialized it correctly here.
- 		self.mock_linux_init.assert_called_once_with('.kunit',
--						kunitconfig_paths=None,
-+						kunitconfig_paths=[],
- 						kconfig_add=None,
- 						arch='x86_64',
- 						cross_compile=None,
-@@ -742,7 +754,7 @@ class KUnitMainTest(unittest.TestCase):
- 		self.linux_source_mock.run_kernel.return_value = ['TAP version 14', 'init: random output'] + want
- 
- 		got = kunit._list_tests(self.linux_source_mock,
--				     kunit.KunitExecRequest(None, None, '.kunit', 300, False, 'suite*', None, 'suite'))
-+				     kunit.KunitExecRequest(None, None, '.kunit', 300, 'suite*', None, 'suite'))
- 
- 		self.assertEqual(got, want)
- 		# Should respect the user's filter glob when listing tests.
-@@ -757,7 +769,7 @@ class KUnitMainTest(unittest.TestCase):
- 
- 		# Should respect the user's filter glob when listing tests.
- 		mock_tests.assert_called_once_with(mock.ANY,
--				     kunit.KunitExecRequest(None, None, '.kunit', 300, False, 'suite*.test*', None, 'suite'))
-+				     kunit.KunitExecRequest(None, None, '.kunit', 300, 'suite*.test*', None, 'suite'))
- 		self.linux_source_mock.run_kernel.assert_has_calls([
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', timeout=300),
-@@ -770,7 +782,7 @@ class KUnitMainTest(unittest.TestCase):
- 
- 		# Should respect the user's filter glob when listing tests.
- 		mock_tests.assert_called_once_with(mock.ANY,
--				     kunit.KunitExecRequest(None, None, '.kunit', 300, False, 'suite*', None, 'test'))
-+				     kunit.KunitExecRequest(None, None, '.kunit', 300, 'suite*', None, 'test'))
- 		self.linux_source_mock.run_kernel.assert_has_calls([
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', timeout=300),
 -- 
 2.37.2.789.g6183377224-goog
 
