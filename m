@@ -2,242 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC645AC359
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Sep 2022 09:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43905AC373
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Sep 2022 10:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbiIDHyn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 4 Sep 2022 03:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S233210AbiIDI1P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 4 Sep 2022 04:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiIDHyi (ORCPT
+        with ESMTP id S229537AbiIDI1L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 4 Sep 2022 03:54:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E506E9D;
-        Sun,  4 Sep 2022 00:54:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5F7BB80D40;
-        Sun,  4 Sep 2022 07:54:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A959C433D6;
-        Sun,  4 Sep 2022 07:54:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662278065;
-        bh=p8nRIS1VrAoUS4zMXarXOQjOtJK7KmJJS5AMfEf7Tvw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Am9a/fGIVt5XpsrJ88ITQxscCDuU9W5L/afh81HCzzkZq6pVhoM7uMF3eSOwD1wo+
-         UkcurNU7ETWh+ANGhS1lRLQrB6Ftu5D+qUCKMahzdtHI7pTE44xFGXfgg13iwUEAuw
-         zJE3CJ3MoWTdl58CbQJwqpcarWznxwR3eQy91qn7zH+QyexcxCEbyT9U3H45zsz59m
-         8DUwDnYHOT55ja9RSrg+dpZ/xPBMOwPhO7vQq7fXWc2wylIuH3c9zUZP0IOVkc0Lya
-         OuzCLOvCQOk+e5hqMlRWX2z6mrfh1zzUVKRxoOSXKabAxIl9SmIFK69rv7a1Dwzs7U
-         twtjAKN2C80Zg==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-sgx@vger.kernel.org
-Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 5/5] selftests/sgx: Add SGX selftest augment_via_eaccept_long
-Date:   Sun,  4 Sep 2022 10:53:58 +0300
-Message-Id: <20220904075358.7727-6-jarkko@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220904075358.7727-1-jarkko@kernel.org>
-References: <20220904075358.7727-1-jarkko@kernel.org>
+        Sun, 4 Sep 2022 04:27:11 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0608941D1C;
+        Sun,  4 Sep 2022 01:27:09 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so231627pjm.1;
+        Sun, 04 Sep 2022 01:27:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=zfiWejN/Bz3YBQupNom1bcY/9klYVsjCN66XEd476z0=;
+        b=SBEuv7blCe057KcuIJdNRyj3g2VOPTQq1llrfLNFf289npI8wf/m4D6m8V6XY3lUXp
+         Re5/g1GMCzHeowzixKLlyMxv657lA13nPeZhWWJ2OC266RIOX72T1P7U1QIAkGITZTkZ
+         OhFiv4GP/cj1MqfFk/e6TYkNwyKqbZZknzVH95RjMeoEs2gWuzEfbEQyCHG1wbtuLJHO
+         pjSg3+fSIKJmTcugr2ndTCmihpEGjkt8TbVpopZ7zzVFWdZ8gYe+YJI8gXqyPjNVYdVK
+         Rz3pc71J6gK/cLFZWzrR+DMSWgYikjoU/F8/eqeKn7KVfwAFofKX6tJeywPhCEF2HQqP
+         7Blw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zfiWejN/Bz3YBQupNom1bcY/9klYVsjCN66XEd476z0=;
+        b=gkb7W3gUoeEZxpMzzIclRYJJa2pHcrDJ+1jVRnHM2CW9ehjuYjXLvAXk6f/LWQb/K5
+         VnOhJPAnq8O8UqR0vEOTUFMCOShg/+m/xcIjS6uvCMGab9ZRsKTvVHpColDVJzNfa4uc
+         tvlaon62fjei1jT4JBZYBkAS23qpNVmVUKhXZpGFjnC5nqmVpcoNmelufXN5fagunMAR
+         H85xuZPrRESC7pYcv4vtle8yGqol89VEH7rBp0rN4TiSxwiFDr0cUcs8+LK5tsfxsnkD
+         xIcOws+M/Xl/x1RgyzSiJWKEgoRj138U8/jLYdQi3I/9GaVSY1JlpSQIoiR8zA93ufPN
+         VkiQ==
+X-Gm-Message-State: ACgBeo1vymS+0VUVjsXKMdixhPKv8I96PsIXcpdcmcC7EBnIG372qad4
+        vlAvFdvAggwFOiiKybqZmyo=
+X-Google-Smtp-Source: AA6agR6p1vnEmVhMR4O8lPoCRt91HpCjcE3g3bJe1rFhs/kMi/uJluoc3/u+nZq0YPRXXKdaBaDdUg==
+X-Received: by 2002:a17:90b:3a81:b0:1fd:c490:4f08 with SMTP id om1-20020a17090b3a8100b001fdc4904f08mr13328363pjb.105.1662280028369;
+        Sun, 04 Sep 2022 01:27:08 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-16.three.co.id. [180.214.232.16])
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090322cb00b001744018def7sm4901806plg.90.2022.09.04.01.27.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Sep 2022 01:27:08 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 521D0102D35; Sun,  4 Sep 2022 15:20:28 +0700 (WIB)
+Date:   Sun, 4 Sep 2022 15:20:27 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Subject: Re: [PATCH v12 09/10] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <YxRfy/SaKkJSm5jY@debian.me>
+References: <20220901205745.323326-1-longman@redhat.com>
+ <20220901205745.323326-10-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oIHDfZi7tkZKklmK"
+Content-Disposition: inline
+In-Reply-To: <20220901205745.323326-10-longman@redhat.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Vijay Dhanraj <vijay.dhanraj@intel.com>
 
-Add a new test case which is same as augment_via_eaccept but adds a
-larger number of EPC pages to stress test EAUG via EACCEPT.
+--oIHDfZi7tkZKklmK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v7:
-- Contains now only the test case. Support for dynamic heap is
-  prepared in prepending patches.
+On Thu, Sep 01, 2022 at 04:57:44PM -0400, Waiman Long wrote:
+>  	It accepts only the following input values when written to.
+> =20
+>  	  =3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> -	  "root"	a partition root
+> -	  "member"	a non-root member of a partition
+> +	  "member"	Non-root member of a partition
+> +	  "root"	Partition root
+> +	  "isolated"	Partition root without load balancing
+>  	  =3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+><snipped>
+> +	On read, the "cpuset.cpus.partition" file can show the following
+> +	values.
+> +
+> +	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> +	  "member"			Non-root member of a partition
+> +	  "root"			Partition root
+> +	  "isolated"			Partition root without load balancing
+> +	  "root invalid (<reason>)"	Invalid partition root
+> +	  "isolated invalid (<reason>)"	Invalid isolated partition root
+> +	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> +
 
-v6:
-- Address Reinette's feedback:
-  https://lore.kernel.org/linux-sgx/Yw6%2FiTzSdSw%2FY%2FVO@kernel.org/
+These tables above produced htmldocs warnings:
 
-v5:
-- Add the klog dump and sysctl option to the commit message.
+Documentation/admin-guide/cgroup-v2.rst:2191: WARNING: Malformed table.
+Text in column margin in table line 4.
 
-v4:
-- Explain expectations for dirty_page_list in the function header, instead
-  of an inline comment.
-- Improve commit message to explain the conditions better.
-- Return the number of pages left dirty to ksgxd() and print warning after
-  the 2nd call, if there are any.
+=3D=3D=3D=3D=3D=3D=3D=3D      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+"member"      Non-root member of a partition
+"root"        Partition root
+"isolated"    Partition root without load balancing
+=3D=3D=3D=3D=3D=3D=3D=3D      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Documentation/admin-guide/cgroup-v2.rst:2229: WARNING: Malformed table.
+Text in column margin in table line 5.
 
-v3:
-- Remove WARN_ON().
-- Tuned comments and the commit message a bit.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D        =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+"member"                      Non-root member of a partition
+"root"                        Partition root
+"isolated"                    Partition root without load balancing
+"root invalid (<reason>)"     Invalid partition root
+"isolated invalid (<reason>)" Invalid isolated partition root
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D        =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-v2:
-- Replaced WARN_ON() with optional pr_info() inside
-  __sgx_sanitize_pages().
-- Rewrote the commit message.
-- Added the fixes tag.
----
- tools/testing/selftests/sgx/main.c | 112 ++++++++++++++++++++++++++++-
- 1 file changed, 111 insertions(+), 1 deletion(-)
+I have applied the fixup:
 
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 4feffe7cd8fb..48976bb7bd79 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -23,8 +23,15 @@
- 
- static const size_t ENCL_HEAP_SIZE_DEFAULT = PAGE_SIZE;
- static const size_t ENCL_DYNAMIC_SIZE_DEFAULT = PAGE_SIZE;
-+/*
-+ * The size was chosen based on a bug report:
-+ * Message-ID: <DM8PR11MB55912A7F47A84EC9913A6352F6999@DM8PR11MB5591.namprd11.prod.outlook.com>
-+ */
-+static const size_t ENCL_DYNAMIC_SIZE_LONG = 8L * 1024L * 1024L * 1024L;
-+static const unsigned long TIMEOUT_DEFAULT = 900;
- static const uint64_t MAGIC = 0x1122334455667788ULL;
- static const uint64_t MAGIC2 = 0x8877665544332211ULL;
-+
- vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
- 
- /*
-@@ -388,7 +395,7 @@ TEST_F(enclave, unclobbered_vdso_oversubscribed)
- 	EXPECT_EQ(self->run.user_data, 0);
- }
- 
--TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
-+TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, TIMEOUT_DEFAULT)
- {
- 	struct sgx_enclave_remove_pages remove_ioc;
- 	struct sgx_enclave_modify_types modt_ioc;
-@@ -1248,6 +1255,109 @@ TEST_F(enclave, augment_via_eaccept)
- 	munmap(addr, PAGE_SIZE);
- }
- 
-+/*
-+ * Test for the addition of large number of pages to an initialized enclave via
-+ * a pre-emptive run of EACCEPT on every page to be added.
-+ */
-+TEST_F_TIMEOUT(enclave, augment_via_eaccept_long, TIMEOUT_DEFAULT)
-+{
-+	struct encl_op_get_from_addr get_addr_op;
-+	struct encl_op_put_to_addr put_addr_op;
-+	struct encl_op_eaccept eaccept_op;
-+	size_t total_size = 0;
-+	unsigned long i;
-+	void *addr;
-+
-+	if (!sgx2_supported())
-+		SKIP(return, "SGX2 not supported");
-+
-+	ASSERT_TRUE(setup_test_encl_dynamic(ENCL_HEAP_SIZE_DEFAULT,
-+					    ENCL_DYNAMIC_SIZE_LONG,
-+					    &self->encl, _metadata));
-+
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	for (i = 0; i < self->encl.nr_segments; i++) {
-+		struct encl_segment *seg = &self->encl.segment_tbl[i];
-+
-+		total_size += seg->size;
-+	}
-+
-+	/*
-+	 * mmap() every page at end of existing enclave to be used for
-+	 * EDMM.
-+	 */
-+	addr = mmap((void *)self->encl.encl_base + total_size, ENCL_DYNAMIC_SIZE_LONG,
-+		    PROT_READ | PROT_WRITE | PROT_EXEC, MAP_SHARED | MAP_FIXED,
-+		    self->encl.fd, 0);
-+	EXPECT_NE(addr, MAP_FAILED);
-+
-+	self->run.exception_vector = 0;
-+	self->run.exception_error_code = 0;
-+	self->run.exception_addr = 0;
-+
-+	/*
-+	 * Run EACCEPT on every page to trigger the #PF->EAUG->EACCEPT(again
-+	 * without a #PF). All should be transparent to userspace.
-+	 */
-+	eaccept_op.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_REG | SGX_SECINFO_PENDING;
-+	eaccept_op.ret = 0;
-+	eaccept_op.header.type = ENCL_OP_EACCEPT;
-+
-+	for (i = 0; i < ENCL_DYNAMIC_SIZE_LONG; i += 4096) {
-+		eaccept_op.epc_addr = (uint64_t)(addr + i);
-+
-+		EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
-+		if (self->run.exception_vector == 14 &&
-+		    self->run.exception_error_code == 4 &&
-+		    self->run.exception_addr == self->encl.encl_base) {
-+			munmap(addr, ENCL_DYNAMIC_SIZE_LONG);
-+			SKIP(return, "Kernel does not support adding pages to initialized enclave");
-+		}
-+
-+		EXPECT_EQ(self->run.exception_vector, 0);
-+		EXPECT_EQ(self->run.exception_error_code, 0);
-+		EXPECT_EQ(self->run.exception_addr, 0);
-+		ASSERT_EQ(eaccept_op.ret, 0);
-+		ASSERT_EQ(self->run.function, EEXIT);
-+	}
-+
-+	/*
-+	 * Pool of pages were successfully added to enclave. Perform sanity
-+	 * check on first page of the pool only to ensure data can be written
-+	 * to and read from a dynamically added enclave page.
-+	 */
-+	put_addr_op.value = MAGIC;
-+	put_addr_op.addr = (unsigned long)addr;
-+	put_addr_op.header.type = ENCL_OP_PUT_TO_ADDRESS;
-+
-+	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+
-+	/*
-+	 * Read memory from newly added page that was just written to,
-+	 * confirming that data previously written (MAGIC) is present.
-+	 */
-+	get_addr_op.value = 0;
-+	get_addr_op.addr = (unsigned long)addr;
-+	get_addr_op.header.type = ENCL_OP_GET_FROM_ADDRESS;
-+
-+	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
-+
-+	EXPECT_EQ(get_addr_op.value, MAGIC);
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+
-+	munmap(addr, ENCL_DYNAMIC_SIZE_LONG);
-+}
-+
- /*
-  * SGX2 page type modification test in two phases:
-  * Phase 1:
--- 
-2.37.2
+---- >8 ----
 
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-=
+guide/cgroup-v2.rst
+index 76b3ea9fd5c560..77b6faecf066cb 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2185,11 +2185,11 @@ Cpuset Interface Files
+=20
+ 	It accepts only the following input values when written to.
+=20
+-	  =3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ 	  "member"	Non-root member of a partition
+ 	  "root"	Partition root
+ 	  "isolated"	Partition root without load balancing
+-	  =3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ 	The root cgroup is always a partition root and its state
+ 	cannot be changed.  All other non-root cgroups start out as
+@@ -2222,13 +2222,13 @@ Cpuset Interface Files
+ 	On read, the "cpuset.cpus.partition" file can show the following
+ 	values.
+=20
+-	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
++	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ 	  "member"			Non-root member of a partition
+ 	  "root"			Partition root
+ 	  "isolated"			Partition root without load balancing
+ 	  "root invalid (<reason>)"	Invalid partition root
+ 	  "isolated invalid (<reason>)"	Invalid isolated partition root
+-	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D	=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
++	  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D	=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+ 	In the case of an invalid partition root, a descriptive string on
+ 	why the partition is invalid is included within parentheses.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--oIHDfZi7tkZKklmK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxRfxAAKCRD2uYlJVVFO
+o3SHAQClBqZgslhw004gM4yBhkfde6wdEJ2nw/MXorNJ8fTClQD+JtUvFXJzGoUu
+rSAT7jqqrPGSs2nO4gsLQKWjeu/V6gQ=
+=Tjsc
+-----END PGP SIGNATURE-----
+
+--oIHDfZi7tkZKklmK--
