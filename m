@@ -2,108 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0512C5AD99B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 21:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156525ADA15
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 22:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiIET1b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Sep 2022 15:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S231466AbiIEUVT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Sep 2022 16:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiIET1O (ORCPT
+        with ESMTP id S229546AbiIEUVS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Sep 2022 15:27:14 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3812622512;
-        Mon,  5 Sep 2022 12:27:02 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id s3so3049241ilv.4;
-        Mon, 05 Sep 2022 12:27:02 -0700 (PDT)
+        Mon, 5 Sep 2022 16:21:18 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AFE12AD1
+        for <linux-kselftest@vger.kernel.org>; Mon,  5 Sep 2022 13:21:17 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id e20so12588642wri.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Sep 2022 13:21:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=okbKeeBWBjVpIAJiPzx493ODGSDGbaRaZtMV6fwikf4=;
-        b=DZVQ7G1dtNGpG2nPDFL5GYqXFWFqPGklfB9ivgGQ2aCtoZSVxhOJyyuxYcx/PLshpS
-         eSj9Sv5axF7UzOIXn9yXOaw+jPNw992t4wHUi2xwtOYQ6ox9jnaWWL9usAll9xELHad1
-         ibWS4xJpQp9tAZ8kebQ7eS9h7d6ap6iFpnqnq39WDERLgwlpZ8FpEQ388Iz3s+jowlTz
-         9qOONIiPtusL21h0GTRdwelC5MkTob0xEq8QeK73WPkLq+LQ2+vg9p0eeGGJttA5J8i5
-         i27lgI87U0M0oz4nAyDEW+uUPERt27Js/x+KR0XoGCcOdzx/k5hu9mQLAQCdxJuytVe1
-         glFA==
+        d=arista.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=HkuLS1fVbmOSdnVWEUBZxpoZwFJkI5ziv+kyTn1ya8A=;
+        b=XnBxNSGxFzdOGOhK6lfK5VvAiuVTm0Z2TqgxrmLWe1FMSGslTh0D1Q9Zrwo9dhKGTZ
+         Qgr2Bdm56yRHNuD+JvCNI46qTUr56YLA6Zj/OKvkjCqnyf9tSe0TXiOZzi+6YTxC8Fqf
+         VGXCAxi1qBlgF7UbgxbMH9tw4YFfL1znx/gJ5VywL/2LLyY+fy8pi+tCQyXWJ43FEHXg
+         SERj2mHuNhjVlGF/eo5KVuyk42Fq2RMtx34asHakz2IgD6Lg2+r5E38VRef5yU+7wuFb
+         tQ7IRP7RK3Llj6jU4+TFATA7ijh1BTZf3vAa4upEnCHv+KFmR6+T0GoZW/MGE1BEES/n
+         eQBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=okbKeeBWBjVpIAJiPzx493ODGSDGbaRaZtMV6fwikf4=;
-        b=dRF98ZEm7djJegh6Uh5Wp9dCzJKbHY2OaVOoF9W6uGtJaaGpQ4bgzRfl+TCV/0IhBR
-         +iqj38DxLw4oXcHTQ7POHEikmOjCWlSMxFlF9T0Oto+jmucsU5jQJ9QbtSgfAXACgYZc
-         JHOdyUiuH1M+DzRSNNX7pIAGO0/DAdeA7B9pI4iof4pKTjNsjwmnQtTwk3/3tHc9ju9U
-         ToMUAx0c8ioijhFwBIP+aegQuYSF32Jk4pNNNFyiChqxcLov2q8YWZ+gWfzB+WgteWwX
-         IYNMIxKYbrdEpS4iUPNy8kDx1CcRKq/g+Rh9hl5QPpw02/iLXmrkmbFE8tZ9EZc58+HJ
-         KQvQ==
-X-Gm-Message-State: ACgBeo0D2axlqFNtdqpgJ8sTI8ynX4mYkVOX7Tpmc9T1GBdH07jVYtEZ
-        NzwVdmbnRWA7FBKIQPel35osCJfVRG7cKwhglCIXh+uO794=
-X-Google-Smtp-Source: AA6agR4UHGlM1wnVx+7B4pMceGklI3ut/1Hp4jDMKF72vpHZsmVqw49fXPSrCWb1lWNFsrLNyVlaIRExi0CYCpBsOyo=
-X-Received: by 2002:a05:6e02:170f:b0:2f1:6cdf:6f32 with SMTP id
- u15-20020a056e02170f00b002f16cdf6f32mr3321677ill.216.1662406021617; Mon, 05
- Sep 2022 12:27:01 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=HkuLS1fVbmOSdnVWEUBZxpoZwFJkI5ziv+kyTn1ya8A=;
+        b=r1t4UcHQGu9VhjpzGtHHWHJd2UVg1RKaP39UumjYoecvltjKh6oBaISFpQIKWi2TFl
+         hISa8ANGz3SUYV5k1U4P/FY2a/+uUekA0mmz9EaAJvKR+Vy0JCQ/C7EhMrAo8OlEsw4O
+         0B6iplGFGDTd4zvT58fFBsfbe812rUGoRY9HWZQTbkPEWZh1Sdktb8x2Ht8UVgVfXB2q
+         pmsUFE9VdyslO7wmKJhqdug7BV8xKZxkyDQm3XhUZ7G0t38FuVp/Bt2GhWMZ8KIIwFWA
+         pcTIq/Gxiv0m4UKPEBppbKp1UcK7pWSXsTonknRONxDrUWkD5ng+Odyz0eEYInqncWq7
+         HamQ==
+X-Gm-Message-State: ACgBeo0XMseNMIDIa4WEDvJnGeQfnBAiWXwTee6N89p/rf71KYGsQ+pR
+        2mO3lk9Q8hLZMSgtEqHkXl6V4Q==
+X-Google-Smtp-Source: AA6agR4S1kbgPVba5pV/XjvMvNrRZp4UPoOlolPLPEvgADezZUSkZBNAYtPJy9ZXsCx2zioNwzei9Q==
+X-Received: by 2002:a5d:62c8:0:b0:228:67d2:797b with SMTP id o8-20020a5d62c8000000b0022867d2797bmr4529340wrv.462.1662409275977;
+        Mon, 05 Sep 2022 13:21:15 -0700 (PDT)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id n19-20020a05600c3b9300b003a846a014c1sm19841272wms.23.2022.09.05.13.21.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 13:21:15 -0700 (PDT)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <dima@arista.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>
+Subject: [PATCH 0/3] selftests/Make: Recursively build TARGETS list
+Date:   Mon,  5 Sep 2022 21:21:05 +0100
+Message-Id: <20220905202108.89338-1-dima@arista.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Mon, 5 Sep 2022 21:26:25 +0200
-Message-ID: <CAP01T77aq-UP02JYp1Vu-LE--K1ieCyfKfyZPw-a7DDKQ7_F+g@mail.gmail.com>
-Subject: Re: [PATCH v16 00/12] bpf: Add kfuncs for PKCS#7 signature verification
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> One of the desirable features in security is the ability to restrict import
-> of data to a given system based on data authenticity. If data import can be
-> restricted, it would be possible to enforce a system-wide policy based on
-> the signing keys the system owner trusts.
->
-> This feature is widely used in the kernel. For example, if the restriction
-> is enabled, kernel modules can be plugged in only if they are signed with a
-> key whose public part is in the primary or secondary keyring.
->
-> For eBPF, it can be useful as well. For example, it might be useful to
-> authenticate data an eBPF program makes security decisions on.
->
-> [...]
+From [1]:
+> Please look into a wayto invoke all of them instead of adding individual
+> net/* to the main Makefile. This list seems to be growing. :)
 
-CI is crashing with NULL deref for test_progs-no_alu32 with llvm-16,
-but I don't think the problem is in this series. This is most likely
-unrelated to BPF, as the crash happens inside
-kernel/time/tick-sched.c:tick_nohz_restart_sched_tick.
+I might have misunderstood what was suggested... Here is an attempt to
+let sub-selftests define their own $(TARGETS) directories.
 
-This was the same case in
-https://lore.kernel.org/bpf/CAP01T74steDfP6O8QOshoto3e3RnHhKtAeTbnrPBZS3YJXjvbA@mail.gmail.com.
+[1]: https://lore.kernel.org/all/aa0143bc-b0d1-69fb-c117-1e7241f0ad89@linuxfoundation.org/T/#u
 
-So, https://github.com/kernel-patches/bpf/runs/8194263557?check_suite_focus=true
-and https://github.com/kernel-patches/bpf/runs/7982907380?check_suite_focus=true
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
 
-look similar to me, and may not be related to BPF. They only trigger
-during runs compiled using LLVM 16, so maybe some compiler
-transformation is surfacing the problem?
+Dmitry Safonov (3):
+  selftests/Make: Recursively build TARGETS list
+  selftests/.gitignore: Add vfork_exec
+  selftests/.gitignore: Add io_uring_zerocopy_tx
+
+ tools/testing/selftests/Makefile             | 71 ++++----------------
+ tools/testing/selftests/drivers/Makefile     |  7 ++
+ tools/testing/selftests/filesystems/Makefile |  4 ++
+ tools/testing/selftests/lib.mk               | 59 +++++++++++++++-
+ tools/testing/selftests/net/.gitignore       |  1 +
+ tools/testing/selftests/net/Makefile         |  4 ++
+ tools/testing/selftests/timens/.gitignore    |  1 +
+ 7 files changed, 87 insertions(+), 60 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/Makefile
+
+
+base-commit: 42e66b1cc3a070671001f8a1e933a80818a192bf
+-- 
+2.37.2
+
