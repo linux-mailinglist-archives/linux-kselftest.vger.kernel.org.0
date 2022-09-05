@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478E15AD528
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 16:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D73E5AD50D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 16:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238414AbiIEOhG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Sep 2022 10:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S238525AbiIEOhg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Sep 2022 10:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238416AbiIEOgV (ORCPT
+        with ESMTP id S238492AbiIEOgn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Sep 2022 10:36:21 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA024F36;
-        Mon,  5 Sep 2022 07:35:28 -0700 (PDT)
+        Mon, 5 Sep 2022 10:36:43 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAE433341;
+        Mon,  5 Sep 2022 07:35:41 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MLrWm6wFyz9xFfw;
-        Mon,  5 Sep 2022 22:29:56 +0800 (CST)
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MLrYf4pYRz9v7Nx;
+        Mon,  5 Sep 2022 22:31:34 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBX0ly8CBZjNGwkAA--.20252S8;
-        Mon, 05 Sep 2022 15:35:00 +0100 (CET)
+        by APP2 (Coremail) with SMTP id GxC2BwBX0ly8CBZjNGwkAA--.20252S9;
+        Mon, 05 Sep 2022 15:35:12 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
@@ -34,18 +34,18 @@ Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         deso@posteo.net, memxor@gmail.com,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v16 06/12] bpf: Add bpf_lookup_*_key() and bpf_key_put() kfuncs
-Date:   Mon,  5 Sep 2022 16:33:12 +0200
-Message-Id: <20220905143318.1592015-7-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v16 07/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
+Date:   Mon,  5 Sep 2022 16:33:13 +0200
+Message-Id: <20220905143318.1592015-8-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
 References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBX0ly8CBZjNGwkAA--.20252S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxKFy8JF48Cw4xJw4kAF1rXrb_yoWxWFyDpF
-        WSkFyFkrWkGFy7Jrn7Cw47Za4a93Wkury7Ga47G3savrnaqr97Gw4xXF4Ygwn8Crs7ury3
-        tF42gw45uryUXrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: GxC2BwBX0ly8CBZjNGwkAA--.20252S9
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr1xZw47AFykZFWfGFyrCrg_yoW5uF18pF
+        W0grsa9rykJr1ftFyfAa1fuF1Fkw4vqw17G3ZFy3s3uFnYgw17Z3WxtF4UW3sYkry8JrZF
+        vrWIqr1akr13WaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
         Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -59,7 +59,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxKFy8JF48Cw4xJw4kAF1rXrb_yoWxWFyDpF
         AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI
         42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
         80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBF1jj36ijgABsi
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBF1jj36ijgACsh
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -72,210 +72,93 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add the bpf_lookup_user_key(), bpf_lookup_system_key() and bpf_key_put()
-kfuncs, to respectively search a key with a given key handle serial number
-and flags, obtain a key from a pre-determined ID defined in
-include/linux/verification.h, and cleanup.
+Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security modules
+the ability to check the validity of a signature against supplied data, by
+using user-provided or system-provided keys as trust anchor.
 
-Introduce system_keyring_id_check() to validate the keyring ID parameter of
+The new kfunc makes it possible to enforce mandatory policies, as eBPF
+programs might be allowed to make security decisions only based on data
+sources the system administrator approves.
+
+The caller should provide the data to be verified and the signature as eBPF
+dynamic pointers (to minimize the number of parameters) and a bpf_key
+structure containing a reference to the keyring with keys trusted for
+signature verification, obtained from bpf_lookup_user_key() or
 bpf_lookup_system_key().
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- include/linux/bpf.h          |   8 +++
- include/linux/verification.h |   8 +++
- kernel/trace/bpf_trace.c     | 135 +++++++++++++++++++++++++++++++++++
- 3 files changed, 151 insertions(+)
+For bpf_key structures obtained from the former lookup function,
+bpf_verify_pkcs7_signature() completes the permission check deferred by
+that function by calling key_validate(). key_task_permission() is already
+called by the PKCS#7 code.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9dbd7c3f8929..f3db614aece6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2595,4 +2595,12 @@ static inline void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype) {}
- static inline void bpf_cgroup_atype_put(int cgroup_atype) {}
- #endif /* CONFIG_BPF_LSM */
- 
-+struct key;
-+
-+#ifdef CONFIG_KEYS
-+struct bpf_key {
-+	struct key *key;
-+	bool has_ref;
-+};
-+#endif /* CONFIG_KEYS */
- #endif /* _LINUX_BPF_H */
-diff --git a/include/linux/verification.h b/include/linux/verification.h
-index a655923335ae..f34e50ebcf60 100644
---- a/include/linux/verification.h
-+++ b/include/linux/verification.h
-@@ -17,6 +17,14 @@
- #define VERIFY_USE_SECONDARY_KEYRING ((struct key *)1UL)
- #define VERIFY_USE_PLATFORM_KEYRING  ((struct key *)2UL)
- 
-+static inline int system_keyring_id_check(u64 id)
-+{
-+	if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- /*
-  * The use to which an asymmetric key is being put.
-  */
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Acked-by: KP Singh <kpsingh@kernel.org>
+---
+ kernel/trace/bpf_trace.c | 45 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
 diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 68e5cdd24cef..7a7023704ac2 100644
+index 7a7023704ac2..8e2c026b0a58 100644
 --- a/kernel/trace/bpf_trace.c
 +++ b/kernel/trace/bpf_trace.c
-@@ -20,6 +20,8 @@
- #include <linux/fprobe.h>
- #include <linux/bsearch.h>
- #include <linux/sort.h>
-+#include <linux/key.h>
-+#include <linux/verification.h>
+@@ -1294,12 +1294,57 @@ void bpf_key_put(struct bpf_key *bkey)
+ 	kfree(bkey);
+ }
  
- #include <net/bpf_sk_storage.h>
- 
-@@ -1181,6 +1183,139 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
-+#ifdef CONFIG_KEYS
-+__diag_push();
-+__diag_ignore_all("-Wmissing-prototypes",
-+		  "kfuncs which will be used in BPF programs");
-+
++#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
 +/**
-+ * bpf_lookup_user_key - lookup a key by its serial
-+ * @serial: key handle serial number
-+ * @flags: lookup-specific flags
++ * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
++ * @data_ptr: data to verify
++ * @sig_ptr: signature of the data
++ * @trusted_keyring: keyring with keys trusted for signature verification
 + *
-+ * Search a key with a given *serial* and the provided *flags*.
-+ * If found, increment the reference count of the key by one, and
-+ * return it in the bpf_key structure.
++ * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
++ * with keys in a keyring referenced by *trusted_keyring*.
 + *
-+ * The bpf_key structure must be passed to bpf_key_put() when done
-+ * with it, so that the key reference count is decremented and the
-+ * bpf_key structure is freed.
-+ *
-+ * Permission checks are deferred to the time the key is used by
-+ * one of the available key-specific kfuncs.
-+ *
-+ * Set *flags* with KEY_LOOKUP_CREATE, to attempt creating a requested
-+ * special keyring (e.g. session keyring), if it doesn't yet exist.
-+ * Set *flags* with KEY_LOOKUP_PARTIAL, to lookup a key without waiting
-+ * for the key construction, and to retrieve uninstantiated keys (keys
-+ * without data attached to them).
-+ *
-+ * Return: a bpf_key pointer with a valid key pointer if the key is found, a
-+ *         NULL pointer otherwise.
++ * Return: 0 on success, a negative value on error.
 + */
-+struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags)
++int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
++			       struct bpf_dynptr_kern *sig_ptr,
++			       struct bpf_key *trusted_keyring)
 +{
-+	key_ref_t key_ref;
-+	struct bpf_key *bkey;
++	int ret;
 +
-+	if (flags & ~KEY_LOOKUP_ALL)
-+		return NULL;
-+
-+	/*
-+	 * Permission check is deferred until the key is used, as the
-+	 * intent of the caller is unknown here.
-+	 */
-+	key_ref = lookup_user_key(serial, flags, KEY_DEFER_PERM_CHECK);
-+	if (IS_ERR(key_ref))
-+		return NULL;
-+
-+	bkey = kmalloc(sizeof(*bkey), GFP_ATOMIC);
-+	if (!bkey) {
-+		key_put(key_ref_to_ptr(key_ref));
-+		return NULL;
++	if (trusted_keyring->has_ref) {
++		/*
++		 * Do the permission check deferred in bpf_lookup_user_key().
++		 * See bpf_lookup_user_key() for more details.
++		 *
++		 * A call to key_task_permission() here would be redundant, as
++		 * it is already done by keyring_search() called by
++		 * find_asymmetric_key().
++		 */
++		ret = key_validate(trusted_keyring->key);
++		if (ret < 0)
++			return ret;
 +	}
 +
-+	bkey->key = key_ref_to_ptr(key_ref);
-+	bkey->has_ref = true;
-+
-+	return bkey;
++	return verify_pkcs7_signature(data_ptr->data,
++				      bpf_dynptr_get_size(data_ptr),
++				      sig_ptr->data,
++				      bpf_dynptr_get_size(sig_ptr),
++				      trusted_keyring->key,
++				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
++				      NULL);
 +}
++#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
 +
-+/**
-+ * bpf_lookup_system_key - lookup a key by a system-defined ID
-+ * @id: key ID
-+ *
-+ * Obtain a bpf_key structure with a key pointer set to the passed key ID.
-+ * The key pointer is marked as invalid, to prevent bpf_key_put() from
-+ * attempting to decrement the key reference count on that pointer. The key
-+ * pointer set in such way is currently understood only by
-+ * verify_pkcs7_signature().
-+ *
-+ * Set *id* to one of the values defined in include/linux/verification.h:
-+ * 0 for the primary keyring (immutable keyring of system keys);
-+ * VERIFY_USE_SECONDARY_KEYRING for both the primary and secondary keyring
-+ * (where keys can be added only if they are vouched for by existing keys
-+ * in those keyrings); VERIFY_USE_PLATFORM_KEYRING for the platform
-+ * keyring (primarily used by the integrity subsystem to verify a kexec'ed
-+ * kerned image and, possibly, the initramfs signature).
-+ *
-+ * Return: a bpf_key pointer with an invalid key pointer set from the
-+ *         pre-determined ID on success, a NULL pointer otherwise
-+ */
-+struct bpf_key *bpf_lookup_system_key(u64 id)
-+{
-+	struct bpf_key *bkey;
-+
-+	if (system_keyring_id_check(id) < 0)
-+		return NULL;
-+
-+	bkey = kmalloc(sizeof(*bkey), GFP_ATOMIC);
-+	if (!bkey)
-+		return NULL;
-+
-+	bkey->key = (struct key *)(unsigned long)id;
-+	bkey->has_ref = false;
-+
-+	return bkey;
-+}
-+
-+/**
-+ * bpf_key_put - decrement key reference count if key is valid and free bpf_key
-+ * @bkey: bpf_key structure
-+ *
-+ * Decrement the reference count of the key inside *bkey*, if the pointer
-+ * is valid, and free *bkey*.
-+ */
-+void bpf_key_put(struct bpf_key *bkey)
-+{
-+	if (bkey->has_ref)
-+		key_put(bkey->key);
-+
-+	kfree(bkey);
-+}
-+
-+__diag_pop();
-+
-+BTF_SET8_START(key_sig_kfunc_set)
-+BTF_ID_FLAGS(func, bpf_lookup_user_key, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_lookup_system_key, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
-+BTF_SET8_END(key_sig_kfunc_set)
-+
-+static const struct btf_kfunc_id_set bpf_key_sig_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set = &key_sig_kfunc_set,
-+};
-+
-+static int __init bpf_key_sig_kfuncs_init(void)
-+{
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-+					 &bpf_key_sig_kfunc_set);
-+}
-+
-+late_initcall(bpf_key_sig_kfuncs_init);
-+#endif /* CONFIG_KEYS */
-+
- static const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
+ __diag_pop();
+ 
+ BTF_SET8_START(key_sig_kfunc_set)
+ BTF_ID_FLAGS(func, bpf_lookup_user_key, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_lookup_system_key, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
++#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
++BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
++#endif
+ BTF_SET8_END(key_sig_kfunc_set)
+ 
+ static const struct btf_kfunc_id_set bpf_key_sig_kfunc_set = {
 -- 
 2.25.1
 
