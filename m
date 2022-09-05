@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBB15AC8AB
+	by mail.lfdr.de (Postfix) with ESMTP id 55C7D5AC8AA
 	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 04:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbiIECEp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S235538AbiIECEp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Sun, 4 Sep 2022 22:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235591AbiIECEn (ORCPT
+        with ESMTP id S235590AbiIECEn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 4 Sep 2022 22:04:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F63DF75;
-        Sun,  4 Sep 2022 19:04:40 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1316BDF70;
+        Sun,  4 Sep 2022 19:04:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E6C17CE0FA6;
-        Mon,  5 Sep 2022 02:04:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48540C433D6;
-        Mon,  5 Sep 2022 02:04:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79E8F61058;
+        Mon,  5 Sep 2022 02:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AD50C433D6;
+        Mon,  5 Sep 2022 02:04:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662343475;
-        bh=zZQCkfIPNszWIc75n8kSu1sHOjjYf8Pclxp9XteeajU=;
+        s=k20201202; t=1662343478;
+        bh=wGTSEZWMab8h0kFBOxuAtGQsTr4W7X4fyGW3lxYimgA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V0DQ3us3Rm1/fNTCYcZqbBObH/D81+g4eCIPsWFkOkWapGCo+Kr5BrGuBm+QcggGa
-         tkZrMjtaZLH3w8osmtEQP8GoIUzj9fe6CIa/tirpJfLtjwySsbTbqFkCDaxnRZZY60
-         YqdJkS8kjNOd53vpRvO/x067Ux14BtTzt8SkXRkatZ1qEJtoRx58rdrlSm/9IqEYEe
-         bW1Mz7z6a18MiRGo6SrqDWEvPmuGEVCnfv6PNmKsm329Kx9BjxW20+6kG1jJlohnWy
-         VjXReu7xtAw9PcyX6jnUL2XzRGPc3VGZdXFfqrH3mep84ByaiBpGMbfOx/YmeaoDPb
-         O6CFMfEWvtKYQ==
+        b=Ggoscw7rf3x4mEbIiNXWvLsCd0I/ItFTpdnVh2y3yTsd+BUsshd1qWKRsxsDx07uB
+         lg+vdH0IsZokdlz6CEVlvJvcQjRmQULG+lS9zuCeDLR8/lVWiRBnFMvFC4Gwk/NJ+Z
+         uzKzZ1ze39TXrgu1JFHm4OqIaba7/elmDJJ5cqI3TWtjVqBzObYuAjnK+1cvU19/3n
+         R016YPGCU/KwjBTbO6x/DHdaDQJ0azTwPGyaJa9nZiv1LyCjnh0HYc1HHexnFuBMlX
+         Bu/WIWkua91gp2cGv6Jn2PaNsnEUAVti8RQSbk4g9HMg4juLh+9z1X2xVDMAGGztfr
+         nXWlo636xDTyg==
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     linux-sgx@vger.kernel.org
 Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
@@ -42,9 +42,9 @@ Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
         Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 3/5] selftests/sgx: Use encl->encl_size in sigstruct.c
-Date:   Mon,  5 Sep 2022 05:04:09 +0300
-Message-Id: <20220905020411.17290-4-jarkko@kernel.org>
+Subject: [PATCH v2 4/5] selftests/sgx: Include the dynamic heap size to the ELRANGE calculation
+Date:   Mon,  5 Sep 2022 05:04:10 +0300
+Message-Id: <20220905020411.17290-5-jarkko@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220905020411.17290-1-jarkko@kernel.org>
 References: <20220905020411.17290-1-jarkko@kernel.org>
@@ -60,83 +60,130 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The final enclave address range (referred as ELRANGE in Intel SDM)
-calculation is a reminiscent of signing tool being a separate command-line
-utility, and sigstruct being produced during the compilation. Given that
-nowadays the sigstruct is calculated on-fly, use the readily calculated
-encl->encl_size instead, in order to remove duplicate code.
+When calculating ELRANGE, i.e. the address range defined for an enclave,
+and represented by encl->encl_size, also dynamic memory should be taken
+into account. Implement setup_test_encl_dynamic() with dynamic_size
+parameter for the dynamic heap size, and use it in 'augment_via_eaccept'
+and 'augment' tests.
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- tools/testing/selftests/sgx/load.c      | 5 +++--
- tools/testing/selftests/sgx/main.h      | 1 -
- tools/testing/selftests/sgx/sigstruct.c | 8 ++------
- 3 files changed, 5 insertions(+), 9 deletions(-)
+v2:
+* Specify a dynamic heap of three pages for tcs_create test.
+* Specify required dynamic heap inside the test cases instead of
+  ENCL_DYNAMIC_SIZE_DEFAULT because the dynamic heaps size
+  varies between the test cases.
+---
+ tools/testing/selftests/sgx/load.c |  5 +++--
+ tools/testing/selftests/sgx/main.c | 22 +++++++++++++++-------
+ tools/testing/selftests/sgx/main.h |  3 ++-
+ 3 files changed, 20 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
-index 94bdeac1cf04..3b4e2422fb09 100644
+index 3b4e2422fb09..963a5c6bbbdc 100644
 --- a/tools/testing/selftests/sgx/load.c
 +++ b/tools/testing/selftests/sgx/load.c
-@@ -174,6 +174,7 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
- bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
+@@ -171,7 +171,8 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
+ 	return 0;
+ }
+ 
+-bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
++bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
++	       unsigned long dynamic_size)
  {
  	const char device_path[] = "/dev/sgx_enclave";
-+	unsigned long contents_size;
- 	struct encl_segment *seg;
- 	Elf64_Phdr *phdr_tbl;
- 	off_t src_offset;
-@@ -298,9 +299,9 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
+ 	unsigned long contents_size;
+@@ -299,7 +300,7 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
  	if (seg->src == MAP_FAILED)
  		goto err;
  
--	encl->src_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
-+	contents_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
+-	contents_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
++	contents_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size + dynamic_size;
  
--	for (encl->encl_size = 4096; encl->encl_size < encl->src_size; )
-+	for (encl->encl_size = 4096; encl->encl_size < contents_size; )
+ 	for (encl->encl_size = 4096; encl->encl_size < contents_size; )
  		encl->encl_size <<= 1;
+diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
+index a1850e139c99..78c3b913ce10 100644
+--- a/tools/testing/selftests/sgx/main.c
++++ b/tools/testing/selftests/sgx/main.c
+@@ -173,8 +173,8 @@ FIXTURE(enclave) {
+ 	struct sgx_enclave_run run;
+ };
  
- 	return true;
+-static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
+-			    struct __test_metadata *_metadata)
++static bool setup_test_encl_dynamic(unsigned long heap_size, unsigned long dynamic_size,
++				    struct encl *encl, struct __test_metadata *_metadata)
+ {
+ 	Elf64_Sym *sgx_enter_enclave_sym = NULL;
+ 	struct vdso_symtab symtab;
+@@ -184,7 +184,7 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
+ 	unsigned int i;
+ 	void *addr;
+ 
+-	if (!encl_load("test_encl.elf", encl, heap_size)) {
++	if (!encl_load("test_encl.elf", encl, heap_size, dynamic_size)) {
+ 		encl_delete(encl);
+ 		TH_LOG("Failed to load the test enclave.");
+ 		return false;
+@@ -251,6 +251,12 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
+ 	return false;
+ }
+ 
++static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
++			    struct __test_metadata *_metadata)
++{
++	return setup_test_encl_dynamic(heap_size, 0, encl, _metadata);
++}
++
+ FIXTURE_SETUP(enclave)
+ {
+ }
+@@ -1013,7 +1019,8 @@ TEST_F(enclave, augment)
+ 	if (!sgx2_supported())
+ 		SKIP(return, "SGX2 not supported");
+ 
+-	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
++	ASSERT_TRUE(setup_test_encl_dynamic(ENCL_HEAP_SIZE_DEFAULT, PAGE_SIZE, &self->encl,
++					    _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+ 	self->run.tcs = self->encl.encl_base;
+@@ -1143,7 +1150,8 @@ TEST_F(enclave, augment_via_eaccept)
+ 	if (!sgx2_supported())
+ 		SKIP(return, "SGX2 not supported");
+ 
+-	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
++	ASSERT_TRUE(setup_test_encl_dynamic(ENCL_HEAP_SIZE_DEFAULT, PAGE_SIZE, &self->encl,
++					    _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+ 	self->run.tcs = self->encl.encl_base;
+@@ -1264,8 +1272,8 @@ TEST_F(enclave, tcs_create)
+ 	int errno_save;
+ 	int ret, i;
+ 
+-	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl,
+-				    _metadata));
++	ASSERT_TRUE(setup_test_encl_dynamic(ENCL_HEAP_SIZE_DEFAULT, 3 * PAGE_SIZE, &self->encl,
++					    _metadata));
+ 
+ 	memset(&self->run, 0, sizeof(self->run));
+ 	self->run.tcs = self->encl.encl_base;
 diff --git a/tools/testing/selftests/sgx/main.h b/tools/testing/selftests/sgx/main.h
-index 82b33f8db048..9c1bc0d9b43c 100644
+index 9c1bc0d9b43c..8f77ce56ad09 100644
 --- a/tools/testing/selftests/sgx/main.h
 +++ b/tools/testing/selftests/sgx/main.h
-@@ -20,7 +20,6 @@ struct encl {
- 	void *bin;
- 	off_t bin_size;
- 	void *src;
--	size_t src_size;
- 	size_t encl_size;
- 	off_t encl_base;
- 	unsigned int nr_segments;
-diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-index 50c5ab1aa6fa..0c7678d2594b 100644
---- a/tools/testing/selftests/sgx/sigstruct.c
-+++ b/tools/testing/selftests/sgx/sigstruct.c
-@@ -212,13 +212,9 @@ struct mrecreate {
- } __attribute__((__packed__));
+@@ -32,7 +32,8 @@ extern unsigned char sign_key[];
+ extern unsigned char sign_key_end[];
  
- 
--static bool mrenclave_ecreate(EVP_MD_CTX *ctx, uint64_t blob_size)
-+static bool mrenclave_ecreate(EVP_MD_CTX *ctx, uint64_t encl_size)
- {
- 	struct mrecreate mrecreate;
--	uint64_t encl_size;
--
--	for (encl_size = 0x1000; encl_size < blob_size; )
--		encl_size <<= 1;
- 
- 	memset(&mrecreate, 0, sizeof(mrecreate));
- 	mrecreate.tag = MRECREATE;
-@@ -343,7 +339,7 @@ bool encl_measure(struct encl *encl)
- 	if (!ctx)
- 		goto err;
- 
--	if (!mrenclave_ecreate(ctx, encl->src_size))
-+	if (!mrenclave_ecreate(ctx, encl->encl_size))
- 		goto err;
- 
- 	for (i = 0; i < encl->nr_segments; i++) {
+ void encl_delete(struct encl *ctx);
+-bool encl_load(const char *path, struct encl *encl, unsigned long heap_size);
++bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
++	       unsigned long dynamic_size);
+ bool encl_measure(struct encl *encl);
+ bool encl_build(struct encl *encl);
+ uint64_t encl_get_entry(struct encl *encl, const char *symbol);
 -- 
 2.37.2
 
