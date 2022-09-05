@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBC15AD425
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 15:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24175AD42C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 15:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbiIENkB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Sep 2022 09:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S237528AbiIENj6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Sep 2022 09:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237401AbiIENj5 (ORCPT
+        with ESMTP id S231187AbiIENj4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:39:57 -0400
+        Mon, 5 Sep 2022 09:39:56 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DBC1ADA3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BE81A83E;
         Mon,  5 Sep 2022 06:39:52 -0700 (PDT)
 Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MLqM24b0JznV53;
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MLqM250N1znV57;
         Mon,  5 Sep 2022 21:37:18 +0800 (CST)
 Received: from ubuntu1804.huawei.com (10.67.174.63) by
  canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 5 Sep 2022 21:39:48 +0800
+ 15.1.2375.24; Mon, 5 Sep 2022 21:39:50 +0800
 From:   Zhao Gongyi <zhaogongyi@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
 CC:     <shuah@kernel.org>, <akpm@linux-foundation.org>,
         <akinobu.mita@gmail.com>, Zhao Gongyi <zhaogongyi@huawei.com>
-Subject: [PATCH -next v3 3/5] selftests/cpu-hotplug: Delete fault injection related code
-Date:   Mon, 5 Sep 2022 21:36:13 +0800
-Message-ID: <20220905133615.139026-4-zhaogongyi@huawei.com>
+Subject: [PATCH -next v3 4/5] selftests/cpu-hotplug: Reserve one cpu online at least
+Date:   Mon, 5 Sep 2022 21:36:14 +0800
+Message-ID: <20220905133615.139026-5-zhaogongyi@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220905133615.139026-1-zhaogongyi@huawei.com>
 References: <20220905133615.139026-1-zhaogongyi@huawei.com>
@@ -47,158 +47,76 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Delete fault injection related code since the module has been deleted.
+Considering that we can not offline all cpus in any cases,
+we need to reserve one cpu online when the test offline all
+hotpluggable online cpus, otherwise the test will fail forever.
+
+Fixes: d89dffa976bc ("fault-injection: add selftests for cpu
+and memory hotplug")
 
 Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
 ---
- tools/testing/selftests/cpu-hotplug/config    |  1 -
- .../selftests/cpu-hotplug/cpu-on-off-test.sh  | 87 ++-----------------
- 2 files changed, 6 insertions(+), 82 deletions(-)
- delete mode 100644 tools/testing/selftests/cpu-hotplug/config
+ .../selftests/cpu-hotplug/cpu-on-off-test.sh  | 40 ++++++++++---------
+ 1 file changed, 22 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/cpu-hotplug/config b/tools/testing/selftests/cpu-hotplug/config
-deleted file mode 100644
-index d4aca2ad5069..000000000000
---- a/tools/testing/selftests/cpu-hotplug/config
-+++ /dev/null
-@@ -1 +0,0 @@
--CONFIG_NOTIFIER_ERROR_INJECTION=y
 diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-index bd2e791fe887..184156763ccb 100755
+index 184156763ccb..d5dc7e0dc726 100755
 --- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
 +++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
-@@ -116,10 +116,10 @@ online_cpu_expect_fail()
-
- 	if online_cpu $cpu 2> /dev/null; then
- 		echo $FUNCNAME $cpu: unexpected success >&2
--		exit 1
-+		retval=1
- 	elif ! cpu_is_offline $cpu; then
- 		echo $FUNCNAME $cpu: unexpected online >&2
--		exit 1
-+		retval=1
+@@ -149,6 +149,25 @@ offline_cpu_expect_fail()
  	fi
  }
 
-@@ -142,16 +142,14 @@ offline_cpu_expect_fail()
-
- 	if offline_cpu $cpu 2> /dev/null; then
- 		echo $FUNCNAME $cpu: unexpected success >&2
--		exit 1
-+		retval=1
- 	elif ! cpu_is_online $cpu; then
- 		echo $FUNCNAME $cpu: unexpected offline >&2
--		exit 1
-+		retval=1
- 	fi
- }
-
--error=-12
++online_all_hot_pluggable_cpus()
++{
++	for cpu in `hotplaggable_offline_cpus`; do
++		online_cpu_expect_success $cpu
++	done
++}
++
++offline_all_hot_pluggable_cpus()
++{
++	local reserve_cpu=$online_max
++	for cpu in `hotpluggable_online_cpus`; do
++		# Reserve one cpu oneline at least.
++		if [ $cpu -eq $reserve_cpu ];then
++			continue
++		fi
++		offline_cpu_expect_success $cpu
++	done
++}
++
  allcpus=0
--priority=0
  online_cpus=0
  online_max=0
- offline_cpus=0
-@@ -159,31 +157,20 @@ offline_max=0
- present_cpus=0
- present_max=0
+@@ -197,25 +216,10 @@ else
+ 	echo -e "\t online all offline cpus"
+ fi
 
--while getopts e:ahp: opt; do
-+while getopts ah opt; do
- 	case $opt in
--	e)
--		error=$OPTARG
--		;;
- 	a)
- 		allcpus=1
- 		;;
- 	h)
--		echo "Usage $0 [ -a ] [ -e errno ] [ -p notifier-priority ]"
-+		echo "Usage $0 [ -a ]"
- 		echo -e "\t default offline one cpu"
- 		echo -e "\t run with -a option to offline all cpus"
- 		exit
- 		;;
--	p)
--		priority=$OPTARG
--		;;
- 	esac
- done
-
--if ! [ "$error" -ge -4095 -a "$error" -lt 0 ]; then
--	echo "error code must be -4095 <= errno < 0" >&2
--	exit 1
--fi
--
- prerequisite
-
- #
-@@ -231,66 +218,4 @@ for cpu in `hotplaggable_offline_cpus`; do
- 	online_cpu_expect_success $cpu
- done
-
--#
--# Test with cpu notifier error injection
--#
--
--DEBUGFS=`mount -t debugfs | head -1 | awk '{ print $3 }'`
--NOTIFIER_ERR_INJECT_DIR=$DEBUGFS/notifier-error-inject/cpu
--
--prerequisite_extra()
--{
--	msg="skip extra tests:"
--
--	/sbin/modprobe -q -r cpu-notifier-error-inject
--	/sbin/modprobe -q cpu-notifier-error-inject priority=$priority
--
--	if [ ! -d "$DEBUGFS" ]; then
--		echo $msg debugfs is not mounted >&2
--		exit $ksft_skip
--	fi
--
--	if [ ! -d $NOTIFIER_ERR_INJECT_DIR ]; then
--		echo $msg cpu-notifier-error-inject module is not available >&2
--		exit $ksft_skip
--	fi
--}
--
--prerequisite_extra
--
--#
--# Offline all hot-pluggable CPUs
--#
--echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_DOWN_PREPARE/error
--for cpu in `hotpluggable_online_cpus`; do
--	offline_cpu_expect_success $cpu
--done
--
--#
--# Test CPU hot-add error handling (offline => online)
--#
--echo $error > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_UP_PREPARE/error
--for cpu in `hotplaggable_offline_cpus`; do
--	online_cpu_expect_fail $cpu
--done
--
 -#
 -# Online all hot-pluggable CPUs
 -#
--echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_UP_PREPARE/error
 -for cpu in `hotplaggable_offline_cpus`; do
 -	online_cpu_expect_success $cpu
 -done
--
++online_all_hot_pluggable_cpus
+
 -#
--# Test CPU hot-remove error handling (online => offline)
+-# Offline all hot-pluggable CPUs
 -#
--echo $error > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_DOWN_PREPARE/error
 -for cpu in `hotpluggable_online_cpus`; do
--	offline_cpu_expect_fail $cpu
+-	offline_cpu_expect_success $cpu
 -done
--
--echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_DOWN_PREPARE/error
--/sbin/modprobe -q -r cpu-notifier-error-inject
--
++offline_all_hot_pluggable_cpus
+
+-#
+-# Online all hot-pluggable CPUs again
+-#
+-for cpu in `hotplaggable_offline_cpus`; do
+-	online_cpu_expect_success $cpu
+-done
++online_all_hot_pluggable_cpus
+
  exit $retval
 --
 2.17.1
