@@ -2,245 +2,207 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3005ACD05
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 09:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A4A5ACD29
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 09:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbiIEHcf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Sep 2022 03:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
+        id S236618AbiIEHqR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Sep 2022 03:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236462AbiIEHcF (ORCPT
+        with ESMTP id S236608AbiIEHqQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:32:05 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A5A1C924;
-        Mon,  5 Sep 2022 00:31:44 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 09:31:40 +0200
+        Mon, 5 Sep 2022 03:46:16 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FC42D1CD;
+        Mon,  5 Sep 2022 00:46:13 -0700 (PDT)
+Date:   Mon, 5 Sep 2022 09:46:09 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662363102;
+        t=1662363971;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=gRgVXREhnYAT2UWNxZgIgPWYkP5DgXnZ3gmvS0nsTF4=;
-        b=PPMqe7wKlQ/65Q8WGpBqIXrecN3XgJnWaf9c6H0A94uv7qWM3jAWlxuIiTRFdrcJL4e2DJ
-        ieF6OM+VKlBxFN0JV2bDVl5b9QldpfuOGhyBr6FIk66uLyHLfX5eP5VXjLRy8GwQ+E5cZ+
-        QUim7QAeV6B1zXmG+09AFJvUHb8eskg=
+        bh=SCEfhooTBrQaT9LKoePqlJT/fiUrAZsQiPWsoYqSYtk=;
+        b=RPVVe0Y+85TmCoLEQG4BCaTU0RINvvI0Rw/FiOm9gGlSwnPxpKwoLeRaknGpYL/QRORWmY
+        iKugJUSvU/wnr9ycH2SI/Wdt5wHZs/4ZByM1c0wMKZrtr6slZ+rnn56/MvjxCWewEhHYPY
+        ogZDO0Cw7F1j/5shF8Vky8jItHYHH+k=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Andrew Jones <andrew.jones@linux.dev>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Reiji Watanabe <reijiw@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] KVM: selftests: Add test for RAZ/WI AArch32 ID
- registers
-Message-ID: <20220905073140.lrsrbyu2zhkiki5a@kamzik>
-References: <20220902154804.1939819-1-oliver.upton@linux.dev>
- <20220902154804.1939819-8-oliver.upton@linux.dev>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
+        drjones@redhat.com, dmatlack@google.com
+Subject: Re: [V1 PATCH 2/5] selftests: kvm: Introduce kvm_arch_main and
+ helpers
+Message-ID: <20220905074609.ga4tnpuxpcgppx4r@kamzik>
+References: <20220903012849.938069-1-vannapurve@google.com>
+ <20220903012849.938069-3-vannapurve@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220902154804.1939819-8-oliver.upton@linux.dev>
+In-Reply-To: <20220903012849.938069-3-vannapurve@google.com>
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 03:48:03PM +0000, Oliver Upton wrote:
-> Add a test to assert that KVM handles the AArch64 views of the AArch32
-> ID registers as RAZ/WI (writable only from userspace).
-> 
-> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> ---
->  tools/testing/selftests/kvm/.gitignore        |   1 +
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../kvm/aarch64/aarch64_only_id_regs.c        | 135 ++++++++++++++++++
->  3 files changed, 137 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/aarch64/aarch64_only_id_regs.c
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index d625a3f83780..4331af62a982 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> +/aarch64/aarch64_only_id_regs
->  /aarch64/arch_timer
->  /aarch64/debug-exceptions
->  /aarch64/get-reg-list
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 4c122f1b1737..efe155259095 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -144,6 +144,7 @@ TEST_GEN_PROGS_x86_64 += system_counter_offset_test
->  # Compiled outputs used by test targets
->  TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
->  
-> +TEST_GEN_PROGS_aarch64 += aarch64/aarch64_only_id_regs
->  TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
->  TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
->  TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
-> diff --git a/tools/testing/selftests/kvm/aarch64/aarch64_only_id_regs.c b/tools/testing/selftests/kvm/aarch64/aarch64_only_id_regs.c
-> new file mode 100644
-> index 000000000000..704a3e7524a8
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/aarch64/aarch64_only_id_regs.c
-> @@ -0,0 +1,135 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * aarch64_only_id_regs - Test for ID register behavior on AArch64-only systems
-> + *
-> + * Copyright (c) 2022 Google LLC.
-> + *
-> + * Test that KVM handles the AArch64 views of the AArch32 ID registers as RAZ
-> + * and WI from userspace.
-> + */
-> +
-> +#include <stdint.h>
-> +
-> +#include "kvm_util.h"
-> +#include "processor.h"
-> +#include "test_util.h"
-> +
-> +#define BAD_ID_REG_VAL	0x1badc0deul
-> +
-> +#define GUEST_ASSERT_REG_RAZ(reg)	GUEST_ASSERT_EQ(read_sysreg_s(reg), 0)
-> +
-> +static void guest_main(void)
-> +{
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_PFR0_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_PFR1_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_DFR0_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_MMFR0_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_MMFR1_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_MMFR2_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_MMFR3_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_ISAR0_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_ISAR1_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_ISAR2_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_ISAR3_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_ISAR4_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_ISAR5_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_MMFR4_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_ISAR6_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_MVFR0_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_MVFR1_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_MVFR2_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_PFR2_EL1);
-> +	GUEST_ASSERT_REG_RAZ(SYS_ID_MMFR5_EL1);
-> +
-> +	GUEST_DONE();
-> +}
-> +
-> +static void test_guest_raz(struct kvm_vcpu *vcpu)
-> +{
-> +	struct ucall uc;
-> +
-> +	vcpu_run(vcpu);
-> +
-> +	switch (get_ucall(vcpu, &uc)) {
-> +	case UCALL_ABORT:
-> +		REPORT_GUEST_ASSERT(uc);
-> +		break;
-> +	case UCALL_DONE:
-> +		break;
-> +	default:
-> +		TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
-> +	}
-> +}
-> +
-> +static uint64_t reg_ids[] = {
-> +	KVM_ARM64_SYS_REG(SYS_ID_PFR0_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_PFR1_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_DFR0_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_MMFR0_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_MMFR1_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_MMFR2_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_MMFR3_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_ISAR0_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_ISAR1_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_ISAR2_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_ISAR3_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_ISAR4_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_ISAR5_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_MMFR4_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_ISAR6_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_MVFR0_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_MVFR1_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_MVFR2_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_PFR2_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_ID_MMFR5_EL1),
+On Sat, Sep 03, 2022 at 01:28:46AM +0000, Vishal Annapurve wrote:
+> Introduce following APIs:
+> 1) kvm_arch_main : to be called at the startup of each test.
 
-Hi Oliver,
+With this, AArch64 can move the content of its constructor,
+init_guest_modes(), into kvm_arch_main(). Or, instead of the
 
-I see all the hidden and unallocated registers have been filtered out of
-the test lists. They should also behave as RAZ, right? Maybe we should
-keep them in the lists here for consistency and to test them as well.
+ main()
+ {
+    /* common main stuff */
+    kvm_arch_main();
+    __main();
+ }
+
+approach we could have each arch provide a constructor
+
+ arch_init()
+ {
+    common_pre_main_stuff();
+    /* arch specific pre-main stuff */
+ }
+
+I personally prefer the latter.
 
 Thanks,
 drew
 
-> +};
+> 2) kvm_arch_post_vm_load: called after guest elf image is loaded into
+>    memory to populate any global state in guest memory.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util_base.h | 10 ++++++++++
+>  tools/testing/selftests/kvm/lib/aarch64/processor.c |  8 ++++++++
+>  tools/testing/selftests/kvm/lib/elf.c               |  2 ++
+>  tools/testing/selftests/kvm/lib/kvm_util.c          |  2 ++
+>  tools/testing/selftests/kvm/lib/riscv/processor.c   |  8 ++++++++
+>  tools/testing/selftests/kvm/lib/s390x/processor.c   |  8 ++++++++
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c  |  8 ++++++++
+>  7 files changed, 46 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 9e521d1c8afe..301bef6376a5 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -834,6 +834,16 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
+>  	return __vm_enable_cap(vm, KVM_CAP_VM_DISABLE_NX_HUGE_PAGES, 0);
+>  }
+>  
+> +/*
+> + * API to execute architecture specific setup before executing selftest logic.
+> + */
+> +void kvm_arch_main(void);
 > +
-> +static void test_user_raz_wi(struct kvm_vcpu *vcpu)
+> +/*
+> + * API to execute architecture specific setup after loading VMs.
+> + */
+> +void kvm_arch_post_vm_load(struct kvm_vm *vm);
+> +
+>  /*
+>   * API to be implemented by all the selftests.
+>   */
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index 6f5551368944..a7ca1947d574 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -528,3 +528,11 @@ void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+>  		       [arg4] "r"(arg4), [arg5] "r"(arg5), [arg6] "r"(arg6)
+>  		     : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7");
+>  }
+> +
+> +void kvm_arch_main(void)
 > +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(reg_ids); i++) {
-> +		uint64_t reg_id = reg_ids[i];
-> +		uint64_t val;
-> +
-> +		vcpu_get_reg(vcpu, reg_id, &val);
-> +		ASSERT_EQ(val, 0);
-> +
-> +		/*
-> +		 * Expect the ioctl to succeed with no effect on the register
-> +		 * value.
-> +		 */
-> +		vcpu_set_reg(vcpu, reg_id, BAD_ID_REG_VAL);
-> +
-> +		vcpu_get_reg(vcpu, reg_id, &val);
-> +		ASSERT_EQ(val, 0);
-> +	}
 > +}
 > +
-> +static bool vcpu_aarch64_only(struct kvm_vcpu *vcpu)
+> +void kvm_arch_post_vm_load(struct kvm_vm *vm)
 > +{
-> +	uint64_t val, el0;
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
+> index 9f54c098d9d0..f56f9279e703 100644
+> --- a/tools/testing/selftests/kvm/lib/elf.c
+> +++ b/tools/testing/selftests/kvm/lib/elf.c
+> @@ -189,4 +189,6 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+>  				phdr.p_filesz);
+>  		}
+>  	}
 > +
-> +	vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_ID_AA64PFR0_EL1), &val);
+> +	kvm_arch_post_vm_load(vm);
+>  }
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 2e611a021c6e..b778dc684e30 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1985,6 +1985,8 @@ int main(int argc, char *argv[])
+>  	/* Tell stdout not to buffer its content */
+>  	setbuf(stdout, NULL);
+>  
+> +	kvm_arch_main();
 > +
-> +	el0 = (val & ARM64_FEATURE_MASK(ID_AA64PFR0_EL0)) >> ID_AA64PFR0_EL0_SHIFT;
-> +	return el0 == ID_AA64PFR0_ELx_64BIT_ONLY;
+>  	__main(argc, argv);
+>  
+>  	return 0;
+> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> index 604478151212..d992ad5b5771 100644
+> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> @@ -362,3 +362,11 @@ void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...)
+>  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+>  {
+>  }
+> +
+> +void kvm_arch_main(void)
+> +{
 > +}
 > +
-> +int main(void)
+> +void kvm_arch_post_vm_load(struct kvm_vm *vm)
 > +{
-> +	struct kvm_vcpu *vcpu;
-> +	struct kvm_vm *vm;
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> index 89d7340d9cbd..3a249783b3fe 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> @@ -218,3 +218,11 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, uint8_t indent)
+>  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+>  {
+>  }
 > +
-> +	vm = vm_create_with_one_vcpu(&vcpu, guest_main);
+> +void kvm_arch_main(void)
+> +{
+> +}
 > +
-> +	TEST_REQUIRE(vcpu_aarch64_only(vcpu));
+> +void kvm_arch_post_vm_load(struct kvm_vm *vm)
+> +{
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 2e6e61bbe81b..e22cfc4bf284 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1311,3 +1311,11 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+>  
+>  	return val == 'Y';
+>  }
 > +
-> +	ucall_init(vm, NULL);
+> +void kvm_arch_main(void)
+> +{
+> +}
 > +
-> +	test_user_raz_wi(vcpu);
-> +	test_guest_raz(vcpu);
-> +
-> +	ucall_uninit(vm);
-> +	kvm_vm_free(vm);
+> +void kvm_arch_post_vm_load(struct kvm_vm *vm)
+> +{
 > +}
 > -- 
 > 2.37.2.789.g6183377224-goog
