@@ -2,69 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3B15ADA18
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 22:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BAF5ADAE8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Sep 2022 23:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbiIEUVZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Sep 2022 16:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S232292AbiIEVi6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Sep 2022 17:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiIEUVV (ORCPT
+        with ESMTP id S230074AbiIEVi5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Sep 2022 16:21:21 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF28F32BBD
-        for <linux-kselftest@vger.kernel.org>; Mon,  5 Sep 2022 13:21:20 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id c131-20020a1c3589000000b003a84b160addso7635607wma.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Sep 2022 13:21:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=FWyWHD71T9hAwWWYq5d0qFKEdIZn5y5bu6+nFTnlJ18=;
-        b=kh8dbngzih/sg97mPKrnkE9TTOdJ17BlH3Q6YNOGFMJE1IZkgSc5Zao5U8SgFF5d45
-         5XIg4Hk6yzc+3r+vIT0/qqEerN7mhEYfGJOmbNdl6/wcnmAcy3GYRaDDrl6FaX/AAH4V
-         jgO/8lICaYLgSDMT61jm8+KGdfY/3rsig7IkEWAfjQEaX2n9uQb2GFoHTrQZNYGQhpFd
-         fbKPdZmOlIkglmJ0gqB1L0bi9m2ajcSoKv735mVw1fpt7ET/HbArwD2N68Qrvj2eYyEW
-         hBTBPvyx5SjCR4SfDZYkrjSYs2JLV6X4HTZmZxpkd3NvSPqidHzE8kZbDuTCd2LyDvmn
-         OAkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=FWyWHD71T9hAwWWYq5d0qFKEdIZn5y5bu6+nFTnlJ18=;
-        b=ByDO19AGiPoPttMUDkCLJnIJxzHtdwxO749kTIY5kMJ//QgUort7cZCH3ctayD1Tv0
-         YLZvUIBfGu8ftyrqdTxV6YZngfG93dOVJCGVy8rM6G7R1G5Gv5gkS8rxFNeAATfUZES8
-         bqRXzn/CNUOjMZ/o0scn6ovmajCx6+UW5STBbbXgfAZ1ilcXd02ky8d1EafWNhQY1Ei8
-         k4lVB1pOR+pnIbw4AznpDmhvapZVihep4KOR4N1q4MxAofslCquqSdRA2Y8h43dt9r00
-         K+FBQqUOP1II36J23Jx/Xu37FCxM0fX3d1iE3UDrG1Xkn3X+55YLxoWwls0xKkd3z5Ey
-         su5g==
-X-Gm-Message-State: ACgBeo0OvvwgVYhA13uEi9g5GBfFt9on/4GVLOAln4SpwiVzec7jL235
-        hv796IGnh7Mb07TvVA7GgHBYAF3HZGpyWHf6
-X-Google-Smtp-Source: AA6agR7qg8y4hTacoHwII015jafdXxUTIcWbZcBE7JDALJ+lxDD1Q5kHn0exomLD5bt8JcBW2bwkDw==
-X-Received: by 2002:a05:600c:4618:b0:3a5:f3f0:3a60 with SMTP id m24-20020a05600c461800b003a5f3f03a60mr11519602wmo.11.1662409279430;
-        Mon, 05 Sep 2022 13:21:19 -0700 (PDT)
-Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id n19-20020a05600c3b9300b003a846a014c1sm19841272wms.23.2022.09.05.13.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Sep 2022 13:21:18 -0700 (PDT)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dmitry Safonov <dima@arista.com>, Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/3] selftests/.gitignore: Add io_uring_zerocopy_tx
-Date:   Mon,  5 Sep 2022 21:21:08 +0100
-Message-Id: <20220905202108.89338-4-dima@arista.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220905202108.89338-1-dima@arista.com>
-References: <20220905202108.89338-1-dima@arista.com>
+        Mon, 5 Sep 2022 17:38:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC384459A6;
+        Mon,  5 Sep 2022 14:38:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DD7C60BEB;
+        Mon,  5 Sep 2022 21:38:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B92C433C1;
+        Mon,  5 Sep 2022 21:38:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662413935;
+        bh=cZo+nBDWscuk91kBYX2XhmZN6ePZTsV8K5UeyA4xrmk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cQziaopxhGVv009umQpUpd8obSATqKfY9NnDXhX1q5uPKlpurRFh1idZ/CFMVXywu
+         12WYc2CtCq1obyDoDsDUGh/qpD5+g2fKTvS6EztF7rLzb/wDNIZNEn5erCImUgAJLO
+         qAIXMmX1AsvmHXwgIuKwx8mnb9pqi8MnVmmT2EMiyJZ7Ks0zHj4MMtvM+UnNYwi8yU
+         yxGftCzVy2u+X7jnYcyRyLNwOYc23YGAxs9TMwSX5S1imL25UaiakAbs39ANBjNSKA
+         VhGLo/hI66bNKaScLgd7OFrJAc34aQ8jFNTblKexe+sTT1RvqkoLXWhhlsz+gBwJZr
+         QEfaxmIqiSkTw==
+Date:   Tue, 6 Sep 2022 00:38:52 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, rostedt@goodmis.org, mingo@redhat.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v16 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and define KEY_LOOKUP_ALL
+Message-ID: <YxZsbLIAcR4/bScc@kernel.org>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+ <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220905143318.1592015-6-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,24 +65,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fixes: d8b6171bd58a ("selftests/io_uring: test zerocopy send")
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- tools/testing/selftests/net/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Sep 05, 2022 at 04:33:11PM +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
+> kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
+> validate the kfunc parameters. Add them to enum key_lookup_flag, so that
+> all the current ones and the ones defined in the future are automatically
+> exported through BTF and available to eBPF programs.
+> 
+> Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking whether a
+> variable contains only defined flags.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index de7d5cc15f85..e17b4f1ad770 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -3,6 +3,7 @@ cmsg_sender
- fin_ack_lat
- gro
- hwtstamp_config
-+io_uring_zerocopy_tx
- ioam6_parser
- ip_defrag
- ipsec
--- 
-2.37.2
+You should remove ack if there is any substantial change.
 
+> ---
+>  include/linux/key.h      | 6 ++++++
+>  security/keys/internal.h | 2 --
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/key.h b/include/linux/key.h
+> index 7febc4881363..d84171f90cbd 100644
+> --- a/include/linux/key.h
+> +++ b/include/linux/key.h
+> @@ -88,6 +88,12 @@ enum key_need_perm {
+>  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
+>  };
+>  
+> +enum key_lookup_flag {
+> +	KEY_LOOKUP_CREATE = 0x01,	/* Create special keyrings if they don't exist */
+> +	KEY_LOOKUP_PARTIAL = 0x02,	/* Permit partially constructed keys to be found */
+> +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL), /* OR of previous flags */
+
+Drop the comments (should be reviewed separately + out of context).
+
+> +};
+> +
+>  struct seq_file;
+>  struct user_struct;
+>  struct signal_struct;
+> diff --git a/security/keys/internal.h b/security/keys/internal.h
+> index 9b9cf3b6fcbb..3c1e7122076b 100644
+> --- a/security/keys/internal.h
+> +++ b/security/keys/internal.h
+> @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
+>  
+>  extern bool lookup_user_key_possessed(const struct key *key,
+>  				      const struct key_match_data *match_data);
+> -#define KEY_LOOKUP_CREATE	0x01
+> -#define KEY_LOOKUP_PARTIAL	0x02
+>  
+>  extern long join_session_keyring(const char *name);
+>  extern void key_change_session_keyring(struct callback_head *twork);
+> -- 
+> 2.25.1
+> 
+
+BR, Jarkko
