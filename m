@@ -2,186 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B3A5AF096
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 18:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8B35AF2F1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 19:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbiIFQhJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 12:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S230470AbiIFRlj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 13:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiIFQgq (ORCPT
+        with ESMTP id S230175AbiIFRlh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 12:36:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265D1B2B
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 09:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662480781;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kg2ZD8/t1Jr30+S6ZmV5Vng3X+mccbhRQidJGUyOJ8o=;
-        b=W0cbC2w0DiD2jrd5wPu/S8P05VJVSzou9lHLk4/BX9FYfIMWD648EOPz8DbBXMAZSJr8SA
-        jV3A0JnrDfAj0V16jFMy+8WN//7D3qyWc4vouKWQxfeys7PUZICAr7Jh7MYa1DXV20fXGx
-        0Uw1+tGQ1ckvX+RFXWQd9BIiJU3k4IU=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-258-Ni1ywgscNtSOiVlygQrU4A-1; Tue, 06 Sep 2022 12:12:56 -0400
-X-MC-Unique: Ni1ywgscNtSOiVlygQrU4A-1
-Received: by mail-pj1-f69.google.com with SMTP id n30-20020a17090a5aa100b001fb0c492d5eso5092098pji.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Sep 2022 09:12:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kg2ZD8/t1Jr30+S6ZmV5Vng3X+mccbhRQidJGUyOJ8o=;
-        b=K/FC3+CEaGyQtSypOjNbJYOZ10bk3C2tVg5QxoJarsK0GErxG4iXorJg1CcKwvgDNi
-         5y6ObcR0R/JXkjbZNPa7oJm2reZgMgCSveIyXkIbykTLKQNf3PUwtuqBfcqczNdNusw0
-         3R4FwM5JhDqRkSqD2VPxIj2o7iWLsVWtvd1W8SnMHGWNQMABDYlCFKM8xtm2X0YnBMAV
-         52I+KenRJ58NXjHRkZ8yZFmbeAwFOhI9bupHfuPSqTeRJtM0J+oJG4zC7Kf7PIyugTpf
-         HrBy9RjAddA47FTmml1S0R0/cU/wA3bJj9SsasnvR7DjsDnXSBUF5PMYN/hRN1lCB+sd
-         gxTQ==
-X-Gm-Message-State: ACgBeo2/lCoQXNQ4b1MTwDWIQUHtipif8HkztqVRiOpYfDtkrxc6YKqM
-        2tAlaow0dZrWkcoThMgmMJEOvbpvW0ZfgMy0wZN3EScDUJGbi1a09R6lzZmJQODinvAQGFUFSS6
-        dZIsQ9Tbc1E9xVKJr7T3zn2aKP8TrrqayMJy3ZBkEWFrn
-X-Received: by 2002:a17:90a:4485:b0:1fa:cc1f:a7a with SMTP id t5-20020a17090a448500b001facc1f0a7amr25979408pjg.45.1662480774757;
-        Tue, 06 Sep 2022 09:12:54 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR62clyvFNxfvYwrm+zhQNaRY46JYdBxaA8PGMyTRlTBTbWPbc89Y4U7LekV45n04MZzTad6xPl3cyc04nZan6E=
-X-Received: by 2002:a17:90a:4485:b0:1fa:cc1f:a7a with SMTP id
- t5-20020a17090a448500b001facc1f0a7amr25979368pjg.45.1662480774362; Tue, 06
- Sep 2022 09:12:54 -0700 (PDT)
+        Tue, 6 Sep 2022 13:41:37 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47D6260E;
+        Tue,  6 Sep 2022 10:41:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MMWmS6PPPz9xFgS;
+        Wed,  7 Sep 2022 00:58:16 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwA34JNSfRdjftYoAA--.8234S2;
+        Tue, 06 Sep 2022 18:03:26 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, jakub@cloudflare.com
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, houtao1@huawei.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 0/7] bpf: Add fd modes check for map iter and extend libbpf
+Date:   Tue,  6 Sep 2022 19:02:54 +0200
+Message-Id: <20220906170301.256206-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
- <20220902132938.2409206-2-benjamin.tissoires@redhat.com> <CAP01T75KTjawtsvQmhZhj0=tEJVwc7UewRqdT1ui+uKONg07Zw@mail.gmail.com>
- <CAP01T74zEuSfTYhkKieU1B5YwzdXhKWxPX55AabV84j-=virwA@mail.gmail.com> <CAO-hwJLBtjfU7NWVTRK8HKmATuSb3ZSY__+OOMZhqY85DeQbWQ@mail.gmail.com>
-In-Reply-To: <CAO-hwJLBtjfU7NWVTRK8HKmATuSb3ZSY__+OOMZhqY85DeQbWQ@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 6 Sep 2022 18:12:43 +0200
-Message-ID: <CAO-hwJ+K0EmS-j+2uuj-13aDf2+X8ZVU4ue4MNg55p9nJhLAKw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v10 01/23] selftests/bpf: regroup and declare
- similar kfuncs selftests in an array
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwA34JNSfRdjftYoAA--.8234S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw4kWryxAr1fAw4rWr4kZwb_yoW8uw4Dpr
+        Z3Gryakr1FvFWI9F9rGrsIyryfJa4xW3y5G3Z7Jr15Zry5XF4DArW8GF43Gry3u3s3W3Z3
+        Zr4Ykr9xGw17uFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
+        0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
+        F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4I
+        kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
+        xVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
+        73UjIFyTuYvjxUsfMaUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAHBF1jj4KtRwABsa
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 3:50 PM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Tue, Sep 6, 2022 at 5:27 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> >
-> > On Tue, 6 Sept 2022 at 05:25, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> > >
-> > > On Fri, 2 Sept 2022 at 15:29, Benjamin Tissoires
-> > > <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > > > Similar to tools/testing/selftests/bpf/prog_tests/dynptr.c:
-> > > > we declare an array of tests that we run one by one in a for loop.
-> > > >
-> > > > Followup patches will add more similar-ish tests, so avoid a lot of copy
-> > > > paste by grouping the declaration in an array.
-> > > >
-> > > > To be able to call bpf_object__find_program_by_name(), we need to use
-> > > > plain libbpf calls, and not light skeletons. So also change the Makefile
-> > > > to not generate light skeletons.
-> > > >
-> > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > >
-> > > > ---
-> > >
-> > > I see your point, but this is also a test so that we keep verifying
-> > > kfunc call in light skeleton.
-> > > Code for relocating both is different in libbpf (we generate BPF ASM
-> > > for light skeleton so it is done inside a loader BPF program instead
-> > > of userspace).
-> >
-> > Err, hit send too early.
-> > We can probably use a macro to hide how program is called, then do
-> > X(prog1)
-> > X(prog2)
-> > in a series, won't look too bad and avoids duplication at the same time.
-> >
-> > > You might then be able to make it work for both light and normal skeleton.
-> > >
-> > WDYT?
-> >
->
-> On this patch alone, I concede the benefit is minimum. But if you look
-> at 6/23, I must confess I definitely prefer having just an array of
-> tests at the beginning instead of crippling the tests functions with
-> calls or macros.
->
-> The actual reason for me to ditch light skeletons was because I was
-> using bpf_object__find_program_by_name().
->
-> But I can work around that by relying on the offsetof() macro, and
-> make the whole thing working for *both* light skeleton and libbpf:
-> +struct kfunc_test_params {
-> +       const char *prog_name;
-> +       unsigned long int lskel_prog_desc_offset;
-> +       int retval;
-> +};
-> +
-> +#define TC_TEST(name,__retval) \
-> +       { \
-> +         .prog_name = #name, \
-> +         .lskel_prog_desc_offset = offsetof(struct
-> kfunc_call_test_lskel, progs.name), \
-> +         .retval = __retval, \
-> +       }
-> +
-> +static struct kfunc_test_params kfunc_tests[] = {
-> +       TC_TEST(kfunc_call_test1, 12),
-> +       TC_TEST(kfunc_call_test2, 3),
-> +       TC_TEST(kfunc_call_test_ref_btf_id, 0),
-> +};
-> +
-> +static void verify_success(struct kfunc_test_params *param)
->  {
-> [...]
-> +       struct bpf_prog_desc *lskel_prog = (struct bpf_prog_desc
-> *)((char *)lskel + param->lskel_prog_desc_offset);
->
-> However, for failing tests, I can not really rely on light skeletons
-> because we can not dynamically set the autoload property.
-> So either I split every failed test in its own file, or I only test
-> the ones that are supposed to load, which don't add a lot IMO.
->
-> I'll repost the bpf-core changes only so you can have a better idea of
-> what I am saying.
->
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-FWIW, I have now sent them at [0] and dropped all of the people not in
-get_maintainers.pl.
+Add a missing fd modes check in map iterators, potentially causing
+unauthorized map writes by eBPF programs attached to the iterator. Use this
+patch set as an opportunity to start a discussion with the cgroup
+developers about whether a security check is missing or not for their
+iterator.
 
-Cheers,
-Benjamin
+Also, extend libbpf with the _opts variant of bpf_*_get_fd_by_id(). Only
+bpf_map_get_fd_by_id_opts() is really useful in this patch set, to ensure
+that the creation of a map iterator fails with a read-only fd.
 
-[0] https://lore.kernel.org/all/20220906151303.2780789-1-benjamin.tissoires@redhat.com/T/#u
+Add all variants in this patch set for symmetry with
+bpf_map_get_fd_by_id_opts(), and because all the variants share the same
+opts structure. Also, add all the variants here, to shrink the patch set
+fixing map permissions requested by bpftool, so that the remaining patches
+are only about the latter.
+
+Finally, extend the bpf_iter test with the read-only fd check, and test
+each _opts variant of bpf_*_get_fd_by_id().
+
+Roberto Sassu (7):
+  bpf: Add missing fd modes check for map iterators
+  libbpf: Define bpf_get_fd_opts and introduce
+    bpf_map_get_fd_by_id_opts()
+  libbpf: Introduce bpf_prog_get_fd_by_id_opts()
+  libbpf: Introduce bpf_btf_get_fd_by_id_opts()
+  libbpf: Introduce bpf_link_get_fd_by_id_opts()
+  selftests/bpf: Ensure fd modes are checked for map iters and destroy
+    links
+  selftests/bpf: Add tests for _opts variants of libbpf
+
+ include/linux/bpf.h                           |   2 +-
+ kernel/bpf/inode.c                            |   2 +-
+ kernel/bpf/map_iter.c                         |   3 +-
+ kernel/bpf/syscall.c                          |   8 +-
+ net/core/bpf_sk_storage.c                     |   3 +-
+ net/core/sock_map.c                           |   3 +-
+ tools/lib/bpf/bpf.c                           |  47 +++++-
+ tools/lib/bpf/bpf.h                           |  16 ++
+ tools/lib/bpf/libbpf.map                      |  10 +-
+ tools/lib/bpf/libbpf_version.h                |   2 +-
+ .../selftests/bpf/prog_tests/bpf_iter.c       |  34 +++-
+ .../bpf/prog_tests/libbpf_get_fd_opts.c       | 145 ++++++++++++++++++
+ .../bpf/progs/test_libbpf_get_fd_opts.c       |  49 ++++++
+ 13 files changed, 309 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
+
+-- 
+2.25.1
 
