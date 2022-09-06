@@ -2,149 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDEB5AE82E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 14:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF2F5AECC0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 16:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbiIFMcE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 08:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S241845AbiIFOWW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 10:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240224AbiIFMbb (ORCPT
+        with ESMTP id S229995AbiIFOUV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:31:31 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD27AF2E;
-        Tue,  6 Sep 2022 05:29:41 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MMPh837Wmz9v7Nk;
-        Tue,  6 Sep 2022 20:24:08 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwA3ZV8KPRdjOwYoAA--.51363S2;
-        Tue, 06 Sep 2022 13:29:12 +0100 (CET)
-Message-ID: <455d80a39b2bf87c58dae9b6035f8cabb4455639.camel@huaweicloud.com>
-Subject: Re: [PATCH v17 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
- and define KEY_LOOKUP_ALL
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     kpsingh@kernel.org
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
-        haoluo@google.com, jmorris@namei.org, john.fastabend@gmail.com,
-        jolsa@kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, mingo@redhat.com, mykolal@fb.com,
-        paul@paul-moore.com, roberto.sassu@huawei.com, rostedt@goodmis.org,
-        sdf@google.com, serge@hallyn.com, shuah@kernel.org,
-        song@kernel.org, yhs@fb.com, Jarkko Sakkinen <jarkko@kernel.org>
-Date:   Tue, 06 Sep 2022 14:28:55 +0200
-In-Reply-To: <Yxc8fwOgZ+UY0jiX@kernel.org>
-References: <YxcyeZBHGPNQB+qJ@kernel.org>
-         <20220906121506.165001-1-roberto.sassu@huaweicloud.com>
-         <Yxc8fwOgZ+UY0jiX@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 6 Sep 2022 10:20:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAFE7C1DA
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 06:51:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662472214;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fF/McEgJ2IGT8zNYV5Anr2pyXDPQdaP/ZefdLv4zi5k=;
+        b=Vf2Ozewp5nWr04BPuvlrFV6mI1KEOFK/XWOo39cAWev7V8hbKxSE+j8J1lSg8T/W9Pxz/A
+        +QvkAhq1BFYLWSGTUEG12l0rvCVvqc7RcTx8lJ7WbaCXhnCv0YO1sy/82zV+jLUiXmCgKz
+        GK1ojGbaKtQtJPgi1iuxkdGr9xhVg/U=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-404-5XrpNKpOOWKWRzLrSEIq5w-1; Tue, 06 Sep 2022 09:50:13 -0400
+X-MC-Unique: 5XrpNKpOOWKWRzLrSEIq5w-1
+Received: by mail-pl1-f200.google.com with SMTP id m5-20020a170902f64500b0016d313f3ce7so7910925plg.23
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Sep 2022 06:50:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=fF/McEgJ2IGT8zNYV5Anr2pyXDPQdaP/ZefdLv4zi5k=;
+        b=GstjjE6MJW2FHukSa1aB47c87fVl7ff+F0+IAnaZ7fJ8jTmpZVq9buK9lYoatnUHst
+         DUxNsOsed8eFmdkVltuiCrNczJMzIAO0QMK6v+fss0fRMeVYpxSssRhJr/LocpHF9qty
+         wgMFlhC9BY4+9DssdwidNIff/j/V0hyI7LRe1jpegmn+EWlQAIV+EYXDUDr/ihCAFWv6
+         VgDGS9RsHYMdyG4gzKeFL5zf6cCWGdAkCm0DEMuTHnnaGKJ7DvHT4cd4BWbFP9E3r1Bh
+         3Nh8cnwnABUFeTn2o1geM4CRro409VeIoLEdwaEh/rZYHGjLrY2iGkqk4yizmn3J+OQQ
+         VocA==
+X-Gm-Message-State: ACgBeo0lUs+l/7atCFceQGvd8swRGTqWBv4C2XdlwrdYLHc2H+oSSO0Q
+        KweZYcS6cVMgTI0yYofp1TXl35iKOQz4d1jkIUnhDS7U47oi5aYPT0APMGN0YmaNqKVIYK7GmiQ
+        Bxc8Y/Lx3COVS4nR8zGWjiL3CmtjRlpG/Htn32fOGsZId
+X-Received: by 2002:a63:125b:0:b0:434:6fb1:660e with SMTP id 27-20020a63125b000000b004346fb1660emr6591737pgs.489.1662472212072;
+        Tue, 06 Sep 2022 06:50:12 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6fpX4ksRwNdiWB8H8btCxoSm5yD30eQEDR5VMy+1tR5Dy84nsIw3fRbEfb3k43eyQqvvFdzBBzDMPFKfIuvA8=
+X-Received: by 2002:a63:125b:0:b0:434:6fb1:660e with SMTP id
+ 27-20020a63125b000000b004346fb1660emr6591709pgs.489.1662472211764; Tue, 06
+ Sep 2022 06:50:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwA3ZV8KPRdjOwYoAA--.51363S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1ftr15Xw4UZF1fZFyfXrb_yoW8tFy8pF
-        WDG3W8KryUtry2gw1DJwsFyw1Sk3y3Kr17WrnrKwn8Zana9r97tr1xtF13ur1FyrWUuw12
-        qr4293WDur4DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbHa0PUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAHBF1jj36rwAABsk
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+ <20220902132938.2409206-2-benjamin.tissoires@redhat.com> <CAP01T75KTjawtsvQmhZhj0=tEJVwc7UewRqdT1ui+uKONg07Zw@mail.gmail.com>
+ <CAP01T74zEuSfTYhkKieU1B5YwzdXhKWxPX55AabV84j-=virwA@mail.gmail.com>
+In-Reply-To: <CAP01T74zEuSfTYhkKieU1B5YwzdXhKWxPX55AabV84j-=virwA@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 6 Sep 2022 15:50:00 +0200
+Message-ID: <CAO-hwJLBtjfU7NWVTRK8HKmATuSb3ZSY__+OOMZhqY85DeQbWQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v10 01/23] selftests/bpf: regroup and declare
+ similar kfuncs selftests in an array
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2022-09-06 at 15:26 +0300, Jarkko Sakkinen wrote:
-> On Tue, Sep 06, 2022 at 02:15:06PM +0200, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for the patch that introduces the
-> > bpf_lookup_user_key() eBPF
-> > kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
-> > able to
-> > validate the kfunc parameters. Add them to enum key_lookup_flag, so
-> > that
-> > all the current ones and the ones defined in the future are
-> > automatically
-> > exported through BTF and available to eBPF programs.
-> > 
-> > Also, add KEY_LOOKUP_ALL to the enum, with the logical OR of
-> > currently
-> > defined flags as value, to facilitate checking whether a variable
-> > contains
-> > only those flags.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  include/linux/key.h      | 6 ++++++
-> >  security/keys/internal.h | 2 --
-> >  2 files changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/linux/key.h b/include/linux/key.h
-> > index 7febc4881363..d27477faf00d 100644
-> > --- a/include/linux/key.h
-> > +++ b/include/linux/key.h
-> > @@ -88,6 +88,12 @@ enum key_need_perm {
-> >  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
-> > deferred */
-> >  };
-> >  
-> > +enum key_lookup_flag {
-> > +	KEY_LOOKUP_CREATE = 0x01,
-> > +	KEY_LOOKUP_PARTIAL = 0x02,
-> > +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL),
-> > +};
-> > +
-> >  struct seq_file;
-> >  struct user_struct;
-> >  struct signal_struct;
-> > diff --git a/security/keys/internal.h b/security/keys/internal.h
-> > index 9b9cf3b6fcbb..3c1e7122076b 100644
-> > --- a/security/keys/internal.h
-> > +++ b/security/keys/internal.h
-> > @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct
-> > key_type *type,
-> >  
-> >  extern bool lookup_user_key_possessed(const struct key *key,
-> >  				      const struct key_match_data
-> > *match_data);
-> > -#define KEY_LOOKUP_CREATE	0x01
-> > -#define KEY_LOOKUP_PARTIAL	0x02
-> >  
-> >  extern long join_session_keyring(const char *name);
-> >  extern void key_change_session_keyring(struct callback_head
-> > *twork);
-> > -- 
-> > 2.25.1
-> > 
-> 
-> Thanks,
-> 
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+On Tue, Sep 6, 2022 at 5:27 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> On Tue, 6 Sept 2022 at 05:25, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> >
+> > On Fri, 2 Sept 2022 at 15:29, Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > Similar to tools/testing/selftests/bpf/prog_tests/dynptr.c:
+> > > we declare an array of tests that we run one by one in a for loop.
+> > >
+> > > Followup patches will add more similar-ish tests, so avoid a lot of copy
+> > > paste by grouping the declaration in an array.
+> > >
+> > > To be able to call bpf_object__find_program_by_name(), we need to use
+> > > plain libbpf calls, and not light skeletons. So also change the Makefile
+> > > to not generate light skeletons.
+> > >
+> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > >
+> > > ---
+> >
+> > I see your point, but this is also a test so that we keep verifying
+> > kfunc call in light skeleton.
+> > Code for relocating both is different in libbpf (we generate BPF ASM
+> > for light skeleton so it is done inside a loader BPF program instead
+> > of userspace).
+>
+> Err, hit send too early.
+> We can probably use a macro to hide how program is called, then do
+> X(prog1)
+> X(prog2)
+> in a series, won't look too bad and avoids duplication at the same time.
+>
+> > You might then be able to make it work for both light and normal skeleton.
+> >
+> WDYT?
+>
 
-Thanks Jarkko.
+On this patch alone, I concede the benefit is minimum. But if you look
+at 6/23, I must confess I definitely prefer having just an array of
+tests at the beginning instead of crippling the tests functions with
+calls or macros.
 
-KP, ok also for you?
+The actual reason for me to ditch light skeletons was because I was
+using bpf_object__find_program_by_name().
 
-Thanks
+But I can work around that by relying on the offsetof() macro, and
+make the whole thing working for *both* light skeleton and libbpf:
++struct kfunc_test_params {
++       const char *prog_name;
++       unsigned long int lskel_prog_desc_offset;
++       int retval;
++};
++
++#define TC_TEST(name,__retval) \
++       { \
++         .prog_name = #name, \
++         .lskel_prog_desc_offset = offsetof(struct
+kfunc_call_test_lskel, progs.name), \
++         .retval = __retval, \
++       }
++
++static struct kfunc_test_params kfunc_tests[] = {
++       TC_TEST(kfunc_call_test1, 12),
++       TC_TEST(kfunc_call_test2, 3),
++       TC_TEST(kfunc_call_test_ref_btf_id, 0),
++};
++
++static void verify_success(struct kfunc_test_params *param)
+ {
+[...]
++       struct bpf_prog_desc *lskel_prog = (struct bpf_prog_desc
+*)((char *)lskel + param->lskel_prog_desc_offset);
 
-Roberto
+However, for failing tests, I can not really rely on light skeletons
+because we can not dynamically set the autoload property.
+So either I split every failed test in its own file, or I only test
+the ones that are supposed to load, which don't add a lot IMO.
+
+I'll repost the bpf-core changes only so you can have a better idea of
+what I am saying.
+
+Cheers,
+Benjamin
 
