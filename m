@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8905AEF85
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 17:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A4F5AEF89
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 17:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233285AbiIFPzl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 11:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S233158AbiIFPzo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 11:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233720AbiIFPzV (ORCPT
+        with ESMTP id S234525AbiIFPzW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 11:55:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805F98E0CC
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 08:13:24 -0700 (PDT)
+        Tue, 6 Sep 2022 11:55:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3B58E0C5
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 08:13:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662477203;
+        s=mimecast20190719; t=1662477204;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NKKnZ7bVoXC5XY3Hg2mohD3LMLumzak+WxpBWzrYkP8=;
-        b=UT2TsvnVA1tVp58vC2AbgKamgNp5Mg/D7roLCzh8uJEq3grbid+x409Ik7DM2h0417oc3S
-        TnYTHstvZaK3Ab1n+uO5vh5kli5pYzynEFV2tJohdwMKVA9Rw0/EWr+uv3M7d46OIrOGy4
-        qw74XGgYIiB7zKLcANRu5JISZxfSjbg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=EN0gZ7KX3l2ofZoDtpWQPp8Bi3n6Z9ichaklbTKAD6Q=;
+        b=h4ug5WhQ7ohHbvVm32L1AA8cQjRqqX1E9deRHsKZTwWNgUQkqF35P+ReqMHjy2fse+D4KA
+        OtABIOGaxu0GeYrBUCM+cobYWDJYfoqzCyGjvIh0tzWxzSVtQcJyxYfwYqPeLDiqFIUPLl
+        wrNojcF4YsHGk2Gjczxa8SzPxP78h1Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-313-amrWNzuVOyKOpOgvM8lV8A-1; Tue, 06 Sep 2022 11:13:19 -0400
-X-MC-Unique: amrWNzuVOyKOpOgvM8lV8A-1
+ us-mta-628-Efo7MM1UNLaxIWQUg9MRVA-1; Tue, 06 Sep 2022 11:13:21 -0400
+X-MC-Unique: Efo7MM1UNLaxIWQUg9MRVA-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A4FE3801F5B;
-        Tue,  6 Sep 2022 15:13:18 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 92252805B9A;
+        Tue,  6 Sep 2022 15:13:20 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.236])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DC19A40D296C;
-        Tue,  6 Sep 2022 15:13:15 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5801A40D296C;
+        Tue,  6 Sep 2022 15:13:18 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -50,17 +50,17 @@ To:     Alexei Starovoitov <ast@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v11 2/7] bpf: split btf_check_subprog_arg_match in two
-Date:   Tue,  6 Sep 2022 17:12:58 +0200
-Message-Id: <20220906151303.2780789-3-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v11 3/7] bpf/verifier: allow all functions to read user provided context
+Date:   Tue,  6 Sep 2022 17:12:59 +0200
+Message-Id: <20220906151303.2780789-4-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
 References: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,173 +68,84 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-btf_check_subprog_arg_match() was used twice in verifier.c:
-- when checking for the type mismatches between a (sub)prog declaration
-  and BTF
-- when checking the call of a subprog to see if the provided arguments
-  are correct and valid
+When a function was trying to access data from context in a syscall eBPF
+program, the verifier was rejecting the call unless it was accessing the
+first element.
+This is because the syscall context is not known at compile time, and
+so we need to check this when actually accessing it.
 
-This is problematic when we check if the first argument of a program
-(pointer to ctx) is correctly accessed:
-To be able to ensure we access a valid memory in the ctx, the verifier
-assumes the pointer to context is not null.
-This has the side effect of marking the program accessing the entire
-context, even if the context is never dereferenced.
+Check for the valid memory access if there is no convert_ctx callback,
+and allow such situation to happen.
 
-For example, by checking the context access with the current code, the
-following eBPF program would fail with -EINVAL if the ctx is set to null
-from the userspace:
+There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
+will check that the types are matching, which is a good thing, but to
+have an accurate result, it hides the fact that the context register may
+be null. This makes env->prog->aux->max_ctx_offset being set to the size
+of the context, which is incompatible with a NULL context.
 
-```
-SEC("syscall")
-int prog(struct my_ctx *args) {
-  return 0;
-}
-```
+Solve that last problem by storing max_ctx_offset before the type check
+and restoring it after.
 
-In that particular case, we do not want to actually check that the memory
-is correct while checking for the BTF validity, but we just want to
-ensure that the (sub)prog definition matches the BTF we have.
-
-So split btf_check_subprog_arg_match() in two so we can actually check
-for the memory used when in a call, and ignore that part when not.
-
-Note that a further patch is in preparation to disentangled
-btf_check_func_arg_match() from these two purposes, and so right now we
-just add a new hack around that by adding a boolean to this function.
-
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
 no changes in v11
 
-new in v10
----
- include/linux/bpf.h   |  2 ++
- kernel/bpf/btf.c      | 54 +++++++++++++++++++++++++++++++++++++++----
- kernel/bpf/verifier.c |  2 +-
- 3 files changed, 52 insertions(+), 6 deletions(-)
+changes in v10:
+- dropped the hunk in btf.c saving/restoring max_ctx_offset
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9c1674973e03..c9c72a089579 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1943,6 +1943,8 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
- struct bpf_reg_state;
- int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
- 				struct bpf_reg_state *regs);
-+int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
-+			   struct bpf_reg_state *regs);
- int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
- 			      const struct btf *btf, u32 func_id,
- 			      struct bpf_reg_state *regs,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 903719b89238..eca9ea78ee5f 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6170,7 +6170,8 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 				    const struct btf *btf, u32 func_id,
- 				    struct bpf_reg_state *regs,
- 				    bool ptr_to_mem_ok,
--				    u32 kfunc_flags)
-+				    u32 kfunc_flags,
-+				    bool processing_call)
- {
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
- 	bool rel = false, kptr_get = false, trusted_arg = false;
-@@ -6356,7 +6357,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 					reg_ref_tname);
- 				return -EINVAL;
- 			}
--		} else if (ptr_to_mem_ok) {
-+		} else if (ptr_to_mem_ok && processing_call) {
- 			const struct btf_type *resolve_ret;
- 			u32 type_size;
- 
-@@ -6431,7 +6432,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 	return rel ? ref_regno : 0;
- }
- 
--/* Compare BTF of a function with given bpf_reg_state.
-+/* Compare BTF of a function declaration with given bpf_reg_state.
-  * Returns:
-  * EFAULT - there is a verifier bug. Abort verification.
-  * EINVAL - there is a type mismatch or BTF is not available.
-@@ -6458,7 +6459,50 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
- 		return -EINVAL;
- 
- 	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
--	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
-+	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0, false);
-+
-+	/* Compiler optimizations can remove arguments from static functions
-+	 * or mismatched type can be passed into a global function.
-+	 * In such cases mark the function as unreliable from BTF point of view.
-+	 */
-+	if (err)
-+		prog->aux->func_info_aux[subprog].unreliable = true;
-+	return err;
-+}
-+
-+/* Compare BTF of a function call with given bpf_reg_state.
-+ * Returns:
-+ * EFAULT - there is a verifier bug. Abort verification.
-+ * EINVAL - there is a type mismatch or BTF is not available.
-+ * 0 - BTF matches with what bpf_reg_state expects.
-+ * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-+ *
-+ * NOTE: the code is duplicated from btf_check_subprog_arg_match()
-+ * because btf_check_func_arg_match() is still doing both. Once that
-+ * function is split in 2, we can call from here btf_check_subprog_arg_match()
-+ * first, and then treat the calling part in a new code path.
-+ */
-+int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog,
-+			   struct bpf_reg_state *regs)
-+{
-+	struct bpf_prog *prog = env->prog;
-+	struct btf *btf = prog->aux->btf;
-+	bool is_global;
-+	u32 btf_id;
-+	int err;
-+
-+	if (!prog->aux->func_info)
-+		return -EINVAL;
-+
-+	btf_id = prog->aux->func_info[subprog].type_id;
-+	if (!btf_id)
-+		return -EFAULT;
-+
-+	if (prog->aux->func_info_aux[subprog].unreliable)
-+		return -EINVAL;
-+
-+	is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-+	err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0, true);
- 
- 	/* Compiler optimizations can remove arguments from static functions
- 	 * or mismatched type can be passed into a global function.
-@@ -6474,7 +6518,7 @@ int btf_check_kfunc_arg_match(struct bpf_verifier_env *env,
- 			      struct bpf_reg_state *regs,
- 			      u32 kfunc_flags)
- {
--	return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags);
-+	return btf_check_func_arg_match(env, btf, func_id, regs, true, kfunc_flags, true);
- }
- 
- /* Convert BTF of a function into bpf_reg_state if possible
+changes in v9:
+- rewrote the commit title and description
+- made it so all functions can make use of context even if there is
+  no convert_ctx
+- remove the is_kfunc field in bpf_call_arg_meta
+
+changes in v8:
+- fixup comment
+- return -EACCESS instead of -EINVAL for consistency
+
+changes in v7:
+- renamed access_t into atype
+- allow zero-byte read
+- check_mem_access() to the correct offset/size
+
+new in v6
+---
+ kernel/bpf/verifier.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0194a36d0b36..d27fae3ce949 100644
+index d27fae3ce949..3f9e6fa92cde 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -6626,7 +6626,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	func_info_aux = env->prog->aux->func_info_aux;
- 	if (func_info_aux)
- 		is_global = func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
--	err = btf_check_subprog_arg_match(env, subprog, caller->regs);
-+	err = btf_check_subprog_call(env, subprog, caller->regs);
- 	if (err == -EFAULT)
- 		return err;
- 	if (is_global) {
+@@ -5233,6 +5233,25 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+ 				env,
+ 				regno, reg->off, access_size,
+ 				zero_size_allowed, ACCESS_HELPER, meta);
++	case PTR_TO_CTX:
++		/* in case the function doesn't know how to access the context,
++		 * (because we are in a program of type SYSCALL for example), we
++		 * can not statically check its size.
++		 * Dynamically check it now.
++		 */
++		if (!env->ops->convert_ctx_access) {
++			enum bpf_access_type atype = meta && meta->raw_mode ? BPF_WRITE : BPF_READ;
++			int offset = access_size - 1;
++
++			/* Allow zero-byte read from PTR_TO_CTX */
++			if (access_size == 0)
++				return zero_size_allowed ? 0 : -EACCES;
++
++			return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
++						atype, -1, false);
++		}
++
++		fallthrough;
+ 	default: /* scalar_value or invalid ptr */
+ 		/* Allow zero-byte read from NULL, regardless of pointer type */
+ 		if (zero_size_allowed && access_size == 0 &&
 -- 
 2.36.1
 
