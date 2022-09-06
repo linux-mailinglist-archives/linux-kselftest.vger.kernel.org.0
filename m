@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0E05AF2F9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 19:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B57E5AF2FB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 19:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiIFRp0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 13:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S229630AbiIFRph (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 13:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIFRpY (ORCPT
+        with ESMTP id S229520AbiIFRpg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:45:24 -0400
+        Tue, 6 Sep 2022 13:45:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB9A51432
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 10:45:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254DC5C9CA
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 10:45:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E9C6615E0
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 17:45:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C8EC433D6;
-        Tue,  6 Sep 2022 17:45:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 403DD615A4
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 17:45:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52974C433C1;
+        Tue,  6 Sep 2022 17:45:30 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
         Will Deacon <will@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] kselftest/arm64: Floating point stress test harness
-Date:   Tue,  6 Sep 2022 18:45:18 +0100
-Message-Id: <166248629287.3558870.9162998590250021356.b4-ty@arm.com>
+Subject: Re: [PATCH v2] kselftest/arm64: Add simple hwcap validation
+Date:   Tue,  6 Sep 2022 18:45:28 +0100
+Message-Id: <166248629287.3558870.14220341700427395787.b4-ty@arm.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220829154452.824870-1-broonie@kernel.org>
-References: <20220829154452.824870-1-broonie@kernel.org>
+In-Reply-To: <20220829154602.827275-1-broonie@kernel.org>
+References: <20220829154602.827275-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -46,28 +46,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 29 Aug 2022 16:44:48 +0100, Mark Brown wrote:
-> This series has a few small enhancements for the existing standalone
-> floating point stress tests and then builds on those with a kselftest
-> integrated program which gives those a very quick spin from within
-> kselftest, as well as having an option to set a custom timeout to allow
-> for use with longer soak testing. This makes it much easier to get
-> thorough testing of the floating point state management logic, rather
-> than requiring custom setup for coverage of the various vector lengths
-> in the system as is needed at present.
+On Mon, 29 Aug 2022 16:46:02 +0100, Mark Brown wrote:
+> Add some trivial hwcap validation which checks that /proc/cpuinfo and
+> AT_HWCAP agree with each other and can verify that for extensions that can
+> generate a SIGILL due to adding new instructions one appears or doesn't
+> appear as expected. I've added SVE and SME, other capabilities can be
+> added later if this gets merged.
+> 
+> This isn't super exciting but on the other hand took very little time to
+> write and should be handy when verifying that you wired up AT_HWCAP
+> properly.
 > 
 > [...]
 
 Applied to arm64 (for-next/kselftest), thanks!
 
-[1/4] kselftest/arm64: Always encourage preemption for za-test
-      https://git.kernel.org/arm64/c/9e40e6272353
-[2/4] kselftest/arm64: Count SIGUSR2 deliveries in FP stress tests
-      https://git.kernel.org/arm64/c/05a5980f7ff5
-[3/4] kselftest/arm64: Install signal handlers before output in FP stress tests
-      https://git.kernel.org/arm64/c/000aef672bf2
-[4/4] kselftest/arm64: kselftest harness for FP stress tests
-      https://git.kernel.org/arm64/c/bce4950aa05c
+[1/1] kselftest/arm64: Add simple hwcap validation
+      https://git.kernel.org/arm64/c/7a9bcaaad5f1
 
 -- 
 Catalin
