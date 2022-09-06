@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0D65AF565
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 22:07:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E1D5AF55D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 22:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiIFUFz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S229698AbiIFUFz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Tue, 6 Sep 2022 16:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbiIFUFf (ORCPT
+        with ESMTP id S229956AbiIFUFe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:05:35 -0400
+        Tue, 6 Sep 2022 16:05:34 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71F82BD296;
-        Tue,  6 Sep 2022 13:01:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAB97B602B;
+        Tue,  6 Sep 2022 13:01:10 -0700 (PDT)
 Received: from pwmachine.numericable.fr (85-170-34-72.rev.numericable.fr [85.170.34.72])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A4272204A0FA;
-        Tue,  6 Sep 2022 12:59:13 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A4272204A0FA
+        by linux.microsoft.com (Postfix) with ESMTPSA id EAFD4204A580;
+        Tue,  6 Sep 2022 12:59:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EAFD4204A580
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1662494358;
-        bh=nWaEkFlsTxoT2qCkLeEAAJWZstzNd2OmaAn1xDktTx8=;
+        s=default; t=1662494381;
+        bh=N4qKGNRCArorGaqJPvl3arifkj3tGRGaxyc5hkP2FRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fXuGmpIIuRaK5ubeN/epmC7TP0PdLKlpXY6ps9ZJc116zqiws8ot0O0RNd5tCNba3
-         nTYBgwtzJqVdSySys+DMBGlf7Ye4e0bvbxvoIvh34iROJgnSn0hI8Xs6QI1KFL697Q
-         I/d/d2hdG5YcMHwma37GhE4IYAs24Y5qdcdCgrAY=
+        b=YHDuOBp3oEAQ+LnOL1ippAIf7DJGdmUY1DDeO2SFn6XY2urLU+ZehCkolr/XgcX+t
+         v1k3Pkj1O9uk1MP4cRwir7XBkmbkke1JOvRWMhZrHi5sdj3dHN1aM/lcT4XeHqRtrA
+         0tiIgnXQqhhkb/ZRVWw839cEBZZVp3aeC5DThNEM=
 From:   Francis Laniel <flaniel@linux.microsoft.com>
 To:     bpf@vger.kernel.org
 Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
@@ -46,11 +46,11 @@ Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
         Maxim Mikityanskiy <maximmi@nvidia.com>,
         Geliang Tang <geliang.tang@suse.com>,
         "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH v2 4/5] libbpf: Add implementation to consume overwritable BPF ring buffer.
-Date:   Tue,  6 Sep 2022 21:56:45 +0200
-Message-Id: <20220906195656.33021-5-flaniel@linux.microsoft.com>
+Subject: [RFC PATCH v2 5/5] for test purpose only: Add toy to play with BPF ring.
+Date:   Tue,  6 Sep 2022 21:56:46 +0200
+Message-Id: <20220906195656.33021-6-flaniel@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220906195656.33021-1-flaniel@linux.microsoft.com>
 References: <20220906195656.33021-1-flaniel@linux.microsoft.com>
@@ -66,179 +66,167 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If the BPF ring buffer is overwritable, ringbuf_process_overwritable_ring() will
-be called to handle the data consumption.
-All the available data will be consumed but some checks will be performed:
-* check we do not read data we already read, if there is no new data, nothing
-happens.
-* check we do not read more than the buffer size.
-* check we do not read invalid data by checking they fit the buffer size.
+This patch should be applied on iovisor/bcc.
 
 Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 ---
- tools/include/uapi/linux/bpf.h |   3 +
- tools/lib/bpf/ringbuf.c        | 106 +++++++++++++++++++++++++++++++++
- 2 files changed, 109 insertions(+)
+ ...-only-Add-toy-to-play-with-BPF-ring-.patch | 147 ++++++++++++++++++
+ 1 file changed, 147 insertions(+)
+ create mode 100644 0001-for-test-purpose-only-Add-toy-to-play-with-BPF-ring-.patch
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 59a217ca2dfd..cd73a89e8ead 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1227,6 +1227,9 @@ enum {
- 
- /* Create a map that is suitable to be an inner map with dynamic max entries */
- 	BPF_F_INNER_MAP		= (1U << 12),
+diff --git a/0001-for-test-purpose-only-Add-toy-to-play-with-BPF-ring-.patch b/0001-for-test-purpose-only-Add-toy-to-play-with-BPF-ring-.patch
+new file mode 100644
+index 000000000000..37d08cc08a88
+--- /dev/null
++++ b/0001-for-test-purpose-only-Add-toy-to-play-with-BPF-ring-.patch
+@@ -0,0 +1,147 @@
++From e4b95b1f9625f62d0978173973070dce38bd7210 Mon Sep 17 00:00:00 2001
++From: Francis Laniel <flaniel@linux.microsoft.com>
++Date: Tue, 9 Aug 2022 18:18:53 +0200
++Subject: [PATCH] for test purpose only: Add toy to play with BPF ring buffer.
 +
-+/* Create an over writable BPF_RINGBUF */
-+	BFP_F_RB_OVERWRITABLE	= (1U << 13),
- };
- 
- /* Flags for BPF_PROG_QUERY. */
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index 8bc117bcc7bc..2362a6280fc5 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -23,6 +23,8 @@
- 
- struct ring {
- 	ring_buffer_sample_fn sample_cb;
-+	__u8 overwritable: 1,
-+	     __reserved:   7;
- 	void *ctx;
- 	void *data;
- 	unsigned long *consumer_pos;
-@@ -51,6 +53,11 @@ static void ringbuf_unmap_ring(struct ring_buffer *rb, struct ring *r)
- 	}
- }
- 
-+static inline bool is_overwritable(struct ring *r)
-+{
-+	return !!r->overwritable;
-+}
++Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
++---
++ libbpf-tools/Makefile  |  1 +
++ libbpf-tools/toy.bpf.c | 29 +++++++++++++++++++
++ libbpf-tools/toy.c     | 65 ++++++++++++++++++++++++++++++++++++++++++
++ libbpf-tools/toy.h     |  4 +++
++ 4 files changed, 99 insertions(+)
++ create mode 100644 libbpf-tools/toy.bpf.c
++ create mode 100644 libbpf-tools/toy.c
++ create mode 100644 libbpf-tools/toy.h
 +
- /* Add extra RINGBUF maps to this ring buffer manager */
- int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 		     ring_buffer_sample_fn sample_cb, void *ctx)
-@@ -95,6 +102,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 	r->sample_cb = sample_cb;
- 	r->ctx = ctx;
- 	r->mask = info.max_entries - 1;
-+	r->overwritable = !!(info.map_flags & BFP_F_RB_OVERWRITABLE);
- 
- 	/* Map writable consumer page */
- 	tmp = mmap(NULL, rb->page_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-@@ -202,6 +210,101 @@ static inline int roundup_len(__u32 len)
- 	return (len + 7) / 8 * 8;
- }
- 
++diff --git a/libbpf-tools/Makefile b/libbpf-tools/Makefile
++index 3e40f6e5..0d81d3b7 100644
++--- a/libbpf-tools/Makefile
+++++ b/libbpf-tools/Makefile
++@@ -68,6 +68,7 @@ APPS = \
++ 	tcplife \
++ 	tcprtt \
++ 	tcpsynbl \
+++	toy \
++ 	vfsstat \
++ 	#
++ 
++diff --git a/libbpf-tools/toy.bpf.c b/libbpf-tools/toy.bpf.c
++new file mode 100644
++index 00000000..3c28a20b
++--- /dev/null
+++++ b/libbpf-tools/toy.bpf.c
++@@ -0,0 +1,29 @@
+++#include <linux/types.h>
+++#include <bpf/bpf_helpers.h>
+++#include <linux/bpf.h>
+++#include "toy.h"
+++
+++
+++struct {
+++	__uint(type, BPF_MAP_TYPE_RINGBUF);
+++	__uint(max_entries, 4096);
+++	__uint(map_flags, 1U << 13);
+++} buffer SEC(".maps");
+++
+++static __u32 count = 0;
+++
+++SEC("tracepoint/syscalls/sys_enter_execve")
+++int sys_enter_execve(void) {
+++	count++;
+++	struct event *event = bpf_ringbuf_reserve(&buffer, sizeof(struct event), 0);
+++	if (!event) {
+++		return 1;
+++	}
+++
+++	event->count = count;
+++	bpf_ringbuf_submit(event, 0);
+++
+++	return 0;
+++}
+++
+++char _license[] SEC("license") = "GPL";
++diff --git a/libbpf-tools/toy.c b/libbpf-tools/toy.c
++new file mode 100644
++index 00000000..4cd8b588
++--- /dev/null
+++++ b/libbpf-tools/toy.c
++@@ -0,0 +1,65 @@
+++#include <bpf/libbpf.h>
+++#include <stdio.h>
+++#include <unistd.h>
+++#include "toy.h"
+++#include "toy.skel.h"
+++#include "btf_helpers.h"
+++
+++
+++static int buf_process_sample(void *ctx, void *data, size_t len) {
+++	struct event *evt = (struct event *)data;
+++
+++	printf("%d\n", evt->count);
+++
+++	return 0;
+++}
+++
+++int main(void) {
+++	LIBBPF_OPTS(bpf_object_open_opts, open_opts);
+++	int buffer_map_fd = -1;
+++	struct toy_bpf *obj;
+++	int err;
+++
+++	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+++
+++	err = ensure_core_btf(&open_opts);
+++	if (err) {
+++		fprintf(stderr, "failed to fetch necessary BTF for CO-RE: %s\n", strerror(-err));
+++		return 1;
+++	}
+++
+++	obj = toy_bpf__open_opts(&open_opts);
+++	if (!obj) {
+++		fprintf(stderr, "failed to open BPF object\n");
+++		return 1;
+++	}
+++
+++	err = toy_bpf__load(obj);
+++	if (err) {
+++		fprintf(stderr, "failed to load BPF object: %d\n", err);
+++		return 1;
+++	}
+++
+++	struct ring_buffer *ring_buffer;
+++
+++	buffer_map_fd = bpf_object__find_map_fd_by_name(obj->obj, "buffer");
+++	ring_buffer = ring_buffer__new(buffer_map_fd, buf_process_sample, NULL, NULL);
+++
+++	if(!ring_buffer) {
+++		fprintf(stderr, "failed to create ring buffer\n");
+++		return 1;
+++	}
+++
+++	err = toy_bpf__attach(obj);
+++	if (err) {
+++		fprintf(stderr, "failed to attach BPF programs\n");
+++		return 1;
+++	}
+++
+++	for (;;) {
+++		ring_buffer__consume(ring_buffer);
+++		sleep(1);
+++	}
+++
+++	return 0;
+++}
++diff --git a/libbpf-tools/toy.h b/libbpf-tools/toy.h
++new file mode 100644
++index 00000000..ebfedf06
++--- /dev/null
+++++ b/libbpf-tools/toy.h
++@@ -0,0 +1,4 @@
+++struct event {
+++	__u32 count;
+++	char filler[4096 / 8 - sizeof(__u32) - 8];
+++};
++-- 
++2.25.1
 +
-+static int64_t ringbuf_process_overwritable_ring(struct ring *r)
-+{
-+	/* 64-bit to avoid overflow in case of extreme application behavior */
-+	int64_t cnt = 0;
-+	unsigned long read_pos, prod_pos, previous_prod_pos;
-+
-+	prod_pos = smp_load_acquire(r->producer_pos);
-+	previous_prod_pos = smp_load_acquire(r->consumer_pos);
-+
-+	/*
-+	 * For overwritable ring buffer, we use consumer_pos as the previous
-+	 * producer_pos.
-+	 * So, if between two calls to this function, the prod_pos did not move,
-+	 * it means there is no new data, so we can return right now rather than
-+	 * dealing with data we already proceeded.
-+	 * NOTE the kernel space does not care about consumer_pos to reserve()
-+	 * in overwritable ring buffers, hence we can hijack this field.
-+	 */
-+	if (previous_prod_pos == prod_pos)
-+		return 0;
-+
-+	/*
-+	 * BPF ring buffer is over writable, we start reading from
-+	 * producer position.
-+	 */
-+	read_pos = prod_pos;
-+	while (read_pos - prod_pos < r->mask) {
-+		int *len_ptr, len;
-+
-+		len_ptr = r->data + (read_pos & r->mask);
-+		len = smp_load_acquire(len_ptr);
-+
-+		/* sample not committed yet, bail out for now */
-+		if (len & BPF_RINGBUF_BUSY_BIT)
-+			break;
-+
-+		/*
-+		 * If len is 0, it means we read all the data
-+		 * available in the buffer and jump on 0 data:
-+		 *
-+		 * prod_pos                         read_pos
-+		 *     |                                |
-+		 *     V                                V
-+		 * +---+------+----------+-------+------+
-+		 * |   |D....D|C........C|B.....B|A....A|
-+		 * +---+------+----------+-------+------+
-+		 */
-+		if (!len)
-+			break;
-+
-+		/*
-+		 * If adding the event len to the current
-+		 * consumer position makes us wrap the buffer,
-+		 * it means we already did "one loop" around the
-+		 * buffer.
-+		 * So, the pointed data would not be usable:
-+		 *
-+		 *                               prod_pos
-+		 *                   read_pos----+   |
-+		 *                               |   |
-+		 *                               V   V
-+		 * +---+------+----------+-------+---+--+
-+		 * |..E|D....D|C........C|B.....B|A..|E.|
-+		 * +---+------+----------+-------+---+--+
-+		 */
-+		if (read_pos - prod_pos + len > r->mask)
-+			break;
-+
-+		read_pos += roundup_len(len);
-+
-+		if ((len & BPF_RINGBUF_DISCARD_BIT) == 0) {
-+			void *sample;
-+			int err;
-+
-+			sample = (void *)len_ptr + BPF_RINGBUF_HDR_SZ;
-+			err = r->sample_cb(r->ctx, sample, len);
-+			if (err < 0) {
-+				/* update consumer pos and bail out */
-+				smp_store_release(r->consumer_pos,
-+						  prod_pos);
-+				return err;
-+			}
-+			cnt++;
-+		}
-+
-+		/* This prevents reading data we already processed. */
-+		if (previous_prod_pos && read_pos >= previous_prod_pos)
-+			break;
-+	}
-+
-+	smp_store_release(r->consumer_pos, prod_pos);
-+	return cnt;
-+}
-+
- static int64_t ringbuf_process_ring(struct ring* r)
- {
- 	int *len_ptr, len, err;
-@@ -211,6 +314,9 @@ static int64_t ringbuf_process_ring(struct ring* r)
- 	bool got_new_data;
- 	void *sample;
- 
-+	if (is_overwritable(r))
-+		return ringbuf_process_overwritable_ring(r);
-+
- 	cons_pos = smp_load_acquire(r->consumer_pos);
- 	do {
- 		got_new_data = false;
 -- 
 2.25.1
 
