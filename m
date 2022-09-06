@@ -2,79 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B835AF662
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 22:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983305AF664
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 22:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiIFU4j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 16:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
+        id S231378AbiIFU4n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 16:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiIFU4h (ORCPT
+        with ESMTP id S229842AbiIFU4k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:56:37 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65F390831
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 13:56:32 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id b17so3904768wrq.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Sep 2022 13:56:32 -0700 (PDT)
+        Tue, 6 Sep 2022 16:56:40 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14381895FA
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 13:56:39 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id b17so3905137wrq.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Sep 2022 13:56:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=tessares.net; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=RZRC0OhzUwbsz5o6LL8NbWidAu3WkyLmyQWIoEdm+Jg=;
-        b=4Ji5BUeDdT3w2OVS/yQVfWuHzPrLkTm8zpYRx2UWHWio/6W9jrrt8L3IWVHPr+ooY7
-         i3Jej7gc5Exww9C/RufEN860zdBH0dpndyfofXbcYgHBOaT1AxHxGmKFFgGvKJ4N8mcW
-         fyNE1WmC4f0iU/4k/9LT4GJO7zd8RBe3Svnuc+uij8L6SQraU2MCw6e+dwyWFjw63cch
-         I7hUZuoXTmqgoxVl0YF2M1GVjaTeOrCLBPfJc0gaZB6+W9skIDOyyRFhzPrftQQnZ5a3
-         oXhYxnlZ3kxfES7Fsm85706o/VroybaNW2sY8wK5ymL5cbxiEahstleQ9VXzQxj7j75b
-         /grw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=uWCP10+KdM1mM0Umgl1CW1tpnCShY3VRv2KhK/s50Pc=;
+        b=hA0aVCFd6I916GvNfIBOiPT70SlSP/gKustpzyybixkWURvyjrKTmq6eVMPCH14/fc
+         H0bbFN1BzpqTyiFaiU6KRqcAEDSiUuBDEUIq6q4hRuYD8SgrlH5pfhn5TIUOO3h3u0kQ
+         0N8vEq5S3qpKVzCwXaBJpLgjsPineUBdGmDRjTOmtS/D9rW0VTf5JR/6GeN0UyA9XT+R
+         SqNG70Nvxe9rSZw+BFmszsL/1XhVh5OvkmbGBY/sBk0okhFoVxY1fy0RYqdsdl3lTVot
+         JRpRfM/CdLZtyoFcJUKWx2Rgqch1n5Z60hSkS3YN8l3Bh93KxIpuDGnzi/TF/VL5uUj/
+         mmQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=RZRC0OhzUwbsz5o6LL8NbWidAu3WkyLmyQWIoEdm+Jg=;
-        b=V9nU7tOPSJ7oJbLfEXKmrg8GPx5mfFgrlvZprE2rh0uWNRl2FYHl6OHehqf9wD+Ovv
-         2aMGaN9r+RoEnaw3BuQ8OI9BTxDy3P38Gd12sEUjREsqsT3bpUuNqokUZkIsi2ZvcqlP
-         Hdf/xvfBZ9KfSxlG3+C0/wTf0gv0bMCmhpsZ0ac0XnTaGRGcD2Jtw8DnRUzMDiX0gM/+
-         23+g9wrxy8vhSy7CparBF0G7yK36CZSoBBZfgz8W1fvn7H64N94B5K/GFbaQ2CiV84Wv
-         ZrzZWztnorXQX6Ry1Rs6Rcv9aqpM5e+ECJlhRLb/Qffdk8b65DSUKuQ/lGXyM6x80yzX
-         Cnig==
-X-Gm-Message-State: ACgBeo3MZZpviD6Z+NQrAIQ0jCAm7IosMwa0v9PWvGWxRLr+Fr49Na5t
-        Ph/v7+eg1mGBza8g0VJAMHH8rA==
-X-Google-Smtp-Source: AA6agR7XxadU1nBJKVC9I9af5814KUHtWktC30z4WVGLJu0wF/DHqaVW1+kfOIN4gVZqmnVjY8oMIQ==
-X-Received: by 2002:a5d:66ce:0:b0:228:a430:673f with SMTP id k14-20020a5d66ce000000b00228a430673fmr154542wrw.355.1662497791425;
-        Tue, 06 Sep 2022 13:56:31 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=uWCP10+KdM1mM0Umgl1CW1tpnCShY3VRv2KhK/s50Pc=;
+        b=SK8atxZZMo/dw6FMD7YV4MzCbHg+MCrqbMfwSbxzQ7nT5is/ZFmw5w8twdaGyY6Hvo
+         WKmRgDZ5ZomUZFMGiitBAsHQ2m581ghbKcVbsuZxyXb5F/faUdCoWLU+2AwMSO9cOz2I
+         S25AV9qKFxS8O40LyRqSibnzicZatSOZ8W/1eHoIT1sAjcxaKwW8pV/ud5te8aEeHqoI
+         m47JrtzJPx9SOnZujHTMOwvqfgBDu4hqTrcKkhjtf677g2BRGLd8Af2PEIzXGcHodm6M
+         vvV/N+R9ZkHPUqrP39PQWkXUT4ZkWjvX4n5ofxNO/CwSIlYh16yQSxYsjze10/Qor5a/
+         5mLg==
+X-Gm-Message-State: ACgBeo2jmVrRDEpJOg3SptQ2BWSjCI2icXfZGP5hTf/5NMCsDFgxtmkR
+        rMUGEgl1AfQV6YG61mzJ/K+mYZ2qaf561AI2
+X-Google-Smtp-Source: AA6agR6Lfe6OBXP3Eps5pfPITiEd+qNhxZ6EK0SqcI3KEQv6VlAWlrpqoXbHVugNSGgqRY4080WywQ==
+X-Received: by 2002:a5d:5312:0:b0:228:cc9e:b70f with SMTP id e18-20020a5d5312000000b00228cc9eb70fmr163892wrv.11.1662497797565;
+        Tue, 06 Sep 2022 13:56:37 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n24-20020a1c7218000000b003a317ee3036sm15735887wmc.2.2022.09.06.13.56.28
+        by smtp.gmail.com with ESMTPSA id n24-20020a1c7218000000b003a317ee3036sm15735887wmc.2.2022.09.06.13.56.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 13:56:28 -0700 (PDT)
+        Tue, 06 Sep 2022 13:56:35 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     "David S. Miller" <davem@davemloft.net>,
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
         Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        mptcp@lists.linux.dev, netdev@vger.kernel.org
-Subject: [PATCH net-next 0/5] mptcp: allow privileged operations from user ns & cleanup
-Date:   Tue,  6 Sep 2022 22:55:38 +0200
-Message-Id: <20220906205545.1623193-1-matthieu.baerts@tessares.net>
+Cc:     Geliang Tang <geliang.tang@suse.com>, netdev@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 2/5] selftests: mptcp: move prefix tests of addr_nr_ns2 together
+Date:   Tue,  6 Sep 2022 22:55:40 +0200
+Message-Id: <20220906205545.1623193-3-matthieu.baerts@tessares.net>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220906205545.1623193-1-matthieu.baerts@tessares.net>
+References: <20220906205545.1623193-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1171; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=S4CDyrNeDuwlK018W6S651nbf7bbfRCydZCxhDW7uh0=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjF7O5qBlYlK33qKWIebumCBpUmWZJxbNvIYsaNWiw
- uwEx7WiJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCYxezuQAKCRD2t4JPQmmgc1oyEA
- Dc9Qn2D1dJo1OMABQwg6c2OfVJyiZprfb9sKPSfeSQxD6rj7treW/AUKsgVZ3CA2RVUruf090DtCKD
- Cb7qbGDOViZN+d1VsHTMDULxI3mETmFLVGQYYg+ytqIOdNE/iKJhbOWRbVhul6XC3bCBYoN4nKKI5E
- iw6X1N5MagJh6O2cjt9f//FfO4g9NoAbGtA9SU5KOuQ7mbF++NEDmIWs5Zkxs5Qw3hwCK7QtvpHFEw
- sn/+5gNL63vkzzemfZBwaK8VGyhrOs5w/ZBz0b2bKlMpkf+l6Yg/qBkFfQlqdFj8VpVPYgmb5vOihK
- IoRkWkzXGoy0erIOm93Z63E/ulhrkWYFYIEtiYFhQFbjSkusCQ/BOa9wGVuC9vF1Eh9aUbsPmx0lvm
- tnh82vA68Tmp9QZNPGu0zlFhg0LIlbiYYsJ+O3sBH02cMlyH8gcHAGMROBQsC9vBzeY1+4lhBJEReJ
- ENlKkhknoNGgErC9nxLnesxDqzC8rtLq87JlqO/r3NVdRbOqnKCFGE7eZJH2iNXpT4PW4dMFkU94v3
- K52Jj5jMyKxZQ5PknJu97DbWOqSkn6ZbXMErQUG2ed7fiJI4/8Jjk8RXc0y2On0agcNN+H1HiBdOXq
- ztEWwjdVkvpjce9c1OGiRZv/dQNQhMwq2ecC3rs2sJfDSW5f4cs0+SEanUkg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1553; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=yUhUy0ygZaIKGg/DCAYpwAsfqZXiS1Iioh7QiRlCzI8=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjF7O5XYAZvCDzDsZTKMXAqDaby25FIJ6aR+JYa7Jc
+ Ihvfp4WJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCYxezuQAKCRD2t4JPQmmgc4fYD/
+ 9tVps4gMGcGcuZq6GiLT1IUNS3czrpayKljF1dvYaofmEc8O45T+Ovey42AGosrXSta3l/hghtQue/
+ 3c56h0DdEJAX9wtcAqbiZF9vuLSst2af0aKAZO/0nxMq9y6D6eNTl0vbT3VG04Pm2W45+wo0S2dr3+
+ B2O6qpteWsu0lca2BF2SrVVUMXGcLvvaVEWxxnTDFbjnuNXqZCoBVfcQeeycR80BlFW1b7n4Jba4FN
+ 35qaba07wM1L1zAKRPitFr/6/FNyF/4AoK7vvFsGIMwOl9MnKrVtnwvX2WyrWgD7eu7bjyXmsGwVbJ
+ zWE3keai1HrMpJOBSnJe6MzAZOO+R8r9Tz+93kdPlJkNnumGcKfdnpUY358rsWn9UBeTZ7I2SWBLXS
+ +7kmlA0NNmzLjWSaB1bGEay88It/5LO0dPAsXApReACPNjgPs7RnhfLWzAz/9LlrgUlszBFhGpFr8X
+ 8vhePUDTbYfBhB41MSB41oBumCpG0WezKZMcOx2zSA2TKyDChwEfkNj3UbKTVpu8DfKtug9/3hyqho
+ bYHnByPY+gbawDib80omMF+8CineZtAsSE7IBQ2ZKjz1H6EUTkaG4Z03gnD3qwrQSxK9j2S0FlCD2m
+ wSh/CesmSQ1xh9Pq2xhmAwGtH04Cp+VUJGpoJZTc1K3iYQ7B74eRJcWGRuBA==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,37 +91,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This series allows privileged Netlink operations from user namespaces. When a
-non-root user configures MPTCP endpoints, the memory allocation is now accounted
-to this user. See patches 4 and 5.
+From: Geliang Tang <geliang.tang@suse.com>
 
-Apart from that, there are some cleanup:
+Move the fullmesh prefix test of addr_nr_ns2 together with its other
+prefix tests.
 
- - Patch 1 adds a macro to improve code readability
+Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
- - Patch 2 regroups similar checks all together
-
- - Patch 3 uses an explicit boolean instead of a counter to do one more check
-
-Geliang Tang (2):
-  selftests: mptcp: move prefix tests of addr_nr_ns2 together
-  mptcp: add do_check_data_fin to replace copied
-
-Matthieu Baerts (1):
-  mptcp: add mptcp_for_each_subflow_safe helper
-
-Thomas Haller (2):
-  mptcp: allow privileged operations from user namespaces
-  mptcp: account memory allocation in mptcp_nl_cmd_add_addr() to user
-
- net/mptcp/pm_netlink.c                        | 22 +++++++++----------
- net/mptcp/protocol.c                          | 13 ++++++-----
- net/mptcp/protocol.h                          |  2 ++
- .../testing/selftests/net/mptcp/mptcp_join.sh | 10 ++++-----
- 4 files changed, 24 insertions(+), 23 deletions(-)
-
-
-base-commit: 03fdb11da92fde0bdc0b6e9c1c642b7414d49e8d
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index ff83ef426df5..2957fe414639 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -706,6 +706,7 @@ do_transfer()
+ 		addr_nr_ns1=${addr_nr_ns1:10}
+ 	fi
+ 
++	local flags="subflow"
+ 	if [[ "${addr_nr_ns2}" = "fastclose_"* ]]; then
+ 		# disconnect
+ 		extra_args="$extra_args -I ${addr_nr_ns2:10}"
+@@ -713,6 +714,9 @@ do_transfer()
+ 	elif [[ "${addr_nr_ns2}" = "userspace_"* ]]; then
+ 		userspace_pm=1
+ 		addr_nr_ns2=${addr_nr_ns2:10}
++	elif [[ "${addr_nr_ns2}" = "fullmesh_"* ]]; then
++		flags="${flags},fullmesh"
++		addr_nr_ns2=${addr_nr_ns2:9}
+ 	fi
+ 
+ 	if [ $userspace_pm -eq 1 ]; then
+@@ -832,12 +836,6 @@ do_transfer()
+ 		fi
+ 	fi
+ 
+-	local flags="subflow"
+-	if [[ "${addr_nr_ns2}" = "fullmesh_"* ]]; then
+-		flags="${flags},fullmesh"
+-		addr_nr_ns2=${addr_nr_ns2:9}
+-	fi
+-
+ 	# if newly added endpoints must be deleted, give the background msk
+ 	# some time to created them
+ 	[ $addr_nr_ns1 -gt 0 ] && [ $addr_nr_ns2 -lt 0 ] && sleep 1
 -- 
 2.37.2
 
