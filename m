@@ -2,38 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B57E5AF2FB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 19:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6645AF2FD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 19:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiIFRph (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 13:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S229520AbiIFRpy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 13:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiIFRpg (ORCPT
+        with ESMTP id S229487AbiIFRpx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 13:45:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254DC5C9CA
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 10:45:32 -0700 (PDT)
+        Tue, 6 Sep 2022 13:45:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6645720F
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 10:45:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 403DD615A4
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 17:45:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52974C433C1;
-        Tue,  6 Sep 2022 17:45:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D598BB819CA
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 17:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD448C433C1;
+        Tue,  6 Sep 2022 17:45:45 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        Will Deacon <will@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>,
+        Zhang Lei <zhang.lei@jp.fujitsu.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] kselftest/arm64: Add simple hwcap validation
-Date:   Tue,  6 Sep 2022 18:45:28 +0100
-Message-Id: <166248629287.3558870.14220341700427395787.b4-ty@arm.com>
+Subject: Re: (subset) [PATCH v3 0/3] arm64/sve: Document our actual SVE syscall ABI
+Date:   Tue,  6 Sep 2022 18:45:43 +0100
+Message-Id: <166248629287.3558870.16909331295509342437.b4-ty@arm.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220829154602.827275-1-broonie@kernel.org>
-References: <20220829154602.827275-1-broonie@kernel.org>
+In-Reply-To: <20220829162502.886816-1-broonie@kernel.org>
+References: <20220829162502.886816-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -46,23 +48,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 29 Aug 2022 16:46:02 +0100, Mark Brown wrote:
-> Add some trivial hwcap validation which checks that /proc/cpuinfo and
-> AT_HWCAP agree with each other and can verify that for extensions that can
-> generate a SIGILL due to adding new instructions one appears or doesn't
-> appear as expected. I've added SVE and SME, other capabilities can be
-> added later if this gets merged.
-> 
-> This isn't super exciting but on the other hand took very little time to
-> write and should be handy when verifying that you wired up AT_HWCAP
-> properly.
+On Mon, 29 Aug 2022 17:24:59 +0100, Mark Brown wrote:
+> Currently our SVE syscall ABI documentation does not reflect the actual
+> implemented ABI, it says that register state not shared with FPSIMD
+> becomes undefined on syscall when in reality we always clear it. Since
+> changing this would cause a change in the observed kernel behaviour
+> there is a substantial desire to avoid taking advantage of the
+> documented ABI so instead let's document what we actually do so it's
+> clear that it is in reality an ABI.
 > 
 > [...]
 
 Applied to arm64 (for-next/kselftest), thanks!
 
-[1/1] kselftest/arm64: Add simple hwcap validation
-      https://git.kernel.org/arm64/c/7a9bcaaad5f1
+[1/3] kselftest/arm64: Correct buffer allocation for SVE Z registers
+      https://git.kernel.org/arm64/c/27f3d9e70fd8
+[3/3] kselftest/arm64: Enforce actual ABI for SVE syscalls
+      https://git.kernel.org/arm64/c/9ccff5080758
 
 -- 
 Catalin
