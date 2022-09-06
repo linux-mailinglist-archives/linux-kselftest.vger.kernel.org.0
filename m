@@ -2,87 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983305AF664
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Sep 2022 22:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD7C5AF796
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 00:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiIFU4n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 16:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S229472AbiIFWCH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 18:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiIFU4k (ORCPT
+        with ESMTP id S229661AbiIFWCH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 16:56:40 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14381895FA
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 13:56:39 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id b17so3905137wrq.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Sep 2022 13:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=uWCP10+KdM1mM0Umgl1CW1tpnCShY3VRv2KhK/s50Pc=;
-        b=hA0aVCFd6I916GvNfIBOiPT70SlSP/gKustpzyybixkWURvyjrKTmq6eVMPCH14/fc
-         H0bbFN1BzpqTyiFaiU6KRqcAEDSiUuBDEUIq6q4hRuYD8SgrlH5pfhn5TIUOO3h3u0kQ
-         0N8vEq5S3qpKVzCwXaBJpLgjsPineUBdGmDRjTOmtS/D9rW0VTf5JR/6GeN0UyA9XT+R
-         SqNG70Nvxe9rSZw+BFmszsL/1XhVh5OvkmbGBY/sBk0okhFoVxY1fy0RYqdsdl3lTVot
-         JRpRfM/CdLZtyoFcJUKWx2Rgqch1n5Z60hSkS3YN8l3Bh93KxIpuDGnzi/TF/VL5uUj/
-         mmQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=uWCP10+KdM1mM0Umgl1CW1tpnCShY3VRv2KhK/s50Pc=;
-        b=SK8atxZZMo/dw6FMD7YV4MzCbHg+MCrqbMfwSbxzQ7nT5is/ZFmw5w8twdaGyY6Hvo
-         WKmRgDZ5ZomUZFMGiitBAsHQ2m581ghbKcVbsuZxyXb5F/faUdCoWLU+2AwMSO9cOz2I
-         S25AV9qKFxS8O40LyRqSibnzicZatSOZ8W/1eHoIT1sAjcxaKwW8pV/ud5te8aEeHqoI
-         m47JrtzJPx9SOnZujHTMOwvqfgBDu4hqTrcKkhjtf677g2BRGLd8Af2PEIzXGcHodm6M
-         vvV/N+R9ZkHPUqrP39PQWkXUT4ZkWjvX4n5ofxNO/CwSIlYh16yQSxYsjze10/Qor5a/
-         5mLg==
-X-Gm-Message-State: ACgBeo2jmVrRDEpJOg3SptQ2BWSjCI2icXfZGP5hTf/5NMCsDFgxtmkR
-        rMUGEgl1AfQV6YG61mzJ/K+mYZ2qaf561AI2
-X-Google-Smtp-Source: AA6agR6Lfe6OBXP3Eps5pfPITiEd+qNhxZ6EK0SqcI3KEQv6VlAWlrpqoXbHVugNSGgqRY4080WywQ==
-X-Received: by 2002:a5d:5312:0:b0:228:cc9e:b70f with SMTP id e18-20020a5d5312000000b00228cc9eb70fmr163892wrv.11.1662497797565;
-        Tue, 06 Sep 2022 13:56:37 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n24-20020a1c7218000000b003a317ee3036sm15735887wmc.2.2022.09.06.13.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 13:56:35 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Geliang Tang <geliang.tang@suse.com>, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/5] selftests: mptcp: move prefix tests of addr_nr_ns2 together
-Date:   Tue,  6 Sep 2022 22:55:40 +0200
-Message-Id: <20220906205545.1623193-3-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220906205545.1623193-1-matthieu.baerts@tessares.net>
-References: <20220906205545.1623193-1-matthieu.baerts@tessares.net>
+        Tue, 6 Sep 2022 18:02:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9979BB4A
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 15:02:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE656B81A76
+        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 22:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07A8EC433D6;
+        Tue,  6 Sep 2022 22:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662501723;
+        bh=K8oZMRiTP6csOh1stCbMxqGuXdt/4TmVB2Ei7geRoCQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CkWoVHzUv1m1/cD2AtfCezWJjca88b8MlCqk35K7BNo7aj7ohHehnSg4jjAh4lZOB
+         pwpF65wnTruRRaOyu3A9Mc447adevkItn5CSkaeMEy70Il14n0lOTsXFuvnPpsFxNJ
+         lQd/dd9YULoQWs4/ropDOKMTlrDq4/yrAD/PHkzpgKGndCy3S8PsjgRnV8EwI53qY7
+         Izl/zLbm7wEwI4dT+MXOKDhsWlTIYei7tPDfyxXVoxe1NrcgaMXVnM+UcJ+us/bW7S
+         H8nzkHhnb94azY0u3pO6YEBhAUjrh6USdv0iSfQM6AiWYEK/FvWkkz9aLN/wZR8lR2
+         hxYe+npctjriA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH] kselftest/arm64: Install signal handlers before output in FP stress tests
+Date:   Tue,  6 Sep 2022 23:00:56 +0100
+Message-Id: <20220906220056.820295-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1553; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=yUhUy0ygZaIKGg/DCAYpwAsfqZXiS1Iioh7QiRlCzI8=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjF7O5XYAZvCDzDsZTKMXAqDaby25FIJ6aR+JYa7Jc
- Ihvfp4WJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCYxezuQAKCRD2t4JPQmmgc4fYD/
- 9tVps4gMGcGcuZq6GiLT1IUNS3czrpayKljF1dvYaofmEc8O45T+Ovey42AGosrXSta3l/hghtQue/
- 3c56h0DdEJAX9wtcAqbiZF9vuLSst2af0aKAZO/0nxMq9y6D6eNTl0vbT3VG04Pm2W45+wo0S2dr3+
- B2O6qpteWsu0lca2BF2SrVVUMXGcLvvaVEWxxnTDFbjnuNXqZCoBVfcQeeycR80BlFW1b7n4Jba4FN
- 35qaba07wM1L1zAKRPitFr/6/FNyF/4AoK7vvFsGIMwOl9MnKrVtnwvX2WyrWgD7eu7bjyXmsGwVbJ
- zWE3keai1HrMpJOBSnJe6MzAZOO+R8r9Tz+93kdPlJkNnumGcKfdnpUY358rsWn9UBeTZ7I2SWBLXS
- +7kmlA0NNmzLjWSaB1bGEay88It/5LO0dPAsXApReACPNjgPs7RnhfLWzAz/9LlrgUlszBFhGpFr8X
- 8vhePUDTbYfBhB41MSB41oBumCpG0WezKZMcOx2zSA2TKyDChwEfkNj3UbKTVpu8DfKtug9/3hyqho
- bYHnByPY+gbawDib80omMF+8CineZtAsSE7IBQ2ZKjz1H6EUTkaG4Z03gnD3qwrQSxK9j2S0FlCD2m
- wSh/CesmSQ1xh9Pq2xhmAwGtH04Cp+VUJGpoJZTc1K3iYQ7B74eRJcWGRuBA==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5019; i=broonie@kernel.org; h=from:subject; bh=K8oZMRiTP6csOh1stCbMxqGuXdt/4TmVB2Ei7geRoCQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjF8MYW2JMRd6zhGWcSAFrHyngiSAl5WCyVX1A2Xg2 A58kK0+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYxfDGAAKCRAk1otyXVSH0BRlB/ 4yo0X1ss8dg2eL2d3hgFWQ2te1ZcuN8Z0Np0pjx5IPCsy/YT5NkawOEK3/S6kYJqdb4G9wXZZL1YYo kypYgl1sj0buUftF8HNpsn3Y35Q9902XAtZthYpnkf9ttR1GXe7T4FTcGICsg5WDEHVzuMmvc7zgk0 dxuzOqEbKuM9DXO3uLfOTUeN/2/mkP2ur6PEAbuiDKpsY7PmEQh2toD/5cRV/yxRUYOqagz/2a85KM o5BKLVNzDGAXl3tjFJQNklovnA55ToNfQW5rAgl1A/SpyQKHdiyOR/n4IWzYtZ+bWrVlgkAhfZ2qSh v34Dn3/GtvTVeFeijHzhC7fT+JLG0U
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,53 +55,219 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Geliang Tang <geliang.tang@suse.com>
+To interface more robustly with other processes install the signal handers
+in the floating point stress tests before we produce any output, this
+means that a parent process can know that if it has seen any output from
+the test then the test is ready to handle incoming signals.
 
-Move the fullmesh prefix test of addr_nr_ns2 together with its other
-prefix tests.
-
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index ff83ef426df5..2957fe414639 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -706,6 +706,7 @@ do_transfer()
- 		addr_nr_ns1=${addr_nr_ns1:10}
- 	fi
+Resending with signoff added, was missed on previous postings.
+
+ .../testing/selftests/arm64/fp/fpsimd-test.S  | 48 +++++++++----------
+ tools/testing/selftests/arm64/fp/sve-test.S   | 48 +++++++++----------
+ tools/testing/selftests/arm64/fp/za-test.S    | 48 +++++++++----------
+ 3 files changed, 72 insertions(+), 72 deletions(-)
+
+diff --git a/tools/testing/selftests/arm64/fp/fpsimd-test.S b/tools/testing/selftests/arm64/fp/fpsimd-test.S
+index f0f92192351a..918d04885a33 100644
+--- a/tools/testing/selftests/arm64/fp/fpsimd-test.S
++++ b/tools/testing/selftests/arm64/fp/fpsimd-test.S
+@@ -216,6 +216,30 @@ endfunction
+ .globl _start
+ function _start
+ _start:
++	mov	x23, #0		// signal count
++
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
++	mov	w0, #SIGUSR2
++	adr	x1, tickle_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
+ 	// Sanity-check and report the vector length
  
-+	local flags="subflow"
- 	if [[ "${addr_nr_ns2}" = "fastclose_"* ]]; then
- 		# disconnect
- 		extra_args="$extra_args -I ${addr_nr_ns2:10}"
-@@ -713,6 +714,9 @@ do_transfer()
- 	elif [[ "${addr_nr_ns2}" = "userspace_"* ]]; then
- 		userspace_pm=1
- 		addr_nr_ns2=${addr_nr_ns2:10}
-+	elif [[ "${addr_nr_ns2}" = "fullmesh_"* ]]; then
-+		flags="${flags},fullmesh"
-+		addr_nr_ns2=${addr_nr_ns2:9}
- 	fi
+ 	mov	x19, #128
+@@ -246,30 +270,6 @@ _start:
+ 	mov	x0, x20
+ 	bl	putdecn
  
- 	if [ $userspace_pm -eq 1 ]; then
-@@ -832,12 +836,6 @@ do_transfer()
- 		fi
- 	fi
- 
--	local flags="subflow"
--	if [[ "${addr_nr_ns2}" = "fullmesh_"* ]]; then
--		flags="${flags},fullmesh"
--		addr_nr_ns2=${addr_nr_ns2:9}
--	fi
+-	mov	x23, #0		// Irritation signal count
 -
- 	# if newly added endpoints must be deleted, give the background msk
- 	# some time to created them
- 	[ $addr_nr_ns1 -gt 0 ] && [ $addr_nr_ns2 -lt 0 ] && sleep 1
+-	mov	w0, #SIGINT
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGTERM
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR1
+-	adr	x1, irritator_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR2
+-	adr	x1, tickle_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+ 	mov	x22, #0		// generation number, increments per iteration
+ .Ltest_loop:
+ 
+diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
+index 79c56e6c5b23..2a18cb4c528c 100644
+--- a/tools/testing/selftests/arm64/fp/sve-test.S
++++ b/tools/testing/selftests/arm64/fp/sve-test.S
+@@ -379,6 +379,30 @@ endfunction
+ .globl _start
+ function _start
+ _start:
++	mov	x23, #0		// Irritation signal count
++
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
++	mov	w0, #SIGUSR2
++	adr	x1, tickle_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
+ #ifdef SSVE
+ 	puts	"Streaming mode "
+ 	smstart_sm
+@@ -414,30 +438,6 @@ _start:
+ 	mov	x0, x20
+ 	bl	putdecn
+ 
+-	mov	x23, #0		// Irritation signal count
+-
+-	mov	w0, #SIGINT
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGTERM
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR1
+-	adr	x1, irritator_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR2
+-	adr	x1, tickle_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+ #ifdef SSVE
+ 	smstart_sm		// syscalls will have exited streaming mode
+ #endif
+diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
+index 901839107205..53c54af65704 100644
+--- a/tools/testing/selftests/arm64/fp/za-test.S
++++ b/tools/testing/selftests/arm64/fp/za-test.S
+@@ -232,6 +232,30 @@ endfunction
+ .globl _start
+ function _start
+ _start:
++	mov	x23, #0		// signal count
++
++	mov	w0, #SIGINT
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGTERM
++	adr	x1, terminate_handler
++	mov	w2, #SA_SIGINFO
++	bl	setsignal
++
++	mov	w0, #SIGUSR1
++	adr	x1, irritator_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
++	mov	w0, #SIGUSR2
++	adr	x1, tickle_handler
++	mov	w2, #SA_SIGINFO
++	orr	w2, w2, #SA_NODEFER
++	bl	setsignal
++
+ 	puts	"Streaming mode "
+ 	smstart_za
+ 
+@@ -264,30 +288,6 @@ _start:
+ 	mov	x0, x20
+ 	bl	putdecn
+ 
+-	mov	x23, #0		// Irritation signal count
+-
+-	mov	w0, #SIGINT
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGTERM
+-	adr	x1, terminate_handler
+-	mov	w2, #SA_SIGINFO
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR1
+-	adr	x1, irritator_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+-	mov	w0, #SIGUSR2
+-	adr	x1, tickle_handler
+-	mov	w2, #SA_SIGINFO
+-	orr	w2, w2, #SA_NODEFER
+-	bl	setsignal
+-
+ 	mov	x22, #0		// generation number, increments per iteration
+ .Ltest_loop:
+ 	rdsvl	0, 8
 -- 
-2.37.2
+2.30.2
 
