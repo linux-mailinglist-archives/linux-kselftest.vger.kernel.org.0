@@ -2,83 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6770F5B0C7E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 20:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3455B0EE8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 23:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiIGSbA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Sep 2022 14:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S229706AbiIGVKO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Sep 2022 17:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiIGSa7 (ORCPT
+        with ESMTP id S229514AbiIGVKM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 14:30:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959118A7D8
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Sep 2022 11:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662575456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ozxprUfy7kpSeSXa5fDN/CdEa50qZfYqxi8d4e9dx00=;
-        b=IXHLV62/Jx1rucu1kBqeWcLrtYgBjlRT2X0tycCrgaNlDYCdjb3d/EoIrnUT1X5IL+Rkei
-        sgSfR67vKdX9KWCAntg70lDbPpxLuxiFC4ofk5fhPHounlcUYcIF5pLYehYY2yjObV8be0
-        ayDBAzduzcCEJmldIH8FNJptbiBUce0=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-486-m1t7S1OyN7e72TfT90KoDw-1; Wed, 07 Sep 2022 14:30:55 -0400
-X-MC-Unique: m1t7S1OyN7e72TfT90KoDw-1
-Received: by mail-pf1-f199.google.com with SMTP id v65-20020a626144000000b0052f89472f54so7991799pfb.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Sep 2022 11:30:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ozxprUfy7kpSeSXa5fDN/CdEa50qZfYqxi8d4e9dx00=;
-        b=Mc0mBcy9CeOHR0m7ove3EgfMTs7wvLsoUtevfpUR+07RtH27qCAz8mmpVuVDepDkfT
-         rtLCCrwNC/2CNF6CynY4rTmwiMtrveFK6j+IftxaEXRPrlxTX2WvdvrNh7zsFfCUBUOY
-         6LWFNwToAsy19gTfmG/9oAmwQ2PaDckOPt6X0DIrJDheLZC7JdBI2KSxgTCX+Oy6nubH
-         8hbHUdOJ5PHdgDt1x/BMxPVxcrZD8R5U1n3Uoffs7U62VCSvOBSC397Tkhc4uF+7AVaA
-         6e74p2vlQ5Sj6RqtUDa/LYypyTaDQU5FRllfFKyU0RBhh0iMIviCfAwx0tEmKXjU6ZAS
-         IX/A==
-X-Gm-Message-State: ACgBeo1HOrJf/55/R8EJAQTblpDlTIfEP5FAzxLBORmhbWZiRYtCM2XB
-        UtMzfRAw1qTRnYE66uxHMPXcfCoKTJwI9GtUh4ZRrFJx/T0VpmdbHPEC2nxvk57FNmAN6s/kL4K
-        Kum1LU6DHD6bR9JOmA0jxxqxqkbDewb+UPyPZb7hoWZQZ
-X-Received: by 2002:a63:125b:0:b0:434:6fb1:660e with SMTP id 27-20020a63125b000000b004346fb1660emr4378616pgs.489.1662575452830;
-        Wed, 07 Sep 2022 11:30:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4PRDUqc1/z0K3l0BNMCqfgcU5GKf+kZwDsYDOn53nxGFxJ88M0aCoKT2+xGuO5/8vs+53GzHsMC8ITbSJOGBw=
-X-Received: by 2002:a63:125b:0:b0:434:6fb1:660e with SMTP id
- 27-20020a63125b000000b004346fb1660emr4378582pgs.489.1662575452461; Wed, 07
- Sep 2022 11:30:52 -0700 (PDT)
+        Wed, 7 Sep 2022 17:10:12 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50612EE30;
+        Wed,  7 Sep 2022 14:10:10 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E956A1884A6C;
+        Wed,  7 Sep 2022 21:10:07 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id CD0D525032B7;
+        Wed,  7 Sep 2022 21:10:07 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id BF8139EC0006; Wed,  7 Sep 2022 21:10:07 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <20220906151303.2780789-1-benjamin.tissoires@redhat.com>
- <20220906151303.2780789-5-benjamin.tissoires@redhat.com> <CAP01T76Q4VGYveL=6NoRFsgjFvLTLLF8jER0HwU1hx+maqo7Tg@mail.gmail.com>
- <CAADnVQK=ZYRvnR38+JMS_ckZBAeHm_o1Jg3XCyr1mg2Hpu4xSg@mail.gmail.com>
-In-Reply-To: <CAADnVQK=ZYRvnR38+JMS_ckZBAeHm_o1Jg3XCyr1mg2Hpu4xSg@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 7 Sep 2022 20:30:41 +0200
-Message-ID: <CAO-hwJL1u7hxqeQOnM3qV=Wkhe=rVt-FQbpcvNLxDuQsTnVJHw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v11 4/7] selftests/bpf: add test for accessing
- ctx from syscall program type
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Date:   Wed, 07 Sep 2022 23:10:07 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <YxNo/0+/Sbg9svid@shredder>
+References: <YwpgvkojEdytzCAB@shredder>
+ <7654860e4d7d43c15d482c6caeb6a773@kapio-technology.com>
+ <YwxtVhlPjq+M9QMY@shredder>
+ <2967ccc234bb672f5440a4b175b73768@kapio-technology.com>
+ <Ywyj1VF1wlYqlHb6@shredder>
+ <9e1a9eb218bbaa0d36cb98ff5d4b97d7@kapio-technology.com>
+ <YwzPJ2oCYJQHOsXD@shredder>
+ <69db7606896c77924c11a6c175c4b1a6@kapio-technology.com>
+ <YwzjPcQjfLPk3q/k@shredder>
+ <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
+ <YxNo/0+/Sbg9svid@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,367 +84,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 8:09 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Sep 7, 2022 at 10:46 AM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > On Tue, 6 Sept 2022 at 17:13, Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > We need to also export the kfunc set to the syscall program type,
-> > > and then add a couple of eBPF programs that are testing those calls.
-> > >
-> > > The first one checks for valid access, and the second one is OK
-> > > from a static analysis point of view but fails at run time because
-> > > we are trying to access outside of the allocated memory.
-> > >
-> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > >
-> > > ---
-> >
-> > CI is failing for test_progs-no_alu32:
-> > https://github.com/kernel-patches/bpf/runs/8220916615?check_suite_focus=true
-> >
-> > >
-> > > changes in v11:
-> > > - use new way of declaring tests
-> > >
-> > > changes in v10:
-> > > - use new definitions for tests in an array
-> > > - add a new kfunc syscall_test_null_fail test
-> > >
-> > > no changes in v9
-> > >
-> > > no changes in v8
-> > >
-> > > changes in v7:
-> > > - add 1 more case to ensure we can read the entire sizeof(ctx)
-> > > - add a test case for when the context is NULL
-> > >
-> > > new in v6
-> > > ---
-> > >  net/bpf/test_run.c                            |   1 +
-> > >  .../selftests/bpf/prog_tests/kfunc_call.c     | 143 +++++++++++++++++-
-> > >  .../selftests/bpf/progs/kfunc_call_fail.c     |  39 +++++
-> > >  .../selftests/bpf/progs/kfunc_call_test.c     |  38 +++++
-> > >  4 files changed, 214 insertions(+), 7 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-> > >
-> > > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > > index 25d8ecf105aa..f16baf977a21 100644
-> > > --- a/net/bpf/test_run.c
-> > > +++ b/net/bpf/test_run.c
-> > > @@ -1634,6 +1634,7 @@ static int __init bpf_prog_test_run_init(void)
-> > >
-> > >         ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_prog_test_kfunc_set);
-> > >         ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_prog_test_kfunc_set);
-> > > +       ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_prog_test_kfunc_set);
-> > >         return ret ?: register_btf_id_dtor_kfuncs(bpf_prog_test_dtor_kfunc,
-> > >                                                   ARRAY_SIZE(bpf_prog_test_dtor_kfunc),
-> > >                                                   THIS_MODULE);
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> > > index 9dfbe5355a2d..d5881c3331a8 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-> > > @@ -2,6 +2,7 @@
-> > >  /* Copyright (c) 2021 Facebook */
-> > >  #include <test_progs.h>
-> > >  #include <network_helpers.h>
-> > > +#include "kfunc_call_fail.skel.h"
-> > >  #include "kfunc_call_test.skel.h"
-> > >  #include "kfunc_call_test.lskel.h"
-> > >  #include "kfunc_call_test_subprog.skel.h"
-> > > @@ -10,37 +11,96 @@
-> > >
-> > >  #include "cap_helpers.h"
-> > >
-> > > +static size_t log_buf_sz = 1048576; /* 1 MB */
-> > > +static char obj_log_buf[1048576];
-> > > +
-> > > +enum kfunc_test_type {
-> > > +       tc_test = 0,
-> > > +       syscall_test,
-> > > +       syscall_null_ctx_test,
-> > > +};
-> > > +
-> > >  struct kfunc_test_params {
-> > >         const char *prog_name;
-> > >         unsigned long lskel_prog_desc_offset;
-> > >         int retval;
-> > > +       enum kfunc_test_type test_type;
-> > > +       const char *expected_err_msg;
-> > >  };
-> > >
-> > > -#define TC_TEST(name, __retval) \
-> > > +#define __BPF_TEST_SUCCESS(name, __retval, type) \
-> > >         { \
-> > >           .prog_name = #name, \
-> > >           .lskel_prog_desc_offset = offsetof(struct kfunc_call_test_lskel, progs.name), \
-> > >           .retval = __retval, \
-> > > +         .test_type = type, \
-> > > +         .expected_err_msg = NULL, \
-> > > +       }
-> > > +
-> > > +#define __BPF_TEST_FAIL(name, __retval, type, error_msg) \
-> > > +       { \
-> > > +         .prog_name = #name, \
-> > > +         .lskel_prog_desc_offset = 0 /* unused when test is failing */, \
-> > > +         .retval = __retval, \
-> > > +         .test_type = type, \
-> > > +         .expected_err_msg = error_msg, \
-> > >         }
-> > >
-> > > +#define TC_TEST(name, retval) __BPF_TEST_SUCCESS(name, retval, tc_test)
-> > > +#define SYSCALL_TEST(name, retval) __BPF_TEST_SUCCESS(name, retval, syscall_test)
-> > > +#define SYSCALL_NULL_CTX_TEST(name, retval) __BPF_TEST_SUCCESS(name, retval, syscall_null_ctx_test)
-> > > +
-> > > +#define SYSCALL_NULL_CTX_FAIL(name, retval, error_msg) \
-> > > +       __BPF_TEST_FAIL(name, retval, syscall_null_ctx_test, error_msg)
-> > > +
-> > >  static struct kfunc_test_params kfunc_tests[] = {
-> > > +       /* failure cases:
-> > > +        * if retval is 0 -> the program will fail to load and the error message is an error
-> > > +        * if retval is not 0 -> the program can be loaded but running it will gives the
-> > > +        *                       provided return value. The error message is thus the one
-> > > +        *                       from a successful load
-> > > +        */
-> > > +       SYSCALL_NULL_CTX_FAIL(kfunc_syscall_test_fail, -EINVAL, "processed 4 insns"),
-> > > +       SYSCALL_NULL_CTX_FAIL(kfunc_syscall_test_null_fail, -EINVAL, "processed 4 insns"),
-> > > +
-> > > +       /* success cases */
-> > >         TC_TEST(kfunc_call_test1, 12),
-> > >         TC_TEST(kfunc_call_test2, 3),
-> > >         TC_TEST(kfunc_call_test_ref_btf_id, 0),
-> > > +       SYSCALL_TEST(kfunc_syscall_test, 0),
-> > > +       SYSCALL_NULL_CTX_TEST(kfunc_syscall_test_null, 0),
-> > > +};
-> > > +
-> > > +struct syscall_test_args {
-> > > +       __u8 data[16];
-> > > +       size_t size;
-> > >  };
-> > >
-> > >  static void verify_success(struct kfunc_test_params *param)
-> > >  {
-> > >         struct kfunc_call_test_lskel *lskel = NULL;
-> > > +       LIBBPF_OPTS(bpf_test_run_opts, topts);
-> > >         struct bpf_prog_desc *lskel_prog;
-> > >         struct kfunc_call_test *skel;
-> > >         struct bpf_program *prog;
-> > >         int prog_fd, err;
-> > > -       LIBBPF_OPTS(bpf_test_run_opts, topts,
-> > > -               .data_in = &pkt_v4,
-> > > -               .data_size_in = sizeof(pkt_v4),
-> > > -               .repeat = 1,
-> > > -       );
-> > > +       struct syscall_test_args args = {
-> > > +               .size = 10,
-> > > +       };
-> > > +
-> > > +       switch (param->test_type) {
-> > > +       case syscall_test:
-> > > +               topts.ctx_in = &args;
-> > > +               topts.ctx_size_in = sizeof(args);
-> > > +               /* fallthrough */
-> > > +       case syscall_null_ctx_test:
-> > > +               break;
-> > > +       case tc_test:
-> > > +               topts.data_in = &pkt_v4;
-> > > +               topts.data_size_in = sizeof(pkt_v4);
-> > > +               topts.repeat = 1;
-> > > +               break;
-> > > +       }
-> > >
-> > >         /* first test with normal libbpf */
-> > >         skel = kfunc_call_test__open_and_load();
-> > > @@ -79,6 +139,72 @@ static void verify_success(struct kfunc_test_params *param)
-> > >                 kfunc_call_test_lskel__destroy(lskel);
-> > >  }
-> > >
-> > > +static void verify_fail(struct kfunc_test_params *param)
-> > > +{
-> > > +       LIBBPF_OPTS(bpf_object_open_opts, opts);
-> > > +       LIBBPF_OPTS(bpf_test_run_opts, topts);
-> > > +       struct bpf_program *prog;
-> > > +       struct kfunc_call_fail *skel;
-> > > +       int prog_fd, err;
-> > > +       struct syscall_test_args args = {
-> > > +               .size = 10,
-> > > +       };
-> > > +
-> > > +       opts.kernel_log_buf = obj_log_buf;
-> > > +       opts.kernel_log_size = log_buf_sz;
-> > > +       opts.kernel_log_level = 1;
-> > > +
-> > > +       switch (param->test_type) {
-> > > +       case syscall_test:
-> > > +               topts.ctx_in = &args;
-> > > +               topts.ctx_size_in = sizeof(args);
-> > > +               /* fallthrough */
-> > > +       case syscall_null_ctx_test:
-> > > +               break;
-> > > +       case tc_test:
-> > > +               topts.data_in = &pkt_v4;
-> > > +               topts.data_size_in = sizeof(pkt_v4);
-> > > +               break;
-> > > +               topts.repeat = 1;
-> > > +       }
-> > > +
-> > > +       skel = kfunc_call_fail__open_opts(&opts);
-> > > +       if (!ASSERT_OK_PTR(skel, "kfunc_call_fail__open_opts"))
-> > > +               goto cleanup;
-> > > +
-> > > +       prog = bpf_object__find_program_by_name(skel->obj, param->prog_name);
-> > > +       if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-> > > +               goto cleanup;
-> > > +
-> > > +       bpf_program__set_autoload(prog, true);
-> > > +
-> > > +       err = kfunc_call_fail__load(skel);
-> > > +       if (!param->retval) {
-> > > +               /* the verifier is supposed to complain and refuses to load */
-> > > +               if (!ASSERT_ERR(err, "unexpected load success"))
-> > > +                       goto out_err;
-> > > +
-> > > +       } else {
-> > > +               /* the program is loaded but must dynamically fail */
-> > > +               if (!ASSERT_OK(err, "unexpected load error"))
-> > > +                       goto out_err;
-> > > +
-> > > +               prog_fd = bpf_program__fd(prog);
-> > > +               err = bpf_prog_test_run_opts(prog_fd, &topts);
-> > > +               if (!ASSERT_EQ(err, param->retval, param->prog_name))
-> > > +                       goto out_err;
-> > > +       }
-> > > +
-> > > +out_err:
-> > > +       if (!ASSERT_OK_PTR(strstr(obj_log_buf, param->expected_err_msg), "expected_err_msg")) {
-> > > +               fprintf(stderr, "Expected err_msg: %s\n", param->expected_err_msg);
-> > > +               fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
-> > > +       }
-> > > +
-> > > +cleanup:
-> > > +       kfunc_call_fail__destroy(skel);
-> > > +}
-> > > +
-> > >  static void test_main(void)
-> > >  {
-> > >         int i;
-> > > @@ -87,7 +213,10 @@ static void test_main(void)
-> > >                 if (!test__start_subtest(kfunc_tests[i].prog_name))
-> > >                         continue;
-> > >
-> > > -               verify_success(&kfunc_tests[i]);
-> > > +               if (!kfunc_tests[i].expected_err_msg)
-> > > +                       verify_success(&kfunc_tests[i]);
-> > > +               else
-> > > +                       verify_fail(&kfunc_tests[i]);
-> > >         }
-> > >  }
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-> > > new file mode 100644
-> > > index 000000000000..4168027f2ab1
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
-> > > @@ -0,0 +1,39 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/* Copyright (c) 2021 Facebook */
-> > > +#include <vmlinux.h>
-> > > +#include <bpf/bpf_helpers.h>
-> > > +
-> > > +extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
-> > > +
-> > > +struct syscall_test_args {
-> > > +       __u8 data[16];
-> > > +       size_t size;
-> > > +};
-> > > +
-> > > +SEC("?syscall")
-> > > +int kfunc_syscall_test_fail(struct syscall_test_args *args)
-> > > +{
-> > > +       bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(*args) + 1);
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +SEC("?syscall")
-> > > +int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
-> > > +{
-> > > +       /* Must be called with args as a NULL pointer
-> > > +        * we do not check for it to have the verifier consider that
-> > > +        * the pointer might not be null, and so we can load it.
-> > > +        *
-> > > +        * So the following can not be added:
-> > > +        *
-> > > +        * if (args)
-> > > +        *      return -22;
-> > > +        */
-> > > +
-> > > +       bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +char _license[] SEC("license") = "GPL";
-> > > diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> > > index 5aecbb9fdc68..94c05267e5e7 100644
-> > > --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> > > +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
-> > > @@ -92,4 +92,42 @@ int kfunc_call_test_pass(struct __sk_buff *skb)
-> > >         return 0;
-> > >  }
-> > >
-> > > +struct syscall_test_args {
-> > > +       __u8 data[16];
-> > > +       size_t size;
-> > > +};
-> > > +
-> > > +SEC("syscall")
-> > > +int kfunc_syscall_test(struct syscall_test_args *args)
-> > > +{
-> > > +       const int size = args->size;
-> > > +
-> > > +       if (size > sizeof(args->data))
-> > > +               return -7; /* -E2BIG */
-> > > +
-> >
-> > Looks like it is due to this. Verifier is confused because:
-> > r7 = args->data;
-> > r1 = r7;
-> >
-> > then it does r1 <<= 32; r1 >>=32; clearing upper 32 bits, so both r1
-> > and r7 lose the id association which propagates the bounds of r1
-> > learnt from comparison of it with sizeof(args->data);
-> >
-> > > +       bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(args->data));
-> > > +       bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(*args));
-> >
-> > Later llvm assigns r7 to r2 for this call's 2nd arg. At this point the
-> > verifier still thinks r7 is unbounded, while to make a call with mem,
-> > len pair you need non-negative min value.
-> >
-> > Easiest way might be to just do args->size & sizeof(args->data), as
-> > the verifier log says. You might still keep the error above.
-> > Others may have better ideas/insights.
->
-> I just did s/const int size/const long size/
-> to fix the issues.
->
-> Also fixed commit in patch 3 that talks about max_ctx_offset
-> and did:
-> -       BTF_KFUNC_SET_MAX_CNT = 64,
-> +       BTF_KFUNC_SET_MAX_CNT = 256,
->
-> and applied.
->
+On 2022-09-03 16:47, Ido Schimmel wrote:
+> On Mon, Aug 29, 2022 at 06:13:14PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-08-29 18:03, Ido Schimmel wrote:
+>> > On Mon, Aug 29, 2022 at 05:08:23PM +0200, netdev@kapio-technology.com
+>> > wrote:
+>> > > On 2022-08-29 16:37, Ido Schimmel wrote:
+>> > > > On Mon, Aug 29, 2022 at 02:04:42PM +0200, netdev@kapio-technology.com
+>> > > > wrote:
+>> > > > > On 2022-08-29 13:32, Ido Schimmel wrote:
+>> > > > > Port association is needed for MAB to work at all on mv88e6xxx, but
+>> > > > > for
+>> > > > > 802.1X port association is only needed for dynamic ATU entries.
+>> > > >
+>> > > > Ageing of dynamic entries in the bridge requires learning to be on as
+>> > > > well, but in these test cases you are only using static entries and
+>> > > > there is no reason to enable learning in the bridge for that. I prefer
+>> > > > not to leak this mv88e6xxx implementation detail to user space and
+>> > > > instead have the driver enable port association based on whether
+>> > > > "learning" or "mab" is on.
+>> > > >
+>> > >
+>> > > Then it makes most sense to have the mv88e6xxx driver enable port
+>> > > association when then port is locked, as it does now.
+>> >
+>> > As you wish, but like you wrote "802.1X port association is only needed
+>> > for dynamic ATU entries" and in this case user space needs to enable
+>> > learning (for refresh only) so you can really key off learning on
+>> > "learning || mab". User space can decide to lock the port and work with
+>> > static entries and then learning is not required.
+>> 
+>> I will of course remove all "learning on" in the selftests, which is 
+>> what I
+>> think you are referring to. In the previous I am referring to the code 
+>> in
+>> the driver itself which I understand shall turn on port association 
+>> with
+>> locked ports, e.g. no need for "learning on" when using the feature in
+>> general outside selftests...
+> 
+> "learning on" is needed when dynamic FDB entries are used to authorize
+> hosts. Without learning being enabled, the bridge driver (or the
+> underlying hardware) will not refresh the entries during forwarding and
+> they will age out, resulting in packet loss until the hosts are
+> re-authorized.
+> 
+> Given the current test cases only use static entries, there is no need
+> to enable learning on locked ports. This will change when test cases 
+> are
+> added with dynamic entries.
+> 
+> Regarding mv88e6xxx, my understanding is that you also need learning
+> enabled for MAB (I assume for the violation interrupts). Therefore, for
+> mv88e6xxx, learning can be enabled if learning is on or MAB is on.
+> Enabling it based on whether the port is locked or not seems 
+> inaccurate.
 
-Great!
+Given that 'learning on' is needed for hardware refreshing of ATU 
+entries (mv88e6xxx), and that will in the future be needed in general, I 
+think it is best to enable it when a port is locked. Also the matter is 
+that the locked feature needs to modify the register that contains the 
+PAV. So I see it as natural that it is done there, as it will eventually 
+have to be done there.
+That the selftests do not need it besides when activating MAB, I think, 
+is a special case.
 
-Many thanks to both of you for your time and getting me there :)
-
-Cheers,
-Benjamin
-
+I am at the blackhole driver implementation now, as I suppose that the 
+iproute2 command should work with the mv88e6xxx driver when adding 
+blackhole entries (with a added selftest)?
+I decided to add the blackhole feature as new ops for drivers with 
+functions blackhole_fdb_add() and blackhole_fdb_del(). Do you agree with 
+that approach?
