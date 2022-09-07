@@ -2,114 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118135B06EC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 16:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762015B0776
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 16:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiIGOdW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Sep 2022 10:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S229621AbiIGOtz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Sep 2022 10:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiIGOdB (ORCPT
+        with ESMTP id S229671AbiIGOty (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:33:01 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7592B4410
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Sep 2022 07:32:27 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id s11so19987016edd.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Sep 2022 07:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=UtFlTSGHQz81OSpK49QGakNczTrN7BvVDcdecb2PlQLSH6U6g6YnfIOwEhF4HyopVw
-         xF3rEa1JazWxVmoA4IZ4APHTWslJfRg5yYhTgDCuueeGynL8ZQ8rlmQ1XFto97Lt71ZJ
-         j3Ra7mPDPEuM/14t68TI6JbC26x0Okvn0tFLgQTeFpImczwoq6TYczyXFG/k8mY/UwUL
-         n4rphtthc3JujA/DBbZnDH2NqlI3e1mX42kS7zoBsDbrZwgnwP4UWzhHEqiLlccbumw3
-         Wu+X+CCk1Fp6KNp6XYfEMT802FX63wwwnC1iqf8dYPeJE0BVyNRj/Y77DpMb+lFAEfsS
-         NjnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=E0MAVITM+j78SNfVlWbSlGMmUha01+NTkmgulwO2c7Ut/TnznuSxgRSAv2ZAjRMob9
-         A+KWRvIvVZLkLR6RXX5V/XrX5pks7n+csik9xNterq8dLQu3KvT/s7R56XMu0cXwtdRw
-         1PAQYPrm+GAPS5KYMEsHaA3fRvo2WYx3UaMYHs4V1PuKv3635vBcSDQOBJtvN6MlraZH
-         BNOr5iw0dao/nc7lxqan+AY9sqrUK7NpTFpuleGIotVuu9u7/sf9+sOmb3lhfeILUf0f
-         M9FLI0aznNFsF1mknIolJdDxf6eID3j5GljVLawUy8cn3BCgLDN/ZKeXY8DP8+rVliXN
-         gcjA==
-X-Gm-Message-State: ACgBeo0Qx5kG7wvUNPBAeTBJhHNbNuVV4SE6b3Q1byc+YWtfZGgoG1W8
-        s+9r5NkzJVn0MABuG/X345g0xqlk/f5tHwpn3B4=
-X-Google-Smtp-Source: AA6agR4u/dbCsJbsVZIBLL6h1UPerJ2TE45jgxUgoCjVrPyl8+wsl025ctgdSe/t/2vkl2wcEplmUnwM80u8Z9eZepA=
-X-Received: by 2002:a05:6402:51d1:b0:44b:ea34:6c0a with SMTP id
- r17-20020a05640251d100b0044bea346c0amr3314952edd.369.1662561145430; Wed, 07
- Sep 2022 07:32:25 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:32:24 -0700 (PDT)
-Reply-To: lumar.casey@outlook.com
-From:   LUMAR CASEY <miriankushrat@gmail.com>
-Date:   Wed, 7 Sep 2022 16:32:24 +0200
-Message-ID: <CAO4StN1OR4tXWWJAZ10p+-rJJ7qOsU8FxVS9cWv=PiegDVtnsA@mail.gmail.com>
-Subject: ATTENTION/PROPOSAL
-To:     undisclosed-recipients:;
+        Wed, 7 Sep 2022 10:49:54 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF19840E2E;
+        Wed,  7 Sep 2022 07:49:51 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MN4lN1g61z9v7Zl;
+        Wed,  7 Sep 2022 22:44:16 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwAHsJNfrxhjkGssAA--.5572S2;
+        Wed, 07 Sep 2022 15:49:19 +0100 (CET)
+Message-ID: <57cedc7a3008248b5147d03e2f4bd0b33ad9a146.camel@huaweicloud.com>
+Subject: Re: [PATCH v16 00/12] bpf: Add kfuncs for PKCS#7 signature
+ verification
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 07 Sep 2022 16:49:00 +0200
+In-Reply-To: <b846cedb14235db6950a55e7eec2eff9e9ab56ec.camel@huaweicloud.com>
+References: <20220905143318.1592015-1-roberto.sassu@huaweicloud.com>
+         <CAP01T77aq-UP02JYp1Vu-LE--K1ieCyfKfyZPw-a7DDKQ7_F+g@mail.gmail.com>
+         <b846cedb14235db6950a55e7eec2eff9e9ab56ec.camel@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:544 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [miriankushrat[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwAHsJNfrxhjkGssAA--.5572S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrWUCFWfXrWkXrW7Wr17Jrb_yoW8Zry5pF
+        W0kFy5KF4qqr17Aw4rKrsxWFW0q3y5GF12qwn5J34UZFyqvr1SkFWxtr4a9FWqgr1kCrya
+        v39IgFy7Awn8Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj365DgAAs2
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ATTENTION
+On Tue, 2022-09-06 at 09:35 +0200, Roberto Sassu wrote:
+> On Mon, 2022-09-05 at 21:26 +0200, Kumar Kartikeya Dwivedi wrote:
+> > On Mon, 5 Sept 2022 at 16:34, Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > 
+> > > One of the desirable features in security is the ability to
+> > > restrict import
+> > > of data to a given system based on data authenticity. If data
+> > > import can be
+> > > restricted, it would be possible to enforce a system-wide policy
+> > > based on
+> > > the signing keys the system owner trusts.
+> > > 
+> > > This feature is widely used in the kernel. For example, if the
+> > > restriction
+> > > is enabled, kernel modules can be plugged in only if they are
+> > > signed with a
+> > > key whose public part is in the primary or secondary keyring.
+> > > 
+> > > For eBPF, it can be useful as well. For example, it might be
+> > > useful
+> > > to
+> > > authenticate data an eBPF program makes security decisions on.
+> > > 
+> > > [...]
+> > 
+> > CI is crashing with NULL deref for test_progs-no_alu32 with llvm-
+> > 16,
+> > but I don't think the problem is in this series. This is most
+> > likely
+> > unrelated to BPF, as the crash happens inside
+> > kernel/time/tick-sched.c:tick_nohz_restart_sched_tick.
+> > 
+> > This was the same case in
+> > https://lore.kernel.org/bpf/CAP01T74steDfP6O8QOshoto3e3RnHhKtAeTbnrPBZS3YJXjvbA@mail.gmail.com.
+> > 
+> > So, 
+> > https://github.com/kernel-patches/bpf/runs/8194263557?check_suite_focus=true
+> > and 
+> > https://github.com/kernel-patches/bpf/runs/7982907380?check_suite_focus=true
+> > 
+> > look similar to me, and may not be related to BPF. They only
+> > trigger
+> > during runs compiled using LLVM 16, so maybe some compiler
+> > transformation is surfacing the problem?
+> 
+> Yes, I saw that too. Not sure what the cause could be.
+> 
 
-BUSINESS PARTNER,
+Another occurrence, this time with gcc:
 
-I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
-MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
-PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
-DIPLOMATIC OUTLET.
+https://github.com/robertosassu/vmtest/runs/8230071814?check_suite_focus=true
 
-I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
-PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
-YOUR COUNTRY.
+Roberto
 
-I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
-
-REGARDS,
-
-LUMAR CASEY
