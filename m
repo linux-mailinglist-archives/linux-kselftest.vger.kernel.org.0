@@ -2,156 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB175B09BC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 18:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06C85B0ABE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 18:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIGQIs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Sep 2022 12:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
+        id S230027AbiIGQ4T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Sep 2022 12:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiIGQIZ (ORCPT
+        with ESMTP id S230118AbiIGQ4L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 12:08:25 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1583AE7F;
-        Wed,  7 Sep 2022 09:08:21 -0700 (PDT)
+        Wed, 7 Sep 2022 12:56:11 -0400
+X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Sep 2022 09:56:06 PDT
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C1E3AB29;
+        Wed,  7 Sep 2022 09:56:06 -0700 (PDT)
 Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 50B395C0150;
-        Wed,  7 Sep 2022 12:08:18 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 07 Sep 2022 12:08:18 -0400
+        by mailnew.west.internal (Postfix) with ESMTP id 865F22B05B86;
+        Wed,  7 Sep 2022 12:18:35 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 07 Sep 2022 12:18:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1662567515; x=1662574715; bh=5D
+        ZtFrVdqR12nN7HSUlbgO9Phu3Lj4gHCeI3MI0eXEs=; b=gKjMSLcGKU47Bpx6uQ
+        gZ+Ahn/J6pmAu6Fk54tOUPmkt4ySG4YQ4tNtCsXNooyXqDQdnB0p/CITTV1m34mq
+        s+LAYPRNp7umaA0DS2tD6Bl9cL2UPuUH1NnFqt+Hujshubfu6tpdqxXryN7Jif7b
+        wFcbM6hQx1KAluzks24vm6vt401JXycrXk/U1TxhftI2k9a3Qr1m/7eQrpEGaUoY
+        dMxR1PpNXaxHCUiB+IzNfCTcZdKp74OQaJyZNKu9NNG2Kd9Cty0VZ7c37OqmpmGx
+        91qSQwwUWpUuKrGDcjIKulD3bI5YIyxjctZu6ma29GlM+OIwXDzKYX0fO8UNhgKu
+        Ok5g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662566898; x=1662653298; bh=09XcLY+Oh89nxAbOdZB+wq/xVi9I
-        kY5d9sAv3nm7+vU=; b=S+2VagZcRJa0df0SXZoltSC5mTxQ2CJMLQbGS+ADdHeb
-        6GkHCYghhu6pQnr7fny4YGaX/Yce6RLfhEqLSiBT+AUaNN50TaUtBwQRJ7MC1SmQ
-        Q7aaJFrZ/+GwZ+SNNjwG1X9GlAOT/zkiVm7GD6fw7kC6WwE6pI7aeK2TF2AtTyud
-        e9BG7W3tQG0aUUlNMTl+tA+skmheYcf6Ir/dKwhZ8btyFXYAGik/A+YgJ+lpQ2pR
-        PTZI3soXAa4BAnKghj63bdVjjMTs3hq1Qh7DzwkwjE/D3EACsAgNJch4ydfcZSF4
-        K/8QkNh+XUceApvbG9kiyEVU6nTj3LHrnE6xdtncRA==
-X-ME-Sender: <xms:8cEYY8Mo99YOk85-NRX0cy2LFdqOmW0Pd4eG1z8avUKe3n8A50wPJA>
-    <xme:8cEYYy-plYsm4M_CZK7B0HtP5dSsZJcoYjKqESg61_kD7603opVArBAkOIHSOseCY
-    LAwHrpInoM1RXU>
-X-ME-Received: <xmr:8cEYYzSbbZVxXSY0KkJXrtsu6mCQGRvpApk4HqVW5RMl7PwDnbg2n8OkrIntx805cJKR3UpgFsYFroQaRH-meOk1KcdKIw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgleejucetufdoteggodetrfdotf
+        fm2; t=1662567515; x=1662574715; bh=5DZtFrVdqR12nN7HSUlbgO9Phu3L
+        j4gHCeI3MI0eXEs=; b=OZJQAUW2is2zfDT/Ce2aXyZmrMSXobT3OZMp5q6fVpQ/
+        iVRiwH1zHSZcVtLQ2DkHlpUlqbEffGM1fAmWod1B2oWsgEDoe///wEj9f9lghrAo
+        QmF2m0YsiHOKiN8AKnZz/6f5uUQMq/9NAYeyhYKiSfFb9Dz+qoavKwdvW7oRiyhC
+        EATCi/71d3py5lcq99u7ST/c6PkyOa3KHXiwFRYH2JEiXVa1izqMZLW3QFlYIdsy
+        XqD1Q0zUyBwkxx7SuUl6U3WVue4FTTdJB8uWCgJhcTDbXLhEkyIR5uYLz6VpaFwh
+        96XgrgE3i0bQPirExWJbzFosbfLoZt7t6DTe9rF30A==
+X-ME-Sender: <xms:V8QYYw_o5DzFzVn-nsNBEVd-FS_D_oEsE0Ni1kSDm-EDmUqf7t5RYw>
+    <xme:V8QYY4tkvs0qarp3milgqkj-QnUfLwCvr9jPsDhMl_JVoMp1Uawemvudn2tTZjoFP
+    RKollyj_THPCycU494>
+X-ME-Received: <xmr:V8QYY2AJ6tnceeMtt6ze-9Y21GxOCHjfGO0Uaic1_Z0sgkplNSGu4E0Lv93m0HLV2ntwuQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgleelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhepfeehffeggeffueffheeitdfhkedtfeelffffjeegtedtffegieejjeeuteej
-    teevnecuffhomhgrihhnpehofhhflhhorggurdhphienucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:8cEYY0s574npuVmYzJvedy1Yu5t-t5SZaQ7qQV4isikwv2QTzw8LBQ>
-    <xmx:8cEYY0eLvL8_qBZs6c1d6L16JBKoF2QVityTgEhKcPWxJdtTX8W3lQ>
-    <xmx:8cEYY42zw4BLGYFAtgoF4QyrpVtVonW2PQsx9Xg4Xd_ZxJ4hOtM70A>
-    <xmx:8sEYYz-XXd8EynQ6tmnN6sEV7OTbM-5p3JEML7n-JKmnG5OyzfWK0A>
-Feedback-ID: i494840e7:Fastmail
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
+    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
+    sehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:V8QYYweqdTZRL4Hql-Il9ILHjXYOl5I2TLxUmx4tUf2irEd7UWrODA>
+    <xmx:V8QYY1Nzk_PUNIp2LKA55MR0G9GVC8m4bLDpu3YSj4OFMB6ygSASzg>
+    <xmx:V8QYY6lIz_r5CyIgsFG97LMd1GcuCvwSFmdupTCv8XNGm0jAThrJpw>
+    <xmx:W8QYYyKr-0dAl_rNZ4o-w_sGm3XfXyNXiJWuDL3a0JOCCopTLRQCg_cdsds>
+Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Sep 2022 12:08:17 -0400 (EDT)
-Date:   Wed, 7 Sep 2022 19:08:13 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     "Zhou, Jie2X" <jie2x.zhou@intel.com>, kuba@kernel.org
-Cc:     "andrii@kernel.org" <andrii@kernel.org>,
-        "mykolal@fb.com" <mykolal@fb.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Li, Philip" <philip.li@intel.com>,
-        "petrm@nvidia.com" <petrm@nvidia.com>
-Subject: Re: test ./tools/testing/selftests/bpf/test_offload.py failed
-Message-ID: <YxjB7RZvVrKxJ4ec@shredder>
-References: <20220907051657.55597-1-jie2x.zhou@intel.com>
- <Yxg9r37w1Wg3mvxy@shredder>
- <CY4PR11MB1320E553043DC1D67B5E7D56C5419@CY4PR11MB1320.namprd11.prod.outlook.com>
+ 7 Sep 2022 12:18:31 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id CAD3C103799; Wed,  7 Sep 2022 19:18:27 +0300 (+03)
+Date:   Wed, 7 Sep 2022 19:18:27 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 05/14] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Message-ID: <20220907161827.klbscalq5lk66rco@box.shutemov.name>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-6-chao.p.peng@linux.intel.com>
+ <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CY4PR11MB1320E553043DC1D67B5E7D56C5419@CY4PR11MB1320.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 08:51:56AM +0000, Zhou, Jie2X wrote:
-> What is the output of test_offload.py?
+On Fri, Aug 05, 2022 at 03:28:50PM +0200, David Hildenbrand wrote:
+> On 06.07.22 10:20, Chao Peng wrote:
+> > Introduce a new memfd_create() flag indicating the content of the
+> > created memfd is inaccessible from userspace through ordinary MMU
+> > access (e.g., read/write/mmap). However, the file content can be
+> > accessed via a different mechanism (e.g. KVM MMU) indirectly.
+> > 
+> > It provides semantics required for KVM guest private memory support
+> > that a file descriptor with this flag set is going to be used as the
+> > source of guest memory in confidential computing environments such
+> > as Intel TDX/AMD SEV but may not be accessible from host userspace.
+> > 
+> > The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
+> > also impossible for a memfd created with this flag.
+> 
+> It's kind of weird to have it that way. Why should the user have to
+> care? It's the notifier requirement to have that, no?
+> 
+> Why can't we handle that when register a notifier? If anything is
+> already mapped, fail registering the notifier if the notifier has these
+> demands. If registering succeeds, block it internally.
+> 
+> Or what am I missing? We might not need the memfile set flag semantics
+> eventually and would not have to expose such a flag to user space.
 
-This output [1], but requires this [2] additional fix on top of the one
-I already posted for netdevsim. Hopefully someone more familiar with
-this test can comment if this is the right fix or not.
+Well, with the new shim-based[1] implementation the approach without uAPI
+does not work.
 
-Without it, bpftool refuses to load the program [3].
+We now have two struct file, one is a normal accessible memfd and the
+other one is wrapper around that hides the memfd from userspace and
+filters allowed operations. If we first create an accessible memfd that
+userspace see it would be hard to hide it as by the time userspace may
+have multiple fds in different processes that point to the same struct
+file.
 
-[1]
-# ./test_offload.py
-Test destruction of generic XDP...
-Test TC non-offloaded...
-Test TC non-offloaded isn't getting bound...
-Test TC offloads are off by default...
-[...]
-test_offload.py: OK
-# echo $?
-0
+[1] https://lore.kernel.org/all/20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name
 
-[2]
-diff --git a/tools/testing/selftests/bpf/progs/sample_map_ret0.c b/tools/testing/selftests/bpf/progs/sample_map_ret0.c
-index 495990d355ef..91417aae6194 100644
---- a/tools/testing/selftests/bpf/progs/sample_map_ret0.c
-+++ b/tools/testing/selftests/bpf/progs/sample_map_ret0.c
-@@ -17,7 +17,8 @@ struct {
- } array SEC(".maps");
- 
- /* Sample program which should always load for testing control paths. */
--SEC(".text") int func()
-+SEC("xdp")
-+int func()
- {
- 	__u64 key64 = 0;
- 	__u32 key = 0;
-diff --git a/tools/testing/selftests/bpf/progs/sample_ret0.c b/tools/testing/selftests/bpf/progs/sample_ret0.c
-index fec99750d6ea..f51c63dd6f20 100644
---- a/tools/testing/selftests/bpf/progs/sample_ret0.c
-+++ b/tools/testing/selftests/bpf/progs/sample_ret0.c
-@@ -1,6 +1,9 @@
- /* SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
- 
- /* Sample program which should always load for testing control paths. */
-+SEC("xdp")
- int func()
- {
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/test_offload.py b/tools/testing/selftests/bpf/test_offload.py
-index 6cd6ef9fc20b..0381f48f45a6 100755
---- a/tools/testing/selftests/bpf/test_offload.py
-+++ b/tools/testing/selftests/bpf/test_offload.py
-@@ -235,7 +235,7 @@ def tc(args, JSON=True, ns="", fail=True, include_stderr=False):
- def ethtool(dev, opt, args, fail=True):
-     return cmd("ethtool %s %s %s" % (opt, dev["ifname"], args), fail=fail)
- 
--def bpf_obj(name, sec=".text", path=bpf_test_dir,):
-+def bpf_obj(name, sec="xdp", path=bpf_test_dir,):
-     return "obj %s sec %s" % (os.path.join(path, name), sec)
- 
- def bpf_pinned(name):
-
-[3]
-# bpftool prog load /home/idosch/code/linux/tools/testing/selftests/bpf/sample_ret0.o /sys/fs/bpf/nooffload type xdp                                                 
-Error: object file doesn't contain any bpf program                                    
-Warning: bpftool is now running in libbpf strict mode and has more stringent requirements about BPF programs.                                                                
-If it used to work for this object file but now doesn't, see --legacy option for more details.
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
