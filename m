@@ -2,111 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010AA5B1014
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 00:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493D95B1049
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 01:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiIGW61 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Sep 2022 18:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        id S229513AbiIGXVP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Sep 2022 19:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiIGW61 (ORCPT
+        with ESMTP id S229727AbiIGXVO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 18:58:27 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B23A99E2
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Sep 2022 15:58:24 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id p200so4710866yba.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Sep 2022 15:58:24 -0700 (PDT)
+        Wed, 7 Sep 2022 19:21:14 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D413798D26
+        for <linux-kselftest@vger.kernel.org>; Wed,  7 Sep 2022 16:21:12 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id o2-20020a17090a9f8200b0020025a22208so503672pjp.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Sep 2022 16:21:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ensB6iG2T4HcBnO54DOwBgrBj2kxQd/wvWtFjiwAVj4=;
-        b=ec3pOZdXR+0LpVTRq9xtvqRgWhEPNWOlfQ0mKzRaG/z4seSTW55o6CxkkBbEr2JftY
-         QIOxFCzbzFr6nl66WDfRjNHGAcuz2W4A7jc8DFtyjAuMJS274y+3N7RuBtFMZTSlO88S
-         NNZHp9ti28xH0kvkd9oi0lKPHhFzwEETdMB1V0XC+oK0QGIiV81gIGM9dh/tRKccoFH/
-         3jHFoZfu1No9YL4DeBaje9rPhu7obuP7MNTxm5c80p7NjZdt3VxFDyPAoWtPhlIMarw1
-         FoKRtXClZ55xK9N7UXCKFY14lX4YixMYO/No+d+iVll5C5V2ktcRd6Aae+fx0Y6l9FUK
-         Cp9Q==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=W/5yzHduhXFdDjGaKgQPKYstDOOVGEFyDuCg/4I9JE0=;
+        b=Fr1b4b794PsnmJQyW0ToUVMUOqsls9yNarn9pbknfm08jhOZdKXwlsrPv52GeSgjHd
+         foH5J6Rk1E6biynw+uM69sfpaU6ByH92ZjKaLVIFrNHdMkODAgkqNCt5jXmb+jHdvfXh
+         6J8aVSbScdvqJV2nB1yHSYRatt5b4+o+ZG8wPyNIjgKz3Nt7n9S6WkYXVCfSJla/QOHm
+         kswJrTfih9p58YTiLMH3VypnxoBl32UjPImIkg1vOVzlO9Ay6fwURH+l5iCP0zxngDKK
+         CIsYsnfODjUuNAF8O3333/KcWSXUFiVhGfIsrU5rDSYZjqN0v2ODzEvZQfXSwsFX4Rz9
+         uUvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ensB6iG2T4HcBnO54DOwBgrBj2kxQd/wvWtFjiwAVj4=;
-        b=aqgGrUYc77KIt9QmvoXal+6WYSFFTV9xCYCaapuNgEFoQj0oLUiRPJw08A+v0leyw2
-         nROcAm+ejkUyrTvM29rSKNbnMobSbyr9n7oFXnSY0kc3O4XKrHR7HdUsnU9YrZdOajTt
-         MwrQpkESYseF9svcfnC+KWCOU/OsTdd7Yrkh+2d6l4nI93C0n4TIch2pwTZqAuTiSSia
-         yWYAvB7maF5HP9/nGhIbG4jxosACialZXLDjK7VeaTSplCPnIKbv1zoM2GbJ8QksBfk0
-         6YBbQpwZJ2gPDqFM9kGi6KVjip8Qh8/jsaI3Kmq3bovU3ATKUCiN+rBX/Pd8C4FzVOG8
-         iQdg==
-X-Gm-Message-State: ACgBeo15UJTK1wLUJdLQsQhxlpbHRaM7bkEmT+hRyspxeRUn3k8qY2CE
-        u66+qh0CpktC0H2srPBz5viTK+RJIiTnNnYAXAcHsg==
-X-Google-Smtp-Source: AA6agR65qU6xB2U2255wpOaXm8Hmd9oTgqy80QJ0Bn/k9GJ5kl8p/E1l+APxsu8s42FDlwIGi/yC1fXRghpvTrC1Mho=
-X-Received: by 2002:a25:b78a:0:b0:695:900e:e211 with SMTP id
- n10-20020a25b78a000000b00695900ee211mr4602285ybh.427.1662591503842; Wed, 07
- Sep 2022 15:58:23 -0700 (PDT)
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=W/5yzHduhXFdDjGaKgQPKYstDOOVGEFyDuCg/4I9JE0=;
+        b=IBCaMSnw5bc69xiX8iiwUQ4VAj15uSQDJ4TLUSV3/DwpRc50hTQNnx6C3xf+XYgDQO
+         /dceuPdhKPmvcUxmXYIj+pnGqgTkxlSJEbxxXpmTleHMPOlAccq29O3QG4GzPznUmUqO
+         sG4/csIZBTH/PL47YUO8J6vpfc93plpdHoTDscxtMrKQruD20e5EcscLpgwy9Bt90HEq
+         DQ/YYMFndURt8c3M8V2/UU0+2QwDChm0NKSsClL5FGWE7xC98WJEZjeJ+pRx/AdiMTVU
+         ACXYlcx1N2mt0SvtkTQURW+s/pgPUvPc2lVPt1PREvzr9UglP+qPbzmAwoXHytHY+fvU
+         4wIg==
+X-Gm-Message-State: ACgBeo291ZWL6HTQ96YxoezaUnO0sWWEUzq/qOzW1P0eyz/fk60srFC4
+        quDZx/IAu28BGcD7naMfoZCABA==
+X-Google-Smtp-Source: AA6agR6u9NRaS38/HSx2R0mjNwDLbPk9PpH7eS2AashpWHGAScNGv2MSxnhVwoHtFDGbjtU2z4LncQ==
+X-Received: by 2002:a17:902:d502:b0:177:f287:269d with SMTP id b2-20020a170902d50200b00177f287269dmr571869plg.140.1662592872342;
+        Wed, 07 Sep 2022 16:21:12 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y28-20020aa79afc000000b0053e0d6f353esm409532pfp.27.2022.09.07.16.21.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 16:21:11 -0700 (PDT)
+Message-ID: <63192767.a70a0220.1747c.0d31@mx.google.com>
+Date:   Wed, 07 Sep 2022 16:21:11 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <cover.1662361354.git.cdleonard@gmail.com> <298e4e87ce3a822b4217b309438483959082e6bb.1662361354.git.cdleonard@gmail.com>
- <CANn89iKq4rUkCwSSD-35u+Lb8s9u-8t5bj1=aZuQ8+oYwuC-Eg@mail.gmail.com> <YxkgC1XKmCNGzk3t@gondor.apana.org.au>
-In-Reply-To: <YxkgC1XKmCNGzk3t@gondor.apana.org.au>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 7 Sep 2022 15:58:12 -0700
-Message-ID: <CANn89iLXsSotHWkUv4h0jCyNqym+Mb1N2-sfyC0sK76TZ+xPPg@mail.gmail.com>
-Subject: Re: [PATCH v8 08/26] tcp: authopt: Disable via sysctl by default
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Leonard Crestez <cdleonard@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Philip Paeps <philip@trouble.is>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: linux-kselftest-next-6.0-rc2-11-g144eeb2fc761
+Subject: kselftest/next build: 8 builds: 0 failed,
+ 8 passed (linux-kselftest-next-6.0-rc2-11-g144eeb2fc761)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 3:50 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> On Tue, Sep 06, 2022 at 04:11:58PM -0700, Eric Dumazet wrote:
-> >
-> > WRITE_ONCE(sysctl_tcp_authopt, val),  or even better:
-> >
-> > if (val)
-> >      cmpxchg(&sysctl_tcp_authopt, 0, val);
->
-> What's the point of the cmpxchg? Since you're simply trying to prevent
-> sysctl_tcp_authopt from going back to zero, then the if clause
-> by itself is enough:
->
->         if (val)
->                 WRITE_ONCE(sysctl_tcp_authopt, val);
->
+kselftest/next build: 8 builds: 0 failed, 8 passed (linux-kselftest-next-6.=
+0-rc2-11-g144eeb2fc761)
 
-Ack.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/linux-kselftest-next-6.0-rc2-11-g144eeb2fc761/
 
-Original patch was doing something racy, I have not though about the
-most efficient way to deal with it.
+Tree: kselftest
+Branch: next
+Git Describe: linux-kselftest-next-6.0-rc2-11-g144eeb2fc761
+Git Commit: 144eeb2fc761f966f71ab8b4b7d2a2198ecc400f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, clang-15) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-15) =E2=80=94 PASS, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-15) =E2=80=94 PASS, 0 errors, 0 w=
+arnings, 0 section mismatches
+
+---
+For more info write to <info@kernelci.org>
