@@ -2,77 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598C75B0B7C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 19:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAA65B0BC0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 19:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiIGR3y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Sep 2022 13:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S230085AbiIGRqK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Sep 2022 13:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIGR3x (ORCPT
+        with ESMTP id S229943AbiIGRqG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 13:29:53 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4994237E1;
-        Wed,  7 Sep 2022 10:29:50 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id t3so10207887ply.2;
-        Wed, 07 Sep 2022 10:29:50 -0700 (PDT)
+        Wed, 7 Sep 2022 13:46:06 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE00A4076;
+        Wed,  7 Sep 2022 10:46:01 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id 62so12091074iov.5;
+        Wed, 07 Sep 2022 10:46:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=WZNMZpyF/eauipQuXO/Lbt+W4cgA4TDPwg9iv72mCSc=;
-        b=WAENKmD5GUO7Gu8pUKDlUY65iW5Bv7O4OLrgMQ1/c3H2pReC6PsQYMyWmCK4TkLhuh
-         TXFLUcW3eNf65aGwrZkN+nEd72rJku95CCtcejx3s88frLbryVpMERpD9j5lhTTYwYM6
-         FtR3zoX/Or8aIqU3FOXHZE99JkA7A134KVTz1PdF7lSxqXLQO+JzyRAPFmDwUU0QfUs1
-         fPRpAQM3vKlJ+4tKDwwJD39YWxc8NVvlc/wtPs+poca1XdIaT6wCMFqHjTAwSju8aqrB
-         QjxE7JcqNTqLeuwI3zDLJfiogCxFxWIgPOAE7kjoFY+xknoxFCkxrtUpycmOcA5dxDjg
-         i/OQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=etqGEG1IsLc7y4+nfpEHnA8iCa8u/VWI1Z7w+pxJ8JQ=;
+        b=p2fEuzr9nh9xc3In5S+N1QO+nIrt2g9ajVzCsqECmA0PwB5PZSSwHuc8xAvTsPQphQ
+         Ne1cCnjtU0bH5cgdPHEnF3TL9z4whO/eRqboWSGER2f+GsgBNLAYH6pg52GTKT+E+0s+
+         iVkNvjM2a5WgG8eX2A0/6YfplE36fHo8lqc1tGb/8JaCww85csNycvFzc9Tg27y/jL+2
+         sL2KcePwD7pOp6TuGJisezIECddh1YGHHOpdowma7cZnaZKdAqPZHU/T/HZLEzjTCJaE
+         I443yCEd/FLujkSrYaOftXGg91wCQVlg/AaKu/TI381dlfnP29v2p9LrRfKAfPWAg6f0
+         0fpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=WZNMZpyF/eauipQuXO/Lbt+W4cgA4TDPwg9iv72mCSc=;
-        b=ykfyGRQZ9WFpk8L7E3WmOx2qch13d0qWQcrAcQb4IRl2EPpa2QpMdwKMmPKFxiwYp6
-         y9NpI2foIQ96H0v/CZ3eOJp/LG1WF2GLPTXmMg5Wd+ZQS/VDT2A2rzLe0EqiRmfhjk6H
-         2Itzxp7urMdlhn++zt7X+DyL98k2fX9m6yKF0/oazL6ZJwGDC8sAq77kwsZBHjrh+OB5
-         a+RvfUvxg9UuR+benMkhAena62uI18PzL+ynNEON+GNZ0er/2yIbCHHD4nOBsSglmYdn
-         mYy+iLbYAKS6q8MMBJj5UM8mqAexoFPzZaWRWq/EgYeD51CpJ2ivSXkt6j3q96XxCSom
-         2JkA==
-X-Gm-Message-State: ACgBeo3aJKtDCuU1LOwd2YFpUA1a96Q3r9eY+dxcn0qyZcXd5HhI4zxO
-        CvyOAMpuGnj03Qa0vvCz+ZthdMwoezK2yoFv
-X-Google-Smtp-Source: AA6agR4nZIDAkir23+CZDT4FLGWnf2uCZr7DP14dD5iS4RXim07D51OkylWsFdBAjy0V6Dd3VRiLxw==
-X-Received: by 2002:a17:902:b109:b0:174:fd03:8c3e with SMTP id q9-20020a170902b10900b00174fd038c3emr4802393plr.23.1662571790058;
-        Wed, 07 Sep 2022 10:29:50 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c083:3603:1885:b229:3257:6535? ([2620:10d:c090:500::2:3e49])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170902e35400b001726ea1b716sm6540044plc.237.2022.09.07.10.29.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Sep 2022 10:29:49 -0700 (PDT)
-Message-ID: <b1570efa-d27e-8af0-f705-2896fa615d05@gmail.com>
-Date:   Wed, 7 Sep 2022 10:29:46 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=etqGEG1IsLc7y4+nfpEHnA8iCa8u/VWI1Z7w+pxJ8JQ=;
+        b=wIhYmm13w2yHxOPrGJ1SfFmR+W0WbdjMJQLWj/mNe6RopUqW+VCaKR7ece2CdGq5g2
+         tcKlnqtpUnKM9Ma7xRSk13LHBQDp3sMGmOYNhVTZvnnZQAh44x0+6nOdO9W7DXB0njWV
+         NBJ0rZNOl6MIc3NSWjcdXSQLMjQ1RZkOFWE8T3YD1/QeFqYSKKP7eR5GHeli6DqP9dWu
+         okaDoWRUfzjPmN0wtP3zympPuaMJ1PoJ/CLBto9xDKlt/uVQec6eQLgRybdryEbu/jKV
+         FG4S2gd3LQ44lEjpMHcG4SLIGXTaY0tmeJj1axXFB4ISI66mMcign1iJMhsFCVHcam/K
+         q8Cg==
+X-Gm-Message-State: ACgBeo1moc8wpyslfGyJ5rbRmLbaqCOpRZpfGjqJCi+RqZDFo+1NTyT1
+        9RbcNvDMRPKoDxcWS0KPRLsNfH3Qtn9DyCGo0HY=
+X-Google-Smtp-Source: AA6agR6BUx6igUuAsTrhRZyZ05ktXQ/AyDG641fczoUfH3SE9Y0RGS+fB31x3WYEaUbacTM7O3tnZTj6ZRuW5MJJRDE=
+X-Received: by 2002:a05:6638:3802:b0:351:d8a5:6d58 with SMTP id
+ i2-20020a056638380200b00351d8a56d58mr2808510jav.206.1662572760259; Wed, 07
+ Sep 2022 10:46:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.2
-Subject: Re: [net-next v3 1/6] net: Documentation on QUIC kernel Tx crypto.
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
-        shuah@kernel.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <adel.abushaev@gmail.com>
- <20220907004935.3971173-1-adel.abushaev@gmail.com>
- <20220907004935.3971173-2-adel.abushaev@gmail.com>
- <YxgSHJDAknxqEznd@debian.me>
-From:   Adel Abouchaev <adel.abushaev@gmail.com>
-In-Reply-To: <YxgSHJDAknxqEznd@debian.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <20220906151303.2780789-1-benjamin.tissoires@redhat.com> <20220906151303.2780789-5-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220906151303.2780789-5-benjamin.tissoires@redhat.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Wed, 7 Sep 2022 19:45:24 +0200
+Message-ID: <CAP01T76Q4VGYveL=6NoRFsgjFvLTLLF8jER0HwU1hx+maqo7Tg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v11 4/7] selftests/bpf: add test for accessing
+ ctx from syscall program type
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,373 +74,370 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, 6 Sept 2022 at 17:13, Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> We need to also export the kfunc set to the syscall program type,
+> and then add a couple of eBPF programs that are testing those calls.
+>
+> The first one checks for valid access, and the second one is OK
+> from a static analysis point of view but fails at run time because
+> we are trying to access outside of the allocated memory.
+>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>
+> ---
 
-On 9/6/22 8:38 PM, Bagas Sanjaya wrote:
-> On Tue, Sep 06, 2022 at 05:49:30PM -0700, Adel Abouchaev wrote:
->> +===========
->> +KERNEL QUIC
->> +===========
->> +
->> +Overview
->> +========
->> +
->> +QUIC is a secure general-purpose transport protocol that creates a stateful
->> +interaction between a client and a server. QUIC provides end-to-end integrity
->> +and confidentiality. Refer to RFC 9000 for more information on QUIC.
->> +
->> +The kernel Tx side offload covers the encryption of the application streams
->> +in the kernel rather than in the application. These packets are 1RTT packets
->> +in QUIC connection. Encryption of every other packets is still done by the
->> +QUIC library in user space.
->> +
->> +The flow match is performed using 5 parameters: source and destination IP
->> +addresses, source and destination UDP ports and destination QUIC connection ID.
->> +Not all 5 parameters are always needed. The Tx direction matches the flow on
->> +the destination IP, port and destination connection ID, while the Rx part would
->> +later match on source IP, port and destination connection ID. This will cover
->> +multiple scenarios where the server is using SO_REUSEADDR and/or empty
->> +destination connection IDs or combination of these.
->> +
-> Both Tx and Rx direction match destination connection ID. Is it right?
-
-That is correct. The QUIC packet only carries the destination CID in its 
-header.
-
-Although the Tx direction could have an ancillary data carrying the 
-source CID,
-
-it is not required by any viable use case scenario.
-
-Thank you for looking at the doc, I will add the documentation changes 
-into the
-
-v4 update.
+CI is failing for test_progs-no_alu32:
+https://github.com/kernel-patches/bpf/runs/8220916615?check_suite_focus=true
 
 >
->> +The Rx direction is not implemented in this set of patches.
->> +
->> +The connection migration scenario is not handled by the kernel code and will
->> +be handled by the user space portion of QUIC library. On the Tx direction,
->> +the new key would be installed before a packet with an updated destination is
->> +sent. On the Rx direction, the behavior will be to drop a packet if a flow is
->> +missing.
->> +
->> +For the key rotation, the behavior is to drop packets on Tx when the encryption
->> +key with matching key rotation bit is not present. On Rx direction, the packet
->> +will be sent to the userspace library with unencrypted header and encrypted
->> +payload. A separate indication will be added to the ancillary data to indicate
->> +the status of the operation as not matching the current key bit. It is not
->> +possible to use the key rotation bit as part of the key for flow lookup as that
->> +bit is protected by the header protection. A special provision will need to be
->> +done in user mode to still attempt the decryption of the payload to prevent a
->> +timing attack.
->> +
->> +
->> +User Interface
->> +==============
->> +
->> +Creating a QUIC connection
->> +--------------------------
->> +
->> +QUIC connection originates and terminates in the application, using one of many
->> +available QUIC libraries. The code instantiates QUIC client and QUIC server in
->> +some form and configures them to use certain addresses and ports for the
->> +source and destination. The client and server negotiate the set of keys to
->> +protect the communication during different phases of the connection, maintain
->> +the connection and perform congestion control.
->> +
->> +Requesting to add QUIC Tx kernel encryption to the connection
->> +-------------------------------------------------------------
->> +
->> +Each flow that should be encrypted by the kernel needs to be registered with
->> +the kernel using socket API. A setsockopt() call on the socket creates an
->> +association between the QUIC connection ID of the flow with the encryption
->> +parameters for the crypto operations:
->> +
->> +.. code-block:: c
->> +
->> +	struct quic_connection_info conn_info;
->> +	char conn_id[5] = {0x01, 0x02, 0x03, 0x04, 0x05};
->> +	const size_t conn_id_len = sizeof(conn_id);
->> +	char conn_key[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
->> +			     0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
->> +	char conn_iv[12] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
->> +			    0x08, 0x09, 0x0a, 0x0b};
->> +	char conn_hdr_key[16] = {0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
->> +				 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
->> +				};
->> +
->> +        conn_info.conn_payload_key_gen = 0;
->> +	conn_info.cipher_type = TLS_CIPHER_AES_GCM_128;
->> +
->> +	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
->> +	conn_info.key.conn_id_length = 5;
->> +	memcpy(&conn_info.key.conn_id[QUIC_MAX_CONNECTION_ID_SIZE
->> +				      - conn_id_len],
->> +	       &conn_id, conn_id_len);
->> +
->> +	memcpy(&conn_info.payload_key, conn_key, sizeof(conn_key));
->> +	memcpy(&conn_info.payload_iv, conn_iv, sizeof(conn_iv));
->> +	memcpy(&conn_info.header_key, conn_hdr_key, sizeof(conn_hdr_key));
->> +
->> +	setsockopt(fd, SOL_UDP, UDP_QUIC_ADD_TX_CONNECTION, &conn_info,
->> +		   sizeof(conn_info));
->> +
->> +
->> +Requesting to remove QUIC Tx kernel crypto offload control messages
->> +-------------------------------------------------------------------
->> +
->> +All flows are removed when the socket is closed. To request an explicit remove
->> +of the offload for the connection during the lifetime of the socket the process
->> +is similar to adding the flow. Only the connection ID and its length are
->> +necessary to supply to remove the connection from the offload:
->> +
->> +.. code-block:: c
->> +
->> +	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
->> +	conn_info.key.conn_id_length = 5;
->> +	memcpy(&conn_info.key.conn_id[QUIC_MAX_CONNECTION_ID_SIZE
->> +				      - conn_id_len],
->> +	       &conn_id, conn_id_len);
->> +	setsockopt(fd, SOL_UDP, UDP_QUIC_DEL_TX_CONNECTION, &conn_info,
->> +		   sizeof(conn_info));
->> +
->> +Sending QUIC application data
->> +-----------------------------
->> +
->> +For QUIC Tx encryption offload, the application should use sendmsg() socket
->> +call and provide ancillary data with information on connection ID length and
->> +offload flags for the kernel to perform the encryption and GSO support if
->> +requested.
->> +
->> +.. code-block:: c
->> +
->> +	size_t cmsg_tx_len = sizeof(struct quic_tx_ancillary_data);
->> +	uint8_t cmsg_buf[CMSG_SPACE(cmsg_tx_len)];
->> +	struct quic_tx_ancillary_data * anc_data;
->> +	size_t quic_data_len = 4500;
->> +	struct cmsghdr * cmsg_hdr;
->> +	char quic_data[9000];
->> +	struct iovec iov[2];
->> +	int send_len = 9000;
->> +	struct msghdr msg;
->> +	int err;
->> +
->> +	iov[0].iov_base = quic_data;
->> +	iov[0].iov_len = quic_data_len;
->> +	iov[1].iov_base = quic_data + 4500;
->> +	iov[1].iov_len = quic_data_len;
->> +
->> +	if (client.addr.sin_family == AF_INET) {
->> +		msg.msg_name = &client.addr;
->> +		msg.msg_namelen = sizeof(client.addr);
->> +	} else {
->> +		msg.msg_name = &client.addr6;
->> +		msg.msg_namelen = sizeof(client.addr6);
->> +	}
->> +
->> +	msg.msg_iov = iov;
->> +	msg.msg_iovlen = 2;
->> +	msg.msg_control = cmsg_buf;
->> +	msg.msg_controllen = sizeof(cmsg_buf);
->> +	cmsg_hdr = CMSG_FIRSTHDR(&msg);
->> +	cmsg_hdr->cmsg_level = IPPROTO_UDP;
->> +	cmsg_hdr->cmsg_type = UDP_QUIC_ENCRYPT;
->> +	cmsg_hdr->cmsg_len = CMSG_LEN(cmsg_tx_len);
->> +	anc_data = CMSG_DATA(cmsg_hdr);
->> +	anc_data->flags = 0;
->> +	anc_data->next_pkt_num = 0x0d65c9;
->> +	anc_data->conn_id_length = conn_id_len;
->> +	err = sendmsg(self->sfd, &msg, 0);
->> +
->> +QUIC Tx offload in kernel will read the data from userspace, encrypt and
->> +copy it to the ciphertext within the same operation.
->> +
->> +
->> +Sending QUIC application data with GSO
->> +--------------------------------------
->> +When GSO is in use, the kernel will use the GSO fragment size as the target
->> +for ciphertext. The packets from the user space should align on the boundary
->> +of GSO fragment size minus the size of the tag for the chosen cipher. For the
->> +GSO fragment 1200, the plain packets should follow each other at every 1184
->> +bytes, given the tag size of 16. After the encryption, the rest of the UDP
->> +and IP stacks will follow the defined value of GSO fragment which will include
->> +the trailing tag bytes.
->> +
->> +To set up GSO fragmentation:
->> +
->> +.. code-block:: c
->> +
->> +	setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
->> +		   sizeof(frag_size));
->> +
->> +If the GSO fragment size is provided in ancillary data within the sendmsg()
->> +call, the value in ancillary data will take precedence over the segment size
->> +provided in setsockopt to split the payload into packets. This is consistent
->> +with the UDP stack behavior.
->> +
->> +Integrating to userspace QUIC libraries
->> +---------------------------------------
->> +
->> +Userspace QUIC libraries integration would depend on the implementation of the
->> +QUIC protocol. For MVFST library, the control plane is integrated into the
->> +handshake callbacks to properly configure the flows into the socket; and the
->> +data plane is integrated into the methods that perform encryption and send
->> +the packets to the batch scheduler for transmissions to the socket.
->> +
->> +MVFST library can be found at https://github.com/facebookincubator/mvfst.
->> +
->> +Statistics
->> +==========
->> +
->> +QUIC Tx offload to the kernel has counters
->> +(``/proc/net/quic_stat``):
->> +
->> +- ``QuicCurrTxSw`` -
->> +  number of currently active kernel offloaded QUIC connections
->> +- ``QuicTxSw`` -
->> +  accumulative total number of offloaded QUIC connections
->> +- ``QuicTxSwError`` -
->> +  accumulative total number of errors during QUIC Tx offload to kernel
-> The rest of documentation can be improved, like:
+> changes in v11:
+> - use new way of declaring tests
 >
-> ---- >8 ----
+> changes in v10:
+> - use new definitions for tests in an array
+> - add a new kfunc syscall_test_null_fail test
 >
-> diff --git a/Documentation/networking/quic.rst b/Documentation/networking/quic.rst
-> index 2e6ec72f4eea3a..3f3d05b901da3f 100644
-> --- a/Documentation/networking/quic.rst
-> +++ b/Documentation/networking/quic.rst
-> @@ -9,22 +9,22 @@ Overview
->   
->   QUIC is a secure general-purpose transport protocol that creates a stateful
->   interaction between a client and a server. QUIC provides end-to-end integrity
-> -and confidentiality. Refer to RFC 9000 for more information on QUIC.
-> +and confidentiality. Refer to RFC 9000 [#rfc9000]_ for the standard document.
->   
->   The kernel Tx side offload covers the encryption of the application streams
->   in the kernel rather than in the application. These packets are 1RTT packets
->   in QUIC connection. Encryption of every other packets is still done by the
-> -QUIC library in user space.
-> +QUIC library in userspace.
->   
->   The flow match is performed using 5 parameters: source and destination IP
->   addresses, source and destination UDP ports and destination QUIC connection ID.
-> -Not all 5 parameters are always needed. The Tx direction matches the flow on
-> -the destination IP, port and destination connection ID, while the Rx part would
-> -later match on source IP, port and destination connection ID. This will cover
-> -multiple scenarios where the server is using SO_REUSEADDR and/or empty
-> -destination connection IDs or combination of these.
-> +Not all these parameters are always needed. The Tx direction matches the flow
-> +on the destination IP, port and destination connection ID; while the Rx
-> +direction would later match on source IP, port and destination connection ID.
-> +This will cover multiple scenarios where the server is using ``SO_REUSEADDR``
-> +and/or empty destination connection IDs or combination of these.
->   
-> -The Rx direction is not implemented in this set of patches.
-> +The Rx direction is not implemented yet.
->   
->   The connection migration scenario is not handled by the kernel code and will
->   be handled by the user space portion of QUIC library. On the Tx direction,
-> @@ -39,8 +39,8 @@ payload. A separate indication will be added to the ancillary data to indicate
->   the status of the operation as not matching the current key bit. It is not
->   possible to use the key rotation bit as part of the key for flow lookup as that
->   bit is protected by the header protection. A special provision will need to be
-> -done in user mode to still attempt the decryption of the payload to prevent a
-> -timing attack.
-> +done in user mode to keep attempting the payload decription to prevent timing
-> +attacks.
->   
->   
->   User Interface
-> @@ -50,7 +50,7 @@ Creating a QUIC connection
->   --------------------------
->   
->   QUIC connection originates and terminates in the application, using one of many
-> -available QUIC libraries. The code instantiates QUIC client and QUIC server in
-> +available QUIC libraries. The code instantiates the client and server in
->   some form and configures them to use certain addresses and ports for the
->   source and destination. The client and server negotiate the set of keys to
->   protect the communication during different phases of the connection, maintain
-> @@ -60,7 +60,7 @@ Requesting to add QUIC Tx kernel encryption to the connection
->   -------------------------------------------------------------
->   
->   Each flow that should be encrypted by the kernel needs to be registered with
-> -the kernel using socket API. A setsockopt() call on the socket creates an
-> +the kernel using socket API. A ``setsockopt()`` call on the socket creates an
->   association between the QUIC connection ID of the flow with the encryption
->   parameters for the crypto operations:
->   
-> @@ -112,10 +112,10 @@ necessary to supply to remove the connection from the offload:
->   	setsockopt(fd, SOL_UDP, UDP_QUIC_DEL_TX_CONNECTION, &conn_info,
->   		   sizeof(conn_info));
->   
-> -Sending QUIC application data
-> ------------------------------
-> +Sending application data
-> +------------------------
->   
-> -For QUIC Tx encryption offload, the application should use sendmsg() socket
-> +For Tx encryption offload, the application should use ``sendmsg()`` socket
->   call and provide ancillary data with information on connection ID length and
->   offload flags for the kernel to perform the encryption and GSO support if
->   requested.
-> @@ -168,11 +168,11 @@ Sending QUIC application data with GSO
->   --------------------------------------
->   When GSO is in use, the kernel will use the GSO fragment size as the target
->   for ciphertext. The packets from the user space should align on the boundary
-> -of GSO fragment size minus the size of the tag for the chosen cipher. For the
-> -GSO fragment 1200, the plain packets should follow each other at every 1184
-> -bytes, given the tag size of 16. After the encryption, the rest of the UDP
-> -and IP stacks will follow the defined value of GSO fragment which will include
-> -the trailing tag bytes.
-> +of the fragment size minus the tag size for the chosen cipher. For example,
-> +if the fragment size is 1200 bytes and the tag size is 16 bytes, the plain
-> +packets should follow each other at every 1184 bytes. After the encryption,
-> +the rest of UDP and IP stacks will follow the defined value of the fragment,
-> +which includes the trailing tag bytes.
->   
->   To set up GSO fragmentation:
->   
-> @@ -181,7 +181,7 @@ To set up GSO fragmentation:
->   	setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
->   		   sizeof(frag_size));
->   
-> -If the GSO fragment size is provided in ancillary data within the sendmsg()
-> +If the fragment size is provided in ancillary data within the ``sendmsg()``
->   call, the value in ancillary data will take precedence over the segment size
->   provided in setsockopt to split the payload into packets. This is consistent
->   with the UDP stack behavior.
-> @@ -190,12 +190,10 @@ Integrating to userspace QUIC libraries
->   ---------------------------------------
->   
->   Userspace QUIC libraries integration would depend on the implementation of the
-> -QUIC protocol. For MVFST library, the control plane is integrated into the
-> -handshake callbacks to properly configure the flows into the socket; and the
-> -data plane is integrated into the methods that perform encryption and send
-> -the packets to the batch scheduler for transmissions to the socket.
-> -
-> -MVFST library can be found at https://github.com/facebookincubator/mvfst.
-> +QUIC protocol. For MVFST library [#mvfst]_, the control plane is integrated
-> +into the handshake callbacks to properly configure the flows into the socket;
-> +and the data plane is integrated into the methods that perform encryption
-> +and send the packets to the batch scheduler for transmissions to the socket.
->   
->   Statistics
->   ==========
-> @@ -209,3 +207,9 @@ QUIC Tx offload to the kernel has counters
->     accumulative total number of offloaded QUIC connections
->   - ``QuicTxSwError`` -
->     accumulative total number of errors during QUIC Tx offload to kernel
+> no changes in v9
+>
+> no changes in v8
+>
+> changes in v7:
+> - add 1 more case to ensure we can read the entire sizeof(ctx)
+> - add a test case for when the context is NULL
+>
+> new in v6
+> ---
+>  net/bpf/test_run.c                            |   1 +
+>  .../selftests/bpf/prog_tests/kfunc_call.c     | 143 +++++++++++++++++-
+>  .../selftests/bpf/progs/kfunc_call_fail.c     |  39 +++++
+>  .../selftests/bpf/progs/kfunc_call_test.c     |  38 +++++
+>  4 files changed, 214 insertions(+), 7 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+>
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 25d8ecf105aa..f16baf977a21 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -1634,6 +1634,7 @@ static int __init bpf_prog_test_run_init(void)
+>
+>         ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_prog_test_kfunc_set);
+>         ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_prog_test_kfunc_set);
+> +       ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_prog_test_kfunc_set);
+>         return ret ?: register_btf_id_dtor_kfuncs(bpf_prog_test_dtor_kfunc,
+>                                                   ARRAY_SIZE(bpf_prog_test_dtor_kfunc),
+>                                                   THIS_MODULE);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> index 9dfbe5355a2d..d5881c3331a8 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+> @@ -2,6 +2,7 @@
+>  /* Copyright (c) 2021 Facebook */
+>  #include <test_progs.h>
+>  #include <network_helpers.h>
+> +#include "kfunc_call_fail.skel.h"
+>  #include "kfunc_call_test.skel.h"
+>  #include "kfunc_call_test.lskel.h"
+>  #include "kfunc_call_test_subprog.skel.h"
+> @@ -10,37 +11,96 @@
+>
+>  #include "cap_helpers.h"
+>
+> +static size_t log_buf_sz = 1048576; /* 1 MB */
+> +static char obj_log_buf[1048576];
 > +
-> +References
-> +==========
+> +enum kfunc_test_type {
+> +       tc_test = 0,
+> +       syscall_test,
+> +       syscall_null_ctx_test,
+> +};
 > +
-> +.. [#rfc9000] https://datatracker.ietf.org/doc/html/rfc9000
-> +.. [#mvfst] https://github.com/facebookincubator/mvfst
+>  struct kfunc_test_params {
+>         const char *prog_name;
+>         unsigned long lskel_prog_desc_offset;
+>         int retval;
+> +       enum kfunc_test_type test_type;
+> +       const char *expected_err_msg;
+>  };
 >
-> Thanks.
+> -#define TC_TEST(name, __retval) \
+> +#define __BPF_TEST_SUCCESS(name, __retval, type) \
+>         { \
+>           .prog_name = #name, \
+>           .lskel_prog_desc_offset = offsetof(struct kfunc_call_test_lskel, progs.name), \
+>           .retval = __retval, \
+> +         .test_type = type, \
+> +         .expected_err_msg = NULL, \
+> +       }
+> +
+> +#define __BPF_TEST_FAIL(name, __retval, type, error_msg) \
+> +       { \
+> +         .prog_name = #name, \
+> +         .lskel_prog_desc_offset = 0 /* unused when test is failing */, \
+> +         .retval = __retval, \
+> +         .test_type = type, \
+> +         .expected_err_msg = error_msg, \
+>         }
 >
-Cheers,
+> +#define TC_TEST(name, retval) __BPF_TEST_SUCCESS(name, retval, tc_test)
+> +#define SYSCALL_TEST(name, retval) __BPF_TEST_SUCCESS(name, retval, syscall_test)
+> +#define SYSCALL_NULL_CTX_TEST(name, retval) __BPF_TEST_SUCCESS(name, retval, syscall_null_ctx_test)
+> +
+> +#define SYSCALL_NULL_CTX_FAIL(name, retval, error_msg) \
+> +       __BPF_TEST_FAIL(name, retval, syscall_null_ctx_test, error_msg)
+> +
+>  static struct kfunc_test_params kfunc_tests[] = {
+> +       /* failure cases:
+> +        * if retval is 0 -> the program will fail to load and the error message is an error
+> +        * if retval is not 0 -> the program can be loaded but running it will gives the
+> +        *                       provided return value. The error message is thus the one
+> +        *                       from a successful load
+> +        */
+> +       SYSCALL_NULL_CTX_FAIL(kfunc_syscall_test_fail, -EINVAL, "processed 4 insns"),
+> +       SYSCALL_NULL_CTX_FAIL(kfunc_syscall_test_null_fail, -EINVAL, "processed 4 insns"),
+> +
+> +       /* success cases */
+>         TC_TEST(kfunc_call_test1, 12),
+>         TC_TEST(kfunc_call_test2, 3),
+>         TC_TEST(kfunc_call_test_ref_btf_id, 0),
+> +       SYSCALL_TEST(kfunc_syscall_test, 0),
+> +       SYSCALL_NULL_CTX_TEST(kfunc_syscall_test_null, 0),
+> +};
+> +
+> +struct syscall_test_args {
+> +       __u8 data[16];
+> +       size_t size;
+>  };
+>
+>  static void verify_success(struct kfunc_test_params *param)
+>  {
+>         struct kfunc_call_test_lskel *lskel = NULL;
+> +       LIBBPF_OPTS(bpf_test_run_opts, topts);
+>         struct bpf_prog_desc *lskel_prog;
+>         struct kfunc_call_test *skel;
+>         struct bpf_program *prog;
+>         int prog_fd, err;
+> -       LIBBPF_OPTS(bpf_test_run_opts, topts,
+> -               .data_in = &pkt_v4,
+> -               .data_size_in = sizeof(pkt_v4),
+> -               .repeat = 1,
+> -       );
+> +       struct syscall_test_args args = {
+> +               .size = 10,
+> +       };
+> +
+> +       switch (param->test_type) {
+> +       case syscall_test:
+> +               topts.ctx_in = &args;
+> +               topts.ctx_size_in = sizeof(args);
+> +               /* fallthrough */
+> +       case syscall_null_ctx_test:
+> +               break;
+> +       case tc_test:
+> +               topts.data_in = &pkt_v4;
+> +               topts.data_size_in = sizeof(pkt_v4);
+> +               topts.repeat = 1;
+> +               break;
+> +       }
+>
+>         /* first test with normal libbpf */
+>         skel = kfunc_call_test__open_and_load();
+> @@ -79,6 +139,72 @@ static void verify_success(struct kfunc_test_params *param)
+>                 kfunc_call_test_lskel__destroy(lskel);
+>  }
+>
+> +static void verify_fail(struct kfunc_test_params *param)
+> +{
+> +       LIBBPF_OPTS(bpf_object_open_opts, opts);
+> +       LIBBPF_OPTS(bpf_test_run_opts, topts);
+> +       struct bpf_program *prog;
+> +       struct kfunc_call_fail *skel;
+> +       int prog_fd, err;
+> +       struct syscall_test_args args = {
+> +               .size = 10,
+> +       };
+> +
+> +       opts.kernel_log_buf = obj_log_buf;
+> +       opts.kernel_log_size = log_buf_sz;
+> +       opts.kernel_log_level = 1;
+> +
+> +       switch (param->test_type) {
+> +       case syscall_test:
+> +               topts.ctx_in = &args;
+> +               topts.ctx_size_in = sizeof(args);
+> +               /* fallthrough */
+> +       case syscall_null_ctx_test:
+> +               break;
+> +       case tc_test:
+> +               topts.data_in = &pkt_v4;
+> +               topts.data_size_in = sizeof(pkt_v4);
+> +               break;
+> +               topts.repeat = 1;
+> +       }
+> +
+> +       skel = kfunc_call_fail__open_opts(&opts);
+> +       if (!ASSERT_OK_PTR(skel, "kfunc_call_fail__open_opts"))
+> +               goto cleanup;
+> +
+> +       prog = bpf_object__find_program_by_name(skel->obj, param->prog_name);
+> +       if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
+> +               goto cleanup;
+> +
+> +       bpf_program__set_autoload(prog, true);
+> +
+> +       err = kfunc_call_fail__load(skel);
+> +       if (!param->retval) {
+> +               /* the verifier is supposed to complain and refuses to load */
+> +               if (!ASSERT_ERR(err, "unexpected load success"))
+> +                       goto out_err;
+> +
+> +       } else {
+> +               /* the program is loaded but must dynamically fail */
+> +               if (!ASSERT_OK(err, "unexpected load error"))
+> +                       goto out_err;
+> +
+> +               prog_fd = bpf_program__fd(prog);
+> +               err = bpf_prog_test_run_opts(prog_fd, &topts);
+> +               if (!ASSERT_EQ(err, param->retval, param->prog_name))
+> +                       goto out_err;
+> +       }
+> +
+> +out_err:
+> +       if (!ASSERT_OK_PTR(strstr(obj_log_buf, param->expected_err_msg), "expected_err_msg")) {
+> +               fprintf(stderr, "Expected err_msg: %s\n", param->expected_err_msg);
+> +               fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
+> +       }
+> +
+> +cleanup:
+> +       kfunc_call_fail__destroy(skel);
+> +}
+> +
+>  static void test_main(void)
+>  {
+>         int i;
+> @@ -87,7 +213,10 @@ static void test_main(void)
+>                 if (!test__start_subtest(kfunc_tests[i].prog_name))
+>                         continue;
+>
+> -               verify_success(&kfunc_tests[i]);
+> +               if (!kfunc_tests[i].expected_err_msg)
+> +                       verify_success(&kfunc_tests[i]);
+> +               else
+> +                       verify_fail(&kfunc_tests[i]);
+>         }
+>  }
+>
+> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+> new file mode 100644
+> index 000000000000..4168027f2ab1
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+> @@ -0,0 +1,39 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2021 Facebook */
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
+> +
+> +struct syscall_test_args {
+> +       __u8 data[16];
+> +       size_t size;
+> +};
+> +
+> +SEC("?syscall")
+> +int kfunc_syscall_test_fail(struct syscall_test_args *args)
+> +{
+> +       bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(*args) + 1);
+> +
+> +       return 0;
+> +}
+> +
+> +SEC("?syscall")
+> +int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
+> +{
+> +       /* Must be called with args as a NULL pointer
+> +        * we do not check for it to have the verifier consider that
+> +        * the pointer might not be null, and so we can load it.
+> +        *
+> +        * So the following can not be added:
+> +        *
+> +        * if (args)
+> +        *      return -22;
+> +        */
+> +
+> +       bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
+> +
+> +       return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> index 5aecbb9fdc68..94c05267e5e7 100644
+> --- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> +++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+> @@ -92,4 +92,42 @@ int kfunc_call_test_pass(struct __sk_buff *skb)
+>         return 0;
+>  }
+>
+> +struct syscall_test_args {
+> +       __u8 data[16];
+> +       size_t size;
+> +};
+> +
+> +SEC("syscall")
+> +int kfunc_syscall_test(struct syscall_test_args *args)
+> +{
+> +       const int size = args->size;
+> +
+> +       if (size > sizeof(args->data))
+> +               return -7; /* -E2BIG */
+> +
 
-Adel.
+Looks like it is due to this. Verifier is confused because:
+r7 = args->data;
+r1 = r7;
 
+then it does r1 <<= 32; r1 >>=32; clearing upper 32 bits, so both r1
+and r7 lose the id association which propagates the bounds of r1
+learnt from comparison of it with sizeof(args->data);
+
+> +       bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(args->data));
+> +       bpf_kfunc_call_test_mem_len_pass1(&args->data, sizeof(*args));
+
+Later llvm assigns r7 to r2 for this call's 2nd arg. At this point the
+verifier still thinks r7 is unbounded, while to make a call with mem,
+len pair you need non-negative min value.
+
+Easiest way might be to just do args->size & sizeof(args->data), as
+the verifier log says. You might still keep the error above.
+Others may have better ideas/insights.
+
+> +       bpf_kfunc_call_test_mem_len_pass1(&args->data, size);
+> +
+> +       return 0;
+> +}
+> +
+> +SEC("syscall")
+> +int kfunc_syscall_test_null(struct syscall_test_args *args)
+> +{
+> +       /* Must be called with args as a NULL pointer
+> +        * we do not check for it to have the verifier consider that
+> +        * the pointer might not be null, and so we can load it.
+> +        *
+> +        * So the following can not be added:
+> +        *
+> +        * if (args)
+> +        *      return -22;
+> +        */
+> +
+> +       bpf_kfunc_call_test_mem_len_pass1(args, 0);
+> +
+> +       return 0;
+> +}
+> +
+>  char _license[] SEC("license") = "GPL";
+> --
+> 2.36.1
+>
