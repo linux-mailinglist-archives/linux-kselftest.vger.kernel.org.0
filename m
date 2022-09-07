@@ -2,202 +2,532 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B1E5AFA07
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 04:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFED5AFAB5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 05:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiIGCmh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 22:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S229679AbiIGDiM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 23:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiIGCma (ORCPT
+        with ESMTP id S229437AbiIGDiL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 22:42:30 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2055.outbound.protection.outlook.com [40.92.52.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D26A86061;
-        Tue,  6 Sep 2022 19:42:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gh9HSVyt/0YcOjwFGRe+LdswhiycciOafnJpOVCUP7QJPK9WwFMQZF7qZB8gAKy/OaM8RUrbRPoevCiyTUEKuPdyiPBuM6LIz6/8uYEuOJcNmF8SDm/OvdQAlN9HxbjGFhJoj0aBU3d8ckMPhyTKYqymwDmsoZ1BgbSTexkHlkAmJ6jVDtVSTp00qjD+QXFy0IxFSTEpV9WbHE+q59fOD4Th8kwxApZVvf9LfpJhXA3LZdIJsva9k3dwxmOYrklyOh25IilrGyhapo5U8mQ3H69usM2/AP5ocSffIl9elgA/fDwycvEYdrdK+AyPkcb1n3tbAzzj3+DwhgADM/1LRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/jKOSPp+XZBvAM6FoyF8CZkDR84bLqkHZrjiIlOwpig=;
- b=GPSliXBNlcsZGZ2/x82NjDViPYHEriLiLBKJ/GzslarAN4RZ5FKaPu542Yfyhrl3my/iQ/58EYgunbn1kw7VQ7Zllc5NayGJ02uZNoUqEHCMKqemgO0f/cSSyPGxIa8w/Lkmt6KlRi7DY/EUhY+TOWWHLISU+paHXYq9OaWlAMQ/kjij9TUnea9bVi1F21brIXjDWSBDailIwMOSHDxtz+xWMR5+TDXrC/miaYxAqtaBG96ift2K0kcPSAbQfTrdaJiiezLyKBANuUHpRIuFz1m7XPhYlZMw4PnpD2pxgwUoL3/LnVpEQnKvxjJey+OH3kvmpvRucZ66jt6mWCRyuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/jKOSPp+XZBvAM6FoyF8CZkDR84bLqkHZrjiIlOwpig=;
- b=Od5LgoGSPCLI8hahIqa53Jr+g2cwGZLX2YvsZ0zWNB6US5IS+dkZjUiFt3MI7DUKh4xdc8bV5n2ZvvkOON9YOKklyvfieyAJ5KOHTR1gUHU3+K8FV9zaCYuqqULDFt6vCqVDpco1UnI7TOg234OAfi75hFTuRm+5WmH6+Qix5IIyt3jAHlB5Im9YJ8y92QnNRXbyjcuq5fCKtNHY6fuKSELpVeaAV3bx0bDfbjAG7INRHFgfvFODUrA6TI3cbJvg2KcYHCf9qGOLB+3qD0LptsbRPuPqAxjCbVPRG/9myLVgdHgU3ns3ETLAI55iMZe09CbiSMhXy3HrQFR/MzAWeg==
-Received: from PSAPR04MB4167.apcprd04.prod.outlook.com (2603:1096:301:2a::9)
- by PSBPR04MB3910.apcprd04.prod.outlook.com (2603:1096:301:6::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Wed, 7 Sep
- 2022 02:42:19 +0000
-Received: from PSAPR04MB4167.apcprd04.prod.outlook.com
- ([fe80::9a5:16f2:9f1e:9bf2]) by PSAPR04MB4167.apcprd04.prod.outlook.com
- ([fe80::9a5:16f2:9f1e:9bf2%8]) with mapi id 15.20.5588.018; Wed, 7 Sep 2022
- 02:42:19 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Subject: Re: [PATCH V5 15/31] x86/sgx: Support restricting of enclave page
- permissions
-From:   zhubojun <bojun.zhu@outlook.com>
-In-Reply-To: <8f7c676e-952b-3409-312a-be4cadaf7194@intel.com>
-Date:   Wed, 7 Sep 2022 10:42:15 +0800
-Cc:     bp@alien8.de, cathy.zhang@intel.com, cedric.xing@intel.com,
-        dave.hansen@linux.intel.com, haitao.huang@intel.com, hpa@zytor.com,
-        jarkko@kernel.org, kai.huang@intel.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-sgx@vger.kernel.org, luto@kernel.org,
-        mark.shanahan@intel.com, mingo@redhat.com, seanjc@google.com,
-        shuah@kernel.org, tglx@linutronix.de, vijay.dhanraj@intel.com,
-        x86@kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-ID: <PSAPR04MB4167CAD68C500068F37B3B6FE9419@PSAPR04MB4167.apcprd04.prod.outlook.com>
-References: <PSAPR04MB416734EEED145D832A04B936E97B9@PSAPR04MB4167.apcprd04.prod.outlook.com>
- <8f7c676e-952b-3409-312a-be4cadaf7194@intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
-X-TMN:  [ox9HvD1XYm0D6QRGejwKEXdh6BgmY2uJ4PmBJ8WkF8Y36NGH+LM3mWqbwo6C2xlc]
-X-ClientProxiedBy: SG2PR02CA0083.apcprd02.prod.outlook.com
- (2603:1096:4:90::23) To PSAPR04MB4167.apcprd04.prod.outlook.com
- (2603:1096:301:2a::9)
-X-Microsoft-Original-Message-ID: <EDFC4D34-B397-4ED5-8F43-B90BDA52F9C0@outlook.com>
+        Tue, 6 Sep 2022 23:38:11 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C00C90823;
+        Tue,  6 Sep 2022 20:38:10 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id q3so13241774pjg.3;
+        Tue, 06 Sep 2022 20:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=aZBY1ytDWkd4w8jVqupdnVQPQRhde1D/W3hmklwt00k=;
+        b=UcJVdAfKiABU7wbqiiYMEGf93NQaKn0Q93j6zARb0BtpuiZ8h9K/VQ70KcKo2r4jvB
+         CdQGOHWAYlgk+aQdSkyPJgcvauzqn8cTQ5BvxZvkWIoPRFzmmFsvMB/NEyDMk6fS8iwq
+         /uzXLJYxx37dQaoxXV3VyFDbYduQMdKFfnbyIbDC1ob/EJjzBr/UOM5q2hmoTdAV7dQg
+         2iXFTzW13+dfYAWLJqZmBi7rz8SHjfXnVGEjhXlvxVytXEHse2XHtTrRroKzzHQbvPYD
+         JRO3cFL5fY77Z5o3RpoYTjndhZ3+IHwq7AjFjX1LfT+JYQbXWQY0tDLDc9SpqlREKLd4
+         UtOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=aZBY1ytDWkd4w8jVqupdnVQPQRhde1D/W3hmklwt00k=;
+        b=m3Wwi3uS0hWU7VdUYHRa/nvf1GQNmXbMvDmvWa77l6aKkrbOLftTIGJUyPE8tkCR97
+         7ZMP73PRuRWat4uKiL6GxQqEa9JeVGHd5X2uhvoIYYQ55y24r9vdrjWmQqRzxR1AV6uR
+         J72DwIPpe6ts5WD+VvUXR4AHPpL4jS/sga/sm6ddxtCN7eFtbGBWcZz+w6+qoy3rtek+
+         HXSXcuoRW5QiPYGw0aLsxzZVtfsluYN9twTI+jwJ+DGwyimD/Q6hdFFK9EM3iYWXeK91
+         XFs+jvdrqWtoQhP7JjD9GUvDaIyrQyl6Lvs3AnAS55Bq7wIpKiiajeHK5HpjoD8GEr1/
+         DSOg==
+X-Gm-Message-State: ACgBeo13YX8tuykiZG4omlAyxl2MZnz3qTEt2O/j/Tu4Lmch+7XYK72I
+        J0/POcKQPbjD0pqOzppP5nU=
+X-Google-Smtp-Source: AA6agR4nU872ff0af8svryqI1HENnm010hfya/Y3swm7JSGuP6HrUoV5X59o5/RIvI9nAsenWu3VxA==
+X-Received: by 2002:a17:90b:4d8c:b0:200:7cd8:333e with SMTP id oj12-20020a17090b4d8c00b002007cd8333emr1695414pjb.95.1662521889463;
+        Tue, 06 Sep 2022 20:38:09 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-34.three.co.id. [116.206.12.34])
+        by smtp.gmail.com with ESMTPSA id d66-20020a623645000000b0052d33bf14d6sm11058929pfa.63.2022.09.06.20.38.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 20:38:08 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 227A9103FC4; Wed,  7 Sep 2022 10:38:04 +0700 (WIB)
+Date:   Wed, 7 Sep 2022 10:38:04 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Adel Abouchaev <adel.abushaev@gmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
+        shuah@kernel.org, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [net-next v3 1/6] net: Documentation on QUIC kernel Tx crypto.
+Message-ID: <YxgSHJDAknxqEznd@debian.me>
+References: <adel.abushaev@gmail.com>
+ <20220907004935.3971173-1-adel.abushaev@gmail.com>
+ <20220907004935.3971173-2-adel.abushaev@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c910ef10-6fbe-4cff-58db-08da907a95a0
-X-MS-TrafficTypeDiagnostic: PSBPR04MB3910:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m1HoK7hWuym44XNcK6TyuteAE65yxdgiwpc5ivPWAgbuOu5ny9KGRY9rid3ZCYDYKRSsvvzNc9OPV4pwVCtoHvTDRWnRPk31OZxwclqEHqAT+jgEUIVap3cPu8I5rxM3DkOqAjsx17O+RhsnihFHpbxFoj9pXcPf/ZJpTKckIc7Hya1LnYkyAd5ToqFYiFdfwExNxljFsUNaonolLX3YOx/WrtWl1Be9KM7TXPAax2hN9rLsWheV5RDipMnsBJXUzGiI3tY6s9MIqe+FVgVlT2RvyC0YQ6QEMTABrtY+O1VqFwIeUmjaZgr2WhhYLBs/A3I/tyCfodi9tVbKp3CNu+162P5LeqDu1FkMjmp2a7ErgFNWd9wBHdq1Euf5FzpHw/9246OMHV0spA00yqtn3sK5RF3ul4LYqedHBGOBI0wf/uoIV0y0V9s0h4Ctdr3XGBTLy+bOKMvDbEZbfaqW9HAsTGIHv2w0Z/VYoyz1BCvrWE4dEqEUUJTOSNGBygvAYDkOQ6Uy6tyuTawgF0Sjc9XWJ6IIjM0uNK09Xvk5kSGC6Mp6ArkPIDsIa2h2Cg4LzwZul96Tj+M2eaA29ed72t/qm0wCA51PP2HdBzicVy8JCXrnH+uZbbOd9LH2wr/T51m+F4ydQd3CfW8xOqFuFhIpj7ZvlX3QMwOwr9uU6Fd6mY9/n11dh1acUDrcaAWp
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZDMxMmZPcG4vUG5yTERlVGUzQkxEakdON21hNnVsU2hkOUF6azRmbzFyTUcw?=
- =?utf-8?B?a0pMQ3Y2WGI1aElXdEVpOWFlSTN0Nk5MSGc4V2lpako4QjJLTW9yc1M5Z04r?=
- =?utf-8?B?eERRUVVWcW5BOGxKbzRHV2tlWUEveHNGSTRNTGFOalVhNXgvWVZLK0s1MTFG?=
- =?utf-8?B?S01DeElHZzFWalU5TlczRkxxYlJaQ2czQ050eTMrZkV2SkF4K3lnLzQrT2VW?=
- =?utf-8?B?aUlxdjBsMDh0cUd0bCs0T25XbGQ1b2xFN3A1dTdrWVJXeXdWcWljTFVSdDR4?=
- =?utf-8?B?TmxPcGhBbHRyTGVvQ0R5Q2p5VXJxM290Y3Q2TlRVRi9TT3pySGQzekZMSFh4?=
- =?utf-8?B?Q0dqNEttbXJrZDlYSlV3RW04czZCOUVDMm5uaGJ5dlVHelFRdm52Z1ljQ0lm?=
- =?utf-8?B?N1VMek82dVV3dmpJTDUxTlhrblNodGIxa3Zrdjd2VyswaE9JQUFqdHFkdlhK?=
- =?utf-8?B?TnAyTUR0RXRaT2l2dU1JZVNrR3kzbTlTaHZ5RFMwaGJ4VGhpWWp5QnhtMFJI?=
- =?utf-8?B?K2JCVC83L095ZmtBdm16Y1hpODZKR1VDcDhPbUx6Ny8xYkFMR3NNUGtidFhh?=
- =?utf-8?B?TnVGTlBTQlJxb3MwQVl4S1pHL01SRitRcjhrTnErQXdVZTdBZnJWVzVPQ3Zy?=
- =?utf-8?B?QTZ4QnZpaW1EajBRdjFrZXBUTEIvRzBTRjZCMWpJUkczL21odTZNV21pZVg0?=
- =?utf-8?B?THBwZ0RWV1BWZDJHdDdGNWNZamdZcVNObmNuYUZYSVQyQkNqemFld2ZoQmFF?=
- =?utf-8?B?SEgvVEd1QUhEODJST01memFMbTRUVWxLeFp1akhBYng3VXBDUEV0UUJHS2lX?=
- =?utf-8?B?cFREbHF5Z2Nnb2g4dFBLUTVXQVh4U2syWE1xYzlNeThzbElLQmx2bHBzWHhC?=
- =?utf-8?B?YysyZWZhcldhREw2N1hzbkI5VCtjVEhobHlib1ZXRlpRaEE4S3dIa1oydlBk?=
- =?utf-8?B?dUZvcjRYSXhtS3AwbmFKblUxemNSMGZjMmdNcW82eFBjNXExNzE0a2E1RHh5?=
- =?utf-8?B?dzlLSnZiUmpzSG9rTGZCOXhHeGcrdGRMSHlkQTg3a0NlSjJzR0NhL1hjS1BD?=
- =?utf-8?B?dTFMMTRUaSsxYXh5RWRGdDgwYWE5TVpMMmozV05MZVVYSzZrVS9sTFd2UFBF?=
- =?utf-8?B?eWlJS2ppZzd4cHFZUEtJbTg5QTRrUjhkMDhhQ1d3NTRPTHBLTkJybFRDT0RF?=
- =?utf-8?B?a05JR1djcloxWEVFSHNwZHcvYVhKMlVLeHlOdWlWb2xBcTFQb09UODlpaXM4?=
- =?utf-8?B?OE5Wemgzd3ZWVURXZitlemRjWVNTVk02VTlUaUNsMnloQlFWUHIzRkp1Z0w2?=
- =?utf-8?B?eUtSQ2pId0NHTWJKa21CUXdHU1dVekc3TTR5dGI4WkN3T0ljNUM3Tlpzcmd0?=
- =?utf-8?B?VjI5eHh0ZTl6dnNsRFJJTUZJVVZSbkxyanNmVjF4VmdFQ0VkOVkzYWJFeHE2?=
- =?utf-8?B?OWxWYm5ZbjlNL3FFQytSTXJ2K2h0dGVxeVoza0cyNXZjWXlvMDE5UjFCZnkr?=
- =?utf-8?B?Z3hxeEkza0kyUTRXYlprdzYzUlNmV1RyU3pyNGJLc256emtLRG1DL0F2U25N?=
- =?utf-8?B?emwxdEFoS2o1UStteC8yVWhQWmxLenQvWk9QTUZtL2dFQTJ6VFJqbjVTaWZG?=
- =?utf-8?B?THVZSVJtdEFKQXdVckdsUWFHTzBOTnc5WVlqM0VDVnIwbTVNNFFadVVHQm9v?=
- =?utf-8?B?WFdsMzRsTytpcC84WEUxdFl0NTFkOTZ4TmtPNHhaRGRGTi92WUxkN0tlOFQw?=
- =?utf-8?B?NHVKRGc0VmRNZVdYeElaSVhuSlZ0Ukw2MHFKQlczOWtwWEtQR1JhMzl0bTFo?=
- =?utf-8?B?YXNGeXpFNEVsQnZ0algxQT09?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c910ef10-6fbe-4cff-58db-08da907a95a0
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR04MB4167.apcprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 02:42:19.8476
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSBPR04MB3910
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="VMxYiAs4WfmYdATp"
+Content-Disposition: inline
+In-Reply-To: <20220907004935.3971173-2-adel.abushaev@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Reinette. Sorry for late reply! Appreciate for you detailed explanation=
-!
 
-> On Sep 2, 2022, at 23:22, Reinette Chatre <reinette.chatre@intel.com> wro=
-te:
->=20
-> How important is the performance of page permission restriction? How
-> about the performance of page type modification?
+--VMxYiAs4WfmYdATp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Enclave applications may need to change its page permissions at runtime.
-If they change page permissions frequently, it may introduce substantial
-overhead, compared to applications running on native Linux.
-(`mprotect()` is more lightweight compared to restricting and extending
-page permissions inside enclave)=20
+On Tue, Sep 06, 2022 at 05:49:30PM -0700, Adel Abouchaev wrote:
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +KERNEL QUIC
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Overview
+> +=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +QUIC is a secure general-purpose transport protocol that creates a state=
+ful
+> +interaction between a client and a server. QUIC provides end-to-end inte=
+grity
+> +and confidentiality. Refer to RFC 9000 for more information on QUIC.
+> +
+> +The kernel Tx side offload covers the encryption of the application stre=
+ams
+> +in the kernel rather than in the application. These packets are 1RTT pac=
+kets
+> +in QUIC connection. Encryption of every other packets is still done by t=
+he
+> +QUIC library in user space.
+> +
+> +The flow match is performed using 5 parameters: source and destination IP
+> +addresses, source and destination UDP ports and destination QUIC connect=
+ion ID.
+> +Not all 5 parameters are always needed. The Tx direction matches the flo=
+w on
+> +the destination IP, port and destination connection ID, while the Rx par=
+t would
+> +later match on source IP, port and destination connection ID. This will =
+cover
+> +multiple scenarios where the server is using SO_REUSEADDR and/or empty
+> +destination connection IDs or combination of these.
+> +
 
-But I have not profiled the detailed of the page permission restriction=E2=
-=80=99s
-performance. So I=E2=80=99m not sure how much benefit we will gain for perf=
-ormance
-if we move the ETRACK flow outside the `for loop`.
+Both Tx and Rx direction match destination connection ID. Is it right?
 
-> From the hardware perspective, a single ETRACK can be run after
-> EMODPR is run on a range of pages.
->=20
-> Some things to keep in mind when considering making this change:
->=20
-> Note that the enclave's mutex is obtained and released every time
-> an enclave page is modified. This is needed to (a) avoid softlockups
-> when modifying a large range of pages and (b) give the reclaimer
-> opportunity make space to load pages that will be modified.
->=20
-> Moving the ETRACK flow out of the for loop implies that the mutex would
-> be released between the time the page is modified and ETRACK flow is run
-> (with enclave mutex held). It is thus possible for other changes
-> to be made or attempted on a page between the time it is modified
-> and the ETRACK flow. The possible interactions between different
-> page modifications (both initiated from user space and the OS via
-> the reclaimer) need to be studied if it is considered to split
-> this flow in two parts.
->=20
-> With the ETRACK flow done while the enclave page being modified is
-> loaded there is a guarantee that the SECS page is loaded also. When
-> the ETRACK flow is isolated there needs to be changes to ensure
-> that the SECS page is loaded.
+> +The Rx direction is not implemented in this set of patches.
+> +
+> +The connection migration scenario is not handled by the kernel code and =
+will
+> +be handled by the user space portion of QUIC library. On the Tx directio=
+n,
+> +the new key would be installed before a packet with an updated destinati=
+on is
+> +sent. On the Rx direction, the behavior will be to drop a packet if a fl=
+ow is
+> +missing.
+> +
+> +For the key rotation, the behavior is to drop packets on Tx when the enc=
+ryption
+> +key with matching key rotation bit is not present. On Rx direction, the =
+packet
+> +will be sent to the userspace library with unencrypted header and encryp=
+ted
+> +payload. A separate indication will be added to the ancillary data to in=
+dicate
+> +the status of the operation as not matching the current key bit. It is n=
+ot
+> +possible to use the key rotation bit as part of the key for flow lookup =
+as that
+> +bit is protected by the header protection. A special provision will need=
+ to be
+> +done in user mode to still attempt the decryption of the payload to prev=
+ent a
+> +timing attack.
+> +
+> +
+> +User Interface
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Creating a QUIC connection
+> +--------------------------
+> +
+> +QUIC connection originates and terminates in the application, using one =
+of many
+> +available QUIC libraries. The code instantiates QUIC client and QUIC ser=
+ver in
+> +some form and configures them to use certain addresses and ports for the
+> +source and destination. The client and server negotiate the set of keys =
+to
+> +protect the communication during different phases of the connection, mai=
+ntain
+> +the connection and perform congestion control.
+> +
+> +Requesting to add QUIC Tx kernel encryption to the connection
+> +-------------------------------------------------------------
+> +
+> +Each flow that should be encrypted by the kernel needs to be registered =
+with
+> +the kernel using socket API. A setsockopt() call on the socket creates an
+> +association between the QUIC connection ID of the flow with the encrypti=
+on
+> +parameters for the crypto operations:
+> +
+> +.. code-block:: c
+> +
+> +	struct quic_connection_info conn_info;
+> +	char conn_id[5] =3D {0x01, 0x02, 0x03, 0x04, 0x05};
+> +	const size_t conn_id_len =3D sizeof(conn_id);
+> +	char conn_key[16] =3D {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+> +			     0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f};
+> +	char conn_iv[12] =3D {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+> +			    0x08, 0x09, 0x0a, 0x0b};
+> +	char conn_hdr_key[16] =3D {0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x=
+17,
+> +				 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
+> +				};
+> +
+> +        conn_info.conn_payload_key_gen =3D 0;
+> +	conn_info.cipher_type =3D TLS_CIPHER_AES_GCM_128;
+> +
+> +	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
+> +	conn_info.key.conn_id_length =3D 5;
+> +	memcpy(&conn_info.key.conn_id[QUIC_MAX_CONNECTION_ID_SIZE
+> +				      - conn_id_len],
+> +	       &conn_id, conn_id_len);
+> +
+> +	memcpy(&conn_info.payload_key, conn_key, sizeof(conn_key));
+> +	memcpy(&conn_info.payload_iv, conn_iv, sizeof(conn_iv));
+> +	memcpy(&conn_info.header_key, conn_hdr_key, sizeof(conn_hdr_key));
+> +
+> +	setsockopt(fd, SOL_UDP, UDP_QUIC_ADD_TX_CONNECTION, &conn_info,
+> +		   sizeof(conn_info));
+> +
+> +
+> +Requesting to remove QUIC Tx kernel crypto offload control messages
+> +-------------------------------------------------------------------
+> +
+> +All flows are removed when the socket is closed. To request an explicit =
+remove
+> +of the offload for the connection during the lifetime of the socket the =
+process
+> +is similar to adding the flow. Only the connection ID and its length are
+> +necessary to supply to remove the connection from the offload:
+> +
+> +.. code-block:: c
+> +
+> +	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
+> +	conn_info.key.conn_id_length =3D 5;
+> +	memcpy(&conn_info.key.conn_id[QUIC_MAX_CONNECTION_ID_SIZE
+> +				      - conn_id_len],
+> +	       &conn_id, conn_id_len);
+> +	setsockopt(fd, SOL_UDP, UDP_QUIC_DEL_TX_CONNECTION, &conn_info,
+> +		   sizeof(conn_info));
+> +
+> +Sending QUIC application data
+> +-----------------------------
+> +
+> +For QUIC Tx encryption offload, the application should use sendmsg() soc=
+ket
+> +call and provide ancillary data with information on connection ID length=
+ and
+> +offload flags for the kernel to perform the encryption and GSO support if
+> +requested.
+> +
+> +.. code-block:: c
+> +
+> +	size_t cmsg_tx_len =3D sizeof(struct quic_tx_ancillary_data);
+> +	uint8_t cmsg_buf[CMSG_SPACE(cmsg_tx_len)];
+> +	struct quic_tx_ancillary_data * anc_data;
+> +	size_t quic_data_len =3D 4500;
+> +	struct cmsghdr * cmsg_hdr;
+> +	char quic_data[9000];
+> +	struct iovec iov[2];
+> +	int send_len =3D 9000;
+> +	struct msghdr msg;
+> +	int err;
+> +
+> +	iov[0].iov_base =3D quic_data;
+> +	iov[0].iov_len =3D quic_data_len;
+> +	iov[1].iov_base =3D quic_data + 4500;
+> +	iov[1].iov_len =3D quic_data_len;
+> +
+> +	if (client.addr.sin_family =3D=3D AF_INET) {
+> +		msg.msg_name =3D &client.addr;
+> +		msg.msg_namelen =3D sizeof(client.addr);
+> +	} else {
+> +		msg.msg_name =3D &client.addr6;
+> +		msg.msg_namelen =3D sizeof(client.addr6);
+> +	}
+> +
+> +	msg.msg_iov =3D iov;
+> +	msg.msg_iovlen =3D 2;
+> +	msg.msg_control =3D cmsg_buf;
+> +	msg.msg_controllen =3D sizeof(cmsg_buf);
+> +	cmsg_hdr =3D CMSG_FIRSTHDR(&msg);
+> +	cmsg_hdr->cmsg_level =3D IPPROTO_UDP;
+> +	cmsg_hdr->cmsg_type =3D UDP_QUIC_ENCRYPT;
+> +	cmsg_hdr->cmsg_len =3D CMSG_LEN(cmsg_tx_len);
+> +	anc_data =3D CMSG_DATA(cmsg_hdr);
+> +	anc_data->flags =3D 0;
+> +	anc_data->next_pkt_num =3D 0x0d65c9;
+> +	anc_data->conn_id_length =3D conn_id_len;
+> +	err =3D sendmsg(self->sfd, &msg, 0);
+> +
+> +QUIC Tx offload in kernel will read the data from userspace, encrypt and
+> +copy it to the ciphertext within the same operation.
+> +
+> +
+> +Sending QUIC application data with GSO
+> +--------------------------------------
+> +When GSO is in use, the kernel will use the GSO fragment size as the tar=
+get
+> +for ciphertext. The packets from the user space should align on the boun=
+dary
+> +of GSO fragment size minus the size of the tag for the chosen cipher. Fo=
+r the
+> +GSO fragment 1200, the plain packets should follow each other at every 1=
+184
+> +bytes, given the tag size of 16. After the encryption, the rest of the U=
+DP
+> +and IP stacks will follow the defined value of GSO fragment which will i=
+nclude
+> +the trailing tag bytes.
+> +
+> +To set up GSO fragmentation:
+> +
+> +.. code-block:: c
+> +
+> +	setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
+> +		   sizeof(frag_size));
+> +
+> +If the GSO fragment size is provided in ancillary data within the sendms=
+g()
+> +call, the value in ancillary data will take precedence over the segment =
+size
+> +provided in setsockopt to split the payload into packets. This is consis=
+tent
+> +with the UDP stack behavior.
+> +
+> +Integrating to userspace QUIC libraries
+> +---------------------------------------
+> +
+> +Userspace QUIC libraries integration would depend on the implementation =
+of the
+> +QUIC protocol. For MVFST library, the control plane is integrated into t=
+he
+> +handshake callbacks to properly configure the flows into the socket; and=
+ the
+> +data plane is integrated into the methods that perform encryption and se=
+nd
+> +the packets to the batch scheduler for transmissions to the socket.
+> +
+> +MVFST library can be found at https://github.com/facebookincubator/mvfst.
+> +
+> +Statistics
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +QUIC Tx offload to the kernel has counters
+> +(``/proc/net/quic_stat``):
+> +
+> +- ``QuicCurrTxSw`` -
+> +  number of currently active kernel offloaded QUIC connections
+> +- ``QuicTxSw`` -
+> +  accumulative total number of offloaded QUIC connections
+> +- ``QuicTxSwError`` -
+> +  accumulative total number of errors during QUIC Tx offload to kernel
 
-Thanks for pointing out such case which I have not considered yet!
+The rest of documentation can be improved, like:
 
-> It needs to be considered how errors will be communicated to user
-> space and how possible inconsistent state could affect user space. In
-> support of partial success the ioctl() returns a count indicating
-> how many pages were successfully modified. With the configuration
-> and ETRACK done per page and their failures handled, the meaning
-> of this count is clear. This needs to be considered because it is
-> not possible for the kernel to undo an EMODPR. So if all (or some of) the=
+---- >8 ----
+
+diff --git a/Documentation/networking/quic.rst b/Documentation/networking/q=
+uic.rst
+index 2e6ec72f4eea3a..3f3d05b901da3f 100644
+--- a/Documentation/networking/quic.rst
++++ b/Documentation/networking/quic.rst
+@@ -9,22 +9,22 @@ Overview
 =20
-> EMODPRs succeed but the final ETRACK fails for some reason then
-> the successful EMODPR cannot be undone yet all will be considered
-> failed? How should this be reported to user space? Variations may be ok
-> since EMODPR can be repeated from what I can tell but I envision scenario=
-s
-> where some pages in a range may have their permissions restricted
-> (and thus have EPCM.PR set) but which pages have this state is not
-> clear to user space. I don't know what would be acceptable here.
-> Looking at the EACCEPT flow in the SDM it does not seem as though
-> EPCM.PR is one of the EPC page settings that are verified.
->=20
-> Reinette
+ QUIC is a secure general-purpose transport protocol that creates a stateful
+ interaction between a client and a server. QUIC provides end-to-end integr=
+ity
+-and confidentiality. Refer to RFC 9000 for more information on QUIC.
++and confidentiality. Refer to RFC 9000 [#rfc9000]_ for the standard docume=
+nt.
+=20
+ The kernel Tx side offload covers the encryption of the application streams
+ in the kernel rather than in the application. These packets are 1RTT packe=
+ts
+ in QUIC connection. Encryption of every other packets is still done by the
+-QUIC library in user space.
++QUIC library in userspace.
+=20
+ The flow match is performed using 5 parameters: source and destination IP
+ addresses, source and destination UDP ports and destination QUIC connectio=
+n ID.
+-Not all 5 parameters are always needed. The Tx direction matches the flow =
+on
+-the destination IP, port and destination connection ID, while the Rx part =
+would
+-later match on source IP, port and destination connection ID. This will co=
+ver
+-multiple scenarios where the server is using SO_REUSEADDR and/or empty
+-destination connection IDs or combination of these.
++Not all these parameters are always needed. The Tx direction matches the f=
+low
++on the destination IP, port and destination connection ID; while the Rx
++direction would later match on source IP, port and destination connection =
+ID.
++This will cover multiple scenarios where the server is using ``SO_REUSEADD=
+R``
++and/or empty destination connection IDs or combination of these.
+=20
+-The Rx direction is not implemented in this set of patches.
++The Rx direction is not implemented yet.
+=20
+ The connection migration scenario is not handled by the kernel code and wi=
+ll
+ be handled by the user space portion of QUIC library. On the Tx direction,
+@@ -39,8 +39,8 @@ payload. A separate indication will be added to the ancil=
+lary data to indicate
+ the status of the operation as not matching the current key bit. It is not
+ possible to use the key rotation bit as part of the key for flow lookup as=
+ that
+ bit is protected by the header protection. A special provision will need t=
+o be
+-done in user mode to still attempt the decryption of the payload to preven=
+t a
+-timing attack.
++done in user mode to keep attempting the payload decription to prevent tim=
+ing
++attacks.
+=20
+=20
+ User Interface
+@@ -50,7 +50,7 @@ Creating a QUIC connection
+ --------------------------
+=20
+ QUIC connection originates and terminates in the application, using one of=
+ many
+-available QUIC libraries. The code instantiates QUIC client and QUIC serve=
+r in
++available QUIC libraries. The code instantiates the client and server in
+ some form and configures them to use certain addresses and ports for the
+ source and destination. The client and server negotiate the set of keys to
+ protect the communication during different phases of the connection, maint=
+ain
+@@ -60,7 +60,7 @@ Requesting to add QUIC Tx kernel encryption to the connec=
+tion
+ -------------------------------------------------------------
+=20
+ Each flow that should be encrypted by the kernel needs to be registered wi=
+th
+-the kernel using socket API. A setsockopt() call on the socket creates an
++the kernel using socket API. A ``setsockopt()`` call on the socket creates=
+ an
+ association between the QUIC connection ID of the flow with the encryption
+ parameters for the crypto operations:
+=20
+@@ -112,10 +112,10 @@ necessary to supply to remove the connection from the=
+ offload:
+ 	setsockopt(fd, SOL_UDP, UDP_QUIC_DEL_TX_CONNECTION, &conn_info,
+ 		   sizeof(conn_info));
+=20
+-Sending QUIC application data
+------------------------------
++Sending application data
++------------------------
+=20
+-For QUIC Tx encryption offload, the application should use sendmsg() socket
++For Tx encryption offload, the application should use ``sendmsg()`` socket
+ call and provide ancillary data with information on connection ID length a=
+nd
+ offload flags for the kernel to perform the encryption and GSO support if
+ requested.
+@@ -168,11 +168,11 @@ Sending QUIC application data with GSO
+ --------------------------------------
+ When GSO is in use, the kernel will use the GSO fragment size as the target
+ for ciphertext. The packets from the user space should align on the bounda=
+ry
+-of GSO fragment size minus the size of the tag for the chosen cipher. For =
+the
+-GSO fragment 1200, the plain packets should follow each other at every 1184
+-bytes, given the tag size of 16. After the encryption, the rest of the UDP
+-and IP stacks will follow the defined value of GSO fragment which will inc=
+lude
+-the trailing tag bytes.
++of the fragment size minus the tag size for the chosen cipher. For example,
++if the fragment size is 1200 bytes and the tag size is 16 bytes, the plain
++packets should follow each other at every 1184 bytes. After the encryption,
++the rest of UDP and IP stacks will follow the defined value of the fragmen=
+t,
++which includes the trailing tag bytes.
+=20
+ To set up GSO fragmentation:
+=20
+@@ -181,7 +181,7 @@ To set up GSO fragmentation:
+ 	setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
+ 		   sizeof(frag_size));
+=20
+-If the GSO fragment size is provided in ancillary data within the sendmsg()
++If the fragment size is provided in ancillary data within the ``sendmsg()``
+ call, the value in ancillary data will take precedence over the segment si=
+ze
+ provided in setsockopt to split the payload into packets. This is consiste=
+nt
+ with the UDP stack behavior.
+@@ -190,12 +190,10 @@ Integrating to userspace QUIC libraries
+ ---------------------------------------
+=20
+ Userspace QUIC libraries integration would depend on the implementation of=
+ the
+-QUIC protocol. For MVFST library, the control plane is integrated into the
+-handshake callbacks to properly configure the flows into the socket; and t=
+he
+-data plane is integrated into the methods that perform encryption and send
+-the packets to the batch scheduler for transmissions to the socket.
+-
+-MVFST library can be found at https://github.com/facebookincubator/mvfst.
++QUIC protocol. For MVFST library [#mvfst]_, the control plane is integrated
++into the handshake callbacks to properly configure the flows into the sock=
+et;
++and the data plane is integrated into the methods that perform encryption
++and send the packets to the batch scheduler for transmissions to the socke=
+t.
+=20
+ Statistics
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+@@ -209,3 +207,9 @@ QUIC Tx offload to the kernel has counters
+   accumulative total number of offloaded QUIC connections
+ - ``QuicTxSwError`` -
+   accumulative total number of errors during QUIC Tx offload to kernel
++
++References
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++.. [#rfc9000] https://datatracker.ietf.org/doc/html/rfc9000
++.. [#mvfst] https://github.com/facebookincubator/mvfst
 
-I agree with you. It is hard to handle when there the final ETRACK fails
-but EMODPR succeeds.
+Thanks.
 
-Thanks for showing the case I have not considered but
-needs thinking deeply!
+--=20
+An old man doll... just what I always wanted! - Clara
 
-BR,
-Bojun
+--VMxYiAs4WfmYdATp
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYxgSEgAKCRD2uYlJVVFO
+ozzfAQCHLoap/Svhj4PBFxGxVQ55yhJdcxkwFTlEnAU5ppoP9AEAj+PPrUhZ88vY
+13QQGtX+vzVAelzd6rcX/5/fVMGLewM=
+=Us4K
+-----END PGP SIGNATURE-----
+
+--VMxYiAs4WfmYdATp--
