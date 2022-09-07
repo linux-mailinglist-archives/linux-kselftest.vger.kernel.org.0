@@ -2,325 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C97F5AF848
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 01:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DC75AF91A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Sep 2022 02:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiIFXMO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 6 Sep 2022 19:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
+        id S229584AbiIGAts (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 6 Sep 2022 20:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiIFXMN (ORCPT
+        with ESMTP id S229447AbiIGAtr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 6 Sep 2022 19:12:13 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1273A89902
-        for <linux-kselftest@vger.kernel.org>; Tue,  6 Sep 2022 16:12:11 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-344fc86d87cso97386397b3.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Sep 2022 16:12:11 -0700 (PDT)
+        Tue, 6 Sep 2022 20:49:47 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EC8286EB;
+        Tue,  6 Sep 2022 17:49:46 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id p18so12924391plr.8;
+        Tue, 06 Sep 2022 17:49:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=3JQEOWLEnbq0vh0DexQWukCn32UtKuHAkuSePHvQS0U=;
-        b=s6AtETKvIEGich4NCsx1yel+1DolsO2sKsFgEpHqRTbeTGZKGrClDeG5GhhXWR8hrx
-         daoxWL1CWmFXt3fW7Kc913NbYFOc80Yl0xiZAiXiS7Y9Vw4NrQLf+Y4E3OhCVXbQT4js
-         5SXv3R9HRws6h2IRAX3r/RqoMei7PiPzQv9x38YCrkvMqQpbM8vkLbK+yZ9/9mqML9ls
-         3AdN5CV8ovXKy+OOw+n4XLhCdGJDy5vsp9HOc5HhozgfQIQMagNp2DWdq9TA+8ltnSMn
-         CLVg2KaED+KzF4Ym6/eIEsIKXnJRo0nLbjanorWy/1dSgRT9JfGny3EfyOpUt1U8IcxT
-         EV6w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date;
+        bh=ICzw1FfKchRebdUezT3tx3j+y8ZDKeGNq7iW51YsKEY=;
+        b=b0yaSApvbWwmy6NGs7G/zTBaUcmCmcUXu7hWODPO/kVYxHLu4RadTuLI+M7MZMLgZF
+         KIZtj6o65Ez/IbPGiOwQaBTvQ5jLJNEgpVH5KRKh4jv45KPq9yUW8iq1iaqWPtb8FO9K
+         OZzI1jujiGutOhT0zgfWN68uFUndKBgb7zl0PtV45AsdVE5Pkbd7mENkUhkBri0SRwv3
+         0gW0VeXv69BirBgLnCFzpqKNoSxAjPdSRlGOi+acK9v1zH2RzloS8JhPqXdIKGqao4hs
+         bB0SZt0WBrPJbfrqG1nLkKJ/SYPuiiHMkNwSzA8XPGmHK+A5lJhy7XW5jVr66ghVmj4k
+         VZ5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3JQEOWLEnbq0vh0DexQWukCn32UtKuHAkuSePHvQS0U=;
-        b=mE61hrA5liaNsESQsBUMG0o82synfo8MlpAOYAPWwp49GutuYMF6BRf6EQmTRr2+DD
-         6wGBUahiJ6ZV/owCA5SB7D7OohwxsdP25bXlZxXpy5c815AKqGUaMVire4htWMItR2jp
-         BiiE8sJ+ozqwbwae2TJbSp1kvfwtxbHP7hbWmIibyWST0/J95dAkAq+R7VNXjP0Tltf+
-         v+0CnUUe4MMpKris7cCJDwCLoY8qy2eOfPUHTW+jiNfoMysZ46WiNQ3tj1zJtoDc75fe
-         SKE5BLl8GK28wG4XXL61MXfkeTqJM2M/aSMkwtkqiBpzeugSTaJRncjGi6C3JkuJ95QX
-         /dUQ==
-X-Gm-Message-State: ACgBeo3PdaTNHCwMV5HmIvulGlT0B0CaMzIucyVY6gZ4uko4l2JFflrx
-        Vy/H4gXunj+k/JXm8CMZ7PFsfi6jW41kFjOgUY4dfw==
-X-Google-Smtp-Source: AA6agR6iJPahWCZn85Dc9fpexgOabsPzYuH4RyQqw98pcGpM4zf2Y0z3+NUjPM5vbUISzN+6VH8o2Bz9HzkQCu3F1KQ=
-X-Received: by 2002:a0d:d5cd:0:b0:345:68b1:c06e with SMTP id
- x196-20020a0dd5cd000000b0034568b1c06emr780033ywd.489.1662505929988; Tue, 06
- Sep 2022 16:12:09 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=ICzw1FfKchRebdUezT3tx3j+y8ZDKeGNq7iW51YsKEY=;
+        b=n96IDqfEnRo288b+SmUoLA8aj32sx6hjNm2pmHjQSA1es9Xx4dmziGkwHBlwKgp5/n
+         e1B5Dp2RdYfuh71IWLKWNTNk6oJtQBaLtq3NvLNIh0KkIf0kwvD64Lkqy2vurQT9sHdB
+         fF0HEt5Go6nwK2yQ2xdvmqC7n3+VrCJdGDhzKdTlHT8o7VUFlQpbGJSm9a4Io9ilQyrf
+         k8TWH+fY1/gqHLTRPAbmZMrHg7E2e2vPsh+cht0G8al8my05hW/Lv39ZYvsJSmLq4fzm
+         4Mfp0KkPNHEwf99orLd+Dm56qrG6x+jK4zfRYLAbfqM9WcaUWbrsbbINS0mUdnq3bfy/
+         M3oA==
+X-Gm-Message-State: ACgBeo3+zIc+hdroPiFgtZH9z9BTR+MUNNVn0BmCxSAIkvYyeQmK3xAY
+        nv/xtkKXffxIZlpUAxE7Skk=
+X-Google-Smtp-Source: AA6agR55GFyoNi+VQtTHA4mYvUfWFQKgNzYCTubeTqE/5MI+IEgFVVCQ8+hyGkSic1HbNvFeeJdwoQ==
+X-Received: by 2002:a17:90b:4a06:b0:200:8997:c292 with SMTP id kk6-20020a17090b4a0600b002008997c292mr1143215pjb.145.1662511785497;
+        Tue, 06 Sep 2022 17:49:45 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-008.fbsv.net. [2a03:2880:ff:8::face:b00c])
+        by smtp.gmail.com with ESMTPSA id p186-20020a625bc3000000b00535d3caa66fsm10901400pfb.197.2022.09.06.17.49.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 17:49:44 -0700 (PDT)
+From:   Adel Abouchaev <adel.abushaev@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
+        shuah@kernel.org, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [net-next v3 0/6] net: support QUIC crypto
+Date:   Tue,  6 Sep 2022 17:49:29 -0700
+Message-Id: <20220907004935.3971173-1-adel.abushaev@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <Adel Abouchaev <adel.abushaev@gmail.com>
+References: <Adel Abouchaev <adel.abushaev@gmail.com>
 MIME-Version: 1.0
-References: <cover.1662361354.git.cdleonard@gmail.com> <298e4e87ce3a822b4217b309438483959082e6bb.1662361354.git.cdleonard@gmail.com>
-In-Reply-To: <298e4e87ce3a822b4217b309438483959082e6bb.1662361354.git.cdleonard@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 6 Sep 2022 16:11:58 -0700
-Message-ID: <CANn89iKq4rUkCwSSD-35u+Lb8s9u-8t5bj1=aZuQ8+oYwuC-Eg@mail.gmail.com>
-Subject: Re: [PATCH v8 08/26] tcp: authopt: Disable via sysctl by default
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Philip Paeps <philip@trouble.is>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 12:06 AM Leonard Crestez <cdleonard@gmail.com> wrote:
->
-> This is mainly intended to protect against local privilege escalations
-> through a rarely used feature so it is deliberately not namespaced.
->
-> Enforcement is only at the setsockopt level, this should be enough to
-> ensure that the tcp_authopt_needed static key never turns on.
->
-> No effort is made to handle disabling when the feature is already in
-> use.
->
-> Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
-> ---
->  Documentation/networking/ip-sysctl.rst |  6 ++++
->  include/net/tcp_authopt.h              |  1 +
->  net/ipv4/sysctl_net_ipv4.c             | 39 ++++++++++++++++++++++++++
->  net/ipv4/tcp_authopt.c                 | 25 +++++++++++++++++
->  4 files changed, 71 insertions(+)
->
-> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> index a759872a2883..41be0e69d767 100644
-> --- a/Documentation/networking/ip-sysctl.rst
-> +++ b/Documentation/networking/ip-sysctl.rst
-> @@ -1038,10 +1038,16 @@ tcp_challenge_ack_limit - INTEGER
->         Note that this per netns rate limit can allow some side channel
->         attacks and probably should not be enabled.
->         TCP stack implements per TCP socket limits anyway.
->         Default: INT_MAX (unlimited)
->
-> +tcp_authopt - BOOLEAN
-> +       Enable the TCP Authentication Option (RFC5925), a replacement for TCP
-> +       MD5 Signatures (RFC2835).
-> +
-> +       Default: 0
-> +
->  UDP variables
->  =============
->
->  udp_l3mdev_accept - BOOLEAN
->         Enabling this option allows a "global" bound socket to work
-> diff --git a/include/net/tcp_authopt.h b/include/net/tcp_authopt.h
-> index 7ad34a6987ec..1f5020b790dd 100644
-> --- a/include/net/tcp_authopt.h
-> +++ b/include/net/tcp_authopt.h
-> @@ -80,10 +80,11 @@ struct tcphdr_authopt {
->  };
->
->  #ifdef CONFIG_TCP_AUTHOPT
->  DECLARE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
->  #define tcp_authopt_needed (static_branch_unlikely(&tcp_authopt_needed_key))
-> +extern int sysctl_tcp_authopt;
->  void tcp_authopt_free(struct sock *sk, struct tcp_authopt_info *info);
->  void tcp_authopt_clear(struct sock *sk);
->  int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen);
->  int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *key);
->  int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen);
-> diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-> index 5490c285668b..908a3ef15b47 100644
-> --- a/net/ipv4/sysctl_net_ipv4.c
-> +++ b/net/ipv4/sysctl_net_ipv4.c
-> @@ -17,10 +17,11 @@
->  #include <net/udp.h>
->  #include <net/cipso_ipv4.h>
->  #include <net/ping.h>
->  #include <net/protocol.h>
->  #include <net/netevent.h>
-> +#include <net/tcp_authopt.h>
->
->  static int tcp_retr1_max = 255;
->  static int ip_local_port_range_min[] = { 1, 1 };
->  static int ip_local_port_range_max[] = { 65535, 65535 };
->  static int tcp_adv_win_scale_min = -31;
-> @@ -413,10 +414,37 @@ static int proc_fib_multipath_hash_fields(struct ctl_table *table, int write,
->
->         return ret;
->  }
->  #endif
->
-> +#ifdef CONFIG_TCP_AUTHOPT
-> +static int proc_tcp_authopt(struct ctl_table *ctl,
-> +                           int write, void *buffer, size_t *lenp,
-> +                           loff_t *ppos)
-> +{
-> +       int val = sysctl_tcp_authopt;
+QUIC requires end to end encryption of the data. The application usually
+prepares the data in clear text, encrypts and calls send() which implies
+multiple copies of the data before the packets hit the networking stack.
+Similar to kTLS, QUIC kernel offload of cryptography reduces the memory
+pressure by reducing the number of copies.
 
-val = READ_ONCE(sysctl_tcp_authopt);
+The scope of kernel support is limited to the symmetric cryptography,
+leaving the handshake to the user space library. For QUIC in particular,
+the application packets that require symmetric cryptography are the 1RTT
+packets with short headers. Kernel will encrypt the application packets
+on transmission and decrypt on receive. This series implements Tx only,
+because in QUIC server applications Tx outweighs Rx by orders of
+magnitude.
 
-> +       struct ctl_table tmp = {
-> +               .data = &val,
-> +               .mode = ctl->mode,
-> +               .maxlen = sizeof(val),
-> +               .extra1 = SYSCTL_ZERO,
-> +               .extra2 = SYSCTL_ONE,
-> +       };
-> +       int err;
-> +
-> +       err = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-> +       if (err)
-> +               return err;
-> +       if (sysctl_tcp_authopt && !val) {
+Supporting the combination of QUIC and GSO requires the application to
+correctly place the data and the kernel to correctly slice it. The
+encryption process appends an arbitrary number of bytes (tag) to the end
+of the message to authenticate it. The GSO value should include this
+overhead, the offload would then subtract the tag size to parse the
+input on Tx before chunking and encrypting it.
 
-READ_ONCE(sysctl_tcp_authopt)
+With the kernel cryptography, the buffer copy operation is conjoined
+with the encryption operation. The memory bandwidth is reduced by 5-8%.
+When devices supporting QUIC encryption in hardware come to the market,
+we will be able to free further 7% of CPU utilization which is used
+today for crypto operations.
 
-Note that this test would still be racy, because another cpu might
-change sysctl_tcp_authopt right after the read.
+Adel Abouchaev (6):
+  Documentation on QUIC kernel Tx crypto.
+  Define QUIC specific constants, control and data plane structures
+  Add UDP ULP operations, initialization and handling prototype
+    functions.
+  Implement QUIC offload functions
+  Add flow counters and Tx processing error counter
+  Add self tests for ULP operations, flow setup and crypto tests
 
-> +               net_warn_ratelimited("Enabling TCP Authentication Option is permanent\n");
-> +               return -EINVAL;
-> +       }
-> +       sysctl_tcp_authopt = val;
+ Documentation/networking/index.rst     |    1 +
+ Documentation/networking/quic.rst      |  211 ++++
+ include/net/inet_sock.h                |    2 +
+ include/net/netns/mib.h                |    3 +
+ include/net/quic.h                     |   63 +
+ include/net/snmp.h                     |    6 +
+ include/net/udp.h                      |   33 +
+ include/uapi/linux/quic.h              |   66 +
+ include/uapi/linux/snmp.h              |    9 +
+ include/uapi/linux/udp.h               |    4 +
+ net/Kconfig                            |    1 +
+ net/Makefile                           |    1 +
+ net/ipv4/Makefile                      |    3 +-
+ net/ipv4/udp.c                         |   15 +
+ net/ipv4/udp_ulp.c                     |  192 +++
+ net/quic/Kconfig                       |   16 +
+ net/quic/Makefile                      |    8 +
+ net/quic/quic_main.c                   | 1533 ++++++++++++++++++++++++
+ net/quic/quic_proc.c                   |   45 +
+ tools/testing/selftests/net/.gitignore |    1 +
+ tools/testing/selftests/net/Makefile   |    3 +-
+ tools/testing/selftests/net/quic.c     | 1370 +++++++++++++++++++++
+ tools/testing/selftests/net/quic.sh    |   46 +
+ 23 files changed, 3630 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/networking/quic.rst
+ create mode 100644 include/net/quic.h
+ create mode 100644 include/uapi/linux/quic.h
+ create mode 100644 net/ipv4/udp_ulp.c
+ create mode 100644 net/quic/Kconfig
+ create mode 100644 net/quic/Makefile
+ create mode 100644 net/quic/quic_main.c
+ create mode 100644 net/quic/quic_proc.c
+ create mode 100644 tools/testing/selftests/net/quic.c
+ create mode 100755 tools/testing/selftests/net/quic.sh
 
-WRITE_ONCE(sysctl_tcp_authopt, val),  or even better:
+-- 
+2.30.2
 
-if (val)
-     cmpxchg(&sysctl_tcp_authopt, 0, val);
-
-> +       return 0;
-> +}
-> +#endif
-> +
->  static struct ctl_table ipv4_table[] = {
->         {
->                 .procname       = "tcp_max_orphans",
->                 .data           = &sysctl_tcp_max_orphans,
->                 .maxlen         = sizeof(int),
-> @@ -524,10 +552,21 @@ static struct ctl_table ipv4_table[] = {
->                 .mode           = 0644,
->                 .proc_handler   = proc_douintvec_minmax,
->                 .extra1         = &sysctl_fib_sync_mem_min,
->                 .extra2         = &sysctl_fib_sync_mem_max,
->         },
-> +#ifdef CONFIG_TCP_AUTHOPT
-> +       {
-> +               .procname       = "tcp_authopt",
-> +               .data           = &sysctl_tcp_authopt,
-> +               .maxlen         = sizeof(int),
-> +               .mode           = 0644,
-> +               .proc_handler   = proc_tcp_authopt,
-> +               .extra1         = SYSCTL_ZERO,
-> +               .extra2         = SYSCTL_ONE,
-> +       },
-> +#endif
->         { }
->  };
->
->  static struct ctl_table ipv4_net_table[] = {
->         /* tcp_max_tw_buckets must be first in this table. */
-> diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
-> index 4f7cbe1e17f3..9d02da8d6964 100644
-> --- a/net/ipv4/tcp_authopt.c
-> +++ b/net/ipv4/tcp_authopt.c
-> @@ -4,10 +4,15 @@
->  #include <net/ipv6.h>
->  #include <net/tcp.h>
->  #include <linux/kref.h>
->  #include <crypto/hash.h>
->
-> +/* This is mainly intended to protect against local privilege escalations through
-> + * a rarely used feature so it is deliberately not namespaced.
-> + */
-> +int sysctl_tcp_authopt;
-> +
->  /* This is enabled when first struct tcp_authopt_info is allocated and never released */
->  DEFINE_STATIC_KEY_FALSE(tcp_authopt_needed_key);
->  EXPORT_SYMBOL(tcp_authopt_needed_key);
->
->  /* All current algorithms have a mac length of 12 but crypto API digestsize can be larger */
-> @@ -437,17 +442,30 @@ static int _copy_from_sockptr_tolerant(u8 *dst,
->                 memset(dst + srclen, 0, dstlen - srclen);
->
->         return err;
->  }
->
-> +static int check_sysctl_tcp_authopt(void)
-> +{
-> +       if (!sysctl_tcp_authopt) {
-
-READ_ONCE(...)
-
-> +               net_warn_ratelimited("TCP Authentication Option disabled by sysctl.\n");
-> +               return -EPERM;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen)
->  {
->         struct tcp_authopt opt;
->         struct tcp_authopt_info *info;
->         int err;
->
->         sock_owned_by_me(sk);
-> +       err = check_sysctl_tcp_authopt();
-> +       if (err)
-> +               return err;
->
->         err = _copy_from_sockptr_tolerant((u8 *)&opt, sizeof(opt), optval, optlen);
->         if (err)
->                 return err;
->
-> @@ -465,13 +483,17 @@ int tcp_set_authopt(struct sock *sk, sockptr_t optval, unsigned int optlen)
->
->  int tcp_get_authopt_val(struct sock *sk, struct tcp_authopt *opt)
->  {
->         struct tcp_sock *tp = tcp_sk(sk);
->         struct tcp_authopt_info *info;
-> +       int err;
->
->         memset(opt, 0, sizeof(*opt));
->         sock_owned_by_me(sk);
-> +       err = check_sysctl_tcp_authopt();
-> +       if (err)
-> +               return err;
->
->         info = rcu_dereference_check(tp->authopt_info, lockdep_sock_is_held(sk));
->         if (!info)
->                 return -ENOENT;
->
-> @@ -493,10 +515,13 @@ int tcp_set_authopt_key(struct sock *sk, sockptr_t optval, unsigned int optlen)
->         struct netns_tcp_authopt *net = sock_net_tcp_authopt(sk);
->         struct tcp_authopt_alg_imp *alg;
->         int err;
->
->         sock_owned_by_me(sk);
-> +       err = check_sysctl_tcp_authopt();
-> +       if (err)
-> +               return err;
->         if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
->                 return -EPERM;
->
->         err = _copy_from_sockptr_tolerant((u8 *)&opt, sizeof(opt), optval, optlen);
->         if (err)
-> --
-> 2.25.1
->
