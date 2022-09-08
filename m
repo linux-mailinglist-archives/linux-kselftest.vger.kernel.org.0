@@ -2,216 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A045B298F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 00:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C21C5B29B4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 00:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiIHWoi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Sep 2022 18:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S229918AbiIHWzt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Sep 2022 18:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiIHWog (ORCPT
+        with ESMTP id S229717AbiIHWz3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Sep 2022 18:44:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389201705C;
-        Thu,  8 Sep 2022 15:44:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662677075; x=1694213075;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=0kzJSnB3Je1KbIoZ7FOwGvJNgIA9lA4gdyltavflnEE=;
-  b=CO9ey2C+C48QgfKh3PuLHinM+gg4KS2l57zVYrvbpeR4oWT3/OxDeP5+
-   QdR1U4t9rKI/STih7Hp3d/CT3qMD6mEX8LeafOs0VVM8yrE42DexGbNUY
-   qTLHo76/v+Dzv3/CnyxkoeGb6FdasF64//GrDzO/jiF0EBmXqb+XAnqL/
-   C4seziGzvYu2w7OcbsQ1qah+1EXtbl1uOBqXFOlgxzGWDK1II8vcfcybA
-   0y4aFCREmCm5ewuW+bOPdRFSDhzU9rHwyqsY0kizo67xmb+AXtJvwMuPB
-   U5xp/mmpSpLtPJgILekoOeAd4DxqPvhYmDUMhXvjPN5A0qiiWKLkNuMNe
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="323543287"
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="323543287"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 15:44:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="592379016"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga006.jf.intel.com with ESMTP; 08 Sep 2022 15:44:34 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Sep 2022 15:44:33 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Sep 2022 15:44:33 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 8 Sep 2022 15:44:33 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 8 Sep 2022 15:44:33 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YS6bRKzRuOHVpOo424N+wN55i0TfEHJfiqwcP9pDk/JcRm0jVYB8RQ5T/XastcNSjV+1qho8WnSPqNgaHlubkJVhVUjF5cdq24Ldj2NnyCkk+Xvm6BqOX8+4gWpwCSEexzyBHIhxcG0D/Iqtg1KrCAfq5gIDSzsTurQPjwuz/8h3FHF8qY9gU6/MwDATTXIGD2bo52zgcH5xNVSECy8y5sRRoc3ogb05LkGZTnnQtr+mF6G0sTiHeyBnUzRrSGnOxeSdoCspyNkwl0N5D+bFwGpy9VujH5XkQd/ere+oR+sllADor6hx9rECfy2X/AXkbf6AF1tSErBp4KKjD7yweA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7p67DJve8yR7GIKUKJOjijtnv6ZAJEr7C1VtOKts8Nk=;
- b=Rn0nmQbc4eK2vAiocYZGweDp5UI6YbTPnEy85XKPJbjZaiSPMJAnU722aP2pusb+325ccQa6v+gXOxmg1Jr4HwGR5xj9EfQlX4LB+wOYlSWiLBSmbrdll0XzIcD3O60gqczoHn0910/wVGnT2NWiA7XQyVhC8SHVDtA2W13ZjQw3rIXjmC3u7zzsMPQEtm6OAcVZLS4RQ9CIEjb1bTSgKTHOKDyzG1vS09c6oCREJr1DkNGw4TwhHQ/znl9pfitN5DTga5uElX09mcS2dkgJQ4BOhYV7jM/Xrx6HFgbn13e8PkWrHDLvOPkoaaXsdkMDkQuHeZR9JKyxQS08H4wb3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by DM6PR11MB4075.namprd11.prod.outlook.com (2603:10b6:5:198::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.18; Thu, 8 Sep
- 2022 22:44:31 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a824:112:52f7:5743]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a824:112:52f7:5743%12]) with mapi id 15.20.5588.014; Thu, 8 Sep 2022
- 22:44:31 +0000
-Message-ID: <ecd03fbb-8019-07ae-e27d-44b1dd20bfb1@intel.com>
-Date:   Thu, 8 Sep 2022 15:44:29 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.1
-Subject: Re: [PATCH v2 5/5] selftests/sgx: Add SGX selftest
- augment_via_eaccept_long
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>, <linux-sgx@vger.kernel.org>
-CC:     Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Shuah Khan" <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220905020411.17290-1-jarkko@kernel.org>
- <20220905020411.17290-6-jarkko@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20220905020411.17290-6-jarkko@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR06CA0011.namprd06.prod.outlook.com
- (2603:10b6:a03:d4::24) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Thu, 8 Sep 2022 18:55:29 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4061DEFB
+        for <linux-kselftest@vger.kernel.org>; Thu,  8 Sep 2022 15:54:48 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id l65so19392147pfl.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Sep 2022 15:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=daVFUOIJ1WvNWC1qEjueC76owjUfPHOYDg0UZR0lqUg=;
+        b=oZxlNPWf5K+8wt2ZAuxUKrIs0mMJQNNHHogkvWprEm/R4G4qfoYzEZThBQQl92orD2
+         SM2jjY0tI864pjaB2AYavXwPkqvThI45Op0T4e2NyE7MNEcV2ndfFd30BDDq1WdB4pu1
+         sGKTd+PlRflXg5hgtQBFqBEd9IYbY5HpWoDoeGcohkv0dYTiQ+i3+qK3M+WnUh2nl+ae
+         ZpPFdMxJXzEzE0zw3BjPyRn77gSjeguZ+B5DQjyUUhGEtJyTsXvwUTG62RKsnt8+O4tw
+         d0Hr1Ce3tFx230OGyqBdaNRTCTIMmXBnAoV1wtsDyUJjr21N2EbB80j1gGjIprlKQu9f
+         aRtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=daVFUOIJ1WvNWC1qEjueC76owjUfPHOYDg0UZR0lqUg=;
+        b=6gJhGZ34EgFqs6rFx+3DaR8M68S4Oync34i6hTfaTtHTkik4+yhL+ls1HcdAf8P+Cy
+         W4jreXtQNrC8Hpkd1EdRY1kB43AuK9IEFvq0QMuy74DCvbnlhgdO9Pmiy/z2yDyhwjhx
+         9yczz4ewXKpd20yWABY2OoFrzg+ayK8GEJP6LODQwNXtHsLM62SDGdQof2kwRcQzUuKD
+         JuRWUu/9YOptOv/ZBz9EZ3F386rKYp0eu5KTvute/JbabFTG5e/oRj3Yk55XUNnqrHom
+         IMEtnf/4BOQm1Q3mQ9nfx/BmMB6AcgxaZ7EbJ7oSgDHu4vOhc4x7l2vUg6UXtIfoKRck
+         NxLQ==
+X-Gm-Message-State: ACgBeo3MyV9y5j7GwqoNKJA+hcq7wlRjqw5JxZHT62QuE/prJ/0DbboH
+        Sfjo4NtbnTy/9pfv+SlEHP9OfQ==
+X-Google-Smtp-Source: AA6agR6YEcDGbO4Kg4ywJJcJmZ+toO7/NZn4H/ZK6esHhw0XWPy9bdN7Q3xmO8DIIoBKbujZOqpxzA==
+X-Received: by 2002:a63:fc13:0:b0:42b:890d:5954 with SMTP id j19-20020a63fc13000000b0042b890d5954mr9712872pgi.200.1662677687671;
+        Thu, 08 Sep 2022 15:54:47 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id r1-20020aa79ec1000000b00540d75197f2sm139144pfq.143.2022.09.08.15.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Sep 2022 15:54:46 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 15:54:41 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
+        drjones@redhat.com
+Subject: Re: [V1 PATCH 3/5] selftests: kvm: x86: Execute vmcall/vmmcall
+ according to CPU type
+Message-ID: <YxpysbHZb2G56K+f@google.com>
+References: <20220903012849.938069-1-vannapurve@google.com>
+ <20220903012849.938069-4-vannapurve@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 162b33eb-4609-4abc-21fb-08da91ebb1d8
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4075:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bHCkeYLFnc2qvcLLqI+DBTxMqFK7OsKrPRlyPjvdA9djlDBA5g23FUVqwf6J/0HQWHjBcvD03tydDjmnsGVGNgpFszPXljfJ1eHZUlU7RXC9TFGVOaqnF0g/MMOaY6exLMuzhlKUgDaDVTyeGRFOKAj5tTq2DapiSWoSziTalsdEDCLv3PNsRIqsqnaRoCCwxrabevPdIEI8nWVjNMS1E3Chm/Z9gnPC+ems6WVVERpkH2vOhZYHCHODQDTry8ArhkTQnAASW58IO1l2GctNGheHukiM+d2SV8gb6r6vboiF9vUVG8UJ6vZgHy+XgMHykAv1Mm3LejiPaBH95oT3vHdnH3N/9fM9ev2O8dXZ5q4KEoILgqX0xNZcrdOqEMlQB435644qe4XYxzqYXeonWY3TU6n+OztwNl04qmjO5uCEDbOQdNUCGwXL5Z2NGDfBbBcdFvABcb4Sg+/aoo8mGpnchQV/6LP0BXM+mWvMdHn+0ecGLBoJdylUnzrvx2DNi4ONIe9WJL2AeFaFypBis87doNXHXoux5HekoftJZojre9UmPwLrdsWrk87RbHpe5fR5i5znB/UAiHBZT3MBRM/C+CGavO62IzD3jwpxmJAdXlZyQ4gS53mY941K2qqAZ3BiMwP/uaHzpHN1FFQo7QRQdmgexIEB9Zbb+WPg/NZLMy0R+75kCGu9MIiPnKajfMnOo+YleOKVdnrzSama+7D9PgUG6X5GnPyFu3jkRAvO7cZakl0zgXiPInXde2AXdf+X15u8zZVGcWaZsbOZIitPZqjj6jPYsV/Lq43jV5k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(396003)(346002)(376002)(39860400002)(54906003)(478600001)(316002)(6506007)(6512007)(26005)(31696002)(8936002)(36756003)(2906002)(53546011)(5660300002)(86362001)(66476007)(66556008)(4326008)(8676002)(83380400001)(31686004)(66946007)(44832011)(186003)(41300700001)(82960400001)(2616005)(38100700002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZEE5eXhOZ0FCdTdzR2crVnhYcElLck91c3hCQkMvdTNJYkYvQkllbzdnaU1E?=
- =?utf-8?B?SlNTYUxsSitGWmdhTXdUZ0JKcDY4cWpYQ3ZFNHVpOGw3WVNiTURiUlQ5ejdm?=
- =?utf-8?B?L2oxNHZoTThodFlja0pRank4NkpGcFFoditwUVhsUmlLc3ZnMEpreENseWZW?=
- =?utf-8?B?SlgyaUFXZy9zRmlCNElLU0ZKOWtWOGhnVXRVRnpXTFc4SjZQZlI1TnUrU0NY?=
- =?utf-8?B?cW9PbXoxeUtaYUFEd3E5NU9sWE1aaUZkelQ2YjVFcFpjOXplUm0yaEFPRGc3?=
- =?utf-8?B?d04vT1ZUODlFYU0yOEFsRzJPWlpFL3B5RnpPSWhqOHFyMFJDNGxlUmxhMVVW?=
- =?utf-8?B?cXp6eVh1NGJZOGU5NVhxMDhjSUI1TUVSeEtmdzVYOFBXL1EycGRaV1RDNjFu?=
- =?utf-8?B?c3F4M2h0Mk5ZTUE0MEw1Qk9GS0xmYVY5OStoUmZUTXJiblpEdlRhMCtRZHNm?=
- =?utf-8?B?OUpvK2xhaXlyeFBJcEVZTms5RUYyRHRPWDZjNE1rZ2pUMXgrRlBCWmRCaHZ3?=
- =?utf-8?B?OXMrWHFTVzRCRUYwS01Ia2tWc3FLdnl5SXlURnFxaHVJTUlZM2dUVkp3dUxw?=
- =?utf-8?B?aUZ3ckxFcml3NzB5ak1pVk5BalUwbko0OVRMRzI1c0I4Q0pHUnJndmNFK1Bq?=
- =?utf-8?B?bUJ3Y3hiWmR4MDRNMHRPczE0ZU1CcGNBL3Q0ZXQyWWpHWmVBK2NQbW53UXNX?=
- =?utf-8?B?TWludGZaWWo1ZXFaYlQ1V2h0UGRJUzhTM25paTM1dEx4MU12WXBSV2djZWE0?=
- =?utf-8?B?ZzJBeEV1b2UveThzc3JTSVlZLzY4VmZHekhicjQ4RGkveG12R0l3enBlbkVT?=
- =?utf-8?B?RHY5YWZxd1lpTGxwaFBMb1Y4aXJJYTRMME1aQ0hxS1dBMW56NEJINDgxTzNO?=
- =?utf-8?B?bGU4d0lUSElkeFowUFFiUFlaZCtwT1kyRzU1Y0k0WlNrVlVvMFJ6emZWREtO?=
- =?utf-8?B?aEZldjJReDkzQjQwekdpYnR2c3lXVjM5SEVkcGlRaS8wWWZqK1M4OTRKSkFr?=
- =?utf-8?B?N3ZYTkJKd09jbDFrNFk5VnFtUFRtbHI5UU5Rd2ZvMnVvK0NIMHQzMG4zREZ0?=
- =?utf-8?B?cWJFQmpGaG9PVENERzh2Y3d3VmU4MWFweEpMOWVXSjFFemNWLzc3dzQ3Mkw5?=
- =?utf-8?B?aHphQjdtVHdrSEJxRFhlcS9QR0lKdGlrVHA5V01PTnBKdUo2RERueVJUbExz?=
- =?utf-8?B?aFl0NERVQm1BZ3RJZ3NQVmVtcTlsdXU0QUlMbmVjWVFrc0dicXhDWVZ6aDdT?=
- =?utf-8?B?N1U4bnZiMTRNdEJsbXVXeVlocFlIRlpodWgzVExDY2JYOUJiUUVvRVZwN2RW?=
- =?utf-8?B?Z216UXduWmZBOXJiRFJlZU51TGhaMVp1SGIvM3MxbW96MGQ0NVI3SlBkZERm?=
- =?utf-8?B?Q1FTV1EyOGVSZXpGaXlLUG93ZjdjYytxSVdJTFdRYVYrTnRWYWQxRHkyU2tm?=
- =?utf-8?B?UW96VWNUb0RtdExyazRVOEhFeWtxV0JnSi8xUWVMT21jN2JuUXk0bzI1bVNx?=
- =?utf-8?B?V0FWMmU0c1BQb2F5YW9LT1BuV08reExVd3NTWmY4ZVJvVk5zaFV2eFIyM3VQ?=
- =?utf-8?B?NURha3hZSDZGU2RKNTFLQmdaT1k0SU1LTjRSQlcrRityc1FoS3c3NU54YWhI?=
- =?utf-8?B?amlTY2F3UCtMczcvYXM1a3pLZlBuSDcwcGFqbXgyZzhab1c5VjdMSUNlcjBU?=
- =?utf-8?B?SnRSL2VKVVdwaFdZeXJHZG9QOUJ5WnpFLzA0YWd4SGhpZWZRc0QvZjlIMnRQ?=
- =?utf-8?B?a2ZhOGpLOGlIVUx1blNDUkhTMnRiRFdQQy91dVNSaVV5eFNISkQ4ZEkvWm5w?=
- =?utf-8?B?SG1IU0hwWlNoVE5zdTNzV2tjMjJFTDdUZXc1ZmR0eEVOeHk2UnNBS1dzZVRH?=
- =?utf-8?B?TC9aMzZubnl2ZmRaNUM4RDYySE5aSXF6YUd2bkxyQVRPZ3BzWlpPNW8wVDA1?=
- =?utf-8?B?aUJpQURoTm5aN2FSMHFxSHFSU2FZWmJpVzF1Yjd1VUxVa1kyd3RaV08xVFVK?=
- =?utf-8?B?RzFNczNxWS9kWWRCRzJweE1iS01STlB0TzR4cGt4ZW1KMWk1c1RucUc2L0VR?=
- =?utf-8?B?aHVvWXBQTHZhSnFUT3lyT3BlZjVKSVliOVJwT2lPWE5HVWE1TzJlSE1DdDhr?=
- =?utf-8?B?ek0vdHI3bUhFNVhNMEFpRFY0V0xsZ1JFRkJNaVRJY2xVTTZtMzA2bXlWYndJ?=
- =?utf-8?B?R0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 162b33eb-4609-4abc-21fb-08da91ebb1d8
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 22:44:31.5138
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cHUZUKodG8CSDZosdJL2IWEF0YIYGIUlxXbOLgwxJZHJPJy30rWCv3IpPWHLgIHTlxUnkd2I4im/VmKbxhfJGFtAegUkbO5CHVXtA5vpZkM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4075
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220903012849.938069-4-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jarkko and Vijay,
+Please use "KVM: selftest: ..." for the shortlog.
 
-On 9/4/2022 7:04 PM, Jarkko Sakkinen wrote:
-> From: Vijay Dhanraj <vijay.dhanraj@intel.com>
+On Sat, Sep 03, 2022 at 01:28:47AM +0000, Vishal Annapurve wrote:
+> Modify following APIs for x86 implementation:
+> 1) kvm_arch_main : Query the cpu vendor and cache the value in advance.
+> 2) kvm_arch_post_vm_load: Populate cpu type in the guest memory so that
+> 	guest doesn't need to execute cpuid instruction again.
+
+This commit message only describes a subset of the changes in this
+commit, and does not provide any context on why the changes are being
+made (other than a clue about avoiding CPUID).
+
+I also think this could be split up into 2 separate commits.
+
+I would suggest first patch changes is_{intel,amd}_cpu() to return a cached
+result. e.g.
+
+  KVM: selftests: Precompute the result for is_{intel,amd}_cpu()
+
+  Cache the vendor CPU type in a global variable so that multiple calls
+  to is_intel_cpu() do not need to re-execute CPUID. This will be useful
+  in a follow-up commit to check if running on AMD or Intel from within
+  a selftest guest where executing CPUID requires a VM-exit.
+
+Then add support for AMD to kvm_hypercall():
+
+  KVM: selftests: Add AMD support to kvm_hypercall()
+
+  Add support for AMD hypercalls to kvm_hypercall() so that it can be
+  used in selftests running on Intel or AMD hosts. This will be used in
+  a follow up commit to ...
+
+  As part of this change, sync the global variable is_cpu_amd into the
+  guest so the guest can determine which hypercall instruction to use
+  without needing to re-execute CPUID for every hypercall.
+
 > 
-> Add a new test case which is same as augment_via_eaccept but adds a
-> larger number of EPC pages to stress test EAUG via EACCEPT.
-> 
-> Signed-off-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 > ---
-
-...
-
-> diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> index 78c3b913ce10..e596b45bc5f8 100644
-> --- a/tools/testing/selftests/sgx/main.c
-> +++ b/tools/testing/selftests/sgx/main.c
-> @@ -22,8 +22,10 @@
->  #include "main.h"
+>  .../testing/selftests/kvm/lib/x86_64/processor.c  | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index e22cfc4bf284..ac104653ab43 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -19,6 +19,7 @@
+>  #define MAX_NR_CPUID_ENTRIES 100
 >  
->  static const size_t ENCL_HEAP_SIZE_DEFAULT = PAGE_SIZE;
-> +static const unsigned long TIMEOUT_DEFAULT = 900;
+>  vm_vaddr_t exception_handlers;
+> +static int is_cpu_amd = -1;
 
-I am not sure about the naming here ... it is _very_ close to
-(and thus appears to be in the same namespace as)
-TEST_TIMEOUT_DEFAULT from the included kselftest_harness.h.
+Should this just be a bool? Since you are initializing it before main(),
+there is really no way for any code to observe it's pre-initialized
+value. And nothing even checks if is_cpu_amd -1, it just silently
+returns false from is_intel_cpu() and is_amd_cpu().
 
-This is surely a nitpick but how about SGX_TEST_TIMEOUT_DEFAULT?
-
->  static const uint64_t MAGIC = 0x1122334455667788ULL;
->  static const uint64_t MAGIC2 = 0x8877665544332211ULL;
-> +
-
-There is an extra empty line here ... but it looks like intended code
-organization?
-
->  vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
+>  
+>  static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
+>  {
+> @@ -1019,7 +1020,7 @@ static bool cpu_vendor_string_is(const char *vendor)
+>  
+>  bool is_intel_cpu(void)
+>  {
+> -	return cpu_vendor_string_is("GenuineIntel");
+> +	return (is_cpu_amd == 0);
+>  }
 >  
 >  /*
-
-
-Apart from the naming comment this addition looks good. 
-
-This is a valuable addition to the SGX tests.
-
-Reinette
+> @@ -1027,7 +1028,7 @@ bool is_intel_cpu(void)
+>   */
+>  bool is_amd_cpu(void)
+>  {
+> -	return cpu_vendor_string_is("AuthenticAMD");
+> +	return (is_cpu_amd == 1);
+>  }
+>  
+>  void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+> @@ -1182,9 +1183,15 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+>  {
+>  	uint64_t r;
+>  
+> -	asm volatile("vmcall"
+> +	if (is_amd_cpu())
+> +		asm volatile("vmmcall"
+>  		     : "=a"(r)
+>  		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+> +	else
+> +		asm volatile("vmcall"
+> +		     : "=a"(r)
+> +		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3));
+> +
+>  	return r;
+>  }
+>  
+> @@ -1314,8 +1321,10 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+>  
+>  void kvm_arch_main(void)
+>  {
+> +	is_cpu_amd = cpu_vendor_string_is("AuthenticAMD") ? 1 : 0;
+>  }
+>  
+>  void kvm_arch_post_vm_load(struct kvm_vm *vm)
+>  {
+> +	sync_global_to_guest(vm, is_cpu_amd);
+>  }
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 
