@@ -2,135 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCC35B10E4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 02:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4405B110B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 02:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIHATU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 7 Sep 2022 20:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S229560AbiIHA1s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 7 Sep 2022 20:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiIHATU (ORCPT
+        with ESMTP id S229569AbiIHA1q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 7 Sep 2022 20:19:20 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57524C2FA5
-        for <linux-kselftest@vger.kernel.org>; Wed,  7 Sep 2022 17:19:19 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id q9-20020a17090a178900b0020265d92ae3so592801pja.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Sep 2022 17:19:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date;
-        bh=RdONs/X586ASk42wkKUPEixLX2JNDhkR14dJhQivFfQ=;
-        b=UUpFqwP0wtzNtw3vff9fvn1+AjKLzthBCUnqLMD+dd1X2L3iAZ2TdE4M/KartSL/YR
-         Bnt6TOpvOcJhVoJ1XyjtFiRxV783s1kcJOAcS4ux+cu4JhiCmp78mlLwZpasT9BNogMJ
-         0IQnHGHu6C/irxxtYEANXmnDs+ByPx2tYvtw8+nzUme5iptRQBpxaPRiJ9EeS5GK8qPA
-         5yYfbhMCo7jqoPrW6nWPpq1RZlHxBfhlCppVklf8fCfWD/+2+14qkWabhX1Jp8o8cqsE
-         4QHxPb8ms4ZbSH1y1O1LvxasSObiM5CIXK58xiY1NKHvsed7KiwW4n2m5QsMcFjFIfr+
-         EsNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=RdONs/X586ASk42wkKUPEixLX2JNDhkR14dJhQivFfQ=;
-        b=piQJyke5NNwu9IKT3dfsAW+QAGSnbwzME6n+Xpe8x6F1EMBBpF3z9kLMqDlCFwhugd
-         l/QH7dN7JXoBfKyAQt64fm16mtvfCU37PRDzrrQV+KnP60FTgI2v6NhnsDQw/GILH7en
-         I9MMVBLA7LgowvdDIatBOLQOujSQMekCzfIW4rdBvrWh9nIBl0xsgAbZFE8zMnfXdh+b
-         7h/Ori/AYPa36jhTtq4/Ngs3ETMG1mDcUnf05ZzdWmMjf+IRFvWF2eWiRNbujGxS3Bly
-         xkDHDNqK4yxhGUe1/WWMvRvLHI4uSwtAt4mwxIxVX5lg/ADa1XjKqaYOr0X433TN9rmE
-         1oJw==
-X-Gm-Message-State: ACgBeo2DkRzYE7DLyNOaHZujdsNgx7BIivS6i05A+IZy2yOZUfMO/73l
-        sz+FA3K+qr1dUsNHjJgdi1YZlvpS0jd7kaH8UJg=
-X-Google-Smtp-Source: AA6agR4Q0c5D3ckyvxAAd2wu0/ZJLKgBvt0IP76YgRgSX0UBbxx8ynnHRBmwkFD0Uho4oxYNLeYvDg==
-X-Received: by 2002:a17:903:2c9:b0:172:57d5:d6f0 with SMTP id s9-20020a17090302c900b0017257d5d6f0mr6536325plk.61.1662596358819;
-        Wed, 07 Sep 2022 17:19:18 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id v125-20020a622f83000000b0053e85a4a2ccsm1884964pfv.26.2022.09.07.17.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 17:19:18 -0700 (PDT)
-Message-ID: <63193506.620a0220.947e0.3527@mx.google.com>
-Date:   Wed, 07 Sep 2022 17:19:18 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 7 Sep 2022 20:27:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716C6D0218;
+        Wed,  7 Sep 2022 17:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662596865; x=1694132865;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ftDogJIQCWUTb5UK7VS3661UIixUHel8n3Dm/IbgrRI=;
+  b=DBnk36FIrAdWUy5j4VCUPEwVrYj+QDdvTz9Gz4xfq5/WlsVZEZFmN8qK
+   nkDAjg+D630kMdbnec2ZYdli5QMQJHOfvcJxtvGt+s9e3XuSbx2LGTnz+
+   dQsF/TI9IejX1uTsdoEimS4fMkLrWTmBX5BoqzUPNi+XjzNp98r28Nw9D
+   SHZDu2JskWe5VhUMaaYTqoikAvrIIhWEH+DzMi8DFK/HqEMjL7vuJzEtx
+   w44vzKxQYISGEYaTjC37R2FylHdC0fYFqAUQYx6hjFfOV3RNO0AhrNoyJ
+   5BgRczdE+e6mGEgqSIAEiOjEAhvtRC3bXrcI5ptB7fqT33o3yJtEV7kyS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10463"; a="360993115"
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="360993115"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 17:27:44 -0700
+X-IronPort-AV: E=Sophos;i="5.93,298,1654585200"; 
+   d="scan'208";a="676440336"
+Received: from pbarrios-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.252.133.9])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2022 17:27:43 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v12 0/3] Add TDX Guest Attestation support
+Date:   Wed,  7 Sep 2022 17:27:19 -0700
+Message-Id: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: linux-kselftest-next-6.0-rc2-11-g144eeb2fc761
-Subject: kselftest/next kselftest-lkdtm: 5 runs,
- 1 regressions (linux-kselftest-next-6.0-rc2-11-g144eeb2fc761)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-lkdtm: 5 runs, 1 regressions (linux-kselftest-next=
--6.0-rc2-11-g144eeb2fc761)
+Hi All,
 
-Regressions Summary
--------------------
+Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+hosts and some physical attacks. VM guest with TDX support is called
+as a TDX Guest.
 
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
+In TDX guest, attestation process is used to verify the TDX guest
+trustworthiness to other entities before provisioning secrets to the
+guest. For example, a key server may request for attestation before
+releasing the encryption keys to mount the encrypted rootfs or
+secondary drive.
 
+This patch set adds attestation support for the TDX guest. Details
+about the TDX attestation process and the steps involved are explained
+in the commit log of Patch 1/3 or in Documentation/x86/tdx.rst (added
+by patch 3/3).
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/linu=
-x-kselftest-next-6.0-rc2-11-g144eeb2fc761/plan/kselftest-lkdtm/
+Following are the details of the patch set:
 
-  Test:     kselftest-lkdtm
-  Tree:     kselftest
-  Branch:   next
-  Describe: linux-kselftest-next-6.0-rc2-11-g144eeb2fc761
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      144eeb2fc761f966f71ab8b4b7d2a2198ecc400f =
+Patch 1/3 -> Adds TDREPORT support.
+Patch 2/3 -> Adds selftest support for TDREPORT feature.
+Patch 3/3 -> Add attestation related documentation.
 
+Commit log history is maintained in the individual patches.
 
+Kuppuswamy Sathyanarayanan (3):
+  x86/tdx: Add TDX Guest attestation interface driver
+  selftests: tdx: Test TDX attestation GetReport support
+  Documentation/x86: Document TDX attestation process
 
-Test Regressions
----------------- =
+ Documentation/x86/tdx.rst                     |  75 +++++++++
+ arch/x86/coco/tdx/tdx.c                       | 112 +++++++++++++
+ arch/x86/include/uapi/asm/tdx.h               |  54 ++++++
+ tools/arch/x86/include/uapi/asm/tdx.h         |  54 ++++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/tdx/Makefile          |  11 ++
+ tools/testing/selftests/tdx/config            |   1 +
+ tools/testing/selftests/tdx/tdx_attest_test.c | 155 ++++++++++++++++++
+ 8 files changed, 463 insertions(+)
+ create mode 100644 arch/x86/include/uapi/asm/tdx.h
+ create mode 100644 tools/arch/x86/include/uapi/asm/tdx.h
+ create mode 100644 tools/testing/selftests/tdx/Makefile
+ create mode 100644 tools/testing/selftests/tdx/config
+ create mode 100644 tools/testing/selftests/tdx/tdx_attest_test.c
 
+-- 
+2.34.1
 
-
-platform        | arch | lab           | compiler | defconfig              =
-      | regressions
-----------------+------+---------------+----------+------------------------=
-------+------------
-imx6q-sabrelite | arm  | lab-collabora | gcc-10   | multi_v7_defconfig+ksel=
-ftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6319235877d2cc81a935564f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/linux-kselftest=
--next-6.0-rc2-11-g144eeb2fc761/arm/multi_v7_defconfig+kselftest/gcc-10/lab-=
-collabora/kselftest-lkdtm-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/linux-kselftest=
--next-6.0-rc2-11-g144eeb2fc761/arm/multi_v7_defconfig+kselftest/gcc-10/lab-=
-collabora/kselftest-lkdtm-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20220826.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/6319235877d2cc=
-81a9355650
-        failing since 15 days (last pass: v6.0-rc1-1-gf1227dc7d0411, first =
-fail: linux-kselftest-next-6.0-rc2-1-gab7039dbcc61) =
-
- =20
