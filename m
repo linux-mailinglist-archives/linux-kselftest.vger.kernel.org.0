@@ -2,109 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6CD5B2822
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 23:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8295B2849
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 23:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiIHVJu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Sep 2022 17:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S230010AbiIHVRc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Sep 2022 17:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiIHVJt (ORCPT
+        with ESMTP id S230036AbiIHVRZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Sep 2022 17:09:49 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AB533E33
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Sep 2022 14:09:47 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id e68so6130392pfe.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Sep 2022 14:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=z9Li9pBnsY2aSk5qTBSDkIw7EfiA5n4FZeT5aJ2NLZQ=;
-        b=Yf5FKr34c9ANVml5Kp0eU6Or+5frA2zi0P/zwS/LxG8XtXWhUC3H2f8LKX2mVjV0sw
-         sYwk+JeS9w1FF/Xu0+k6pDz8Von1XWRpnkNnY0yryJsrVzZVZ0kJiwM/g227q8NjpPXg
-         RjEFSkdNLq726ducobxVkgKvi3zcsAkjhmNO5WoZzGxsk0f7YXYeKnwlm1OuZ7rsWLbw
-         E1BoGb8nng0n1brdOIT26K7+YERd8LCP1qv/HX2HOlc0ob1/Cq8nAzmQmOgiK5x4jLqL
-         AhhWDsUiYAf/C9U2qAuHMsbUj5wHtOO2c3CVouW+Xbp2gzL/d41EXRwVhDfJcrV0uAaO
-         oLPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=z9Li9pBnsY2aSk5qTBSDkIw7EfiA5n4FZeT5aJ2NLZQ=;
-        b=rDPO++/EjJBvBxFeKliZdXiGRBetfi6PxeH0UW53s+FQjg9UOH2kI4Ym5Ak7XIJqkY
-         PHcaLHSC6F+j/RL751alYA5iA4bAFsb85P1Ub1mcOh3uFA8sen1ItLHddyJhFJB2i4Ld
-         sqvf218qntPAEPm8/3u7/+qDUV38taIidNQvaPhxxDMql3Hhg5UM+y2dFv0kbqXpHdmX
-         fCkCKGS0CPwkjrsH4GXcBJqKX6qX3gjBKbTNXaChQRE7ppHfNMh8085tuw4H744Qu/EB
-         UX3PRyEt2G/kYWZLnpIkWPODHibflFHwlPWGkqBfbolZu+Kl2KA+NJGGK4Dk1vfCHol9
-         9bGg==
-X-Gm-Message-State: ACgBeo02Dlhr/vtBkan2iiLGhKOyAuiUKSxWt+MVV/sWfNA0dBjp3EkG
-        1O+iuJ1yDmqGoemYsbVJ8y49GA==
-X-Google-Smtp-Source: AA6agR6M9oTF2yRJbQoMe6RbyFPb8y+rNRTuTZ5E0cB8MHjVuwrXp2Nm7C8kmdRsCrQHpE6EtOcqgg==
-X-Received: by 2002:a63:f918:0:b0:438:766e:e57a with SMTP id h24-20020a63f918000000b00438766ee57amr1785235pgi.584.1662671386712;
-        Thu, 08 Sep 2022 14:09:46 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id iw1-20020a170903044100b00172973d3cd9sm11365074plb.55.2022.09.08.14.09.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 14:09:45 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 14:09:41 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
-        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
-        drjones@redhat.com
-Subject: Re: [V1 PATCH 1/5] selftests: kvm: move common startup logic to
- kvm_util.c
-Message-ID: <YxpaFfw4jbwwvEI6@google.com>
-References: <20220903012849.938069-1-vannapurve@google.com>
- <20220903012849.938069-2-vannapurve@google.com>
+        Thu, 8 Sep 2022 17:17:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098DCD21FF;
+        Thu,  8 Sep 2022 14:17:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AC52B822A1;
+        Thu,  8 Sep 2022 21:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF8E5C433C1;
+        Thu,  8 Sep 2022 21:17:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662671840;
+        bh=v9s/sbwXbN0b5p0MQQ1FPV3KReo58HlFqg6xFDEd62M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ta+norZeD7rlC7HE94dns0X1sl0/IAkAQBZlf/o1jCc8vgo6HoI6sZJzTQIP6wPMw
+         QpcJ3R//CiemhE0UA+Bu0E9FfjlQX/JDT6frndDixICBTK+Byc7E2G1zVp6JUcAq5i
+         DtEkBoXf1NTEys71HyXHz3s+nMk6qI55jCFVt2BbwaEbbDErbIZpBF+epI54C/dMrE
+         4j5aHqlugt4xiwQDzi9lzjTvGKk8+Zj1V7/ju5anLqwVptNDAsEkHrTEDUHs6dbpD9
+         u0h61hVOzxxQxGAvCmg4YjNKBKFRmdEZ8PHkjCouz7cpfyQBvfePeIYChZiai0ED/q
+         GdRhfUKzyIroA==
+Date:   Fri, 9 Sep 2022 00:17:13 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-sgx@vger.kernel.org
+Cc:     Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 5/5] selftests/sgx: Add SGX selftest
+ augment_via_eaccept_long
+Message-ID: <Yxpb2aBXUZxHZwjb@kernel.org>
+References: <20220905020411.17290-1-jarkko@kernel.org>
+ <20220905020411.17290-6-jarkko@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220903012849.938069-2-vannapurve@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220905020411.17290-6-jarkko@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 01:28:45AM +0000, Vishal Annapurve wrote:
-[...]
-> --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -393,7 +393,7 @@ static void help(char *name)
->  	exit(0);
->  }
->  
-> -int main(int argc, char *argv[])
-> +void __main(int argc, char *argv[])
->  {
->  	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
->  	struct test_params p = {
-> @@ -447,18 +447,15 @@ int main(int argc, char *argv[])
->  	}
->  
->  	for_each_guest_mode(run_test, &p);
-> -
-> -	return 0;
->  }
->  
->  #else /* __NR_userfaultfd */
->  
->  #warning "missing __NR_userfaultfd definition"
->  
-> -int main(void)
-> +void __main(int argc, char *argv[])
->  {
->  	print_skip("__NR_userfaultfd must be present for userfaultfd test");
-> -	return KSFT_SKIP;
+On Mon, Sep 05, 2022 at 05:04:11AM +0300, Jarkko Sakkinen wrote:
+> +	for (i = 0; i < self->encl.nr_segments; i++) {
+> +		struct encl_segment *seg = &self->encl.segment_tbl[i];
+> +
+> +		total_size += seg->size;
+> +	}
 
-exit(KSFT_SKIP) to preserve the test behavior.
+This is actually same as:
+
+        struct encl_segment *seg = &self->encl.segment_tbl[self->encl.nr_segments - 1];
+        
+        total_size = seg->offset + seg->size;
+
+Should I update?
+
+BR, Jarkko
