@@ -2,246 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F42A5B2513
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 19:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A1E5B266C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 21:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiIHRoC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Sep 2022 13:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S230426AbiIHTHc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Sep 2022 15:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiIHRn1 (ORCPT
+        with ESMTP id S229610AbiIHTHb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:43:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6AA2D1C5;
-        Thu,  8 Sep 2022 10:41:11 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288GLMLY004064;
-        Thu, 8 Sep 2022 17:40:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=SmSTj2/HdzqYj70y36yqizzCyVn5KVKz4ABjNdpPPK0=;
- b=DJsJt65OXxR4koGfezS0IQDxlrW6NwIjYRD1MWGWzM7VBc8wCBiTw+6zy1LuToucxk3D
- IkL8zu+ndC0KiXPdaP+e+wmg+OuzTsHnGddCYvf+jimNLL4mJBF2J4oP5BG2YZ1vmQ5w
- Eii7q8rAIurNYSd9r9ieYQ1KnBVchrEZhctyh5WOGoC6BEI8Xo6MD0PzhJJB6BbcYlZP
- PEbVmwUiGj5Jk5LHJpDwWha48tuOU/ajTfmb86JyIvAV4vieQNh/7ps60lIFvEZ2tEt7
- 1nOtLn1Z4KCOnOtHppBXU9aIvGsrI/94+Q9LizcUAKpVSjAsxnPExFtkVNImLBdN1MOO 2Q== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jfku6ah5p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 17:40:30 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 288HKOcP031828;
-        Thu, 8 Sep 2022 17:40:28 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3jbxj8xwj3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 17:40:28 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 288HePO121692888
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 8 Sep 2022 17:40:25 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1210F5204F;
-        Thu,  8 Sep 2022 17:40:25 +0000 (GMT)
-Received: from tarunpc.ibmuc.com (unknown [9.43.79.171])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8C4825204E;
-        Thu,  8 Sep 2022 17:40:22 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     ltp@lists.linux.it, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, aneesh.kumar@linux.ibm.com,
-        Tarun Sahu <tsahu@linux.ibm.com>
-Subject: [RFC PATCH] Hugetlb: Migrating hugetlb tests from libhugetlbfs
-Date:   Thu,  8 Sep 2022 23:09:47 +0530
-Message-Id: <20220908173947.17956-1-tsahu@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 8 Sep 2022 15:07:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B5FC04F0;
+        Thu,  8 Sep 2022 12:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662664049; x=1694200049;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=44eqfRb+CPq6+faXpY40ZoHvEwz6Mc0cnlewhnmlylc=;
+  b=DZyFwN8QNY5TIO/4iunsaWHHkAY+Q/LdaD7+AnD9peGalPZdYpf0tbRC
+   FIrQWYPL2VERFNzfNo822zlBd0ozO2It3AauduBEzmVKtyJfo4ARb41zM
+   65FsVtWmAHZtkOmlE/C8s/gx0Cm+bvsudxlJEQ4ht21qi4+WArK7mmLHM
+   bLaqc21nYSLITbOrmsNs7yo76I8LKRM1kGsm8kfgqKJzTA9L3n/OTUEPJ
+   G/Ah+NYSYsMcMw/D1RW55UtxlN3K+u3bWwEFrs4tVG538LiJBS7LYtf2D
+   Obcms0TPLfYl5gheiJ4now0ccxrWKlmv7rZHqneetGfVNvlnaZCkzPTll
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="277032673"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="277032673"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 12:07:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="740787532"
+Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 12:07:28 -0700
+Message-ID: <6cf407ed-95c7-0db4-d581-b85efad13239@linux.intel.com>
+Date:   Thu, 8 Sep 2022 12:07:28 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: S5Nx9Kq0tV_sLB5rl_gKVTuSIszC-y5a
-X-Proofpoint-GUID: S5Nx9Kq0tV_sLB5rl_gKVTuSIszC-y5a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_10,2022-09-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 malwarescore=0 spamscore=0 clxscore=1011 impostorscore=0
- bulkscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=904
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209080062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v12 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220908002723.923241-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Yxl+PE4A+WUfQ7bl@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Yxl+PE4A+WUfQ7bl@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Libhugetlbfs is not being maintained actively, and some distro is
-dropping support for it. There are some tests that are good for testing
-hugetlb functionality in kernel, which can be migrated to either kernel
-kselftests or LTP.
-I am submitting this patch to get comments from community on the
-following
-    1. The test framework in ltp is most suitable for the tests that are
-    in libhugetlbfs/tests/ which follow similar test framework. And there
-    is already a section for hugetlb specific tests in LTP. So it makes
-    more sense and less effort to migrate the test to LTP. Though I
-    recommend migrating these tests to LTP, I would like to discuss tests
-    should be migrated to LTP or kselftests.
-    2. Libhugetlbfs tests has license GNU Lesser GPL 2.1 or later, while
-    kernel and LTP has license GPL2 or later, so can the test be
-    migrated to kernel/kselftests or LTP.
+Hi,
 
-The below patch is libhugetlbfs/tests/direct.c which has been migrated
-to ltp/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
+On 9/7/22 10:31 PM, Greg Kroah-Hartman wrote:
+> On Wed, Sep 07, 2022 at 05:27:20PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>> +	/*
+>> +	 * Per TDX Module 1.0 specification, section titled
+>> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
+>> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
+>> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as
+>> +	 * 0. Also check for valid user pointers.
+>> +	 */
+>> +	if (!req.reportdata || !req.tdreport || req.subtype ||
+>> +		req.rpd_len != TDX_REPORTDATA_LEN ||
+>> +		req.tdr_len != TDX_REPORT_LEN)
+>> +		return -EINVAL;
+> 
+> You never verify that your reserved[7] fields are actually set to 0,
+> which means you can never use them in the future :(
 
-Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
----
- runtest/hugetlb                               |   2 +
- testcases/kernel/mem/.gitignore               |   1 +
- .../kernel/mem/hugetlb/hugemmap/hugemmap07.c  | 106 ++++++++++++++++++
- 3 files changed, 109 insertions(+)
- create mode 100644 testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
+Currently, we don't use those fields in our code. Why do we have to
+make sure they are set to zero? Can't we add checks when we really use
+them in future?
 
-diff --git a/runtest/hugetlb b/runtest/hugetlb
-index f719217ab..ee02835d3 100644
---- a/runtest/hugetlb
-+++ b/runtest/hugetlb
-@@ -3,6 +3,8 @@ hugemmap02 hugemmap02
- hugemmap04 hugemmap04
- hugemmap05 hugemmap05
- hugemmap06 hugemmap06
-+hugemmap07 hugemmap07
-+
- hugemmap05_1 hugemmap05 -m
- hugemmap05_2 hugemmap05 -s
- hugemmap05_3 hugemmap05 -s -m
-diff --git a/testcases/kernel/mem/.gitignore b/testcases/kernel/mem/.gitignore
-index ff2910533..df5256ec8 100644
---- a/testcases/kernel/mem/.gitignore
-+++ b/testcases/kernel/mem/.gitignore
-@@ -4,6 +4,7 @@
- /hugetlb/hugemmap/hugemmap04
- /hugetlb/hugemmap/hugemmap05
- /hugetlb/hugemmap/hugemmap06
-+/hugetlb/hugemmap/hugemmap07
- /hugetlb/hugeshmat/hugeshmat01
- /hugetlb/hugeshmat/hugeshmat02
- /hugetlb/hugeshmat/hugeshmat03
-diff --git a/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c b/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
-new file mode 100644
-index 000000000..798735ed0
---- /dev/null
-+++ b/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
-@@ -0,0 +1,106 @@
-+/*
-+ * License/Copyright Details
-+ */
-+
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <sys/mount.h>
-+#include <limits.h>
-+#include <sys/param.h>
-+#include <sys/types.h>
-+
-+#include "tst_test.h"
-+
-+#define P0 "ffffffff"
-+#define IOSZ 4096
-+char buf[IOSZ] __attribute__((aligned(IOSZ)));
-+static int  fildes = -1, nfildes = -1;
-+static char TEMPFILE[MAXPATHLEN];
-+static char NTEMPFILE[MAXPATHLEN];
-+
-+void test_directio(void)
-+{
-+	long hpage_size;
-+	void *p;
-+	int ret;
-+
-+	hpage_size = SAFE_READ_MEMINFO("Hugepagesize:");
-+
-+	fildes = SAFE_OPEN(TEMPFILE, O_RDWR | O_CREAT, 0600);
-+	nfildes = SAFE_OPEN(NTEMPFILE, O_CREAT|O_EXCL|O_RDWR|O_DIRECT, 0600);
-+
-+	p = mmap(NULL, hpage_size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fildes, 0);
-+	if (p == MAP_FAILED)
-+		tst_brk(TFAIL | TERRNO, "mmap() Failed on %s", TEMPFILE);
-+
-+	memcpy(p, P0, 8);
-+
-+	/* Direct write from huge page */
-+	ret = write(nfildes, p, IOSZ);
-+	if (ret == -1)
-+		tst_brk(TFAIL | TERRNO, "Direct-IO write from huge page");
-+	if (ret != IOSZ)
-+		tst_brk(TFAIL, "Short direct-IO write from huge page");
-+	if (lseek(nfildes, 0, SEEK_SET) == -1)
-+		tst_brk(TFAIL | TERRNO, "lseek");
-+
-+	/* Check for accuracy */
-+	ret = read(nfildes, buf, IOSZ);
-+	if (ret == -1)
-+		tst_brk(TFAIL | TERRNO, "Direct-IO read to normal memory");
-+	if (ret != IOSZ)
-+		tst_brk(TFAIL, "Short direct-IO read to normal memory");
-+	if (memcmp(P0, buf, 8))
-+		tst_brk(TFAIL, "Memory mismatch after Direct-IO write");
-+	if (lseek(nfildes, 0, SEEK_SET) == -1)
-+		tst_brk(TFAIL | TERRNO, "lseek");
-+
-+	/* Direct read to huge page */
-+	memset(p, 0, IOSZ);
-+	ret = read(nfildes, p, IOSZ);
-+	if (ret == -1)
-+		tst_brk(TFAIL | TERRNO, "Direct-IO read to huge page");
-+	if (ret != IOSZ)
-+		tst_brk(TFAIL, "Short direct-IO read to huge page");
-+
-+	/* Check for accuracy */
-+	if (memcmp(p, P0, 8))
-+		tst_brk(TFAIL, "Memory mismatch after Direct-IO read");
-+	tst_res(TPASS, "Successfully tested Hugepage Direct I/O");
-+}
-+
-+void setup(void)
-+{
-+	if (tst_hugepages == 0)
-+		tst_brk(TCONF, "Not enough hugepages for testing.");
-+
-+	if (!Hopt)
-+		Hopt = tst_get_tmpdir();
-+	SAFE_MOUNT("none", Hopt, "hugetlbfs", 0, NULL);
-+
-+	snprintf(TEMPFILE, sizeof(TEMPFILE), "%s/mmapfile%d", Hopt, getpid());
-+	snprintf(NTEMPFILE, sizeof(NTEMPFILE), "%s/nmmapfile%d", "/home/", getpid());
-+}
-+
-+void cleanup(void)
-+{
-+	close(fildes);
-+	close(nfildes);
-+	remove(TEMPFILE);
-+	remove(NTEMPFILE);
-+	umount2(Hopt, MNT_DETACH);
-+}
-+
-+static struct tst_test test = {
-+	.needs_root = 1,
-+	.needs_tmpdir = 1,
-+	.options = (struct tst_option[]) {
-+		{"H:", &Hopt,   "Location of hugetlbfs, i.e.  -H /var/hugetlbfs"},
-+		{"s:", &nr_opt, "Set the number of the been allocated hugepages"},
-+		{}
-+	},
-+	.setup = setup,
-+	.cleanup = cleanup,
-+	.test_all = test_directio,
-+	.hugepages = {2, TST_REQUEST},
-+};
+If your suggestion is to define allowed values of these fields for user,
+we can add some help in structure definition of "tdx_report_req" in
+arch/x86/include/uapi/asm/tdx.h
+
+> 
+> Please fix that up, thanks.
+> 
+> greg k-h
+
 -- 
-2.31.1
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
