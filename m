@@ -2,203 +2,246 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076225B21D1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 17:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F42A5B2513
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 19:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbiIHPRe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Sep 2022 11:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S229925AbiIHRoC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Sep 2022 13:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiIHPRd (ORCPT
+        with ESMTP id S232320AbiIHRn1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Sep 2022 11:17:33 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAA740571;
-        Thu,  8 Sep 2022 08:17:32 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id go34so3790453ejc.2;
-        Thu, 08 Sep 2022 08:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=dvC/u7qJ5dN4X47tbsTGAuz++QpERj+4FDleSIpBEMg=;
-        b=R0hVOMicuPDSnoQmcmYiJB3LFWFfOFwjBgRBuwuOEWI5JTxT51Lu0OjLr++Gxw/lzs
-         Tvik3ezKxyKAnzDTCdQqFNmpHVznLaNacrF9ZuvJc9pBhz0lrAdZi1n+3xp/ijThvgp8
-         VOwRWcRDrlK9c+JFS1o8ONZvPVH7bR5r3/0ESeh6jy2zLWd7yU9MbottgDeiLnCTWQUN
-         tzuE0V5OqQhzozQQSsV16et/mkj7icGxA9KjWbtIM5r6eFzdxL2e+f9jqf4Nw1JWc8Gp
-         zzjf6KnNbCgGJ8j2doSbs7qY9udYo9nEXzEMNqBxnxO5iPN9tehMBETqPTDu68UbIvgn
-         qldw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dvC/u7qJ5dN4X47tbsTGAuz++QpERj+4FDleSIpBEMg=;
-        b=bCVLOJe+uWFWhqRYSGlMsFWddY0ccOuslSZ8SxdL5L4VKGycPyhjMCScLRhrL0wnfH
-         RsYzRQaebJgmm78Cg/YaAN4h7x05qFflvpl/48d9F+9zdZvvCyQq7TL4x9K/CZjvJyKp
-         MBqif/DNTnyFdBHskvp2mk1B8zH0UkInMhxX7ly6sfwJuQkpGto1JBRRvrIjiFf3x+97
-         o5C8f42lClJCCLQaBHcMn+tBo5h3qGNYa5g+kVTJEFlKNVY8QQcOH4CmslmqXyG5fWq1
-         vvyGtTkV49j8EDzzYtl4fiB78Cu5BoqX0p4ICS6c4nbSy8sIiz0tWrTpps/jPlbQ+W6X
-         NDEg==
-X-Gm-Message-State: ACgBeo2kHgehmbKYlK/bn9FOqYfXQFkMOZxRq42BTwPpoWaewC3p1ZtZ
-        i4+mAZFTL3LeSGmr2QXgeLi+SG2lq4CZ77J0pa8=
-X-Google-Smtp-Source: AA6agR6lkwvnPcInorNKbMkhlPy/kqMnwSqf9ilS5C3PIU+zXOi3rmnC/1PYHJgUShzGaAZn2JBWrMwTREu95J9WrlE=
-X-Received: by 2002:a17:907:a04f:b0:772:da0b:e2f1 with SMTP id
- gz15-20020a170907a04f00b00772da0be2f1mr3625960ejc.327.1662650250524; Thu, 08
- Sep 2022 08:17:30 -0700 (PDT)
+        Thu, 8 Sep 2022 13:43:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6AA2D1C5;
+        Thu,  8 Sep 2022 10:41:11 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288GLMLY004064;
+        Thu, 8 Sep 2022 17:40:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=SmSTj2/HdzqYj70y36yqizzCyVn5KVKz4ABjNdpPPK0=;
+ b=DJsJt65OXxR4koGfezS0IQDxlrW6NwIjYRD1MWGWzM7VBc8wCBiTw+6zy1LuToucxk3D
+ IkL8zu+ndC0KiXPdaP+e+wmg+OuzTsHnGddCYvf+jimNLL4mJBF2J4oP5BG2YZ1vmQ5w
+ Eii7q8rAIurNYSd9r9ieYQ1KnBVchrEZhctyh5WOGoC6BEI8Xo6MD0PzhJJB6BbcYlZP
+ PEbVmwUiGj5Jk5LHJpDwWha48tuOU/ajTfmb86JyIvAV4vieQNh/7ps60lIFvEZ2tEt7
+ 1nOtLn1Z4KCOnOtHppBXU9aIvGsrI/94+Q9LizcUAKpVSjAsxnPExFtkVNImLBdN1MOO 2Q== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jfku6ah5p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 17:40:30 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 288HKOcP031828;
+        Thu, 8 Sep 2022 17:40:28 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3jbxj8xwj3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 17:40:28 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 288HePO121692888
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Sep 2022 17:40:25 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1210F5204F;
+        Thu,  8 Sep 2022 17:40:25 +0000 (GMT)
+Received: from tarunpc.ibmuc.com (unknown [9.43.79.171])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8C4825204E;
+        Thu,  8 Sep 2022 17:40:22 +0000 (GMT)
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     ltp@lists.linux.it, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, aneesh.kumar@linux.ibm.com,
+        Tarun Sahu <tsahu@linux.ibm.com>
+Subject: [RFC PATCH] Hugetlb: Migrating hugetlb tests from libhugetlbfs
+Date:   Thu,  8 Sep 2022 23:09:47 +0530
+Message-Id: <20220908173947.17956-1-tsahu@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220906170301.256206-1-roberto.sassu@huaweicloud.com>
- <20220906170301.256206-2-roberto.sassu@huaweicloud.com> <CAADnVQ+o8zyi_Z+XqCQynmvj04AtEtF9AoOTSeyUx9dvKTXOqg@mail.gmail.com>
- <02309cfbc1ce47f7de6be8addc2caa315b1fee1b.camel@huaweicloud.com>
- <CAADnVQ+cEM5Sb7d9yPA72Mp2zimx7VZ5Si3SPVdAZgsdFGpP1Q@mail.gmail.com> <8d7a713e500b5e3fce93e4c5c7b8841eb6dd28e4.camel@huaweicloud.com>
-In-Reply-To: <8d7a713e500b5e3fce93e4c5c7b8841eb6dd28e4.camel@huaweicloud.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 8 Sep 2022 08:17:19 -0700
-Message-ID: <CAADnVQL7murY8G4SG5sF3855ETBpmrv0S-dueR8Rht4ucm6WwQ@mail.gmail.com>
-Subject: Re: [PATCH 1/7] bpf: Add missing fd modes check for map iterators
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Hou Tao <houtao1@huawei.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable <stable@vger.kernel.org>, Chenbo Feng <fengc@google.com>,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: S5Nx9Kq0tV_sLB5rl_gKVTuSIszC-y5a
+X-Proofpoint-GUID: S5Nx9Kq0tV_sLB5rl_gKVTuSIszC-y5a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_10,2022-09-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 malwarescore=0 spamscore=0 clxscore=1011 impostorscore=0
+ bulkscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=904
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209080062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 6:59 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> On Wed, 2022-09-07 at 09:02 -0700, Alexei Starovoitov wrote:
-> >
->
-> [...]
->
-> > > Well, if you write a security module to prevent writes on a map,
-> > > and
-> > > user space is able to do it anyway with an iterator, what is the
-> > > purpose of the security module then?
-> >
-> > sounds like a broken "security module" and nothing else.
->
-> Ok, if a custom security module does not convince you, let me make a
-> small example with SELinux.
->
-> I created a small map iterator that sets every value of a map to 5:
->
-> SEC("iter/bpf_map_elem")
-> int write_bpf_hash_map(struct bpf_iter__bpf_map_elem *ctx)
-> {
->         u32 *key = ctx->key;
->         u8 *val = ctx->value;
->
->         if (key == NULL || val == NULL)
->                 return 0;
->
->         *val = 5;
->         return 0;
-> }
->
-> I create and pin a map:
->
-> # bpftool map create /sys/fs/bpf/map type array key 4 value 1 entries 1
-> name test
->
-> Initially, the content of the map looks like:
->
-> # bpftool map dump pinned /sys/fs/bpf/map
-> key: 00 00 00 00  value: 00
-> Found 1 element
->
-> I then created a new SELinux type bpftool_test_t, which has only read
-> permission on maps:
->
-> # sesearch -A -s bpftool_test_t -t unconfined_t -c bpf
-> allow bpftool_test_t unconfined_t:bpf map_read;
->
-> So, what I expect is that this type is not able to write to the map.
->
-> Indeed, the current bpftool is not able to do it:
->
-> # strace -f -etrace=bpf runcon -t bpftool_test_t bpftool iter pin
-> writer.o /sys/fs/bpf/iter map pinned /sys/fs/bpf/map
-> bpf(BPF_OBJ_GET, {pathname="/sys/fs/bpf/map", bpf_fd=0, file_flags=0},
-> 144) = -1 EACCES (Permission denied)
-> Error: bpf obj get (/sys/fs/bpf): Permission denied
->
-> This happens because the current bpftool requests to access the map
-> with read-write permission, and SELinux denies it:
->
-> # cat /var/log/audit/audit.log|audit2allow
->
->
-> #============= bpftool_test_t ==============
-> allow bpftool_test_t unconfined_t:bpf map_write;
->
->
-> The command failed, and the content of the map is still:
->
-> # bpftool map dump pinned /sys/fs/bpf/map
-> key: 00 00 00 00  value: 00
-> Found 1 element
->
->
-> Now, what I will do is to use a slightly modified version of bpftool
-> which requests read-only access to the map instead:
->
-> # strace -f -etrace=bpf runcon -t bpftool_test_t ./bpftool iter pin
-> writer.o /sys/fs/bpf/iter map pinned /sys/fs/bpf/map
-> bpf(BPF_OBJ_GET, {pathname="/sys/fs/bpf/map", bpf_fd=0,
-> file_flags=BPF_F_RDONLY}, 16) = 3
-> libbpf: elf: skipping unrecognized data section(5) .eh_frame
-> libbpf: elf: skipping relo section(6) .rel.eh_frame for section(5)
-> .eh_frame
->
-> ...
->
-> bpf(BPF_LINK_CREATE, {link_create={prog_fd=4, target_fd=0,
-> attach_type=BPF_TRACE_ITER, flags=0}, ...}, 48) = 5
-> bpf(BPF_OBJ_PIN, {pathname="/sys/fs/bpf/iter", bpf_fd=5, file_flags=0},
-> 16) = 0
->
-> That worked, because SELinux grants read-only permission to
-> bpftool_test_t. However, the map iterator does not check how the fd was
-> obtained, and thus allows the iterator to be created.
->
-> At this point, we have write access, despite not having the right to do
-> it:
+Libhugetlbfs is not being maintained actively, and some distro is
+dropping support for it. There are some tests that are good for testing
+hugetlb functionality in kernel, which can be migrated to either kernel
+kselftests or LTP.
+I am submitting this patch to get comments from community on the
+following
+    1. The test framework in ltp is most suitable for the tests that are
+    in libhugetlbfs/tests/ which follow similar test framework. And there
+    is already a section for hugetlb specific tests in LTP. So it makes
+    more sense and less effort to migrate the test to LTP. Though I
+    recommend migrating these tests to LTP, I would like to discuss tests
+    should be migrated to LTP or kselftests.
+    2. Libhugetlbfs tests has license GNU Lesser GPL 2.1 or later, while
+    kernel and LTP has license GPL2 or later, so can the test be
+    migrated to kernel/kselftests or LTP.
 
-That is a wrong assumption to begin with.
-Having an fd to a bpf object (map, link, prog) allows access.
-read/write sort-of applicable to maps, but not so much
-to progs, links.
-That file based read/write flag is only for user processes.
-bpf progs always had separate flags for that.
-See BPF_F_RDONLY vs BPF_F_RDONLY_PROG.
-One doesn't imply the other.
+The below patch is libhugetlbfs/tests/direct.c which has been migrated
+to ltp/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
+
+Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
+---
+ runtest/hugetlb                               |   2 +
+ testcases/kernel/mem/.gitignore               |   1 +
+ .../kernel/mem/hugetlb/hugemmap/hugemmap07.c  | 106 ++++++++++++++++++
+ 3 files changed, 109 insertions(+)
+ create mode 100644 testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
+
+diff --git a/runtest/hugetlb b/runtest/hugetlb
+index f719217ab..ee02835d3 100644
+--- a/runtest/hugetlb
++++ b/runtest/hugetlb
+@@ -3,6 +3,8 @@ hugemmap02 hugemmap02
+ hugemmap04 hugemmap04
+ hugemmap05 hugemmap05
+ hugemmap06 hugemmap06
++hugemmap07 hugemmap07
++
+ hugemmap05_1 hugemmap05 -m
+ hugemmap05_2 hugemmap05 -s
+ hugemmap05_3 hugemmap05 -s -m
+diff --git a/testcases/kernel/mem/.gitignore b/testcases/kernel/mem/.gitignore
+index ff2910533..df5256ec8 100644
+--- a/testcases/kernel/mem/.gitignore
++++ b/testcases/kernel/mem/.gitignore
+@@ -4,6 +4,7 @@
+ /hugetlb/hugemmap/hugemmap04
+ /hugetlb/hugemmap/hugemmap05
+ /hugetlb/hugemmap/hugemmap06
++/hugetlb/hugemmap/hugemmap07
+ /hugetlb/hugeshmat/hugeshmat01
+ /hugetlb/hugeshmat/hugeshmat02
+ /hugetlb/hugeshmat/hugeshmat03
+diff --git a/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c b/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
+new file mode 100644
+index 000000000..798735ed0
+--- /dev/null
++++ b/testcases/kernel/mem/hugetlb/hugemmap/hugemmap07.c
+@@ -0,0 +1,106 @@
++/*
++ * License/Copyright Details
++ */
++
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <sys/mount.h>
++#include <limits.h>
++#include <sys/param.h>
++#include <sys/types.h>
++
++#include "tst_test.h"
++
++#define P0 "ffffffff"
++#define IOSZ 4096
++char buf[IOSZ] __attribute__((aligned(IOSZ)));
++static int  fildes = -1, nfildes = -1;
++static char TEMPFILE[MAXPATHLEN];
++static char NTEMPFILE[MAXPATHLEN];
++
++void test_directio(void)
++{
++	long hpage_size;
++	void *p;
++	int ret;
++
++	hpage_size = SAFE_READ_MEMINFO("Hugepagesize:");
++
++	fildes = SAFE_OPEN(TEMPFILE, O_RDWR | O_CREAT, 0600);
++	nfildes = SAFE_OPEN(NTEMPFILE, O_CREAT|O_EXCL|O_RDWR|O_DIRECT, 0600);
++
++	p = mmap(NULL, hpage_size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fildes, 0);
++	if (p == MAP_FAILED)
++		tst_brk(TFAIL | TERRNO, "mmap() Failed on %s", TEMPFILE);
++
++	memcpy(p, P0, 8);
++
++	/* Direct write from huge page */
++	ret = write(nfildes, p, IOSZ);
++	if (ret == -1)
++		tst_brk(TFAIL | TERRNO, "Direct-IO write from huge page");
++	if (ret != IOSZ)
++		tst_brk(TFAIL, "Short direct-IO write from huge page");
++	if (lseek(nfildes, 0, SEEK_SET) == -1)
++		tst_brk(TFAIL | TERRNO, "lseek");
++
++	/* Check for accuracy */
++	ret = read(nfildes, buf, IOSZ);
++	if (ret == -1)
++		tst_brk(TFAIL | TERRNO, "Direct-IO read to normal memory");
++	if (ret != IOSZ)
++		tst_brk(TFAIL, "Short direct-IO read to normal memory");
++	if (memcmp(P0, buf, 8))
++		tst_brk(TFAIL, "Memory mismatch after Direct-IO write");
++	if (lseek(nfildes, 0, SEEK_SET) == -1)
++		tst_brk(TFAIL | TERRNO, "lseek");
++
++	/* Direct read to huge page */
++	memset(p, 0, IOSZ);
++	ret = read(nfildes, p, IOSZ);
++	if (ret == -1)
++		tst_brk(TFAIL | TERRNO, "Direct-IO read to huge page");
++	if (ret != IOSZ)
++		tst_brk(TFAIL, "Short direct-IO read to huge page");
++
++	/* Check for accuracy */
++	if (memcmp(p, P0, 8))
++		tst_brk(TFAIL, "Memory mismatch after Direct-IO read");
++	tst_res(TPASS, "Successfully tested Hugepage Direct I/O");
++}
++
++void setup(void)
++{
++	if (tst_hugepages == 0)
++		tst_brk(TCONF, "Not enough hugepages for testing.");
++
++	if (!Hopt)
++		Hopt = tst_get_tmpdir();
++	SAFE_MOUNT("none", Hopt, "hugetlbfs", 0, NULL);
++
++	snprintf(TEMPFILE, sizeof(TEMPFILE), "%s/mmapfile%d", Hopt, getpid());
++	snprintf(NTEMPFILE, sizeof(NTEMPFILE), "%s/nmmapfile%d", "/home/", getpid());
++}
++
++void cleanup(void)
++{
++	close(fildes);
++	close(nfildes);
++	remove(TEMPFILE);
++	remove(NTEMPFILE);
++	umount2(Hopt, MNT_DETACH);
++}
++
++static struct tst_test test = {
++	.needs_root = 1,
++	.needs_tmpdir = 1,
++	.options = (struct tst_option[]) {
++		{"H:", &Hopt,   "Location of hugetlbfs, i.e.  -H /var/hugetlbfs"},
++		{"s:", &nr_opt, "Set the number of the been allocated hugepages"},
++		{}
++	},
++	.setup = setup,
++	.cleanup = cleanup,
++	.test_all = test_directio,
++	.hugepages = {2, TST_REQUEST},
++};
+-- 
+2.31.1
+
