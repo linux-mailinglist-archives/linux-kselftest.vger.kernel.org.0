@@ -2,82 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D445B1DC3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 14:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0AA5B1FA4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Sep 2022 15:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiIHM6O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Sep 2022 08:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        id S232004AbiIHNw2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Sep 2022 09:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiIHM6J (ORCPT
+        with ESMTP id S229842AbiIHNw0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Sep 2022 08:58:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE8C9CCDF
-        for <linux-kselftest@vger.kernel.org>; Thu,  8 Sep 2022 05:58:08 -0700 (PDT)
-Received: from localhost.localdomain (unknown [213.194.152.135])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: rcn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6FE466601F8F;
-        Thu,  8 Sep 2022 13:58:06 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662641886;
-        bh=1Ut9IDHGTYcghgsoMMqfibgr8juaexcW2Xr+KgU03q4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mqY0vKnwg51PzBWy22L9fiT3R3/cs5BxJTJqfufdZZ2vWH+tM+chgg0Ouzyf76pxh
-         NsJartAvv7djtqwAHqrTNFtsyYUH9h4ViKXxCm9l0Kn4IjkNZJdj9bLjVScGFMpF2I
-         LEFbTYzVEGO+HkCInB2rWeSNc/AWz26w90tRQco2wZ+FZ6R4p+4xKgSXofi5J3BCRp
-         xBWboI1zvpEzgUnf0+h5iLHQSRzVoeSyBquR1BCHyvf+xoPphZTguVBWlLUEn5PV0W
-         yGwORAQ8YvC8OEiiFp8YT7ZZgS7phS2/o0oi2HwAUNHyusEY/XauKCUxOYh1gdKrP+
-         4EewAKYN4Rkig==
-From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To:     linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
-        rnsastry@linux.ibm.com, kernel@collabora.com
-Subject: [PATCH] selftests/kexec: fix build for ARCH=x86_64
-Date:   Thu,  8 Sep 2022 14:57:49 +0200
-Message-Id: <20220908125749.1711044-1-ricardo.canuelo@collabora.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 8 Sep 2022 09:52:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C79DF6BAE;
+        Thu,  8 Sep 2022 06:52:22 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288DfAQU020721;
+        Thu, 8 Sep 2022 13:52:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=GJh0mrNCEHXtxxdUH+g6jKIM0jaKF/Dn8W1pmU6Rpqc=;
+ b=oStrnru62YWYjVxhyRyTbNsnG/bSLDErTQXiVZ/eTY8WKkzWslc7kvBJL0GtHNsuqXah
+ fl8WStiqCAjp3ChZUwJaAajVQka3GKy6yQvRf1zpR/UrT11EmUMOlbvTTTiq/0f5x64q
+ D/krKWiIjsD4aqtJhi0kIK8UbQmoJ7YaeigFWifftggYYA9UMIu2sZqzxVFls6y4th9B
+ YrGl5qrAMY94DNIM4hczzpP94J/ZDjqsqLtMM3T3+n9Gv6/G854pOPK/EANeX2lRPWQk
+ yB/NcpNV2QIabcnjuYbKT/gwbqmH9GqbDxQOQwna786O07mALU5lxVCkxaB92CmcWaER Fg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jer1x4pcv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 13:52:15 +0000
+Received: from nasanex01c.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 288DqEVa020439
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Sep 2022 13:52:14 GMT
+Received: from [10.216.56.128] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 8 Sep 2022
+ 06:52:10 -0700
+Message-ID: <36d3af06-4534-000f-525d-d1fa82467aaa@quicinc.com>
+Date:   Thu, 8 Sep 2022 19:22:07 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] selftests/cgroup: fix repeated words in comments
+Content-Language: en-US
+To:     wangjianli <wangjianli@cdjrlc.com>, <tj@kernel.org>,
+        <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>, <shuah@kernel.org>
+CC:     <cgroups@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220908121107.4814-1-wangjianli@cdjrlc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20220908121107.4814-1-wangjianli@cdjrlc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: s4_rKhtSSyZC2D63Ix7Dy0MkxyTcRHuw
+X-Proofpoint-GUID: s4_rKhtSSyZC2D63Ix7Dy0MkxyTcRHuw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_09,2022-09-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ malwarescore=0 clxscore=1011 adultscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209080050
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Handle the scenario where the build is launched with the ARCH envvar
-defined as x86_64.
+Hi,
 
-Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
----
- tools/testing/selftests/kexec/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 9/8/2022 5:41 PM, wangjianli wrote:
+> Delete the redundant word 'in'.
+> 
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+> ---
+>   tools/testing/selftests/cgroup/test_freezer.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
+> index ff519029f6f4..b479434e87b7 100644
+> --- a/tools/testing/selftests/cgroup/test_freezer.c
+> +++ b/tools/testing/selftests/cgroup/test_freezer.c
+> @@ -740,7 +740,7 @@ static int test_cgfreezer_ptraced(const char *root)
+>   
+>   	/*
+>   	 * cg_check_frozen(cgroup, true) will fail here,
+> -	 * because the task in in the TRACEd state.
+> +	 * because the task in the TRACEd state.
 
-diff --git a/tools/testing/selftests/kexec/Makefile b/tools/testing/selftests/kexec/Makefile
-index 806a150648c3..67fe7a46cb62 100644
---- a/tools/testing/selftests/kexec/Makefile
-+++ b/tools/testing/selftests/kexec/Makefile
-@@ -1,10 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0-only
- # Makefile for kexec tests
- 
--uname_M := $(shell uname -m 2>/dev/null || echo not)
--ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+ARCH_PROCESSED := $(shell echo $(ARCH) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
--ifeq ($(ARCH),$(filter $(ARCH),x86 ppc64le))
-+ifeq ($(ARCH_PROCESSED),$(filter $(ARCH_PROCESSED),x86 ppc64le))
- TEST_PROGS := test_kexec_load.sh test_kexec_file_load.sh
- TEST_FILES := kexec_common_lib.sh
- 
--- 
-2.25.1
+Should it be s/in in/is in/ ?
 
+-Mukesh
+>   	 */
+>   	if (cg_freeze_wait(cgroup, false))
+>   		goto cleanup;
