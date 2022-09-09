@@ -2,77 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593D45B4052
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 22:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DFD5B40A8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 22:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiIIUHc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 16:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
+        id S231444AbiIIUaO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 16:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiIIUHb (ORCPT
+        with ESMTP id S231808AbiIIU3x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:07:31 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A32ACCD7D;
-        Fri,  9 Sep 2022 13:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662754050; x=1694290050;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oxcGdpzGuPvSalr55BaYS9QZ2APctMGWYr460kANP7M=;
-  b=cBWQ94VyXEr86Y7l8VWDb0u0scoOJI0lGN2wbtdUfhPj7ukSmjfxQr+z
-   zYSW6i1t+ZUjAi3ccio7sr7K8o1Z7CRXFC1xrbFonvFRpylJFsbdRhVZq
-   Z+DQjrVes0X1NeW5M/XN84lLoRlyPyR620jlcI14fLeb3irRHaWTEnMVJ
-   GsE9peVij9w2AJYe6UGTvgVzRGkJJUiimw8jRkj9NMc0O2qdCswvWvLek
-   yFRyiDscZLU5qMoaK9JrxIRK7QYe97ddyJvCkOkwB0l+D2284dMdWTzbz
-   h80rboLVyxyJgNJQfOrStoHweTdUxc8QXS3cPwPhDMg7DVn4CEGKJkJgh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277294485"
-X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
-   d="scan'208";a="277294485"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:07:29 -0700
-X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
-   d="scan'208";a="592731467"
-Received: from hmadupal-mobl1.amr.corp.intel.com (HELO [10.251.6.204]) ([10.251.6.204])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:07:29 -0700
-Message-ID: <c289f18c-1276-eaa8-739e-4fb530eace91@linux.intel.com>
-Date:   Fri, 9 Sep 2022 13:07:29 -0700
+        Fri, 9 Sep 2022 16:29:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4108B12D570;
+        Fri,  9 Sep 2022 13:29:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEDC2620BA;
+        Fri,  9 Sep 2022 20:29:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CBAC433C1;
+        Fri,  9 Sep 2022 20:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662755344;
+        bh=q2B2bEaPY32bxTmDNGxPgX/Wuh5TeAA8MV5nuqGrMY0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JOWwHZQRdqyALR69+cnV85S7ykdL4p0wVWzxrBTBq2FA7dWXUKUkEBYH0oNiXuTNk
+         N1dSyZ3C1hSybrC5qAeuhTeVcaJu2f3YdwkT0Ih+1HnplsqaP034mNihuILp2qBRbV
+         pMg+fDB4NG9qn3ppAGbeie/zRVGli3HuzNEWDgMcfnXdLMbCZ3VtB1X4emL8Kya/Y9
+         LefLdbVRjEoRvwLAwM6mcejPt8YEejNCybn/YbY2vS9uh4VVktYssprBhvbsMRGhFT
+         EaFqQbRVuUFI8AbfPcGL9uWO8RHDDf3w57tpXLveg7WVuXwaY5XvNPzt+4nrRn1jTT
+         LiwIiJkqv7ugw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] mm/damon: minor fixes and cleanups
+Date:   Fri,  9 Sep 2022 20:28:54 +0000
+Message-Id: <20220909202901.57977-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <1942be91-ec18-5fb3-9fcd-6ffcfaf9f36c@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <1942be91-ec18-5fb3-9fcd-6ffcfaf9f36c@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,48 +56,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+This patchset contains minor fixes and cleanups for DAMON including
 
+- selftest for a bug we found before (Patch 1), 
+- fix of region holes in vaddr corner case and a kunit test for it
+  (Patches 2 and 3), and
+- documents/Kconfig updates for title wordsmithing (Patch 4) and more
+  aggressive DAMON debugfs interface deprecation announcement
+  (Patches 5-7).
 
-On 9/9/22 12:41 PM, Dave Hansen wrote:
-> On 9/9/22 12:27, Kuppuswamy Sathyanarayanan wrote:
->> +	u8 reserved[7] = {0};
-> ...
->> +	if (!req.reportdata || !req.tdreport || req.subtype ||
->> +		req.rpd_len != TDX_REPORTDATA_LEN ||
->> +		req.tdr_len != TDX_REPORT_LEN ||
->> +		memcmp(req.reserved, reserved, 7))
->> +		return -EINVAL;
-> 
-> Huh, so to look for 0's, you:
-> 
-> 1. Declare an on-stack structure with a hard coded, magic numbered field
->    that has to be zeroed.
-> 2. memcmp() that structure
-> 3. Feed memcmp() with another hard coded magic number
-> 
-> I've gotta ask: did you have any reservations writing this code?  Were
-> there any alarm bells going off saying that something might be wrong?
-> 
-> Using memcmp() itself is probably forgivable.  But, the two magic
-> numbers are pretty mortal sins in my book.  What's going to happen the
-> first moment someone wants to repurpose a reserved byte?  They're going
-> to do:
-> 
-> -	__u8 reserved[7];
-> +	__u8 my_new_byte;
-> +	__u8 reserved[6];
-> 
-> What's going to happen to the code you wrote?  Will it continue to work?
->  Or will the memcmp() silently start doing crazy stuff as it overruns
-> the structure into garbage land?
-> 
-> What's wrong with:
-> 
-> 	memchr_inv(&req.reserved, sizeof(req.reserved), 0)
+SeongJae Park (7):
+  selftest/damon: add a test for duplicate context dirs creation
+  mm/damon/core: avoid holes in newly set monitoring target ranges
+  mm/damon/core-test: test damon_set_regions
+  Docs/admin-guide/mm/damon: rename the title of the document
+  mm/damon/Kconfig: Notify debugfs deprecation plan
+  Docs/DAMON/start: mention the dependency as sysfs instead of debugfs
+  Docs/admin-guide/mm/damon/usage: note DAMON debugfs interface
+    deprecation plan
 
-I did not consider the hard coding issue. It is a mistake. Your suggestion
-looks better. I will use it.
+ Documentation/admin-guide/mm/damon/index.rst  |  6 ++---
+ Documentation/admin-guide/mm/damon/start.rst  | 13 +++------
+ Documentation/admin-guide/mm/damon/usage.rst  |  5 ++++
+ mm/damon/Kconfig                              |  3 +++
+ mm/damon/core-test.h                          | 23 ++++++++++++++++
+ mm/damon/core.c                               | 24 +++++++++++++++++
+ tools/testing/selftests/damon/Makefile        |  1 +
+ .../debugfs_duplicate_context_creation.sh     | 27 +++++++++++++++++++
+ 8 files changed, 89 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.25.1
+
