@@ -2,107 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D355B404C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 22:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 593D45B4052
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 22:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiIIUE6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 16:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
+        id S231205AbiIIUHc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 16:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiIIUE4 (ORCPT
+        with ESMTP id S229774AbiIIUHb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 16:04:56 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F004C26544
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Sep 2022 13:04:51 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1278a61bd57so6711427fac.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Sep 2022 13:04:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=PBBkfqyKEKmoKSlfumXcfswFTGpWKdlelDU3j7TdrR4=;
-        b=MHywHitd5io7XuRWQ1rvvt5OziBwdtSQkH6YWIvZJXhDzI0hK+yn26ZtZ5AmtVG4Kn
-         HrSjUsuHgDOXfTP8N9TWP1x7NIkLdK3/t7GT0g6yajI4+GpgY/j5nwOq5W31DjCxx02e
-         zZqdEAnp7y1AUW/yFAsJvidtJ+MkBYVTCp5RIFpFktu/KdD4mPTB/H1E5VweTBovTVgg
-         8s4tsTJK5l4foiGE66je2O3u9GdFIaFWajCgl7jrckozwvMYP/rnSzwIilaQLxl2Wqbo
-         gXzk+Q//svkPmlif8IuOV2mdB32O1jMWIpjNAJl0YwB4Q645aETejfaBmjUNXUlDpm3C
-         mQQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=PBBkfqyKEKmoKSlfumXcfswFTGpWKdlelDU3j7TdrR4=;
-        b=OhwYCjlsaNZ5O2mN/4NFoFsyv3GuWBY4Pf4if2pUu8nLB0nN5WfTBJJdfWfIZKqk7Q
-         SBUf468mEdanSSlsv77ewWrrSkPr78tJQeaPnp5FY+TliKDulqYD6N659rlwFco4ZQT1
-         81rcKVRrC0i91qZnMT12GpqT047ovBHh2UPmFAfxngHqV/kdku57JIookbbKVNzg+8Gq
-         xA+XQ0qrmzu2p7bIyRctPCsAo7L2eFHnPU50u9r049RmBvQSoJMo26TQSaZlawXZGaud
-         EscETdN20FDS2cwnGw5z45BWNvQLPRPHZ22GsQO4nVgdTwQC4kdRQ4s6MbHMMxTzDhVD
-         npGQ==
-X-Gm-Message-State: ACgBeo0POkAPntOh+vKpMr83zna1FJWy/nTDxAq7VECBPC1VGzg8Ykjm
-        sseJOJgK6kR5onyGWsEiJrdpsA==
-X-Google-Smtp-Source: AA6agR5RYgasVurh3aZ6wjP27XeqkU/V82in/0/Rq3d0A0Fg9HJAYXaPlZLWbDr6iVRloG2uUuMB9A==
-X-Received: by 2002:a05:6870:a197:b0:128:4c:ffd7 with SMTP id a23-20020a056870a19700b00128004cffd7mr6050134oaf.176.1662753891117;
-        Fri, 09 Sep 2022 13:04:51 -0700 (PDT)
-Received: from ?IPV6:2804:1b3:7000:8f29:b747:519c:23a4:77ca? ([2804:1b3:7000:8f29:b747:519c:23a4:77ca])
-        by smtp.gmail.com with ESMTPSA id a65-20020a9d2647000000b006391bdbb361sm184640otb.31.2022.09.09.13.04.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 13:04:50 -0700 (PDT)
-Message-ID: <6d627826-94ac-6c44-9a26-2e2662b58ee0@mojatatu.com>
-Date:   Fri, 9 Sep 2022 17:04:47 -0300
+        Fri, 9 Sep 2022 16:07:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A32ACCD7D;
+        Fri,  9 Sep 2022 13:07:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662754050; x=1694290050;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oxcGdpzGuPvSalr55BaYS9QZ2APctMGWYr460kANP7M=;
+  b=cBWQ94VyXEr86Y7l8VWDb0u0scoOJI0lGN2wbtdUfhPj7ukSmjfxQr+z
+   zYSW6i1t+ZUjAi3ccio7sr7K8o1Z7CRXFC1xrbFonvFRpylJFsbdRhVZq
+   Z+DQjrVes0X1NeW5M/XN84lLoRlyPyR620jlcI14fLeb3irRHaWTEnMVJ
+   GsE9peVij9w2AJYe6UGTvgVzRGkJJUiimw8jRkj9NMc0O2qdCswvWvLek
+   yFRyiDscZLU5qMoaK9JrxIRK7QYe97ddyJvCkOkwB0l+D2284dMdWTzbz
+   h80rboLVyxyJgNJQfOrStoHweTdUxc8QXS3cPwPhDMg7DVn4CEGKJkJgh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10465"; a="277294485"
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="277294485"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:07:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,304,1654585200"; 
+   d="scan'208";a="592731467"
+Received: from hmadupal-mobl1.amr.corp.intel.com (HELO [10.251.6.204]) ([10.251.6.204])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2022 13:07:29 -0700
+Message-ID: <c289f18c-1276-eaa8-739e-4fb530eace91@linux.intel.com>
+Date:   Fri, 9 Sep 2022 13:07:29 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH net-next 0/8] add tc-testing test cases
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
 Content-Language: en-US
-To:     Zhengchao Shao <shaozhengchao@huawei.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, shuah@kernel.org
-Cc:     weiyongjun1@huawei.com, yuehaibing@huawei.com
-References: <20220909012936.268433-1-shaozhengchao@huawei.com>
-From:   Victor Nogueira <victor@mojatatu.com>
-In-Reply-To: <20220909012936.268433-1-shaozhengchao@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <1942be91-ec18-5fb3-9fcd-6ffcfaf9f36c@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <1942be91-ec18-5fb3-9fcd-6ffcfaf9f36c@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> For this patchset, test cases of the ctinfo, gate, and xt action modules
-> are added to the tc-testing test suite. Also add deleting test for
-> connmark, ife, nat, sample and tunnel_key action modules.
-> 
-> Zhengchao Shao (8):
->    selftests/tc-testings: add selftests for ctinfo action
->    selftests/tc-testings: add selftests for gate action
->    selftests/tc-testings: add selftests for xt action
->    selftests/tc-testings: add connmark action deleting test case
->    selftests/tc-testings: add ife action deleting test case
->    selftests/tc-testings: add nat action deleting test case
->    selftests/tc-testings: add sample action deleting test case
->    selftests/tc-testings: add tunnel_key action deleting test case
-> 
->   .../tc-testing/tc-tests/actions/connmark.json |  50 +++
->   .../tc-testing/tc-tests/actions/ctinfo.json   | 316 ++++++++++++++++++
->   .../tc-testing/tc-tests/actions/gate.json     | 315 +++++++++++++++++
->   .../tc-testing/tc-tests/actions/ife.json      |  50 +++
->   .../tc-testing/tc-tests/actions/nat.json      |  50 +++
->   .../tc-testing/tc-tests/actions/sample.json   |  50 +++
->   .../tc-tests/actions/tunnel_key.json          |  50 +++
->   .../tc-testing/tc-tests/actions/xt.json       | 219 ++++++++++++
->   8 files changed, 1100 insertions(+)
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/ctinfo.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/gate.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/xt.json
-> 
 
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+
+On 9/9/22 12:41 PM, Dave Hansen wrote:
+> On 9/9/22 12:27, Kuppuswamy Sathyanarayanan wrote:
+>> +	u8 reserved[7] = {0};
+> ...
+>> +	if (!req.reportdata || !req.tdreport || req.subtype ||
+>> +		req.rpd_len != TDX_REPORTDATA_LEN ||
+>> +		req.tdr_len != TDX_REPORT_LEN ||
+>> +		memcmp(req.reserved, reserved, 7))
+>> +		return -EINVAL;
+> 
+> Huh, so to look for 0's, you:
+> 
+> 1. Declare an on-stack structure with a hard coded, magic numbered field
+>    that has to be zeroed.
+> 2. memcmp() that structure
+> 3. Feed memcmp() with another hard coded magic number
+> 
+> I've gotta ask: did you have any reservations writing this code?  Were
+> there any alarm bells going off saying that something might be wrong?
+> 
+> Using memcmp() itself is probably forgivable.  But, the two magic
+> numbers are pretty mortal sins in my book.  What's going to happen the
+> first moment someone wants to repurpose a reserved byte?  They're going
+> to do:
+> 
+> -	__u8 reserved[7];
+> +	__u8 my_new_byte;
+> +	__u8 reserved[6];
+> 
+> What's going to happen to the code you wrote?  Will it continue to work?
+>  Or will the memcmp() silently start doing crazy stuff as it overruns
+> the structure into garbage land?
+> 
+> What's wrong with:
+> 
+> 	memchr_inv(&req.reserved, sizeof(req.reserved), 0)
+
+I did not consider the hard coding issue. It is a mistake. Your suggestion
+looks better. I will use it.
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
