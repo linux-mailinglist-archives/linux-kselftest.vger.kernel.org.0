@@ -2,107 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9EB5B2E15
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 07:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE695B2F6A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 09:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiIIF0X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 01:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
+        id S230216AbiIIHBk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 03:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiIIF0W (ORCPT
+        with ESMTP id S230285AbiIIHBd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 01:26:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C78F125B12;
-        Thu,  8 Sep 2022 22:26:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 229A7B81AD8;
-        Fri,  9 Sep 2022 05:26:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CB1EC433D6;
-        Fri,  9 Sep 2022 05:26:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662701178;
-        bh=Xym8nFLz1doYxhLivSjmjBENQn3h/0+1UGRP2640huo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FNeBCKbkMaomtUhQZrSHqUijbnZ4bdUQ8JbJpI71pv04FLfRVOledJg1Eu2ph9zkO
-         jxVwGxIkiYn2Oy0bhQVHmSZF6uXOWky7R4ztux5+XhyicxCbYSkOKqgTTlV/eJUyLA
-         WEghLPcljutHXFUM5WW8nTb32hxhPHYCfGwI+9XM=
-Date:   Fri, 9 Sep 2022 07:26:16 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v12 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Message-ID: <YxrOeGqOrmsUNZ/6@kroah.com>
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220908002723.923241-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yxl+PE4A+WUfQ7bl@kroah.com>
- <6cf407ed-95c7-0db4-d581-b85efad13239@linux.intel.com>
- <ac10ec37-91c8-031e-b3d3-843eaf28f0ee@intel.com>
+        Fri, 9 Sep 2022 03:01:33 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFA0A9C3A;
+        Fri,  9 Sep 2022 00:01:29 -0700 (PDT)
+Date:   Fri, 9 Sep 2022 09:01:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662706887;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RWCELvBZAP7UK2m8DqFciqCKvSVVz5+g8uq2bLhQwA8=;
+        b=SwQYFx2gTSYfpujoytL1i5+wwGrG5ThpC5gpq83EFjxVv08IzH3LHBjo9RP/GlHkgGOw+H
+        HeeegsKUNc+JjU+Sv1kpinOYC8BKj8TSA5OHWn9vO1uwvGowpyeVAvU1Zev38vM91Nynir
+        A5iEQktvI19mNnzP4EwHBlASsW56ZUI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Vishal Annapurve <vannapurve@google.com>, x86 <x86@kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>, oupton@google.com,
+        peterx@redhat.com, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        drjones@redhat.com
+Subject: Re: [V1 PATCH 2/5] selftests: kvm: Introduce kvm_arch_main and
+ helpers
+Message-ID: <20220909070125.dtqfa6neq46fvns2@kamzik>
+References: <20220903012849.938069-1-vannapurve@google.com>
+ <20220903012849.938069-3-vannapurve@google.com>
+ <20220905074609.ga4tnpuxpcgppx4r@kamzik>
+ <CAGtprH9Kaemwupgoo_kgM-Ci2cnN2kpXa+ZwEymSnYNFhS9Fsg@mail.gmail.com>
+ <Yxpc8NDdtdOl9wpH@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ac10ec37-91c8-031e-b3d3-843eaf28f0ee@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yxpc8NDdtdOl9wpH@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 01:36:00PM -0700, Dave Hansen wrote:
-> On 9/8/22 12:07, Sathyanarayanan Kuppuswamy wrote:
-> > On 9/7/22 10:31 PM, Greg Kroah-Hartman wrote:
-> >> On Wed, Sep 07, 2022 at 05:27:20PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> >>> +	/*
-> >>> +	 * Per TDX Module 1.0 specification, section titled
-> >>> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
-> >>> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
-> >>> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as
-> >>> +	 * 0. Also check for valid user pointers.
-> >>> +	 */
-> >>> +	if (!req.reportdata || !req.tdreport || req.subtype ||
-> >>> +		req.rpd_len != TDX_REPORTDATA_LEN ||
-> >>> +		req.tdr_len != TDX_REPORT_LEN)
-> >>> +		return -EINVAL;
-> >> You never verify that your reserved[7] fields are actually set to 0,
-> >> which means you can never use them in the future :(
-> > Currently, we don't use those fields in our code. Why do we have to
-> > make sure they are set to zero?
+On Thu, Sep 08, 2022 at 02:21:52PM -0700, David Matlack wrote:
+> On Tue, Sep 06, 2022 at 03:46:20PM -0700, Vishal Annapurve wrote:
+> > On Mon, Sep 5, 2022 at 12:46 AM Andrew Jones <andrew.jones@linux.dev> wrote:
+> > >
+> > > On Sat, Sep 03, 2022 at 01:28:46AM +0000, Vishal Annapurve wrote:
+> > > > Introduce following APIs:
+> > > > 1) kvm_arch_main : to be called at the startup of each test.
+> > >
+> > > With this, AArch64 can move the content of its constructor,
+> > > init_guest_modes(), into kvm_arch_main(). Or, instead of the
+> > >
+> > >  main()
+> > >  {
+> > >     /* common main stuff */
+> > >     kvm_arch_main();
+> > >     __main();
+> > >  }
+> > >
+> > > approach we could have each arch provide a constructor
+> > >
+> > >  arch_init()
+> > >  {
+> > >     common_pre_main_stuff();
+> > >     /* arch specific pre-main stuff */
+> > >  }
+> > >
+> > > I personally prefer the latter.
+> > >
+> > 
+> > I agree with your suggestion of using constructors here. This will
+> > help avoid changes in all the selftests.
+> > Maybe I can add a common constructor that can invoke arch specific
+> > init. I will add this change in the next series.
 > 
-> Yes.
+> In case anyone else is confused like me: "constructor" refers to
+> __attribute__ ((constructor)), which causes the function to run before
+> main().
 > 
-> > Can't we add checks when we really use them in future?
+> I have a slight preference for having as few constructors as possible,
+> since they are somewhat subtle. So how about one constructor for all
+> selftests, e.g.:
 > 
-> No.
+> void __attribute__ ((constructor)) kvm_selftest_init(void)
+> {
+>         /* Tell stdout not to buffer its content. */
+>         setbuf(stdout, NULL);
 > 
-> This has been a hard learned lesson both by people writing software and
-> designing hardware interfaces: if you _let_ folks pass garbage you have
-> to _keep_ letting them pass garbage forever.  It becomes part of the ABI.
+>         kvm_selftest_arch_init();
+> }
 > 
-> I'm sorry you missed the memo on this one.  But, this is one million
-> percent a best practice across the industry.  Please do it.
+> Per-arch:
+> 
+> void kvm_selftest_arch_init(void)
+> {
+>         /* arch-specific pre-main stuff */
+> }
 
-And it's documented in the Documentation/ directory as a requirement to
-do as well, the memo shouldn't have been missed :(
+WFM and I think that's what Vishal was suggesting as well.
+
+Thanks,
+drew
