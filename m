@@ -2,92 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89675B2BC0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 03:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40895B2BE3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 03:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiIIBkb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Sep 2022 21:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        id S230085AbiIIBzz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Sep 2022 21:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIIBka (ORCPT
+        with ESMTP id S229985AbiIIBzy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Sep 2022 21:40:30 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777FC883FA;
-        Thu,  8 Sep 2022 18:40:24 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 78so191178pgb.13;
-        Thu, 08 Sep 2022 18:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=opMHbhzPWlzvUgAliFnJJB8yW1hajJahD6Wqj7mMbYk=;
-        b=Sn7iMixibbOE9yShth3gvVIUPI7UDKY8s0dY1SUuYERNVmaNK4pam9mtQVru2ljfZ9
-         wyaXJnaz+85JZXLuViTO/L4kJ4a89qAgJ2mg3mb95lTRVIbKxbw6Vobs310AGlkULNn3
-         2weWbQB93QiqbSduQDNGtnQkC3vk8r8ihXRZAkvSWsIfPeJgCD7WxvfLjdEFs2S7MMo2
-         F8YJJKxzZvUOXvkuSX9zqNYf2XQSB07UE3TAVeB3hC8LjvKMAEhHJU+4cQ5n6VnBu/2v
-         jQohsYQSF8I6q8y49bHijSrHx7zC0h8h38rZ704TChD5Ykby1ye3YiJpYW9ZxHQ8F6Rw
-         yxlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=opMHbhzPWlzvUgAliFnJJB8yW1hajJahD6Wqj7mMbYk=;
-        b=WEhNPhZj3SoCkVF5RhQVIPfJZdPWaRwkQJCZogSoS33jbWfjyWV1TpC6UouEc8lyuM
-         hijCB74yiqY4uOZbi+nfqLBOxdqhOkl9vrfoqzgA6NbQL8vpaRMQod+CMTp0thrJGL1t
-         93lGIQ0wJUwov+uSPZnqBWSEazeLrJeI7ZLkYLm16TsYOqmD7/o8pgMTwsaPy9XklDiH
-         S2zJuVi3QQ7TMGVJWK0MD/dVO3I29Mod/edWui+MxLbC8cB/OdcnsfJjFYMz4cqaeG7k
-         Uwq/5if3jHXSE2YxbuQ+q2tjuN923hcS7axlgitWfwF0aKImnU755VIYcSUEU+A2W+re
-         xDLw==
-X-Gm-Message-State: ACgBeo2J/pGSW9D0cYZzLR7xV/f1sNmwBJPzCLefUJMfw6EcDYCnYcVu
-        UAmO6AVyBQ5kAGYCuk7C15tYXB51fC0TNw==
-X-Google-Smtp-Source: AA6agR7Lb3R1nPNK7ief5X8jNpBPQ+MWDSH4uIIm1mvcJUyvI8lzhYnBzIC6Oi6NPjXF3cyOlop4ng==
-X-Received: by 2002:a63:d114:0:b0:429:f039:ccfc with SMTP id k20-20020a63d114000000b00429f039ccfcmr10311537pgg.95.1662687623767;
-        Thu, 08 Sep 2022 18:40:23 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-47.three.co.id. [116.206.28.47])
-        by smtp.gmail.com with ESMTPSA id y66-20020a636445000000b00421841943dfsm135078pgb.12.2022.09.08.18.40.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 18:40:23 -0700 (PDT)
-Message-ID: <d9c17e2a-48f4-e7fd-7cbb-c47e7cffcd72@gmail.com>
-Date:   Fri, 9 Sep 2022 08:40:17 +0700
+        Thu, 8 Sep 2022 21:55:54 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F474F18D;
+        Thu,  8 Sep 2022 18:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662688554; x=1694224554;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8ihrEr+mNY0MgHnxmzKiyanf1ZC65fntYv6pqfRRa5o=;
+  b=OzbGzywVhIX8p4ZFh+6WPn/YJ+VTvdiPWHCJgR/NDnxP+nbmZnHgKbua
+   dCYGuRuXJtNhtEOKyIXaR+PHYRTumyOtWqKcXVE1qyFPcYEAqVqblyND7
+   ntgGvUx/sBdflnL5iMAhk1KQ8e241p/cFG7PiqHW6RubAGasnyEaGSlbB
+   olFxkZ3dxghlAUjYeuQYDcT4DionREEqb7wmuSQAE1ew07CsYlVgBqwGs
+   bqDUOpTWZuvrQsJORJumiGnNEeRSgGYrve5F6sqApMEWqhZsmIyj8axpv
+   38hJontYOY0rfkjyfq8/Q5a8sGl4YJD/sIOKZEPfabrb82DQLUm2zePa0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="298710931"
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="298710931"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 18:55:53 -0700
+X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
+   d="scan'208";a="740892245"
+Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 18:55:53 -0700
+Message-ID: <e4b6f718-d671-72b3-4c4d-4338feba80a1@linux.intel.com>
+Date:   Thu, 8 Sep 2022 18:55:53 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [net-next v4 1/6] net: Documentation on QUIC kernel Tx crypto.
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport
+ support
 Content-Language: en-US
-To:     Adel Abouchaev <adel.abushaev@gmail.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, dsahern@kernel.org, shuah@kernel.org,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-References: <Adel Abouchaev <adel.abushaev@gmail.com>
- <20220909001238.3965798-1-adel.abushaev@gmail.com>
- <20220909001238.3965798-2-adel.abushaev@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220909001238.3965798-2-adel.abushaev@gmail.com>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Yxn5VDzJMUxSKz0Z@fedora>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Yxn5VDzJMUxSKz0Z@fedora>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/9/22 07:12, Adel Abouchaev wrote:
-> Add documentation for kernel QUIC code.
-> 
 
-LGTM, thanks.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+On 9/8/22 7:16 AM, Wander Lairson Costa wrote:
+> You can unconditionally define print_array_hex, and
+> use `if (DEBUG)` instead of #ifdef `DEBUG here`. The compiler
+> will get rid of the unused code when DEBUG is not defined
+> as expected, but you get the parser to validate it
+> independent of the definition of DEBUG.
+
+To avoid #ifdef DEBUG in multiple places, we can try following
+change. Let me know your comments.
+
+--- a/tools/testing/selftests/tdx/tdx_attest_test.c
+
++++ b/tools/testing/selftests/tdx/tdx_attest_test.c
+
+@@ -21,6 +21,14 @@
+
+ #define HEX_DUMP_SIZE  8
+
+ #define __packed       __attribute__((packed))
+
+ 
+
++static inline int _no_printf(const char *format, ...) { return 0; }
+
++
+
++#ifdef DEBUG
+
++#define pr_debug(...) printf(__VA_ARGS__)
+
++#else
+
++#define pr_debug(...) _no_printf(__VA_ARGS__)
+
++#endif
+
++
+
+ /*
+
+  * Trusted Execution Environment (TEE) report (TDREPORT_STRUCT) type,
+
+  * sub type and version. More details can be found in TDX v1.0 Module
+
+@@ -90,7 +98,6 @@ struct tdreport {
+
+        struct td_info tdinfo;
+
+ }  __packed;
+
+ 
+
+-#ifdef DEBUG
+
+ static void print_array_hex(const char *title, const char *prefix_str,
+
+                const void *buf, int len)
+
+ {
+
+@@ -100,17 +107,16 @@ static void print_array_hex(const char *title, const char *prefix_str,
+
+        if (!len || !buf)
+
+                return;
+
+ 
+
+-       printf("\t\t%s", title);
+
++       pr_debug("\t\t%s", title);
+
+ 
+
+        for (i = 0; i < len; i++) {
+
+                if (!(i % rowsize))
+
+-                       printf("\n%s%.8x:", prefix_str, i);
+
+-               printf(" %.2x", ptr[i]);
+
++                       pr_debug("\n%s%.8x:", prefix_str, i);
+
++               pr_debug(" %.2x", ptr[i]);
+
+        }
+
+ 
+
+-       printf("\n");
+
++       pr_debug("\n");
+
+ }
+
+-#endif
+
+ 
+
+ TEST(verify_report)
+
+ {
+
+@@ -139,13 +145,11 @@ TEST(verify_report)
+
+        /* Get TDREPORT */
+
+        ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
+
+ 
+
+-#ifdef DEBUG
+
+        print_array_hex("\n\t\tTDX report data\n", "",
+
+                        reportdata, sizeof(reportdata));
+
+ 
+
+        print_array_hex("\n\t\tTDX tdreport data\n", "",
+
+                        &tdreport, sizeof(tdreport));
+
+-#endif
+
+ 
+
+        /* Make sure TDREPORT data includes the REPORTDATA passed */
+
+        ASSERT_EQ(0, memcmp(&tdreport.reportmac.reportdata[0],
+
+
 
 -- 
-An old man doll... just what I always wanted! - Clara
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
