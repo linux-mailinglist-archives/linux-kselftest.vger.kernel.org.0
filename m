@@ -1,1562 +1,574 @@
 Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD8F5B2AE9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 02:13:56 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 4F64B5B2B87
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 03:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbiIIANy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Sep 2022 20:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S229899AbiIIB1k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Sep 2022 21:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiIIANH (ORCPT
+        with ESMTP id S229567AbiIIB1j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Sep 2022 20:13:07 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450BF9CCDC;
-        Thu,  8 Sep 2022 17:12:59 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id 9so253592plj.11;
-        Thu, 08 Sep 2022 17:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date;
-        bh=sl8Uzgrm3DCid/LWuaibxm9+1N/HnaWqjI+4AHmRzpc=;
-        b=YdUDGA1QsEFid8hcG9IMuFhibtzKCwo6mE63Vsq+hs36dMHXJSTL3KYkQuu9KlOUg0
-         YAmS9hRiBeOkpUj3QRtp0kVkrMSLJVxjHxybFmEW7n20XGR65mKRlhvdpVq5SBSiFvo2
-         bj//YBYpmvEptEE7IRVi/cXZMEIOzRBOnu1zEq0izaDjJzPDF4a9uPRr3eybR4oVLAWt
-         /czCb4tOEZ7KBsZ21aT9RaJxkk7jmhqzUoKJRPIJqkrYGI1+Kh+3+Edfhg7epiT9kOE0
-         emiemo0HZGGbtr1ng1GnN948VVMERCD2mWenxh42u0JV+bDJ8CAB9STRX0M/T7YnVn71
-         eMEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=sl8Uzgrm3DCid/LWuaibxm9+1N/HnaWqjI+4AHmRzpc=;
-        b=wkr90g0hJs7fwfr9+qwhZsi2D6o+dDdDUe/9VLHUju22aVK0QJk8eMi/UjzIQeASMd
-         MiHOslo9pVPTPPT4PGiACo8Ljg1LWlGe1ZETLBeMRy+pNsENfWPgSrnVhd6S9Sa0i9DN
-         lCgnV7swfHyoMD35GQdHoIVXAg6vrBJVlxsVZHS09RXG3toEBbEh7DqEC3GrJAJGvPvt
-         FUEHxB+vgIywhdbKfbz1SQiagEi4Udfg/KT1FTDn10wqQAN+QeqsmjHtkOjHkRBWXYaM
-         fO3ATQ1EuESjDkiZe09j/otWHpFAEsLMRSbOmC2ag+e+TiFxFh63YOJfq1Vgfxw1fEm4
-         y/xw==
-X-Gm-Message-State: ACgBeo0UQ3u458I1FvWTbYnrMbB+/YuDCpEohzVIYGu0Iv917Es5GaNi
-        zIvl65J+mk4WlsXL+yTDXKY=
-X-Google-Smtp-Source: AA6agR4+M0qv/Z6dl/sJXIu3q9HDCZL1dgnJkbL1p2NA3u99WjhIBiJTPzi1L9jIwOOv7bphLvbofw==
-X-Received: by 2002:a17:902:8307:b0:172:e611:491f with SMTP id bd7-20020a170902830700b00172e611491fmr11026310plb.111.1662682378880;
-        Thu, 08 Sep 2022 17:12:58 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-023.fbsv.net. [2a03:2880:ff:17::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 19-20020a630b13000000b0042c2def703asm61803pgl.22.2022.09.08.17.12.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 17:12:58 -0700 (PDT)
-From:   Adel Abouchaev <adel.abushaev@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, dsahern@kernel.org,
-        shuah@kernel.org, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [net-next v4 6/6] net: Add self tests for ULP operations, flow setup and crypto tests
-Date:   Thu,  8 Sep 2022 17:12:38 -0700
-Message-Id: <20220909001238.3965798-7-adel.abushaev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220909001238.3965798-1-adel.abushaev@gmail.com>
-References: <Adel Abouchaev <adel.abushaev@gmail.com>
- <20220909001238.3965798-1-adel.abushaev@gmail.com>
+        Thu, 8 Sep 2022 21:27:39 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FC61177A3;
+        Thu,  8 Sep 2022 18:27:36 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MNytm2sHfz14QXZ;
+        Fri,  9 Sep 2022 09:23:44 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 9 Sep
+ 2022 09:27:34 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <shuah@kernel.org>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next 0/8] add tc-testing test cases
+Date:   Fri, 9 Sep 2022 09:29:28 +0800
+Message-ID: <20220909012936.268433-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add self tests for ULP operations, flow setup and crypto tests.
+For this patchset, test cases of the ctinfo, gate, and xt action modules
+are added to the tc-testing test suite. Also add deleting test for
+connmark, ife, nat, sample and tunnel_key action modules.
 
-Signed-off-by: Adel Abouchaev <adel.abushaev@gmail.com>
+After a test case is added locally, the test result is as follows:
 
----
+./tdc.py -c action ctinfo
+considering category action
+considering category ctinfo
+Test c826: Add ctinfo action with default setting
+Test 0286: Add ctinfo action with dscp
+Test 4938: Add ctinfo action with valid cpmark and zone
+Test 7593: Add ctinfo action with drop control
+Test 2961: Replace ctinfo action zone and action control
+Test e567: Delete ctinfo action with valid index
+Test 6a91: Delete ctinfo action with invalid index
+Test 5232: List ctinfo actions
+Test 7702: Flush ctinfo actions
+Test 3201: Add ctinfo action with duplicate index
+Test 8295: Add ctinfo action with invalid index
+Test 3964: Replace ctinfo action with invalid goto_chain control
 
-Restored the test build. Changed the QUIC context reference variable
-names for the keys and iv to match the uAPI.
+All test results:
 
-Updated alignment, added SPDX license line.
+1..12
+ok 1 c826 - Add ctinfo action with default setting
+ok 2 0286 - Add ctinfo action with dscp
+ok 3 4938 - Add ctinfo action with valid cpmark and zone
+ok 4 7593 - Add ctinfo action with drop control
+ok 5 2961 - Replace ctinfo action zone and action control
+ok 6 e567 - Delete ctinfo action with valid index
+ok 7 6a91 - Delete ctinfo action with invalid index
+ok 8 5232 - List ctinfo actions
+ok 9 7702 - Flush ctinfo actions
+ok 10 3201 - Add ctinfo action with duplicate index
+ok 11 8295 - Add ctinfo action with invalid index
+ok 12 3964 - Replace ctinfo action with invalid goto_chain control
 
-v3: Added Chacha20-Poly1305 test.
-v3: Added test to fail sending with wrong key generation bit.
----
- tools/testing/selftests/net/.gitignore |    1 +
- tools/testing/selftests/net/Makefile   |    3 +-
- tools/testing/selftests/net/quic.c     | 1369 ++++++++++++++++++++++++
- tools/testing/selftests/net/quic.sh    |   46 +
- 4 files changed, 1418 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/quic.c
- create mode 100755 tools/testing/selftests/net/quic.sh
+./tdc.py -c action gate
+considering category gate
+considering category action
+Test 5153: Add gate action with priority and sched-entry
+Test 7189: Add gate action with base-time
+Test a721: Add gate action with cycle-time
+Test c029: Add gate action with cycle-time-ext
+Test 3719: Replace gate base-time action
+Test d821: Delete gate action with valid index
+Test 3128: Delete gate action with invalid index
+Test 7837: List gate actions
+Test 9273: Flush gate actions
+Test c829: Add gate action with duplicate index
+Test 3043: Add gate action with invalid index
+Test 2930: Add gate action with cookie
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 3d7adee7a3e6..78970a09d73c 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -14,6 +14,7 @@ nettest
- psock_fanout
- psock_snd
- psock_tpacket
-+quic
- reuseaddr_conflict
- reuseaddr_ports_exhausted
- reuseport_addr_any
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index f5ac1433c301..b4e9586a2d03 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -44,6 +44,7 @@ TEST_PROGS += arp_ndisc_untracked_subnets.sh
- TEST_PROGS += stress_reuseport_listen.sh
- TEST_PROGS += l2_tos_ttl_inherit.sh
- TEST_PROGS += bind_bhash.sh
-+TEST_PROGS += quic.sh
- TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
- TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
- TEST_GEN_FILES =  socket nettest
-@@ -59,7 +60,7 @@ TEST_GEN_FILES += ipsec
- TEST_GEN_FILES += ioam6_parser
- TEST_GEN_FILES += gro
- TEST_GEN_PROGS = reuseport_bpf reuseport_bpf_cpu reuseport_bpf_numa
--TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls tun tap
-+TEST_GEN_PROGS += reuseport_dualstack reuseaddr_conflict tls tun tap quic
- TEST_GEN_FILES += toeplitz
- TEST_GEN_FILES += cmsg_sender
- TEST_GEN_FILES += stress_reuseport_listen
-diff --git a/tools/testing/selftests/net/quic.c b/tools/testing/selftests/net/quic.c
-new file mode 100644
-index 000000000000..81285a6d9601
---- /dev/null
-+++ b/tools/testing/selftests/net/quic.c
-@@ -0,0 +1,1369 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <arpa/inet.h>
-+#include <errno.h>
-+#include <error.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <sched.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+
-+#include <linux/limits.h>
-+#include <linux/quic.h>
-+#include <linux/socket.h>
-+#include <linux/tls.h>
-+#include <linux/tcp.h>
-+#include <linux/types.h>
-+#include <linux/udp.h>
-+
-+#include <sys/ioctl.h>
-+#include <sys/types.h>
-+#include <sys/sendfile.h>
-+#include <sys/socket.h>
-+#include <sys/stat.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define UDP_ULP		105
-+
-+#ifndef SOL_UDP
-+#define SOL_UDP		17
-+#endif
-+
-+// 1. QUIC ULP Registration Test
-+
-+FIXTURE(quic_ulp)
-+{
-+	int sfd;
-+	socklen_t len_s;
-+	union {
-+		struct sockaddr_in addr;
-+		struct sockaddr_in6 addr6;
-+	} server;
-+	int default_net_ns_fd;
-+	int server_net_ns_fd;
-+};
-+
-+FIXTURE_VARIANT(quic_ulp)
-+{
-+	unsigned int af_server;
-+	char *server_address;
-+	unsigned short server_port;
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_ulp, ipv4)
-+{
-+	.af_server = AF_INET,
-+	.server_address = "10.0.0.2",
-+	.server_port = 7101,
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_ulp, ipv6)
-+{
-+	.af_server = AF_INET6,
-+	.server_address = "2001::2",
-+	.server_port = 7102,
-+};
-+
-+FIXTURE_SETUP(quic_ulp)
-+{
-+	char path[PATH_MAX];
-+	int optval = 1;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/ns/net", getpid());
-+	self->default_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->default_net_ns_fd, 0);
-+	strcpy(path, "/var/run/netns/ns2");
-+	self->server_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->server_net_ns_fd, 0);
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	self->sfd = socket(variant->af_server, SOCK_DGRAM, 0);
-+	ASSERT_NE(setsockopt(self->sfd, SOL_SOCKET, SO_REUSEPORT, &optval,
-+			     sizeof(optval)), -1);
-+	if (variant->af_server == AF_INET) {
-+		self->len_s = sizeof(self->server.addr);
-+		self->server.addr.sin_family = variant->af_server;
-+		inet_pton(variant->af_server, variant->server_address,
-+			  &self->server.addr.sin_addr);
-+		self->server.addr.sin_port = htons(variant->server_port);
-+		ASSERT_EQ(bind(self->sfd, &self->server.addr, self->len_s), 0);
-+		ASSERT_EQ(getsockname(self->sfd, &self->server.addr,
-+				      &self->len_s), 0);
-+	} else {
-+		self->len_s = sizeof(self->server.addr6);
-+		self->server.addr6.sin6_family = variant->af_server;
-+		inet_pton(variant->af_server, variant->server_address,
-+			  &self->server.addr6.sin6_addr);
-+		self->server.addr6.sin6_port = htons(variant->server_port);
-+		ASSERT_EQ(bind(self->sfd, &self->server.addr6, self->len_s), 0);
-+		ASSERT_EQ(getsockname(self->sfd, &self->server.addr6,
-+				      &self->len_s), 0);
-+	}
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+};
-+
-+FIXTURE_TEARDOWN(quic_ulp)
-+{
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	close(self->sfd);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+};
-+
-+TEST_F(quic_ulp, request_nonexistent_udp_ulp)
-+{
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_ULP,
-+			     "nonexistent", sizeof("nonexistent")), -1);
-+	// If UDP_ULP option is not present, the error would be ENOPROTOOPT.
-+	ASSERT_EQ(errno, ENOENT);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+};
-+
-+TEST_F(quic_ulp, request_quic_crypto_udp_ulp)
-+{
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_ULP,
-+			     "quic-crypto", sizeof("quic-crypto")), 0);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+};
-+
-+// 2. QUIC Data Path Operation Tests
-+
-+#define DO_NOT_SETUP_FLOW 0
-+#define SETUP_FLOW 1
-+
-+#define DO_NOT_USE_CLIENT 0
-+#define USE_CLIENT 1
-+
-+FIXTURE(quic_data)
-+{
-+	int sfd, c1fd, c2fd;
-+	socklen_t len_c1;
-+	socklen_t len_c2;
-+	socklen_t len_s;
-+
-+	union {
-+		struct sockaddr_in addr;
-+		struct sockaddr_in6 addr6;
-+	} client_1;
-+	union {
-+		struct sockaddr_in addr;
-+		struct sockaddr_in6 addr6;
-+	} client_2;
-+	union {
-+		struct sockaddr_in addr;
-+		struct sockaddr_in6 addr6;
-+	} server;
-+	int default_net_ns_fd;
-+	int client_1_net_ns_fd;
-+	int client_2_net_ns_fd;
-+	int server_net_ns_fd;
-+};
-+
-+FIXTURE_VARIANT(quic_data)
-+{
-+	unsigned int af_client_1;
-+	char *client_1_address;
-+	unsigned short client_1_port;
-+	uint8_t conn_id_1[8];
-+	uint8_t conn_1_key[16];
-+	uint8_t conn_1_iv[12];
-+	uint8_t conn_1_hdr_key[16];
-+	size_t conn_id_1_len;
-+	bool setup_flow_1;
-+	bool use_client_1;
-+	unsigned int af_client_2;
-+	char *client_2_address;
-+	unsigned short client_2_port;
-+	uint8_t conn_id_2[8];
-+	uint8_t conn_2_key[16];
-+	uint8_t conn_2_iv[12];
-+	uint8_t conn_2_hdr_key[16];
-+	size_t conn_id_2_len;
-+	bool setup_flow_2;
-+	bool use_client_2;
-+	unsigned int af_server;
-+	char *server_address;
-+	unsigned short server_port;
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_data, ipv4)
-+{
-+	.af_client_1 = AF_INET,
-+	.client_1_address = "10.0.0.1",
-+	.client_1_port = 6667,
-+	.conn_id_1 = {0x11, 0x12, 0x13, 0x14},
-+	.conn_id_1_len = 4,
-+	.setup_flow_1 = SETUP_FLOW,
-+	.use_client_1 = USE_CLIENT,
-+	.af_client_2 = AF_INET,
-+	.client_2_address = "10.0.0.3",
-+	.client_2_port = 6668,
-+	.conn_id_2 = {0x21, 0x22, 0x23, 0x24},
-+	.conn_id_2_len = 4,
-+	.setup_flow_2 = SETUP_FLOW,
-+	//.use_client_2 = USE_CLIENT,
-+	.af_server = AF_INET,
-+	.server_address = "10.0.0.2",
-+	.server_port = 6669,
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_data, ipv6_mapped_ipv4_two_conns)
-+{
-+	.af_client_1 = AF_INET6,
-+	.client_1_address = "::ffff:10.0.0.1",
-+	.client_1_port = 6670,
-+	.conn_id_1 = {0x11, 0x12, 0x13, 0x14},
-+	.conn_id_1_len = 4,
-+	.setup_flow_1 = SETUP_FLOW,
-+	.use_client_1 = USE_CLIENT,
-+	.af_client_2 = AF_INET6,
-+	.client_2_address = "::ffff:10.0.0.3",
-+	.client_2_port = 6671,
-+	.conn_id_2 = {0x21, 0x22, 0x23, 0x24},
-+	.conn_id_2_len = 4,
-+	.setup_flow_2 = SETUP_FLOW,
-+	.use_client_2 = USE_CLIENT,
-+	.af_server = AF_INET6,
-+	.server_address = "::ffff:10.0.0.2",
-+	.server_port = 6672,
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_data, ipv6_mapped_ipv4_setup_ipv4_one_conn)
-+{
-+	.af_client_1 = AF_INET,
-+	.client_1_address = "10.0.0.3",
-+	.client_1_port = 6676,
-+	.conn_id_1 = {0x11, 0x12, 0x13, 0x14},
-+	.conn_id_1_len = 4,
-+	.setup_flow_1 = SETUP_FLOW,
-+	.use_client_1 = DO_NOT_USE_CLIENT,
-+	.af_client_2 = AF_INET6,
-+	.client_2_address = "::ffff:10.0.0.3",
-+	.client_2_port = 6676,
-+	.conn_id_2 = {0x11, 0x12, 0x13, 0x14},
-+	.conn_id_2_len = 4,
-+	.setup_flow_2 = DO_NOT_SETUP_FLOW,
-+	.use_client_2 = USE_CLIENT,
-+	.af_server = AF_INET6,
-+	.server_address = "::ffff:10.0.0.2",
-+	.server_port = 6677,
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_data, ipv6_mapped_ipv4_setup_ipv6_one_conn)
-+{
-+	.af_client_1 = AF_INET6,
-+	.client_1_address = "::ffff:10.0.0.3",
-+	.client_1_port = 6678,
-+	.conn_id_1 = {0x11, 0x12, 0x13, 0x14},
-+	.setup_flow_1 = SETUP_FLOW,
-+	.use_client_1 = DO_NOT_USE_CLIENT,
-+	.af_client_2 = AF_INET,
-+	.client_2_address = "10.0.0.3",
-+	.client_2_port = 6678,
-+	.conn_id_2 = {0x11, 0x12, 0x13, 0x14},
-+	.setup_flow_2 = DO_NOT_SETUP_FLOW,
-+	.use_client_2 = USE_CLIENT,
-+	.af_server = AF_INET6,
-+	.server_address = "::ffff:10.0.0.2",
-+	.server_port = 6679,
-+};
-+
-+FIXTURE_SETUP(quic_data)
-+{
-+	char path[PATH_MAX];
-+	int optval = 1;
-+
-+	if (variant->af_client_1 == AF_INET) {
-+		self->len_c1 = sizeof(self->client_1.addr);
-+		self->client_1.addr.sin_family = variant->af_client_1;
-+		inet_pton(variant->af_client_1, variant->client_1_address,
-+			  &self->client_1.addr.sin_addr);
-+		self->client_1.addr.sin_port = htons(variant->client_1_port);
-+	} else {
-+		self->len_c1 = sizeof(self->client_1.addr6);
-+		self->client_1.addr6.sin6_family = variant->af_client_1;
-+		inet_pton(variant->af_client_1, variant->client_1_address,
-+			  &self->client_1.addr6.sin6_addr);
-+		self->client_1.addr6.sin6_port = htons(variant->client_1_port);
-+	}
-+
-+	if (variant->af_client_2 == AF_INET) {
-+		self->len_c2 = sizeof(self->client_2.addr);
-+		self->client_2.addr.sin_family = variant->af_client_2;
-+		inet_pton(variant->af_client_2, variant->client_2_address,
-+			  &self->client_2.addr.sin_addr);
-+		self->client_2.addr.sin_port = htons(variant->client_2_port);
-+	} else {
-+		self->len_c2 = sizeof(self->client_2.addr6);
-+		self->client_2.addr6.sin6_family = variant->af_client_2;
-+		inet_pton(variant->af_client_2, variant->client_2_address,
-+			  &self->client_2.addr6.sin6_addr);
-+		self->client_2.addr6.sin6_port = htons(variant->client_2_port);
-+	}
-+
-+	if (variant->af_server == AF_INET) {
-+		self->len_s = sizeof(self->server.addr);
-+		self->server.addr.sin_family = variant->af_server;
-+		inet_pton(variant->af_server, variant->server_address,
-+			  &self->server.addr.sin_addr);
-+		self->server.addr.sin_port = htons(variant->server_port);
-+	} else {
-+		self->len_s = sizeof(self->server.addr6);
-+		self->server.addr6.sin6_family = variant->af_server;
-+		inet_pton(variant->af_server, variant->server_address,
-+			  &self->server.addr6.sin6_addr);
-+		self->server.addr6.sin6_port = htons(variant->server_port);
-+	}
-+
-+	snprintf(path, sizeof(path), "/proc/%d/ns/net", getpid());
-+	self->default_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->default_net_ns_fd, 0);
-+	strcpy(path, "/var/run/netns/ns11");
-+	self->client_1_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->client_1_net_ns_fd, 0);
-+	strcpy(path, "/var/run/netns/ns12");
-+	self->client_2_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->client_2_net_ns_fd, 0);
-+	strcpy(path, "/var/run/netns/ns2");
-+	self->server_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->server_net_ns_fd, 0);
-+
-+	if (variant->use_client_1) {
-+		ASSERT_NE(setns(self->client_1_net_ns_fd, 0), -1);
-+		self->c1fd = socket(variant->af_client_1, SOCK_DGRAM, 0);
-+		ASSERT_NE(setsockopt(self->c1fd, SOL_SOCKET, SO_REUSEPORT,
-+				     &optval, sizeof(optval)), -1);
-+		if (variant->af_client_1 == AF_INET) {
-+			ASSERT_EQ(bind(self->c1fd, &self->client_1.addr,
-+				       self->len_c1), 0);
-+			ASSERT_EQ(getsockname(self->c1fd, &self->client_1.addr,
-+					      &self->len_c1), 0);
-+		} else {
-+			ASSERT_EQ(bind(self->c1fd, &self->client_1.addr6,
-+				       self->len_c1), 0);
-+			ASSERT_EQ(getsockname(self->c1fd, &self->client_1.addr6,
-+					      &self->len_c1), 0);
-+		}
-+	}
-+
-+	if (variant->use_client_2) {
-+		ASSERT_NE(setns(self->client_2_net_ns_fd, 0), -1);
-+		self->c2fd = socket(variant->af_client_2, SOCK_DGRAM, 0);
-+		ASSERT_NE(setsockopt(self->c2fd, SOL_SOCKET, SO_REUSEPORT,
-+				     &optval, sizeof(optval)), -1);
-+		if (variant->af_client_2 == AF_INET) {
-+			ASSERT_EQ(bind(self->c2fd, &self->client_2.addr,
-+				       self->len_c2), 0);
-+			ASSERT_EQ(getsockname(self->c2fd, &self->client_2.addr,
-+					      &self->len_c2), 0);
-+		} else {
-+			ASSERT_EQ(bind(self->c2fd, &self->client_2.addr6,
-+				       self->len_c2), 0);
-+			ASSERT_EQ(getsockname(self->c2fd, &self->client_2.addr6,
-+					      &self->len_c2), 0);
-+		}
-+	}
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	self->sfd = socket(variant->af_server, SOCK_DGRAM, 0);
-+	ASSERT_NE(setsockopt(self->sfd, SOL_SOCKET, SO_REUSEPORT, &optval,
-+			     sizeof(optval)), -1);
-+	if (variant->af_server == AF_INET) {
-+		ASSERT_EQ(bind(self->sfd, &self->server.addr, self->len_s), 0);
-+		ASSERT_EQ(getsockname(self->sfd, &self->server.addr,
-+				      &self->len_s), 0);
-+	} else {
-+		ASSERT_EQ(bind(self->sfd, &self->server.addr6, self->len_s), 0);
-+		ASSERT_EQ(getsockname(self->sfd, &self->server.addr6,
-+				      &self->len_s), 0);
-+	}
-+
-+	ASSERT_EQ(setsockopt(self->sfd, IPPROTO_UDP, UDP_ULP,
-+			     "quic-crypto", sizeof("quic-crypto")), 0);
-+
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+}
-+
-+FIXTURE_TEARDOWN(quic_data)
-+{
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	close(self->sfd);
-+	ASSERT_NE(setns(self->client_1_net_ns_fd, 0), -1);
-+	close(self->c1fd);
-+	ASSERT_NE(setns(self->client_2_net_ns_fd, 0), -1);
-+	close(self->c2fd);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+}
-+
-+TEST_F(quic_data, send_fail_no_flow)
-+{
-+	char const *test_str = "test_read";
-+	int send_len = 10;
-+
-+	ASSERT_EQ(strlen(test_str) + 1, send_len);
-+	EXPECT_EQ(sendto(self->sfd, test_str, send_len, 0,
-+			 &self->client_1.addr, self->len_c1), -1);
-+};
-+
-+TEST_F(quic_data, fail_wrong_key_generation_bit)
-+{
-+	size_t cmsg_tx_len = sizeof(struct quic_tx_ancillary_data);
-+	uint8_t cmsg_buf[CMSG_SPACE(cmsg_tx_len)];
-+	struct quic_connection_info conn_1_info;
-+	struct quic_connection_info conn_2_info;
-+	struct quic_tx_ancillary_data *anc_data;
-+	struct cmsghdr *cmsg_hdr;
-+	int frag_size = 1200;
-+	struct iovec iov[2];
-+	int msg_len = 4500;
-+	struct msghdr msg;
-+	char *test_str_1;
-+	char *test_str_2;
-+	char *buf_1;
-+	char *buf_2;
-+	int i;
-+
-+	test_str_1 = (char *)malloc(9000);
-+	test_str_2 = (char *)malloc(9000);
-+	memset(test_str_1, 0, 9000);
-+	memset(test_str_2, 0, 9000);
-+
-+	buf_1 = (char *)malloc(10000);
-+	buf_2 = (char *)malloc(10000);
-+	for (i = 0; i < 9000; i += (1200 - 16)) {
-+		test_str_1[i] = 0x44;
-+		memcpy(&test_str_1[i + 1], &variant->conn_id_1,
-+		       variant->conn_id_1_len);
-+		test_str_1[i + 1 + variant->conn_id_1_len] = 0xca;
-+
-+		test_str_2[i] = 0x44;
-+		memcpy(&test_str_2[i + 1], &variant->conn_id_2,
-+		       variant->conn_id_2_len);
-+		test_str_2[i + 1 + variant->conn_id_2_len] = 0xca;
-+	}
-+
-+	// program the connection into the offload
-+	conn_1_info.cipher_type = TLS_CIPHER_AES_GCM_128;
-+	memset(&conn_1_info.key, 0, sizeof(struct quic_connection_info_key));
-+	conn_1_info.key.dst_conn_id_length = variant->conn_id_1_len;
-+	memcpy(conn_1_info.key.dst_conn_id,
-+	       &variant->conn_id_1,
-+	       variant->conn_id_1_len);
-+	conn_1_info.conn_payload_key_gen = 0;
-+
-+	if (self->client_1.addr.sin_family == AF_INET) {
-+		memcpy(&conn_1_info.key.addr.ipv4_addr,
-+		       &self->client_1.addr.sin_addr, sizeof(struct in_addr));
-+		conn_1_info.key.udp_port = self->client_1.addr.sin_port;
-+	} else {
-+		memcpy(&conn_1_info.key.addr.ipv6_addr,
-+		       &self->client_1.addr6.sin6_addr,
-+		       sizeof(struct in6_addr));
-+		conn_1_info.key.udp_port = self->client_1.addr6.sin6_port;
-+	}
-+
-+	conn_2_info.cipher_type = TLS_CIPHER_AES_GCM_128;
-+	memset(&conn_2_info.key, 0, sizeof(struct quic_connection_info_key));
-+	conn_2_info.key.dst_conn_id_length = variant->conn_id_2_len;
-+	memcpy(conn_2_info.key.dst_conn_id,
-+	       &variant->conn_id_2,
-+	       variant->conn_id_2_len);
-+	conn_2_info.conn_payload_key_gen = 0;
-+
-+	if (self->client_2.addr.sin_family == AF_INET) {
-+		memcpy(&conn_2_info.key.addr.ipv4_addr,
-+		       &self->client_2.addr.sin_addr, sizeof(struct in_addr));
-+		conn_2_info.key.udp_port = self->client_2.addr.sin_port;
-+	} else {
-+		memcpy(&conn_2_info.key.addr.ipv6_addr,
-+		       &self->client_2.addr6.sin6_addr,
-+		       sizeof(struct in6_addr));
-+		conn_2_info.key.udp_port = self->client_2.addr6.sin6_port;
-+	}
-+
-+	memcpy(&conn_1_info.aes_gcm_128.payload_key,
-+	       &variant->conn_1_key, 16);
-+	memcpy(&conn_1_info.aes_gcm_128.payload_iv,
-+	       &variant->conn_1_iv, 12);
-+	memcpy(&conn_1_info.aes_gcm_128.header_key,
-+	       &variant->conn_1_hdr_key, 16);
-+	memcpy(&conn_2_info.aes_gcm_128.payload_key,
-+	       &variant->conn_2_key, 16);
-+	memcpy(&conn_2_info.aes_gcm_128.payload_iv,
-+	       &variant->conn_2_iv, 12);
-+	memcpy(&conn_2_info.aes_gcm_128.header_key,
-+	       &variant->conn_2_hdr_key,
-+	       16);
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
-+			     sizeof(frag_size)), 0);
-+
-+	if (variant->setup_flow_1)
-+		ASSERT_EQ(setsockopt(self->sfd, SOL_UDP,
-+				     UDP_QUIC_ADD_TX_CONNECTION,
-+				     &conn_1_info, sizeof(conn_1_info)), 0);
-+
-+	if (variant->setup_flow_2)
-+		ASSERT_EQ(setsockopt(self->sfd, SOL_UDP,
-+				     UDP_QUIC_ADD_TX_CONNECTION,
-+				     &conn_2_info, sizeof(conn_2_info)), 0);
-+
-+	iov[0].iov_base = test_str_1;
-+	iov[0].iov_len = msg_len;
-+	iov[1].iov_base = (void *)test_str_1 + 4500;
-+	iov[1].iov_len = msg_len;
-+
-+	msg.msg_name = (self->client_1.addr.sin_family == AF_INET)
-+		       ? (void *)&self->client_1.addr
-+		       : (void *)&self->client_1.addr6;
-+	msg.msg_namelen = self->len_c1;
-+	msg.msg_iov = iov;
-+	msg.msg_iovlen = 2;
-+	msg.msg_control = cmsg_buf;
-+	msg.msg_controllen = sizeof(cmsg_buf);
-+	cmsg_hdr = CMSG_FIRSTHDR(&msg);
-+	cmsg_hdr->cmsg_level = IPPROTO_UDP;
-+	cmsg_hdr->cmsg_type = UDP_QUIC_ENCRYPT;
-+	cmsg_hdr->cmsg_len = CMSG_LEN(cmsg_tx_len);
-+	anc_data = (struct quic_tx_ancillary_data *)CMSG_DATA(cmsg_hdr);
-+	anc_data->next_pkt_num = 0x0d65c9;
-+	anc_data->flags = 0;
-+	anc_data->dst_conn_id_length = variant->conn_id_1_len;
-+
-+	if (variant->use_client_1)
-+		EXPECT_EQ(sendmsg(self->sfd, &msg, 0), -1);
-+
-+	iov[0].iov_base = test_str_2;
-+	iov[0].iov_len = msg_len;
-+	iov[1].iov_base = (void *)test_str_2 + 4500;
-+	iov[1].iov_len = msg_len;
-+	msg.msg_name = (self->client_2.addr.sin_family == AF_INET)
-+		       ? (void *)&self->client_2.addr
-+		       : (void *)&self->client_2.addr6;
-+	msg.msg_namelen = self->len_c2;
-+	cmsg_hdr = CMSG_FIRSTHDR(&msg);
-+	anc_data = (struct quic_tx_ancillary_data *)CMSG_DATA(cmsg_hdr);
-+	anc_data->next_pkt_num = 0x0d65c9;
-+	anc_data->dst_conn_id_length = variant->conn_id_2_len;
-+	anc_data->flags = 0;
-+
-+	if (variant->use_client_2)
-+		EXPECT_EQ(sendmsg(self->sfd, &msg, 0), -1);
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	if (variant->setup_flow_1) {
-+		ASSERT_EQ(setsockopt(self->sfd, SOL_UDP,
-+				     UDP_QUIC_DEL_TX_CONNECTION,
-+				     &conn_1_info, sizeof(conn_1_info)),
-+			  0);
-+	}
-+	if (variant->setup_flow_2) {
-+		ASSERT_EQ(setsockopt(self->sfd, SOL_UDP,
-+				     UDP_QUIC_DEL_TX_CONNECTION,
-+				     &conn_2_info, sizeof(conn_2_info)),
-+			  0);
-+	}
-+	free(test_str_1);
-+	free(test_str_2);
-+	free(buf_1);
-+	free(buf_2);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+}
-+
-+TEST_F(quic_data, encrypt_two_conn_gso_1200_iov_2_size_9000_aesgcm128)
-+{
-+	size_t cmsg_tx_len = sizeof(struct quic_tx_ancillary_data);
-+	uint8_t cmsg_buf[CMSG_SPACE(cmsg_tx_len)];
-+	struct quic_connection_info conn_1_info;
-+	struct quic_connection_info conn_2_info;
-+	struct quic_tx_ancillary_data *anc_data;
-+	socklen_t recv_addr_len_1;
-+	socklen_t recv_addr_len_2;
-+	struct cmsghdr *cmsg_hdr;
-+	int frag_size = 1200;
-+	int send_len = 9000;
-+	struct iovec iov[2];
-+	int msg_len = 4500;
-+	struct msghdr msg;
-+	char *test_str_1;
-+	char *test_str_2;
-+	char *buf_1;
-+	char *buf_2;
-+	int i;
-+
-+	test_str_1 = (char *)malloc(9000);
-+	test_str_2 = (char *)malloc(9000);
-+	memset(test_str_1, 0, 9000);
-+	memset(test_str_2, 0, 9000);
-+
-+	buf_1 = (char *)malloc(10000);
-+	buf_2 = (char *)malloc(10000);
-+	for (i = 0; i < 9000; i += (1200 - 16)) {
-+		test_str_1[i] = 0x40;
-+		memcpy(&test_str_1[i + 1], &variant->conn_id_1,
-+		       variant->conn_id_1_len);
-+		test_str_1[i + 1 + variant->conn_id_1_len] = 0xca;
-+
-+		test_str_2[i] = 0x40;
-+		memcpy(&test_str_2[i + 1], &variant->conn_id_2,
-+		       variant->conn_id_2_len);
-+		test_str_2[i + 1 + variant->conn_id_2_len] = 0xca;
-+	}
-+
-+	// program the connection into the offload
-+	conn_1_info.cipher_type = TLS_CIPHER_AES_GCM_128;
-+	memset(&conn_1_info.key, 0, sizeof(struct quic_connection_info_key));
-+	conn_1_info.key.dst_conn_id_length = variant->conn_id_1_len;
-+	memcpy(conn_1_info.key.dst_conn_id,
-+	       &variant->conn_id_1,
-+	       variant->conn_id_1_len);
-+	conn_1_info.conn_payload_key_gen = 0;
-+
-+	if (self->client_1.addr.sin_family == AF_INET) {
-+		memcpy(&conn_1_info.key.addr.ipv4_addr,
-+		       &self->client_1.addr.sin_addr, sizeof(struct in_addr));
-+		conn_1_info.key.udp_port = self->client_1.addr.sin_port;
-+	} else {
-+		memcpy(&conn_1_info.key.addr.ipv6_addr,
-+		       &self->client_1.addr6.sin6_addr,
-+		       sizeof(struct in6_addr));
-+		conn_1_info.key.udp_port = self->client_1.addr6.sin6_port;
-+	}
-+
-+	conn_2_info.cipher_type = TLS_CIPHER_AES_GCM_128;
-+	memset(&conn_2_info.key, 0, sizeof(struct quic_connection_info_key));
-+	conn_2_info.key.dst_conn_id_length = variant->conn_id_2_len;
-+	memcpy(conn_2_info.key.dst_conn_id,
-+	       &variant->conn_id_2,
-+	       variant->conn_id_2_len);
-+	conn_2_info.conn_payload_key_gen = 0;
-+
-+	if (self->client_2.addr.sin_family == AF_INET) {
-+		memcpy(&conn_2_info.key.addr.ipv4_addr,
-+		       &self->client_2.addr.sin_addr, sizeof(struct in_addr));
-+		conn_2_info.key.udp_port = self->client_2.addr.sin_port;
-+	} else {
-+		memcpy(&conn_2_info.key.addr.ipv6_addr,
-+		       &self->client_2.addr6.sin6_addr,
-+		       sizeof(struct in6_addr));
-+		conn_2_info.key.udp_port = self->client_2.addr6.sin6_port;
-+	}
-+
-+	memcpy(&conn_1_info.aes_gcm_128.payload_key,
-+	       &variant->conn_1_key, 16);
-+	memcpy(&conn_1_info.aes_gcm_128.payload_iv,
-+	       &variant->conn_1_iv, 12);
-+	memcpy(&conn_1_info.aes_gcm_128.header_key,
-+	       &variant->conn_1_hdr_key, 16);
-+	memcpy(&conn_2_info.aes_gcm_128.payload_key,
-+	       &variant->conn_2_key, 16);
-+	memcpy(&conn_2_info.aes_gcm_128.payload_iv,
-+	       &variant->conn_2_iv, 12);
-+	memcpy(&conn_2_info.aes_gcm_128.header_key,
-+	       &variant->conn_2_hdr_key,
-+	       16);
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
-+			     sizeof(frag_size)), 0);
-+
-+	if (variant->setup_flow_1)
-+		ASSERT_EQ(setsockopt(self->sfd, SOL_UDP,
-+				     UDP_QUIC_ADD_TX_CONNECTION,
-+				     &conn_1_info, sizeof(conn_1_info)), 0);
-+
-+	if (variant->setup_flow_2)
-+		ASSERT_EQ(setsockopt(self->sfd, SOL_UDP,
-+				     UDP_QUIC_ADD_TX_CONNECTION,
-+				     &conn_2_info, sizeof(conn_2_info)), 0);
-+
-+	recv_addr_len_1 = self->len_c1;
-+	recv_addr_len_2 = self->len_c2;
-+
-+	iov[0].iov_base = test_str_1;
-+	iov[0].iov_len = msg_len;
-+	iov[1].iov_base = (void *)test_str_1 + 4500;
-+	iov[1].iov_len = msg_len;
-+
-+	msg.msg_name = (self->client_1.addr.sin_family == AF_INET)
-+		       ? (void *)&self->client_1.addr
-+		       : (void *)&self->client_1.addr6;
-+	msg.msg_namelen = self->len_c1;
-+	msg.msg_iov = iov;
-+	msg.msg_iovlen = 2;
-+	msg.msg_control = cmsg_buf;
-+	msg.msg_controllen = sizeof(cmsg_buf);
-+	cmsg_hdr = CMSG_FIRSTHDR(&msg);
-+	cmsg_hdr->cmsg_level = IPPROTO_UDP;
-+	cmsg_hdr->cmsg_type = UDP_QUIC_ENCRYPT;
-+	cmsg_hdr->cmsg_len = CMSG_LEN(cmsg_tx_len);
-+	anc_data = (struct quic_tx_ancillary_data *)CMSG_DATA(cmsg_hdr);
-+	anc_data->next_pkt_num = 0x0d65c9;
-+	anc_data->flags = 0;
-+	anc_data->dst_conn_id_length = variant->conn_id_1_len;
-+
-+	if (variant->use_client_1)
-+		EXPECT_EQ(sendmsg(self->sfd, &msg, 0), send_len);
-+
-+	iov[0].iov_base = test_str_2;
-+	iov[0].iov_len = msg_len;
-+	iov[1].iov_base = (void *)test_str_2 + 4500;
-+	iov[1].iov_len = msg_len;
-+	msg.msg_name = (self->client_2.addr.sin_family == AF_INET)
-+		       ? (void *)&self->client_2.addr
-+		       : (void *)&self->client_2.addr6;
-+	msg.msg_namelen = self->len_c2;
-+	cmsg_hdr = CMSG_FIRSTHDR(&msg);
-+	anc_data = (struct quic_tx_ancillary_data *)CMSG_DATA(cmsg_hdr);
-+	anc_data->next_pkt_num = 0x0d65c9;
-+	anc_data->dst_conn_id_length = variant->conn_id_2_len;
-+	anc_data->flags = 0;
-+
-+	if (variant->use_client_2)
-+		EXPECT_EQ(sendmsg(self->sfd, &msg, 0), send_len);
-+
-+	if (variant->use_client_1) {
-+		ASSERT_NE(setns(self->client_1_net_ns_fd, 0), -1);
-+		if (variant->af_client_1 == AF_INET) {
-+			for (i = 0; i < 7; ++i) {
-+				EXPECT_EQ(recvfrom(self->c1fd, buf_1, 9000, 0,
-+						   &self->client_1.addr,
-+						   &recv_addr_len_1),
-+					  1200);
-+				// Validate framing is intact.
-+				EXPECT_EQ(memcmp((void *)buf_1 + 1,
-+						 &variant->conn_id_1,
-+						 variant->conn_id_1_len), 0);
-+			}
-+			EXPECT_EQ(recvfrom(self->c1fd, buf_1, 9000, 0,
-+					   &self->client_1.addr,
-+					   &recv_addr_len_1),
-+				  728);
-+			EXPECT_EQ(memcmp((void *)buf_1 + 1,
-+					 &variant->conn_id_1,
-+					 variant->conn_id_1_len), 0);
-+		} else {
-+			for (i = 0; i < 7; ++i) {
-+				EXPECT_EQ(recvfrom(self->c1fd, buf_1, 9000, 0,
-+						   &self->client_1.addr6,
-+						   &recv_addr_len_1),
-+					1200);
-+			}
-+			EXPECT_EQ(recvfrom(self->c1fd, buf_1, 9000, 0,
-+					   &self->client_1.addr6,
-+					   &recv_addr_len_1),
-+				  728);
-+			EXPECT_EQ(memcmp((void *)buf_1 + 1,
-+					 &variant->conn_id_1,
-+					 variant->conn_id_1_len), 0);
-+		}
-+		EXPECT_NE(memcmp(buf_1, test_str_1, send_len), 0);
-+	}
-+
-+	if (variant->use_client_2) {
-+		ASSERT_NE(setns(self->client_2_net_ns_fd, 0), -1);
-+		if (variant->af_client_2 == AF_INET) {
-+			for (i = 0; i < 7; ++i) {
-+				EXPECT_EQ(recvfrom(self->c2fd, buf_2, 9000, 0,
-+						   &self->client_2.addr,
-+						   &recv_addr_len_2),
-+					  1200);
-+				EXPECT_EQ(memcmp((void *)buf_2 + 1,
-+						 &variant->conn_id_2,
-+						 variant->conn_id_2_len), 0);
-+			}
-+			EXPECT_EQ(recvfrom(self->c2fd, buf_2, 9000, 0,
-+					   &self->client_2.addr,
-+					   &recv_addr_len_2),
-+				  728);
-+			EXPECT_EQ(memcmp((void *)buf_2 + 1,
-+					 &variant->conn_id_2,
-+					 variant->conn_id_2_len), 0);
-+		} else {
-+			for (i = 0; i < 7; ++i) {
-+				EXPECT_EQ(recvfrom(self->c2fd, buf_2, 9000, 0,
-+						   &self->client_2.addr6,
-+						   &recv_addr_len_2),
-+					  1200);
-+				EXPECT_EQ(memcmp((void *)buf_2 + 1,
-+						 &variant->conn_id_2,
-+						 variant->conn_id_2_len), 0);
-+			}
-+			EXPECT_EQ(recvfrom(self->c2fd, buf_2, 9000, 0,
-+					   &self->client_2.addr6,
-+					   &recv_addr_len_2),
-+				  728);
-+			EXPECT_EQ(memcmp((void *)buf_2 + 1,
-+					 &variant->conn_id_2,
-+					 variant->conn_id_2_len), 0);
-+		}
-+		EXPECT_NE(memcmp(buf_2, test_str_2, send_len), 0);
-+	}
-+
-+	if (variant->use_client_1 && variant->use_client_2)
-+		EXPECT_NE(memcmp(buf_1, buf_2, send_len), 0);
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	if (variant->setup_flow_1) {
-+		ASSERT_EQ(setsockopt(self->sfd, SOL_UDP,
-+				     UDP_QUIC_DEL_TX_CONNECTION,
-+				     &conn_1_info, sizeof(conn_1_info)),
-+			  0);
-+	}
-+	if (variant->setup_flow_2) {
-+		ASSERT_EQ(setsockopt(self->sfd, SOL_UDP,
-+				     UDP_QUIC_DEL_TX_CONNECTION,
-+				     &conn_2_info, sizeof(conn_2_info)),
-+			  0);
-+	}
-+	free(test_str_1);
-+	free(test_str_2);
-+	free(buf_1);
-+	free(buf_2);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+}
-+
-+// 3. QUIC Encryption Tests
-+
-+FIXTURE(quic_crypto)
-+{
-+	int sfd, cfd;
-+	socklen_t len_c;
-+	socklen_t len_s;
-+	union {
-+		struct sockaddr_in addr;
-+		struct sockaddr_in6 addr6;
-+	} client;
-+	union {
-+		struct sockaddr_in addr;
-+		struct sockaddr_in6 addr6;
-+	} server;
-+	int default_net_ns_fd;
-+	int client_net_ns_fd;
-+	int server_net_ns_fd;
-+};
-+
-+FIXTURE_VARIANT(quic_crypto)
-+{
-+	unsigned int af_client;
-+	char *client_address;
-+	unsigned short client_port;
-+	uint32_t algo;
-+	size_t conn_key_len;
-+	uint8_t conn_id[8];
-+	union {
-+		uint8_t conn_key_16[16];
-+		uint8_t conn_key_32[32];
-+	} conn_key;
-+	uint8_t conn_iv[12];
-+	union {
-+		uint8_t conn_hdr_key_16[16];
-+		uint8_t conn_hdr_key_32[32];
-+	} conn_hdr_key;
-+	size_t conn_id_len;
-+	bool setup_flow;
-+	bool use_client;
-+	unsigned int af_server;
-+	char *server_address;
-+	unsigned short server_port;
-+	char plain[128];
-+	size_t plain_len;
-+	char match[128];
-+	size_t match_len;
-+	uint32_t next_pkt_num;
-+};
-+
-+FIXTURE_SETUP(quic_crypto)
-+{
-+	char path[PATH_MAX];
-+	int optval = 1;
-+
-+	if (variant->af_client == AF_INET) {
-+		self->len_c = sizeof(self->client.addr);
-+		self->client.addr.sin_family = variant->af_client;
-+		inet_pton(variant->af_client, variant->client_address,
-+			  &self->client.addr.sin_addr);
-+		self->client.addr.sin_port = htons(variant->client_port);
-+	} else {
-+		self->len_c = sizeof(self->client.addr6);
-+		self->client.addr6.sin6_family = variant->af_client;
-+		inet_pton(variant->af_client, variant->client_address,
-+			  &self->client.addr6.sin6_addr);
-+		self->client.addr6.sin6_port = htons(variant->client_port);
-+	}
-+
-+	if (variant->af_server == AF_INET) {
-+		self->len_s = sizeof(self->server.addr);
-+		self->server.addr.sin_family = variant->af_server;
-+		inet_pton(variant->af_server, variant->server_address,
-+			  &self->server.addr.sin_addr);
-+		self->server.addr.sin_port = htons(variant->server_port);
-+	} else {
-+		self->len_s = sizeof(self->server.addr6);
-+		self->server.addr6.sin6_family = variant->af_server;
-+		inet_pton(variant->af_server, variant->server_address,
-+			  &self->server.addr6.sin6_addr);
-+		self->server.addr6.sin6_port = htons(variant->server_port);
-+	}
-+
-+	snprintf(path, sizeof(path), "/proc/%d/ns/net", getpid());
-+	self->default_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->default_net_ns_fd, 0);
-+	strcpy(path, "/var/run/netns/ns11");
-+	self->client_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->client_net_ns_fd, 0);
-+	strcpy(path, "/var/run/netns/ns2");
-+	self->server_net_ns_fd = open(path, O_RDONLY);
-+	ASSERT_GE(self->server_net_ns_fd, 0);
-+
-+	if (variant->use_client) {
-+		ASSERT_NE(setns(self->client_net_ns_fd, 0), -1);
-+		self->cfd = socket(variant->af_client, SOCK_DGRAM, 0);
-+		ASSERT_NE(setsockopt(self->cfd, SOL_SOCKET, SO_REUSEPORT,
-+				     &optval, sizeof(optval)), -1);
-+		if (variant->af_client == AF_INET) {
-+			ASSERT_EQ(bind(self->cfd, &self->client.addr,
-+				       self->len_c), 0);
-+			ASSERT_EQ(getsockname(self->cfd, &self->client.addr,
-+					      &self->len_c), 0);
-+		} else {
-+			ASSERT_EQ(bind(self->cfd, &self->client.addr6,
-+				       self->len_c), 0);
-+			ASSERT_EQ(getsockname(self->cfd, &self->client.addr6,
-+					      &self->len_c), 0);
-+		}
-+	}
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	self->sfd = socket(variant->af_server, SOCK_DGRAM, 0);
-+	ASSERT_NE(setsockopt(self->sfd, SOL_SOCKET, SO_REUSEPORT, &optval,
-+			     sizeof(optval)), -1);
-+	if (variant->af_server == AF_INET) {
-+		ASSERT_EQ(bind(self->sfd, &self->server.addr, self->len_s), 0);
-+		ASSERT_EQ(getsockname(self->sfd, &self->server.addr,
-+				      &self->len_s),
-+			  0);
-+	} else {
-+		ASSERT_EQ(bind(self->sfd, &self->server.addr6, self->len_s), 0);
-+		ASSERT_EQ(getsockname(self->sfd, &self->server.addr6,
-+				      &self->len_s),
-+			  0);
-+	}
-+
-+	ASSERT_EQ(setsockopt(self->sfd, IPPROTO_UDP, UDP_ULP,
-+			     "quic-crypto", sizeof("quic-crypto")), 0);
-+
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+}
-+
-+FIXTURE_TEARDOWN(quic_crypto)
-+{
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	close(self->sfd);
-+	ASSERT_NE(setns(self->client_net_ns_fd, 0), -1);
-+	close(self->cfd);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+}
-+
-+FIXTURE_VARIANT_ADD(quic_crypto, ipv4_aes_gcm_128)
-+{
-+	.af_client = AF_INET,
-+	.client_address = "10.0.0.1",
-+	.client_port = 7667,
-+	.algo = TLS_CIPHER_AES_GCM_128,
-+	.conn_key_len = 16,
-+	.conn_id = {0x08, 0x6b, 0xbf, 0x88, 0x82, 0xb9, 0x12, 0x49},
-+	.conn_key = {
-+		.conn_key_16 = {0x87, 0x71, 0xea, 0x1d,
-+				0xfb, 0xbe, 0x7a, 0x45,
-+				0xbb, 0xe2, 0x7e, 0xbc,
-+				0x0b, 0x53, 0x94, 0x99
-+		},
-+	},
-+	.conn_iv = {0x3A, 0xA7, 0x46, 0x72, 0xE9, 0x83, 0x6B, 0x55, 0xDA,
-+		0x66, 0x7B, 0xDA},
-+	.conn_hdr_key = {
-+		.conn_hdr_key_16 = {0xc9, 0x8e, 0xfd, 0xf2,
-+				    0x0b, 0x64, 0x8c, 0x57,
-+				    0xb5, 0x0a, 0xb2, 0xd2,
-+				    0x21, 0xd3, 0x66, 0xa5},
-+	},
-+	.conn_id_len = 8,
-+	.setup_flow = SETUP_FLOW,
-+	.use_client = USE_CLIENT,
-+	.af_server = AF_INET,
-+	.server_address = "10.0.0.2",
-+	.server_port = 7669,
-+	.plain = { 0x40, 0x08, 0x6b, 0xbf, 0x88, 0x82, 0xb9, 0x12,
-+		   0x49, 0xca,
-+		   // payload
-+		   0x02, 0x80, 0xde, 0x40, 0x39, 0x40, 0xf6, 0x00,
-+		   0x01, 0x0b, 0x00, 0x0f, 0x65, 0x63, 0x68, 0x6f,
-+		   0x20, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36,
-+		   0x37, 0x38, 0x39
-+	},
-+	.plain_len = 37,
-+	.match = {
-+		   0x46, 0x08, 0x6b, 0xbf, 0x88, 0x82, 0xb9, 0x12,
-+		   0x49, 0x1c, 0x44, 0xb8, 0x41, 0xbb, 0xcf, 0x6e,
-+		   0x0a, 0x2a, 0x24, 0xfb, 0xb4, 0x79, 0x62, 0xea,
-+		   0x59, 0x38, 0x1a, 0x0e, 0x50, 0x1e, 0x59, 0xed,
-+		   0x3f, 0x8e, 0x7e, 0x5a, 0x70, 0xe4, 0x2a, 0xbc,
-+		   0x2a, 0xfa, 0x2b, 0x54, 0xeb, 0x89, 0xc3, 0x2c,
-+		   0xb6, 0x8c, 0x1e, 0xab, 0x2d
-+	},
-+	.match_len = 53,
-+	.next_pkt_num = 0x0d65c9,
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_crypto, ipv4_chacha20_poly1305)
-+{
-+	.af_client = AF_INET,
-+	.client_address = "10.0.0.1",
-+	.client_port = 7801,
-+	.algo = TLS_CIPHER_CHACHA20_POLY1305,
-+	.conn_key_len = 32,
-+	.conn_id = {},
-+	.conn_id_len = 0,
-+	.conn_key = {
-+		.conn_key_32 = {
-+			0x3b, 0xfc, 0xdd, 0xd7, 0x2b, 0xcf, 0x02, 0x54,
-+			0x1d, 0x7f, 0xa0, 0xdd, 0x1f, 0x5f, 0x9e, 0xee,
-+			0xa8, 0x17, 0xe0, 0x9a, 0x69, 0x63, 0xa0, 0xe6,
-+			0xc7, 0xdf, 0x0f, 0x9a, 0x1b, 0xab, 0x90, 0xf2,
-+		},
-+	},
-+	.conn_iv = {
-+		0xa6, 0xb5, 0xbc, 0x6a, 0xb7, 0xda, 0xfc, 0xe3,
-+		0x0f, 0xff, 0xf5, 0xdd,
-+	},
-+	.conn_hdr_key = {
-+		.conn_hdr_key_32 = {
-+			0xd6, 0x59, 0x76, 0x0d, 0x2b, 0xa4, 0x34, 0xa2,
-+			0x26, 0xfd, 0x37, 0xb3, 0x5c, 0x69, 0xe2, 0xda,
-+			0x82, 0x11, 0xd1, 0x0c, 0x4f, 0x12, 0x53, 0x87,
-+			0x87, 0xd6, 0x56, 0x45, 0xd5, 0xd1, 0xb8, 0xe2,
-+		},
-+	},
-+	.setup_flow = SETUP_FLOW,
-+	.use_client = USE_CLIENT,
-+	.af_server = AF_INET,
-+	.server_address = "10.0.0.2",
-+	.server_port = 7802,
-+	.plain = { 0x42, 0x00, 0xbf, 0xf4, 0x01 },
-+	.plain_len = 5,
-+	.match = { 0x55, 0x58, 0xb1, 0xc6, 0x0a, 0xe7, 0xb6, 0xb9,
-+		   0x32, 0xbc, 0x27, 0xd7, 0x86, 0xf4, 0xbc, 0x2b,
-+		   0xb2, 0x0f, 0x21, 0x62, 0xba },
-+	.match_len = 21,
-+	.next_pkt_num = 0x2700bff5,
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_crypto, ipv6_aes_gcm_128)
-+{
-+	.af_client = AF_INET6,
-+	.client_address = "2001::1",
-+	.client_port = 7673,
-+	.algo = TLS_CIPHER_AES_GCM_128,
-+	.conn_key_len = 16,
-+	.conn_id = {0x08, 0x6b, 0xbf, 0x88, 0x82, 0xb9, 0x12, 0x49},
-+	.conn_key = {
-+		.conn_key_16 = {0x87, 0x71, 0xea, 0x1d,
-+				0xfb, 0xbe, 0x7a, 0x45,
-+				0xbb, 0xe2, 0x7e, 0xbc,
-+				0x0b, 0x53, 0x94, 0x99
-+		},
-+	},
-+	.conn_iv = {0x3a, 0xa7, 0x46, 0x72, 0xe9, 0x83, 0x6b, 0x55, 0xda,
-+		0x66, 0x7b, 0xda},
-+	.conn_hdr_key = {
-+		.conn_hdr_key_16 = {0xc9, 0x8e, 0xfd, 0xf2,
-+				    0x0b, 0x64, 0x8c, 0x57,
-+				    0xb5, 0x0a, 0xb2, 0xd2,
-+				    0x21, 0xd3, 0x66, 0xa5},
-+	},
-+	.conn_id_len = 8,
-+	.setup_flow = SETUP_FLOW,
-+	.use_client = USE_CLIENT,
-+	.af_server = AF_INET6,
-+	.server_address = "2001::2",
-+	.server_port = 7675,
-+	.plain = { 0x40, 0x08, 0x6b, 0xbf, 0x88, 0x82, 0xb9, 0x12,
-+		   0x49, 0xca,
-+		   // Payload
-+		   0x02, 0x80, 0xde, 0x40, 0x39, 0x40, 0xf6, 0x00,
-+		   0x01, 0x0b, 0x00, 0x0f, 0x65, 0x63, 0x68, 0x6f,
-+		   0x20, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36,
-+		   0x37, 0x38, 0x39
-+	},
-+	.plain_len = 37,
-+	.match = {
-+		   0x46, 0x08, 0x6b, 0xbf, 0x88, 0x82, 0xb9, 0x12,
-+		   0x49, 0x1c, 0x44, 0xb8, 0x41, 0xbb, 0xcf, 0x6e,
-+		   0x0a, 0x2a, 0x24, 0xfb, 0xb4, 0x79, 0x62, 0xea,
-+		   0x59, 0x38, 0x1a, 0x0e, 0x50, 0x1e, 0x59, 0xed,
-+		   0x3f, 0x8e, 0x7e, 0x5a, 0x70, 0xe4, 0x2a, 0xbc,
-+		   0x2a, 0xfa, 0x2b, 0x54, 0xeb, 0x89, 0xc3, 0x2c,
-+		   0xb6, 0x8c, 0x1e, 0xab, 0x2d
-+	},
-+	.match_len = 53,
-+	.next_pkt_num = 0x0d65c9,
-+};
-+
-+FIXTURE_VARIANT_ADD(quic_crypto, ipv6_chacha20_poly1305)
-+{
-+	.af_client = AF_INET6,
-+	.client_address = "2001::1",
-+	.client_port = 7803,
-+	.algo = TLS_CIPHER_CHACHA20_POLY1305,
-+	.conn_key_len = 32,
-+	.conn_id = {},
-+	.conn_id_len = 0,
-+	.conn_key = {
-+		.conn_key_32 = {
-+			0x3b, 0xfc, 0xdd, 0xd7, 0x2b, 0xcf, 0x02, 0x54,
-+			0x1d, 0x7f, 0xa0, 0xdd, 0x1f, 0x5f, 0x9e, 0xee,
-+			0xa8, 0x17, 0xe0, 0x9a, 0x69, 0x63, 0xa0, 0xe6,
-+			0xc7, 0xdf, 0x0f, 0x9a, 0x1b, 0xab, 0x90, 0xf2,
-+		},
-+	},
-+	.conn_iv = {
-+		0xa6, 0xb5, 0xbc, 0x6a, 0xb7, 0xda, 0xfc, 0xe3,
-+		0x0f, 0xff, 0xf5, 0xdd,
-+	},
-+	.conn_hdr_key = {
-+		.conn_hdr_key_32 = {
-+			0xd6, 0x59, 0x76, 0x0d, 0x2b, 0xa4, 0x34, 0xa2,
-+			0x26, 0xfd, 0x37, 0xb3, 0x5c, 0x69, 0xe2, 0xda,
-+			0x82, 0x11, 0xd1, 0x0c, 0x4f, 0x12, 0x53, 0x87,
-+			0x87, 0xd6, 0x56, 0x45, 0xd5, 0xd1, 0xb8, 0xe2,
-+		},
-+	},
-+	.setup_flow = SETUP_FLOW,
-+	.use_client = USE_CLIENT,
-+	.af_server = AF_INET6,
-+	.server_address = "2001::2",
-+	.server_port = 7804,
-+	.plain = { 0x42, 0x00, 0xbf, 0xf4, 0x01 },
-+	.plain_len = 5,
-+	.match = { 0x55, 0x58, 0xb1, 0xc6, 0x0a, 0xe7, 0xb6, 0xb9,
-+		   0x32, 0xbc, 0x27, 0xd7, 0x86, 0xf4, 0xbc, 0x2b,
-+		   0xb2, 0x0f, 0x21, 0x62, 0xba },
-+	.match_len = 21,
-+	.next_pkt_num = 0x2700bff5,
-+};
-+
-+TEST_F(quic_crypto, encrypt_test_vector_single_flow_gso_in_control)
-+{
-+	uint8_t cmsg_buf[CMSG_SPACE(sizeof(struct quic_tx_ancillary_data))
-+			 + CMSG_SPACE(sizeof(uint16_t))];
-+	struct quic_tx_ancillary_data *anc_data;
-+	struct quic_connection_info conn_info;
-+	uint16_t frag_size = 1200;
-+	struct cmsghdr *cmsg_hdr;
-+	int wrong_frag_size = 26;
-+	socklen_t recv_addr_len;
-+	struct iovec iov;
-+	struct msghdr msg;
-+	char *buf;
-+
-+	buf = (char *)malloc(9000);
-+	conn_info.cipher_type = variant->algo;
-+	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
-+	conn_info.key.dst_conn_id_length = variant->conn_id_len;
-+	memcpy(conn_info.key.dst_conn_id,
-+	       &variant->conn_id,
-+	       variant->conn_id_len);
-+	conn_info.conn_payload_key_gen = 0;
-+
-+	if (self->client.addr.sin_family == AF_INET) {
-+		memcpy(&conn_info.key.addr.ipv4_addr,
-+		       &self->client.addr.sin_addr, sizeof(struct in_addr));
-+		conn_info.key.udp_port = self->client.addr.sin_port;
-+	} else {
-+		memcpy(&conn_info.key.addr.ipv6_addr,
-+		       &self->client.addr6.sin6_addr,
-+		       sizeof(struct in6_addr));
-+		conn_info.key.udp_port = self->client.addr6.sin6_port;
-+	}
-+
-+	ASSERT_TRUE(variant->algo == TLS_CIPHER_AES_GCM_128 ||
-+		    variant->algo == TLS_CIPHER_CHACHA20_POLY1305);
-+	switch (variant->algo) {
-+	case TLS_CIPHER_AES_GCM_128:
-+		memcpy(&conn_info.aes_gcm_128.payload_key,
-+		       &variant->conn_key, 16);
-+		memcpy(&conn_info.aes_gcm_128.payload_iv,
-+		       &variant->conn_iv, 12);
-+		memcpy(&conn_info.aes_gcm_128.header_key,
-+		       &variant->conn_hdr_key, 16);
-+		break;
-+	case TLS_CIPHER_CHACHA20_POLY1305:
-+		memcpy(&conn_info.chacha20_poly1305.payload_key,
-+		       &variant->conn_key, 32);
-+		memcpy(&conn_info.chacha20_poly1305.payload_iv,
-+		       &variant->conn_iv, 12);
-+		memcpy(&conn_info.chacha20_poly1305.header_key,
-+		       &variant->conn_hdr_key, 32);
-+		break;
-+	}
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &wrong_frag_size,
-+			     sizeof(wrong_frag_size)), 0);
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_QUIC_ADD_TX_CONNECTION,
-+			     &conn_info, sizeof(conn_info)), 0);
-+
-+	recv_addr_len = self->len_c;
-+	iov.iov_base = (void *)variant->plain;
-+	iov.iov_len = variant->plain_len;
-+	memset(cmsg_buf, 0, sizeof(cmsg_buf));
-+	msg.msg_name = (self->client.addr.sin_family == AF_INET)
-+		       ? (void *)&self->client.addr
-+		       : (void *)&self->client.addr6;
-+	msg.msg_namelen = self->len_c;
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = cmsg_buf;
-+	msg.msg_controllen = sizeof(cmsg_buf);
-+	cmsg_hdr = CMSG_FIRSTHDR(&msg);
-+	cmsg_hdr->cmsg_level = IPPROTO_UDP;
-+	cmsg_hdr->cmsg_type = UDP_QUIC_ENCRYPT;
-+	cmsg_hdr->cmsg_len = CMSG_LEN(sizeof(struct quic_tx_ancillary_data));
-+	anc_data = (struct quic_tx_ancillary_data *)CMSG_DATA(cmsg_hdr);
-+	anc_data->flags = 0;
-+	anc_data->next_pkt_num = variant->next_pkt_num;
-+	anc_data->dst_conn_id_length = variant->conn_id_len;
-+	cmsg_hdr = CMSG_NXTHDR(&msg, cmsg_hdr);
-+	cmsg_hdr->cmsg_level = IPPROTO_UDP;
-+	cmsg_hdr->cmsg_type = UDP_SEGMENT;
-+	cmsg_hdr->cmsg_len = CMSG_LEN(sizeof(uint16_t));
-+	memcpy(CMSG_DATA(cmsg_hdr), (void *)&frag_size, sizeof(frag_size));
-+
-+	EXPECT_EQ(sendmsg(self->sfd, &msg, 0), variant->plain_len);
-+	ASSERT_NE(setns(self->client_net_ns_fd, 0), -1);
-+	if (variant->af_client == AF_INET) {
-+		EXPECT_EQ(recvfrom(self->cfd, buf, 9000, 0,
-+				   &self->client.addr, &recv_addr_len),
-+			  variant->match_len);
-+	} else {
-+		EXPECT_EQ(recvfrom(self->cfd, buf, 9000, 0,
-+				   &self->client.addr6, &recv_addr_len),
-+			  variant->match_len);
-+	}
-+	EXPECT_STREQ(buf, variant->match);
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_QUIC_DEL_TX_CONNECTION,
-+			     &conn_info, sizeof(conn_info)), 0);
-+	free(buf);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+}
-+
-+TEST_F(quic_crypto, encrypt_test_vector_single_flow_gso_in_setsockopt)
-+{
-+	uint8_t cmsg_buf[CMSG_SPACE(sizeof(struct quic_tx_ancillary_data))];
-+	struct quic_tx_ancillary_data *anc_data;
-+	struct quic_connection_info conn_info;
-+	int frag_size = 1200;
-+	struct cmsghdr *cmsg_hdr;
-+	socklen_t recv_addr_len;
-+	struct iovec iov;
-+	struct msghdr msg;
-+	char *buf;
-+
-+	buf = (char *)malloc(9000);
-+	conn_info.cipher_type = variant->algo;
-+	memset(&conn_info.key, 0, sizeof(struct quic_connection_info_key));
-+	conn_info.key.dst_conn_id_length = variant->conn_id_len;
-+	memcpy(conn_info.key.dst_conn_id,
-+	       &variant->conn_id,
-+	       variant->conn_id_len);
-+	conn_info.conn_payload_key_gen = 0;
-+
-+	if (self->client.addr.sin_family == AF_INET) {
-+		memcpy(&conn_info.key.addr.ipv4_addr,
-+		       &self->client.addr.sin_addr, sizeof(struct in_addr));
-+		conn_info.key.udp_port = self->client.addr.sin_port;
-+	} else {
-+		memcpy(&conn_info.key.addr.ipv6_addr,
-+		       &self->client.addr6.sin6_addr,
-+		       sizeof(struct in6_addr));
-+		conn_info.key.udp_port = self->client.addr6.sin6_port;
-+	}
-+	ASSERT_TRUE(variant->algo == TLS_CIPHER_AES_GCM_128 ||
-+		    variant->algo == TLS_CIPHER_CHACHA20_POLY1305);
-+	switch (variant->algo) {
-+	case TLS_CIPHER_AES_GCM_128:
-+		memcpy(&conn_info.aes_gcm_128.payload_key,
-+		       &variant->conn_key, 16);
-+		memcpy(&conn_info.aes_gcm_128.payload_iv,
-+		       &variant->conn_iv, 12);
-+		memcpy(&conn_info.aes_gcm_128.header_key,
-+		       &variant->conn_hdr_key, 16);
-+		break;
-+	case TLS_CIPHER_CHACHA20_POLY1305:
-+		memcpy(&conn_info.chacha20_poly1305.payload_key,
-+		       &variant->conn_key, 32);
-+		memcpy(&conn_info.chacha20_poly1305.payload_iv,
-+		       &variant->conn_iv, 12);
-+		memcpy(&conn_info.chacha20_poly1305.header_key,
-+		       &variant->conn_hdr_key, 32);
-+		break;
-+	}
-+
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_SEGMENT, &frag_size,
-+			     sizeof(frag_size)), 0);
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_QUIC_ADD_TX_CONNECTION,
-+			     &conn_info, sizeof(conn_info)), 0);
-+
-+	recv_addr_len = self->len_c;
-+	iov.iov_base = (void *)variant->plain;
-+	iov.iov_len = variant->plain_len;
-+	memset(cmsg_buf, 0, sizeof(cmsg_buf));
-+	msg.msg_name = (self->client.addr.sin_family == AF_INET)
-+		       ? (void *)&self->client.addr
-+		       : (void *)&self->client.addr6;
-+	msg.msg_namelen = self->len_c;
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = cmsg_buf;
-+	msg.msg_controllen = sizeof(cmsg_buf);
-+	cmsg_hdr = CMSG_FIRSTHDR(&msg);
-+	cmsg_hdr->cmsg_level = IPPROTO_UDP;
-+	cmsg_hdr->cmsg_type = UDP_QUIC_ENCRYPT;
-+	cmsg_hdr->cmsg_len = CMSG_LEN(sizeof(struct quic_tx_ancillary_data));
-+	anc_data = (struct quic_tx_ancillary_data *)CMSG_DATA(cmsg_hdr);
-+	anc_data->flags = 0;
-+	anc_data->next_pkt_num = variant->next_pkt_num;
-+	anc_data->dst_conn_id_length = variant->conn_id_len;
-+
-+	EXPECT_EQ(sendmsg(self->sfd, &msg, 0), variant->plain_len);
-+	ASSERT_NE(setns(self->client_net_ns_fd, 0), -1);
-+	if (variant->af_client == AF_INET) {
-+		EXPECT_EQ(recvfrom(self->cfd, buf, 9000, 0,
-+				   &self->client.addr, &recv_addr_len),
-+			  variant->match_len);
-+	} else {
-+		EXPECT_EQ(recvfrom(self->cfd, buf, 9000, 0,
-+				   &self->client.addr6, &recv_addr_len),
-+			  variant->match_len);
-+	}
-+	EXPECT_STREQ(buf, variant->match);
-+	ASSERT_NE(setns(self->server_net_ns_fd, 0), -1);
-+	ASSERT_EQ(setsockopt(self->sfd, SOL_UDP, UDP_QUIC_DEL_TX_CONNECTION,
-+			     &conn_info, sizeof(conn_info)), 0);
-+	free(buf);
-+	ASSERT_NE(setns(self->default_net_ns_fd, 0), -1);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/net/quic.sh b/tools/testing/selftests/net/quic.sh
-new file mode 100755
-index 000000000000..8ff8bc494671
---- /dev/null
-+++ b/tools/testing/selftests/net/quic.sh
-@@ -0,0 +1,46 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+sudo ip netns add ns11
-+sudo ip netns add ns12
-+sudo ip netns add ns2
-+sudo ip link add veth11 type veth peer name br-veth11
-+sudo ip link add veth12 type veth peer name br-veth12
-+sudo ip link add veth2 type veth peer name br-veth2
-+sudo ip link set veth11 netns ns11
-+sudo ip link set veth12 netns ns12
-+sudo ip link set veth2 netns ns2
-+sudo ip netns exec ns11 ip addr add 10.0.0.1/24 dev veth11
-+sudo ip netns exec ns11 ip addr add ::ffff:10.0.0.1/96 dev veth11
-+sudo ip netns exec ns11 ip addr add 2001::1/64 dev veth11
-+sudo ip netns exec ns12 ip addr add 10.0.0.3/24 dev veth12
-+sudo ip netns exec ns12 ip addr add ::ffff:10.0.0.3/96 dev veth12
-+sudo ip netns exec ns12 ip addr add 2001::3/64 dev veth12
-+sudo ip netns exec ns2 ip addr add 10.0.0.2/24 dev veth2
-+sudo ip netns exec ns2 ip addr add ::ffff:10.0.0.2/96 dev veth2
-+sudo ip netns exec ns2 ip addr add 2001::2/64 dev veth2
-+sudo ip link add name br1 type bridge forward_delay 0
-+sudo ip link set br1 up
-+sudo ip link set br-veth11 up
-+sudo ip link set br-veth12 up
-+sudo ip link set br-veth2 up
-+sudo ip netns exec ns11 ip link set veth11 up
-+sudo ip netns exec ns12 ip link set veth12 up
-+sudo ip netns exec ns2 ip link set veth2 up
-+sudo ip link set br-veth11 master br1
-+sudo ip link set br-veth12 master br1
-+sudo ip link set br-veth2 master br1
-+sudo ip netns exec ns2 cat /proc/net/quic_stat
-+
-+printf "%s" "Waiting for bridge to start fowarding ..."
-+while ! timeout 0.5 sudo ip netns exec ns2 ping -c 1 -n 2001::1 &> /dev/null
-+do
-+	printf "%c" "."
-+done
-+printf "\n%s\n"  "Bridge is operational"
-+
-+sudo ./quic
-+sudo ip netns exec ns2 cat /proc/net/quic_stat
-+sudo ip netns delete ns2
-+sudo ip netns delete ns12
-+sudo ip netns delete ns11
+All test results:
+
+1..12
+ok 1 5153 - Add gate action with priority and sched-entry
+ok 2 7189 - Add gate action with base-time
+ok 3 a721 - Add gate action with cycle-time
+ok 4 c029 - Add gate action with cycle-time-ext
+ok 5 3719 - Replace gate base-time action
+ok 6 d821 - Delete gate action with valid index
+ok 7 3128 - Delete gate action with invalid index
+ok 8 7837 - List gate actions
+ok 9 9273 - Flush gate actions
+ok 10 c829 - Add gate action with duplicate index
+ok 11 3043 - Add gate action with invalid index
+ok 12 2930 - Add gate action with cookie
+
+./tdc.py -c action xt
+considering category xt
+considering category action
+Test 2029: Add xt action with log-prefix
+Test 3562: Replace xt action log-prefix
+Test 8291: Delete xt action with valid index
+Test 5169: Delete xt action with invalid index
+Test 7284: List xt actions
+Test 5010: Flush xt actions
+Test 8437: Add xt action with duplicate index
+Test 2837: Add xt action with invalid index
+
+All test results:
+
+1..8
+ok 1 2029 - Add xt action with log-prefix
+ok 2 3562 - Replace xt action log-prefix
+ok 3 8291 - Delete xt action with valid index
+ok 4 5169 - Delete xt action with invalid index
+ok 5 7284 - List xt actions
+ok 6 5010 - Flush xt actions
+ok 7 8437 - Add xt action with duplicate index
+ok 8 2837 - Add xt action with invalid index
+
+./tdc.py -c action connmark
+considering category action
+considering category connmark
+Test 2002: Add valid connmark action with defaults
+Test 56a5: Add valid connmark action with control pass
+Test 7c66: Add valid connmark action with control drop
+Test a913: Add valid connmark action with control pipe
+Test bdd8: Add valid connmark action with control reclassify
+Test b8be: Add valid connmark action with control continue
+Test d8a6: Add valid connmark action with control jump
+Test aae8: Add valid connmark action with zone argument
+Test 2f0b: Add valid connmark action with invalid zone argument
+Test 9305: Add connmark action with unsupported argument
+Test 71ca: Add valid connmark action and replace it
+Test 5f8f: Add valid connmark action with cookie
+Test c506: Replace connmark with invalid goto chain control
+Test 6571: Delete connmark action with valid index
+Test 3426: Delete connmark action with invalid index
+
+All test results:
+
+1..15
+ok 1 2002 - Add valid connmark action with defaults
+ok 2 56a5 - Add valid connmark action with control pass
+ok 3 7c66 - Add valid connmark action with control drop
+ok 4 a913 - Add valid connmark action with control pipe
+ok 5 bdd8 - Add valid connmark action with control reclassify
+ok 6 b8be - Add valid connmark action with control continue
+ok 7 d8a6 - Add valid connmark action with control jump
+ok 8 aae8 - Add valid connmark action with zone argument
+ok 9 2f0b - Add valid connmark action with invalid zone argument
+ok 10 9305 - Add connmark action with unsupported argument
+ok 11 71ca - Add valid connmark action and replace it
+ok 12 5f8f - Add valid connmark action with cookie
+ok 13 c506 - Replace connmark with invalid goto chain control
+ok 14 6571 - Delete connmark action with valid index
+ok 15 3426 - Delete connmark action with invalid index
+
+./tdc.py -c action ife
+considering category action
+considering category ife
+Test 7682: Create valid ife encode action with mark and pass control
+Test ef47: Create valid ife encode action with mark and pipe control
+Test df43: Create valid ife encode action with mark and continue control
+Test e4cf: Create valid ife encode action with mark and drop control
+Test ccba: Create valid ife encode action with mark and reclassify control
+Test a1cf: Create valid ife encode action with mark and jump control
+Test cb3d: Create valid ife encode action with mark value at 32-bit
+maximum
+Test 1efb: Create ife encode action with mark value exceeding 32-bit
+maximum
+Test 95ed: Create valid ife encode action with prio and pass control
+Test aa17: Create valid ife encode action with prio and pipe control
+Test 74c7: Create valid ife encode action with prio and continue control
+Test 7a97: Create valid ife encode action with prio and drop control
+Test f66b: Create valid ife encode action with prio and reclassify control
+Test 3056: Create valid ife encode action with prio and jump control
+Test 7dd3: Create valid ife encode action with prio value at 32-bit
+maximum
+Test 2ca1: Create ife encode action with prio value exceeding 32-bit
+maximum
+Test 05bb: Create valid ife encode action with tcindex and pass control
+Test ce65: Create valid ife encode action with tcindex and pipe control
+Test 09cd: Create valid ife encode action with tcindex and continue control
+Test 8eb5: Create valid ife encode action with tcindex and continue control
+Test 451a: Create valid ife encode action with tcindex and drop control
+Test d76c: Create valid ife encode action with tcindex and reclassify
+control
+Test e731: Create valid ife encode action with tcindex and jump control
+Test b7b8: Create valid ife encode action with tcindex value at 16-bit
+maximum
+Test d0d8: Create ife encode action with tcindex value exceeding 16-bit
+maximum
+Test 2a9c: Create valid ife encode action with mac src parameter
+Test cf5c: Create valid ife encode action with mac dst parameter
+Test 2353: Create valid ife encode action with mac src and mac dst
+parameters
+Test 552c: Create valid ife encode action with mark and type parameters
+Test 0421: Create valid ife encode action with prio and type parameters
+Test 4017: Create valid ife encode action with tcindex and type parameters
+Test fac3: Create valid ife encode action with index at 32-bit maximum
+Test 7c25: Create valid ife decode action with pass control
+Test dccb: Create valid ife decode action with pipe control
+Test 7bb9: Create valid ife decode action with continue control
+Test d9ad: Create valid ife decode action with drop control
+Test 219f: Create valid ife decode action with reclassify control
+Test 8f44: Create valid ife decode action with jump control
+Test 56cf: Create ife encode action with index exceeding 32-bit maximum
+Test ee94: Create ife encode action with invalid control
+Test b330: Create ife encode action with cookie
+Test bbc0: Create ife encode action with invalid argument
+Test d54a: Create ife encode action with invalid type argument
+Test 7ee0: Create ife encode action with invalid mac src argument
+Test 0a7d: Create ife encode action with invalid mac dst argument
+Test a0e2: Replace ife encode action with invalid goto chain control
+Test a972: Delete ife encode action with valid index
+Test 1272: Delete ife encode action with invalid index
+
+All test results:
+
+1..48
+ok 1 7682 - Create valid ife encode action with mark and pass control
+ok 2 ef47 - Create valid ife encode action with mark and pipe control
+ok 3 df43 - Create valid ife encode action with mark and continue control
+ok 4 e4cf - Create valid ife encode action with mark and drop control
+ok 5 ccba - Create valid ife encode action with mark and reclassify
+control
+ok 6 a1cf - Create valid ife encode action with mark and jump control
+ok 7 cb3d - Create valid ife encode action with mark value at 32-bit
+maximum
+ok 8 1efb - Create ife encode action with mark value exceeding 32-bit
+maximum
+ok 9 95ed - Create valid ife encode action with prio and pass control
+ok 10 aa17 - Create valid ife encode action with prio and pipe control
+ok 11 74c7 - Create valid ife encode action with prio and continue control
+ok 12 7a97 - Create valid ife encode action with prio and drop control
+ok 13 f66b - Create valid ife encode action with prio and reclassify
+control
+ok 14 3056 - Create valid ife encode action with prio and jump control
+ok 15 7dd3 - Create valid ife encode action with prio value at 32-bit
+maximum
+ok 16 2ca1 - Create ife encode action with prio value exceeding 32-bit
+maximum
+ok 17 05bb - Create valid ife encode action with tcindex and pass control
+ok 18 ce65 - Create valid ife encode action with tcindex and pipe control
+ok 19 09cd - Create valid ife encode action with tcindex and continue
+control
+ok 20 8eb5 - Create valid ife encode action with tcindex and continue
+control
+ok 21 451a - Create valid ife encode action with tcindex and drop control
+ok 22 d76c - Create valid ife encode action with tcindex and reclassify
+control
+ok 23 e731 - Create valid ife encode action with tcindex and jump control
+ok 24 b7b8 - Create valid ife encode action with tcindex value at 16-bit
+maximum
+ok 25 d0d8 - Create ife encode action with tcindex value exceeding 16-bit
+maximum
+ok 26 2a9c - Create valid ife encode action with mac src parameter
+ok 27 cf5c - Create valid ife encode action with mac dst parameter
+ok 28 2353 - Create valid ife encode action with mac src and mac dst
+parameters
+ok 29 552c - Create valid ife encode action with mark and type parameters
+ok 30 0421 - Create valid ife encode action with prio and type parameters
+ok 31 4017 - Create valid ife encode action with tcindex and type
+parameters
+ok 32 fac3 - Create valid ife encode action with index at 32-bit maximum
+ok 33 7c25 - Create valid ife decode action with pass control
+ok 34 dccb - Create valid ife decode action with pipe control
+ok 35 7bb9 - Create valid ife decode action with continue control
+ok 36 d9ad - Create valid ife decode action with drop control
+ok 37 219f - Create valid ife decode action with reclassify control
+ok 38 8f44 - Create valid ife decode action with jump control
+ok 39 56cf - Create ife encode action with index exceeding 32-bit maximum
+ok 40 ee94 - Create ife encode action with invalid control
+ok 41 b330 - Create ife encode action with cookie
+ok 42 bbc0 - Create ife encode action with invalid argument
+ok 43 d54a - Create ife encode action with invalid type argument
+ok 44 7ee0 - Create ife encode action with invalid mac src argument
+ok 45 0a7d - Create ife encode action with invalid mac dst argument
+ok 46 a0e2 - Replace ife encode action with invalid goto chain control
+ok 47 a972 - Delete ife encode action with valid index
+ok 48 1272 - Delete ife encode action with invalid index
+
+./tdc.py -c action nat
+considering category action
+considering category nat
+Test 7565: Add nat action on ingress with default control action
+Test fd79: Add nat action on ingress with pipe control action
+Test eab9: Add nat action on ingress with continue control action
+Test c53a: Add nat action on ingress with reclassify control action
+Test 76c9: Add nat action on ingress with jump control action
+Test 24c6: Add nat action on ingress with drop control action
+Test 2120: Add nat action on ingress with maximum index value
+Test 3e9d: Add nat action on ingress with invalid index value
+Test f6c9: Add nat action on ingress with invalid IP address
+Test be25: Add nat action on ingress with invalid argument
+Test a7bd: Add nat action on ingress with DEFAULT IP address
+Test ee1e: Add nat action on ingress with ANY IP address
+Test 1de8: Add nat action on ingress with ALL IP address
+Test 8dba: Add nat action on egress with default control action
+Test 19a7: Add nat action on egress with pipe control action
+Test f1d9: Add nat action on egress with continue control action
+Test 6d4a: Add nat action on egress with reclassify control action
+Test b313: Add nat action on egress with jump control action
+Test d9fc: Add nat action on egress with drop control action
+Test a895: Add nat action on egress with DEFAULT IP address
+Test 2572: Add nat action on egress with ANY IP address
+Test 37f3: Add nat action on egress with ALL IP address
+Test 6054: Add nat action on egress with cookie
+Test 79d6: Add nat action on ingress with cookie
+Test 4b12: Replace nat action with invalid goto chain control
+Test b811: Delete nat action with valid index
+Test a521: Delete nat action with invalid index
+
+All test results:
+
+1..27
+ok 1 7565 - Add nat action on ingress with default control action
+ok 2 fd79 - Add nat action on ingress with pipe control action
+ok 3 eab9 - Add nat action on ingress with continue control action
+ok 4 c53a - Add nat action on ingress with reclassify control action
+ok 5 76c9 - Add nat action on ingress with jump control action
+ok 6 24c6 - Add nat action on ingress with drop control action
+ok 7 2120 - Add nat action on ingress with maximum index value
+ok 8 3e9d - Add nat action on ingress with invalid index value
+ok 9 f6c9 - Add nat action on ingress with invalid IP address
+ok 10 be25 - Add nat action on ingress with invalid argument
+ok 11 a7bd - Add nat action on ingress with DEFAULT IP address
+ok 12 ee1e - Add nat action on ingress with ANY IP address
+ok 13 1de8 - Add nat action on ingress with ALL IP address
+ok 14 8dba - Add nat action on egress with default control action
+ok 15 19a7 - Add nat action on egress with pipe control action
+ok 16 f1d9 - Add nat action on egress with continue control action
+ok 17 6d4a - Add nat action on egress with reclassify control action
+ok 18 b313 - Add nat action on egress with jump control action
+ok 19 d9fc - Add nat action on egress with drop control action
+ok 20 a895 - Add nat action on egress with DEFAULT IP address
+ok 21 2572 - Add nat action on egress with ANY IP address
+ok 22 37f3 - Add nat action on egress with ALL IP address
+ok 23 6054 - Add nat action on egress with cookie
+ok 24 79d6 - Add nat action on ingress with cookie
+ok 25 4b12 - Replace nat action with invalid goto chain control
+ok 26 b811 - Delete nat action with valid index
+ok 27 a521 - Delete nat action with invalid index
+
+./tdc.py -c action sample
+considering category action
+considering category sample
+Test 9784: Add valid sample action with mandatory arguments
+Test 5c91: Add valid sample action with mandatory arguments and continue
+control action
+Test 334b: Add valid sample action with mandatory arguments and drop
+control action
+Test da69: Add valid sample action with mandatory arguments and reclassify
+control action
+Test 13ce: Add valid sample action with mandatory arguments and pipe
+control action
+Test 1886: Add valid sample action with mandatory arguments and jump
+control action
+Test 7571: Add sample action with invalid rate
+Test b6d4: Add sample action with mandatory arguments and invalid control
+action
+Test a874: Add invalid sample action without mandatory arguments
+Test ac01: Add invalid sample action without mandatory argument rate
+Test 4203: Add invalid sample action without mandatory argument group
+Test 14a7: Add invalid sample action without mandatory argument group
+Test 8f2e: Add valid sample action with trunc argument
+Test 45f8: Add sample action with maximum rate argument
+Test ad0c: Add sample action with maximum trunc argument
+Test 83a9: Add sample action with maximum group argument
+Test ed27: Add sample action with invalid rate argument
+Test 2eae: Add sample action with invalid group argument
+Test 6ff3: Add sample action with invalid trunc size
+Test 2b2a: Add sample action with invalid index
+Test dee2: Add sample action with maximum allowed index
+Test 560e: Add sample action with cookie
+Test 704a: Replace existing sample action with new rate argument
+Test 60eb: Replace existing sample action with new group argument
+Test 2cce: Replace existing sample action with new trunc argument
+Test 59d1: Replace existing sample action with new control argument
+Test 0a6e: Replace sample action with invalid goto chain control
+Test 3872: Delete sample action with valid index
+Test a394: Delete sample action with invalid index
+
+All test results:
+
+1..29
+ok 1 9784 - Add valid sample action with mandatory arguments
+ok 2 5c91 - Add valid sample action with mandatory arguments and continue
+control action
+ok 3 334b - Add valid sample action with mandatory arguments and drop
+control action
+ok 4 da69 - Add valid sample action with mandatory arguments and
+reclassify control action
+ok 5 13ce - Add valid sample action with mandatory arguments and pipe
+control action
+ok 6 1886 - Add valid sample action with mandatory arguments and jump
+control action
+ok 7 7571 - Add sample action with invalid rate
+ok 8 b6d4 - Add sample action with mandatory arguments and invalid control
+action
+ok 9 a874 - Add invalid sample action without mandatory arguments
+ok 10 ac01 - Add invalid sample action without mandatory argument rate
+ok 11 4203 - Add invalid sample action without mandatory argument group
+ok 12 14a7 - Add invalid sample action without mandatory argument group
+ok 13 8f2e - Add valid sample action with trunc argument
+ok 14 45f8 - Add sample action with maximum rate argument
+ok 15 ad0c - Add sample action with maximum trunc argument
+ok 16 83a9 - Add sample action with maximum group argument
+ok 17 ed27 - Add sample action with invalid rate argument
+ok 18 2eae - Add sample action with invalid group argument
+ok 19 6ff3 - Add sample action with invalid trunc size
+ok 20 2b2a - Add sample action with invalid index
+ok 21 dee2 - Add sample action with maximum allowed index
+ok 22 560e - Add sample action with cookie
+ok 23 704a - Replace existing sample action with new rate argument
+ok 24 60eb - Replace existing sample action with new group argument
+ok 25 2cce - Replace existing sample action with new trunc argument
+ok 26 59d1 - Replace existing sample action with new control argument
+ok 27 0a6e - Replace sample action with invalid goto chain control
+ok 28 3872 - Delete sample action with valid index
+ok 29 a394 - Delete sample action with invalid index
+
+./tdc.py -c action tunnel_key
+considering category tunnel_key
+considering category action
+Test 2b11: Add tunnel_key set action with mandatory parameters
+Test dc6b: Add tunnel_key set action with missing mandatory src_ip
+parameter
+Test 7f25: Add tunnel_key set action with missing mandatory dst_ip
+parameter
+Test a5e0: Add tunnel_key set action with invalid src_ip parameter
+Test eaa8: Add tunnel_key set action with invalid dst_ip parameter
+Test 3b09: Add tunnel_key set action with invalid id parameter
+Test 9625: Add tunnel_key set action with invalid dst_port parameter
+Test 05af: Add tunnel_key set action with optional dst_port parameter
+Test da80: Add tunnel_key set action with index at 32-bit maximum
+Test d407: Add tunnel_key set action with index exceeding 32-bit maximum
+Test 5cba: Add tunnel_key set action with id value at 32-bit maximum
+Test e84a: Add tunnel_key set action with id value exceeding 32-bit
+maximum
+Test 9c19: Add tunnel_key set action with dst_port value at 16-bit maximum
+Test 3bd9: Add tunnel_key set action with dst_port value exceeding 16-bit
+maximum
+Test 68e2: Add tunnel_key unset action
+Test 6192: Add tunnel_key unset continue action
+Test 061d: Add tunnel_key set continue action with cookie
+Test 8acb: Add tunnel_key set continue action with invalid cookie
+Test a07e: Add tunnel_key action with no set/unset command specified
+Test b227: Add tunnel_key action with csum option
+Test 58a7: Add tunnel_key action with nocsum option
+Test 2575: Add tunnel_key action with not-supported parameter
+Test 7a88: Add tunnel_key action with cookie parameter
+Test 4f20: Add tunnel_key action with a single geneve option parameter
+Test e33d: Add tunnel_key action with multiple geneve options parameter
+Test 0778: Add tunnel_key action with invalid class geneve option
+parameter
+Test 4ae8: Add tunnel_key action with invalid type geneve option parameter
+Test 4039: Add tunnel_key action with short data length geneve option
+parameter
+Test 26a6: Add tunnel_key action with non-multiple of 4 data length geneve
+option parameter
+Test f44d: Add tunnel_key action with incomplete geneve options parameter
+Test 7afc: Replace tunnel_key set action with all parameters
+Test 364d: Replace tunnel_key set action with all parameters and cookie
+Test 937c: Fetch all existing tunnel_key actions
+Test 6783: Flush all existing tunnel_key actions
+Test 8242: Replace tunnel_key set action with invalid goto chain
+Test 0cd2: Add tunnel_key set action with no_percpu flag
+Test 3671: Delete tunnel_key set action with valid index
+Test 8597: Delete tunnel_key set action with invalid index
+
+All test results:
+
+1..38
+ok 1 2b11 - Add tunnel_key set action with mandatory parameters
+ok 2 dc6b - Add tunnel_key set action with missing mandatory src_ip
+parameter
+ok 3 7f25 - Add tunnel_key set action with missing mandatory dst_ip
+parameter
+ok 4 a5e0 - Add tunnel_key set action with invalid src_ip parameter
+ok 5 eaa8 - Add tunnel_key set action with invalid dst_ip parameter
+ok 6 3b09 - Add tunnel_key set action with invalid id parameter
+ok 7 9625 - Add tunnel_key set action with invalid dst_port parameter
+ok 8 05af - Add tunnel_key set action with optional dst_port parameter
+ok 9 da80 - Add tunnel_key set action with index at 32-bit maximum
+ok 10 d407 - Add tunnel_key set action with index exceeding 32-bit maximum
+ok 11 5cba - Add tunnel_key set action with id value at 32-bit maximum
+ok 12 e84a - Add tunnel_key set action with id value exceeding 32-bit
+maximum
+ok 13 9c19 - Add tunnel_key set action with dst_port value at 16-bit
+maximum
+ok 14 3bd9 - Add tunnel_key set action with dst_port value exceeding
+16-bit maximum
+ok 15 68e2 - Add tunnel_key unset action
+ok 16 6192 - Add tunnel_key unset continue action
+ok 17 061d - Add tunnel_key set continue action with cookie
+ok 18 8acb - Add tunnel_key set continue action with invalid cookie
+ok 19 a07e - Add tunnel_key action with no set/unset command specified
+ok 20 b227 - Add tunnel_key action with csum option
+ok 21 58a7 - Add tunnel_key action with nocsum option
+ok 22 2575 - Add tunnel_key action with not-supported parameter
+ok 23 7a88 - Add tunnel_key action with cookie parameter
+ok 24 4f20 - Add tunnel_key action with a single geneve option parameter
+ok 25 e33d - Add tunnel_key action with multiple geneve options parameter
+ok 26 0778 - Add tunnel_key action with invalid class geneve option
+parameter
+ok 27 4ae8 - Add tunnel_key action with invalid type geneve option
+parameter
+ok 28 4039 - Add tunnel_key action with short data length geneve option
+parameter
+ok 29 26a6 - Add tunnel_key action with non-multiple of 4 data length
+geneve option parameter
+ok 30 f44d - Add tunnel_key action with incomplete geneve options
+parameter
+ok 31 7afc - Replace tunnel_key set action with all parameters
+ok 32 364d - Replace tunnel_key set action with all parameters and cookie
+ok 33 937c - Fetch all existing tunnel_key actions
+ok 34 6783 - Flush all existing tunnel_key actions
+ok 35 8242 - Replace tunnel_key set action with invalid goto chain
+ok 36 0cd2 - Add tunnel_key set action with no_percpu flag
+ok 37 3671 - Delete tunnel_key set action with valid index
+ok 38 8597 - Delete tunnel_key set action with invalid index
+
+Zhengchao Shao (8):
+  selftests/tc-testings: add selftests for ctinfo action
+  selftests/tc-testings: add selftests for gate action
+  selftests/tc-testings: add selftests for xt action
+  selftests/tc-testings: add connmark action deleting test case
+  selftests/tc-testings: add ife action deleting test case
+  selftests/tc-testings: add nat action deleting test case
+  selftests/tc-testings: add sample action deleting test case
+  selftests/tc-testings: add tunnel_key action deleting test case
+
+ .../tc-testing/tc-tests/actions/connmark.json |  50 +++
+ .../tc-testing/tc-tests/actions/ctinfo.json   | 316 ++++++++++++++++++
+ .../tc-testing/tc-tests/actions/gate.json     | 315 +++++++++++++++++
+ .../tc-testing/tc-tests/actions/ife.json      |  50 +++
+ .../tc-testing/tc-tests/actions/nat.json      |  50 +++
+ .../tc-testing/tc-tests/actions/sample.json   |  50 +++
+ .../tc-tests/actions/tunnel_key.json          |  50 +++
+ .../tc-testing/tc-tests/actions/xt.json       | 219 ++++++++++++
+ 8 files changed, 1100 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/ctinfo.json
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/gate.json
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/actions/xt.json
+
 -- 
-2.30.2
+2.17.1
 
