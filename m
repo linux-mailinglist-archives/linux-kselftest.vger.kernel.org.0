@@ -2,80 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCF05B38A9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 15:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CC95B391A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 15:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiIINMD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 09:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S231250AbiIINgR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 09:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiIINMC (ORCPT
+        with ESMTP id S230460AbiIINgQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 09:12:02 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B693C94127;
-        Fri,  9 Sep 2022 06:11:59 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id F0F37188528F;
-        Fri,  9 Sep 2022 13:11:56 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id E8A0725032B7;
-        Fri,  9 Sep 2022 13:11:56 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id DDD2B9EC0002; Fri,  9 Sep 2022 13:11:56 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 9 Sep 2022 09:36:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6172E129C6B
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Sep 2022 06:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662730574;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r+j5NRBRWTe4dwiHyAiQIy4Dst2HaG54q1byj2vgh9A=;
+        b=cRagtOr7fsMrTdHyBAlsC9Zd3n0yeBcLIfkYYHUSTzgQckqFNOnXUavFvOn4FBgRCpk6f6
+        QmcfG5Yf1BEsXRlO+mcEqR3We/68lfn+oa9exTVgB591Bul9b01x74dTb5BrkT+1sX4xII
+        5gzGXzDa5FuTieWIQ9N1o4saneV3c6A=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-371-yEfQCMORNCSmTpexHCrisQ-1; Fri, 09 Sep 2022 09:36:12 -0400
+X-MC-Unique: yEfQCMORNCSmTpexHCrisQ-1
+Received: by mail-pg1-f197.google.com with SMTP id j3-20020a634a43000000b00429f2cb4a43so1008390pgl.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Sep 2022 06:36:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=r+j5NRBRWTe4dwiHyAiQIy4Dst2HaG54q1byj2vgh9A=;
+        b=UVQXbkDfo0s39I1rdEa3x/Fy+DWyHp4RdTG/KzgiwT9B8rxEMbzHXJvh6F8qIvcAVA
+         SPfMzeAzT4GxqwBC9tHlwfPggW/fAKe2zB1UxTuNWA4IRNwI03Y9J+VaWXgk+T1HGh7I
+         fbTXJ0n64G1+Tr2H8XUWKne0SZhetJq91yMInPdJiGuyUQksdQUBJSeQukHTERwhr7dd
+         rjbVaBB3liWOs10Qhf1QlwQ2D7AlVVuwJZ0MeugCZ0kMGgtZqiHoR+++zkUhiNtr2CcK
+         fOV4CRajd9ftUVvHoXQr+kVL4dn3OcAALkXy8IUy03gh/3T8EvEAKCtOdNjH2PYQ2S1C
+         NuNA==
+X-Gm-Message-State: ACgBeo1qhy+m4LqGuqS7hzoPHi78dNcAwS08Lz69fV9kRLWBEVjNa9oV
+        B2MrcCPnS/wamQfnOW8j9hZJLZshhWZnnZKgB3uGSllsutz+xJzWh71IN6N4iVbMHhtKQn4ecv2
+        hcr7QmUp6g1K5Y0zb4SmEGbdIXLfD7ivEWnKvetp35WmB
+X-Received: by 2002:a63:f74c:0:b0:42b:77c2:ce7c with SMTP id f12-20020a63f74c000000b0042b77c2ce7cmr12592095pgk.473.1662730571983;
+        Fri, 09 Sep 2022 06:36:11 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5SuJp+5hF11ORlTCZwHRZ31liJYmxmCrru4MNb9MY8mX5OINDPGCydElCCxBRT4j/66jaTrmZy9iz49jm7DGI=
+X-Received: by 2002:a63:f74c:0:b0:42b:77c2:ce7c with SMTP id
+ f12-20020a63f74c000000b0042b77c2ce7cmr12592074pgk.473.1662730571756; Fri, 09
+ Sep 2022 06:36:11 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Fri, 09 Sep 2022 15:11:56 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Yxn5VDzJMUxSKz0Z@fedora> <23a76ce3-d568-3c73-eecc-fa499aeecfcd@linux.intel.com>
+In-Reply-To: <23a76ce3-d568-3c73-eecc-fa499aeecfcd@linux.intel.com>
+From:   Wander Lairson Costa <wander@redhat.com>
+Date:   Fri, 9 Sep 2022 10:36:00 -0300
+Message-ID: <CAAq0SUk9_DS4T5_uAg+3re7=wrGXMkiXgw_oPsWfrmgY79P=2g@mail.gmail.com>
+Subject: Re: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport support
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <20220908112044.czjh3xkzb4r27ohq@skbuf>
-References: <Ywyj1VF1wlYqlHb6@shredder>
- <9e1a9eb218bbaa0d36cb98ff5d4b97d7@kapio-technology.com>
- <YwzPJ2oCYJQHOsXD@shredder>
- <69db7606896c77924c11a6c175c4b1a6@kapio-technology.com>
- <YwzjPcQjfLPk3q/k@shredder>
- <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
- <YxNo/0+/Sbg9svid@shredder>
- <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
- <Yxmgs7Du62V1zyjK@shredder>
- <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
- <20220908112044.czjh3xkzb4r27ohq@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,26 +88,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-09-08 13:20, Vladimir Oltean wrote:
-> On Thu, Sep 08, 2022 at 01:14:59PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-09-08 09:59, Ido Schimmel wrote:
->> > On Wed, Sep 07, 2022 at 11:10:07PM +0200, netdev@kapio-technology.com wrote:
->> > > I am at the blackhole driver implementation now, as I suppose that the
->> > > iproute2 command should work with the mv88e6xxx driver when adding blackhole
->> > > entries (with a added selftest)?
->> > > I decided to add the blackhole feature as new ops for drivers with functions
->> > > blackhole_fdb_add() and blackhole_fdb_del(). Do you agree with that approach?
->> >
->> > I assume you are talking about extending 'dsa_switch_ops'?
->> 
->> Yes, that is the idea.
->> 
->> > If so, it's up to the DSA maintainers to decide.
-> 
-> What will be the usefulness of adding a blackhole FDB entry from user 
-> space?
+On Thu, Sep 8, 2022 at 8:45 PM Sathyanarayanan Kuppuswamy
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>
+>
+>
+> On 9/8/22 7:16 AM, Wander Lairson Costa wrote:
+> >> +#ifdef DEBUG
+> >> +static void print_array_hex(const char *title, const char *prefix_str,
+> >> +            const void *buf, int len)
+> >> +{
+> >> +    const __u8 *ptr = buf;
+> >> +    int i, rowsize = HEX_DUMP_SIZE;
+> >> +
+> >> +    if (!len || !buf)
+> >> +            return;
+> >> +
+> >> +    printf("\t\t%s", title);
+> >> +
+> >> +    for (i = 0; i < len; i++) {
+> >> +            if (!(i % rowsize))
+> >> +                    printf("\n%s%.8x:", prefix_str, i);
+> >> +            printf(" %.2x", ptr[i]);
+> >> +    }
+> >> +
+> >> +    printf("\n");
+> >> +}
+> >> +#endif
+> >> +
+> >> +TEST(verify_report)
+> >> +{
+> >> +    __u8 reportdata[TDX_REPORTDATA_LEN];
+> >> +    struct tdreport tdreport;
+> >> +    struct tdx_report_req req;
+> >> +    int devfd, i;
+> >> +
+> >> +    devfd = open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
+> >> +
+> >> +    ASSERT_LT(0, devfd);
+> >> +
+> >> +    /* Generate sample report data */
+> >> +    for (i = 0; i < TDX_REPORTDATA_LEN; i++)
+> >> +            reportdata[i] = i;
+> >> +
+> >> +    /* Initialize IOCTL request */
+> >> +    req.subtype     = 0;
+> >> +    req.reportdata  = (__u64)reportdata;
+> >> +    req.rpd_len     = TDX_REPORTDATA_LEN;
+> >> +    req.tdreport    = (__u64)&tdreport;
+> >> +    req.tdr_len     = sizeof(tdreport);
+> >> +
+> >> +    /* Get TDREPORT */
+> >> +    ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
+> >> +
+> >> +#ifdef DEBUG
+> >> +    print_array_hex("\n\t\tTDX report data\n", "",
+> >> +                    reportdata, sizeof(reportdata));
+> >> +
+> >> +    print_array_hex("\n\t\tTDX tdreport data\n", "",
+> >> +                    &tdreport, sizeof(tdreport));
+> >> +#endif
+> > You can unconditionally define print_array_hex, and
+> > use `if (DEBUG)` instead of #ifdef `DEBUG here`. The compiler
+> > will get rid of the unused code when DEBUG is not defined
+> > as expected, but you get the parser to validate it
+> > independent of the definition of DEBUG.
+>
+> Currently, DEBUG is a macro, so we cannot use if (DEBUG) directly.
+> You are suggesting to change DEBUG to a variable? Any reason to
+> make this change? I think both changes are functionally similar.
+> So I am wondering why to make this change?
+>
 
-With the software bridge it could be used to signal a untrusted host in 
-connection with a locked port entry attempt. I don't see so much use 
-other that test purposes with the driver though.
+My thought is always to define DEBUG. If in debug mode it is defined
+to 1; otherwise to 0.
+Then, you can use `if (DEBUG)` instead of `#ifdef DEBUG`. But the
+former will always check the syntax of the debug code,
+independent of the value of DEBUG, and the compiler will generate the
+same code. The GNU coding standard [1] explains that
+better than I do.
+
+[1] https://www.gnu.org/prep/standards/standards.html#Conditional-Compilation
+
+> >
+>
+> --
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer
+>
+
