@@ -2,219 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40895B2BE3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 03:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33B85B2C12
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 04:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiIIBzz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Sep 2022 21:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S229480AbiIICU5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Sep 2022 22:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiIIBzy (ORCPT
+        with ESMTP id S229607AbiIICUx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Sep 2022 21:55:54 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F474F18D;
-        Thu,  8 Sep 2022 18:55:54 -0700 (PDT)
+        Thu, 8 Sep 2022 22:20:53 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4989752E;
+        Thu,  8 Sep 2022 19:20:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662688554; x=1694224554;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8ihrEr+mNY0MgHnxmzKiyanf1ZC65fntYv6pqfRRa5o=;
-  b=OzbGzywVhIX8p4ZFh+6WPn/YJ+VTvdiPWHCJgR/NDnxP+nbmZnHgKbua
-   dCYGuRuXJtNhtEOKyIXaR+PHYRTumyOtWqKcXVE1qyFPcYEAqVqblyND7
-   ntgGvUx/sBdflnL5iMAhk1KQ8e241p/cFG7PiqHW6RubAGasnyEaGSlbB
-   olFxkZ3dxghlAUjYeuQYDcT4DionREEqb7wmuSQAE1ew07CsYlVgBqwGs
-   bqDUOpTWZuvrQsJORJumiGnNEeRSgGYrve5F6sqApMEWqhZsmIyj8axpv
-   38hJontYOY0rfkjyfq8/Q5a8sGl4YJD/sIOKZEPfabrb82DQLUm2zePa0
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="298710931"
+  t=1662690053; x=1694226053;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OdMYeu3KhOhU/zz3RvTa7hJVA+wlquSZxYlXBYDUS10=;
+  b=kjeKbpI54HuU/jj1atJpmKDp8iGZd2zlFRcsW9JfvLzGhHZetuRWPq1L
+   ZglXSsF7kG5hYc7jLFj0lZtUSR/hsmrx6BDgyAsi/B/ct3Jw0PgZSdjg0
+   Bb8OxQEYdBI5hFEjpwjxMIFDulYhM3+Bd3u2KDZINd1X6EIrN2OtKQ0H0
+   TCB+W3fTc+OUj3+Ml042RA/WViiuTCYkj25+pFRpj8bBq6M5d45c3BtJM
+   w14tACbaZiEAFPENdimBx/Bt1IPliz3gzVpFZT8gfkxJw1sbZv2EsV7Ib
+   JWVfmh3vrDWy2uoe6KV3GSQCuKGP0FiC3B0cqcEyEwPCmokpkVwd6a2e7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10464"; a="323579285"
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="298710931"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 18:55:53 -0700
+   d="scan'208";a="323579285"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 19:20:52 -0700
 X-IronPort-AV: E=Sophos;i="5.93,300,1654585200"; 
-   d="scan'208";a="740892245"
-Received: from duttamou-mobl1.amr.corp.intel.com (HELO [10.209.109.184]) ([10.209.109.184])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 18:55:53 -0700
-Message-ID: <e4b6f718-d671-72b3-4c4d-4338feba80a1@linux.intel.com>
-Date:   Thu, 8 Sep 2022 18:55:53 -0700
+   d="scan'208";a="676968127"
+Received: from zhichao2-mobl1.ccr.corp.intel.com (HELO jiezho4x-mobl1.ccr.corp.intel.com) ([10.255.31.140])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2022 19:20:50 -0700
+From:   Jie2x Zhou <jie2x.zhou@intel.com>
+To:     jie2x.zhou@intel.com, shuah@kernel.org, adobriyan@gmail.com,
+        guozhengkui@vivo.com
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Philip Li <philip.li@intel.com>
+Subject: make run_tests -C proc: proc-pid-vm assertion failed.
+Date:   Fri,  9 Sep 2022 10:19:16 +0800
+Message-Id: <20220909021916.43293-1-jie2x.zhou@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v12 2/3] selftests: tdx: Test TDX attestation GetReport
- support
-Content-Language: en-US
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220908002723.923241-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220908002723.923241-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Yxn5VDzJMUxSKz0Z@fedora>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Yxn5VDzJMUxSKz0Z@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 9/8/22 7:16 AM, Wander Lairson Costa wrote:
-> You can unconditionally define print_array_hex, and
-> use `if (DEBUG)` instead of #ifdef `DEBUG here`. The compiler
-> will get rid of the unused code when DEBUG is not defined
-> as expected, but you get the parser to validate it
-> independent of the definition of DEBUG.
-
-To avoid #ifdef DEBUG in multiple places, we can try following
-change. Let me know your comments.
-
---- a/tools/testing/selftests/tdx/tdx_attest_test.c
-
-+++ b/tools/testing/selftests/tdx/tdx_attest_test.c
-
-@@ -21,6 +21,14 @@
-
- #define HEX_DUMP_SIZE  8
-
- #define __packed       __attribute__((packed))
-
- 
-
-+static inline int _no_printf(const char *format, ...) { return 0; }
-
-+
-
-+#ifdef DEBUG
-
-+#define pr_debug(...) printf(__VA_ARGS__)
-
-+#else
-
-+#define pr_debug(...) _no_printf(__VA_ARGS__)
-
-+#endif
-
-+
-
- /*
-
-  * Trusted Execution Environment (TEE) report (TDREPORT_STRUCT) type,
-
-  * sub type and version. More details can be found in TDX v1.0 Module
-
-@@ -90,7 +98,6 @@ struct tdreport {
-
-        struct td_info tdinfo;
-
- }  __packed;
-
- 
-
--#ifdef DEBUG
-
- static void print_array_hex(const char *title, const char *prefix_str,
-
-                const void *buf, int len)
-
- {
-
-@@ -100,17 +107,16 @@ static void print_array_hex(const char *title, const char *prefix_str,
-
-        if (!len || !buf)
-
-                return;
-
- 
-
--       printf("\t\t%s", title);
-
-+       pr_debug("\t\t%s", title);
-
- 
-
-        for (i = 0; i < len; i++) {
-
-                if (!(i % rowsize))
-
--                       printf("\n%s%.8x:", prefix_str, i);
-
--               printf(" %.2x", ptr[i]);
-
-+                       pr_debug("\n%s%.8x:", prefix_str, i);
-
-+               pr_debug(" %.2x", ptr[i]);
-
-        }
-
- 
-
--       printf("\n");
-
-+       pr_debug("\n");
-
- }
-
--#endif
-
- 
-
- TEST(verify_report)
-
- {
-
-@@ -139,13 +145,11 @@ TEST(verify_report)
-
-        /* Get TDREPORT */
-
-        ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT, &req));
-
- 
-
--#ifdef DEBUG
-
-        print_array_hex("\n\t\tTDX report data\n", "",
-
-                        reportdata, sizeof(reportdata));
-
- 
-
-        print_array_hex("\n\t\tTDX tdreport data\n", "",
-
-                        &tdreport, sizeof(tdreport));
-
--#endif
-
- 
-
-        /* Make sure TDREPORT data includes the REPORTDATA passed */
-
-        ASSERT_EQ(0, memcmp(&tdreport.reportmac.reportdata[0],
-
-
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+hi,
+
+The test error is caused by g_vsyscall set failed.
+
+Error output:
+ selftests: proc: proc-pid-vm
+ proc-pid-vm: proc-pid-vm.c:389: main: Assertion `rv == len' failed.
+ Aborted
+
+g_vsyscall is set to 0.
+In proc-pid-vm.c:
+/*
+ * 0: vsyscall VMA doesn't exist        vsyscall=none
+ * 1: vsyscall VMA is r-xp              vsyscall=emulate
+ * 2: vsyscall VMA is --xp              vsyscall=xonly
+ */
+static int g_vsyscall;
+static const char *str_vsyscall;
+
+static const char str_vsyscall_0[] = "";
+static const char str_vsyscall_1[] =
+"ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]\n";
+static const char str_vsyscall_2[] =
+"ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]\n";
+
+The /proc/%u/maps output is:
+buf=100000000-100001000 r-xp 00000000 00:2d 2                                /tmp/#2 (deleted)
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
+
+So the g_vsyscall should be 2 according to commentary(2: vsyscall VMA is --xp).
+Is it a bug?
+
+best regards,
