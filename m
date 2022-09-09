@@ -2,190 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449535B2D34
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 06:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABFB5B2DA2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 06:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiIIEBr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 00:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S229521AbiIIEox (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 00:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiIIEBp (ORCPT
+        with ESMTP id S229685AbiIIEou (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 00:01:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7837D074A;
-        Thu,  8 Sep 2022 21:01:44 -0700 (PDT)
+        Fri, 9 Sep 2022 00:44:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFCF37FAB;
+        Thu,  8 Sep 2022 21:44:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A80161E35;
-        Fri,  9 Sep 2022 04:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16162C433C1;
-        Fri,  9 Sep 2022 04:01:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 424D360E73;
+        Fri,  9 Sep 2022 04:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E45CC433C1;
+        Fri,  9 Sep 2022 04:44:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662696103;
-        bh=9PLi232bcOnEaVbw2xQNicyLAvrsStubFpd3g24HjS8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TKjmeoR2dbaaPj+sb57Jx3PPxOKZQnISq6tuHl3KURjplc474Wsl+FG1myLQNQq7k
-         vn+heCFNH8b+vdX1bDyNTmOZoG5Q2kzAxb8+kjed/itQsRlOg5iJE10lanYcUjyqkb
-         RMtXLmRMhhz3BWiUmEJQMe/mCAK7mYZnjk4BjrxbzSuXlCDyhTnd5/AF8bGcFewTI3
-         kNhgzS/EOHbxrAzMUnhPkxFCaFUmzWtDJqgjMF8kfpYEC4LSHh7fgDvqgjIsJ38cvm
-         gpCbQ+FqkQTsgzcmPaFmWnD7aEZMLRtiYwMADhEpdeoldiF33ZuM1rFE1OpGy9oiHm
-         gA5QrYY6nRKdg==
-Date:   Fri, 9 Sep 2022 07:01:36 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/5] selftests/sgx: Retry the ioctl()'s returned with
- EAGAIN
-Message-ID: <Yxq6oAcGkg33tkb8@kernel.org>
-References: <20220905020411.17290-1-jarkko@kernel.org>
- <20220905020411.17290-2-jarkko@kernel.org>
- <fe0e7a0c-da41-5918-6ef4-8906598998a6@intel.com>
- <Yxp4iIKjOQflQC2i@kernel.org>
- <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
+        s=k20201202; t=1662698687;
+        bh=enEwLIV4OwLmN/RgbTuEUX2L54sFfCWJPwewzGbYInE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cLrhFtKHGXINYvsGREelVRIrtsdDSdhyssoSgqKj1qRrv8lKr0eHelXtdnDQr85sC
+         vUhwAfnsNzkQoKexpnXMoJMT2YKwm5XKP5lz/55VUhKJAfkOYJlwEC7BQKT5XWACfI
+         1k3vOOYkyrSJreY+nrZBkF7nlWbJdvuk7q1CKzdUycNfapzFNnsGW/qGhV4hFmnntR
+         OfJ8zVRoAu1qi5JA6EiUBZ7jakY55X0EANPYhumQNRuDzDBGpuIpiLT6sCkdfGVwZE
+         3o0LkAEWoAGTiudx3mSdHcf7Y878UhbbaZuVzxJ+2HSUPNQIqSpy8GPq8284tGcG6p
+         KiZxc67uW85HQ==
+Message-ID: <48f7d192-993d-1df1-db0a-f985e61669b6@kernel.org>
+Date:   Thu, 8 Sep 2022 21:44:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Content-Language: en-US
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, jun.nakajima@intel.com,
+        dave.hansen@intel.com, ak@linux.intel.com, david@redhat.com,
+        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <20220818132421.6xmjqduempmxnnu2@box>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 05:06:58PM -0700, Reinette Chatre wrote:
-> Hi Jarkko,
+On 8/18/22 06:24, Kirill A . Shutemov wrote:
+> On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+>> On Wed, 6 Jul 2022, Chao Peng wrote:
+>>> This is the v7 of this series which tries to implement the fd-based KVM
+>>> guest private memory.
+>>
+>> Here at last are my reluctant thoughts on this patchset.
+>>
+>> fd-based approach for supporting KVM guest private memory: fine.
+>>
+>> Use or abuse of memfd and shmem.c: mistaken.
+>>
+>> memfd_create() was an excellent way to put together the initial prototype.
+>>
+>> But since then, TDX in particular has forced an effort into preventing
+>> (by flags, seals, notifiers) almost everything that makes it shmem/tmpfs.
+>>
+>> Are any of the shmem.c mods useful to existing users of shmem.c? No.
+>> Is MFD_INACCESSIBLE useful or comprehensible to memfd_create() users? No.
+>>
+>> What use do you have for a filesystem here?  Almost none.
+>> IIUC, what you want is an fd through which QEMU can allocate kernel
+>> memory, selectively free that memory, and communicate fd+offset+length
+>> to KVM.  And perhaps an interface to initialize a little of that memory
+>> from a template (presumably copied from a real file on disk somewhere).
+>>
+>> You don't need shmem.c or a filesystem for that!
+>>
+>> If your memory could be swapped, that would be enough of a good reason
+>> to make use of shmem.c: but it cannot be swapped; and although there
+>> are some references in the mailthreads to it perhaps being swappable
+>> in future, I get the impression that will not happen soon if ever.
+>>
+>> If your memory could be migrated, that would be some reason to use
+>> filesystem page cache (because page migration happens to understand
+>> that type of memory): but it cannot be migrated.
 > 
-> On 9/8/2022 4:19 PM, Jarkko Sakkinen wrote:
-> > On Thu, Sep 08, 2022 at 03:43:06PM -0700, Reinette Chatre wrote:
-> >> Hi Jarkko and Haitao,
-> >>
-> >> On 9/4/2022 7:04 PM, Jarkko Sakkinen wrote:
-> >>> From: Haitao Huang <haitao.huang@linux.intel.com>
-> >>>
-> >>> For EMODT and EREMOVE ioctl()'s with a large range, kernel
-> >>> may not finish in one shot and return EAGAIN error code
-> >>> and count of bytes of EPC pages on that operations are
-> >>> finished successfully.
-> >>>
-> >>> Change the unclobbered_vdso_oversubscribed_remove test
-> >>> to rerun the ioctl()'s in a loop, updating offset and length
-> >>> using the byte count returned in each iteration.
-> >>>
-> >>> Fixes: 6507cce561b4 ("selftests/sgx: Page removal stress test")
-> >>
-> >> Should this patch be moved to the "critical fixes for v6.0" series?
-> > 
-> > I think not because it does not risk stability of the
-> > kernel itself. It's "nice to have" but not mandatory.
+> Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
+> theoretically possible, but I'm not aware of any plans as of now.
 > 
-> ok, thank you for considering it.
+> [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
 > 
-> ...
-> 
-> >>> @@ -453,16 +454,30 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
-> >>>  	modt_ioc.offset = heap->offset;
-> >>>  	modt_ioc.length = heap->size;
-> >>>  	modt_ioc.page_type = SGX_PAGE_TYPE_TRIM;
-> >>> -
-> >>> +	count = 0;
-> >>>  	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
-> >>>  	       heap->size);
-> >>> -	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> >>> -	errno_save = ret == -1 ? errno : 0;
-> >>> +	do {
-> >>> +		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> >>> +
-> >>> +		errno_save = ret == -1 ? errno : 0;
-> >>> +		if (errno_save != EAGAIN)
-> >>> +			break;
-> >>> +
-> >>> +		EXPECT_EQ(modt_ioc.result, 0);
-> >>
-> >> If this check triggers then there is something seriously wrong and in that case
-> >> it may also be that this loop may be unable to terminate or the error condition would
-> >> keep appearing until the loop terminates (which may be many iterations). Considering
-> >> the severity and risk I do think that ASSERT_EQ() would be more appropriate,
-> >> similar to how ASSERT_EQ() is used in patch 5/5.
-> >>
-> >> Apart from that I think that this looks good.
-> >>
-> >> Thank you very much for adding this.
-> >>
-> >> Reinette
-> > 
-> > Hmm... I could along the lines:
-> > 
-> > /*
-> >  * Get time since Epoch is milliseconds.
-> >  */
-> > unsigned long get_time(void)
-> > {
-> >     struct timeval start;
-> > 
-> >     gettimeofday(&start, NULL);
-> > 
-> >     return (unsigneg long)start.tv_sec * 1000L + (unsigned long)start.tv_usec / 1000L;
-> > }
-> > 
-> > and
-> > 
-> > #define IOCTL_RETRY_TIMEOUT 100
-> > 
-> > In the test function:
-> > 
-> >         unsigned long start_time;
-> > 
-> >         /* ... */
-> > 
-> >         start_time = get_time();
-> >         do {
-> >                 EXPECT_LT(get_time() - start_time(), IOCTL_RETRY_TIMEOUT);
-> > 
-> >                 /* ... */
-> >         }
-> > 
-> >         /* ... */
-> > 
-> > What do you think?
-> 
-> I do think that your proposal can be considered for an additional check in this
-> test but the way I understand it it does not address my feedback.
-> 
-> In this patch the flow is:
-> 
-> 	do {
-> 		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
-> 
-> 		errno_save = ret == -1 ? errno : 0;
-> 		if (errno_save != EAGAIN)
-> 			break;
-> 
-> 		EXPECT_EQ(modt_ioc.result, 0);
-> 		...
-> 	} while ...
-> 
-> 
-> If this EXPECT_EQ() check fails then it means that errno_save is EAGAIN
-> and modt_ioc.result != 0. This should never happen because in the kernel
-> (sgx_enclave_modify_types()) the only time modt_ioc.result can be set is
-> when the ioctl() returns EFAULT.
-> 
-> In my opinion this check should be changed to:
-> 		ASSERT_EQ(modt_ioc.result, 0);
 
-Right, I missed this. It should be definitely ASSERT_EQ(().
+This thing?
 
-BR, Jarkko
+https://cdrdv2.intel.com/v1/dl/getContent/733578
+
+That looks like migration between computers, not between NUMA nodes.  Or 
+am I missing something?
