@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C0A5B3C9D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 18:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADA55B3CA1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 18:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiIIQFm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 12:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S231304AbiIIQGb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 12:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiIIQFl (ORCPT
+        with ESMTP id S230510AbiIIQGa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:05:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381C51269F8;
-        Fri,  9 Sep 2022 09:05:40 -0700 (PDT)
+        Fri, 9 Sep 2022 12:06:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99EB1282D5;
+        Fri,  9 Sep 2022 09:06:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 963C2B82584;
-        Fri,  9 Sep 2022 16:05:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43BF3C43142;
-        Fri,  9 Sep 2022 16:05:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F4C5B82584;
+        Fri,  9 Sep 2022 16:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBAB3C4347C;
+        Fri,  9 Sep 2022 16:06:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662739537;
-        bh=vZdt9ixCZtMLcAI25GuWDIZT5TxgjuuYoXVx/JYGVGY=;
+        s=k20201202; t=1662739587;
+        bh=axWEZR2AGhaBfThvLrSFA+NxQSVcKpOAZwv+H9dW4Nk=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=odSrelK3eNCHpDgWE8Y3tTlD/NuoAGPqafEe+Bker9e8oMm6a2LIAJhSr0+1xukvV
-         6yCeit3xFM4/NpIN/vJUAcWjZpLz8FesYCby1lFimWunO+zR7IqAwGzbsaLpIRfjNn
-         Itk5K24hwseJ7RShTWP7wZscLn2qJoArckxSYgKp52s+jjKbH+NAt6rkjHMsHMM0CM
-         hpwe810k33BLU0KXZIzdeg3Ckd5LrILTIx/nEdnykWbB7zvZy0LGvPCaRI5CyJ0GII
-         6UWD4kfMJjFAT9xgwQos7feHJ57Ohq0WqOS0+R0RCRG4pNTMV4y6XqrEErhQEKzI9o
-         ZyHYVyBpwL9zg==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1278a61bd57so5038146fac.7;
-        Fri, 09 Sep 2022 09:05:37 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3aaPbEG+pOGskB2VnRI/Nvu809DZOEIBEL79YPcLtHXglM5G3Y
-        BitYUAxfNHkrEWSE3r/i0riFPu/akuSEoBDXtXM=
-X-Google-Smtp-Source: AA6agR4l0hQbiJb5tqPV7ginxf4L2jgOl514Oejh5l5k9dTzEz2tfwqmk7IGsBHhGG67/L3lxzVanhheUehYuKXgwFE=
-X-Received: by 2002:a05:6870:32d2:b0:127:f0b4:418f with SMTP id
- r18-20020a05687032d200b00127f0b4418fmr5643550oac.22.1662739536321; Fri, 09
- Sep 2022 09:05:36 -0700 (PDT)
+        b=iibSQJJ4qO0hADleXEMz2q8bsHl4E5kuxqbEW814lAtB6rTghQGxlaWLayEs9BxL6
+         qWsyybTYDgORZqa6SMD8HdP43rhj1S8YjCOGM9LPqk1nIDUVt5ZuMgXhANuH88DKOX
+         95BFN5MFwjwD9ElXZwnG8HK/hMlNHfBMh1T8AIl9UALOKwpDACprIwB3Q/uJMOMGK9
+         sLu1xcTQkm+vu/dcD4ppCL5/l1YYFiqRqH8Y9AVLUdEQsy+oN4tgJUEMP1ZH820Oi4
+         mIWgpb9JtuezcGS477Kc9vOF3tkLh6WKLFdEXRqhZCKemRhAoj+tFJ1fRKxhMvAKDS
+         51qBZeIRP1V5g==
+Received: by mail-ot1-f48.google.com with SMTP id 6-20020a9d0106000000b0063963134d04so1356595otu.3;
+        Fri, 09 Sep 2022 09:06:26 -0700 (PDT)
+X-Gm-Message-State: ACgBeo26VrXaTyec/izQJuIUnPTImjFNVOv1eFUaqESyTBoEi6C6AFcW
+        0WgF/GpLpCB37EyxNemsswUpO/bndaY6iHRZCkY=
+X-Google-Smtp-Source: AA6agR7gNcjRD/fchDqW/acEVY47PneSmF9ZfU3M+Ex1YMk2RVvQ+AETSXZH7W4vEnLR3dT4sV0ywAUAaVtWdc9Vjok=
+X-Received: by 2002:a9d:7c94:0:b0:636:f74b:2364 with SMTP id
+ q20-20020a9d7c94000000b00636f74b2364mr5594298otn.165.1662739586134; Fri, 09
+ Sep 2022 09:06:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com> <20220909120736.1027040-7-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220909120736.1027040-7-roberto.sassu@huaweicloud.com>
+References: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com> <20220909120736.1027040-8-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220909120736.1027040-8-roberto.sassu@huaweicloud.com>
 From:   Song Liu <song@kernel.org>
-Date:   Fri, 9 Sep 2022 17:05:25 +0100
-X-Gmail-Original-Message-ID: <CAPhsuW4wYaBOwJW8EWv4COggZFpbic8yCbfCJ_u-4QPNUTGWCw@mail.gmail.com>
-Message-ID: <CAPhsuW4wYaBOwJW8EWv4COggZFpbic8yCbfCJ_u-4QPNUTGWCw@mail.gmail.com>
-Subject: Re: [PATCH v17 06/12] bpf: Add bpf_lookup_*_key() and bpf_key_put() kfuncs
+Date:   Fri, 9 Sep 2022 17:06:15 +0100
+X-Gmail-Original-Message-ID: <CAPhsuW6zhrUJBfht7RCiUGWWCaWwpcjzAq-R4W-YmpU+YZyMXg@mail.gmail.com>
+Message-ID: <CAPhsuW6zhrUJBfht7RCiUGWWCaWwpcjzAq-R4W-YmpU+YZyMXg@mail.gmail.com>
+Subject: Re: [PATCH v17 07/12] bpf: Add bpf_verify_pkcs7_signature() kfunc
 To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -87,16 +87,27 @@ On Fri, Sep 9, 2022 at 1:09 PM Roberto Sassu
 >
 > From: Roberto Sassu <roberto.sassu@huawei.com>
 >
-> Add the bpf_lookup_user_key(), bpf_lookup_system_key() and bpf_key_put()
-> kfuncs, to respectively search a key with a given key handle serial number
-> and flags, obtain a key from a pre-determined ID defined in
-> include/linux/verification.h, and cleanup.
+> Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security modules
+> the ability to check the validity of a signature against supplied data, by
+> using user-provided or system-provided keys as trust anchor.
 >
-> Introduce system_keyring_id_check() to validate the keyring ID parameter of
+> The new kfunc makes it possible to enforce mandatory policies, as eBPF
+> programs might be allowed to make security decisions only based on data
+> sources the system administrator approves.
+>
+> The caller should provide the data to be verified and the signature as eBPF
+> dynamic pointers (to minimize the number of parameters) and a bpf_key
+> structure containing a reference to the keyring with keys trusted for
+> signature verification, obtained from bpf_lookup_user_key() or
 > bpf_lookup_system_key().
 >
+> For bpf_key structures obtained from the former lookup function,
+> bpf_verify_pkcs7_signature() completes the permission check deferred by
+> that function by calling key_validate(). key_task_permission() is already
+> called by the PKCS#7 code.
+>
 > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Acked-by: KP Singh <kpsingh@kernel.org>
 
 Acked-by: Song Liu <song@kernel.org>
 
