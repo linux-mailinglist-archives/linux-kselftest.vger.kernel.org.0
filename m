@@ -2,130 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACCB5B3799
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 14:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCF05B38A9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 15:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbiIIMX2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 08:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        id S229647AbiIINMD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 09:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiIIMW7 (ORCPT
+        with ESMTP id S229536AbiIINMC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:22:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237FBC4830
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Sep 2022 05:21:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662726115;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wpKZaZKB6OuIOUbNK0QXmxRia5uDsfJYJGNMehBpaeQ=;
-        b=Gg28gKJ3uKapzabdcjs/ovSkjmzQHcse7/DT6PFfTqWsw+hYpR7ACfBtTyuGGGiV/+5xuy
-        N7xGMSXUYiUl8By9l0ewwMVmj8Q+DdQE+Rz0WnpSaZ/PBT87lvB2r1bpSRU/W3tFQGIMx0
-        ZohYkQ23f6xUZy3z3J76XaWgPtdxaW8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-102-aToaIkC7O1aIvs9DB4LnWw-1; Fri, 09 Sep 2022 08:21:53 -0400
-X-MC-Unique: aToaIkC7O1aIvs9DB4LnWw-1
-Received: by mail-wm1-f69.google.com with SMTP id c128-20020a1c3586000000b003b324bb08c5so2450504wma.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Sep 2022 05:21:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=wpKZaZKB6OuIOUbNK0QXmxRia5uDsfJYJGNMehBpaeQ=;
-        b=XNiZiC6WyzV/3oZmTJWwjY76pv32ew/W1RAdQSJ36p3pljRr8nHsS01IJZeiZTjTl+
-         UqfK2ZFzusRpzjZwkJiJUI9emnibzI3orZz/3RW1S9GVBq37wRHK/ATm5hXBrffZJkT5
-         ZuvFXHNT/TwG5HQnchS2FbT9osPVbzP5/6GIz8gI0fh4PwGOayocXvD84dSOu2xOmanK
-         KiVeK//UhsuVqh/6/46DIUGr4JaIs19FA/TOfogD0UO8t2T2U8YKUSn4DWGUikJKmtMM
-         6wcywOUts6VEI9IxwuQMNtjzylGUj5a4Hnk4rsEbmJCB9+y1PODxzGFKSv7ZuMkqYotw
-         zGIg==
-X-Gm-Message-State: ACgBeo0VEiHlDt+t318QhGKZVdqMZnvIQAMTXnJ+Y0O/5ABH6UOXWKcp
-        H4mWu4GGPa2CY/zXWM+CGfQul0ml03oVmUcCjhQp4asyVqoNwRLbSdk6B0cM5UIVTKT1O3h3MaN
-        9YdYY23w29my23PVVaDKSs9y04RxP
-X-Received: by 2002:a5d:588a:0:b0:228:462f:a49 with SMTP id n10-20020a5d588a000000b00228462f0a49mr8372607wrf.616.1662726112733;
-        Fri, 09 Sep 2022 05:21:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4zCe6lDbEZptsQT9dTPwb/AYvVBjW5axO/MWFBwE2Vrd8p4VQ+FCvkXzdgnWOwMPwcYhUpUA==
-X-Received: by 2002:a5d:588a:0:b0:228:462f:a49 with SMTP id n10-20020a5d588a000000b00228462f0a49mr8372589wrf.616.1662726112488;
-        Fri, 09 Sep 2022 05:21:52 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:6300:1fe0:42e1:62c5:91b6? (p200300cbc70463001fe042e162c591b6.dip0.t-ipconnect.de. [2003:cb:c704:6300:1fe0:42e1:62c5:91b6])
-        by smtp.gmail.com with ESMTPSA id q127-20020a1c4385000000b003a5f54e3bbbsm429713wma.38.2022.09.09.05.21.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 05:21:52 -0700 (PDT)
-Message-ID: <c4447a26-8bc7-2250-0a64-1cb3a1b3b5a2@redhat.com>
-Date:   Fri, 9 Sep 2022 14:21:51 +0200
+        Fri, 9 Sep 2022 09:12:02 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B693C94127;
+        Fri,  9 Sep 2022 06:11:59 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id F0F37188528F;
+        Fri,  9 Sep 2022 13:11:56 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id E8A0725032B7;
+        Fri,  9 Sep 2022 13:11:56 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id DDD2B9EC0002; Fri,  9 Sep 2022 13:11:56 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH -next 4/5] selftests/memory-hotplug: Restore memory before
- exit
-Content-Language: en-US
-To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Cc:     akinobu.mita@gmail.com, corbet@lwn.net, osalvador@suse.de,
-        shuah@kernel.org
-References: <20220909075200.198363-1-zhaogongyi@huawei.com>
- <20220909075200.198363-5-zhaogongyi@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220909075200.198363-5-zhaogongyi@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Fri, 09 Sep 2022 15:11:56 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <20220908112044.czjh3xkzb4r27ohq@skbuf>
+References: <Ywyj1VF1wlYqlHb6@shredder>
+ <9e1a9eb218bbaa0d36cb98ff5d4b97d7@kapio-technology.com>
+ <YwzPJ2oCYJQHOsXD@shredder>
+ <69db7606896c77924c11a6c175c4b1a6@kapio-technology.com>
+ <YwzjPcQjfLPk3q/k@shredder>
+ <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
+ <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 09.09.22 09:51, Zhao Gongyi wrote:
-> Some momory will be left in offline state when calling
-> offline_memory_expect_fail() failed. Restore it before exit.
+On 2022-09-08 13:20, Vladimir Oltean wrote:
+> On Thu, Sep 08, 2022 at 01:14:59PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-09-08 09:59, Ido Schimmel wrote:
+>> > On Wed, Sep 07, 2022 at 11:10:07PM +0200, netdev@kapio-technology.com wrote:
+>> > > I am at the blackhole driver implementation now, as I suppose that the
+>> > > iproute2 command should work with the mv88e6xxx driver when adding blackhole
+>> > > entries (with a added selftest)?
+>> > > I decided to add the blackhole feature as new ops for drivers with functions
+>> > > blackhole_fdb_add() and blackhole_fdb_del(). Do you agree with that approach?
+>> >
+>> > I assume you are talking about extending 'dsa_switch_ops'?
+>> 
+>> Yes, that is the idea.
+>> 
+>> > If so, it's up to the DSA maintainers to decide.
 > 
-> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
-> ---
->   .../memory-hotplug/mem-on-off-test.sh         | 24 +++++++++++++------
->   1 file changed, 17 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> index 3bdf3c4d6d06..259fd8978639 100755
-> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
-> @@ -134,6 +134,17 @@ offline_memory_expect_fail()
->   	return 0
->   }
-> 
-> +online_all_hot_pluggable_memory()
-> +{
-> +
-> +	for memory in `hotpluggable_offline_memory`; do
-> +		online_memory_expect_success $memory || {
-> +			echo "online memory $memory: unexpected fail"
-> +			retval=1
-> +		}
-> +	done
-> +}
+> What will be the usefulness of adding a blackhole FDB entry from user 
+> space?
 
-Maybe call it
-
-"online_all_offline_memory()"
-
-instead?
-
-Note that "removable" as used in hotpluggable_memory() will nowadays 
-always return "1" if the kernel supports memory hotunplug, independent 
-of the specific memory block.
-
--- 
-Thanks,
-
-David / dhildenb
-
+With the software bridge it could be used to signal a untrusted host in 
+connection with a locked port entry attempt. I don't see so much use 
+other that test purposes with the driver though.
