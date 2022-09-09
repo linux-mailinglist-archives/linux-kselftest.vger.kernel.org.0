@@ -2,175 +2,220 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F9A5B4190
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 23:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DAA5B42BA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Sep 2022 01:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbiIIVmQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 17:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36796 "EHLO
+        id S231269AbiIIXCP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 19:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiIIVmO (ORCPT
+        with ESMTP id S229464AbiIIXCN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 17:42:14 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E89E13B12B
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Sep 2022 14:42:11 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so2479909wmb.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Sep 2022 14:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=+7gUZTKN1RNnN3ci9/lyNR5cvcW0J68JTLhQ3vnxCGE=;
-        b=KI3FNKqXtOXA+08GsDYcQfo20rsDbEVGbB9PTviUFUhu87d38jUzyfdBaEdvr9wTu1
-         7YKzd0mtg8I2iVZxoQdRz+P8/MBaXB9JK8SPryzEvjv1NpXd18HwAkF4b9yEQ3Sn1n0F
-         yALnIP1cJimHIF/KBYvP49bxkem7XhcpEibS24SebYzxl4Y/k46SZ4yEdeSQywRRkAx0
-         tX/JfQ7kEjUQX6JYho7VjazrzbWkEj734S/ALCvkNqwCADJdyNhAXUxG5PqSEhSTtonG
-         yEtCgCC8ComGUSz+QpMvrTm4eteY323vBAUpb9X48G9Mpp7MR3HHlBM09JYELhydtXLG
-         dmCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=+7gUZTKN1RNnN3ci9/lyNR5cvcW0J68JTLhQ3vnxCGE=;
-        b=G6tFIeFNUd+xVraCLzEa2/fC7GvZHpmlMHm03qqb9azKmQ5Uqct0YFiqZOGXmVt1zP
-         QZpHQUR25SMgMFgKk4FxQMWJZz3xAPoO2jgivMw4pfrDqsli4CNw8B8xSjVB5ywGDizR
-         uBbLl53CpF9Q7J57wJrazUwfVw0ZII3vDsJ8K71NfvLoraHUpWrJijYNHgpdB/HZkTh+
-         U5hzY1q7ohaH2FD73UKM3vuMXyZgOpZmZgcm6CrUC0VamsZILbpiM4xizJqLcu1q1I3s
-         NDY75KVmdh5mZGGT+Tp4anf7kHWee8EzR966NcOBbpgz7IW+TWUK+Of1/P2d2SytuDPq
-         FlFg==
-X-Gm-Message-State: ACgBeo1e/ev6zesi/r2PlpUcUAbRIou2quDxaPEfqolxOtv28QfOCfTn
-        JKk3xP3ExemcVHTAo0FGTREQiYxh49eQ5kANLORvew==
-X-Google-Smtp-Source: AA6agR6Us7LvGpTuE9bFLm53J4mE8TTx9hyp2wzRef3J/SA5Qz3Gfd+lkzE27Upvavl5JzDThz4Jf4TwvGXPEtb50QY=
-X-Received: by 2002:a7b:c056:0:b0:3b4:5f7f:16b6 with SMTP id
- u22-20020a7bc056000000b003b45f7f16b6mr2718359wmc.135.1662759729393; Fri, 09
- Sep 2022 14:42:09 -0700 (PDT)
+        Fri, 9 Sep 2022 19:02:13 -0400
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18959D4BD4;
+        Fri,  9 Sep 2022 16:02:12 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7A8C95806ED;
+        Fri,  9 Sep 2022 19:02:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 09 Sep 2022 19:02:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1662764529; x=1662771729; bh=LZ
+        qIYAsRBDLHzzFlN7g+AhI2hMyU/ynXCZmSXJx2o4o=; b=Fd9GWSBue9IWHe503e
+        u6NjmzZkClyF2iQ1lgniAHchY/0TuAinaS2NWLg6kXBU39151pE1ovKNVS25Z/eq
+        IFGfoDCZdfi9vsheNiozUhWQhBFe09NjS0fOO3MHFGf7ZJIdFE7URE2+4T8ry1tP
+        Nbg2/Rj0tE3Ek4flC4ACTOcql6PzwfFTME2lnOV+B3N/lL/hnKnCQ6GH5+XhazC2
+        Nmlg33RcE4W1FIQN8y/vZurktFXXaUv+E4bgIUTmtxklpt0y22GN9mlaZnVA1HvP
+        jkswfdiKSGu/tJLd7oZD/eoKEIjjf2SfU40zdSq1rOcMST2//OkJ9MhjZ2EdQs+x
+        twzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662764529; x=1662771729; bh=LZqIYAsRBDLHzzFlN7g+AhI2hMyU
+        /ynXCZmSXJx2o4o=; b=R0rm0u9Q8CX9dbZ2DhuKZkJyLwqDkiL/bcQEMyyhRDy3
+        DKn59ZmnL3PU6DmHyrEOtbWOQxV0Jvh3Grnr7NnwLKmBBu1OqZr7MHMw5AF8nOc3
+        yZwD78eLbs+PQ7ZV3R0sH3zp40EzNkJRkYIFQoQD0TzJshF7fsO77EIAhb/np+v5
+        fD3+R4uPoMhtBl6YFx1Id+vdQVHvRNN3JNjDEgZx0z97eg2UtW70uB3fK3NPtcQq
+        YXJKLKjalf08E+dU2zl2hDz2uNpIpr6InQLeo3pXVpi6p5g0dYXSjFu2qp7lvcHO
+        z/6UG76BNmJ0JLKn+JDTKA1iOr5MetWJtzkldsMOKw==
+X-ME-Sender: <xms:7sUbY3rI1KJg6T2GIL1QERVjHifgXO5lm0MnxXu08ZpG7b3CagZfXw>
+    <xme:7sUbYxoUJWW56KV29pr_aHSFZMDTg3SRysBUXhQlGa9zL3CR6D-tSmooacFF6F7T4
+    vngwaKGwj26JDXPHtA>
+X-ME-Received: <xmr:7sUbY0NDMWxhzD2mgtmpwtlR72xtvAmgXhoiiyjc53F64CGLIQNkCJkgvMmlVTESiy-95w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtiedgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutecurdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhepvdekkeelteduteduledtgfevledtgeekjeeu
+    ieehgeeltdduteeuueekhffhledvnecuffhomhgrihhnpehinhhtvghlrdgtohhmpdhmvg
+    hmrdhprghgvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
+    ohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:7sUbY65BD7T0lBkv38MIfA5C7WIcBVzxQYY2iqyB0VQfm1zOuugzwQ>
+    <xmx:7sUbY24PLQzdG8vOj0k1OQ385SW1ySugRFGwv36hbK-YXtzdMEgHpA>
+    <xmx:7sUbYygCW8klPbx4kDGz3VpnpXvXc5mSI7G4ZJw8EFDOAiv-qLQgWA>
+    <xmx:8cUbY7VMkXPqPikJg5h1mEfMk_BDtkjgyhUL44T0t1A43JkcVR9sBQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Sep 2022 19:02:06 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 2DAF3104A9B; Sat, 10 Sep 2022 02:02:03 +0300 (+03)
+Date:   Sat, 10 Sep 2022 02:02:03 +0300
+From:   "Kirill A . Shutemov" <kirill@shutemov.name>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <20220909230203.czdpronokk3lxses@box.shutemov.name>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+ <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
+ <95bd287b-d17f-fda8-58c9-20700b1e0c72@kernel.org>
+ <20220909143236.sznwzkpedldrlnn5@box.shutemov.name>
+ <762581e4-a6bf-41d1-b0d3-72543153ffb1@www.fastmail.com>
 MIME-Version: 1.0
-References: <cover.1662361354.git.cdleonard@gmail.com>
-In-Reply-To: <cover.1662361354.git.cdleonard@gmail.com>
-From:   Salam Noureddine <noureddine@arista.com>
-Date:   Fri, 9 Sep 2022 14:41:58 -0700
-Message-ID: <CAO7SqHBGMY4u6H6+H8iy_aZEy3F55JkW05JfrB9HsLGNOjmFyA@mail.gmail.com>
-Subject: Re: [PATCH v8 00/26] tcp: Initial support for RFC5925 auth option
-To:     Leonard Crestez <cdleonard@gmail.com>
-Cc:     David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Philip Paeps <philip@trouble.is>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Caowangbao <caowangbao@huawei.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <762581e4-a6bf-41d1-b0d3-72543153ffb1@www.fastmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Leonard,
+On Fri, Sep 09, 2022 at 12:11:05PM -0700, Andy Lutomirski wrote:
+> 
+> 
+> On Fri, Sep 9, 2022, at 7:32 AM, Kirill A . Shutemov wrote:
+> > On Thu, Sep 08, 2022 at 09:48:35PM -0700, Andy Lutomirski wrote:
+> >> On 8/19/22 17:27, Kirill A. Shutemov wrote:
+> >> > On Thu, Aug 18, 2022 at 08:00:41PM -0700, Hugh Dickins wrote:
+> >> > > On Thu, 18 Aug 2022, Kirill A . Shutemov wrote:
+> >> > > > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
+> >> > > > > 
+> >> > > > > If your memory could be swapped, that would be enough of a good reason
+> >> > > > > to make use of shmem.c: but it cannot be swapped; and although there
+> >> > > > > are some references in the mailthreads to it perhaps being swappable
+> >> > > > > in future, I get the impression that will not happen soon if ever.
+> >> > > > > 
+> >> > > > > If your memory could be migrated, that would be some reason to use
+> >> > > > > filesystem page cache (because page migration happens to understand
+> >> > > > > that type of memory): but it cannot be migrated.
+> >> > > > 
+> >> > > > Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
+> >> > > > theoretically possible, but I'm not aware of any plans as of now.
+> >> > > > 
+> >> > > > [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
+> >> > > 
+> >> > > I always forget, migration means different things to different audiences.
+> >> > > As an mm person, I was meaning page migration, whereas a virtualization
+> >> > > person thinks VM live migration (which that reference appears to be about),
+> >> > > a scheduler person task migration, an ornithologist bird migration, etc.
+> >> > > 
+> >> > > But you're an mm person too: you may have cited that reference in the
+> >> > > knowledge that TDX 1.5 Live Migration will entail page migration of the
+> >> > > kind I'm thinking of.  (Anyway, it's not important to clarify that here.)
+> >> > 
+> >> > TDX 1.5 brings both.
+> >> > 
+> >> > In TDX speak, mm migration called relocation. See TDH.MEM.PAGE.RELOCATE.
+> >> > 
+> >> 
+> >> This seems to be a pretty bad fit for the way that the core mm migrates
+> >> pages.  The core mm unmaps the page, then moves (in software) the contents
+> >> to a new address, then faults it in.  TDH.MEM.PAGE.RELOCATE doesn't fit into
+> >> that workflow very well.  I'm not saying it can't be done, but it won't just
+> >> work.
+> >
+> > Hm. From what I see we have all necessary infrastructure in place.
+> >
+> > Unmaping is NOP for inaccessible pages as it is never mapped and we have
+> > mapping->a_ops->migrate_folio() callback that allows to replace software
+> > copying with whatever is needed, like TDH.MEM.PAGE.RELOCATE.
+> >
+> > What do I miss?
+> 
+> Hmm, maybe this isn't as bad as I thought.
+> 
+> Right now, unless I've missed something, the migration workflow is to
+> unmap (via try_to_migrate) all mappings, then migrate the backing store
+> (with ->migrate_folio(), although it seems like most callers expect the
+> actual copy to happen outside of ->migrate_folio(),
 
-On Mon, Sep 5, 2022 at 12:06 AM Leonard Crestez <cdleonard@gmail.com> wrote=
-:
->
-> This is similar to TCP-MD5 in functionality but it's sufficiently
-> different that packet formats and interfaces are incompatible.
-> Compared to TCP-MD5 more algorithms are supported and multiple keys
-> can be used on the same connection but there is still no negotiation
-> mechanism.
-...
->
-> A completely unrelated series that implements the same features was poste=
-d
-> recently: https://lore.kernel.org/netdev/20220818170005.747015-1-dima@ari=
-sta.com/
->
-> The biggest difference is that this series puts TCP-AO key on a global
-> instead of per-socket list and that it attempts to make kernel-mode
-> key selection decisions instead of very strictly requiring userspace
-> to make all decisions.
->
+Most? I guess you are talking about MIGRATE_SYNC_NO_COPY, right? AFAICS,
+it is HMM thing and not a common thing.
 
-This is a departure from how md5 is implemented and the interface that
-BGP developers are used to. The reason you switched your implementation
-to a global database was to fix a minor race between key addition/deletion
-and connections being accepted on a listening socket. This race can be
-easily solved with a getsockopt() in user space. Thus it doesn=E2=80=99t ju=
-stify
-the complexity that a global key database brings to the implementation.
-I have a few issues with that design that I would like to point out.
+> and then make new
+> mappings.  With the *current* (vma-based, not fd-based) model for KVM
+> memory, this won't work -- we can't unmap before calling
+> TDH.MEM.PAGE.RELOCATE.
 
-- Currently, a setsockopt on a given socket that adds a key will add it to =
-the
-global database. That opens up the door for buggy/malicious apps to install
-bogus keys and mess up the connections of other apps. Also, it seems unusua=
-l
-for a setsockopt to affect all sockets in a namespace. This requires all us=
-er
-space apps to play nicely together.
+We don't need to unmap. The page is not mapped from core-mm PoV.
 
-- Having the keys be per-socket takes advantage of the existing socket lock=
-,
-simplifying synchronization and avoiding extra locks in the TCP stack.
+> But maybe it's actually okay with some care or maybe mild modifications
+> with the fd-based model.  We don't have any mmaps, per se, to unmap for
+> secret / INACCESSIBLE memory.  So maybe we can get all the way to
+> ->migrate_folio() without zapping anything in the secure EPT and just
+> call TDH-MEM.PAGE.RELOCATE from inside migrate_folio().  And there will
+> be nothing to fault back in.  From the core code's perspective, it's
+> like migrating a memfd that doesn't happen to have my mappings at the
+> time.
 
-- Caching of traffic keys becomes much easier with per-socket keys. Once
-a connection is established it will typically have one or two keys on its l=
-ist
-with traffic keys cached. In your current implementation, a linked list of
-potentially thousands of keys has to be linearly searched for each packet
-and the traffic key has to be calculated before doing the actual hashing of
-the packet. We believe a linear search with the extra hashing to calculate
-the traffic keys will be detrimental to the performance of real world
-deployments.
+Modifications needed if we want to initiate migation from userspace. IIRC,
+we don't have any API that can initiate page migration for file ranges,
+without mapping the file.
 
-- Using a global database might have a benefit if the goal is to have
-user space apps use tcp-ao transparently without any modifications.
-This would require key matching on the local and remote ports.
-But again, do we expect any apps other than BGP/LDP using tcp-ao?
-If not, why the extra complexity in the kernel?
+But kernel can do it fine for own housekeeping, like compaction doesn't
+need any VMA. And we need compaction working for long term stability of
+the system.
 
-
-> I believe my approach greatly simplifies userspace implementation.
-> The biggest difference in this iteration of the patch series is adding
-> per-key lifetime values based on RFC8177 in order to implement
-> kernel-mode key rollover.
->
-
-We believe that key rotation should be done in user-space. One reason is th=
-at
-different vendors might have slightly different behaviors during key rotati=
-on
-and having the logic be in user-space is more flexible for fixing issues. I=
-t=E2=80=99s
-not fun having to patch the kernel every time an interop issue is discovere=
-d.
-
-
-> Older versions still required userspace to tweak the NOSEND/NORECV flags
-> and always pick rnextkeyid explicitly, but now no active "key management"
-> should be required on established socket - Just set correct flags and
-> expiration dates and the kernel can perform key rollover itself. You can
-> see a (simple) test of that behavior here:
->
-...
-
-Best,
-
-Salam
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
