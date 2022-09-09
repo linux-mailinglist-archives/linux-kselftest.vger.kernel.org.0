@@ -2,25 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8AB5B3722
+	by mail.lfdr.de (Postfix) with ESMTP id B9BDC5B3723
 	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 14:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiIIMKC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 08:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S231126AbiIIMKU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 08:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbiIIMJc (ORCPT
+        with ESMTP id S231138AbiIIMJn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 08:09:32 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D871135D7E;
-        Fri,  9 Sep 2022 05:09:14 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MPF543rMXz9xHvY;
-        Fri,  9 Sep 2022 20:03:36 +0800 (CST)
+        Fri, 9 Sep 2022 08:09:43 -0400
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABBF6266;
+        Fri,  9 Sep 2022 05:09:25 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MPF6w4ftXz9yMX0;
+        Fri,  9 Sep 2022 20:05:12 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwC3rpKVLBtj1uszAA--.31607S6;
-        Fri, 09 Sep 2022 13:08:46 +0100 (CET)
+        by APP1 (Coremail) with SMTP id LxC2BwC3rpKVLBtj1uszAA--.31607S7;
+        Fri, 09 Sep 2022 13:08:56 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
@@ -33,20 +33,19 @@ Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v17 04/12] bpf: Export bpf_dynptr_get_size()
-Date:   Fri,  9 Sep 2022 14:07:28 +0200
-Message-Id: <20220909120736.1027040-5-roberto.sassu@huaweicloud.com>
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v17 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h and define KEY_LOOKUP_ALL
+Date:   Fri,  9 Sep 2022 14:07:29 +0200
+Message-Id: <20220909120736.1027040-6-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com>
 References: <20220909120736.1027040-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwC3rpKVLBtj1uszAA--.31607S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cw4DKr15uw4UZw4UKrW3Wrg_yoW8WryDpa
-        s5G34xAr48tFWIv3yUJan7Z3yYga1UWr17GFyqk34F9rW2qF9xZr1jgr1xWr90k345GrW5
-        ArnrKrWFv3W8ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: LxC2BwC3rpKVLBtj1uszAA--.31607S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7urW3JFW3Xr43XryxXw1fZwb_yoW8Cw17pF
+        WDC3W8Kry8Cry2gwn5GwsFy3WSk39xGr17XF9IgwnYya1Sg3y8trn7KF47uF1YyrW5ur12
+        qrW29FWUur1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
         Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -57,10 +56,10 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Cw4DKr15uw4UZw4UKrW3Wrg_yoW8WryDpa
         7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20x
         vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
         3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI
+        AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI
         42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
         80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj37rZgADsN
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj37rZgAEsK
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -73,43 +72,53 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Export bpf_dynptr_get_size(), so that kernel code dealing with eBPF dynamic
-pointers can obtain the real size of data carried by this data structure.
+In preparation for the patch that introduces the bpf_lookup_user_key() eBPF
+kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be able to
+validate the kfunc parameters. Add them to enum key_lookup_flag, so that
+all the current ones and the ones defined in the future are automatically
+exported through BTF and available to eBPF programs.
+
+Also, add KEY_LOOKUP_ALL to the enum, with the logical OR of currently
+defined flags as value, to facilitate checking whether a variable contains
+only those flags.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reviewed-by: Joanne Koong <joannelkoong@gmail.com>
-Acked-by: KP Singh <kpsingh@kernel.org>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- include/linux/bpf.h  | 1 +
- kernel/bpf/helpers.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ include/linux/key.h      | 6 ++++++
+ security/keys/internal.h | 2 --
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 48ae05099f36..9aeeac1d5cf5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2631,6 +2631,7 @@ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
- 		     enum bpf_dynptr_type type, u32 offset, u32 size);
- void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
- int bpf_dynptr_check_size(u32 size);
-+u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr);
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 7febc4881363..d27477faf00d 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -88,6 +88,12 @@ enum key_need_perm {
+ 	KEY_DEFER_PERM_CHECK,	/* Special: permission check is deferred */
+ };
  
- #ifdef CONFIG_BPF_LSM
- void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index fc08035f14ed..824864ac82d1 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1408,7 +1408,7 @@ static void bpf_dynptr_set_type(struct bpf_dynptr_kern *ptr, enum bpf_dynptr_typ
- 	ptr->size |= type << DYNPTR_TYPE_SHIFT;
- }
++enum key_lookup_flag {
++	KEY_LOOKUP_CREATE = 0x01,
++	KEY_LOOKUP_PARTIAL = 0x02,
++	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL),
++};
++
+ struct seq_file;
+ struct user_struct;
+ struct signal_struct;
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 9b9cf3b6fcbb..3c1e7122076b 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct key_type *type,
  
--static u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
-+u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
- {
- 	return ptr->size & DYNPTR_SIZE_MASK;
- }
+ extern bool lookup_user_key_possessed(const struct key *key,
+ 				      const struct key_match_data *match_data);
+-#define KEY_LOOKUP_CREATE	0x01
+-#define KEY_LOOKUP_PARTIAL	0x02
+ 
+ extern long join_session_keyring(const char *name);
+ extern void key_change_session_keyring(struct callback_head *twork);
 -- 
 2.25.1
 
