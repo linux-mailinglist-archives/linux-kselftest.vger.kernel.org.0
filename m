@@ -2,43 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439185B355A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 12:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2365B3607
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Sep 2022 13:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiIIKjG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 06:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S229544AbiIILHo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Sep 2022 07:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiIIKjF (ORCPT
+        with ESMTP id S229585AbiIILHm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 06:39:05 -0400
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [IPv6:2001:1600:3:17::190b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE0F134C10
-        for <linux-kselftest@vger.kernel.org>; Fri,  9 Sep 2022 03:39:04 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MPCCW0221zMqPkF;
-        Fri,  9 Sep 2022 12:39:03 +0200 (CEST)
-Received: from localhost (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MPCCV5brKzMpnPq;
-        Fri,  9 Sep 2022 12:39:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1662719942;
-        bh=mUrd1lhQRsT39GMuGMdM54M7Mdt2k87ApjcidD8sFRU=;
+        Fri, 9 Sep 2022 07:07:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4501223B6
+        for <linux-kselftest@vger.kernel.org>; Fri,  9 Sep 2022 04:07:35 -0700 (PDT)
+Received: from localhost.localdomain (unknown [213.194.152.135])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 33F006601FAE;
+        Fri,  9 Sep 2022 12:07:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662721653;
+        bh=4g4y9nZxJqWZ0WrJbsdi8AQVvz3bDAst05Xjpozqjkg=;
         h=From:To:Cc:Subject:Date:From;
-        b=vDpXl5FXOhCUQO7zEhdG8UTfzKKWbyFQdS0cawFUn6q+SWPjwTwrqUz9hx6/mgucD
-         nXr+lRW1kgMWROfpW2NUZuCCCgfTJBZ3EY9ZHqWbADbOCGheTpqVMowmazetLIsmdT
-         O0DaqQHba3PgDl0RzR0XfUwlpGUgdLP8s4zBM6Ys=
-From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v1] selftests: Use optional USERCFLAGS and USERLDFLAGS
-Date:   Fri,  9 Sep 2022 12:39:01 +0200
-Message-Id: <20220909103901.1503436-1-mic@digikod.net>
+        b=MjSeBlapXacP0KB0xO5YzJ7p+shj8QdGhjv20tvyommlBBwomiLCo4rUKSISFkjj3
+         dfF2O4WHtgbg1mcD7xwc3b0zTv42tH2EEvt8513gF67hiHh3jz25h5N4PviUPbdctV
+         4wcdWPPJWJjneJ2d3zqPJ/96nDDljUFWQr1A0/QKo+l1WH15i/az/ghK/MIQjEFHOe
+         EOOwyU+D2zwn+j/dpHCECW0xPTQMGA0nWlMUFNndTIqVQIM1PwsFMKoDiR36f44H9Z
+         MKTGKKw7JKbCoVR63PQus2/C7b/j5H0B1eUEBmX6e5ckBsWofiTfpCvT+K3c8jOpiS
+         0fOJlLE7roowA==
+From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     andrealmeid@igalia.com, dvhart@infradead.org, shuah@kernel.org,
+        kernel@collabora.com
+Subject: [PATCH] selftests/futex: fix build for clang
+Date:   Fri,  9 Sep 2022 13:07:09 +0200
+Message-Id: <20220909110709.1827374-1-ricardo.canuelo@collabora.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,41 +52,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This change enables to extend CFLAGS and LDFLAGS from command line, e.g.
-to extend compiler checks: make USERCFLAGS=-Werror USERLDFLAGS=-static
+Don't use the test-specific header files as source files to force a
+target dependency, as clang will complain if more than one source file
+is used for a compile command with a single '-o' flag.
 
-USERCFLAGS and USERLDFLAGS are documented in
-Documentation/kbuild/makefiles.rst and Documentation/kbuild/kbuild.rst
+Use the proper Makefile variables instead as defined in
+tools/testing/selftests/lib.mk.
 
-This should be backported (down to 5.10) to improve previous kernel
-versions testing as well.
-
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20220909103901.1503436-1-mic@digikod.net
+Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
 ---
- tools/testing/selftests/lib.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/futex/functional/Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index d44c72b3abe3..da47a0257165 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -119,6 +119,11 @@ endef
- clean:
- 	$(CLEAN)
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index 732149011692..5a0e0df8de9b 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -3,11 +3,11 @@ INCLUDES := -I../include -I../../ -I../../../../../usr/include/
+ CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
+ LDLIBS := -lpthread -lrt
  
-+# Enables to extend CFLAGS and LDFLAGS from command line, e.g.
-+# make USERCFLAGS=-Werror USERLDFLAGS=-static
-+CFLAGS += $(USERCFLAGS)
-+LDFLAGS += $(USERLDFLAGS)
-+
- # When make O= with kselftest target from main level
- # the following aren't defined.
- #
-
-base-commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+-HEADERS := \
++LOCAL_HDRS := \
+ 	../include/futextest.h \
+ 	../include/atomic.h \
+ 	../include/logging.h
+-TEST_GEN_FILES := \
++TEST_GEN_PROGS := \
+ 	futex_wait_timeout \
+ 	futex_wait_wouldblock \
+ 	futex_requeue_pi \
+@@ -24,5 +24,3 @@ TEST_PROGS := run.sh
+ top_srcdir = ../../../../..
+ DEFAULT_INSTALL_HDR_PATH := 1
+ include ../../lib.mk
+-
+-$(TEST_GEN_FILES): $(HEADERS)
 -- 
-2.37.2
+2.25.1
 
