@@ -2,220 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DAA5B42BA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Sep 2022 01:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970455B4A54
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Sep 2022 23:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiIIXCP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Sep 2022 19:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        id S230125AbiIJVme (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 10 Sep 2022 17:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiIIXCN (ORCPT
+        with ESMTP id S230156AbiIJVmQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Sep 2022 19:02:13 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18959D4BD4;
-        Fri,  9 Sep 2022 16:02:12 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7A8C95806ED;
-        Fri,  9 Sep 2022 19:02:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 09 Sep 2022 19:02:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1662764529; x=1662771729; bh=LZ
-        qIYAsRBDLHzzFlN7g+AhI2hMyU/ynXCZmSXJx2o4o=; b=Fd9GWSBue9IWHe503e
-        u6NjmzZkClyF2iQ1lgniAHchY/0TuAinaS2NWLg6kXBU39151pE1ovKNVS25Z/eq
-        IFGfoDCZdfi9vsheNiozUhWQhBFe09NjS0fOO3MHFGf7ZJIdFE7URE2+4T8ry1tP
-        Nbg2/Rj0tE3Ek4flC4ACTOcql6PzwfFTME2lnOV+B3N/lL/hnKnCQ6GH5+XhazC2
-        Nmlg33RcE4W1FIQN8y/vZurktFXXaUv+E4bgIUTmtxklpt0y22GN9mlaZnVA1HvP
-        jkswfdiKSGu/tJLd7oZD/eoKEIjjf2SfU40zdSq1rOcMST2//OkJ9MhjZ2EdQs+x
-        twzA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662764529; x=1662771729; bh=LZqIYAsRBDLHzzFlN7g+AhI2hMyU
-        /ynXCZmSXJx2o4o=; b=R0rm0u9Q8CX9dbZ2DhuKZkJyLwqDkiL/bcQEMyyhRDy3
-        DKn59ZmnL3PU6DmHyrEOtbWOQxV0Jvh3Grnr7NnwLKmBBu1OqZr7MHMw5AF8nOc3
-        yZwD78eLbs+PQ7ZV3R0sH3zp40EzNkJRkYIFQoQD0TzJshF7fsO77EIAhb/np+v5
-        fD3+R4uPoMhtBl6YFx1Id+vdQVHvRNN3JNjDEgZx0z97eg2UtW70uB3fK3NPtcQq
-        YXJKLKjalf08E+dU2zl2hDz2uNpIpr6InQLeo3pXVpi6p5g0dYXSjFu2qp7lvcHO
-        z/6UG76BNmJ0JLKn+JDTKA1iOr5MetWJtzkldsMOKw==
-X-ME-Sender: <xms:7sUbY3rI1KJg6T2GIL1QERVjHifgXO5lm0MnxXu08ZpG7b3CagZfXw>
-    <xme:7sUbYxoUJWW56KV29pr_aHSFZMDTg3SRysBUXhQlGa9zL3CR6D-tSmooacFF6F7T4
-    vngwaKGwj26JDXPHtA>
-X-ME-Received: <xmr:7sUbY0NDMWxhzD2mgtmpwtlR72xtvAmgXhoiiyjc53F64CGLIQNkCJkgvMmlVTESiy-95w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtiedgudekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutecurdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhepvdekkeelteduteduledtgfevledtgeekjeeu
-    ieehgeeltdduteeuueekhffhledvnecuffhomhgrihhnpehinhhtvghlrdgtohhmpdhmvg
-    hmrdhprghgvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
-    ohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:7sUbY65BD7T0lBkv38MIfA5C7WIcBVzxQYY2iqyB0VQfm1zOuugzwQ>
-    <xmx:7sUbY24PLQzdG8vOj0k1OQ385SW1ySugRFGwv36hbK-YXtzdMEgHpA>
-    <xmx:7sUbYygCW8klPbx4kDGz3VpnpXvXc5mSI7G4ZJw8EFDOAiv-qLQgWA>
-    <xmx:8cUbY7VMkXPqPikJg5h1mEfMk_BDtkjgyhUL44T0t1A43JkcVR9sBQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Sep 2022 19:02:06 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 2DAF3104A9B; Sat, 10 Sep 2022 02:02:03 +0300 (+03)
-Date:   Sat, 10 Sep 2022 02:02:03 +0300
-From:   "Kirill A . Shutemov" <kirill@shutemov.name>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220909230203.czdpronokk3lxses@box.shutemov.name>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
- <20220818132421.6xmjqduempmxnnu2@box>
- <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
- <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
- <95bd287b-d17f-fda8-58c9-20700b1e0c72@kernel.org>
- <20220909143236.sznwzkpedldrlnn5@box.shutemov.name>
- <762581e4-a6bf-41d1-b0d3-72543153ffb1@www.fastmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <762581e4-a6bf-41d1-b0d3-72543153ffb1@www.fastmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 10 Sep 2022 17:42:16 -0400
+Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCA34D176
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Sep 2022 14:38:02 -0700 (PDT)
+Received: by mail-ua1-x94a.google.com with SMTP id a8-20020ab04948000000b003b5de1448d2so1950097uad.11
+        for <linux-kselftest@vger.kernel.org>; Sat, 10 Sep 2022 14:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=AtmQOz4cqU5AlOnIxEScnXs2STqQsi71nD797NpxF7g=;
+        b=ONMGnunKNz4gp6pmKkYtXjmszONPlJmgdmvIFMNIH+l1kH1hr624Pikj7usUwyBpKa
+         jdsHPH0YixHNFhP/yHhRREK/X8wkkfqH6qk8dp5aGV6QebWO+f6XMb2QvPYteCi4E4Uc
+         T8M/1/I05+yqj5lcEBqf6Xk3mm1+GqkhSuJGBcWXiIU6f3W+6QjI9nzceAR+tOPaenBz
+         UTSW3y14Yxlk4TNZ/Wl7n2dP7gYAOGOoyxN1CHYmrWybYD+5sZdz4CQLci8yoJ9emYSc
+         Nctku8l/YvfTuqjQV/j26hSEz3mpU5iS7q0UtrBp4MSk+XbJ2haQ1nySY5D37C0eYdQx
+         +vRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=AtmQOz4cqU5AlOnIxEScnXs2STqQsi71nD797NpxF7g=;
+        b=PXe+W7fmP3S14DSQ2ot8VwT6c1+Q96y71EIxZMupWVE/bQ0dmsdunjM6BFgMIIfXTf
+         O7SdssBSjbjqPcSCy+Vjl1hPaYwgZbwl4kMC1TIEhco3lbE+4v798LTZAJmEZxIdTanZ
+         fuYPbzhpiC6CazZ0ZwCcS2qR4JgnZyklskVGBm6kesTXn2hFD83hewCGaL7xkrWhpj/z
+         W7AvFp+pv+h4qTqZWuRPwkIqczP2z1BWqd446z7FC6cds2M0mC1L/Q649R8DIkAhFwG/
+         7GMpm725w+T4ZogS6MbT/SjovAkiP7U5wB03e4RfuC4neFEICP2Gl9keIXGsTZHBgztS
+         wOaw==
+X-Gm-Message-State: ACgBeo2bWeFQhIaEAW6VMBzI8Pd8I6E80mAVfQb9P2EpyKy2cXEn3OOl
+        qKsOY0TPcsViKWoCaDp88L3ogg0tL9SLbA==
+X-Google-Smtp-Source: AA6agR4gR+/yHl1fMdZOru1FjRTOUUGrDSviK2l/4Yh1aEqbh8B3ViYymnNaCdL+DMqLzyFefh9vmEOz/DnoEA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:902:bd48:b0:172:bb9d:d6d5 with SMTP
+ id b8-20020a170902bd4800b00172bb9dd6d5mr19190501plx.59.1662845297768; Sat, 10
+ Sep 2022 14:28:17 -0700 (PDT)
+Date:   Sun, 11 Sep 2022 05:28:02 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+Message-ID: <20220910212804.670622-1-davidgow@google.com>
+Subject: [RFC PATCH v2 0/2] kunit: Support redirecting function calls
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Fradley <joefradley@google.com>
+Cc:     Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 09, 2022 at 12:11:05PM -0700, Andy Lutomirski wrote:
-> 
-> 
-> On Fri, Sep 9, 2022, at 7:32 AM, Kirill A . Shutemov wrote:
-> > On Thu, Sep 08, 2022 at 09:48:35PM -0700, Andy Lutomirski wrote:
-> >> On 8/19/22 17:27, Kirill A. Shutemov wrote:
-> >> > On Thu, Aug 18, 2022 at 08:00:41PM -0700, Hugh Dickins wrote:
-> >> > > On Thu, 18 Aug 2022, Kirill A . Shutemov wrote:
-> >> > > > On Wed, Aug 17, 2022 at 10:40:12PM -0700, Hugh Dickins wrote:
-> >> > > > > 
-> >> > > > > If your memory could be swapped, that would be enough of a good reason
-> >> > > > > to make use of shmem.c: but it cannot be swapped; and although there
-> >> > > > > are some references in the mailthreads to it perhaps being swappable
-> >> > > > > in future, I get the impression that will not happen soon if ever.
-> >> > > > > 
-> >> > > > > If your memory could be migrated, that would be some reason to use
-> >> > > > > filesystem page cache (because page migration happens to understand
-> >> > > > > that type of memory): but it cannot be migrated.
-> >> > > > 
-> >> > > > Migration support is in pipeline. It is part of TDX 1.5 [1]. And swapping
-> >> > > > theoretically possible, but I'm not aware of any plans as of now.
-> >> > > > 
-> >> > > > [1] https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
-> >> > > 
-> >> > > I always forget, migration means different things to different audiences.
-> >> > > As an mm person, I was meaning page migration, whereas a virtualization
-> >> > > person thinks VM live migration (which that reference appears to be about),
-> >> > > a scheduler person task migration, an ornithologist bird migration, etc.
-> >> > > 
-> >> > > But you're an mm person too: you may have cited that reference in the
-> >> > > knowledge that TDX 1.5 Live Migration will entail page migration of the
-> >> > > kind I'm thinking of.  (Anyway, it's not important to clarify that here.)
-> >> > 
-> >> > TDX 1.5 brings both.
-> >> > 
-> >> > In TDX speak, mm migration called relocation. See TDH.MEM.PAGE.RELOCATE.
-> >> > 
-> >> 
-> >> This seems to be a pretty bad fit for the way that the core mm migrates
-> >> pages.  The core mm unmaps the page, then moves (in software) the contents
-> >> to a new address, then faults it in.  TDH.MEM.PAGE.RELOCATE doesn't fit into
-> >> that workflow very well.  I'm not saying it can't be done, but it won't just
-> >> work.
-> >
-> > Hm. From what I see we have all necessary infrastructure in place.
-> >
-> > Unmaping is NOP for inaccessible pages as it is never mapped and we have
-> > mapping->a_ops->migrate_folio() callback that allows to replace software
-> > copying with whatever is needed, like TDH.MEM.PAGE.RELOCATE.
-> >
-> > What do I miss?
-> 
-> Hmm, maybe this isn't as bad as I thought.
-> 
-> Right now, unless I've missed something, the migration workflow is to
-> unmap (via try_to_migrate) all mappings, then migrate the backing store
-> (with ->migrate_folio(), although it seems like most callers expect the
-> actual copy to happen outside of ->migrate_folio(),
+When writing tests, it'd often be very useful to be able to intercept
+calls to a function in the code being tested and replace it with a
+test-specific stub. This has always been an obviously missing piece of
+KUnit, and the solutions always involve some tradeoffs with cleanliness,
+performance, or impact on non-test code. See the folowing document for
+some of the challenges:
+https://kunit.dev/mocking.html
 
-Most? I guess you are talking about MIGRATE_SYNC_NO_COPY, right? AFAICS,
-it is HMM thing and not a common thing.
+This series consists of two prototype patches which add support for this
+sort of redirection to KUnit tests:
 
-> and then make new
-> mappings.  With the *current* (vma-based, not fd-based) model for KVM
-> memory, this won't work -- we can't unmap before calling
-> TDH.MEM.PAGE.RELOCATE.
+1: static_stub: Any function which might want to be intercepted adds a
+call to a macro which checks if a test has redirected calls to it, and
+calls the corresponding replacement.
 
-We don't need to unmap. The page is not mapped from core-mm PoV.
+2: ftrace_stub: Functions are intercepted using ftrace.
+This doesn't require adding a new prologue to each function being
+replaced, but does have more dependencies (which restricts it to a small
+number of architectures, not including UML), and doesn't work well with
+inline functions.
 
-> But maybe it's actually okay with some care or maybe mild modifications
-> with the fd-based model.  We don't have any mmaps, per se, to unmap for
-> secret / INACCESSIBLE memory.  So maybe we can get all the way to
-> ->migrate_folio() without zapping anything in the secure EPT and just
-> call TDH-MEM.PAGE.RELOCATE from inside migrate_folio().  And there will
-> be nothing to fault back in.  From the core code's perspective, it's
-> like migrating a memfd that doesn't happen to have my mappings at the
-> time.
+The API for both implementations is very similar, so it should be easy
+to migrate from one to the other if necessary.  Both of these
+implementations restrict the redirection to the test context: it is
+automatically undone after the KUnit test completes, and does not affect
+calls in other threads. If CONFIG_KUNIT is not enabled, there should be
+no overhead in either implementation.
 
-Modifications needed if we want to initiate migation from userspace. IIRC,
-we don't have any API that can initiate page migration for file ranges,
-without mapping the file.
+Does either (or both) of these features sound useful, and is this
+sort-of API the right model? (Personally, I think there's a reasonable
+scope for both.) Is anything obviously missing or wrong? Do the names,
+descriptions etc. make any sense?
 
-But kernel can do it fine for own housekeeping, like compaction doesn't
-need any VMA. And we need compaction working for long term stability of
-the system.
+Note that these patches are definitely still at the "prototype" level,
+and things like error-handling, documentation, and testing are still
+pretty sparse. There is also quite a bit of room for optimisation.
+These'll all be improved for v1 if the concept seems good.
+
+We're going to be talking about this again at LPC, so it's worth having
+another look before then if you're interested and/or will be attending:
+https://lpc.events/event/16/contributions/1308/
+
+Cheers,
+-- David
+
+---
+
+Changes since RFC v1:
+https://lore.kernel.org/lkml/20220318021314.3225240-1-davidgow@google.com/
+- Fix some typos (thanks Daniel)
+- Use typecheck_fn() to fix typechecking in some cases (thanks Brendan)
+- Use ftrace_instruction_pointer_set() in place of kernel livepatch,
+  which seems to have disappeared:
+  https://lore.kernel.org/lkml/0a76550d-008d-0364-8244-4dae2981ea05@csgroup.eu/T/
+- Fix a copy-paste name error in the resource finding function.
+- Rebase on top of torvalds/master, as it wasn't applying cleanly.
+
+Note that the Kernel Livepatch -> ftrace change seems to allow more
+architectures to work, but while they compile, there still seems to be
+issues. So, this will compile on (e.g.) arm64, but fails:
+$ ./tools/testing/kunit/kunit.py run 'example*' --kunitconfig lib/kunit/stubs_example.kunitconfig --arch arm64 --make_options LLVM=1
+[05:00:13] # example_ftrace_stub_test: initializing
+[05:00:13] # example_ftrace_stub_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:179
+[05:00:13] Expected add_one(1) == 0, but
+[05:00:13] add_one(1) == 2 
+[05:00:13] not ok 6 - example_ftrace_stub_test                                                                                                                                                                                              
+[05:00:13] [FAILED] example_ftrace_stub_test                                                                                                                                                                                                
+
+
+
+Daniel Latypov (1):
+  kunit: expose ftrace-based API for stubbing out functions during tests
+
+David Gow (1):
+  kunit: Expose 'static stub' API to redirect functions
+
+ include/kunit/ftrace_stub.h         |  84 +++++++++++++++++
+ include/kunit/static_stub.h         | 106 +++++++++++++++++++++
+ lib/kunit/Kconfig                   |  11 +++
+ lib/kunit/Makefile                  |   5 +
+ lib/kunit/ftrace_stub.c             | 137 ++++++++++++++++++++++++++++
+ lib/kunit/kunit-example-test.c      |  63 +++++++++++++
+ lib/kunit/static_stub.c             | 125 +++++++++++++++++++++++++
+ lib/kunit/stubs_example.kunitconfig |  10 ++
+ 8 files changed, 541 insertions(+)
+ create mode 100644 include/kunit/ftrace_stub.h
+ create mode 100644 include/kunit/static_stub.h
+ create mode 100644 lib/kunit/ftrace_stub.c
+ create mode 100644 lib/kunit/static_stub.c
+ create mode 100644 lib/kunit/stubs_example.kunitconfig
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.37.2.789.g6183377224-goog
+
