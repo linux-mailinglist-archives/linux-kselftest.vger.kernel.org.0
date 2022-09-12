@@ -2,128 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9075B57D4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Sep 2022 12:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6EB5B5891
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Sep 2022 12:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiILKGa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Sep 2022 06:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S229605AbiILKkr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Sep 2022 06:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiILKG0 (ORCPT
+        with ESMTP id S229496AbiILKkp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Sep 2022 06:06:26 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4921B1A3B2;
-        Mon, 12 Sep 2022 03:06:25 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28C8tDD9030287;
-        Mon, 12 Sep 2022 10:06:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=klkeUedZzOD8HNa/htDaTso+jLdfKWnvnnAbZyswICc=;
- b=QC5zDos/X3F+5IkPZt6vDyld6RZFAO6AH+RFCgonk+Z5ZRnWwJDXGlnPniYugn9UYVtc
- nQUIdKjmeH++mBpR9vzaJHtAHmoU1ttXL7drj56BZzKoZ9HDKzolz5OdI0H7HpDzzsHP
- osOKhODCxkMzHySBVOLxnoRGVKBROVp8m8MAtyEDNICclwlgvfNBs5+nEn4UGo3bjkpQ
- Vh+E2V/46kXKMabRkcUybScj0wY1Xqh0Inudy/kdbQ2nHK1bFl/8XrcR3JfbsejqwiGz
- J/b2N6mutl9BW2KBusAZNrdzm4hjTwggFMn7cnU2/EkFFeuXsSAxHnH6NtjIscPBKgZ3 RQ== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jhyv85xed-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 10:06:17 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28CA5nGG022219;
-        Mon, 12 Sep 2022 10:06:15 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3jgj78smhq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Sep 2022 10:06:15 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28CA2W2s16056720
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Sep 2022 10:02:32 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E411A4053;
-        Mon, 12 Sep 2022 10:06:13 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 751B5A4051;
-        Mon, 12 Sep 2022 10:06:11 +0000 (GMT)
-Received: from tarunpc (unknown [9.43.18.53])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Sep 2022 10:06:11 +0000 (GMT)
-Message-ID: <32851d30c124e1a499edf3d8c7c0cf0cd04735cc.camel@linux.ibm.com>
-Subject: Re: [LTP] [RFC PATCH] Hugetlb: Migrating hugetlb tests from
- libhugetlbfs
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-Reply-To: tsahu@linux.ibm.com
-To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     ltp@lists.linux.it, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, aneesh.kumar@linux.ibm.com,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 12 Sep 2022 15:36:10 +0530
-In-Reply-To: <Yx7xOGLqy2lVE9tI@yuki>
-References: <20220908173947.17956-1-tsahu@linux.ibm.com>
-         <YxsCJi8O+HmMpefq@yuki>
-         <2412537e2e07ebf62fe95971a3022336cde9833a.camel@linux.ibm.com>
-         <Yx7xOGLqy2lVE9tI@yuki>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UfbPtEGr12zhGuYnAJg1hGetJ9yIqOwZ
-X-Proofpoint-GUID: UfbPtEGr12zhGuYnAJg1hGetJ9yIqOwZ
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 12 Sep 2022 06:40:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88A12495D;
+        Mon, 12 Sep 2022 03:40:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E01FB80C67;
+        Mon, 12 Sep 2022 10:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C7AFC433D6;
+        Mon, 12 Sep 2022 10:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662979240;
+        bh=DIfVeEZaLk2MHz9A0QBEd0qnfu425kQdhOpMpcQXmiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f7yIlaBJhfHKhEAsCTDhsNQhEi+bsittT7YoYl5+IoUZ50/aKc5nasLsAl0drcB5j
+         pLE21tUBXYpl6eEskGqaZ1YNAh0Kc+zml48Z8bv9FU+PjM4Q0VCaCmp+hXl3ECFaLK
+         a4CUPHrD7f/xhh+3BAC2+4FwuLywAxsSy0rm3h4U+lqpuZq+23Bh/p3I0/fHLyTTaV
+         La89zSN/hjDIz0Mhuk4nWyVkV7PxgGzlv94KMJK6ight0dxglG0B9jDwoWJwBDWaOd
+         G1fNlQBfACK9/OQKd6UsyP1Pekcp6a+C8ICd0KvrSkEDNZnHRvlosPl4wco96L/ueM
+         gpIDcrvQZ7CZA==
+Date:   Mon, 12 Sep 2022 13:40:33 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-sgx@vger.kernel.org,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/5] selftests/sgx: Retry the ioctl()'s returned with
+ EAGAIN
+Message-ID: <Yx8MoYF3Jed5G+uo@kernel.org>
+References: <20220905020411.17290-1-jarkko@kernel.org>
+ <20220905020411.17290-2-jarkko@kernel.org>
+ <fe0e7a0c-da41-5918-6ef4-8906598998a6@intel.com>
+ <Yxp4iIKjOQflQC2i@kernel.org>
+ <d2cccc58-b6b2-4153-0c1b-8d5b39ca0862@intel.com>
+ <Yxq6oAcGkg33tkb8@kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-12_06,2022-09-12_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- priorityscore=1501 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- bulkscore=0 mlxscore=0 impostorscore=0 suspectscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209120033
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yxq6oAcGkg33tkb8@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, 
-
-Thanks for confirming.
-
-There is one more confirmation I required
-before I submit a patch series on necessary libhugetlbfs tests, 
-Between
-LTP and Kselftests, Choosing LTP is right decision? (mentioned details
-in patch description)
-
-Thanks
-
-On Mon, 2022-09-12 at 10:43 +0200, Cyril Hrubis wrote:
-> Hi!
-> > As mentioned in the patch description, there is a conflict in
-> > license,
-> > That is why, I have avoided to put any of them in the header. Once
-> > confirmed within the community, I can add the original license
-> > here.
-> > (GPL2.1+) as 
-> > https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines
-> > this says only to add code with GPL2.0+.
+On Fri, Sep 09, 2022 at 07:01:36AM +0300, Jarkko Sakkinen wrote:
+> On Thu, Sep 08, 2022 at 05:06:58PM -0700, Reinette Chatre wrote:
+> > Hi Jarkko,
+> > 
+> > On 9/8/2022 4:19 PM, Jarkko Sakkinen wrote:
+> > > On Thu, Sep 08, 2022 at 03:43:06PM -0700, Reinette Chatre wrote:
+> > >> Hi Jarkko and Haitao,
+> > >>
+> > >> On 9/4/2022 7:04 PM, Jarkko Sakkinen wrote:
+> > >>> From: Haitao Huang <haitao.huang@linux.intel.com>
+> > >>>
+> > >>> For EMODT and EREMOVE ioctl()'s with a large range, kernel
+> > >>> may not finish in one shot and return EAGAIN error code
+> > >>> and count of bytes of EPC pages on that operations are
+> > >>> finished successfully.
+> > >>>
+> > >>> Change the unclobbered_vdso_oversubscribed_remove test
+> > >>> to rerun the ioctl()'s in a loop, updating offset and length
+> > >>> using the byte count returned in each iteration.
+> > >>>
+> > >>> Fixes: 6507cce561b4 ("selftests/sgx: Page removal stress test")
+> > >>
+> > >> Should this patch be moved to the "critical fixes for v6.0" series?
+> > > 
+> > > I think not because it does not risk stability of the
+> > > kernel itself. It's "nice to have" but not mandatory.
+> > 
+> > ok, thank you for considering it.
+> > 
+> > ...
+> > 
+> > >>> @@ -453,16 +454,30 @@ TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
+> > >>>  	modt_ioc.offset = heap->offset;
+> > >>>  	modt_ioc.length = heap->size;
+> > >>>  	modt_ioc.page_type = SGX_PAGE_TYPE_TRIM;
+> > >>> -
+> > >>> +	count = 0;
+> > >>>  	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
+> > >>>  	       heap->size);
+> > >>> -	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> > >>> -	errno_save = ret == -1 ? errno : 0;
+> > >>> +	do {
+> > >>> +		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> > >>> +
+> > >>> +		errno_save = ret == -1 ? errno : 0;
+> > >>> +		if (errno_save != EAGAIN)
+> > >>> +			break;
+> > >>> +
+> > >>> +		EXPECT_EQ(modt_ioc.result, 0);
+> > >>
+> > >> If this check triggers then there is something seriously wrong and in that case
+> > >> it may also be that this loop may be unable to terminate or the error condition would
+> > >> keep appearing until the loop terminates (which may be many iterations). Considering
+> > >> the severity and risk I do think that ASSERT_EQ() would be more appropriate,
+> > >> similar to how ASSERT_EQ() is used in patch 5/5.
+> > >>
+> > >> Apart from that I think that this looks good.
+> > >>
+> > >> Thank you very much for adding this.
+> > >>
+> > >> Reinette
+> > > 
+> > > Hmm... I could along the lines:
+> > > 
+> > > /*
+> > >  * Get time since Epoch is milliseconds.
+> > >  */
+> > > unsigned long get_time(void)
+> > > {
+> > >     struct timeval start;
+> > > 
+> > >     gettimeofday(&start, NULL);
+> > > 
+> > >     return (unsigneg long)start.tv_sec * 1000L + (unsigned long)start.tv_usec / 1000L;
+> > > }
+> > > 
+> > > and
+> > > 
+> > > #define IOCTL_RETRY_TIMEOUT 100
+> > > 
+> > > In the test function:
+> > > 
+> > >         unsigned long start_time;
+> > > 
+> > >         /* ... */
+> > > 
+> > >         start_time = get_time();
+> > >         do {
+> > >                 EXPECT_LT(get_time() - start_time(), IOCTL_RETRY_TIMEOUT);
+> > > 
+> > >                 /* ... */
+> > >         }
+> > > 
+> > >         /* ... */
+> > > 
+> > > What do you think?
+> > 
+> > I do think that your proposal can be considered for an additional check in this
+> > test but the way I understand it it does not address my feedback.
+> > 
+> > In this patch the flow is:
+> > 
+> > 	do {
+> > 		ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPES, &modt_ioc);
+> > 
+> > 		errno_save = ret == -1 ? errno : 0;
+> > 		if (errno_save != EAGAIN)
+> > 			break;
+> > 
+> > 		EXPECT_EQ(modt_ioc.result, 0);
+> > 		...
+> > 	} while ...
+> > 
+> > 
+> > If this EXPECT_EQ() check fails then it means that errno_save is EAGAIN
+> > and modt_ioc.result != 0. This should never happen because in the kernel
+> > (sgx_enclave_modify_types()) the only time modt_ioc.result can be set is
+> > when the ioctl() returns EFAULT.
+> > 
+> > In my opinion this check should be changed to:
+> > 		ASSERT_EQ(modt_ioc.result, 0);
 > 
-> As far as I can tell there is no GPL2.1+ the only 2.1 version in
-> existence is LGPL.
-> 
-> GPL2.1+ usually happens to be an error when someone takes library
-> header
-> with LGPL2.1+ license and removes the "Lesser" part.
-> 
-> However it looks like the whole libhugetlbfs is under LGPL2.1+ which
-> kind of makes sense for a library, but not so much for the tests
-> since
-> these do not provide a library that can be linked againts at all.
-> 
+> Right, I missed this. It should be definitely ASSERT_EQ(().
 
+I was thinking to add patch, which adds helper to calculate static
+content length from the last item of the segment table (offset + size)
+and replace total_length calculations in various tests. 
+
+I won't send a new version this week because I'm at Open Source Summit
+EU and Linux Security Summit EU.
+
+BR, Jarkko
