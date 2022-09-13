@@ -2,132 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E145B77D5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Sep 2022 19:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF245B77F4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Sep 2022 19:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbiIMRZq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Sep 2022 13:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S231281AbiIMRak (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Sep 2022 13:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbiIMRZS (ORCPT
+        with ESMTP id S230141AbiIMRaO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:25:18 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAA89E2E0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 09:12:09 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id v1so12314229plo.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 09:12:09 -0700 (PDT)
+        Tue, 13 Sep 2022 13:30:14 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC4836DE0;
+        Tue, 13 Sep 2022 09:19:22 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id w20so265607ply.12;
+        Tue, 13 Sep 2022 09:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=4GTld6ZU8MtCcyeBG9nWMSKRKMoB2xn8bpkZwXHEw2s=;
-        b=DihabYGaFpN/XoOHm1MSaQi2kRH2os0yj0QoILo7SPAJF8OpMSQjLf1+pqVt7GZRjd
-         D81sKZU5Oq0vtGEgr0Plm1UVQOezX4s/yuWlGktjKnB/6aqUWru04VRRHhXjgMf9lgKo
-         FR9C6O8IdbFGuxPJakYZ4BdDTShUXISvdElPZULkotAb3nTa0x7V27hT49l5H57ZEuzT
-         Y2ncOVkRrhHKP66UtZI06AJkG7HRBc21aMZ2rHU6LkxtwqHKRvYMVYVLxRX743DN2L19
-         qdr5gZklkks6Bi/hi2Z1rhwNsdKW/awWh0sDR0Rahs+8lcIfTne4V8e5TEE/NSU59M4J
-         aEIw==
+        bh=JRpSe51gO9elcRpNLQ13XpR1BjhyoW7VoSIpUC+x7RI=;
+        b=Eonuy6tP0PQq6FJE+yAdGYE4n7+/QEnfURtlysVXZkisYqC6MQK8pg4FSKqNDfNend
+         OeX/Tu38DpQzJf/kaFZkBZgFegcxev/dClMV7FHVh7bO9ezKK+2I92MkHjic6QqaIiH2
+         wMM5mt1u0ueFdumkSmKOV/boMIur2vQLfPICJOUl7LjeBk9QhuIggiewGGVlfhRdpCNy
+         SYCXv0IV9Kd8C03Dx2kHyy5W36X83WC6mjHzGw/mKaGP9yc0hCY/JyHyAHP2sOnC43Le
+         gQ2Cok7GMNbUgE/a3EkIOr2FBDLWzHcxkpa4J886i3fVUPYH2oww+ylvu9LjSOmWw7/0
+         a4Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4GTld6ZU8MtCcyeBG9nWMSKRKMoB2xn8bpkZwXHEw2s=;
-        b=fie60VGWG5NiOF92Hjl70e3XHMz8+VPOLG1NUigCC5b8EERoFFWDUR8lVfwYmY82el
-         OVMVMzXfJwEphPbMB8Q//O38Bo5qbcnttBajoRvLEnuD+Qd/ppZPZi/BD2OoONxRHl+e
-         dkOn2Zzrhxu0xp6m9USnQynnHwvfMNuzZwsz37VS9XIDCM+h3GNrOdXQET2XvX+4v40N
-         +ii7L+BIS8KvMNjpu29xhfaJO2D+gQwJh4g55wQ7yhpWB8hzcryWxF+CF3yjnVFDMTf5
-         CoINgikv1EZvOHgZZBXj+ZFGFWifZi6fJIIvsF4QnrUAve++XWj2b/pfQzVa6Qog1+Oa
-         NuVA==
-X-Gm-Message-State: ACgBeo106CXrI/oQXNJeqcA72VYFVDu2hCpaLlJUuYvxIpTdH5JsUh0X
-        TCKi5eQ4C1fvMF6TseOiYMkjmg==
-X-Google-Smtp-Source: AA6agR40QaognMZ1z9EKqE4W87Ed5lvL47BWBF35ur3fvygfSXXOQSwbnkou/SgHBPbWX+ZFZu3LkA==
-X-Received: by 2002:a17:902:ce12:b0:172:9512:595d with SMTP id k18-20020a170902ce1200b001729512595dmr33361116plg.101.1663085528936;
-        Tue, 13 Sep 2022 09:12:08 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id ij24-20020a170902ab5800b001783f964fe3sm3191697plb.113.2022.09.13.09.12.07
+        bh=JRpSe51gO9elcRpNLQ13XpR1BjhyoW7VoSIpUC+x7RI=;
+        b=H/kO+vdHf5Q+wZOTDrJ/bqydO5vaPkLc1G3VJaJnFocdZrUm2HSE508Z5tGRonFlQ0
+         Ow47wnXaejEjVmmgxtDrXvO5HbueNAc0dYP8zknCjd//5ZCG9cK6L9ZehRFFvwo1fI5t
+         sqmc8LOsJnLiKmPHLtpOKAya/mckbIZYChq85oIKwbZqpL3gB9bytHlmfSIWNmNR44LL
+         cT9yi94oARCQ0Zz7ryeb0kPIr86fL7q4fQI9s9EiXzOhC6EDl4ENIptvenspEX3+6wVi
+         R6nsMy/VFW5MZjR51+vgXuZ8wb/8DXy8i4DeOZVp3knvA7y6NqzxfAmwZLkP2OeHzpa0
+         c/zg==
+X-Gm-Message-State: ACrzQf2uewmdtkLCh4/MY1fZ72PyHxlfffOcrqqw+G3zlgwtyiRsL5om
+        UYCkCTaMILHX0Z2CRik+m6Q=
+X-Google-Smtp-Source: AMsMyM5t1BxKo7mB4oo2cqqSwlWl3t+9pzST0FUwIknMPIUKkYQGfi4+HWWZNiyQ/6X522JJR731MA==
+X-Received: by 2002:a17:90a:e60c:b0:202:6ef8:4b52 with SMTP id j12-20020a17090ae60c00b002026ef84b52mr81315pjy.236.1663085956264;
+        Tue, 13 Sep 2022 09:19:16 -0700 (PDT)
+Received: from biggie ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id n12-20020a17090ac68c00b002009c05b802sm7459286pjt.2.2022.09.13.09.19.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 09:12:07 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 16:12:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
-        Elena Reshetova <elena.reshetova@intel.com>
-Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <YyCr1IfPWtAHmrwN@google.com>
-References: <20220818132421.6xmjqduempmxnnu2@box>
- <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
- <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
- <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
- <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
- <20220908011037.ez2cdorthqxkerwk@box.shutemov.name>
- <YyBQ+wzPtGwwRB/U@google.com>
- <20220913132821.3ch5cv3rgdxqgz3i@box.shutemov.name>
- <YyCZZSyCrwXLLCD9@google.com>
- <20220913160046.rkz7uh6cpwy6wyzg@box.shutemov.name>
+        Tue, 13 Sep 2022 09:19:15 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 21:49:10 +0530
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     pbonzini@redhat.com, shuah@kernel.org
+Cc:     seanjc@google.com, guang.zeng@intel.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/kvm: Use num_vcpus when testing ICR in the
+ xapic_state_test
+Message-ID: <YyCtfu8zvvTKKs1u@biggie>
+References: <20220903073901.73862-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220913160046.rkz7uh6cpwy6wyzg@box.shutemov.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220903073901.73862-1-gautammenghani201@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 13, 2022, Kirill A. Shutemov wrote:
-> On Tue, Sep 13, 2022 at 02:53:25PM +0000, Sean Christopherson wrote:
-> > > > Switching topics, what actually prevents mmapp() on the shim?  I tried to follow,
-> > > > but I don't know these areas well enough.
-> > > 
-> > > It has no f_op->mmap, so mmap() will fail with -ENODEV. See do_mmap().
-> > > (I did not read the switch statement correctly at first. Note there are
-> > > two 'fallthrough' there.)
-> > 
-> > Ah, validate_mmap_request().  Thought not implementing ->mmap() was the key, but
-> > couldn't find the actual check.
+On Sat, Sep 03, 2022 at 01:09:01PM +0530, Gautam Menghani wrote:
+> A TODO in xapic_state_test asks to use number of vCPUs instead of
+> vcpu.id + 1 in test_icr(). This patch adds support to get the number 
+> of vCPUs from the VM created and use it.
 > 
-> validate_mmap_request() is in mm/nommu.c which is not relevant for real
-> computers.
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+>  .../selftests/kvm/x86_64/xapic_state_test.c     | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
 > 
-> I was talking about this check:
+> diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> index 6f7a5ef66718..de934e8e5e41 100644
+> --- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> @@ -96,9 +96,8 @@ static void __test_icr(struct xapic_vcpu *x, uint64_t val)
+>  	____test_icr(x, val & ~(u64)APIC_ICR_BUSY);
+>  }
+>  
+> -static void test_icr(struct xapic_vcpu *x)
+> +static void test_icr(struct xapic_vcpu *x, int num_vcpus)
+>  {
+> -	struct kvm_vcpu *vcpu = x->vcpu;
+>  	uint64_t icr, i, j;
+>  
+>  	icr = APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_FIXED;
+> @@ -110,11 +109,11 @@ static void test_icr(struct xapic_vcpu *x)
+>  		__test_icr(x, icr | i);
+>  
+>  	/*
+> -	 * Send all flavors of IPIs to non-existent vCPUs.  TODO: use number of
+> -	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
+> +	 * Send all flavors of IPIs to non-existent vCPUs. Arbitrarily use vector 0xff.
+>  	 */
+> +
+>  	icr = APIC_INT_ASSERT | 0xff;
+> -	for (i = vcpu->id + 1; i < 0xff; i++) {
+> +	for (i = num_vcpus; i < 0xff; i++) {
+>  		for (j = 0; j < 8; j++)
+>  			__test_icr(x, i << (32 + 24) | icr | (j << 8));
+>  	}
+> @@ -137,9 +136,13 @@ int main(int argc, char *argv[])
+>  		.is_x2apic = true,
+>  	};
+>  	struct kvm_vm *vm;
+> +	struct list_head *iter;
+> +	int nr_vcpus_created = 0;
+>  
+>  	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
+> -	test_icr(&x);
+> +	list_for_each(iter, &vm->vcpus)
+> +		nr_vcpus_created++;
+> +	test_icr(&x, nr_vcpus_created);
+>  	kvm_vm_free(vm);
+>  
+>  	/*
+> @@ -153,6 +156,6 @@ int main(int argc, char *argv[])
+>  	vcpu_clear_cpuid_feature(x.vcpu, X86_FEATURE_X2APIC);
+>  
+>  	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
+> -	test_icr(&x);
+> +	test_icr(&x, nr_vcpus_created);
+>  	kvm_vm_free(vm);
+>  }
+> -- 
+> 2.34.1
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/mmap.c#n1495
 
-Hence the comment about 'fallthrough'.  Thanks again!
+Hi,
+
+Please review the above patch and let me know if any change is required.
+
+Thanks,
+Gautam
