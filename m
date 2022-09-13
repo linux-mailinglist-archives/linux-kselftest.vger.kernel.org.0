@@ -2,70 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF245B77F4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Sep 2022 19:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24F45B79AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Sep 2022 20:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiIMRak (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Sep 2022 13:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
+        id S232020AbiIMSf2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Sep 2022 14:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiIMRaO (ORCPT
+        with ESMTP id S232030AbiIMSfG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Sep 2022 13:30:14 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC4836DE0;
-        Tue, 13 Sep 2022 09:19:22 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id w20so265607ply.12;
-        Tue, 13 Sep 2022 09:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=JRpSe51gO9elcRpNLQ13XpR1BjhyoW7VoSIpUC+x7RI=;
-        b=Eonuy6tP0PQq6FJE+yAdGYE4n7+/QEnfURtlysVXZkisYqC6MQK8pg4FSKqNDfNend
-         OeX/Tu38DpQzJf/kaFZkBZgFegcxev/dClMV7FHVh7bO9ezKK+2I92MkHjic6QqaIiH2
-         wMM5mt1u0ueFdumkSmKOV/boMIur2vQLfPICJOUl7LjeBk9QhuIggiewGGVlfhRdpCNy
-         SYCXv0IV9Kd8C03Dx2kHyy5W36X83WC6mjHzGw/mKaGP9yc0hCY/JyHyAHP2sOnC43Le
-         gQ2Cok7GMNbUgE/a3EkIOr2FBDLWzHcxkpa4J886i3fVUPYH2oww+ylvu9LjSOmWw7/0
-         a4Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=JRpSe51gO9elcRpNLQ13XpR1BjhyoW7VoSIpUC+x7RI=;
-        b=H/kO+vdHf5Q+wZOTDrJ/bqydO5vaPkLc1G3VJaJnFocdZrUm2HSE508Z5tGRonFlQ0
-         Ow47wnXaejEjVmmgxtDrXvO5HbueNAc0dYP8zknCjd//5ZCG9cK6L9ZehRFFvwo1fI5t
-         sqmc8LOsJnLiKmPHLtpOKAya/mckbIZYChq85oIKwbZqpL3gB9bytHlmfSIWNmNR44LL
-         cT9yi94oARCQ0Zz7ryeb0kPIr86fL7q4fQI9s9EiXzOhC6EDl4ENIptvenspEX3+6wVi
-         R6nsMy/VFW5MZjR51+vgXuZ8wb/8DXy8i4DeOZVp3knvA7y6NqzxfAmwZLkP2OeHzpa0
-         c/zg==
-X-Gm-Message-State: ACrzQf2uewmdtkLCh4/MY1fZ72PyHxlfffOcrqqw+G3zlgwtyiRsL5om
-        UYCkCTaMILHX0Z2CRik+m6Q=
-X-Google-Smtp-Source: AMsMyM5t1BxKo7mB4oo2cqqSwlWl3t+9pzST0FUwIknMPIUKkYQGfi4+HWWZNiyQ/6X522JJR731MA==
-X-Received: by 2002:a17:90a:e60c:b0:202:6ef8:4b52 with SMTP id j12-20020a17090ae60c00b002026ef84b52mr81315pjy.236.1663085956264;
-        Tue, 13 Sep 2022 09:19:16 -0700 (PDT)
-Received: from biggie ([103.230.148.187])
-        by smtp.gmail.com with ESMTPSA id n12-20020a17090ac68c00b002009c05b802sm7459286pjt.2.2022.09.13.09.19.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 09:19:15 -0700 (PDT)
-Date:   Tue, 13 Sep 2022 21:49:10 +0530
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     pbonzini@redhat.com, shuah@kernel.org
-Cc:     seanjc@google.com, guang.zeng@intel.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] selftests/kvm: Use num_vcpus when testing ICR in the
- xapic_state_test
-Message-ID: <YyCtfu8zvvTKKs1u@biggie>
-References: <20220903073901.73862-1-gautammenghani201@gmail.com>
+        Tue, 13 Sep 2022 14:35:06 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659A7110E;
+        Tue, 13 Sep 2022 10:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663091693; x=1694627693;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vGVC5RZ9xNE0Q3ij62U800PLPBbcfE6gKEJ8YBR8JO8=;
+  b=RcneJGkyslL4PMPV1wpJEUIwXUAK6i5iaOCOC30pm8HNiL3xCsARS6az
+   w/5vfBiCt1lctZ5FslaLGtXxXsp+Z2Loy5+M1xtddEzVpHfk2ipcSUYxC
+   pcUx94kgFbGKISgDdMN8o/wyCDkHg+Jq35KH5U+AzadYcprjVRTLnEaS/
+   8waHrb51FQ5qonggB8zMJNRz5vtlLZANdWUDIQBaV3XiSZww6vHYL9dor
+   7dELTjlrIbSBZhIviNFDuxN46nist+uqv+F9gROIaj3iH85r4t/mKJkds
+   J6Yofbtyyz+rtcnnDvLIdFdwin39RvbKqz9wj3jj/y87VytNoBzwWSnDH
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="281224878"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="281224878"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 10:54:53 -0700
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="567678691"
+Received: from shamimah-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.209.23])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 10:54:44 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 34DA810465E; Tue, 13 Sep 2022 20:54:40 +0300 (+03)
+Date:   Tue, 13 Sep 2022 20:54:40 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v13 3/3] Documentation/x86: Document TDX attestation
+ process
+Message-ID: <20220913175440.wahcdmaumeqjgzmh@box>
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-4-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220903073901.73862-1-gautammenghani201@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20220909192708.1113126-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,76 +76,122 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 03, 2022 at 01:09:01PM +0530, Gautam Menghani wrote:
-> A TODO in xapic_state_test asks to use number of vCPUs instead of
-> vcpu.id + 1 in test_icr(). This patch adds support to get the number 
-> of vCPUs from the VM created and use it.
+On Fri, Sep 09, 2022 at 12:27:08PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> Document details about TDX attestation process and related user API
+> support.
+
+"related user API support" sounds wrong to me.
+
+Maybe just "related userspace API"?
+
+> Attestation details can be found in Guest-Host-Communication Interface
+> (GHCI) for Intel Trust Domain Extensions (TDX), section titled "TD
+> attestation".
 > 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> [Bagas Sanjaya fixed htmldocs warning]
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 > ---
->  .../selftests/kvm/x86_64/xapic_state_test.c     | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-> index 6f7a5ef66718..de934e8e5e41 100644
-> --- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-> @@ -96,9 +96,8 @@ static void __test_icr(struct xapic_vcpu *x, uint64_t val)
->  	____test_icr(x, val & ~(u64)APIC_ICR_BUSY);
->  }
+> Change since v12:
+>  * None
+> 
+> Changes since v11:
+>  * Fixed htmldocs warnings.
+> 
+>  Documentation/x86/tdx.rst | 75 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+> 
+> diff --git a/Documentation/x86/tdx.rst b/Documentation/x86/tdx.rst
+> index b8fa4329e1a5..c9e3ecf86e0b 100644
+> --- a/Documentation/x86/tdx.rst
+> +++ b/Documentation/x86/tdx.rst
+> @@ -210,6 +210,81 @@ converted to shared on boot.
+>  For coherent DMA allocation, the DMA buffer gets converted on the
+>  allocation. Check force_dma_unencrypted() for details.
 >  
-> -static void test_icr(struct xapic_vcpu *x)
-> +static void test_icr(struct xapic_vcpu *x, int num_vcpus)
->  {
-> -	struct kvm_vcpu *vcpu = x->vcpu;
->  	uint64_t icr, i, j;
->  
->  	icr = APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_FIXED;
-> @@ -110,11 +109,11 @@ static void test_icr(struct xapic_vcpu *x)
->  		__test_icr(x, icr | i);
->  
->  	/*
-> -	 * Send all flavors of IPIs to non-existent vCPUs.  TODO: use number of
-> -	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
-> +	 * Send all flavors of IPIs to non-existent vCPUs. Arbitrarily use vector 0xff.
->  	 */
+> +Attestation
+> +===========
 > +
->  	icr = APIC_INT_ASSERT | 0xff;
-> -	for (i = vcpu->id + 1; i < 0xff; i++) {
-> +	for (i = num_vcpus; i < 0xff; i++) {
->  		for (j = 0; j < 8; j++)
->  			__test_icr(x, i << (32 + 24) | icr | (j << 8));
->  	}
-> @@ -137,9 +136,13 @@ int main(int argc, char *argv[])
->  		.is_x2apic = true,
->  	};
->  	struct kvm_vm *vm;
-> +	struct list_head *iter;
-> +	int nr_vcpus_created = 0;
->  
->  	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
-> -	test_icr(&x);
-> +	list_for_each(iter, &vm->vcpus)
-> +		nr_vcpus_created++;
-> +	test_icr(&x, nr_vcpus_created);
->  	kvm_vm_free(vm);
->  
->  	/*
-> @@ -153,6 +156,6 @@ int main(int argc, char *argv[])
->  	vcpu_clear_cpuid_feature(x.vcpu, X86_FEATURE_X2APIC);
->  
->  	virt_pg_map(vm, APIC_DEFAULT_GPA, APIC_DEFAULT_GPA);
-> -	test_icr(&x);
-> +	test_icr(&x, nr_vcpus_created);
->  	kvm_vm_free(vm);
->  }
-> -- 
-> 2.34.1
-> 
+> +Attestation is used to verify the TDX guest trustworthiness to other
+> +entities before provisioning secrets to the guest. For example, a key
+> +server may request for attestation before releasing the encryption keys
+> +to mount the encrypted rootfs or secondary drive.
 
-Hi,
+Maybe "may request attestation quote before ..."?
 
-Please review the above patch and let me know if any change is required.
+> +TDX module records the state of the TDX guest in various stages of guest
+> +boot process using build time measurement register (MRTD) and runtime
+> +measurement registers (RTMR). Measurements related to guest initial
+> +configuration and firmware image is recorded in the MRTD register.
+> +Measurements related to initial state, kernel image, firmware image,
+> +command line options, initrd, ACPI tables, etc are recorded in RTMR
+> +registers. For more details, please refer to TDX Virtual Firmware design
+> +specification, sec titled "TD Measurement".
+> +
+> +At TDX guest runtime, the Intel TDX module reuses the Intel SGX attestation
+> +infrastructure to provide support for attesting to these measurements as
+> +described below.
+> +
+> +The attestation process consists of two steps: TDREPORT generation and
+> +Quote generation.
+> +
+> +TDX guest uses TDCALL[TDG.MR.REPORT] to get the TDREPORT (TDREPORT_STRUCT)
+> +from the TDX module. TDREPORT is a fixed-size data structure generated by
+> +the TDX module which contains guest-specific information (such as build
+> +and boot measurements), platform security version, and the MAC to protect
+> +the integrity of the TDREPORT.
+> +
+> +After getting the TDREPORT, the second step of the attestation process
+> +is to send it to the QE to generate the Quote. TDREPORT by design can only
 
-Thanks,
-Gautam
+The first use of QE abbreviation is before it is defined. -EPARSE.
+
+> +be verified on local platform as the MAC key is bound to the platform. To
+> +support remote verification of the TDREPORT, TDX leverages Intel SGX Quote
+> +Enclave (QE) to verify the TDREPORT locally and convert it to a remote
+> +verifiable Quote. Method of sending TDREPORT to QE is implemenentation
+> +specific. Attestation software can choose whatever communication channel
+> +available (i.e. vsock or hypercall) to send the TDREPORT to QE and receive
+> +the Quote.
+> +
+> +To allow userspace attestation agent get the TDREPORT, TDX guest driver
+> +exposes an IOCTL (TDX_CMD_GET_REPORT) interface via /dev/tdx-guest misc
+> +device.
+> +
+> +TDX Guest driver
+> +================
+> +
+> +The TDX guest driver exposes IOCTL interfaces via /dev/tdx-guest misc
+> +device to allow user space to get certain TDX guest specific details
+> +(like attestation report, attestation quote or storage keys, etc).
+> +
+> +In this section, for each supported IOCTL, following information is
+> +provided along with generic description.
+
+"for each" looks strange as we only have single IOCTL.
+
+> +:Input parameters: Parameters passed to the IOCTL and related details.
+> +:Output: Details about output data and return value (with details
+> +         about the non common error values).
+> +
+> +TDX_CMD_GET_REPORT
+> +------------------
+> +
+> +:Input parameters: struct tdx_report_req
+> +:Output: Upon successful execution, TDREPORT data is copied to
+> +         tdx_report_req.tdreport and returns 0 or returns
+> +         -EIO on TDCALL failure and standard error number on
+> +         other common failures.
+> +
+> +The TDX_CMD_GET_REPORT IOCTL can be used by the attestation software to
+> +get the TDX guest measurements data (with few other info) in the format
+> +of TDREPORT_STRUCT. It uses TDCALL[TDG.MR.REPORT] to get the TDREPORT
+> +from the TDX Module.
+> +
+> +Format of TDREPORT_STRUCT can be found in TDX 1.0 Module specification,
+> +sec titled "TDREPORT_STRUCT".
+> +
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
