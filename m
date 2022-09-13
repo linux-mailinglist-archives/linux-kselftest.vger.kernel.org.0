@@ -2,100 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1645B7036
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Sep 2022 16:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D36E5B7683
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Sep 2022 18:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbiIMOUM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Sep 2022 10:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S229881AbiIMQaY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Sep 2022 12:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbiIMOTG (ORCPT
+        with ESMTP id S231818AbiIMQaE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Sep 2022 10:19:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE1F1C131
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 07:13:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70564614B9
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 14:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FAF0C433C1;
-        Tue, 13 Sep 2022 14:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663078315;
-        bh=beifvSd0yZCf/rhb6goLcuPqGmCyFQ/KBjdE6tPJ6QA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vQbe0aY1RIi6/xcLONQ02TTGgNTtJ9MkN6Sackgo4LbNmpUGUL/ag3mJwPnjGPu/T
-         TSZAiQgCvyjFZVZfsbA5mvvGuZ5s/T9qhmiEYCggnktMQNDgSJNPDB6R60ri1Cng2a
-         1sOgDO3S3wiPOIDzRQWdMkeytOmZn3SS42xep4yea0SIEMXqu5Dt+AVyxwt+yvRdmZ
-         diXZscJY0is7Q6Wa0AWH4FRl34qLmJXZsdU5B69eO0hkzzjnEf5Z9D/pSKAo5uDhig
-         il3BSF75d4JNW3KAYxIwyr0VngH7myzutoJ12u2ww2ShrYoySK7Fwls/10LHMCKbRL
-         Q2qfzzCtnpw+w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 3/3] kselftest/arm64: Add hwcap test for RNG
-Date:   Tue, 13 Sep 2022 15:11:01 +0100
-Message-Id: <20220913141101.151400-4-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220913141101.151400-1-broonie@kernel.org>
-References: <20220913141101.151400-1-broonie@kernel.org>
+        Tue, 13 Sep 2022 12:30:04 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992EF606AC
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 08:24:50 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id go6so7459583pjb.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Sep 2022 08:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=OJAIEjey9dL/oOlyHKJUty+rvUtRfrNcjV74l588HbE=;
+        b=nipjUGyopyRbnweevoI2Oq+FbDhrGlaD7wKP+k5xapkMVsoGweAQ6K2hQ8AZ+n3N71
+         J85U0qDe2D5AD8d1gpjf++nTpiIkyTFzNlFk+YTPVFtJCYSH/SE9jP8KJtPu7wQ0hfi5
+         wYDpgxyUrRwd1sYa/NGSuu4VudYk3GqiPthKN+bOi/ckST3RiIggvPeGp3bhm5p8ypVT
+         3f+MwrbGT4h/7a0VEnXrxvfZQW0KEOYcQaivu+1/UqQdLAEGFiH+0RbJHMUiEdIZPPCt
+         MhVMuPS1IGUUE+HBMjXHJM9fAUIO8mG1oaSP0/UpGjTZuC/UI7ZeIyP4hCCX4seU5+Tv
+         A0Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=OJAIEjey9dL/oOlyHKJUty+rvUtRfrNcjV74l588HbE=;
+        b=c9bzkmrAHlhcHrOOhU9+C7hOTFAxBU1Ksjb9uhe32t1TEuqQ5WLWXgjWCXqPuG8tFP
+         q1ZCYt0DXcygTYllo7UfqWEnK809eD97H2UAoxSa7bGjpqkPUSomHtKpsUZh1q7f1boE
+         Fv05VZYAOPB7Ma2QxjjB3umIH3RqndP9lpZrGyKdl/fhuz/0UEm0Jbw7SiepKgUQdi2Q
+         jyS1ywkDTtbyONYFtjzIGbF40/AlXca71xBBZXwubIDH1HVGBIONZvKNJ7fUFpTIl8cY
+         r/Xo56TS3MPmRyYFkrdToz0TI97uYE5+1C43nWMBMrMg9gOhs5sfrxZJSlzwc1aN+5tS
+         R0Qg==
+X-Gm-Message-State: ACgBeo1emEEqPrWbUvCBwmPaARZCeSXIwFQlrrNzfr7Zo9GTnaj0GPyO
+        9spIaZ1i3usHQ2uhsd7wSzcQJhQi2lvL0Q==
+X-Google-Smtp-Source: AA6agR4hCeLSjZthMuJfgYlKUGutRaZadKKJTFOH4uT+lOP/oa9jwO7wbAgJCVwL7oqP3EbrVwcGew==
+X-Received: by 2002:a17:902:c7cc:b0:176:9fdd:ddb7 with SMTP id r12-20020a170902c7cc00b001769fddddb7mr32324812pla.150.1663080810301;
+        Tue, 13 Sep 2022 07:53:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id k5-20020aa79985000000b00535d3caa66fsm7855085pfh.197.2022.09.13.07.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 07:53:29 -0700 (PDT)
+Date:   Tue, 13 Sep 2022 14:53:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Gupta, Pankaj" <pankaj.gupta@amd.com>,
+        Elena Reshetova <elena.reshetova@intel.com>
+Subject: Re: [PATCH v7 00/14] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <YyCZZSyCrwXLLCD9@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com>
+ <20220818132421.6xmjqduempmxnnu2@box>
+ <c6ccbb96-5849-2e2f-3b49-4ea711af525d@google.com>
+ <20220820002700.6yflrxklmpsavdzi@box.shutemov.name>
+ <c194262b-b634-4baf-abf0-dc727e8f1d7@google.com>
+ <20220831142439.65q2gi4g2d2z4ofh@box.shutemov.name>
+ <20220908011037.ez2cdorthqxkerwk@box.shutemov.name>
+ <YyBQ+wzPtGwwRB/U@google.com>
+ <20220913132821.3ch5cv3rgdxqgz3i@box.shutemov.name>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1030; i=broonie@kernel.org; h=from:subject; bh=beifvSd0yZCf/rhb6goLcuPqGmCyFQ/KBjdE6tPJ6QA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjII90gcKY6uSnz9tFfY2jAbMa19gPEEyveQ1V4Ytn 1LC/BPWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYyCPdAAKCRAk1otyXVSH0OxzB/ 4y5iu5SKb3HvofGak5+WdjYkSzcZJxFjG2nkrJvTRDpQjzfwRTbudxAFOXxfCwE1VoGdl40pWOy3y9 7WCBRxj9jCZbMzgT5vqBU1tCBD4SwMTAhTLuNKrSWCnqeuLYDywpIJCRr0X4907jd70GVPpJ4mV1mm yTlFIa0Cqif23IiFGLTrcv9Lp5zGEKnFhwlmIj6LF8E9Iu3h+RHrNfUszNrlGtb5Z9bwX5RbOi3j2k C+cUp5E3Se1JbzoHNtGyU/9Uybdr82BUMtV4wV4yPOb8KQDY1EWh/uxClIUqETorwABwPtpKzS/xFV lU96m4kzlIKr2gFoxIg94ZPspVeOaM
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220913132821.3ch5cv3rgdxqgz3i@box.shutemov.name>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Validate the RNG hwcap and make sure we don't generate a SIGILL reading
-RNDR when it is reported.
+On Tue, Sep 13, 2022, Kirill A. Shutemov wrote:
+> On Tue, Sep 13, 2022 at 09:44:27AM +0000, Sean Christopherson wrote:
+> > On Thu, Sep 08, 2022, Kirill A. Shutemov wrote:
+> > > On Wed, Aug 31, 2022 at 05:24:39PM +0300, Kirill A . Shutemov wrote:
+> > > > On Sat, Aug 20, 2022 at 10:15:32PM -0700, Hugh Dickins wrote:
+> > > > > > I will try next week to rework it as shim to top of shmem. Does it work
+> > > > > > for you?
+> > > > > 
+> > > > > Yes, please do, thanks.  It's a compromise between us: the initial TDX
+> > > > > case has no justification to use shmem at all, but doing it that way
+> > > > > will help you with some of the infrastructure, and will probably be
+> > > > > easiest for KVM to extend to other more relaxed fd cases later.
+> > > > 
+> > > > Okay, below is my take on the shim approach.
+> > > > 
+> > > > I don't hate how it turned out. It is easier to understand without
+> > > > callback exchange thing.
+> > > > 
+> > > > The only caveat is I had to introduce external lock to protect against
+> > > > race between lookup and truncate.
+> > 
+> > As before, I think this lock is unnecessary.  Or at least it's unnessary to hold
+> > the lock across get/put.  The ->invalidate() call will ensure that the pfn is
+> > never actually used if get() races with truncation.
+> 
+> The updated version you replying to does not use the lock to protect
+> against truncation anymore. The lock protect notifier list.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/abi/hwcap.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Gah, grabbed the patch when applying.
 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index 6c91b4a0987e..d173e41f2123 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -33,6 +33,11 @@
-  */
- typedef void (*sigill_fn)(void);
- 
-+static void rng_sigill(void)
-+{
-+	asm volatile("mrs x0, S3_3_C2_C4_0" : : : "x0");
-+}
-+
- static void sme_sigill(void)
- {
- 	/* RDSVL x0, #0 */
-@@ -113,6 +118,13 @@ static const struct hwcap_data {
- 	sigill_fn sigill_fn;
- 	bool sigill_reliable;
- } hwcaps[] = {
-+	{
-+		.name = "RNG",
-+		.at_hwcap = AT_HWCAP2,
-+		.hwcap_bit = HWCAP2_RNG,
-+		.cpuinfo = "rng",
-+		.sigill_fn = rng_sigill,
-+	},
- 	{
- 		.name = "SME",
- 		.at_hwcap = AT_HWCAP2,
--- 
-2.30.2
+> > Switching topics, what actually prevents mmapp() on the shim?  I tried to follow,
+> > but I don't know these areas well enough.
+> 
+> It has no f_op->mmap, so mmap() will fail with -ENODEV. See do_mmap().
+> (I did not read the switch statement correctly at first. Note there are
+> two 'fallthrough' there.)
 
+Ah, validate_mmap_request().  Thought not implementing ->mmap() was the key, but
+couldn't find the actual check.
+
+Thanks much!
