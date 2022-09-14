@@ -2,50 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0695B79F8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Sep 2022 20:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54E35B7E3C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 03:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiIMSqG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Sep 2022 14:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
+        id S229876AbiINBXn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Sep 2022 21:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiIMSpl (ORCPT
+        with ESMTP id S229585AbiINBXk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Sep 2022 14:45:41 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF2D7B2A4;
-        Tue, 13 Sep 2022 11:25:32 -0700 (PDT)
+        Tue, 13 Sep 2022 21:23:40 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12176556D;
+        Tue, 13 Sep 2022 18:23:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663093533; x=1694629533;
+  t=1663118618; x=1694654618;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=UblfnalyvGKyzOm1JXwjImFfqo89UXQzpAJ/gqq3rxM=;
-  b=kwlm2fhz1G36SiEAWp+TpWcgKAyaeZejAO3NJ9OmC/sgxQ3JkrHvvnKw
-   qQQW3xuFQ2iUkp+nzYW9XxFqRlNx1+BF+riFybks1ThzW01Oz642hurxi
-   6BsrWeV4LZ94YBMzaqIRrzp6TFWXD1bvUxPIkq9yB6LjWSCVB3uI4UCIW
-   mofIXTM6f3LtNnhmcTGq47v2NrupUnmfyqn5Sx3jQIefRqnZenIT5elfV
-   bGtQFLBX2TKjTgmzhaXVWO+nFPgIs+bQsT/9o9YUHYApHIOoRtt+ku2/z
-   PMRH4tosrz2w+5/GOHxTTdAM4JhjoZ4nmaBzvq0t3zZh0kkyN4Jsv911N
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="299554408"
+  bh=lbeU84M3yA/lQbBKX0b3sLR775J5S+s8pCPMWnzhg3E=;
+  b=QzZPhegPMpULmMI2ygr8Cwt7R/QbzK/f74QIpEjxcr6QXVP5TgEBnDUl
+   oDHbNb5fAc0bo5n0Hk6JywWAMZHpn9J8xEvqTQa89NRkhB+ZqWNckGuK/
+   7X2GtG06MW/Y3Nwi+lQ5W+rMM7jy9T50ctb0FW1mN+e97qFmFOkYl4l07
+   x5p8w5yBEOO4eVXM8dTe6mbOp/KgjMTc4M33vqi8CWcg6fYkPaI25XZdj
+   Hse8CU6FhkCMuIvg3hwfYW+f999Wz74Jy8nU47n0BgUfakGIKGhncfftp
+   Uow6pV3wp3GjdyyaQsLLmvoU5BlvVuMrpfKAqTRgAy8uQywqQ1jd31x8G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="281337398"
 X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="299554408"
+   d="scan'208";a="281337398"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 11:25:32 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 18:23:35 -0700
 X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
-   d="scan'208";a="792030996"
+   d="scan'208";a="792144302"
 Received: from ewcubbag-mobl2.amr.corp.intel.com (HELO [10.209.57.220]) ([10.209.57.220])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 11:25:31 -0700
-Message-ID: <a687a458-9bd2-472f-2243-9ab0fea8b8c4@linux.intel.com>
-Date:   Tue, 13 Sep 2022 11:25:31 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 18:23:35 -0700
+Message-ID: <c5868924-f2a0-d6fd-c757-ae539194f9f2@linux.intel.com>
+Date:   Tue, 13 Sep 2022 18:23:34 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Firefox/91.0 Thunderbird/91.11.0
 Subject: Re: [PATCH v13 3/3] Documentation/x86: Document TDX attestation
  process
 Content-Language: en-US
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
@@ -54,7 +55,6 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tony Luck <tony.luck@intel.com>,
         Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
         Wander Lairson Costa <wander@redhat.com>,
         Isaku Yamahata <isaku.yamahata@gmail.com>,
         marcelo.cerri@canonical.com, tim.gardner@canonical.com,
@@ -69,17 +69,17 @@ From:   Sathyanarayanan Kuppuswamy
 In-Reply-To: <20220913175440.wahcdmaumeqjgzmh@box>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
+Hi Kirill/Kai,
 
 On 9/13/22 10:54 AM, Kirill A . Shutemov wrote:
 > On Fri, Sep 09, 2022 at 12:27:08PM -0700, Kuppuswamy Sathyanarayanan wrote:
@@ -89,9 +89,6 @@ On 9/13/22 10:54 AM, Kirill A . Shutemov wrote:
 > "related user API support" sounds wrong to me.
 > 
 > Maybe just "related userspace API"?
-
-Ok
-
 > 
 >> Attestation details can be found in Guest-Host-Communication Interface
 >> (GHCI) for Intel Trust Domain Extensions (TDX), section titled "TD
@@ -155,9 +152,6 @@ Ok
 >> +is to send it to the QE to generate the Quote. TDREPORT by design can only
 > 
 > The first use of QE abbreviation is before it is defined. -EPARSE.
-
-Yes. I already noticed it and fixed it.
-
 > 
 >> +be verified on local platform as the MAC key is bound to the platform. To
 >> +support remote verification of the TDREPORT, TDX leverages Intel SGX Quote
@@ -182,15 +176,6 @@ Yes. I already noticed it and fixed it.
 >> +provided along with generic description.
 > 
 > "for each" looks strange as we only have single IOCTL.
-
-I just want to give an overview of IOCTL documentation. Although we have
-only one IOCTL now, we have plans to extend it in near future. At least
-VERIFYEREPORT IOCTL will be added soon. Do you think I should still
-fix it? How about the following?
-
-In this section, in addition to generic information of IOCTL, following
-details are provided.
-
 > 
 >> +:Input parameters: Parameters passed to the IOCTL and related details.
 >> +:Output: Details about output data and return value (with details
@@ -214,6 +199,128 @@ details are provided.
 >> +sec titled "TDREPORT_STRUCT".
 >> +
 > 
+
+After addressing the comments, the final version looks like below.
+
+
+
+Attestation
+
+===========
+
+
+
+Attestation is used to verify the TDX guest trustworthiness to other
+
+entities before provisioning secrets to the guest. For example, a key
+
+server may request attestation quote before releasing the encryption
+
+keys to mount the encrypted rootfs or secondary drive.
+
+
+
+The TDX module records the state of the TDX guest in various stages of
+
+the guest boot process using build time measurement register (MRTD) and
+
+runtime measurement registers (RTMR). Measurements related to guest
+
+initial configuration and firmware image are recorded in the MRTD
+
+register. Measurements related to initial state, kernel image, firmware
+
+image, command line options, initrd, ACPI tables, etc are recorded in
+
+RTMR registers. For more details, please refer to TDX Virtual Firmware
+
+design specification, sec titled "TD Measurement". At TDX guest runtime,
+
+the attestation process is used to attest to these measurements.
+
+
+
+The attestation process consists of two steps: TDREPORT generation and
+
+Quote generation.
+
+
+
+TDX guest uses TDCALL[TDG.MR.REPORT] to get the TDREPORT (TDREPORT_STRUCT)
+
+from the TDX module. TDREPORT is a fixed-size data structure generated by
+
+the TDX module which contains guest-specific information (such as build
+
+and boot measurements), platform security version, and the MAC to protect
+
+the integrity of the TDREPORT.
+
+
+
+After getting the TDREPORT, the second step of the attestation process
+
+is to send it to the Quoting Enclave (QE) to generate the Quote. TDREPORT
+
+by design can only be verified on the local platform as the MAC key is
+
+bound to the platform. To support remote verification of the TDREPORT,
+
+TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT locally
+
+and convert it to a remotely verifiable Quote. Method of sending TDREPORT
+
+to QE is implementation specific. Attestation software can choose
+
+whatever communication channel available (i.e. vsock or hypercall) to
+
+send the TDREPORT to QE and receive the Quote.
+
+
+TDX Guest driver
+
+================
+
+
+
+The TDX guest driver exposes IOCTL interfaces via /dev/tdx-guest device
+
+to service TDX guest user-specific requests. But currently only
+
+TDX_CMD_GET_RERPORT IOCTL is supported to allow user space attestation
+
+agent to get the TDREPORT.
+
+
+
+Following are the IOCTL ABI details:
+
+
+
+TDX_CMD_GET_REPORT
+
+------------------
+
+
+
+:Input parameters: struct tdx_report_req
+
+:Output: Upon successful execution, TDREPORT data is copied to
+
+         tdx_report_req.tdreport and return 0. Return -EIO on
+
+         TDCALL failure or standard error number on other common
+
+         failures.
+
+
+
+The TDX_CMD_GET_REPORT IOCTL can be used by the attestation software to
+
+get the TDREPORT from the TDX module using TDCALL[TDG.MR.REPORT].
+
+
+
 
 -- 
 Sathyanarayanan Kuppuswamy
