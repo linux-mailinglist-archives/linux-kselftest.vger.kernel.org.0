@@ -2,124 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7756E5B85E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 12:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087BF5B8751
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 13:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiINKBU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Sep 2022 06:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
+        id S229683AbiINLgM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Sep 2022 07:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiINKBD (ORCPT
+        with ESMTP id S229627AbiINLgL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Sep 2022 06:01:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3798E6AA17;
-        Wed, 14 Sep 2022 03:00:50 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MSG1m14HJzNmG6;
-        Wed, 14 Sep 2022 17:56:12 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
- 2022 18:00:46 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 9/9] selftests/tc-testings: add list case for basic filter
-Date:   Wed, 14 Sep 2022 18:02:21 +0800
-Message-ID: <20220914100221.386855-10-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220914100221.386855-1-shaozhengchao@huawei.com>
-References: <20220914100221.386855-1-shaozhengchao@huawei.com>
+        Wed, 14 Sep 2022 07:36:11 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AC07C1A3;
+        Wed, 14 Sep 2022 04:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663155370; x=1694691370;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/UyNS1z5553flzYh+TOYHe0+TXBOSWmCkQFcTXHq+KU=;
+  b=Asx85HhUSGiNp8TarWw2oAUHa1WpfTULFz/rezyFT+ZCHij8Wx0RXsbk
+   +DZRHSnZrgPrV/zZLMhPukPqHeQPoi78LWpgbmSr07rKOsmxfXAuY+/IX
+   noqlNoGveEOwy7Q8iQwpWJGZ+zAwEHNby0d55fU7uKiY67c3NkNdWphn9
+   078GSi8yeebA/GozuCr0NTT1VJIc6SVxUCjzJ0TdHNb7Zhr5XhCDobvU/
+   aXxt3rROrlYp64T8/MjM5lCsFZOgcFENkQ4/zxjo/EnyEgKOn7e0onkvU
+   qkS5VOjl35P2C+v5YpRXCCWmA+shvyxm/UYr57cTq/yD7nrii8ijpeHXp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="278133852"
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="278133852"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 04:36:10 -0700
+X-IronPort-AV: E=Sophos;i="5.93,315,1654585200"; 
+   d="scan'208";a="567978194"
+Received: from rwathan-mobl1.ger.corp.intel.com (HELO [10.213.220.95]) ([10.213.220.95])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 04:36:04 -0700
+Message-ID: <7c3cc265-869b-b2fc-43f2-d2cbd0bc142c@intel.com>
+Date:   Wed, 14 Sep 2022 04:36:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+Content-Language: en-US
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 0811: Add multiple basic filter with cmp ematch u8/link layer and
-default action and dump them
-Test 5129: List basic filters
+On 9/9/22 12:27, Kuppuswamy Sathyanarayanan wrote:
+> 
+>  arch/x86/coco/tdx/tdx.c         | 115 ++++++++++++++++++++++++++++++++
+>  arch/x86/include/uapi/asm/tdx.h |  56 ++++++++++++++++
+>  2 files changed, 171 insertions(+)
+>  create mode 100644 arch/x86/include/uapi/asm/tdx.h
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- .../tc-testing/tc-tests/filters/basic.json    | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
+The SEV equivalent of this in in:
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-index e788c114a484..d1278de8ebc3 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-@@ -1274,5 +1274,52 @@
-         "teardown": [
-             "$TC qdisc del dev $DEV1 ingress"
-         ]
-+    },
-+    {
-+        "id": "0811",
-+        "name": "Add multiple basic filter with cmp ematch u8/link layer and default action and dump them",
-+        "category": [
-+            "filter",
-+            "basic"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "^filter protocol ip pref 1 basic",
-+        "matchCount": "3",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "5129",
-+        "name": "List basic filters",
-+        "category": [
-+            "filter",
-+            "basic"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1",
-+            "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1"
-+        ],
-+        "cmdUnderTest": "$TC filter show dev $DEV1 parent ffff:",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "cmp\\(u8 at 0 layer 0 mask 0xff gt 10\\)",
-+        "matchCount": "2",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-     }
- ]
--- 
-2.17.1
+	drivers/virt/coco/sev-guest/sev-guest.c
 
+right?
+
+Why did you choose a different location?  Also, can you please study the
+SEV implementation a bit?  It might help you find problems like the
+ioctl() return code issue.  The SEV driver appears to have gotten that
+right.
