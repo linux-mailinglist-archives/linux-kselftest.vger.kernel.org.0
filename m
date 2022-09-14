@@ -2,185 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5527C5B812E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 08:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B10E5B85A8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 11:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiINGCH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Sep 2022 02:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S231639AbiINJz2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Sep 2022 05:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiINGCD (ORCPT
+        with ESMTP id S231651AbiINJzI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Sep 2022 02:02:03 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C3861DB7;
-        Tue, 13 Sep 2022 23:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=/AdvcLB/6Lq62F25dpNZjPyf+RkXKrtfVHPO5PSE7Z8=; b=YvwcNsYU3EvAkZm9GfLxM+lM+t
-        HXOtQOv+4Jx2cMnFleGlhr69M3+KXaO7vS3jOxN5ZlkVX34tIyl7rjzD9U4DkBOX2FLRlkU/LZ5TI
-        7Av1xS2jZQmW4Q/gtB/Dto8WjESCYp2jULocXq3Sb9OQiGUrnyf/bgKgV8h1Q09amwu2+3Yxq/U7e
-        cYxi8Lm0uBnFPcmXe+oWHMzlQw2coiYY4yufW4KsMWHKpDuMKTrzDBLYs+CuhzvUcHSfqL/l0SxMK
-        AGxUOS+iObhsF3iBOphHEyYTw73Wyvc/WOnhnnaeBqkbnNDjnHh0uxJzRiaya03YucdIXOE8VGL8Z
-        ZsXenlOw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oYLT2-00879w-Dz; Wed, 14 Sep 2022 06:01:48 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     tglx@linutronix.de, gregkh@linuxfoundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org
-Cc:     joe@perches.com, mcgrof@kernel.org, keescook@chromium.org,
-        rostedt@goodmis.org, linux-spdx@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Kuno Woudt <kuno@frob.nl>,
-        Richard Fontana <fontana@sharpeleven.org>,
-        copyleft-next@lists.fedorahosted.org,
-        Ciaran Farrell <Ciaran.Farrell@suse.com>,
-        Christopher De Nicolo <Christopher.DeNicolo@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
-Subject: [PATCH v10 2/2] testing: use the copyleft-next-0.3.1 SPDX tag
-Date:   Tue, 13 Sep 2022 23:01:47 -0700
-Message-Id: <20220914060147.1934064-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220914060147.1934064-1-mcgrof@kernel.org>
-References: <20220914060147.1934064-1-mcgrof@kernel.org>
+        Wed, 14 Sep 2022 05:55:08 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963077B281
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Sep 2022 02:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
+        In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ehWrl3y+Wg0GBs71Zw1RTQVPegiwwGzXZB7B3+J31M4=; b=GoCZBoHDlBqjwKvlvWd3vM1L3A
+        MY6KakRZZGOgIUc2Y5H9Qll9TMTR+4U77XWJ5pCYd0vNd5U2UVw5LvMVkv19/v2EwoUIJWSbT+Q0t
+        aABfdhFSbz1il9WczLXUctN8SnUTYqvSGH56ul0rAt+NNv3Q9jggeQzq0/zEm28/r48LZe3kpUJD4
+        Bxn1a60ybz7BFd0LmUOQ9Gu8cLG4W+vPNqHofH4AyD069vyE14SvwbCNelkaEjRsMEb7YEeRzZ8jQ
+        Pma7K7Y3t+zDrG1QV/giQwDia6LHee/X4IYLaD13d/krsPWsZnnRFGJIutNVKMRmrafea1LTEO5Rf
+        0JjTlWVQ==;
+Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtps 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oYP5N-000Bqj-UQ; Wed, 14 Sep 2022 11:53:37 +0200
+Received: from webmail.service.igalia.com ([192.168.21.45])
+        by mail.igalia.com with esmtp (Exim)
+        id 1oYP5L-000QAS-7S; Wed, 14 Sep 2022 11:53:37 +0200
+Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
+        by webmail.service.igalia.com with esmtp (Exim 4.94.2)
+        (envelope-from <andrealmeid@igalia.com>)
+        id 1oYP5K-0003Dj-BI; Wed, 14 Sep 2022 11:53:34 +0200
 MIME-Version: 1.0
+Date:   Wed, 14 Sep 2022 11:53:34 +0200
+From:   =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+To:     =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+Cc:     linux-kselftest@vger.kernel.org, dvhart@infradead.org,
+        shuah@kernel.org, kernel@collabora.com
+Subject: Re: [PATCH] selftests/futex: fix build for clang
+In-Reply-To: <20220909110709.1827374-1-ricardo.canuelo@collabora.com>
+References: <20220909110709.1827374-1-ricardo.canuelo@collabora.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a5f6b1da7df0784536c7d7b70a0bc44e@igalia.com>
+X-Sender: andrealmeid@igalia.com
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Two selftests drivers exist under the copyleft-next license.
-These drivers were added prior to SPDX practice taking full swing
-in the kernel. Now that we have an SPDX tag for copylef-next-0.3.1
-documented, embrace it and remove the boiler plate.
+Hi Ricardo :)
 
-Cc: Goldwyn Rodrigues <rgoldwyn@suse.com>
-Cc: Kuno Woudt <kuno@frob.nl>
-Cc: Richard Fontana <fontana@sharpeleven.org>
-Cc: copyleft-next@lists.fedorahosted.org
-Cc: Ciaran Farrell <Ciaran.Farrell@suse.com>
-Cc: Christopher De Nicolo <Christopher.DeNicolo@suse.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- lib/test_kmod.c                          | 12 +-----------
- lib/test_sysctl.c                        | 12 +-----------
- tools/testing/selftests/kmod/kmod.sh     | 13 +------------
- tools/testing/selftests/sysctl/sysctl.sh | 12 +-----------
- 4 files changed, 4 insertions(+), 45 deletions(-)
+On 2022-09-09 13:07, Ricardo Cañuelo wrote:
+> Don't use the test-specific header files as source files to force a
+> target dependency, as clang will complain if more than one source file
+> is used for a compile command with a single '-o' flag.
+> 
+> Use the proper Makefile variables instead as defined in
+> tools/testing/selftests/lib.mk.
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index cb800b1d0d99..6423df9fa8dd 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * kmod stress test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
-index 9a564971f539..e2a816d85ea2 100644
---- a/lib/test_sysctl.c
-+++ b/lib/test_sysctl.c
-@@ -1,18 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- /*
-  * proc sysctl test driver
-  *
-  * Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or at your option any
-- * later version; or, when distributed separately from the Linux kernel or
-- * when incorporated into other software packages, subject to the following
-- * license:
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of copyleft-next (version 0.3.1 or later) as published
-- * at http://copyleft-next.org/.
-  */
- 
- /*
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index afd42387e8b2..7189715d7960 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -1,18 +1,7 @@
- #!/bin/bash
--#
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
- #
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
--
- # This is a stress test script for kmod, the kernel module loader. It uses
- # test_kmod which exposes a series of knobs for the API for us so we can
- # tweak each test in userspace rather than in kernelspace.
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index f50778a3d744..bfc54b422f25 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -1,16 +1,6 @@
- #!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
- # Copyright (C) 2017 Luis R. Rodriguez <mcgrof@kernel.org>
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by the Free
--# Software Foundation; either version 2 of the License, or at your option any
--# later version; or, when distributed separately from the Linux kernel or
--# when incorporated into other software packages, subject to the following
--# license:
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of copyleft-next (version 0.3.1 or later) as published
--# at http://copyleft-next.org/.
- 
- # This performs a series tests against the proc sysctl interface.
- 
--- 
-2.35.1
+Could you share how I can test this patch?
 
+> 
+> Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+> ---
+>  tools/testing/selftests/futex/functional/Makefile | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/futex/functional/Makefile
+> b/tools/testing/selftests/futex/functional/Makefile
+> index 732149011692..5a0e0df8de9b 100644
+> --- a/tools/testing/selftests/futex/functional/Makefile
+> +++ b/tools/testing/selftests/futex/functional/Makefile
+> @@ -3,11 +3,11 @@ INCLUDES := -I../include -I../../
+> -I../../../../../usr/include/
+>  CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES)
+> $(KHDR_INCLUDES)
+>  LDLIBS := -lpthread -lrt
+>  
+> -HEADERS := \
+> +LOCAL_HDRS := \
+>  	../include/futextest.h \
+>  	../include/atomic.h \
+>  	../include/logging.h
+> -TEST_GEN_FILES := \
+> +TEST_GEN_PROGS := \
+>  	futex_wait_timeout \
+>  	futex_wait_wouldblock \
+>  	futex_requeue_pi \
+> @@ -24,5 +24,3 @@ TEST_PROGS := run.sh
+>  top_srcdir = ../../../../..
+>  DEFAULT_INSTALL_HDR_PATH := 1
+>  include ../../lib.mk
+> -
+> -$(TEST_GEN_FILES): $(HEADERS)
