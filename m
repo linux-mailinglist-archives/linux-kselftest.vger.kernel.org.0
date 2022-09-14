@@ -2,107 +2,274 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B10E5B85A8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 11:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD175B85C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 12:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbiINJz2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Sep 2022 05:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S229602AbiINKAo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Sep 2022 06:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiINJzI (ORCPT
+        with ESMTP id S229966AbiINKAl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Sep 2022 05:55:08 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963077B281
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Sep 2022 02:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:References:
-        In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ehWrl3y+Wg0GBs71Zw1RTQVPegiwwGzXZB7B3+J31M4=; b=GoCZBoHDlBqjwKvlvWd3vM1L3A
-        MY6KakRZZGOgIUc2Y5H9Qll9TMTR+4U77XWJ5pCYd0vNd5U2UVw5LvMVkv19/v2EwoUIJWSbT+Q0t
-        aABfdhFSbz1il9WczLXUctN8SnUTYqvSGH56ul0rAt+NNv3Q9jggeQzq0/zEm28/r48LZe3kpUJD4
-        Bxn1a60ybz7BFd0LmUOQ9Gu8cLG4W+vPNqHofH4AyD069vyE14SvwbCNelkaEjRsMEb7YEeRzZ8jQ
-        Pma7K7Y3t+zDrG1QV/giQwDia6LHee/X4IYLaD13d/krsPWsZnnRFGJIutNVKMRmrafea1LTEO5Rf
-        0JjTlWVQ==;
-Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
-        by fanzine2.igalia.com with esmtps 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oYP5N-000Bqj-UQ; Wed, 14 Sep 2022 11:53:37 +0200
-Received: from webmail.service.igalia.com ([192.168.21.45])
-        by mail.igalia.com with esmtp (Exim)
-        id 1oYP5L-000QAS-7S; Wed, 14 Sep 2022 11:53:37 +0200
-Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
-        by webmail.service.igalia.com with esmtp (Exim 4.94.2)
-        (envelope-from <andrealmeid@igalia.com>)
-        id 1oYP5K-0003Dj-BI; Wed, 14 Sep 2022 11:53:34 +0200
+        Wed, 14 Sep 2022 06:00:41 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2C865651;
+        Wed, 14 Sep 2022 03:00:40 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MSG2J33XJzlVhq;
+        Wed, 14 Sep 2022 17:56:40 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 14 Sep
+ 2022 18:00:37 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <shuah@kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2 0/9] refactor duplicate codes in the tc cls walk function
+Date:   Wed, 14 Sep 2022 18:02:12 +0800
+Message-ID: <20220914100221.386855-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Date:   Wed, 14 Sep 2022 11:53:34 +0200
-From:   =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-To:     =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-Cc:     linux-kselftest@vger.kernel.org, dvhart@infradead.org,
-        shuah@kernel.org, kernel@collabora.com
-Subject: Re: [PATCH] selftests/futex: fix build for clang
-In-Reply-To: <20220909110709.1827374-1-ricardo.canuelo@collabora.com>
-References: <20220909110709.1827374-1-ricardo.canuelo@collabora.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a5f6b1da7df0784536c7d7b70a0bc44e@igalia.com>
-X-Sender: andrealmeid@igalia.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ricardo :)
+The walk implementation of most tc cls modules is basically the same.
+That is, the values of count and skip are checked first. If count is
+greater than or equal to skip, the registered fn function is executed.
+Otherwise, increase the value of count. So the code can be refactored.
+Then use helper function to replace the code of each cls module in
+alphabetical order.
 
-On 2022-09-09 13:07, Ricardo Cañuelo wrote:
-> Don't use the test-specific header files as source files to force a
-> target dependency, as clang will complain if more than one source file
-> is used for a compile command with a single '-o' flag.
-> 
-> Use the proper Makefile variables instead as defined in
-> tools/testing/selftests/lib.mk.
+The walk function is invoked during dump. Therefore, test cases related
+ to the tdc filter need to be added.
 
-Could you share how I can test this patch?
+Add test cases locally and perform the test. The test results are listed
+below:
 
-> 
-> Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
-> ---
->  tools/testing/selftests/futex/functional/Makefile | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/Makefile
-> b/tools/testing/selftests/futex/functional/Makefile
-> index 732149011692..5a0e0df8de9b 100644
-> --- a/tools/testing/selftests/futex/functional/Makefile
-> +++ b/tools/testing/selftests/futex/functional/Makefile
-> @@ -3,11 +3,11 @@ INCLUDES := -I../include -I../../
-> -I../../../../../usr/include/
->  CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES)
-> $(KHDR_INCLUDES)
->  LDLIBS := -lpthread -lrt
->  
-> -HEADERS := \
-> +LOCAL_HDRS := \
->  	../include/futextest.h \
->  	../include/atomic.h \
->  	../include/logging.h
-> -TEST_GEN_FILES := \
-> +TEST_GEN_PROGS := \
->  	futex_wait_timeout \
->  	futex_wait_wouldblock \
->  	futex_requeue_pi \
-> @@ -24,5 +24,3 @@ TEST_PROGS := run.sh
->  top_srcdir = ../../../../..
->  DEFAULT_INSTALL_HDR_PATH := 1
->  include ../../lib.mk
-> -
-> -$(TEST_GEN_FILES): $(HEADERS)
+./tdc.py -e 0811
+ok 1 0811 - Add multiple basic filter with cmp ematch u8/link layer and
+default action and dump them
+
+./tdc.py -e 5129
+ok 1 5129 - List basic filters
+
+./tdc.py -c bpf-filter
+ok 1 23c3 - Add cBPF filter with valid bytecode
+ok 2 1563 - Add cBPF filter with invalid bytecode
+ok 3 2334 - Add eBPF filter with valid object-file
+ok 4 2373 - Add eBPF filter with invalid object-file
+ok 5 4423 - Replace cBPF bytecode
+ok 6 5122 - Delete cBPF filter
+ok 7 e0a9 - List cBPF filters
+
+./tdc.py -c cgroup
+ok 1 6273 - Add cgroup filter with cmp ematch u8/link layer and drop
+action
+ok 2 4721 - Add cgroup filter with cmp ematch u8/link layer with trans
+flag and pass action
+ok 3 d392 - Add cgroup filter with cmp ematch u16/link layer and pipe
+action
+ok 4 0234 - Add cgroup filter with cmp ematch u32/link layer and miltiple
+actions
+ok 5 8499 - Add cgroup filter with cmp ematch u8/network layer and pass
+action
+ok 6 b273 - Add cgroup filter with cmp ematch u8/network layer with trans
+flag and drop action
+ok 7 1934 - Add cgroup filter with cmp ematch u16/network layer and pipe
+action
+ok 8 2733 - Add cgroup filter with cmp ematch u32/network layer and
+miltiple actions
+ok 9 3271 - Add cgroup filter with NOT cmp ematch rule and pass action
+ok 10 2362 - Add cgroup filter with two ANDed cmp ematch rules and single
+action
+ok 11 9993 - Add cgroup filter with two ORed cmp ematch rules and single
+action
+ok 12 2331 - Add cgroup filter with two ANDed cmp ematch rules and one
+ORed ematch rule and single action
+ok 13 3645 - Add cgroup filter with two ANDed cmp ematch rules and one
+NOT ORed ematch rule and single action
+ok 14 b124 - Add cgroup filter with u32 ematch u8/zero offset and drop
+action
+ok 15 7381 - Add cgroup filter with u32 ematch u8/zero offset and invalid
+value >0xFF
+ok 16 2231 - Add cgroup filter with u32 ematch u8/positive offset and
+drop action
+ok 17 1882 - Add cgroup filter with u32 ematch u8/invalid mask >0xFF
+ok 18 1237 - Add cgroup filter with u32 ematch u8/missing offset
+ok 19 3812 - Add cgroup filter with u32 ematch u8/missing AT keyword
+ok 20 1112 - Add cgroup filter with u32 ematch u8/missing value
+ok 21 3241 - Add cgroup filter with u32 ematch u8/non-numeric value
+ok 22 e231 - Add cgroup filter with u32 ematch u8/non-numeric mask
+ok 23 4652 - Add cgroup filter with u32 ematch u8/negative offset and
+pass action
+ok 24 1331 - Add cgroup filter with u32 ematch u16/zero offset and pipe
+action
+ok 25 e354 - Add cgroup filter with u32 ematch u16/zero offset and
+invalid value >0xFFFF
+ok 26 3538 - Add cgroup filter with u32 ematch u16/positive offset and
+drop action
+ok 27 4576 - Add cgroup filter with u32 ematch u16/invalid mask >0xFFFF
+ok 28 b842 - Add cgroup filter with u32 ematch u16/missing offset
+ok 29 c924 - Add cgroup filter with u32 ematch u16/missing AT keyword
+ok 30 cc93 - Add cgroup filter with u32 ematch u16/missing value
+ok 31 123c - Add cgroup filter with u32 ematch u16/non-numeric value
+ok 32 3675 - Add cgroup filter with u32 ematch u16/non-numeric mask
+ok 33 1123 - Add cgroup filter with u32 ematch u16/negative offset and
+drop action
+ok 34 4234 - Add cgroup filter with u32 ematch u16/nexthdr+ offset and
+pass action
+ok 35 e912 - Add cgroup filter with u32 ematch u32/zero offset and pipe
+action
+ok 36 1435 - Add cgroup filter with u32 ematch u32/positive offset and
+drop action
+ok 37 1282 - Add cgroup filter with u32 ematch u32/missing offset
+ok 38 6456 - Add cgroup filter with u32 ematch u32/missing AT keyword
+ok 39 4231 - Add cgroup filter with u32 ematch u32/missing value
+ok 40 2131 - Add cgroup filter with u32 ematch u32/non-numeric value
+ok 41 f125 - Add cgroup filter with u32 ematch u32/non-numeric mask
+ok 42 4316 - Add cgroup filter with u32 ematch u32/negative offset and
+drop action
+ok 43 23ae - Add cgroup filter with u32 ematch u32/nexthdr+ offset and
+pipe action
+ok 44 23a1 - Add cgroup filter with canid ematch and single SFF
+ok 45 324f - Add cgroup filter with canid ematch and single SFF with mask
+ok 46 2576 - Add cgroup filter with canid ematch and multiple SFF
+ok 47 4839 - Add cgroup filter with canid ematch and multiple SFF with
+masks
+ok 48 6713 - Add cgroup filter with canid ematch and single EFF
+ok 49 4572 - Add cgroup filter with canid ematch and single EFF with mask
+ok 50 8031 - Add cgroup filter with canid ematch and multiple EFF
+ok 51 ab9d - Add cgroup filter with canid ematch and multiple EFF with
+masks
+ok 52 5349 - Add cgroup filter with canid ematch and a combination of
+SFF/EFF
+ok 53 c934 - Add cgroup filter with canid ematch and a combination of
+SFF/EFF with masks
+ok 54 4319 - Replace cgroup filter with diffferent match
+ok 55 4636 - Detele cgroup filter
+
+./tdc.py -c flow
+ok 1 5294 - Add flow filter with map key and ops
+ok 2 3514 - Add flow filter with map key or ops
+ok 3 7534 - Add flow filter with map key xor ops
+ok 4 4524 - Add flow filter with map key rshift ops
+ok 5 0230 - Add flow filter with map key addend ops
+ok 6 2344 - Add flow filter with src map key
+ok 7 9304 - Add flow filter with proto map key
+ok 8 9038 - Add flow filter with proto-src map key
+ok 9 2a03 - Add flow filter with proto-dst map key
+ok 10 a073 - Add flow filter with iif map key
+ok 11 3b20 - Add flow filter with priority map key
+ok 12 8945 - Add flow filter with mark map key
+ok 13 c034 - Add flow filter with nfct map key
+ok 14 0205 - Add flow filter with nfct-src map key
+ok 15 5315 - Add flow filter with nfct-src map key
+ok 16 7849 - Add flow filter with nfct-proto-src map key
+ok 17 9902 - Add flow filter with nfct-proto-dst map key
+ok 18 6742 - Add flow filter with rt-classid map key
+ok 19 5432 - Add flow filter with sk-uid map key
+ok 20 4234 - Add flow filter with sk-gid map key
+ok 21 4522 - Add flow filter with vlan-tag map key
+ok 22 4253 - Add flow filter with rxhash map key
+ok 23 4452 - Add flow filter with hash key list
+ok 24 4341 - Add flow filter with muliple ops
+ok 25 4392 - List flow filters
+ok 26 4322 - Change flow filter with map key num
+ok 27 2320 - Replace flow filter with map key num
+ok 28 3213 - Delete flow filter with map key num
+
+./tdc.py -c route
+ok 1 e122 - Add route filter with from and to tag
+ok 2 6573 - Add route filter with fromif and to tag
+ok 3 1362 - Add route filter with to flag and reclassify action
+ok 4 4720 - Add route filter with from flag and continue actions
+ok 5 2812 - Add route filter with form tag and pipe action
+ok 6 7994 - Add route filter with miltiple actions
+ok 7 4312 - List route filters
+ok 8 2634 - Delete route filter with pipe action
+
+./tdc.py -c rsvp
+ok 1 2141 - Add rsvp filter with tcp proto and specific IP address
+ok 2 5267 - Add rsvp filter with udp proto and specific IP address
+ok 3 2819 - Add rsvp filter with src ip and src port
+ok 4 c967 - Add rsvp filter with tunnelid and continue action
+ok 5 5463 - Add rsvp filter with tunnel and pipe action
+ok 6 2332 - Add rsvp filter with miltiple actions
+ok 7 8879 - Add rsvp filter with tunnel and skp flag
+ok 8 8261 - List rsvp filters
+ok 9 8989 - Delete rsvp filter
+
+./tdc.py -c tcindex
+ok 1 8293 - Add tcindex filter with default action
+ok 2 7281 - Add tcindex filter with hash size and pass action
+ok 3 b294 - Add tcindex filter with mask shift and reclassify action
+ok 4 0532 - Add tcindex filter with pass_on and continue actions
+ok 5 d473 - Add tcindex filter with pipe action
+ok 6 2940 - Add tcindex filter with miltiple actions
+ok 7 1893 - List tcindex filters
+ok 8 2041 - Change tcindex filter with pass action
+ok 9 9203 - Replace tcindex filter with pass action
+ok 10 7957 - Delete tcindex filter with drop action
+
+---
+v2: rectify spelling error; The category name bpf in filters file 
+    is renamed to bpf-filter
+---
+
+Zhengchao Shao (9):
+  net/sched: cls_api: add helper for tc cls walker stats updating
+  net/sched: use tc_cls_stats_update() in filter
+  selftests/tc-testings: add selftests for bpf filter
+  selftests/tc-testings: add selftests for cgroup filter
+  selftests/tc-testings: add selftests for flow filter
+  selftests/tc-testings: add selftests for route filter
+  selftests/tc-testings: add selftests for rsvp filter
+  selftests/tc-testings: add selftests for tcindex filter
+  selftests/tc-testings: add list case for basic filter
+
+ include/net/pkt_cls.h                         |   13 +
+ net/sched/cls_basic.c                         |    9 +-
+ net/sched/cls_bpf.c                           |    8 +-
+ net/sched/cls_flow.c                          |    8 +-
+ net/sched/cls_fw.c                            |    9 +-
+ net/sched/cls_route.c                         |    9 +-
+ net/sched/cls_rsvp.h                          |    9 +-
+ net/sched/cls_tcindex.c                       |   18 +-
+ net/sched/cls_u32.c                           |   20 +-
+ .../tc-testing/tc-tests/filters/basic.json    |   47 +
+ .../tc-testing/tc-tests/filters/bpf.json      |  171 +++
+ .../tc-testing/tc-tests/filters/cgroup.json   | 1236 +++++++++++++++++
+ .../tc-testing/tc-tests/filters/flow.json     |  623 +++++++++
+ .../tc-testing/tc-tests/filters/route.json    |  181 +++
+ .../tc-testing/tc-tests/filters/rsvp.json     |  203 +++
+ .../tc-testing/tc-tests/filters/tcindex.json  |  227 +++
+ 16 files changed, 2716 insertions(+), 75 deletions(-)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/route.json
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/rsvp.json
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
+
+-- 
+2.17.1
+
