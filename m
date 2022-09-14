@@ -2,113 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79625B8949
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 15:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C915B8972
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Sep 2022 15:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiINNl4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Sep 2022 09:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S229838AbiINNsL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Sep 2022 09:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiINNlz (ORCPT
+        with ESMTP id S229851AbiINNsG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Sep 2022 09:41:55 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA03D32062;
-        Wed, 14 Sep 2022 06:41:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7CB245802E9;
-        Wed, 14 Sep 2022 09:41:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 14 Sep 2022 09:41:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1663162910; x=1663170110; bh=9u
-        dvku0NNJooTG5PR0CRxNtI94An28JpAV1KnmmamBY=; b=ZjHvw3a6pBffuT3xRg
-        xpoDAsYdt4XL8/i/JT3v6IJjJroO/aoAmhQHhq5g6bBilEH/voNXhJn22WWPxMvi
-        /FZvn0xz4b1jy83cjVTjFGR8jISB6D26oPXcyE4/Jh05WGOMMQBo2uSzJeG+IUqf
-        tsAaH9NoX1zMBypHeLhhHYzffMkBrClCguZcrzv40a5a9mnFExobe2CfTEo5U727
-        ilQX7CTdlZn4zZoFT3FuOaKoCRsiq+4yGYQNpulzLh/CMeqoz41D8SVnJKI/qze7
-        e22XmGRw1rpvTos+1duo3HpiTwanP/OM2Rs+iImOcETLHVpgGh+VrijR6zA1WQxn
-        QQrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663162910; x=1663170110; bh=9udvku0NNJooTG5PR0CRxNtI94An
-        28JpAV1KnmmamBY=; b=EdHJVI6+aLmZ4CEL85sFGkG2z8mijdhi3WTBzJXCG1zC
-        P55PwahnplR0MpOhEvJrBhyCuc8pHum1Bzg8fL6gA8ebL66fBvv+liNmMdcwAFwa
-        y8uUNrthcmwXsz8tF1pQ3ncXP3H6zX31CZ8KBYmUkxSmWjP3hq8IrtT4wtsp8qUp
-        J4nCHxGuANWdr4HLs1E8C6bcrxKd+h+bZnNRhoLXrJqsAZZ/kb41ZoPPu+LNBt/4
-        ZhYmW0Z3jPGdIderbBJzavHUoMkKTRBtEIKVak5ZU2nLhYfHtHjsO0kfSjG9KuJQ
-        EnZ1fuMON3EByPgHpWYlISBExOmpcZvG32Zoi/bWqg==
-X-ME-Sender: <xms:HNohY8ve_0GngwMEMdzu-j2WoinjMwGGqv_a5bFsdZkaQMLkD88bWQ>
-    <xme:HNohY5daNrEO4E0rJOS9eJ1cwYDP3v-FAVa518SuH9wUA_pRIwdLyeVEpQ1Xb481o
-    F0oYWlkCl5by0cDDbE>
-X-ME-Received: <xmr:HNohY3yUHLYns9-T2hzVdsfuq_tTnHv-wmds33nAB9yuFIKkb5JymKMtjdzg1Vi-PQBfJQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeduiedgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:HNohY_MMxuYhCY_lW_sZgN_XAVJqC6hOZWAcTLIR5kZsrqb1QDSn-Q>
-    <xmx:HNohY8-ZPRjxtF6BNQ0JhsQkY14SwfGotj5Ioswu9elQnezW3h6TLQ>
-    <xmx:HNohY3UTJXhfAuRh1iWerMz_fyW7_lza7Aco2t_MBtaPF-1pSlp07w>
-    <xmx:HtohY_eICiNZzS-lR2V0SZqZPprnKWCaYtbKNid-25sIQMt2Gifytg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 14 Sep 2022 09:41:48 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id C4BF8104669; Wed, 14 Sep 2022 16:41:45 +0300 (+03)
-Date:   Wed, 14 Sep 2022 16:41:45 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v13 3/3] Documentation/x86: Document TDX attestation
- process
-Message-ID: <20220914134145.3llpjs76wkb3yacs@box.shutemov.name>
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220913175440.wahcdmaumeqjgzmh@box>
- <c5868924-f2a0-d6fd-c757-ae539194f9f2@linux.intel.com>
+        Wed, 14 Sep 2022 09:48:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EB7760CB
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Sep 2022 06:47:56 -0700 (PDT)
+Received: from localhost (unknown [213.194.152.135])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4017B6601F88;
+        Wed, 14 Sep 2022 14:47:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663163275;
+        bh=ag0pFWwUGGozBZ3vrQUcDBvQ0iBTtskA1NAwADcmVuc=;
+        h=From:To:Cc:Subject:References:In-reply-to:Date:From;
+        b=VxBjJdVJeyynfnkwK9XDWCaKYa9Z9FL5fPlo4D96r8aAgwQYqnk9OzsA3MXXj1+cb
+         F0lzcpwEJmydOGWagzS1uOoIwcvNYTcnPL6vw6Z7L++9ZrBihZtUanScr6LfFZvCvs
+         kpTSANTm+zziO1kTfHMa1YS7BNL47SzGtTv5u4yTKnHbYmpWE33o+gyZk2btR2wY8D
+         HVw0OQBOHkvMg47W4jDaO2P81R7qV8D/0/RLc3h/Bj6255OSYN0xKf71DfkXfnrelE
+         OY8iahoqBhqN6kh6xDSH1fxnaXdA8PzepW28wVLtkbp8/RuzEh16CPQCkp2E2RQjlC
+         11YoEXj7KO9fw==
+From:   Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+To:     =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@igalia.com>
+Cc:     linux-kselftest@vger.kernel.org, dvhart@infradead.org,
+        shuah@kernel.org, kernel@collabora.com
+Subject: Re: [PATCH] selftests/futex: fix build for clang
+References: <20220909110709.1827374-1-ricardo.canuelo@collabora.com> <a5f6b1da7df0784536c7d7b70a0bc44e@igalia.com>
+In-reply-to: <a5f6b1da7df0784536c7d7b70a0bc44e@igalia.com>
+Date:   Wed, 14 Sep 2022 15:47:51 +0200
+Message-ID: <87leqmt6d4.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5868924-f2a0-d6fd-c757-ae539194f9f2@linux.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 13, 2022 at 06:23:34PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> After addressing the comments, the final version looks like below.
+On mi=C3=A9, sep 14 2022 at 11:53:34, Andr=C3=A9 Almeida <andrealmeid@igali=
+a.com> wrote:
 
-Looks okay to me. You can keep my Acked-by for the patchset.
+> Hi Ricardo :)
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Hey Tony! Long time, haha. I hope you're doing fine.
+
+> Could you share how I can test this patch?
+
+Simply running `make CC=3Dclang' in tools/testing/selftest/futex with and
+without the patch on should highlight the differences:
+
+Without the patch:
+
+    $ make CC=3Dclang
+    make[1]: Entering directory '/root/linux-kselftest/tools/testing/selfte=
+sts/futex/functional'
+    make --no-builtin-rules ARCH=3Dx86 -C ../../../../.. headers_install
+    make[2]: Entering directory '/root/linux-kselftest'
+      INSTALL ./usr/include
+    make[2]: Leaving directory '/root/linux-kselftest'
+    clang  -g -O2 -Wall -D_GNU_SOURCE -pthread -I../include -I../../ -I../.=
+./../../../usr/include/     futex_wait_timeout.c ../include/futextest.h ../=
+include/atomic.h ../include/logging.h -lpthread -lrt -o /root/linux-kselfte=
+st/tools/testing/selftests/futex/functional/futex_wait_timeout
+    clang: error: cannot specify -o when generating multiple output files
+    make[1]: *** [../../lib.mk:152: /root/linux-kselftest/tools/testing/sel=
+ftests/futex/functional/futex_wait_timeout] Error 1
+    make[1]: Leaving directory '/root/linux-kselftest/tools/testing/selftes=
+ts/futex/functional'
+
+
+With the patch:
+
+    $ make CC=3Dclang
+    make[1]: Entering directory '/root/linux-kselftest/tools/testing/selfte=
+sts/futex/functional'
+    make --no-builtin-rules ARCH=3Dx86 -C ../../../../.. headers_install
+    make[2]: Entering directory '/root/linux-kselftest'
+      INSTALL ./usr/include
+    make[2]: Leaving directory '/root/linux-kselftest'
+    clang  -g -O2 -Wall -D_GNU_SOURCE -pthread -I../include -I../../ -I../.=
+./../../../usr/include/     futex_wait_timeout.c -lpthread -lrt -o /root/li=
+nux-kselftest/tools/testing/selftests/futex/functional/futex_wait_timeout
+    clang  -g -O2 -Wall -D_GNU_SOURCE -pthread -I../include -I../../ -I../.=
+./../../../usr/include/     futex_wait_wouldblock.c -lpthread -lrt -o /root=
+/linux-kselftest/tools/testing/selftests/futex/functional/futex_wait_wouldb=
+lock
+    ...
+
+I'm testing this with Clang v11, by the way.
+
+Cheers,
+Ricardo
