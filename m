@@ -2,86 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FEC5B9702
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Sep 2022 11:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F265B97C8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Sep 2022 11:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiIOJHS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Sep 2022 05:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S229884AbiIOJpB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Sep 2022 05:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiIOJHQ (ORCPT
+        with ESMTP id S229886AbiIOJo5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Sep 2022 05:07:16 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772879351F;
-        Thu, 15 Sep 2022 02:07:15 -0700 (PDT)
-Received: from canpemm500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MSrrQ2sh4zBsL7;
-        Thu, 15 Sep 2022 17:05:10 +0800 (CST)
-Received: from canpemm500005.china.huawei.com (7.192.104.229) by
- canpemm500008.china.huawei.com (7.192.105.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 15 Sep 2022 17:07:13 +0800
-Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
- canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
- Thu, 15 Sep 2022 17:07:13 +0800
-From:   zhaogongyi <zhaogongyi@huawei.com>
-To:     David Hildenbrand <david@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-CC:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Subject: Re: [PATCH -next 4/5] selftests/memory-hotplug: Restore memory before
- exit
-Thread-Topic: [PATCH -next 4/5] selftests/memory-hotplug: Restore memory
- before exit
-Thread-Index: AdjI4di+jDtB2yhWTra18n09UshJEw==
-Date:   Thu, 15 Sep 2022 09:07:13 +0000
-Message-ID: <a87ac52f279b4bc3944c57f135d8c03c@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.67.110.209]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 15 Sep 2022 05:44:57 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3942713EA7;
+        Thu, 15 Sep 2022 02:44:47 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 11:44:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1663235085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9HGr/Xz3Nz5Oe6gQpIzDaO+SoCtgP8KCXpxOyiLDjzM=;
+        b=vyZ1eCcD/MXc4cKd0CBFHSIaK3VdW708iT8jcXLnW7GbWRTKQhLFORj0pyCiZdva94aDwB
+        3Me4DVSj1iVzzVcqiY+SC+tk4PdmeIZxyd7Nv/ROmTCJqAdu/9iYBlly0VGgDzEHQIK0xp
+        HIdSCDtx2tbtZnOp65bRmR7bBhJaZv4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Andrew Jones <andrew.jones@linux.dev>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
+        dmatlack@google.com
+Subject: Re: [V2 PATCH 2/8] KVM: selftests: Add arch specific initialization
+Message-ID: <20220915094442.45eldu4bes5alacm@kamzik>
+References: <20220915000448.1674802-1-vannapurve@google.com>
+ <20220915000448.1674802-3-vannapurve@google.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220915000448.1674802-3-vannapurve@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SGksDQoNClRoYW5rcyBmb3IgeW91ciByZXZpZXcsIEkgaGF2ZSBzdWJtaXQgdGhlIHBhdGNoZXMg
-aW4gYSBuZXcgdmVyc2lvbiBhcyB5b3VyIHN1Z2dlc3Rpb24uDQoNCkJlc3QgV2lzaGVzLA0KR29u
-Z3lpDQoNCj4gDQo+IE9uIDA5LjA5LjIyIDA5OjUxLCBaaGFvIEdvbmd5aSB3cm90ZToNCj4gPiBT
-b21lIG1vbW9yeSB3aWxsIGJlIGxlZnQgaW4gb2ZmbGluZSBzdGF0ZSB3aGVuIGNhbGxpbmcNCj4g
-PiBvZmZsaW5lX21lbW9yeV9leHBlY3RfZmFpbCgpIGZhaWxlZC4gUmVzdG9yZSBpdCBiZWZvcmUg
-ZXhpdC4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFpoYW8gR29uZ3lpIDx6aGFvZ29uZ3lpQGh1
-YXdlaS5jb20+DQo+ID4gLS0tDQo+ID4gICAuLi4vbWVtb3J5LWhvdHBsdWcvbWVtLW9uLW9mZi10
-ZXN0LnNoICAgICAgICAgfCAyNA0KPiArKysrKysrKysrKysrLS0tLS0tDQo+ID4gICAxIGZpbGUg
-Y2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYg
-LS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tZW1vcnktaG90cGx1Zy9tZW0tb24tb2Zm
-LXRlc3Quc2gNCj4gPiBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21l
-bS1vbi1vZmYtdGVzdC5zaA0KPiA+IGluZGV4IDNiZGYzYzRkNmQwNi4uMjU5ZmQ4OTc4NjM5IDEw
-MDc1NQ0KPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21l
-bS1vbi1vZmYtdGVzdC5zaA0KPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9y
-eS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaA0KPiA+IEBAIC0xMzQsNiArMTM0LDE3IEBAIG9m
-ZmxpbmVfbWVtb3J5X2V4cGVjdF9mYWlsKCkNCj4gPiAgIAlyZXR1cm4gMA0KPiA+ICAgfQ0KPiA+
-DQo+ID4gK29ubGluZV9hbGxfaG90X3BsdWdnYWJsZV9tZW1vcnkoKQ0KPiA+ICt7DQo+ID4gKw0K
-PiA+ICsJZm9yIG1lbW9yeSBpbiBgaG90cGx1Z2dhYmxlX29mZmxpbmVfbWVtb3J5YDsgZG8NCj4g
-PiArCQlvbmxpbmVfbWVtb3J5X2V4cGVjdF9zdWNjZXNzICRtZW1vcnkgfHwgew0KPiA+ICsJCQll
-Y2hvICJvbmxpbmUgbWVtb3J5ICRtZW1vcnk6IHVuZXhwZWN0ZWQgZmFpbCINCj4gPiArCQkJcmV0
-dmFsPTENCj4gPiArCQl9DQo+ID4gKwlkb25lDQo+ID4gK30NCj4gDQo+IE1heWJlIGNhbGwgaXQN
-Cj4gDQo+ICJvbmxpbmVfYWxsX29mZmxpbmVfbWVtb3J5KCkiDQo+IA0KPiBpbnN0ZWFkPw0KPiAN
-Cj4gTm90ZSB0aGF0ICJyZW1vdmFibGUiIGFzIHVzZWQgaW4gaG90cGx1Z2dhYmxlX21lbW9yeSgp
-IHdpbGwgbm93YWRheXMNCj4gYWx3YXlzIHJldHVybiAiMSIgaWYgdGhlIGtlcm5lbCBzdXBwb3J0
-cyBtZW1vcnkgaG90dW5wbHVnLCBpbmRlcGVuZGVudA0KPiBvZiB0aGUgc3BlY2lmaWMgbWVtb3J5
-IGJsb2NrLg0KPiANCj4gLS0NCj4gVGhhbmtzLA0KPiANCj4gRGF2aWQgLyBkaGlsZGVuYg0KDQo=
+On Thu, Sep 15, 2022 at 12:04:42AM +0000, Vishal Annapurve wrote:
+> Introduce arch specific API: kvm_selftest_arch_init to allow each arch to
+> handle initialization before running any selftest logic.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h      |  5 +++++
+>  .../selftests/kvm/lib/aarch64/processor.c      | 18 +++++++++---------
+>  tools/testing/selftests/kvm/lib/kvm_util.c     |  2 ++
+>  .../selftests/kvm/lib/riscv/processor.c        |  4 ++++
+>  .../selftests/kvm/lib/s390x/processor.c        |  4 ++++
+>  .../selftests/kvm/lib/x86_64/processor.c       |  4 ++++
+>  6 files changed, 28 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 24fde97f6121..98edbbda9f97 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -834,4 +834,9 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
+>  	return __vm_enable_cap(vm, KVM_CAP_VM_DISABLE_NX_HUGE_PAGES, 0);
+>  }
+>  
+> +/*
+> + * API to execute architecture specific setup before executing selftest logic.
+> + */
+> +void kvm_selftest_arch_init(void);
+> +
+>  #endif /* SELFTEST_KVM_UTIL_BASE_H */
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index 6f5551368944..2281d6c5d02f 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -495,15 +495,6 @@ void aarch64_get_supported_page_sizes(uint32_t ipa,
+>  	close(kvm_fd);
+>  }
+>  
+> -/*
+> - * arm64 doesn't have a true default mode, so start by computing the
+> - * available IPA space and page sizes early.
+> - */
+> -void __attribute__((constructor)) init_guest_modes(void)
+> -{
+> -       guest_modes_append_default();
+> -}
+> -
+>  void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+>  	       uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5,
+>  	       uint64_t arg6, struct arm_smccc_res *res)
+> @@ -528,3 +519,12 @@ void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+>  		       [arg4] "r"(arg4), [arg5] "r"(arg5), [arg6] "r"(arg6)
+>  		     : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7");
+>  }
+> +
+> +/*
+> + * arm64 doesn't have a true default mode, so start by computing the
+> + * available IPA space and page sizes early.
+> + */
+
+It'd be better to move this comment inside the function above the
+guest_modes_append_default call.
+
+> +void kvm_selftest_arch_init(void)
+> +{
+> +	guest_modes_append_default();
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 3c83838999f5..dafe4471a6c7 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1984,4 +1984,6 @@ void __attribute((constructor)) kvm_selftest_init(void)
+>  {
+>  	/* Tell stdout not to buffer its content. */
+>  	setbuf(stdout, NULL);
+> +
+> +	kvm_selftest_arch_init();
+>  }
+> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> index 604478151212..26660dd2ba78 100644
+> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> @@ -362,3 +362,7 @@ void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...)
+>  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+>  {
+>  }
+> +
+> +void kvm_selftest_arch_init(void)
+> +{
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> index 89d7340d9cbd..8654ec74009a 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> @@ -218,3 +218,7 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, uint8_t indent)
+>  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+>  {
+>  }
+> +
+> +void kvm_selftest_arch_init(void)
+> +{
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index 2e6e61bbe81b..20bf125f9363 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -1311,3 +1311,7 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+>  
+>  	return val == 'Y';
+>  }
+> +
+> +void kvm_selftest_arch_init(void)
+> +{
+> +}
+> -- 
+> 2.37.2.789.g6183377224-goog
+>
+
+Otherwise,
+
+Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
