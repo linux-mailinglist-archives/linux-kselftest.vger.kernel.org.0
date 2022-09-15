@@ -2,125 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEFE5B9467
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Sep 2022 08:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E475B96DA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Sep 2022 11:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiIOG3g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Sep 2022 02:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
+        id S229957AbiIOJB5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Sep 2022 05:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiIOG3O (ORCPT
+        with ESMTP id S229881AbiIOJBv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Sep 2022 02:29:14 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201F695ACC;
-        Wed, 14 Sep 2022 23:29:03 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MSnKt4jlkzBsJy;
-        Thu, 15 Sep 2022 14:26:58 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 15 Sep
- 2022 14:28:59 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v3 9/9] selftests/tc-testings: add list case for basic filter
-Date:   Thu, 15 Sep 2022 14:30:38 +0800
-Message-ID: <20220915063038.20010-10-shaozhengchao@huawei.com>
+        Thu, 15 Sep 2022 05:01:51 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9FB4332C;
+        Thu, 15 Sep 2022 02:01:49 -0700 (PDT)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MSrh84DTDzmVMC;
+        Thu, 15 Sep 2022 16:58:00 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.63) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 15 Sep 2022 17:01:45 +0800
+From:   Zhao Gongyi <zhaogongyi@huawei.com>
+To:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
+CC:     <akinobu.mita@gmail.com>, <corbet@lwn.net>, <david@redhat.com>,
+        <osalvador@suse.de>, <shuah@kernel.org>,
+        Zhao Gongyi <zhaogongyi@huawei.com>
+Subject: [PATCH -next v2 0/5] Optimize and bugfix for notifier error
+Date:   Thu, 15 Sep 2022 16:57:52 +0800
+Message-ID: <20220915085757.258608-1-zhaogongyi@huawei.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220915063038.20010-1-shaozhengchao@huawei.com>
-References: <20220915063038.20010-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500026.china.huawei.com (7.185.36.106)
+X-Originating-IP: [10.67.174.63]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500005.china.huawei.com (7.192.104.229)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 0811: Add multiple basic filter with cmp ematch u8/link layer and
-default action and dump them
-Test 5129: List basic filters
+1. Fix non-working usage of negative values
+2. Add checking after online or offline
+3. Restore memory before exit
+4. Correct test's name
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
- .../tc-testing/tc-tests/filters/basic.json    | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
+Changes in v2:
+  - Replace 'online_all_hot_pluggable_memory'
+    with 'online_all_offline_memory()'.
+  - Collect Reviewed-by tags from David Hildenbrand.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-index e788c114a484..d1278de8ebc3 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-@@ -1274,5 +1274,52 @@
-         "teardown": [
-             "$TC qdisc del dev $DEV1 ingress"
-         ]
-+    },
-+    {
-+        "id": "0811",
-+        "name": "Add multiple basic filter with cmp ematch u8/link layer and default action and dump them",
-+        "category": [
-+            "filter",
-+            "basic"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "^filter protocol ip pref 1 basic",
-+        "matchCount": "3",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-+    },
-+    {
-+        "id": "5129",
-+        "name": "List basic filters",
-+        "category": [
-+            "filter",
-+            "basic"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$TC qdisc add dev $DEV1 ingress",
-+            "$TC filter add dev $DEV1 parent ffff: handle 1 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1",
-+            "$TC filter add dev $DEV1 parent ffff: handle 2 protocol ip prio 1 basic match 'cmp(u8 at 0 layer link mask 0xff gt 10)' classid 1:1"
-+        ],
-+        "cmdUnderTest": "$TC filter show dev $DEV1 parent ffff:",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC filter show dev $DEV1 parent ffff:",
-+        "matchPattern": "cmp\\(u8 at 0 layer 0 mask 0xff gt 10\\)",
-+        "matchCount": "2",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 ingress"
-+        ]
-     }
- ]
--- 
+
+Zhao Gongyi (5):
+  docs: notifier-error-inject: fix non-working usage of negative values
+  selftests/memory-hotplug: Use 'printf' instead of 'echo'
+  selftests/memory-hotplug: Add checking after online or offline
+  selftests/memory-hotplug: Restore memory before exit
+  docs: notifier-error-inject: Correct test's name
+
+ .../fault-injection/notifier-error-inject.rst | 14 ++++---
+ .../memory-hotplug/mem-on-off-test.sh         | 37 +++++++++++++++----
+ 2 files changed, 39 insertions(+), 12 deletions(-)
+
+--
 2.17.1
 
