@@ -2,80 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6D55B91A3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Sep 2022 02:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB715B92EF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Sep 2022 05:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiIOAau (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Sep 2022 20:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S230139AbiIODN4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Sep 2022 23:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiIOAat (ORCPT
+        with ESMTP id S229804AbiIODNy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Sep 2022 20:30:49 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53D886FF7;
-        Wed, 14 Sep 2022 17:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663201848; x=1694737848;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=f3arqoM1mTN79PR584P6N+hqC5q/kwp/eTlHzWZFjgw=;
-  b=nu+7lIo2ischnxQEON7BpILh6o9oA8NALaem6kJUdoIX1d5qlu4NRQGV
-   BeDKghTR0Vq8gvIlnC0utiAlRWZ4yISYUdEZe7FXcSIeJioxRgl95R+KJ
-   Cxfxq0ASnI6Il9iRx8gu4LrReBADKTzDh41zK9UIvQkSIi9ZS1C0SzD2D
-   eD6RQBvbqCXV4OXhJ1c3pVFqnJoAUgVbuc4AOyGgEfJGgn2GAJSH85eO9
-   UMYgdFSRM05V4pKS70rf8VzyVrs2nekVFWapND0vzs20Kf2wuH/Ir+Dqo
-   ewIqUUEIHqZBJxJnsq6oso0UUQ9r/nisb+6iyX9+BvzUh+4adjrGNT1I4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10470"; a="362536145"
-X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
-   d="scan'208";a="362536145"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 17:30:47 -0700
-X-IronPort-AV: E=Sophos;i="5.93,316,1654585200"; 
-   d="scan'208";a="759418141"
-Received: from mmcgoort-mobl.amr.corp.intel.com (HELO [10.209.54.54]) ([10.209.54.54])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2022 17:30:46 -0700
-Message-ID: <d5b54f8c-2e03-4ac8-8b8a-605c7f0f601b@linux.intel.com>
-Date:   Wed, 14 Sep 2022 17:30:45 -0700
+        Wed, 14 Sep 2022 23:13:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BFD910B6;
+        Wed, 14 Sep 2022 20:13:50 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MShyP5GrLzlVml;
+        Thu, 15 Sep 2022 11:09:49 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 15 Sep 2022 11:13:47 +0800
+Message-ID: <02634506-8aa2-af44-38d6-3bd656b866cf@huawei.com>
+Date:   Thu, 15 Sep 2022 11:13:47 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v13 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220909192708.1113126-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220909192708.1113126-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <7c3cc265-869b-b2fc-43f2-d2cbd0bc142c@intel.com>
- <1182ef92-cae3-b7c1-8339-8e8bfa48f2e3@linux.intel.com>
- <d238f235-5623-d152-c0d3-2ef851f88473@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <d238f235-5623-d152-c0d3-2ef851f88473@intel.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH net-next 0/9] refactor duplicate codes in the tc cls walk
+ function
+To:     Victor Nogueira <victor@mojatatu.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <jhs@mojatatu.com>, <jiri@resnulli.us>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <shuah@kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>
+References: <20220913042135.58342-1-shaozhengchao@huawei.com>
+ <24f4feb8-7ca1-eae3-570e-5ece870dee47@mojatatu.com>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <24f4feb8-7ca1-eae3-570e-5ece870dee47@mojatatu.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,41 +61,231 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-On 9/14/22 9:12 AM, Dave Hansen wrote:
-> On 9/14/22 08:36, Sathyanarayanan Kuppuswamy wrote:
->> When we initially submitted the attestation patches, virt/coco folder
->> was not created. I initially kept this driver in platform/x86/, but
->> later moved to arch/x86/coco based on the review comments in v4. There
->> was a discussion about the need for a new config and the location of
->> the driver. The outcome of that discussion is, since this is not a
->> traditional driver, but a basic TDX feature, we don't need a special
->> config and the code can be maintained in the arch/x86/coco folder.
+On 2022/9/14 21:59, Victor Nogueira wrote:
+> On 13/09/2022 01:21, Zhengchao Shao wrote:
+>> The walk implementation of most tc cls modules is basically the same.
+>> That is, the values of count and skip are checked first. If count is
+>> greater than or equal to skip, the registered fn function is executed.
+>> Otherwise, increase the value of count. So the code can be refactored.
+>> Then use helper function to replace the code of each cls module in
+>> alphabetical order.
+>>
+>> The walk function is invoked during dump. Therefore, test cases related
+>>   to the tdc filter need to be added.
+>>
+>> Add test cases locally and perform the test. The test results are listed
+>> below:
+>>
+>> ./tdc.py -e 0811
+>> ok 1 0811 - Add multiple basic filter with cmp ematch u8/link layer and
+>> default action and dump them
+>>
+>> ./tdc.py -e 5129
+>> ok 1 5129 - List basic filters
+>>
+>> ./tdc.py -c filters bpf
+>> ok 13 23c3 - Add cBPF filter with valid bytecode
+>> ok 14 1563 - Add cBPF filter with invalid bytecode
+>> ok 15 2334 - Add eBPF filter with valid object-file
+>> ok 16 2373 - Add eBPF filter with invalid object-file
+>> ok 17 4423 - Replace cBPF bytecode
+>> ok 18 5122 - Delete cBPF filter
+>> ok 19 e0a9 - List cBPF filters
+>>
+>> ./tdc.py -c filters cgroup
+>> ok 1 6273 - Add cgroup filter with cmp ematch u8/link layer and drop
+>> action
+>> ok 2 4721 - Add cgroup filter with cmp ematch u8/link layer with trans
+>> flag and pass action
+>> ok 3 d392 - Add cgroup filter with cmp ematch u16/link layer and pipe
+>> action
+>> ok 4 0234 - Add cgroup filter with cmp ematch u32/link layer and miltiple
+>> actions
+>> ok 5 8499 - Add cgroup filter with cmp ematch u8/network layer and pass
+>> action
+>> ok 6 b273 - Add cgroup filter with cmp ematch u8/network layer with trans
+>> flag and drop action
+>> ok 7 1934 - Add cgroup filter with cmp ematch u16/network layer and pipe
+>> action
+>> ok 8 2733 - Add cgroup filter with cmp ematch u32/network layer and
+>> miltiple actions
+>> ok 9 3271 - Add cgroup filter with NOT cmp ematch rule and pass action
+>> ok 10 2362 - Add cgroup filter with two ANDed cmp ematch rules and single
+>> action
+>> ok 11 9993 - Add cgroup filter with two ORed cmp ematch rules and single
+>> action
+>> ok 12 2331 - Add cgroup filter with two ANDed cmp ematch rules and one
+>> ORed ematch rule and single action
+>> ok 13 3645 - Add cgroup filter with two ANDed cmp ematch rules and one
+>> NOT ORed ematch rule and single action
+>> ok 14 b124 - Add cgroup filter with u32 ematch u8/zero offset and drop
+>> action
+>> ok 15 7381 - Add cgroup filter with u32 ematch u8/zero offset and invalid
+>> value >0xFF
+>> ok 16 2231 - Add cgroup filter with u32 ematch u8/positive offset and
+>> drop action
+>> ok 17 1882 - Add cgroup filter with u32 ematch u8/invalid mask >0xFF
+>> ok 18 1237 - Add cgroup filter with u32 ematch u8/missing offset
+>> ok 19 3812 - Add cgroup filter with u32 ematch u8/missing AT keyword
+>> ok 20 1112 - Add cgroup filter with u32 ematch u8/missing value
+>> ok 21 3241 - Add cgroup filter with u32 ematch u8/non-numeric value
+>> ok 22 e231 - Add cgroup filter with u32 ematch u8/non-numeric mask
+>> ok 23 4652 - Add cgroup filter with u32 ematch u8/negative offset and
+>> pass action
+>> ok 24 1331 - Add cgroup filter with u32 ematch u16/zero offset and pipe
+>> action
+>> ok 25 e354 - Add cgroup filter with u32 ematch u16/zero offset and
+>> invalid value >0xFFFF
+>> ok 26 3538 - Add cgroup filter with u32 ematch u16/positive offset and
+>> drop action
+>> ok 27 4576 - Add cgroup filter with u32 ematch u16/invalid mask >0xFFFF
+>> ok 28 b842 - Add cgroup filter with u32 ematch u16/missing offset
+>> ok 29 c924 - Add cgroup filter with u32 ematch u16/missing AT keyword
+>> ok 30 cc93 - Add cgroup filter with u32 ematch u16/missing value
+>> ok 31 123c - Add cgroup filter with u32 ematch u16/non-numeric value
+>> ok 32 3675 - Add cgroup filter with u32 ematch u16/non-numeric mask
+>> ok 33 1123 - Add cgroup filter with u32 ematch u16/negative offset and
+>> drop action
+>> ok 34 4234 - Add cgroup filter with u32 ematch u16/nexthdr+ offset and
+>> pass action
+>> ok 35 e912 - Add cgroup filter with u32 ematch u32/zero offset and pipe
+>> action
+>> ok 36 1435 - Add cgroup filter with u32 ematch u32/positive offset and
+>> drop action
+>> ok 37 1282 - Add cgroup filter with u32 ematch u32/missing offset
+>> ok 38 6456 - Add cgroup filter with u32 ematch u32/missing AT keyword
+>> ok 39 4231 - Add cgroup filter with u32 ematch u32/missing value
+>> ok 40 2131 - Add cgroup filter with u32 ematch u32/non-numeric value
+>> ok 41 f125 - Add cgroup filter with u32 ematch u32/non-numeric mask
+>> ok 42 4316 - Add cgroup filter with u32 ematch u32/negative offset and
+>> drop action
+>> ok 43 23ae - Add cgroup filter with u32 ematch u32/nexthdr+ offset and
+>> pipe action
+>> ok 44 23a1 - Add cgroup filter with canid ematch and single SFF
+>> ok 45 324f - Add cgroup filter with canid ematch and single SFF with mask
+>> ok 46 2576 - Add cgroup filter with canid ematch and multiple SFF
+>> ok 47 4839 - Add cgroup filter with canid ematch and multiple SFF with
+>> masks
+>> ok 48 6713 - Add cgroup filter with canid ematch and single EFF
+>> ok 49 4572 - Add cgroup filter with canid ematch and single EFF with mask
+>> ok 50 8031 - Add cgroup filter with canid ematch and multiple EFF
+>> ok 51 ab9d - Add cgroup filter with canid ematch and multiple EFF with
+>> masks
+>> ok 52 5349 - Add cgroup filter with canid ematch and a combination of
+>> SFF/EFF
+>> ok 53 c934 - Add cgroup filter with canid ematch and a combination of
+>> SFF/EFF with masks
+>> ok 54 4319 - Replace cgroup filter with diffferent match
+>> ok 55 4636 - Detele cgroup filter
+>>
+>> ./tdc.py -c filters flow
+>> ok 1 5294 - Add flow filter with map key and ops
+>> ok 2 3514 - Add flow filter with map key or ops
+>> ok 3 7534 - Add flow filter with map key xor ops
+>> ok 4 4524 - Add flow filter with map key rshift ops
+>> ok 5 0230 - Add flow filter with map key addend ops
+>> ok 6 2344 - Add flow filter with src map key
+>> ok 7 9304 - Add flow filter with proto map key
+>> ok 8 9038 - Add flow filter with proto-src map key
+>> ok 9 2a03 - Add flow filter with proto-dst map key
+>> ok 10 a073 - Add flow filter with iif map key
+>> ok 11 3b20 - Add flow filter with priority map key
+>> ok 12 8945 - Add flow filter with mark map key
+>> ok 13 c034 - Add flow filter with nfct map key
+>> ok 14 0205 - Add flow filter with nfct-src map key
+>> ok 15 5315 - Add flow filter with nfct-src map key
+>> ok 16 7849 - Add flow filter with nfct-proto-src map key
+>> ok 17 9902 - Add flow filter with nfct-proto-dst map key
+>> ok 18 6742 - Add flow filter with rt-classid map key
+>> ok 19 5432 - Add flow filter with sk-uid map key
+>> ok 20 4234 - Add flow filter with sk-gid map key
+>> ok 21 4522 - Add flow filter with vlan-tag map key
+>> ok 22 4253 - Add flow filter with rxhash map key
+>> ok 23 4452 - Add flow filter with hash key list
+>> ok 24 4341 - Add flow filter with muliple ops
+>> ok 25 4322 - List flow filters
+>> ok 26 2320 - Replace flow filter with map key num
+>> ok 27 3213 - Delete flow filter with map key num
+>>
+>> ./tdc.py -c filters route
+>> ok 1 e122 - Add route filter with from and to tag
+>> ok 2 6573 - Add route filter with fromif and to tag
+>> ok 3 1362 - Add route filter with to flag and reclassify action
+>> ok 4 4720 - Add route filter with from flag and continue actions
+>> ok 5 2812 - Add route filter with form tag and pipe action
+>> ok 6 7994 - Add route filter with miltiple actions
+>> ok 7 4312 - List route filters
+>> ok 8 2634 - Delete route filters with pipe action
+>>
+>> ./tdc.py -c filters rsvp
+>> ok 1 2141 - Add rsvp filter with tcp proto and specific IP address
+>> ok 2 5267 - Add rsvp filter with udp proto and specific IP address
+>> ok 3 2819 - Add rsvp filter with src ip and src port
+>> ok 4 c967 - Add rsvp filter with tunnelid and continue action
+>> ok 5 5463 - Add rsvp filter with tunnel and pipe action
+>> ok 6 2332 - Add rsvp filter with miltiple actions
+>> ok 7 8879 - Add rsvp filter with tunnel and skp flag
+>> ok 8 8261 - List rsvp filters
+>> ok 9 8989 - Delete rsvp filters
+>>
+>> ./tdc.py -c filters tcindex
+>> ok 1 8293 - Add tcindex filter with default action
+>> ok 2 7281 - Add tcindex filter with hash size and pass action
+>> ok 3 b294 - Add tcindex filter with mask shift and reclassify action
+>> ok 4 0532 - Add tcindex filter with pass_on and continue actions
+>> ok 5 d473 - Add tcindex filter with pipe action
+>> ok 6 2940 - Add tcindex filter with miltiple actions
+>> ok 7 1893 - List tcindex filters
+>> ok 8 2041 - Change tcindex filters with pass action
+>> ok 9 9203 - Replace tcindex filters with pass action
+>> ok 10 7957 - Delete tcindex filters with drop action
+>>
+>> Zhengchao Shao (9):
+>>    net/sched: cls_api: add helper for tc cls walker stats updating
+>>    net/sched: use tc_cls_stats_update() in filter
+>>    selftests/tc-testings: add selftests for bpf filter
+>>    selftests/tc-testings: add selftests for cgroup filter
+>>    selftests/tc-testings: add selftests for flow filter
+>>    selftests/tc-testings: add selftests for route filter
+>>    selftests/tc-testings: add selftests for rsvp filter
+>>    selftests/tc-testings: add selftests for tcindex filter
+>>    selftests/tc-testings: add list case for basic filter
+>>
+>>   include/net/pkt_cls.h                         |   13 +
+>>   net/sched/cls_basic.c                         |    9 +-
+>>   net/sched/cls_bpf.c                           |    8 +-
+>>   net/sched/cls_flow.c                          |    8 +-
+>>   net/sched/cls_fw.c                            |    9 +-
+>>   net/sched/cls_route.c                         |    9 +-
+>>   net/sched/cls_rsvp.h                          |    9 +-
+>>   net/sched/cls_tcindex.c                       |   18 +-
+>>   net/sched/cls_u32.c                           |   20 +-
+>>   .../tc-testing/tc-tests/filters/basic.json    |   47 +
+>>   .../tc-testing/tc-tests/filters/bpf.json      |  171 +++
+>>   .../tc-testing/tc-tests/filters/cgroup.json   | 1236 +++++++++++++++++
+>>   .../tc-testing/tc-tests/filters/flow.json     |  623 +++++++++
+>>   .../tc-testing/tc-tests/filters/route.json    |  181 +++
+>>   .../tc-testing/tc-tests/filters/rsvp.json     |  203 +++
+>>   .../tc-testing/tc-tests/filters/tcindex.json  |  227 +++
+>>   16 files changed, 2716 insertions(+), 75 deletions(-)
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/bpf.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/route.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/rsvp.json
+>>   create mode 100644 
+>> tools/testing/selftests/tc-testing/tc-tests/filters/tcindex.json
+>>
 > 
-> Could you please include the following in this set somewhere:
-> 
-> "The code to do the SEV analog of this TDX functionality is in
-> ___insert_path_here____.   This code is different from that because
-> ______reason______ so it is instead placed in ____other_path____."
-> 
-> ?
+> Aside from tabs vs spaces nit-picking, the test patches in this set look 
+> good.
 
-I have also included info about why we don't use a separate config
-option for it.
+Hi Victor and Jamal:
+	Thank you for your review. I will change them in V3.
 
-The code for the SEV equivalent of this TDX attestation functionality
-can be found in drivers/virt/coco/sev-guest/. It is implemented as a
-platform module driver, and it can be enabled using the CONFIG_SEV_GUEST
-config option. However, in the case of TDX, it is implemented as a
-built-in driver in the arch/x86/coco/tdx/tdx.c because of the following
-reasons:
-
-1. Attestation is expected to be needed by all distributions that support
-   TDX. Therefore, using a separate configuration option is not necessary.
-   With TDX support, it can be enabled by default, and a built-in driver
-   model will work better in this use case.
-2. Since it is not a conventional device driver and the code is very simple,
-   creating an individual driver for it may be an overkill.
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Zhengchao Shao
