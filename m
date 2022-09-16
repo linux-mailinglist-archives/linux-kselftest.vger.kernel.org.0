@@ -2,53 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC675BAE26
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 15:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B61E5BAE5F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 15:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiIPNaY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Sep 2022 09:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S229975AbiIPNkT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Sep 2022 09:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiIPNaW (ORCPT
+        with ESMTP id S229863AbiIPNkS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:30:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2C93AB09;
-        Fri, 16 Sep 2022 06:30:21 -0700 (PDT)
+        Fri, 16 Sep 2022 09:40:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49782C664;
+        Fri, 16 Sep 2022 06:40:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DC8B8CE1E61;
-        Fri, 16 Sep 2022 13:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 15B09C433D6;
-        Fri, 16 Sep 2022 13:30:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4299B62BD3;
+        Fri, 16 Sep 2022 13:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C862C433D7;
+        Fri, 16 Sep 2022 13:40:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663335018;
-        bh=13EYRbgoJfqB810DYW91+jUD6de99QdJ4UHxA+u/ogM=;
+        s=k20201202; t=1663335616;
+        bh=4oERv06eKf9jgPyu28yyrLztXaVivyopqZpP/JCtkSc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=S0pf8mLhAexZn60Vy3wXLDe8bSqLH07fDqxJATALXBhnSHBhfZBDTwfjA1bOVK42X
-         oqkp4wL9RiX16P4UkrawDpTzx7PasCwgWdetqunWqdQILG6SVQTsiQSsUPvsjXWvwk
-         eCxKESQque6fns273L374etVyWuytzUWla2pmjATO+1D4nvzWsjft02qJtaxM+iDrr
-         OMijvjft3Hi4tkKcRc9m1hnRRXVxPgaqSfS+OnIE9rBi9XxILaX/Z6fF6PjMfCAqkl
-         2hv/7YcE9iKpFBvSOv4a1QogdkhIwi9jF62CSrhiv0sk/0ouXfGDYxuvm/I6NLCakH
-         3A1VyxmdAzNNA==
+        b=uXJtfVb1gosLAKhUbogSkFCS5zIr+yBj/6KCxYYfPFzsTwWX/Ox9HUIebgdr3qYjM
+         h7nymM3mS2pvJhKOAUIrxuNmIlbg4WWDeTHHFgXtwYISPBjHEoqzGIqdMhRt4H/j58
+         /5x+vPNb0PpwPWP92BObOwDdOq8m3rdo6F5iwqmvv3FVd0IsV49ZSo3CBH0H5EWbc+
+         nLM7NVIr0se+aR+ehcJRw8n9kOfgGLDp9g35tR2430Ydet9fwXnZwqO0ip9Zgdc/CD
+         hlHpe9VgxjFXkJvTsanTEa23mKagXZEFbf8lTAkK0urf40JYotDQk1HhkuDyVNzVJp
+         TXCzQnsTW7QmQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E53EEC73FEF;
-        Fri, 16 Sep 2022 13:30:17 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7A87AC59A58;
+        Fri, 16 Sep 2022 13:40:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/8] add tc-testing test cases
+Subject: Re: [PATCH net v3 0/4] Unsync addresses from ports when stopping
+ aggregated devices
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166333501793.14457.4751472061963307047.git-patchwork-notify@kernel.org>
-Date:   Fri, 16 Sep 2022 13:30:17 +0000
-References: <20220909012936.268433-1-shaozhengchao@huawei.com>
-In-Reply-To: <20220909012936.268433-1-shaozhengchao@huawei.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, shuah@kernel.org,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
+Message-Id: <166333561648.19332.1506754631018938447.git-patchwork-notify@kernel.org>
+Date:   Fri, 16 Sep 2022 13:40:16 +0000
+References: <20220907075642.475236-1-bpoirier@nvidia.com>
+In-Reply-To: <20220907075642.475236-1-bpoirier@nvidia.com>
+To:     Benjamin Poirier <bpoirier@nvidia.com>
+Cc:     netdev@vger.kernel.org, j.vosburgh@gmail.com, vfalico@gmail.com,
+        andy@greyhouse.net, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, jiri@resnulli.us,
+        shuah@kernel.org, jtoppins@redhat.com,
+        linux-kselftest@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,51 +62,30 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net-next.git (master)
+This series was applied to netdev/net.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Fri, 9 Sep 2022 09:29:28 +0800 you wrote:
-> For this patchset, test cases of the ctinfo, gate, and xt action modules
-> are added to the tc-testing test suite. Also add deleting test for
-> connmark, ife, nat, sample and tunnel_key action modules.
+On Wed,  7 Sep 2022 16:56:38 +0900 you wrote:
+> This series fixes similar problems in the bonding and team drivers.
 > 
-> After a test case is added locally, the test result is as follows:
+> Because of missing dev_{uc,mc}_unsync() calls, addresses added to
+> underlying devices may be leftover after the aggregated device is deleted.
+> Add the missing calls and a few related tests.
 > 
-> ./tdc.py -c action ctinfo
-> considering category action
-> considering category ctinfo
-> Test c826: Add ctinfo action with default setting
-> Test 0286: Add ctinfo action with dscp
-> Test 4938: Add ctinfo action with valid cpmark and zone
-> Test 7593: Add ctinfo action with drop control
-> Test 2961: Replace ctinfo action zone and action control
-> Test e567: Delete ctinfo action with valid index
-> Test 6a91: Delete ctinfo action with invalid index
-> Test 5232: List ctinfo actions
-> Test 7702: Flush ctinfo actions
-> Test 3201: Add ctinfo action with duplicate index
-> Test 8295: Add ctinfo action with invalid index
-> Test 3964: Replace ctinfo action with invalid goto_chain control
+> v2:
+> * fix selftest installation, see patch 3
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,1/8] selftests/tc-testings: add selftests for ctinfo action
-    https://git.kernel.org/netdev/net-next/c/77cba3879f1b
-  - [net-next,2/8] selftests/tc-testings: add selftests for gate action
-    https://git.kernel.org/netdev/net-next/c/4a1db5251cfa
-  - [net-next,3/8] selftests/tc-testings: add selftests for xt action
-    https://git.kernel.org/netdev/net-next/c/910d504bc187
-  - [net-next,4/8] selftests/tc-testings: add connmark action deleting test case
-    https://git.kernel.org/netdev/net-next/c/0fc8674663f6
-  - [net-next,5/8] selftests/tc-testings: add ife action deleting test case
-    https://git.kernel.org/netdev/net-next/c/af649e7a6a53
-  - [net-next,6/8] selftests/tc-testings: add nat action deleting test case
-    https://git.kernel.org/netdev/net-next/c/043b16435f3d
-  - [net-next,7/8] selftests/tc-testings: add sample action deleting test case
-    https://git.kernel.org/netdev/net-next/c/a32a4fa447f5
-  - [net-next,8/8] selftests/tc-testings: add tunnel_key action deleting test case
-    https://git.kernel.org/netdev/net-next/c/eed791d3ca95
+  - [net,v3,1/4] net: bonding: Share lacpdu_mcast_addr definition
+    https://git.kernel.org/netdev/net/c/1d9a143ee340
+  - [net,v3,2/4] net: bonding: Unsync device addresses on ndo_stop
+    https://git.kernel.org/netdev/net/c/86247aba599e
+  - [net,v3,3/4] net: team: Unsync device addresses on ndo_stop
+    https://git.kernel.org/netdev/net/c/bd60234222b2
+  - [net,v3,4/4] net: Add tests for bonding and team address list management
+    https://git.kernel.org/netdev/net/c/bbb774d921e2
 
 You are awesome, thank you!
 -- 
