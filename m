@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33B05BB392
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 22:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B88E5BB397
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 22:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiIPUgg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Sep 2022 16:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S229552AbiIPUjC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Sep 2022 16:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIPUgf (ORCPT
+        with ESMTP id S230082AbiIPUjB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:36:35 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59A5B249A
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:36:34 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id o204so7522621oia.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:36:34 -0700 (PDT)
+        Fri, 16 Sep 2022 16:39:01 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF60BA14E
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:39:00 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id w22-20020a056830061600b006546deda3f9so15637072oti.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:39:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=qNgM/TndfAax0dsoj6SwDLTXPGx8d6rJAaaKl5p2/kw=;
-        b=ooLBY1DSSf9K7dL6b3oMD5uEzb0uJJ2GvQsgBDt2WCXd3Yx06a6OMnvetEC6UaHboN
-         /TdrworwDydXsY7b5JWIemPNDoz8XkTxdlZTm9wLGDOz2vSnf0DhqCIxxkGRDFpoV7Ja
-         1fgnlRlmSBg09/hshXA0WjDM0VwmBZOx85Tia+vPnahzf+SaUIEjn+gxejIOEZ3+Z4y7
-         Ax+/LA4vkGyn7b4Y1z2b4gCebem88gzv1WT7BtPGuaZFilpA/rgacxZvoesO33xoFHFj
-         1FoFw54ro9VTjZIHPk9kSyd+WEqJC4Bui/Txx0GtBk5wwYQv5DbJkitHyyzrhl0IgEif
-         5umA==
+        bh=kyztAHqHuXiSURiu7DOqq1qRn6lQaXfCzteSotmFNvA=;
+        b=ktlj8++dwdauzOkfjhOrnCWWfAOJ90lKMHch11rGPjIhvy2DZR8h4HcuVIWKhey/vL
+         xjzHtE2kOQagRisqOMYFWWEes+McrsjtWDJmB9LZ8obyppFoZsaI7ZYeE+3fITxNwC1Y
+         SdQYnCfzLz1ySPL4em2skkm5jClkQN0oTjMYcX5liT5tCJ4PiX9C3lkjYxxAuiyiLkDn
+         IWA1IDR90jD7OVb/W9jyKzPLhjYxSrAtee8Rq0A9UUm0XPJT7YEHAARzagYuoZgZ8pJf
+         ogdi4Swp22xtFYVbg9WbVHcIl8USoueUJabf18GwjYm3ELv2PFCQHkjDVDq2/OshbC0P
+         34QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qNgM/TndfAax0dsoj6SwDLTXPGx8d6rJAaaKl5p2/kw=;
-        b=qrOOR9AEteW2gR7zo5byM3uZ4IQS6qWMzgoF5FAw3vlK3P5oXYxpYdbfyScMnZ0hSh
-         JIl2i7RjsqFPdSgnybDpEmNvePV/FlHGeZaVB9IM+SXsmCXyaT0ws6NZ9E6BfnFAGzVb
-         3ucvtFhjLQvrb2g3GnJsacYzrGflGrte0FvnJDAJo+LW+0Qloy43xux0Gao6gX9u24Wp
-         CAUU6d85ekecBPIaJtsfRElrra/GHtPzxyfvRJoF3onodTbSYRUd/KQ/c/cWjMhYEKns
-         G3SUX/Hbxcrb5Zu/t6pEwBXqAnJ7ce9dw4hWJewHg4fJlJyh9uSi+280HadwnleLHfbI
-         2OMA==
-X-Gm-Message-State: ACgBeo1zahdjTNvTGIGFa5bA2bxtAY1WoDAmp6lGzNEsuRhfHknC18Hc
-        trKOQEBgi0InY39weOlwtISzhyeKWtLxwfwXN+n+Yw==
-X-Google-Smtp-Source: AA6agR4jov8ggoW1khyzlCggpeVUjMO4l/iM7JVO0N/AG6wmNBHtmMcyAWSpEj787L08i+VW4oziGdOM5BxOZh8ZoJ0=
-X-Received: by 2002:a05:6808:1a8d:b0:34f:dbe0:5bf5 with SMTP id
- bm13-20020a0568081a8d00b0034fdbe05bf5mr7516269oib.147.1663360593990; Fri, 16
- Sep 2022 13:36:33 -0700 (PDT)
+        bh=kyztAHqHuXiSURiu7DOqq1qRn6lQaXfCzteSotmFNvA=;
+        b=soX+/WNMi5pGKGGXXgpYMCnPHqn1LbzlaN30O7aunQsVi6hIhZfuwiwLs+orkWw0Us
+         KbULhERoDklKIOT+gGE9tnvSi3iHB2/TY7i0CMqsjix7UUQl5vz3Gb49uaa0MsPfOP2h
+         6XrwzHTn4TrfJz4b5/Ln3YXgX8BkDW/vLZlypLPSbzqVc5qX3J741P5mvfhwrkqlGHV2
+         WZKtAId3rxcXUUrfxXYKKp+2Qee8zB8HNDoCnCwcNpU71MGM6q58mV40//Ub3N87rhYR
+         mAK1AVD8i+QrPwyJYVLslUjuRHwOEV+ZlkUwhLjiqge40G9LvVqSTW0pJOqjMxMccJbJ
+         +wWA==
+X-Gm-Message-State: ACrzQf2kcv7/uMSVqvrzWOG/juo2eMRBlhG5OeC3SoySs2LuQrkC0mk3
+        JLjhUdcMSZeO7ukcBQ91QzthDPJ/CVZrZjjW2umPFg==
+X-Google-Smtp-Source: AMsMyM6nBjHd9gKr+PBK2mnCGpDt8Uecxe+vY5rSFRZnE1+hDOax1UK9V4PqE7FOHlqn4KHhKHL3wm+IPuZV2VwdXAU=
+X-Received: by 2002:a05:6830:2b28:b0:657:7798:2eda with SMTP id
+ l40-20020a0568302b2800b0065777982edamr3121799otv.153.1663360739768; Fri, 16
+ Sep 2022 13:38:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220916030544.228274-1-shaozhengchao@huawei.com> <20220916030544.228274-6-shaozhengchao@huawei.com>
-In-Reply-To: <20220916030544.228274-6-shaozhengchao@huawei.com>
+References: <20220916030544.228274-1-shaozhengchao@huawei.com> <20220916030544.228274-9-shaozhengchao@huawei.com>
+In-Reply-To: <20220916030544.228274-9-shaozhengchao@huawei.com>
 From:   Victor Nogueira <victor@mojatatu.com>
-Date:   Fri, 16 Sep 2022 17:36:23 -0300
-Message-ID: <CA+NMeC97ehoQAM4_Kh9mxw1aWob0KZLOxof_-dHQ-wMes9jOEQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 05/18] selftests/tc-testings: add selftests for
- cbs qdisc
+Date:   Fri, 16 Sep 2022 17:38:48 -0300
+Message-ID: <CA+NMeC8syNuBGcFUtGEmxigsuh+pkWgT+hDVkioLye07vLHiiw@mail.gmail.com>
+Subject: Re: [PATCH net-next 08/18] selftests/tc-testings: add selftests for
+ fq_codel qdisc
 To:     Zhengchao Shao <shaozhengchao@huawei.com>
 Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
@@ -74,35 +74,39 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 <shaozhengchao@huawei.com> wrote:
 >
-> Test 1820: Create CBS with default setting
-> Test 1532: Create CBS with hicredit setting
-> Test 2078: Create CBS with locredit setting
-> Test 0482: Create CBS with sendslope setting
-> Test e8f3: Create CBS with multiple setting
-> Test 23c9: Replace CBS with sendslope setting
-> Test a07a: Change CBS with idleslope setting
-> Test 43b3: Delete CBS with handle
-> Test 9472: Show CBS class
+> Test 4957: Create FQ_CODEL with default setting
+> Test 7621: Create FQ_CODEL with limit setting
+> Test 6872: Create FQ_CODEL with memory_limit setting
+> Test 5636: Create FQ_CODEL with target setting
+> Test 630a: Create FQ_CODEL with interval setting
+> Test 4324: Create FQ_CODEL with quantum setting
+> Test b190: Create FQ_CODEL with noecn flag
+> Test c9d2: Create FQ_CODEL with ce_threshold setting
+> Test 523b: Create FQ_CODEL with multiple setting
+> Test 9283: Replace FQ_CODEL with noecn setting
+> Test 3459: Change FQ_CODEL with limit setting
+> Test 0128: Delete FQ_CODEL with handle
+> Test 0435: Show FQ_CODEL class
 >
 > Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 > ---
->  .../tc-testing/tc-tests/qdiscs/cbs.json       | 234 ++++++++++++++++++
->  1 file changed, 234 insertions(+)
->  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbs.json
+>  .../tc-testing/tc-tests/qdiscs/fq_codel.json  | 326 ++++++++++++++++++
+>  1 file changed, 326 insertions(+)
+>  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
 >
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbs.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbs.json
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
 > new file mode 100644
-> index 000000000000..06618d2c3700
+> index 000000000000..09608677cfee
 > --- /dev/null
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbs.json
-> @@ -0,0 +1,234 @@
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
+> @@ -0,0 +1,326 @@
 > +[
 > +    {
-> +        "id": "1820",
-> +        "name": "Create CBS with default setting",
+> +        "id": "4957",
+> +        "name": "Create FQ_CODEL with default setting",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
@@ -110,10 +114,10 @@ On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbs",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 0 locredit 0 sendslope 0 idleslope 0 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
 > +        "matchCount": "1",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -121,11 +125,11 @@ On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 > +        ]
 > +    },
 > +    {
-> +        "id": "1532",
-> +        "name": "Create CBS with hicredit setting",
+> +        "id": "7621",
+> +        "name": "Create FQ_CODEL with limit setting",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
@@ -133,10 +137,10 @@ On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbs hicredit 64",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 64 locredit 0 sendslope 0 idleslope 0 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
 > +        "matchCount": "1",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -144,11 +148,11 @@ On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 > +        ]
 > +    },
 > +    {
-> +        "id": "2078",
-> +        "name": "Create CBS with locredit setting",
+> +        "id": "6872",
+> +        "name": "Create FQ_CODEL with memory_limit setting",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
@@ -156,10 +160,10 @@ On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbs locredit 10",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel memory_limit 100000",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 0 locredit 10 sendslope 0 idleslope 0 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 100000b ecn drop_batch 64",
 > +        "matchCount": "1",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -167,11 +171,11 @@ On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 > +        ]
 > +    },
 > +    {
-> +        "id": "0482",
-> +        "name": "Create CBS with sendslope setting",
+> +        "id": "5636",
+> +        "name": "Create FQ_CODEL with target setting",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
@@ -179,10 +183,10 @@ On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbs sendslope 888",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel target 2000",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 0 locredit 0 sendslope 888 idleslope 0 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 2ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
 > +        "matchCount": "1",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -190,14 +194,106 @@ On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 > +        ]
 > +    },
 > +    {
-> +        "id": "0482",
+> +        "id": "630a",
+> +        "name": "Create FQ_CODEL with interval setting",
+> +        "category": [
+> +            "qdisc",
+> +            "fq_codel"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel interval 5000",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 5ms memory_limit 32Mb ecn drop_batch 64",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "4324",
+> +        "name": "Create FQ_CODEL with quantum setting",
+> +        "category": [
+> +            "qdisc",
+> +            "fq_codel"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel quantum 9000",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum 9000 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "b190",
+> +        "name": "Create FQ_CODEL with noecn flag",
+> +        "category": [
+> +            "qdisc",
+> +            "fq_codel"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel noecn",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb drop_batch 64",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "c9d2",
+> +        "name": "Create FQ_CODEL with ce_threshold setting",
+> +        "category": [
+> +            "qdisc",
+> +            "fq_codel"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel ce_threshold 1024000",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms ce_threshold 1.02s interval 100ms memory_limit 32Mb ecn drop_batch 64",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "c9d2",
 
-Be careful, you are using ID 0482 in the previous test case.
+Be careful, you are using ID c9d2 in the previous test case.
 
-> +        "name": "Create CBS with idleslope setting",
+> +        "name": "Create FQ_CODEL with drop_batch setting",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
@@ -205,10 +301,10 @@ Be careful, you are using ID 0482 in the previous test case.
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbs idleslope 666",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel drop_batch 100",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 0 locredit 0 sendslope 0 idleslope 666 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
 > +        "matchCount": "1",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -216,11 +312,11 @@ Be careful, you are using ID 0482 in the previous test case.
 > +        ]
 > +    },
 > +    {
-> +        "id": "e8f3",
-> +        "name": "Create CBS with multiple setting",
+> +        "id": "523b",
+> +        "name": "Create FQ_CODEL with multiple setting",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
@@ -228,10 +324,10 @@ Be careful, you are using ID 0482 in the previous test case.
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbs hicredit 10 locredit 75 sendslope 2 idleslope 666",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 10 locredit 75 sendslope 2 idleslope 666 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
 > +        "matchCount": "1",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -239,23 +335,23 @@ Be careful, you are using ID 0482 in the previous test case.
 > +        ]
 > +    },
 > +    {
-> +        "id": "23c9",
-> +        "name": "Replace CBS with sendslope setting",
+> +        "id": "9283",
+> +        "name": "Replace FQ_CODEL with noecn setting",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
 > +        },
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true",
-> +            "$TC qdisc add dev $DUMMY handle 1: root cbs idleslope 666"
+> +            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root cbs sendslope 10",
+> +        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root fq_codel noecn",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 0 locredit 0 sendslope 10 idleslope 0 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb drop_batch 100",
 > +        "matchCount": "1",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -263,23 +359,23 @@ Be careful, you are using ID 0482 in the previous test case.
 > +        ]
 > +    },
 > +    {
-> +        "id": "a07a",
-> +        "name": "Change CBS with idleslope setting",
+> +        "id": "3459",
+> +        "name": "Change FQ_CODEL with limit setting",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
 > +        },
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true",
-> +            "$TC qdisc add dev $DUMMY handle 1: root cbs idleslope 666"
+> +            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root cbs idleslope 1",
+> +        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root fq_codel limit 2000",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 0 locredit 0 sendslope 0 idleslope 1 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 2000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
 > +        "matchCount": "1",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -287,34 +383,34 @@ Be careful, you are using ID 0482 in the previous test case.
 > +        ]
 > +    },
 > +    {
-> +        "id": "43b3",
-> +        "name": "Delete CBS with handle",
+> +        "id": "0128",
+> +        "name": "Delete FQ_CODEL with handle",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
 > +        },
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true",
-> +            "$TC qdisc add dev $DUMMY handle 1: root cbs idleslope 666"
+> +            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
 > +        ],
 > +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc cbs 1: root refcnt [0-9]+ hicredit 0 locredit 0 sendslope 0 idleslope 1 offload 0.*qdisc pfifo 0: parent 1: limit 1000p",
+> +        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb noecn drop_batch 100",
 > +        "matchCount": "0",
 > +        "teardown": [
 > +            "$IP link del dev $DUMMY type dummy"
 > +        ]
 > +    },
 > +    {
-> +        "id": "9472",
-> +        "name": "Show CBS class",
+> +        "id": "0435",
+> +        "name": "Show FQ_CODEL class",
 > +        "category": [
 > +            "qdisc",
-> +            "cbs"
+> +            "fq_codel"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
@@ -322,11 +418,11 @@ Be careful, you are using ID 0482 in the previous test case.
 > +        "setup": [
 > +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cbs",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel",
 > +        "expExitCode": "0",
 > +        "verifyCmd": "$TC class show dev $DUMMY",
-> +        "matchPattern": "class cbs 1:[0-9]+ parent 1:",
-> +        "matchCount": "1",
+> +        "matchPattern": "class fq_codel 1:",
+> +        "matchCount": "0",
 > +        "teardown": [
 > +            "$TC qdisc del dev $DUMMY handle 1: root",
 > +            "$IP link del dev $DUMMY type dummy"
