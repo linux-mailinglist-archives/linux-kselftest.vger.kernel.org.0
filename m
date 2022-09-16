@@ -2,96 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35AA5BA505
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 05:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CFA5BA601
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 06:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiIPDFQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Sep 2022 23:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
+        id S229669AbiIPEv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Sep 2022 00:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiIPDEu (ORCPT
+        with ESMTP id S229531AbiIPEvz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Sep 2022 23:04:50 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5B99E0DE;
-        Thu, 15 Sep 2022 20:04:20 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTJkR1BmmznTVr;
-        Fri, 16 Sep 2022 11:01:35 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 16 Sep
- 2022 11:04:17 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
-        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <toke@toke.dk>, <vinicius.gomes@intel.com>,
-        <stephen@networkplumber.org>, <shuah@kernel.org>,
-        <victor@mojatatu.com>
-CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
-        <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 18/18] selftests/tc-testings: add show class case for red qdisc
-Date:   Fri, 16 Sep 2022 11:05:44 +0800
-Message-ID: <20220916030544.228274-19-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220916030544.228274-1-shaozhengchao@huawei.com>
-References: <20220916030544.228274-1-shaozhengchao@huawei.com>
+        Fri, 16 Sep 2022 00:51:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D514A9FA89
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Sep 2022 21:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663303911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZrlYoSR0t0sSR123GOVAJxEfCWOvnKpItP6M0/Vrog0=;
+        b=L8Q8pVkXAXlyhc9bJidMelrqFDxcdqbCODQBFo2Un4S05cguVx6JiT2QLqwKkCdS7BffZn
+        bp85BLxcrrOgTzZY2a9G+pYInUj5hkb+4ly6cZD3HkuMbpLfrUR9Nwka8adlMoEawm75vD
+        HnWgJeUrhdgY5DC0yjU/OSDsNShaLNM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-HQsuENMbNjO1T32TYAyMaA-1; Fri, 16 Sep 2022 00:51:48 -0400
+X-MC-Unique: HQsuENMbNjO1T32TYAyMaA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFB52862FDF;
+        Fri, 16 Sep 2022 04:51:47 +0000 (UTC)
+Received: from gshan.redhat.com (vpn2-54-126.bne.redhat.com [10.64.54.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2795D140EBF3;
+        Fri, 16 Sep 2022 04:51:40 +0000 (UTC)
+From:   Gavin Shan <gshan@redhat.com>
+To:     kvmarm@lists.cs.columbia.edu
+Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        catalin.marinas@arm.com, linux-kselftest@vger.kernel.org,
+        bgardon@google.com, shuah@kernel.org, corbet@lwn.net,
+        maz@kernel.org, drjones@redhat.com, will@kernel.org,
+        zhenyzha@redhat.com, dmatlack@google.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, peterx@redhat.com, oliver.upton@linux.dev,
+        shan.gavin@gmail.com
+Subject: [PATCH v2 0/5] KVM: arm64: Enable ring-based dirty memory tracking
+Date:   Fri, 16 Sep 2022 12:51:30 +0800
+Message-Id: <20220916045135.154505-1-gshan@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 290a: Show RED class
+This series enables the ring-based dirty memory tracking for ARM64.
+The feature has been available and enabled on x86 for a while. It
+is beneficial when the number of dirty pages is small in a checkpointing
+system or live migration scenario. More details can be found from
+fb04a1eddb1a ("KVM: X86: Implement ring-based dirty memory tracking").
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
----
- .../tc-testing/tc-tests/qdiscs/red.json       | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+The generic part has been comprehensive, meaning there isn't too much
+work, needed to extend it to ARM64.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/red.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/red.json
-index 0703a2a255eb..4b3e449857f2 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/red.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/red.json
-@@ -181,5 +181,28 @@
-             "$TC qdisc del dev $DUMMY handle 1: root",
-             "$IP link del dev $DUMMY type dummy"
-         ]
-+    },
-+    {
-+        "id": "290a",
-+        "name": "Show RED class",
-+        "category": [
-+            "qdisc",
-+            "red"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root red limit 1M avpkt 1500 min 100K max 300K",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class red 1:[0-9]+ parent 1:",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY handle 1: root",
-+            "$IP link del dev $DUMMY type dummy"
-+        ]
-     }
- ]
+- PATCH[1]   introduces KVM_REQ_RING_SOFT_FULL for x86
+- PATCH[2]   enables the feature on ARM64
+- PATCH[3-5] improves kvm/selftests/dirty_log_test
+
+v1: https://lore.kernel.org/lkml/20220819005601.198436-1-gshan@redhat.com
+
+Testing
+=======
+
+(1) kvm/selftests/dirty_log_test
+(2) Live migration by QEMU
+
+Changelog
+=========
+v2:
+  * Introduce KVM_REQ_RING_SOFT_FULL                         (Marc)
+  * Changelog improvement                                    (Marc)
+  * Fix dirty_log_test without knowing host page size        (Drew)
+
+Gavin Shan (5):
+  KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
+  KVM: arm64: Enable ring-based dirty memory tracking
+  KVM: selftests: Use host page size to map ring buffer in
+    dirty_log_test
+  KVM: selftests: Clear dirty ring states between two modes in
+    dirty_log_test
+  KVM: selftests: Automate choosing dirty ring size in dirty_log_test
+
+ Documentation/virt/kvm/api.rst               |  2 +-
+ arch/arm64/include/uapi/asm/kvm.h            |  1 +
+ arch/arm64/kvm/Kconfig                       |  1 +
+ arch/arm64/kvm/arm.c                         |  8 +++
+ arch/x86/kvm/x86.c                           |  5 +-
+ include/linux/kvm_host.h                     |  1 +
+ tools/testing/selftests/kvm/dirty_log_test.c | 53 ++++++++++++++------
+ tools/testing/selftests/kvm/lib/kvm_util.c   |  2 +-
+ virt/kvm/dirty_ring.c                        |  4 ++
+ 9 files changed, 59 insertions(+), 18 deletions(-)
+
 -- 
-2.17.1
+2.23.0
 
