@@ -2,144 +2,302 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAA35BB1D9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 20:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684315BB367
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 22:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiIPSKB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Sep 2022 14:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S230114AbiIPUWB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Sep 2022 16:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiIPSKA (ORCPT
+        with ESMTP id S229935AbiIPUV7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Sep 2022 14:10:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0B427B2C
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 11:09:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663351797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dGo9IIHnzVXPXPzRwNLgG2J2p1J5QcMOec8HOITKZNg=;
-        b=WJwTwtrTw9Rh96kTdmSRUY7AZclZN2Dg56fVltfr5XtzmXcRcjvOgkcMQijXla8Lm3gKFJ
-        mpfDn5gISn/1B4XcsUCHzrgaO0/EviZ3PQr/v7PnlEb9gw3avhUFevcoFoAmMSGCcnannN
-        6DcK0M82RlOr+ZjJelw9FPbypuEBvkw=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-519-5_X2OPImOPS1pzYLDzUNDQ-1; Fri, 16 Sep 2022 14:09:55 -0400
-X-MC-Unique: 5_X2OPImOPS1pzYLDzUNDQ-1
-Received: by mail-qv1-f72.google.com with SMTP id q5-20020a056214194500b004a03466c568so15387545qvk.19
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 11:09:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=dGo9IIHnzVXPXPzRwNLgG2J2p1J5QcMOec8HOITKZNg=;
-        b=A1eEPBe0+b91/ami3lZ9bpVygQJLFTP3EbFdIKu2aA0vLKxshxJmMcHaDJGyaxYkXc
-         cC6AvCb91FC3JZYzzuSdOYuFCTQtMmfIBUGn71TH6nXvpHM+AUlyQcUmYi6zT2cfBPqW
-         OxAKlzfZY1rtDlIasOY1LtdpZIMJDZzNpa8cl2tPLpsLWTXgGbubxJGpdxm5GpeAbwLC
-         jHWR/llEKlJxichpCQypWrFYsVn5hIWgfAec4Bk3tDlsVNIiSCSDzrH9FOA9GHuRQVSC
-         uLDXlpaLAG0zmh9D9KJB3Dkt+rllpUHj+iPj9BQNpwPBEn/TviDkKcyLCpyqBPHuKpXK
-         cxaQ==
-X-Gm-Message-State: ACrzQf0BfLfwHjQOqGJx3poTp4CizKkH9Sfk8xbZ7rQrQ7tgvYMqOVVt
-        V2IqzMG8612aKTxzy+7LhKyq1TPbol0SBXoUQGyQzXXTCjxkBEucsEiMCpO2cPtTG9+F61LajSG
-        5C4xcFqVfE6JBEEZOhbUK84tSObUK
-X-Received: by 2002:ac8:5f4d:0:b0:35b:ba2e:ce1 with SMTP id y13-20020ac85f4d000000b0035bba2e0ce1mr5516860qta.26.1663351795090;
-        Fri, 16 Sep 2022 11:09:55 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5Eq8nutd1y8SgkrtcXFUsUl9UMHM0MnxQbGXx8ngkMtdvW9XgFJl7Id6By2Z5c1AZ7GoPT7w==
-X-Received: by 2002:ac8:5f4d:0:b0:35b:ba2e:ce1 with SMTP id y13-20020ac85f4d000000b0035bba2e0ce1mr5516842qta.26.1663351794880;
-        Fri, 16 Sep 2022 11:09:54 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05620a28d300b006b60d5a7205sm7398453qkp.51.2022.09.16.11.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 11:09:54 -0700 (PDT)
-Date:   Fri, 16 Sep 2022 14:09:52 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, catalin.marinas@arm.com,
-        linux-kselftest@vger.kernel.org, bgardon@google.com,
-        shuah@kernel.org, corbet@lwn.net, maz@kernel.org,
-        drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com,
-        dmatlack@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        oliver.upton@linux.dev, shan.gavin@gmail.com
-Subject: Re: [PATCH v2 1/5] KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
-Message-ID: <YyS78BqsQxKkLOiW@xz-m1.local>
-References: <20220916045135.154505-1-gshan@redhat.com>
- <20220916045135.154505-2-gshan@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220916045135.154505-2-gshan@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 16:21:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9B5B5E45;
+        Fri, 16 Sep 2022 13:21:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663359718; x=1694895718;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=x0W/PWlKVH4Kg6RVdCR6J9PqSt//9vhZDuFOnyIkMK4=;
+  b=Fuw4IG3j4QtF0o+JnNBA3hQILipODYur3ehrm0z3vFT0MU3UcFZ/NlHi
+   6mDugKbVk4NU825JwRLWR8829HxXpTlyC3qyMshxPy6tZkrcdr0U/DOFr
+   8hq2iQm08nTG6eimS2am7RW5sfYyKuJoM+09CGigXa3TtUqTPiWynvDDB
+   07EtmYokdGwgltKhEnQm2l57D2A8LSAvGV4kwZhxSU4nLZCYUxRxVGsAY
+   Dxul4WGtiP/59xHQgqQ7RZq1fVgDZ3schZnXRQA0LhMeEBGOqT5KWOWd1
+   ISz9DYAmJbNixPLHeh8m47QqcjwsSe0TEC7M55MyugG/8oDGJdARlNGkx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="278801382"
+X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
+   d="scan'208";a="278801382"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 13:21:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
+   d="scan'208";a="680092292"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by fmsmga008.fm.intel.com with ESMTP; 16 Sep 2022 13:21:57 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
+        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/4] selftests/x86/mxcsr: Test the MXCSR state write via ptrace
+Date:   Fri, 16 Sep 2022 13:11:56 -0700
+Message-Id: <20220916201158.8072-3-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220916201158.8072-1-chang.seok.bae@intel.com>
+References: <20220916201158.8072-1-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:51:31PM +0800, Gavin Shan wrote:
-> This adds KVM_REQ_RING_SOFT_FULL, which is raised when the dirty
-> ring of the specific VCPU becomes softly full in kvm_dirty_ring_push().
-> The VCPU is enforced to exit when the request is raised and its
-> dirty ring is softly full on its entrance.
-> 
-> Suggested-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->  arch/x86/kvm/x86.c       | 5 +++--
->  include/linux/kvm_host.h | 1 +
->  virt/kvm/dirty_ring.c    | 4 ++++
->  3 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 43a6a7efc6ec..7f368f59f033 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -10265,8 +10265,9 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	bool req_immediate_exit = false;
->  
->  	/* Forbid vmenter if vcpu dirty ring is soft-full */
-> -	if (unlikely(vcpu->kvm->dirty_ring_size &&
-> -		     kvm_dirty_ring_soft_full(&vcpu->dirty_ring))) {
-> +	if (kvm_check_request(KVM_REQ_RING_SOFT_FULL, vcpu) &&
-> +	    kvm_dirty_ring_soft_full(&vcpu->dirty_ring)) {
-> +		kvm_make_request(KVM_REQ_RING_SOFT_FULL, vcpu);
->  		vcpu->run->exit_reason = KVM_EXIT_DIRTY_RING_FULL;
->  		trace_kvm_dirty_ring_exit(vcpu);
->  		r = 0;
+The ptrace buffer is in the non-compacted format. The MXCSR state should be
+written to the target thread when either SSE or AVX component is enabled.
 
-As commented previously - can we use kvm_test_request() instead? because we
-don't want to unconditionally clear the bit.  Instead of making the request
-again, we can clear request only if !full.
+Write an MXCSR value to the target and read back. Then it is validated with
+the XRSTOR/XSAVE result on the current.
 
-We can also safely move this into the block of below kvm_request_pending()
-as Marc used to suggest.
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+---
 
-To explicitly use kvm_clear_request(), we may need to be careful on the
-memory barriers.  I'm wondering whether we should have moved
-smp_mb__after_atomic() into kvm_clear_request() because kvm_clear_request()
-is used outside kvm_check_request() and IIUC all the call sites should
-better have that barrier too to be safe.
+If this is acceptable, I will also follow up to move some of the helper
+functions to a .h file from this and other test cases because duplicating
+what is shareable should be avoided.
+---
+ tools/testing/selftests/x86/Makefile |   2 +-
+ tools/testing/selftests/x86/mxcsr.c  | 200 +++++++++++++++++++++++++++
+ 2 files changed, 201 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/mxcsr.c
 
-Side note: when I read the code around I also see some mis-use of clear
-request where it can be omitted, e.g.:
-
-		if (kvm_check_request(KVM_REQ_UNHALT, vcpu)) {
-			kvm_clear_request(KVM_REQ_UNHALT, vcpu);
-			vcpu->run->exit_reason = KVM_EXIT_IRQ_WINDOW_OPEN;
-		}
-
-Maybe it's a sign of bad naming, so we should renamed kvm_check_request()
-to kvm_test_clear_request() too to show that clearing after that is not
-needed?
-
-Thanks,
-
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 0388c4d60af0..621c47960be3 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+ 			test_vsyscall mov_ss_trap \
+-			syscall_arg_fault fsgsbase_restore sigaltstack
++			syscall_arg_fault fsgsbase_restore sigaltstack mxcsr
+ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+diff --git a/tools/testing/selftests/x86/mxcsr.c b/tools/testing/selftests/x86/mxcsr.c
+new file mode 100644
+index 000000000000..7c318c48b4be
+--- /dev/null
++++ b/tools/testing/selftests/x86/mxcsr.c
+@@ -0,0 +1,200 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <err.h>
++#include <elf.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <x86intrin.h>
++
++#include <sys/ptrace.h>
++#include <sys/syscall.h>
++#include <sys/wait.h>
++#include <sys/uio.h>
++
++#include "../kselftest.h" /* For __cpuid_count() */
++
++#define LEGACY_STATE_SIZE	24
++#define MXCSR_SIZE		8
++#define STSTATE_SIZE		8*16
++#define XMM_SIZE		16*16
++#define PADDING_SIZE		96
++#define XSAVE_HDR_SIZE		64
++
++struct xsave_buffer {
++	uint8_t		legacy_state[LEGACY_STATE_SIZE];
++	uint8_t		mxcsr[MXCSR_SIZE];
++	uint8_t		st_state[STSTATE_SIZE];
++	uint8_t		xmm_state[XMM_SIZE];
++	uint8_t		padding[PADDING_SIZE];
++	uint8_t		header[XSAVE_HDR_SIZE];
++	uint8_t		extended[0];
++};
++
++#ifdef __x86_64__
++#define REX_PREFIX	"0x48, "
++#else
++#define REX_PREFIX
++#endif
++
++#define XSAVE		".byte " REX_PREFIX "0x0f,0xae,0x27"
++#define XRSTOR		".byte " REX_PREFIX "0x0f,0xae,0x2f"
++
++static inline uint64_t xgetbv(uint32_t index)
++{
++	uint32_t eax, edx;
++
++	asm volatile("xgetbv"
++		     : "=a" (eax), "=d" (edx)
++		     : "c" (index));
++	return eax + ((uint64_t)edx << 32);
++}
++
++static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
++{
++	uint32_t rfbm_lo = rfbm;
++	uint32_t rfbm_hi = rfbm >> 32;
++
++	asm volatile(XSAVE :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi) : "memory");
++}
++
++static inline void xrstor(struct xsave_buffer *xbuf, uint64_t rfbm)
++{
++	uint32_t rfbm_lo = rfbm;
++	uint32_t rfbm_hi = rfbm >> 32;
++
++	asm volatile(XRSTOR :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi));
++}
++
++static inline void clear_xstate_header(struct xsave_buffer *xbuf)
++{
++	memset(&xbuf->header, 0, sizeof(xbuf->header));
++}
++
++static inline uint32_t get_mxcsr(struct xsave_buffer *xbuf)
++{
++	return *((uint32_t *)xbuf->mxcsr);
++}
++
++static inline void set_mxcsr(struct xsave_buffer *xbuf, uint32_t val)
++{
++	*((uint32_t *)xbuf->mxcsr) = val;
++}
++
++#define XFEATURE_MASK_SSE		0x2
++#define XFEATURE_MASK_YMM		0x4
++
++#define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
++#define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
++#define CPUID_LEAF_XSTATE		0xd
++#define CPUID_SUBLEAF_XSTATE_USER	0x0
++#define CPUID_SUBLEAF_XSTATE_EXT	0x1
++
++static bool xsave_availability(void)
++{
++	uint32_t eax, ebx, ecx, edx;
++
++	__cpuid_count(1, 0, eax, ebx, ecx, edx);
++	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
++		return false;
++	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
++		return false;
++	return true;
++}
++
++static uint32_t get_xbuf_size(void)
++{
++	uint32_t eax, ebx, ecx, edx;
++
++	__cpuid_count(CPUID_LEAF_XSTATE, CPUID_SUBLEAF_XSTATE_USER,
++		      eax, ebx, ecx, edx);
++	return ebx;
++}
++
++static void ptrace_get(pid_t pid, struct iovec *iov)
++{
++	memset(iov->iov_base, 0, iov->iov_len);
++
++	if (ptrace(PTRACE_GETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
++		err(1, "TRACE_GETREGSET");
++}
++
++static void ptrace_set(pid_t pid, struct iovec *iov)
++{
++	if (ptrace(PTRACE_SETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
++		err(1, "TRACE_SETREGSET");
++}
++
++int main(void)
++{
++	struct xsave_buffer *xbuf;
++	uint32_t xbuf_size;
++	struct iovec iov;
++	uint32_t mxcsr;
++	pid_t child;
++	int status;
++
++	if (!xsave_availability())
++		printf("[SKIP]\tSkip as XSAVE not available.\n");
++
++	xbuf_size = get_xbuf_size();
++	if (!xbuf_size)
++		printf("[SKIP]\tSkip as XSAVE not available.\n");
++
++	if (!(xgetbv(0) & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM)))
++		printf("[SKIP]\tSkip as SSE state not available.\n");
++
++	xbuf = aligned_alloc(64, xbuf_size);
++	if (!xbuf)
++		err(1, "aligned_alloc()");
++
++	iov.iov_base = xbuf;
++	iov.iov_len = xbuf_size;
++
++	child = fork();
++	if (child < 0) {
++		err(1, "fork()");
++	} else if (!child) {
++		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
++			err(1, "PTRACE_TRACEME");
++
++		raise(SIGTRAP);
++		_exit(0);
++	}
++
++	wait(&status);
++
++	if (WSTOPSIG(status) != SIGTRAP)
++		err(1, "raise(SIGTRAP)");
++
++	printf("[RUN]\tTest the MXCSR state write via ptrace().\n");
++
++	/* Set a benign value */
++	set_mxcsr(xbuf, 0xabc);
++	/* The MXCSR state should be loaded regardless of XSTATE_BV */
++	clear_xstate_header(xbuf);
++
++	/* Write the MXCSR state both locally and remotely. */
++	xrstor(xbuf, XFEATURE_MASK_SSE);
++	ptrace_set(child, &iov);
++
++	/* Read the MXCSR state back for both */
++	xsave(xbuf, XFEATURE_MASK_SSE);
++	mxcsr = get_mxcsr(xbuf);
++	ptrace_get(child, &iov);
++
++	/* Cross-check with each other */
++	if (mxcsr == get_mxcsr(xbuf))
++		printf("[OK]\tThe written state was read back correctly.\n");
++	else
++		printf("[FAIL]\tThe write (or read) was incorrect.\n");
++
++	ptrace(PTRACE_DETACH, child, NULL, NULL);
++	wait(&status);
++	if (!WIFEXITED(status) || WEXITSTATUS(status))
++		err(1, "PTRACE_DETACH");
++
++	free(xbuf);
++}
 -- 
-Peter Xu
+2.17.1
 
