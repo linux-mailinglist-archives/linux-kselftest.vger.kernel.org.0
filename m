@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999115BB39A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 22:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738225BB3A1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 22:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiIPUlM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Sep 2022 16:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S230160AbiIPUoQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Sep 2022 16:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiIPUlL (ORCPT
+        with ESMTP id S229861AbiIPUoP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:41:11 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470B877570
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:41:10 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id t62so7528176oie.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:41:10 -0700 (PDT)
+        Fri, 16 Sep 2022 16:44:15 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CBD7FF99
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:44:13 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id o184so7547404oif.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=J2kyV1QeWmifhwdex3np+82YN4pfaKiop6G2W47DH2Y=;
-        b=XfNB0wHMoUpkjDXE0KTqrsaJdFmFEaQdZdoDwM1O89P0fpd6jP4uJYyh1CHjdCwkC5
-         CqOiryJBDg57Hz+pyx70XDATrOL1DLe4RY+LRnKBV19IzMZh6xCgUQM041y4b+tB3jxE
-         Oke6dSSOEsz5zHtodq/Hv2sIo5k4AiKi69uF4O4BgIgjT4NJJ77RUG67rMLjcD/VjJ+w
-         mV4C6eqho5y8UhHijDSqyGyMl0aa1j+3hcvC4b5APEfyZhn1fVKXE6LT2gX8XBLzkYss
-         LTAvix6XpOvMzUbZmtaDCmbilne95OjbSWHW/EckhG68TIjhEFJ8g/jLnFEPU0MESdib
-         SGDA==
+        bh=qaqaEny/sBPOd8+H9ejVkeT0pJ935p7TgqoAVrkLtAA=;
+        b=sTWPE3exqk4jUDtHu/Cn7kRBLUQSV7g56RWxn1YZCAXbpPVuM5aWnCt57tKV9Q9iLa
+         IyAPIQq3Prwu+8i8sXSOY3+z9xtXVeBibSm5XyUQh4MFwYCC+fP5o6K99yVAbthCIvkD
+         XtutQuFMVROePQ2j4LT/vAGr8HSlPOjXGxdxrStzH70SVJB8DiYr6nQSEQPN6v/4HCa3
+         CxfC8UuT7d6YGLJTzaBc28uqwaWeO7UWCrxToX1XvThjxpqzNBpxbD3ns/LNDR+elSt7
+         huOuoZ/n4c1kB3msk8XYrjjtWpxxEOZYGPfamxSxp2OvciZ6Yrpnzu8+WqA6AxKThhuF
+         5B8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=J2kyV1QeWmifhwdex3np+82YN4pfaKiop6G2W47DH2Y=;
-        b=lBQ4R9zRWyB0fmkIZgmMm3EQrPjI1tYr98fUn8zatP/0gQE5YoLlJ3DrOO3jcDQEP1
-         UY2epna+qFn4ZRYIp/0gIejRoQERxwQxk9S8+cPnY5cDpcvS5W3ybgqyRJrXDQQ9aj+1
-         52simdre+bZTAs39Evrjspx4dvIvLmUPvdROhvknHazyzPI7oAJ8HyM/bcMS98YPfRYz
-         sIptjhyTGwY+HtwrFKC0QD1eSNjzorxXUBJawteUHekCNcy3AOiY1YI7C9XOCf7O9Qzj
-         kPVAkfcWUNdCCDLIqzb4N7pfwWZss5KtHvduDF+ZbJGkxl/Xqdo71/CRg4bSvf9q5UT9
-         IoHg==
-X-Gm-Message-State: ACrzQf2P51FvGUfn+0dNVoasli9NIYeO7H2Ogqop+KuRZJSH9G0BwJJb
-        vb22Q4ycug63EWXP6uzJaQO82NXWhrhoHFYFlVdUHA==
-X-Google-Smtp-Source: AMsMyM6aQDhSX+slRvXtLnsbRWGlkfTXFw7dTDYJdTRc73fLW2p/byHUdwljasLi2jfRMJBdCG2wEjkfhU0YEvXpbfY=
+        bh=qaqaEny/sBPOd8+H9ejVkeT0pJ935p7TgqoAVrkLtAA=;
+        b=lP+nWxh64hb7TSERNGbIYomZFdqla4BO1LFV6ekCs5htzaby5DLZ7dpGSW0UoU58fI
+         gJERQUcqPspZGPCvqKjT3wzooqbDXP71CGVE5AY4GXOWPIwLOr3bQE+f27XsyqpaC3WF
+         gYMp0krF3adMir8JAtRB9VXpSgaf+ywjaRpaI+Ab5HkgKTbBHQauCmgshPRxuREUa38m
+         oiKhWECA/0WKmeYzFoK+1+klFIMxnscnBwnng8aReWceBDhPgZWf2hXdkwPrxfc31+iE
+         uaJCaaxL9+dbX/wp3wKVDCRzn4I0Pecsv9otlIwzG+mBWoVLGx2PvBv6fSplsLqK3ai4
+         dTlg==
+X-Gm-Message-State: ACrzQf2PL/Od5XC8/oC8nSUq4vBFbVrt9EKsJ5uWPyC4dZzVzqkOLWra
+        6wK8kZbMfHBXKwjp9bZtZWLcKEHQyfebSeFCcjt+Qg==
+X-Google-Smtp-Source: AMsMyM4yZdDj6SY4GY95qBGV1CZ7ysOz2AHSb6E8E6gzVuyU3ARh8P4KVgiCA8iRMSGQGUXTkgfgy8psJviemq+aP9Q=
 X-Received: by 2002:a05:6808:21a3:b0:345:3202:e2a1 with SMTP id
- be35-20020a05680821a300b003453202e2a1mr3251269oib.268.1663360869605; Fri, 16
- Sep 2022 13:41:09 -0700 (PDT)
+ be35-20020a05680821a300b003453202e2a1mr3256163oib.268.1663361053225; Fri, 16
+ Sep 2022 13:44:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220916030544.228274-1-shaozhengchao@huawei.com> <20220916030544.228274-13-shaozhengchao@huawei.com>
-In-Reply-To: <20220916030544.228274-13-shaozhengchao@huawei.com>
+References: <20220916030544.228274-1-shaozhengchao@huawei.com> <20220916030544.228274-14-shaozhengchao@huawei.com>
+In-Reply-To: <20220916030544.228274-14-shaozhengchao@huawei.com>
 From:   Victor Nogueira <victor@mojatatu.com>
-Date:   Fri, 16 Sep 2022 17:40:58 -0300
-Message-ID: <CA+NMeC-bysQAMzNzmyDObVtgVzP8Kpeay517kkvHu_YsT7otzQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 12/18] selftests/tc-testings: add selftests for
- multiq qdisc
+Date:   Fri, 16 Sep 2022 17:44:02 -0300
+Message-ID: <CA+NMeC852sL-PRYvtEZEe463Y-uBxLKEbAZuJE8XesW3A7_wog@mail.gmail.com>
+Subject: Re: [PATCH net-next 13/18] selftests/tc-testings: add selftests for
+ netem qdisc
 To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, toke@toke.dk, vinicius.gomes@intel.com,
-        stephen@networkplumber.org, shuah@kernel.org,
-        zhijianx.li@intel.com, weiyongjun1@huawei.com,
+Cc:     netdev@vger.kernel.org, cake@lists.bufferbloat.net,
+        linux-kselftest@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        toke@toke.dk, vinicius.gomes@intel.com, stephen@networkplumber.org,
+        shuah@kernel.org, zhijianx.li@intel.com, weiyongjun1@huawei.com,
         yuehaibing@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,138 +74,406 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
 <shaozhengchao@huawei.com> wrote:
 >
-> Test 20ba: Add multiq Qdisc to multi-queue device (8 queues)
-> Test 9903: List multiq Class
-> Test 7832: Delete nonexistent multiq Qdisc
-> Test 2891: Delete multiq Qdisc twice
-> Test 1329: Add multiq Qdisc to single-queue device
+> Test cb28: Create NETEM with default setting
+> Test a089: Create NETEM with limit flag
+> Test 3449: Create NETEM with delay time
+> Test 3782: Create NETEM with distribution and corrupt flag
+> Test a932: Create NETEM with distribution and duplicate flag
+> Test e01a: Create NETEM with distribution and loss state flag
+> Test ba29: Create NETEM with loss gemodel flag
+> Test 0492: Create NETEM with reorder flag
+> Test 7862: Create NETEM with rate limit
+> Test 7235: Create NETEM with multiple slot rate
+> Test 5439: Create NETEM with multiple slot setting
+> Test 5029: Change NETEM with loss state
+> Test 3785: Replace NETEM with delay time
+> Test 4502: Delete NETEM with handle
+> Test 0785: Show NETEM class
 >
 > Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 > ---
->  .../tc-testing/tc-tests/qdiscs/multiq.json    | 114 ++++++++++++++++++
->  1 file changed, 114 insertions(+)
->  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/multiq.json
+>  .../tc-testing/tc-tests/qdiscs/netem.json     | 372 ++++++++++++++++++
+>  1 file changed, 372 insertions(+)
+>  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
 >
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/multiq.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/multiq.json
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
 > new file mode 100644
-> index 000000000000..2ae813f676a5
+> index 000000000000..c8ce7883bd9f
 > --- /dev/null
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/multiq.json
-> @@ -0,0 +1,114 @@
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
+> @@ -0,0 +1,372 @@
 > +[
 > +    {
-> +        "id": "20ba",
-> +        "name": "Add multiq Qdisc to multi-queue device (8 queues)",
+> +        "id": "cb28",
+> +        "name": "Create NETEM with default setting",
 > +        "category": [
 > +            "qdisc",
-> +            "multiq"
+> +            "netem"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
 > +        },
 > +        "setup": [
-> +            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device"
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: multiq",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem",
 > +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $ETH",
-> +        "matchPattern": "qdisc multiq 1: root refcnt [0-9]+ bands 8",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ limit",
 > +        "matchCount": "1",
 > +        "teardown": [
-> +            "echo \"1\" > /sys/bus/netdevsim/del_device"
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
 > +        ]
 > +    },
 > +    {
-> +        "id": "9903",
-
-Be careful, you are using ID 9903 in the mqprio test patch.
-
-> +        "name": "List multiq Class",
+> +        "id": "a089",
+> +        "name": "Create NETEM with limit flag",
 > +        "category": [
 > +            "qdisc",
-> +            "multiq"
+> +            "netem"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
 > +        },
 > +        "setup": [
-> +            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device"
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: multiq",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem limit 200",
 > +        "expExitCode": "0",
-> +        "verifyCmd": "$TC class show dev $ETH",
-> +        "matchPattern": "class multiq 1:[0-9]+ parent 1:",
-> +        "matchCount": "8",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ limit 200",
+> +        "matchCount": "1",
 > +        "teardown": [
-> +            "echo \"1\" > /sys/bus/netdevsim/del_device"
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
 > +        ]
 > +    },
 > +    {
-> +        "id": "7832",
-> +        "name": "Delete nonexistent multiq Qdisc",
+> +        "id": "3449",
+> +        "name": "Create NETEM with delay time",
 > +        "category": [
 > +            "qdisc",
-> +            "multiq"
+> +            "netem"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
 > +        },
 > +        "setup": [
-> +            "echo \"1 1 4\" > /sys/bus/netdevsim/new_device"
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc del dev $ETH root handle 1: multiq",
-> +        "expExitCode": "2",
-> +        "verifyCmd": "$TC qdisc show dev $ETH",
-> +        "matchPattern": "qdisc multiq 1: root",
-> +        "matchCount": "0",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms",
+> +        "matchCount": "1",
 > +        "teardown": [
-> +            "echo \"1\" > /sys/bus/netdevsim/del_device"
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
 > +        ]
 > +    },
 > +    {
-> +        "id": "2891",
-> +        "name": "Delete multiq Qdisc twice",
+> +        "id": "3782",
+> +        "name": "Create NETEM with distribution and corrupt flag",
 > +        "category": [
 > +            "qdisc",
-> +            "multiq"
+> +            "netem"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
 > +        },
 > +        "setup": [
-> +            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device",
-> +            "$TC qdisc add dev $ETH root handle 1: multiq",
-> +            "$TC qdisc del dev $ETH root handle 1:"
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc del dev $ETH root handle 1:",
-> +        "expExitCode": "2",
-> +        "verifyCmd": "$TC qdisc show dev $ETH",
-> +        "matchPattern": "qdisc mqprio 1: root",
-> +        "matchCount": "0",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal corrupt 1%",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms corrupt 1%",
+> +        "matchCount": "1",
 > +        "teardown": [
-> +            "echo \"1\" > /sys/bus/netdevsim/del_device"
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
 > +        ]
 > +    },
 > +    {
-> +        "id": "1329",
-> +        "name": "Add multiq Qdisc to single-queue device",
+> +        "id": "a932",
+> +        "name": "Create NETEM with distribution and duplicate flag",
 > +        "category": [
 > +            "qdisc",
-> +            "multiq"
+> +            "netem"
 > +        ],
 > +        "plugins": {
 > +            "requires": "nsPlugin"
 > +        },
 > +        "setup": [
-> +            "echo \"1 1\" > /sys/bus/netdevsim/new_device"
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
 > +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: multiq",
-> +        "expExitCode": "2",
-> +        "verifyCmd": "$TC qdisc show dev $ETH",
-> +        "matchPattern": "qdisc multiq 1: root",
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal duplicate 1%",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms duplicate 1%",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "a932",
+
+Be careful, you are using ID a932 in the previous test case.
+
+> +        "name": "Create NETEM with distribution and loss flag",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution pareto loss 1%",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms loss 1%",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "e01a",
+> +        "name": "Create NETEM with distribution and loss state flag",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution paretonormal loss state 1",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms loss state p13 1% p31 99% p32 0% p23 100% p14 0%",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "ba29",
+> +        "name": "Create NETEM with loss gemodel flag",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem loss gemodel 1%",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*loss gemodel p 1%",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "0492",
+> +        "name": "Create NETEM with reorder flag",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms reorder 2% gap 100",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*reorder 2%",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "7862",
+> +        "name": "Create NETEM with rate limit",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem rate 20000",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*rate 20Kbit",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "7235",
+> +        "name": "Create NETEM with multiple slot rate",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem slot 10 200 packets 2000 bytes 9000",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*slot 10ns 200ns packets 2000 bytes 9000",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "5439",
+> +        "name": "Create NETEM with multiple slot setting",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem slot distribution pareto 1ms 0.1ms",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*slot distribution 1ms 100us",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "5029",
+> +        "name": "Change NETEM with loss state",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+> +            "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal loss 1%"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal loss 2%",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*loss 2%",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "3785",
+> +        "name": "Replace NETEM with delay time",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+> +            "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal loss 1%"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root netem delay 200ms 10ms",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 200ms  10ms",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "4502",
+> +        "name": "Delete NETEM with handle",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+> +            "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms",
 > +        "matchCount": "0",
 > +        "teardown": [
-> +            "echo \"1\" > /sys/bus/netdevsim/del_device"
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "0785",
+> +        "name": "Show NETEM class",
+> +        "category": [
+> +            "qdisc",
+> +            "netem"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC class show dev $DUMMY",
+> +        "matchPattern": "class netem 1:",
+> +        "matchCount": "0",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
 > +        ]
 > +    }
 > +]
