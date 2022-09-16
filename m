@@ -2,94 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B61E5BAE5F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 15:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB385BB12C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 18:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiIPNkT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Sep 2022 09:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
+        id S229511AbiIPQnF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Sep 2022 12:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiIPNkS (ORCPT
+        with ESMTP id S229454AbiIPQnE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Sep 2022 09:40:18 -0400
+        Fri, 16 Sep 2022 12:43:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49782C664;
-        Fri, 16 Sep 2022 06:40:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E59915FD0;
+        Fri, 16 Sep 2022 09:43:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4299B62BD3;
-        Fri, 16 Sep 2022 13:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C862C433D7;
-        Fri, 16 Sep 2022 13:40:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B06AE62C22;
+        Fri, 16 Sep 2022 16:43:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0A9C433D7;
+        Fri, 16 Sep 2022 16:43:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663335616;
-        bh=4oERv06eKf9jgPyu28yyrLztXaVivyopqZpP/JCtkSc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uXJtfVb1gosLAKhUbogSkFCS5zIr+yBj/6KCxYYfPFzsTwWX/Ox9HUIebgdr3qYjM
-         h7nymM3mS2pvJhKOAUIrxuNmIlbg4WWDeTHHFgXtwYISPBjHEoqzGIqdMhRt4H/j58
-         /5x+vPNb0PpwPWP92BObOwDdOq8m3rdo6F5iwqmvv3FVd0IsV49ZSo3CBH0H5EWbc+
-         nLM7NVIr0se+aR+ehcJRw8n9kOfgGLDp9g35tR2430Ydet9fwXnZwqO0ip9Zgdc/CD
-         hlHpe9VgxjFXkJvTsanTEa23mKagXZEFbf8lTAkK0urf40JYotDQk1HhkuDyVNzVJp
-         TXCzQnsTW7QmQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7A87AC59A58;
-        Fri, 16 Sep 2022 13:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1663346583;
+        bh=UmsHj7RKIsPQ6Gwcuw/nAlwsZUANyOdOwRkhC5DlIlA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Q+MvSDJNvYsAGXBuFUlrG09/stqFoapplIlPRQgFQVvJgfC6rMy5NLwQB77CQxul4
+         qYB640QLfxErr8XyvX5D5Qp3xIUAbqEAYOnsS13/oqpie38U9F/4SLT1HD8AkHH+o9
+         It5PVx1zS9qRi6Gr3t0UzhtbAypW1Z4T6uS/aBcrp9ji1iNmnfd120OhHYaI04+pGj
+         KeipG5t8Eus87efmYVmlp2qvLEh1GHKF3dnrKSDg0w+7aoEykM3zTVB/CeWwUMkLN3
+         HkWLSeOmV25HJtnfqZNSX0d7CVG1syTqh7QfXcNq9BdyajzQGGD47bjRMYeniUNPMV
+         s60eUtxyA/ZcA==
+Message-ID: <75585c26-b4bc-8004-dc45-cedba6b8b392@kernel.org>
+Date:   Fri, 16 Sep 2022 10:43:01 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/4] Unsync addresses from ports when stopping
- aggregated devices
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166333561648.19332.1506754631018938447.git-patchwork-notify@kernel.org>
-Date:   Fri, 16 Sep 2022 13:40:16 +0000
-References: <20220907075642.475236-1-bpoirier@nvidia.com>
-In-Reply-To: <20220907075642.475236-1-bpoirier@nvidia.com>
-To:     Benjamin Poirier <bpoirier@nvidia.com>
-Cc:     netdev@vger.kernel.org, j.vosburgh@gmail.com, vfalico@gmail.com,
-        andy@greyhouse.net, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jiri@resnulli.us,
-        shuah@kernel.org, jtoppins@redhat.com,
-        linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [net-next v2 1/3] seg6: add netlink_ext_ack support in parsing
+ SRv6 behavior attributes
+Content-Language: en-US
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+References: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
+ <20220912171619.16943-2-andrea.mayer@uniroma2.it>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220912171619.16943-2-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed,  7 Sep 2022 16:56:38 +0900 you wrote:
-> This series fixes similar problems in the bonding and team drivers.
+On 9/12/22 11:16 AM, Andrea Mayer wrote:
+> An SRv6 behavior instance can be set up using mandatory and/or optional
+> attributes.
+> In the setup phase, each supplied attribute is parsed and processed. If
+> the parsing operation fails, the creation of the behavior instance stops
+> and an error number/code is reported to the user.  In many cases, it is
+> challenging for the user to figure out exactly what happened by relying
+> only on the error code.
 > 
-> Because of missing dev_{uc,mc}_unsync() calls, addresses added to
-> underlying devices may be leftover after the aggregated device is deleted.
-> Add the missing calls and a few related tests.
+> For this reason, we add the support for netlink_ext_ack in parsing SRv6
+> behavior attributes. In this way, when an SRv6 behavior attribute is
+> parsed and an error occurs, the kernel can send a message to the
+> userspace describing the error through a meaningful text message in
+> addition to the classic error code.
 > 
-> v2:
-> * fix selftest installation, see patch 3
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  net/ipv6/seg6_local.c | 44 +++++++++++++++++++++++++++----------------
+>  1 file changed, 28 insertions(+), 16 deletions(-)
 > 
-> [...]
 
-Here is the summary with links:
-  - [net,v3,1/4] net: bonding: Share lacpdu_mcast_addr definition
-    https://git.kernel.org/netdev/net/c/1d9a143ee340
-  - [net,v3,2/4] net: bonding: Unsync device addresses on ndo_stop
-    https://git.kernel.org/netdev/net/c/86247aba599e
-  - [net,v3,3/4] net: team: Unsync device addresses on ndo_stop
-    https://git.kernel.org/netdev/net/c/bd60234222b2
-  - [net,v3,4/4] net: Add tests for bonding and team address list management
-    https://git.kernel.org/netdev/net/c/bbb774d921e2
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
 
