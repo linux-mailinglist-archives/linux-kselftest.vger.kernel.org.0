@@ -2,302 +2,604 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684315BB367
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 22:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1065BB38A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 22:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiIPUWB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Sep 2022 16:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S229808AbiIPUdF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Sep 2022 16:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiIPUV7 (ORCPT
+        with ESMTP id S229533AbiIPUdC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:21:59 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9B5B5E45;
-        Fri, 16 Sep 2022 13:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663359718; x=1694895718;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=x0W/PWlKVH4Kg6RVdCR6J9PqSt//9vhZDuFOnyIkMK4=;
-  b=Fuw4IG3j4QtF0o+JnNBA3hQILipODYur3ehrm0z3vFT0MU3UcFZ/NlHi
-   6mDugKbVk4NU825JwRLWR8829HxXpTlyC3qyMshxPy6tZkrcdr0U/DOFr
-   8hq2iQm08nTG6eimS2am7RW5sfYyKuJoM+09CGigXa3TtUqTPiWynvDDB
-   07EtmYokdGwgltKhEnQm2l57D2A8LSAvGV4kwZhxSU4nLZCYUxRxVGsAY
-   Dxul4WGtiP/59xHQgqQ7RZq1fVgDZ3schZnXRQA0LhMeEBGOqT5KWOWd1
-   ISz9DYAmJbNixPLHeh8m47QqcjwsSe0TEC7M55MyugG/8oDGJdARlNGkx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="278801382"
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="278801382"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2022 13:21:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,321,1654585200"; 
-   d="scan'208";a="680092292"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Sep 2022 13:21:57 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
-        chang.seok.bae@intel.com, linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/4] selftests/x86/mxcsr: Test the MXCSR state write via ptrace
-Date:   Fri, 16 Sep 2022 13:11:56 -0700
-Message-Id: <20220916201158.8072-3-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220916201158.8072-1-chang.seok.bae@intel.com>
-References: <20220916201158.8072-1-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 16 Sep 2022 16:33:02 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB89BA170
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:32:57 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id e35-20020a9d01a6000000b0065798eb8754so6540552ote.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=pnH8rAyxbku61mBev6Jx8gS65j3hOthJPRKsdFuYagI=;
+        b=nao/rFeM0ITgf1gOLYPFwOOhKVqAozDkZZeXtit5XFRkiajZcvR40dJ88lDRaJILj9
+         G9QBr1v3SEom3/S0wUf9YdGFuTu5ryr6mscNhateVzFGoKiLzc4PwBg+IXU49r0ks3aq
+         W3InY5EQxNgx9vV5ByEzE8XzGf1eR2Wcy0MouYOQoVjvvaQqeordI7vY5fnOUAoabb4f
+         V9bX71SY5d0YDBxrSRWQteVJuKAkLYS8/g+Ctlhe0rQtsZe1D/FQBJn9M13y9SyGlcPy
+         A9aPHEQMULvZTyHMwxLY1vwmyBlhDi3tnuDM5r+YqrpeAKK6D2hS+kDMJ3BskO4KMrfN
+         IWKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=pnH8rAyxbku61mBev6Jx8gS65j3hOthJPRKsdFuYagI=;
+        b=FzPL99IGBQGxb1By0E9K+fxqHtxXmNEcRuovalOytE++tbSEXbR0uhhE8fKcQOaNez
+         Wpmhih/C9p+qSx0o8MY+/m2NslKlZCHE0u2XGUua8mdzy4nr5gyrKLZNgeWb/mtBccVy
+         PCDakQzI0jV3xXizN5E/I+/lzmOxMUjmX6kVQsYKqWgznMq3EyaFJg/PK/6sfrdImnC3
+         NS5bjYTsvaCoQZ1/YnrQHXaBc0hucREMXj1HLeEYlx7TQsmkVdAt7G2k1mLh+jHQgzV2
+         ondY1FjJvHxIX29wgWUpTg2iAJLs968P43+GNXOkhbd07Eerd+76Pawipw2k4VGecxVI
+         RsJg==
+X-Gm-Message-State: ACrzQf1q73TtEp9c2bde/05xX6fVI6LQCH3CMVItUUA2eaZjXjFuRmOs
+        6tjPHBR90kJeJexnd/+dpBmVIzMZ53dEjWIvGvcq3Q==
+X-Google-Smtp-Source: AMsMyM4QOUkbJ0H5MRmucA1btE7d2BDT7rvI417cAMCqkMhZjzPeeI4Bz/txnwkODhBDt+HZeyf3TEq/UL/TZNMVsrw=
+X-Received: by 2002:a05:6830:2b28:b0:657:7798:2eda with SMTP id
+ l40-20020a0568302b2800b0065777982edamr3112364otv.153.1663360377153; Fri, 16
+ Sep 2022 13:32:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220916030544.228274-1-shaozhengchao@huawei.com> <20220916030544.228274-4-shaozhengchao@huawei.com>
+In-Reply-To: <20220916030544.228274-4-shaozhengchao@huawei.com>
+From:   Victor Nogueira <victor@mojatatu.com>
+Date:   Fri, 16 Sep 2022 17:32:46 -0300
+Message-ID: <CA+NMeC935wcGnHGQ=-PmSuLjUOx+r5g2LVJ5-8t-8o_V5hjrNQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 03/18] selftests/tc-testings: add selftests for
+ cake qdisc
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, cake@lists.bufferbloat.net,
+        linux-kselftest@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        toke@toke.dk, vinicius.gomes@intel.com, stephen@networkplumber.org,
+        shuah@kernel.org, zhijianx.li@intel.com, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ptrace buffer is in the non-compacted format. The MXCSR state should be
-written to the target thread when either SSE or AVX component is enabled.
+On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
+<shaozhengchao@huawei.com> wrote:
+>
+> Test 1212: Create CAKE with default setting
+> Test 3241: Create CAKE with bandwidth limit
+> Test c940: Create CAKE with autorate-ingress flag
+> Test 2310: Create CAKE with rtt time
+> Test 2385: Create CAKE with besteffort flag
+> Test a032: Create CAKE with diffserv8 flag
+> Test 2349: Create CAKE with diffserv4 flag
+> Test 8472: Create CAKE with flowblind flag
+> Test 2341: Create CAKE with dsthost and nat flag
+> Test 5134: Create CAKE with wash flag
+> Test 2302: Create CAKE with flowblind and no-split-gso flag
+> Test 0768: Create CAKE with dual-srchost and ack-filter flag
+> Test 0238: Create CAKE with dual-dsthost and ack-filter-aggressive flag
+> Test 6573: Create CAKE with memlimit and ptm flag
+> Test 2436: Create CAKE with fwmark and atm flag
+> Test 3984: Create CAKE with overhead and mpu
+> Test 2342: Create CAKE with conservative and ingress flag
+> Test 2313: Change CAKE with mpu
+> Test 4365: Show CAKE class
+>
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ---
+>  .../tc-testing/tc-tests/qdiscs/cake.json      | 488 ++++++++++++++++++
+>  1 file changed, 488 insertions(+)
+>  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json
+>
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json
+> new file mode 100644
+> index 000000000000..11ca18bab721
+> --- /dev/null
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json
+> @@ -0,0 +1,488 @@
+> +[
+> +    {
+> +        "id": "1212",
+> +        "name": "Create CAKE with default setting",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "3241",
+> +        "name": "Create CAKE with bandwidth limit",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake bandwidth 1000",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth 1Kbit diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "c940",
+> +        "name": "Create CAKE with autorate-ingress flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake autorate-ingress",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited autorate-ingress diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2310",
+> +        "name": "Create CAKE with rtt time",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake rtt 200",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 200us raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2385",
+> +        "name": "Create CAKE with besteffort flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake besteffort",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited besteffort triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "a032",
+> +        "name": "Create CAKE with diffserv8 flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake diffserv8",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv8 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2349",
+> +        "name": "Create CAKE with diffserv4 flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake diffserv4",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv4 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "8472",
+> +        "name": "Create CAKE with flowblind flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake flowblind",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 flowblind nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2341",
+> +        "name": "Create CAKE with dsthost and nat flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake dsthost nat",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 dsthost nat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "5134",
+> +        "name": "Create CAKE with wash flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake hosts wash",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 hosts nonat wash no-ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2302",
+> +        "name": "Create CAKE with flowblind and no-split-gso flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake flowblind no-split-gso",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 flowblind nonat nowash no-ack-filter no-split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "0768",
+> +        "name": "Create CAKE with dual-srchost and ack-filter flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake dual-srchost ack-filter",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 dual-srchost nonat nowash ack-filter split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "0238",
+> +        "name": "Create CAKE with dual-dsthost and ack-filter-aggressive flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake dual-dsthost ack-filter-aggressive",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 dual-dsthost nonat nowash ack-filter-aggressive split-gso rtt 100ms raw overhead",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "6573",
+> +        "name": "Create CAKE with memlimit and ptm flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake memlimit 10000 ptm",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw ptm overhead 0 memlimit 10000b",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2436",
+> +        "name": "Create CAKE with fwmark and atm flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake fwmark 8 atm",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw atm overhead 0 fwmark 0x8",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "3984",
+> +        "name": "Create CAKE with overhead and mpu",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake overhead 128 mpu 256",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms noatm overhead 128 mpu 256",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2342",
+> +        "name": "Create CAKE with conservative and ingress flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake conservative ingress",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash ingress no-ack-filter split-gso rtt 100ms atm overhead 48",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2342",
 
-Write an MXCSR value to the target and read back. Then it is validated with
-the XRSTOR/XSAVE result on the current.
+Be careful, you are using ID 2342 for 3 test cases in this file.
+Each test case must have a unique ID.
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
 
-If this is acceptable, I will also follow up to move some of the helper
-functions to a .h file from this and other test cases because duplicating
-what is shareable should be avoided.
----
- tools/testing/selftests/x86/Makefile |   2 +-
- tools/testing/selftests/x86/mxcsr.c  | 200 +++++++++++++++++++++++++++
- 2 files changed, 201 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/mxcsr.c
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 0388c4d60af0..621c47960be3 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore sigaltstack
-+			syscall_arg_fault fsgsbase_restore sigaltstack mxcsr
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/mxcsr.c b/tools/testing/selftests/x86/mxcsr.c
-new file mode 100644
-index 000000000000..7c318c48b4be
---- /dev/null
-+++ b/tools/testing/selftests/x86/mxcsr.c
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <err.h>
-+#include <elf.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <x86intrin.h>
-+
-+#include <sys/ptrace.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+#include <sys/uio.h>
-+
-+#include "../kselftest.h" /* For __cpuid_count() */
-+
-+#define LEGACY_STATE_SIZE	24
-+#define MXCSR_SIZE		8
-+#define STSTATE_SIZE		8*16
-+#define XMM_SIZE		16*16
-+#define PADDING_SIZE		96
-+#define XSAVE_HDR_SIZE		64
-+
-+struct xsave_buffer {
-+	uint8_t		legacy_state[LEGACY_STATE_SIZE];
-+	uint8_t		mxcsr[MXCSR_SIZE];
-+	uint8_t		st_state[STSTATE_SIZE];
-+	uint8_t		xmm_state[XMM_SIZE];
-+	uint8_t		padding[PADDING_SIZE];
-+	uint8_t		header[XSAVE_HDR_SIZE];
-+	uint8_t		extended[0];
-+};
-+
-+#ifdef __x86_64__
-+#define REX_PREFIX	"0x48, "
-+#else
-+#define REX_PREFIX
-+#endif
-+
-+#define XSAVE		".byte " REX_PREFIX "0x0f,0xae,0x27"
-+#define XRSTOR		".byte " REX_PREFIX "0x0f,0xae,0x2f"
-+
-+static inline uint64_t xgetbv(uint32_t index)
-+{
-+	uint32_t eax, edx;
-+
-+	asm volatile("xgetbv"
-+		     : "=a" (eax), "=d" (edx)
-+		     : "c" (index));
-+	return eax + ((uint64_t)edx << 32);
-+}
-+
-+static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile(XSAVE :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi) : "memory");
-+}
-+
-+static inline void xrstor(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile(XRSTOR :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi));
-+}
-+
-+static inline void clear_xstate_header(struct xsave_buffer *xbuf)
-+{
-+	memset(&xbuf->header, 0, sizeof(xbuf->header));
-+}
-+
-+static inline uint32_t get_mxcsr(struct xsave_buffer *xbuf)
-+{
-+	return *((uint32_t *)xbuf->mxcsr);
-+}
-+
-+static inline void set_mxcsr(struct xsave_buffer *xbuf, uint32_t val)
-+{
-+	*((uint32_t *)xbuf->mxcsr) = val;
-+}
-+
-+#define XFEATURE_MASK_SSE		0x2
-+#define XFEATURE_MASK_YMM		0x4
-+
-+#define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
-+#define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
-+#define CPUID_LEAF_XSTATE		0xd
-+#define CPUID_SUBLEAF_XSTATE_USER	0x0
-+#define CPUID_SUBLEAF_XSTATE_EXT	0x1
-+
-+static bool xsave_availability(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	__cpuid_count(1, 0, eax, ebx, ecx, edx);
-+	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
-+		return false;
-+	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
-+		return false;
-+	return true;
-+}
-+
-+static uint32_t get_xbuf_size(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	__cpuid_count(CPUID_LEAF_XSTATE, CPUID_SUBLEAF_XSTATE_USER,
-+		      eax, ebx, ecx, edx);
-+	return ebx;
-+}
-+
-+static void ptrace_get(pid_t pid, struct iovec *iov)
-+{
-+	memset(iov->iov_base, 0, iov->iov_len);
-+
-+	if (ptrace(PTRACE_GETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
-+		err(1, "TRACE_GETREGSET");
-+}
-+
-+static void ptrace_set(pid_t pid, struct iovec *iov)
-+{
-+	if (ptrace(PTRACE_SETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
-+		err(1, "TRACE_SETREGSET");
-+}
-+
-+int main(void)
-+{
-+	struct xsave_buffer *xbuf;
-+	uint32_t xbuf_size;
-+	struct iovec iov;
-+	uint32_t mxcsr;
-+	pid_t child;
-+	int status;
-+
-+	if (!xsave_availability())
-+		printf("[SKIP]\tSkip as XSAVE not available.\n");
-+
-+	xbuf_size = get_xbuf_size();
-+	if (!xbuf_size)
-+		printf("[SKIP]\tSkip as XSAVE not available.\n");
-+
-+	if (!(xgetbv(0) & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM)))
-+		printf("[SKIP]\tSkip as SSE state not available.\n");
-+
-+	xbuf = aligned_alloc(64, xbuf_size);
-+	if (!xbuf)
-+		err(1, "aligned_alloc()");
-+
-+	iov.iov_base = xbuf;
-+	iov.iov_len = xbuf_size;
-+
-+	child = fork();
-+	if (child < 0) {
-+		err(1, "fork()");
-+	} else if (!child) {
-+		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-+			err(1, "PTRACE_TRACEME");
-+
-+		raise(SIGTRAP);
-+		_exit(0);
-+	}
-+
-+	wait(&status);
-+
-+	if (WSTOPSIG(status) != SIGTRAP)
-+		err(1, "raise(SIGTRAP)");
-+
-+	printf("[RUN]\tTest the MXCSR state write via ptrace().\n");
-+
-+	/* Set a benign value */
-+	set_mxcsr(xbuf, 0xabc);
-+	/* The MXCSR state should be loaded regardless of XSTATE_BV */
-+	clear_xstate_header(xbuf);
-+
-+	/* Write the MXCSR state both locally and remotely. */
-+	xrstor(xbuf, XFEATURE_MASK_SSE);
-+	ptrace_set(child, &iov);
-+
-+	/* Read the MXCSR state back for both */
-+	xsave(xbuf, XFEATURE_MASK_SSE);
-+	mxcsr = get_mxcsr(xbuf);
-+	ptrace_get(child, &iov);
-+
-+	/* Cross-check with each other */
-+	if (mxcsr == get_mxcsr(xbuf))
-+		printf("[OK]\tThe written state was read back correctly.\n");
-+	else
-+		printf("[FAIL]\tThe write (or read) was incorrect.\n");
-+
-+	ptrace(PTRACE_DETACH, child, NULL, NULL);
-+	wait(&status);
-+	if (!WIFEXITED(status) || WEXITSTATUS(status))
-+		err(1, "PTRACE_DETACH");
-+
-+	free(xbuf);
-+}
--- 
-2.17.1
-
+> +        "name": "Delete CAKE with conservative and ingress flag",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+> +            "$TC qdisc add dev $DUMMY handle 1: root cake conservative ingress"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash ingress no-ack-filter split-gso rtt 100ms atm overhead 48",
+> +        "matchCount": "0",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2342",
+> +        "name": "Replace CAKE with mpu",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+> +            "$TC qdisc add dev $DUMMY handle 1: root cake overhead 128 mpu 256"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root cake mpu 128",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms noatm overhead 128 mpu 128",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "2313",
+> +        "name": "Change CAKE with mpu",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+> +            "$TC qdisc add dev $DUMMY handle 1: root cake overhead 128 mpu 256"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root cake mpu 128",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms noatm overhead 128 mpu 128",
+> +        "matchCount": "1",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    },
+> +    {
+> +        "id": "4365",
+> +        "name": "Show CAKE class",
+> +        "category": [
+> +            "qdisc",
+> +            "cake"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake",
+> +        "expExitCode": "0",
+> +        "verifyCmd": "$TC class show dev $DUMMY",
+> +        "matchPattern": "class cake",
+> +        "matchCount": "0",
+> +        "teardown": [
+> +            "$TC qdisc del dev $DUMMY handle 1: root",
+> +            "$IP link del dev $DUMMY type dummy"
+> +        ]
+> +    }
+> +]
+> --
+> 2.17.1
+>
