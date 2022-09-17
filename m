@@ -2,146 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625865BB6E2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Sep 2022 09:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0985BB758
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Sep 2022 10:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiIQHPf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 17 Sep 2022 03:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S229483AbiIQI5p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 17 Sep 2022 04:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiIQHPb (ORCPT
+        with ESMTP id S229517AbiIQI5p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 17 Sep 2022 03:15:31 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A952E3DBD0;
-        Sat, 17 Sep 2022 00:15:30 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so1865513pjq.3;
-        Sat, 17 Sep 2022 00:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date;
-        bh=euiEboSX4sdbeq9UmO12nvx8uEAMFtLZgxLVQeziaMM=;
-        b=HlDkWDLtMRywKdOKQmpeW5A+Q5bj6Cui32N7zuzHb17bwiyg2C+8ioFKvjm+7JmTC3
-         vd60jGNsfAG20BL8ZbC/C/lvToJLVupK3xLf1MlbQrLC5lqiAbX7/IyIhJ/XBhG7vW+S
-         ouMufuuQEenPqxykeiBRlQyGoKUvBBAzSpGOBZ41pWdHESLhg1SCXWd9D2JkRRgPtnDs
-         5hK7SmWFCqhMbryVHn3I4e6OeI503DLjoLjg0+LFzK+ngelEZFl6vub4PlV8WH0or4vE
-         WEO2ma7CkG2EL6jmEu7SGWDmRRwqLEWuvME+JG56c+6cmXFHeB834x0UJsbFBsKI9K6Z
-         zW2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=euiEboSX4sdbeq9UmO12nvx8uEAMFtLZgxLVQeziaMM=;
-        b=05GfCM2SnF5Ec+3zImiHrAFTElJuUNDQdI4WLPsp+RTcMGEpqRRo2rTwsC7KyN4EEK
-         3sIuDTIlq69IGauym8ezXlgwm7BsKSL7A5CLtIFlmACYzMm7H0mRYnlnmZJRucxo4/ms
-         E7W/ZhXjYEOOwD05qCzN6S5WuZ7K/fEIVZFAasAirfTAgJE1u4ny0v0lqA1Ma5E0V1P4
-         jl7lxsM5J2zeBeqmoLyzQL1XYi/kD/ZmLF72Y9juGsCK9vtEtHLCHyX+6Eu0gT1amkyM
-         Etw85/fx4fY5qmcacFtGgPuiJp87Z5+3nF62/ULz1mhMyUt7oApeX69A74Mb1Gv+vQOx
-         zpVg==
-X-Gm-Message-State: ACrzQf3cT/nirU+ahuuK6/x+hshROGnDVRsz/byWGPwryzdMKoI5OwMX
-        C/kvLKHebMBopAaF4BjdAeN5QbonCvc=
-X-Google-Smtp-Source: AMsMyM7HJcgHweGOWmpLFyDkTHHlATOBWe+dMv9CzetA3a6U53V746dEsWDsUM4gjqiMcMKHuIWEeA==
-X-Received: by 2002:a17:902:c245:b0:178:3912:f1fe with SMTP id 5-20020a170902c24500b001783912f1femr3491026plg.13.1663398929823;
-        Sat, 17 Sep 2022 00:15:29 -0700 (PDT)
-Received: from localhost.localdomain (KD027092233113.ppp-bb.dion.ne.jp. [27.92.233.113])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170902d50600b0016c0c82e85csm16327792plg.75.2022.09.17.00.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Sep 2022 00:15:29 -0700 (PDT)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        akinobu.mita@gmail.com, corbet@lwn.net, david@redhat.com,
-        osalvador@suse.de, shuah@kernel.org,
-        Zhao Gongyi <zhaogongyi@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>
-Subject: [PATCH -v2] lib/notifier-error-inject: fix error when writing errno to debugfs file
-Date:   Sat, 17 Sep 2022 16:14:27 +0900
-Message-Id: <20220917071427.28499-1-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 17 Sep 2022 04:57:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C32357D5
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Sep 2022 01:57:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D43AB80C85
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Sep 2022 08:57:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0CCC43141
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Sep 2022 08:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663405060;
+        bh=f3slc4i9BYX5T9bjmWc1W8M30gcMk6SgVO5v7uCsOG4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qzrKZAxT8kjbjTev6ieIzRpxN0KnSYywMKsWjp7RW8ytVhamz8lmgIcWw2nvn4EX/
+         LAf278dfGcctTT8fcV8eiAGgYsXD06LZG5nX6BJbeabyYVrI/fi5qQ9Vv1OFuXpn1V
+         USq97a28C7QRdXaafDvNjQJXmR/k5e6tTDtolx7boaYJR1eh4+DONDiWyFUXRhdb6M
+         KI0U4kJw8MxmM1XD1uzOiVBLOF1fTLicl64Fkm5bhyAJmFMONwdVmNrNT8cnL9V63L
+         /ESi/aminhz93tVQt7H4ewvNrsKfJ7wrlpcPhdcs4sUYMjc5Cw60APMh7xoLljgyGn
+         jJt6yR9cqFzpg==
+Received: by mail-vs1-f41.google.com with SMTP id h1so24987350vsr.11
+        for <linux-kselftest@vger.kernel.org>; Sat, 17 Sep 2022 01:57:40 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1nwjCG0j9ny339qsbzUQmMBZtpcapWzD66BwWUYcuEhmcCHQrZ
+        RoftUKAnsdKhV2JJGup2xHpXzmS/eoMA9EnZRsI=
+X-Google-Smtp-Source: AMsMyM6slZBp83XRzKzz4BqTO6KyzJF4vLne1cUbZg89vPxp4wwbRsOA/XqmgO14SVdYK6HbZWwYpV0SSYLUTwQu/ao=
+X-Received: by 2002:a05:6102:1481:b0:39a:67f5:3096 with SMTP id
+ d1-20020a056102148100b0039a67f53096mr3362686vsv.70.1663405059677; Sat, 17 Sep
+ 2022 01:57:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220903095507.3425208-1-chenhuacai@loongson.cn>
+In-Reply-To: <20220903095507.3425208-1-chenhuacai@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 17 Sep 2022 16:57:27 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4Rn0vQpD5PA8iGHPHLYw1tReNzQM4dps9YoK=u7YNY3Q@mail.gmail.com>
+Message-ID: <CAAhV-H4Rn0vQpD5PA8iGHPHLYw1tReNzQM4dps9YoK=u7YNY3Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] tools: Add LoongArch build infrastructure
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Will Drewry <wad@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, loongarch@lists.linux.dev,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The simple attribute files do not accept a negative value since the
-commit 488dac0c9237 ("libfs: fix error cast of negative value in
-simple_attr_write()"), so we can no longer use DEFINE_SIMPLE_ATTRIBUTE() to
-define a file operations for errno value.
+Ping?
 
-Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
-Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
-v2: Fix Reported-by line
-
- lib/notifier-error-inject.c | 38 ++++++++++++++++++++++++++++++-------
- 1 file changed, 31 insertions(+), 7 deletions(-)
-
-diff --git a/lib/notifier-error-inject.c b/lib/notifier-error-inject.c
-index 21016b32d313..30ec41f58d53 100644
---- a/lib/notifier-error-inject.c
-+++ b/lib/notifier-error-inject.c
-@@ -3,20 +3,44 @@
- 
- #include "notifier-error-inject.h"
- 
--static int debugfs_errno_set(void *data, u64 val)
-+static int notifier_err_errno_show(struct seq_file *m, void *data)
- {
--	*(int *)data = clamp_t(int, val, -MAX_ERRNO, 0);
-+	int *value = m->private;
-+
-+	seq_printf(m, "%d\n", *value);
-+
- 	return 0;
- }
- 
--static int debugfs_errno_get(void *data, u64 *val)
-+static int notifier_err_errno_open(struct inode *inode, struct file *file)
- {
--	*val = *(int *)data;
--	return 0;
-+	return single_open(file, notifier_err_errno_show, inode->i_private);
-+}
-+
-+static ssize_t notifier_err_errno_write(struct file *file, const char __user *ubuf, size_t len,
-+					loff_t *offp)
-+{
-+	struct seq_file *m = file->private_data;
-+	int *value = m->private;
-+	int ret;
-+
-+	ret = kstrtoint_from_user(ubuf, len, 0, value);
-+	if (ret)
-+		return ret;
-+
-+	*value = clamp(*value, -MAX_ERRNO, 0);
-+
-+	return len;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(fops_errno, debugfs_errno_get, debugfs_errno_set,
--			"%lld\n");
-+static const struct file_operations fops_errno = {
-+	.owner = THIS_MODULE,
-+	.open = notifier_err_errno_open,
-+	.read = seq_read,
-+	.write = notifier_err_errno_write,
-+	.llseek = seq_lseek,
-+	.release = single_release,
-+};
- 
- static struct dentry *debugfs_create_errno(const char *name, umode_t mode,
- 				struct dentry *parent, int *value)
--- 
-2.34.1
-
+On Sat, Sep 3, 2022 at 5:55 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> We will add tools support for LoongArch (bpf, perf, objtool, etc.), add
+> build infrastructure and common headers for preparation.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  tools/arch/loongarch/include/uapi/asm/bitsperlong.h |  9 +++++++++
+>  tools/scripts/Makefile.arch                         | 11 ++++++++++-
+>  2 files changed, 19 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
+>
+> diff --git a/tools/arch/loongarch/include/uapi/asm/bitsperlong.h b/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
+> new file mode 100644
+> index 000000000000..d4e32b3d4843
+> --- /dev/null
+> +++ b/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef __ASM_LOONGARCH_BITSPERLONG_H
+> +#define __ASM_LOONGARCH_BITSPERLONG_H
+> +
+> +#define __BITS_PER_LONG (__SIZEOF_POINTER__ * 8)
+> +
+> +#include <asm-generic/bitsperlong.h>
+> +
+> +#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
+> diff --git a/tools/scripts/Makefile.arch b/tools/scripts/Makefile.arch
+> index 0c6c7f456887..1c72d07cb9fe 100644
+> --- a/tools/scripts/Makefile.arch
+> +++ b/tools/scripts/Makefile.arch
+> @@ -5,7 +5,7 @@ HOSTARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+>                                    -e s/s390x/s390/ -e s/parisc64/parisc/ \
+>                                    -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+>                                    -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+> -                                  -e s/riscv.*/riscv/)
+> +                                  -e s/riscv.*/riscv/ -e s/loongarch.*/loongarch/)
+>
+>  ifndef ARCH
+>  ARCH := $(HOSTARCH)
+> @@ -34,6 +34,15 @@ ifeq ($(ARCH),sh64)
+>         SRCARCH := sh
+>  endif
+>
+> +# Additional ARCH settings for loongarch
+> +ifeq ($(ARCH),loongarch32)
+> +       SRCARCH := loongarch
+> +endif
+> +
+> +ifeq ($(ARCH),loongarch64)
+> +       SRCARCH := loongarch
+> +endif
+> +
+>  LP64 := $(shell echo __LP64__ | ${CC} ${CFLAGS} -E -x c - | tail -n 1)
+>  ifeq ($(LP64), 1)
+>    IS_64_BIT := 1
+> --
+> 2.31.1
+>
+>
