@@ -2,68 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738225BB3A1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Sep 2022 22:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106985BB564
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Sep 2022 03:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiIPUoQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 16 Sep 2022 16:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
+        id S229851AbiIQBsm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Sep 2022 21:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiIPUoP (ORCPT
+        with ESMTP id S229889AbiIQBsk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 16 Sep 2022 16:44:15 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CBD7FF99
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:44:13 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id o184so7547404oif.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Sep 2022 13:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=qaqaEny/sBPOd8+H9ejVkeT0pJ935p7TgqoAVrkLtAA=;
-        b=sTWPE3exqk4jUDtHu/Cn7kRBLUQSV7g56RWxn1YZCAXbpPVuM5aWnCt57tKV9Q9iLa
-         IyAPIQq3Prwu+8i8sXSOY3+z9xtXVeBibSm5XyUQh4MFwYCC+fP5o6K99yVAbthCIvkD
-         XtutQuFMVROePQ2j4LT/vAGr8HSlPOjXGxdxrStzH70SVJB8DiYr6nQSEQPN6v/4HCa3
-         CxfC8UuT7d6YGLJTzaBc28uqwaWeO7UWCrxToX1XvThjxpqzNBpxbD3ns/LNDR+elSt7
-         huOuoZ/n4c1kB3msk8XYrjjtWpxxEOZYGPfamxSxp2OvciZ6Yrpnzu8+WqA6AxKThhuF
-         5B8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=qaqaEny/sBPOd8+H9ejVkeT0pJ935p7TgqoAVrkLtAA=;
-        b=lP+nWxh64hb7TSERNGbIYomZFdqla4BO1LFV6ekCs5htzaby5DLZ7dpGSW0UoU58fI
-         gJERQUcqPspZGPCvqKjT3wzooqbDXP71CGVE5AY4GXOWPIwLOr3bQE+f27XsyqpaC3WF
-         gYMp0krF3adMir8JAtRB9VXpSgaf+ywjaRpaI+Ab5HkgKTbBHQauCmgshPRxuREUa38m
-         oiKhWECA/0WKmeYzFoK+1+klFIMxnscnBwnng8aReWceBDhPgZWf2hXdkwPrxfc31+iE
-         uaJCaaxL9+dbX/wp3wKVDCRzn4I0Pecsv9otlIwzG+mBWoVLGx2PvBv6fSplsLqK3ai4
-         dTlg==
-X-Gm-Message-State: ACrzQf2PL/Od5XC8/oC8nSUq4vBFbVrt9EKsJ5uWPyC4dZzVzqkOLWra
-        6wK8kZbMfHBXKwjp9bZtZWLcKEHQyfebSeFCcjt+Qg==
-X-Google-Smtp-Source: AMsMyM4yZdDj6SY4GY95qBGV1CZ7ysOz2AHSb6E8E6gzVuyU3ARh8P4KVgiCA8iRMSGQGUXTkgfgy8psJviemq+aP9Q=
-X-Received: by 2002:a05:6808:21a3:b0:345:3202:e2a1 with SMTP id
- be35-20020a05680821a300b003453202e2a1mr3256163oib.268.1663361053225; Fri, 16
- Sep 2022 13:44:13 -0700 (PDT)
+        Fri, 16 Sep 2022 21:48:40 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A870FA99DF;
+        Fri, 16 Sep 2022 18:48:37 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTv1L5TWzzBsMf;
+        Sat, 17 Sep 2022 09:46:30 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 17 Sep 2022 09:48:34 +0800
+Message-ID: <2bcd7b7d-c6d5-e123-0d3c-07f6b9274e88@huawei.com>
+Date:   Sat, 17 Sep 2022 09:48:34 +0800
 MIME-Version: 1.0
-References: <20220916030544.228274-1-shaozhengchao@huawei.com> <20220916030544.228274-14-shaozhengchao@huawei.com>
-In-Reply-To: <20220916030544.228274-14-shaozhengchao@huawei.com>
-From:   Victor Nogueira <victor@mojatatu.com>
-Date:   Fri, 16 Sep 2022 17:44:02 -0300
-Message-ID: <CA+NMeC852sL-PRYvtEZEe463Y-uBxLKEbAZuJE8XesW3A7_wog@mail.gmail.com>
-Subject: Re: [PATCH net-next 13/18] selftests/tc-testings: add selftests for
- netem qdisc
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, cake@lists.bufferbloat.net,
-        linux-kselftest@vger.kernel.org, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        toke@toke.dk, vinicius.gomes@intel.com, stephen@networkplumber.org,
-        shuah@kernel.org, zhijianx.li@intel.com, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH net-next 03/18] selftests/tc-testings: add selftests for
+ cake qdisc
+To:     Victor Nogueira <victor@mojatatu.com>
+CC:     <netdev@vger.kernel.org>, <cake@lists.bufferbloat.net>,
+        <linux-kselftest@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <toke@toke.dk>, <vinicius.gomes@intel.com>,
+        <stephen@networkplumber.org>, <shuah@kernel.org>,
+        <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>
+References: <20220916030544.228274-1-shaozhengchao@huawei.com>
+ <20220916030544.228274-4-shaozhengchao@huawei.com>
+ <CA+NMeC935wcGnHGQ=-PmSuLjUOx+r5g2LVJ5-8t-8o_V5hjrNQ@mail.gmail.com>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <CA+NMeC935wcGnHGQ=-PmSuLjUOx+r5g2LVJ5-8t-8o_V5hjrNQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,412 +58,543 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
-<shaozhengchao@huawei.com> wrote:
->
-> Test cb28: Create NETEM with default setting
-> Test a089: Create NETEM with limit flag
-> Test 3449: Create NETEM with delay time
-> Test 3782: Create NETEM with distribution and corrupt flag
-> Test a932: Create NETEM with distribution and duplicate flag
-> Test e01a: Create NETEM with distribution and loss state flag
-> Test ba29: Create NETEM with loss gemodel flag
-> Test 0492: Create NETEM with reorder flag
-> Test 7862: Create NETEM with rate limit
-> Test 7235: Create NETEM with multiple slot rate
-> Test 5439: Create NETEM with multiple slot setting
-> Test 5029: Change NETEM with loss state
-> Test 3785: Replace NETEM with delay time
-> Test 4502: Delete NETEM with handle
-> Test 0785: Show NETEM class
->
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
->  .../tc-testing/tc-tests/qdiscs/netem.json     | 372 ++++++++++++++++++
->  1 file changed, 372 insertions(+)
->  create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
->
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
-> new file mode 100644
-> index 000000000000..c8ce7883bd9f
-> --- /dev/null
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
-> @@ -0,0 +1,372 @@
-> +[
-> +    {
-> +        "id": "cb28",
-> +        "name": "Create NETEM with default setting",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ limit",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "a089",
-> +        "name": "Create NETEM with limit flag",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem limit 200",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ limit 200",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "3449",
-> +        "name": "Create NETEM with delay time",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "3782",
-> +        "name": "Create NETEM with distribution and corrupt flag",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal corrupt 1%",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms corrupt 1%",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "a932",
-> +        "name": "Create NETEM with distribution and duplicate flag",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal duplicate 1%",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms duplicate 1%",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "a932",
 
-Be careful, you are using ID a932 in the previous test case.
 
-> +        "name": "Create NETEM with distribution and loss flag",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution pareto loss 1%",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms loss 1%",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "e01a",
-> +        "name": "Create NETEM with distribution and loss state flag",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution paretonormal loss state 1",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms loss state p13 1% p31 99% p32 0% p23 100% p14 0%",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "ba29",
-> +        "name": "Create NETEM with loss gemodel flag",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem loss gemodel 1%",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*loss gemodel p 1%",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "0492",
-> +        "name": "Create NETEM with reorder flag",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms reorder 2% gap 100",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*reorder 2%",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "7862",
-> +        "name": "Create NETEM with rate limit",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem rate 20000",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*rate 20Kbit",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "7235",
-> +        "name": "Create NETEM with multiple slot rate",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem slot 10 200 packets 2000 bytes 9000",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*slot 10ns 200ns packets 2000 bytes 9000",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "5439",
-> +        "name": "Create NETEM with multiple slot setting",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem slot distribution pareto 1ms 0.1ms",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*slot distribution 1ms 100us",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "5029",
-> +        "name": "Change NETEM with loss state",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true",
-> +            "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal loss 1%"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal loss 2%",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*loss 2%",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "3785",
-> +        "name": "Replace NETEM with delay time",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true",
-> +            "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal loss 1%"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root netem delay 200ms 10ms",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 200ms  10ms",
-> +        "matchCount": "1",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "4502",
-> +        "name": "Delete NETEM with handle",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true",
-> +            "$TC qdisc add dev $DUMMY handle 1: root netem delay 100ms 10ms distribution normal"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-> +        "matchPattern": "qdisc netem 1: root refcnt [0-9]+ .*delay 100ms  10ms",
-> +        "matchCount": "0",
-> +        "teardown": [
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    },
-> +    {
-> +        "id": "0785",
-> +        "name": "Show NETEM class",
-> +        "category": [
-> +            "qdisc",
-> +            "netem"
-> +        ],
-> +        "plugins": {
-> +            "requires": "nsPlugin"
-> +        },
-> +        "setup": [
-> +            "$IP link add dev $DUMMY type dummy || /bin/true"
-> +        ],
-> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root netem",
-> +        "expExitCode": "0",
-> +        "verifyCmd": "$TC class show dev $DUMMY",
-> +        "matchPattern": "class netem 1:",
-> +        "matchCount": "0",
-> +        "teardown": [
-> +            "$TC qdisc del dev $DUMMY handle 1: root",
-> +            "$IP link del dev $DUMMY type dummy"
-> +        ]
-> +    }
-> +]
-> --
-> 2.17.1
->
+On 2022/9/17 4:32, Victor Nogueira wrote:
+> On Fri, Sep 16, 2022 at 12:04 AM Zhengchao Shao
+> <shaozhengchao@huawei.com> wrote:
+>>
+>> Test 1212: Create CAKE with default setting
+>> Test 3241: Create CAKE with bandwidth limit
+>> Test c940: Create CAKE with autorate-ingress flag
+>> Test 2310: Create CAKE with rtt time
+>> Test 2385: Create CAKE with besteffort flag
+>> Test a032: Create CAKE with diffserv8 flag
+>> Test 2349: Create CAKE with diffserv4 flag
+>> Test 8472: Create CAKE with flowblind flag
+>> Test 2341: Create CAKE with dsthost and nat flag
+>> Test 5134: Create CAKE with wash flag
+>> Test 2302: Create CAKE with flowblind and no-split-gso flag
+>> Test 0768: Create CAKE with dual-srchost and ack-filter flag
+>> Test 0238: Create CAKE with dual-dsthost and ack-filter-aggressive flag
+>> Test 6573: Create CAKE with memlimit and ptm flag
+>> Test 2436: Create CAKE with fwmark and atm flag
+>> Test 3984: Create CAKE with overhead and mpu
+>> Test 2342: Create CAKE with conservative and ingress flag
+>> Test 2313: Change CAKE with mpu
+>> Test 4365: Show CAKE class
+>>
+>> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+>> ---
+>>   .../tc-testing/tc-tests/qdiscs/cake.json      | 488 ++++++++++++++++++
+>>   1 file changed, 488 insertions(+)
+>>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json
+>>
+>> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json
+>> new file mode 100644
+>> index 000000000000..11ca18bab721
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json
+>> @@ -0,0 +1,488 @@
+>> +[
+>> +    {
+>> +        "id": "1212",
+>> +        "name": "Create CAKE with default setting",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "3241",
+>> +        "name": "Create CAKE with bandwidth limit",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake bandwidth 1000",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth 1Kbit diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "c940",
+>> +        "name": "Create CAKE with autorate-ingress flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake autorate-ingress",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited autorate-ingress diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2310",
+>> +        "name": "Create CAKE with rtt time",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake rtt 200",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 200us raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2385",
+>> +        "name": "Create CAKE with besteffort flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake besteffort",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited besteffort triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "a032",
+>> +        "name": "Create CAKE with diffserv8 flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake diffserv8",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv8 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2349",
+>> +        "name": "Create CAKE with diffserv4 flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake diffserv4",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv4 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "8472",
+>> +        "name": "Create CAKE with flowblind flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake flowblind",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 flowblind nonat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2341",
+>> +        "name": "Create CAKE with dsthost and nat flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake dsthost nat",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 dsthost nat nowash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "5134",
+>> +        "name": "Create CAKE with wash flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake hosts wash",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 hosts nonat wash no-ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2302",
+>> +        "name": "Create CAKE with flowblind and no-split-gso flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake flowblind no-split-gso",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 flowblind nonat nowash no-ack-filter no-split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "0768",
+>> +        "name": "Create CAKE with dual-srchost and ack-filter flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake dual-srchost ack-filter",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 dual-srchost nonat nowash ack-filter split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "0238",
+>> +        "name": "Create CAKE with dual-dsthost and ack-filter-aggressive flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake dual-dsthost ack-filter-aggressive",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 dual-dsthost nonat nowash ack-filter-aggressive split-gso rtt 100ms raw overhead",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "6573",
+>> +        "name": "Create CAKE with memlimit and ptm flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake memlimit 10000 ptm",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw ptm overhead 0 memlimit 10000b",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2436",
+>> +        "name": "Create CAKE with fwmark and atm flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake fwmark 8 atm",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms raw atm overhead 0 fwmark 0x8",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "3984",
+>> +        "name": "Create CAKE with overhead and mpu",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake overhead 128 mpu 256",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms noatm overhead 128 mpu 256",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2342",
+>> +        "name": "Create CAKE with conservative and ingress flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake conservative ingress",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash ingress no-ack-filter split-gso rtt 100ms atm overhead 48",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2342",
+> 
+> Be careful, you are using ID 2342 for 3 test cases in this file.
+> Each test case must have a unique ID.
+> 
+> 
+> 
+Hi Victor:
+	Thank you for your review. My mistake. I will check more
+carefully, and test again. Then send V2.
+
+Zhengchao Shao
+>> +        "name": "Delete CAKE with conservative and ingress flag",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+>> +            "$TC qdisc add dev $DUMMY handle 1: root cake conservative ingress"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash ingress no-ack-filter split-gso rtt 100ms atm overhead 48",
+>> +        "matchCount": "0",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2342",
+>> +        "name": "Replace CAKE with mpu",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+>> +            "$TC qdisc add dev $DUMMY handle 1: root cake overhead 128 mpu 256"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root cake mpu 128",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms noatm overhead 128 mpu 128",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "2313",
+>> +        "name": "Change CAKE with mpu",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true",
+>> +            "$TC qdisc add dev $DUMMY handle 1: root cake overhead 128 mpu 256"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root cake mpu 128",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC qdisc show dev $DUMMY",
+>> +        "matchPattern": "qdisc cake 1: root refcnt [0-9]+ bandwidth unlimited diffserv3 triple-isolate nonat nowash no-ack-filter split-gso rtt 100ms noatm overhead 128 mpu 128",
+>> +        "matchCount": "1",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    },
+>> +    {
+>> +        "id": "4365",
+>> +        "name": "Show CAKE class",
+>> +        "category": [
+>> +            "qdisc",
+>> +            "cake"
+>> +        ],
+>> +        "plugins": {
+>> +            "requires": "nsPlugin"
+>> +        },
+>> +        "setup": [
+>> +            "$IP link add dev $DUMMY type dummy || /bin/true"
+>> +        ],
+>> +        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root cake",
+>> +        "expExitCode": "0",
+>> +        "verifyCmd": "$TC class show dev $DUMMY",
+>> +        "matchPattern": "class cake",
+>> +        "matchCount": "0",
+>> +        "teardown": [
+>> +            "$TC qdisc del dev $DUMMY handle 1: root",
+>> +            "$IP link del dev $DUMMY type dummy"
+>> +        ]
+>> +    }
+>> +]
+>> --
+>> 2.17.1
+>>
