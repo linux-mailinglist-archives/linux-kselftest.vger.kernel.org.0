@@ -2,26 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8DA5BB662
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Sep 2022 07:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611B35BB664
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Sep 2022 07:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiIQFCS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 17 Sep 2022 01:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        id S229662AbiIQFC2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 17 Sep 2022 01:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiIQFCP (ORCPT
+        with ESMTP id S229635AbiIQFC1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 17 Sep 2022 01:02:15 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55A6B516A;
-        Fri, 16 Sep 2022 22:02:14 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MTzJ03vtzzXdVx;
-        Sat, 17 Sep 2022 12:59:28 +0800 (CST)
+        Sat, 17 Sep 2022 01:02:27 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B80B5E5A;
+        Fri, 16 Sep 2022 22:02:25 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MTzJy6n50zBsP8;
+        Sat, 17 Sep 2022 13:00:18 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
  (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 17 Sep
- 2022 13:02:12 +0800
+ 2022 13:02:23 +0800
 From:   Zhengchao Shao <shaozhengchao@huawei.com>
 To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
@@ -31,9 +31,9 @@ To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <victor@mojatatu.com>
 CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
         <yuehaibing@huawei.com>, <shaozhengchao@huawei.com>
-Subject: [PATCH net-next,v2 07/18] selftests/tc-testings: add selftests for dsmark qdisc
-Date:   Sat, 17 Sep 2022 13:03:55 +0800
-Message-ID: <20220917050355.131431-1-shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v2 08/18] selftests/tc-testings: add selftests for fq_codel qdisc
+Date:   Sat, 17 Sep 2022 13:04:07 +0800
+Message-ID: <20220917050407.131550-1-shaozhengchao@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -49,32 +49,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test 6345: Create DSMARK with default setting
-Test 3462: Create DSMARK with default_index setting
-Test ca95: Create DSMARK with set_tc_index flag
-Test a950: Create DSMARK with multiple setting
-Test 4092: Delete DSMARK with handle
-Test 5930: Show DSMARK class
+Test 4957: Create FQ_CODEL with default setting
+Test 7621: Create FQ_CODEL with limit setting
+Test 6871: Create FQ_CODEL with memory_limit setting
+Test 5636: Create FQ_CODEL with target setting
+Test 630a: Create FQ_CODEL with interval setting
+Test 4324: Create FQ_CODEL with quantum setting
+Test b190: Create FQ_CODEL with noecn flag
+Test 5381: Create FQ_CODEL with ce_threshold setting
+Test c9d2: Create FQ_CODEL with drop_batch setting
+Test 523b: Create FQ_CODEL with multiple setting
+Test 9283: Replace FQ_CODEL with noecn setting
+Test 3459: Change FQ_CODEL with limit setting
+Test 0128: Delete FQ_CODEL with handle
+Test 0435: Show FQ_CODEL class
 
 Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- .../tc-testing/tc-tests/qdiscs/dsmark.json    | 140 ++++++++++++++++++
- 1 file changed, 140 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json
+ .../tc-testing/tc-tests/qdiscs/fq_codel.json  | 326 ++++++++++++++++++
+ 1 file changed, 326 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
 new file mode 100644
-index 000000000000..c030795f9c37
+index 000000000000..a65266357a9a
 --- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json
-@@ -0,0 +1,140 @@
++++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
+@@ -0,0 +1,326 @@
 +[
 +    {
-+        "id": "6345",
-+        "name": "Create DSMARK with default setting",
++        "id": "4957",
++        "name": "Create FQ_CODEL with default setting",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
++            "fq_codel"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -82,10 +90,10 @@ index 000000000000..c030795f9c37
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -93,11 +101,11 @@ index 000000000000..c030795f9c37
 +        ]
 +    },
 +    {
-+        "id": "3462",
-+        "name": "Create DSMARK with default_index setting",
++        "id": "7621",
++        "name": "Create FQ_CODEL with limit setting",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
++            "fq_codel"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -105,10 +113,10 @@ index 000000000000..c030795f9c37
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024 default_index 512",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400 default_index 0x0200",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -116,11 +124,11 @@ index 000000000000..c030795f9c37
 +        ]
 +    },
 +    {
-+        "id": "ca95",
-+        "name": "Create DSMARK with set_tc_index flag",
++        "id": "6871",
++        "name": "Create FQ_CODEL with memory_limit setting",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
++            "fq_codel"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -128,10 +136,10 @@ index 000000000000..c030795f9c37
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024 set_tc_index",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel memory_limit 100000",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400 set_tc_index",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 100000b ecn drop_batch 64",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -139,11 +147,11 @@ index 000000000000..c030795f9c37
 +        ]
 +    },
 +    {
-+        "id": "a950",
-+        "name": "Create DSMARK with multiple setting",
++        "id": "5636",
++        "name": "Create FQ_CODEL with target setting",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
++            "fq_codel"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -151,10 +159,10 @@ index 000000000000..c030795f9c37
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024 default_index 1024 set_tc_index",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel target 2000",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400 default_index 0x0400 set_tc_index",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 2ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
 +        "matchCount": "1",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
@@ -162,34 +170,220 @@ index 000000000000..c030795f9c37
 +        ]
 +    },
 +    {
-+        "id": "4092",
-+        "name": "Delete DSMARK with handle",
++        "id": "630a",
++        "name": "Create FQ_CODEL with interval setting",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
++            "fq_codel"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel interval 5000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 5ms memory_limit 32Mb ecn drop_batch 64",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "4324",
++        "name": "Create FQ_CODEL with quantum setting",
++        "category": [
++            "qdisc",
++            "fq_codel"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel quantum 9000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum 9000 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "b190",
++        "name": "Create FQ_CODEL with noecn flag",
++        "category": [
++            "qdisc",
++            "fq_codel"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel noecn",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb drop_batch 64",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "5381",
++        "name": "Create FQ_CODEL with ce_threshold setting",
++        "category": [
++            "qdisc",
++            "fq_codel"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel ce_threshold 1024000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms ce_threshold 1.02s interval 100ms memory_limit 32Mb ecn drop_batch 64",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "c9d2",
++        "name": "Create FQ_CODEL with drop_batch setting",
++        "category": [
++            "qdisc",
++            "fq_codel"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel drop_batch 100",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 10240p flows 1024 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "523b",
++        "name": "Create FQ_CODEL with multiple setting",
++        "category": [
++            "qdisc",
++            "fq_codel"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true"
++        ],
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "9283",
++        "name": "Replace FQ_CODEL with noecn setting",
++        "category": [
++            "qdisc",
++            "fq_codel"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
 +        },
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024 default_index 1024"
++            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
++        ],
++        "cmdUnderTest": "$TC qdisc replace dev $DUMMY handle 1: root fq_codel noecn",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb drop_batch 100",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "3459",
++        "name": "Change FQ_CODEL with limit setting",
++        "category": [
++            "qdisc",
++            "fq_codel"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
++        ],
++        "cmdUnderTest": "$TC qdisc change dev $DUMMY handle 1: root fq_codel limit 2000",
++        "expExitCode": "0",
++        "verifyCmd": "$TC qdisc show dev $DUMMY",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 2000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 100",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY handle 1: root",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    },
++    {
++        "id": "0128",
++        "name": "Delete FQ_CODEL with handle",
++        "category": [
++            "qdisc",
++            "fq_codel"
++        ],
++        "plugins": {
++            "requires": "nsPlugin"
++        },
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY handle 1: root fq_codel limit 1000 flows 256 drop_batch 100"
 +        ],
 +        "cmdUnderTest": "$TC qdisc del dev $DUMMY handle 1: root",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC qdisc show dev $DUMMY",
-+        "matchPattern": "qdisc dsmark 1: root refcnt [0-9]+ indices 0x0400",
++        "matchPattern": "qdisc fq_codel 1: root refcnt [0-9]+ limit 1000p flows 256 quantum.*target 5ms interval 100ms memory_limit 32Mb noecn drop_batch 100",
 +        "matchCount": "0",
 +        "teardown": [
 +            "$IP link del dev $DUMMY type dummy"
 +        ]
 +    },
 +    {
-+        "id": "5930",
-+        "name": "Show DSMARK class",
++        "id": "0435",
++        "name": "Show FQ_CODEL class",
 +        "category": [
 +            "qdisc",
-+            "dsmark"
++            "fq_codel"
 +        ],
 +        "plugins": {
 +            "requires": "nsPlugin"
@@ -197,10 +391,10 @@ index 000000000000..c030795f9c37
 +        "setup": [
 +            "$IP link add dev $DUMMY type dummy || /bin/true"
 +        ],
-+        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root dsmark indices 1024",
++        "cmdUnderTest": "$TC qdisc add dev $DUMMY handle 1: root fq_codel",
 +        "expExitCode": "0",
 +        "verifyCmd": "$TC class show dev $DUMMY",
-+        "matchPattern": "class dsmark 1:",
++        "matchPattern": "class fq_codel 1:",
 +        "matchCount": "0",
 +        "teardown": [
 +            "$TC qdisc del dev $DUMMY handle 1: root",
