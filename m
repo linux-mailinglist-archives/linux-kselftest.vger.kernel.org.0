@@ -2,129 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0985BB758
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Sep 2022 10:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC535BB8FB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Sep 2022 17:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbiIQI5p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 17 Sep 2022 04:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S229688AbiIQPLJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 17 Sep 2022 11:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiIQI5p (ORCPT
+        with ESMTP id S229612AbiIQPLI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 17 Sep 2022 04:57:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C32357D5
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Sep 2022 01:57:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D43AB80C85
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Sep 2022 08:57:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0CCC43141
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Sep 2022 08:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663405060;
-        bh=f3slc4i9BYX5T9bjmWc1W8M30gcMk6SgVO5v7uCsOG4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qzrKZAxT8kjbjTev6ieIzRpxN0KnSYywMKsWjp7RW8ytVhamz8lmgIcWw2nvn4EX/
-         LAf278dfGcctTT8fcV8eiAGgYsXD06LZG5nX6BJbeabyYVrI/fi5qQ9Vv1OFuXpn1V
-         USq97a28C7QRdXaafDvNjQJXmR/k5e6tTDtolx7boaYJR1eh4+DONDiWyFUXRhdb6M
-         KI0U4kJw8MxmM1XD1uzOiVBLOF1fTLicl64Fkm5bhyAJmFMONwdVmNrNT8cnL9V63L
-         /ESi/aminhz93tVQt7H4ewvNrsKfJ7wrlpcPhdcs4sUYMjc5Cw60APMh7xoLljgyGn
-         jJt6yR9cqFzpg==
-Received: by mail-vs1-f41.google.com with SMTP id h1so24987350vsr.11
-        for <linux-kselftest@vger.kernel.org>; Sat, 17 Sep 2022 01:57:40 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1nwjCG0j9ny339qsbzUQmMBZtpcapWzD66BwWUYcuEhmcCHQrZ
-        RoftUKAnsdKhV2JJGup2xHpXzmS/eoMA9EnZRsI=
-X-Google-Smtp-Source: AMsMyM6slZBp83XRzKzz4BqTO6KyzJF4vLne1cUbZg89vPxp4wwbRsOA/XqmgO14SVdYK6HbZWwYpV0SSYLUTwQu/ao=
-X-Received: by 2002:a05:6102:1481:b0:39a:67f5:3096 with SMTP id
- d1-20020a056102148100b0039a67f53096mr3362686vsv.70.1663405059677; Sat, 17 Sep
- 2022 01:57:39 -0700 (PDT)
+        Sat, 17 Sep 2022 11:11:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882772B183;
+        Sat, 17 Sep 2022 08:11:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663427465; x=1694963465;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Mg1mTmFu6agjQhhpCPwzyOWFWXDgCK6dpsoGBgS6IfY=;
+  b=YnAeC6BczgHEH+8ooHC96Ln+qcEZ2zN0G5RWycV9d3cZLYOmk34wJtX1
+   mf4GH4qL77P2piQNydgEnffNAm/3253WMStPhNK0KlsvxgEzEriamfZ74
+   yrNIe4sAobCha/uWGnfIcwlzzdan5LeEa/UcIgnxYZa8Zbq1wNHUtVinV
+   stPsoo9p5p7j3n1iN+gWVIHtted9KPPRLEq3WUisVWKzu/5vVS15q1ltD
+   lUAatXI19QYZFi8JryfpHmE0yATn2i9pX14UTiq41D9nJU1bg7YlQ4Rk3
+   aD6mpREJQbngAszLtRtFgwQqY0wkXoMaJy8MOdyzXhUApwMGHa4Z27n5Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10473"; a="296749028"
+X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
+   d="scan'208";a="296749028"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 08:11:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
+   d="scan'208";a="707071147"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Sep 2022 08:11:00 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZZTA-0000Qb-0C;
+        Sat, 17 Sep 2022 15:11:00 +0000
+Date:   Sat, 17 Sep 2022 23:10:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu
+Cc:     kbuild-all@lists.01.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, catalin.marinas@arm.com,
+        linux-kselftest@vger.kernel.org, bgardon@google.com,
+        shuah@kernel.org, corbet@lwn.net, maz@kernel.org,
+        drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com,
+        dmatlack@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        peterx@redhat.com, oliver.upton@linux.dev, shan.gavin@gmail.com
+Subject: Re: [PATCH v2 2/5] KVM: arm64: Enable ring-based dirty memory
+ tracking
+Message-ID: <202209180726.FLL69aKA-lkp@intel.com>
+References: <20220916045135.154505-3-gshan@redhat.com>
 MIME-Version: 1.0
-References: <20220903095507.3425208-1-chenhuacai@loongson.cn>
-In-Reply-To: <20220903095507.3425208-1-chenhuacai@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 17 Sep 2022 16:57:27 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Rn0vQpD5PA8iGHPHLYw1tReNzQM4dps9YoK=u7YNY3Q@mail.gmail.com>
-Message-ID: <CAAhV-H4Rn0vQpD5PA8iGHPHLYw1tReNzQM4dps9YoK=u7YNY3Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] tools: Add LoongArch build infrastructure
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Will Drewry <wad@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, loongarch@lists.linux.dev,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220916045135.154505-3-gshan@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ping?
+Hi Gavin,
 
-On Sat, Sep 3, 2022 at 5:55 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> We will add tools support for LoongArch (bpf, perf, objtool, etc.), add
-> build infrastructure and common headers for preparation.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  tools/arch/loongarch/include/uapi/asm/bitsperlong.h |  9 +++++++++
->  tools/scripts/Makefile.arch                         | 11 ++++++++++-
->  2 files changed, 19 insertions(+), 1 deletion(-)
->  create mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
->
-> diff --git a/tools/arch/loongarch/include/uapi/asm/bitsperlong.h b/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
-> new file mode 100644
-> index 000000000000..d4e32b3d4843
-> --- /dev/null
-> +++ b/tools/arch/loongarch/include/uapi/asm/bitsperlong.h
-> @@ -0,0 +1,9 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef __ASM_LOONGARCH_BITSPERLONG_H
-> +#define __ASM_LOONGARCH_BITSPERLONG_H
-> +
-> +#define __BITS_PER_LONG (__SIZEOF_POINTER__ * 8)
-> +
-> +#include <asm-generic/bitsperlong.h>
-> +
-> +#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
-> diff --git a/tools/scripts/Makefile.arch b/tools/scripts/Makefile.arch
-> index 0c6c7f456887..1c72d07cb9fe 100644
-> --- a/tools/scripts/Makefile.arch
-> +++ b/tools/scripts/Makefile.arch
-> @@ -5,7 +5,7 @@ HOSTARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
->                                    -e s/s390x/s390/ -e s/parisc64/parisc/ \
->                                    -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->                                    -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-> -                                  -e s/riscv.*/riscv/)
-> +                                  -e s/riscv.*/riscv/ -e s/loongarch.*/loongarch/)
->
->  ifndef ARCH
->  ARCH := $(HOSTARCH)
-> @@ -34,6 +34,15 @@ ifeq ($(ARCH),sh64)
->         SRCARCH := sh
->  endif
->
-> +# Additional ARCH settings for loongarch
-> +ifeq ($(ARCH),loongarch32)
-> +       SRCARCH := loongarch
-> +endif
-> +
-> +ifeq ($(ARCH),loongarch64)
-> +       SRCARCH := loongarch
-> +endif
-> +
->  LP64 := $(shell echo __LP64__ | ${CC} ${CFLAGS} -E -x c - | tail -n 1)
->  ifeq ($(LP64), 1)
->    IS_64_BIT := 1
-> --
-> 2.31.1
->
->
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvmarm/next linus/master v6.0-rc5 next-20220916]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gavin-Shan/KVM-arm64-Enable-ring-based-dirty-memory-tracking/20220916-125417
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220918/202209180726.FLL69aKA-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a1a4cd8f6a5e8927f800baff7d965870a1b7d7ba
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Gavin-Shan/KVM-arm64-Enable-ring-based-dirty-memory-tracking/20220916-125417
+        git checkout a1a4cd8f6a5e8927f800baff7d965870a1b7d7ba
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm64/kvm/../../../virt/kvm/dirty_ring.c:14:12: warning: no previous prototype for 'kvm_cpu_dirty_log_size' [-Wmissing-prototypes]
+      14 | int __weak kvm_cpu_dirty_log_size(void)
+         |            ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/kvm_cpu_dirty_log_size +14 arch/arm64/kvm/../../../virt/kvm/dirty_ring.c
+
+fb04a1eddb1a65 Peter Xu 2020-09-30  13  
+fb04a1eddb1a65 Peter Xu 2020-09-30 @14  int __weak kvm_cpu_dirty_log_size(void)
+fb04a1eddb1a65 Peter Xu 2020-09-30  15  {
+fb04a1eddb1a65 Peter Xu 2020-09-30  16  	return 0;
+fb04a1eddb1a65 Peter Xu 2020-09-30  17  }
+fb04a1eddb1a65 Peter Xu 2020-09-30  18  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
