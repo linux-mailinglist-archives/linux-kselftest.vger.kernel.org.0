@@ -2,70 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0205BC0E4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 03:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C0C5BC101
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 03:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiISBFo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 18 Sep 2022 21:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S229674AbiISB16 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 18 Sep 2022 21:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiISBFm (ORCPT
+        with ESMTP id S229652AbiISB15 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 18 Sep 2022 21:05:42 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFEC13EB2
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Sep 2022 18:05:41 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id x23-20020a056830409700b00655c6dace73so16551744ott.11
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Sep 2022 18:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=7Nln9o8+KgWXh20eCVhrCs8ZRIFITlFWDCJFyQHKKl4=;
-        b=HZ5JQstOdyCuVV963ZooQpoyIaPxFimUQrEC+R/gZH/lIHi1rSMy4XixtpzdjH8IVN
-         IVkMMP2OO0H5Buf8+jWiOlDZuJ9yy/8qCB66kindOVf71hZ6Yo8R9QQYGY1iQm+ZGU81
-         FqHdC+XWokAbMRaxDHY2l1b6vmGUV+dDxIeFYHKTRqj75hJKEeomm66Vy7FW3eM/p9Ff
-         wtJFjVqIbQLRnJrBdqirW73gj7lV4wzfrScnVjxYnhiLqduhq0zYWVH2pTJ12lkpcweD
-         qK/IWwvrYrL9gfVbcXH/IhdeQEtoIqODDuMh0QVqBjzHT7gpyDBoB4P/HvOalDqRlLC7
-         1n6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=7Nln9o8+KgWXh20eCVhrCs8ZRIFITlFWDCJFyQHKKl4=;
-        b=FH1g9yCi21H9ZbDLNwLYPpHpCmDd8V/SvcR9I+Uw/rVAwjfkGvTQ/RO1uYeWX/pGD0
-         4Kupjw3zfM4cfdnsVyE/Sd0LiiflnQIwue8Tt2vF5IsILDnxkC3ltuuI220shKwoYzWY
-         QC4breYPtSZ7pl2OQg725yfrnwvbOiuZlmWaCUQT5e6EKkDgoimGvXAs4haKtiLLt5yp
-         M6xUN35T1l7lINFIkqub5gLJzLK+Jt6yu+RMUyucECwLBn3aSBVsZFYrYZC9RLwoyvca
-         uDXx8H6pDNwR8vbxgni10g//dYdIz4a55jNv5uYsBBAGLcIaLngd/CBr1R2O1onJ6JNa
-         jouQ==
-X-Gm-Message-State: ACrzQf3skrKkmTctp6t1UfQJR/xLiFtCi5uWODkfLXnsWBTce5h3hxu1
-        3i4V0eQhgj6QW4kZmFGn6XbX5YZof0jsJk0QuxvoOA==
-X-Google-Smtp-Source: AMsMyM6OazjHldIhOvSyzPAGt9W76ixoFWTADxVnkP4jasV5XE9fsHajWSzioFh5T2jypjokFzRcCm/zA1Bu6QNAlv8=
-X-Received: by 2002:a9d:1b70:0:b0:658:cfeb:d221 with SMTP id
- l103-20020a9d1b70000000b00658cfebd221mr6955321otl.34.1663549540604; Sun, 18
- Sep 2022 18:05:40 -0700 (PDT)
+        Sun, 18 Sep 2022 21:27:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AA418382
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Sep 2022 18:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663550874;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mTlHJkSe2zwoVsxiCcbcUXVRXRosTOKrm+znhbWqwWI=;
+        b=jEltpuvKknpBGp2cG2u1cMyzrj1eg8rsEbnPgeJTzymA+xbTg4qpVQzwSDC8k1GqfwwpHV
+        EVDA875PpEGOdw3uImdznLxY5NikTzuCor4FOAi2MfF1hecXUISC+AsfZe43vtfjPREsDJ
+        zyzH/Ezs6zBMHF1v+FuEBZoqEpTAe+A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-464-Iy3PoTvROFe09ARVEqroCA-1; Sun, 18 Sep 2022 21:27:51 -0400
+X-MC-Unique: Iy3PoTvROFe09ARVEqroCA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 568FE85A583;
+        Mon, 19 Sep 2022 01:27:50 +0000 (UTC)
+Received: from [10.64.54.126] (vpn2-54-126.bne.redhat.com [10.64.54.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A6E5A40C6EC2;
+        Mon, 19 Sep 2022 01:27:42 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v2 2/5] KVM: arm64: Enable ring-based dirty memory
+ tracking
+To:     kernel test robot <lkp@intel.com>, kvmarm@lists.cs.columbia.edu
+Cc:     kbuild-all@lists.01.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, catalin.marinas@arm.com,
+        linux-kselftest@vger.kernel.org, bgardon@google.com,
+        shuah@kernel.org, corbet@lwn.net, maz@kernel.org,
+        drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com,
+        dmatlack@google.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        peterx@redhat.com, oliver.upton@linux.dev, shan.gavin@gmail.com
+References: <20220916045135.154505-3-gshan@redhat.com>
+ <202209180726.FLL69aKA-lkp@intel.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <fbf2bbe6-06d7-8e06-3f7f-04ca01d604c0@redhat.com>
+Date:   Mon, 19 Sep 2022 11:27:40 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <20220916020251.190097-1-shaozhengchao@huawei.com> <f0fa2b91-cebf-0997-1074-d1ba35bf77a9@mojatatu.com>
-In-Reply-To: <f0fa2b91-cebf-0997-1074-d1ba35bf77a9@mojatatu.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Sun, 18 Sep 2022 21:05:29 -0400
-Message-ID: <CAM0EoMmcjfjg+7RsMtW_4YWb+4ewACGW=YVtzOU0Xqh=Kk_K-g@mail.gmail.com>
-Subject: Re: [PATCH net-next,v4 0/9] refactor duplicate codes in the tc cls
- walk function
-To:     Victor Nogueira <victor@mojatatu.com>
-Cc:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <202209180726.FLL69aKA-lkp@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,32 +74,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 12:56 PM Victor Nogueira <victor@mojatatu.com> wrote:
->
->
-> On 15/09/2022 23:02, Zhengchao Shao wrote:
-> > The walk implementation of most tc cls modules is basically the same.
-> > That is, the values of count and skip are checked first. If count is
-> > greater than or equal to skip, the registered fn function is executed.
-> > Otherwise, increase the value of count. So the code can be refactored.
-> > Then use helper function to replace the code of each cls module in
-> > alphabetical order.
-> >
-> > The walk function is invoked during dump. Therefore, test cases related
-> >   to the tdc filter need to be added.
-> >
-> > Last, thanks to Jamal, Victor and Wang for their review.
-> >
-> > Add test cases locally and perform the test. The test results are listed
-> > below:
-> >
+On 9/18/22 1:10 AM, kernel test robot wrote:
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on kvm/queue]
+> [also build test WARNING on kvmarm/next linus/master v6.0-rc5 next-20220916]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Gavin-Shan/KVM-arm64-Enable-ring-based-dirty-memory-tracking/20220916-125417
+> base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220918/202209180726.FLL69aKA-lkp@intel.com/config)
+> compiler: aarch64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/a1a4cd8f6a5e8927f800baff7d965870a1b7d7ba
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Gavin-Shan/KVM-arm64-Enable-ring-based-dirty-memory-tracking/20220916-125417
+>          git checkout a1a4cd8f6a5e8927f800baff7d965870a1b7d7ba
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> arch/arm64/kvm/../../../virt/kvm/dirty_ring.c:14:12: warning: no previous prototype for 'kvm_cpu_dirty_log_size' [-Wmissing-prototypes]
+>        14 | int __weak kvm_cpu_dirty_log_size(void)
+>           |            ^~~~~~~~~~~~~~~~~~~~~~
+> 
+> 
 
->
-> Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-> Tested-by: Victor Nogueira <victor@mojatatu.com>
+[...]
 
-For the series:
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Thanks for reporting the issue. The weak function needn't to be overrided by
+ARM64. In v3, I will have a separate patch to fix the issue by moving its
+declaration to kvm_dirty_ring.h.
 
-cheers,
-jamal
+Thanks,
+Gavin
+
+
