@@ -2,100 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FFF5BD1FD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 18:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFB45BD390
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 19:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbiISQRO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Sep 2022 12:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S230378AbiISRYx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Sep 2022 13:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiISQRJ (ORCPT
+        with ESMTP id S229617AbiISRYv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Sep 2022 12:17:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85D02983A
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 09:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663604227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xn5fnqKtyryYA5w5sfE3wIiUTcmcdDi6qpfcSbkJ4Lw=;
-        b=R10g2q7MF069L96xyxjbx86o6FVyu4S0FAG/4+qRdbU1yYZ4JlzKbnSRyHeTPm5rOqWdi1
-        2V+mUuaLpQqlTNmjZcjsYiFLmIfLGQ/jP356MtQ0Ut6wX5Y3n+mUC7bzj7DZnCJHXMqrmf
-        nIAon8/sbTvv7sJfAxuar2nPyYQ+8Qo=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-228-0kFHq870M9Su2l73Ybwosw-1; Mon, 19 Sep 2022 12:17:05 -0400
-X-MC-Unique: 0kFHq870M9Su2l73Ybwosw-1
-Received: by mail-qk1-f197.google.com with SMTP id v15-20020a05620a0f0f00b006ceab647023so10184445qkl.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 09:17:05 -0700 (PDT)
+        Mon, 19 Sep 2022 13:24:51 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F374D12741;
+        Mon, 19 Sep 2022 10:24:50 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d24so5359192pls.4;
+        Mon, 19 Sep 2022 10:24:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=yLXbhdZTFJDz1Eruum+B2eKRMi+oFeTFSm6260p2MLc=;
+        b=CLcyONO1tRPGjoZAaIYtpv+BQUg6p73mrNktcLcwmrzTHqJzD2K7NR1GfWPSCBGPxE
+         Yu2F92jKgBwkknxARDrGTifPH6MQk386kI0Sw7CZHJdP07ZR75qOh2W14DeRRgakdUNR
+         nF3ibbpOsfMGK52NKZ0rwKUS2aAELJihMdlQ89i1XsXj7HqtU5/QYt5ETDqhUqRWVbFq
+         UaDax9f6skaAn+5zG+0Tcq/K/IbZ5LemJiiSqoQxvnP9sAZ8NoZ41jC8Aw1ldsY98lkA
+         Y2sEvfDJAtYboaLm00hKcoCpOi7+rvCaHRpeZmD820MlkgG1eYb5KrMTIbFAU5Rw8Xk2
+         /1Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Xn5fnqKtyryYA5w5sfE3wIiUTcmcdDi6qpfcSbkJ4Lw=;
-        b=P/5IUWMYk4L3LbOGy/ne/77eTOQBTwekq2PUIund2zXY6vCvo/fgca7slG7IBc6jV0
-         7awoPqRaDxACgPeNEZPZ8BJOw7yMtakWklIhqhHlssVOmIsHoGP8/LOJmTBm/KVmUObn
-         EcSrIKBRIAITTFcf85fbl+NO5Z8+mvDyy3dYLteV7gB/a6fvkMj50kF2LAIw1DrvHe7H
-         wO42Yd7iPNbSJH467NJjvpj59OEQxvxrgwuS59tnau2iYyvk+76eGsysAxtlt44vGvgs
-         O+fQdnGxDR6PrCwmB4W4a6S6rmmhdxakCbVlWOc3aSI3xnuuIIyMejV4YGhL/cbO+5+P
-         tFAg==
-X-Gm-Message-State: ACrzQf0wUhkeSpC1P0WZeo34llkkl2iCrPgnTujzx2Kwauku085Got1E
-        SJDZnlj2+4JLh0Dg3dsi27AQQTxnKcBIp4i4gbMUOAlBrpjPuydXsVQz/AXEObON38R2PTtqbUj
-        RGD2tibpeAhR3AqHW8lL63mbrb6l1
-X-Received: by 2002:ac8:5e0a:0:b0:35c:e8d8:6c19 with SMTP id h10-20020ac85e0a000000b0035ce8d86c19mr5068666qtx.178.1663604225351;
-        Mon, 19 Sep 2022 09:17:05 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM51+LmYDmB5JjErlr4hYbacMbbiBwggTg81wkAjJVlWGP8agHsUu4S5cY7WS6QJw0cvQ6qJIg==
-X-Received: by 2002:ac8:5e0a:0:b0:35c:e8d8:6c19 with SMTP id h10-20020ac85e0a000000b0035ce8d86c19mr5068640qtx.178.1663604225144;
-        Mon, 19 Sep 2022 09:17:05 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id bv12-20020a05622a0a0c00b0035cf2995ad8sm826570qtb.51.2022.09.19.09.17.03
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=yLXbhdZTFJDz1Eruum+B2eKRMi+oFeTFSm6260p2MLc=;
+        b=eSrt3RXlvXNIjZM/hvTHYdeDE9nYW8Y7OH4NscBZ8wqj9Y6/Bc7PwCsvxPXfMIZb+u
+         huwarC4UJ/4ghjHLUChHwkedTbAEw3hjVubYmY/zjmUl6WHf4+5tMqzLEdR50OLXsMpn
+         RWbJER7e00EROZiDwu3pNgG/a5QcM6JHoVEY+2siIt2GaMwSL2Q3ajKyyrMMA46zkOkO
+         JO0esQaObPbIoOyr0lfL3+fMir7Ul6slubexQAI8T0RZY+RNb4uhwhAGQqRAqqduJNFo
+         cTcjB1G3O9KX6Eq7ixyWLfqY207MXYVDTZv+3vU9XksvhHPdJXSEM4k1vdLTyD6qJop5
+         DR6A==
+X-Gm-Message-State: ACrzQf0+03JA2krE/QWOechyfJyqEfrJGeUMK60eKG6y9cp4bdqKeb0o
+        SQG/wxqk7xhd8EaHGDLwgmuqMIjHXdQ=
+X-Google-Smtp-Source: AMsMyM6VM/BivqDfuJDvVl6ZNbzXY/5NA1f7mD4YYRuIqm7xUhTzEi114h9ynNOaChL++gsvhYqEiw==
+X-Received: by 2002:a17:902:e94f:b0:16d:847b:3343 with SMTP id b15-20020a170902e94f00b0016d847b3343mr774637pll.103.1663608290154;
+        Mon, 19 Sep 2022 10:24:50 -0700 (PDT)
+Received: from localhost.localdomain (KD027092233113.ppp-bb.dion.ne.jp. [27.92.233.113])
+        by smtp.gmail.com with ESMTPSA id h7-20020aa796c7000000b0053f2505318asm21226480pfq.142.2022.09.19.10.24.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 09:17:04 -0700 (PDT)
-Date:   Mon, 19 Sep 2022 12:17:02 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        catalin.marinas@arm.com, linux-kselftest@vger.kernel.org,
-        bgardon@google.com, shuah@kernel.org, corbet@lwn.net,
-        drjones@redhat.com, will@kernel.org, zhenyzha@redhat.com,
-        dmatlack@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        oliver.upton@linux.dev, shan.gavin@gmail.com
-Subject: Re: [PATCH v2 1/5] KVM: x86: Introduce KVM_REQ_RING_SOFT_FULL
-Message-ID: <YyiV/l7O23aw5aaO@xz-m1.local>
-References: <20220916045135.154505-1-gshan@redhat.com>
- <20220916045135.154505-2-gshan@redhat.com>
- <YyS78BqsQxKkLOiW@xz-m1.local>
- <87illlkqfu.wl-maz@kernel.org>
- <a2e0b9bc-2c67-8683-d722-7298bd65058c@redhat.com>
+        Mon, 19 Sep 2022 10:24:49 -0700 (PDT)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, corbet@lwn.net, david@redhat.com,
+        osalvador@suse.de, shuah@kernel.org,
+        Zhao Gongyi <zhaogongyi@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        akpm@linux-foundation.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>
+Subject: [PATCH 0/3] fix error when writing negative value to simple attribute files
+Date:   Tue, 20 Sep 2022 02:24:15 +0900
+Message-Id: <20220919172418.45257-1-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a2e0b9bc-2c67-8683-d722-7298bd65058c@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 09:58:10AM +1000, Gavin Shan wrote:
-> I think Marc's explanation makes sense. It won't make difference in terms
-> of performance. We need to explicitly handle barrier when kvm_test_request()
-> is used. So I prefer to keep the code if Peter agrees.
+The simple attribute files do not accept a negative value since the
+commit 488dac0c9237 ("libfs: fix error cast of negative value in
+simple_attr_write()"), but some attribute files want to accept
+a negative value.
 
-No strong opinion here. I keep thinking clear+set look awkward even if it's
-unlikely path to trigger (ring should be recycled when reaching here for
-any sane user app), but if it's already 2:1 then please go ahead. :)
+Akinobu Mita (3):
+  libfs: add DEFINE_SIMPLE_ATTRIBUTE_SIGNED for signed value
+  lib/notifier-error-inject: fix error when writing -errno to debugfs
+    file
+  debugfs: fix error when writing negative value to atomic_t debugfs
+    file
 
-Thanks,
+ .../fault-injection/fault-injection.rst       | 10 +++----
+ fs/debugfs/file.c                             | 28 +++++++++++++++----
+ fs/libfs.c                                    | 22 +++++++++++++--
+ include/linux/debugfs.h                       | 19 +++++++++++--
+ include/linux/fs.h                            | 12 ++++++--
+ lib/notifier-error-inject.c                   |  2 +-
+ 6 files changed, 73 insertions(+), 20 deletions(-)
 
 -- 
-Peter Xu
+2.34.1
 
