@@ -2,323 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156475BD4BF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 20:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9955BD5A3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 22:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiISSb5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Sep 2022 14:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
+        id S229775AbiISUUJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Sep 2022 16:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiISSb4 (ORCPT
+        with ESMTP id S229776AbiISUUI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Sep 2022 14:31:56 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B0F303DA
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 11:31:53 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id l7-20020a056830154700b0065563d564dfso182971otp.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 11:31:53 -0700 (PDT)
+        Mon, 19 Sep 2022 16:20:08 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1FC481CA
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 13:20:06 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id r7so953275wrm.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 13:20:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Em2VYxT/ljZDxqf2wDCOYhHhJePUbe7CNMlkX8FZrB0=;
-        b=awMhCX4JzDA5f2iOHZL76wV7SUzScn/pmrF2TgI/y6AkL9rYSmME+4mj74/pdB/TSu
-         HT2Aaf9gkmXOmeiQ+KzcArQ+CLR/gmBXdwbd6INsf5BT7p8ZM8Rv+Yai4iXfv2jcf4hY
-         Br+zhK9klNk8H/6rrmYemRiEYCRAygGBCRQULjJ7RWqrI493K3AsyfN9YtTrTsls5c0n
-         Eo5ruu8pHqYpFVbRhWj3QdG5i/NaIVbU4Nt1D6a6ongog/RtwIfNMKAa/v9U+Dk/m93y
-         8vK4CqkJU7V2ScXM3p7+nPnKB8ja9iiqRZZn7mnhoj375rUcc9UFVzIj+25r1s4Uxb5d
-         pdjQ==
+        d=arista.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=rleumtfsTqJmyQKHKe7K6jC9PgKbDZt02ru2L/1PApQ=;
+        b=glCYw8Hs3O+85oP7tfzZwLJ1JR5Tkl/Zfkjf1X/Oq12xCUaXUBneUzQrnUB8P/Vxgo
+         uYisVvYLvzldBy1no5802aMwOr+hWM3HBQIJlUo0oqM73uhXJ40LoOvMabG2rhlNVIBx
+         J999xlBbSdmeLcGnWxqkpqzBHBGTRgOS5Nd6CaAxGbmubNVVrJWcAyA8AvvtvBJKn8GX
+         UYVifNIA+gfXwdmjjTaC3YdcMddNbI3dKwsBPqNu0VctuSjtw8gx5S1OKAVHxn+/rkCM
+         VfP9sOWWA9ooJcvzuFJofUKAhcn1jj8TN8mcwMAgUt1lWArzpqQdZJJg5DTU3aRM4ehX
+         bCSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Em2VYxT/ljZDxqf2wDCOYhHhJePUbe7CNMlkX8FZrB0=;
-        b=3KNeE9z9cSvQsjtj24DiGo/dLnRn3797iUgh4NWMERW5SqfLi+2cjoR7LAsxhBG6E0
-         hc8xRgwxn0Bd1+oNbDMbauzKxt5iXUs2f78okCMqI0YF/TF7UF/HBYSJdEugHbP8Lpg1
-         1NVK0y4fLl4Kx5453BJjc/lz0YwxZWITg+gCyDS+EipG7e4sjhkBsdNEPAcs1jTLpE0Q
-         G4CXROBS2iXBIFTgz4RZ1vgndYmAmOBbwVIYEwBHDpoC7IWbMmVZsEz9e09sLQgF9aYa
-         Ei4+iFhsRGsLElAmhzjK9TVwjbJ+sv7J6tJCjeZVn6WiBU3HFOblxfgrAbpcDaAJkQap
-         mnog==
-X-Gm-Message-State: ACrzQf2s/4Tv7zGDshK4scYZNC+WSInccEGUcjw+RRVtmRJDXb1OrgHC
-        LVNJ7u8l9MG431MTvWX+wmd/Bg==
-X-Google-Smtp-Source: AMsMyM5Ob6QFO3j59nOdCJrbcf2aMPr/niJ2jdaXlfnM+SfaASfsnGwdl0YIqPl8j5bHW7YESMKKZw==
-X-Received: by 2002:a05:6830:4489:b0:65a:16d7:648a with SMTP id r9-20020a056830448900b0065a16d7648amr1686016otv.160.1663612313084;
-        Mon, 19 Sep 2022 11:31:53 -0700 (PDT)
-Received: from ?IPV6:2804:1b3:7001:2c5:8b07:2c04:e4b7:4d82? ([2804:1b3:7001:2c5:8b07:2c04:e4b7:4d82])
-        by smtp.gmail.com with ESMTPSA id x18-20020a4a4112000000b00448aff53822sm12688885ooa.40.2022.09.19.11.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 11:31:52 -0700 (PDT)
-Message-ID: <fd1948e0-6cd9-677e-ac82-e2254cb80f60@mojatatu.com>
-Date:   Mon, 19 Sep 2022 15:31:46 -0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=rleumtfsTqJmyQKHKe7K6jC9PgKbDZt02ru2L/1PApQ=;
+        b=QevYlW4I/YJ7Zaa0OG5wkHgbZtgtKiL6wiKkUDMW2odEleVqxI8+6UwVKf/kNya9tu
+         pe/8w4cWeghbIPoNr5gWpUl7S6jvgvCkGJVhMucdAsP3eIyH9JIg+dhjR9Z4IEAoUmJ2
+         I4DT9RFSIgosqt/4Uc9xCNrOhg4TekyaYt9P6Goh/rr5vykMv6G6HZzQ9S+ZBwGqKHZR
+         jnc1DkyOfxPWbVsyHCChTBCZ5GgallpyQUiTd6r5vVw2ARY7k5yXrbzbUCy8pY1sJrgI
+         Ad73rSVQAkCu7ZK07IDFD4NB8harnpNU35X7HZFJKhCTRv/h5e37oAsu5F/DGlbK1quE
+         Fjmw==
+X-Gm-Message-State: ACrzQf1U2Tzkds8P1XcDl26vITjY/BeKXjrqordEr3UbgE5OHhGKTh66
+        B4vl3+kJfKWW355HjsewvNfYCg==
+X-Google-Smtp-Source: AMsMyM6kvysW+w84W4NM9Jg8am0rokoV2PqOrn+9to55Hk/t+UGKfvdQq3aL4AGmC//oWOkJM3jAew==
+X-Received: by 2002:a05:6000:1842:b0:22a:4d1d:4bd6 with SMTP id c2-20020a056000184200b0022a4d1d4bd6mr11736864wri.603.1663618805346;
+        Mon, 19 Sep 2022 13:20:05 -0700 (PDT)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003b47e8a5d22sm17342849wmq.23.2022.09.19.13.20.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 13:20:04 -0700 (PDT)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <dima@arista.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/2] selftests/Make: Recursively build TARGETS list
+Date:   Mon, 19 Sep 2022 21:19:56 +0100
+Message-Id: <20220919201958.279545-1-dima@arista.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH net-next,v2 00/18] refactor duplicate codes in the qdisc
- class walk function
-Content-Language: en-US
-To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        toke@toke.dk, vinicius.gomes@intel.com, stephen@networkplumber.org,
-        shuah@kernel.org
-Cc:     zhijianx.li@intel.com, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-References: <20220917050204.127191-1-shaozhengchao@huawei.com>
-From:   Victor Nogueira <victor@mojatatu.com>
-In-Reply-To: <20220917050204.127191-1-shaozhengchao@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17/09/2022 02:02, Zhengchao Shao wrote:
+Version 2 changes:
+- fix `make install` in sub-directories with TARGETS, but with no
+  TEST_LIST defined, i.e. selftests/net directory
+  (reported-by: kernel test robot <yujie.liu@intel.com>)
+- vfork_exec selftest is about to be reverted, don't add .gitignore entry
 
-> The walk implementation of most qdisc class modules is basically the
-> same. That is, the values of count and skip are checked first. If count
-> is greater than or equal to skip, the registered fn function is
-> executed. Otherwise, increase the value of count. So the code can be
-> refactored.
->
-> The walk function is invoked during dump. Therefore, test cases related
->   to the tdc filter need to be added.
->
-> Last, thanks to Victor for his review.
->
-> Add test cases locally and perform the test. The test results are listed
-> below:
->
-> ./tdc.py -c cake
-> ok 1 1212 - Create CAKE with default setting
-> ok 2 3281 - Create CAKE with bandwidth limit
-> ok 3 c940 - Create CAKE with autorate-ingress flag
-> ok 4 2310 - Create CAKE with rtt time
-> ok 5 2385 - Create CAKE with besteffort flag
-> ok 6 a032 - Create CAKE with diffserv8 flag
-> ok 7 2349 - Create CAKE with diffserv4 flag
-> ok 8 8472 - Create CAKE with flowblind flag
-> ok 9 2341 - Create CAKE with dsthost and nat flag
-> ok 10 5134 - Create CAKE with wash flag
-> ok 11 2302 - Create CAKE with flowblind and no-split-gso flag
-> ok 12 0768 - Create CAKE with dual-srchost and ack-filter flag
-> ok 13 0238 - Create CAKE with dual-dsthost and ack-filter-aggressive flag
-> ok 14 6572 - Create CAKE with memlimit and ptm flag
-> ok 15 2436 - Create CAKE with fwmark and atm flag
-> ok 16 3984 - Create CAKE with overhead and mpu
-> ok 17 5421 - Create CAKE with conservative and ingress flag
-> ok 18 6854 - Delete CAKE with conservative and ingress flag
-> ok 19 2342 - Replace CAKE with mpu
-> ok 20 2313 - Change CAKE with mpu
-> ok 21 4365 - Show CAKE class
->
-> ./tdc.py -c cbq
-> ok 1 3460 - Create CBQ with default setting
-> ok 2 0592 - Create CBQ with mpu
-> ok 3 4684 - Create CBQ with valid cell num
-> ok 4 4345 - Create CBQ with invalid cell num
-> ok 5 4525 - Create CBQ with valid ewma
-> ok 6 6784 - Create CBQ with invalid ewma
-> ok 7 5468 - Delete CBQ with handle
-> ok 8 492a - Show CBQ class
->
-> ./tdc.py -c cbs
-> ok 1 1820 - Create CBS with default setting
-> ok 2 1532 - Create CBS with hicredit setting
-> ok 3 2078 - Create CBS with locredit setting
-> ok 4 9271 - Create CBS with sendslope setting
-> ok 5 0482 - Create CBS with idleslope setting
-> ok 6 e8f3 - Create CBS with multiple setting
-> ok 7 23c9 - Replace CBS with sendslope setting
-> ok 8 a07a - Change CBS with idleslope setting
-> ok 9 43b3 - Delete CBS with handle
-> ok 10 9472 - Show CBS class
->
-> ./tdc.py -c drr
-> ok 1 0385 - Create DRR with default setting
-> ok 2 2375 - Delete DRR with handle
-> ok 3 3092 - Show DRR class
->
-> ./tdc.py -c dsmark
-> ok 1 6345 - Create DSMARK with default setting
-> ok 2 3462 - Create DSMARK with default_index setting
-> ok 3 ca95 - Create DSMARK with set_tc_index flag
-> ok 4 a950 - Create DSMARK with multiple setting
-> ok 5 4092 - Delete DSMARK with handle
-> ok 6 5930 - Show DSMARK class
->
-> ./tdc.py -c fq_codel
-> ok 1 4957 - Create FQ_CODEL with default setting
-> ok 2 7621 - Create FQ_CODEL with limit setting
-> ok 3 6871 - Create FQ_CODEL with memory_limit setting
-> ok 4 5636 - Create FQ_CODEL with target setting
-> ok 5 630a - Create FQ_CODEL with interval setting
-> ok 6 4324 - Create FQ_CODEL with quantum setting
-> ok 7 b190 - Create FQ_CODEL with noecn flag
-> ok 8 5381 - Create FQ_CODEL with ce_threshold setting
-> ok 9 c9d2 - Create FQ_CODEL with drop_batch setting
-> ok 10 523b - Create FQ_CODEL with multiple setting
-> ok 11 9283 - Replace FQ_CODEL with noecn setting
-> ok 12 3459 - Change FQ_CODEL with limit setting
-> ok 13 0128 - Delete FQ_CODEL with handle
-> ok 14 0435 - Show FQ_CODEL class
->
-> ./tdc.py -c hfsc
-> ok 1 3254 - Create HFSC with default setting
-> ok 2 0289 - Create HFSC with class sc and ul rate setting
-> ok 3 846a - Create HFSC with class sc umax and dmax setting
-> ok 4 5413 - Create HFSC with class rt and ls rate setting
-> ok 5 9312 - Create HFSC with class rt umax and dmax setting
-> ok 6 6931 - Delete HFSC with handle
-> ok 7 8436 - Show HFSC class
->
-> ./tdc.py -c htb
-> ok 1 0904 - Create HTB with default setting
-> ok 2 3906 - Create HTB with default-N setting
-> ok 3 8492 - Create HTB with r2q setting
-> ok 4 9502 - Create HTB with direct_qlen setting
-> ok 5 b924 - Create HTB with class rate and burst setting
-> ok 6 4359 - Create HTB with class mpu setting
-> ok 7 9048 - Create HTB with class prio setting
-> ok 8 4994 - Create HTB with class ceil setting
-> ok 9 9523 - Create HTB with class cburst setting
-> ok 10 5353 - Create HTB with class mtu setting
-> ok 11 346a - Create HTB with class quantum setting
-> ok 12 303a - Delete HTB with handle
->
-> ./tdc.py -c mqprio
-> ok 1 9903 - Add mqprio Qdisc to multi-queue device (8 queues)
-> ok 2 453a - Delete nonexistent mqprio Qdisc
-> ok 3 5292 - Delete mqprio Qdisc twice
-> ok 4 45a9 - Add mqprio Qdisc to single-queue device
-> ok 5 2ba9 - Show mqprio class
->
-> ./tdc.py -c multiq
-> ok 1 20ba - Add multiq Qdisc to multi-queue device (8 queues)
-> ok 2 4301 - List multiq Class
-> ok 3 7832 - Delete nonexistent multiq Qdisc
-> ok 4 2891 - Delete multiq Qdisc twice
-> ok 5 1329 - Add multiq Qdisc to single-queue device
->
-> ./tdc.py -c netem
-> ok 1 cb28 - Create NETEM with default setting
-> ok 2 a089 - Create NETEM with limit flag
-> ok 3 3449 - Create NETEM with delay time
-> ok 4 3782 - Create NETEM with distribution and corrupt flag
-> ok 5 2b82 - Create NETEM with distribution and duplicate flag
-> ok 6 a932 - Create NETEM with distribution and loss flag
-> ok 7 e01a - Create NETEM with distribution and loss state flag
-> ok 8 ba29 - Create NETEM with loss gemodel flag
-> ok 9 0492 - Create NETEM with reorder flag
-> ok 10 7862 - Create NETEM with rate limit
-> ok 11 7235 - Create NETEM with multiple slot rate
-> ok 12 5439 - Create NETEM with multiple slot setting
-> ok 13 5029 - Change NETEM with loss state
-> ok 14 3785 - Replace NETEM with delay time
-> ok 15 4502 - Delete NETEM with handle
-> ok 16 0785 - Show NETEM class
->
-> ./tdc.py -c qfq
-> ok 1 0582 - Create QFQ with default setting
-> ok 2 c9a3 - Create QFQ with class weight setting
-> ok 3 8452 - Create QFQ with class maxpkt setting
-> ok 4 d920 - Create QFQ with multiple class setting
-> ok 5 0548 - Delete QFQ with handle
-> ok 6 5901 - Show QFQ class
->
-> ./tdc.py -e 0521
-> ok 1 0521 - Show ingress class
->
-> ./tdc.py -e 1023
-> ok 1 1023 - Show mq class
->
-> ./tdc.py -e 2410
-> ok 1 2410 - Show prio class
->
-> ./tdc.py -e 290a
-> ok 1 290a - Show RED class
->
-> Zhengchao Shao (18):
->    net/sched: sch_api: add helper for tc qdisc walker stats dump
->    net/sched: use tc_qdisc_stats_dump() in qdisc
->    selftests/tc-testings: add selftests for cake qdisc
->    selftests/tc-testings: add selftests for cbq qdisc
->    selftests/tc-testings: add selftests for cbs qdisc
->    selftests/tc-testings: add selftests for drr qdisc
->    selftests/tc-testings: add selftests for dsmark qdisc
->    selftests/tc-testings: add selftests for fq_codel qdisc
->    selftests/tc-testings: add selftests for hfsc qdisc
->    selftests/tc-testings: add selftests for htb qdisc
->    selftests/tc-testings: add selftests for mqprio qdisc
->    selftests/tc-testings: add selftests for multiq qdisc
->    selftests/tc-testings: add selftests for netem qdisc
->    selftests/tc-testings: add selftests for qfq qdisc
->    selftests/tc-testings: add show class case for ingress qdisc
->    selftests/tc-testings: add show class case for mq qdisc
->    selftests/tc-testings: add show class case for prio qdisc
->    selftests/tc-testings: add show class case for red qdisc
->
->   include/net/pkt_sched.h                       |  13 +
->   net/sched/sch_atm.c                           |   6 +-
->   net/sched/sch_cake.c                          |   9 +-
->   net/sched/sch_cbq.c                           |   9 +-
->   net/sched/sch_cbs.c                           |   8 +-
->   net/sched/sch_drr.c                           |   9 +-
->   net/sched/sch_dsmark.c                        |  14 +-
->   net/sched/sch_ets.c                           |   9 +-
->   net/sched/sch_fq_codel.c                      |   8 +-
->   net/sched/sch_hfsc.c                          |   9 +-
->   net/sched/sch_htb.c                           |   9 +-
->   net/sched/sch_mq.c                            |   5 +-
->   net/sched/sch_mqprio.c                        |   5 +-
->   net/sched/sch_multiq.c                        |   9 +-
->   net/sched/sch_netem.c                         |   8 +-
->   net/sched/sch_prio.c                          |   9 +-
->   net/sched/sch_qfq.c                           |   9 +-
->   net/sched/sch_red.c                           |   7 +-
->   net/sched/sch_sfb.c                           |   7 +-
->   net/sched/sch_sfq.c                           |   8 +-
->   net/sched/sch_skbprio.c                       |   9 +-
->   net/sched/sch_taprio.c                        |   5 +-
->   net/sched/sch_tbf.c                           |   7 +-
->   .../tc-testing/tc-tests/qdiscs/cake.json      | 487 ++++++++++++++++++
->   .../tc-testing/tc-tests/qdiscs/cbq.json       | 184 +++++++
->   .../tc-testing/tc-tests/qdiscs/cbs.json       | 234 +++++++++
->   .../tc-testing/tc-tests/qdiscs/drr.json       |  71 +++
->   .../tc-testing/tc-tests/qdiscs/dsmark.json    | 140 +++++
->   .../tc-testing/tc-tests/qdiscs/fq_codel.json  | 326 ++++++++++++
->   .../tc-testing/tc-tests/qdiscs/hfsc.json      | 167 ++++++
->   .../tc-testing/tc-tests/qdiscs/htb.json       | 285 ++++++++++
->   .../tc-testing/tc-tests/qdiscs/ingress.json   |  20 +
->   .../tc-testing/tc-tests/qdiscs/mq.json        |  24 +-
->   .../tc-testing/tc-tests/qdiscs/mqprio.json    | 114 ++++
->   .../tc-testing/tc-tests/qdiscs/multiq.json    | 114 ++++
->   .../tc-testing/tc-tests/qdiscs/netem.json     | 372 +++++++++++++
->   .../tc-testing/tc-tests/qdiscs/prio.json      |  20 +
->   .../tc-testing/tc-tests/qdiscs/qfq.json       | 145 ++++++
->   .../tc-testing/tc-tests/qdiscs/red.json       |  23 +
->   39 files changed, 2769 insertions(+), 148 deletions(-)
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbq.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbs.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/mqprio.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/multiq.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
->   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/qfq.json
+From [1]:
+> Please look into a wayto invoke all of them instead of adding individual
+> net/* to the main Makefile. This list seems to be growing. :)
+
+I might have misunderstood what was suggested... Here is an attempt to
+let sub-selftests define their own $(TARGETS) directories.
+
+[1]: https://lore.kernel.org/all/aa0143bc-b0d1-69fb-c117-1e7241f0ad89@linuxfoundation.org/T/#u
+
+Version 1: https://lore.kernel.org/all/20220905202108.89338-1-dima@arista.com/T/#u
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+Dmitry Safonov (2):
+  selftests/Make: Recursively build TARGETS list
+  selftests/.gitignore: Add io_uring_zerocopy_tx
+
+ tools/testing/selftests/Makefile             | 71 ++++----------------
+ tools/testing/selftests/drivers/Makefile     |  7 ++
+ tools/testing/selftests/filesystems/Makefile |  4 ++
+ tools/testing/selftests/lib.mk               | 60 ++++++++++++++++-
+ tools/testing/selftests/net/.gitignore       |  1 +
+ tools/testing/selftests/net/Makefile         |  4 ++
+ 6 files changed, 87 insertions(+), 60 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/Makefile
 
 
-Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-Tested-by: Victor Nogueira <victor@mojatatu.com>
+base-commit: 521a547ced6477c54b4b0cc206000406c221b4d6
+-- 
+2.37.2
 
