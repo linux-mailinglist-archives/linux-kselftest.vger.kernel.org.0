@@ -2,257 +2,323 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFEA5BD39C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 19:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156475BD4BF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 20:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbiISRZS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Sep 2022 13:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S229453AbiISSb5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Sep 2022 14:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiISRZL (ORCPT
+        with ESMTP id S229602AbiISSb4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Sep 2022 13:25:11 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7DD1E3C0;
-        Mon, 19 Sep 2022 10:25:02 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id bh13so27363789pgb.4;
-        Mon, 19 Sep 2022 10:25:02 -0700 (PDT)
+        Mon, 19 Sep 2022 14:31:56 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B0F303DA
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 11:31:53 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id l7-20020a056830154700b0065563d564dfso182971otp.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 11:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=euAaknLa+h5zIEMESHSd9vMo0x33lOPRlPldQOSO1tY=;
-        b=ShNlkKcjQX74zNjF0cFpDDUgQjKD8DIkh4EVc7Mv0LXsJafE4SY2OEYjaXtaX6yg8Z
-         8PJonHc9SvScgzKL+dfAAtAzN5E0QOm7TMiGh2Ekv8ph4CTYvq458StXhFk/3SPwMm3F
-         pBPxy2kCWa/AcGmxcGJKEWMGDaIOsTcrM8xaBFKZCvGgwW/IdONn/pVcY4Fow5+4aJSw
-         0cPtz24cRa12OPlbcMKQngJjGnF67wogF9OE5broq9HuQhZ3ydOxsJpbUfpIjX0ugOuw
-         N27BvSJhGKXz03wnL1LZqtd0vyEKXZjs3SigU8Kfz8DrsmsoOySbz9GKYKX7CBuDtB/Q
-         lnpg==
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Em2VYxT/ljZDxqf2wDCOYhHhJePUbe7CNMlkX8FZrB0=;
+        b=awMhCX4JzDA5f2iOHZL76wV7SUzScn/pmrF2TgI/y6AkL9rYSmME+4mj74/pdB/TSu
+         HT2Aaf9gkmXOmeiQ+KzcArQ+CLR/gmBXdwbd6INsf5BT7p8ZM8Rv+Yai4iXfv2jcf4hY
+         Br+zhK9klNk8H/6rrmYemRiEYCRAygGBCRQULjJ7RWqrI493K3AsyfN9YtTrTsls5c0n
+         Eo5ruu8pHqYpFVbRhWj3QdG5i/NaIVbU4Nt1D6a6ongog/RtwIfNMKAa/v9U+Dk/m93y
+         8vK4CqkJU7V2ScXM3p7+nPnKB8ja9iiqRZZn7mnhoj375rUcc9UFVzIj+25r1s4Uxb5d
+         pdjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=euAaknLa+h5zIEMESHSd9vMo0x33lOPRlPldQOSO1tY=;
-        b=23UQn5e3Aua4IwfPxPJe0jVDodaXO/0MFLAyLkVyii6rFwg59qTWJdqwhVYxotOOfl
-         SR5bpWUCGdear9c0LbUcu8J8eETh3lHNOE2slv2z2m7gtvDW0rs9PypU4Dpdko+8QHSQ
-         bHjh6dwrRFHGQwvtHHYud0Q5XkV6+VBuh3+pogzSD6hSR/mCpVV0y88OYcQENdp8JAoV
-         tJEmSanSBEomeWUa3K6OhBhHhozfxVi+0dvXZLePwcRzt8H02j9X+Y2Md5UMGWDY3GgR
-         v+u8LT/K9MmNSyYiG0acD/V+DcdDjgfT+TeAur9N9239GCRiC+Of8Px74+DB+CTQ9wfC
-         4vRw==
-X-Gm-Message-State: ACrzQf0dczm7oHhkpRZVL9Lt4IOU5CEny4LaLYFTlaaM1DVTfgVklC5w
-        0+cnziL+XlYNk5WdenPMtZ+9JpKa6nA=
-X-Google-Smtp-Source: AMsMyM6OTf8JGt0/2O1PiJjtsm9iJk3G5nddptF65VkDZixrBOW+hXa9Ea4CpUGY12LhhkBrwX/ErA==
-X-Received: by 2002:a63:b64:0:b0:439:8143:c184 with SMTP id a36-20020a630b64000000b004398143c184mr16377617pgl.22.1663608301881;
-        Mon, 19 Sep 2022 10:25:01 -0700 (PDT)
-Received: from localhost.localdomain (KD027092233113.ppp-bb.dion.ne.jp. [27.92.233.113])
-        by smtp.gmail.com with ESMTPSA id h7-20020aa796c7000000b0053f2505318asm21226480pfq.142.2022.09.19.10.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 10:25:01 -0700 (PDT)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, corbet@lwn.net, david@redhat.com,
-        osalvador@suse.de, shuah@kernel.org,
-        Zhao Gongyi <zhaogongyi@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        akpm@linux-foundation.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>
-Subject: [PATCH 3/3] debugfs: fix error when writing negative value to atomic_t debugfs file
-Date:   Tue, 20 Sep 2022 02:24:18 +0900
-Message-Id: <20220919172418.45257-4-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220919172418.45257-1-akinobu.mita@gmail.com>
-References: <20220919172418.45257-1-akinobu.mita@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Em2VYxT/ljZDxqf2wDCOYhHhJePUbe7CNMlkX8FZrB0=;
+        b=3KNeE9z9cSvQsjtj24DiGo/dLnRn3797iUgh4NWMERW5SqfLi+2cjoR7LAsxhBG6E0
+         hc8xRgwxn0Bd1+oNbDMbauzKxt5iXUs2f78okCMqI0YF/TF7UF/HBYSJdEugHbP8Lpg1
+         1NVK0y4fLl4Kx5453BJjc/lz0YwxZWITg+gCyDS+EipG7e4sjhkBsdNEPAcs1jTLpE0Q
+         G4CXROBS2iXBIFTgz4RZ1vgndYmAmOBbwVIYEwBHDpoC7IWbMmVZsEz9e09sLQgF9aYa
+         Ei4+iFhsRGsLElAmhzjK9TVwjbJ+sv7J6tJCjeZVn6WiBU3HFOblxfgrAbpcDaAJkQap
+         mnog==
+X-Gm-Message-State: ACrzQf2s/4Tv7zGDshK4scYZNC+WSInccEGUcjw+RRVtmRJDXb1OrgHC
+        LVNJ7u8l9MG431MTvWX+wmd/Bg==
+X-Google-Smtp-Source: AMsMyM5Ob6QFO3j59nOdCJrbcf2aMPr/niJ2jdaXlfnM+SfaASfsnGwdl0YIqPl8j5bHW7YESMKKZw==
+X-Received: by 2002:a05:6830:4489:b0:65a:16d7:648a with SMTP id r9-20020a056830448900b0065a16d7648amr1686016otv.160.1663612313084;
+        Mon, 19 Sep 2022 11:31:53 -0700 (PDT)
+Received: from ?IPV6:2804:1b3:7001:2c5:8b07:2c04:e4b7:4d82? ([2804:1b3:7001:2c5:8b07:2c04:e4b7:4d82])
+        by smtp.gmail.com with ESMTPSA id x18-20020a4a4112000000b00448aff53822sm12688885ooa.40.2022.09.19.11.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 11:31:52 -0700 (PDT)
+Message-ID: <fd1948e0-6cd9-677e-ac82-e2254cb80f60@mojatatu.com>
+Date:   Mon, 19 Sep 2022 15:31:46 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH net-next,v2 00/18] refactor duplicate codes in the qdisc
+ class walk function
+Content-Language: en-US
+To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        toke@toke.dk, vinicius.gomes@intel.com, stephen@networkplumber.org,
+        shuah@kernel.org
+Cc:     zhijianx.li@intel.com, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+References: <20220917050204.127191-1-shaozhengchao@huawei.com>
+From:   Victor Nogueira <victor@mojatatu.com>
+In-Reply-To: <20220917050204.127191-1-shaozhengchao@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The simple attribute files do not accept a negative value since the
-commit 488dac0c9237 ("libfs: fix error cast of negative value in
-simple_attr_write()"), so we have to use a 64-bit value to write a
-negative value for a debugfs file created by debugfs_create_atomic_t().
+On 17/09/2022 02:02, Zhengchao Shao wrote:
 
-This restores the previous behaviour by introducing
-DEFINE_DEBUGFS_ATTRIBUTE_SIGNED for a signed value.
+> The walk implementation of most qdisc class modules is basically the
+> same. That is, the values of count and skip are checked first. If count
+> is greater than or equal to skip, the registered fn function is
+> executed. Otherwise, increase the value of count. So the code can be
+> refactored.
+>
+> The walk function is invoked during dump. Therefore, test cases related
+>   to the tdc filter need to be added.
+>
+> Last, thanks to Victor for his review.
+>
+> Add test cases locally and perform the test. The test results are listed
+> below:
+>
+> ./tdc.py -c cake
+> ok 1 1212 - Create CAKE with default setting
+> ok 2 3281 - Create CAKE with bandwidth limit
+> ok 3 c940 - Create CAKE with autorate-ingress flag
+> ok 4 2310 - Create CAKE with rtt time
+> ok 5 2385 - Create CAKE with besteffort flag
+> ok 6 a032 - Create CAKE with diffserv8 flag
+> ok 7 2349 - Create CAKE with diffserv4 flag
+> ok 8 8472 - Create CAKE with flowblind flag
+> ok 9 2341 - Create CAKE with dsthost and nat flag
+> ok 10 5134 - Create CAKE with wash flag
+> ok 11 2302 - Create CAKE with flowblind and no-split-gso flag
+> ok 12 0768 - Create CAKE with dual-srchost and ack-filter flag
+> ok 13 0238 - Create CAKE with dual-dsthost and ack-filter-aggressive flag
+> ok 14 6572 - Create CAKE with memlimit and ptm flag
+> ok 15 2436 - Create CAKE with fwmark and atm flag
+> ok 16 3984 - Create CAKE with overhead and mpu
+> ok 17 5421 - Create CAKE with conservative and ingress flag
+> ok 18 6854 - Delete CAKE with conservative and ingress flag
+> ok 19 2342 - Replace CAKE with mpu
+> ok 20 2313 - Change CAKE with mpu
+> ok 21 4365 - Show CAKE class
+>
+> ./tdc.py -c cbq
+> ok 1 3460 - Create CBQ with default setting
+> ok 2 0592 - Create CBQ with mpu
+> ok 3 4684 - Create CBQ with valid cell num
+> ok 4 4345 - Create CBQ with invalid cell num
+> ok 5 4525 - Create CBQ with valid ewma
+> ok 6 6784 - Create CBQ with invalid ewma
+> ok 7 5468 - Delete CBQ with handle
+> ok 8 492a - Show CBQ class
+>
+> ./tdc.py -c cbs
+> ok 1 1820 - Create CBS with default setting
+> ok 2 1532 - Create CBS with hicredit setting
+> ok 3 2078 - Create CBS with locredit setting
+> ok 4 9271 - Create CBS with sendslope setting
+> ok 5 0482 - Create CBS with idleslope setting
+> ok 6 e8f3 - Create CBS with multiple setting
+> ok 7 23c9 - Replace CBS with sendslope setting
+> ok 8 a07a - Change CBS with idleslope setting
+> ok 9 43b3 - Delete CBS with handle
+> ok 10 9472 - Show CBS class
+>
+> ./tdc.py -c drr
+> ok 1 0385 - Create DRR with default setting
+> ok 2 2375 - Delete DRR with handle
+> ok 3 3092 - Show DRR class
+>
+> ./tdc.py -c dsmark
+> ok 1 6345 - Create DSMARK with default setting
+> ok 2 3462 - Create DSMARK with default_index setting
+> ok 3 ca95 - Create DSMARK with set_tc_index flag
+> ok 4 a950 - Create DSMARK with multiple setting
+> ok 5 4092 - Delete DSMARK with handle
+> ok 6 5930 - Show DSMARK class
+>
+> ./tdc.py -c fq_codel
+> ok 1 4957 - Create FQ_CODEL with default setting
+> ok 2 7621 - Create FQ_CODEL with limit setting
+> ok 3 6871 - Create FQ_CODEL with memory_limit setting
+> ok 4 5636 - Create FQ_CODEL with target setting
+> ok 5 630a - Create FQ_CODEL with interval setting
+> ok 6 4324 - Create FQ_CODEL with quantum setting
+> ok 7 b190 - Create FQ_CODEL with noecn flag
+> ok 8 5381 - Create FQ_CODEL with ce_threshold setting
+> ok 9 c9d2 - Create FQ_CODEL with drop_batch setting
+> ok 10 523b - Create FQ_CODEL with multiple setting
+> ok 11 9283 - Replace FQ_CODEL with noecn setting
+> ok 12 3459 - Change FQ_CODEL with limit setting
+> ok 13 0128 - Delete FQ_CODEL with handle
+> ok 14 0435 - Show FQ_CODEL class
+>
+> ./tdc.py -c hfsc
+> ok 1 3254 - Create HFSC with default setting
+> ok 2 0289 - Create HFSC with class sc and ul rate setting
+> ok 3 846a - Create HFSC with class sc umax and dmax setting
+> ok 4 5413 - Create HFSC with class rt and ls rate setting
+> ok 5 9312 - Create HFSC with class rt umax and dmax setting
+> ok 6 6931 - Delete HFSC with handle
+> ok 7 8436 - Show HFSC class
+>
+> ./tdc.py -c htb
+> ok 1 0904 - Create HTB with default setting
+> ok 2 3906 - Create HTB with default-N setting
+> ok 3 8492 - Create HTB with r2q setting
+> ok 4 9502 - Create HTB with direct_qlen setting
+> ok 5 b924 - Create HTB with class rate and burst setting
+> ok 6 4359 - Create HTB with class mpu setting
+> ok 7 9048 - Create HTB with class prio setting
+> ok 8 4994 - Create HTB with class ceil setting
+> ok 9 9523 - Create HTB with class cburst setting
+> ok 10 5353 - Create HTB with class mtu setting
+> ok 11 346a - Create HTB with class quantum setting
+> ok 12 303a - Delete HTB with handle
+>
+> ./tdc.py -c mqprio
+> ok 1 9903 - Add mqprio Qdisc to multi-queue device (8 queues)
+> ok 2 453a - Delete nonexistent mqprio Qdisc
+> ok 3 5292 - Delete mqprio Qdisc twice
+> ok 4 45a9 - Add mqprio Qdisc to single-queue device
+> ok 5 2ba9 - Show mqprio class
+>
+> ./tdc.py -c multiq
+> ok 1 20ba - Add multiq Qdisc to multi-queue device (8 queues)
+> ok 2 4301 - List multiq Class
+> ok 3 7832 - Delete nonexistent multiq Qdisc
+> ok 4 2891 - Delete multiq Qdisc twice
+> ok 5 1329 - Add multiq Qdisc to single-queue device
+>
+> ./tdc.py -c netem
+> ok 1 cb28 - Create NETEM with default setting
+> ok 2 a089 - Create NETEM with limit flag
+> ok 3 3449 - Create NETEM with delay time
+> ok 4 3782 - Create NETEM with distribution and corrupt flag
+> ok 5 2b82 - Create NETEM with distribution and duplicate flag
+> ok 6 a932 - Create NETEM with distribution and loss flag
+> ok 7 e01a - Create NETEM with distribution and loss state flag
+> ok 8 ba29 - Create NETEM with loss gemodel flag
+> ok 9 0492 - Create NETEM with reorder flag
+> ok 10 7862 - Create NETEM with rate limit
+> ok 11 7235 - Create NETEM with multiple slot rate
+> ok 12 5439 - Create NETEM with multiple slot setting
+> ok 13 5029 - Change NETEM with loss state
+> ok 14 3785 - Replace NETEM with delay time
+> ok 15 4502 - Delete NETEM with handle
+> ok 16 0785 - Show NETEM class
+>
+> ./tdc.py -c qfq
+> ok 1 0582 - Create QFQ with default setting
+> ok 2 c9a3 - Create QFQ with class weight setting
+> ok 3 8452 - Create QFQ with class maxpkt setting
+> ok 4 d920 - Create QFQ with multiple class setting
+> ok 5 0548 - Delete QFQ with handle
+> ok 6 5901 - Show QFQ class
+>
+> ./tdc.py -e 0521
+> ok 1 0521 - Show ingress class
+>
+> ./tdc.py -e 1023
+> ok 1 1023 - Show mq class
+>
+> ./tdc.py -e 2410
+> ok 1 2410 - Show prio class
+>
+> ./tdc.py -e 290a
+> ok 1 290a - Show RED class
+>
+> Zhengchao Shao (18):
+>    net/sched: sch_api: add helper for tc qdisc walker stats dump
+>    net/sched: use tc_qdisc_stats_dump() in qdisc
+>    selftests/tc-testings: add selftests for cake qdisc
+>    selftests/tc-testings: add selftests for cbq qdisc
+>    selftests/tc-testings: add selftests for cbs qdisc
+>    selftests/tc-testings: add selftests for drr qdisc
+>    selftests/tc-testings: add selftests for dsmark qdisc
+>    selftests/tc-testings: add selftests for fq_codel qdisc
+>    selftests/tc-testings: add selftests for hfsc qdisc
+>    selftests/tc-testings: add selftests for htb qdisc
+>    selftests/tc-testings: add selftests for mqprio qdisc
+>    selftests/tc-testings: add selftests for multiq qdisc
+>    selftests/tc-testings: add selftests for netem qdisc
+>    selftests/tc-testings: add selftests for qfq qdisc
+>    selftests/tc-testings: add show class case for ingress qdisc
+>    selftests/tc-testings: add show class case for mq qdisc
+>    selftests/tc-testings: add show class case for prio qdisc
+>    selftests/tc-testings: add show class case for red qdisc
+>
+>   include/net/pkt_sched.h                       |  13 +
+>   net/sched/sch_atm.c                           |   6 +-
+>   net/sched/sch_cake.c                          |   9 +-
+>   net/sched/sch_cbq.c                           |   9 +-
+>   net/sched/sch_cbs.c                           |   8 +-
+>   net/sched/sch_drr.c                           |   9 +-
+>   net/sched/sch_dsmark.c                        |  14 +-
+>   net/sched/sch_ets.c                           |   9 +-
+>   net/sched/sch_fq_codel.c                      |   8 +-
+>   net/sched/sch_hfsc.c                          |   9 +-
+>   net/sched/sch_htb.c                           |   9 +-
+>   net/sched/sch_mq.c                            |   5 +-
+>   net/sched/sch_mqprio.c                        |   5 +-
+>   net/sched/sch_multiq.c                        |   9 +-
+>   net/sched/sch_netem.c                         |   8 +-
+>   net/sched/sch_prio.c                          |   9 +-
+>   net/sched/sch_qfq.c                           |   9 +-
+>   net/sched/sch_red.c                           |   7 +-
+>   net/sched/sch_sfb.c                           |   7 +-
+>   net/sched/sch_sfq.c                           |   8 +-
+>   net/sched/sch_skbprio.c                       |   9 +-
+>   net/sched/sch_taprio.c                        |   5 +-
+>   net/sched/sch_tbf.c                           |   7 +-
+>   .../tc-testing/tc-tests/qdiscs/cake.json      | 487 ++++++++++++++++++
+>   .../tc-testing/tc-tests/qdiscs/cbq.json       | 184 +++++++
+>   .../tc-testing/tc-tests/qdiscs/cbs.json       | 234 +++++++++
+>   .../tc-testing/tc-tests/qdiscs/drr.json       |  71 +++
+>   .../tc-testing/tc-tests/qdiscs/dsmark.json    | 140 +++++
+>   .../tc-testing/tc-tests/qdiscs/fq_codel.json  | 326 ++++++++++++
+>   .../tc-testing/tc-tests/qdiscs/hfsc.json      | 167 ++++++
+>   .../tc-testing/tc-tests/qdiscs/htb.json       | 285 ++++++++++
+>   .../tc-testing/tc-tests/qdiscs/ingress.json   |  20 +
+>   .../tc-testing/tc-tests/qdiscs/mq.json        |  24 +-
+>   .../tc-testing/tc-tests/qdiscs/mqprio.json    | 114 ++++
+>   .../tc-testing/tc-tests/qdiscs/multiq.json    | 114 ++++
+>   .../tc-testing/tc-tests/qdiscs/netem.json     | 372 +++++++++++++
+>   .../tc-testing/tc-tests/qdiscs/prio.json      |  20 +
+>   .../tc-testing/tc-tests/qdiscs/qfq.json       | 145 ++++++
+>   .../tc-testing/tc-tests/qdiscs/red.json       |  23 +
+>   39 files changed, 2769 insertions(+), 148 deletions(-)
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cake.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbq.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/cbs.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/drr.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/dsmark.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/fq_codel.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/hfsc.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/htb.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/mqprio.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/multiq.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/netem.json
+>   create mode 100644 tools/testing/selftests/tc-testing/tc-tests/qdiscs/qfq.json
 
-Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
-Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
- .../fault-injection/fault-injection.rst       | 10 +++----
- fs/debugfs/file.c                             | 28 +++++++++++++++----
- include/linux/debugfs.h                       | 19 +++++++++++--
- 3 files changed, 43 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/fault-injection/fault-injection.rst b/Documentation/fault-injection/fault-injection.rst
-index 17779a2772e5..5f6454b9dbd4 100644
---- a/Documentation/fault-injection/fault-injection.rst
-+++ b/Documentation/fault-injection/fault-injection.rst
-@@ -83,9 +83,7 @@ configuration of fault-injection capabilities.
- - /sys/kernel/debug/fail*/times:
- 
- 	specifies how many times failures may happen at most. A value of -1
--	means "no limit". Note, though, that this file only accepts unsigned
--	values. So, if you want to specify -1, you better use 'printf' instead
--	of 'echo', e.g.: $ printf %#x -1 > times
-+	means "no limit".
- 
- - /sys/kernel/debug/fail*/space:
- 
-@@ -284,7 +282,7 @@ Application Examples
-     echo Y > /sys/kernel/debug/$FAILTYPE/task-filter
-     echo 10 > /sys/kernel/debug/$FAILTYPE/probability
-     echo 100 > /sys/kernel/debug/$FAILTYPE/interval
--    printf %#x -1 > /sys/kernel/debug/$FAILTYPE/times
-+    echo -1 > /sys/kernel/debug/$FAILTYPE/times
-     echo 0 > /sys/kernel/debug/$FAILTYPE/space
-     echo 2 > /sys/kernel/debug/$FAILTYPE/verbose
-     echo Y > /sys/kernel/debug/$FAILTYPE/ignore-gfp-wait
-@@ -338,7 +336,7 @@ Application Examples
-     echo N > /sys/kernel/debug/$FAILTYPE/task-filter
-     echo 10 > /sys/kernel/debug/$FAILTYPE/probability
-     echo 100 > /sys/kernel/debug/$FAILTYPE/interval
--    printf %#x -1 > /sys/kernel/debug/$FAILTYPE/times
-+    echo -1 > /sys/kernel/debug/$FAILTYPE/times
-     echo 0 > /sys/kernel/debug/$FAILTYPE/space
-     echo 2 > /sys/kernel/debug/$FAILTYPE/verbose
-     echo Y > /sys/kernel/debug/$FAILTYPE/ignore-gfp-wait
-@@ -369,7 +367,7 @@ Application Examples
-     echo N > /sys/kernel/debug/$FAILTYPE/task-filter
-     echo 100 > /sys/kernel/debug/$FAILTYPE/probability
-     echo 0 > /sys/kernel/debug/$FAILTYPE/interval
--    printf %#x -1 > /sys/kernel/debug/$FAILTYPE/times
-+    echo -1 > /sys/kernel/debug/$FAILTYPE/times
-     echo 0 > /sys/kernel/debug/$FAILTYPE/space
-     echo 1 > /sys/kernel/debug/$FAILTYPE/verbose
- 
-diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-index 950c63fa4d0b..38930d9b0bb7 100644
---- a/fs/debugfs/file.c
-+++ b/fs/debugfs/file.c
-@@ -378,8 +378,8 @@ ssize_t debugfs_attr_read(struct file *file, char __user *buf,
- }
- EXPORT_SYMBOL_GPL(debugfs_attr_read);
- 
--ssize_t debugfs_attr_write(struct file *file, const char __user *buf,
--			 size_t len, loff_t *ppos)
-+static ssize_t debugfs_attr_write_xsigned(struct file *file, const char __user *buf,
-+			 size_t len, loff_t *ppos, bool is_signed)
- {
- 	struct dentry *dentry = F_DENTRY(file);
- 	ssize_t ret;
-@@ -387,12 +387,28 @@ ssize_t debugfs_attr_write(struct file *file, const char __user *buf,
- 	ret = debugfs_file_get(dentry);
- 	if (unlikely(ret))
- 		return ret;
--	ret = simple_attr_write(file, buf, len, ppos);
-+	if (is_signed)
-+		ret = simple_attr_write_signed(file, buf, len, ppos);
-+	else
-+		ret = simple_attr_write(file, buf, len, ppos);
- 	debugfs_file_put(dentry);
- 	return ret;
- }
-+
-+ssize_t debugfs_attr_write(struct file *file, const char __user *buf,
-+			 size_t len, loff_t *ppos)
-+{
-+	return debugfs_attr_write_xsigned(file, buf, len, ppos, false);
-+}
- EXPORT_SYMBOL_GPL(debugfs_attr_write);
- 
-+ssize_t debugfs_attr_write_signed(struct file *file, const char __user *buf,
-+			 size_t len, loff_t *ppos)
-+{
-+	return debugfs_attr_write_xsigned(file, buf, len, ppos, true);
-+}
-+EXPORT_SYMBOL_GPL(debugfs_attr_write_signed);
-+
- static struct dentry *debugfs_create_mode_unsafe(const char *name, umode_t mode,
- 					struct dentry *parent, void *value,
- 					const struct file_operations *fops,
-@@ -738,11 +754,11 @@ static int debugfs_atomic_t_get(void *data, u64 *val)
- 	*val = atomic_read((atomic_t *)data);
- 	return 0;
- }
--DEFINE_DEBUGFS_ATTRIBUTE(fops_atomic_t, debugfs_atomic_t_get,
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic_t, debugfs_atomic_t_get,
- 			debugfs_atomic_t_set, "%lld\n");
--DEFINE_DEBUGFS_ATTRIBUTE(fops_atomic_t_ro, debugfs_atomic_t_get, NULL,
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic_t_ro, debugfs_atomic_t_get, NULL,
- 			"%lld\n");
--DEFINE_DEBUGFS_ATTRIBUTE(fops_atomic_t_wo, NULL, debugfs_atomic_t_set,
-+DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(fops_atomic_t_wo, NULL, debugfs_atomic_t_set,
- 			"%lld\n");
- 
- /**
-diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-index f60674692d36..ea2d919fd9c7 100644
---- a/include/linux/debugfs.h
-+++ b/include/linux/debugfs.h
-@@ -45,7 +45,7 @@ struct debugfs_u32_array {
- 
- extern struct dentry *arch_debugfs_dir;
- 
--#define DEFINE_DEBUGFS_ATTRIBUTE(__fops, __get, __set, __fmt)		\
-+#define DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, __is_signed)	\
- static int __fops ## _open(struct inode *inode, struct file *file)	\
- {									\
- 	__simple_attr_check_format(__fmt, 0ull);			\
-@@ -56,10 +56,16 @@ static const struct file_operations __fops = {				\
- 	.open	 = __fops ## _open,					\
- 	.release = simple_attr_release,					\
- 	.read	 = debugfs_attr_read,					\
--	.write	 = debugfs_attr_write,					\
-+	.write	 = (__is_signed) ? debugfs_attr_write_signed : debugfs_attr_write,	\
- 	.llseek  = no_llseek,						\
- }
- 
-+#define DEFINE_DEBUGFS_ATTRIBUTE(__fops, __get, __set, __fmt)		\
-+	DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, false)
-+
-+#define DEFINE_DEBUGFS_ATTRIBUTE_SIGNED(__fops, __get, __set, __fmt)	\
-+	DEFINE_DEBUGFS_ATTRIBUTE_XSIGNED(__fops, __get, __set, __fmt, true)
-+
- typedef struct vfsmount *(*debugfs_automount_t)(struct dentry *, void *);
- 
- #if defined(CONFIG_DEBUG_FS)
-@@ -102,6 +108,8 @@ ssize_t debugfs_attr_read(struct file *file, char __user *buf,
- 			size_t len, loff_t *ppos);
- ssize_t debugfs_attr_write(struct file *file, const char __user *buf,
- 			size_t len, loff_t *ppos);
-+ssize_t debugfs_attr_write_signed(struct file *file, const char __user *buf,
-+			size_t len, loff_t *ppos);
- 
- struct dentry *debugfs_rename(struct dentry *old_dir, struct dentry *old_dentry,
-                 struct dentry *new_dir, const char *new_name);
-@@ -254,6 +262,13 @@ static inline ssize_t debugfs_attr_write(struct file *file,
- 	return -ENODEV;
- }
- 
-+static inline ssize_t debugfs_attr_write_signed(struct file *file,
-+					const char __user *buf,
-+					size_t len, loff_t *ppos)
-+{
-+	return -ENODEV;
-+}
-+
- static inline struct dentry *debugfs_rename(struct dentry *old_dir, struct dentry *old_dentry,
-                 struct dentry *new_dir, char *new_name)
- {
--- 
-2.34.1
+Reviewed-by: Victor Nogueira <victor@mojatatu.com>
+Tested-by: Victor Nogueira <victor@mojatatu.com>
 
