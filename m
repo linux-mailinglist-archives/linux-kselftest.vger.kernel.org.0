@@ -2,122 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2931B5BCEB7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 16:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B275BCFB7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 16:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiISO2v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Sep 2022 10:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
+        id S229611AbiISO6R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Sep 2022 10:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiISO2s (ORCPT
+        with ESMTP id S229473AbiISO6Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Sep 2022 10:28:48 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572B326555;
-        Mon, 19 Sep 2022 07:28:43 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MWRj93TCkz9v7gQ;
-        Mon, 19 Sep 2022 22:22:53 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwD3cl1vfChjLSJdAA--.62071S2;
-        Mon, 19 Sep 2022 15:28:13 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     roberto.sassu@huaweicloud.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, deso@posteo.net, dhowells@redhat.com,
-        haoluo@google.com, jarkko@kernel.org, jmorris@namei.org,
-        joannelkoong@gmail.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        keyrings@vger.kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, mingo@redhat.com, mykolal@fb.com,
-        paul@paul-moore.com, roberto.sassu@huawei.com, rostedt@goodmis.org,
-        sdf@google.com, serge@hallyn.com, shuah@kernel.org,
-        song@kernel.org, yhs@fb.com
-Subject: [PATCH v18 02/13] btf: Export bpf_dynptr definition
-Date:   Mon, 19 Sep 2022 16:27:54 +0200
-Message-Id: <20220919142754.626564-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <64e8ef59363bcd0f314d4e1eb7483f4dd2b7dbcf.camel@huaweicloud.com>
-References: <64e8ef59363bcd0f314d4e1eb7483f4dd2b7dbcf.camel@huaweicloud.com>
+        Mon, 19 Sep 2022 10:58:16 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6753A19C01;
+        Mon, 19 Sep 2022 07:58:15 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id w2so18085709pfb.0;
+        Mon, 19 Sep 2022 07:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=lnYJozcLUmTPYrU24R8V0lK2TwtYqvaT/IHSXf9uJg0=;
+        b=hRmZP+oV1Bl8EjCD8HfT0GqgLngvsP/aBaoWTJ1ML06z73Xew4hyq/urnklLSYH3/q
+         dMPY4mFzOip3Hsohb93b7CLrlknDnOe/YktWjjXLDjm6POoYbFn/tds3R2oy1BleZjSd
+         ThdYET2VaFoimTq2WMbSzrMwONsyEuf+BbWVFjYn+yHXDGIr5BnnT3vcx7Gh0F0WzY/p
+         UyPnLDLeZ+3OLuFYxtytUFI9A9D+YQsIRvdjN4Vbw3aWKFqXeYacSAt2wzSCLCm6BCA1
+         Mo9MaxLow+r5p7N7q9QGNHdmyFNlnoiBVMgP+AFPXrq2mqMyaPABJXUP2NQ8TuNOElrQ
+         s6ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=lnYJozcLUmTPYrU24R8V0lK2TwtYqvaT/IHSXf9uJg0=;
+        b=Qvr9UNS0APM/OpQtGCVuHQ+L6AQ4+JznjIPhSQX/PBTd6dlaLgBIpyu3hfrCAVPn5f
+         WC/jVFLYJ8oy+jo9oCklcpYZCSdQGfNmLCQipsaPg5svwk7/QUP9LKFHvf+XXPeC/Vil
+         QiW8x9PSleZHU4tAdXmUm7aEiudbqEiEW98BdhzoYzlUUOhN2xeSyj1SG3VOsxHy0La+
+         44OGG7/H33gCLs76oowCTE7PkHfAj5OfpYkK8VSROrKxCHqTCapRXFcn+dOKVWvrJBoQ
+         8hOkHjfg5/BllwCHN8nGIopzHIVvpXhq82nB+c+3GDhLV5xjxGLH6C4M0e4jsM2YPGbp
+         QPSQ==
+X-Gm-Message-State: ACrzQf3GHsgMe/BmfUr0bl8cW7Aw0HPK/dUzqNVG90kdJX0OlFdixW3s
+        chqPxuygvu0Vm/yV9yUgfmw=
+X-Google-Smtp-Source: AMsMyM5ZYYdFuNeKzgLJKAadbdkw3BGTjlQj6CuVcT73oxkvecA7RXzVRlY7rFhCUdnWPJ2uEHW6bw==
+X-Received: by 2002:a05:6a00:3392:b0:547:f861:1fad with SMTP id cm18-20020a056a00339200b00547f8611fadmr19226573pfb.16.1663599494511;
+        Mon, 19 Sep 2022 07:58:14 -0700 (PDT)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id p14-20020a170902e74e00b00177324a7862sm21108171plf.45.2022.09.19.07.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 07:58:13 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 07:58:11 -0700
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+Message-ID: <YyiDg79flhWoMDZB@gmail.com>
+References: <20220826064535.1941190-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwD3cl1vfChjLSJdAA--.62071S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw47JF4UCFy5JFyxurWUCFg_yoW8Zr1rpa
-        1rG39Fyr4vqFyI9w1UAr4093ySyw4kX347CFyvv3yYvrsIqFyqvF4jkr43Wr95trWDWFWY
-        kF4agr4Yva4UZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9a14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
-        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-        zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_
-        WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJr
-        UvcSsGvfC2KfnxnUUI43ZEXa7VUUbAw7UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4M4lgADsa
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+In-Reply-To: <20220826064535.1941190-1-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Fri, Aug 26, 2022 at 11:45:31AM +0500, Muhammad Usama Anjum wrote:
+> 
+> Hello,
+> 
+> This patch series implements a new ioctl on the pagemap proc fs file to
+> get, clear and perform both get and clear at the same time atomically on
+> the specified range of the memory.
+> 
+> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
+> procfs file. The soft-dirty PTE bit for the whole memory range of the
+> process can be cleared by writing to the clear_refs file. This series
+> adds features that weren't present earlier.
+> - There is no atomic get soft-dirty PTE bit status and clear operation
+>   present.
+> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
+> 
+> Historically, soft-dirty PTE bit tracking has been used in the CRIU
+> project. The proc fs interface is enough for that as I think the process
+> is frozen. We have the use case where we need to track the soft-dirty
+> PTE bit for the running processes. We need this tracking and clear
+> mechanism of a region of memory while the process is running to emulate
+> the getWriteWatch() syscall of Windows. This syscall is used by games to
+> keep track of dirty pages and keep processing only the dirty pages. This
+> new ioctl can be used by the CRIU project and other applications which
+> require soft-dirty PTE bit information.
+> 
+> As in the current kernel there is no way to clear a part of memory (instead
+> of clearing the Soft-Dirty bits for the entire process) and get+clear
+> operation cannot be performed atomically, there are other methods to mimic
+> this information entirely in userspace with poor performance:
+> - The mprotect syscall and SIGSEGV handler for bookkeeping
+> - The userfaultfd syscall with the handler for bookkeeping
+> Some benchmarks can be seen [1].
+> 
+> This ioctl can be used by the CRIU project and other applications which
+> require soft-dirty PTE bit information. The following operations are
+> supported in this ioctl:
+> - Get the pages that are soft-dirty.
 
-eBPF dynamic pointers is a new feature recently added to upstream. It binds
-together a pointer to a memory area and its size. The internal kernel
-structure bpf_dynptr_kern is not accessible by eBPF programs in user space.
-They instead see bpf_dynptr, which is then translated to the internal
-kernel structure by the eBPF verifier.
+I think this interface doesn't have to be limited by the soft-dirty
+bits only. For example, CRIU needs to know whether file, present and swap bits
+are set or not.
 
-The problem is that it is not possible to include at the same time the uapi
-include linux/bpf.h and the vmlinux BTF vmlinux.h, as they both contain the
-definition of some structures/enums. The compiler complains saying that the
-structures/enums are redefined.
+I mean we should be able to specify for what pages we need to get info
+for. An ioctl argument can have these four fields:
+* required bits (rmask & mask == mask) - all bits from this mask have to be set.
+* any of these bits (amask & mask != 0) - any of these bits is set.
+* exclude masks (emask & mask == 0) = none of these bits are set.
+* return mask - bits that have to be reported to user.
 
-As bpf_dynptr is defined in the uapi include linux/bpf.h, this makes it
-impossible to include vmlinux.h. However, in some cases, e.g. when using
-kfuncs, vmlinux.h has to be included. The only option until now was to
-include vmlinux.h and add the definition of bpf_dynptr directly in the eBPF
-program source code from linux/bpf.h.
+> - Clear the pages which are soft-dirty.
+> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
+> soft-dirty PTE bit
+> 
+> There are two decisions which have been taken about how to get the output
+> from the syscall.
+> - Return offsets of the pages from the start in the vec
 
-Solve the problem by using the same approach as for bpf_timer (which also
-follows the same scheme with the _kern suffix for the internal kernel
-structure).
+We can conside to return regions that contains pages with the same set
+of bits.
 
-Add the following line in one of the dynamic pointer helpers,
-bpf_dynptr_from_mem():
+struct page_region {
+	void *start;
+	long size;
+	u64 bitmap;
+}
 
-BTF_TYPE_EMIT(struct bpf_dynptr);
+And ioctl returns arrays of page_region-s. I believe it will be more
+compact form for many cases.
 
-Cc: stable@vger.kernel.org
-Cc: Joanne Koong <joannelkoong@gmail.com>
-Fixes: 97e03f521050c ("bpf: Add verifier support for dynptrs")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- kernel/bpf/helpers.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 41aeaf3862ec..7ce1f583b929 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1446,6 +1446,8 @@ BPF_CALL_4(bpf_dynptr_from_mem, void *, data, u32, size, u64, flags, struct bpf_
- {
- 	int err;
- 
-+	BTF_TYPE_EMIT(struct bpf_dynptr);
-+
- 	err = bpf_dynptr_check_size(size);
- 	if (err)
- 		goto error;
--- 
-2.25.1
-
+> - Stop execution when vec is filled with dirty pages
+> These two arguments doesn't follow the mincore() philosophy where the
+> output array corresponds to the address range in one to one fashion, hence
+> the output buffer length isn't passed and only a flag is set if the page
+> is present. This makes mincore() easy to use with less control. We are
+> passing the size of the output array and putting return data consecutively
+> which is offset of dirty pages from the start. The user can convert these
+> offsets back into the dirty page addresses easily. Suppose, the user want
+> to get first 10 dirty pages from a total memory of 100 pages. He'll
+> allocate output buffer of size 10 and the ioctl will abort after finding the
+> 10 pages. This behaviour is needed to support Windows' getWriteWatch(). The
+> behaviour like mincore() can be achieved by passing output buffer of 100
+> size. This interface can be used for any desired behaviour.
+> 
+> [1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+> 
+> Regards,
+> Muhammad Usama Anjum
+> 
+> Muhammad Usama Anjum (4):
+>   fs/proc/task_mmu: update functions to clear the soft-dirty PTE bit
+>   fs/proc/task_mmu: Implement IOCTL to get and clear soft dirty PTE bit
+>   selftests: vm: add pagemap ioctl tests
+>   mm: add documentation of the new ioctl on pagemap
+> 
+>  Documentation/admin-guide/mm/soft-dirty.rst |  42 +-
+>  fs/proc/task_mmu.c                          | 342 ++++++++++-
+>  include/uapi/linux/fs.h                     |  23 +
+>  tools/include/uapi/linux/fs.h               |  23 +
+>  tools/testing/selftests/vm/.gitignore       |   1 +
+>  tools/testing/selftests/vm/Makefile         |   2 +
+>  tools/testing/selftests/vm/pagemap_ioctl.c  | 649 ++++++++++++++++++++
+>  7 files changed, 1050 insertions(+), 32 deletions(-)
+>  create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
+> 
+> -- 
+> 2.30.2
+> 
