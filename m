@@ -2,539 +2,223 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0B75BD5EC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Sep 2022 22:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5575BD7CE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 01:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiISUz4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Sep 2022 16:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S229881AbiISXJG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Sep 2022 19:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiISUzz (ORCPT
+        with ESMTP id S229810AbiISXJE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Sep 2022 16:55:55 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5184B4A7;
-        Mon, 19 Sep 2022 13:55:54 -0700 (PDT)
-Received: from mx0.riseup.net (mx0-pn.riseup.net [10.0.1.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mx0.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4MWcQd5Y3MzDq8s;
-        Mon, 19 Sep 2022 20:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1663620953; bh=Y6zGMsGFdwFliQ3+RHU800xKasFHBJLooN5fF2cVeEU=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=ZcHItAFV8apkMKUmenyTBed1aftl/fsyMWE25cwHy0lYRtKsTxk8lstgj4v/ZWh6j
-         ZeQWSrlZanergzuTDkxA9ZNZc7I0I2xdVmZ/V4scIrD/MKg9mCnj/qaldLix4S/sJ8
-         +jk2iciujpqjZeyqKiF4gR/pAiSMPrxlSpp9Hm2g=
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MWcQc5SPsz9sNF;
-        Mon, 19 Sep 2022 20:55:52 +0000 (UTC)
-X-Riseup-User-ID: 13F53709CB8123FC955927105016AA312A7F55A7E5F644F5CB03E89423DB5C1F
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4MWcQW4s8Wz5vW6;
-        Mon, 19 Sep 2022 20:55:47 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [igt-dev] [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility
- for KUnit
-From:   Isabella Basso <isabbasso@riseup.net>
-In-Reply-To: <2101392.KlZ2vcFHjT@jkrzyszt-mobl1.ger.corp.intel.com>
-Date:   Mon, 19 Sep 2022 17:55:44 -0300
-Cc:     igt-dev@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Magali Lemes <magalilemes00@gmail.com>,
-        =?utf-8?Q?Ma=C3=ADra_Canal?= <maira.canal@usp.br>,
-        Daniel Latypov <dlatypov@google.com>, n@nfraprado.net,
-        kernel list <linux-kernel@vger.kernel.org>,
-        leandro.ribeiro@collabora.com,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        David Gow <davidgow@google.com>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?utf-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Trevor Woerner <twoerner@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <66E07FE6-0FE1-4CDF-A346-CF23C7B9D073@riseup.net>
-References: <20220829000920.38185-1-isabbasso@riseup.net>
- <20220829000920.38185-4-isabbasso@riseup.net>
- <2101392.KlZ2vcFHjT@jkrzyszt-mobl1.ger.corp.intel.com>
-To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 19 Sep 2022 19:09:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2270DFA5
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Sep 2022 16:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663628942;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kRv1IgEAbdDa7hf7F1XkJd0avcDO43VfXVsRTgwNQLk=;
+        b=YbhEqakxZamNYNiOdsgOZXjOW6Wejkl6jyY3f1cH+dePbRljjUGogLPRsfqgy1Hsn7DzLI
+        9+DQs3TXVyx/t7R0iLNi7BYJqLrmzyRmnAs7IyE22beHOH63DX7h6ZcJSoAMDyWltnXH1l
+        NtGayc+OmjTcK8upp6ud1tF8mzo8aU8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-217-6DwRdfwKN9G9YsNOLU21UQ-1; Mon, 19 Sep 2022 19:08:58 -0400
+X-MC-Unique: 6DwRdfwKN9G9YsNOLU21UQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2AC65862FE0;
+        Mon, 19 Sep 2022 23:08:58 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.8.155])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CAD30140EBF3;
+        Mon, 19 Sep 2022 23:08:57 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     "netdev @ vger . kernel . org" <netdev@vger.kernel.org>
+Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH net 1/2] selftests: bonding: cause oops in bond_rr_gen_slave_id
+Date:   Mon, 19 Sep 2022 19:08:45 -0400
+Message-Id: <bb3abf634d23944a24f4a9453e07c37c7b2168e9.1663628505.git.jtoppins@redhat.com>
+In-Reply-To: <cover.1663628505.git.jtoppins@redhat.com>
+References: <cover.1663628505.git.jtoppins@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Janusz,
+This bonding selftest causes the following kernel oops on aarch64 and
+should be architectures agnostic.
 
-> Am 09/09/2022 um 12:18 PM schrieb Janusz Krzysztofik =
-<janusz.krzysztofik@linux.intel.com>:
->=20
-> Hi Isabella,
->=20
-> On Monday, 29 August 2022 02:09:19 CEST Isabella Basso wrote:
->> This adds functions for both executing the tests as well as parsing =
-(K)TAP
->> kmsg output, as per the KTAP spec [1].
->>=20
->> [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
->>=20
->> Signed-off-by: Isabella Basso <isabbasso@riseup.net>
->> ---
->> lib/igt_kmod.c | 290 =
-+++++++++++++++++++++++++++++++++++++++++++++++++
->> lib/igt_kmod.h |   2 +
->> 2 files changed, 292 insertions(+)
->>=20
->> diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
->> index 97cac7f5..93cdfcc5 100644
->> --- a/lib/igt_kmod.c
->> +++ b/lib/igt_kmod.c
->> @@ -25,6 +25,7 @@
->> #include <signal.h>
->> #include <errno.h>
->> #include <sys/utsname.h>
->> +#include <limits.h>
->>=20
->> #include "igt_aux.h"
->> #include "igt_core.h"
->> @@ -32,6 +33,8 @@
->> #include "igt_sysfs.h"
->> #include "igt_taints.h"
->>=20
->> +#define BUF_LEN 4096
->> +
->> /**
->>  * SECTION:igt_kmod
->>  * @short_description: Wrappers around libkmod for module =
-loading/unloading
->> @@ -713,6 +716,293 @@ void igt_kselftest_get_tests(struct kmod_module =
-*kmod,
->> 	kmod_module_info_free_list(pre);
->> }
->>=20
->> +/**
->> + * lookup_value:
->> + * @haystack: the string to search in
->> + * @needle: the string to search for
->> + *
->> + * Returns: the value of the needle in the haystack, or -1 if not =
-found.
->> + */
->> +static long lookup_value(const char *haystack, const char *needle)
->> +{
->> +	const char *needle_rptr;
->> +	char *needle_end;
->> +	long num;
->> +
->> +	needle_rptr =3D strcasestr(haystack, needle);
->> +
->> +	if (needle_rptr =3D=3D NULL)
->> +		return -1;
->> +
->> +	/* skip search string and whitespaces after it */
->> +	needle_rptr +=3D strlen(needle);
->> +
->> +	num =3D strtol(needle_rptr, &needle_end, 10);
->> +
->> +	if (needle_rptr =3D=3D needle_end)
->> +		return -1;
->> +
->> +	if (num =3D=3D LONG_MIN || num =3D=3D LONG_MAX)
->> +		return 0;
->> +
->> +	return num > 0 ? num : 0;
->> +}
->> +
->> +static int find_next_tap_subtest(char *record, char *test_name,
->> +				 bool is_subtest)
->> +{
->> +	const char *name_lookup_str,
->> +	      *lend, *version_rptr, *name_rptr;
->> +	long test_count;
->> +
->> +	name_lookup_str =3D "test: ";
->> +
->> +	version_rptr =3D strcasestr(record, "TAP version ");
->> +	name_rptr =3D strcasestr(record, name_lookup_str);
->> +
->> +	/*
->> +	 * total test count will almost always appear as 0..N at the =
-beginning
->> +	 * of a run, so we use it as indication of a run
->> +	 */
->> +	test_count =3D lookup_value(record, "..");
->> +
->> +	/* no count found, so this is probably not starting a (sub)test =
-*/
->> +	if (test_count < 0) {
->> +		if (name_rptr !=3D NULL) {
->> +			if (test_name[0] =3D=3D '\0')
->> +				strncpy(test_name,
->> +					name_rptr + =
-strlen(name_lookup_str),
->> +					BUF_LEN);
->> +			else if (strcmp(test_name, name_rptr + =
-strlen(name_lookup_str)) =3D=3D 0)
->> +				return 0;
->> +			else
->> +				test_name[0] =3D '\0';
->> +
->> +		}
->> +		return -1;
->> +	}
->> +
->> +	/*
->> +	 * "(K)TAP version XX" should be the first line on all =
-(sub)tests as per
->> +	 * =
-https://www.kernel.org/doc/html/latest/dev-tools/ktap.html#version-lines
->> +	 * but actually isn't, as it currently depends on whoever writes =
-the
->> +	 * test to print this info
->> +	 */
->> +	if (version_rptr =3D=3D NULL)
->> +		igt_info("Missing test version string\n");
->> +
->> +	if (name_rptr =3D=3D NULL) {
->> +		/* we have to keep track of the name string, as it might =
-be
->> +		 * contained in a line read previously */
->> +		if (test_name[0] =3D=3D '\0') {
->> +			igt_info("Missing test name string\n");
->> +
->> +			if (is_subtest)
->> +				igt_info("Running %ld subtests...\n", =
-test_count);
->> +			else
->> +				igt_info("Running %ld tests...\n", =
-test_count);
->> +		} else {
->> +			lend =3D strchrnul(test_name, '\n');
->> +
->> +			if (*lend =3D=3D '\0') {
->> +				if (is_subtest)
->> +					igt_info("Executing %ld subtests =
-in: %s\n",
->> +						 test_count, test_name);
->> +				else
->> +					igt_info("Executing %ld tests =
-in: %s\n",
->> +						 test_count, test_name);
->> +				return test_count;
->> +			}
->> +
->> +			if (is_subtest)
->> +				igt_info("Executing %ld subtests in: =
-%.*s\n",
->> +					 test_count, (int)(lend - =
-test_name),
->> +					 test_name);
->> +			else
->> +				igt_info("Executing %ld tests in: =
-%.*s\n",
->> +					 test_count, (int)(lend - =
-test_name),
->> +					 test_name);
->> +			test_name[0] =3D '\0';
->> +		}
->> +	} else {
->> +		name_rptr +=3D strlen(name_lookup_str);
->> +		lend =3D strchrnul(name_rptr, '\n');
->> +		/*
->> +		 * as the test count comes after the test name we need =
-not check
->> +		 * for a long line again
->> +		 */
->> +		if (is_subtest)
->> +			igt_info("Executing %ld subtests in: %.*s\n",
->> +				 test_count, (int)(lend - name_rptr),
->> +				 name_rptr);
->> +		else
->> +			igt_info("Executing %ld tests in: %.*s\n",
->> +				 test_count, (int)(lend - name_rptr),
->> +				 name_rptr);
->> +	}
->> +
->> +	return test_count;
->> +}
->> +
->> +static void parse_kmsg_for_tap(const char *lstart, char *lend,
->> +			       int *sublevel, bool *failed_tests)
->> +{
->> +	const char *nok_rptr, *comment_start, *value_parse_start;
->> +
->> +	nok_rptr =3D strstr(lstart, "not ok ");
->> +	if (nok_rptr !=3D NULL) {
->> +		igt_warn("kmsg> %.*s\n",
->> +			 (int)(lend - lstart), lstart);
->> +		*failed_tests =3D true;
->> +		return;
->> +	}
->> +
->> +	comment_start =3D strchrnul(lstart, '#');
->> +
->> +	/* check if we're still in a subtest */
->> +	if (*comment_start !=3D '\0') {
->> +		comment_start++;
->> +		value_parse_start =3D comment_start;
->> +
->> +		if (lookup_value(value_parse_start, "fail: ") > 0) {
->> +			igt_warn("kmsg> %.*s\n",
->> +				 (int)(lend - comment_start), =
-comment_start);
->> +			*failed_tests =3D true;
->> +			(*sublevel)--;
->> +			return;
->> +		}
->> +	}
->> +
->> +	igt_info("kmsg> %.*s\n",
->> +		 (int)(lend - lstart), lstart);
->> +}
->> +
->> +static void igt_kunit_subtests(int fd, char *record,
->> +			       int *sublevel, bool *failed_tests)
->=20
-> This function looks like nothing but a KTAP parser.  It doesn't =
-perform any=20
-> operations required for execution of kunit tests.  Shouldn't we better =
-name it=20
-> like igt_ktap_parser or something like that?  Besides, I would move =
-that=20
-> parser code to a separate source file.
->=20
->> +{
->> +	char test_name[BUF_LEN + 1], *lend;
->> +
->> +	lend =3D NULL;
->> +	test_name[0] =3D '\0';
->> +	test_name[BUF_LEN] =3D '\0';
->> +
->> +	while (*sublevel >=3D 0) {
->> +		const char *lstart;
->> +		ssize_t r;
->> +
->> +		if (lend !=3D NULL && *lend !=3D '\0')
->> +			lseek(fd, (int) (lend - record), SEEK_CUR);
->> +
->> +		r =3D read(fd, record, BUF_LEN);
->> +
->> +		if (r <=3D 0) {
->> +			switch (errno) {
->> +			case EINTR:
->> +				continue;
->> +			case EPIPE:
->> +				igt_warn("kmsg truncated: too many =
-messages. \
->> +					 You may want to increase =
-log_buf_len \
->> +					 in your boot options\n");
->> +				continue;
->> +			case !EAGAIN:
->> +				igt_warn("kmsg truncated: unknown error =
-(%m)\n");something=20
->=20
-> If the intention here is to display this warning only in other cases =
-but=20
-> EAGAIN error then that won't work as intended.
->=20
->> +				*sublevel =3D -1;
->=20
-> Shouldn't *sublevel be also set to -1 in all cases but EINTR and =
-EPIPE,=20
-> whether EAGAIN or anything else?
->=20
-> Other than that, please use /* fallthrough */ marking if you =
-intentionally=20
-> omit break;
->=20
->> +			default:
->> +				break;
->> +			}
->> +			break;
->> +		}
->> +
->> +		lend =3D strchrnul(record, '\n');
->> +
->> +		/* in case line > 4096 */
->> +		if (*lend =3D=3D '\0')
->> +			continue;
->=20
-> That means we are free to ignore initial fragments of lines exceeding =
-4096=20
-> characters, but still will be looking at trailing fragments of those =
-lines. =20
-> This approach seems sub-optimal to me.  Wouldn't it be more convenient =
-if we=20
-> used line buffered I/O instead of read()?
->=20
->> +
->> +		if (find_next_tap_subtest(record, test_name, *sublevel > =
-0) !=3D -1)
->> +			(*sublevel)++;
->> +
->> +		if (*sublevel > 0) {
->> +			lstart =3D strchrnul(record, ';');
->> +
->> +			if (*lstart =3D=3D '\0') {
->> +				igt_warn("kmsg truncated: output =
-malformed (%m)\n");
->> +				igt_fail(IGT_EXIT_FAILURE);
->> +			}
->> +
->> +			lstart++;
->> +			while (isspace(*lstart))
->> +				lstart++;
->> +
->> +			parse_kmsg_for_tap(lstart, lend, sublevel, =
-failed_tests);
->> +		}
->> +	}
->> +
->> +	if (*failed_tests || *sublevel < 0)
->> +		igt_fail(IGT_EXIT_FAILURE);
->> +	else
->> +		igt_success();
->> +}
->> +
->> +/**
->> + * igt_kunit:
->> + * @module_name: the name of the module
->> + * @opts: options to load the module
->> + *
->> + * Loads the kunit module, parses its dmesg output, then unloads it
->> + */
->> +void igt_kunit(const char *module_name, const char *opts)
->> +{
->> +	struct igt_ktest tst;
->> +	char record[BUF_LEN + 1];
->> +	bool failed_tests =3D false;
->> +	int sublevel =3D 0;
->> +
->> +	record[BUF_LEN] =3D '\0';
->> +
->> +	/* get normalized module name */
->> +	if (igt_ktest_init(&tst, module_name) !=3D 0) {
->> +		igt_warn("Unable to initialize ktest for %s\n", =
-module_name);
->> +		return;
->> +	}
->> +
->> +	if (igt_ktest_begin(&tst) !=3D 0) {
->=20
-> Since igt_ktest_begin() as is calls igt_require() then it may be used =
-only=20
-> from inside an igt_fixture or igt_subtest block.  If the intention is =
-to call
-> igt_kunit() from an igt_subtest block, unlike igt_kselftest() which =
-has=20
-> igt_fixture and igt_subtest blocks placed in its body, please document =
-that.
->=20
->> +		igt_warn("Unable to begin ktest for %s\n", module_name);
->> +
->> +		igt_ktest_fini(&tst);
->> +		return;
->> +	}
->> +
->> +	if (tst.kmsg < 0) {
->> +		igt_warn("Could not open /dev/kmsg");
->> +		goto unload;
->> +	}
->> +
->> +	if (lseek(tst.kmsg, 0, SEEK_END)) {
->> +		igt_warn("Could not seek the end of /dev/kmsg");
->> +		goto unload;
->> +	}
->> +
->> +	/* The kunit module is required for running any kunit tests */
->> +	if (igt_kmod_load("kunit", NULL) !=3D 0) {
->> +		igt_warn("Unable to load kunit module\n");
->> +		goto unload;
->> +	}
->> +
->> +	if (igt_kmod_load(module_name, opts) !=3D 0) {
->> +		igt_warn("Unable to load %s module\n", module_name);
->> +		goto unload;
->> +	}
->> +
->> +	igt_kunit_subtests(tst.kmsg, record, &sublevel, &failed_tests);
->=20
-> What's the point of passing that many temporary variable pointers to=20=
+[  329.805838] kselftest: Running tests in drivers/net/bonding
+[  330.011028] eth0: renamed from link1_2
+[  330.220846] eth0: renamed from link1_1
+[  330.387755] bond0: (slave eth0): making interface the new active one
+[  330.394165] bond0: (slave eth0): Enslaving as an active interface with an up link
+[  330.401867] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+[  334.586619] bond0: (slave eth0): Releasing backup interface
+[  334.671065] bond0: (slave eth0): Enslaving as an active interface with an up link
+[  334.686773] Unable to handle kernel paging request at virtual address ffff2c91ac905000
+[  334.694703] Mem abort info:
+[  334.697486]   ESR = 0x0000000096000004
+[  334.701234]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  334.706536]   SET = 0, FnV = 0
+[  334.709579]   EA = 0, S1PTW = 0
+[  334.712719]   FSC = 0x04: level 0 translation fault
+[  334.717586] Data abort info:
+[  334.720454]   ISV = 0, ISS = 0x00000004
+[  334.724288]   CM = 0, WnR = 0
+[  334.727244] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000008044d662000
+[  334.733944] [ffff2c91ac905000] pgd=0000000000000000, p4d=0000000000000000
+[  334.740734] Internal error: Oops: 96000004 [#1] SMP
+[  334.745602] Modules linked in: bonding tls veth rfkill sunrpc arm_spe_pmu vfat fat acpi_ipmi ipmi_ssif ixgbe igb i40e mdio ipmi_devintf ipmi_msghandler arm_cmn arm_dsu_pmu cppc_cpufreq acpi_tad fuse zram crct10dif_ce ast ghash_ce sbsa_gwdt nvme drm_vram_helper drm_ttm_helper nvme_core ttm xgene_hwmon
+[  334.772217] CPU: 7 PID: 2214 Comm: ping Not tainted 6.0.0-rc4-00133-g64ae13ed4784 #4
+[  334.779950] Hardware name: GIGABYTE R272-P31-00/MP32-AR1-00, BIOS F18v (SCP: 1.08.20211002) 12/01/2021
+[  334.789244] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  334.796196] pc : bond_rr_gen_slave_id+0x40/0x124 [bonding]
+[  334.801691] lr : bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
+[  334.807962] sp : ffff8000221733e0
+[  334.811265] x29: ffff8000221733e0 x28: ffffdbac8572d198 x27: ffff80002217357c
+[  334.818392] x26: 000000000000002a x25: ffffdbacb33ee000 x24: ffff07ff980fa000
+[  334.825519] x23: ffffdbacb2e398ba x22: ffff07ff98102000 x21: ffff07ff981029c0
+[  334.832646] x20: 0000000000000001 x19: ffff07ff981029c0 x18: 0000000000000014
+[  334.839773] x17: 0000000000000000 x16: ffffdbacb1004364 x15: 0000aaaabe2f5a62
+[  334.846899] x14: ffff07ff8e55d968 x13: ffff07ff8e55db30 x12: 0000000000000000
+[  334.854026] x11: ffffdbacb21532e8 x10: 0000000000000001 x9 : ffffdbac857178ec
+[  334.861153] x8 : ffff07ff9f6e5a28 x7 : 0000000000000000 x6 : 000000007c2b3742
+[  334.868279] x5 : ffff2c91ac905000 x4 : ffff2c91ac905000 x3 : ffff07ff9f554400
+[  334.875406] x2 : ffff2c91ac905000 x1 : 0000000000000001 x0 : ffff07ff981029c0
+[  334.882532] Call trace:
+[  334.884967]  bond_rr_gen_slave_id+0x40/0x124 [bonding]
+[  334.890109]  bond_xmit_roundrobin_slave_get+0x38/0xdc [bonding]
+[  334.896033]  __bond_start_xmit+0x128/0x3a0 [bonding]
+[  334.901001]  bond_start_xmit+0x54/0xb0 [bonding]
+[  334.905622]  dev_hard_start_xmit+0xb4/0x220
+[  334.909798]  __dev_queue_xmit+0x1a0/0x720
+[  334.913799]  arp_xmit+0x3c/0xbc
+[  334.916932]  arp_send_dst+0x98/0xd0
+[  334.920410]  arp_solicit+0xe8/0x230
+[  334.923888]  neigh_probe+0x60/0xb0
+[  334.927279]  __neigh_event_send+0x3b0/0x470
+[  334.931453]  neigh_resolve_output+0x70/0x90
+[  334.935626]  ip_finish_output2+0x158/0x514
+[  334.939714]  __ip_finish_output+0xac/0x1a4
+[  334.943800]  ip_finish_output+0x40/0xfc
+[  334.947626]  ip_output+0xf8/0x1a4
+[  334.950931]  ip_send_skb+0x5c/0x100
+[  334.954410]  ip_push_pending_frames+0x3c/0x60
+[  334.958758]  raw_sendmsg+0x458/0x6d0
+[  334.962325]  inet_sendmsg+0x50/0x80
+[  334.965805]  sock_sendmsg+0x60/0x6c
+[  334.969286]  __sys_sendto+0xc8/0x134
+[  334.972853]  __arm64_sys_sendto+0x34/0x4c
+[  334.976854]  invoke_syscall+0x78/0x100
+[  334.980594]  el0_svc_common.constprop.0+0x4c/0xf4
+[  334.985287]  do_el0_svc+0x38/0x4c
+[  334.988591]  el0_svc+0x34/0x10c
+[  334.991724]  el0t_64_sync_handler+0x11c/0x150
+[  334.996072]  el0t_64_sync+0x190/0x194
+[  334.999726] Code: b9001062 f9403c02 d53cd044 8b040042 (b8210040)
+[  335.005810] ---[ end trace 0000000000000000 ]---
+[  335.010416] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+[  335.017279] SMP: stopping secondary CPUs
+[  335.021374] Kernel Offset: 0x5baca8eb0000 from 0xffff800008000000
+[  335.027456] PHYS_OFFSET: 0x80000000
+[  335.030932] CPU features: 0x0000,0085c029,19805c82
+[  335.035713] Memory Limit: none
+[  335.038756] Rebooting in 180 seconds..
 
-> igt_kunit_subtests() if we are not interested here in content of any =
-of those=20
-> variables after the function returns?  That function could perfectly =
-use its=20
-> own local variables for storing that data.
->=20
-> Besides, my comment about not using igt_require() outside of =
-igt_fixture or=20
-> igt_subtest blocks also applies to igt_fail() and igt_success() called =
-from
-> igt_kunit_subtests().
->=20
-> Anyway, related to my comment about naming that function a parser, I =
-think the=20
-> best approach would be for that parser to return a generic set of =
-results from=20
-> kunit execution, then we could feed that data into an IGT specific =
-handler=20
-> that would convert them to IGT results (SUCCESS, FAIL, or SKIP) as if =
-returned=20
-> by a set of IGT dynamic subtests.
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
+ .../selftests/drivers/net/bonding/Makefile    |  3 +-
+ .../bonding/bond-arp-interval-causes-panic.sh | 48 +++++++++++++++++++
+ 2 files changed, 50 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
 
-That sounds like a good idea to me, I might take some extra time before =
-v3 to
-do that, though. I=E2=80=99ll also look into your other suggestions =
-carefully.
-
-Thanks a lot for the review!
-
-Cheers,
---
-Isabella Basso
-
-> Thanks,
-> Janusz
->=20
->> +unload:
->> +	igt_kmod_unload("kunit", 0);
->> +
->> +	igt_ktest_end(&tst);
->> +
->> +	igt_ktest_fini(&tst);
->> +}
->> +
->> static int open_parameters(const char *module_name)
->> {
->> 	char path[256];
->> diff --git a/lib/igt_kmod.h b/lib/igt_kmod.h
->> index ceb10cd0..737143c1 100644
->> --- a/lib/igt_kmod.h
->> +++ b/lib/igt_kmod.h
->> @@ -45,6 +45,8 @@ int __igt_i915_driver_unload(char **whom);
->> int igt_amdgpu_driver_load(const char *opts);
->> int igt_amdgpu_driver_unload(void);
->>=20
->> +void igt_kunit(const char *module_name, const char *opts);
->> +
->> void igt_kselftests(const char *module_name,
->> 		    const char *module_options,
->> 		    const char *result_option,
->>=20
+diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
+index 0f9659407969..1d866658e541 100644
+--- a/tools/testing/selftests/drivers/net/bonding/Makefile
++++ b/tools/testing/selftests/drivers/net/bonding/Makefile
+@@ -2,7 +2,8 @@
+ # Makefile for net selftests
+ 
+ TEST_PROGS := bond-break-lacpdu-tx.sh \
+-	      dev_addr_lists.sh
++	      dev_addr_lists.sh \
++	      bond-arp-interval-causes-panic.sh
+ 
+ TEST_FILES := lag_lib.sh
+ 
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
+new file mode 100755
+index 000000000000..095c262ba74c
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
+@@ -0,0 +1,48 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# cause kernel oops in bond_rr_gen_slave_id
++DEBUG=${DEBUG:-0}
++
++set -e
++test ${DEBUG} -ne 0 && set -x
++
++function finish()
++{
++	ip -all netns delete
++	ip link del link1_1 || true
++}
++
++trap finish EXIT
++
++client_ip4=192.168.1.198
++server_ip4=192.168.1.254
++
++# setup kernel so it reboots after causing the panic
++echo 180 >/proc/sys/kernel/panic
++
++# build namespaces
++ip link add dev link1_1 type veth peer name link1_2
++
++ip netns add "server"
++ip link set dev link1_2 netns server up name eth0
++ip netns exec server ip addr add ${server_ip4}/24 dev eth0
++
++ip netns add "client"
++ip link set dev link1_1 netns client down name eth0
++ip netns exec client ip link add dev bond0 down type bond mode 1 \
++	miimon 100 all_slaves_active 1
++ip netns exec client ip link set dev eth0 down master bond0
++ip netns exec client ip link set dev bond0 up
++ip netns exec client ip addr add ${client_ip4}/24 dev bond0
++ip netns exec client ping -c 5 $server_ip4 >/dev/null
++
++ip netns exec client ip link set dev eth0 down nomaster
++ip netns exec client ip link set dev bond0 down
++ip netns exec client ip link set dev bond0 type bond mode 0 \
++	arp_interval 1000 arp_ip_target "+${server_ip4}"
++ip netns exec client ip link set dev eth0 down master bond0
++ip netns exec client ip link set dev bond0 up
++ip netns exec client ping -c 5 $server_ip4 >/dev/null
++
++exit 0
+-- 
+2.31.1
 
