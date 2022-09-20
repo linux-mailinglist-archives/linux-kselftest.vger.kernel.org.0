@@ -2,148 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044085BEE05
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 21:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5F25BEF26
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 23:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiITTvS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Sep 2022 15:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
+        id S229881AbiITV3p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Sep 2022 17:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiITTvR (ORCPT
+        with ESMTP id S229815AbiITV3o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Sep 2022 15:51:17 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849116FA2E
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 12:51:16 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 78so3711404pgb.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 12:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=DTuwHmur8BQ7UzvYXiSfhG6hoCLOFlEZLc+v/yhwyjc=;
-        b=RBtwoayj+pMK/J5jSI0mvoHQG0BJON5T+gf4rKX8Rq65AY9XUeli1UUam9cEOdwCAC
-         x8gHFCFL/icqEGcNeWXHYdTE02bXSyc+MV5I6e+kPHCYobDuk8E18tp7lCpTuJHGrllN
-         fbxAe321lGeeHrzc+Ra82RYS1HVvMLDfTirYcgq/8rboWH0JckIn6jecDWxBKEDr/SGw
-         i0Vquzu9V1zci54lVCEK9NvAHru6Jcbfa3XI7Y1FLDGHulIX+dwJ1kLrCyBMkOuqvzfw
-         2oK92I1Bd+apQXpZ6IMsdy7zCALZAtqKt4nDiO7GtPdba0vXE4LR7n8j8mDCrSyBDLl8
-         jDug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DTuwHmur8BQ7UzvYXiSfhG6hoCLOFlEZLc+v/yhwyjc=;
-        b=Ecn46NUyxD6zf1BTV9lGNRX8N//19KoMlqa9lOM0KSY8FGNHTtCSuc39usfROqxI0O
-         bqw9OO9eePLqVhwMSZhOwjYKcHyMcZjuScbQkpgyVU7SXswB9qZGemvuRVDaCq0Yr7AC
-         GvjOvMAOw8KZCK9uarsG0dBR3geyjKj+wPIfQlKCN1oBIUe+uY8smMD0ABBd7Pux4MaD
-         pXpbdw+BG7epPwZhXNoV/g3QPTEKdeDi+FtfNYA0T29RmlvwYyWZEGuRiFqGW4UcmwFp
-         32XfzBTOkQG9O7rvcvwqLw43S1IO2Z00MLveZsNBAaYlRTTr3SvGxyt0cBDKrXc6odsS
-         0ncw==
-X-Gm-Message-State: ACrzQf1F9JO9eRncZ9mUINRfL3NvHbo3iVWuFGVquogQe5COXqe19497
-        I9GMKrvB2UnLm21ECrQetLbgcQ==
-X-Google-Smtp-Source: AMsMyM7jex9Q5arTcLqho5hOOC6Z04y67nCb26iNt51DRVTZbuq+ew/XjLCTxS9HZwnDheQ8q64NMw==
-X-Received: by 2002:a63:1455:0:b0:438:e26b:ab1f with SMTP id 21-20020a631455000000b00438e26bab1fmr20977346pgu.183.1663703475946;
-        Tue, 20 Sep 2022 12:51:15 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m1-20020a17090a7f8100b002008ba3a74csm256802pjl.52.2022.09.20.12.51.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 12:51:15 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 19:51:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Gautam Menghani <gautammenghani201@gmail.com>
-Cc:     pbonzini@redhat.com, shuah@kernel.org, guang.zeng@intel.com,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] selftests/kvm: Use num_vcpus when testing ICR in the
- xapic_state_test
-Message-ID: <YyoZr9rXSSMEtdh5@google.com>
-References: <20220903073901.73862-1-gautammenghani201@gmail.com>
+        Tue, 20 Sep 2022 17:29:44 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064DEBC17;
+        Tue, 20 Sep 2022 14:29:39 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E87CF18845FF;
+        Tue, 20 Sep 2022 21:29:12 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id D3A51250007B;
+        Tue, 20 Sep 2022 21:29:12 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id C5ED9A0A1E65; Tue, 20 Sep 2022 21:29:12 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220903073901.73862-1-gautammenghani201@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Tue, 20 Sep 2022 23:29:12 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <Yx73FOpN5uhPQhFl@shredder>
+References: <YwzjPcQjfLPk3q/k@shredder>
+ <f1a17512266ac8b61444e7f0e568aca7@kapio-technology.com>
+ <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 03, 2022, Gautam Menghani wrote:
-> A TODO in xapic_state_test asks to use number of vCPUs instead of
-> vcpu.id + 1 in test_icr(). This patch adds support to get the number 
-> of vCPUs from the VM created and use it.
+On 2022-09-12 11:08, Ido Schimmel wrote:
+> On Sun, Sep 11, 2022 at 11:23:55AM +0200, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-09-11 02:13, Vladimir Oltean wrote:
+>> > On Fri, Sep 09, 2022 at 03:11:56PM +0200, netdev@kapio-technology.com
+>> > wrote:
+>> > > > > > On Wed, Sep 07, 2022 at 11:10:07PM +0200, netdev@kapio-technology.com wrote:
+>> > > > > > > I am at the blackhole driver implementation now, as I suppose that the
+>> > > > > > > iproute2 command should work with the mv88e6xxx driver when adding blackhole
+>> > > > > > > entries (with a added selftest)?
+>> > > > > > > I decided to add the blackhole feature as new ops for drivers with functions
+>> > > > > > > blackhole_fdb_add() and blackhole_fdb_del(). Do you agree with that approach?
+>> > > > > >
+>> > > > > > I assume you are talking about extending 'dsa_switch_ops'?
+>> > > > >
+>> > > > > Yes, that is the idea.
+>> > > > >
+>> > > > > > If so, it's up to the DSA maintainers to decide.
+>> > > >
+>> > > > What will be the usefulness of adding a blackhole FDB entry from user
+>> > > > space?
+>> > >
+>> > > With the software bridge it could be used to signal a untrusted host
+>> > > in
+>> > > connection with a locked port entry attempt. I don't see so much use
+>> > > other
+>> > > that test purposes with the driver though.
+>> >
+>> > Not a huge selling point, to be honest. Can't the blackhole flag remain
+>> > settable only in the device -> bridge direction, with user space just
+>> > reading it?
+>> 
+>> That is possible, but it would of course not make sense to have 
+>> selftests of
+>> the feature as that would not work unless there is a driver with this
+>> capability (now just mv88e6xxx).
 > 
-> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
-> ---
->  .../selftests/kvm/x86_64/xapic_state_test.c     | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-> index 6f7a5ef66718..de934e8e5e41 100644
-> --- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-> @@ -96,9 +96,8 @@ static void __test_icr(struct xapic_vcpu *x, uint64_t val)
->  	____test_icr(x, val & ~(u64)APIC_ICR_BUSY);
->  }
->  
-> -static void test_icr(struct xapic_vcpu *x)
-> +static void test_icr(struct xapic_vcpu *x, int num_vcpus)
->  {
-> -	struct kvm_vcpu *vcpu = x->vcpu;
->  	uint64_t icr, i, j;
->  
->  	icr = APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_FIXED;
-> @@ -110,11 +109,11 @@ static void test_icr(struct xapic_vcpu *x)
->  		__test_icr(x, icr | i);
->  
->  	/*
-> -	 * Send all flavors of IPIs to non-existent vCPUs.  TODO: use number of
-> -	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
-> +	 * Send all flavors of IPIs to non-existent vCPUs. Arbitrarily use vector 0xff.
->  	 */
-> +
->  	icr = APIC_INT_ASSERT | 0xff;
-> -	for (i = vcpu->id + 1; i < 0xff; i++) {
-> +	for (i = num_vcpus; i < 0xff; i++) {
+> The new "blackhole" flag requires changes in the bridge driver and
+> without allowing user space to add such entries, the only way to test
+> these changes is with mv88e6xxx which many of us do not have...
 
-Hrm, this is a bad TODO, which is 100% my fault.  I think past me wanted to play
-nice with the possibility of creating multiple vCPUs, but using the number of
-vCPUs to do that is the wrong approach as it makes assumptions on the vcpu_id.
-One of the goals of the refactoring that led to vm_create_with_one_vcpu() was
-to have tests stop making assumptions about vCPU IDs.
+I am now building from new system (comp), and the kernel selftests are 
+not being installed correctly, so I haven't been able to run the 
+selftests yet.
 
-What would make sense though is to not assume vcpu_id == 0, i.e.
+I have made a blackhole selftest, which looks like this:
 
-	if (i = 0; i < 0xff; i++) {
-		if (i == vcpu->id)
-			continue;
+test_blackhole_fdb()
+{
+         RET=0
 
-		for (j = 0; j < 8; j++)
-			__test_icr(x, i << (32 + 24) | icr | (j << 8));
+         check_blackhole_fdb_support || return 0
 
-	}
+         tcpdump_start $h2
+         $MZ $h1 -q -t udp -a $h1 -b $h2
+         tcpdump_stop
+         tcpdump_show | grep -q udp
+         check_err $? "test_blackhole_fdb: No packet seen on initial"
+         tcpdump_cleanup
 
->  		for (j = 0; j < 8; j++)
->  			__test_icr(x, i << (32 + 24) | icr | (j << 8));
->  	}
-> @@ -137,9 +136,13 @@ int main(int argc, char *argv[])
->  		.is_x2apic = true,
->  	};
->  	struct kvm_vm *vm;
-> +	struct list_head *iter;
-> +	int nr_vcpus_created = 0;
->  
->  	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
-> -	test_icr(&x);
-> +	list_for_each(iter, &vm->vcpus)
-> +		nr_vcpus_created++;
-> +	test_icr(&x, nr_vcpus_created);
+         bridge fdb add `mac_get $h2` dev br0 blackhole
+         bridge fdb show dev br0 | grep -q "blackhole"
+         check_err $? "test_blackhole_fdb: No blackhole FDB entry found"
 
-Computing the number of vCPUs created is rather silly, the test _knows_ that it
-has created exacty one vCPU.  Should be a moot point though.
+         tcpdump_start $h2
+         $MZ $h1 -q -t udp -a $h1 -b $h2
+         tcpdump_stop
+         tcpdump_show | grep -q udp
+         check_fail $? "test_blackhole_fdb: packet seen with blackhole 
+fdb entry"
+         tcpdump_cleanup
+
+         bridge fdb del `mac_get $h2` dev br0 blackhole
+         bridge fdb show dev br0 | grep -q "blackhole"
+         check_fail $? "test_blackhole_fdb: Blackhole FDB entry not 
+deleted"
+
+         tcpdump_start $h2
+         $MZ $h1 -q -t udp -a $h1 -b $h2
+         tcpdump_stop
+         tcpdump_show | grep -q udp
+         check_err $? "test_blackhole_fdb: No packet seen after removing 
+blackhole FDB entry"
+         tcpdump_cleanup
+
+         log_test "Blackhole FDB entry test"
+}
+
+the setup is simple and is the same as in bridge_sticky_fdb.sh.
+
+Does the test look sound or is there obvious mistakes?
