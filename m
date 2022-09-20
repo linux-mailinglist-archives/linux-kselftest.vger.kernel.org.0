@@ -2,70 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8B15BEDCB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 21:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044085BEE05
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 21:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbiITTau (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Sep 2022 15:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        id S229962AbiITTvS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Sep 2022 15:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiITTat (ORCPT
+        with ESMTP id S229676AbiITTvR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Sep 2022 15:30:49 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9525D13F
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 12:30:48 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id h188so3656623pgc.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 12:30:48 -0700 (PDT)
+        Tue, 20 Sep 2022 15:51:17 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849116FA2E
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 12:51:16 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 78so3711404pgb.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 12:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=WpQqspmgFGfmC+YAd/CrSCQSkyr81aAwd2bugZMTk7k=;
-        b=LQ353DWmIk4mA0IYnycIFirDPNZUsCUt6FdNvoMEL+E01KbJ8eylfEpzjRjta8Qz15
-         flP1tmPZOLqUO1fjoV42BWuQ7BJd09nfOUtzQueSgORJ2PhCldArxVWna0KVYLdGi/2A
-         r4TnFYo3AUJ9KsSQi+ra2qEgAhwG7xCLsxsJUOuf7lhWDt8DqWINfGVCS/zLFz+Z8zP1
-         Ss4NxcDijIutKrisC8TL3rtX2Tcy1q5JRyJd76qe1JCaD2Gpt2wm7ZGNrYZn0/qN2P2q
-         D1eInRdqF1IAkYoqvz41Rx1m/0ZLZAjcMkEANqnpx7+2EFloi5HPHFceireV8qZR0FjL
-         odTw==
+        bh=DTuwHmur8BQ7UzvYXiSfhG6hoCLOFlEZLc+v/yhwyjc=;
+        b=RBtwoayj+pMK/J5jSI0mvoHQG0BJON5T+gf4rKX8Rq65AY9XUeli1UUam9cEOdwCAC
+         x8gHFCFL/icqEGcNeWXHYdTE02bXSyc+MV5I6e+kPHCYobDuk8E18tp7lCpTuJHGrllN
+         fbxAe321lGeeHrzc+Ra82RYS1HVvMLDfTirYcgq/8rboWH0JckIn6jecDWxBKEDr/SGw
+         i0Vquzu9V1zci54lVCEK9NvAHru6Jcbfa3XI7Y1FLDGHulIX+dwJ1kLrCyBMkOuqvzfw
+         2oK92I1Bd+apQXpZ6IMsdy7zCALZAtqKt4nDiO7GtPdba0vXE4LR7n8j8mDCrSyBDLl8
+         jDug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=WpQqspmgFGfmC+YAd/CrSCQSkyr81aAwd2bugZMTk7k=;
-        b=RFO+Wl1CT+byHu8kD2F7cfpqjMkxAmwiy7vsYmEpEi4n/TmamORCyAKYoaTTEUjbxQ
-         RhmwPmUE2BDTlco6ULayLUcbjSMckKZJrOIHlmg1leFIUIUFVSLPUiIBgVRdyfIkzugg
-         QD0klaHZxxRivZgvKZE1XLYUY9QsL04VY0O++Pcy+okVvyMTusjPHYTDPobb5X8JF02E
-         p9xtqWFu3XkXYnoDzJDgm1N2pW/VlQJOBbRdgc8BGNO4WvRKCmaBDvrqJM4m1jPdKM1p
-         De+cqC1Gby+Ji2Ev8uBvBWEChM44zkgnXEN9xDM9ll3hb/j30kHlK1qkSJZqpcFpwbPU
-         OoPQ==
-X-Gm-Message-State: ACrzQf2xPT70uXa7mQcoaTbopUibDX16q6ms71WRkh9Yim5M5W9KDm/M
-        M3fk9X143lJWwn39GZDS3N5lcQ==
-X-Google-Smtp-Source: AMsMyM63z0rbNdkRyoeb01YO4su8NB7CImnY+2I1yNAC3M2GA2LUTE7Bsgc05MbGkxjfdI4QliP/SA==
-X-Received: by 2002:aa7:9605:0:b0:53e:8062:43fc with SMTP id q5-20020aa79605000000b0053e806243fcmr25334064pfg.39.1663702248225;
-        Tue, 20 Sep 2022 12:30:48 -0700 (PDT)
+        bh=DTuwHmur8BQ7UzvYXiSfhG6hoCLOFlEZLc+v/yhwyjc=;
+        b=Ecn46NUyxD6zf1BTV9lGNRX8N//19KoMlqa9lOM0KSY8FGNHTtCSuc39usfROqxI0O
+         bqw9OO9eePLqVhwMSZhOwjYKcHyMcZjuScbQkpgyVU7SXswB9qZGemvuRVDaCq0Yr7AC
+         GvjOvMAOw8KZCK9uarsG0dBR3geyjKj+wPIfQlKCN1oBIUe+uY8smMD0ABBd7Pux4MaD
+         pXpbdw+BG7epPwZhXNoV/g3QPTEKdeDi+FtfNYA0T29RmlvwYyWZEGuRiFqGW4UcmwFp
+         32XfzBTOkQG9O7rvcvwqLw43S1IO2Z00MLveZsNBAaYlRTTr3SvGxyt0cBDKrXc6odsS
+         0ncw==
+X-Gm-Message-State: ACrzQf1F9JO9eRncZ9mUINRfL3NvHbo3iVWuFGVquogQe5COXqe19497
+        I9GMKrvB2UnLm21ECrQetLbgcQ==
+X-Google-Smtp-Source: AMsMyM7jex9Q5arTcLqho5hOOC6Z04y67nCb26iNt51DRVTZbuq+ew/XjLCTxS9HZwnDheQ8q64NMw==
+X-Received: by 2002:a63:1455:0:b0:438:e26b:ab1f with SMTP id 21-20020a631455000000b00438e26bab1fmr20977346pgu.183.1663703475946;
+        Tue, 20 Sep 2022 12:51:15 -0700 (PDT)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902ec8e00b001780e4e1a0fsm278469plg.125.2022.09.20.12.30.47
+        by smtp.gmail.com with ESMTPSA id m1-20020a17090a7f8100b002008ba3a74csm256802pjl.52.2022.09.20.12.51.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Sep 2022 12:30:47 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 19:30:44 +0000
+        Tue, 20 Sep 2022 12:51:15 -0700 (PDT)
+Date:   Tue, 20 Sep 2022 19:51:11 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     cgel.zte@gmail.com, pbonzini@redhat.com, shuah@kernel.org,
-        dmatlack@google.com, peterx@redhat.com, oupton@google.com,
+To:     Gautam Menghani <gautammenghani201@gmail.com>
+Cc:     pbonzini@redhat.com, shuah@kernel.org, guang.zeng@intel.com,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] KVM: selftests: remove redundant variable
- tsc_val
-Message-ID: <YyoU5E2eKD9dpjzH@google.com>
-References: <20220831143150.304406-1-cui.jinpeng2@zte.com.cn>
- <CALMp9eT1yz0q1xn2nPtKBbnx_ixX4ivFk=qOayz70k_hxooaoQ@mail.gmail.com>
+        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/kvm: Use num_vcpus when testing ICR in the
+ xapic_state_test
+Message-ID: <YyoZr9rXSSMEtdh5@google.com>
+References: <20220903073901.73862-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALMp9eT1yz0q1xn2nPtKBbnx_ixX4ivFk=qOayz70k_hxooaoQ@mail.gmail.com>
+In-Reply-To: <20220903073901.73862-1-gautammenghani201@gmail.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -77,30 +74,76 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 31, 2022, Jim Mattson wrote:
-> On Wed, Aug 31, 2022 at 7:31 AM <cgel.zte@gmail.com> wrote:
-> > diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> > index 0cbc71b7af50..75920678f34d 100644
-> > --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> > +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> > @@ -237,7 +237,6 @@ static inline uint64_t get_desc64_base(const struct desc64 *desc)
-> >  static inline uint64_t rdtsc(void)
-> >  {
-> >         uint32_t eax, edx;
-> > -       uint64_t tsc_val;
-> >         /*
-> >          * The lfence is to wait (on Intel CPUs) until all previous
-> >          * instructions have been executed. If software requires RDTSC to be
-> > @@ -245,8 +244,8 @@ static inline uint64_t rdtsc(void)
-> >          * execute LFENCE immediately after RDTSC
-> >          */
-> >         __asm__ __volatile__("lfence; rdtsc; lfence" : "=a"(eax), "=d"(edx));
-> > -       tsc_val = ((uint64_t)edx) << 32 | eax;
-> > -       return tsc_val;
-> > +
-> > +       return ((uint64_t)edx) << 32 | eax;
-> >  }
+On Sat, Sep 03, 2022, Gautam Menghani wrote:
+> A TODO in xapic_state_test asks to use number of vCPUs instead of
+> vcpu.id + 1 in test_icr(). This patch adds support to get the number 
+> of vCPUs from the VM created and use it.
 > 
-> This does beg the question: "Why?"
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> ---
+>  .../selftests/kvm/x86_64/xapic_state_test.c     | 17 ++++++++++-------
+>  1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> index 6f7a5ef66718..de934e8e5e41 100644
+> --- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+> @@ -96,9 +96,8 @@ static void __test_icr(struct xapic_vcpu *x, uint64_t val)
+>  	____test_icr(x, val & ~(u64)APIC_ICR_BUSY);
+>  }
+>  
+> -static void test_icr(struct xapic_vcpu *x)
+> +static void test_icr(struct xapic_vcpu *x, int num_vcpus)
+>  {
+> -	struct kvm_vcpu *vcpu = x->vcpu;
+>  	uint64_t icr, i, j;
+>  
+>  	icr = APIC_DEST_SELF | APIC_INT_ASSERT | APIC_DM_FIXED;
+> @@ -110,11 +109,11 @@ static void test_icr(struct xapic_vcpu *x)
+>  		__test_icr(x, icr | i);
+>  
+>  	/*
+> -	 * Send all flavors of IPIs to non-existent vCPUs.  TODO: use number of
+> -	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
+> +	 * Send all flavors of IPIs to non-existent vCPUs. Arbitrarily use vector 0xff.
+>  	 */
+> +
+>  	icr = APIC_INT_ASSERT | 0xff;
+> -	for (i = vcpu->id + 1; i < 0xff; i++) {
+> +	for (i = num_vcpus; i < 0xff; i++) {
 
-Yeah, for this one I think having a local variable adds value.
+Hrm, this is a bad TODO, which is 100% my fault.  I think past me wanted to play
+nice with the possibility of creating multiple vCPUs, but using the number of
+vCPUs to do that is the wrong approach as it makes assumptions on the vcpu_id.
+One of the goals of the refactoring that led to vm_create_with_one_vcpu() was
+to have tests stop making assumptions about vCPU IDs.
+
+What would make sense though is to not assume vcpu_id == 0, i.e.
+
+	if (i = 0; i < 0xff; i++) {
+		if (i == vcpu->id)
+			continue;
+
+		for (j = 0; j < 8; j++)
+			__test_icr(x, i << (32 + 24) | icr | (j << 8));
+
+	}
+
+>  		for (j = 0; j < 8; j++)
+>  			__test_icr(x, i << (32 + 24) | icr | (j << 8));
+>  	}
+> @@ -137,9 +136,13 @@ int main(int argc, char *argv[])
+>  		.is_x2apic = true,
+>  	};
+>  	struct kvm_vm *vm;
+> +	struct list_head *iter;
+> +	int nr_vcpus_created = 0;
+>  
+>  	vm = vm_create_with_one_vcpu(&x.vcpu, x2apic_guest_code);
+> -	test_icr(&x);
+> +	list_for_each(iter, &vm->vcpus)
+> +		nr_vcpus_created++;
+> +	test_icr(&x, nr_vcpus_created);
+
+Computing the number of vCPUs created is rather silly, the test _knows_ that it
+has created exacty one vCPU.  Should be a moot point though.
