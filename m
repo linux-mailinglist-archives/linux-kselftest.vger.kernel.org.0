@@ -2,94 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602635BE3C1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 12:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C2C5BE6CE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 15:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiITKuT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Sep 2022 06:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S230429AbiITNPP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Sep 2022 09:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiITKuS (ORCPT
+        with ESMTP id S230419AbiITNPJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Sep 2022 06:50:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9B52529A;
-        Tue, 20 Sep 2022 03:50:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 080796292A;
-        Tue, 20 Sep 2022 10:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AB10C433D7;
-        Tue, 20 Sep 2022 10:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663671016;
-        bh=9a2t3wK0Ru1r5Ca3Rlk5Zy7DcfMhJsKYI36+wzQ7dQk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=crQzKBxeoICwDwkTO9YQ2MXDXqoQXACdCcVUsndi7qn+dV0acDsW6hx/vxNJV4fZH
-         yUKl2EWmHnQikiD+WkQq62S5oTGw4qVcqtVPjo2EBgnbs/cGm+RgHzq4leKuYq7PRG
-         LTghvYiTGEqu6TnU1ld3sc3x8MxqSGrUBitkOtPuWAU4Vlgh/LCWnaDfUx/5ylsvZV
-         2jXT0ZZBV72Kf/q6xS6+859FOJ7fWzGyKifkCBmsmNhdyCsx7ZIkWl2gF42pytnYW5
-         LyGdE9JJ/CvGA+F0xKqXcjJz0YCPWCDz6vYGUnL4Wu4mWhbN98RBkfB35nvwqK4HAv
-         QJP695XBA9WEA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D419E21EE0;
-        Tue, 20 Sep 2022 10:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 20 Sep 2022 09:15:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346CADFC1;
+        Tue, 20 Sep 2022 06:15:08 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KCv4DR030618;
+        Tue, 20 Sep 2022 13:14:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Fu48Iu5NZOSMbIsP/71F9Oo1u/l7GC3lQUvjx3+9/DU=;
+ b=qfY3ES7Q8geDtPSLunWm72PVNfuaKMb3pLROe/l1dZg2hpyFgu4s48KUITkum9h1gTPl
+ PWukBCco2c62L8qAFbrFYsPsW/lxBhlukgWEhtN0wQY8gU7YrMGS1IP/p5F2eOQdB72Y
+ YjgQPL4Y+eU3YZzqo0Swe7Rz2ahkQWPTQYxFhLVMQp3aCIkPd6wz5Rv3kQeoszZPoPOX
+ NeoNzT9nWpCiXD89yWq2UJB9/a06r4vtkdWvoP734ho0kTlQeHaZhXaaI2AwpUZGJw9d
+ F/Un8/qhIOrsGTIgh4XkTb9vRjnTLr2TamlNOB3NazJWo6Ac8yWNqw4DgGApZpU442xm /g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqdyq0syj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 13:14:58 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28KCwVNt006513;
+        Tue, 20 Sep 2022 13:14:58 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqdyq0sxe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 13:14:58 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28KD68AP016844;
+        Tue, 20 Sep 2022 13:14:57 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma04dal.us.ibm.com with ESMTP id 3jn5v9ru6h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 13:14:57 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com ([9.208.128.117])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28KDEtFe57016738
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Sep 2022 13:14:56 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E3C458061;
+        Tue, 20 Sep 2022 13:14:55 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D25F25805D;
+        Tue, 20 Sep 2022 13:14:54 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 20 Sep 2022 13:14:54 +0000 (GMT)
+Message-ID: <e6882322-c4c3-97c2-2419-a85ac4caf80d@linux.ibm.com>
+Date:   Tue, 20 Sep 2022 09:14:54 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next v2 0/3] seg6: add NEXT-C-SID support for SRv6 End behavior
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166367101624.31197.16175014864853693907.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Sep 2022 10:50:16 +0000
-References: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
-In-Reply-To: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        shuah@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org, stefano.salsano@uniroma2.it,
-        paolo.lungaroni@uniroma2.it, ahabdels.dev@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] selftests: tpm2: Implement class desstructor to close
+ file descriptor
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Shuah Khan <shuah@kernel.org>
+References: <20220909152056.1335261-1-stefanb@linux.vnet.ibm.com>
+ <YylCPAGbn7MgICau@kernel.org>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <YylCPAGbn7MgICau@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Fu9k58Bi8l807cSLdaQMrgsrDeHR4Hos
+X-Proofpoint-GUID: h1TUp8ni_kFmzX9Pu3biyaVQnUr_RTpX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_04,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 adultscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 clxscore=1011 mlxscore=0 mlxlogscore=460
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209200077
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
 
-On Mon, 12 Sep 2022 19:16:16 +0200 you wrote:
-> The Segment Routing (SR) architecture is based on loose source routing.
-> A list of instructions, called segments, can be added to the packet headers to
-> influence the forwarding and processing of the packets in an SR enabled
-> network.
-> In SRv6 (Segment Routing over IPv6 data plane) [1], the segment identifiers
-> (SIDs) are IPv6 addresses (128 bits) and the segment list (SID List) is carried
-> in the Segment Routing Header (SRH). A segment may correspond to a "behavior"
-> that is executed by a node when the packet is received.
-> The Linux kernel currently supports a large subset of the behaviors described
-> in [2] (e.g., End, End.X, End.T and so on).
+On 9/20/22 00:31, Jarkko Sakkinen wrote:
+
+>>
+>>   test_flush_context (tpm2_tests.SpaceTest) ... \
+>>     /usr/lib64/python3.6/unittest/case.py:605: ResourceWarning: \
+>>     unclosed file <_io.FileIO name='/dev/tpmrm0' mode='rb+' closefd=True>
 > 
-> [...]
+> I don't recall seeing this. Does this happen on every test case?
 
-Here is the summary with links:
-  - [net-next,v2,1/3] seg6: add netlink_ext_ack support in parsing SRv6 behavior attributes
-    https://git.kernel.org/netdev/net-next/c/e2a8ecc45165
-  - [net-next,v2,2/3] seg6: add NEXT-C-SID support for SRv6 End behavior
-    https://git.kernel.org/netdev/net-next/c/848f3c0d4769
-  - [net-next,v2,3/3] selftests: seg6: add selftest for NEXT-C-SID flavor in SRv6 End behavior
-    https://git.kernel.org/netdev/net-next/c/19d6356ab3f0
+No, only on that one test case.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+    Stefan
