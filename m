@@ -2,127 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516EE5BE6D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 15:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B35E5BE76A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 15:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiITNPm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Sep 2022 09:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S230400AbiITNoN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Sep 2022 09:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbiITNPf (ORCPT
+        with ESMTP id S230046AbiITNoL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Sep 2022 09:15:35 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5EF3DF18;
-        Tue, 20 Sep 2022 06:15:33 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28KD0JFt026187;
-        Tue, 20 Sep 2022 13:15:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=PYIvYTAAdCiZxua/KpMy+T+6zdoN1f7wb9Ci3NDqtGk=;
- b=E3U/G4CPYZHfLQo34pCSP0RKwpxO3ZRWUSo5ViEuMwg4y9uM2rUTiU6PwEkahX41p6z9
- 2kDHWcZ8Es3eRZxMqGs26dUF4NPeB0uefbPjo0e1Sh0C3h7om1eHwt+EKpTGOUl88gCh
- 04umVxAIIb2tJ1hqNlB4bGfubeZLiDYp1Ewr3xs6kjKGuCth7E8IdwbeMSFSZiHx4OCj
- wQFn9CnAjpNEtt1UspJo34+ZX1UUjntNtC0NLckDfvIasVOZXBFjNtS6492wyw7VB7bH
- w2qvKIjN6oaJQhh/dmzcft+kcraqK+CJddTo2xzhQLF6O/vhfwZBmaGO+9i9t1anMnfy QA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqe17gtp9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 13:15:30 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28KD0gQe028275;
-        Tue, 20 Sep 2022 13:15:29 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jqe17gtn3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 13:15:29 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28KD701H030978;
-        Tue, 20 Sep 2022 13:15:28 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma02dal.us.ibm.com with ESMTP id 3jn5v9rutx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Sep 2022 13:15:28 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com ([9.208.128.117])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28KDFRBF31195426
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Sep 2022 13:15:27 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 377C55805F;
-        Tue, 20 Sep 2022 13:15:27 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6BC2458053;
-        Tue, 20 Sep 2022 13:15:26 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 20 Sep 2022 13:15:26 +0000 (GMT)
-From:   Stefan Berger <stefanb@linux.ibm.com>
-To:     jarkko@kernel.org, linux-integrity@vger.kernel.org
-Cc:     peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        shuah@kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-Subject: [PATCH v2] selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle
-Date:   Tue, 20 Sep 2022 09:15:18 -0400
-Message-Id: <20220920131518.1984701-1-stefanb@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 20 Sep 2022 09:44:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921FB501B0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 06:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1663681448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vwW7t8MPa7zeKiTEgnAftOAZBeq2iD70Wyn142D/zRo=;
+        b=SClir3dq9ieDg7GzdeVhk3z8wn69SXG5Za2e9Tpolj3w/M9cVkavVKQ/qBcXJuLLqDDlYs
+        Zj4dMrCFUH1iSeE/su+Eijma+w6g5opW7yzC8v6IiRx51k/kSuAXuRyTGTAhyzGmpmPwb9
+        UHoeh7OZmlABBKZZrmgnKeTdT5/gNqI=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-362-D76_x9L0OiGuKER0iisdcQ-1; Tue, 20 Sep 2022 09:44:07 -0400
+X-MC-Unique: D76_x9L0OiGuKER0iisdcQ-1
+Received: by mail-pf1-f197.google.com with SMTP id cg5-20020a056a00290500b0053511889856so1740042pfb.18
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 06:44:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vwW7t8MPa7zeKiTEgnAftOAZBeq2iD70Wyn142D/zRo=;
+        b=0/y2Kj1tZm0n5aG8lwkgrv+Skc3D/iY+WeXT5RLLCAWH7N5EOk54Cgmyx+mrGxIEvY
+         qzg8DomYwcKb8eqWOXETHi9VJd1AGixHSFoWgjOJupSS15U2H/KbMlPL3O5qN2M8KE9A
+         ZTij78rHBTndMhE+fizmDFLUHHHYaM+pI0dE0UmM9xdMf1Jl2DtfKuIRD9fWjsVBCeM+
+         4EGR3aQf45/9I6NpqNxDfe/srXsHs9F6xuYo8Mb4RyX+8RWOaK+PjPiGHfyViUpECQym
+         m3fg25clRWZzBzQmVqYuLjMm7zMibD0O7f3VTQCFs5Uw2aPinrgQz0aMsg6a6GCsx3kM
+         8g4w==
+X-Gm-Message-State: ACrzQf024xZ/z/WHWK2sxMLeCD4upJ2Tbs8XIj3CEVNjHUU58/+BBXsr
+        5CaeEP3CEncgr9guUisOpSdUjE5XfXioBZfdO7ap1+7JzQ+/zohKpr43mFpSbncyPMBI9uJEmP0
+        /mMTUIRr2aKIT6WjLHZvjipCI8FiMOv+ZG1dcA6Tyka+m
+X-Received: by 2002:a17:90a:f28b:b0:203:627c:7ba1 with SMTP id fs11-20020a17090af28b00b00203627c7ba1mr4063188pjb.191.1663681446406;
+        Tue, 20 Sep 2022 06:44:06 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM61euhDYViIzDlUs4Ah/OZb3hFvXIlLEfl5ptqxt1gkv1vD4Ica+puVs5gjlf6riTd8NcMoul6d/R4nLAKpoCo=
+X-Received: by 2002:a17:90a:f28b:b0:203:627c:7ba1 with SMTP id
+ fs11-20020a17090af28b00b00203627c7ba1mr4063163pjb.191.1663681446067; Tue, 20
+ Sep 2022 06:44:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Scym3ii4UvSkSUb59rvM09EGyQVHtVLS
-X-Proofpoint-GUID: ogfoCpxp-5wj3ziIDOFJQjEk-7AzJsrT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-20_04,2022-09-20_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- impostorscore=0 suspectscore=0 mlxlogscore=533 lowpriorityscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2209200077
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220902132938.2409206-1-benjamin.tissoires@redhat.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 20 Sep 2022 15:43:55 +0200
+Message-ID: <CAO-hwJ+GxSHKf-zCNg-WM_5+o2B94n4=AXGwz-tfipS_+YpK+w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v10 00/23] Introduce eBPF support for HID devices
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The following output can bee seen when the test is executed:
+On Fri, Sep 2, 2022 at 3:29 PM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> Hi,
+>
+> here comes the v10 of the HID-BPF series.
+>
+> Again, for a full explanation of HID-BPF, please refer to the last patch
+> in this series (23/23).
+>
+> Hopefully we are getting closer to merging the bpf-core changes that
+> are pre-requesite of the HID work.
+>
+> This revision of the series focused on those bpf-core changes with
+> a hopefully proper way of fixing access to ctx pointers, and a few more
+> selftests to cover those changes.
+>
+> Once those bpf changes are in, the HID changes are pretty much self
+> consistent, which is a good thing, but I still wonder how we are going
+> to merge the selftests. I'd rather have the selftests in the bpf tree to
+> prevent any regression on bpf-core changes, but that might require some
+> coordination between the HID and bpf trees.
+>
+> Anyway, let's hope we are getting closer to the end of those revisions :)
 
-  test_flush_context (tpm2_tests.SpaceTest) ... \
-    /usr/lib64/python3.6/unittest/case.py:605: ResourceWarning: \
-    unclosed file <_io.FileIO name='/dev/tpmrm0' mode='rb+' closefd=True>
+FWIW, I have now applied the HID patches 8, 9, and 10 to hid.git. They
+are independent of the bpf work and given how close we are to 6.1, we
+can take them just now.
+Patch 11 is having a conflict with the HID tree, so I'll need to
+handle it in v11 for the HID part.
 
-An instance of Client does not implicitly close /dev/tpm* handle, once it
-gets destroyed. Close the file handle in the class destructor
-Client.__del__().
+The first few patches have already been applied in the bpf-next tree,
+as part of the v11 subset of those patches.
 
-Fixes: 6ea3dfe1e0732 ("selftests: add TPM 2.0 tests")
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+The plan is now to wait for all of these to land in 6.1-rc1, and then
+submit only the HID changes as a followup series for 6.2.
 
----
- tools/testing/selftests/tpm2/tpm2.py | 4 ++++
- 1 file changed, 4 insertions(+)
+Cheers,
+Benjamin
 
-diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
-index 057a4f49c79d..c7363c6764fc 100644
---- a/tools/testing/selftests/tpm2/tpm2.py
-+++ b/tools/testing/selftests/tpm2/tpm2.py
-@@ -371,6 +371,10 @@ class Client:
-             fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
-             self.tpm_poll = select.poll()
- 
-+    def __del__(self):
-+        if self.tpm:
-+            self.tpm.close()
-+
-     def close(self):
-         self.tpm.close()
- 
--- 
-2.36.1
+>
+> Cheers,
+> Benjamin
+>
+>
+> Benjamin Tissoires (23):
+>   selftests/bpf: regroup and declare similar kfuncs selftests in an
+>     array
+>   bpf: split btf_check_subprog_arg_match in two
+>   bpf/verifier: allow all functions to read user provided context
+>   selftests/bpf: add test for accessing ctx from syscall program type
+>   bpf/btf: bump BTF_KFUNC_SET_MAX_CNT
+>   bpf/verifier: allow kfunc to return an allocated mem
+>   selftests/bpf: Add tests for kfunc returning a memory pointer
+>   HID: core: store the unique system identifier in hid_device
+>   HID: export hid_report_type to uapi
+>   HID: convert defines of HID class requests into a proper enum
+>   HID: Kconfig: split HID support and hid-core compilation
+>   HID: initial BPF implementation
+>   selftests/bpf: add tests for the HID-bpf initial implementation
+>   HID: bpf: allocate data memory for device_event BPF programs
+>   selftests/bpf/hid: add test to change the report size
+>   HID: bpf: introduce hid_hw_request()
+>   selftests/bpf: add tests for bpf_hid_hw_request
+>   HID: bpf: allow to change the report descriptor
+>   selftests/bpf: add report descriptor fixup tests
+>   selftests/bpf: Add a test for BPF_F_INSERT_HEAD
+>   samples/bpf: HID: add new hid_mouse example
+>   samples/bpf: HID: add Surface Dial example
+>   Documentation: add HID-BPF docs
+>
+>  Documentation/hid/hid-bpf.rst                 | 513 +++++++++
+>  Documentation/hid/index.rst                   |   1 +
+>  drivers/Makefile                              |   2 +-
+>  drivers/hid/Kconfig                           |  20 +-
+>  drivers/hid/Makefile                          |   2 +
+>  drivers/hid/bpf/Kconfig                       |  17 +
+>  drivers/hid/bpf/Makefile                      |  11 +
+>  drivers/hid/bpf/entrypoints/Makefile          |  93 ++
+>  drivers/hid/bpf/entrypoints/README            |   4 +
+>  drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  66 ++
+>  .../hid/bpf/entrypoints/entrypoints.lskel.h   | 682 ++++++++++++
+>  drivers/hid/bpf/hid_bpf_dispatch.c            | 526 ++++++++++
+>  drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
+>  drivers/hid/bpf/hid_bpf_jmp_table.c           | 577 ++++++++++
+>  drivers/hid/hid-core.c                        |  49 +-
+>  include/linux/bpf.h                           |  11 +-
+>  include/linux/bpf_verifier.h                  |   2 +
+>  include/linux/btf.h                           |  10 +
+>  include/linux/hid.h                           |  38 +-
+>  include/linux/hid_bpf.h                       | 148 +++
+>  include/uapi/linux/hid.h                      |  26 +-
+>  include/uapi/linux/hid_bpf.h                  |  25 +
+>  kernel/bpf/btf.c                              | 149 ++-
+>  kernel/bpf/verifier.c                         |  66 +-
+>  net/bpf/test_run.c                            |  37 +
+>  samples/bpf/.gitignore                        |   2 +
+>  samples/bpf/Makefile                          |  27 +
+>  samples/bpf/hid_mouse.bpf.c                   | 134 +++
+>  samples/bpf/hid_mouse.c                       | 161 +++
+>  samples/bpf/hid_surface_dial.bpf.c            | 161 +++
+>  samples/bpf/hid_surface_dial.c                | 232 ++++
+>  tools/include/uapi/linux/hid.h                |  62 ++
+>  tools/include/uapi/linux/hid_bpf.h            |  25 +
+>  tools/testing/selftests/bpf/Makefile          |   2 +-
+>  tools/testing/selftests/bpf/config            |   3 +
+>  tools/testing/selftests/bpf/prog_tests/hid.c  | 990 ++++++++++++++++++
+>  .../selftests/bpf/prog_tests/kfunc_call.c     | 182 +++-
+>  tools/testing/selftests/bpf/progs/hid.c       | 206 ++++
+>  .../selftests/bpf/progs/kfunc_call_fail.c     | 160 +++
+>  .../selftests/bpf/progs/kfunc_call_test.c     |  71 ++
+>  40 files changed, 5416 insertions(+), 105 deletions(-)
+>  create mode 100644 Documentation/hid/hid-bpf.rst
+>  create mode 100644 drivers/hid/bpf/Kconfig
+>  create mode 100644 drivers/hid/bpf/Makefile
+>  create mode 100644 drivers/hid/bpf/entrypoints/Makefile
+>  create mode 100644 drivers/hid/bpf/entrypoints/README
+>  create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
+>  create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
+>  create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
+>  create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
+>  create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
+>  create mode 100644 include/linux/hid_bpf.h
+>  create mode 100644 include/uapi/linux/hid_bpf.h
+>  create mode 100644 samples/bpf/hid_mouse.bpf.c
+>  create mode 100644 samples/bpf/hid_mouse.c
+>  create mode 100644 samples/bpf/hid_surface_dial.bpf.c
+>  create mode 100644 samples/bpf/hid_surface_dial.c
+>  create mode 100644 tools/include/uapi/linux/hid.h
+>  create mode 100644 tools/include/uapi/linux/hid_bpf.h
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/hid.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/hid.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+>
+> --
+> 2.36.1
+>
 
