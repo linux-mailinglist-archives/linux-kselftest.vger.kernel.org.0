@@ -2,124 +2,236 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04EE5BDFE1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 10:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591FF5BE39F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Sep 2022 12:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbiITIVx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Sep 2022 04:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        id S230380AbiITKot (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Sep 2022 06:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiITIUo (ORCPT
+        with ESMTP id S230267AbiITKo3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:20:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C9EB7B
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 01:19:28 -0700 (PDT)
+        Tue, 20 Sep 2022 06:44:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D166594
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 03:44:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663661968;
+        s=mimecast20190719; t=1663670640;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5gk3kLlspQCYjPujhZljAtxcOT9dALJ6AajDjY8rEpQ=;
-        b=d3PXYXT+YXcQoPdJ7SmI+s9Guxv/wwEDvKFSGiUh+JMn24YBuP0Tv+HFVNub0GGFhdEaLw
-        A2LYsDZAmjkuLlk8ppGDDk1rrhKixQxbgf4MCRUATRbpxPTDtAv816wnXDedFL6sNsapkZ
-        5R2C8LY05fJfILxM6y2jMysVAjAowhs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Bryd/YqvBscp2y8ehsVjCoNVOvUucCenOquY6lmdqLE=;
+        b=UPlzEJJf4gFrlhTDrmO3sq2WxICbnWc9HtDAZN0pnND6VuujN4IAQwDRCOlcgwRDLsfOwj
+        3TJeHDupKS0DM1/BIwbSNCL0Fkwaa9j5nNfDS4/iGQM2VwLtLaLp3h0tkaiUNk7BOTPWOt
+        lj/cqftEqv5Ada1SMskX8IU/T9VOKkU=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-15-xSK4Q_gKMOeYAeyPZkrzlg-1; Tue, 20 Sep 2022 04:19:26 -0400
-X-MC-Unique: xSK4Q_gKMOeYAeyPZkrzlg-1
-Received: by mail-wr1-f70.google.com with SMTP id o7-20020adfba07000000b00228663f217fso830503wrg.20
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 01:19:26 -0700 (PDT)
+ us-mta-426-UNFMpZ2bMz6lY0DBAj2SJg-1; Tue, 20 Sep 2022 06:43:59 -0400
+X-MC-Unique: UNFMpZ2bMz6lY0DBAj2SJg-1
+Received: by mail-qv1-f72.google.com with SMTP id n15-20020ad444af000000b004a2a341ad71so1691469qvt.15
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Sep 2022 03:43:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=5gk3kLlspQCYjPujhZljAtxcOT9dALJ6AajDjY8rEpQ=;
-        b=G4WkuyFlNSwx5JiwU1w9UFjDUb5WnHifJMVXt3U21XNsFoO56H3l2kJv2+pnF6+F3Y
-         xPKrixGDkDXz02cSfUGF+PFLKtzGS6RbcgFWnDil2rIGKoyG94OJNTlchgPrnVfGWtWW
-         427y8KjlubEO9NlgUb+srkpfPZaW6mnaln+RHEW0noiSPitPvejtNwESLrBaQnJMWY/9
-         Vqc6ZK8E4rsnuoa6wEZwWHPjGirxNNxHHQteleYILJ3RM2LdM3Z6/g5947j5yuw8srPD
-         8HrA3z3n1SxoKEkzwz0qiKBX+7/2ElqtoJS8tR1hSW8q8uO35TcfASnrHrHa4BMqCKK3
-         Sslg==
-X-Gm-Message-State: ACrzQf2zmij56bMkQsZEOYnQ1HliDbCCYkm32avzGiNx7Vd0KEmJwPI9
-        2dN01Kf9kLALxbTADT5sTPSVqinlQ2kQJRZ5eGCw5IF3k7w6C6pOh4iT0kYUYXlLeDEjJjXYmv2
-        8+T39Fb3doMH4KaBurj2CYAgo2fxh
-X-Received: by 2002:a05:600c:5d3:b0:3b4:c326:d096 with SMTP id p19-20020a05600c05d300b003b4c326d096mr1455793wmd.98.1663661965721;
-        Tue, 20 Sep 2022 01:19:25 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM699k74ssA2kGuvCCoIhZaRcQrvxVrQkbuqjTWhJzQr+8vhrPtqFiDe49El6iFxQE3O3R+O2w==
-X-Received: by 2002:a05:600c:5d3:b0:3b4:c326:d096 with SMTP id p19-20020a05600c05d300b003b4c326d096mr1455764wmd.98.1663661965297;
-        Tue, 20 Sep 2022 01:19:25 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c712:2300:e82d:5a58:4fd8:c1e6? (p200300cbc7122300e82d5a584fd8c1e6.dip0.t-ipconnect.de. [2003:cb:c712:2300:e82d:5a58:4fd8:c1e6])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1ced09000000b003b49aa8083esm1325807wmh.42.2022.09.20.01.19.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Sep 2022 01:19:24 -0700 (PDT)
-Message-ID: <a127720d-ed49-5d20-4d63-13da8914652d@redhat.com>
-Date:   Tue, 20 Sep 2022 10:19:23 +0200
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=Bryd/YqvBscp2y8ehsVjCoNVOvUucCenOquY6lmdqLE=;
+        b=cUUhE93Xu2hZrUbOt4Sml+N7umMwrF4QuFRTPawjFbjeRurQMqshpv8W8EY5PypB4p
+         gJdKu8VGVnkyyhUp+un/Vt0kt+WT1sQ/A8GmNVjjoghtyljhypPZ6be+7511ZiEsa4mN
+         HhtVS+3pwKwa+LgtM4CQ8lT8DhNx4k8wdZjkCRGJYEiMGoBSw8aMsDJjb7SMd4MM4MW9
+         hu+7XdaGbr+hmv50sS8jN4PqMLhqPA6bHL0dV2qAQ23+EabPOYF2BST7qMJ82cu7VGsd
+         aoScQvejnAJl94/wAmjqvqkdlzsTg8M/Hos7EC8jFhjK5biLb3RaemGY+yJOnDz2dHvt
+         TXnA==
+X-Gm-Message-State: ACrzQf08yE1Qa67zf8QeueW1LjAAex+jhB6XT0X+VhvOnAXipW0DIEs1
+        6wS3Cr/YfHBHsTqUvsjv9CXlEMDbs/6m0xm+EUvklc8vzHcBvo6SpPeQWyLMYqzg5z5pJyfWTUL
+        Dud90nIQBgcNTX8vjk4FR8ea+m9EI
+X-Received: by 2002:ad4:5ca2:0:b0:4aa:9d05:2424 with SMTP id q2-20020ad45ca2000000b004aa9d052424mr17937148qvh.71.1663670638672;
+        Tue, 20 Sep 2022 03:43:58 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6Ksp+8em66xjCysoFTBRD+jUUAtxdjlfisN2fuwcZNehJY+I7UeG3BcQTd8r72XLhFC4WzSQ==
+X-Received: by 2002:ad4:5ca2:0:b0:4aa:9d05:2424 with SMTP id q2-20020ad45ca2000000b004aa9d052424mr17937131qvh.71.1663670638406;
+        Tue, 20 Sep 2022 03:43:58 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-114-90.dyn.eolo.it. [146.241.114.90])
+        by smtp.gmail.com with ESMTPSA id y8-20020a05620a44c800b006ce16588056sm805177qkp.89.2022.09.20.03.43.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 03:43:57 -0700 (PDT)
+Message-ID: <cc46d6ae3bba9dfcc602ac23a32fad9860cb8064.camel@redhat.com>
+Subject: Re: [net-next v2 2/3] seg6: add NEXT-C-SID support for SRv6 End
+ behavior
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+Date:   Tue, 20 Sep 2022 12:43:53 +0200
+In-Reply-To: <20220912171619.16943-3-andrea.mayer@uniroma2.it>
+References: <20220912171619.16943-1-andrea.mayer@uniroma2.it>
+         <20220912171619.16943-3-andrea.mayer@uniroma2.it>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 3/3] debugfs: fix error when writing negative value to
- atomic_t debugfs file
-Content-Language: en-US
-To:     Akinobu Mita <akinobu.mita@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        corbet@lwn.net, osalvador@suse.de, shuah@kernel.org,
-        Zhao Gongyi <zhaogongyi@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        akpm@linux-foundation.org
-References: <20220919172418.45257-1-akinobu.mita@gmail.com>
- <20220919172418.45257-4-akinobu.mita@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220919172418.45257-4-akinobu.mita@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 19.09.22 19:24, Akinobu Mita wrote:
-> The simple attribute files do not accept a negative value since the
-> commit 488dac0c9237 ("libfs: fix error cast of negative value in
-> simple_attr_write()"), so we have to use a 64-bit value to write a
-> negative value for a debugfs file created by debugfs_create_atomic_t().
-
-Is that comment stale?
-
-I would ahve thought you simply document that we restore the original 
-behavior essentially by reverting 005747526d4f ("docs: fault-injection: 
-fix non-working usage of negative values") and the using 
-DEFINE_DEBUGFS_ATTRIBUTE_SIGNED accordingly.
-
+On Mon, 2022-09-12 at 19:16 +0200, Andrea Mayer wrote:
+> The NEXT-C-SID mechanism described in [1] offers the possibility of
+> encoding several SRv6 segments within a single 128 bit SID address. Such
+> a SID address is called a Compressed SID (C-SID) container. In this way,
+> the length of the SID List can be drastically reduced.
 > 
-> This restores the previous behaviour by introducing
-> DEFINE_DEBUGFS_ATTRIBUTE_SIGNED for a signed value.
+> A SID instantiated with the NEXT-C-SID flavor considers an IPv6 address
+> logically structured in three main blocks: i) Locator-Block; ii)
+> Locator-Node Function; iii) Argument.
 > 
-> Fixes: 488dac0c9237 ("libfs: fix error cast of negative value in simple_attr_write()")
-> Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+>                         C-SID container
+> +------------------------------------------------------------------+
+> >     Locator-Block      |Loc-Node|            Argument            |
+> >                        |Function|                                |
+> +------------------------------------------------------------------+
+> <--------- B -----------> <- NF -> <------------- A --------------->
+> 
+>    (i) The Locator-Block can be any IPv6 prefix available to the provider;
+> 
+>   (ii) The Locator-Node Function represents the node and the function to
+>        be triggered when a packet is received on the node;
+> 
+>  (iii) The Argument carries the remaining C-SIDs in the current C-SID
+>        container.
+> 
+> The NEXT-C-SID mechanism relies on the "flavors" framework defined in
+> [2]. The flavors represent additional operations that can modify or
+> extend a subset of the existing behaviors.
+> 
+> This patch introduces the support for flavors in SRv6 End behavior
+> implementing the NEXT-C-SID one. An SRv6 End behavior with NEXT-C-SID
+> flavor works as an End behavior but it is capable of processing the
+> compressed SID List encoded in C-SID containers.
+> 
+> An SRv6 End behavior with NEXT-C-SID flavor can be configured to support
+> user-provided Locator-Block and Locator-Node Function lengths. In this
+> implementation, such lengths must be evenly divisible by 8 (i.e. must be
+> byte-aligned), otherwise the kernel informs the user about invalid
+> values with a meaningful error code and message through netlink_ext_ack.
+> 
+> If Locator-Block and/or Locator-Node Function lengths are not provided
+> by the user during configuration of an SRv6 End behavior instance with
+> NEXT-C-SID flavor, the kernel will choose their default values i.e.,
+> 32-bit Locator-Block and 16-bit Locator-Node Function.
+> 
+> [1] - https://datatracker.ietf.org/doc/html/draft-ietf-spring-srv6-srh-compression
+> [2] - https://datatracker.ietf.org/doc/html/rfc8986
+> 
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  include/uapi/linux/seg6_local.h |  24 +++
+>  net/ipv6/seg6_local.c           | 335 +++++++++++++++++++++++++++++++-
+>  2 files changed, 356 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/uapi/linux/seg6_local.h b/include/uapi/linux/seg6_local.h
+> index 332b18f318f8..4fdc424c9cb3 100644
+> --- a/include/uapi/linux/seg6_local.h
+> +++ b/include/uapi/linux/seg6_local.h
+> @@ -28,6 +28,7 @@ enum {
+>  	SEG6_LOCAL_BPF,
+>  	SEG6_LOCAL_VRFTABLE,
+>  	SEG6_LOCAL_COUNTERS,
+> +	SEG6_LOCAL_FLAVORS,
+>  	__SEG6_LOCAL_MAX,
+>  };
+>  #define SEG6_LOCAL_MAX (__SEG6_LOCAL_MAX - 1)
+> @@ -110,4 +111,27 @@ enum {
+>  
+>  #define SEG6_LOCAL_CNT_MAX (__SEG6_LOCAL_CNT_MAX - 1)
+>  
+> +/* SRv6 End* Flavor attributes */
+> +enum {
+> +	SEG6_LOCAL_FLV_UNSPEC,
+> +	SEG6_LOCAL_FLV_OPERATION,
+> +	SEG6_LOCAL_FLV_LCBLOCK_BITS,
+> +	SEG6_LOCAL_FLV_LCNODE_FN_BITS,
+> +	__SEG6_LOCAL_FLV_MAX,
+> +};
+> +
+> +#define SEG6_LOCAL_FLV_MAX (__SEG6_LOCAL_FLV_MAX - 1)
+> +
+> +/* Designed flavor operations for SRv6 End* Behavior */
+> +enum {
+> +	SEG6_LOCAL_FLV_OP_UNSPEC,
+> +	SEG6_LOCAL_FLV_OP_PSP,
+> +	SEG6_LOCAL_FLV_OP_USP,
+> +	SEG6_LOCAL_FLV_OP_USD,
+> +	SEG6_LOCAL_FLV_OP_NEXT_CSID,
+> +	__SEG6_LOCAL_FLV_OP_MAX
+> +};
+> +
+> +#define SEG6_LOCAL_FLV_OP_MAX (__SEG6_LOCAL_FLV_OP_MAX - 1)
+> +
+>  #endif
+> diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
+> index f43e6f0baac1..8370726ae7bf 100644
+> --- a/net/ipv6/seg6_local.c
+> +++ b/net/ipv6/seg6_local.c
+> @@ -73,6 +73,55 @@ struct bpf_lwt_prog {
+>  	char *name;
+>  };
+>  
+> +/* default length values (expressed in bits) for both Locator-Block and
+> + * Locator-Node Function.
+> + *
+> + * Both SEG6_LOCAL_LCBLOCK_DBITS and SEG6_LOCAL_LCNODE_FN_DBITS *must* be:
+> + *    i) greater than 0;
+> + *   ii) evenly divisible by 8. In other terms, the lengths of the
+> + *	 Locator-Block and Locator-Node Function must be byte-aligned (we can
+> + *	 relax this constraint in the future if really needed).
+> + *
+> + * Moreover, a third condition must hold:
+> + *  iii) SEG6_LOCAL_LCBLOCK_DBITS + SEG6_LOCAL_LCNODE_FN_DBITS <= 128.
+> + *
+> + * The correctness of SEG6_LOCAL_LCBLOCK_DBITS and SEG6_LOCAL_LCNODE_FN_DBITS
+> + * values are checked during the kernel compilation. If the compilation stops,
+> + * check the value of these parameters to see if they meet conditions (i), (ii)
+> + * and (iii).
+> + */
+> +#define SEG6_LOCAL_LCBLOCK_DBITS	32
+> +#define SEG6_LOCAL_LCNODE_FN_DBITS	16
+> +
+> +/* The following next_csid_chk_{cntr,lcblock,lcblock_fn}_bits macros can be
+> + * used directly to check whether the lengths (in bits) of Locator-Block and
+> + * Locator-Node Function are valid according to (i), (ii), (iii).
+> + */
+> +#define next_csid_chk_cntr_bits(blen, flen)		\
+> +	((blen) + (flen) > 128)
+> +
+> +#define next_csid_chk_lcblock_bits(blen)		\
+> +({							\
+> +	typeof(blen) __tmp = blen;			\
+> +	(!__tmp || __tmp > 120 || (__tmp & 0x07));	\
 
+Just a note to mention that in theory a caller could pass a signed
+argument, so the above check does not ensure that __tmp is acutally >=
+8.
 
-Apart from that
+All the current callers use unsigned arguements, so it still looks
+safe. 
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Cheers,
 
--- 
-Thanks,
-
-David / dhildenb
+Paolo
 
