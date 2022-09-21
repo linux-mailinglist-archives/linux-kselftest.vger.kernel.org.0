@@ -2,100 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6BD5BFB2C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Sep 2022 11:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14A75BFCB8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Sep 2022 13:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiIUJkw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Sep 2022 05:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S229751AbiIULGO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Sep 2022 07:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiIUJkv (ORCPT
+        with ESMTP id S229622AbiIULGN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Sep 2022 05:40:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DB7915CE
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 02:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663753249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vfl/st5m8Se6ltL60JY32xTNgdDLAMTh+1ursFMAnnc=;
-        b=YWt3eM0woOQOdt6OfPJDgSvs+0dcEp6Sy9Xctak38BDL4pycpmN32Yc1h8ZV7PSg0qeWO6
-        AtUo++zzORAVZAXcL393gsGlqgHJETaZ2MIdrbAtHd7X/OZweNiQ1+PerH43iSgkomjLT+
-        BTzGxwnI0pXWfIh1l7dHvcgvvjK/ETo=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-60-QPFa3kgHMIWMAW0uzfcCbQ-1; Wed, 21 Sep 2022 05:40:48 -0400
-X-MC-Unique: QPFa3kgHMIWMAW0uzfcCbQ-1
-Received: by mail-ed1-f70.google.com with SMTP id y1-20020a056402358100b00451b144e23eso3926283edc.18
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 02:40:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=vfl/st5m8Se6ltL60JY32xTNgdDLAMTh+1ursFMAnnc=;
-        b=zrzNS5u2itELCMjep6zRwXYkWZz1HF6upp07iKhMs5uXj8POASSchGvfTbnqvQvZfv
-         80NQ36mVcOkfaoGhG0fF+KQhCEO4oPjV36Uc0liYBYxS+qc4f1vjqJKWddlYTUmH5lVB
-         J7Q3+pCd+kqXyWgQoFHGuNuITV7YmBxRhJ101915BVs5SSedD5k1EkJ4aB43ykZ1yfuk
-         PhoiPPMYzq2njcilCjXxmYCb4WNXK3/DIuWjtWGSqK3ffO+EZQYigFS+6C/Jwv9yJz3j
-         QjBIzfFXyBOVlbUwz0c/S/6ovEvZfSHIihQMWghTddIR24reBomCX25b3ZdSiuHqsle+
-         oi7g==
-X-Gm-Message-State: ACrzQf3WHumP1g1JRcl8cJF/lG/4iZx4rvVMnUvW8j+VWqP80tKCZtjB
-        GOr4ww0i7nhFgIoGkQSfJniCWtbFm4PEMNKe/CJdrfzb9BJjRlJw03D5ConXSuJL1BvXjx4aIF6
-        496NYv2V7pJ+IGVfNMKFD164caPPA
-X-Received: by 2002:a17:907:94ca:b0:77b:542a:4cc4 with SMTP id dn10-20020a17090794ca00b0077b542a4cc4mr19302858ejc.257.1663753247300;
-        Wed, 21 Sep 2022 02:40:47 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4hDKaFsXcDpGvBW7qsS7g0afcmMVDNPrIWCK+FY0bzS4JRPiUwSLUK8z2QrUwdSGY7qf4/BA==
-X-Received: by 2002:a17:907:94ca:b0:77b:542a:4cc4 with SMTP id dn10-20020a17090794ca00b0077b542a4cc4mr19302826ejc.257.1663753247016;
-        Wed, 21 Sep 2022 02:40:47 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id gj22-20020a170906e11600b0073dd1ac2fc8sm1016556ejb.195.2022.09.21.02.40.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 02:40:46 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id D17D861C4E3; Wed, 21 Sep 2022 11:40:45 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
-        cake@lists.bufferbloat.net, linux-kselftest@vger.kernel.org,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, vinicius.gomes@intel.com,
-        stephen@networkplumber.org, shuah@kernel.org, victor@mojatatu.com
-Cc:     zhijianx.li@intel.com, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com, shaozhengchao@huawei.com
-Subject: Re: [PATCH net-next,v3 01/18] net/sched: sch_api: add helper for tc
- qdisc walker stats dump
-In-Reply-To: <20220921024104.386242-1-shaozhengchao@huawei.com>
-References: <20220921024104.386242-1-shaozhengchao@huawei.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 21 Sep 2022 11:40:45 +0200
-Message-ID: <87illhvzdu.fsf@toke.dk>
+        Wed, 21 Sep 2022 07:06:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D05C832C9;
+        Wed, 21 Sep 2022 04:06:12 -0700 (PDT)
+Received: from [192.168.10.9] (unknown [39.45.34.16])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ADB3F6602028;
+        Wed, 21 Sep 2022 12:06:08 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663758371;
+        bh=nuKvXuAY4Qozyni7h0nt+ch9rX1wpz7qK5yc710ELL8=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=AP5Ygg/TB0BOpHeku/CfraDNwnteQItCpz1LXbjC5qASX68yK99F44dzXYi8lI5xp
+         IAslEbJqK1fKFDFTQJOFObd5vIBOaN3AqL5RcyETSQUxDDOCJxh+tisaeexMV7SyGM
+         4BNdWykfRlqZctcj3O4JxNSxJl3+OdYN2hlW61aFxXfXyqxTcjMK8Jk2zI2S+v/OAN
+         feFEbtBJvWYOwt0JDVoJ/1MWipBWRyir3qOLMT/mg/RLnC0WqNSKOlpteE6Hxxot9n
+         lgxx5eAlnwPMDCiG2KNzTZXRKb/69nHz/xBceFZcLdsmdTG5+2CIYS97i3jiDfAmkR
+         kFMZThPHEc8og==
+Message-ID: <c3df7c71-79c1-7876-e39a-15cffc444da3@collabora.com>
+Date:   Wed, 21 Sep 2022 16:06:03 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        krisman@collabora.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Joel Savitz <jsavitz@redhat.com>
+Subject: Re: [PATCH v6 1/2] selftests: vm: bring common functions to a new
+ file
+Content-Language: en-US
+To:     Nico Pache <npache@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220420084036.4101604-1-usama.anjum@collabora.com>
+ <01f64e01-580e-abca-2b86-aa586d987bf4@redhat.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <01f64e01-580e-abca-2b86-aa586d987bf4@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Zhengchao Shao <shaozhengchao@huawei.com> writes:
+On 9/9/22 8:06 AM, Nico Pache wrote:
+> 
+> 
+> On 4/20/22 04:40, Muhammad Usama Anjum wrote:
+>> Bring common functions to a new file while keeping code as much same as
+>> possible. These functions can be used in the new tests. This helps in
+>> avoiding code duplication.
+> 
+> This commit breaks a pattern in the way tests are run in the current scheme.
+> Before this commit the only executable (or TEST_PROGS) that was executed was
+> run_vmselftests.sh. Now both madv_populate and split_huge_page_test are being
+> run as well.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> Changes in V6:
+>> - Correct header files inclusion
+>>
+>> Changes in V5:
+>> Keep moved code as same as possible
+>> - Updated macros names
+>> - Removed macro used to show bit number of dirty bit, added a comment
+>>   instead
+>> - Corrected indentation
+>> ---
+>>  tools/testing/selftests/vm/Makefile           |   7 +-
+>>  tools/testing/selftests/vm/madv_populate.c    |  34 +-----
+>>  .../selftests/vm/split_huge_page_test.c       |  79 +------------
+>>  tools/testing/selftests/vm/vm_util.c          | 108 ++++++++++++++++++
+>>  tools/testing/selftests/vm/vm_util.h          |   9 ++
+>>  5 files changed, 124 insertions(+), 113 deletions(-)
+>>  create mode 100644 tools/testing/selftests/vm/vm_util.c
+>>  create mode 100644 tools/testing/selftests/vm/vm_util.h
+>>
+>> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+>> index 5e43f072f5b76..4e68edb26d6b6 100644
+>> --- a/tools/testing/selftests/vm/Makefile
+>> +++ b/tools/testing/selftests/vm/Makefile
+>> @@ -34,7 +34,7 @@ TEST_GEN_FILES += hugepage-mremap
+>>  TEST_GEN_FILES += hugepage-shm
+>>  TEST_GEN_FILES += hugepage-vmemmap
+>>  TEST_GEN_FILES += khugepaged
+>> -TEST_GEN_FILES += madv_populate
+>> +TEST_GEN_PROGS = madv_populate
+> madv_populate is already being run in run_vmselftests.sh
+>>  TEST_GEN_FILES += map_fixed_noreplace
+>>  TEST_GEN_FILES += map_hugetlb
+>>  TEST_GEN_FILES += map_populate
+>> @@ -47,7 +47,7 @@ TEST_GEN_FILES += on-fault-limit
+>>  TEST_GEN_FILES += thuge-gen
+>>  TEST_GEN_FILES += transhuge-stress
+>>  TEST_GEN_FILES += userfaultfd
+>> -TEST_GEN_FILES += split_huge_page_test
+>> +TEST_GEN_PROGS += split_huge_page_test
+>>  TEST_GEN_FILES += ksm_tests
+>>  
+>>  ifeq ($(MACHINE),x86_64)
+>> @@ -91,6 +91,9 @@ TEST_FILES := test_vmalloc.sh
+>>  KSFT_KHDR_INSTALL := 1
+>>  include ../lib.mk
+>>  
+>> +$(OUTPUT)/madv_populate: vm_util.c
+>> +$(OUTPUT)/split_huge_page_test: vm_util.c
+> Not sure what this does but if we add a run entry for split_huge_page_test in
+> run_vmselftests.sh we wont really need this patch.
+> 
+> I'm not sure the reduction in code size is worth the change in run behavior.
+> 
+> Unless I'm missing something I suggest we revert this patch and add a run entry
+> for split_huge_page_test in run_vmselftests.sh. I can do this if no one objects.
+The run behavior isn't being changed here. Only the build behavior is
+being changed as we want to keep the common code in one file. You can
+add the run entry as required. I don't know why do you think the
+Makefile has changed the run behavior.
 
-> The walk implementation of most qdisc class modules is basically the
-> same. That is, the values of count and skip are checked first. If
-> count is greater than or equal to skip, the registered fn function is
-> executed. Otherwise, increase the value of count. So we can reconstruct
-> them.
->
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> 
+> Cheers,
+> -- Nico
+> 
 
-Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-
+-- 
+Muhammad Usama Anjum
