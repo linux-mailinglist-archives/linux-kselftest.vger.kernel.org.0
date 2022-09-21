@@ -2,117 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B1B5BFF16
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Sep 2022 15:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CE95C0532
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Sep 2022 19:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiIUNns (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Sep 2022 09:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S229751AbiIURTV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Sep 2022 13:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiIUNnm (ORCPT
+        with ESMTP id S229473AbiIURTU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Sep 2022 09:43:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4FA6E2EE
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 06:43:41 -0700 (PDT)
+        Wed, 21 Sep 2022 13:19:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEF19E6A1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 10:19:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A45F7B82FC6
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 13:43:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A79C43140
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 13:43:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663767818;
-        bh=Gmuw7RYv066IxRae4zmwgZqYaBan3eu2R7Ak+x42SkI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=epzRSJ0jyAlPZ16JH3+XPj16W+fgflBh69EoIUoCn+iYNALhGhq0EGN7hyvK6/xnz
-         tCrpO2MgL9f/JKcaFVIpdYkwWnKD81N8BqNwoKaIfVpULQLmOvz2ZVdroMjawrta0o
-         ltKZ/KorHpLGLupVh7L0N+yDipDQXa6ThxHz29DxoZb9DXxNv+/aKxvEEYH4WGYHYT
-         oaAootsA0LfuR1MUG3VujCM5P1GmGhokDptfnnqRKL295GKdkC9Z7vl9faJN982WEV
-         SSAWusvTxydhhjpXEPqqtH0teulP5+KXcoBUaMngLqObOmac7yPzK5i/UYTPtLUnEo
-         byWIA2B/BIBDA==
-Received: by mail-ej1-f48.google.com with SMTP id sd10so5377486ejc.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 06:43:38 -0700 (PDT)
-X-Gm-Message-State: ACrzQf21iefpzFquTKvewjjKCiHPAFk20IExeeDq3dcicqGsPR8njGgq
-        8PhaZUjP/BTHSwiSvbPaLl++8y+X55pT0QIpPA2UNg==
-X-Google-Smtp-Source: AMsMyM79gcUQDdS+aheFYCBSJgkOeTa2g6z7vtIVxydF5XAVlYV8l3YcMmi9Yn+KvZ/xQuuFPV3NVrj9PpUfx7TqFJ4=
-X-Received: by 2002:a2e:920a:0:b0:26c:f7b:95db with SMTP id
- k10-20020a2e920a000000b0026c0f7b95dbmr9324650ljg.156.1663767805783; Wed, 21
- Sep 2022 06:43:25 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 380846259B
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 17:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC225C433C1;
+        Wed, 21 Sep 2022 17:19:16 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Luis Machado <luis.machado@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alan Hayward <alan.hayward@arm.com>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] arm64/sme: ptrace support for TPIDR2_EL0
+Date:   Wed, 21 Sep 2022 18:19:14 +0100
+Message-Id: <166378074640.3946796.15081323710769114507.b4-ty@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220829154921.837871-1-broonie@kernel.org>
+References: <20220829154921.837871-1-broonie@kernel.org>
 MIME-Version: 1.0
-References: <20220920075951.929132-1-roberto.sassu@huaweicloud.com> <20220920075951.929132-3-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220920075951.929132-3-roberto.sassu@huaweicloud.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Wed, 21 Sep 2022 15:43:14 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ7or3+zwZShXC7TdzhSbN4O9wEk6KEkbRBFh85=HZ87PQ@mail.gmail.com>
-Message-ID: <CACYkzJ7or3+zwZShXC7TdzhSbN4O9wEk6KEkbRBFh85=HZ87PQ@mail.gmail.com>
-Subject: Re: [PATCH v18 02/13] btf: Export bpf_dynptr definition
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, dhowells@redhat.com,
-        jarkko@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        shuah@kernel.org, bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Joanne Koong <joannelkoong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 10:01 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> eBPF dynamic pointers is a new feature recently added to upstream. It binds
-> together a pointer to a memory area and its size. The internal kernel
-> structure bpf_dynptr_kern is not accessible by eBPF programs in user space.
-> They instead see bpf_dynptr, which is then translated to the internal
-> kernel structure by the eBPF verifier.
->
-> The problem is that it is not possible to include at the same time the uapi
-> include linux/bpf.h and the vmlinux BTF vmlinux.h, as they both contain the
-> definition of some structures/enums. The compiler complains saying that the
-> structures/enums are redefined.
->
-> As bpf_dynptr is defined in the uapi include linux/bpf.h, this makes it
-> impossible to include vmlinux.h. However, in some cases, e.g. when using
-> kfuncs, vmlinux.h has to be included. The only option until now was to
-> include vmlinux.h and add the definition of bpf_dynptr directly in the eBPF
-> program source code from linux/bpf.h.
->
-> Solve the problem by using the same approach as for bpf_timer (which also
-> follows the same scheme with the _kern suffix for the internal kernel
-> structure).
->
-> Add the following line in one of the dynamic pointer helpers,
-> bpf_dynptr_from_mem():
->
-> BTF_TYPE_EMIT(struct bpf_dynptr);
->
-> Cc: stable@vger.kernel.org
-> Cc: Joanne Koong <joannelkoong@gmail.com>
-> Fixes: 97e03f521050c ("bpf: Add verifier support for dynptrs")
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Acked-by: Yonghong Song <yhs@fb.com>
+On Mon, 29 Aug 2022 16:49:17 +0100, Mark Brown wrote:
+> When SME was initially merged we did not add support for TPIDR2_EL0 to
+> the ptrace interface, creating difficulties for debuggers in accessing
+> lazy save state for ZA. This series implements that support, extending
+> the existing NT_ARM_TLS regset to support the register when available,
+> and adds kselftest coverage for the existing and new NT_ARM_TLS
+> functionality.
+> 
+> [...]
 
-I tested this out and it works, however for the BPF signing use case
-where "bpf_dynptr_kern" is added to struct bpf_prog_aux one still
-ends up defining the __ksym extern with bpf_dynptr_kern.
+Applied to arm64 (for-next/tpidr2_el0), thanks!
 
-But let's discuss that when the series is posted.
+[1/4] kselftest/arm64: Add test coverage for NT_ARM_TLS
+      https://git.kernel.org/arm64/c/ecaf4d3f734f
+[2/4] arm64/ptrace: Document extension of NT_ARM_TLS to cover TPIDR2_EL0
+      https://git.kernel.org/arm64/c/f285da05c62a
+[3/4] arm64/ptrace: Support access to TPIDR2_EL0
+      https://git.kernel.org/arm64/c/0027d9c6c7b5
+[4/4] kselftest/arm64: Add coverage of TPIDR2_EL0 ptrace interface
+      https://git.kernel.org/arm64/c/2ddadec2206c
 
-Tested-by: KP Singh <kpsingh@kernel.org>
+-- 
+Catalin
+
