@@ -2,121 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3125BF309
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Sep 2022 03:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013D05BF350
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Sep 2022 04:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiIUBpy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Sep 2022 21:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S229540AbiIUCIv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Sep 2022 22:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiIUBpw (ORCPT
+        with ESMTP id S229490AbiIUCIu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Sep 2022 21:45:52 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0167AC0D;
-        Tue, 20 Sep 2022 18:45:51 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MXLpl2dFMz9sFV;
-        Wed, 21 Sep 2022 01:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1663724751; bh=iFbKdVTUqU9vaOZpXdfH9jOuaXhN/xqaIIRjsRn3wOw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F8xbe4WI22SdXMwoOnXMr+WazwBDt+8rTFWF2sBGSfF36ogzU7PM5wS9EKRzNcWOO
-         2DzzpD5FfPBUFnpjWEUo1Vt3D9kaIDk3ND7ha45sYm0GbZPLR6PUIKcBpd+XoURom3
-         syIQFuxcPbKkQbwY8oTJMJE3+0/9nfc1w8xPdxdo=
-X-Riseup-User-ID: D4A74AB70EA45172B4364F8A79F3A5E2D1A5FAAAFBB24C3E9C3F291F43B62EAB
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4MXLph43Yqz5vMb;
-        Wed, 21 Sep 2022 01:45:48 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
-        Daniel Latypov <dlatypov@google.com>, daniel@ffwll.ch,
-        davem@davemloft.net, kuba@kernel.org, jose.exposito89@gmail.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH v5 3/3] kunit: Use KUNIT_EXPECT_MEMEQ macro
-Date:   Tue, 20 Sep 2022 22:45:15 -0300
-Message-Id: <20220921014515.113062-4-mairacanal@riseup.net>
-In-Reply-To: <20220921014515.113062-1-mairacanal@riseup.net>
-References: <20220921014515.113062-1-mairacanal@riseup.net>
+        Tue, 20 Sep 2022 22:08:50 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238E15143B;
+        Tue, 20 Sep 2022 19:08:49 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MXMDS1bLWz14RNk;
+        Wed, 21 Sep 2022 10:04:40 +0800 (CST)
+Received: from [10.174.178.66] (10.174.178.66) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 21 Sep 2022 10:08:43 +0800
+Message-ID: <05bf784d-e0aa-0dde-ca6b-e147b9753f20@huawei.com>
+Date:   Wed, 21 Sep 2022 10:08:42 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH net-next,v2 03/18] selftests/tc-testings: add selftests
+ for cake qdisc
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <vinicius.gomes@intel.com>,
+        <stephen@networkplumber.org>, <shuah@kernel.org>,
+        <victor@mojatatu.com>
+CC:     <zhijianx.li@intel.com>, <weiyongjun1@huawei.com>,
+        <yuehaibing@huawei.com>
+References: <20220917050304.127729-1-shaozhengchao@huawei.com>
+ <87r106w3tm.fsf@toke.dk>
+From:   shaozhengchao <shaozhengchao@huawei.com>
+In-Reply-To: <87r106w3tm.fsf@toke.dk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.66]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use KUNIT_EXPECT_MEMEQ to compare memory blocks in replacement of the
-KUNIT_EXPECT_EQ macro. Therefor, the statement
 
-    KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
 
-is replaced by:
+On 2022/9/20 21:52, Toke Høiland-Jørgensen wrote:
+> Zhengchao Shao <shaozhengchao@huawei.com> writes:
+> 
+>> Test 1212: Create CAKE with default setting
+>> Test 3281: Create CAKE with bandwidth limit
+>> Test c940: Create CAKE with autorate-ingress flag
+>> Test 2310: Create CAKE with rtt time
+>> Test 2385: Create CAKE with besteffort flag
+>> Test a032: Create CAKE with diffserv8 flag
+>> Test 2349: Create CAKE with diffserv4 flag
+>> Test 8472: Create CAKE with flowblind flag
+>> Test 2341: Create CAKE with dsthost and nat flag
+>> Test 5134: Create CAKE with wash flag
+>> Test 2302: Create CAKE with flowblind and no-split-gso flag
+>> Test 0768: Create CAKE with dual-srchost and ack-filter flag
+>> Test 0238: Create CAKE with dual-dsthost and ack-filter-aggressive flag
+>> Test 6572: Create CAKE with memlimit and ptm flag
+>> Test 2436: Create CAKE with fwmark and atm flag
+>> Test 3984: Create CAKE with overhead and mpu
+>> Test 5421: Create CAKE with conservative and ingress flag
+>> Test 6854: Delete CAKE with conservative and ingress flag
+>> Test 2342: Replace CAKE with mpu
+>> Test 2313: Change CAKE with mpu
+>> Test 4365: Show CAKE class
+>>
+>> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> 
+> The subject prefix is misspelled for all the test patches (should be
+> selftests/tc-testing without the last 's').
+> 
+> Also, v2 of the series wasn't properly threaded for some reason, which
+> makes it harder to apply as a whole.
+> 
+> Other than those nits, for this patch:
+> 
+> Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> 
+Hi Toke：
+	Thank you for your review. I will send v3.
 
-    KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
-
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
-Acked-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
- drivers/gpu/drm/tests/drm_format_helper_test.c | 6 +++---
- net/core/dev_addr_lists_test.c                 | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-index ab49f5e8796c..e2746429ea3e 100644
---- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-+++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-@@ -219,7 +219,7 @@ static void drm_test_fb_xrgb8888_to_rgb332(struct kunit *test)
- 	iosys_map_set_vaddr(&src, xrgb8888);
- 
- 	drm_fb_xrgb8888_to_rgb332(&dst, &result->dst_pitch, &src, &fb, &params->clip);
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
- }
- 
- static void drm_test_fb_xrgb8888_to_rgb565(struct kunit *test)
-@@ -249,10 +249,10 @@ static void drm_test_fb_xrgb8888_to_rgb565(struct kunit *test)
- 	iosys_map_set_vaddr(&src, xrgb8888);
- 
- 	drm_fb_xrgb8888_to_rgb565(&dst, &result->dst_pitch, &src, &fb, &params->clip, false);
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
- 
- 	drm_fb_xrgb8888_to_rgb565(&dst, &result->dst_pitch, &src, &fb, &params->clip, true);
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected_swab, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected_swab, dst_size);
- }
- 
- static struct kunit_case drm_format_helper_test_cases[] = {
-diff --git a/net/core/dev_addr_lists_test.c b/net/core/dev_addr_lists_test.c
-index 049cfbc58aa9..90e7e3811ae7 100644
---- a/net/core/dev_addr_lists_test.c
-+++ b/net/core/dev_addr_lists_test.c
-@@ -71,11 +71,11 @@ static void dev_addr_test_basic(struct kunit *test)
- 
- 	memset(addr, 2, sizeof(addr));
- 	eth_hw_addr_set(netdev, addr);
--	KUNIT_EXPECT_EQ(test, 0, memcmp(netdev->dev_addr, addr, sizeof(addr)));
-+	KUNIT_EXPECT_MEMEQ(test, netdev->dev_addr, addr, sizeof(addr));
- 
- 	memset(addr, 3, sizeof(addr));
- 	dev_addr_set(netdev, addr);
--	KUNIT_EXPECT_EQ(test, 0, memcmp(netdev->dev_addr, addr, sizeof(addr)));
-+	KUNIT_EXPECT_MEMEQ(test, netdev->dev_addr, addr, sizeof(addr));
- }
- 
- static void dev_addr_test_sync_one(struct kunit *test)
--- 
-2.37.3
-
+Zhengchao Shao
