@@ -2,186 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0895DEA91
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Sep 2022 20:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06FC5E4EEC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Sep 2022 20:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiIUSRo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Sep 2022 14:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S229814AbiIUS0e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 21 Sep 2022 14:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiIUSRn (ORCPT
+        with ESMTP id S229720AbiIUS0d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Sep 2022 14:17:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E22A3450
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 11:17:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 21 Sep 2022 14:26:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0599E6BD;
+        Wed, 21 Sep 2022 11:26:31 -0700 (PDT)
+Received: from [192.168.10.9] (unknown [39.45.34.16])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC852B82257
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Sep 2022 18:17:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D77A4C433D6;
-        Wed, 21 Sep 2022 18:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663784259;
-        bh=/kCtptTTWEb3AePTiK49kvfDAIqsfjXBgTxkdXkZuoQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tvyy+vdYMjjKMP/ZKpA9BIKOVeCiSgIvyqopDWASdkyslBAgg35WzcHJzntlWMr+v
-         9RYMSwGN7y8/8jHpL9vcVlWRsutyAxFAclbR9uYI5PFJL+LmhA5Jzg/wxItTiCoxua
-         mYIBMlDnQWnjW7ortqQfKxsIVdahKDlPEHCjIK/hcq5F2eDz31GdO9P3zipCgkMX3n
-         kanxN2sPZdNcPFSIXR9I5ziCZMi3TCDCW/BL7y7jGkkygWrN+6I05mVAO80hUaTlwy
-         W/EaMTCu3G9Q3TeP9/80ESH3xT8M0OAh/OZGALVH6mbzjF0FKpQg/xg3tlvatzmecY
-         W8DR6kZ4lnfBw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 3/3] kselftest/arm64: Handle EINTR while reading data from children
-Date:   Wed, 21 Sep 2022 19:13:45 +0100
-Message-Id: <20220921181345.618085-4-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220921181345.618085-1-broonie@kernel.org>
-References: <20220921181345.618085-1-broonie@kernel.org>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 86C166601F3F;
+        Wed, 21 Sep 2022 19:26:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1663784789;
+        bh=So86y159AbWJGTLFx2a5tmcV8v05eppZwwAmrovWgMM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=IGDJJARkqok3B6pKtzC9Wf7OvwLPfsce/uxiqcj2w9+vuT/nKW+Tks5OD65FDuCuX
+         H/ap7da1XCgHuIvU/XoqGGV4A8u28RcxRxhH9jJr8DwSY6p1zURGwZxRoZ6mSc/hIJ
+         tfwYtCeXl39rr5ol291NlnhTqquo5POJ3kuKgzTLo4tWJPeBRjQN3gpoQKbCDHRNQe
+         N2Dx3YQGKt+qQX+l1X+V+GFHp+5ww+zNHJoh3/aB01Sz9WYhlATyMSmRmulP7978mI
+         JqFUDHrzQblaK5hcEicjIUcmsBR2stbPew4HBYXDSiweegz2o2i7VBbflfbJWxlhrh
+         qy9Igt7cKbb5A==
+Message-ID: <2c8b7116-56e9-3202-c47e-e42078c85793@collabora.com>
+Date:   Wed, 21 Sep 2022 23:26:21 +0500
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3556; i=broonie@kernel.org; h=from:subject; bh=/kCtptTTWEb3AePTiK49kvfDAIqsfjXBgTxkdXkZuoQ=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjK1RYELy0MkuqmGPtQHXduRGLPKoxcv4c1Lgvf7bt WOAbetaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYytUWAAKCRAk1otyXVSH0Pv2B/ 0SmfKAEzq2JtcU4oidByx+8xgLBDKk0Eg1QBbmdkA2+8CH17qO/NCZ7nLAeFV4mEOYn4XDaJKyZTmM 8GBUABCCKz/euC0kdGosBaiwMQZiMDsDnJ1+yH2yuulXB9gtU7fsuIifBB2rEn3mKcf3BrzYdkyk3i J2HBRl9WRlQkVxBGslEZyCNj38ybbs/NdQ0VnM4+JFnUdsJAARgg2Syib/+0oItgFnKaXNcWVFcNAj b6L63a5JixdXQmM4BIOQAZklXPB6RSalZ8HADcSEDedxqQDY5WOxk01cEig0n5BqSud02KzRlmUT5F Wb4Qezf/hM+I7AQ6jvBrxm9Hz+YNUC
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Cc:     usama.anjum@collabora.com, Jonathan Corbet <corbet@lwn.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+Content-Language: en-US
+To:     Andrei Vagin <avagin@gmail.com>
+References: <20220826064535.1941190-1-usama.anjum@collabora.com>
+ <YyiDg79flhWoMDZB@gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <YyiDg79flhWoMDZB@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently we treat any error when reading from the child as a failure and
-don't read any more output from that child as a result. This ignores the
-fact that it is valid for read() to return EINTR as the error code if there
-is a signal pending so we could stop handling the output of children,
-especially during exit when we will get some SIGCHLD signals delivered to
-us. Fix this by pulling the read handling out into a separate function
-which returns a flag if reads should be continued and wrapping it in a
-loop.
+Hi,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/fp-stress.c | 85 ++++++++++++--------
- 1 file changed, 50 insertions(+), 35 deletions(-)
+Thank you for reviewing.
 
-diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
-index 03ce3936220a..4e62a9199f97 100644
---- a/tools/testing/selftests/arm64/fp/fp-stress.c
-+++ b/tools/testing/selftests/arm64/fp/fp-stress.c
-@@ -121,55 +121,70 @@ static void child_start(struct child_data *child, const char *program)
- 	}
- }
- 
--static void child_output(struct child_data *child, uint32_t events,
--			 bool flush)
-+static bool child_output_read(struct child_data *child)
- {
- 	char read_data[1024];
- 	char work[1024];
- 	int ret, len, cur_work, cur_read;
- 
--	if (events & EPOLLIN) {
--		ret = read(child->stdout, read_data, sizeof(read_data));
--		if (ret < 0) {
--			ksft_print_msg("%s: read() failed: %s (%d)\n",
--				       child->name, strerror(errno), errno);
--			return;
--		}
--		len = ret;
-+	ret = read(child->stdout, read_data, sizeof(read_data));
-+	if (ret < 0) {
-+		if (errno == EINTR)
-+			return true;
- 
--		child->output_seen = true;
-+		ksft_print_msg("%s: read() failed: %s (%d)\n",
-+			       child->name, strerror(errno),
-+			       errno);
-+		return false;
-+	}
-+	len = ret;
- 
--		/* Pick up any partial read */
--		if (child->output) {
--			strncpy(work, child->output, sizeof(work) - 1);
--			cur_work = strnlen(work, sizeof(work));
--			free(child->output);
--			child->output = NULL;
--		} else {
--			cur_work = 0;
--		}
-+	child->output_seen = true;
- 
--		cur_read = 0;
--		while (cur_read < len) {
--			work[cur_work] = read_data[cur_read++];
-+	/* Pick up any partial read */
-+	if (child->output) {
-+		strncpy(work, child->output, sizeof(work) - 1);
-+		cur_work = strnlen(work, sizeof(work));
-+		free(child->output);
-+		child->output = NULL;
-+	} else {
-+		cur_work = 0;
-+	}
- 
--			if (work[cur_work] == '\n') {
--				work[cur_work] = '\0';
--				ksft_print_msg("%s: %s\n", child->name, work);
--				cur_work = 0;
--			} else {
--				cur_work++;
--			}
--		}
-+	cur_read = 0;
-+	while (cur_read < len) {
-+		work[cur_work] = read_data[cur_read++];
- 
--		if (cur_work) {
-+		if (work[cur_work] == '\n') {
- 			work[cur_work] = '\0';
--			ret = asprintf(&child->output, "%s", work);
--			if (ret == -1)
--				ksft_exit_fail_msg("Out of memory\n");
-+			ksft_print_msg("%s: %s\n", child->name, work);
-+			cur_work = 0;
-+		} else {
-+			cur_work++;
- 		}
- 	}
- 
-+	if (cur_work) {
-+		work[cur_work] = '\0';
-+		ret = asprintf(&child->output, "%s", work);
-+		if (ret == -1)
-+			ksft_exit_fail_msg("Out of memory\n");
-+	}
-+
-+	return false;
-+}
-+
-+static void child_output(struct child_data *child, uint32_t events,
-+			 bool flush)
-+{
-+	bool read_more;
-+
-+	if (events & EPOLLIN) {
-+		do {
-+			read_more = child_output_read(child);
-+		} while (read_more);
-+	}
-+
- 	if (events & EPOLLHUP) {
- 		close(child->stdout);
- 		child->stdout = -1;
+On 9/19/22 7:58 PM, Andrei Vagin wrote:
+>> This ioctl can be used by the CRIU project and other applications which
+>> require soft-dirty PTE bit information. The following operations are
+>> supported in this ioctl:
+>> - Get the pages that are soft-dirty.
+> 
+> I think this interface doesn't have to be limited by the soft-dirty
+> bits only. For example, CRIU needs to know whether file, present and swap bits
+> are set or not.
+These operations can be performed by pagemap procfs file. Definitely
+performing them through IOCTL will be faster. But I'm trying to add a
+simple IOCTL by which some specific PTE bit can be read and cleared
+atomically. This IOCTL can be extended to include other bits like file,
+present and swap bits by keeping the interface simple. The following
+mask advice is nice. But if we add that kind of masking, it'll start to
+look like a filter on top of pagemap. My intention is to not duplicate
+the functionality already provided by the pagemap. One may ask, then why
+am I adding "get the soft-dirty pages" functionality? I'm adding it to
+complement the get and clear operation. The "get" and "get and clear"
+operations with special flag (PAGEMAP_SD_NO_REUSED_REGIONS) can give
+results quicker by not splitting the VMAs.
+
+> 
+> I mean we should be able to specify for what pages we need to get info
+> for. An ioctl argument can have these four fields:
+> * required bits (rmask & mask == mask) - all bits from this mask have to be set.
+> * any of these bits (amask & mask != 0) - any of these bits is set.
+> * exclude masks (emask & mask == 0) = none of these bits are set.
+> * return mask - bits that have to be reported to user.
+> 
+>> - Clear the pages which are soft-dirty.
+>> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
+>> soft-dirty PTE bit
+>>
+>> There are two decisions which have been taken about how to get the output
+>> from the syscall.
+>> - Return offsets of the pages from the start in the vec
+> 
+> We can conside to return regions that contains pages with the same set
+> of bits.
+> 
+> struct page_region {
+> 	void *start;
+> 	long size;
+> 	u64 bitmap;
+> }
+> 
+> And ioctl returns arrays of page_region-s. I believe it will be more
+> compact form for many cases.
+Thank you for mentioning this. I'd considered this while development.
+But I gave up and used the simple array to return the offsets of the
+pages as in the problem I'm trying to solve, the dirty pages may be
+present amid non-dirty pages. The range may not be useful in that case.
+Also we want to return only a specific number of pages of interest. The
+following paragraph explains it.
+
+> 
+>> - Stop execution when vec is filled with dirty pages
+>> These two arguments doesn't follow the mincore() philosophy where the
+>> output array corresponds to the address range in one to one fashion, hence
+>> the output buffer length isn't passed and only a flag is set if the page
+>> is present. This makes mincore() easy to use with less control. We are
+>> passing the size of the output array and putting return data consecutively
+>> which is offset of dirty pages from the start. The user can convert these
+>> offsets back into the dirty page addresses easily. Suppose, the user want
+>> to get first 10 dirty pages from a total memory of 100 pages. He'll
+>> allocate output buffer of size 10 and the ioctl will abort after finding the
+>> 10 pages. This behaviour is needed to support Windows' getWriteWatch(). The
+>> behaviour like mincore() can be achieved by passing output buffer of 100
+>> size. This interface can be used for any desired behaviour.
+>>
+>> [1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+>>
+>> Regards,
+>> Muhammad Usama Anjum
+>>
+>> Muhammad Usama Anjum (4):
+>>   fs/proc/task_mmu: update functions to clear the soft-dirty PTE bit
+>>   fs/proc/task_mmu: Implement IOCTL to get and clear soft dirty PTE bit
+>>   selftests: vm: add pagemap ioctl tests
+>>   mm: add documentation of the new ioctl on pagemap
+>>
+>>  Documentation/admin-guide/mm/soft-dirty.rst |  42 +-
+>>  fs/proc/task_mmu.c                          | 342 ++++++++++-
+>>  include/uapi/linux/fs.h                     |  23 +
+>>  tools/include/uapi/linux/fs.h               |  23 +
+>>  tools/testing/selftests/vm/.gitignore       |   1 +
+>>  tools/testing/selftests/vm/Makefile         |   2 +
+>>  tools/testing/selftests/vm/pagemap_ioctl.c  | 649 ++++++++++++++++++++
+>>  7 files changed, 1050 insertions(+), 32 deletions(-)
+>>  create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
+>>
+>> -- 
+>> 2.30.2
+>>
+
 -- 
-2.30.2
-
+Muhammad Usama Anjum
