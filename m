@@ -2,42 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD945E6235
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Sep 2022 14:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD9D5E634D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Sep 2022 15:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbiIVMWO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Sep 2022 08:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S229959AbiIVNMo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Sep 2022 09:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiIVMWN (ORCPT
+        with ESMTP id S229641AbiIVNMn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Sep 2022 08:22:13 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5530AE21FB;
-        Thu, 22 Sep 2022 05:22:10 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYDn155bPzMpRl;
-        Thu, 22 Sep 2022 20:17:25 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 20:22:07 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [net-next] selftests: Fix the if conditions of in test_extra_filter()
-Date:   Thu, 22 Sep 2022 20:42:49 +0800
-Message-ID: <1663850569-33122-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Thu, 22 Sep 2022 09:12:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1622E6B7;
+        Thu, 22 Sep 2022 06:12:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A1F6334D;
+        Thu, 22 Sep 2022 13:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AAE6C433C1;
+        Thu, 22 Sep 2022 13:12:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663852361;
+        bh=a6Pxb5FFcGLIPM2aP832Xw0KLYvfxKAw3qHbhN0ERD0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hh+K4+W0G3XOml4vAkNGhfWn+eLNdj84S+ahAtP7IfFPcfKTdo+ShyATLdsYeJ2Tp
+         T8cVu912jI1euX5jECyamUX1zOzuNggm15syBmpdFEIBIZpnp9auZuSG5havJ2P8J3
+         nGWPjditWNKEeaBEglYc/7NQX4/JR2f58kkQil/YzG4DnEJvrlaZ1+l/KtFtE5AE3G
+         KTJq85TV9lbB5Ft25aCbn6tQoem3crBz2XMSd4bkAqSzQCaRUNn/NieW68daYd2+Bl
+         bQJe/QLfhVgu9dhUvmKbTmytz3YtOZ7mP/IBJZCTMAx87rdS/kKemcAVdLyDdUlrXj
+         BNrpzp92+cHiA==
+Date:   Thu, 22 Sep 2022 06:12:39 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Wang Yufen <wangyufen@huawei.com>
+Cc:     <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <shuah@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+Subject: Re: [net-next] selftests: Fix the if conditions of in
+ test_extra_filter()
+Message-ID: <20220922061239.115520b2@kernel.org>
+In-Reply-To: <1663850569-33122-1-git-send-email-wangyufen@huawei.com>
+References: <1663850569-33122-1-git-send-email-wangyufen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,27 +56,9 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The socket 2 bind the addr in use, bind should fail with EADDRINUSE. So
-if bind success or errno != EADDRINUSE, testcase should be failed.
+On Thu, 22 Sep 2022 20:42:49 +0800 Wang Yufen wrote:
+> The socket 2 bind the addr in use, bind should fail with EADDRINUSE. So
+> if bind success or errno != EADDRINUSE, testcase should be failed.
 
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- tools/testing/selftests/net/reuseport_bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
-index 072d709c..65aea27 100644
---- a/tools/testing/selftests/net/reuseport_bpf.c
-+++ b/tools/testing/selftests/net/reuseport_bpf.c
-@@ -328,7 +328,7 @@ static void test_extra_filter(const struct test_params p)
- 	if (bind(fd1, addr, sockaddr_size()))
- 		error(1, errno, "failed to bind recv socket 1");
- 
--	if (!bind(fd2, addr, sockaddr_size()) && errno != EADDRINUSE)
-+	if (!bind(fd2, addr, sockaddr_size()) || errno != EADDRINUSE)
- 		error(1, errno, "bind socket 2 should fail with EADDRINUSE");
- 
- 	free(addr);
--- 
-1.8.3.1
-
+Please add a Fixes tag, even if the buggy commit has not reached Linus
+yet.
