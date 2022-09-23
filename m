@@ -2,110 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE59A5E7130
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 03:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADCD5E7333
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 07:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiIWBLS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Sep 2022 21:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S229804AbiIWFBI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Sep 2022 01:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbiIWBK6 (ORCPT
+        with ESMTP id S229568AbiIWFBI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Sep 2022 21:10:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B037F9629;
-        Thu, 22 Sep 2022 18:10:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 07906B834F3;
-        Fri, 23 Sep 2022 01:10:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AC34EC433C1;
-        Fri, 23 Sep 2022 01:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663895422;
-        bh=op7+9L67dqlaF5pksxSU+uimTe+RF2SRZi+xWANH2NI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UPYkIWELE/ahQh1qQMbRUpL0CZMurPrXkdwo362V4058WzSVE7eDh5MlpOlNGAe4V
-         lk7695MPJeG3f12MBVT3L/dw9NIIumrmz/HlUn+NMwZAM/HKPf5FV/sVfTHVqlewvK
-         t2wbiiiSR2ObMvcSRZzPGCCHa65/wVksncPtYPSB24VWWRiQqYllX8xPQ4R1Kyw6g6
-         OOGz/XhgsH3xe3pIuk4gS8y6fadWuUitVnXPbobVmd543yOeZOnAwMm0t+B3mu7Pq9
-         27cf7MhlxWsVfoD/HBTiL9kSfBVVv1oRZYureamZLF7jqYq4tt1v8nLvg7fv1nM1Ax
-         hG+cWhUK3NNeA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8A1DFE4D03C;
-        Fri, 23 Sep 2022 01:10:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next, v3 00/10] cleanup in Huawei hinic driver
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166389542255.15244.1888532276548956272.git-patchwork-notify@kernel.org>
-Date:   Fri, 23 Sep 2022 01:10:22 +0000
-References: <20220921123358.63442-1-shaozhengchao@huawei.com>
-In-Reply-To: <20220921123358.63442-1-shaozhengchao@huawei.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        shuah@kernel.org, victor@mojatatu.com, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Sep 2022 01:01:08 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A6F126447
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Sep 2022 22:01:05 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-349cf83cfc7so96367337b3.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Sep 2022 22:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=daFDSoGJO9kSrGHqPw4bon34ioz/ecAvyFcmE63pSEk=;
+        b=GYACt8ZMAo3l8WpXpwRvh1ZV/QgPMQY4sKUHU0FmzF5hMQbpqrQT1jVOFEoalBwZnF
+         9cetOsNQnzSenFbG3crzsiSaU4RiXJPFhqI9x81/PvUIb/Qje5J0+H64d/UKtJQZZC5L
+         uWvdWNNjfNi0383sWvHsxvlC6WjSOkXLEsX/KvzSyWrXErZNPSenGmJfprhTGNvD1TF6
+         Q4C4bMzrmSAvb4BUSCEhn1KJrBgmdugy8IQ7ivckKcC9wix1q2l7DVYWGPZX8YqD+qLG
+         yd90tAu5CI1VaqcFTI+c+JSY8GFCEMetTBWUiEUmtMp8d68iBjrUG+1ykUuubUeRnFrO
+         9HmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=daFDSoGJO9kSrGHqPw4bon34ioz/ecAvyFcmE63pSEk=;
+        b=ZFC3pUWZTFbtJlUWzalTWXur1aDEScBd1NltfhSiX26gfXqzkSVz7UKqP1zaN6wV2I
+         nin7RltstP1KQ7w+YPAzYT2HFeRFFeFPgljmg/TL07mfxDRiNgcBTozRPdMUUnyaLehw
+         JLeQnr5Re78O3AH4CQ6kG7SzjdAJp4YWTpze+KOB4dn9IQaqmwjTPdxqsiHPfhI2MlkC
+         EklTaWIaOa9hdVfsHpxBpDZK1U3VUeoWg+tl1JFfhDwgbatJjhdPUMKawC/2CGuX0pRa
+         Dk1jSwLKrGlXvkUVPenrLSxNwID6f7U9TeGf+/cQFfjfSNJe39WHKiaZ6RY+3oIUeVRS
+         OO9Q==
+X-Gm-Message-State: ACrzQf1dK3GXRtUIVCANKOEtG7Zm5wZz5ci8ZbqZ9WOGe0YI0kL6ZDWb
+        76asxBYs+FwhXNn4e7+6vCEG9x5tnivSjg==
+X-Google-Smtp-Source: AMsMyM5E7B60nFf5LZb+hVSlJESQdtDQkBqmmnVWvuuMsiUjx0f7PPpvSbtGoMnw1NGy4nChmHeMev2peqehZg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:7905:0:b0:348:c973:d2c9 with SMTP id
+ u5-20020a817905000000b00348c973d2c9mr6990823ywc.450.1663909264704; Thu, 22
+ Sep 2022 22:01:04 -0700 (PDT)
+Date:   Fri, 23 Sep 2022 13:00:39 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220923050039.3371091-1-davidgow@google.com>
+Subject: [PATCH] kunit: tool: Don't download risc-v opensbi firmware with wget
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Xu Panda <xu.panda@zte.com.cn>
+Cc:     David Gow <davidgow@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+When running a RISC-V test kernel under QEMU, we need an OpenSBI BIOS
+file. In the original QEMU support patchset, kunit_tool would optionally
+download this file from GitHub if it didn't exist, using wget.
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+These days, it can usually be found in the distro's qemu-system-riscv
+package, and is located in /usr/share/qemu on all the distros I tried
+(Debian, Arch, OpenSUSE). Use this file, and thereby don't do any
+downloading in kunit_tool.
 
-On Wed, 21 Sep 2022 20:33:48 +0800 you wrote:
-> Do code cleanup in Huawei hinic driver.
-> 
-> Zhengchao Shao (10):
->   net: hinic: modify kernel doc comments
->   net: hinic: change type of function to be static
->   net: hinic: remove unused functions
->   net: hinic: remove unused macro
->   net: hinic: remove duplicate macro definition
->   net: hinic: simplify code logic
->   net: hinic: change hinic_deinit_vf_hw() to void
->   net: hinic: remove unused enumerated value
->   net: hinic: replace magic numbers with macro
->   net: hinic: remove the unused input parameter prod_idx in
->     sq_prepare_ctrl()
-> 
-> [...]
+In addition, we used to shell out to whatever 'wget' was in the path,
+which could have potentially been used to trick the developer into
+running another binary. By not using wget at all, we nicely sidestep
+this issue.
 
-Here is the summary with links:
-  - [-next,v3,01/10] net: hinic: modify kernel doc comments
-    https://git.kernel.org/netdev/net-next/c/15b209cde263
-  - [-next,v3,02/10] net: hinic: change type of function to be static
-    https://git.kernel.org/netdev/net-next/c/73f25f16cc3c
-  - [-next,v3,03/10] net: hinic: remove unused functions
-    https://git.kernel.org/netdev/net-next/c/2b291ee6dd6e
-  - [-next,v3,04/10] net: hinic: remove unused macro
-    https://git.kernel.org/netdev/net-next/c/2fa1cd3b4a0d
-  - [-next,v3,05/10] net: hinic: remove duplicate macro definition
-    https://git.kernel.org/netdev/net-next/c/97d6a3e642bf
-  - [-next,v3,06/10] net: hinic: simplify code logic
-    https://git.kernel.org/netdev/net-next/c/4f304250c39b
-  - [-next,v3,07/10] net: hinic: change hinic_deinit_vf_hw() to void
-    https://git.kernel.org/netdev/net-next/c/dcbe72d25594
-  - [-next,v3,08/10] net: hinic: remove unused enumerated value
-    https://git.kernel.org/netdev/net-next/c/566ad0ed6b12
-  - [-next,v3,09/10] net: hinic: replace magic numbers with macro
-    https://git.kernel.org/netdev/net-next/c/57ac57154d83
-  - [-next,v3,10/10] net: hinic: remove the unused input parameter prod_idx in sq_prepare_ctrl()
-    https://git.kernel.org/netdev/net-next/c/c706df6d8f6e
+Cc: Xu Panda <xu.panda@zte.com.cn>
+Fixes: 87c9c1631788 ("kunit: tool: add support for QEMU")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-You are awesome, thank you!
+This is a replacement for "kunit: tool: use absolute path for wget":
+https://lore.kernel.org/linux-kselftest/20220922083610.235936-1-xu.panda@zte.com.cn/
+
+Instead of just changing the path to wget, it removes the download
+option completely and grabs the opensbi-riscv64-generic-fw_dynamic.bin
+from the /usr/share/qemu directory, where the distro package manager
+should have put it.
+
+I _think_ this should be okay to treat as a fix: we were always grabbing
+this from the QEMU GitHub repository, so it should be widely available.
+And if you want to treat the wget use as a security issue, getting rid
+of it everywhere would be nice.
+
+Thoughts?
+
+-- David
+
+---
+ tools/testing/kunit/qemu_configs/riscv.py | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
+
+diff --git a/tools/testing/kunit/qemu_configs/riscv.py b/tools/testing/kunit/qemu_configs/riscv.py
+index 6207be146d26..12a1d525978a 100644
+--- a/tools/testing/kunit/qemu_configs/riscv.py
++++ b/tools/testing/kunit/qemu_configs/riscv.py
+@@ -3,17 +3,13 @@ import os
+ import os.path
+ import sys
+ 
+-GITHUB_OPENSBI_URL = 'https://github.com/qemu/qemu/raw/master/pc-bios/opensbi-riscv64-generic-fw_dynamic.bin'
+-OPENSBI_FILE = os.path.basename(GITHUB_OPENSBI_URL)
++OPENSBI_FILE = 'opensbi-riscv64-generic-fw_dynamic.bin'
++OPENSBI_PATH = '/usr/share/qemu/' + OPENSBI_FILE
+ 
+-if not os.path.isfile(OPENSBI_FILE):
+-	print('\n\nOpenSBI file is not in the current working directory.\n'
+-	      'Would you like me to download it for you from:\n' + GITHUB_OPENSBI_URL + ' ?\n')
+-	response = input('yes/[no]: ')
+-	if response.strip() == 'yes':
+-		os.system('wget ' + GITHUB_OPENSBI_URL)
+-	else:
+-		sys.exit()
++if not os.path.isfile(OPENSBI_PATH):
++	print('\n\nOpenSBI bios was not found in "' + OPENSBI_PATH + '".\n'
++	      'Please ensure that qemu-system-riscv is installed, or edit the path in "qemu_configs/riscv.py"\n')
++	sys.exit()
+ 
+ QEMU_ARCH = QemuArchParams(linux_arch='riscv',
+ 			   kconfig='''
+@@ -29,4 +25,4 @@ CONFIG_SERIAL_EARLYCON_RISCV_SBI=y''',
+ 			   extra_qemu_params=[
+ 					   '-machine', 'virt',
+ 					   '-cpu', 'rv64',
+-					   '-bios', 'opensbi-riscv64-generic-fw_dynamic.bin'])
++					   '-bios', OPENSBI_PATH])
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.37.3.998.g577e59143f-goog
 
