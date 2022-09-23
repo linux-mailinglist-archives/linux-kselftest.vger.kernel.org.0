@@ -2,72 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CEA5E7444
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 08:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB535E74FF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 09:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiIWGmA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Sep 2022 02:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S229535AbiIWHkz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Sep 2022 03:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiIWGl7 (ORCPT
+        with ESMTP id S229520AbiIWHkx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Sep 2022 02:41:59 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7442A127CB2;
-        Thu, 22 Sep 2022 23:41:58 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYjB121n1zMpXs;
-        Fri, 23 Sep 2022 14:37:13 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 14:41:56 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [net-next v2] selftests: Fix the if conditions of in test_extra_filter()
-Date:   Fri, 23 Sep 2022 15:02:37 +0800
-Message-ID: <1663916557-10730-1-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Fri, 23 Sep 2022 03:40:53 -0400
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0A811C156
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Sep 2022 00:40:51 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id 5879923550; Fri, 23 Sep 2022 07:37:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1663918800; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=ATClC5AmJpmGlgUNJooyqCnsndNMWpmRjMj2Bcn9lJp/fau68GPElwwGaj9GHr1GR
+         0LidGAKVSU/P1klxcS0udPxcqpfbXcfQtC8mwSWkiqoHypaWZYB0aQW0zgUMA6WTfm
+         8dBIV5cGp1g13IoqbYu1z3Rkooj76rMMHPUxiiE7Ki9JHmRGP1FnXqRGfnUxNOyPml
+         6qYv6Eqks2MdPDRttcR3NF6XytbLJ39seh2Thq8K+XVI5mDTIMQs1VD6U5UTSFxG7K
+         gUBWdk/5zkerbOe1DhOEDygPxhee4dK9auo+Ls/NM3Sb/nkH+1bzLELe+zjY05ncy3
+         aORgYEFfqHD0g==
+Received: by mail.fadrush.pl for <linux-kselftest@vger.kernel.org>; Fri, 23 Sep 2022 07:36:05 GMT
+Message-ID: <20220923064500-0.1.1t.haaa.0.jjccwbxb98@fadrush.pl>
+Date:   Fri, 23 Sep 2022 07:36:05 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-kselftest@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The socket 2 bind the addr in use, bind should fail with EADDRINUSE. So
-if bind success or errno != EADDRINUSE, testcase should be failed.
+Dzie=C5=84 dobry,
 
-Fixes: 3ca8e4029969 ("soreuseport: BPF selection functional test")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
-v1 -> v2: add a Fixes tag
- tools/testing/selftests/net/reuseport_bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
-diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
-index 072d709c..65aea27 100644
---- a/tools/testing/selftests/net/reuseport_bpf.c
-+++ b/tools/testing/selftests/net/reuseport_bpf.c
-@@ -328,7 +328,7 @@ static void test_extra_filter(const struct test_params p)
- 	if (bind(fd1, addr, sockaddr_size()))
- 		error(1, errno, "failed to bind recv socket 1");
- 
--	if (!bind(fd2, addr, sockaddr_size()) && errno != EADDRINUSE)
-+	if (!bind(fd2, addr, sockaddr_size()) || errno != EADDRINUSE)
- 		error(1, errno, "bind socket 2 should fail with EADDRINUSE");
- 
- 	free(addr);
--- 
-1.8.3.1
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
 
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
+
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
+
+
+Pozdrawiam
+Jakub Olejniczak
