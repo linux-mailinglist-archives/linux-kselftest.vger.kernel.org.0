@@ -2,99 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CCD5E7AB1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 14:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA7D5E7BBF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 15:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbiIWM0F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Sep 2022 08:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S231816AbiIWNZr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Sep 2022 09:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiIWMZ0 (ORCPT
+        with ESMTP id S231621AbiIWNZq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Sep 2022 08:25:26 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB8413EAFD;
-        Fri, 23 Sep 2022 05:21:27 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id EA925188504F;
-        Fri, 23 Sep 2022 12:21:25 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id E0024250007B;
-        Fri, 23 Sep 2022 12:21:25 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id CD3219EC0002; Fri, 23 Sep 2022 12:21:25 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 23 Sep 2022 09:25:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2767312C683;
+        Fri, 23 Sep 2022 06:25:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF467B81E56;
+        Fri, 23 Sep 2022 13:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C8BFC433D6;
+        Fri, 23 Sep 2022 13:25:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663939543;
+        bh=dvzp8eyI4MQl3wONgiHtP4fVdsf0WDy4arC+9dcgonw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fyaeRFAEYordYWbyGSMdleexKo5WW/HrH9aUcowCGGEWPFqFoM7adziIPM8YPe3oq
+         +ySW1PLXu4jKAM5UHlfQXoYGpuYdFXoPrCFMxOjMvR94mOJ3EjcXVVA5JZHPP7WLS3
+         sr1TLyqNscp2MmImHNWuaRYXSbDQNRPzB7tYHj8eR/SB73egR6MPMaS4E25JQukFhr
+         SCqVhLu6g0iWs6nMzxfinuteAeaYApNaY95/Y4u7kSn8rn2Vw7AFr8bchyBwl4hIoN
+         Nz56I4RyD+l+rScDkmVwSmPaQo2RnzL4d5G1uD75daiofxHyirRlbiZdQO8U/iRtlK
+         0Hb1RE5oyiSQA==
+Date:   Fri, 23 Sep 2022 06:25:42 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests/bonding: re-add lladdr target test
+Message-ID: <20220923062542.6e41fed8@kernel.org>
+In-Reply-To: <Yy16saDPo5tnkXdp@Laptop-X1>
+References: <20220923082306.2468081-1-matthieu.baerts@tessares.net>
+        <Yy16saDPo5tnkXdp@Laptop-X1>
 MIME-Version: 1.0
-Date:   Fri, 23 Sep 2022 14:21:25 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <546f96aa592aec4d64bdfc45d4618c05@kapio-technology.com>
-References: <YxNo/0+/Sbg9svid@shredder>
- <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
- <Yxmgs7Du62V1zyjK@shredder>
- <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
- <20220908112044.czjh3xkzb4r27ohq@skbuf>
- <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
- <20220911001346.qno33l47i6nvgiwy@skbuf>
- <15ee472a68beca4a151118179da5e663@kapio-technology.com>
- <Yx73FOpN5uhPQhFl@shredder>
- <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
- <Yyq6BnUfctLeerqE@shredder>
- <546f96aa592aec4d64bdfc45d4618c05@kapio-technology.com>
-User-Agent: Gigahost Webmail
-Message-ID: <bd690048460a519cd804d41be736ae40@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-09-23 13:34, netdev@kapio-technology.com wrote:
-> On 2022-09-21 09:15, Ido Schimmel wrote:
+On Fri, 23 Sep 2022 17:21:53 +0800 Hangbin Liu wrote:
+> > The first one was applied in 'net-next' while the two other ones were
+> > recently applied in the 'net' tree.  
 > 
->> 	# Check blackhole entries can be replaced.
->> 	bridge fdb replace `mac_get $h2` dev $swp2 master static
->> 	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
->> 	check_fail $? "Blackhole entry found after replacement"
-> 
-> There seems to be a problem with replacing blackhole fdb entries as
-> fdb_find_rcu() does not find the associated fdb entry (addr, vid) and
-> I don't know why that is the case?
+> Thanks for the fix. Before re-post to net-next, I should wait for some more
+> time so lladdr test could be applied to net tree.
 
-I realize that the reason why fdb_find_rcu() does not find the entry is 
-surely that it is stored in the bridge device fdb and not 'master' fdb.
+That'd be best, but hopefully if the tests are sorted the chances 
+of conflicts go down. Chances are the tests will end up landing in
+different spots in the list rather than all at the end.
