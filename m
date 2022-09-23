@@ -2,80 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86175E7C30
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 15:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEC55E7C92
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 16:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiIWNrF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Sep 2022 09:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S232367AbiIWOLK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Sep 2022 10:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbiIWNrE (ORCPT
+        with ESMTP id S232526AbiIWOKq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Sep 2022 09:47:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D69126B6B;
-        Fri, 23 Sep 2022 06:46:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A8F0021A5A;
-        Fri, 23 Sep 2022 13:46:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1663940812; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8vGCZfchEFFjpHwi1/o54WkcrU8R1sIbEuaLYYPinG4=;
-        b=uTbh1d1JcX4/yC2tkEubaGmOun2VRv+6BNfCsGPpqyPSml4Se6ReudOBTcb9u6QFqDOCNM
-        AOdFHOuTYuEilieIh87JkcMUZ2Jr2Qt9GjMTeBa+rSL+5VlmLEB77QMB1h3Lehezg7RpoZ
-        1wSVqz9eqlAS6DX0DbIMNRf7XdX0UI8=
-Received: from suse.cz (unknown [10.100.201.202])
+        Fri, 23 Sep 2022 10:10:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6848FEE67B;
+        Fri, 23 Sep 2022 07:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8769C2C15A;
-        Fri, 23 Sep 2022 13:46:52 +0000 (UTC)
-Date:   Fri, 23 Sep 2022 15:46:49 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>,
-        Yannick Cote <ycote@redhat.com>, Dennis Li <denli@redhat.com>
-Subject: Re: [PATCH] selftests/livepatch: normalize sysctl error message
-Message-ID: <Yy24yV+xd9KTBMBb@alley>
-References: <20220811212138.182575-1-joe.lawrence@redhat.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id B5F87CE24E3;
+        Fri, 23 Sep 2022 14:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1AF64C4347C;
+        Fri, 23 Sep 2022 14:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663942217;
+        bh=iAWhOPsndRHqQw8SQe8LSyqZZn5ruSlDcyafkVQl0xs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rHnY2Rbg+pxQ+vtknC8C1wKlFqj3JQz9BSel/X+FHqgB/yCPFbXp1d/i1NJYLlKiQ
+         ZMbU2WCXKNYs8vAEyTUtQ7ZueorPA9JPmFwO9yHL7tGlu9uLvXYMkqVl31of1aQ7v3
+         g7tB8rseuicwuq1mseI67gtt4ARs+G0utDlW9h8b2BMvSDUFQ8fVTqYhYnVISMiZ6D
+         Xi0A1ip/x7guZatl6wDT4BQF3KC3scDMIk0xJUmE1pIbgJl40a9iz+BqC2B2cIveNr
+         txpSIkX9PQ/7XQfF6bj4DNusifjwkuA0zAtFwvX924aCH9jWjk+lRWuOYBODRDC06X
+         ZHhX+Rmpg5bIQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2EE9E4D03F;
+        Fri, 23 Sep 2022 14:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811212138.182575-1-joe.lawrence@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests/bonding: re-add lladdr target test
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166394221699.18573.18054139188469148797.git-patchwork-notify@kernel.org>
+Date:   Fri, 23 Sep 2022 14:10:16 +0000
+References: <20220923082306.2468081-1-matthieu.baerts@tessares.net>
+In-Reply-To: <20220923082306.2468081-1-matthieu.baerts@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        shuah@kernel.org, kuba@kernel.org, liuhangbin@gmail.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 2022-08-11 17:21:38, Joe Lawrence wrote:
-> The livepatch kselftests rely on comparing expected and actual output
-> from such commands as sysctl.  A recent commit in procps-ng v4.0.0 [1]
-> changed sysctl's output to emit key pathnames like:
-> 
->   sysctl: setting key "/proc/sys/kernel/ftrace_enabled": Device or resource busy
-> 
-> versus previous dotted output:
-> 
->   sysctl: setting key "kernel.ftrace_enabled": Device or resource busy
-> 
-> The modification in output was later reverted [2], but since the change
-> has been tagged in procps-ng v4.0.0, update the livepatch kselftest to
-> handle either case.
-> 
-> [1] https://gitlab.com/procps-ng/procps/-/commit/6389deca5bf667f5fab5912acde78ba8e0febbc7
-> [2] https://gitlab.com/procps-ng/procps/-/commit/b159c198c9160a8eb13254e2b631d0035b9b542c
-> 
-> Reported-by: Dennis(Zhuoheng) Li <denli@redhat.com>
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+Hello:
 
-JFYI, the patch has been committed into livepatching.git, branch
-for-6.1/fixes.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Best Regards,
-Petr
+On Fri, 23 Sep 2022 10:23:06 +0200 you wrote:
+> It looks like this test has been accidentally dropped when resolving
+> conflicts in this Makefile.
+> 
+> Most probably because there were 3 different patches modifying this file
+> in parallel:
+> 
+>   commit 152e8ec77640 ("selftests/bonding: add a test for bonding lladdr target")
+>   commit bbb774d921e2 ("net: Add tests for bonding and team address list management")
+>   commit 2ffd57327ff1 ("selftests: bonding: cause oops in bond_rr_gen_slave_id")
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next] selftests/bonding: re-add lladdr target test
+    https://git.kernel.org/netdev/net-next/c/aacdecda9eb4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
