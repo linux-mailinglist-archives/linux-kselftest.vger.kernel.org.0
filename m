@@ -2,70 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F985E7D19
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 16:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2D65E7D69
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Sep 2022 16:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbiIWObr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Sep 2022 10:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S231208AbiIWOmi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Sep 2022 10:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbiIWOb2 (ORCPT
+        with ESMTP id S229511AbiIWOmi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Sep 2022 10:31:28 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D645713EEA1
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Sep 2022 07:31:25 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id m16so232445ili.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Sep 2022 07:31:25 -0700 (PDT)
+        Fri, 23 Sep 2022 10:42:38 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E9112968F
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Sep 2022 07:42:37 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id g12so258047ilj.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Sep 2022 07:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=HGCf2CEH8Pze7w6/yHjPsApA3KSaCMjYFuFN/oMe1oY=;
-        b=COf4mUkCy0J/hewdcFUot+/GptzPuCtGrmUOOSuIET0uLNlUSmhQW5R/5K6aCcAuDS
-         Boeerq18H9HPShuMX4r8Kpm3nozSvzzIDtHvIKJPwl67AKZ7vpnFjt9Ylj8MPZZbRP/3
-         2+6Zjczk0/PxHue8RsLCnj0AtZwPwD2YzIGsY=
+        bh=KPF2lqF/WtNz1hYLUge3B8Vp3BuerYZNr3G0LKFM+pI=;
+        b=gGnxOJrzA69G0jn1C8f+RQVhfmTHqoKHFI3+99865brwbstNc1J2/z9iqIIu10QDLB
+         4NLuEqFsYK96WzVR7C2e6Em/Q7fFvn9PQvfUdFE0Kgc7zk5U97BgfP0YtQkqSMDzKaqG
+         fe3C0co8WGjRk1ntXTXbg/lLRF0PXK8bDayXk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=HGCf2CEH8Pze7w6/yHjPsApA3KSaCMjYFuFN/oMe1oY=;
-        b=4pAcLF+J/Zg9FOwm2bVkPRaDvI7Bi4xmSWejb6dzqJdFQSPk4OieLd/VBAgedlqAnV
-         VgoJz7UyZ+2+2yo+3zVd+Tu9cMCsckwYs4lFzUmyrk/nRjmuh9UIem+Jsf0k+i4B9bsc
-         E6DnWwNKxaZruDAjooRdRi5t1dwDMyA3bi2u517Qtts+LK6tax5yreROC14VuM69vMDa
-         QnnCd8lCQh7FbNvOz8gmfFU4nh/xSJytI5T9wPbW7EUjOoojwT9LSRh6kbDnHh2Lz2pH
-         igUTjPwz2CfSFKrJk8UNdFId40XJWXJp3UO0Wq4ysG6gCL6mr3vu8di+xSYtN6hpCmXU
-         BuRg==
-X-Gm-Message-State: ACrzQf0PnRhSCcuWTBBLvs+dEjkIX4xvGdViq1eimSZR3RdyrgVukQZm
-        AZaxUZ66oUtefwx4X4kevbOcmQ==
-X-Google-Smtp-Source: AMsMyM6tXJVRa8Ovs7CGzDxQ/BOFGz+7XqZt8CHp4EsyF8+4qZpAiKek3gXenARMzODcfNx5yMo7tA==
-X-Received: by 2002:a92:730c:0:b0:2f5:7dd7:45f7 with SMTP id o12-20020a92730c000000b002f57dd745f7mr4279062ilc.12.1663943485147;
-        Fri, 23 Sep 2022 07:31:25 -0700 (PDT)
+        bh=KPF2lqF/WtNz1hYLUge3B8Vp3BuerYZNr3G0LKFM+pI=;
+        b=d4S+5RU5zTpkodIO01UUgon2/puskSOOdjLX013sun3Ddt7c7COc33E4dIyNtxfHwY
+         KrdnOzIDdQi9hFIC38kbx72zAt+EAguBoy5zDfxEIdFBHIJtxGcgbBxd5dIlmV1jubCL
+         yIZzgeQf8/K0xbuLjEWNM6RXd2p2kMh5bNRrQcP+PFIyeJrG3uKfbuGXbOm6/mkq2BP+
+         5HqxRYwqDCDArRfHEyoMTFeSjuaV5hahJNXDOrTWjGs1oj87CDTDSOtoWn8APMOSkWLk
+         nXxpShxkj+gUq9IjUwmvwTTwLDwSHD4F4QoXY8sn4yonHbwwmlDSkDs0C5AdBu7NmVhJ
+         Ps6g==
+X-Gm-Message-State: ACrzQf0+jvfQ/XziWtmAq+ZzOaMPrArE7s2KvSbDT96ErRH4po2sNT1A
+        416rFgiFTIwTnNBX6MXBopP23w==
+X-Google-Smtp-Source: AMsMyM5B06KoxoN0qBRyK2rGavS6PZzCApYyN7HCsCIYb2derNbv+I2Yo72cxf2knFUZ1oV3smdxZQ==
+X-Received: by 2002:a05:6e02:194c:b0:2eb:6cfa:1615 with SMTP id x12-20020a056e02194c00b002eb6cfa1615mr4251985ilu.10.1663944156485;
+        Fri, 23 Sep 2022 07:42:36 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c37-20020a023b25000000b0034a56f2f120sm3378709jaa.155.2022.09.23.07.31.24
+        by smtp.gmail.com with ESMTPSA id q39-20020a027b27000000b0034b362d5a12sm3365431jac.97.2022.09.23.07.42.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 07:31:24 -0700 (PDT)
-Message-ID: <0d7e2c9d-dffc-d68e-c475-7933806d3ffa@linuxfoundation.org>
-Date:   Fri, 23 Sep 2022 08:31:23 -0600
+        Fri, 23 Sep 2022 07:42:36 -0700 (PDT)
+Message-ID: <19cecfa3-7333-d97f-374a-12150acda79c@linuxfoundation.org>
+Date:   Fri, 23 Sep 2022 08:42:35 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v1] selftests/landlock: Fix out-of-tree builds
+Subject: Re: [GIT PULL] Landlock fix for v6.0 #2
 Content-Language: en-US
 To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220909103402.1501802-1-mic@digikod.net>
- <5e288153-ca6b-a91d-a3fd-cd2b1e102b3e@digikod.net>
- <21feac5f-27d1-60ca-0c06-6605f3f27474@digikod.net>
- <2879477f-82d9-9d39-13b6-9cc60a3f14c7@digikod.net>
+References: <20220923104322.3182116-1-mic@digikod.net>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <2879477f-82d9-9d39-13b6-9cc60a3f14c7@digikod.net>
+In-Reply-To: <20220923104322.3182116-1-mic@digikod.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,26 +77,22 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/22/22 03:18, Mickaël Salaün wrote:
-> I plan to push it to Linus tomorrow, I'd like to get some feedback by then though.
+On 9/23/22 04:43, Mickaël Salaün wrote:
+> Hi Linus,
 > 
+> This change fixes out-of-tree builds for Landlock tests, which was
+> initially identified here:
+> https://lore.kernel.org/r/CADYN=9JM1nnjC9LypHqrz7JJjbZLpm8rArDUy4zgYYrajErBnA@mail.gmail.com
 > 
-> On 14/09/2022 16:43, Mickaël Salaün wrote:
->> I took the liberty to pushed it in -next with my tree:
->> https://git.kernel.org/mic/c/a52540522c9541bfa3e499d2edba7bc0ca73a4ca
->>
->> Please let me know when you can take it in your tree to include it in
->> the next -rc.
->>
->> Regards,
->>    Mickaël
->>
+> Please pull this Landlock fix for v6.0-rc7 .  This change merged
+> cleanly with your tree, and have been successfully tested in the latest
+> linux-next releases for a week.
+> 
+> Regards,
+>   Mickaël
+> 
 
-Looks good to me. Thanks for doing this. Linux Plumbers travel and
-subsequent being under the weather caused the delay in a response
-to this patch.
-
-I also saw your pull request to Linus.
+Thank you for taking care of this Mickaël.
 
 thanks,
 -- Shuah
