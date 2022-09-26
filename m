@@ -2,208 +2,200 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5D15EADAE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Sep 2022 19:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47775EB575
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 01:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiIZRKm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Sep 2022 13:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S231253AbiIZXTe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Sep 2022 19:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiIZRKX (ORCPT
+        with ESMTP id S230445AbiIZXSw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Sep 2022 13:10:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BC0E090;
-        Mon, 26 Sep 2022 09:18:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0032960B68;
-        Mon, 26 Sep 2022 16:18:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F85C433C1;
-        Mon, 26 Sep 2022 16:18:38 +0000 (UTC)
-Date:   Mon, 26 Sep 2022 12:19:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Joe Fradley <joefradley@google.com>,
-        Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/2] kunit: expose ftrace-based API for stubbing
- out functions during tests
-Message-ID: <20220926121946.5b409ca1@gandalf.local.home>
-In-Reply-To: <20220910212804.670622-3-davidgow@google.com>
-References: <20220910212804.670622-1-davidgow@google.com>
-        <20220910212804.670622-3-davidgow@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 26 Sep 2022 19:18:52 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4C6B6D08
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Sep 2022 16:18:50 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id h8-20020a17090a054800b00205ccbae31eso1445093pjf.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Sep 2022 16:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=SIAPwLGrdF6de2sUvVzEsUXI67gCH9gi2KlqfGNRtvk=;
+        b=PiwXiRi6C5W9sHwMs6AfMS2o9JzPIAHf0vDUDJ4gQ4sXVlaTML3wMo++n6LPbexjxG
+         yg+3HFqUSr7IIk+GDWu3bk261jQmKuSUpnrjAeXgsQ1fqp2oldn6BXZHs5IPKkBQdm4c
+         jnBFOuGs7aTKI7SMJ6LBaNzvjg9tAMuWhXKOGN0ZdgF8r1WtCYP2z41AgLNbGUoZHtXh
+         K32XsFj7suJJr0vWAZFCww+Umdo1J5TA0yuR8gTn5cPhzkJ0ycEMDffQ0ZLU+l7yh75b
+         yK1F5yOF8lNeNKC0134uIKJ/DVxvCQ6kuXkK/aqJkCL6DGzU8g4G88Y2tXr1kimfhyEG
+         jtRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=SIAPwLGrdF6de2sUvVzEsUXI67gCH9gi2KlqfGNRtvk=;
+        b=ukOKb4cutNMH6/8130QdK7DZIVdKUI2N1i1yPWGX9py/a8qIkN5F+h1ElSssaidhPN
+         Y0Z3HsspNq7F5hIYFLMinjwT+qTGjf+aVjcNj2kgjQBszj5ub0aGgTgie57yNUKyopcz
+         V0GZEaD78XAVEbEJkTLse+tSOGtCcbBfzGl+NQMqMSp1jCuxx4TpuD54ey75yeiaZRvC
+         VYxYhWIf2vUSqRakogUTLjVeebQH6/3mk0iOJbxlRrRLpyx0JZfGyyjhxeqa76X36NJr
+         bm/QZD4h29q4Zdw0ha+T7RWJhz0Xp6cx3M44Z4tJhPPsq7C7Fu28kjVKumIYx7OwqYmU
+         lH0Q==
+X-Gm-Message-State: ACrzQf2SMvfdteEUGyzEUrpY5C0ldv9eCyeXleGb0UpBHfYw0n9ke6Rk
+        I9UFOByjO/t9Nkq0yoKbxdULFJdZ1viFA6zge09Z6A==
+X-Google-Smtp-Source: AMsMyM4SkUxm44J+T/UiQPpnhjOvmdzF9n1exmwexp+ZbQb4Ohl0IC1hqh5nzSJYdV402K/a4YDOMEG53gH7uD32kgM=
+X-Received: by 2002:a17:902:d143:b0:178:456b:8444 with SMTP id
+ t3-20020a170902d14300b00178456b8444mr24452996plt.137.1664234330087; Mon, 26
+ Sep 2022 16:18:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915000448.1674802-1-vannapurve@google.com>
+ <20220915000448.1674802-3-vannapurve@google.com> <20220915094442.45eldu4bes5alacm@kamzik>
+In-Reply-To: <20220915094442.45eldu4bes5alacm@kamzik>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Mon, 26 Sep 2022 16:18:39 -0700
+Message-ID: <CAGtprH-PWxLTVVZQoe3kbqBdW0dMh4djOXH0cPWfVkWxu0QjHg@mail.gmail.com>
+Subject: Re: [V2 PATCH 2/8] KVM: selftests: Add arch specific initialization
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oliver Upton <oupton@google.com>, peterx@redhat.com,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 11 Sep 2022 05:28:04 +0800
-David Gow <davidgow@google.com> wrote:
+On Thu, Sep 15, 2022 at 2:44 AM Andrew Jones <andrew.jones@linux.dev> wrote:
+>
+> On Thu, Sep 15, 2022 at 12:04:42AM +0000, Vishal Annapurve wrote:
+> > Introduce arch specific API: kvm_selftest_arch_init to allow each arch to
+> > handle initialization before running any selftest logic.
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > ---
+> >  .../selftests/kvm/include/kvm_util_base.h      |  5 +++++
+> >  .../selftests/kvm/lib/aarch64/processor.c      | 18 +++++++++---------
+> >  tools/testing/selftests/kvm/lib/kvm_util.c     |  2 ++
+> >  .../selftests/kvm/lib/riscv/processor.c        |  4 ++++
+> >  .../selftests/kvm/lib/s390x/processor.c        |  4 ++++
+> >  .../selftests/kvm/lib/x86_64/processor.c       |  4 ++++
+> >  6 files changed, 28 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > index 24fde97f6121..98edbbda9f97 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > @@ -834,4 +834,9 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
+> >       return __vm_enable_cap(vm, KVM_CAP_VM_DISABLE_NX_HUGE_PAGES, 0);
+> >  }
+> >
+> > +/*
+> > + * API to execute architecture specific setup before executing selftest logic.
+> > + */
+> > +void kvm_selftest_arch_init(void);
+> > +
+> >  #endif /* SELFTEST_KVM_UTIL_BASE_H */
+> > diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > index 6f5551368944..2281d6c5d02f 100644
+> > --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > @@ -495,15 +495,6 @@ void aarch64_get_supported_page_sizes(uint32_t ipa,
+> >       close(kvm_fd);
+> >  }
+> >
+> > -/*
+> > - * arm64 doesn't have a true default mode, so start by computing the
+> > - * available IPA space and page sizes early.
+> > - */
+> > -void __attribute__((constructor)) init_guest_modes(void)
+> > -{
+> > -       guest_modes_append_default();
+> > -}
+> > -
+> >  void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+> >              uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5,
+> >              uint64_t arg6, struct arm_smccc_res *res)
+> > @@ -528,3 +519,12 @@ void smccc_hvc(uint32_t function_id, uint64_t arg0, uint64_t arg1,
+> >                      [arg4] "r"(arg4), [arg5] "r"(arg5), [arg6] "r"(arg6)
+> >                    : "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7");
+> >  }
+> > +
+> > +/*
+> > + * arm64 doesn't have a true default mode, so start by computing the
+> > + * available IPA space and page sizes early.
+> > + */
+>
+> It'd be better to move this comment inside the function above the
+> guest_modes_append_default call.
+>
 
-> +++ b/lib/kunit/ftrace_stub.c
-> @@ -0,0 +1,137 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <kunit/test.h>
-> +
-> +#include <linux/typecheck.h>
-> +
-> +#include <linux/ftrace.h>
-> +#include <linux/sched.h>
-> +
-> +struct kunit_ftrace_stub_ctx {
-> +	struct kunit *test;
-> +	unsigned long real_fn_addr; /* used as a key to lookup the stub */
-> +	unsigned long replacement_addr;
-> +	struct ftrace_ops ops; /* a copy of kunit_stub_base_ops with .private set */
-> +};
-> +
-> +static void kunit_stub_trampoline(unsigned long ip, unsigned long parent_ip,
-> +				  struct ftrace_ops *ops,
-> +				  struct ftrace_regs *fregs)
-> +{
-> +	struct kunit_ftrace_stub_ctx *ctx = ops->private;
-> +	int lock_bit;
-> +
-> +	if (current->kunit_test != ctx->test)
-> +		return;
-> +
-> +	lock_bit = ftrace_test_recursion_trylock(ip, parent_ip);
-> +	KUNIT_ASSERT_GE(ctx->test, lock_bit, 0);
-> +
-> +	ftrace_instruction_pointer_set(fregs, ctx->replacement_addr);
-> +
-> +	ftrace_test_recursion_unlock(lock_bit);
-> +}
-> +
-> +static struct ftrace_ops kunit_stub_base_ops = {
-> +	.func = &kunit_stub_trampoline,
-> +	.flags = FTRACE_OPS_FL_IPMODIFY |
-> +#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-> +		FTRACE_OPS_FL_SAVE_REGS |
-> +#endif
-> +		FTRACE_OPS_FL_DYNAMIC
-> +};
-> +
-> +static void __kunit_ftrace_stub_resource_free(struct kunit_resource *res)
-> +{
-> +	struct kunit_ftrace_stub_ctx *ctx = res->data;
-> +
-> +	unregister_ftrace_function(&ctx->ops);
-> +	kfree(ctx);
-> +}
-> +
-> +/* Matching function for kunit_find_resource(). match_data is real_fn_addr. */
-> +static bool __kunit_ftrace_stub_resource_match(struct kunit *test,
-> +						struct kunit_resource *res,
-> +						void *match_real_fn_addr)
-> +{
-> +	/* This pointer is only valid if res is a static stub resource. */
-> +	struct kunit_ftrace_stub_ctx *ctx = res->data;
-> +
-> +	/* Make sure the resource is a static stub resource. */
-> +	if (res->free != &__kunit_ftrace_stub_resource_free)
-> +		return false;
-> +
-> +	return ctx->real_fn_addr == (unsigned long)match_real_fn_addr;
-> +}
-> +
-> +void kunit_deactivate_ftrace_stub(struct kunit *test, void *real_fn_addr)
-> +{
-> +	struct kunit_resource *res;
-> +
-> +	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
-> +				"Tried to deactivate a NULL stub.");
-> +
-> +	/* Look up the existing stub for this function. */
-> +	res = kunit_find_resource(test,
-> +				  __kunit_ftrace_stub_resource_match,
-> +				  real_fn_addr);
-> +
-> +	/* Error out if the stub doesn't exist. */
-> +	KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
-> +				"Tried to deactivate a nonexistent stub.");
-> +
-> +	/* Free the stub. We 'put' twice, as we got a reference
-> +	 * from kunit_find_resource(). The free function will deactivate the
-> +	 * ftrace stub.
-> +	 */
-> +	kunit_remove_resource(test, res);
-> +	kunit_put_resource(res);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_deactivate_ftrace_stub);
-> +
-> +void __kunit_activate_ftrace_stub(struct kunit *test,
-> +				  const char *name,
-> +				  void *real_fn_addr,
-> +				  void *replacement_addr)
-> +{
-> +	unsigned long ftrace_ip;
-> +	struct kunit_ftrace_stub_ctx *ctx;
-> +	int ret;
-> +
-> +	ftrace_ip = ftrace_location((unsigned long)real_fn_addr);
-> +	if (!ftrace_ip)
-> +		KUNIT_ASSERT_FAILURE(test, "%s ip is invalid: not a function, or is marked notrace or inline", name);
-> +
-> +	/* Allocate the stub context, which contains pointers to the replacement
-> +	 * function and the test object. It's also registered as a KUnit
-> +	 * resource which can be looked up by address (to deactivate manually)
-> +	 * and is destroyed automatically on test exit.
-> +	 */
-> +	ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL_MSG(test, ctx, "failed to allocate kunit stub for %s", name);
-> +
-> +	ctx->test = test;
-> +	ctx->ops = kunit_stub_base_ops;
-> +	ctx->ops.private = ctx;
-> +	ctx->real_fn_addr = (unsigned long)real_fn_addr;
-> +	ctx->replacement_addr = (unsigned long)replacement_addr;
-> +
-> +	ret = ftrace_set_filter_ip(&ctx->ops, ftrace_ip, 0, 0);
-> +	if (ret) {
-> +		kfree(ctx);
-> +		KUNIT_ASSERT_FAILURE(test, "failed to set filter ip for %s: %d", name, ret);
-
-I don't know the KUNIT_ASSERT content, but I'm guessing that any failure is
-just to crash the kernel or something where you do not need to bail out of
-the function?
-
-> +	}
-> +
-> +	ret = register_ftrace_function(&ctx->ops);
-> +	if (ret) {
-> +		kfree(ctx);
-> +		if (ret == -EBUSY)
-> +			KUNIT_ASSERT_FAILURE(test, "failed to register stub (-EBUSY) for %s, likely due to already stubbing it?", name);
-> +		KUNIT_ASSERT_FAILURE(test, "failed to register stub for %s: %d", name, ret);
-> +	}
-> +
-> +	/* Register the stub as a resource with a cleanup function */
-> +	kunit_alloc_resource(test, NULL,
-> +			     __kunit_ftrace_stub_resource_free,
-> +			     GFP_KERNEL, ctx);
-
-And I'm also guessing that there's no race concern with registering the
-free resource after enabling the function code?
-
-Other than that, looks good to me.
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
-> +}
+Ack, will fix this in the next series.
+> > +void kvm_selftest_arch_init(void)
+> > +{
+> > +     guest_modes_append_default();
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > index 3c83838999f5..dafe4471a6c7 100644
+> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > @@ -1984,4 +1984,6 @@ void __attribute((constructor)) kvm_selftest_init(void)
+> >  {
+> >       /* Tell stdout not to buffer its content. */
+> >       setbuf(stdout, NULL);
+> > +
+> > +     kvm_selftest_arch_init();
+> >  }
+> > diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> > index 604478151212..26660dd2ba78 100644
+> > --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> > @@ -362,3 +362,7 @@ void vcpu_args_set(struct kvm_vcpu *vcpu, unsigned int num, ...)
+> >  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+> >  {
+> >  }
+> > +
+> > +void kvm_selftest_arch_init(void)
+> > +{
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> > index 89d7340d9cbd..8654ec74009a 100644
+> > --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> > @@ -218,3 +218,7 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, uint8_t indent)
+> >  void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+> >  {
+> >  }
+> > +
+> > +void kvm_selftest_arch_init(void)
+> > +{
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > index 2e6e61bbe81b..20bf125f9363 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > @@ -1311,3 +1311,7 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+> >
+> >       return val == 'Y';
+> >  }
+> > +
+> > +void kvm_selftest_arch_init(void)
+> > +{
+> > +}
+> > --
+> > 2.37.2.789.g6183377224-goog
+> >
+>
+> Otherwise,
+>
+> Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
