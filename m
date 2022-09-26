@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96E35EB58A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 01:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3785EB5BB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 01:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiIZXU2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Sep 2022 19:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S229872AbiIZX1p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Sep 2022 19:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiIZXTM (ORCPT
+        with ESMTP id S229571AbiIZX1o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:19:12 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD2FAFAE8
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Sep 2022 16:19:10 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so13975509pjq.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Sep 2022 16:19:10 -0700 (PDT)
+        Mon, 26 Sep 2022 19:27:44 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2FE6EF29
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Sep 2022 16:27:42 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id f193so7944299pgc.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Sep 2022 16:27:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=KTYkoGSnzoJvmcli4WcPkh9mD6LI1jnFnjX4Q4TT2Dw=;
-        b=bUlA+hIf6EHrPg6Yjm1RD3TBCBKxD9VZxfMkGFaLz9DAFz2FV7tLQP4nBfEHN7nOja
-         OwKLyjUqKKhJUAzlsz4s1RG32swgnsK9c4oxMKVYlAps2IEpfwejclDTVnpQaI3MUqTu
-         UJfE5mlf3BkYySDs5sWm9/sK4tqpTI+jFjN/qtsmMK5EuJHF5rhR8xYH6Tnq3BKk2V2W
-         77F91PPAOk5sVGm4o+KQS8KxNJADcBa8X5PPy3XftGUQQ4rxDXg6yHsII94yR34u7eO+
-         lGmY4q/6ojKglw1GHKCj7VCcsvLO19KRRqfAZxDXmVBbNnWMKnmN5keiQ5Yya/kUI/rn
-         EE7A==
+        bh=R4uQtEJE5e59CjrqKVswdXws/gcA7psIs8btH21+MPI=;
+        b=GgFgwZi+ddAl59t5WyglkquklNhracaGBrF6jU0NtDfgG0IgyUN+puhncM4Se+w3hN
+         3ew+w2WAJPxrfTMHOqMoH5NrrG6IkW5+egKVHdTceHhmZygy1KIcyJjeClsgKVlkj5ex
+         oneWUpdx17BO4/PyBE6g+cJ8tE6d/72orSPDJT/z2Dn5cNhJcTxeiz73K/6cipRmQmPg
+         5WSDE+Crbf2mdPFXkZYYQykqzOJxfF2M7gXPNUdqAk6rST36q6aTR2pVw3SdsdUcI5Zd
+         7j5360faOwyI019TWu9zwCPdBHpnL9pJ3m2PtS+Z9jLoDEfpk2kTstRnVY5XOIb1KKxO
+         K6qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=KTYkoGSnzoJvmcli4WcPkh9mD6LI1jnFnjX4Q4TT2Dw=;
-        b=Uyz2I8D5pX23napxSTSnbEciuFeYKwOfol7M3JXJIrfZq/Fn7Ib5N3jvBZCrGfyEmL
-         p4+AS8G7VwKMxi0fkczKC71CQyqJWARxf6UhsZXFHqMLOvciYSav+ArDuZ7DR50/V3oc
-         3QynHSIptA4QVyX2N3CxhFZ8El/wjHx5Q0Pu4EPeZTMgAPuU1BxB9XT767kKkgfJaDNi
-         I/AKmmV7KEt2hCKrjdX1i46jABDHgfI5i1cjP3xTupLhjk/XPnw7kkle5p2adUtydqCv
-         OD/9OdbTpqAJZv/0wg6oI5mP2DMKmor8rQ2FBJCOJA38eTGfiCPE6PWKkR6J8ssa9GYd
-         2Q2g==
-X-Gm-Message-State: ACrzQf0q5MAmtyGug338GIncmdE73kYFmN4Yi0haj8RB3W96twXz+pGc
-        4wHF66q4ax83UF2JRaVVxetK+t+z9Rkij8d91rJBww==
-X-Google-Smtp-Source: AMsMyM6SalzArkfrof70ETM7z2kh8vAOPBfPGL6kbQpwN0aziTGkIJzl4D5AHxkvT231SdmTjqSWE63m9xyIl+4h4+I=
-X-Received: by 2002:a17:90b:384b:b0:200:3215:878b with SMTP id
- nl11-20020a17090b384b00b002003215878bmr1184729pjb.176.1664234350226; Mon, 26
- Sep 2022 16:19:10 -0700 (PDT)
+        bh=R4uQtEJE5e59CjrqKVswdXws/gcA7psIs8btH21+MPI=;
+        b=VfURu4+Z+y7FViDrjCQ/0D3tAUmucK5ngVjVbV5hZhYlP8z0RLoHB08Nyuy8PyqV6m
+         Pnrr+sIcrn11ew85014ecfbPLj2LFbOBYHjNQHXPj1Q8aJvz64r4FbBX/uQwF3Z6pDF8
+         dwAVWWZUpW1r4MyNZh5atCkOtyH6ao3TMSaY/dv20/ExgTJwpb1vE1Fta4lH5UUVYgFS
+         mge3Oxxke1TuxabpLnKln7wEcANh+lgLS4sQLetunDu6qWrOzPn51vKPAz61ut+MIu5p
+         NTJLaO3y3zWo9faAnSViuVYDqyEP2solpa9KuB9H9DdOnKoVPzPuW6QdEfVzCGl4bcyc
+         w2+Q==
+X-Gm-Message-State: ACrzQf02kry7QhtoJJhu2rLs2b1I8p5l+jR3PWkUOMZpAuo8eUKgdrgS
+        H64eiRiN0/uXPqlr8YlTpvVDOMm7DkCSeQo+pRM3g3fS3Vc=
+X-Google-Smtp-Source: AMsMyM4Y0+nAEAfTHn3/Q+IPC10tZSPdNyafhAmVC2i9miBgZKk8ZEBtq5Y706fIgaHIfrIlYaLC0/EtPvVCFzYpGnY=
+X-Received: by 2002:a63:1a51:0:b0:43b:e496:f2f4 with SMTP id
+ a17-20020a631a51000000b0043be496f2f4mr22517497pgm.99.1664234861996; Mon, 26
+ Sep 2022 16:27:41 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220915000448.1674802-1-vannapurve@google.com>
- <20220915000448.1674802-4-vannapurve@google.com> <Yyt586xOWrNEoCYF@google.com>
-In-Reply-To: <Yyt586xOWrNEoCYF@google.com>
+ <20220915000448.1674802-5-vannapurve@google.com> <Yyt/xgPkHfbOE3vH@google.com>
+In-Reply-To: <Yyt/xgPkHfbOE3vH@google.com>
 From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Mon, 26 Sep 2022 16:18:59 -0700
-Message-ID: <CAGtprH8=wjQAhpr97KNsziT_jAqSS6sMTb5=gzgbhssNPm8q_Q@mail.gmail.com>
-Subject: Re: [V2 PATCH 3/8] KVM: selftests: Add arch specific post vm load setup
+Date:   Mon, 26 Sep 2022 16:27:31 -0700
+Message-ID: <CAGtprH-4nRyA81wock_OVwL-xA+LgNfqZFhJeE7T4iUyEscJKg@mail.gmail.com>
+Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for is_{intel,amd}_cpu()
 To:     David Matlack <dmatlack@google.com>
 Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -66,7 +66,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,114 +74,60 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 21, 2022 at 1:54 PM David Matlack <dmatlack@google.com> wrote:
+On Wed, Sep 21, 2022 at 2:19 PM David Matlack <dmatlack@google.com> wrote:
 >
-> On Thu, Sep 15, 2022 at 12:04:43AM +0000, Vishal Annapurve wrote:
-> > Add arch specific API kvm_selftest_post_vm_elf_load to possibly communicate
-> > information to VM that is already known to selftest VMM logic.
+> On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
+> > Cache the vendor CPU type in a global variable so that multiple calls
+> > to is_intel_cpu() do not need to re-execute CPUID.
 > >
-> > This API will be used in followup commit to convey cpu vendor type to the
-> > guest vm.
-> >
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/include/kvm_util_base.h | 4 ++++
-> >  tools/testing/selftests/kvm/lib/aarch64/processor.c | 4 ++++
-> >  tools/testing/selftests/kvm/lib/elf.c               | 2 ++
-> >  tools/testing/selftests/kvm/lib/riscv/processor.c   | 4 ++++
-> >  tools/testing/selftests/kvm/lib/s390x/processor.c   | 4 ++++
-> >  tools/testing/selftests/kvm/lib/x86_64/processor.c  | 4 ++++
-> >  6 files changed, 22 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > index 98edbbda9f97..73cfee3ebd76 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> > @@ -839,4 +839,8 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
-> >   */
-> >  void kvm_selftest_arch_init(void);
-> >
-> > +/*
-> > + * API to execute architecture specific setup after loading the vm elf.
+> > Add cpu vendor check in kvm_hypercall() so that it executes correct
+> > vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
+> > exit to KVM which anyway tries to patch the instruction according to
+> > the cpu type.
 >
-> It's not a "vm elf" per-se, it's "loading the elf into the VM". How
-> about:
+> The commit shortlog makes no mention (nor even implies) that this commit
+> adds AMD support to kvm_hypercall(). Please break this commit up into 2.
+> One to precompute the result of is_{intel,amd}_cpu() and one to add AMD
+> support to kvm_hypercall().
 >
-> /*
->  * API to execute arch-specific logic after loading the selftest ELF image
->  * into the VM.
->  */
+> If you really want to keep this as one commit (I don't know what the
+> benefit would be), please change the shortlog and commit message to
+> focus on the kvm_hypercall() change, as that is the real goal of this
+> commit. The precomputation is arguably and implementation detail. e.g.
 >
 
-Ack. Will update this in the next series.
+is_amd_cpu is used by guest code within fix_hypercall_test.c, just
+caching the result will break the guest code execution. I have clubbed
+these two changes together in order to ensure that is_amd_cpu works
+fine for both host userspace and guest vm logic.
 
-> > + */
-> > +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm);
-> >  #endif /* SELFTEST_KVM_UTIL_BASE_H */
-> > diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> > index 2281d6c5d02f..12627c560f66 100644
-> > --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-> > @@ -528,3 +528,7 @@ void kvm_selftest_arch_init(void)
-> >  {
-> >       guest_modes_append_default();
-> >  }
-> > +
-> > +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
-> > +{
-> > +}
-> > diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
-> > index 9f54c098d9d0..b8963a7146ce 100644
-> > --- a/tools/testing/selftests/kvm/lib/elf.c
-> > +++ b/tools/testing/selftests/kvm/lib/elf.c
-> > @@ -189,4 +189,6 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
-> >                               phdr.p_filesz);
-> >               }
-> >       }
-> > +
-> > +     kvm_arch_post_vm_elf_load(vm);
-> >  }
+>   KVM: selftest: Add support for AMD to kvm_hypercall()
 >
-> Same suggestion here as the previous patch: Use __weak to define a
-> default no-op implementation of kvm_arch_post_vm_elf_load().
+>   Make it possible to use kvm_hypercall() on AMD by checking if running
+>   on an AMD CPU and, if so, using vmmcall instead of vmcall. In order to
+>   avoid executing CPUID in the guest on every call t kvm_hypercall()
+>   (which would be slow), pre-compute the result of is_{intel,amd}_cpu()
+>   as part of kvm_selftest_arch_init() and sync it into the guest
+>   after loading the ELF image.
 >
-> > diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> > index 26660dd2ba78..4491c0d4be45 100644
-> > --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> > @@ -366,3 +366,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+> But again, it'd be cleaner just to split it up. Caching the result of
+> is_{intel,amd}_cpu() is useful in its own right, independent of the
+> kvm_hypercall() change.
+>
+> >
+> > ...
+> >
+> > @@ -1314,8 +1321,10 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+> >
 > >  void kvm_selftest_arch_init(void)
 > >  {
+> > +     is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
 > >  }
-> > +
-> > +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
-> > +{
-> > +}
-> > diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
-> > index 8654ec74009a..332501b3693f 100644
-> > --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
-> > @@ -222,3 +222,7 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
-> >  void kvm_selftest_arch_init(void)
+> >
+> >  void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
 > >  {
+> > +     sync_global_to_guest(vm, is_cpu_amd);
 > >  }
-> > +
-> > +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
-> > +{
-> > +}
-> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > index 20bf125f9363..25ae972f5c71 100644
-> > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > @@ -1315,3 +1315,7 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
-> >  void kvm_selftest_arch_init(void)
-> >  {
-> >  }
-> > +
-> > +void kvm_arch_post_vm_elf_load(struct kvm_vm *vm)
-> > +{
-> > +}
 > > --
 > > 2.37.2.789.g6183377224-goog
 > >
