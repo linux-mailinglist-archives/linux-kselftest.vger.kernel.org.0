@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B9B5EC057
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 13:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48185EC064
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 13:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbiI0LC6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Sep 2022 07:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        id S231820AbiI0LDd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Sep 2022 07:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiI0LCV (ORCPT
+        with ESMTP id S231818AbiI0LC3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:02:21 -0400
+        Tue, 27 Sep 2022 07:02:29 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4662D1E80
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 04:01:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609925B07B
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 04:02:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664276507;
+        s=mimecast20190719; t=1664276524;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=a6ppzU8NrJ3mYSPxoJruC+SRfOuYeuv/ezC2v1fvuK4=;
-        b=bCLMABtaJ2uUtZAl83P1n7Zq0P7fH4nAXMWHXaH/n4+1hiQEVje4XNjY/GCz06c7LTWmIS
-        ynHGIgfksdRpb1z2YxBDEpdDR1VwimE8Xv58d3+ZSQ/fKv95G6CcEh2iZQnxSAggUx046Q
-        O5oEbeNoQQJPak/WMdzLMavq52gUQWE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=EXlbqV3bMihYU4DcJv9mg2N2kXbruPismRocuYGvJL4=;
+        b=fnFktNX/XPrQ2jLxkJxmLYauu2IPncpUNw6Pj92BkemimbnqDGlLXyhRlEMS+MZVDIJ0kS
+        xXNdWOoaz82ewHmajiYU9RTPSXYkQtHjAZOlpnq3ymZqM4GRuqD/tX9RLJv3hmsLLA9/yg
+        90oXe2FMlmbA7YcPUBxG4CJhq3i1QgI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-K67q5aYpPl6RfXIYoCfxYQ-1; Tue, 27 Sep 2022 07:01:45 -0400
-X-MC-Unique: K67q5aYpPl6RfXIYoCfxYQ-1
+ us-mta-533-ZI3TsViQOP20dkgQFxNpFQ-1; Tue, 27 Sep 2022 07:01:48 -0400
+X-MC-Unique: ZI3TsViQOP20dkgQFxNpFQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC6B63C01D86;
-        Tue, 27 Sep 2022 11:01:44 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99E39803D4A;
+        Tue, 27 Sep 2022 11:01:47 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C77CC15E76;
-        Tue, 27 Sep 2022 11:01:42 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 24964C15BA5;
+        Tue, 27 Sep 2022 11:01:45 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Mike Rapoport <rppt@kernel.org>,
         Christoph von Recklinghausen <crecklin@redhat.com>,
         Don Dutile <ddutile@redhat.com>
-Subject: [PATCH v1 6/7] mm/gup_test: start/stop/read functionality for PIN LONGTERM test
-Date:   Tue, 27 Sep 2022 13:01:19 +0200
-Message-Id: <20220927110120.106906-7-david@redhat.com>
+Subject: [PATCH v1 7/7] selftests/vm: anon_cow: add R/O longterm tests via gup_test
+Date:   Tue, 27 Sep 2022 13:01:20 +0200
+Message-Id: <20220927110120.106906-8-david@redhat.com>
 In-Reply-To: <20220927110120.106906-1-david@redhat.com>
 References: <20220927110120.106906-1-david@redhat.com>
 MIME-Version: 1.0
@@ -62,219 +62,284 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We want an easy way to take a R/O or R/W longterm pin on a range and be
-able to observe the content of the pinned pages, so we can properly test
-how longterm puns interact with our COW logic.
+Let's trigger a R/O longterm pin on three cases of R/O mapped anonymous
+pages:
+* exclusive (never shared)
+* shared (child still alive)
+* previously shared (child no longer alive)
+
+... and make sure that the pin is reliable: whatever we write via the page
+tables has to be observable via the pin.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/gup_test.c | 140 ++++++++++++++++++++++++++++++++++++++++++++++++++
- mm/gup_test.h |  12 +++++
- 2 files changed, 152 insertions(+)
+ tools/testing/selftests/vm/anon_cow.c | 210 ++++++++++++++++++++++++++
+ 1 file changed, 210 insertions(+)
 
-diff --git a/mm/gup_test.c b/mm/gup_test.c
-index 12b0a91767d3..2bbfacd31f5a 100644
---- a/mm/gup_test.c
-+++ b/mm/gup_test.c
-@@ -203,6 +203,134 @@ static int __gup_test_ioctl(unsigned int cmd,
- 	return ret;
- }
+diff --git a/tools/testing/selftests/vm/anon_cow.c b/tools/testing/selftests/vm/anon_cow.c
+index 369b3e15647d..055bf13a05d9 100644
+--- a/tools/testing/selftests/vm/anon_cow.c
++++ b/tools/testing/selftests/vm/anon_cow.c
+@@ -17,6 +17,7 @@
+ #include <dirent.h>
+ #include <assert.h>
+ #include <sys/mman.h>
++#include <sys/ioctl.h>
+ #include <sys/wait.h>
  
-+static DEFINE_MUTEX(pin_longterm_test_mutex);
-+static struct page **pin_longterm_test_pages;
-+static unsigned long pin_longterm_test_nr_pages;
-+
-+static inline void pin_longterm_test_stop(void)
-+{
-+	if (pin_longterm_test_pages) {
-+		if (pin_longterm_test_nr_pages)
-+			unpin_user_pages(pin_longterm_test_pages,
-+					 pin_longterm_test_nr_pages);
-+		kfree(pin_longterm_test_pages);
-+		pin_longterm_test_pages = NULL;
-+		pin_longterm_test_nr_pages = 0;
-+	}
-+}
-+
-+static inline int pin_longterm_test_start(unsigned long arg)
-+{
-+	long nr_pages, cur_pages, addr, remaining_pages;
-+	int gup_flags = FOLL_LONGTERM;
-+	struct pin_longterm_test args;
-+	struct page **pages;
-+	int ret = 0;
-+	bool fast;
-+
-+	if (pin_longterm_test_pages)
-+		return -EINVAL;
-+
-+	if (copy_from_user(&args, (void __user *)arg, sizeof(args)))
-+		return -EFAULT;
-+
-+	if (args.flags &
-+	    ~(PIN_LONGTERM_TEST_FLAG_USE_WRITE|PIN_LONGTERM_TEST_FLAG_USE_FAST))
-+		return -EINVAL;
-+	if (!IS_ALIGNED(args.addr | args.size, PAGE_SIZE))
-+		return -EINVAL;
-+	if (args.size > LONG_MAX)
-+		return -EINVAL;
-+	nr_pages = args.size / PAGE_SIZE;
-+	if (!nr_pages)
-+		return -EINVAL;
-+
-+	pages = kvcalloc(nr_pages, sizeof(void *), GFP_KERNEL);
-+	if (!pages)
-+		return -ENOMEM;
-+
-+	if (args.flags & PIN_LONGTERM_TEST_FLAG_USE_WRITE)
-+		gup_flags |= FOLL_WRITE;
-+	fast = !!(args.flags & PIN_LONGTERM_TEST_FLAG_USE_FAST);
-+
-+	if (!fast && mmap_read_lock_killable(current->mm)) {
-+		kfree(pages);
-+		return -EINTR;
-+	}
-+
-+	pin_longterm_test_pages = pages;
-+	pin_longterm_test_nr_pages = 0;
-+
-+	while (nr_pages - pin_longterm_test_nr_pages) {
-+		remaining_pages = nr_pages - pin_longterm_test_nr_pages;
-+		addr = args.addr + pin_longterm_test_nr_pages * PAGE_SIZE;
-+
-+		if (fast)
-+			cur_pages = pin_user_pages_fast(addr, remaining_pages,
-+							gup_flags, pages);
-+		else
-+			cur_pages = pin_user_pages(addr, remaining_pages,
-+						   gup_flags, pages, NULL);
-+		if (cur_pages < 0) {
-+			pin_longterm_test_stop();
-+			ret = cur_pages;
-+			break;
-+		}
-+		pin_longterm_test_nr_pages += cur_pages;
-+		pages += cur_pages;
-+	};
-+
-+	if (!fast)
-+		mmap_read_unlock(current->mm);
-+	return ret;
-+}
-+
-+static inline int pin_longterm_test_read(unsigned long arg)
-+{
-+	__u64 user_addr;
-+	unsigned long i;
-+
-+	if (!pin_longterm_test_pages)
-+		return -EINVAL;
-+
-+	if (copy_from_user(&user_addr, (void __user *)arg, sizeof(user_addr)))
-+		return -EFAULT;
-+
-+	for (i = 0; i < pin_longterm_test_nr_pages; i++) {
-+		void *addr = page_to_virt(pin_longterm_test_pages[i]);
-+
-+		if (copy_to_user((void __user *)user_addr, addr, PAGE_SIZE))
-+			return -EFAULT;
-+		user_addr += PAGE_SIZE;
-+	}
-+	return 0;
-+}
-+
-+static long pin_longterm_test_ioctl(struct file *filep, unsigned int cmd,
-+				    unsigned long arg)
-+{
-+	int ret = -EINVAL;
-+
-+	if (mutex_lock_killable(&pin_longterm_test_mutex))
-+		return -EINTR;
-+
-+	switch (cmd) {
-+	case PIN_LONGTERM_TEST_START:
-+		ret = pin_longterm_test_start(arg);
-+		break;
-+	case PIN_LONGTERM_TEST_STOP:
-+		pin_longterm_test_stop();
-+		ret = 0;
-+		break;
-+	case PIN_LONGTERM_TEST_READ:
-+		ret = pin_longterm_test_read(arg);
-+		break;
-+	}
-+
-+	mutex_unlock(&pin_longterm_test_mutex);
-+	return ret;
-+}
-+
- static long gup_test_ioctl(struct file *filep, unsigned int cmd,
- 		unsigned long arg)
+ #include "local_config.h"
+@@ -24,6 +25,7 @@
+ #include <liburing.h>
+ #endif /* LOCAL_CONFIG_HAVE_LIBURING */
+ 
++#include "../../../../mm/gup_test.h"
+ #include "../kselftest.h"
+ #include "vm_util.h"
+ 
+@@ -32,6 +34,7 @@ static int pagemap_fd;
+ static size_t thpsize;
+ static int nr_hugetlbsizes;
+ static size_t hugetlbsizes[10];
++static int gup_fd;
+ 
+ static void detect_thpsize(void)
  {
-@@ -217,6 +345,10 @@ static long gup_test_ioctl(struct file *filep, unsigned int cmd,
- 	case PIN_BASIC_TEST:
- 	case DUMP_USER_PAGES_TEST:
- 		break;
-+	case PIN_LONGTERM_TEST_START:
-+	case PIN_LONGTERM_TEST_STOP:
-+	case PIN_LONGTERM_TEST_READ:
-+		return pin_longterm_test_ioctl(filep, cmd, arg);
- 	default:
- 		return -EINVAL;
- 	}
-@@ -234,9 +366,17 @@ static long gup_test_ioctl(struct file *filep, unsigned int cmd,
- 	return 0;
- }
+@@ -503,6 +506,170 @@ static void test_iouring_fork(char *mem, size_t size)
  
-+static int gup_test_release(struct inode *inode, struct file *file)
-+{
-+	pin_longterm_test_stop();
-+
-+	return 0;
-+}
-+
- static const struct file_operations gup_test_fops = {
- 	.open = nonseekable_open,
- 	.unlocked_ioctl = gup_test_ioctl,
-+	.release = gup_test_release,
- };
+ #endif /* LOCAL_CONFIG_HAVE_LIBURING */
  
- static int __init gup_test_init(void)
-diff --git a/mm/gup_test.h b/mm/gup_test.h
-index 887ac1d5f5bc..5b37b54e8bea 100644
---- a/mm/gup_test.h
-+++ b/mm/gup_test.h
-@@ -10,6 +10,9 @@
- #define GUP_BASIC_TEST		_IOWR('g', 4, struct gup_test)
- #define PIN_BASIC_TEST		_IOWR('g', 5, struct gup_test)
- #define DUMP_USER_PAGES_TEST	_IOWR('g', 6, struct gup_test)
-+#define PIN_LONGTERM_TEST_START	_IOW('g', 7, struct pin_longterm_test)
-+#define PIN_LONGTERM_TEST_STOP	_IO('g', 8)
-+#define PIN_LONGTERM_TEST_READ	_IOW('g', 9, __u64)
- 
- #define GUP_TEST_MAX_PAGES_TO_DUMP		8
- 
-@@ -30,4 +33,13 @@ struct gup_test {
- 	__u32 which_pages[GUP_TEST_MAX_PAGES_TO_DUMP];
- };
- 
-+#define PIN_LONGTERM_TEST_FLAG_USE_WRITE	1
-+#define PIN_LONGTERM_TEST_FLAG_USE_FAST		2
-+
-+struct pin_longterm_test {
-+	__u64 addr;
-+	__u64 size;
-+	__u32 flags;
++enum ro_pin_test {
++	RO_PIN_TEST_SHARED,
++	RO_PIN_TEST_PREVIOUSLY_SHARED,
++	RO_PIN_TEST_RO_EXCLUSIVE,
 +};
 +
- #endif	/* __GUP_TEST_H */
++static void do_test_ro_pin(char *mem, size_t size, enum ro_pin_test test,
++			   bool fast)
++{
++	struct pin_longterm_test args;
++	struct comm_pipes comm_pipes;
++	char *tmp, buf;
++	__u64 tmp_val;
++	int ret;
++
++	if (gup_fd < 0) {
++		ksft_test_result_skip("gup_test not available\n");
++		return;
++	}
++
++	tmp = malloc(size);
++	if (!tmp) {
++		ksft_test_result_fail("malloc() failed\n");
++		return;
++	}
++
++	ret = setup_comm_pipes(&comm_pipes);
++	if (ret) {
++		ksft_test_result_fail("pipe() failed\n");
++		goto free_tmp;
++	}
++
++	switch (test) {
++	case RO_PIN_TEST_SHARED:
++	case RO_PIN_TEST_PREVIOUSLY_SHARED:
++		/*
++		 * Share the pages with our child. As the pages are not pinned,
++		 * this should just work.
++		 */
++		ret = fork();
++		if (ret < 0) {
++			ksft_test_result_fail("fork() failed\n");
++			goto close_comm_pipes;
++		} else if (!ret) {
++			write(comm_pipes.child_ready[1], "0", 1);
++			while (read(comm_pipes.parent_ready[0], &buf, 1) != 1)
++				;
++			exit(0);
++		}
++
++		/* Wait until our child is ready. */
++		while (read(comm_pipes.child_ready[0], &buf, 1) != 1)
++			;
++
++		if (test == RO_PIN_TEST_PREVIOUSLY_SHARED) {
++			/*
++			 * Tell the child to quit now and wait until it quit.
++			 * The pages should now be mapped R/O into our page
++			 * tables, but they are no longer shared.
++			 */
++			write(comm_pipes.parent_ready[1], "0", 1);
++			wait(&ret);
++			if (!WIFEXITED(ret))
++				ksft_print_msg("[INFO] wait() failed\n");
++		}
++		break;
++	case RO_PIN_TEST_RO_EXCLUSIVE:
++		/*
++		 * Map the page R/O into the page table. Enable softdirty
++		 * tracking to stop the page from getting mapped R/W immediately
++		 * again by mprotect() optimizations. Note that we don't have an
++		 * easy way to test if that worked (the pagemap does not export
++		 * if the page is mapped R/O vs. R/W).
++		 */
++		ret = mprotect(mem, size, PROT_READ);
++		clear_softdirty();
++		ret |= mprotect(mem, size, PROT_READ | PROT_WRITE);
++		if (ret) {
++			ksft_test_result_fail("mprotect() failed\n");
++			goto close_comm_pipes;
++		}
++		break;
++	default:
++		assert(false);
++	}
++
++	/* Take a R/O pin. This should trigger unsharing. */
++	args.addr = (__u64)mem;
++	args.size = size;
++	args.flags = fast ? PIN_LONGTERM_TEST_FLAG_USE_FAST : 0;
++	ret = ioctl(gup_fd, PIN_LONGTERM_TEST_START, &args);
++	if (ret) {
++		if (errno == EINVAL)
++			ksft_test_result_skip("PIN_LONGTERM_TEST_START failed\n");
++		else
++			ksft_test_result_fail("PIN_LONGTERM_TEST_START failed\n");
++		goto wait;
++	}
++
++	/* Modify the page. */
++	memset(mem, 0xff, size);
++
++	/*
++	 * Read back the content via the pin to the temporary buffer and
++	 * test if we observed the modification.
++	 */
++	tmp_val = (__u64)tmp;
++	ret = ioctl(gup_fd, PIN_LONGTERM_TEST_READ, &tmp_val);
++	if (ret)
++		ksft_test_result_fail("PIN_LONGTERM_TEST_READ failed\n");
++	else
++		ksft_test_result(!memcmp(mem, tmp, size),
++				 "Longterm R/O pin is reliable\n");
++
++	ret = ioctl(gup_fd, PIN_LONGTERM_TEST_STOP);
++	if (ret)
++		ksft_print_msg("[INFO] PIN_LONGTERM_TEST_STOP failed\n");
++wait:
++	switch (test) {
++	case RO_PIN_TEST_SHARED:
++		write(comm_pipes.parent_ready[1], "0", 1);
++		wait(&ret);
++		if (!WIFEXITED(ret))
++			ksft_print_msg("[INFO] wait() failed\n");
++		break;
++	default:
++		break;
++	}
++close_comm_pipes:
++	close_comm_pipes(&comm_pipes);
++free_tmp:
++	free(tmp);
++}
++
++static void test_ro_pin_on_shared(char *mem, size_t size)
++{
++	do_test_ro_pin(mem, size, RO_PIN_TEST_SHARED, false);
++}
++
++static void test_ro_fast_pin_on_shared(char *mem, size_t size)
++{
++	do_test_ro_pin(mem, size, RO_PIN_TEST_SHARED, true);
++}
++
++static void test_ro_pin_on_ro_previously_shared(char *mem, size_t size)
++{
++	do_test_ro_pin(mem, size, RO_PIN_TEST_PREVIOUSLY_SHARED, false);
++}
++
++static void test_ro_fast_pin_on_ro_previously_shared(char *mem, size_t size)
++{
++	do_test_ro_pin(mem, size, RO_PIN_TEST_PREVIOUSLY_SHARED, true);
++}
++
++static void test_ro_pin_on_ro_exclusive(char *mem, size_t size)
++{
++	do_test_ro_pin(mem, size, RO_PIN_TEST_RO_EXCLUSIVE, false);
++}
++
++static void test_ro_fast_pin_on_ro_exclusive(char *mem, size_t size)
++{
++	do_test_ro_pin(mem, size, RO_PIN_TEST_RO_EXCLUSIVE, true);
++}
++
+ typedef void (*test_fn)(char *mem, size_t size);
+ 
+ static void do_run_with_base_page(test_fn fn, bool swapout)
+@@ -850,6 +1017,48 @@ static const struct test_case test_cases[] = {
+ 	},
+ 
+ #endif /* LOCAL_CONFIG_HAVE_LIBURING */
++	/*
++	 * Take a R/O longterm pin on a R/O-mapped shared anonymous page.
++	 * When modifying the page via the page table, the page content change
++	 * must be visible via the pin.
++	 */
++	{
++		"R/O GUP pin on R/O-mapped shared page",
++		test_ro_pin_on_shared,
++	},
++	/* Same as above, but using GUP-fast. */
++	{
++		"R/O GUP-fast pin on R/O-mapped shared page",
++		test_ro_fast_pin_on_shared,
++	},
++	/*
++	 * Take a R/O longterm pin on a R/O-mapped exclusive anonymous page that
++	 * was previously shared. When modifying the page via the page table,
++	 * the page content change must be visible via the pin.
++	 */
++	{
++		"R/O GUP pin on R/O-mapped previously-shared page",
++		test_ro_pin_on_ro_previously_shared,
++	},
++	/* Same as above, but using GUP-fast. */
++	{
++		"R/O GUP-fast pin on R/O-mapped previously-shared page",
++		test_ro_fast_pin_on_ro_previously_shared,
++	},
++	/*
++	 * Take a R/O longterm pin on a R/O-mapped exclusive anonymous page.
++	 * When modifying the page via the page table, the page content change
++	 * must be visible via the pin.
++	 */
++	{
++		"R/O GUP pin on R/O-mapped exclusive page",
++		test_ro_pin_on_ro_exclusive,
++	},
++	/* Same as above, but using GUP-fast. */
++	{
++		"R/O GUP-fast pin on R/O-mapped exclusive page",
++		test_ro_fast_pin_on_ro_exclusive,
++	},
+ };
+ 
+ static void run_test_case(struct test_case const *test_case)
+@@ -902,6 +1111,7 @@ int main(int argc, char **argv)
+ 	ksft_print_header();
+ 	ksft_set_plan(nr_test_cases * tests_per_test_case());
+ 
++	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
+ 	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+ 	if (pagemap_fd < 0)
+ 		ksft_exit_fail_msg("opening pagemap failed\n");
 -- 
 2.37.3
 
