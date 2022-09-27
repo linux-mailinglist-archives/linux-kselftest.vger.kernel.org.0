@@ -2,110 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E405A5EC1EA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 13:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2FE5EC238
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 14:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiI0L4S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Sep 2022 07:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S231634AbiI0MPR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Sep 2022 08:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiI0L4S (ORCPT
+        with ESMTP id S232251AbiI0MPF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:56:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB571125;
-        Tue, 27 Sep 2022 04:56:16 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4McHzZ28D4zWgxD;
-        Tue, 27 Sep 2022 19:52:10 +0800 (CST)
-Received: from canpemm500005.china.huawei.com (7.192.104.229) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 27 Sep 2022 19:56:14 +0800
-Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
- canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
- Tue, 27 Sep 2022 19:56:14 +0800
-From:   zhaogongyi <zhaogongyi@huawei.com>
-To:     David Hildenbrand <david@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-CC:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Subject: Re: [PATCH -next v4 1/3] selftests/memory-hotplug: Add checking after
- online or offline
-Thread-Topic: [PATCH -next v4 1/3] selftests/memory-hotplug: Add checking
- after online or offline
-Thread-Index: AdjSZ70agPM4MSRHq0+s99zfeKpZsg==
-Date:   Tue, 27 Sep 2022 11:56:14 +0000
-Message-ID: <dd8998bcfe0e4b82a617dfd79d93368c@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.67.110.209]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 27 Sep 2022 08:15:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3962ED4F
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 05:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664280899;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rSE3SZr7AU4BSfTZW9EzqUJqNHJZJS1agFSm+3MsOAM=;
+        b=UigL3dT8bhVsb5z6RXv7Ii0OgqjjeoH97JzvKZE4qav8VPLjw8NlsBv/PFLWlBvYTDPnLo
+        sKG5Ti3jIo5y07R1dapdgxj/AExqo9aaEswvclfkDTVuPHHNjoekOMqp7kkx2fD1Tjjfvf
+        J6FTxC0RUdvso8C2o7qMis73n981MXI=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-669-DNsUJCsVOtamKzkGKkOqpQ-1; Tue, 27 Sep 2022 08:14:56 -0400
+X-MC-Unique: DNsUJCsVOtamKzkGKkOqpQ-1
+Received: by mail-ed1-f69.google.com with SMTP id f18-20020a056402355200b0045115517911so7609888edd.14
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 05:14:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=rSE3SZr7AU4BSfTZW9EzqUJqNHJZJS1agFSm+3MsOAM=;
+        b=pfmnmkB2+w6gW9f7Og6TfNFeZsFCAplhT0woArM9Q7jjwNcFxijzquG3wlnACH8qaz
+         vBTb1Js8nVujqY1OKQG6aaCz/O/OL4IB9AkEG4JscT9Mvpfo6UqUddPOxfoDOdz+NA+V
+         TiWF4Rk8qkRon+9VRf6f8Ki5Pz6sqoWDIMCEWGhe+sBo/9en3y9H9okRTzy3q/FVriem
+         Y79jk2twGir6GLsbY4572W0xZGdWjhkGVMJeQF7FZKbV7JGtFG0f+gBll66bGeIcMdaY
+         gCwnrePwhjc7YpBEPVsh+RLZtwIHcGjQVy+hCieMu13A4V6QyvMLt/sB2KVUVcXldlro
+         0xTg==
+X-Gm-Message-State: ACrzQf39BjjC+XNXI8MG0ZGQ26n5NzyW2r2ayBdwkPWoL16C0ITpMgng
+        2RRs8kEV5L8IBRumzX+BpdBsZJ/6eDWc6nANg4Ei8UIV1QGeML4L7OuRF3nAwFLjrXB3fVMRfuI
+        n/MxOXWs5YHT2PfX7g2Q0kr1gDHq0
+X-Received: by 2002:aa7:c04f:0:b0:457:1b08:d056 with SMTP id k15-20020aa7c04f000000b004571b08d056mr14655692edo.146.1664280895437;
+        Tue, 27 Sep 2022 05:14:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5dF2l0zCe+9PMvtpzvSQRGqYKmswR21oDA/D9ukNUOBwPFoxUVmoO0fb4CxB4+uAI8q522lA==
+X-Received: by 2002:aa7:c04f:0:b0:457:1b08:d056 with SMTP id k15-20020aa7c04f000000b004571b08d056mr14655669edo.146.1664280895219;
+        Tue, 27 Sep 2022 05:14:55 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id u11-20020a170906780b00b0077a8fa8ba55sm695214ejm.210.2022.09.27.05.14.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 05:14:54 -0700 (PDT)
+Message-ID: <005c8afa-d290-d140-0dac-19a41f2ef81a@redhat.com>
+Date:   Tue, 27 Sep 2022 14:14:53 +0200
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH] KVM: selftests: replace assertion with warning in
+ access_tracking_perf_test
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220926082923.299554-1-eesposit@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220926082923.299554-1-eesposit@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SGkhDQoNCj4gDQo+IE9uIDI3LjA5LjIyIDA1OjI4LCBaaGFvIEdvbmd5aSB3cm90ZToNCj4gPiBB
-ZGQgY2hlY2tpbmcgZm9yIG9ubGluZV9tZW1vcnlfZXhwZWN0X3N1Y2Nlc3MoKS8NCj4gPiBvZmZs
-aW5lX21lbW9yeV9leHBlY3Rfc3VjY2VzcygpL29mZmxpbmVfbWVtb3J5X2V4cGVjdF9mYWlsKCks
-IG9yIHRoZQ0KPiA+IHRlc3Qgd291bGQgZXhpdCAwIGFsdGhvdWdoIHRoZSBmdW5jdGlvbnMgcmV0
-dXJuIDEuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBaaGFvIEdvbmd5aSA8emhhb2dvbmd5aUBo
-dWF3ZWkuY29tPg0KPiA+IC0tLQ0KPiA+ICAgLi4uL3NlbGZ0ZXN0cy9tZW1vcnktaG90cGx1Zy9t
-ZW0tb24tb2ZmLXRlc3Quc2ggICAgICB8IDEyDQo+ICsrKysrKysrKy0tLQ0KPiA+ICAgMSBmaWxl
-IGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYg
-LS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tZW1vcnktaG90cGx1Zy9tZW0tb24tb2Zm
-LXRlc3Quc2gNCj4gPiBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21l
-bS1vbi1vZmYtdGVzdC5zaA0KPiA+IGluZGV4IDQ2YTk3ZjMxOGY1OC4uMWQ4NzYxMWE3ZDUyIDEw
-MDc1NQ0KPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21l
-bS1vbi1vZmYtdGVzdC5zaA0KPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9y
-eS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaA0KPiA+IEBAIC0yNjYsNyArMjY2LDkgQEAgZG9u
-ZQ0KPiA+ICAgIw0KPiA+ICAgZWNobyAkZXJyb3IgPg0KPiAkTk9USUZJRVJfRVJSX0lOSkVDVF9E
-SVIvYWN0aW9ucy9NRU1fR09JTkdfT05MSU5FL2Vycm9yDQo+ID4gICBmb3IgbWVtb3J5IGluIGBo
-b3RwbHVnZ2FibGVfb2ZmbGluZV9tZW1vcnlgOyBkbw0KPiA+IC0Jb25saW5lX21lbW9yeV9leHBl
-Y3RfZmFpbCAkbWVtb3J5DQo+ID4gKwlpZiAhIG9ubGluZV9tZW1vcnlfZXhwZWN0X2ZhaWwgJG1l
-bW9yeTsgdGhlbg0KPiA+ICsJCXJldHZhbD0xDQo+ID4gKwlmaQ0KPiA+ICAgZG9uZQ0KPiA+DQo+
-ID4gICAjDQo+ID4gQEAgLTI3NCw3ICsyNzYsOSBAQCBkb25lDQo+ID4gICAjDQo+ID4gICBlY2hv
-IDAgPg0KPiAkTk9USUZJRVJfRVJSX0lOSkVDVF9ESVIvYWN0aW9ucy9NRU1fR09JTkdfT05MSU5F
-L2Vycm9yDQo+ID4gICBmb3IgbWVtb3J5IGluIGBob3RwbHVnZ2FibGVfb2ZmbGluZV9tZW1vcnlg
-OyBkbw0KPiA+IC0Jb25saW5lX21lbW9yeV9leHBlY3Rfc3VjY2VzcyAkbWVtb3J5DQo+ID4gKwlp
-ZiAhIG9ubGluZV9tZW1vcnlfZXhwZWN0X3N1Y2Nlc3MgJG1lbW9yeTsgdGhlbg0KPiA+ICsJCXJl
-dHZhbD0xDQo+ID4gKwlmaQ0KPiA+ICAgZG9uZQ0KPiA+DQo+ID4gICAjDQo+ID4gQEAgLTI4Myw3
-ICsyODcsOSBAQCBkb25lDQo+ID4gICBlY2hvICRlcnJvciA+DQo+ICROT1RJRklFUl9FUlJfSU5K
-RUNUX0RJUi9hY3Rpb25zL01FTV9HT0lOR19PRkZMSU5FL2Vycm9yDQo+ID4gICBmb3IgbWVtb3J5
-IGluIGBob3RwbHVnZ2FibGVfb25saW5lX21lbW9yeWA7IGRvDQo+ID4gICAJaWYgWyAkKChSQU5E
-T00gJSAxMDApKSAtbHQgJHJhdGlvIF07IHRoZW4NCj4gPiAtCQlvZmZsaW5lX21lbW9yeV9leHBl
-Y3RfZmFpbCAkbWVtb3J5DQo+ID4gKwkJaWYgISBvZmZsaW5lX21lbW9yeV9leHBlY3RfZmFpbCAk
-bWVtb3J5OyB0aGVuDQo+ID4gKwkJCXJldHZhbD0xDQo+ID4gKwkJZmkNCj4gPiAgIAlmaQ0KPiAN
-Cj4gDQo+IExHVE0NCj4gDQo+IFJldmlld2VkLWJ5OiBEYXZpZCBIaWxkZW5icmFuZCA8ZGF2aWRA
-cmVkaGF0LmNvbT4NCj4gDQo+IA0KPiBJIGFtIHF1ZXN0aW9uaW5nIHRoZSBzdGFiaWxpdHkgb2Yg
-dGhlIG9mZmxpbmluZyB0ZXN0LCB0aG91Z2guDQo+IE9mZmxpbmluZyBhIHJhbmRvbSBtZW1vcnkg
-YmxvY2sgY2FuIGZhaWwgZWFzaWx5LCBiZWNhdXNlICItPnJlbW92YWJsZSIgaXMgbm90DQo+IGV4
-cHJlc3NpdmU6DQo+IA0KPiAjIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVn
-L21lbS1vbi1vZmYtdGVzdC5zaA0KPiBUZXN0IHNjb3BlOiAyJSBob3RwbHVnIG1lbW9yeQ0KPiAg
-ICAgICAgICAgb25saW5lIGFsbCBob3QtcGx1Z2dhYmxlIG1lbW9yeSBpbiBvZmZsaW5lIHN0YXRl
-Og0KPiAgICAgICAgICAgICAgICAgICBTS0lQUEVEIC0gbm8gaG90LXBsdWdnYWJsZSBtZW1vcnkg
-aW4gb2ZmbGluZSBzdGF0ZQ0KPiAgICAgICAgICAgb2ZmbGluZSAyJSBob3QtcGx1Z2dhYmxlIG1l
-bW9yeSBpbiBvbmxpbmUgc3RhdGUNCj4gICAgICAgICAgIHRyeWluZyB0byBvZmZsaW5lIDIgb3V0
-IG9mIDk2IG1lbW9yeSBibG9jayhzKToNCj4gb25saW5lLT5vZmZsaW5lIG1lbW9yeTANCj4gdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMvbWVtb3J5LWhvdHBsdWcvbWVtLW9uLW9mZi10ZXN0LnNoOiBs
-aW5lIDc4OiBlY2hvOg0KPiB3cml0ZSBlcnJvcjogSW52YWxpZCBhcmd1bWVudCBvZmZsaW5lX21l
-bW9yeV9leHBlY3Rfc3VjY2VzcyAwOiB1bmV4cGVjdGVkDQo+IGZhaWwNCj4gb25saW5lLT5vZmZs
-aW5lIG1lbW9yeTEwDQo+IG9ubGluZS0+b2ZmbGluZSBtZW1vcnkxMQ0KPiANCj4gDQo+IEkgZ3Vl
-c3MgdGhpcyB0ZXN0IHdpbGwgYWxtb3N0IGFsd2F5cyBmYWlsIG5vd2FkYXlzLg0KDQpPZmZsaW5l
-IHNvbWUgbWVtb3J5IG5vZGUgbWF5YmUgZmFpbGVkIGFzIGV4cGVjdGVkLCBidXQgdGhlIGVycm9y
-IG1lc3NhZ2UgaXMgYSBiaXQgYW5ub3lpbmcuDQoNCg0KPiANCj4gLS0NCj4gVGhhbmtzLA0KPiAN
-Cj4gRGF2aWQgLyBkaGlsZGVuYg0KDQo=
+On 9/26/22 10:29, Emanuele Giuseppe Esposito wrote:
+> Page_idle uses {ptep/pmdp}_clear_young_notify which in turn calls
+> the mmu notifier callback ->clear_young(), which purposefully
+> does not flush the TLB.
+> 
+> When running the test in a nested guest, point 1. of the test
+> doc header is violated, because KVM TLB is unbounded by size
+> and since no flush is forced, KVM does not update the sptes
+> accessed/idle bits resulting in guest assertion failure.
+> 
+> More precisely, only the first ACCESS_WRITE in run_test() actually
+> makes visible changes, because sptes are created and the accessed
+> bit is set to 1 (or idle bit is 0). Then the first mark_memory_idle()
+> passes since access bit is still one, and sets all pages as idle
+> (or not accessed). When the next write is performed, the update
+> is not flushed therefore idle is still 1 and next mark_memory_idle()
+> fails.
+
+Queued, thanks.
+
+Paolo
+
