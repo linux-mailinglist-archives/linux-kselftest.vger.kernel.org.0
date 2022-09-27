@@ -2,109 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2FE5EC238
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 14:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952C85EC780
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 17:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbiI0MPR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Sep 2022 08:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
+        id S231686AbiI0PVP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Sep 2022 11:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbiI0MPF (ORCPT
+        with ESMTP id S230402AbiI0PVO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Sep 2022 08:15:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3962ED4F
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 05:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664280899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rSE3SZr7AU4BSfTZW9EzqUJqNHJZJS1agFSm+3MsOAM=;
-        b=UigL3dT8bhVsb5z6RXv7Ii0OgqjjeoH97JzvKZE4qav8VPLjw8NlsBv/PFLWlBvYTDPnLo
-        sKG5Ti3jIo5y07R1dapdgxj/AExqo9aaEswvclfkDTVuPHHNjoekOMqp7kkx2fD1Tjjfvf
-        J6FTxC0RUdvso8C2o7qMis73n981MXI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-669-DNsUJCsVOtamKzkGKkOqpQ-1; Tue, 27 Sep 2022 08:14:56 -0400
-X-MC-Unique: DNsUJCsVOtamKzkGKkOqpQ-1
-Received: by mail-ed1-f69.google.com with SMTP id f18-20020a056402355200b0045115517911so7609888edd.14
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 05:14:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=rSE3SZr7AU4BSfTZW9EzqUJqNHJZJS1agFSm+3MsOAM=;
-        b=pfmnmkB2+w6gW9f7Og6TfNFeZsFCAplhT0woArM9Q7jjwNcFxijzquG3wlnACH8qaz
-         vBTb1Js8nVujqY1OKQG6aaCz/O/OL4IB9AkEG4JscT9Mvpfo6UqUddPOxfoDOdz+NA+V
-         TiWF4Rk8qkRon+9VRf6f8Ki5Pz6sqoWDIMCEWGhe+sBo/9en3y9H9okRTzy3q/FVriem
-         Y79jk2twGir6GLsbY4572W0xZGdWjhkGVMJeQF7FZKbV7JGtFG0f+gBll66bGeIcMdaY
-         gCwnrePwhjc7YpBEPVsh+RLZtwIHcGjQVy+hCieMu13A4V6QyvMLt/sB2KVUVcXldlro
-         0xTg==
-X-Gm-Message-State: ACrzQf39BjjC+XNXI8MG0ZGQ26n5NzyW2r2ayBdwkPWoL16C0ITpMgng
-        2RRs8kEV5L8IBRumzX+BpdBsZJ/6eDWc6nANg4Ei8UIV1QGeML4L7OuRF3nAwFLjrXB3fVMRfuI
-        n/MxOXWs5YHT2PfX7g2Q0kr1gDHq0
-X-Received: by 2002:aa7:c04f:0:b0:457:1b08:d056 with SMTP id k15-20020aa7c04f000000b004571b08d056mr14655692edo.146.1664280895437;
-        Tue, 27 Sep 2022 05:14:55 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5dF2l0zCe+9PMvtpzvSQRGqYKmswR21oDA/D9ukNUOBwPFoxUVmoO0fb4CxB4+uAI8q522lA==
-X-Received: by 2002:aa7:c04f:0:b0:457:1b08:d056 with SMTP id k15-20020aa7c04f000000b004571b08d056mr14655669edo.146.1664280895219;
-        Tue, 27 Sep 2022 05:14:55 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id u11-20020a170906780b00b0077a8fa8ba55sm695214ejm.210.2022.09.27.05.14.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 05:14:54 -0700 (PDT)
-Message-ID: <005c8afa-d290-d140-0dac-19a41f2ef81a@redhat.com>
-Date:   Tue, 27 Sep 2022 14:14:53 +0200
+        Tue, 27 Sep 2022 11:21:14 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36341A6C29;
+        Tue, 27 Sep 2022 08:21:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lLubIFMzgPA8lVL+AmLKldcV/ItDtbvQqoR7ILuB3+LlyIxiT3jSkfYbFJRXuOUINa1Iop2RnOh+HbehMYibl7gOp+LNXi+I3+MT18mSlYIkEiStBoDPitv7+0d9fteCzR2LDLxpRnXmJDaVrnXXXQtnuq6m04Updau1LfAR/9ETHNO1EZLTliitjt/amK8IMvivSgtSdsxRXgtk1/U1ahOlA6PzEU3Mw9cGAHUZ5ruj2aM4jFHPCQCNakRZvqud/xFxJVO0T1zgwShd03Cwrqhpbu2FVw25WdFOhmsShQ0fkuBCCLPIAyJuwJTDtFbmdjlPH17hOsjQXphS35TsFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LPIEZNk08XXFrQmWW3ATki8MZAqw1XX37c8AH/JEm8I=;
+ b=ZzMLo9A77X/oKs4FjHB0b+uT836PY/up7s1I7BHj9AjzDBNAH6kYFKzrvWHSilWteT5/fzMFKmAhrrK3vvCU9Heva0TyA8ZD43vq6+GsQpDV6McJDRS8//fxMKSBuMvaJ1kQwIwfG4OA8x+E8OysH9RHTcL5RqDUgDbd/sXC+IRUznBpfr7UWU5MnlJ1w4ZusQbEC4zAhiBGZweCRiCVZB9ktxU9Y4mGY0HV12JfLh4Umz6TqWwPq12Ywr/V2RkrhJpro58YwYvN/PS6hi7i9r9gWxxD0H8iK8ZyHPSqvIV17eB62BUIpSeGbYZMxk+jWOCHqJP1CcyEjSf33UOOTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lists.linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LPIEZNk08XXFrQmWW3ATki8MZAqw1XX37c8AH/JEm8I=;
+ b=KZAyk0engENwoT3cERPwJnv53FekWcQnxWt2ZyghkSWohJvVso3wRWzlCRtE1t+oyiA44bLcZbaexRdCGHkjd31G5IplaY9nj0KmjYJGvLEWDOhJ2RJUZ1L/cj40WUkqdp7V7iGlz9aQAZm9lyXsYToRoghyVadYGRuuk3vpF/GJkY4ZJenmMlgzitFT8GGrhISocTNRedEMFuhdDWO38DKtwJGB4XgcJfuJHRx+feBbF864IVUDV9bIhLBcuMPEJSrOL5lu9ujYLeWPk7A3w+cUvwQu3CW2JAIXg/4x3kwL2sT9wDhBgfQSZ88RdGcu7TwcsXfbSY6KCAo/T3Xsqg==
+Received: from DM6PR13CA0004.namprd13.prod.outlook.com (2603:10b6:5:bc::17) by
+ BY5PR12MB4324.namprd12.prod.outlook.com (2603:10b6:a03:209::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Tue, 27 Sep
+ 2022 15:21:10 +0000
+Received: from DM6NAM11FT093.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:bc:cafe::c4) by DM6PR13CA0004.outlook.office365.com
+ (2603:10b6:5:bc::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
+ Transport; Tue, 27 Sep 2022 15:21:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT093.mail.protection.outlook.com (10.13.172.235) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5654.14 via Frontend Transport; Tue, 27 Sep 2022 15:21:10 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 27 Sep
+ 2022 08:21:00 -0700
+Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
+ 2022 08:20:51 -0700
+References: <YxNo/0+/Sbg9svid@shredder>
+ <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
+ <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+ <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+ <Yyq6BnUfctLeerqE@shredder>
+ <d559df70d75b3f5db2815f3038be3e3a@kapio-technology.com>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     <netdev@kapio-technology.com>
+CC:     Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew@lunn.ch>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Roopa Prabhu <roopa@nvidia.com>, <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "Landen Chao" <Landen.Chao@mediatek.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "Christian Marangi" <ansuelsmth@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        <linux-mediatek@lists.infradead.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Yuwei Wang <wangyuweihx@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
+        Vladimir Oltean <olteanv@gmail.com>, <davem@davemloft.net>,
+        <bridge@lists.linux-foundation.org>
+Subject: Re: [Bridge] [PATCH v5 net-next 6/6] selftests: forwarding: add
+ test of MAC-Auth Bypass to locked port tests
+Date:   Tue, 27 Sep 2022 17:19:49 +0200
+In-Reply-To: <d559df70d75b3f5db2815f3038be3e3a@kapio-technology.com>
+Message-ID: <87k05ox2r2.fsf@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] KVM: selftests: replace assertion with warning in
- access_tracking_perf_test
-Content-Language: en-US
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220926082923.299554-1-eesposit@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220926082923.299554-1-eesposit@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT093:EE_|BY5PR12MB4324:EE_
+X-MS-Office365-Filtering-Correlation-Id: b86d6557-186d-4971-df81-08daa09be829
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q3LssFMFpny2q61kO7vhgtb1vsG9YTw2JLd+qGpLMY2gkMb1Ezh+V1j06qtm/t4umXTKoccIqr7o9OuA83rQpo3Kej016g2C+nEF7f8WawJ2RT1ZVwjiR0QNEJ3k4VhlSmgFFLT53Nmn9mwpcb7HfPY4tDWbvkK/Bi6xDWs93ZInh6RC0ztg4Xfv9nea64fbi8LbKDi36SxkkdFWCHk+tOqwpsTgOWyeC/uvhbOhh9gTNOXLS87/FuR/KtR6JrOu1M03n029k/j708gWhXl/BkteMz25yC4HpJUcf/R0apvSxipDdbnO5yoYQSoKesSwuBjJq3CXkEO80Rh+pEib0AqonJ4ZfpL442IFKg+MQl+i45y2Z0JBF9laBNuhdM8kjMHu2tQQXK6DKDhXtMfPAwzzRbpuxO5su4Exw6sGcyi0OCwl5kFHfkL9W3h5mxA4zdJ0Xkl+5i9pVjrwBzpHSnnTLN8mPnNl/r+dsP3/sE4U52agbpQlvy6g4en+QCpoO2Rk0Q8B2Zkr4rG7wPxj4FFkds5fzmuco+pwzw24PlQQYWSc/nhDV2xlCx4IAA9lpUdvxr4Kd9wLEHwz4UqCFRFVtkL217okEEFoAZ5fPpUhg0VYtEuKbzC0XUbl7q5KQwvSqR4t6nLL5sc4LGDuw2E1PfD0t9j90wgnPrMYTXtPN3B3/oOaLeqUQEoysb7uhHwFaseyDQ/7c1CLx1LSSE/bFxvL249I2YjrQ9HyH3J9Cqs+icyfmbvsTN8Ul6/dAYgG26QQfzaZCxzYQWUP1Q==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(5660300002)(16526019)(426003)(336012)(7636003)(82310400005)(82740400003)(40460700003)(36756003)(40480700001)(36860700001)(86362001)(47076005)(316002)(356005)(70206006)(186003)(41300700001)(478600001)(6916009)(54906003)(8936002)(26005)(2616005)(2906002)(4744005)(70586007)(7416002)(4326008)(7406005)(8676002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 15:21:10.0373
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b86d6557-186d-4971-df81-08daa09be829
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT093.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4324
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/26/22 10:29, Emanuele Giuseppe Esposito wrote:
-> Page_idle uses {ptep/pmdp}_clear_young_notify which in turn calls
-> the mmu notifier callback ->clear_young(), which purposefully
-> does not flush the TLB.
-> 
-> When running the test in a nested guest, point 1. of the test
-> doc header is violated, because KVM TLB is unbounded by size
-> and since no flush is forced, KVM does not update the sptes
-> accessed/idle bits resulting in guest assertion failure.
-> 
-> More precisely, only the first ACCESS_WRITE in run_test() actually
-> makes visible changes, because sptes are created and the accessed
-> bit is set to 1 (or idle bit is 0). Then the first mark_memory_idle()
-> passes since access bit is still one, and sets all pages as idle
-> (or not accessed). When the next write is performed, the update
-> is not flushed therefore idle is still 1 and next mark_memory_idle()
-> fails.
 
-Queued, thanks.
+netdev@kapio-technology.com writes:
 
-Paolo
+> Thx, looks good.
+> I have tried to run the test as far as I can manually, but I don't seem to have 'busywait' in the
+> system, which tc_check_packets() depends on, and I couldn't find any 'busywait' in Buildroot.
 
+It's a helper defined in tools/testing/selftests/net/forwarding/lib.sh
