@@ -2,138 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952C85EC780
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 17:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811C15EC9D4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 18:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbiI0PVP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Sep 2022 11:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S233056AbiI0Qoz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Sep 2022 12:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiI0PVO (ORCPT
+        with ESMTP id S231650AbiI0Qou (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Sep 2022 11:21:14 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36341A6C29;
-        Tue, 27 Sep 2022 08:21:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lLubIFMzgPA8lVL+AmLKldcV/ItDtbvQqoR7ILuB3+LlyIxiT3jSkfYbFJRXuOUINa1Iop2RnOh+HbehMYibl7gOp+LNXi+I3+MT18mSlYIkEiStBoDPitv7+0d9fteCzR2LDLxpRnXmJDaVrnXXXQtnuq6m04Updau1LfAR/9ETHNO1EZLTliitjt/amK8IMvivSgtSdsxRXgtk1/U1ahOlA6PzEU3Mw9cGAHUZ5ruj2aM4jFHPCQCNakRZvqud/xFxJVO0T1zgwShd03Cwrqhpbu2FVw25WdFOhmsShQ0fkuBCCLPIAyJuwJTDtFbmdjlPH17hOsjQXphS35TsFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LPIEZNk08XXFrQmWW3ATki8MZAqw1XX37c8AH/JEm8I=;
- b=ZzMLo9A77X/oKs4FjHB0b+uT836PY/up7s1I7BHj9AjzDBNAH6kYFKzrvWHSilWteT5/fzMFKmAhrrK3vvCU9Heva0TyA8ZD43vq6+GsQpDV6McJDRS8//fxMKSBuMvaJ1kQwIwfG4OA8x+E8OysH9RHTcL5RqDUgDbd/sXC+IRUznBpfr7UWU5MnlJ1w4ZusQbEC4zAhiBGZweCRiCVZB9ktxU9Y4mGY0HV12JfLh4Umz6TqWwPq12Ywr/V2RkrhJpro58YwYvN/PS6hi7i9r9gWxxD0H8iK8ZyHPSqvIV17eB62BUIpSeGbYZMxk+jWOCHqJP1CcyEjSf33UOOTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=lists.linux-foundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LPIEZNk08XXFrQmWW3ATki8MZAqw1XX37c8AH/JEm8I=;
- b=KZAyk0engENwoT3cERPwJnv53FekWcQnxWt2ZyghkSWohJvVso3wRWzlCRtE1t+oyiA44bLcZbaexRdCGHkjd31G5IplaY9nj0KmjYJGvLEWDOhJ2RJUZ1L/cj40WUkqdp7V7iGlz9aQAZm9lyXsYToRoghyVadYGRuuk3vpF/GJkY4ZJenmMlgzitFT8GGrhISocTNRedEMFuhdDWO38DKtwJGB4XgcJfuJHRx+feBbF864IVUDV9bIhLBcuMPEJSrOL5lu9ujYLeWPk7A3w+cUvwQu3CW2JAIXg/4x3kwL2sT9wDhBgfQSZ88RdGcu7TwcsXfbSY6KCAo/T3Xsqg==
-Received: from DM6PR13CA0004.namprd13.prod.outlook.com (2603:10b6:5:bc::17) by
- BY5PR12MB4324.namprd12.prod.outlook.com (2603:10b6:a03:209::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Tue, 27 Sep
- 2022 15:21:10 +0000
-Received: from DM6NAM11FT093.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:bc:cafe::c4) by DM6PR13CA0004.outlook.office365.com
- (2603:10b6:5:bc::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17 via Frontend
- Transport; Tue, 27 Sep 2022 15:21:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT093.mail.protection.outlook.com (10.13.172.235) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5654.14 via Frontend Transport; Tue, 27 Sep 2022 15:21:10 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 27 Sep
- 2022 08:21:00 -0700
-Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 27 Sep
- 2022 08:20:51 -0700
-References: <YxNo/0+/Sbg9svid@shredder>
- <5cee059b65f6f7671e099150f9da79c1@kapio-technology.com>
- <Yxmgs7Du62V1zyjK@shredder>
- <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
- <20220908112044.czjh3xkzb4r27ohq@skbuf>
- <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
- <20220911001346.qno33l47i6nvgiwy@skbuf>
- <15ee472a68beca4a151118179da5e663@kapio-technology.com>
- <Yx73FOpN5uhPQhFl@shredder>
- <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
- <Yyq6BnUfctLeerqE@shredder>
- <d559df70d75b3f5db2815f3038be3e3a@kapio-technology.com>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     <netdev@kapio-technology.com>
-CC:     Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew@lunn.ch>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Roopa Prabhu <roopa@nvidia.com>, <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "Landen Chao" <Landen.Chao@mediatek.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "Christian Marangi" <ansuelsmth@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        <linux-mediatek@lists.infradead.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Yuwei Wang <wangyuweihx@gmail.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
-        Vladimir Oltean <olteanv@gmail.com>, <davem@davemloft.net>,
-        <bridge@lists.linux-foundation.org>
-Subject: Re: [Bridge] [PATCH v5 net-next 6/6] selftests: forwarding: add
- test of MAC-Auth Bypass to locked port tests
-Date:   Tue, 27 Sep 2022 17:19:49 +0200
-In-Reply-To: <d559df70d75b3f5db2815f3038be3e3a@kapio-technology.com>
-Message-ID: <87k05ox2r2.fsf@nvidia.com>
+        Tue, 27 Sep 2022 12:44:50 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0270BC9;
+        Tue, 27 Sep 2022 09:44:45 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id s26so9903940pgv.7;
+        Tue, 27 Sep 2022 09:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=BWgKxUk31+J2+2MSd46wU4vlOnJG3Yc8AiZ9YkHKoOw=;
+        b=RPz+oGaXBgnWrNZkao9myAW+JIeB14subN6cQTIoHYYD+ugeMtypU+830O25ILYK7O
+         G/IKSCYBSyTr3XUJxW12BiCEpY6OgqMDNlVYvVC1EDcTeQ1Q36H/A8NkvNxDQ6MXSRI+
+         aJKl5drrDxwWBed3HvWdZO6c8bBkvkXcbH2zdNdpXGena7uwMJe58Ps7ID+bplm+O4PE
+         tVrvgHf95mkeqPj8J8ARzL4lmJSwP+F6rCsVmMizfY42R+BnYrMLtNGvLg+kEpC732+p
+         Z+PUer58KgcwURonAZoKBovdGO//6XIQ9HsVqzkKwoPahxJ0W+YQap86VPv3UGbqks7R
+         Nsdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=BWgKxUk31+J2+2MSd46wU4vlOnJG3Yc8AiZ9YkHKoOw=;
+        b=8KXExfuQy7hGBctKa+3gJAC9i8lDEn/5JwhV6ADpVVhrB/ZG9e5OzKA7cfBFOte3s2
+         DbCfWp2sKbHvVNEVBrJsdguhMbWAItu2GQSOorTP7XJo20JAgRQsuDcvarwu0B+WLjMb
+         KR32BrvrhYLY+QWPi5VNfhBTDjjfspM/BgSnWje/6YD3finpYvXOUX608q3rU3D6ac8w
+         4KwjfntFedKi7rfDcvFp1p5oyoDKExioA6W1xwbrDfbWmb0j6PItaD6JoJ5fVkuw4KI2
+         HDlrbsQS07n3Yi+GXI2pPp0UaWVUZpyaHytoCWqvsYmqKsrcJL8aWF4xYdwrf8wNwljJ
+         uQiw==
+X-Gm-Message-State: ACrzQf1pyqqId+xfCmL8v1C/iEzBUqcYw4ugfgSDM7k+ar1UrLbwy21T
+        TBwRTkuumOaTEd1k3lhgGBI=
+X-Google-Smtp-Source: AMsMyM7lXlUEqdYMJEwpDow4qNfPvfCwMrN01PHaXlLmv+QcFcQ92RJndlw8wjyhzmbTuH7O+FOrMg==
+X-Received: by 2002:a05:6a00:2409:b0:54e:a3ad:d32d with SMTP id z9-20020a056a00240900b0054ea3add32dmr29903648pfh.70.1664297085046;
+        Tue, 27 Sep 2022 09:44:45 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c083:3603:1885:b229:3257:6535? ([2620:10d:c090:500::1:5b3])
+        by smtp.gmail.com with ESMTPSA id o3-20020a170902d4c300b00174ea015ee2sm1863469plg.38.2022.09.27.09.44.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 09:44:44 -0700 (PDT)
+Message-ID: <0c989c58-2aa6-eca6-2bb9-24b1ae71694a@gmail.com>
+Date:   Tue, 27 Sep 2022 09:44:42 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT093:EE_|BY5PR12MB4324:EE_
-X-MS-Office365-Filtering-Correlation-Id: b86d6557-186d-4971-df81-08daa09be829
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q3LssFMFpny2q61kO7vhgtb1vsG9YTw2JLd+qGpLMY2gkMb1Ezh+V1j06qtm/t4umXTKoccIqr7o9OuA83rQpo3Kej016g2C+nEF7f8WawJ2RT1ZVwjiR0QNEJ3k4VhlSmgFFLT53Nmn9mwpcb7HfPY4tDWbvkK/Bi6xDWs93ZInh6RC0ztg4Xfv9nea64fbi8LbKDi36SxkkdFWCHk+tOqwpsTgOWyeC/uvhbOhh9gTNOXLS87/FuR/KtR6JrOu1M03n029k/j708gWhXl/BkteMz25yC4HpJUcf/R0apvSxipDdbnO5yoYQSoKesSwuBjJq3CXkEO80Rh+pEib0AqonJ4ZfpL442IFKg+MQl+i45y2Z0JBF9laBNuhdM8kjMHu2tQQXK6DKDhXtMfPAwzzRbpuxO5su4Exw6sGcyi0OCwl5kFHfkL9W3h5mxA4zdJ0Xkl+5i9pVjrwBzpHSnnTLN8mPnNl/r+dsP3/sE4U52agbpQlvy6g4en+QCpoO2Rk0Q8B2Zkr4rG7wPxj4FFkds5fzmuco+pwzw24PlQQYWSc/nhDV2xlCx4IAA9lpUdvxr4Kd9wLEHwz4UqCFRFVtkL217okEEFoAZ5fPpUhg0VYtEuKbzC0XUbl7q5KQwvSqR4t6nLL5sc4LGDuw2E1PfD0t9j90wgnPrMYTXtPN3B3/oOaLeqUQEoysb7uhHwFaseyDQ/7c1CLx1LSSE/bFxvL249I2YjrQ9HyH3J9Cqs+icyfmbvsTN8Ul6/dAYgG26QQfzaZCxzYQWUP1Q==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(39860400002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(5660300002)(16526019)(426003)(336012)(7636003)(82310400005)(82740400003)(40460700003)(36756003)(40480700001)(36860700001)(86362001)(47076005)(316002)(356005)(70206006)(186003)(41300700001)(478600001)(6916009)(54906003)(8936002)(26005)(2616005)(2906002)(4744005)(70586007)(7416002)(4326008)(7406005)(8676002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2022 15:21:10.0373
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b86d6557-186d-4971-df81-08daa09be829
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT093.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4324
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.2
+Subject: Re: [net-next v2 0/6] net: support QUIC crypto
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Xin Long <lucien.xin@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+        davem <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Ahern <dsahern@kernel.org>, shuah@kernel.org,
+        imagedong@tencent.com, network dev <netdev@vger.kernel.org>,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <adel.abushaev@gmail.com>
+ <20220817200940.1656747-1-adel.abushaev@gmail.com>
+ <CADvbK_fVRVYjtSkn29ec70mko9aEwnwu+kHYx8bAAWm-n25mjA@mail.gmail.com>
+ <f479b419-b05d-2cae-4fd0-4e88707b8d8b@gmail.com>
+ <CA+FuTSf_8MjF4jeUjEqDrOwqXzf485jX_GJyVP5kPUDzOFezkg@mail.gmail.com>
+Content-Language: en-US
+From:   Adel Abouchaev <adel.abushaev@gmail.com>
+In-Reply-To: <CA+FuTSf_8MjF4jeUjEqDrOwqXzf485jX_GJyVP5kPUDzOFezkg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -141,10 +85,152 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-netdev@kapio-technology.com writes:
+On 9/25/22 11:04 AM, Willem de Bruijn wrote:
+>>> The patch seems to get the crypto_ctx by doing a connection hash table
+>>> lookup in the sendmsg(), which is not good from the performance side.
+>>> One QUIC connection can go over multiple UDP sockets, but I don't
+>>> think one socket can be used by multiple QUIC connections. So why not
+>>> save the ctx in the socket instead?
+>> A single socket could have multiple connections originated from it,
+>> having different destinations, if the socket is not connected. An
+>> optimization could be made for connected sockets to cache the context
+>> and save time on a lookup. The measurement of kernel operations timing
+>> did not reveal a significant amount of time spent in this lookup due to
+>> a relatively small number of connections per socket in general. A shared
+>> table across multiple sockets might experience a different performance
+>> grading.
+> I'm late to this patch series, sorry. High quality implementation. I
+> have a few design questions similar to Xin.
+>
+> If multiplexing, instead of looking up a connection by { address, port
+> variable length connection ID }, perhaps return a connection table
+> index on setsockopt and use that in sendmsg.
 
-> Thx, looks good.
-> I have tried to run the test as far as I can manually, but I don't seem to have 'busywait' in the
-> system, which tc_check_packets() depends on, and I couldn't find any 'busywait' in Buildroot.
 
-It's a helper defined in tools/testing/selftests/net/forwarding/lib.sh
+It was deliberate to not to return anything other than 0 from 
+setsockopt() as defined in the spec for the function. Despite that it 
+says "shall", the doc says that 0 is the only value for successful 
+operation. This was the reason not to use setsockopt() for any 
+bidirectional transfers of data and or status. A more sophisticated 
+approach with netlink sockets would be more suitable for it. The second 
+reason is the API asymmetry for Tx and Rx which will be introduced - the 
+Rx will still need to match on the address, port and cid. The third 
+reason is that in current implementations there are no more than a few 
+connections per socket, which does not abuse the rhashtable that does a 
+lookup, although it takes time to hash the key into a hash for a seek. 
+The performance measurement ran against the runtime and did not flag 
+this path as underperforming either, there were other parts that 
+substantially add to the runtime, not the key lookup though.
+
+
+>>> The patch is to reduce the copying operations between user space and
+>>> the kernel. I might miss something in your user space code, but the
+>>> msg to send is *already packed* into the Stream Frame in user space,
+>>> what's the difference if you encrypt it in userspace and then
+>>> sendmsg(udp_sk) with zero-copy to the kernel.
+>> It is possible to do it this way. Zero-copy works best with packet sizes
+>> starting at 32K and larger.  Anything less than that would consume the
+>> improvements of zero-copy by zero-copy pre/post operations and needs to
+>> align memory.
+> Part of the cost of MSG_ZEROCOPY is in mapping and unmapping user
+> pages. This series re-implements that with its own get_user_pages.
+> That is duplicative non-trivial code. And it will incur the same cost.
+> What this implementation saves is the (indeed non-trivial)
+> asynchronous completion notification over the error queue.
+>
+> The cover letter gives some performance numbers against a userspace
+> implementation that has to copy from user to kernel. It might be more
+> even to compare against an implementation using MSG_ZEROCOPY and
+> UDP_SEGMENT. A userspace crypto implementation may have other benefits
+> compared to a kernel implementation, such as not having to convert to
+> crypto API scatter-gather arrays and back to network structures.
+>
+> A few related points
+>
+> - The implementation support multiplexed connections, but only one
+> crypto sendmsg can be outstanding at any time:
+>
+>    + /**
+>    + * To synchronize concurrent sendmsg() requests through the same socket
+>    + * and protect preallocated per-context memory.
+>    + **/
+>    + struct mutex sendmsg_mux;
+>
+> That is quite limiting for production workloads.
+
+The use case that we have with MVFST library currently runs a single 
+worker for a connection and has a single socket attached to it. QUIC 
+allows simultaneous use of multiple connection IDs to swap them in 
+runtime, and implementation would request only a handful of these. The 
+MVFST batches writes into a block of about 8Kb and then uses GSO to send 
+them all at once.
+
+> - Crypto operations are also executed synchronously, using
+> crypto_wait_req after each operationn. This limits throughput by using
+> at most one core per UDP socket. And adds sendmsg latency (which may
+> or may not be important to the application). Wireguard shows an
+> example of how to parallelize software crypto across cores.
+>
+> - The implementation avoids dynamic allocation of cipher text pages by
+> using a single ctx->cipher_page. This is protected by sendmsg_mux (see
+> above). Is that safe when packets leave the protocol stack and are
+> then held in a qdisc or when being processed by the NIC?
+> quic_sendmsg_locked will return, but the cipher page is not free to
+> reuse yet.
+There is currently no use case that we have in hands that requires 
+parallel transmission of data for the same connection. Multiple 
+connections would have no issue running in parallel as each of them will 
+have it's own preallocated cipher_page in the context.
+
+There is a fragmentation further down the stack with 
+ip_generic_getfrag() that eventually does copy_from_iter() and makea a 
+copy of the data. This is executed as part of __ip_append_data() called 
+from udp_sendmsg() in ipv4/udp.c. The assumption was that this is 
+executed synchronously and the queues and NIC will see a mapping of a 
+different memory area than the ciphertext in the pre-allocated page.
+
+>
+> - The real benefit of kernel QUIC will come from HW offload. Would it
+> be better to avoid the complexity of an in-kernel software
+> implementation and only focus on HW offload? Basically, pass the
+> plaintext QUIC packets over a standard UDP socket and alongside in a
+> cmsg pass either an index into a HW security association database or
+> the immediate { key, iv } connection_info (for stateless sockets), to
+> be encoded into the descriptor by the device driver.
+Hardware usually targets a single ciphersuite such as AES-GCM-128/256, 
+while QUIC also supports Chacha20-Poly1305 and AES-CCM. The generalized 
+support for offload prompted implementation of these ciphers in kernel 
+code. The kernel code could also engage if the future hardware has 
+capacity caps preventing it from handling all requests in the hardware.
+> - With such a simpler path, could we avoid introducing ULP and just
+> have udp [gs]etsockopt CRYPTO_STATE. Where QUIC is the only defined
+> state type yet.
+>
+> - Small aside: as the series introduces new APIs with non-trivial
+> parsing in the kernel, it's good to run a fuzzer like syzkaller on it
+> (if not having done so yet).
+Agreed.
+>> The other possible obstacle would be that eventual support
+>> of QUIC encryption and decryption in hardware would integrate well with
+>> this current approach.
+>>> Didn't really understand the "GSO" you mentioned, as I don't see any
+>>> code about kernel GSO, I guess it's just "Fragment size", right?
+>>> BTW, it‘s not common to use "//" for the kernel annotation.
+> minor point: fragment has meaning in IPv4. For GSO, prefer gso_size.
+Sure, will change it to gso_size.
+>
+>> Once the payload arrives into the kernel, the GSO on the interface would
+>> instruct L3/L4 stack on fragmentation. In this case, the plaintext QUIC
+>> packets should be aligned on the GSO marks less the tag size that would
+>> be added by encryption. For GSO size 1000, the QUIC packets in the batch
+>> for transmission should all be 984 bytes long, except maybe the last
+>> one. Once the tag is attached, the new size of 1000 will correctly split
+>> the QUIC packets further down the stack for transmission in individual
+>> IP/UDP packets. The code is also saving processing time by sending all
+>> packets at once to UDP in a single call, when GSO is enabled.
+>>> I'm not sure if it's worth adding a ULP layer over UDP for this QUIC
+>>> TX only. Honestly, I'm more supporting doing a full QUIC stack in the
+>>> kernel independently with socket APIs to use it:
+>>> https://github.com/lxin/tls_hs.
+>>>
+>>> Thanks.
