@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5935EC053
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 13:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE88A5EC056
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 13:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbiI0LCx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Sep 2022 07:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S231778AbiI0LC4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Sep 2022 07:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiI0LCS (ORCPT
+        with ESMTP id S231706AbiI0LCU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Sep 2022 07:02:18 -0400
+        Tue, 27 Sep 2022 07:02:20 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD7D4300
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 04:01:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D429F5AC70
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 04:01:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664276501;
+        s=mimecast20190719; t=1664276504;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qCkMLugRYEBXXrFbCSOQYs7SVp0LQbTQHuIKgCNYGNE=;
-        b=QGw+udV9tyP21FmbuGb4YAZClWEIFWA5dSwgDPvQMcT363EpSF4gZgr51g6Tv0CFOvEySD
-        5bcZHZPjl1fjEDZGK0yxENk2japoaLiZBAJldV2HDC13r3XtRtNBGyfOU4j5f2mqI740Kb
-        kcqD7UA+VpA34i4cqhnAmpW1t+o53ro=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=67MQdpq3rsEztUFgas8DeaT4UznxvUWpJMHF+tOYoio=;
+        b=b+ndT44dxfGtgflhi390jcSBEJIgHwcLXOGaYwBSu/zUwwWfeNezfJU/PBUKMS6+lTmrn2
+        KUACN211k3R8RvgxX1TAF9zSL8alZ9RjDj+N9GL8Y8pzhY2Ipx3O4kWQpYN0QMhibXzLpg
+        iNGvdjpXHJwK2n1NePC2PJ5M5gAY4Wo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-CBTZl0wDObm0zKMkk-ci9Q-1; Tue, 27 Sep 2022 07:01:36 -0400
-X-MC-Unique: CBTZl0wDObm0zKMkk-ci9Q-1
+ us-mta-294-1I8snYYfN7S5Cgya_yiFww-1; Tue, 27 Sep 2022 07:01:39 -0400
+X-MC-Unique: 1I8snYYfN7S5Cgya_yiFww-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C6EA03C01D83;
-        Tue, 27 Sep 2022 11:01:35 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BFB381019C89;
+        Tue, 27 Sep 2022 11:01:38 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DEB3C15BBC;
-        Tue, 27 Sep 2022 11:01:32 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 31B41C15BB2;
+        Tue, 27 Sep 2022 11:01:36 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Mike Rapoport <rppt@kernel.org>,
         Christoph von Recklinghausen <crecklin@redhat.com>,
         Don Dutile <ddutile@redhat.com>
-Subject: [PATCH v1 3/7] selftests/vm: anon_cow: THP tests
-Date:   Tue, 27 Sep 2022 13:01:16 +0200
-Message-Id: <20220927110120.106906-4-david@redhat.com>
+Subject: [PATCH v1 4/7] selftests/vm: anon_cow: hugetlb tests
+Date:   Tue, 27 Sep 2022 13:01:17 +0200
+Message-Id: <20220927110120.106906-5-david@redhat.com>
 In-Reply-To: <20220927110120.106906-1-david@redhat.com>
 References: <20220927110120.106906-1-david@redhat.com>
 MIME-Version: 1.0
@@ -70,313 +70,154 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Let's add various THP variants that we'll run with our existing test
-cases.
+Let's run all existing test cases with all hugetlb sizes we're able to
+detect.
+
+Note that some tests cases still fail. This will, for example, be fixed
+once vmsplice properly uses FOLL_PIN instead of FOLL_GET for pinning.
+With 2 MiB and 1 GiB hugetlb on x86_64, the expected failures are:
+
+ # [RUN] vmsplice() + unmap in child ... with hugetlb (2048 kB)
+ not ok 23 No leak from parent into child
+ # [RUN] vmsplice() + unmap in child ... with hugetlb (1048576 kB)
+ not ok 24 No leak from parent into child
+ # [RUN] vmsplice() before fork(), unmap in parent after fork() ... with hugetlb (2048 kB)
+ not ok 35 No leak from child into parent
+ # [RUN] vmsplice() before fork(), unmap in parent after fork() ... with hugetlb (1048576 kB)
+ not ok 36 No leak from child into parent
+ # [RUN] vmsplice() + unmap in parent after fork() ... with hugetlb (2048 kB)
+ not ok 47 No leak from child into parent
+ # [RUN] vmsplice() + unmap in parent after fork() ... with hugetlb (1048576 kB)
+ not ok 48 No leak from child into parent
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- tools/testing/selftests/vm/anon_cow.c | 259 +++++++++++++++++++++++++-
- 1 file changed, 258 insertions(+), 1 deletion(-)
+ tools/testing/selftests/vm/anon_cow.c | 70 ++++++++++++++++++++++++++-
+ 1 file changed, 69 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/vm/anon_cow.c b/tools/testing/selftests/vm/anon_cow.c
-index 9d2b15c829e6..9244c8551a95 100644
+index 9244c8551a95..06fd046bf1f2 100644
 --- a/tools/testing/selftests/vm/anon_cow.c
 +++ b/tools/testing/selftests/vm/anon_cow.c
-@@ -24,6 +24,43 @@
- 
+@@ -25,6 +25,8 @@
  static size_t pagesize;
  static int pagemap_fd;
-+static size_t thpsize;
-+
-+static void detect_thpsize(void)
-+{
-+	int fd = open("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size",
-+		      O_RDONLY);
-+	size_t size = 0;
-+	char buf[15];
-+	int ret;
-+
-+	if (fd < 0)
-+		return;
-+
-+	ret = pread(fd, buf, sizeof(buf), 0);
-+	if (ret > 0 && ret < sizeof(buf)) {
-+		buf[ret] = 0;
-+
-+		size = strtoul(buf, NULL, 10);
-+		if (size < pagesize)
-+			size = 0;
-+		if (size > 0) {
-+			thpsize = size;
-+			ksft_print_msg("[INFO] detected THP size: %zu KiB\n",
-+				       thpsize / 1024);
-+		}
-+	}
-+
-+	close(fd);
-+}
-+
-+static bool range_is_swapped(void *addr, size_t size)
-+{
-+	for (; size; addr += pagesize, size -= pagesize)
-+		if (!pagemap_is_swapped(pagemap_fd, addr))
-+			return false;
-+	return true;
-+}
+ static size_t thpsize;
++static int nr_hugetlbsizes;
++static size_t hugetlbsizes[10];
  
- struct comm_pipes {
- 	int child_ready[2];
-@@ -319,6 +356,206 @@ static void run_with_base_page_swap(test_fn fn, const char *desc)
- 	do_run_with_base_page(fn, true);
+ static void detect_thpsize(void)
+ {
+@@ -54,6 +56,31 @@ static void detect_thpsize(void)
+ 	close(fd);
  }
  
-+enum thp_run {
-+	THP_RUN_PMD,
-+	THP_RUN_PMD_SWAPOUT,
-+	THP_RUN_PTE,
-+	THP_RUN_PTE_SWAPOUT,
-+	THP_RUN_SINGLE_PTE,
-+	THP_RUN_SINGLE_PTE_SWAPOUT,
-+	THP_RUN_PARTIAL_MREMAP,
-+	THP_RUN_PARTIAL_SHARED,
-+};
-+
-+static void do_run_with_thp(test_fn fn, enum thp_run thp_run)
++static void detect_hugetlbsizes(void)
 +{
-+	char *mem, *mmap_mem, *tmp, *mremap_mem = MAP_FAILED;
-+	size_t size, mmap_size, mremap_size;
-+	int ret;
++	DIR *dir = opendir("/sys/kernel/mm/hugepages/");
 +
-+	/* For alignment purposes, we need twice the thp size. */
-+	mmap_size = 2 * thpsize;
-+	mmap_mem = mmap(NULL, mmap_size, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (mmap_mem == MAP_FAILED) {
-+		ksft_test_result_fail("mmap() failed\n");
++	if (!dir)
++		return;
++
++	while (nr_hugetlbsizes < ARRAY_SIZE(hugetlbsizes)) {
++		struct dirent *entry = readdir(dir);
++		size_t kb;
++
++		if (!entry)
++			break;
++		if (entry->d_type != DT_DIR)
++			continue;
++		if (sscanf(entry->d_name, "hugepages-%zukB", &kb) != 1)
++			continue;
++		hugetlbsizes[nr_hugetlbsizes] = kb * 1024;
++		nr_hugetlbsizes++;
++		ksft_print_msg("[INFO] detected hugetlb size: %zu KiB\n",
++			       kb);
++	}
++	closedir(dir);
++}
++
+ static bool range_is_swapped(void *addr, size_t size)
+ {
+ 	for (; size; addr += pagesize, size -= pagesize)
+@@ -556,6 +583,41 @@ static void run_with_partial_shared_thp(test_fn fn, const char *desc)
+ 	do_run_with_thp(fn, THP_RUN_PARTIAL_SHARED);
+ }
+ 
++static void run_with_hugetlb(test_fn fn, const char *desc, size_t hugetlbsize)
++{
++	int flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
++	char *mem, *dummy;
++
++	ksft_print_msg("[RUN] %s ... with hugetlb (%zu kB)\n", desc,
++		       hugetlbsize / 1024);
++
++	flags |= __builtin_ctzll(hugetlbsize) << MAP_HUGE_SHIFT;
++
++	mem = mmap(NULL, hugetlbsize, PROT_READ | PROT_WRITE, flags, -1, 0);
++	if (mem == MAP_FAILED) {
++		ksft_test_result_skip("need more free huge pages\n");
 +		return;
 +	}
 +
-+	/* We need a THP-aligned memory area. */
-+	mem = (char *)(((uintptr_t)mmap_mem + thpsize) & ~(thpsize - 1));
-+
-+	ret = madvise(mem, thpsize, MADV_HUGEPAGE);
-+	if (ret) {
-+		ksft_test_result_fail("MADV_HUGEPAGE failed\n");
-+		goto munmap;
-+	}
++	/* Populate an huge page. */
++	memset(mem, 0, hugetlbsize);
 +
 +	/*
-+	 * Try to populate a THP. Touch the first sub-page and test if we get
-+	 * another sub-page populated automatically.
++	 * We need a total of two hugetlb pages to handle COW/unsharing
++	 * properly, otherwise we might get zapped by a SIGBUS.
 +	 */
-+	mem[0] = 0;
-+	if (!pagemap_is_populated(pagemap_fd, mem + pagesize)) {
-+		ksft_test_result_skip("Did not get a THP populated\n");
++	dummy = mmap(NULL, hugetlbsize, PROT_READ | PROT_WRITE, flags, -1, 0);
++	if (dummy == MAP_FAILED) {
++		ksft_test_result_skip("need more free huge pages\n");
 +		goto munmap;
 +	}
-+	memset(mem, 0, thpsize);
++	munmap(dummy, hugetlbsize);
 +
-+	size = thpsize;
-+	switch (thp_run) {
-+	case THP_RUN_PMD:
-+	case THP_RUN_PMD_SWAPOUT:
-+		break;
-+	case THP_RUN_PTE:
-+	case THP_RUN_PTE_SWAPOUT:
-+		/*
-+		 * Trigger PTE-mapping the THP by temporarily mapping a single
-+		 * subpage R/O.
-+		 */
-+		ret = mprotect(mem + pagesize, pagesize, PROT_READ);
-+		if (ret) {
-+			ksft_test_result_fail("mprotect() failed\n");
-+			goto munmap;
-+		}
-+		ret = mprotect(mem + pagesize, pagesize, PROT_READ | PROT_WRITE);
-+		if (ret) {
-+			ksft_test_result_fail("mprotect() failed\n");
-+			goto munmap;
-+		}
-+		break;
-+	case THP_RUN_SINGLE_PTE:
-+	case THP_RUN_SINGLE_PTE_SWAPOUT:
-+		/*
-+		 * Discard all but a single subpage of that PTE-mapped THP. What
-+		 * remains is a single PTE mapping a single subpage.
-+		 */
-+		ret = madvise(mem + pagesize, thpsize - pagesize, MADV_DONTNEED);
-+		if (ret) {
-+			ksft_test_result_fail("MADV_DONTNEED failed\n");
-+			goto munmap;
-+		}
-+		size = pagesize;
-+		break;
-+	case THP_RUN_PARTIAL_MREMAP:
-+		/*
-+		 * Remap half of the THP. We need some new memory location
-+		 * for that.
-+		 */
-+		mremap_size = thpsize / 2;
-+		mremap_mem = mmap(NULL, mremap_size, PROT_NONE,
-+				  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+		if (mem == MAP_FAILED) {
-+			ksft_test_result_fail("mmap() failed\n");
-+			goto munmap;
-+		}
-+		tmp = mremap(mem + mremap_size, mremap_size, mremap_size,
-+			     MREMAP_MAYMOVE | MREMAP_FIXED, mremap_mem);
-+		if (tmp != mremap_mem) {
-+			ksft_test_result_fail("mremap() failed\n");
-+			goto munmap;
-+		}
-+		size = mremap_size;
-+		break;
-+	case THP_RUN_PARTIAL_SHARED:
-+		/*
-+		 * Share the first page of the THP with a child and quit the
-+		 * child. This will result in some parts of the THP never
-+		 * have been shared.
-+		 */
-+		ret = madvise(mem + pagesize, thpsize - pagesize, MADV_DONTFORK);
-+		if (ret) {
-+			ksft_test_result_fail("MADV_DONTFORK failed\n");
-+			goto munmap;
-+		}
-+		ret = fork();
-+		if (ret < 0) {
-+			ksft_test_result_fail("fork() failed\n");
-+			goto munmap;
-+		} else if (!ret) {
-+			exit(0);
-+		}
-+		wait(&ret);
-+		/* Allow for sharing all pages again. */
-+		ret = madvise(mem + pagesize, thpsize - pagesize, MADV_DOFORK);
-+		if (ret) {
-+			ksft_test_result_fail("MADV_DOFORK failed\n");
-+			goto munmap;
-+		}
-+		break;
-+	default:
-+		assert(false);
-+	}
-+
-+	switch (thp_run) {
-+	case THP_RUN_PMD_SWAPOUT:
-+	case THP_RUN_PTE_SWAPOUT:
-+	case THP_RUN_SINGLE_PTE_SWAPOUT:
-+		madvise(mem, size, MADV_PAGEOUT);
-+		if (!range_is_swapped(mem, size)) {
-+			ksft_test_result_skip("MADV_PAGEOUT did not work, is swap enabled?\n");
-+			goto munmap;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	fn(mem, size);
++	fn(mem, hugetlbsize);
 +munmap:
-+	munmap(mmap_mem, mmap_size);
-+	if (mremap_mem != MAP_FAILED)
-+		munmap(mremap_mem, mremap_size);
-+}
-+
-+static void run_with_thp(test_fn fn, const char *desc)
-+{
-+	ksft_print_msg("[RUN] %s ... with THP\n", desc);
-+	do_run_with_thp(fn, THP_RUN_PMD);
-+}
-+
-+static void run_with_thp_swap(test_fn fn, const char *desc)
-+{
-+	ksft_print_msg("[RUN] %s ... with swapped-out THP\n", desc);
-+	do_run_with_thp(fn, THP_RUN_PMD_SWAPOUT);
-+}
-+
-+static void run_with_pte_mapped_thp(test_fn fn, const char *desc)
-+{
-+	ksft_print_msg("[RUN] %s ... with PTE-mapped THP\n", desc);
-+	do_run_with_thp(fn, THP_RUN_PTE);
-+}
-+
-+static void run_with_pte_mapped_thp_swap(test_fn fn, const char *desc)
-+{
-+	ksft_print_msg("[RUN] %s ... with swapped-out, PTE-mapped THP\n", desc);
-+	do_run_with_thp(fn, THP_RUN_PTE_SWAPOUT);
-+}
-+
-+static void run_with_single_pte_of_thp(test_fn fn, const char *desc)
-+{
-+	ksft_print_msg("[RUN] %s ... with single PTE of THP\n", desc);
-+	do_run_with_thp(fn, THP_RUN_SINGLE_PTE);
-+}
-+
-+static void run_with_single_pte_of_thp_swap(test_fn fn, const char *desc)
-+{
-+	ksft_print_msg("[RUN] %s ... with single PTE of swapped-out THP\n", desc);
-+	do_run_with_thp(fn, THP_RUN_SINGLE_PTE_SWAPOUT);
-+}
-+
-+static void run_with_partial_mremap_thp(test_fn fn, const char *desc)
-+{
-+	ksft_print_msg("[RUN] %s ... with partially mremap()'ed THP\n", desc);
-+	do_run_with_thp(fn, THP_RUN_PARTIAL_MREMAP);
-+}
-+
-+static void run_with_partial_shared_thp(test_fn fn, const char *desc)
-+{
-+	ksft_print_msg("[RUN] %s ... with partially shared THP\n", desc);
-+	do_run_with_thp(fn, THP_RUN_PARTIAL_SHARED);
++	munmap(mem, hugetlbsize);
 +}
 +
  struct test_case {
  	const char *desc;
  	test_fn fn;
-@@ -367,6 +604,16 @@ static void run_test_case(struct test_case const *test_case)
+@@ -602,6 +664,8 @@ static const struct test_case test_cases[] = {
+ 
+ static void run_test_case(struct test_case const *test_case)
  {
++	int i;
++
  	run_with_base_page(test_case->fn, test_case->desc);
  	run_with_base_page_swap(test_case->fn, test_case->desc);
-+	if (thpsize) {
-+		run_with_thp(test_case->fn, test_case->desc);
-+		run_with_thp_swap(test_case->fn, test_case->desc);
-+		run_with_pte_mapped_thp(test_case->fn, test_case->desc);
-+		run_with_pte_mapped_thp_swap(test_case->fn, test_case->desc);
-+		run_with_single_pte_of_thp(test_case->fn, test_case->desc);
-+		run_with_single_pte_of_thp_swap(test_case->fn, test_case->desc);
-+		run_with_partial_mremap_thp(test_case->fn, test_case->desc);
-+		run_with_partial_shared_thp(test_case->fn, test_case->desc);
-+	}
+ 	if (thpsize) {
+@@ -614,6 +678,9 @@ static void run_test_case(struct test_case const *test_case)
+ 		run_with_partial_mremap_thp(test_case->fn, test_case->desc);
+ 		run_with_partial_shared_thp(test_case->fn, test_case->desc);
+ 	}
++	for (i = 0; i < nr_hugetlbsizes; i++)
++		run_with_hugetlb(test_case->fn, test_case->desc,
++				 hugetlbsizes[i]);
  }
  
  static void run_test_cases(void)
-@@ -377,15 +624,25 @@ static void run_test_cases(void)
- 		run_test_case(&test_cases[i]);
- }
+@@ -626,7 +693,7 @@ static void run_test_cases(void)
  
-+static int tests_per_test_case(void)
-+{
-+	int tests = 2;
-+
-+	if (thpsize)
-+		tests += 8;
-+	return tests;
-+}
-+
- int main(int argc, char **argv)
+ static int tests_per_test_case(void)
  {
- 	int nr_test_cases = ARRAY_SIZE(test_cases);
- 	int err;
+-	int tests = 2;
++	int tests = 2 + nr_hugetlbsizes;
+ 
+ 	if (thpsize)
+ 		tests += 8;
+@@ -640,6 +707,7 @@ int main(int argc, char **argv)
  
  	pagesize = getpagesize();
-+	detect_thpsize();
+ 	detect_thpsize();
++	detect_hugetlbsizes();
  
  	ksft_print_header();
--	ksft_set_plan(nr_test_cases * 2);
-+	ksft_set_plan(nr_test_cases * tests_per_test_case());
- 
- 	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
- 	if (pagemap_fd < 0)
+ 	ksft_set_plan(nr_test_cases * tests_per_test_case());
 -- 
 2.37.3
 
