@@ -2,186 +2,274 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EAD5EC9EB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 18:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6285ECA90
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 19:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbiI0Qs7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Sep 2022 12:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S231240AbiI0RMz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Sep 2022 13:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233266AbiI0Qsd (ORCPT
+        with ESMTP id S231622AbiI0RMx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Sep 2022 12:48:33 -0400
-Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [IPv6:2001:1600:3:17::42af])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B29578A2
-        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 09:47:55 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4McQXp4wNXzMqhJk;
-        Tue, 27 Sep 2022 18:47:54 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4McQXp18VRzxR;
-        Tue, 27 Sep 2022 18:47:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1664297274;
-        bh=rgWmPEsXTNpU/14N1h/JP8Zym6PzAre3MX3cgSbq3h4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FnR7VLPNFrn28EDtPsoATyxxTXZCAuV3tb7SsW/9jebX2SX0v4r7J/R7fMLoJ7cpK
-         Su3gimxzk0KXEGDTLnDoDAJniOz+fcXTFzb03bt+Ps8o0AOUs6ZtkyooIN5AcuLplB
-         TiTwU1DMO1VEeWgLA2Xysd4fzhpqSkfUctdsSZoA=
-Message-ID: <bf30363b-44f3-13da-48b1-1e7567a337ee@digikod.net>
-Date:   Tue, 27 Sep 2022 18:47:53 +0200
+        Tue, 27 Sep 2022 13:12:53 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4511B8CB4
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 10:12:52 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id y2so6448126qtv.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 10:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=OiY5rTg7VuhmYymVKAvhy3a2Viv1gv5iq9jVHgcVhoo=;
+        b=Cyaj3DXeuxOqDwfDoeKxig+AmOf6rB9Lo+Up8G4NmzjQlDqn9j/oOY405eSYaMVi2+
+         Co67QWpVc6W0uq3SFu/ES6dQHBjbIzJkYrHOXgXzuJ6xX7uynNn1QWzTJ1lIiW0Aq5iD
+         /+pwfqzghCxnVvLkRV1j7m2pajju9eQVQSL79FpwoZqG+REqh4R44nVtupwyj+eGPpGc
+         ofX7+dIr1YHxxr8htDQ9HAji34uJ1vec/p82hYJTIBUwvZZJznIdSifoCeHVYzD68fi8
+         GLZGhu8KtuGM7XMYPcKfUZXAKyw7E48FGUFcPEHJPfqSj/WPItlp9/B0uqVwFbmtaWkO
+         DM7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=OiY5rTg7VuhmYymVKAvhy3a2Viv1gv5iq9jVHgcVhoo=;
+        b=yby1jhLADY99JMVz98gtoATM7RARgs0q1NbxeIhqxBbPb0kHawgrsESAo2RCddEcXm
+         5boefe4cw/zrjHzGiwFOuYPBN4Hc3Ou7Va2N9LkeLrCpoVoBY6U+OEymxGemFKZPnYcT
+         6ku/lN2UIjKwJxotDGs9sO20KSGmokr8ZPKap5KqHXTIpucODfpmdpjZzEjNsQifS6PD
+         ol7oF18dAVJ8/BHnceiIKH5Soync90WxnIbbl198cjOJilcmruvMHiHUlssduc0cfWRr
+         M5B7AWM9jTWJxK3hFd1CBtmdxRaZjIbqvCwdZ0yqwfaTaC38MkLY2XL5y2N9ZkMQUp80
+         zUtA==
+X-Gm-Message-State: ACrzQf3ttKHXsv8ffgcDhhBU/pwiHrJrFz4xK+NxGxkE5cdAET795jIB
+        0tc/FCEeGc98gUr7YIxGXxMsfOQKPrU=
+X-Google-Smtp-Source: AMsMyM58tbbcyXtyBWnx72tIE4sVrOvgyPijw5W3Uh/NmqUGvBGW82W46uNlE1OK3YWVQN4jl1BfmQ==
+X-Received: by 2002:ac8:5f82:0:b0:35b:b35e:74ff with SMTP id j2-20020ac85f82000000b0035bb35e74ffmr22685984qta.574.1664298771697;
+        Tue, 27 Sep 2022 10:12:51 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id ay6-20020a05620a178600b006bb49cfe147sm1403252qkb.84.2022.09.27.10.12.50
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 10:12:50 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-350cb1c0abaso69366597b3.9
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 10:12:50 -0700 (PDT)
+X-Received: by 2002:a81:de44:0:b0:341:6954:52b2 with SMTP id
+ o4-20020a81de44000000b00341695452b2mr25648802ywl.208.1664298770377; Tue, 27
+ Sep 2022 10:12:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v5] selftests/landlock: Skip overlayfs tests not supported
-Content-Language: en-US
-To:     Jeff Xu <jeffxu@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     jorgelo@chromium.org, keescook@chromium.org,
-        linux-security-module@vger.kernel.org, groeck@chromium.org,
-        linux-kselftest@vger.kernel.org
-References: <20220824015852.32257-1-jeffxu@chromium.org>
- <ccadad07-53a6-e86e-602b-1d5615a5f9e4@digikod.net>
- <CABi2SkWfTvA+40K+=LkPnGxvL_tKGbuaMog3ZC-ohmkVGgmsug@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <CABi2SkWfTvA+40K+=LkPnGxvL_tKGbuaMog3ZC-ohmkVGgmsug@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <adel.abushaev@gmail.com> <20220817200940.1656747-1-adel.abushaev@gmail.com>
+ <CADvbK_fVRVYjtSkn29ec70mko9aEwnwu+kHYx8bAAWm-n25mjA@mail.gmail.com>
+ <f479b419-b05d-2cae-4fd0-4e88707b8d8b@gmail.com> <CA+FuTSf_8MjF4jeUjEqDrOwqXzf485jX_GJyVP5kPUDzOFezkg@mail.gmail.com>
+ <0c989c58-2aa6-eca6-2bb9-24b1ae71694a@gmail.com>
+In-Reply-To: <0c989c58-2aa6-eca6-2bb9-24b1ae71694a@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Tue, 27 Sep 2022 13:12:13 -0400
+X-Gmail-Original-Message-ID: <CA+FuTSdCmWu5w09KZshCv=TVugf_x5NUY1xjv4X8kgbEQ+WbHQ@mail.gmail.com>
+Message-ID: <CA+FuTSdCmWu5w09KZshCv=TVugf_x5NUY1xjv4X8kgbEQ+WbHQ@mail.gmail.com>
+Subject: Re: [net-next v2 0/6] net: support QUIC crypto
+To:     Adel Abouchaev <adel.abushaev@gmail.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, davem <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Ahern <dsahern@kernel.org>, shuah@kernel.org,
+        imagedong@tencent.com, network dev <netdev@vger.kernel.org>,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 12:45 PM Adel Abouchaev <adel.abushaev@gmail.com> w=
+rote:
+>
+>
+> On 9/25/22 11:04 AM, Willem de Bruijn wrote:
+> >>> The patch seems to get the crypto_ctx by doing a connection hash tabl=
+e
+> >>> lookup in the sendmsg(), which is not good from the performance side.
+> >>> One QUIC connection can go over multiple UDP sockets, but I don't
+> >>> think one socket can be used by multiple QUIC connections. So why not
+> >>> save the ctx in the socket instead?
+> >> A single socket could have multiple connections originated from it,
+> >> having different destinations, if the socket is not connected. An
+> >> optimization could be made for connected sockets to cache the context
+> >> and save time on a lookup. The measurement of kernel operations timing
+> >> did not reveal a significant amount of time spent in this lookup due t=
+o
+> >> a relatively small number of connections per socket in general. A shar=
+ed
+> >> table across multiple sockets might experience a different performance
+> >> grading.
+> > I'm late to this patch series, sorry. High quality implementation. I
+> > have a few design questions similar to Xin.
+> >
+> > If multiplexing, instead of looking up a connection by { address, port
+> > variable length connection ID }, perhaps return a connection table
+> > index on setsockopt and use that in sendmsg.
+>
+>
+> It was deliberate to not to return anything other than 0 from
+> setsockopt() as defined in the spec for the function. Despite that it
+> says "shall", the doc says that 0 is the only value for successful
+> operation. This was the reason not to use setsockopt() for any
+> bidirectional transfers of data and or status. A more sophisticated
+> approach with netlink sockets would be more suitable for it. The second
+> reason is the API asymmetry for Tx and Rx which will be introduced - the
 
-On 26/09/2022 16:23, Jeff Xu wrote:
-> On Thu, Aug 25, 2022 at 1:23 AM Mickaël Salaün <mic@digikod.net> wrote:
->>
->> As discussed for the v4, the next version of this patch needs a
->> TEST_F_FORK() fix.
->>
-> I can make TEST_F_FORK() to be skipped when SKIP() is called
-> in FIXTURE_SETUP(), but this makes FIXTURE_TEARDOWN()
-> complicated, because SKIP() can be called after any resource
-> creation failure in the FIXTURE_SETUP().
-> 
-> Another (better) option:  add generic FIXTURE_CONFIG_CHECK()
-> FIXTURE_CONFIG_CHECK() checks the runtime configuration for
-> current FIXTURE, if the configuration is not met, the whole test will be
-> skipped, including FIXTURE_SETUP()/TEARDOWN(), TEST_F_FORK(),
-> so there is no resource clear up issue after test.
+I thought the cover letter indicated that due to asymmetry of most
+QUIC workloads, only Tx offload is implemented. You do intend to add
+Rx later?
 
-This looks like a good idea. What do you think Shuah?
+> Rx will still need to match on the address, port and cid. The third
+> reason is that in current implementations there are no more than a few
+> connections per socket,
 
+This is very different from how we do QUIC at Google. There we
+definitely multiplex many connections across essentially a socket per
+CPU IIRC.
 
-> 
->> Please add a link to the previous patch (lore.kernel.org) for each new
->> version.
->>
->>
->> On 24/08/2022 03:58, jeffxu@chromium.org wrote:
->>> From: Jeff Xu <jeffxu@chromium.org>
->>>
->>> overlayfs can be disabled in the kernel configuration (which is the case
->>> for chromeOS), causing related tests to fail.  Skip such tests when an
->>> overlayfs mount operation failed because the running kernel doesn't
->>> support this file system.
->>>
->>> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
->>> Reviewed-by: Guenter Roeck <groeck@chromium.org>
->>> ---
->>>    tools/testing/selftests/landlock/fs_test.c | 54 ++++++++++++++++++++--
->>>    1 file changed, 51 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
->>> index 21a2ce8fa739..645304d9fe98 100644
->>> --- a/tools/testing/selftests/landlock/fs_test.c
->>> +++ b/tools/testing/selftests/landlock/fs_test.c
->>> @@ -11,6 +11,7 @@
->>>    #include <fcntl.h>
->>>    #include <linux/landlock.h>
->>>    #include <sched.h>
->>> +#include <stdio.h>
->>>    #include <string.h>
->>>    #include <sys/capability.h>
->>>    #include <sys/mount.h>
->>> @@ -169,6 +170,42 @@ static int remove_path(const char *const path)
->>>        return err;
->>>    }
->>>
->>> +static bool fgrep(FILE *file, const char *str)
->>> +{
->>> +     char line[32];
->>> +     int str_len = strlen(str);
->>> +
->>> +     while (!feof(file)) {
->>> +             if (!fgets(line, sizeof(line), file))
->>> +                     break;
->>> +             if (strncmp(line, str, str_len))
->>> +                     continue;
->>> +
->>> +             return true;
->>> +     }
->>> +
->>> +     return false;
->>> +}
->>> +
->>> +static bool supports_overlayfs(void)
->>> +{
->>> +     bool ret;
->>> +     FILE *file = fopen("/proc/filesystems", "r");
->>> +
->>> +     /*
->>> +      * A failed attempt to open /proc/filesystems
->>> +      * implies that the file system is supported (default
->>> +      * behavior). This can help detect such unattended issue
->>> +      * (which should not happen)."
->>> +      */
->>> +     if (!file)
->>> +             return true;
->>> +
->>> +     ret = fgrep(file, "nodev\toverlay\n");
->>> +     fclose(file);
->>> +     return ret;
->>> +}
->>> +
->>>    static void prepare_layout(struct __test_metadata *const _metadata)
->>>    {
->>>        disable_caps(_metadata);
->>> @@ -3404,6 +3441,8 @@ FIXTURE(layout2_overlay) {};
->>>
->>>    FIXTURE_SETUP(layout2_overlay)
->>>    {
->>> +     int ret, err;
->>> +
->>>        prepare_layout(_metadata);
->>>
->>>        create_directory(_metadata, LOWER_BASE);
->>> @@ -3431,11 +3470,20 @@ FIXTURE_SETUP(layout2_overlay)
->>>        create_directory(_metadata, MERGE_DATA);
->>>        set_cap(_metadata, CAP_SYS_ADMIN);
->>>        set_cap(_metadata, CAP_DAC_OVERRIDE);
->>> -     ASSERT_EQ(0, mount("overlay", MERGE_DATA, "overlay", 0,
->>> -                        "lowerdir=" LOWER_DATA ",upperdir=" UPPER_DATA
->>> -                        ",workdir=" UPPER_WORK));
->>> +
->>> +     ret = mount("overlay", MERGE_DATA, "overlay", 0,
->>> +                "lowerdir=" LOWER_DATA ",upperdir=" UPPER_DATA
->>> +                ",workdir=" UPPER_WORK);
->>> +     err = errno;
->>>        clear_cap(_metadata, CAP_DAC_OVERRIDE);
->>>        clear_cap(_metadata, CAP_SYS_ADMIN);
->>> +
->>> +     if (ret == -1) {
->>> +             ASSERT_EQ(ENODEV, err);
->>> +             ASSERT_FALSE(supports_overlayfs());
->>> +             SKIP(return, "overlayfs is not supported");
->>> +     }
->>> +     ASSERT_EQ(0, ret);
->>>    }
->>>
->>>    FIXTURE_TEARDOWN(layout2_overlay)
->>>
->>> base-commit: 50cd95ac46548429e5bba7ca75cc97d11a697947
+> which does not abuse the rhashtable that does a
+> lookup, although it takes time to hash the key into a hash for a seek.
+> The performance measurement ran against the runtime and did not flag
+> this path as underperforming either, there were other parts that
+> substantially add to the runtime, not the key lookup though.
+>
+>
+> >>> The patch is to reduce the copying operations between user space and
+> >>> the kernel. I might miss something in your user space code, but the
+> >>> msg to send is *already packed* into the Stream Frame in user space,
+> >>> what's the difference if you encrypt it in userspace and then
+> >>> sendmsg(udp_sk) with zero-copy to the kernel.
+> >> It is possible to do it this way. Zero-copy works best with packet siz=
+es
+> >> starting at 32K and larger.  Anything less than that would consume the
+> >> improvements of zero-copy by zero-copy pre/post operations and needs t=
+o
+> >> align memory.
+> > Part of the cost of MSG_ZEROCOPY is in mapping and unmapping user
+> > pages. This series re-implements that with its own get_user_pages.
+> > That is duplicative non-trivial code. And it will incur the same cost.
+> > What this implementation saves is the (indeed non-trivial)
+> > asynchronous completion notification over the error queue.
+> >
+> > The cover letter gives some performance numbers against a userspace
+> > implementation that has to copy from user to kernel. It might be more
+> > even to compare against an implementation using MSG_ZEROCOPY and
+> > UDP_SEGMENT. A userspace crypto implementation may have other benefits
+> > compared to a kernel implementation, such as not having to convert to
+> > crypto API scatter-gather arrays and back to network structures.
+> >
+> > A few related points
+> >
+> > - The implementation support multiplexed connections, but only one
+> > crypto sendmsg can be outstanding at any time:
+> >
+> >    + /**
+> >    + * To synchronize concurrent sendmsg() requests through the same so=
+cket
+> >    + * and protect preallocated per-context memory.
+> >    + **/
+> >    + struct mutex sendmsg_mux;
+> >
+> > That is quite limiting for production workloads.
+>
+> The use case that we have with MVFST library currently runs a single
+> worker for a connection and has a single socket attached to it. QUIC
+> allows simultaneous use of multiple connection IDs to swap them in
+> runtime, and implementation would request only a handful of these. The
+> MVFST batches writes into a block of about 8Kb and then uses GSO to send
+> them all at once.
+>
+> > - Crypto operations are also executed synchronously, using
+> > crypto_wait_req after each operationn. This limits throughput by using
+> > at most one core per UDP socket. And adds sendmsg latency (which may
+> > or may not be important to the application). Wireguard shows an
+> > example of how to parallelize software crypto across cores.
+> >
+> > - The implementation avoids dynamic allocation of cipher text pages by
+> > using a single ctx->cipher_page. This is protected by sendmsg_mux (see
+> > above). Is that safe when packets leave the protocol stack and are
+> > then held in a qdisc or when being processed by the NIC?
+> > quic_sendmsg_locked will return, but the cipher page is not free to
+> > reuse yet.
+> There is currently no use case that we have in hands that requires
+> parallel transmission of data for the same connection. Multiple
+> connections would have no issue running in parallel as each of them will
+> have it's own preallocated cipher_page in the context.
+
+This still leaves the point that sendmsg may return and the mutex
+released while the cipher_page is still associated with an skb in the
+transmit path.
+
+> There is a fragmentation further down the stack with
+> ip_generic_getfrag() that eventually does copy_from_iter() and makea a
+> copy of the data. This is executed as part of __ip_append_data() called
+> from udp_sendmsg() in ipv4/udp.c. The assumption was that this is
+> executed synchronously and the queues and NIC will see a mapping of a
+> different memory area than the ciphertext in the pre-allocated page.
+>
+> >
+> > - The real benefit of kernel QUIC will come from HW offload. Would it
+> > be better to avoid the complexity of an in-kernel software
+> > implementation and only focus on HW offload? Basically, pass the
+> > plaintext QUIC packets over a standard UDP socket and alongside in a
+> > cmsg pass either an index into a HW security association database or
+> > the immediate { key, iv } connection_info (for stateless sockets), to
+> > be encoded into the descriptor by the device driver.
+> Hardware usually targets a single ciphersuite such as AES-GCM-128/256,
+> while QUIC also supports Chacha20-Poly1305 and AES-CCM. The generalized
+> support for offload prompted implementation of these ciphers in kernel
+> code.
+
+All userspace libraries also support all protocols as fall-back. No
+need for two fall-backs if HW support is missing?
+
+> The kernel code could also engage if the future hardware has
+> capacity caps preventing it from handling all requests in the hardware.
+> > - With such a simpler path, could we avoid introducing ULP and just
+> > have udp [gs]etsockopt CRYPTO_STATE. Where QUIC is the only defined
+> > state type yet.
+> >
+> > - Small aside: as the series introduces new APIs with non-trivial
+> > parsing in the kernel, it's good to run a fuzzer like syzkaller on it
+> > (if not having done so yet).
+> Agreed.
+> >> The other possible obstacle would be that eventual support
+> >> of QUIC encryption and decryption in hardware would integrate well wit=
+h
+> >> this current approach.
+> >>> Didn't really understand the "GSO" you mentioned, as I don't see any
+> >>> code about kernel GSO, I guess it's just "Fragment size", right?
+> >>> BTW, it=E2=80=98s not common to use "//" for the kernel annotation.
+> > minor point: fragment has meaning in IPv4. For GSO, prefer gso_size.
+> Sure, will change it to gso_size.
+> >
+> >> Once the payload arrives into the kernel, the GSO on the interface wou=
+ld
+> >> instruct L3/L4 stack on fragmentation. In this case, the plaintext QUI=
+C
+> >> packets should be aligned on the GSO marks less the tag size that woul=
+d
+> >> be added by encryption. For GSO size 1000, the QUIC packets in the bat=
+ch
+> >> for transmission should all be 984 bytes long, except maybe the last
+> >> one. Once the tag is attached, the new size of 1000 will correctly spl=
+it
+> >> the QUIC packets further down the stack for transmission in individual
+> >> IP/UDP packets. The code is also saving processing time by sending all
+> >> packets at once to UDP in a single call, when GSO is enabled.
+> >>> I'm not sure if it's worth adding a ULP layer over UDP for this QUIC
+> >>> TX only. Honestly, I'm more supporting doing a full QUIC stack in the
+> >>> kernel independently with socket APIs to use it:
+> >>> https://github.com/lxin/tls_hs.
+> >>>
+> >>> Thanks.
