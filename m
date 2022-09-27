@@ -2,86 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9705EBE06
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 11:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3135EC04F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 13:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiI0JKQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 27 Sep 2022 05:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        id S231827AbiI0LC3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Sep 2022 07:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiI0JKP (ORCPT
+        with ESMTP id S231869AbiI0LCA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 27 Sep 2022 05:10:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E796E6D9DB;
-        Tue, 27 Sep 2022 02:10:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 27 Sep 2022 07:02:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC7BB7C3
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Sep 2022 04:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664276489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3xgDb8D/3EHICRWKuyfoBAlGnicVQATCL19Alr25P2c=;
+        b=N2JjCpsbwMVdqxLgpGh5QveNw4DK0sWCZphk8G5c77P+A62rtyPjYqWWmNOwzubor19mm7
+        lPiEQ6KncO3bOi9Usv4fgalatxFsOWD4yguM9NSCIXE8mqaB1nOBgVoTglnP/9UVR3JnaF
+        IeXj/KKN0A4tV/ciUGh7LatujKGj3QI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-vgVRod4zOGm8GofJPuq0Hg-1; Tue, 27 Sep 2022 07:01:25 -0400
+X-MC-Unique: vgVRod4zOGm8GofJPuq0Hg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 842FB61765;
-        Tue, 27 Sep 2022 09:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DE02EC433D7;
-        Tue, 27 Sep 2022 09:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664269813;
-        bh=HrqAsjtCCTfOpqKuvarQVRgA4LgzPa5pLIthBQL0w4k=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=eqz95eD0M413YvOzO6hwpWmdEDNsg9EQJFGafeFrB8Ie+qphV/94yic/FDdawLRbA
-         Nc+STwFUYilAeiw19IavixMKuDB7dOLxqr8M5RaadJDge/Q7S0ZWVYScDG2L8gJH2n
-         3Pxx35Vqk9u7MbUuMPVvVklRsV89iN+IL7L6dsjqCGlbpR6dBMAkhTXlLYoV8bZCWX
-         V+Kiq9+Wyh7DHrO4DS3nmU9d0kiZOjgmUweTMEoforSRZ9J+H7kkxkuVCqhIgcY19P
-         mzlkmEZ+91HSi8ZLLohe/bfFj1FOL7da4FPKig8zMqmTzsuI2p3eamxrWCW8UH2iyl
-         +lM4Ly4WU7/NQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C2925C04E59;
-        Tue, 27 Sep 2022 09:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 583E0800186;
+        Tue, 27 Sep 2022 11:01:25 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.14])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F2D58C15BAB;
+        Tue, 27 Sep 2022 11:01:21 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mike Rapoport <rppt@kernel.org>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>
+Subject: [PATCH v1 0/7] selftests/vm: test COW handling of anonymous memory
+Date:   Tue, 27 Sep 2022 13:01:13 +0200
+Message-Id: <20220927110120.106906-1-david@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next v2] selftests: Fix the if conditions of in
- test_extra_filter()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166426981379.9788.6307412483003792088.git-patchwork-notify@kernel.org>
-Date:   Tue, 27 Sep 2022 09:10:13 +0000
-References: <1663916557-10730-1-git-send-email-wangyufen@huawei.com>
-In-Reply-To: <1663916557-10730-1-git-send-email-wangyufen@huawei.com>
-To:     Wang Yufen <wangyufen@huawei.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On top of mm-stable.
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+This is my current set of tests for testing COW handling of anonymous
+memory, especially when interacting with GUP. I developed these tests
+while working on PageAnonExclusive and managed to clean them up just now.
 
-On Fri, 23 Sep 2022 15:02:37 +0800 you wrote:
-> The socket 2 bind the addr in use, bind should fail with EADDRINUSE. So
-> if bind success or errno != EADDRINUSE, testcase should be failed.
-> 
-> Fixes: 3ca8e4029969 ("soreuseport: BPF selection functional test")
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> ---
-> v1 -> v2: add a Fixes tag
->  tools/testing/selftests/net/reuseport_bpf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On current upstream Linux, all tests pass except the hugetlb tests that
+rely on vmsplice -- these tests should pass as soon as vmsplice properly
+uses FOLL_PIN instead of FOLL_GET.
 
-Here is the summary with links:
-  - [net-next,v2] selftests: Fix the if conditions of in test_extra_filter()
-    https://git.kernel.org/netdev/net/c/bc7a31984489
+I'm working on additional tests for COW handling in private mappings,
+focusing on long-term R/O pinning e.g., of the shared zeropage, pagecache
+pages and KSM pages. These tests, however, will go into a different file.
+So this is everything I have regarding tests for anonymous memory.
 
-You are awesome, thank you!
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Nadav Amit <namit@vmware.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Christoph von Recklinghausen <crecklin@redhat.com>
+Cc: Don Dutile <ddutile@redhat.com>
+
+David Hildenbrand (7):
+  selftests/vm: anon_cow: test COW handling of anonymous memory
+  selftests/vm: factor out pagemap_is_populated() into vm_util
+  selftests/vm: anon_cow: THP tests
+  selftests/vm: anon_cow: hugetlb tests
+  selftests/vm: anon_cow: add liburing test cases
+  mm/gup_test: start/stop/read functionality for PIN LONGTERM test
+  selftests/vm: anon_cow: add R/O longterm tests via gup_test
+
+ mm/gup_test.c                              |  140 +++
+ mm/gup_test.h                              |   12 +
+ tools/testing/selftests/vm/.gitignore      |    1 +
+ tools/testing/selftests/vm/Makefile        |   25 +-
+ tools/testing/selftests/vm/anon_cow.c      | 1126 ++++++++++++++++++++
+ tools/testing/selftests/vm/check_config.sh |   31 +
+ tools/testing/selftests/vm/madv_populate.c |    8 -
+ tools/testing/selftests/vm/run_vmtests.sh  |    3 +
+ tools/testing/selftests/vm/vm_util.c       |   15 +
+ tools/testing/selftests/vm/vm_util.h       |    2 +
+ 10 files changed, 1353 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/anon_cow.c
+ create mode 100644 tools/testing/selftests/vm/check_config.sh
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.37.3
 
