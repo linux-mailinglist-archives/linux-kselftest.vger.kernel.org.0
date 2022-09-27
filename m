@@ -2,108 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F3C5EB5FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 01:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E1D5EB6F3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Sep 2022 03:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiIZXyK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Sep 2022 19:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S229538AbiI0BgY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Sep 2022 21:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiIZXyG (ORCPT
+        with ESMTP id S229738AbiI0BgW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Sep 2022 19:54:06 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2EE96FEE
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Sep 2022 16:54:05 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 65so2867320ybp.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Sep 2022 16:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=HwKLS+p+kzaLysWHkGSka85DTvLRdK+675PcR0q9v3w=;
-        b=pm0ElfRJfwGKSuhNjHi2Hrm6ChvnLcu8n9EQR2swES7EBtcz6U72fX3JbsrJXY9g6Y
-         eqNib96zQ9YIvlGADNXevxAeyvbZ7zZncUvNb5gHxAmFwpC4+UK3a5/WkWNJ+SzZ4947
-         FuQ4zyIG8xJ7t3NkEWR3gI6EygLJVRCKL4NonduFnmLPEu66SSPcwShT2tMmhOV24CJp
-         etvD8mJ7Lh8NZbOhd/w7VUECgt46pLy7mLS2h+TXGHGgftLAyWrv50Gwc80LCwhV0byJ
-         cDCbcJHqr+aFEyRfOMQA9xCYVaTXoCSXL2zwfJ0usep3SFk+IvKeStX9PaeEKRSp7s7G
-         2jxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=HwKLS+p+kzaLysWHkGSka85DTvLRdK+675PcR0q9v3w=;
-        b=GeB1rCtbKOemF9PB98JIGXnASJmnWDCaPlqatXm5vYyhSaO33OWWIWm7MVaQN7gdpf
-         WUwGbqtSZfiH4WUscNnPz3BybC/dhCW/0HyhAxLqTxUYSdUyuwGhNSUCJAZwnqe/I+H7
-         hGn0DeBii62n65gzXOb3GRWkPr3paeOTv+RIH8LM7vOOA6yKBapbnt3vQqJqtvbAKbPg
-         /wh2bcXY9MQ6q6SxTBCb9c4HjK0tZLrJDxZBRo1AlScvxaS0CpsaLfF1ddE5y6XLfPmN
-         pU01gPrc0aH7RWWESGS5WBNuZBB6yeGLnA4IWb9Jr9bxa5umD/8KtFClvODAv1kOmTyL
-         6uMg==
-X-Gm-Message-State: ACrzQf36l++0r1G+KGpCAO9jIxnd2/eeZvHASvSHyizVizvazJGcwwYw
-        zF4LezmauchTlENtslj/rndKVHRhufffUqjAYwj7yQ==
-X-Google-Smtp-Source: AMsMyM5d1u3qvJiaXnCTboC2C1dkUPnHl5oQjUdRN08V2TQJKfzcOVQuGaTUUx0kZUjMHA4xDwlyeKtWBVza49Aqisg=
-X-Received: by 2002:a25:4fc2:0:b0:680:f309:48e5 with SMTP id
- d185-20020a254fc2000000b00680f30948e5mr24258349ybb.0.1664236444719; Mon, 26
- Sep 2022 16:54:04 -0700 (PDT)
+        Mon, 26 Sep 2022 21:36:22 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97448DF6;
+        Mon, 26 Sep 2022 18:36:20 -0700 (PDT)
+Received: from canpemm100008.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mc2Fc0v3kzpTpl;
+        Tue, 27 Sep 2022 09:33:24 +0800 (CST)
+Received: from canpemm500005.china.huawei.com (7.192.104.229) by
+ canpemm100008.china.huawei.com (7.192.104.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 09:36:18 +0800
+Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
+ canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
+ Tue, 27 Sep 2022 09:36:18 +0800
+From:   zhaogongyi <zhaogongyi@huawei.com>
+To:     David Hildenbrand <david@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+CC:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "osalvador@suse.de" <osalvador@suse.de>,
+        "shuah@kernel.org" <shuah@kernel.org>
+Subject: Re: [PATCH -next v3 1/3] selftests/memory-hotplug: Add checking after
+ online or offline
+Thread-Topic: [PATCH -next v3 1/3] selftests/memory-hotplug: Add checking
+ after online or offline
+Thread-Index: AdjSEXoq4KNGQqzodUStOJZvmVcVRQ==
+Date:   Tue, 27 Sep 2022 01:36:18 +0000
+Message-ID: <5484ea857c0644c9bdeb03bd3aa1c041@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.67.110.209]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220915000448.1674802-1-vannapurve@google.com>
- <20220915000448.1674802-5-vannapurve@google.com> <YyuEhxW4URWVvHyW@google.com>
- <CAGtprH-YsgkeD2qpY4kRvhX=goRC20wzLPrEKHBVX73urhqh4g@mail.gmail.com>
-In-Reply-To: <CAGtprH-YsgkeD2qpY4kRvhX=goRC20wzLPrEKHBVX73urhqh4g@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 26 Sep 2022 16:53:38 -0700
-Message-ID: <CALzav=eyYN=EX0mJGc5p+jybJygxtXyXSwUb0UEsVt0YzSng5A@mail.gmail.com>
-Subject: Re: [V2 PATCH 4/8] KVM: selftests: x86: Precompute the result for is_{intel,amd}_cpu()
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86 <x86@kernel.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oliver Upton <oupton@google.com>, Peter Xu <peterx@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 4:48 PM Vishal Annapurve <vannapurve@google.com> wrote:
->
-> On Wed, Sep 21, 2022 at 2:39 PM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Thu, Sep 15, 2022 at 12:04:44AM +0000, Vishal Annapurve wrote:
-> > > Cache the vendor CPU type in a global variable so that multiple calls
-> > > to is_intel_cpu() do not need to re-execute CPUID.
-> > >
-> > > Add cpu vendor check in kvm_hypercall() so that it executes correct
-> > > vmcall/vmmcall instruction when running on Intel/AMD hosts. This avoids
-> > > exit to KVM which anyway tries to patch the instruction according to
-> > > the cpu type.
-> >
-> > Out of curiousity, why do we want to avoid this exit?
->
-> Referring to the patch set posted for UPM selftests with
-> non-confidential VMs [1], vmcall patching will not work for selftests
-> executed with UPM feature enabled since guest memory can not be
-> modified by KVM. So I tried to add a kvm_hypercall implementation that
-> will execute the hypercall according to the cpu type.
->
-> Hypercall updates in this series are done to ensure that such a change
-> is done for all callers to allow consistency and avoid relying on KVM
-> behavior to patch the vmmcall/vmcall instruction.
->
-> [1] https://lore.kernel.org/lkml/20220819174659.2427983-5-vannapurve@google.com/
-
-Thanks! That makes a ton of sense. Please include that in the cover
-letter and any of the commit messages that avoid hypercall patching.
-That will help reviewers understand the context of why the changes are
-being made, and help anyone reviewing the git history in the future
-understand the same.
+DQo+IA0KPiBPbiAyNi4wOS4yMiAxNTowMywgWmhhbyBHb25neWkgd3JvdGU6DQo+ID4gQWRkIGNo
+ZWNraW5nIGZvciBvbmxpbmVfbWVtb3J5X2V4cGVjdF9zdWNjZXNzKCkvDQo+ID4gb2ZmbGluZV9t
+ZW1vcnlfZXhwZWN0X3N1Y2Nlc3MoKS9vZmZsaW5lX21lbW9yeV9leHBlY3RfZmFpbCgpLCBvcg0K
+PiB0aGUNCj4gPiB0ZXN0IHdvdWxkIGV4aXQgMCBhbHRob3VnaCB0aGUgZnVuY3Rpb25zIHJldHVy
+biAxLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogWmhhbyBHb25neWkgPHpoYW9nb25neWlAaHVh
+d2VpLmNvbT4NCj4gPiAtLS0NCj4gPiAgIC4uLi9zZWxmdGVzdHMvbWVtb3J5LWhvdHBsdWcvbWVt
+LW9uLW9mZi10ZXN0LnNoICAgfCAxNQ0KPiArKysrKysrKysrKystLS0NCj4gPiAgIDEgZmlsZSBj
+aGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAt
+LWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYt
+dGVzdC5zaA0KPiA+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbWVtb3J5LWhvdHBsdWcvbWVt
+LW9uLW9mZi10ZXN0LnNoDQo+ID4gaW5kZXggNDZhOTdmMzE4ZjU4Li4zZWRkYTFmMTNmN2IgMTAw
+NzU1DQo+ID4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbWVtb3J5LWhvdHBsdWcvbWVt
+LW9uLW9mZi10ZXN0LnNoDQo+ID4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbWVtb3J5
+LWhvdHBsdWcvbWVtLW9uLW9mZi10ZXN0LnNoDQo+ID4gQEAgLTI2Niw3ICsyNjYsMTAgQEAgZG9u
+ZQ0KPiA+ICAgIw0KPiA+ICAgZWNobyAkZXJyb3IgPg0KPiAkTk9USUZJRVJfRVJSX0lOSkVDVF9E
+SVIvYWN0aW9ucy9NRU1fR09JTkdfT05MSU5FL2Vycm9yDQo+ID4gICBmb3IgbWVtb3J5IGluIGBo
+b3RwbHVnZ2FibGVfb2ZmbGluZV9tZW1vcnlgOyBkbw0KPiA+IC0Jb25saW5lX21lbW9yeV9leHBl
+Y3RfZmFpbCAkbWVtb3J5DQo+ID4gKwlvbmxpbmVfbWVtb3J5X2V4cGVjdF9mYWlsICRtZW1vcnkg
+fHwgew0KPiA+ICsJCWVjaG8gIm9ubGluZSBtZW1vcnkgJG1lbW9yeTogdW5leHBlY3RlZCBzdWNj
+ZXNzIg0KPiANCj4gVGhlIGZ1bmN0aW9ucyB0aGVtc2VsZiBhbHJlYWR5IHByaW50IGFuIGVycm9y
+LCBpc24ndCBpdCBzdWZmaWNpZW50IHRvIHNldA0KPiByZXR2YWw9MT8NCg0KSW5kZWVkLCB0aGlz
+IGZ1bmN0aW9uIGlzIG9ubHkgY2FsbGVkIG9uY2UuIEl0IGlzIG5vIG5lZWQgdG8gYWRkIHRoZSBs
+b2cgaW5mby4NCg0KDQo+IA0KPiA+ICsJCXJldHZhbD0xDQo+ID4gKwl9DQo+ID4gICBkb25lDQo+
+ID4NCj4gPiAgICMNCj4gPiBAQCAtMjc0LDcgKzI3NywxMCBAQCBkb25lDQo+ID4gICAjDQo+ID4g
+ICBlY2hvIDAgPg0KPiAkTk9USUZJRVJfRVJSX0lOSkVDVF9ESVIvYWN0aW9ucy9NRU1fR09JTkdf
+T05MSU5FL2Vycm9yDQo+ID4gICBmb3IgbWVtb3J5IGluIGBob3RwbHVnZ2FibGVfb2ZmbGluZV9t
+ZW1vcnlgOyBkbw0KPiA+IC0Jb25saW5lX21lbW9yeV9leHBlY3Rfc3VjY2VzcyAkbWVtb3J5DQo+
+ID4gKwlvbmxpbmVfbWVtb3J5X2V4cGVjdF9zdWNjZXNzICRtZW1vcnkgfHwgew0KPiA+ICsJCWVj
+aG8gIm9ubGluZSBtZW1vcnkgJG1lbW9yeTogdW5leHBlY3RlZCBmYWlsIg0KPiA+ICsJCXJldHZh
+bD0xDQo+ID4gKwl9DQo+ID4gICBkb25lDQo+ID4NCj4gPiAgICMNCj4gPiBAQCAtMjgzLDcgKzI4
+OSwxMCBAQCBkb25lDQo+ID4gICBlY2hvICRlcnJvciA+DQo+ICROT1RJRklFUl9FUlJfSU5KRUNU
+X0RJUi9hY3Rpb25zL01FTV9HT0lOR19PRkZMSU5FL2Vycm9yDQo+ID4gICBmb3IgbWVtb3J5IGlu
+IGBob3RwbHVnZ2FibGVfb25saW5lX21lbW9yeWA7IGRvDQo+ID4gICAJaWYgWyAkKChSQU5ET00g
+JSAxMDApKSAtbHQgJHJhdGlvIF07IHRoZW4NCj4gPiAtCQlvZmZsaW5lX21lbW9yeV9leHBlY3Rf
+ZmFpbCAkbWVtb3J5DQo+ID4gKwkJb2ZmbGluZV9tZW1vcnlfZXhwZWN0X2ZhaWwgJG1lbW9yeSB8
+fCB7DQo+ID4gKwkJCWVjaG8gIm9mZmxpbmUgbWVtb3J5ICRtZW1vcnk6IHVuZXhwZWN0ZWQgc3Vj
+Y2VzcyINCj4gPiArCQkJcmV0dmFsPTENCj4gPiArCQl9DQo+IA0KPiBUaGVzZSBmdW5jdGlvbnMg
+cmV0dXJuIDAgaWYgdGhlIHJlc3VsdCBpcyBhcyBleHBlY3RlZCBhbmQgMSBpZiB0aGUgcmVzdWx0
+IGlzDQo+IHVuZXhwZWN0ZWQuDQo+IA0KPiAuLi4gYnV0IHdvdWxkbid0IHdlIGV2YWx1YXRlIHRo
+ZSByaWdodCBoYW5kIHNpZGUgb25seSBpZiB0aGUgcmVzdWx0IGlzICIwIiAtLQ0KPiBleHBlY3Rl
+ZD8gSSBtaWdodCBiZSB3cm9uZy4NCj4gDQoNClllcywgaWYgb2ZmbGluZV9tZW1vcnlfZXhwZWN0
+X2ZhaWwncyByZXR1cm4gdmFsdWUgaXMgbm90IHplcm8sIHRoZW4gaXQgd2lsbCBzZXQgJ3JldHZh
+bD0xJw0KDQo+IA0KPiBXb3VsZG4ndCBpdCBiZSBzaW1wbGVyIGRvIGl0IGFzIGluICJPbmxpbmUg
+YWxsIGhvdC1wbHVnZ2FibGUgbWVtb3J5IGFnYWluIg0KPiANCj4gaWYgISBvbmxpbmVfbWVtb3J5
+X2V4cGVjdF9zdWNjZXNzICRtZW1vcnk7IHRoZW4NCj4gCXJldHZhbD0xDQo+IGZpDQo+IA0KPiAo
+c2ltaWxhcmx5IGFkanVzdGluZyB0aGUgZnVuY3Rpb24gbmFtZSkNCg0KSSB3aWxsIHNlbmQgYSBu
+ZXcgdmVyc2lvbiBvZiB0aGUgcGF0Y2ggdG8gZml4IGl0Lg0KDQpLaW5kIHJlZ2FyZHMsDQpHb25n
+eWkNCg==
