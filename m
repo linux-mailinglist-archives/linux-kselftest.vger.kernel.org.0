@@ -2,96 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489E75ED6BB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 09:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174415ED7BC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 10:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbiI1Ht6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Sep 2022 03:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S233499AbiI1I30 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Sep 2022 04:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233642AbiI1HtS (ORCPT
+        with ESMTP id S233410AbiI1I3Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:49:18 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9212D744;
-        Wed, 28 Sep 2022 00:47:44 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 1169C1884B7D;
-        Wed, 28 Sep 2022 07:47:43 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id E96B42500370;
-        Wed, 28 Sep 2022 07:47:42 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id DA92A9EC0019; Wed, 28 Sep 2022 07:47:42 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Wed, 28 Sep 2022 04:29:25 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E92975FEC;
+        Wed, 28 Sep 2022 01:29:23 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4McqNS2R4CzHqMs;
+        Wed, 28 Sep 2022 16:27:04 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 28 Sep
+ 2022 16:29:20 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <shuah@kernel.org>, <victor@mojatatu.com>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next] selftests/tc-testing: update qdisc/cls/action features in config
+Date:   Wed, 28 Sep 2022 16:37:33 +0800
+Message-ID: <20220928083733.252290-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Date:   Wed, 28 Sep 2022 09:47:42 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <YzPwwuCe0HkJpkQe@shredder>
-References: <Yxmgs7Du62V1zyjK@shredder>
- <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
- <20220908112044.czjh3xkzb4r27ohq@skbuf>
- <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
- <20220911001346.qno33l47i6nvgiwy@skbuf>
- <15ee472a68beca4a151118179da5e663@kapio-technology.com>
- <Yx73FOpN5uhPQhFl@shredder>
- <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
- <Yyq6BnUfctLeerqE@shredder>
- <7a4549d645f9bbbf41e814f087eb07d1@kapio-technology.com>
- <YzPwwuCe0HkJpkQe@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <0c6b93c828d9b52346ddb3d445446734@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-09-28 08:59, Ido Schimmel wrote:
+Since three patchsets "add tc-testing test cases", "refactor duplicate
+codes in the tc cls walk function", and "refactor duplicate codes in the
+qdisc class walk function" are merged to net-next tree, the list of
+supported features needs to be updated in config file.
 
-> Why not found? This works:
-> 
->  # bridge fdb add 00:11:22:33:44:55 dev br0 self local
->  $ bridge fdb get 00:11:22:33:44:55 br br0
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+---
+ tools/testing/selftests/tc-testing/config | 25 ++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-With:
-  # bridge fdb replace 00.11.22.33.44.55 dev $swpX static
+diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
+index 2b2c2a835757..5ec7418a3c29 100644
+--- a/tools/testing/selftests/tc-testing/config
++++ b/tools/testing/selftests/tc-testing/config
+@@ -13,15 +13,28 @@ CONFIG_NET_SCHED=y
+ # Queueing/Scheduling
+ #
+ CONFIG_NET_SCH_ATM=m
++CONFIG_NET_SCH_CAKE=m
++CONFIG_NET_SCH_CBQ=m
++CONFIG_NET_SCH_CBS=m
+ CONFIG_NET_SCH_CHOKE=m
+ CONFIG_NET_SCH_CODEL=m
++CONFIG_NET_SCH_DRR=m
++CONFIG_NET_SCH_DSMARK=m
+ CONFIG_NET_SCH_ETF=m
+ CONFIG_NET_SCH_FQ=m
++CONFIG_NET_SCH_FQ_CODEL=m
+ CONFIG_NET_SCH_GRED=m
++CONFIG_NET_SCH_HFSC=m
+ CONFIG_NET_SCH_HHF=m
++CONFIG_NET_SCH_HTB=m
++CONFIG_NET_SCH_INGRESS=m
++CONFIG_NET_SCH_MQPRIO=m
++CONFIG_NET_SCH_MULTIQ=m
++CONFIG_NET_NET_SCH_NETEM=m
++CONFIG_NET_SCH_PIE=m
+ CONFIG_NET_SCH_PLUG=m
+ CONFIG_NET_SCH_PRIO=m
+-CONFIG_NET_SCH_INGRESS=m
++CONFIG_NET_SCH_QFQ=m
+ CONFIG_NET_SCH_SFB=m
+ CONFIG_NET_SCH_SFQ=m
+ CONFIG_NET_SCH_SKBPRIO=m
+@@ -37,6 +50,15 @@ CONFIG_NET_CLS_FW=m
+ CONFIG_NET_CLS_U32=m
+ CONFIG_CLS_U32_PERF=y
+ CONFIG_CLS_U32_MARK=y
++CONFIG_NET_CLS_BASIC=m
++CONFIG_NET_CLS_BPF=m
++CONFIG_NET_CLS_CGROUP=m
++CONFIG_NET_CLS_FLOW=m
++CONFIG_NET_CLS_FLOWER=m
++CONFIG_NET_CLS_MATCHALL=m
++CONFIG_NET_CLS_ROUTE4=m
++CONFIG_NET_CLS_RSVP=m
++CONFGI_NET_CLS_TCINDEX=m
+ CONFIG_NET_EMATCH=y
+ CONFIG_NET_EMATCH_STACK=32
+ CONFIG_NET_EMATCH_CMP=m
+@@ -68,6 +90,7 @@ CONFIG_NET_ACT_IFE=m
+ CONFIG_NET_ACT_TUNNEL_KEY=m
+ CONFIG_NET_ACT_CT=m
+ CONFIG_NET_ACT_MPLS=m
++CONFIG_NET_ACT_GATE=m
+ CONFIG_NET_IFE_SKBMARK=m
+ CONFIG_NET_IFE_SKBPRIO=m
+ CONFIG_NET_IFE_SKBTCINDEX=m
+-- 
+2.17.1
 
-fdb_find_rcu() will not find the entry added with 'dev br0' above, and 
-will thus add a new entry afaik.
