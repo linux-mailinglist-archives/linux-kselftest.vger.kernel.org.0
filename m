@@ -2,112 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF69B5ED69D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 09:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 489E75ED6BB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 09:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiI1HoB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Sep 2022 03:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S233672AbiI1Ht6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Sep 2022 03:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbiI1HnO (ORCPT
+        with ESMTP id S233642AbiI1HtS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Sep 2022 03:43:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA6D1138C6;
-        Wed, 28 Sep 2022 00:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C616661C2C;
-        Wed, 28 Sep 2022 07:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1572FC433D7;
-        Wed, 28 Sep 2022 07:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664350819;
-        bh=2oXepY+kJ5EmQKTE4f8lyro0vonBwLtTDrSU9LwLHMU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=RuhzEopZePXB52+e4734tH4+3i6qadG1syhVuP/ewTZpobJb2woX+ePqGoatc5TqI
-         dsZWzsTFnjBd3FWd8Okbi5CKqZl1S5JaHpOFkhbX8YzVssiayQE7/IB63AFHPQ9W37
-         pFvdFIGTBNsmXbFClNOTTqtzwvXWti8jLy8aWBrOO4l2x2rE4/WPXuTO99IBcnsSVP
-         NKOsiaY4Ph2/E+dK6XAx5orH1dRQrZ3Fr+IbjewBlrbaNbLhoc/KHf9KCqgvLwE/0N
-         sDnuGNZRTRLUZM8/AuVA5QScMvisulgoCt+6IGdZMI5AP7LMfzgVcPRqWVCiKFCMAE
-         /y1INZPGpd6nw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EACDFE4D035;
-        Wed, 28 Sep 2022 07:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 28 Sep 2022 03:49:18 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9212D744;
+        Wed, 28 Sep 2022 00:47:44 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 1169C1884B7D;
+        Wed, 28 Sep 2022 07:47:43 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id E96B42500370;
+        Wed, 28 Sep 2022 07:47:42 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id DA92A9EC0019; Wed, 28 Sep 2022 07:47:42 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next,v3 00/15] add tc-testing qdisc test cases
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166435081895.7457.3548028612225858722.git-patchwork-notify@kernel.org>
-Date:   Wed, 28 Sep 2022 07:40:18 +0000
-References: <20220924025157.331635-1-shaozhengchao@huawei.com>
-In-Reply-To: <20220924025157.331635-1-shaozhengchao@huawei.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        shuah@kernel.org, victor@mojatatu.com, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 28 Sep 2022 09:47:42 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <YzPwwuCe0HkJpkQe@shredder>
+References: <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+ <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+ <Yyq6BnUfctLeerqE@shredder>
+ <7a4549d645f9bbbf41e814f087eb07d1@kapio-technology.com>
+ <YzPwwuCe0HkJpkQe@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <0c6b93c828d9b52346ddb3d445446734@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+On 2022-09-28 08:59, Ido Schimmel wrote:
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Sat, 24 Sep 2022 10:51:42 +0800 you wrote:
-> For this patchset, test cases of the qdisc modules are added to the
-> tc-testing test suite.
+> Why not found? This works:
 > 
-> Last, thanks to Victor for testing and suggestion.
-> 
-> After a test case is added locally, the test result is as follows:
-> 
-> [...]
+>  # bridge fdb add 00:11:22:33:44:55 dev br0 self local
+>  $ bridge fdb get 00:11:22:33:44:55 br br0
 
-Here is the summary with links:
-  - [net-next,v3,01/15] selftests/tc-testing: add selftests for atm qdisc
-    https://git.kernel.org/netdev/net-next/c/0335833b10cd
-  - [net-next,v3,02/15] selftests/tc-testing: add selftests for choke qdisc
-    https://git.kernel.org/netdev/net-next/c/99e0f78d6bdd
-  - [net-next,v3,03/15] selftests/tc-testing: add selftests for codel qdisc
-    https://git.kernel.org/netdev/net-next/c/412233b1f7e7
-  - [net-next,v3,04/15] selftests/tc-testing: add selftests for etf qdisc
-    https://git.kernel.org/netdev/net-next/c/fa4b3e9f057b
-  - [net-next,v3,05/15] selftests/tc-testing: add selftests for fq qdisc
-    https://git.kernel.org/netdev/net-next/c/9e274718cc05
-  - [net-next,v3,06/15] selftests/tc-testing: add selftests for gred qdisc
-    https://git.kernel.org/netdev/net-next/c/a4a8d3562b07
-  - [net-next,v3,07/15] selftests/tc-testing: add selftests for hhf qdisc
-    https://git.kernel.org/netdev/net-next/c/225aeb62fe58
-  - [net-next,v3,08/15] selftests/tc-testing: add selftests for pfifo_fast qdisc
-    https://git.kernel.org/netdev/net-next/c/379a6509452e
-  - [net-next,v3,09/15] selftests/tc-testing: add selftests for plug qdisc
-    https://git.kernel.org/netdev/net-next/c/7d0b4b0ccb15
-  - [net-next,v3,10/15] selftests/tc-testing: add selftests for sfb qdisc
-    https://git.kernel.org/netdev/net-next/c/6ad92dc56fca
-  - [net-next,v3,11/15] selftests/tc-testing: add selftests for sfq qdisc
-    https://git.kernel.org/netdev/net-next/c/0158f65bfbdd
-  - [net-next,v3,12/15] selftests/tc-testing: add selftests for skbprio qdisc
-    https://git.kernel.org/netdev/net-next/c/c5a2d86b9228
-  - [net-next,v3,13/15] selftests/tc-testing: add selftests for taprio qdisc
-    https://git.kernel.org/netdev/net-next/c/8a3b3667ddbd
-  - [net-next,v3,14/15] selftests/tc-testing: add selftests for tbf qdisc
-    https://git.kernel.org/netdev/net-next/c/10835be3f0f7
-  - [net-next,v3,15/15] selftests/tc-testing: add selftests for teql qdisc
-    https://git.kernel.org/netdev/net-next/c/cc62fbe114c9
+With:
+  # bridge fdb replace 00.11.22.33.44.55 dev $swpX static
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+fdb_find_rcu() will not find the entry added with 'dev br0' above, and 
+will thus add a new entry afaik.
