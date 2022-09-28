@@ -2,110 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA105EDD28
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 14:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2B95EDE53
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 15:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbiI1MvV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Sep 2022 08:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S234245AbiI1N7G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Sep 2022 09:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbiI1MvT (ORCPT
+        with ESMTP id S230268AbiI1N7F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Sep 2022 08:51:19 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B15425EA8;
-        Wed, 28 Sep 2022 05:51:19 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id i15-20020a17090a4b8f00b0020073b4ac27so1613872pjh.3;
-        Wed, 28 Sep 2022 05:51:19 -0700 (PDT)
+        Wed, 28 Sep 2022 09:59:05 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A8254C9E
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Sep 2022 06:59:02 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id c19so7879425qkm.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Sep 2022 06:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=f7TsWwxU/w6JewgZ7REDLJD+bdMWMCvX/uiUT6tA2rg=;
-        b=jqXstJ8FNTK8Hqf3RFbWiBqHpZh2yMkTV8/GSaA2vjZ253Y4mX9LIqNdw5jnkk8dNR
-         H2E71e67qQhHFRzwGBR8u+Jy+VivAnxwluGAuQfmaZp2nvSNpG7tU0+aZMQMPhFg+HOX
-         6q1G1XIfaPaFUpP4ucTm55mluuuTPfCXYbCxt1sxVBMjifTp/W75WJnEb9IG+3VfneQm
-         8GEamWvjKrbrwd/D5V/8QE6a5uuo1NLH4uDCQkn5zbi0NyVbCnwLB44MjRmOF88RKUP+
-         2oGIuJrQ4Hd7doIcPmWfd+ZmF4FJWX+uUFs8aXbWLQvP4eUi3JwUhyjUrlA2RlXHlQnh
-         TILA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Xl3s6np3thQqV7b5PLy2sMzW5jKteWMBx5DZFvaLryE=;
+        b=JGOorsiYUNjvI8/WD7E2CgaiXHZQgB0JDGDdZb+8DhWqv7w5VxaqdmkMVPU3vKlnA4
+         hGfpg+dHdXAbwVeRNVK5yuL4XBBMjhpS9U6LcEIoXkhsRjeTo9XwC9RvddgpBIpcLM7E
+         oX/OcunbT/1d8V348Ux6/ZEPF+DnP1RUNhqMdE2pXckOJlyNmWEfwJmz9yz7ipVMyu3e
+         rfHcdl10jK5xZBtHvAfVTZS5FFEwY5A1u7/X82VuJ4xaNY1kHjDsV1BBsXLBsGezoCnl
+         8XuU1qyer25lMYkjlYc6Ty3UKKNY37O0cr+quxDXsiwIk2si9Mo0kkFvKE2WWqyl+3YR
+         QR5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=f7TsWwxU/w6JewgZ7REDLJD+bdMWMCvX/uiUT6tA2rg=;
-        b=3WG0nkuf3P/12M97nFauSVLneKwKvC5U8xbv7jw1zMVK1umhpb14eFD2DDzjBTme38
-         vKfl3nCW8KFmnk8+2yKR18/8/+7Zq2fH3I2Bv8WP1pDr3D3SCwxNwr6OFezOVSg/BB+I
-         NKuZyGr8YgU2LqxBRsdpo9HaCxArZp+OdhWc9AfiPCjOmAqPvFzS0wbgC+eQGEGzQskY
-         Iz8ON+PsxFs0DxMO3aqKhqIiqDqBixArwGRJUPLXlokLn95T01wj4401I4vXi93E6rjW
-         XRzpps4pmABQ71nWi5EXei0pYy3zT8FwLUHSE/zd1FL1Bt5yzwL5dhS7+JLWVTQi9Qg/
-         qdGQ==
-X-Gm-Message-State: ACrzQf0Iz5uYjFt/QqAiwMcIl94dYCSiYisr++AEuRtgfSOA9e0tgjGQ
-        9GRprSUG6yIZ4fIpLRBR/bw=
-X-Google-Smtp-Source: AMsMyM5WOS+DCvN6NZXTPIlyPGCHbxRC+zo9UUtJ2o1T1/nPGcvDzOaypZEUfsU1fY/ELxhNl+aRaA==
-X-Received: by 2002:a17:902:d4c3:b0:178:1d5b:fb10 with SMTP id o3-20020a170902d4c300b001781d5bfb10mr32649954plg.108.1664369478601;
-        Wed, 28 Sep 2022 05:51:18 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-28.three.co.id. [116.206.28.28])
-        by smtp.gmail.com with ESMTPSA id a12-20020a170902eccc00b0015e8d4eb219sm3714032plh.99.2022.09.28.05.51.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Sep 2022 05:51:17 -0700 (PDT)
-Message-ID: <be928578-6453-5cf1-32da-322aebe2cee5@gmail.com>
-Date:   Wed, 28 Sep 2022 19:51:09 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Xl3s6np3thQqV7b5PLy2sMzW5jKteWMBx5DZFvaLryE=;
+        b=ChGZDYnZ5AIMRyGEwF/ZNiD8rQKIH7uJV8kKygYniykLSVLX9qgO1BlcM6/JznyDqT
+         mRMIwK2Uz5lxUwrWgvS7caeSJqvFxK/hpZKBIlvofNsb32FqvsRZ4wagEAejKBS2OyMS
+         yuDSsxdPydnNkHsR94sp7haZih+JcZAVMZcYVwESoi9+ije3CAd22gSRzfkbEqSzvhV2
+         Ynu8uzBxyRuhlmxo/y5QligKNgpO2zWYXpV2Mr+uPIqxC/w8+8WV25YbYNXY7ivbBn6y
+         vHm1N24wo8fhvKamuFOzLyMlVeN3bzno/b6XC367droiPXPl5CsKyW4Ppf2D6OqgcJfR
+         tYlg==
+X-Gm-Message-State: ACrzQf1UE3ZiJTczlSh5/B4uSW7E8d4teaAzfBZIbpydUiuMD4wiwlHc
+        u7jo0ICWSZpt0/3ky0qi7aI5Y65ed5WlY9NDLdBx
+X-Google-Smtp-Source: AMsMyM4H+l18N+zAUfM6ee44zSsHUNaMWwjy7Dmkp444wZ/HV+lUoGmG6UBMyR5k3fA9S/QTZz1TipveiUtv2DF1SWw=
+X-Received: by 2002:a05:620a:29c9:b0:6ce:7681:19e9 with SMTP id
+ s9-20020a05620a29c900b006ce768119e9mr21006494qkp.297.1664373541846; Wed, 28
+ Sep 2022 06:59:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] Documentation: Kunit: Use full path to .kunitconfig
-Content-Language: en-US
-To:     Khalid Masum <khalid.masum.92@gmail.com>,
+References: <20220823142456.3977086-1-joefradley@google.com> <10f97a94-ab35-fbc7-4dd7-98586a027c8b@gmail.com>
+In-Reply-To: <10f97a94-ab35-fbc7-4dd7-98586a027c8b@gmail.com>
+From:   Joe Fradley <joefradley@google.com>
+Date:   Wed, 28 Sep 2022 06:58:50 -0700
+Message-ID: <CAF-60z2huZ0scPzrV8mrZGzH0Ha6-c+iszOdcpVV7y020m4arw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] kunit: add boot time parameter to enable KUnit
+To:     Tales Aparecida <tales.aparecida@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
         Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220928040058.37422-1-khalid.masum.92@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220928040058.37422-1-khalid.masum.92@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/28/22 11:00, Khalid Masum wrote:
-> The numbered list contains full path to every files that need to be
-> modified or created in order to implement misc-example kunit test.
-> Except for .kunitconfig. Which might make a newcommer confused about
-> where the file exists. Since there are multiple .kunitconfig files.
-> 
-> Fix this by using the full path to .kunitconfig.
-> 
+On Sat, Sep 24, 2022 at 5:42 PM Tales Aparecida
+<tales.aparecida@gmail.com> wrote:
+>
+> Hi,
+>
+>
+> This series is
+> Tested-by: Tales Aparecida <tales.aparecida@gmail.com>
+>
+> 1. Tested using kunit_tool: running tests and showing output as expected.
+>
+> 2. Tested further by running QEMU through virtme-run with:
+>    $ ../virtme/virtme-run --show-command --kdir ../linux/.for-amd/ --mods=auto --kopt kunit.enable=1
+>
+> 2.a. "KUNIT_DEFAULT_ENABLED" works as expected when "kunit.enable" is omitted
+> 2.b. kunit.enable=0 results in printing "kunit: disabled" on boot and on loading test modules, as expected
+> 3.c. kunit.enable=1 runs tests on boot and allows them to run when loading test modules
+>
+> 3. Regarding taint
+> 3.a. /proc/sys/kernel/tainted is 0 when kunit.enable=0 and does not change when trying to load test modules.
+> 3.b. /proc/sys/kernel/tainted is 0 when kunit.enable=1 until the first test runs, then it becomes 262144 (2^18) as expected.
 
-Better say:
+Tales, thank you for doing this testing.
 
-```
-The fourth list item on writing test cases instructs adding Kconfig
-fragments to .kunitconfig, which should have been full path to the file
-(.kunit/.kunitconfig).
-```
+>
+>
+> On other note, there's something I would like to delve into below.
+>
+>
+> On 23/08/2022 11:24, Joe Fradley wrote:
+> > v2:
+> >  - Added enable check in executor.c to prevent wrong error output from
+> >    kunit_tool.py when run against a KUnit disabled kernel
+> >  - kunit_tool.py now passes kunit.enable=1
+> >  - Flipped around logic of new config to KUNIT_DEFAULT_ENABLED
+> >  - Now load modules containing tests but not executing them
+> >  - Various message/description text clean up
+> >
+> > There are some use cases where the kernel binary is desired to be the same
+> > for both production and testing. This poses a problem for users of KUnit
+> > as built-in tests will automatically run at startup and test modules
+> > can still be loaded leaving the kernel in an unsafe state. There is a
+> > "test" taint flag that gets set if a test runs but nothing to prevent
+> > the execution.
+>
+> Do you have any info on whether these use cases would have something against writing tests for static functions using the documented approach of including the tests into the actual runtime code?
+> https://docs.kernel.org/dev-tools/kunit/usage.html#testing-static-functions
+>
+> Otherwise, would them agree to export the symbols that need to be tested?
+>
+> I would really like to understand better what are these use cases :)
 
-> -4. Add the following lines to ``.kunitconfig``:
-> +4. Add the following lines to ``.kunit/.kunitconfig``:
->  
->  .. code-block:: none
->  
+I feel using the static functions as described in your link is a good
+alternative to
+modules with embedded KUnit tests. However, this is a different use case then
+I refer to, which is the ability to have the framework embedded in the
+kernel for
+both production and test with the control of test execution gated on a kernel
+command line parameter.
 
-I think "Add the following lines" should be changed to something more
-descriptive in regards to what these lines are about (which in this
-case should be "Add following configuration fragments").
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
+>
+> >
+> > This patch adds the kunit.enable module parameter that will need to be
+> > set to true in addition to KUNIT being enabled for KUnit tests to run.
+> > The default value is true giving backwards compatibility. However, for
+> > the production+testing use case the new config option KUNIT_DEFAULT_ENABLED
+> > can be set to N requiring the tester to opt-in by passing kunit.enable=1 to
+> > the kernel.
+> >
+> > Joe Fradley (2):
+> >   kunit: add kunit.enable to enable/disable KUnit test
+> >   kunit: no longer call module_info(test, "Y") for kunit modules
+> >
+> >  .../admin-guide/kernel-parameters.txt         |  6 +++++
+> >  include/kunit/test.h                          |  3 ++-
+> >  lib/kunit/Kconfig                             | 11 +++++++++
+> >  lib/kunit/executor.c                          |  4 ++++
+> >  lib/kunit/test.c                              | 24 +++++++++++++++++++
+> >  tools/testing/kunit/kunit_kernel.py           |  1 +
+> >  6 files changed, 48 insertions(+), 1 deletion(-)
+> >
+>
+> Great work!
+>
+> Kind regards,
+> Tales
