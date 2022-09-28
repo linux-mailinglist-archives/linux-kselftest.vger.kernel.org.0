@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0796F5EE8BD
+	by mail.lfdr.de (Postfix) with ESMTP id AA3AB5EE8BF
 	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 23:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbiI1V4R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Sep 2022 17:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S234212AbiI1V4T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Sep 2022 17:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbiI1V4Q (ORCPT
+        with ESMTP id S233889AbiI1V4R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:56:16 -0400
+        Wed, 28 Sep 2022 17:56:17 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE444CE13;
-        Wed, 28 Sep 2022 14:56:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB27870B2;
+        Wed, 28 Sep 2022 14:56:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664402176; x=1695938176;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Mt51ZtHrZsJ0S2Nwi2p7REGTZebPRfuMMt9Z+Psz7TE=;
-  b=dzfV/xTcrKHjRgbHZF4qDi8nExj9LjklpEF+axxXDeTNIsy0/2uyiyCp
-   a6HWTFe6YEH7G0C1sjKk3z363CsuMgrQ9a2kdBL1Kv42iRvli3pCIUTSq
-   UhoromVt1i+gwBZ6NRpUZUP4GWgMi8wLSWsUDeDg4a2tlaMU15mnwqO3e
-   Tq3+aR2rIwmdJp9nmoTz4NTiIX1IRrGI0WIxnbS+VxKN3mWGQUFLiSbYd
-   5uJnB3ASLNvjg8vPI/drLZSw/9hfh5okkgchpzxXscsKkfucGrXwplaoC
-   xa0+7mIY2bQ6fwlzPzYPSTWck/IpobU2DORwvCfh5UWW4+gtaQi4bIMNP
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="363566930"
+  t=1664402177; x=1695938177;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=RtPINx+oQBut00jsinEziQIc2A8YqCByTG069MvBxfs=;
+  b=aSKoIsbgoJuf37VA4NJDxJxi5SYn1Ec+aLigw798GaLKtPXNjdANbmhY
+   1FlPXuclqIPaukJ2m1K3elmzc3TogtwpzWLobVU2Dn+7iEvU2BJu4mZ4Y
+   Jw2+Yd5DqhLIkRztmC/eTbxhJ+9B+Be7PX12xs9Hknh+1/7QGZukqLOZP
+   NBXhoJxO7Lk81OOjgVfLjSGj64gCr4GBPRArcQWe4qBFJEWR8eHESje32
+   Si3H1q9G+f7t0L2XtUPvNja0nrYP733AzF0ZHrvI2d5i4NQdp26FMiwkB
+   E20u924fZF9x28Cuc3sweqeCgigjwCdbHoqThwz2etlz0MXghOnL0GGzs
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="363566931"
 X-IronPort-AV: E=Sophos;i="5.93,353,1654585200"; 
-   d="scan'208";a="363566930"
+   d="scan'208";a="363566931"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 14:56:15 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="652848685"
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="652848695"
 X-IronPort-AV: E=Sophos;i="5.93,353,1654585200"; 
-   d="scan'208";a="652848685"
+   d="scan'208";a="652848695"
 Received: from mjpaul-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.66.23])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 14:56:15 -0700
 From:   Kuppuswamy Sathyanarayanan 
@@ -57,10 +57,12 @@ Cc:     "H . Peter Anvin" <hpa@zytor.com>,
         khalid.elmously@canonical.com, philip.cox@canonical.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH v14 0/3] Add TDX Guest Attestation support
-Date:   Wed, 28 Sep 2022 14:55:32 -0700
-Message-Id: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v14 1/3] x86/tdx: Make __tdx_module_call() usable in driver module
+Date:   Wed, 28 Sep 2022 14:55:33 -0700
+Message-Id: <20220928215535.26527-2-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -72,61 +74,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi All,
+To support TDX attestation, the TDX guest user interface driver must
+use the __tdx module_call() function in the driver to allow the user to
+obtain the TDREPORT.
 
-Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
-hosts and some physical attacks. VM guest with TDX support is called
-as a TDX Guest.
+So export the __tdx_module_call() and move the TDX Module IDs to
+asm/tdx.h.
 
-In TDX guest, attestation process is used to verify the TDX guest
-trustworthiness to other entities before provisioning secrets to the
-guest. For example, a key server may request for attestation before
-releasing the encryption keys to mount the encrypted rootfs or
-secondary drive.
+This is a preparatory patch for adding attestation support.
 
-This patch set adds attestation support for the TDX guest. Details
-about the TDX attestation process and the steps involved are explained
-in Documentation/x86/tdx.rst (added by patch 2/3).
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+---
 
-Following are the details of the patch set:
+Changes since v13:
+ * None
 
-Patch 1/3 -> Preparatory patch for adding attestation support.
-Patch 2/3 -> Adds user interface driver to support attestation.
-Patch 3/3 -> Adds selftest support for TDREPORT feature.
+ arch/x86/coco/tdx/tdcall.S | 2 ++
+ arch/x86/coco/tdx/tdx.c    | 5 -----
+ arch/x86/include/asm/tdx.h | 5 +++++
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-Commit log history is maintained in the individual patches.
-
-Kuppuswamy Sathyanarayanan (3):
-  x86/tdx: Make __tdx_module_call() usable in driver module
-  virt: Add TDX guest driver
-  selftests: tdx: Test TDX attestation GetReport support
-
- Documentation/virt/coco/tdx-guest.rst        |  42 +++++
- Documentation/virt/index.rst                 |   1 +
- Documentation/x86/tdx.rst                    |  43 +++++
- arch/x86/coco/tdx/tdcall.S                   |   2 +
- arch/x86/coco/tdx/tdx.c                      |   5 -
- arch/x86/include/asm/tdx.h                   |   6 +
- drivers/virt/Kconfig                         |   2 +
- drivers/virt/Makefile                        |   1 +
- drivers/virt/coco/tdx-guest/Kconfig          |  10 ++
- drivers/virt/coco/tdx-guest/Makefile         |   2 +
- drivers/virt/coco/tdx-guest/tdx-guest.c      | 131 ++++++++++++++
- include/uapi/linux/tdx-guest.h               |  53 ++++++
- tools/testing/selftests/Makefile             |   1 +
- tools/testing/selftests/tdx/Makefile         |   7 +
- tools/testing/selftests/tdx/config           |   1 +
- tools/testing/selftests/tdx/tdx_guest_test.c | 175 +++++++++++++++++++
- 16 files changed, 477 insertions(+), 5 deletions(-)
- create mode 100644 Documentation/virt/coco/tdx-guest.rst
- create mode 100644 drivers/virt/coco/tdx-guest/Kconfig
- create mode 100644 drivers/virt/coco/tdx-guest/Makefile
- create mode 100644 drivers/virt/coco/tdx-guest/tdx-guest.c
- create mode 100644 include/uapi/linux/tdx-guest.h
- create mode 100644 tools/testing/selftests/tdx/Makefile
- create mode 100644 tools/testing/selftests/tdx/config
- create mode 100644 tools/testing/selftests/tdx/tdx_guest_test.c
-
+diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
+index f9eb1134f22d..47a1534946c8 100644
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -3,6 +3,7 @@
+ #include <asm/asm.h>
+ #include <asm/frame.h>
+ #include <asm/unwind_hints.h>
++#include <asm/export.h>
+ 
+ #include <linux/linkage.h>
+ #include <linux/bits.h>
+@@ -75,6 +76,7 @@ SYM_FUNC_START(__tdx_module_call)
+ 	FRAME_END
+ 	RET
+ SYM_FUNC_END(__tdx_module_call)
++EXPORT_SYMBOL_GPL(__tdx_module_call);
+ 
+ /*
+  * __tdx_hypercall() - Make hypercalls to a TDX VMM using TDVMCALL leaf
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index 928dcf7a20d9..2dcc6021aa43 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -12,11 +12,6 @@
+ #include <asm/insn-eval.h>
+ #include <asm/pgtable.h>
+ 
+-/* TDX module Call Leaf IDs */
+-#define TDX_GET_INFO			1
+-#define TDX_GET_VEINFO			3
+-#define TDX_ACCEPT_PAGE			6
+-
+ /* TDX hypercall Leaf IDs */
+ #define TDVMCALL_MAP_GPA		0x10001
+ 
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+index 020c81a7c729..34c00d8a5263 100644
+--- a/arch/x86/include/asm/tdx.h
++++ b/arch/x86/include/asm/tdx.h
+@@ -18,6 +18,11 @@
+ #define TDX_SW_ERROR			(TDX_ERROR | GENMASK_ULL(47, 40))
+ #define TDX_SEAMCALL_VMFAILINVALID	(TDX_SW_ERROR | _UL(0xFFFF0000))
+ 
++/* TDX module Call Leaf IDs */
++#define TDX_GET_INFO			1
++#define TDX_GET_VEINFO			3
++#define TDX_ACCEPT_PAGE			6
++
+ #ifndef __ASSEMBLY__
+ 
+ /*
 -- 
 2.34.1
 
