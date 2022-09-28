@@ -2,94 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC2B5EE8AA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 23:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0796F5EE8BD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 23:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234157AbiI1VvE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Sep 2022 17:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S233913AbiI1V4R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Sep 2022 17:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234809AbiI1Vuz (ORCPT
+        with ESMTP id S231782AbiI1V4Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Sep 2022 17:50:55 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462A68C010;
-        Wed, 28 Sep 2022 14:50:54 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id iv17so9302407wmb.4;
-        Wed, 28 Sep 2022 14:50:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=zB9rqqvbjvVxpdcrL93MXJfKb/J0urKxQpQUWhHbEsc=;
-        b=RNJzT7yVog3c8NvQJjfHBUbtrSy3WqfQCFoK5OjQ3C27DSH2m1sX9TOwybT2krTWCC
-         pPl2oa29GVrL4XAXf9FubvdnmsfzTBW5mSZcOuYAjkqz1sNxEmKkn0AxxsIpDTtpZjfd
-         Xv5IW3UD2vqw+9GF6jF6I9kFc3RUzI467D3Cr1hrHnlh8XvOV6F0SzGqUvoQ2dK1g+po
-         6+kLpZr6G3Tf7xDV8zLVI61dUaPyqWePTM/sRyAuNcZ4Q751UnVK1+Nv9dVRUX780NyK
-         3p91Saj4/nR+yUKUO86EZJX8b5ctvZk4YgVuzrJG1zv9pbYAN7bb1Zix7LYE0yx5TKK8
-         UFxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=zB9rqqvbjvVxpdcrL93MXJfKb/J0urKxQpQUWhHbEsc=;
-        b=B0PkUciUfBYSmA5pGJwym9Z8S5bVvwjYFaekWuhlStmM54hp5/VFZuSw2NAzFKyQQY
-         3rmqdkzYSv8/8k5EdUP8yV15h/OtfINNGhy1GtiTFKImpPXl2Dg/CGjHPqjDrrzjXzsw
-         pcd09htXGGRDV5Ceh9FkTIK3eI0JjGvLcbeYUTDA43u0uYNV3u85qlK4t744QsifgIhC
-         oF0nX0pw+ouCrt0UlRK52qFMrWlD7pcvg9BqwCk8DmYDFKb5e30Wehp8g62QAbmDjZQD
-         Qd9l8GU975ayZcoaOrqv7FgW7DpQrzN3kxKVdKkNGRPz5NCayZN4rvqCdYGm8TYGDuBZ
-         Ewtw==
-X-Gm-Message-State: ACrzQf1jUboq4CoEgDxIfEF6hEMjzoURCFp+kFUeXYu41+tqX8sNAY5G
-        MziEH0hlBgwHxtSwhlu8LAE=
-X-Google-Smtp-Source: AMsMyM6j5QBbGC2iAuhe51N1wLpquPlgnW5/oXFPFauihkffWdlUV2BgwefBIs/W/0nlGYvFIk4FtQ==
-X-Received: by 2002:a05:600c:4352:b0:3b4:84c0:2006 with SMTP id r18-20020a05600c435200b003b484c02006mr34776wme.205.1664401852657;
-        Wed, 28 Sep 2022 14:50:52 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id j1-20020a05600c42c100b003b3401f1e24sm2579686wme.28.2022.09.28.14.50.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Sep 2022 14:50:52 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        David Matlack <dmatlack@google.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftests: Fix spelling mistake "miliseconds" -> "milliseconds"
-Date:   Wed, 28 Sep 2022 22:50:51 +0100
-Message-Id: <20220928215051.65632-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 28 Sep 2022 17:56:16 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE444CE13;
+        Wed, 28 Sep 2022 14:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664402176; x=1695938176;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Mt51ZtHrZsJ0S2Nwi2p7REGTZebPRfuMMt9Z+Psz7TE=;
+  b=dzfV/xTcrKHjRgbHZF4qDi8nExj9LjklpEF+axxXDeTNIsy0/2uyiyCp
+   a6HWTFe6YEH7G0C1sjKk3z363CsuMgrQ9a2kdBL1Kv42iRvli3pCIUTSq
+   UhoromVt1i+gwBZ6NRpUZUP4GWgMi8wLSWsUDeDg4a2tlaMU15mnwqO3e
+   Tq3+aR2rIwmdJp9nmoTz4NTiIX1IRrGI0WIxnbS+VxKN3mWGQUFLiSbYd
+   5uJnB3ASLNvjg8vPI/drLZSw/9hfh5okkgchpzxXscsKkfucGrXwplaoC
+   xa0+7mIY2bQ6fwlzPzYPSTWck/IpobU2DORwvCfh5UWW4+gtaQi4bIMNP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="363566930"
+X-IronPort-AV: E=Sophos;i="5.93,353,1654585200"; 
+   d="scan'208";a="363566930"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 14:56:15 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="652848685"
+X-IronPort-AV: E=Sophos;i="5.93,353,1654585200"; 
+   d="scan'208";a="652848685"
+Received: from mjpaul-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.66.23])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2022 14:56:15 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v14 0/3] Add TDX Guest Attestation support
+Date:   Wed, 28 Sep 2022 14:55:32 -0700
+Message-Id: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-There is a spelling mistake in some help text. Fix it.
+Hi All,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+hosts and some physical attacks. VM guest with TDX support is called
+as a TDX Guest.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-index e19933ea34ca..62827d121c4f 100644
---- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-@@ -211,7 +211,7 @@ static void help(char *name)
- 	puts("");
- 	printf("usage: %s [-h] [-p period_ms] [-t token]\n", name);
- 	puts("");
--	printf(" -p: The NX reclaim period in miliseconds.\n");
-+	printf(" -p: The NX reclaim period in milliseconds.\n");
- 	printf(" -t: The magic token to indicate environment setup is done.\n");
- 	printf(" -r: The test has reboot permissions and can disable NX huge pages.\n");
- 	puts("");
+In TDX guest, attestation process is used to verify the TDX guest
+trustworthiness to other entities before provisioning secrets to the
+guest. For example, a key server may request for attestation before
+releasing the encryption keys to mount the encrypted rootfs or
+secondary drive.
+
+This patch set adds attestation support for the TDX guest. Details
+about the TDX attestation process and the steps involved are explained
+in Documentation/x86/tdx.rst (added by patch 2/3).
+
+Following are the details of the patch set:
+
+Patch 1/3 -> Preparatory patch for adding attestation support.
+Patch 2/3 -> Adds user interface driver to support attestation.
+Patch 3/3 -> Adds selftest support for TDREPORT feature.
+
+Commit log history is maintained in the individual patches.
+
+Kuppuswamy Sathyanarayanan (3):
+  x86/tdx: Make __tdx_module_call() usable in driver module
+  virt: Add TDX guest driver
+  selftests: tdx: Test TDX attestation GetReport support
+
+ Documentation/virt/coco/tdx-guest.rst        |  42 +++++
+ Documentation/virt/index.rst                 |   1 +
+ Documentation/x86/tdx.rst                    |  43 +++++
+ arch/x86/coco/tdx/tdcall.S                   |   2 +
+ arch/x86/coco/tdx/tdx.c                      |   5 -
+ arch/x86/include/asm/tdx.h                   |   6 +
+ drivers/virt/Kconfig                         |   2 +
+ drivers/virt/Makefile                        |   1 +
+ drivers/virt/coco/tdx-guest/Kconfig          |  10 ++
+ drivers/virt/coco/tdx-guest/Makefile         |   2 +
+ drivers/virt/coco/tdx-guest/tdx-guest.c      | 131 ++++++++++++++
+ include/uapi/linux/tdx-guest.h               |  53 ++++++
+ tools/testing/selftests/Makefile             |   1 +
+ tools/testing/selftests/tdx/Makefile         |   7 +
+ tools/testing/selftests/tdx/config           |   1 +
+ tools/testing/selftests/tdx/tdx_guest_test.c | 175 +++++++++++++++++++
+ 16 files changed, 477 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/virt/coco/tdx-guest.rst
+ create mode 100644 drivers/virt/coco/tdx-guest/Kconfig
+ create mode 100644 drivers/virt/coco/tdx-guest/Makefile
+ create mode 100644 drivers/virt/coco/tdx-guest/tdx-guest.c
+ create mode 100644 include/uapi/linux/tdx-guest.h
+ create mode 100644 tools/testing/selftests/tdx/Makefile
+ create mode 100644 tools/testing/selftests/tdx/config
+ create mode 100644 tools/testing/selftests/tdx/tdx_guest_test.c
+
 -- 
-2.37.1
+2.34.1
 
