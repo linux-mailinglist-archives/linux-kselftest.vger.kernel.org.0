@@ -2,155 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B275ED473
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 08:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1FE5ED58F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 08:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232667AbiI1GEL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Sep 2022 02:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S231301AbiI1G7g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Sep 2022 02:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiI1GEK (ORCPT
+        with ESMTP id S232518AbiI1G7a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Sep 2022 02:04:10 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2175F11A68C;
-        Tue, 27 Sep 2022 23:04:08 -0700 (PDT)
-Received: from [192.168.10.9] (unknown [39.45.148.204])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BE0B0660221F;
-        Wed, 28 Sep 2022 07:04:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664345045;
-        bh=bCIwW7EnoB27URDSRgUhCbHMbob8kMA51uretneCH6Q=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=N3+1KZuO5H04WNxoCOUnyir8XcV1ug7Z1d4L9L8SOJ8okF7JdcbpmOdS1qo7K84TM
-         S8jYu4V3IIxMf7oYORnrWJPqcJGYHpXA4m1d9NV66kS2ESmpwPrpTEdMT2+01ajYna
-         NcQBJAXjNf8o87NA3HY5Id3TTdprvTEQM6rAe07MMPPbre+we4/meeAE3pYKjq/Q5r
-         cmUCvTAkyCynARQChugIhgjgfzjJ7a9gvAQzGXseBfurkAIISOcPiSyRhYUYX/aU8a
-         84A3KfYvhLZ2Q4eaeA7V60Td5yReER5N2f1Wv5QSlCoS41Fnq6ojT91/iHVmk7SUF0
-         7ZnF7rDUz1fvw==
-Message-ID: <26380310-05c6-3e57-d05a-e6e373335232@collabora.com>
-Date:   Wed, 28 Sep 2022 11:03:58 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Wed, 28 Sep 2022 02:59:30 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2071.outbound.protection.outlook.com [40.107.96.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B24C76752;
+        Tue, 27 Sep 2022 23:59:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dor0jMFUUZxzlLSP0bz/crtOPaJMqCNVqtbBc8BFGhZMGjxcWO6ow52he+dCv6yBN/9Dsr0kYndcDJvZe0+vijojy3nVjydsMiie8SUl9wsWzMa3ezLID9iGagZBf0uztLU5rpiE1p5kwbVBkMr/B+q4amNp3hpEPaBRMV2rGyi5EN1PdmqXppleDjigGEwdUFqfCtVxKHVqbt2MN7KbvVVQH9wixRmj4pDQKGyGiTw25vhe7m5NrbNGWW+heu5VyAn5v3MwWnUSwTLQzwf814loyhkunzR/mLWGRo7RUc9Psjnmbpbo8BGiDZ23GoEGISqtoLEhu7uIKYnvLd5tbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O5M8Fx1V6BI9wC4Rfe4cdEOngK8wJXgYTrL1iDgs66Q=;
+ b=ZNyOMi0cXey1gJZXehy25S5+d2PRy57bVDnkmCwJgdd7KlfkH2717mxutHCorFTRiWdIFbzrmVk4LkrwhCLrF2AmmlZs4yvPMNxoIjnpYeV50u5WR1ep2OVpgYYiXADyu3jufEKuFMFhD1S9iMKg9gcHEIDGh0Q6Xeb61zq0tWLJP5rHpfS7L4qTszL88airFUYjwlU1pqQi/+kXWQVEPQW/++SzbfVGLwEN+v0hi6b52ap/BqoE7IUrHtU31QsP4TR3pXmA3Um5YhsyhbDOA0SWVrw0mzk/sMV15RVfe0Qht90G16a7xRZzFz3D6FV246i7i4wy6N0XQ74gTROtmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O5M8Fx1V6BI9wC4Rfe4cdEOngK8wJXgYTrL1iDgs66Q=;
+ b=F9UWqSRerbKkdC7/PEgRQL6dpyJmzEedY7clfpPJgtBfUhHkOA7rCpckCu2t5wsKGsZRVqo0Jrli/A8nCYP6/PQt0PYOX/mQCKz70pThCQot3b47k0U4SfQpfBaU1G88yBPWv0/NMdMPi6c8mRoKeZf5XjkD442xM33pgvpJnBeI2MaqlxfWXg0piM5r5jfE/s1BXSVilHJ+Ni+rHLXbFSU1eFnLuuWp2MOBwTF10HOfICx4UToB5Pq1+sxjK3PVCsIEwKZPBW69vguWcgQ0JTgUImmhhK56h7VAi18XS1ehNSe29a8ssUd2ghrLIabt/2cIv9DALO/UXbgYSbcBgQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by IA1PR12MB7591.namprd12.prod.outlook.com (2603:10b6:208:429::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Wed, 28 Sep
+ 2022 06:59:20 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::8f0b:1a79:520a:64c5]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::8f0b:1a79:520a:64c5%7]) with mapi id 15.20.5676.017; Wed, 28 Sep 2022
+ 06:59:20 +0000
+Date:   Wed, 28 Sep 2022 09:59:14 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     netdev@kapio-technology.com
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
         Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20220826064535.1941190-1-usama.anjum@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220826064535.1941190-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+Message-ID: <YzPwwuCe0HkJpkQe@shredder>
+References: <Yxmgs7Du62V1zyjK@shredder>
+ <8dfc9b525f084fa5ad55019f4418a35e@kapio-technology.com>
+ <20220908112044.czjh3xkzb4r27ohq@skbuf>
+ <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
+ <20220911001346.qno33l47i6nvgiwy@skbuf>
+ <15ee472a68beca4a151118179da5e663@kapio-technology.com>
+ <Yx73FOpN5uhPQhFl@shredder>
+ <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
+ <Yyq6BnUfctLeerqE@shredder>
+ <7a4549d645f9bbbf41e814f087eb07d1@kapio-technology.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a4549d645f9bbbf41e814f087eb07d1@kapio-technology.com>
+X-ClientProxiedBy: VI1PR08CA0260.eurprd08.prod.outlook.com
+ (2603:10a6:803:dc::33) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|IA1PR12MB7591:EE_
+X-MS-Office365-Filtering-Correlation-Id: c27bc2a2-0f81-40e3-17c6-08daa11ef778
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /A5xdkglto+Dv25v260nux4jlaXibWjzsemO+ZeQ+4AxRoOvs2CQdb+rbbA8vuI1ZvE949pCI7zcZ3J2iFj6D6vtf2c4mjnNUl/rOHbc7vpPITrCB5d8wiwgxhwZ9PUhkNxz2EuqA7YTd/ananak5dwZWp5VSmeE3wc0MkWN7zjS7zYcKYQiAv4vAgtfkuS6zu/V9mPrIr5fqXz+SJEgWxV5WfjdzvGZIyHYgc9nWUcG/WYiYdsPy+Dzsx5lFoAq1e/kUcbsW2ZHfRn7WxsOZnymJRtQQ9lrHZ7LSrDCpzQ2yIVDsEJ+YLTPbth6vGjSfpAGv3tK3rRXqjcaTpt2e610kjPdk4Mnx43jlLIboy2shASe+iJpwnGKgujP0mwlIT4dtSWuBz7uyFtkE2bsfKuJ8vdPKbFrJSmiWAwVOIPmWojrde4RlMTqYLVZnvHphxUOETd9QA2TSCksPL2LLZbARKnqj7UmAuRupYSlVVkJXh7pmyjB86SV7HAiJe7oZMYRrx20Yg5G1DSCwB3ePHzw2xT6YE+WP6h9AKN1HcsoxfA43GevIRFnnIR2gA6POXt4XFfq0+pfGluZj+gq+SWcaqSUaJwscMsphBhpbb8R9ah/uOpt8j7TkqXOTvjWuxaapogfyp6r3x4UBGtnuCdbnvA/xMjVVV1xPqEp5IGhTfa5MDjpmB1Ww6lWdm8b
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(39860400002)(136003)(366004)(376002)(346002)(396003)(451199015)(478600001)(6486002)(86362001)(2906002)(54906003)(7406005)(7416002)(5660300002)(41300700001)(8936002)(26005)(8676002)(66946007)(66556008)(33716001)(4326008)(316002)(6916009)(66476007)(6666004)(53546011)(6506007)(9686003)(6512007)(38100700002)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NOUzIJh593pcLKtnwi/r3OGZDUBj7v/yugSFcJdOb4QGvLLtPKp19S9+7J5o?=
+ =?us-ascii?Q?X7mx1INPsdLUMjnYZWHaRR5ewaQRZzQaWM1laElBDF0utmwjUV5HbGDfwIYJ?=
+ =?us-ascii?Q?P0V6mEZ0A+YRtf1dUsJNSxpxGntJbjGe8HrUuNwA/dRvBApjWJSQH1wSUrRu?=
+ =?us-ascii?Q?azWZabPlxEIR9wuTdGtrzLtrsY/sU8oKLJBc1vAXv6JpoQOO7+zsr7wXiYHK?=
+ =?us-ascii?Q?SiTTQfQIbz6aLjpli6kL4wG1MXo1ga+n/9r1a2YFkQuZiUa4T8maItHsvD5g?=
+ =?us-ascii?Q?KUCvKe7GQd8DDZQmXtLTh+xGYtHU84s6WlSV8FYw9cnPVpflXaaVj8cy5bw5?=
+ =?us-ascii?Q?al27jTxF+VSmHDcbbw8j1kJS2oy8BagWzjjzaVd5H35iIbuWvLByHM2UOnsX?=
+ =?us-ascii?Q?jZvkE87jXUYrtoPvbBAR/0alz9ihFFPLAm8LJfGkBy3lbEyNr6Hi2stBzpMh?=
+ =?us-ascii?Q?7lyhcs0oqYnOS8awswDFtIsUy3YfKTUa9mjUKBcXhBKbNpX3zIqagsm3e8b7?=
+ =?us-ascii?Q?uPdwdDvDcz7f6CWW3H70pKdPS4u+RTytmQ/xqWgIo+sJE2Z3JVbqNZLTGNcK?=
+ =?us-ascii?Q?8XXBPIHKY9NeVNLYDBj7ZJe0zVx/OzXppT4JhP8UyI14b1Afh9E1bI5bcSiT?=
+ =?us-ascii?Q?b91e3eynoQXapLT1RU9BzLOpwaMSWQoJBxRfGxVHm1srBIJV1JF4Ky4lMsGy?=
+ =?us-ascii?Q?/TXzpKYzwRb8J4ciso7i6vkNwIqmBHSbomTm1PyGrkgFDOkJhNW5sZAOX7KD?=
+ =?us-ascii?Q?bxuDTs2nGoPnZTGTmu6myrT9VyaAulhF1SBF+uaBWD+6Fg8In2eCtuLUI8jt?=
+ =?us-ascii?Q?pNKsYHIRmve8JVWJh1+Xro7Vb2rlpGfiVVEioCEBeFkmx4Cpjm8mG+n9bLzi?=
+ =?us-ascii?Q?7iBEUuE3uOilCHhLYI4qUZcJSvxZlz7EPAhtvCowlb7YjGgrBGmdl6mogfxQ?=
+ =?us-ascii?Q?s1Ts98hUB43HojG1Ru6MxciRViwzErw4WXtATAzb2pbb6HsyS2lKskQTbxZt?=
+ =?us-ascii?Q?iyFc2c9RVvQadZiWAhTGt3q5jmkaMUU+heAHvbiQaoX5RSy3XIYD2Izc1ONf?=
+ =?us-ascii?Q?nGFkog3dbHq6v8Lmomm5WlsQjTq37UdYVY889QKeZf0HqZzaPpM4I1nNDve7?=
+ =?us-ascii?Q?4WpwXf8+TVlSxsyASSUfnCb3PYynu+qWsbnXlzONwuJ+PaVqN9/PWv8n8a3C?=
+ =?us-ascii?Q?XRIxs5FbHGBrERhtDXDZMiX/1+JbHCbt3VScYyu+dKlJUQfIUmRWbxltqdql?=
+ =?us-ascii?Q?uWx0kL/FVXWOYmzwooNMlxeQ01otjcNXh21f6hoh6wVQwYllpeff4uByLEfW?=
+ =?us-ascii?Q?h67Qbfw4pa1o5DaP6FLZ2Gj6yzb68Z/jC0d3aaZPap/fcxKdymtJlpduA96D?=
+ =?us-ascii?Q?2a0SAO8nC5t8ENjy16hu6mZvzHSqFgs4ikjrnv9qTfssii0W5lm4uln89s5G?=
+ =?us-ascii?Q?L9von1/nadsHLI8x9XzN+RiQQ8SD3Vi+bowyxmj0kys4+Dz6BZDVkijSL7T0?=
+ =?us-ascii?Q?PPBnPSzY8UKK17I4mSEdtRMs18hGRCFKdxEzzGaJsFns0FWDw+T0gcuRKnWI?=
+ =?us-ascii?Q?9ES0XQGA5XcywpDQmAs0rh6B2TWvTA3kmtPMk/EE?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c27bc2a2-0f81-40e3-17c6-08daa11ef778
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2022 06:59:20.0686
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yy4w5OcTXRtai5Oh4ScIo2U9AJi3s/R8tT2chGB181SO0O4GV9HjOrhp4qZHg15d8qqxWkFRYQoEyZyi5IVgig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7591
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Any thoughts about it?
+Sorry for the delay, was away.
 
-On 8/26/22 11:45 AM, Muhammad Usama Anjum wrote:
+On Tue, Sep 27, 2022 at 10:33:10AM +0200, netdev@kapio-technology.com wrote:
+> On 2022-09-21 09:15, Ido Schimmel wrote:
+> > 	bridge fdb add `mac_get $h2` dev br0 blackhole
 > 
-> Hello,
+> To make this work, I think we need to change the concept, so that blackhole
+> FDB entries are added to ports connected to the bridge, thus
+>      bridge fdb add MAC dev $swpX master blackhole
 > 
-> This patch series implements a new ioctl on the pagemap proc fs file to
-> get, clear and perform both get and clear at the same time atomically on
-> the specified range of the memory.
-> 
-> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
-> procfs file. The soft-dirty PTE bit for the whole memory range of the
-> process can be cleared by writing to the clear_refs file. This series
-> adds features that weren't present earlier.
-> - There is no atomic get soft-dirty PTE bit status and clear operation
->   present.
-> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
-> 
-> Historically, soft-dirty PTE bit tracking has been used in the CRIU
-> project. The proc fs interface is enough for that as I think the process
-> is frozen. We have the use case where we need to track the soft-dirty
-> PTE bit for the running processes. We need this tracking and clear
-> mechanism of a region of memory while the process is running to emulate
-> the getWriteWatch() syscall of Windows. This syscall is used by games to
-> keep track of dirty pages and keep processing only the dirty pages. This
-> new ioctl can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information.
-> 
-> As in the current kernel there is no way to clear a part of memory (instead
-> of clearing the Soft-Dirty bits for the entire process) and get+clear
-> operation cannot be performed atomically, there are other methods to mimic
-> this information entirely in userspace with poor performance:
-> - The mprotect syscall and SIGSEGV handler for bookkeeping
-> - The userfaultfd syscall with the handler for bookkeeping
-> Some benchmarks can be seen [1].
-> 
-> This ioctl can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information. The following operations are
-> supported in this ioctl:
-> - Get the pages that are soft-dirty.
-> - Clear the pages which are soft-dirty.
-> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
-> soft-dirty PTE bit
-> 
-> There are two decisions which have been taken about how to get the output
-> from the syscall.
-> - Return offsets of the pages from the start in the vec
-> - Stop execution when vec is filled with dirty pages
-> These two arguments doesn't follow the mincore() philosophy where the
-> output array corresponds to the address range in one to one fashion, hence
-> the output buffer length isn't passed and only a flag is set if the page
-> is present. This makes mincore() easy to use with less control. We are
-> passing the size of the output array and putting return data consecutively
-> which is offset of dirty pages from the start. The user can convert these
-> offsets back into the dirty page addresses easily. Suppose, the user want
-> to get first 10 dirty pages from a total memory of 100 pages. He'll
-> allocate output buffer of size 10 and the ioctl will abort after finding the
-> 10 pages. This behaviour is needed to support Windows' getWriteWatch(). The
-> behaviour like mincore() can be achieved by passing output buffer of 100
-> size. This interface can be used for any desired behaviour.
-> 
-> [1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
-> 
-> Regards,
-> Muhammad Usama Anjum
-> 
-> Muhammad Usama Anjum (4):
->   fs/proc/task_mmu: update functions to clear the soft-dirty PTE bit
->   fs/proc/task_mmu: Implement IOCTL to get and clear soft dirty PTE bit
->   selftests: vm: add pagemap ioctl tests
->   mm: add documentation of the new ioctl on pagemap
-> 
->  Documentation/admin-guide/mm/soft-dirty.rst |  42 +-
->  fs/proc/task_mmu.c                          | 342 ++++++++++-
->  include/uapi/linux/fs.h                     |  23 +
->  tools/include/uapi/linux/fs.h               |  23 +
->  tools/testing/selftests/vm/.gitignore       |   1 +
->  tools/testing/selftests/vm/Makefile         |   2 +
->  tools/testing/selftests/vm/pagemap_ioctl.c  | 649 ++++++++++++++++++++
->  7 files changed, 1050 insertions(+), 32 deletions(-)
->  create mode 100644 tools/testing/selftests/vm/pagemap_ioctl.c
-> 
+> This makes sense as the driver adds them based on the port where the SMAC is
+> seen, even though the effect of the blackhole FDB entry is switch wide.
 
--- 
-Muhammad Usama Anjum
+Asking user space to associate a blackhole entry with a bridge port does
+not make sense to me because unlike regular entries, blackhole entries
+do not forward packets out of this port. Blackhole routes and nexthops
+are not associated with a device either.
+
+> Adding them to the bridge (e.g. f.ex. br0) will not work in the SW bridge as
+> the entries then are not found.
+
+Why not found? This works:
+
+ # bridge fdb add 00:11:22:33:44:55 dev br0 self local
+ $ bridge fdb get 00:11:22:33:44:55 br br0
+ 00:11:22:33:44:55 dev br0 master br0 permanent
+
+With blackhole support I expect:
+
+ # bridge fdb add 00:11:22:33:44:55 dev br0 self local blackhole
+ $ bridge fdb get 00:11:22:33:44:55 br br0
+ 00:11:22:33:44:55 dev br0 master br0 permanent blackhole
