@@ -2,75 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C7D5EE41E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 20:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BD05EE483
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Sep 2022 20:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbiI1SPx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Sep 2022 14:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
+        id S233782AbiI1SoX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Sep 2022 14:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbiI1SPu (ORCPT
+        with ESMTP id S231269AbiI1SoW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Sep 2022 14:15:50 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B49DCEA5;
-        Wed, 28 Sep 2022 11:15:44 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 42E951884BE5;
-        Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 39ED02500709;
-        Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 0)
-        id 269CF9EC000D; Wed, 28 Sep 2022 18:15:41 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 26EAA9120FED;
-        Wed, 28 Sep 2022 17:52:14 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        "Hans J. Schultz" <netdev@kapio-technology.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v6 net-next 9/9] selftests: forwarding: add test of MAC-Auth Bypass to locked port tests
-Date:   Wed, 28 Sep 2022 19:49:04 +0200
-Message-Id: <20220928174904.117131-1-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 28 Sep 2022 14:44:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC639E68F
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Sep 2022 11:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664390659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SbtPQhX9I84OROKbhbdRw5uccBlUUiAh7Z+QGzKyldg=;
+        b=cQh4UdgkvRXE0R3uHhtp6S7VuK2AXUGo32NUO1u6pFpoSECdqzAaok0pvvKH/CFIhpomNb
+        I/GUP86jjMtiHMhBXVXpknwbwZ/KLlYAtVOPGw8KUaD8/r5UyISxuWNw3Yyc6SVuEsWY2C
+        aMez8kUYvDKU+QAWpzNwdO6UkeZD9Eo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-237-bjLl8cFAM5uc8tFFsHq22w-1; Wed, 28 Sep 2022 14:44:16 -0400
+X-MC-Unique: bjLl8cFAM5uc8tFFsHq22w-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C629329AB401;
+        Wed, 28 Sep 2022 18:44:15 +0000 (UTC)
+Received: from jsavitz-csb.redhat.com (unknown [10.22.11.106])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 27169492B04;
+        Wed, 28 Sep 2022 18:44:14 +0000 (UTC)
+From:   Joel Savitz <jsavitz@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-next@vger.kernel.org,
+        Nico Pache <npache@redhat.com>
+Subject: [PATCH linux-next v5] selftests/vm: enable running select groups of tests
+Date:   Wed, 28 Sep 2022 21:44:07 +0300
+Message-Id: <20220928184407.628486-1-jsavitz@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,329 +59,426 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Hans J. Schultz" <netdev@kapio-technology.com>
+Our memory management kernel CI testing at Red Hat uses the VM
+selftests and we have run into two problems:
 
-Verify that the MAC-Auth mechanism works by adding a FDB entry with the
-locked flag set, denying access until the FDB entry is replaced with a
-FDB entry without the locked flag set.
+First, our LTP tests overlap with the VM selftests.
 
-Add test of blackhole fdb entries, verifying that there is no forwarding
-to a blackhole entry from any port, and that the blackhole entry can be
-replaced.
+We want to avoid unhelpful redundancy in our testing practices.
 
-Also add a test that verifies that sticky FDB entries cannot roam (this
-is not needed for now, but should in general be present anyhow for future
-applications).
+Second, we have observed the current run_vmtests.sh to report overall
+failure/ambiguous results in the case that a machine lacks the necessary
+hardware to perform one or more of the tests. E.g. ksm tests that
+require more than one numa node.
 
-Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
+We want to be able to run the vm selftests suitable to particular hardware.
+
+Add the ability to run one or more groups of vm tests via run_vmtests.sh
+instead of simply all-or-none in order to solve these problems.
+
+Preserve existing default behavior of running all tests when the script
+is invoked with no arguments.
+
+Documentation of test groups is included in the patch as follows:
+
+    # ./run_vmtests.sh [ -h || --help ]
+
+    usage: ./tools/testing/selftests/vm/run_vmtests.sh [ -h | -t "<categories>"]
+      -t: specify specific categories to tests to run
+      -h: display this message
+
+    The default behavior is to run all tests.
+
+    Alternatively, specific groups tests can be run by passing a string
+    to the -t argument containing one or more of the following categories
+    separated by spaces:
+    - mmap
+	    tests for mmap(2)
+    - gup_test
+	    tests for gup using gup_test interface
+    - userfaultfd
+	    tests for  userfaultfd(2)
+    - compaction
+	    a test for the patch "Allow compaction of unevictable pages"
+    - mlock
+	    tests for mlock(2)
+    - mremap
+	    tests for mremap(2)
+    - hugevm
+	    tests for very large virtual address space
+    - vmalloc
+	    vmalloc smoke tests
+    - hmm
+	    hmm smoke tests
+    - madv_populate
+	    test memadvise(2) MADV_POPULATE_{READ,WRITE} options
+    - memfd_secret
+	    test memfd_secret(2)
+    - process_mrelease
+	    test process_mrelease(2)
+    - ksm
+	    ksm tests that do not require >=2 NUMA nodes
+    - ksm_numa
+	    ksm tests that require >=2 NUMA nodes
+    - pkey
+	    memory protection key tests
+    example: ./run_vmtests.sh -t "hmm mmap ksm"
+
+Changes from v4:
+	- fix imprecise checking in test_selected
+	- drop conditional setup/cleanup of hugetlb
+
+Changes from v3:
+	- rename variable TEST_ITEMS as VM_TEST_ITEMS
+
+Changes from v2:
+	- rebase onto the mm-everyting branch in
+	https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+	- integrate this functionality with new the tests
+
+Changes from v1:
+	- use a command line argument to pass the test categories to the
+	  script instead of an environmet variable
+	- remove novel prints to avoid messing with extant parsers of this
+	  script
+	- update the usage text
+
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
 ---
- .../net/forwarding/bridge_blackhole_fdb.sh    | 102 +++++++++++++++++
- .../net/forwarding/bridge_locked_port.sh      | 106 +++++++++++++++++-
- .../net/forwarding/bridge_sticky_fdb.sh       |  21 +++-
- tools/testing/selftests/net/forwarding/lib.sh |  18 +++
- 4 files changed, 245 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh
+ tools/testing/selftests/vm/run_vmtests.sh | 232 +++++++++++++++-------
+ 1 file changed, 155 insertions(+), 77 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh b/tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh
-new file mode 100755
-index 000000000000..54b1a51e1ed6
---- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/bridge_blackhole_fdb.sh
-@@ -0,0 +1,102 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+ALL_TESTS="blackhole_fdb"
-+NUM_NETIFS=4
-+source lib.sh
-+
-+switch_create()
-+{
-+        ip link add dev br0 type bridge
-+
-+        ip link set dev $swp1 master br0
-+        ip link set dev $swp2 master br0
-+
-+        ip link set dev br0 up
-+        ip link set dev $h1 up
-+        ip link set dev $swp1 up
-+        ip link set dev $h2 up
-+        ip link set dev $swp2 up
-+
-+	tc qdisc add dev $swp2 clsact
-+}
-+
-+switch_destroy()
-+{
-+	tc qdisc del dev $swp2 clsact
-+
-+        ip link set dev $swp2 down
-+        ip link set dev $h2 down
-+        ip link set dev $swp1 down
-+        ip link set dev $h1 down
-+
-+        ip link del dev br0
-+}
-+
-+setup_prepare()
-+{
-+        h1=${NETIFS[p1]}
-+        swp1=${NETIFS[p2]}
-+        h2=${NETIFS[p3]}
-+        swp2=${NETIFS[p4]}
-+
-+        switch_create
-+}
-+
-+cleanup()
-+{
-+        pre_cleanup
-+        switch_destroy
-+}
-+
-+# Check that there is no egress with blackhole entry and that blackhole entries can be replaced
-+blackhole_fdb()
-+{
-+        RET=0
-+
-+	check_blackhole_fdb_support || return 0
-+
-+	tc filter add dev $swp2 egress protocol ip pref 1 handle 1 flower \
-+		dst_ip 192.0.2.2 ip_proto udp dst_port 12345 action pass
-+
-+	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_err $? "Packet not seen on egress before adding blackhole entry"
-+
-+	bridge fdb add `mac_get $h2` dev br0 blackhole
-+	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
-+	check_err $? "Blackhole entry not found"
-+
-+	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+
-+	tc_check_packets "dev $swp2 egress" 1 1
-+	check_err $? "Packet seen on egress after adding blackhole entry"
-+
-+	# Check blackhole entries can be replaced.
-+	bridge fdb replace `mac_get $h2` dev $swp2 master static
-+	bridge fdb get `mac_get $h2` br br0 | grep -q blackhole
-+	check_fail $? "Blackhole entry found after replacement"
-+
-+	$MZ $h1 -c 1 -p 128 -t udp "sp=54321,dp=12345" \
-+		-a own -b `mac_get $h2` -A 192.0.2.1 -B 192.0.2.2 -q
-+
-+	tc_check_packets "dev $swp2 egress" 1 2
-+	check_err $? "Packet not seen on egress after replacing blackhole entry"
-+
-+	bridge fdb del `mac_get $h2` dev $swp2 master static
-+	tc filter del dev $swp2 egress protocol ip pref 1 handle 1 flower
-+
-+        log_test "Blackhole FDB entry"
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+setup_wait
-+
-+tests_run
-+
-+exit $EXIT_STATUS
-diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-index 5b02b6b60ce7..59b8b7666eab 100755
---- a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-@@ -1,7 +1,15 @@
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index 249295a10f56..f115e9a6d3a1 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -1,6 +1,6 @@
  #!/bin/bash
  # SPDX-License-Identifier: GPL-2.0
+-#please run as root
++# Please run as root
  
--ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
-+ALL_TESTS="
-+	locked_port_ipv4
-+	locked_port_ipv6
-+	locked_port_vlan
-+	locked_port_mab
-+	locked_port_station_move
-+	locked_port_mab_station_move
-+"
-+
- NUM_NETIFS=4
- CHECK_TC="no"
- source lib.sh
-@@ -166,6 +174,102 @@ locked_port_ipv6()
- 	log_test "Locked port ipv6"
- }
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+@@ -8,15 +8,76 @@ ksft_skip=4
+ mnt=./huge
+ exitcode=0
  
-+locked_port_mab()
-+{
-+	RET=0
-+	check_locked_port_support || return 0
+-#get huge pagesize and freepages from /proc/meminfo
+-while read -r name size unit; do
+-	if [ "$name" = "HugePages_Free:" ]; then
+-		freepgs="$size"
++usage() {
++	cat <<EOF
++usage: ${BASH_SOURCE[0]:-$0} [ -h | -t "<categories>"]
++  -t: specify specific categories to tests to run
++  -h: display this message
 +
-+	ping_do $h1 192.0.2.2
-+	check_err $? "MAB: Ping did not work before locking port"
++The default behavior is to run all tests.
 +
-+	bridge link set dev $swp1 locked on
-+	check_port_mab_support $swp1 || return 0
-+
-+	ping_do $h1 192.0.2.2
-+	check_fail $? "MAB: Ping worked on locked port without FDB entry"
-+
-+	bridge fdb show | grep `mac_get $h1` | grep -q "locked"
-+	check_err $? "MAB: No locked fdb entry after ping on locked port"
-+
-+	bridge fdb replace `mac_get $h1` dev $swp1 master static
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "MAB: Ping did not work with fdb entry without locked flag"
-+
-+	bridge fdb del `mac_get $h1` dev $swp1 master
-+	bridge link set dev $swp1 locked off mab off
-+
-+	log_test "Locked port MAB"
++Alternatively, specific groups tests can be run by passing a string
++to the -t argument containing one or more of the following categories
++separated by spaces:
++- mmap
++	tests for mmap(2)
++- gup_test
++	tests for gup using gup_test interface
++- userfaultfd
++	tests for  userfaultfd(2)
++- compaction
++	a test for the patch "Allow compaction of unevictable pages"
++- mlock
++	tests for mlock(2)
++- mremap
++	tests for mremap(2)
++- hugevm
++	tests for very large virtual address space
++- vmalloc
++	vmalloc smoke tests
++- hmm
++	hmm smoke tests
++- madv_populate
++	test memadvise(2) MADV_POPULATE_{READ,WRITE} options
++- memfd_secret
++	test memfd_secret(2)
++- process_mrelease
++	test process_mrelease(2)
++- ksm
++	ksm tests that do not require >=2 NUMA nodes
++- ksm_numa
++	ksm tests that require >=2 NUMA nodes
++- pkey
++	memory protection key tests
++example: ./run_vmtests.sh -t "hmm mmap ksm"
++EOF
++	exit 0
 +}
 +
-+# No roaming allowed to a simple locked port
-+locked_port_station_move()
-+{
-+	local mac=a0:b0:c0:c0:b0:a0
 +
-+	RET=0
-+	check_locked_port_support || return 0
++while getopts "ht:" OPT; do
++	case ${OPT} in
++		"h") usage ;;
++		"t") VM_SELFTEST_ITEMS=${OPTARG} ;;
++	esac
++done
++shift $((OPTIND -1))
 +
-+	bridge link set dev $swp1 locked on
++# default behavior: run all tests
++VM_SELFTEST_ITEMS=${VM_SELFTEST_ITEMS:-default}
 +
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "master br0"
-+	check_fail $? "Locked port station move: FDB entry on first injection"
-+
-+	$MZ $h2 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp2 | grep "$mac vlan 1" | grep -q "master br0"
-+	check_err $? "Locked port station move: Entry not found on unlocked port"
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "master br0"
-+	check_fail $? "Locked port station move: entry roamed to locked port"
-+
-+	bridge link set dev $swp1 locked off
-+
-+	log_test "Locked port station move"
-+}
-+
-+# Roaming to and from a MAB enabled port should work if sticky flag is not set
-+locked_port_mab_station_move()
-+{
-+	local mac=10:20:30:30:20:10
-+
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	bridge link set dev $swp1 locked on
-+
-+	check_port_mab_support $swp1 || return 0
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	if bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "permanent"; then
-+		echo "SKIP: Roaming not possible with local flag, skipping test..."
-+		bridge link set dev $swp1 locked off mab off
-+		return $ksft_skip
-+	fi
-+
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "locked"
-+	check_err $? "MAB station move: no locked entry on first injection"
-+
-+	$MZ $h2 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "locked"
-+	check_fail $? "MAB station move: locked entry did not move"
-+
-+	bridge fdb show dev $swp2 | grep "$mac vlan 1" | grep -q "locked"
-+	check_fail $? "MAB station move: roamed entry to unlocked port had locked flag on"
-+
-+	bridge fdb show dev $swp2 | grep "$mac vlan 1" | grep -q "master br0"
-+	check_err $? "MAB station move: roamed entry not found"
-+
-+	$MZ $h1 -q -t udp -a $mac -b rand
-+	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep "master br0" | grep -q "locked"
-+	check_fail $? "MAB station move: entry roamed back to locked port"
-+
-+	bridge link set dev $swp1 locked off mab off
-+
-+	log_test "Locked port MAB station move"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
-diff --git a/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh b/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-index 1f8ef0eff862..bca77bc3fe09 100755
---- a/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_sticky_fdb.sh
-@@ -1,7 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--ALL_TESTS="sticky"
-+ALL_TESTS="sticky sticky_no_roaming"
- NUM_NETIFS=4
- TEST_MAC=de:ad:be:ef:13:37
- source lib.sh
-@@ -59,6 +59,25 @@ sticky()
- 	log_test "Sticky fdb entry"
- }
- 
-+# No roaming allowed with the sticky flag set
-+sticky_no_roaming()
-+{
-+	local mac=a8:b4:c2:c2:b4:a8
-+
-+	RET=0
-+
-+	bridge link set dev $swp2 learning on
-+	bridge fdb add $mac dev $swp1 master static sticky
-+	bridge fdb show dev $swp1 | grep "$mac master br0" | grep -q sticky
-+	check_err $? "Sticky no roaming: No sticky FDB entry found after adding"
-+
-+	$MZ $h2 -q -t udp -c 10 -d 100msec -a $mac -b rand
-+	bridge fdb show dev $swp2 | grep "$mac master br0" | grep -q sticky
-+	check_fail $? "Sticky no roaming: Sticky entry roamed"
-+
-+	log_test "Sticky no roaming"
-+}
-+
- trap cleanup EXIT
- 
- setup_prepare
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 3ffb9d6c0950..642fbf217c20 100755
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -137,6 +137,24 @@ check_locked_port_support()
++test_selected() {
++	if [ "$VM_SELFTEST_ITEMS" == "default" ]; then
++		# If no VM_SELFTEST_ITEMS are specified, run all tests
++		return 0
  	fi
+-	if [ "$name" = "Hugepagesize:" ]; then
+-		hpgsize_KB="$size"
++	# If test selected argument is one of the test items
++	if [[ " ${VM_SELFTEST_ITEMS[*]} " =~ " ${1} " ]]; then
++	        return 0
++	else
++	        return 1
+ 	fi
+-done < /proc/meminfo
++}
+ 
+ # Simple hugetlbfs tests have a hardcoded minimum requirement of
+ # huge pages totaling 256MB (262144KB) in size.  The userfaultfd
+@@ -28,7 +89,17 @@ hpgsize_MB=$((hpgsize_KB / 1024))
+ half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
+ needmem_KB=$((half_ufd_size_MB * 2 * 1024))
+ 
+-#set proper nr_hugepages
++# get huge pagesize and freepages from /proc/meminfo
++while read -r name size unit; do
++	if [ "$name" = "HugePages_Free:" ]; then
++		freepgs="$size"
++	fi
++	if [ "$name" = "Hugepagesize:" ]; then
++		hpgsize_KB="$size"
++	fi
++done < /proc/meminfo
++
++# set proper nr_hugepages
+ if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+ 	nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
+ 	needpgs=$((needmem_KB / hpgsize_KB))
+@@ -57,140 +128,147 @@ else
+ 	exit 1
+ fi
+ 
+-#filter 64bit architectures
++# filter 64bit architectures
+ ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
+ if [ -z "$ARCH" ]; then
+ 	ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
+ fi
+ VADDR64=0
+-echo "$ARCH64STR" | grep "$ARCH" && VADDR64=1
++echo "$ARCH64STR" | grep "$ARCH" &>/dev/null && VADDR64=1
+ 
+ # Usage: run_test [test binary] [arbitrary test arguments...]
+ run_test() {
+-	local title="running $*"
+-	local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
+-	printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
+-
+-	"$@"
+-	local ret=$?
+-	if [ $ret -eq 0 ]; then
+-		echo "[PASS]"
+-	elif [ $ret -eq $ksft_skip ]; then
+-		echo "[SKIP]"
+-		exitcode=$ksft_skip
+-	else
+-		echo "[FAIL]"
+-		exitcode=1
+-	fi
++	if test_selected ${CATEGORY}; then
++		echo "running: $1"
++		local title="running $*"
++		local sep=$(echo -n "$title" | tr "[:graph:][:space:]" -)
++		printf "%s\n%s\n%s\n" "$sep" "$title" "$sep"
++
++		"$@"
++		local ret=$?
++		if [ $ret -eq 0 ]; then
++			echo "[PASS]"
++		elif [ $ret -eq $ksft_skip ]; then
++			echo "[SKIP]"
++			exitcode=$ksft_skip
++		else
++			echo "[FAIL]"
++			exitcode=1
++		fi
++	fi # test_selected
  }
  
-+check_port_mab_support()
-+{
-+	local dev=$1;
+ mkdir "$mnt"
+ mount -t hugetlbfs none "$mnt"
+ 
+-run_test ./hugepage-mmap
++CATEGORY="hugetlb" run_test ./hugepage-mmap
+ 
+ shmmax=$(cat /proc/sys/kernel/shmmax)
+ shmall=$(cat /proc/sys/kernel/shmall)
+ echo 268435456 > /proc/sys/kernel/shmmax
+ echo 4194304 > /proc/sys/kernel/shmall
+-run_test ./hugepage-shm
++CATEGORY="hugetlb" run_test ./hugepage-shm
+ echo "$shmmax" > /proc/sys/kernel/shmmax
+ echo "$shmall" > /proc/sys/kernel/shmall
+ 
+-run_test ./map_hugetlb
++CATEGORY="hugetlb" run_test ./map_hugetlb
+ 
+-run_test ./hugepage-mremap "$mnt"/huge_mremap
+-rm -f "$mnt"/huge_mremap
++CATEGORY="hugetlb" run_test ./hugepage-mremap "$mnt"/huge_mremap
++test_selected "hugetlb" && rm -f "$mnt"/huge_mremap
+ 
+-run_test ./hugepage-vmemmap
++CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+ 
+-run_test ./hugetlb-madvise "$mnt"/madvise-test
+-rm -f "$mnt"/madvise-test
++CATEGORY="hugetlb" run_test ./hugetlb-madvise "$mnt"/madvise-test
++test_selected "hugetlb" && rm -f "$mnt"/madvise-test
+ 
+-echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
+-echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
+-echo "      hugetlb regression testing."
++if test_selected "hugetlb"; then
++	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
++	echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
++	echo "      hugetlb regression testing."
++fi
+ 
+-run_test ./map_fixed_noreplace
++CATEGORY="mmap" run_test ./map_fixed_noreplace
+ 
+ # get_user_pages_fast() benchmark
+-run_test ./gup_test -u
++CATEGORY="gup_test" run_test ./gup_test -u
+ # pin_user_pages_fast() benchmark
+-run_test ./gup_test -a
++CATEGORY="gup_test" run_test ./gup_test -a
+ # Dump pages 0, 19, and 4096, using pin_user_pages:
+-run_test ./gup_test -ct -F 0x1 0 19 0x1000
++CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
+ 
+-run_test ./userfaultfd anon 20 16
+-run_test ./userfaultfd anon:dev 20 16
++CATEGORY="userfaultfd" run_test ./userfaultfd anon 20 16
++CATEGORY="userfaultfd" run_test ./userfaultfd anon:dev 20 16
+ # Hugetlb tests require source and destination huge pages. Pass in half the
+ # size ($half_ufd_size_MB), which is used for *each*.
+-run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
+-run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
+-run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
++CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb "$half_ufd_size_MB" 32
++CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb:dev "$half_ufd_size_MB" 32
++CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb_shared "$half_ufd_size_MB" 32 "$mnt"/uffd-test
+ rm -f "$mnt"/uffd-test
+-run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
++CATEGORY="userfaultfd" run_test ./userfaultfd hugetlb_shared:dev "$half_ufd_size_MB" 32 "$mnt"/uffd-test
+ rm -f "$mnt"/uffd-test
+-run_test ./userfaultfd shmem 20 16
+-run_test ./userfaultfd shmem:dev 20 16
+-
+-#cleanup
+-umount "$mnt"
+-rm -rf "$mnt"
+-echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
++CATEGORY="userfaultfd" run_test ./userfaultfd shmem 20 16
++CATEGORY="userfaultfd" run_test ./userfaultfd shmem:dev 20 16
 +
-+	if ! bridge link set dev $dev mab on 2>/dev/null; then
-+		echo "SKIP: iproute2 too old; MacAuth feature not supported."
-+		return $ksft_skip
-+	fi
-+}
-+
-+check_blackhole_fdb_support()
-+{
-+	if ! bridge fdb help | grep -q "blackhole"; then
-+		echo "SKIP: Blackhole fdb feature not supported."
-+		return $ksft_skip
-+	fi
-+}
-+
- if [[ "$(id -u)" -ne 0 ]]; then
- 	echo "SKIP: need root privileges"
- 	exit $ksft_skip
++# cleanup (only needed when running hugetlb tests)
++if test_selected "hugetlb"; then
++	umount "$mnt"
++	rm -rf "$mnt"
++	echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
++fi
+ 
+-run_test ./compaction_test
++CATEGORY="compaction" run_test ./compaction_test
+ 
+-run_test sudo -u nobody ./on-fault-limit
++CATEGORY="mlock" run_test sudo -u nobody ./on-fault-limit
+ 
+-run_test ./map_populate
++CATEGORY="mmap" run_test ./map_populate
+ 
+-run_test ./mlock-random-test
++CATEGORY="mlock" run_test ./mlock-random-test
+ 
+-run_test ./mlock2-tests
++CATEGORY="mlock" run_test ./mlock2-tests
+ 
+-run_test ./mrelease_test
++CATEGORY="process_mrelease" run_test ./mrelease_test
+ 
+-run_test ./mremap_test
++CATEGORY="mremap" run_test ./mremap_test
+ 
+-run_test ./thuge-gen
++CATEGORY="hugetlb" run_test ./thuge-gen
+ 
+ if [ $VADDR64 -ne 0 ]; then
+-	run_test ./virtual_address_range
++	CATEGORY="hugevm" run_test ./virtual_address_range
+ 
+ 	# virtual address 128TB switch test
+-	run_test ./va_128TBswitch.sh
++	CATEGORY="hugevm" run_test ./va_128TBswitch.sh
+ fi # VADDR64
+ 
+ # vmalloc stability smoke test
+-run_test ./test_vmalloc.sh smoke
++CATEGORY="vmalloc" run_test ./test_vmalloc.sh smoke
+ 
+-run_test ./mremap_dontunmap
++CATEGORY="mremap" run_test ./mremap_dontunmap
+ 
+-run_test ./test_hmm.sh smoke
++CATEGORY="hmm" run_test ./test_hmm.sh smoke
+ 
+ # MADV_POPULATE_READ and MADV_POPULATE_WRITE tests
+-run_test ./madv_populate
++CATEGORY="madv_populate" run_test ./madv_populate
+ 
+-run_test ./memfd_secret
++CATEGORY="memfd_secret" run_test ./memfd_secret
+ 
+ # KSM MADV_MERGEABLE test with 10 identical pages
+-run_test ./ksm_tests -M -p 10
++CATEGORY="ksm" run_test ./ksm_tests -M -p 10
+ # KSM unmerge test
+-run_test ./ksm_tests -U
++CATEGORY="ksm" run_test ./ksm_tests -U
+ # KSM test with 10 zero pages and use_zero_pages = 0
+-run_test ./ksm_tests -Z -p 10 -z 0
++CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 0
+ # KSM test with 10 zero pages and use_zero_pages = 1
+-run_test ./ksm_tests -Z -p 10 -z 1
++CATEGORY="ksm" run_test ./ksm_tests -Z -p 10 -z 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 1
+-run_test ./ksm_tests -N -m 1
++CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+-run_test ./ksm_tests -N -m 0
++CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
+ 
+ # protection_keys tests
+ if [ $VADDR64 -eq 0 ]; then
+-	run_test ./protection_keys_32
++	CATEGORY="pkey" run_test ./protection_keys_32
+ else
+-	run_test ./protection_keys_64
++	CATEGORY="pkey" run_test ./protection_keys_64
+ fi
+ 
+ exit $exitcode
 -- 
-2.34.1
+2.31.1
 
