@@ -2,92 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C565E5EFCBB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 20:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA3E5EFD07
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 20:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234163AbiI2SLv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 14:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S234128AbiI2S2X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 14:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbiI2SLt (ORCPT
+        with ESMTP id S234987AbiI2S1w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 14:11:49 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2286E1E459B;
-        Thu, 29 Sep 2022 11:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664475109; x=1696011109;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Hi2tz7dvkDqO9KGRG9jxKLr4Lwuxpc+amCA8E8qTyfY=;
-  b=kwPk69LahIVQbrC99oxQrpOzjYJoVLsqqPHRMWUraRrs+JBrGm5T/wYG
-   HM6O/V+wvryih12fDRrWPzFQT+5kvJSOkgGplSxNTHkJQ4v6km+6i1w4q
-   IMAVt0POwyGP4drlI9gQO17qT0LDfQlElLGQAe2z/pX53Z0B5UiV+zP6F
-   sVLcm6WKMPjvnjbXVa3NFfFPHCvy37ytMdD2WrckbCoKBzrYuZHozNChA
-   /PaPXET/KhdFTVSxcTpjWsR6tRhsXUNbeqhtieYx80lNX03JUf4r7ZaR4
-   uQ7cuD3FZD3a+DaqU13cx7czs5+DQ5N/3lfEhx1hq1UUkrxLFMiEw+Rb7
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="282347587"
-X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
-   d="scan'208";a="282347587"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 11:11:48 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="600106659"
-X-IronPort-AV: E=Sophos;i="5.93,355,1654585200"; 
-   d="scan'208";a="600106659"
-Received: from tjthomps-mobl.amr.corp.intel.com (HELO [10.252.139.94]) ([10.252.139.94])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 11:11:48 -0700
-Message-ID: <665a4db2-a342-43ba-38a0-715c34709729@linux.intel.com>
-Date:   Thu, 29 Sep 2022 11:11:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v14 2/3] virt: Add TDX guest driver
-Content-Language: en-US
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Thu, 29 Sep 2022 14:27:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1501438C8;
+        Thu, 29 Sep 2022 11:27:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DEB3B82646;
+        Thu, 29 Sep 2022 18:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D73EC433C1;
+        Thu, 29 Sep 2022 18:27:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664476067;
+        bh=peXm6EYz/EMFFA8zuW/FKucf85TPZxTNbaodSHoZ7Wg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Kv7xhea2uFIbwtuFQLZh9XSjU1NQfjbcVqi7NBdfo1YmhLPr/oFL/8Xy7h8nVd63Y
+         1QbyuerlojcUMR9UJXqyqMMe/stYLXuAEzjAn5YgYL+gSYYe2Mgq5Jy1q1QOi5phs9
+         LUXrQ/s2M+7o3FfgPVpda31wV2wVBaOYzo8yfTohR2fDzhGsJx5Pf63zWtPQKojM9F
+         jn5yUhRAxSZA/Yu9rBhiUcBtbQl8G7FuabZv9yLUhOJjlvUZ798HikAJYp4pUIjm//
+         HnqLKE0lE+TxmEdaYgq6OQOzGouYBxg3CmBkmarKcPIbw5qPRqYRZam7X/YTCqQye3
+         IoYyggPAxMHZw==
+Date:   Thu, 29 Sep 2022 11:27:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
         Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220928215535.26527-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <YzXduIn83E1oood8@fedora>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <YzXduIn83E1oood8@fedora>
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+Message-ID: <20220929112744.27cc969b@kernel.org>
+In-Reply-To: <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
+        <20220929091036.3812327f@kernel.org>
+        <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, 29 Sep 2022 18:37:09 +0200 netdev@kapio-technology.com wrote:
+> On 2022-09-29 18:10, Jakub Kicinski wrote:
+> > On Wed, 28 Sep 2022 17:02:47 +0200 Hans Schultz wrote: =20
+> >> From: "Hans J. Schultz" <netdev@kapio-technology.com>
+> >>=20
+> >> This patch set extends the locked port feature for devices
+> >> that are behind a locked port, but do not have the ability to
+> >> authorize themselves as a supplicant using IEEE 802.1X.
+> >> Such devices can be printers, meters or anything related to
+> >> fixed installations. Instead of 802.1X authorization, devices
+> >> can get access based on their MAC addresses being whitelisted. =20
+> >=20
+> > Try a allmodconfig build on latest net-next, seems broken. =20
+>=20
+> I have all different switch drivers enabled and I see no compile=20
+> warnings or errors.=20
 
+Just do what I told you - rebase on net-next, allmodconfig.
 
-On 9/29/22 11:02 AM, Wander Lairson Costa wrote:
->> +#define TDX_GUEST_DEVICE                "tdx-guest"
-> nit: I think now we can use KBUILD_MODNAME, can't we?
-> 
+> I guess I will get a robot update if that is the=20
+> case but please be specific as to what does not build.
 
-Yes. We can use it. But I thought user can use this macro
-and avoid hard coding the device name.
+The maintainers simply don't have time to hold everyone by the hand.
+Sometimes I wish it was still okay to yell at people who post code
+which does not build. Oh well.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+../drivers/net/dsa/qca/qca8k-common.c:810:5: error: conflicting types for =
+=E2=80=98qca8k_port_fdb_del=E2=80=99
+ int qca8k_port_fdb_del(struct dsa_switch *ds, int port,
+     ^~~~~~~~~~~~~~~~~~
+In file included from ../drivers/net/dsa/qca/qca8k-common.c:13:
+../drivers/net/dsa/qca/qca8k.h:483:5: note: previous declaration of =E2=80=
+=98qca8k_port_fdb_del=E2=80=99 was here
+ int qca8k_port_fdb_del(struct dsa_switch *ds, int port,
+     ^~~~~~~~~~~~~~~~~~
+../drivers/net/dsa/qca/qca8k-common.c: In function =E2=80=98qca8k_port_fdb_=
+del=E2=80=99:
+../drivers/net/dsa/qca/qca8k-common.c:818:6: error: =E2=80=98fdb_flags=E2=
+=80=99 undeclared (first use in this function); did you mean =E2=80=98tsq_f=
+lags=E2=80=99?
+  if (fdb_flags)
+      ^~~~~~~~~
+      tsq_flags
+../drivers/net/dsa/qca/qca8k-common.c:818:6: note: each undeclared identifi=
+er is reported only once for each function it appears in
+make[5]: *** [../scripts/Makefile.build:249: drivers/net/dsa/qca/qca8k-comm=
+on.o] Error 1
+make[5]: *** Waiting for unfinished jobs....
+make[4]: *** [../scripts/Makefile.build:465: drivers/net/dsa/qca] Error 2
+make[4]: *** Waiting for unfinished jobs....
+../drivers/net/dsa/sja1105/sja1105_main.c: In function =E2=80=98sja1105_fas=
+t_age=E2=80=99:
+../drivers/net/dsa/sja1105/sja1105_main.c:1941:61: error: incompatible type=
+ for argument 5 of =E2=80=98sja1105_fdb_del=E2=80=99
+   rc =3D sja1105_fdb_del(ds, port, macaddr, l2_lookup.vlanid, db);
+                                                             ^~
+../drivers/net/dsa/sja1105/sja1105_main.c:1831:11: note: expected =E2=80=98=
+u16=E2=80=99 {aka =E2=80=98short unsigned int=E2=80=99} but argument is of =
+type =E2=80=98struct dsa_db=E2=80=99
+       u16 fdb_flags, struct dsa_db db)
+       ~~~~^~~~~~~~~
+../drivers/net/dsa/sja1105/sja1105_main.c:1941:8: error: too few arguments =
+to function =E2=80=98sja1105_fdb_del=E2=80=99
+   rc =3D sja1105_fdb_del(ds, port, macaddr, l2_lookup.vlanid, db);
+        ^~~~~~~~~~~~~~~
+../drivers/net/dsa/sja1105/sja1105_main.c:1829:12: note: declared here
+ static int sja1105_fdb_del(struct dsa_switch *ds, int port,
+            ^~~~~~~~~~~~~~~
+../drivers/net/dsa/sja1105/sja1105_main.c: In function =E2=80=98sja1105_mdb=
+_del=E2=80=99:
+../drivers/net/dsa/sja1105/sja1105_main.c:1962:56: error: incompatible type=
+ for argument 5 of =E2=80=98sja1105_fdb_del=E2=80=99
+  return sja1105_fdb_del(ds, port, mdb->addr, mdb->vid, db);
+                                                        ^~
+../drivers/net/dsa/sja1105/sja1105_main.c:1831:11: note: expected =E2=80=98=
+u16=E2=80=99 {aka =E2=80=98short unsigned int=E2=80=99} but argument is of =
+type =E2=80=98struct dsa_db=E2=80=99
+       u16 fdb_flags, struct dsa_db db)
+       ~~~~^~~~~~~~~
+../drivers/net/dsa/sja1105/sja1105_main.c:1962:9: error: too few arguments =
+to function =E2=80=98sja1105_fdb_del=E2=80=99
+  return sja1105_fdb_del(ds, port, mdb->addr, mdb->vid, db);
+         ^~~~~~~~~~~~~~~
+../drivers/net/dsa/sja1105/sja1105_main.c:1829:12: note: declared here
+ static int sja1105_fdb_del(struct dsa_switch *ds, int port,
+            ^~~~~~~~~~~~~~~
+../drivers/net/dsa/sja1105/sja1105_main.c:1963:1: error: control reaches en=
+d of non-void function [-Werror=3Dreturn-type]
+ }
+ ^
+cc1: some warnings being treated as errors
+make[5]: *** [../scripts/Makefile.build:249: drivers/net/dsa/sja1105/sja110=
+5_main.o] Error 1
+make[5]: *** Waiting for unfinished jobs....
+make[4]: *** [../scripts/Makefile.build:465: drivers/net/dsa/sja1105] Error=
+ 2
+make[3]: *** [../scripts/Makefile.build:465: drivers/net/dsa] Error 2
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [../scripts/Makefile.build:465: drivers/net] Error 2
+make[1]: *** [/home/kicinski/linux/Makefile:1852: drivers] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:222: __sub-make] Error 2
