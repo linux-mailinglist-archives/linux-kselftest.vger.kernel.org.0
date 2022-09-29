@@ -2,195 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0A35EF5CB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 14:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353EF5EF5DC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 14:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235286AbiI2Mzr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 08:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S230418AbiI2M6G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 08:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234922AbiI2Mzp (ORCPT
+        with ESMTP id S234861AbiI2M6F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:55:45 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D627C1323D5;
-        Thu, 29 Sep 2022 05:55:44 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r62so1352120pgr.12;
-        Thu, 29 Sep 2022 05:55:44 -0700 (PDT)
+        Thu, 29 Sep 2022 08:58:05 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509F71684ED;
+        Thu, 29 Sep 2022 05:58:04 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 129so1380150pgc.5;
+        Thu, 29 Sep 2022 05:58:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=9yf4OQz+BK3lw3pxhu02ZUG7Irlu0z/ZcY7cz4znAzs=;
-        b=dJkWfKlkyJBN7WaUfltXzILCK2Wy5ACLkrxeFQCE/YTFIoDSh7HbLG0zdsR2ij9PtQ
-         o9XtqcmnebtOH6EOAxM46xj2zr08TxQNhig9krAUmWhW+rJhL5xY85dYBblq01+Bdhk0
-         RB3gx8izGpJQRsiRMTUfbLmJjDi4k6OL5lt2hRyuPtIrK9pVdsQINS5AFg3fVblYBNr6
-         RPy7oGnPWeNjesvlwvQNzcUZOkhmoxiFxAA+UEipzOadO7JNhW43uZgHTzg2ahA0My/v
-         DEJLC2jy/9rEl+z+Yk5coa7ydqOqBpgaKceZlnpM3Jpnj6fyWGfanedU4w59XT6amaVp
-         mXTA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=3YFANs5KOBBvjTf0E3nXBdofeBJevKykUZZCZ3oiBSE=;
+        b=KBDfIxCUnv/KK5ZKEau7sPU8QDp/Cpf3WFuBZhYp+eWQYP1l6NyM4EzsCEQ7AKTWo+
+         sRUigibTuwd4oRiW8sQfe2Xdcs6sjI5v6zIXjjyrmP07SMpczd6cQsuANQgPSnmU10ZV
+         avaHZSjfD+myi7RBTULpGLewx9508pMcW14wj/ybMJDByT6g4unGKlWt7ScMfvPcVyL5
+         zs9uaKA+48d6TighEUA6mQYaUQGa46UAXjCZNpTfa7KSo6R+iJd6/MYb510nWR9+Nys8
+         ZCsLzoXwbCabwFczTsNYJCdugD4zY37z4xZeUXNN6OJcOZWpyBiJaTQtM4Wtrlxru9sR
+         qv0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=9yf4OQz+BK3lw3pxhu02ZUG7Irlu0z/ZcY7cz4znAzs=;
-        b=di2VzddzhYxadQ1w4qIe6qpET/WbrjY5DMbW+ZT7S86RHTwjXcRafSr+eAjMw0RQKg
-         TzN3GNPj46DGDWd9KW/AGWC5fvIPAMqsvgy2r/dE8eyCExIkNGkw9J8E8bjkHofBldf2
-         pyIvuU4fSU7/2rMToQCF350tn3b9HoQ3Nxrh6g4Ya2dxW7LDpDkxfJRxMjmXB+PpvMaH
-         16HpferSOvfQTzJSnxKkX6Bb5OyW/gNNBjMzOUZ611EQCkgS/iM962RkODTaBBGCXqej
-         znl8e+GkqADYoSIbUQUxSxmIbtrPmU28BZtu/lrC6WezBK5hZwt4L8g/RCD4gKM59AGe
-         TUug==
-X-Gm-Message-State: ACrzQf0zYyNG52RhS/92XqPuGHxHiLe47Dos2gaAvAMnZSiDz8057x2Y
-        FH+Pd/Pn1e5gZnG+/ELrzuHud7U5xq9dLw==
-X-Google-Smtp-Source: AMsMyM6IPHHra7AxEtjzU6k5fLaaFgYbpyzssqyW3xHAR2tOYvYHgx86NKhSQRqSBiiPKn2DkdDR4w==
-X-Received: by 2002:a05:6a00:1249:b0:543:aa0a:9c0a with SMTP id u9-20020a056a00124900b00543aa0a9c0amr3479328pfi.2.1664456144072;
-        Thu, 29 Sep 2022 05:55:44 -0700 (PDT)
-Received: from debian.. (subs32-116-206-28-55.three.co.id. [116.206.28.55])
-        by smtp.gmail.com with ESMTPSA id x15-20020aa7956f000000b0052e987c64efsm6219645pfq.174.2022.09.29.05.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 05:55:43 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=3YFANs5KOBBvjTf0E3nXBdofeBJevKykUZZCZ3oiBSE=;
+        b=A17xmhnRpPEIxsOEl/XrazW6UmarsbVeL8CmRhKyALxxIQ7gjpW078rQuT3b143CkC
+         ruC9KZdU14GPaDL0wxLgWJz6fWwCDxpwd7tQUKfHb9nN1q11RkNj3u+tNZo7zKDBdnrs
+         ZBQGaxIC01h5mjRXtrPqD1qW69Cpy2IvK1NLmXcSWkCj9YWxuAprPYlp6fo5z3vLioNS
+         F4cvoJYCxECMr7o31H5FIs/nUL63uTuXbXdKdq73hrOh7AO4NNI9knETT/m5KC3gsgHP
+         6Wu+HQ7OZxyKjfM3rSL3zSmNlothYjryhn/1/Srq0Whux8e65CgDPM6Vr7OCBpYPRj8I
+         UTKg==
+X-Gm-Message-State: ACrzQf0UCvO5QXufG9h6ZQnPoibUG438/IWj8XMl1lmXbIeAfA46VMlv
+        C2INlXsFeDgoOccccu7TeFI=
+X-Google-Smtp-Source: AMsMyM6B3vttmenuE5dtCT96heOK6boTPtp9W4yf6L3Wa5MBGIfrgfdkXML9rOPYCd1doLcBpG//Ug==
+X-Received: by 2002:a65:6e05:0:b0:439:ebfb:1169 with SMTP id bd5-20020a656e05000000b00439ebfb1169mr2781927pgb.492.1664456283823;
+        Thu, 29 Sep 2022 05:58:03 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-55.three.co.id. [116.206.28.55])
+        by smtp.gmail.com with ESMTPSA id u8-20020a170903124800b00178b717a143sm6010566plh.126.2022.09.29.05.58.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 05:58:03 -0700 (PDT)
+Message-ID: <af104afb-7273-bdb9-9f8f-9f5c80fd2f7c@gmail.com>
+Date:   Thu, 29 Sep 2022 19:57:59 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2] Documentation: Kunit: Use full path to .kunitconfig
+Content-Language: en-US
+To:     Khalid Masum <khalid.masum.92@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
         David Gow <davidgow@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH] Documentation: kunit: rewrite writing first test instructions
-Date:   Thu, 29 Sep 2022 19:54:59 +0700
-Message-Id: <20220929125458.52979-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3732; i=bagasdotme@gmail.com; h=from:subject; bh=yfiSx16xg1z1vQcacEqraLapzGUSyioovfRTutAD9m8=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMmmU+dey3eRm/8kjlUp/c5M364sa+MzM2dcy5YRvMEo9X1K zpPjHaUsDGIcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZiInyPDP1t9XqfSMxMat3SmOU0TyD q3nk05Rqq2d2Nd2htzwzzVGwz/S/y0jhyz/XPKpyF745aH6zayWzieOFPsEae+al5T8OyjPAA=
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sadiya Kazi <sadiyakazi@google.com>
+References: <20220929085332.4155-1-khalid.masum.92@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220929085332.4155-1-khalid.masum.92@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The wordings of step-by-step instructions on writing the first Kunit test
-are instructing readers to write codes without knowing what these are about.
-Rewrite these instructions to include the purpose of written code.
+On 9/29/22 15:53, Khalid Masum wrote:
+> The fourth list item on writing test cases instructs adding Kconfig
+> fragments to .kunitconfig, which should have been full path to the file
+> (.kunit/.kunitconfig).
+> 
+> Cc: Sadiya Kazi <sadiyakazi@google.com>
+> Cc: David Gow <davidgow@google.com>
+> Suggested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+> ---
+> Changes since v1:
+> - Update commit message
+> - Make the instruction more descriptive
+> 
+>  Documentation/dev-tools/kunit/start.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> index 867a4bba6bf6..69361065cda6 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -217,7 +217,7 @@ Now we are ready to write the test cases.
+>  
+>  	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
+>  
+> -4. Add the following lines to ``.kunitconfig``:
+> +4. Add following configuration fragments to ``.kunit/.kunitconfig``:
+>  
+>  .. code-block:: none
+>  
 
-While at it, align the code blocks of these contents.
+Looks OK, thanks!
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- This patch is based on Khalid's full path to .kunitconfig patch [1].
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
- [1]: https://lore.kernel.org/linux-doc/20220929085332.4155-1-khalid.masum.92@gmail.com/
-
- Documentation/dev-tools/kunit/start.rst | 40 ++++++++++++++-----------
- 1 file changed, 22 insertions(+), 18 deletions(-)
-
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 7999874dc4ddb3..9628360947507b 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -131,17 +131,19 @@ are built-in. Otherwise the module will need to be loaded.
- 
- Writing Your First Test
- =======================
--In your kernel repository, let's add some code that we can test.
-+In your kernel repository, let's add some code that we can test. For this
-+purpose, we are going to add simple addition driver.
- 
--1. Create a file ``drivers/misc/example.h``, which includes:
-+1. Write the feature that will be tested. First, write the declaration
-+   for ``misc_example_add()`` in ``drivers/misc/example.h``:
- 
--.. code-block:: c
-+   .. code-block:: c
- 
- 	int misc_example_add(int left, int right);
- 
--2. Create a file ``drivers/misc/example.c``, which includes:
-+   Then implement the function in ``drivers/misc/example.c``:
- 
--.. code-block:: c
-+   .. code-block:: c
- 
- 	#include <linux/errno.h>
- 
-@@ -152,24 +154,25 @@ In your kernel repository, let's add some code that we can test.
- 		return left + right;
- 	}
- 
--3. Add the following lines to ``drivers/misc/Kconfig``:
-+3. Add Kconfig menu entry for the feature to ``drivers/misc/Kconfig``:
- 
--.. code-block:: kconfig
-+   .. code-block:: kconfig
- 
- 	config MISC_EXAMPLE
- 		bool "My example"
- 
--4. Add the following lines to ``drivers/misc/Makefile``:
-+4. Add the kbuild goal that will build the feature to
-+   ``drivers/misc/Makefile``:
- 
--.. code-block:: make
-+   .. code-block:: make
- 
- 	obj-$(CONFIG_MISC_EXAMPLE) += example.o
- 
- Now we are ready to write the test cases.
- 
--1. Add the below test case in ``drivers/misc/example_test.c``:
-+1. Write the test in ``drivers/misc/example_test.c``:
- 
--.. code-block:: c
-+   .. code-block:: c
- 
- 	#include <kunit/test.h>
- 	#include "example.h"
-@@ -202,31 +205,32 @@ Now we are ready to write the test cases.
- 	};
- 	kunit_test_suite(misc_example_test_suite);
- 
--2. Add the following lines to ``drivers/misc/Kconfig``:
-+2. Add following Kconfig entry for the test to ``drivers/misc/Kconfig``:
- 
--.. code-block:: kconfig
-+   .. code-block:: kconfig
- 
- 	config MISC_EXAMPLE_TEST
- 		tristate "Test for my example" if !KUNIT_ALL_TESTS
- 		depends on MISC_EXAMPLE && KUNIT=y
- 		default KUNIT_ALL_TESTS
- 
--3. Add the following lines to ``drivers/misc/Makefile``:
-+3. Add kbuild goal of the test to ``drivers/misc/Makefile``:
- 
--.. code-block:: make
-+   .. code-block:: make
- 
- 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
- 
--4. Add following configuration fragments to ``.kunit/.kunitconfig``:
-+4. Add following configuration fragments for the test to
-+   ``.kunit/.kunitconfig``:
- 
--.. code-block:: none
-+   .. code-block:: none
- 
- 	CONFIG_MISC_EXAMPLE=y
- 	CONFIG_MISC_EXAMPLE_TEST=y
- 
- 5. Run the test:
- 
--.. code-block:: bash
-+   .. code-block:: bash
- 
- 	./tools/testing/kunit/kunit.py run
- 
 -- 
 An old man doll... just what I always wanted! - Clara
-
