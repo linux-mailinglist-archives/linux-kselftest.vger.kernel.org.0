@@ -2,39 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E08AF5EFA5B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 18:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5285EFB01
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 18:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbiI2QZm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 12:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
+        id S235615AbiI2QhS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 12:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236308AbiI2QZX (ORCPT
+        with ESMTP id S235657AbiI2QhO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:25:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886B511D0DE;
-        Thu, 29 Sep 2022 09:22:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C41B61AC4;
-        Thu, 29 Sep 2022 16:22:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A4FC433D6;
-        Thu, 29 Sep 2022 16:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664468532;
-        bh=d2xbFWd6cZFHqRqtchaW5YtreTtOFcfhK6VaJhknpbI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n0wLICpr9rwLDoO4I22Q+j9GYGdUKtx6O4WAI2LoMiZB3FDSAWURYHUfaUCVoy0FM
-         qYyRxJgC0jSvph0Coo/utPsy68jMOH4DGqPFWjRqQEKttA/d/0ZrktDUcVfwwNuHYL
-         7S0HoBNZHiImbcIfMeTZSAaIn1zhtANzQbzqt32J/JeYD3OMUq74UVbliF+CfVlu/p
-         J0/ACe8PO1rnEPHBK1ESN38tRjPVVor7iVryP5kv1sA7xGmVWQ0mD3oN4aWaqOEzHm
-         9PdQWpxoqQyzL/n52vrIBKCwHTD8pcJQesLiDsZ8geoyB2WeoZD2mTUT3adNUZloCX
-         4w2/AXVJNLemw==
-Date:   Thu, 29 Sep 2022 09:22:10 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     netdev@kapio-technology.com
+        Thu, 29 Sep 2022 12:37:14 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2D626F5;
+        Thu, 29 Sep 2022 09:37:12 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3B0671884CC9;
+        Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 2AB242500370;
+        Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 0C5179EC0002; Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+MIME-Version: 1.0
+Date:   Thu, 29 Sep 2022 18:37:09 +0200
+From:   netdev@kapio-technology.com
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     davem@davemloft.net, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -69,31 +62,38 @@ Cc:     davem@davemloft.net, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 9/9] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-Message-ID: <20220929092210.0423e96d@kernel.org>
-In-Reply-To: <6811b44516cf8bf37678bab23bca80ba@kapio-technology.com>
-References: <20220928174904.117131-1-netdev@kapio-technology.com>
-        <20220929091143.468546f2@kernel.org>
-        <6811b44516cf8bf37678bab23bca80ba@kapio-technology.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+In-Reply-To: <20220929091036.3812327f@kernel.org>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
+ <20220929091036.3812327f@kernel.org>
+User-Agent: Gigahost Webmail
+Message-ID: <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 29 Sep 2022 18:17:40 +0200 netdev@kapio-technology.com wrote:
-> > If you were trying to repost just the broken patches - that's not gonna
-> > work :(  
+On 2022-09-29 18:10, Jakub Kicinski wrote:
+> On Wed, 28 Sep 2022 17:02:47 +0200 Hans Schultz wrote:
+>> From: "Hans J. Schultz" <netdev@kapio-technology.com>
+>> 
+>> This patch set extends the locked port feature for devices
+>> that are behind a locked port, but do not have the ability to
+>> authorize themselves as a supplicant using IEEE 802.1X.
+>> Such devices can be printers, meters or anything related to
+>> fixed installations. Instead of 802.1X authorization, devices
+>> can get access based on their MAC addresses being whitelisted.
 > 
-> Sorry, I do not understand what 'broken' patches you are referring to?
-> 
-> I think that the locked port tests should be working?
+> Try a allmodconfig build on latest net-next, seems broken.
 
-Ignore it then. v6 does not build, see my other reply.
+I have all different switch drivers enabled and I see no compile 
+warnings or errors. I guess I will get a robot update if that is the 
+case, but please be specific as to what does not build.
