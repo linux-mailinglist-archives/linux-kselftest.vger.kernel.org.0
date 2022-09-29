@@ -2,99 +2,195 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0245EF4F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 14:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0A35EF5CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 14:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbiI2MI3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 08:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
+        id S235286AbiI2Mzr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 08:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbiI2MI2 (ORCPT
+        with ESMTP id S234922AbiI2Mzp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 08:08:28 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E097147A26;
-        Thu, 29 Sep 2022 05:08:26 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MdX8Q597Lz1P6w4;
-        Thu, 29 Sep 2022 20:04:06 +0800 (CST)
-Received: from canpemm500005.china.huawei.com (7.192.104.229) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 29 Sep 2022 20:08:24 +0800
-Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
- canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
- Thu, 29 Sep 2022 20:08:24 +0800
-From:   zhaogongyi <zhaogongyi@huawei.com>
-To:     David Hildenbrand <david@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-CC:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Subject: Re: [PATCH -next v4 1/3] selftests/memory-hotplug: Add checking after
- online or offline
-Thread-Topic: [PATCH -next v4 1/3] selftests/memory-hotplug: Add checking
- after online or offline
-Thread-Index: AdjT+ytsJOcEj+v4TUG4sPNhxFl26Q==
-Date:   Thu, 29 Sep 2022 12:08:24 +0000
-Message-ID: <96c8944284974e08a63d02dac1fa2601@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.67.110.209]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 29 Sep 2022 08:55:45 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D627C1323D5;
+        Thu, 29 Sep 2022 05:55:44 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id r62so1352120pgr.12;
+        Thu, 29 Sep 2022 05:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=9yf4OQz+BK3lw3pxhu02ZUG7Irlu0z/ZcY7cz4znAzs=;
+        b=dJkWfKlkyJBN7WaUfltXzILCK2Wy5ACLkrxeFQCE/YTFIoDSh7HbLG0zdsR2ij9PtQ
+         o9XtqcmnebtOH6EOAxM46xj2zr08TxQNhig9krAUmWhW+rJhL5xY85dYBblq01+Bdhk0
+         RB3gx8izGpJQRsiRMTUfbLmJjDi4k6OL5lt2hRyuPtIrK9pVdsQINS5AFg3fVblYBNr6
+         RPy7oGnPWeNjesvlwvQNzcUZOkhmoxiFxAA+UEipzOadO7JNhW43uZgHTzg2ahA0My/v
+         DEJLC2jy/9rEl+z+Yk5coa7ydqOqBpgaKceZlnpM3Jpnj6fyWGfanedU4w59XT6amaVp
+         mXTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=9yf4OQz+BK3lw3pxhu02ZUG7Irlu0z/ZcY7cz4znAzs=;
+        b=di2VzddzhYxadQ1w4qIe6qpET/WbrjY5DMbW+ZT7S86RHTwjXcRafSr+eAjMw0RQKg
+         TzN3GNPj46DGDWd9KW/AGWC5fvIPAMqsvgy2r/dE8eyCExIkNGkw9J8E8bjkHofBldf2
+         pyIvuU4fSU7/2rMToQCF350tn3b9HoQ3Nxrh6g4Ya2dxW7LDpDkxfJRxMjmXB+PpvMaH
+         16HpferSOvfQTzJSnxKkX6Bb5OyW/gNNBjMzOUZ611EQCkgS/iM962RkODTaBBGCXqej
+         znl8e+GkqADYoSIbUQUxSxmIbtrPmU28BZtu/lrC6WezBK5hZwt4L8g/RCD4gKM59AGe
+         TUug==
+X-Gm-Message-State: ACrzQf0zYyNG52RhS/92XqPuGHxHiLe47Dos2gaAvAMnZSiDz8057x2Y
+        FH+Pd/Pn1e5gZnG+/ELrzuHud7U5xq9dLw==
+X-Google-Smtp-Source: AMsMyM6IPHHra7AxEtjzU6k5fLaaFgYbpyzssqyW3xHAR2tOYvYHgx86NKhSQRqSBiiPKn2DkdDR4w==
+X-Received: by 2002:a05:6a00:1249:b0:543:aa0a:9c0a with SMTP id u9-20020a056a00124900b00543aa0a9c0amr3479328pfi.2.1664456144072;
+        Thu, 29 Sep 2022 05:55:44 -0700 (PDT)
+Received: from debian.. (subs32-116-206-28-55.three.co.id. [116.206.28.55])
+        by smtp.gmail.com with ESMTPSA id x15-20020aa7956f000000b0052e987c64efsm6219645pfq.174.2022.09.29.05.55.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Sep 2022 05:55:43 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH] Documentation: kunit: rewrite writing first test instructions
+Date:   Thu, 29 Sep 2022 19:54:59 +0700
+Message-Id: <20220929125458.52979-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3732; i=bagasdotme@gmail.com; h=from:subject; bh=yfiSx16xg1z1vQcacEqraLapzGUSyioovfRTutAD9m8=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMmmU+dey3eRm/8kjlUp/c5M364sa+MzM2dcy5YRvMEo9X1K zpPjHaUsDGIcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZiInyPDP1t9XqfSMxMat3SmOU0TyD q3nk05Rqq2d2Nd2htzwzzVGwz/S/y0jhyz/XPKpyF745aH6zayWzieOFPsEae+al5T8OyjPAA=
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SGkhDQoNCj4gDQo+IE9uIDI5LjA5LjIyIDA5OjM5LCB6aGFvZ29uZ3lpIHdyb3RlOg0KPiA+IEhp
-LA0KPiA+DQo+ID4gV2UgY2FuIG5vdCBnZXQgdGhlIEVCVVNZIGZyb20gIiBlY2hvIDAgPg0KPiAv
-c3lzL2RldmljZXMvc3lzdGVtL21lbW9yeS9tZW1vcnl4eHgvb25saW5lIiwgbWF5YmUsIHJlZGly
-ZWN0IHRoZSBlcnJvcg0KPiBvdXB1dCB0byAvZGV2L251bGwgaXMgc3VpdGFibGUgd2hlbiBjYWxs
-aW5nIG9mZmxpbmVfbWVtb3J5X2V4cGVjdF9zdWNjZXNzKCk6DQo+ID4NCj4gPiAjIHNoIG1lbS1v
-bi1vZmYtdGVzdC5zaCAtYQ0KPiA+IG1lbS1vbi1vZmYtdGVzdC5zaDogaWxsZWdhbCBvcHRpb24g
-LS0gYSBUZXN0IHNjb3BlOiAyJSBob3RwbHVnIG1lbW9yeQ0KPiA+ICAgICAgICAgICBvbmxpbmUg
-YWxsIGhvdC1wbHVnZ2FibGUgbWVtb3J5IGluIG9mZmxpbmUgc3RhdGU6DQo+ID4gICAgICAgICAg
-ICAgICAgICAgU0tJUFBFRCAtIG5vIGhvdC1wbHVnZ2FibGUgbWVtb3J5IGluIG9mZmxpbmUgc3Rh
-dGUNCj4gPiAgICAgICAgICAgb2ZmbGluZSAyJSBob3QtcGx1Z2dhYmxlIG1lbW9yeSBpbiBvbmxp
-bmUgc3RhdGUNCj4gPiAgICAgICAgICAgdHJ5aW5nIHRvIG9mZmxpbmUgNCBvdXQgb2YgMTkyIG1l
-bW9yeSBibG9jayhzKToNCj4gPiBvbmxpbmUtPm9mZmxpbmUgbWVtb3J5MA0KPiA+IG9ubGluZS0+
-b2ZmbGluZSBtZW1vcnkxMA0KPiA+IG9ubGluZS0+b2ZmbGluZSBtZW1vcnkxMDANCj4gPiBvbmxp
-bmUtPm9mZmxpbmUgbWVtb3J5MTAxDQo+ID4gb25saW5lLT5vZmZsaW5lIG1lbW9yeTEwMg0KPiA+
-IG9ubGluZS0+b2ZmbGluZSBtZW1vcnkxMDMNCj4gPiBvbmxpbmUtPm9mZmxpbmUgbWVtb3J5MTA0
-DQo+ID4gb25saW5lLT5vZmZsaW5lIG1lbW9yeTEwNQ0KPiA+IG9ubGluZS0+b2ZmbGluZSBtZW1v
-cnkxMDYNCj4gPiBvbmxpbmUtPm9mZmxpbmUgbWVtb3J5MTA3DQo+ID4gb25saW5lLT5vZmZsaW5l
-IG1lbW9yeTEwOA0KPiA+IG9ubGluZS0+b2ZmbGluZSBtZW1vcnkxMDkNCj4gPiBvbmxpbmUtPm9m
-ZmxpbmUgbWVtb3J5MTENCj4gPiBvbmxpbmUtPm9mZmxpbmUgbWVtb3J5MTEwDQo+ID4gb25saW5l
-LT5vZmZsaW5lIG1lbW9yeTExMQ0KPiA+IG9ubGluZS0+b2ZmbGluZSBtZW1vcnkxMTINCj4gPiBv
-bmxpbmUtPm9mZmxpbmUgbWVtb3J5MTEzDQo+ID4gb25saW5lLT5vZmZsaW5lIG1lbW9yeTExNA0K
-PiA+IG9ubGluZS0+b2ZmbGluZSBtZW1vcnkxMTUNCj4gPiBvbmxpbmUtPm9mZmxpbmUgbWVtb3J5
-MTE2DQo+ID4gb25saW5lLT5vZmZsaW5lIG1lbW9yeTExNw0KPiA+IG9ubGluZS0+b2ZmbGluZSBt
-ZW1vcnkxMTgNCj4gPiBvbmxpbmUtPm9mZmxpbmUgbWVtb3J5MTE5DQo+ID4gb25saW5lLT5vZmZs
-aW5lIG1lbW9yeTEyDQo+ID4gb25saW5lLT5vZmZsaW5lIG1lbW9yeTEyMA0KPiA+IG9ubGluZS0+
-b2ZmbGluZSBtZW1vcnkxMjENCj4gPiBvbmxpbmUtPm9mZmxpbmUgbWVtb3J5MTIyDQo+ID4gb25s
-aW5lLT5vZmZsaW5lIG1lbW9yeTEyMw0KPiA+IG9ubGluZS0+b2ZmbGluZSBtZW1vcnkxMjQNCj4g
-DQo+IENhbiB3ZSBoYXZlIGhlcmUgYW4gb3V0cHV0IGxpa2UNCj4gDQo+IG9ubGluZS0+b2ZmbGlu
-ZSBtZW1vcnkwDQo+IC0+IEZhaWx1cmUNCj4gb25saW5lLT5vZmZsaW5lIG1lbW9yeTEwDQo+IC0+
-IFN1Y2Nlc3MNCj4gDQo+IFRoYXQgd291bGQgbWFrZSBtdWNoIG1vcmUgc2Vuc2UgZm9yIGRlYnVn
-Z2luZyBwdXJwb3NlcyBhbmQgdW5kZXJzdGFuZGluZw0KPiB3aGF0IGlzIGhhcHBlbmluZyBoZXJl
-LiBJIHdhcyBwcmltYXJpbHkgY29uY2VybmVkIGFib3V0IHRoZSBtaXNsZWFkaW5nIGVycm9yDQo+
-IG1lc3NhZ2UsIHRoYXQgaW5kaWNhdGVkIHRoYXQgc29tZXRoaW5nIGlzICJ1bmV4cGVjdGVkIiAt
-LSBpdCdzIHBlcmZlY3RseQ0KPiByZWFzb25hYmxlIGhlcmUgdG8gKmV4cGVjdCogdGhhdCBvZmZs
-aW5pbmcgYSByYW5kb20gbWVtb3J5IGJsb2NrcyBqdXN0IGZhaWxzLg0KDQpZZXMsIEkgd2lsbCBz
-dWJtaXQgYSBuZXcgdmVyc2lvbiBvZiBwYXRjaGVzIHRvIGltcGxlbWVudCBpdCBhcyB5b3VyIHN1
-Z2dlc3Rpb25lczoNCg0KMS4gIFJlZGlyZWN0IG1pc2xlYWRpbmcgbXNnIHRvIC9kZXYvbnVsbA0K
-Mi4gIEFkZCBhbiBvdXRwdXQgZm9yIG9ubGluZS0+b2ZmbGluZSB0ZXN0DQoNClRoYW5rcyENCg0K
-DQo+IA0KPiAtLQ0KPiBUaGFua3MsDQo+IA0KPiBEYXZpZCAvIGRoaWxkZW5iDQoNCg==
+The wordings of step-by-step instructions on writing the first Kunit test
+are instructing readers to write codes without knowing what these are about.
+Rewrite these instructions to include the purpose of written code.
+
+While at it, align the code blocks of these contents.
+
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ This patch is based on Khalid's full path to .kunitconfig patch [1].
+
+ [1]: https://lore.kernel.org/linux-doc/20220929085332.4155-1-khalid.masum.92@gmail.com/
+
+ Documentation/dev-tools/kunit/start.rst | 40 ++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 18 deletions(-)
+
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 7999874dc4ddb3..9628360947507b 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -131,17 +131,19 @@ are built-in. Otherwise the module will need to be loaded.
+ 
+ Writing Your First Test
+ =======================
+-In your kernel repository, let's add some code that we can test.
++In your kernel repository, let's add some code that we can test. For this
++purpose, we are going to add simple addition driver.
+ 
+-1. Create a file ``drivers/misc/example.h``, which includes:
++1. Write the feature that will be tested. First, write the declaration
++   for ``misc_example_add()`` in ``drivers/misc/example.h``:
+ 
+-.. code-block:: c
++   .. code-block:: c
+ 
+ 	int misc_example_add(int left, int right);
+ 
+-2. Create a file ``drivers/misc/example.c``, which includes:
++   Then implement the function in ``drivers/misc/example.c``:
+ 
+-.. code-block:: c
++   .. code-block:: c
+ 
+ 	#include <linux/errno.h>
+ 
+@@ -152,24 +154,25 @@ In your kernel repository, let's add some code that we can test.
+ 		return left + right;
+ 	}
+ 
+-3. Add the following lines to ``drivers/misc/Kconfig``:
++3. Add Kconfig menu entry for the feature to ``drivers/misc/Kconfig``:
+ 
+-.. code-block:: kconfig
++   .. code-block:: kconfig
+ 
+ 	config MISC_EXAMPLE
+ 		bool "My example"
+ 
+-4. Add the following lines to ``drivers/misc/Makefile``:
++4. Add the kbuild goal that will build the feature to
++   ``drivers/misc/Makefile``:
+ 
+-.. code-block:: make
++   .. code-block:: make
+ 
+ 	obj-$(CONFIG_MISC_EXAMPLE) += example.o
+ 
+ Now we are ready to write the test cases.
+ 
+-1. Add the below test case in ``drivers/misc/example_test.c``:
++1. Write the test in ``drivers/misc/example_test.c``:
+ 
+-.. code-block:: c
++   .. code-block:: c
+ 
+ 	#include <kunit/test.h>
+ 	#include "example.h"
+@@ -202,31 +205,32 @@ Now we are ready to write the test cases.
+ 	};
+ 	kunit_test_suite(misc_example_test_suite);
+ 
+-2. Add the following lines to ``drivers/misc/Kconfig``:
++2. Add following Kconfig entry for the test to ``drivers/misc/Kconfig``:
+ 
+-.. code-block:: kconfig
++   .. code-block:: kconfig
+ 
+ 	config MISC_EXAMPLE_TEST
+ 		tristate "Test for my example" if !KUNIT_ALL_TESTS
+ 		depends on MISC_EXAMPLE && KUNIT=y
+ 		default KUNIT_ALL_TESTS
+ 
+-3. Add the following lines to ``drivers/misc/Makefile``:
++3. Add kbuild goal of the test to ``drivers/misc/Makefile``:
+ 
+-.. code-block:: make
++   .. code-block:: make
+ 
+ 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
+ 
+-4. Add following configuration fragments to ``.kunit/.kunitconfig``:
++4. Add following configuration fragments for the test to
++   ``.kunit/.kunitconfig``:
+ 
+-.. code-block:: none
++   .. code-block:: none
+ 
+ 	CONFIG_MISC_EXAMPLE=y
+ 	CONFIG_MISC_EXAMPLE_TEST=y
+ 
+ 5. Run the test:
+ 
+-.. code-block:: bash
++   .. code-block:: bash
+ 
+ 	./tools/testing/kunit/kunit.py run
+ 
+-- 
+An old man doll... just what I always wanted! - Clara
+
