@@ -2,109 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E375EFA0B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 18:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582BC5EFA47
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 18:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236085AbiI2QRo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 12:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
+        id S236247AbiI2QVy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 12:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235091AbiI2QRn (ORCPT
+        with ESMTP id S236248AbiI2QUN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:17:43 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2369F1D9284;
-        Thu, 29 Sep 2022 09:17:42 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C3F251884D0E;
-        Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id B9E4D2500370;
-        Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id AFFD09EC0002; Thu, 29 Sep 2022 16:17:40 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 29 Sep 2022 12:20:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44852253D;
+        Thu, 29 Sep 2022 09:19:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9EC2B81E59;
+        Thu, 29 Sep 2022 16:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2BEC433D6;
+        Thu, 29 Sep 2022 16:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664468382;
+        bh=a2NGbV0KNZ4CqbaOXaD8TLvI2KNvPxg0PZC3tUgSAXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YQQkiBB0DRXdQ2K9agjn79HAWa4krFA9RP2nzH5BOZUjA9v563VRs1jAXTryMyM84
+         JrNhfq4xfgy8RacwJzmibVTpEQ0IL0YSrzVLLaa4heLnw24y2I3Vhs3T6ez9iQRXX2
+         Vr5qGLq1xoWRoyQKQH35/LcwMDQhllgfPyoeegsNtLhxs2vaKew/05nGxwDzEKsmp9
+         C1Z9cTVf+KWAkj2XiiW0Itac70ENUM9yRKiez+PiQKO90f8e5WMNAPPxHmDiOpbBJW
+         ZeGwqWI4Wzf9ysRHoUhUXeYjhPpoL+Df5Q0n2ADiC86wa8XAZ8K48p6aHEXDkP0MwM
+         i4M3RwO1l5Fig==
+Date:   Thu, 29 Sep 2022 17:19:37 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Subject: Re: selftest: arm64: missing install files
+Message-ID: <YzXFmT1qYz6inFrC@sirena.org.uk>
+References: <CA+G9fYuw3Xn2wPc3_MXsJFNx7O4Zu91wFt+VsK4qwKMB7HdGow@mail.gmail.com>
 MIME-Version: 1.0
-Date:   Thu, 29 Sep 2022 18:17:40 +0200
-From:   netdev@kapio-technology.com
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 9/9] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <20220929091143.468546f2@kernel.org>
-References: <20220928174904.117131-1-netdev@kapio-technology.com>
- <20220929091143.468546f2@kernel.org>
-User-Agent: Gigahost Webmail
-Message-ID: <6811b44516cf8bf37678bab23bca80ba@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="33saO4ZIu08nOG3h"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYuw3Xn2wPc3_MXsJFNx7O4Zu91wFt+VsK4qwKMB7HdGow@mail.gmail.com>
+X-Cookie: Last week's pet, this week's special.
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-09-29 18:11, Jakub Kicinski wrote:
-> On Wed, 28 Sep 2022 19:49:04 +0200 Hans Schultz wrote:
->> From: "Hans J. Schultz" <netdev@kapio-technology.com>
->> 
->> Verify that the MAC-Auth mechanism works by adding a FDB entry with 
->> the
->> locked flag set, denying access until the FDB entry is replaced with a
->> FDB entry without the locked flag set.
->> 
->> Add test of blackhole fdb entries, verifying that there is no 
->> forwarding
->> to a blackhole entry from any port, and that the blackhole entry can 
->> be
->> replaced.
->> 
->> Also add a test that verifies that sticky FDB entries cannot roam 
->> (this
->> is not needed for now, but should in general be present anyhow for 
->> future
->> applications).
-> 
-> If you were trying to repost just the broken patches - that's not gonna
-> work :(
 
-Sorry, I do not understand what 'broken' patches you are referring to?
+--33saO4ZIu08nOG3h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I think that the locked port tests should be working?
+On Thu, Sep 29, 2022 at 09:03:54PM +0530, Naresh Kamboju wrote:
+
+> While running kselftest arm64 tests the following list of tests
+> were missing which means those test binaries not installed on to the rootfs.
+> Not a part of "make install" do we need to fix Makefiles ?
+> or am I missing something on the build machine ?
+
+There's probably an issue in either the build system or in how you're
+using it.  I'd guess if there is an issue in the source it's in the
+generic kselftest stuff rather than something arm64 specific.
+
+> We are building on the one machine and testing on multiple arm64 target
+> devices. Please refer to build log [1] and test log [2].
+
+The build log does not seem to include the command used to start the
+kselftest build and I'm not clear that it includes anything from the
+install step at all, never mind the command for it.  As far as I can
+tell everything built fine and something that was done between the build
+and trying to run the tests didn't work as expected but there doesn't
+appear to be any information about that part of the process.
+
+An example of a build which builds all expected executables and installs
+them into a tarball for deployment on a system can be seen here:
+
+https://storage.kernelci.org/mainline/master/v6.0-rc7/arm64/defconfig%2Bkselftest/gcc-10/logs/kselftest.log
+
+--33saO4ZIu08nOG3h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmM1xZgACgkQJNaLcl1U
+h9BzIggAhAO2Zs+LoHq9Y2Mv6ukTR9Ov5khaZ3FqGWR711cAKf6nH2I2A53kXs7A
+SAB1kfoymnsGkkKGD1XYchfcK5J+F+MAh9KTET878gWhHiF29AZzhWIX+LCn9xZ5
+nG2JE2mMb9lWTtlsUlRGXHQ8cRnkpq1dZIneVw6lqeQxMUZh8XFI9P4+l0pHcnPi
+EmWeLn69wV62Y+Zo8qdlAQfPjFtVYl1HEkdldnzbDZnWuGlZl4jJzqiQ/l9QrhLk
+S06FJF0h70rGrWiyQ7T3zcQ9qtOlSDqUqbqw71iN2sr1h5CPTMVw9cX3J9UVNTZQ
+yWTz03UbHESNlHnIYNfN2UE97ZsWiA==
+=2rQl
+-----END PGP SIGNATURE-----
+
+--33saO4ZIu08nOG3h--
