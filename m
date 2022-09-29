@@ -2,98 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5285EFB01
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 18:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8615EFC66
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 19:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235615AbiI2QhS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 12:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
+        id S235055AbiI2Ryx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 13:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235657AbiI2QhO (ORCPT
+        with ESMTP id S235024AbiI2Rys (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 12:37:14 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2D626F5;
-        Thu, 29 Sep 2022 09:37:12 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3B0671884CC9;
-        Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 2AB242500370;
-        Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 0C5179EC0002; Thu, 29 Sep 2022 16:37:10 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 29 Sep 2022 13:54:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BF013E23
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Sep 2022 10:54:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2912C61E8E
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Sep 2022 17:54:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6122DC433D6;
+        Thu, 29 Sep 2022 17:54:36 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] kselftest/arm64: Don't enable v8.5 for MTE selftest builds
+Date:   Thu, 29 Sep 2022 18:54:34 +0100
+Message-Id: <166447406678.3004405.3029448965221717837.b4-ty@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220928154517.173108-1-broonie@kernel.org>
+References: <20220928154517.173108-1-broonie@kernel.org>
 MIME-Version: 1.0
-Date:   Thu, 29 Sep 2022 18:37:09 +0200
-From:   netdev@kapio-technology.com
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-In-Reply-To: <20220929091036.3812327f@kernel.org>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
- <20220929091036.3812327f@kernel.org>
-User-Agent: Gigahost Webmail
-Message-ID: <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-09-29 18:10, Jakub Kicinski wrote:
-> On Wed, 28 Sep 2022 17:02:47 +0200 Hans Schultz wrote:
->> From: "Hans J. Schultz" <netdev@kapio-technology.com>
->> 
->> This patch set extends the locked port feature for devices
->> that are behind a locked port, but do not have the ability to
->> authorize themselves as a supplicant using IEEE 802.1X.
->> Such devices can be printers, meters or anything related to
->> fixed installations. Instead of 802.1X authorization, devices
->> can get access based on their MAC addresses being whitelisted.
+On Wed, 28 Sep 2022 16:45:17 +0100, Mark Brown wrote:
+> Currently we set -march=armv8.5+memtag when building the MTE selftests,
+> allowing the compiler to emit v8.5 and MTE instructions for anything it
+> generates. This means that we may get code that will generate SIGILLs when
+> run on older systems rather than skipping on non-MTE systems as should be
+> the case. Most toolchains don't select any incompatible instructions but
+> I have seen some reports which suggest that some may be appearing which do
+> so. This is also potentially problematic in that if the compiler chooses to
+> emit any MTE instructions for the C code it may interfere with the MTE
+> usage we are trying to test.
 > 
-> Try a allmodconfig build on latest net-next, seems broken.
+> [...]
 
-I have all different switch drivers enabled and I see no compile 
-warnings or errors. I guess I will get a robot update if that is the 
-case, but please be specific as to what does not build.
+Applied to arm64 (for-next/kselftest), thanks!
+
+[1/1] kselftest/arm64: Don't enable v8.5 for MTE selftest builds
+      https://git.kernel.org/arm64/c/55c8a987dd73
+
+-- 
+Catalin
+
