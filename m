@@ -2,106 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C805EF0F7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 10:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506FB5EF13A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 11:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbiI2I4c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 04:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S235628AbiI2JEq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 05:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbiI2I4N (ORCPT
+        with ESMTP id S235635AbiI2JEi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 04:56:13 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC4FEA599;
-        Thu, 29 Sep 2022 01:56:05 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id w10so689070pll.11;
-        Thu, 29 Sep 2022 01:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=0cWeqUzaMnvJsketKHV5m3B9Lf16LWQNARMhtcdH+io=;
-        b=ehTHs2nV2GGGpc0k4+HiEG1bx95nzdT2s331DZ53ruQ0ZAdVnTf+pwrWAAQa1b777K
-         XRYdQFgOpO3383w0aBgNsnx5WdAUXVmbbYvSIJaehz+DXMUrhN9a1rcsjAB6MFm9fVm5
-         q39KLk2CfeW/a9V0cyc3yzbq8yQ+UoREh8b52qfjCvSKNOkthgFbnPiso9CZ16MvnUKx
-         nOf0jdfcOK+he1OtNeD9oIwPRSE8+D8/QzdhIFJKQfItQ4roErv2Z7mZqO9SP9AXbu4R
-         QV1zZF/JyGfWAG+G3qhi9YveAfxW13b83+TktfrULAUW0lIS/I7+RjjZjCVawe/ZPp2u
-         o9aA==
+        Thu, 29 Sep 2022 05:04:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CCF287
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Sep 2022 02:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1664442271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZaVCDSxgfFbbhpN7t2ZlL2MHraJNJaYgGTscSpeG8bI=;
+        b=US4nReiV1pPxXhkJ58Cyl9ogbWYhGeHqHGDHYJS8XueIdDgSpTqYgTqXgA+dH6Xpz4cPM4
+        r/N+PoL6z7mfaaQFysO6ue4oXlXBuvdf4tdxnrEa+OflRcWQoyGfkVnXWtR0Hogt9dEuA3
+        OJeIARdmlc81trDJcCI5dXkOY7PlRCs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-133-wegNtYsoMU-rNFlK5sm0kg-1; Thu, 29 Sep 2022 05:04:29 -0400
+X-MC-Unique: wegNtYsoMU-rNFlK5sm0kg-1
+Received: by mail-wm1-f72.google.com with SMTP id r128-20020a1c4486000000b003b3309435a9so1938046wma.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Sep 2022 02:04:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=0cWeqUzaMnvJsketKHV5m3B9Lf16LWQNARMhtcdH+io=;
-        b=AXhemCH8u2CWYbB8PWSInZ5aVgpjr2zt9ANxwam9tUlLNcPelu/jPxubfAbkGHPzLN
-         oN6gI/ZMkd5ct0MCDKILG4nYz+0ibPnqdtPnjYped3zeFa1YavQtXMDv27+Iu6WVwDKK
-         lMw9jsljiaUDZvRJl0B2VL+baw4oUYkFnIEG/030wl5OGhZ0NX69TGzrsaSFpWYXPS7e
-         Jp60BT83IMKMN6dU8AU8JLixwEtRn/AtCkAM7wU5L+ly4st4WIpJLF6RyNhcOsVEsknU
-         dFEybCWjI+DcxYdO1b1QyHHFkBSCHUzLCIAdiXL1hhQLlVRLf7XuWRw4JhmwVu0lTdtn
-         ABvg==
-X-Gm-Message-State: ACrzQf0a1Y05s/DuviInILi2EgsR5NzAlDBdd2EUQX1uGRBJsQNXJfkG
-        lrcXVt5ufXizOWMpwtiWsnY=
-X-Google-Smtp-Source: AMsMyM6nbIstL6rkLYMB924r1HlKquI+95HbQR8gQs/nzchuFmCdeeu8W7EsBEA182vfEHGRsbVEcw==
-X-Received: by 2002:a17:902:ca01:b0:17a:487:d5f5 with SMTP id w1-20020a170902ca0100b0017a0487d5f5mr2451664pld.63.1664441764196;
-        Thu, 29 Sep 2022 01:56:04 -0700 (PDT)
-Received: from fedora.. ([103.230.106.49])
-        by smtp.gmail.com with ESMTPSA id w16-20020a63d750000000b00439dfe09770sm4922796pgi.12.2022.09.29.01.55.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 01:56:03 -0700 (PDT)
-From:   Khalid Masum <khalid.masum.92@gmail.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Khalid Masum <khalid.masum.92@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH v2] Documentation: Kunit: Use full path to .kunitconfig
-Date:   Thu, 29 Sep 2022 14:53:32 +0600
-Message-Id: <20220929085332.4155-1-khalid.masum.92@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZaVCDSxgfFbbhpN7t2ZlL2MHraJNJaYgGTscSpeG8bI=;
+        b=0l3KU2EyKqDnssAIZX9sv/8/SzDjLxGpVHgjkoNiXy6tPHpEaapknPX73MQQ/kSzvB
+         lMOgusDlUAk3EJKtrxuOlHZ3HqSecFNgseZ9cCMeK0xMXVGjvuh+4C1eEpUVSlJU0b5T
+         9shCKCZf/BGk7RDrCRILqXJ8IE0QqUthkoICnis49CICJm/jevXIiO0EYcockx1p9kFR
+         uVdYlJTE4FWh08jb5d3A48iS6yw8lBmYb1m1NQ0XsXC/eRBjTAyMuQv2OXnqBroR4mxe
+         N2L+ae8FnEAhzzVBOQYX0jiyqkvF516fImIG1VlvpbJ0r4/mvrTQ5PXffnI8nnFLMYAe
+         0ATA==
+X-Gm-Message-State: ACrzQf2uxNtTN+L4fMJnEX6yaB1OWP5HINF0Sy6E4v1IlUyjQXzGQTyI
+        zbSNJqWW9Bu+ItI37GwquB0UVv+Yo5S3p4z3lKk91n3+lReH43FcrtQLYZLuUjQnWDNS3YI81qG
+        RNX6+F9VlteW30/ZuPNGupKc/CM6h
+X-Received: by 2002:a5d:64c7:0:b0:22a:6a2e:c4f1 with SMTP id f7-20020a5d64c7000000b0022a6a2ec4f1mr1355205wri.269.1664442268808;
+        Thu, 29 Sep 2022 02:04:28 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7j7YGY9YexIU4PweeHwyH1XB9hyrfcXMb0si62fL6a+YKhLNI6oZjfmmbQ55PFKBuyPXRTBw==
+X-Received: by 2002:a5d:64c7:0:b0:22a:6a2e:c4f1 with SMTP id f7-20020a5d64c7000000b0022a6a2ec4f1mr1355187wri.269.1664442268525;
+        Thu, 29 Sep 2022 02:04:28 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:ce00:b5d:2b28:1eb5:9245? (p200300cbc705ce000b5d2b281eb59245.dip0.t-ipconnect.de. [2003:cb:c705:ce00:b5d:2b28:1eb5:9245])
+        by smtp.gmail.com with ESMTPSA id s2-20020a5d4ec2000000b00228d67db06esm6063780wrv.21.2022.09.29.02.04.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 02:04:28 -0700 (PDT)
+Message-ID: <975cd79d-b211-c10b-4e25-d7b7203c0109@redhat.com>
+Date:   Thu, 29 Sep 2022 11:04:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH -next v4 1/3] selftests/memory-hotplug: Add checking after
+ online or offline
+Content-Language: en-US
+To:     zhaogongyi <zhaogongyi@huawei.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Cc:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "osalvador@suse.de" <osalvador@suse.de>,
+        "shuah@kernel.org" <shuah@kernel.org>
+References: <f16e94ec925747f3954d34aa4bd0c355@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <f16e94ec925747f3954d34aa4bd0c355@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The fourth list item on writing test cases instructs adding Kconfig
-fragments to .kunitconfig, which should have been full path to the file
-(.kunit/.kunitconfig).
+On 29.09.22 09:39, zhaogongyi wrote:
+> Hi,
+> 
+> We can not get the EBUSY from " echo 0 > /sys/devices/system/memory/memoryxxx/online", maybe, redirect the error ouput to /dev/null is suitable when calling offline_memory_expect_success():
+> 
+> # sh mem-on-off-test.sh -a
+> mem-on-off-test.sh: illegal option -- a
+> Test scope: 2% hotplug memory
+>           online all hot-pluggable memory in offline state:
+>                   SKIPPED - no hot-pluggable memory in offline state
+>           offline 2% hot-pluggable memory in online state
+>           trying to offline 4 out of 192 memory block(s):
+> online->offline memory0
+> online->offline memory10
+> online->offline memory100
+> online->offline memory101
+> online->offline memory102
+> online->offline memory103
+> online->offline memory104
+> online->offline memory105
+> online->offline memory106
+> online->offline memory107
+> online->offline memory108
+> online->offline memory109
+> online->offline memory11
+> online->offline memory110
+> online->offline memory111
+> online->offline memory112
+> online->offline memory113
+> online->offline memory114
+> online->offline memory115
+> online->offline memory116
+> online->offline memory117
+> online->offline memory118
+> online->offline memory119
+> online->offline memory12
+> online->offline memory120
+> online->offline memory121
+> online->offline memory122
+> online->offline memory123
+> online->offline memory124
 
-Cc: Sadiya Kazi <sadiyakazi@google.com>
-Cc: David Gow <davidgow@google.com>
-Suggested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
----
-Changes since v1:
-- Update commit message
-- Make the instruction more descriptive
+Can we have here an output like
 
- Documentation/dev-tools/kunit/start.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+online->offline memory0
+-> Failure
+online->offline memory10
+-> Success
 
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 867a4bba6bf6..69361065cda6 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -217,7 +217,7 @@ Now we are ready to write the test cases.
- 
- 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
- 
--4. Add the following lines to ``.kunitconfig``:
-+4. Add following configuration fragments to ``.kunit/.kunitconfig``:
- 
- .. code-block:: none
- 
+That would make much more sense for debugging purposes and understanding 
+what is happening here. I was primarily concerned about the misleading 
+error message, that indicated that something is "unexpected" -- it's 
+perfectly reasonable here to *expect* that offlining a random memory 
+blocks just fails.
+
 -- 
-2.37.3
+Thanks,
+
+David / dhildenb
 
