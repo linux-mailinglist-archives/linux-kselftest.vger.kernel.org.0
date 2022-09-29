@@ -2,200 +2,358 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0DF5EF677
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 15:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3551B5EF89F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 17:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235724AbiI2N0w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 09:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
+        id S235850AbiI2PZB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 11:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbiI2N02 (ORCPT
+        with ESMTP id S235808AbiI2PY6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 09:26:28 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD08F11DFCD;
-        Thu, 29 Sep 2022 06:26:19 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 3so1462454pga.1;
-        Thu, 29 Sep 2022 06:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=tZqNyVFP8TilF+zyV4PYC5u7/K2JRWQ8RYWUuGAVbWU=;
-        b=cX4x36k3ftMZAj4wDt2XyX9s8mpa6T2cqgqfZVZR+aM1HnfxIY1D0N/oeEIylgPIsR
-         /s48GoP2v2XTVNoU73D3SNEfQN/EKIV2rg16OqpdizhFX9ds8y0XZWvv8SVml3iY3/jd
-         mVnHBivKIe9S/YU4AbEnrhQInJNlrhnlKXq5Kd67mbYJhkpbwZfiZYKPD9B0QBgNV8Se
-         UnLoJOIhrowLAooSsjasef/0KjFhaPDNe3mkH/b6fZFQJmF5UlcGaA6VCNWZqn17BuNq
-         R7hjSvqlaQW2oyjJDIHQHTG7rz7wTweSCC9r5VolAlNdzsBbHTZFgY8O4NX7sVbveYVQ
-         W2xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=tZqNyVFP8TilF+zyV4PYC5u7/K2JRWQ8RYWUuGAVbWU=;
-        b=3J45kZ6Iz7+pjNpkE5uWW3kBC2tHw2tV63/8VsO05Dv/LhxebCZ0l7aEdvBHVxEjSO
-         nHRIUeYyv8Upj1nmqS/O1whpw/AvltEyXyhrcCWy7V6zUNWj0q+4l5hx5QG+GqHt1Av6
-         bYywWQmeM2fG4lGRGOwIkJmKA6M+/4W+IYPkXtocaF3j736IT3fPUf9kWN4Ot3AtoIuB
-         ypG73H/u9zfgYR3xpJ99heM0kYA92OyWKPlwGk0bw9SgIHA8MR4qyDjPL1yWKixdIaCU
-         sXUBSgo9cnzLBq0KZqxQ5uGijOe8d+4GkoKYP2fa448dOxgKJqrwgt74h22cmLAWnoy5
-         ZiMQ==
-X-Gm-Message-State: ACrzQf2aSe3O7Tmih8HAoGHHw0R4ZfeUkpmfCp51zwl5Qcfeda9F1JGg
-        KkHSobnAWnL0geWGavaA30KRBlS7gqAyLSvG
-X-Google-Smtp-Source: AMsMyM6E1lmgYBG3krlNTaNVmvfDxtih9qIcvbgskKpTf5Wihh+/0LcgP9LLmZIJ6wJF7d37f8P1tw==
-X-Received: by 2002:a65:5b05:0:b0:439:a0ae:7e6a with SMTP id y5-20020a655b05000000b00439a0ae7e6amr2981230pgq.16.1664457977896;
-        Thu, 29 Sep 2022 06:26:17 -0700 (PDT)
-Received: from debian.. (subs03-180-214-233-65.three.co.id. [180.214.233.65])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b0016be834d54asm5886900pln.306.2022.09.29.06.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 06:26:17 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH v2] Documentation: kunit: rewrite writing first test instructions
-Date:   Thu, 29 Sep 2022 20:25:49 +0700
-Message-Id: <20220929132549.56452-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Thu, 29 Sep 2022 11:24:58 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA38B632D;
+        Thu, 29 Sep 2022 08:24:52 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id A2C4A18848E5;
+        Thu, 29 Sep 2022 15:24:50 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 97A542500370;
+        Thu, 29 Sep 2022 15:24:50 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 894CA9EC0005; Thu, 29 Sep 2022 15:24:50 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 875B69120FED;
+        Thu, 29 Sep 2022 15:24:49 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH iproute2-next 1/2] bridge: link: enable MacAuth/MAB feature
+Date:   Thu, 29 Sep 2022 17:21:36 +0200
+Message-Id: <20220929152137.167626-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3901; i=bagasdotme@gmail.com; h=from:subject; bh=BF2ojZpfYeCZ/rD/w17Lk5r/0Jvd5HPV5sWmEkAa5r0=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMmmcy5VvnC0u2v8/f4p1o/BZgVBM5/+PLEmqszq7aRFYW6h ke9WdpSyMIhxMMiKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAiO34z/FM04vBJXarZe/+KxluDqd ombzgyE8wWyb0o8bTlcHZxucDIsHvSqqtFkmx9mycL7lc48nu1D+t1/p4HFj0sS3+cPa5bzAcA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The wordings of step-by-step instructions on writing the first Kunit test
-are instructing readers to write codes without knowing what these are about.
-Rewrite these instructions to include the purpose of written code.
+The MAB feature can be enabled on a locked port with the command:
+bridge link set dev <DEV> mab on
 
-While at it, align the code blocks of these contents.
-
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
 ---
- Changes since v1 [1]:
+ bridge/fdb.c                   | 17 +++++++++++++++--
+ bridge/link.c                  | 21 ++++++++++++++++++---
+ include/uapi/linux/if_link.h   |  1 +
+ include/uapi/linux/neighbour.h |  7 ++++++-
+ ip/iplink_bridge_slave.c       | 16 +++++++++++++---
+ man/man8/bridge.8              | 10 ++++++++++
+ man/man8/ip-link.8.in          |  8 ++++++++
+ 7 files changed, 71 insertions(+), 9 deletions(-)
 
-   - Fix jumped list numbering on writing the feature
-
- This patch is based on Khalid's full path to .kunitconfig patch [2].
-
- [1]: https://lore.kernel.org/linux-doc/20220929125458.52979-1-bagasdotme@gmail.com/
- [2]: https://lore.kernel.org/linux-doc/20220929085332.4155-1-khalid.masum.92@gmail.com/
-
- Documentation/dev-tools/kunit/start.rst | 40 ++++++++++++++-----------
- 1 file changed, 22 insertions(+), 18 deletions(-)
-
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 7999874dc4ddb3..c0a5adf6d8d665 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -131,17 +131,19 @@ are built-in. Otherwise the module will need to be loaded.
+diff --git a/bridge/fdb.c b/bridge/fdb.c
+index 5f71bde0..0fbe9bd3 100644
+--- a/bridge/fdb.c
++++ b/bridge/fdb.c
+@@ -93,7 +93,7 @@ static int state_a2n(unsigned int *s, const char *arg)
+ 	return 0;
+ }
  
- Writing Your First Test
- =======================
--In your kernel repository, let's add some code that we can test.
-+In your kernel repository, let's add some code that we can test. For this
-+purpose, we are going to add simple addition driver.
+-static void fdb_print_flags(FILE *fp, unsigned int flags)
++static void fdb_print_flags(FILE *fp, unsigned int flags, __u8 ext_flags)
+ {
+ 	open_json_array(PRINT_JSON,
+ 			is_json_context() ?  "flags" : "");
+@@ -116,6 +116,9 @@ static void fdb_print_flags(FILE *fp, unsigned int flags)
+ 	if (flags & NTF_STICKY)
+ 		print_string(PRINT_ANY, NULL, "%s ", "sticky");
  
--1. Create a file ``drivers/misc/example.h``, which includes:
-+1. Write the feature that will be tested. First, write the declaration
-+   for ``misc_example_add()`` in ``drivers/misc/example.h``:
++	if (ext_flags & NTF_EXT_LOCKED)
++		print_string(PRINT_ANY, NULL, "%s ", "locked");
++
+ 	close_json_array(PRINT_JSON, NULL);
+ }
  
--.. code-block:: c
-+   .. code-block:: c
+@@ -144,6 +147,7 @@ int print_fdb(struct nlmsghdr *n, void *arg)
+ 	struct ndmsg *r = NLMSG_DATA(n);
+ 	int len = n->nlmsg_len;
+ 	struct rtattr *tb[NDA_MAX+1];
++	__u32 ext_flags = 0;
+ 	__u16 vid = 0;
  
- 	int misc_example_add(int left, int right);
+ 	if (n->nlmsg_type != RTM_NEWNEIGH && n->nlmsg_type != RTM_DELNEIGH) {
+@@ -170,6 +174,9 @@ int print_fdb(struct nlmsghdr *n, void *arg)
+ 	parse_rtattr(tb, NDA_MAX, NDA_RTA(r),
+ 		     n->nlmsg_len - NLMSG_LENGTH(sizeof(*r)));
  
--2. Create a file ``drivers/misc/example.c``, which includes:
-+   Then implement the function in ``drivers/misc/example.c``:
++	if (tb[NDA_FLAGS_EXT])
++		ext_flags = rta_getattr_u32(tb[NDA_FLAGS_EXT]);
++
+ 	if (tb[NDA_VLAN])
+ 		vid = rta_getattr_u16(tb[NDA_VLAN]);
  
--.. code-block:: c
-+   .. code-block:: c
+@@ -266,7 +273,7 @@ int print_fdb(struct nlmsghdr *n, void *arg)
+ 	if (show_stats && tb[NDA_CACHEINFO])
+ 		fdb_print_stats(fp, RTA_DATA(tb[NDA_CACHEINFO]));
  
- 	#include <linux/errno.h>
+-	fdb_print_flags(fp, r->ndm_flags);
++	fdb_print_flags(fp, r->ndm_flags, ext_flags);
  
-@@ -152,24 +154,25 @@ In your kernel repository, let's add some code that we can test.
- 		return left + right;
- 	}
  
--3. Add the following lines to ``drivers/misc/Kconfig``:
-+2. Add Kconfig menu entry for the feature to ``drivers/misc/Kconfig``:
+ 	if (tb[NDA_MASTER])
+@@ -414,6 +421,7 @@ static int fdb_modify(int cmd, int flags, int argc, char **argv)
+ 	char *endptr;
+ 	short vid = -1;
+ 	__u32 nhid = 0;
++	__u32 ext_flags = 0;
  
--.. code-block:: kconfig
-+   .. code-block:: kconfig
+ 	while (argc > 0) {
+ 		if (strcmp(*argv, "dev") == 0) {
+@@ -527,6 +535,11 @@ static int fdb_modify(int cmd, int flags, int argc, char **argv)
+ 	if (dst_ok)
+ 		addattr_l(&req.n, sizeof(req), NDA_DST, &dst.data, dst.bytelen);
  
- 	config MISC_EXAMPLE
- 		bool "My example"
++	if (ext_flags &&
++	    addattr_l(&req.n, sizeof(req), NDA_FLAGS_EXT, &ext_flags,
++		      sizeof(ext_flags)) < 0)
++		return -1;
++
+ 	if (vid >= 0)
+ 		addattr16(&req.n, sizeof(req), NDA_VLAN, vid);
+ 	if (nhid > 0)
+diff --git a/bridge/link.c b/bridge/link.c
+index 3810fa04..dd69d7c3 100644
+--- a/bridge/link.c
++++ b/bridge/link.c
+@@ -181,9 +181,14 @@ static void print_protinfo(FILE *fp, struct rtattr *attr)
+ 		if (prtb[IFLA_BRPORT_ISOLATED])
+ 			print_on_off(PRINT_ANY, "isolated", "isolated %s ",
+ 				     rta_getattr_u8(prtb[IFLA_BRPORT_ISOLATED]));
+-		if (prtb[IFLA_BRPORT_LOCKED])
+-			print_on_off(PRINT_ANY, "locked", "locked %s ",
+-				     rta_getattr_u8(prtb[IFLA_BRPORT_LOCKED]));
++		if (prtb[IFLA_BRPORT_LOCKED]) {
++			if (prtb[IFLA_BRPORT_MAB] && rta_getattr_u8(prtb[IFLA_BRPORT_MAB]))
++				print_on_off(PRINT_ANY, "locked mab", "locked mab %s ",
++					     rta_getattr_u8(prtb[IFLA_BRPORT_LOCKED]));
++			else
++				print_on_off(PRINT_ANY, "locked", "locked %s ",
++					     rta_getattr_u8(prtb[IFLA_BRPORT_LOCKED]));
++		}
+ 	} else
+ 		print_stp_state(rta_getattr_u8(attr));
+ }
+@@ -281,6 +286,7 @@ static void usage(void)
+ 		"                               [ vlan_tunnel {on | off} ]\n"
+ 		"                               [ isolated {on | off} ]\n"
+ 		"                               [ locked {on | off} ]\n"
++		"                               [ mab {on | off} ]\n"
+ 		"                               [ hwmode {vepa | veb} ]\n"
+ 		"                               [ backup_port DEVICE ] [ nobackup_port ]\n"
+ 		"                               [ self ] [ master ]\n"
+@@ -312,6 +318,7 @@ static int brlink_modify(int argc, char **argv)
+ 	__s8 bcast_flood = -1;
+ 	__s8 mcast_to_unicast = -1;
+ 	__s8 locked = -1;
++	__s8 macauth = -1;
+ 	__s8 isolated = -1;
+ 	__s8 hairpin = -1;
+ 	__s8 bpdu_guard = -1;
+@@ -437,6 +444,11 @@ static int brlink_modify(int argc, char **argv)
+ 			locked = parse_on_off("locked", *argv, &ret);
+ 			if (ret)
+ 				return ret;
++		} else if (strcmp(*argv, "mab") == 0) {
++			NEXT_ARG();
++			macauth = parse_on_off("mab", *argv, &ret);
++			if (ret)
++				return ret;
+ 		} else if (strcmp(*argv, "backup_port") == 0) {
+ 			NEXT_ARG();
+ 			backup_port_idx = ll_name_to_index(*argv);
+@@ -520,6 +532,9 @@ static int brlink_modify(int argc, char **argv)
+ 	if (locked >= 0)
+ 		addattr8(&req.n, sizeof(req), IFLA_BRPORT_LOCKED, locked);
  
--4. Add the following lines to ``drivers/misc/Makefile``:
-+3. Add the kbuild goal that will build the feature to
-+   ``drivers/misc/Makefile``:
++	if (macauth >= 0)
++		addattr8(&req.n, sizeof(req), IFLA_BRPORT_MAB, macauth);
++
+ 	if (backup_port_idx != -1)
+ 		addattr32(&req.n, sizeof(req), IFLA_BRPORT_BACKUP_PORT,
+ 			  backup_port_idx);
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index 7494cffb..58a002de 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -559,6 +559,7 @@ enum {
+ 	IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT,
+ 	IFLA_BRPORT_MCAST_EHT_HOSTS_CNT,
+ 	IFLA_BRPORT_LOCKED,
++	IFLA_BRPORT_MAB,
+ 	__IFLA_BRPORT_MAX
+ };
+ #define IFLA_BRPORT_MAX (__IFLA_BRPORT_MAX - 1)
+diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
+index a998bf76..4dda051b 100644
+--- a/include/uapi/linux/neighbour.h
++++ b/include/uapi/linux/neighbour.h
+@@ -52,7 +52,8 @@ enum {
+ #define NTF_STICKY	(1 << 6)
+ #define NTF_ROUTER	(1 << 7)
+ /* Extended flags under NDA_FLAGS_EXT: */
+-#define NTF_EXT_MANAGED	(1 << 0)
++#define NTF_EXT_MANAGED		(1 << 0)
++#define NTF_EXT_LOCKED		(1 << 1)
  
--.. code-block:: make
-+   .. code-block:: make
+ /*
+  *	Neighbor Cache Entry States.
+@@ -86,6 +87,10 @@ enum {
+  * NTF_EXT_MANAGED flagged neigbor entries are managed by the kernel on behalf
+  * of a user space control plane, and automatically refreshed so that (if
+  * possible) they remain in NUD_REACHABLE state.
++ *
++ * NTF_EXT_LOCKED flagged FDB entries are placeholder entries used with the
++ * locked port feature, that ensures that an entry exists while at the same
++ * time dropping packets on ingress with src MAC and VID matching the entry.
+  */
  
- 	obj-$(CONFIG_MISC_EXAMPLE) += example.o
+ struct nda_cacheinfo {
+diff --git a/ip/iplink_bridge_slave.c b/ip/iplink_bridge_slave.c
+index 98d17213..0c0894eb 100644
+--- a/ip/iplink_bridge_slave.c
++++ b/ip/iplink_bridge_slave.c
+@@ -44,6 +44,7 @@ static void print_explain(FILE *f)
+ 		"			[ vlan_tunnel {on | off} ]\n"
+ 		"			[ isolated {on | off} ]\n"
+ 		"			[ locked {on | off} ]\n"
++		"                       [ mab {on | off} ]\n"
+ 		"			[ backup_port DEVICE ] [ nobackup_port ]\n"
+ 	);
+ }
+@@ -284,9 +285,14 @@ static void bridge_slave_print_opt(struct link_util *lu, FILE *f,
+ 		print_on_off(PRINT_ANY, "isolated", "isolated %s ",
+ 			     rta_getattr_u8(tb[IFLA_BRPORT_ISOLATED]));
  
- Now we are ready to write the test cases.
+-	if (tb[IFLA_BRPORT_LOCKED])
+-		print_on_off(PRINT_ANY, "locked", "locked %s ",
+-			     rta_getattr_u8(tb[IFLA_BRPORT_LOCKED]));
++	if (tb[IFLA_BRPORT_LOCKED]) {
++		if (tb[IFLA_BRPORT_MAB] && rta_getattr_u8(tb[IFLA_BRPORT_MAB]))
++			print_on_off(PRINT_ANY, "locked mab", "locked mab %s ",
++				     rta_getattr_u8(tb[IFLA_BRPORT_LOCKED]));
++		else
++			print_on_off(PRINT_ANY, "locked", "locked %s ",
++				     rta_getattr_u8(tb[IFLA_BRPORT_LOCKED]));
++	}
  
--1. Add the below test case in ``drivers/misc/example_test.c``:
-+1. Write the test in ``drivers/misc/example_test.c``:
+ 	if (tb[IFLA_BRPORT_BACKUP_PORT]) {
+ 		int backup_p = rta_getattr_u32(tb[IFLA_BRPORT_BACKUP_PORT]);
+@@ -411,6 +417,10 @@ static int bridge_slave_parse_opt(struct link_util *lu, int argc, char **argv,
+ 			NEXT_ARG();
+ 			bridge_slave_parse_on_off("locked", *argv, n,
+ 						  IFLA_BRPORT_LOCKED);
++		} else if (matches(*argv, "mab") == 0) {
++			NEXT_ARG();
++			bridge_slave_parse_on_off("mab", *argv, n,
++						  IFLA_BRPORT_MAB);
+ 		} else if (matches(*argv, "backup_port") == 0) {
+ 			int ifindex;
  
--.. code-block:: c
-+   .. code-block:: c
+diff --git a/man/man8/bridge.8 b/man/man8/bridge.8
+index d4df772e..40250477 100644
+--- a/man/man8/bridge.8
++++ b/man/man8/bridge.8
+@@ -54,6 +54,7 @@ bridge \- show / manipulate bridge addresses and devices
+ .BR vlan_tunnel " { " on " | " off " } ] [ "
+ .BR isolated " { " on " | " off " } ] [ "
+ .BR locked " { " on " | " off " } ] [ "
++.BR mab " { " on " | " off " } ] [ "
+ .B backup_port
+ .IR  DEVICE " ] ["
+ .BR nobackup_port " ] [ "
+@@ -580,6 +581,15 @@ The common use is that hosts are allowed access through authentication
+ with the IEEE 802.1X protocol or based on whitelists or like setups.
+ By default this flag is off.
  
- 	#include <kunit/test.h>
- 	#include "example.h"
-@@ -202,31 +205,32 @@ Now we are ready to write the test cases.
- 	};
- 	kunit_test_suite(misc_example_test_suite);
++.TP
++.RB "mab on " or " mab off "
++Enables or disables the MAB/MacAuth feature. This feature can only be
++activated on a port that is in locked mode, and when enabled it extends the
++locked port feature so that MAC address can get access through a locked
++port based on acceptlists, thus it is a much simpler procedure for a
++device to become authorized than f.ex. the 802.1X protocol, and is used
++for devices that are not capable of password or crypto based authorization
++methods.
  
--2. Add the following lines to ``drivers/misc/Kconfig``:
-+2. Add following Kconfig entry for the test to ``drivers/misc/Kconfig``:
+ .TP
+ .BI backup_port " DEVICE"
+diff --git a/man/man8/ip-link.8.in b/man/man8/ip-link.8.in
+index fc9d62fc..187ca7ca 100644
+--- a/man/man8/ip-link.8.in
++++ b/man/man8/ip-link.8.in
+@@ -2454,6 +2454,9 @@ the following additional arguments are supported:
+ .BR isolated " { " on " | " off " }"
+ ] [
+ .BR locked " { " on " | " off " }"
++] [
++.BR mab " { " on " | " off " }"
++] [
+ .BR backup_port " DEVICE"
+ ] [
+ .BR nobackup_port " ]"
+@@ -2560,6 +2563,11 @@ default this flag is off.
+ behind the port cannot communicate through the port unless a FDB entry
+ representing the host is in the FDB. By default this flag is off.
  
--.. code-block:: kconfig
-+   .. code-block:: kconfig
- 
- 	config MISC_EXAMPLE_TEST
- 		tristate "Test for my example" if !KUNIT_ALL_TESTS
- 		depends on MISC_EXAMPLE && KUNIT=y
- 		default KUNIT_ALL_TESTS
- 
--3. Add the following lines to ``drivers/misc/Makefile``:
-+3. Add kbuild goal of the test to ``drivers/misc/Makefile``:
- 
--.. code-block:: make
-+   .. code-block:: make
- 
- 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example_test.o
- 
--4. Add following configuration fragments to ``.kunit/.kunitconfig``:
-+4. Add following configuration fragments for the test to
-+   ``.kunit/.kunitconfig``:
- 
--.. code-block:: none
-+   .. code-block:: none
- 
- 	CONFIG_MISC_EXAMPLE=y
- 	CONFIG_MISC_EXAMPLE_TEST=y
- 
- 5. Run the test:
- 
--.. code-block:: bash
-+   .. code-block:: bash
- 
- 	./tools/testing/kunit/kunit.py run
- 
++.BR mab " { " on " | " off " }"
++- enables or disables the MAB/MacAuth feature on a locked port. It is
++thus possible for a device to gain authorization on a locked port based
++on acceptlists.
++
+ .BI backup_port " DEVICE"
+ - if the port loses carrier all traffic will be redirected to the
+ configured backup port
 -- 
-An old man doll... just what I always wanted! - Clara
+2.34.1
 
