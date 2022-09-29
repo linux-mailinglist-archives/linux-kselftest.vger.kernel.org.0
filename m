@@ -2,153 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F805EEAA7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 02:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A6D5EEB3C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Sep 2022 03:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbiI2A4X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Sep 2022 20:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S234729AbiI2BuT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Sep 2022 21:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiI2A4W (ORCPT
+        with ESMTP id S234582AbiI2Bth (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Sep 2022 20:56:22 -0400
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D78FE668;
-        Wed, 28 Sep 2022 17:56:20 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10484"; a="90990129"
-X-IronPort-AV: E=Sophos;i="5.93,353,1654527600"; 
-   d="scan'208";a="90990129"
-Received: from unknown (HELO yto-r3.gw.nic.fujitsu.com) ([218.44.52.219])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP; 29 Sep 2022 09:56:18 +0900
-Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
-        by yto-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id E970CD5026;
-        Thu, 29 Sep 2022 09:56:16 +0900 (JST)
-Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
-        by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 2590610132;
-        Thu, 29 Sep 2022 09:56:16 +0900 (JST)
-Received: from [10.167.226.45] (unknown [10.167.226.45])
-        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id EA71A234036D;
-        Thu, 29 Sep 2022 09:56:14 +0900 (JST)
-Message-ID: <8b921394-e7c4-2c85-da76-0ebd05e6ef07@fujitsu.com>
-Date:   Thu, 29 Sep 2022 08:56:14 +0800
+        Wed, 28 Sep 2022 21:49:37 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE8CE11B4
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Sep 2022 18:49:03 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id t62so174047oie.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Sep 2022 18:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Bxq9cI+zlUWQx7u5d55Qg0rIB29NoUYaY5T41Jjr2u8=;
+        b=pyrYL+eZLGZx7Cf75R0xer0qJxhN+LkZ71/lEkrKDOs+2Mg43odAQI12yuoZra9YOd
+         YVUihaTTjZQo2YhOrHJWVh7QQEomGavV3ki97VsBwBLSPP+v793eVgXsRVTHdGnQ9nhz
+         KMzBtIUyl/VwQsqPt6/ItmVZby642x1iGCe413+ibI8HLnNnDjzEgrwRhWwOkUb5r4VC
+         nEbKroQ40otp/RWRMV5zdxqjARJ0A+dm3Mse+b4JUgcz3PGd22VqfLKJzPW4Xg7qsNha
+         P7n2DpAHA3RAyjWTDXFvJq3xPDSu2+Nr533mkq15xonIWAzPsUsaTn1UQ/MExU4EP6Gk
+         rNiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Bxq9cI+zlUWQx7u5d55Qg0rIB29NoUYaY5T41Jjr2u8=;
+        b=k4nySjqTE0TkV2FHamo/HXSeKZukvRdLwZ719aaV5qRyL/CtA3gzQX7iKpTVS2tNwK
+         GHjo6ekrBlhF5QgnMhmXuVEur1TghDLU5uswwR6NhzkMg+SNewnMarvGT4kkIoxXndmr
+         pofg8R2ZTl6ibzUHyyWbAupXOMVoJh6yI+7B1ibAMDpL2TGn5/bNBpR+huu9nC0Gvpvf
+         c0/l7pIOsDGVWaDmMPt0NP39En1FaBIvLCHHebKU67kicamj1315QWFvkQP/cF+RiLXV
+         43wsnYYyKj+Lw0XRc72Pd/KZgpkG6DI72BLbCRMcMfkg/RCmcCkMiY/aA9ULHshdEfWL
+         z8kw==
+X-Gm-Message-State: ACrzQf3TbfE1ALIDisIG8b/7YYIwocHUse0JCj+0X/985Tc/06dnCXa8
+        WMvxctsTLbnXtjo/y52x+9u8xzOkI1DCXWMlY7cLUQ==
+X-Google-Smtp-Source: AMsMyM5kTZMRktCsNgBsfGAKOZD78DkMvRn0A+9Q8vOTxaJDnkuvtHTFrLhN82b5/2Ze7dXj2kW73rqS8MRg1c11a8o=
+X-Received: by 2002:a05:6808:1a8d:b0:34f:dbe0:5bf5 with SMTP id
+ bm13-20020a0568081a8d00b0034fdbe05bf5mr5758029oib.147.1664416142950; Wed, 28
+ Sep 2022 18:49:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] ksefltests: pidfd: Fix wait_states: Test terminated by
- timeout
-Content-Language: en-US
-To:     brauner@kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Philip Li <philip.li@intel.com>
-References: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
-From:   Li Zhijian <lizhijian@fujitsu.com>
-In-Reply-To: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27170.003
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27170.003
-X-TMASE-Result: 10--10.193700-10.000000
-X-TMASE-MatchedRID: PYYU0ZXim+GPvrMjLFD6eK5i3jK3KDOoC/ExpXrHizzvJ+necCyol7ow
-        i5z3C6ZAsBAAmnpYMTt751tTDA2z+CYX9xlRB3xlvR08UROkEAfQxDD776KHLzUvQN19brjgj+v
-        Rrcokg+XDeCYEpLFeRPMW54P2B2tdD7lLiXNUhrM8o3fwIs8rQUfLPdsHmQbnXtXt17pSeWDi0n
-        VT9rWZ+SimJNrMe3aRUUG0x+61aZEqXuKH5Jbj7O9S+n/TuQfm1KDIlODIu+VcvdqWtCoykpGHZ
-        85Onc+2J2o10m2bLBJaq/6AkfzLhNHpEovtNFNuEXjPIvKd74BMkOX0UoduuVaSZ4yU9Q2HXpMk
-        2W6rZUiRigXI/55G6lX71r5lUalZTX7PJ/OU3vKDGx/OQ1GV8rnUfzScNiR3DWKb6PcVvpiOhzO
-        a6g8KrUyblknw4+A9+LphlqyNPyaCBOUNmNaC6JbIkO7qU+b1eoiGkqreB1A=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220928083733.252290-1-shaozhengchao@huawei.com>
+In-Reply-To: <20220928083733.252290-1-shaozhengchao@huawei.com>
+From:   Victor Nogueira <victor@mojatatu.com>
+Date:   Wed, 28 Sep 2022 22:48:52 -0300
+Message-ID: <CA+NMeC81H2wOfbi32SB0VVs1Lw10a4YWb57Sk-M_nUaJKfttbg@mail.gmail.com>
+Subject: Re: [PATCH net-next] selftests/tc-testing: update qdisc/cls/action
+ features in config
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        shuah@kernel.org, weiyongjun1@huawei.com, yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-ping
-
-
-On 01/09/2022 11:10, Li Zhijian wrote:
-> 0Day/LKP observed that the kselftest blocks forever since one of the
-> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
-> the source, we found that it blocks at:
-> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
+On Wed, Sep 28, 2022 at 5:29 AM Zhengchao Shao <shaozhengchao@huawei.com> wrote:
 >
-> wait_states has below testing flow:
->    CHILD                 PARENT
->    ---------------+--------------
-> 1 STOP itself
-> 2                   WAIT for CHILD STOPPED
-> 3                   SIGNAL CHILD to CONT
-> 4 CONT
-> 5 STOP itself
-> 5'                  WAIT for CHILD CONT
-> 6                   WAIT for CHILD STOPPED
+> Since three patchsets "add tc-testing test cases", "refactor duplicate
+> codes in the tc cls walk function", and "refactor duplicate codes in the
+> qdisc class walk function" are merged to net-next tree, the list of
+> supported features needs to be updated in config file.
 >
-> The problem is that the kernel cannot ensure the order of 5 and 5', once
-> 5 goes first, the test will fail.
->
-> we can reproduce it by:
-> $ while true; do make run_tests -C pidfd; done
->
-> Introduce a blocking read in child process to make sure the parent can
-> check its WCONTINUED.
->
-> CC: Philip Li <philip.li@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 > ---
-> I have almost forgotten this patch since the former version post over 6 months
-> ago. This time I just do a rebase and update the comments.
-> V3: fixes description and add review tag
-> V2: rewrite with pipe to avoid usleep
-> ---
->   tools/testing/selftests/pidfd/pidfd_wait.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+>  tools/testing/selftests/tc-testing/config | 25 ++++++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
-> index 070c1c876df1..c3e2a3041f55 100644
-> --- a/tools/testing/selftests/pidfd/pidfd_wait.c
-> +++ b/tools/testing/selftests/pidfd/pidfd_wait.c
-> @@ -95,20 +95,28 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
->   		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
->   		.exit_signal = SIGCHLD,
->   	};
-> +	int pfd[2];
->   	pid_t pid;
->   	siginfo_t info = {
->   		.si_signo = 0,
->   	};
->   
-> +	ASSERT_EQ(pipe(pfd), 0);
->   	pid = sys_clone3(&args);
->   	ASSERT_GE(pid, 0);
->   
->   	if (pid == 0) {
-> +		char buf[2];
-> +
-> +		close(pfd[1]);
->   		kill(getpid(), SIGSTOP);
-> +		ASSERT_EQ(read(pfd[0], buf, 1), 1);
-> +		close(pfd[0]);
->   		kill(getpid(), SIGSTOP);
->   		exit(EXIT_SUCCESS);
->   	}
->   
-> +	close(pfd[0]);
->   	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
->   	ASSERT_EQ(info.si_signo, SIGCHLD);
->   	ASSERT_EQ(info.si_code, CLD_STOPPED);
-> @@ -117,6 +125,8 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
->   	ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
->   
->   	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
-> +	ASSERT_EQ(write(pfd[1], "C", 1), 1);
-> +	close(pfd[1]);
->   	ASSERT_EQ(info.si_signo, SIGCHLD);
->   	ASSERT_EQ(info.si_code, CLD_CONTINUED);
->   	ASSERT_EQ(info.si_pid, parent_tid);
+> diff --git a/tools/testing/selftests/tc-testing/config b/tools/testing/selftests/tc-testing/config
+> index 2b2c2a835757..5ec7418a3c29 100644
+> --- a/tools/testing/selftests/tc-testing/config
+> +++ b/tools/testing/selftests/tc-testing/config
+> @@ -13,15 +13,28 @@ CONFIG_NET_SCHED=y
+>  # Queueing/Scheduling
+>  #
+>  CONFIG_NET_SCH_ATM=m
+> +CONFIG_NET_SCH_CAKE=m
+> +CONFIG_NET_SCH_CBQ=m
+> +CONFIG_NET_SCH_CBS=m
+>  CONFIG_NET_SCH_CHOKE=m
+>  CONFIG_NET_SCH_CODEL=m
+> +CONFIG_NET_SCH_DRR=m
+> +CONFIG_NET_SCH_DSMARK=m
+>  CONFIG_NET_SCH_ETF=m
+>  CONFIG_NET_SCH_FQ=m
+> +CONFIG_NET_SCH_FQ_CODEL=m
+>  CONFIG_NET_SCH_GRED=m
+> +CONFIG_NET_SCH_HFSC=m
+>  CONFIG_NET_SCH_HHF=m
+> +CONFIG_NET_SCH_HTB=m
+> +CONFIG_NET_SCH_INGRESS=m
+> +CONFIG_NET_SCH_MQPRIO=m
+> +CONFIG_NET_SCH_MULTIQ=m
+> +CONFIG_NET_NET_SCH_NETEM=m
 
+I think it should be CONFIG_NET_SCH_NETEM.
+
+> +CONFIG_NET_SCH_PIE=m
+>  CONFIG_NET_SCH_PLUG=m
+>  CONFIG_NET_SCH_PRIO=m
+> -CONFIG_NET_SCH_INGRESS=m
+> +CONFIG_NET_SCH_QFQ=m
+>  CONFIG_NET_SCH_SFB=m
+>  CONFIG_NET_SCH_SFQ=m
+>  CONFIG_NET_SCH_SKBPRIO=m
+> @@ -37,6 +50,15 @@ CONFIG_NET_CLS_FW=m
+>  CONFIG_NET_CLS_U32=m
+>  CONFIG_CLS_U32_PERF=y
+>  CONFIG_CLS_U32_MARK=y
+> +CONFIG_NET_CLS_BASIC=m
+> +CONFIG_NET_CLS_BPF=m
+> +CONFIG_NET_CLS_CGROUP=m
+> +CONFIG_NET_CLS_FLOW=m
+> +CONFIG_NET_CLS_FLOWER=m
+> +CONFIG_NET_CLS_MATCHALL=m
+> +CONFIG_NET_CLS_ROUTE4=m
+> +CONFIG_NET_CLS_RSVP=m
+> +CONFGI_NET_CLS_TCINDEX=m
+
+I think there's a typo here.
+Should be CONFIG_NET_CLS_TCINDEX.
+
+>  CONFIG_NET_EMATCH=y
+>  CONFIG_NET_EMATCH_STACK=32
+>  CONFIG_NET_EMATCH_CMP=m
+> @@ -68,6 +90,7 @@ CONFIG_NET_ACT_IFE=m
+>  CONFIG_NET_ACT_TUNNEL_KEY=m
+>  CONFIG_NET_ACT_CT=m
+>  CONFIG_NET_ACT_MPLS=m
+> +CONFIG_NET_ACT_GATE=m
+>  CONFIG_NET_IFE_SKBMARK=m
+>  CONFIG_NET_IFE_SKBPRIO=m
+>  CONFIG_NET_IFE_SKBTCINDEX=m
+> --
+> 2.17.1
+>
