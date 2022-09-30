@@ -2,108 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3DE5F0ED3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 17:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F42F5F0EE3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 17:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiI3P2F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Sep 2022 11:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
+        id S230191AbiI3Pdb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Sep 2022 11:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbiI3P1n (ORCPT
+        with ESMTP id S229646AbiI3Pda (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:27:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31062184820;
-        Fri, 30 Sep 2022 08:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664551662; x=1696087662;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pdBa67z24rRy+FxC1HOkaJMDCnc29Jo4VuWC2sxPlkc=;
-  b=GJGl1Mub2QQcekcktEJSjl+k6U0TUhm4519eUlCUgwsg2GZG8qA6YYOw
-   V9JgBTZ2a9WDwrKQnMhNWZ/kZBjjQw7rzfrZ5fOZp/mp2rRwEPCCNQtbo
-   /dSq6D7lp45sZsZpWVG4bNBmIC6jFPw/+Ab+RI5Hy2JZfdTh0T5Jgb6j1
-   Nq7KyYqxpdwtn/SezQW6sl6lCaDoPXY97WGKE8+oKbcNq9bhl9KqDDWsf
-   VHy6GznfA5uKvPTr1Iaqo8lNenxi5RBpRdRo6Zta+KpzNIneLuKsasO7L
-   /B+Kzosbaej7zbqbSWU9qEeZvX7ShYnd4E+IPAuWuXY+lDM7YAhTeAsFx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="289377080"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="289377080"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 08:27:41 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="685320052"
-X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
-   d="scan'208";a="685320052"
-Received: from lventrap-mobl2.amr.corp.intel.com (HELO [10.251.23.225]) ([10.251.23.225])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 08:27:40 -0700
-Message-ID: <c0e8ccaa-46b8-061b-f035-cd6a984a25b6@linux.intel.com>
-Date:   Fri, 30 Sep 2022 08:27:39 -0700
+        Fri, 30 Sep 2022 11:33:30 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CB419869A;
+        Fri, 30 Sep 2022 08:33:28 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 5C10B1884DF6;
+        Fri, 30 Sep 2022 15:33:26 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 482782500015;
+        Fri, 30 Sep 2022 15:33:26 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 3CBD79EC0002; Fri, 30 Sep 2022 15:33:26 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v14 2/3] virt: Add TDX guest driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+Date:   Fri, 30 Sep 2022 17:33:26 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
         Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220928215535.26527-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <YzXduIn83E1oood8@fedora>
- <665a4db2-a342-43ba-38a0-715c34709729@linux.intel.com>
- <YzbflIZzANjAgN9d@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <YzbflIZzANjAgN9d@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+In-Reply-To: <Yzb3oNGNtq4GCS3M@shredder>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
+ <20220929091036.3812327f@kernel.org>
+ <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
+ <20220929112744.27cc969b@kernel.org>
+ <ab488e3d1b9d456ae96cfd84b724d939@kapio-technology.com>
+ <Yzb3oNGNtq4GCS3M@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <ee5317df52609e0d7c0fdbccf0421a69@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 2022-09-30 16:05, Ido Schimmel wrote:
+> What exactly is the issue? You should be able to run the tests with 
+> veth
+> pairs in a VM.
+
+First there is an issue with alsa missing for some mixer tests, then 
+there is several reports of sys/capability.h missing, and then just 
+really many obscure problems that look like wrong lib versions are in 
+place. Here is some of the long log of errors etc... :(
 
 
-On 9/30/22 5:22 AM, Greg Kroah-Hartman wrote:
-> On Thu, Sep 29, 2022 at 11:11:47AM -0700, Sathyanarayanan Kuppuswamy wrote:
->>
->>
->> On 9/29/22 11:02 AM, Wander Lairson Costa wrote:
->>>> +#define TDX_GUEST_DEVICE                "tdx-guest"
->>> nit: I think now we can use KBUILD_MODNAME, can't we?
->>>
->>
->> Yes. We can use it. But I thought user can use this macro
->> and avoid hard coding the device name.
-> 
-> What user?  Please use KBUILD_MODNAME now instead.
-
-Ok. I will change it.
-
-> 
-> thanks,
-> 
-> greg k-h
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+In file included from lib/elf.c:8:
+include/test_util.h: In function ‘align_up’:
+include/test_util.h:134:7: warning: format ‘%lu’ expects argument of 
+type ‘long unsigned int’, but argument 6 has type ‘uint64_t’ {aka ‘long 
+long unsigned int’} [-Wformat=]
+   134 |       "size not a power of 2: %lu", size);
+       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~
+       |                                     |
+       |                                     uint64_t {aka long long 
+unsigned int}
+include/test_util.h:54:43: note: in definition of macro ‘TEST_ASSERT’
+    54 |  test_assert((e), #e, __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+       |                                           ^~~
+include/test_util.h:134:33: note: format string is defined here
+   134 |       "size not a power of 2: %lu", size);
+       |                               ~~^
+       |                                 |
+       |                                 long unsigned int
+       |                               %llu
+include/test_util.h: In function ‘align_ptr_up’:
+include/test_util.h:150:9: warning: cast to pointer from integer of 
+different size [-Wint-to-pointer-cast]
+   150 |  return (void *)align_up((unsigned long)x, size);
+       |         ^
+In file included from include/kvm_util.h:10,
+                  from lib/elf.c:13:
+include/kvm_util_base.h: At top level:
+include/kvm_util_base.h:93:26: error: field ‘stats_header’ has 
+incomplete type
+    93 |  struct kvm_stats_header stats_header;
+       |                          ^~~~~~~~~~~~
+In file included from ../../../include/linux/kernel.h:8,
+                  from ../../../include/linux/list.h:7,
+                  from ../../../include/linux/hashtable.h:10,
+                  from include/kvm_util_base.h:13,
+                  from include/kvm_util.h:10,
+                  from lib/elf.c:13:
+include/kvm_util_base.h: In function ‘kvm_vm_reset_dirty_ring’:
+include/kvm_util_base.h:308:24: error: ‘KVM_RESET_DIRTY_RINGS’ 
+undeclared (first use in this function); did you mean 
+‘KVM_GET_DIRTY_LOG’?
+   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
+       |                        ^~~~~~~~~~~~~~~~~~~~~
+../../../include/linux/build_bug.h:79:56: note: in definition of macro 
+‘__static_assert’
+    79 | #define __static_assert(expr, msg, ...) _Static_assert(expr, 
+msg)
+       |                                                        ^~~~
+include/kvm_util_base.h:193:2: note: in expansion of macro 
+‘static_assert’
+   193 |  static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == 
+_IOC_SIZE(cmd), ""); \
+       |  ^~~~~~~~~~~~~
+include/kvm_util_base.h:216:2: note: in expansion of macro 
+‘kvm_do_ioctl’
+   216 |  kvm_do_ioctl((vm)->fd, cmd, arg);   \
+       |  ^~~~~~~~~~~~
+include/kvm_util_base.h:308:9: note: in expansion of macro ‘__vm_ioctl’
+   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
+       |         ^~~~~~~~~~
+include/kvm_util_base.h:308:24: note: each undeclared identifier is 
+reported only once for each function it appears in
+   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
+       |                        ^~~~~~~~~~~~~~~~~~~~~
+../../../include/linux/build_bug.h:79:56: note: in definition of macro 
+‘__static_assert’
+    79 | #define __static_assert(expr, msg, ...) _Static_assert(expr, 
+msg)
+       |                                                        ^~~~
+include/kvm_util_base.h:193:2: note: in expansion of macro 
+‘static_assert’
+   193 |  static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == 
+_IOC_SIZE(cmd), ""); \
+       |  ^~~~~~~~~~~~~
+include/kvm_util_base.h:216:2: note: in expansion of macro 
+‘kvm_do_ioctl’
+   216 |  kvm_do_ioctl((vm)->fd, cmd, arg);   \
+       |  ^~~~~~~~~~~~
+include/kvm_util_base.h:308:9: note: in expansion of macro ‘__vm_ioctl’
+   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
+       |         ^~~~~~~~~~
+include/kvm_util_base.h:193:16: error: expression in static assertion is 
+not an integer
+   193 |  static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == 
+_IOC_SIZE(cmd), ""); \
+       |                ^
+../../../include/linux/build_bug.h:79:56: note: in definition of macro 
+‘__static_assert’
+    79 | #define __static_assert(expr, msg, ...) _Static_assert(expr, 
+msg)
+       |                                                        ^~~~
+include/kvm_util_base.h:193:2: note: in expansion of macro 
+‘static_assert’
+   193 |  static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == 
+_IOC_SIZE(cmd), ""); \
+       |  ^~~~~~~~~~~~~
+include/kvm_util_base.h:216:2: note: in expansion of macro 
+‘kvm_do_ioctl’
+   216 |  kvm_do_ioctl((vm)->fd, cmd, arg);   \
+       |  ^~~~~~~~~~~~
+include/kvm_util_base.h:308:9: note: in expansion of macro ‘__vm_ioctl’
+   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
+       |         ^~~~~~~~~~
+include/kvm_util_base.h: In function ‘vm_get_stats_fd’:
+include/kvm_util_base.h:313:26: error: ‘KVM_GET_STATS_FD’ undeclared 
+(first use in this function); did you mean ‘KVM_GET_SREGS’?
+   313 |  int fd = __vm_ioctl(vm, KVM_GET_STATS_FD, NULL);
+       |                          ^~~~~~~~~~~~~~~~
