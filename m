@@ -2,181 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE075F0D64
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 16:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853975F0E19
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 16:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbiI3OVh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Sep 2022 10:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
+        id S231546AbiI3OyJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Sep 2022 10:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbiI3OVF (ORCPT
+        with ESMTP id S231598AbiI3Oxp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 10:21:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A511A1EB9
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Sep 2022 07:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664547660;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NRwNrzzGpz8bO60Pn63vXNqmewRV7ohymI+Kzy3OQVY=;
-        b=LOyetPor1pjK/1INiyl7VTQQkf4tNUmRZnUVuKdyxnxwVCOKWv1QuRUZ7gC2Y6wMP3tbbd
-        bOLWQrmsrhFwrGzapmD1/gh3e9otO2YjCbTxUdTcEWl1my3UDBZwe4m00QUCMz9/yrFy9a
-        C3/CNN5F/pD1gK4fb0dt9nRtUef9xSQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-192-ced8YZfqPOWKMAfTZSCfpQ-1; Fri, 30 Sep 2022 10:20:56 -0400
-X-MC-Unique: ced8YZfqPOWKMAfTZSCfpQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 30 Sep 2022 10:53:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B131C439;
+        Fri, 30 Sep 2022 07:52:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 03AAE855305;
-        Fri, 30 Sep 2022 14:20:56 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DE74A112132C;
-        Fri, 30 Sep 2022 14:20:46 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v1 7/7] mm/gup: remove FOLL_MIGRATION
-Date:   Fri, 30 Sep 2022 16:19:31 +0200
-Message-Id: <20220930141931.174362-8-david@redhat.com>
-In-Reply-To: <20220930141931.174362-1-david@redhat.com>
-References: <20220930141931.174362-1-david@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id F284EB8291A;
+        Fri, 30 Sep 2022 14:52:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241ABC433D6;
+        Fri, 30 Sep 2022 14:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664549526;
+        bh=wAWWnDm7dRfdfL1HmqTHFE1I+5HoqUMPdvT4lPVEVoE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bJQRnCgWgZS/Y4k3DPIVn8jCZvgWNT8MnReKAQQxb9c7BvikjAFxBUbelfmcH+g/8
+         BnLeyvMclzeZw9EyFesPMH5HJftJHAQyAVx3uzjeOYbWf+tsLFfVnnsfbNYO/MpRWn
+         89z7zInb1EqAj4CB3WO7e0+pAAsCIxVYGhnMj97QnCAf/VAwvyt2vJZSxob/n17hD+
+         +3qptHAyJuCpgRLDppuF4+PSlZYWUIUx6bspwZuCzGROyytwzBG9k/Sp508GdImeej
+         GXaeifMfOoC2Tut/0wuCnBLHLJgmYvD62nyPwwIezJpkF6cqAL+Bqo2gyw4/wTgMl1
+         HLtS0Q7AAdxAw==
+Date:   Fri, 30 Sep 2022 07:52:04 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     netdev@kapio-technology.com, davem@davemloft.net,
+        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
+ locked flag (MAC-Auth/MAB)
+Message-ID: <20220930075204.608b6351@kernel.org>
+In-Reply-To: <Yzb3oNGNtq4GCS3M@shredder>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
+        <20220929091036.3812327f@kernel.org>
+        <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
+        <20220929112744.27cc969b@kernel.org>
+        <ab488e3d1b9d456ae96cfd84b724d939@kapio-technology.com>
+        <Yzb3oNGNtq4GCS3M@shredder>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fortunately, the last user (KSM) is gone, so let's just remove this
-rather special code from generic GUP handling -- especially because KSM
-never required the PMD handling as KSM only deals with individual base
-pages.
+On Fri, 30 Sep 2022 17:05:20 +0300 Ido Schimmel wrote:
+> You can see build issues on patchwork:
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- include/linux/mm.h |  1 -
- mm/gup.c           | 55 +++++-----------------------------------------
- 2 files changed, 5 insertions(+), 51 deletions(-)
+Overall a helpful response, but that part you got wrong.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index e56dd8f7eae1..4c176e308ead 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2942,7 +2942,6 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
- 				 * and return without waiting upon it */
- #define FOLL_NOFAULT	0x80	/* do not fault in pages */
- #define FOLL_HWPOISON	0x100	/* check page is hwpoisoned */
--#define FOLL_MIGRATION	0x400	/* wait for page to replace migration entry */
- #define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
- #define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
- #define FOLL_ANON	0x8000	/* don't do file mappings */
-diff --git a/mm/gup.c b/mm/gup.c
-index ce00a4c40da8..37195c549f68 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -537,30 +537,13 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
- 			 (FOLL_PIN | FOLL_GET)))
- 		return ERR_PTR(-EINVAL);
--retry:
- 	if (unlikely(pmd_bad(*pmd)))
- 		return no_page_table(vma, flags);
- 
- 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
- 	pte = *ptep;
--	if (!pte_present(pte)) {
--		swp_entry_t entry;
--		/*
--		 * KSM's break_ksm() relies upon recognizing a ksm page
--		 * even while it is being migrated, so for that case we
--		 * need migration_entry_wait().
--		 */
--		if (likely(!(flags & FOLL_MIGRATION)))
--			goto no_page;
--		if (pte_none(pte))
--			goto no_page;
--		entry = pte_to_swp_entry(pte);
--		if (!is_migration_entry(entry))
--			goto no_page;
--		pte_unmap_unlock(ptep, ptl);
--		migration_entry_wait(mm, pmd, address);
--		goto retry;
--	}
-+	if (!pte_present(pte))
-+		goto no_page;
- 	if (pte_protnone(pte) && !gup_can_follow_protnone(flags))
- 		goto no_page;
- 
-@@ -682,28 +665,8 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
- 			return page;
- 		return no_page_table(vma, flags);
- 	}
--retry:
--	if (!pmd_present(pmdval)) {
--		/*
--		 * Should never reach here, if thp migration is not supported;
--		 * Otherwise, it must be a thp migration entry.
--		 */
--		VM_BUG_ON(!thp_migration_supported() ||
--				  !is_pmd_migration_entry(pmdval));
--
--		if (likely(!(flags & FOLL_MIGRATION)))
--			return no_page_table(vma, flags);
--
--		pmd_migration_entry_wait(mm, pmd);
--		pmdval = READ_ONCE(*pmd);
--		/*
--		 * MADV_DONTNEED may convert the pmd to null because
--		 * mmap_lock is held in read mode
--		 */
--		if (pmd_none(pmdval))
--			return no_page_table(vma, flags);
--		goto retry;
--	}
-+	if (!pmd_present(pmdval))
-+		return no_page_table(vma, flags);
- 	if (pmd_devmap(pmdval)) {
- 		ptl = pmd_lock(mm, pmd);
- 		page = follow_devmap_pmd(vma, address, pmd, flags, &ctx->pgmap);
-@@ -717,18 +680,10 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
- 	if (pmd_protnone(pmdval) && !gup_can_follow_protnone(flags))
- 		return no_page_table(vma, flags);
- 
--retry_locked:
- 	ptl = pmd_lock(mm, pmd);
--	if (unlikely(pmd_none(*pmd))) {
--		spin_unlock(ptl);
--		return no_page_table(vma, flags);
--	}
- 	if (unlikely(!pmd_present(*pmd))) {
- 		spin_unlock(ptl);
--		if (likely(!(flags & FOLL_MIGRATION)))
--			return no_page_table(vma, flags);
--		pmd_migration_entry_wait(mm, pmd);
--		goto retry_locked;
-+		return no_page_table(vma, flags);
- 	}
- 	if (unlikely(!pmd_trans_huge(*pmd))) {
- 		spin_unlock(ptl);
--- 
-2.37.3
+Do not point people to patchwork checks, please. It will only encourage
+people to post stuff they haven't build tested themselves.
 
+It's documented:
+
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#running-all-the-builds-and-checks-locally-is-a-pain-can-i-post-my-patches-and-have-the-patchwork-bot-validate-them
+
+Only people who helped write the code and maintain the infra can decide
+how to use it which means me, Kees, or Hangbin. Please and thank you :S
