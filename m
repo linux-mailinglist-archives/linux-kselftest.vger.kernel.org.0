@@ -2,98 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828995F000D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 00:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6EF5F01BD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 02:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiI2W05 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Sep 2022 18:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S229806AbiI3AWN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Sep 2022 20:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiI2W04 (ORCPT
+        with ESMTP id S229501AbiI3AWM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Sep 2022 18:26:56 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB941514E0;
-        Thu, 29 Sep 2022 15:26:53 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 4FD0E1884CB0;
-        Thu, 29 Sep 2022 22:26:51 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 418CD2500370;
-        Thu, 29 Sep 2022 22:26:51 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 2A0289EC0007; Thu, 29 Sep 2022 22:26:51 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 29 Sep 2022 20:22:12 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CD014F81E
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Sep 2022 17:22:11 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-131ea99262dso1445313fac.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Sep 2022 17:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=eLIEnAwOgcD3RzZntVosaSQRt5lgikT9jrPA+ZstSNM=;
+        b=t8sM4wz5hiMw3lGJponNYfeHmYQSKR99dkoiOfpA43bEbIrI9pyfS3sunMhKtPIn8K
+         ZwKXWGRibo3DmRkznpAXf+6TCyZxvqGo7HHeqDBfx09pICDu/Wt8mwLgwawxdwF4LUJx
+         pYhR0Fr7fyNMDxLbe73qUT+ZE7bS8a/5+k95ZiibfgoXEQX2fzbwTbGeA8WQR9YV2guk
+         EOQusEEelMN8hR22ILrGqI7QYrEFfuene+j2odp29hdUE6DiRxR1lV7dnOJs7W8qC6ug
+         Rbq8leUm2hVXefaDvaHauPm9zHAqCAWLn5+Avz3i1hSMSRj1csFfFbz6O37a44k5RxZN
+         2eqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=eLIEnAwOgcD3RzZntVosaSQRt5lgikT9jrPA+ZstSNM=;
+        b=pqO5WB6Ws/m+kE9R56ayGGa9meruQrZNVct48C2FXudix748gsOqxqkc5sANvf+E3E
+         g+zTsyVzhXG5C76dxqasa1H+QeakzMAWkYyTSdAyc3L9UbQUWpqCuZcC391gL4ULmc4j
+         Ub9KfFsegK+woSqei1dfXttpCtuVu23/4WhPG8tujT3/PYBdcxh5N4GpcZqfJS1QUMDr
+         NExudyG38Nr1DYVy1KRaSNM2bO5cTgBz6MRYzjDtnM4HQRblAvHeMGyC4rPCdqRUfbp+
+         T99tkFHSeuFdgJxPVIthU/VVY3vGuBSSzy2cAQwhLKvDa/yF4tg6ShrOfwFx3bdsv19S
+         73ZQ==
+X-Gm-Message-State: ACrzQf0xXRpoZjziz+1boTUMO+vGbUTNiTKdeqnFF4m1OOBaq4Cy9fw0
+        vYrLsFYEcyQOM7J+aw2CWBFn/VFthmjAlQydgFksiw==
+X-Google-Smtp-Source: AMsMyM5fdHlakT8nYyzmvEr1fjxKmwjzs8jtE/AUvE/WoIFQ9Bp46LAueFb9nBOkqKE9muhJr4CnTxLuY7IYrhjxkDI=
+X-Received: by 2002:a05:6870:2417:b0:127:be13:2d1 with SMTP id
+ n23-20020a056870241700b00127be1302d1mr3407265oap.268.1664497330795; Thu, 29
+ Sep 2022 17:22:10 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Fri, 30 Sep 2022 00:26:50 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 6/6] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <YzQJ5MRSL/ShRSgP@shredder>
-References: <20220908112044.czjh3xkzb4r27ohq@skbuf>
- <152c0ceadefbd742331c340bec2f50c0@kapio-technology.com>
- <20220911001346.qno33l47i6nvgiwy@skbuf>
- <15ee472a68beca4a151118179da5e663@kapio-technology.com>
- <Yx73FOpN5uhPQhFl@shredder>
- <086704ce7f323cc1b3cca78670b42095@kapio-technology.com>
- <Yyq6BnUfctLeerqE@shredder>
- <7a4549d645f9bbbf41e814f087eb07d1@kapio-technology.com>
- <YzPwwuCe0HkJpkQe@shredder>
- <0c6b93c828d9b52346ddb3d445446734@kapio-technology.com>
- <YzQJ5MRSL/ShRSgP@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <e3ae7671490064eea8f548cb8769b573@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929041909.83913-1-shaozhengchao@huawei.com>
+In-Reply-To: <20220929041909.83913-1-shaozhengchao@huawei.com>
+From:   Victor Nogueira <victor@mojatatu.com>
+Date:   Thu, 29 Sep 2022 21:21:59 -0300
+Message-ID: <CA+NMeC8gFQ-M-nMzNA5H3UQKNtbekGvbKRxhyhg-b0QSNjY7MA@mail.gmail.com>
+Subject: Re: [PATCH net-next,v2] selftests/tc-testing: update qdisc/cls/action
+ features in config
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        shuah@kernel.org, weiyongjun1@huawei.com, yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-09-28 10:46, Ido Schimmel wrote:
+On Thu, Sep 29, 2022 at 1:11 AM Zhengchao Shao <shaozhengchao@huawei.com> wrote:
+>
+> Since three patchsets "add tc-testing test cases", "refactor duplicate
+> codes in the tc cls walk function", and "refactor duplicate codes in the
+> qdisc class walk function" are merged to net-next tree, the list of
+> supported features needs to be updated in config file.
+>
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 
-> "master" means manipulate the FDB of the master device. Therefore, the
-> replace command manipulates the FDB of br0.
-> 
-> "self" (which is the default [1]) means manipulate the FDB of the 
-> device
-> itself. In case of br0 it means manipulate the FDB of the bridge 
-> device.
-> For physical devices it usually translates to manipulating the unicast
-> address filter list.
-
-Hi Ido, can you check the selftests of the v6 I have sent out using the 
-iproute2-next I have also sent?
+Reviewed-by: Victor Nogueira <victor@mojatatu.com>
