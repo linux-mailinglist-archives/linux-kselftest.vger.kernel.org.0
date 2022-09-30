@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E41A5F146C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 23:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD6A5F147E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 23:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbiI3VIP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Sep 2022 17:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
+        id S232528AbiI3VIU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Sep 2022 17:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbiI3VIL (ORCPT
+        with ESMTP id S232422AbiI3VIM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 17:08:11 -0400
+        Fri, 30 Sep 2022 17:08:12 -0400
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D251A9A68;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BAF1B3A5C;
         Fri, 30 Sep 2022 14:08:10 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UIr68e035973;
-        Fri, 30 Sep 2022 21:08:06 GMT
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UKh95H010487;
+        Fri, 30 Sep 2022 21:08:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=W2P7qsEPK+klH/lcTKxFhSdYlAeCxIkBaebr7mA5jS8=;
- b=TAt3kxGrNDoESIdZYBNaxYl3w++lStU4I23M5lK2y+VZbSwkwE6H0a6tKnJuBKnqXC87
- zJQ80G/5A4fyH6iV1HkhAk0sU/kx7t6vm6328h0s90ai9U7FlcFxiaN7fR3VW+B3WwnI
- 6hFqbi4ofQec8wABw8je4END2hDDp6KsN5HbzTtQWytCzyJDdtDPyaRF0abIkV4vGvVf
- Tp9uLAdk51Nq7xMIM4HKo42J5aZ888nFbvp3q+Vsav/f2sKDzZKoRVGIsuckZRbZIKnV
- IPF2NvzMnuvt6yfWX1St+86bkZdM/+jRcPCdDtDXlGer9vunJUZIzrK6v6vWsZ2O8a6P Rg== 
+ bh=nl/5gCMNnBS+0L6H72cB1uQDKL7IKiCSAS6UO2Uev1M=;
+ b=ktV5ZlCHZdmud27nEjZzNS2GTgbtoB5opQoQ2vTTJU3sa0nx8K8bvu2686sapc1iU9V6
+ iYZ/fq/k7kraHN5FcO8q8rCFXWrfMuN7U5N7FVvOFl/OXePFgsRvhuvlWJ4ImbOInxK+
+ 1MAowDEIQvasIWlkmK2Cgj+XzyGyJmfzX4t7nvqez+EAVaGRzyeK1X8S9byUi0ZZUF35
+ wRqCxbsmVq00o7sgprB+v63Cdz33YQNk9htqx0EqfCNYDkHI6gDk3cinjqjz2xGOgf4O
+ xrQ7JpRiKrE4mUVd5ena5sY7rST65Vlvx+9m0j+tvaIVKrSNugP9uSHAC1ocTdaRuVkz xA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx64kkk6m-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx7r08gdq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 30 Sep 2022 21:08:06 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28UJXuA9040513;
-        Fri, 30 Sep 2022 21:08:05 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx64kkk5w-1
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28UL5q2G003495;
+        Fri, 30 Sep 2022 21:08:06 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx7r08gd5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 21:08:05 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28UL64NR005147;
-        Fri, 30 Sep 2022 21:08:03 GMT
+        Fri, 30 Sep 2022 21:08:06 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28UL69bo003464;
+        Fri, 30 Sep 2022 21:08:04 GMT
 Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3jssh9gkqa-1
+        by ppma04fra.de.ibm.com with ESMTP id 3jssh96fbj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Sep 2022 21:08:03 +0000
+        Fri, 30 Sep 2022 21:08:04 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28UL80hF47841564
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28UL81Xb1966666
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Sep 2022 21:08:00 GMT
+        Fri, 30 Sep 2022 21:08:01 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6233EA405F;
+        by IMSVA (Postfix) with ESMTP id E2695A405B;
         Fri, 30 Sep 2022 21:08:00 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E1B01A405B;
-        Fri, 30 Sep 2022 21:07:59 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6D785A4060;
+        Fri, 30 Sep 2022 21:08:00 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Sep 2022 21:07:59 +0000 (GMT)
+        Fri, 30 Sep 2022 21:08:00 +0000 (GMT)
 From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
@@ -73,24 +73,24 @@ Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
         Sven Schnelle <svens@linux.ibm.com>
-Subject: [PATCH v1 8/9] KVM: s390: selftest: memop: Fix typo
-Date:   Fri, 30 Sep 2022 23:07:50 +0200
-Message-Id: <20220930210751.225873-9-scgl@linux.ibm.com>
+Subject: [PATCH v1 9/9] KVM: s390: selftest: memop: Fix wrong address being used in test
+Date:   Fri, 30 Sep 2022 23:07:51 +0200
+Message-Id: <20220930210751.225873-10-scgl@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220930210751.225873-1-scgl@linux.ibm.com>
 References: <20220930210751.225873-1-scgl@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FcvTvTas0xoUpzFjcT-0LeySV58T0itO
-X-Proofpoint-GUID: GXtMWdWpJqJnX-U5Ecp9qMorA_JWkQ7G
+X-Proofpoint-GUID: WHRIQRiCI8idu3nVYUp7nysw5-7SKtAf
+X-Proofpoint-ORIG-GUID: MlYmW17-qSgpYlb5JnvDsbhCE-zfizs1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 clxscore=1015 malwarescore=0 bulkscore=0
- impostorscore=0 phishscore=0 mlxscore=0 spamscore=0 mlxlogscore=908
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ spamscore=0 mlxscore=0 impostorscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 mlxlogscore=939
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2209130000 definitions=main-2209300131
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -101,24 +101,30 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+The guest code sets the key for mem1 only. In order to provoke a
+protection exception the test codes needs to address mem1.
+
 Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 ---
- tools/testing/selftests/kvm/s390x/memop.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/kvm/s390x/memop.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index 3a160ab0415b..1887685b41d2 100644
+index 1887685b41d2..82fc65cca8a3 100644
 --- a/tools/testing/selftests/kvm/s390x/memop.c
 +++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -970,7 +970,7 @@ static void test_errors_key_fetch_prot_override_enabled(void)
+@@ -800,9 +800,9 @@ static void test_errors_key(void)
  
- 	/*
- 	 * vcpu, mismatching keys on fetch,
--	 * fetch protection override does not apply because memory range acceeded
-+	 * fetch protection override does not apply because memory range exceeded
- 	 */
- 	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, READ, mem2, 2048 + 1, GADDR_V(0), KEY(2));
- 	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, READ, mem2, PAGE_SIZE + 2048 + 1,
+ 	/* vm/vcpu, mismatching keys, fetch protection in effect */
+ 	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, WRITE, mem1, t.size, GADDR_V(mem1), KEY(2));
+-	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, READ, mem2, t.size, GADDR_V(mem2), KEY(2));
++	CHECK_N_DO(ERR_PROT_MOP, t.vcpu, LOGICAL, READ, mem2, t.size, GADDR_V(mem1), KEY(2));
+ 	CHECK_N_DO(ERR_PROT_MOP, t.vm, ABSOLUTE, WRITE, mem1, t.size, GADDR_V(mem1), KEY(2));
+-	CHECK_N_DO(ERR_PROT_MOP, t.vm, ABSOLUTE, READ, mem2, t.size, GADDR_V(mem2), KEY(2));
++	CHECK_N_DO(ERR_PROT_MOP, t.vm, ABSOLUTE, READ, mem2, t.size, GADDR_V(mem1), KEY(2));
+ 
+ 	kvm_vm_free(t.kvm_vm);
+ }
 -- 
 2.34.1
 
