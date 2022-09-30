@@ -2,204 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F42F5F0EE3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 17:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960AA5F0F6E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 18:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiI3Pdb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Sep 2022 11:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S231876AbiI3QAL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Sep 2022 12:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiI3Pda (ORCPT
+        with ESMTP id S231819AbiI3P7x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 11:33:30 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CB419869A;
-        Fri, 30 Sep 2022 08:33:28 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 5C10B1884DF6;
-        Fri, 30 Sep 2022 15:33:26 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 482782500015;
-        Fri, 30 Sep 2022 15:33:26 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 3CBD79EC0002; Fri, 30 Sep 2022 15:33:26 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 30 Sep 2022 11:59:53 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BBD14006
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Sep 2022 08:59:39 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id j10so2921781qtv.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Sep 2022 08:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=NK6zfHFnMf5a+HdLSDIx93EDC/e6X/0+F6ZlZy78SrM=;
+        b=oI44i8ct1miKHvC15nqHdpFZsiQN/a6fBOW+ZYxIuHgcgrSgEMiy1UDyFqNCnVQflK
+         e8RynzGvVbPEIr334P0F2XEgZVy/hznfl/4rSmPKGh5lulb5qPi4/9UgvgyQ6BOQk1l4
+         VcV/Qev9ROuqB14ytynnwQv7acnIJh1lOteutIjv3x5mhvIoMKy6EXeBNoP1jxeeCFqm
+         rgGpdpCOCSPhxtiRqotxIJq5HVLIO9GGne2Ht8GTXS7malqIMoa4MBWLmLtcFNGWecH5
+         S0RtWkjqiVOwRAlsCYJk1MlNUBEk/EUoNLZAUWO78kJR4ZdUbb3P0QIwnWYLsFEBUFeC
+         vrCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=NK6zfHFnMf5a+HdLSDIx93EDC/e6X/0+F6ZlZy78SrM=;
+        b=JLzej7mqDy8d7yBuXsSV1bk5skciYz70XVR8Sf2/IEokIbhHQVhi7uAuRPK09xW2qr
+         jcT7MljwNNDBNvzsmV8XUueCmRp/eg5LiaSj5eQ3ATw1gqYbwctgis4/FESA6IQscsBU
+         Oteq+61++ncVP2eUdtbjzKqajwV+n1TM5cZrGiCZN2ZDD0fRoOhMSt764vexT0qlOpDY
+         QcADMNVDOD5Rz4TH1iZlsyEbdisZu10O5TWeAsMwEcbwxBRK0wOo06Wy8jqiuJbr49mx
+         +VX5L0Az1HJV1bycFnntSMfA+y6RL8hzYFMYKQYDcrpbmNcOWnvPY3h08+DqIhdcmytY
+         Disw==
+X-Gm-Message-State: ACrzQf3aeIzFrV7kqghVviYXtAJd9T37NIZuYYaXQEpzsnILYO/nDZTY
+        38fll9kkNiW0o8YAkS4O5efxky/AkJGHXAZO618I
+X-Google-Smtp-Source: AMsMyM6O1DIA75QYTgiw5H+ZOOhVdREd5TKnxPtjDN29ygv/Oonp/S7A+UWlQGh3fqZMAZyTVpZeQGt2sgUrjPPNBSk=
+X-Received: by 2002:ac8:5e51:0:b0:35c:e40f:d898 with SMTP id
+ i17-20020ac85e51000000b0035ce40fd898mr7287109qtx.685.1664553578206; Fri, 30
+ Sep 2022 08:59:38 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Fri, 30 Sep 2022 17:33:26 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 0/9] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-In-Reply-To: <Yzb3oNGNtq4GCS3M@shredder>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
- <20220929091036.3812327f@kernel.org>
- <12587604af1ed79be4d3a1607987483a@kapio-technology.com>
- <20220929112744.27cc969b@kernel.org>
- <ab488e3d1b9d456ae96cfd84b724d939@kapio-technology.com>
- <Yzb3oNGNtq4GCS3M@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <ee5317df52609e0d7c0fdbccf0421a69@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220910212804.670622-1-davidgow@google.com>
+In-Reply-To: <20220910212804.670622-1-davidgow@google.com>
+From:   Joe Fradley <joefradley@google.com>
+Date:   Fri, 30 Sep 2022 08:59:26 -0700
+Message-ID: <CAF-60z0Tmr_DkJumaT6O84EQoR_XEJVYaT2TTYcwGFfJETD1KA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/2] kunit: Support redirecting function calls
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-09-30 16:05, Ido Schimmel wrote:
-> What exactly is the issue? You should be able to run the tests with 
-> veth
-> pairs in a VM.
+On Sat, Sep 10, 2022 at 2:28 PM David Gow <davidgow@google.com> wrote:
+>
+> When writing tests, it'd often be very useful to be able to intercept
+> calls to a function in the code being tested and replace it with a
+> test-specific stub. This has always been an obviously missing piece of
+> KUnit, and the solutions always involve some tradeoffs with cleanliness,
+> performance, or impact on non-test code. See the folowing document for
+> some of the challenges:
+> https://kunit.dev/mocking.html
+>
+> This series consists of two prototype patches which add support for this
+> sort of redirection to KUnit tests:
+>
+> 1: static_stub: Any function which might want to be intercepted adds a
+> call to a macro which checks if a test has redirected calls to it, and
+> calls the corresponding replacement.
+>
+> 2: ftrace_stub: Functions are intercepted using ftrace.
+> This doesn't require adding a new prologue to each function being
+> replaced, but does have more dependencies (which restricts it to a small
+> number of architectures, not including UML), and doesn't work well with
+> inline functions.
+>
+> The API for both implementations is very similar, so it should be easy
+> to migrate from one to the other if necessary.  Both of these
+> implementations restrict the redirection to the test context: it is
+> automatically undone after the KUnit test completes, and does not affect
+> calls in other threads. If CONFIG_KUNIT is not enabled, there should be
+> no overhead in either implementation.
+>
+> Does either (or both) of these features sound useful, and is this
+> sort-of API the right model? (Personally, I think there's a reasonable
+> scope for both.) Is anything obviously missing or wrong? Do the names,
+> descriptions etc. make any sense?
 
-First there is an issue with alsa missing for some mixer tests, then 
-there is several reports of sys/capability.h missing, and then just 
-really many obscure problems that look like wrong lib versions are in 
-place. Here is some of the long log of errors etc... :(
+David,
+This will be a great addition to the KUnit framework and another tool in
+the toolbox for test writers. Both approaches have their merits. If all
+things were equal the ftrace option would be preffered in my opinion.
+The ability to add tests without having to touch the source of what
+you're testing is superior. However, all things aren't equal as you've
+detailed. There are a number of open items for the ftrace approach that
+will limit its scope of use. Given that a solid amount of test developers
+already develop on what they're testing, the static stub option sounds
+like the one to go with for now, if you had to choose one.
 
+Regarding the implementation, could there be more granualitary in the
+activation of these stubs? Considering there's a small amount overhead
+for these stubs when CONFIG_KUNIT is enabled, a developer's environment
+could be adversely affected when they're testing a completely different
+area that doesn't require mocks.
 
-In file included from lib/elf.c:8:
-include/test_util.h: In function ‘align_up’:
-include/test_util.h:134:7: warning: format ‘%lu’ expects argument of 
-type ‘long unsigned int’, but argument 6 has type ‘uint64_t’ {aka ‘long 
-long unsigned int’} [-Wformat=]
-   134 |       "size not a power of 2: %lu", size);
-       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~
-       |                                     |
-       |                                     uint64_t {aka long long 
-unsigned int}
-include/test_util.h:54:43: note: in definition of macro ‘TEST_ASSERT’
-    54 |  test_assert((e), #e, __FILE__, __LINE__, fmt, ##__VA_ARGS__)
-       |                                           ^~~
-include/test_util.h:134:33: note: format string is defined here
-   134 |       "size not a power of 2: %lu", size);
-       |                               ~~^
-       |                                 |
-       |                                 long unsigned int
-       |                               %llu
-include/test_util.h: In function ‘align_ptr_up’:
-include/test_util.h:150:9: warning: cast to pointer from integer of 
-different size [-Wint-to-pointer-cast]
-   150 |  return (void *)align_up((unsigned long)x, size);
-       |         ^
-In file included from include/kvm_util.h:10,
-                  from lib/elf.c:13:
-include/kvm_util_base.h: At top level:
-include/kvm_util_base.h:93:26: error: field ‘stats_header’ has 
-incomplete type
-    93 |  struct kvm_stats_header stats_header;
-       |                          ^~~~~~~~~~~~
-In file included from ../../../include/linux/kernel.h:8,
-                  from ../../../include/linux/list.h:7,
-                  from ../../../include/linux/hashtable.h:10,
-                  from include/kvm_util_base.h:13,
-                  from include/kvm_util.h:10,
-                  from lib/elf.c:13:
-include/kvm_util_base.h: In function ‘kvm_vm_reset_dirty_ring’:
-include/kvm_util_base.h:308:24: error: ‘KVM_RESET_DIRTY_RINGS’ 
-undeclared (first use in this function); did you mean 
-‘KVM_GET_DIRTY_LOG’?
-   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
-       |                        ^~~~~~~~~~~~~~~~~~~~~
-../../../include/linux/build_bug.h:79:56: note: in definition of macro 
-‘__static_assert’
-    79 | #define __static_assert(expr, msg, ...) _Static_assert(expr, 
-msg)
-       |                                                        ^~~~
-include/kvm_util_base.h:193:2: note: in expansion of macro 
-‘static_assert’
-   193 |  static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == 
-_IOC_SIZE(cmd), ""); \
-       |  ^~~~~~~~~~~~~
-include/kvm_util_base.h:216:2: note: in expansion of macro 
-‘kvm_do_ioctl’
-   216 |  kvm_do_ioctl((vm)->fd, cmd, arg);   \
-       |  ^~~~~~~~~~~~
-include/kvm_util_base.h:308:9: note: in expansion of macro ‘__vm_ioctl’
-   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
-       |         ^~~~~~~~~~
-include/kvm_util_base.h:308:24: note: each undeclared identifier is 
-reported only once for each function it appears in
-   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
-       |                        ^~~~~~~~~~~~~~~~~~~~~
-../../../include/linux/build_bug.h:79:56: note: in definition of macro 
-‘__static_assert’
-    79 | #define __static_assert(expr, msg, ...) _Static_assert(expr, 
-msg)
-       |                                                        ^~~~
-include/kvm_util_base.h:193:2: note: in expansion of macro 
-‘static_assert’
-   193 |  static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == 
-_IOC_SIZE(cmd), ""); \
-       |  ^~~~~~~~~~~~~
-include/kvm_util_base.h:216:2: note: in expansion of macro 
-‘kvm_do_ioctl’
-   216 |  kvm_do_ioctl((vm)->fd, cmd, arg);   \
-       |  ^~~~~~~~~~~~
-include/kvm_util_base.h:308:9: note: in expansion of macro ‘__vm_ioctl’
-   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
-       |         ^~~~~~~~~~
-include/kvm_util_base.h:193:16: error: expression in static assertion is 
-not an integer
-   193 |  static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == 
-_IOC_SIZE(cmd), ""); \
-       |                ^
-../../../include/linux/build_bug.h:79:56: note: in definition of macro 
-‘__static_assert’
-    79 | #define __static_assert(expr, msg, ...) _Static_assert(expr, 
-msg)
-       |                                                        ^~~~
-include/kvm_util_base.h:193:2: note: in expansion of macro 
-‘static_assert’
-   193 |  static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == 
-_IOC_SIZE(cmd), ""); \
-       |  ^~~~~~~~~~~~~
-include/kvm_util_base.h:216:2: note: in expansion of macro 
-‘kvm_do_ioctl’
-   216 |  kvm_do_ioctl((vm)->fd, cmd, arg);   \
-       |  ^~~~~~~~~~~~
-include/kvm_util_base.h:308:9: note: in expansion of macro ‘__vm_ioctl’
-   308 |  return __vm_ioctl(vm, KVM_RESET_DIRTY_RINGS, NULL);
-       |         ^~~~~~~~~~
-include/kvm_util_base.h: In function ‘vm_get_stats_fd’:
-include/kvm_util_base.h:313:26: error: ‘KVM_GET_STATS_FD’ undeclared 
-(first use in this function); did you mean ‘KVM_GET_SREGS’?
-   313 |  int fd = __vm_ioctl(vm, KVM_GET_STATS_FD, NULL);
-       |                          ^~~~~~~~~~~~~~~~
+Maybe only activate these with CONFIG_KUNIT_FTRACE_STUBS and
+CONFIG_KUNIT_STATIC_STUBS respectively?
+
+Joe
+
+>
+> Note that these patches are definitely still at the "prototype" level,
+> and things like error-handling, documentation, and testing are still
+> pretty sparse. There is also quite a bit of room for optimisation.
+> These'll all be improved for v1 if the concept seems good.
+>
+> We're going to be talking about this again at LPC, so it's worth having
+> another look before then if you're interested and/or will be attending:
+> https://lpc.events/event/16/contributions/1308/
+>
+> Cheers,
+> -- David
+>
+> ---
+>
+> Changes since RFC v1:
+> https://lore.kernel.org/lkml/20220318021314.3225240-1-davidgow@google.com/
+> - Fix some typos (thanks Daniel)
+> - Use typecheck_fn() to fix typechecking in some cases (thanks Brendan)
+> - Use ftrace_instruction_pointer_set() in place of kernel livepatch,
+>   which seems to have disappeared:
+>   https://lore.kernel.org/lkml/0a76550d-008d-0364-8244-4dae2981ea05@csgroup.eu/T/
+> - Fix a copy-paste name error in the resource finding function.
+> - Rebase on top of torvalds/master, as it wasn't applying cleanly.
+>
+> Note that the Kernel Livepatch -> ftrace change seems to allow more
+> architectures to work, but while they compile, there still seems to be
+> issues. So, this will compile on (e.g.) arm64, but fails:
+> $ ./tools/testing/kunit/kunit.py run 'example*' --kunitconfig lib/kunit/stubs_example.kunitconfig --arch arm64 --make_options LLVM=1
+> [05:00:13] # example_ftrace_stub_test: initializing
+> [05:00:13] # example_ftrace_stub_test: EXPECTATION FAILED at lib/kunit/kunit-example-test.c:179
+> [05:00:13] Expected add_one(1) == 0, but
+> [05:00:13] add_one(1) == 2
+> [05:00:13] not ok 6 - example_ftrace_stub_test
+> [05:00:13] [FAILED] example_ftrace_stub_test
+>
+>
+>
+> Daniel Latypov (1):
+>   kunit: expose ftrace-based API for stubbing out functions during tests
+>
+> David Gow (1):
+>   kunit: Expose 'static stub' API to redirect functions
+>
+>  include/kunit/ftrace_stub.h         |  84 +++++++++++++++++
+>  include/kunit/static_stub.h         | 106 +++++++++++++++++++++
+>  lib/kunit/Kconfig                   |  11 +++
+>  lib/kunit/Makefile                  |   5 +
+>  lib/kunit/ftrace_stub.c             | 137 ++++++++++++++++++++++++++++
+>  lib/kunit/kunit-example-test.c      |  63 +++++++++++++
+>  lib/kunit/static_stub.c             | 125 +++++++++++++++++++++++++
+>  lib/kunit/stubs_example.kunitconfig |  10 ++
+>  8 files changed, 541 insertions(+)
+>  create mode 100644 include/kunit/ftrace_stub.h
+>  create mode 100644 include/kunit/static_stub.h
+>  create mode 100644 lib/kunit/ftrace_stub.c
+>  create mode 100644 lib/kunit/static_stub.c
+>  create mode 100644 lib/kunit/stubs_example.kunitconfig
+>
+> --
+> 2.37.2.789.g6183377224-goog
+>
