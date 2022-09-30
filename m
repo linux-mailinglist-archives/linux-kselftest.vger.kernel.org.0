@@ -2,183 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464D65F142A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 22:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1135F1459
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Sep 2022 23:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbiI3Uv1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Sep 2022 16:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S232129AbiI3VIJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Sep 2022 17:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiI3UvG (ORCPT
+        with ESMTP id S231420AbiI3VII (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 16:51:06 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB513FEF8;
-        Fri, 30 Sep 2022 13:51:03 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 29so7468735edv.7;
-        Fri, 30 Sep 2022 13:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2uOxQ/gH+BgVfHcCDAltFHRafqSJpRPHbM8VX4eQrmE=;
-        b=fs3yfrRRvR85fOrAE8GAeQyZ90fUrcsb8udC0e71buYHjY7T74pIwS4w8H6f0fvC1s
-         eK1vQrVnAe11HDk8LzNmz0xfvfvSzsCz1ixvXx8fJu7+L1bNRcc0dHRJHZmDvPkRIlWm
-         I1fJ72Y6Mrqo2iI86ZwRQ8DuriJW+M4cPlEtm26wRMz2IJEZTmfwc/4aA0/e/5X01Iz/
-         kM32AzxGKVsgPsUg3kpMi15piKRvsb5ucsexXD2H8sMNDHTFJYcKuVXXfbc224KV7pyB
-         0w75MjDrHvddHHvwM0/gmQp92smLeagbdaWPIfvWpJR/wMCK/vTnDO01/eXyipt43CPA
-         iycA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2uOxQ/gH+BgVfHcCDAltFHRafqSJpRPHbM8VX4eQrmE=;
-        b=hyHxQf9SE4zGuN+O8awkt86kalDjwrp8usfneYxuAQlHYC2kA/Jiv7aHr5WY/6K1Gt
-         Jphz9j4KPxuTK7r143ZEXIzBY9S7j72bq8f2ixqbu5xADtg49iL8WwaFZMZH7Pa0Qils
-         Ev3RoYpssRiJmLo56sUzNvyRytt8BBrvwpKrkivioLfJ85rR9EDFBq4AdtnSV/+uIL1Z
-         R7qDG6YdVRI4nt6JJNKJ4gZrobc78DeZ76VPsB0RQWR1Ya0NFbtmJMmDV0srny51jdRs
-         3Q5l6/EFbKsybLsL3J1jnTcGFS2oqKk4ajRXZAb1w4qTC9IdtEy4/D/1huoL3h2R9+mX
-         Jolg==
-X-Gm-Message-State: ACrzQf3Jte6G//qU9+xVE+67ZxPDi1uO5h+6+wtPmW1buOgfS424vcfI
-        FEHW4uMHIiXE77fR+J2WQZinLc6nxeisPFjltWignHnD
-X-Google-Smtp-Source: AMsMyM6EKTV3OYVPy0FeoJ4Q0c8PKaZ0YHnV+7MLNI7ACfUNUTYGxH23fggkidH07Wm5gwKzJTddxXJ7IeZ1U3oJHxc=
-X-Received: by 2002:a50:eb05:0:b0:457:c6f5:5f65 with SMTP id
- y5-20020a50eb05000000b00457c6f55f65mr9072849edp.311.1664571061776; Fri, 30
- Sep 2022 13:51:01 -0700 (PDT)
+        Fri, 30 Sep 2022 17:08:08 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3E61ABFD6;
+        Fri, 30 Sep 2022 14:08:06 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28UKhA7o021100;
+        Fri, 30 Sep 2022 21:08:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Xu0H5UfpQsFJQrNSTollubi/5t/SW6aJGRMjyCemwpA=;
+ b=kNR1tusqhAP1W9CP1taPxd7sYArCKSfUfYrVWyYg+YF1AVYOj9jw3JbYSun8MgNw2HDF
+ mslmAq9pbD6Lu5V3YnhmrXnxy4V/HERy96CpKFwa3zVFfGf2OWqyDH0gRn2kCiA6hfe0
+ cC7pPjFkUzIX53eFbuEccR0+tvFkJ7Jtj59Mngokxm+2/7MpqByieqCH8fbFC3r20Nad
+ JE/63Fba0BbUGC2G8uGjkBdM1TycFzmFgUbwl1DLuRwajbVgDeDxciMx1BEwT5fyNgOY
+ cQFOXEkvN8InrS7SXHZ93vbscq3gFz8Ms0869QhJhASFgIp7Xa0c8b25B2wDjFv1VbXY Vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx7r3ggbq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 21:08:01 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28UKhqhg022803;
+        Fri, 30 Sep 2022 21:08:01 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jx7r3ggb3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 21:08:01 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 28UL5fpM000687;
+        Fri, 30 Sep 2022 21:07:59 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3jssh8xet8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Sep 2022 21:07:59 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 28UL7uM951249490
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Sep 2022 21:07:56 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 44289A405B;
+        Fri, 30 Sep 2022 21:07:56 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C9B58A405C;
+        Fri, 30 Sep 2022 21:07:55 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 30 Sep 2022 21:07:55 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: [PATCH v1 0/9] KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
+Date:   Fri, 30 Sep 2022 23:07:42 +0200
+Message-Id: <20220930210751.225873-1-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220926154430.1552800-1-roberto.sassu@huaweicloud.com> <20220926154430.1552800-2-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20220926154430.1552800-2-roberto.sassu@huaweicloud.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 30 Sep 2022 13:50:49 -0700
-Message-ID: <CAEf4BzZT3aSWYzaNrOW6Qw95mfj1S+AduGi+A0H+h4maTU2umQ@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/3] libbpf: Define bpf_get_fd_opts and introduce bpf_map_get_fd_by_id_opts()
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, oss@lmb.io, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fengc@google.com, davem@davemloft.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cy6BvvwuhQW2wWK6a76owBHuLw0jFZPQ
+X-Proofpoint-ORIG-GUID: yG4IYyw_GrFQY__GCBnTDXOab8NwZ7ki
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-30_04,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ clxscore=1011 phishscore=0 bulkscore=0 malwarescore=0 spamscore=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=768 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209300131
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 8:45 AM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Define a new data structure called bpf_get_fd_opts, with the member
-> open_flags, to be used by callers of the _opts variants of
-> bpf_*_get_fd_by_id() to specify the permissions needed for the file
-> descriptor to be obtained.
->
-> Also, introduce bpf_map_get_fd_by_id_opts(), to let the caller pass a
-> bpf_get_fd_opts structure.
->
-> Finally, keep the existing bpf_map_get_fd_by_id(), and call
-> bpf_map_get_fd_by_id_opts() with NULL as opts argument, to request
-> read-write permissions (current behavior).
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
+User space can use the MEM_OP ioctl to make storage key checked reads
+and writes to the guest, however, it has no way of performing atomic,
+key checked, accesses to the guest.
+Extend the MEM_OP ioctl in order to allow for this, by adding a cmpxchg
+mode. For now, support this mode for absolute accesses only.
 
-looks good overall, but please see two nits below
+This mode can be use, for example, to set the device-state-change
+indicator and the adapter-local-summary indicator atomically.
 
->  tools/lib/bpf/bpf.c      | 12 +++++++++++-
->  tools/lib/bpf/bpf.h      | 10 ++++++++++
->  tools/lib/bpf/libbpf.map |  3 ++-
->  3 files changed, 23 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 1d49a0352836..4b03063edf1d 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -948,19 +948,29 @@ int bpf_prog_get_fd_by_id(__u32 id)
->         return libbpf_err_errno(fd);
->  }
->
-> -int bpf_map_get_fd_by_id(__u32 id)
-> +int bpf_map_get_fd_by_id_opts(__u32 id,
-> +                             const struct bpf_get_fd_opts *opts)
->  {
->         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
->         union bpf_attr attr;
->         int fd;
->
-> +       if (!OPTS_VALID(opts, bpf_get_fd_opts))
-> +               return libbpf_err(-EINVAL);
-> +
->         memset(&attr, 0, attr_sz);
->         attr.map_id = id;
-> +       attr.open_flags = OPTS_GET(opts, open_flags, 0);
->
->         fd = sys_bpf_fd(BPF_MAP_GET_FD_BY_ID, &attr, attr_sz);
->         return libbpf_err_errno(fd);
->  }
->
-> +int bpf_map_get_fd_by_id(__u32 id)
-> +{
-> +       return bpf_map_get_fd_by_id_opts(id, NULL);
-> +}
-> +
->  int bpf_btf_get_fd_by_id(__u32 id)
->  {
->         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 9c50beabdd14..38a1b7eccfc8 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -365,7 +365,17 @@ LIBBPF_API int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_map_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_btf_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_link_get_next_id(__u32 start_id, __u32 *next_id);
-> +
-> +struct bpf_get_fd_opts {
-> +       size_t sz; /* size of this struct for forward/backward compatibility */
-> +       __u32 open_flags; /* permissions requested for the operation on fd */
-> +       __u32 :0;
+Janis Schoetterl-Glausch (9):
+  s390/uaccess: Add storage key checked cmpxchg access to user space
+  KVM: s390: Extend MEM_OP ioctl by storage key checked cmpxchg
+  Documentation: KVM: s390: Describe KVM_S390_MEMOP_F_CMPXCHG
+  KVM: s390: selftest: memop: Pass mop_desc via pointer
+  KVM: s390: selftest: memop: Replace macros by functions
+  KVM: s390: selftest: memop: Add bad address test
+  KVM: s390: selftest: memop: Add cmpxchg tests
+  KVM: s390: selftest: memop: Fix typo
+  KVM: s390: selftest: memop: Fix wrong address being used in test
 
-this should be size_t: 0
+ Documentation/virt/kvm/api.rst            |  18 +-
+ include/uapi/linux/kvm.h                  |   5 +
+ arch/s390/include/asm/uaccess.h           | 187 ++++++
+ arch/s390/kvm/gaccess.h                   |   4 +
+ arch/s390/kvm/gaccess.c                   |  56 ++
+ arch/s390/kvm/kvm-s390.c                  |  50 +-
+ tools/testing/selftests/kvm/s390x/memop.c | 704 +++++++++++++++++-----
+ 7 files changed, 874 insertions(+), 150 deletions(-)
 
-> +};
-> +#define bpf_get_fd_opts__last_field open_flags
-> +
->  LIBBPF_API int bpf_prog_get_fd_by_id(__u32 id);
-> +LIBBPF_API int bpf_map_get_fd_by_id_opts(__u32 id,
-> +                                        const struct bpf_get_fd_opts *opts);
->  LIBBPF_API int bpf_map_get_fd_by_id(__u32 id);
->  LIBBPF_API int bpf_btf_get_fd_by_id(__u32 id);
->  LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index c1d6aa7c82b6..2e665b21d84f 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -367,10 +367,11 @@ LIBBPF_1.0.0 {
->                 libbpf_bpf_map_type_str;
->                 libbpf_bpf_prog_type_str;
->                 perf_buffer__buffer;
-> -};
-> +} LIBBPF_0.8.0;
->
 
-good catch, please send this as a separate fix, thanks!
+base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
+-- 
+2.34.1
 
->  LIBBPF_1.1.0 {
->         global:
-> +               bpf_map_get_fd_by_id_opts;
->                 user_ring_buffer__discard;
->                 user_ring_buffer__free;
->                 user_ring_buffer__new;
-> --
-> 2.25.1
->
