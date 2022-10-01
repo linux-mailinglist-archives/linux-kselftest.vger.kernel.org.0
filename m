@@ -2,97 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBE95F175E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Oct 2022 02:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E695F1883
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Oct 2022 03:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiJAA11 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Sep 2022 20:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S231454AbiJABuZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Sep 2022 21:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232674AbiJAA1C (ORCPT
+        with ESMTP id S232233AbiJABuX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 20:27:02 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE8410F
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Sep 2022 17:26:53 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id br14-20020a056a00440e00b00548434985cdso3570587pfb.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Sep 2022 17:26:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date;
-        bh=DrdzDq6t5Szhsu/Sk6P5GuM2F1JxchQr+0dbQd4xjqA=;
-        b=GnykWZuUusySEmZRDRq89nbwQwUSS2BZ3mERFnQ4lw308/JrzIFUt3G3r3OyQyCjfY
-         xAGBEhZoOjtYOPP8uKLKyaeuOwyTC5+Ne5KdeSKX1oOdmB7M82beLgNPk+c8TS/FODPr
-         jdMKA28NUTHDe1EM7NYZEZ+ZFBuycXKzuRj0CGqja9/DOu2jNxbXBg5SmocYCMh1SZXU
-         ZCNc4wgHNfJ5CS7hmVhiauHHfxSm0LB0ad444Mr3DMD2ttT4FviZTfx6IOcsxF6372ME
-         yszZfuUwgArHETLd59mL3L4rLuGOmlZJnOjm+9F6SqME9JE5Dlb8r0bpg5tpT6xSp2Eh
-         KsUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=DrdzDq6t5Szhsu/Sk6P5GuM2F1JxchQr+0dbQd4xjqA=;
-        b=2bpgrUWtjTiw1h7EHa5Qc9EapfAI8IgGyDcqlttm/tslzgWNesY1h75L67gLG2zHBn
-         Iql7TZLJTPW50OL/WFGzwOIJv8uACC3SyWcQvmJLO6myUkaCqvQOc6b8sU/qEmseEgK9
-         MJmHGkc+VD4SYaNA2vQyQ92pjpHHglKLSVk+mErQ1N8zls9cRTzmOki9uNa0872RYxBu
-         bpEwCTFKjE9YkYXyzRtlVJIce1P8oe7Lgv/B88T4UeXG9gddbHtwdTt4wj2zcK92XQfz
-         FpLVGJL/a30oaO5tXhHXuCZvv8MpjB6HRtSYf8j6D4qk+xDR6Zl2GsZEgzIS+l1XVLsV
-         Ff2Q==
-X-Gm-Message-State: ACrzQf05BDKntPRrGm2Dx26tKyfaAQ2XVxQGVOXzRKCPNbrxIt8/OAsR
-        KyZ6LAR/+F8Pb5lEdLh1cmFqpIuwCvYkpg==
-X-Google-Smtp-Source: AMsMyM7nL2AzNmgA6b7OLqOJyYnw86E/zsba9xXmPiPKN7886pdizJ5Lnh2FzZ9kEeNFeAPtVmNTcPPf1r1gVw==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a17:90b:3c49:b0:209:7137:4b7c with SMTP
- id pm9-20020a17090b3c4900b0020971374b7cmr876988pjb.115.1664584012978; Fri, 30
- Sep 2022 17:26:52 -0700 (PDT)
-Date:   Fri, 30 Sep 2022 17:26:38 -0700
-In-Reply-To: <20221001002638.2881842-1-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20221001002638.2881842-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221001002638.2881842-5-dlatypov@google.com>
-Subject: [PATCH 4/4] kunit: declare kunit_assert structs as const
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        miguel.ojeda.sandonis@gmail.com,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 30 Sep 2022 21:50:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B92C14A3;
+        Fri, 30 Sep 2022 18:50:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55DA7B82AFE;
+        Sat,  1 Oct 2022 01:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E959DC4347C;
+        Sat,  1 Oct 2022 01:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664589019;
+        bh=g/fmvJQ96I21QWYtz7rgrzEHz71okhsbh1uHsnts1uM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=U5xvTQF4+XR8/Eu3xnbGCKQoOauzh2PvyoN4ZGPTpNACTA1FAzUSvvZQ8PlqT4izq
+         0u4gViEyITLsEqOag8e8yXf2xfFleuuM8YFSnnu1ZkqbpIdjPtK1ZVFIhJHDT6DHlT
+         m2gNItxqdQko/4isDpY9ZI4rZuKPVoM1eMqCUsosr8SSETbiJzG/LjQnnTy46ZzRCw
+         tCkZ0RJHInHmNk36E93rDRD26UrneUt2vWwlSwpsPCeNHh1w72T1YowswtTasSN9Z1
+         6zIMtJEVDXIOP3h2Twc2XZsCZRT2yeL3cqkoYwQnGbf6IXCTGJd2AdTwHR7cKk4V+m
+         naKShy00JfRvg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C4AEDE50D64;
+        Sat,  1 Oct 2022 01:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next,v2] selftests/tc-testing: update qdisc/cls/action
+ features in config
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166458901880.12957.16544448645380385670.git-patchwork-notify@kernel.org>
+Date:   Sat, 01 Oct 2022 01:50:18 +0000
+References: <20220929041909.83913-1-shaozhengchao@huawei.com>
+In-Reply-To: <20220929041909.83913-1-shaozhengchao@huawei.com>
+To:     shaozhengchao <shaozhengchao@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        shuah@kernel.org, victor@mojatatu.com, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Everywhere we use the assert structs now takes them via const*, as of
-commit 7466886b400b ("kunit: take `kunit_assert` as `const`").
+Hello:
 
-So now let's properly declare the structs as const as well.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- include/kunit/test.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 29 Sep 2022 12:19:09 +0800 you wrote:
+> Since three patchsets "add tc-testing test cases", "refactor duplicate
+> codes in the tc cls walk function", and "refactor duplicate codes in the
+> qdisc class walk function" are merged to net-next tree, the list of
+> supported features needs to be updated in config file.
+> 
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> 
+> [...]
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index e49348bbc6ee..d574c871dd9f 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -477,7 +477,7 @@ void kunit_do_failed_assertion(struct kunit *test,
- 
- #define _KUNIT_FAILED(test, assert_type, assert_class, assert_format, INITIALIZER, fmt, ...) do { \
- 	static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;	       \
--	struct assert_class __assertion = INITIALIZER;			       \
-+	const struct assert_class __assertion = INITIALIZER;		       \
- 	kunit_do_failed_assertion(test,					       \
- 				  &__loc,				       \
- 				  assert_type,				       \
+Here is the summary with links:
+  - [net-next,v2] selftests/tc-testing: update qdisc/cls/action features in config
+    https://git.kernel.org/netdev/net-next/c/f77a9f3cd1e6
+
+You are awesome, thank you!
 -- 
-2.38.0.rc1.362.ged0d419d3c-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
