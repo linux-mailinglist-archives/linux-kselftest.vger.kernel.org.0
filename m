@@ -2,85 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E695F1883
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Oct 2022 03:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5AC5F193F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Oct 2022 05:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbiJABuZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Sep 2022 21:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S233023AbiJADJr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Sep 2022 23:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbiJABuX (ORCPT
+        with ESMTP id S232539AbiJADIN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Sep 2022 21:50:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B92C14A3;
-        Fri, 30 Sep 2022 18:50:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55DA7B82AFE;
-        Sat,  1 Oct 2022 01:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E959DC4347C;
-        Sat,  1 Oct 2022 01:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664589019;
-        bh=g/fmvJQ96I21QWYtz7rgrzEHz71okhsbh1uHsnts1uM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=U5xvTQF4+XR8/Eu3xnbGCKQoOauzh2PvyoN4ZGPTpNACTA1FAzUSvvZQ8PlqT4izq
-         0u4gViEyITLsEqOag8e8yXf2xfFleuuM8YFSnnu1ZkqbpIdjPtK1ZVFIhJHDT6DHlT
-         m2gNItxqdQko/4isDpY9ZI4rZuKPVoM1eMqCUsosr8SSETbiJzG/LjQnnTy46ZzRCw
-         tCkZ0RJHInHmNk36E93rDRD26UrneUt2vWwlSwpsPCeNHh1w72T1YowswtTasSN9Z1
-         6zIMtJEVDXIOP3h2Twc2XZsCZRT2yeL3cqkoYwQnGbf6IXCTGJd2AdTwHR7cKk4V+m
-         naKShy00JfRvg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C4AEDE50D64;
-        Sat,  1 Oct 2022 01:50:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 30 Sep 2022 23:08:13 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1075C18274D;
+        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id e129so5595593pgc.9;
+        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=72VbjhRWlgAwdbhThbX1+r5OGqqoZFzDMkMotTN36YI=;
+        b=HKIm8sUWrKr4PCRwaqCH508rlTrKgpYA14FFWn0mw8SVxO2R/FL2ZsxanugF57qv6f
+         hptW1gl+Ytwp9yLquB93l1pJC8+3MbFCSHEvDFUMDycoQcdMSU95h3KatHQtXL/AhGHk
+         z6eMtoULZvFFRXN+zU5GP/Fv+HZCdT36t5gFb1TTbLnH4ovmm3tKU/nugg8yLppTQmfn
+         5KNg622Gq9fX+sA+vzdWU7cZC+Xt+IyJctX9Zky8kQxi/HS2DRi4Dv/c9WAKhEbTaRMK
+         G/epkrnTJkqDXiFPMWxvZbbjMbJZ6xRtYHRW5lp99mjr3DWcQO9S56TVVU2pC2oLOD/g
+         bk7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=72VbjhRWlgAwdbhThbX1+r5OGqqoZFzDMkMotTN36YI=;
+        b=v2ezGjjFTBeD1LYKawGGali3AqJhcnZ/LBtoYWOXObLpa+zbldsJDWnw70QZIzgCUa
+         dAr3guOgw9/BAFAUTyeIXeyCfBRswskmb2JHlAgBiqWFqTcejZ2eUtsJWpcOHS2RUyGq
+         Bn9cwynYQ6iXJBpzXd4qEmYVGIXt4cD8iLuVBWBD4lV3GPcI96PD3uM3pyp/pYEdiY7P
+         3rt2sJYbf9NlwJw9M9P9DuoKt9ctDjbRpfdp0S32Rxzf/1W+JbjQ08qV7eHIO1ZFNXDG
+         SXnp+CszDnbm39VR6LbW7+QydnND451oEl+SBStwi/NNwqlVJpvG+I3A4VA7GRA08yEb
+         8XQQ==
+X-Gm-Message-State: ACrzQf0QethSNPWj4FWqVD+EL++pUm/6vICVUHTs4prtdM+4tQuKk3hx
+        NY+SmbPmWU7xob40f/1ImDZ8VPU9WOyXTQ==
+X-Google-Smtp-Source: AMsMyM5mEoG5OV/d2pEFEPAsELU8L+ViMKV218DSnTkdlbQojzLQ5R2ifp3I5bxIkaIK2UealMmFYQ==
+X-Received: by 2002:a63:4d5b:0:b0:42c:299e:eecc with SMTP id n27-20020a634d5b000000b0042c299eeeccmr9937227pgl.41.1664593673144;
+        Fri, 30 Sep 2022 20:07:53 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-5.three.co.id. [180.214.232.5])
+        by smtp.gmail.com with ESMTPSA id f69-20020a623848000000b0055fd8b687fdsm13563pfa.95.2022.09.30.20.07.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 20:07:52 -0700 (PDT)
+Message-ID: <41fe0989-9157-944d-c796-21e28c8265b9@gmail.com>
+Date:   Sat, 1 Oct 2022 10:07:47 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next,v2] selftests/tc-testing: update qdisc/cls/action
- features in config
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166458901880.12957.16544448645380385670.git-patchwork-notify@kernel.org>
-Date:   Sat, 01 Oct 2022 01:50:18 +0000
-References: <20220929041909.83913-1-shaozhengchao@huawei.com>
-In-Reply-To: <20220929041909.83913-1-shaozhengchao@huawei.com>
-To:     shaozhengchao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        shuah@kernel.org, victor@mojatatu.com, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2] Documentation: kunit: rewrite writing first test
+ instructions
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Sadiya Kazi <sadiyakazi@google.com>
+References: <20220929132549.56452-1-bagasdotme@gmail.com>
+ <CABVgOSkT-EWLqr6R=RvbEgmkMAY0680YbRnEBg1un6h-=TzrUg@mail.gmail.com>
+ <464981b6-d9d7-e656-261f-ef48661deaa2@gmail.com>
+ <CABVgOSko6kgA_T3LNgTPxQZS8Ab8E+XhMcOGHFx76nd2HN_RBg@mail.gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <CABVgOSko6kgA_T3LNgTPxQZS8Ab8E+XhMcOGHFx76nd2HN_RBg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 29 Sep 2022 12:19:09 +0800 you wrote:
-> Since three patchsets "add tc-testing test cases", "refactor duplicate
-> codes in the tc cls walk function", and "refactor duplicate codes in the
-> qdisc class walk function" are merged to net-next tree, the list of
-> supported features needs to be updated in config file.
+On 9/30/22 17:32, David Gow wrote:
+>>
+>> The indentation for code-block directive is required, since the preceding
+>> paragraph is multiline; otherwise there will be Sphinx warnings.
+>>
 > 
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> I don't see any such warnings on my machine (which claims to have
+> sphinx-build 4.5.0).
 > 
-> [...]
+> Could you send an example warning, and your sphinx version to me so I
+> can try to reproduce it.
+> 
+> Regardless, if it's causing warnings, keep these changes. (Though it'd
+> be nice to include the warnings in the commit message, so it's obvious
+> that these are being re-aligned for a reason.)
+> 
 
-Here is the summary with links:
-  - [net-next,v2] selftests/tc-testing: update qdisc/cls/action features in config
-    https://git.kernel.org/netdev/net-next/c/f77a9f3cd1e6
+I'm using Sphinx 2.4.4 (as installed from pip through
+Documentation/sphinx/requirements.txt).
 
-You are awesome, thank you!
+Sorry I can't reproduce the warning I mentioned earlier (I forget
+the recipe that triggers it when writing the improv).
+
+In any case, I'd like to keep code block aligning in the separate patch.
+It would be nice to see code blocks aligned to the instructions list.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+An old man doll... just what I always wanted! - Clara
