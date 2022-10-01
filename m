@@ -2,98 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84025F1E80
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Oct 2022 20:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F293F5F1FCB
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Oct 2022 23:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiJASAa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 1 Oct 2022 14:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        id S229468AbiJAVc6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 1 Oct 2022 17:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiJASA2 (ORCPT
+        with ESMTP id S229453AbiJAVc5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 1 Oct 2022 14:00:28 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702152E6A3
-        for <linux-kselftest@vger.kernel.org>; Sat,  1 Oct 2022 11:00:27 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id nb11so14962490ejc.5
-        for <linux-kselftest@vger.kernel.org>; Sat, 01 Oct 2022 11:00:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Bl8Fuk+Wt6jUa3TDAfDFoX2FZNxP/enu0dcwtqyz7lQ=;
-        b=LAj5/wYQW+g7G7cWNCyQVaM3sPZr0O2loM1xXLc+9xxzUaEv0/SdAs9iD6pKeeBlsX
-         HY0/31eFDPMgBbu17vb4RYs/su95HpSw74OsbElWNGqYYUd/3iaAInVMtLDnJHLs5wdi
-         LNtufLCX9onmC6fjaU/xXTes7LBClEkU0Ulwxwl6PLC2l+y6zfXyaoGHryJsuCOFKqq0
-         UukvuDKN+aKLr4tTk8rfN1O1BXKc/kl16qUMZ5+GnLL/sHDHIVEJaT2lViDlmET25LfN
-         wuIKa/+Tq/fwq5wjlYxfyaqU9+JKZhQyJIF0vQWwCRl6SdPc2O8jA0IYNdl++fO2bFdr
-         McQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Bl8Fuk+Wt6jUa3TDAfDFoX2FZNxP/enu0dcwtqyz7lQ=;
-        b=J7Bobyr0b55AD0bgfRHjTsut3QXi/0g8MfIikay8HHGs8L8ma13FUrse1722bfAfUx
-         pfxBFgYSb4MjgId2P0tiSaNkL/bWACoZwqyiZGiHD0Xj1d1/s3ebUuIHA2UpIHzSNnsK
-         i3m00bGZg0MM2hlHNSUJkdJRe+OtBdpf+dqdNHhoAaR5WbmvMUaoiCUlW5gwoSUyEN8l
-         YqI8IcBIvuKMlfC3SaaDaoj2l2LniQNfaXkQiZAAuzCEm6CnHIMnFC6S7t8KD3DX5822
-         2kzGrQABTGXwypZGXWCL0XvOzOnFBbUiCx4k+iZQ1kxL/9BluK7MYuw+Yrfr6v0yohgC
-         2P8g==
-X-Gm-Message-State: ACrzQf2irWA1eC3VYg5ECEV6cZcFfbPCPOMu8tJTgNqFEniWl3+0JxPV
-        1YVc9kLzBm0RHzQSTBjTNL+6HC/mjLsOoTmXdW84Xg==
-X-Google-Smtp-Source: AMsMyM60dQdVmC4T15XjDaLbKD9eQkJk3OfvjwVfPIshLbNkxnQ01b7b4S8g/loPaU1LNZC6nkoDqVPw9ouObY8wPNs=
-X-Received: by 2002:a17:906:5a4d:b0:76f:bb35:48f4 with SMTP id
- my13-20020a1709065a4d00b0076fbb3548f4mr9940776ejc.686.1664647225890; Sat, 01
- Oct 2022 11:00:25 -0700 (PDT)
+        Sat, 1 Oct 2022 17:32:57 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6383B965;
+        Sat,  1 Oct 2022 14:32:55 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id ABDF018847C2;
+        Sat,  1 Oct 2022 21:32:52 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 9DC972500015;
+        Sat,  1 Oct 2022 21:32:52 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 97C309EC0002; Sat,  1 Oct 2022 21:32:52 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <20221001002638.2881842-1-dlatypov@google.com> <CANiq72nU-eDOT94q26dTVgCFA_Hs1cGiLpDCmQ5n-cCVKAcsqQ@mail.gmail.com>
-In-Reply-To: <CANiq72nU-eDOT94q26dTVgCFA_Hs1cGiLpDCmQ5n-cCVKAcsqQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Sat, 1 Oct 2022 11:00:14 -0700
-Message-ID: <CAGS_qxqVUmjxULZ_Kt-gWRJb=+EYpG2_K89sQTq0BYbUighn5w@mail.gmail.com>
-Subject: Re: [PATCH 0/4] kunit: more assertion reworking
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Sat, 01 Oct 2022 23:32:52 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH iproute2-next 1/2] bridge: link: enable MacAuth/MAB
+ feature
+In-Reply-To: <YzhV0hU9v7oQ+g+K@shredder>
+References: <20220929152137.167626-1-netdev@kapio-technology.com>
+ <YzhV0hU9v7oQ+g+K@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <00f5b024d242b948e1e198dfe95d73bc@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Oct 1, 2022 at 3:15 AM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Sat, Oct 1, 2022 at 2:26 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > Note: this does change the function signature of
-> > kunit_do_failed_assertion, so we'd need to update the rust wrapper in
-> > https://github.com/Rust-for-Linux/linux/blob/rust/rust/kernel/kunit.rs,
-> > but hopefully it's just a simple change, e.g. maybe just like:
->
-> Yeah, should be simple. Thanks for pointing it out!
->
-> The series looks like a great cleanup on top of the stack reduction.
+On 2022-10-01 16:59, Ido Schimmel wrote:
+> On Thu, Sep 29, 2022 at 05:21:36PM +0200, Hans Schultz wrote:
+>> The MAB feature can be enabled on a locked port with the command:
+>> bridge link set dev <DEV> mab on
+> 
+> Please provide regular and JSON output in the commit message.
+> 
 
-Thanks for taking a look at the rest of the series as well.
+How would the JSON version look like in this example?
 
-While I have you here, any thoughts on how to coordinate the change?
-I made the breaking change patch#1 so it should be easier to pull out.
-
-One option I was thinking was:
-* wait till this lands in Shuah's tree
-* I create a Github PR that contains patch#1 + a patch for kunit.rs
-
-I was not clear on how the RfL Github pulls in upstream changes or how often.
-But my assumption is patch#1 would fall away naturally if rebasing
-onto 6.1 (and maybe we can squash the kunit.rs change).
-
-Thanks,
-Daniel
