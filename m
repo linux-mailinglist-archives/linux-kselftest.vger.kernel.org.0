@@ -2,119 +2,280 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D6C5F3608
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Oct 2022 21:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1D95F373E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Oct 2022 22:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiJCTDY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Oct 2022 15:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
+        id S229611AbiJCUmn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Oct 2022 16:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiJCTDX (ORCPT
+        with ESMTP id S229522AbiJCUmg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Oct 2022 15:03:23 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2EC2D75D
-        for <linux-kselftest@vger.kernel.org>; Mon,  3 Oct 2022 12:03:21 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id l22so14442768edj.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Oct 2022 12:03:21 -0700 (PDT)
+        Mon, 3 Oct 2022 16:42:36 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689884B491
+        for <linux-kselftest@vger.kernel.org>; Mon,  3 Oct 2022 13:42:35 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id c7so10638681pgt.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Oct 2022 13:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ME1oTRsKwcRu7pn4CZOREj68nEw1ojk/ZGR5xxUk3Sg=;
-        b=OH+1O0yBwvwn63HKW65OnVIOZQaonjRKJTCdSGeVuP5d1mzORL/by5EYWtrNl+DiRV
-         H/iv0rwX4Akil6x2X/fNwZSzNVfEbtiYH/Jzfpn9rh63p7N90ximWOclhYH8YRQVsyJZ
-         HxdKryNPruy7rMvoXh0wntcTdNLx/+mfL9Qx+H2a9HzTL092YWHBax3tds1GJkB7hnR8
-         0h0oCxEe0t6m5oQVNq1wrjs7KyGy7KA3pyI5HHRdpQyfZuKhxvu37VuDjQpP66u7H0Te
-         vL9kneYYgcGNk8/hNOSCXy7A4bp4JOXViCuAoYJ3Isfp5+yUJQle0HOBrfhtsqWq25Vf
-         9qfg==
+        d=kylehuey.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=4qLQoJQNu1CZW/0PSN7Xr+tyBQTuegEan0yqmUNKFmY=;
+        b=Nbg7Y+ulmuPhnyslETGZ9FvylenNR9uhx3/BBNxvuUUMxMIKLTRrScH/NOzmr/1SSA
+         Y8vQKwIgZygsltUnLEqEzazMnXiIQBDiVYiInXA1IaJ26uYHcNh/GdrHCDyt4faw3oLR
+         CbK4W8v7AzMPsvL18a+sh8GvK6yWrYLov0xVvbBNEEo/5x2+SgtPUILYa3RgqAzuPM3k
+         SOLSwPBo+lbONMU6LlDwBLwtX27TZ+fkRN2S0Pm8vGB4TkXCeVIupX7d47a4a03mBGhn
+         hasU2wxPwgaSeKV7Kc5dOm82UFxhQMSr5MhcDLOWotBHAI80r2RqNdhW+eG6X8PybxRY
+         kUVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ME1oTRsKwcRu7pn4CZOREj68nEw1ojk/ZGR5xxUk3Sg=;
-        b=YPaaptt9toO/NtEWQXjH88SPrp7zeZkIq3a8iDZTafLajxd4dkBEsWWh+5nsuSoDAS
-         XE/CtpZVbfQL9cJCaYRt+/9N3xY99tL4rjz135NU62CkfIS8L6S0237JmhmbkueY90Ex
-         jWI0Io93oDJsfLrbEsRXxt7kGr/ujs6HZNISJB4gEP+iVyhS5DrmU4gEPJEXmSJtwxzx
-         7MbIC61ClXP6brlSCyx0LocNZ7V6DXYlszODBDgtskLPEWQhyQQNZecI9Wnen0K+BtbD
-         4+sv7VrQydQXru8nD43qIymrHdfP2OaBLmUfIraZfm5ETnUcFX1nSQ4ms4juBCrvUY3F
-         AMPQ==
-X-Gm-Message-State: ACrzQf3fTvAY9U9OJ1YzXWoGC4qyoDextL6iMDl1A7b1ewyep6vEQRCx
-        NCHgZVlebOuPGSw8JPG887bdNYl+xhbIa/EbVENT1g==
-X-Google-Smtp-Source: AMsMyM5+0XjUg+rbqjU1P9AGeVmXKI+ReO0zH3sXaihrG7wezbdK7msUP9IIJnkX6tV1MVdR66IeKMH4WYdW9tY2XVE=
-X-Received: by 2002:a05:6402:540d:b0:450:bda7:f76e with SMTP id
- ev13-20020a056402540d00b00450bda7f76emr20009652edb.249.1664823799850; Mon, 03
- Oct 2022 12:03:19 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=4qLQoJQNu1CZW/0PSN7Xr+tyBQTuegEan0yqmUNKFmY=;
+        b=u5ThBs3X/6VzJEVOoy2dOoUsrOjZaVvvFSt0Ly/JrlChiIftgyHZ5k/RSBo2CY38JB
+         u2QJYb0rm3ZuQnegU9pDX/8zBQrhH/wAZb/UFiPxC5+5087I82u88+FWHs6PuzXAaVcE
+         BUVkQiRvVCgDSgbFcLlz4Bxaz0fP6+IsW3HXTOqJJbDs494zxgOHM2crqS4crSKaRB6V
+         va/7j8bqbU6TIReQH9GtreqRzy45JT8rj3/efVBExbxsgxOIlkoyp7YVwbcP6gdARoh/
+         9D42M4Vkg7PtFGiUrKK2E2z/Ws9FBYNi4VJTBhfUOMiggVO9D/+BmKor1q6ayaLhX0Ga
+         f8CQ==
+X-Gm-Message-State: ACrzQf3LNv68XQTPBdy5EiwhpljKgDhiNbdnBu/0Pe03VqeoFL66cXEY
+        Iv18a8nxvuPMeNm93Sllpo939A==
+X-Google-Smtp-Source: AMsMyM4thTNJXA6D7jB785C8pcwUMO3FeXB26ake8K/B8O5iQPd8J2W8NefAVsVBdak8eQ3DeRQ3fg==
+X-Received: by 2002:a65:6cc8:0:b0:3fe:2b89:cc00 with SMTP id g8-20020a656cc8000000b003fe2b89cc00mr20444357pgw.599.1664829754854;
+        Mon, 03 Oct 2022 13:42:34 -0700 (PDT)
+Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b0017834a6966csm7693795plh.176.2022.10.03.13.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 13:42:34 -0700 (PDT)
+From:   Kyle Huey <me@kylehuey.com>
+X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Kyle Huey <me@kylehuey.com>, Borislav Petkov <bp@suse.de>,
+        stable@vger.kernel.org
+Subject: [PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again) written by ptrace.
+Date:   Mon,  3 Oct 2022 13:42:30 -0700
+Message-Id: <20221003204231.104972-1-khuey@kylehuey.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20220910212804.670622-1-davidgow@google.com> <CAF-60z0Tmr_DkJumaT6O84EQoR_XEJVYaT2TTYcwGFfJETD1KA@mail.gmail.com>
-In-Reply-To: <CAF-60z0Tmr_DkJumaT6O84EQoR_XEJVYaT2TTYcwGFfJETD1KA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 3 Oct 2022 12:03:08 -0700
-Message-ID: <CAGS_qxqWnu8V3Rj=v7z-M+LfNYyEciMtxUBS=5KBeAb8SC_D7A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/2] kunit: Support redirecting function calls
-To:     Joe Fradley <joefradley@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Steve Muckle <smuckle@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 8:59 AM Joe Fradley <joefradley@google.com> wrote:
-> Regarding the implementation, could there be more granualitary in the
-> activation of these stubs? Considering there's a small amount overhead
-> for these stubs when CONFIG_KUNIT is enabled, a developer's environment
-> could be adversely affected when they're testing a completely different
-> area that doesn't require mocks.
->
-> Maybe only activate these with CONFIG_KUNIT_FTRACE_STUBS and
-> CONFIG_KUNIT_STATIC_STUBS respectively?
+From: Kyle Huey <me@kylehuey.com>
 
-Just to clarify, for ftrace, there shouldn't be overhead unless a stub is used.
-So it's not relevant for the following discussion.
+When management of the PKRU register was moved away from XSTATE, emulation
+of PKRU's existence in XSTATE was added for reading PKRU through ptrace,
+but not for writing PKRU through ptrace. This can be seen by running gdb
+and executing `p $pkru`, `set $pkru = 42`, and `p $pkru`. On affected
+kernels (5.14+) the write to the PKRU register (which gdb performs through
+ptrace) is ignored.
 
-But for "static stubs", KUNIT_STATIC_STUB_REDIRECT() checks for
-current->kunit_test and kunit_find_resource() call to look for
-potential stubs.
+There are three APIs that write PKRU: sigreturn, PTRACE_SETREGSET with
+NT_X86_XSTATE, and KVM_SET_XSAVE. sigreturn still uses XRSTOR to write to
+PKRU. KVM_SET_XSAVE has its own special handling to make PKRU writes take
+effect (in fpu_copy_uabi_to_guest_fpstate). Push that down into
+copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE pass in
+a pointer to the appropriate PKRU slot. copy_sigframe_from_user_to_xstate
+depends on copy_uabi_to_xstate populating the PKRU field in the task's
+XSTATE so that __fpu_restore_sig can do a XRSTOR from it, so continue doing
+that.
 
-The current->kunit_test overhead should go away if we use a static key
-[1] instead to track if KUnit is running.
-David has a patch he's working on to do just that.
-So the overhead for Android when tests aren't running should mostly vanish.
+This also adds code to initialize the PKRU value to the hardware init value
+(namely 0) if the PKRU bit is not set in the XSTATE header provided to
+ptrace, to match XRSTOR.
 
-But there's still overhead when you *are* running tests.
-As you pointed out, all KUNIT_STATIC_STUB_REDIRECT() callsites will
-have overhead, even in functions you never intend to stub out.
-I.e. there's an O(n) scan of the resource list for potential stubs
-_for every single call_.
+Fixes: e84ba47e313d ("x86/fpu: Hook up PKRU into ptrace()")
+Signed-off-by: Kyle Huey <me@kylehuey.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: stable@vger.kernel.org # 5.14+
+---
+ arch/x86/kernel/fpu/core.c   | 20 +++++++++-----------
+ arch/x86/kernel/fpu/regset.c |  2 +-
+ arch/x86/kernel/fpu/signal.c |  2 +-
+ arch/x86/kernel/fpu/xstate.c | 25 ++++++++++++++++++++-----
+ arch/x86/kernel/fpu/xstate.h |  4 ++--
+ 5 files changed, 33 insertions(+), 20 deletions(-)
 
-We could add a CONFIG_KUNIT_STATIC_STUBS option and have
-KUNIT_STATIC_STUB_REDIRECT() be a no-op in that case.
-But if you have it turned on, then all the overhead comes back, even
-for functions you don't care to test.
-And given the goal is that this feature be useful and ubiquitous
-enough, that would be the steady state.
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 3b28c5b25e12..c273669e8a00 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+ {
+ 	struct fpstate *kstate = gfpu->fpstate;
+ 	const union fpregs_state *ustate = buf;
+-	struct pkru_state *xpkru;
+-	int ret;
+ 
+ 	if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
+ 		if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
+@@ -406,16 +404,16 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+ 	if (ustate->xsave.header.xfeatures & ~xcr0)
+ 		return -EINVAL;
+ 
+-	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
+-	if (ret)
+-		return ret;
++	/*
++	 * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
++	 * in the header.  KVM's odd ABI is to leave PKRU untouched in this
++	 * case (all other components are eventually re-initialized).
++	 * (Not clear that this is actually necessary for compat).
++	 */
++	if (!(ustate->xsave.header.xfeatures & XFEATURE_MASK_PKRU))
++		vpkru = NULL;
+ 
+-	/* Retrieve PKRU if not in init state */
+-	if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
+-		xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
+-		*vpkru = xpkru->pkru;
+-	}
+-	return 0;
++	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+ }
+ EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
+ #endif /* CONFIG_KVM */
+diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+index 75ffaef8c299..6d056b68f4ed 100644
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+ 	}
+ 
+ 	fpu_force_restore(fpu);
+-	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
++	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
+ 
+ out:
+ 	vfree(tmpbuf);
+diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+index 91d4b6de58ab..558076dbde5b 100644
+--- a/arch/x86/kernel/fpu/signal.c
++++ b/arch/x86/kernel/fpu/signal.c
+@@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
+ 
+ 	fpregs = &fpu->fpstate->regs;
+ 	if (use_xsave() && !fx_only) {
+-		if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
++		if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
+ 			return false;
+ 	} else {
+ 		if (__copy_from_user(&fpregs->fxsave, buf_fx,
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index c8340156bfd2..8f14981a3936 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
+ 
+ 
+ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+-			       const void __user *ubuf)
++			       const void __user *ubuf, u32 *pkru)
+ {
+ 	struct xregs_state *xsave = &fpstate->regs.xsave;
+ 	unsigned int offset, size;
+@@ -1246,6 +1246,21 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+ 		}
+ 	}
+ 
++	/*
++	 * Update the user protection key storage. Allow KVM to
++	 * pass in a NULL pkru pointer if the mask bit is unset
++	 * for its legacy ABI behavior.
++	 */
++	if (pkru)
++		*pkru = 0;
++
++	if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
++		struct pkru_state *xpkru;
++
++		xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
++		*pkru = xpkru->pkru;
++	}
++
+ 	/*
+ 	 * The state that came in from userspace was user-state only.
+ 	 * Mask all the user states out of 'xfeatures':
+@@ -1264,9 +1279,9 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+  * Convert from a ptrace standard-format kernel buffer to kernel XSAVE[S]
+  * format and copy to the target thread. Used by ptrace and KVM.
+  */
+-int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
++int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru)
+ {
+-	return copy_uabi_to_xstate(fpstate, kbuf, NULL);
++	return copy_uabi_to_xstate(fpstate, kbuf, NULL, pkru);
+ }
+ 
+ /*
+@@ -1274,10 +1289,10 @@ int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
+  * XSAVE[S] format and copy to the target thread. This is called from the
+  * sigreturn() and rt_sigreturn() system calls.
+  */
+-int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate,
++int copy_sigframe_from_user_to_xstate(struct task_struct *tsk,
+ 				      const void __user *ubuf)
+ {
+-	return copy_uabi_to_xstate(fpstate, NULL, ubuf);
++	return copy_uabi_to_xstate(tsk->thread.fpu.fpstate, NULL, ubuf, &tsk->thread.pkru);
+ }
+ 
+ static bool validate_independent_components(u64 mask)
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index 5ad47031383b..a4ecb04d8d64 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -46,8 +46,8 @@ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
+ 				      u32 pkru_val, enum xstate_copy_mode copy_mode);
+ extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
+ 				    enum xstate_copy_mode mode);
+-extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf);
+-extern int copy_sigframe_from_user_to_xstate(struct fpstate *fpstate, const void __user *ubuf);
++extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
++extern int copy_sigframe_from_user_to_xstate(struct task_struct *tsk, const void __user *ubuf);
+ 
+ 
+ extern void fpu__init_cpu_xstate(void);
+-- 
+2.37.2
 
-I feel like we'd need to wait to see how this feature gets used to determine
-1) if we should try and reduce the overhead
-2) how we go about doing so (e.g. separate list for stubs, static
-keys, hash-based lookups of stubs, etc.)
+Changelog since v5:
+- Avoids a second copy from the uabi buffer as suggested.
+- Preserves old KVM_SET_XSAVE behavior where leaving the PKRU bit in the
+  XSTATE header results in PKRU remaining unchanged instead of
+  reinitializing it.
+- Fixed up patch metadata as requested.
 
-If people are mostly going to use ftrace, then this might not be worth
-trying to address.
+Changelog since v4:
+- Selftest additionally checks PKRU readbacks through ptrace.
+- Selftest flips all PKRU bits (except the default key).
 
-[1] https://docs.kernel.org/staging/static-keys.html
+Changelog since v3:
+- The v3 patch is now part 1 of 2.
+- Adds a selftest in part 2 of 2.
 
-Daniel
+Changelog since v2:
+- Removed now unused variables in fpu_copy_uabi_to_guest_fpstate
+
+Changelog since v1:
+- Handles the error case of copy_to_buffer().
