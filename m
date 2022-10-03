@@ -2,72 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FF35F3515
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Oct 2022 19:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D675F3585
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Oct 2022 20:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiJCR7t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Oct 2022 13:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
+        id S229785AbiJCSXS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Oct 2022 14:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiJCR7G (ORCPT
+        with ESMTP id S229811AbiJCSXP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Oct 2022 13:59:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6AC6276;
-        Mon,  3 Oct 2022 10:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=cWKiDxQpg3CrpeNWpGyXUibJ4Au13VIXyN0weQaKLtg=; b=nRl77eQDmZSZZPQHB1+dsnLflz
-        w9aVyK4cbyW3sM66HlTxN9W56e8/LDGLeQrqdbiPlOEiebM/+OC+lYQQ3FKvXcIT3UXU1YpgoTh4q
-        ddfvlK8cXIrtDKfL/XgQZnr6Yv76m2Ejq5vDrwtKwxZWAegthrI0XWdW/MFuq7GcD/fjXVJfaI9Og
-        4XhwzddPKpX3aZknrc8NqOXwrAMuoqnp4jCRU2IRpi08gfu7f3JEdrGUovVBo2GbpuF86+kDqUbxi
-        A2+WLdFVuKJvlGt4JwWhMz2Ot+7MTYqprKztwNHI86M0euJNlCX4arZ2/UcyUcBIhbanOiZSKcwDN
-        rNWqqoaw==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ofPi3-00GZIr-8t; Mon, 03 Oct 2022 17:58:31 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH RESEND] selftests/ftrace: func_event_triggers: fix typo in user message
-Date:   Mon,  3 Oct 2022 10:58:23 -0700
-Message-Id: <20221003175823.25040-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.37.3
+        Mon, 3 Oct 2022 14:23:15 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79933DBE5;
+        Mon,  3 Oct 2022 11:23:08 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3303218847DA;
+        Mon,  3 Oct 2022 18:23:05 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 2131F25002BC;
+        Mon,  3 Oct 2022 18:23:05 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 039A69EC0002; Mon,  3 Oct 2022 18:23:04 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 03 Oct 2022 20:23:04 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH iproute2-next 2/2] bridge: fdb: enable FDB blackhole
+ feature
+In-Reply-To: <YzhfDgqjBvhqNUHX@shredder>
+References: <20220929152137.167626-1-netdev@kapio-technology.com>
+ <20220929152137.167626-2-netdev@kapio-technology.com>
+ <YzhfDgqjBvhqNUHX@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <d4d110223244b27ade43fa50326be2d7@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Correct typo of "it's" to "it".
+On 2022-10-01 17:38, Ido Schimmel wrote:
+> 
+> Need to patch the "SYNOPSIS" section as well
+> 
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Does this look right to you for the addition to the "SYNOPSIS"?...
 
---- linux-next-20211224.orig/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
-+++ linux-next-20211224/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
-@@ -85,7 +85,7 @@ run_enable_disable() {
- 	echo $check_disable > $EVENT_ENABLE
-     done
-     sleep $SLEEP_TIME
--    echo " make sure it's still works"
-+    echo " make sure it still works"
-     test_event_enabled $check_enable_star
- 
-     reset_ftrace_filter
+bridge fdb { add | del } LLADR dev BRDEV [ self ] [ local ] [ blackhole 
+]
+
