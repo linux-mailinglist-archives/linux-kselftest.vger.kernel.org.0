@@ -2,241 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2445F4421
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Oct 2022 15:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1785F467D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Oct 2022 17:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiJDNTr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Oct 2022 09:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S229509AbiJDPUx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Oct 2022 11:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiJDNTZ (ORCPT
+        with ESMTP id S229446AbiJDPUv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Oct 2022 09:19:25 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B454F66F;
-        Tue,  4 Oct 2022 06:19:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4MhdT333Ygz9v7Gg;
-        Tue,  4 Oct 2022 21:14:15 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwA3ZV+JMjxj8ZGaAA--.6154S8;
-        Tue, 04 Oct 2022 14:18:52 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RESEND][PATCH 6/6] selftests/bpf: Add tests for _opts variants of bpf_*_get_fd_by_id()
-Date:   Tue,  4 Oct 2022 15:17:50 +0200
-Message-Id: <20221004131750.2306251-7-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221004131750.2306251-1-roberto.sassu@huaweicloud.com>
-References: <20221004131750.2306251-1-roberto.sassu@huaweicloud.com>
+        Tue, 4 Oct 2022 11:20:51 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34A113F21;
+        Tue,  4 Oct 2022 08:20:48 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 274A918847D5;
+        Tue,  4 Oct 2022 15:20:46 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 1C11425002BC;
+        Tue,  4 Oct 2022 15:20:46 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 1361F9EC000E; Tue,  4 Oct 2022 15:20:46 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 2858B9EC000C;
+        Tue,  4 Oct 2022 15:20:45 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 iproute2-next 1/4] include: uapi: MacAuth and Blackhole feature header changes
+Date:   Tue,  4 Oct 2022 17:20:33 +0200
+Message-Id: <20221004152036.7848-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Organization: Westermo Network Technologies AB
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwA3ZV+JMjxj8ZGaAA--.6154S8
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF4rJF43GFW8ur47tw45trb_yoWxXr17pa
-        93Gr1YkryFqr4093sxJF45Wr48KFW8X34Ut397WFy5Zr18XFn7Ww1xGF13tF9xurZ5Gws3
-        Z3y3try8GrW7ua7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZo7tUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAPBF1jj4PQKgAAsC
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
-
-Introduce the data_input map, write-protected with a small eBPF program
-implementing the lsm/bpf_map hook.
-
-Then, ensure that bpf_map_get_fd_by_id() and bpf_map_get_fd_by_id_opts()
-with NULL opts don't succeed due to requesting read-write access to the
-write-protected map. Also, ensure that bpf_map_get_fd_by_id_opts() with
-open_flags in opts set to BPF_F_RDONLY instead succeeds.
-
-After obtaining a read-only fd, ensure that only map lookup succeeds and
-not update. Ensure that update works only with the read-write fd obtained
-at program loading time, when the write protection was not yet enabled.
-
-Finally, ensure that the other _opts variants of bpf_*_get_fd_by_id() don't
-work if the BPF_F_RDONLY flag is set in opts (due to the kernel not
-handling the open_flags member of bpf_attr).
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
 ---
- tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
- .../bpf/prog_tests/libbpf_get_fd_opts.c       | 88 +++++++++++++++++++
- .../bpf/progs/test_libbpf_get_fd_opts.c       | 36 ++++++++
- 3 files changed, 125 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
+ include/uapi/linux/if_link.h   |  1 +
+ include/uapi/linux/neighbour.h | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index 17e074eb42b8..780a9b2090ad 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -75,3 +75,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
- lookup_key                               # JIT does not support calling kernel function                                (kfunc)
- verify_pkcs7_sig                         # JIT does not support calling kernel function                                (kfunc)
- kfunc_dynptr_param                       # JIT does not support calling kernel function                                (kfunc)
-+libbpf_get_fd_opts                       # failed to attach: ERROR: strerror_r(-524)=22                                (trampoline)
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
-new file mode 100644
-index 000000000000..2d4ba8f80d55
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_get_fd_opts.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+index 7494cffb..58a002de 100644
+--- a/include/uapi/linux/if_link.h
++++ b/include/uapi/linux/if_link.h
+@@ -559,6 +559,7 @@ enum {
+ 	IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT,
+ 	IFLA_BRPORT_MCAST_EHT_HOSTS_CNT,
+ 	IFLA_BRPORT_LOCKED,
++	IFLA_BRPORT_MAB,
+ 	__IFLA_BRPORT_MAX
+ };
+ #define IFLA_BRPORT_MAX (__IFLA_BRPORT_MAX - 1)
+diff --git a/include/uapi/linux/neighbour.h b/include/uapi/linux/neighbour.h
+index a998bf76..cc7d540e 100644
+--- a/include/uapi/linux/neighbour.h
++++ b/include/uapi/linux/neighbour.h
+@@ -52,7 +52,9 @@ enum {
+ #define NTF_STICKY	(1 << 6)
+ #define NTF_ROUTER	(1 << 7)
+ /* Extended flags under NDA_FLAGS_EXT: */
+-#define NTF_EXT_MANAGED	(1 << 0)
++#define NTF_EXT_MANAGED		(1 << 0)
++#define NTF_EXT_LOCKED		(1 << 1)
++#define NTF_EXT_BLACKHOLE	(1 << 2)
+ 
+ /*
+  *	Neighbor Cache Entry States.
+@@ -86,6 +88,13 @@ enum {
+  * NTF_EXT_MANAGED flagged neigbor entries are managed by the kernel on behalf
+  * of a user space control plane, and automatically refreshed so that (if
+  * possible) they remain in NUD_REACHABLE state.
 + *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include <test_progs.h>
-+
-+#include "test_libbpf_get_fd_opts.skel.h"
-+
-+void test_libbpf_get_fd_opts(void)
-+{
-+	struct test_libbpf_get_fd_opts *skel;
-+	struct bpf_map_info info_m = { 0 };
-+	__u32 len = sizeof(info_m), value;
-+	struct bpf_map *map;
-+	int ret, zero = 0, fd = -1;
-+
-+	DECLARE_LIBBPF_OPTS(bpf_get_fd_opts, fd_opts_rdonly,
-+		.open_flags = BPF_F_RDONLY,
-+	);
-+
-+	skel = test_libbpf_get_fd_opts__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_libbpf_get_fd_opts__open_and_load"))
-+		return;
-+
-+	ret = test_libbpf_get_fd_opts__attach(skel);
-+	if (!ASSERT_OK(ret, "test_libbpf_get_fd_opts__attach"))
-+		goto close_prog;
-+
-+	map = bpf_object__find_map_by_name(skel->obj, "data_input");
-+	if (!ASSERT_OK_PTR(map, "bpf_object__find_map_by_name"))
-+		goto close_prog;
-+
-+	ret = bpf_obj_get_info_by_fd(bpf_map__fd(map), &info_m, &len);
-+	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id(info_m.id);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, NULL);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	fd = bpf_map_get_fd_by_id_opts(info_m.id, &fd_opts_rdonly);
-+	if (!ASSERT_GE(fd, 0, "bpf_map_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* Map lookup should work with read-only fd. */
-+	ret = bpf_map_lookup_elem(fd, &zero, &value);
-+	if (!ASSERT_OK(ret, "bpf_map_lookup_elem"))
-+		goto close_prog;
-+
-+	if (!ASSERT_EQ(value, 0, "map value mismatch"))
-+		goto close_prog;
-+
-+	/* Map update should not work with read-only fd. */
-+	ret = bpf_map_update_elem(fd, &zero, &len, BPF_ANY);
-+	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	/* Map update should work with read-write fd. */
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &len, BPF_ANY);
-+	if (!ASSERT_OK(ret, "bpf_map_update_elem"))
-+		goto close_prog;
-+
-+	/* Prog get fd with opts set should not work (no kernel support). */
-+	ret = bpf_prog_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	if (!ASSERT_EQ(ret, -EINVAL, "bpf_prog_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* Link get fd with opts set should not work (no kernel support). */
-+	ret = bpf_link_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	if (!ASSERT_EQ(ret, -EINVAL, "bpf_link_get_fd_by_id_opts"))
-+		goto close_prog;
-+
-+	/* BTF get fd with opts set should not work (no kernel support). */
-+	ret = bpf_btf_get_fd_by_id_opts(0, &fd_opts_rdonly);
-+	ASSERT_EQ(ret, -EINVAL, "bpf_btf_get_fd_by_id_opts");
-+
-+close_prog:
-+	close(fd);
-+	test_libbpf_get_fd_opts__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
-new file mode 100644
-index 000000000000..f5ac5f3e8919
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_libbpf_get_fd_opts.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
++ * NTF_EXT_LOCKED flagged FDB entries are placeholder entries used with the
++ * locked port feature, that ensures that an entry exists while at the same
++ * time dropping packets on ingress with src MAC and VID matching the entry.
 + *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+/* From include/linux/mm.h. */
-+#define FMODE_WRITE	0x2
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} data_input SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("lsm/bpf_map")
-+int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode)
-+{
-+	if (map != (struct bpf_map *)&data_input)
-+		return 0;
-+
-+	if (fmode & FMODE_WRITE)
-+		return -EACCES;
-+
-+	return 0;
-+}
++ * NTF_EXT_BLACKHOLE flagged FDB entries ensure that no forwarding is allowed
++ * from any port to the destination MAC, VID pair associated with it.
+  */
+ 
+ struct nda_cacheinfo {
 -- 
-2.25.1
+2.34.1
 
