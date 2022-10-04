@@ -2,198 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35205F4688
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Oct 2022 17:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C50E5F4978
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Oct 2022 20:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiJDPVA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Oct 2022 11:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S229817AbiJDSwI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Oct 2022 14:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiJDPUz (ORCPT
+        with ESMTP id S229777AbiJDSwH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Oct 2022 11:20:55 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B575FAD0;
-        Tue,  4 Oct 2022 08:20:54 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id C91BD1884BAC;
-        Tue,  4 Oct 2022 15:20:52 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id AC91125001FA;
-        Tue,  4 Oct 2022 15:20:52 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 8B1649EC000E; Tue,  4 Oct 2022 15:20:52 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id B5CFB9EC000A;
-        Tue,  4 Oct 2022 15:20:51 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Hans Schultz <netdev@kapio-technology.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+        Tue, 4 Oct 2022 14:52:07 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2463061DAF;
+        Tue,  4 Oct 2022 11:51:54 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294IZ1Ms007437;
+        Tue, 4 Oct 2022 18:51:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=okNrQoOOAKp7rX9H9gitL78BaDqjgeTG34ONzWtxWmQ=;
+ b=E57NGs5zYbtzAOP9oXzMRsjJ+Vf7QFjMM+IrLH8kTnoJ6Ln9J7InMP7UjtkYcCP4SX7/
+ 2PqwGCQExLIui+I0l/R6GW4I+w7qvhODhyvynukR3hSXkWslaLumyutmW9w/5kEGAv0c
+ mZ6LMmocwav+YaMd6bpZ7qXOx/VhS+7ou3JQLYyvGW0br3gbM2K3XEbNgeNMpDFlDf1A
+ MpA+x2i83qOLfVB7KLJH6S8g1TVgq4h/tly+Gp8sP6/xTEYg4a71jizNTwO0yTtsEm50
+ 8zlLNewh++atK+JBrsF1H7VoQ6MHza3mhVT0vnZ6V8EwaCIca9PZArlCdhEAh5k0vIa6 pQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0gpq275d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 18:51:43 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 294Im2jN005228;
+        Tue, 4 Oct 2022 18:51:43 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3k0gpq274j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 18:51:43 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 294IoO8j021028;
+        Tue, 4 Oct 2022 18:51:41 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 3jxd68uajr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 18:51:41 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 294IpbWo60031284
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 4 Oct 2022 18:51:37 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9909042041;
+        Tue,  4 Oct 2022 18:51:37 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D65124203F;
+        Tue,  4 Oct 2022 18:51:36 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.6.222])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  4 Oct 2022 18:51:36 +0000 (GMT)
+Message-ID: <dca9e17ffbe71c76665ba25a6d9cd91d4aa0c329.camel@linux.ibm.com>
+Subject: Re: [PATCH v1 3/9] Documentation: KVM: s390: Describe
+ KVM_S390_MEMOP_F_CMPXCHG
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 iproute2-next 4/4] bridge: fdb: enable FDB blackhole feature
-Date:   Tue,  4 Oct 2022 17:20:36 +0200
-Message-Id: <20221004152036.7848-4-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221004152036.7848-1-netdev@kapio-technology.com>
-References: <20221004152036.7848-1-netdev@kapio-technology.com>
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Tue, 04 Oct 2022 20:51:36 +0200
+In-Reply-To: <85399389-9b5a-d72a-5db1-b8418008ad58@redhat.com>
+References: <20220930210751.225873-1-scgl@linux.ibm.com>
+         <20220930210751.225873-4-scgl@linux.ibm.com>
+         <85399389-9b5a-d72a-5db1-b8418008ad58@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _UNaA-cHpN_FYmyJlyAccAWzob0jG6bx
+X-Proofpoint-ORIG-GUID: c72-2sVsijxEwFYVaNKYmL9Z3Obkv5f0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_08,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ impostorscore=0 suspectscore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ clxscore=1015 spamscore=0 mlxlogscore=999 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210040120
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Block traffic to a specific host with the command:
-bridge fdb add <MAC> vlan <vid> dev br0 blackhole
+On Tue, 2022-10-04 at 10:16 +0200, Thomas Huth wrote:
+> On 30/09/2022 23.07, Janis Schoetterl-Glausch wrote:
+> > Describe the semantics of the new KVM_S390_MEMOP_F_CMPXCHG flag for
+> > absolute vm write memops which allows user space to perform (storage key
+> > checked) cmpxchg operations on guest memory.
+> > 
+> > Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> > ---
+> >   Documentation/virt/kvm/api.rst | 18 +++++++++++++++++-
+> >   1 file changed, 17 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index abd7c32126ce..0e02d66e38ae 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -3771,6 +3771,7 @@ Parameters are specified via the following structure::
+> >   		struct {
 
-Blackhole FDB entries can be added, deleted and replaced with
-ordinary FDB entries.
+What is the reason you initially didn't copy the /* in */ comment here?
 
-Example with output:
 
-$ bridge fdb add 10:10:10:10:10:10 dev br0 blackhole
-$ bridge -d fdb show dev br0
-10:10:10:10:10:10 vlan 1 blackhole master br0 permanent
-10:10:10:10:10:10 blackhole master br0 permanent
-$ bridge -d -j -p fdb show dev br0
-[ {
-        "mac": "10:10:10:10:10:10",
-        "vlan": 1,
-        "flags": [ "blackhole" ],
-        "master": "br0",
-        "state": "permanent"
-    },{
-        "mac": "10:10:10:10:10:10",
-        "flags": [ "blackhole" ],
-        "master": "br0",
-        "state": "permanent"
-    } ]
+Thanks for the reviews.
 
-Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
----
- bridge/fdb.c      | 13 ++++++++++++-
- man/man8/bridge.8 | 12 ++++++++++++
- 2 files changed, 24 insertions(+), 1 deletion(-)
-
-diff --git a/bridge/fdb.c b/bridge/fdb.c
-index f1f0a5bb..1c8c50a8 100644
---- a/bridge/fdb.c
-+++ b/bridge/fdb.c
-@@ -38,7 +38,7 @@ static void usage(void)
- 	fprintf(stderr,
- 		"Usage: bridge fdb { add | append | del | replace } ADDR dev DEV\n"
- 		"              [ self ] [ master ] [ use ] [ router ] [ extern_learn ]\n"
--		"              [ sticky ] [ local | static | dynamic ] [ vlan VID ]\n"
-+		"              [ sticky ] [ local | static | dynamic ] [ blackhole ] [ vlan VID ]\n"
- 		"              { [ dst IPADDR ] [ port PORT] [ vni VNI ] | [ nhid NHID ] }\n"
- 		"	       [ via DEV ] [ src_vni VNI ]\n"
- 		"       bridge fdb [ show [ br BRDEV ] [ brport DEV ] [ vlan VID ]\n"
-@@ -116,6 +116,9 @@ static void fdb_print_flags(FILE *fp, unsigned int flags, __u8 ext_flags)
- 	if (flags & NTF_STICKY)
- 		print_string(PRINT_ANY, NULL, "%s ", "sticky");
- 
-+	if (ext_flags & NTF_EXT_BLACKHOLE)
-+		print_string(PRINT_ANY, NULL, "%s ", "blackhole");
-+
- 	if (ext_flags & NTF_EXT_LOCKED)
- 		print_string(PRINT_ANY, NULL, "%s ", "locked");
- 
-@@ -421,6 +424,7 @@ static int fdb_modify(int cmd, int flags, int argc, char **argv)
- 	char *endptr;
- 	short vid = -1;
- 	__u32 nhid = 0;
-+	__u32 ext_flags = 0;
- 
- 	while (argc > 0) {
- 		if (strcmp(*argv, "dev") == 0) {
-@@ -492,6 +496,8 @@ static int fdb_modify(int cmd, int flags, int argc, char **argv)
- 			req.ndm.ndm_flags |= NTF_EXT_LEARNED;
- 		} else if (matches(*argv, "sticky") == 0) {
- 			req.ndm.ndm_flags |= NTF_STICKY;
-+		} else if (matches(*argv, "blackhole") == 0) {
-+			ext_flags |= NTF_EXT_BLACKHOLE;
- 		} else {
- 			if (strcmp(*argv, "to") == 0)
- 				NEXT_ARG();
-@@ -534,6 +540,11 @@ static int fdb_modify(int cmd, int flags, int argc, char **argv)
- 	if (dst_ok)
- 		addattr_l(&req.n, sizeof(req), NDA_DST, &dst.data, dst.bytelen);
- 
-+	if (ext_flags &&
-+	    addattr_l(&req.n, sizeof(req), NDA_FLAGS_EXT, &ext_flags,
-+		      sizeof(ext_flags)) < 0)
-+		return -1;
-+
- 	if (vid >= 0)
- 		addattr16(&req.n, sizeof(req), NDA_VLAN, vid);
- 	if (nhid > 0)
-diff --git a/man/man8/bridge.8 b/man/man8/bridge.8
-index f4f1d807..0119a2a9 100644
---- a/man/man8/bridge.8
-+++ b/man/man8/bridge.8
-@@ -85,6 +85,13 @@ bridge \- show / manipulate bridge addresses and devices
- .B nhid
- .IR NHID " } "
- 
-+.ti -8
-+.BR "bridge fdb" " { " add " | " del " } "
-+.I LLADR
-+.B dev
-+.IR BRDEV " [ "
-+.BR self " ] [ " local " ] [ " blackhole " ] "
-+
- .ti -8
- .BR "bridge fdb" " [ [ " show " ] [ "
- .B br
-@@ -701,6 +708,11 @@ controller learnt dynamic entry. Kernel will not age such an entry.
- - this entry will not change its port due to learning.
- .sp
- 
-+.B blackhole
-+- this entry will silently discard all matching packets. The entry must
-+be added as a local permanent entry.
-+.sp
-+
- .in -8
- The next command line parameters apply only
- when the specified device
--- 
-2.34.1
+> >   			__u8 ar;	/* the access register number */
+> >   			__u8 key;	/* access key, ignored if flag unset */
+> 
+> Padding / alignment?
+> 
+> > +			__u64 old[2];	/* ignored if flag unset */
+> >   		};
+> >   		__u32 sida_offset; /* offset into the sida */
+> >   		__u8 reserved[32]; /* ignored */
+> > @@ -3853,8 +3854,23 @@ Absolute accesses are permitted for non-protected guests only.
+> >   Supported flags:
+> >     * ``KVM_S390_MEMOP_F_CHECK_ONLY``
+> >     * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
+> > +  * ``KVM_S390_MEMOP_F_CMPXCHG``
+> > +
+> > +The semantics of the flags common with logical acesses are as for logical accesses.
+> > +
+> > +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
+> > +In this case, instead of doing an unconditional write, the access occurs only
+> > +if the target location contains the value provided in "old". This is performed
+> > +as an atomic cmpxchg. "size" must be a power of two up to and including 16.
+> > +Values with sizes <8 byte are to be provided by assignment to "old[1]".
+> > +Doublewords are provided with the higher value word in "old[0]" and the lower
+> > +word in "old[1]".
+> > +The value at the target location is returned in "old", encoded in the same manner.
+> > +If the value was exchanged the KVM_S390_MEMOP_F_CMPXCHG bit in "flags" is set to
+> > +0, otherwise it remains set.
+> > +The KVM_S390_MEMOP_F_CMPXCHG flag is supported if KVM_CAP_S390_MEM_OP_EXTENSION
+> > +has bit 1 (i.e. bit with value 2) set.
+> 
+> Please try to fit the text within 80 columns.
+> 
+>   Thanks,
+>    Thomas
+> 
 
