@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFF95F5B12
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Oct 2022 22:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9910F5F5B1A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Oct 2022 22:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbiJEUgc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Oct 2022 16:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S231133AbiJEUja (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Oct 2022 16:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiJEUgb (ORCPT
+        with ESMTP id S230094AbiJEUj2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Oct 2022 16:36:31 -0400
+        Wed, 5 Oct 2022 16:39:28 -0400
 Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFB04153B
-        for <linux-kselftest@vger.kernel.org>; Wed,  5 Oct 2022 13:36:28 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id ot12so282327ejb.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Oct 2022 13:36:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ADA476FD
+        for <linux-kselftest@vger.kernel.org>; Wed,  5 Oct 2022 13:39:27 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id ot12so296811ejb.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Oct 2022 13:39:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2Re7iXmxWCc16aVxPj7jXQfr86b17TQ2/MaN7IUN2k=;
-        b=Bd3kUt9pSuaO3Scmoy+GEswieHGai7AlVdf0McStQWtG0D3v6Yl0kQvU3oZz6IKJf2
-         DxAcbzw/Zri8q4buHEvgvzc2hcin4PD1Ua93SW9O9OoGPBTKqVLtApwxu0GQvhjM72Uh
-         TlWN91UFe/vh/AeC6mnFXoO000TDHaJzsNrf/qWlGIuzXp9yo2w1pdH64rho745KZO6F
-         G5qWqbT5sfSOVCSIPq34MhPSv0V/OVRw7sTVVg3k7O1+KobzwFbktozz1aF9P5yYuQoo
-         BnvsB+HfXw2xXrqRt3aym43XAqQWHSZectFmJtUoPHMJeeX3XzqNLdRORi/0DFIMaCe8
-         pEvw==
+        bh=g6s7DJKavkP6Wy2PCKjnIW2IKB4P0bWvffwW3eMp+yI=;
+        b=DBO3i9LoxZwL9VONd/WY01Ix6CFiUp0JklwT3uV0W6Zbp1Gqi9bQH4adXbZqV2I3eq
+         7ZdyJCgkzFThHHUEocvVBJ1ZSUKnjCZ85Rl7tbWysqMnXNzJwAugLi6JVEcpFTN0Spb8
+         /RP0sQgCNYQmKaMMSZyU4HIgAyeIbf73CEFFMh2C7q8e0p4aCW7sDlF5BwTijKZgCEN5
+         HoDYOmZrPJjk+PH3bCd12Dv4bNWNy0JdvlAufb3BEFe1Osiylv4QDq81pxncn6wHfmOB
+         iFnatp9zkEo/wqVJGds9FBHl/8FgpGS0iPdkzF24tpp/c1vckPparQvMDFBGnKBAsQ55
+         GIIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q2Re7iXmxWCc16aVxPj7jXQfr86b17TQ2/MaN7IUN2k=;
-        b=6U8XmoAGgs0U34c9BCcoQVfRQrl9ggcLlvEmPLQaLiH49yohV5BppNZJdgy7drFwJr
-         jtRwYQaxDp1/g/k3eKy0HAIwIVBMTALTF3BJ8uEt1dMpL0g6GisKoxX79XZaZfbi+Kxk
-         +IKdCDZmldpWfhOxE4ntmMplZ6PgQM6wjJc9yb6/PRmRIusAVlBMN6iP8hrXXhiSHoy/
-         Tjmt4ccqT/lbqFKw5cywm+JkLOtFrkMaIEDsi30BXTcBWtdM7019DI5/9JOxbLDf4vCD
-         HBOZpTdAEJKJjd9jtnwgd4Yxc4YLiwSITn/5NGXVRHpaI/Ac2uZmuK9eM2K+Tfw+Wo3k
-         WUdQ==
-X-Gm-Message-State: ACrzQf0iG4Rw6G+rldjusq1D/AxcTaOY+VKkpW++2GVY1oi/i6Qx+aYX
-        4qZ75I8ZSjOJBt1vCs+YrDiHoV+QfHOqmJrw3Tx07Q==
-X-Google-Smtp-Source: AMsMyM4gOvihBgNAuFstuwa6PPhhWu6YCOZvfZTBC5eQxXbnEZQLmWMYXNYzk8inQK+JMg7+VFMoCXhcCxLzknb+88o=
-X-Received: by 2002:a17:906:1e08:b0:73d:c724:4876 with SMTP id
- g8-20020a1709061e0800b0073dc7244876mr1147718ejj.62.1665002186127; Wed, 05 Oct
- 2022 13:36:26 -0700 (PDT)
+        bh=g6s7DJKavkP6Wy2PCKjnIW2IKB4P0bWvffwW3eMp+yI=;
+        b=ypsz0sHtA3ySCnVHhKgLSzU4bqU6K31Gr1aFJqUfFhi/RyUA9CIuoXn035yGeUgWRO
+         vzEr7Lg4LzTKMPNwTSSPjj7M0XTOq06QrC5L7MtMQ/suce+B1Jl5ssZaQ33nNpdj57xy
+         uyBKbhguTOozl+EXKFhp5haJppusOv9HUdSmO4BzXVJj5qwApp0tFsYcCHtPU3nWb6/P
+         Onfbb2ve4W8ST+tcVJ9FeUXYtWIbqUlR1AZKdSIRzqnh+8b5K7KONwhaMF9NiDd+1uQ8
+         EA6xHHBmyf3u1llpqqzYaX8Z0StOmBN4GzkwemToGfNVDZd+nkzXeSqO5XgiUVF6AUyI
+         iWqw==
+X-Gm-Message-State: ACrzQf0JUM8kvaUXaTLQu75z/tlYXPrnLE0U11Yxt8/2Ml0AVohlRpBy
+        HobVBjoiCifH5hJcNfhJ6wi4ZQcvbWXenfd3gZnk8w==
+X-Google-Smtp-Source: AMsMyM46SP4qUvEeA8KOjyNhY32AbAj+OwOgWsw5GUBSdT76g50q1ZBZGMW18xC4yRrG4qFyC3mq/IM7gF91OyOBXLs=
+X-Received: by 2002:a17:906:6791:b0:78d:4051:969f with SMTP id
+ q17-20020a170906679100b0078d4051969fmr338628ejp.171.1665002365425; Wed, 05
+ Oct 2022 13:39:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722171534.3576419-1-dlatypov@google.com> <20220722171534.3576419-3-dlatypov@google.com>
-In-Reply-To: <20220722171534.3576419-3-dlatypov@google.com>
+References: <20220722171534.3576419-1-dlatypov@google.com> <20220722171534.3576419-4-dlatypov@google.com>
+In-Reply-To: <20220722171534.3576419-4-dlatypov@google.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 5 Oct 2022 16:36:15 -0400
-Message-ID: <CAFd5g450Jgxu=HYVpj8YmrtF9Hd3K9fuTHBp-Q5ZK+w=YVxO+w@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] kunit: make kunit_kfree() only work on pointers
- from kunit_malloc() and friends
+Date:   Wed, 5 Oct 2022 16:39:14 -0400
+Message-ID: <CAFd5g47-EqGY4ZwaH_btjhweFSqjLZ=3cq8M26pvf8yuwL3Qhg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] kunit: make kunit_kfree() not segfault on invalid inputs
 To:     Daniel Latypov <dlatypov@google.com>
 Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
@@ -62,7 +61,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,34 +71,29 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Fri, Jul 22, 2022 at 1:15 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> kunit_kfree() exists to clean up allocations from kunit_kmalloc() and
-> friends early instead of waiting for this to happen automatically at the
-> end of the test.
+> kunit_kfree() can only work on data ("resources") allocated by KUnit.
 >
-> But it can be used on *anything* registered with the kunit resource API.
+> Currently for code like this,
+> > void *ptr = kmalloc(4, GFP_KERNEL);
+> > kunit_kfree(test, ptr);
+> kunit_kfree() will segfault.
 >
-> E.g. the last 2 statements are equivalent:
->   struct kunit_resource *res = something();
->   kfree(res->data);
->   kunit_put_resource(res);
+> It'll try and look up the kunit_resource associated with `ptr` and get a
+> NULL back, but it won't check for this. This means we also segfault if
+> you double-free.
 >
-> The problem is that there could be multiple resources that point to the
-> same `data`.
+> Change kunit_kfree() so it'll notice these invalid pointers and respond
+> by failing the test.
 >
-> E.g. you can have a named resource acting as a pseudo-global variable in
-> a test. If you point it to data allocated with kunit_kmalloc(), then
-> calling `kunit_kfree(ptr)` has the chance to delete either the named
-> resource or to kfree `ptr`.
-> Which one it does depends on the order the resources are registered as
-> kunit_kfree() will delete resources in LIFO order.
+> Implementation: kunit_destroy_resource() does what kunit_kfree() does,
+> but is more generic and returns -ENOENT when it can't find the resource.
+> Sadly, unlike just letting it crash, this means we don't get a stack
+> trace. But kunit_kfree() is so infrequently used it shouldn't be hard to
+> track down the bad callsite anyways.
 >
-> So this patch restricts kunit_kfree() to only working on resources
-> created by kunit_kmalloc(). Calling it is therefore guaranteed to free
-> the memory, not do anything else.
->
-> Note: kunit_resource_instance_match() wasn't used outside of KUnit, so
-> it should be safe to remove from the public interface. It's also
-> generally dangerous, as shown above, and shouldn't be used.
+> After this change, the above code gives:
+> > # example_simple_test: EXPECTATION FAILED at lib/kunit/test.c:702
+> > kunit_kfree: 00000000626ec200 already freed or not allocated by kunit
 >
 > Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > Reviewed-by: David Gow <davidgow@google.com>
