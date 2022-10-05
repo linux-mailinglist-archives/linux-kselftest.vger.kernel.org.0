@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFE15F5D06
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 01:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079CE5F5D0F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 01:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiJEXET (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Oct 2022 19:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
+        id S229650AbiJEXHB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Oct 2022 19:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJEXES (ORCPT
+        with ESMTP id S229508AbiJEXHA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Oct 2022 19:04:18 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A28E8559C;
-        Wed,  5 Oct 2022 16:04:17 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-35ceeae764dso2815427b3.4;
-        Wed, 05 Oct 2022 16:04:17 -0700 (PDT)
+        Wed, 5 Oct 2022 19:07:00 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A540857D7;
+        Wed,  5 Oct 2022 16:06:57 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id b145so399897yba.0;
+        Wed, 05 Oct 2022 16:06:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dZaNz1pzQi1epRSfLigI6QZ/E9hSkPxllAw4SwzkTA0=;
-        b=Yb0fwn3nuUtB7A4O2nb5i95beKvK7pOkkOL0dBgrb8IZJFVjlvkzmIJgmViiLUVb0E
-         DCdSYQ+m7UWT6nR6kR1BRreRwIaWW4U7bHiugL5jPdUvwVMRcAzt/xJpTxAi66dE2SG1
-         ItFjkD6hnFs8RSbNuhK9StcWV12Rz34k9Nbf7xNPcoajW6xlfmMsXSib+ZRa7EQ7sUv1
-         Csk4KPjIH/vCwLA4JBTnAgWQVFuclRPq5oh2hfZbYEbHMm36nvaRY2Y1P3Jmcui3v+C0
-         nWf2lv3blrpLTkCj1CSy+aVStQmk7a9GWMtI+Gg4fPPpf6a4Ro3YAUep14iuhn6V4oEr
-         xvGg==
+        bh=FmImwKatnMwbFulNzGw3sRM/1NjJtezQ9bl/fz9hQTc=;
+        b=JefZ4ZlrnfEPRiZxSl7bQ8/CvH5MuUBBTDrYGiueAVz7XyQrGQhtgC2vUBZ8viKzkz
+         700xK66FJwez1MSQq6JtWMTPEUjh+jwfW6NasVaztWFz/CgDRu3PVU23J3MEsgvq9N9O
+         9l8iGZrAks162LaJzfDxLJhgpmfcY+oNKsVKvBGaP49m6ehuzGMOZLE3LV1U4RQ2Yfmh
+         NkTvlkdhL3JRwdefCi+JNx6I8rVIMQbj8Y0PdAi22sJUmCjBFfC9j9Xz28+Hjlvg4pll
+         o10MMafSnLTYnh9wnDp6F2Wwooukz9rcZRUPAP/HWlDpoNVIgT6aiyAnhwc0r9GYXySl
+         jQwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dZaNz1pzQi1epRSfLigI6QZ/E9hSkPxllAw4SwzkTA0=;
-        b=yKHTUtxRwabSbv5Jd7Ke5OQWEASVMF+K0zfevhq/YdOunGJ9rLs8IeuDpm6BVgHKku
-         lzo/dOe0lV0QvzvnIZ9QQjHPZEmp933KLRD10azysrP8OJhycSqKXzlz0yMhpLSlBED7
-         p4fzQCe95Z0q0WkL6vP5uL2fsAL37P5mwiQIZoBCnRFaaQOBO6Y/XltEZtGuKhRTAgBi
-         7ZSCUIzheRM/eQqAOs+VBjYtcxVlygI0Rly2e+++FBvobOKALx8a+g6WtgrS4VUuvNDl
-         TY6iBJyaiRUw6BnMVyNFFkGO+kmLha6nkJDlfA+tq7b3ZV8vczcuTtt0dbjykPE+Y2lG
-         7A3Q==
-X-Gm-Message-State: ACrzQf1rtQi9jfUXNIMK/zK9htzL8M7Q0aI96qAEnf7g9qCCSpiemTB2
-        LlEEudajXMQ5RTFCE0jQ2r16oFoQIVzaUjkr7BI=
-X-Google-Smtp-Source: AMsMyM712/OQJaHW071yNXGMW+ozmWYfCCrrv5e4dFJMZLILTTYuyBylZdOVm+K5Sf4sKt0xLwiZ4m8jBrqdWE7i2uE=
-X-Received: by 2002:a0d:df0b:0:b0:358:83d4:95a2 with SMTP id
- i11-20020a0ddf0b000000b0035883d495a2mr2024360ywe.475.1665011056641; Wed, 05
- Oct 2022 16:04:16 -0700 (PDT)
+        bh=FmImwKatnMwbFulNzGw3sRM/1NjJtezQ9bl/fz9hQTc=;
+        b=7dOIhMJMmhIg+8OB3TZeRGnfxJkYuVmZXVyRzb/L/tYbFqLLtunI3m+G6yxtsDTy7e
+         n1eqojUaXIP7ffvINY1MJapIDLK6m1B43F6xLRbCup4qt8KQ5kKYSmAASD6IzNLFyPb/
+         mGW4zI6mde0vknFKTzw1SHEG+NBd11Vr/zLAPsTm/K9S46HFv2CgfdauG53xlbWkFpNA
+         yeGbRtoznD+Y2NbAFyqyvwp14dCb1G5fXgbC8AwX1b9Ef9SPnc/cAKCjIHfHxN8gaZPw
+         bsJHmtSWNnzG/4Rf9ajBwgh0636tlZeVGf0o5RHlEUCR9Zm3HosallFokqUM/bcnzpz3
+         Tw0w==
+X-Gm-Message-State: ACrzQf2RRO/IfAhvGyQMOPHDDNgKI/3Cbfea3D/EI0DOgBuIT+iXeUm3
+        1ZC2OMTyPtA1uAEwhXelw6d+8BsvrjZ7SIEaYss=
+X-Google-Smtp-Source: AMsMyM6hgHAL9ud1h7kcp37MU46mb8sHpbWZglKDHHju/Us8wJOB/fgSwln0AX4Hhj2baQ55J8hwll/wcwKBSplFesI=
+X-Received: by 2002:a25:6d88:0:b0:6be:6dbd:c477 with SMTP id
+ i130-20020a256d88000000b006be6dbdc477mr2140673ybc.385.1665011216127; Wed, 05
+ Oct 2022 16:06:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221004131750.2306251-1-roberto.sassu@huaweicloud.com> <20221004131750.2306251-3-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20221004131750.2306251-3-roberto.sassu@huaweicloud.com>
+References: <20221004131750.2306251-1-roberto.sassu@huaweicloud.com> <20221004131750.2306251-5-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221004131750.2306251-5-roberto.sassu@huaweicloud.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Oct 2022 16:04:03 -0700
-Message-ID: <CAEf4Bzby0g3o3i07p-irS4NupQFO+eer6TOageEBOJEdWvz1ZA@mail.gmail.com>
-Subject: Re: [RESEND][PATCH 2/6] libbpf: Define bpf_get_fd_opts and introduce bpf_map_get_fd_by_id_opts()
+Date:   Wed, 5 Oct 2022 16:06:43 -0700
+Message-ID: <CAEf4BzZm1iEPyr2Q3L+95JdC4H11dq1AGw1FiOH0XCRHaCzigg@mail.gmail.com>
+Subject: Re: [RESEND][PATCH 4/6] libbpf: Introduce bpf_btf_get_fd_by_id_opts()
 To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
@@ -77,35 +77,34 @@ On Tue, Oct 4, 2022 at 6:18 AM Roberto Sassu
 >
 > From: Roberto Sassu <roberto.sassu@huawei.com>
 >
-> Define a new data structure called bpf_get_fd_opts, with the member
-> open_flags, to be used by callers of the _opts variants of
-> bpf_*_get_fd_by_id() to specify the permissions needed for the file
-> descriptor to be obtained.
+> Introduce bpf_btf_get_fd_by_id_opts(), for symmetry with
+> bpf_map_get_fd_by_id_opts(), to let the caller pass the newly introduced
+> data structure bpf_get_fd_opts. Keep the existing bpf_btf_get_fd_by_id(),
+> and call bpf_btf_get_fd_by_id_opts() with NULL as opts argument, to prevent
+> setting open_flags.
 >
-> Also, introduce bpf_map_get_fd_by_id_opts(), to let the caller pass a
-> bpf_get_fd_opts structure.
->
-> Finally, keep the existing bpf_map_get_fd_by_id(), and call
-> bpf_map_get_fd_by_id_opts() with NULL as opts argument, to request
-> read-write permissions (current behavior).
+> Currently, the kernel does not support non-zero open_flags for
+> bpf_btf_get_fd_by_id_opts(), and a call with them will result in an error
+> returned by the bpf() system call. The caller should always pass zero
+> open_flags.
 >
 > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
 >  tools/lib/bpf/bpf.c      | 12 +++++++++++-
->  tools/lib/bpf/bpf.h      | 10 ++++++++++
+>  tools/lib/bpf/bpf.h      |  2 ++
 >  tools/lib/bpf/libbpf.map |  1 +
->  3 files changed, 22 insertions(+), 1 deletion(-)
+>  3 files changed, 14 insertions(+), 1 deletion(-)
 >
 > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 1d49a0352836..4b03063edf1d 100644
+> index 92464c2d1da7..f43e8c8afbd3 100644
 > --- a/tools/lib/bpf/bpf.c
 > +++ b/tools/lib/bpf/bpf.c
-> @@ -948,19 +948,29 @@ int bpf_prog_get_fd_by_id(__u32 id)
->         return libbpf_err_errno(fd);
+> @@ -980,19 +980,29 @@ int bpf_map_get_fd_by_id(__u32 id)
+>         return bpf_map_get_fd_by_id_opts(id, NULL);
 >  }
 >
-> -int bpf_map_get_fd_by_id(__u32 id)
-> +int bpf_map_get_fd_by_id_opts(__u32 id,
+> -int bpf_btf_get_fd_by_id(__u32 id)
+> +int bpf_btf_get_fd_by_id_opts(__u32 id,
 > +                             const struct bpf_get_fd_opts *opts)
 >  {
 >         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
@@ -116,63 +115,51 @@ On Tue, Oct 4, 2022 at 6:18 AM Roberto Sassu
 > +               return libbpf_err(-EINVAL);
 > +
 >         memset(&attr, 0, attr_sz);
->         attr.map_id = id;
+>         attr.btf_id = id;
 > +       attr.open_flags = OPTS_GET(opts, open_flags, 0);
 >
->         fd = sys_bpf_fd(BPF_MAP_GET_FD_BY_ID, &attr, attr_sz);
+>         fd = sys_bpf_fd(BPF_BTF_GET_FD_BY_ID, &attr, attr_sz);
 >         return libbpf_err_errno(fd);
 >  }
 >
-> +int bpf_map_get_fd_by_id(__u32 id)
+> +int bpf_btf_get_fd_by_id(__u32 id)
 > +{
-> +       return bpf_map_get_fd_by_id_opts(id, NULL);
+> +       return bpf_btf_get_fd_by_id_opts(id, NULL);
 > +}
 > +
->  int bpf_btf_get_fd_by_id(__u32 id)
+>  int bpf_link_get_fd_by_id(__u32 id)
 >  {
 >         const size_t attr_sz = offsetofend(union bpf_attr, open_flags);
 > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 9c50beabdd14..c60eda3c88ad 100644
+> index 595d342fb7f9..559af0b84299 100644
 > --- a/tools/lib/bpf/bpf.h
 > +++ b/tools/lib/bpf/bpf.h
-> @@ -365,7 +365,17 @@ LIBBPF_API int bpf_prog_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_map_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_btf_get_next_id(__u32 start_id, __u32 *next_id);
->  LIBBPF_API int bpf_link_get_next_id(__u32 start_id, __u32 *next_id);
-> +
-> +struct bpf_get_fd_opts {
-
-should we call it "bpf_get_fd_by_id_opts" ? kernel command is
-specifically about getting object FD by its external ID, so let's
-reflect this in the name?
-
-Otherwise it looks good.
-
-
-> +       size_t sz; /* size of this struct for forward/backward compatibility */
-> +       __u32 open_flags; /* permissions requested for the operation on fd */
-> +       size_t :0;
-> +};
-> +#define bpf_get_fd_opts__last_field open_flags
-> +
->  LIBBPF_API int bpf_prog_get_fd_by_id(__u32 id);
-> +LIBBPF_API int bpf_map_get_fd_by_id_opts(__u32 id,
-> +                                        const struct bpf_get_fd_opts *opts);
+> @@ -379,6 +379,8 @@ LIBBPF_API int bpf_prog_get_fd_by_id(__u32 id);
+>  LIBBPF_API int bpf_map_get_fd_by_id_opts(__u32 id,
+>                                          const struct bpf_get_fd_opts *opts);
 >  LIBBPF_API int bpf_map_get_fd_by_id(__u32 id);
+> +LIBBPF_API int bpf_btf_get_fd_by_id_opts(__u32 id,
+> +                                        const struct bpf_get_fd_opts *opts);
+
+It's subjective, but opts variants of APIs, being more "advanced"
+usually are listed after their simpler non-opts variants. Can you
+please add new _opts APIs after their non-opts variants?
+
 >  LIBBPF_API int bpf_btf_get_fd_by_id(__u32 id);
 >  LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
+>  LIBBPF_API int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len);
 > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 04fab9f1fdd7..2e665b21d84f 100644
+> index c3604eaa220d..7011d5eec67b 100644
 > --- a/tools/lib/bpf/libbpf.map
 > +++ b/tools/lib/bpf/libbpf.map
 > @@ -371,6 +371,7 @@ LIBBPF_1.0.0 {
 >
 >  LIBBPF_1.1.0 {
 >         global:
-> +               bpf_map_get_fd_by_id_opts;
+> +               bpf_btf_get_fd_by_id_opts;
+>                 bpf_map_get_fd_by_id_opts;
+>                 bpf_prog_get_fd_by_id_opts;
 >                 user_ring_buffer__discard;
->                 user_ring_buffer__free;
->                 user_ring_buffer__new;
 > --
 > 2.25.1
 >
