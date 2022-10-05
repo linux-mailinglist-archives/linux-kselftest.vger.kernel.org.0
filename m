@@ -2,304 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4667B5F5C57
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 00:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF315F5CFF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 01:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiJEWEM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Oct 2022 18:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S229534AbiJEXCk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Oct 2022 19:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiJEWEL (ORCPT
+        with ESMTP id S229508AbiJEXCj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Oct 2022 18:04:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3673ED41;
-        Wed,  5 Oct 2022 15:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665007450; x=1696543450;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=x0W/PWlKVH4Kg6RVdCR6J9PqSt//9vhZDuFOnyIkMK4=;
-  b=Cu95gJoEPxBWNDOsULtMh0WiixtM2ZVIDTUcjLRpC0QvtVH0CtEJuDS+
-   FtQ79PwQ01r+AWR6sE51wUuo6o57XmgCRumfNq6UhjQqfRCzsoSE0pNbr
-   +ItQB1E/qedNWG84p09iAIgR42ExWsKBJsbb1J0sxv/DmpUOeNOuZbVPx
-   fDC92W18IrP3j4TYOngKrv63jLGmGG4XPK2eGePDkc0m2BY1nrt1RMR7s
-   Noq+X1jcHMyxatqaMVUXSBJJGvdGku+gYQwUh9ptFdlwMF+KzPg29M/CK
-   X7/TQrsBajwgm2rpEyvT8svRsprNbLlacAW4AMvcFd19zZUF3d+NDOOAx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="365218813"
-X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="365218813"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 15:04:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="602193024"
-X-IronPort-AV: E=Sophos;i="5.95,162,1661842800"; 
-   d="scan'208";a="602193024"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by orsmga006.jf.intel.com with ESMTP; 05 Oct 2022 15:04:08 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     x86@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, avagin@gmail.com,
-        seanjc@google.com, chang.seok.bae@intel.com,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 2/3] selftests/x86/mxcsr: Test the MXCSR state write via ptrace
-Date:   Wed,  5 Oct 2022 14:53:56 -0700
-Message-Id: <20221005215357.1808-3-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221005215357.1808-1-chang.seok.bae@intel.com>
-References: <20221005215357.1808-1-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 5 Oct 2022 19:02:39 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51D085599;
+        Wed,  5 Oct 2022 16:02:36 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 63so342057ybq.4;
+        Wed, 05 Oct 2022 16:02:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=L7ufU5NJZ1m5iRvOEgBPFkIANRERx7whw7EOLnWZahg=;
+        b=k8uPcu7u+JSMjPJ10LB7tmG2Wunjo9xJkXKMm2Err/usFhtZr+sEaiQ/3LNWCwo9M3
+         HV/Gu/eODY/YWme6iPaHG7GjSCHSx7FpyBWNxbDJTXCNHANHK2qNuSw80SCmtbOdB7Al
+         e3vlpX/lK+GEaOLx8/pyHhcdAxVmnEM0J4fU05J6nk+xrR9tGx9xZxlLBGKzNm61+pdS
+         c7RwBrI1J5NisiK+mIIjCAiuKDTNiSjt13x4EGtgibV6U9in0e2kJCnIBBmkofd2QsTi
+         Wadppnhar/U2fyRSNpF5qYJbhkAmRQHHigwz82pEMXMWtOYNb/9VOvOeq9K7KaeI3kgF
+         midw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L7ufU5NJZ1m5iRvOEgBPFkIANRERx7whw7EOLnWZahg=;
+        b=NxUc5XqIuw6mNNXJ73SJUdywa4YzP14pY5SQt93SJMU2oBbUNZjQZdqYQLVxfriodu
+         Mr/gV39lrgFMI6sh88de2zMgw3IGsOGUAZZL4XAfp3vB+zyhnmbO6iq2VwDaOt1jVVkS
+         2lhc7e4SAp3c9lFXuYet+fAQw9Lt1k2+6yqZ90L7v1ovusDDgI3NDgy8XksY72x0fnDT
+         LB+YeYyklNu40ADKyzt5aci/YTim4XKh00iS09sR27b8IShroWwsz5CIhouxizw1cj6F
+         qVDjqKfgfU1AQPbLxN0mZM2xkiUjmZzRnQWfk8iP9qBnBL/IIQIbclsvpM3ZccThXYIt
+         PzHQ==
+X-Gm-Message-State: ACrzQf0PiITVc1TvU9s0w0QZ2xCNZ0TafGiFe/2JCPe8E+O+o4N0rDOe
+        d40bfv5J+i31wljjLFFp1s6qGoUfRlnF8rFAtaE=
+X-Google-Smtp-Source: AMsMyM6TEfE8Y2LkWYa6/+BHsh/IW88Rt1oi0UVBNQpoo2Nkmg+SgLGCHDnE1by2VXt60s37ZBKH3wEwB874AnG6wYM=
+X-Received: by 2002:a25:1042:0:b0:6bb:f807:aa04 with SMTP id
+ 63-20020a251042000000b006bbf807aa04mr2202432ybq.639.1665010956061; Wed, 05
+ Oct 2022 16:02:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221004131750.2306251-1-roberto.sassu@huaweicloud.com> <20221004131750.2306251-2-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20221004131750.2306251-2-roberto.sassu@huaweicloud.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 5 Oct 2022 16:02:23 -0700
+Message-ID: <CAEf4BzaeOknT5d_ziidov3UXMZD40WCVHFamqC2_eH9nAUNUYQ@mail.gmail.com>
+Subject: Re: [RESEND][PATCH 1/6] libbpf: Fix LIBBPF_1.0.0 declaration in libbpf.map
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ptrace buffer is in the non-compacted format. The MXCSR state should be
-written to the target thread when either SSE or AVX component is enabled.
+On Tue, Oct 4, 2022 at 6:18 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Add the missing LIBBPF_0.8.0 at the end of the LIBBPF_1.0.0 declaration,
+> similarly to other version declarations.
+>
+> Cc: stable@vger.kernel.org # 5.19.x
 
-Write an MXCSR value to the target and read back. Then it is validated with
-the XRSTOR/XSAVE result on the current.
+there is no need to backport this, libbpf has its own release cycle
+and it is released from github mirror. And also this doesn't have any
+effect, this inheritance between versions in .map file is mostly for
+humans, according [0] (and I checked in practice that it doesn't
+change anything for libbpf).
 
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
+So it's good to fix, but no need to bother maintainers to backport it
+to stable branches.
 
-If this is acceptable, I will also follow up to move some of the helper
-functions to a .h file from this and other test cases because duplicating
-what is shareable should be avoided.
----
- tools/testing/selftests/x86/Makefile |   2 +-
- tools/testing/selftests/x86/mxcsr.c  | 200 +++++++++++++++++++++++++++
- 2 files changed, 201 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/mxcsr.c
+  [0] https://www.akkadia.org/drepper/dsohowto.pdf
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 0388c4d60af0..621c47960be3 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore sigaltstack
-+			syscall_arg_fault fsgsbase_restore sigaltstack mxcsr
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/mxcsr.c b/tools/testing/selftests/x86/mxcsr.c
-new file mode 100644
-index 000000000000..7c318c48b4be
---- /dev/null
-+++ b/tools/testing/selftests/x86/mxcsr.c
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <err.h>
-+#include <elf.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <x86intrin.h>
-+
-+#include <sys/ptrace.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+#include <sys/uio.h>
-+
-+#include "../kselftest.h" /* For __cpuid_count() */
-+
-+#define LEGACY_STATE_SIZE	24
-+#define MXCSR_SIZE		8
-+#define STSTATE_SIZE		8*16
-+#define XMM_SIZE		16*16
-+#define PADDING_SIZE		96
-+#define XSAVE_HDR_SIZE		64
-+
-+struct xsave_buffer {
-+	uint8_t		legacy_state[LEGACY_STATE_SIZE];
-+	uint8_t		mxcsr[MXCSR_SIZE];
-+	uint8_t		st_state[STSTATE_SIZE];
-+	uint8_t		xmm_state[XMM_SIZE];
-+	uint8_t		padding[PADDING_SIZE];
-+	uint8_t		header[XSAVE_HDR_SIZE];
-+	uint8_t		extended[0];
-+};
-+
-+#ifdef __x86_64__
-+#define REX_PREFIX	"0x48, "
-+#else
-+#define REX_PREFIX
-+#endif
-+
-+#define XSAVE		".byte " REX_PREFIX "0x0f,0xae,0x27"
-+#define XRSTOR		".byte " REX_PREFIX "0x0f,0xae,0x2f"
-+
-+static inline uint64_t xgetbv(uint32_t index)
-+{
-+	uint32_t eax, edx;
-+
-+	asm volatile("xgetbv"
-+		     : "=a" (eax), "=d" (edx)
-+		     : "c" (index));
-+	return eax + ((uint64_t)edx << 32);
-+}
-+
-+static inline void xsave(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile(XSAVE :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi) : "memory");
-+}
-+
-+static inline void xrstor(struct xsave_buffer *xbuf, uint64_t rfbm)
-+{
-+	uint32_t rfbm_lo = rfbm;
-+	uint32_t rfbm_hi = rfbm >> 32;
-+
-+	asm volatile(XRSTOR :: "D" (xbuf), "a" (rfbm_lo), "d" (rfbm_hi));
-+}
-+
-+static inline void clear_xstate_header(struct xsave_buffer *xbuf)
-+{
-+	memset(&xbuf->header, 0, sizeof(xbuf->header));
-+}
-+
-+static inline uint32_t get_mxcsr(struct xsave_buffer *xbuf)
-+{
-+	return *((uint32_t *)xbuf->mxcsr);
-+}
-+
-+static inline void set_mxcsr(struct xsave_buffer *xbuf, uint32_t val)
-+{
-+	*((uint32_t *)xbuf->mxcsr) = val;
-+}
-+
-+#define XFEATURE_MASK_SSE		0x2
-+#define XFEATURE_MASK_YMM		0x4
-+
-+#define CPUID_LEAF1_ECX_XSAVE_MASK	(1 << 26)
-+#define CPUID_LEAF1_ECX_OSXSAVE_MASK	(1 << 27)
-+#define CPUID_LEAF_XSTATE		0xd
-+#define CPUID_SUBLEAF_XSTATE_USER	0x0
-+#define CPUID_SUBLEAF_XSTATE_EXT	0x1
-+
-+static bool xsave_availability(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	__cpuid_count(1, 0, eax, ebx, ecx, edx);
-+	if (!(ecx & CPUID_LEAF1_ECX_XSAVE_MASK))
-+		return false;
-+	if (!(ecx & CPUID_LEAF1_ECX_OSXSAVE_MASK))
-+		return false;
-+	return true;
-+}
-+
-+static uint32_t get_xbuf_size(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+
-+	__cpuid_count(CPUID_LEAF_XSTATE, CPUID_SUBLEAF_XSTATE_USER,
-+		      eax, ebx, ecx, edx);
-+	return ebx;
-+}
-+
-+static void ptrace_get(pid_t pid, struct iovec *iov)
-+{
-+	memset(iov->iov_base, 0, iov->iov_len);
-+
-+	if (ptrace(PTRACE_GETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
-+		err(1, "TRACE_GETREGSET");
-+}
-+
-+static void ptrace_set(pid_t pid, struct iovec *iov)
-+{
-+	if (ptrace(PTRACE_SETREGSET, pid, (uint32_t)NT_X86_XSTATE, iov))
-+		err(1, "TRACE_SETREGSET");
-+}
-+
-+int main(void)
-+{
-+	struct xsave_buffer *xbuf;
-+	uint32_t xbuf_size;
-+	struct iovec iov;
-+	uint32_t mxcsr;
-+	pid_t child;
-+	int status;
-+
-+	if (!xsave_availability())
-+		printf("[SKIP]\tSkip as XSAVE not available.\n");
-+
-+	xbuf_size = get_xbuf_size();
-+	if (!xbuf_size)
-+		printf("[SKIP]\tSkip as XSAVE not available.\n");
-+
-+	if (!(xgetbv(0) & (XFEATURE_MASK_SSE | XFEATURE_MASK_YMM)))
-+		printf("[SKIP]\tSkip as SSE state not available.\n");
-+
-+	xbuf = aligned_alloc(64, xbuf_size);
-+	if (!xbuf)
-+		err(1, "aligned_alloc()");
-+
-+	iov.iov_base = xbuf;
-+	iov.iov_len = xbuf_size;
-+
-+	child = fork();
-+	if (child < 0) {
-+		err(1, "fork()");
-+	} else if (!child) {
-+		if (ptrace(PTRACE_TRACEME, 0, NULL, NULL))
-+			err(1, "PTRACE_TRACEME");
-+
-+		raise(SIGTRAP);
-+		_exit(0);
-+	}
-+
-+	wait(&status);
-+
-+	if (WSTOPSIG(status) != SIGTRAP)
-+		err(1, "raise(SIGTRAP)");
-+
-+	printf("[RUN]\tTest the MXCSR state write via ptrace().\n");
-+
-+	/* Set a benign value */
-+	set_mxcsr(xbuf, 0xabc);
-+	/* The MXCSR state should be loaded regardless of XSTATE_BV */
-+	clear_xstate_header(xbuf);
-+
-+	/* Write the MXCSR state both locally and remotely. */
-+	xrstor(xbuf, XFEATURE_MASK_SSE);
-+	ptrace_set(child, &iov);
-+
-+	/* Read the MXCSR state back for both */
-+	xsave(xbuf, XFEATURE_MASK_SSE);
-+	mxcsr = get_mxcsr(xbuf);
-+	ptrace_get(child, &iov);
-+
-+	/* Cross-check with each other */
-+	if (mxcsr == get_mxcsr(xbuf))
-+		printf("[OK]\tThe written state was read back correctly.\n");
-+	else
-+		printf("[FAIL]\tThe write (or read) was incorrect.\n");
-+
-+	ptrace(PTRACE_DETACH, child, NULL, NULL);
-+	wait(&status);
-+	if (!WIFEXITED(status) || WEXITSTATUS(status))
-+		err(1, "PTRACE_DETACH");
-+
-+	free(xbuf);
-+}
--- 
-2.17.1
-
+> Fixes: e2371b1632b1c ("libbpf: start 1.0 development cycle")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  tools/lib/bpf/libbpf.map | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index c1d6aa7c82b6..04fab9f1fdd7 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -367,7 +367,7 @@ LIBBPF_1.0.0 {
+>                 libbpf_bpf_map_type_str;
+>                 libbpf_bpf_prog_type_str;
+>                 perf_buffer__buffer;
+> -};
+> +} LIBBPF_0.8.0;
+>
+>  LIBBPF_1.1.0 {
+>         global:
+> --
+> 2.25.1
+>
