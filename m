@@ -2,191 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A08D5F6E37
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 21:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA8C5F6E8A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 22:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiJFT2v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Oct 2022 15:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
+        id S232147AbiJFUCr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Oct 2022 16:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbiJFT2r (ORCPT
+        with ESMTP id S232153AbiJFUCo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:28:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618A41727A9
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Oct 2022 12:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665084521;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1wwtCkg9brQ3dbfSvGkTv+uYwYqKS+oibTQyuGU5eVE=;
-        b=aSra8tYQSpbdgA4m3WPi118tbzXX1oqYemkOM9AXQDDSbh0O1MC9cFypU56dEzP97Ze8l8
-        Ds7aOYiGWycaUGyVWiQDamWmcM94IOCBjKhPrVYSpx0zejfv2PI/sZLz3Rz3j3VmphhVqY
-        5R3xb2OFpcXjEYQ4ja2FuO09lQ0H/8c=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-1-GYTUMPUWOH-TwVRkpTnTQg-1; Thu, 06 Oct 2022 15:28:40 -0400
-X-MC-Unique: GYTUMPUWOH-TwVRkpTnTQg-1
-Received: by mail-qk1-f199.google.com with SMTP id bj40-20020a05620a192800b006e20308f39cso2239385qkb.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Oct 2022 12:28:40 -0700 (PDT)
+        Thu, 6 Oct 2022 16:02:44 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2FAB1B98
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Oct 2022 13:02:41 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id c24so2684580plo.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Oct 2022 13:02:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LIiTWkOpc8IzCdKyYmBTbqUM+MiKg43asT5Ky3ZBVwI=;
+        b=ooT7SiXeA4500qzGPoywjNXFF5+ELJzGuZAUMqbhPgAGkzbHLnE/cwDCsneFlyZG0e
+         E22lPbo9DM/HWiWMfq9uWBeiBbMmjRlEPIe73g4XZYzrGXj2Jus4otCH+LLs9IeBz3Hi
+         5fGUASoctRPM96EIdp6RLs5081H2ERpbPbdUQ114tVuEgqRxOJ49CPX5qkdFZLGGjAXx
+         jE/zkiUE1M3y9x9osVzVFal5qf07uDg7IwiHtRVdq79Ske8YOGYGLhyqKnp5VBKsFxRG
+         eTTPsbGZocRImg5FtedstKITSAxajN4RNWwVyNspnUTvrpM+olsMRc8l+JMA0zLxKbA5
+         8KLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1wwtCkg9brQ3dbfSvGkTv+uYwYqKS+oibTQyuGU5eVE=;
-        b=1KcdqjXW1BGS5ml4OFTKls7POeBDcuy1mpex/i1OSLxBKekYYLjtoTyF4bPq8PQxWN
-         bkFJEg1II3HoBeCcLh11uWCiFRZVhoZJejoaQV2ZnXgTMokAC7fg2Y4gGOMugidONvU0
-         6IL6VPOSfd7ZA3CxYSfyqWHfk7WB4iiYuGdowTC1nTG8v0Fisf8oBpnUvQaAKHmN4qqy
-         58O3hLvAxOwBwy9XfzhRTk78R14RZLLmnFQ23WXqvelZXaOLf9NlflSON6vhOv1WnzOj
-         ZG1Q6IDwlE44nD8jliplu4MaeCuO93/T7jYjLLomw1btxw09EmwKZDTsK7RzW+1Uhv54
-         8X6w==
-X-Gm-Message-State: ACrzQf3zTHlt7rDFA7IcqnpJa8374sI6LdAhCfAngB/Wljp6t+t4LlbL
-        muW46OlJAXQKFg7hOq8dBK09tdJwHBZd1dlbF2gWDrsTb78KnYQwDhikWQ+xAmYbec2mIU5uGwE
-        Kk7TCVt8skkiZCN0eoZWF/oblzl68
-X-Received: by 2002:a05:620a:2989:b0:6ce:1913:83ce with SMTP id r9-20020a05620a298900b006ce191383cemr1404396qkp.49.1665084520142;
-        Thu, 06 Oct 2022 12:28:40 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5O0opIAgOKkQpMkYtzkmV6L2RfyYpkvzkuo1iBKAjxfLrtcmURtP29Z5SsTjxfFNHsMZ/MfQ==
-X-Received: by 2002:a05:620a:2989:b0:6ce:1913:83ce with SMTP id r9-20020a05620a298900b006ce191383cemr1404378qkp.49.1665084519888;
-        Thu, 06 Oct 2022 12:28:39 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id o18-20020a05620a0d5200b006ce407b996asm19445857qkl.69.2022.10.06.12.28.38
+        bh=LIiTWkOpc8IzCdKyYmBTbqUM+MiKg43asT5Ky3ZBVwI=;
+        b=ifWcq3tUjlJsuj8CoyXydXbCiQ/ufecNoD0/Wj31eGt1ofeU5FiIfrUwmjxxq8Zrjy
+         v06makwBQ4WPjz33A2CmWMHlIU6sGLVFkCgFjwhRFqszJ2LkZXgek0oHPqP/NfTI39hr
+         VX3Hyl1ppCh61KCa7TaKKCRbwgJUmMuoP20L+ylcthE2NwBVQ5ckyuSsNlRZf+6HHIDa
+         FUVeyyZMeif6VN0e8jI/tA7bw6nooNah5c+QZaX3eez8aNCENlYDwXINjlC71ej2DP8w
+         Ax02TKBuT93zeH25TDmooJJzQNRWoGo0PwTfKU9CYTrT7MSuLUYF3kUhh28v7RciLobJ
+         Co4w==
+X-Gm-Message-State: ACrzQf1RQXRLFgkQixutFDmw+4uHv2iNnxx27wNegUDzSRHkk7snEkx4
+        owOzYVFlUb1KxxmJBnQzZrWN2A==
+X-Google-Smtp-Source: AMsMyM6Oj0yBqJnAj8XCfZNWm/5C6Fnv8+9xRuwhZtTVRNy3EpLf7BIbZB2nRwVOJFC9zE76VDNv1Q==
+X-Received: by 2002:a17:90b:4b41:b0:20a:fe8f:5a3 with SMTP id mi1-20020a17090b4b4100b0020afe8f05a3mr7230387pjb.120.1665086560817;
+        Thu, 06 Oct 2022 13:02:40 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id f26-20020aa79d9a000000b00537a6b81bb7sm5772052pfq.148.2022.10.06.13.02.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 12:28:39 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 15:28:37 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v1 6/7] mm/ksm: convert break_ksm() to use
- walk_page_range_vma()
-Message-ID: <Yz8sZROC7rpPwmgY@x1n>
-References: <20220930141931.174362-1-david@redhat.com>
- <20220930141931.174362-7-david@redhat.com>
- <Yz3wcDZPFvKBmnet@x1n>
- <9a84440f-1462-2193-7dd6-c84e8bb22232@redhat.com>
+        Thu, 06 Oct 2022 13:02:40 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 20:02:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com
+Subject: Re: [RFC V3 PATCH 3/6] selftests: kvm: ucall: Allow querying ucall
+ pool gpa
+Message-ID: <Yz80XAg74KGdSqco@google.com>
+References: <20220819174659.2427983-1-vannapurve@google.com>
+ <20220819174659.2427983-4-vannapurve@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9a84440f-1462-2193-7dd6-c84e8bb22232@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220819174659.2427983-4-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 11:20:42AM +0200, David Hildenbrand wrote:
-> > > +int break_ksm_pud_entry(pud_t *pud, unsigned long addr, unsigned long next,
-> > > +			struct mm_walk *walk)
-> > > +{
-> > > +	/* We only care about page tables to walk to a single base page. */
-> > > +	if (pud_leaf(*pud) || !pud_present(*pud))
-> > > +		return 1;
-> > > +	return 0;
-> > > +}
-> > 
-> > Is this needed?  I thought the pgtable walker handlers this already.
-> > 
-> > [...]
-> > 
+On Fri, Aug 19, 2022, Vishal Annapurve wrote:
+> Add a helper to query guest physical address for ucall pool
+> so that guest can mark the page as accessed shared or private.
 > 
-> Most probably yes. I was trying to avoid about PUD splits, but I guess we
-> simply should not care in VMAs that are considered by KSM (MERGABLE). Most
-> probably never ever happens.
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
 
-I was surprised the split is the default approach; didn't really notice
-that before. Yeah maybe better to keep it.
+This should be handled by the SEV series[*].  Can you provide feedback on that
+series if having a generic way to map the ucall address as shared won't work?
 
-> 
-> > >   static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
-> > >   {
-> > > -	struct page *page;
-> > >   	vm_fault_t ret = 0;
-> > > +	if (WARN_ON_ONCE(!IS_ALIGNED(addr, PAGE_SIZE)))
-> > > +		return -EINVAL;
-> > > +
-> > >   	do {
-> > >   		bool ksm_page = false;
-> > >   		cond_resched();
-> > > -		page = follow_page(vma, addr,
-> > > -				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
-> > > -		if (IS_ERR_OR_NULL(page))
-> > > -			break;
-> > > -		if (PageKsm(page))
-> > > -			ksm_page = true;
-> > > -		put_page(page);
-> > > +		ret = walk_page_range_vma(vma, addr, addr + PAGE_SIZE,
-> > > +					  &break_ksm_ops, &ksm_page);
-> > > +		if (WARN_ON_ONCE(ret < 0))
-> > > +			return ret;
-> > 
-> > I'm not sure this would be worth it, especially with a 4% degrade.  The
-> > next patch will be able to bring 50- LOC, but this patch does 60+ anyway,
-> > based on another new helper just introduced...
-> > 
-> > I just don't see whether there's strong enough reason to do so to drop
-> > FOLL_MIGRATE.  It's different to the previous VM_FAULT_WRITE refactor
-> > because of the unshare approach was much of a good reasoning to me.
-> > 
-> > Perhaps I missed something?
-> 
-> My main motivation is to remove most of that GUP hackery here, which is
-> 1) Getting a reference on a page and waiting for migration to finish
->    even though both is unnecessary.
-> 2) As we don't have sufficient control, we added FOLL_MIGRATION hacks to
->    MM core to work around limitations in the GUP-based approacj.
-
-I saw one thing of adding FOLL_MIGRATION from Hugh was to have a hint for
-follow page users:
-
-  I'd have preferred to avoid another flag, and do it every time, in case
-  someone else makes the same easy mistake..
-
-Though..
-
-> 3) We rely on legacy follow_page() interface that we should really get
->    rid of in the long term.
-
-..this is part of effort to remove follow_page()?  More context will be
-helpful in that case.
-
-> 
-> All we want to do is walk the page tables and make a decision if something
-> we care about is mapped. Instead of leaking these details via hacks into GUP
-> code and making that code harder to grasp/maintain, this patch moves that
-> logic to the actual user, while reusing generic page walking code.
-
-Indeed there's only one ksm user, at least proving that the flag was not
-widely used.
-
-> 
-> Yes, we have to extend page walking code, but it's just the natural,
-> non-hacky way of doing it.
-> 
-> Regarding the 4% performance degradation (if I wouldn't have added the
-> benchmarks, nobody would know and probably care ;) ), I am not quite sure
-> why that is the case. We're just walking page tables after all in both
-> cases. Maybe the callback-based implementation of pagewalk code is less
-> efficient, but we might be able to improve that implementation if we really
-> care about performance here. Maybe removing break_ksm_pud_entry() already
-> improves the numbers slightly.
-
-Yeah it could be the walker is just slower.  And for !ksm walking your code
-should be faster when hit migration entries, but that should really be rare
-anyway.
-
--- 
-Peter Xu
-
+[*] https://lore.kernel.org/all/20220829171021.701198-1-pgonda@google.com
