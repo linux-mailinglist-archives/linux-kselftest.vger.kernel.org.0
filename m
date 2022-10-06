@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7F25F6DD3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 21:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A08D5F6E37
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 21:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiJFTFJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Oct 2022 15:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        id S231805AbiJFT2v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Oct 2022 15:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbiJFTE4 (ORCPT
+        with ESMTP id S231232AbiJFT2r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Oct 2022 15:04:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B843898
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Oct 2022 12:04:53 -0700 (PDT)
+        Thu, 6 Oct 2022 15:28:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618A41727A9
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Oct 2022 12:28:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665083092;
+        s=mimecast20190719; t=1665084521;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JWiYaOXLcLPovjcCyVZW8Hvnr9LXyElLmC25/eoQjh0=;
-        b=TPWmpRspp54e1WM4Ris1iLQw3RNRFRChliJfsyTTU5hy67G3+N3GEYmbGK54tkPDN9rjgY
-        xcweTQzlZxm7Z2jx9rhTy11GxiYUycaESmDQDc6psg4KDvFmvNok+6sFyaII9D3LZ//ADC
-        KsQbBP+CU+3mhvKdO9CCKnmgQbH5TU8=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=1wwtCkg9brQ3dbfSvGkTv+uYwYqKS+oibTQyuGU5eVE=;
+        b=aSra8tYQSpbdgA4m3WPi118tbzXX1oqYemkOM9AXQDDSbh0O1MC9cFypU56dEzP97Ze8l8
+        Ds7aOYiGWycaUGyVWiQDamWmcM94IOCBjKhPrVYSpx0zejfv2PI/sZLz3Rz3j3VmphhVqY
+        5R3xb2OFpcXjEYQ4ja2FuO09lQ0H/8c=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-652-fOujaYGYPeCOQRXJfJinzA-1; Thu, 06 Oct 2022 15:04:51 -0400
-X-MC-Unique: fOujaYGYPeCOQRXJfJinzA-1
-Received: by mail-qk1-f197.google.com with SMTP id w10-20020a05620a444a00b006ce9917ea1fso2173512qkp.16
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Oct 2022 12:04:51 -0700 (PDT)
+ us-mta-1-GYTUMPUWOH-TwVRkpTnTQg-1; Thu, 06 Oct 2022 15:28:40 -0400
+X-MC-Unique: GYTUMPUWOH-TwVRkpTnTQg-1
+Received: by mail-qk1-f199.google.com with SMTP id bj40-20020a05620a192800b006e20308f39cso2239385qkb.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Oct 2022 12:28:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JWiYaOXLcLPovjcCyVZW8Hvnr9LXyElLmC25/eoQjh0=;
-        b=s6LLBCZuN5WrInfB/0/Grzfm1L8cy1LWZ3Pw0lHrHB/TBi09VrPsSLSY6Igu6n2GhK
-         ti0POGF7uGC7CABuAfnVI2mRJAVa1v+X4L4Vw4jDOWNxIS4ZFeD3QU9Ly5YjcMs1woa0
-         7NZRf/6SKmOUX3CtOqTtKNbin5uvvAePCm+CNg2oxPwgDnlabTcZg4KI7GhGy8z/hf69
-         hTjeDgFP5ny6ny9gNYrAgEvRH2aVdK3WvmGO9VsPmv2anZFgRYfTTWMgCTPVfITrjmSz
-         mXT3tXm32YgDZSWCViJ+V6wzLgeUpCvsfqofXGxh/9AJtqjPRK7SuaOcW9Qq+zRsYlYL
-         X4ew==
-X-Gm-Message-State: ACrzQf2822F3ARb+nkTinCYIgqd+U4gOsfbS5zbX/uEsRbl6i5KjAPAd
-        gft5WF4FCLvIw/jAMdzolGn02pW0uY71Y0URHHlinwc17atmF66v0B4ANIS6WpybWVesor/2wJo
-        i0DxW+YmvOJtVwxdkAfl5jx/ZVCOx
-X-Received: by 2002:a05:6214:21ea:b0:4b1:bc8f:b182 with SMTP id p10-20020a05621421ea00b004b1bc8fb182mr1268063qvj.90.1665083090679;
-        Thu, 06 Oct 2022 12:04:50 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7ktypX+Rn92Vi/FHAUQs+cZWsJiTq70J7qmscJNemTST4c+2LJpEm40kZ7k1cwD99PWk8Gxw==
-X-Received: by 2002:a05:6214:21ea:b0:4b1:bc8f:b182 with SMTP id p10-20020a05621421ea00b004b1bc8fb182mr1268029qvj.90.1665083090378;
-        Thu, 06 Oct 2022 12:04:50 -0700 (PDT)
+        bh=1wwtCkg9brQ3dbfSvGkTv+uYwYqKS+oibTQyuGU5eVE=;
+        b=1KcdqjXW1BGS5ml4OFTKls7POeBDcuy1mpex/i1OSLxBKekYYLjtoTyF4bPq8PQxWN
+         bkFJEg1II3HoBeCcLh11uWCiFRZVhoZJejoaQV2ZnXgTMokAC7fg2Y4gGOMugidONvU0
+         6IL6VPOSfd7ZA3CxYSfyqWHfk7WB4iiYuGdowTC1nTG8v0Fisf8oBpnUvQaAKHmN4qqy
+         58O3hLvAxOwBwy9XfzhRTk78R14RZLLmnFQ23WXqvelZXaOLf9NlflSON6vhOv1WnzOj
+         ZG1Q6IDwlE44nD8jliplu4MaeCuO93/T7jYjLLomw1btxw09EmwKZDTsK7RzW+1Uhv54
+         8X6w==
+X-Gm-Message-State: ACrzQf3zTHlt7rDFA7IcqnpJa8374sI6LdAhCfAngB/Wljp6t+t4LlbL
+        muW46OlJAXQKFg7hOq8dBK09tdJwHBZd1dlbF2gWDrsTb78KnYQwDhikWQ+xAmYbec2mIU5uGwE
+        Kk7TCVt8skkiZCN0eoZWF/oblzl68
+X-Received: by 2002:a05:620a:2989:b0:6ce:1913:83ce with SMTP id r9-20020a05620a298900b006ce191383cemr1404396qkp.49.1665084520142;
+        Thu, 06 Oct 2022 12:28:40 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5O0opIAgOKkQpMkYtzkmV6L2RfyYpkvzkuo1iBKAjxfLrtcmURtP29Z5SsTjxfFNHsMZ/MfQ==
+X-Received: by 2002:a05:620a:2989:b0:6ce:1913:83ce with SMTP id r9-20020a05620a298900b006ce191383cemr1404378qkp.49.1665084519888;
+        Thu, 06 Oct 2022 12:28:39 -0700 (PDT)
 Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id w2-20020a05620a444200b006dfa0891397sm8495177qkp.32.2022.10.06.12.04.48
+        by smtp.gmail.com with ESMTPSA id o18-20020a05620a0d5200b006ce407b996asm19445857qkl.69.2022.10.06.12.28.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 12:04:49 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 15:04:48 -0400
+        Thu, 06 Oct 2022 12:28:39 -0700 (PDT)
+Date:   Thu, 6 Oct 2022 15:28:37 -0400
 From:   Peter Xu <peterx@redhat.com>
 To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -67,17 +67,17 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jason Gunthorpe <jgg@nvidia.com>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v1 4/7] mm/ksm: fix KSM COW breaking with userfaultfd-wp
- via FAULT_FLAG_UNSHARE
-Message-ID: <Yz8m0J+UV/O9K5Lk@x1n>
+Subject: Re: [PATCH v1 6/7] mm/ksm: convert break_ksm() to use
+ walk_page_range_vma()
+Message-ID: <Yz8sZROC7rpPwmgY@x1n>
 References: <20220930141931.174362-1-david@redhat.com>
- <20220930141931.174362-5-david@redhat.com>
- <Yz3qekna97ndP4FK@x1n>
- <bdddfd01-bc7e-2f99-21b9-2762a7041096@redhat.com>
+ <20220930141931.174362-7-david@redhat.com>
+ <Yz3wcDZPFvKBmnet@x1n>
+ <9a84440f-1462-2193-7dd6-c84e8bb22232@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <bdddfd01-bc7e-2f99-21b9-2762a7041096@redhat.com>
+In-Reply-To: <9a84440f-1462-2193-7dd6-c84e8bb22232@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -87,83 +87,105 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 11:29:29AM +0200, David Hildenbrand wrote:
-> On 05.10.22 22:35, Peter Xu wrote:
-> > On Fri, Sep 30, 2022 at 04:19:28PM +0200, David Hildenbrand wrote:
-> > > Let's stop breaking COW via a fake write fault and let's use
-> > > FAULT_FLAG_UNSHARE instead. This avoids any wrong side effects of the fake
-> > > write fault, such as mapping the PTE writable and marking the pte
-> > > dirty/softdirty.
-> > > 
-> > > Also, this fixes KSM interaction with userfaultfd-wp: when we have a KSM
-> > > page that's write-protected by userfaultfd, break_ksm()->handle_mm_fault()
-> > > will fail with VM_FAULT_SIGBUS and will simpy return in break_ksm() with 0.
-> > > The warning in dmesg indicates this wrong handling:
-> > > 
-> > > [  230.096368] FAULT_FLAG_ALLOW_RETRY missing 881
-> > > [  230.100822] CPU: 1 PID: 1643 Comm: ksm-uffd-wp [...]
-> > > [  230.110124] Hardware name: [...]
-> > > [  230.117775] Call Trace:
-> > > [  230.120227]  <TASK>
-> > > [  230.122334]  dump_stack_lvl+0x44/0x5c
-> > > [  230.126010]  handle_userfault.cold+0x14/0x19
-> > > [  230.130281]  ? tlb_finish_mmu+0x65/0x170
-> > > [  230.134207]  ? uffd_wp_range+0x65/0xa0
-> > > [  230.137959]  ? _raw_spin_unlock+0x15/0x30
-> > > [  230.141972]  ? do_wp_page+0x50/0x590
-> > > [  230.145551]  __handle_mm_fault+0x9f5/0xf50
-> > > [  230.149652]  ? mmput+0x1f/0x40
-> > > [  230.152712]  handle_mm_fault+0xb9/0x2a0
-> > > [  230.156550]  break_ksm+0x141/0x180
-> > > [  230.159964]  unmerge_ksm_pages+0x60/0x90
-> > > [  230.163890]  ksm_madvise+0x3c/0xb0
-> > > [  230.167295]  do_madvise.part.0+0x10c/0xeb0
-> > > [  230.171396]  ? do_syscall_64+0x67/0x80
-> > > [  230.175157]  __x64_sys_madvise+0x5a/0x70
-> > > [  230.179082]  do_syscall_64+0x58/0x80
-> > > [  230.182661]  ? do_syscall_64+0x67/0x80
-> > > [  230.186413]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+On Thu, Oct 06, 2022 at 11:20:42AM +0200, David Hildenbrand wrote:
+> > > +int break_ksm_pud_entry(pud_t *pud, unsigned long addr, unsigned long next,
+> > > +			struct mm_walk *walk)
+> > > +{
+> > > +	/* We only care about page tables to walk to a single base page. */
+> > > +	if (pud_leaf(*pud) || !pud_present(*pud))
+> > > +		return 1;
+> > > +	return 0;
+> > > +}
 > > 
-> > Since it's already there, worth adding the test into ksm_test.c?
-> 
-> Yes, I can give it a try. What I dislike about ksm_test is that it's a
-> mixture of benchmarks and test cases that have to explicitly triggered by
-> parameters. It's not a simple "run all available test cases" tests as we
-> know it. So maybe something separate (or having it as part of the uffd
-> tests) makes more sense.
-
-We can add an entry into run_vmtests.sh.  That's also what current ksm_test
-does.
-
-Yes adding into uffd test would work too, but I do have a plan that we
-should move functional tests out of userfaultfd.c, leaving that with the
-stress test only.  Not really a big deal, though.
-
-> 
+> > Is this needed?  I thought the pgtable walker handlers this already.
 > > 
-> > > 
-> > > Consequently, we will no longer trigger a fake write fault and break COW
-> > > without any such side-effects.
-> > > 
-> > > This is primarily a fix for KSM+userfaultfd-wp, however, the fake write
-> > > fault was always questionable. As this fix is not easy to backport and it's
-> > > not very critical, let's not cc stable.
+> > [...]
 > > 
-> > A patch to cc most of the stable would probably need to still go with the
-> > old write approach but attaching ALLOW_RETRY.  But I agree maybe that may
-> > not need to bother, or a report should have arrived earlier..  The unshare
-> > approach looks much cleaner indeed.
 > 
-> A fix without FAULT_FLAG_UNSHARE is not straight forward. We really don't
-> want to notify user space about write events here (because there is none).
-> And there is no way around the uffd handling in WP code without that.
-> 
-> FAULT_FLAG_ALLOW_RETRY would rely on userfaultfd triggering and having to
-> resolve the WP event.
+> Most probably yes. I was trying to avoid about PUD splits, but I guess we
+> simply should not care in VMAs that are considered by KSM (MERGABLE). Most
+> probably never ever happens.
 
-Right it'll be very much a false positive, but the userspace should be fine
-with it e.g. for live snapshot we need to copy page earlier; it still won't
-stop the process from running along the way.  But I agree that's not ideal.
+I was surprised the split is the default approach; didn't really notice
+that before. Yeah maybe better to keep it.
+
+> 
+> > >   static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
+> > >   {
+> > > -	struct page *page;
+> > >   	vm_fault_t ret = 0;
+> > > +	if (WARN_ON_ONCE(!IS_ALIGNED(addr, PAGE_SIZE)))
+> > > +		return -EINVAL;
+> > > +
+> > >   	do {
+> > >   		bool ksm_page = false;
+> > >   		cond_resched();
+> > > -		page = follow_page(vma, addr,
+> > > -				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
+> > > -		if (IS_ERR_OR_NULL(page))
+> > > -			break;
+> > > -		if (PageKsm(page))
+> > > -			ksm_page = true;
+> > > -		put_page(page);
+> > > +		ret = walk_page_range_vma(vma, addr, addr + PAGE_SIZE,
+> > > +					  &break_ksm_ops, &ksm_page);
+> > > +		if (WARN_ON_ONCE(ret < 0))
+> > > +			return ret;
+> > 
+> > I'm not sure this would be worth it, especially with a 4% degrade.  The
+> > next patch will be able to bring 50- LOC, but this patch does 60+ anyway,
+> > based on another new helper just introduced...
+> > 
+> > I just don't see whether there's strong enough reason to do so to drop
+> > FOLL_MIGRATE.  It's different to the previous VM_FAULT_WRITE refactor
+> > because of the unshare approach was much of a good reasoning to me.
+> > 
+> > Perhaps I missed something?
+> 
+> My main motivation is to remove most of that GUP hackery here, which is
+> 1) Getting a reference on a page and waiting for migration to finish
+>    even though both is unnecessary.
+> 2) As we don't have sufficient control, we added FOLL_MIGRATION hacks to
+>    MM core to work around limitations in the GUP-based approacj.
+
+I saw one thing of adding FOLL_MIGRATION from Hugh was to have a hint for
+follow page users:
+
+  I'd have preferred to avoid another flag, and do it every time, in case
+  someone else makes the same easy mistake..
+
+Though..
+
+> 3) We rely on legacy follow_page() interface that we should really get
+>    rid of in the long term.
+
+..this is part of effort to remove follow_page()?  More context will be
+helpful in that case.
+
+> 
+> All we want to do is walk the page tables and make a decision if something
+> we care about is mapped. Instead of leaking these details via hacks into GUP
+> code and making that code harder to grasp/maintain, this patch moves that
+> logic to the actual user, while reusing generic page walking code.
+
+Indeed there's only one ksm user, at least proving that the flag was not
+widely used.
+
+> 
+> Yes, we have to extend page walking code, but it's just the natural,
+> non-hacky way of doing it.
+> 
+> Regarding the 4% performance degradation (if I wouldn't have added the
+> benchmarks, nobody would know and probably care ;) ), I am not quite sure
+> why that is the case. We're just walking page tables after all in both
+> cases. Maybe the callback-based implementation of pagewalk code is less
+> efficient, but we might be able to improve that implementation if we really
+> care about performance here. Maybe removing break_ksm_pud_entry() already
+> improves the numbers slightly.
+
+Yeah it could be the walker is just slower.  And for !ksm walking your code
+should be faster when hit migration entries, but that should really be rare
+anyway.
 
 -- 
 Peter Xu
