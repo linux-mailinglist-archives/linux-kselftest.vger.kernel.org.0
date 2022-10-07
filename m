@@ -2,83 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE5D5F6EF0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Oct 2022 22:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED645F7282
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Oct 2022 03:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbiJFUYD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Oct 2022 16:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S231229AbiJGBXr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Oct 2022 21:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbiJFUYC (ORCPT
+        with ESMTP id S230242AbiJGBXp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Oct 2022 16:24:02 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB9BBB07C
-        for <linux-kselftest@vger.kernel.org>; Thu,  6 Oct 2022 13:23:58 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s206so2841307pgs.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Oct 2022 13:23:58 -0700 (PDT)
+        Thu, 6 Oct 2022 21:23:45 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC98C4C13
+        for <linux-kselftest@vger.kernel.org>; Thu,  6 Oct 2022 18:23:43 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so3354528pjf.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Oct 2022 18:23:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+YMVD388HY4gyN9KXMp2mD0UxMIRKINTjTu+0ma51kI=;
-        b=ZaK/h7gI4j1HzDQbCtiys+s/JZmJJZpQGu818KofOQuSks/l65WxVexlmCH7Q/UD1D
-         2QBY0bV8xeLjmy868p//N5X3NmDnYzWK7Sb1B1qZ7QvFtzF3YgiQhr1Ssy/hHkL3w3Sz
-         yFog3EYTjV8JGFMCgvzgzz4wTRufqrOCyxNVAfIR5Piiy+Met4OJdVtTyUwznfbzGaC4
-         TtJVA40+OHY1tKsHhqiX3BxbKMsIbt0C3v1eU8Fx7gAGFzhkqjIYXP1uGOo20Z/KH3Pe
-         j85R805hQikwAgDeuy2mIpHt/qzD9B2QtgSV6BfGvEWyLohQV+lIllvKbanffgCgMwWC
-         JPdA==
+        bh=stxK5eytfi7UYuaTvPr6AF15rib5TqQ7VohLY8AETTo=;
+        b=BAMPgHgcFnz0m5pv8ALZ2vuDAV8Wc9woff48oOK4K3VMoOPH9YWc5vnpQ7Heyj2BBG
+         nErfRvGZFFrVBxkfN8+u3Skf3cCa62PrOw7iLZw5DPICoO1zvKaRXjGHEa+qKJZHKG3t
+         v6jrPuKfQbzGgsIL98V9SzitClNrxXtr5Gl7Sd71SrKOP7n2Rd9wK0KZVm6KQaVHa+jL
+         W4RdSyoaZbbXNRucpHlJ8Z9EtmwXiSNUZOncYy2CsQdKY2C1QH8456f9SnWskshsgZNT
+         uFOOkktZooPW0OQIjY9chxvRV0u/OC8K1zp8E3PO+lokUwafNUUGnxxbUIrlANr3bloM
+         GSLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+YMVD388HY4gyN9KXMp2mD0UxMIRKINTjTu+0ma51kI=;
-        b=U4DRIVc+LWPQR4GenBNGT7VWvg2tt48DoNz09CoeMnzzrlhT1P2rC5h2zQ9EZ/pSib
-         NWq90YN2YicyrMOvuCwdwhErFV3rbn/DN4lsdKdHBLf0Enp4Buuw6Bu8u81fr3FSHY3Y
-         1aqaK2665p5t1yX0+tc1vLUeFy6iscDFxJMmZ6JkvSaM1TUOaAbXjP2evYnWWMQh79nk
-         i4jNE+oA7rKanuiHopdrVsBGirAxkLBuQ+//467rvk9/zbIaBj/znVSnUIhfGJuy7ufO
-         G4Ho7+9QiMxD6f4q2gicknpqOrmytt8o5bRSVyWWbXHgCUFX8ytDUEf+PsgNJ4UJevK+
-         mOQQ==
-X-Gm-Message-State: ACrzQf0QsmjVMhrMcPCoXOnDwl0zcLjxvon3ZJX9kYI+/7KEZQhfyoAJ
-        Vg0iCfhlJooRZZey5HSM5bGwMQ==
-X-Google-Smtp-Source: AMsMyM6Usq1xbc+hq7aorYaRMqyYzyH8p33s7j+wBGcQBvAD9iBc9TLdvg3KOYHNAKDwbwo8uL4pkA==
-X-Received: by 2002:a05:6a00:1595:b0:562:6199:bdab with SMTP id u21-20020a056a00159500b005626199bdabmr1477052pfk.64.1665087836860;
-        Thu, 06 Oct 2022 13:23:56 -0700 (PDT)
+        bh=stxK5eytfi7UYuaTvPr6AF15rib5TqQ7VohLY8AETTo=;
+        b=j0b3OSrBdMMu8i9i144jWPnQn7HZzIhA1gE5qzF/Ix7+fAEgTro5Zy5tB9obxfTRbj
+         yM5E9p/hC96b/cjsAY4EiiX3Itu1VyNo/ZO1pUaZXAvbrJwH3P4aCXPspRBGZDIOrEqe
+         bRnyJMDfJySg2x9Kn89btiphlF0w36yweH9fApv9SV4k3RLht7277mZ18C/d4lR9otUm
+         6rjEv86m/l5fxEaB+nlqwhm00COVA8ExabQzfudvIa+MB5eLOGfJcA5ERzRRYXf3iW1w
+         IxfO4vZal/FTVI/VAEVZgnO9yYdKEcH0L4FVW4L93tBSxBAf5Hlgt+BsinIa1ryZycji
+         wutA==
+X-Gm-Message-State: ACrzQf28SU6QlgVV2OHVSiJQk1ICmNuECzGY2y64yZ7eIAKojj3t9hG8
+        mjZ7LFl5uvuOxrrzISQteINz/OZmU0UhKA==
+X-Google-Smtp-Source: AMsMyM4PWFE5pVw18NO2lbdt/TsjQ6FJS7+cij5WQtyZmovc7uLcrH3PCdFglUP7Tg7u6mRpJ23L7A==
+X-Received: by 2002:a17:90b:3d89:b0:20b:201e:9d with SMTP id pq9-20020a17090b3d8900b0020b201e009dmr3592539pjb.11.1665105823006;
+        Thu, 06 Oct 2022 18:23:43 -0700 (PDT)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z12-20020a1709027e8c00b0016dbaf3ff2esm48576pla.22.2022.10.06.13.23.56
+        by smtp.gmail.com with ESMTPSA id k3-20020a632403000000b00439920bfcbdsm395764pgk.46.2022.10.06.18.22.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 13:23:56 -0700 (PDT)
-Date:   Thu, 6 Oct 2022 20:23:52 +0000
+        Thu, 06 Oct 2022 18:23:11 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 01:22:26 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com
-Subject: Re: [RFC V3 PATCH 6/6] sefltests: kvm: x86: Add selftest for private
- memory
-Message-ID: <Yz85WEQWsXAbLWnu@google.com>
-References: <20220819174659.2427983-1-vannapurve@google.com>
- <20220819174659.2427983-7-vannapurve@google.com>
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     Thomas Huth <thuth@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] KVM: selftests: Use TAP interface in the
+ kvm_binary_stats_test
+Message-ID: <Yz9/UsWtYimt2T1D@google.com>
+References: <20221004093131.40392-1-thuth@redhat.com>
+ <20221004093131.40392-2-thuth@redhat.com>
+ <20221005083312.dnblbpe6wabspkzk@kamzik>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819174659.2427983-7-vannapurve@google.com>
+In-Reply-To: <20221005083312.dnblbpe6wabspkzk@kamzik>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -90,74 +77,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 19, 2022, Vishal Annapurve wrote:
-> +static bool verify_mem_contents(void *mem, uint32_t size, uint8_t pat)
+On Wed, Oct 05, 2022, Andrew Jones wrote:
+> On Tue, Oct 04, 2022 at 11:31:29AM +0200, Thomas Huth wrote:
+> > The kvm_binary_stats_test test currently does not have any output (unless
+> > one of the TEST_ASSERT statement fails), so it's hard to say for a user
+> > how far it did proceed already. Thus let's make this a little bit more
+> > user-friendly and include some TAP output via the kselftest.h interface.
+> 
+> I like the idea of switching the entire kvm selftests framework and all
+> tests to the ksft TAP interface. But, if we want to do that, then the
+> question is whether we should start by partially using it for some tests,
+> and then eventually switch over the framework, or whether we should try to
+> switch everything at once.
+> 
+> I think I prefer the latter, because without changing the framework we
+> can't provide full TAP anyway as TEST_ASSERT exits with 254 instead of 1
+> for a fail-exit and it doesn't output a final TAP test summary either.
 
-As per feedback in v1[*], spell out "pattern".
+I would much prefer the latter, e.g. with common entry/exit points[*], much of the
+boilerplate can be done once in common code.  I bet we could even figure out a way
+to have tests default to setting a plan of '1' so that simple tests don't need to
+care about TAP at all.
 
-[*] https://lore.kernel.org/all/YtiJx11AZHslcGnN@google.com
-
-> +{
-> +	uint8_t *buf = (uint8_t *)mem;
-> +
-> +	for (uint32_t i = 0; i < size; i++) {
-> +		if (buf[i] != pat)
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +/*
-> + * Add custom implementation for memset to avoid using standard/builtin memset
-> + * which may use features like SSE/GOT that don't work with guest vm execution
-> + * within selftests.
-> + */
-> +void *memset(void *mem, int byte, size_t size)
-> +{
-> +	uint8_t *buf = (uint8_t *)mem;
-> +
-> +	for (uint32_t i = 0; i < size; i++)
-> +		buf[i] = byte;
-> +
-> +	return buf;
-> +}
-
-memset(), memcpy(), and memcmp() are safe to use as of commit 6b6f71484bf4 ("KVM:
-selftests: Implement memcmp(), memcpy(), and memset() for guest use").
-
-Note the "fun" with gcc "optimizing" into infinite recursion... :-)
-
-> +
-> +static void populate_test_area(void *test_area_base, uint64_t pat)
-> +{
-> +	memset(test_area_base, pat, TEST_AREA_SIZE);
-> +}
-> +
-> +static void populate_guest_test_mem(void *guest_test_mem, uint64_t pat)
-> +{
-> +	memset(guest_test_mem, pat, GUEST_TEST_MEM_SIZE);
-> +}
-> +
-> +static bool verify_test_area(void *test_area_base, uint64_t area_pat,
-> +	uint64_t guest_pat)
-
-Again, avoid "pat".
-
-> +{
-> +	void *test_area1_base = test_area_base;
-> +	uint64_t test_area1_size = GUEST_TEST_MEM_OFFSET;
-> +	void *guest_test_mem = test_area_base + test_area1_size;
-> +	uint64_t guest_test_size = GUEST_TEST_MEM_SIZE;
-> +	void *test_area2_base = guest_test_mem + guest_test_size;
-> +	uint64_t test_area2_size = (TEST_AREA_SIZE - (GUEST_TEST_MEM_OFFSET +
-> +			GUEST_TEST_MEM_SIZE));
-
-This is all amazingly hard to read.  AFAICT, the local variables are largely useless.
-Actually, why even take in @test_area_base, isn't it hardcoded to TEST_AREA_GPA?
-Then everything except the pattern can be hardcoded.
-
-> +	return (verify_mem_contents(test_area1_base, test_area1_size, area_pat) &&
-> +		verify_mem_contents(guest_test_mem, guest_test_size, guest_pat) &&
-> +		verify_mem_contents(test_area2_base, test_area2_size, area_pat));
-> +}
+[*] https://lore.kernel.org/all/20220915000448.1674802-2-vannapurve@google.com
