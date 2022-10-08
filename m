@@ -2,89 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3765F8422
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Oct 2022 09:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824B85F8501
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Oct 2022 13:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiJHHrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Oct 2022 03:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
+        id S229512AbiJHLeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Oct 2022 07:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJHHrg (ORCPT
+        with ESMTP id S229484AbiJHLeX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Oct 2022 03:47:36 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C87C59246;
-        Sat,  8 Oct 2022 00:47:35 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id x59so9720733ede.7;
-        Sat, 08 Oct 2022 00:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9XWTwkGI5Af//G/T43u5lv++O037WGEnD8xGQHooYMI=;
-        b=C7MjMCi5NdoUGDJUaA+9Pdiym75dKCyQt2gZkzSS3JaDfI3mPBk30NOrI0dbVAE5jO
-         vYu3f7ZeZkbnyqlwqhbZNbFFOxwsfCpesP8wAcsbAa4r/SJZ5ChFBdo+dknkm5lFjcOs
-         bTd6s0TLgTALGEZEVG/WBGNDvZf6IWpgL5m99CBTNOQif/GZEr7ProC4HStleUG+FWZ1
-         aTNTfivP3aaMZXwTFEl7logfwS87oTXIpm1YXtdiMuoPdrzMmEazITmUMNdYKMEyQ8Na
-         izSvaEYOK2TqUqi/kqV8rDKJuujEKVtLyvn/f85aNDV06Q30n0a79ZIRw56E9GLP+eNd
-         LAPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9XWTwkGI5Af//G/T43u5lv++O037WGEnD8xGQHooYMI=;
-        b=zooE4JwByQ0TLaY2Vd+Ycl+nb9JQoZjmLBx7rAWae8+D8W1QANJ92WT75hO5Sc8Qsg
-         GLk6FeGc5FUrjVnoVrjRzii3PdKQi6E+dNQK0QTrbUDK3OiX/r+olWc9Eue23jNhk8DO
-         LYFL4n9kl6Kq2KoDezLyZF/ICziEwswOW5DCDCTntzZpHC41AYZ/2fLuLgMVg/6YbfHB
-         blXpQLqJ8anxM6breMBN44tQEpBrQLotUgKhxOGQWkQ3FwZK0ekcDeejwctGWGhSBLHT
-         x/j9d5PX+j/t9E242c9LkzNg60XEmVj7imbjym3d1oa+GHnFVyrQGG/PKge7K2lCdnIh
-         hXQw==
-X-Gm-Message-State: ACrzQf0cc9CTc1ChmCmlrCV9jwNtvFUXNIXfJPRJOZ8jbpH7OprkqyDs
-        Hm5nFHu3REBjfUWaSq41wzA=
-X-Google-Smtp-Source: AMsMyM5ac4ypSl42nPQaGmlLP17RX1zqvqtcF9xletSOBVTCiJDC6vSsCRGFhHGshI2mprUVr3J/9g==
-X-Received: by 2002:a05:6402:548a:b0:454:762b:158b with SMTP id fg10-20020a056402548a00b00454762b158bmr7962632edb.362.1665215253304;
-        Sat, 08 Oct 2022 00:47:33 -0700 (PDT)
-Received: from nuc ([2a02:168:633b:1:1e69:7aff:fe05:97e6])
-        by smtp.gmail.com with ESMTPSA id p21-20020a170906a01500b0072f112a6ad2sm2332115ejy.97.2022.10.08.00.47.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 00:47:32 -0700 (PDT)
-Date:   Sat, 8 Oct 2022 09:47:30 +0200
-From:   =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     linux-security-module@vger.kernel.org,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-fsdevel@vger.kernel.org,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v8 2/9] selftests/landlock: Locally define __maybe_unused
-Message-ID: <Y0ErEnzWUXCk6x92@nuc>
-References: <20221001154908.49665-1-gnoack3000@gmail.com>
- <20221001154908.49665-3-gnoack3000@gmail.com>
- <beb43471-48fa-9f8f-767c-a025db3bd660@digikod.net>
+        Sat, 8 Oct 2022 07:34:23 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D9247B99;
+        Sat,  8 Oct 2022 04:34:19 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 1067E1884502;
+        Sat,  8 Oct 2022 11:34:17 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 062492503DE3;
+        Sat,  8 Oct 2022 11:34:17 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id F11D99120FED; Sat,  8 Oct 2022 11:34:16 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <beb43471-48fa-9f8f-767c-a025db3bd660@digikod.net>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Sat, 08 Oct 2022 13:34:16 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 net-next 9/9] selftests: forwarding: add test of
+ MAC-Auth Bypass to locked port tests
+In-Reply-To: <YzrmaixRZ3k/alPh@shredder>
+References: <20220928150256.115248-1-netdev@kapio-technology.com>
+ <20220928150256.115248-10-netdev@kapio-technology.com>
+ <YzrmaixRZ3k/alPh@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <c25d21e4f3a8d825a4ceb3069b05c6d9@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 08:53:56PM +0200, Mickaël Salaün wrote:
-> Thanks for cleaning this. Can you please move this patch just before the
-> test patches?
+On 2022-10-03 15:40, Ido Schimmel wrote:
+>> +locked_port_station_move()
+>> +{
+>> +	local mac=a0:b0:c0:c0:b0:a0
+>> +
+>> +	RET=0
+>> +	check_locked_port_support || return 0
+>> +
+>> +	bridge link set dev $swp1 locked on
+> 
+> It is quite pointless to check that an entry cannot roam to a port that
+> has learning disabled... Need:
+> 
+> bridge link set dev $swp1 locked on learning on
+> 
+>> +
+>> +	$MZ $h1 -q -t udp -a $mac -b rand
+>> +	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "master 
+>> br0"
+> 
+> bridge fdb get ...
+> 
+> Same in other places
+> 
 
-Done.
-
--- 
+It seems that the output of 'bridge fdb get' does not respect the dev it 
+is given as input and outputs the (MAC,vlan) when found on another 
+dev...
