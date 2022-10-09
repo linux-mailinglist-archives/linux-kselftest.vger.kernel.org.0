@@ -2,109 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82D65F8BF5
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Oct 2022 17:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672E85F8C18
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Oct 2022 17:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiJIPT6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 9 Oct 2022 11:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
+        id S229866AbiJIPpz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 9 Oct 2022 11:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiJIPT4 (ORCPT
+        with ESMTP id S230017AbiJIPpy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Oct 2022 11:19:56 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FD4BE012;
-        Sun,  9 Oct 2022 08:19:53 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 299FJifX028312;
-        Sun, 9 Oct 2022 17:19:44 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: tools/nolibc: fix missing strlen() definition and infinite loop with gcc-12
-Date:   Sun,  9 Oct 2022 17:19:39 +0200
-Message-Id: <20221009151939.28270-1-w@1wt.eu>
-X-Mailer: git-send-email 2.17.5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 9 Oct 2022 11:45:54 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4592408B;
+        Sun,  9 Oct 2022 08:45:53 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id v130-20020a1cac88000000b003bcde03bd44so7184335wme.5;
+        Sun, 09 Oct 2022 08:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7nRMSkb+ml96yYY9w8KKx8b1cTDJi6bovEKWdF0d+9Y=;
+        b=JmbKkz1Jw/pgnvrZOmgP0Zo9MWwwLNmpJN3+e+pwC16qEybYFCiblKveHxpz26pSr+
+         Phc9sspbhuEayA2+LLZn8C4hvexpN7Qa2isk4KwF3GS4ED+F/vTTkLFvYy0FbTiSY91g
+         H0rVInXMz1wyaxjwPhimc1mGKPgRGpHoogueQLf09MhLlFAz8G1MRzy3BhGcTGyqAlZS
+         5X3Efit43XbkAGKayC+SNPPmgLmgIy3eXe7yzWy/qX+3Fm3yN9P/ILlrP8oaE33v3m3y
+         MVu0LPGV/qh9rN/sYl/aCmhPRx962Ca5esEOVTTPLc9IuBbO0g030lVviamMDXaIGqpU
+         Vr8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7nRMSkb+ml96yYY9w8KKx8b1cTDJi6bovEKWdF0d+9Y=;
+        b=oQ5QbJnpXLaBcLFOL+90cp90B0xxJ6L3+z+fTtyetRiDl/S1ND+wUzADEdfPEqOFu1
+         /iu4kNyJYkgKP7WqyX+pkcuIxA5bvtx7OwvqCbimcPQHXhXD369t2GzegZCRhfxceRx9
+         s+zcZoIz6TNXtT4HKpJWu6QJZ5Isp7kOWyL6zl+KOTDV44VYUY2cAVpZ5qauWBn4YJLS
+         WIm0yWGi6dqPU1CR06Q/VE0kzXS+tEi/xvACW83V88oZs871I3OTNaJJQieQ2ZicBnMY
+         YxdNfH9kt2euLkBS92zsC16KsbGh/crCz0qQD5kl2zIsfslHxAmsjyp4xCzs84JxROfT
+         yb7w==
+X-Gm-Message-State: ACrzQf1usqlsqNH+gokWf5ssrPkWx5pDg2VQsFeqmsXeTshm7P0B1xnA
+        0buShlBunO4zTUTsUwZGwA==
+X-Google-Smtp-Source: AMsMyM5nP+6EqILdWCc6sT8s+AghPUti03O0i9dwrZeR+eVOpjGG8ZUOIxy6j14O27uc3GNzkTAyjg==
+X-Received: by 2002:a05:600c:b47:b0:3b4:8604:410c with SMTP id k7-20020a05600c0b4700b003b48604410cmr9919564wmr.51.1665330351733;
+        Sun, 09 Oct 2022 08:45:51 -0700 (PDT)
+Received: from localhost.localdomain ([46.53.253.37])
+        by smtp.gmail.com with ESMTPSA id q8-20020adffec8000000b0022afce9ea93sm6797658wrs.40.2022.10.09.08.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 08:45:51 -0700 (PDT)
+Date:   Sun, 9 Oct 2022 18:45:49 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     lkp@intel.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: tools/nolibc: fix missing strlen() definition and infinite loop
+ with gcc-12
+Message-ID: <Y0LsreRGq3nbe2xC@localhost.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When built at -Os, gcc-12 recognizes an strlen() pattern in nolibc_strlen()
-and replaces it with a jump to strlen(), which is not defined as a symbol
-and breaks compilation. Worse, when the function is called strlen(), the
-function is simply replaced with a jump to itself, hence becomes an
-infinite loop.
+Willy Tarreau wrote:
+> +#if defined(__GNUC__) && (__GNUC__ >= 12)
+> +__attribute__((optimize("no-tree-loop-distribute-patterns")))
+> +#endif
+>  static __attribute__((unused))
+> -size_t nolibc_strlen(const char *str
 
-One way to avoid this is to always set -ffreestanding, but the calling
-code doesn't know this and there's no way (either via attributes or
-pragmas) to globally enable it from include files, effectively leaving
-a painful situation for the caller.
+I'd suggest to use asm("") in the loop body. It worked in the past
+to prevent folding division loop back into division instruction.
 
-It turns out that -fno-tree-loop-distribute-patterns disables replacement
-of strlen-like loops with calls to strlen and that this option is accepted
-in the optimize() function attribute. Thus at least it allows us to make
-sure our local definition is not replaced with a self jump. The function
-only needs to be renamed back to strlen() so that the symbol exists, which
-implies that nolibc_strlen() which is used on variable strings has to be
-declared as a macro that points back to it before the strlen() macro is
-redifined.
+Or switch to 
 
-It was verified to produce valid code with gcc 3.4 to 12.1 at different
-optimization levels, and both with constant and variable strings.
+	size_t f(const char *s)
+	{
+		const char *s0 = s;
+		while (*s++)
+			;
+		return s - s0 - 1;
+	}
 
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/r/202210081618.754a77db-yujie.liu@intel.com
-Fixes: 66b6f755ad45 ("rcutorture: Import a copy of nolibc")
-Fixes: 96980b833a21 ("tools/nolibc/string: do not use __builtin_strlen() at -O0")
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
----
- tools/include/nolibc/string.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+which compiles to 1 branch, not 2.
 
-diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
-index bef35bee9c44..5ef8778cd16f 100644
---- a/tools/include/nolibc/string.h
-+++ b/tools/include/nolibc/string.h
-@@ -125,10 +125,16 @@ char *strcpy(char *dst, const char *src)
- }
- 
- /* this function is only used with arguments that are not constants or when
-- * it's not known because optimizations are disabled.
-+ * it's not known because optimizations are disabled. Note that gcc 12
-+ * recognizes an strlen() pattern and replaces it with a jump to strlen(),
-+ * thus itself, hence the optimize() attribute below that's meant to disable
-+ * this confusing practice.
-  */
-+#if defined(__GNUC__) && (__GNUC__ >= 12)
-+__attribute__((optimize("no-tree-loop-distribute-patterns")))
-+#endif
- static __attribute__((unused))
--size_t nolibc_strlen(const char *str)
-+size_t strlen(const char *str)
- {
- 	size_t len;
- 
-@@ -140,13 +146,12 @@ size_t nolibc_strlen(const char *str)
-  * the two branches, then will rely on an external definition of strlen().
-  */
- #if defined(__OPTIMIZE__)
-+#define nolibc_strlen(x) strlen(x)
- #define strlen(str) ({                          \
- 	__builtin_constant_p((str)) ?           \
- 		__builtin_strlen((str)) :       \
- 		nolibc_strlen((str));           \
- })
--#else
--#define strlen(str) nolibc_strlen((str))
- #endif
- 
- static __attribute__((unused))
--- 
-2.35.3
-
+But of course they could recognise this pattern too.
