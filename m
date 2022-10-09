@@ -2,110 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824B85F8501
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Oct 2022 13:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE095F8B69
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Oct 2022 15:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiJHLeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Oct 2022 07:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
+        id S230029AbiJINAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 9 Oct 2022 09:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJHLeX (ORCPT
+        with ESMTP id S229663AbiJINAs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Oct 2022 07:34:23 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D9247B99;
-        Sat,  8 Oct 2022 04:34:19 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 1067E1884502;
-        Sat,  8 Oct 2022 11:34:17 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 062492503DE3;
-        Sat,  8 Oct 2022 11:34:17 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id F11D99120FED; Sat,  8 Oct 2022 11:34:16 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-MIME-Version: 1.0
-Date:   Sat, 08 Oct 2022 13:34:16 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
+        Sun, 9 Oct 2022 09:00:48 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9155224BFF;
+        Sun,  9 Oct 2022 06:00:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MlhtZ2ZDLz6Pm4S;
+        Sun,  9 Oct 2022 20:58:30 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP2 (Coremail) with SMTP id Syh0CgDHX9T6xUJjwRQEAA--.16593S2;
+        Sun, 09 Oct 2022 21:00:43 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 9/9] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <YzrmaixRZ3k/alPh@shredder>
-References: <20220928150256.115248-1-netdev@kapio-technology.com>
- <20220928150256.115248-10-netdev@kapio-technology.com>
- <YzrmaixRZ3k/alPh@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <c25d21e4f3a8d825a4ceb3069b05c6d9@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Hou Tao <houtao1@huawei.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Kui-Feng Lee <kuifeng@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next 0/5] Fix bugs found by ASAN when running selftests
+Date:   Sun,  9 Oct 2022 09:18:25 -0400
+Message-Id: <20221009131830.395569-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgDHX9T6xUJjwRQEAA--.16593S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruFyftFWDArW7AF4rZr47Jwb_yoW3ArXEyF
+        4IqrykZFZrCa9IyFW5C3Z3WrWxC3yYqryIvFsrtr97J34j9r1UAF4kKFWSy3y8W3y3Jrya
+        vFykX3y09r1aqjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2xYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-10-03 15:40, Ido Schimmel wrote:
->> +locked_port_station_move()
->> +{
->> +	local mac=a0:b0:c0:c0:b0:a0
->> +
->> +	RET=0
->> +	check_locked_port_support || return 0
->> +
->> +	bridge link set dev $swp1 locked on
-> 
-> It is quite pointless to check that an entry cannot roam to a port that
-> has learning disabled... Need:
-> 
-> bridge link set dev $swp1 locked on learning on
-> 
->> +
->> +	$MZ $h1 -q -t udp -a $mac -b rand
->> +	bridge fdb show dev $swp1 | grep "$mac vlan 1" | grep -q "master 
->> br0"
-> 
-> bridge fdb get ...
-> 
-> Same in other places
-> 
+From: Xu Kuohai <xukuohai@huawei.com>
 
-It seems that the output of 'bridge fdb get' does not respect the dev it 
-is given as input and outputs the (MAC,vlan) when found on another 
-dev...
+Xu Kuohai (5):
+  libbpf: Fix use-after-free in btf_dump_name_dups
+  libbpf: Fix memory leak in parse_usdt_arg()
+  selftests/bpf: Fix memory leak caused by not destroying skeleton
+  selftest/bpf: Fix memory leak in kprobe_multi_test
+  selftest/bpf: Fix error usage of ASSERT_OK in xdp_adjust_tail.c
+
+ tools/lib/bpf/btf_dump.c                      | 47 +++++++++++----
+ tools/lib/bpf/usdt.c                          | 59 +++++++++++--------
+ .../selftests/bpf/prog_tests/bpf_iter.c       |  4 +-
+ .../bpf/prog_tests/kprobe_multi_test.c        | 17 +++---
+ .../selftests/bpf/prog_tests/map_kptr.c       |  3 +-
+ .../selftests/bpf/prog_tests/tracing_struct.c |  3 +-
+ .../bpf/prog_tests/xdp_adjust_tail.c          |  6 +-
+ 7 files changed, 88 insertions(+), 51 deletions(-)
+
+-- 
+2.25.1
+
