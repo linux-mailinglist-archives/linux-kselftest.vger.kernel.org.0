@@ -2,36 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362AB5F8BF2
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Oct 2022 17:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82D65F8BF5
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Oct 2022 17:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiJIPTa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 9 Oct 2022 11:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
+        id S230014AbiJIPT6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 9 Oct 2022 11:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiJIPT3 (ORCPT
+        with ESMTP id S229710AbiJIPT4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Oct 2022 11:19:29 -0400
+        Sun, 9 Oct 2022 11:19:56 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AED5B2A973;
-        Sun,  9 Oct 2022 08:19:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FD4BE012;
+        Sun,  9 Oct 2022 08:19:53 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 299FJ5YN028180;
-        Sun, 9 Oct 2022 17:19:05 +0200
-Date:   Sun, 9 Oct 2022 17:19:05 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 299FJifX028312;
+        Sun, 9 Oct 2022 17:19:44 +0200
 From:   Willy Tarreau <w@1wt.eu>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     lkp@lists.01.org, lkp@intel.com,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [selftests/nolibc] 362aecb2d8: kernel-selftests.nolibc.make_fail
-Message-ID: <20221009151905.GA28148@1wt.eu>
-References: <202210081618.754a77db-yujie.liu@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202210081618.754a77db-yujie.liu@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Willy Tarreau <w@1wt.eu>
+Subject: tools/nolibc: fix missing strlen() definition and infinite loop with gcc-12
+Date:   Sun,  9 Oct 2022 17:19:39 +0200
+Message-Id: <20221009151939.28270-1-w@1wt.eu>
+X-Mailer: git-send-email 2.17.5
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -40,45 +34,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+When built at -Os, gcc-12 recognizes an strlen() pattern in nolibc_strlen()
+and replaces it with a jump to strlen(), which is not defined as a symbol
+and breaks compilation. Worse, when the function is called strlen(), the
+function is simply replaced with a jump to itself, hence becomes an
+infinite loop.
 
-On Sat, Oct 08, 2022 at 04:57:43PM +0800, kernel test robot wrote:
-(...)
-> 2022-10-02 10:04:53 make TARGETS=nolibc
-> make[1]: Entering directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
->   CC      nolibc-test
-> /usr/bin/ld: /tmp/cccOWbdp.o: in function `printf':
-> nolibc-test.c:(.text+0x369): undefined reference to `strlen'
-> collect2: error: ld returned 1 exit status
-> make[1]: *** [Makefile:31: nolibc-test] Error 1
-> make[1]: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
-> make: *** [Makefile:155: all] Error 2
-> 2022-10-02 10:04:53 make -C nolibc
-> make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
->   CC      nolibc-test
-> /usr/bin/ld: /tmp/lkp/ccP4fovP.o: in function `printf':
-> nolibc-test.c:(.text+0x369): undefined reference to `strlen'
-> collect2: error: ld returned 1 exit status
-> make: *** [Makefile:31: nolibc-test] Error 1
-> make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
-> 2022-10-02 10:04:54 make quicktest=1 run_tests -C nolibc
-> make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
-> make: *** No rule to make target 'run_tests'.  Stop.
-> make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-362aecb2d8cfad0268d6c0ae5f448e9b6eee7ffb/tools/testing/selftests/nolibc'
-> 
-> 
-> This error only happens when build with gcc-12, while gcc-11 and gcc-9
-> build fine. We are not sure whether this is a compiler issue or a kernel
-> code issue, so we send this report FYI. Below link may be helpful for
-> analysis:
-> 
-> https://www.spinics.net/lists/fedora-devel/msg296395.html
-(...)
+One way to avoid this is to always set -ffreestanding, but the calling
+code doesn't know this and there's no way (either via attributes or
+pragmas) to globally enable it from include files, effectively leaving
+a painful situation for the caller.
 
-Many thanks for the detailed report and hints. Since we're only providing
-include files we don't always have the luxury of enforcing build options
-on the caller, so it took me quite some trial and error but I finally
-found a way around it. I'm sending a updated patch to Paul for merging.
+It turns out that -fno-tree-loop-distribute-patterns disables replacement
+of strlen-like loops with calls to strlen and that this option is accepted
+in the optimize() function attribute. Thus at least it allows us to make
+sure our local definition is not replaced with a self jump. The function
+only needs to be renamed back to strlen() so that the symbol exists, which
+implies that nolibc_strlen() which is used on variable strings has to be
+declared as a macro that points back to it before the strlen() macro is
+redifined.
 
-Thanks again,
-Willy
+It was verified to produce valid code with gcc 3.4 to 12.1 at different
+optimization levels, and both with constant and variable strings.
+
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Link: https://lore.kernel.org/r/202210081618.754a77db-yujie.liu@intel.com
+Fixes: 66b6f755ad45 ("rcutorture: Import a copy of nolibc")
+Fixes: 96980b833a21 ("tools/nolibc/string: do not use __builtin_strlen() at -O0")
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+---
+ tools/include/nolibc/string.h | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
+index bef35bee9c44..5ef8778cd16f 100644
+--- a/tools/include/nolibc/string.h
++++ b/tools/include/nolibc/string.h
+@@ -125,10 +125,16 @@ char *strcpy(char *dst, const char *src)
+ }
+ 
+ /* this function is only used with arguments that are not constants or when
+- * it's not known because optimizations are disabled.
++ * it's not known because optimizations are disabled. Note that gcc 12
++ * recognizes an strlen() pattern and replaces it with a jump to strlen(),
++ * thus itself, hence the optimize() attribute below that's meant to disable
++ * this confusing practice.
+  */
++#if defined(__GNUC__) && (__GNUC__ >= 12)
++__attribute__((optimize("no-tree-loop-distribute-patterns")))
++#endif
+ static __attribute__((unused))
+-size_t nolibc_strlen(const char *str)
++size_t strlen(const char *str)
+ {
+ 	size_t len;
+ 
+@@ -140,13 +146,12 @@ size_t nolibc_strlen(const char *str)
+  * the two branches, then will rely on an external definition of strlen().
+  */
+ #if defined(__OPTIMIZE__)
++#define nolibc_strlen(x) strlen(x)
+ #define strlen(str) ({                          \
+ 	__builtin_constant_p((str)) ?           \
+ 		__builtin_strlen((str)) :       \
+ 		nolibc_strlen((str));           \
+ })
+-#else
+-#define strlen(str) nolibc_strlen((str))
+ #endif
+ 
+ static __attribute__((unused))
+-- 
+2.35.3
+
