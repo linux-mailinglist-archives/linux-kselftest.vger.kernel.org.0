@@ -2,107 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B1F5F9FE0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Oct 2022 16:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E935FA25B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Oct 2022 19:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiJJOI0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Oct 2022 10:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S229983AbiJJRCr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Oct 2022 13:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiJJOIQ (ORCPT
+        with ESMTP id S229956AbiJJRCg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Oct 2022 10:08:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28E86F56A;
-        Mon, 10 Oct 2022 07:08:13 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MmLJt1k22zpVnT;
-        Mon, 10 Oct 2022 22:05:02 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 10 Oct
- 2022 22:08:10 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [PATCH bpf v3 6/6] selftest/bpf: Fix error usage of ASSERT_OK in xdp_adjust_tail.c
-Date:   Mon, 10 Oct 2022 10:25:53 -0400
-Message-ID: <20221010142553.776550-7-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221010142553.776550-1-xukuohai@huawei.com>
-References: <20221010142553.776550-1-xukuohai@huawei.com>
+        Mon, 10 Oct 2022 13:02:36 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C86566857
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Oct 2022 10:02:31 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id h203so1254785iof.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Oct 2022 10:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Sku5J7PyxwEr729i9MgpltbFTlOLk2agD7q4nskSz/8=;
+        b=GfZe1er7asCP0ALA4xE6quMC5DxOFhh/7LbUYi1cC7lbaczkr2bHNyRdEFHjv207Vn
+         Wiqxjkj1oviICRGEGXz7Mcg6Awz7FctKFrN1vYbsEPlnEa06eG1DIgm3v2oSHEgptcur
+         spkpD/4M/kpmoHV9rtcTZJr2HLtXnkPJPYdPs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sku5J7PyxwEr729i9MgpltbFTlOLk2agD7q4nskSz/8=;
+        b=fN2fT5WMDJSRD31tJK/TwfSTx5HWuAortCudcQwHDgP5pH4sIqsQmvYoGnOVIF8LW+
+         vxoMrvNP/Nbx2AXE74i3fGJ1KQvl2KejpNsMOXd3EW2oED+wIZ9k0rAfym58hB48bhfi
+         ho50KDVFSp97BqVraQ41s9YIBAV3Gt3f93Gs3iGVl5IsVZ7Kg2KELnmIaRVr1Qsw5C3C
+         BHu7sP7mWmMok8H0SH4kC2Tx3luuJ6slubYyGfiBrZcg3pzS91n5l2scxY6RiNddY76M
+         95fEhvAyRyDEy2UzN6Is2gHmxepunJf0jpw0/sgGLEidz6cmzqkp/Jv96FEIo23m+uMl
+         w3eg==
+X-Gm-Message-State: ACrzQf2P8dGLRj4A7knGY+qdIvCJ+NoJyHwQijyAs23e1f89Fkbzjy2K
+        NG2Kxl6NuMMb2nfU8UzGvYxAEQ==
+X-Google-Smtp-Source: AMsMyM5MdoRFlHdN/oWlHzW5c6TiU0d91kNy2sJnAp7PMUFFDAN10eFKJ+CZjzZGIA+MbGA7ivOSYw==
+X-Received: by 2002:a05:6638:2491:b0:35a:53dd:f98e with SMTP id x17-20020a056638249100b0035a53ddf98emr10571658jat.261.1665421350124;
+        Mon, 10 Oct 2022 10:02:30 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v2-20020a02b082000000b0036378e4747esm4096449jah.114.2022.10.10.10.02.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Oct 2022 10:02:29 -0700 (PDT)
+Message-ID: <e26efc62-327f-946e-6a0a-151151485589@linuxfoundation.org>
+Date:   Mon, 10 Oct 2022 11:02:29 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
+ before exit
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        zhaogongyi <zhaogongyi@huawei.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Cc:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "osalvador@suse.de" <osalvador@suse.de>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <f83730eec0b1445fa92d4cf0397d886b@huawei.com>
+ <b0ae9fcc-7e2b-dae9-30be-4b6ee248bf97@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <b0ae9fcc-7e2b-dae9-30be-4b6ee248bf97@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-xdp_adjust_tail.c calls ASSERT_OK() to check the return value of
-bpf_prog_test_load(), but the condition is not correct. Fix it.
+On 10/10/22 00:54, David Hildenbrand wrote:
+> On 08.10.22 03:40, zhaogongyi wrote:
 
-Fixes: 791cad025051 ("bpf: selftests: Get rid of CHECK macro in xdp_adjust_tail.c")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> Yes, online_memory_expect_success() already prints a warning, remove the warning in online_all_offline_memory() seems ok,
+>>
+>> My previous consideration was that one more log information would make it easier to locate the wrong location.
+> 
+> Let's keep it simple unless there is real reason to warn twice.
+> 
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index 009ee37607df..39973ea1ce43 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -18,7 +18,7 @@ static void test_xdp_adjust_tail_shrink(void)
- 	);
- 
- 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
--	if (ASSERT_OK(err, "test_xdp_adjust_tail_shrink"))
-+	if (!ASSERT_OK(err, "test_xdp_adjust_tail_shrink"))
- 		return;
- 
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
-@@ -53,7 +53,7 @@ static void test_xdp_adjust_tail_grow(void)
- 	);
- 
- 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
--	if (ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
-+	if (!ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
- 		return;
- 
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
-@@ -90,7 +90,7 @@ static void test_xdp_adjust_tail_grow2(void)
- 	);
- 
- 	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
--	if (ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
-+	if (!ASSERT_OK(err, "test_xdp_adjust_tail_grow"))
- 		return;
- 
- 	/* Test case-64 */
--- 
-2.30.2
+zhaogongyi,
 
+Please note that I already applied the patches to linux-kselftest
+next for my second pull request before the merge window. Please
+send the change David requested in a separate patch on top of
+next as a fix.
+
+thanks,
+-- Shuah
