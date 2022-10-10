@@ -2,150 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE355F9B90
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Oct 2022 11:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E8F5F9C5F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Oct 2022 12:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbiJJJBa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Oct 2022 05:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
+        id S231452AbiJJKEA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Oct 2022 06:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbiJJJB3 (ORCPT
+        with ESMTP id S231285AbiJJKD7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Oct 2022 05:01:29 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB981127;
-        Mon, 10 Oct 2022 02:01:28 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id bv10so12437486wrb.4;
-        Mon, 10 Oct 2022 02:01:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+y7bAJPsrwUBLd8lS99Vl4DRojpEn+2LcBi7aYBpm8I=;
-        b=ZNeBW7oC/NBRtw9xcqoobO8Sf2Hpd3hHAQSXcdNrdgDyfNtSZixn5MzoA9CaeAeA1G
-         0lex4dOAf61JCebm3hSj3AwBUnfh7IIT4hQmDO0VWq/hS4ekXjr8pLq30R7GHEifUTcb
-         R2mjGyqRkppt9s5U8xI4pPgW0WCutKuE5EHGuJvGZTguE+4khI7EI/KlvMzhC6JUPMi+
-         MzYS3Zc6j788ok9c+PCuDGLhOETVttIbLCtNr9bDYe45TE/z7/vFb8SVsIJ1CByyIQCN
-         +0+ZKhHUrOVk1+yem7sO2SN9JeGcuYM3Vw8tN0BRHfnwep7+ZnYjJUMnvGlN0w97AujX
-         xdVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+y7bAJPsrwUBLd8lS99Vl4DRojpEn+2LcBi7aYBpm8I=;
-        b=32ahkabU0/5UXRTJhHllQUxlifrkOu+0j4y9JZq1qGnB9xMxyFir6SkL70qm7Xzupy
-         Bs+8Q7MGsO5xdtQiF3C+YXNK1st0QhbJM8izswYXNHhfZ7yaMWCb0ysmvfe5o7Kt+uWx
-         lK9lqKCTKfbvz8r1ccIbSbOqqM+IA1xbVVFFJVHPIwYRgNmjxZbSsJxvvBDH5OLC+NWP
-         7h3IVJraYFuzT/uF5C6A2hCDdW/svAtsXbiQCsvB2lvRyHap/srv23zjiz1XYCuxDUMp
-         rZ89Nrf68/o8VYHhAm9b0keqTlbvC5BFNpFnnrEHLS7CvOZMgl6PGxEjVSJ8zMDuGBCH
-         3UTA==
-X-Gm-Message-State: ACrzQf0GeWBqMFBaGi14pSve8ammK556D28dbS762Rh6TQlmI6vD1ewl
-        uSg56kW+qSuFEllzjr3qIRs=
-X-Google-Smtp-Source: AMsMyM6l0DoGdglXgDjk2sFu/ZsftUW4ab9ENWWlsIARyWTAJVPu3e6srwvRZ+OuxbUS34qvawzhtw==
-X-Received: by 2002:adf:f98e:0:b0:22e:393:8def with SMTP id f14-20020adff98e000000b0022e03938defmr11307683wrr.570.1665392486906;
-        Mon, 10 Oct 2022 02:01:26 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id n11-20020a05600c3b8b00b003a540fef440sm17165455wms.1.2022.10.10.02.01.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 02:01:26 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 10 Oct 2022 11:01:23 +0200
-To:     Xu Kuohai <xukuohai@huaweicloud.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Hou Tao <houtao1@huawei.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next 4/5] selftest/bpf: Fix memory leak in
- kprobe_multi_test
-Message-ID: <Y0PfY9irDM0KEqq7@krava>
-References: <20221009131830.395569-1-xukuohai@huaweicloud.com>
- <20221009131830.395569-5-xukuohai@huaweicloud.com>
+        Mon, 10 Oct 2022 06:03:59 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A215255AA
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Oct 2022 03:03:57 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-321-F5c44r0_NSKo1yZuF9u8Yg-1; Mon, 10 Oct 2022 11:03:55 +0100
+X-MC-Unique: F5c44r0_NSKo1yZuF9u8Yg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Mon, 10 Oct
+ 2022 11:03:53 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.040; Mon, 10 Oct 2022 11:03:53 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Willy Tarreau' <w@1wt.eu>, Alexey Dobriyan <adobriyan@gmail.com>
+CC:     "lkp@intel.com" <lkp@intel.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: RE: tools/nolibc: fix missing strlen() definition and infinite loop
+ with gcc-12
+Thread-Topic: tools/nolibc: fix missing strlen() definition and infinite loop
+ with gcc-12
+Thread-Index: AQHY3A4FfEAIYReKOkCQTHoqkpVhA64HYvog
+Date:   Mon, 10 Oct 2022 10:03:53 +0000
+Message-ID: <9e16965f1d494084981eaa90d73ca80e@AcuMS.aculab.com>
+References: <Y0LsreRGq3nbe2xC@localhost.localdomain>
+ <20221009175920.GA28685@1wt.eu> <20221009183604.GA29069@1wt.eu>
+In-Reply-To: <20221009183604.GA29069@1wt.eu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221009131830.395569-5-xukuohai@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 09:18:29AM -0400, Xu Kuohai wrote:
-> From: Xu Kuohai <xukuohai@huawei.com>
+From: Willy Tarreau <w@1wt.eu>
+> Sent: 09 October 2022 19:36
+...
+> By the way, just for the sake of completeness, the one that consistently
+> gives me a better output is this one:
 > 
-> The get_syms() function in kprobe_multi_test.c does not free the string
-> memory allocated by sscanf correctly. Fix it.
+>   size_t strlen(const char *str)
+>   {
+>           const char *s0 = str--;
 > 
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> ---
->  .../bpf/prog_tests/kprobe_multi_test.c          | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
+>           while (*++str)
+>   		;
+>           return str - s0;
+>   }
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> index d457a55ff408..07dd2c5b7f98 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> @@ -360,15 +360,14 @@ static int get_syms(char ***symsp, size_t *cntp)
->  		 * to them. Filter out the current culprits - arch_cpu_idle
->  		 * and rcu_* functions.
->  		 */
-> -		if (!strcmp(name, "arch_cpu_idle"))
-> -			continue;
-> -		if (!strncmp(name, "rcu_", 4))
-> -			continue;
-> -		if (!strcmp(name, "bpf_dispatcher_xdp_func"))
-> -			continue;
-> -		if (!strncmp(name, "__ftrace_invalid_address__",
-> -			     sizeof("__ftrace_invalid_address__") - 1))
-> +		if (!strcmp(name, "arch_cpu_idle") ||
-> +			!strncmp(name, "rcu_", 4) ||
-> +			!strcmp(name, "bpf_dispatcher_xdp_func") ||
-> +			!strncmp(name, "__ftrace_invalid_address__",
-> +				 sizeof("__ftrace_invalid_address__") - 1)) {
-> +			free(name);
->  			continue;
-> +		}
->  		err = hashmap__add(map, name, NULL);
->  		if (err) {
->  			free(name);
-> @@ -394,7 +393,7 @@ static int get_syms(char ***symsp, size_t *cntp)
->  	hashmap__free(map);
->  	if (err) {
->  		for (i = 0; i < cnt; i++)
-> -			free(syms[cnt]);
-> +			free(syms[i]);
-
-mama mia.. nice catch! thanks
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
->  		free(syms);
->  	}
->  	return err;
-> -- 
-> 2.25.1
+> Which gives me this:
 > 
+> 
+>   0000000000000000 <strlen>:
+>      0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
+>      4:   48 ff c0                inc    %rax
+>      7:   80 38 00                cmpb   $0x0,(%rax)
+>      a:   75 f8                   jne    4 <len+0x4>
+>      c:   48 29 f8                sub    %rdi,%rax
+>      f:   c3                      ret
+> 
+> But this is totally ruined by the addition of asm() in the loop. However
+> I suspect that the construct is difficult to match against a real strlen()
+> since it starts on an extra character, thus placing the asm() statement
+> before the loop could durably preserve it. It does work here (the code
+> remains the exact same one), but for how long, that's the question. Maybe
+> we can revisit the various loop-based functions in the future with this in
+> mind.
+
+clang wilfully and persistently generates:
+
+strlen:                                 # @strlen
+        movq    $-1, %rax
+.LBB0_1:                                # =>This Inner Loop Header: Depth=1
+        cmpb    $0, 1(%rdi,%rax)
+        leaq    1(%rax), %rax
+        jne     .LBB0_1
+        retq
+
+But feed the C for that into gcc and it generates a 'jmp strlen'
+at everything above -O1.
+I suspect that might run with less clocks/byte than the code above.
+
+Somewhere I hate some complier pessimisations.
+Substituting a call to strlen() is typical.
+strlen() is almost certainly optimised for long strings.
+If the string is short the coded loop will be faster.
+The same is true (and probably more so) for memcpy.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
