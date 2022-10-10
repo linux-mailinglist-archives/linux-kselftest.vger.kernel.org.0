@@ -2,142 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157635F98A6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Oct 2022 08:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1661B5F987E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Oct 2022 08:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbiJJGyZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Oct 2022 02:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S231341AbiJJGrH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Oct 2022 02:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbiJJGyK (ORCPT
+        with ESMTP id S230486AbiJJGrH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Oct 2022 02:54:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5548D2AF1
-        for <linux-kselftest@vger.kernel.org>; Sun,  9 Oct 2022 23:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665384848;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pg5G9VL5CpW466Qb5kzC3fS+GraPCe+CdwnleWArycc=;
-        b=PxqPPj6WRP4DACQ8tvnw2PYYjSoCKyuLHpkaU4f7Vuddu1GfYlbPcodz3czGEZ08T7NxRJ
-        mxLmzwj8Q4Z8Gkb56uwQdUKkOe6W/C0FDqApEq05bGEHJDQvEuMfek7ckKsryWzxPdsP0l
-        CuKdUewKnvy2Snj6y4QM2pd1Ef7ODRk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-310-fTc0LmnUPCSdgukhJLWnmg-1; Mon, 10 Oct 2022 02:54:06 -0400
-X-MC-Unique: fTc0LmnUPCSdgukhJLWnmg-1
-Received: by mail-wm1-f71.google.com with SMTP id n6-20020a7bc5c6000000b003c6bbe5d5cfso659623wmk.4
-        for <linux-kselftest@vger.kernel.org>; Sun, 09 Oct 2022 23:54:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Pg5G9VL5CpW466Qb5kzC3fS+GraPCe+CdwnleWArycc=;
-        b=Zfr/ETdKeqMQCRPZGMkRU9XRmP4gdu9VWPPhkSF83OHNRIGpelyjOrKmI4Bh9mFoub
-         584qaYdSBXb9FXD3VwM8XFrEeD7nBIWr+CrT5PEJAbFelRa8fhzG5CmwSTgKSVZiCW26
-         wf/+Vv97ltvt9w7J+nbU1ypssFgRXKSHX37+KdjW+J5NLcEf9GgNvpTW+ExozqtXj6pp
-         TKek7ruEeb1x9MQXOddlbkGEnMaTLDhMu/F+37A3RSD8YDSUQncaJcViA//HoPd0Ye16
-         NM0zwIJl8j9otPQI1e7tInRSqIijIWZMfrp/e10NOVHI74cB2xDJnfPBYFlB7yf2Rs4X
-         C59w==
-X-Gm-Message-State: ACrzQf30o10x9Iv6c9FX1JZDN/jbiF9BSz8RjArQJyUoLpigIiwhgN/0
-        jtOr/2yle3tOvAZ7NLfDjpSWwmsL8iPtzD4YOB0MxVUHgPX4vRs/CTEgZndBP8Lcv5pE7VecOXw
-        VWRA4oN5I0bVVsSWpnN4rtiCtEWJc
-X-Received: by 2002:a05:600c:4186:b0:3b4:a660:1d29 with SMTP id p6-20020a05600c418600b003b4a6601d29mr18631479wmh.120.1665384845741;
-        Sun, 09 Oct 2022 23:54:05 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7V2dlW9YbkCCzqACXYKambIlk713mlq6z7oXm6nZyP2WjnrSh/2V7hTzCymmXg6z+PUAe1lg==
-X-Received: by 2002:a05:600c:4186:b0:3b4:a660:1d29 with SMTP id p6-20020a05600c418600b003b4a6601d29mr18631464wmh.120.1665384845488;
-        Sun, 09 Oct 2022 23:54:05 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:e600:3a4a:f000:b085:4839? (p200300cbc704e6003a4af000b0854839.dip0.t-ipconnect.de. [2003:cb:c704:e600:3a4a:f000:b085:4839])
-        by smtp.gmail.com with ESMTPSA id j5-20020a05600c1c0500b003b477532e66sm35460629wms.2.2022.10.09.23.54.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Oct 2022 23:54:05 -0700 (PDT)
-Message-ID: <b0ae9fcc-7e2b-dae9-30be-4b6ee248bf97@redhat.com>
-Date:   Mon, 10 Oct 2022 08:54:03 +0200
+        Mon, 10 Oct 2022 02:47:07 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174BE5140C;
+        Sun,  9 Oct 2022 23:47:05 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mm8Xs5DMVzKG2m;
+        Mon, 10 Oct 2022 14:44:45 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP2 (Coremail) with SMTP id Syh0CgDnf9Tiv0NjoL4qAA--.49036S2;
+        Mon, 10 Oct 2022 14:46:59 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Hou Tao <houtao1@huawei.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [PATCH bpf v2 0/5] Fix bugs found by ASAN when running selftests
+Date:   Mon, 10 Oct 2022 03:04:49 -0400
+Message-Id: <20221010070454.577433-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH -next v5 2/4] selftests/memory-hotplug: Restore memory
- before exit
-Content-Language: en-US
-To:     zhaogongyi <zhaogongyi@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Cc:     "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "osalvador@suse.de" <osalvador@suse.de>,
-        "shuah@kernel.org" <shuah@kernel.org>
-References: <f83730eec0b1445fa92d4cf0397d886b@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <f83730eec0b1445fa92d4cf0397d886b@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgDnf9Tiv0NjoL4qAA--.49036S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4fJr18AF1UCw13uw45KFg_yoW3urbEyF
+        42gr95AFZxGa9xAFWUCan3WrZrC3y5tryfZFsrtFyxJ3Wjkr17CFsYgFWSya48Ww4fJry3
+        ZFWkX3y0gryYgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 08.10.22 03:40, zhaogongyi wrote:
-> Hi!
-> 
->>
->> On 30.09.22 10:52, zhaogongyi wrote:
->>> Hi!
->>>
->>>>
->>>> On 30.09.22 08:35, Zhao Gongyi wrote:
->>>>> Some momory will be left in offline state when calling
->>>>> offline_memory_expect_fail() failed. Restore it before exit.
->>>>>
->>>>> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
->>>>> ---
->>>>>     .../memory-hotplug/mem-on-off-test.sh         | 21
->>>> ++++++++++++++-----
->>>>>     1 file changed, 16 insertions(+), 5 deletions(-)
->>>>>
->>>>> diff --git a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
->>>> b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
->>>>> index 1d87611a7d52..91a7457616bb 100755
->>>>> --- a/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
->>>>> +++ b/tools/testing/selftests/memory-hotplug/mem-on-off-test.sh
->>>>> @@ -134,6 +134,16 @@ offline_memory_expect_fail()
->>>>>     	return 0
->>>>>     }
->>>>>
->>>>> +online_all_offline_memory()
->>>>> +{
->>>>> +	for memory in `hotpluggable_offline_memory`; do
->>>>> +		if ! online_memory_expect_success $memory; then
->>>>> +			echo "$FUNCNAME $memory: unexpected fail" >&2
->>>>
->>>> Do we need that output?
->>>
->>> In my opinion, if online a memory node failed ,it should be a kernel bug
->> catched, so, I think the output here is needed.
->>
->> But online_memory_expect_success() already prints a warning, no?
-> 
-> Yes, online_memory_expect_success() already prints a warning, remove the warning in online_all_offline_memory() seems ok,
-> 
-> My previous consideration was that one more log information would make it easier to locate the wrong location.
+v2:
+- Rebase and fix conflict
 
-Let's keep it simple unless there is real reason to warn twice.
+v1: https://lore.kernel.org/bpf/20221009131830.395569-1-xukuohai@huaweicloud.com/
+
+Xu Kuohai (5):
+  libbpf: Fix use-after-free in btf_dump_name_dups
+  libbpf: Fix memory leak in parse_usdt_arg()
+  selftests/bpf: Fix memory leak caused by not destroying skeleton
+  selftest/bpf: Fix memory leak in kprobe_multi_test
+  selftest/bpf: Fix error usage of ASSERT_OK in xdp_adjust_tail.c
+
+ tools/lib/bpf/btf_dump.c                      | 47 +++++++++++----
+ tools/lib/bpf/usdt.c                          | 59 +++++++++++--------
+ .../bpf/prog_tests/kprobe_multi_test.c        | 17 +++---
+ .../selftests/bpf/prog_tests/map_kptr.c       |  3 +-
+ .../selftests/bpf/prog_tests/tracing_struct.c |  3 +-
+ .../bpf/prog_tests/xdp_adjust_tail.c          |  6 +-
+ 6 files changed, 85 insertions(+), 50 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.30.2
 
