@@ -2,46 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA565FB525
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Oct 2022 16:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB655FB57B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Oct 2022 16:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJKOvj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Oct 2022 10:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S230425AbiJKOyg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Oct 2022 10:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiJKOu7 (ORCPT
+        with ESMTP id S230310AbiJKOxe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Oct 2022 10:50:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776F43FA0D;
-        Tue, 11 Oct 2022 07:50:42 -0700 (PDT)
+        Tue, 11 Oct 2022 10:53:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2B59C203;
+        Tue, 11 Oct 2022 07:51:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AEA561198;
-        Tue, 11 Oct 2022 14:50:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA0BC433C1;
-        Tue, 11 Oct 2022 14:50:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 091A6B81629;
+        Tue, 11 Oct 2022 14:51:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E47A0C433D6;
+        Tue, 11 Oct 2022 14:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665499841;
-        bh=x32F4CsgPwMHtEyCKulF2Xq3YJudJVWiV7tN9IUCuYs=;
+        s=k20201202; t=1665499888;
+        bh=ojCmeGHkofBLPO9rvISVcCUKCRfazna5eqPo7nU17v0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FTN2/sbyTB14xRTUgN4+7Pqx3iNl/qhiLxzDUPAfVT8l1/RIEpLDJLtjjpgpdhqPu
-         JA2heAkAAocQE5zen2mQ/J4NkalgqTUYpKmH7rrdFa47hRH0cAIilyiQ/4WA9Z7qv9
-         AphPk2NNnfnJwYOHmApibbTPdatpBDJb1Mypp0Q/JbBZHTae/cef1s/YYpQqc4ooE/
-         nfpY8vFbzLsN2e2wUu2YFhX/XBM9WAiBBeEqhWRCKEznqvqNNOQH+Vxp+HqFz2YGxj
-         X16S1DazgIruSpl7BxWBh/H/tpF9+fPnAox0RVQR2eMw3BL35Pc4vYh880ZKZ2U1z6
-         TEVQErh9s6L9g==
+        b=Zp239PcndrhV55aJVZeeqp13++q2X08HXd/7/bBlXvsvAodHFXrKvvWMpchr//8LB
+         lPBRwD8sOqwNt3FKLEPIVb2zsKIdQNNlKQICpljbyfv3zFw0sNfQbxOhyhxv9jbRYz
+         Q1e1aLVgVx86NUS+4KdWbAwEtdioUu+w6PWZLLPL0BGtLu947Nh74Iz0vGXgorwLQl
+         srS8U3wX44yzbcTxaxGRWAkMaAqpcHIGTWBV/Tc+lB9lrwXECJJ6lHLY83KoCaBr4S
+         uyGdsFgbyiM0Otr6gfwrmp+fv9PcRBy92ia09U0G3xY7VZJxUeMmi5kjKVIJNiysdL
+         y9dtcjeyjjfFQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sasha Levin <sashal@kernel.org>, will@kernel.org,
-        shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
+Cc:     Zhao Gongyi <zhaogongyi@huawei.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 15/46] kselftest/arm64: Allow larger buffers in get_signal_context()
-Date:   Tue, 11 Oct 2022 10:49:43 -0400
-Message-Id: <20221011145015.1622882-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.0 46/46] selftests/cpu-hotplug: Use return instead of exit
+Date:   Tue, 11 Oct 2022 10:50:14 -0400
+Message-Id: <20221011145015.1622882-46-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221011145015.1622882-1-sashal@kernel.org>
 References: <20221011145015.1622882-1-sashal@kernel.org>
@@ -58,227 +57,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Zhao Gongyi <zhaogongyi@huawei.com>
 
-[ Upstream commit 38150a6204c731a4846786682e500d132571fd82 ]
+[ Upstream commit 972cf4ce51ef5532d56822af17defb148aac0ccb ]
 
-In order to allow testing of signal contexts that overflow the base signal
-frame allow callers to pass the buffer size for the user context into
-get_signal_context(). No functional change.
+Some cpus will be left in offline state when online
+function exits in some error conditions. Use return
+instead of exit to fix it.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220829160703.874492-10-broonie@kernel.org
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/arm64/signal/test_signals_utils.h    | 5 +++--
- .../arm64/signal/testcases/fake_sigreturn_bad_magic.c        | 2 +-
- .../arm64/signal/testcases/fake_sigreturn_bad_size.c         | 2 +-
- .../signal/testcases/fake_sigreturn_bad_size_for_magic0.c    | 2 +-
- .../signal/testcases/fake_sigreturn_duplicated_fpsimd.c      | 2 +-
- .../arm64/signal/testcases/fake_sigreturn_misaligned_sp.c    | 2 +-
- .../arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c   | 2 +-
- .../arm64/signal/testcases/fake_sigreturn_sme_change_vl.c    | 2 +-
- .../arm64/signal/testcases/fake_sigreturn_sve_change_vl.c    | 2 +-
- tools/testing/selftests/arm64/signal/testcases/sme_vl.c      | 2 +-
- tools/testing/selftests/arm64/signal/testcases/ssve_regs.c   | 2 +-
- tools/testing/selftests/arm64/signal/testcases/sve_regs.c    | 2 +-
- tools/testing/selftests/arm64/signal/testcases/sve_vl.c      | 2 +-
- tools/testing/selftests/arm64/signal/testcases/za_regs.c     | 2 +-
- 14 files changed, 16 insertions(+), 15 deletions(-)
+ .../selftests/cpu-hotplug/cpu-on-off-test.sh        | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-index f3aa99ba67bb..222093f51b67 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-@@ -56,7 +56,8 @@ static inline bool feats_ok(struct tdescr *td)
-  * at sizeof(ucontext_t).
-  */
- static __always_inline bool get_current_context(struct tdescr *td,
--						ucontext_t *dest_uc)
-+						ucontext_t *dest_uc,
-+						size_t dest_sz)
+diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+index 0d26b5e3f966..940b68c940bb 100755
+--- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
++++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+@@ -4,6 +4,7 @@
+ SYSFS=
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
++retval=0
+ 
+ prerequisite()
  {
- 	static volatile bool seen_already;
+@@ -102,10 +103,10 @@ online_cpu_expect_success()
  
-@@ -64,7 +65,7 @@ static __always_inline bool get_current_context(struct tdescr *td,
- 	/* it's a genuine invocation..reinit */
- 	seen_already = 0;
- 	td->live_uc_valid = 0;
--	td->live_sz = sizeof(*dest_uc);
-+	td->live_sz = dest_sz;
- 	memset(dest_uc, 0x00, td->live_sz);
- 	td->live_uc = dest_uc;
- 	/*
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
-index 8dc600a7d4fd..8c7f00ea9823 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
-@@ -21,7 +21,7 @@ static int fake_sigreturn_bad_magic_run(struct tdescr *td,
- 	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
+ 	if ! online_cpu $cpu; then
+ 		echo $FUNCNAME $cpu: unexpected fail >&2
+-		exit 1
++		retval=1
+ 	elif ! cpu_is_online $cpu; then
+ 		echo $FUNCNAME $cpu: unexpected offline >&2
+-		exit 1
++		retval=1
+ 	fi
+ }
  
- 	/* just to fill the ucontext_t with something real */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
+@@ -128,10 +129,10 @@ offline_cpu_expect_success()
  
- 	/* need at least 2*HDR_SZ space: KSFT_BAD_MAGIC + terminator. */
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c
-index b3c362100666..1c03f6b638e0 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c
-@@ -24,7 +24,7 @@ static int fake_sigreturn_bad_size_run(struct tdescr *td,
- 	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
+ 	if ! offline_cpu $cpu; then
+ 		echo $FUNCNAME $cpu: unexpected fail >&2
+-		exit 1
++		retval=1
+ 	elif ! cpu_is_offline $cpu; then
+ 		echo $FUNCNAME $cpu: unexpected offline >&2
+-		exit 1
++		retval=1
+ 	fi
+ }
  
- 	/* just to fill the ucontext_t with something real */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
+@@ -201,7 +202,7 @@ if [ $allcpus -eq 0 ]; then
+ 		offline_cpu_expect_success $present_max
+ 		online_cpu $present_max
+ 	fi
+-	exit 0
++	exit $retval
+ else
+ 	echo "Full scope test: all hotplug cpus"
+ 	echo -e "\t online all offline cpus"
+@@ -291,3 +292,5 @@ done
  
- 	resv_sz = GET_SF_RESV_SIZE(sf);
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
-index a44b88bfc81a..bc22f64b544e 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
-@@ -21,7 +21,7 @@ static int fake_sigreturn_bad_size_for_magic0_run(struct tdescr *td,
- 	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
- 
- 	/* just to fill the ucontext_t with something real */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	/* at least HDR_SZ for the badly sized terminator. */
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c
-index afe8915f0998..63e3906b631c 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c
-@@ -21,7 +21,7 @@ static int fake_sigreturn_duplicated_fpsimd_run(struct tdescr *td,
- 	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
- 
- 	/* just to fill the ucontext_t with something real */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	head = get_starting_head(shead, sizeof(struct fpsimd_context) + HDR_SZ,
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
-index 1e089e66f9f3..d00625ff12c2 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
-@@ -19,7 +19,7 @@ static int fake_sigreturn_misaligned_run(struct tdescr *td,
- 					 siginfo_t *si, ucontext_t *uc)
- {
- 	/* just to fill the ucontext_t with something real */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	/* Forcing sigframe on misaligned SP (16 + 3) */
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
-index 08ecd8073a1a..f805138cb20d 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
-@@ -23,7 +23,7 @@ static int fake_sigreturn_missing_fpsimd_run(struct tdescr *td,
- 	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
- 
- 	/* just to fill the ucontext_t with something real */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	resv_sz = GET_SF_RESV_SIZE(sf);
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
-index 7ed762b7202f..ebd5815b54bb 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
-@@ -54,7 +54,7 @@ static int fake_sigreturn_ssve_change_vl(struct tdescr *td,
- 	struct sve_context *sve;
- 
- 	/* Get a signal context with a SME ZA frame in it */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	resv_sz = GET_SF_RESV_SIZE(sf);
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
-index 915821375b0a..e2a452190511 100644
---- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sve_change_vl.c
-@@ -56,7 +56,7 @@ static int fake_sigreturn_sve_change_vl(struct tdescr *td,
- 	struct sve_context *sve;
- 
- 	/* Get a signal context with a SVE frame in it */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	resv_sz = GET_SF_RESV_SIZE(sf);
-diff --git a/tools/testing/selftests/arm64/signal/testcases/sme_vl.c b/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
-index 13ff3b35cbaf..75f387f2db81 100644
---- a/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/sme_vl.c
-@@ -34,7 +34,7 @@ static int sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
- 	struct za_context *za;
- 
- 	/* Get a signal context which should have a ZA frame in it */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	resv_sz = GET_SF_RESV_SIZE(sf);
-diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
-index 9022a6cab4b3..71f14632c524 100644
---- a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
-@@ -73,7 +73,7 @@ static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
- 	 * in it.
- 	 */
- 	setup_ssve_regs();
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	resv_sz = GET_SF_RESV_SIZE(sf);
-diff --git a/tools/testing/selftests/arm64/signal/testcases/sve_regs.c b/tools/testing/selftests/arm64/signal/testcases/sve_regs.c
-index 4b2418aa08a9..4cdedb706786 100644
---- a/tools/testing/selftests/arm64/signal/testcases/sve_regs.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/sve_regs.c
-@@ -71,7 +71,7 @@ static int do_one_sve_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
- 	 * in it.
- 	 */
- 	setup_sve_regs();
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	resv_sz = GET_SF_RESV_SIZE(sf);
-diff --git a/tools/testing/selftests/arm64/signal/testcases/sve_vl.c b/tools/testing/selftests/arm64/signal/testcases/sve_vl.c
-index 92904653add1..aa835acec062 100644
---- a/tools/testing/selftests/arm64/signal/testcases/sve_vl.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/sve_vl.c
-@@ -34,7 +34,7 @@ static int sve_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
- 	struct sve_context *sve;
- 
- 	/* Get a signal context which should have a SVE frame in it */
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	resv_sz = GET_SF_RESV_SIZE(sf);
-diff --git a/tools/testing/selftests/arm64/signal/testcases/za_regs.c b/tools/testing/selftests/arm64/signal/testcases/za_regs.c
-index b94e4f99fcac..70c00ca6eded 100644
---- a/tools/testing/selftests/arm64/signal/testcases/za_regs.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/za_regs.c
-@@ -71,7 +71,7 @@ static int do_one_sme_vl(struct tdescr *td, siginfo_t *si, ucontext_t *uc,
- 	 * in it.
- 	 */
- 	setup_za_regs();
--	if (!get_current_context(td, &sf.uc))
-+	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
- 		return 1;
- 
- 	resv_sz = GET_SF_RESV_SIZE(sf);
+ echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_DOWN_PREPARE/error
+ /sbin/modprobe -q -r cpu-notifier-error-inject
++
++exit $retval
 -- 
 2.35.1
 
