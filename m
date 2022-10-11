@@ -2,154 +2,303 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFE45FB045
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Oct 2022 12:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB575FB0D8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Oct 2022 12:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiJKKSL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Oct 2022 06:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S229614AbiJKK7H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Oct 2022 06:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJKKSK (ORCPT
+        with ESMTP id S229499AbiJKK7G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Oct 2022 06:18:10 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D87824094
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Oct 2022 03:18:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-286-09IWco5YP-G3TOKGjGh0fQ-1; Tue, 11 Oct 2022 11:18:04 +0100
-X-MC-Unique: 09IWco5YP-G3TOKGjGh0fQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.38; Tue, 11 Oct
- 2022 11:18:03 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.040; Tue, 11 Oct 2022 11:18:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Willy Tarreau' <w@1wt.eu>
-CC:     Alexey Dobriyan <adobriyan@gmail.com>,
-        "lkp@intel.com" <lkp@intel.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: RE: tools/nolibc: fix missing strlen() definition and infinite loop
- with gcc-12
-Thread-Topic: tools/nolibc: fix missing strlen() definition and infinite loop
- with gcc-12
-Thread-Index: AQHY3A4FfEAIYReKOkCQTHoqkpVhA64HYvoggAFHY4CAACsgsA==
-Date:   Tue, 11 Oct 2022 10:18:03 +0000
-Message-ID: <b5de4f7b61f1467baea10267c96d6db4@AcuMS.aculab.com>
-References: <Y0LsreRGq3nbe2xC@localhost.localdomain>
- <20221009175920.GA28685@1wt.eu> <20221009183604.GA29069@1wt.eu>
- <9e16965f1d494084981eaa90d73ca80e@AcuMS.aculab.com>
- <20221011062055.GC5107@1wt.eu>
-In-Reply-To: <20221011062055.GC5107@1wt.eu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 11 Oct 2022 06:59:06 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CAC5282B;
+        Tue, 11 Oct 2022 03:59:04 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29BAwqu7086784;
+        Tue, 11 Oct 2022 05:58:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1665485932;
+        bh=0bcuz/1aO/u8pUu1ZydeV1qQ9w3qPRAKX9BMcN7JkMQ=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=eb8iW6Yio4d87g6PiV27ZY2fERgF99CRTCSFCEpc+a2nEd2Ne2MlO7G2M3g1aN2q0
+         M3c73WR8wlyNi7ZmxqL8z8VA9qtA6KeGzo7UbsZlQJpvlFeLIc5TFmPzEsdRNbKGZE
+         +PGFSqaE7AHrzF8ansRgN0XczOG43oErkwwXpxa4=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29BAwqwF104321
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Oct 2022 05:58:52 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 11
+ Oct 2022 05:58:52 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 11 Oct 2022 05:58:52 -0500
+Received: from [172.24.147.145] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29BAwnro051923;
+        Tue, 11 Oct 2022 05:58:49 -0500
+Subject: Re: [PATCH] selftests: pci: pci-selftest: add support for PCI
+ endpoint driver test
+To:     Aman Gupta <aman1.gupta@samsung.com>, <shradha.t@samsung.com>,
+        <pankaj.dubey@samsung.com>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <shuah@kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <CGME20221007053726epcas5p357c35abb79327fee6327bc6493e0178c@epcas5p3.samsung.com>
+ <20221007053934.5188-1-aman1.gupta@samsung.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <fe40a005-b6a2-2938-576d-acf5432636b9@ti.com>
+Date:   Tue, 11 Oct 2022 16:28:48 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <20221007053934.5188-1-aman1.gupta@samsung.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Willy Tarreau
-> Sent: 11 October 2022 07:21
++Mani
+
+On 07/10/22 11:09 am, Aman Gupta wrote:
+> This patch enables the support to perform selftest on PCIe endpoint
+> driver present in the system. The following tests are currently
+> performed by the selftest utility
 > 
-> On Mon, Oct 10, 2022 at 10:03:53AM +0000, David Laight wrote:
-> > From: Willy Tarreau <w@1wt.eu>
-> > > Sent: 09 October 2022 19:36
-> > ...
-> > > By the way, just for the sake of completeness, the one that consistently
-> > > gives me a better output is this one:
-> > >
-> > >   size_t strlen(const char *str)
-> > >   {
-> > >           const char *s0 = str--;
-> > >
-> > >           while (*++str)
-> > >   		;
-> > >           return str - s0;
-> > >   }
-> > >
-> > > Which gives me this:
-> > >
-> > >
-> > >   0000000000000000 <strlen>:
-> > >      0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
-> > >      4:   48 ff c0                inc    %rax
-> > >      7:   80 38 00                cmpb   $0x0,(%rax)
-> > >      a:   75 f8                   jne    4 <len+0x4>
-> > >      c:   48 29 f8                sub    %rdi,%rax
-> > >      f:   c3                      ret
-> > >
-> > > But this is totally ruined by the addition of asm() in the loop. However
-> > > I suspect that the construct is difficult to match against a real strlen()
-> > > since it starts on an extra character, thus placing the asm() statement
-> > > before the loop could durably preserve it. It does work here (the code
-> > > remains the exact same one), but for how long, that's the question. Maybe
-> > > we can revisit the various loop-based functions in the future with this in
-> > > mind.
-> >
-> > clang wilfully and persistently generates:
-> >
-> > strlen:                                 # @strlen
-> >         movq    $-1, %rax
-> > .LBB0_1:                                # =>This Inner Loop Header: Depth=1
-> >         cmpb    $0, 1(%rdi,%rax)
-> >         leaq    1(%rax), %rax
-> >         jne     .LBB0_1
-> >         retq
-> >
-> > But feed the C for that into gcc and it generates a 'jmp strlen'
-> > at everything above -O1.
+> 1. BAR Tests (BAR0 to BAR5)
+> 2. MSI Interrupt Tests (MSI1 to MSI32)
+> 3. Read Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
+> 4. Write Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
+> 5. Copy Tests (For 1, 1024, 1025, 1024000, 1024001 Bytes)
 > 
-> Interesting, that's not the case for me here with 12.2 from kernel.org
-> on x86_64, which gives this at -O1, -O2, -O3 and -Ofast:
+> Signed-off-by: Aman Gupta <aman1.gupta@samsung.com>
+> Signed-off-by: Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+> ---
+>   tools/testing/selftests/Makefile           |   1 +
+>   tools/testing/selftests/pci/.gitignore     |   1 +
+>   tools/testing/selftests/pci/Makefile       |   7 +
+>   tools/testing/selftests/pci/pci-selftest.c | 167 +++++++++++++++++++++
+>   4 files changed, 176 insertions(+)
+>   create mode 100644 tools/testing/selftests/pci/.gitignore
+>   create mode 100644 tools/testing/selftests/pci/Makefile
+>   create mode 100644 tools/testing/selftests/pci/pci-selftest.c
 > 
->   0000000000000000 <strlen>:
->      0:   48 8d 47 ff             lea    -0x1(%rdi),%rax
->      4:   0f 1f 40 00             nopl   0x0(%rax)
->      8:   48 83 c0 01             add    $0x1,%rax
->      c:   80 38 00                cmpb   $0x0,(%rax)
->      f:   75 f7                   jne    8 <strlen+0x8>
->     11:   48 29 f8                sub    %rdi,%rax
->     14:   c3                      ret
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index c2064a35688b..81584169a80f 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -49,6 +49,7 @@ TARGETS += net/forwarding
+>   TARGETS += net/mptcp
+>   TARGETS += netfilter
+>   TARGETS += nsfs
+> +TARGETS += pci
+>   TARGETS += pidfd
+>   TARGETS += pid_namespace
+>   TARGETS += powerpc
+> diff --git a/tools/testing/selftests/pci/.gitignore b/tools/testing/selftests/pci/.gitignore
+> new file mode 100644
+> index 000000000000..db01411b8200
+> --- /dev/null
+> +++ b/tools/testing/selftests/pci/.gitignore
+> @@ -0,0 +1 @@
+> +pci-selftest
+> diff --git a/tools/testing/selftests/pci/Makefile b/tools/testing/selftests/pci/Makefile
+> new file mode 100644
+> index 000000000000..76b7725a45ae
+> --- /dev/null
+> +++ b/tools/testing/selftests/pci/Makefile
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +CFLAGS += -O2 -Wl,-no-as-needed -Wall
+> +LDFLAGS += -lrt -lpthread -lm
+> +
+> +TEST_GEN_PROGS = pci-selftest
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/pci/pci-selftest.c b/tools/testing/selftests/pci/pci-selftest.c
+> new file mode 100644
+> index 000000000000..73e8f3eb1982
+> --- /dev/null
+> +++ b/tools/testing/selftests/pci/pci-selftest.c
+> @@ -0,0 +1,167 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * PCI Endpoint Driver Test Program
+> + *
+> + * Copyright (c) 2022 Samsung Electronics Co., Ltd.
+> + *             https://www.samsung.com
+> + * Author: Aman Gupta <aman1.gupta@samsung.com>
+> + */
+> +
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <stdbool.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <sys/ioctl.h>
+> +#include <unistd.h>
+> +
+> +#include "../kselftest_harness.h"
+> +
+> +#define PCITEST_BAR		_IO('P', 0x1)
+> +#define PCITEST_LEGACY_IRQ	_IO('P', 0x2)
+> +#define PCITEST_MSI		_IOW('P', 0x3, int)
+> +#define PCITEST_WRITE		_IOW('P', 0x4, unsigned long)
+> +#define PCITEST_READ		_IOW('P', 0x5, unsigned long)
+> +#define PCITEST_COPY		_IOW('P', 0x6, unsigned long)
+> +#define PCITEST_MSIX		_IOW('P', 0x7, int)
+> +#define PCITEST_SET_IRQTYPE	_IOW('P', 0x8, int)
+> +#define PCITEST_GET_IRQTYPE	_IO('P', 0x9)
+> +#define PCITEST_CLEAR_IRQ	_IO('P', 0x10)
+> +
+> +static char *test_device = "/dev/pci-endpoint-test.0";
+> +
+> +struct xfer_param {
+> +	unsigned long size;
+> +	unsigned char flag;
+> +	};
+> +
+> +FIXTURE(device)
+> +{
+> +	int fd;
+> +};
+> +
+> +FIXTURE_SETUP(device)
+> +{
+> +
+> +	self->fd = open(test_device, O_RDWR);
+> +
+> +	ASSERT_NE(-1, self->fd) {
+> +		TH_LOG("Can't open PCI Endpoint Test device\n");
+> +	}
+> +}
+> +
+> +FIXTURE_TEARDOWN(device)
+> +{
+> +	close(self->fd);
+> +}
+> +
+> +TEST_F(device, BAR_TEST)
+> +{
+> +	int ret = -EINVAL;
+> +	int final = 0;
+> +
+> +	for (int i = 0; i <= 5; i++) {
+> +		ret = ioctl(self->fd, PCITEST_BAR, i);
+> +
+> +		EXPECT_EQ(1, ret) {
+> +			TH_LOG("TEST FAILED FOR BAR %d\n", i);
+> +			final++;
+> +		}
+> +	}
+> +
+> +	ASSERT_EQ(0, final);
+> +}
+> +
+> +TEST_F(device, MSI_TEST)
+> +{
+> +	int ret = -EINVAL;
+> +	int final = 0;
+> +
+> +	ret = ioctl(self->fd, PCITEST_SET_IRQTYPE, 1);
+> +	ASSERT_EQ(1, ret);
+> +
+> +	for (int i = 1; i <= 32; i++) {
+> +		ret = ioctl(self->fd, PCITEST_MSI, i);
+> +		EXPECT_EQ(1, ret) {
+> +			TH_LOG("TEST FAILED FOR MSI%d\n", i);
+> +			final++;
+> +		}
+> +	}
+> +
+> +	ASSERT_EQ(0, final);
+> +}
+> +
+> +TEST_F(device, READ_TEST)
+> +{
+> +	int final = 0;
+> +	int ret = -EINVAL;
+> +	unsigned long SIZE[5] = {1, 1024, 1025, 1024000, 1024001};
+> +
+> +	ret = ioctl(self->fd, PCITEST_SET_IRQTYPE, 1);
+> +	ASSERT_EQ(1, ret);
+> +
+> +	struct xfer_param param;
+> +
+> +	param.flag = 0;
+> +	for (int i = 0; i < 5; i++) {
+> +		param.size = SIZE[i];
+> +		ret = ioctl(self->fd, PCITEST_READ, &param);
+> +		EXPECT_EQ(1, ret) {
+> +			TH_LOG("TEST FAILED FOR size =%ld.\n", SIZE[i]);
+> +			final++;
+> +		}
+> +	}
+> +
+> +	ASSERT_EQ(0, final);
+> +}
+> +
+> +TEST_F(device, WRITE_TEST)
+> +{
+> +	int final = 0;
+> +	int ret = -EINVAL;
+> +	unsigned long SIZE[5] = {1, 1024, 1025, 1024000, 1024001};
+> +
+> +	ret = ioctl(self->fd, PCITEST_SET_IRQTYPE, 1);
+> +	ASSERT_EQ(1, ret);
+> +
+> +	struct xfer_param param;
+> +
+> +	param.flag = 0;
+> +
+> +	for (int i = 0; i < 5; i++) {
+> +		param.size = SIZE[i];
+> +		ret = ioctl(self->fd, PCITEST_WRITE, &param);
+> +		EXPECT_EQ(1, ret) {
+> +			TH_LOG("TEST FAILED FOR size =%ld.\n", SIZE[i]);
+> +			final++;
+> +		}
+> +	}
+> +
+> +	ASSERT_EQ(0, final);
+> +}
+> +
+> +TEST_F(device, COPY_TEST)
+> +{
+> +	int final = 0;
+> +	int ret = -EINVAL;
+> +	unsigned long SIZE[5] = {1, 1024, 1025, 1024000, 1024001};
+> +
+> +	ret = ioctl(self->fd, PCITEST_SET_IRQTYPE, 1);
+> +	ASSERT_EQ(1, ret);
+> +
+> +	struct xfer_param param;
+> +
+> +	param.flag = 0;
+> +
+> +	for (int i = 0; i < 5; i++) {
+> +		param.size = SIZE[i];
+> +		ret = ioctl(self->fd, PCITEST_COPY, &param);
+> +		EXPECT_EQ(1, ret) {
+> +			TH_LOG("TEST FAILED FOR size =%ld.\n", SIZE[i]);
+> +			final++;
+> +		}
+> +	}
+> +
+> +	ASSERT_EQ(0, final);
+> +}
+> +TEST_HARNESS_MAIN
 > 
-> Out of curiosity what version were you using ?
-
-Clang 12.0.0 onwards, see https://godbolt.org/z/67Gnzs8js
-
-> > I suspect that might run with less clocks/byte than the code above.
-> 
-> Certainly for large strings, but not for short ones.
-
-For short strings not needing the final sub and not having
-the read depend on the increment should make the leal one faster.
-(The nop to align the loop label is monumentally pointless.)
-
-For long strings what matters is how many clocks it takes
-to schedule the 4 uops in the loop.
-It might be possible to get down to 2 clocks - but I think
-both the loops are 3 clocks (assuming the adjacent cmp/jne fuse).
-
-I'm not going to try to instrument the loops though!
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
