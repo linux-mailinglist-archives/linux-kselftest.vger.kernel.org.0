@@ -2,138 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE075FB2A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Oct 2022 14:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A615FB36B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Oct 2022 15:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJKMr0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Oct 2022 08:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
+        id S230053AbiJKN2t (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Oct 2022 09:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiJKMrX (ORCPT
+        with ESMTP id S230030AbiJKN2r (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Oct 2022 08:47:23 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A769080D
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Oct 2022 05:47:20 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id u16-20020a250950000000b006be72659056so13299635ybm.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Oct 2022 05:47:20 -0700 (PDT)
+        Tue, 11 Oct 2022 09:28:47 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D985071F
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Oct 2022 06:28:45 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id 63so14277126vse.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Oct 2022 06:28:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JZgfsSGBJAIpwrM+kN5gILalFFiDKNqq+i+h/f0T+1w=;
-        b=Lhj7yGBgLSbssGDsd2KUsMVfq/iXui4imvLqgRv+9ymf7fd0W+VDlTKnh0f+tpRRXB
-         /Br17OtlaZyA2gyUxT98PtVyrIAuDpC/pXipYVvOV8y+f8H4vW+MajDUU3phx5GVqniT
-         HPzXIHjVgZ7zojUrVGN8Zida1RvUp9HXnw3R3Rm90a+ZGX1tkwsB9j+AqH0+BXbiF72l
-         HQEjtC130tULmZYTQtzesNR494kbdH2bqCeNOTyjf3JroTg4WaW38z8ocmG0723+8zRd
-         am3phKQ78ruIuH5HZIEE2opGxyuYN7Xbsf+A6j9hntbwWKvWdfuFZxjWS4penwRx6jCJ
-         mWEQ==
+        d=eclypsium.com; s=google;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=raH7WVDSsvCPKQIhYgmZFVAAGSUF5nc09Zedq+rsMAU=;
+        b=RIe4dBR0aMf5OdrqYm/Utd+N0OJj8M7yVRnxQt0SWrAE+Icqli8dm198FiWu1zyE4K
+         ThFkWDgg/9Td5d2IRDtyLEfSPwokGQrcFSl+ZlD2K4af69I3g3EB9B1emQIrMWvScJHw
+         r+I3aZYKyOKoXo9+c2guSFePs38N6mNAHs3VoFJnnpA5I08Jok+DXwlLOgxNK3KgfAUZ
+         XdH4LxlWpNY4uzGhO4Af+xDw0bOM1Vadya5Rtbe4apuRaNOzWyL2aYvjt49BUK4JI6Dw
+         lHsf8fQMu1jQgOb7cxH8q3pAtHNmlqi/rQWzUKfzGN0Ycw4ppIGnoOMf/vkNLy9aLTOC
+         /peA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JZgfsSGBJAIpwrM+kN5gILalFFiDKNqq+i+h/f0T+1w=;
-        b=JeC1j7Q8tyFZ9SvEVadR0a1smBtcGte/X5hr62k3t63QfekRDLMg+9Q1EdUXeNsKer
-         93vNfa5n+2JXcAYFU0L+ULNFT9WmVOSShxynv8d/N2iG8tYdF2jfse+sjS2MwvdNTxEt
-         ZgNNu6DqX78FQTsoGsy4ZzWBGQWD1FDa+cx5ahi4GxRF10jJEdayk1bHPxRaoOnDbFDg
-         K2cI2j1lQ0lZC5e1Zf9Qg8X3WyGZ+ufbVxD5c4O3M+dTQUmP6ACtY/6QyksMJGYbthLK
-         RbYzwzT3t0R2KAEMhtfoiFH7JZquXpFXc+yB0DsOyBRqQQhqCDMzZhRr5Xx0Vyyc9zpI
-         eUrA==
-X-Gm-Message-State: ACrzQf0qf9eLGftZsPBSfeAzNJagN+5bJ4fDqwyi1+LHeTGoe+2eJjfd
-        iE8lwtBu3azMKqCsvTvhqFMAw2farA==
-X-Google-Smtp-Source: AMsMyM7mLP7qxYhVaFvAfaOOBR4Ia7Pa0IN/qv4FwNg3SacUjhfZkgOXsyXoCAhZIp/qsLi2hi3T37gusQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:3abd:8519:48e1:da82])
- (user=elver job=sendgmr) by 2002:a25:6dc3:0:b0:6c0:7938:5b3f with SMTP id
- i186-20020a256dc3000000b006c079385b3fmr13344582ybc.625.1665492440186; Tue, 11
- Oct 2022 05:47:20 -0700 (PDT)
-Date:   Tue, 11 Oct 2022 14:45:35 +0200
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221011124534.84907-1-elver@google.com>
-Subject: [PATCH] selftests/perf_events: Add a SIGTRAP stress test with disables
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-perf-users@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=raH7WVDSsvCPKQIhYgmZFVAAGSUF5nc09Zedq+rsMAU=;
+        b=Etehs8KbQpnpLcJOxV6TLzweDbbHxNgjINVQiVa61jWFU2HfUDS7j3Gd/EqfDaLnBg
+         vlar2KOrJ/Ob75sUpajh528Wf9dXIq+vTdUPp48/VtuKv97L6kEfHeU7ggjrA/CDkKw+
+         ffxK+yK8zt6KnumPzQki/eDB+/sKxcvmg377fjJv0YBnmNSdp2wH8GTJkQRy9AX+Psms
+         hhaDEbgJNQccil6teqE0oDT9sJeoMM+rmdFC6qRTHYIRAo2uavo2yNsP0671l3nydOPx
+         cqRvtZOM8I8FTh1WWbNJpLfQNj6OlhgkXJgf3eDKvq2naDiE6oomPCokjH1GHRdbwz6W
+         aWFQ==
+X-Gm-Message-State: ACrzQf1NRqw5fBmnTzvA8y+NABPGMWSKE/UKtx/792xrr4sW/QyhFeUp
+        L0AwK/4kvp0GVSdBWSaXQwERoTucYfhP7kakZnOkfy/V9Ms=
+X-Google-Smtp-Source: AMsMyM4RCzDu9DE1SgMdp+TCHAnmXWjm2D/kY89a9RpcBY1OK3SAh2E+19si06YAqT4aoi2eeQCzNy8ngm5l9Ym0oU4=
+X-Received: by 2002:a05:6102:301a:b0:3a7:8755:2b7e with SMTP id
+ s26-20020a056102301a00b003a787552b7emr4741009vsa.32.1665494924704; Tue, 11
+ Oct 2022 06:28:44 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:ab0:136f:0:b0:3d2:4916:f286 with HTTP; Tue, 11 Oct 2022
+ 06:28:44 -0700 (PDT)
+In-Reply-To: <20221007155323.ue4cdthkilfy4lbd@box.shutemov.name>
+References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
+ <20220704135833.1496303-3-martin.fernandez@eclypsium.com> <20221007155323.ue4cdthkilfy4lbd@box.shutemov.name>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Tue, 11 Oct 2022 10:28:44 -0300
+Message-ID: <CAKgze5bRKph0SPOerLDLZb5KckPX5+q0y649XCU4J5HehYVu0A@mail.gmail.com>
+Subject: Re: [PATCH v9 2/9] mm/mmzone: Tag pg_data_t with crypto capabilities
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com, keescook@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a SIGTRAP stress test that exercises repeatedly enabling/disabling
-an event while it concurrently keeps firing.
+On 10/7/22, Kirill A. Shutemov <kirill@shutemov.name> wrote:
+> On Mon, Jul 04, 2022 at 10:58:26AM -0300, Martin Fernandez wrote:
+>> Add a new member in the pg_data_t struct to tell whether the node
+>> corresponding to that pg_data_t is able to do hardware memory
+>> encryption.
+>>
+>> This will be read from sysfs.
+>>
+>> Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+>> ---
+>>  include/linux/mmzone.h | 3 +++
+>>  mm/page_alloc.c        | 1 +
+>>  2 files changed, 4 insertions(+)
+>>
+>> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+>> index aab70355d64f..6fd4785f1d05 100644
+>> --- a/include/linux/mmzone.h
+>> +++ b/include/linux/mmzone.h
+>> @@ -883,6 +883,9 @@ typedef struct pglist_data {
+>>  	struct task_struct *kcompactd;
+>>  	bool proactive_compact_trigger;
+>>  #endif
+>> +
+>> +	bool crypto_capable;
+>> +
+>
+> There's already pgdat->flags. Any reason we cannot encode it there?
 
-Link: https://lore.kernel.org/all/Y0E3uG7jOywn7vy3@elver.google.com/
-Signed-off-by: Marco Elver <elver@google.com>
----
- .../selftests/perf_events/sigtrap_threads.c   | 35 +++++++++++++++++--
- 1 file changed, 32 insertions(+), 3 deletions(-)
+Not really a reason, I'll considerate when I send then next version. I
+tried to quickly find for references of what kind of flags does it
+have, I didn't find any. Do you suggest it should work?
 
-diff --git a/tools/testing/selftests/perf_events/sigtrap_threads.c b/tools/testing/selftests/perf_events/sigtrap_threads.c
-index 6d849dc2bee0..d1d8483ac628 100644
---- a/tools/testing/selftests/perf_events/sigtrap_threads.c
-+++ b/tools/testing/selftests/perf_events/sigtrap_threads.c
-@@ -62,6 +62,8 @@ static struct perf_event_attr make_event_attr(bool enabled, volatile void *addr,
- 		.remove_on_exec = 1, /* Required by sigtrap. */
- 		.sigtrap	= 1, /* Request synchronous SIGTRAP on event. */
- 		.sig_data	= TEST_SIG_DATA(addr, id),
-+		.exclude_kernel = 1, /* To allow */
-+		.exclude_hv     = 1, /* running as !root */
- 	};
- 	return attr;
- }
-@@ -93,9 +95,13 @@ static void *test_thread(void *arg)
- 
- 	__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
- 	iter = ctx.iterate_on; /* read */
--	for (i = 0; i < iter - 1; i++) {
--		__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
--		ctx.iterate_on = iter; /* idempotent write */
-+	if (iter >= 0) {
-+		for (i = 0; i < iter - 1; i++) {
-+			__atomic_fetch_add(&ctx.tids_want_signal, tid, __ATOMIC_RELAXED);
-+			ctx.iterate_on = iter; /* idempotent write */
-+		}
-+	} else {
-+		while (ctx.iterate_on);
- 	}
- 
- 	return NULL;
-@@ -208,4 +214,27 @@ TEST_F(sigtrap_threads, signal_stress)
- 	EXPECT_EQ(ctx.first_siginfo.si_perf_data, TEST_SIG_DATA(&ctx.iterate_on, 0));
- }
- 
-+TEST_F(sigtrap_threads, signal_stress_with_disable)
-+{
-+	const int target_count = NUM_THREADS * 3000;
-+	int i;
-+
-+	ctx.iterate_on = -1;
-+
-+	EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_ENABLE, 0), 0);
-+	pthread_barrier_wait(&self->barrier);
-+	while (__atomic_load_n(&ctx.signal_count, __ATOMIC_RELAXED) < target_count) {
-+		EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_DISABLE, 0), 0);
-+		EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_ENABLE, 0), 0);
-+	}
-+	ctx.iterate_on = 0;
-+	for (i = 0; i < NUM_THREADS; i++)
-+		ASSERT_EQ(pthread_join(self->threads[i], NULL), 0);
-+	EXPECT_EQ(ioctl(self->fd, PERF_EVENT_IOC_DISABLE, 0), 0);
-+
-+	EXPECT_EQ(ctx.first_siginfo.si_addr, &ctx.iterate_on);
-+	EXPECT_EQ(ctx.first_siginfo.si_perf_type, PERF_TYPE_BREAKPOINT);
-+	EXPECT_EQ(ctx.first_siginfo.si_perf_data, TEST_SIG_DATA(&ctx.iterate_on, 0));
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.38.0.rc1.362.ged0d419d3c-goog
-
+>>  	/*
+>>  	 * This is a per-node reserve of pages that are not available
+>>  	 * to userspace allocations.
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index e008a3df0485..147437329ac7 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -7729,6 +7729,7 @@ static void __init free_area_init_node(int nid)
+>>  	pgdat->node_id = nid;
+>>  	pgdat->node_start_pfn = start_pfn;
+>>  	pgdat->per_cpu_nodestats = NULL;
+>> +	pgdat->crypto_capable = memblock_node_is_crypto_capable(nid);
+>>
+>>  	if (start_pfn != end_pfn) {
+>>  		pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
+>> --
+>> 2.30.2
+>>
+>
+> --
+>   Kiryl Shutsemau / Kirill A. Shutemov
+>
