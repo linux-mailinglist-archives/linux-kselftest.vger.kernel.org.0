@@ -2,64 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E965FC3A1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Oct 2022 12:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419285FC42F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Oct 2022 13:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiJLKSp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Oct 2022 06:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S229507AbiJLLMX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Oct 2022 07:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJLKSg (ORCPT
+        with ESMTP id S229703AbiJLLMW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Oct 2022 06:18:36 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ACDD83;
-        Wed, 12 Oct 2022 03:18:32 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e705329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e705:329c:23ff:fea6:a903])
+        Wed, 12 Oct 2022 07:12:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D393CC148A;
+        Wed, 12 Oct 2022 04:12:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7164D1EC0716;
-        Wed, 12 Oct 2022 12:18:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665569907;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=9vYszipudkgN+JyCf6YKNcAINQz5USDy31mfIDJFVGs=;
-        b=bUR2WL5WGtmu9OPZHEVmibMsQjRPSN5SwXgYgrqCOe0jXKGU2KDQpreiK48V4qekgiZppe
-        s0JN83R33y7M7crVylIXvWaNvDc8w04mCNheyrlQGDPLUj29DN28b3l9Ca7K+lUhRcE39H
-        vSjhbxAp+9WhMxnaXvNv1wgW/X1Krjs=
-Date:   Wed, 12 Oct 2022 12:18:23 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4E7614AC;
+        Wed, 12 Oct 2022 11:12:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66033C433D6;
+        Wed, 12 Oct 2022 11:12:17 +0000 (UTC)
+Date:   Wed, 12 Oct 2022 07:12:16 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v14 1/3] x86/tdx: Make __tdx_module_call() usable in
- driver module
-Message-ID: <Y0aUb3n7ouaeAt2a@zn.tnic>
-References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220928215535.26527-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/ftrace: fix dynamic_events dependency check
+Message-ID: <20221012071216.1a74cc21@rorschach.local.home>
+In-Reply-To: <20221010074207.714077-1-svens@linux.ibm.com>
+References: <20221010074207.714077-1-svens@linux.ibm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220928215535.26527-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,21 +47,51 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 02:55:33PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> To support TDX attestation, the TDX guest user interface driver must
-> use the __tdx module_call() function in the driver to allow the user to
-> obtain the TDREPORT.
+On Mon, 10 Oct 2022 09:42:07 +0200
+Sven Schnelle <svens@linux.ibm.com> wrote:
+
+> commit 95c104c378dc ("tracing: Auto generate event name when creating a
+> group of events") changed the syntax in the ftrace README file which is
+> used by the selftests to check what features are support. Adjust the
+> string to make test_duplicates.tc and trigger-synthetic-eprobe.tc work
+> again.
 > 
-> So export the __tdx_module_call() and move the TDX Module IDs to
-> asm/tdx.h.
+> Fixes: 95c104c378dc ("tracing: Auto generate event name when creating a group of events")
+> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 
-The functions with the __ prefix are usually lower-level interfaces
-which should be internal. Usually.
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Why aren't you exporting the tdx_module_call() one instead?
+-- Steve
 
--- 
-Regards/Gruss,
-    Boris.
+> ---
+>  .../testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc | 2 +-
+>  .../test.d/trigger/inter-event/trigger-synthetic-eprobe.tc      | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> index db522577ff78..d3a79da215c8 100644
+> --- a/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: Generic dynamic event - check if duplicate events are caught
+> -# requires: dynamic_events "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
+> +# requires: dynamic_events "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README
+>  
+>  echo 0 > events/enable
+>  
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
+> index 914fe2e5d030..6461c375694f 100644
+> --- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc
+> @@ -1,7 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: event trigger - test inter-event histogram trigger eprobe on synthetic event
+> -# requires: dynamic_events synthetic_events events/syscalls/sys_enter_openat/hist "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
+> +# requires: dynamic_events synthetic_events events/syscalls/sys_enter_openat/hist "e[:[<group>/][<event>]] <attached-group>.<attached-event> [<args>]":README
+>  
+>  echo 0 > events/enable
+>  
 
-https://people.kernel.org/tglx/notes-about-netiquette
