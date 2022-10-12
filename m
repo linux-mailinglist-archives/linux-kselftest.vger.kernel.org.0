@@ -2,57 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D025FC768
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Oct 2022 16:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054625FC899
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Oct 2022 17:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiJLOco (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Oct 2022 10:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S229693AbiJLPoI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Oct 2022 11:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiJLOcm (ORCPT
+        with ESMTP id S229470AbiJLPoH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Oct 2022 10:32:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAF6CE9A7
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Oct 2022 07:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665585158;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=59ODeYb/zj0xWpehY5IjWapAt6RkzLSO55I3d59wWk8=;
-        b=PxIP9btN6aYa4XXZTVMZp9o6t9Qaeixao9FC3KfwwKLkGnJteze0WF03pNTc9AO7OlWfWp
-        2qOLhDsCtd7PCfncxnkjLGsnb9M7a/pF6AvzEfyC2n1tx5dsrMgeGE1jE7s6cVWyrhOxd6
-        2Xb1i7pNj+dmGemzYNwrKDfKuiJUkEY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-389-vMwQdboiM6uXOlQ93jUmFA-1; Wed, 12 Oct 2022 10:32:35 -0400
-X-MC-Unique: vMwQdboiM6uXOlQ93jUmFA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A52AA811E81;
-        Wed, 12 Oct 2022 14:32:34 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.34.148])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F82A492B05;
-        Wed, 12 Oct 2022 14:32:34 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     "netdev @ vger . kernel . org" <netdev@vger.kernel.org>
-Cc:     Jay Vosburgh <j.vosburgh@gmail.com>, Liang Li <liali@redhat.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [net RFC] selftests: bonding: up/down delay w/ slave link flapping
-Date:   Wed, 12 Oct 2022 10:32:29 -0400
-Message-Id: <016a7258b6150e97ddca69d993f8223aa0761d14.1665585149.git.jtoppins@redhat.com>
+        Wed, 12 Oct 2022 11:44:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4EACAE52;
+        Wed, 12 Oct 2022 08:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665589446; x=1697125446;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XqAPHLBdMzTuuEY80fpMDDr2gQi/t6fzUUh5xjTnGyM=;
+  b=JFQX0sabYdWaSWayxLe2Alhse/m+F9765VsnP4tgfIo/6yCAjTBfIcWO
+   fPuNof3FFdPYtypKRBURPRqexvxXoVCHe0yvfP+FsxCQfR1qA77r7ZG53
+   26/PlaxLOBOaDWGIy1IHt/Z5NqFe5E8VpiaDQdI/SE6x/RBwv1s5/10iE
+   OPdabFVPHkndVKBwCR2wRdUIREppWTWO5PagUkRFR6X+QgzeGq3Qzl71A
+   SLTbN0GZRMYE8AVHb3ywGcEX7SYdXG5xQ6nezSdU5vOwdm3Ysf64qKYy8
+   szlKfRNLvk1KJ1YvEKbHcC0RStWBDa7WqLO0vGMCjAZv9E/usS+tnWs0X
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="391132231"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="391132231"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 08:44:05 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="695518334"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="695518334"
+Received: from jbrolli1-mobl.amr.corp.intel.com (HELO [10.212.174.189]) ([10.212.174.189])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 08:44:04 -0700
+Message-ID: <6759025f-fc08-74f0-efd7-2331110dec0c@linux.intel.com>
+Date:   Wed, 12 Oct 2022 08:44:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH v14 1/3] x86/tdx: Make __tdx_module_call() usable in
+ driver module
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220928215535.26527-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y0aUb3n7ouaeAt2a@zn.tnic>
+ <acc212d6-782b-a398-825a-212849beba00@linux.intel.com>
+ <Y0bOtzlrkKzHmQVZ@zn.tnic>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Y0bOtzlrkKzHmQVZ@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,128 +82,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verify when a bond is configured with {up,down}delay and the link state
-of slave members flaps if there are no remaining members up the bond
-should immediately select a member to bring up. (from bonding.txt
-section 13.1 paragraph 4)
 
-Suggested-by: Liang Li <liali@redhat.com>
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
 
-Notes:
-    Bug: Currently the bond never comes back up.
+On 10/12/22 7:27 AM, Borislav Petkov wrote:
+> On Wed, Oct 12, 2022 at 06:35:56AM -0700, Sathyanarayanan Kuppuswamy wrote:
+>> So we should create a new wrapper for this use case or use
+> 
+> Yes, you got it - a new wrapper pls.
 
- .../selftests/drivers/net/bonding/Makefile    |  3 +-
- .../net/bonding/slave-link-flapping.sh        | 85 +++++++++++++++++++
- 2 files changed, 87 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/drivers/net/bonding/slave-link-flapping.sh
+Ok. I will add a new wrapper to get the TDREPORT. 
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-index e9dab5f9d773..cb40ef91c152 100644
---- a/tools/testing/selftests/drivers/net/bonding/Makefile
-+++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-@@ -5,7 +5,8 @@ TEST_PROGS := \
- 	bond-arp-interval-causes-panic.sh \
- 	bond-break-lacpdu-tx.sh \
- 	bond-lladdr-target.sh \
--	dev_addr_lists.sh
-+	dev_addr_lists.sh \
-+	slave-link-flapping.sh
- 
- TEST_FILES := lag_lib.sh
- 
-diff --git a/tools/testing/selftests/drivers/net/bonding/slave-link-flapping.sh b/tools/testing/selftests/drivers/net/bonding/slave-link-flapping.sh
-new file mode 100755
-index 000000000000..a1499933fd39
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/bonding/slave-link-flapping.sh
-@@ -0,0 +1,85 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Regression Test:
-+#  When the bond is configured with down/updelay and the link state of
-+#  slave members flaps if there are no remaining members up the bond
-+#  should immediately select a member to bring up. (from bonding.txt
-+#  section 13.1 paragraph 4)
-+#
-+#  +-------------+       +-----------+
-+#  | client      |       | switch    |
-+#  |             |       |           |
-+#  |    +--------| link1 |-----+     |
-+#  |    |        +-------+     |     |
-+#  |    |        |       |     |     |
-+#  |    |        +-------+     |     |
-+#  |    | bond   | link2 | Br0 |     |
-+#  +-------------+       +-----------+
-+#     172.20.2.1           172.20.2.2
-+
-+set -e
-+
-+BOND="bond0"
-+LINK1="veth1"
-+LINK2="veth2"
-+CLIENTIP="172.20.2.1"
-+SWITCHIP="172.20.2.2"
-+NAMESPACES="switch client"
-+
-+cleanup()
++/*
+
++ * Add a wrapper for TDG.MR.REPORT TDCALL. It is used in TDX guest
+
++ * driver module to get the TDREPORT.
+
++ */
+
++long tdx_mcall_get_report(void *reportdata, void *tdreport, u8 subtype)
+
 +{
-+	for n in ${NAMESPACES}; do
-+		ip netns delete ${n} >/dev/null 2>&1 || true
-+	done
-+	modprobe -r bonding
+
++       if (subtype || !reportdata || !tdreport)
+
++               return -EINVAL;
+
++
+
++       /*
+
++        * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
+
++        *
+
++        * Get the TDREPORT using REPORTDATA as input. Refer to
+
++        * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
+
++        * specification for detailed information.
+
++        */
+
++       return __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
+
++                       virt_to_phys(reportdata), subtype, 0, NULL);
+
 +}
-+
-+setup_network()
-+{
-+	# create namespaces
-+	for n in ${NAMESPACES}; do
-+		ip netns add ${n}
-+	done
-+
-+	# create veths
-+	ip link add name ${LINK1}-bond type veth peer name ${LINK1}-end
-+	ip link add name ${LINK2}-bond type veth peer name ${LINK2}-end
-+
-+	# create switch
-+	ip netns exec switch ip link add br0 up type bridge
-+	ip link set ${LINK1}-end netns switch up
-+	ip link set ${LINK2}-end netns switch up
-+	ip netns exec switch ip link set ${LINK1}-end master br0
-+	ip netns exec switch ip link set ${LINK2}-end master br0
-+	ip netns exec switch ip addr add ${SWITCHIP}/24 dev br0
-+
-+	# create client
-+	ip link set ${LINK1}-bond netns client
-+	ip link set ${LINK2}-bond netns client
-+	ip netns exec client ip link add ${BOND} type bond \
-+		mode 2 miimon 100 updelay 10000
-+	ip netns exec client ip link set ${LINK1}-bond master ${BOND}
-+	ip netns exec client ip link set ${LINK2}-bond master ${BOND}
-+	ip netns exec client ip link set ${BOND} up
-+	ip netns exec client ip addr add ${CLIENTIP}/24 dev ${BOND}
-+}
-+
-+trap cleanup 0 1 2
-+cleanup
-+sleep 1
-+
-+dmesg --clear
-+setup_network
-+
-+# verify connectivity
-+ip netns exec client ping ${SWITCHIP} -c 5 >/dev/null 2>&1
-+
-+# force the links of the bond down
-+ip netns exec switch ip link set ${LINK1}-end down
-+sleep 2
-+ip netns exec switch ip link set ${LINK1}-end up
-+ip netns exec switch ip link set ${LINK2}-end down
-+
-+# re-verify connectivity
-+ip netns exec client ping ${SWITCHIP} -c 5 >/dev/null 2>&1
+
++EXPORT_SYMBOL_GPL(tdx_mcall_get_report);
+
+
+
+> 
+> Thx.
+> 
+
 -- 
-2.31.1
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
