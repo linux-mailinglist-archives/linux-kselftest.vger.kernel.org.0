@@ -2,95 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319355FC33A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Oct 2022 11:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E965FC3A1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Oct 2022 12:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiJLJrB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Oct 2022 05:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S229490AbiJLKSp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Oct 2022 06:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiJLJq7 (ORCPT
+        with ESMTP id S229550AbiJLKSg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:46:59 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27533A8CC1;
-        Wed, 12 Oct 2022 02:46:58 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 8616418848EA;
-        Wed, 12 Oct 2022 09:46:55 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 73DBE250032D;
-        Wed, 12 Oct 2022 09:46:55 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 695109EC0005; Wed, 12 Oct 2022 09:46:55 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-MIME-Version: 1.0
-Date:   Wed, 12 Oct 2022 11:46:55 +0200
-From:   netdev@kapio-technology.com
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+        Wed, 12 Oct 2022 06:18:36 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ACDD83;
+        Wed, 12 Oct 2022 03:18:32 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e705329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e705:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7164D1EC0716;
+        Wed, 12 Oct 2022 12:18:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665569907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=9vYszipudkgN+JyCf6YKNcAINQz5USDy31mfIDJFVGs=;
+        b=bUR2WL5WGtmu9OPZHEVmibMsQjRPSN5SwXgYgrqCOe0jXKGU2KDQpreiK48V4qekgiZppe
+        s0JN83R33y7M7crVylIXvWaNvDc8w04mCNheyrlQGDPLUj29DN28b3l9Ca7K+lUhRcE39H
+        vSjhbxAp+9WhMxnaXvNv1wgW/X1Krjs=
+Date:   Wed, 12 Oct 2022 12:18:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 net-next 9/9] selftests: forwarding: add test of
- MAC-Auth Bypass to locked port tests
-In-Reply-To: <20221009174052.1927483-10-netdev@kapio-technology.com>
-References: <20221009174052.1927483-1-netdev@kapio-technology.com>
- <20221009174052.1927483-10-netdev@kapio-technology.com>
-User-Agent: Gigahost Webmail
-Message-ID: <21f799c5a7a79e2e4b111a95fff6fe3d@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v14 1/3] x86/tdx: Make __tdx_module_call() usable in
+ driver module
+Message-ID: <Y0aUb3n7ouaeAt2a@zn.tnic>
+References: <20220928215535.26527-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220928215535.26527-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220928215535.26527-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-10-09 19:40, Hans J. Schultz wrote:
-> Verify that the MAC-Auth mechanism works by adding a FDB entry with the
-> locked flag set, denying access until the FDB entry is replaced with a
-> FDB entry without the locked flag set.
+On Wed, Sep 28, 2022 at 02:55:33PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> To support TDX attestation, the TDX guest user interface driver must
+> use the __tdx module_call() function in the driver to allow the user to
+> obtain the TDREPORT.
 > 
-> Add test of blackhole fdb entries, verifying that there is no 
-> forwarding
-> to a blackhole entry from any port, and that the blackhole entry can be
-> replaced.
-> 
+> So export the __tdx_module_call() and move the TDX Module IDs to
+> asm/tdx.h.
 
-Ido, have you had time to look at this patch set, and do I need to 
-release a v8 to fix those two forgotten statics and maybe also this new 
-switchcore driver that was not there when I posted this patch set?
+The functions with the __ prefix are usually lower-level interfaces
+which should be internal. Usually.
+
+Why aren't you exporting the tdx_module_call() one instead?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
