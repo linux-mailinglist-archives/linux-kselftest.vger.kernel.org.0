@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C9A5FDC06
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Oct 2022 16:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98CA5FDC55
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Oct 2022 16:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiJMOHQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Oct 2022 10:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S230033AbiJMOVr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Oct 2022 10:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiJMOHO (ORCPT
+        with ESMTP id S230115AbiJMOVp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Oct 2022 10:07:14 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2042.outbound.protection.outlook.com [40.107.101.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79816E6F6A;
-        Thu, 13 Oct 2022 07:07:04 -0700 (PDT)
+        Thu, 13 Oct 2022 10:21:45 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFA6DD880;
+        Thu, 13 Oct 2022 07:21:43 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QPMUjI0ns2uPIVtjGbKe19uCkgrmmFmhJNNflkjIzjZhHLBdeAYwLpxPdww1qPg3ZKE0T4RfYgXMorXFMvd3zZTK9f8mAXelhOb2yUZ/Ryr3SQqV47t6QPfCmiSybjc/o3OaCUfleFuawMLiOoX5yCC0UEQ19ePzWwVbEYNZM6fezBtjYOnyAnfcnKsT1wuSH2/nnS4GQzyU+8ZeyZbUS81Si+ImvHntBe1rvax0k+MfxdEQiQLQMmhdoIJaF0Iyusew22g4UgSEQA5Qpp+mJyCdR5XsCVIR/RdGYmkxQRqwfKF27YLuW+wZah6KmMSdGXpbfF51Aixh+LeXKD5wAQ==
+ b=B7hYEsixNNkLyA2hq84nEgtfBWxguyIXB1swFmxhAh6BU2N68DWDFkxLjkkARyNllJwdOg1TlN6nNaML6onPnKexfOFAlgksSa3TWQsxWZhgufcFwBYbJx6qst2trv0uXPxsvtlTXp9bxtjYDHhAjw/z0n1ndUG3ttNd8xg9pCAB0Fcx3G1n9N0p3yLajnx8DPBCdR8HstxArFRxcvhRQAKkzUMzIqMfS784i4o9ReBCYV8ljjQsfTg4Lc9wnLOo5nF1e60gDrK3DWgQPqTQsZbHzFodjHfC5haKyr1I1Urf+m0vHHy18oGX95Twza99Fe5ksAlG7Mhg0nGxXp9Kdw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=POSAfKjE6zvEwR6cQjzhYazJSFGO2KOXOP0fthXCztI=;
- b=aJdvCEspNylzM523xeWJkkhYQhqR9JKcF3rtufJz4SfShh4JEquHJVFiqfuP6ugtmwW2xXnJsjCgCW1NKMCENncik7N38zlGUYne37Z8BG4/lTgHcz6XZBcmsRxXlKt93/a2nD15pGFzleOXHU3S3+RujWhtP5R79Y21hwUOFjgPqt7SMSyocS5oNRhLp5wbERrbsavzc5fAIMXEBYlexnHUfxkpbG+onWOS8wCTE1WFuc8xQegfz/ImksjqCP6TJWIpv9vPman8YKuhAeMICkk1El57hixdLksuipcRHvWFJ4Mh5bkzUQ7FQqmgH0t5APaSQgASjf54F4WpWlP/dg==
+ bh=H/5ROoTKcst6zjne8g3KvrWeyt5TDJH93dI6IBjClJg=;
+ b=ec7JQRT7R/mLm6Brhw3UIIxbamEWobBFA0Q+hvlKUj4bdFA9OFKSL9wdRzXSZi/vdljihSvnegDps+grDadLb3k55vXclQFNkeiHwV+L04gUWDkeJ6DnhuqMOlCBgni7za7uZSFBNiF2VKJ9cz2qRGK+Stz6vSVqkDtOan6To0Qnz9rTRo1nqYJfEBAj2rtkTOPC1RZlj112K/PktVl17qwfPQ8r1ldm1ZJrJ8waSXoVfrPo0yVIwGmIFn+7KuEQVxAXmI16IKItdJcOzAYQd6S93ArY4B67X6BSGXbwT1vZ/9txRZnEuBNwqDEcRlOUJ0slKG+6V8fcYun/NECAww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=POSAfKjE6zvEwR6cQjzhYazJSFGO2KOXOP0fthXCztI=;
- b=SpEq/wM7GtG+vnE+fphKp/Q8i6x0+MjbvL9EC7LF67abwXgXO6VNi5lK1Dqv1icpwy0Jesj7F48rlmvcT/uAN8Cg3ZAK3TuCDG7wlRY0KGWEKU2heYbi2SlQqbrRXuJjJxOu7CHaF+OULmEL30DDhNWlGhAFlfMaxRM+nUItLZ3erP4OlemkrrkGcH/9Sur8yeH8N/Q4V7e07vTW6E2YaH06AzdlBta4a60QwzD36xUPZCmgR4jr7/QecMqT6XA6i/je4WvRvkhZLx49cmCP2opocDO4sIZJHF42THpHTknmKfj8lb/iWxNWVMGlbAH0xN+Bj1GmO455P3MWsdJ1DA==
+ bh=H/5ROoTKcst6zjne8g3KvrWeyt5TDJH93dI6IBjClJg=;
+ b=R+kTzf7QBbme8S9SaJY0fTOAYQTranVwu3kn0aCdEVHqdZrFwKUY6G+Sje/V4l32ohXKbmZgTE/+hzxEN+a1d5buu9NmPA0UnEHJM+odXsQS13U1gI3V+m2KK1o+NBjNMTjLfM+02zjyUZUuaN8hgSbZn0M5PkVED4L4O8ro4tidajIN0ePyP0pIfVcSA6E4Ghs1+Q+mEfabLekGCD+dnV52Vmkv/zgZpquZKBXT7F+60TalFYLaMR5oafbAEHSEKPGIWuLka1awr5F1uZfBcx0NYeJ0tU+9d7ozNV4S0gKNfsaBgcqXwC158ET+n0cZDM6GxUYqRedAub0Krf45Hw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
  by BL3PR12MB6404.namprd12.prod.outlook.com (2603:10b6:208:3b4::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Thu, 13 Oct
- 2022 14:06:21 +0000
+ 2022 14:21:42 +0000
 Received: from CY5PR12MB6179.namprd12.prod.outlook.com
  ([fe80::4ff2:d93e:d200:227e]) by CY5PR12MB6179.namprd12.prod.outlook.com
  ([fe80::4ff2:d93e:d200:227e%6]) with mapi id 15.20.5676.031; Thu, 13 Oct 2022
- 14:06:20 +0000
-Date:   Thu, 13 Oct 2022 17:06:14 +0300
+ 14:21:42 +0000
+Date:   Thu, 13 Oct 2022 17:21:35 +0300
 From:   Ido Schimmel <idosch@nvidia.com>
 To:     "Hans J. Schultz" <netdev@kapio-technology.com>
 Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
@@ -77,64 +77,64 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 net-next 3/9] net: switchdev: add support for
- offloading of the FDB locked flag
-Message-ID: <Y0gbVoeV/e6wzlbM@shredder>
+Subject: Re: [PATCH v7 net-next 4/9] net: switchdev: support offloading of
+ the FDB blackhole flag
+Message-ID: <Y0ge76Afxpc2DOsn@shredder>
 References: <20221009174052.1927483-1-netdev@kapio-technology.com>
- <20221009174052.1927483-4-netdev@kapio-technology.com>
+ <20221009174052.1927483-5-netdev@kapio-technology.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221009174052.1927483-4-netdev@kapio-technology.com>
-X-ClientProxiedBy: VI1PR0102CA0099.eurprd01.prod.exchangelabs.com
- (2603:10a6:803:15::40) To CY5PR12MB6179.namprd12.prod.outlook.com
+In-Reply-To: <20221009174052.1927483-5-netdev@kapio-technology.com>
+X-ClientProxiedBy: VI1PR03CA0046.eurprd03.prod.outlook.com
+ (2603:10a6:803:50::17) To CY5PR12MB6179.namprd12.prod.outlook.com
  (2603:10b6:930:24::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|BL3PR12MB6404:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba0b1003-3c33-4f72-fa3b-08daad241a91
+X-MS-Office365-Filtering-Correlation-Id: dc7d6b04-4adf-40f9-e514-08daad263fcc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z/AS0X42y7/jNVW4/P3k5zz2BZ/nZozRbGqFMsHCBxGDdv/ToP+ReyZbEcuF/C8WI2dtEWIbKsrHJxFbTDJW7sRCM16mfGdkcA1l70WJjrw8XgANSfhquoLmDeCJI8dKbodTgWLnLjeJ7HaEfpovREJO1HNUAL4UU/Qb6UKiA7sUAmYQNq2RfIaN83VI88U+p3BHkLoR2/XGAZQNxWW0v6i3oft5jvKwKEmfA/fczSDZbldo3jp+Zzxo33z4tcMydWYmx5mfQK9O/uo7oHyvyQDx+UGmsKUJD75jdGOco9KR32jq213rgxih4kRoGA7eswaG3tEdGFb7SF/L+wRXkBDnx7uQbBGnux7U5GfIBiI542sIaIWcRyr/56UukUFGF6uxWIVFYeSkgtta8FrLr2Cl3k7IEualAnbxe27mPX1JIyuaQLrs+hJwpD5D4iyl4mrqtUktR3v0t21p+SYdK3/X3pOB+X+1xf/WgO1BAHaCJoVb6qllV/2IT1JrF7GqtqeEeA1WCOqTMCbnrkHR5uQRLjrb00lJArQSlOvaIr6gdZCiH1BusQpHS7tUeheWgdm6C0PPOeD6OT0lmoPxONkQXKNvzPVGmitMhoKswn6c+2j7WbjbvUejTPcLtilTlt9TvzC5ybe+upUuB+UfzcqGl4eKVZwPsTPXnr+FKlLDdNHvtYxH7fVyrSwgah/gJqm48EjVigEsxoPdmCUvvg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(396003)(39860400002)(136003)(376002)(346002)(366004)(451199015)(316002)(54906003)(6916009)(6486002)(86362001)(478600001)(8936002)(66556008)(5660300002)(7416002)(7406005)(66946007)(66476007)(8676002)(33716001)(38100700002)(41300700001)(4326008)(83380400001)(26005)(6506007)(9686003)(6512007)(6666004)(186003)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: CQjX/bWtnOmlN5cdCUb3ysnii5uHXFv6gga5kKMhh48ybu+bD+ilut+TK6vaOTYbAHRFMZqt+vVG7ZO4PXoQpT8Bti10+qmvHSN/JaQ60ebc1L1jzJ8h4VA/3fNapMWAWo7e6VEzbAI+x5Cu2+DMjf6fcPNkFSJpEpIPC5dMx4xsC+xZWqJI1LaWSdrIlxyZ2ZowqJ+Xj936KppjInV5Bz0UdQOv8cLUZ7VlTZ72ug2xM6FnfcjmYnReAxy5/i6+cnaRFMfsiMzmO3hrT5mXiLSYn+kYoLY0dzidw1hQ1RcTyXc07EgCdoCj/lqJGYwDiKulURQdXQy9+NdcEB/qgzVZkx8avyIsiw92gBtuAlSknN12f+5gPMq/CWxxTVlDt9quRar9OxB3IzKGwSNl/oPhD8cnwJKUbaCN4qcpTE3QUk03eEtenzdoYQVRkdhkUE5wRyfyA+SvbhRVZXO1LuRUbA6mFcS1y/3+BBhENeG1UkQv4aJLUMMc0yeXWb8aRNOv1x7IVfpbNxVgSYleK9JJT3I20chxRx+lC4UY5cp+IrczspF+1YUH8kypC91kbUtatWcQ5M/dNCplHkc957N3OVhC6gz4xobmdYIvobhwiZ6uZREjeDJYhmKX3j7t6hF5KQefGh7vlfa1ZSU2LD5YwZNECLyhc+GnctUVMgDbDgOZgCxhOLd5PPjmb2C/Mr9YbT9y67EoI+ID7zG57A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(396003)(39860400002)(136003)(376002)(346002)(366004)(451199015)(316002)(54906003)(6916009)(6486002)(86362001)(478600001)(8936002)(66556008)(5660300002)(7416002)(7406005)(4744005)(66946007)(66476007)(8676002)(33716001)(38100700002)(41300700001)(4326008)(83380400001)(26005)(6506007)(9686003)(6512007)(6666004)(186003)(2906002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hcJmpbrX1CDHzna4Rf1qbJ7AvvutQbsgYrZsXvj7MlUuNUeY5Z4GhiSRFeAV?=
- =?us-ascii?Q?EtHOZnNwnQSJoJ2AQpApZJXSWvF8blaeNh7grUDrFuhjpbk96gEO6FKAvqx3?=
- =?us-ascii?Q?z0d+5I3qS3+J58T0WmEPDdskXQ23+MsYxnN/3c/9AjkSnrPpDKmyAnMiTLpw?=
- =?us-ascii?Q?Prx001jfjS7HcBjE0jr+dhTKxQyZLr9s5lA555JSIbzqcCv7zwCbWTOBfxUJ?=
- =?us-ascii?Q?KHMCDGSFClUJpEI8Z+RR0u4ixABw58JZOjSg09Zn+ZEFNZ9o8icBihDkqau9?=
- =?us-ascii?Q?IeQbFX9BwrRnS4Dq1zwF1FNDJzk85ZIOHi/2hP2JZLCYoB6KKYjAe/OZ1OqA?=
- =?us-ascii?Q?z0GygvEaRrVMp17K3XpwLogUqhObhLwb7MVYYn753RYF3V186NS4Pc3j/4Ev?=
- =?us-ascii?Q?tR83IlX5t2/SvYDe7eHuPAlyVPM3AqyYmKLVJnAYgKLinf4vg2CpfP2W2ANi?=
- =?us-ascii?Q?ocdiNtQKNtakftGuCIAzTjuqTV8HuKklugZwGeIj6hkGHNrg7mwInW+ikjsM?=
- =?us-ascii?Q?GsCLuATtkzLalkF47/XaO80AMYdnr12iNxoW6Ew5Y3Y/Zhy5vRMlSSTbZubO?=
- =?us-ascii?Q?94MbXPvQ2nphENV8thivn03pKRrzK4ksof0KUKEVpJ1bP7+QXYAHZpoTqPHq?=
- =?us-ascii?Q?1pCWjVgZ4JA0Z55LWNhKxOzLiatSizndJPAJAwSnDS2g7a3jSzrjQKNdZuA9?=
- =?us-ascii?Q?+cxitpXsZAIptw5yHjb5g2/Wxo+bPyH+A0GRFGVQO5b9KNZST0jor2ygf4aV?=
- =?us-ascii?Q?J64odDO9JL0R3801e1xToGiZ/FpwmxLth3kkMNfnpHba0sJ/FgUMT9pgTer9?=
- =?us-ascii?Q?geCfJq4YDTdTtTwO8++coqFaICSrh4RLmLRlbj0v5HVP1unuztP4nxR5mYZr?=
- =?us-ascii?Q?1M8/y9qhXZprQmcWi4R1hCSKHkyLsFNkByMYgYw05p4dEbQoWJVyGiWbS68K?=
- =?us-ascii?Q?6B2JxBtD8B07F6jqZQ5ooGMhrL00aw8uPY81PeHQx+rCeypSok0hUoqoOB+H?=
- =?us-ascii?Q?fb9UDpNBw+VZjCIo+xB24AGIiji+C2K9chJDm901akEyUOVCv30JgJMMug6S?=
- =?us-ascii?Q?Dm6XpARVpxjQGlXEzDzmuoG3xmZR7Iz1ObRRC7h/krcXZWR2qdme6EGQVvsl?=
- =?us-ascii?Q?WHvDj7NtyxFGxKoyCMPqVdMKeCySgi/jrX1KV5LG+WElWrvfDM5gAGL04ksc?=
- =?us-ascii?Q?pEvdAc6NkIfgaG8Q8NkwO5Z2G3ScvC2GX2z38RaqGrhL0mfrnvJ5gQkO8jug?=
- =?us-ascii?Q?LFMCQGHPXvDEjglWTJVWzAhVyuG8CW2EAgAc0H0uaJ4cmmOHVHu3Q9zxt6lV?=
- =?us-ascii?Q?ynjtTuQx7v029N1ePiPCps5vSb76gQAppRnOhcc2NsURjZw50nP6ZDf06vTb?=
- =?us-ascii?Q?2bSbxNCzYhYkW+gFzc5jJIkYYajI5L3K7z4PHkE0/mYtUlpYv07aBLA0X8LN?=
- =?us-ascii?Q?sDWU5lFStJ1L1hLcBCRbPxag843nvsty+RfIxF9b8/20zzsf0Z7ctWJdbW0T?=
- =?us-ascii?Q?G3O5UPGDSlLhUbjPLwqQMmB50BhNewGh5A6QC3ER0QjShzkjB+uKpymiCMfT?=
- =?us-ascii?Q?0Qg354mY8Pj0f/PcRpBSgBTLw4YYK8EviZQ1102u?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rxO86z92rEW3mUyW4AO06LsSIT9JG4j/rTqQfvWsG/DNsIdjsiYJyPqaTpRK?=
+ =?us-ascii?Q?b52YoIwMT2Tf7gJ5e/mJHsKdBYEjGjqWDrnxNfYnYsL7Rnl0SLl1cOLWaRWG?=
+ =?us-ascii?Q?z7R4IEmZT0ZBOoLq5XZ1N5V4417abmC6P44AJmco6PHTpKJhQV1P7PzcoTcD?=
+ =?us-ascii?Q?xb0wdkInju92jmZfneF/IDWQa9kSC6Yg4jtg2kgNeDXcTw2VPBd8mZ/6tpRH?=
+ =?us-ascii?Q?RSILD6RdJDjGAwiTFzPe1zUwfk40flNEjemCyuVkFVbhVBphpGztbKF8Sr36?=
+ =?us-ascii?Q?IETjPfTbWeTZ3wKv5XHBPtRElWd8LFvPG730UBBBTu2n+rx0OBYaJ8dEw6ON?=
+ =?us-ascii?Q?CDGSzwtu91CAZr8v0QWSY0D8mdxUDmrIu+YhKA+kFbNOBqMjRncIRUjRp44I?=
+ =?us-ascii?Q?7biyewxFxUf0ZcZTlGWbXhk+srF/Buj0VwoBKPy60Q+YgCPimx+K7IOuoiP3?=
+ =?us-ascii?Q?St0PhJbcWjC7AO1vTsM9c0cIfGaPHaMdRkNAhXAyGQ5kgJiO1qKoo52eyAH/?=
+ =?us-ascii?Q?pWFHgwZhrolHdDmtzJdYv0MF6IDGpR0hYoxKx3rmnCiyoyZWIL6PZVIUPhM1?=
+ =?us-ascii?Q?WqQooSyB7atWzm+NKFqYsmeLAg+QU6kZI4IbAWlYoEYx86vi4Q4xLi76nsrU?=
+ =?us-ascii?Q?iouGrPrU9YjnKXg3T0ywVoiIQqI1BmE8vCxG7xH/GiPP2qM4TegSXSUcNdjS?=
+ =?us-ascii?Q?mzSzbGejdL31vNQ1QU+P2cZiJuO0Cbdsj4Gvyx0aPn8xv9mvQ4iPxiYnIWUO?=
+ =?us-ascii?Q?QFaJH7S5Sc/9f+xHtNciueZBe93SeacoZJOqrZet7vc4ESBpYEHNLv9wcFyO?=
+ =?us-ascii?Q?4K5YNWG3mIRaDI+Z2ozSRlFzgXCuCp40k9jlnrzRCdsLYA8/XE2e2+R8ln2M?=
+ =?us-ascii?Q?xRCtXZJt01sBMTqV7zdiHXFrcRlXMQWHmxjgH94q0q3TUZe3DyEyq0MBP3w6?=
+ =?us-ascii?Q?BFDJEyt7GeMpnoBWnIPQbhNSoQTF7+jLM5oH81lg4kP5Vv5/zr5aBOhFTT+c?=
+ =?us-ascii?Q?2sANcGsz80rgGu0tCo+Ebur5hTW+OIFj0xUpdw3XjutNURfOVAVubjhaYuVY?=
+ =?us-ascii?Q?4Z75ZtebI9yrK5HjqWfKfwrK02BKkl8IYqOgLn/Mxv0ACGp4zNrdrWTgCmzl?=
+ =?us-ascii?Q?GGW22AfJ2ORxMgx75a5iyLAxW99jS/Xv+PC/gwdFJ4chJqHiGoq6J9MOOF5V?=
+ =?us-ascii?Q?BPQ9yQPHWfD96w19Ln0MXnweM71XpG2fq4czhqQOCUeQ9U2exFrQ5W4Udij0?=
+ =?us-ascii?Q?3tZYa0nSHCE2yH8yqisyRaPR33GunsPNwwsv9O3CV/v/2f/OgLceSBGbX3aY?=
+ =?us-ascii?Q?eKD60XLSfr8jF8O/QvVxTlA1ZwMBNVwVGCfijgJdUfy+tR9hahgIn2VLsr1z?=
+ =?us-ascii?Q?NNINtt0QeMu3itUwWUUPf8WFDvdYBWmv5ZZmnShGDyL5BxwCrFq/XIYLD6UI?=
+ =?us-ascii?Q?eZOcFRHQ2+QTCG1OIzV75E04k7hvYFK1xyQqHiuQuHBymexCM1PV7rdajMcG?=
+ =?us-ascii?Q?3G0iILO4KkR5fwurkRPtfxZyWE95EsN1cwmdyY88rPZz2ery4gMDTjeg0oP3?=
+ =?us-ascii?Q?cUUcfY1IJupPZZA0uuwpzGuqA9B/ltPU6Q0bZYFo?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba0b1003-3c33-4f72-fa3b-08daad241a91
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc7d6b04-4adf-40f9-e514-08daad263fcc
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 14:06:20.6922
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 14:21:41.8819
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kgN6Khhh1Pw+AnRWwmwqBPilslfZ/GnApuhyuiROUVgBVB0aPTsOMXpXXWsRmljN5BbMmtvlOUFsICq07gP9bQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: vUTbullLmGFQJknm9jDYGS7QREePCZMxGb5zYKU8xMm0tCF+NaexkAKjn8Xdaklh2J+l/x2BWUExL+5kVMsR/A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6404
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -146,58 +146,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 07:40:46PM +0200, Hans J. Schultz wrote:
-> Add support for offloading of the MAB/MacAuth feature flag and the FDB
-> locked flag which is used by the Mac-Auth/MAB feature.
+On Sun, Oct 09, 2022 at 07:40:47PM +0200, Hans J. Schultz wrote:
+> Add support for offloading of the FDB blackhole flag.
 > 
 > Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
 > ---
->  include/net/dsa.h         |  2 ++
+>  include/net/dsa.h         |  1 +
 >  include/net/switchdev.h   |  1 +
->  net/bridge/br.c           |  4 ++--
->  net/bridge/br_fdb.c       | 12 ++++++++++--
->  net/bridge/br_private.h   |  2 +-
->  net/bridge/br_switchdev.c |  3 ++-
->  net/dsa/dsa_priv.h        |  6 ++++--
->  net/dsa/port.c            | 10 ++++++----
->  net/dsa/slave.c           | 10 ++++++++--
->  net/dsa/switch.c          | 16 ++++++++--------
->  10 files changed, 44 insertions(+), 22 deletions(-)
+>  net/bridge/br.c           |  3 ++-
+>  net/bridge/br_fdb.c       | 19 ++++++++++++++++---
+>  net/bridge/br_private.h   |  3 ++-
+>  net/bridge/br_switchdev.c |  1 +
+>  net/dsa/dsa_priv.h        |  4 ++--
+>  net/dsa/port.c            | 22 ++++++++++++----------
+>  net/dsa/slave.c           |  6 ++++--
+>  9 files changed, 41 insertions(+), 19 deletions(-)
 
-There is more than one logical change here. I suggest splitting it to
-make review easier:
+Too many changes at once. I suggest to split into:
 
-1. A patch allowing the bridge driver to install locked entries notified
-from device drivers. These changes:
+1. A patch that allows the bridge driver to be notified about blackhole
+entries from device drivers and also notifying it to drivers when added
+from user space. These changes:
 
 include/net/switchdev.h   |  1 +
-net/bridge/br.c           |  4 ++--
-net/bridge/br_fdb.c       | 12 ++++++++++--
-net/bridge/br_private.h   |  2 +-
+net/bridge/br.c           |  3 ++-
+net/bridge/br_fdb.c       | 19 ++++++++++++++++---
+net/bridge/br_private.h   |  3 ++-
+net/bridge/br_switchdev.c |  1 +
 
-And the br_switchdev_fdb_populate() hunk
-
-2. A patch allowing DSA core to report locked entries to the bridge
-driver
-
-3. A patch adding the new MAB flag to BR_PORT_FLAGS_HW_OFFLOAD
-
-4. A patch allowing DSA core to propagate the MAB flag to device drivers
-
-[...]
-
-> diff --git a/net/dsa/port.c b/net/dsa/port.c
-> index e4a0513816bb..eab32b7a945a 100644
-> --- a/net/dsa/port.c
-> +++ b/net/dsa/port.c
-> @@ -304,7 +304,7 @@ static int dsa_port_inherit_brport_flags(struct dsa_port *dp,
->  					 struct netlink_ext_ack *extack)
->  {
->  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
-> -				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
-> +				   BR_BCAST_FLOOD;
-
-Not sure how this is related to the patchset.
-
->  	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
->  	int flag, err;
+2. The DSA changes
