@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496795FDEAE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Oct 2022 19:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7935FDEAF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Oct 2022 19:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiJMRK1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Oct 2022 13:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S229587AbiJMRKb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Oct 2022 13:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJMRKX (ORCPT
+        with ESMTP id S229684AbiJMRKa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Oct 2022 13:10:23 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6583F51A2E
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 10:10:22 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id u2so1290357ilv.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 10:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ut3IJn5YguVAJiDT/xFMzy3gQTlor63h4VFTKLUbEM=;
-        b=gMylnowM8qSEF/HMJHGiCE+pUDilZbKsRldVwVMAOh0snrqdIFzSsmneMfCnMM1Uzv
-         QzdixvWh9sFxoNJ95cf6VKuGAxUSDNhR3W5EA9wh6F8M6RaKOqPe5td8XLnmkI/nh4RU
-         hxYPgKdlliwKs1tqrgshhehCVPguLCJQZ6X/A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ut3IJn5YguVAJiDT/xFMzy3gQTlor63h4VFTKLUbEM=;
-        b=avTtvR9RkxrtMn/2gXB5c8pVPfvNK1ojnQyolkXmojLZ0NazQgJxvYayeltibvZirS
-         PlxmsqhzGDO9wAm2ns0GW7M7UbYeTGtcVYYtvJXCQg0TzPqFUGpoxFTflZcynJySCCzK
-         bXtY0o8jQvtOfItjjV10hM96b1X5lc4HaGGCUMJPxYmOrAcxOKBj2H/BB0TWVYAiHYmw
-         fV+SNzEfSKiqQNgBeKRPC4Qh7nVB07mUseYeVFFy2JVG1QibRuw65Y2Lye/0rm0R38q3
-         FOpW7WPEs+d6FtxzpTFxFfgtmq2UnL2bJDi9qYt9736fSQ5yqSeNslyeUuHE9gk4fkTT
-         BRww==
-X-Gm-Message-State: ACrzQf14p1dNEeBO8U8QUceO9SWxfuMZAk23ewHY7s/5oVcwWoHdLyuo
-        2EH83m3rmO1ISpQSLmWwB0BMwQ==
-X-Google-Smtp-Source: AMsMyM4shy0V/vvJOp5C+M3fzvgjfTV95CCS8UuwUOggKtwayh2zIvYOI8000Mw4vcCZnbtj9mByHA==
-X-Received: by 2002:a05:6e02:1c87:b0:2fa:d3d7:8a29 with SMTP id w7-20020a056e021c8700b002fad3d78a29mr481628ill.179.1665681021505;
-        Thu, 13 Oct 2022 10:10:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z19-20020a056638241300b0035a578870a4sm157756jat.129.2022.10.13.10.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 10:10:20 -0700 (PDT)
-Message-ID: <44fcecda-31a4-7288-1848-63003dfe0a7d@linuxfoundation.org>
-Date:   Thu, 13 Oct 2022 11:10:20 -0600
+        Thu, 13 Oct 2022 13:10:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFD39413F
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 10:10:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EA0C233B2C;
+        Thu, 13 Oct 2022 17:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1665681026; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aOUN0RqxfFAji7pAOYbsyHmN1Jeo/tXqK+Fvu5sgj1A=;
+        b=j+6pNY11XxsrBUUDZRHSikzA0VUhJbutw8ULURF1AeaUGAtG6tG3+GyspdW/KdS9tRzokJ
+        xafNe25q4OIkP22ciK5UxeGCgzz50aAFwVhQhTAtvlKDRVneKk9Kms7YqSNzaCympsCUMk
+        tRtlwIBGIBgzvW9Y+wa/Il+1rijLnjc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1665681026;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aOUN0RqxfFAji7pAOYbsyHmN1Jeo/tXqK+Fvu5sgj1A=;
+        b=7LOmPPfLA9yWniTFBPHEoEZ6N53IEDNIpPTh2+Jrrd/VTCpM0lffHhmhjdT/wo9Pi9ywg2
+        9uV4lfsYGYPipUDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6067D139F3;
+        Thu, 13 Oct 2022 17:10:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rNjmDoJGSGP0PwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 13 Oct 2022 17:10:26 +0000
+Message-ID: <02c39433-a572-f730-6853-32a5247b9360@suse.cz>
+Date:   Thu, 13 Oct 2022 19:10:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
+ Thunderbird/102.3.1
 Subject: Re: hmm_test issues with latest mainline
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
+To:     Shuah Khan <skhan@linuxfoundation.org>,
         Alex Sierra <alex.sierra@amd.com>,
         Alistair Popple <apopple@nvidia.com>
 Cc:     Jason Gunthorpe <jgg@nvidia.com>,
@@ -66,25 +66,25 @@ Cc:     Jason Gunthorpe <jgg@nvidia.com>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        David Hildenbrand <david@redhat.com>
 References: <26017fe3-5ad7-6946-57db-e5ec48063ceb@suse.cz>
- <7e2e6679-3205-3540-f522-9eaed2940559@redhat.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <7e2e6679-3205-3540-f522-9eaed2940559@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <fe4188e5-2997-6a00-9684-9ca114b6d2c6@linuxfoundation.org>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <fe4188e5-2997-6a00-9684-9ca114b6d2c6@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/13/22 11:01, David Hildenbrand wrote:
-> On 13.10.22 18:54, Vlastimil Babka wrote:
+On 10/13/22 19:03, Shuah Khan wrote:
+> On 10/13/22 10:54, Vlastimil Babka wrote:
 >> Hi,
 >>
 >> I've been trying the hmm_tests as of today's commit:
@@ -99,12 +99,18 @@ On 10/13/22 11:01, David Hildenbrand wrote:
 >> assertion failure. Dunno if it's a kselftests issue or it's a bug to
 >> use asserts in teardown. I hacked it up like this locally to proceed:
 >>
+> 
+> kselftest pull requests didn't include any framework changes. I doubt
+> that it is framework related.
+
+But is it OK to use e.g. ASSERT_EQ() in FIXTURE_TEARDOWN()?
+
 >> --- a/tools/testing/selftests/vm/hmm-tests.c
 >> +++ b/tools/testing/selftests/vm/hmm-tests.c
 >> @@ -154,6 +154,11 @@ FIXTURE_TEARDOWN(hmm)
 >>   {
 >>       int ret = close(self->fd);
->> +    if (ret != 0) {
+>>   +    if (ret != 0) {
 >> +        fprintf(stderr, "close returned (%d) fd is (%d)\n", ret,self->fd);
 >> +        exit(1);
 >> +    }
@@ -134,19 +140,48 @@ On 10/13/22 11:01, David Hildenbrand wrote:
 >> #          FAIL  hmm.hmm_device_private.exclusive_cow
 >> not ok 22 hmm.hmm_device_private.exclusive_cow
 >>
+>> I'll try to check more closely but maybe if you can reproduce it too, you'll
+>> have more idea what's going on.
 >>
 > 
-> When did that test start failing? Was it still ok for 6.0?
+> Sounds good.
 > 
+>> The next thing is more of a question/documentation suggestion. Tons of tests
+>> fail like this:
+>>
+>> ok 24 hmm.hmm_device_private.hmm_cow_in_device
+>> #  RUN           hmm.hmm_device_coherent.open_close ...
+>> could not open hmm dmirror driver (/dev/hmm_dmirror2)
+>> #      SKIP      DEVICE_COHERENT not available
+>> #            OK  hmm.hmm_device_coherent.open_close
+>>
+>> I assume this is because I run "test_hmm.sh smoke" without the SPM
+>> parameters.
+>> The help message doesn't say much about what to specify there for
+>> <spm_addr_dev0> <spm_addr_dev1>. Do these tests need a particular hardware?
+>> (unlike the rest?) Maybe it could be clarified.
+>>
+>> Last thing, I noticed all these DEVICE_COHERENT tests ultimately count as OK,
+>> not SKIPPED, which would probably be more appropriate?
+>>
+> 
+> Anytime a test can't be run due to missing config, the result should be a SKIP.
+> If that is not the case let's fix these cases.
+> 
+>> # FAILED: 51 / 54 tests passed.
+>> # Totals: pass:50 fail:3 xfail:0 xpass:0 skip:1 error:0
+>>
+>> (the skip:1 is due to test 9 "#      SKIP      Huge page could not be
+>> allocated"
+>> which is probably a misconfiguration on my part so I don't report that as
+>> an issue)
+>>
+> 
+> Skip is the right result in this case if it is indeed the result of misconfig.
 
-commit 4fe89d07dcc2804c8b562f6c7896a45643d34b2f (tag: v6.0, linux/master)
+Right. My point is that there were more than 20 more reporting "#      SKIP
+    DEVICE_COHERENT not available" that were not counted as skip: but pass:
 
-# FAILED: 25 / 50 tests passed.
-# Totals: pass:25 fail:25 xfail:0 xpass:0 skip:0 error:0
+> thanks,
+> -- Shuah
 
-Looks good to me.
-
-Possible change in 6.1 and we have to time fix them all. :)
-
-thanks,
--- Shuah
