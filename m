@@ -2,355 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3FD5FD5EC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Oct 2022 10:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD715FD640
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Oct 2022 10:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiJMIHP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Oct 2022 04:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S229653AbiJMIfo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Oct 2022 04:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiJMIGr (ORCPT
+        with ESMTP id S229618AbiJMIfn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Oct 2022 04:06:47 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640D014BB74
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 01:06:18 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id f186-20020a636ac3000000b0044adaa7d347so637872pgc.14
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 01:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0C6s+MNUKUyiE+/v2qK38FP6EUh65MnvoFXMGNDXtt8=;
-        b=LFmej4FtWtIw+ACUmCkBCvNhPT5OE+ghqTanmbl0BbWy+m7ISQZb20JgrgxyFPdEE3
-         7UCbQwC7Vn0e+YeertLEaR0iPnrT+nUULrtjTi9do6eHuaN6K1+EZnydHD/9uUIAJg0Q
-         oI0AKC4efh2WQzZ7mUR5l44vVnVRkLJnLSyw/Pq+2OBiIVDY+8EZFmF//lz1sM8EA5VR
-         40mGlJOI34LUTdr4G6rw4QacZQ6VPAmY6gLjfuo8U+k6VRtnV/aP/gX8R48E/CrfIyea
-         BmUTweXILgGIzEDPq6QDk2mQoYRi6KRH/YSfId4WGkMsUjBH8NRfaY46Y9O1afiqTIry
-         ds0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0C6s+MNUKUyiE+/v2qK38FP6EUh65MnvoFXMGNDXtt8=;
-        b=G8xc9wkbIr7C41xJLi0DSGhiRoTQc4xlfDhnqZbZYZzxCixXh02UhRVtI+LYbrC5Ci
-         Cru0Pb0NnDKtvykNcwBHIPLGK9ICNREX108q942A8ISLoTbYHJesInqzQv6dr6s8PTx7
-         6BsrjRNAZp9AE7dv9NYf3MllvBNxyiG4G6nh+nUXxiF7pL2shN0w8xVls5RrPpa6IuJ5
-         3tVrr/LEzyF/j6nPDsWW8iy0wtcj5sOEQJJfFmiY3mH3wcVfzfHxNL3dfMVXMnL+C17L
-         5/SKfjh90/BufPuU8VZjz/IIqGStZjaJT4cL+dRoeA4HbMT1NZmTISI5kkA1X/VGmB5f
-         5G0g==
-X-Gm-Message-State: ACrzQf1gfPRCjVlBDybauPy8DLGxFWdbWNoM6jOWOhdj7XYukc40cYfS
-        ZX1ZG/nl3bDf1o6FPpTGWoBKdbnFKfwMBPS1
-X-Google-Smtp-Source: AMsMyM6cdohpJOw0dU+5OtiEXdVBkLltK/MrBtcua6pxb/KCPsQWsBedZjQwDw2n1xK4MbpqJw/ZFHS4JhQq92XJ
-X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a17:902:d50f:b0:178:6505:fae3 with SMTP
- id b15-20020a170902d50f00b001786505fae3mr34564172plg.54.1665648378508; Thu,
- 13 Oct 2022 01:06:18 -0700 (PDT)
-Date:   Thu, 13 Oct 2022 08:05:46 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
-Message-ID: <20221013080545.1552573-1-sadiyakazi@google.com>
-Subject: [PATCH v2] Documentation: Kunit: Update architecture.rst for minor fixes
-From:   Sadiya Kazi <sadiyakazi@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, corbet@lwn.net, bagasdotme@gmail.com
-Cc:     Sadiya Kazi <sadiyakazi@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 13 Oct 2022 04:35:43 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3DA100BD1;
+        Thu, 13 Oct 2022 01:35:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lSCjjnGS3kR+0clbLEUum+wIfM3BXUGRs9SDjgoM3svqkIvLwn7SzVxEEQqa/a5M6v3xuo+nyRMBYEcD1tqK2NNcx7n1IDzZyxnbVNSGhLlMr6XzpRPQbyHtlSNfbegcCUn5PTRtDFr6fSF8HhnK8fiGL4A8MnaDpHwKWr1MbDyLYKucKyWozz3QZSLvwAzz5icMeGyZc88PnsKiMLngRQoNRYAdo/qGqqvVAbSgw3ZqxgfcmfJOva+t7C6781EwIdLTbEZA/f5l8PDhwh1uw/hT238LT0KB6zPkMbiolb9IzIsAYLGx7/lH6o4V+5h1O4uslUVEDUkcq/Qh3yyq+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wK/oJZKTfh2jniIxFc4B9NCaOYnxEmBnVHzazEb2RLk=;
+ b=nn5oiWmwpZAtyRqKUxtiFutqsVKlDgpH3o3L+lfPZuIugGh0BtMsB3bfZ2eZAKvCcUaZeyiXBQB+4fabfRI1BPoKyIJpRLPWUtYoifjRbZN/DkpQsjVReiCIjVOmXWKPxgAI/VuFvThr5oeAQSPGYfz5kxInRDoirmgqW0IxWHtLLOBA5Uj4Fotggdu8cSyMl/1CFp2S7oKkSp+Iy0XARuNs/n3N6xL1cB2hLbl3rk1uw090VgKKz689RBmar1f4zaykXiB87cReWV/tJZxZVLA8FCf0lhNTQYSJzc6o4ADBCTw7K4geoNqxlTjQ/a80qsUHIbv3NB/GAPZIf0WN6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wK/oJZKTfh2jniIxFc4B9NCaOYnxEmBnVHzazEb2RLk=;
+ b=Y3iF5UuEAQUv5HKU++61otnneNaoL0b8xYcJo6TgjqteyJpxta3zPmFVBufZP/pEbELyNG/LfNXLXjjntAJF+OZ/iDjPPGdhRWvu7grXLTiSY63oe3X5jX4Hkv47AdggabFZxK6hhjJXC0RG1X4bMTqyj5rd35hbr56y4lSgB2qw2Ko8EHkeREtQGShWrZ7Lou/Coepr5X53Uu0f5y5OHQhwnG+tTpisDYk5/KD8d7NQ8K6IRXNx3BiWie3OWoNQ5k2uPwB7/O0dYZsWoCUFK9oe6xwjw7uVtSyqSIQL54E0POQ//pTjyUsyTy58+0JoINeN2HHlrkLPtgrNODkQYw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by MW4PR12MB7240.namprd12.prod.outlook.com (2603:10b6:303:226::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Thu, 13 Oct
+ 2022 08:35:40 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::4ff2:d93e:d200:227e]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::4ff2:d93e:d200:227e%6]) with mapi id 15.20.5676.031; Thu, 13 Oct 2022
+ 08:35:40 +0000
+Date:   Thu, 13 Oct 2022 11:35:33 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 iproute2-next 2/4] bridge: fdb: show locked FDB
+ entries flag in output
+Message-ID: <Y0fN1aYfNKS3JWFN@shredder>
+References: <20221004152036.7848-1-netdev@kapio-technology.com>
+ <20221004152036.7848-2-netdev@kapio-technology.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221004152036.7848-2-netdev@kapio-technology.com>
+X-ClientProxiedBy: VI1PR06CA0169.eurprd06.prod.outlook.com
+ (2603:10a6:803:c8::26) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|MW4PR12MB7240:EE_
+X-MS-Office365-Filtering-Correlation-Id: a1f12435-6019-4129-050d-08daacf5e8ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qE8TqfGavzGa9hr/J6SOMlCbhHzeScOyUe+Aq+4Pr6IsFGYccBMb1OwfaWzR4MRUH6o//+tJ2bFf/Y1qoKR3LFjwpP2bE0YbV7iuwcFUxMdeefU08toQ2qKhfDCfrHrURPC6xAskbcTwmmM4JCqIT7oMDrZYEScUTHy88M1cMjjLfmAc+A+aRTu4rVzfcdeO7HvyI2iaDiY6ZaN/CcaWRlvxHuwfCfWlWDfG1w8/Cszd1EFsBWezRDOLpFZvVzEknZHp7RW55hRLFDzrAZhN3voD3osYVOczJDcoe9g2HGqMCk7xlC8jWHZ4I58Sq1bC80S+bp4FQIy/YN1VpGjC0wUrUlgM1xLUZ3vivw8BGQ+RulUHYbnNN3et0UdjBXKE6QghZCWTiYLEpS8oj6dTrKQ1tcVKGt/+vyw6XHvHH5k7I862riRARvOQeFGtomzO676YQAbS2Xerwznpwedx8PaRZ1EaHtK0MTCmkyMTmKbFPcG7lcEQE8ZjLT/t6xsKWhtgSGrYq5WWa8rszAAAtWeSN/TQXmP6Et0u2BqoZfGfDFLoWYKG6Ov9MWQolI3X1/UCd/JX7Iw6iJyLgqvbe++r9S7s/f7AIHVYncLfTUhTm0b6UOSBzObgqVibnem6aUftImLonvbKJGzyN59qZxJyK7vZjS03dqEB8ioI0mu5K3nUcXpQvrvPmGM3BTYGIv85vVQBnSq/zylBrADcDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(39860400002)(366004)(346002)(376002)(396003)(451199015)(186003)(9686003)(26005)(6512007)(2906002)(316002)(33716001)(8936002)(6916009)(54906003)(41300700001)(66556008)(66476007)(66946007)(8676002)(4326008)(86362001)(6666004)(38100700002)(6506007)(478600001)(7416002)(7406005)(5660300002)(6486002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8ZnNJ1/YSjEhKguatk15sd3o1riXDxtVZRS9L0/zN+MUSCS5cIs/iF4buzi9?=
+ =?us-ascii?Q?tFbdW4lVtowapaMeh680k0TLrxqLo9ZhTm+hhxweBztGWyN1Ct4nqTHa4yvi?=
+ =?us-ascii?Q?rFT3MztHTgVtGEQbeTyc9P6GZgol0HdpCZLunTepNxLUQgSXCf8ooV/zOCM2?=
+ =?us-ascii?Q?EV99LDtL41pQ1KjaZyQgCpVTdfznBrz+UGR9CSYxG5xsy5pOaJxgsZ5IfFWN?=
+ =?us-ascii?Q?oxNYUmyailWbR2eSry36QzJ+R6+FhyGc7LSTLzpe9MM1Xe/L7zExHUg8TObB?=
+ =?us-ascii?Q?ms3KXCNUtIj3pGYFxI0hfIoCt/PxMXmjoI2pFn+uH9YDOsuu5q6o/Xy0RLA/?=
+ =?us-ascii?Q?kVrHjfjMDUFcL0R+Z5KL9/8M4yNt3Z2Mx9h1os7RbmWpLGqfyn2us1RK5ibM?=
+ =?us-ascii?Q?6KJ32dNWGjBv+QKceQGIkhVlgTETwxWRROIZwQDRfVjb1x0dQW1YPQuagopF?=
+ =?us-ascii?Q?3WKeOCFJ4qRxCImsCclm+HeHv0iGwwlPYNX9hRIFiuh0PqiRXXPy+S27u8aU?=
+ =?us-ascii?Q?wgfpuZ62dOA/XlTZNzzo+HoytO/1ulS5qzQw0uVVyQTNrAGAhksUkfDsIkYj?=
+ =?us-ascii?Q?trT959A3MkfRFEZRVy2tYS5MA2DF6doWzFgXuJgL7K6iDKR+I9L6FAag/LVx?=
+ =?us-ascii?Q?eVDKgYHIn7mUL4IhlpOWBXMtcbXx26dEIN2gkcpOztMwAki9UoHVhLuDsGCO?=
+ =?us-ascii?Q?H27l/bM5h4zELTZCfnwTIIxc7Pczr85G+5alCZHZIzQoh2vsE+USd/vEzcg+?=
+ =?us-ascii?Q?QVea1bjrf4eBe5hNOQ4GGb/C7Ncxd/DWPo55HkHYgFGycNykG/jfn7eLAhSI?=
+ =?us-ascii?Q?Cb34dBWb7HviUe6y4THw8HVrkdNV1biUUQkkSiB5MZXlC+ZFDmgbVWjb/R0T?=
+ =?us-ascii?Q?XVbou/W8uSkHvPSSATe5S2UrT0ztCgbP7mPb/2YFxsXhLRzLx3/3+aX9yfJw?=
+ =?us-ascii?Q?BsB9JxmhZdlIzb9zP9CU+XxrdgSh+JeFl6jAYoiuV+pQ/h6Cbc0Sxvu7ZIMo?=
+ =?us-ascii?Q?4ec/MtS7+BUaoiW1vuPCB0l8XvgSG2q632q4FxG7/2w0ZfWyGsja8IcP8rkf?=
+ =?us-ascii?Q?VcHsHF81KSYXNHy9USzFM6JxeH+bO8AJ1LxO7RHRuS954l3nO97ih8RQvIAS?=
+ =?us-ascii?Q?zXRE4qpLpXrlkQUqMq5KRVKDjBURtAWx0SW6TJYwIaMzoz9VmzyJY0RiNUDw?=
+ =?us-ascii?Q?YGpI+bXNrZD+Uv5H1gCFfG6jEKW6Ldo/SNvmxucoCF9QzUdsLuo0HgzP+OSW?=
+ =?us-ascii?Q?C+mSQ/nqAl6KtTbfW3eMpYGx/ic86JPW6jIt1WbCo4reaTU2eS/3cMeHqJQY?=
+ =?us-ascii?Q?R0avaSq/OkNVg+BTq7+/JtnhtZPhVEmBOmcfFXejUFRw1EqMlXJakZ2nVncU?=
+ =?us-ascii?Q?inrObi1lFDl4SMxwaoGMKDIUNbUJEUnAOYsKbx/4ZZmfD3OvIH9rqTD+e6k4?=
+ =?us-ascii?Q?VkbjnLAcubt9BgfMex7u2a0MSOmUkXrbZlDwqJybnZmpXJoljNjqq/i7yp8y?=
+ =?us-ascii?Q?Kk2UmIXcSBsnU8PczwC1mIcaeLaxDSMoJuwZunuGvFzwTG0f9fDZGjTGMJzb?=
+ =?us-ascii?Q?bHv6XIpzzYFPbVFLLFc6gYSwFjb2X8uWAdGy3NPd?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1f12435-6019-4129-050d-08daacf5e8ef
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 08:35:40.4258
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8S/DYPbJk2uahcjHnw/kVgD/Mdx6DfifdWwgRW+Yd7tgEb1lvYi6awvUIrba+dqidndGH9pW7UcK16+5dwbYjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7240
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Updated the architecture.rst page with the following changes:
--Add missing article _the_ across the document.
--Reword content across for style and standard.
--Update all occurrences of Command Line to
- Command-line across the document.
--Correct grammatical issues, for example, added _it_
- wherever missing.
--Update all occurrences of =E2=80=9Cvia" to either
- use =E2=80=9Cthrough=E2=80=9D or =E2=80=9Cusing=E2=80=9D.
--Update the text preceding the external links and pushed
-the full link to a new line for better readability.
--Reword content under the config command to make it
- more clear and concise.
+On Tue, Oct 04, 2022 at 05:20:34PM +0200, Hans Schultz wrote:
+> Signed-off-by: Hans Schultz <netdev@kapio-technology.com>
 
-Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
----
-Thank you David and Bagas for reviewing the doc. I have added the feedback.
+Don't leave the commit message empty. Explain the change and include an
+example output showing the "locked" flag.
 
-Changes since V1:
-https://lore.kernel.org/linux-kselftest/20221010171353.1106166-1-sadiyakazi=
-@google.com/
-- Corrected the typo in the commit message.
-- Followed the style for links as suggested by Bagas throughout the documen=
-t.
-- Updated the links for latest versions whereever applicable
-  (Note: Links having no changes between 5.15 and 6.0 have been retained).
-- Updated the KTAP spec link to point to Documentation/dev-tools/ktap.rst.
-- Reworded content as per David and Bagas's feedback.
+> ---
+>  bridge/fdb.c | 11 +++++++++--
 
----
- .../dev-tools/kunit/architecture.rst          | 114 +++++++++---------
- 1 file changed, 57 insertions(+), 57 deletions(-)
+Still missing a description of the "locked" flag from the man page.
+Something like:
 
-diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation=
-/dev-tools/kunit/architecture.rst
-index 8efe792bdcb9..b8ee0fa8afc3 100644
---- a/Documentation/dev-tools/kunit/architecture.rst
-+++ b/Documentation/dev-tools/kunit/architecture.rst
-@@ -4,16 +4,17 @@
- KUnit Architecture
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--The KUnit architecture can be divided into two parts:
-+The KUnit architecture is divided into two parts:
-=20
- - `In-Kernel Testing Framework`_
--- `kunit_tool (Command Line Test Harness)`_
-+- `kunit_tool (Command-line Test Harness)`_
-=20
- In-Kernel Testing Framework
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-=20
- The kernel testing library supports KUnit tests written in C using
--KUnit. KUnit tests are kernel code. KUnit does several things:
-+KUnit. These KUnit tests are kernel code. KUnit performs the following
-+tasks:
-=20
- - Organizes tests
- - Reports test results
-@@ -22,19 +23,17 @@ KUnit. KUnit tests are kernel code. KUnit does several =
-things:
- Test Cases
- ----------
-=20
--The fundamental unit in KUnit is the test case. The KUnit test cases are
--grouped into KUnit suites. A KUnit test case is a function with type
--signature ``void (*)(struct kunit *test)``.
--These test case functions are wrapped in a struct called
--struct kunit_case.
-+The test case is the fundamental unit in KUnit. KUnit test cases are organ=
-ised
-+into suites. A KUnit test case is a function with type signature
-+``void (*)(struct kunit *test)``. These test case functions are wrapped in=
- a
-+struct called struct kunit_case.
-=20
- .. note:
- 	``generate_params`` is optional for non-parameterized tests.
-=20
--Each KUnit test case gets a ``struct kunit`` context
--object passed to it that tracks a running test. The KUnit assertion
--macros and other KUnit utilities use the ``struct kunit`` context
--object. As an exception, there are two fields:
-+Each KUnit test case receives a ``struct kunit`` context object that track=
-s a
-+running test. The KUnit assertion macros and other KUnit utilities use the
-+``struct kunit`` context object. As an exception, there are two fields:
-=20
- - ``->priv``: The setup functions can use it to store arbitrary test
-   user data.
-@@ -77,12 +76,12 @@ Executor
-=20
- The KUnit executor can list and run built-in KUnit tests on boot.
- The Test suites are stored in a linker section
--called ``.kunit_test_suites``. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/in=
-clude/asm-generic/vmlinux.lds.h?h=3Dv5.15#n945.
-+called ``.kunit_test_suites``. For the full code, see
-+`include/asm-generic/vmlinux.lds.h <https://git.kernel.org/pub/scm/linux/k=
-ernel/git/torvalds/linux.git/tree/include/asm-generic/vmlinux.lds.h?h=3Dv6.=
-0#n950>`_ .
- The linker section consists of an array of pointers to
- ``struct kunit_suite``, and is populated by the ``kunit_test_suites()``
--macro. To run all tests compiled into the kernel, the KUnit executor
--iterates over the linker section array.
-+macro. The KUnit executor iterates over the linker section array in order =
-to
-+run all the tests that are compiled into the kernel.
-=20
- .. kernel-figure:: kunit_suitememorydiagram.svg
- 	:alt:	KUnit Suite Memory
-@@ -90,17 +89,16 @@ iterates over the linker section array.
- 	KUnit Suite Memory Diagram
-=20
- On the kernel boot, the KUnit executor uses the start and end addresses
--of this section to iterate over and run all tests. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/executor.c
--
-+of this section to iterate over and run all tests. For the full code, see
-+`executor.c <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git/tree/lib/kunit/executor.c>`_.
- When built as a module, the ``kunit_test_suites()`` macro defines a
- ``module_init()`` function, which runs all the tests in the compilation
- unit instead of utilizing the executor.
-=20
- In KUnit tests, some error classes do not affect other tests
- or parts of the kernel, each KUnit case executes in a separate thread
--context. For code, see:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/li=
-b/kunit/try-catch.c?h=3Dv5.15#n58
-+context. For the full code, see
-+`try-catch.c <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/lin=
-ux.git/tree/lib/kunit/try-catch.c?h=3Dv5.15#n58>`_.
-=20
- Assertion Macros
- ----------------
-@@ -111,37 +109,36 @@ All expectations/assertions are formatted as:
-=20
- - ``{EXPECT|ASSERT}`` determines whether the check is an assertion or an
-   expectation.
-+  In the event of a failure, the testing flow differs as follows:
-=20
--	- For an expectation, if the check fails, marks the test as failed
--	  and logs the failure.
-+	- For expectations, the test is marked as failed and the failure is logge=
-d.
-=20
--	- An assertion, on failure, causes the test case to terminate
--	  immediately.
-+	- Failing assertions, on the other hand, result in the test case being
-+	  terminated immediately.
-=20
--		- Assertions call function:
-+		- Assertions call the function:
- 		  ``void __noreturn kunit_abort(struct kunit *)``.
-=20
--		- ``kunit_abort`` calls function:
-+		- ``kunit_abort`` calls the function:
- 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_ca=
-tch)``.
-=20
--		- ``kunit_try_catch_throw`` calls function:
-+		- ``kunit_try_catch_throw`` calls the function:
- 		  ``void kthread_complete_and_exit(struct completion *, long) __noreturn=
-;``
- 		  and terminates the special thread context.
-=20
- - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
--  has the boolean value =E2=80=9Ctrue=E2=80=9D), ``EQ`` (two supplied prop=
-erties are
-+  has the boolean value "true"), ``EQ`` (two supplied properties are
-   equal), ``NOT_ERR_OR_NULL`` (supplied pointer is not null and does not
--  contain an =E2=80=9Cerr=E2=80=9D value).
-+  contain an "err" value).
-=20
- - ``[_MSG]`` prints a custom message on failure.
-=20
- Test Result Reporting
- ---------------------
--KUnit prints test results in KTAP format. KTAP is based on TAP14, see:
--https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14=
--specification.md.
--KTAP (yet to be standardized format) works with KUnit and Kselftest.
--The KUnit executor prints KTAP results to dmesg, and debugfs
--(if configured).
-+KUnit prints the test results in KTAP format. KTAP is based on TAP14, see
-+Documentation/dev-tools/ktap.rst.
-+KTAP works with KUnit and Kselftest. The KUnit executor prints KTAP result=
-s to
-+dmesg, and debugfs (if configured).
-=20
- Parameterized Tests
- -------------------
-@@ -150,33 +147,33 @@ Each KUnit parameterized test is associated with a co=
-llection of
- parameters. The test is invoked multiple times, once for each parameter
- value and the parameter is stored in the ``param_value`` field.
- The test case includes a KUNIT_CASE_PARAM() macro that accepts a
--generator function.
--The generator function is passed the previous parameter and returns the ne=
-xt
--parameter. It also provides a macro to generate common-case generators bas=
-ed on
--arrays.
-+generator function. The generator function is passed the previous paramete=
-r
-+and returns the next parameter. It also includes a macro for generating
-+array-based common-case generators.
-=20
--kunit_tool (Command Line Test Harness)
-+kunit_tool (Command-line Test Harness)
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--kunit_tool is a Python script ``(tools/testing/kunit/kunit.py)``
--that can be used to configure, build, exec, parse and run (runs other
--commands in order) test results. You can either run KUnit tests using
--kunit_tool or can include KUnit in kernel and parse manually.
-+``kunit_tool`` is a Python script, found in ``tools/testing/kunit/kunit.py=
-``. It
-+is used to configure, build, execute, parse test results and run all of th=
-e
-+previous commands in correct order (i.e., configure, build, execute and pa=
-rse).
-+You have two options for running KUnit tests: either use KUnit
-+directly through the kernel and parse manually, or use the ``kunit_tool``.
-=20
- - ``configure`` command generates the kernel ``.config`` from a
-   ``.kunitconfig`` file (and any architecture-specific options).
--  For some architectures, additional config options are specified in the
--  ``qemu_config`` Python script
--  (For example: ``tools/testing/kunit/qemu_configs/powerpc.py``).
-+  The Python scripts available in ``qemu_configs`` folder
-+  (for example, ``tools/testing/kunit/qemu configs/powerpc.py``) contains
-+  additional configuration options for specific architectures.
-   It parses both the existing ``.config`` and the ``.kunitconfig`` files
--  and ensures that ``.config`` is a superset of ``.kunitconfig``.
--  If this is not the case, it will combine the two and run
--  ``make olddefconfig`` to regenerate the ``.config`` file. It then
--  verifies that ``.config`` is now a superset. This checks if all
--  Kconfig dependencies are correctly specified in ``.kunitconfig``.
--  ``kunit_config.py`` includes the parsing Kconfigs code. The code which
--  runs ``make olddefconfig`` is a part of ``kunit_kernel.py``. You can
--  invoke this command via: ``./tools/testing/kunit/kunit.py config`` and
-+  to ensure that ``.config`` is a superset of ``.kunitconfig``.
-+  If not, it will combine the two and run ``make olddefconfig`` to regener=
-ate
-+  the ``.config`` file. It then checks to see if ``.config`` has become a =
-superset.
-+  This verifies that all the Kconfig dependencies are correctly specified =
-in the file
-+  ``.kunitconfig``. The ``kunit_config.py`` script contains the code for p=
-arsing
-+  Kconfigs. The code which runs ``make olddefconfig`` is part of the
-+  ``kunit_kernel.py`` script. You can invoke this command through:
-+  ``./tools/testing/kunit/kunit.py config`` and
-   generate a ``.config`` file.
- - ``build`` runs ``make`` on the kernel tree with required options
-   (depends on the architecture and some options, for example: build_dir)
-@@ -184,8 +181,8 @@ kunit_tool or can include KUnit in kernel and parse man=
-ually.
-   To build a KUnit kernel from the current ``.config``, you can use the
-   ``build`` argument: ``./tools/testing/kunit/kunit.py build``.
- - ``exec`` command executes kernel results either directly (using
--  User-mode Linux configuration), or via an emulator such
--  as QEMU. It reads results from the log via standard
-+  User-mode Linux configuration), or through an emulator such
-+  as QEMU. It reads results from the log using standard
-   output (stdout), and passes them to ``parse`` to be parsed.
-   If you already have built a kernel with built-in KUnit tests,
-   you can run the kernel and display the test results with the ``exec``
-@@ -193,3 +190,6 @@ kunit_tool or can include KUnit in kernel and parse man=
-ually.
- - ``parse`` extracts the KTAP output from a kernel log, parses
-   the test results, and prints a summary. For failed tests, any
-   diagnostic output will be included.
-+
-+For more information on kunit_tool, see
-+Documentation/dev-tools/kunit/run_wrapper.rst.
---=20
-2.38.0.rc1.362.ged0d419d3c-goog
+"
+locked - this entry was added by the kernel in response to a host trying
+to communicate behind a bridge port with MAB enabled. User space can
+authenticate the host by clearing the flag. The flag cannot be set by
+user space.
+"
 
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/bridge/fdb.c b/bridge/fdb.c
+> index 5f71bde0..f1f0a5bb 100644
+> --- a/bridge/fdb.c
+> +++ b/bridge/fdb.c
+> @@ -93,7 +93,7 @@ static int state_a2n(unsigned int *s, const char *arg)
+>  	return 0;
+>  }
+>  
+> -static void fdb_print_flags(FILE *fp, unsigned int flags)
+> +static void fdb_print_flags(FILE *fp, unsigned int flags, __u8 ext_flags)
+
+s/__u8/__u32/
+
+>  {
+>  	open_json_array(PRINT_JSON,
+>  			is_json_context() ?  "flags" : "");
+> @@ -116,6 +116,9 @@ static void fdb_print_flags(FILE *fp, unsigned int flags)
+>  	if (flags & NTF_STICKY)
+>  		print_string(PRINT_ANY, NULL, "%s ", "sticky");
+>  
+> +	if (ext_flags & NTF_EXT_LOCKED)
+> +		print_string(PRINT_ANY, NULL, "%s ", "locked");
+> +
+>  	close_json_array(PRINT_JSON, NULL);
+>  }
+>  
+> @@ -144,6 +147,7 @@ int print_fdb(struct nlmsghdr *n, void *arg)
+>  	struct ndmsg *r = NLMSG_DATA(n);
+>  	int len = n->nlmsg_len;
+>  	struct rtattr *tb[NDA_MAX+1];
+> +	__u32 ext_flags = 0;
+>  	__u16 vid = 0;
+>  
+>  	if (n->nlmsg_type != RTM_NEWNEIGH && n->nlmsg_type != RTM_DELNEIGH) {
+> @@ -170,6 +174,9 @@ int print_fdb(struct nlmsghdr *n, void *arg)
+>  	parse_rtattr(tb, NDA_MAX, NDA_RTA(r),
+>  		     n->nlmsg_len - NLMSG_LENGTH(sizeof(*r)));
+>  
+> +	if (tb[NDA_FLAGS_EXT])
+> +		ext_flags = rta_getattr_u32(tb[NDA_FLAGS_EXT]);
+> +
+>  	if (tb[NDA_VLAN])
+>  		vid = rta_getattr_u16(tb[NDA_VLAN]);
+>  
+> @@ -266,7 +273,7 @@ int print_fdb(struct nlmsghdr *n, void *arg)
+>  	if (show_stats && tb[NDA_CACHEINFO])
+>  		fdb_print_stats(fp, RTA_DATA(tb[NDA_CACHEINFO]));
+>  
+> -	fdb_print_flags(fp, r->ndm_flags);
+> +	fdb_print_flags(fp, r->ndm_flags, ext_flags);
+>  
+>  
+>  	if (tb[NDA_MASTER])
+> -- 
+> 2.34.1
+> 
