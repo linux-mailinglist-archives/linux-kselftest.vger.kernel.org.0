@@ -2,105 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2BA5FE24F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Oct 2022 21:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3BB5FE2CD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Oct 2022 21:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbiJMTAY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Oct 2022 15:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
+        id S229518AbiJMTik (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Oct 2022 15:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbiJMS7e (ORCPT
+        with ESMTP id S229791AbiJMTib (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Oct 2022 14:59:34 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B3748A0F;
-        Thu, 13 Oct 2022 11:59:01 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id AED361884BD4;
-        Thu, 13 Oct 2022 18:58:57 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 8569E2500015;
-        Thu, 13 Oct 2022 18:58:57 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 7DDF49EC0005; Thu, 13 Oct 2022 18:58:57 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 13 Oct 2022 15:38:31 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FCA183DAB
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 12:38:26 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id r142so2225217iod.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Oct 2022 12:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f/qPChDMs0oj8qrjGozguno+4qFo0qn/A0exuIvNQrY=;
+        b=KkWHiT9dlNw9P6CEdY5QNtQ63vDUnz7Xd7/usAAnCerQAn2hChTNNy805ga3ZBL251
+         +pnWzGpx2ywYhJe0W2axPKtfMKuykSSfhfynjiXhnG2gcenn8T5K6oqgHAFUt/WjMYIR
+         hquxRCW/QOKbpSPMn12hjNQ3NZ32Dpy3KobTU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f/qPChDMs0oj8qrjGozguno+4qFo0qn/A0exuIvNQrY=;
+        b=HX7pfTWwQV/cGdul7EUtlhq7asTcg9nKyan9RCHHm7jMocRw8UmO0Vz+//IbpfGyJv
+         86RLRCuv/ImHlMQWpsQ99SlVxb0bsC/H3zbon5Xb75P/kUVr7jdP+jLXROrwYZ7E63DG
+         EXFWKZz1P2vmYgYDwEwSzk6/2gA57hv6orpDlKTJb6K2rcizSUXrp/Jpm7crk9MjPa7y
+         e/1PZ+JXdJ0HTuDcUiIEe5RyEj/fQYVw107qvMxHG6oDkUqLqo+iSFS2pzddtLfICGMV
+         OZDmJKiSQ/hxuI0lhoch9TFc39bBSVUivXA7Dg4Fq70pLqVNj1D0y+pUIQyynaKUWfQp
+         YBRQ==
+X-Gm-Message-State: ACrzQf2sMOCfUfLg/9y/dpknuWyllnQrzUPBV54E2KdEHY7jSGks2UmJ
+        E6/GuJqu2e4skhTICtWmmIm8Mg==
+X-Google-Smtp-Source: AMsMyM7/usZtdj1fRr63VhfBK9sMSkZn/jAa7j6TZUtdkqI3+B/FVihyhgYSjPNfFgJNFyhxVBXUrA==
+X-Received: by 2002:a05:6602:3c7:b0:6a4:334d:3344 with SMTP id g7-20020a05660203c700b006a4334d3344mr673987iov.21.1665689904625;
+        Thu, 13 Oct 2022 12:38:24 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h5-20020a92d845000000b002fa7b6e9cf5sm184013ilq.31.2022.10.13.12.38.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 12:38:24 -0700 (PDT)
+Message-ID: <a7b3cf86-4578-c23d-7326-4ddf7dcda043@linuxfoundation.org>
+Date:   Thu, 13 Oct 2022 13:38:23 -0600
 MIME-Version: 1.0
-Date:   Thu, 13 Oct 2022 20:58:57 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 net-next 3/9] net: switchdev: add support for
- offloading of the FDB locked flag
-In-Reply-To: <Y0gbVoeV/e6wzlbM@shredder>
-References: <20221009174052.1927483-1-netdev@kapio-technology.com>
- <20221009174052.1927483-4-netdev@kapio-technology.com>
- <Y0gbVoeV/e6wzlbM@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <d314ba738b12e28694a955de1301e906@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: hmm_test issues with latest mainline
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Alistair Popple <apopple@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <26017fe3-5ad7-6946-57db-e5ec48063ceb@suse.cz>
+ <7e2e6679-3205-3540-f522-9eaed2940559@redhat.com>
+ <44fcecda-31a4-7288-1848-63003dfe0a7d@linuxfoundation.org>
+ <04114304-7b35-d42f-0155-087e3b6237c6@suse.cz>
+ <0e02ace6-2fad-47d2-03b9-d8a46f256097@suse.cz>
+ <ecebc355-eff8-0046-3749-8738ed1954de@redhat.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ecebc355-eff8-0046-3749-8738ed1954de@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-10-13 16:06, Ido Schimmel wrote:
->> diff --git a/net/dsa/port.c b/net/dsa/port.c
->> index e4a0513816bb..eab32b7a945a 100644
->> --- a/net/dsa/port.c
->> +++ b/net/dsa/port.c
->> @@ -304,7 +304,7 @@ static int dsa_port_inherit_brport_flags(struct 
->> dsa_port *dp,
->>  					 struct netlink_ext_ack *extack)
->>  {
->>  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
->> -				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
->> +				   BR_BCAST_FLOOD;
+On 10/13/22 12:00, David Hildenbrand wrote:
+>>>>> When did that test start failing? Was it still ok for 6.0?
+>>>
+>>> Didn't test yet, will try, in case it's my system/config specific thing.
+>>
+>> So it's actually all the same with v6.0 for me. The infinite loops, the test
+>> failures, the misreported SKIPs.
+>>
+
+I am not seeing infinite loops and seeing 25 failures which could
+be skips.
+
 > 
-> Not sure how this is related to the patchset.
+> Is the kernel compiled with support. I have the feeling that we might simply miss kernel support and it's not handled gracefully ...
 > 
 
-In general it is needed as a fix because of the way learning with locked 
-port is handled in the driver,
-so as with MAB and also locked port in the future needing a non-zero 
-Port Association Vector (PAV)
-for refresh etc to work, inheritance of the locked port flag is a bad 
-idea (say bug) and shouldn't have
-been in the first place.
+Here is my config
+CONFIG_HMM_MIRROR=y
+# CONFIG_TEST_HMM is not set
+
+Okay here is what is going on - hmm_tests are supposed to be run
+from test_hmm.sh script. When I run this I see a message that tells
+me what to do.
+
+sudo ./test_hmm.sh
+./test_hmm.sh: You must have the following enabled in your kernel:
+CONFIG_TEST_HMM=m
+
+Running ./hmm_tests gives me all the failures. So it appears running
+hmm_tests executable won't work. This is expected as test_hmm.sh does
+the right setup before running the test. We have several tests that do
+that.
+
+Vlastimil, can you try this and let me know what you see. I will compile
+with CONFIG_TEST_HMM=m and let you know what I see on my system.
+
+thanks,
+-- Shuah
+
+
+
