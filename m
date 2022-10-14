@@ -2,59 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771915FEBB6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Oct 2022 11:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F515FEBBA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Oct 2022 11:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiJNJeD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Oct 2022 05:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
+        id S229837AbiJNJfi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Oct 2022 05:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiJNJeC (ORCPT
+        with ESMTP id S229776AbiJNJff (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:34:02 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8324109D42
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 02:34:00 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gf8so4414478pjb.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 02:34:00 -0700 (PDT)
+        Fri, 14 Oct 2022 05:35:35 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB40109D65
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 02:35:34 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso4302873pjk.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 02:35:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qzAcxQk6qiAzX4JfJ3Ull7czfyaTNKS2jBC3TA7dkoE=;
-        b=Xn3knpI6S0TI8SVmIeZrUwd+IEGZNMDmPgcij92G0qK4tt77hhMmanzKBOqdmIgvMQ
-         kmuQkzZmdNo8jx4vQMELuo6KxIjln5xx4Kzi7wRL7lDVHGvKfP9yp0KsBsM56wue7U+I
-         fQMQqvEyQhchMIwfqNcizm/Yg8Ak0D4ytlLuEgebQLk6JjEYr4+2TWd4BWevC0JBmmOl
-         KQGVHIY9+YiZobLFuM7tN3lgotmwE3QWrjmJgHOK2cI7gZCjNd6y/WdqURlduVpku7xV
-         ciQTqLJ6YXgqMndoJMh+PiAZ8BZMTbg87rC45a+wN5kd1NKpdF2LchzQUGZGBqyXo4s8
-         00JQ==
+        bh=W72qU+VIW5XhUX7uAnZIVpuOffuQisEiiwK4cvRG0vU=;
+        b=B9ME/S36KxBRTW5prTouAg9AKCdUX8Tw8YNjYsziP8yB91x6yiA47toBWLLiWtsGLI
+         34pOrn+YJiLNY7QpKuTEJ664bbLnq5WqD5/3e0RnXhuwA5RYV1CxeuZJ+rnkUSCTvCJc
+         CeFgzSy2B8UJsIcTBxKfHg93Kzh65ocunBLGM3Vju03U27NSJuNJ2SKqnNQOEOZvdYcK
+         pdxL0oy3ZnESEAu3bkI1uokIv/bYhm4RNjgAJ8AbTfTXyLnbnYi8g7O5k/t1BCD2K0zi
+         KZuetDlu4F4XzoYbqEh8A4Z81TH6leaug5RBlniKwls3xyYyYu4WwGGSepX6TabCzzMJ
+         nXXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qzAcxQk6qiAzX4JfJ3Ull7czfyaTNKS2jBC3TA7dkoE=;
-        b=FXgyXtE6oNbOncjg6J+JfDP6dBxKcMOw0kjHN5PX7noXaSOXzyuII701qnJWd+qbh5
-         +lnNx0MpD/eKsyXjlN24OYySWulbMNGzxh7dLS0E527c5SbvC0f/JRAYEGzJoKkkTK38
-         UGwnEMhnOsJODoPNmqVI3s8x9CJ8MIQn/uXIXgIITG8pys1D2exoH061dYnTLYfjiYck
-         n2zFQpjZdbaQLcWqarSlnND9ePR7AxyF0FRn4ELMlGiyTc33i93rsNBGMARD8w2KaOG9
-         L9spKuWfaTKyFcbH1r4vxhz6SYErYd0NlcegdK1ijvQtooGepylEeTSrbCF4JPHTwler
-         kb6w==
-X-Gm-Message-State: ACrzQf0KjmeD9FXnKPlysWoToR7Eltlm8kLFBjleh8knXk2K3C1lDkW9
-        j167/2iczDmK9NSQImA/d/t8V1jDWx3qf8O4FjTznT/xK/JTfL4P
-X-Google-Smtp-Source: AMsMyM5lCLe4qOgbPdIvr8xMZJqM34ul1uP6RDEMDwek8tLA0fKhPkv5Fu0o4vFuaEE7KTys/HuSmaRNHZwvkqkWOrg=
-X-Received: by 2002:a17:90a:66c9:b0:20a:f78a:77e4 with SMTP id
- z9-20020a17090a66c900b0020af78a77e4mr16057828pjl.214.1665740040131; Fri, 14
- Oct 2022 02:34:00 -0700 (PDT)
+        bh=W72qU+VIW5XhUX7uAnZIVpuOffuQisEiiwK4cvRG0vU=;
+        b=gwpsB15OJuwp2XG6vtj2ipvfDYCPj4d9yiX6LbE7wFs637Mke8aST01CVrww345dMH
+         SEB0GG7fwDtGtX6rbYJ6O9rLBjok4oFbeaXb6EpfLMUF79UpdjUNuJs8ZHaCvHwYSHyr
+         oBjgNgpKvC8PjA29JozcAYxxAoLNUaPSCcW7OuuV3jDy3tDX9pndiPNUMWrd916Sn4S1
+         Z4Slu4EvuPoFj/HagKKWLZ5kIy0kRF7cKvQp6JCl0x7faGx2okSjyE/7efaPTjNCCJs9
+         1qTu/eSZ91shwQ+94lfD3fzUVkhBrpGMyLL2DwtWc/VoGtNaE7iY2s4v0SKG+EtxhsIJ
+         vWFQ==
+X-Gm-Message-State: ACrzQf3HOnQUDrh6INAZlmlhul4aeadW93GEkT2llWBNrlDTiNZxS1Qg
+        SZWsxM2zSgzCsg+tuHxymwKSbFIvz/7D1+QnLrvzbQ==
+X-Google-Smtp-Source: AMsMyM5JTkM1AeJ9RQt3kUkKbZLzqh69dodlb7V1REpt+lPteLG7O67szgwid5ocSo1qHiAmpQ/sKjFR23AaBwSdvMk=
+X-Received: by 2002:a17:902:e74f:b0:178:3af4:fb13 with SMTP id
+ p15-20020a170902e74f00b001783af4fb13mr4214727plf.19.1665740133649; Fri, 14
+ Oct 2022 02:35:33 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220819174659.2427983-1-vannapurve@google.com>
- <20220819174659.2427983-4-vannapurve@google.com> <Yz80XAg74KGdSqco@google.com>
-In-Reply-To: <Yz80XAg74KGdSqco@google.com>
+ <20220819174659.2427983-6-vannapurve@google.com> <Yz834mGQDtkdwn7q@google.com>
+In-Reply-To: <Yz834mGQDtkdwn7q@google.com>
 From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Fri, 14 Oct 2022 15:03:48 +0530
-Message-ID: <CAGtprH_XSCXZDroGUnL3H1CwcsbH_A_NDn8B4P2xfpSYGqKmqw@mail.gmail.com>
-Subject: Re: [RFC V3 PATCH 3/6] selftests: kvm: ucall: Allow querying ucall
- pool gpa
+Date:   Fri, 14 Oct 2022 15:05:22 +0530
+Message-ID: <CAGtprH_c+vhr8iBYYd7+BZtwzs_r6uFzxPyW1D3bHGhmHugcnA@mail.gmail.com>
+Subject: Re: [RFC V3 PATCH 5/6] selftests: kvm: x86: Execute VMs with private memory
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
@@ -86,24 +85,102 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 1:32 AM Sean Christopherson <seanjc@google.com> wrote:
+On Fri, Oct 7, 2022 at 1:47 AM Sean Christopherson <seanjc@google.com> wrote:
 >
 > On Fri, Aug 19, 2022, Vishal Annapurve wrote:
-> > Add a helper to query guest physical address for ucall pool
-> > so that guest can mark the page as accessed shared or private.
-> >
-> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> > ---
+> > +/*
+> > + * Execute KVM hypercall to change memory access type for a given gpa range.
+> > + *
+> > + * Input Args:
+> > + *   type - memory conversion type TO_SHARED/TO_PRIVATE
+> > + *   gpa - starting gpa address
+> > + *   size - size of the range starting from gpa for which memory access needs
+> > + *     to be changed
+> > + *
+> > + * Output Args: None
+> > + *
+> > + * Return: None
+> > + *
+> > + * Function called by guest logic in selftests to update the memory access type
+> > + * for a given gpa range. This API is useful in exercising implicit conversion
+> > + * path.
+> > + */
+> > +void guest_update_mem_access(enum mem_conversion_type type, uint64_t gpa,
+> > +     uint64_t size)
 >
-> This should be handled by the SEV series[*].  Can you provide feedback on that
-> series if having a generic way to map the ucall address as shared won't work?
+> Provide wrappers to self-document what's going on, then the massive block comments
+> go away.  And the guts of this and guest_update_mem_map() are nearly identical.
 >
-> [*] https://lore.kernel.org/all/20220829171021.701198-1-pgonda@google.com
+> Hmm, and we probably want to make it possible to do negative testing.
+>
+> Then the one-off enums for TO_PRIVATE and whatnot go way too.
+>
+> > +{
+> > +     int ret = kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> MIN_PAGE_SHIFT,
+>
+> Needs an assert that @size is page aligned.  And since these are x86-64 specific,
+> just use PAGE_SHIFT.  Huh, IS_ALIGNED() doesn't exist in selftests.  That should
+> be added, either by pulling in align.h or by adding the generic macros to
+> kvm_util_base.h.
+>
+> And then x86-64's processor.h can defined IS_PAGE_ALIGNED().
+>
+> E.g.
+>
+> static inline void __kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
+>                                                  uint64_t flags)
+> {
+>         return = kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> PAGE_SHIFT, flags, 0);
+> }
+>
+> static inline void kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
+>                                                uint64_t flags)
+> {
+>         int ret;
+>
+>         GUEST_ASSERT_2(IS_PAGE_ALIGNED(gpa) && IS_PAGE_ALIGNED(size), gpa, size);
+>
+>         ret = __kvm_hypercall_map_gpa_range(gpa, size, flags);
+>         GUEST_ASSERT_1(!ret, ret);
+> }
+>
+> static inline kvm_hypercall_map_shared(uint64_t gpa, uint64_t size)
+> {
+>         kvm_hypercall_map_gpa_range(gpa, size, KVM_CLR_GPA_RANGE_ENC_ACCESS);
+> }
+>
+> static inline kvm_hypercall_map_private(uint64_t gpa, uint64_t size)
+> {
+>         kvm_hypercall_map_gpa_range(gpa, size, KVM_MARK_GPA_RANGE_ENC_ACCESS);
+> }
+>
+> > +static void handle_vm_exit_map_gpa_hypercall(struct kvm_vm *vm,
+> > +                             volatile struct kvm_run *run)
+>
+> Pass in @vcpu, not a vm+run.
+>
+> > +{
+> > +     uint64_t gpa, npages, attrs, size;
+> > +
+> > +     TEST_ASSERT(run->hypercall.nr == KVM_HC_MAP_GPA_RANGE,
+> > +             "Unhandled Hypercall %lld\n", run->hypercall.nr);
+> > +     gpa = run->hypercall.args[0];
+> > +     npages = run->hypercall.args[1];
+> > +     size = npages << MIN_PAGE_SHIFT;
+> > +     attrs = run->hypercall.args[2];
+> > +     pr_info("Explicit conversion off 0x%lx size 0x%lx to %s\n", gpa, size,
+> > +             (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED) ? "private" : "shared");
+> > +
+> > +     if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
+> > +             vm_update_private_mem(vm, gpa, size, ALLOCATE_MEM);
+> > +     else
+> > +             vm_update_private_mem(vm, gpa, size, UNBACK_MEM);
+> > +
+> > +     run->hypercall.ret = 0;
+> > +}
+> > +
+> > +static void handle_vm_exit_memory_error(struct kvm_vm *vm, volatile struct kvm_run *run)
+>
+> Same  here, take a @vcpu.
 
-Based on the SEV series you referred to, selftests are capable of
-accessing ucall pool memory by having encryption bit cleared (as set
-by guest pagetables) as allowed by generic API vm_vaddr_alloc_shared.
-This change is needed in the context of fd based private memory where
-guest (specifically non-confidential/sev guests) code in the selftests
-will have to explicitly indicate that ucall pool address range will be
-accessed by guest as shared.
+Ack. Will address these comments in the next series.
