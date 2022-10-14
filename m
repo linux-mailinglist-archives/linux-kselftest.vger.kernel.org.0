@@ -2,71 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E315FE64A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Oct 2022 02:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4F95FE6B6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Oct 2022 03:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiJNAYz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Oct 2022 20:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S229673AbiJNBx2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Oct 2022 21:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJNAYy (ORCPT
+        with ESMTP id S229540AbiJNBx2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Oct 2022 20:24:54 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B437356FD;
-        Thu, 13 Oct 2022 17:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665707092; x=1697243092;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aE1+hnfKiYR3idWoXlvpbQtseYBiK39vZ4xtmA2EiTA=;
-  b=movb+VxVc4OwfJ2L20xr7vxXW0PY73ZCmnMEfPo1tW6GVLkvM9faadIQ
-   rnGr1ybskH9PWNJo+02sGu+DKYWroMN96MIgn22Qmd6VoNcUtwyN/UQmA
-   VrySaXu9oQXuq94iP5Q5C/CzT3Bohka3tGXS8pClx5lacbDDQWrSKBEuM
-   wY/40eAJ6KbPQHqnQIKW3xnONUspN4TCTjZpJ5pNSTVXMJfSSC6SbGloh
-   oYSE5IyT5Qm+MOMfid0O5kSWtU1wfATjtl4J2xPKrpii6eEKTbaGWaRcd
-   m27XYJ57jb/Afb5KIW2SUIiXDLhH1/gqaQPIjY/h0E1je0J6DCXq9UDi8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="305231889"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="305231889"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 17:24:52 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10499"; a="660539646"
-X-IronPort-AV: E=Sophos;i="5.95,182,1661842800"; 
-   d="scan'208";a="660539646"
-Received: from mkucejko-mobl.ger.corp.intel.com (HELO [10.213.24.166]) ([10.213.24.166])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2022 17:24:40 -0700
-Message-ID: <09db0198-53d3-bc41-da5a-b518375bbec9@intel.com>
-Date:   Thu, 13 Oct 2022 17:24:35 -0700
+        Thu, 13 Oct 2022 21:53:28 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F7F18982A;
+        Thu, 13 Oct 2022 18:53:26 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MpTqt6pYKzDsVV;
+        Fri, 14 Oct 2022 09:50:50 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 14 Oct 2022 09:53:23 +0800
+Message-ID: <86c88c01-22eb-b7f8-9c65-0faf97b4096b@huawei.com>
+Date:   Fri, 14 Oct 2022 09:53:23 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v9 0/9] x86: Show in sysfs if a memory node is able to do
- encryption
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v4 2/6] libbpf: Fix memory leak in
+ parse_usdt_arg()
 Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
-        dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org
-References: <20220704135833.1496303-1-martin.fernandez@eclypsium.com>
- <Y0hrhzprPFTK+VWV@zn.tnic>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y0hrhzprPFTK+VWV@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Xu Kuohai <xukuohai@huaweicloud.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Delyan Kratunov <delyank@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+References: <20221011120108.782373-1-xukuohai@huaweicloud.com>
+ <20221011120108.782373-3-xukuohai@huaweicloud.com>
+ <CAEf4BzZVYO42kDcmNqorLfwJcMcN7fyTLdp2GWbGfV5akP12GQ@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CAEf4BzZVYO42kDcmNqorLfwJcMcN7fyTLdp2GWbGfV5akP12GQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +71,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/13/22 12:48, Borislav Petkov wrote:
->> It's planned to make this check part of an specification that can be
->> passed to people purchasing hardware
-> How is that supposed to work?
+On 10/13/2022 11:47 PM, Andrii Nakryiko wrote:
+> On Tue, Oct 11, 2022 at 4:43 AM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+>>
+>> From: Xu Kuohai <xukuohai@huawei.com>
+>>
+>> In the arm64 version of parse_usdt_arg(), when sscanf returns 2, reg_name
+>> is allocated but not freed. Fix it.
+>>
+>> Fixes: 0f8619929c57 ("libbpf: Usdt aarch64 arg parsing support")
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> ---
+>>   tools/lib/bpf/usdt.c | 11 ++++-------
+>>   1 file changed, 4 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+>> index e83b497c2245..49f3c3b7f609 100644
+>> --- a/tools/lib/bpf/usdt.c
+>> +++ b/tools/lib/bpf/usdt.c
+>> @@ -1348,25 +1348,23 @@ static int calc_pt_regs_off(const char *reg_name)
+>>
+>>   static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
+>>   {
+>> -       char *reg_name = NULL;
+>> +       char reg_name[16];
+>>          int arg_sz, len, reg_off;
+>>          long off;
+>>
+>> -       if (sscanf(arg_str, " %d @ \[ %m[a-z0-9], %ld ] %n", &arg_sz, &reg_name, &off, &len) == 3) {
+>> +       if (sscanf(arg_str, " %d @ \[ %15[a-z0-9], %ld ] %n", &arg_sz, reg_name, &off, &len) == 3) {
 > 
-> People would boot a Linux on that hardware and fwupd would tell them
-> whether it can encrypt memory or not?
-> 
-> But if that were the only use case, why can't EFI simply say that in its
-> fancy GUI?
-> 
-> Because all the kernel seems to be doing here is parrot further
-> EFI_MEMORY_CPU_CRYPTO.
-> 
-> And that attribute gets set by EFI so it goes and picks apart whether
-> the underlying hw can encrypt memory. So EFI could report it too.
+> It would be nice to do the same change for other architectures where
+> it makes sense and avoid having to deal with unnecessary memory
+> allocations. Please send follow up patches with similar changes for
+> other implementations of parse_usdt_arg. Thanks.
+>
 
-I think the kernel _would_ just be parroting the firmware's info *if*
-this stuff was all static at boot.  It pretty much _is_ static on
-today's systems.  You generally can't hotplug memory (encrypted or not)
-on any of these fancy memory encryption systems.  On the Intel side, I'm
-thinking mostly of Ice Lake systems.
+ok, will do
 
-But, that is very much changing once CXL comes on the scene.  A system
-might boot with only DRAM attached right to the CPU and all of it is
-encryption-capable.  Then, some wise guys plugs in a CXL card that
-doesn't support encryption.
+> 
+>>                  /* Memory dereference case, e.g., -4@[sp, 96] */
+>>                  arg->arg_type = USDT_ARG_REG_DEREF;
+>>                  arg->val_off = off;
+>>                  reg_off = calc_pt_regs_off(reg_name);
+>> -               free(reg_name);
+>>                  if (reg_off < 0)
+>>                          return reg_off;
+>>                  arg->reg_off = reg_off;
+>> -       } else if (sscanf(arg_str, " %d @ \[ %m[a-z0-9] ] %n", &arg_sz, &reg_name, &len) == 2) {
+>> +       } else if (sscanf(arg_str, " %d @ \[ %15[a-z0-9] ] %n", &arg_sz, reg_name, &len) == 2) {
+>>                  /* Memory dereference case, e.g., -4@[sp] */
+>>                  arg->arg_type = USDT_ARG_REG_DEREF;
+>>                  arg->val_off = 0;
+>>                  reg_off = calc_pt_regs_off(reg_name);
+>> -               free(reg_name);
+>>                  if (reg_off < 0)
+>>                          return reg_off;
+>>                  arg->reg_off = reg_off;
+>> @@ -1375,12 +1373,11 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
+>>                  arg->arg_type = USDT_ARG_CONST;
+>>                  arg->val_off = off;
+>>                  arg->reg_off = 0;
+>> -       } else if (sscanf(arg_str, " %d @ %m[a-z0-9] %n", &arg_sz, &reg_name, &len) == 2) {
+>> +       } else if (sscanf(arg_str, " %d @ %15[a-z0-9] %n", &arg_sz, reg_name, &len) == 2) {
+>>                  /* Register read case, e.g., -8@x4 */
+>>                  arg->arg_type = USDT_ARG_REG;
+>>                  arg->val_off = 0;
+>>                  reg_off = calc_pt_regs_off(reg_name);
+>> -               free(reg_name);
+>>                  if (reg_off < 0)
+>>                          return reg_off;
+>>                  arg->reg_off = reg_off;
+>> --
+>> 2.30.2
+>>
+> .
 
-That makes the "is everything encrypted" answer dynamic and is
-essentially unanswerable at boot, other than to give a one-off answer.
