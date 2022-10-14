@@ -2,165 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D95F5FEBE0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Oct 2022 11:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BED5FEDBC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Oct 2022 14:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiJNJlh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Oct 2022 05:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        id S230013AbiJNMB6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Oct 2022 08:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiJNJlf (ORCPT
+        with ESMTP id S229607AbiJNMB5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Oct 2022 05:41:35 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9507B1C8D6C
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 02:41:31 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id i6so4217109pli.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 02:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KdrfFMceV7elb/rA2YCTui/ZhC4l1ygRRIMRPNusZhU=;
-        b=tILJoqotiPdze1TCCwL+mF59nGOxYtncfKrouddVFax7Gcsz+crVbOVRREI0Tubts5
-         vV3yE8640V3CYRlQELJMmFfQQTczEty9SrunN7E3D3rGtjh2DtqxOyXcFHLCaUj06bmI
-         n2K5LQbByQ+bIzM6sx24DqM+gWvxy+s7nteoahhh7v3RsKCxB7wfK3JM651TalbDEgCt
-         iq+ySPOEI9A34HStVa3+jhYVticSF1HMoHESfANw0eGaYRCfMc6JZDSu2ulbuQq9aPiZ
-         CEjBxmmj7CjShgC3jfj1T37OUIOlhGbi6AzfZNYGfNVtK/Ji6CXdTMJ7lej9vyZzHKB2
-         fE3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KdrfFMceV7elb/rA2YCTui/ZhC4l1ygRRIMRPNusZhU=;
-        b=6FbPKHK079DcU4jVpz/OcdD+mqFoQSJGoU1CankypEDkl3gzisWF2+vP5Cmjd8s2LE
-         SBWp6ur1ZeMEyy8Agk9YcyAGDMHte75oVh55CPqHq5+BTYAVJCJkxIzqrgrg9p5mp5YY
-         P0SFzfKm1eKuW5aNg3AUujleRNM4dBkzcgrekLBVKBMyv1FFeew3aAi6Hc5stngcYxYv
-         no9nWHd8dKmlJhnLZrbq44pieV0fOh9QnnHGfOcP1nfa5fslWBTqWUFi9eRPW6fC4PZz
-         e5zRcHx62DzlwiSQFjzkP1WMVH+x3ljUX7yKS2iYEocFh1XCKfXCqFyUbv9k5zscSHK3
-         mAkA==
-X-Gm-Message-State: ACrzQf0VnVdnakYykwTY/OHfPS+PK1dggt/4FsyZQnwVcwNp5sTCeYCO
-        WxZEAhcqQMIUvEX6sBwQXkLTJVHufPYGxBQEePVPOA==
-X-Google-Smtp-Source: AMsMyM4UqG/vIk3S7koHuixUnBbVmb4fDf+woVq1uoMPm6jtVGqdAhA4fxEgS9gbQtKnvvq2Dv3MB4MMySXFLzb02qg=
-X-Received: by 2002:a17:90b:38c3:b0:20d:406e:26d9 with SMTP id
- nn3-20020a17090b38c300b0020d406e26d9mr4843007pjb.121.1665740490315; Fri, 14
- Oct 2022 02:41:30 -0700 (PDT)
+        Fri, 14 Oct 2022 08:01:57 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2050.outbound.protection.outlook.com [40.107.94.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE9418F27C
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 05:01:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W2+PhP79rNtkMXnkGO6dTNTqoY2/zSAV16I8IxgPfd0nRe4K5XNQ1m8ba4P1jHfJrHuP4xXYDlwchJ7RMK2YTUKTtpmvdz6QP1gQQESsV47UNFpqR9Weej5FlRvhrNX+9QmIVBThhPXhurBWvqea2IXLvHSicQ6eXLt6/I4X0PrJU5Qp0h54VuxEwrQxB13Mjy4pK1joJdMOriT3Ad7JApbw5ggRpedEJ0InqKgCKU1l0Roy1E+EmTg/H91urFdSNjtAeLuGVl0LVtvLNqbr7/RFFcxzpJNuDlmsJxXRVKsJNkgQ4Q+/Di8N1TkaUBTd1lavmz3E531TcTdl4nCvQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=60mzp0qN4msS5g0AfvMwfzj94lKp0QCYimtytO+GSnM=;
+ b=gvxYuDv+djHWONQRwSPzy3/l9l/eebXuIYru3KlOpvIT8afY5hxH+XsPsnWp9JGumUib6sGKH7UdksFANncAxdVgHVIyc/mb2DwxIJ1qDoUG2HHsQaGYKkfrkECe9VrF/oiUIkCt5mp87645+tbhW+xdB3Eqcg5+IShKFo5tz7rcOpWHJ/xS5RI8ykNytxzpUvyv23aFMqfykVB1EU0xSKzkWg6zoHfHBgIeaT4AXky6MlkgVfFx6V/6+LjTwKRG5IH6dJAJ7coqTK+e68qa/PvjFUGwDpiPf29Fc2U7lMYSgX0vYWuGeAVzwlulARSySzYscx/p55CsiNsXD/GKIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=60mzp0qN4msS5g0AfvMwfzj94lKp0QCYimtytO+GSnM=;
+ b=o8iC16912Cqb+Nd5+ENYgWVykJiKUyxQooAL7AqfeffGo9BdIg3A/lUL4nii39rdxegC5XSgPG8DnrzAhuJI8/b4DT85ux61aclHcZ/tXJZOC7XjQV5AHA6L/S6zZn0rclOqZVspEmhSdbPZ0lONbOb0eIgfEggNjG8m1hY1o4LZDMzECSuntGXA3UJEMzbwgxaTZmjgnWWHvKSHMeRAbOsgHv7pg2coPq4N928mpKy8OoECiupZQDXCjHBOk+mOsjKfYGBmaq4prS4P9UfboPC9NkMc8T40TSbHwTG7eVM3NwFInCN0Knkz2Z4GDCMjmc++7/ObdoKAvjeCiFo65w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MN2PR12MB4270.namprd12.prod.outlook.com (2603:10b6:208:1d9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Fri, 14 Oct
+ 2022 12:01:54 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%5]) with mapi id 15.20.5676.032; Fri, 14 Oct 2022
+ 12:01:54 +0000
+Date:   Fri, 14 Oct 2022 09:01:53 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Alex Sierra <alex.sierra@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: hmm_test issues with latest mainline
+Message-ID: <Y0lPsbLKZakAGZeZ@nvidia.com>
+References: <26017fe3-5ad7-6946-57db-e5ec48063ceb@suse.cz>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <26017fe3-5ad7-6946-57db-e5ec48063ceb@suse.cz>
+X-ClientProxiedBy: BL1PR13CA0161.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::16) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20220819174659.2427983-1-vannapurve@google.com>
- <20220819174659.2427983-7-vannapurve@google.com> <Yz85WEQWsXAbLWnu@google.com>
-In-Reply-To: <Yz85WEQWsXAbLWnu@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Fri, 14 Oct 2022 15:11:19 +0530
-Message-ID: <CAGtprH-eA+k3BwczSyds+Hrr5QZn96hNK81Op_iBH20-wKfKeg@mail.gmail.com>
-Subject: Re: [RFC V3 PATCH 6/6] sefltests: kvm: x86: Add selftest for private memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
-        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN2PR12MB4270:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6836aca8-ece3-4b9c-376d-08daaddbe2a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Civ4vGvS6XMdzedwnuC8DKgqzjKtsisJcqVdXiClHtWrYTy3Sm2Hz8uIa5148f9fu1zCwCoMlnuo7znqkfqid6ECuDnEdeXnXov2i1vPCBcnrDXUcr8WyYaInSRTqn5zT4hRBdUfsI+GgoUPnfS2rq1NKaq70RtjOlJdBR0nCtqK9mVsRLe7EjucSsGnyh9qAa8pa8zjkEDfx9OGxBhE42AiXFt4E/9+JrcuAzv7lhrafLrtyssQVScOs7cOQRD5rEzwKoSY2sBXbbo+7ZbTl7is0uDctX0a2xt23FXjhjeX0Zt+zpxFcJGow05FGzJgiXTMDNPsihz3Z4JIEhAZMb09NAI8PoVYjejMMIvoFicHOElTbXHzQxy3Vm6tSUPD1ARuIjaKhJczKSD4Tv1k3UZHl84zYf0VN3imU5KGAq9FxrQdRlmR4pHEPsDxxeRn2prDrR40pgRgMwaib5Z/G1YCvtr9xLKzdoHdCdfAS0iCGrJuZO1/Pe2gNS6R1f9ds8uvQxScYRZoWH+wrla8B1+pXztdS6p/lZVCeKnumPrziOjnd9Vy6TaZeB6/PmHLWj1b7Gi6WcvKVi0UtAxFwBgH/OfWLiLoxSriomKowvdbjZYVHLYVhVg1PkH791hWpAh/Hxwkb1VBQKTLPCTXwxxvQ3s5Qcu9e4jFFwPle41b8L8mZ0lIa3jGut4TNFvNsxjXWayvARH13MoGGVZzAg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(451199015)(478600001)(6486002)(86362001)(6916009)(54906003)(5660300002)(6506007)(4326008)(8676002)(4744005)(8936002)(66946007)(83380400001)(66476007)(66556008)(38100700002)(36756003)(2906002)(2616005)(186003)(26005)(6512007)(316002)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?itN90WplxjN+0MrOjJGmIWJoF0wnKOL6ZQ74uBK5b0obJxHvDa5pvOTU9DR4?=
+ =?us-ascii?Q?ch0is1GrwGyxu631gSZVFISZhbQU833VyVyhAi7FAK3vonj8ijfrNIX1lpV1?=
+ =?us-ascii?Q?7WEymyaN+iBG+O/AnmhCiB+UUhmxe0JDAcE2G6/Xs/wK0wEGtAeFYpurOouX?=
+ =?us-ascii?Q?EYxqGllSWwKlegEy9q/3QwvQ9qvPabzdWXrtSaciugKTbTzdN6n44AU5GzTs?=
+ =?us-ascii?Q?M5aruFG2WhT5ZrzFn8HeK/M/qCeLQm3azbBhjG9jfMlTJ1eRzeesGUgny9Sw?=
+ =?us-ascii?Q?r72cCp8FDmaV11btIzNY6yzMY4qUqKs8a+x7YgTMND68IX1Cqh3U5WubzSih?=
+ =?us-ascii?Q?0mTOrLyVmMpPZUwVO80123DOx6AwLqmBU5yEDMiYv3dCVm561PfsrmAeGOm3?=
+ =?us-ascii?Q?HHuZE6ihx2EcqOM49kyAAUPoB5iPiNWcC8v6D91PXz9tbuWVIBHOFYVMa3pd?=
+ =?us-ascii?Q?inPHK97dkcZkWjA+EXFqI92mLE7UjSkFv1hsAwVmsKwaUJSiRPj2smIoHZyt?=
+ =?us-ascii?Q?TR8Az4C/KdSiCrh1Qtjj1KRETqtKnDU+iRgVJXgVCGAV1OeDt+4qd+2KDg3m?=
+ =?us-ascii?Q?O+TpdqSlaE5pM/ezWD0+wqC/iK182wAAIoQ+9k2uvtodhAFgxhYmGgmkvbFK?=
+ =?us-ascii?Q?wxZAz6+5lRHLNkebDliOARgFOu8G89EV7s28AAG+pC+aJvao7Ct4d8+PZfQU?=
+ =?us-ascii?Q?zmqF9aKjEqiFjikHHqNXSdypTsAVOL52V7DXlisKYtgpM4EMI2Nw7wG4Sp+h?=
+ =?us-ascii?Q?Eas6/KrOrt7xrfh6+yMywkUp7yEeo6bVzKOELqhKzfjNQIO7/yha/XrcDddv?=
+ =?us-ascii?Q?1uN20crsNCzD2A11EaWkkWwacxDsyJ/CTohsvos+SVlqHnH6wOia45DNQHuJ?=
+ =?us-ascii?Q?yhohNspw6WIVTxXSiM25yUxowNgqvR2cuJzQcG+QOej8u2o/hYtuozKem/81?=
+ =?us-ascii?Q?HJ+ojKTVZvXu8GPWWtpPkXREb9lYVBOr8UZPu00RB94nDkLG133/RBLxWheV?=
+ =?us-ascii?Q?ubdQzE1TSPSU+SXbD3I/TIOojTq+AGxJtKbxdL/5NS860ckV8IIo3kEsTL68?=
+ =?us-ascii?Q?LjwLzQQNf6v0Sp5zIKSrZ7SbjwUqq9yHpB2YGC1BK+AzLhsG175/x33Amq7L?=
+ =?us-ascii?Q?YtYAtMHOv0wH7HQAMK9KJ8LoGP5XqhitYsQERg7jxj8PZV2S8+GdRJw0PHmt?=
+ =?us-ascii?Q?YkrJ+o6Z7Dr40wr3ERF3Pq+Q+TWNDXWuIX8VkaXu0cyOTmpOxS8hieORAJkC?=
+ =?us-ascii?Q?l2ZZhMuVt5afT4UiKdC1OpdWxRmSwgc+JsZi3Jtw/dPLZOyOJHgEAg6or/1g?=
+ =?us-ascii?Q?dmHENZ7jHf/PPW1lC7aOkBwwRO9XYkA5MpocgzN/q/TaYd6qJ4aaK33NC7pY?=
+ =?us-ascii?Q?F0qPDvbuXn0cJxvW0SvawQahb3uC21Qf9BN0PTOD6jym1qIAdSr+kSmdBPMY?=
+ =?us-ascii?Q?7UQrFyzjZarHy2VDzYRDLXclT7qEfVrNFTpFedUmdpsBBnCm07XZ+1zreUhJ?=
+ =?us-ascii?Q?Zx0TkAXA5vRjl/Q9e/PX74bYT9ibe48CC0J+kkoWWGoXx66YrQ1x37KjI51/?=
+ =?us-ascii?Q?WfG+EWo8iXLgi2s1kMg=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6836aca8-ece3-4b9c-376d-08daaddbe2a1
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2022 12:01:53.9724
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V6kl9sNndd84aRFY+7stfM5a7LERecwj+MRNebzIhK4+Apab+4+Tc4yDGrPVTwEN
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4270
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 1:54 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Aug 19, 2022, Vishal Annapurve wrote:
-> > +static bool verify_mem_contents(void *mem, uint32_t size, uint8_t pat)
->
-> As per feedback in v1[*], spell out "pattern".
->
-> [*] https://lore.kernel.org/all/YtiJx11AZHslcGnN@google.com
->
-> > +{
-> > +     uint8_t *buf = (uint8_t *)mem;
-> > +
-> > +     for (uint32_t i = 0; i < size; i++) {
-> > +             if (buf[i] != pat)
-> > +                     return false;
-> > +     }
-> > +
-> > +     return true;
-> > +}
-> > +
-> > +/*
-> > + * Add custom implementation for memset to avoid using standard/builtin memset
-> > + * which may use features like SSE/GOT that don't work with guest vm execution
-> > + * within selftests.
-> > + */
-> > +void *memset(void *mem, int byte, size_t size)
-> > +{
-> > +     uint8_t *buf = (uint8_t *)mem;
-> > +
-> > +     for (uint32_t i = 0; i < size; i++)
-> > +             buf[i] = byte;
-> > +
-> > +     return buf;
-> > +}
->
-> memset(), memcpy(), and memcmp() are safe to use as of commit 6b6f71484bf4 ("KVM:
-> selftests: Implement memcmp(), memcpy(), and memset() for guest use").
->
+On Thu, Oct 13, 2022 at 06:54:24PM +0200, Vlastimil Babka wrote:
+> Hi,
+> 
+> I've been trying the hmm_tests as of today's commit:
+> 
+> a185a0995518 ("Merge tag 'linux-kselftest-kunit-6.1-rc1-2' ...)
+> 
+> and run into several issues that seemed worth reporting.
+> 
+> First, it seems the FIXTURE_TEARDOWN(hmm) in
+> tools/testing/selftests/vm/hmm-tests.c
+> using ASSERT_EQ(ret, 0); can run into an infinite loop of reporting the
+> assertion failure. Dunno if it's a kselftests issue or it's a bug to
+> use asserts in teardown. I hacked it up like this locally to proceed:
 
-This is much better. It made less sense to add a custom memset for a
-single selftest.
+I've seen this too in other tests, it is a kselftests bug/limitation,
+AFAIK. You can't use assert macros in those functions.
 
-> Note the "fun" with gcc "optimizing" into infinite recursion... :-)
->
-> > +
-> > +static void populate_test_area(void *test_area_base, uint64_t pat)
-> > +{
-> > +     memset(test_area_base, pat, TEST_AREA_SIZE);
-> > +}
-> > +
-> > +static void populate_guest_test_mem(void *guest_test_mem, uint64_t pat)
-> > +{
-> > +     memset(guest_test_mem, pat, GUEST_TEST_MEM_SIZE);
-> > +}
-> > +
-> > +static bool verify_test_area(void *test_area_base, uint64_t area_pat,
-> > +     uint64_t guest_pat)
->
-> Again, avoid "pat".
->
-> > +{
-> > +     void *test_area1_base = test_area_base;
-> > +     uint64_t test_area1_size = GUEST_TEST_MEM_OFFSET;
-> > +     void *guest_test_mem = test_area_base + test_area1_size;
-> > +     uint64_t guest_test_size = GUEST_TEST_MEM_SIZE;
-> > +     void *test_area2_base = guest_test_mem + guest_test_size;
-> > +     uint64_t test_area2_size = (TEST_AREA_SIZE - (GUEST_TEST_MEM_OFFSET +
-> > +                     GUEST_TEST_MEM_SIZE));
->
-> This is all amazingly hard to read.  AFAICT, the local variables are largely useless.
-> Actually, why even take in @test_area_base, isn't it hardcoded to TEST_AREA_GPA?
-> Then everything except the pattern can be hardcoded.
->
-> > +     return (verify_mem_contents(test_area1_base, test_area1_size, area_pat) &&
-> > +             verify_mem_contents(guest_test_mem, guest_test_size, guest_pat) &&
-> > +             verify_mem_contents(test_area2_base, test_area2_size, area_pat));
-> > +}
-
-Ack. Will address these comments in the next series.
+Jason
