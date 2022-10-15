@@ -2,63 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B44195FF853
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Oct 2022 05:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5BB5FF85F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Oct 2022 06:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiJOD46 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Oct 2022 23:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S229578AbiJOEE4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 15 Oct 2022 00:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiJOD45 (ORCPT
+        with ESMTP id S229740AbiJOEEy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Oct 2022 23:56:57 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC837AC19
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 20:56:55 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id e22so2600273uar.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 20:56:55 -0700 (PDT)
+        Sat, 15 Oct 2022 00:04:54 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18B325C9
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 21:04:45 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id a8so2593259uaj.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 21:04:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1XtuVADnAOBONC1M17shsTaGM9X/1vdcEzHMBFOcvXk=;
-        b=SICoSPjDMfDyxBWTvI7h9j4rOaw3W2JVixNlEFSxzdTf6iuhFXBogtg847ozW9ItTi
-         iDSArywWSE3DkZw1FNys8hKdxU3sUjMxau4rTklao5ix4vsIiiONwe/8BXURq//KJx+D
-         fNIo9KEwNEfqsa3Ef3Uu2pBfrzPRaF0qH7pp411E6JrQryl+ADOssJ0e+daZPOlgPxzc
-         c6My6fhbMjtQYxj/9xPLCJ6w2rXqSN0/hV6APJtyCBtdRyiUdsrwmXysPLc2a05g0+Ta
-         EkrhdH2ZpUkMlbylrfbwzXDWieqPKsHzGFeblUcz/gI9hdI6RLuvJzPwUAWxs+rigjT6
-         gNSA==
+        bh=gaRuIOy5mipxC/DcG4OUxK58zUai1nT9d4WWV0cqyO8=;
+        b=IszlE+nsJk2T1FzF4PpZXEdi2LN8qHNRhvPsuS12/3ruJQ23aBGF/V8KITeyrHkY9X
+         Tzkie3tfTYo7X1JXlsKbzRpRsXTnfgha+GpWtbkIt1Ps9Lj0634OCqEBAwO+l15G732A
+         e2Zi0S6hVyUbSZP/5P68DfpgFs+pYBjjvaQmB1yG2gwU0iBE/pbNFD481RAnRmBjNseA
+         /lpY2DERASTvoFUrVEdSnAmOZHz3eEeIzgSNrE3RhD56vUzvJuflRO9hm1wNnu34jG16
+         IP74UVFKUar3t/Z9w7l1K3+dd1zZCgMVCvclxFkZe0KC5hlR6qU/mwhLR7cEtvJ3F9Pl
+         tcxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1XtuVADnAOBONC1M17shsTaGM9X/1vdcEzHMBFOcvXk=;
-        b=GGn6eTH7DUcXAUV53veLZP3hhH0Ly0HEHYrKUBDhibohdxgobWlahZjR+0bUHDDHm7
-         2rPdAN3MrkcyE4qmmVpRejzaaoCGS0Kr2B4LbKUEaOWKGt4CQqLtS/dYmJmQtpCzfRFV
-         han1vneK5QRNLmFiwDDiBKnfGvG2qn10IAVPgBqjjlVw1av0pxAh7mV9TWasVFNQ+Vxv
-         cb/w5BSscarodDx7pIyU+Cs84KQaCgAmZoZERGuCLCiBUSqXj6bDOPstxtdJ/hu3eaBe
-         NLPTjBJ3O5btOgbOmyro6GgDHIL+BAn4bIFRVX8iqQ4s0Ey8F/dIrHokp56Fei+7CFBF
-         +9gw==
-X-Gm-Message-State: ACrzQf0zlz7jPJPymBJW5PM5YTlcT8ZV8XHkcruURJY/ZmZl7lPjdOAD
-        DG6YFPqHKgnsgzb1ATwPfmcuu+RMbKc1rJ/Xs1zoag==
-X-Google-Smtp-Source: AMsMyM473JkJYVq3qyMVSEZ/H2A3T4g6IsXoU0uUO2ER+bROjWbRK2mptRijTTlqIqKwYqfHd0rHvvyL8dMeIHpWimw=
-X-Received: by 2002:ab0:7412:0:b0:3d1:c2f7:3250 with SMTP id
- r18-20020ab07412000000b003d1c2f73250mr351495uap.21.1665806214170; Fri, 14 Oct
- 2022 20:56:54 -0700 (PDT)
+        bh=gaRuIOy5mipxC/DcG4OUxK58zUai1nT9d4WWV0cqyO8=;
+        b=b4XSpywkwVrtR+Jl/P9IXJCUT+Lhh5x6jDr+O/8T5yLUptooThJfeTDjhU6BGtL7WP
+         AAgswyzU51SXZyQD2tEiH2O1/H1MKSplNQvg0inuk542HdQA8drhge/b8KMgVVX/paeL
+         pA7z5vQrKNn+3TMzYU76itfsat8Q5RsU6TK03AczoRcLgJNsmKZVrvzEqfy9sHnTQjt7
+         iyVppE0nmt5aJyHcsGbqC/Sd8y+GPqrJv68Qm5tchboI1/0fOPHuXOe15+91AHIsmthK
+         bHULMQ0WFKhABLM9G7FRXo0q9whbGG1DSVcm9wyRZh+yEg8ggdFC7YoDM41VT4ztm5XR
+         /YjQ==
+X-Gm-Message-State: ACrzQf3wU0eacDOnvJjjIGM9b5Af4CU/yMgNeLF7ZqZOyLysn6US3qNO
+        0B2/nbWmamgJdTUHpZJDo0005AqtfZ42hY6JRbu3UA==
+X-Google-Smtp-Source: AMsMyM7hRmdyeIhbI6VaevYf0uTIoRSecIosJKChDWbOj0yxPl7Gy6TyTDB/xFC68FLvzTCiqzfQ5/kJUV3egu1oUBs=
+X-Received: by 2002:ab0:628a:0:b0:3e3:651f:a07d with SMTP id
+ z10-20020ab0628a000000b003e3651fa07dmr330706uao.52.1665806684727; Fri, 14 Oct
+ 2022 21:04:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <Y0kt1aCTHO4r2CmL@kili>
-In-Reply-To: <Y0kt1aCTHO4r2CmL@kili>
+References: <20221005175149.611068-1-mark.rutland@arm.com>
+In-Reply-To: <20221005175149.611068-1-mark.rutland@arm.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 15 Oct 2022 11:56:42 +0800
-Message-ID: <CABVgOSkrZ+ZHP6M5t3JSMetdM=WWQwiS_2k1VZUHm9t42JagOA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: update NULL vs IS_ERR() tests
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org
+Date:   Sat, 15 Oct 2022 12:04:33 +0800
+Message-ID: <CABVgOSmgkxb6U1S1Ww3dZ6M3i6asmXF-4MtEzn7O+GiA0SLPaA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: log numbers in decimal and hex
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, brendan.higgins@linux.dev,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -71,55 +68,78 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 5:37 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+On Thu, Oct 6, 2022 at 1:52 AM Mark Rutland <mark.rutland@arm.com> wrote:
 >
-> The alloc_string_stream() functions were changed from returning NULL on
-> error to returning error pointers so these caller needs to be updated
-> as well.
+> When KUNIT_EXPECT_EQ() or KUNIT_ASSERT_EQ() log a failure, they log the
+> two values being compared, with numerical values logged in decimal.
 >
-> Fixes: 78b1c6584fce ("kunit: string-stream: Simplify resource use")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> In some cases, decimal output is painful to consume, and hexadecimal
+> output would be more helpful. For example, this is the case for tests
+> I'm currently developing for the arm64 insn encoding/decoding code,
+> where comparing two 32-bit instruction opcodes results in output such
+> as:
+>
+> |  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
+> |  Expected obj_insn == gen_insn, but
+> |      obj_insn == 2332164128
+> |      gen_insn == 1258422304
+>
+> To make this easier to consume, this patch logs the values in both
+> decimal and hexadecimal:
+>
+> |  # test_insn_add_shifted_reg: EXPECTATION FAILED at arch/arm64/lib/test_insn.c:2791
+> |  Expected obj_insn == gen_insn, but
+> |      obj_insn == 2332164128 (0x8b020020)
+> |      gen_insn == 1258422304 (0x4b020020)
+>
+> As can be seen from the example, having hexadecimal makes it
+> significantly easier for a human to spot which specific bits are
+> incorrect.
+>
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <davidgow@google.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
 > ---
 
-Thanks for catching this!
+Thanks very much: this will definitely be useful. I tend to agree with
+Daniel that this could clutter things up a bit, but I think the other
+options (a separate ASSERT_EQ_HEX() macro, or a heuristic to remove it
+for, e.g., values <= 9) add more complexity than benefit there.
+
+So let's go with this as-is.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  lib/kunit/string-stream.c | 4 ++--
->  lib/kunit/test.c          | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  lib/kunit/assert.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index f5ae79c37400..a608746020a9 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -56,8 +56,8 @@ int string_stream_vadd(struct string_stream *stream,
->         frag_container = alloc_string_stream_fragment(stream->test,
->                                                       len,
->                                                       stream->gfp);
-> -       if (!frag_container)
-> -               return -ENOMEM;
-> +       if (IS_ERR(frag_container))
-> +               return PTR_ERR(frag_container);
->
->         len = vsnprintf(frag_container->fragment, len, fmt, args);
->         spin_lock(&stream->lock);
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 90640a43cf62..2a6992fe7c3e 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -265,7 +265,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
->         kunit_set_failure(test);
->
->         stream = alloc_string_stream(test, GFP_KERNEL);
-> -       if (!stream) {
-> +       if (IS_ERR(stream)) {
->                 WARN(true,
->                      "Could not allocate stream to print failed assertion in %s:%d\n",
->                      loc->file,
+> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+> index d00d6d181ee8..24dec5b48722 100644
+> --- a/lib/kunit/assert.c
+> +++ b/lib/kunit/assert.c
+> @@ -127,13 +127,15 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+>                           binary_assert->text->right_text);
+>         if (!is_literal(stream->test, binary_assert->text->left_text,
+>                         binary_assert->left_value, stream->gfp))
+> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld\n",
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
+>                                   binary_assert->text->left_text,
+> +                                 binary_assert->left_value,
+>                                   binary_assert->left_value);
+>         if (!is_literal(stream->test, binary_assert->text->right_text,
+>                         binary_assert->right_value, stream->gfp))
+> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
+>                                   binary_assert->text->right_text,
+> +                                 binary_assert->right_value,
+>                                   binary_assert->right_value);
+>         kunit_assert_print_msg(message, stream);
+>  }
 > --
-> 2.35.1
+> 2.30.2
 >
