@@ -2,70 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D949B5FF4F5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Oct 2022 23:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44195FF853
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Oct 2022 05:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiJNVEG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Oct 2022 17:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S229708AbiJOD46 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Oct 2022 23:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiJNVEE (ORCPT
+        with ESMTP id S229618AbiJOD45 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Oct 2022 17:04:04 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC91F1DC4F8
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 14:04:03 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id f23so5835493plr.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 14:04:03 -0700 (PDT)
+        Fri, 14 Oct 2022 23:56:57 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC837AC19
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 20:56:55 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id e22so2600273uar.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Oct 2022 20:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FEPtKNTg7NezEV8TRfsVFDaZ2fJ2JKYBjP7uR8dhm+Q=;
-        b=ghXdUokTFObMpYmEMyA5TGYHsb9p1yIdHyjKldJRnv8meEPZNLqDb6gaJC6CS3gCAU
-         wKI/E9fp70U4GxOlUa9Tk49BfJ7YtDWHwV8siA1GOD5deWy8f1N9GPDcWEsqIoiobPr9
-         cm18E706gRnczeSjs9KGMfnvsmBMRsFeBo5SFCK188aD8A0ErFSk0GNNO02uA7nPyrs7
-         wAp1Q2/XdVvr5ekyAAwiJhTM/tinI0cw7rq0wFvrap7tnezgLnqlm1o+eFSi8REqPquv
-         HCV5HrFWGZK2V9XrRGF08TekR6EyyL9a10mSlEBNtNAZG8s94GAn2iSkGRcZub6dcdYW
-         xbgw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1XtuVADnAOBONC1M17shsTaGM9X/1vdcEzHMBFOcvXk=;
+        b=SICoSPjDMfDyxBWTvI7h9j4rOaw3W2JVixNlEFSxzdTf6iuhFXBogtg847ozW9ItTi
+         iDSArywWSE3DkZw1FNys8hKdxU3sUjMxau4rTklao5ix4vsIiiONwe/8BXURq//KJx+D
+         fNIo9KEwNEfqsa3Ef3Uu2pBfrzPRaF0qH7pp411E6JrQryl+ADOssJ0e+daZPOlgPxzc
+         c6My6fhbMjtQYxj/9xPLCJ6w2rXqSN0/hV6APJtyCBtdRyiUdsrwmXysPLc2a05g0+Ta
+         EkrhdH2ZpUkMlbylrfbwzXDWieqPKsHzGFeblUcz/gI9hdI6RLuvJzPwUAWxs+rigjT6
+         gNSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FEPtKNTg7NezEV8TRfsVFDaZ2fJ2JKYBjP7uR8dhm+Q=;
-        b=NLBbyJCq6qomoQ9mNKuP3vz5NPF3/AcWEZv2UZdCQCYW+qPXU/DUPYAYrxDB3CwudT
-         jpfakb//U3vrr5jijEq8o/SvdincO0qtwQj5MtSSYi6wMNwG8GLosgonJAKKl/7VarUg
-         lraeD2Mjhfrj4gIGmrVt0qepyJnEhMWP9aqx1GdM/ggqP3LWWhbZ42LUGK98FkChGT0O
-         z/NwfEDIphvgguqhPmyL2twHub3J76THPy8NA9xtrw5GrGkFiYl3AdsbTaypzburQs3v
-         0M6FtQA7tSWqh//VV0o7AjZb25L6sh6iN6uFgaBL0nH9Ukllo5anMTUolxzG9YhF8hcq
-         9AHg==
-X-Gm-Message-State: ACrzQf2Plw4uVp/a8zzPDj03gNbdUNdsPuS9AOf9yZqZcOVs56Bb8rok
-        CTAw/arTCTP6YKscSQhEbcE04w==
-X-Google-Smtp-Source: AMsMyM5JdhDG1UpOFIQKo1Xnh0Iup3kp8kSlAUfnxdMjkyOeWnzbt+R+akO078ePfB3UOfdracdJ7Q==
-X-Received: by 2002:a17:902:9684:b0:17e:71b2:bd16 with SMTP id n4-20020a170902968400b0017e71b2bd16mr7234080plp.163.1665781443064;
-        Fri, 14 Oct 2022 14:04:03 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b30-20020aa78ede000000b0053e6eae9665sm2253296pfr.140.2022.10.14.14.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:04:02 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 21:03:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Huth <thuth@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/3] Use TAP in some more KVM selftests
-Message-ID: <Y0nOv6fqTe2NnPuu@google.com>
-References: <20221004093131.40392-1-thuth@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1XtuVADnAOBONC1M17shsTaGM9X/1vdcEzHMBFOcvXk=;
+        b=GGn6eTH7DUcXAUV53veLZP3hhH0Ly0HEHYrKUBDhibohdxgobWlahZjR+0bUHDDHm7
+         2rPdAN3MrkcyE4qmmVpRejzaaoCGS0Kr2B4LbKUEaOWKGt4CQqLtS/dYmJmQtpCzfRFV
+         han1vneK5QRNLmFiwDDiBKnfGvG2qn10IAVPgBqjjlVw1av0pxAh7mV9TWasVFNQ+Vxv
+         cb/w5BSscarodDx7pIyU+Cs84KQaCgAmZoZERGuCLCiBUSqXj6bDOPstxtdJ/hu3eaBe
+         NLPTjBJ3O5btOgbOmyro6GgDHIL+BAn4bIFRVX8iqQ4s0Ey8F/dIrHokp56Fei+7CFBF
+         +9gw==
+X-Gm-Message-State: ACrzQf0zlz7jPJPymBJW5PM5YTlcT8ZV8XHkcruURJY/ZmZl7lPjdOAD
+        DG6YFPqHKgnsgzb1ATwPfmcuu+RMbKc1rJ/Xs1zoag==
+X-Google-Smtp-Source: AMsMyM473JkJYVq3qyMVSEZ/H2A3T4g6IsXoU0uUO2ER+bROjWbRK2mptRijTTlqIqKwYqfHd0rHvvyL8dMeIHpWimw=
+X-Received: by 2002:ab0:7412:0:b0:3d1:c2f7:3250 with SMTP id
+ r18-20020ab07412000000b003d1c2f73250mr351495uap.21.1665806214170; Fri, 14 Oct
+ 2022 20:56:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004093131.40392-1-thuth@redhat.com>
+References: <Y0kt1aCTHO4r2CmL@kili>
+In-Reply-To: <Y0kt1aCTHO4r2CmL@kili>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 15 Oct 2022 11:56:42 +0800
+Message-ID: <CABVgOSkrZ+ZHP6M5t3JSMetdM=WWQwiS_2k1VZUHm9t42JagOA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: update NULL vs IS_ERR() tests
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,44 +71,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 04, 2022, Thomas Huth wrote:
-> Many KVM selftests are completely silent. This has the disadvantage
-> for the users that they do not know what's going on here. For example,
-> some time ago, a tester asked me how to know whether a certain new
-> sub-test has been added to one of the s390x test binaries or not (which
-> he didn't compile on his own), which is hard to judge when there is no
-> output. So I finally went ahead and implemented TAP output in the
-> s390x-specific tests some months ago.
-> 
-> Now I wonder whether that could be a good strategy for the x86 and
-> generic tests, too?
+On Fri, Oct 14, 2022 at 5:37 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> The alloc_string_stream() functions were changed from returning NULL on
+> error to returning error pointers so these caller needs to be updated
+> as well.
+>
+> Fixes: 78b1c6584fce ("kunit: string-stream: Simplify resource use")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
 
-Taking Andrew's thoughts a step further, I'm in favor of adding TAP output, but
-only if we implement it in such a way that it reduces the burden on writing new
-tests.  I _really_ like that sync_regs_test's subtests are split into consumable
-chunks, but I worry that the amount of boilerplate needed will deter test writes
-and increase the maintenance cost.
+Thanks for catching this!
 
-And my experience with KVM-unit-tests is that letting test writers specify strings
-for test names is a bad idea, e.g. using an arbitrary string creates a disconnect
-between what the user sees and what code is running, and makes it unnecessarily
-difficult to connect a failure back to code.  And if we ever support running
-specific testcases by name (I'm still not sure this is a net positive), arbitrary
-strings get really annoying because inevitably an arbitrary string will contain
-characters that need to be escaped in the shell.
+Reviewed-by: David Gow <davidgow@google.com>
 
-Adding a macro or three to let tests define and run testscases with minimal effort
-would more or less eliminate the boilerplate.  And in theory providing semi-rigid
-macros would help force simple tests to conform to standard patterns, which should
-reduce the cost of someone new understanding the test, and would likely let us do
-more automagic things in the future.
+Cheers,
+-- David
 
-E.g. something like this in the test:
-
-	KVM_RUN_TESTCASES(vcpu,
-		test_clear_kvm_dirty_regs_bits,
-		test_set_invalid,
-		test_req_and_verify_all_valid_regs,
-		test_set_and_verify_various_reg_values,
-		test_clear_kvm_dirty_regs_bits,
-	);
+>  lib/kunit/string-stream.c | 4 ++--
+>  lib/kunit/test.c          | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+> index f5ae79c37400..a608746020a9 100644
+> --- a/lib/kunit/string-stream.c
+> +++ b/lib/kunit/string-stream.c
+> @@ -56,8 +56,8 @@ int string_stream_vadd(struct string_stream *stream,
+>         frag_container = alloc_string_stream_fragment(stream->test,
+>                                                       len,
+>                                                       stream->gfp);
+> -       if (!frag_container)
+> -               return -ENOMEM;
+> +       if (IS_ERR(frag_container))
+> +               return PTR_ERR(frag_container);
+>
+>         len = vsnprintf(frag_container->fragment, len, fmt, args);
+>         spin_lock(&stream->lock);
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 90640a43cf62..2a6992fe7c3e 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -265,7 +265,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+>         kunit_set_failure(test);
+>
+>         stream = alloc_string_stream(test, GFP_KERNEL);
+> -       if (!stream) {
+> +       if (IS_ERR(stream)) {
+>                 WARN(true,
+>                      "Could not allocate stream to print failed assertion in %s:%d\n",
+>                      loc->file,
+> --
+> 2.35.1
+>
