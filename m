@@ -2,67 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5416015D4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 19:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177436015FB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 20:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiJQR6d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Oct 2022 13:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S230464AbiJQSI4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Oct 2022 14:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiJQR6c (ORCPT
+        with ESMTP id S229948AbiJQSIy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:58:32 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E5161D96;
-        Mon, 17 Oct 2022 10:58:31 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id bh13so11124682pgb.4;
-        Mon, 17 Oct 2022 10:58:31 -0700 (PDT)
+        Mon, 17 Oct 2022 14:08:54 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AC474B92
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 11:08:52 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id q10-20020a17090a304a00b0020b1d5f6975so11749154pjl.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 11:08:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XeKUR+Ic7TUkYH6vGnV3fuwa2YAfRUGUap65mjX2bIY=;
-        b=dHb/yAW8qCnmR3JHQz9IMnHr3ZXBJzqzORUlGlIhSix9QXQV7XUf+Jhjgi0HecrIkp
-         wcJ6RXOEGEoWSe+puoBC77GS8PekmjpB64vannhPqzpG9WEXd0D+q0NVxBHHUFdZsyvP
-         eSuEh9CEXPxNl8721pWgrNJs84B1OLAfN1U7MVguuieZO6W/nB/FHw/B0mJeXA8euOfC
-         KeXah39qz+ZaPV3gqIq6PL9NYUP3Hvn0JfllXC77RFMDMoJNi0aNUr4rQevAykWqDV4a
-         k2+yZ5vlwk6zEWIr2rxHrG8Tf667SW/4h6zjfGUjSJea8iJbihAJwZE1MODCEBe5yk4P
-         lr6w==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L9A07l58gYnh7KAA0iXhOrnBqUc773E6KyrOSccVOeI=;
+        b=VEW8NrH9pYWqGDvIZkdrS5zE1KyrBYrxMV/OFT8xI++Zos03GTAy4kuS4+FYASo15T
+         vM0kH4ym0hozzgAK5k3fiBmg1i7avcGAUw2qzOK2sD4Bys1dpmBa9MV9D5SmkzFHqgxr
+         Qo/AT+amKP5u7jpv49MWo8TrOSib/79/eBpB6rxAcSr9fGeYmBsTH0dJ/TYKFuIag2Tv
+         73VGvVPZrNSrJgTRvomtlRITXBj/voR6b4QUthdiYg+3bejNxmdeSACLiPOFHnuYEUAB
+         lchGF110Oo6fwO+VAqhIYulZdloa+ZKOw7IPEx7WHRSwI2ujMBy0UFAJHxjzwTsOg0rd
+         AEbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XeKUR+Ic7TUkYH6vGnV3fuwa2YAfRUGUap65mjX2bIY=;
-        b=mp7Sjf8Ih23IDx/Fjd0WzTz4+esZQ2/nCh1ZnYNxrbo8AjaVAT1aHs68c1pj6AxaL9
-         1miusGW8OccXzvJDGH0Ya3Wbv0DYli0aaDg4BK3Eccq/dUguen5CUWUr+m8nl2YMgVZN
-         4g/qnUpGspjcvgDw9rP3XcYRpleSWFAokaHqEwWlNGwdhOG79aSEwuFxvVNG3FpOY9Av
-         pRIcXgeQ/lP5BsrDC4M3Ve0cQLilxU5wWWRdDW2vwVtx8HWqgfBLpMA/Fm1pKifQ4s90
-         K/j14qlW6YXIPXOOqFoerHNJ9CgU15ePthawdqFTJDcqEesYmz4XX/yyuUyhdnrFYUOA
-         LqCQ==
-X-Gm-Message-State: ACrzQf1C+7pcUfJI/tEnm2ZEpW6AijGiUilFtcOf2E9V6swsfbtJey5r
-        UBanAh8G15fG3ugsFVqoZpo=
-X-Google-Smtp-Source: AMsMyM6O/eHDc2cFH8FuN5f5YwYBetwCaCLwv0bTljbF9TCOzsgl9UCIjpasZmTuPdc6ayIdV/45/w==
-X-Received: by 2002:a63:8bc9:0:b0:45f:afa8:e686 with SMTP id j192-20020a638bc9000000b0045fafa8e686mr11677365pge.219.1666029510647;
-        Mon, 17 Oct 2022 10:58:30 -0700 (PDT)
-Received: from biggie.. ([103.230.148.187])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902cec500b00178a8f4d4f2sm6886480plg.74.2022.10.17.10.58.27
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L9A07l58gYnh7KAA0iXhOrnBqUc773E6KyrOSccVOeI=;
+        b=YyLsc/YjJ3D5I1t9Bf7wQ6FPhEPWIv6KPj+zC1jt+kN/SjTQsmIL3doLhkrW/qY+vk
+         8XXlIVfZuxUj5YZiSkCcjkI+LjLO9He/NdBKhJO9ns27souEMd8VXzlZI8XCHKngADis
+         aoVk5DtHvYcSlJnVBHMBDyXvqpPL2v7fQzYACXmgOlqBNoSnkf62X/drchLjbJFaTAc/
+         RHz1t64UlL/NVoXE2JmNbtiXw3im8LTfsnrOuq8ebwczQlXXGAx52SBwh9miGXJ7VcJQ
+         wFqmTHsYD+6ZL9JxfdbZHauIBvMJXBwHIVUHjYFbN1qI9/ZKLSZ83Q91pBuvDIHny2Pa
+         lg7g==
+X-Gm-Message-State: ACrzQf1DkHbFWR3wOxtMHSlwt7L+D7xp1JONKrwCs8H19gQ4srI+ICoU
+        +Hju6qVS+3ysmalGPHbDgl8jZw==
+X-Google-Smtp-Source: AMsMyM5/2r1LHGQfBAhdn0WDF+kLf6ME/hYhjaFUfzyQ8DsiO0ibgWcC8AAcfRM1UTz/1uTAvXZbOQ==
+X-Received: by 2002:a17:902:b286:b0:17f:9db0:2334 with SMTP id u6-20020a170902b28600b0017f9db02334mr12977811plr.131.1666030132316;
+        Mon, 17 Oct 2022 11:08:52 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n12-20020a17090a2bcc00b00208c58d5a0esm9999071pje.40.2022.10.17.11.08.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 10:58:29 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
-        gautammenghani201@gmail.com, guang.zeng@intel.com
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/kvm: Avoid for loop initialization using vcpu->id in xapic_state_test
-Date:   Mon, 17 Oct 2022 23:28:19 +0530
-Message-Id: <20221017175819.12672-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 17 Oct 2022 11:08:51 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 18:08:47 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com
+Subject: Re: [RFC V3 PATCH 3/6] selftests: kvm: ucall: Allow querying ucall
+ pool gpa
+Message-ID: <Y02aLxlCKWwN62I5@google.com>
+References: <20220819174659.2427983-1-vannapurve@google.com>
+ <20220819174659.2427983-4-vannapurve@google.com>
+ <Yz80XAg74KGdSqco@google.com>
+ <CAGtprH_XSCXZDroGUnL3H1CwcsbH_A_NDn8B4P2xfpSYGqKmqw@mail.gmail.com>
+ <Y0mu1FKugNQG5T8K@google.com>
+ <CAGtprH9tm2ZPY6skZuqeYq9LzpPeoSzYEnqMja3heVf06qoFgQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGtprH9tm2ZPY6skZuqeYq9LzpPeoSzYEnqMja3heVf06qoFgQ@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,36 +94,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In the test_icr() function in xapic_state_test, one of the for loops is
-initialized with vcpu->id. Fix this assumption that vcpu->id is 0 so
-that IPIs are correctly sent to non-existent vCPUs [1].
+On Mon, Oct 17, 2022, Vishal Annapurve wrote:
+> This is much sleeker and will avoid hacking KVM for testing. Only
+> caveat here is that these tests will not be able to exercise implicit
+> conversion path if we go this route.
 
-[1] https://lore.kernel.org/kvm/YyoZr9rXSSMEtdh5@google.com/
-
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
----
-changes in v2:
-1. move the lore link above signed off tag
-
- tools/testing/selftests/kvm/x86_64/xapic_state_test.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-index 6f7a5ef66718..d7d37dae3eeb 100644
---- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-@@ -114,7 +114,9 @@ static void test_icr(struct xapic_vcpu *x)
- 	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
- 	 */
- 	icr = APIC_INT_ASSERT | 0xff;
--	for (i = vcpu->id + 1; i < 0xff; i++) {
-+	for (i = 0; i < 0xff; i++) {
-+		if (i == vcpu->id)
-+			continue;
- 		for (j = 0; j < 8; j++)
- 			__test_icr(x, i << (32 + 24) | icr | (j << 8));
- 	}
--- 
-2.34.1
-
+Yeah, I think that's a perfectly fine tradeoff.  Implicit conversion isn't strictly
+a UPM feature, e.g. if TDX and SNP "architecturally" disallowed implicit conversions,
+then KVM wouldn't need to support implicit conversions at all, i.e. that testing can
+be punted to SNP and/or TDX selftests.
