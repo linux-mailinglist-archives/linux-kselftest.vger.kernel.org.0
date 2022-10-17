@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF0A600B34
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 11:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FD4600B36
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 11:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiJQJpC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Oct 2022 05:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
+        id S231407AbiJQJpD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Oct 2022 05:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiJQJpB (ORCPT
+        with ESMTP id S231387AbiJQJpB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 17 Oct 2022 05:45:01 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C75D275D4;
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A385A275EB;
         Mon, 17 Oct 2022 02:44:59 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 129so9979012pgc.5;
+Received: by mail-pl1-x62b.google.com with SMTP id f23so10272745plr.6;
         Mon, 17 Oct 2022 02:44:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X6w1PAaUTCjPukGI0vOQ+R/3atXqjV5uO6exD9p/X6Y=;
-        b=XoJMbly4B0saJm8NDptnA8WAcCvDISv6V1tu5Uq2PyfezORvoT5eZAMSRnFicyfFEa
-         +KuoQ6Je6IhleHFxTy4R15hlsp/KVLeipZsHasv6AsMns8nfmLzVVqV1uZqZhwANhIPX
-         22xBytCuPjVnViGmUPBD6H4LafjzUBsXh7+APjNjqEzYmY25NWSdqRR9Lm837rS2VNst
-         g5OKC9MDH5/GRB5R5NbWzF5faOGLQcP6JkcvqyNAGsauI4/8m7UezJtTiff6EDwIFx4K
-         fYuY+iG7mNte3KrCjCnVMwg2z5XHCQ6rW1sIEgkiuzbd0fu+VKQawYT1ATE+TcRKFm36
-         Rrtw==
+        bh=cqiAlzCu1M7hbptqd9bs/f6Fb99fEGoTcNv+wTuLZE4=;
+        b=JPaKRjVIVXbCqHtVJ/N1q8seetDSOka/ZyXmWq8HGRbBDRlqx9bh8YOH7q8LCGXzwC
+         JPD4ykDLUcVrc7bhxmvMaURds5xYRmaoC3vWyblSz/Wj6HjUvUUW7RFfY03M1va+iyr/
+         ID9KoGr1sEIj5XpMUfNbSQnU+qlYiOW5plwbjTOWgGfSWfd7eN/dgz8NTr7p+3tx8RzG
+         bIsJmFwPooq07jZwZeqa8QIG8NJ7y3Sg8Jw6BzACa1uUi+TuNwx3xUGYBZB/bOI8SjQ7
+         QZRd4KwJZ29wXE4of3TosJ1S3lJ0msTZdfid+IvKKdGrGzIM2PuAVa84ctErgX52Yo46
+         Mj7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X6w1PAaUTCjPukGI0vOQ+R/3atXqjV5uO6exD9p/X6Y=;
-        b=7uKrvl7Q1WvzpheH3XFibU76hYf94y/olVkYLmqSnembDHuzNfiHIduI24abfnJFfc
-         wNnGa5aSbrzzkx5KkPBfOTyIhOrbK0FboLdMOcxg0wLBdwceul1ixl27ZkLKt/IAkw0t
-         WejxUCO0lj4omNUn2mVqqs+MQTBe4HjffIfpY891arK/GpWE/OlrrSmWleDbwXdq26q3
-         L32jn3N3kUw8Qhqw3LvYEhx5laVacEbCapoS3H5IZKuSlB+KE7GZMQKlvuqYob6NaPRK
-         M80gKE8GpYYZuuceYYW+RLUsgwClJjIGNZg+/eLvrVOfMpGa+0slE5E9BhSbEUe1RrlN
-         u99g==
-X-Gm-Message-State: ACrzQf2ORhEHYpdANIOtXyfmGxHxgUJNM6rrcD47NlomC1h6xViClLYy
-        GjEL89p8Sr+LeIFQxp3XXJY=
-X-Google-Smtp-Source: AMsMyM5BXk/q1P6qGLg/Z74zMGlJFMN8GlQri0Kne+PjFcGu4ypvQ3aEdW6meCz5SXtVhhOXI/JozQ==
-X-Received: by 2002:a63:1521:0:b0:43c:9566:7a6a with SMTP id v33-20020a631521000000b0043c95667a6amr9971910pgl.339.1665999898521;
+        bh=cqiAlzCu1M7hbptqd9bs/f6Fb99fEGoTcNv+wTuLZE4=;
+        b=1l38rH0/p35E3pFqgEvWUMYcNAP9iu6r4xK3KKZ971uEfznTEj4T2oy7nMVkYrp9eo
+         OuAAUnbF4ZehgW+gvYzv8Z+DmxHqXaqmLzAdRgJZPnGaw4rOKPSFp0QR/av5TnPzuB0R
+         rCgUVe+FSlDEsijZ3RBQl7rhyONMK/52HO3q9VKKPMiKWnpAbIDqS0QIA1frSWMeoZWT
+         o4z6HwkvnrTJDGUOW4Th+sJC2xw6FP67ptcoLm1sOZ4mF8pM9SFK5fsPHPDJw811QbIQ
+         cHLH6Cg8mZJrXQHmHP6GDZ3PmEl3ZowiL0IbAMHSAH2gnLa5I20ult+IRqggzVZrL9Gu
+         ZElg==
+X-Gm-Message-State: ACrzQf3AAVuCTR8fL3Sg6mxE36zSFldzcm/YF7AAsCl8xDLYBDebVJ1M
+        LxDRcv+mTDKyjH7FOGA8zlg=
+X-Google-Smtp-Source: AMsMyM5K9ZTucg9g7sM+aexaLUQAQRQ4+CZMokPrWXks/084Z00OzBeO7xQ3BIC1Tt45xB4xKa99Zw==
+X-Received: by 2002:a17:90a:2849:b0:20a:f3ff:c983 with SMTP id p9-20020a17090a284900b0020af3ffc983mr12893902pjf.198.1665999898978;
         Mon, 17 Oct 2022 02:44:58 -0700 (PDT)
 Received: from debian.me (subs02-180-214-232-30.three.co.id. [180.214.232.30])
-        by smtp.gmail.com with ESMTPSA id t25-20020aa79479000000b0056126b79072sm6615433pfq.21.2022.10.17.02.44.57
+        by smtp.gmail.com with ESMTPSA id nh12-20020a17090b364c00b0020dda04df79sm1367693pjb.44.2022.10.17.02.44.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 17 Oct 2022 02:44:58 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id DB0851017B5; Mon, 17 Oct 2022 16:27:24 +0700 (WIB)
-Date:   Mon, 17 Oct 2022 16:27:24 +0700
+        id C2D56103E64; Mon, 17 Oct 2022 16:38:35 +0700 (WIB)
+Date:   Mon, 17 Oct 2022 16:38:35 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Sadiya Kazi <sadiyakazi@google.com>
 Cc:     brendanhiggins@google.com, davidgow@google.com,
@@ -60,13 +60,13 @@ Cc:     brendanhiggins@google.com, davidgow@google.com,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3] Documentation: Kunit: Update architecture.rst for
  minor fixes
-Message-ID: <Y00f/OHxTJXH2vYc@debian.me>
-References: <20221017065452.2250273-1-sadiyakazi@google.com>
+Message-ID: <Y00im2gq9/c5NzVt@debian.me>
+References: <20221017070820.2253501-1-sadiyakazi@google.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="EY4KXZ7eqD8LDJOn"
+        protocol="application/pgp-signature"; boundary="4yZrwh7LMvg4p5Xk"
 Content-Disposition: inline
-In-Reply-To: <20221017065452.2250273-1-sadiyakazi@google.com>
+In-Reply-To: <20221017070820.2253501-1-sadiyakazi@google.com>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
@@ -78,12 +78,12 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---EY4KXZ7eqD8LDJOn
+--4yZrwh7LMvg4p5Xk
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 17, 2022 at 06:54:53AM +0000, Sadiya Kazi wrote:
+On Mon, Oct 17, 2022 at 07:08:21AM +0000, Sadiya Kazi wrote:
 > Updated the architecture.rst page with the following changes:
 > -Add missing article _the_ across the document.
 > -Reword content across for style and standard.
@@ -100,6 +100,9 @@ e.
 >=20
 > Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
 > ---
+> Please Note: The link in the change log in my previous email was broken a=
+s it got
+> mixed with the next line. I have resent the email.
 >=20
 > Thank you Bagas for your detailed comments.=20
 > I think the current commit message does convey the right message as it is=
@@ -111,6 +114,7 @@ ests Options'.
 > Changes since v2:
 > https://lore.kernel.org/linux-kselftest/20221013080545.1552573-1-sadiyaka=
 zi@google.com/
+>=20
 > -Updated the link descriptions as per Bagas=E2=80=99s feedback
 > -Reworded content talking about options to run tests and added links as p=
 er Bagas=E2=80=99s feedback
@@ -374,25 +378,24 @@ anually.
 >    If you already have built a kernel with built-in KUnit tests,
 >    you can run the kernel and display the test results with the ``exec``
 
-Seems like you're ignoring my review suggestions from both v1 and v2
-(code locations and redundant kunit_tool summary), hence NAK until you addr=
-ess
-them.
+Seems like you ignore my requested changes from v1 and v2 review (code
+location link and redundant kunit_tool summary), hence NAK until you
+have addressed them.
 
 Thanks.
 
 --=20
 An old man doll... just what I always wanted! - Clara
 
---EY4KXZ7eqD8LDJOn
+--4yZrwh7LMvg4p5Xk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY00f9AAKCRD2uYlJVVFO
-owc1AQDWTYT2DMbm74SVnn8XCVjnQ8vz+q1vXx8amO9uf1kZyAEAh0XlxHs8C+NM
-I0A9yvFsnyC+ZtSGiOcqwnj63TPohwY=
-=mNlc
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY00ilgAKCRD2uYlJVVFO
+oz8QAQDop9z/KFT1Sk9UFEslUOjnen6I4kq7NlvfpCBGExyZkgD/YuH4CV2VW3I5
+/KZrRArluL1YMiFFOcxsEBadcag4FAc=
+=Zjvf
 -----END PGP SIGNATURE-----
 
---EY4KXZ7eqD8LDJOn--
+--4yZrwh7LMvg4p5Xk--
