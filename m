@@ -2,184 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE32E6015C9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 19:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5416015D4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 19:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiJQRyK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Oct 2022 13:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
+        id S230005AbiJQR6d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Oct 2022 13:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiJQRyJ (ORCPT
+        with ESMTP id S229520AbiJQR6c (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Oct 2022 13:54:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FD41B9E4
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 10:54:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666029246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vW045TRZg0HI3CVbl/qDr7ObashbGzCDeLwDHPt2cRk=;
-        b=GhWocHMwRQsHUOh7qNE7I9xphdAj/SHPlFpRWXbmQY8r+0vgFTVz4EpUiXgTGoAno4SUoa
-        +ZYNHqJU0zUPkGN10s+Wu8CwGWJLW2YNcV8WwcCystHd/AqvWFyZsujcfXfMBiotLnNN63
-        C06I7a3Ce9vB1gg997FxVcGC2vEOKmk=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-629-UQ3KifUTMrqGMGZa9dpR7Q-1; Mon, 17 Oct 2022 13:54:04 -0400
-X-MC-Unique: UQ3KifUTMrqGMGZa9dpR7Q-1
-Received: by mail-qk1-f200.google.com with SMTP id j13-20020a05620a288d00b006be7b2a758fso10073114qkp.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 10:54:04 -0700 (PDT)
+        Mon, 17 Oct 2022 13:58:32 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E5161D96;
+        Mon, 17 Oct 2022 10:58:31 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id bh13so11124682pgb.4;
+        Mon, 17 Oct 2022 10:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XeKUR+Ic7TUkYH6vGnV3fuwa2YAfRUGUap65mjX2bIY=;
+        b=dHb/yAW8qCnmR3JHQz9IMnHr3ZXBJzqzORUlGlIhSix9QXQV7XUf+Jhjgi0HecrIkp
+         wcJ6RXOEGEoWSe+puoBC77GS8PekmjpB64vannhPqzpG9WEXd0D+q0NVxBHHUFdZsyvP
+         eSuEh9CEXPxNl8721pWgrNJs84B1OLAfN1U7MVguuieZO6W/nB/FHw/B0mJeXA8euOfC
+         KeXah39qz+ZaPV3gqIq6PL9NYUP3Hvn0JfllXC77RFMDMoJNi0aNUr4rQevAykWqDV4a
+         k2+yZ5vlwk6zEWIr2rxHrG8Tf667SW/4h6zjfGUjSJea8iJbihAJwZE1MODCEBe5yk4P
+         lr6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vW045TRZg0HI3CVbl/qDr7ObashbGzCDeLwDHPt2cRk=;
-        b=Gs/H19FrARkGgAcsEGSyJdhCblVYetaU4QIn5OXJk0/AUgWzbO/sgRsVs2CTrp/pPp
-         /ENIttZNCcTPDCjbo+JWdfRmd9OON81hFoNSIC7KteFaQrcOoAPSk+xeOkc3qOuqbRVU
-         jxQdg4rZVcMB9Io3HN1i45yY+fZEyqDPMQLOiWCP1k1pulzuhWa9dM97N5k081TbjsM7
-         RxCINYzSy4jjLQR/XVhU4DbP0WyB90HQxItFN09UCwVOWD+tozdkhmYHyLnLSKQE/uma
-         PkgDkUQMoQXYTPElGRhU7DC4hqL26Qq8XU118GxjmFlXRQVqsmv5lXNsQjUdy9OBatPe
-         fskw==
-X-Gm-Message-State: ACrzQf2PSzJU3yKQ4UXNjBg1ncQwV4T452yXaxVAJZQTFZkZ3+FZIzkX
-        Y1uQ/I/ZI6NY5BXdhk38NVvy1fLriU02Ns3g+SmotLFOxLpEMnlejM/OqS+2Ma1yOHutBdr3zBc
-        gt0rQ/JklPAPFie14xt0jojRaPQv/
-X-Received: by 2002:a05:620a:2618:b0:6ea:908:120e with SMTP id z24-20020a05620a261800b006ea0908120emr8354726qko.645.1666029243933;
-        Mon, 17 Oct 2022 10:54:03 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5MnZRI/+y7OnMntAppb+WoMmHAqSPseNR2wkk3kcHFTfjDcUN7CIaRXFJasqXSEgtakgiexA==
-X-Received: by 2002:a05:620a:2618:b0:6ea:908:120e with SMTP id z24-20020a05620a261800b006ea0908120emr8354717qko.645.1666029243706;
-        Mon, 17 Oct 2022 10:54:03 -0700 (PDT)
-Received: from [192.168.98.18] ([107.12.98.143])
-        by smtp.gmail.com with ESMTPSA id x7-20020ac87ec7000000b0038d9555b580sm276689qtj.44.2022.10.17.10.54.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 10:54:01 -0700 (PDT)
-Message-ID: <ad1c232c-e209-162d-1fa6-65702b5af121@redhat.com>
-Date:   Mon, 17 Oct 2022 13:53:55 -0400
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XeKUR+Ic7TUkYH6vGnV3fuwa2YAfRUGUap65mjX2bIY=;
+        b=mp7Sjf8Ih23IDx/Fjd0WzTz4+esZQ2/nCh1ZnYNxrbo8AjaVAT1aHs68c1pj6AxaL9
+         1miusGW8OccXzvJDGH0Ya3Wbv0DYli0aaDg4BK3Eccq/dUguen5CUWUr+m8nl2YMgVZN
+         4g/qnUpGspjcvgDw9rP3XcYRpleSWFAokaHqEwWlNGwdhOG79aSEwuFxvVNG3FpOY9Av
+         pRIcXgeQ/lP5BsrDC4M3Ve0cQLilxU5wWWRdDW2vwVtx8HWqgfBLpMA/Fm1pKifQ4s90
+         K/j14qlW6YXIPXOOqFoerHNJ9CgU15ePthawdqFTJDcqEesYmz4XX/yyuUyhdnrFYUOA
+         LqCQ==
+X-Gm-Message-State: ACrzQf1C+7pcUfJI/tEnm2ZEpW6AijGiUilFtcOf2E9V6swsfbtJey5r
+        UBanAh8G15fG3ugsFVqoZpo=
+X-Google-Smtp-Source: AMsMyM6O/eHDc2cFH8FuN5f5YwYBetwCaCLwv0bTljbF9TCOzsgl9UCIjpasZmTuPdc6ayIdV/45/w==
+X-Received: by 2002:a63:8bc9:0:b0:45f:afa8:e686 with SMTP id j192-20020a638bc9000000b0045fafa8e686mr11677365pge.219.1666029510647;
+        Mon, 17 Oct 2022 10:58:30 -0700 (PDT)
+Received: from biggie.. ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170902cec500b00178a8f4d4f2sm6886480plg.74.2022.10.17.10.58.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Oct 2022 10:58:29 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com,
+        gautammenghani201@gmail.com, guang.zeng@intel.com
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/kvm: Avoid for loop initialization using vcpu->id in xapic_state_test
+Date:   Mon, 17 Oct 2022 23:28:19 +0530
+Message-Id: <20221017175819.12672-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: kselftest: bonding: dev_addr_lists.sh doesn't run due to lack of
- dependencies
-Content-Language: en-US
-To:     Benjamin Poirier <bpoirier@nvidia.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-References: <40f04ded-0c86-8669-24b1-9a313ca21076@redhat.com>
- <Y0dejgSk60iZaJ/4@d3>
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <Y0dejgSk60iZaJ/4@d3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/12/22 20:40, Benjamin Poirier wrote:
-> On 2022-10-12 10:17 -0400, Jonathan Toppins wrote:
->> When kselftest for bonding is built like:
->> $ make TARGETS="drivers/net/bonding" -j8 -C tools/testing/selftests gen_tar
->>
->> and then run on the target:
->> $ ./run_kselftest.sh
->> [...]
->> # selftests: drivers/net/bonding: dev_addr_lists.sh
->> # ./dev_addr_lists.sh: line 17: ./../../../net/forwarding/lib.sh: No such
->> file or directory
->> # ./dev_addr_lists.sh: line 107: tests_run: command not found
->> # ./dev_addr_lists.sh: line 109: exit: : numeric argument required
->> # ./dev_addr_lists.sh: line 34: pre_cleanup: command not found
->> not ok 4 selftests: drivers/net/bonding: dev_addr_lists.sh # exit=2
->> [...]
->>
->> I am still new to kselftests is this expected or is there some way in the
->> make machinery to force packaging of net as well?
->>
-> 
-> Arg, I didn't know that you could export just a part of the selftest
-> tree. Thanks for the report.
-> 
-> I'm traveling for a few days. I'll look into how to fix the inclusion
-> problem when I get back on October 19th.
-> 
-> In the meantime, if you just want to run the bonding tests you can do:
-> 
-> (in tree)
-> make -C tools/testing/selftests run_tests TARGETS="drivers/net/bonding"
-> 
-> or
-> 
-> (exported)
-> make -C tools/testing/selftests gen_tar
-> [... extract archive ...]
-> ./run_kselftest.sh -c drivers/net/bonding
-> 
-> 
-> It seems like a plausible fix might be to use symlinks, what do you
-> think?
+In the test_icr() function in xapic_state_test, one of the for loops is
+initialized with vcpu->id. Fix this assumption that vcpu->id is 0 so
+that IPIs are correctly sent to non-existent vCPUs [1].
 
-This looks good to me. I might rename `lib.sh` to `net_lib.sh` but that 
-is just a nit.
+[1] https://lore.kernel.org/kvm/YyoZr9rXSSMEtdh5@google.com/
 
--Jon
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+changes in v2:
+1. move the lore link above signed off tag
 
-> 
-> diff --git a/tools/testing/selftests/drivers/net/bonding/Makefile b/tools/testing/selftests/drivers/net/bonding/Makefile
-> index e9dab5f9d773..7c50bfc24d32 100644
-> --- a/tools/testing/selftests/drivers/net/bonding/Makefile
-> +++ b/tools/testing/selftests/drivers/net/bonding/Makefile
-> @@ -7,6 +7,8 @@ TEST_PROGS := \
->   	bond-lladdr-target.sh \
->   	dev_addr_lists.sh
->   
-> -TEST_FILES := lag_lib.sh
-> +TEST_FILES := \
-> +	lag_lib.sh \
-> +	lib.sh
->   
->   include ../../../lib.mk
-> diff --git a/tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh b/tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh
-> index e6fa24eded5b..7b79f090ddaa 100755
-> --- a/tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh
-> +++ b/tools/testing/selftests/drivers/net/bonding/dev_addr_lists.sh
-> @@ -14,7 +14,7 @@ ALL_TESTS="
->   REQUIRE_MZ=no
->   NUM_NETIFS=0
->   lib_dir=$(dirname "$0")
-> -source "$lib_dir"/../../../net/forwarding/lib.sh
-> +source "$lib_dir"/lib.sh
->   
->   source "$lib_dir"/lag_lib.sh
->   
-> diff --git a/tools/testing/selftests/drivers/net/bonding/lib.sh b/tools/testing/selftests/drivers/net/bonding/lib.sh
-> new file mode 120000
-> index 000000000000..39c96828c5ef
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/bonding/lib.sh
-> @@ -0,0 +1 @@
-> +../../../net/forwarding/lib.sh
-> \ No newline at end of file
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 9d4cb94cf437..6203d3993554 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -84,7 +84,7 @@ endif
->   
->   define INSTALL_SINGLE_RULE
->   	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-> -	$(if $(INSTALL_LIST),rsync -a $(INSTALL_LIST) $(INSTALL_PATH)/)
-> +	$(if $(INSTALL_LIST),rsync -aL $(INSTALL_LIST) $(INSTALL_PATH)/)
->   endef
->   
->   define INSTALL_RULE
-> 
+ tools/testing/selftests/kvm/x86_64/xapic_state_test.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+index 6f7a5ef66718..d7d37dae3eeb 100644
+--- a/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xapic_state_test.c
+@@ -114,7 +114,9 @@ static void test_icr(struct xapic_vcpu *x)
+ 	 * vCPUs, not vcpu.id + 1.  Arbitrarily use vector 0xff.
+ 	 */
+ 	icr = APIC_INT_ASSERT | 0xff;
+-	for (i = vcpu->id + 1; i < 0xff; i++) {
++	for (i = 0; i < 0xff; i++) {
++		if (i == vcpu->id)
++			continue;
+ 		for (j = 0; j < 8; j++)
+ 			__test_icr(x, i << (32 + 24) | icr | (j << 8));
+ 	}
+-- 
+2.34.1
 
