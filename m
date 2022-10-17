@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D0F600721
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 08:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F41600775
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 09:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiJQG4w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Oct 2022 02:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
+        id S230190AbiJQHNp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Oct 2022 03:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiJQG4W (ORCPT
+        with ESMTP id S229767AbiJQHNe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Oct 2022 02:56:22 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64EE389C
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Oct 2022 23:56:08 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-36144a71051so103034207b3.19
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Oct 2022 23:56:08 -0700 (PDT)
+        Mon, 17 Oct 2022 03:13:34 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9DB2F392
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 00:13:32 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id e10-20020a17090301ca00b00183d123e2a5so7202775plh.14
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 00:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:from:subject:message-id
          :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwXkiJpyXszOYeaS5kG3VAZ2YoiwGwYHcpmiHrFrcts=;
-        b=roDFn8omU7wnmMudjnSUOiAGszxw+QGhON7IWQRPOaHfdtnPmUE8nNQhQxmOg0DEf8
-         bQm3KSB/rQ9xd4jdPxHbckgm8C6oUTKZjbgWoBtEu+BE7S3sB/LslVQ5gUFlPWCe02ZK
-         JueN75mvsRblKc7vyLybbNFSNlAtbBsIuqRrbcASeRsjdUMPfLJIAIDvgzAWu1VJsezM
-         77oOUX5k1N8dhzj1/Y0xDW4UGCqQsQabUwUvXEoQqnIQUCsaAFFvRsU2sLIo+RTMuZ/s
-         3sWRmcFpijCHYJTsDSZ+HbydBmZ+T+XXgFil8Bb9mTof+j4+6YT0E9hq5MB45mftQR2u
-         j0AQ==
+        bh=8uo76CIDBaq7HIm/FGI7bEiznO623Zlw58MY8o8i1jQ=;
+        b=JOhG279Pgn76eErTmzecyOat6CvlRRfOLfbJzUkkXMa/roQOzgt6ns7XrcuH5idfxW
+         Pz1VMHhCQ82Bk1MOzgkgCq65CQhqsUPjDlRB4IfvXHe+Pf61lNHwmoUFPym38IUhqT41
+         Td9KgFef1Ig7p6fkSWsV3cWREoPD4LPNEj8CRkHxf2eAEADc+gBjTk8c9mwAS2YjOdDt
+         124eD6Rqsgb8eo7fVr8DwhOMPAhctQkWTPvoDR1gX5sN42kYQisUDdjLg0E8zzhrzneX
+         BWKo06Dj9afzfMy82tSyezGO5aTtV/ZENhXV/Yu9tkHwaAWGR4qS46wPJDoNO709lWNt
+         L8Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:from:subject:message-id
          :mime-version:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mwXkiJpyXszOYeaS5kG3VAZ2YoiwGwYHcpmiHrFrcts=;
-        b=HA47SlewVtq+75Jk6uB/NZnLR1As+wtllGcgBCClXJDZba/RWr8uJes/DKh+bY8KyC
-         pJjId6UjRcuPbz7jxWFVOe1IUrRwoWRwt+Lc3RnH6pAGk6wIZhR/w2aDaTSPs5Vf6W/M
-         L06vA14RQkdNEFCwdNl8ZhRNQ+N14ltZ/9fu+edfie+3mH6O2v3RGssDZ7G0yO9ErSsY
-         So/bi0rt50kPSNvCdqKnLd+VyIMJMHTUmU8iPkyAvg34mlWK8I/jsMpDrJAyOfxm5+Hf
-         KvE98UBPtf24Cu22Oh5WzY2EM3XZO5qaFVolF/8D/YvBGxp1p6IA0AvWJEtsPnt8pgps
-         BLZw==
-X-Gm-Message-State: ACrzQf22cwwPHv8pBPg3U0fsTSy19Mjt5uY/aOrFmL3OYsGj5UJBU4E2
-        94gqCDZGishAaB4hfQkuP144A7scHn5geia5
-X-Google-Smtp-Source: AMsMyM4Ng4pCcCrVTiu96rzWmaxFC5Di/VjnWfc6zxEpsP7MFY97oiAeeQ/WR982LUEM8D0pmlaoMUiVZDcvDYRe
+        bh=8uo76CIDBaq7HIm/FGI7bEiznO623Zlw58MY8o8i1jQ=;
+        b=onKMWw0UUDWw7Do8i7bdaaqsTlAB3n/ssCaTsyRs505uBtUdteGN71KNgpfeeVRhtI
+         1h0YH/his11v6sR8Q4bnGR/68c9hBnC23mQ/wi1bzp9R/b7yNxd6CsfQVDkZcSKud8fu
+         saUNqcBIoXNWxu+156EFljTc3ZHIFnlnvTm5XtL7qI/6CHSXKNmml5aWuD03NFYUr+jx
+         QXPfimp9V0dOGS7AeXnNDifpKDq8U9GDGFdrdj1g2JnplwJLhE+A7BdSjB4UliwaURim
+         kWzf6tXvuUZbe6DAqvY5SOkVKwhyBMGIhK1mhBS5iAPFwvHM8W0/jhaRPQaKP38zIak/
+         O4GA==
+X-Gm-Message-State: ACrzQf0CR6Lupbz70BJBR84iFhT0cXkU/yQqZKtI2Q/q7mMpQ7jCT/Lq
+        6ztWfPOkhOsy6iUaWHtkMIJTtj3hX87GvQDo
+X-Google-Smtp-Source: AMsMyM4qvaqmCe2PiBBHuDGNVCli3vsunB7By1Giq0UKro2EvojwlPjuBMpj6cem2jROOWXYG/YkrUA+Qbm4+gNQ
 X-Received: from skazigti.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:411e])
- (user=sadiyakazi job=sendgmr) by 2002:a25:9d0a:0:b0:6bc:2641:19d4 with SMTP
- id i10-20020a259d0a000000b006bc264119d4mr7781133ybp.388.1665989767169; Sun,
- 16 Oct 2022 23:56:07 -0700 (PDT)
-Date:   Mon, 17 Oct 2022 06:54:53 +0000
+ (user=sadiyakazi job=sendgmr) by 2002:a17:90a:5408:b0:20a:d6b1:a2a7 with SMTP
+ id z8-20020a17090a540800b0020ad6b1a2a7mr1237191pjh.2.1665990811200; Mon, 17
+ Oct 2022 00:13:31 -0700 (PDT)
+Date:   Mon, 17 Oct 2022 07:08:21 +0000
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
-Message-ID: <20221017065452.2250273-1-sadiyakazi@google.com>
+Message-ID: <20221017070820.2253501-1-sadiyakazi@google.com>
 Subject: [PATCH v3] Documentation: Kunit: Update architecture.rst for minor fixes
 From:   Sadiya Kazi <sadiyakazi@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com,
@@ -62,7 +62,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,6 +85,9 @@ Updated the architecture.rst page with the following changes:
 
 Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
 ---
+Please Note: The link in the change log in my previous email was broken as =
+it got
+mixed with the next line. I have resent the email.
 
 Thank you Bagas for your detailed comments.=20
 I think the current commit message does convey the right message as it is n=
@@ -96,6 +99,7 @@ ts Options'.
 Changes since v2:
 https://lore.kernel.org/linux-kselftest/20221013080545.1552573-1-sadiyakazi=
 @google.com/
+
 -Updated the link descriptions as per Bagas=E2=80=99s feedback
 -Reworded content talking about options to run tests and added links as per=
  Bagas=E2=80=99s feedback
