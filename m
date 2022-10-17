@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962156012B6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 17:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4833B6012B8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Oct 2022 17:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiJQP0o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Oct 2022 11:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S230135AbiJQP0r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Oct 2022 11:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiJQP0o (ORCPT
+        with ESMTP id S230171AbiJQP0q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Oct 2022 11:26:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4375354CAA
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 08:26:43 -0700 (PDT)
+        Mon, 17 Oct 2022 11:26:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D12F37191
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 08:26:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 116D5B80B6B
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 15:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D48C433D6;
-        Mon, 17 Oct 2022 15:26:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1436CB81909
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Oct 2022 15:26:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463EEC4347C;
+        Mon, 17 Oct 2022 15:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666020400;
-        bh=RuOhSPrvvH9gTDsmvQ1faozljhC23IB8LE8aNw+zUwM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ME0RJZehPmF5J9M+OrGVe4q35MKweS8R2IOyvBf+4vyVbnuhwjTFF+uIUGe80ADtG
-         0zjN4HGYu5tt+c/KiEn+QIiWv0f/lcUqse8ujN6H3FJsvGF5cUACyQatKJ8zJA4SgP
-         Teofs9MnvTc00+dt4MqBk3AKBrq03vGwccfDdoamE7EBWjiMEgYFeS/9HQD1YQgjo/
-         tF5ICMZB3+thlluwcdsAIGNxuoKzg2dteZkO2KAQdftJ7MtuKvT2WIWIsVYP6b9XIk
-         AoYX6dWfmiyniTdpHQz6JATZ/4nx3lB9zGYcCKaag24hZ7x1JpYD4MhIQwfkLAhC4r
-         0k7x0yR7jqrLg==
+        s=k20201202; t=1666020402;
+        bh=FrpsB5GqMNt+LthRzZXRIsR6Armhvx2HZji/9oIAvao=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dHFqYCi8BobaRwxMjx1NMqAOIKmiJStpfULuJlP3ppz0WtangHYoQ+rfujSFhGEgv
+         ETnRWdqAXhmcI8nqibxJmIUUIQkDVkRdtLR/dzgSa2WT1o87fffP03TH7GdIbJFm0C
+         Bk46DfTu0yk+PKpx6xE6134M3ThX+w+gimyYiimylpzEtR4RHTtIpocUvhmdjSw2D5
+         4XYOaMwcjRuQTYwzt8krJQBl1dA8T/Qo+jrTdbypmqwz7yjJZf4yTjHg6Zn0AKBI1W
+         1JZkiWfSTCtlWWt4BVcm+Hm++JwxK81IJ2ZYp+NX1dX80SC2V0MwFcjdHADlwclTd5
+         ZTXdnPsYUgDOw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -39,12 +39,14 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 0/6] arm64: Support for 2022 data processing instructions
-Date:   Mon, 17 Oct 2022 16:25:14 +0100
-Message-Id: <20221017152520.1039165-1-broonie@kernel.org>
+Subject: [PATCH v1 1/6] arm64/hwcap: Add support for FEAT_CSSC
+Date:   Mon, 17 Oct 2022 16:25:15 +0100
+Message-Id: <20221017152520.1039165-2-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221017152520.1039165-1-broonie@kernel.org>
+References: <20221017152520.1039165-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1340; i=broonie@kernel.org; h=from:subject; bh=RuOhSPrvvH9gTDsmvQ1faozljhC23IB8LE8aNw+zUwM=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjTXPZXSyr9S2xtMskwYR9ZYxOIaybUXndZ2311UZx iwZoYYCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY01z2QAKCRAk1otyXVSH0MxMB/ wN2Ozd1xFxfGWYam8QD9ZXG58kwNCtwLIP0UafGO0ZpTV4a4twj81cEag/wyDK8ACBdD1yZgGHIT+L iQqmbUv30PvN2f8mnX9i8FNuDgyNupA1iddx0c4UfMXh+y+9pdRuODAFu3p8WsrxSX7y13elggFrJ3 BV/kS9L42CPkoU9UTdFyf7ON9tvzMvm+Tj9i1ydYgFEnHmla4BAjN/KHNw4NOFdDJawPv64lct8e7U pQ0KaYPEXSsRWG7EcdgE4y9Pajz6IDxpxn4OfzWcweZv1wXg2YyrjYuBy1o5Uuie7xW6hqFgpdYyrP qSRnoGwBCZmUGGZN8cJURpu8Ey/My8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4235; i=broonie@kernel.org; h=from:subject; bh=FrpsB5GqMNt+LthRzZXRIsR6Armhvx2HZji/9oIAvao=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjTXPaysKcpY9Yd7nbeFkVFU26JqW8OOddEQtBnz2d URJBx1GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY01z2gAKCRAk1otyXVSH0CN8B/ 9CeBuLo/TZznqESGhp3KRmd7+1yKp3MhKsuWGxz8yqbyotZXBgE+u6Ud5urUIiHiaPkH3P+P/RzZ1l LGYaV4DHUDqCw49qSFHWY8doml1LTfgo0raIpgRj7mp7ryYp84rUW5Eoig/V7vM05/P3oSCYK6SuXz IGbie94AZbp/3BSUhMefy8Ao8DwGWWcAWNP8/RiKlJqqG2zgTKcvvpS4S8gfay5nz1npApLFxVYOhL JVzi1BqnNcvQqIN+qiJmxJ+9RgZJk7tLf7/gaewN+wAfhCbPwRUAjM8OSouCsoD7blbrqn7zZdemnc EbxQ2iHOS26Y0b48DrO02QEQC+JHWN
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,34 +58,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The 2022 update to the Arm architecture includes a number of additions
-of generic data processing features, covering the base architecture, SVE
-and SME. Other than SME these are all simple features which introduce no
-architectural state so we simply need to expose hwcaps for them. This
-series covers these simple features. Since the SME updates do introduce
-new architectural state for which we must add new ABI they will be
-handled in a separate series.
+FEAT_CSSC adds a number of new instructions usable to optimise common short
+sequences of instructions, add a hwcap indicating that the feature is
+available and can be used by userspace.
 
-Mark Brown (6):
-  arm64/hwcap: Add support for FEAT_CSSC
-  kselftest/arm64: Add FEAT_CSSC to the hwcap selftest
-  arm64/hwcap: Add support for FEAT_RPRFM
-  kselftest/arm64: Add FEAT_RPRFM to the hwcap test
-  arm64/hwcap: Add support for SVE 2.1
-  kselftest/arm64: Add SVE 2.1 to hwcap test
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ Documentation/arm64/elf_hwcaps.rst  | 3 +++
+ arch/arm64/include/asm/hwcap.h      | 1 +
+ arch/arm64/include/uapi/asm/hwcap.h | 1 +
+ arch/arm64/kernel/cpufeature.c      | 2 ++
+ arch/arm64/kernel/cpuinfo.c         | 1 +
+ arch/arm64/tools/sysreg             | 7 ++++++-
+ 6 files changed, 14 insertions(+), 1 deletion(-)
 
- Documentation/arm64/elf_hwcaps.rst        |  9 +++++++
- Documentation/arm64/sve.rst               |  1 +
- arch/arm64/include/asm/hwcap.h            |  3 +++
- arch/arm64/include/uapi/asm/hwcap.h       |  3 +++
- arch/arm64/kernel/cpufeature.c            |  5 ++++
- arch/arm64/kernel/cpuinfo.c               |  3 +++
- arch/arm64/tools/sysreg                   | 12 ++++++++-
- tools/testing/selftests/arm64/abi/hwcap.c | 32 +++++++++++++++++++++++
- 8 files changed, 67 insertions(+), 1 deletion(-)
-
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+diff --git a/Documentation/arm64/elf_hwcaps.rst b/Documentation/arm64/elf_hwcaps.rst
+index bb34287c8e01..58197e9ccb6d 100644
+--- a/Documentation/arm64/elf_hwcaps.rst
++++ b/Documentation/arm64/elf_hwcaps.rst
+@@ -275,6 +275,9 @@ HWCAP2_EBF16
+ HWCAP2_SVE_EBF16
+     Functionality implied by ID_AA64ZFR0_EL1.BF16 == 0b0010.
+ 
++HWCAP2_CSSC
++    Functionality implied by ID_AA64ISAR2_EL1.CSSC == 0b0001.
++
+ 4. Unused AT_HWCAP bits
+ -----------------------
+ 
+diff --git a/arch/arm64/include/asm/hwcap.h b/arch/arm64/include/asm/hwcap.h
+index 298b386d3ebe..a0e080df9a62 100644
+--- a/arch/arm64/include/asm/hwcap.h
++++ b/arch/arm64/include/asm/hwcap.h
+@@ -120,6 +120,7 @@
+ #define KERNEL_HWCAP_WFXT		__khwcap2_feature(WFXT)
+ #define KERNEL_HWCAP_EBF16		__khwcap2_feature(EBF16)
+ #define KERNEL_HWCAP_SVE_EBF16		__khwcap2_feature(SVE_EBF16)
++#define KERNEL_HWCAP_CSSC		__khwcap2_feature(CSSC)
+ 
+ /*
+  * This yields a mask that user programs can use to figure out what
+diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
+index 9b245da6f507..a43dddd94b4a 100644
+--- a/arch/arm64/include/uapi/asm/hwcap.h
++++ b/arch/arm64/include/uapi/asm/hwcap.h
+@@ -93,5 +93,6 @@
+ #define HWCAP2_WFXT		(1UL << 31)
+ #define HWCAP2_EBF16		(1UL << 32)
+ #define HWCAP2_SVE_EBF16	(1UL << 33)
++#define HWCAP2_CSSC		(1UL << 34)
+ 
+ #endif /* _UAPI__ASM_HWCAP_H */
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 6062454a9067..130cc9127dde 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -212,6 +212,7 @@ static const struct arm64_ftr_bits ftr_id_aa64isar1[] = {
+ };
+ 
+ static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
++	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR2_EL1_CSSC_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_HIDDEN, FTR_STRICT, FTR_HIGHER_SAFE, ID_AA64ISAR2_EL1_BC_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_PTR_AUTH),
+ 		       FTR_STRICT, FTR_EXACT, ID_AA64ISAR2_EL1_APA3_SHIFT, 4, 0),
+@@ -2774,6 +2775,7 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
+ #endif /* CONFIG_ARM64_MTE */
+ 	HWCAP_CAP(SYS_ID_AA64MMFR0_EL1, ID_AA64MMFR0_EL1_ECV_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_ECV),
+ 	HWCAP_CAP(SYS_ID_AA64MMFR1_EL1, ID_AA64MMFR1_EL1_AFP_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_AFP),
++	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_EL1_CSSC_SHIFT, 4, FTR_UNSIGNED, ID_AA64ISAR2_EL1_CSSC_IMP, CAP_HWCAP, KERNEL_HWCAP_CSSC),
+ 	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_EL1_RPRES_SHIFT, 4, FTR_UNSIGNED, 1, CAP_HWCAP, KERNEL_HWCAP_RPRES),
+ 	HWCAP_CAP(SYS_ID_AA64ISAR2_EL1, ID_AA64ISAR2_EL1_WFxT_SHIFT, 4, FTR_UNSIGNED, ID_AA64ISAR2_EL1_WFxT_IMP, CAP_HWCAP, KERNEL_HWCAP_WFXT),
+ #ifdef CONFIG_ARM64_SME
+diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
+index 28d4f442b0bc..3160550c0cc9 100644
+--- a/arch/arm64/kernel/cpuinfo.c
++++ b/arch/arm64/kernel/cpuinfo.c
+@@ -116,6 +116,7 @@ static const char *const hwcap_str[] = {
+ 	[KERNEL_HWCAP_WFXT]		= "wfxt",
+ 	[KERNEL_HWCAP_EBF16]		= "ebf16",
+ 	[KERNEL_HWCAP_SVE_EBF16]	= "sveebf16",
++	[KERNEL_HWCAP_CSSC]		= "cssc",
+ };
+ 
+ #ifdef CONFIG_COMPAT
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index 384757a7eda9..629d119151bf 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -484,7 +484,12 @@ EndEnum
+ EndSysreg
+ 
+ Sysreg	ID_AA64ISAR2_EL1	3	0	0	6	2
+-Res0	63:28
++Res0	63:56
++Enum	55:52	CSSC
++	0b0000	NI
++	0b0001	IMP
++EndEnum
++Res0	51:28
+ Enum	27:24	PAC_frac
+ 	0b0000	NI
+ 	0b0001	IMP
 -- 
 2.30.2
 
