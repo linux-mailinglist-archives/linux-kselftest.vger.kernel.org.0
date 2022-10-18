@@ -2,312 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC61603126
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Oct 2022 18:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C293603172
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Oct 2022 19:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiJRQ5I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Oct 2022 12:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S230025AbiJRRSC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Oct 2022 13:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiJRQ5C (ORCPT
+        with ESMTP id S229872AbiJRRR4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Oct 2022 12:57:02 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5EBC821A;
-        Tue, 18 Oct 2022 09:57:00 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 0F6B81884965;
-        Tue, 18 Oct 2022 16:56:58 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id EBBFB25001FA;
-        Tue, 18 Oct 2022 16:56:57 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id E04E89EC0007; Tue, 18 Oct 2022 16:56:57 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 12B1D9EC000A;
-        Tue, 18 Oct 2022 16:56:57 +0000 (UTC)
-From:   "Hans J. Schultz" <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        "Hans J. Schultz" <netdev@kapio-technology.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag down through the DSA layer
-Date:   Tue, 18 Oct 2022 18:56:12 +0200
-Message-Id: <20221018165619.134535-6-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221018165619.134535-1-netdev@kapio-technology.com>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
+        Tue, 18 Oct 2022 13:17:56 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC3AEF599
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Oct 2022 10:17:50 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id i17so17871984lja.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Oct 2022 10:17:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mn0g0uPQNgWAIulTAHlL4xKStBrdvYdScpOKFuxEci4=;
+        b=UJmeKnfZ0F5FNYAg1B4ZlTGwoxmU03fABlswDVlVVDgdYKNPZcdY9WwV9GCOovjwDd
+         pr0rk37er31wg/7euIBifdagIniBWY3V0gmHDwx+y5etMY0U3a0nYe+C+MTxtfPZ/5fc
+         1r9Rz5GR/ByFfPvbdaoFylxy8TMIeEtwAFCRNWDfb6Hm8/aafKJks8N+CyJYbwJCL1ow
+         mUYyOmuY/7jxV9fy7uFfgEwwCOG8ZIOG50gL1ZIE/NaVnCDyOk4j9YQLEPwjYgbEiHkP
+         5zLk7o1Cz4NUUL0z/K4cBYl+DvRpVssMkoS1R0RBaGTRoyWBJ0hRzdPNVtmg4vkuYMvW
+         DqvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mn0g0uPQNgWAIulTAHlL4xKStBrdvYdScpOKFuxEci4=;
+        b=eG2bo+6/KSgwaAHRD9utqKenaWhLjflY8IHQZI6LBUu5W/beiCWoukK+b2H7Jh8Ml2
+         qH4HtnjTC+o/hDq0VazNvCaPfAWmvaWxEb0nnP2RyXLZdBB2pn3vc9hlv4gu2xHHcSNH
+         Fc5P0kmqNcdfgsb8eyVAnDGYPcXi2ilS/SPDst67tKgRdtFRC8AcZAeRvNS1MGAawnbN
+         7lleluHWj8Oz8SuSRePxT5oNiiGa/mrqnfIEQpMTu+DvIvUvgUROZcIsBoskEPntdNCL
+         FPtbrc1g7UkT2Xz1Ul5ctkytryvJSpvouBXC32IY8nfMPJDdXOpu8D5+TsygBfzEUC+4
+         gajg==
+X-Gm-Message-State: ACrzQf0ywQzBFccqRQPhcTOk2fTpFjFZRG/gfquICy+ilD4XsU0VWF7K
+        AFnTvo385K9Tkt2jdECClkoy60ikzRdjhmQyb3CRyg==
+X-Google-Smtp-Source: AMsMyM5Xl/iFuj+/VH/qkFLvtSgyGhPwva9B3V2p0knCNY2j/1i0nJ5N41af6+MwEGFUhgjJzb9tjkAuGpSPlyxwjxI=
+X-Received: by 2002:a2e:92d5:0:b0:26f:a674:94ac with SMTP id
+ k21-20020a2e92d5000000b0026fa67494acmr1465830ljh.470.1666113467907; Tue, 18
+ Oct 2022 10:17:47 -0700 (PDT)
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Y0T2l3HaH2MU8M9m@gmail.com> <20221014134802.1361436-1-mdanylo@google.com>
+ <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com> <CABb0KFGCm=K2X3-O=y3BJN85sT2C-y+XZRtLxnuabuOg+OrHwQ@mail.gmail.com>
+ <17d7d6f5-21dc-37e1-6843-29c77a0e14b6@collabora.com>
+In-Reply-To: <17d7d6f5-21dc-37e1-6843-29c77a0e14b6@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 18 Oct 2022 19:17:36 +0200
+Message-ID: <CABb0KFFGRgy9D212skxxFMsHV5n3qjqUP9d-bQaWLUmtH46H3A@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org,
+        gregkh@linuxfoundation.org, corbet@lwn.net, david@redhat.com,
+        kernel@collabora.com, krisman@collabora.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        peter.enderborg@sony.com, shuah@kernel.org,
+        viro@zeniv.linux.org.uk, willy@infradead.org, figiel@google.com,
+        kyurtsever@google.com, Paul Gofman <pgofman@codeweavers.com>,
+        surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a new u16 for fdb flags to propagate through the DSA layer towards the
-fdb add and del functions of the drivers.
+On Tue, 18 Oct 2022 at 15:23, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> On 10/18/22 4:11 PM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Tue, 18 Oct 2022 at 12:36, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+[...]
+> >>    * @start:             Starting address
+> >>    * @len:               Length of the region
+> >>    * @vec:               Output page_region struct array
+> >>    * @vec_len:           Length of the page_region struct array
+> >>    * @max_out_page:      Optional max output pages (It must be less th=
+an
+> >> vec_len if specified)
+> >
+> > Why is it required to be less than vec_len? vec_len effectively
+> > specifies max number of ranges to find, and this new additional field
+> > counts pages, I suppose?
+> > BTW, if we count pages, then what size of them? Maybe using bytes
+> > (matching start/len fields) would be more consistent?
+> Yes, it if for counting pages. As the regions can have multiple pages,
+> user cannot specify through the number of regions that how many pages
+> does he need. Page size is used here as well like the start and len.
+> This is optional argument as this is only needed to emulate the Windows
+> syscall getWriteWatch.
 
-Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
----
- include/net/dsa.h  |  2 ++
- net/dsa/dsa_priv.h |  6 ++++--
- net/dsa/port.c     | 10 ++++++----
- net/dsa/slave.c    | 10 ++++++++--
- net/dsa/switch.c   | 16 ++++++++--------
- 5 files changed, 28 insertions(+), 16 deletions(-)
+I'm wondering about the condition that max_out_page < vec_len. Since
+both count different things (pages vs ranges) I would expect there is
+no strict relation between them and information returned is as much as
+fits both (IOW: at most vec_len ranges spanning not more than
+max_out_page pages). The field's name and description I'd suggest
+improving: maybe 'max_pages' with a comment that 0 =3D unlimited?
 
-diff --git a/include/net/dsa.h b/include/net/dsa.h
-index ee369670e20e..e4b641b20713 100644
---- a/include/net/dsa.h
-+++ b/include/net/dsa.h
-@@ -821,6 +821,8 @@ static inline bool dsa_port_tree_same(const struct dsa_port *a,
- 	return a->ds->dst == b->ds->dst;
- }
- 
-+#define DSA_FDB_FLAG_LOCKED		(1 << 0)
-+
- typedef int dsa_fdb_dump_cb_t(const unsigned char *addr, u16 vid,
- 			      bool is_static, void *data);
- struct dsa_switch_ops {
-diff --git a/net/dsa/dsa_priv.h b/net/dsa/dsa_priv.h
-index 6e65c7ffd6f3..c943e8934063 100644
---- a/net/dsa/dsa_priv.h
-+++ b/net/dsa/dsa_priv.h
-@@ -65,6 +65,7 @@ struct dsa_notifier_fdb_info {
- 	const struct dsa_port *dp;
- 	const unsigned char *addr;
- 	u16 vid;
-+	u16 fdb_flags;
- 	struct dsa_db db;
- };
- 
-@@ -131,6 +132,7 @@ struct dsa_switchdev_event_work {
- 	 */
- 	unsigned char addr[ETH_ALEN];
- 	u16 vid;
-+	u16 fdb_flags;
- 	bool host_addr;
- };
- 
-@@ -241,9 +243,9 @@ int dsa_port_vlan_msti(struct dsa_port *dp,
- 		       const struct switchdev_vlan_msti *msti);
- int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu);
- int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
--		     u16 vid);
-+		     u16 vid, u16 fdb_flags);
- int dsa_port_fdb_del(struct dsa_port *dp, const unsigned char *addr,
--		     u16 vid);
-+		     u16 vid, u16 fdb_flags);
- int dsa_port_standalone_host_fdb_add(struct dsa_port *dp,
- 				     const unsigned char *addr, u16 vid);
- int dsa_port_standalone_host_fdb_del(struct dsa_port *dp,
-diff --git a/net/dsa/port.c b/net/dsa/port.c
-index 208168276995..ff4f66f14d39 100644
---- a/net/dsa/port.c
-+++ b/net/dsa/port.c
-@@ -304,7 +304,7 @@ static int dsa_port_inherit_brport_flags(struct dsa_port *dp,
- 					 struct netlink_ext_ack *extack)
- {
- 	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
--				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
-+				   BR_BCAST_FLOOD;
- 	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
- 	int flag, err;
- 
-@@ -328,7 +328,7 @@ static void dsa_port_clear_brport_flags(struct dsa_port *dp)
- {
- 	const unsigned long val = BR_FLOOD | BR_MCAST_FLOOD | BR_BCAST_FLOOD;
- 	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
--				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
-+				   BR_BCAST_FLOOD | BR_PORT_LOCKED | BR_PORT_MAB;
- 	int flag, err;
- 
- 	for_each_set_bit(flag, &mask, 32) {
-@@ -956,12 +956,13 @@ int dsa_port_mtu_change(struct dsa_port *dp, int new_mtu)
- }
- 
- int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
--		     u16 vid)
-+		     u16 vid, u16 fdb_flags)
- {
- 	struct dsa_notifier_fdb_info info = {
- 		.dp = dp,
- 		.addr = addr,
- 		.vid = vid,
-+		.fdb_flags = fdb_flags,
- 		.db = {
- 			.type = DSA_DB_BRIDGE,
- 			.bridge = *dp->bridge,
-@@ -979,12 +980,13 @@ int dsa_port_fdb_add(struct dsa_port *dp, const unsigned char *addr,
- }
- 
- int dsa_port_fdb_del(struct dsa_port *dp, const unsigned char *addr,
--		     u16 vid)
-+		     u16 vid, u16 fdb_flags)
- {
- 	struct dsa_notifier_fdb_info info = {
- 		.dp = dp,
- 		.addr = addr,
- 		.vid = vid,
-+		.fdb_flags = fdb_flags,
- 		.db = {
- 			.type = DSA_DB_BRIDGE,
- 			.bridge = *dp->bridge,
-diff --git a/net/dsa/slave.c b/net/dsa/slave.c
-index 1a59918d3b30..65f0c578ef44 100644
---- a/net/dsa/slave.c
-+++ b/net/dsa/slave.c
-@@ -3246,6 +3246,7 @@ static void dsa_slave_switchdev_event_work(struct work_struct *work)
- 		container_of(work, struct dsa_switchdev_event_work, work);
- 	const unsigned char *addr = switchdev_work->addr;
- 	struct net_device *dev = switchdev_work->dev;
-+	u16 fdb_flags = switchdev_work->fdb_flags;
- 	u16 vid = switchdev_work->vid;
- 	struct dsa_switch *ds;
- 	struct dsa_port *dp;
-@@ -3261,7 +3262,7 @@ static void dsa_slave_switchdev_event_work(struct work_struct *work)
- 		else if (dp->lag)
- 			err = dsa_port_lag_fdb_add(dp, addr, vid);
- 		else
--			err = dsa_port_fdb_add(dp, addr, vid);
-+			err = dsa_port_fdb_add(dp, addr, vid, fdb_flags);
- 		if (err) {
- 			dev_err(ds->dev,
- 				"port %d failed to add %pM vid %d to fdb: %d\n",
-@@ -3277,7 +3278,7 @@ static void dsa_slave_switchdev_event_work(struct work_struct *work)
- 		else if (dp->lag)
- 			err = dsa_port_lag_fdb_del(dp, addr, vid);
- 		else
--			err = dsa_port_fdb_del(dp, addr, vid);
-+			err = dsa_port_fdb_del(dp, addr, vid, fdb_flags);
- 		if (err) {
- 			dev_err(ds->dev,
- 				"port %d failed to delete %pM vid %d from fdb: %d\n",
-@@ -3315,6 +3316,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
- 	struct dsa_port *dp = dsa_slave_to_port(dev);
- 	bool host_addr = fdb_info->is_local;
- 	struct dsa_switch *ds = dp->ds;
-+	u16 fdb_flags = 0;
- 
- 	if (ctx && ctx != dp)
- 		return 0;
-@@ -3361,6 +3363,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
- 		   orig_dev->name, fdb_info->addr, fdb_info->vid,
- 		   host_addr ? " as host address" : "");
- 
-+	if (fdb_info->locked)
-+		fdb_flags |= DSA_FDB_FLAG_LOCKED;
-+
- 	INIT_WORK(&switchdev_work->work, dsa_slave_switchdev_event_work);
- 	switchdev_work->event = event;
- 	switchdev_work->dev = dev;
-@@ -3369,6 +3374,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
- 	ether_addr_copy(switchdev_work->addr, fdb_info->addr);
- 	switchdev_work->vid = fdb_info->vid;
- 	switchdev_work->host_addr = host_addr;
-+	switchdev_work->fdb_flags = fdb_flags;
- 
- 	dsa_schedule_work(&switchdev_work->work);
- 
-diff --git a/net/dsa/switch.c b/net/dsa/switch.c
-index ce56acdba203..dd355556892e 100644
---- a/net/dsa/switch.c
-+++ b/net/dsa/switch.c
-@@ -234,7 +234,7 @@ static int dsa_port_do_mdb_del(struct dsa_port *dp,
- }
- 
- static int dsa_port_do_fdb_add(struct dsa_port *dp, const unsigned char *addr,
--			       u16 vid, struct dsa_db db)
-+			       u16 vid, u16 fdb_flags, struct dsa_db db)
- {
- 	struct dsa_switch *ds = dp->ds;
- 	struct dsa_mac_addr *a;
-@@ -278,7 +278,7 @@ static int dsa_port_do_fdb_add(struct dsa_port *dp, const unsigned char *addr,
- }
- 
- static int dsa_port_do_fdb_del(struct dsa_port *dp, const unsigned char *addr,
--			       u16 vid, struct dsa_db db)
-+			       u16 vid, u16 fdb_flags, struct dsa_db db)
- {
- 	struct dsa_switch *ds = dp->ds;
- 	struct dsa_mac_addr *a;
-@@ -404,8 +404,8 @@ static int dsa_switch_host_fdb_add(struct dsa_switch *ds,
- 								info->vid,
- 								info->db);
- 			} else {
--				err = dsa_port_do_fdb_add(dp, info->addr,
--							  info->vid, info->db);
-+				err = dsa_port_do_fdb_add(dp, info->addr, info->vid,
-+							  info->fdb_flags, info->db);
- 			}
- 			if (err)
- 				break;
-@@ -432,8 +432,8 @@ static int dsa_switch_host_fdb_del(struct dsa_switch *ds,
- 								info->vid,
- 								info->db);
- 			} else {
--				err = dsa_port_do_fdb_del(dp, info->addr,
--							  info->vid, info->db);
-+				err = dsa_port_do_fdb_del(dp, info->addr, info->vid,
-+							  info->fdb_flags, info->db);
- 			}
- 			if (err)
- 				break;
-@@ -452,7 +452,7 @@ static int dsa_switch_fdb_add(struct dsa_switch *ds,
- 	if (!ds->ops->port_fdb_add)
- 		return -EOPNOTSUPP;
- 
--	return dsa_port_do_fdb_add(dp, info->addr, info->vid, info->db);
-+	return dsa_port_do_fdb_add(dp, info->addr, info->vid, info->fdb_flags, info->db);
- }
- 
- static int dsa_switch_fdb_del(struct dsa_switch *ds,
-@@ -464,7 +464,7 @@ static int dsa_switch_fdb_del(struct dsa_switch *ds,
- 	if (!ds->ops->port_fdb_del)
- 		return -EOPNOTSUPP;
- 
--	return dsa_port_do_fdb_del(dp, info->addr, info->vid, info->db);
-+	return dsa_port_do_fdb_del(dp, info->addr, info->vid, info->fdb_flags, info->db);
- }
- 
- static int dsa_switch_lag_fdb_add(struct dsa_switch *ds,
--- 
-2.34.1
+[...]
+> >> /* Special flags */
+> >> #define PAGEMAP_NO_REUSED_REGIONS       0x1
+> >
+> > What does this flag do?
+> Some non-dirty pages get marked as dirty because of the kernel's
+> internal activity. The dirty bit of the pages is stored in the VMA flags
+> and in the per page flags. If any of these two bits are set, the page is
+> considered to be dirty. Suppose you have cleared the dirty bit of half
+> of VMA which will be done by splitting the VMA and clearing dirty flag
+> in the half VMA and the pages in it. Now kernel may decide to merge the
+> VMAs again as dirty bit of VMAs isn't considered if the VMAs should be
+> merged. So the half VMA becomes dirty again. This splitting/merging
+> costs performance. The application receives a lot of pages which aren't
+> dirty in reality but marked as dirty. Performance is lost again here.
+>
+> This PAGEMAP_NO_REUSED_REGIONS flag is used to don't depend on the dirty
+> flag in the VMA flags. It only depends on the individual page dirty bit.
+> With doing this, the new memory regions which are just created, doesn't
+> look like dirty when seen with the IOCTL, but look dirty when seen from
+> pagemap. This seems okay as the user of this flag know the implication
+> of using it.
 
+Thanks for explaining! Could you include this as a comment in the patch?
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
