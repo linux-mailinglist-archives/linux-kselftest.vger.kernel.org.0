@@ -2,141 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C293603172
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Oct 2022 19:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056A0603236
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Oct 2022 20:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiJRRSC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Oct 2022 13:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
+        id S229832AbiJRSUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Oct 2022 14:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJRRR4 (ORCPT
+        with ESMTP id S229836AbiJRSUV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Oct 2022 13:17:56 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC3AEF599
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Oct 2022 10:17:50 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id i17so17871984lja.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Oct 2022 10:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mn0g0uPQNgWAIulTAHlL4xKStBrdvYdScpOKFuxEci4=;
-        b=UJmeKnfZ0F5FNYAg1B4ZlTGwoxmU03fABlswDVlVVDgdYKNPZcdY9WwV9GCOovjwDd
-         pr0rk37er31wg/7euIBifdagIniBWY3V0gmHDwx+y5etMY0U3a0nYe+C+MTxtfPZ/5fc
-         1r9Rz5GR/ByFfPvbdaoFylxy8TMIeEtwAFCRNWDfb6Hm8/aafKJks8N+CyJYbwJCL1ow
-         mUYyOmuY/7jxV9fy7uFfgEwwCOG8ZIOG50gL1ZIE/NaVnCDyOk4j9YQLEPwjYgbEiHkP
-         5zLk7o1Cz4NUUL0z/K4cBYl+DvRpVssMkoS1R0RBaGTRoyWBJ0hRzdPNVtmg4vkuYMvW
-         DqvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mn0g0uPQNgWAIulTAHlL4xKStBrdvYdScpOKFuxEci4=;
-        b=eG2bo+6/KSgwaAHRD9utqKenaWhLjflY8IHQZI6LBUu5W/beiCWoukK+b2H7Jh8Ml2
-         qH4HtnjTC+o/hDq0VazNvCaPfAWmvaWxEb0nnP2RyXLZdBB2pn3vc9hlv4gu2xHHcSNH
-         Fc5P0kmqNcdfgsb8eyVAnDGYPcXi2ilS/SPDst67tKgRdtFRC8AcZAeRvNS1MGAawnbN
-         7lleluHWj8Oz8SuSRePxT5oNiiGa/mrqnfIEQpMTu+DvIvUvgUROZcIsBoskEPntdNCL
-         FPtbrc1g7UkT2Xz1Ul5ctkytryvJSpvouBXC32IY8nfMPJDdXOpu8D5+TsygBfzEUC+4
-         gajg==
-X-Gm-Message-State: ACrzQf0ywQzBFccqRQPhcTOk2fTpFjFZRG/gfquICy+ilD4XsU0VWF7K
-        AFnTvo385K9Tkt2jdECClkoy60ikzRdjhmQyb3CRyg==
-X-Google-Smtp-Source: AMsMyM5Xl/iFuj+/VH/qkFLvtSgyGhPwva9B3V2p0knCNY2j/1i0nJ5N41af6+MwEGFUhgjJzb9tjkAuGpSPlyxwjxI=
-X-Received: by 2002:a2e:92d5:0:b0:26f:a674:94ac with SMTP id
- k21-20020a2e92d5000000b0026fa67494acmr1465830ljh.470.1666113467907; Tue, 18
- Oct 2022 10:17:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <Y0T2l3HaH2MU8M9m@gmail.com> <20221014134802.1361436-1-mdanylo@google.com>
- <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com> <CABb0KFGCm=K2X3-O=y3BJN85sT2C-y+XZRtLxnuabuOg+OrHwQ@mail.gmail.com>
- <17d7d6f5-21dc-37e1-6843-29c77a0e14b6@collabora.com>
-In-Reply-To: <17d7d6f5-21dc-37e1-6843-29c77a0e14b6@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 18 Oct 2022 19:17:36 +0200
-Message-ID: <CABb0KFFGRgy9D212skxxFMsHV5n3qjqUP9d-bQaWLUmtH46H3A@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+        Tue, 18 Oct 2022 14:20:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1A7606A3;
+        Tue, 18 Oct 2022 11:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5FB1616CF;
+        Tue, 18 Oct 2022 18:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD346C433C1;
+        Tue, 18 Oct 2022 18:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666117219;
+        bh=NvhhyK9lab3DToVl45Rqdbu70WmZzVvJ21km5nzXMZw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zn4qrdE4oBzwg5ma3af26uEAN+5xgiYPZCOFWL+CV/oXCGFImJR5SjyTVV6kRtIqg
+         1OPuz2U+K5jzo8t4StmTHi56GJpuQCTR6zVioRoy/DG73cANUhHc5uwM7QPL1MFiyI
+         ML34MLKBRKV4B3npJnC+HWKIowpYzAWIaU82bgv4=
+Date:   Tue, 18 Oct 2022 20:20:16 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
 Cc:     Danylo Mocherniuk <mdanylo@google.com>, avagin@gmail.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        gregkh@linuxfoundation.org, corbet@lwn.net, david@redhat.com,
-        kernel@collabora.com, krisman@collabora.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, corbet@lwn.net,
+        david@redhat.com, kernel@collabora.com, krisman@collabora.com,
         linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         peter.enderborg@sony.com, shuah@kernel.org,
-        viro@zeniv.linux.org.uk, willy@infradead.org, figiel@google.com,
-        kyurtsever@google.com, Paul Gofman <pgofman@codeweavers.com>,
-        surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        viro@zeniv.linux.org.uk, willy@infradead.org, emmir@google.com,
+        figiel@google.com, kyurtsever@google.com,
+        Paul Gofman <pgofman@codeweavers.com>, surenb@google.com
+Subject: Re: [PATCH v3 0/4] Implement IOCTL to get and clear soft dirty PTE
+Message-ID: <Y07uYHLW8iShPw1S@kroah.com>
+References: <Y0T2l3HaH2MU8M9m@gmail.com>
+ <20221014134802.1361436-1-mdanylo@google.com>
+ <474513c0-4ff9-7978-9d77-839fe775d04c@collabora.com>
+ <8e6ae988-ae89-9e94-ca05-38a4c2548356@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e6ae988-ae89-9e94-ca05-38a4c2548356@collabora.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 15:23, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> On 10/18/22 4:11 PM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Tue, 18 Oct 2022 at 12:36, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-[...]
-> >>    * @start:             Starting address
-> >>    * @len:               Length of the region
-> >>    * @vec:               Output page_region struct array
-> >>    * @vec_len:           Length of the page_region struct array
-> >>    * @max_out_page:      Optional max output pages (It must be less th=
-an
-> >> vec_len if specified)
-> >
-> > Why is it required to be less than vec_len? vec_len effectively
-> > specifies max number of ranges to find, and this new additional field
-> > counts pages, I suppose?
-> > BTW, if we count pages, then what size of them? Maybe using bytes
-> > (matching start/len fields) would be more consistent?
-> Yes, it if for counting pages. As the regions can have multiple pages,
-> user cannot specify through the number of regions that how many pages
-> does he need. Page size is used here as well like the start and len.
-> This is optional argument as this is only needed to emulate the Windows
-> syscall getWriteWatch.
+On Tue, Oct 18, 2022 at 06:32:46PM +0500, Muhammad Usama Anjum wrote:
+> On 10/18/22 3:36 PM, Muhammad Usama Anjum wrote:
+> > > > > > > > I mean we should be able to specify for what
+> > > > > > > > pages we need to get info
+> > > > > > > > for. An ioctl argument can have these four fields:
+> > > > > > > > * required bits (rmask & mask == mask) - all
+> > > > > > > > bits from this mask have to be set.
+> > > > > > > > * any of these bits (amask & mask != 0) - any of these bits is set.
+> > > > > > > > * exclude masks (emask & mask == 0) = none of these bits are set.
+> > > > > > > > * return mask - bits that have to be reported to user.
+> > > > > The required mask (rmask) makes sense to me. At the moment, I only know
+> > > > > about the practical use case for the required mask. Can you share how
+> > > > > can any and exclude masks help for the CRIU?
+> > > > > 
+> > > > 
+> > > > I looked at should_dump_page in the CRIU code:
+> > > > https://github.com/checkpoint-restore/criu/blob/45641ab26d7bb78706a6215fdef8f9133abf8d10/criu/mem.c#L102
+> > > > 
+> > > > When CRIU dumps file private mappings, it needs to get pages that have
+> > > > PME_PRESENT or PME_SWAP but don't have PME_FILE.
+> > > 
+> > > I would really like to see the mask discussed will be adopted. With
+> > > it CRIU will
+> > > be able to migrate huge sparse VMAs assuming that a single hole is
+> > > processed in
+> > > O(1) time.
+> > > 
+> > > Use cases for migrating sparse VMAs are binaries sanitized with
+> > > ASAN, MSAN or
+> > > TSAN [1]. All of these sanitizers produce sparse mappings of shadow
+> > > memory [2].
+> > > Being able to migrate such binaries allows to highly reduce the
+> > > amount of work
+> > > needed to identify and fix post-migration crashes, which happen
+> > > constantly.
+> > > 
+> > 
+> > Hello all,
+> > 
+> > I've included the masks which the CRIU developers have specified.
+> > max_out_page is another new optional variable which is needed to
+> > terminate the operation without visiting all the pages after finding the
+> > max_out_page number of desired pages. There is no way to terminate the
+> > operation without this variable.
+> > 
+> > How does the interface looks now? Please comment.
+> > 
+> Updated interface with only one IOCTL. If vec is defined, get operation will
+> be performed. If PAGEMAP_SD_CLEAR flag is specified, soft dirty bit will be
+> cleared as well. CLEAR flag can only be specified for clearing soft dirty
+> bit.
+> 
+> /* PAGEMAP IOCTL */
+> #define PAGEMAP_SCAN	_IOWR('f', 16, struct pagemap_sd_args)
+> 
+> /* Bits are set in the bitmap of the page_region and masks in
+> pagemap_sd_args */
+> #define PAGE_IS_SD	1 << 0
+> #define PAGE_IS_FILE	1 << 1
+> #define PAGE_IS_PRESENT	1 << 2
+> #define PAGE_IS_SWAPED	1 << 3
+> 
+> /**
+>  * struct page_region - Page region with bitmap flags
+>  * @start:	Start of the region
+>  * @len:	Length of the region
+>  * bitmap:	Bits sets for the region
+>  */
+> struct page_region {
+> 	__u64 start;
+> 	__u64 len;
+> 	__u64 bitmap;
+> };
+> 
+> /**
+>  * struct pagemap_sd_args - Soft-dirty IOCTL argument
+>  * @start:		Starting address of the page
+>  * @len:		Length of the region (All the pages in this length are included)
+>  * @vec:		Output page_region struct array
+>  * @vec_len:		Length of the page_region struct array
+>  * @max_out_page:	Optional max output pages (It must be less than vec_len if
+> specified)
+>  * @flags:		Special flags for the IOCTL
+>  * @rmask:		Required mask - All of these bits have to be set
 
-I'm wondering about the condition that max_out_page < vec_len. Since
-both count different things (pages vs ranges) I would expect there is
-no strict relation between them and information returned is as much as
-fits both (IOW: at most vec_len ranges spanning not more than
-max_out_page pages). The field's name and description I'd suggest
-improving: maybe 'max_pages' with a comment that 0 =3D unlimited?
+Why have it at all if it always has to be all 1s?
 
-[...]
-> >> /* Special flags */
-> >> #define PAGEMAP_NO_REUSED_REGIONS       0x1
-> >
-> > What does this flag do?
-> Some non-dirty pages get marked as dirty because of the kernel's
-> internal activity. The dirty bit of the pages is stored in the VMA flags
-> and in the per page flags. If any of these two bits are set, the page is
-> considered to be dirty. Suppose you have cleared the dirty bit of half
-> of VMA which will be done by splitting the VMA and clearing dirty flag
-> in the half VMA and the pages in it. Now kernel may decide to merge the
-> VMAs again as dirty bit of VMAs isn't considered if the VMAs should be
-> merged. So the half VMA becomes dirty again. This splitting/merging
-> costs performance. The application receives a lot of pages which aren't
-> dirty in reality but marked as dirty. Performance is lost again here.
->
-> This PAGEMAP_NO_REUSED_REGIONS flag is used to don't depend on the dirty
-> flag in the VMA flags. It only depends on the individual page dirty bit.
-> With doing this, the new memory regions which are just created, doesn't
-> look like dirty when seen with the IOCTL, but look dirty when seen from
-> pagemap. This seems okay as the user of this flag know the implication
-> of using it.
+>  * @amask:		Any mask - Any of these bits are set
 
-Thanks for explaining! Could you include this as a comment in the patch?
+which ones?
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+>  * @emask:		Exclude mask - None of these bits are set
+
+Why have it, if none are ever set?
+
+>  * @rmask:		Bits that have to be reported to the user in page_region
+
+I feel like I have no idea what these bits are...
+
+Anyway, please send a real patch, with real code, so we have a better
+idea of what is happening.  AFTER you have tested and made it all work
+properly.
+
+thanks,
+
+greg k-h
