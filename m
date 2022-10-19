@@ -2,143 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C3C604608
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Oct 2022 14:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE1A604774
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Oct 2022 15:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiJSMzg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Oct 2022 08:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S232649AbiJSNj1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Oct 2022 09:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiJSMyp (ORCPT
+        with ESMTP id S232894AbiJSNjE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:54:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6C45973D
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Oct 2022 05:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666183021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/mboaMe9gaID9QBKkicmcYb6FMJMHWN52iMVH+ykHQY=;
-        b=Jxs9wlo3cQ8Y5b7hSVNXXa/lvw/ShTEEn6+zZOpkmf4OaOJn1KRgA7En6frM1vum2C/J+W
-        2LCH7m+jwZzhzl8GxptmyfughykAaTmYHRl34iu21+t+CzHjI4wYktaJuHU7r4wWal+vsi
-        MneYBJWsc8pdLB09pxMt/bcwjtOhFpg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-227-om9sa7FwOgmlgUu-l_i30g-1; Wed, 19 Oct 2022 08:33:20 -0400
-X-MC-Unique: om9sa7FwOgmlgUu-l_i30g-1
-Received: by mail-wr1-f69.google.com with SMTP id s30-20020adfa29e000000b002302b9671feso5576452wra.20
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Oct 2022 05:33:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/mboaMe9gaID9QBKkicmcYb6FMJMHWN52iMVH+ykHQY=;
-        b=WBWmctP1bgt6Biox8NjpY492fx12nrbqR4wRA6rfe5WbMKdh09kCeRT41EFhauL4cW
-         Clpm5MZZxCjluDbbB9QlxM/02f5NZ47zsMVcbesYB2gKTvICrIupmx9LNn+TNLy9O1bH
-         gf/YJI9lFCWK2/9/+0ofe1605puopEe8IKopJOuwMhAu05mPGiMt0cQZO/mtV19+IvsY
-         bSALVdyhqzkT/eFuk1uqeEG1fYcbnzV8KTXhQWI0CL4CtXQBppE4xlfYiVPg0BbzRCk9
-         1pIvWzMr24jMymqMXQQVK3YtpkyvPYqClbYd0pv2K0Ra8WDc3qso5ORuiS5Sl04tDT41
-         QInw==
-X-Gm-Message-State: ACrzQf2WzwL34+GKejXQmflWEihMmPCivLQlnfK7fubCcwTRbbYKOIdg
-        PDGNiNpiUgYruwSZgVl9z7l9rH4kL31QywLl41t5Qf550fsBClqdAGPyVYuB7a+AKtUfN42zMIS
-        agduc8GMOJ3CuHz9gI+b4fn92D6aQ
-X-Received: by 2002:a5d:4748:0:b0:22e:32c1:d11e with SMTP id o8-20020a5d4748000000b0022e32c1d11emr5097436wrs.672.1666182799548;
-        Wed, 19 Oct 2022 05:33:19 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4ZCpAtby+E6unN5Wy+u9IszQTZYL2BSwB5rLUNO2OIQj+D41SXgbcnflDb4tj98oOc8cmhlQ==
-X-Received: by 2002:a5d:4748:0:b0:22e:32c1:d11e with SMTP id o8-20020a5d4748000000b0022e32c1d11emr5097411wrs.672.1666182799220;
-        Wed, 19 Oct 2022 05:33:19 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:2c00:d4ac:d2c:4aee:dac1? (p200300cbc7072c00d4ac0d2c4aeedac1.dip0.t-ipconnect.de. [2003:cb:c707:2c00:d4ac:d2c:4aee:dac1])
-        by smtp.gmail.com with ESMTPSA id j30-20020adfa55e000000b0021e51c039c5sm14342243wrb.80.2022.10.19.05.33.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 05:33:18 -0700 (PDT)
-Message-ID: <c1bcb281-c4ef-3b7d-f24d-82569602939b@redhat.com>
-Date:   Wed, 19 Oct 2022 14:33:17 +0200
+        Wed, 19 Oct 2022 09:39:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFB914C53C;
+        Wed, 19 Oct 2022 06:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DMfo3vlJ+nr6H0YFpZ0tb2uuXDjhc2GyhwauQdw41Tc=; b=xcxnnOc5b+UKA+HUHyI0gwFc9b
+        US6B71/1iL72nJ16wadEPkMKP3huGYHXLegNWN8IZ5A8R9N+kUXsozwkWQ0tD38hszv4IVtin4bRQ
+        8N1svNYM6RDo7nTEGcUsq601uXyypMqsGepg/BlR6z33rsPGXNRVwqA5RmOCgg9AjF5f2cBM18rKi
+        I/8zkORY9Yzp9s514Ersqb+x8J7zin3DDIvNox12OoMINwvTbM6J5Tel3c4iSjw+ZgwhM2xelK9n0
+        fLx01DwvNmmw7SKIJ6KxagqJAMiFcVYdMC5C6JJukLfcWiiU5txpcA7SYgFHJgHz59E9/e9sgUR7y
+        gxNjTkjg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ol95p-0027td-DD; Wed, 19 Oct 2022 13:26:45 +0000
+Date:   Wed, 19 Oct 2022 06:26:45 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     tglx@linutronix.de, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, keescook@chromium.org
+Cc:     joe@perches.com, rostedt@goodmis.org, linux-spdx@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 0/2] SPDX: add copyleft-next-0.3.1
+Message-ID: <Y0/7FZCk7D+ygf2o@bombadil.infradead.org>
+References: <20221003165849.1658170-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v1 7/7] selftests/vm: anon_cow: add R/O longterm tests via
- gup_test
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mike Rapoport <rppt@kernel.org>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>
-References: <20220927110120.106906-1-david@redhat.com>
- <20220927110120.106906-8-david@redhat.com>
- <74adbb51-6e33-f636-8a9c-2ad87bd9007e@redhat.com>
-Organization: Red Hat
-In-Reply-To: <74adbb51-6e33-f636-8a9c-2ad87bd9007e@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221003165849.1658170-1-mcgrof@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 19.10.22 14:31, David Hildenbrand wrote:
-> On 27.09.22 13:01, David Hildenbrand wrote:
->> Let's trigger a R/O longterm pin on three cases of R/O mapped anonymous
->> pages:
->> * exclusive (never shared)
->> * shared (child still alive)
->> * previously shared (child no longer alive)
->>
->> ... and make sure that the pin is reliable: whatever we write via the page
->> tables has to be observable via the pin.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
+On Mon, Oct 03, 2022 at 09:58:47AM -0700, Luis Chamberlain wrote:
+> As suggested by Thomas Gleixner, I'm following up to move on with
+> the SPDX tag needed for copyleft-next-0.3.1. I've split this out
+> from the test_sysfs selftest so to separate review from that.
 > 
-> The following on top should silence the warning on 32bit:
+> Changes on this v11:
+>   o Fixed a minor typo on patch #2 as noted by Kees Cook
+>   o Added Reviewed-by tags by Kees Cook
 > 
-> https://lore.kernel.org/all/202210182101.XOyPZEQV-lkp@intel.com/T/#u
+> Changes on this v10:
+>   o embraced paragraph from Thomas Gleixner which helps explain why             
+>     the OR operator in the SPDX license name
+>   o dropped the GPL-2.0 and GPL-2.0+ tags as suggested by Thomas Gleixner
+>     as these are outdated (still valid) in the SPDX spec
+>   o trimmed the Cc list to remove the test_sysfs / block layer / fs folks as
+>     the test_sysfs stuff is now dropped from consideration in this series
 > 
+> Prior to this the series was at v9 but it also had the test_sysfs and its
+> changes, its history can be found here:
 > 
-> diff --git a/mm/gup_test.c b/mm/gup_test.c
-> index 2bbfacd31f5a..57c343f2dc51 100644
-> --- a/mm/gup_test.c
-> +++ b/mm/gup_test.c
-> @@ -299,7 +299,8 @@ static inline int pin_longterm_test_read(unsigned long arg)
->           for (i = 0; i < pin_longterm_test_nr_pages; i++) {
->                   void *addr = page_to_virt(pin_longterm_test_pages[i]);
->    
-> -               if (copy_to_user((void __user *)user_addr, addr, PAGE_SIZE))
-> +               if (copy_to_user((void __user *)(unsigned long)user_addr, addr,
-> +                                PAGE_SIZE))
->                           return -EFAULT;
->                   user_addr += PAGE_SIZE;
->           }
+> https://lore.kernel.org/all/20211029184500.2821444-1-mcgrof@kernel.org/
 > 
+> Luis Chamberlain (2):
+>   LICENSES: Add the copyleft-next-0.3.1 license
+>   testing: use the copyleft-next-0.3.1 SPDX tag
 > 
+>  LICENSES/dual/copyleft-next-0.3.1        | 236 +++++++++++++++++++++++
+>  lib/test_kmod.c                          |  12 +-
+>  lib/test_sysctl.c                        |  12 +-
+>  tools/testing/selftests/kmod/kmod.sh     |  13 +-
+>  tools/testing/selftests/sysctl/sysctl.sh |  12 +-
+>  5 files changed, 240 insertions(+), 45 deletions(-)
+>  create mode 100644 LICENSES/dual/copyleft-next-0.3.1
 
-Ehm, wrong patch, it actually belongs into #6/7
+*poke*
 
-https://lkml.kernel.org/r/20220927110120.106906-7-david@redhat.com
-
-@Andrew, if your confused, I can just resend the whole thing.
-
--- 
-Thanks,
-
-David / dhildenb
-
+  Luis
