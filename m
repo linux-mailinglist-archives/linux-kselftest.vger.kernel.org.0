@@ -2,106 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D55C6050B4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Oct 2022 21:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB0E6050FA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Oct 2022 22:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiJSTs5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Oct 2022 15:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
+        id S230493AbiJSUF7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Oct 2022 16:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiJSTsz (ORCPT
+        with ESMTP id S230387AbiJSUF6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Oct 2022 15:48:55 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14241D3A5B;
-        Wed, 19 Oct 2022 12:48:53 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id o2so11434959qkk.10;
-        Wed, 19 Oct 2022 12:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cXqWYGSUyr7OrNHL1T/x/7EkjfHttBM4QCa4eRu5CdE=;
-        b=ox4rhvjtu73vL7Eoxb3ELsaih0GlyG+yB5zAmkNS2KiGxZogVp8NBKoF6fDJ9BzkmB
-         g5m7neSOBU7hxoeYpgeJhyW82i4iUuH+nAkA1889hB4gGWH4W84vgK2aEjqfKIUmw9e2
-         6KQeu2jyaZbGrHtlleYWE765geA3KCNVdXzxzwVlSMf01m+k+kOLAS12he6YgxdoOX82
-         rXVagiCyq1Cr/b1T2PqecVmN8w/Y2jDApucHSTERZlg+zPKUq8lW7N0qfzAdtRJFAukt
-         UcCZNp5iz9eOTx0EkWGUMtkEpjXHNVJLVNrndqpioDkYpW6THJL9HVRtB1vn9S37Go8D
-         hl0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cXqWYGSUyr7OrNHL1T/x/7EkjfHttBM4QCa4eRu5CdE=;
-        b=FXLA2xf6CdAGhzY4bmALR2AwuCgobBh62urC+rE92sV41FHBkSv4gM5xz2qGsN8e4x
-         rt1C25T3wjOH6lVWZHKE/yG5RrIyg/g+bimR0akT4a4JrmJk/IHsQ1j4uPSH2Gp7CnLD
-         Wzen4PrFPJMeTEZmCfyhQG/I8ea1Qrln6BxwFM4JNcuBWsbv44n1WSYznyZqzRznnJqi
-         kWdvx8yy0Ur8EPI9LnNHvEirS7S7gz4cdmgutvgmzfr2FanYU7klth70G6yBSL/4in2T
-         xVckRsINL9HSO4Ptv5mFNv27yUaW7zL2i5zO56akr6lm/PpKgK0FmrzvApuOMGyJbjX3
-         Sekw==
-X-Gm-Message-State: ACrzQf1r0tdH4Hc0Bv/JePCYuGiougGO9/kHAi99w44TPPcxpm/7vdP/
-        OXrmYZ7ZVB14jLPZYIXO92FKgCppYHQ9uyhl4Qo=
-X-Google-Smtp-Source: AMsMyM67C5+6trm/g0kHA0nfVIVp7N/QTSeM9dZkG/qfb9srEg8RMwNlyV/8r8K+waGxTBLgd71QtUJMHNv6t+Se0ks=
-X-Received: by 2002:a05:620a:d94:b0:6bc:5a8c:3168 with SMTP id
- q20-20020a05620a0d9400b006bc5a8c3168mr6743224qkl.56.1666208933104; Wed, 19
- Oct 2022 12:48:53 -0700 (PDT)
+        Wed, 19 Oct 2022 16:05:58 -0400
+Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FC818BE09;
+        Wed, 19 Oct 2022 13:05:52 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Mt1v13XXkzMq4cH;
+        Wed, 19 Oct 2022 22:05:49 +0200 (CEST)
+Received: from localhost (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Mt1v06dk9zxH;
+        Wed, 19 Oct 2022 22:05:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1666209949;
+        bh=dLhBf8o1kXqp6sscAfSz5LKvdc7yEb7Q8TYdJPkHjFU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AoGSdmPF2lFsibBkqhvB5eYH60CouLgJ8QYefj+ta77rUi4JMemlGJVAt8EPpPaCk
+         P+tS6NSCCXlNSCOxMpSJa4uhMtesUp5+kVEmXqiUFqIhu0KYl9/3fEoekhY7JwKyEr
+         r1uI/wobcxe+Eb9kYM0tZ2vS3YpOOh+RzjhTgB6U=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v1] selftests/landlock: Build without static libraries
+Date:   Wed, 19 Oct 2022 22:05:36 +0200
+Message-Id: <20221019200536.2771316-1-mic@digikod.net>
 MIME-Version: 1.0
-References: <20221019085747.3810920-1-davidgow@google.com> <CA+fCnZdPwjThjY7fd7vBkMzS1eFXySR2AKrDK8weJ3p25fzS3g@mail.gmail.com>
- <CABVgOSmP1A4d_-SNrWg7VruxpKj3SZz=Bzb2Xebd=EXw1imXyA@mail.gmail.com>
-In-Reply-To: <CABVgOSmP1A4d_-SNrWg7VruxpKj3SZz=Bzb2Xebd=EXw1imXyA@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 19 Oct 2022 21:48:42 +0200
-Message-ID: <CA+fCnZcea7UrA11HyRB80WgrUXMtEkK0AjdxEN=H-pMuWBhQyQ@mail.gmail.com>
-Subject: Re: [PATCH] kasan: Enable KUnit integration whenever CONFIG_KUNIT is enabled
-To:     David Gow <davidgow@google.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 5:06 PM David Gow <davidgow@google.com> wrote:
->
-> > How does KUnit detect a KASAN failure for other tests than the KASAN
-> > ones? I thought this was only implemented for KASAN tests. At least, I
-> > don't see any code querying kunit_kasan_status outside of KASAN tests.
->
-> Yeah, there aren't any other tests which set up a "kasan_status"
-> resource to expect specific failures, but we still want the fallback
-> call to kunit_set_failure() so that any test which causes a KASAN
-> report will fail:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/kasan/report.c#n130
+The only (forced) static test binary doesn't depend on libcap.  Because
+using -lcap on systems that don't have such static library would fail
+(e.g. on Arch Linux), let's be more specific and require only dynamic
+libcap linking.
 
-Ah, right. Thanks for the explanation!
+Fixes: a52540522c95 ("selftests/landlock: Fix out-of-tree builds")
+Cc: Anders Roxell <anders.roxell@linaro.org>
+Cc: Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+Link: https://lore.kernel.org/r/20221019200536.2771316-1-mic@digikod.net
+---
+ tools/testing/selftests/landlock/Makefile | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-> > I'm currently switching KASAN tests from using KUnit resources to
-> > console tracepoints [1], and those patches will be in conflict with
-> > yours.
->
-> Ah, sorry -- I'd seen these go past, and totally forgot about them! I
-> think all we really want to keep is the ability to fail tests if a
-> KASAN report occurs. The tricky bit is then disabling that for the
-> KASAN tests, so that they can have "expected" failures.
+diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/selftests/landlock/Makefile
+index 6632bfff486b..348e2dbdb4e0 100644
+--- a/tools/testing/selftests/landlock/Makefile
++++ b/tools/testing/selftests/landlock/Makefile
+@@ -3,7 +3,6 @@
+ # First run: make -C ../../../.. headers_install
+ 
+ CFLAGS += -Wall -O2 $(KHDR_INCLUDES)
+-LDLIBS += -lcap
+ 
+ LOCAL_HDRS += common.h
+ 
+@@ -13,10 +12,12 @@ TEST_GEN_PROGS := $(src_test:.c=)
+ 
+ TEST_GEN_PROGS_EXTENDED := true
+ 
+-# Static linking for short targets:
++# Short targets:
++$(TEST_GEN_PROGS): LDLIBS += -lcap
+ $(TEST_GEN_PROGS_EXTENDED): LDFLAGS += -static
+ 
+ include ../lib.mk
+ 
+-# Static linking for targets with $(OUTPUT)/ prefix:
++# Targets with $(OUTPUT)/ prefix:
++$(TEST_GEN_PROGS): LDLIBS += -lcap
+ $(TEST_GEN_PROGS_EXTENDED): LDFLAGS += -static
 
-I wonder what's the best solution to support this, assuming KASAN
-tests are switched to using tracepoints... I guess we could still keep
-the per-task KUnit flag, and only use it for non-KASAN tests. However,
-they will still suffer from the same issue tracepoints solve for KASAN
-tests: if a bug is triggered in a context other than the current task,
-the test will succeed.
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.37.2
+
