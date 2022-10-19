@@ -2,123 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F71604949
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Oct 2022 16:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D878604AAC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Oct 2022 17:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiJSOeP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Oct 2022 10:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S229789AbiJSPJo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Oct 2022 11:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiJSOdh (ORCPT
+        with ESMTP id S232102AbiJSPIr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Oct 2022 10:33:37 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA42159A07;
-        Wed, 19 Oct 2022 07:18:12 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id 8so10767318qka.1;
-        Wed, 19 Oct 2022 07:18:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cknIal1Dqn0NuUAETBIEQ0lkMDHrEUKWbBRZZcSw1O0=;
-        b=orl3WtaDUNcCVULI1fi76dsgEpQKIF0G7LTX3izYm28mr8jzmmUbBsZXMKVAEqJZxl
-         9UokjFoKhOnsPeZto0hchT9sGCBY5MNhrO+zFqeoZ6DeraDl4WqSiK7qVOdCTXiEjTcs
-         YSqlFNsNc1cXt3F2AT522djFUeXczOgztyZjbmN/SQCWXxoN3JuUhUzbFfkp2he/K0q6
-         +6T6vae37EAuX7dNTC6j6DPbZf96EGjUl1U555sZIvvGSA5bIKwrLXr3Cx8MPZ3orUUN
-         Hda6Rp6RISqHOKYTBCyjtsn1qD9IzEJAAtaEeDeaa+uMJIlMiKe5cQGexlqa2NigJZ74
-         Ix1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cknIal1Dqn0NuUAETBIEQ0lkMDHrEUKWbBRZZcSw1O0=;
-        b=XA29hhfKs9NnmMdrtWbS2LP25PbuGkNHpCLsR9JVGGW5QQQK0AT8DM1rL9S828Rp7I
-         FMrjk+3OJAkhLi8nRFPGm4uE+2dKXwN5MSYHz29yBprOT9tasjnz38bY1SdvR2IP0Ub1
-         HVtNJgUL3fobb56ADv+ixSRsFpm6uHyLyTQm3Y7NN8YZ+HuGX/zjbjnpT4GzJjkfjWBL
-         hFN8FYSWmyuc+nMqWZ1+hsZeZvmWIHPyo0g+/4cWI8bbTMisZ4agMt5yDjRhXqygr5wI
-         aK58pZNBWlNS08h7Q0b8A2mVWsszWgXGG2PptM7Vn8Dd11Ov45922EvpLaeFeO8D3yUH
-         IDNg==
-X-Gm-Message-State: ACrzQf3h+AQY9dN6QGRO+mTgTtSjHbR5+TxQ+jA4O2mveHwZJeeINKOc
-        81hG2/gXMnaNY2j27fDTiDXFID3Dcb3wHLFA0yc=
-X-Google-Smtp-Source: AMsMyM7p0PqU27XQdSypuWEjEDwSsJpxQKotFiEysDCDwzPck6pY+ftPfRp5TQ4uCqheYH/bz+aKWZoYJONuAwGz45A=
-X-Received: by 2002:a37:b2c5:0:b0:6df:f8d6:6ea0 with SMTP id
- b188-20020a37b2c5000000b006dff8d66ea0mr5676134qkf.386.1666189080171; Wed, 19
- Oct 2022 07:18:00 -0700 (PDT)
+        Wed, 19 Oct 2022 11:08:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4508E0D9;
+        Wed, 19 Oct 2022 08:00:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75E1B61929;
+        Wed, 19 Oct 2022 15:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5613EC433C1;
+        Wed, 19 Oct 2022 15:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666191655;
+        bh=7I7sjR3Gz/WEhc33eidz6uHor5l2/Hm/OLxObdG7yG8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sog1tByziDJHCwjc4iNK++1OQnMnVOsC2tejISrPvGOhBEjRrdAKDbuex/sqNU+HN
+         6elLnkGOLlGv1O1aIfaJ6lcGouACd/05Y6BEIffQG4aIf1+rehV7ZRaE1C6sG7RGRb
+         znSR961sDjRUk3FRLo8+Jokm8Z8lYyfk+P510w/Y=
+Date:   Wed, 19 Oct 2022 17:00:52 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     tglx@linutronix.de, akpm@linux-foundation.org, shuah@kernel.org,
+        keescook@chromium.org, joe@perches.com, rostedt@goodmis.org,
+        linux-spdx@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 0/2] SPDX: add copyleft-next-0.3.1
+Message-ID: <Y1ARJIhR9oldlXr5@kroah.com>
+References: <20221003165849.1658170-1-mcgrof@kernel.org>
+ <Y0/7FZCk7D+ygf2o@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20221019085747.3810920-1-davidgow@google.com>
-In-Reply-To: <20221019085747.3810920-1-davidgow@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 19 Oct 2022 16:17:49 +0200
-Message-ID: <CA+fCnZdPwjThjY7fd7vBkMzS1eFXySR2AKrDK8weJ3p25fzS3g@mail.gmail.com>
-Subject: Re: [PATCH] kasan: Enable KUnit integration whenever CONFIG_KUNIT is enabled
-To:     David Gow <davidgow@google.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0/7FZCk7D+ygf2o@bombadil.infradead.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:58 AM 'David Gow' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> Enable the KASAN/KUnit integration even when the KASAN tests are
-> disabled, as it's useful for testing other things under KASAN.
-> Essentially, this reverts commit 49d9977ac909 ("kasan: check CONFIG_KASAN_KUNIT_TEST instead of CONFIG_KUNIT").
->
-> To mitigate the performance impact slightly, add a likely() to the check
-> for a currently running test.
->
-> There's more we can do for performance if/when it becomes more of a
-> problem, such as only enabling the "expect a KASAN failure" support wif
-> the KASAN tests are enabled, or putting the whole thing behind a "kunit
-> tests are running" static branch (which I do plan to do eventually).
->
-> Fixes: 49d9977ac909 ("kasan: check CONFIG_KASAN_KUNIT_TEST instead of CONFIG_KUNIT")
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> Basically, hiding the KASAN/KUnit integration broke being able to just
-> pass --kconfig_add CONFIG_KASAN=y to kunit_tool to enable KASAN
-> integration. We didn't notice this, because usually
-> CONFIG_KUNIT_ALL_TESTS is enabled, which in turn enables
-> CONFIG_KASAN_KUNIT_TEST. However, using a separate .kunitconfig might
-> result in failures being missed.
->
-> Take, for example:
-> ./tools/testing/kunit/kunit.py run --kconfig_add CONFIG_KASAN=y \
->         --kunitconfig drivers/gpu/drm/tests
->
-> This should run the drm tests with KASAN enabled, but even if there's a
-> KASAN failure (such as the one fixed by [1]), kunit_tool will report
-> success.
+On Wed, Oct 19, 2022 at 06:26:45AM -0700, Luis Chamberlain wrote:
+> On Mon, Oct 03, 2022 at 09:58:47AM -0700, Luis Chamberlain wrote:
+> > As suggested by Thomas Gleixner, I'm following up to move on with
+> > the SPDX tag needed for copyleft-next-0.3.1. I've split this out
+> > from the test_sysfs selftest so to separate review from that.
+> > 
+> > Changes on this v11:
+> >   o Fixed a minor typo on patch #2 as noted by Kees Cook
+> >   o Added Reviewed-by tags by Kees Cook
+> > 
+> > Changes on this v10:
+> >   o embraced paragraph from Thomas Gleixner which helps explain why             
+> >     the OR operator in the SPDX license name
+> >   o dropped the GPL-2.0 and GPL-2.0+ tags as suggested by Thomas Gleixner
+> >     as these are outdated (still valid) in the SPDX spec
+> >   o trimmed the Cc list to remove the test_sysfs / block layer / fs folks as
+> >     the test_sysfs stuff is now dropped from consideration in this series
+> > 
+> > Prior to this the series was at v9 but it also had the test_sysfs and its
+> > changes, its history can be found here:
+> > 
+> > https://lore.kernel.org/all/20211029184500.2821444-1-mcgrof@kernel.org/
+> > 
+> > Luis Chamberlain (2):
+> >   LICENSES: Add the copyleft-next-0.3.1 license
+> >   testing: use the copyleft-next-0.3.1 SPDX tag
+> > 
+> >  LICENSES/dual/copyleft-next-0.3.1        | 236 +++++++++++++++++++++++
+> >  lib/test_kmod.c                          |  12 +-
+> >  lib/test_sysctl.c                        |  12 +-
+> >  tools/testing/selftests/kmod/kmod.sh     |  13 +-
+> >  tools/testing/selftests/sysctl/sysctl.sh |  12 +-
+> >  5 files changed, 240 insertions(+), 45 deletions(-)
+> >  create mode 100644 LICENSES/dual/copyleft-next-0.3.1
+> 
+> *poke*
 
-Hi David,
+It's been 2 days since the merge window ended.  And my todo queue is:
 
-How does KUnit detect a KASAN failure for other tests than the KASAN
-ones? I thought this was only implemented for KASAN tests. At least, I
-don't see any code querying kunit_kasan_status outside of KASAN tests.
+	$ mdfrm -c todo/
+	1410 messages in todo/
 
-I'm currently switching KASAN tests from using KUnit resources to
-console tracepoints [1], and those patches will be in conflict with
-yours.
+Please give me a chance to catch up...
 
-Thanks!
+thanks,
 
-[1] https://lore.kernel.org/linux-mm/ebf96ea600050f00ed567e80505ae8f242633640.1666113393.git.andreyknvl@google.com/
+greg k-h
