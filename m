@@ -2,154 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785EC606603
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 18:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC48C6066C4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 19:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiJTQku (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 12:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
+        id S230087AbiJTRJK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 13:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiJTQks (ORCPT
+        with ESMTP id S230180AbiJTRJI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 12:40:48 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C80714D1DC
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Oct 2022 09:40:46 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id g28so62469pfk.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Oct 2022 09:40:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=xdKaJMBvUmIKbh2Lyw8nNzTOqBu53UG/4bKZ2w88isY=;
-        b=l3w7IWMHdn1iyTILtJzSlPN/LZnMKHyF08VZPE1MVD0m2DYUagGPvbcinoitbkcB0y
-         2tFRZg/+a6wTQ/n2Q+lM7ABLDIERQ+Ok1hYYn7VCvlJxQSIoausq5qtKaNn64uiDEwlP
-         O0FVGyWmLfdPGfgmz8QXxIj7/br9z9JSSBOfF345QzjFUfYraJL1yfsAisIrH0jPs2v5
-         bEG99aMnpbiz5TCqdhxlce2YstXiqa2LGctEGsuyolXdHyfMnyb9EypYyDh6hgLOV1VM
-         aFCMvq1SirwekOxPnVyhtIELHksbltPvwnxAYU/r/a1tUrldfLkpP1EHfC0vllYzXu8r
-         DKGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xdKaJMBvUmIKbh2Lyw8nNzTOqBu53UG/4bKZ2w88isY=;
-        b=BiBDuN5yqNYmoByCy1tWbt9bVixp23rQMzNK/I9nhe8bTgVH1sqSkfkLJKZMObvkqS
-         PU2PHzdyPo9MaQNlQZa5Ck8Ugj6ZVvrjSuo8mc1GVqrTueggW2N7HkZyNas4CWk0gRo/
-         799YUbTeDAYjmEZA020GY6SRxS67mB5srvChnHObOYh+A6lszpWowxm92zeKpIEDZc1h
-         4DOfblPvWlRvCC5k3GXPUQLxw1HepungplaCgXNffk20XwQuZwANUMud3nCsnH8q1B1g
-         y6vWB4t6+t7O2cGdwxQ5TIoCob7pZAzRRSj8qvt0TRtVE38fhH70VdodPbySpi7sG+1/
-         axTw==
-X-Gm-Message-State: ACrzQf1KBdicgvJDW86EIxzlTio5Ab6bvWC/+IMtAQdkDzyJBSRU76tR
-        wT2zScDbDUyUuMtqja8YDIO2Z7I1g9ycVZCZ
-X-Google-Smtp-Source: AMsMyM6IIQ6siCsWyCYpwE9ueUGafmtbP3BMogBh6S73GHoxG4yTCe4zeSdx2t9TjH2gdLeVckHIRA==
-X-Received: by 2002:a63:1521:0:b0:43c:9566:7a6a with SMTP id v33-20020a631521000000b0043c95667a6amr12452173pgl.339.1666284045981;
-        Thu, 20 Oct 2022 09:40:45 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id iw15-20020a170903044f00b00176ca74c58bsm12959415plb.245.2022.10.20.09.40.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 09:40:45 -0700 (PDT)
-Message-ID: <63517a0d.170a0220.1a6d4.8cf0@mx.google.com>
-Date:   Thu, 20 Oct 2022 09:40:45 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 20 Oct 2022 13:09:08 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4EE1A5B09;
+        Thu, 20 Oct 2022 10:09:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666285747; x=1697821747;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OlzdSXYboENTBrdi9bhDa2ItnEOzKmNLunjkKtlJrBg=;
+  b=k4ziil6b1mae30B+HiNJgi6r1KhhI3g6Q7tTAA0gLb3zznlt7kju1pTH
+   h8j1Napgekeavf+cV6uqZtut21HBDtALxqS2+nc4lYYyZ/csvkY5dK/0e
+   4eF3Yk+5j7jtO30fl5XxLh+i/JADKuQopb5US8Gqj98JWB52n9Q5jNKyV
+   XMcb53J3EE7XX9tWFNBoJ5EpwKXj6wd6f+I7EM94R68Tyo4/45NLTRW+6
+   RzoNiDsZpGBTaBAQpd32r9m0Pihh00c0yXe7M3CwfxisDXqbut1lBzIMT
+   rwv8BgEWCxn1b/t26Xq8/pG9udh7MfZjJYj2FPJU6w023/BEpIe8rEWyM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="306770191"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="306770191"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 10:08:52 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="805017090"
+X-IronPort-AV: E=Sophos;i="5.95,199,1661842800"; 
+   d="scan'208";a="805017090"
+Received: from amancuso-mobl.amr.corp.intel.com (HELO [10.209.121.211]) ([10.209.121.211])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 10:08:48 -0700
+Message-ID: <95240a74-0c49-d051-a609-775c48b22bf5@intel.com>
+Date:   Thu, 20 Oct 2022 10:08:36 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.1-rc1-1-gde3ee3f63400a
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next build: 7 builds: 0 failed, 7 passed,
- 2 errors (v6.1-rc1-1-gde3ee3f63400a)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v15 0/3]] Add TDX Guest Attestation support
+Content-Language: en-US
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 7 builds: 0 failed, 7 passed, 2 errors (v6.1-rc1-1-gd=
-e3ee3f63400a)
+On 10/19/22 21:58, Kuppuswamy Sathyanarayanan wrote:
+> Following are the details of the patch set:
+> 
+> Patch 1/3 -> Preparatory patch for adding attestation support.
+> Patch 2/3 -> Adds user interface driver to support attestation.
+> Patch 3/3 -> Adds selftest support for TDREPORT feature.
+> 
+> Commit log history is maintained in the individual patches.
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.1-rc1-1-gde3ee3f63400a/
-
-Tree: kselftest
-Branch: next
-Git Describe: v6.1-rc1-1-gde3ee3f63400a
-Git Commit: de3ee3f63400a23954e7c1ad1cb8c20f29ab6fe3
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
-
-Errors Detected:
-
-arm64:
-    defconfig+kselftest+arm64-chromebook (clang-15): 1 error
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-15): 1 error
-
-Errors summary:
-
-    2    error: write on a pipe with no reader
-
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-15) =E2=80=94 PASS, 1 er=
-ror, 0 warnings, 0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-15) =E2=80=94 PASS, 1 error, 0 wa=
-rnings, 0 section mismatches
-
-Errors:
-    error: write on a pipe with no reader
-
----
-For more info write to <info@kernelci.org>
+I really appreciate when folks come out and say what they think should
+be done with the series.  Is this ready to be applied?  Or, is it just
+being thrown over the fence in the general direction of the maintainers
+with the hope that they'll divine its true purpose?
