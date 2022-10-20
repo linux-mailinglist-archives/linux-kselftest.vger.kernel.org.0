@@ -2,30 +2,30 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD5E60696C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 22:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E77606A12
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 23:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiJTUVO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 16:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S229541AbiJTVJ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 17:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiJTUVN (ORCPT
+        with ESMTP id S229491AbiJTVJz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 16:21:13 -0400
+        Thu, 20 Oct 2022 17:09:55 -0400
 Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CA31F9A0C;
-        Thu, 20 Oct 2022 13:20:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF5752DE7;
+        Thu, 20 Oct 2022 14:09:43 -0700 (PDT)
 Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 061771884A7E;
-        Thu, 20 Oct 2022 20:20:51 +0000 (UTC)
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id F066718849CE;
+        Thu, 20 Oct 2022 21:09:40 +0000 (UTC)
 Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id DBA3025004E9;
-        Thu, 20 Oct 2022 20:20:50 +0000 (UTC)
+        by mailout.gigahost.dk (Postfix) with ESMTP id D1DD725001FA;
+        Thu, 20 Oct 2022 21:09:40 +0000 (UTC)
 Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id CD02F9EC0002; Thu, 20 Oct 2022 20:20:50 +0000 (UTC)
+        id C9D209EC0002; Thu, 20 Oct 2022 21:09:40 +0000 (UTC)
 X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 22:20:50 +0200
+Date:   Thu, 20 Oct 2022 23:09:40 +0200
 From:   netdev@kapio-technology.com
 To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
@@ -70,7 +70,7 @@ References: <20221018165619.134535-1-netdev@kapio-technology.com>
  <20221018165619.134535-11-netdev@kapio-technology.com>
  <20221020132538.reirrskemcjwih2m@skbuf>
 User-Agent: Gigahost Webmail
-Message-ID: <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
+Message-ID: <3e58594c1223f4591e56409cd5061de7@kapio-technology.com>
 X-Sender: netdev@kapio-technology.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -84,31 +84,6 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 2022-10-20 15:25, Vladimir Oltean wrote:
->> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c 
->> b/drivers/net/dsa/mv88e6xxx/chip.c
->> index 352121cce77e..71843fe87f77 100644
->> --- a/drivers/net/dsa/mv88e6xxx/chip.c
->> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
->> @@ -42,6 +42,7 @@
->>  #include "ptp.h"
->>  #include "serdes.h"
->>  #include "smi.h"
->> +#include "switchdev.h"
->> 
->>  static void assert_reg_lock(struct mv88e6xxx_chip *chip)
->>  {
->> @@ -924,6 +925,13 @@ static void mv88e6xxx_mac_link_down(struct 
->> dsa_switch *ds, int port,
->>  	if (err)
->>  		dev_err(chip->dev,
->>  			"p%d: failed to force MAC link down\n", port);
->> +	else
->> +		if (mv88e6xxx_port_is_locked(chip, port)) {
->> +			err = mv88e6xxx_atu_locked_entry_flush(ds, port);
->> +			if (err)
->> +				dev_err(chip->dev,
->> +					"p%d: failed to clear locked entries\n", port);
->> +		}
 > 
 > This would not have been needed if dsa_port_set_state() would have
 > called dsa_port_fast_age().
@@ -133,12 +108,49 @@ On 2022-10-20 15:25, Vladimir Oltean wrote:
 > I'm missing about the "learning" flag.
 > 
 
-In general locked ports block traffic from a host based on if there is a
-FDB entry or not. In the non-offloaded case, there is only CPU assisted
-learning, so the normal learning mechanism has to be disabled as any
-learned entry will open the port for the learned MAC,vlan.
-Thus learning is off for locked ports, which of course includes MAB.
+As learning is off on locked ports, see other response, your dp->mab 
+flag
+idea might be a way to go, just need confirmation that this is needed.
 
-So the 'learning' is based on authorizing MAC,vlan addresses, which
-is done by userspace daemons, e.g. hostapd or what could be called
-mabd.
+
+>> @@ -6572,8 +6604,10 @@ static int mv88e6xxx_port_bridge_flags(struct 
+>> dsa_switch *ds, int port,
+>>  	if (flags.mask & BR_MCAST_FLOOD) {
+>>  		bool multicast = !!(flags.val & BR_MCAST_FLOOD);
+>> 
+>> +		mv88e6xxx_reg_lock(chip);
+>>  		err = chip->info->ops->port_set_mcast_flood(chip, port,
+>>  							    multicast);
+>> +		mv88e6xxx_reg_unlock(chip);
+>>  		if (err)
+>>  			goto out;
+>>  	}
+>> @@ -6581,20 +6615,34 @@ static int mv88e6xxx_port_bridge_flags(struct 
+>> dsa_switch *ds, int port,
+>>  	if (flags.mask & BR_BCAST_FLOOD) {
+>>  		bool broadcast = !!(flags.val & BR_BCAST_FLOOD);
+>> 
+>> +		mv88e6xxx_reg_lock(chip);
+>>  		err = mv88e6xxx_port_broadcast_sync(chip, port, broadcast);
+>> +		mv88e6xxx_reg_unlock(chip);
+>>  		if (err)
+>>  			goto out;
+>>  	}
+>> 
+>> +	if (flags.mask & BR_PORT_MAB) {
+>> +		chip->ports[port].mab = !!(flags.val & BR_PORT_MAB);
+>> +
+>> +		if (!chip->ports[port].mab)
+>> +			err = mv88e6xxx_atu_locked_entry_flush(ds, port);
+>> +		else
+>> +			err = 0;
+> 
+> Again, dsa_port_fast_age() is also called when dp->learning is turned
+> off in dsa_port_bridge_flags(). I don't want to see the mv88e6xxx 
+> driver
+> doing this manually.
+> 
+
+Maybe I am wrong, but I have only been able to trigger fast ageing by 
+setting
+the STP state of the port to blocked...
