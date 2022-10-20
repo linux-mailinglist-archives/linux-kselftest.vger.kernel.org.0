@@ -2,467 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DC8606174
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 15:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E94606189
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 15:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiJTNWl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 09:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
+        id S229494AbiJTNZG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 09:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbiJTNWc (ORCPT
+        with ESMTP id S230429AbiJTNYs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 09:22:32 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA581B2319;
-        Thu, 20 Oct 2022 06:22:18 -0700 (PDT)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 84E61C0004;
-        Thu, 20 Oct 2022 13:21:53 +0000 (UTC)
-Message-ID: <88eff2a1-495c-0e89-44bf-1478db7d0661@ovn.org>
-Date:   Thu, 20 Oct 2022 15:21:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Cc:     i.maximets@ovn.org, Pravin B Shelar <pshelar@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Thu, 20 Oct 2022 09:24:48 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25D01261C;
+        Thu, 20 Oct 2022 06:24:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LCtLwca6gad8sZPs2LyZxnyPKqqfa2noyp7hyeA/HkW8z6E+mCoBqN3OsO1qrOi+E+HuhPlBVBPM7iduZtRV8xED/gOk0duQ+1hvw0yWrpOIPEdG7HJDF1rI5XGntv73W19NVU+t9n/ZiFu7dewPgcst+jbG8IqTb9VxEkWG9tqTkZ2XSU13QyQ8ZgvaTW9ZEx51v4jXDQ2ftyBH+NjNVzRVfhmGqFXbXprFPENvBApuWxhki9e8wAVYqCDvfvn17ZnqnB0fIVSTOvxqoiEyYfu5WUjNji4u0rNm5zo3MT3ZlfQJqiirI8eNpPqin+khk9GpproNqNl/vz5ky0PixQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eiAnkFhTNtZ+cXSzdoH6LBgydFuoZNuEPknI4Ct6Cpw=;
+ b=OdjyuD3jHZrhG2bd+yO4qU6Dr3ejTTSJCppI5lUBtp0kAiLXnZiYzDIicqBl9VsJ91oBLEahzCcStrhXNvy4Ha6x6MoimNQNLFVqecM9lI7iJkn1PexjgWIR3BAK26WQ0GooOKANZe5KTLHI3f2bmpYBRlsoU9l0QE6Aq79c5rL3fXXrx414kCP6jq66bwZxnj7TMkUwnYYyvoJoaNEWJylx9pye7KFxbxYWT3tNFWivmptOG8m8UfcfjEP4hp5FUZQeVBBfZtYmJUD2xVQU7AFkrLBW5EldIeUhQ9ruw6EL9rKWKc4wmbq0V7xJ+DcJzDpzJLnkaMSOAD+Oq0iUHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eiAnkFhTNtZ+cXSzdoH6LBgydFuoZNuEPknI4Ct6Cpw=;
+ b=Em1ga+64y5dPii0oSfQtbbXnQgt9zNcXT9Ll0TAhoooy3GYoIQyQjWPUFLw6AjVgawaNE1H/zAZ2CPtaUTJiqWL9Aab6K9dHedtr7s6G7W1BqELCbqwwpIGdGF5lofpBU8H52kfNggOKCxoU35ePKbdTx3nz2g98cyhgpi23wQt4DvbezBUeYiWvrHTjGfkD6aTG8EVjCDvSUMd1BlCK/9lEyPEkyd3oxpCrbpGxOdVzuSGcqCX2heGDDFByAw/UcZVNA6HjpnbA/1BdPIvqwjs1OQxR6KudTjOhNnCJP5eNqvfFYwCCQtE3eHKNpWzSIGGVpXvr31EaFTvQctQ+vg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by DM4PR12MB5248.namprd12.prod.outlook.com (2603:10b6:5:39c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Thu, 20 Oct
+ 2022 13:24:22 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::4ff2:d93e:d200:227e]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::4ff2:d93e:d200:227e%7]) with mapi id 15.20.5723.033; Thu, 20 Oct 2022
+ 13:24:22 +0000
+Date:   Thu, 20 Oct 2022 16:24:16 +0300
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     "Hans J. Schultz" <netdev@kapio-technology.com>,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
-        Thomas Graf <tgraf@suug.ch>,
-        Kevin Sprague <ksprague0711@gmail.com>, dev@openvswitch.org,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Language: en-US
-To:     Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org
-References: <20221019183054.105815-1-aconole@redhat.com>
- <20221019183054.105815-3-aconole@redhat.com>
-From:   Ilya Maximets <i.maximets@ovn.org>
-Subject: Re: [PATCH net 2/2] selftests: add openvswitch selftest suite
-In-Reply-To: <20221019183054.105815-3-aconole@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
+ down through the DSA layer
+Message-ID: <Y1FMAI9BzDRUPi5Y@shredder>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
+ <20221018165619.134535-6-netdev@kapio-technology.com>
+ <20221020130224.6ralzvteoxfdwseb@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020130224.6ralzvteoxfdwseb@skbuf>
+X-ClientProxiedBy: VI1PR10CA0089.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:803:28::18) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|DM4PR12MB5248:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a06a5e0-67e7-4668-5fc0-08dab29e66cd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oApm/aLaexFTN0dZAP/+LopVwJnuDYGe5+cGNzaFcZBCUIMycCs4p0K3RxmR7NVbOSpaIgvgzPN7HBv8OyxMrnKum8PcrtTTfdExiHzOoCmP/Y784K3G5rCPfIhP4J76mVoiSRZXvMlP5ZWQQ80tmzdJZRYjxLyY/BDfjmypZKKQbn+WsaTFo/xNX8W1WucxiGNLNQ6Enf2TRaoWQIBjj2Aftg55bu5ioDMS8kKiWMq2kRCLgl+v3DVZPZnSEtCj7gcfaU/vA1Q63+SyDQGht0GyBoNoG+hRZKnpG3c/O9V/2iTWu9GaFOyFSfsetRhU0Ev91Jf6MeWvNdcuzqV/oC6/cIevYj2oLx7OvTqep0ajiyE1j9rWRji6wcb13QiPG1/CDH2+/I25VLz7Vl21OVuGVWNVDe+gfSLxQVp4lRthVi/viWRI1w2QnHeOrnkyk/mn6bc8fH87hnqYanTz3TEnjAOaVkmeQWLrB8EYMxUAtMOcJpV+Y6rjxVnxds8Plho5XnSpcbrqelilfEhxl5KyF9TJDtf3eSRj2Q+6en3LuewYEJQo/BX629cbidTC70jRpMnSn5ueQkuAoxeG+UQD1TEM3JWXwwXmtyJDPVySNfenzfO5Qq4LUzW/s0DLs1JHzF6L7MeqbPvhJnCRJ6WkIorC4DENTE0DyQXS5yjAj8u7aAnAmgYL0Si3D1eD948JlPyofuR8YU6iZqdDrw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(376002)(366004)(136003)(39860400002)(346002)(396003)(451199015)(26005)(66946007)(86362001)(6506007)(6512007)(7416002)(9686003)(8676002)(83380400001)(4326008)(54906003)(6916009)(41300700001)(66556008)(66476007)(5660300002)(6666004)(8936002)(316002)(7406005)(6486002)(33716001)(38100700002)(66899015)(2906002)(186003)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GYvaq7+1vEICVJEGld945MJ8s5Cnpiqi4g7zDU25LYPNbs9l0ZVZe2M/BKF1?=
+ =?us-ascii?Q?ZGxuJOtUh93BMnd6o2L3l4nWsk4J5rds7KbU5jTFwBgyKiMxPK72agSHSgME?=
+ =?us-ascii?Q?whPIyUTloCSymcGlZIfvbW0tFqlDHb8GNMwQTWoK+qGlqH0VzQDHQ0ScXJtL?=
+ =?us-ascii?Q?LE7mun2Mpxlc1xPECq2KJaoR2DnB6RkrleJsbK7cgM3DVgA4FvPFGSRP3nTI?=
+ =?us-ascii?Q?yag3cDF0O/hKto1Gmnf86m8UBGNXF7ElvDlMkXWwj+biswuXNaAfwB3wtGH9?=
+ =?us-ascii?Q?XxKZt4kT2OrNF9Xb88OF0wTczcn0AmJ14qWPs9B0w/KlT6o/rexDBOP6JMej?=
+ =?us-ascii?Q?FIJQoia8N2YllQzvz1iVGTkyw5HnvaDcICL55tIJuGob8Xreau4tKGBMRtrC?=
+ =?us-ascii?Q?Qc8Xlc5bjfAgK4Bm19npTLAc3zL+OrA5xyqR96lgWOYg5aG6fCP4ee7FXpr9?=
+ =?us-ascii?Q?KS+Jzsl5ktDQO2oHOyahxDoBpmWI0yRjQxKZTl1UWth99w7bICuf9NpW5Xii?=
+ =?us-ascii?Q?519/P/iZBBxUDomoAl/rfua1XjO4GUMgIsgbiQK0G5wB3QFr+o67Hjgx42+c?=
+ =?us-ascii?Q?h95Li/BR09tVl3LQerR6f+oWCb11cmcdIvYmhkntIFXWvBDx2EySIvOVx8m8?=
+ =?us-ascii?Q?KWEesRO39qQfC0jeGUx9yJXo/i48qpqvDCahKlR1i/0pNHdS/bh30x9Fw69R?=
+ =?us-ascii?Q?SvsCl3UGNMMdbZYQGkaxpuhN/ghwAftSHihT7b44V66BpgGg9scL2jbR/0/a?=
+ =?us-ascii?Q?gD3detdQ5HiqePR+hRDc9impboUQ6P3yppAOG2egf63rhglMXSCogo25TdeF?=
+ =?us-ascii?Q?oKzTPE4y3iAjV3pWohRZey8x8JhR882UNTJ1JZHvZoEZO4wMWt2gYP8Um+cx?=
+ =?us-ascii?Q?QBjtHX8KUregy/cnrHVVSIccyclCWIEy7fAVs69ZnQ88m+G3EgbKqLy5OgXU?=
+ =?us-ascii?Q?u3IbFOyIHmbxdE4xqMZwpRXe6K2sSUvVdwD1IEmuYdm4Xvwc/u/0xNRfXfYT?=
+ =?us-ascii?Q?+YE1xI7PihNsayq1/CRDP+U2oQTqR02gZPF438bT//KrHeljveqU9IxzXGpR?=
+ =?us-ascii?Q?mftx/8wV3HDst/Onlnv7OHZItn5TLD0jdFP1rJL8HVQk8PDYm4xQERjPTpTF?=
+ =?us-ascii?Q?6jAP/zGDArBU986FPYYsoNARpMHTvLlqYeQQw81On1VGDJ295tojvEpI8+7a?=
+ =?us-ascii?Q?AlfIK6I4sGOcmnuHBiiWk097zHOK9IzASbFeRN+9EjAgCX5I7t4OV347Ib26?=
+ =?us-ascii?Q?Vj5O/QqieRevRh+/550B7j2rb0i2GxyDjWdT0vZDmGKY1O55MEsQYW7PwYLS?=
+ =?us-ascii?Q?MQxhd4Xn7nNp7t43HnHKhaciE+ZsN3WENLSnF3cCEsj4u8Dz1hOQcfLepLrY?=
+ =?us-ascii?Q?1sYQJbfzywmiZvPDlC9D295pWl5qtRISkRsj1N6ekZ3mSS0Gg9k2h184rg1q?=
+ =?us-ascii?Q?qhWE2j3fLiJ48FH92pcLiILc4+F/Lq3EPQWMUA5LqOdA3GnVvh/f0ofpDLcM?=
+ =?us-ascii?Q?hnSZnCnbD7r7Is+c3Pxh/jScpxXpgyrx668e6Jn+XKtvfeFdA7D1U0OXGVuQ?=
+ =?us-ascii?Q?TCq40FM8SLkm+vQQ0IPhHR5c1Kvhm4gEFBwRgrqA?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a06a5e0-67e7-4668-5fc0-08dab29e66cd
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 13:24:22.7689
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cmQRiMJCc+UZuXtH9Bjoj7voVvaqgXByob+A1ea0PmVqggkngxFOjavpTF02aVI9RGTYGO0HbfkqKi1y6/Q7HA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5248
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/19/22 20:30, Aaron Conole wrote:
-> Previous commit resolves a WARN splat that can be difficult to reproduce,
-> but with the ovs-dpctl.py utility, it can be trivial.  Introduce a test
-> case which creates a DP, and then downgrades the feature set.  This will
-> include a utility 'ovs-dpctl.py' that can be extended to do additional
-> work.
+On Thu, Oct 20, 2022 at 04:02:24PM +0300, Vladimir Oltean wrote:
+> On Tue, Oct 18, 2022 at 06:56:12PM +0200, Hans J. Schultz wrote:
+> > @@ -3315,6 +3316,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+> >  	struct dsa_port *dp = dsa_slave_to_port(dev);
+> >  	bool host_addr = fdb_info->is_local;
+> >  	struct dsa_switch *ds = dp->ds;
+> > +	u16 fdb_flags = 0;
+> >  
+> >  	if (ctx && ctx != dp)
+> >  		return 0;
+> > @@ -3361,6 +3363,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+> >  		   orig_dev->name, fdb_info->addr, fdb_info->vid,
+> >  		   host_addr ? " as host address" : "");
+> >  
+> > +	if (fdb_info->locked)
+> > +		fdb_flags |= DSA_FDB_FLAG_LOCKED;
 > 
-> Signed-off-by: Aaron Conole <aconole@redhat.com>
-> Signed-off-by: Kevin Sprague <ksprague0711@gmail.com>
-> ---
->  MAINTAINERS                                   |   1 +
->  tools/testing/selftests/Makefile              |   1 +
->  .../selftests/net/openvswitch/Makefile        |  13 +
->  .../selftests/net/openvswitch/openvswitch.sh  | 216 +++++++++
->  .../selftests/net/openvswitch/ovs-dpctl.py    | 411 ++++++++++++++++++
->  5 files changed, 642 insertions(+)
->  create mode 100644 tools/testing/selftests/net/openvswitch/Makefile
->  create mode 100755 tools/testing/selftests/net/openvswitch/openvswitch.sh
->  create mode 100644 tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> This is the bridge->driver direction. In which of the changes up until
+> now/through which mechanism will the bridge emit a
+> SWITCHDEV_FDB_ADD_TO_DEVICE with fdb_info->locked = true?
+
+I believe it can happen in the following call chain:
+
+br_handle_frame_finish
+   br_fdb_update // p->flags & BR_PORT_MAB
+       fdb_notify
+           br_switchdev_fdb_notify
+
+This can happen with Spectrum when a packet ingresses via a locked port
+and incurs an FDB miss in hardware. The packet will be trapped and
+injected to the Rx path where it should invoke the above call chain.
+
+> Don't the other switchdev drivers except DSA (search for SWITCHDEV_FDB_EVENT_TO_DEVICE
+> in the drivers/ folder) need to handle this new flag too, even if to reject it?
+
+Yes, agree. At least with mlxsw it is not a big deal right now because
+it ignores entries with !BR_FDB_ADDED_BY_USER and locked entries are
+always like that, but it would be good to make it more explicit.
+
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index abbe88e1c50b..295a6b0fbe26 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15434,6 +15434,7 @@ S:	Maintained
->  W:	http://openvswitch.org
->  F:	include/uapi/linux/openvswitch.h
->  F:	net/openvswitch/
-> +F:	tools/testing/selftests/net/openvswitch/
->  
->  OPERATING PERFORMANCE POINTS (OPP)
->  M:	Viresh Kumar <vireshk@kernel.org>
-
-...
-
-> +exit ${exitcode}
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> new file mode 100644
-> index 000000000000..791d76b7adcd
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> @@ -0,0 +1,411 @@
-> +#!/usr/bin/env python3
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# Controls the openvswitch module.  Part of the kselftest suite, but
-> +# can be used for some diagnostic purpose as well.
-> +
-> +import logging
-> +import multiprocessing
-> +import socket
-> +import struct
-> +import sys
-> +
-> +try:
-> +    from libnl.attr import NLA_NESTED, NLA_STRING, NLA_U32, NLA_UNSPEC
-> +    from libnl.attr import nla_get_string, nla_get_u32
-> +    from libnl.attr import nla_put, nla_put_string, nla_put_u32
-> +    from libnl.attr import nla_policy
-> +
-> +    from libnl.error import errmsg
-> +
-> +    from libnl.genl.ctrl import genl_ctrl_resolve
-> +    from libnl.genl.genl import genl_connect, genlmsg_parse, genlmsg_put
-> +
-> +    from libnl.handlers import nl_cb_alloc, nl_cb_set
-> +    from libnl.handlers import NL_CB_CUSTOM, NL_CB_MSG_IN, NL_CB_VALID
-> +    from libnl.handlers import NL_OK, NL_STOP
-> +
-> +    from libnl.linux_private.netlink import NLM_F_ACK, NLM_F_DUMP
-> +    from libnl.linux_private.netlink import NLM_F_REQUEST, NLMSG_DONE
-> +
-> +    from libnl.msg import NL_AUTO_SEQ, nlmsg_alloc, nlmsg_hdr
-> +
-> +    from libnl.nl import NLMSG_ERROR, nl_recvmsgs_default, nl_send_auto
-> +    from libnl.socket_ import nl_socket_alloc, nl_socket_set_cb
-> +    from libnl.socket_ import nl_socket_get_local_port
-> +except ModuleNotFoundError:
-> +    print("Need to install the python libnl3 library.")
-
-
-Hey, Aaron and Kevin.  Selftests sounds like a very important and
-long overdue thing to add.  Thanks for working on this!
-
-I have some worries about the libnl3 library though.  It doesn't
-seem to be maintained well.  It it maintained by a single person,
-it it was at least 3 different single persons over the last 7
-years via forks.  It didn't get any significant development done
-since 2015 as well and no commits at all for a last 1.5 years.
-It is not packaged by any major distributions.
-I'm talking about https://github.com/coolshou/libnl3 .  Please,
-correct me if that is not the right one.  There are too many
-libraies with the name libnl out there...  That is also not a great
-sign.
-
-The C library libnl (https://github.com/thom311/libnl) seems to
-be well maintained in general.  It has experimental python
-bindings which are not really supported much.  Python bindings
-received only 2 actual code-changing commits in the last 7 years.
-Both of them are just python 2/3 compatibility changes.
-Maybe that is not that big of a deal since it's not really a
-real python library, but a wrapper on top of a main C library.
-However, I didn't find these python bindings to be packaged in
-distributions.  And they seem to be not available in pip as well.
-So, building them is kind of a pain.
-
-There is another option which is pyroute2.  It positions itself
-primarily as a netlink library and it does include an
-pyroute2.netlink module indeed:
-  https://github.com/svinota/pyroute2/tree/master/pyroute2/netlink
-See the __init__.py for usage examples.
-
-This one looks to me like the most trustworthy.  It is actively
-used by everyone in the python networking world, e.g. by OpenStack.
-And it is actively developed and maintained unlike other
-netlink-related python projects.  It is also packaged in most of the
-main distributions, so it's easy to install and use.  Many people
-already have it installed for other purposes.
-
-TBH, I didn't compare the functionality, but I'd expect that most
-of the things we need are implemented.
-
-What do you think?
-
-
-
-On the other note, I'm not a real python developer, but the code
-looks more like a C than a python even for me.  Firstly, I'd say
-that it would be great to maintain some coding style, e.g. by
-checking with flake8 and/or black.  See some issues/suggestions
-provided by these tools below.
-
-Secondly, we shouldd at least use argparse for argument parsing.
-It's part of the standard library since python 3.2, so doens't
-require any special dependencies to be installed.
-
-Some parts of the code can probably be re-written to be more
-"pythonic" as well, but I won't dive into that for now.  I didn't
-review the code deep enough for that.
-
-Best regards, Ilya Maximets.
-
-$ flake8 --ignore=E203,W504,W503 ./dpctl.py
-./dpctl.py:14:38: H301: one import per line
-./dpctl.py:15:42: H301: one import per line
-./dpctl.py:16:35: H301: one import per line
-./dpctl.py:22:45: H301: one import per line
-./dpctl.py:24:43: H301: one import per line
-./dpctl.py:25:44: H301: one import per line
-./dpctl.py:26:37: H301: one import per line
-./dpctl.py:28:54: H301: one import per line
-./dpctl.py:29:58: H301: one import per line
-./dpctl.py:31:38: H301: one import per line
-./dpctl.py:33:37: H301: one import per line
-./dpctl.py:34:46: H301: one import per line
-./dpctl.py:118:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:118:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:119:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:119:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:120:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:120:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:121:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:121:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:130:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:130:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:131:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:131:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:132:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:132:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:133:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:133:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:200:13: E126 continuation line over-indented for hanging indent
-./dpctl.py:207:9: E121 continuation line under-indented for hanging indent
-./dpctl.py:358:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:358:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:359:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:359:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:360:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:360:1: H405: multi line docstring summary not separated with an empty line
-./dpctl.py:361:1: H404: multi line docstring should start without a leading new line
-./dpctl.py:361:1: H405: multi line docstring summary not separated with an empty line
-
-Black also provides some readability suggestions like this:
-
-$ black -l 80 -S --check --diff dpctl.py 
---- dpctl.py    2022-10-19 21:24:34.352403 +0000
-+++ dpctl.py    2022-10-20 13:15:29.095154 +0000
-@@ -137,12 +137,18 @@
-     if ret:
-         print(errmsg[abs(ret)])
-         sk = None
-         return ret
-     ovs_families = {}
--    family_probe = [OVS_DATAPATH_FAMILY, OVS_VPORT_FAMILY, OVS_FLOW_FAMILY,
--                    OVS_PACKET_FAMILY, OVS_METER_FAMILY, OVS_CT_LIMIT_FAMILY]
-+    family_probe = [
-+        OVS_DATAPATH_FAMILY,
-+        OVS_VPORT_FAMILY,
-+        OVS_FLOW_FAMILY,
-+        OVS_PACKET_FAMILY,
-+        OVS_METER_FAMILY,
-+        OVS_CT_LIMIT_FAMILY,
-+    ]
-     for family in family_probe:
-         ovs_families[family] = get_family(family)
-         if ovs_families[family] == -1:
-             return -1
-     return 0
-@@ -150,19 +156,21 @@
- 
- def parse_dp_msg(nlh, target_dict):
-     dp_dict = {}
-     attrs = dict((i, None) for i in range(OVS_DP_ATTR_MAX))
-     dp_policy = dict((i, None) for i in range(OVS_DP_ATTR_MAX))
--    dp_policy.update({
--        OVS_DP_ATTR_NAME: nla_policy(type_=NLA_STRING, maxlen=15),
--        OVS_DP_ATTR_UPCALL_PID: nla_policy(type_=NLA_U32),
--        OVS_DP_ATTR_STATS: nla_policy(type_=NLA_NESTED),
--        OVS_DP_ATTR_MEGAFLOW_STATS: nla_policy(type_=NLA_NESTED),
--        OVS_DP_ATTR_USER_FEATURES: nla_policy(type_=NLA_U32),
--        OVS_DP_ATTR_MASKS_CACHE_SIZE: nla_policy(type_=NLA_U32),
--        OVS_DP_ATTR_PER_CPU_PIDS: nla_policy(type_=NLA_UNSPEC)
--    })
-+    dp_policy.update(
-+        {
-+            OVS_DP_ATTR_NAME: nla_policy(type_=NLA_STRING, maxlen=15),
-+            OVS_DP_ATTR_UPCALL_PID: nla_policy(type_=NLA_U32),
-+            OVS_DP_ATTR_STATS: nla_policy(type_=NLA_NESTED),
-+            OVS_DP_ATTR_MEGAFLOW_STATS: nla_policy(type_=NLA_NESTED),
-+            OVS_DP_ATTR_USER_FEATURES: nla_policy(type_=NLA_U32),
-+            OVS_DP_ATTR_MASKS_CACHE_SIZE: nla_policy(type_=NLA_U32),
-+            OVS_DP_ATTR_PER_CPU_PIDS: nla_policy(type_=NLA_UNSPEC),
-+        }
-+    )
-     ret = genlmsg_parse(nlh, 4, attrs, OVS_DP_ATTR_MAX, dp_policy)
-     if ret:
-         print("Error parsing datapath")
-         return -1
-     if attrs[1] is None:
-@@ -173,11 +181,12 @@
-     dp_dict[OVS_DP_ATTR_STATS] = stats
-     b = bytes(attrs[OVS_DP_ATTR_MEGAFLOW_STATS].payload)
-     stats = struct.unpack("=QIIQQ", b[:32])
-     dp_dict[OVS_DP_ATTR_MEGAFLOW_STATS] = [stats[i] for i in (0, 1, 3)]
-     dp_dict[OVS_DP_ATTR_MASKS_CACHE_SIZE] = nla_get_u32(
--        attrs[OVS_DP_ATTR_MASKS_CACHE_SIZE])
-+        attrs[OVS_DP_ATTR_MASKS_CACHE_SIZE]
-+    )
-     target_dict[dp_name] = dp_dict
- 
- 
- def show_dp_cb(msg, dp_dict):
-     nlh = nlmsg_hdr(msg)
-@@ -194,19 +203,21 @@
-     retn = None
-     if nlh.nlmsg_type == NLMSG_DONE:
-         retn = NL_STOP
-     attrs = dict((i, None) for i in range(OVS_DP_ATTR_MAX))
-     port_policy = dict((i, None) for i in range(OVS_VPORT_ATTR_MAX))
--    port_policy.update({
-+    port_policy.update(
-+        {
-             OVS_VPORT_ATTR_PORT_NO: nla_policy(type_=NLA_U32),
-             OVS_VPORT_ATTR_TYPE: nla_policy(type_=NLA_U32),
-             OVS_VPORT_ATTR_NAME: nla_policy(type_=NLA_STRING, maxlen=15),
-             OVS_VPORT_ATTR_OPTIONS: nla_policy(type_=NLA_NESTED),
-             OVS_VPORT_ATTR_UPCALL_PID: nla_policy(type_=NLA_UNSPEC),
-             OVS_VPORT_ATTR_STATS: nla_policy(type_=NLA_NESTED),
-             OVS_VPORT_ATTR_IFINDEX: nla_policy(type_=NLA_U32),
--        })
-+        }
-+    )
-     genlmsg_parse(nlh, OVS_HDR_LEN, attrs, OVS_DP_ATTR_MAX, port_policy)
-     if attrs[1] is not None:
-         port_info = "Port " + str(nla_get_u32(attrs[1])) + ": "
-         if attrs[3] is not None:
-             port_info += nla_get_string(attrs[3]).decode('utf-8')
-@@ -234,12 +245,17 @@
-         f_zip = zip(fields, dp_info[i][OVS_DP_ATTR_MEGAFLOW_STATS])
-         format_list = [val for pair in f_zip for val in pair]
-         out_string = indent + "Masks: {}: {} {}: {}\n"
-         out_string += indent + "Cache: {}: {}"
-         print(out_string.format(*format_list))
--        print("Caches:\n" + indent + "Masks-cache: size: {}".
--              format(dp_info[i][OVS_DP_ATTR_MASKS_CACHE_SIZE]))
-+        print(
-+            "Caches:\n"
-+            + indent
-+            + "Masks-cache: size: {}".format(
-+                dp_info[i][OVS_DP_ATTR_MASKS_CACHE_SIZE]
-+            )
-+        )
-         indent = 4 * " "
-         for port in vport_info[i]:
-             print(indent + port)
- 
- 
-@@ -255,27 +271,46 @@
-             print("That interface does not exist.")
-             return -1
-         flag = NLM_F_REQUEST
-     else:
-         flag = NLM_F_DUMP
--    genlmsg_put(msg_dpctl_get, 0, NL_AUTO_SEQ,
--                ovs_families[OVS_DATAPATH_FAMILY], OVS_HDR_LEN,
--                flag, OVS_DP_CMD_GET, OVS_DATAPATH_VERSION)
-+    genlmsg_put(
-+        msg_dpctl_get,
-+        0,
-+        NL_AUTO_SEQ,
-+        ovs_families[OVS_DATAPATH_FAMILY],
-+        OVS_HDR_LEN,
-+        flag,
-+        OVS_DP_CMD_GET,
-+        OVS_DATAPATH_VERSION,
-+    )
-     if dp is not None:
-         nla_put_string(msg_dpctl_get, OVS_DP_ATTR_NAME, dp.encode('utf-8'))
-     nl_sk_transaction(msg_dpctl_get, sk, cb_dp_show)
-     vport_info = dict((i, []) for i in dp_info)
-     # for each datapath, call down and ask it to tell us its vports.
-     for dp in vport_info:
-         msg_vport_get = nlmsg_alloc()
--        ba = genlmsg_put(msg_vport_get, 0, NL_AUTO_SEQ,
--                         ovs_families[OVS_VPORT_FAMILY], OVS_HDR_LEN,
--                         NLM_F_DUMP, OVS_VPORT_CMD_GET, OVS_DATAPATH_VERSION)
-+        ba = genlmsg_put(
-+            msg_vport_get,
-+            0,
-+            NL_AUTO_SEQ,
-+            ovs_families[OVS_VPORT_FAMILY],
-+            OVS_HDR_LEN,
-+            NLM_F_DUMP,
-+            OVS_VPORT_CMD_GET,
-+            OVS_DATAPATH_VERSION,
-+        )
-         ba[0:OVS_HDR_LEN] = struct.pack('=I', socket.if_nametoindex(dp))
-         cb_vport_show = nl_cb_alloc(NL_CB_CUSTOM)
--        nl_cb_set(cb_vport_show, NL_CB_VALID, NL_CB_CUSTOM,
--                  show_vport_cb, (dp, vport_info))
-+        nl_cb_set(
-+            cb_vport_show,
-+            NL_CB_VALID,
-+            NL_CB_CUSTOM,
-+            show_vport_cb,
-+            (dp, vport_info),
-+        )
-         nl_sk_transaction(msg_vport_get, sk, cb_vport_show)
-     dpctl_show_print(dp_info, vport_info)
- 
- 
- def mod_cb(msg, add):
-@@ -308,13 +343,20 @@
-             segment = len(hdrval)
-         hdrver = int(hdrval[:segment], 0)
-         if len(hdrval[:segment]):
-             userfeatures = int(hdrval[:segment], 0)
- 
--    genlmsg_put(msg_dpctl_cmd, 0, NL_AUTO_SEQ,
--                ovs_families[OVS_DATAPATH_FAMILY], OVS_HDR_LEN,
--                NLM_F_ACK, cmd, hdrver)
-+    genlmsg_put(
-+        msg_dpctl_cmd,
-+        0,
-+        NL_AUTO_SEQ,
-+        ovs_families[OVS_DATAPATH_FAMILY],
-+        OVS_HDR_LEN,
-+        NLM_F_ACK,
-+        cmd,
-+        hdrver,
-+    )
- 
-     nla_put_u32(msg_dpctl_cmd, OVS_DP_ATTR_UPCALL_PID, 0)
-     nla_put_string(msg_dpctl_cmd, OVS_DP_ATTR_NAME, dp.encode('utf-8'))
- 
-     if setpid:
-@@ -325,12 +367,13 @@
-         for i in range(nproc):
-             if procarray is not None:
-                 procarray += struct.pack("=I", nl_socket_get_local_port(sk))
-             else:
-                 procarray = struct.pack('=I', nl_socket_get_local_port(sk))
--        nla_put(msg_dpctl_cmd, OVS_DP_ATTR_UPCALL_PID, len(procarray),
--                procarray)
-+        nla_put(
-+            msg_dpctl_cmd, OVS_DP_ATTR_UPCALL_PID, len(procarray), procarray
-+        )
-     nla_put_u32(msg_dpctl_cmd, OVS_DP_ATTR_USER_FEATURES, userfeatures)
-     cb_dp_mod = nl_cb_alloc(NL_CB_CUSTOM)
-     nl_cb_set(cb_dp_mod, NL_CB_MSG_IN, NL_CB_CUSTOM, mod_cb, add)
-     return nl_sk_transaction(msg_dpctl_cmd, sk, cb_dp_mod)
- 
-@@ -388,19 +431,19 @@
-             else:
-                 dpctl_show(argv[count])
-             return 0
-         elif arg == "add-dp":
-             dpctl_netlink_init()
--            if len(argv) < 3:   # 3rd arg should be DP name or additional opts
-+            if len(argv) < 3:  # 3rd arg should be DP name or additional opts
-                 help("Missing a DP name")
-                 return -1
-             else:
-                 dpctl_add_dp(argv[count:])
-             return 0
-         elif arg == "del-dp":
-             dpctl_netlink_init()
--            if len(argv) < 3:   # 3rd arg MUST be DP name
-+            if len(argv) < 3:  # 3rd arg MUST be DP name
-                 help("Missing a DP name")
-                 return -1
-             else:
-                 dpctl_del_dp(argv[count])
-             return 0
----
+> When other drivers will want to look at fdb_info->locked, they'll have
+> the surprise that it's impossible to maintain backwards compatibility,
+> because they didn't use to treat the flag at all in the past (so either
+> locked or unlocked, they did the same thing).
+> 
+> > +
+> >  	INIT_WORK(&switchdev_work->work, dsa_slave_switchdev_event_work);
+> >  	switchdev_work->event = event;
+> >  	switchdev_work->dev = dev;
+> > @@ -3369,6 +3374,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
+> >  	ether_addr_copy(switchdev_work->addr, fdb_info->addr);
+> >  	switchdev_work->vid = fdb_info->vid;
+> >  	switchdev_work->host_addr = host_addr;
+> > +	switchdev_work->fdb_flags = fdb_flags;
