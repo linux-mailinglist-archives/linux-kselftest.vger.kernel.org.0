@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57BF606BA4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 00:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE33606BC6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 00:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiJTWw4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 18:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S229875AbiJTW5i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 18:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiJTWwz (ORCPT
+        with ESMTP id S229893AbiJTW5h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:52:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B2B21E109;
-        Thu, 20 Oct 2022 15:52:53 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a26so3082704ejc.4;
-        Thu, 20 Oct 2022 15:52:53 -0700 (PDT)
+        Thu, 20 Oct 2022 18:57:37 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AEA22E0D4;
+        Thu, 20 Oct 2022 15:57:35 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id k2so3126022ejr.2;
+        Thu, 20 Oct 2022 15:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L2G/9Nt1UPxsYT32uFvEw5BhWk6FA6rHpv/vvZ1BQSE=;
-        b=L7KL7Cmq5BeuUdYGMW3cAgtIcuVZg5ASkJ/IZNJWWUiJ+/Qt6gVlScz1u/W2UurieC
-         StTRCMiF1gayWtat9yR1jxy03jHzqPRpY+d/GgJ1K8lmNPRqj47kEmjBivrdxwcQlJRP
-         gqfaCFKJCe0cSgQC/Xx9MVQoKg98NUMWFRqSK3/+nRYCXn1Q7yrGT4PHRNV43mZeBqb1
-         cVtzyuggTcE1Pu9cpikwolaS6fyiZ1HlsdnyB5HAFFtEAPY8oUGlBvmr4xSRLlq7VRIk
-         7rfYUfkbEQcY9aYc3JzsWSeJh1CqZ0CXrIEVX1+mmeRiMEa2Rwrz9msL2vRPepDcIKvz
-         1T1Q==
+        bh=JuxcgTkIRC5WG6rM4q/CSaRgfUH0Ti3MoOBIFAp7H8s=;
+        b=XBJzFhduueKPu1ACZxmcj5cXRa0nb0p5dX8b6x8utN2F40sVgNnz2Vwo93T3WLnBcx
+         Yx3WwrvmN9Nuh/q4vOjOu0pqXnDTWqYB4KV9B3sCwZOf7c8OCwjoNM/D1TNvmc045ZzX
+         Poo3JVc6Gu+DF650q6sVaij7GSbGVXbKX5JW9xSnGo2M+EdB4pcsbE0152s/sylYv+Nc
+         ALPztrqDuyQF/Ci2P4snXxWjZKRtHnNH3GhbYR/zFvz6RX+vOKF1y9KazvTME97oRexc
+         94w80ZyNJO0Z5bBflaDs/V5ISm1JA/Dg+OYU7d/pyJvJYa/mJ0Vv6e7Q6YanX5FVgqB4
+         eYew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L2G/9Nt1UPxsYT32uFvEw5BhWk6FA6rHpv/vvZ1BQSE=;
-        b=dhwJv04hCIZT/VPN6Q7cb18sc6g3DaXpAxwAirdY3Jaainq3iLmmALw0QK7+W8x1Ug
-         1DrvGDOl5/TBlynCuatReW7AeCD14d7qdvNfJlf4WXLTRPgnUNFkhDul/7SMS62pw5zM
-         kdJdeV/xy6blwtIxzhTswIVanGSesXNdJ7SxTBuOCzItM9Mtl2bOhHeLlcagY+q0xrAy
-         nmtBW9KqdlFtkKXQ7GSlKkP1Bc2YWgn0yYFEqA7QxjMNZd1+UTiL8es7Q7drAR3iIzMV
-         SRCUxBTZDQ8WU8GYRN8W+218f87nktmjZhNRUwzjmiRi/h68BdRqDe7ADhPuG8CUh3DZ
-         2oxQ==
-X-Gm-Message-State: ACrzQf0z1EcO+Ivt007VdVCWgmsCz3w8hz4dSAD8AGvIPh2oGf8zQ5KF
-        TWGApTr4XvzhM9IHQgPp5iY=
-X-Google-Smtp-Source: AMsMyM5+9yiqphjFjNrH8KW/esDJUp/n6M5wxHkOVHLIro1ZznSRDyfo73CoezEZIlBBqvJ8bUzutw==
-X-Received: by 2002:a17:907:9602:b0:780:8c9f:f99a with SMTP id gb2-20020a170907960200b007808c9ff99amr12947250ejc.465.1666306371826;
-        Thu, 20 Oct 2022 15:52:51 -0700 (PDT)
+        bh=JuxcgTkIRC5WG6rM4q/CSaRgfUH0Ti3MoOBIFAp7H8s=;
+        b=4kUdMb+u2XRrHmLU+EuuqbCdyOLgAcdkFgOu3kjz+hT63LZn9HJN8JLgOG3m1fcFSs
+         ciwI27DxgE7r3MPhcJz+0geVtmW/fyvjfnjkrQVm58QLC3D2cWNLikxhCxe6ijJJwwGc
+         i4XoZtEffNkwbqSnazLDctBLW7pTyKVnAFUpfoGcPrH5pUqK/mpKJVIxzzVh4YwjB9C7
+         E69LIXrT6zmbMcTGInfAnsdIadX7Jpt63bdJLCvOzkyF0N37QwxGwzWnE/Xw8Vjis6xs
+         JCHveLz1vaXGEerP/VAldmnFM/xpr3YerlKqu4jOx7MKtnomlae6WrWIcDF6NOu/Nlnj
+         vm0w==
+X-Gm-Message-State: ACrzQf1Wqw1ZAfXF4phW1hSUJexp1pXGNAXHSk3DUKopWpm/KP2ag+s0
+        toc0VvqFAQ4dydTSKuplXm7zQW6khpPfOQ==
+X-Google-Smtp-Source: AMsMyM7/vnHFskrIzjNC7ybOEBIlorfKrTTq/Ou6mds57aeFaKcu+F9HahwfD0wuLF52vhDnh4xpcw==
+X-Received: by 2002:a17:906:58cc:b0:78d:ce9c:3787 with SMTP id e12-20020a17090658cc00b0078dce9c3787mr12707611ejs.715.1666306643405;
+        Thu, 20 Oct 2022 15:57:23 -0700 (PDT)
 Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id v25-20020a17090651d900b0078da24ea9c7sm10939361ejk.17.2022.10.20.15.52.49
+        by smtp.gmail.com with ESMTPSA id l6-20020a1709062a8600b0073d796a1043sm10750046eje.123.2022.10.20.15.57.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 15:52:51 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 01:52:47 +0300
+        Thu, 20 Oct 2022 15:57:22 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 01:57:19 +0300
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     netdev@kapio-technology.com
 Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
@@ -85,19 +85,19 @@ Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
- down through the DSA layer
-Message-ID: <20221020225247.acy4cejhcmtmf6ua@skbuf>
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <20221020225719.l5iw6vndmm7gvjo3@skbuf>
 References: <20221018165619.134535-1-netdev@kapio-technology.com>
  <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221020130224.6ralzvteoxfdwseb@skbuf>
- <715c068915c9f07ad62d9837e70df7a1@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221020132538.reirrskemcjwih2m@skbuf>
+ <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <715c068915c9f07ad62d9837e70df7a1@kapio-technology.com>
+In-Reply-To: <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -108,21 +108,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 09:43:40PM +0200, netdev@kapio-technology.com wrote:
-> I guess you mean, why it differs from the inherit flag mask list?
+On Thu, Oct 20, 2022 at 10:20:50PM +0200, netdev@kapio-technology.com wrote:
+> In general locked ports block traffic from a host based on if there is a
+> FDB entry or not. In the non-offloaded case, there is only CPU assisted
+> learning, so the normal learning mechanism has to be disabled as any
+> learned entry will open the port for the learned MAC,vlan.
+
+Does it have to be that way? Why can't BR_LEARNING on a BR_PORT_LOCKED
+cause the learned FDB entries to have BR_FDB_LOCKED, and everything
+would be ok in that case (the port will not be opened for the learned
+MAC/VLAN)?
+
+> Thus learning is off for locked ports, which of course includes MAB.
 > 
-> If so it is explained in the update to v7 in 00/12.
-
-The following is written there:
-
-|        v7:     Remove locked port and mab flags from DSA flags
-|                inherit list as it messes with the learning
-|                setting and those flags are not naturally meant
-|                for enheriting, but should be set explicitly.
-
-Can you go one level deeper with the explanation? What messes with the
-learning setting? Why are those brport flags not naturally meant for
-inheriting?
-
-It's pretty hard to take your patch set seriously if you don't provide
-proper explanations.
+> So the 'learning' is based on authorizing MAC,vlan addresses, which
+> is done by userspace daemons, e.g. hostapd or what could be called
+> mabd.
