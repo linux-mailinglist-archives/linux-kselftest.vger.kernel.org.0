@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B87F6063AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 16:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A781F606446
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 17:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiJTO6y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 10:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S229850AbiJTPXq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 11:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJTO6x (ORCPT
+        with ESMTP id S229645AbiJTPXp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 10:58:53 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2076.outbound.protection.outlook.com [40.107.94.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1D61C5A68;
-        Thu, 20 Oct 2022 07:58:51 -0700 (PDT)
+        Thu, 20 Oct 2022 11:23:45 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E065F199899;
+        Thu, 20 Oct 2022 08:23:44 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ljzLE9KP5ea8AmLqZS2zsywgtG842AKJLmwdZMc/AnatYXfhAHDPNikT6/8aCWAttpLtpgZ+0huiQYecWOlfwADe6SgoYx+EQuw4h+KsObZbGPeDtNjIkkLkf5xGn8Ul5FB6w27sAYhseHh+tc8R2WVradz1r+ZGI/FIIUMCNiwGrbMcbhA1VIMxpjeuyaBBR01Pa0pQEL5kTGAJ+0haJZACwbsT6J2JWKJn5yd95ewfooQqGgU/bQxyEZSiWSK6J3PPhLvci9Xhx37pr2EV/89BFUC40JmqxLr1TTSWt8VcrzNECpCQBFLwMAAgQTI67VqLvR6ofg4fjSDgi5Tx7Q==
+ b=Br+bVtpFquwJnaTg5EyxrLMp/xaWedAWrvQslHMYNiLb5148u32b3b8o/jWezvPYk1lC1o8Vcxg1m4Jcse9K6JVw+WTVYHbViuYNeWwHT6yI2m14wL5AR95ViNGU4eYTf49y6iSLMk2nQhDzU6M138Nk/Ym5TdITlIyNY+5mUWfOsq+3582dGC1nkPNA9ppR2pmiDJfairy9aYOD4PsLVVZ2ST4eAOTHpAMoPjUzEEk1A0DwGlfAItuzFAITLHha+6hQQrzJVugN11uYlpuGtRuiuL0G+u2mUNEvsdwKar76bQsJ9HALcc80O/fZr4GzD/u34aCl60RIwjLuDW0KpA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rDjlAV2B5PLWaEiiAhnQ3gBii1XZvZttHzVQXmFo82I=;
- b=MQDFvCEnsQ/4OQ3EVepXcb0nUJPyncy1P/5iT3lREH71WNktSzkw4TBc3suChG5Fl8InGGwsKrdXTPJFRpGksVbp2HsD+hjwyCSK9iagVtg9IH0G3wI6eQy1oGCU8UDVZnUtzwcv85+D0Of3FQ+QZ6LrDzwSDqWmnjcA89S1YDHR39a4CxBkTF54OeA9ALN4lHVpWrV/5wl9DpYBb4MFVqfGoCQWQQWDWOQ/yn+18yC1Mq++CPmNzNNaCz3mLsNBWhMWKKeeMt2ihvH9OJM6E3FGPeMkTSesXDOMHyXwTuOR6MW2OX5Q4241FlaqCUmFMgBlcb0bhHFMrutFYCyz+Q==
+ bh=T7W92ag0AKiJBJpoYACJvKkZWNE1ZGcagqI+HW9wDrU=;
+ b=lsoRndPxJJth6ca+Zh04VmDA/7aPZmAps8V/IFfaAOCbJEWHvrxTzZWD6PrvBtOpa1ZzDgHFPuxUIs5+M7v9K6cxCecb9P6dOX9hCwIyo2w6vBtkkQvlTsetsrbHjkKUAO+DdrgJq1L7DNfepvvOXX8VgBymMNybCGwo9kNiQLKIuuKpxZUsB+9AdgFr2WwzaqF+XjwdktAACDKv7794/REV1KxC5QVA8dITHNmgsLY2kWuLA2GeAA/KZn3WEhTXsmnvueVgO8u6y6B2u3QC4aO7KPyB769KQxZdDetSasF8oYzJzFP36F1zqRVwgsvRTm3OHyG2sImjkIKNawC3cw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rDjlAV2B5PLWaEiiAhnQ3gBii1XZvZttHzVQXmFo82I=;
- b=PiOk1hZV8RsHJgz/bSeNc/o22QGZtXNazdIr1EydeD43PCfiQtLzD9zjNPIOYtzl1jE5paIz7T5G2FNVlTzXwNimd96TiR3lUXj5/VYAV1BpwT3d962XAYwCew0w0EhjOZ2u4Xi9CdPHWEoGCjg4dQYmy/4e86h9c+89vKQbF11lf0i3K0qE1xfk9N3Op2pdvi2UOZvwEyvEvMM2J2FvhfeK3qU4XVmwv4svPJ1TRV+xGral1Fc8+mNzugJ93bNGYXAMZbCJjrnHR8IOMMYcA4s9ME1lK0F94W9Qwrq8XQYzmA1VKcBjI9on29auusEfCUFLw5YcSbNetMAJryRLgQ==
+ bh=T7W92ag0AKiJBJpoYACJvKkZWNE1ZGcagqI+HW9wDrU=;
+ b=GyHxvL1MbfwIm5XLS9+oicHdpeWtUXxDVkp45Ns9G5A/OPYGzZLc/Z4jzqlCu2IVR2Ud1oDYyt1a1zwZPE4gu0dmOkZbauID1CoRa46GYBLmz0janab13ARwjR5pRVD4Un5zQEKyNwKdoq38YgGTJQ2Hi5kAFjPhWowYm1C9XjFt06Xjtj0wTsShQa+Y38wEqOLUSnMzauWhe8v0pwSR6z4y9J5ELokizTBwBT/IcL/SR7uPPnqperoi09j3nCZjDE7LAcCHTck8GY0PZEVyAk5N7wgmA5dgXrZHJEBryGYFuu+afZhRyJlf/tj6oL7uf9HpLzTOFj9TX0hsXCPTLQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by PH7PR12MB5805.namprd12.prod.outlook.com (2603:10b6:510:1d1::13) with
+ by DM6PR12MB4372.namprd12.prod.outlook.com (2603:10b6:5:2af::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Thu, 20 Oct
- 2022 14:58:49 +0000
+ 2022 15:23:43 +0000
 Received: from CY5PR12MB6179.namprd12.prod.outlook.com
  ([fe80::4ff2:d93e:d200:227e]) by CY5PR12MB6179.namprd12.prod.outlook.com
  ([fe80::4ff2:d93e:d200:227e%7]) with mapi id 15.20.5723.033; Thu, 20 Oct 2022
- 14:58:49 +0000
-Date:   Thu, 20 Oct 2022 17:58:42 +0300
+ 15:23:43 +0000
+Date:   Thu, 20 Oct 2022 18:23:37 +0300
 From:   Ido Schimmel <idosch@nvidia.com>
 To:     Vladimir Oltean <olteanv@gmail.com>
 Cc:     "Hans J. Schultz" <netdev@kapio-technology.com>,
@@ -79,7 +79,7 @@ Cc:     "Hans J. Schultz" <netdev@kapio-technology.com>,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
  down through the DSA layer
-Message-ID: <Y1FiImF3i4s0bLuD@shredder>
+Message-ID: <Y1Fn+TnbI/uMH0VR@shredder>
 References: <20221018165619.134535-1-netdev@kapio-technology.com>
  <20221018165619.134535-1-netdev@kapio-technology.com>
  <20221018165619.134535-6-netdev@kapio-technology.com>
@@ -88,61 +88,61 @@ References: <20221018165619.134535-1-netdev@kapio-technology.com>
  <Y1FMAI9BzDRUPi5Y@shredder>
  <20221020133506.76wroc7owpwjzrkg@skbuf>
  <Y1FTzyPdTbAF+ODT@shredder>
- <20221020140400.h4czo4wwv7erncy7@skbuf>
+ <20221020141104.7h7kpau6cnpfqvh4@skbuf>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020140400.h4czo4wwv7erncy7@skbuf>
-X-ClientProxiedBy: VI1PR0501CA0009.eurprd05.prod.outlook.com
- (2603:10a6:800:92::19) To CY5PR12MB6179.namprd12.prod.outlook.com
+In-Reply-To: <20221020141104.7h7kpau6cnpfqvh4@skbuf>
+X-ClientProxiedBy: VE1PR03CA0015.eurprd03.prod.outlook.com
+ (2603:10a6:802:a0::27) To CY5PR12MB6179.namprd12.prod.outlook.com
  (2603:10b6:930:24::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|PH7PR12MB5805:EE_
-X-MS-Office365-Filtering-Correlation-Id: ad99cae0-d89f-40b6-812a-08dab2ab9842
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|DM6PR12MB4372:EE_
+X-MS-Office365-Filtering-Correlation-Id: c91323fe-3204-4185-4e2e-08dab2af12d4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GNdsy0RNkiBCjD8dhFRkX2cXPwgNhJvg6UTXAoeN4QvmvgD7zFXIKCL52RwEV65pi6Tcgnea5LEn8Y71x5gJoKyzCdcxf2+JRAayYgMcsBjQXekqQe5432L7x7EN/4bv55z+I30MzhXFKcom21mcNnjjUYJmQ1wdjhEcmYGx1qfbqqYw5OYJ61x2qkziODLD/ciWfhiv16MTD5KmEdvMxQemWb2dYRJRmrX+WqNM80Qoful4nmPiG1zsYzdxWOPrka4dnAHwJtC8PIW1hpsiL4J7uS5/A6ktRBUfeaxuQ4AB6YbyrTraNNhBAXXwz//NmR45AxliEdi6gj3H9ULIKjgshFZKDElcJdHxh2gQmxKjoex7amWjypJKlvpysu6faW6qoTrfG3bb/VZvNvuP5kEAp5tP926X1Kq54OuHFCikRfBONER/2FokV4J+dN4ClqbQyIokeaPW+lsx17GdZqcbcNKQL7X7QUCJffcYNePaiCaOAF89NyUKNDPuLXFFDJIUNTppuoiDt67ScFsv+vmqG5oEGRSgT8bvf8icjicrkq7WhWYpYG5IAc+YN1VKbC3ZZoqusDk2HaJgIiIXxjMBCk9AZPSEbdCXLAYtLnjl65500S8fIWtZSUvyP5CIbfeZH2TqoYWeN43ihGj0fVv3coXgRKc030NEUrX8UIN0k7tOrRgA5HXArGvLGji+TbTnzEjl9IJ5eVfM+rf15Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(39860400002)(376002)(136003)(366004)(346002)(396003)(451199015)(54906003)(6916009)(316002)(8936002)(6512007)(186003)(7406005)(9686003)(7416002)(26005)(6506007)(8676002)(5660300002)(41300700001)(66476007)(38100700002)(66899015)(66946007)(6666004)(4326008)(2906002)(83380400001)(66556008)(478600001)(33716001)(86362001)(6486002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: CxdeFMFKBDXqJdgiV4zJaKHaPIo/th+0Yg+v4EOvQ2deuvyKQXmJoPeu+1I6wTTob/4oPc/5P33sCdPtc3zVc5Pi/J31OkWjlzgxZdBLB3rITuxdncSV5C7+SWvYi3pShMZuaF7BmUgMo5HwKV7/OfMRntld5K2MAOvHHGozHZA/FmDH/HEtlucBj8JiGDcXnGRWPtQ1W0mw9k0hqgI9spHV+FVXxRDJUSApMFGosdpDbXLOgbhz5zHuKMqwcEJ2ZZrU19szFvJw/4OyiAFFWwPxE5NS2oyMJ0HckM+k6nRaVuFEH1dzRzLRF4OUCEWiw9PfgTjCIgrUTgRrzNw8LwWtFDOJsqZ2g7pRgAY9hB/uYKUeROkCI9UHI1j+xM+HB4tFUdAIP0vUnmqtDvnK2VGRq2gXbJlLoG+kt0EbAaSZsmG6ZT26IOoT2lvrhtUdFZOiDOMQhFEFx3P+k7mabuzvjX88mKvqlrgyjCoOZsGMmqXdnygcK6BUV6fQkSl769QCVC5eZJMR01Rdf2qnP8SUpsJWwyQ8KsIIKEsnOn/NpHS3+HgKSSMC0Kh+/4Ba4ppP1eFJj99gSLZbH4BV/3yspkgKfH05VtYjs5NRLj63K1zuknIz5/v2jSDbJu9rE+XAaY0wrEBH7iRUoEP6man/9KqUNvC5WmZcqV1OvXq/xbCzCVuDYs3I5s/8sGHM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(366004)(396003)(346002)(376002)(39860400002)(451199015)(86362001)(33716001)(478600001)(6486002)(7406005)(186003)(8936002)(54906003)(6506007)(9686003)(7416002)(26005)(6512007)(6916009)(316002)(6666004)(2906002)(83380400001)(41300700001)(38100700002)(66556008)(5660300002)(8676002)(66946007)(66476007)(4326008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RPuaKzJ/i9u5icSvS+soJY4vz4ypaM2G4DcURzHmZYUveBsR5v/P8c8tWKJa?=
- =?us-ascii?Q?yTYUhW6gAhsB6YN0DwXRdiiaPhRps5zl7RBIMQDH8l0mCWPPUFRTHCzx9KL2?=
- =?us-ascii?Q?tLk0Q04PR3PfZvM4dsPg7Cw3yH7HMjJFVbhkJ3X1wV+Oo6XduCVR7kWKn3Gn?=
- =?us-ascii?Q?PYpLeiag+NoIEVBmHWdNj8ztOE2qgANAWHExRBvpahEWhYhXSkTWKvz9xE5a?=
- =?us-ascii?Q?PUab6JGSuHkKupektJa/CnHzAmVaAs8HJhwSSxsoOdTmkG34XjUl38CRqGZN?=
- =?us-ascii?Q?58GMe2DbudSX3mkqASCKsLOC+xF74usMNrQ3ucS8nO9Z0ExR3wIlTuj9mEb5?=
- =?us-ascii?Q?2sAApTicvXHk6c6XlZMt7FPo8J2LK6RPNZAGavxoGw66WoPPl8CmV3DIwc/V?=
- =?us-ascii?Q?WkMt9pUybUVsbJzND7SpNQtKF1pR+FiNn0JrtjoqL0ZfHT0QVZp2RaBJT37h?=
- =?us-ascii?Q?YsUJvbokZa4tATWO7pkX1YM+epNIsG8Z/EbwK67oMIR+AXJUZp/c1Af9m3V8?=
- =?us-ascii?Q?Oq68gskXXoHcVVbHmjSYLRqFr8QfNZlp2ph4ne+01oQW40TwjH0eZp8N+R7u?=
- =?us-ascii?Q?P5OOWtR4Gdz2wmM27qLVOPvWE9esPPmkVG5LY8ZO2G2hT9lzAMQdGGWtBR7T?=
- =?us-ascii?Q?6WjXC8dXbmZqUiDM3mcmGbJ9/Q5aSjBGo54GYSH/1mCl14AsW5VFv2s20qbL?=
- =?us-ascii?Q?kCfzsLUXTSIcTE8RN0x0P0W3Y1/Kwr/cpIsh6vsp1z/TjSM0LSoASprlZuFd?=
- =?us-ascii?Q?0UJJ2ye/82LIrP1sk4v65GZeFq9iymuP4Qxw9yGPndFHHoQBsgHxigmlrKmy?=
- =?us-ascii?Q?sV34cx1gSrkhOmWBn0ucNPb39xubHqKyyHpOmDkB91QX72kOV6bKX60/zqZa?=
- =?us-ascii?Q?AjQxz8Htj64bm/ZGoo81xK2wmusfw0fxBVtXM63WKQ9COYO+sUfaHjB/4TIp?=
- =?us-ascii?Q?t0z/cDAAiH5Ravtqrk4xYaolD4Kkpw5r2cAHDY8Og1DBoVpRTsmFbds6fsfh?=
- =?us-ascii?Q?kO0E0yapbK69kzP0rsGYqiSJL5SZMirEaoPzOy7Lvv9iBK+lZgD4ssUxGmDl?=
- =?us-ascii?Q?atb94QzZVsjSWNba8TJgWOxQM0IYg9vaPBNT1EY5Z8gI4p4qlEcY+DuStLUG?=
- =?us-ascii?Q?vMETOfGLnhSDjLsGbImN9X08HKGAg98+rs4P69zS0aP16XGfQLA0qW/v3WOg?=
- =?us-ascii?Q?gJzb84dYHiOvykuVgdA3+dWXBO0BF1grje8pYytzaulppYOUNmzaH/3FYmYe?=
- =?us-ascii?Q?R2eWg7bxBUBQDMvMhn64QTEBQWSJB9wf3/wbqMR6LUAKVuO+WezmByulbpVE?=
- =?us-ascii?Q?v2sbgqPaZDZ1GpgpSVngYn4c+XEJ8Kj6PFQBNbqCKjK8NMSDHTfl6wuymMmc?=
- =?us-ascii?Q?swf+ElQ6iiM2a/NecRkC0axYKONBTJBJZsIlzzzhIyp74FP7XKDIKS407Kb3?=
- =?us-ascii?Q?Baqzns95yIpBQtxwR/V8EnBO18M8d4HboFT3ws8gdPgeD0vBqxNB8y0aLIaj?=
- =?us-ascii?Q?tsJ+lkXKQu/BfIY8RMDARGcPqoibVvQVpaYa046xQ0tGlm6IkcMWabG0e9yj?=
- =?us-ascii?Q?j9GElxm/9sTSdgoTWggFx8bGdnKxunLpgirzVuRu?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pguSwecIprCmuKi+4o85laQApBTettX8tbOe1FURkpbOs9uJm/wZNbsPLAtS?=
+ =?us-ascii?Q?ffODVCBi74GrTN9nBCOA0dto2z+oVb/l17abZo0TaO5bW6MKzADKgInea6mf?=
+ =?us-ascii?Q?rpLwpdwv7pxZmDKljPdN0kYZNuyg84a15kWguC2Is+8R+ozcXfkLuxlW62g8?=
+ =?us-ascii?Q?U9QSHkRiqS+r2feYbjhp24f76LP7QJd+ht0otwU+uxzOeFNF6QoDdZ5t3AY4?=
+ =?us-ascii?Q?YM9SsOXeAXOvSSw0Dm7JG/KgLzpxnI7njo8unklWiQoENPI/65V5zTgP+Z52?=
+ =?us-ascii?Q?v7+XqkGfacaaJ+6tsGCRi2BJiOeh1jo0BFq6q3Zl9VovvHBrfgeW9QWt5Vq9?=
+ =?us-ascii?Q?zl5kklFLsIG7wVrABzxKOblCAR7y7hxYJ6bjXb/80sb1p+vBkWQPHjyesWqT?=
+ =?us-ascii?Q?YpxXXkoF8l088gFFv2dW6xx4KdT4ldFrDiVJMQfAuoz2RDb99WMt7tD7CrI3?=
+ =?us-ascii?Q?bzHWTVqw2PQ0LCBxmDvuqUkCHfveRpblMorOFUdp9V5/g1KiQgn63lSJ6x6C?=
+ =?us-ascii?Q?2yreV8/Zt0hD1a8GGVb53dTUkf0Ob/gFlNWJBeNTbHyizG8kSoJosXs9XqOv?=
+ =?us-ascii?Q?/tGVFEWL9Svcjvz6yEhmwyYUfAvKVP6ieakmAkSBmuw5RRXKq5DkyHdA6XmZ?=
+ =?us-ascii?Q?mgqKr0x2g1kuC+av5cq4yi4pgNCRjvD/pvzA61vJAm+qMq+UEKLltbuk5t0G?=
+ =?us-ascii?Q?uHOrzFBnbadLym2I5sVFKOzuk6PmSVlKJR5ESX+FwDwWcZTVN6ZiN5s8cPmC?=
+ =?us-ascii?Q?7lIePoB3nmTNVvIId8EU84OdwkDw8C7cexoAG8lV1jWjqB2X5U/SQqmEu68U?=
+ =?us-ascii?Q?09nYKtsIZmXkaFLR03UKqnmGqcgNoO/xslHf5FA9Srp/wV7D1cZQAchs8xNm?=
+ =?us-ascii?Q?1HbB7rPwyJbjpZt5IBEmzuptE9wB9K0nt+Ouuwn4ogZMlBIAtrifmHzIn5T3?=
+ =?us-ascii?Q?Kviq5AO3NFxZ9SJ+8AYl36Kg496OK4IIdKJG8vKc9GJ2DlMPrbFF5pu9DhO1?=
+ =?us-ascii?Q?Ad2PFkJi6F4y2dDJr/oRABupVesXjKypYAMViwxVZQX7Xksvk1osFoBpWvtD?=
+ =?us-ascii?Q?iSUtxdaA24CA+Wl9u/e4iyFcS2tqF6IehCt7+sP11lkD8BNq//VsyNkih/+u?=
+ =?us-ascii?Q?ZRg2Gjkf/CQEUZCAJZcLrrkqxWP0Rcw4HKPMdQQDmMlR6DlH15fveRyypVTo?=
+ =?us-ascii?Q?SP/knWH+zuGP/uoXjLTCybLeRIcHuSJpwO8CAgV8DFLI5Z+stbrULakzZ/Po?=
+ =?us-ascii?Q?JvBrKTtudQ90K/b+6kwTr8nBUSAyWBeBt+9qrn4+PeL0t1cnaAcj7tyux0J1?=
+ =?us-ascii?Q?pmGDUEN2XGZA+7XRozU4iRaS+Dy0fQgI8vnViYXQmrMnBvgoPC7jkETN2Crv?=
+ =?us-ascii?Q?yU5yjjqoMM01K8iT9khamV8R6hq/KvfoDJJ3bWNoxKAEUtuJcL9GIb57ODAe?=
+ =?us-ascii?Q?Qp7EeJFoOOgiwuLAYxiPLsDkVexW6wdcUR8Bgv9q1+2z2lD2Jlpu73hWLt8Q?=
+ =?us-ascii?Q?jiKw7Pr7HEEfRBXrAHB/WkvVeCZkCRVuBc8Vm2OKkBlRmzIKLN3t6nyj5iIY?=
+ =?us-ascii?Q?wUFuWdJS/XSwr+XhD0EGdm7TfsPgWCcErPHRIX/C?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ad99cae0-d89f-40b6-812a-08dab2ab9842
+X-MS-Exchange-CrossTenant-Network-Message-Id: c91323fe-3204-4185-4e2e-08dab2af12d4
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 14:58:49.1711
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 15:23:43.2677
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L05EuL5R73xa9sdfpppcAJhIwY7gsYt4IuWlbLQVE0HJjUeIo/aD1Fbw+qpLGvQHfmLcfleWTPkADiXFWmi4Jw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5805
+X-MS-Exchange-CrossTenant-UserPrincipalName: aCsU+IVPUmFr3w+Z1ttj/V9lXWogR9+JNAe7qt1HbzNFlUNIcz9ok2sE3mvx1MeB3O6piPb/SrUw2jlRRoLdLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4372
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -153,101 +153,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 05:04:00PM +0300, Vladimir Oltean wrote:
+On Thu, Oct 20, 2022 at 05:11:04PM +0300, Vladimir Oltean wrote:
 > On Thu, Oct 20, 2022 at 04:57:35PM +0300, Ido Schimmel wrote:
-> > On Thu, Oct 20, 2022 at 04:35:06PM +0300, Vladimir Oltean wrote:
-> > > On Thu, Oct 20, 2022 at 04:24:16PM +0300, Ido Schimmel wrote:
-> > > > On Thu, Oct 20, 2022 at 04:02:24PM +0300, Vladimir Oltean wrote:
-> > > > > On Tue, Oct 18, 2022 at 06:56:12PM +0200, Hans J. Schultz wrote:
-> > > > > > @@ -3315,6 +3316,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
-> > > > > >  	struct dsa_port *dp = dsa_slave_to_port(dev);
-> > > > > >  	bool host_addr = fdb_info->is_local;
-> > > > > >  	struct dsa_switch *ds = dp->ds;
-> > > > > > +	u16 fdb_flags = 0;
-> > > > > >  
-> > > > > >  	if (ctx && ctx != dp)
-> > > > > >  		return 0;
-> > > > > > @@ -3361,6 +3363,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
-> > > > > >  		   orig_dev->name, fdb_info->addr, fdb_info->vid,
-> > > > > >  		   host_addr ? " as host address" : "");
-> > > > > >  
-> > > > > > +	if (fdb_info->locked)
-> > > > > > +		fdb_flags |= DSA_FDB_FLAG_LOCKED;
-> > > > > 
-> > > > > This is the bridge->driver direction. In which of the changes up until
-> > > > > now/through which mechanism will the bridge emit a
-> > > > > SWITCHDEV_FDB_ADD_TO_DEVICE with fdb_info->locked = true?
-> > > > 
-> > > > I believe it can happen in the following call chain:
-> > > > 
-> > > > br_handle_frame_finish
-> > > >    br_fdb_update // p->flags & BR_PORT_MAB
-> > > >        fdb_notify
-> > > >            br_switchdev_fdb_notify
-> > > > 
-> > > > This can happen with Spectrum when a packet ingresses via a locked port
-> > > > and incurs an FDB miss in hardware. The packet will be trapped and
-> > > > injected to the Rx path where it should invoke the above call chain.
-> > > 
-> > > Ah, so this is the case which in mv88e6xxx would generate an ATU
-> > > violation interrupt; in the Spectrum case it generates a special packet.
-> > 
-> > Not sure what you mean by "special" :) It's simply the packet that
-> > incurred the FDB miss on the SMAC.
-> > 
 > > > Right now this packet isn't generated, right?
 > > 
 > > Right. We don't support BR_PORT_LOCKED so these checks are not currently
 > > enabled in hardware. To be clear, only packets received via locked ports
 > > are able to trigger the check.
-> > 
-> > > 
-> > > I think we have the same thing in ocelot, a port can be configured to
-> > > send "learn frames" to the CPU.
-> > > 
-> > > Should these packets be injected into the bridge RX path in the first
-> > > place? They reach the CPU because of an FDB miss, not because the CPU
-> > > was the intended destination.
-> > 
-> > The reason to inject them to the Rx path is so that they will trigger
-> > the creation of the "locked" entry in the bridge driver (when MAB is
-> > on), thereby notifying user space about the presence of a new MAC behind
-> > the locked port. We can try to parse them in the driver and notify the
-> > bridge driver via SWITCHDEV_FDB_ADD_TO_BRIDGE, but it's quite ugly...
 > 
-> "ugly" => your words, not mine... But abstracting things a bit, doing
-> what you just said (SWITCHDEV_FDB_ADD_TO_BRIDGE) for learn frames would
-> be exactly the same thing as what mv88e6xxx is doing (so your "ugly"
-> comment equally applies to Marvell).
+> You mean BR_PORT_MAB, not BR_PORT_LOCKED, right?
 
-My understanding is that mv88e6xxx only reads the SMAC and FID/VID from
-hardware and notifies them to the bridge driver. It does not need to
-parse them out of the Ethernet frame that triggered the "violation".
-This is the "ugly" part (in my opinion).
+I actually meant BR_PORT_LOCKED... The hardware has a single bit per
+port that can be used to enable security checks on the port. If security
+checks are enabled, then before L2 forwarding the hardware will perform
+an FDB lookup with the SMAC and FID (VID), which can have one of three
+results:
 
-> The learn frames are "special" in the sense that they don't belong to
-> the data path of the software bridge*, they are just hardware specific
-> information which the driver must deal with, using a channel that
-> happens to be Ethernet and not an IRQ/MDIO.
+1. Match. FDB entry found and it points to the ingress port. In this
+case the packet continues to the regular L2 pipeline.
 
-I think we misunderstand each other because I don't understand why you
-call them "special" nor "hardware specific information" :/ We don't
-inject to the software data path some hardware specific frames, but
-rather the original Ethernet frames that triggered the violation. The
-same thing happens with packets that encountered a neighbour miss during
-routing or whose TTL was decremented to zero. The hardware can't
-generate ARP or ICMP packets, so the original packet is injected to the
-Rx path so that the kernel will generate the necessary control packets
-in response.
+2. Mismatch. FDB entry found, but it points to a different port than
+ingress port. In this case we want to drop the packet like the software
+bridge.
 
-> *in other words, a bridge with proper RX filtering should not even
-> receive these frames, or would need special casing for BR_PORT_MAB to
-> not drop them in the first place.
-> 
-> I would incline towards an unified approach for CPU assisted learning,
-> regardless of this (minor, IMO) difference between Marvell and other
-> vendors.
+3. Miss. FDB entry not found. Here I was thinking to always tell the
+packet to go to the software data path so that it will trigger the
+creation of the "locked" entry if MAB is enabled. If MAB is not enabled,
+it will simply be dropped by the bridge. We can't control it per port in
+hardware, which is why the BR_PORT_MAB flag is not consulted.
 
-OK, understood. Assuming you don't like the above, I need to check if we
-can do something similar to what mv88e6xxx is doing (because I don't
-think mv88e6xxx can do anything else).
+> AFAIU, "locked" means drop unknown MAC SA, "mab" means "install
+> BR_FDB_LOCKED entry on port" (and also maybe still drop, if "locked"
+> is also set on port).
+
+Right, but you can't have "mab" without "locked" (from patch #1):
+
+```
+@@ -943,6 +946,13 @@ static int br_setport(struct net_bridge_port *p, struct nlattr *tb[],
+ 	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS, BR_NEIGH_SUPPRESS);
+ 	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+ 	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
++	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
++
++	if (!(p->flags & BR_PORT_LOCKED) && (p->flags & BR_PORT_MAB)) {
++		NL_SET_ERR_MSG(extack, "MAB cannot be enabled when port is unlocked");
++		p->flags = old_flags;
++		return -EINVAL;
++	}
+ 
+ 	changed_mask = old_flags ^ p->flags;
+```
+
+> Sad there isn't any good documentation about these flags in the patches
+> that Hans is proposing.
+
+Will try to comment with better commit messages for patches #1 and #2.
+Not sure I will have time today.
