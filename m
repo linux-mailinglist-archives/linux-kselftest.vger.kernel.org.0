@@ -2,75 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7B5605770
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 08:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994F860580E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 09:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJTGiR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 02:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
+        id S230143AbiJTHN3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 03:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiJTGiR (ORCPT
+        with ESMTP id S230099AbiJTHNK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 02:38:17 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5C21BBEE7
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Oct 2022 23:38:15 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id h29so19780548vsq.9
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Oct 2022 23:38:15 -0700 (PDT)
+        Thu, 20 Oct 2022 03:13:10 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168F115ECE4
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Oct 2022 00:13:00 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id s30so28556458eds.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Oct 2022 00:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B5HI7J8Q8O4UW/XlJGEyJ5SGpV7T23iGYhO4p4smrDs=;
-        b=eR2Torhe8/fk+IR45FSZYsHnu0DMjSi83A3cLvmv5DPLg54vSZijuSThojRoEBNUPd
-         bwQvD9rfSRH8jTKBAOCq2Uv+GH0cPtBd54m0Vx6Z6P9uAYexp+IpeFa8tp40XG7rSgZg
-         7KGP/eg+ZHFcZJsFefpgTeYv/w2++R9MFj2fvB3wCOYNamh6lh7jtvb8VGju3/ESzDHS
-         mih0V3+ZeEMGL2zGoK24AuTi0L6vhppbbNNhnAP+NKjTba/Q1UDAddu91IhJdviievIL
-         APe+W+GQYseBYHCvynsm5Jv/qBpVqgIyBkJF7ebyCqy67/sO1Ac+J/vTYI2Rt5XPkfjo
-         sEJw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cQF7shMOaRQonYJ106IZz0MxpfPL6PYZUfZ7s13dUNM=;
+        b=Q8UNf33MkmgmFSwS+b25nZWJFd5urYJLAu7fYb2z7XEwGMRj4MP1K+3ouAhJzYk2gP
+         6GECstiUK47x4Ix8ojBK5LnX6TabhJSJu0R/X4IT1K+tt3Cqna/rynLhB8Q4b1F4QRZO
+         T4Fv/XS0o+s8Rvll4vVJKboxqbONnYYBOcNm10PRmlrqPKIT9hMZp+74L5ozLujwswBt
+         Hi0jTuSVFRyAqbbI16YqhtwPsujN8uFKGYOaNhYhLltZoUMmzyHXu2vVbWUypdW9ODPC
+         L7XN4NWuDLEHM/pG9MErMLPGFTZa434ES8AcXtyGX+oc3YaVqPlAuOEG+fHixYL6Wcaj
+         sqYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B5HI7J8Q8O4UW/XlJGEyJ5SGpV7T23iGYhO4p4smrDs=;
-        b=mKcQM81gD22qFuvFdhSnTlbZZK3Ruou3hY7MS8Mo9AH3+Yrb4BnH0OU9U3OqdIsYiU
-         ILKsMo1dcrkUzJZa4krtbq9BMAut06D6ihO+pUTC1srvs33Ec1eOh40gQUP4uXVQinii
-         laHGZMM/tYJeqsoLAwKM1FojpFrcw1oWHJEaEwCQoN7iQGw78VQTFrFN3FHBu7J5J8lS
-         6R+omhYOzLUVDHPFCnQPqTmzT/MP0GDi4c2oR/xY1NaLiYds1dXoFx7eP12Ql5WY7uFL
-         xOUUjiN9HIUQ60Q4lEGS/jL8xkOxkzahwNlOEQHWgvDmNsVVoHL/7UjzItzlo1GObVVX
-         7/TQ==
-X-Gm-Message-State: ACrzQf2wVhKLkh1dckCypCFQVHrOJICBLmgDHW1VfTQQ0b+FB1RFoLA4
-        +G1Uv+qXxZ/fQTOdFIIaez0NJ3Wq9bk2+/Xph8JpqBGj7nrIGA==
-X-Google-Smtp-Source: AMsMyM6KzOA5mpJFXqPd26FvRjH/BBU2pVcRO5EKRE+XibKU/2qVQdh3QmXomiAISTVkPDjWncg76vAKDVQSW1d6iuQ=
-X-Received: by 2002:a05:6102:284a:b0:3a7:ce5:ca83 with SMTP id
- az10-20020a056102284a00b003a70ce5ca83mr5880849vsb.38.1666247894600; Wed, 19
- Oct 2022 23:38:14 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cQF7shMOaRQonYJ106IZz0MxpfPL6PYZUfZ7s13dUNM=;
+        b=lpj9Ezwu22CDcV2hIYsZnWXu8kSnkRGpZ0pSJepgpVhTrBxow8TzbB0NXZFq03G8Jk
+         FNzjCe6Ax3mpKrdW8qQVbvSw/u1OoVmvvJPOqU/DB6LflJrpHsMCgX9I54vKB6INXsNi
+         PtivlhizJEAxxQT1dLSvBQpQb60OutLU8brNwPnHUqhZUgET5jKl4gpPpYRITVD446b2
+         eDqIDIm9EyPjm5OphWB1vx20+qc7m/93p60LRmhSi8nK+T2ZpH6YbCoIkK9nO/teDm9I
+         o9JfC6FMuEYtjnE6j59PqfdhCEamUDKLIk2r+2obnejQlR/mK2tNZ48n/8zLbPf7ilMm
+         CvfA==
+X-Gm-Message-State: ACrzQf11n4cZ1/5fN4uUXb4Wys/iQMF6JMjAniPVS6ifJvHjDQmJSOVO
+        XH9SFgvN4UuDz2fbVwbqiWgxVyOD+B+AxTICHLGC5PaO3p2asA==
+X-Google-Smtp-Source: AMsMyM7c9FOSk1QyeJUBJzvCUD7Wed9fZE6Pkw5IV8sm17wKgYsNfU2Xwsmc9RimidJvhHlwdrKWg6dygD96vvXOoAU=
+X-Received: by 2002:a05:6402:190f:b0:45d:2c25:3a1d with SMTP id
+ e15-20020a056402190f00b0045d2c253a1dmr11216272edz.175.1666249978265; Thu, 20
+ Oct 2022 00:12:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019085747.3810920-1-davidgow@google.com> <CA+fCnZdPwjThjY7fd7vBkMzS1eFXySR2AKrDK8weJ3p25fzS3g@mail.gmail.com>
- <CABVgOSmP1A4d_-SNrWg7VruxpKj3SZz=Bzb2Xebd=EXw1imXyA@mail.gmail.com> <CA+fCnZcea7UrA11HyRB80WgrUXMtEkK0AjdxEN=H-pMuWBhQyQ@mail.gmail.com>
-In-Reply-To: <CA+fCnZcea7UrA11HyRB80WgrUXMtEkK0AjdxEN=H-pMuWBhQyQ@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 20 Oct 2022 14:38:02 +0800
-Message-ID: <CABVgOSnC3Y4Dq4evkghiKpDYSe_kSeCQPo6193H0_WxQyx0EFg@mail.gmail.com>
-Subject: Re: [PATCH] kasan: Enable KUnit integration whenever CONFIG_KUNIT is enabled
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e1ff4105eb7191e9"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 20 Oct 2022 12:42:46 +0530
+Message-ID: <CA+G9fYvepPVpDn5AP6bwDukpx7h++avMPEUARuHyvJqWwQ84uQ@mail.gmail.com>
+Subject: selftests: net: pmtu.sh: Unable to handle kernel paging request at
+ virtual address 2c86c000
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,139 +69,182 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000e1ff4105eb7191e9
-Content-Type: text/plain; charset="UTF-8"
+Following kernel crash reported while running selftests: net: pmtu.sh
+on x15 device with kselftests merge configs enabled.
 
-On Thu, Oct 20, 2022 at 3:48 AM Andrey Konovalov <andreyknvl@gmail.com> wrote:
->
-> On Wed, Oct 19, 2022 at 5:06 PM David Gow <davidgow@google.com> wrote:
-> >
-> > > How does KUnit detect a KASAN failure for other tests than the KASAN
-> > > ones? I thought this was only implemented for KASAN tests. At least, I
-> > > don't see any code querying kunit_kasan_status outside of KASAN tests.
-> >
-> > Yeah, there aren't any other tests which set up a "kasan_status"
-> > resource to expect specific failures, but we still want the fallback
-> > call to kunit_set_failure() so that any test which causes a KASAN
-> > report will fail:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/kasan/report.c#n130
->
-> Ah, right. Thanks for the explanation!
->
-> > > I'm currently switching KASAN tests from using KUnit resources to
-> > > console tracepoints [1], and those patches will be in conflict with
-> > > yours.
-> >
-> > Ah, sorry -- I'd seen these go past, and totally forgot about them! I
-> > think all we really want to keep is the ability to fail tests if a
-> > KASAN report occurs. The tricky bit is then disabling that for the
-> > KASAN tests, so that they can have "expected" failures.
->
-> I wonder what's the best solution to support this, assuming KASAN
-> tests are switched to using tracepoints... I guess we could still keep
-> the per-task KUnit flag, and only use it for non-KASAN tests. However,
-> they will still suffer from the same issue tracepoints solve for KASAN
-> tests: if a bug is triggered in a context other than the current task,
-> the test will succeed.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Yeah: I'm not sure what the perfect solution here is. Ideally, we'd
-have some good way to get the current test, which would work even in
-workqueues, rcu, etc. This affects more than just KASAN: there are
-quite a few different places where getting "the current test" is
-important. One option is just to use a global: we don't support
-running multiple simultaneous KUnit tests at all, at the moment. But,
-equally, it increases the possibility of false-positives if something
-non-test related needs to access the test structure. This is probably
-not too much of a problem for KASAN, but the function redirection
-features we're working on benefit quite a bit from those redirections
-not being enabled outside of the test.
+# selftests: net: pmtu.sh
+...
+# TEST: IPv4 over vxlan6: PMTU exceptions                             [ OK ]
+[  169.299682] 8<--- cut here ---
+[  169.302764] Unable to handle kernel paging request at virtual
+address 2c86c000
+[  169.310089] [2c86c000] *pgd=00000000
+[  169.313720] Internal error: Oops: 5 [#1] SMP ARM
+[  169.318359] Modules linked in: act_csum act_pedit cls_flower
+sch_prio ip_tables x_tables veth tun cfg80211 bluetooth
+snd_soc_simple_card snd_soc_simple_card_utils etnaviv gpu_sched
+onboard_usb_hub snd_soc_davinci_mcasp snd_soc_ti_udma snd_soc_ti_edma
+snd_soc_ti_sdma snd_soc_core ac97_bus snd_pcm_dmaengine snd_pcm
+snd_timer snd soundcore display_connector fuse [last unloaded:
+test_blackhole_dev]
+[  169.353576] CPU: 0 PID: 295 Comm: rngd Not tainted 6.0.3-rc1 #1
+[  169.359527] Hardware name: Generic DRA74X (Flattened Device Tree)
+[  169.365631] PC is at percpu_counter_add_batch+0x28/0xc4
+[  169.370910] LR is at 0x0
+[  169.373443] pc : [<c0989aa8>]    lr : [<00000000>]    psr: 600d0113
+[  169.379730] sp : f0001ed8  ip : 00000020  fp : f0001f50
+[  169.385009] r10: c23aef04  r9 : c231efd0  r8 : c25da080
+[  169.390258] r7 : c84adb80  r6 : 00000001  r5 : c9a99440  r4 : 2c86c000
+[  169.396820] r3 : ffffffff  r2 : ffffffff  r1 : 00000000  r0 : c9a99440
+[  169.403381] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+[  169.410552] Control: 10c5387d  Table: 891f006a  DAC: 00000051
+[  169.416320] Register r0 information: slab net_namespace start
+c9a98ec0 data offset 64 pointer offset 1344 allocated at
+copy_net_ns+0x78/0x27c
+[  169.429107]     kmem_cache_alloc+0x328/0x43c
+[  169.433380]     copy_net_ns+0x78/0x27c
+[  169.437164]     create_new_namespaces+0x10c/0x2a4
+[  169.441894]     unshare_nsproxy_namespaces+0x70/0x8c
+[  169.446868]     ksys_unshare+0x16c/0x32c
+[  169.450836]     ret_fast_syscall+0x0/0x1c
+[  169.454864]  Free path:
+[  169.457305]     cleanup_net+0x2e0/0x3c4
+[  169.461151]     process_one_work+0x26c/0x708
+[  169.465454]     worker_thread+0x60/0x4e8
+[  169.469421]     kthread+0xfc/0x11c
+[  169.472839]     ret_from_fork+0x14/0x2c
+[  169.476684] Register r1 information: NULL pointer
+[  169.481414] Register r2 information: non-paged memory
+[  169.486480] Register r3 information: non-paged memory
+[  169.491577] Register r4 information: non-paged memory
+[  169.496643] Register r5 information: slab net_namespace start
+c9a98ec0 data offset 64 pointer offset 1344 allocated at
+copy_net_ns+0x78/0x27c
+[  169.509460]     kmem_cache_alloc+0x328/0x43c
+[  169.513763]     copy_net_ns+0x78/0x27c
+[  169.517517]     create_new_namespaces+0x10c/0x2a4
+[  169.522247]     unshare_nsproxy_namespaces+0x70/0x8c
+[  169.527221]     ksys_unshare+0x16c/0x32c
+[  169.531188]     ret_fast_syscall+0x0/0x1c
+[  169.535217]  Free path:
+[  169.537658]     cleanup_net+0x2e0/0x3c4
+[  169.541503]     process_one_work+0x26c/0x708
+[  169.545806]     worker_thread+0x60/0x4e8
+[  169.549743]     kthread+0xfc/0x11c
+[  169.553161]     ret_from_fork+0x14/0x2c
+[  169.557037] Register r6 information: non-paged memory
+[  169.562103] Register r7 information: slab task_struct start
+c84adb40 data offset 64 pointer offset 0 allocated at
+copy_process+0x1a4/0x1950
+[  169.574707]     kmem_cache_alloc+0x328/0x43c
+[  169.579010]     copy_process+0x1a4/0x1950
+[  169.583038]     kernel_clone+0x5c/0x418
+[  169.586883]     sys_clone+0x74/0x90
+[  169.590393]     __sys_trace_return+0x0/0x10
+[  169.594604]  Free path:
+[  169.597076]     rcu_core+0x3c8/0x1140
+[  169.600738]     __do_softirq+0x130/0x538
+[  169.604675] Register r8 information: non-slab/vmalloc memory
+[  169.610382] Register r9 information: non-slab/vmalloc memory
+[  169.616058] Register r10 information: non-slab/vmalloc memory
+[  169.621856] Register r11 information: 2-page vmalloc region
+starting at 0xf0000000 allocated at start_kernel+0x578/0x764
+[  169.632781] Register r12 information: non-paged memory
+[  169.637939] Process rngd (pid: 295, stack limit = 0xf0188000)
+[  169.643707] Stack: (0xf0001ed8 to 0xf0002000)
+[  169.648101] 1ec0:
+    c9b33540 00000000
+[  169.656311] 1ee0: 00000001 00000000 c25da080 c231efd0 c23aef04
+c1325f00 00000020 c25da080
+[  169.664550] 1f00: c231efd0 c84adb80 c9b33570 c0402628 00000000
+00000000 c04025c4 00000000
+[  169.672760] 1f20: 00000000 0000000a 00000000 c23b0940 c25d9e80
+eeb0ff14 c229a5d8 c229a5d8
+[  169.680969] 1f40: c229a484 c229a484 eeb0fec0 00000001 00000000
+f0001f50 00000000 e2868d57
+[  169.689178] 1f60: 00000002 c23030a4 00000008 00000009 c25d97e0
+c231efd0 00000100 c84adb80
+[  169.697418] 1f80: 00000080 c0301e10 c3212340 c1770a48 00000015
+c2303080 c229a518 0000000a
+[  169.705627] 1fa0: c22a3100 c25d79bc c22a3100 ffffccf2 c2305d40
+c1de927c c1dfc684 f0001fd0
+[  169.713836] 1fc0: 00400040 00000001 c231fbb0 c84adb80 000d0030
+ffffffff c84adb80 c229a044
+[  169.722076] 1fe0: 00000000 b633f000 f0189fa8 c0359ca4 b6ec2cce
+c0359e00 b6ec2cce c099b6bc
+[  169.730285]  percpu_counter_add_batch from dst_destroy+0x11c/0x130
+[  169.736511]  dst_destroy from rcu_core+0x3c8/0x1140
+[  169.741394]  rcu_core from __do_softirq+0x130/0x538
+[  169.746307]  __do_softirq from __irq_exit_rcu+0x14c/0x170
+[  169.751739]  __irq_exit_rcu from irq_exit+0x10/0x30
+[  169.756622]  irq_exit from call_with_stack+0x18/0x20
+[  169.761627]  call_with_stack from __irq_usr+0x7c/0xa0
+[  169.766693] Exception stack(0xf0189fb0 to 0xf0189ff8)
+[  169.771789] 9fa0:                                     6fce9940
+1b458cad 0000003d b6b3e970
+[  169.779998] 9fc0: b6b3ea20 00028789 0001629c b6b3e8d8 000172a0
+00000000 b633f000 b6b3f3a0
+[  169.788208] 9fe0: 00000000 b6b3e8d8 b6ec3835 b6ec2cce 000d0030 ffffffff
+[  169.794860] Code: e5871004 ee1d4f90 e5901038 e1a0efcc (e7946001)
 
-Thus far, we've just sort-of accepted that these don't work with tests
-which push work to other tasks, but it is sub-optimal. And even if
-KASAN moves to tracepoints, this problem doesn't totally go away, as
-you still need some way to know you're in the KASAN test to disable
-the "fail-test-on-KASAN-report" behaviour. I guess that could be some
-global flag triggered from the suite_init / suite_exit for the KASAN
-test, though.
+Broadcast message from systemd-journald@am57xx-evm (Thu 2022[
+169.801116] ---[ end trace 0000000000000000 ]---
+-04-28 17:45:03 UTC):
+kernel[290]: [  169.313720] Internal [  169.811279] Kernel panic - not
+syncing: Fatal exception in interrupt
+[  169.823211] CPU1: stopping
+[  169.825927] CPU: 1 PID: 308 Comm: rngd Tainted: G      D
+6.0.3-rc1 #1
+[  169.833343] Hardware name: Generic DRA74X (Flattened Device Tree)
+[  169.839477]  unwind_backtrace from show_stack+0x18/0x1c
+[  169.844757]  show_stack from dump_stack_lvl+0x58/0x70
+[  169.849822]  dump_stack_lvl from do_handle_IPI+0x308/0x334
+[  169.855346]  do_handle_IPI from ipi_handler+0x20/0x28
+[  169.860412]  ipi_handler from handle_percpu_devid_irq+0xcc/0x320
+[  169.866485]  handle_percpu_devid_irq from generic_handle_domain_irq+0x30/0x40
+[  169.873657]  generic_handle_domain_irq from gic_handle_irq+0x90/0xb0
+[  169.880035]  gic_handle_irq from generic_handle_arch_irq+0x34/0x44
+[  169.886260]  generic_handle_arch_irq from call_with_stack+0x18/0x20
+[  169.892547]  call_with_stack from __irq_svc+0x9c/0xb8
+[  169.897644] Exception stack(0xf0181ee0 to 0xf0181f28)
+[  169.902709] 1ee0: 005807d2 00000000 77359400 00000010 00008272
+c23b3300 f0181f80 c23b33c4
+[  169.910919] 1f00: c0427c70 c23b3400 c23b3450 00001c49 0058075e
+f0181f30 f6df0000 c0420798
+[  169.919158] 1f20: 600f0013 ffffffff
+[  169.922637]  __irq_svc from ktime_get_real_ts64+0x110/0x22c
+[  169.928253]  ktime_get_real_ts64 from posix_get_realtime_timespec+0x14/0x1c
+[  169.935272]  posix_get_realtime_timespec from sys_clock_gettime+0x64/0xc8
+[  169.942077]  sys_clock_gettime from __sys_trace_return+0x0/0x10
+[  169.948028] Exception stack(0xf0181fa8 to 0xf0181ff0)
+[  169.953124] 1fa0:                   00000000 b61fea18 00000000
+b61fea18 00000000 00000000
+[  169.961334] 1fc0: 00000000 b61fea18 b61feacc 00000193 000172a0
+00000000 b59ff000 bee7f000
+[  169.969543] 1fe0: bee7f020 b61fe9c0 bee8055c bee806b8
+[  169.974639] ---[ end Kernel panic - not syncing: Fatal exception in
+interrupt ]---
+error: Oops: 5 [#1] SMP ARM
 
-Cheers,
--- David
+Full test log:
+https://lkft.validation.linaro.org/scheduler/job/5708561#L5793
 
---000000000000e1ff4105eb7191e9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+metadata:
+  git_ref: linux-6.0.y
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+  git_sha: 84429734035197a6ab8e79c852d5e4e6ed744703
+  git_describe: v6.0-916-g844297340351
+  kernel_version: 6.0.3-rc1
+  kernel-config: https://builds.tuxbuild.com/2GMZBBq4CuTDk9rrHpkrP7lPMTT/config
+  build-url: https://gitlab.com/mrchapp/linux/-/pipelines/671394419
+  artifact-location: https://builds.tuxbuild.com/2GMZBBq4CuTDk9rrHpkrP7lPMTT
+  toolchain: gcc-10
+  vmlinux.xz: https://builds.tuxbuild.com/2GMZBBq4CuTDk9rrHpkrP7lPMTT/vmlinux.xz
+  System.map: https://builds.tuxbuild.com/2GMZBBq4CuTDk9rrHpkrP7lPMTT/System.map
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAGH0uAg+eV8wUdHQOJ7
-yfswDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMjA2MjAw
-MjAzNTNaFw0yMjEyMTcwMjAzNTNaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv9aO5pJtu5ZPHSb99iASzp2mcnJtk
-JIh8xsJ+fNj9OOm0B7Rbg2l0+F4c19b1DyIzz/DHXIX9Gc55kfd4TBzhITOJmB+WdbaWS8Lnr9gu
-SVO8OISymO6uVA0Lmkfne3zV0TwRtFkEeff0+P+MqdaLutOmOcLQRp8eAzb/TNKToSROBYmBRcuA
-hDOMCVZZozIJ7T4nHBjfOrR+nJ4mjBIDRnDucs4dazypyiYiHYLfedCxp8vldywHMsTxl59Ue9Yk
-RVewDw3HWvWUIMbc+Y636UXdUn4axP1TXN0khUpexMoc5qCHxpBIE/AyeS4WPASlE8uVY9Qg8dT6
-kJmeOT+ZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFDyAvtuc
-z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
-VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
-ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
-OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
-3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
-lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAo
-ogmkt0T1uj2QIKsXwG+hFNXz6di6nxMeYsddbR3IzzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjEwMjAwNjM4MTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAjoQr8agQ2/ydqc4OA2Oc
-drTCyCW0z5RqDAjvLJ5Or0Ng6s215FH/WgaF0Vu1zx+wntJ9B5P/s5rFUmgSc+t7yvBAfZPbItxd
-MU86verb4K5Dx1NNtxqJnUrQcuZt1uyenYinVhnMFmj4HJ1mVx+FP3A4V4mIuZsKFyrUGZYWzR6A
-m/ZrnCBogOxKiuqFJ2NcW67pg4lmHi2DWuoGjHdwCSabVdw+fm2JysegKPieAJjnGHeDQTBsyE5f
-xnHt84ns4MWo+viXnr+/dGvfk8b7+bP6zU90/izWoTzbC3olb6pISXPlOSwvPC7DTHRE9bviMhQ6
-zyYIRHwF5ias8cmwLg==
---000000000000e1ff4105eb7191e9--
+
+--
+Linaro LKFT
+https://lkft.linaro.org
