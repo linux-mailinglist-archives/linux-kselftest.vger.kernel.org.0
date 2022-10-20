@@ -2,34 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F4B606864
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 20:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CDD6068DA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 21:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJTSrr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 14:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S229449AbiJTT3L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 15:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiJTSrp (ORCPT
+        with ESMTP id S229667AbiJTT3K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:47:45 -0400
+        Thu, 20 Oct 2022 15:29:10 -0400
 Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCDD20B110;
-        Thu, 20 Oct 2022 11:47:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E296317E21D;
+        Thu, 20 Oct 2022 12:29:08 -0700 (PDT)
 Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 56E301884CB9;
-        Thu, 20 Oct 2022 18:47:39 +0000 (UTC)
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 5A96F18838D4;
+        Thu, 20 Oct 2022 19:29:06 +0000 (UTC)
 Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 4421F25001FA;
-        Thu, 20 Oct 2022 18:47:39 +0000 (UTC)
+        by mailout.gigahost.dk (Postfix) with ESMTP id 48C0C25001FA;
+        Thu, 20 Oct 2022 19:29:06 +0000 (UTC)
 Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 38C139EC0005; Thu, 20 Oct 2022 18:47:39 +0000 (UTC)
+        id 3A7E29EC0002; Thu, 20 Oct 2022 19:29:06 +0000 (UTC)
 X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Date:   Thu, 20 Oct 2022 20:47:39 +0200
+Date:   Thu, 20 Oct 2022 21:29:06 +0200
 From:   netdev@kapio-technology.com
 To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -54,6 +53,7 @@ Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
         Daniel Borkmann <daniel@iogearbox.net>,
         Yuwei Wang <wangyuweihx@gmail.com>,
         Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
         Florent Fourcot <florent.fourcot@wifirst.fr>,
         Hans Schultz <schultz.hans@gmail.com>,
         Joachim Wiberg <troglobit@gmail.com>,
@@ -61,17 +61,14 @@ Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
- down through the DSA layer
-In-Reply-To: <20221020133506.76wroc7owpwjzrkg@skbuf>
+Subject: Re: [PATCH v8 net-next 03/12] net: bridge: enable bridge to install
+ locked fdb entries from drivers
+In-Reply-To: <20221020125549.v6kls2lk7etvay7c@skbuf>
 References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221020130224.6ralzvteoxfdwseb@skbuf> <Y1FMAI9BzDRUPi5Y@shredder>
- <20221020133506.76wroc7owpwjzrkg@skbuf>
+ <20221018165619.134535-4-netdev@kapio-technology.com>
+ <20221020125549.v6kls2lk7etvay7c@skbuf>
 User-Agent: Gigahost Webmail
-Message-ID: <8456155b8e0f6327e4fb595c7a08399b@kapio-technology.com>
+Message-ID: <e1184c879642c35e4ff6f19e0fd5de46@kapio-technology.com>
 X-Sender: netdev@kapio-technology.com
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -84,75 +81,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-10-20 15:35, Vladimir Oltean wrote:
-> On Thu, Oct 20, 2022 at 04:24:16PM +0300, Ido Schimmel wrote:
->> On Thu, Oct 20, 2022 at 04:02:24PM +0300, Vladimir Oltean wrote:
->> > On Tue, Oct 18, 2022 at 06:56:12PM +0200, Hans J. Schultz wrote:
->> > > @@ -3315,6 +3316,7 @@ static int dsa_slave_fdb_event(struct net_device *dev,
->> > >  	struct dsa_port *dp = dsa_slave_to_port(dev);
->> > >  	bool host_addr = fdb_info->is_local;
->> > >  	struct dsa_switch *ds = dp->ds;
->> > > +	u16 fdb_flags = 0;
->> > >
->> > >  	if (ctx && ctx != dp)
->> > >  		return 0;
->> > > @@ -3361,6 +3363,9 @@ static int dsa_slave_fdb_event(struct net_device *dev,
->> > >  		   orig_dev->name, fdb_info->addr, fdb_info->vid,
->> > >  		   host_addr ? " as host address" : "");
->> > >
->> > > +	if (fdb_info->locked)
->> > > +		fdb_flags |= DSA_FDB_FLAG_LOCKED;
->> >
->> > This is the bridge->driver direction. In which of the changes up until
->> > now/through which mechanism will the bridge emit a
->> > SWITCHDEV_FDB_ADD_TO_DEVICE with fdb_info->locked = true?
->> 
->> I believe it can happen in the following call chain:
->> 
->> br_handle_frame_finish
->>    br_fdb_update // p->flags & BR_PORT_MAB
->>        fdb_notify
->>            br_switchdev_fdb_notify
->> 
->> This can happen with Spectrum when a packet ingresses via a locked 
->> port
->> and incurs an FDB miss in hardware. The packet will be trapped and
->> injected to the Rx path where it should invoke the above call chain.
+On 2022-10-20 14:55, Vladimir Oltean wrote:
+> On Tue, Oct 18, 2022 at 06:56:10PM +0200, Hans J. Schultz wrote:
+>> diff --git a/net/bridge/br_switchdev.c b/net/bridge/br_switchdev.c
+>> index 8f3d76c751dd..c6b938c01a74 100644
+>> --- a/net/bridge/br_switchdev.c
+>> +++ b/net/bridge/br_switchdev.c
+>> @@ -136,6 +136,7 @@ static void br_switchdev_fdb_populate(struct 
+>> net_bridge *br,
+>>  	item->added_by_user = test_bit(BR_FDB_ADDED_BY_USER, &fdb->flags);
+>>  	item->offloaded = test_bit(BR_FDB_OFFLOADED, &fdb->flags);
+>>  	item->is_local = test_bit(BR_FDB_LOCAL, &fdb->flags);
+>> +	item->locked = test_bit(BR_FDB_LOCKED, &fdb->flags);
 > 
-> Ah, so this is the case which in mv88e6xxx would generate an ATU
-> violation interrupt; in the Spectrum case it generates a special 
-> packet.
-> Right now this packet isn't generated, right?
+> Shouldn't this be set to 0 here, since it is the bridge->driver
+> direction?
 > 
-> I think we have the same thing in ocelot, a port can be configured to
-> send "learn frames" to the CPU.
-> 
-> Should these packets be injected into the bridge RX path in the first
-> place? They reach the CPU because of an FDB miss, not because the CPU
-> was the intended destination.
 
-Just to add to it, now that there is a u16 for flags in the 
-bridge->driver
-direction, making it easier to add such flags, I expect that for the
-mv88e6xxx driver there shall be a 'IS_DYNAMIC' flag also, as authorized
-hosts will have their authorized FDB entries added with dynamic 
-entries...
-
-Now as the bridge will not be able to refresh such authorized FDB 
-entries
-based on unicast incoming traffic on the locked port in the offloaded 
-case,
-besides we don't want the CPU to do such in this case anyway, to keep 
-the
-authorized line alive without having to reauthorize in like every 5 
-minutes,
-the driver needs to do the ageing (and refreshing) of the dynamic entry
-added from userspace. When the entry "ages" out, there is the HoldAt1
-feature and Age Out Violations that should be used to tell userspace
-(plus bridge) that this authorization has been removed by the driver as
-the host has gone quiet.
-
-So all in all, there is the need of another flag from
-userspace->bridge->driver, telling that we want a dynamic ATU entry 
-(with
-mv88e6xxx it will start at age 7).
+Wouldn't it be a good idea to allow drivers to add what corresponds to a 
+blackhole
+entry when using the bridge input chain to activate the MAB feature, or 
+in general
+to leave the decision of what to do to the driver implementation?
