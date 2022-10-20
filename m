@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B3960568A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 06:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2A160568D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 06:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJTE7i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 00:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
+        id S229711AbiJTE7m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 00:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJTE7h (ORCPT
+        with ESMTP id S229659AbiJTE7k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 00:59:37 -0400
+        Thu, 20 Oct 2022 00:59:40 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D462D186C0;
-        Wed, 19 Oct 2022 21:59:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0514B186C0;
+        Wed, 19 Oct 2022 21:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666241976; x=1697777976;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZeManeh8urWZwWabFCHDLXg+rU167WQjv7MnROaoT+c=;
-  b=iZKnrB6Mzh4kRxAmhhdNmiO4mrkgsfbBHx3M2gxMvuErDEoWgkuNc9PB
-   Y5HMaS7+aWNv2biveH5WB2PCnavgiSYkAXX5i7/g46KMF3ZHbLHEe0tib
-   mNLYVzQXL4ewrXj17NiPzPdL0+lx5mWbASnlSOCSUGL69rIEJtFk2G0Bg
-   Z2/NvyEu7z7VJgP9Kl7m1U7t+95eQwRLdNonunwvGe7+XmH5j2/nydEpC
-   zT5VfFQk3HzPs6tIqHMzB6JA3Lcp2VvqLQuIqFs7bprXqy3wifFS4YAjy
-   tqNVBBcNFTPcZA6zf58j3hKaIJDSYAQOCGmOrXuE2Bq4nKr64P3FKUUEM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="293997446"
+  t=1666241978; x=1697777978;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=J1B+wNI21ZvyF3fkLUngeojjoGkXMov8BLHhgnCy9X4=;
+  b=AgP3U6xbZx4C1FStYyt7FYbYqDioMPOmrhSbor5jyR+TruK02ULT57da
+   0Ks9BD36Pf1vTcfBRjjyvr3UsDY8QXUKnVLCmYlWzQ0GDgo6Z3b6fAj/U
+   iC3GiZGXFIT4i0ADqObFHqXP9NbIQsGC7jBtJqcSkL7gJrnjN3Q6xG9IF
+   voQqa7Zvnf9rkDdQSJmVjVM4acrePfpsOtOCQs5902TWzCIdJXxYwMLOC
+   KOfPRStdFcFRtFTiMvrX5WQdk5dVGWRp6QgMqRvQ2QoeRRuBq0lm9CF8Q
+   Q/vqxj990K/vo/qDOuegXq/tpgRGvbly20jBPrBdoTLllQwCBEq5FlQO1
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="293997449"
 X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="293997446"
+   d="scan'208";a="293997449"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 21:59:31 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="660690252"
+X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="660690255"
 X-IronPort-AV: E=Sophos;i="5.95,198,1661842800"; 
-   d="scan'208";a="660690252"
+   d="scan'208";a="660690255"
 Received: from srnaisha-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.209.25.189])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 21:59:30 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 21:59:31 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -57,10 +57,12 @@ Cc:     "H . Peter Anvin" <hpa@zytor.com>,
         khalid.elmously@canonical.com, philip.cox@canonical.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH v15 0/3]] Add TDX Guest Attestation support
-Date:   Wed, 19 Oct 2022 21:58:25 -0700
-Message-Id: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v15 1/3] x86/tdx: Add a wrapper to get TDREPORT from the TDX Module
+Date:   Wed, 19 Oct 2022 21:58:26 -0700
+Message-Id: <20221020045828.2354731-2-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,60 +75,96 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi All,
+To support TDX attestation, the TDX guest driver exposes an IOCTL
+interface to allow userspace to get the TDREPORT from the TDX module
+via TDG.MR.TDREPORT TDCALL.
 
-Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
-hosts and some physical attacks. VM guest with TDX support is called
-as a TDX Guest.
+In order to get the TDREPORT in the TDX guest driver, instead of using
+a low level function like __tdx_module_call(), add a
+tdx_mcall_get_report() wrapper function to handle it.
 
-In TDX guest, attestation process is used to verify the TDX guest
-trustworthiness to other entities before provisioning secrets to the
-guest. For example, a key server may request for attestation before
-releasing the encryption keys to mount the encrypted rootfs or
-secondary drive.
+This is a preparatory patch for adding attestation support.
 
-This patch set adds attestation support for the TDX guest. Details
-about the TDX attestation process and the steps involved are explained
-in Documentation/x86/tdx.rst (added by patch 2/3).
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+---
 
-Following are the details of the patch set:
+Changes since v14:
+ * Instead of exporting __tdx_module_call(), added a new wrapper.
+ * Rebased on top of v6.1-rc1
 
-Patch 1/3 -> Preparatory patch for adding attestation support.
-Patch 2/3 -> Adds user interface driver to support attestation.
-Patch 3/3 -> Adds selftest support for TDREPORT feature.
+ arch/x86/coco/tdx/tdx.c    | 31 +++++++++++++++++++++++++++++++
+ arch/x86/include/asm/tdx.h |  2 ++
+ 2 files changed, 33 insertions(+)
 
-Commit log history is maintained in the individual patches.
-
-Kuppuswamy Sathyanarayanan (3):
-  x86/tdx: Add a wrapper to get TDREPORT from the TDX Module
-  virt: Add TDX guest driver
-  selftests: tdx: Test TDX attestation GetReport support
-
- Documentation/virt/coco/tdx-guest.rst        |  42 +++++
- Documentation/virt/index.rst                 |   1 +
- Documentation/x86/tdx.rst                    |  43 +++++
- arch/x86/coco/tdx/tdx.c                      |  31 ++++
- arch/x86/include/asm/tdx.h                   |   2 +
- drivers/virt/Kconfig                         |   2 +
- drivers/virt/Makefile                        |   1 +
- drivers/virt/coco/tdx-guest/Kconfig          |  10 ++
- drivers/virt/coco/tdx-guest/Makefile         |   2 +
- drivers/virt/coco/tdx-guest/tdx-guest.c      | 131 ++++++++++++++
- include/uapi/linux/tdx-guest.h               |  51 ++++++
- tools/testing/selftests/Makefile             |   1 +
- tools/testing/selftests/tdx/Makefile         |   7 +
- tools/testing/selftests/tdx/config           |   1 +
- tools/testing/selftests/tdx/tdx_guest_test.c | 175 +++++++++++++++++++
- 15 files changed, 500 insertions(+)
- create mode 100644 Documentation/virt/coco/tdx-guest.rst
- create mode 100644 drivers/virt/coco/tdx-guest/Kconfig
- create mode 100644 drivers/virt/coco/tdx-guest/Makefile
- create mode 100644 drivers/virt/coco/tdx-guest/tdx-guest.c
- create mode 100644 include/uapi/linux/tdx-guest.h
- create mode 100644 tools/testing/selftests/tdx/Makefile
- create mode 100644 tools/testing/selftests/tdx/config
- create mode 100644 tools/testing/selftests/tdx/tdx_guest_test.c
-
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index 928dcf7a20d9..6cae239aee14 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -5,6 +5,8 @@
+ #define pr_fmt(fmt)     "tdx: " fmt
+ 
+ #include <linux/cpufeature.h>
++#include <linux/export.h>
++#include <linux/io.h>
+ #include <asm/coco.h>
+ #include <asm/tdx.h>
+ #include <asm/vmx.h>
+@@ -15,6 +17,7 @@
+ /* TDX module Call Leaf IDs */
+ #define TDX_GET_INFO			1
+ #define TDX_GET_VEINFO			3
++#define TDX_GET_REPORT			4
+ #define TDX_ACCEPT_PAGE			6
+ 
+ /* TDX hypercall Leaf IDs */
+@@ -98,6 +101,34 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+ 		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
+ }
+ 
++/**
++ * tdx_mcall_get_report() - Wrapper for TDG.MR.REPORT TDCALL.
++ * @reportdata: Address of the input buffer which contains
++ *              user-defined REPORTDATA to be included into
++ *              TDREPORT.
++ * @tdreport: Address of the output buffer to store TDREPORT.
++ * @subtype: Subtype of TDREPORT.
++ *
++ * Generate TDREPORT using "TDG.MR.REPORT" TDCALL. Refer to section
++ * 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0 specification
++ * for detailed information. It is used in the TDX guest driver
++ * module to get the TDREPORT.
++ *
++ * Return 0 on success or -EIO on TDCALL failure.
++ */
++int tdx_mcall_get_report(u8 *reportdata, u8 *tdreport, u8 subtype)
++{
++	u64 ret;
++
++	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
++				virt_to_phys(reportdata), subtype, 0, NULL);
++	if (ret)
++		return -EIO;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(tdx_mcall_get_report);
++
+ static u64 get_cc_mask(void)
+ {
+ 	struct tdx_module_output out;
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+index 020c81a7c729..eb979d9b8c37 100644
+--- a/arch/x86/include/asm/tdx.h
++++ b/arch/x86/include/asm/tdx.h
+@@ -67,6 +67,8 @@ void tdx_safe_halt(void);
+ 
+ bool tdx_early_handle_ve(struct pt_regs *regs);
+ 
++int tdx_mcall_get_report(u8 *reportdata, u8 *tdreport, u8 subtype);
++
+ #else
+ 
+ static inline void tdx_early_init(void) { };
 -- 
 2.34.1
 
