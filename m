@@ -2,155 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B399C605B8D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 11:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD501605BD1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Oct 2022 12:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiJTJzi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 05:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S229606AbiJTKFi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 06:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiJTJzh (ORCPT
+        with ESMTP id S229866AbiJTKFg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 05:55:37 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2089.outbound.protection.outlook.com [40.107.223.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A4714C51D;
-        Thu, 20 Oct 2022 02:55:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XaXD18bPEeOMqcCMZ/+PQC2vGyrt/tpfJCHTnHNcY0GRiEmTEXzqAOoRKhKbuo29Tr6Z7E65dbLxC1YItayjM1SYZjW/7XagxkFrq4RI2XGiDvEbm3fDn1Ile3mxswcydTS9goCDWfPtTWfO+OflutJvcf1xlqL1MQXGYGKZ41/s5NCREGK8LYtTxHFXnY7Olc8Ur6upFJTqRHbsWnaDAmsMBPS/jlH4gNh6ziyi3hkKCQm/JMSn5eLRdanAgW/BxvjzNiyrokVHicJf4/OvIjA2d5KFj6najbGLlxKsjOJHCWNH035DUFP3h51178+JwF5YCO+9aNPJOTNZaetGRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hPEFtBZAzwiUajtMxvjOEuCLKwkEocj6qxTW3LRTvaU=;
- b=Qb7n6c1OvvajAqsXHhf3KdPJzvuWbp/i50+C6I5jZ/KXrokVbe3sJFvf2BQcklwgWhxBKyVucFPT5+ltlMh6qln7yl7VwovcrPce/gGqnkdw01yNfwcaqmGxovVpitVPByJ2P15imeUzzwtjgLyIQP2upwsV22QYDiE0HJEd6GtAR6sHO/nkPpdaTlbT9XkUWOj0LtzK7U7XDs78K4eWC6h8k9JUMNSlo9yDTinENkPq3idExxkHebtprmugmizFyrQVKiMlF1e6jMaFvlvIIRxDddLgnrTk5CGJ+m0MDqPV4E6GsHeXtxk7uB8aXz38m9y4U2I5fRgd0b1dr7UWSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hPEFtBZAzwiUajtMxvjOEuCLKwkEocj6qxTW3LRTvaU=;
- b=o7SzomlP+TxTBd6PrRmqXGpxrn1y7EBB6qWHbu6xaunclxqy2K9m+6oN7z1dC4gzROICoR3GAwh8uC4AzIYUhaq/QnFSHv4UvyB64aJ1pfpDWD/yG1XbH/wXtVK/7uZ1RmXhKPLadChGI91OzoL8A9cVphkSHgMc7WNZ+AfcIVrK0K7TXHV9bLjHr2j7TGMvjbYdCACRuCEgWwUrwXBfCA55hwIALs7qH6Q3PFRvlUBPOpFCmtrHKc4VZqyOzumSK43moVvfMQbyAP3h+4rSQZc8zP9VmJlqCGxXGC05O9kGrfJUa79qgtGy2PQdMek2AShtZcKSmsX1oPvUNSzLxw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by CH3PR12MB7617.namprd12.prod.outlook.com (2603:10b6:610:140::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Thu, 20 Oct
- 2022 09:55:34 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::4ff2:d93e:d200:227e]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::4ff2:d93e:d200:227e%7]) with mapi id 15.20.5723.033; Thu, 20 Oct 2022
- 09:55:34 +0000
-Date:   Thu, 20 Oct 2022 12:55:27 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Hans J. Schultz" <netdev@kapio-technology.com>,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 00/12] Extend locked port feature with FDB
- locked flag (MAC-Auth/MAB)
-Message-ID: <Y1EbD4gp7MuTb8lu@shredder>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221019115809.552812a5@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019115809.552812a5@kernel.org>
-X-ClientProxiedBy: VI1P195CA0084.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:802:59::37) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+        Thu, 20 Oct 2022 06:05:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6351C169CFE
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Oct 2022 03:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666260334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b6yK6XC2fpvM5GYufymBVihPn45YwUGwSfARH9fFd4M=;
+        b=Y+jcC3NhgyxsKN3cmKlZr7ZWBxRQEQCu08y0r1Kg55AlbRi8IR8+F87QDBGG6id34ouqFi
+        ebW3hOTgnzpQVcvoiL+pQP7H8jB3PtAm3Ns92Ng9f5w7RHca+IkOujpeovPWHbWInIT1CD
+        NyOfSi3SrpLUpu4nkt5PTXMAco7CZrg=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-496-v2avBa2gM2ytW1y39JEGFA-1; Thu, 20 Oct 2022 06:05:33 -0400
+X-MC-Unique: v2avBa2gM2ytW1y39JEGFA-1
+Received: by mail-wm1-f70.google.com with SMTP id az11-20020a05600c600b00b003c6e3d4d5b1so10971585wmb.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Oct 2022 03:05:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b6yK6XC2fpvM5GYufymBVihPn45YwUGwSfARH9fFd4M=;
+        b=cgHs3ZBIeG3KfsumTLQ8yw4oHGTCLTXSrjcUyQq2OVuRu913OwavVuH49InQR34H/3
+         IY8tXjt8vgQPTzLsXWXDSQMs9fXOKXmG0Keznk+9+eS2Gwj+gRPOx6oRJfHhFPQ00RhJ
+         lgk9QRz/BFtqAVK8oF/esW+iBFZM+Z9f86xRpspTnAgWm6Q1RA06TSVhIfoUZT+k75L+
+         V5jyIjcvSXRp1M+QcKFLuf9ARmMC7qB3OXSBrsKaTsABz1ePCPZpWFr2PxMkFrk2VObA
+         Kfh7YpbrCYI0LmbqwTd1gpq7G00fo6Jus365xxeo4hpj2vdcd4i2kNiOItzt6EN2LIdO
+         GrEw==
+X-Gm-Message-State: ACrzQf3BIDt7fLj49tqXX9KKVn7ZU8dLHxTxhiGt3troxPI64/3gjefz
+        kOETRoJr/yUCzGiYmJbq+Ebavg9nKKVF/X1W6hayokAu4IWB6w0mvEWeGb33fq5LE0up/yxSIUL
+        coCIG5NoQ+HwyGsK7WmRn7X7HaOGH
+X-Received: by 2002:adf:dc4b:0:b0:230:5fe6:69d2 with SMTP id m11-20020adfdc4b000000b002305fe669d2mr7935514wrj.469.1666260331791;
+        Thu, 20 Oct 2022 03:05:31 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4g+BdVVhP/DCqSzgafKraJ4+5xJgtnKBLUIP0W7QYfpF3Ib4HNHfxW8nd9OyuxmutH2d9vcA==
+X-Received: by 2002:adf:dc4b:0:b0:230:5fe6:69d2 with SMTP id m11-20020adfdc4b000000b002305fe669d2mr7935479wrj.469.1666260331411;
+        Thu, 20 Oct 2022 03:05:31 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:b100:1443:78d5:341f:c97a? (p200300cbc708b100144378d5341fc97a.dip0.t-ipconnect.de. [2003:cb:c708:b100:1443:78d5:341f:c97a])
+        by smtp.gmail.com with ESMTPSA id v10-20020a5d4a4a000000b00236492b3315sm413315wrs.104.2022.10.20.03.05.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Oct 2022 03:05:30 -0700 (PDT)
+Message-ID: <95c44cc0-31db-88cf-7296-7c18a1e7f42a@redhat.com>
+Date:   Thu, 20 Oct 2022 12:05:29 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|CH3PR12MB7617:EE_
-X-MS-Office365-Filtering-Correlation-Id: da607213-eb7c-4fdf-b04a-08dab2813b0b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ib0akApWlC3oDxWG1XVCrv1J454cTr5bYmGhk7BDiW3HMGDudCq/Dkl3407MbXTJHg74jsgqPhPqGlkYOAgdQT5hY8pRhcwt2Uaohqo+a7BbcHccYcRaWOwV1qvkWtkPY4nVmDaL2nGY/QbcDtIr/htdxyZea2BeqknsJO5gzAXoP/HVv6Mqx2B/aMtfWUgv2d8tDmX7p91Azi2DkLXF1kBLBM1T+T7rwi+nDI1x5lFWl7lDZ/bPrgxMlb9FwoYRtVIkExsYqUbZEjoEYX004X/YUYPg41GATEi76bWmEwGYYhz6Ecx7wuZJ5rcZ1p6s7me8eEzbPuJjBqM09AlDZs/+q5Pba4oPDEI/fGPGL8hS0BHsWbn18VmYdquRZTyO//zs2m2fKHzNEimqAJ0X2JLQFt+GKI5zaDNBLyt3zTLVTATlYSZPy/SDe0GMppB5ysYXzDB+dy4n9VdEvXU6lH6PivS7MLBjJ95Q192z4+lUPelRyZKpmlVdHcs+wbIKxhpz+dWcDPsWzVTFR8YJHtigHvHVIGTph68UgqzcYYvxSFQvoF+kZdQ54bJ45apGiQQUxoZXVKKQg47Lu3eEhlrOOYy0OhwgfmfLFmQb8O/3MvXJFCrf3YSatNQnKV9QcDOSmLL+69r3hq5vAle9nVuzmZQDiMCfuBUpiWuZUFbcUO8sD307u1HkrGrz6SoKkirXGFFPVJhBoo+bq3RQZQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(39860400002)(396003)(136003)(376002)(346002)(366004)(451199015)(7406005)(316002)(4326008)(54906003)(6506007)(6512007)(8936002)(2906002)(4744005)(26005)(86362001)(41300700001)(9686003)(7416002)(5660300002)(66946007)(6916009)(6666004)(66556008)(66476007)(8676002)(38100700002)(66899015)(33716001)(6486002)(186003)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Tn4Ed1z4LZOhHafpBDv/lprJwbMvaIIf5O39bSBZCI3wBymGln4H5QoJw2TW?=
- =?us-ascii?Q?0oQZwv0bsPeyAqHUbSf+2BrOSxrtCpuOCfAD4+lhnT+ro8GTm8HMqdse77lu?=
- =?us-ascii?Q?+gGtDmYPAVnd2KtxSZeXHNSvwtl0ps7XXf45dvUyRrD+rzHY5u9VWsQd4D+x?=
- =?us-ascii?Q?ZUwaTyWeWDx2QvQphnPBRxQIcaVGfXJVHcxeD2rhcbzxMkKEfpxNysKL3tRZ?=
- =?us-ascii?Q?8Un+rBlsLb4qpcHLMFAtzC1zrRJR5nhSi1TdwYphsG9MxcwDnEH/KOm7Xhcg?=
- =?us-ascii?Q?kbLKkRYY2oCVxMtHz6+JUVtjQpbmA9sslk3E7klY2E7kUWeIB9KawQMJiBOZ?=
- =?us-ascii?Q?BaGXCMxrVOpf1RsYMlprXjFj8ioOcUMDrWm2lhjuecUTCCeOwpdkrUftOylH?=
- =?us-ascii?Q?et4y4nn8e6J9oklINYBY4wqVm574Lalm2AEKMu0JEUs+yIWTaVJA//zt7la2?=
- =?us-ascii?Q?a/Zc2X2dzfis4V5NkcVuhsTXRVQtnvY4+LkoTzNuvG0zBotoISukh+FNH3Mf?=
- =?us-ascii?Q?J2ppKupyCz9jAcsjAv03jbAY22wXbFImNrAFwTQ2waUewmv+1eee85nRsmCP?=
- =?us-ascii?Q?PO0jXeAX7y6xDbvA0Z1pjDI8G3np+PmiLYfIfDzEgOES/bByOpB/Vh6gWG8Q?=
- =?us-ascii?Q?ANjg87Pk+9mdhfDPpZHZel11smU8tY/OU4+nntY4yv6ifFXGDLcs39BSJnRZ?=
- =?us-ascii?Q?RFxN8cHlKU/04qL3ynaCh8nJxanob0Qp8A+nCQvpJUUnzDJJrOLefKP6G7aS?=
- =?us-ascii?Q?eAIepWQP9A3KycYLJLP93y0FPYB6fhBUs1t8i8qeR7uZZcC8ql6Qtj2+S4Fz?=
- =?us-ascii?Q?bTBT4rHXUruKU2+vc883kY9hrP+G2Rq8d4FCypV6fmgp96wBX0/E87PdkuoU?=
- =?us-ascii?Q?xEWbddcfLPyjsAgNxKHYkm3X4gd0+PyjSDZtHMLC3FaRfOjKhs6IeBapivgW?=
- =?us-ascii?Q?f4xtVl4FtuMEyYKtzB3pWCC7QYZvg2Y5L5xQEyu1qpE6HKcs7rfaJoCEK1e3?=
- =?us-ascii?Q?pYmKqJdBffifjcVmO/BALlzx05TbPyh0XAwfPO/gw9rZA7zbNBWILq+Cxybm?=
- =?us-ascii?Q?UUEQjv2sYYhR4U6HxWdleyVIKmKcGoC7uS97YOZomFYOvIy0sy1r5hP8thuj?=
- =?us-ascii?Q?DAmYHgNsL7hLbkZv1HodzxPTYmY6feIozZwJqrpAno/2Y3lUe7lRx8eSaG/m?=
- =?us-ascii?Q?qPyEoRz9cEETx5Fuq0YvFE3tfqfmne8HIBGrlVX8T/aNC2lj2S77fkn/49Vx?=
- =?us-ascii?Q?VNX1zq+hoMq2oe7f6xYeeNJUoPdHpnALfaB/14oJCVyP0b+5jVWnTmyVZhrO?=
- =?us-ascii?Q?h/KymZ4zkogzR4d1y6NhKaW9NVJIt2fpjXfgV1JueM0uy7lIxV3WcXAmNODz?=
- =?us-ascii?Q?TuE6vVNFJwYPLhtdHwu5fx3AgP4JQlnZi6uMyFkt9vJ259zT6u2/LiY1LVX6?=
- =?us-ascii?Q?hvUhSItztICffR8xTc/JB2pYoU3m2Z7niG50flVSD7m1fJbhgYntgTuzIkvp?=
- =?us-ascii?Q?4tdmcZsUitrI4VKD1o9GWtYrkZdxJ8TXDZnC4j6rShEua8+OhbuK9oklnKMK?=
- =?us-ascii?Q?e6wNf3PM4PxQ6HqgagcyJ0a/HFp09hRdzoNDVFZ6?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da607213-eb7c-4fdf-b04a-08dab2813b0b
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 09:55:33.9524
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l1tfyF+rSX2q/Pq4LAAlDbNE4KeAFaY1SxyBmwBQMWTfUppWs8AqnxfRrLMaD9mNSBQfscjuGiXU+KGR3BMV8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7617
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20220930141931.174362-1-david@redhat.com>
+ <20220930141931.174362-5-david@redhat.com> <Yz3qekna97ndP4FK@x1n>
+ <bdddfd01-bc7e-2f99-21b9-2762a7041096@redhat.com> <Yz8m0J+UV/O9K5Lk@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 4/7] mm/ksm: fix KSM COW breaking with userfaultfd-wp
+ via FAULT_FLAG_UNSHARE
+In-Reply-To: <Yz8m0J+UV/O9K5Lk@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:58:09AM -0700, Jakub Kicinski wrote:
-> FWIW half of this posting got stuck on the "email pipes" for a day..
-> somehow. Let's give Ido and others a chance to have a look but you'll
-> need to repost even if it's flawless because the build bots can't deal
-> with a delay that long :(
+Hi Peter,
 
-Will review today
+sorry for replying so late, I only managed now to get back to this patch 
+set.
+
+>> Yes, I can give it a try. What I dislike about ksm_test is that it's a
+>> mixture of benchmarks and test cases that have to explicitly triggered by
+>> parameters. It's not a simple "run all available test cases" tests as we
+>> know it. So maybe something separate (or having it as part of the uffd
+>> tests) makes more sense.
+> 
+> We can add an entry into run_vmtests.sh.  That's also what current ksm_test
+> does.
+
+Right, but I kind-of don't like that way at all and would much rather do 
+it cleaner...
+
+> 
+> Yes adding into uffd test would work too, but I do have a plan that we
+> should move functional tests out of userfaultfd.c, leaving that with the
+> stress test only.  Not really a big deal, though.
+
+... similar to what you want to do with userfaultfd.c
+
+So maybe I'll just add a new test for ksm functional tests.
+
+> 
+>>
+>>>
+>>>>
+>>>> Consequently, we will no longer trigger a fake write fault and break COW
+>>>> without any such side-effects.
+>>>>
+>>>> This is primarily a fix for KSM+userfaultfd-wp, however, the fake write
+>>>> fault was always questionable. As this fix is not easy to backport and it's
+>>>> not very critical, let's not cc stable.
+>>>
+>>> A patch to cc most of the stable would probably need to still go with the
+>>> old write approach but attaching ALLOW_RETRY.  But I agree maybe that may
+>>> not need to bother, or a report should have arrived earlier..  The unshare
+>>> approach looks much cleaner indeed.
+>>
+>> A fix without FAULT_FLAG_UNSHARE is not straight forward. We really don't
+>> want to notify user space about write events here (because there is none).
+>> And there is no way around the uffd handling in WP code without that.
+>>
+>> FAULT_FLAG_ALLOW_RETRY would rely on userfaultfd triggering and having to
+>> resolve the WP event.
+> 
+> Right it'll be very much a false positive, but the userspace should be fine
+> with it e.g. for live snapshot we need to copy page earlier; it still won't
+> stop the process from running along the way.  But I agree that's not ideal.
+
+At least the test case at hand will wait until infinitely, because there 
+is no handler that would allow break_cow to make progress (well, we 
+don't expect write events in the test :) ).
+
+Anyhow, I don't think messing with that for stable kernels is worth the 
+pain / complexity / possible issues.
+
+-- 
+Thanks,
+
+David / dhildenb
+
