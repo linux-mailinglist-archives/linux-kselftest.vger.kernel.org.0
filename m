@@ -2,152 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5B7607E24
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 20:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29139607EFD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 21:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiJUSOV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Oct 2022 14:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
+        id S230030AbiJUTXH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Oct 2022 15:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiJUSOT (ORCPT
+        with ESMTP id S229998AbiJUTXG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Oct 2022 14:14:19 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1021F26553E;
-        Fri, 21 Oct 2022 11:14:18 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z97so8890683ede.8;
-        Fri, 21 Oct 2022 11:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IWT32hn/5on9JQFLZ9CdZqyFkNpfjrGX5X1sBaET02U=;
-        b=P9hSCaa39i9JGj/5fhpGAGKqV0qNaEhqet8DmdqurbIDP+fWwaBweSZJ3/S6bAi2DE
-         p+eq7oKJ/RDCYh9wf+nabFJSnwsdceArXMizkG598uRi7agL1PsnxpKJR3QOGe9LGUsr
-         zmlp8/3/NqI+V1i2nDa+LoUbsVbsT7TecGgNHY9btlLCVLiBhuGwippKH5FV3uy6EKQf
-         py5P3IgoKNZRscRUy9euAQkfpmI26lMxdGlz6ZIjmzgrS22NPAK4YVPfYhIgDowxprq/
-         ViQgGv3cTTio2/IhXMiDB1cCyYpWLgr0OA+yXjiHyGL9TQD3FZitvAZZYL5w3Dv4WD/K
-         D/1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IWT32hn/5on9JQFLZ9CdZqyFkNpfjrGX5X1sBaET02U=;
-        b=0IIUGq2/m1jNRNM78VX6acbMB2gcrT5vIVpu2YM+fqxsuFSjn7DHk64uODO5K3Vr/s
-         1NbbTt/fkBexvgfHZgVRmuTOh0REclXfv1/EfrwVhVoRFTmYD92SbIFqZ+HQJXURg1WM
-         ZiapQJo4MG5w6hR+1qkIAhkMUVbK/TmPMRecxWE4JhQ5hb28Dqaho0UXDFXy5oeglaT7
-         2k5ZkrpPkygbceUUCRxRGX+9RyrB/NHeaNfT4TBYZOS4tdkjvLc0FbhN3TjSA2C3EfUn
-         1kQxYUuBHrJMBR8PiG0HCv+ARdlR0wRcw2wjK9qY67YsxsouVIpLJE5Nl6ve3l+6AmCa
-         rcmg==
-X-Gm-Message-State: ACrzQf3QDvrNObTuk9ocG726vZxN+AjStVT4H9OnkYZmv3gM8AyU1Fdz
-        u78y+A5rHgBFhcRn3I5r9lM=
-X-Google-Smtp-Source: AMsMyM7EHFMooNaoQGzQ5R9JFO+S5r0igTZjt4d8ThXihB+ZZ0Av9ErxITHmAdRMMZTwcRJFugdAAw==
-X-Received: by 2002:a17:907:b05:b0:78d:9bc9:b96f with SMTP id h5-20020a1709070b0500b0078d9bc9b96fmr16306095ejl.468.1666376056317;
-        Fri, 21 Oct 2022 11:14:16 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id kw15-20020a170907770f00b00741383c1c5bsm11797572ejc.196.2022.10.21.11.14.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 11:14:15 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 21:14:11 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+        Fri, 21 Oct 2022 15:23:06 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CCE297F13;
+        Fri, 21 Oct 2022 12:22:58 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29LJAOSw016332;
+        Fri, 21 Oct 2022 19:22:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=O2wrMryTEiAay8wx5tyw/G36BC6rjJNRPY6ceokv4ko=;
+ b=Mg2ttchFt+6glxcDusxlK/LuFfgS+MfNNcU4Pd4QuIrAAc0vZOPRDG+X+473YU7YmH6X
+ 2o73eck8h//PRdFNO8av5gcS+uYlNu1k0Iv50w7VR9WAkoy7+wDhqz/wdR1YnHcq8Sc7
+ E0Ds8TwIrSenF1D++qAvpgtuhThdYmWq11E1sqF9t81LlCS4LqXjYCY/kuhXZm3NNpJN
+ CMYBpj4HvVdGVhNNyvpfoWIYEQvig4qT70cFFC61zCQ20R/2o6j+vcqlmrxSVg2UyTmW
+ +ZT05OT/hDraoaCheZyJMskvq+YQZecMGA0NsbkTuHi3aZGZivrx8F6ZoVdEPzd43cx5 qw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kc0p69jsb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 19:22:53 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29LJMr9Y011350;
+        Fri, 21 Oct 2022 19:22:53 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kc0p69jrh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 19:22:53 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29LJKbQR015132;
+        Fri, 21 Oct 2022 19:22:51 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3k7mg9g7pa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 21 Oct 2022 19:22:51 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29LJMlaK328250
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 21 Oct 2022 19:22:47 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C5F8EA405F;
+        Fri, 21 Oct 2022 19:22:47 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2819BA405B;
+        Fri, 21 Oct 2022 19:22:47 +0000 (GMT)
+Received: from osiris (unknown [9.145.190.216])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 21 Oct 2022 19:22:47 +0000 (GMT)
+Date:   Fri, 21 Oct 2022 21:22:45 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Nico Boehr <nrb@linux.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-Message-ID: <20221021181411.sv52q4yxr5r7urab@skbuf>
-References: <20221020132538.reirrskemcjwih2m@skbuf>
- <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
- <20221020225719.l5iw6vndmm7gvjo3@skbuf>
- <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
- <20221021112216.6bw6sjrieh2znlti@skbuf>
- <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
- <20221021163005.xljk2j3fkikr6uge@skbuf>
- <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
- <20221021173014.oit3qmpkrsjwzbgu@skbuf>
- <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v2 1/9] s390/uaccess: Add storage key checked cmpxchg
+ access to user space
+Message-ID: <Y1LxhaZaVZlM0Cl/@osiris>
+References: <20221012205609.2811294-1-scgl@linux.ibm.com>
+ <20221012205609.2811294-2-scgl@linux.ibm.com>
+ <166627325676.27216.13358887886569042677@t14-nrb>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <166627325676.27216.13358887886569042677@t14-nrb>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: g2hTvFXAjC5Zgx26NB4fqiBeHV2Lyv3D
+X-Proofpoint-GUID: 5CTYsYsWsjZDwPO2UxkN15iFYffX3NEc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 clxscore=1015 suspectscore=0 phishscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 impostorscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210210112
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 07:39:34PM +0200, netdev@kapio-technology.com wrote:
-> Well, with this change, to have MAB working, the bridge would need learning on
-> of course, but how things work with the bridge according to the flags, they
-> should also work in the offloaded case if you ask me. There should be no
-> difference between the two, thus MAB in drivers would have to be with
-> learning on.
+On Thu, Oct 20, 2022 at 03:40:56PM +0200, Nico Boehr wrote:
+> Quoting Janis Schoetterl-Glausch (2022-10-12 22:56:01)
+> > +               "2:     lr      %[old_word],%[tmp]\n"
+> > +               "3:     cs      %[tmp],%[new_word],%[aligned]\n"
+> > +               "4:     jnl     5f\n"
+> > +               /* We'll restore old_word before the cs, use reg for the diff */
+> > +               "       xr      %[old_word],%[tmp]\n"
+> > +               /* Apply diff assuming only bits outside target byte(s) changed */
+> > +               "       xr      %[new_word],%[old_word]\n"
+> > +               /* If prior assumption false we exit loop, so not an issue */
+> > +               "       nr      %[old_word],%[mask]\n"
+> > +               "       jz      2b\n"
+> 
+> So if the remainder changed but the actual value to exchange stays the same, we
+> loop in the kernel. Does it maybe make sense to limit the number of iterations
+> we spend retrying? I think while looping here the calling process can't be
+> killed, can it?
 
-Am I proposing for things to work differently in the offload and
-software case, and not realizing it? :-/
-
-The essence of my proposal was to send a bug fix now which denies
-BR_LEARNING to be set together with BR_PORT_LOCKED. The fact that
-link-local traffic is learned by the software bridge is something
-unintended as far as I understand.
-
-You tried to fix it here, and as far as I could search in my inbox, that
-didn't go anywhere:
-https://lore.kernel.org/netdev/47d8d747-54ef-df52-3b9c-acb9a77fa14a@blackwall.org/T/#u
-
-I thought only mv88e6xxx offloads BR_PORT_LOCKED, but now, after
-searching, I also see prestera has support for it, so let me add
-Oleksandr Mazur to the discussion as well. I wonder how they deal with
-this? Has somebody come to rely on learning being enabled on a locked
-port?
-
-
-MAB in offloading drivers will have to be with learning on (same as in
-software). When BR_PORT_LOCKED | BR_LEARNING will be allowed together
-back in net-next (to denote the MAB configuration), offloading drivers
-(mv88e6xxx and prestera) will be patched to reject them. They will only
-accept the two together when they implement MAB support.
-
-Future drivers after this mess has been cleaned up will have to look at
-the BR_PORT_LOCKED and BR_LEARNING flag in combination, to see which
-kind of learning is desired on a port (secure, CPU based learning or
-autonomous learning).
-
-Am I not making sense?
+Yes, the number of loops should be limited; quite similar what arm64
+implemented with commit 03110a5cb216 ("arm64: futex: Bound number of
+LDXR/STXR loops in FUTEX_WAKE_OP").
