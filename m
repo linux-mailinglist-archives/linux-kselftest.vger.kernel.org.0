@@ -2,121 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899BA608167
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Oct 2022 00:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB576608245
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Oct 2022 01:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiJUWSj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Oct 2022 18:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S229886AbiJUXvj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Oct 2022 19:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiJUWS2 (ORCPT
+        with ESMTP id S229847AbiJUXvi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Oct 2022 18:18:28 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0BB2AB11A
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Oct 2022 15:18:26 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id q11so2368200ilj.10
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Oct 2022 15:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xEShaJ32qONw6Ik3PO9e5EbC1hloeWQUD82bcXUGSI8=;
-        b=fEx4OTp+x4ZE3H0fyqrFYVgdQxHMwlNZn9v+cFhrbYHz7TvbhSRwcHFDCONm6rROR8
-         KZGHntnFCQuRr909vmwZQjb1lJgqJpCwL/jigAYpuLI7eCLxKzlne6Wm2rIiNKrhBxYi
-         CLeJjlNpmomCTYwKuAhN9vxHI8n2g7ByAVVV8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xEShaJ32qONw6Ik3PO9e5EbC1hloeWQUD82bcXUGSI8=;
-        b=Ld/XZrCQ6RRueSWKdKjgAbCrLTqhJC6Nkj4H5PuvZgTj1pUiXqmcfC6x3YCGWzSzSv
-         seaLtj9Q78cW48x4CFW6zYbKfRUS8bSSB6PGF5IZDQpc4y1DGp6PXVUuIgBIDlW8JH9p
-         gfFyXGSmAy2+vydb4pq7jPIP8VSBnxaAPXNw+LR9R7SzLozk+Q34wMsvHrsl3NyWbvt0
-         TrDx5GyLyJNjwoDGFoEkiJrn1RX9QoQmkdpNP5jQD0Tr3EYUxY+gb20VVqPbsllMhnAu
-         bvbS5gXIbwu5XZkbaN+KH9CQ2OxxlPATs90v1ZIRUuxXm4MdqIAArKhzb9OW7mD9WkVL
-         iqpg==
-X-Gm-Message-State: ACrzQf0YpPSMtZSqvBcpf1WoO3FXxU/ZtLTY+dwfyHENvjiDcfAWTh1O
-        ddlDzZ7uYVxAwPJYA0PQh5CKmQ==
-X-Google-Smtp-Source: AMsMyM6lM/rYjfxg+jLPtpZy6aJxXUzDKCO0FalDgdayZH+Xuieo7F5XlhyjFLFaCIc2/6eX9SdmgQ==
-X-Received: by 2002:a05:6e02:184d:b0:2fc:2d17:4fbf with SMTP id b13-20020a056e02184d00b002fc2d174fbfmr14693702ilv.150.1666390705483;
-        Fri, 21 Oct 2022 15:18:25 -0700 (PDT)
-Received: from shuah-tx13.internal ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id cp6-20020a056638480600b0036cc14af7adsm430740jab.149.2022.10.21.15.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 15:18:24 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     skhan@linuxfoundation.org, shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] selftests/watchdog: add test for WDIOC_GETTEMP
-Date:   Fri, 21 Oct 2022 16:18:19 -0600
-Message-Id: <2b559a7d0d2be46729f3a03dc639dd4a69e465bb.1666390362.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666390362.git.skhan@linuxfoundation.org>
-References: <cover.1666390362.git.skhan@linuxfoundation.org>
+        Fri, 21 Oct 2022 19:51:38 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB0F53DF;
+        Fri, 21 Oct 2022 16:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666396296; x=1697932296;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FfuVcGdiPTAK5k1d7MIsjDwLmLyP3F5o7OxDOtjkzOg=;
+  b=XI8w6OGEH+vAHed6PvoGTPGplssGn4XPr+oOG0s6bV/oisw4hUuxcqtv
+   xDD1C3UVXjvc5/5ps1Ys7fswxf76Zs/KQfVCGgiQvor2BXOZ3qRq9f9zH
+   xKAHkRnKPMNr0optV8dmKZ7InHPRh8DcQINs84p9wlJ0cifdqI19XKMax
+   HwlKR4D6IuT7nFgID+IFJ1sAMRGSCS/J5k4DUNjHU7AEcLYqPssl5D135
+   CQvDfkoJwr/0sc1fXt4KO6UCOUjZRzPTq6ooUTJmnO3hl5J5UaDt3/L/b
+   Maf2dy3TUkLmvaeBWHFDnuznWDKzCiz8zEm1N/6eOMiYJ+wPp+ulp2KFa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="307122256"
+X-IronPort-AV: E=Sophos;i="5.95,203,1661842800"; 
+   d="scan'208";a="307122256"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 16:51:35 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="693913352"
+X-IronPort-AV: E=Sophos;i="5.95,203,1661842800"; 
+   d="scan'208";a="693913352"
+Received: from sabravo-mobl.amr.corp.intel.com (HELO [10.209.25.112]) ([10.209.25.112])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 16:51:35 -0700
+Message-ID: <13adfc8d-8118-2fd7-3a66-98dfbf8037a9@linux.intel.com>
+Date:   Fri, 21 Oct 2022 16:51:34 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y1De4IyAB6n2qs4V@kroah.com>
+ <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
+ <Y1Iimg0WItgIGq6/@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Y1Iimg0WItgIGq6/@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add test for WDIOC_GETTEMP and this ioctl might not be supported by some
-devices and if it is this test will print the following message:
+Hi Greg,
 
-Inappropriate ioctl for device
+On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
+>>>> +#ifdef MODULE
+>>>> +static const struct x86_cpu_id tdx_guest_ids[] = {
+>>>> +	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+>>>> +	{}
+>>>> +};
+>>>> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+>>>> +#endif
+>>> Why the #ifdef?  Should not be needed, right?
+>> I have added it to fix the following warning reported by 0-day.
+>>
+>> https://lore.kernel.org/lkml/202209211607.tCtTWKbV-lkp@intel.com/
+>>
+>> It is related to nullifying the MODULE_DEVICE_TABLE in #ifndef MODULE
+>> case in linux/module.h.
+> Then fix it properly, by correctly using that structure no matter what.
+> You don't do that here...
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/watchdog/watchdog-test.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+I think we can use __maybe_unused attribute to fix this warning like
+mentioned below. Are you fine with it?
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index 03103eaa946c..5ec0384b7f02 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -1,12 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
- * Watchdog Driver Test Program
--* - Tests all ioctls except WDIOC_GETTEMP
-+* - Tests all ioctls
- * - Tests Magic Close - CONFIG_WATCHDOG_NOWAYOUT
- * - Could be tested against softdog driver on systems that
- *   don't have watchdog hadrware.
--* - TODO:
--* - Enhance test to add coverage for WDIOC_GETTEMP.
- *
- * Reference: Documentation/watchdog/watchdog-api.rst
-  */
-@@ -177,6 +175,7 @@ int main(int argc, char *argv[])
- 	int oneshot = 0;
- 	char *file = "/dev/watchdog";
- 	struct watchdog_info info;
-+	int temperature;
+--- a/drivers/virt/coco/tdx-guest/tdx-guest.c
++++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
+@@ -118,13 +118,11 @@ static void __exit tdx_guest_exit(void)
+ }
+ module_exit(tdx_guest_exit);
  
- 	setbuf(stdout, NULL);
+-#ifdef MODULE
+-static const struct x86_cpu_id tdx_guest_ids[] = {
++static const struct x86_cpu_id __maybe_unused tdx_guest_ids[] = {
+        X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+        {}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+-#endif
+
+Solution 2:
+-----------
+
+We can also modify the code to use this structure in all cases like
+below. But it requires me to use slower x86_match_cpu() in place of 
+cpu_feature_enabled() which I think is unnecessary.
+
+--- a/drivers/virt/coco/tdx-guest/tdx-guest.c
++++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
+@@ -103,9 +103,15 @@ static struct miscdevice tdx_misc_dev = {
+        .fops = &tdx_guest_fops,
+ };
  
-@@ -255,6 +254,12 @@ int main(int argc, char *argv[])
- 				print_status(flags);
- 			else
- 				printf("WDIOC_GETSTATUS error '%s'\n", strerror(errno));
-+			ret = ioctl(fd, WDIOC_GETTEMP, &temperature);
-+			if (ret)
-+				printf("WDIOC_GETTEMP: '%s'\n", strerror(errno));
-+			else
-+				printf("Temeprature: %d\n", temperature);
++static const struct x86_cpu_id tdx_guest_ids[] = {
++       X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
++       {}
++};
++MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
 +
- 			break;
- 		case 't':
- 			flags = strtoul(optarg, NULL, 0);
--- 
-2.34.1
+ static int __init tdx_guest_init(void)
+ {
+-       if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++       if (!x86_match_cpu(tdx_guest_ids))
+                return -ENODEV;
+ 
+        return misc_register(&tdx_misc_dev);
+@@ -118,14 +124,6 @@ static void __exit tdx_guest_exit(void)
+ }
+ module_exit(tdx_guest_exit);
+ 
+-#ifdef MODULE
+-static const struct x86_cpu_id tdx_guest_ids[] = {
+-       X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+-       {}
+-};
+-MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+-#endif
 
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
