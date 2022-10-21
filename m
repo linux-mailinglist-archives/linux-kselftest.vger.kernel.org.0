@@ -2,170 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C88606C43
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 01:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853EF606C51
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 02:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiJTX56 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 19:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
+        id S229731AbiJUABt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 20:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiJTX55 (ORCPT
+        with ESMTP id S229664AbiJUABs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 19:57:57 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778C322C83A;
-        Thu, 20 Oct 2022 16:57:56 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id y14so3270805ejd.9;
-        Thu, 20 Oct 2022 16:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jNzg2CMoVd1I4LouGMN20H+N7eFasZcE1vbuzP9T/xs=;
-        b=jGsALBlOoX8f5qbY1dWPMgFbqX+TDJEuFICi8yi8v6ey26All+ybVMGus3u4o7CjtB
-         2MlnTxAcMRNfrsJedjfk/cuF/95qZGp4fH+fJXWDNJozR5YTGoA10Lc9vs3BOIr2lmMI
-         dxTsF38Tb8LG0uhRUly/piC5DxyLD8p/1KuWo8oLhwv7A3K8/GykppxaQsk8JSb+9BAA
-         wNpb5AxxxGQlOKS4/adV7zfUH6dG8tJdUg8eyCGmIbl0tA3XCun6GVm7+XnY1YWsmZpG
-         Kl/yNyKO6CH+FIURbM45H9nWjE6K3Ad/kHxcMcsi7kjVibiY8S1pBQQAlaEaeYR2oKp3
-         6ghw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jNzg2CMoVd1I4LouGMN20H+N7eFasZcE1vbuzP9T/xs=;
-        b=ae0Fil2KO4nL+Xb1FHwpzK4ArBGkSCUeoQ3wlklgIt23C+gI5sHGN44UEzXfzSFUos
-         zJGSd0oQMqbHD2TSHjMoBKANahK8gMMZ46p3UwcuN+Uu4twhydcfD4cpbHMvLT92Jg4s
-         1CqNvCQORIJb3+7Gs0PgvZdz4AogfoLrB2EUmOp3TEJpRR1gF7vPHpbZyPH97F2wgkXX
-         SOIR+ZrGAVG2KfuTsZkSvg5gOIqS8l4Yyk4KH/RnwRfU16ztemNOzYcEijJisQBFgWUj
-         2nxdyiJLD+7ZC7CqXawfd07pb1QEsxuTjQJFgyN6n3lXZ318uZSSK92GvJ9mwan6ghRx
-         EQqg==
-X-Gm-Message-State: ACrzQf18JutAhPsNeL9X3y5QtsFKuXquxtY/mazEts4908THVYiOwfci
-        LnDTLrLtZOUU5Dhui1yaNMc=
-X-Google-Smtp-Source: AMsMyM6ssiTPx2XFwPqjIn7V795i4Bu9+MHPdpCMZkdeH3IV8p2KB475oEPOc+uSDgaRj3mmcC4d7g==
-X-Received: by 2002:a17:907:86a2:b0:791:910e:cce4 with SMTP id qa34-20020a17090786a200b00791910ecce4mr13251967ejc.36.1666310274807;
-        Thu, 20 Oct 2022 16:57:54 -0700 (PDT)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id x24-20020a170906b09800b0078d46aa3b82sm10822041ejy.21.2022.10.20.16.57.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 16:57:53 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 02:57:50 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     netdev@kapio-technology.com
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 05/12] net: dsa: propagate the locked flag
- down through the DSA layer
-Message-ID: <20221020235750.ql5v55y3knnxofna@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221018165619.134535-6-netdev@kapio-technology.com>
- <20221020130224.6ralzvteoxfdwseb@skbuf>
- <Y1FMAI9BzDRUPi5Y@shredder>
- <20221020133506.76wroc7owpwjzrkg@skbuf>
- <8456155b8e0f6327e4fb595c7a08399b@kapio-technology.com>
+        Thu, 20 Oct 2022 20:01:48 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F0B1F040A;
+        Thu, 20 Oct 2022 17:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666310507; x=1697846507;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=axznp6OnV6Oaffkdp+OJ9LGPX/DGG8dLw8F0zIaw8Iw=;
+  b=dHIA7wvUOGJRebCqwflVX6i2KwxXe9LNzLf9VCTHUc7Ty8GI3ieTp7tn
+   Ngq1JIUhkm1aOMqtNIQQbiEUCceJ+Nri7QW70rt8k56neVCyvvP5M1s0v
+   2ihTGk7Cw2a5wl6XQk4K1F0Oc68w54+M79XeALAwU8KbHEBiYtMcjT7WI
+   DodF4Z9nJ8BU4le87FMGx1pOznk5JnE1f9vT4BCUExRF8VWm+4+dWoJsf
+   zjo1K6/BurYaEL816eWmi3wmqQ5OuobOiQM9mWbl6ODL76fV3f4OFUQrk
+   vPgcw/9T2Pn7FmIK/feL03biQRuv4UdPP2NrjOFwFrwBl9tDdy9Zr7QEj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="368916740"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="368916740"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 17:00:33 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="805222050"
+X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
+   d="scan'208";a="805222050"
+Received: from apattnay-mobl.amr.corp.intel.com (HELO [10.209.102.175]) ([10.209.102.175])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 17:00:27 -0700
+Message-ID: <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
+Date:   Thu, 20 Oct 2022 17:00:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8456155b8e0f6327e4fb595c7a08399b@kapio-technology.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y1De4IyAB6n2qs4V@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Y1De4IyAB6n2qs4V@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 08:47:39PM +0200, netdev@kapio-technology.com wrote:
-> Just to add to it, now that there is a u16 for flags in the bridge->driver
-> direction, making it easier to add such flags, I expect that for the
-> mv88e6xxx driver there shall be a 'IS_DYNAMIC' flag also, as authorized
-> hosts will have their authorized FDB entries added with dynamic entries...
+Hi,
 
-With what is implemented in this patchset, the MAB daemon uses static
-FDB entries for authorizations, just like the selftests, right? That's
-the only thing that works.
+On 10/19/22 10:38 PM, Greg Kroah-Hartman wrote:
+> On Wed, Oct 19, 2022 at 09:58:27PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>> +static long tdx_get_report(void __user *argp)
+>> +{
+>> +	u8 *reportdata, *tdreport;
+>> +	struct tdx_report_req req;
+>> +	long ret;
+>> +
+>> +	if (copy_from_user(&req, argp, sizeof(req)))
+>> +		return -EFAULT;
+>> +
+>> +	/*
+>> +	 * Per TDX Module 1.0 specification, section titled
+>> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
+>> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
+>> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as 0.
+>> +	 */
+>> +	if (req.subtype || req.rpd_len != TDX_REPORTDATA_LEN ||
+>> +	    req.tdr_len != TDX_REPORT_LEN) {
+>> +		pr_err("TDX_CMD_GET_REPORT: invalid req: subtype:%u rpd_len:%u tdr_len:%u\n",
+>> +		       req.subtype, req.rpd_len, req.tdr_len);
+> 
+> You are allowing userspace to spam the kernel logs, please do not do
+> that.
 
-> Now as the bridge will not be able to refresh such authorized FDB entries
-> based on unicast incoming traffic on the locked port in the offloaded case,
-> besides we don't want the CPU to do such in this case anyway,
-
-..because the software bridge refreshes the FDB entry based on the traffic
-it sees, and the hardware port refreshes the corresponding ATU entry
-based on the traffic *it* sees, and the 2 are not in sync because most
-of the traffic is autonomously forwarded, causing the FDB to be
-refreshed more often in hardware than in software..
-
-> to keep the authorized line alive without having to reauthorize in
-> like every 5 minutes, the driver needs to do the ageing (and refreshing)
-> of the dynamic entry added from userspace.
-
-You're saying "now [...] to keep the authorized line alive [...], the
-driver needs to do the [...] refreshing of the dynamic [FDB] entry".
-
-Can you point me to the code where that is done now?
-
-Or perhaps I'm misunderstanding and it is a "future now"...
-
-> When the entry "ages" out, there is the HoldAt1 feature and Age Out
-> Violations that should be used to tell userspace (plus bridge) that
-> this authorization has been removed by the driver as the host has gone
-> quiet.
-
-So this is your proposal for how a dynamic FDB entry could be offloaded.
-
-Have you given any thought to how can we prevent the software FDB entry
-from ageing out first, and causing the hardware FDB entry to be removed
-too, through the ensuing switchdev notification?
-
-> So all in all, there is the need of another flag from
-> userspace->bridge->driver, telling that we want a dynamic ATU entry (with
-> mv88e6xxx it will start at age 7).
-
-Sorry for the elementary question, but what is gained from making the
-authorized FDB entries dynamic in the bridge? You don't have to
-reauthorize every 5 minutes even with the current implementation; you
-could make the FDB entries static. The ability for authorized stations
-to roam? This is why the authorizations are removed every 5 minutes,
-to see if anybody is still there? Who removes the authorizations in the
-implementation with the currently proposed patch set? The MAB daemon,
-right?
+Added it to help userspace understand the reason for the failure (only for
+the cases like request param issues and TDCALL failure). Boris recommended
+adding it in the previous review.
 
 
-Could you please present a high level overview of how you want things to
-look in the end and how far you are along that line? Maybe a set of user
-space + kernel repos where everything is implemented and works?
+> 
+> Also, you have a real device here, use it and call dev_*() instead of
+> pr_*().  Your code should not have any pr_* calls.
+
+Ok. I will use dev_err variant.
+
+> 
+> 
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (memchr_inv(req.reserved, 0, sizeof(req.reserved))) {
+>> +		pr_err("TDX_CMD_GET_REPORT: Non zero value in reserved field\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	reportdata = kmalloc(req.rpd_len, GFP_KERNEL);
+>> +	if (!reportdata)
+>> +		return -ENOMEM;
+>> +
+>> +	tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
+>> +	if (!tdreport) {
+>> +		ret = -ENOMEM;
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (copy_from_user(reportdata, u64_to_user_ptr(req.reportdata),
+>> +			   req.rpd_len)) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	/* Generate TDREPORT using "TDG.MR.REPORT" TDCALL */
+>> +	ret = tdx_mcall_get_report(reportdata, tdreport, req.subtype);
+>> +	if (ret) {
+>> +		pr_err("TDX_CMD_GET_REPORT: TDCALL failed\n");
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (copy_to_user(u64_to_user_ptr(req.tdreport), tdreport, req.tdr_len))
+>> +		ret = -EFAULT;
+>> +
+>> +out:
+>> +	kfree(reportdata);
+>> +	kfree(tdreport);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
+>> +			    unsigned long arg)
+>> +{
+>> +	switch (cmd) {
+>> +	case TDX_CMD_GET_REPORT:
+>> +		return tdx_get_report((void __user *)arg);
+>> +	default:
+>> +		return -ENOTTY;
+>> +	}
+>> +}
+>> +
+>> +static const struct file_operations tdx_guest_fops = {
+>> +	.owner = THIS_MODULE,
+>> +	.unlocked_ioctl = tdx_guest_ioctl,
+>> +	.llseek = no_llseek,
+>> +};
+>> +
+>> +static struct miscdevice tdx_misc_dev = {
+>> +	.name = KBUILD_MODNAME,
+>> +	.minor = MISC_DYNAMIC_MINOR,
+>> +	.fops = &tdx_guest_fops,
+>> +};
+>> +
+>> +static int __init tdx_guest_init(void)
+>> +{
+>> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+>> +		return -ENODEV;
+>> +
+>> +	return misc_register(&tdx_misc_dev);
+>> +}
+>> +module_init(tdx_guest_init);
+>> +
+>> +static void __exit tdx_guest_exit(void)
+>> +{
+>> +	misc_deregister(&tdx_misc_dev);
+>> +}
+>> +module_exit(tdx_guest_exit);
+>> +
+>> +#ifdef MODULE
+>> +static const struct x86_cpu_id tdx_guest_ids[] = {
+>> +	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
+>> +#endif
+> 
+> Why the #ifdef?  Should not be needed, right?
+
+I have added it to fix the following warning reported by 0-day.
+
+https://lore.kernel.org/lkml/202209211607.tCtTWKbV-lkp@intel.com/
+
+It is related to nullifying the MODULE_DEVICE_TABLE in #ifndef MODULE
+case in linux/module.h.
+
+> 
+> thanks,
+> 
+> greg k-h
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
