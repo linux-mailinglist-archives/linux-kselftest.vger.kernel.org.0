@@ -2,141 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8800F607817
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 15:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1BF607959
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 16:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiJUNRZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Oct 2022 09:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S231349AbiJUOQx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Oct 2022 10:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiJUNRX (ORCPT
+        with ESMTP id S231339AbiJUOQw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Oct 2022 09:17:23 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA50E17F98E;
-        Fri, 21 Oct 2022 06:17:09 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 03CB41884D82;
-        Fri, 21 Oct 2022 13:16:22 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id EDB80250007B;
-        Fri, 21 Oct 2022 13:16:21 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id E48979EC0009; Fri, 21 Oct 2022 13:16:21 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Fri, 21 Oct 2022 10:16:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE45227C961;
+        Fri, 21 Oct 2022 07:16:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C3CFB82BD0;
+        Fri, 21 Oct 2022 14:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE10C433C1;
+        Fri, 21 Oct 2022 14:16:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666361808;
+        bh=PRytFCKdCT1L3cd5CHsBUG4+VKn3sU9mmpc6aa+Ovks=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=n0BYFG9VEEZacp9J0pCV285LJboNVWnBkr3nTja0Zxmux96k+PMK2V9Jyu4VWRJ07
+         RyVNDURFNHsAY1ITKGq5jg0ZfNG7C14tCUqYPMWCa1MqvGcvUlnuVWAmBEOce5NQrA
+         a74Pf6uj8syYtdLBlIXcgzclA+Kg1byvukOV/7QqulTGS/nio/Gv9TGpJgJx3By5XQ
+         e2j79wGS3gxdtwpvF62bIfBKgHcuGXUu9UVWNOyAhnNR/effUe1GgdmGY572tsk+uh
+         kRraSBrFiZNsu1PXsyPfAHNnGeUcOvXl3Ky9o9UEMmoGJBPAL33JbiAVYfMEnnxiDI
+         BOVyniBt9sjDQ==
+Date:   Fri, 21 Oct 2022 07:16:46 -0700
+From:   Kees Cook <kees@kernel.org>
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+CC:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_2/2=5D_kunit=3A_Use_the_stat?= =?US-ASCII?Q?ic_key_in_kunit=5Ffail=5Fcurrent=5Ftest=28=29?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221021072854.333010-2-davidgow@google.com>
+References: <20221021072854.333010-1-davidgow@google.com> <20221021072854.333010-2-davidgow@google.com>
+Message-ID: <C8A2E3D7-E62D-43B3-AECC-3B6117E1DD0E@kernel.org>
 MIME-Version: 1.0
-Date:   Fri, 21 Oct 2022 15:16:21 +0200
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221021112216.6bw6sjrieh2znlti@skbuf>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-1-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221018165619.134535-11-netdev@kapio-technology.com>
- <20221020132538.reirrskemcjwih2m@skbuf>
- <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
- <20221020225719.l5iw6vndmm7gvjo3@skbuf>
- <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
- <20221021112216.6bw6sjrieh2znlti@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2022-10-21 13:22, Vladimir Oltean wrote:
-> On Fri, Oct 21, 2022 at 08:47:42AM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-10-21 00:57, Vladimir Oltean wrote:
->> > On Thu, Oct 20, 2022 at 10:20:50PM +0200, netdev@kapio-technology.com
->> > wrote:
->> > > In general locked ports block traffic from a host based on if there
->> > > is a
->> > > FDB entry or not. In the non-offloaded case, there is only CPU
->> > > assisted
->> > > learning, so the normal learning mechanism has to be disabled as any
->> > > learned entry will open the port for the learned MAC,vlan.
->> >
->> > Does it have to be that way? Why can't BR_LEARNING on a BR_PORT_LOCKED
->> > cause the learned FDB entries to have BR_FDB_LOCKED, and everything
->> > would be ok in that case (the port will not be opened for the learned
->> > MAC/VLAN)?
->> 
->> I suppose you are right that basing it solely on BR_FDB_LOCKED is 
->> possible.
->> 
->> The question is then maybe if the common case where you don't need 
->> learned
->> entries for the scheme to work, e.g. with EAPOL link local packets, 
->> requires
->> less CPU load to work and is cleaner than if using BR_FDB_LOCKED 
->> entries?
-> 
-> I suppose the real question is what does the bridge currently do with
-> BR_LEARNING + BR_PORT_LOCKED, and if that is sane and useful in any 
-> case?
-> It isn't a configuration that's rejected, for sure. The configuration
-> could be rejected via a bug fix patch, then in net-next it could be 
-> made
-> to learn these addresses with the BR_FDB_LOCKED flag.
-> 
-> To your question regarding the common case (no MAB): that can be 
-> supported
-> just fine when BR_LEARNING is off and BR_PORT_LOCKED is on, no?
-> No BR_FDB_LOCKED entries will be learned.
+On October 21, 2022 12:28:55 AM PDT, David Gow <davidgow@google=2Ecom> wrot=
+e:
+>Speed up the case where kunit_fail_current_test() is called when no test
+>is running=2E This should make it convenient for code to call this
+>unconditionally in some error paths, without fear of causing a
+>performance problem=2E
 
-As it is now in the bridge, the locked port part is handled before 
-learning
-in the ingress data path, so with BR_LEARNING and BR_PORT_LOCKED, I 
-think it
-will work as it does now except link local packages.
+A third patch showing these cases may help in understanding the utility=2E=
+ I get it, but I lack imagination on where/why they would be added=2E :)
 
-If your suggestion of BR_LEARNING causing BR_FDB_LOCKED on a locked 
-port, I
-guess it would be implemented under br_fdb_update() and BR_LEARNING +
-BR_PORT_LOCKED would go together, forcing BR_LEARNING in this case, thus 
-also
-for all drivers?
+>
+>If CONFIG_KUNIT=3Dn, this compiles away to nothing=2E If CONFIG_KUNIT=3Dy=
+, it
+>will compile down to a NOP (on most architectures) if no KUnit test is
+>currently running=2E kunit_fail_current_test() does not work if KUnit
+>itself is built as a module, though this is a pre-existing limitation=2E
+>
+>Note that the definition of kunit_fail_current_test() still wraps an
+>empty, inline function if KUnit is not built-in=2E This is to ensure that
+>the printf format string __attribute__ will still work=2E
+>
+>Signed-off-by: David Gow <davidgow@google=2Ecom>
+>---
+> include/kunit/test-bug=2Eh | 19 ++++++++++++++++---
+> 1 file changed, 16 insertions(+), 3 deletions(-)
+>
+>diff --git a/include/kunit/test-bug=2Eh b/include/kunit/test-bug=2Eh
+>index 5fc58081d511=2E=2Eba9558a9f9c0 100644
+>--- a/include/kunit/test-bug=2Eh
+>+++ b/include/kunit/test-bug=2Eh
+>@@ -9,16 +9,29 @@
+> #ifndef _KUNIT_TEST_BUG_H
+> #define _KUNIT_TEST_BUG_H
+>=20
+>-#define kunit_fail_current_test(fmt, =2E=2E=2E) \
+>-	__kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+>-
+> #if IS_BUILTIN(CONFIG_KUNIT)
+>=20
+>+#include <linux/jump_label=2Eh> /* For static branch */
+>+
+>+/* Static key if KUnit is running any tests=2E */
+>+extern struct static_key_false kunit_running;
+>+
+>+#define kunit_fail_current_test(fmt, =2E=2E=2E) do {					\
+>+	if (static_branch_unlikely(&kunit_running)) {				\
+
+This trailing { should be dropped=2E
+
+>+		__kunit_fail_current_test(__FILE__, __LINE__,			\
+>+					  fmt, ##__VA_ARGS__);			\
+
+Or a closing one added here=2E (The {}s are unbalanced, as 0day complained=
+ about=2E)
+
+>+	} while (0)
+>+
+>+
+> extern __printf(3, 4) void __kunit_fail_current_test(const char *file, i=
+nt line,
+> 						    const char *fmt, =2E=2E=2E);
+>=20
+> #else
+>=20
+>+/* We define this with an empty helper function so format string warning=
+s work */
+>+#define kunit_fail_current_test(fmt, =2E=2E=2E) \
+>+		__kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+>+
+> static inline __printf(3, 4) void __kunit_fail_current_test(const char *=
+file, int line,
+> 							    const char *fmt, =2E=2E=2E)
+> {
+
+
+--=20
+Kees Cook
