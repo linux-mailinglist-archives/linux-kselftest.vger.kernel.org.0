@@ -2,92 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B9D606F3D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 07:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4BA606FCA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 08:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJUFLL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Oct 2022 01:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S230040AbiJUGEG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Oct 2022 02:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiJUFKh (ORCPT
+        with ESMTP id S230055AbiJUGD6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Oct 2022 01:10:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E564DBBCD;
-        Thu, 20 Oct 2022 22:10:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D751AB82AD4;
-        Fri, 21 Oct 2022 05:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8CEC8C433C1;
-        Fri, 21 Oct 2022 05:10:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666329020;
-        bh=uiS8E7UZqqx9dw/HCUIiU9iQ8Po61sH0v6P41uEyu1M=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hgy+5XSWy435v2fDfR9qVLsF55x04HqwFshY9/BHVM/YjoKois8BLUfckBRFJC3xG
-         mHC0u560hsl37pJpPPFxZRF3aS1psw+iVyyIzsNhZw7XVS7MFHri4Wwy5PRZVNKXiz
-         U68DKoDj4Wvkak4zvg7caGDC/tyc2s6Hl6MowlWlN2ZL7HUSmv4obSZQEMcJYX6I/d
-         hoE4/wnOvVWjW+8aozsSD8N5wJKeDWYL0lsftv0PzeGyZDGV6nluOdyJHohzZUiWwb
-         XsAai3rnDzjnYGqdaqrqknalewwywORa4aYh77dRLfKQ/Q6b6vjy3DvUQnzrlbGMVj
-         hdHooe3DST+1Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71345E270E0;
-        Fri, 21 Oct 2022 05:10:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/2] selftests: net: Fix problems in some drivers/net
- tests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166632902045.25874.5012108937559240231.git-patchwork-notify@kernel.org>
-Date:   Fri, 21 Oct 2022 05:10:20 +0000
-References: <20221019091042.783786-1-bpoirier@nvidia.com>
-In-Reply-To: <20221019091042.783786-1-bpoirier@nvidia.com>
-To:     Benjamin Poirier <bpoirier@nvidia.com>
-Cc:     netdev@vger.kernel.org, j.vosburgh@gmail.com, vfalico@gmail.com,
-        andy@greyhouse.net, shuah@kernel.org, andrew@lunn.ch,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com, olteanv@gmail.com,
-        jiri@resnulli.us, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jtoppins@redhat.com, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 21 Oct 2022 02:03:58 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4978D4521E;
+        Thu, 20 Oct 2022 23:03:56 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29L63lSF007564;
+        Fri, 21 Oct 2022 08:03:47 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Willy Tarreau <w@1wt.eu>
+Subject: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Date:   Fri, 21 Oct 2022 08:03:40 +0200
+Message-Id: <20221021060340.7515-1-w@1wt.eu>
+X-Mailer: git-send-email 2.17.5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+This adds 7 combinations of input values for memcmp() using signed and
+unsigned bytes, which will trigger on the original code before Rasmus'
+fix. This is mostly aimed at helping backporters verify their work, and
+showing how tests for corner cases can be added to the selftests suite.
 
-This series was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Before the fix it reports:
+  12 memcmp_20_20 = 0                      [OK]
+  13 memcmp_20_60 = -64                    [OK]
+  14 memcmp_60_20 = 64                     [OK]
+  15 memcmp_20_e0 = 64                    [FAIL]
+  16 memcmp_e0_20 = -64                   [FAIL]
+  17 memcmp_80_e0 = -96                    [OK]
+  18 memcmp_e0_80 = 96                     [OK]
 
-On Wed, 19 Oct 2022 18:10:40 +0900 you wrote:
-> From: Benjamin Poirier <benjamin.poirier@gmail.com>
-> 
-> Fix two problems mostly introduced in commit bbb774d921e2 ("net: Add tests
-> for bonding and team address list management").
-> 
-> Benjamin Poirier (2):
->   selftests: net: Fix cross-tree inclusion of scripts
->   selftests: net: Fix netdev name mismatch in cleanup
-> 
-> [...]
+And after:
+  12 memcmp_20_20 = 0                      [OK]
+  13 memcmp_20_60 = -64                    [OK]
+  14 memcmp_60_20 = 64                     [OK]
+  15 memcmp_20_e0 = -192                   [OK]
+  16 memcmp_e0_20 = 192                    [OK]
+  17 memcmp_80_e0 = -96                    [OK]
+  18 memcmp_e0_80 = 96                     [OK]
 
-Here is the summary with links:
-  - [net,1/2] selftests: net: Fix cross-tree inclusion of scripts
-    https://git.kernel.org/netdev/net/c/ae108c48b5d2
-  - [net,2/2] selftests: net: Fix netdev name mismatch in cleanup
-    https://git.kernel.org/netdev/net/c/b2c0921b926c
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 78bced95ac63..f14f5076fb6d 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -565,6 +565,13 @@ int run_stdlib(int min, int max)
+ 		CASE_TEST(strchr_foobar_z);    EXPECT_STRZR(1, strchr("foobar", 'z')); break;
+ 		CASE_TEST(strrchr_foobar_o);   EXPECT_STREQ(1, strrchr("foobar", 'o'), "obar"); break;
+ 		CASE_TEST(strrchr_foobar_z);   EXPECT_STRZR(1, strrchr("foobar", 'z')); break;
++		CASE_TEST(memcmp_20_20);       EXPECT_EQ(1, memcmp("aaa\x20", "aaa\x20", 4), 0); break;
++		CASE_TEST(memcmp_20_60);       EXPECT_LT(1, memcmp("aaa\x20", "aaa\x60", 4), 0); break;
++		CASE_TEST(memcmp_60_20);       EXPECT_GT(1, memcmp("aaa\x60", "aaa\x20", 4), 0); break;
++		CASE_TEST(memcmp_20_e0);       EXPECT_LT(1, memcmp("aaa\x20", "aaa\xe0", 4), 0); break;
++		CASE_TEST(memcmp_e0_20);       EXPECT_GT(1, memcmp("aaa\xe0", "aaa\x20", 4), 0); break;
++		CASE_TEST(memcmp_80_e0);       EXPECT_LT(1, memcmp("aaa\x80", "aaa\xe0", 4), 0); break;
++		CASE_TEST(memcmp_e0_80);       EXPECT_GT(1, memcmp("aaa\xe0", "aaa\x80", 4), 0); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.5
 
