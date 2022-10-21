@@ -2,137 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E379607D2E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 19:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556F4607D4B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 19:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiJURHn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Oct 2022 13:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S230475AbiJURTG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Oct 2022 13:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiJURHm (ORCPT
+        with ESMTP id S230049AbiJURTF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Oct 2022 13:07:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADD0280832;
-        Fri, 21 Oct 2022 10:07:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9FBA61F07;
-        Fri, 21 Oct 2022 17:07:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37656C433C1;
-        Fri, 21 Oct 2022 17:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666372059;
-        bh=VPjhYfOUR6L2mwkcCBIV4jQwrQEUQNNlpty2cw8v/yY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=jLMqfOwO4f5VGNM/qSMh1erQ7koRuRREgh06yaQjK5qdWlFE/UNcapLrlCEYz20H3
-         aEpCTRzeyEUFWeXPA9p0X84o0Zefrggy1eV9DsgupKXOLMfMsG+u/JungS+wHKsA6J
-         nc7/BMi/vdYR86OnxKWs6eGWx1CajJ0w45cP32uvy9jXEvT1lYwO0qkyyfbFLdDyRG
-         Xm95gsb8cztGKVH3JNsUEeTJHu3/v9/QwN79LpmKyFGHIb/8Rwy+GcXS66NGoYVdwk
-         KotPi/6YaHnHRNN2M9P8VsUbszRrxgdHbMhSfy6maPNZAOato040UGO3mAwPhUTsRY
-         RhANv9J4799qw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CABFE5C0543; Fri, 21 Oct 2022 10:07:38 -0700 (PDT)
-Date:   Fri, 21 Oct 2022 10:07:38 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
-Message-ID: <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221021060340.7515-1-w@1wt.eu>
- <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021170134.GB8420@1wt.eu>
+        Fri, 21 Oct 2022 13:19:05 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2811ABA01;
+        Fri, 21 Oct 2022 10:19:02 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id BD5431884D31;
+        Fri, 21 Oct 2022 17:18:59 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 7E0FF250007B;
+        Fri, 21 Oct 2022 17:18:59 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 7497A9EC0007; Fri, 21 Oct 2022 17:18:59 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021170134.GB8420@1wt.eu>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 21 Oct 2022 19:18:59 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20221021163005.xljk2j3fkikr6uge@skbuf>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-1-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221018165619.134535-11-netdev@kapio-technology.com>
+ <20221020132538.reirrskemcjwih2m@skbuf>
+ <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
+ <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+ <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
+ <20221021112216.6bw6sjrieh2znlti@skbuf>
+ <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
+ <20221021163005.xljk2j3fkikr6uge@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 07:01:34PM +0200, Willy Tarreau wrote:
-> On Fri, Oct 21, 2022 at 08:56:45AM -0700, Paul E. McKenney wrote:
-> > On Fri, Oct 21, 2022 at 08:03:40AM +0200, Willy Tarreau wrote:
-> > > This adds 7 combinations of input values for memcmp() using signed and
-> > > unsigned bytes, which will trigger on the original code before Rasmus'
-> > > fix. This is mostly aimed at helping backporters verify their work, and
-> > > showing how tests for corner cases can be added to the selftests suite.
-> > > 
-> > > Before the fix it reports:
-> > >   12 memcmp_20_20 = 0                      [OK]
-> > >   13 memcmp_20_60 = -64                    [OK]
-> > >   14 memcmp_60_20 = 64                     [OK]
-> > >   15 memcmp_20_e0 = 64                    [FAIL]
-> > >   16 memcmp_e0_20 = -64                   [FAIL]
-> > >   17 memcmp_80_e0 = -96                    [OK]
-> > >   18 memcmp_e0_80 = 96                     [OK]
-> > > 
-> > > And after:
-> > >   12 memcmp_20_20 = 0                      [OK]
-> > >   13 memcmp_20_60 = -64                    [OK]
-> > >   14 memcmp_60_20 = 64                     [OK]
-> > >   15 memcmp_20_e0 = -192                   [OK]
-> > >   16 memcmp_e0_20 = 192                    [OK]
-> > >   17 memcmp_80_e0 = -96                    [OK]
-> > >   18 memcmp_e0_80 = 96                     [OK]
-> > > 
-> > > Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> > > Signed-off-by: Willy Tarreau <w@1wt.eu>
-> > 
-> > I have pulled both of these in, thank you!
->  
-> Thanks!
+On 2022-10-21 18:30, Vladimir Oltean wrote:
+> On Fri, Oct 21, 2022 at 03:16:21PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> As it is now in the bridge, the locked port part is handled before 
+>> learning
+>> in the ingress data path, so with BR_LEARNING and BR_PORT_LOCKED, I 
+>> think it
+>> will work as it does now except link local packages.
 > 
-> > One thing, though...  I had to do "make clean" in both tools/include/nolibc
-> > and tools/testing/selftests/nolibc to make those two "[FAIL]" indications
-> > go away.  Does this mean that I am doing something wrong?
+> If link-local learning is enabled on a locked port, I think those
+> addresses should also be learned with the BR_FDB_LOCKED flag. The
+> creation of those locked FDB entries can be further suppressed by the
+> BROPT_NO_LL_LEARN flag.
 > 
-> No you didn't do anything wrong, it was the same for me and initially it
-> was intentional, but probably it wasn't that good an idea. What happens
-> is that we first prepare a pseudo-sysroot with kernel headers and nolibc
-> headers, then we build the test based on this sysroot. Thus if any uapi
-> header or nolibc header changes, nothing is detected. And I'm not much
-> willing to always reinstall everything for every single test, nor to
-> detect long dependency chains. Maybe I should think about adding another
-> target to clean+test at the same time, or maybe make the current
-> "nolibc-test" target do that and have a "retest" to only rebuild. But
-> that needs to be thought about with the QEMU test as well (because most
-> of the time for a quick test I don't build the kernel nor start QEMU, I
-> just call the executable directly).
+>> If your suggestion of BR_LEARNING causing BR_FDB_LOCKED on a locked 
+>> port, I
+>> guess it would be implemented under br_fdb_update() and BR_LEARNING +
+>> BR_PORT_LOCKED would go together, forcing BR_LEARNING in this case, 
+>> thus also
+>> for all drivers?
 > 
-> Any ideas or suggestions are welcome, of course. We could consider that
-> if we build a kernel and start QEMU, it's long enough to justify a
-> systematic clean maybe ?
+> Yes, basically where this is placed right now (in 
+> br_handle_frame_finish):
 > 
-> > It would be good to know before I send the pull request containing these,
-> > so that we can let Linus know of anything special he needs to do to
-> > ensure a valid test result.
+> 	if (p->flags & BR_PORT_LOCKED) {
+> 		struct net_bridge_fdb_entry *fdb_src =
+> 			br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
 > 
-> I see. In the worst case, a preliminary "make clean" will do it. We just
-> need to decide what's the best solution for everyone (i.e. not waste too
-> much time between tests while not getting misleading results by accident).
+> 		if (!fdb_src) {
+> 			unsigned long flags = 0;
+> 
+> 			if (p->flags & BR_PORT_MAB) {
+> 			   ~~~~~~~~~~~~~~~~~~~~~~~~
+> 			   except check for BR_LEARNING
+> 
+> 				__set_bit(BR_FDB_LOCKED, &flags);
+> 				br_fdb_update(br, p, eth_hdr(skb)->h_source,
+> 					      vid, flags);
+> 			}
+> 			goto drop;
+> 		} else if (READ_ONCE(fdb_src->dst) != p ||
+> 			   test_bit(BR_FDB_LOCAL, &fdb_src->flags) ||
+> 			   test_bit(BR_FDB_LOCKED, &fdb_src->flags)) {
+> 			goto drop;
+> 		}
+> 	}
 
-Maybe just document the careful/slow way, then people doing it more
-frequently can do it the clever/fast way.
-
-My guess is that the careful/slow is this:
-
-	pushd tools/include/nolibc
-	make clean
-	make
-	popd
-	pushd tools/testing/selftests/nolibc
-	make clean
-	make -j32 run
-
-Or did I miss a turn in there somewhere?
-
-							Thanx, Paul
+As I don't know what implications it would have for other drivers to 
+have learning
+forced enabled on locked ports, I cannot say if it is a good idea or 
+not. Right now
+learning is not forced either way as is, but the consensus is that 
+learning should
+be off with locked ports, which it would be either way in the common 
+case I think.
