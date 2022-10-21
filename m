@@ -2,224 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853EF606C51
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 02:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85BB606C59
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Oct 2022 02:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiJUABt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Oct 2022 20:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S229741AbiJUADY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Oct 2022 20:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiJUABs (ORCPT
+        with ESMTP id S229796AbiJUADX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Oct 2022 20:01:48 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F0B1F040A;
-        Thu, 20 Oct 2022 17:01:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666310507; x=1697846507;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=axznp6OnV6Oaffkdp+OJ9LGPX/DGG8dLw8F0zIaw8Iw=;
-  b=dHIA7wvUOGJRebCqwflVX6i2KwxXe9LNzLf9VCTHUc7Ty8GI3ieTp7tn
-   Ngq1JIUhkm1aOMqtNIQQbiEUCceJ+Nri7QW70rt8k56neVCyvvP5M1s0v
-   2ihTGk7Cw2a5wl6XQk4K1F0Oc68w54+M79XeALAwU8KbHEBiYtMcjT7WI
-   DodF4Z9nJ8BU4le87FMGx1pOznk5JnE1f9vT4BCUExRF8VWm+4+dWoJsf
-   zjo1K6/BurYaEL816eWmi3wmqQ5OuobOiQM9mWbl6ODL76fV3f4OFUQrk
-   vPgcw/9T2Pn7FmIK/feL03biQRuv4UdPP2NrjOFwFrwBl9tDdy9Zr7QEj
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="368916740"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="368916740"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 17:00:33 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10506"; a="805222050"
-X-IronPort-AV: E=Sophos;i="5.95,200,1661842800"; 
-   d="scan'208";a="805222050"
-Received: from apattnay-mobl.amr.corp.intel.com (HELO [10.209.102.175]) ([10.209.102.175])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2022 17:00:27 -0700
-Message-ID: <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
-Date:   Thu, 20 Oct 2022 17:00:27 -0700
+        Thu, 20 Oct 2022 20:03:23 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52356230A9D
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Oct 2022 17:03:20 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id n7so809199plp.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Oct 2022 17:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sYVRxk9zv95/rFuldjiWQhzUXXLiE1Nf1Pm7x/wKrxU=;
+        b=THfVzfjL32SPhvD/WSWN519kLVcz4lMkjLoJrROQzqF/Imj3q2uPrEhEJxP0FNrx+a
+         OAJerLFzuN3w6n3GuhPH83m5Wg5LBcclvi7UvyXYpawGCJXIPv443xRdzFQiZQJZA+zo
+         SJB5G3OxiLIcU3+RIx83DNwwaslDLKvkBH5CPE1Np4DhzWr28FAAKPwTickTvZOaHinA
+         X0cfowmPTUOgI6VNxoZwB4J5noWT10ZjSTi8TG+ZYf+nIa/KOcAR3CX1zdk+upvXi7oG
+         JMUS7Rryj6G1eMDMjtz7bQuyQelGvXxw1bVaXg9Z+gZuyYYac2BUow1MtsjgY2w0lvoC
+         YTmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sYVRxk9zv95/rFuldjiWQhzUXXLiE1Nf1Pm7x/wKrxU=;
+        b=4AOpyIqKr1O8Iie3DN3cFon7mnLvJSezMFtlVihkxqSxCzEdVaPWqe8hUCUPaA45Rq
+         +Ys0mbv6+IW8kFb+fPSfSsQuvmIjpXytIcyFP7p/jjXSlm6RY91v/pAgpYsQdSryez4F
+         3RVooIvbjqs01eiTHUjPVCg7DbK78a8IRxVgBi31jvXd8oBs1JZrvQTJQdUCytGxB9H8
+         ySSe8ZC2RGVby9mO1QqqJnhDsSKssCEp6u1prQKRPe0h4j5y+o01Q8QFuXxcJoonOkRf
+         BVkXiMVGuF/xQtA7rHQVZ/oAKoW7s2Ms+YN5Cv8eaQV9VK2mNYsCdanjMvXxqpcP0aro
+         jWJQ==
+X-Gm-Message-State: ACrzQf1hkqLVQPlmamLiZdGqqvnDrno5ekh5pCaVp5KsZBk4qNwCJvw/
+        r4iHzn9reNj/Mjup//KwNe/9lA==
+X-Google-Smtp-Source: AMsMyM5oP6p5xd1sG1FSBuifQFZ9eTxa2EctG1rAcLMZeClgXEj3gfbfaIwU9m/ygjES8kXEyGVGRw==
+X-Received: by 2002:a17:90a:1b0d:b0:20d:69b1:70c3 with SMTP id q13-20020a17090a1b0d00b0020d69b170c3mr19296704pjq.5.1666310599088;
+        Thu, 20 Oct 2022 17:03:19 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170903124700b0017a1145eec7sm13618876plh.157.2022.10.20.17.03.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 17:03:18 -0700 (PDT)
+Date:   Fri, 21 Oct 2022 00:03:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, oupton@google.com,
+        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com
+Subject: Re: [V3 PATCH 4/4] KVM: selftests: x86: Precompute the cpu type
+Message-ID: <Y1Hhw40H58EmZ6lK@google.com>
+References: <20221013121319.994170-1-vannapurve@google.com>
+ <20221013121319.994170-5-vannapurve@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Y1De4IyAB6n2qs4V@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013121319.994170-5-vannapurve@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-
-On 10/19/22 10:38 PM, Greg Kroah-Hartman wrote:
-> On Wed, Oct 19, 2022 at 09:58:27PM -0700, Kuppuswamy Sathyanarayanan wrote:
->> +static long tdx_get_report(void __user *argp)
->> +{
->> +	u8 *reportdata, *tdreport;
->> +	struct tdx_report_req req;
->> +	long ret;
->> +
->> +	if (copy_from_user(&req, argp, sizeof(req)))
->> +		return -EFAULT;
->> +
->> +	/*
->> +	 * Per TDX Module 1.0 specification, section titled
->> +	 * "TDG.MR.REPORT", REPORTDATA length is fixed as
->> +	 * TDX_REPORTDATA_LEN, TDREPORT length is fixed as
->> +	 * TDX_REPORT_LEN, and TDREPORT subtype is fixed as 0.
->> +	 */
->> +	if (req.subtype || req.rpd_len != TDX_REPORTDATA_LEN ||
->> +	    req.tdr_len != TDX_REPORT_LEN) {
->> +		pr_err("TDX_CMD_GET_REPORT: invalid req: subtype:%u rpd_len:%u tdr_len:%u\n",
->> +		       req.subtype, req.rpd_len, req.tdr_len);
+On Thu, Oct 13, 2022, Vishal Annapurve wrote:
+> Cache the vendor CPU type in a global variable so that multiple calls
+> to is_amd/intel_cpu() do not need to re-execute CPUID.
 > 
-> You are allowing userspace to spam the kernel logs, please do not do
-> that.
-
-Added it to help userspace understand the reason for the failure (only for
-the cases like request param issues and TDCALL failure). Boris recommended
-adding it in the previous review.
-
-
+> Sync the global variable is_cpu_amd into the guest so the guest can also
+> avoid executing CPUID instruction.
 > 
-> Also, you have a real device here, use it and call dev_*() instead of
-> pr_*().  Your code should not have any pr_* calls.
-
-Ok. I will use dev_err variant.
-
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> ---
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index fa65e8142c16..f508e58346e9 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -19,6 +19,7 @@
+>  #define MAX_NR_CPUID_ENTRIES 100
+>  
+>  vm_vaddr_t exception_handlers;
+> +static bool is_cpu_amd;
+
+This should probably have a "host" qualifier, e.g. is_host_cpu_amd.  More below.
+
+>  
+>  static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
+>  {
+> @@ -1046,7 +1047,7 @@ static bool cpu_vendor_string_is(const char *vendor)
+>  
+>  bool is_intel_cpu(void)
+
+It'll be more churn, but I think we should drop the wrappers in this patch so
+that we can visually audit all users.  There is technically a subtle functional
+change here, as previously executing is_intel_cpu() and is_amd_cpu() in the guest
+will consume the _guest_ CPUID, whereas with this change, the guest will now
+consume the _host_ CPUID.
+
+It just so happens that the existing user and the new user both want to query
+Intel vs. AMD for VMCALL vs. VMMCALL, i.e. care about the host even when checking
+from the guest.  It's extreme paranoia since I don't think there are any parallel
+series that are adding is_intel_cpu()/is_amd_cpu() users, not to mention that I
+don't think any selftests does cross-vendor virtualization, but on the other hand
+the paranoia doesn't cost much.
+
+>  {
+> -	return cpu_vendor_string_is("GenuineIntel");
+> +	return !is_cpu_amd;
+
+Please keep the explicit "GenuineIntel" check, i.e. add is_host_cpu_intel.  KVM
+technically supports other vendors, e.g. Centaur and Zhaoxin for VMX, and Hygon
+for AMD, so it's not impossible that someone could run on Centuar or Zhaoxin and
+get a false positive.  Again, extreme paranoia, but doesn't cost much.
+
+>  }
+>  
+>  /*
+> @@ -1054,7 +1055,7 @@ bool is_intel_cpu(void)
+>   */
+>  bool is_amd_cpu(void)
+>  {
+> -	return cpu_vendor_string_is("AuthenticAMD");
+> +	return is_cpu_amd;
+>  }
+>  
+>  void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+> @@ -1328,8 +1329,13 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+>  	return get_kvm_intel_param_bool("unrestricted_guest");
+>  }
+>  
+> +void kvm_selftest_arch_init(void)
+> +{
+> +	is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
+> +}
+>  
+>  void kvm_arch_vm_post_create(struct kvm_vm *vm)
+>  {
+>  	vm_create_irqchip(vm);
+> +	sync_global_to_guest(vm, is_cpu_amd);
+>  }
+> -- 
+> 2.38.0.rc1.362.ged0d419d3c-goog
 > 
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (memchr_inv(req.reserved, 0, sizeof(req.reserved))) {
->> +		pr_err("TDX_CMD_GET_REPORT: Non zero value in reserved field\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	reportdata = kmalloc(req.rpd_len, GFP_KERNEL);
->> +	if (!reportdata)
->> +		return -ENOMEM;
->> +
->> +	tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
->> +	if (!tdreport) {
->> +		ret = -ENOMEM;
->> +		goto out;
->> +	}
->> +
->> +	if (copy_from_user(reportdata, u64_to_user_ptr(req.reportdata),
->> +			   req.rpd_len)) {
->> +		ret = -EFAULT;
->> +		goto out;
->> +	}
->> +
->> +	/* Generate TDREPORT using "TDG.MR.REPORT" TDCALL */
->> +	ret = tdx_mcall_get_report(reportdata, tdreport, req.subtype);
->> +	if (ret) {
->> +		pr_err("TDX_CMD_GET_REPORT: TDCALL failed\n");
->> +		goto out;
->> +	}
->> +
->> +	if (copy_to_user(u64_to_user_ptr(req.tdreport), tdreport, req.tdr_len))
->> +		ret = -EFAULT;
->> +
->> +out:
->> +	kfree(reportdata);
->> +	kfree(tdreport);
->> +
->> +	return ret;
->> +}
->> +
->> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
->> +			    unsigned long arg)
->> +{
->> +	switch (cmd) {
->> +	case TDX_CMD_GET_REPORT:
->> +		return tdx_get_report((void __user *)arg);
->> +	default:
->> +		return -ENOTTY;
->> +	}
->> +}
->> +
->> +static const struct file_operations tdx_guest_fops = {
->> +	.owner = THIS_MODULE,
->> +	.unlocked_ioctl = tdx_guest_ioctl,
->> +	.llseek = no_llseek,
->> +};
->> +
->> +static struct miscdevice tdx_misc_dev = {
->> +	.name = KBUILD_MODNAME,
->> +	.minor = MISC_DYNAMIC_MINOR,
->> +	.fops = &tdx_guest_fops,
->> +};
->> +
->> +static int __init tdx_guest_init(void)
->> +{
->> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
->> +		return -ENODEV;
->> +
->> +	return misc_register(&tdx_misc_dev);
->> +}
->> +module_init(tdx_guest_init);
->> +
->> +static void __exit tdx_guest_exit(void)
->> +{
->> +	misc_deregister(&tdx_misc_dev);
->> +}
->> +module_exit(tdx_guest_exit);
->> +
->> +#ifdef MODULE
->> +static const struct x86_cpu_id tdx_guest_ids[] = {
->> +	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
->> +#endif
-> 
-> Why the #ifdef?  Should not be needed, right?
-
-I have added it to fix the following warning reported by 0-day.
-
-https://lore.kernel.org/lkml/202209211607.tCtTWKbV-lkp@intel.com/
-
-It is related to nullifying the MODULE_DEVICE_TABLE in #ifndef MODULE
-case in linux/module.h.
-
-> 
-> thanks,
-> 
-> greg k-h
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
