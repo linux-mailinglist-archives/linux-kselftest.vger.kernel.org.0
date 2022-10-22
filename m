@@ -2,79 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5898608536
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Oct 2022 08:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF42608568
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Oct 2022 09:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiJVGmZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 22 Oct 2022 02:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S229777AbiJVHZF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 22 Oct 2022 03:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJVGmX (ORCPT
+        with ESMTP id S229484AbiJVHZE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 22 Oct 2022 02:42:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E982A520A;
-        Fri, 21 Oct 2022 23:42:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666420942; x=1697956942;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Q2Sryo3FNr3ZccmOfEjnDpCgO5RRQ/r8uLrfFTtqk6g=;
-  b=ezS+wYaadCblCOJCFQGbdFf4Ky1FP53Th2DQBnh78TumGIaRwM4hli+H
-   47kvUnU79O2uS9iav5QURsksCqaz1MQj7q79RN4j3itgXOGeOORVLhNvU
-   WZvmuvm9Gxy/LGoVfTxU6lgXERWuJz2PwVDi/WR115XAL13YWuRwYO5Rg
-   SOLdC6YN2NykZV39LQfQUcgsW4/mlI3/+LexsOQEUucV+mRkII8VkPBDx
-   14kIZJxxD7q+h7kJqKdFdxguAdOmzwl492E2zuerZ+PkbC5oZo/rShoZG
-   hsGENmFEN/BWQt+RCcJIlsvpFODdMRiLhFGgdlvGDKYqW3HL6ayakOOVh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="307153843"
-X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
-   d="scan'208";a="307153843"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 23:42:21 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10507"; a="693983375"
-X-IronPort-AV: E=Sophos;i="5.95,204,1661842800"; 
-   d="scan'208";a="693983375"
-Received: from bmoore-mobl1.amr.corp.intel.com (HELO [10.252.130.138]) ([10.252.130.138])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2022 23:42:21 -0700
-Message-ID: <01ac3648-0d89-5c78-42e9-c43d4ef64925@linux.intel.com>
-Date:   Fri, 21 Oct 2022 23:42:20 -0700
+        Sat, 22 Oct 2022 03:25:04 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A70746213;
+        Sat, 22 Oct 2022 00:24:59 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E208F1884447;
+        Sat, 22 Oct 2022 07:24:56 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id DACBB250007B;
+        Sat, 22 Oct 2022 07:24:56 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id CA4389EC0002; Sat, 22 Oct 2022 07:24:56 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+Date:   Sat, 22 Oct 2022 09:24:56 +0200
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
         Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com>
- <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
- <Y1Iimg0WItgIGq6/@kroah.com>
- <13adfc8d-8118-2fd7-3a66-98dfbf8037a9@linux.intel.com>
- <Y1OIHjFp2r58fDPI@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Y1OIHjFp2r58fDPI@kroah.com>
-Content-Type: text/plain; charset=UTF-8
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 10/12] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20221021181411.sv52q4yxr5r7urab@skbuf>
+References: <20221020132538.reirrskemcjwih2m@skbuf>
+ <2565c09bb95d69142522c3c3bcaa599e@kapio-technology.com>
+ <20221020225719.l5iw6vndmm7gvjo3@skbuf>
+ <82d23b100b8d2c9e4647b8a134d5cbbf@kapio-technology.com>
+ <20221021112216.6bw6sjrieh2znlti@skbuf>
+ <7bfaae46b1913fe81654a4cd257d98b1@kapio-technology.com>
+ <20221021163005.xljk2j3fkikr6uge@skbuf>
+ <d1fb07de4b55d64f98425fe66156c4e4@kapio-technology.com>
+ <20221021173014.oit3qmpkrsjwzbgu@skbuf>
+ <b88e331e016ad3801f1bf1a0dec507f3@kapio-technology.com>
+ <20221021181411.sv52q4yxr5r7urab@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <37dc7673fde2b8e166a5ed78431a2078@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,104 +90,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 10/21/22 11:05 PM, Greg Kroah-Hartman wrote:
-> On Fri, Oct 21, 2022 at 04:51:34PM -0700, Sathyanarayanan Kuppuswamy wrote:
->> Hi Greg,
->>
->> On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
->>>>>> +#ifdef MODULE
->>>>>> +static const struct x86_cpu_id tdx_guest_ids[] = {
->>>>>> +	X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
->>>>>> +	{}
->>>>>> +};
->>>>>> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
->>>>>> +#endif
->>>>> Why the #ifdef?  Should not be needed, right?
->>>> I have added it to fix the following warning reported by 0-day.
->>>>
->>>> https://lore.kernel.org/lkml/202209211607.tCtTWKbV-lkp@intel.com/
->>>>
->>>> It is related to nullifying the MODULE_DEVICE_TABLE in #ifndef MODULE
->>>> case in linux/module.h.
->>> Then fix it properly, by correctly using that structure no matter what.
->>> You don't do that here...
->>
->> I think we can use __maybe_unused attribute to fix this warning like
->> mentioned below. Are you fine with it?
->>
->> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
->> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
->> @@ -118,13 +118,11 @@ static void __exit tdx_guest_exit(void)
->>  }
->>  module_exit(tdx_guest_exit);
->>  
->> -#ifdef MODULE
->> -static const struct x86_cpu_id tdx_guest_ids[] = {
->> +static const struct x86_cpu_id __maybe_unused tdx_guest_ids[] = {
->>         X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
->>         {}
->>  };
->>  MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
->> -#endif
->>
->> Solution 2:
->> -----------
->>
->> We can also modify the code to use this structure in all cases like
->> below. But it requires me to use slower x86_match_cpu() in place of 
->> cpu_feature_enabled() which I think is unnecessary.
->>
->> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
->> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
->> @@ -103,9 +103,15 @@ static struct miscdevice tdx_misc_dev = {
->>         .fops = &tdx_guest_fops,
->>  };
->>  
->> +static const struct x86_cpu_id tdx_guest_ids[] = {
->> +       X86_MATCH_FEATURE(X86_FEATURE_TDX_GUEST, NULL),
->> +       {}
->> +};
->> +MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
->> +
->>  static int __init tdx_guest_init(void)
->>  {
->> -       if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
->> +       if (!x86_match_cpu(tdx_guest_ids))
+On 2022-10-21 20:14, Vladimir Oltean wrote:
+> On Fri, Oct 21, 2022 at 07:39:34PM +0200, netdev@kapio-technology.com 
+> wrote:
+>> Well, with this change, to have MAB working, the bridge would need 
+>> learning on
+>> of course, but how things work with the bridge according to the flags, 
+>> they
+>> should also work in the offloaded case if you ask me. There should be 
+>> no
+>> difference between the two, thus MAB in drivers would have to be with
+>> learning on.
 > 
-> Please use this as it's what all other users of the x86cpu module device
-
-Ok. I will use it.
-
-> table code uses, right?
-
-Not all, but most of them use the above model. 
-
-Following two drivers seems to use __maybe_unused method.
-
-./drivers/cpufreq/acpi-cpufreq.c
-./drivers/char/hw_random/via-rng.c
-
-and following two drivers uses #ifdef MODULE method.
-
-./arch/x86/kvm/vmx/vmx.c
-./arch/x86/kvm/svm/svm.c
-
-
+> Am I proposing for things to work differently in the offload and
+> software case, and not realizing it? :-/
 > 
-> And what is the "speed" difference here?  Is is measurable and where
-
-> does it matter?
-
-Speed difference does not really matter in init code. So I am fine
-with using this approach.
-
+> The essence of my proposal was to send a bug fix now which denies
+> BR_LEARNING to be set together with BR_PORT_LOCKED. The fact that
+> link-local traffic is learned by the software bridge is something
+> unintended as far as I understand.
 > 
-> thanks,
+> You tried to fix it here, and as far as I could search in my inbox, 
+> that
+> didn't go anywhere:
+> https://lore.kernel.org/netdev/47d8d747-54ef-df52-3b9c-acb9a77fa14a@blackwall.org/T/#u
 > 
-> greg k-h
+> I thought only mv88e6xxx offloads BR_PORT_LOCKED, but now, after
+> searching, I also see prestera has support for it, so let me add
+> Oleksandr Mazur to the discussion as well. I wonder how they deal with
+> this? Has somebody come to rely on learning being enabled on a locked
+> port?
+> 
+> 
+> MAB in offloading drivers will have to be with learning on (same as in
+> software). When BR_PORT_LOCKED | BR_LEARNING will be allowed together
+> back in net-next (to denote the MAB configuration), offloading drivers
+> (mv88e6xxx and prestera) will be patched to reject them. They will only
+> accept the two together when they implement MAB support.
+> 
+> Future drivers after this mess has been cleaned up will have to look at
+> the BR_PORT_LOCKED and BR_LEARNING flag in combination, to see which
+> kind of learning is desired on a port (secure, CPU based learning or
+> autonomous learning).
+> 
+> Am I not making sense?
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+I will not say that you are not making sense as for the mv88e6xxx, as it
+needs port association in all cases with BR_PORT_LOCKED, MAB or not, and
+port association is turned on in the driver with learning turned on.
+
+That said, there must be some resolution and agreement overall with this
+issue to move on. Right now port association is turned on in the 
+mv88e6xxx
+driver when locking the port, thus setting learning off after locking 
+will
+break things.
