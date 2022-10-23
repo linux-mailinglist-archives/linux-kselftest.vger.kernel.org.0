@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7284E609318
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Oct 2022 14:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AD860931C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Oct 2022 14:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiJWM4Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 23 Oct 2022 08:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S230341AbiJWM41 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 23 Oct 2022 08:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiJWMzz (ORCPT
+        with ESMTP id S230408AbiJWMz5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 23 Oct 2022 08:55:55 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024C35926A;
-        Sun, 23 Oct 2022 05:55:43 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id q71so6532998pgq.8;
-        Sun, 23 Oct 2022 05:55:43 -0700 (PDT)
+        Sun, 23 Oct 2022 08:55:57 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7538F5A831;
+        Sun, 23 Oct 2022 05:55:47 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id io19so1378098plb.8;
+        Sun, 23 Oct 2022 05:55:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=y6vwtBgk1QR+Bc4S86nB20t7mIV4s/vDKmFGd1CmmDU=;
-        b=kHn1W714Xzr/vtBCCFUq0WBZxVmrVcf4dPWQJoxAMiC04ZGcMieo2FrC5rfZOrVYz4
-         oanp3gIJQeVsH3axIiiGlzOUnceFabBpBjfmA+RPU2eCJW3nz/W9glyDka4JMU0YqcTW
-         BmBW1pm0HzmifRvyxhqUXVn6LuXSQs05gw5iwNPeOj9e32LyKgW8NUNggrlwIFV8UAxL
-         L6nWKALz/aRHyNS7DDgRRj7E5P90cdLPshnAspHmm9tBB6+p6AJoHOOjRw+MLvk5oDKW
-         NfLqxQlOU21RSpP6VBUumjg+xr+pe3dAB+a+uQ8Y+s5qIlOWZ4PX9wW5/ZuGPdNSfyZV
-         mhoA==
+        b=SydiUkHhHoFeJCGoiPL1fizZPohFw5Ahd2lb/ZMpjCSptBRRIfuz4jFScNI5VzzDTE
+         PgJ3NaqXphcLhVsYIX55+6KOQ/66PsNPBaAIJwYqhhws7YuXL+u7KqAMMLvsPqMwqlO4
+         IJBSzrmCJSQ5maMvwSFs30u9d9AaJR1ykp4wx3V7mzQirJdakkBXshbDaHHxMPbcFjub
+         AjhLICoYWaTHr0QAc2xbCpbXMFLg/ZL1JQ28QS7lXsknIql8qDBu0QNZYis0GwYgrAxK
+         kGfUBqBVOKbgHDsHwSXx6C+M2cPVnUCIQ5V9Z58RZZukTMlMIfJzsYNkuCuJY8VVsPDW
+         Iy3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=y6vwtBgk1QR+Bc4S86nB20t7mIV4s/vDKmFGd1CmmDU=;
-        b=TuDV7WMtp1g4F7eUFKMEiVH3fOIiQLGjh7I8C0r9x2A8944yfOFhq+2ilQ6j7Y56y7
-         MkXApvTr66O/uLZfQfCKFpsJtZiC/HuNnbaX7U9tpcfnYB6zAYPI0bSCgy5FPp6zfv/C
-         xm9mFlewtSK/MfgT+sMOB+xMrhiVuwgK7KeXfnlq5GyuaaV6bLq1o3Qd7osmhJC5/Ghj
-         qyem7Gxvp4V7HLecAwpoeNOES3T3jvbxri5kFGQFS/ZuBkfwFGdUsogyoynptbpcMI8O
-         5OpkOGL8wK1C0UcLrXXcgg514hxXIbego10dMbAG/xlsrao95FGx0L+VhcbdESlj5TUD
-         /UAg==
-X-Gm-Message-State: ACrzQf1zKRWgZpmaWi1joYSFuu8Qz9ErvVFkPjfNIMk4xPK8kn6WrOno
-        Dp61L80lAEXM9mr0MAiegeUO4SV3sDZdQQ==
-X-Google-Smtp-Source: AMsMyM4uO0IdVXYOy1WLfEvKbk+bybxbD0GLAXz3vo0E5dv8HZ9RfQ4b/6hqKpyEVahjHjqgvaybXg==
-X-Received: by 2002:a63:6cc3:0:b0:43c:7585:1ec with SMTP id h186-20020a636cc3000000b0043c758501ecmr24240336pgc.571.1666529742597;
-        Sun, 23 Oct 2022 05:55:42 -0700 (PDT)
+        b=NFRxbKf5DvJXRFKPylooXsQIhahl1aJoOfCA6f0sQyt+ZrdFL7mXLJ7YY7px+uIqQv
+         zTNsGMvIS0NchrZOnoGkK4GRJsIgR0q3OJMBXBcXif2SLRKBxGTpD+1nzHSW/sqet0r0
+         peIaDI8RwnhfyTyS6sygqKrp4+e9Q1Qve5JZwXqC+TxYnnaAMFnrNDLbaEJSZF/E0KqH
+         FVuCBOkQOYJSYuqFvOwKagMDKFKSZjl0Zm7/q0GP7tpTgwsDLfe3o08Ptf0HNZOaN5ko
+         Zbf8I4EeYbTk3Bn7MjPrqTNCjhyX+7X3ElnrcxLHXXmf1yJIot7uj1891f1XNeTqTcrO
+         26Ew==
+X-Gm-Message-State: ACrzQf1KMs6fQFX61voIzGb2kh7lR4boz4k9e7AWtgJ8bn0XAXidVTsF
+        py31ba32KQNmSbHIKoR/v/dqrTUKE42OXQ==
+X-Google-Smtp-Source: AMsMyM6Cr7hlp7akFl0nHZQPIDrRnI/PW0nOT68JuQwZPXjKHQ6SIsObFx9HEv/NdwtIBoYYDK85Pw==
+X-Received: by 2002:a17:903:230b:b0:186:6041:51bf with SMTP id d11-20020a170903230b00b00186604151bfmr18220217plh.24.1666529746308;
+        Sun, 23 Oct 2022 05:55:46 -0700 (PDT)
 Received: from debian.. (subs02-180-214-232-1.three.co.id. [180.214.232.1])
-        by smtp.gmail.com with ESMTPSA id om10-20020a17090b3a8a00b00212daa68b7csm2670639pjb.44.2022.10.23.05.55.39
+        by smtp.gmail.com with ESMTPSA id om10-20020a17090b3a8a00b00212daa68b7csm2670639pjb.44.2022.10.23.05.55.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 05:55:42 -0700 (PDT)
+        Sun, 23 Oct 2022 05:55:46 -0700 (PDT)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
@@ -60,14 +60,14 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Khalid Masum <khalid.masum.92@gmail.com>,
         Sadiya Kazi <sadiyakazi@google.com>,
         Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 7/7] Documentation: kunit: rewrite usage
-Date:   Sun, 23 Oct 2022 19:54:14 +0700
-Message-Id: <20221023125414.60961-8-bagasdotme@gmail.com>
+Subject: [PATCH 7/7] Documentation: kunit: rewrite "Writing tests"
+Date:   Sun, 23 Oct 2022 19:54:15 +0700
+Message-Id: <20221023125414.60961-9-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221023125414.60961-1-bagasdotme@gmail.com>
 References: <20221023125414.60961-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=27186; i=bagasdotme@gmail.com; h=from:subject; bh=ZBMrD2zTAwPNW4BI+VkpvBw6PlGVuQCho52Kn8PDVZU=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMmhlnkV9WX7db9m2RybzTZFwerLznrOovlmV6/xyq+7s3Ol itvKjlIWBjEOBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAEyEuZKRoUdq1XzhjzenTdNZe12J6/ FUs/Wsk3V3Ze/Mzdy+m2VTkyojw+6YE6nvBSenuV+/K3La1EnUdt+ONxobFns+sNqisf7yFA4A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=27186; i=bagasdotme@gmail.com; h=from:subject; bh=ZBMrD2zTAwPNW4BI+VkpvBw6PlGVuQCho52Kn8PDVZU=; b=owGbwMvMwCH2bWenZ2ig32LG02pJDMmhlnmpLdsljxmL9txp0t56pNzr6KrbAutl3TLtv64X02Xg r+DoKGVhEONgkBVTZJmUyNd0epeRyIX2tY4wc1iZQIYwcHEKwERSVjMyfL8ttmO904MHKSraTN5Rz+ aYiQovTvNK+nfyUE3e6mup3xgZjrf+slY5Y2x+7PFdH3b7S5u8hDd3lk/66f70zWnv1cv5mAA=
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
