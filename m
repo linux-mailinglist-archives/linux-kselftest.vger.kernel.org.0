@@ -2,83 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C8960B5AC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Oct 2022 20:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D2160BE2B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 01:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiJXShF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Oct 2022 14:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        id S230211AbiJXXHU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Oct 2022 19:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiJXSgi (ORCPT
+        with ESMTP id S230408AbiJXXHC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:36:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27E8201AC;
-        Mon, 24 Oct 2022 10:18:36 -0700 (PDT)
+        Mon, 24 Oct 2022 19:07:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDF45A815;
+        Mon, 24 Oct 2022 14:28:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62B00B81888;
-        Mon, 24 Oct 2022 17:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0086C433C1;
-        Mon, 24 Oct 2022 17:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666631284;
-        bh=qWgfUtE4UN4/iCrWAyctAyzwt74lHMnUej7miAfWozs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zu+kqShRcjC8nRPj+ZPavRcjYG48rUxYr/xtUKVxq/tVD3qP4BQ8938gc4JRHh+sQ
-         wUEoCQstYbywkycJbXo1Gx9NudXpA31ePGv1ymKF7AziAkUafYLdFNwgeHV1QImOEK
-         JFwJgG3tBQ+MqnkxeUpIBTBFzGPMlWiBuQYZJPplfyUZSfiekZhXplF9BCf4TEz5cR
-         BoSuO18xOEhTlK5W4tnJUnjIc+5268Ad/+OGpyLVWX/qO+ewTt1u6BRu/hvzFkn3Kl
-         CbW0He1dZ/toR97u7dANoXILUr18MDMSTzT2iOWvvh3xihpjn8Gr15icEr7MzFt17l
-         NwXsJuVW8BO6Q==
-Date:   Mon, 24 Oct 2022 10:08:01 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     netdev@kapio-technology.com
-Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
-        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 506E86136E;
+        Mon, 24 Oct 2022 13:53:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E71C433D7;
+        Mon, 24 Oct 2022 13:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666619595;
+        bh=eQhpkWuxYO6xU1NVTJ5iMfsh38Ej4102Y8qOohSGKQ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jP2if4R4CABPqOwD8Pfhi1AYLkGQTfZA5g6iSAZFd1Zv7tfuz3e4/6hctCWKdcYgS
+         8Gn0cTiJ27vXC0S9Vy2MpBrHVfyU+dFMns1bfTlaTtFAZZlYqmZoUkKk/3/axEcmEW
+         VH5aGrWnc2tNRPQ5v4TLoCyDkKBJMTBm1YSBYKDI=
+Date:   Mon, 24 Oct 2022 15:54:07 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         Shuah Khan <shuah@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yuwei Wang <wangyuweihx@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Florent Fourcot <florent.fourcot@wifirst.fr>,
-        Hans Schultz <schultz.hans@gmail.com>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v8 net-next 02/12] net: bridge: add blackhole fdb entry
- flag
-Message-ID: <20221024100801.6c391ff9@kernel.org>
-In-Reply-To: <7690b7f836b144b60f60b3b68d3bf784@kapio-technology.com>
-References: <20221018165619.134535-1-netdev@kapio-technology.com>
-        <20221018165619.134535-3-netdev@kapio-technology.com>
-        <Y1FHuXE+X/V9aRvh@shredder>
-        <7690b7f836b144b60f60b3b68d3bf784@kapio-technology.com>
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
+Message-ID: <Y1aY/4SWwuDENigJ@kroah.com>
+References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y1De4IyAB6n2qs4V@kroah.com>
+ <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
+ <Y1Iimg0WItgIGq6/@kroah.com>
+ <c09184e3-ac15-b230-6dea-d6718f6f0ab0@linux.intel.com>
+ <CAAq0SU=w-upGGstmQgTh63zGqLZnEy1OpF+9FwAjSWMuyYyXTg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAq0SU=w-upGGstmQgTh63zGqLZnEy1OpF+9FwAjSWMuyYyXTg@mail.gmail.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -88,27 +71,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 23 Oct 2022 07:32:02 +0200 netdev@kapio-technology.com wrote:
-> >> @@ -1140,7 +1148,7 @@ static int __br_fdb_add(struct ndmsg *ndm, 
-> >> struct net_bridge *br,
-> >>  		err = br_fdb_external_learn_add(br, p, addr, vid, true);
-> >>  	} else {
-> >>  		spin_lock_bh(&br->hash_lock);
-> >> -		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, nfea_tb);
-> >> +		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, ext_flags, 
-> >> nfea_tb);  
-> > 
-> > I believe the preference is to wrap to 80 columns when possible.  
+On Mon, Oct 24, 2022 at 09:57:53AM -0300, Wander Lairson Costa wrote:
+> On Sun, Oct 23, 2022 at 1:13 PM Sathyanarayanan Kuppuswamy
+> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+> >
+> >
+> >
+> > On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
+> > >>> You are allowing userspace to spam the kernel logs, please do not do
+> > >>> that.
+> > >> Added it to help userspace understand the reason for the failure (only for
+> > >> the cases like request param issues and TDCALL failure). Boris recommended
+> > >> adding it in the previous review.
+> > > Again, you just created a vector for userspace to spam the kernel log.
+> > > No kernel driver should ever do that.
+> > >
+> >
+> > Brois, any comments? Do you also agree?
+> >
 > 
-> Very strange... since I ran checkpatch.pl from the net-next kernel 
-> itself and it did not
-> give me any warnings about 80 columns, but rather said 'patch is ready 
-> for submission'.
-> 
-> As this is silent, could it be some missing python plugins or something 
-> to do with perl?
+> Maybe dev_err_once() does the job?
 
-I run:
+That does not make any sense when the userspace input can be different
+each time.
 
-./scripts/checkpatch.pl --strict --max-line-length=80
+This is just yet-another-ioctl, there's nothing special about it.
+Return an error for invalid input and don't log anything.  Worst case,
+make it a dev_dbg() call if you really really really want to see it.
 
+thanks,
+
+greg k-h
