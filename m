@@ -2,99 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C696094A8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Oct 2022 18:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF8660A9E0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Oct 2022 15:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiJWQNR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 23 Oct 2022 12:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S229920AbiJXNZu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Oct 2022 09:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbiJWQNO (ORCPT
+        with ESMTP id S233747AbiJXNXh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 23 Oct 2022 12:13:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6F26FA2C;
-        Sun, 23 Oct 2022 09:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666541592; x=1698077592;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Dx/eyFHeXeUFZ0jVshCZRF81EMBFVHHeyq+Bgt9BlYE=;
-  b=QkyJTeuRqOFmhhG80A25Nzj4g1sEgU+xH9tr0dllJ9kqIyM6A+q9pEzr
-   bH/f/y7DMdA15iwHXkWiTndnAomhpGUpFgGPFLs9zO8EDyr4mL4c1M6mg
-   4X435kBydKgoQRUVAEOCiXKbx1RqPGNqzmf3qw+eP3BN2iGy14yCbtwgq
-   xH6Bsf5+d5hXfW7wCbQboQjU3qbXMdjdUL32wwrPCPriEjwlwfIVy06HQ
-   p82dzN9QTGR+v6KI5sZBNpm60uqGkRv6QXoV4T3iCBu1EQkF/UMcWAiFD
-   BensBIpu3kHlNoTJuZEElXxU+IIgFct6LMpSfqIMKfCGMMaGfZLM9Y/fy
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="307271592"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="307271592"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 09:13:12 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="631031587"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="631031587"
-Received: from supriya-m-ravichandran.amr.corp.intel.com (HELO [10.212.253.138]) ([10.212.253.138])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 09:13:11 -0700
-Message-ID: <c09184e3-ac15-b230-6dea-d6718f6f0ab0@linux.intel.com>
-Date:   Sun, 23 Oct 2022 09:13:11 -0700
+        Mon, 24 Oct 2022 09:23:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A3A5072F;
+        Mon, 24 Oct 2022 05:30:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD4EB61328;
+        Mon, 24 Oct 2022 12:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC79EC433C1;
+        Mon, 24 Oct 2022 12:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666614523;
+        bh=SQBhvpbr67nNnwBS9iLoISYpMqP1aXfZOUUFaVU+bMg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jOJwNlQk/bc7Y1f4MO3jGG0G262z/aomhlQ8tcnOdXvb2qkRDQpvERoNZxWn3MZ3M
+         i8yb/Vs/Ma4coqK8bEWnVjc2o8QmHuuOwI7K8KQZ0f7vd98YwgGtVzWKIxy8slXcFv
+         5TSAZkTou9cu+CbNhcwOz0qDLJ9WFGd69zzjVwCo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 294/390] selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle
+Date:   Mon, 24 Oct 2022 13:31:31 +0200
+Message-Id: <20221024113035.525923548@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com>
- <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
- <Y1Iimg0WItgIGq6/@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Y1Iimg0WItgIGq6/@kroah.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+From: Stefan Berger <stefanb@linux.ibm.com>
 
+[ Upstream commit 2d869f0b458547386fbcd8cf3004b271b7347b7f ]
 
-On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
->>> You are allowing userspace to spam the kernel logs, please do not do
->>> that.
->> Added it to help userspace understand the reason for the failure (only for
->> the cases like request param issues and TDCALL failure). Boris recommended
->> adding it in the previous review.
-> Again, you just created a vector for userspace to spam the kernel log.
-> No kernel driver should ever do that.
-> 
+The following output can bee seen when the test is executed:
 
-Brois, any comments? Do you also agree?
+  test_flush_context (tpm2_tests.SpaceTest) ... \
+    /usr/lib64/python3.6/unittest/case.py:605: ResourceWarning: \
+    unclosed file <_io.FileIO name='/dev/tpmrm0' mode='rb+' closefd=True>
 
+An instance of Client does not implicitly close /dev/tpm* handle, once it
+gets destroyed. Close the file handle in the class destructor
+Client.__del__().
+
+Fixes: 6ea3dfe1e0732 ("selftests: add TPM 2.0 tests")
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/tpm2/tpm2.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+index f34486cd7342..3e67fdb518ec 100644
+--- a/tools/testing/selftests/tpm2/tpm2.py
++++ b/tools/testing/selftests/tpm2/tpm2.py
+@@ -370,6 +370,10 @@ class Client:
+             fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
+             self.tpm_poll = select.poll()
+ 
++    def __del__(self):
++        if self.tpm:
++            self.tpm.close()
++
+     def close(self):
+         self.tpm.close()
+ 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.35.1
+
+
+
