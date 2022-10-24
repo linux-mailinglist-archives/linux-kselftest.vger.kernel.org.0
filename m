@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF8660A9E0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Oct 2022 15:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6CC60AC99
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Oct 2022 16:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJXNZu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Oct 2022 09:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S231801AbiJXOKx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Oct 2022 10:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233747AbiJXNXh (ORCPT
+        with ESMTP id S237048AbiJXOJ5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:23:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A3A5072F;
-        Mon, 24 Oct 2022 05:30:12 -0700 (PDT)
+        Mon, 24 Oct 2022 10:09:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC01C707C;
+        Mon, 24 Oct 2022 05:51:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD4EB61328;
-        Mon, 24 Oct 2022 12:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC79EC433C1;
-        Mon, 24 Oct 2022 12:28:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EEC861342;
+        Mon, 24 Oct 2022 12:51:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1F9C433B5;
+        Mon, 24 Oct 2022 12:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614523;
+        s=korg; t=1666615915;
         bh=SQBhvpbr67nNnwBS9iLoISYpMqP1aXfZOUUFaVU+bMg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jOJwNlQk/bc7Y1f4MO3jGG0G262z/aomhlQ8tcnOdXvb2qkRDQpvERoNZxWn3MZ3M
-         i8yb/Vs/Ma4coqK8bEWnVjc2o8QmHuuOwI7K8KQZ0f7vd98YwgGtVzWKIxy8slXcFv
-         5TSAZkTou9cu+CbNhcwOz0qDLJ9WFGd69zzjVwCo=
+        b=yA/NksSg2YRIlIwsu8xBjOkiwiKFBAEj07Iqss7JvNc+OfXwINRKXMqiqe7I+Hn2A
+         syGJLzsJMO5oqwon223zQvGKIIvQaQNX2wWgSMrj1vP6GH/4YwyhNly0+IL1IYVxhZ
+         i8hvKpRK7pvn/7das8rlnh/bqZR43rXUEeXhZi10=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Stefan Berger <stefanb@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 294/390] selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle
-Date:   Mon, 24 Oct 2022 13:31:31 +0200
-Message-Id: <20221024113035.525923548@linuxfoundation.org>
+Subject: [PATCH 5.15 399/530] selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle
+Date:   Mon, 24 Oct 2022 13:32:23 +0200
+Message-Id: <20221024113103.139238837@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
