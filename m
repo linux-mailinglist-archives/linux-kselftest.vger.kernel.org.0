@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B5C60C835
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 11:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE2060C834
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 11:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiJYJfU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 05:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        id S231744AbiJYJfT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 05:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiJYJfQ (ORCPT
+        with ESMTP id S231528AbiJYJfR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:35:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8BD100434
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 02:35:12 -0700 (PDT)
+        Tue, 25 Oct 2022 05:35:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B95ECA8B2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 02:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666690511;
+        s=mimecast20190719; t=1666690509;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/q3UGfmiDf1h8tQ4Dd1CX+bmTpe31w2kpXjkzLMiyFY=;
-        b=AW3ebgshwi+kK/qNHPAbbbbh5jBBWsSFPgrDiKFMDIceELB91iN/hv/PPMRP1GgfXiFwJs
-        npL8U5DIozwo/geZ51X07yUqMjM/SBemdDMXf9BPlACMEt3pkLRNPatYg9P8E8UtL5jeak
-        j2KH6IjqIuY3DVekcbHqWrEkXKufnmU=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VGbtfkMEb8GyCHz72Cj7Hj6kcmjTcDTxFhyd1w3lCf0=;
+        b=VKXhtOfFY/jGIVLyLnBHKTkVGi86X4edwCpJq0eSsGhwXpwDWc8/Y7CtCq5sS3bMCWhVpK
+        VE05HRQtIyiw3vg6em4Forh7piwLwGucZ48F2iBLreHmCO3/FCglg0yAxBEV2tBLAc/9Rr
+        pZDetGVCmc4zAZqtFISPs+1D0aKhHpw=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-400-QMRywEh2OGeERquzOUcgWg-1; Tue, 25 Oct 2022 05:35:03 -0400
-X-MC-Unique: QMRywEh2OGeERquzOUcgWg-1
+ us-mta-629-yBcCjRxGPb2AQ560Y73EQA-1; Tue, 25 Oct 2022 05:35:06 -0400
+X-MC-Unique: yBcCjRxGPb2AQ560Y73EQA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48EDA833A0D;
-        Tue, 25 Oct 2022 09:35:03 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A7A5185A78B;
+        Tue, 25 Oct 2022 09:35:05 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.195.44])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 79C5449BB60;
-        Tue, 25 Oct 2022 09:35:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8E5C149BB65;
+        Tue, 25 Oct 2022 09:35:03 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -46,15 +47,17 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH hid v11 00/14] Introduce eBPF support for HID devices
-Date:   Tue, 25 Oct 2022 11:34:44 +0200
-Message-Id: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
+Subject: [PATCH hid v11 01/14] HID: Kconfig: split HID support and hid-core compilation
+Date:   Tue, 25 Oct 2022 11:34:45 +0200
+Message-Id: <20221025093458.457089-2-benjamin.tissoires@redhat.com>
+In-Reply-To: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
+References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,111 +65,102 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Currently, we step into drivers/hid/ based on the value of
+CONFIG_HID.
 
-and here comes the v11 of the HID-BPF series.
+However, that value is a tristate, meaning that it can be a module.
 
-Again, for a full explanation of HID-BPF, please refer to the last patch
-in this series (14/14).
+As per the documentation, if we jump into the subdirectory by
+following an obj-m, we can not compile anything inside that
+subdirectory in vmlinux. It is considered as a bug.
 
-Now that the bpf-core changes are all merged in v6.1, it is
-time to have that series entirely relying on HID, so it can get
-merged into the HID tree.
+To make things more friendly to HID-BPF, split HID (the HID core
+parameter) from HID_SUPPORT (do we want any kind of HID support in the
+system?), and make this new config a boolean.
 
-Compared to v10, the most notable change is in the selftests and the
-samples: they are now namespaced into hid, not bpf.
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-This means that HID-BPF has no more conflicts with the bpf tree.
+---
 
-One other interesting change is in patch 4/14. I managed to reduce
-the scope of the embedded bpf programs, by tricking the refcount.
-I am planning on submitting an RFC for embedding those changes in
-bpf core (a map that doesn't increment refcount and a cleanup mechanism)
-but this can come as a later improvement.
-This new kind of maps and mechanisms might also be useful for other
-subsystems.
+no changes in v11
 
-Cheers,
-Benjamin
+no changes in v10
 
-Benjamin Tissoires (14):
-  HID: Kconfig: split HID support and hid-core compilation
-  HID: initial BPF implementation
-  selftests: add tests for the HID-bpf initial implementation
-  HID: bpf jmp table: simplify the logic of cleaning up programs
-  HID: bpf: allocate data memory for device_event BPF programs
-  selftests/hid: add test to change the report size
-  HID: bpf: introduce hid_hw_request()
-  selftests/hid: add tests for bpf_hid_hw_request
-  HID: bpf: allow to change the report descriptor
-  selftests/hid: add report descriptor fixup tests
-  selftests/hid: Add a test for BPF_F_INSERT_HEAD
-  samples/hid: add new hid BPF example
-  samples/hid: add Surface Dial example
-  Documentation: add HID-BPF docs
+no changes in v9
 
- Documentation/hid/hid-bpf.rst                 | 513 +++++++++++
- Documentation/hid/index.rst                   |   1 +
- MAINTAINERS                                   |   3 +
- drivers/Makefile                              |   2 +-
- drivers/hid/Kconfig                           |  20 +-
- drivers/hid/Makefile                          |   2 +
- drivers/hid/bpf/Kconfig                       |  17 +
- drivers/hid/bpf/Makefile                      |  11 +
- drivers/hid/bpf/entrypoints/Makefile          |  93 ++
- drivers/hid/bpf/entrypoints/README            |   4 +
- drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  34 +
- .../hid/bpf/entrypoints/entrypoints.lskel.h   | 368 ++++++++
- drivers/hid/bpf/hid_bpf_dispatch.c            | 526 +++++++++++
- drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
- drivers/hid/bpf/hid_bpf_jmp_table.c           | 572 ++++++++++++
- drivers/hid/hid-core.c                        |  32 +-
- include/linux/hid.h                           |   5 +
- include/linux/hid_bpf.h                       | 148 +++
- include/uapi/linux/hid_bpf.h                  |  25 +
- samples/hid/.gitignore                        |   8 +
- samples/hid/Makefile                          | 246 +++++
- samples/hid/Makefile.target                   |  75 ++
- samples/hid/hid_mouse.bpf.c                   | 134 +++
- samples/hid/hid_mouse.c                       | 160 ++++
- samples/hid/hid_surface_dial.bpf.c            | 161 ++++
- samples/hid/hid_surface_dial.c                | 231 +++++
- tools/include/uapi/linux/hid.h                |  62 ++
- tools/include/uapi/linux/hid_bpf.h            |  25 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/hid/.gitignore        |   4 +
- tools/testing/selftests/hid/Makefile          | 242 +++++
- tools/testing/selftests/hid/config            |  20 +
- tools/testing/selftests/hid/hid_bpf.c         | 846 ++++++++++++++++++
- tools/testing/selftests/hid/progs/hid.c       | 206 +++++
- 34 files changed, 4815 insertions(+), 10 deletions(-)
- create mode 100644 Documentation/hid/hid-bpf.rst
- create mode 100644 drivers/hid/bpf/Kconfig
- create mode 100644 drivers/hid/bpf/Makefile
- create mode 100644 drivers/hid/bpf/entrypoints/Makefile
- create mode 100644 drivers/hid/bpf/entrypoints/README
- create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
- create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
- create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
- create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
- create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
- create mode 100644 include/linux/hid_bpf.h
- create mode 100644 include/uapi/linux/hid_bpf.h
- create mode 100644 samples/hid/.gitignore
- create mode 100644 samples/hid/Makefile
- create mode 100644 samples/hid/Makefile.target
- create mode 100644 samples/hid/hid_mouse.bpf.c
- create mode 100644 samples/hid/hid_mouse.c
- create mode 100644 samples/hid/hid_surface_dial.bpf.c
- create mode 100644 samples/hid/hid_surface_dial.c
- create mode 100644 tools/include/uapi/linux/hid.h
- create mode 100644 tools/include/uapi/linux/hid_bpf.h
- create mode 100644 tools/testing/selftests/hid/.gitignore
- create mode 100644 tools/testing/selftests/hid/Makefile
- create mode 100644 tools/testing/selftests/hid/config
- create mode 100644 tools/testing/selftests/hid/hid_bpf.c
- create mode 100644 tools/testing/selftests/hid/progs/hid.c
+no changes in v8
 
+new in v7
+---
+ drivers/Makefile    |  2 +-
+ drivers/hid/Kconfig | 20 +++++++++++---------
+ 2 files changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/Makefile b/drivers/Makefile
+index bdf1c66141c9..cf5d8b86da8f 100644
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -137,7 +137,7 @@ obj-$(CONFIG_CRYPTO)		+= crypto/
+ obj-$(CONFIG_SUPERH)		+= sh/
+ obj-y				+= clocksource/
+ obj-$(CONFIG_DCA)		+= dca/
+-obj-$(CONFIG_HID)		+= hid/
++obj-$(CONFIG_HID_SUPPORT)	+= hid/
+ obj-$(CONFIG_PPC_PS3)		+= ps3/
+ obj-$(CONFIG_OF)		+= of/
+ obj-$(CONFIG_SSB)		+= ssb/
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 185a077d59cd..ad767955ee62 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -2,12 +2,18 @@
+ #
+ # HID driver configuration
+ #
+-menu "HID support"
+-     depends on INPUT
++menuconfig HID_SUPPORT
++	bool "HID bus support"
++	default y
++	depends on INPUT
++	help
++	  This option adds core support for human interface device (HID).
++	  You will also need drivers from the following menu to make use of it.
++
++if HID_SUPPORT
+ 
+ config HID
+-	tristate "HID bus support"
+-	depends on INPUT
++	tristate "HID bus core support"
+ 	default y
+ 	help
+ 	  A human interface device (HID) is a type of computer device that
+@@ -24,8 +30,6 @@ config HID
+ 
+ 	  If unsure, say Y.
+ 
+-if HID
+-
+ config HID_BATTERY_STRENGTH
+ 	bool "Battery level reporting for HID devices"
+ 	select POWER_SUPPLY
+@@ -1278,8 +1282,6 @@ config HID_KUNIT_TEST
+ 
+ endmenu
+ 
+-endif # HID
+-
+ source "drivers/hid/usbhid/Kconfig"
+ 
+ source "drivers/hid/i2c-hid/Kconfig"
+@@ -1290,4 +1292,4 @@ source "drivers/hid/amd-sfh-hid/Kconfig"
+ 
+ source "drivers/hid/surface-hid/Kconfig"
+ 
+-endmenu
++endif # HID_SUPPORT
 -- 
 2.36.1
 
