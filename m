@@ -2,71 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9784460CB98
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 14:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696AD60CC19
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 14:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiJYMPt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 08:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S232042AbiJYMmr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 08:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiJYMPs (ORCPT
+        with ESMTP id S232073AbiJYMmh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:15:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F8E22EA
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 05:15:45 -0700 (PDT)
+        Tue, 25 Oct 2022 08:42:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758E318BE37
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 05:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666700144;
+        s=mimecast20190719; t=1666701754;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nOzDdV0oEp6wyZXzDDf647sJ9V/1wsykXrnknbLQpv4=;
-        b=Ye0HWUzUfvsXJKemZLUjLzzyUgbV/9v66li6EzQgljhQouF8BuOI65z8OO6ZUC7d9IQNZw
-        t5cXHW3AhIYul2jMQdP8Kid8dXE5RSjdjPC63H7cfDar+B4A7gOogP8qq5FZNZkHYj8GKr
-        jBc+C//r22oM0g9Wi8fdUILt/jx8rrg=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YKqk8JFJPFyZT4uxuIdJDMrDXX3QslvogL56oEpKGVE=;
+        b=HyxUij/zbzb4wx7sOhSthGAR1kigJ7mUPXjB7QeFjbJw9Ig0tNz0XwDGv8KFe7dwCXjzM5
+        dlFeSownJuRTPHEcx2vNxYQeFjhFcVf7gmlQtWv7RAO0MRDosrcx4u/GztJyzDOh0pZMZN
+        N3IMwMTmJtZFiqTM/H62Ulz5FmXPjVs=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-356-Aw4s5VMxObCjXXdpWAVxpQ-1; Tue, 25 Oct 2022 08:15:43 -0400
-X-MC-Unique: Aw4s5VMxObCjXXdpWAVxpQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-341-73h3obR2O_m7aheX040YGA-1; Tue, 25 Oct 2022 08:42:30 -0400
+X-MC-Unique: 73h3obR2O_m7aheX040YGA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3BC8629DD999;
-        Tue, 25 Oct 2022 12:15:37 +0000 (UTC)
-Received: from RHTPC1VM0NT (unknown [10.22.32.203])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4B4ED1415117;
-        Tue, 25 Oct 2022 12:15:29 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Graf <tgraf@suug.ch>,
-        Kevin Sprague <ksprague0711@gmail.com>, dev@openvswitch.org,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/2] selftests: add openvswitch selftest suite
-References: <20221019183054.105815-1-aconole@redhat.com>
-        <20221019183054.105815-3-aconole@redhat.com>
-        <88eff2a1-495c-0e89-44bf-1478db7d0661@ovn.org>
-        <f7ty1taqznl.fsf@redhat.com>
-        <1d7beda5-c558-5ea3-17f2-934bf298f4ad@ovn.org>
-        <7b540b02-e676-5ccc-e832-269ef397f9ec@ovn.org>
-Date:   Tue, 25 Oct 2022 08:15:27 -0400
-In-Reply-To: <7b540b02-e676-5ccc-e832-269ef397f9ec@ovn.org> (Ilya Maximets's
-        message of "Thu, 20 Oct 2022 19:17:35 +0200")
-Message-ID: <f7tilk8p09s.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E26DC3C0D84F;
+        Tue, 25 Oct 2022 12:42:27 +0000 (UTC)
+Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 428352024CCA;
+        Tue, 25 Oct 2022 12:42:24 +0000 (UTC)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Yang Zhong <yang.zhong@intel.com>,
+        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        Wei Wang <wei.w.wang@intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v4 00/23] SMM emulation and interrupt shadow fixes
+Date:   Tue, 25 Oct 2022 15:42:00 +0300
+Message-Id: <20221025124223.227577-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,304 +73,88 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ilya Maximets <i.maximets@ovn.org> writes:
-
-> On 10/20/22 18:33, Ilya Maximets wrote:
->> On 10/20/22 17:32, Aaron Conole wrote:
->>> Hi Ilya,
->>>
->>> Ilya Maximets <i.maximets@ovn.org> writes:
->>>
->>>> On 10/19/22 20:30, Aaron Conole wrote:
->>>>> Previous commit resolves a WARN splat that can be difficult to reproduce,
->>>>> but with the ovs-dpctl.py utility, it can be trivial.  Introduce a test
->>>>> case which creates a DP, and then downgrades the feature set.  This will
->>>>> include a utility 'ovs-dpctl.py' that can be extended to do additional
->>>>> work.
->>>>>
->>>>> Signed-off-by: Aaron Conole <aconole@redhat.com>
->>>>> Signed-off-by: Kevin Sprague <ksprague0711@gmail.com>
->>>>> ---
->>>>>  MAINTAINERS                                   |   1 +
->>>>>  tools/testing/selftests/Makefile              |   1 +
->>>>>  .../selftests/net/openvswitch/Makefile        |  13 +
->>>>>  .../selftests/net/openvswitch/openvswitch.sh  | 216 +++++++++
->>>>>  .../selftests/net/openvswitch/ovs-dpctl.py    | 411 ++++++++++++++++++
->>>>>  5 files changed, 642 insertions(+)
->>>>>  create mode 100644 tools/testing/selftests/net/openvswitch/Makefile
->>>>>  create mode 100755 tools/testing/selftests/net/openvswitch/openvswitch.sh
->>>>>  create mode 100644 tools/testing/selftests/net/openvswitch/ovs-dpctl.py
->>>>>
->>>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>>> index abbe88e1c50b..295a6b0fbe26 100644
->>>>> --- a/MAINTAINERS
->>>>> +++ b/MAINTAINERS
->>>>> @@ -15434,6 +15434,7 @@ S:	Maintained
->>>>>  W:	http://openvswitch.org
->>>>>  F:	include/uapi/linux/openvswitch.h
->>>>>  F:	net/openvswitch/
->>>>> +F:	tools/testing/selftests/net/openvswitch/
->>>>>  
->>>>>  OPERATING PERFORMANCE POINTS (OPP)
->>>>>  M:	Viresh Kumar <vireshk@kernel.org>
->>>>
->>>> ...
->>>>
->>>>> +exit ${exitcode}
->>>>> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
->>>>> b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
->>>>> new file mode 100644
->>>>> index 000000000000..791d76b7adcd
->>>>> --- /dev/null
->>>>> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
->>>>> @@ -0,0 +1,411 @@
->>>>> +#!/usr/bin/env python3
->>>>> +# SPDX-License-Identifier: GPL-2.0
->>>>> +
->>>>> +# Controls the openvswitch module.  Part of the kselftest suite, but
->>>>> +# can be used for some diagnostic purpose as well.
->>>>> +
->>>>> +import logging
->>>>> +import multiprocessing
->>>>> +import socket
->>>>> +import struct
->>>>> +import sys
->>>>> +
->>>>> +try:
->>>>> +    from libnl.attr import NLA_NESTED, NLA_STRING, NLA_U32, NLA_UNSPEC
->>>>> +    from libnl.attr import nla_get_string, nla_get_u32
->>>>> +    from libnl.attr import nla_put, nla_put_string, nla_put_u32
->>>>> +    from libnl.attr import nla_policy
->>>>> +
->>>>> +    from libnl.error import errmsg
->>>>> +
->>>>> +    from libnl.genl.ctrl import genl_ctrl_resolve
->>>>> +    from libnl.genl.genl import genl_connect, genlmsg_parse, genlmsg_put
->>>>> +
->>>>> +    from libnl.handlers import nl_cb_alloc, nl_cb_set
->>>>> +    from libnl.handlers import NL_CB_CUSTOM, NL_CB_MSG_IN, NL_CB_VALID
->>>>> +    from libnl.handlers import NL_OK, NL_STOP
->>>>> +
->>>>> +    from libnl.linux_private.netlink import NLM_F_ACK, NLM_F_DUMP
->>>>> +    from libnl.linux_private.netlink import NLM_F_REQUEST, NLMSG_DONE
->>>>> +
->>>>> +    from libnl.msg import NL_AUTO_SEQ, nlmsg_alloc, nlmsg_hdr
->>>>> +
->>>>> +    from libnl.nl import NLMSG_ERROR, nl_recvmsgs_default, nl_send_auto
->>>>> +    from libnl.socket_ import nl_socket_alloc, nl_socket_set_cb
->>>>> +    from libnl.socket_ import nl_socket_get_local_port
->>>>> +except ModuleNotFoundError:
->>>>> +    print("Need to install the python libnl3 library.")
->>>>
->>>>
->>>> Hey, Aaron and Kevin.  Selftests sounds like a very important and
->>>> long overdue thing to add.  Thanks for working on this!
->>>>
->>>> I have some worries about the libnl3 library though.  It doesn't
->>>> seem to be maintained well.  It it maintained by a single person,
->>>> it it was at least 3 different single persons over the last 7
->>>> years via forks.  It didn't get any significant development done
->>>> since 2015 as well and no commits at all for a last 1.5 years.
->>>> It is not packaged by any major distributions.
->>>
->>> :-/  On my fedora:
->>>
->>>   11:12:24 aconole@RHTPC1VM0NT ~$ dnf search python3-libnl3
->>>   Last metadata expiration check: 1 day, 0:25:11 ago on Wed 19 Oct 2022 10:47:21 AM EDT.
->>>   ===================== Name Exactly Matched: python3-libnl3 =====================
->>>   python3-libnl3.x86_64 : libnl3 binding for Python 3
->>>
->>>
->>> And I can use it:
->>>
->>>   11:18:39 aconole@RHTPC1VM0NT {(6a5c83bdd991...)} ~/git/linux/tools/testing/selftests/net/openvswitch$ sudo python3 ./ovs-dpctl.py show
->>>   foop
->>>     Lookups: Hit: 0 Missed: 0 Lost: 0
->>>     Flows: 0
->>>     Masks: Hit: 0 Total: 0
->>>     Cache: Hit: 0
->>>   Caches:
->>>     Masks-cache: size: 256
->>>       Port 0: foop (internal)
->>>   11:18:43 aconole@RHTPC1VM0NT {(6a5c83bdd991...)} ~/git/linux/tools/testing/selftests/net/openvswitch$ rpm -qa | grep python3-libnl3
->>>   python3-libnl3-3.5.0-6.fc34.x86_64
->>>   11:19:01 aconole@RHTPC1VM0NT {(6a5c83bdd991...)} ~/git/linux/tools/testing/selftests/net/openvswitch$ 
->>>
->>> Was there some place you did not find it?
->> 
->> You're right, I missed that somehow.  But this is not an
->> https://github.com/coolshou/libnl3 project. :)
->> These are python bindings for the C libnl library:
->> 
->> $ dnf info python3-libnl3
->> Available Packages
->> Name         : python3-libnl3
->> Version      : 3.7.0
->> Release      : 1.fc36
->> Architecture : x86_64
->> Size         : 153 k
->> Source       : libnl3-3.7.0-1.fc36.src.rpm
->> Repository   : updates
->> Summary      : libnl3 binding for Python 3
->> URL          : http://www.infradead.org/~tgr/libnl/
->> License      : LGPLv2
->> Description  : Python 3 bindings for libnl3
->
-> Actually, I can't find an equivalent package for Ubuntu 22.04.
-> And since pip is not an option (pip install libnl3 is a different
-> package), there is no way to install it there beside building
-> from sources.
->
-> Am I still missing something?
-
-Well, I have switched the latest version to using pyroute2 - hopefully
-this will be acceptable :)
-
->> 
->>>
->>>> I'm talking about https://github.com/coolshou/libnl3 .  Please,
->>>> correct me if that is not the right one.  There are too many
->>>> libraies with the name libnl out there...  That is also not a great
->>>> sign.
->>>
->>> Yes, this is the project.
->> 
->> Doensn't look like it...
->> 
->>> We did look at some of the ones you
->>> mentioned, but didn't find much.
->>>
->>> It is a sparse landscape of projects that provide netlink support in
->>> python.
->>>
->>>> The C library libnl (https://github.com/thom311/libnl) seems to
->>>> be well maintained in general.  It has experimental python
->>>> bindings which are not really supported much.  Python bindings
->>>> received only 2 actual code-changing commits in the last 7 years.
->>>> Both of them are just python 2/3 compatibility changes.
->>>> Maybe that is not that big of a deal since it's not really a
->>>> real python library, but a wrapper on top of a main C library.
->>>> However, I didn't find these python bindings to be packaged in
->>>> distributions.  And they seem to be not available in pip as well.
->>>> So, building them is kind of a pain.
->>>
->>> Well, the python libnl3 should be installable via pip3.  Ex:
->>>
->>>   11:27:15 aconole@RHTPC1VM0NT ~$ pip3 install libnl3
->>>   Defaulting to user installation because normal site-packages is not writeable
->>>   Collecting libnl3
->>>     Using cached libnl3-0.3.0-py3-none-any.whl (89 kB)
->>>   Installing collected packages: libnl3
->>>   Successfully installed libnl3-0.3.0
->> 
->> And this is https://pypi.org/project/libnl3/, which is the
->> https://github.com/coolshou/libnl3 project.  So, by installing
->> libnl3 via pip and installing python3-libnl3 from the fedora
->> you're getting two completely different libraries.
->> 
->> So, which one users should use?
->> 
->> I can't find python bindings for the C libnl (which is the
->> python3-libnl3 package) in pypi, so it can't be installed
->> with pip.
->> 
->> 
->>>
->>> So I guess that is worth something.
->>>
->>> At least on Fedora it is installable from distribution as well.
->>>
->>>> There is another option which is pyroute2.  It positions itself
->>>> primarily as a netlink library and it does include an
->>>> pyroute2.netlink module indeed:
->>>>   https://github.com/svinota/pyroute2/tree/master/pyroute2/netlink
->>>> See the __init__.py for usage examples.
->>>>
->>>> This one looks to me like the most trustworthy.  It is actively
->>>> used by everyone in the python networking world, e.g. by OpenStack.
->>>> And it is actively developed and maintained unlike other
->>>> netlink-related python projects.  It is also packaged in most of the
->>>> main distributions, so it's easy to install and use.  Many people
->>>> already have it installed for other purposes.
->>>>
->>>> TBH, I didn't compare the functionality, but I'd expect that most
->>>> of the things we need are implemented.
->>>>
->>>> What do you think?
->>>
->>> We can certainly look at switching, but having a quick glance, it seems
->>> pyroute2 expects to provide the genl commands as well, so they would
->>> want us to create an ovs module in pyroute2 that includes all of the ovs
->>> family support.  Of course, we can always do this just in our module,
->>> but I think it isn't the way pyroute2 project wants to be structured.
->>> More like a library that provides all the command functionality.
->> 
->> What I was thinking is to import pyroute2.netlink and the
->> pyroute2.netlink.generic  and go from there.  But I didn't
->> look too deep on how to actually implement the functionality.
->> 
->> The python bindings for the C libnl (python3-libnl3) sounds
->> like a fine option since they are actually packaged in
->> distributions (missed that in my initial reply).  However,
->> the fact that you can not install them via pip and actually
->> you will install something but completely different is kind
->> of weird.  This has to be at least better documented, so
->> users will know what to install and they will not try to use
->> pip for that.
->> 
->>>
->>>> On the other note, I'm not a real python developer, but the code
->>>> looks more like a C than a python even for me.  Firstly, I'd say
->>>> that it would be great to maintain some coding style, e.g. by
->>>> checking with flake8 and/or black.  See some issues/suggestions
->>>> provided by these tools below.
->>>
->>> Agreed.  BTW, on the rhel8 system I developed on:
->>>
->>>   [root@wsfd-netdev60 openvswitch]# flake8 ./ovs-dpctl.py 
->>>   [root@wsfd-netdev60 openvswitch]# 
->>>
->>> So, I guess it is probably that I should have used a different system to
->>> do the flake8 checks.
->> 
->> Maybe the python version is different...  I was running on f36
->> with python 3.10.  Also, the list of defaults might be different.
->> flake8 doesn't use default ignore list if one is explicitly provided.
->> 
->>>
->>>> Secondly, we shouldd at least use argparse for argument parsing.
->>>> It's part of the standard library since python 3.2, so doens't
->>>> require any special dependencies to be installed.
->>>
->>> Okay - I can switch to argparse.  TBH, I haven't kept up with python
->>> standard library for some time.
->> 
->> Well, 3.2 was released 11 years ago. :)
->> 
->>>
->>>> Some parts of the code can probably be re-written to be more
->>>> "pythonic" as well, but I won't dive into that for now.  I didn't
->>>> review the code deep enough for that.
->>>
->>> I have difficulty sometimes understanding what it means to be "Real
->>> Python (tm)" - I don't plan to change things too much.  I can certainly
->>> switch to using argparse, but unless you give something you want to
->>> change, I would not change anything.
->> 
->> I breifly looked through code and though I don't fully
->> understand what this piece supposed to do:
->> 
->> +        segment = hdrval.find(":")
->> +        if segment == -1:
->> +            segment = len(hdrval)
->> +        hdrver = int(hdrval[:segment], 0)
->> +        if len(hdrval[:segment]):
->> +            userfeatures = int(hdrval[:segment], 0)
->> 
->> but I have a strong feeling that this part can benefit
->> from use of hdrval.split(':').
->> 
->> I won't insist on that too much. :)
->> 
->> Best regards, Ilya Maximets.
+This patch series is a result of long debug work to find out why=0D
+sometimes guests with win11 secure boot=0D
+were failing during boot.=0D
+=0D
+During writing a unit test I found another bug, turns out=0D
+that on rsm emulation, if the rsm instruction was done in real=0D
+or 32 bit mode, KVM would truncate the restored RIP to 32 bit.=0D
+=0D
+I also refactored the way we write SMRAM so it is easier=0D
+now to understand what is going on.=0D
+=0D
+The main bug in this series which I fixed is that we=0D
+allowed #SMI to happen during the STI interrupt shadow,=0D
+and we did nothing to both reset it on #SMI handler=0D
+entry and restore it on RSM.=0D
+=0D
+V4:=0D
+=0D
+ - rebased on top of patch series from Paolo which=0D
+   allows smm support to be disabled by Kconfig option.=0D
+=0D
+ - addressed review feedback.=0D
+=0D
+I included these patches in the series for reference.=0D
+=0D
+Best regards,=0D
+	Maxim Levitsky=0D
+=0D
+Maxim Levitsky (15):=0D
+  bug: introduce ASSERT_STRUCT_OFFSET=0D
+  KVM: x86: emulator: em_sysexit should update ctxt->mode=0D
+  KVM: x86: emulator: introduce emulator_recalc_and_set_mode=0D
+  KVM: x86: emulator: update the emulation mode after rsm=0D
+  KVM: x86: emulator: update the emulation mode after CR0 write=0D
+  KVM: x86: smm: number of GPRs in the SMRAM image depends on the image=0D
+    format=0D
+  KVM: x86: smm: check for failures on smm entry=0D
+  KVM: x86: smm: add structs for KVM's smram layout=0D
+  KVM: x86: smm: use smram structs in the common code=0D
+  KVM: x86: smm: use smram struct for 32 bit smram load/restore=0D
+  KVM: x86: smm: use smram struct for 64 bit smram load/restore=0D
+  KVM: svm: drop explicit return value of kvm_vcpu_map=0D
+  KVM: x86: SVM: use smram structs=0D
+  KVM: x86: SVM: don't save SVM state to SMRAM when VM is not long mode=0D
+    capable=0D
+  KVM: x86: smm: preserve interrupt shadow in SMRAM=0D
+=0D
+Paolo Bonzini (8):=0D
+  KVM: x86: start moving SMM-related functions to new files=0D
+  KVM: x86: move SMM entry to a new file=0D
+  KVM: x86: move SMM exit to a new file=0D
+  KVM: x86: do not go through ctxt->ops when emulating rsm=0D
+  KVM: allow compiling out SMM support=0D
+  KVM: x86: compile out vendor-specific code if SMM is disabled=0D
+  KVM: x86: remove SMRAM address space if SMM is not supported=0D
+  KVM: x86: do not define KVM_REQ_SMI if SMM disabled=0D
+=0D
+ arch/x86/include/asm/kvm-x86-ops.h            |   2 +=0D
+ arch/x86/include/asm/kvm_host.h               |  29 +-=0D
+ arch/x86/kvm/Kconfig                          |  11 +=0D
+ arch/x86/kvm/Makefile                         |   1 +=0D
+ arch/x86/kvm/emulate.c                        | 458 +++----------=0D
+ arch/x86/kvm/kvm_cache_regs.h                 |   5 -=0D
+ arch/x86/kvm/kvm_emulate.h                    |  47 +-=0D
+ arch/x86/kvm/lapic.c                          |  14 +-=0D
+ arch/x86/kvm/lapic.h                          |   7 +-=0D
+ arch/x86/kvm/mmu/mmu.c                        |   1 +=0D
+ arch/x86/kvm/smm.c                            | 637 ++++++++++++++++++=0D
+ arch/x86/kvm/smm.h                            | 160 +++++=0D
+ arch/x86/kvm/svm/nested.c                     |   3 +=0D
+ arch/x86/kvm/svm/svm.c                        |  43 +-=0D
+ arch/x86/kvm/vmx/nested.c                     |   1 +=0D
+ arch/x86/kvm/vmx/vmcs12.h                     |   5 +-=0D
+ arch/x86/kvm/vmx/vmx.c                        |  11 +-=0D
+ arch/x86/kvm/x86.c                            | 353 +---------=0D
+ include/linux/build_bug.h                     |   9 +=0D
+ tools/testing/selftests/kvm/x86_64/smm_test.c |   2 +=0D
+ 20 files changed, 1031 insertions(+), 768 deletions(-)=0D
+ create mode 100644 arch/x86/kvm/smm.c=0D
+ create mode 100644 arch/x86/kvm/smm.h=0D
+=0D
+-- =0D
+2.34.3=0D
+=0D
 
