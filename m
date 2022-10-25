@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3870E60D335
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 20:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531E160D312
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 20:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbiJYSMs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 14:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S232662AbiJYSMg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 14:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbiJYSMn (ORCPT
+        with ESMTP id S232380AbiJYSMd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:12:43 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2066.outbound.protection.outlook.com [40.107.220.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F822B7ED0;
-        Tue, 25 Oct 2022 11:12:41 -0700 (PDT)
+        Tue, 25 Oct 2022 14:12:33 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2045.outbound.protection.outlook.com [40.107.237.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5F0B1DE3;
+        Tue, 25 Oct 2022 11:12:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EOOjn0QwX1ipJpKGYFn1X6lN/wqjNeRJlpTtrFyDf27O7yPMnIuntBhG+/Hyn4oyi10yyrCw38WlFOOlaDDAjb6CJRIy47TLV4aJmaEvSNQOn983+hnlzh3VHury9Ytfr+szCGZ4YUccWufLiBU7515yCEU+FynwrWzIQJjmlzIOYC/c8dB3PPIPh1Q8AJsXclmWS1s0VpRmTrCG1LolP+UPpgjaiXk0IC874ppdo1dakkjnZg5eTLwNoPivR+4Z3IEAizrJp7BiCs4YevJx+VUl99OEslsZhR3aRNkTpK01u6c1Acpv6zZeiKcJACFn7BAaEW6EminQ8OUc7oGZtw==
+ b=La5QNStPWqxXF8M1GdQev90mfoCj2qIFT3QcYcvoz/YV1a0wL5BgavE1VEO1IYGNwU0UXIj/20dMUkGlN+nSL7LembxLAiZ/klxmDAOAGy09ef9T8kd6rMhs5zpotq6IoetRZuXnBuvii2MevHapsMkTCe4G9WpDJvQT68I5+gBk6O7FnUrTNchVrzSSSWtb1J5UFrdkTOSL7ioaiyxSxahJYbLxhX4UaoI2Acptj9Gy2Zz6sR3Kpgz3ch/jn3wrhqD0kwOGcFOOIFyRJPx217zJHAh+FcNxqkxDeFT5h+uijTSpiPzt35dyBvbkm4T17TF6cqHz4I4beTBHeCvxjA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6i/P1q03QfnoK4kiUL8HgfSbsunbv30zQ7EeRDcqoMQ=;
- b=h55OaCTOym+blc5+ZJOJsGhXYHIA2IbpjANQAHSu90Bab3f8fQALGX6EI67GbIhj7nsPWjYJ4EIgsvL2TRggnL26ETSSLmwPFqsL2DG7g7qkonS2NduAArH9vz0121M2kQnRpmx9a+vSyEbwdBxk9BYiADS9v75486J2T6yHmX1IjOB8w4qwnOF4rwlzw/8j7Xtr0Ohsrig29ngum6AbLlj92CuzJr4ANoAXqwBojSWHrlJ8vlWSTHT9pb4ZZUm3AcPOT4JZA6qGnCMiM66h5xsvvchQgD/E9CP6WWtNIqOqMNwqBWqkpiip5FNGrR9qKHHPlzIiWGTH8q2Qj72AMw==
+ bh=WWLRqUfk5qLeu1ABpeOCULlhr6vyxlC2X7SSBj2Lon0=;
+ b=gFD2DO995KZB2wbBNb+8WIDjk9FynecXmGCYNyrTiQm9m2EeKYI4ITK7asrzATqyqd3Hm8EjsjfZlkFk9Dyj5gYXbendOr320i37y0vhMnPVICAcW6q8OXQMCCzT9y+rdvzOiK29kOW+IOkBob4sa4aogjHViJ4KRl5sC7Xkv0ujMjgi/6hjqIAH5SEew0sfFDu1vI1nCTdxawkzRfBhTnBNSRSTVmDGpxm3x05zlMQSY3C07yeq3rU+fP4Mq7W0JxHMLbbxea25H/ijgBHton7s7W5eDVx36UWaOScC6LuN2+JIaxJsLS6mdJZrcc3Mkr/OfOpIrwUN3UXB25QHrA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6i/P1q03QfnoK4kiUL8HgfSbsunbv30zQ7EeRDcqoMQ=;
- b=Gy+1PnTltwVUDfWNUrWSfTjI2ukGBtEmilp1UqxNxON2Lj+Ce5LJXlitT0aH2ltkP5J1eznQA3GKaJKNN4tIVLjN17qs4BukGY6X0x/RclCjI1pajOx9tjCjPOiaSvLY7xvhHlwJEcklJ1YtPtY30y7uyDZ1brtHbQGkflTO8d3eklO6xM0mZMlfP7RYtLWtD9IKDOJnu5HXy2pH9DHAskDbFzF/mFr3fpKkd7K+3esClAOV4w2tKWOOInWEjinkES3phgnYY5lf10mHpsWp4dshS8Z4eF33CnaqaNv/5QMOUlUDw56BoU7XDpZbPt73ST4BgpuRjCPMWd4DvKi2Cw==
+ bh=WWLRqUfk5qLeu1ABpeOCULlhr6vyxlC2X7SSBj2Lon0=;
+ b=dokB4WvgnUVjBS9LKB992YLeaDXV74bI/+w6Tmf8Ad0HIdQYwoAkBtkcsqhiNQjN3kOBpnXqUg13NF1r9Sf4jFCChsKXibIhubsu8/j0tyByBFu8SUcZ2vKLllAY5pw8Sxm+PcQFbTUv2JI3jx8HnNMZ1eMB6pH/O0RXgQRUZRZy0geSSVc6sTAJ/HXJ8EpgfYRsJLR48BLYwjNmK7GV98Q9DWedVb/2YOqLaV4FLjB4UbVI4LTDeET7fgDuKQLfMiJVCT4K0NyQlVjCi3ebGyOBNA/m6EQiYieUa+TVVjpiku+GJmudvNBbq/yv6qtcKg0OolF6BazOVP66m1fyUg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22) with
+ by BL3PR12MB6475.namprd12.prod.outlook.com (2603:10b6:208:3bb::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Tue, 25 Oct
- 2022 18:12:31 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 25 Oct
+ 2022 18:12:28 +0000
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Tue, 25 Oct 2022
- 18:12:31 +0000
+ 18:12:28 +0000
 From:   Jason Gunthorpe <jgg@nvidia.com>
 To:     Lu Baolu <baolu.lu@linux.intel.com>, bpf@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
@@ -72,64 +72,64 @@ Cc:     Alex Williamson <alex.williamson@redhat.com>,
         Shameerali Kolothum Thodi 
         <shameerali.kolothum.thodi@huawei.com>,
         Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: [PATCH v3 02/15] iommu: Add device-centric DMA ownership interfaces
-Date:   Tue, 25 Oct 2022 15:12:11 -0300
-Message-Id: <2-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+Subject: [PATCH v3 03/15] interval-tree: Add a utility to iterate over spans in an interval tree
+Date:   Tue, 25 Oct 2022 15:12:12 -0300
+Message-Id: <3-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
 In-Reply-To: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
 References: 
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BL1P222CA0008.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:208:2c7::13) To LV2PR12MB5869.namprd12.prod.outlook.com
+X-ClientProxiedBy: MN2PR05CA0035.namprd05.prod.outlook.com
+ (2603:10b6:208:c0::48) To LV2PR12MB5869.namprd12.prod.outlook.com
  (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL0PR12MB5506:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d869c03-30f9-43e4-ba3e-08dab6b478dc
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL3PR12MB6475:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9fbab31b-8f96-45ec-522f-08dab6b4784b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 27jknOMBuHrikbPBvWzztW3ffSe543JgFfjEx56HVHfBf8eotvYnY2c7Od0A5XA3yyWHONrFlB6+NGTxEYHviFVKmJ8T0bVF2ioqJ2eB4FJA0Xz67kL/IfXDRPDSzIAC07se5MrCe3cpUCpxMib6bliWlRyCMKKZeAi07Kw2+dMGlvMHPgN/NEJ1Lan+/IeBYmyMgvQBJIkP8Q/24xpmaulbk8zmLDZn5Jrtvyjg+WS1ws1osZeO4rPC00oaNmJ2O5+wqgOsApk7ypK/cwWtss3Uf4Iz3I16MWdaCGZM4XvIPLh5/sPTdtR9Udm6XPHBh1u2DcKKcXmgOlW/0097zI0N3NiCv9gGNE1DDRAbtNHwW5MveFevms6CTDdB3tYaX7r3hBFNGag9vUpa4TFnb7MnMHJdezsCg2TTCM0v/fGkWa/heQbYT4IBt6eCkRLs/MGXrgq1dr70VN8wxSGMZv7PeT46Hh+6Z7VDZpD+rbyjb9foyq1sc1QxPFj8EIqQhjX4GYCl+DNVu/P00KsYZlgTpI9o4LQTpUKM/XfiGPcrS/eXUTDK0RaGeRM3auvYprUy2yix1K+YT+jZZI7FMimSRNzE0GrrgK2Kd3bi5mGqpCZHumG3ZR4S5/UQlqMxa1Tp4f+zchvs5NqdC5lkS5MbT+KdpOGeMi12fhhSbyWgTYNYIW8tLnX8M7WYUiYGW0kf73pVhk0a4+PDiy9B8SlUBBCEmx5gLlQ/2AT+t8wowupND42XSUbHAjmaBAFLO2GV/wUGh9y39bdHd1Z1CQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(396003)(376002)(366004)(451199015)(7406005)(7416002)(41300700001)(5660300002)(8936002)(66476007)(6506007)(110136005)(66946007)(36756003)(4326008)(8676002)(6512007)(66556008)(6666004)(316002)(26005)(2616005)(921005)(38100700002)(186003)(2906002)(54906003)(86362001)(83380400001)(6486002)(478600001)(4216001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: qfZU+lnf/25J+4x8q6ov7+D8vqqwdnqhBp5jPCzP+Jeatx6pxK4cUwasr26dOHuRW4ShctNZrliZabUMSIu3l36j4uIEZJrimJOQsKLUTzKnPLGunCxOqmiNiYvnCKrPb4W8sC4MYfHuyVYmJsDMosUGzuWhm0JkQAeKOPO+CjhfYdJVtSwz95mBemE6zNyTRPjsCrdhTZOevrkxqERUPkoVERSedjFiHHATnNx+1O78RAAXmDQV5cuMe9oSKhMANs599V7O9WeftxHxOzVvfebzxYB1/rKOvPRsENq2KCeKSlY1N1dLBmnZEr561dO5Bj/vczBjqqG78wl+lsj1BJ+R4dEP7kIXkSgg9FAxdXTwZbBEWuqtjXmIPSmgzUMkgY83NqGWP3W3uobg9H/FJvSAAdEp84r75sWJsn6XdciGFG2nGLXibGIXb/3kYFVUcLhLU0T9uAxbRPlVjUPQxYQmy8ijhp3z1hSfyhk/7XoY+mTR8C6/NDZ9EZu4zjkEz7aLUgls+D7G3/njTCdNU7Qq/beC1eoc7dM6njRCQKfKapr5dGIk6G26N9iPmoaWHAJelf4u/NXtUe3qeRoEW/AcbYvsA9SC5vfSb5X8CppvgA3DXqlhDXZJ2q7qZ/2Fs/d788kHNcdvohynqWPBbmlvpUX2oj5Opzp/+5s6jSZbJ9Ob4EJtQdYyRLLbR6xmMHan+FPnfvClLv+IOJitzDFZ/GiXrDpfvZMPnyklOOOGA8/6/46VQf7YH9XtsOEws+GQRIzoerUcV7DlpM2AlA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(396003)(366004)(346002)(451199015)(6666004)(316002)(41300700001)(110136005)(36756003)(2616005)(6506007)(54906003)(7406005)(7416002)(8936002)(66476007)(83380400001)(5660300002)(26005)(2906002)(4326008)(186003)(66946007)(8676002)(66556008)(6512007)(921005)(6486002)(38100700002)(86362001)(478600001)(4216001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ewzDS1knclkL8KVY1ewB2FPMnv0fTE5MOBWVBp1oNn40QnLBs+ZKpxLvnC51?=
- =?us-ascii?Q?SvkKjnMREuwdSuvxUxafHKrgdwYauICwoPIKSdFcRu+ZQj5BKUURy9sR9O5T?=
- =?us-ascii?Q?Bo20uDDNAWzHaCuHKd1kcisUD9ZS8QVzqxO2wz+wvg5XodYH2dmPOswenNmH?=
- =?us-ascii?Q?u+DIq1V7KVjEUgyBj97Kcts+G3UJrcIfERUsFnURwb7JeIXAhaYi0AKqaDOX?=
- =?us-ascii?Q?zdwtbAhq1pHJpRmGmPaGtfAxnMbYpx2JrXnD+CzzcjpqlqBDr7x/3kP2JgUL?=
- =?us-ascii?Q?siizx9IkZN82KT0iwEiGG/ySLsrGhdUx0L5zKbEGuNAvA8lVkICYSSm2MKxG?=
- =?us-ascii?Q?4OYrrjujMOHvRoJ4OoAoOQAgpMDzdd6UKxxbXVHAs48XKAkkspNNPMMrzkJm?=
- =?us-ascii?Q?ComBaqdoRZbrJlk//4EhanzOOWLqRqRb56M9YyYnzDKzEszP82Jk8L79HMhZ?=
- =?us-ascii?Q?i7LjDiOmu93B4rbmyi+O5sZDlPuDk8x8p7ybLCNf6RjZfUdMUWpsJMUGo301?=
- =?us-ascii?Q?X/sbLxaT73uWDk75TceHIXOSOCIJymrhkilxb+8trZ8v4FeA6W/rRLQODYm7?=
- =?us-ascii?Q?iLiJSfTwB61m2lWDUiUSKx67oXeVEA9vayZxqtj60feDK521ejOJ6mpNZc0h?=
- =?us-ascii?Q?R3JJrlV+JWLX7I5ms+fA7bHA7Tg7QPovct6fHko7YIgBnAUMYo/gA7WIWG0+?=
- =?us-ascii?Q?NBHQXmCJvLWvkifhLnPubegBQgLOxe6fI0NLLZjf+ULtZ6FsYSkeg9jH4qJv?=
- =?us-ascii?Q?c1Nw+J1V0YARY3Mwp7W22u8Z0tEuoW+MrYt/7wrsdTjo4aOr24FPoy8+Sxf9?=
- =?us-ascii?Q?8a7UQN7TEU+Sddxg+1nrl1hjiQUGOEcqeOT6ySOg2LUaPxBzJgKfFMuzOQd6?=
- =?us-ascii?Q?BIbSWZ/6bUX3IMDYkZ1cI4ewDBOMTg6C1HZrccweZxuJ4Xuocj0V4NXZUfNH?=
- =?us-ascii?Q?ew5zI86eHRaXdrZrMrTu74onLIx8mGJK6hQXq+ojsD6BSaPcy+NpAopjEb28?=
- =?us-ascii?Q?BOrXk24v8gN0vSYyjAIBp2GlotqhTgzkRWPXow8XqiukeWWWwKAv48cKp5ng?=
- =?us-ascii?Q?jFjxatwiMWk1qJ1J93ujT9tGF/inXCEwHIyWQ902QSVqLlInKG8wvRmIjMeR?=
- =?us-ascii?Q?K9n/98onyzuWc2qznx/e50dxTiVflJ04YpRgdlNXzBvoRx04BVa2aQNq5Xag?=
- =?us-ascii?Q?NeYYRKssaykbiSvmQH3pjImuLTMb9wYIs6Lhi7vwkucdSZbYeV++A/nXln0P?=
- =?us-ascii?Q?mfEXGL3JNiHGL39qEgx/MKYPo0tzjLZsTci9lJu3cY4O/YKyQb8iLNJSMw63?=
- =?us-ascii?Q?ZIGab6jC/WS80c/3TlNrHioYGxxCdoP4/avFJ9LBuNuFmcTjLCXMw8zYZQsS?=
- =?us-ascii?Q?2C+idSQCjMG4PzE2P+PZNok9CXwIS0Zb0qdsmVH2p9uNshNAEYjZZFcw1A/y?=
- =?us-ascii?Q?lrfgmPhW3d3YPi4xMji5fd3PIA6j7iEXJcKmO4lywvbbui5biedJpW5NDiGr?=
- =?us-ascii?Q?afsLpYK5Z7P4N0eGB75J0HR5tnNZUC9Dm32sqbu8czBA7QK/rIArpNiSF2S5?=
- =?us-ascii?Q?etpal6J65g1NV6886uM=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4rkW6byTJuCcLgeh5i9XLlodTNnimKoNvQre3LaMsXnABTXUGWRZDX0uph0r?=
+ =?us-ascii?Q?Kc/MJ+v3JUlEtCwQabL9islP66fI7X3+TtPZ+nyJb9ADtBWspRTRKhh2vW3R?=
+ =?us-ascii?Q?GryUJZn0CGFtqiHqb/6tbyj7YmxIP4QVDtVjP8ABRZb3XNI4819iWHle9HvC?=
+ =?us-ascii?Q?1QdpNJaw3l1z69sebs02pqwaf06IY1xOdScmne4XG1EiK0iLxEiI68BXFWfx?=
+ =?us-ascii?Q?zW6DD8S0QH7tF78raVuCyuy4Cud8oqGPXQb+guBSRB8k+13TNanIxBE00wgx?=
+ =?us-ascii?Q?UHjtr5UADWRBQY4ymTnE18SGpzh7ArmlU8dL0DzscEnmmWmGqnSfgd7wQvVY?=
+ =?us-ascii?Q?vu1hm7CN8WuApPSoCkVGyVGcMdZASIEIApo+u4sV66PwO1asH8LYBSk9dlIR?=
+ =?us-ascii?Q?5iq9bpl6wv3dVbMPru1YekuZFKlO9QrJTqDcjLU2EGttHYd6jM+s3EhVJUf5?=
+ =?us-ascii?Q?kd61o2MyhGRsJdC6YDvTfWW17dmD5PUgsdVXP/30Q38FRjA8c8EDnbAHWgiF?=
+ =?us-ascii?Q?I46J4d9ZSaqB8k0MAHUIKPI8QaukB52jg7V/AhcLEnIQRDvfDaxAS5iwB3Rk?=
+ =?us-ascii?Q?D6M1N1cafL7TAbHRqnrhlUuWPRukU9tGP4SEkW6IVyGIo5GvFBNXV5R3X4JA?=
+ =?us-ascii?Q?TdFlUWEAS9pg/waf2rAezKswsIHddgPrL/ls81hwhAegLRT66rhA9gBBUgZt?=
+ =?us-ascii?Q?Ye/dIKTaw0gu/isOIZ+P10+IfrSCvyo1MNDC+oTOsU98KjGv/UVldef4h6xf?=
+ =?us-ascii?Q?WqDbmLKfF1UZeEXwHsZuanBxwr8IR0CT97iB215+dprZOpod+4q6z3KRuAQF?=
+ =?us-ascii?Q?xfkpWqqE9ww+w1/ozG8+3y94zYuV895RcykcH9qqJBJxSJLN9xdiS+OQvTr7?=
+ =?us-ascii?Q?cww0Xo4MbYlyKMgwsCEVt5HI/bDPfiXHAHv102L449JrAt7m5KG75shOtXyI?=
+ =?us-ascii?Q?0/R3JqNVFy2sN2Mz5yWfF1TCMC92sjcMucSOVAZ6dVQ+0KfoPs8uuqV37Y9x?=
+ =?us-ascii?Q?C7Fwpd/noMVwtcr4bBkJWT+K54sfG0hkADB2ba4Uy472YoYlhi6rk6o4gSlJ?=
+ =?us-ascii?Q?BubuZSIDAXjPQpzyKxTkS3oweoek4wzmvWHJtRHTsPorTKHYWGb2oXR+nLOq?=
+ =?us-ascii?Q?RyMYacY0N1DdzzBtSmEvnlN1vFjdALQwhblfoZa/ZLaJakdCWkzN8gvsnnTv?=
+ =?us-ascii?Q?uba3ulfeRHv1z1NQRr+fOzj5t3gwOBVbvbK7Ns1n2+M9C9SBjSN+bP6APuN0?=
+ =?us-ascii?Q?UOMeR2IB9DhKL+aquoOp9rDyMFyUtf0jiqZcgdwporYztKX9ubI1UoIKs6lR?=
+ =?us-ascii?Q?012xlNBX+BMP/hNEZ9OAy2mggA0+ScgA3i/IxWYeCFglaDnMV5dEKk8fhH7f?=
+ =?us-ascii?Q?ToMzxRXVSPozI6vQW6WEd0emknI82nRqvDTQ6TjcPq1uf8dnxUrl1q1jJLrw?=
+ =?us-ascii?Q?zMZOjFG8tJLUtZKEsJ5aRZ4ihqpO9N9zuDEuJiZe+SFSO22HguDLYiaxa06L?=
+ =?us-ascii?Q?xwpU+BPfHdzmr1oCvGgxes32NaVArXQcke5ByKuCy6WpCsoUrABHgqmh6pz4?=
+ =?us-ascii?Q?eVs13wBPaimQSbB3Gcw=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d869c03-30f9-43e4-ba3e-08dab6b478dc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fbab31b-8f96-45ec-522f-08dab6b4784b
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 18:12:26.6008
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 18:12:25.6791
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 765rXkg5RaJq2VZkda9TJRwM74bn84OuAySDDMfyhmPp0gUrDedOtxQ2yh0nLvIE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB5506
+X-MS-Exchange-CrossTenant-UserPrincipalName: r8Jm6wzBV1gJUmbo824KsN2susJX1+QPwXzsRHbn2wYQqlxzN33DIDUPmpG46MHd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6475
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -140,216 +140,264 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+The span iterator travels over the indexes of the interval_tree, not the
+nodes, and classifies spans of indexes as either 'used' or 'hole'.
 
-These complement the group interfaces and are for use by VFIO. The main
-difference is that multiple devices in the same group can all share the
-ownership by passing the same ownership pointer.
+'used' spans are fully covered by nodes in the tree and 'hole' spans have
+no node intersecting the span.
 
-Move the common code into shared functions.
+This is done greedily such that spans are maximally sized and every
+iteration step switches between used/hole.
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+As an example a trivial allocator can be written as:
+
+	for (interval_tree_span_iter_first(&span, itree, 0, ULONG_MAX);
+	     !interval_tree_span_iter_done(&span);
+	     interval_tree_span_iter_next(&span))
+		if (span.is_hole &&
+		    span.last_hole - span.start_hole >= allocation_size - 1)
+			return span.start_hole;
+
+With all the tricky boundary conditions handled by the library code.
+
+The following iommufd patches have several algorithms for its overlapping
+node interval trees that are significantly simplified with this kind of
+iteration primitive. As it seems generally useful, put it into lib/.
+
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/iommu/iommu.c | 116 +++++++++++++++++++++++++++++++++---------
- include/linux/iommu.h |  13 +++++
- 2 files changed, 104 insertions(+), 25 deletions(-)
+ .clang-format                 |   1 +
+ include/linux/interval_tree.h |  50 +++++++++++++
+ lib/Kconfig                   |   4 ++
+ lib/interval_tree.c           | 132 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 187 insertions(+)
 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 65a3b3d886dc00..e34dde68ae2b0d 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -3148,14 +3148,33 @@ static int __iommu_group_alloc_blocking_domain(struct iommu_group *group)
- 	return 0;
- }
+diff --git a/.clang-format b/.clang-format
+index 1247d54f9e49fa..96d07786dcfb46 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -440,6 +440,7 @@ ForEachMacros:
+   - 'inet_lhash2_for_each_icsk'
+   - 'inet_lhash2_for_each_icsk_continue'
+   - 'inet_lhash2_for_each_icsk_rcu'
++  - 'interval_tree_for_each_span'
+   - 'intlist__for_each_entry'
+   - 'intlist__for_each_entry_safe'
+   - 'kcore_copy__for_each_phdr'
+diff --git a/include/linux/interval_tree.h b/include/linux/interval_tree.h
+index 288c26f50732d7..3c803379b83cd8 100644
+--- a/include/linux/interval_tree.h
++++ b/include/linux/interval_tree.h
+@@ -27,4 +27,54 @@ extern struct interval_tree_node *
+ interval_tree_iter_next(struct interval_tree_node *node,
+ 			unsigned long start, unsigned long last);
  
-+static int __iommu_take_dma_ownership(struct iommu_group *group, void *owner)
++/*
++ * This iterator travels over spans in an interval tree. It does not return
++ * nodes but classifies each span as either a hole, where no nodes intersect, or
++ * a used, which is fully covered by nodes. Each iteration step toggles between
++ * hole and used until the entire range is covered. The returned spans always
++ * fully cover the requested range.
++ *
++ * The iterator is greedy, it always returns the largest hole or used possible,
++ * consolidating all consecutive nodes.
++ *
++ * Only is_hole, start_hole/used and last_hole/used are part of the external
++ * interface.
++ */
++struct interval_tree_span_iter {
++	struct interval_tree_node *nodes[2];
++	unsigned long first_index;
++	unsigned long last_index;
++	union {
++		unsigned long start_hole;
++		unsigned long start_used;
++	};
++	union {
++		unsigned long last_hole;
++		unsigned long last_used;
++	};
++	/* 0 == used, 1 == is_hole, -1 == done iteration */
++	int is_hole;
++};
++
++void interval_tree_span_iter_first(struct interval_tree_span_iter *state,
++				   struct rb_root_cached *itree,
++				   unsigned long first_index,
++				   unsigned long last_index);
++void interval_tree_span_iter_advance(struct interval_tree_span_iter *iter,
++				     struct rb_root_cached *itree,
++				     unsigned long new_index);
++void interval_tree_span_iter_next(struct interval_tree_span_iter *state);
++
++static inline bool
++interval_tree_span_iter_done(struct interval_tree_span_iter *state)
 +{
-+	int ret;
-+
-+	if (group->domain && group->domain != group->default_domain)
-+		return  -EBUSY;
-+
-+	ret = __iommu_group_alloc_blocking_domain(group);
-+	if (ret)
-+		return ret;
-+	ret = __iommu_group_set_domain(group, group->blocking_domain);
-+	if (ret)
-+		return ret;
-+
-+	group->owner = owner;
-+	group->owner_cnt++;
-+	return 0;
++	return state->is_hole == -1;
 +}
 +
- /**
-  * iommu_group_claim_dma_owner() - Set DMA ownership of a group
-  * @group: The group.
-  * @owner: Caller specified pointer. Used for exclusive ownership.
-  *
-- * This is to support backward compatibility for vfio which manages
-- * the dma ownership in iommu_group level. New invocations on this
-- * interface should be prohibited.
-+ * This is to support backward compatibility for vfio which manages the dma
-+ * ownership in iommu_group level. New invocations on this interface should be
-+ * prohibited. Only a single owner may exist for a group.
-  */
- int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner)
- {
-@@ -3165,23 +3184,9 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner)
- 	if (group->owner_cnt) {
- 		ret = -EPERM;
- 		goto unlock_out;
--	} else {
--		if (group->domain && group->domain != group->default_domain) {
--			ret = -EBUSY;
--			goto unlock_out;
--		}
--
--		ret = __iommu_group_alloc_blocking_domain(group);
--		if (ret)
--			goto unlock_out;
--
--		ret = __iommu_group_set_domain(group, group->blocking_domain);
--		if (ret)
--			goto unlock_out;
--		group->owner = owner;
- 	}
- 
--	group->owner_cnt++;
-+	ret = __iommu_take_dma_ownership(group, owner);
- unlock_out:
- 	mutex_unlock(&group->mutex);
- 
-@@ -3190,29 +3195,90 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner)
- EXPORT_SYMBOL_GPL(iommu_group_claim_dma_owner);
- 
- /**
-- * iommu_group_release_dma_owner() - Release DMA ownership of a group
-- * @group: The group.
-+ * iommu_device_claim_dma_owner() - Set DMA ownership of a device
-+ * @dev: The device.
-+ * @owner: Caller specified pointer. Used for exclusive ownership.
-  *
-- * Release the DMA ownership claimed by iommu_group_claim_dma_owner().
-+ * Claim the DMA ownership of a device. Multiple devices in the same group may
-+ * concurrently claim ownership if they present the same owner value. Returns 0
-+ * on success and error code on failure
-  */
--void iommu_group_release_dma_owner(struct iommu_group *group)
-+int iommu_device_claim_dma_owner(struct device *dev, void *owner)
- {
--	int ret;
-+	struct iommu_group *group = iommu_group_get(dev);
-+	int ret = 0;
++#define interval_tree_for_each_span(span, itree, first_index, last_index)      \
++	for (interval_tree_span_iter_first(span, itree,                        \
++					   first_index, last_index);           \
++	     !interval_tree_span_iter_done(span);                              \
++	     interval_tree_span_iter_next(span))
 +
-+	if (!group)
-+		return -ENODEV;
+ #endif	/* _LINUX_INTERVAL_TREE_H */
+diff --git a/lib/Kconfig b/lib/Kconfig
+index 9bbf8a4b2108e6..c6c323fd251721 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -479,6 +479,10 @@ config INTERVAL_TREE
  
- 	mutex_lock(&group->mutex);
--	if (WARN_ON(!group->owner_cnt || !group->owner))
-+	if (group->owner_cnt) {
-+		if (group->owner != owner) {
-+			ret = -EPERM;
-+			goto unlock_out;
-+		}
-+		group->owner_cnt++;
- 		goto unlock_out;
-+	}
+ 	  for more information.
+ 
++config INTERVAL_TREE_SPAN_ITER
++	bool
++	depends on INTERVAL_TREE
 +
-+	ret = __iommu_take_dma_ownership(group, owner);
-+unlock_out:
-+	mutex_unlock(&group->mutex);
-+	iommu_group_put(group);
+ config XARRAY_MULTI
+ 	bool
+ 	help
+diff --git a/lib/interval_tree.c b/lib/interval_tree.c
+index 593ce56ece5050..6edfb83894af8e 100644
+--- a/lib/interval_tree.c
++++ b/lib/interval_tree.c
+@@ -15,3 +15,135 @@ EXPORT_SYMBOL_GPL(interval_tree_insert);
+ EXPORT_SYMBOL_GPL(interval_tree_remove);
+ EXPORT_SYMBOL_GPL(interval_tree_iter_first);
+ EXPORT_SYMBOL_GPL(interval_tree_iter_next);
 +
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(iommu_device_claim_dma_owner);
-+
-+static void __iommu_release_dma_ownership(struct iommu_group *group)
++#ifdef CONFIG_INTERVAL_TREE_SPAN_ITER
++static void
++interval_tree_span_iter_next_gap(struct interval_tree_span_iter *state)
 +{
-+	int ret;
++	struct interval_tree_node *cur = state->nodes[1];
 +
-+	if (WARN_ON(!group->owner_cnt || !group->owner))
++	/*
++	 * Roll nodes[1] into nodes[0] by advancing nodes[1] to the end of a
++	 * contiguous span of nodes. This makes nodes[0]->last the end of that
++	 * contiguous span of valid indexes that started at the original
++	 * nodes[1]->start. nodes[1] is now the next node and a hole is between
++	 * nodes[0] and [1].
++	 */
++	state->nodes[0] = cur;
++	do {
++		if (cur->last > state->nodes[0]->last)
++			state->nodes[0] = cur;
++		cur = interval_tree_iter_next(cur, state->first_index,
++					      state->last_index);
++	} while (cur && (state->nodes[0]->last >= cur->start ||
++			 state->nodes[0]->last + 1 == cur->start));
++	state->nodes[1] = cur;
++}
++
++void interval_tree_span_iter_first(struct interval_tree_span_iter *iter,
++				   struct rb_root_cached *itree,
++				   unsigned long first_index,
++				   unsigned long last_index)
++{
++	iter->first_index = first_index;
++	iter->last_index = last_index;
++	iter->nodes[0] = NULL;
++	iter->nodes[1] =
++		interval_tree_iter_first(itree, first_index, last_index);
++	if (!iter->nodes[1]) {
++		/* No nodes intersect the span, whole span is hole */
++		iter->start_hole = first_index;
++		iter->last_hole = last_index;
++		iter->is_hole = 1;
 +		return;
- 
- 	group->owner_cnt = 0;
- 	group->owner = NULL;
- 	ret = __iommu_group_set_domain(group, group->default_domain);
- 	WARN(ret, "iommu driver failed to attach the default domain");
-+}
- 
--unlock_out:
-+/**
-+ * iommu_group_release_dma_owner() - Release DMA ownership of a group
-+ * @group: The group.
-+ *
-+ * Release the DMA ownership claimed by iommu_group_claim_dma_owner().
-+ */
-+void iommu_group_release_dma_owner(struct iommu_group *group)
-+{
-+	mutex_lock(&group->mutex);
-+	__iommu_release_dma_ownership(group);
- 	mutex_unlock(&group->mutex);
- }
- EXPORT_SYMBOL_GPL(iommu_group_release_dma_owner);
- 
-+/**
-+ * iommu_device_release_dma_owner() - Release DMA ownership of a device
-+ * @group: The device.
-+ *
-+ * Release the DMA ownership claimed by iommu_device_claim_dma_owner().
-+ */
-+void iommu_device_release_dma_owner(struct device *dev)
-+{
-+	struct iommu_group *group = iommu_group_get(dev);
-+
-+	mutex_lock(&group->mutex);
-+	if (group->owner_cnt > 1) {
-+		group->owner_cnt--;
-+		goto unlock_out;
 +	}
-+	__iommu_release_dma_ownership(group);
-+unlock_out:
-+	mutex_unlock(&group->mutex);
-+	iommu_group_put(group);
++	if (iter->nodes[1]->start > first_index) {
++		/* Leading hole on first iteration */
++		iter->start_hole = first_index;
++		iter->last_hole = iter->nodes[1]->start - 1;
++		iter->is_hole = 1;
++		interval_tree_span_iter_next_gap(iter);
++		return;
++	}
++
++	/* Starting inside a used */
++	iter->start_used = first_index;
++	iter->is_hole = 0;
++	interval_tree_span_iter_next_gap(iter);
++	iter->last_used = iter->nodes[0]->last;
++	if (iter->last_used >= last_index) {
++		iter->last_used = last_index;
++		iter->nodes[0] = NULL;
++		iter->nodes[1] = NULL;
++	}
 +}
-+EXPORT_SYMBOL_GPL(iommu_device_release_dma_owner);
++EXPORT_SYMBOL_GPL(interval_tree_span_iter_first);
 +
- /**
-  * iommu_group_dma_owner_claimed() - Query group dma ownership status
-  * @group: The group.
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 40cf2d8393465f..b33c962d7b851b 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -681,6 +681,9 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner);
- void iommu_group_release_dma_owner(struct iommu_group *group);
- bool iommu_group_dma_owner_claimed(struct iommu_group *group);
- 
-+int iommu_device_claim_dma_owner(struct device *dev, void *owner);
-+void iommu_device_release_dma_owner(struct device *dev);
-+
- #else /* CONFIG_IOMMU_API */
- 
- struct iommu_ops {};
-@@ -1043,6 +1046,16 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
- {
- 	return false;
- }
-+
-+static inline int
-+iommu_device_claim_dma_owner(struct device *dev, void *owner)
++void interval_tree_span_iter_next(struct interval_tree_span_iter *iter)
 +{
-+	return -ENODEV;
-+}
++	if (!iter->nodes[0] && !iter->nodes[1]) {
++		iter->is_hole = -1;
++		return;
++	}
 +
-+static inline void iommu_device_release_dma_owner(struct device *dev)
-+{
++	if (iter->is_hole) {
++		iter->start_used = iter->last_hole + 1;
++		iter->last_used = iter->nodes[0]->last;
++		if (iter->last_used >= iter->last_index) {
++			iter->last_used = iter->last_index;
++			iter->nodes[0] = NULL;
++			iter->nodes[1] = NULL;
++		}
++		iter->is_hole = 0;
++		return;
++	}
++
++	if (!iter->nodes[1]) {
++		/* Trailing hole */
++		iter->start_hole = iter->nodes[0]->last + 1;
++		iter->last_hole = iter->last_index;
++		iter->nodes[0] = NULL;
++		iter->is_hole = 1;
++		return;
++	}
++
++	/* must have both nodes[0] and [1], interior hole */
++	iter->start_hole = iter->nodes[0]->last + 1;
++	iter->last_hole = iter->nodes[1]->start - 1;
++	iter->is_hole = 1;
++	interval_tree_span_iter_next_gap(iter);
 +}
- #endif /* CONFIG_IOMMU_API */
- 
- /**
++EXPORT_SYMBOL_GPL(interval_tree_span_iter_next);
++
++/*
++ * Advance the iterator index to a specific position. The returned used/hole is
++ * updated to start at new_index. This is faster than calling
++ * interval_tree_span_iter_first() as it can avoid full searches in several
++ * cases where the iterator is already set.
++ */
++void interval_tree_span_iter_advance(struct interval_tree_span_iter *iter,
++				     struct rb_root_cached *itree,
++				     unsigned long new_index)
++{
++	if (iter->is_hole == -1)
++		return;
++
++	iter->first_index = new_index;
++	if (new_index == iter->last_index) {
++		iter->is_hole = -1;
++		return;
++	}
++
++	/* Rely on the union aliasing hole/used */
++	if (iter->start_hole <= new_index && new_index <= iter->last_hole) {
++		iter->start_hole = new_index;
++		return;
++	}
++	if (new_index == iter->last_hole + 1)
++		interval_tree_span_iter_next(iter);
++	else
++		interval_tree_span_iter_first(iter, itree, new_index,
++					      iter->last_index);
++}
++EXPORT_SYMBOL_GPL(interval_tree_span_iter_advance);
++#endif
 -- 
 2.38.0
 
