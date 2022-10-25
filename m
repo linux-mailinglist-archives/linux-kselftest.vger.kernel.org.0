@@ -2,45 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A8D60CA54
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 12:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9784460CB98
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 14:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbiJYKuc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 06:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S229740AbiJYMPt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 08:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbiJYKua (ORCPT
+        with ESMTP id S229800AbiJYMPs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:50:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1B325F9
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 03:50:28 -0700 (PDT)
+        Tue, 25 Oct 2022 08:15:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F8E22EA
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 05:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666695028;
+        s=mimecast20190719; t=1666700144;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=mIPFepEyIraktN2dDGt5aIieB+StF02kHm/qSHaC+H4=;
-        b=CWmz5fZpDhWNKllnXxMRF3X5Nu08xg6P/fxWU79M3/UyVEe/Z15JLIsio9ZYTnOzI71XfT
-        7mNO1bIb7hO9abJnl0rUcejlxED9EPfxpMLN8QGA1Lc0zZnh55tsIE8AvLepYvlOO63S2s
-        bOj7pZXLFQPol5USutTRps2G1WAE0Mo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=nOzDdV0oEp6wyZXzDDf647sJ9V/1wsykXrnknbLQpv4=;
+        b=Ye0HWUzUfvsXJKemZLUjLzzyUgbV/9v66li6EzQgljhQouF8BuOI65z8OO6ZUC7d9IQNZw
+        t5cXHW3AhIYul2jMQdP8Kid8dXE5RSjdjPC63H7cfDar+B4A7gOogP8qq5FZNZkHYj8GKr
+        jBc+C//r22oM0g9Wi8fdUILt/jx8rrg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-cY8wv4sFMoyTkYqJqNvV6A-1; Tue, 25 Oct 2022 06:50:23 -0400
-X-MC-Unique: cY8wv4sFMoyTkYqJqNvV6A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-356-Aw4s5VMxObCjXXdpWAVxpQ-1; Tue, 25 Oct 2022 08:15:43 -0400
+X-MC-Unique: Aw4s5VMxObCjXXdpWAVxpQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6883E86F123;
-        Tue, 25 Oct 2022 10:50:22 +0000 (UTC)
-Received: from RHTPC1VM0NT.redhat.com (unknown [10.22.8.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D0D2C2024CCA;
-        Tue, 25 Oct 2022 10:50:20 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3BC8629DD999;
+        Tue, 25 Oct 2022 12:15:37 +0000 (UTC)
+Received: from RHTPC1VM0NT (unknown [10.22.32.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4B4ED1415117;
+        Tue, 25 Oct 2022 12:15:29 +0000 (UTC)
 From:   Aaron Conole <aconole@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Pravin B Shelar <pshelar@ovn.org>,
+To:     Ilya Maximets <i.maximets@ovn.org>
+Cc:     netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
         Jakub Kicinski <kuba@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Paolo Abeni <pabeni@redhat.com>,
@@ -48,673 +47,331 @@ Cc:     Pravin B Shelar <pshelar@ovn.org>,
         Thomas Graf <tgraf@suug.ch>,
         Kevin Sprague <ksprague0711@gmail.com>, dev@openvswitch.org,
         Eelco Chaudron <echaudro@redhat.com>,
-        Ilya Maximets <i.maximets@ovn.org>,
         Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 net 2/2] selftests: add openvswitch selftest suite
-Date:   Tue, 25 Oct 2022 06:50:18 -0400
-Message-Id: <20221025105018.466157-3-aconole@redhat.com>
-In-Reply-To: <20221025105018.466157-1-aconole@redhat.com>
-References: <20221025105018.466157-1-aconole@redhat.com>
+Subject: Re: [PATCH net 2/2] selftests: add openvswitch selftest suite
+References: <20221019183054.105815-1-aconole@redhat.com>
+        <20221019183054.105815-3-aconole@redhat.com>
+        <88eff2a1-495c-0e89-44bf-1478db7d0661@ovn.org>
+        <f7ty1taqznl.fsf@redhat.com>
+        <1d7beda5-c558-5ea3-17f2-934bf298f4ad@ovn.org>
+        <7b540b02-e676-5ccc-e832-269ef397f9ec@ovn.org>
+Date:   Tue, 25 Oct 2022 08:15:27 -0400
+In-Reply-To: <7b540b02-e676-5ccc-e832-269ef397f9ec@ovn.org> (Ilya Maximets's
+        message of "Thu, 20 Oct 2022 19:17:35 +0200")
+Message-ID: <f7tilk8p09s.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previous commit resolves a WARN splat that can be difficult to reproduce,
-but with the ovs-dpctl.py utility, it can be trivial.  Introduce a test
-case which creates a DP, and then downgrades the feature set.  This will
-include a utility 'ovs-dpctl.py' that can be extended to do additional
-tests and diagnostics.
+Ilya Maximets <i.maximets@ovn.org> writes:
 
-Signed-off-by: Aaron Conole <aconole@redhat.com>
----
-v1->v2: Convert to using pyroute2 for netlink messages
-        Dropped Keving Sprague (since ovs-dpctl.py was rewritten)
-        Re-ran flake8 and also ran black against ovs-dpctl.py
+> On 10/20/22 18:33, Ilya Maximets wrote:
+>> On 10/20/22 17:32, Aaron Conole wrote:
+>>> Hi Ilya,
+>>>
+>>> Ilya Maximets <i.maximets@ovn.org> writes:
+>>>
+>>>> On 10/19/22 20:30, Aaron Conole wrote:
+>>>>> Previous commit resolves a WARN splat that can be difficult to reproduce,
+>>>>> but with the ovs-dpctl.py utility, it can be trivial.  Introduce a test
+>>>>> case which creates a DP, and then downgrades the feature set.  This will
+>>>>> include a utility 'ovs-dpctl.py' that can be extended to do additional
+>>>>> work.
+>>>>>
+>>>>> Signed-off-by: Aaron Conole <aconole@redhat.com>
+>>>>> Signed-off-by: Kevin Sprague <ksprague0711@gmail.com>
+>>>>> ---
+>>>>>  MAINTAINERS                                   |   1 +
+>>>>>  tools/testing/selftests/Makefile              |   1 +
+>>>>>  .../selftests/net/openvswitch/Makefile        |  13 +
+>>>>>  .../selftests/net/openvswitch/openvswitch.sh  | 216 +++++++++
+>>>>>  .../selftests/net/openvswitch/ovs-dpctl.py    | 411 ++++++++++++++++++
+>>>>>  5 files changed, 642 insertions(+)
+>>>>>  create mode 100644 tools/testing/selftests/net/openvswitch/Makefile
+>>>>>  create mode 100755 tools/testing/selftests/net/openvswitch/openvswitch.sh
+>>>>>  create mode 100644 tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+>>>>>
+>>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>>> index abbe88e1c50b..295a6b0fbe26 100644
+>>>>> --- a/MAINTAINERS
+>>>>> +++ b/MAINTAINERS
+>>>>> @@ -15434,6 +15434,7 @@ S:	Maintained
+>>>>>  W:	http://openvswitch.org
+>>>>>  F:	include/uapi/linux/openvswitch.h
+>>>>>  F:	net/openvswitch/
+>>>>> +F:	tools/testing/selftests/net/openvswitch/
+>>>>>  
+>>>>>  OPERATING PERFORMANCE POINTS (OPP)
+>>>>>  M:	Viresh Kumar <vireshk@kernel.org>
+>>>>
+>>>> ...
+>>>>
+>>>>> +exit ${exitcode}
+>>>>> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+>>>>> b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+>>>>> new file mode 100644
+>>>>> index 000000000000..791d76b7adcd
+>>>>> --- /dev/null
+>>>>> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+>>>>> @@ -0,0 +1,411 @@
+>>>>> +#!/usr/bin/env python3
+>>>>> +# SPDX-License-Identifier: GPL-2.0
+>>>>> +
+>>>>> +# Controls the openvswitch module.  Part of the kselftest suite, but
+>>>>> +# can be used for some diagnostic purpose as well.
+>>>>> +
+>>>>> +import logging
+>>>>> +import multiprocessing
+>>>>> +import socket
+>>>>> +import struct
+>>>>> +import sys
+>>>>> +
+>>>>> +try:
+>>>>> +    from libnl.attr import NLA_NESTED, NLA_STRING, NLA_U32, NLA_UNSPEC
+>>>>> +    from libnl.attr import nla_get_string, nla_get_u32
+>>>>> +    from libnl.attr import nla_put, nla_put_string, nla_put_u32
+>>>>> +    from libnl.attr import nla_policy
+>>>>> +
+>>>>> +    from libnl.error import errmsg
+>>>>> +
+>>>>> +    from libnl.genl.ctrl import genl_ctrl_resolve
+>>>>> +    from libnl.genl.genl import genl_connect, genlmsg_parse, genlmsg_put
+>>>>> +
+>>>>> +    from libnl.handlers import nl_cb_alloc, nl_cb_set
+>>>>> +    from libnl.handlers import NL_CB_CUSTOM, NL_CB_MSG_IN, NL_CB_VALID
+>>>>> +    from libnl.handlers import NL_OK, NL_STOP
+>>>>> +
+>>>>> +    from libnl.linux_private.netlink import NLM_F_ACK, NLM_F_DUMP
+>>>>> +    from libnl.linux_private.netlink import NLM_F_REQUEST, NLMSG_DONE
+>>>>> +
+>>>>> +    from libnl.msg import NL_AUTO_SEQ, nlmsg_alloc, nlmsg_hdr
+>>>>> +
+>>>>> +    from libnl.nl import NLMSG_ERROR, nl_recvmsgs_default, nl_send_auto
+>>>>> +    from libnl.socket_ import nl_socket_alloc, nl_socket_set_cb
+>>>>> +    from libnl.socket_ import nl_socket_get_local_port
+>>>>> +except ModuleNotFoundError:
+>>>>> +    print("Need to install the python libnl3 library.")
+>>>>
+>>>>
+>>>> Hey, Aaron and Kevin.  Selftests sounds like a very important and
+>>>> long overdue thing to add.  Thanks for working on this!
+>>>>
+>>>> I have some worries about the libnl3 library though.  It doesn't
+>>>> seem to be maintained well.  It it maintained by a single person,
+>>>> it it was at least 3 different single persons over the last 7
+>>>> years via forks.  It didn't get any significant development done
+>>>> since 2015 as well and no commits at all for a last 1.5 years.
+>>>> It is not packaged by any major distributions.
+>>>
+>>> :-/  On my fedora:
+>>>
+>>>   11:12:24 aconole@RHTPC1VM0NT ~$ dnf search python3-libnl3
+>>>   Last metadata expiration check: 1 day, 0:25:11 ago on Wed 19 Oct 2022 10:47:21 AM EDT.
+>>>   ===================== Name Exactly Matched: python3-libnl3 =====================
+>>>   python3-libnl3.x86_64 : libnl3 binding for Python 3
+>>>
+>>>
+>>> And I can use it:
+>>>
+>>>   11:18:39 aconole@RHTPC1VM0NT {(6a5c83bdd991...)} ~/git/linux/tools/testing/selftests/net/openvswitch$ sudo python3 ./ovs-dpctl.py show
+>>>   foop
+>>>     Lookups: Hit: 0 Missed: 0 Lost: 0
+>>>     Flows: 0
+>>>     Masks: Hit: 0 Total: 0
+>>>     Cache: Hit: 0
+>>>   Caches:
+>>>     Masks-cache: size: 256
+>>>       Port 0: foop (internal)
+>>>   11:18:43 aconole@RHTPC1VM0NT {(6a5c83bdd991...)} ~/git/linux/tools/testing/selftests/net/openvswitch$ rpm -qa | grep python3-libnl3
+>>>   python3-libnl3-3.5.0-6.fc34.x86_64
+>>>   11:19:01 aconole@RHTPC1VM0NT {(6a5c83bdd991...)} ~/git/linux/tools/testing/selftests/net/openvswitch$ 
+>>>
+>>> Was there some place you did not find it?
+>> 
+>> You're right, I missed that somehow.  But this is not an
+>> https://github.com/coolshou/libnl3 project. :)
+>> These are python bindings for the C libnl library:
+>> 
+>> $ dnf info python3-libnl3
+>> Available Packages
+>> Name         : python3-libnl3
+>> Version      : 3.7.0
+>> Release      : 1.fc36
+>> Architecture : x86_64
+>> Size         : 153 k
+>> Source       : libnl3-3.7.0-1.fc36.src.rpm
+>> Repository   : updates
+>> Summary      : libnl3 binding for Python 3
+>> URL          : http://www.infradead.org/~tgr/libnl/
+>> License      : LGPLv2
+>> Description  : Python 3 bindings for libnl3
+>
+> Actually, I can't find an equivalent package for Ubuntu 22.04.
+> And since pip is not an option (pip install libnl3 is a different
+> package), there is no way to install it there beside building
+> from sources.
+>
+> Am I still missing something?
 
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- .../selftests/net/openvswitch/Makefile        |  13 +
- .../selftests/net/openvswitch/openvswitch.sh  | 218 +++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 351 ++++++++++++++++++
- 5 files changed, 584 insertions(+)
- create mode 100644 tools/testing/selftests/net/openvswitch/Makefile
- create mode 100755 tools/testing/selftests/net/openvswitch/openvswitch.sh
- create mode 100644 tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+Well, I have switched the latest version to using pyroute2 - hopefully
+this will be acceptable :)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index abbe88e1c50b..295a6b0fbe26 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15434,6 +15434,7 @@ S:	Maintained
- W:	http://openvswitch.org
- F:	include/uapi/linux/openvswitch.h
- F:	net/openvswitch/
-+F:	tools/testing/selftests/net/openvswitch/
- 
- OPERATING PERFORMANCE POINTS (OPP)
- M:	Viresh Kumar <vireshk@kernel.org>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 0464b2c6c1e4..f07aef7c592c 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -49,6 +49,7 @@ TARGETS += net
- TARGETS += net/af_unix
- TARGETS += net/forwarding
- TARGETS += net/mptcp
-+TARGETS += net/openvswitch
- TARGETS += netfilter
- TARGETS += nsfs
- TARGETS += pidfd
-diff --git a/tools/testing/selftests/net/openvswitch/Makefile b/tools/testing/selftests/net/openvswitch/Makefile
-new file mode 100644
-index 000000000000..2f1508abc826
---- /dev/null
-+++ b/tools/testing/selftests/net/openvswitch/Makefile
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+top_srcdir = ../../../../..
-+
-+CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
-+
-+TEST_PROGS := openvswitch.sh
-+
-+TEST_FILES := ovs-dpctl.py
-+
-+EXTRA_CLEAN := test_netlink_checks
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-new file mode 100755
-index 000000000000..7ce46700a3ae
---- /dev/null
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -0,0 +1,218 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# OVS kernel module self tests
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+PAUSE_ON_FAIL=no
-+VERBOSE=0
-+TRACING=0
-+
-+tests="
-+	netlink_checks				ovsnl: validate netlink attrs and settings"
-+
-+info() {
-+    [ $VERBOSE = 0 ] || echo $*
-+}
-+
-+ovs_base=`pwd`
-+sbxs=
-+sbx_add () {
-+	info "adding sandbox '$1'"
-+
-+	sbxs="$sbxs $1"
-+
-+	NO_BIN=0
-+
-+	# Create sandbox.
-+	local d="$ovs_base"/$1
-+	if [ -e $d ]; then
-+		info "removing $d"
-+		rm -rf "$d"
-+	fi
-+	mkdir "$d" || return 1
-+	ovs_setenv $1
-+}
-+
-+ovs_exit_sig() {
-+	[ -e ${ovs_dir}/cleanup ] && . "$ovs_dir/cleanup"
-+}
-+
-+on_exit() {
-+	echo "$1" > ${ovs_dir}/cleanup.tmp
-+	cat ${ovs_dir}/cleanup >> ${ovs_dir}/cleanup.tmp
-+	mv ${ovs_dir}/cleanup.tmp ${ovs_dir}/cleanup
-+}
-+
-+ovs_setenv() {
-+	sandbox=$1
-+
-+	ovs_dir=$ovs_base${1:+/$1}; export ovs_dir
-+
-+	test -e ${ovs_dir}/cleanup || : > ${ovs_dir}/cleanup
-+}
-+
-+ovs_sbx() {
-+	if test "X$2" != X; then
-+		(ovs_setenv $1; shift; "$@" >> ${ovs_dir}/debug.log)
-+	else
-+		ovs_setenv $1
-+	fi
-+}
-+
-+ovs_add_dp () {
-+	info "Adding DP/Bridge IF: sbx:$1 dp:$2 {$3, $4, $5}"
-+	sbxname="$1"
-+	shift
-+	ovs_sbx "$sbxname" python3 $ovs_base/ovs-dpctl.py add-dp $*
-+	on_exit "ovs_sbx $sbxname python3 $ovs_base/ovs-dpctl.py del-dp $1;"
-+}
-+
-+usage() {
-+	echo
-+	echo "$0 [OPTIONS] [TEST]..."
-+	echo "If no TEST argument is given, all tests will be run."
-+	echo
-+	echo "Options"
-+	echo "  -t: capture traffic via tcpdump"
-+	echo "  -v: verbose"
-+	echo "  -p: pause on failure"
-+	echo
-+	echo "Available tests${tests}"
-+	exit 1
-+}
-+
-+# netlink_validation
-+# - Create a dp
-+# - check no warning with "old version" simulation
-+test_netlink_checks () {
-+	sbx_add "test_netlink_checks" || return 1
-+
-+	info "setting up new DP"
-+	ovs_add_dp "test_netlink_checks" nv0 || return 1
-+	# now try again
-+	PRE_TEST=$(dmesg | grep -E "RIP: [0-9a-fA-Fx]+:ovs_dp_cmd_new\+")
-+	ovs_add_dp "test_netlink_checks" nv0 -V 0 || return 1
-+	POST_TEST=$(dmesg | grep -E "RIP: [0-9a-fA-Fx]+:ovs_dp_cmd_new\+")
-+	if [ "$PRE_TEST" != "$POST_TEST" ]; then
-+		info "failed - gen warning"
-+		return 1
-+	fi
-+
-+	return 0
-+}
-+
-+run_test() {
-+	(
-+	tname="$1"
-+	tdesc="$2"
-+
-+	if ! lsmod | grep openvswitch >/dev/null 2>&1; then
-+		stdbuf -o0 printf "TEST: %-60s  [NOMOD]\n" "${tdesc}"
-+		return $ksft_skip
-+	fi
-+
-+	if python3 ovs-dpctl.py -h 2>&1 | \
-+	     grep "Need to install the python" >/dev/null 2>&1; then
-+		stdbuf -o0 printf "TEST: %-60s  [PYLIB]\n" "${tdesc}"
-+		return $ksft_skip
-+	fi
-+	printf "TEST: %-60s  [START]\n" "${tname}"
-+
-+	unset IFS
-+
-+	eval test_${tname}
-+	ret=$?
-+
-+	if [ $ret -eq 0 ]; then
-+		printf "TEST: %-60s  [ OK ]\n" "${tdesc}"
-+		ovs_exit_sig
-+		rm -rf "$ovs_dir"
-+	elif [ $ret -eq 1 ]; then
-+		printf "TEST: %-60s  [FAIL]\n" "${tdesc}"
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+			echo
-+			echo "Pausing. Logs in $ovs_dir/. Hit enter to continue"
-+			read a
-+		fi
-+		ovs_exit_sig
-+		[ "${PAUSE_ON_FAIL}" = "yes" ] || rm -rf "$ovs_dir"
-+		exit 1
-+	elif [ $ret -eq $ksft_skip ]; then
-+		printf "TEST: %-60s  [SKIP]\n" "${tdesc}"
-+	elif [ $ret -eq 2 ]; then
-+		rm -rf test_${tname}
-+		run_test "$1" "$2"
-+	fi
-+
-+	return $ret
-+	)
-+	ret=$?
-+	case $ret in
-+		0)
-+			[ $all_skipped = true ] && [ $exitcode=$ksft_skip ] && exitcode=0
-+			all_skipped=false
-+		;;
-+		$ksft_skip)
-+			[ $all_skipped = true ] && exitcode=$ksft_skip
-+		;;
-+		*)
-+			all_skipped=false
-+			exitcode=1
-+		;;
-+	esac
-+
-+	return $ret
-+}
-+
-+
-+exitcode=0
-+desc=0
-+all_skipped=true
-+
-+while getopts :pvt o
-+do
-+	case $o in
-+	p) PAUSE_ON_FAIL=yes;;
-+	v) VERBOSE=1;;
-+	t) if which tcpdump > /dev/null 2>&1; then
-+		TRACING=1
-+	   else
-+		echo "=== tcpdump not available, tracing disabled"
-+	   fi
-+	   ;;
-+	*) usage;;
-+	esac
-+done
-+shift $(($OPTIND-1))
-+
-+IFS="	
-+"
-+
-+for arg do
-+	# Check first that all requested tests are available before running any
-+	command -v > /dev/null "test_${arg}" || { echo "=== Test ${arg} not found"; usage; }
-+done
-+
-+name=""
-+desc=""
-+for t in ${tests}; do
-+	[ "${name}" = "" ]	&& name="${t}"	&& continue
-+	[ "${desc}" = "" ]	&& desc="${t}"
-+
-+	run_this=1
-+	for arg do
-+		[ "${arg}" != "${arg#--*}" ] && continue
-+		[ "${arg}" = "${name}" ] && run_this=1 && break
-+		run_this=0
-+	done
-+	if [ $run_this -eq 1 ]; then
-+		run_test "${name}" "${desc}"
-+	fi
-+	name=""
-+	desc=""
-+done
-+
-+exit ${exitcode}
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-new file mode 100644
-index 000000000000..3243c90d449e
---- /dev/null
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -0,0 +1,351 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Controls the openvswitch module.  Part of the kselftest suite, but
-+# can be used for some diagnostic purpose as well.
-+
-+import argparse
-+import errno
-+import sys
-+
-+try:
-+    from pyroute2 import NDB
-+
-+    from pyroute2.netlink import NLM_F_ACK
-+    from pyroute2.netlink import NLM_F_REQUEST
-+    from pyroute2.netlink import genlmsg
-+    from pyroute2.netlink import nla
-+    from pyroute2.netlink.exceptions import NetlinkError
-+    from pyroute2.netlink.generic import GenericNetlinkSocket
-+except ModuleNotFoundError:
-+    print("Need to install the python pyroute2 package.")
-+    sys.exit(0)
-+
-+
-+OVS_DATAPATH_FAMILY = "ovs_datapath"
-+OVS_VPORT_FAMILY = "ovs_vport"
-+OVS_FLOW_FAMILY = "ovs_flow"
-+OVS_PACKET_FAMILY = "ovs_packet"
-+OVS_METER_FAMILY = "ovs_meter"
-+OVS_CT_LIMIT_FAMILY = "ovs_ct_limit"
-+
-+OVS_DATAPATH_VERSION = 2
-+OVS_DP_CMD_NEW = 1
-+OVS_DP_CMD_DEL = 2
-+OVS_DP_CMD_GET = 3
-+OVS_DP_CMD_SET = 4
-+
-+OVS_VPORT_CMD_NEW = 1
-+OVS_VPORT_CMD_DEL = 2
-+OVS_VPORT_CMD_GET = 3
-+OVS_VPORT_CMD_SET = 4
-+
-+
-+class ovs_dp_msg(genlmsg):
-+    # include the OVS version
-+    # We need a custom header rather than just being able to rely on
-+    # genlmsg because fields ends up not expressing everything correctly
-+    # if we use the canonical example of setting fields = (('customfield',),)
-+    fields = genlmsg.fields + (("dpifindex", "I"),)
-+
-+
-+class OvsDatapath(GenericNetlinkSocket):
-+
-+    OVS_DP_F_VPORT_PIDS = 1 << 1
-+    OVS_DP_F_DISPATCH_UPCALL_PER_CPU = 1 << 3
-+
-+    class dp_cmd_msg(ovs_dp_msg):
-+        """
-+        Message class that will be used to communicate with the kernel module.
-+        """
-+
-+        nla_map = (
-+            ("OVS_DP_ATTR_UNSPEC", "none"),
-+            ("OVS_DP_ATTR_NAME", "asciiz"),
-+            ("OVS_DP_ATTR_UPCALL_PID", "uint32"),
-+            ("OVS_DP_ATTR_STATS", "dpstats"),
-+            ("OVS_DP_ATTR_MEGAFLOW_STATS", "megaflowstats"),
-+            ("OVS_DP_ATTR_USER_FEATURES", "uint32"),
-+            ("OVS_DP_ATTR_PAD", "none"),
-+            ("OVS_DP_ATTR_MASKS_CACHE_SIZE", "uint32"),
-+            ("OVS_DP_ATTR_PER_CPU_PIDS", "array(uint32)"),
-+        )
-+
-+        class dpstats(nla):
-+            fields = (
-+                ("hit", "=Q"),
-+                ("missed", "=Q"),
-+                ("lost", "=Q"),
-+                ("flows", "=Q"),
-+            )
-+
-+        class megaflowstats(nla):
-+            fields = (
-+                ("mask_hit", "=Q"),
-+                ("masks", "=I"),
-+                ("padding", "=I"),
-+                ("cache_hits", "=Q"),
-+                ("pad1", "=Q"),
-+            )
-+
-+    def __init__(self):
-+        GenericNetlinkSocket.__init__(self)
-+        self.bind(OVS_DATAPATH_FAMILY, OvsDatapath.dp_cmd_msg)
-+
-+    def info(self, dpname, ifindex=0):
-+        msg = OvsDatapath.dp_cmd_msg()
-+        msg["cmd"] = OVS_DP_CMD_GET
-+        msg["version"] = OVS_DATAPATH_VERSION
-+        msg["reserved"] = 0
-+        msg["dpifindex"] = ifindex
-+        msg["attrs"].append(["OVS_DP_ATTR_NAME", dpname])
-+
-+        try:
-+            reply = self.nlm_request(
-+                msg, msg_type=self.prid, msg_flags=NLM_F_REQUEST
-+            )
-+            reply = reply[0]
-+        except NetlinkError as ne:
-+            if ne.code == errno.ENODEV:
-+                reply = None
-+            else:
-+                raise ne
-+
-+        return reply
-+
-+    def create(self, dpname, shouldUpcall=False, versionStr=None):
-+        msg = OvsDatapath.dp_cmd_msg()
-+        msg["cmd"] = OVS_DP_CMD_NEW
-+        if versionStr is None:
-+            msg["version"] = OVS_DATAPATH_VERSION
-+        else:
-+            msg["version"] = int(versionStr.split(":")[0], 0)
-+        msg["reserved"] = 0
-+        msg["dpifindex"] = 0
-+        msg["attrs"].append(["OVS_DP_ATTR_NAME", dpname])
-+
-+        dpfeatures = 0
-+        if versionStr is not None and versionStr.find(":") != -1:
-+            dpfeatures = int(versionStr.split(":")[1], 0)
-+        else:
-+            dpfeatures = OvsDatapath.OVS_DP_F_VPORT_PIDS
-+
-+        msg["attrs"].append(["OVS_DP_ATTR_USER_FEATURES", dpfeatures])
-+        if not shouldUpcall:
-+            msg["attrs"].append(["OVS_DP_ATTR_UPCALL_PID", 0])
-+
-+        try:
-+            reply = self.nlm_request(
-+                msg, msg_type=self.prid, msg_flags=NLM_F_REQUEST | NLM_F_ACK
-+            )
-+            reply = reply[0]
-+        except NetlinkError as ne:
-+            if ne.code == errno.EEXIST:
-+                reply = None
-+            else:
-+                raise ne
-+
-+        return reply
-+
-+    def destroy(self, dpname):
-+        msg = OvsDatapath.dp_cmd_msg()
-+        msg["cmd"] = OVS_DP_CMD_DEL
-+        msg["version"] = OVS_DATAPATH_VERSION
-+        msg["reserved"] = 0
-+        msg["dpifindex"] = 0
-+        msg["attrs"].append(["OVS_DP_ATTR_NAME", dpname])
-+
-+        try:
-+            reply = self.nlm_request(
-+                msg, msg_type=self.prid, msg_flags=NLM_F_REQUEST | NLM_F_ACK
-+            )
-+            reply = reply[0]
-+        except NetlinkError as ne:
-+            if ne.code == errno.ENODEV:
-+                reply = None
-+            else:
-+                raise ne
-+
-+        return reply
-+
-+
-+class OvsVport(GenericNetlinkSocket):
-+    class ovs_vport_msg(ovs_dp_msg):
-+        nla_map = (
-+            ("OVS_VPORT_ATTR_UNSPEC", "none"),
-+            ("OVS_VPORT_ATTR_PORT_NO", "uint32"),
-+            ("OVS_VPORT_ATTR_TYPE", "uint32"),
-+            ("OVS_VPORT_ATTR_NAME", "asciiz"),
-+            ("OVS_VPORT_ATTR_OPTIONS", "none"),
-+            ("OVS_VPORT_ATTR_UPCALL_PID", "array(uint32)"),
-+            ("OVS_VPORT_ATTR_STATS", "vportstats"),
-+            ("OVS_VPORT_ATTR_PAD", "none"),
-+            ("OVS_VPORT_ATTR_IFINDEX", "uint32"),
-+            ("OVS_VPORT_ATTR_NETNSID", "uint32"),
-+        )
-+
-+        class vportstats(nla):
-+            fields = (
-+                ("rx_packets", "=Q"),
-+                ("tx_packets", "=Q"),
-+                ("rx_bytes", "=Q"),
-+                ("tx_bytes", "=Q"),
-+                ("rx_errors", "=Q"),
-+                ("tx_errors", "=Q"),
-+                ("rx_dropped", "=Q"),
-+                ("tx_dropped", "=Q"),
-+            )
-+
-+    def type_to_str(vport_type):
-+        if vport_type == 1:
-+            return "netdev"
-+        elif vport_type == 2:
-+            return "internal"
-+        elif vport_type == 3:
-+            return "gre"
-+        elif vport_type == 4:
-+            return "vxlan"
-+        elif vport_type == 5:
-+            return "geneve"
-+        return "unknown:%d" % vport_type
-+
-+    def __init__(self):
-+        GenericNetlinkSocket.__init__(self)
-+        self.bind(OVS_VPORT_FAMILY, OvsVport.ovs_vport_msg)
-+
-+    def info(self, vport_name, dpifindex=0, portno=None):
-+        msg = OvsVport.ovs_vport_msg()
-+
-+        msg["cmd"] = OVS_VPORT_CMD_GET
-+        msg["version"] = OVS_DATAPATH_VERSION
-+        msg["reserved"] = 0
-+        msg["dpifindex"] = dpifindex
-+
-+        if portno is None:
-+            msg["attrs"].append(["OVS_VPORT_ATTR_NAME", vport_name])
-+        else:
-+            msg["attrs"].append(["OVS_VPORT_ATTR_PORT_NO", portno])
-+
-+        try:
-+            reply = self.nlm_request(
-+                msg, msg_type=self.prid, msg_flags=NLM_F_REQUEST
-+            )
-+            reply = reply[0]
-+        except NetlinkError as ne:
-+            if ne.code == errno.ENODEV:
-+                reply = None
-+            else:
-+                raise ne
-+        return reply
-+
-+
-+def print_ovsdp_full(dp_lookup_rep, ifindex, ndb=NDB()):
-+    dp_name = dp_lookup_rep.get_attr("OVS_DP_ATTR_NAME")
-+    base_stats = dp_lookup_rep.get_attr("OVS_DP_ATTR_STATS")
-+    megaflow_stats = dp_lookup_rep.get_attr("OVS_DP_ATTR_MEGAFLOW_STATS")
-+    user_features = dp_lookup_rep.get_attr("OVS_DP_ATTR_USER_FEATURES")
-+    masks_cache_size = dp_lookup_rep.get_attr("OVS_DP_ATTR_MASKS_CACHE_SIZE")
-+
-+    print("%s:" % dp_name)
-+    print(
-+        "  lookups: hit:%d missed:%d lost:%d"
-+        % (base_stats["hit"], base_stats["missed"], base_stats["lost"])
-+    )
-+    print("  flows:%d" % base_stats["flows"])
-+    pkts = base_stats["hit"] + base_stats["missed"]
-+    avg = (megaflow_stats["mask_hit"] / pkts) if pkts != 0 else 0.0
-+    print(
-+        "  masks: hit:%d total:%d hit/pkt:%f"
-+        % (megaflow_stats["mask_hit"], megaflow_stats["masks"], avg)
-+    )
-+    print("  caches:")
-+    print("    masks-cache: size:%d" % masks_cache_size)
-+
-+    if user_features is not None:
-+        print("  features: 0x%X" % user_features)
-+
-+    # port print out
-+    vpl = OvsVport()
-+    for iface in ndb.interfaces:
-+        rep = vpl.info(iface.ifname, ifindex)
-+        if rep is not None:
-+            print(
-+                "  port %d: %s (%s)"
-+                % (
-+                    rep.get_attr("OVS_VPORT_ATTR_PORT_NO"),
-+                    rep.get_attr("OVS_VPORT_ATTR_NAME"),
-+                    OvsVport.type_to_str(rep.get_attr("OVS_VPORT_ATTR_TYPE")),
-+                )
-+            )
-+
-+
-+def main(argv):
-+    parser = argparse.ArgumentParser()
-+    parser.add_argument(
-+        "-v",
-+        "--verbose",
-+        action="count",
-+        help="Increment 'verbose' output counter.",
-+    )
-+    subparsers = parser.add_subparsers()
-+
-+    showdpcmd = subparsers.add_parser("show")
-+    showdpcmd.add_argument(
-+        "showdp", metavar="N", type=str, nargs="?", help="Datapath Name"
-+    )
-+
-+    adddpcmd = subparsers.add_parser("add-dp")
-+    adddpcmd.add_argument("adddp", help="Datapath Name")
-+    adddpcmd.add_argument(
-+        "-u",
-+        "--upcall",
-+        action="store_true",
-+        help="Leave open a reader for upcalls",
-+    )
-+    adddpcmd.add_argument(
-+        "-V",
-+        "--versioning",
-+        required=False,
-+        help="Specify a custom version / feature string",
-+    )
-+
-+    deldpcmd = subparsers.add_parser("del-dp")
-+    deldpcmd.add_argument("deldp", help="Datapath Name")
-+
-+    args = parser.parse_args()
-+
-+    ovsdp = OvsDatapath()
-+    ndb = NDB()
-+
-+    if hasattr(args, "showdp"):
-+        found = False
-+        for iface in ndb.interfaces:
-+            rep = None
-+            if args.showdp is None:
-+                rep = ovsdp.info(iface.ifname, 0)
-+            elif args.showdp == iface.ifname:
-+                rep = ovsdp.info(iface.ifname, 0)
-+
-+            if rep is not None:
-+                found = True
-+                print_ovsdp_full(rep, iface.index, ndb)
-+
-+        if not found:
-+            msg = "No DP found"
-+            if args.showdp is not None:
-+                msg += ":'%s'" % args.showdp
-+            print(msg)
-+    elif hasattr(args, "adddp"):
-+        rep = ovsdp.create(args.adddp, args.upcall, args.versioning)
-+        if rep is None:
-+            print("DP '%s' already exists" % args.adddp)
-+        else:
-+            print("DP '%s' added" % args.adddp)
-+    elif hasattr(args, "deldp"):
-+        ovsdp.destroy(args.deldp)
-+
-+    return 0
-+
-+
-+if __name__ == "__main__":
-+    sys.exit(main(sys.argv))
--- 
-2.34.3
+>> 
+>>>
+>>>> I'm talking about https://github.com/coolshou/libnl3 .  Please,
+>>>> correct me if that is not the right one.  There are too many
+>>>> libraies with the name libnl out there...  That is also not a great
+>>>> sign.
+>>>
+>>> Yes, this is the project.
+>> 
+>> Doensn't look like it...
+>> 
+>>> We did look at some of the ones you
+>>> mentioned, but didn't find much.
+>>>
+>>> It is a sparse landscape of projects that provide netlink support in
+>>> python.
+>>>
+>>>> The C library libnl (https://github.com/thom311/libnl) seems to
+>>>> be well maintained in general.  It has experimental python
+>>>> bindings which are not really supported much.  Python bindings
+>>>> received only 2 actual code-changing commits in the last 7 years.
+>>>> Both of them are just python 2/3 compatibility changes.
+>>>> Maybe that is not that big of a deal since it's not really a
+>>>> real python library, but a wrapper on top of a main C library.
+>>>> However, I didn't find these python bindings to be packaged in
+>>>> distributions.  And they seem to be not available in pip as well.
+>>>> So, building them is kind of a pain.
+>>>
+>>> Well, the python libnl3 should be installable via pip3.  Ex:
+>>>
+>>>   11:27:15 aconole@RHTPC1VM0NT ~$ pip3 install libnl3
+>>>   Defaulting to user installation because normal site-packages is not writeable
+>>>   Collecting libnl3
+>>>     Using cached libnl3-0.3.0-py3-none-any.whl (89 kB)
+>>>   Installing collected packages: libnl3
+>>>   Successfully installed libnl3-0.3.0
+>> 
+>> And this is https://pypi.org/project/libnl3/, which is the
+>> https://github.com/coolshou/libnl3 project.  So, by installing
+>> libnl3 via pip and installing python3-libnl3 from the fedora
+>> you're getting two completely different libraries.
+>> 
+>> So, which one users should use?
+>> 
+>> I can't find python bindings for the C libnl (which is the
+>> python3-libnl3 package) in pypi, so it can't be installed
+>> with pip.
+>> 
+>> 
+>>>
+>>> So I guess that is worth something.
+>>>
+>>> At least on Fedora it is installable from distribution as well.
+>>>
+>>>> There is another option which is pyroute2.  It positions itself
+>>>> primarily as a netlink library and it does include an
+>>>> pyroute2.netlink module indeed:
+>>>>   https://github.com/svinota/pyroute2/tree/master/pyroute2/netlink
+>>>> See the __init__.py for usage examples.
+>>>>
+>>>> This one looks to me like the most trustworthy.  It is actively
+>>>> used by everyone in the python networking world, e.g. by OpenStack.
+>>>> And it is actively developed and maintained unlike other
+>>>> netlink-related python projects.  It is also packaged in most of the
+>>>> main distributions, so it's easy to install and use.  Many people
+>>>> already have it installed for other purposes.
+>>>>
+>>>> TBH, I didn't compare the functionality, but I'd expect that most
+>>>> of the things we need are implemented.
+>>>>
+>>>> What do you think?
+>>>
+>>> We can certainly look at switching, but having a quick glance, it seems
+>>> pyroute2 expects to provide the genl commands as well, so they would
+>>> want us to create an ovs module in pyroute2 that includes all of the ovs
+>>> family support.  Of course, we can always do this just in our module,
+>>> but I think it isn't the way pyroute2 project wants to be structured.
+>>> More like a library that provides all the command functionality.
+>> 
+>> What I was thinking is to import pyroute2.netlink and the
+>> pyroute2.netlink.generic  and go from there.  But I didn't
+>> look too deep on how to actually implement the functionality.
+>> 
+>> The python bindings for the C libnl (python3-libnl3) sounds
+>> like a fine option since they are actually packaged in
+>> distributions (missed that in my initial reply).  However,
+>> the fact that you can not install them via pip and actually
+>> you will install something but completely different is kind
+>> of weird.  This has to be at least better documented, so
+>> users will know what to install and they will not try to use
+>> pip for that.
+>> 
+>>>
+>>>> On the other note, I'm not a real python developer, but the code
+>>>> looks more like a C than a python even for me.  Firstly, I'd say
+>>>> that it would be great to maintain some coding style, e.g. by
+>>>> checking with flake8 and/or black.  See some issues/suggestions
+>>>> provided by these tools below.
+>>>
+>>> Agreed.  BTW, on the rhel8 system I developed on:
+>>>
+>>>   [root@wsfd-netdev60 openvswitch]# flake8 ./ovs-dpctl.py 
+>>>   [root@wsfd-netdev60 openvswitch]# 
+>>>
+>>> So, I guess it is probably that I should have used a different system to
+>>> do the flake8 checks.
+>> 
+>> Maybe the python version is different...  I was running on f36
+>> with python 3.10.  Also, the list of defaults might be different.
+>> flake8 doesn't use default ignore list if one is explicitly provided.
+>> 
+>>>
+>>>> Secondly, we shouldd at least use argparse for argument parsing.
+>>>> It's part of the standard library since python 3.2, so doens't
+>>>> require any special dependencies to be installed.
+>>>
+>>> Okay - I can switch to argparse.  TBH, I haven't kept up with python
+>>> standard library for some time.
+>> 
+>> Well, 3.2 was released 11 years ago. :)
+>> 
+>>>
+>>>> Some parts of the code can probably be re-written to be more
+>>>> "pythonic" as well, but I won't dive into that for now.  I didn't
+>>>> review the code deep enough for that.
+>>>
+>>> I have difficulty sometimes understanding what it means to be "Real
+>>> Python (tm)" - I don't plan to change things too much.  I can certainly
+>>> switch to using argparse, but unless you give something you want to
+>>> change, I would not change anything.
+>> 
+>> I breifly looked through code and though I don't fully
+>> understand what this piece supposed to do:
+>> 
+>> +        segment = hdrval.find(":")
+>> +        if segment == -1:
+>> +            segment = len(hdrval)
+>> +        hdrver = int(hdrval[:segment], 0)
+>> +        if len(hdrval[:segment]):
+>> +            userfeatures = int(hdrval[:segment], 0)
+>> 
+>> but I have a strong feeling that this part can benefit
+>> from use of hdrval.split(':').
+>> 
+>> I won't insist on that too much. :)
+>> 
+>> Best regards, Ilya Maximets.
 
