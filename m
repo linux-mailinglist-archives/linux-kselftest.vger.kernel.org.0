@@ -2,71 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E3D60C4B2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 09:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6FE60C4B9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 09:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiJYHFn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 03:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
+        id S229851AbiJYHH5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 03:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiJYHFm (ORCPT
+        with ESMTP id S229952AbiJYHHz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:05:42 -0400
+        Tue, 25 Oct 2022 03:07:55 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D115D4A112
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 00:05:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FA16BCE0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 00:07:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666681539;
+        s=mimecast20190719; t=1666681674;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fe1WZpWI0+WNHlpXUbrxZSAOPfSw/3F9thWPXoPIAVs=;
-        b=AtGwgNSDpIm6obnesW0L75VfF3/OFXAOFVlnGfOlzJwPclzWBj9C642Ii5LsyTmP4n4Dru
-        fLFmO7yAMl5rRXEYbCD7ehSCq5t8ixS+yi5LqHMWt29BWsjji6YpigbatbPur4npfOzw3S
-        qP+yE7iQTftUUtIiMVeXfNG1od7uz9c=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=e274vUxvlMRl4b9EVFADkQ7OakHDt5CbdSA7wcE3hgk=;
+        b=KAq4Lnflfo127ahBd6D3zfKVPiJFdCGoUIPgsWDaNlfwWVgE7gK7EOkFCy+q+r7DNvLiVR
+        TKi50bH01tE51LoDhfxZKvJYhjhPnwh688XRl9Okj6LZgF3tNkEZQXoecBp+mVLBwomiOt
+        wx37jvVuVP8utkCE1Wl/TZ38iL6Ykvs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-626-OpTFLyGEOJGMFOVoZXXImQ-1; Tue, 25 Oct 2022 03:05:37 -0400
-X-MC-Unique: OpTFLyGEOJGMFOVoZXXImQ-1
-Received: by mail-wr1-f72.google.com with SMTP id c18-20020adfa312000000b002364fabf2ceso4241970wrb.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 00:05:37 -0700 (PDT)
+ us-mta-306-CiRZXWkRNA-5Si2CaWR9Yw-1; Tue, 25 Oct 2022 03:07:53 -0400
+X-MC-Unique: CiRZXWkRNA-5Si2CaWR9Yw-1
+Received: by mail-wm1-f71.google.com with SMTP id x12-20020a05600c21cc00b003c8340cb973so1863147wmj.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 00:07:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fe1WZpWI0+WNHlpXUbrxZSAOPfSw/3F9thWPXoPIAVs=;
-        b=ZMGwhJYyequ1uvhsqg9apF26vC5mAAyvyXxObsfQIyRsa3iUa/k3KXdjmL6DyUdPEw
-         g7IbZIku6rDHmjfuw2yiOq4al53lmXGkdRpwenEgPULWCKtXukZoZhdoAtsFkwfOjhIA
-         XE7Ece6f6eXwIbF0rlC+yr2gvOQHK+riQJFY73h9kgGY+Y2AWrJWkanJms5quVeMNcQD
-         kqpnL5K0qPt4Ytc8Fo2DLxYFofMaVCm9+vw0fZq3LnVwLJUtJXT0inbORmdOQHDxDdrD
-         l6oZtpMwS0wyE03BisEOCNXQe3Z6oysR3Nw18Kv4Cy+ywDV7izkZknJ+OGA4sbn0Efh9
-         hoAQ==
-X-Gm-Message-State: ACrzQf3j+j/noACqkuMsi6tAbFMpCFmN9QpDvPLjzvLuDj5EWoPubqrQ
-        jasGQhoXIrRsJcoJic29tYn8AeNXam1pEGDaIkLhVrI4FQLbpV6Jit5pjpRhLirpAg6BFBBucfD
-        EJqJMPX/DhCxEZnB6f9tnflNQyidC
-X-Received: by 2002:a5d:6d8a:0:b0:236:6123:a8a5 with SMTP id l10-20020a5d6d8a000000b002366123a8a5mr9839564wrs.229.1666681536437;
-        Tue, 25 Oct 2022 00:05:36 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6vGN8RwMdOloicelrC6hCDmVpDUnXTSURyJhiGcLjlRN3taSS7ZSJOzY1mCKKolD0ZTIX/qA==
-X-Received: by 2002:a5d:6d8a:0:b0:236:6123:a8a5 with SMTP id l10-20020a5d6d8a000000b002366123a8a5mr9839535wrs.229.1666681536103;
-        Tue, 25 Oct 2022 00:05:36 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e274vUxvlMRl4b9EVFADkQ7OakHDt5CbdSA7wcE3hgk=;
+        b=0UYzKEC1ZGDOv7nrOCTQfhZujIughRF6np/vf9gVv7vrb4ELLuH8pQ09I9TckDsAux
+         7/LYja6IycuyPOlVNo0NiRWnIRXF+tjToZGa9/qLLuC4Xt6LUX3YCMjL4zac8zbz7TMY
+         no9Bcz3OgWTchj1xAFfY1eMjfMDlvIZjuaIjEcp4euo+Z/UDyJ3uJAUcHYtOnmXDUwKH
+         Q1mweCBd9y7CNrRH+i7UVBAxDPBfxoHb0TQix8V7gyhBAfoU+xZj+7W09LZKWyKFfRlb
+         QnahqvNgBBTIYuEhhFFLlc2AddljWmepF+0RYohSTCGqwQlDbnPvV0FofJlqz3TP0AxK
+         GZCg==
+X-Gm-Message-State: ACrzQf1b8QZSHFGqAF79k99l2lqUoC5WkLtxSUJActJ6Gm0XTxOjQGzK
+        cL+GZxBCfd7LTSlpuLkqleBOc2A3LB40L7jb8j6SkcR7Ms9X4P2Shda3LRLe1byRDz4fQN8l9/q
+        K2OPw3EtTTSVua2FD/mAZ7norfUIR
+X-Received: by 2002:a1c:7215:0:b0:3c7:130c:a77f with SMTP id n21-20020a1c7215000000b003c7130ca77fmr17230951wmc.151.1666681672022;
+        Tue, 25 Oct 2022 00:07:52 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5wfwAz04p4u+4LaRLlYASuFAO4jGFX1iOyzpJF3Rl6HqJmrYTDgzqRMdCAl5kVrCw2aGPoEg==
+X-Received: by 2002:a1c:7215:0:b0:3c7:130c:a77f with SMTP id n21-20020a1c7215000000b003c7130ca77fmr17230933wmc.151.1666681671734;
+        Tue, 25 Oct 2022 00:07:51 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c70b:4e00:3efc:1c60:bc60:f557? (p200300cbc70b4e003efc1c60bc60f557.dip0.t-ipconnect.de. [2003:cb:c70b:4e00:3efc:1c60:bc60:f557])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1ccc14000000b003b492753826sm1686070wmb.43.2022.10.25.00.05.34
+        by smtp.gmail.com with ESMTPSA id a15-20020adffacf000000b002366e3f1497sm1702551wrs.6.2022.10.25.00.07.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 00:05:35 -0700 (PDT)
-Message-ID: <b9e88ddf-e0ac-ce81-d6b4-caf70772c455@redhat.com>
-Date:   Tue, 25 Oct 2022 09:05:34 +0200
+        Tue, 25 Oct 2022 00:07:51 -0700 (PDT)
+Message-ID: <51302b9e-dc69-d709-3214-f23868028555@redhat.com>
+Date:   Tue, 25 Oct 2022 09:07:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
 Subject: Re: [PATCH v1 1/7] selftests/vm: anon_cow: test COW handling of
  anonymous memory
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
         Jason Gunthorpe <jgg@nvidia.com>,
@@ -78,42 +78,57 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Christoph von Recklinghausen <crecklin@redhat.com>,
         Don Dutile <ddutile@redhat.com>
 References: <20220927110120.106906-1-david@redhat.com>
- <20220927110120.106906-2-david@redhat.com> <Y1bD+8CMzlqkbPwU@macondo>
-Content-Language: en-US
+ <20220927110120.106906-2-david@redhat.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <Y1bD+8CMzlqkbPwU@macondo>
+In-Reply-To: <20220927110120.106906-2-david@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->> +	/* See if we still read the old values via the pipe. */
->> +	for (total = 0; total < transferred; total += cur) {
->> +		cur = read(fds[0], new + total, transferred - total);
->> +		if (cur < 0)
+On 27.09.22 13:01, David Hildenbrand wrote:
+> Let's start adding tests for our COW handling of anonymous memory. We'll
+> focus on basic tests that we can achieve without additional libraries or
+> gup_test extensions.
 > 
-> Hi David,
-> I was looking at some coccinelle reports for linux-next and
-> saw the following warning for this comparison:
+> We'll add THP and hugetlb tests separately.
 > 
->    WARNING: Unsigned expression compared with zero: cur < 0
-> 
-> I think 'cur' needs to be of type 'ssize_t' for this comparison to work.
-> 
-> The same warning is reported for the variable 'transferred' above, and
-> also for do_test_iouring() and do_test_vmsplice_in_parent() in
-> "selftests/vm: anon_cow: add liburing test cases".
-> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
 
-Thanks for reporting! Indeed, we need a signed value.
+The following fixup on top:
+
+diff --git a/tools/testing/selftests/vm/anon_cow.c b/tools/testing/selftests/vm/anon_cow.c
+index 9d2b15c829e6..4613294af758 100644
+--- a/tools/testing/selftests/vm/anon_cow.c
++++ b/tools/testing/selftests/vm/anon_cow.c
+@@ -76,7 +76,7 @@ static int child_vmsplice_memcmp_fn(char *mem, size_t size,
+                 .iov_base = mem,
+                 .iov_len = size,
+         };
+-       size_t cur, total, transferred;
++       ssize_t cur, total, transferred;
+         char *old, *new;
+         int fds[2];
+         char buf;
+@@ -172,7 +172,7 @@ static void do_test_vmsplice_in_parent(char *mem, size_t size,
+                 .iov_base = mem,
+                 .iov_len = size,
+         };
+-       size_t cur, total, transferred;
++       ssize_t cur, total, transferred;
+         struct comm_pipes comm_pipes;
+         char *old, *new;
+         int ret, fds[2];
+
 
 -- 
 Thanks,
