@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46FC60C84A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 11:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FCAD60C85C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 11:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiJYJgA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 05:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
+        id S231967AbiJYJgd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 05:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbiJYJf3 (ORCPT
+        with ESMTP id S231857AbiJYJgB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:35:29 -0400
+        Tue, 25 Oct 2022 05:36:01 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F8A100BD3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 02:35:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7BE1011BA
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 02:35:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666690517;
+        s=mimecast20190719; t=1666690526;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BxD4By7/9T1+H4xx1JfhdDeyZDBqF6Qq6XgOvR4bL7I=;
-        b=bSCqYisCzye6tcq5bEMAYwb9TAHHLD+JWt2A74WP8tX+qudAoWvKvdTGZ7shWD9tn8huXN
-        RRJsv3bD4pS2nB4Jn9P4Kkdtj7O4ucjXJqRBbRCsekjZwJ/wJZP6RVrNckM35w2Y3AIkoz
-        hy2N5ry/rpcZbMN5/spR4yoGHqDVO8Q=
+        bh=nIjl1oeN9VLQ4aHRU8YkmXXk/c0XUd06aRHcqwEyg6E=;
+        b=XzWcs89mSyTBaOFGbKHHi2mKuUILj61IaHifgixfnXTsLJTQY+6aQV9x9EFg8gH1GsYIKH
+        f76GVJopVIHju1rUf6lsyYQfrAF7MtPBWan4i8hnmYGgXUKBi50DohB7neUiLDZSdTsObQ
+        gxTRu6k9ob/PwY25R5jgCdpVGBQ0JHQ=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-252-Y09SS6XpMRu_9vA-xZWqAw-1; Tue, 25 Oct 2022 05:35:12 -0400
-X-MC-Unique: Y09SS6XpMRu_9vA-xZWqAw-1
+ us-mta-286-WiEzAtWKM5Kq10L5vUTclA-1; Tue, 25 Oct 2022 05:35:14 -0400
+X-MC-Unique: WiEzAtWKM5Kq10L5vUTclA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F243F185A792;
-        Tue, 25 Oct 2022 09:35:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 00532185A7A8;
+        Tue, 25 Oct 2022 09:35:14 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.195.44])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 273404A9254;
-        Tue, 25 Oct 2022 09:35:10 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3BBA9492CA5;
+        Tue, 25 Oct 2022 09:35:12 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH hid v11 04/14] HID: bpf jmp table: simplify the logic of cleaning up programs
-Date:   Tue, 25 Oct 2022 11:34:48 +0200
-Message-Id: <20221025093458.457089-5-benjamin.tissoires@redhat.com>
+Subject: [PATCH hid v11 05/14] HID: bpf: allocate data memory for device_event BPF programs
+Date:   Tue, 25 Oct 2022 11:34:49 +0200
+Message-Id: <20221025093458.457089-6-benjamin.tissoires@redhat.com>
 In-Reply-To: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
 References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -57,1096 +57,355 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kind of a hack, but works for now:
+We need to also be able to change the size of the report.
+Reducing it is easy, because we already have the incoming buffer that is
+big enough, but extending it is harder.
 
-Instead of listening for any close of eBPF program, we now
-decrement the refcount when we insert it in our internal
-map of fd progs.
+Pre-allocate a buffer that is big enough to handle all reports of the
+device, and use that as the primary buffer for BPF programs.
+To be able to change the size of the buffer, we change the device_event
+API and request it to return the size of the buffer.
 
-This is safe to do because:
-- we listen to any call of destructor of programs
-- when a program is being destroyed, we disable it by removing
-  it from any RCU list used by any HID device (so it will never
-  be called)
-- we then trigger a job to cleanup the prog fd map, but we overwrite
-  the removal of the elements to not do anything on the programs, just
-  remove the allocated space
-
-This is better than previously because we can remove the map of known
-programs and their usage count. We now rely on the refcount of
-bpf, which has greater chances of being accurate.
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-new in v11
----
- drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  40 +-
- .../hid/bpf/entrypoints/entrypoints.lskel.h   | 722 +++++-------------
- drivers/hid/bpf/hid_bpf_dispatch.c            |   2 +-
- drivers/hid/bpf/hid_bpf_dispatch.h            |   2 +-
- drivers/hid/bpf/hid_bpf_jmp_table.c           |  83 +-
- 5 files changed, 249 insertions(+), 600 deletions(-)
+no changes in v11
 
-diff --git a/drivers/hid/bpf/entrypoints/entrypoints.bpf.c b/drivers/hid/bpf/entrypoints/entrypoints.bpf.c
-index 41dd66d5fc7a..7c1895d9e5c0 100644
---- a/drivers/hid/bpf/entrypoints/entrypoints.bpf.c
-+++ b/drivers/hid/bpf/entrypoints/entrypoints.bpf.c
-@@ -7,7 +7,7 @@
- 
- #define HID_BPF_MAX_PROGS 1024
- 
--extern bool call_hid_bpf_prog_release(u64 prog, int table_cnt) __ksym;
-+extern void call_hid_bpf_prog_put_deferred(struct work_struct *work) __ksym;
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-@@ -16,13 +16,6 @@ struct {
- 	__uint(value_size, sizeof(__u32));
- } hid_jmp_table SEC(".maps");
- 
--struct {
--	__uint(type, BPF_MAP_TYPE_HASH);
--	__uint(max_entries, HID_BPF_MAX_PROGS * HID_BPF_PROG_TYPE_MAX);
--	__type(key, void *);
--	__type(value, __u8);
--} progs_map SEC(".maps");
--
- SEC("fmod_ret/__hid_bpf_tail_call")
- int BPF_PROG(hid_tail_call, struct hid_bpf_ctx *hctx)
- {
-@@ -31,35 +24,10 @@ int BPF_PROG(hid_tail_call, struct hid_bpf_ctx *hctx)
- 	return 0;
- }
- 
--static void release_prog(u64 prog)
--{
--	u8 *value;
--
--	value = bpf_map_lookup_elem(&progs_map, &prog);
--	if (!value)
--		return;
--
--	if (call_hid_bpf_prog_release(prog, *value))
--		bpf_map_delete_elem(&progs_map, &prog);
--}
--
--SEC("fexit/bpf_prog_release")
--int BPF_PROG(hid_prog_release, struct inode *inode, struct file *filp)
-+SEC("fentry/bpf_prog_put_deferred")
-+int BPF_PROG(hid_bpf_prog_put_deferred, struct work_struct *work)
- {
--	u64 prog = (u64)filp->private_data;
--
--	release_prog(prog);
--
--	return 0;
--}
--
--SEC("fexit/bpf_free_inode")
--int BPF_PROG(hid_free_inode, struct inode *inode)
--{
--	u64 prog = (u64)inode->i_private;
--
--	release_prog(prog);
--
-+	call_hid_bpf_prog_put_deferred(work);
- 	return 0;
- }
- 
-diff --git a/drivers/hid/bpf/entrypoints/entrypoints.lskel.h b/drivers/hid/bpf/entrypoints/entrypoints.lskel.h
-index d6a6045a06fe..524e5f90415f 100644
---- a/drivers/hid/bpf/entrypoints/entrypoints.lskel.h
-+++ b/drivers/hid/bpf/entrypoints/entrypoints.lskel.h
-@@ -9,17 +9,14 @@ struct entrypoints_bpf {
- 	struct bpf_loader_ctx ctx;
- 	struct {
- 		struct bpf_map_desc hid_jmp_table;
--		struct bpf_map_desc progs_map;
- 	} maps;
- 	struct {
- 		struct bpf_prog_desc hid_tail_call;
--		struct bpf_prog_desc hid_prog_release;
--		struct bpf_prog_desc hid_free_inode;
-+		struct bpf_prog_desc hid_bpf_prog_put_deferred;
- 	} progs;
- 	struct {
- 		int hid_tail_call_fd;
--		int hid_prog_release_fd;
--		int hid_free_inode_fd;
-+		int hid_bpf_prog_put_deferred_fd;
- 	} links;
- };
- 
-@@ -35,24 +32,13 @@ entrypoints_bpf__hid_tail_call__attach(struct entrypoints_bpf *skel)
- }
- 
- static inline int
--entrypoints_bpf__hid_prog_release__attach(struct entrypoints_bpf *skel)
-+entrypoints_bpf__hid_bpf_prog_put_deferred__attach(struct entrypoints_bpf *skel)
- {
--	int prog_fd = skel->progs.hid_prog_release.prog_fd;
-+	int prog_fd = skel->progs.hid_bpf_prog_put_deferred.prog_fd;
- 	int fd = skel_raw_tracepoint_open(NULL, prog_fd);
- 
- 	if (fd > 0)
--		skel->links.hid_prog_release_fd = fd;
--	return fd;
--}
--
--static inline int
--entrypoints_bpf__hid_free_inode__attach(struct entrypoints_bpf *skel)
--{
--	int prog_fd = skel->progs.hid_free_inode.prog_fd;
--	int fd = skel_raw_tracepoint_open(NULL, prog_fd);
--
--	if (fd > 0)
--		skel->links.hid_free_inode_fd = fd;
-+		skel->links.hid_bpf_prog_put_deferred_fd = fd;
- 	return fd;
- }
- 
-@@ -62,8 +48,7 @@ entrypoints_bpf__attach(struct entrypoints_bpf *skel)
- 	int ret = 0;
- 
- 	ret = ret < 0 ? ret : entrypoints_bpf__hid_tail_call__attach(skel);
--	ret = ret < 0 ? ret : entrypoints_bpf__hid_prog_release__attach(skel);
--	ret = ret < 0 ? ret : entrypoints_bpf__hid_free_inode__attach(skel);
-+	ret = ret < 0 ? ret : entrypoints_bpf__hid_bpf_prog_put_deferred__attach(skel);
- 	return ret < 0 ? ret : 0;
- }
- 
-@@ -71,8 +56,7 @@ static inline void
- entrypoints_bpf__detach(struct entrypoints_bpf *skel)
- {
- 	skel_closenz(skel->links.hid_tail_call_fd);
--	skel_closenz(skel->links.hid_prog_release_fd);
--	skel_closenz(skel->links.hid_free_inode_fd);
-+	skel_closenz(skel->links.hid_bpf_prog_put_deferred_fd);
- }
- static void
- entrypoints_bpf__destroy(struct entrypoints_bpf *skel)
-@@ -81,10 +65,8 @@ entrypoints_bpf__destroy(struct entrypoints_bpf *skel)
- 		return;
- 	entrypoints_bpf__detach(skel);
- 	skel_closenz(skel->progs.hid_tail_call.prog_fd);
--	skel_closenz(skel->progs.hid_prog_release.prog_fd);
--	skel_closenz(skel->progs.hid_free_inode.prog_fd);
-+	skel_closenz(skel->progs.hid_bpf_prog_put_deferred.prog_fd);
- 	skel_closenz(skel->maps.hid_jmp_table.map_fd);
--	skel_closenz(skel->maps.progs_map.map_fd);
- 	skel_free(skel);
- }
- static inline struct entrypoints_bpf *
-@@ -109,7 +91,7 @@ entrypoints_bpf__load(struct entrypoints_bpf *skel)
- 	int err;
- 
- 	opts.ctx = (struct bpf_loader_ctx *)skel;
--	opts.data_sz = 11504;
-+	opts.data_sz = 4768;
- 	opts.data = (void *)"\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-@@ -144,509 +126,213 @@ entrypoints_bpf__load(struct entrypoints_bpf *skel)
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x9f\xeb\x01\0\
--\x18\0\0\0\0\0\0\0\x78\x14\0\0\x78\x14\0\0\xf4\x0c\0\0\0\0\0\0\0\0\0\x02\x03\0\
-+\x18\0\0\0\0\0\0\0\x34\x06\0\0\x34\x06\0\0\x92\x04\0\0\0\0\0\0\0\0\0\x02\x03\0\
- \0\0\x01\0\0\0\0\0\0\x01\x04\0\0\0\x20\0\0\x01\0\0\0\0\0\0\0\x03\0\0\0\0\x02\0\
- \0\0\x04\0\0\0\x03\0\0\0\x05\0\0\0\0\0\0\x01\x04\0\0\0\x20\0\0\0\0\0\0\0\0\0\0\
- \x02\x06\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x02\0\0\0\x04\0\0\0\0\x04\0\0\0\0\0\0\
- \0\0\0\x02\x08\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x02\0\0\0\x04\0\0\0\x04\0\0\0\0\
- \0\0\0\x04\0\0\x04\x20\0\0\0\x19\0\0\0\x01\0\0\0\0\0\0\0\x1e\0\0\0\x05\0\0\0\
- \x40\0\0\0\x2a\0\0\0\x07\0\0\0\x80\0\0\0\x33\0\0\0\x07\0\0\0\xc0\0\0\0\x3e\0\0\
--\0\0\0\0\x0e\x09\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\x02\x0c\0\0\0\0\0\0\0\0\0\0\x03\
--\0\0\0\0\x02\0\0\0\x04\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\x02\x0e\0\0\0\0\0\0\0\0\0\
--\0\x03\0\0\0\0\x02\0\0\0\x04\0\0\0\0\x08\0\0\0\0\0\0\0\0\0\x02\x10\0\0\0\0\0\0\
--\0\0\0\0\x02\0\0\0\0\0\0\0\0\0\0\0\x02\x12\0\0\0\x4c\0\0\0\0\0\0\x08\x13\0\0\0\
--\x51\0\0\0\0\0\0\x01\x01\0\0\0\x08\0\0\0\0\0\0\0\x04\0\0\x04\x20\0\0\0\x19\0\0\
--\0\x0b\0\0\0\0\0\0\0\x1e\0\0\0\x0d\0\0\0\x40\0\0\0\x5f\0\0\0\x0f\0\0\0\x80\0\0\
--\0\x63\0\0\0\x11\0\0\0\xc0\0\0\0\x69\0\0\0\0\0\0\x0e\x14\0\0\0\x01\0\0\0\0\0\0\
--\0\0\0\0\x02\x17\0\0\0\x73\0\0\0\0\0\0\x01\x08\0\0\0\x40\0\0\0\0\0\0\0\x01\0\0\
--\x0d\x02\0\0\0\x86\0\0\0\x16\0\0\0\x8a\0\0\0\x01\0\0\x0c\x18\0\0\0\x30\x01\0\0\
--\x05\0\0\x04\x20\0\0\0\x3c\x01\0\0\x1b\0\0\0\0\0\0\0\x42\x01\0\0\x1d\0\0\0\x40\
--\0\0\0\x46\x01\0\0\x1b\0\0\0\x80\0\0\0\x55\x01\0\0\x1f\0\0\0\xa0\0\0\0\0\0\0\0\
--\x20\0\0\0\xc0\0\0\0\x61\x01\0\0\0\0\0\x08\x1c\0\0\0\x67\x01\0\0\0\0\0\x01\x04\
--\0\0\0\x20\0\0\0\0\0\0\0\0\0\0\x02\x1e\0\0\0\0\0\0\0\0\0\0\x0a\xb5\0\0\0\x74\
--\x01\0\0\x04\0\0\x06\x04\0\0\0\x84\x01\0\0\0\0\0\0\x95\x01\0\0\x01\0\0\0\xa7\
--\x01\0\0\x02\0\0\0\xba\x01\0\0\x03\0\0\0\0\0\0\0\x02\0\0\x05\x04\0\0\0\xcb\x01\
--\0\0\x21\0\0\0\0\0\0\0\xd2\x01\0\0\x21\0\0\0\0\0\0\0\xd7\x01\0\0\0\0\0\x08\x02\
--\0\0\0\0\0\0\0\x01\0\0\x0d\x02\0\0\0\x86\0\0\0\x16\0\0\0\x13\x02\0\0\x01\0\0\
--\x0c\x22\0\0\0\x82\x02\0\0\x14\0\0\x04\xc8\x01\0\0\x87\x02\0\0\x25\0\0\0\0\0\0\
--\0\x8b\x02\0\0\x2c\0\0\0\x80\0\0\0\x92\x02\0\0\x2f\0\0\0\0\x01\0\0\x9a\x02\0\0\
--\x30\0\0\0\x40\x01\0\0\x9f\x02\0\0\x32\0\0\0\x80\x01\0\0\xa6\x02\0\0\x59\0\0\0\
--\x80\x03\0\0\xae\x02\0\0\x1c\0\0\0\xc0\x03\0\0\xb6\x02\0\0\x5f\0\0\0\xe0\x03\0\
--\0\xbd\x02\0\0\x60\0\0\0\0\x04\0\0\xc8\x02\0\0\x63\0\0\0\x80\x08\0\0\xce\x02\0\
--\0\x65\0\0\0\xc0\x08\0\0\xd6\x02\0\0\x73\0\0\0\x80\x0b\0\0\xdd\x02\0\0\x75\0\0\
--\0\xc0\x0b\0\0\xe2\x02\0\0\x76\0\0\0\xc0\x0c\0\0\xec\x02\0\0\x10\0\0\0\0\x0d\0\
--\0\xf7\x02\0\0\x10\0\0\0\x40\x0d\0\0\x04\x03\0\0\x78\0\0\0\x80\x0d\0\0\x09\x03\
--\0\0\x79\0\0\0\xc0\x0d\0\0\x13\x03\0\0\x7a\0\0\0\0\x0e\0\0\x1c\x03\0\0\x7a\0\0\
--\0\x20\x0e\0\0\0\0\0\0\x02\0\0\x05\x10\0\0\0\x25\x03\0\0\x26\0\0\0\0\0\0\0\x2e\
--\x03\0\0\x28\0\0\0\0\0\0\0\x39\x03\0\0\x01\0\0\x04\x08\0\0\0\x44\x03\0\0\x27\0\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\x02\x26\0\0\0\x49\x03\0\0\x02\0\0\x04\x10\0\0\0\x44\
--\x03\0\0\x29\0\0\0\0\0\0\0\x57\x03\0\0\x2a\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\
--\x28\0\0\0\0\0\0\0\0\0\0\x02\x2b\0\0\0\0\0\0\0\x01\0\0\x0d\0\0\0\0\0\0\0\0\x29\
--\0\0\0\x5c\x03\0\0\x02\0\0\x04\x10\0\0\0\x61\x03\0\0\x2d\0\0\0\0\0\0\0\x65\x03\
--\0\0\x2e\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\xbe\0\0\0\0\0\0\0\0\0\0\x02\xb1\0\0\
--\0\0\0\0\0\0\0\0\x02\x81\0\0\0\0\0\0\0\0\0\0\x02\x31\0\0\0\0\0\0\0\0\0\0\x0a\
--\xb3\0\0\0\x6c\x03\0\0\0\0\0\x08\x33\0\0\0\x77\x03\0\0\x01\0\0\x04\x40\0\0\0\0\
--\0\0\0\x34\0\0\0\0\0\0\0\0\0\0\0\x02\0\0\x05\x40\0\0\0\x80\x03\0\0\x35\0\0\0\0\
--\0\0\0\0\0\0\0\x57\0\0\0\0\0\0\0\x86\x03\0\0\x05\0\0\x04\x40\0\0\0\x93\x03\0\0\
--\x36\0\0\0\0\0\0\0\x9c\x03\0\0\x1c\0\0\0\x20\0\0\0\xa2\x03\0\0\x1c\0\0\0\x40\0\
--\0\0\xac\x03\0\0\x10\0\0\0\x80\0\0\0\xb2\x03\0\0\x41\0\0\0\xc0\0\0\0\xba\x03\0\
--\0\0\0\0\x08\x37\0\0\0\xca\x03\0\0\x01\0\0\x04\x04\0\0\0\0\0\0\0\x38\0\0\0\0\0\
--\0\0\0\0\0\0\x03\0\0\x05\x04\0\0\0\xd4\x03\0\0\x39\0\0\0\0\0\0\0\0\0\0\0\x3b\0\
--\0\0\0\0\0\0\0\0\0\0\x3d\0\0\0\0\0\0\0\xd8\x03\0\0\0\0\0\x08\x3a\0\0\0\0\0\0\0\
--\x01\0\0\x04\x04\0\0\0\xe1\x03\0\0\x02\0\0\0\0\0\0\0\0\0\0\0\x02\0\0\x04\x02\0\
--\0\0\xe9\x03\0\0\x3c\0\0\0\0\0\0\0\xf0\x03\0\0\x3c\0\0\0\x08\0\0\0\xf8\x03\0\0\
--\0\0\0\x08\x12\0\0\0\0\0\0\0\x02\0\0\x04\x04\0\0\0\xfb\x03\0\0\x3e\0\0\0\0\0\0\
--\0\x0a\x04\0\0\x3e\0\0\0\x10\0\0\0\x0f\x04\0\0\0\0\0\x08\x3f\0\0\0\x13\x04\0\0\
--\0\0\0\x08\x40\0\0\0\x19\x04\0\0\0\0\0\x01\x02\0\0\0\x10\0\0\0\x28\x04\0\0\x06\
--\0\0\x04\x28\0\0\0\x5f\0\0\0\x42\0\0\0\0\0\0\0\x34\x04\0\0\x56\0\0\0\x40\0\0\0\
--\x40\x04\0\0\x53\0\0\0\xc0\0\0\0\x45\x04\0\0\x3c\0\0\0\0\x01\0\0\x55\x04\0\0\
--\x3c\0\0\0\x08\x01\0\0\x65\x04\0\0\x3c\0\0\0\x10\x01\0\0\0\0\0\0\0\0\0\x02\xb7\
--\0\0\0\0\0\0\0\0\0\0\x02\x44\0\0\0\x6f\x04\0\0\x0e\0\0\x04\xc0\0\0\0\x7a\x04\0\
--\0\x45\0\0\0\0\0\0\0\x85\x04\0\0\x48\0\0\0\x80\0\0\0\x90\x04\0\0\x48\0\0\0\0\
--\x01\0\0\x9c\x04\0\0\x48\0\0\0\x80\x01\0\0\x5f\0\0\0\x4a\0\0\0\0\x02\0\0\xa9\
--\x04\0\0\x1c\0\0\0\x40\x02\0\0\xb2\x04\0\0\x1c\0\0\0\x60\x02\0\0\xbd\x04\0\0\
--\x4c\0\0\0\x80\x02\0\0\xc8\x04\0\0\x52\0\0\0\xc0\x02\0\0\xd5\x04\0\0\x02\0\0\0\
--\x40\x05\0\0\x40\x04\0\0\x53\0\0\0\x80\x05\0\0\x55\x04\0\0\x3c\0\0\0\xc0\x05\0\
--\0\x45\x04\0\0\x3c\0\0\0\xc8\x05\0\0\x65\x04\0\0\x3c\0\0\0\xd0\x05\0\0\xe2\x04\
--\0\0\x02\0\0\x04\x10\0\0\0\x44\x03\0\0\x46\0\0\0\0\0\0\0\xed\x04\0\0\x47\0\0\0\
--\x40\0\0\0\0\0\0\0\0\0\0\x02\x45\0\0\0\0\0\0\0\0\0\0\x02\x46\0\0\0\xf3\x04\0\0\
--\x02\0\0\x04\x10\0\0\0\x44\x03\0\0\x49\0\0\0\0\0\0\0\xfd\x04\0\0\x49\0\0\0\x40\
--\0\0\0\0\0\0\0\0\0\0\x02\x48\0\0\0\0\0\0\0\0\0\0\x02\x4b\0\0\0\0\0\0\0\0\0\0\
--\x0a\xb8\0\0\0\x02\x05\0\0\0\0\0\x01\x08\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\x4e\
--\0\0\0\0\0\0\0\0\0\0\x0a\x4f\0\0\0\x10\x05\0\0\x04\0\0\x04\x18\0\0\0\x7a\x04\0\
--\0\x45\0\0\0\0\0\0\0\x1b\x05\0\0\x50\0\0\0\x80\0\0\0\x20\x05\0\0\x50\0\0\0\xa0\
--\0\0\0\x2b\x05\0\0\x51\0\0\0\xc0\0\0\0\x33\x05\0\0\0\0\0\x08\x1b\0\0\0\0\0\0\0\
--\0\0\0\x03\0\0\0\0\x4c\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x4d\0\
--\0\0\x04\0\0\0\x0a\0\0\0\0\0\0\0\0\0\0\x02\x54\0\0\0\0\0\0\0\0\0\0\x0a\x55\0\0\
--\0\x37\x05\0\0\0\0\0\x01\x01\0\0\0\x08\0\0\x01\0\0\0\0\0\0\0\x03\0\0\0\0\x43\0\
--\0\0\x04\0\0\0\x02\0\0\0\0\0\0\0\x02\0\0\x04\x40\0\0\0\x3c\x05\0\0\x58\0\0\0\0\
--\0\0\0\xb2\x03\0\0\x41\0\0\0\xc0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x3c\0\0\0\x04\
--\0\0\0\x18\0\0\0\x46\x05\0\0\0\0\0\x08\x5a\0\0\0\x54\x05\0\0\0\0\0\x08\x5b\0\0\
--\0\0\0\0\0\x01\0\0\x04\x08\0\0\0\xe1\x03\0\0\x5c\0\0\0\0\0\0\0\x5f\x05\0\0\0\0\
--\0\x08\x5d\0\0\0\x63\x05\0\0\0\0\0\x08\x5e\0\0\0\x69\x05\0\0\0\0\0\x01\x08\0\0\
--\0\x40\0\0\x01\x73\x05\0\0\0\0\0\x08\x1c\0\0\0\x7b\x05\0\0\x06\0\0\x04\x90\0\0\
--\0\xac\x03\0\0\x59\0\0\0\0\0\0\0\x81\x05\0\0\x61\0\0\0\x40\0\0\0\x8b\x05\0\0\
--\x62\0\0\0\x40\x02\0\0\x8f\x05\0\0\x48\0\0\0\x80\x02\0\0\x9c\x03\0\0\x10\0\0\0\
--\0\x03\0\0\xb2\x03\0\0\x41\0\0\0\x40\x03\0\0\x99\x05\0\0\0\0\0\x08\x35\0\0\0\
--\xa8\x05\0\0\x01\0\0\x04\x04\0\0\0\x0a\x04\0\0\x39\0\0\0\0\0\0\0\xbe\x05\0\0\0\
--\0\0\x08\x64\0\0\0\xc5\x05\0\0\0\0\0\x08\x5e\0\0\0\xd5\x05\0\0\x06\0\0\x04\x58\
--\0\0\0\xe1\x05\0\0\x66\0\0\0\0\0\0\0\xe6\x05\0\0\x6d\0\0\0\0\x02\0\0\xea\x05\0\
--\0\x6e\0\0\0\x40\x02\0\0\xf3\x05\0\0\x6f\0\0\0\x60\x02\0\0\xf7\x05\0\0\x6f\0\0\
--\0\x80\x02\0\0\xfc\x05\0\0\x02\0\0\0\xa0\x02\0\0\x03\x06\0\0\0\0\0\x08\x67\0\0\
--\0\0\0\0\0\x05\0\0\x04\x40\0\0\0\x93\x03\0\0\x68\0\0\0\0\0\0\0\x9c\x03\0\0\x1c\
--\0\0\0\x40\0\0\0\xa2\x03\0\0\x1c\0\0\0\x60\0\0\0\xac\x03\0\0\x10\0\0\0\x80\0\0\
--\0\xb2\x03\0\0\x41\0\0\0\xc0\0\0\0\x0c\x06\0\0\0\0\0\x08\x69\0\0\0\x1a\x06\0\0\
--\x02\0\0\x04\x08\0\0\0\0\0\0\0\x6a\0\0\0\0\0\0\0\x81\x05\0\0\x36\0\0\0\x20\0\0\
--\0\0\0\0\0\x02\0\0\x05\x04\0\0\0\x22\x06\0\0\x39\0\0\0\0\0\0\0\0\0\0\0\x6b\0\0\
--\0\0\0\0\0\0\0\0\0\x02\0\0\x04\x04\0\0\0\x27\x06\0\0\x3c\0\0\0\0\0\0\0\x2f\x06\
--\0\0\x6c\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x3c\0\0\0\x04\0\0\0\x03\0\0\
--\0\0\0\0\0\0\0\0\x02\xb9\0\0\0\xea\x05\0\0\x05\0\0\x06\x04\0\0\0\x38\x06\0\0\0\
--\0\0\0\x44\x06\0\0\x01\0\0\0\x51\x06\0\0\x02\0\0\0\x5e\x06\0\0\x03\0\0\0\x6a\
--\x06\0\0\x04\0\0\0\x76\x06\0\0\0\0\0\x08\x70\0\0\0\0\0\0\0\x01\0\0\x04\x04\0\0\
--\0\xd4\x03\0\0\x71\0\0\0\0\0\0\0\x7d\x06\0\0\0\0\0\x08\x72\0\0\0\x83\x06\0\0\0\
--\0\0\x08\x1c\0\0\0\0\0\0\0\0\0\0\x02\x74\0\0\0\0\0\0\0\0\0\0\x0a\xb0\0\0\0\x94\
--\x06\0\0\x06\0\0\x04\x20\0\0\0\xa2\x06\0\0\x4c\0\0\0\0\0\0\0\xd2\x01\0\0\x1c\0\
--\0\0\x40\0\0\0\xa8\x06\0\0\x1c\0\0\0\x60\0\0\0\xb3\x06\0\0\x1c\0\0\0\x80\0\0\0\
--\xbc\x06\0\0\x1c\0\0\0\xa0\0\0\0\xc6\x06\0\0\x63\0\0\0\xc0\0\0\0\xcf\x06\0\0\0\
--\0\0\x08\x77\0\0\0\xd3\x06\0\0\0\0\0\x08\x17\0\0\0\0\0\0\0\0\0\0\x02\x96\0\0\0\
--\0\0\0\0\0\0\0\x02\x9b\0\0\0\xd9\x06\0\0\0\0\0\x08\x50\0\0\0\0\0\0\0\x02\0\0\
--\x0d\x7c\0\0\0\xe9\x0c\0\0\x76\0\0\0\xe9\x0c\0\0\x02\0\0\0\xa2\x07\0\0\0\0\0\
--\x08\x7d\0\0\0\xa7\x07\0\0\0\0\0\x01\x01\0\0\0\x08\0\0\x04\xad\x07\0\0\x01\0\0\
--\x0c\x7b\0\0\0\0\0\0\0\x01\0\0\x0d\x02\0\0\0\x86\0\0\0\x16\0\0\0\xc7\x07\0\0\
--\x01\0\0\x0c\x7f\0\0\0\x1d\x08\0\0\x34\0\0\x04\x78\x04\0\0\x23\x08\0\0\x82\0\0\
--\0\0\0\0\0\x2a\x08\0\0\x40\0\0\0\x10\0\0\0\x34\x08\0\0\x6f\0\0\0\x20\0\0\0\x3a\
--\x08\0\0\x83\0\0\0\x40\0\0\0\x40\x08\0\0\x1c\0\0\0\x60\0\0\0\x48\x08\0\0\x87\0\
--\0\0\x80\0\0\0\x4e\x08\0\0\x87\0\0\0\xc0\0\0\0\x5c\x08\0\0\x88\0\0\0\0\x01\0\0\
--\x61\x08\0\0\x8a\0\0\0\x40\x01\0\0\x66\x08\0\0\x79\0\0\0\x80\x01\0\0\x70\x08\0\
--\0\x10\0\0\0\xc0\x01\0\0\x7b\x08\0\0\x4c\0\0\0\0\x02\0\0\0\0\0\0\x8b\0\0\0\x40\
--\x02\0\0\x81\x08\0\0\x8d\0\0\0\x60\x02\0\0\x88\x08\0\0\x63\0\0\0\x80\x02\0\0\
--\x8f\x08\0\0\x8f\0\0\0\xc0\x02\0\0\x97\x08\0\0\x8f\0\0\0\x40\x03\0\0\x9f\x08\0\
--\0\x8f\0\0\0\xc0\x03\0\0\xa7\x08\0\0\x32\0\0\0\x40\x04\0\0\xae\x08\0\0\x40\0\0\
--\0\x40\x06\0\0\xb6\x08\0\0\x3c\0\0\0\x50\x06\0\0\xc0\x08\0\0\x3c\0\0\0\x58\x06\
--\0\0\xcd\x08\0\0\x92\0\0\0\x80\x06\0\0\xd6\x08\0\0\x4c\0\0\0\xc0\x06\0\0\xde\
--\x08\0\0\x93\0\0\0\0\x07\0\0\xe6\x08\0\0\x4c\0\0\0\xc0\x0b\0\0\xf3\x08\0\0\x4c\
--\0\0\0\0\x0c\0\0\x05\x09\0\0\x45\0\0\0\x40\x0c\0\0\x0c\x09\0\0\x48\0\0\0\xc0\
--\x0c\0\0\x16\x09\0\0\x94\0\0\0\x40\x0d\0\0\x1b\x09\0\0\x02\0\0\0\x80\x0d\0\0\
--\x2b\x09\0\0\x3e\0\0\0\xa0\x0d\0\0\x3d\x09\0\0\x3e\0\0\0\xb0\x0d\0\0\x4e\x09\0\
--\0\x48\0\0\0\xc0\x0d\0\0\x54\x09\0\0\x48\0\0\0\x40\x0e\0\0\x5e\x09\0\0\x48\0\0\
--\0\xc0\x0e\0\0\0\0\0\0\x95\0\0\0\x40\x0f\0\0\x68\x09\0\0\x5a\0\0\0\xc0\x0f\0\0\
--\x72\x09\0\0\x5a\0\0\0\0\x10\0\0\x7d\x09\0\0\x39\0\0\0\x40\x10\0\0\x85\x09\0\0\
--\x39\0\0\0\x60\x10\0\0\x91\x09\0\0\x39\0\0\0\x80\x10\0\0\x9e\x09\0\0\x39\0\0\0\
--\xa0\x10\0\0\0\0\0\0\x97\0\0\0\xc0\x10\0\0\xaa\x09\0\0\x9a\0\0\0\0\x11\0\0\xb2\
--\x09\0\0\x9b\0\0\0\x40\x11\0\0\xb9\x09\0\0\x48\0\0\0\x40\x22\0\0\0\0\0\0\xa3\0\
--\0\0\xc0\x22\0\0\xc3\x09\0\0\x1b\0\0\0\0\x23\0\0\xd0\x09\0\0\x1b\0\0\0\x20\x23\
--\0\0\xe0\x09\0\0\xa7\0\0\0\x40\x23\0\0\xf1\x09\0\0\x10\0\0\0\x80\x23\0\0\xfb\
--\x09\0\0\0\0\0\x08\x40\0\0\0\x03\x0a\0\0\0\0\0\x08\x84\0\0\0\0\0\0\0\x01\0\0\
--\x04\x04\0\0\0\xd4\x03\0\0\x85\0\0\0\0\0\0\0\x0a\x0a\0\0\0\0\0\x08\x86\0\0\0\
--\x10\x0a\0\0\0\0\0\x08\x1c\0\0\0\0\0\0\0\0\0\0\x02\xbb\0\0\0\0\0\0\0\0\0\0\x02\
--\x89\0\0\0\0\0\0\0\0\0\0\x0a\xb6\0\0\0\0\0\0\0\0\0\0\x02\xbd\0\0\0\0\0\0\0\x02\
--\0\0\x05\x04\0\0\0\x21\x0a\0\0\x8c\0\0\0\0\0\0\0\x29\x0a\0\0\x1c\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\x0a\x1c\0\0\0\x33\x0a\0\0\0\0\0\x08\x8e\0\0\0\x39\x0a\0\0\0\0\0\
--\x08\x50\0\0\0\x48\x0a\0\0\x02\0\0\x04\x10\0\0\0\x53\x0a\0\0\x90\0\0\0\0\0\0\0\
--\x5a\x0a\0\0\x91\0\0\0\x40\0\0\0\x62\x0a\0\0\0\0\0\x08\x5d\0\0\0\x6b\x0a\0\0\0\
--\0\0\x01\x08\0\0\0\x40\0\0\x01\x70\x0a\0\0\0\0\0\x08\x76\0\0\0\x79\x0a\0\0\x07\
--\0\0\x04\x98\0\0\0\x86\x0a\0\0\x59\0\0\0\0\0\0\0\xac\x03\0\0\x59\0\0\0\x40\0\0\
--\0\x8b\x05\0\0\x62\0\0\0\x80\0\0\0\x81\x05\0\0\x61\0\0\0\xc0\0\0\0\x8f\x05\0\0\
--\x48\0\0\0\xc0\x02\0\0\x9c\x03\0\0\x10\0\0\0\x40\x03\0\0\xb2\x03\0\0\x41\0\0\0\
--\x80\x03\0\0\0\0\0\0\0\0\0\x02\xae\0\0\0\0\0\0\0\x02\0\0\x05\x10\0\0\0\x8c\x0a\
--\0\0\x96\0\0\0\0\0\0\0\x95\x0a\0\0\x28\0\0\0\0\0\0\0\x9b\x0a\0\0\x01\0\0\x04\
--\x08\0\0\0\xa6\x0a\0\0\x46\0\0\0\0\0\0\0\0\0\0\0\x02\0\0\x05\x08\0\0\0\xac\x0a\
--\0\0\x30\0\0\0\0\0\0\0\xb2\x0a\0\0\x98\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x02\x99\0\0\
--\0\0\0\0\0\x01\0\0\x0d\0\0\0\0\0\0\0\0\x2f\0\0\0\0\0\0\0\0\0\0\x02\xb2\0\0\0\
--\xbd\x0a\0\0\x0f\0\0\x04\x20\x02\0\0\xcb\x0a\0\0\x2f\0\0\0\0\0\0\0\xd0\x0a\0\0\
--\x9c\0\0\0\x40\0\0\0\xd8\x0a\0\0\x93\0\0\0\xc0\x02\0\0\xe8\x0a\0\0\x9d\0\0\0\
--\x80\x07\0\0\xf1\x0a\0\0\x39\0\0\0\xa0\x07\0\0\x01\x0b\0\0\x9e\0\0\0\xc0\x07\0\
--\0\x08\x0b\0\0\x93\0\0\0\x40\x08\0\0\x15\x0b\0\0\x4c\0\0\0\0\x0d\0\0\x1d\x0b\0\
--\0\x4c\0\0\0\x40\x0d\0\0\x2d\x0b\0\0\xa1\0\0\0\x80\x0d\0\0\x33\x0b\0\0\x4c\0\0\
--\0\xc0\x0d\0\0\x39\x0b\0\0\x7a\0\0\0\0\x0e\0\0\x40\x0b\0\0\x32\0\0\0\x40\x0e\0\
--\0\x4d\x0b\0\0\x48\0\0\0\x40\x10\0\0\xf7\x02\0\0\x10\0\0\0\xc0\x10\0\0\x5a\x0b\
--\0\0\x03\0\0\x04\x50\0\0\0\x61\x0b\0\0\x32\0\0\0\0\0\0\0\x69\x0b\0\0\x9d\0\0\0\
--\0\x02\0\0\x72\x0b\0\0\x10\0\0\0\x40\x02\0\0\x7a\x0b\0\0\0\0\0\x08\x1c\0\0\0\
--\x80\x0b\0\0\x02\0\0\x04\x10\0\0\0\x8f\x0b\0\0\x9f\0\0\0\0\0\0\0\x97\x0b\0\0\
--\xa0\0\0\0\x40\0\0\0\x8f\x0b\0\0\x01\0\0\x04\x08\0\0\0\xa3\x0b\0\0\xa0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\x02\xbc\0\0\0\0\0\0\0\0\0\0\x02\xa2\0\0\0\0\0\0\0\0\0\0\
--\x0a\xad\0\0\0\0\0\0\0\x04\0\0\x05\x08\0\0\0\xab\x0b\0\0\xa4\0\0\0\0\0\0\0\xb2\
--\x0b\0\0\xa5\0\0\0\0\0\0\0\xb9\x0b\0\0\xa6\0\0\0\0\0\0\0\xc0\x0b\0\0\x1c\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\x02\xba\0\0\0\0\0\0\0\0\0\0\x02\xaf\0\0\0\0\0\0\0\0\0\0\
--\x02\x55\0\0\0\0\0\0\0\0\0\0\x02\xb4\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x55\0\0\0\
--\x04\0\0\0\x04\0\0\0\xf2\x0b\0\0\0\0\0\x0e\xa8\0\0\0\x01\0\0\0\xfa\x0b\0\0\x01\
--\0\0\x0f\x04\0\0\0\xbf\0\0\0\0\0\0\0\x04\0\0\0\x01\x0c\0\0\x02\0\0\x0f\x40\0\0\
--\0\x0a\0\0\0\0\0\0\0\x20\0\0\0\x15\0\0\0\x20\0\0\0\x20\0\0\0\x07\x0c\0\0\x01\0\
--\0\x0f\x04\0\0\0\xa9\0\0\0\0\0\0\0\x04\0\0\0\x0f\x0c\0\0\0\0\0\x07\0\0\0\0\x28\
--\x0c\0\0\0\0\0\x07\0\0\0\0\x36\x0c\0\0\0\0\0\x07\0\0\0\0\x3b\x0c\0\0\0\0\0\x07\
--\0\0\0\0\x65\x03\0\0\0\0\0\x07\0\0\0\0\x40\x0c\0\0\0\0\0\x07\0\0\0\0\x52\x0c\0\
--\0\0\0\0\x07\0\0\0\0\x62\x0c\0\0\0\0\0\x07\0\0\0\0\x7a\x0c\0\0\0\0\0\x07\0\0\0\
--\0\x85\x0c\0\0\0\0\0\x07\0\0\0\0\x96\x0c\0\0\0\0\0\x07\0\0\0\0\xa5\x0c\0\0\0\0\
--\0\x07\0\0\0\0\xe6\x05\0\0\0\0\0\x07\0\0\0\0\xba\x0c\0\0\0\0\0\x07\0\0\0\0\xca\
--\x0c\0\0\0\0\0\x07\0\0\0\0\xa3\x0b\0\0\0\0\0\x07\0\0\0\0\xd4\x0c\0\0\0\0\0\x07\
--\0\0\0\0\xe0\x0c\0\0\0\0\0\x07\0\0\0\0\xe9\x0c\0\0\0\0\0\x0e\x02\0\0\0\x01\0\0\
--\0\0\x69\x6e\x74\0\x5f\x5f\x41\x52\x52\x41\x59\x5f\x53\x49\x5a\x45\x5f\x54\x59\
--\x50\x45\x5f\x5f\0\x74\x79\x70\x65\0\x6d\x61\x78\x5f\x65\x6e\x74\x72\x69\x65\
--\x73\0\x6b\x65\x79\x5f\x73\x69\x7a\x65\0\x76\x61\x6c\x75\x65\x5f\x73\x69\x7a\
--\x65\0\x68\x69\x64\x5f\x6a\x6d\x70\x5f\x74\x61\x62\x6c\x65\0\x5f\x5f\x75\x38\0\
--\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x63\x68\x61\x72\0\x6b\x65\x79\0\x76\x61\
--\x6c\x75\x65\0\x70\x72\x6f\x67\x73\x5f\x6d\x61\x70\0\x75\x6e\x73\x69\x67\x6e\
--\x65\x64\x20\x6c\x6f\x6e\x67\x20\x6c\x6f\x6e\x67\0\x63\x74\x78\0\x68\x69\x64\
--\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\x66\x6d\x6f\x64\x5f\x72\x65\x74\x2f\
--\x5f\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\
--\x2f\x68\x6f\x6d\x65\x2f\x62\x74\x69\x73\x73\x6f\x69\x72\x2f\x53\x72\x63\x2f\
--\x68\x69\x64\x2f\x64\x72\x69\x76\x65\x72\x73\x2f\x68\x69\x64\x2f\x62\x70\x66\
--\x2f\x65\x6e\x74\x72\x79\x70\x6f\x69\x6e\x74\x73\x2f\x65\x6e\x74\x72\x79\x70\
--\x6f\x69\x6e\x74\x73\x2e\x62\x70\x66\x2e\x63\0\x69\x6e\x74\x20\x42\x50\x46\x5f\
--\x50\x52\x4f\x47\x28\x68\x69\x64\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\x2c\
--\x20\x73\x74\x72\x75\x63\x74\x20\x68\x69\x64\x5f\x62\x70\x66\x5f\x63\x74\x78\
--\x20\x2a\x68\x63\x74\x78\x29\0\x68\x69\x64\x5f\x62\x70\x66\x5f\x63\x74\x78\0\
--\x69\x6e\x64\x65\x78\0\x68\x69\x64\0\x61\x6c\x6c\x6f\x63\x61\x74\x65\x64\x5f\
--\x73\x69\x7a\x65\0\x72\x65\x70\x6f\x72\x74\x5f\x74\x79\x70\x65\0\x5f\x5f\x75\
--\x33\x32\0\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x69\x6e\x74\0\x68\x69\x64\x5f\
--\x72\x65\x70\x6f\x72\x74\x5f\x74\x79\x70\x65\0\x48\x49\x44\x5f\x49\x4e\x50\x55\
--\x54\x5f\x52\x45\x50\x4f\x52\x54\0\x48\x49\x44\x5f\x4f\x55\x54\x50\x55\x54\x5f\
--\x52\x45\x50\x4f\x52\x54\0\x48\x49\x44\x5f\x46\x45\x41\x54\x55\x52\x45\x5f\x52\
--\x45\x50\x4f\x52\x54\0\x48\x49\x44\x5f\x52\x45\x50\x4f\x52\x54\x5f\x54\x59\x50\
--\x45\x53\0\x72\x65\x74\x76\x61\x6c\0\x73\x69\x7a\x65\0\x5f\x5f\x73\x33\x32\0\
--\x30\x3a\x30\0\x09\x62\x70\x66\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\x28\x63\
--\x74\x78\x2c\x20\x26\x68\x69\x64\x5f\x6a\x6d\x70\x5f\x74\x61\x62\x6c\x65\x2c\
--\x20\x68\x63\x74\x78\x2d\x3e\x69\x6e\x64\x65\x78\x29\x3b\0\x68\x69\x64\x5f\x70\
--\x72\x6f\x67\x5f\x72\x65\x6c\x65\x61\x73\x65\0\x66\x65\x78\x69\x74\x2f\x62\x70\
--\x66\x5f\x70\x72\x6f\x67\x5f\x72\x65\x6c\x65\x61\x73\x65\0\x69\x6e\x74\x20\x42\
--\x50\x46\x5f\x50\x52\x4f\x47\x28\x68\x69\x64\x5f\x70\x72\x6f\x67\x5f\x72\x65\
--\x6c\x65\x61\x73\x65\x2c\x20\x73\x74\x72\x75\x63\x74\x20\x69\x6e\x6f\x64\x65\
--\x20\x2a\x69\x6e\x6f\x64\x65\x2c\x20\x73\x74\x72\x75\x63\x74\x20\x66\x69\x6c\
--\x65\x20\x2a\x66\x69\x6c\x70\x29\0\x66\x69\x6c\x65\0\x66\x5f\x75\0\x66\x5f\x70\
--\x61\x74\x68\0\x66\x5f\x69\x6e\x6f\x64\x65\0\x66\x5f\x6f\x70\0\x66\x5f\x6c\x6f\
--\x63\x6b\0\x66\x5f\x63\x6f\x75\x6e\x74\0\x66\x5f\x66\x6c\x61\x67\x73\0\x66\x5f\
--\x6d\x6f\x64\x65\0\x66\x5f\x70\x6f\x73\x5f\x6c\x6f\x63\x6b\0\x66\x5f\x70\x6f\
--\x73\0\x66\x5f\x6f\x77\x6e\x65\x72\0\x66\x5f\x63\x72\x65\x64\0\x66\x5f\x72\x61\
--\0\x66\x5f\x76\x65\x72\x73\x69\x6f\x6e\0\x66\x5f\x73\x65\x63\x75\x72\x69\x74\
--\x79\0\x70\x72\x69\x76\x61\x74\x65\x5f\x64\x61\x74\x61\0\x66\x5f\x65\x70\0\x66\
--\x5f\x6d\x61\x70\x70\x69\x6e\x67\0\x66\x5f\x77\x62\x5f\x65\x72\x72\0\x66\x5f\
--\x73\x62\x5f\x65\x72\x72\0\x66\x75\x5f\x6c\x6c\x69\x73\x74\0\x66\x75\x5f\x72\
--\x63\x75\x68\x65\x61\x64\0\x6c\x6c\x69\x73\x74\x5f\x6e\x6f\x64\x65\0\x6e\x65\
--\x78\x74\0\x63\x61\x6c\x6c\x62\x61\x63\x6b\x5f\x68\x65\x61\x64\0\x66\x75\x6e\
--\x63\0\x70\x61\x74\x68\0\x6d\x6e\x74\0\x64\x65\x6e\x74\x72\x79\0\x73\x70\x69\
--\x6e\x6c\x6f\x63\x6b\x5f\x74\0\x73\x70\x69\x6e\x6c\x6f\x63\x6b\0\x72\x6c\x6f\
--\x63\x6b\0\x72\x61\x77\x5f\x73\x70\x69\x6e\x6c\x6f\x63\x6b\0\x72\x61\x77\x5f\
--\x6c\x6f\x63\x6b\0\x6d\x61\x67\x69\x63\0\x6f\x77\x6e\x65\x72\x5f\x63\x70\x75\0\
--\x6f\x77\x6e\x65\x72\0\x64\x65\x70\x5f\x6d\x61\x70\0\x61\x72\x63\x68\x5f\x73\
--\x70\x69\x6e\x6c\x6f\x63\x6b\x5f\x74\0\x71\x73\x70\x69\x6e\x6c\x6f\x63\x6b\0\
--\x76\x61\x6c\0\x61\x74\x6f\x6d\x69\x63\x5f\x74\0\x63\x6f\x75\x6e\x74\x65\x72\0\
--\x6c\x6f\x63\x6b\x65\x64\0\x70\x65\x6e\x64\x69\x6e\x67\0\x75\x38\0\x6c\x6f\x63\
--\x6b\x65\x64\x5f\x70\x65\x6e\x64\x69\x6e\x67\0\x74\x61\x69\x6c\0\x75\x31\x36\0\
--\x5f\x5f\x75\x31\x36\0\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x73\x68\x6f\x72\x74\
--\0\x6c\x6f\x63\x6b\x64\x65\x70\x5f\x6d\x61\x70\0\x63\x6c\x61\x73\x73\x5f\x63\
--\x61\x63\x68\x65\0\x6e\x61\x6d\x65\0\x77\x61\x69\x74\x5f\x74\x79\x70\x65\x5f\
--\x6f\x75\x74\x65\x72\0\x77\x61\x69\x74\x5f\x74\x79\x70\x65\x5f\x69\x6e\x6e\x65\
--\x72\0\x6c\x6f\x63\x6b\x5f\x74\x79\x70\x65\0\x6c\x6f\x63\x6b\x5f\x63\x6c\x61\
--\x73\x73\0\x68\x61\x73\x68\x5f\x65\x6e\x74\x72\x79\0\x6c\x6f\x63\x6b\x5f\x65\
--\x6e\x74\x72\x79\0\x6c\x6f\x63\x6b\x73\x5f\x61\x66\x74\x65\x72\0\x6c\x6f\x63\
--\x6b\x73\x5f\x62\x65\x66\x6f\x72\x65\0\x73\x75\x62\x63\x6c\x61\x73\x73\0\x64\
--\x65\x70\x5f\x67\x65\x6e\x5f\x69\x64\0\x75\x73\x61\x67\x65\x5f\x6d\x61\x73\x6b\
--\0\x75\x73\x61\x67\x65\x5f\x74\x72\x61\x63\x65\x73\0\x6e\x61\x6d\x65\x5f\x76\
--\x65\x72\x73\x69\x6f\x6e\0\x68\x6c\x69\x73\x74\x5f\x6e\x6f\x64\x65\0\x70\x70\
--\x72\x65\x76\0\x6c\x69\x73\x74\x5f\x68\x65\x61\x64\0\x70\x72\x65\x76\0\x75\x6e\
--\x73\x69\x67\x6e\x65\x64\x20\x6c\x6f\x6e\x67\0\x6c\x6f\x63\x6b\x5f\x74\x72\x61\
--\x63\x65\0\x68\x61\x73\x68\0\x6e\x72\x5f\x65\x6e\x74\x72\x69\x65\x73\0\x65\x6e\
--\x74\x72\x69\x65\x73\0\x75\x33\x32\0\x63\x68\x61\x72\0\x5f\x5f\x70\x61\x64\x64\
--\x69\x6e\x67\0\x61\x74\x6f\x6d\x69\x63\x5f\x6c\x6f\x6e\x67\x5f\x74\0\x61\x74\
--\x6f\x6d\x69\x63\x36\x34\x5f\x74\0\x73\x36\x34\0\x5f\x5f\x73\x36\x34\0\x6c\x6f\
--\x6e\x67\x20\x6c\x6f\x6e\x67\0\x66\x6d\x6f\x64\x65\x5f\x74\0\x6d\x75\x74\x65\
--\x78\0\x77\x61\x69\x74\x5f\x6c\x6f\x63\x6b\0\x6f\x73\x71\0\x77\x61\x69\x74\x5f\
--\x6c\x69\x73\x74\0\x72\x61\x77\x5f\x73\x70\x69\x6e\x6c\x6f\x63\x6b\x5f\x74\0\
--\x6f\x70\x74\x69\x6d\x69\x73\x74\x69\x63\x5f\x73\x70\x69\x6e\x5f\x71\x75\x65\
--\x75\x65\0\x6c\x6f\x66\x66\x5f\x74\0\x5f\x5f\x6b\x65\x72\x6e\x65\x6c\x5f\x6c\
--\x6f\x66\x66\x5f\x74\0\x66\x6f\x77\x6e\x5f\x73\x74\x72\x75\x63\x74\0\x6c\x6f\
--\x63\x6b\0\x70\x69\x64\0\x70\x69\x64\x5f\x74\x79\x70\x65\0\x75\x69\x64\0\x65\
--\x75\x69\x64\0\x73\x69\x67\x6e\x75\x6d\0\x72\x77\x6c\x6f\x63\x6b\x5f\x74\0\x61\
--\x72\x63\x68\x5f\x72\x77\x6c\x6f\x63\x6b\x5f\x74\0\x71\x72\x77\x6c\x6f\x63\x6b\
--\0\x63\x6e\x74\x73\0\x77\x6c\x6f\x63\x6b\x65\x64\0\x5f\x5f\x6c\x73\x74\x61\x74\
--\x65\0\x50\x49\x44\x54\x59\x50\x45\x5f\x50\x49\x44\0\x50\x49\x44\x54\x59\x50\
--\x45\x5f\x54\x47\x49\x44\0\x50\x49\x44\x54\x59\x50\x45\x5f\x50\x47\x49\x44\0\
--\x50\x49\x44\x54\x59\x50\x45\x5f\x53\x49\x44\0\x50\x49\x44\x54\x59\x50\x45\x5f\
--\x4d\x41\x58\0\x6b\x75\x69\x64\x5f\x74\0\x75\x69\x64\x5f\x74\0\x5f\x5f\x6b\x65\
--\x72\x6e\x65\x6c\x5f\x75\x69\x64\x33\x32\x5f\x74\0\x66\x69\x6c\x65\x5f\x72\x61\
--\x5f\x73\x74\x61\x74\x65\0\x73\x74\x61\x72\x74\0\x61\x73\x79\x6e\x63\x5f\x73\
--\x69\x7a\x65\0\x72\x61\x5f\x70\x61\x67\x65\x73\0\x6d\x6d\x61\x70\x5f\x6d\x69\
--\x73\x73\0\x70\x72\x65\x76\x5f\x70\x6f\x73\0\x75\x36\x34\0\x5f\x5f\x75\x36\x34\
--\0\x65\x72\x72\x73\x65\x71\x5f\x74\0\x30\x3a\x31\x35\0\x09\x75\x36\x34\x20\x70\
--\x72\x6f\x67\x20\x3d\x20\x28\x75\x36\x34\x29\x66\x69\x6c\x70\x2d\x3e\x70\x72\
--\x69\x76\x61\x74\x65\x5f\x64\x61\x74\x61\x3b\0\x09\x76\x61\x6c\x75\x65\x20\x3d\
--\x20\x62\x70\x66\x5f\x6d\x61\x70\x5f\x6c\x6f\x6f\x6b\x75\x70\x5f\x65\x6c\x65\
--\x6d\x28\x26\x70\x72\x6f\x67\x73\x5f\x6d\x61\x70\x2c\x20\x26\x70\x72\x6f\x67\
--\x29\x3b\0\x09\x69\x66\x20\x28\x21\x76\x61\x6c\x75\x65\x29\0\x09\x69\x66\x20\
--\x28\x63\x61\x6c\x6c\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\
--\x72\x65\x6c\x65\x61\x73\x65\x28\x70\x72\x6f\x67\x2c\x20\x2a\x76\x61\x6c\x75\
--\x65\x29\x29\0\x09\x09\x62\x70\x66\x5f\x6d\x61\x70\x5f\x64\x65\x6c\x65\x74\x65\
--\x5f\x65\x6c\x65\x6d\x28\x26\x70\x72\x6f\x67\x73\x5f\x6d\x61\x70\x2c\x20\x26\
--\x70\x72\x6f\x67\x29\x3b\0\x62\x6f\x6f\x6c\0\x5f\x42\x6f\x6f\x6c\0\x63\x61\x6c\
--\x6c\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x72\x65\x6c\x65\
--\x61\x73\x65\0\x68\x69\x64\x5f\x66\x72\x65\x65\x5f\x69\x6e\x6f\x64\x65\0\x66\
--\x65\x78\x69\x74\x2f\x62\x70\x66\x5f\x66\x72\x65\x65\x5f\x69\x6e\x6f\x64\x65\0\
--\x69\x6e\x74\x20\x42\x50\x46\x5f\x50\x52\x4f\x47\x28\x68\x69\x64\x5f\x66\x72\
--\x65\x65\x5f\x69\x6e\x6f\x64\x65\x2c\x20\x73\x74\x72\x75\x63\x74\x20\x69\x6e\
--\x6f\x64\x65\x20\x2a\x69\x6e\x6f\x64\x65\x29\0\x69\x6e\x6f\x64\x65\0\x69\x5f\
--\x6d\x6f\x64\x65\0\x69\x5f\x6f\x70\x66\x6c\x61\x67\x73\0\x69\x5f\x75\x69\x64\0\
--\x69\x5f\x67\x69\x64\0\x69\x5f\x66\x6c\x61\x67\x73\0\x69\x5f\x61\x63\x6c\0\x69\
--\x5f\x64\x65\x66\x61\x75\x6c\x74\x5f\x61\x63\x6c\0\x69\x5f\x6f\x70\0\x69\x5f\
--\x73\x62\0\x69\x5f\x6d\x61\x70\x70\x69\x6e\x67\0\x69\x5f\x73\x65\x63\x75\x72\
--\x69\x74\x79\0\x69\x5f\x69\x6e\x6f\0\x69\x5f\x72\x64\x65\x76\0\x69\x5f\x73\x69\
--\x7a\x65\0\x69\x5f\x61\x74\x69\x6d\x65\0\x69\x5f\x6d\x74\x69\x6d\x65\0\x69\x5f\
--\x63\x74\x69\x6d\x65\0\x69\x5f\x6c\x6f\x63\x6b\0\x69\x5f\x62\x79\x74\x65\x73\0\
--\x69\x5f\x62\x6c\x6b\x62\x69\x74\x73\0\x69\x5f\x77\x72\x69\x74\x65\x5f\x68\x69\
--\x6e\x74\0\x69\x5f\x62\x6c\x6f\x63\x6b\x73\0\x69\x5f\x73\x74\x61\x74\x65\0\x69\
--\x5f\x72\x77\x73\x65\x6d\0\x64\x69\x72\x74\x69\x65\x64\x5f\x77\x68\x65\x6e\0\
--\x64\x69\x72\x74\x69\x65\x64\x5f\x74\x69\x6d\x65\x5f\x77\x68\x65\x6e\0\x69\x5f\
--\x68\x61\x73\x68\0\x69\x5f\x69\x6f\x5f\x6c\x69\x73\x74\0\x69\x5f\x77\x62\0\x69\
--\x5f\x77\x62\x5f\x66\x72\x6e\x5f\x77\x69\x6e\x6e\x65\x72\0\x69\x5f\x77\x62\x5f\
--\x66\x72\x6e\x5f\x61\x76\x67\x5f\x74\x69\x6d\x65\0\x69\x5f\x77\x62\x5f\x66\x72\
--\x6e\x5f\x68\x69\x73\x74\x6f\x72\x79\0\x69\x5f\x6c\x72\x75\0\x69\x5f\x73\x62\
--\x5f\x6c\x69\x73\x74\0\x69\x5f\x77\x62\x5f\x6c\x69\x73\x74\0\x69\x5f\x76\x65\
--\x72\x73\x69\x6f\x6e\0\x69\x5f\x73\x65\x71\x75\x65\x6e\x63\x65\0\x69\x5f\x63\
--\x6f\x75\x6e\x74\0\x69\x5f\x64\x69\x6f\x5f\x63\x6f\x75\x6e\x74\0\x69\x5f\x77\
--\x72\x69\x74\x65\x63\x6f\x75\x6e\x74\0\x69\x5f\x72\x65\x61\x64\x63\x6f\x75\x6e\
--\x74\0\x69\x5f\x66\x6c\x63\x74\x78\0\x69\x5f\x64\x61\x74\x61\0\x69\x5f\x64\x65\
--\x76\x69\x63\x65\x73\0\x69\x5f\x67\x65\x6e\x65\x72\x61\x74\x69\x6f\x6e\0\x69\
--\x5f\x66\x73\x6e\x6f\x74\x69\x66\x79\x5f\x6d\x61\x73\x6b\0\x69\x5f\x66\x73\x6e\
--\x6f\x74\x69\x66\x79\x5f\x6d\x61\x72\x6b\x73\0\x69\x5f\x70\x72\x69\x76\x61\x74\
--\x65\0\x75\x6d\x6f\x64\x65\x5f\x74\0\x6b\x67\x69\x64\x5f\x74\0\x67\x69\x64\x5f\
--\x74\0\x5f\x5f\x6b\x65\x72\x6e\x65\x6c\x5f\x67\x69\x64\x33\x32\x5f\x74\0\x69\
--\x5f\x6e\x6c\x69\x6e\x6b\0\x5f\x5f\x69\x5f\x6e\x6c\x69\x6e\x6b\0\x64\x65\x76\
--\x5f\x74\0\x5f\x5f\x6b\x65\x72\x6e\x65\x6c\x5f\x64\x65\x76\x5f\x74\0\x74\x69\
--\x6d\x65\x73\x70\x65\x63\x36\x34\0\x74\x76\x5f\x73\x65\x63\0\x74\x76\x5f\x6e\
--\x73\x65\x63\0\x74\x69\x6d\x65\x36\x34\x5f\x74\0\x6c\x6f\x6e\x67\0\x62\x6c\x6b\
--\x63\x6e\x74\x5f\x74\0\x72\x77\x5f\x73\x65\x6d\x61\x70\x68\x6f\x72\x65\0\x63\
--\x6f\x75\x6e\x74\0\x69\x5f\x64\x65\x6e\x74\x72\x79\0\x69\x5f\x72\x63\x75\0\x68\
--\x6c\x69\x73\x74\x5f\x68\x65\x61\x64\0\x66\x69\x72\x73\x74\0\x69\x5f\x66\x6f\
--\x70\0\x66\x72\x65\x65\x5f\x69\x6e\x6f\x64\x65\0\x61\x64\x64\x72\x65\x73\x73\
--\x5f\x73\x70\x61\x63\x65\0\x68\x6f\x73\x74\0\x69\x5f\x70\x61\x67\x65\x73\0\x69\
--\x6e\x76\x61\x6c\x69\x64\x61\x74\x65\x5f\x6c\x6f\x63\x6b\0\x67\x66\x70\x5f\x6d\
--\x61\x73\x6b\0\x69\x5f\x6d\x6d\x61\x70\x5f\x77\x72\x69\x74\x61\x62\x6c\x65\0\
--\x69\x5f\x6d\x6d\x61\x70\0\x69\x5f\x6d\x6d\x61\x70\x5f\x72\x77\x73\x65\x6d\0\
--\x6e\x72\x70\x61\x67\x65\x73\0\x77\x72\x69\x74\x65\x62\x61\x63\x6b\x5f\x69\x6e\
--\x64\x65\x78\0\x61\x5f\x6f\x70\x73\0\x66\x6c\x61\x67\x73\0\x77\x62\x5f\x65\x72\
--\x72\0\x70\x72\x69\x76\x61\x74\x65\x5f\x6c\x6f\x63\x6b\0\x70\x72\x69\x76\x61\
--\x74\x65\x5f\x6c\x69\x73\x74\0\x78\x61\x72\x72\x61\x79\0\x78\x61\x5f\x6c\x6f\
--\x63\x6b\0\x78\x61\x5f\x66\x6c\x61\x67\x73\0\x78\x61\x5f\x68\x65\x61\x64\0\x67\
--\x66\x70\x5f\x74\0\x72\x62\x5f\x72\x6f\x6f\x74\x5f\x63\x61\x63\x68\x65\x64\0\
--\x72\x62\x5f\x72\x6f\x6f\x74\0\x72\x62\x5f\x6c\x65\x66\x74\x6d\x6f\x73\x74\0\
--\x72\x62\x5f\x6e\x6f\x64\x65\0\x69\x5f\x70\x69\x70\x65\0\x69\x5f\x63\x64\x65\
--\x76\0\x69\x5f\x6c\x69\x6e\x6b\0\x69\x5f\x64\x69\x72\x5f\x73\x65\x71\0\x30\x3a\
--\x35\x31\0\x09\x75\x36\x34\x20\x70\x72\x6f\x67\x20\x3d\x20\x28\x75\x36\x34\x29\
--\x69\x6e\x6f\x64\x65\x2d\x3e\x69\x5f\x70\x72\x69\x76\x61\x74\x65\x3b\0\x4c\x49\
--\x43\x45\x4e\x53\x45\0\x2e\x6b\x73\x79\x6d\x73\0\x2e\x6d\x61\x70\x73\0\x6c\x69\
--\x63\x65\x6e\x73\x65\0\x61\x64\x64\x72\x65\x73\x73\x5f\x73\x70\x61\x63\x65\x5f\
--\x6f\x70\x65\x72\x61\x74\x69\x6f\x6e\x73\0\x62\x64\x69\x5f\x77\x72\x69\x74\x65\
--\x62\x61\x63\x6b\0\x63\x64\x65\x76\0\x63\x72\x65\x64\0\x66\x69\x6c\x65\x5f\x6c\
--\x6f\x63\x6b\x5f\x63\x6f\x6e\x74\x65\x78\x74\0\x66\x69\x6c\x65\x5f\x6f\x70\x65\
--\x72\x61\x74\x69\x6f\x6e\x73\0\x66\x73\x6e\x6f\x74\x69\x66\x79\x5f\x6d\x61\x72\
--\x6b\x5f\x63\x6f\x6e\x6e\x65\x63\x74\x6f\x72\0\x68\x69\x64\x5f\x64\x65\x76\x69\
--\x63\x65\0\x69\x6e\x6f\x64\x65\x5f\x6f\x70\x65\x72\x61\x74\x69\x6f\x6e\x73\0\
--\x6c\x6f\x63\x6b\x5f\x63\x6c\x61\x73\x73\x5f\x6b\x65\x79\0\x6c\x6f\x63\x6b\x64\
--\x65\x70\x5f\x73\x75\x62\x63\x6c\x61\x73\x73\x5f\x6b\x65\x79\0\x70\x69\x70\x65\
--\x5f\x69\x6e\x6f\x64\x65\x5f\x69\x6e\x66\x6f\0\x70\x6f\x73\x69\x78\x5f\x61\x63\
--\x6c\0\x73\x75\x70\x65\x72\x5f\x62\x6c\x6f\x63\x6b\0\x76\x66\x73\x6d\x6f\x75\
--\x6e\x74\0\x64\x75\x6d\x6d\x79\x5f\x6b\x73\x79\x6d\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\x84\x21\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\x04\0\0\0\x04\0\0\
--\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x68\x69\x64\x5f\x6a\x6d\x70\x5f\x74\x61\
--\x62\x6c\x65\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\
--\0\0\0\x08\0\0\0\x01\0\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x70\x72\x6f\x67\
--\x73\x5f\x6d\x61\x70\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x10\0\0\0\x12\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\x47\x50\x4c\0\0\0\0\0\x79\x12\0\0\0\0\0\0\x61\x23\0\0\0\0\0\0\
--\x18\x52\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x85\0\0\0\x0c\0\0\0\xb7\0\0\0\0\0\0\0\x95\
--\0\0\0\0\0\0\0\0\0\0\0\x19\0\0\0\0\0\0\0\xb5\0\0\0\xfa\0\0\0\x05\x6c\0\0\x01\0\
--\0\0\xb5\0\0\0\xe1\x01\0\0\x02\x74\0\0\x05\0\0\0\xb5\0\0\0\xfa\0\0\0\x05\x6c\0\
--\0\x08\0\0\0\x1a\0\0\0\xdd\x01\0\0\0\0\0\0\x1a\0\0\0\x07\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x68\x69\x64\
--\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\0\0\0\0\0\0\x1a\0\0\0\0\0\0\0\x08\0\
--\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\x01\0\0\0\0\
--\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\x5f\x5f\x68\
--\x69\x64\x5f\x62\x70\x66\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\0\0\0\0\x47\
--\x50\x4c\0\0\0\0\0\x79\x11\x08\0\0\0\0\0\x79\x11\xa8\x01\0\0\0\0\x7b\x1a\xf8\
--\xff\0\0\0\0\xbf\xa2\0\0\0\0\0\0\x07\x02\0\0\xf8\xff\xff\xff\x18\x51\0\0\x01\0\
--\0\0\0\0\0\0\0\0\0\0\x85\0\0\0\x01\0\0\0\x15\0\x09\0\0\0\0\0\x71\x02\0\0\0\0\0\
--\0\x79\xa1\xf8\xff\0\0\0\0\x85\x20\0\0\0\0\0\0\x15\0\x05\0\0\0\0\0\xbf\xa2\0\0\
--\0\0\0\0\x07\x02\0\0\xf8\xff\xff\xff\x18\x51\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\x85\
--\0\0\0\x03\0\0\0\xb7\0\0\0\0\0\0\0\x95\0\0\0\0\0\0\0\0\0\0\0\x23\0\0\0\0\0\0\0\
--\xb5\0\0\0\x3b\x02\0\0\x05\xbc\0\0\x01\0\0\0\xb5\0\0\0\xe7\x06\0\0\x18\xc4\0\0\
--\x04\0\0\0\xb5\0\0\0\0\0\0\0\0\0\0\0\x05\0\0\0\xb5\0\0\0\x0c\x07\0\0\x0a\x98\0\
--\0\x08\0\0\0\xb5\0\0\0\x3d\x07\0\0\x06\x9c\0\0\x09\0\0\0\xb5\0\0\0\x4a\x07\0\0\
--\x26\xa8\0\0\x0a\0\0\0\xb5\0\0\0\x4a\x07\0\0\x20\xa8\0\0\x0b\0\0\0\xb5\0\0\0\
--\x4a\x07\0\0\x06\xa8\0\0\x0c\0\0\0\xb5\0\0\0\x4a\x07\0\0\x06\xa8\0\0\x0e\0\0\0\
--\xb5\0\0\0\0\0\0\0\0\0\0\0\x0f\0\0\0\xb5\0\0\0\x78\x07\0\0\x03\xac\0\0\x12\0\0\
--\0\xb5\0\0\0\x3b\x02\0\0\x05\xbc\0\0\x08\0\0\0\x24\0\0\0\xe2\x06\0\0\0\0\0\0\
--\x1a\0\0\0\x14\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\x68\x69\x64\x5f\x70\x72\x6f\x67\x5f\x72\x65\x6c\x65\x61\
--\x73\0\0\0\0\0\x19\0\0\0\0\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\x10\0\0\0\
--\0\0\0\0\0\0\0\0\x0c\0\0\0\x01\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\x10\0\0\0\0\0\0\0\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x72\x65\x6c\x65\
--\x61\x73\x65\0\0\0\0\0\0\0\0\x63\x61\x6c\x6c\x5f\x68\x69\x64\x5f\x62\x70\x66\
--\x5f\x70\x72\x6f\x67\x5f\x72\x65\x6c\x65\x61\x73\x65\0\0\0\0\0\0\0\x47\x50\x4c\
--\0\0\0\0\0\x79\x11\0\0\0\0\0\0\x79\x11\x70\x04\0\0\0\0\x7b\x1a\xf8\xff\0\0\0\0\
--\xbf\xa2\0\0\0\0\0\0\x07\x02\0\0\xf8\xff\xff\xff\x18\x51\0\0\x01\0\0\0\0\0\0\0\
--\0\0\0\0\x85\0\0\0\x01\0\0\0\x15\0\x09\0\0\0\0\0\x71\x02\0\0\0\0\0\0\x79\xa1\
--\xf8\xff\0\0\0\0\x85\x20\0\0\0\0\0\0\x15\0\x05\0\0\0\0\0\xbf\xa2\0\0\0\0\0\0\
--\x07\x02\0\0\xf8\xff\xff\xff\x18\x51\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\x85\0\0\0\
--\x03\0\0\0\xb7\0\0\0\0\0\0\0\x95\0\0\0\0\0\0\0\0\0\0\0\x80\0\0\0\0\0\0\0\xb5\0\
--\0\0\xeb\x07\0\0\x05\xe4\0\0\x01\0\0\0\xb5\0\0\0\xcf\x0b\0\0\x19\xec\0\0\x04\0\
--\0\0\xb5\0\0\0\0\0\0\0\0\0\0\0\x05\0\0\0\xb5\0\0\0\x0c\x07\0\0\x0a\x98\0\0\x08\
--\0\0\0\xb5\0\0\0\x3d\x07\0\0\x06\x9c\0\0\x09\0\0\0\xb5\0\0\0\x4a\x07\0\0\x26\
--\xa8\0\0\x0a\0\0\0\xb5\0\0\0\x4a\x07\0\0\x20\xa8\0\0\x0b\0\0\0\xb5\0\0\0\x4a\
--\x07\0\0\x06\xa8\0\0\x0c\0\0\0\xb5\0\0\0\x4a\x07\0\0\x06\xa8\0\0\x0e\0\0\0\xb5\
--\0\0\0\0\0\0\0\0\0\0\0\x0f\0\0\0\xb5\0\0\0\x78\x07\0\0\x03\xac\0\0\x12\0\0\0\
--\xb5\0\0\0\xeb\x07\0\0\x05\xe4\0\0\x08\0\0\0\x81\0\0\0\xca\x0b\0\0\0\0\0\0\x1a\
--\0\0\0\x14\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\x68\x69\x64\x5f\x66\x72\x65\x65\x5f\x69\x6e\x6f\x64\x65\0\0\
--\0\0\0\0\x19\0\0\0\0\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\x10\0\0\0\0\0\0\
--\0\0\0\0\0\x0c\0\0\0\x01\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\x10\0\0\0\0\0\0\0\x62\x70\x66\x5f\x66\x72\x65\x65\x5f\x69\x6e\x6f\x64\x65\0\
--\0\x63\x61\x6c\x6c\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x72\
--\x65\x6c\x65\x61\x73\x65\0\0\0\0\0\0\0";
--	opts.insns_sz = 3152;
-+\0\0\0\0\x0e\x09\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\x02\x0c\0\0\0\x4c\0\0\0\0\0\0\
-+\x01\x08\0\0\0\x40\0\0\0\0\0\0\0\x01\0\0\x0d\x02\0\0\0\x5f\0\0\0\x0b\0\0\0\x63\
-+\0\0\0\x01\0\0\x0c\x0d\0\0\0\x09\x01\0\0\x05\0\0\x04\x20\0\0\0\x15\x01\0\0\x10\
-+\0\0\0\0\0\0\0\x1b\x01\0\0\x12\0\0\0\x40\0\0\0\x1f\x01\0\0\x10\0\0\0\x80\0\0\0\
-+\x2e\x01\0\0\x14\0\0\0\xa0\0\0\0\0\0\0\0\x15\0\0\0\xc0\0\0\0\x3a\x01\0\0\0\0\0\
-+\x08\x11\0\0\0\x40\x01\0\0\0\0\0\x01\x04\0\0\0\x20\0\0\0\0\0\0\0\0\0\0\x02\x13\
-+\0\0\0\0\0\0\0\0\0\0\x0a\x43\0\0\0\x4d\x01\0\0\x04\0\0\x06\x04\0\0\0\x5d\x01\0\
-+\0\0\0\0\0\x6e\x01\0\0\x01\0\0\0\x80\x01\0\0\x02\0\0\0\x93\x01\0\0\x03\0\0\0\0\
-+\0\0\0\x02\0\0\x05\x04\0\0\0\xa4\x01\0\0\x16\0\0\0\0\0\0\0\xab\x01\0\0\x16\0\0\
-+\0\0\0\0\0\xb0\x01\0\0\0\0\0\x08\x02\0\0\0\0\0\0\0\x01\0\0\x0d\x02\0\0\0\x5f\0\
-+\0\0\x0b\0\0\0\xec\x01\0\0\x01\0\0\x0c\x17\0\0\0\0\0\0\0\x01\0\0\x0d\0\0\0\0\
-+\x87\x04\0\0\x1a\0\0\0\0\0\0\0\0\0\0\x02\x1b\0\0\0\x8c\x02\0\0\x04\0\0\x04\x48\
-+\0\0\0\x98\x02\0\0\x1c\0\0\0\0\0\0\0\x9d\x02\0\0\x22\0\0\0\x40\0\0\0\xa3\x02\0\
-+\0\x24\0\0\0\xc0\0\0\0\xa8\x02\0\0\x26\0\0\0\0\x01\0\0\xb4\x02\0\0\0\0\0\x08\
-+\x1d\0\0\0\xc2\x02\0\0\0\0\0\x08\x1e\0\0\0\0\0\0\0\x01\0\0\x04\x08\0\0\0\xcd\
-+\x02\0\0\x1f\0\0\0\0\0\0\0\xd5\x02\0\0\0\0\0\x08\x20\0\0\0\xd9\x02\0\0\0\0\0\
-+\x08\x21\0\0\0\xdf\x02\0\0\0\0\0\x01\x08\0\0\0\x40\0\0\x01\xe9\x02\0\0\x02\0\0\
-+\x04\x10\0\0\0\xf3\x02\0\0\x23\0\0\0\0\0\0\0\xf8\x02\0\0\x23\0\0\0\x40\0\0\0\0\
-+\0\0\0\0\0\0\x02\x22\0\0\0\xfd\x02\0\0\0\0\0\x08\x25\0\0\0\0\0\0\0\0\0\0\x02\
-+\x19\0\0\0\xa8\x02\0\0\x06\0\0\x04\x28\0\0\0\x09\x03\0\0\x27\0\0\0\0\0\0\0\x0d\
-+\x03\0\0\x3c\0\0\0\x40\0\0\0\x19\x03\0\0\x36\0\0\0\xc0\0\0\0\x1e\x03\0\0\x39\0\
-+\0\0\0\x01\0\0\x2e\x03\0\0\x39\0\0\0\x08\x01\0\0\x3e\x03\0\0\x39\0\0\0\x10\x01\
-+\0\0\0\0\0\0\0\0\0\x02\x44\0\0\0\0\0\0\0\0\0\0\x02\x29\0\0\0\x48\x03\0\0\x0e\0\
-+\0\x04\xc0\0\0\0\x53\x03\0\0\x2a\0\0\0\0\0\0\0\x5e\x03\0\0\x22\0\0\0\x80\0\0\0\
-+\x69\x03\0\0\x22\0\0\0\0\x01\0\0\x75\x03\0\0\x22\0\0\0\x80\x01\0\0\x09\x03\0\0\
-+\x2d\0\0\0\0\x02\0\0\x82\x03\0\0\x11\0\0\0\x40\x02\0\0\x8b\x03\0\0\x11\0\0\0\
-+\x60\x02\0\0\x96\x03\0\0\x2f\0\0\0\x80\x02\0\0\xa1\x03\0\0\x35\0\0\0\xc0\x02\0\
-+\0\xae\x03\0\0\x02\0\0\0\x40\x05\0\0\x19\x03\0\0\x36\0\0\0\x80\x05\0\0\x2e\x03\
-+\0\0\x39\0\0\0\xc0\x05\0\0\x1e\x03\0\0\x39\0\0\0\xc8\x05\0\0\x3e\x03\0\0\x39\0\
-+\0\0\xd0\x05\0\0\xbb\x03\0\0\x02\0\0\x04\x10\0\0\0\xf3\x02\0\0\x2b\0\0\0\0\0\0\
-+\0\xc6\x03\0\0\x2c\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\x2a\0\0\0\0\0\0\0\0\0\0\
-+\x02\x2b\0\0\0\0\0\0\0\0\0\0\x02\x2e\0\0\0\0\0\0\0\0\0\0\x0a\x45\0\0\0\xcc\x03\
-+\0\0\0\0\0\x01\x08\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\x31\0\0\0\0\0\0\0\0\0\0\
-+\x0a\x32\0\0\0\xda\x03\0\0\x04\0\0\x04\x18\0\0\0\x53\x03\0\0\x2a\0\0\0\0\0\0\0\
-+\xe5\x03\0\0\x33\0\0\0\x80\0\0\0\xea\x03\0\0\x33\0\0\0\xa0\0\0\0\xf5\x03\0\0\
-+\x34\0\0\0\xc0\0\0\0\xfd\x03\0\0\0\0\0\x08\x10\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\
-+\x2f\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x30\0\0\0\x04\0\0\0\x0a\
-+\0\0\0\0\0\0\0\0\0\0\x02\x37\0\0\0\0\0\0\0\0\0\0\x0a\x38\0\0\0\x01\x04\0\0\0\0\
-+\0\x01\x01\0\0\0\x08\0\0\x01\x06\x04\0\0\0\0\0\x08\x3a\0\0\0\x09\x04\0\0\0\0\0\
-+\x08\x3b\0\0\0\x0e\x04\0\0\0\0\0\x01\x01\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\x03\0\0\
-+\0\0\x28\0\0\0\x04\0\0\0\x02\0\0\0\x1c\x04\0\0\x01\0\0\x0c\x19\0\0\0\0\0\0\0\0\
-+\0\0\x03\0\0\0\0\x38\0\0\0\x04\0\0\0\x04\0\0\0\x3b\x04\0\0\0\0\0\x0e\x3e\0\0\0\
-+\x01\0\0\0\x43\x04\0\0\x01\0\0\x0f\x04\0\0\0\x46\0\0\0\0\0\0\0\x04\0\0\0\x4a\
-+\x04\0\0\x01\0\0\x0f\x20\0\0\0\x0a\0\0\0\0\0\0\0\x20\0\0\0\x50\x04\0\0\x01\0\0\
-+\x0f\x04\0\0\0\x3f\0\0\0\0\0\0\0\x04\0\0\0\x58\x04\0\0\0\0\0\x07\0\0\0\0\x63\
-+\x04\0\0\0\0\0\x07\0\0\0\0\x72\x04\0\0\0\0\0\x07\0\0\0\0\x87\x04\0\0\0\0\0\x0e\
-+\x02\0\0\0\x01\0\0\0\0\x69\x6e\x74\0\x5f\x5f\x41\x52\x52\x41\x59\x5f\x53\x49\
-+\x5a\x45\x5f\x54\x59\x50\x45\x5f\x5f\0\x74\x79\x70\x65\0\x6d\x61\x78\x5f\x65\
-+\x6e\x74\x72\x69\x65\x73\0\x6b\x65\x79\x5f\x73\x69\x7a\x65\0\x76\x61\x6c\x75\
-+\x65\x5f\x73\x69\x7a\x65\0\x68\x69\x64\x5f\x6a\x6d\x70\x5f\x74\x61\x62\x6c\x65\
-+\0\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x6c\x6f\x6e\x67\x20\x6c\x6f\x6e\x67\0\
-+\x63\x74\x78\0\x68\x69\x64\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\x66\x6d\
-+\x6f\x64\x5f\x72\x65\x74\x2f\x5f\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\x74\x61\
-+\x69\x6c\x5f\x63\x61\x6c\x6c\0\x2f\x68\x6f\x6d\x65\x2f\x62\x74\x69\x73\x73\x6f\
-+\x69\x72\x2f\x53\x72\x63\x2f\x68\x69\x64\x2f\x64\x72\x69\x76\x65\x72\x73\x2f\
-+\x68\x69\x64\x2f\x62\x70\x66\x2f\x65\x6e\x74\x72\x79\x70\x6f\x69\x6e\x74\x73\
-+\x2f\x65\x6e\x74\x72\x79\x70\x6f\x69\x6e\x74\x73\x2e\x62\x70\x66\x2e\x63\0\x69\
-+\x6e\x74\x20\x42\x50\x46\x5f\x50\x52\x4f\x47\x28\x68\x69\x64\x5f\x74\x61\x69\
-+\x6c\x5f\x63\x61\x6c\x6c\x2c\x20\x73\x74\x72\x75\x63\x74\x20\x68\x69\x64\x5f\
-+\x62\x70\x66\x5f\x63\x74\x78\x20\x2a\x68\x63\x74\x78\x29\0\x68\x69\x64\x5f\x62\
-+\x70\x66\x5f\x63\x74\x78\0\x69\x6e\x64\x65\x78\0\x68\x69\x64\0\x61\x6c\x6c\x6f\
-+\x63\x61\x74\x65\x64\x5f\x73\x69\x7a\x65\0\x72\x65\x70\x6f\x72\x74\x5f\x74\x79\
-+\x70\x65\0\x5f\x5f\x75\x33\x32\0\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x69\x6e\
-+\x74\0\x68\x69\x64\x5f\x72\x65\x70\x6f\x72\x74\x5f\x74\x79\x70\x65\0\x48\x49\
-+\x44\x5f\x49\x4e\x50\x55\x54\x5f\x52\x45\x50\x4f\x52\x54\0\x48\x49\x44\x5f\x4f\
-+\x55\x54\x50\x55\x54\x5f\x52\x45\x50\x4f\x52\x54\0\x48\x49\x44\x5f\x46\x45\x41\
-+\x54\x55\x52\x45\x5f\x52\x45\x50\x4f\x52\x54\0\x48\x49\x44\x5f\x52\x45\x50\x4f\
-+\x52\x54\x5f\x54\x59\x50\x45\x53\0\x72\x65\x74\x76\x61\x6c\0\x73\x69\x7a\x65\0\
-+\x5f\x5f\x73\x33\x32\0\x30\x3a\x30\0\x09\x62\x70\x66\x5f\x74\x61\x69\x6c\x5f\
-+\x63\x61\x6c\x6c\x28\x63\x74\x78\x2c\x20\x26\x68\x69\x64\x5f\x6a\x6d\x70\x5f\
-+\x74\x61\x62\x6c\x65\x2c\x20\x68\x63\x74\x78\x2d\x3e\x69\x6e\x64\x65\x78\x29\
-+\x3b\0\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\
-+\x65\x66\x65\x72\x72\x65\x64\0\x66\x65\x6e\x74\x72\x79\x2f\x62\x70\x66\x5f\x70\
-+\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\x65\x64\0\x69\x6e\x74\
-+\x20\x42\x50\x46\x5f\x50\x52\x4f\x47\x28\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\
-+\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\x65\x64\x2c\x20\x73\
-+\x74\x72\x75\x63\x74\x20\x77\x6f\x72\x6b\x5f\x73\x74\x72\x75\x63\x74\x20\x2a\
-+\x77\x6f\x72\x6b\x29\0\x09\x63\x61\x6c\x6c\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\
-+\x70\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\x65\x64\x28\x77\
-+\x6f\x72\x6b\x29\x3b\0\x77\x6f\x72\x6b\x5f\x73\x74\x72\x75\x63\x74\0\x64\x61\
-+\x74\x61\0\x65\x6e\x74\x72\x79\0\x66\x75\x6e\x63\0\x6c\x6f\x63\x6b\x64\x65\x70\
-+\x5f\x6d\x61\x70\0\x61\x74\x6f\x6d\x69\x63\x5f\x6c\x6f\x6e\x67\x5f\x74\0\x61\
-+\x74\x6f\x6d\x69\x63\x36\x34\x5f\x74\0\x63\x6f\x75\x6e\x74\x65\x72\0\x73\x36\
-+\x34\0\x5f\x5f\x73\x36\x34\0\x6c\x6f\x6e\x67\x20\x6c\x6f\x6e\x67\0\x6c\x69\x73\
-+\x74\x5f\x68\x65\x61\x64\0\x6e\x65\x78\x74\0\x70\x72\x65\x76\0\x77\x6f\x72\x6b\
-+\x5f\x66\x75\x6e\x63\x5f\x74\0\x6b\x65\x79\0\x63\x6c\x61\x73\x73\x5f\x63\x61\
-+\x63\x68\x65\0\x6e\x61\x6d\x65\0\x77\x61\x69\x74\x5f\x74\x79\x70\x65\x5f\x6f\
-+\x75\x74\x65\x72\0\x77\x61\x69\x74\x5f\x74\x79\x70\x65\x5f\x69\x6e\x6e\x65\x72\
-+\0\x6c\x6f\x63\x6b\x5f\x74\x79\x70\x65\0\x6c\x6f\x63\x6b\x5f\x63\x6c\x61\x73\
-+\x73\0\x68\x61\x73\x68\x5f\x65\x6e\x74\x72\x79\0\x6c\x6f\x63\x6b\x5f\x65\x6e\
-+\x74\x72\x79\0\x6c\x6f\x63\x6b\x73\x5f\x61\x66\x74\x65\x72\0\x6c\x6f\x63\x6b\
-+\x73\x5f\x62\x65\x66\x6f\x72\x65\0\x73\x75\x62\x63\x6c\x61\x73\x73\0\x64\x65\
-+\x70\x5f\x67\x65\x6e\x5f\x69\x64\0\x75\x73\x61\x67\x65\x5f\x6d\x61\x73\x6b\0\
-+\x75\x73\x61\x67\x65\x5f\x74\x72\x61\x63\x65\x73\0\x6e\x61\x6d\x65\x5f\x76\x65\
-+\x72\x73\x69\x6f\x6e\0\x68\x6c\x69\x73\x74\x5f\x6e\x6f\x64\x65\0\x70\x70\x72\
-+\x65\x76\0\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x6c\x6f\x6e\x67\0\x6c\x6f\x63\
-+\x6b\x5f\x74\x72\x61\x63\x65\0\x68\x61\x73\x68\0\x6e\x72\x5f\x65\x6e\x74\x72\
-+\x69\x65\x73\0\x65\x6e\x74\x72\x69\x65\x73\0\x75\x33\x32\0\x63\x68\x61\x72\0\
-+\x75\x38\0\x5f\x5f\x75\x38\0\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x63\x68\x61\
-+\x72\0\x63\x61\x6c\x6c\x5f\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\
-+\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\x65\x64\0\x4c\x49\x43\x45\x4e\x53\x45\
-+\0\x2e\x6b\x73\x79\x6d\x73\0\x2e\x6d\x61\x70\x73\0\x6c\x69\x63\x65\x6e\x73\x65\
-+\0\x68\x69\x64\x5f\x64\x65\x76\x69\x63\x65\0\x6c\x6f\x63\x6b\x5f\x63\x6c\x61\
-+\x73\x73\x5f\x6b\x65\x79\0\x6c\x6f\x63\x6b\x64\x65\x70\x5f\x73\x75\x62\x63\x6c\
-+\x61\x73\x73\x5f\x6b\x65\x79\0\x64\x75\x6d\x6d\x79\x5f\x6b\x73\x79\x6d\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xde\x0a\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\
-+\x04\0\0\0\x04\0\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x68\x69\x64\x5f\x6a\x6d\
-+\x70\x5f\x74\x61\x62\x6c\x65\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\0\0\x47\x50\x4c\0\0\0\0\0\x79\x12\0\0\0\0\0\0\x61\x23\0\0\0\0\0\0\x18\
-+\x52\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x85\0\0\0\x0c\0\0\0\xb7\0\0\0\0\0\0\0\x95\0\0\
-+\0\0\0\0\0\0\0\0\0\x0e\0\0\0\0\0\0\0\x8e\0\0\0\xd3\0\0\0\x05\x50\0\0\x01\0\0\0\
-+\x8e\0\0\0\xba\x01\0\0\x02\x58\0\0\x05\0\0\0\x8e\0\0\0\xd3\0\0\0\x05\x50\0\0\
-+\x08\0\0\0\x0f\0\0\0\xb6\x01\0\0\0\0\0\0\x1a\0\0\0\x07\0\0\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x68\x69\x64\x5f\
-+\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\0\0\0\0\0\0\x1a\0\0\0\0\0\0\0\x08\0\0\0\
-+\0\0\0\0\0\0\0\0\x01\0\0\0\x10\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\x01\0\0\0\0\0\0\
-+\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\x5f\x5f\x68\x69\
-+\x64\x5f\x62\x70\x66\x5f\x74\x61\x69\x6c\x5f\x63\x61\x6c\x6c\0\0\0\0\0\x47\x50\
-+\x4c\0\0\0\0\0\x79\x11\0\0\0\0\0\0\x85\x20\0\0\0\0\0\0\xb7\0\0\0\0\0\0\0\x95\0\
-+\0\0\0\0\0\0\0\0\0\0\x18\0\0\0\0\0\0\0\x8e\0\0\0\x23\x02\0\0\x05\x70\0\0\x01\0\
-+\0\0\x8e\0\0\0\x65\x02\0\0\x02\x78\0\0\x02\0\0\0\x8e\0\0\0\x23\x02\0\0\x05\x70\
-+\0\0\x1a\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\x68\x69\x64\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\
-+\x70\x75\0\0\0\0\0\x18\0\0\0\0\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\x10\0\
-+\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\0\x10\0\0\0\0\0\0\0\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x70\x75\x74\
-+\x5f\x64\x65\x66\x65\x72\x72\x65\x64\0\0\0\x63\x61\x6c\x6c\x5f\x68\x69\x64\x5f\
-+\x62\x70\x66\x5f\x70\x72\x6f\x67\x5f\x70\x75\x74\x5f\x64\x65\x66\x65\x72\x72\
-+\x65\x64\0\0";
-+	opts.insns_sz = 2056;
- 	opts.insns = (void *)"\
- \xbf\x16\0\0\0\0\0\0\xbf\xa1\0\0\0\0\0\0\x07\x01\0\0\x78\xff\xff\xff\xb7\x02\0\
--\0\x88\0\0\0\xb7\x03\0\0\0\0\0\0\x85\0\0\0\x71\0\0\0\x05\0\x1d\0\0\0\0\0\x61\
-+\0\x88\0\0\0\xb7\x03\0\0\0\0\0\0\x85\0\0\0\x71\0\0\0\x05\0\x14\0\0\0\0\0\x61\
- \xa1\x78\xff\0\0\0\0\xd5\x01\x01\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa1\x7c\xff\
- \0\0\0\0\xd5\x01\x01\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa1\x80\xff\0\0\0\0\xd5\
- \x01\x01\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa1\x84\xff\0\0\0\0\xd5\x01\x01\0\0\
--\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa1\x88\xff\0\0\0\0\xd5\x01\x01\0\0\0\0\0\x85\0\
--\0\0\xa8\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\
--\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x18\x60\0\0\0\0\0\0\0\0\
--\0\0\x04\0\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\
--\x85\0\0\0\xa8\0\0\0\xbf\x70\0\0\0\0\0\0\x95\0\0\0\0\0\0\0\x61\x60\x08\0\0\0\0\
--\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xa0\x26\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\0\
--\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x9c\x26\0\0\x63\x01\0\0\0\0\0\0\x79\x60\x10\
--\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x90\x26\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\
--\0\0\0\0\0\0\0\0\0\0\0\x05\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x88\x26\0\0\x7b\x01\
--\0\0\0\0\0\0\xb7\x01\0\0\x12\0\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\x88\x26\0\0\xb7\
--\x03\0\0\x1c\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\xcb\xff\0\0\
--\0\0\x63\x7a\x78\xff\0\0\0\0\x61\x60\x1c\0\0\0\0\0\x15\0\x03\0\0\0\0\0\x18\x61\
--\0\0\0\0\0\0\0\0\0\0\xb4\x26\0\0\x63\x01\0\0\0\0\0\0\xb7\x01\0\0\0\0\0\0\x18\
--\x62\0\0\0\0\0\0\0\0\0\0\xa8\x26\0\0\xb7\x03\0\0\x48\0\0\0\x85\0\0\0\xa6\0\0\0\
--\xbf\x07\0\0\0\0\0\0\xc5\x07\xbe\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\x63\x71\0\0\0\0\0\0\x61\xa0\x78\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x20\
--\x27\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x2c\0\0\0\0\0\x15\0\x03\0\0\0\0\0\x18\x61\
--\0\0\0\0\0\0\0\0\0\0\xfc\x26\0\0\x63\x01\0\0\0\0\0\0\xb7\x01\0\0\0\0\0\0\x18\
--\x62\0\0\0\0\0\0\0\0\0\0\xf0\x26\0\0\xb7\x03\0\0\x48\0\0\0\x85\0\0\0\xa6\0\0\0\
--\xbf\x07\0\0\0\0\0\0\xc5\x07\xab\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x04\0\
--\0\0\x63\x71\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x38\x27\0\0\x18\x61\0\0\0\
--\0\0\0\0\0\0\0\xd0\x27\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x40\
--\x27\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xc8\x27\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\
--\0\0\0\0\0\0\0\0\0\x78\x27\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x10\x28\0\0\x7b\x01\
--\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x80\x27\0\0\x18\x61\0\0\0\0\0\0\0\0\0\
--\0\x20\x28\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xb0\x27\0\0\x18\
--\x61\0\0\0\0\0\0\0\0\0\0\x40\x28\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x38\x28\0\0\x7b\x01\0\0\0\0\0\0\x61\
--\x60\x08\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xd8\x27\0\0\x63\x01\0\0\0\0\0\0\
--\x61\x60\x0c\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xdc\x27\0\0\x63\x01\0\0\0\0\
--\0\0\x79\x60\x10\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xe0\x27\0\0\x7b\x01\0\0\
--\0\0\0\0\x61\xa0\x78\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x08\x28\0\0\x63\
--\x01\0\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x50\x28\0\0\xb7\x02\0\0\x14\0\0\0\
--\xb7\x03\0\0\x0c\0\0\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\
--\0\0\xc5\x07\x72\xff\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xc0\x27\0\0\x63\x70\
--\x6c\0\0\0\0\0\x77\x07\0\0\x20\0\0\0\x63\x70\x70\0\0\0\0\0\xb7\x01\0\0\x05\0\0\
--\0\x18\x62\0\0\0\0\0\0\0\0\0\0\xc0\x27\0\0\xb7\x03\0\0\x8c\0\0\0\x85\0\0\0\xa6\
--\0\0\0\xbf\x07\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x30\x28\0\0\x61\x01\0\0\
--\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xc5\x07\
--\x60\xff\0\0\0\0\x63\x7a\x80\xff\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x68\x28\0\
--\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xf8\x29\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\
--\0\0\0\0\0\0\x70\x28\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xf0\x29\0\0\x7b\x01\0\0\0\
--\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x10\x29\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x38\
--\x2a\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x18\x29\0\0\x18\x61\0\
--\0\0\0\0\0\0\0\0\0\x48\x2a\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\
--\xd8\x29\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x68\x2a\0\0\x7b\x01\0\0\0\0\0\0\x18\
--\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x60\x2a\0\0\x7b\
--\x01\0\0\0\0\0\0\x61\x60\x08\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\0\x2a\0\0\
--\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x04\x2a\
--\0\0\x63\x01\0\0\0\0\0\0\x79\x60\x10\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x08\
--\x2a\0\0\x7b\x01\0\0\0\0\0\0\x61\xa0\x78\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\
--\0\x30\x2a\0\0\x63\x01\0\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x78\x2a\0\0\xb7\
--\x02\0\0\x11\0\0\0\xb7\x03\0\0\x0c\0\0\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\
--\0\xbf\x07\0\0\0\0\0\0\xc5\x07\x29\xff\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xe8\
--\x29\0\0\x63\x70\x6c\0\0\0\0\0\x77\x07\0\0\x20\0\0\0\x63\x70\x70\0\0\0\0\0\x18\
--\x68\0\0\0\0\0\0\0\0\0\0\xc8\x28\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x90\x2a\0\0\
--\xb7\x02\0\0\x1a\0\0\0\xb7\x03\0\0\x0c\0\0\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\
--\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\x1a\xff\0\0\0\0\x75\x07\x03\0\0\0\0\0\x62\
--\x08\x04\0\0\0\0\0\x6a\x08\x02\0\0\0\0\0\x05\0\x0a\0\0\0\0\0\x63\x78\x04\0\0\0\
--\0\0\xbf\x79\0\0\0\0\0\0\x77\x09\0\0\x20\0\0\0\x55\x09\x02\0\0\0\0\0\x6a\x08\
--\x02\0\0\0\0\0\x05\0\x04\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\x63\
--\x90\0\0\0\0\0\0\x6a\x08\x02\0\x40\0\0\0\xb7\x01\0\0\x05\0\0\0\x18\x62\0\0\0\0\
--\0\0\0\0\0\0\xe8\x29\0\0\xb7\x03\0\0\x8c\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\
--\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\x02\
--\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\
--\x58\x2a\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\
--\0\0\0\xa8\0\0\0\xc5\x07\xf9\xfe\0\0\0\0\x63\x7a\x84\xff\0\0\0\0\x18\x60\0\0\0\
--\0\0\0\0\0\0\0\xb0\x2a\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x40\x2c\0\0\x7b\x01\0\0\
--\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xb8\x2a\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\
--\x38\x2c\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x58\x2b\0\0\x18\
--\x61\0\0\0\0\0\0\0\0\0\0\x80\x2c\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\
--\0\0\0\x60\x2b\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x90\x2c\0\0\x7b\x01\0\0\0\0\0\0\
--\x18\x60\0\0\0\0\0\0\0\0\0\0\x20\x2c\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xb0\x2c\0\
-+\0\0\0\x85\0\0\0\xa8\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x61\x01\0\0\0\0\
-+\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xbf\x70\0\0\
-+\0\0\0\0\x95\0\0\0\0\0\0\0\x61\x60\x08\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\
-+\xf8\x0f\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\
-+\0\0\xf4\x0f\0\0\x63\x01\0\0\0\0\0\0\x79\x60\x10\0\0\0\0\0\x18\x61\0\0\0\0\0\0\
-+\0\0\0\0\xe8\x0f\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x05\0\0\
-+\x18\x61\0\0\0\0\0\0\0\0\0\0\xe0\x0f\0\0\x7b\x01\0\0\0\0\0\0\xb7\x01\0\0\x12\0\
-+\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\xe0\x0f\0\0\xb7\x03\0\0\x1c\0\0\0\x85\0\0\0\
-+\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\xd4\xff\0\0\0\0\x63\x7a\x78\xff\0\0\0\0\
-+\x61\x60\x1c\0\0\0\0\0\x15\0\x03\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x0c\x10\
-+\0\0\x63\x01\0\0\0\0\0\0\xb7\x01\0\0\0\0\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\0\x10\
-+\0\0\xb7\x03\0\0\x48\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\xc7\
-+\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x63\x71\0\0\0\0\0\0\x18\x60\0\
-+\0\0\0\0\0\0\0\0\0\x48\x10\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xe0\x10\0\0\x7b\x01\
-+\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x50\x10\0\0\x18\x61\0\0\0\0\0\0\0\0\0\
-+\0\xd8\x10\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x88\x10\0\0\x18\
-+\x61\0\0\0\0\0\0\0\0\0\0\x20\x11\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\
-+\0\0\0\x90\x10\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x30\x11\0\0\x7b\x01\0\0\0\0\0\0\
-+\x18\x60\0\0\0\0\0\0\0\0\0\0\xc0\x10\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x50\x11\0\
- \0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x18\x61\0\0\0\0\0\0\
--\0\0\0\0\xa8\x2c\0\0\x7b\x01\0\0\0\0\0\0\x61\x60\x08\0\0\0\0\0\x18\x61\0\0\0\0\
--\0\0\0\0\0\0\x48\x2c\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\0\0\0\0\x18\x61\0\0\
--\0\0\0\0\0\0\0\0\x4c\x2c\0\0\x63\x01\0\0\0\0\0\0\x79\x60\x10\0\0\0\0\0\x18\x61\
--\0\0\0\0\0\0\0\0\0\0\x50\x2c\0\0\x7b\x01\0\0\0\0\0\0\x61\xa0\x78\xff\0\0\0\0\
--\x18\x61\0\0\0\0\0\0\0\0\0\0\x78\x2c\0\0\x63\x01\0\0\0\0\0\0\x18\x61\0\0\0\0\0\
--\0\0\0\0\0\xc0\x2c\0\0\xb7\x02\0\0\x0f\0\0\0\xb7\x03\0\0\x0c\0\0\0\xb7\x04\0\0\
--\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\xc2\xfe\0\0\0\0\x18\
--\x60\0\0\0\0\0\0\0\0\0\0\x30\x2c\0\0\x63\x70\x6c\0\0\0\0\0\x77\x07\0\0\x20\0\0\
--\0\x63\x70\x70\0\0\0\0\0\x18\x68\0\0\0\0\0\0\0\0\0\0\x10\x2b\0\0\x18\x61\0\0\0\
--\0\0\0\0\0\0\0\xd0\x2c\0\0\xb7\x02\0\0\x1a\0\0\0\xb7\x03\0\0\x0c\0\0\0\xb7\x04\
--\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\xb3\xfe\0\0\0\0\
--\x75\x07\x03\0\0\0\0\0\x62\x08\x04\0\0\0\0\0\x6a\x08\x02\0\0\0\0\0\x05\0\x0a\0\
--\0\0\0\0\x63\x78\x04\0\0\0\0\0\xbf\x79\0\0\0\0\0\0\x77\x09\0\0\x20\0\0\0\x55\
--\x09\x02\0\0\0\0\0\x6a\x08\x02\0\0\0\0\0\x05\0\x04\0\0\0\0\0\x18\x60\0\0\0\0\0\
--\0\0\0\0\0\0\x01\0\0\x63\x90\0\0\0\0\0\0\x6a\x08\x02\0\x40\0\0\0\xb7\x01\0\0\
--\x05\0\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\x30\x2c\0\0\xb7\x03\0\0\x8c\0\0\0\x85\0\
--\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\x61\
--\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\
--\x18\x60\0\0\0\0\0\0\0\0\0\0\xa0\x2c\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\
--\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xc5\x07\x92\xfe\0\0\0\0\x63\x7a\
--\x88\xff\0\0\0\0\x61\xa1\x78\xff\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\
--\0\0\x85\0\0\0\xa8\0\0\0\x61\xa0\x80\xff\0\0\0\0\x63\x06\x38\0\0\0\0\0\x61\xa0\
--\x84\xff\0\0\0\0\x63\x06\x3c\0\0\0\0\0\x61\xa0\x88\xff\0\0\0\0\x63\x06\x40\0\0\
--\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x61\x10\0\0\0\0\0\0\x63\x06\x18\0\0\
--\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x04\0\0\0\x61\x10\0\0\0\0\0\0\x63\x06\x28\0\
--\0\0\0\0\xb7\0\0\0\0\0\0\0\x95\0\0\0\0\0\0\0";
-+\0\0\0\0\x48\x11\0\0\x7b\x01\0\0\0\0\0\0\x61\x60\x08\0\0\0\0\0\x18\x61\0\0\0\0\
-+\0\0\0\0\0\0\xe8\x10\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\0\0\0\0\x18\x61\0\0\
-+\0\0\0\0\0\0\0\0\xec\x10\0\0\x63\x01\0\0\0\0\0\0\x79\x60\x10\0\0\0\0\0\x18\x61\
-+\0\0\0\0\0\0\0\0\0\0\xf0\x10\0\0\x7b\x01\0\0\0\0\0\0\x61\xa0\x78\xff\0\0\0\0\
-+\x18\x61\0\0\0\0\0\0\0\0\0\0\x18\x11\0\0\x63\x01\0\0\0\0\0\0\x18\x61\0\0\0\0\0\
-+\0\0\0\0\0\x60\x11\0\0\xb7\x02\0\0\x14\0\0\0\xb7\x03\0\0\x0c\0\0\0\xb7\x04\0\0\
-+\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\x8e\xff\0\0\0\0\x18\
-+\x60\0\0\0\0\0\0\0\0\0\0\xd0\x10\0\0\x63\x70\x6c\0\0\0\0\0\x77\x07\0\0\x20\0\0\
-+\0\x63\x70\x70\0\0\0\0\0\xb7\x01\0\0\x05\0\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\xd0\
-+\x10\0\0\xb7\x03\0\0\x8c\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\x18\x60\
-+\0\0\0\0\0\0\0\0\0\0\x40\x11\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\
-+\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xc5\x07\x7c\xff\0\0\0\0\x63\x7a\x80\xff\0\
-+\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x78\x11\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xe8\
-+\x11\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x80\x11\0\0\x18\x61\0\
-+\0\0\0\0\0\0\0\0\0\xe0\x11\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\
-+\xa0\x11\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x28\x12\0\0\x7b\x01\0\0\0\0\0\0\x18\
-+\x60\0\0\0\0\0\0\0\0\0\0\xa8\x11\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x38\x12\0\0\
-+\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xd8\x11\0\0\x18\x61\0\0\0\0\0\
-+\0\0\0\0\0\x58\x12\0\0\x7b\x01\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\x18\x61\0\0\0\0\0\0\0\0\0\0\x50\x12\0\0\x7b\x01\0\0\0\0\0\0\x61\x60\x08\0\0\0\
-+\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xf0\x11\0\0\x63\x01\0\0\0\0\0\0\x61\x60\x0c\0\
-+\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xf4\x11\0\0\x63\x01\0\0\0\0\0\0\x79\x60\
-+\x10\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\xf8\x11\0\0\x7b\x01\0\0\0\0\0\0\x61\
-+\xa0\x78\xff\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x20\x12\0\0\x63\x01\0\0\0\0\0\
-+\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x68\x12\0\0\xb7\x02\0\0\x16\0\0\0\xb7\x03\0\0\
-+\x0c\0\0\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\x07\
-+\x45\xff\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\xd8\x11\0\0\x63\x70\x6c\0\0\0\0\0\
-+\x77\x07\0\0\x20\0\0\0\x63\x70\x70\0\0\0\0\0\x18\x68\0\0\0\0\0\0\0\0\0\0\x88\
-+\x11\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\x80\x12\0\0\xb7\x02\0\0\x1f\0\0\0\xb7\x03\
-+\0\0\x0c\0\0\0\xb7\x04\0\0\0\0\0\0\x85\0\0\0\xa7\0\0\0\xbf\x07\0\0\0\0\0\0\xc5\
-+\x07\x36\xff\0\0\0\0\x75\x07\x03\0\0\0\0\0\x62\x08\x04\0\0\0\0\0\x6a\x08\x02\0\
-+\0\0\0\0\x05\0\x0a\0\0\0\0\0\x63\x78\x04\0\0\0\0\0\xbf\x79\0\0\0\0\0\0\x77\x09\
-+\0\0\x20\0\0\0\x55\x09\x02\0\0\0\0\0\x6a\x08\x02\0\0\0\0\0\x05\0\x04\0\0\0\0\0\
-+\x18\x60\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\x63\x90\0\0\0\0\0\0\x6a\x08\x02\0\x40\0\
-+\0\0\xb7\x01\0\0\x05\0\0\0\x18\x62\0\0\0\0\0\0\0\0\0\0\xd8\x11\0\0\xb7\x03\0\0\
-+\x8c\0\0\0\x85\0\0\0\xa6\0\0\0\xbf\x07\0\0\0\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\
-+\0\x01\0\0\x61\x01\0\0\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\
-+\0\0\xa8\0\0\0\x18\x60\0\0\0\0\0\0\0\0\0\0\x48\x12\0\0\x61\x01\0\0\0\0\0\0\xd5\
-+\x01\x02\0\0\0\0\0\xbf\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\xc5\x07\x15\xff\0\0\
-+\0\0\x63\x7a\x84\xff\0\0\0\0\x61\xa1\x78\xff\0\0\0\0\xd5\x01\x02\0\0\0\0\0\xbf\
-+\x19\0\0\0\0\0\0\x85\0\0\0\xa8\0\0\0\x61\xa0\x80\xff\0\0\0\0\x63\x06\x28\0\0\0\
-+\0\0\x61\xa0\x84\xff\0\0\0\0\x63\x06\x2c\0\0\0\0\0\x18\x61\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\x61\x10\0\0\0\0\0\0\x63\x06\x18\0\0\0\0\0\xb7\0\0\0\0\0\0\0\x95\0\0\0\
-+\0\0\0\0";
- 	err = bpf_load_and_run(&opts);
- 	if (err < 0)
- 		return err;
+no changes in v10
+
+no changes in v9
+
+no changes in v8
+
+no changes in v7
+
+no changes in v6
+
+new-ish in v5
+---
+ drivers/hid/bpf/hid_bpf_dispatch.c  | 116 +++++++++++++++++++++++++---
+ drivers/hid/bpf/hid_bpf_jmp_table.c |   4 +-
+ drivers/hid/hid-core.c              |  12 ++-
+ include/linux/hid_bpf.h             |  37 +++++++--
+ 4 files changed, 151 insertions(+), 18 deletions(-)
+
 diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index 600b00fdf6c1..0ef99caf937a 100644
+index 0ef99caf937a..efd4e4b4a615 100644
 --- a/drivers/hid/bpf/hid_bpf_dispatch.c
 +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -94,7 +94,7 @@ hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr
-  * can use.
-  */
- BTF_SET8_START(hid_bpf_kfunc_ids)
--BTF_ID_FLAGS(func, call_hid_bpf_prog_release)
-+BTF_ID_FLAGS(func, call_hid_bpf_prog_put_deferred)
- BTF_ID_FLAGS(func, hid_bpf_get_data, KF_RET_NULL)
- BTF_SET8_END(hid_bpf_kfunc_ids)
+@@ -28,8 +28,9 @@ EXPORT_SYMBOL(hid_bpf_ops);
+  *
+  * @ctx: The HID-BPF context
+  *
+- * @return %0 on success and keep processing; a negative error code to interrupt
+- * the processing of this event
++ * @return %0 on success and keep processing; a positive value to change the
++ * incoming size buffer; a negative error code to interrupt the processing
++ * of this event
+  *
+  * Declare an %fmod_ret tracing bpf program to this function and attach this
+  * program through hid_bpf_attach_prog() to have this helper called for
+@@ -44,23 +45,43 @@ __weak noinline int hid_bpf_device_event(struct hid_bpf_ctx *ctx)
+ }
+ ALLOW_ERROR_INJECTION(hid_bpf_device_event, ERRNO);
  
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.h b/drivers/hid/bpf/hid_bpf_dispatch.h
-index 98c378e18b2b..e2d64faa3932 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.h
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.h
-@@ -22,6 +22,6 @@ int hid_bpf_prog_run(struct hid_device *hdev, enum hid_bpf_prog_type type,
- struct bpf_prog;
- 
- /* HID-BPF internal kfuncs API */
--bool call_hid_bpf_prog_release(u64 prog, int table_cnt);
-+void call_hid_bpf_prog_put_deferred(struct work_struct *work);
- 
- #endif
-diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bpf_jmp_table.c
-index 05225ff3cc27..57ed937fd70a 100644
---- a/drivers/hid/bpf/hid_bpf_jmp_table.c
-+++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
-@@ -39,7 +39,6 @@ struct hid_bpf_prog_entry {
- 
- struct hid_bpf_jmp_table {
- 	struct bpf_map *map;
--	struct bpf_map *prog_keys;
- 	struct hid_bpf_prog_entry entries[HID_BPF_MAX_PROGS]; /* compacted list, circular buffer */
- 	int tail, head;
- 	struct bpf_prog *progs[HID_BPF_MAX_PROGS]; /* idx -> progs mapping */
-@@ -286,14 +285,12 @@ static void hid_bpf_release_prog_at(int idx)
-  */
- static int hid_bpf_insert_prog(int prog_fd, struct bpf_prog *prog)
+-int
++u8 *
+ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type, u8 *data,
+-			      u32 size, int interrupt)
++			      u32 *size, int interrupt)
  {
--	int i, cnt, index = -1, map_fd = -1, progs_map_fd = -1, err = -EINVAL;
-+	int i, cnt, index = -1, map_fd = -1, err = -EINVAL;
+ 	struct hid_bpf_ctx_kern ctx_kern = {
+ 		.ctx = {
+ 			.hid = hdev,
+ 			.report_type = type,
+-			.size = size,
++			.allocated_size = hdev->bpf.allocated_data,
++			.size = *size,
+ 		},
+-		.data = data,
++		.data = hdev->bpf.device_data,
+ 	};
++	int ret;
  
- 	/* retrieve a fd of our prog_array map in BPF */
- 	map_fd = skel_map_get_fd_by_id(jmp_table.map->id);
--	/* take an fd for the table of progs we monitor with SEC("fexit/bpf_prog_release") */
--	progs_map_fd = skel_map_get_fd_by_id(jmp_table.prog_keys->id);
+ 	if (type >= HID_REPORT_TYPES)
+-		return -EINVAL;
++		return ERR_PTR(-EINVAL);
++
++	/* no program has been attached yet */
++	if (!hdev->bpf.device_data)
++		return data;
++
++	memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
++	memcpy(ctx_kern.data, data, *size);
++
++	ret = hid_bpf_prog_run(hdev, HID_BPF_PROG_TYPE_DEVICE_EVENT, &ctx_kern);
++	if (ret < 0)
++		return ERR_PTR(ret);
++
++	if (ret) {
++		if (ret > ctx_kern.ctx.allocated_size)
++			return ERR_PTR(-EINVAL);
  
--	if (map_fd < 0 || progs_map_fd < 0) {
-+	if (map_fd < 0) {
- 		err = -EINVAL;
- 		goto out;
- 	}
-@@ -324,10 +321,15 @@ static int hid_bpf_insert_prog(int prog_fd, struct bpf_prog *prog)
- 	if (err)
- 		goto out;
+-	return hid_bpf_prog_run(hdev, HID_BPF_PROG_TYPE_DEVICE_EVENT, &ctx_kern);
++		*size = ret;
++	}
++
++	return ctx_kern.data;
+ }
+ EXPORT_SYMBOL_GPL(dispatch_hid_bpf_device_event);
  
--	/* insert the program in the prog list table */
--	err = skel_map_update_elem(progs_map_fd, &prog, &cnt, 0);
--	if (err)
--		goto out;
-+	/*
-+	 * The program has been safely inserted, decrement the reference count
-+	 * so it doesn't interfere with the number of actual user handles.
-+	 * This is safe to do because:
-+	 * - we overrite the put_ptr in the prog fd map
-+	 * - we also have a cleanup function that monitors when a program gets
-+	 *   released and we manually do the cleanup in the prog fd map
-+	 */
-+	bpf_prog_sub(prog, 1);
+@@ -83,7 +104,7 @@ hid_bpf_get_data(struct hid_bpf_ctx *ctx, unsigned int offset, const size_t rdwr
  
- 	/* return the index */
- 	err = index;
-@@ -337,8 +339,6 @@ static int hid_bpf_insert_prog(int prog_fd, struct bpf_prog *prog)
- 		__hid_bpf_do_release_prog(map_fd, index);
- 	if (map_fd >= 0)
- 		close_fd(map_fd);
--	if (progs_map_fd >= 0)
--		close_fd(progs_map_fd);
- 	return err;
+ 	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
+ 
+-	if (rdwr_buf_size + offset > ctx->size)
++	if (rdwr_buf_size + offset > ctx->allocated_size)
+ 		return NULL;
+ 
+ 	return ctx_kern->data + offset;
+@@ -110,6 +131,51 @@ static int device_match_id(struct device *dev, const void *id)
+ 	return hdev->id == *(int *)id;
  }
  
-@@ -457,41 +457,38 @@ void __hid_bpf_destroy_device(struct hid_device *hdev)
- 	schedule_work(&release_work);
- }
- 
--noinline bool
--call_hid_bpf_prog_release(u64 prog_key, int table_cnt)
-+void call_hid_bpf_prog_put_deferred(struct work_struct *work)
- {
--	/* compare with how many refs are left in the bpf program */
--	struct bpf_prog *prog = (struct bpf_prog *)prog_key;
--	int idx;
--
--	if (!prog)
--		return false;
-+	struct bpf_prog_aux *aux;
-+	struct bpf_prog *prog;
-+	bool found = false;
-+	int i;
- 
--	if (atomic64_read(&prog->aux->refcnt) != table_cnt)
--		return false;
-+	aux = container_of(work, struct bpf_prog_aux, work);
-+	prog = aux->prog;
- 
- 	/* we don't need locking here because the entries in the progs table
- 	 * are stable:
- 	 * if there are other users (and the progs entries might change), we
--	 * would return in the statement above.
-+	 * would simply not have been called.
- 	 */
--	for (idx = 0; idx < HID_BPF_MAX_PROGS; idx++) {
--		if (jmp_table.progs[idx] == prog) {
--			__clear_bit(idx, jmp_table.enabled);
--			break;
-+	for (i = 0; i < HID_BPF_MAX_PROGS; i++) {
-+		if (jmp_table.progs[i] == prog) {
-+			__clear_bit(i, jmp_table.enabled);
-+			found = true;
- 		}
- 	}
--	if (idx >= HID_BPF_MAX_PROGS) {
--		/* should never happen if we get our refcount right */
--		idx = -1;
--	}
- 
--	/* schedule release of all detached progs */
--	schedule_work(&release_work);
--	return idx >= 0;
-+	if (found)
-+		/* schedule release of all detached progs */
-+		schedule_work(&release_work);
- }
- 
--#define HID_BPF_PROGS_COUNT 3
-+static void hid_bpf_prog_fd_array_put_ptr(void *ptr)
++static int __hid_bpf_allocate_data(struct hid_device *hdev, u8 **data, u32 *size)
 +{
++	u8 *alloc_data;
++	unsigned int i, j, max_report_len = 0;
++	size_t alloc_size = 0;
++
++	/* compute the maximum report length for this device */
++	for (i = 0; i < HID_REPORT_TYPES; i++) {
++		struct hid_report_enum *report_enum = hdev->report_enum + i;
++
++		for (j = 0; j < HID_MAX_IDS; j++) {
++			struct hid_report *report = report_enum->report_id_hash[j];
++
++			if (report)
++				max_report_len = max(max_report_len, hid_report_len(report));
++		}
++	}
++
++	/*
++	 * Give us a little bit of extra space and some predictability in the
++	 * buffer length we create. This way, we can tell users that they can
++	 * work on chunks of 64 bytes of memory without having the bpf verifier
++	 * scream at them.
++	 */
++	alloc_size = DIV_ROUND_UP(max_report_len, 64) * 64;
++
++	alloc_data = kzalloc(alloc_size, GFP_KERNEL);
++	if (!alloc_data)
++		return -ENOMEM;
++
++	*data = alloc_data;
++	*size = alloc_size;
++
++	return 0;
 +}
 +
-+#define HID_BPF_PROGS_COUNT 2
- 
- static struct bpf_link *links[HID_BPF_PROGS_COUNT];
- static struct entrypoints_bpf *skel;
-@@ -501,9 +498,6 @@ void hid_bpf_free_links_and_skel(void)
- 	int i;
- 
- 	/* the following is enough to release all programs attached to hid */
--	if (jmp_table.prog_keys)
--		bpf_map_put_with_uref(jmp_table.prog_keys);
--
- 	if (jmp_table.map)
- 		bpf_map_put_with_uref(jmp_table.map);
- 
-@@ -533,6 +527,8 @@ void hid_bpf_free_links_and_skel(void)
- 	idx++;									\
- } while (0)
- 
-+static struct bpf_map_ops hid_bpf_prog_fd_maps_ops;
++static int hid_bpf_allocate_event_data(struct hid_device *hdev)
++{
++	/* hdev->bpf.device_data is already allocated, abort */
++	if (hdev->bpf.device_data)
++		return 0;
 +
- int hid_bpf_preload_skel(void)
++	return __hid_bpf_allocate_data(hdev, &hdev->bpf.device_data, &hdev->bpf.allocated_data);
++}
++
+ /**
+  * hid_bpf_attach_prog - Attach the given @prog_fd to the given HID device
+  *
+@@ -125,7 +191,7 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
  {
- 	int err, idx = 0;
-@@ -551,15 +547,14 @@ int hid_bpf_preload_skel(void)
- 		goto out;
+ 	struct hid_device *hdev;
+ 	struct device *dev;
+-	int prog_type = hid_bpf_get_prog_attach_type(prog_fd);
++	int err, prog_type = hid_bpf_get_prog_attach_type(prog_fd);
+ 
+ 	if (!hid_bpf_ops)
+ 		return -EINVAL;
+@@ -145,6 +211,12 @@ hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, __u32 flags)
+ 
+ 	hdev = to_hid_device(dev);
+ 
++	if (prog_type == HID_BPF_PROG_TYPE_DEVICE_EVENT) {
++		err = hid_bpf_allocate_event_data(hdev);
++		if (err)
++			return err;
++	}
++
+ 	return __hid_bpf_attach_prog(hdev, prog_type, prog_fd, flags);
+ }
+ 
+@@ -158,6 +230,30 @@ static const struct btf_kfunc_id_set hid_bpf_syscall_kfunc_set = {
+ 	.set   = &hid_bpf_syscall_kfunc_ids,
+ };
+ 
++int hid_bpf_connect_device(struct hid_device *hdev)
++{
++	struct hid_bpf_prog_list *prog_list;
++
++	rcu_read_lock();
++	prog_list = rcu_dereference(hdev->bpf.progs[HID_BPF_PROG_TYPE_DEVICE_EVENT]);
++	rcu_read_unlock();
++
++	/* only allocate BPF data if there are programs attached */
++	if (!prog_list)
++		return 0;
++
++	return hid_bpf_allocate_event_data(hdev);
++}
++EXPORT_SYMBOL_GPL(hid_bpf_connect_device);
++
++void hid_bpf_disconnect_device(struct hid_device *hdev)
++{
++	kfree(hdev->bpf.device_data);
++	hdev->bpf.device_data = NULL;
++	hdev->bpf.allocated_data = 0;
++}
++EXPORT_SYMBOL_GPL(hid_bpf_disconnect_device);
++
+ void hid_bpf_destroy_device(struct hid_device *hdev)
+ {
+ 	if (!hdev)
+diff --git a/drivers/hid/bpf/hid_bpf_jmp_table.c b/drivers/hid/bpf/hid_bpf_jmp_table.c
+index 57ed937fd70a..b78925f7fa81 100644
+--- a/drivers/hid/bpf/hid_bpf_jmp_table.c
++++ b/drivers/hid/bpf/hid_bpf_jmp_table.c
+@@ -122,8 +122,10 @@ int hid_bpf_prog_run(struct hid_device *hdev, enum hid_bpf_prog_type type,
+ 
+ 		ctx_kern->ctx.index = idx;
+ 		err = __hid_bpf_tail_call(&ctx_kern->ctx);
+-		if (err)
++		if (err < 0)
+ 			break;
++		if (err)
++			ctx_kern->ctx.retval = err;
  	}
  
--	jmp_table.prog_keys = bpf_map_get_with_uref(skel->maps.progs_map.map_fd);
--	if (IS_ERR(jmp_table.prog_keys)) {
--		err = PTR_ERR(jmp_table.prog_keys);
--		goto out;
--	}
-+	/* our jump table is stealing refs, so we should not decrement on removal of elements */
-+	hid_bpf_prog_fd_maps_ops = *jmp_table.map->ops;
-+	hid_bpf_prog_fd_maps_ops.map_fd_put_ptr = hid_bpf_prog_fd_array_put_ptr;
+  out_unlock:
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 2557a7c09627..6bee65624551 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2040,9 +2040,11 @@ int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data
+ 	report_enum = hid->report_enum + type;
+ 	hdrv = hid->driver;
+ 
+-	ret = dispatch_hid_bpf_device_event(hid, type, data, size, interrupt);
+-	if (ret)
++	data = dispatch_hid_bpf_device_event(hid, type, data, &size, interrupt);
++	if (IS_ERR(data)) {
++		ret = PTR_ERR(data);
+ 		goto unlock;
++	}
+ 
+ 	if (!size) {
+ 		dbg_hid("empty report\n");
+@@ -2158,6 +2160,10 @@ int hid_connect(struct hid_device *hdev, unsigned int connect_mask)
+ 	int len;
+ 	int ret;
+ 
++	ret = hid_bpf_connect_device(hdev);
++	if (ret)
++		return ret;
 +
-+	jmp_table.map->ops = &hid_bpf_prog_fd_maps_ops;
+ 	if (hdev->quirks & HID_QUIRK_HIDDEV_FORCE)
+ 		connect_mask |= (HID_CONNECT_HIDDEV_FORCE | HID_CONNECT_HIDDEV);
+ 	if (hdev->quirks & HID_QUIRK_HIDINPUT_FORCE)
+@@ -2259,6 +2265,8 @@ void hid_disconnect(struct hid_device *hdev)
+ 	if (hdev->claimed & HID_CLAIMED_HIDRAW)
+ 		hidraw_disconnect(hdev);
+ 	hdev->claimed = 0;
++
++	hid_bpf_disconnect_device(hdev);
+ }
+ EXPORT_SYMBOL_GPL(hid_disconnect);
  
- 	ATTACH_AND_STORE_LINK(hid_tail_call);
--	ATTACH_AND_STORE_LINK(hid_prog_release);
--	ATTACH_AND_STORE_LINK(hid_free_inode);
-+	ATTACH_AND_STORE_LINK(hid_bpf_prog_put_deferred);
+diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
+index 5d53b12c6ea0..277afae784ec 100644
+--- a/include/linux/hid_bpf.h
++++ b/include/linux/hid_bpf.h
+@@ -29,15 +29,32 @@ struct hid_device;
+  *         a bigger index).
+  * @hid: the ``struct hid_device`` representing the device itself
+  * @report_type: used for ``hid_bpf_device_event()``
++ * @allocated_size: Allocated size of data.
++ *
++ *                  This is how much memory is available and can be requested
++ *                  by the HID program.
++ *                  Note that for ``HID_BPF_RDESC_FIXUP``, that memory is set to
++ *                  ``4096`` (4 KB)
+  * @size: Valid data in the data field.
+  *
+  *        Programs can get the available valid size in data by fetching this field.
++ *        Programs can also change this value by returning a positive number in the
++ *        program.
++ *        To discard the event, return a negative error code.
++ *
++ *        ``size`` must always be less or equal than ``allocated_size`` (it is enforced
++ *        once all BPF programs have been run).
++ * @retval: Return value of the previous program.
+  */
+ struct hid_bpf_ctx {
+ 	__u32 index;
+ 	const struct hid_device *hid;
++	__u32 allocated_size;
+ 	enum hid_report_type report_type;
+-	__s32 size;
++	union {
++		__s32 retval;
++		__s32 size;
++	};
+ };
  
- 	return 0;
- out:
+ /* Following functions are tracepoints that BPF programs can attach to */
+@@ -81,6 +98,12 @@ struct hid_bpf_prog_list {
+ 
+ /* stored in each device */
+ struct hid_bpf {
++	u8 *device_data;		/* allocated when a bpf program of type
++					 * SEC(f.../hid_bpf_device_event) has been attached
++					 * to this HID device
++					 */
++	u32 allocated_data;
++
+ 	struct hid_bpf_prog_list __rcu *progs[HID_BPF_PROG_TYPE_MAX];	/* attached BPF progs */
+ 	bool destroyed;			/* prevents the assignment of any progs */
+ 
+@@ -88,13 +111,17 @@ struct hid_bpf {
+ };
+ 
+ #ifdef CONFIG_HID_BPF
+-int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
+-				  u32 size, int interrupt);
++u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
++				  u32 *size, int interrupt);
++int hid_bpf_connect_device(struct hid_device *hdev);
++void hid_bpf_disconnect_device(struct hid_device *hdev);
+ void hid_bpf_destroy_device(struct hid_device *hid);
+ void hid_bpf_device_init(struct hid_device *hid);
+ #else /* CONFIG_HID_BPF */
+-static inline int dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
+-						u32 size, int interrupt) { return 0; }
++static inline u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type,
++						u8 *data, u32 *size, int interrupt) { return 0; }
++static inline int hid_bpf_connect_device(struct hid_device *hdev) { return 0; }
++static inline void hid_bpf_disconnect_device(struct hid_device *hdev) {}
+ static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
+ static inline void hid_bpf_device_init(struct hid_device *hid) {}
+ #endif /* CONFIG_HID_BPF */
 -- 
 2.36.1
 
