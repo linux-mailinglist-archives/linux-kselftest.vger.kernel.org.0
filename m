@@ -2,2999 +2,1350 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FB660D33A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 20:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7367E60D731
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Oct 2022 00:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiJYSMt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 14:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S231628AbiJYWfd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 18:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbiJYSMp (ORCPT
+        with ESMTP id S230025AbiJYWfc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:12:45 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F565B5FC7;
-        Tue, 25 Oct 2022 11:12:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fRnyGdoHUCRXxLt6IMbjeuPJb3v96N2kpYbI2pdMucclB74UcagLGZKF9US/j3t1Yiokz77uvx/6kDHIU5n/W/eBd6HggdAFwY3EUitOXEIptm7xPbO3sDIPVti8+IaMbz7RL5mejx0RC0NIF3hGTUN8s3e1ejcxn/U3Qil4B3PSXp/vzmiQMqMxWRuUfx0wyczDlsRDvwi9rRRdqk9wLFV08wXz/lHy+/6QA3fkCRZpmCXVkZFCp2bHeApiqrx60jyWi8Tv06JgKeqMHnr26eNZKBGZ9eH+bvmiwkIFGs4YVQapV3/4Zwolvre6DlJeyyGez+k4TNLYwmXV8lr3vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3Su5cbJ/DK8VvyTAZ51P/u6lgPFKfWP7XIaoqaqyzQo=;
- b=fSiZ7bJx7x1/6+CUpmQPcr/oZVBI05ZY6VNhowcULRSWUVWhHr+yOZYnqM4sQpiH1RCqn82QQ1kizqqtO7u9vmVFOzmUDewVfCIwg01AcfbhlHuX9xkoK2xlj2OxWBBfwsDHmIQFxZqOHDO0ufeTzeSPRhzczlTt5n/SKAUC1tIE5c/BFU7R7AtrjlHDXjo8uRQJRnzyjbGiODJRxqaVJQNzRB8r7IHHZLDIox7W+Q9OBsTCQfQx52umCxh42YSG3YNO2RHFO3TJRrUnU4LDrOOL4uJhmM/JJP3dZvN2qr32ISEzn8iynLhEvSSZakjRC92rXn3+k9EuV2YWdW5B3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Su5cbJ/DK8VvyTAZ51P/u6lgPFKfWP7XIaoqaqyzQo=;
- b=N96+zZWIWlgiqQLuztB+gf6dIgChgz+Y6c1ZDLKAmk63X9RRvNk1nsaALApAxZt18uyKzuHbuzyl5Io1SyVZzkCVWL0DSihbN1bRmTHOBP3yTe9EjjK3cWYv5+5mdzmFElCTrSOj5T/wcGkxgP0+b/UnQ6kpmArf/DpxMXfcAW6XZs+GjhzQGEBuvvGV3QkSWRun2kfzwRKaVUXsh9Zv2CcgjSRGTDVLbLWzDZcn2ynUG5fQFJK7hXcvUntitZqviq+F3M/XM14HF6dA7254fAsLpPt+XFYa5e0bHG4a8X2M4Ichu5MpVHHipCOqSLmpoxNA/3ZSla8YmdOOCJ9FTg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL3PR12MB6475.namprd12.prod.outlook.com (2603:10b6:208:3bb::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.30; Tue, 25 Oct
- 2022 18:12:30 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Tue, 25 Oct 2022
- 18:12:30 +0000
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>, bpf@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: [PATCH v3 15/15] iommufd: Add a selftest
-Date:   Tue, 25 Oct 2022 15:12:24 -0300
-Message-Id: <15-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
-In-Reply-To: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
-References: 
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR05CA0029.namprd05.prod.outlook.com
- (2603:10b6:208:c0::42) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Tue, 25 Oct 2022 18:35:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030F77C30E;
+        Tue, 25 Oct 2022 15:35:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666737330; x=1698273330;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cBz+1icHczZrzN3gCnOQ5rwPnrXshA6m1i6C1Pgx5cE=;
+  b=h0uVconneyVnF/Q843FpIVUs7VI/8KZViy/y2Bu3fgzAz7G4NG4T69OW
+   2iiFxLAnOlDcGCBE6e+ZEFW1IeVJLnWBh2HHcoWwIUv74wbPom30hzkj3
+   XCFRWJhBmtyT6EG9YiJPYA3/txM6+3zuJJ1Mpf8a/B4MkmWptZSHEkCRd
+   jaRVV+m1uOtSvRosRDQTwZIZqQ0yojl+jZ8eONEfa3q54+opkD0azIS3b
+   xlVrsltzYVZ5ZrZ5K6Z1nmDmJKKFlwWK7qX+A4ZY7+8hJlOFMoWnqllZS
+   WnJLXD+FFGyRewamGVodwjkNrNweDuJMaUQ2Aige6DiOmxjsUXpx6tLde
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="334417891"
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="gz'50?scan'50,208,50";a="334417891"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 15:35:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="721033151"
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="gz'50?scan'50,208,50";a="721033151"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Oct 2022 15:35:26 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1onSW5-0006gy-1Q;
+        Tue, 25 Oct 2022 22:35:25 +0000
+Date:   Wed, 26 Oct 2022 06:34:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     oe-kbuild-all@lists.linux.dev, David Gow <davidgow@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        Oliver Glitta <glittao@gmail.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 3/3] mm: slub: test: Use the kunit_get_current_test()
+ function
+Message-ID: <202210260611.GdMgtVsI-lkp@intel.com>
+References: <20221025071907.1251820-3-davidgow@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL3PR12MB6475:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b8e862a-62b8-4845-2589-08dab6b47882
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6OOBdIiT6KXEdN0iomvLVVMuiZ+86j0itWvYAlHzCsNMgQncF0sOW3gRVXCvVNS6yWtmxrRKPXdBLurTLdf4g13ydPhZvT5y6kTrf+gK0z5LIAgzABZWX3OFPo8hdomPHkzPOwmKf+ub0h7G7NE9QQssb++X72VKFd0cQQhz8wjAQs/GP+igD9Uke8Do/jM2q8NMMgghF90q4xMDOJedJHME3PHmJtBFdUTWEXsjsBRZ7ZPjK4bj4ep403llV/Zx7LE90ueaG8VgReg0wE7eo3pmm1rys1zUPPE7lm0Vej9uKQsJIOJr5KG58TK733YSGFx8mzbiW+JLGH9CMZzmbPIX0SFn5QR800zcMea/wyVyPSpXIJASBwTLbW/PVEJf6szPTOR97ezMiyKXJgBiDSqkpGuzpwlyBEQVmR5Wf7NqQ9sZfPrZrecfRNSIZQp6ER6dZF4CRQweITFv4dlG1y66PFDrAICQqfwU4lkOS7+1k2XXfZjeMbL0ufC2J/EA+7B/AK+sZqzV8aBoh/wbwUiSL+mVPWgbUWUPkhaSGVTOSnd+0Ybciq4tBhNqXLWumg+NpvkS5gtmp1GO6f47itDjUqltVhbhJ9OFUA7LVVJUmXzXAk3Cnb2KLM4sWVVkgH5LiD0TQEc/d57fqgnfYlz+dOp7dnFqQV2v+cTa3HKyxk3ir8BZ65gLhU0Dm3ISt7dSHXiloul5RQ0AZTwWxbJS/TyQxS2GfKXs31Q7VXewZG1FnxhdgcXfYGcSoMP6
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(396003)(366004)(346002)(451199015)(6666004)(316002)(41300700001)(110136005)(36756003)(2616005)(6506007)(54906003)(7406005)(30864003)(7416002)(8936002)(66476007)(83380400001)(5660300002)(26005)(2906002)(4326008)(186003)(66946007)(8676002)(66556008)(6512007)(921005)(6486002)(38100700002)(86362001)(478600001)(579004)(559001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4jAhF06xYEVY4493XZZgrFDFF1//1vJDiji1foVGAVvxVSFp0nDlCnYePD2n?=
- =?us-ascii?Q?tyusSkK6/oADONZ8za1Hyo+7U7VCv1veSW4NFD/uQbrrT3cnE2PQmWrDTVwe?=
- =?us-ascii?Q?X1Vcagtb9URAIQhSc8tzPlZqwkREn/TgZP2vVG4advJZz1oao/feae/RlHwB?=
- =?us-ascii?Q?CJI4n7houlEyk6YIUSuvOMho7W/W2Kz1pOqVrGRoOWrMPN8h6a9NEFNUIAk5?=
- =?us-ascii?Q?tQAsi/ShEY2vzeAArggYBl2tRcQRqXsrqDpVVm/7I21/9Qkrdh7IUjL+PpCp?=
- =?us-ascii?Q?5ffgD+x2pIoxbKZWWBw+x7rJrWvpqFYfIzg7PgsufYGbWxsiOmhuyVCHzx0h?=
- =?us-ascii?Q?zqncgLN866eqMqDIrWk4IZVj0PNM2VD05K8jIz5YnGgpau2s6IHIdVvS+fzH?=
- =?us-ascii?Q?q+8Y72S5EikuxsG4hDFkTcQsrL/jopXKb32uaO7kOnQzhB14zgkIfEXCsqjo?=
- =?us-ascii?Q?9kxBoC13d6MoJNLG1oTARCCqAE/T7XjWMVRySyqqkkGPNMm4gr9hSNwO6LHd?=
- =?us-ascii?Q?OC//ksR5QWGemkI0S+utVLwyyzMf5S+lYyrxYjJQDVCKO6KnQPCGKER8tnMk?=
- =?us-ascii?Q?zZWmsDzWOzpk1sS5Z5ZX2P8DaEkbGFRVtl9eRio6A/ZxTpSJMSi7GkDIqMPB?=
- =?us-ascii?Q?K8p//d9PKiYf0YwuZ6jMK0iXP4RGtM7p03VkPYVdg+nUinhp9AdEzfL5AjQG?=
- =?us-ascii?Q?Ha5Vn9rVU8CcO1L2aQidG5FcA2/ixcEO+ScBS/auAyfw2I1MEOlCvz6ntMnd?=
- =?us-ascii?Q?J8kQVD9Pt6DJwkjB9odl7y+OeMbVBUw2hWh2zGZDyphT7ERhqXQJDGcfbWEL?=
- =?us-ascii?Q?lCVzvGXNK39JmpxRriB8qL5sNrdiu0c/M14qePwKp/6DW+aX/Pzi0My8ffp9?=
- =?us-ascii?Q?ZF2/+2yE1ghd0WMDkUi20Ng+gqQrp9CnTgcedbTL1/2XAouD6wpfmR/3hiM9?=
- =?us-ascii?Q?2VtCsp0uH6eDK9QouP62SjuE4QyiYTfLPTKhKoqhXorsROVGHwlbcaAs7wE3?=
- =?us-ascii?Q?ZiM2qO2C/ipxQoat0PEIFHkrzpBi1ChRb04d9ZwFvgbztKDIxXO6HxiQtliP?=
- =?us-ascii?Q?sAKZxpjB2Vk4tzxQEy2cls1q/yUy/6yS+1SwmBbjPN2NRXglZ7ZwZLGdAb4Y?=
- =?us-ascii?Q?x2RzPA4faPGvo6izf8Wq5KbdP1sjtysPwhOuWT7u2oiLMiz93cihaBs7dJbT?=
- =?us-ascii?Q?sqDISZ6ivOX/d1GbWUIeIV84YioL/Qo/QLxAU10aNEWf9rlLL0aFlIIErikQ?=
- =?us-ascii?Q?12efMGV3Ut9ERcOmY1lOuEh8tHn7Pbl7+/iP8GBPvBj4NRfirnQ8IBLbMQFJ?=
- =?us-ascii?Q?t5s4nr0TWOvEKb/Oqa2v5A7/hvVQI/5tQwrj1nxlAyJs4fYlLtoe/EjNRjXA?=
- =?us-ascii?Q?ue+Stx2rWUwLX5+OdIXvU4LA/wSdvpqgF1dPRBYhvexMQKRHhbW9vcgxsJYH?=
- =?us-ascii?Q?jhZ92J+igzqNHFV5hJJ0BBvzPZWUAAkd19YL3S61OZj9LRu3ldBukuGjl5Vq?=
- =?us-ascii?Q?CITR6x5yHiKdnbCau/+EbNIqYLf3kiffHYT3pBy4LgJksLkclTtwcG7dUVAE?=
- =?us-ascii?Q?TRgnuBB8O3nmY+4Cj5o=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b8e862a-62b8-4845-2589-08dab6b47882
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 18:12:26.1009
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6txo4LeEuCSQqSfnwaUmi9aeSEf4o5WFmPhYssm57yg0XvDb9tt2QSsCcz5CqSLQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6475
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="UaFl6BFhQ45HgFRm"
+Content-Disposition: inline
+In-Reply-To: <20221025071907.1251820-3-davidgow@google.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Cover the essential functionality of the iommufd with a directed
-test. This aims to achieve reasonable functional coverage using the
-in-kernel self test framework.
 
-It provides a mock kernel module for the iommu_domain that allows it to
-run without any HW and the mocking provides a way to directly validate
-that the PFNs loaded into the iommu_domain are correct.
+--UaFl6BFhQ45HgFRm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The mock also simulates the rare case of PAGE_SIZE > iommu page size as
-the mock will operate at a 2K iommu page size. This allows exercising all
-of the calculations to support this mismatch.
+Hi David,
 
-This allows achieving high coverage of the corner cases in the iopt_pages.
+I love your patch! Yet something to improve:
 
-However, it is an unusually invasive config option to enable all of
-this. The config option should not be enabled in a production kernel.
+[auto build test ERROR on vbabka-slab/for-next]
+[also build test ERROR on kees/for-next/pstore linus/master v6.1-rc2 next-20221025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/iommufd/Kconfig            |   10 +
- drivers/iommu/iommufd/Makefile           |    2 +
- drivers/iommu/iommufd/device.c           |   38 +
- drivers/iommu/iommufd/io_pagetable.c     |   10 +
- drivers/iommu/iommufd/iommufd_private.h  |   15 +
- drivers/iommu/iommufd/iommufd_test.h     |   85 ++
- drivers/iommu/iommufd/main.c             |   12 +
- drivers/iommu/iommufd/pages.c            |   12 +
- drivers/iommu/iommufd/selftest.c         |  711 +++++++++
- include/linux/iommufd.h                  |    3 +
- tools/testing/selftests/Makefile         |    1 +
- tools/testing/selftests/iommu/.gitignore |    2 +
- tools/testing/selftests/iommu/Makefile   |   11 +
- tools/testing/selftests/iommu/config     |    2 +
- tools/testing/selftests/iommu/iommufd.c  | 1715 ++++++++++++++++++++++
- 15 files changed, 2629 insertions(+)
- create mode 100644 drivers/iommu/iommufd/iommufd_test.h
- create mode 100644 drivers/iommu/iommufd/selftest.c
- create mode 100644 tools/testing/selftests/iommu/.gitignore
- create mode 100644 tools/testing/selftests/iommu/Makefile
- create mode 100644 tools/testing/selftests/iommu/config
- create mode 100644 tools/testing/selftests/iommu/iommufd.c
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/kunit-Provide-a-static-key-to-check-if-KUnit-is-actively-running-tests/20221025-152023
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git for-next
+patch link:    https://lore.kernel.org/r/20221025071907.1251820-3-davidgow%40google.com
+patch subject: [PATCH v2 3/3] mm: slub: test: Use the kunit_get_current_test() function
+config: m68k-allmodconfig (attached as .config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/048f50673812037a89a222fd04beaeaa59a2c2bb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Gow/kunit-Provide-a-static-key-to-check-if-KUnit-is-actively-running-tests/20221025-152023
+        git checkout 048f50673812037a89a222fd04beaeaa59a2c2bb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-diff --git a/drivers/iommu/iommufd/Kconfig b/drivers/iommu/iommufd/Kconfig
-index 020614dc5eaf7e..f0a2012234fa09 100644
---- a/drivers/iommu/iommufd/Kconfig
-+++ b/drivers/iommu/iommufd/Kconfig
-@@ -12,3 +12,13 @@ config IOMMUFD
- 	  This would commonly be used in combination with VFIO.
- 
- 	  If you don't know what to do here, say N.
-+
-+if IOMMUFD
-+config IOMMUFD_TEST
-+	bool "IOMMU Userspace API Test support"
-+	depends on RUNTIME_TESTING_MENU
-+	default n
-+	help
-+	  This is dangerous, do not enable unless running
-+	  tools/testing/selftests/iommu
-+endif
-diff --git a/drivers/iommu/iommufd/Makefile b/drivers/iommu/iommufd/Makefile
-index 2fdff04000b326..8aeba81800c512 100644
---- a/drivers/iommu/iommufd/Makefile
-+++ b/drivers/iommu/iommufd/Makefile
-@@ -8,4 +8,6 @@ iommufd-y := \
- 	pages.o \
- 	vfio_compat.o
- 
-+iommufd-$(CONFIG_IOMMUFD_TEST) += selftest.o
-+
- obj-$(CONFIG_IOMMUFD) += iommufd.o
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index b4a799b2b41ae3..d1af0389dfab83 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -704,3 +704,41 @@ int iommufd_access_rw(struct iommufd_access *access, unsigned long iova,
- 	return rc;
- }
- EXPORT_SYMBOL_NS_GPL(iommufd_access_rw, IOMMUFD);
-+
-+#ifdef CONFIG_IOMMUFD_TEST
-+/*
-+ * Creating a real iommufd_device is too hard, bypass creating a iommufd_device
-+ * and go directly to attaching a domain.
-+ */
-+struct iommufd_hw_pagetable *
-+iommufd_device_selftest_attach(struct iommufd_ctx *ictx,
-+			       struct iommufd_ioas *ioas,
-+			       struct device *mock_dev)
-+{
-+	struct iommufd_hw_pagetable *hwpt;
-+	int rc;
-+
-+	hwpt = iommufd_hw_pagetable_alloc(ictx, ioas, mock_dev);
-+	if (IS_ERR(hwpt))
-+		return hwpt;
-+
-+	rc = iopt_table_add_domain(&hwpt->ioas->iopt, hwpt->domain);
-+	if (rc)
-+		goto out_hwpt;
-+
-+	refcount_inc(&hwpt->obj.users);
-+	iommufd_object_finalize(ictx, &hwpt->obj);
-+	return hwpt;
-+
-+out_hwpt:
-+	iommufd_object_abort_and_destroy(ictx, &hwpt->obj);
-+	return ERR_PTR(rc);
-+}
-+
-+void iommufd_device_selftest_detach(struct iommufd_ctx *ictx,
-+				    struct iommufd_hw_pagetable *hwpt)
-+{
-+	iopt_table_remove_domain(&hwpt->ioas->iopt, hwpt->domain);
-+	refcount_dec(&hwpt->obj.users);
-+}
-+#endif
-diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
-index bc24227100fe22..d42f89becab96e 100644
---- a/drivers/iommu/iommufd/io_pagetable.c
-+++ b/drivers/iommu/iommufd/io_pagetable.c
-@@ -257,6 +257,11 @@ static int iopt_alloc_area_pages(struct io_pagetable *iopt,
- 			(uintptr_t)elm->pages->uptr + elm->start_byte, length);
- 		if (rc)
- 			goto out_unlock;
-+		if (IS_ENABLED(CONFIG_IOMMUFD_TEST) &&
-+		    WARN_ON(iopt_check_iova(iopt, *dst_iova, length))) {
-+			rc = -EINVAL;
-+			goto out_unlock;
-+		}
- 	} else {
- 		rc = iopt_check_iova(iopt, *dst_iova, length);
- 		if (rc)
-@@ -283,6 +288,8 @@ static int iopt_alloc_area_pages(struct io_pagetable *iopt,
- 
- static void iopt_abort_area(struct iopt_area *area)
- {
-+	if (IS_ENABLED(CONFIG_IOMMUFD_TEST))
-+		WARN_ON(area->pages);
- 	if (area->iopt) {
- 		down_write(&area->iopt->iova_rwsem);
- 		interval_tree_remove(&area->node, &area->iopt->area_itree);
-@@ -641,6 +648,9 @@ void iopt_destroy_table(struct io_pagetable *iopt)
- {
- 	struct interval_tree_node *node;
- 
-+	if (IS_ENABLED(CONFIG_IOMMUFD_TEST))
-+		iopt_remove_reserved_iova(iopt, NULL);
-+
- 	while ((node = interval_tree_iter_first(&iopt->allowed_itree, 0,
- 						ULONG_MAX))) {
- 		interval_tree_remove(node, &iopt->allowed_itree);
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 87fd127ca5843a..47d18388dc24fa 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -112,6 +112,9 @@ enum iommufd_object_type {
- 	IOMMUFD_OBJ_HW_PAGETABLE,
- 	IOMMUFD_OBJ_IOAS,
- 	IOMMUFD_OBJ_ACCESS,
-+#ifdef CONFIG_IOMMUFD_TEST
-+	IOMMUFD_OBJ_SELFTEST,
-+#endif
- };
- 
- /* Base struct for all objects with a userspace ID handle. */
-@@ -255,4 +258,16 @@ void iommufd_device_destroy(struct iommufd_object *obj);
- 
- void iommufd_access_destroy_object(struct iommufd_object *obj);
- 
-+#ifdef CONFIG_IOMMUFD_TEST
-+struct iommufd_access;
-+struct iommufd_hw_pagetable *
-+iommufd_device_selftest_attach(struct iommufd_ctx *ictx,
-+			       struct iommufd_ioas *ioas,
-+			       struct device *mock_dev);
-+void iommufd_device_selftest_detach(struct iommufd_ctx *ictx,
-+				    struct iommufd_hw_pagetable *hwpt);
-+int iommufd_test(struct iommufd_ucmd *ucmd);
-+void iommufd_selftest_destroy(struct iommufd_object *obj);
-+extern size_t iommufd_test_memory_limit;
-+#endif
- #endif
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-new file mode 100644
-index 00000000000000..4e52e37e4b66df
---- /dev/null
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -0,0 +1,85 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES.
-+ */
-+#ifndef _UAPI_IOMMUFD_TEST_H
-+#define _UAPI_IOMMUFD_TEST_H
-+
-+#include <linux/types.h>
-+#include <linux/iommufd.h>
-+
-+enum {
-+	IOMMU_TEST_OP_ADD_RESERVED,
-+	IOMMU_TEST_OP_MOCK_DOMAIN,
-+	IOMMU_TEST_OP_MD_CHECK_MAP,
-+	IOMMU_TEST_OP_MD_CHECK_REFS,
-+	IOMMU_TEST_OP_CREATE_ACCESS,
-+	IOMMU_TEST_OP_DESTROY_ACCESS_ITEM,
-+	IOMMU_TEST_OP_ACCESS_PAGES,
-+	IOMMU_TEST_OP_ACCESS_RW,
-+	IOMMU_TEST_OP_SET_TEMP_MEMORY_LIMIT,
-+};
-+
-+enum {
-+	MOCK_APERTURE_START = 1UL << 24,
-+	MOCK_APERTURE_LAST = (1UL << 31) - 1,
-+};
-+
-+enum {
-+	MOCK_FLAGS_ACCESS_WRITE = 1 << 0,
-+};
-+
-+enum {
-+	MOCK_ACCESS_RW_WRITE = 1 << 0,
-+	MOCK_ACCESS_RW_SLOW_PATH = 1 << 2,
-+};
-+
-+struct iommu_test_cmd {
-+	__u32 size;
-+	__u32 op;
-+	__u32 id;
-+	union {
-+		struct {
-+			__u32 device_id;
-+		} mock_domain;
-+		struct {
-+			__aligned_u64 start;
-+			__aligned_u64 length;
-+		} add_reserved;
-+		struct {
-+			__aligned_u64 iova;
-+			__aligned_u64 length;
-+			__aligned_u64 uptr;
-+		} check_map;
-+		struct {
-+			__aligned_u64 length;
-+			__aligned_u64 uptr;
-+			__u32 refs;
-+		} check_refs;
-+		struct {
-+			__u32 out_access_fd;
-+		} create_access;
-+		struct {
-+			__u32 flags;
-+			__u32 out_access_item_id;
-+			__aligned_u64 iova;
-+			__aligned_u64 length;
-+			__aligned_u64 uptr;
-+		} access_pages;
-+		struct {
-+			__aligned_u64 iova;
-+			__aligned_u64 length;
-+			__aligned_u64 uptr;
-+			__u32 flags;
-+		} access_rw;
-+		struct {
-+			__u32 access_item_id;
-+		} destroy_access_item;
-+		struct {
-+			__u32 limit;
-+		} memory_limit;
-+	};
-+	__u32 last;
-+};
-+#define IOMMU_TEST_CMD _IO(IOMMUFD_TYPE, IOMMUFD_CMD_BASE + 32)
-+
-+#endif
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index dc19723d5832a5..8a31c1a14cdd53 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -25,6 +25,7 @@
- #include <linux/iommufd.h>
- 
- #include "iommufd_private.h"
-+#include "iommufd_test.h"
- 
- struct iommufd_object_ops {
- 	void (*destroy)(struct iommufd_object *obj);
-@@ -234,6 +235,9 @@ union ucmd_buffer {
- 	struct iommu_ioas_iova_ranges iova_ranges;
- 	struct iommu_ioas_map map;
- 	struct iommu_ioas_unmap unmap;
-+#ifdef CONFIG_IOMMUFD_TEST
-+	struct iommu_test_cmd test;
-+#endif
- };
- 
- struct iommufd_ioctl_op {
-@@ -270,6 +274,9 @@ static struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
- 		 val64),
- 	IOCTL_OP(IOMMU_VFIO_IOAS, iommufd_vfio_ioas, struct iommu_vfio_ioas,
- 		 __reserved),
-+#ifdef CONFIG_IOMMUFD_TEST
-+	IOCTL_OP(IOMMU_TEST_CMD, iommufd_test, struct iommu_test_cmd, last),
-+#endif
- };
- 
- static long iommufd_fops_ioctl(struct file *filp, unsigned int cmd,
-@@ -370,6 +377,11 @@ static struct iommufd_object_ops iommufd_object_ops[] = {
- 	[IOMMUFD_OBJ_HW_PAGETABLE] = {
- 		.destroy = iommufd_hw_pagetable_destroy,
- 	},
-+#ifdef CONFIG_IOMMUFD_TEST
-+	[IOMMUFD_OBJ_SELFTEST] = {
-+		.destroy = iommufd_selftest_destroy,
-+	},
-+#endif
- };
- 
- static struct miscdevice iommu_misc_dev = {
-diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-index a09e197524be3b..1885efaea6502a 100644
---- a/drivers/iommu/iommufd/pages.c
-+++ b/drivers/iommu/iommufd/pages.c
-@@ -56,7 +56,11 @@
- #include "io_pagetable.h"
- #include "double_span.h"
- 
-+#ifndef CONFIG_IOMMUFD_TEST
- #define TEMP_MEMORY_LIMIT 65536
-+#else
-+#define TEMP_MEMORY_LIMIT iommufd_test_memory_limit
-+#endif
- #define BATCH_BACKUP_SIZE 32
- 
- /*
-@@ -370,6 +374,10 @@ static int batch_iommu_map_small(struct iommu_domain *domain,
- 	unsigned long start_iova = iova;
- 	int rc;
- 
-+	if (IS_ENABLED(CONFIG_IOMMUFD_TEST))
-+		WARN_ON(paddr % PAGE_SIZE || iova % PAGE_SIZE ||
-+			size % PAGE_SIZE);
-+
- 	while (size) {
- 		rc = iommu_map(domain, iova, paddr, PAGE_SIZE, prot);
- 		if (rc)
-@@ -1648,6 +1656,10 @@ int iopt_pages_rw_access(struct iopt_pages *pages, unsigned long start_byte,
- 	bool change_mm = current->mm != pages->source_mm;
- 	int rc = 0;
- 
-+	if (IS_ENABLED(CONFIG_IOMMUFD_TEST) &&
-+	    (flags & __IOMMUFD_ACCESS_RW_SLOW_PATH))
-+		change_mm = true;
-+
- 	if ((flags & IOMMUFD_ACCESS_RW_WRITE) && !pages->writable)
- 		return -EPERM;
- 
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-new file mode 100644
-index 00000000000000..4902669619c92a
---- /dev/null
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -0,0 +1,711 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES.
-+ *
-+ * Kernel side components to support tools/testing/selftests/iommu
-+ */
-+#include <linux/slab.h>
-+#include <linux/iommu.h>
-+#include <linux/xarray.h>
-+#include <linux/file.h>
-+#include <linux/anon_inodes.h>
-+
-+#include "iommufd_private.h"
-+#include "iommufd_test.h"
-+
-+size_t iommufd_test_memory_limit = 65536;
-+
-+enum {
-+	MOCK_IO_PAGE_SIZE = PAGE_SIZE / 2,
-+
-+	/*
-+	 * Like a real page table alignment requires the low bits of the address
-+	 * to be zero. xarray also requires the high bit to be zero, so we store
-+	 * the pfns shifted. The upper bits are used for metadata.
-+	 */
-+	MOCK_PFN_MASK = ULONG_MAX / MOCK_IO_PAGE_SIZE,
-+
-+	_MOCK_PFN_START = MOCK_PFN_MASK + 1,
-+	MOCK_PFN_START_IOVA = _MOCK_PFN_START,
-+	MOCK_PFN_LAST_IOVA = _MOCK_PFN_START,
-+};
-+
-+struct mock_iommu_domain {
-+	struct iommu_domain domain;
-+	struct xarray pfns;
-+};
-+
-+enum selftest_obj_type {
-+	TYPE_IDEV,
-+};
-+
-+struct selftest_obj {
-+	struct iommufd_object obj;
-+	enum selftest_obj_type type;
-+
-+	union {
-+		struct {
-+			struct iommufd_hw_pagetable *hwpt;
-+			struct iommufd_ctx *ictx;
-+			struct device mock_dev;
-+		} idev;
-+	};
-+};
-+
-+static struct iommu_domain *mock_domain_alloc(unsigned int iommu_domain_type)
-+{
-+	struct mock_iommu_domain *mock;
-+
-+	if (WARN_ON(iommu_domain_type != IOMMU_DOMAIN_UNMANAGED))
-+		return NULL;
-+
-+	mock = kzalloc(sizeof(*mock), GFP_KERNEL);
-+	if (!mock)
-+		return NULL;
-+	mock->domain.geometry.aperture_start = MOCK_APERTURE_START;
-+	mock->domain.geometry.aperture_end = MOCK_APERTURE_LAST;
-+	mock->domain.pgsize_bitmap = MOCK_IO_PAGE_SIZE;
-+	xa_init(&mock->pfns);
-+	return &mock->domain;
-+}
-+
-+static void mock_domain_free(struct iommu_domain *domain)
-+{
-+	struct mock_iommu_domain *mock =
-+		container_of(domain, struct mock_iommu_domain, domain);
-+
-+	WARN_ON(!xa_empty(&mock->pfns));
-+	kfree(mock);
-+}
-+
-+static int mock_domain_map_pages(struct iommu_domain *domain,
-+				 unsigned long iova, phys_addr_t paddr,
-+				 size_t pgsize, size_t pgcount, int prot,
-+				 gfp_t gfp, size_t *mapped)
-+{
-+	struct mock_iommu_domain *mock =
-+		container_of(domain, struct mock_iommu_domain, domain);
-+	unsigned long flags = MOCK_PFN_START_IOVA;
-+
-+	WARN_ON(iova % MOCK_IO_PAGE_SIZE);
-+	WARN_ON(pgsize % MOCK_IO_PAGE_SIZE);
-+	for (; pgcount; pgcount--) {
-+		size_t cur;
-+
-+		for (cur = 0; cur != pgsize; cur += MOCK_IO_PAGE_SIZE) {
-+			void *old;
-+
-+			if (pgcount == 1 && cur + MOCK_IO_PAGE_SIZE == pgsize)
-+				flags = MOCK_PFN_LAST_IOVA;
-+			old = xa_store(&mock->pfns, iova / MOCK_IO_PAGE_SIZE,
-+				       xa_mk_value((paddr / MOCK_IO_PAGE_SIZE) |
-+						   flags),
-+				       GFP_KERNEL);
-+			if (xa_is_err(old))
-+				return xa_err(old);
-+			WARN_ON(old);
-+			iova += MOCK_IO_PAGE_SIZE;
-+			paddr += MOCK_IO_PAGE_SIZE;
-+			*mapped += MOCK_IO_PAGE_SIZE;
-+			flags = 0;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static size_t mock_domain_unmap_pages(struct iommu_domain *domain,
-+				      unsigned long iova, size_t pgsize,
-+				      size_t pgcount,
-+				      struct iommu_iotlb_gather *iotlb_gather)
-+{
-+	struct mock_iommu_domain *mock =
-+		container_of(domain, struct mock_iommu_domain, domain);
-+	bool first = true;
-+	size_t ret = 0;
-+	void *ent;
-+
-+	WARN_ON(iova % MOCK_IO_PAGE_SIZE);
-+	WARN_ON(pgsize % MOCK_IO_PAGE_SIZE);
-+
-+	for (; pgcount; pgcount--) {
-+		size_t cur;
-+
-+		for (cur = 0; cur != pgsize; cur += MOCK_IO_PAGE_SIZE) {
-+			ent = xa_erase(&mock->pfns, iova / MOCK_IO_PAGE_SIZE);
-+			WARN_ON(!ent);
-+			/*
-+			 * iommufd generates unmaps that must be a strict
-+			 * superset of the map's performend So every starting
-+			 * IOVA should have been an iova passed to map, and the
-+			 *
-+			 * First IOVA must be present and have been a first IOVA
-+			 * passed to map_pages
-+			 */
-+			if (first) {
-+				WARN_ON(!(xa_to_value(ent) &
-+					  MOCK_PFN_START_IOVA));
-+				first = false;
-+			}
-+			if (pgcount == 1 && cur + MOCK_IO_PAGE_SIZE == pgsize)
-+				WARN_ON(!(xa_to_value(ent) &
-+					  MOCK_PFN_LAST_IOVA));
-+
-+			iova += MOCK_IO_PAGE_SIZE;
-+			ret += MOCK_IO_PAGE_SIZE;
-+		}
-+	}
-+	return ret;
-+}
-+
-+static phys_addr_t mock_domain_iova_to_phys(struct iommu_domain *domain,
-+					    dma_addr_t iova)
-+{
-+	struct mock_iommu_domain *mock =
-+		container_of(domain, struct mock_iommu_domain, domain);
-+	void *ent;
-+
-+	WARN_ON(iova % MOCK_IO_PAGE_SIZE);
-+	ent = xa_load(&mock->pfns, iova / MOCK_IO_PAGE_SIZE);
-+	WARN_ON(!ent);
-+	return (xa_to_value(ent) & MOCK_PFN_MASK) * MOCK_IO_PAGE_SIZE;
-+}
-+
-+static const struct iommu_ops mock_ops = {
-+	.owner = THIS_MODULE,
-+	.pgsize_bitmap = MOCK_IO_PAGE_SIZE,
-+	.domain_alloc = mock_domain_alloc,
-+	.default_domain_ops =
-+		&(struct iommu_domain_ops){
-+			.free = mock_domain_free,
-+			.map_pages = mock_domain_map_pages,
-+			.unmap_pages = mock_domain_unmap_pages,
-+			.iova_to_phys = mock_domain_iova_to_phys,
-+		},
-+};
-+
-+static inline struct iommufd_hw_pagetable *
-+get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
-+		 struct mock_iommu_domain **mock)
-+{
-+	struct iommufd_hw_pagetable *hwpt;
-+	struct iommufd_object *obj;
-+
-+	obj = iommufd_get_object(ucmd->ictx, mockpt_id,
-+				 IOMMUFD_OBJ_HW_PAGETABLE);
-+	if (IS_ERR(obj))
-+		return ERR_CAST(obj);
-+	hwpt = container_of(obj, struct iommufd_hw_pagetable, obj);
-+	if (hwpt->domain->ops != mock_ops.default_domain_ops) {
-+		return ERR_PTR(-EINVAL);
-+		iommufd_put_object(&hwpt->obj);
-+	}
-+	*mock = container_of(hwpt->domain, struct mock_iommu_domain, domain);
-+	return hwpt;
-+}
-+
-+/* Create an hw_pagetable with the mock domain so we can test the domain ops */
-+static int iommufd_test_mock_domain(struct iommufd_ucmd *ucmd,
-+				    struct iommu_test_cmd *cmd)
-+{
-+	static struct bus_type mock_bus = { .iommu_ops = &mock_ops };
-+	struct iommufd_hw_pagetable *hwpt;
-+	struct selftest_obj *sobj;
-+	struct iommufd_ioas *ioas;
-+	int rc;
-+
-+	ioas = iommufd_get_ioas(ucmd, cmd->id);
-+	if (IS_ERR(ioas))
-+		return PTR_ERR(ioas);
-+
-+	sobj = iommufd_object_alloc(ucmd->ictx, sobj, IOMMUFD_OBJ_SELFTEST);
-+	if (IS_ERR(sobj)) {
-+		rc = PTR_ERR(sobj);
-+		goto out_ioas;
-+	}
-+	sobj->idev.ictx = ucmd->ictx;
-+	sobj->type = TYPE_IDEV;
-+	sobj->idev.mock_dev.bus = &mock_bus;
-+
-+	hwpt = iommufd_device_selftest_attach(ucmd->ictx, ioas,
-+					      &sobj->idev.mock_dev);
-+	if (IS_ERR(hwpt)) {
-+		rc = PTR_ERR(hwpt);
-+		goto out_sobj;
-+	}
-+	sobj->idev.hwpt = hwpt;
-+
-+	cmd->id = hwpt->obj.id;
-+	cmd->mock_domain.device_id = sobj->obj.id;
-+	iommufd_object_finalize(ucmd->ictx, &sobj->obj);
-+	iommufd_put_object(&ioas->obj);
-+	return iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-+
-+out_sobj:
-+	iommufd_object_abort(ucmd->ictx, &sobj->obj);
-+out_ioas:
-+	iommufd_put_object(&ioas->obj);
-+	return rc;
-+}
-+
-+/* Add an additional reserved IOVA to the IOAS */
-+static int iommufd_test_add_reserved(struct iommufd_ucmd *ucmd,
-+				     unsigned int mockpt_id,
-+				     unsigned long start, size_t length)
-+{
-+	struct iommufd_ioas *ioas;
-+	int rc;
-+
-+	ioas = iommufd_get_ioas(ucmd, mockpt_id);
-+	if (IS_ERR(ioas))
-+		return PTR_ERR(ioas);
-+	down_write(&ioas->iopt.iova_rwsem);
-+	rc = iopt_reserve_iova(&ioas->iopt, start, start + length - 1, NULL);
-+	up_write(&ioas->iopt.iova_rwsem);
-+	iommufd_put_object(&ioas->obj);
-+	return rc;
-+}
-+
-+/* Check that every pfn under each iova matches the pfn under a user VA */
-+static int iommufd_test_md_check_pa(struct iommufd_ucmd *ucmd,
-+				    unsigned int mockpt_id, unsigned long iova,
-+				    size_t length, void __user *uptr)
-+{
-+	struct iommufd_hw_pagetable *hwpt;
-+	struct mock_iommu_domain *mock;
-+	int rc;
-+
-+	if (iova % MOCK_IO_PAGE_SIZE || length % MOCK_IO_PAGE_SIZE ||
-+	    (uintptr_t)uptr % MOCK_IO_PAGE_SIZE)
-+		return -EINVAL;
-+
-+	hwpt = get_md_pagetable(ucmd, mockpt_id, &mock);
-+	if (IS_ERR(hwpt))
-+		return PTR_ERR(hwpt);
-+
-+	for (; length; length -= MOCK_IO_PAGE_SIZE) {
-+		struct page *pages[1];
-+		unsigned long pfn;
-+		long npages;
-+		void *ent;
-+
-+		npages = get_user_pages_fast((uintptr_t)uptr & PAGE_MASK, 1, 0,
-+					     pages);
-+		if (npages < 0) {
-+			rc = npages;
-+			goto out_put;
-+		}
-+		if (WARN_ON(npages != 1)) {
-+			rc = -EFAULT;
-+			goto out_put;
-+		}
-+		pfn = page_to_pfn(pages[0]);
-+		put_page(pages[0]);
-+
-+		ent = xa_load(&mock->pfns, iova / MOCK_IO_PAGE_SIZE);
-+		if (!ent ||
-+		    (xa_to_value(ent) & MOCK_PFN_MASK) * MOCK_IO_PAGE_SIZE !=
-+			    pfn * PAGE_SIZE + ((uintptr_t)uptr % PAGE_SIZE)) {
-+			rc = -EINVAL;
-+			goto out_put;
-+		}
-+		iova += MOCK_IO_PAGE_SIZE;
-+		uptr += MOCK_IO_PAGE_SIZE;
-+	}
-+	rc = 0;
-+
-+out_put:
-+	iommufd_put_object(&hwpt->obj);
-+	return rc;
-+}
-+
-+/* Check that the page ref count matches, to look for missing pin/unpins */
-+static int iommufd_test_md_check_refs(struct iommufd_ucmd *ucmd,
-+				      void __user *uptr, size_t length,
-+				      unsigned int refs)
-+{
-+	if (length % PAGE_SIZE || (uintptr_t)uptr % PAGE_SIZE)
-+		return -EINVAL;
-+
-+	for (; length; length -= PAGE_SIZE) {
-+		struct page *pages[1];
-+		long npages;
-+
-+		npages = get_user_pages_fast((uintptr_t)uptr, 1, 0, pages);
-+		if (npages < 0)
-+			return npages;
-+		if (WARN_ON(npages != 1))
-+			return -EFAULT;
-+		if (!PageCompound(pages[0])) {
-+			unsigned int count;
-+
-+			count = page_ref_count(pages[0]);
-+			if (count / GUP_PIN_COUNTING_BIAS != refs) {
-+				put_page(pages[0]);
-+				return -EIO;
-+			}
-+		}
-+		put_page(pages[0]);
-+		uptr += PAGE_SIZE;
-+	}
-+	return 0;
-+}
-+
-+struct selftest_access {
-+	struct iommufd_access *access;
-+	struct file *file;
-+	spinlock_t lock;
-+	struct list_head items;
-+	unsigned int next_id;
-+	bool destroying;
-+};
-+
-+struct selftest_access_item {
-+	struct list_head items_elm;
-+	unsigned long iova;
-+	unsigned long iova_end;
-+	size_t length;
-+	unsigned int id;
-+};
-+
-+static const struct file_operations iommfd_test_staccess_fops;
-+
-+static struct selftest_access *iommufd_access_get(int fd)
-+{
-+	struct file *file;
-+
-+	file = fget(fd);
-+	if (!file)
-+		return ERR_PTR(-EBADFD);
-+
-+	if (file->f_op != &iommfd_test_staccess_fops) {
-+		fput(file);
-+		return ERR_PTR(-EBADFD);
-+	}
-+	return file->private_data;
-+}
-+
-+static void iommufd_test_access_unmap(void *data, unsigned long iova,
-+				      unsigned long length)
-+{
-+	unsigned long iova_last = iova + length - 1;
-+	struct selftest_access *staccess = data;
-+	struct selftest_access_item *item;
-+	struct selftest_access_item *tmp;
-+
-+	spin_lock(&staccess->lock);
-+	list_for_each_entry_safe(item, tmp, &staccess->items, items_elm) {
-+		if (iova > item->iova_end || iova_last < item->iova)
-+			continue;
-+		list_del(&item->items_elm);
-+		spin_unlock(&staccess->lock);
-+		iommufd_access_unpin_pages(staccess->access, item->iova,
-+					   item->length);
-+		kfree(item);
-+		spin_lock(&staccess->lock);
-+	}
-+	spin_unlock(&staccess->lock);
-+}
-+
-+static int iommufd_test_access_item_destroy(struct iommufd_ucmd *ucmd,
-+					    unsigned int access_id,
-+					    unsigned int item_id)
-+{
-+	struct selftest_access_item *item;
-+	struct selftest_access *staccess;
-+
-+	staccess = iommufd_access_get(access_id);
-+	if (IS_ERR(staccess))
-+		return PTR_ERR(staccess);
-+
-+	spin_lock(&staccess->lock);
-+	list_for_each_entry(item, &staccess->items, items_elm) {
-+		if (item->id == item_id) {
-+			list_del(&item->items_elm);
-+			spin_unlock(&staccess->lock);
-+			iommufd_access_unpin_pages(staccess->access, item->iova,
-+						   item->length);
-+			kfree(item);
-+			fput(staccess->file);
-+			return 0;
-+		}
-+	}
-+	spin_unlock(&staccess->lock);
-+	fput(staccess->file);
-+	return -ENOENT;
-+}
-+
-+static int iommufd_test_staccess_release(struct inode *inode,
-+					 struct file *filep)
-+{
-+	struct selftest_access *staccess = filep->private_data;
-+
-+	iommufd_test_access_unmap(staccess, 0, ULONG_MAX);
-+	iommufd_access_destroy(staccess->access);
-+	kfree(staccess);
-+	return 0;
-+}
-+
-+static struct iommufd_access_ops selftest_access_ops = {
-+	.unmap = iommufd_test_access_unmap,
-+};
-+
-+static const struct file_operations iommfd_test_staccess_fops = {
-+	.release = iommufd_test_staccess_release,
-+};
-+
-+static struct selftest_access *iommufd_test_alloc_access(void)
-+{
-+	struct selftest_access *staccess;
-+	struct file *filep;
-+
-+	staccess = kzalloc(sizeof(*staccess), GFP_KERNEL_ACCOUNT);
-+	if (!staccess)
-+		return ERR_PTR(-ENOMEM);
-+	INIT_LIST_HEAD(&staccess->items);
-+	spin_lock_init(&staccess->lock);
-+
-+	staccess->file = anon_inode_getfile("[iommufd_test_staccess]",
-+					    &iommfd_test_staccess_fops,
-+					    staccess, O_RDWR);
-+	if (IS_ERR(staccess->file)) {
-+		kfree(staccess);
-+		return ERR_CAST(filep);
-+	}
-+	return staccess;
-+}
-+
-+static int iommufd_test_create_access(struct iommufd_ucmd *ucmd,
-+				      unsigned int ioas_id)
-+{
-+	struct iommu_test_cmd *cmd = ucmd->cmd;
-+	struct selftest_access *staccess;
-+	int fdno;
-+	int rc;
-+
-+	staccess = iommufd_test_alloc_access();
-+	if (IS_ERR(staccess))
-+		return PTR_ERR(staccess);
-+
-+	fdno = get_unused_fd_flags(O_CLOEXEC);
-+	if (fdno < 0) {
-+		rc = -ENOMEM;
-+		goto out_free_staccess;
-+	}
-+
-+	staccess->access = iommufd_access_create(
-+		ucmd->ictx, ioas_id, &selftest_access_ops, staccess);
-+	if (IS_ERR(staccess->access)) {
-+		rc = PTR_ERR(staccess->access);
-+		goto out_put_fdno;
-+	}
-+	cmd->create_access.out_access_fd = fdno;
-+	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-+	if (rc)
-+		goto out_destroy;
-+
-+	fd_install(fdno, staccess->file);
-+	return 0;
-+
-+out_destroy:
-+	iommufd_access_destroy(staccess->access);
-+out_put_fdno:
-+	put_unused_fd(fdno);
-+out_free_staccess:
-+	fput(staccess->file);
-+	return rc;
-+}
-+
-+/* Check that the pages in a page array match the pages in the user VA */
-+static int iommufd_test_check_pages(void __user *uptr, struct page **pages,
-+				    size_t npages)
-+{
-+	for (; npages; npages--) {
-+		struct page *tmp_pages[1];
-+		long rc;
-+
-+		rc = get_user_pages_fast((uintptr_t)uptr, 1, 0, tmp_pages);
-+		if (rc < 0)
-+			return rc;
-+		if (WARN_ON(rc != 1))
-+			return -EFAULT;
-+		put_page(tmp_pages[0]);
-+		if (tmp_pages[0] != *pages)
-+			return -EBADE;
-+		pages++;
-+		uptr += PAGE_SIZE;
-+	}
-+	return 0;
-+}
-+
-+static int iommufd_test_access_pages(struct iommufd_ucmd *ucmd,
-+				     unsigned int access_id, unsigned long iova,
-+				     size_t length, void __user *uptr,
-+				     u32 flags)
-+{
-+	struct iommu_test_cmd *cmd = ucmd->cmd;
-+	struct selftest_access_item *item;
-+	struct selftest_access *staccess;
-+	struct page **pages;
-+	size_t npages;
-+	int rc;
-+
-+	if (flags & ~MOCK_FLAGS_ACCESS_WRITE)
-+		return -EOPNOTSUPP;
-+
-+	staccess = iommufd_access_get(access_id);
-+	if (IS_ERR(staccess))
-+		return PTR_ERR(staccess);
-+
-+	npages = (ALIGN(iova + length, PAGE_SIZE) -
-+		  ALIGN_DOWN(iova, PAGE_SIZE)) /
-+		 PAGE_SIZE;
-+	pages = kvcalloc(npages, sizeof(*pages), GFP_KERNEL_ACCOUNT);
-+	if (!pages) {
-+		rc = -ENOMEM;
-+		goto out_put;
-+	}
-+
-+	rc = iommufd_access_pin_pages(staccess->access, iova, length, pages,
-+				      flags & MOCK_FLAGS_ACCESS_WRITE);
-+	if (rc)
-+		goto out_free_pages;
-+
-+	rc = iommufd_test_check_pages(
-+		uptr - (iova - ALIGN_DOWN(iova, PAGE_SIZE)), pages, npages);
-+	if (rc)
-+		goto out_unaccess;
-+
-+	item = kzalloc(sizeof(*item), GFP_KERNEL_ACCOUNT);
-+	if (!item) {
-+		rc = -ENOMEM;
-+		goto out_unaccess;
-+	}
-+
-+	item->iova = iova;
-+	item->length = length;
-+	spin_lock(&staccess->lock);
-+	item->id = staccess->next_id++;
-+	list_add_tail(&item->items_elm, &staccess->items);
-+	spin_unlock(&staccess->lock);
-+
-+	cmd->access_pages.out_access_item_id = item->id;
-+	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
-+	if (rc)
-+		goto out_free_item;
-+	goto out_free_pages;
-+
-+out_free_item:
-+	spin_lock(&staccess->lock);
-+	list_del(&item->items_elm);
-+	spin_unlock(&staccess->lock);
-+	kfree(item);
-+out_unaccess:
-+	iommufd_access_unpin_pages(staccess->access, iova, length);
-+out_free_pages:
-+	kvfree(pages);
-+out_put:
-+	fput(staccess->file);
-+	return rc;
-+}
-+
-+static int iommufd_test_access_rw(struct iommufd_ucmd *ucmd,
-+				  unsigned int access_id, unsigned long iova,
-+				  size_t length, void __user *ubuf,
-+				  unsigned int flags)
-+{
-+	struct selftest_access *staccess;
-+	void *tmp;
-+	int rc;
-+
-+	staccess = iommufd_access_get(access_id);
-+	if (IS_ERR(staccess))
-+		return PTR_ERR(staccess);
-+
-+	tmp = kvzalloc(length, GFP_KERNEL_ACCOUNT);
-+	if (!tmp) {
-+		rc = -ENOMEM;
-+		goto out_put;
-+	}
-+
-+	if (flags & MOCK_ACCESS_RW_WRITE) {
-+		if (copy_from_user(tmp, ubuf, length)) {
-+			rc = -EFAULT;
-+			goto out_free;
-+		}
-+	}
-+
-+	rc = iommufd_access_rw(staccess->access, iova, tmp, length, flags);
-+	if (rc)
-+		goto out_free;
-+	if (!(flags & MOCK_ACCESS_RW_WRITE)) {
-+		if (copy_to_user(ubuf, tmp, length)) {
-+			rc = -EFAULT;
-+			goto out_free;
-+		}
-+	}
-+
-+out_free:
-+	kvfree(tmp);
-+out_put:
-+	fput(staccess->file);
-+	return rc;
-+}
-+static_assert((unsigned int)MOCK_ACCESS_RW_WRITE == IOMMUFD_ACCESS_RW_WRITE);
-+static_assert((unsigned int)MOCK_ACCESS_RW_SLOW_PATH ==
-+	      __IOMMUFD_ACCESS_RW_SLOW_PATH);
-+
-+void iommufd_selftest_destroy(struct iommufd_object *obj)
-+{
-+	struct selftest_obj *sobj = container_of(obj, struct selftest_obj, obj);
-+
-+	switch (sobj->type) {
-+	case TYPE_IDEV:
-+		iommufd_device_selftest_detach(sobj->idev.ictx,
-+					       sobj->idev.hwpt);
-+		break;
-+	}
-+}
-+
-+int iommufd_test(struct iommufd_ucmd *ucmd)
-+{
-+	struct iommu_test_cmd *cmd = ucmd->cmd;
-+
-+	switch (cmd->op) {
-+	case IOMMU_TEST_OP_ADD_RESERVED:
-+		return iommufd_test_add_reserved(ucmd, cmd->id,
-+						 cmd->add_reserved.start,
-+						 cmd->add_reserved.length);
-+	case IOMMU_TEST_OP_MOCK_DOMAIN:
-+		return iommufd_test_mock_domain(ucmd, cmd);
-+	case IOMMU_TEST_OP_MD_CHECK_MAP:
-+		return iommufd_test_md_check_pa(
-+			ucmd, cmd->id, cmd->check_map.iova,
-+			cmd->check_map.length,
-+			u64_to_user_ptr(cmd->check_map.uptr));
-+	case IOMMU_TEST_OP_MD_CHECK_REFS:
-+		return iommufd_test_md_check_refs(
-+			ucmd, u64_to_user_ptr(cmd->check_refs.uptr),
-+			cmd->check_refs.length, cmd->check_refs.refs);
-+	case IOMMU_TEST_OP_CREATE_ACCESS:
-+		return iommufd_test_create_access(ucmd, cmd->id);
-+	case IOMMU_TEST_OP_ACCESS_PAGES:
-+		return iommufd_test_access_pages(
-+			ucmd, cmd->id, cmd->access_pages.iova,
-+			cmd->access_pages.length,
-+			u64_to_user_ptr(cmd->access_pages.uptr),
-+			cmd->access_pages.flags);
-+	case IOMMU_TEST_OP_ACCESS_RW:
-+		return iommufd_test_access_rw(
-+			ucmd, cmd->id, cmd->access_rw.iova,
-+			cmd->access_rw.length,
-+			u64_to_user_ptr(cmd->access_rw.uptr),
-+			cmd->access_rw.flags);
-+	case IOMMU_TEST_OP_DESTROY_ACCESS_ITEM:
-+		return iommufd_test_access_item_destroy(
-+			ucmd, cmd->id, cmd->destroy_access_item.access_item_id);
-+	case IOMMU_TEST_OP_SET_TEMP_MEMORY_LIMIT:
-+		iommufd_test_memory_limit = cmd->memory_limit.limit;
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
-index 3598292df937d5..fc253a4d2f8e77 100644
---- a/include/linux/iommufd.h
-+++ b/include/linux/iommufd.h
-@@ -37,6 +37,9 @@ enum {
- 	IOMMUFD_ACCESS_RW_WRITE = 1 << 0,
- 	/* Set if the caller is in a kthread then rw will use kthread_use_mm() */
- 	IOMMUFD_ACCESS_RW_KTHREAD = 1 << 1,
-+
-+	/* Only for use by selftest */
-+	__IOMMUFD_ACCESS_RW_SLOW_PATH = 1 << 2,
- };
- 
- struct iommufd_access *
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 0464b2c6c1e4b2..eedd772b36fe9c 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -27,6 +27,7 @@ TARGETS += ftrace
- TARGETS += futex
- TARGETS += gpio
- TARGETS += intel_pstate
-+TARGETS += iommu
- TARGETS += ipc
- TARGETS += ir
- TARGETS += kcmp
-diff --git a/tools/testing/selftests/iommu/.gitignore b/tools/testing/selftests/iommu/.gitignore
-new file mode 100644
-index 00000000000000..c6bd07e7ff59b3
---- /dev/null
-+++ b/tools/testing/selftests/iommu/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+/iommufd
-diff --git a/tools/testing/selftests/iommu/Makefile b/tools/testing/selftests/iommu/Makefile
-new file mode 100644
-index 00000000000000..7bc38b3beaeb20
---- /dev/null
-+++ b/tools/testing/selftests/iommu/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+CFLAGS += -Wall -O2 -Wno-unused-function
-+CFLAGS += -I../../../../include/uapi/
-+CFLAGS += -I../../../../include/
-+
-+CFLAGS += -D_GNU_SOURCE
-+
-+TEST_GEN_PROGS :=
-+TEST_GEN_PROGS += iommufd
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/iommu/config b/tools/testing/selftests/iommu/config
-new file mode 100644
-index 00000000000000..6c4f901d6fed3c
---- /dev/null
-+++ b/tools/testing/selftests/iommu/config
-@@ -0,0 +1,2 @@
-+CONFIG_IOMMUFD
-+CONFIG_IOMMUFD_TEST
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-new file mode 100644
-index 00000000000000..8de1ff8a8c9257
---- /dev/null
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -0,0 +1,1715 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES */
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <sys/mman.h>
-+#include <sys/fcntl.h>
-+#include <sys/ioctl.h>
-+#include <assert.h>
-+#include <stddef.h>
-+#include <sys/eventfd.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define __EXPORTED_HEADERS__
-+#include <linux/iommufd.h>
-+#include <linux/vfio.h>
-+#include "../../../../drivers/iommu/iommufd/iommufd_test.h"
-+
-+static void *buffer;
-+
-+static unsigned long PAGE_SIZE;
-+static unsigned long HUGEPAGE_SIZE;
-+static unsigned long BUFFER_SIZE;
-+
-+#define MOCK_PAGE_SIZE (PAGE_SIZE / 2)
-+
-+static unsigned long get_huge_page_size(void)
-+{
-+	char buf[80];
-+	int ret;
-+	int fd;
-+
-+	fd = open("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size",
-+		  O_RDONLY);
-+	if (fd < 0)
-+		return 2 * 1024 * 1024;
-+
-+	ret = read(fd, buf, sizeof(buf));
-+	close(fd);
-+	if (ret <= 0 || ret == sizeof(buf))
-+		return 2 * 1024 * 1024;
-+	buf[ret] = 0;
-+	return strtoul(buf, NULL, 10);
-+}
-+
-+static __attribute__((constructor)) void setup_sizes(void)
-+{
-+	void *vrc;
-+	int rc;
-+
-+	PAGE_SIZE = sysconf(_SC_PAGE_SIZE);
-+	HUGEPAGE_SIZE = get_huge_page_size();
-+
-+	BUFFER_SIZE = PAGE_SIZE * 16;
-+	rc = posix_memalign(&buffer, HUGEPAGE_SIZE, BUFFER_SIZE);
-+	assert(!rc);
-+	assert(buffer);
-+	assert((uintptr_t)buffer % HUGEPAGE_SIZE == 0);
-+	vrc = mmap(buffer, BUFFER_SIZE, PROT_READ | PROT_WRITE,
-+		   MAP_SHARED | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
-+	assert(vrc == buffer);
-+}
-+
-+/* Hack to make assertions more readable */
-+#define _IOMMU_TEST_CMD(x) IOMMU_TEST_CMD
-+
-+/*
-+ * Have the kernel check the refcount on pages. I don't know why a freshly
-+ * mmap'd anon non-compound page starts out with a ref of 3
-+ */
-+#define check_refs(_ptr, _length, _refs)                                      \
-+	({                                                                    \
-+		struct iommu_test_cmd test_cmd = {                            \
-+			.size = sizeof(test_cmd),                             \
-+			.op = IOMMU_TEST_OP_MD_CHECK_REFS,                    \
-+			.check_refs = { .length = _length,                    \
-+					.uptr = (uintptr_t)(_ptr),            \
-+					.refs = _refs },                      \
-+		};                                                            \
-+		ASSERT_EQ(0,                                                  \
-+			  ioctl(self->fd,                                     \
-+				_IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_REFS), \
-+				&test_cmd));                                  \
-+	})
-+
-+static int _test_cmd_create_access(int fd, unsigned int ioas_id,
-+				   __u32 *access_id)
-+{
-+	struct iommu_test_cmd cmd = {
-+		.size = sizeof(cmd),
-+		.op = IOMMU_TEST_OP_CREATE_ACCESS,
-+		.id = ioas_id,
-+	};
-+	int ret;
-+
-+	ret = ioctl(fd, IOMMU_TEST_CMD, &cmd);
-+	if (ret)
-+		return ret;
-+	*access_id = cmd.create_access.out_access_fd;
-+	return 0;
-+}
-+#define test_cmd_create_access(ioas_id, access_id) \
-+	ASSERT_EQ(0, _test_cmd_create_access(self->fd, ioas_id, access_id))
-+
-+static int _test_cmd_destroy_access(int fd, unsigned int access_id)
-+{
-+	return close(access_id);
-+}
-+#define test_cmd_destroy_access(access_id) \
-+	ASSERT_EQ(0, _test_cmd_destroy_access(self->fd, access_id))
-+
-+static int _test_cmd_destroy_access_item(int fd, unsigned int access_id,
-+					 unsigned int access_item_id)
-+{
-+	struct iommu_test_cmd cmd = {
-+		.size = sizeof(cmd),
-+		.op = IOMMU_TEST_OP_DESTROY_ACCESS_ITEM,
-+		.id = access_id,
-+		.destroy_access_item = { .access_item_id = access_item_id },
-+	};
-+	return ioctl(fd, IOMMU_TEST_CMD, &cmd);
-+}
-+#define test_cmd_destroy_access_item(access_id, access_item_id)         \
-+	ASSERT_EQ(0, _test_cmd_destroy_access_item(self->fd, access_id, \
-+						   access_item_id))
-+
-+static int _test_ioctl_destroy(int fd, unsigned int id)
-+{
-+	struct iommu_destroy cmd = {
-+		.size = sizeof(cmd),
-+		.id = id,
-+	};
-+	return ioctl(fd, IOMMU_DESTROY, &cmd);
-+}
-+#define test_ioctl_destroy(id) ASSERT_EQ(0, _test_ioctl_destroy(self->fd, id))
-+
-+static int _test_ioctl_ioas_alloc(int fd, __u32 *id)
-+{
-+	struct iommu_ioas_alloc cmd = {
-+		.size = sizeof(cmd),
-+	};
-+	int ret;
-+
-+	ret = ioctl(fd, IOMMU_IOAS_ALLOC, &cmd);
-+	if (ret)
-+		return ret;
-+	*id = cmd.out_ioas_id;
-+	return 0;
-+}
-+#define test_ioctl_ioas_alloc(id)                                   \
-+	({                                                          \
-+		ASSERT_EQ(0, _test_ioctl_ioas_alloc(self->fd, id)); \
-+		ASSERT_NE(0, *(id));                                \
-+	})
-+
-+static int _test_ioctl_ioas_map(int fd, unsigned int ioas_id, void *buffer,
-+				size_t length, __u64 *iova, unsigned int flags)
-+{
-+	struct iommu_ioas_map cmd = {
-+		.size = sizeof(cmd),
-+		.flags = flags,
-+		.ioas_id = ioas_id,
-+		.user_va = (uintptr_t)buffer,
-+		.length = length,
-+	};
-+	int ret;
-+
-+	if (flags & IOMMU_IOAS_MAP_FIXED_IOVA)
-+		cmd.iova = *iova;
-+
-+	ret = ioctl(fd, IOMMU_IOAS_MAP, &cmd);
-+	*iova = cmd.iova;
-+	return ret;
-+}
-+#define test_ioctl_ioas_map(buffer, length, iova_p)                        \
-+	ASSERT_EQ(0, _test_ioctl_ioas_map(self->fd, self->ioas_id, buffer, \
-+					  length, iova_p,                  \
-+					  IOMMU_IOAS_MAP_WRITEABLE |       \
-+						  IOMMU_IOAS_MAP_READABLE))
-+
-+#define test_efault_ioctl_ioas_map(buffer, length, iova_p)                 \
-+	EXPECT_ERRNO(EFAULT,                                               \
-+		     _test_ioctl_ioas_map(self->fd, self->ioas_id, buffer, \
-+					  length, iova_p,                  \
-+					  IOMMU_IOAS_MAP_WRITEABLE |       \
-+						  IOMMU_IOAS_MAP_READABLE))
-+
-+#define test_ioctl_ioas_map_id(ioas_id, buffer, length, iova_p)              \
-+	ASSERT_EQ(0, _test_ioctl_ioas_map(self->fd, ioas_id, buffer, length, \
-+					  iova_p,                            \
-+					  IOMMU_IOAS_MAP_WRITEABLE |         \
-+						  IOMMU_IOAS_MAP_READABLE))
-+
-+#define test_ioctl_ioas_map_fixed(buffer, length, iova)                       \
-+	({                                                                    \
-+		__u64 __iova = iova;                                          \
-+		ASSERT_EQ(0, _test_ioctl_ioas_map(                            \
-+				     self->fd, self->ioas_id, buffer, length, \
-+				     &__iova,                                 \
-+				     IOMMU_IOAS_MAP_FIXED_IOVA |              \
-+					     IOMMU_IOAS_MAP_WRITEABLE |       \
-+					     IOMMU_IOAS_MAP_READABLE));       \
-+	})
-+
-+#define test_eaddrinuse_ioctl_ioas_map_fixed(buffer, length, iova)            \
-+	({                                                                    \
-+		__u64 __iova = iova;                                          \
-+		EXPECT_ERRNO(EADDRINUSE,                                      \
-+			     _test_ioctl_ioas_map(                            \
-+				     self->fd, self->ioas_id, buffer, length, \
-+				     &__iova,                                 \
-+				     IOMMU_IOAS_MAP_FIXED_IOVA |              \
-+					     IOMMU_IOAS_MAP_WRITEABLE |       \
-+					     IOMMU_IOAS_MAP_READABLE));       \
-+	})
-+
-+static int _test_ioctl_ioas_unmap(int fd, unsigned int ioas_id, uint64_t iova,
-+				  size_t length, uint64_t *out_len)
-+{
-+	struct iommu_ioas_unmap cmd = {
-+		.size = sizeof(cmd),
-+		.ioas_id = ioas_id,
-+		.iova = iova,
-+		.length = length,
-+	};
-+	int ret;
-+
-+	ret = ioctl(fd, IOMMU_IOAS_UNMAP, &cmd);
-+	if (out_len)
-+		*out_len = cmd.length;
-+	return ret;
-+}
-+#define test_ioctl_ioas_unmap(iova, length)                                \
-+	ASSERT_EQ(0, _test_ioctl_ioas_unmap(self->fd, self->ioas_id, iova, \
-+					    length, NULL))
-+
-+#define test_enoent_ioctl_ioas_unmap(iova, length)                           \
-+	EXPECT_ERRNO(ENOENT, _test_ioctl_ioas_unmap(self->fd, self->ioas_id, \
-+						    iova, length, NULL))
-+
-+static void teardown_iommufd(int fd, struct __test_metadata *_metadata)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_MD_CHECK_REFS,
-+		.check_refs = { .length = BUFFER_SIZE,
-+				.uptr = (uintptr_t)buffer },
-+	};
-+
-+	EXPECT_EQ(0, close(fd));
-+
-+	fd = open("/dev/iommu", O_RDWR);
-+	EXPECT_NE(-1, fd);
-+	EXPECT_EQ(0, ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_REFS),
-+			   &test_cmd));
-+	EXPECT_EQ(0, close(fd));
-+}
-+
-+#define EXPECT_ERRNO(expected_errno, cmd)         \
-+	({                                        \
-+		ASSERT_EQ(-1, cmd);               \
-+		EXPECT_EQ(expected_errno, errno); \
-+	})
-+
-+FIXTURE(iommufd)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(iommufd)
-+{
-+	self->fd = open("/dev/iommu", O_RDWR);
-+	ASSERT_NE(-1, self->fd);
-+}
-+
-+FIXTURE_TEARDOWN(iommufd)
-+{
-+	teardown_iommufd(self->fd, _metadata);
-+}
-+
-+TEST_F(iommufd, simple_close)
-+{
-+}
-+
-+TEST_F(iommufd, cmd_fail)
-+{
-+	struct iommu_destroy cmd = { .size = sizeof(cmd), .id = 0 };
-+
-+	/* object id is invalid */
-+	EXPECT_ERRNO(ENOENT, _test_ioctl_destroy(self->fd, 0));
-+	/* Bad pointer */
-+	EXPECT_ERRNO(EFAULT, ioctl(self->fd, IOMMU_DESTROY, NULL));
-+	/* Unknown ioctl */
-+	EXPECT_ERRNO(ENOTTY,
-+		     ioctl(self->fd, _IO(IOMMUFD_TYPE, IOMMUFD_CMD_BASE - 1),
-+			   &cmd));
-+}
-+
-+TEST_F(iommufd, cmd_ex_fail)
-+{
-+	struct {
-+		struct iommu_destroy cmd;
-+		__u64 future;
-+	} cmd = { .cmd = { .size = sizeof(cmd), .id = 0 } };
-+
-+	/* object id is invalid and command is longer */
-+	EXPECT_ERRNO(ENOENT, ioctl(self->fd, IOMMU_DESTROY, &cmd));
-+	/* future area is non-zero */
-+	cmd.future = 1;
-+	EXPECT_ERRNO(E2BIG, ioctl(self->fd, IOMMU_DESTROY, &cmd));
-+	/* Original command "works" */
-+	cmd.cmd.size = sizeof(cmd.cmd);
-+	EXPECT_ERRNO(ENOENT, ioctl(self->fd, IOMMU_DESTROY, &cmd));
-+	/* Short command fails */
-+	cmd.cmd.size = sizeof(cmd.cmd) - 1;
-+	EXPECT_ERRNO(EOPNOTSUPP, ioctl(self->fd, IOMMU_DESTROY, &cmd));
-+}
-+
-+TEST_F(iommufd, global_options)
-+{
-+	struct iommu_option cmd = {
-+		.size = sizeof(cmd),
-+		.option_id = IOMMU_OPTION_RLIMIT_MODE,
-+		.op = IOMMU_OPTION_OP_GET,
-+		.val64 = 1,
-+	};
-+
-+	cmd.option_id = IOMMU_OPTION_RLIMIT_MODE;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+	ASSERT_EQ(0, cmd.val64);
-+
-+	/* This requires root */
-+	cmd.op = IOMMU_OPTION_OP_SET;
-+	cmd.val64 = 1;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+	cmd.val64 = 2;
-+	EXPECT_ERRNO(EINVAL, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+
-+	cmd.op = IOMMU_OPTION_OP_GET;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+	ASSERT_EQ(1, cmd.val64);
-+
-+	cmd.op = IOMMU_OPTION_OP_SET;
-+	cmd.val64 = 0;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+
-+	cmd.op = IOMMU_OPTION_OP_GET;
-+	cmd.option_id = IOMMU_OPTION_HUGE_PAGES;
-+	EXPECT_ERRNO(ENOENT, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+	cmd.op = IOMMU_OPTION_OP_SET;
-+	EXPECT_ERRNO(ENOENT, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+}
-+
-+FIXTURE(iommufd_ioas)
-+{
-+	int fd;
-+	uint32_t ioas_id;
-+	uint32_t domain_id;
-+	uint64_t base_iova;
-+};
-+
-+FIXTURE_VARIANT(iommufd_ioas)
-+{
-+	unsigned int mock_domains;
-+	unsigned int memory_limit;
-+};
-+
-+FIXTURE_SETUP(iommufd_ioas)
-+{
-+	struct iommu_test_cmd memlimit_cmd = {
-+		.size = sizeof(memlimit_cmd),
-+		.op = IOMMU_TEST_OP_SET_TEMP_MEMORY_LIMIT,
-+		.memory_limit = { .limit = variant->memory_limit },
-+	};
-+	unsigned int i;
-+
-+	if (!variant->memory_limit)
-+		memlimit_cmd.memory_limit.limit = 65536;
-+
-+	self->fd = open("/dev/iommu", O_RDWR);
-+	ASSERT_NE(-1, self->fd);
-+	test_ioctl_ioas_alloc(&self->ioas_id);
-+
-+	ASSERT_EQ(0, ioctl(self->fd,
-+			   _IOMMU_TEST_CMD(IOMMU_TEST_OP_SET_TEMP_MEMORY_LIMIT),
-+			   &memlimit_cmd));
-+
-+	for (i = 0; i != variant->mock_domains; i++) {
-+		struct iommu_test_cmd test_cmd = {
-+			.size = sizeof(test_cmd),
-+			.op = IOMMU_TEST_OP_MOCK_DOMAIN,
-+			.id = self->ioas_id,
-+		};
-+
-+		ASSERT_EQ(0, ioctl(self->fd,
-+				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_MOCK_DOMAIN),
-+				   &test_cmd));
-+		EXPECT_NE(0, test_cmd.id);
-+		self->domain_id = test_cmd.id;
-+		self->base_iova = MOCK_APERTURE_START;
-+	}
-+}
-+
-+FIXTURE_TEARDOWN(iommufd_ioas)
-+{
-+	struct iommu_test_cmd memlimit_cmd = {
-+		.size = sizeof(memlimit_cmd),
-+		.op = IOMMU_TEST_OP_SET_TEMP_MEMORY_LIMIT,
-+		.memory_limit = { .limit = 65536 },
-+	};
-+
-+	EXPECT_EQ(0, ioctl(self->fd,
-+			   _IOMMU_TEST_CMD(IOMMU_TEST_OP_SET_TEMP_MEMORY_LIMIT),
-+			   &memlimit_cmd));
-+	teardown_iommufd(self->fd, _metadata);
-+}
-+
-+FIXTURE_VARIANT_ADD(iommufd_ioas, no_domain)
-+{
-+};
-+
-+FIXTURE_VARIANT_ADD(iommufd_ioas, mock_domain)
-+{
-+	.mock_domains = 1,
-+};
-+
-+FIXTURE_VARIANT_ADD(iommufd_ioas, two_mock_domain)
-+{
-+	.mock_domains = 2,
-+};
-+
-+FIXTURE_VARIANT_ADD(iommufd_ioas, mock_domain_limit)
-+{
-+	.mock_domains = 1,
-+	.memory_limit = 16,
-+};
-+
-+TEST_F(iommufd_ioas, ioas_auto_destroy)
-+{
-+}
-+
-+TEST_F(iommufd_ioas, ioas_destroy)
-+{
-+	if (self->domain_id) {
-+		/* IOAS cannot be freed while a domain is on it */
-+		EXPECT_ERRNO(EBUSY,
-+			     _test_ioctl_destroy(self->fd, self->ioas_id));
-+	} else {
-+		/* Can allocate and manually free an IOAS table */
-+		test_ioctl_destroy(self->ioas_id);
-+	}
-+}
-+
-+TEST_F(iommufd_ioas, ioas_area_destroy)
-+{
-+	/* Adding an area does not change ability to destroy */
-+	test_ioctl_ioas_map_fixed(buffer, PAGE_SIZE, self->base_iova);
-+	if (self->domain_id)
-+		EXPECT_ERRNO(EBUSY,
-+			     _test_ioctl_destroy(self->fd, self->ioas_id));
-+	else
-+		test_ioctl_destroy(self->ioas_id);
-+}
-+
-+TEST_F(iommufd_ioas, ioas_area_auto_destroy)
-+{
-+	int i;
-+
-+	/* Can allocate and automatically free an IOAS table with many areas */
-+	for (i = 0; i != 10; i++) {
-+		test_ioctl_ioas_map_fixed(buffer, PAGE_SIZE,
-+					  self->base_iova + i * PAGE_SIZE);
-+	}
-+}
-+
-+TEST_F(iommufd_ioas, area)
-+{
-+	int i;
-+
-+	/* Unmap fails if nothing is mapped */
-+	for (i = 0; i != 10; i++)
-+		test_enoent_ioctl_ioas_unmap(i * PAGE_SIZE, PAGE_SIZE);
-+
-+	/* Unmap works */
-+	for (i = 0; i != 10; i++)
-+		test_ioctl_ioas_map_fixed(buffer, PAGE_SIZE,
-+					  self->base_iova + i * PAGE_SIZE);
-+	for (i = 0; i != 10; i++)
-+		test_ioctl_ioas_unmap(self->base_iova + i * PAGE_SIZE,
-+				      PAGE_SIZE);
-+
-+	/* Split fails */
-+	test_ioctl_ioas_map_fixed(buffer, PAGE_SIZE * 2,
-+				  self->base_iova + 16 * PAGE_SIZE);
-+	test_enoent_ioctl_ioas_unmap(self->base_iova + 16 * PAGE_SIZE,
-+				     PAGE_SIZE);
-+	test_enoent_ioctl_ioas_unmap(self->base_iova + 17 * PAGE_SIZE,
-+				     PAGE_SIZE);
-+
-+	/* Over map fails */
-+	test_eaddrinuse_ioctl_ioas_map_fixed(buffer, PAGE_SIZE * 2,
-+					     self->base_iova + 16 * PAGE_SIZE);
-+	test_eaddrinuse_ioctl_ioas_map_fixed(buffer, PAGE_SIZE,
-+					     self->base_iova + 16 * PAGE_SIZE);
-+	test_eaddrinuse_ioctl_ioas_map_fixed(buffer, PAGE_SIZE,
-+					     self->base_iova + 17 * PAGE_SIZE);
-+	test_eaddrinuse_ioctl_ioas_map_fixed(buffer, PAGE_SIZE * 2,
-+					     self->base_iova + 15 * PAGE_SIZE);
-+	test_eaddrinuse_ioctl_ioas_map_fixed(buffer, PAGE_SIZE * 3,
-+					     self->base_iova + 15 * PAGE_SIZE);
-+
-+	/* unmap all works */
-+	test_ioctl_ioas_unmap(0, UINT64_MAX);
-+}
-+
-+TEST_F(iommufd_ioas, unmap_fully_contained_areas)
-+{
-+	uint64_t unmap_len;
-+	int i;
-+
-+	/* Give no_domain some space to rewind base_iova */
-+	self->base_iova += 4 * PAGE_SIZE;
-+
-+	for (i = 0; i != 4; i++)
-+		test_ioctl_ioas_map_fixed(buffer, 8 * PAGE_SIZE,
-+					  self->base_iova + i * 16 * PAGE_SIZE);
-+
-+	/* Unmap not fully contained area doesn't work */
-+	test_enoent_ioctl_ioas_unmap(self->base_iova - 4 * PAGE_SIZE,
-+				     8 * PAGE_SIZE);
-+	test_enoent_ioctl_ioas_unmap(self->base_iova + 3 * 16 * PAGE_SIZE +
-+					     8 * PAGE_SIZE - 4 * PAGE_SIZE,
-+				     8 * PAGE_SIZE);
-+
-+	/* Unmap fully contained areas works */
-+	ASSERT_EQ(0, _test_ioctl_ioas_unmap(self->fd, self->ioas_id,
-+					    self->base_iova - 4 * PAGE_SIZE,
-+					    3 * 16 * PAGE_SIZE + 8 * PAGE_SIZE +
-+						    4 * PAGE_SIZE,
-+					    &unmap_len));
-+	ASSERT_EQ(32 * PAGE_SIZE, unmap_len);
-+}
-+
-+TEST_F(iommufd_ioas, area_auto_iova)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_ADD_RESERVED,
-+		.id = self->ioas_id,
-+		.add_reserved = { .start = PAGE_SIZE * 4,
-+				  .length = PAGE_SIZE * 100 },
-+	};
-+	struct iommu_iova_range ranges[1] = {};
-+	struct iommu_ioas_allow_iovas allow_cmd = {
-+		.size = sizeof(allow_cmd),
-+		.ioas_id = self->ioas_id,
-+		.num_iovas = 1,
-+		.allowed_iovas = (uintptr_t)ranges,
-+	};
-+	__u64 iovas[10];
-+	int i;
-+
-+	/* Simple 4k pages */
-+	for (i = 0; i != 10; i++)
-+		test_ioctl_ioas_map(buffer, PAGE_SIZE, &iovas[i]);
-+	for (i = 0; i != 10; i++)
-+		test_ioctl_ioas_unmap(iovas[i], PAGE_SIZE);
-+
-+	/* Kernel automatically aligns IOVAs properly */
-+	for (i = 0; i != 10; i++) {
-+		size_t length = PAGE_SIZE * (i + 1);
-+
-+		if (self->domain_id) {
-+			test_ioctl_ioas_map(buffer, length, &iovas[i]);
-+		} else {
-+			test_ioctl_ioas_map((void *)(1UL << 31), length,
-+					    &iovas[i]);
-+		}
-+		EXPECT_EQ(0, iovas[i] % (1UL << (ffs(length) - 1)));
-+	}
-+	for (i = 0; i != 10; i++)
-+		test_ioctl_ioas_unmap(iovas[i], PAGE_SIZE * (i + 1));
-+
-+	/* Avoids a reserved region */
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ADD_RESERVED),
-+			&test_cmd));
-+	for (i = 0; i != 10; i++) {
-+		size_t length = PAGE_SIZE * (i + 1);
-+
-+		test_ioctl_ioas_map(buffer, length, &iovas[i]);
-+		EXPECT_EQ(0, iovas[i] % (1UL << (ffs(length) - 1)));
-+		EXPECT_EQ(false,
-+			  iovas[i] > test_cmd.add_reserved.start &&
-+				  iovas[i] <
-+					  test_cmd.add_reserved.start +
-+						  test_cmd.add_reserved.length);
-+	}
-+	for (i = 0; i != 10; i++)
-+		test_ioctl_ioas_unmap(iovas[i], PAGE_SIZE * (i + 1));
-+
-+	/* Allowed region intersects with a reserved region */
-+	ranges[0].start = PAGE_SIZE;
-+	ranges[0].last = PAGE_SIZE * 600;
-+	EXPECT_ERRNO(EADDRINUSE,
-+		     ioctl(self->fd, IOMMU_IOAS_ALLOW_IOVAS, &allow_cmd));
-+
-+	/* Allocate from an allowed region */
-+	if (self->domain_id) {
-+		ranges[0].start = MOCK_APERTURE_START + PAGE_SIZE;
-+		ranges[0].last = MOCK_APERTURE_START + PAGE_SIZE * 600 - 1;
-+	} else {
-+		ranges[0].start = PAGE_SIZE * 200;
-+		ranges[0].last = PAGE_SIZE * 600 - 1;
-+	}
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_ALLOW_IOVAS, &allow_cmd));
-+	for (i = 0; i != 10; i++) {
-+		size_t length = PAGE_SIZE * (i + 1);
-+
-+		test_ioctl_ioas_map(buffer, length, &iovas[i]);
-+		EXPECT_EQ(0, iovas[i] % (1UL << (ffs(length) - 1)));
-+		EXPECT_EQ(true, iovas[i] >= ranges[0].start);
-+		EXPECT_EQ(true, iovas[i] <= ranges[0].last);
-+		EXPECT_EQ(true, iovas[i] + length > ranges[0].start);
-+		EXPECT_EQ(true, iovas[i] + length <= ranges[0].last + 1);
-+	}
-+	for (i = 0; i != 10; i++)
-+		test_ioctl_ioas_unmap(iovas[i], PAGE_SIZE * (i + 1));
-+}
-+
-+TEST_F(iommufd_ioas, area_allowed)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_ADD_RESERVED,
-+		.id = self->ioas_id,
-+		.add_reserved = { .start = PAGE_SIZE * 4,
-+				  .length = PAGE_SIZE * 100 },
-+	};
-+	struct iommu_iova_range ranges[1] = {};
-+	struct iommu_ioas_allow_iovas allow_cmd = {
-+		.size = sizeof(allow_cmd),
-+		.ioas_id = self->ioas_id,
-+		.num_iovas = 1,
-+		.allowed_iovas = (uintptr_t)ranges,
-+	};
-+
-+	/* Reserved intersects an allowed */
-+	allow_cmd.num_iovas = 1;
-+	ranges[0].start = self->base_iova;
-+	ranges[0].last = ranges[0].start + PAGE_SIZE * 600;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_ALLOW_IOVAS, &allow_cmd));
-+	test_cmd.add_reserved.start = ranges[0].start + PAGE_SIZE;
-+	test_cmd.add_reserved.length = PAGE_SIZE;
-+	EXPECT_ERRNO(EADDRINUSE,
-+		     ioctl(self->fd,
-+			   _IOMMU_TEST_CMD(IOMMU_TEST_OP_ADD_RESERVED),
-+			   &test_cmd));
-+	allow_cmd.num_iovas = 0;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_ALLOW_IOVAS, &allow_cmd));
-+
-+	/* Allowed intersects a reserved */
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ADD_RESERVED),
-+			&test_cmd));
-+	allow_cmd.num_iovas = 1;
-+	ranges[0].start = self->base_iova;
-+	ranges[0].last = ranges[0].start + PAGE_SIZE * 600;
-+	EXPECT_ERRNO(EADDRINUSE,
-+		     ioctl(self->fd, IOMMU_IOAS_ALLOW_IOVAS, &allow_cmd));
-+}
-+
-+TEST_F(iommufd_ioas, copy_area)
-+{
-+	struct iommu_ioas_copy copy_cmd = {
-+		.size = sizeof(copy_cmd),
-+		.flags = IOMMU_IOAS_MAP_FIXED_IOVA,
-+		.dst_ioas_id = self->ioas_id,
-+		.src_ioas_id = self->ioas_id,
-+		.length = PAGE_SIZE,
-+	};
-+
-+	test_ioctl_ioas_map_fixed(buffer, PAGE_SIZE, self->base_iova);
-+
-+	/* Copy inside a single IOAS */
-+	copy_cmd.src_iova = self->base_iova;
-+	copy_cmd.dst_iova = self->base_iova + PAGE_SIZE;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_COPY, &copy_cmd));
-+
-+	/* Copy between IOAS's */
-+	copy_cmd.src_iova = self->base_iova;
-+	copy_cmd.dst_iova = 0;
-+	test_ioctl_ioas_alloc(&copy_cmd.dst_ioas_id);
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_COPY, &copy_cmd));
-+}
-+
-+TEST_F(iommufd_ioas, iova_ranges)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_ADD_RESERVED,
-+		.id = self->ioas_id,
-+		.add_reserved = { .start = PAGE_SIZE, .length = PAGE_SIZE },
-+	};
-+	struct iommu_iova_range *ranges = buffer;
-+	struct iommu_ioas_iova_ranges ranges_cmd = {
-+		.size = sizeof(ranges_cmd),
-+		.ioas_id = self->ioas_id,
-+		.num_iovas = BUFFER_SIZE / sizeof(*ranges),
-+		.allowed_iovas = (uint64_t)ranges,
-+	};
-+
-+	/* Range can be read */
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_IOVA_RANGES, &ranges_cmd));
-+	EXPECT_EQ(1, ranges_cmd.num_iovas);
-+	if (!self->domain_id) {
-+		EXPECT_EQ(0, ranges[0].start);
-+		EXPECT_EQ(SIZE_MAX, ranges[0].last);
-+		EXPECT_EQ(1, ranges_cmd.out_iova_alignment);
-+	} else {
-+		EXPECT_EQ(MOCK_APERTURE_START, ranges[0].start);
-+		EXPECT_EQ(MOCK_APERTURE_LAST, ranges[0].last);
-+		EXPECT_EQ(MOCK_PAGE_SIZE, ranges_cmd.out_iova_alignment);
-+	}
-+
-+	/* Buffer too small */
-+	memset(ranges, 0, BUFFER_SIZE);
-+	ranges_cmd.num_iovas = 0;
-+	EXPECT_ERRNO(EMSGSIZE,
-+		     ioctl(self->fd, IOMMU_IOAS_IOVA_RANGES, &ranges_cmd));
-+	EXPECT_EQ(1, ranges_cmd.num_iovas);
-+	EXPECT_EQ(0, ranges[0].start);
-+	EXPECT_EQ(0, ranges[0].last);
-+
-+	/* 2 ranges */
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ADD_RESERVED),
-+			&test_cmd));
-+	ranges_cmd.num_iovas = BUFFER_SIZE / sizeof(*ranges);
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_IOVA_RANGES, &ranges_cmd));
-+	if (!self->domain_id) {
-+		EXPECT_EQ(2, ranges_cmd.num_iovas);
-+		EXPECT_EQ(0, ranges[0].start);
-+		EXPECT_EQ(PAGE_SIZE - 1, ranges[0].last);
-+		EXPECT_EQ(PAGE_SIZE * 2, ranges[1].start);
-+		EXPECT_EQ(SIZE_MAX, ranges[1].last);
-+	} else {
-+		EXPECT_EQ(1, ranges_cmd.num_iovas);
-+		EXPECT_EQ(MOCK_APERTURE_START, ranges[0].start);
-+		EXPECT_EQ(MOCK_APERTURE_LAST, ranges[0].last);
-+	}
-+
-+	/* Buffer too small */
-+	memset(ranges, 0, BUFFER_SIZE);
-+	ranges_cmd.num_iovas = 1;
-+	if (!self->domain_id) {
-+		EXPECT_ERRNO(EMSGSIZE, ioctl(self->fd, IOMMU_IOAS_IOVA_RANGES,
-+					     &ranges_cmd));
-+		EXPECT_EQ(2, ranges_cmd.num_iovas);
-+		EXPECT_EQ(0, ranges[0].start);
-+		EXPECT_EQ(PAGE_SIZE - 1, ranges[0].last);
-+	} else {
-+		ASSERT_EQ(0,
-+			  ioctl(self->fd, IOMMU_IOAS_IOVA_RANGES, &ranges_cmd));
-+		EXPECT_EQ(1, ranges_cmd.num_iovas);
-+		EXPECT_EQ(MOCK_APERTURE_START, ranges[0].start);
-+		EXPECT_EQ(MOCK_APERTURE_LAST, ranges[0].last);
-+	}
-+	EXPECT_EQ(0, ranges[1].start);
-+	EXPECT_EQ(0, ranges[1].last);
-+}
-+
-+TEST_F(iommufd_ioas, access)
-+{
-+	struct iommu_test_cmd access_cmd = {
-+		.size = sizeof(access_cmd),
-+		.op = IOMMU_TEST_OP_ACCESS_PAGES,
-+		.access_pages = { .iova = MOCK_APERTURE_START,
-+				  .length = BUFFER_SIZE,
-+				  .uptr = (uintptr_t)buffer },
-+	};
-+	struct iommu_test_cmd mock_cmd = {
-+		.size = sizeof(mock_cmd),
-+		.op = IOMMU_TEST_OP_MOCK_DOMAIN,
-+		.id = self->ioas_id,
-+	};
-+	struct iommu_test_cmd check_map_cmd = {
-+		.size = sizeof(check_map_cmd),
-+		.op = IOMMU_TEST_OP_MD_CHECK_MAP,
-+		.check_map = { .iova = MOCK_APERTURE_START,
-+			       .length = BUFFER_SIZE,
-+			       .uptr = (uintptr_t)buffer },
-+	};
-+	uint32_t access_item_id;
-+
-+	test_cmd_create_access(self->ioas_id, &access_cmd.id);
-+
-+	/* Single map/unmap */
-+	test_ioctl_ioas_map_fixed(buffer, BUFFER_SIZE, MOCK_APERTURE_START);
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_PAGES),
-+			&access_cmd));
-+	test_cmd_destroy_access_item(
-+		access_cmd.id, access_cmd.access_pages.out_access_item_id);
-+
-+	/* Double user */
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_PAGES),
-+			&access_cmd));
-+	access_item_id = access_cmd.access_pages.out_access_item_id;
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_PAGES),
-+			&access_cmd));
-+	test_cmd_destroy_access_item(
-+		access_cmd.id, access_cmd.access_pages.out_access_item_id);
-+	test_cmd_destroy_access_item(access_cmd.id, access_item_id);
-+
-+	/* Add/remove a domain with a user */
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_PAGES),
-+			&access_cmd));
-+	ASSERT_EQ(0, ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_MOCK_DOMAIN),
-+			   &mock_cmd));
-+	check_map_cmd.id = mock_cmd.id;
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_MAP),
-+			&check_map_cmd));
-+
-+	test_ioctl_destroy(mock_cmd.mock_domain.device_id);
-+	test_ioctl_destroy(mock_cmd.id);
-+	test_cmd_destroy_access_item(
-+		access_cmd.id, access_cmd.access_pages.out_access_item_id);
-+	test_cmd_destroy_access(access_cmd.id);
-+}
-+
-+static void check_access_rw(struct __test_metadata *_metadata, int fd,
-+			    unsigned int access_id, uint64_t iova,
-+			    unsigned int def_flags)
-+{
-+	uint16_t tmp[32];
-+	struct iommu_test_cmd access_cmd = {
-+		.size = sizeof(access_cmd),
-+		.op = IOMMU_TEST_OP_ACCESS_RW,
-+		.id = access_id,
-+		.access_rw = { .uptr = (uintptr_t)tmp },
-+	};
-+	uint16_t *buffer16 = buffer;
-+	unsigned int i;
-+	void *tmp2;
-+
-+	for (i = 0; i != BUFFER_SIZE / sizeof(*buffer16); i++)
-+		buffer16[i] = rand();
-+
-+	for (access_cmd.access_rw.iova = iova + PAGE_SIZE - 50;
-+	     access_cmd.access_rw.iova < iova + PAGE_SIZE + 50;
-+	     access_cmd.access_rw.iova++) {
-+		for (access_cmd.access_rw.length = 1;
-+		     access_cmd.access_rw.length < sizeof(tmp);
-+		     access_cmd.access_rw.length++) {
-+			access_cmd.access_rw.flags = def_flags;
-+			ASSERT_EQ(0, ioctl(fd,
-+					   _IOMMU_TEST_CMD(
-+						   IOMMU_TEST_OP_ACCESS_RW),
-+					   &access_cmd));
-+			ASSERT_EQ(0,
-+				  memcmp(buffer + (access_cmd.access_rw.iova -
-+						   iova),
-+					 tmp, access_cmd.access_rw.length));
-+
-+			for (i = 0; i != ARRAY_SIZE(tmp); i++)
-+				tmp[i] = rand();
-+			access_cmd.access_rw.flags = def_flags |
-+						     MOCK_ACCESS_RW_WRITE;
-+			ASSERT_EQ(0, ioctl(fd,
-+					   _IOMMU_TEST_CMD(
-+						   IOMMU_TEST_OP_ACCESS_RW),
-+					   &access_cmd));
-+			ASSERT_EQ(0,
-+				  memcmp(buffer + (access_cmd.access_rw.iova -
-+						   iova),
-+					 tmp, access_cmd.access_rw.length));
-+		}
-+	}
-+
-+	/* Multi-page test */
-+	tmp2 = malloc(BUFFER_SIZE);
-+	ASSERT_NE(NULL, tmp2);
-+	access_cmd.access_rw.iova = iova;
-+	access_cmd.access_rw.length = BUFFER_SIZE;
-+	access_cmd.access_rw.flags = def_flags;
-+	access_cmd.access_rw.uptr = (uintptr_t)tmp2;
-+	ASSERT_EQ(0, ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_RW),
-+			   &access_cmd));
-+	ASSERT_EQ(0, memcmp(buffer, tmp2, access_cmd.access_rw.length));
-+	free(tmp2);
-+}
-+
-+TEST_F(iommufd_ioas, access_rw)
-+{
-+	__u32 access_id;
-+	__u64 iova;
-+
-+	test_cmd_create_access(self->ioas_id, &access_id);
-+	test_ioctl_ioas_map(buffer, BUFFER_SIZE, &iova);
-+	check_access_rw(_metadata, self->fd, access_id, iova, 0);
-+	check_access_rw(_metadata, self->fd, access_id, iova,
-+			MOCK_ACCESS_RW_SLOW_PATH);
-+	test_ioctl_ioas_unmap(iova, BUFFER_SIZE);
-+	test_cmd_destroy_access(access_id);
-+}
-+
-+TEST_F(iommufd_ioas, access_rw_unaligned)
-+{
-+	__u32 access_id;
-+	__u64 iova;
-+
-+	test_cmd_create_access(self->ioas_id, &access_id);
-+
-+	/* Unaligned pages */
-+	iova = self->base_iova + MOCK_PAGE_SIZE;
-+	test_ioctl_ioas_map_fixed(buffer, BUFFER_SIZE, iova);
-+	check_access_rw(_metadata, self->fd, access_id, iova, 0);
-+	test_ioctl_ioas_unmap(iova, BUFFER_SIZE);
-+	test_cmd_destroy_access(access_id);
-+}
-+
-+TEST_F(iommufd_ioas, fork_gone)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_MOCK_DOMAIN,
-+		.id = self->ioas_id,
-+	};
-+	__u32 access_id;
-+	pid_t child;
-+
-+	test_cmd_create_access(self->ioas_id, &access_id);
-+
-+	/* Create a mapping with a different mm */
-+	child = fork();
-+	if (!child) {
-+		test_ioctl_ioas_map_fixed(buffer, BUFFER_SIZE,
-+					  MOCK_APERTURE_START);
-+		exit(0);
-+	}
-+	ASSERT_NE(-1, child);
-+	ASSERT_EQ(child, waitpid(child, NULL, 0));
-+
-+	if (self->domain_id) {
-+		/*
-+		 * If a domain already existed then everything was pinned within
-+		 * the fork, so this copies from one domain to another.
-+		 */
-+		ASSERT_EQ(0, ioctl(self->fd,
-+				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_MOCK_DOMAIN),
-+				   &test_cmd));
-+		check_access_rw(_metadata, self->fd, access_id,
-+				MOCK_APERTURE_START, 0);
-+
-+	} else {
-+		/*
-+		 * Otherwise we need to actually pin pages which can't happen
-+		 * since the fork is gone.
-+		 */
-+		EXPECT_ERRNO(EFAULT,
-+			     ioctl(self->fd,
-+				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_MOCK_DOMAIN),
-+				   &test_cmd));
-+	}
-+
-+	test_cmd_destroy_access(access_id);
-+}
-+
-+TEST_F(iommufd_ioas, fork_present)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_MOCK_DOMAIN,
-+		.id = self->ioas_id,
-+	};
-+	__u32 access_id;
-+	int pipefds[2];
-+	uint64_t tmp;
-+	pid_t child;
-+	int efd;
-+
-+	test_cmd_create_access(self->ioas_id, &access_id);
-+
-+	ASSERT_EQ(0, pipe2(pipefds, O_CLOEXEC));
-+	efd = eventfd(0, EFD_CLOEXEC);
-+	ASSERT_NE(-1, efd);
-+
-+	/* Create a mapping with a different mm */
-+	child = fork();
-+	if (!child) {
-+		__u64 iova;
-+		uint64_t one = 1;
-+
-+		close(pipefds[1]);
-+		test_ioctl_ioas_map_fixed(buffer, BUFFER_SIZE,
-+					  MOCK_APERTURE_START);
-+		if (write(efd, &one, sizeof(one)) != sizeof(one))
-+			exit(100);
-+		if (read(pipefds[0], &iova, 1) != 1)
-+			exit(100);
-+		exit(0);
-+	}
-+	close(pipefds[0]);
-+	ASSERT_NE(-1, child);
-+	ASSERT_EQ(8, read(efd, &tmp, sizeof(tmp)));
-+
-+	/* Read pages from the remote process */
-+	ASSERT_EQ(0, ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_MOCK_DOMAIN),
-+			   &test_cmd));
-+	check_access_rw(_metadata, self->fd, access_id, MOCK_APERTURE_START, 0);
-+
-+	ASSERT_EQ(0, close(pipefds[1]));
-+	ASSERT_EQ(child, waitpid(child, NULL, 0));
-+
-+	test_cmd_destroy_access(access_id);
-+}
-+
-+TEST_F(iommufd_ioas, ioas_option_huge_pages)
-+{
-+	struct iommu_option cmd = {
-+		.size = sizeof(cmd),
-+		.option_id = IOMMU_OPTION_HUGE_PAGES,
-+		.op = IOMMU_OPTION_OP_GET,
-+		.val64 = 3,
-+		.object_id = self->ioas_id,
-+	};
-+
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+	ASSERT_EQ(1, cmd.val64);
-+
-+	cmd.op = IOMMU_OPTION_OP_SET;
-+	cmd.val64 = 0;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+
-+	cmd.op = IOMMU_OPTION_OP_GET;
-+	cmd.val64 = 3;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+	ASSERT_EQ(0, cmd.val64);
-+
-+	cmd.op = IOMMU_OPTION_OP_SET;
-+	cmd.val64 = 2;
-+	EXPECT_ERRNO(EINVAL, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+
-+	cmd.op = IOMMU_OPTION_OP_SET;
-+	cmd.val64 = 1;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+}
-+
-+FIXTURE(iommufd_mock_domain)
-+{
-+	int fd;
-+	uint32_t ioas_id;
-+	uint32_t domain_id;
-+	uint32_t domain_ids[2];
-+	int mmap_flags;
-+	size_t mmap_buf_size;
-+};
-+
-+FIXTURE_VARIANT(iommufd_mock_domain)
-+{
-+	unsigned int mock_domains;
-+	bool hugepages;
-+};
-+
-+FIXTURE_SETUP(iommufd_mock_domain)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_MOCK_DOMAIN,
-+	};
-+	unsigned int i;
-+
-+	self->fd = open("/dev/iommu", O_RDWR);
-+	ASSERT_NE(-1, self->fd);
-+	test_ioctl_ioas_alloc(&self->ioas_id);
-+
-+	ASSERT_GE(ARRAY_SIZE(self->domain_ids), variant->mock_domains);
-+
-+	for (i = 0; i != variant->mock_domains; i++) {
-+		test_cmd.id = self->ioas_id;
-+		ASSERT_EQ(0, ioctl(self->fd,
-+				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_MOCK_DOMAIN),
-+				   &test_cmd));
-+		EXPECT_NE(0, test_cmd.id);
-+		self->domain_ids[i] = test_cmd.id;
-+	}
-+	self->domain_id = self->domain_ids[0];
-+
-+	self->mmap_flags = MAP_SHARED | MAP_ANONYMOUS;
-+	self->mmap_buf_size = PAGE_SIZE * 8;
-+	if (variant->hugepages) {
-+		/*
-+		 * MAP_POPULATE will cause the kernel to fail mmap if THPs are
-+		 * not available.
-+		 */
-+		self->mmap_flags |= MAP_HUGETLB | MAP_POPULATE;
-+		self->mmap_buf_size = HUGEPAGE_SIZE * 2;
-+	}
-+}
-+
-+FIXTURE_TEARDOWN(iommufd_mock_domain)
-+{
-+	teardown_iommufd(self->fd, _metadata);
-+}
-+
-+FIXTURE_VARIANT_ADD(iommufd_mock_domain, one_domain)
-+{
-+	.mock_domains = 1,
-+	.hugepages = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(iommufd_mock_domain, two_domains)
-+{
-+	.mock_domains = 2,
-+	.hugepages = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(iommufd_mock_domain, one_domain_hugepage)
-+{
-+	.mock_domains = 1,
-+	.hugepages = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(iommufd_mock_domain, two_domains_hugepage)
-+{
-+	.mock_domains = 2,
-+	.hugepages = true,
-+};
-+
-+/* Have the kernel check that the user pages made it to the iommu_domain */
-+#define check_mock_iova(_ptr, _iova, _length)                                \
-+	({                                                                   \
-+		struct iommu_test_cmd check_map_cmd = {                      \
-+			.size = sizeof(check_map_cmd),                       \
-+			.op = IOMMU_TEST_OP_MD_CHECK_MAP,                    \
-+			.id = self->domain_id,                               \
-+			.check_map = { .iova = _iova,                        \
-+				       .length = _length,                    \
-+				       .uptr = (uintptr_t)(_ptr) },          \
-+		};                                                           \
-+		ASSERT_EQ(0,                                                 \
-+			  ioctl(self->fd,                                    \
-+				_IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_MAP), \
-+				&check_map_cmd));                            \
-+		if (self->domain_ids[1]) {                                   \
-+			check_map_cmd.id = self->domain_ids[1];              \
-+			ASSERT_EQ(0,                                         \
-+				  ioctl(self->fd,                            \
-+					_IOMMU_TEST_CMD(                     \
-+						IOMMU_TEST_OP_MD_CHECK_MAP), \
-+					&check_map_cmd));                    \
-+		}                                                            \
-+	})
-+
-+TEST_F(iommufd_mock_domain, basic)
-+{
-+	size_t buf_size = self->mmap_buf_size;
-+	uint8_t *buf;
-+	__u64 iova;
-+
-+	/* Simple one page map */
-+	test_ioctl_ioas_map(buffer, PAGE_SIZE, &iova);
-+	check_mock_iova(buffer, iova, PAGE_SIZE);
-+
-+	buf = mmap(0, buf_size, PROT_READ | PROT_WRITE, self->mmap_flags, -1,
-+		   0);
-+	ASSERT_NE(MAP_FAILED, buf);
-+
-+	/* EFAULT half way through mapping */
-+	ASSERT_EQ(0, munmap(buf + buf_size / 2, buf_size / 2));
-+	test_efault_ioctl_ioas_map(buf, buf_size, &iova);
-+
-+	/* EFAULT on first page */
-+	ASSERT_EQ(0, munmap(buf, buf_size / 2));
-+	test_efault_ioctl_ioas_map(buf, buf_size, &iova);
-+}
-+
-+TEST_F(iommufd_mock_domain, all_aligns)
-+{
-+	size_t test_step = variant->hugepages ? (self->mmap_buf_size / 16) :
-+						MOCK_PAGE_SIZE;
-+	size_t buf_size = self->mmap_buf_size;
-+	unsigned int start;
-+	unsigned int end;
-+	uint8_t *buf;
-+
-+	buf = mmap(0, buf_size, PROT_READ | PROT_WRITE, self->mmap_flags, -1,
-+		   0);
-+	ASSERT_NE(MAP_FAILED, buf);
-+	check_refs(buf, buf_size, 0);
-+
-+	/*
-+	 * Map every combination of page size and alignment within a big region,
-+	 * less for hugepage case as it takes so long to finish.
-+	 */
-+	for (start = 0; start < buf_size; start += test_step) {
-+		if (variant->hugepages)
-+			end = buf_size;
-+		else
-+			end = start + MOCK_PAGE_SIZE;
-+		for (; end < buf_size; end += MOCK_PAGE_SIZE) {
-+			size_t length = end - start;
-+			__u64 iova;
-+
-+			test_ioctl_ioas_map(buf + start, length, &iova);
-+			check_mock_iova(buf + start, iova, length);
-+			check_refs(buf + start / PAGE_SIZE * PAGE_SIZE,
-+				   end / PAGE_SIZE * PAGE_SIZE -
-+					   start / PAGE_SIZE * PAGE_SIZE,
-+				   1);
-+
-+			test_ioctl_ioas_unmap(iova, length);
-+		}
-+	}
-+	check_refs(buf, buf_size, 0);
-+	ASSERT_EQ(0, munmap(buf, buf_size));
-+}
-+
-+TEST_F(iommufd_mock_domain, all_aligns_copy)
-+{
-+	struct iommu_test_cmd add_mock_pt = {
-+		.size = sizeof(add_mock_pt),
-+		.op = IOMMU_TEST_OP_MOCK_DOMAIN,
-+	};
-+	size_t test_step = variant->hugepages ? self->mmap_buf_size / 16 :
-+						MOCK_PAGE_SIZE;
-+	size_t buf_size = self->mmap_buf_size;
-+	unsigned int start;
-+	unsigned int end;
-+	uint8_t *buf;
-+
-+	buf = mmap(0, buf_size, PROT_READ | PROT_WRITE, self->mmap_flags, -1,
-+		   0);
-+	ASSERT_NE(MAP_FAILED, buf);
-+	check_refs(buf, buf_size, 0);
-+
-+	/*
-+	 * Map every combination of page size and alignment within a big region,
-+	 * less for hugepage case as it takes so long to finish.
-+	 */
-+	for (start = 0; start < buf_size; start += test_step) {
-+		if (variant->hugepages)
-+			end = buf_size;
-+		else
-+			end = start + MOCK_PAGE_SIZE;
-+		for (; end < buf_size; end += MOCK_PAGE_SIZE) {
-+			size_t length = end - start;
-+			unsigned int old_id;
-+			__u64 iova;
-+
-+			test_ioctl_ioas_map(buf + start, length, &iova);
-+
-+			/* Add and destroy a domain while the area exists */
-+			add_mock_pt.id = self->ioas_id;
-+			ASSERT_EQ(0, ioctl(self->fd,
-+					   _IOMMU_TEST_CMD(
-+						   IOMMU_TEST_OP_MOCK_DOMAIN),
-+					   &add_mock_pt));
-+			old_id = self->domain_ids[1];
-+			self->domain_ids[1] = add_mock_pt.id;
-+
-+			check_mock_iova(buf + start, iova, length);
-+			check_refs(buf + start / PAGE_SIZE * PAGE_SIZE,
-+				   end / PAGE_SIZE * PAGE_SIZE -
-+					   start / PAGE_SIZE * PAGE_SIZE,
-+				   1);
-+
-+			test_ioctl_destroy(add_mock_pt.mock_domain.device_id);
-+			test_ioctl_destroy(add_mock_pt.id)
-+				self->domain_ids[1] = old_id;
-+
-+			test_ioctl_ioas_unmap(iova, length);
-+		}
-+	}
-+	check_refs(buf, buf_size, 0);
-+	ASSERT_EQ(0, munmap(buf, buf_size));
-+}
-+
-+TEST_F(iommufd_mock_domain, user_copy)
-+{
-+	struct iommu_test_cmd access_cmd = {
-+		.size = sizeof(access_cmd),
-+		.op = IOMMU_TEST_OP_ACCESS_PAGES,
-+		.access_pages = { .length = BUFFER_SIZE,
-+				  .uptr = (uintptr_t)buffer },
-+	};
-+	struct iommu_ioas_copy copy_cmd = {
-+		.size = sizeof(copy_cmd),
-+		.flags = IOMMU_IOAS_MAP_FIXED_IOVA,
-+		.dst_ioas_id = self->ioas_id,
-+		.dst_iova = MOCK_APERTURE_START,
-+		.length = BUFFER_SIZE,
-+	};
-+	unsigned int ioas_id;
-+
-+	/* Pin the pages in an IOAS with no domains then copy to an IOAS with domains */
-+	test_ioctl_ioas_alloc(&ioas_id);
-+	test_ioctl_ioas_map_id(ioas_id, buffer, BUFFER_SIZE,
-+			       &copy_cmd.src_iova);
-+
-+	test_cmd_create_access(ioas_id, &access_cmd.id);
-+
-+	access_cmd.access_pages.iova = copy_cmd.src_iova;
-+	ASSERT_EQ(0,
-+		  ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_PAGES),
-+			&access_cmd));
-+	copy_cmd.src_ioas_id = ioas_id;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_IOAS_COPY, &copy_cmd));
-+	check_mock_iova(buffer, MOCK_APERTURE_START, BUFFER_SIZE);
-+
-+	test_cmd_destroy_access_item(
-+		access_cmd.id, access_cmd.access_pages.out_access_item_id);
-+	test_cmd_destroy_access(access_cmd.id) test_ioctl_destroy(ioas_id);
-+}
-+
-+/* VFIO compatibility IOCTLs */
-+
-+TEST_F(iommufd, simple_ioctls)
-+{
-+	ASSERT_EQ(VFIO_API_VERSION, ioctl(self->fd, VFIO_GET_API_VERSION));
-+	ASSERT_EQ(1, ioctl(self->fd, VFIO_CHECK_EXTENSION, VFIO_TYPE1v2_IOMMU));
-+}
-+
-+TEST_F(iommufd, unmap_cmd)
-+{
-+	struct vfio_iommu_type1_dma_unmap unmap_cmd = {
-+		.iova = MOCK_APERTURE_START,
-+		.size = PAGE_SIZE,
-+	};
-+
-+	unmap_cmd.argsz = 1;
-+	EXPECT_ERRNO(EINVAL, ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA, &unmap_cmd));
-+
-+	unmap_cmd.argsz = sizeof(unmap_cmd);
-+	unmap_cmd.flags = 1 << 31;
-+	EXPECT_ERRNO(EINVAL, ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA, &unmap_cmd));
-+
-+	unmap_cmd.flags = 0;
-+	EXPECT_ERRNO(ENODEV, ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA, &unmap_cmd));
-+}
-+
-+TEST_F(iommufd, map_cmd)
-+{
-+	struct vfio_iommu_type1_dma_map map_cmd = {
-+		.iova = MOCK_APERTURE_START,
-+		.size = PAGE_SIZE,
-+		.vaddr = (__u64)buffer,
-+	};
-+
-+	map_cmd.argsz = 1;
-+	EXPECT_ERRNO(EINVAL, ioctl(self->fd, VFIO_IOMMU_MAP_DMA, &map_cmd));
-+
-+	map_cmd.argsz = sizeof(map_cmd);
-+	map_cmd.flags = 1 << 31;
-+	EXPECT_ERRNO(EINVAL, ioctl(self->fd, VFIO_IOMMU_MAP_DMA, &map_cmd));
-+
-+	/* Requires a domain to be attached */
-+	map_cmd.flags = VFIO_DMA_MAP_FLAG_READ | VFIO_DMA_MAP_FLAG_WRITE;
-+	EXPECT_ERRNO(ENODEV, ioctl(self->fd, VFIO_IOMMU_MAP_DMA, &map_cmd));
-+}
-+
-+TEST_F(iommufd, info_cmd)
-+{
-+	struct vfio_iommu_type1_info info_cmd = {};
-+
-+	/* Invalid argsz */
-+	info_cmd.argsz = 1;
-+	EXPECT_ERRNO(EINVAL, ioctl(self->fd, VFIO_IOMMU_GET_INFO, &info_cmd));
-+
-+	info_cmd.argsz = sizeof(info_cmd);
-+	EXPECT_ERRNO(ENODEV, ioctl(self->fd, VFIO_IOMMU_GET_INFO, &info_cmd));
-+}
-+
-+TEST_F(iommufd, set_iommu_cmd)
-+{
-+	/* Requires a domain to be attached */
-+	EXPECT_ERRNO(ENODEV,
-+		     ioctl(self->fd, VFIO_SET_IOMMU, VFIO_TYPE1v2_IOMMU));
-+	EXPECT_ERRNO(ENODEV, ioctl(self->fd, VFIO_SET_IOMMU, VFIO_TYPE1_IOMMU));
-+}
-+
-+TEST_F(iommufd, vfio_ioas)
-+{
-+	struct iommu_vfio_ioas vfio_ioas_cmd = {
-+		.size = sizeof(vfio_ioas_cmd),
-+		.op = IOMMU_VFIO_IOAS_GET,
-+	};
-+	__u32 ioas_id;
-+
-+	/* ENODEV if there is no compat ioas */
-+	EXPECT_ERRNO(ENODEV, ioctl(self->fd, IOMMU_VFIO_IOAS, &vfio_ioas_cmd));
-+
-+	/* Invalid id for set */
-+	vfio_ioas_cmd.op = IOMMU_VFIO_IOAS_SET;
-+	EXPECT_ERRNO(ENOENT, ioctl(self->fd, IOMMU_VFIO_IOAS, &vfio_ioas_cmd));
-+
-+	/* Valid id for set*/
-+	test_ioctl_ioas_alloc(&ioas_id);
-+	vfio_ioas_cmd.ioas_id = ioas_id;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_VFIO_IOAS, &vfio_ioas_cmd));
-+
-+	/* Same id comes back from get */
-+	vfio_ioas_cmd.op = IOMMU_VFIO_IOAS_GET;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_VFIO_IOAS, &vfio_ioas_cmd));
-+	ASSERT_EQ(ioas_id, vfio_ioas_cmd.ioas_id);
-+
-+	/* Clear works */
-+	vfio_ioas_cmd.op = IOMMU_VFIO_IOAS_CLEAR;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_VFIO_IOAS, &vfio_ioas_cmd));
-+	vfio_ioas_cmd.op = IOMMU_VFIO_IOAS_GET;
-+	EXPECT_ERRNO(ENODEV, ioctl(self->fd, IOMMU_VFIO_IOAS, &vfio_ioas_cmd));
-+}
-+
-+FIXTURE(vfio_compat_mock_domain)
-+{
-+	int fd;
-+	uint32_t ioas_id;
-+};
-+
-+FIXTURE_VARIANT(vfio_compat_mock_domain)
-+{
-+	unsigned int version;
-+};
-+
-+FIXTURE_SETUP(vfio_compat_mock_domain)
-+{
-+	struct iommu_test_cmd test_cmd = {
-+		.size = sizeof(test_cmd),
-+		.op = IOMMU_TEST_OP_MOCK_DOMAIN,
-+	};
-+	struct iommu_vfio_ioas vfio_ioas_cmd = {
-+		.size = sizeof(vfio_ioas_cmd),
-+		.op = IOMMU_VFIO_IOAS_SET,
-+	};
-+
-+	self->fd = open("/dev/iommu", O_RDWR);
-+	ASSERT_NE(-1, self->fd);
-+
-+	/* Create what VFIO would consider a group */
-+	test_ioctl_ioas_alloc(&self->ioas_id);
-+	test_cmd.id = self->ioas_id;
-+	ASSERT_EQ(0, ioctl(self->fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_MOCK_DOMAIN),
-+			   &test_cmd));
-+	EXPECT_NE(0, test_cmd.id);
-+
-+	/* Attach it to the vfio compat */
-+	vfio_ioas_cmd.ioas_id = self->ioas_id;
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_VFIO_IOAS, &vfio_ioas_cmd));
-+	ASSERT_EQ(0, ioctl(self->fd, VFIO_SET_IOMMU, variant->version));
-+}
-+
-+FIXTURE_TEARDOWN(vfio_compat_mock_domain)
-+{
-+	teardown_iommufd(self->fd, _metadata);
-+}
-+
-+FIXTURE_VARIANT_ADD(vfio_compat_mock_domain, Ver1v2)
-+{
-+	.version = VFIO_TYPE1v2_IOMMU,
-+};
-+
-+FIXTURE_VARIANT_ADD(vfio_compat_mock_domain, Ver1v0)
-+{
-+	.version = VFIO_TYPE1_IOMMU,
-+};
-+
-+TEST_F(vfio_compat_mock_domain, simple_close)
-+{
-+}
-+
-+TEST_F(vfio_compat_mock_domain, option_huge_pages)
-+{
-+	struct iommu_option cmd = {
-+		.size = sizeof(cmd),
-+		.option_id = IOMMU_OPTION_HUGE_PAGES,
-+		.op = IOMMU_OPTION_OP_GET,
-+		.val64 = 3,
-+		.object_id = self->ioas_id,
-+	};
-+
-+	ASSERT_EQ(0, ioctl(self->fd, IOMMU_OPTION, &cmd));
-+	if (variant->version == VFIO_TYPE1_IOMMU) {
-+		ASSERT_EQ(0, cmd.val64);
-+	} else {
-+		ASSERT_EQ(1, cmd.val64);
-+	}
-+}
-+
-+/*
-+ * Execute an ioctl command stored in buffer and check that the result does not
-+ * overflow memory.
-+ */
-+static bool is_filled(const void *buf, uint8_t c, size_t len)
-+{
-+	const uint8_t *cbuf = buf;
-+
-+	for (; len; cbuf++, len--)
-+		if (*cbuf != c)
-+			return false;
-+	return true;
-+}
-+
-+#define ioctl_check_buf(fd, cmd)                                         \
-+	({                                                               \
-+		size_t _cmd_len = *(__u32 *)buffer;                      \
-+									 \
-+		memset(buffer + _cmd_len, 0xAA, BUFFER_SIZE - _cmd_len); \
-+		ASSERT_EQ(0, ioctl(fd, cmd, buffer));                    \
-+		ASSERT_EQ(true, is_filled(buffer + _cmd_len, 0xAA,       \
-+					  BUFFER_SIZE - _cmd_len));      \
-+	})
-+
-+static void check_vfio_info_cap_chain(struct __test_metadata *_metadata,
-+				      struct vfio_iommu_type1_info *info_cmd)
-+{
-+	const struct vfio_info_cap_header *cap;
-+
-+	ASSERT_GE(info_cmd->argsz, info_cmd->cap_offset + sizeof(*cap));
-+	cap = buffer + info_cmd->cap_offset;
-+	while (true) {
-+		size_t cap_size;
-+
-+		if (cap->next)
-+			cap_size = (buffer + cap->next) - (void *)cap;
-+		else
-+			cap_size = (buffer + info_cmd->argsz) - (void *)cap;
-+
-+		switch (cap->id) {
-+		case VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE: {
-+			struct vfio_iommu_type1_info_cap_iova_range *data =
-+				(void *)cap;
-+
-+			ASSERT_EQ(1, data->header.version);
-+			ASSERT_EQ(1, data->nr_iovas);
-+			EXPECT_EQ(MOCK_APERTURE_START,
-+				  data->iova_ranges[0].start);
-+			EXPECT_EQ(MOCK_APERTURE_LAST, data->iova_ranges[0].end);
-+			break;
-+		}
-+		case VFIO_IOMMU_TYPE1_INFO_DMA_AVAIL: {
-+			struct vfio_iommu_type1_info_dma_avail *data =
-+				(void *)cap;
-+
-+			ASSERT_EQ(1, data->header.version);
-+			ASSERT_EQ(sizeof(*data), cap_size);
-+			break;
-+		}
-+		default:
-+			ASSERT_EQ(false, true);
-+			break;
-+		}
-+		if (!cap->next)
-+			break;
-+
-+		ASSERT_GE(info_cmd->argsz, cap->next + sizeof(*cap));
-+		ASSERT_GE(buffer + cap->next, (void *)cap);
-+		cap = buffer + cap->next;
-+	}
-+}
-+
-+TEST_F(vfio_compat_mock_domain, get_info)
-+{
-+	struct vfio_iommu_type1_info *info_cmd = buffer;
-+	unsigned int i;
-+	size_t caplen;
-+
-+	/* Pre-cap ABI */
-+	*info_cmd = (struct vfio_iommu_type1_info){
-+		.argsz = offsetof(struct vfio_iommu_type1_info, cap_offset),
-+	};
-+	ioctl_check_buf(self->fd, VFIO_IOMMU_GET_INFO);
-+	ASSERT_NE(0, info_cmd->iova_pgsizes);
-+	ASSERT_EQ(VFIO_IOMMU_INFO_PGSIZES | VFIO_IOMMU_INFO_CAPS,
-+		  info_cmd->flags);
-+
-+	/* Read the cap chain size */
-+	*info_cmd = (struct vfio_iommu_type1_info){
-+		.argsz = sizeof(*info_cmd),
-+	};
-+	ioctl_check_buf(self->fd, VFIO_IOMMU_GET_INFO);
-+	ASSERT_NE(0, info_cmd->iova_pgsizes);
-+	ASSERT_EQ(VFIO_IOMMU_INFO_PGSIZES | VFIO_IOMMU_INFO_CAPS,
-+		  info_cmd->flags);
-+	ASSERT_EQ(0, info_cmd->cap_offset);
-+	ASSERT_LT(sizeof(*info_cmd), info_cmd->argsz);
-+
-+	/* Read the caps, kernel should never create a corrupted caps */
-+	caplen = info_cmd->argsz;
-+	for (i = sizeof(*info_cmd); i < caplen; i++) {
-+		*info_cmd = (struct vfio_iommu_type1_info){
-+			.argsz = i,
-+		};
-+		ioctl_check_buf(self->fd, VFIO_IOMMU_GET_INFO);
-+		ASSERT_EQ(VFIO_IOMMU_INFO_PGSIZES | VFIO_IOMMU_INFO_CAPS,
-+			  info_cmd->flags);
-+		if (!info_cmd->cap_offset)
-+			continue;
-+		check_vfio_info_cap_chain(_metadata, info_cmd);
-+	}
-+}
-+
-+static void shuffle_array(unsigned long *array, size_t nelms)
-+{
-+	unsigned int i;
-+
-+	/* Shuffle */
-+	for (i = 0; i != nelms; i++) {
-+		unsigned long tmp = array[i];
-+		unsigned int other = rand() % (nelms - i);
-+
-+		array[i] = array[other];
-+		array[other] = tmp;
-+	}
-+}
-+
-+TEST_F(vfio_compat_mock_domain, map)
-+{
-+	struct vfio_iommu_type1_dma_map map_cmd = {
-+		.argsz = sizeof(map_cmd),
-+		.flags = VFIO_DMA_MAP_FLAG_READ | VFIO_DMA_MAP_FLAG_WRITE,
-+		.vaddr = (uintptr_t)buffer,
-+		.size = BUFFER_SIZE,
-+		.iova = MOCK_APERTURE_START,
-+	};
-+	struct vfio_iommu_type1_dma_unmap unmap_cmd = {
-+		.argsz = sizeof(unmap_cmd),
-+		.size = BUFFER_SIZE,
-+		.iova = MOCK_APERTURE_START,
-+	};
-+	unsigned long pages_iova[BUFFER_SIZE / PAGE_SIZE];
-+	unsigned int i;
-+
-+	/* Simple map/unmap */
-+	ASSERT_EQ(0, ioctl(self->fd, VFIO_IOMMU_MAP_DMA, &map_cmd));
-+	ASSERT_EQ(0, ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA, &unmap_cmd));
-+	ASSERT_EQ(BUFFER_SIZE, unmap_cmd.size);
-+
-+	/* UNMAP_FLAG_ALL requres 0 iova/size */
-+	ASSERT_EQ(0, ioctl(self->fd, VFIO_IOMMU_MAP_DMA, &map_cmd));
-+	unmap_cmd.flags = VFIO_DMA_UNMAP_FLAG_ALL;
-+	EXPECT_ERRNO(EINVAL, ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA, &unmap_cmd));
-+
-+	unmap_cmd.iova = 0;
-+	unmap_cmd.size = 0;
-+	ASSERT_EQ(0, ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA, &unmap_cmd));
-+	ASSERT_EQ(BUFFER_SIZE, unmap_cmd.size);
-+
-+	/* Small pages */
-+	for (i = 0; i != ARRAY_SIZE(pages_iova); i++) {
-+		map_cmd.iova = pages_iova[i] =
-+			MOCK_APERTURE_START + i * PAGE_SIZE;
-+		map_cmd.vaddr = (uintptr_t)buffer + i * PAGE_SIZE;
-+		map_cmd.size = PAGE_SIZE;
-+		ASSERT_EQ(0, ioctl(self->fd, VFIO_IOMMU_MAP_DMA, &map_cmd));
-+	}
-+	shuffle_array(pages_iova, ARRAY_SIZE(pages_iova));
-+
-+	unmap_cmd.flags = 0;
-+	unmap_cmd.size = PAGE_SIZE;
-+	for (i = 0; i != ARRAY_SIZE(pages_iova); i++) {
-+		unmap_cmd.iova = pages_iova[i];
-+		ASSERT_EQ(0, ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA, &unmap_cmd));
-+	}
-+}
-+
-+TEST_F(vfio_compat_mock_domain, huge_map)
-+{
-+	size_t buf_size = HUGEPAGE_SIZE * 2;
-+	struct vfio_iommu_type1_dma_map map_cmd = {
-+		.argsz = sizeof(map_cmd),
-+		.flags = VFIO_DMA_MAP_FLAG_READ | VFIO_DMA_MAP_FLAG_WRITE,
-+		.size = buf_size,
-+		.iova = MOCK_APERTURE_START,
-+	};
-+	struct vfio_iommu_type1_dma_unmap unmap_cmd = {
-+		.argsz = sizeof(unmap_cmd),
-+	};
-+	unsigned long pages_iova[16];
-+	unsigned int i;
-+	void *buf;
-+
-+	/* Test huge pages and splitting */
-+	buf = mmap(0, buf_size, PROT_READ | PROT_WRITE,
-+		   MAP_SHARED | MAP_ANONYMOUS | MAP_HUGETLB | MAP_POPULATE, -1,
-+		   0);
-+	ASSERT_NE(MAP_FAILED, buf);
-+	map_cmd.vaddr = (uintptr_t)buf;
-+	ASSERT_EQ(0, ioctl(self->fd, VFIO_IOMMU_MAP_DMA, &map_cmd));
-+
-+	unmap_cmd.size = buf_size / ARRAY_SIZE(pages_iova);
-+	for (i = 0; i != ARRAY_SIZE(pages_iova); i++)
-+		pages_iova[i] = MOCK_APERTURE_START + (i * unmap_cmd.size);
-+	shuffle_array(pages_iova, ARRAY_SIZE(pages_iova));
-+
-+	/* type1 mode can cut up larger mappings, type1v2 always fails */
-+	for (i = 0; i != ARRAY_SIZE(pages_iova); i++) {
-+		unmap_cmd.iova = pages_iova[i];
-+		unmap_cmd.size = buf_size / ARRAY_SIZE(pages_iova);
-+		if (variant->version == VFIO_TYPE1_IOMMU) {
-+			ASSERT_EQ(0, ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA,
-+					   &unmap_cmd));
-+		} else {
-+			EXPECT_ERRNO(ENOENT,
-+				     ioctl(self->fd, VFIO_IOMMU_UNMAP_DMA,
-+					   &unmap_cmd));
-+		}
-+	}
-+}
-+
-+TEST_HARNESS_MAIN
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   m68k-linux-ld: mm/slub.o: in function `slab_add_kunit_errors':
+>> slub.c:(.text+0x1262): undefined reference to `kunit_running'
+
 -- 
-2.38.0
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 
+--UaFl6BFhQ45HgFRm
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
+
+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
+vSqhIG2O/ws8FV/CDDgEAA==
+
+--UaFl6BFhQ45HgFRm--
