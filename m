@@ -2,300 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC2F60C391
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 07:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E3D60C4B2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 09:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiJYF7A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 01:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
+        id S229604AbiJYHFn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 03:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJYF67 (ORCPT
+        with ESMTP id S231213AbiJYHFm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 01:58:59 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539CCCAE73
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Oct 2022 22:58:58 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id m66-20020a257145000000b006c23949ec98so11068834ybc.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Oct 2022 22:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=43JnGaSmU9P6ZBvWvLMP1pUgKjTWqRmMdR5LIqZN3qg=;
-        b=S4FIphM9prlXum6vIeOxIroffCESQSRcZaH1GLxXGbFjzWXf5cVkCAX/ZJI4yvFKTT
-         xDPrNs3PZNw5pJwiU0acuDKRIgeX6NgSLdt4cs+fet+U64zGJ4m1heu32GvM7uFo6r9g
-         PtCAUcB1+VklxsDRWWP7SuaKsincZvhUrpcbFQxZEGbxk2Pt2gf5f78DMqPnnc6kpSGy
-         0UQfNnzOcWLBFz2rxFs4CFlV9EZW+4ht16MqF7aZ82uiSafHSch+X7Z3WkJvEX5PR7sx
-         H26rXP+ptqi38PrmryrSLFhVrcOSBsELuhBKJMj89iMhaRTDAAS+VhMWjT3qVQKGOLqE
-         zNpg==
+        Tue, 25 Oct 2022 03:05:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D115D4A112
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 00:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666681539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fe1WZpWI0+WNHlpXUbrxZSAOPfSw/3F9thWPXoPIAVs=;
+        b=AtGwgNSDpIm6obnesW0L75VfF3/OFXAOFVlnGfOlzJwPclzWBj9C642Ii5LsyTmP4n4Dru
+        fLFmO7yAMl5rRXEYbCD7ehSCq5t8ixS+yi5LqHMWt29BWsjji6YpigbatbPur4npfOzw3S
+        qP+yE7iQTftUUtIiMVeXfNG1od7uz9c=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-626-OpTFLyGEOJGMFOVoZXXImQ-1; Tue, 25 Oct 2022 03:05:37 -0400
+X-MC-Unique: OpTFLyGEOJGMFOVoZXXImQ-1
+Received: by mail-wr1-f72.google.com with SMTP id c18-20020adfa312000000b002364fabf2ceso4241970wrb.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 00:05:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=43JnGaSmU9P6ZBvWvLMP1pUgKjTWqRmMdR5LIqZN3qg=;
-        b=V73YUDhfGxwEDk0j2KN00tvq5oGePz7EGZ1kR4e2goqD2H0wvePe6T/8QVR1fJkH8S
-         i07JOW1tcoRhky7O/8RPMN4vVuEOOzwveJh2YNlwHh3VKG+2VO1CGTTXtYxBkZKM2M6P
-         avUeNR+SPOsjWkjhxzRP/lxcyVW0bYkjN+JKpPDxxKh0M7/SZIGJS/3C0J9ts2pWGyz2
-         FPkM0RKTi98ctnO4kc/fx00KLsFBDsuEISKZQyvfa7YDBPEplgbsHhQgAXQjmMm7PU1D
-         0vkKlHqtboKGPPwTGF2AxVW4kBtXNc6KuZ2DdQI96ZzLsgzAzeVBj7ouKE3mc9oDtlxv
-         Q3bA==
-X-Gm-Message-State: ACrzQf0nx50RIUM7luQGZpKBGbEiOaEvAtBzW42SW8yZfb/WXsAuo/Dt
-        I+uSwowj+hXU0XdJstdr65eiRLHum80OBw==
-X-Google-Smtp-Source: AMsMyM5gXQvSYyq6afqFjQhWPqDHR2nuVKuscFng+2bBfPawO5G4cc1QmSa2SlQS5PeHLKJfYvBFnGMRYmpJVQ==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:9c01:0:b0:6af:4a89:26b3 with SMTP id
- c1-20020a259c01000000b006af4a8926b3mr34164356ybo.190.1666677537630; Mon, 24
- Oct 2022 22:58:57 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 13:58:45 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221025055844.1231592-1-davidgow@google.com>
-Subject: [PATCH] Documentation: kunit: Remove redundant 'tips.rst' page
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fe1WZpWI0+WNHlpXUbrxZSAOPfSw/3F9thWPXoPIAVs=;
+        b=ZMGwhJYyequ1uvhsqg9apF26vC5mAAyvyXxObsfQIyRsa3iUa/k3KXdjmL6DyUdPEw
+         g7IbZIku6rDHmjfuw2yiOq4al53lmXGkdRpwenEgPULWCKtXukZoZhdoAtsFkwfOjhIA
+         XE7Ece6f6eXwIbF0rlC+yr2gvOQHK+riQJFY73h9kgGY+Y2AWrJWkanJms5quVeMNcQD
+         kqpnL5K0qPt4Ytc8Fo2DLxYFofMaVCm9+vw0fZq3LnVwLJUtJXT0inbORmdOQHDxDdrD
+         l6oZtpMwS0wyE03BisEOCNXQe3Z6oysR3Nw18Kv4Cy+ywDV7izkZknJ+OGA4sbn0Efh9
+         hoAQ==
+X-Gm-Message-State: ACrzQf3j+j/noACqkuMsi6tAbFMpCFmN9QpDvPLjzvLuDj5EWoPubqrQ
+        jasGQhoXIrRsJcoJic29tYn8AeNXam1pEGDaIkLhVrI4FQLbpV6Jit5pjpRhLirpAg6BFBBucfD
+        EJqJMPX/DhCxEZnB6f9tnflNQyidC
+X-Received: by 2002:a5d:6d8a:0:b0:236:6123:a8a5 with SMTP id l10-20020a5d6d8a000000b002366123a8a5mr9839564wrs.229.1666681536437;
+        Tue, 25 Oct 2022 00:05:36 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6vGN8RwMdOloicelrC6hCDmVpDUnXTSURyJhiGcLjlRN3taSS7ZSJOzY1mCKKolD0ZTIX/qA==
+X-Received: by 2002:a5d:6d8a:0:b0:236:6123:a8a5 with SMTP id l10-20020a5d6d8a000000b002366123a8a5mr9839535wrs.229.1666681536103;
+        Tue, 25 Oct 2022 00:05:36 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:4e00:3efc:1c60:bc60:f557? (p200300cbc70b4e003efc1c60bc60f557.dip0.t-ipconnect.de. [2003:cb:c70b:4e00:3efc:1c60:bc60:f557])
+        by smtp.gmail.com with ESMTPSA id h20-20020a1ccc14000000b003b492753826sm1686070wmb.43.2022.10.25.00.05.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 00:05:35 -0700 (PDT)
+Message-ID: <b9e88ddf-e0ac-ce81-d6b4-caf70772c455@redhat.com>
+Date:   Tue, 25 Oct 2022 09:05:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v1 1/7] selftests/vm: anon_cow: test COW handling of
+ anonymous memory
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mike Rapoport <rppt@kernel.org>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>
+References: <20220927110120.106906-1-david@redhat.com>
+ <20220927110120.106906-2-david@redhat.com> <Y1bD+8CMzlqkbPwU@macondo>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y1bD+8CMzlqkbPwU@macondo>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The contents of 'tips.rst' was included in 'usage.rst' way back in
-commit 953574390634 ("Documentation: KUnit: Rework writing page to focus on writing tests"),
-but the tips page remained behind as well.
+>> +	/* See if we still read the old values via the pipe. */
+>> +	for (total = 0; total < transferred; total += cur) {
+>> +		cur = read(fds[0], new + total, transferred - total);
+>> +		if (cur < 0)
+> 
+> Hi David,
+> I was looking at some coccinelle reports for linux-next and
+> saw the following warning for this comparison:
+> 
+>    WARNING: Unsigned expression compared with zero: cur < 0
+> 
+> I think 'cur' needs to be of type 'ssize_t' for this comparison to work.
+> 
+> The same warning is reported for the variable 'transferred' above, and
+> also for do_test_iouring() and do_test_vmsplice_in_parent() in
+> "selftests/vm: anon_cow: add liburing test cases".
+> 
 
-Therefore, delete 'tips.rst'
+Thanks for reporting! Indeed, we need a signed value.
 
-While I regret breaking any links to 'tips' which might exist
-externally, it's confusing to have two subtly different versions of the
-same content around.
-
-Signed-off-by: David Gow <davidgow@google.com>
----
- Documentation/dev-tools/kunit/index.rst |   1 -
- Documentation/dev-tools/kunit/tips.rst  | 190 ------------------------
- 2 files changed, 191 deletions(-)
- delete mode 100644 Documentation/dev-tools/kunit/tips.rst
-
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-index f5d13f1d37be..d5629817cd72 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -16,7 +16,6 @@ KUnit - Linux Kernel Unit Testing
- 	api/index
- 	style
- 	faq
--	tips
- 	running_tips
- 
- This section details the kernel unit testing framework.
-diff --git a/Documentation/dev-tools/kunit/tips.rst b/Documentation/dev-tools/kunit/tips.rst
-deleted file mode 100644
-index 492d2ded2f5a..000000000000
---- a/Documentation/dev-tools/kunit/tips.rst
-+++ /dev/null
-@@ -1,190 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--============================
--Tips For Writing KUnit Tests
--============================
--
--Exiting early on failed expectations
--------------------------------------
--
--``KUNIT_EXPECT_EQ`` and friends will mark the test as failed and continue
--execution.  In some cases, it's unsafe to continue and you can use the
--``KUNIT_ASSERT`` variant to exit on failure.
--
--.. code-block:: c
--
--	void example_test_user_alloc_function(struct kunit *test)
--	{
--		void *object = alloc_some_object_for_me();
--
--		/* Make sure we got a valid pointer back. */
--		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, object);
--		do_something_with_object(object);
--	}
--
--Allocating memory
-------------------
--
--Where you would use ``kzalloc``, you should prefer ``kunit_kzalloc`` instead.
--KUnit will ensure the memory is freed once the test completes.
--
--This is particularly useful since it lets you use the ``KUNIT_ASSERT_EQ``
--macros to exit early from a test without having to worry about remembering to
--call ``kfree``.
--
--Example:
--
--.. code-block:: c
--
--	void example_test_allocation(struct kunit *test)
--	{
--		char *buffer = kunit_kzalloc(test, 16, GFP_KERNEL);
--		/* Ensure allocation succeeded. */
--		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buffer);
--
--		KUNIT_ASSERT_STREQ(test, buffer, "");
--	}
--
--
--Testing static functions
--------------------------
--
--If you don't want to expose functions or variables just for testing, one option
--is to conditionally ``#include`` the test file at the end of your .c file, e.g.
--
--.. code-block:: c
--
--	/* In my_file.c */
--
--	static int do_interesting_thing();
--
--	#ifdef CONFIG_MY_KUNIT_TEST
--	#include "my_kunit_test.c"
--	#endif
--
--Injecting test-only code
--------------------------
--
--Similarly to the above, it can be useful to add test-specific logic.
--
--.. code-block:: c
--
--	/* In my_file.h */
--
--	#ifdef CONFIG_MY_KUNIT_TEST
--	/* Defined in my_kunit_test.c */
--	void test_only_hook(void);
--	#else
--	void test_only_hook(void) { }
--	#endif
--
--This test-only code can be made more useful by accessing the current kunit
--test, see below.
--
--Accessing the current test
----------------------------
--
--In some cases, you need to call test-only code from outside the test file, e.g.
--like in the example above or if you're providing a fake implementation of an
--ops struct.
--There is a ``kunit_test`` field in ``task_struct``, so you can access it via
--``current->kunit_test``.
--
--Here's a slightly in-depth example of how one could implement "mocking":
--
--.. code-block:: c
--
--	#include <linux/sched.h> /* for current */
--
--	struct test_data {
--		int foo_result;
--		int want_foo_called_with;
--	};
--
--	static int fake_foo(int arg)
--	{
--		struct kunit *test = current->kunit_test;
--		struct test_data *test_data = test->priv;
--
--		KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
--		return test_data->foo_result;
--	}
--
--	static void example_simple_test(struct kunit *test)
--	{
--		/* Assume priv is allocated in the suite's .init */
--		struct test_data *test_data = test->priv;
--
--		test_data->foo_result = 42;
--		test_data->want_foo_called_with = 1;
--
--		/* In a real test, we'd probably pass a pointer to fake_foo somewhere
--		 * like an ops struct, etc. instead of calling it directly. */
--		KUNIT_EXPECT_EQ(test, fake_foo(1), 42);
--	}
--
--
--Note: here we're able to get away with using ``test->priv``, but if you wanted
--something more flexible you could use a named ``kunit_resource``, see
--Documentation/dev-tools/kunit/api/test.rst.
--
--Failing the current test
--------------------------
--
--But sometimes, you might just want to fail the current test. In that case, we
--have ``kunit_fail_current_test(fmt, args...)`` which is defined in ``<kunit/test-bug.h>`` and
--doesn't require pulling in ``<kunit/test.h>``.
--
--E.g. say we had an option to enable some extra debug checks on some data structure:
--
--.. code-block:: c
--
--	#include <kunit/test-bug.h>
--
--	#ifdef CONFIG_EXTRA_DEBUG_CHECKS
--	static void validate_my_data(struct data *data)
--	{
--		if (is_valid(data))
--			return;
--
--		kunit_fail_current_test("data %p is invalid", data);
--
--		/* Normal, non-KUnit, error reporting code here. */
--	}
--	#else
--	static void my_debug_function(void) { }
--	#endif
--
--
--Customizing error messages
----------------------------
--
--Each of the ``KUNIT_EXPECT`` and ``KUNIT_ASSERT`` macros have a ``_MSG`` variant.
--These take a format string and arguments to provide additional context to the automatically generated error messages.
--
--.. code-block:: c
--
--	char some_str[41];
--	generate_sha1_hex_string(some_str);
--
--	/* Before. Not easy to tell why the test failed. */
--	KUNIT_EXPECT_EQ(test, strlen(some_str), 40);
--
--	/* After. Now we see the offending string. */
--	KUNIT_EXPECT_EQ_MSG(test, strlen(some_str), 40, "some_str='%s'", some_str);
--
--Alternatively, one can take full control over the error message by using ``KUNIT_FAIL()``, e.g.
--
--.. code-block:: c
--
--	/* Before */
--	KUNIT_EXPECT_EQ(test, some_setup_function(), 0);
--
--	/* After: full control over the failure message. */
--	if (some_setup_function())
--		KUNIT_FAIL(test, "Failed to setup thing for testing");
--
--Next Steps
--==========
--*   Optional: see the Documentation/dev-tools/kunit/usage.rst page for a more
--    in-depth explanation of KUnit.
 -- 
-2.38.0.135.g90850a2211-goog
+Thanks,
+
+David / dhildenb
 
