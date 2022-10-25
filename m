@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09A660D7B2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Oct 2022 01:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D4560D7B4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Oct 2022 01:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbiJYXLJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 19:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S229952AbiJYXL1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 19:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiJYXLI (ORCPT
+        with ESMTP id S231877AbiJYXLZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 19:11:08 -0400
+        Tue, 25 Oct 2022 19:11:25 -0400
 Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D38CF874;
-        Tue, 25 Oct 2022 16:11:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A546D18FA;
+        Tue, 25 Oct 2022 16:11:23 -0700 (PDT)
 Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
          client-signature RSA-PSS (2048 bits) client-digest SHA256)
         (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4Mxnk21dYqzDqs8;
-        Tue, 25 Oct 2022 23:11:06 +0000 (UTC)
+        by mx1.riseup.net (Postfix) with ESMTPS id 4MxnkM1SvszDq8h;
+        Tue, 25 Oct 2022 23:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1666739466; bh=KKHR24rPQxFu1YA5ld6wDOQ/gCh3kJrbD7p3rWeW2Tg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GVJQsrY1HzfiJfux+/dhic0R4jUYqYXHr38lir4sSk2NO9//jrTWPBkSmpEvO4RFS
-         DbGoeo0PfZJoCR+e3D4vavQc6G3zJVjJ4t2c0BuAio8jIbGsUijXH5eJgMWwiADfXm
-         eFJZimPDgaowT6ZxWVomOneiri3Do+VfQy3Kdvc8=
-X-Riseup-User-ID: EF1CFFE6C67DC1ABFA3A5A31252CC2AD9978F88F1CF011EF5CD6A589F715F482
+        t=1666739483; bh=finQVfU1113nTJwkczbf5nMjxzmVG5L0FUY1qZRrKOI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NMLgqt4Ta+b3GkByEJ2faOJGhg7FSEr06gAS0dtDH1kCsyMkkNYGiMO7Ex2DwzfZQ
+         CJdhobdD0wXcWsC6oDfLkm8QQQA+g7TEgfp8mbiyF6uhIfqTCau33Qh8XYC7nLyQhc
+         3CDFd9V1eizcHzu/gKCl0yAhFW17F5X38ldPOdDc=
+X-Riseup-User-ID: C3A9666FF44CDDF4A6F86D0869802BAB88985C51ACCF9A3777BB677C7FC020CD
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4Mxnjv0gL0z1yRB;
-        Tue, 25 Oct 2022 23:10:58 +0000 (UTC)
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4MxnkD6PD6z1yRB;
+        Tue, 25 Oct 2022 23:11:16 +0000 (UTC)
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
 To:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
         Daniel Latypov <dlatypov@google.com>, airlied@gmail.com,
@@ -42,10 +42,13 @@ Cc:     andrealmeid@riseup.net, melissa.srw@gmail.com,
         magalilemes00@gmail.com, tales.aparecida@gmail.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH v7 0/3] Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
-Date:   Tue, 25 Oct 2022 20:10:40 -0300
-Message-Id: <20221025231043.115295-1-mairacanal@riseup.net>
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [PATCH v7 1/3] kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
+Date:   Tue, 25 Oct 2022 20:10:41 -0300
+Message-Id: <20221025231043.115295-2-mairacanal@riseup.net>
+In-Reply-To: <20221025231043.115295-1-mairacanal@riseup.net>
+References: <20221025231043.115295-1-mairacanal@riseup.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -59,85 +62,249 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_EQ or
-KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp function,
-such as:
-  KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_EQ
+or KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp
+function, such as:
+    KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
 
-Although this usage produces correct results for the test cases, if the
-expectation fails the error message is not very helpful, indicating only the
-return of the memcmp function.
+Although this usage produces correct results for the test cases, when
+the expectation fails, the error message is not very helpful,
+indicating only the return of the memcmp function.
 
 Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
-KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size. In
-case of expectation failure, those macros print the hex dump of the memory
-blocks, making it easier to debug test failures for memory blocks.
+KUNIT_EXPECT_MEMNEQ that compare memory blocks until a specified size.
+In case of expectation failure, those macros print the hex dump of the
+memory blocks, making it easier to debug test failures for memory blocks.
 
-The v7 has some formatting changes on the first patch and it was rebased on
-top of the mainline (due to 7089003304c6).
+That said, the expectation
 
-The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
-KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
-expectations on the kunit-example-test.c. And the last patch replaces the
-KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
+    KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
 
-Best Regards,
-- Maíra Canal
+would translate to the expectation
 
-v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2749-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
+    KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
 
-- Change "determinated" to "specified" (Daniel Latypov).
-- Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to make
-it easier for users to infer the right size unit (Daniel Latypov).
-- Mark the different bytes on the failure message with a <> (Daniel Latypov).
-- Replace a constant number of array elements for ARRAY_SIZE() (André Almeida).
-- Rename "array" and "expected" variables to "array1" and "array2" (Daniel Latypov).
+Signed-off-by: Maíra Canal <mairacanal@riseup.net>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
+ include/kunit/assert.h | 33 ++++++++++++++++
+ include/kunit/test.h   | 87 ++++++++++++++++++++++++++++++++++++++++++
+ lib/kunit/assert.c     | 56 +++++++++++++++++++++++++++
+ 3 files changed, 176 insertions(+)
 
-v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.420840-1-mairacanal@riseup.net/T/#t
-
-- Make the bytes aligned at output.
-- Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel Latypov).
-- Line up the trailing \ at macros using tabs (Daniel Latypov).
-- Line up the params to the functions (Daniel Latypov).
-- Change "Increament" to "Augment" (Daniel Latypov).
-- Use sizeof() for array sizes (Daniel Latypov).
-- Add Daniel Latypov's tags.
-
-v3 -> v4: https://lore.kernel.org/linux-kselftest/CABVgOSm_59Yr82deQm2C=18jjSv_akmn66zs4jxx3hfziXPeHg@mail.gmail.com/T/#t
-
-- Fix wrapped lines by the mail client (David Gow).
-- Mention on documentation that KUNIT_EXPECT_MEMEQ is not recommended for
-structured data (David Gow).
-- Add Muhammad Usama Anjum's tag.
-
-v4 -> v5: https://lore.kernel.org/linux-kselftest/20220808125237.277126-1-mairacanal@riseup.net/
-
-- Rebase on top of drm-misc-next.
-- Add David Gow's tags.
-
-v5 -> v6: https://lore.kernel.org/linux-kselftest/20220921014515.113062-1-mairacanal@riseup.net/
-
-- Rebase on top of Linux 6.1.
-- Change KUNIT_ASSERTION macro to _KUNIT_FAILED.
-
-v6 -> v7: https://lore.kernel.org/linux-kselftest/20221018190541.189780-1-mairacanal@riseup.net/
-
-- Format nits (David Gow).
-- Rebase on top of Linux 6.1-rc2.
-
-Maíra Canal (3):
-  kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
-  kunit: Add KUnit memory block assertions to the example_all_expect_macros_test
-  kunit: Use KUNIT_EXPECT_MEMEQ macro
-
- .../gpu/drm/tests/drm_format_helper_test.c    | 12 +--
- include/kunit/assert.h                        | 33 +++++++
- include/kunit/test.h                          | 87 +++++++++++++++++++
- lib/kunit/assert.c                            | 56 ++++++++++++
- lib/kunit/kunit-example-test.c                |  7 ++
- net/core/dev_addr_lists_test.c                |  4 +-
- 6 files changed, 191 insertions(+), 8 deletions(-)
-
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index ace3de8d1ee7..e8a59487fd59 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -240,4 +240,37 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 				    const struct va_format *message,
+ 				    struct string_stream *stream);
+ 
++#define KUNIT_INIT_MEM_ASSERT_STRUCT(text_, left_val, right_val, size_) {      \
++	.text = text_,							       \
++	.left_value = left_val,						       \
++	.right_value = right_val,				       	       \
++	.size = size_						       	       \
++}
++
++/**
++ * struct kunit_mem_assert - An expectation/assertion that compares two
++ *	memory blocks.
++ * @assert: The parent of this type.
++ * @text: Holds the textual representations of the operands and comparator.
++ * @left_value: The actual evaluated value of the expression in the left slot.
++ * @right_value: The actual evaluated value of the expression in the right slot.
++ * @size: Size of the memory block analysed in bytes.
++ *
++ * Represents an expectation/assertion that compares two memory blocks. For
++ * example, to expect that the first three bytes of foo is equal to the
++ * first three bytes of bar, you can use the expectation
++ * KUNIT_EXPECT_MEMEQ(test, foo, bar, 3);
++ */
++struct kunit_mem_assert {
++	struct kunit_assert assert;
++	const struct kunit_binary_assert_text *text;
++	const void *left_value;
++	const void *right_value;
++	const size_t size;
++};
++
++void kunit_mem_assert_format(const struct kunit_assert *assert,
++			     const struct va_format *message,
++			     struct string_stream *stream);
++
+ #endif /*  _KUNIT_ASSERT_H */
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index b1ab6b32216d..cde97dc4eed5 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -658,6 +658,39 @@ do {									       \
+ 		      ##__VA_ARGS__);					       \
+ } while (0)
+ 
++#define KUNIT_MEM_ASSERTION(test,					       \
++			    assert_type,				       \
++			    left,					       \
++			    op,						       \
++			    right,					       \
++			    size,					       \
++			    fmt,					       \
++			    ...)					       \
++do {									       \
++	const void *__left = (left);					       \
++	const void *__right = (right);					       \
++	const size_t __size = (size);					       \
++	static const struct kunit_binary_assert_text __text = {		       \
++		.operation = #op,					       \
++		.left_text = #left,					       \
++		.right_text = #right,					       \
++	};								       \
++									       \
++	if (likely(memcmp(__left, __right, __size) op 0))		       \
++		break;							       \
++									       \
++	_KUNIT_FAILED(test,						       \
++		      assert_type,					       \
++		      kunit_mem_assert,					       \
++		      kunit_mem_assert_format,				       \
++		      KUNIT_INIT_MEM_ASSERT_STRUCT(&__text,		       \
++						   __left,		       \
++						   __right,		       \
++						   __size),		       \
++		      fmt,						       \
++		      ##__VA_ARGS__);					       \
++} while (0)
++
+ #define KUNIT_PTR_NOT_ERR_OR_NULL_MSG_ASSERTION(test,			       \
+ 						assert_type,		       \
+ 						ptr,			       \
+@@ -928,6 +961,60 @@ do {									       \
+ 				   fmt,					       \
+ 				   ##__VA_ARGS__)
+ 
++/**
++ * KUNIT_EXPECT_MEMEQ() - Expects that the first @size bytes of @left and @right are equal.
++ * @test: The test context object.
++ * @left: An arbitrary expression that evaluates to the specified size.
++ * @right: An arbitrary expression that evaluates to the specified size.
++ * @size: Number of bytes compared.
++ *
++ * Sets an expectation that the values that @left and @right evaluate to are
++ * equal. This is semantically equivalent to
++ * KUNIT_EXPECT_TRUE(@test, !memcmp((@left), (@right), (@size))). See
++ * KUNIT_EXPECT_TRUE() for more information.
++ *
++ * Although this expectation works for any memory block, it is not recommended
++ * for comparing more structured data, such as structs. This expectation is
++ * recommended for comparing, for example, data arrays.
++ */
++#define KUNIT_EXPECT_MEMEQ(test, left, right, size) \
++	KUNIT_EXPECT_MEMEQ_MSG(test, left, right, size, NULL)
++
++#define KUNIT_EXPECT_MEMEQ_MSG(test, left, right, size, fmt, ...)	       \
++	KUNIT_MEM_ASSERTION(test,					       \
++			    KUNIT_EXPECTATION,				       \
++			    left, ==, right,				       \
++			    size,					       \
++			    fmt,					       \
++			    ##__VA_ARGS__)
++
++/**
++ * KUNIT_EXPECT_MEMNEQ() - Expects that the first @size bytes of @left and @right are not equal.
++ * @test: The test context object.
++ * @left: An arbitrary expression that evaluates to the specified size.
++ * @right: An arbitrary expression that evaluates to the specified size.
++ * @size: Number of bytes compared.
++ *
++ * Sets an expectation that the values that @left and @right evaluate to are
++ * not equal. This is semantically equivalent to
++ * KUNIT_EXPECT_TRUE(@test, memcmp((@left), (@right), (@size))). See
++ * KUNIT_EXPECT_TRUE() for more information.
++ *
++ * Although this expectation works for any memory block, it is not recommended
++ * for comparing more structured data, such as structs. This expectation is
++ * recommended for comparing, for example, data arrays.
++ */
++#define KUNIT_EXPECT_MEMNEQ(test, left, right, size) \
++	KUNIT_EXPECT_MEMNEQ_MSG(test, left, right, size, NULL)
++
++#define KUNIT_EXPECT_MEMNEQ_MSG(test, left, right, size, fmt, ...)	       \
++	KUNIT_MEM_ASSERTION(test,					       \
++			    KUNIT_EXPECTATION,				       \
++			    left, !=, right,				       \
++			    size,					       \
++			    fmt,					       \
++			    ##__VA_ARGS__)
++
+ /**
+  * KUNIT_EXPECT_NULL() - Expects that @ptr is null.
+  * @test: The test context object.
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index d00d6d181ee8..c346a8d7fa6e 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -204,3 +204,59 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 	kunit_assert_print_msg(message, stream);
+ }
+ EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
++
++/* Adds a hexdump of a buffer to a string_stream comparing it with
++ * a second buffer. The different bytes are marked with <>.
++ */
++static void kunit_assert_hexdump(struct string_stream *stream,
++				 const void *buf,
++				 const void *compared_buf,
++				 const size_t len)
++{
++	size_t i;
++	const u8 *buf1 = buf;
++	const u8 *buf2 = compared_buf;
++
++	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT);
++
++	for (i = 0; i < len; ++i) {
++		if (!(i % 16) && i)
++			string_stream_add(stream, "\n" KUNIT_SUBSUBTEST_INDENT);
++
++		if (buf1[i] != buf2[i])
++			string_stream_add(stream, "<%02x>", buf1[i]);
++		else
++			string_stream_add(stream, " %02x ", buf1[i]);
++	}
++}
++
++void kunit_mem_assert_format(const struct kunit_assert *assert,
++			     const struct va_format *message,
++			     struct string_stream *stream)
++{
++	struct kunit_mem_assert *mem_assert;
++
++	mem_assert = container_of(assert, struct kunit_mem_assert,
++				  assert);
++
++	string_stream_add(stream,
++			  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
++			  mem_assert->text->left_text,
++			  mem_assert->text->operation,
++			  mem_assert->text->right_text);
++
++	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
++			  mem_assert->text->left_text);
++	kunit_assert_hexdump(stream, mem_assert->left_value,
++			     mem_assert->right_value, mem_assert->size);
++
++	string_stream_add(stream, "\n");
++
++	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s ==\n",
++			  mem_assert->text->right_text);
++	kunit_assert_hexdump(stream, mem_assert->right_value,
++			     mem_assert->left_value, mem_assert->size);
++
++	kunit_assert_print_msg(message, stream);
++}
++EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
 -- 
 2.37.3
 
