@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A1D60CC36
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 14:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A588760CC3B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Oct 2022 14:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiJYMnt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Oct 2022 08:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S229613AbiJYMoT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Oct 2022 08:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbiJYMnS (ORCPT
+        with ESMTP id S232207AbiJYMnm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:43:18 -0400
+        Tue, 25 Oct 2022 08:43:42 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F7318F0EE
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 05:43:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BB218F90E
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 05:43:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666701782;
+        s=mimecast20190719; t=1666701786;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zVCaW6lEEBFNmdMv7F/qs/utrwfJnH2v1kJUVNJMX6M=;
-        b=F0AsWdTkf+OmP1yVhTsj+2jAB3wu1gQsdTQEAKW0osesmhTKRXTWMD4wEn4d37ktW+QI+z
-        K0MluIyvT3pHTM8goi2L8+zXmQIFTyZ6c7e9JvR0jH33SED9LpJARYvZ07GPUQ9GSWwvR/
-        L415ftoHOheYzSLvWxAMmK9SVTSwTSU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=k7eb+GFGOU5S7G9TNA6e1VQ8CjmkOXIwTqSDjDKPGFk=;
+        b=A2Kg4V4BRKo7fmYR0YBUMfNWVN0f3MUAVkk87ywaOtuziTDU4Yq0M/3mThVmRzGGtP0dVJ
+        7IFsgUwlFVDskG/zUFTHh0c19K7F6EUlvdlqXC+cT4CS0gcC3TwjmCq12DE2UbSf77mnhG
+        FvDIQ9Hs+SGM+cvI8xV7CQM5LW7/Anw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-262-3KknvcArPDSo5DbzuUs2LQ-1; Tue, 25 Oct 2022 08:42:58 -0400
-X-MC-Unique: 3KknvcArPDSo5DbzuUs2LQ-1
+ us-mta-78-DlvJ23uJPcKZC5YGkQPVRA-1; Tue, 25 Oct 2022 08:43:02 -0400
+X-MC-Unique: DlvJ23uJPcKZC5YGkQPVRA-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 260C43833287;
-        Tue, 25 Oct 2022 12:42:57 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF74C80252F;
+        Tue, 25 Oct 2022 12:43:00 +0000 (UTC)
 Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C4FEF2017DF0;
-        Tue, 25 Oct 2022 12:42:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6DA2D2028E98;
+        Tue, 25 Oct 2022 12:42:57 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -57,9 +57,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>, x86@kernel.org,
         Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v4 08/23] KVM: x86: do not define KVM_REQ_SMI if SMM disabled
-Date:   Tue, 25 Oct 2022 15:42:08 +0300
-Message-Id: <20221025124223.227577-9-mlevitsk@redhat.com>
+Subject: [PATCH v4 09/23] bug: introduce ASSERT_STRUCT_OFFSET
+Date:   Tue, 25 Oct 2022 15:42:09 +0300
+Message-Id: <20221025124223.227577-10-mlevitsk@redhat.com>
 In-Reply-To: <20221025124223.227577-1-mlevitsk@redhat.com>
 References: <20221025124223.227577-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -75,80 +75,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+ASSERT_STRUCT_OFFSET allows to assert during the build of
+the kernel that a field in a struct have an expected offset.
 
-This ensures that all the relevant code is compiled out, in fact
-the process_smi stub can be removed too.
+KVM used to have such macro, but there is almost nothing KVM specific
+in it so move it to build_bug.h, so that it can be used in other
+places in KVM.
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/include/asm/kvm_host.h | 2 ++
- arch/x86/kvm/smm.h              | 1 -
- arch/x86/kvm/x86.c              | 6 ++++++
- 3 files changed, 8 insertions(+), 1 deletion(-)
+ arch/x86/kvm/vmx/vmcs12.h | 5 ++---
+ include/linux/build_bug.h | 9 +++++++++
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 28e41926027e7a..0b0a82c0bb5cbd 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -81,7 +81,9 @@
- #define KVM_REQ_NMI			KVM_ARCH_REQ(9)
- #define KVM_REQ_PMU			KVM_ARCH_REQ(10)
- #define KVM_REQ_PMI			KVM_ARCH_REQ(11)
-+#ifdef CONFIG_KVM_SMM
- #define KVM_REQ_SMI			KVM_ARCH_REQ(12)
-+#endif
- #define KVM_REQ_MASTERCLOCK_UPDATE	KVM_ARCH_REQ(13)
- #define KVM_REQ_MCLOCK_INPROGRESS \
- 	KVM_ARCH_REQ_FLAGS(14, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
-diff --git a/arch/x86/kvm/smm.h b/arch/x86/kvm/smm.h
-index 7ccce6b655cacf..a6795b93ba3002 100644
---- a/arch/x86/kvm/smm.h
-+++ b/arch/x86/kvm/smm.h
-@@ -28,7 +28,6 @@ void process_smi(struct kvm_vcpu *vcpu);
- static inline int kvm_inject_smi(struct kvm_vcpu *vcpu) { return -ENOTTY; }
- static inline bool is_smm(struct kvm_vcpu *vcpu) { return false; }
- static inline void kvm_smm_changed(struct kvm_vcpu *vcpu, bool in_smm) { WARN_ON_ONCE(1); }
--static inline void process_smi(struct kvm_vcpu *vcpu) { WARN_ON_ONCE(1); }
- 
+diff --git a/arch/x86/kvm/vmx/vmcs12.h b/arch/x86/kvm/vmx/vmcs12.h
+index 746129ddd5ae02..01936013428b5c 100644
+--- a/arch/x86/kvm/vmx/vmcs12.h
++++ b/arch/x86/kvm/vmx/vmcs12.h
+@@ -208,9 +208,8 @@ struct __packed vmcs12 {
  /*
-  * emulator_leave_smm is used as a function pointer, so the
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8394cd62c2854c..56004890a71742 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5033,8 +5033,10 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+  * For save/restore compatibility, the vmcs12 field offsets must not change.
+  */
+-#define CHECK_OFFSET(field, loc)				\
+-	BUILD_BUG_ON_MSG(offsetof(struct vmcs12, field) != (loc),	\
+-		"Offset of " #field " in struct vmcs12 has changed.")
++#define CHECK_OFFSET(field, loc) \
++	ASSERT_STRUCT_OFFSET(struct vmcs12, field, loc)
  
- 	process_nmi(vcpu);
+ static inline void vmx_check_vmcs12_offsets(void)
+ {
+diff --git a/include/linux/build_bug.h b/include/linux/build_bug.h
+index e3a0be2c90ad98..3aa3640f8c181f 100644
+--- a/include/linux/build_bug.h
++++ b/include/linux/build_bug.h
+@@ -77,4 +77,13 @@
+ #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+ #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
  
-+#ifdef CONFIG_KVM_SMM
- 	if (kvm_check_request(KVM_REQ_SMI, vcpu))
- 		process_smi(vcpu);
-+#endif
- 
- 	/*
- 	 * KVM's ABI only allows for one exception to be migrated.  Luckily,
-@@ -10207,8 +10209,10 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 		}
- 		if (kvm_check_request(KVM_REQ_STEAL_UPDATE, vcpu))
- 			record_steal_time(vcpu);
-+#ifdef CONFIG_KVM_SMM
- 		if (kvm_check_request(KVM_REQ_SMI, vcpu))
- 			process_smi(vcpu);
-+#endif
- 		if (kvm_check_request(KVM_REQ_NMI, vcpu))
- 			process_nmi(vcpu);
- 		if (kvm_check_request(KVM_REQ_PMU, vcpu))
-@@ -12565,7 +12569,9 @@ bool kvm_arch_dy_runnable(struct kvm_vcpu *vcpu)
- 		return true;
- 
- 	if (kvm_test_request(KVM_REQ_NMI, vcpu) ||
-+#ifdef CONFIG_KVM_SMM
- 		kvm_test_request(KVM_REQ_SMI, vcpu) ||
-+#endif
- 		 kvm_test_request(KVM_REQ_EVENT, vcpu))
- 		return true;
- 
++
++/*
++ * Compile time check that field has an expected offset
++ */
++#define ASSERT_STRUCT_OFFSET(type, field, expected_offset)	\
++	BUILD_BUG_ON_MSG(offsetof(type, field) != (expected_offset),	\
++		"Offset of " #field " in " #type " has changed.")
++
++
+ #endif	/* _LINUX_BUILD_BUG_H */
 -- 
 2.34.3
 
