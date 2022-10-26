@@ -2,87 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F79060DDBB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Oct 2022 11:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0387560E11A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Oct 2022 14:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbiJZJIx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Oct 2022 05:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
+        id S233867AbiJZMoU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Oct 2022 08:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbiJZJIv (ORCPT
+        with ESMTP id S233835AbiJZMoS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:08:51 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA229B851
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Oct 2022 02:08:44 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id g12so16764499lfh.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Oct 2022 02:08:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kxvYJthqzz9Ch/FqWQ8XhBVmiJuFjTiWQBM9GNthY1Q=;
-        b=dLq1lvr7ijuQYVhxr6ksYWfPSV5MW7jkOz7HomVM7JcsvhE7pEA3RhV6nb/khhtVRf
-         xuSIzjunoHk9DH7ihAoreksPSOu4eRXykeH5HfgbkW552dDnfWToCOKg0ltwZyo+PMvt
-         3AEHCAH3JOJoE114X7S+cXXfy4jvpZPEWOIC4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kxvYJthqzz9Ch/FqWQ8XhBVmiJuFjTiWQBM9GNthY1Q=;
-        b=3wU0mq9bmoZBLYRGk+cN4hx0W1/C852nEict0cU5sh2MfpGqptwnG//ZNRjhshKb6A
-         M+Rt7gs9Qa25FE1XL1PLDIJFWB2JgZlH33JsXQDGRl/d3luTMNMZmikT9dXa715i+BAg
-         kdfcfy0fZpYxm51DmpjYppwfucfKV1ZVamum8bzqbW0qsOsSqHpaSNEs8CHM6AGqyGTw
-         TICy1AcuRjgecj5KdmwwHFUSxO/LZwjayxOd3hSodISQX0SC2n7mq5zerciwbY0pQ819
-         IbOx5ZFH94r0DhFxUC2KTYOUcQVrNXy75qbrbmHRMYofcNZw8MyQd6teq9pgO6ouVA2p
-         wGGQ==
-X-Gm-Message-State: ACrzQf1SxfmsFtpZgFkOUf7My6nDBhaTcuYmIDmVVLTwi5YZaRKHA1dM
-        QZ/qTToGIam1rcRX/lcvGP06Jw==
-X-Google-Smtp-Source: AMsMyM6xUY+dz5Tae0JqZ/Gt/+e/3j4bX9GN6Q/duxsMwusZHTZGtpBDWt+XZUOl2BllGHQisMALcQ==
-X-Received: by 2002:ac2:4c03:0:b0:4a2:2273:89c6 with SMTP id t3-20020ac24c03000000b004a2227389c6mr14264301lfq.245.1666775322987;
-        Wed, 26 Oct 2022 02:08:42 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id v24-20020ac258f8000000b00499f9aaa9desm767405lfo.179.2022.10.26.02.08.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 02:08:42 -0700 (PDT)
-Message-ID: <a5233381-4081-afce-07b5-72d653eeeefb@rasmusvillemoes.dk>
-Date:   Wed, 26 Oct 2022 11:08:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221021060340.7515-1-w@1wt.eu>
- <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021170134.GB8420@1wt.eu>
- <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021172026.GC8420@1wt.eu>
- <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221022112228.GB30596@1wt.eu>
- <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026053922.GA19206@1wt.eu>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221026053922.GA19206@1wt.eu>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 26 Oct 2022 08:44:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B81D10075;
+        Wed, 26 Oct 2022 05:44:18 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QCbnpK017383;
+        Wed, 26 Oct 2022 12:44:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=vahBHWcjmX25fVfVppqO25R8GRT50gCuNofrt1TcoK4=;
+ b=pBs6LbiNS3CUyqAiiOPizWkElYkgt5B10jYMfFaCrnEI6ICsORTtLyl17N0adkl9w9lR
+ YgLj84hxehhCbxTeIY6wgF3XOpqtqf/Q4SjdxsLEooiMbDyU9Ckr0M9EGyGYgbCGavHd
+ SBodUGORSUhPywMBxOpfVnOKqcWax2Mbi6dnvBm0Xvr0mlt31NvWgk/xSP8t0vtkFugS
+ Av6VJ3nlkpXa2u3Udso9GJD7n1HebJD/wLyWX6Z4eHLNWl+hQ8buNpxL1sll8OZMrZe9
+ UXOCDb2XZo+z5u4MymC+t5jAOdqNeDuO1RPcvZSf4XHO0VaoZMSNflY8CJGlsefGosza 4A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kf3n5ua0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 12:44:12 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29QCcNow022863;
+        Wed, 26 Oct 2022 12:44:11 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kf3n5u9y8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 12:44:11 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29QCaYtB015665;
+        Wed, 26 Oct 2022 12:44:09 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 3kc859ndav-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 12:44:09 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29QCcqSc49414598
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 12:38:52 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5795CA4040;
+        Wed, 26 Oct 2022 12:44:07 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEA43A4051;
+        Wed, 26 Oct 2022 12:44:06 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.3.66])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Wed, 26 Oct 2022 12:44:06 +0000 (GMT)
+Date:   Wed, 26 Oct 2022 14:44:04 +0200
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>
+Subject: Re: [PATCH] selftests: vm: use 1 MB hugepage size for s390
+Message-ID: <20221026144404.2d67681a@thinkpad>
+In-Reply-To: <e5eff1ef-760c-5e6f-9f32-e8a7a624993b@redhat.com>
+References: <20221025152610.3439102-1-gerald.schaefer@linux.ibm.com>
+        <e5eff1ef-760c-5e6f-9f32-e8a7a624993b@redhat.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3Yn-AhucFM2Iy7NU2wdj19KAUIBuFP63
+X-Proofpoint-ORIG-GUID: mwDdvCMyECj3v-6kQ4FEuQuocyYSjqm2
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_06,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 impostorscore=0 mlxlogscore=868 mlxscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210260070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26/10/2022 07.39, Willy Tarreau wrote:
-> 
-> No more false positives nor false negatives anymore. I'm sending you
-> the patch separately.
+On Tue, 25 Oct 2022 17:34:52 +0200
+David Hildenbrand <david@redhat.com> wrote:
 
-While you're at it, may I suggest also adding a few test cases where the
-buffers differ by 128, e.g. 0x0 v 0x80 and 0x40 v 0xc0.
+> On 25.10.22 17:26, Gerald Schaefer wrote:
+> > hugepage-vmemmap test fails for s390 because it assumes a hugepagesize
+> > of 2 MB, while we have 1 MB on s390. This results in iterating over two
+> > hugepages. If they are consecutive in memory, check_page_flags() will
+> > stumble over the additional head page. Otherwise, it will stumble over
+> > non-huge pageflags, after crossing the first 1 MB hugepage.
+> > 
+> > Fix this by using 1 MB MAP_LENGTH for s390.
+> > 
+> > Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> > ---
+> >   tools/testing/selftests/vm/hugepage-vmemmap.c | 7 +++++++
+> >   1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/vm/hugepage-vmemmap.c b/tools/testing/selftests/vm/hugepage-vmemmap.c
+> > index 557bdbd4f87e..a4695f138cec 100644
+> > --- a/tools/testing/selftests/vm/hugepage-vmemmap.c
+> > +++ b/tools/testing/selftests/vm/hugepage-vmemmap.c
+> > @@ -11,7 +11,14 @@
+> >   #include <sys/mman.h>
+> >   #include <fcntl.h>
+> >   
+> > +/*
+> > + * 1 MB hugepage size for s390
+> > + */
+> > +#if defined(__s390x__)
+> > +#define MAP_LENGTH		(1UL * 1024 * 1024)
+> > +#else
+> >   #define MAP_LENGTH		(2UL * 1024 * 1024)
+> > +#endif
+> 
+> Why not detect it at runtime, so this works on any architecture (e.g., 
+> ppc64 with 16 MiB IIRC and arm64 with weird sizes)?
+> 
+> A patch that adds such detection code is currently on its way upstream:
+> 
+> https://lore.kernel.org/all/20220927110120.106906-5-david@redhat.com/T/#u
+> 
+> We could factor that out into vm_utils.c
+> 
+
+Hello David, nice, I guess that would be much better than adding new #ifdefs,
+and also allow to check all available hugepage sizes per arch.
