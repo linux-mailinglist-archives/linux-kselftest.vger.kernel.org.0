@@ -2,173 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B5260DB81
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Oct 2022 08:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F79060DDBB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Oct 2022 11:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbiJZGmM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Oct 2022 02:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
+        id S233142AbiJZJIx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Oct 2022 05:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbiJZGmK (ORCPT
+        with ESMTP id S232488AbiJZJIv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Oct 2022 02:42:10 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242C7A834C
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 23:42:08 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id io19so8194430plb.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Oct 2022 23:42:08 -0700 (PDT)
+        Wed, 26 Oct 2022 05:08:51 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA229B851
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Oct 2022 02:08:44 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id g12so16764499lfh.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Oct 2022 02:08:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=3mICiiZ0n7RGRy3iELcb/mS6KANhT6KyoULHuxkJLgU=;
-        b=wY4v/o/qzDaXcvW04y+ubsowJaMtFn5cvKi+zLJZRI/BWm2Lx6WbZ1PIK9fI8mADTY
-         P971gW5FCTJmAEiyUq95PO5WICGwWTL0fKzN98zIURhMccQqvuGMf/wKGek/N8dSFmv8
-         w98S2FXPaKSKaai/2cjTMQfielaZtpagOix4L90C93WPixOkiv+HtvUoUuSRYPvLhEaQ
-         D9rOGc7V/AUorLtgK76sGzj80ZSWZWPYmsIKeXuDt9dOnHNtN7ht7EcYakPu3fkTHEmZ
-         BT4AFNuGknSuT+xCOQHUWHX3xum+OduQr+ZqEZxEmAhKjjzwwtzSHlP6noqDKsHbgc11
-         aDjg==
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kxvYJthqzz9Ch/FqWQ8XhBVmiJuFjTiWQBM9GNthY1Q=;
+        b=dLq1lvr7ijuQYVhxr6ksYWfPSV5MW7jkOz7HomVM7JcsvhE7pEA3RhV6nb/khhtVRf
+         xuSIzjunoHk9DH7ihAoreksPSOu4eRXykeH5HfgbkW552dDnfWToCOKg0ltwZyo+PMvt
+         3AEHCAH3JOJoE114X7S+cXXfy4jvpZPEWOIC4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3mICiiZ0n7RGRy3iELcb/mS6KANhT6KyoULHuxkJLgU=;
-        b=sEtFEA4+FiHRy2L/jTgRtEF6GVTfsqxlKMdFdVkF/8qYSUbmF6JKic1e5d1+iA3XpP
-         7gaUfwKrKI2/Qn1ShV/9XZqIAVG7BQMqlYlpmE/QHqU0ZC3/mup5heNgDUKs7EO1AdFM
-         JkV5nZfP/NGlnrbsDXwF2dIgxX2FbJfmqueZGE90ID+ZE42OVgF07rOQgKYvMPT+KF+7
-         LIO3OggxlqpXnRTl0Nsouhb7Jw8JniwpmFox5IPqGdAPAByi/LlMf+683/IR/N5TPXTg
-         hWic8Njz/DMQR2br9y+pMqQrgUbtjsyOgW/obcswFMmQD4D3RHX5gZdGgASJLQO2uXFc
-         Eb8g==
-X-Gm-Message-State: ACrzQf1dlesIbT65sheVflP/wZpf1mZHnaJ3lJPfsU2SmsPXUNr5tV7H
-        PtulG4521O5bnUeKdRiS9PBhaA==
-X-Google-Smtp-Source: AMsMyM5ANrZMC7QvooLGaFa3tUvawtVcirkkLBAhd4S07pPAi+2wrzdggwGLtlkNsQTk0rZC5pEQXA==
-X-Received: by 2002:a17:90a:df04:b0:213:1cf1:435d with SMTP id gp4-20020a17090adf0400b002131cf1435dmr2597693pjb.210.1666766528278;
-        Tue, 25 Oct 2022 23:42:08 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g17-20020a170902d1d100b0017f74cab9eesm2195268plb.128.2022.10.25.23.42.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 23:42:07 -0700 (PDT)
-Message-ID: <6358d6bf.170a0220.6316.4ec6@mx.google.com>
-Date:   Tue, 25 Oct 2022 23:42:07 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kxvYJthqzz9Ch/FqWQ8XhBVmiJuFjTiWQBM9GNthY1Q=;
+        b=3wU0mq9bmoZBLYRGk+cN4hx0W1/C852nEict0cU5sh2MfpGqptwnG//ZNRjhshKb6A
+         M+Rt7gs9Qa25FE1XL1PLDIJFWB2JgZlH33JsXQDGRl/d3luTMNMZmikT9dXa715i+BAg
+         kdfcfy0fZpYxm51DmpjYppwfucfKV1ZVamum8bzqbW0qsOsSqHpaSNEs8CHM6AGqyGTw
+         TICy1AcuRjgecj5KdmwwHFUSxO/LZwjayxOd3hSodISQX0SC2n7mq5zerciwbY0pQ819
+         IbOx5ZFH94r0DhFxUC2KTYOUcQVrNXy75qbrbmHRMYofcNZw8MyQd6teq9pgO6ouVA2p
+         wGGQ==
+X-Gm-Message-State: ACrzQf1SxfmsFtpZgFkOUf7My6nDBhaTcuYmIDmVVLTwi5YZaRKHA1dM
+        QZ/qTToGIam1rcRX/lcvGP06Jw==
+X-Google-Smtp-Source: AMsMyM6xUY+dz5Tae0JqZ/Gt/+e/3j4bX9GN6Q/duxsMwusZHTZGtpBDWt+XZUOl2BllGHQisMALcQ==
+X-Received: by 2002:ac2:4c03:0:b0:4a2:2273:89c6 with SMTP id t3-20020ac24c03000000b004a2227389c6mr14264301lfq.245.1666775322987;
+        Wed, 26 Oct 2022 02:08:42 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id v24-20020ac258f8000000b00499f9aaa9desm767405lfo.179.2022.10.26.02.08.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 02:08:42 -0700 (PDT)
+Message-ID: <a5233381-4081-afce-07b5-72d653eeeefb@rasmusvillemoes.dk>
+Date:   Wed, 26 Oct 2022 11:08:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.1-rc1-5-gec7b4511185b
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-seccomp: 3 runs,
- 2 regressions (v6.1-rc1-5-gec7b4511185b)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Content-Language: en-US
+To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221021060340.7515-1-w@1wt.eu>
+ <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021170134.GB8420@1wt.eu>
+ <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021172026.GC8420@1wt.eu>
+ <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221022112228.GB30596@1wt.eu>
+ <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221026053922.GA19206@1wt.eu>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20221026053922.GA19206@1wt.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 3 runs, 2 regressions (v6.1-rc1-5-gec7b45=
-11185b)
+On 26/10/2022 07.39, Willy Tarreau wrote:
+> 
+> No more false positives nor false negatives anymore. I'm sending you
+> the patch separately.
 
-Regressions Summary
--------------------
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
--rc1-5-gec7b4511185b/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.1-rc1-5-gec7b4511185b
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      ec7b4511185bba95fc702c33a388582c8842d454 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6358cb0c135546d81a5e5b3d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-5-gec7=
-b4511185b/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/k=
-selftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-5-gec7=
-b4511185b/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/k=
-selftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221007.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/6358cb0c1355=
-46d81a5e5b3e
-        failing since 8 days (last pass: linux-kselftest-next-6.0-rc2-11-g1=
-44eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6358c7c40586f95d9b5e5b3e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-5-gec7=
-b4511185b/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/k=
-selftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-5-gec7=
-b4511185b/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/k=
-selftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221007.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/6358c7c40586=
-f95d9b5e5b3f
-        failing since 8 days (last pass: linux-kselftest-next-6.0-rc2-11-g1=
-44eeb2fc761, first fail: v6.1-rc1) =
-
- =20
+While you're at it, may I suggest also adding a few test cases where the
+buffers differ by 128, e.g. 0x0 v 0x80 and 0x40 v 0xc0.
