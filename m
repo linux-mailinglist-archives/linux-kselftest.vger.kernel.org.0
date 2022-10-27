@@ -2,110 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B19460F33F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Oct 2022 11:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0236460F353
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Oct 2022 11:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235237AbiJ0JKW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Oct 2022 05:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S235341AbiJ0JLz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Oct 2022 05:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiJ0JKJ (ORCPT
+        with ESMTP id S235346AbiJ0JLD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Oct 2022 05:10:09 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5663C1145E
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Oct 2022 02:09:58 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id f37so1451095lfv.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Oct 2022 02:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OmfGV//KmMuic4TgO6B6vfIweF0JdsZfuu3s+Qe2Rfc=;
-        b=BOMLOipgWTGcIVb7PapOdU9iiCF8wgQ45BNUdfX0F957+X8rdd2g09ehnb/YzoQE0U
-         1+urSVIxFDBtB7meLqbvaxdg+t5vQj2AHEL8XLuElrDsXQ+gc8B1uJxlFaDBKH6ZnMHA
-         NTmHmfkbZaav1fWDblzrnvLqaUo+Vlj6UUecY=
+        Thu, 27 Oct 2022 05:11:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FAF175AA
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Oct 2022 02:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666861840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ziau/u6EFDYrbkB/0U+jFJAy6/VcVCK6XBP9il5+IKo=;
+        b=DR5zuXHf5QYQzPYnaLGXt8eE8oU7NfyR9QZxMvMVwhJuA7xwH/EZj0ElS7pRNsptcEFkeu
+        e8JSGMnmc/lnJg6iqUJEWGsUMIAVat7/2FcnYJhRcSqpDtDF6bH0JFo9+Mm0LJrSPHvsgb
+        MmUgl5J7hAXmZ1k2btfJ5I15MkVZFPM=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-190-wAngWzORNJehc8aH9KCxTQ-1; Thu, 27 Oct 2022 05:10:39 -0400
+X-MC-Unique: wAngWzORNJehc8aH9KCxTQ-1
+Received: by mail-lj1-f198.google.com with SMTP id s7-20020a2eb8c7000000b0026fdd80df37so424239ljp.23
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Oct 2022 02:10:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OmfGV//KmMuic4TgO6B6vfIweF0JdsZfuu3s+Qe2Rfc=;
-        b=z5dJMfSrispdSUze7lwW2z1698sHNoNwehwDpOwHf+EeUrsjCbpuVXm8nvmjCPes+C
-         HARjRDWC9JXcnCMgJDYjvtGEazCdkkqs5yE9NyBtfwAc4s5NNw3A/+jHKYZru0tR0MRd
-         GxbCQxPxwCHJ87O3OuOiH9pHKL+XtfopAYF0e3NqIUU0EZZ5mMoiN9014klhOqK7IA6b
-         odzeGxXHPj6reLG8Zxs2nPnscajoUmd1tObLHFI7KLCDNPjBFPweIXy8Gat4CD5dlzAn
-         EGUMgPDQc1x2If6XzYAT/0BVXaxn9H70d6fdIEI+vk6sKVHvdorzemJY6G4n3N8zKIbT
-         oTOA==
-X-Gm-Message-State: ACrzQf1M06XwGyRpeaCiVjltXZ7lt5+Ezq/13fItrMo/f4AQeBhnjgc2
-        wGDXA5kTWE2/xaXpzTOhgnQhojjmTJwDgwSR8os=
-X-Google-Smtp-Source: AMsMyM5jjPBa7Tcg65INJ5Gwrp3OOniDuXxIBIYwfP4ATGzQwGtdbjWycZGpTSapwM38W6w8zOuSeQ==
-X-Received: by 2002:a19:700a:0:b0:4a4:7fc2:788b with SMTP id h10-20020a19700a000000b004a47fc2788bmr19520859lfc.117.1666861797193;
-        Thu, 27 Oct 2022 02:09:57 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id w7-20020ac254a7000000b004946c99e78asm107237lfk.277.2022.10.27.02.09.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 02:09:56 -0700 (PDT)
-Message-ID: <0b8feeb2-6ec6-d2af-8aa7-0bf34e7ab4b2@rasmusvillemoes.dk>
-Date:   Thu, 27 Oct 2022 11:09:55 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ziau/u6EFDYrbkB/0U+jFJAy6/VcVCK6XBP9il5+IKo=;
+        b=2QJ+vT+Ig2TF7TFweg9wGikTyyz9rxrmw/t94UobSCQjf5UelEPZFWKuaKimLJjnWs
+         kpIgq6BtLtYVzltvyfJX8CjKZrV/kSIRXpuIjxpAoJdFaqZJ1CPgo2+DoYLHQPqdz2qg
+         xekPZzyhqViqMVHCwb6cam/97JAqBmxTHOniJSDp8kYnUBlzEp9TmG4ll5fsQry8i/N8
+         t2z5YqdjbfbrwfWY2tjumJp+l/l+wmdt9JJMS2TW1YbL5+75FzDlQRLdaUzANb+5XOqv
+         zU5gj5LZq9WdrKQPlfp6xBV9TSdE2loPExtzIrv/gx6QHk0IAMOcNga2KBvzHPsN0H6w
+         ILpQ==
+X-Gm-Message-State: ACrzQf0f3QjEpnbJqcfe7ud/0ePhWEu+Q0tlt+7FLLHqKds2Mqtikf8M
+        A3006LF0+pFBziWWA1baq7Pb2MN9669gyZ35mcEfboRPpRid6Nr2xcuwiruL9Jsxy5FNPf8Enr8
+        Bh75vY+1qRn5lT/N9WHGAQGDtbOzip5tGRjo79ZgpWgb+
+X-Received: by 2002:ac2:47e1:0:b0:4af:5088:9576 with SMTP id b1-20020ac247e1000000b004af50889576mr2998554lfp.468.1666861837591;
+        Thu, 27 Oct 2022 02:10:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4fIV6ydQRgmrMVyIU2r9H0oB18YXsVEUdlFYjrQuSfS2ucEUJhllLqj68fs6nzyLA4Vj6RKPmXnDYesOOZKOo=
+X-Received: by 2002:ac2:47e1:0:b0:4af:5088:9576 with SMTP id
+ b1-20020ac247e1000000b004af50889576mr2998542lfp.468.1666861837363; Thu, 27
+ Oct 2022 02:10:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221021060340.7515-1-w@1wt.eu>
- <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021170134.GB8420@1wt.eu>
- <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021172026.GC8420@1wt.eu>
- <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221022112228.GB30596@1wt.eu>
- <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026053922.GA19206@1wt.eu>
- <a5233381-4081-afce-07b5-72d653eeeefb@rasmusvillemoes.dk>
- <20221026195224.GA24197@1wt.eu>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221026195224.GA24197@1wt.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
+ <20221025093458.457089-3-benjamin.tissoires@redhat.com> <20221025225219.i3pi7ewue6xqeig4@macbook-pro-4.dhcp.thefacebook.com>
+In-Reply-To: <20221025225219.i3pi7ewue6xqeig4@macbook-pro-4.dhcp.thefacebook.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 27 Oct 2022 10:11:31 +0100
+Message-ID: <CAO-hwJ+WWO-GhzX-eaoGtF8+5Mw-QOVREWYmtm-VNBF5NGC22g@mail.gmail.com>
+Subject: Re: [PATCH hid v11 02/14] HID: initial BPF implementation
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 26/10/2022 21.52, Willy Tarreau wrote:
-> On Wed, Oct 26, 2022 at 11:08:41AM +0200, Rasmus Villemoes wrote:
->> On 26/10/2022 07.39, Willy Tarreau wrote:
->>>
->>> No more false positives nor false negatives anymore. I'm sending you
->>> the patch separately.
->>
->> While you're at it, may I suggest also adding a few test cases where the
->> buffers differ by 128, e.g. 0x0 v 0x80 and 0x40 v 0xc0.
-> 
-> I initially thought about it but changed my mind for +/- 0xc0 that
-> covered the same cases in my opinion. Do you have a particular error
-> case in mind that would be caught by this one that the other one does
-> not catch ?
+On Tue, Oct 25, 2022 at 11:52 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Oct 25, 2022 at 11:34:46AM +0200, Benjamin Tissoires wrote:
+> >  include/linux/hid.h                           |   5 +
+> >  include/linux/hid_bpf.h                       | 102 +++
+> >  include/uapi/linux/hid_bpf.h                  |  25 +
+> >  tools/include/uapi/linux/hid.h                |  62 ++
+> >  tools/include/uapi/linux/hid_bpf.h            |  25 +
+>
+> ...
+>
+> > +++ b/include/linux/hid_bpf.h
+> > @@ -0,0 +1,102 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ */
+> > +
+> > +#ifndef __HID_BPF_H
+> > +#define __HID_BPF_H
+> > +
+> > +#include <linux/spinlock.h>
+> > +#include <uapi/linux/hid.h>
+> > +#include <uapi/linux/hid_bpf.h>
+> > +
+> > +struct hid_device;
+> > +
+> > +/*
+> > + * The following is the HID BPF API.
+> > + *
+> > + * It should be treated as UAPI, so extra care is required
+> > + * when making change to this file.
+> > + */
+>
+> I thought at the maintainer summit we discussed that it shouldn't be
+> treated as uapi. There is no need to draw this line right now.
+> If the whole concept turns out to be useful and api is stable
+> then promote it.
 
-Not really, but in a sense the opposite: for the +/- 0xc0 case, both
-ways of comparison will give the wrong sign because -192 becomes +64 and
-vice versa. For +/- 0x80, one way of doing the comparison will
-"accidentally" produce the right answer, and I thought that might also
-be a little interesting.
+I'd still like to keep the kfunc API explicitly marked as "danger
+zone". I want to let contributors know that changing this part has an
+impact on the existing available bpf programs that are out of the tree
+(the HID firewall for instance might be out of the tree).
 
-I'm fine for proposing a respin of the patch to improve
-> it if it brings some value,
+I'll reword it to not mark it as uapi though.
 
-It's your call, you can respin, do an incremental patch, or just ignore
-me :)
+>
+> > +++ b/include/uapi/linux/hid_bpf.h
+> > @@ -0,0 +1,25 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > +
+> > +#ifndef _UAPI_HID_BPF_H
+> > +#define _UAPI_HID_BPF_H
+> > +
+> > +#include <linux/const.h>
+> > +#include <linux/hid.h>
+> > +
+> > +/**
+> > + * enum hid_bpf_attach_flags - flags used when attaching a HIF-BPF program
+> > + *
+> > + * @HID_BPF_FLAG_NONE: no specific flag is used, the kernel choses where to
+> > + *                     insert the program
+> > + * @HID_BPF_FLAG_INSERT_HEAD: insert the given program before any other program
+> > + *                            currently attached to the device. This doesn't
+> > + *                            guarantee that this program will always be first
+> > + * @HID_BPF_FLAG_MAX: sentinel value, not to be used by the callers
+> > + */
+> > +enum hid_bpf_attach_flags {
+> > +     HID_BPF_FLAG_NONE = 0,
+> > +     HID_BPF_FLAG_INSERT_HEAD = _BITUL(0),
+> > +     HID_BPF_FLAG_MAX,
+> > +};
+> > +
+> > +#endif /* _UAPI_HID_BPF_H */
+>
+> Not sure what is the purpose of this uapi file.
+> Since it's enum the progs can get it from vmlinux.h.
 
-Rasmus
+Good point. It can easily go into the non uapi hid_bpf.h
+
+>
+> > diff --git a/tools/include/uapi/linux/hid.h b/tools/include/uapi/linux/hid.h
+> > new file mode 100644
+> > index 000000000000..3e63bea3b3e2
+> > --- /dev/null
+> > +++ b/tools/include/uapi/linux/hid.h
+> > @@ -0,0 +1,62 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+> > +/*
+> > + *  Copyright (c) 1999 Andreas Gal
+> > + *  Copyright (c) 2000-2001 Vojtech Pavlik
+> > + *  Copyright (c) 2006-2007 Jiri Kosina
+> > + */
+> > +#ifndef _UAPI__HID_H
+> > +#define _UAPI__HID_H
+>
+> This is a copy of include/uapi/linux/hid.h ?
+
+Yes it is
+
+> Probably should be a separate commit to make it obvious.
+>
+
+I'll need to assess why I needed that. I think it was related to the
+selftests, but now that they are in selftests/hid, I can probably have
+a special include in the Makefile to not have to duplicate the file at
+all.
+
+Thanks for the review :)
+
+Cheers,
+Benjamin
+
