@@ -2,39 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6CC60FF0A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Oct 2022 19:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1778260FF3B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Oct 2022 19:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbiJ0RNX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Oct 2022 13:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
+        id S234493AbiJ0RUv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Oct 2022 13:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236201AbiJ0RNW (ORCPT
+        with ESMTP id S235003AbiJ0RUu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Oct 2022 13:13:22 -0400
+        Thu, 27 Oct 2022 13:20:50 -0400
 Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C2E91A2E23;
-        Thu, 27 Oct 2022 10:13:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83AE51826DB;
+        Thu, 27 Oct 2022 10:20:48 -0700 (PDT)
 Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 29RHD84B031359;
-        Thu, 27 Oct 2022 19:13:08 +0200
-Date:   Thu, 27 Oct 2022 19:13:08 +0200
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 29RHKfeK031409;
+        Thu, 27 Oct 2022 19:20:41 +0200
+Date:   Thu, 27 Oct 2022 19:20:41 +0200
 From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
- running a test
-Message-ID: <20221027171307.GA30081@1wt.eu>
-References: <20221026054508.19634-1-w@1wt.eu>
- <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026195902.GB24197@1wt.eu>
- <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221027023456.GA26215@1wt.eu>
- <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
+Message-ID: <20221027172041.GB30081@1wt.eu>
+References: <20221021170134.GB8420@1wt.eu>
+ <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221021172026.GC8420@1wt.eu>
+ <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221022112228.GB30596@1wt.eu>
+ <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221026053922.GA19206@1wt.eu>
+ <a5233381-4081-afce-07b5-72d653eeeefb@rasmusvillemoes.dk>
+ <20221026195224.GA24197@1wt.eu>
+ <0b8feeb2-6ec6-d2af-8aa7-0bf34e7ab4b2@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027170453.GA5600@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <0b8feeb2-6ec6-d2af-8aa7-0bf34e7ab4b2@rasmusvillemoes.dk>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -44,57 +48,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:04:53AM -0700, Paul E. McKenney wrote:
-> > > My intent is to push these nolicb patches into the upcoming v6.2
-> > > merge window:
-> > > 
-> > > 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
-> > > 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
-> > > e1bbfe393c900 selftests/nolibc: Add 7 tests for memcmp()
-> > > 3f2c1c45a3a9a selftests/nolibc: Always rebuild the sysroot when running a test
-> > > 
-> > > I didn't see the problem until I queued the third patch (e1bbfe393c900),
-> > > and it is still in -rcu, not in v6.1.
-> > > 
-> > > What am I missing here?
+Hi Rasmus,
+
+On Thu, Oct 27, 2022 at 11:09:55AM +0200, Rasmus Villemoes wrote:
+> >> While you're at it, may I suggest also adding a few test cases where the
+> >> buffers differ by 128, e.g. 0x0 v 0x80 and 0x40 v 0xc0.
 > > 
-> > I thought that since some of them are fixes, they would be pushed during
-> > 6.1-rc so that we don't release 6.1 with known defects. For example Rasmus'
-> > fix for memcmp() or the strlen() fix would IMHO make sense for this
-> > release since we're aware of the bugs and we have the fixes. The 3rd one
-> > is indeed an addition and in no way a fix and it can easily wait for 6.2.
-> > The 4th one is more of a usability fix but I agree that for this last one
-> > it's debatable, I was mostly seeing this as a possiility to avoid causing
-> > needless confusion.
-> > 
-> > Hoping this clarifies my initial question.
+> > I initially thought about it but changed my mind for +/- 0xc0 that
+> > covered the same cases in my opinion. Do you have a particular error
+> > case in mind that would be caught by this one that the other one does
+> > not catch ?
 > 
-> Very much so, thank you!
+> Not really, but in a sense the opposite: for the +/- 0xc0 case, both
+> ways of comparison will give the wrong sign because -192 becomes +64 and
+> vice versa. For +/- 0x80, one way of doing the comparison will
+> "accidentally" produce the right answer, and I thought that might also
+> be a little interesting.
+
+OK, initially I thought you were trying to make the comparison return a
+match when there is none. I now see better what you mean there.
+
+> > I'm fine for proposing a respin of the patch to improve
+> > it if it brings some value,
 > 
-> I was not considering the bug fixed by the first two patches to be
-> serious, my mistake, apologies for my misclassification.
+> It's your call, you can respin, do an incremental patch, or just ignore
+> me :)
 
-No worries, I wasn't probably clear upfront about the purpose.
+I would like to propose you something. Till now I'm the only one having
+added tests to this file, and I'm still lacking feedback on the usability.
+I would very much appreciate it if you could try to add this test case
+yourself on top of existing ones (those present in Paul's rcu/next branch
+here:
+https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/ ).
 
-> Given that background, I would rebase these two, test them, and send
-> off a pull request, probably early next week.
-> 
-> 2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
-> 6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
+Then your criticism of what you would find unclear, unconvenient, poorly
+thought, unintuitive etc, and of course suggestions, would be welcome.
+That doesn't mean I'd have a quick solution of course but the more eyes
+there at the early stages, the better so that it becomes friendly to use
+for other contributors. If you don't want to, that's no big deal, but if
+you do I'll really appreciate it.
 
-Perfect, thank you!
-
-> I would push the other two commits into the upcoming merge window.
-
-OK!
-
-> Or might the discussion between you and Rasmus result in changes to
-> either of those first two commits?  If so, I should of course wait for
-> that discussion to resolve.
-
-We'll see, but in any case it would just be a minor detail, but I'll
-give you a quick response so that you don't have to deal with multiple
-versions of the patch, we all know that it's painful.
-
-Thanks!
+Thank you,
 Willy
