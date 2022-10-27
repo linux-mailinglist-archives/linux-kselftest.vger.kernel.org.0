@@ -2,116 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B79A60FD65
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Oct 2022 18:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C492560FDF5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Oct 2022 19:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235611AbiJ0QtP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Oct 2022 12:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S236817AbiJ0RAu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Oct 2022 13:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235176AbiJ0QtO (ORCPT
+        with ESMTP id S236812AbiJ0RAt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Oct 2022 12:49:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4484618F932
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Oct 2022 09:49:14 -0700 (PDT)
+        Thu, 27 Oct 2022 13:00:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D919A9DE
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Oct 2022 10:00:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666889353;
+        s=mimecast20190719; t=1666890048;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SBR+zNlTAG21dDioM5sgF6nCCLjPvKzLkAHg4n7ta1Q=;
-        b=WiQ+eTb8304LY2NZvSgNH2D1Pmh5r/Xd6NT487D8g9aRe54/6fKnqh6XHxfP8C/7DBo+PC
-        yvnV4PIdkhVAN44wqfEYyCbA30mBIPgt5kHsIwFw26fv6MGF9Gg2W4yKEfYwUVz1/3qgfs
-        N8X6eTujuBM8pf4OVmN5TbXHj1q6fgM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-583-yBAdHjc1OtSn0TuB-zKSMg-1; Thu, 27 Oct 2022 12:49:11 -0400
-X-MC-Unique: yBAdHjc1OtSn0TuB-zKSMg-1
-Received: by mail-wm1-f69.google.com with SMTP id v23-20020a1cf717000000b003bff630f31aso748859wmh.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Oct 2022 09:49:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SBR+zNlTAG21dDioM5sgF6nCCLjPvKzLkAHg4n7ta1Q=;
-        b=CplwqMP/DrP438u81U4zW4eJ/EF9i7r0Dc5Lz8X2cRsg4pL0mY61rVGxME32/Y+zAZ
-         wga26pr0tpLc4h6jG22azmjwyGnEGvb/A+rTDyVk6b3z6/etZihKX95pavpxOpbDTZDh
-         2FZf78rDcQYZ0v59bN+7rnsfweKg5VtROLdWXXF8+OSkIwOjgFg6Q/QcR5M0WGvsH8RN
-         MIWjWTVJgHr9GXfYAfTD7LBzOkLTCvCrLOQoGxu+i+rbYSZuUgJeVYea+Yy2p7DAlpBR
-         URjGtrn5nDJP/COHBB3EJHb/ZIBek238XB3OH0slA1nStDwMoCTKVD7AnRREOXklLjGP
-         OSqw==
-X-Gm-Message-State: ACrzQf0khXbdRs10swjlCS7yLH9MykeaZZaqvhVhTt0wcCgGNEXGGokR
-        MPQNQh8jWyVg6Q0Bk6acnxKkhi8n8qk2O/sDvf63V0Y6JHWcXIT/Zka/Isn4jkNd+dh7+B9zm01
-        btfoHPPAMOrKmXzlhJ6uoNeiv+m0d
-X-Received: by 2002:a05:6000:10a:b0:236:6a79:f5cf with SMTP id o10-20020a056000010a00b002366a79f5cfmr15965899wrx.470.1666889350573;
-        Thu, 27 Oct 2022 09:49:10 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4Y6At6prTJyixBcdRFchUGzanWYZ2mDWqXwbRXFsEFagdyFpLO8S2LxyUFFO7cp89cHZAQDw==
-X-Received: by 2002:a05:6000:10a:b0:236:6a79:f5cf with SMTP id o10-20020a056000010a00b002366a79f5cfmr15965875wrx.470.1666889350283;
-        Thu, 27 Oct 2022 09:49:10 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id z17-20020a1c4c11000000b003b3365b38f9sm1937795wmf.10.2022.10.27.09.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 09:49:09 -0700 (PDT)
-Message-ID: <0e3a0cab-1093-3e83-9e9c-f8639ebe5da0@redhat.com>
-Date:   Thu, 27 Oct 2022 18:49:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH RESEND v4 00/23] SMM emulation and interrupt shadow fixes
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OLxo65GqqyDAg4pQmkoaDcyRjV3222s+5rEKoJQtb20=;
+        b=J+2TlVmfzJtlVpfc0vOODnqd/4Q4gMJmERctniPnm5cQs2VDYZqQP0l1iKUcXNLLo7feXk
+        r2Kke2Pho4DlyhlWCPOCx2A7uk0iId6+JjWWQEVejuEDk6RNi1aLHKrYXmCFg1+N8ox97y
+        Q212etztbNgvSmkA7k/lRGvWjB/TnHE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-DzEm0zyWOb6egDRYU4pQAA-1; Thu, 27 Oct 2022 13:00:45 -0400
+X-MC-Unique: DzEm0zyWOb6egDRYU4pQAA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AEBC9858F13;
+        Thu, 27 Oct 2022 17:00:44 +0000 (UTC)
+Received: from jsavitz-csb.redhat.com (unknown [10.22.17.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 666491121320;
+        Thu, 27 Oct 2022 17:00:44 +0000 (UTC)
+From:   Joel Savitz <jsavitz@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Wei Wang <wei.w.wang@intel.com>,
-        Borislav Petkov <bp@alien8.de>
-References: <20221025124741.228045-1-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221025124741.228045-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        David Hildenbrand <dhildenb@redhat.com>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH linux-next] selftests/vm: add CATEGORY for ksm_functional_tests
+Date:   Thu, 27 Oct 2022 13:00:43 -0400
+Message-Id: <20221027170043.2363797-1-jsavitz@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/25/22 14:47, Maxim Levitsky wrote:
-> This patch series is a result of long debug work to find out why
-> sometimes guests with win11 secure boot
-> were failing during boot.
-> 
-> During writing a unit test I found another bug, turns out
-> that on rsm emulation, if the rsm instruction was done in real
-> or 32 bit mode, KVM would truncate the restored RIP to 32 bit.
-> 
-> I also refactored the way we write SMRAM so it is easier
-> now to understand what is going on.
-> 
-> The main bug in this series which I fixed is that we
-> allowed #SMI to happen during the STI interrupt shadow,
-> and we did nothing to both reset it on #SMI handler
-> entry and restore it on RSM.
+commit e080ceaa69c1 ("selftests/vm: add KSM unmerge tests") in
+linux-next adds an entry to run_vmtests.sh. I recently submitted
+commit b5ba705c2608 ("selftests/vm: enable running select groups of tests")
+to linux-next which categorizes tests by functionality in order to
+allow more precise selection of which tests are to be run.
 
-I have now sent out the final/new version of the first 8 patches and 
-will review these tomorrow.  Thanks for your patience. :)
+Since this newest test targets ksm and does not require more than one
+numa node, add 'CATEGORY="ksm"' to the invocation to group this test
+with the other ksm tests.
 
-Paolo
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+---
+ tools/testing/selftests/vm/run_vmtests.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index af35dd3bc589..fff00bb77086 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -252,7 +252,7 @@ CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 1
+ # KSM test with 2 NUMA nodes and merge_across_nodes = 0
+ CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
+ 
+-run_test ./ksm_functional_tests
++CATEGORY="ksm" run_test ./ksm_functional_tests
+ 
+ # protection_keys tests
+ if [ -x ./protection_keys_32 ]
+-- 
+2.31.1
 
