@@ -2,236 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F3E61185E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Oct 2022 18:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE736118FD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Oct 2022 19:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiJ1Q4g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Oct 2022 12:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S231404AbiJ1RLY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Oct 2022 13:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiJ1Qzq (ORCPT
+        with ESMTP id S231365AbiJ1RKs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Oct 2022 12:55:46 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEB01CCCD1;
-        Fri, 28 Oct 2022 09:55:37 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MzT5x3dj4z9xFQb;
-        Sat, 29 Oct 2022 00:49:09 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBX9XFOCVxj63ccAA--.45991S4;
-        Fri, 28 Oct 2022 17:55:14 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        revest@chromium.org, jackmanb@chromium.org, shuah@kernel.org,
-        paul@paul-moore.com, casey@schaufler-ca.com, zohar@linux.ibm.com
-Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nicolas.bouchinet@clip-os.org
-Subject: [RESEND][RFC][PATCH 3/3] selftests/bpf: Check if return values of LSM programs are allowed
-Date:   Fri, 28 Oct 2022 18:54:23 +0200
-Message-Id: <20221028165423.386151-3-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
-References: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
+        Fri, 28 Oct 2022 13:10:48 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39325190E60;
+        Fri, 28 Oct 2022 10:08:39 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id z18so3780564edb.9;
+        Fri, 28 Oct 2022 10:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dvfGQP4rEg3Kw5lEX3ZtIQ80dTIYCeCUaIYb9XGpr/k=;
+        b=cb7GzC2LOMi2HhBTaPvR5AaOzavwMgVz+NZbfwHKwNRcM6fXi1A80WsbFn7ohk6ixh
+         KiBO060pfwirL26Ikmt1dKQKccxlcIiP9n7JiRSByONWP1ZxDKLVJTT8CXKd6a9KxbqE
+         lQh8XOD3G8kfyIv586Kqsf6SzQS3m9Qhisr+MHGDV5DI13m/4U29o44v7dK5HnvLnioN
+         fK15pRyu5AyHYKoLipfjv/+0WDqMCyKwU3xAVX4WAIxHNh7cbyNGJzObNo1oUrCIgL/p
+         fwaaN2n4onbCzWX+qO4vINqOycBfesVQFGRnDnyZiXgvL1Yo3UzskM92p+iMDLvJX73H
+         i+Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dvfGQP4rEg3Kw5lEX3ZtIQ80dTIYCeCUaIYb9XGpr/k=;
+        b=b9RPD+7Pmya7N0OJSpkm/6vLdCXhyy3xDsBTtvT4i38IraTDzMBy6jkRLFddUdEo1Z
+         gVVQjE1mOlqWOtIIiISz22urnrbId0mESSZRfoP5pTykxM3Wk5gzMZjIOKj9rhaoJH2M
+         ruVgN0aubnygC2y/AktzGQjMk7KGFIzOLHX4piB+zu7urxlyRpWhT8nmuxZYVD5Uof2R
+         EBnggmPicqA53bSFKgtNRM7W/biait2q98jYDg6gRv6CcTPmNr8n+Js0rIX1p87WbHdf
+         GtTDi+/cSCZbC49AsIW9uTKx9VRUee/hh7SHVViixxKAvx255YSOn1TX1jWpUggkGoeK
+         z9QA==
+X-Gm-Message-State: ACrzQf3sKoTfRR5R4bwlFkgN2fP3bis0TnmEZ5OrhGwdlzQpIiF6OKVd
+        KD7MZ1PlZ1w7u8bIRltiRTKugryktVTJRTS8RS4=
+X-Google-Smtp-Source: AMsMyM73DDBTb/37IgY8U4uAkjDXpD1SHFZ7Pv5EOMO6OVXaecY+4kd0FuaftXvRtchfac9FwrV7biq8VpNfEyCeSq8=
+X-Received: by 2002:aa7:c504:0:b0:461:122b:882b with SMTP id
+ o4-20020aa7c504000000b00461122b882bmr456141edq.14.1666976917671; Fri, 28 Oct
+ 2022 10:08:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBX9XFOCVxj63ccAA--.45991S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF1kAr4UAFyxAr48Cr17ZFb_yoWrZw1Dp3
-        WrZw1jkF40vF4avFWrK397uayS9FW7CrW5KwnxZwnrZa97JF4xW3W5tFy5Zr13Gr15Gr9Y
-        qr17Can5u3WUZa7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-        AKxVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07jTbyZUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4DNkwAAs6
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAEf4Bzbq0PSsc6xCGSF=Af-pcysjt8Lv76-4N65AJMpXOOpOcg@mail.gmail.com>
+ <tencent_CD22930180507496CE65B30ACBABC4681506@qq.com>
+In-Reply-To: <tencent_CD22930180507496CE65B30ACBABC4681506@qq.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 28 Oct 2022 10:08:25 -0700
+Message-ID: <CAEf4BzazYVkVKrKzPD8a7tRZrcWDvvgoVksJHYk3+46V=8kZhw@mail.gmail.com>
+Subject: Re: Re: [PATCH] selftests/bpf: Fix strncpy() fortify warning
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
+        mykolal@fb.com, rongtao@cestc.cn, sdf@google.com, shuah@kernel.org,
+        song@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Oct 27, 2022 at 5:26 PM Rong Tao <rtoax@foxmail.com> wrote:
+>
+> Thanks for your reply, `enable[0] =3D '\0';` at the beginning and then
+> strncat() still has the same compile warning
+>
+> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
+> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+> @@ -77,7 +77,8 @@ static int __enable_controllers(const char *cgroup_path=
+, const char *controllers
+>                 enable[len] =3D 0;
+>                 close(fd);
+>         } else {
+> -               strncpy(enable, controllers, sizeof(enable));
+> +               enable[0] =3D '\0';
+> +               strncat(enable, controllers, sizeof(enable));
+>         }
+>
+> In function =E2=80=98__enable_controllers=E2=80=99:
+> tools/testing/selftests/bpf/cgroup_helpers.c:81:17: warning: =E2=80=98str=
+ncat=E2=80=99 specified bound 4097 equals destination size [-Wstringop-trun=
+cation]
+>    81 |                 strncat(enable, controllers, sizeof(enable));
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> tools/testing/selftests/bpf/cgroup_helpers.c:81:17: warning: =E2=80=98str=
+ncat=E2=80=99 specified bound 4097 equals destination size [-Wstringop-over=
+flow=3D]
+>
+> So, i think just add '-1' for strncpy() is a good way.
 
-Ensure that the eBPF verifier allows to load only LSM programs that return
-an allowed value depending on the LSM hook they attach to.
+no, it's not, see my previous email about ending up with
+non-zero-terminated C string.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- .../testing/selftests/bpf/verifier/lsm_ret.c  | 148 ++++++++++++++++++
- 1 file changed, 148 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/lsm_ret.c
-
-diff --git a/tools/testing/selftests/bpf/verifier/lsm_ret.c b/tools/testing/selftests/bpf/verifier/lsm_ret.c
-new file mode 100644
-index 000000000000..1a11f47fb24a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/lsm_ret.c
-@@ -0,0 +1,148 @@
-+{
-+	"lsm return value: positive not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_permission",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return zero value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: zero/positive not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "inode_init_security",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: positive allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "getprocattr",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: positive allowed, return two",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "getprocattr",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: only one allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "audit_rule_match",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: only one allowed, return two",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "audit_rule_match",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, can return only one as positive value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: negative not allowed, return -EPERM",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, -EPERM),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.errstr = "Invalid R0, cannot return negative value",
-+	.result = REJECT,
-+},
-+{
-+	"lsm return value: negative not allowed, return zero",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
-+{
-+	"lsm return value: negative not allowed, return one",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_LSM,
-+	.kfunc = "vm_enough_memory",
-+	.expected_attach_type = BPF_LSM_MAC,
-+	.result = ACCEPT,
-+},
--- 
-2.25.1
-
+check strncat() API, it leaves the dst string zero terminated, and
+yes, you need -1 for strncat as well, your compiler is right
