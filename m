@@ -2,127 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBEE610EB1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Oct 2022 12:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0276112B1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Oct 2022 15:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiJ1Kim (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Oct 2022 06:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
+        id S230222AbiJ1N17 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Oct 2022 09:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiJ1KiJ (ORCPT
+        with ESMTP id S229450AbiJ1N1z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:38:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC55F1C8410
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Oct 2022 03:36:54 -0700 (PDT)
+        Fri, 28 Oct 2022 09:27:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880DE1CCCD9
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Oct 2022 06:26:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666953413;
+        s=mimecast20190719; t=1666963618;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9QDN7b8C40P5nLRSFdo+jNsPCZ6unv6lfSYzzSd/j0g=;
-        b=IL+MsBo94WtKGXLYGhotY/2Vimcd3uFl0NlgqiWtz1H5/VDSRR9efayMYOZETIYTeV906x
-        1HVhlS3GKA6tghGJqSfEY9xjIih82jqVNtbiIvepT2IxyCJLhnQlWMiOJjmSKYXVfyO3iV
-        BQqmnI4SKnRZY42MiDT54Yp8MfmUq8o=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-595-AN3HKu3kNkOn0WPIIvkH7w-1; Fri, 28 Oct 2022 06:36:52 -0400
-X-MC-Unique: AN3HKu3kNkOn0WPIIvkH7w-1
-Received: by mail-wm1-f72.google.com with SMTP id r18-20020a05600c35d200b003cb2ba79692so2102211wmq.5
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Oct 2022 03:36:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9QDN7b8C40P5nLRSFdo+jNsPCZ6unv6lfSYzzSd/j0g=;
-        b=dtp5mr/PW0wf55bJY6WiIA5yV88UygyyDJVKixialOdzH43aHIylWWmKZR0QOAUKsj
-         YJyEBCx/i8uGEvByrI0likVaaGyZM5hZxTyyiWfIAFeMnIH5x1ZycOlDzjmm4/yATvbH
-         RwufzjfhFxqj12iknbVPfmFFd7W17wbCfgZHniGzLLqk+Gkpu6o+G9yspx2GWEHd6cgO
-         EhMxUzrrTPPz4pV5E+S3SkOXrdHLyJoufjSqmYWeQGZFbaFBWLOyPkUGVPKksk5w05N3
-         JveCyYnA2N3dQ4FJcztV+86d9qhlaUEgHjH4YUOwjM93PwxDXcUTMfzTdb4qhEaCIWGl
-         FiYQ==
-X-Gm-Message-State: ACrzQf2F4zRw+srObonDY8dq6bRFtk6xaWzLvr0Qe7stnzkOD9CYFAbe
-        HxQ9iiT7RpRO+t4FMhzDiFb35ziY48g6pE+IC1GuVmhSS1AvbBapH7FvTKzl0V9ljBaZMB4QPO2
-        DN67xRo1nuS/Z394ci/JWAorwsdZQ
-X-Received: by 2002:a7b:c404:0:b0:3b4:faca:cf50 with SMTP id k4-20020a7bc404000000b003b4facacf50mr8948955wmi.67.1666953411322;
-        Fri, 28 Oct 2022 03:36:51 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM63INbtLXdaafbXarNtJkfNp7fpH7epzfnlBib/0MYYIdXo2FN2jSREsMZG7t0ad/25Arizcg==
-X-Received: by 2002:a7b:c404:0:b0:3b4:faca:cf50 with SMTP id k4-20020a7bc404000000b003b4facacf50mr8948941wmi.67.1666953411035;
-        Fri, 28 Oct 2022 03:36:51 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id bq13-20020a5d5a0d000000b002366dd0e030sm3440555wrb.68.2022.10.28.03.36.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 03:36:50 -0700 (PDT)
-Message-ID: <4ce3d40e-9b2a-5f81-fc62-839f788fed16@redhat.com>
-Date:   Fri, 28 Oct 2022 12:36:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH RESEND v4 00/23] SMM emulation and interrupt shadow fixes
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nMEqJ+SJX81wA4F4D8VcQ1oWVGj7/HJA80MojM8MPSQ=;
+        b=CFSdZ2opJf4ryyuNDY8cLJzZ4oEBYkoqer1sRCux6RKCEUyqX34w3HE16BPpxqqWSAHJcy
+        ztZt2RcJdId68vmL3iUMyi5wy/qvDiHGDdjTUS8Qa65WoUJJO5K09zNjApj3bSXWczjaNa
+        Q1EK79tuhFBEkHe9yO4ULYEzR/H+9Zg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-170-eXGXvRW4NzCQ6fMIzMAqUA-1; Fri, 28 Oct 2022 09:26:56 -0400
+X-MC-Unique: eXGXvRW4NzCQ6fMIzMAqUA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDD8484ACA0;
+        Fri, 28 Oct 2022 13:26:55 +0000 (UTC)
+Received: from jsavitz-csb.redhat.com (unknown [10.22.16.249])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F9CE492B06;
+        Fri, 28 Oct 2022 13:26:53 +0000 (UTC)
+From:   Joel Savitz <jsavitz@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Savitz <jsavitz@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Shuah Khan <shuah@kernel.org>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Wei Wang <wei.w.wang@intel.com>,
-        Borislav Petkov <bp@alien8.de>
-References: <20221025124741.228045-1-mlevitsk@redhat.com>
- <0e3a0cab-1093-3e83-9e9c-f8639ebe5da0@redhat.com>
- <b0e8da09162cc6f2194e445a6e566f1bc356d5d0.camel@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <b0e8da09162cc6f2194e445a6e566f1bc356d5d0.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        David Hildenbrand <dhildenb@redhat.com>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH linux-next] selftests/vm: calculate variables in correct order
+Date:   Fri, 28 Oct 2022 09:26:40 -0400
+Message-Id: <20221028132640.2791026-1-jsavitz@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/27/22 19:06, Maxim Levitsky wrote:
-> On Thu, 2022-10-27 at 18:49 +0200, Paolo Bonzini wrote:
->> On 10/25/22 14:47, Maxim Levitsky wrote:
->>> This patch series is a result of long debug work to find out why
->>> sometimes guests with win11 secure boot
->>> were failing during boot.
->>>
->>> During writing a unit test I found another bug, turns out
->>> that on rsm emulation, if the rsm instruction was done in real
->>> or 32 bit mode, KVM would truncate the restored RIP to 32 bit.
->>>
->>> I also refactored the way we write SMRAM so it is easier
->>> now to understand what is going on.
->>>
->>> The main bug in this series which I fixed is that we
->>> allowed #SMI to happen during the STI interrupt shadow,
->>> and we did nothing to both reset it on #SMI handler
->>> entry and restore it on RSM.
->>
->> I have now sent out the final/new version of the first 8 patches and
->> will review these tomorrow.  Thanks for your patience. :)
->>
->> Paolo
->>
-> Thank you very much!!
+commit b5ba705c2608 ("selftests/vm: enable running select groups of tests")
+unintentionally reversed the ordering of some of the lines of
+run_vmtests.sh that calculate values based on system configuration.
+Importantly, $hpgsize_MB is determined from $hpgsize_KB, but this later
+value is not read from /proc/meminfo until later, causing userfaultfd
+tests to incorrectly fail since $half_ufd_size_MB will always be 0.
 
-Queued, thanks.  Note that some emulator patches should go in stable 
-releases so I have reordered them in front.
+Switch these statements around into proper order to fix the invocation
+of the userfaultfd tests that use $half_ufd_size_MB.
 
-Paolo
+Suggested-by: Nico Pache <npache@redhat.com>
+Signed-off-by: Joel Savitz <jsavitz@redhat.com>
+---
+ tools/testing/selftests/vm/run_vmtests.sh | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+index fff00bb77086..ce52e4f5ff21 100755
+--- a/tools/testing/selftests/vm/run_vmtests.sh
++++ b/tools/testing/selftests/vm/run_vmtests.sh
+@@ -82,16 +82,6 @@ test_selected() {
+ 	fi
+ }
+ 
+-# Simple hugetlbfs tests have a hardcoded minimum requirement of
+-# huge pages totaling 256MB (262144KB) in size.  The userfaultfd
+-# hugetlb test requires a minimum of 2 * nr_cpus huge pages.  Take
+-# both of these requirements into account and attempt to increase
+-# number of huge pages available.
+-nr_cpus=$(nproc)
+-hpgsize_MB=$((hpgsize_KB / 1024))
+-half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
+-needmem_KB=$((half_ufd_size_MB * 2 * 1024))
+-
+ # get huge pagesize and freepages from /proc/meminfo
+ while read -r name size unit; do
+ 	if [ "$name" = "HugePages_Free:" ]; then
+@@ -102,6 +92,16 @@ while read -r name size unit; do
+ 	fi
+ done < /proc/meminfo
+ 
++# Simple hugetlbfs tests have a hardcoded minimum requirement of
++# huge pages totaling 256MB (262144KB) in size.  The userfaultfd
++# hugetlb test requires a minimum of 2 * nr_cpus huge pages.  Take
++# both of these requirements into account and attempt to increase
++# number of huge pages available.
++nr_cpus=$(nproc)
++hpgsize_MB=$((hpgsize_KB / 1024))
++half_ufd_size_MB=$((((nr_cpus * hpgsize_MB + 127) / 128) * 128))
++needmem_KB=$((half_ufd_size_MB * 2 * 1024))
++
+ # set proper nr_hugepages
+ if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
+ 	nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
+-- 
+2.31.1
 
