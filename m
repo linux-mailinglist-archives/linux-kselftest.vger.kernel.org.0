@@ -2,173 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20FF610E54
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Oct 2022 12:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A2C610EA9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Oct 2022 12:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiJ1KX2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Oct 2022 06:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S230137AbiJ1KhN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Oct 2022 06:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJ1KXZ (ORCPT
+        with ESMTP id S230522AbiJ1Kgf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Oct 2022 06:23:25 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94E71CB516
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Oct 2022 03:23:24 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id b29so4412158pfp.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Oct 2022 03:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2CfsTgMX12Tq2R+NusU48gkRVh744rDyDoGlan3hPw=;
-        b=BxG0oJm+o+yiN573kTLN9a2ymmtQMETVKYE9YXSi/GAmnNU86X2WvPIRfYu9/e0kte
-         opSdzK313bkEBK51x7k/QqNdMg4a1t/d8jAmZnDZ4YtoCO/P129iUV2r4cKeVjfEPxOa
-         WBEtYTjBje3J68O0qZhFYQdstLDAKCY5RiLgaiU1UgJHHsk4Re0qrNkYTI0bCQKZfn1f
-         SILKp9fCV5z1PNbt5hR/mcarvEoE1RMc0Wg3nTMqJID0/t8KJTbyrZG2DPdTbiRkpZcq
-         +I3jeYOItfYYYe28s8K+FY4cpc0JELBnAkoNhuMNFm1Kat697xl7gofgnMZZ5Chlyzux
-         xnEQ==
+        Fri, 28 Oct 2022 06:36:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86D7180AF9
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Oct 2022 03:35:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666953321;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AHHc5DYHXDTbroGg4eDNG7KGetgNkKtBzWrn2006T0E=;
+        b=FX5TQ6D6mX+PDRVN98VkWMcL7JZO4srIH/XiPq8cPHAAgc3pLEgeUzAbTdWHAKnJQoRLG3
+        4CSRfO+xdq9jP8U4lsv1px5qax6XyPDeNyaCdAurQ7vENyhhrIxF+iQtx3z4xBW6ijM5tF
+        vMh0M6bzbppMYGAUs3SedP/Kl/NTkMs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-88-3CBnkh7MNaeLF_pvP_kGvA-1; Fri, 28 Oct 2022 06:35:19 -0400
+X-MC-Unique: 3CBnkh7MNaeLF_pvP_kGvA-1
+Received: by mail-wm1-f71.google.com with SMTP id m34-20020a05600c3b2200b003cf549cb32bso2162117wms.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Oct 2022 03:35:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g2CfsTgMX12Tq2R+NusU48gkRVh744rDyDoGlan3hPw=;
-        b=IyZ74EftnD+emJMWxpTrpRpgm/zm62+qqqNEXYSQljaF2WSb8k6I7AqubOk57OsNnV
-         T7SldeA64hYBbFNHcY8CAHIY7JJPxGkZAmcxHzrpJuiCFxiRw8ubhsyAj0KD8WedxR69
-         E4LNzJVI9dGXb/W6BPm29elwryvMWIEuDIlF5Ubjq7r2goqRMj9dia/M+kBTNGZ3dp34
-         Iz+eRkvwmbZl2I53nxQzDwcpFQMYxQqDW9sLaA4Dluztz6hGod3XdowsEJn3G9N3iHrs
-         D9xFn6t4M/5V1r7FLrAeVZE8r66Lx05lqnnEvZta3F2krHyPKEHqcGcLmDiCmBfGvetA
-         nbCA==
-X-Gm-Message-State: ACrzQf1IVkSukIaLpCiQseaqibdVE8nQjgUB1xWvVghv6vAyf68mEbTa
-        EBiDHOiF+NZzcV5QdrCewUuBAQ==
-X-Google-Smtp-Source: AMsMyM427J5c0sRT/SmQTigIbhmzccWoB+LlpGRx4T+yvyGfZaeVX6WAvf7NfgNzzZThtd+6ZWEC9g==
-X-Received: by 2002:a63:5f91:0:b0:46f:53ce:8005 with SMTP id t139-20020a635f91000000b0046f53ce8005mr6049600pgb.428.1666952604338;
-        Fri, 28 Oct 2022 03:23:24 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w35-20020a634763000000b0046ef0114367sm2469938pgk.71.2022.10.28.03.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 03:23:23 -0700 (PDT)
-Message-ID: <635bad9b.630a0220.4385c.5015@mx.google.com>
-Date:   Fri, 28 Oct 2022 03:23:23 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AHHc5DYHXDTbroGg4eDNG7KGetgNkKtBzWrn2006T0E=;
+        b=ei3Fmrr5jpK5EfpEJKD7Hltj9sJ18SnWxog/Og8kFHcIyciOp0QBhN6kF4Xz3LQlnG
+         y3OmKDiz7YS07uxFdtiztvaUPQbK6nDLb3kzZManX9rE40kb45GljvnZHvQHhf6DOLgR
+         fNvYkTJMo4gWx/j0FuFKggQ/mKJ4Oe1NRpuJDXi268voaNENWLdJdDMAkxK+YgemAr2u
+         DVBYKew646Y0Ng7ditItDs/BHVpRkXIELVixsHku5MoTBRUZw+91BiK2uUCSqmyQvxeu
+         N78HjdBOyj6etfdAnTPpNmsMe+5Ft9QW1cxASknul0+Jh3RI0tTBzKrh+/IOG0BWJ6vl
+         cW5A==
+X-Gm-Message-State: ACrzQf3bqxWwiHmqp0unoVkTKLLRPuCrMj2n57rUFJ0mf78pmytQxa8c
+        j6yRe6XhvRrFOrd/63kBmOPedcn+XCTrJlyiR/zXR0bEKNG+13OpNuzm6Ml3YpxSLjDIWYhk3bw
+        GKfZSZNkxn4SvuKISZrjgkdHQwRcY
+X-Received: by 2002:a5d:62cd:0:b0:236:6ea0:a609 with SMTP id o13-20020a5d62cd000000b002366ea0a609mr16771221wrv.508.1666953318644;
+        Fri, 28 Oct 2022 03:35:18 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6fApbM+YGw2J1Oa0PPkdj7Kvml3S9i9FB/WJLWdDFQlLGFmi2b3HQOlm75URoHDv5Fix/7Ug==
+X-Received: by 2002:a5d:62cd:0:b0:236:6ea0:a609 with SMTP id o13-20020a5d62cd000000b002366ea0a609mr16771188wrv.508.1666953318364;
+        Fri, 28 Oct 2022 03:35:18 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id i15-20020a05600c354f00b003cdf141f363sm4311927wmq.11.2022.10.28.03.35.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 03:35:17 -0700 (PDT)
+Message-ID: <137568e8-90a6-19e3-1bcb-055ed0c419e7@redhat.com>
+Date:   Fri, 28 Oct 2022 12:35:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.1-rc1-8-g94fea664ae4ee
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-seccomp: 3 runs,
- 2 regressions (v6.1-rc1-8-g94fea664ae4ee)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH RESEND v4 23/23] KVM: x86: smm: preserve interrupt shadow
+ in SMRAM
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Wei Wang <wei.w.wang@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+References: <20221025124741.228045-1-mlevitsk@redhat.com>
+ <20221025124741.228045-24-mlevitsk@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221025124741.228045-24-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 3 runs, 2 regressions (v6.1-rc1-8-g94fea6=
-64ae4ee)
+On 10/25/22 14:47, Maxim Levitsky wrote:
+> @@ -19,7 +19,8 @@ struct kvm_smram_state_32 {
+>   	u32 reserved1[62];
+>   	u32 smbase;
+>   	u32 smm_revision;
+> -	u32 reserved2[5];
+> +	u32 reserved2[4];
+> +	u32 int_shadow; /* KVM extension */
+>   	u32 cr4; /* CR4 is not present in Intel/AMD SMRAM image */
+>   	u32 reserved3[5];
 
-Regressions Summary
--------------------
+Of course the placement of KVM-specific fields is somewhat arbitrary, 
+but based on sandpile.org data I would place it at 0xFF1A ("reserved", 
+you have to search for 7F1Ah in the web page).
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+> @@ -86,7 +87,7 @@ struct kvm_smram_state_64 {
+>   	u64 io_restart_rsi;
+>   	u64 io_restart_rdi;
+>   	u32 io_restart_dword;
+> -	u32 reserved1;
+> +	u32 int_shadow;
+>   	u8 io_inst_restart;
+>   	u8 auto_hlt_restart;
+>   	u8 reserved2[6];
 
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
+Likewise, based on AMD BKDG I would place this at 0xFECB after the "NMI 
+Mask" field (which unfortunately I learnt about only after "inventing" 
+HF_SMM_INSIDE_NMI_MASK).
 
+I can do the changes myself, but please ack.
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
--rc1-8-g94fea664ae4ee/plan/kselftest-seccomp/
+Paolo
 
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.1-rc1-8-g94fea664ae4ee
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      94fea664ae4eea69e90abb4bd01997b9c54cd013 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/635b9b9f393db5c8b7e7db54
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-8-g94f=
-ea664ae4ee/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-8-g94f=
-ea664ae4ee/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221024.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/635b9b9f393d=
-b5c8b7e7db55
-        failing since 10 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/635b9bb2adae52ab3fe7db62
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.1-rc1-8-g94f=
-ea664ae4ee/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.1-rc1-8-g94f=
-ea664ae4ee/arm64/defconfig+kselftest+arm64-chromebook/gcc-10/lab-collabora/=
-kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221024.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/635b9bb2adae=
-52ab3fe7db63
-        failing since 10 days (last pass: linux-kselftest-next-6.0-rc2-11-g=
-144eeb2fc761, first fail: v6.1-rc1) =
-
- =20
