@@ -2,104 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D4A612237
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Oct 2022 12:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1BD6122E2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Oct 2022 14:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbiJ2Kfm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Oct 2022 06:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
+        id S229681AbiJ2MXm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Oct 2022 08:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJ2Kfl (ORCPT
+        with ESMTP id S229562AbiJ2MXi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Oct 2022 06:35:41 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EF465270;
-        Sat, 29 Oct 2022 03:35:37 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MzwmS53sKz9sNb;
-        Sat, 29 Oct 2022 10:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1667039736; bh=FXaHqBE8piSKzUlN37PhlW9f3D/eAeB2qZPMLHzY81I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TKQ5FX5ibcUaOFSPmJ9Q1n6X2B40QXNxU1UBHkGTgE6aomi5mfdan7Dj20O4HdjAl
-         u+o1RfminOXOyZOsdi/7Ro4d2Zc6uQghv8SUBTb747uA8DwR1d4Dy0a8xSbjzvztWQ
-         En6a56lT7INEBsx+6BeYdhvKQIT/OpetgE9CxIss=
-X-Riseup-User-ID: 5E46FA78F9295AE62B12862AC84E9FF8FC4711671C71289E7AA556C21037FE7C
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4MzwmQ2qyqz5vRh;
-        Sat, 29 Oct 2022 10:35:34 +0000 (UTC)
-Message-ID: <383a94bf-e9f1-49a9-9df9-1e72c51b5444@riseup.net>
-Date:   Sat, 29 Oct 2022 07:35:30 -0300
+        Sat, 29 Oct 2022 08:23:38 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888244D835
+        for <linux-kselftest@vger.kernel.org>; Sat, 29 Oct 2022 05:23:37 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-193-yOyJapxqNr6g5VWDcEBcsw-1; Sat, 29 Oct 2022 13:23:34 +0100
+X-MC-Unique: yOyJapxqNr6g5VWDcEBcsw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 29 Oct
+ 2022 13:23:33 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Sat, 29 Oct 2022 13:23:33 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Rong Tao' <rtoax@foxmail.com>,
+        "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>
+CC:     "andrii@kernel.org" <andrii@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "mykolal@fb.com" <mykolal@fb.com>,
+        "rongtao@cestc.cn" <rongtao@cestc.cn>,
+        "sdf@google.com" <sdf@google.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>
+Subject: RE: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+Thread-Topic: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+Thread-Index: AQHY60Mk36Wn0FfjTU6Muu9w9hWY+64lSbUw
+Date:   Sat, 29 Oct 2022 12:23:33 +0000
+Message-ID: <1611fe67d311461aa5f820836318bacc@AcuMS.aculab.com>
+References: <CAEf4BzazYVkVKrKzPD8a7tRZrcWDvvgoVksJHYk3+46V=8kZhw@mail.gmail.com>
+ <tencent_BA460110770C008560B21A2E3555405E9F09@qq.com>
+In-Reply-To: <tencent_BA460110770C008560B21A2E3555405E9F09@qq.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Subject: Re: [PATCH] kunit: alloc_string_stream_fragment error handling bug
- fix
-To:     "YoungJun.park" <her0gyugyu@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>
-Cc:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-References: <20221028144241.634012-1-her0gyugyu@gmail.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20221028144241.634012-1-her0gyugyu@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/28/22 11:42, YoungJun.park wrote:
-> When it fails to allocate fragment, it does not free and return error.
-> And check the pointer inappropriately.
-> 
-> Signed-off-by: YoungJun.park <her0gyugyu@gmail.com>
-> ---
->  lib/kunit/string-stream.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index 72659a9773e3..0228fe814e96 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -23,8 +23,10 @@ static struct string_stream_fragment *alloc_string_stream_fragment(
->  		return ERR_PTR(-ENOMEM);
->  
->  	frag->fragment = kunit_kmalloc(test, len, gfp);
-> -	if (!frag->fragment)
-> +	if (!frag->fragment) {
-> +		kunit_kfree(test, frag);
+RnJvbTogUm9uZyBUYW8NCj4gU2VudDogMjkgT2N0b2JlciAyMDIyIDA0OjAwDQo+IA0KPiBGcm9t
+OiBSb25nIFRhbyA8cm9uZ3Rhb0BjZXN0Yy5jbj4NCj4gDQo+IFJlcGxhY2Ugc3RybmNweSgpIHdp
+dGggc3RybmNhdCgpLCBzdHJuY2F0KCkgbGVhdmVzIHRoZSBkc3Qgc3RyaW5nIHplcm8NCj4gdGVy
+bWluYXRlZC4gQ29tcGlsZSBzYW1wbGVzL2JwZiB3YXJuaW5nOg0KDQpUaGlzIG9ubHkgbWFrZXMg
+YSBkaWZmZXJlbmNlIGJlY2F1c2UgdGVzdHMgZm9yIHN0cm5jYXQoKSBoYXZlIG5vdCBiZWVuIGFk
+ZGVkLg0Kc3J0bmNhdCgpIHJlYWxseSBpcyBuZXZlciB0aGUgc3RyaW5nIGZ1bmN0aW9uIHlvdSBh
+cmUgbG9va2luZyBmb3IuDQoNCglEYXZpZA0KDQoNCj4gDQo+ICQgY2Qgc2FtcGxlcy9icGYNCj4g
+JCBtYWtlDQo+IC4uLg0KPiBJbiBmdW5jdGlvbiDigJhfX2VuYWJsZV9jb250cm9sbGVyc+KAmToN
+Cj4gc2FtcGxlcy9icGYvLi4vLi4vdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL2Nncm91cF9o
+ZWxwZXJzLmM6ODA6MTc6IHdhcm5pbmc6IOKAmHN0cm5jcHnigJkgc3BlY2lmaWVkDQo+IGJvdW5k
+IDQwOTcgZXF1YWxzIGRlc3RpbmF0aW9uIHNpemUgWy1Xc3RyaW5nb3AtdHJ1bmNhdGlvbl0NCj4g
+ICAgODAgfCAgICAgICAgICAgICAgICAgc3RybmNweShlbmFibGUsIGNvbnRyb2xsZXJzLCBzaXpl
+b2YoZW5hYmxlKSk7DQo+ICAgICAgIHwgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+
+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBSb25nIFRh
+byA8cm9uZ3Rhb0BjZXN0Yy5jbj4NCj4gLS0tDQo+ICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9i
+cGYvY2dyb3VwX2hlbHBlcnMuYyB8IDMgKystDQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRp
+b25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9z
+ZWxmdGVzdHMvYnBmL2Nncm91cF9oZWxwZXJzLmMNCj4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9icGYvY2dyb3VwX2hlbHBlcnMuYw0KPiBpbmRleCBhNzBlODczYjI2N2UuLjkxMmU2NTIyYzdj
+NSAxMDA2NDQNCj4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL2Nncm91cF9oZWxw
+ZXJzLmMNCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL2Nncm91cF9oZWxwZXJz
+LmMNCj4gQEAgLTc3LDcgKzc3LDggQEAgc3RhdGljIGludCBfX2VuYWJsZV9jb250cm9sbGVycyhj
+b25zdCBjaGFyICpjZ3JvdXBfcGF0aCwgY29uc3QgY2hhciAqY29udHJvbGxlcnMNCj4gIAkJZW5h
+YmxlW2xlbl0gPSAwOw0KPiAgCQljbG9zZShmZCk7DQo+ICAJfSBlbHNlIHsNCj4gLQkJc3RybmNw
+eShlbmFibGUsIGNvbnRyb2xsZXJzLCBzaXplb2YoZW5hYmxlKSAtIDEpOw0KPiArCQllbmFibGVb
+MF0gPSAnXDAnOw0KPiArCQlzdHJuY2F0KGVuYWJsZSwgY29udHJvbGxlcnMsIHNpemVvZihlbmFi
+bGUpIC0gMSk7DQo+ICAJfQ0KPiANCj4gIAlzbnByaW50ZihwYXRoLCBzaXplb2YocGF0aCksICIl
+cy9jZ3JvdXAuc3VidHJlZV9jb250cm9sIiwgY2dyb3VwX3BhdGgpOw0KPiAtLQ0KPiAyLjMxLjEN
+Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
+cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
+KFdhbGVzKQ0K
 
-I don't believe that kunit_kfree is necessary here, because
-kunit_kmalloc is like kmalloc, but the allocation is test managed, which
-means that the allocation is managed by the test case and is
-automatically cleaned up after the test case concludes.
-
-So, the original version seems correct: if the allocation fails,
-alloc_string_stream_fragment will return NULL and string_stream_vadd
-will check if frag_container is different than NULL.
-
-Best Regards,
-- Maíra Canal
-
->  		return ERR_PTR(-ENOMEM);
-> +	}
->  
->  	return frag;
->  }
-> @@ -56,7 +58,7 @@ int string_stream_vadd(struct string_stream *stream,
->  	frag_container = alloc_string_stream_fragment(stream->test,
->  						      len,
->  						      stream->gfp);
-> -	if (!frag_container)
-> +	if (IS_ERR(frag_container))
->  		return -ENOMEM;
->  
->  	len = vsnprintf(frag_container->fragment, len, fmt, args);
