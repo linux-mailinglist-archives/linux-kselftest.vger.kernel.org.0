@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9713D6120F1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Oct 2022 09:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB026120FD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Oct 2022 09:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiJ2HTx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Oct 2022 03:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S229846AbiJ2HZY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Oct 2022 03:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJ2HTw (ORCPT
+        with ESMTP id S229861AbiJ2HZX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Oct 2022 03:19:52 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADAA2648D;
-        Sat, 29 Oct 2022 00:19:46 -0700 (PDT)
+        Sat, 29 Oct 2022 03:25:23 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B209E5FF5B;
+        Sat, 29 Oct 2022 00:25:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667027986; x=1698563986;
+  t=1667028321; x=1698564321;
   h=message-id:date:mime-version:cc:subject:to:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=FhmH3plE0BSGDSUDNHfqp0mdEEM+/mvoaPeadfpkBxc=;
-  b=MyWMXcREeIB3slWphO3CUX7aSykcpLIHbUf5pgNQ2d1XsHUHWbM6NiS9
-   vnrrQi1bq0kH3Xn4VJYW08TcTaeO7of0SnCL4evrLlxe6qqVeTD0KMqPm
-   bE0VY3EYDRUMvyn9XkXLOe8kmMmze3GKh/2wze3/Xf0q10bnTB+hfuFrt
-   l8dbPQtP8H+RwvMz6xbsV8KvE2N3vrjpSayyrKE8dpS2WSzsNLoUXJj9X
-   R7f9qny9Y9WyajOMpOLE3HSu/QUIWvLxpaevOJdpPcB5xh/p7Lj0/VXjP
-   rgKAvaC/ESlcGgFMiJ8Mtp+455mUnXVE1wxLHNciLH+CcZNJDiqvTsMeh
+  bh=pdSuXJp1XhtaXabpFFjunuzlj4sN7bGhSfVL9lBLAP4=;
+  b=CpmflPo4Cp029qIyseW/8A0JsyKeJaMZJiaN3YRe//QUVrraKnpevFlc
+   +IxGi7ZMvajXrxf+3OtOQBUjDnNAOojguKk2Bb6TPmTTysM0VWPGgUBJQ
+   DchdKUWK45VvUROEBMNdHGsY0+0PrsHw5IMkadNb7ZGbVybnVEHbmKPS9
+   z+ydSOgABYBMS4yzzaYimL10Rp4ekeCx/nWx0Bo79RLh/bMOlLmbSINKT
+   u0daNpigAM8NigiMFr8DmhWTiq9ubkAH/ciOXWg6MYvavcA/vDjsYnIEc
+   0dqYrDkRav0bg3qH4eYBGucE1YBOdkgjt4I1S3t70IAwYpEHQf2mE62Xb
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="308644827"
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="310341202"
 X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
-   d="scan'208";a="308644827"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 00:19:46 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="701992575"
+   d="scan'208";a="310341202"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 00:25:19 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="635552771"
 X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
-   d="scan'208";a="701992575"
+   d="scan'208";a="635552771"
 Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.211]) ([10.254.215.211])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 00:19:39 -0700
-Message-ID: <b43a183f-b06a-6abb-0ec8-498e2a62f92d@linux.intel.com>
-Date:   Sat, 29 Oct 2022 15:19:36 +0800
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 00:25:02 -0700
+Message-ID: <32d495bc-2dc7-1cc3-9c63-31f8172bb394@linux.intel.com>
+Date:   Sat, 29 Oct 2022 15:25:00 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
@@ -61,8 +61,7 @@ Cc:     baolu.lu@linux.intel.com,
         Shameerali Kolothum Thodi 
         <shameerali.kolothum.thodi@huawei.com>,
         Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v3 12/15] iommufd: Add kAPI toward external drivers for
- physical devices
+Subject: Re: [PATCH v3 10/15] iommufd: IOCTLs for the io_pagetable
 Content-Language: en-US
 To:     Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
@@ -77,13 +76,13 @@ To:     Jason Gunthorpe <jgg@nvidia.com>, bpf@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>,
         Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
         Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-References: <12-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+References: <10-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
 From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <12-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+In-Reply-To: <10-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,73 +91,76 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 2022/10/26 2:12, Jason Gunthorpe wrote:
-> +/*
-> + * When automatically managing the domains we search for a compatible domain in
-> + * the iopt and if one is found use it, otherwise create a new domain.
-> + * Automatic domain selection will never pick a manually created domain.
+> +/**
+> + * struct iommu_ioas_iova_ranges - ioctl(IOMMU_IOAS_IOVA_RANGES)
+> + * @size: sizeof(struct iommu_ioas_iova_ranges)
+> + * @ioas_id: IOAS ID to read ranges from
+> + * @num_iovas: Input/Output total number of ranges in the IOAS
+> + * @__reserved: Must be 0
+> + * @allowed_iovas: Pointer to the output array of struct iommu_iova_range
+> + * @out_iova_alignment: Minimum alignment required for mapping IOVA
+> + *
+> + * Query an IOAS for ranges of allowed IOVAs. Mapping IOVA outside these ranges
+> + * is not allowed. out_num_iovas will be set to the total number of iovas and
+> + * the out_valid_iovas[] will be filled in as space permits.
+
+"out_num_iovas" and "out_valid_iovas[]" are outdated.
+
+> + *
+> + * The allowed ranges are dependent on the HW path the DMA operation takes, and
+> + * can change during the lifetime of the IOAS. A fresh empty IOAS will have a
+> + * full range, and each attached device will narrow the ranges based on that
+> + * devices HW restrictions. Detatching a device can widen the ranges. Userspace
+> + * should query ranges after every attach/detatch to know what IOVAs are valid
+> + * for mapping.
+> + *
+> + * On input num_iovas is the length of the allowed_iovas array. On output it is
+> + * the total number of iovas filled in. The ioctl will return -EMSGSIZE and set
+> + * num_iovas to the required value if num_iovas is too small. In this case the
+> + * caller should allocate a larger output array and re-issue the ioctl.
 > + */
-> +static int iommufd_device_auto_get_domain(struct iommufd_device *idev,
-> +					  struct iommufd_ioas *ioas,
-> +					  unsigned int flags)
-> +{
-> +	struct iommufd_hw_pagetable *hwpt;
-> +	int rc;
+> +struct iommu_ioas_iova_ranges {
+> +	__u32 size;
+> +	__u32 ioas_id;
+> +	__u32 num_iovas;
+> +	__u32 __reserved;
+> +	__aligned_u64 allowed_iovas;
+> +	__aligned_u64 out_iova_alignment;
+> +};
+> +#define IOMMU_IOAS_IOVA_RANGES _IO(IOMMUFD_TYPE, IOMMUFD_CMD_IOAS_IOVA_RANGES)
 > +
-> +	/*
-> +	 * There is no differentiation when domains are allocated, so any domain
-> +	 * that is willing to attach to the device is interchangeable with any
-> +	 * other.
-> +	 */
-> +	mutex_lock(&ioas->mutex);
-> +	list_for_each_entry(hwpt, &ioas->hwpt_list, hwpt_item) {
-> +		if (!hwpt->auto_domain ||
-> +		    !refcount_inc_not_zero(&hwpt->obj.users))
-> +			continue;
-> +
-> +		rc = iommufd_device_do_attach(idev, hwpt, flags);
-> +		refcount_dec(&hwpt->obj.users);
-> +		if (rc) {
-> +			/*
-> +			 * FIXME: Requires the series to return EINVAL for
-> +			 * incompatible domain attaches.
-> +			 */
-> +			if (rc == -EINVAL)
-> +				continue;
-> +			goto out_unlock;
-> +		}
-> +		goto out_unlock;
+> +/**
+> + * struct iommu_ioas_allow_iovas - ioctl(IOMMU_IOAS_ALLOW_IOVAS)
+> + * @size: sizeof(struct iommu_ioas_allow_iovas)
+> + * @ioas_id: IOAS ID to allow IOVAs from
 
-Can the above code be simplified as:
+@num_iovas: The number of elements in @allowed_iovas array
 
-		if (rc == -EINVAL)
-			continue;
-		goto out_unlock;
-?
-
-> +	}
-> +
-> +	hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev->dev);
-> +	if (IS_ERR(hwpt)) {
-> +		rc = PTR_ERR(hwpt);
-> +		goto out_unlock;
-> +	}
-> +	hwpt->auto_domain = true;
-> +
-> +	rc = iommufd_device_do_attach(idev, hwpt, flags);
-> +	if (rc)
-> +		goto out_abort;
-> +	list_add_tail(&hwpt->hwpt_item, &ioas->hwpt_list);
-> +
-> +	mutex_unlock(&ioas->mutex);
-> +	iommufd_object_finalize(idev->ictx, &hwpt->obj);
-> +	return 0;
-> +
-> +out_abort:
-> +	iommufd_object_abort_and_destroy(idev->ictx, &hwpt->obj);
-> +out_unlock:
-> +	mutex_unlock(&ioas->mutex);
-> +	return rc;
-> +}
+> + * @allowed_iovas: Pointer to array of struct iommu_iova_range
+> + *
+> + * Ensure a range of IOVAs are always available for allocation. If this call
+> + * succeeds then IOMMU_IOAS_IOVA_RANGES will never return a list of IOVA ranges
+> + * that are narrower than the ranges provided here. This call will fail if
+> + * IOMMU_IOAS_IOVA_RANGES is currently narrower than the given ranges.
+> + *
+> + * When an IOAS is first created the IOVA_RANGES will be maximally sized, and as
+> + * devices are attached the IOVA will narrow based on the device restrictions.
+> + * When an allowed range is specified any narrowing will be refused, ie device
+> + * attachment can fail if the device requires limiting within the allowed range.
+> + *
+> + * Automatic IOVA allocation is also impacted by this call. MAP will only
+> + * allocate within the allowed IOVAs if they are present.
+> + *
+> + * This call replaces the entire allowed list with the given list.
+> + */
+> +struct iommu_ioas_allow_iovas {
+> +	__u32 size;
+> +	__u32 ioas_id;
+> +	__u32 num_iovas;
+> +	__u32 __reserved;
+> +	__aligned_u64 allowed_iovas;
+> +};
+> +#define IOMMU_IOAS_ALLOW_IOVAS _IO(IOMMUFD_TYPE, IOMMUFD_CMD_IOAS_ALLOW_IOVAS)
 
 Best regards,
 baolu
