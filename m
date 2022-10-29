@@ -2,107 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523A8611F92
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Oct 2022 05:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FAC611FD5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Oct 2022 05:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJ2DII (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Oct 2022 23:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S229721AbiJ2Dng (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Oct 2022 23:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiJ2DH7 (ORCPT
+        with ESMTP id S229681AbiJ2Dnf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Oct 2022 23:07:59 -0400
-X-Greylist: delayed 464 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Oct 2022 20:07:53 PDT
-Received: from out203-205-251-60.mail.qq.com (out203-205-251-60.mail.qq.com [203.205.251.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D9614BB48
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Oct 2022 20:07:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1667012871;
-        bh=c8DKeSJHy7nv5V+vv7J8kQrLnkZeHMgYOuYV61olSO4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=tmhW+oRwhGJgHzvwGIqcjzKtg7Y4iuLFWB9xeGpFG2515R5Jp44bPD3mkBjvzvevZ
-         EwVCZmaHYI5xUOHtd5CyAzeoojj/oksnY5eH2yl0ia7a+zj00uWWqviIvbuVCJgUr1
-         dhWoZEukvbFRTMmBxpF1AnWXyx40IEI1sfqfuGto=
-Received: from localhost.localdomain ([111.199.189.86])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id 1EE9CAFF; Sat, 29 Oct 2022 11:07:46 +0800
-X-QQ-mid: xmsmtpt1667012866tszdu6uwh
-Message-ID: <tencent_D977F40871CDA0474822CBF7324D25F9B505@qq.com>
-X-QQ-XMAILINFO: M5KH7ZjKOjx4y5ReN9Ig/rkL+0Hdd95Phowszp3b8X0t9jtQIK/Tmf8UovW4pj
-         2pILr1dmXvV9WdTOEEXIajKMZfAfcnVUKbnosj7k4TzakQC9qSEYk74EMq0ZO+toWT2O3SPvbmgh
-         DWlOVi+nEJOnuKEQtzkPKwvfGud8gRvsoKyqQyZQtIJTCYvBX3d6LoSUrXbuTcIWlAsNX31gXOLM
-         oDGyz6kWukIIEtiKTxfwI7xScBX1ny9vIwv939+Ll5Uteg2P9WVMQ7qdYzrD+IVBuQv+veFVlTaB
-         uXbTN7Akr3o4pJkd8hf9lCFkLUojtGfHoU7c/XTRdz8T5AephBAg9p/qcDZGSOjACla9xn1DpLha
-         o+HMxY4dsZZL4WJMrr9tmm7L7gQzIBNpX++JTleScZ88+XqWaC8xrWYjbrInptBvGySwSE0gCXy9
-         oFZBAjQbykXcmPR6i8/Ey7w7SRIrFBtcoerdwL773lL0v91BJtvuimfmZgmzP0+MIsO4JQHbO8jx
-         EpmrEoMzZn2g/iC5lWqZ00/xtukjBhDGU/sdgosfvo9pVB2Geno/HtOw9vGLNtBXx7PCONIafb67
-         IfvOzuHs2HCNpIn7SbFgzwR4VaS/+SWzSxK36EpcRXv3TM7/iuQzwz7KeZtk4HIzMCZY8DmTkBTJ
-         bx0o6tvr9LJ2yrcv0Gu24ba8JwSAXS32IkGIHtQRzaPPRnpZ+8SCJioorTw+lCPMTC9boWqUet0m
-         Sgw98kj38wXUdXEU4L8o1EKBKX9VwE5kwnIGS80ETOj8q3z9OA/QPDC8dBF47aQVH8KLVDHwiJ3H
-         a3tbL7Et9lyTFXgL5paksucNePksbwBVUVCjw/oRv4qEIiw631ci9bRNEyC1HYCKISJH2k8u3aCZ
-         S2sgct1zUCnotBzFuBcAFxA9Qn8/KqyVYFYM18h1s93piWkjCJnGZuMVZNqFPl7LI9z7k5V8D6rr
-         dm9QTdxYZPKXok/t2JDZ0OtIVvBF76b852KDJ9bnQC4IWq4S8xjOVj1wRTrxV/sov5fQHhAeOkqM
-         M3h+BAtR+8I9XxdRyjLZNLPquVFOdmZmqAUhJ+CWtKCZKpI/psDeqNa5da9+w=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     andrii.nakryiko@gmail.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
-        mykolal@fb.com, rongtao@cestc.cn, rtoax@foxmail.com,
-        sdf@google.com, shuah@kernel.org, song@kernel.org, yhs@fb.com
-Subject: [RESEND PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
-Date:   Sat, 29 Oct 2022 11:07:45 +0800
-X-OQ-MSGID: <20221029030745.25588-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <CAEf4BzazYVkVKrKzPD8a7tRZrcWDvvgoVksJHYk3+46V=8kZhw@mail.gmail.com>
-References: <CAEf4BzazYVkVKrKzPD8a7tRZrcWDvvgoVksJHYk3+46V=8kZhw@mail.gmail.com>
+        Fri, 28 Oct 2022 23:43:35 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0A61C8D7C;
+        Fri, 28 Oct 2022 20:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667015014; x=1698551014;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lwhcsqVAPcB+BRLzzkySku/43hUGK299jANuukpJQiU=;
+  b=DU5uUi+sMPvwvQvrMrsKVZ7QYkhHdRbqX3edVEUBiX13HbqjrMb5Zjeo
+   PHEstuGA4JyAm3XM8ER+4XJKw8Q2ON8Q3DT9eWSAfZDIKjjA3W9x5gT9z
+   yZCeUG/39seUm49yg0mno4PoeehngrAK3ynElWQ/cNvFtXTAKHLrh3Eu4
+   44prwvaoYNMnf8Yo2jk5BU14jvVq4Is03d5ax0FVyyZMo38hlze/oI2o1
+   7hf6fyHD/vBT6+6AkrixetzF6jYZGazQ4MSxq8mh5H1+/aT+7y9DsWlyR
+   7FDqZv9FtaYggSrj1xpsRo/RArb6CAU77zibHcxobyCJQ4LV1UpGOJEVk
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="309723947"
+X-IronPort-AV: E=Sophos;i="5.95,222,1661842800"; 
+   d="scan'208";a="309723947"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 20:43:34 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="635522260"
+X-IronPort-AV: E=Sophos;i="5.95,222,1661842800"; 
+   d="scan'208";a="635522260"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.211]) ([10.254.215.211])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2022 20:43:25 -0700
+Message-ID: <8b165b88-eea1-c891-2754-33209a2711bf@linux.intel.com>
+Date:   Sat, 29 Oct 2022 11:43:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Cc:     baolu.lu@linux.intel.com, bpf@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        David Gibson <david@gibson.dropbear.id.au>,
+        Eric Auger <eric.auger@redhat.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Yi Liu <yi.l.liu@intel.com>, Keqian Zhu <zhukeqian1@huawei.com>
+Subject: Re: [PATCH v3 05/15] iommufd: File descriptor, context, kconfig and
+ makefiles
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <5-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+ <9a837538-6333-0973-c6f4-229064026330@linux.intel.com>
+ <Y1lq2JJt1yLrzNjs@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Y1lq2JJt1yLrzNjs@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On 2022/10/27 1:14, Jason Gunthorpe wrote:
+> On Wed, Oct 26, 2022 at 08:58:23PM +0800, Baolu Lu wrote:
+>>> +	[_IOC_NR(_ioctl) - IOMMUFD_CMD_BASE] = {                               \
+>>> +		.size = sizeof(_struct) +                                      \
+>>> +			BUILD_BUG_ON_ZERO(sizeof(union ucmd_buffer) <          \
+>>> +					  sizeof(_struct)),                    \
+>>> +		.min_size = offsetofend(_struct, _last),                       \
+>>> +		.ioctl_num = _ioctl,                                           \
+>>> +		.execute = _fn,                                                \
+>>> +	}
+>>> +static struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
+>>
+>> How about making the ops "static const"?
+> 
+> Yes both const's were missed
+> 
+>>> +static void __exit iommufd_exit(void)
+>>> +{
+>>> +	misc_deregister(&iommu_misc_dev);
+>>> +}
+>>> +
+>>> +module_init(iommufd_init);
+>>> +module_exit(iommufd_exit);
+>>> +
+>>> +MODULE_DESCRIPTION("I/O Address Space Management for passthrough devices");
+>>> +MODULE_LICENSE("GPL");
+>>
+>> Could above be "GPL v2"?
+> 
+> It should be just "GPL", see Documentation/process/license-rules.rst:
+> 
+>      "GPL v2"                      Same as "GPL". It exists for historic
 
-Replace strncpy() with strncat(), strncat() leaves the dst string zero
-terminated. Compile samples/bpf warning:
+Ah! Thanks for letting me know this.
 
-$ cd samples/bpf
-$ make
-...
-In function ‘__enable_controllers’:
-samples/bpf/../../tools/testing/selftests/bpf/cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
-   80 |                 strncpy(enable, controllers, sizeof(enable));
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+>>> --- /dev/null
+>>> +++ b/include/uapi/linux/iommufd.h
+>>> @@ -0,0 +1,55 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>>> +/* Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES.
+>>> + */
+>>> +#ifndef _UAPI_IOMMUFD_H
+>>> +#define _UAPI_IOMMUFD_H
+>>> +
+>>> +#include <linux/types.h>
+>>> +#include <linux/ioctl.h>
+>>> +
+>>> +#define IOMMUFD_TYPE (';')
+>>> +
+>>> +/**
+>>> + * DOC: General ioctl format
+>>> + *
+>>> + * The ioctl mechanims follows a general format to allow for extensibility. Each
+>>                  ^^^^^^^^^ mechanism?
+> 
+> How about "interface" ?
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/cgroup_helpers.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Yes. It works.
 
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index e914cc45b766..912e6522c7c5 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -77,7 +77,8 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
- 		enable[len] = 0;
- 		close(fd);
- 	} else {
--		strncpy(enable, controllers, sizeof(enable));
-+		enable[0] = '\0';
-+		strncat(enable, controllers, sizeof(enable) - 1);
- 	}
- 
- 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
--- 
-2.31.1
+With above addressed,
 
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Best regards,
+baolu
