@@ -2,63 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12B9612714
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Oct 2022 04:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AC9612721
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Oct 2022 04:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiJ3DUw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Oct 2022 23:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
+        id S229552AbiJ3DbQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Oct 2022 23:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiJ3DUv (ORCPT
+        with ESMTP id S229500AbiJ3DbP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Oct 2022 23:20:51 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28E443309
-        for <linux-kselftest@vger.kernel.org>; Sat, 29 Oct 2022 20:20:45 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id m18so4036562vka.10
-        for <linux-kselftest@vger.kernel.org>; Sat, 29 Oct 2022 20:20:45 -0700 (PDT)
+        Sat, 29 Oct 2022 23:31:15 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C213C46D91
+        for <linux-kselftest@vger.kernel.org>; Sat, 29 Oct 2022 20:31:13 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id 3so8477294vsh.5
+        for <linux-kselftest@vger.kernel.org>; Sat, 29 Oct 2022 20:31:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oto+c/nGjvbR+NGnhNNU16o1If3e8M8wI2EbaxRIsqY=;
-        b=n2VuiyBC1oj62F+SETVcu+IwlOeGmrKzgR6kpqXldlsHQbPqQRRKn1E2cK2l+oxKK0
-         HGYMTzJInwB+VxDIGYz5vz65lFM+ws8Yp3agbvUFdngDSguQPc4bSU7xKkrUsr0P2d0C
-         eeGqeDj0Mr+O0sz6HJbjqwxbaMrlbcO5kngjXEjYIozVA8JkNmiK31wkujCXjvGdFQD1
-         d4n/JkLviNLpPBhs27z17EVR8gTYEqisKp3yt9pvbu/HSPsehOYKNalP5HubzeJCKVmQ
-         SdtAxlpRG81F11c0Ley74YNtLj5WGzvQOAqy4TEPMGmUdkbR55wbgg7QPYPR2tUG7oZw
-         8J6Q==
+        bh=FYx9BuSkD3biD9oEGRo91/JJMds1MHru8rbjhRVb2T0=;
+        b=TUO4K17nL/T9D8TxkEryUfiZ//zeSX119r18rcPvNVi4LbIDJr8tBjNLFiQP5t2de/
+         1iGNOQcjRjpxn5Zl2tOEyu0Sfyrec3vXQrTjXPXi4E2QuAAsKC6qiNgPgtfZcuUz1BhR
+         GNC+AP9PV/ZIxOccomYs+SWGk85vgqNyCalObHAMqKJdBH0DIsZ7ZqxzsMzBsL9WGpWw
+         +q/9zXG3PitU5Eq2FAZxMWy/cyPs6RnBFXpk8U/QTc9qHbpuuSTL33lW5VrhnjW0l+tu
+         eLfMPpqaTAM31aKLHfJMoZMT865+3rHD6aQ+TbZzZ27a86p3SAdzz+chiSQVJslyRLOr
+         R9ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oto+c/nGjvbR+NGnhNNU16o1If3e8M8wI2EbaxRIsqY=;
-        b=ySRA1/Met+dlh8nhCFPFp+ZvO9WkeMDpRKJkJSlKlM5W8qAMW9JG2zP+s66eqfctTI
-         C9yEgtS0ATzks+5Hnrh4ElF3uiajo3oYc83cbcsTuRwlcq9bhQsUdKMCypjZrfzHUZzC
-         d8exLCvgj2eiHUkkYT0lHRMQhtxDHYwTJTkjuoERYYTP4bScrH9Cw4zKPlHvG5mIC8yD
-         ycoac6bKSBphd+AUG8fZ5Dpn7ZRbdUtdFgaUiRk9a2sbWgq8MJy1W3NVrUVET+5gLUHw
-         OFnnyJyfVcIIqRa7laM55+waztaJ6xRGBQluytviNI3SMMeL3WgnNeVRUmd22pYqLY2s
-         /3Sg==
-X-Gm-Message-State: ACrzQf1VXESC4cq2QuLE6SXatHaKCDvGyh8T9X2Zact//HtzlVR7DwKa
-        MssiCYfYHHmhnTRZRYDM3Mym3Y88uESW1hf5v9tW9+164/A=
-X-Google-Smtp-Source: AMsMyM7o/ID0LrhRkVy9T0rDGx+JidnQatSLyAeKUBqM6+OAOK4pjB1xveOYd39L4y7WAPrLDDAda1nPYiiXZdJAL68=
-X-Received: by 2002:a1f:ad49:0:b0:3b6:d5d4:99dc with SMTP id
- w70-20020a1fad49000000b003b6d5d499dcmr2439308vke.37.1667100044298; Sat, 29
- Oct 2022 20:20:44 -0700 (PDT)
+        bh=FYx9BuSkD3biD9oEGRo91/JJMds1MHru8rbjhRVb2T0=;
+        b=DAmDTXqM9T1rDLFY4ZiHJpb7rDyzAnQgXLjNPx6wP94dmEWYBEUPOzPPd8u4fIUNJK
+         0C6xU1i3gPlf7PV8jiYFNwrR9E1prqMXlWhulv0+E54HE3uTrjPAvn5Br9VLdF3TusZU
+         nIamduGj3q/eiCAbxMpkLCZ86W6sBvVui6JTccN4C1Xrah74E3ckHebtSjc0MiSWHcNf
+         gNrRp7JKQ8bGZi0nQV3T+CG390zfHVnsqwtzsUYUB+BOeT7gjeP/dQZyRWg1dBsCE3O+
+         yvmYUsd39AhlHUMrgRbTF88qylvuowVFKgNgBXuG98iI6Hce05S/hDmrIY/M+lzU8euy
+         NU4w==
+X-Gm-Message-State: ACrzQf0YoSfz0us9MHEaDimc6hOyLaoau4gTMkI240MC8ex3yyASliXM
+        X9Kl6v22/nsh5Va0iPogHXwD9vULwa5gVHVIqjs4NA==
+X-Google-Smtp-Source: AMsMyM5kx7g+1XTgh54N1pWeneWGRG+yfMHypplxhY2W1ZkhiIk85rRNpts+1Y8lAqMudx4LzNKNyCtj2ew2clCBNp8=
+X-Received: by 2002:a67:d20b:0:b0:3aa:52e6:9802 with SMTP id
+ y11-20020a67d20b000000b003aa52e69802mr2338573vsi.35.1667100672812; Sat, 29
+ Oct 2022 20:31:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221028144241.634012-1-her0gyugyu@gmail.com>
-In-Reply-To: <20221028144241.634012-1-her0gyugyu@gmail.com>
+References: <20221028210256.3776835-1-dlatypov@google.com>
+In-Reply-To: <20221028210256.3776835-1-dlatypov@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sun, 30 Oct 2022 11:20:32 +0800
-Message-ID: <CABVgOSmtD3GRV3hDoMw9EgMG4DPFWWK1SEDJT_yGDs7-CnwveA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: alloc_string_stream_fragment error handling bug fix
-To:     "YoungJun.park" <her0gyugyu@gmail.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
+Date:   Sun, 30 Oct 2022 11:31:01 +0800
+Message-ID: <CABVgOS=uAVc_nKRFYRiQtWFykyfWH6hWASK-yd+ZnH5UNmRgsw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: make unit test not print parsed testdata
+ to stdout
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f6913705ec37f9eb"
+        boundary="0000000000006cea3a05ec381fa6"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,72 +71,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000f6913705ec37f9eb
+--0000000000006cea3a05ec381fa6
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 28, 2022 at 10:43 PM YoungJun.park <her0gyugyu@gmail.com> wrote=
-:
+On Sat, Oct 29, 2022 at 5:03 AM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> When it fails to allocate fragment, it does not free and return error.
-> And check the pointer inappropriately.
+> Currently, if you run
+> $ ./tools/testing/kunit/kunit_tool_test.py
+> you'll see a lot of output from the parser as we feed it testdata.
 >
-> Signed-off-by: YoungJun.park <her0gyugyu@gmail.com>
+> This makes the output hard to read and fairly confusing, esp. since our
+> testdata includes example failures, which get printed out in red.
+>
+> Silence that output so real failures are easier to see.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
 
-Thanks! As Ma=C3=ADra points out, the added kunit_kfree() call isn't
-strictly necessary, though it definitely doesn't hurt (and it's
-probably a nice thing to free memory early if we're already in a
-pretty dire memory situation). So I think it's an improvement.
+Thanks -- this has been annoying me for ages.
 
-The IS_ERR check is definitely a fix, though.
+That being said, this isn't a perfect fix, the "usage" text and
+"Reconfiguring .config"  still show up for me:
+---
+davidgow@slicestar:~/Development/linux-kselftest$
+./tools/testing/kunit/kunit_tool_test.py
+..............................usage: kunit_tool_test.py run [-h]
+[--build_dir DIR] [--make_options X=Y] [--alltests] [--kunitconfig
+PATHS] [--kconfig_add CONFIG_X=Y] [--arch ARCH] [--cross_compile
+PREFIX] [--qemu_config FILE] [--qemu_ar
+gs] [--jobs N]
+                             [--timeout SECONDS] [--kernel_args]
+[--run_isolated {suite,test}] [--raw_output [{all,kunit}]] [--json
+[FILE]]
+                             [filter_glob]
+kunit_tool_test.py run: error: argument --raw_output: invalid choice:
+'invalid' (choose from 'all', 'kunit')
+..............................Generating .config ...
+.Regenerating .config ...
+.........
+----------------------------------------------------------------------
+Ran 70 tests in 0.232s
+
+OK
+---
+
+That's still a significant improvement on what we had before, though, so:
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  lib/kunit/string-stream.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  tools/testing/kunit/kunit_tool_test.py | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index 72659a9773e3..0228fe814e96 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -23,8 +23,10 @@ static struct string_stream_fragment *alloc_string_str=
-eam_fragment(
->                 return ERR_PTR(-ENOMEM);
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index e2cd2cc2e98f..a6e53945656e 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -80,6 +80,9 @@ class KconfigTest(unittest.TestCase):
+>                 self.assertEqual(actual_kconfig, expected_kconfig)
 >
->         frag->fragment =3D kunit_kmalloc(test, len, gfp);
-> -       if (!frag->fragment)
-> +       if (!frag->fragment) {
-> +               kunit_kfree(test, frag);
->                 return ERR_PTR(-ENOMEM);
-> +       }
+>  class KUnitParserTest(unittest.TestCase):
+> +       def setUp(self):
+> +               self.print_mock = mock.patch('kunit_printer.Printer.print').start()
+> +               self.addCleanup(mock.patch.stopall)
 >
->         return frag;
->  }
-> @@ -56,7 +58,7 @@ int string_stream_vadd(struct string_stream *stream,
->         frag_container =3D alloc_string_stream_fragment(stream->test,
->                                                       len,
->                                                       stream->gfp);
-> -       if (!frag_container)
-> +       if (IS_ERR(frag_container))
->                 return -ENOMEM;
+>         def assertContains(self, needle: str, haystack: kunit_parser.LineStream):
+>                 # Clone the iterator so we can print the contents on failure.
+> @@ -485,6 +488,9 @@ class LinuxSourceTreeTest(unittest.TestCase):
 >
->         len =3D vsnprintf(frag_container->fragment, len, fmt, args);
+>
+>  class KUnitJsonTest(unittest.TestCase):
+> +       def setUp(self):
+> +               self.print_mock = mock.patch('kunit_printer.Printer.print').start()
+> +               self.addCleanup(mock.patch.stopall)
+>
+>         def _json_for(self, log_file):
+>                 with open(test_data_path(log_file)) as file:
+>
+> base-commit: 8f8b51f7d5c8bd3a89e7ea87aed2cdaa52ca5ba4
 > --
-> 2.25.1
+> 2.38.1.273.g43a17bfeac-goog
 >
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/20221028144241.634012-1-her0gyugyu%40gmail.com.
 
---000000000000f6913705ec37f9eb
+--0000000000006cea3a05ec381fa6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -202,14 +222,14 @@ p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
 +bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
 /GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDE
-31osRoT6A3adxWgNBGyH1HasOH3gEM7PhrEmi17oizAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjEwMzAwMzIwNDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCu
+dMEw1BIPsg8ftz0X6aTpMFn8qzQVXgrBqcz/twO9sjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjEwMzAwMzMxMTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAV+M53GYVuCZTcEd7h6fi
-b/IsNA5c5yY28vkl2w/U9HMpoZc5NRUlfQDHp9a/t6yq4LYBY63FT+mwzoIRXno/zOcAxWHwvNZF
-K3lJpkurSc2+7ZzSVbP8jT37lQTSImCFzknooGy/sQVl7vvCC9tEY31J6xr5TDIJlUk22l1dlzgx
-2BRuyFxlVML9k5AjHnER2gQVYnz57xtYfXq5xcw26bjip3IdfiuAjihlMGgA315bEbZLfJ0h3HsX
-aGD5GNottTH9rs2waf19hCcTTMj0/76QJXDGBrO//UZA1+6iCl7GxGGVLqBrCiad6xTD49Ip6qxO
-7AyNWNZmJN0nNe6R6A==
---000000000000f6913705ec37f9eb--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAopFyFx8CJeuCw4W58VRW
+pemzoFh2T1Um45RQwHVsBKpMOD/7DvpXbuf7LWk6LUhaD09fBUMAtGsucvHnehq1aWLw6dMpoYZt
+AeCO7xP0FjA0JGhIOMzF7ItxDUmqVRY0WwDcGD5XDOPHxTc0N4JymcILWIWSXnTt4gkj42uzORVa
+Iochwo39X1q7LoEsV/Sti08HOtYmHwUM1b3QKSg35NTVgHMW+vZ+NJflLaCeyr0l6AvEG+4683gh
+Q7lx9X8Goxifuv4xUnGDf1xXcbG0mn/J46uNP2DDMTEmtbQs3w+EzD8SChaQvt+MvLlZMj2RmvDN
+lUBxsWdBfYUJI/6G/Q==
+--0000000000006cea3a05ec381fa6--
