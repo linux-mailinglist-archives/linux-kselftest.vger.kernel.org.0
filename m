@@ -2,71 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0120361291C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Oct 2022 09:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60ED1612AAA
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Oct 2022 14:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiJ3I3v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 30 Oct 2022 04:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
+        id S229619AbiJ3NEP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 30 Oct 2022 09:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJ3I3v (ORCPT
+        with ESMTP id S229441AbiJ3NEP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 30 Oct 2022 04:29:51 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ADB120
-        for <linux-kselftest@vger.kernel.org>; Sun, 30 Oct 2022 01:29:47 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id f140so8280557pfa.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 30 Oct 2022 01:29:47 -0700 (PDT)
+        Sun, 30 Oct 2022 09:04:15 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65233B7F8
+        for <linux-kselftest@vger.kernel.org>; Sun, 30 Oct 2022 06:04:14 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id b185so8535201pfb.9
+        for <linux-kselftest@vger.kernel.org>; Sun, 30 Oct 2022 06:04:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wn67zjUrvRIAuIt/yH34kPy+6+CbEnri6MP6SVwT/Is=;
-        b=Jr71H3plqD0NcrrYdwq7uz80Jp+rK4So+F/8gfGNz+KeVF+pfuD1Ka2tE14wYNniX/
-         p7kCpQF54u1qeOBmwB4by0DV+zIZ7SxUW4RWggXHhupamH4rgLtobZNIODPexU3IdT28
-         ZmjO3D4jQF2AIyBLSx8DuS1WXjZQY0UeaKU7o=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=x8Q5V/hEyzT5GSg4hevtw2Az212298Ph3py1LZ+ezSw=;
+        b=tXnyMuF36x+Iqp8oyM7Ic3fxT43tMNQoZK/hGX0qrgeKf0NQQH5FpwZlnGLUOotSAL
+         6I53B9h1fX0lEPw7hvaxsn9h/DnjtshMHG6EEu6BtyHfQJXtXBekSXIUKHSBa8/6X0YS
+         CzUOiwp5X1zXAYSuj4iakyE5JIuqdk0YvMrBoDa4kZmNJxL1nnsGclnOZ7wQWOMW+OYN
+         pPYDsTH18MagUQOgSjpNg0jBJ/NiQAgboEX/inS7cCaWiLdH+/DSMtfAJ8ZcC6UxkK7L
+         sF4sZyZtwWuV9l3qaD3h4KN68LGB+6P/jm76R5MwI1Wvevuzx4UvMrxQ/mGAGyQDRKtk
+         hmcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wn67zjUrvRIAuIt/yH34kPy+6+CbEnri6MP6SVwT/Is=;
-        b=tjDok0Ec7i+A8XNlVeoCZ91rZzuzFfCdco28QHl3M03Nd9XKjrwY0oJgB5cueSsygR
-         hItG/rfJXdHFEHhmdbAOgns9qSfEDwT+fHuHQyzxLxjPdWSOcaNZCkCyshGKM9RKhuPb
-         UFUSGZkQxzp7Gnsy1R61ZocyBReAnTbpE24EEe1hxVzNcJlDZ5hRbgsDt+YggzHJnA+i
-         UJnCR6oY+ssSXZ3DyuUmzm1iVatykK5nLpyQr9TZCrbdLGUxympqGM3o3dReGsFeH3dp
-         N79ZQ+NJ4OV7pbHeArkumZq6pBX74vFpkdQtH5h/vlLJ8BNtZ7oN40rEMvVTG2BWyrdm
-         8cfQ==
-X-Gm-Message-State: ACrzQf3TkKDRMDgWC6eXemQwri3pDZ/nkUGkxfuZllRKMpfLpAoqFtsT
-        KExNQOrzL8W/8+svhd69j4QFCQ==
-X-Google-Smtp-Source: AMsMyM4CsumDtpL/W71VaqyRQAmwnuQbfM0942cbOIosw7sDXzTn02D8QcnFcAzPyo5WgphUJOuwtg==
-X-Received: by 2002:a05:6a00:1810:b0:56b:f29d:cc8e with SMTP id y16-20020a056a00181000b0056bf29dcc8emr8181665pfa.33.1667118586633;
-        Sun, 30 Oct 2022 01:29:46 -0700 (PDT)
-Received: from [192.168.0.168] ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id 1-20020a17090a0f0100b00205fafa6768sm2101042pjy.6.2022.10.30.01.29.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Oct 2022 01:29:46 -0700 (PDT)
-Message-ID: <2dc3fbd9-217b-1e7e-1b77-dad14bce91e0@linuxfoundation.org>
-Date:   Sun, 30 Oct 2022 02:29:41 -0600
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x8Q5V/hEyzT5GSg4hevtw2Az212298Ph3py1LZ+ezSw=;
+        b=yOk7+hCIhvqdG8HRmpDhd9d9/FHT9eGd+vRw27FtmyJkbgjh/c02+ccc4YdF5LGiBN
+         0ResDGQVa98west1bdy6sgYiudJYXcfmOSZ8IaJ22ah/nd+SB45GJoMBtNuEgkM22hdX
+         xXq17PpihneUnV+H5cui/7XHLyp8Jf/uEv2BkMxzyFuytcGvhzIdPUtGYfMXTGByowij
+         k0HdrxrQEUHhk5MZ3RTP1UdBDMCK3ero4RRc0wAraW47dVF3+TBa2OqsdsGlEDWtykEX
+         CUX0JAIqDFjx5TF29yeknOEbOyIcoP9ChelDQggSHZ5qwVVgQLwFhmS2K+uk4DJpkJ8q
+         Q7UQ==
+X-Gm-Message-State: ACrzQf2aJNRYKxQMf7dwJZIorrU2KGtHPUHg6GwE3hudHACwGK1Qw8Wj
+        /YG+4cMjLLzYi0Yr6PwpXC09VA==
+X-Google-Smtp-Source: AMsMyM6JMqBz/sAFtYJrOhdIeGbCQGqTuB+7lwV6Lvf00EfZtjjJm9am5zYzObyLlXGRucvczQ/o8Q==
+X-Received: by 2002:a62:7bc5:0:b0:56b:47ed:22a7 with SMTP id w188-20020a627bc5000000b0056b47ed22a7mr9117421pfc.63.1667135053914;
+        Sun, 30 Oct 2022 06:04:13 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w3-20020a636203000000b00442c70b659esm2307439pgb.91.2022.10.30.06.04.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 06:04:13 -0700 (PDT)
+Message-ID: <635e764d.630a0220.a3ad0.3641@mx.google.com>
+Date:   Sun, 30 Oct 2022 06:04:13 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3] ksefltests: pidfd: Fix wait_states: Test terminated by
- timeout
-Content-Language: en-US
-To:     Li Zhijian <lizhijian@fujitsu.com>, brauner@kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Philip Li <philip.li@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: linux-kselftest-fixes-6.1-rc3-2-g3d982441308e
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
+ 1 error (linux-kselftest-fixes-6.1-rc3-2-g3d982441308e)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +72,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/31/22 21:10, Li Zhijian wrote:
-> 0Day/LKP observed that the kselftest blocks forever since one of the
-> pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
-> the source, we found that it blocks at:
-> ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
-> 
-> wait_states has below testing flow:
->    CHILD                 PARENT
->    ---------------+--------------
-> 1 STOP itself
-> 2                   WAIT for CHILD STOPPED
-> 3                   SIGNAL CHILD to CONT
-> 4 CONT
-> 5 STOP itself
-> 5'                  WAIT for CHILD CONT
-> 6                   WAIT for CHILD STOPPED
-> 
-> The problem is that the kernel cannot ensure the order of 5 and 5', once
-> 5 goes first, the test will fail.
-> 
-> we can reproduce it by:
-> $ while true; do make run_tests -C pidfd; done
-> 
-> Introduce a blocking read in child process to make sure the parent can
-> check its WCONTINUED.
-> 
-> CC: Philip Li <philip.li@intel.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> ---
+kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 error (linux-kselfte=
+st-fixes-6.1-rc3-2-g3d982441308e)
 
-Sorry for the delay. Now applied to linux-kselftest fixes for rc4
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/linux-kselftest-fixes-6.1-rc3-2-g3d982441308e/
 
-thanks,
--- Shuah
+Tree: kselftest
+Branch: fixes
+Git Describe: linux-kselftest-fixes-6.1-rc3-2-g3d982441308e
+Git Commit: 3d982441308ebdf713771c8a85c23d9b8b66b4d4
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Errors Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-15): 1 error
+
+Errors summary:
+
+    1    error: write on a pipe with no reader
+
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-15) =E2=80=94 PASS, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    error: write on a pipe with no reader
+
+---
+For more info write to <info@kernelci.org>
