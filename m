@@ -2,234 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AC9612721
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Oct 2022 04:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB0B61274A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Oct 2022 05:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiJ3DbQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Oct 2022 23:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S229695AbiJ3EWb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 30 Oct 2022 00:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJ3DbP (ORCPT
+        with ESMTP id S229441AbiJ3EWa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Oct 2022 23:31:15 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C213C46D91
-        for <linux-kselftest@vger.kernel.org>; Sat, 29 Oct 2022 20:31:13 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id 3so8477294vsh.5
-        for <linux-kselftest@vger.kernel.org>; Sat, 29 Oct 2022 20:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FYx9BuSkD3biD9oEGRo91/JJMds1MHru8rbjhRVb2T0=;
-        b=TUO4K17nL/T9D8TxkEryUfiZ//zeSX119r18rcPvNVi4LbIDJr8tBjNLFiQP5t2de/
-         1iGNOQcjRjpxn5Zl2tOEyu0Sfyrec3vXQrTjXPXi4E2QuAAsKC6qiNgPgtfZcuUz1BhR
-         GNC+AP9PV/ZIxOccomYs+SWGk85vgqNyCalObHAMqKJdBH0DIsZ7ZqxzsMzBsL9WGpWw
-         +q/9zXG3PitU5Eq2FAZxMWy/cyPs6RnBFXpk8U/QTc9qHbpuuSTL33lW5VrhnjW0l+tu
-         eLfMPpqaTAM31aKLHfJMoZMT865+3rHD6aQ+TbZzZ27a86p3SAdzz+chiSQVJslyRLOr
-         R9ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FYx9BuSkD3biD9oEGRo91/JJMds1MHru8rbjhRVb2T0=;
-        b=DAmDTXqM9T1rDLFY4ZiHJpb7rDyzAnQgXLjNPx6wP94dmEWYBEUPOzPPd8u4fIUNJK
-         0C6xU1i3gPlf7PV8jiYFNwrR9E1prqMXlWhulv0+E54HE3uTrjPAvn5Br9VLdF3TusZU
-         nIamduGj3q/eiCAbxMpkLCZ86W6sBvVui6JTccN4C1Xrah74E3ckHebtSjc0MiSWHcNf
-         gNrRp7JKQ8bGZi0nQV3T+CG390zfHVnsqwtzsUYUB+BOeT7gjeP/dQZyRWg1dBsCE3O+
-         yvmYUsd39AhlHUMrgRbTF88qylvuowVFKgNgBXuG98iI6Hce05S/hDmrIY/M+lzU8euy
-         NU4w==
-X-Gm-Message-State: ACrzQf0YoSfz0us9MHEaDimc6hOyLaoau4gTMkI240MC8ex3yyASliXM
-        X9Kl6v22/nsh5Va0iPogHXwD9vULwa5gVHVIqjs4NA==
-X-Google-Smtp-Source: AMsMyM5kx7g+1XTgh54N1pWeneWGRG+yfMHypplxhY2W1ZkhiIk85rRNpts+1Y8lAqMudx4LzNKNyCtj2ew2clCBNp8=
-X-Received: by 2002:a67:d20b:0:b0:3aa:52e6:9802 with SMTP id
- y11-20020a67d20b000000b003aa52e69802mr2338573vsi.35.1667100672812; Sat, 29
- Oct 2022 20:31:12 -0700 (PDT)
+        Sun, 30 Oct 2022 00:22:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CC53CBEE;
+        Sat, 29 Oct 2022 21:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667103748; x=1698639748;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MhIuLCRf0Hwq3SMK5PGVuAWcO/v6ykzenDIV6L6SLeA=;
+  b=PYi/sUfLVAIPYTisS4AXwO6zPLXaEEk5rdshqxoK9N3T5WV2CiD0uYfV
+   npJtR8ffuEaU1APEebQ84rF/pz96RjO0loxrGRkAe2gw6fPRcYky6vnUP
+   91qkWKEhVRtldi5UgCaygs8z8xD2MGj0wZph7Q3T2g7dMby1NniOsSWzr
+   5CP8JcpynYCLfijyn7o2o1997h864XL5g8Czpx0Do4YwXpNVSNytl67O/
+   WUl1RKvJ77OLkh2Rrs0asZt7HX2c449AYLA7Cepqt4F407QAW7Pty74wJ
+   07s6PxfbD+KQV5i6m2MvRoSX3TDuQGNvwDl/8iKc078+SbK7SeavGoxIt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="296121243"
+X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
+   d="scan'208";a="296121243"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 21:22:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="722463143"
+X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
+   d="scan'208";a="722463143"
+Received: from xpf.sh.intel.com ([10.239.182.130])
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Oct 2022 21:22:24 -0700
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bae Chang Seok <chang.seok.bae@intel.com>
+Subject: [PATCH v13 0/2] Introduce XSAVE feature self-test
+Date:   Sun, 30 Oct 2022 12:22:43 +0800
+Message-Id: <cover.1667102760.git.pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221028210256.3776835-1-dlatypov@google.com>
-In-Reply-To: <20221028210256.3776835-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sun, 30 Oct 2022 11:31:01 +0800
-Message-ID: <CABVgOS=uAVc_nKRFYRiQtWFykyfWH6hWASK-yd+ZnH5UNmRgsw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: make unit test not print parsed testdata
- to stdout
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000006cea3a05ec381fa6"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000006cea3a05ec381fa6
-Content-Type: text/plain; charset="UTF-8"
+The XSAVE feature set supports the saving and restoring of xstate components.
+XSAVE feature has been used for process context switching. XSAVE components
+include x87 state for FP execution environment, SSE state, AVX state and so on.
 
-On Sat, Oct 29, 2022 at 5:03 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Currently, if you run
-> $ ./tools/testing/kunit/kunit_tool_test.py
-> you'll see a lot of output from the parser as we feed it testdata.
->
-> This makes the output hard to read and fairly confusing, esp. since our
-> testdata includes example failures, which get printed out in red.
->
-> Silence that output so real failures are easier to see.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+In order to ensure that XSAVE works correctly, add XSAVE most basic test for
+XSAVE architecture functionality.
 
-Thanks -- this has been annoying me for ages.
+This patch tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
+AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
+1. The contents of these xstates in the process should not change after the
+   signal handling.
+2. The contents of these xstates in the child process should be the same as
+   the contents of the xstate in the parent process after the fork syscall.
+3. The contents of xstates in the parent process should not change after
+   the context switch.
 
-That being said, this isn't a perfect fix, the "usage" text and
-"Reconfiguring .config"  still show up for me:
----
-davidgow@slicestar:~/Development/linux-kselftest$
-./tools/testing/kunit/kunit_tool_test.py
-..............................usage: kunit_tool_test.py run [-h]
-[--build_dir DIR] [--make_options X=Y] [--alltests] [--kunitconfig
-PATHS] [--kconfig_add CONFIG_X=Y] [--arch ARCH] [--cross_compile
-PREFIX] [--qemu_config FILE] [--qemu_ar
-gs] [--jobs N]
-                             [--timeout SECONDS] [--kernel_args]
-[--run_isolated {suite,test}] [--raw_output [{all,kunit}]] [--json
-[FILE]]
-                             [filter_glob]
-kunit_tool_test.py run: error: argument --raw_output: invalid choice:
-'invalid' (choose from 'all', 'kunit')
-..............................Generating .config ...
-.Regenerating .config ...
-.........
-----------------------------------------------------------------------
-Ran 70 tests in 0.232s
+As stated in the ABI(Application Binary Interface) specification:
+https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf
+Xstate like XMM is not preserved across function calls, so fork() function
+which provided from libc could not be used in the xsave test, and the libc
+function is replaced with an inline function of the assembly code only.
 
-OK
----
+To prevent GCC from generating any FP/SSE(XMM)/AVX/PKRU code by mistake, add
+"-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler arguments. stdlib.h
+can not be used because of the "-mno-sse" option.
+Thanks Dave, Hansen for the above suggestion!
+Thanks Chen Yu; Shuah Khan; Chatre Reinette and Tony Luck's comments!
+Thanks to Bae, Chang Seok for a bunch of comments!
 
-That's still a significant improvement on what we had before, though, so:
+========
+- Change from v12 to v13
+  - Improve the comments of CPUID.(EAX=0DH, ECX=0H):EBX.
 
-Reviewed-by: David Gow <davidgow@google.com>
+- Change from v11 to v12
+  - Remove useless rbx register stuffing in assembly syscall functions.
+    (Zhang, Li)
 
-Cheers,
--- David
+- Change from v10 to v11
+  - Remove the small function like cpu_has_pkru(), get_xstate_size() and so
+    on. (Shuah Khan)
+  - Unify xfeature_num type to uint32_t.
 
->  tools/testing/kunit/kunit_tool_test.py | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index e2cd2cc2e98f..a6e53945656e 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -80,6 +80,9 @@ class KconfigTest(unittest.TestCase):
->                 self.assertEqual(actual_kconfig, expected_kconfig)
->
->  class KUnitParserTest(unittest.TestCase):
-> +       def setUp(self):
-> +               self.print_mock = mock.patch('kunit_printer.Printer.print').start()
-> +               self.addCleanup(mock.patch.stopall)
->
->         def assertContains(self, needle: str, haystack: kunit_parser.LineStream):
->                 # Clone the iterator so we can print the contents on failure.
-> @@ -485,6 +488,9 @@ class LinuxSourceTreeTest(unittest.TestCase):
->
->
->  class KUnitJsonTest(unittest.TestCase):
-> +       def setUp(self):
-> +               self.print_mock = mock.patch('kunit_printer.Printer.print').start()
-> +               self.addCleanup(mock.patch.stopall)
->
->         def _json_for(self, log_file):
->                 with open(test_data_path(log_file)) as file:
->
-> base-commit: 8f8b51f7d5c8bd3a89e7ea87aed2cdaa52ca5ba4
-> --
-> 2.38.1.273.g43a17bfeac-goog
->
+- Change from v9 to v10
+  - Remove the small function if the function will be called once and there
+    is no good reason. (Shuah Khan)
 
---0000000000006cea3a05ec381fa6
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+- Change from v8 to v9
+  - Use function pointers to make it more structured. (Hansen, Dave)
+  - Improve the function name: xstate_tested -> xstate_in_test. (Chang S. Bae)
+  - Break this test up into two pieces: keep the xstate key test steps with
+    "-mno-sse" and no stdlib.h, keep others in xstate.c file. (Hansen, Dave)
+  - Use kselftest infrastructure for xstate.c file. (Hansen, Dave)
+  - Use instruction back to populate fp xstate buffer. (Hansen, Dave)
+  - Will skip the test if cpu could not support xsave. (Chang S. Bae)
+  - Use __cpuid_count() helper in kselftest.h. (Reinette, Chatre)
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCu
-dMEw1BIPsg8ftz0X6aTpMFn8qzQVXgrBqcz/twO9sjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjEwMzAwMzMxMTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAopFyFx8CJeuCw4W58VRW
-pemzoFh2T1Um45RQwHVsBKpMOD/7DvpXbuf7LWk6LUhaD09fBUMAtGsucvHnehq1aWLw6dMpoYZt
-AeCO7xP0FjA0JGhIOMzF7ItxDUmqVRY0WwDcGD5XDOPHxTc0N4JymcILWIWSXnTt4gkj42uzORVa
-Iochwo39X1q7LoEsV/Sti08HOtYmHwUM1b3QKSg35NTVgHMW+vZ+NJflLaCeyr0l6AvEG+4683gh
-Q7lx9X8Goxifuv4xUnGDf1xXcbG0mn/J46uNP2DDMTEmtbQs3w+EzD8SChaQvt+MvLlZMj2RmvDN
-lUBxsWdBfYUJI/6G/Q==
---0000000000006cea3a05ec381fa6--
+- Change from v7 to v8
+  Many thanks to Bae, Chang Seok for a bunch of comments as follow:
+  - Use the filling buffer way to prepare the xstate buffer, and use xrstor
+    instruction way to load the tested xstates.
+  - Remove useless dump_buffer, compare_buffer functions.
+  - Improve the struct of xstate_info.
+  - Added AVX512_ZMM_Hi256 and AVX512_Hi16_ZMM components in xstate test.
+  - Remove redundant xstate_info.xstate_mask, xstate_flag[], and
+    xfeature_test_mask, use xstate_info.mask instead.
+  - Check if xfeature is supported outside of fill_xstate_buf() , this change
+    is easier to read and understand.
+  - Remove useless wrpkru, only use filling all tested xstate buffer in
+    fill_xstates_buf().
+  - Improve a bunch of function names and variable names.
+  - Improve test steps flow for readability.
+
+- Change from v6 to v7:
+  - Added the error number and error description of the reason for the
+    failure, thanks Shuah Khan's suggestion.
+  - Added a description of what these tests are doing in the head comments.
+  - Added changes update in the head comments.
+  - Added description of the purpose of the function. thanks Shuah Khan.
+
+- Change from v5 to v6:
+  - In order to prevent GCC from generating any FP code by mistake,
+    "-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler parameter was
+    added, it's referred to the parameters for compiling the x86 kernel. Thanks
+    Dave Hansen's suggestion.
+  - Removed the use of "kselftest.h", because kselftest.h included <stdlib.h>,
+    and "stdlib.h" would use sse instructions in it's libc, and this *XSAVE*
+    test needed to be compiled without libc sse instructions(-mno-sse).
+  - Improved the description in commit header, thanks Chen Yu's suggestion.
+  - Becasue test code could not use buildin xsave64 in libc without sse, added
+    xsave function by instruction way.
+  - Every key test action would not use libc(like printf) except syscall until
+    it's failed or done. If it's failed, then it would print the failed reason.
+  - Used __cpuid_count() instead of native_cpuid(), becasue __cpuid_count()
+    was a macro definition function with one instruction in libc and did not
+    change xstate. Thanks Chatre Reinette, Shuah Khan.
+    https://lore.kernel.org/linux-sgx/8b7c98f4-f050-bc1c-5699-fa598ecc66a2@linuxfoundation.org/
+
+- Change from v4 to v5:
+  - Moved code files into tools/testing/selftests/x86.
+  - Delete xsave instruction test, becaue it's not related to kernel.
+  - Improved case description.
+  - Added AVX512 opmask change and related XSAVE content verification.
+  - Added PKRU part xstate test into instruction and signal handling test.
+  - Added XSAVE process swich test for FPU, AVX2, AVX512 opmask and PKRU part.
+
+- Change from v3 to v4:
+  - Improve the comment in patch 1.
+
+- Change from v2 to v3:
+  - Improve the description of patch 2 git log.
+
+- Change from v1 to v2:
+  - Improve the cover-letter. Thanks Dave Hansen's suggestion.
+
+
+Pengfei Xu (2):
+  selftests/x86/xstate: Add xstate signal handling test for XSAVE
+    feature
+  selftests/x86/xstate: Add xstate fork test for XSAVE feature
+
+ tools/testing/selftests/x86/.gitignore       |   1 +
+ tools/testing/selftests/x86/Makefile         |  11 +-
+ tools/testing/selftests/x86/xstate.c         | 214 +++++++++++++++++
+ tools/testing/selftests/x86/xstate.h         | 228 +++++++++++++++++++
+ tools/testing/selftests/x86/xstate_helpers.c | 209 +++++++++++++++++
+ tools/testing/selftests/x86/xstate_helpers.h |   9 +
+ 6 files changed, 670 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/xstate.c
+ create mode 100644 tools/testing/selftests/x86/xstate.h
+ create mode 100644 tools/testing/selftests/x86/xstate_helpers.c
+ create mode 100644 tools/testing/selftests/x86/xstate_helpers.h
+
+-- 
+2.31.1
+
