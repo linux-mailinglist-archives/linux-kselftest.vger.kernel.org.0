@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B6C614CD3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C0F614CD4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiKAOjk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Nov 2022 10:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
+        id S230336AbiKAOjo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Nov 2022 10:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbiKAOjj (ORCPT
+        with ESMTP id S230335AbiKAOjn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:39:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB9012AFF
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:39:38 -0700 (PDT)
+        Tue, 1 Nov 2022 10:39:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C61120B8
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:39:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64A3C615AF
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A97BFC4347C;
-        Tue,  1 Nov 2022 14:39:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8A3EB81DE7
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:39:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445DAC43470;
+        Tue,  1 Nov 2022 14:39:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667313577;
-        bh=WtLZskmj0qPo98o2L14apeeTu/h7b96ZNMltJ+zQPHo=;
+        s=k20201202; t=1667313580;
+        bh=mpO5Qxgy63SzKSm0Pa637DSx9B/LwRyQmrBGvfcgjI4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cTjyV/81DGsCax1YBvLPB1mDTZkpe2yPHjYicXsB8M5Z0SJ3n2d5k9rYVtM0TyPvI
-         GYCW0mRYTVcVrmopebHLgb6/FqSfeKXru0v1wB6kph4n3T87A8jgu+cDpQ7LkSZVoD
-         x8V3M6w7IWTXzr68/XnKZqCoLF2Chm6FhvMQJmSpsBKUEzgcvIDGF/Cavfup8z6ovf
-         Xkby0gzwa7cFiOyhsOwCQx/BGhzRT8aLyVqrtyMmjUMOq43Cq6XdHWYBXmmiGW8cEx
-         +u9v42T990oukUefN1lyDNpTXl6Oelyyp+FidZAgSPcDnVhCkItZ1UJvdW74vcRJTq
-         o/4SxpG+lJofA==
+        b=uLPY8ISrAQM1IcwRt+e6glqWUD4UUhWhbIfjpBl7fu1hVoRp0auxf45pkcsIsfPV+
+         YuNBH7rLjoU1njZ3N5WF09uX6Uv0U5dvYgaIg+BsrQfWmnLuu3hy4HEOUk275yDy3p
+         GIdBFV40FNfzrmrtiqvet2IIampGYnC0pu2iCfqb/+AGTabfHzstiGCCUaqR3i7kD2
+         UpqeW7pW3j1des7NTmgxnLH3WzexI+FmS6C5+zVxGpmwgxeaimnakAk7az1/li5eT4
+         zC9Oi+mjmeM56noZGYbos3u8oJX7Jkgg1MJSuCoLoQmAGKG4YSqzjHsijM54SxMiIv
+         oF1yxJrg8Qqlg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -42,14 +42,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 09/21] arm64/sme: Provide storage for ZT0
-Date:   Tue,  1 Nov 2022 14:33:24 +0000
-Message-Id: <20221101143336.254445-10-broonie@kernel.org>
+Subject: [PATCH v2 10/21] arm64/sme: Implement context switching for ZT0
+Date:   Tue,  1 Nov 2022 14:33:25 +0000
+Message-Id: <20221101143336.254445-11-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221101143336.254445-1-broonie@kernel.org>
 References: <20221101143336.254445-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3004; i=broonie@kernel.org; h=from:subject; bh=WtLZskmj0qPo98o2L14apeeTu/h7b96ZNMltJ+zQPHo=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS4yQsw2eFc36W6Nj2o/z05lO1c+jtujGyIEcwYm QWn+JCuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuMgAKCRAk1otyXVSH0GT0CA CDgeib0V8bpeC2U5Wm52+G07etBIqOvvQO8A5iPLCugp6sKf2R6SuKT+iVBLyOqsjKnCgdmS7FhDJ+ NAZixiFw7ryQvTYC5fNhLtG8ILHvhJUTLoFL0FiEY8KO2358CxifvVcNEZtq+94itropg2huYOhAVc 7F2bb1Bx5Scb+ext5usFdCgi9hD9R6CkRXehWo+N0D33+mb+oq3rYKT9W1ds34oTCB399y+LD4A6pH sEAxmzQiKnVm+Ws/dRRaU/ZVvPw5lQ+irSjuZ8UecDroS8XO3P2cKUPwpTVszpm6qJmwqkXNcP7W6x D/WlYpnxq+1V9oOkcgHG9voHE0ScvR
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3458; i=broonie@kernel.org; h=from:subject; bh=mpO5Qxgy63SzKSm0Pa637DSx9B/LwRyQmrBGvfcgjI4=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS4zdc/EIKP8qquj4JHn1sObOtN20Fi7cMiGER7Z YGdTDF+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuMwAKCRAk1otyXVSH0Hf9B/ sHUWBhFbCQTvgxgLRDQoO7uP6trnWCTyLZO0xGyJZitVcAyW2R7Cl7iOgTzSHb/4M7P1lLr45PFvjE 8ho8gFv1Wb2/pJKMz9JgkiI0xS8/Tsp/ab1cfxsSGVYKtPKjYCz9xnGbT+EhmrOehJJ2AeNt/dVqPY HNosuaKzdoPfua7xFrvsUXi6otS+pztyhURNBEuetf4vzsolyij0h4X/7CDjBatHjRW8M+Jcl5vhDS MJR5XTNdTQKvqSYcSnF7uSZhqj5YG9oq7bkmkmj1b86rCtoWQcxRzWW7qqvS/FCXDu9enol1E/mzIy SBdGSLufIdkXeYbwOpocSvtTHgxHWb
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,77 +61,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When the system supports SME2 there is an additional register ZT0 which
-we must store when the task is using SME. Since ZT0 is accessible only
-when PSTATE.ZA is set just like ZA we allocate storage for it along with
-ZA, increasing the allocation size for the memory region where we store
-ZA and storing the data for ZT after that for ZA.
+When the system supports SME2 the ZT0 register must be context switched as
+part of the floating point state. This register is stored immediately
+after ZA in memory and is only accessible when PSTATE.ZA is set so we
+handle it in the same functions we use to save and restore ZA.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h | 13 +++++++++++++
- arch/arm64/kernel/process.c     | 10 +++++-----
- 2 files changed, 18 insertions(+), 5 deletions(-)
+ arch/arm64/include/asm/fpsimd.h  |  4 ++--
+ arch/arm64/kernel/entry-fpsimd.S | 30 ++++++++++++++++++++----------
+ arch/arm64/kernel/fpsimd.c       |  6 ++++--
+ 3 files changed, 26 insertions(+), 14 deletions(-)
 
 diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index f2bda963cfe5..2d7a69b49349 100644
+index 2d7a69b49349..42c019936dfd 100644
 --- a/arch/arm64/include/asm/fpsimd.h
 +++ b/arch/arm64/include/asm/fpsimd.h
-@@ -96,6 +96,13 @@ static inline void *sve_pffr(struct thread_struct *thread)
- 	return (char *)thread->sve_state + sve_ffr_offset(vl);
- }
+@@ -110,8 +110,8 @@ extern void sve_flush_live(bool flush_ffr, unsigned long vq_minus_1);
+ extern unsigned int sve_get_vl(void);
+ extern void sve_set_vq(unsigned long vq_minus_1);
+ extern void sme_set_vq(unsigned long vq_minus_1);
+-extern void za_save_state(void *state);
+-extern void za_load_state(void const *state);
++extern void sme_save_state(void *state, int zt);
++extern void sme_load_state(void const *state, int zt);
  
-+static inline void *thread_zt_state(struct thread_struct *thread)
-+{
-+	/* The ZT register state is stored immediately after the ZA state */
-+	unsigned int sme_vq = sve_vq_from_vl(thread_get_sme_vl(thread));
-+	return thread->sme_state + ZA_SIG_REGS_SIZE(sme_vq);
-+}
-+
- extern void sve_save_state(void *state, u32 *pfpsr, int save_ffr);
- extern void sve_load_state(void const *state, u32 const *pfpsr,
- 			   int restore_ffr);
-@@ -345,6 +352,9 @@ extern unsigned int sme_get_vl(void);
- extern int sme_set_current_vl(unsigned long arg);
- extern int sme_get_current_vl(void);
+ struct arm64_cpu_capabilities;
+ extern void sve_kernel_enable(const struct arm64_cpu_capabilities *__unused);
+diff --git a/arch/arm64/kernel/entry-fpsimd.S b/arch/arm64/kernel/entry-fpsimd.S
+index 229436f33df5..6325db1a2179 100644
+--- a/arch/arm64/kernel/entry-fpsimd.S
++++ b/arch/arm64/kernel/entry-fpsimd.S
+@@ -100,25 +100,35 @@ SYM_FUNC_START(sme_set_vq)
+ SYM_FUNC_END(sme_set_vq)
  
-+/* Will move with signal support */
-+#define ZT_SIG_REG_SIZE 512
-+
  /*
-  * Return how many bytes of memory are required to store the full SME
-  * specific state for task, given task's currently configured vector
-@@ -357,6 +367,9 @@ static inline size_t sme_state_size(struct task_struct const *task)
- 
- 	size = ZA_SIG_REGS_SIZE(sve_vq_from_vl(vl));
- 
-+	if (system_supports_sme2())
-+		size += ZT_SIG_REG_SIZE;
+- * Save the SME state
++ * Save the ZA and ZT state
+  *
+  * x0 - pointer to buffer for state
++ * x1 - number of ZT registers to save
+  */
+-SYM_FUNC_START(za_save_state)
+-	_sme_rdsvl	1, 1		// x1 = VL/8
+-	sme_save_za 0, x1, 12
++SYM_FUNC_START(sme_save_state)
++	_sme_rdsvl	2, 1		// x2 = VL/8
++	sme_save_za 0, x2, 12		// Leaves x0 pointing to the end of ZA
 +
- 	return size;
- }
++	cbz	x1, 1f
++	_str_zt 0
++1:
+ 	ret
+-SYM_FUNC_END(za_save_state)
++SYM_FUNC_END(sme_save_state)
  
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 5cfb876c76ee..b7919bf45e2e 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -307,11 +307,11 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
+ /*
+- * Load the SME state
++ * Load the ZA and ZT state
+  *
+  * x0 - pointer to buffer for state
++ * x1 - number of ZT registers to save
+  */
+-SYM_FUNC_START(za_load_state)
+-	_sme_rdsvl	1, 1		// x1 = VL/8
+-	sme_load_za 0, x1, 12
++SYM_FUNC_START(sme_load_state)
++	_sme_rdsvl	2, 1		// x2 = VL/8
++	sme_load_za 0, x2, 12		// Leaves x0 pointing to the end of ZA
++
++	cbz	x1, 1f
++	_ldr_zt 0
++1:
+ 	ret
+-SYM_FUNC_END(za_load_state)
++SYM_FUNC_END(sme_load_state)
  
- 	/*
- 	 * In the unlikely event that we create a new thread with ZA
--	 * enabled we should retain the ZA state so duplicate it here.
--	 * This may be shortly freed if we exec() or if CLONE_SETTLS
--	 * but it's simpler to do it here. To avoid confusing the rest
--	 * of the code ensure that we have a sve_state allocated
--	 * whenever za_state is allocated.
-+	 * enabled we should retain the ZA and ZT state so duplicate
-+	 * it here.  This may be shortly freed if we exec() or if
-+	 * CLONE_SETTLS but it's simpler to do it here. To avoid
-+	 * confusing the rest of the code ensure that we have a
-+	 * sve_state allocated whenever za_state is allocated.
- 	 */
- 	if (thread_za_enabled(&src->thread)) {
- 		dst->thread.sve_state = kzalloc(sve_state_size(src),
+ #endif /* CONFIG_ARM64_SME */
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 73ec8850a402..b7f4eef42f86 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -396,7 +396,8 @@ static void task_fpsimd_load(void)
+ 		write_sysreg_s(current->thread.svcr, SYS_SVCR);
+ 
+ 		if (thread_za_enabled(&current->thread))
+-			za_load_state(current->thread.sme_state);
++			sme_load_state(current->thread.sme_state,
++				       system_supports_sme2());
+ 
+ 		if (thread_sm_enabled(&current->thread)) {
+ 			restore_sve_regs = true;
+@@ -449,7 +450,8 @@ static void fpsimd_save(void)
+ 		*svcr = read_sysreg_s(SYS_SVCR);
+ 
+ 		if (*svcr & SVCR_ZA_MASK)
+-			za_save_state(last->sme_state);
++			sme_save_state(last->sme_state,
++				       system_supports_sme2());
+ 
+ 		/* If we are in streaming mode override regular SVE. */
+ 		if (*svcr & SVCR_SM_MASK) {
 -- 
 2.30.2
 
