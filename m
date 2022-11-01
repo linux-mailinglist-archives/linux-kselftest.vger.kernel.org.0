@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261AC614CDE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B6A614CDF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiKAOkG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Nov 2022 10:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S230305AbiKAOkI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Nov 2022 10:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiKAOkE (ORCPT
+        with ESMTP id S230355AbiKAOkF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:40:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23831C426
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:40:03 -0700 (PDT)
+        Tue, 1 Nov 2022 10:40:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A71C10B
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:40:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FFCFB81DE7
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:40:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F9BC433D7;
-        Tue,  1 Nov 2022 14:39:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63B25615AF
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:40:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A298BC43142;
+        Tue,  1 Nov 2022 14:40:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667313601;
-        bh=btqd+wxNRzbHiPozkH6Ho7qEjlMM8y1Ld49FHNxQVHA=;
+        s=k20201202; t=1667313603;
+        bh=27+llr53xtHHEMl2wSYoYx5Yhlq4fzr34gu5YztKp94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ma/LREcjN+QjKpjW+WdkMph0YqUkcGyxiTYwCRnnydyMgKwxaIA1+1SHiL7JpkuLZ
-         u3HgXefflixeAITHUEqc1F2d5SNUqvt9jmEs9OIn+EQRtY/cN55cH/MQsfvbn33Qzx
-         jbCPqXX24gKPIOobdA9ugLr+MtSo0K8l0Ui4ast6VU1bS4AP0K36QsWMU6HzV2rOJV
-         OXr42DwcFGRWz+U77aomK2AzRddamWIF6jPCv4hP3xOswnhBGlb7D98yCInZB5SFfe
-         6AaJqSYxnryqN3tJVnFdMqIH1SosX32cL/lJVB1KFqJXGw3r6kY8AMq1KtocBw+zDn
-         dlA+U0Daki0Gw==
+        b=bfXSQICgwP/iQx4+nULxWweA3DoMFBvZBoBuAz8GgNozb830ziXRLSX5gvAnF6uwc
+         7xoQR4t7qkigDXPkncfFrVVm2QFpCMRvzmS6YCAIkMx88ALyK2JLq2lzfUzSxKZzt+
+         p/h8tQHCFexrXFXIgI63496bb51OW0RqXsIfmEoz3Q55zAeO7v+KVL89Lv9J5e7k7G
+         RSgonU5OEwLhX+EltQjC0lyCa07MgO1mmE8t18WX3V6A0h4ZEg2IbqJMvlcsMHj1qX
+         wlGV6/BBSCPFf5S+8AOqG+TjWQkqEFfbObUThsh8KHAWnXkYUF8Gs8FBSXxf7yJbqA
+         ZyYPyaW41lw4Q==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -42,14 +42,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 18/21] kselftest/arm64: Add test coverage for ZT register signal frames
-Date:   Tue,  1 Nov 2022 14:33:33 +0000
-Message-Id: <20221101143336.254445-19-broonie@kernel.org>
+Subject: [PATCH v2 19/21] kselftest/arm64: Add SME2 coverage to syscall-abi
+Date:   Tue,  1 Nov 2022 14:33:34 +0000
+Message-Id: <20221101143336.254445-20-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221101143336.254445-1-broonie@kernel.org>
 References: <20221101143336.254445-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4843; i=broonie@kernel.org; h=from:subject; bh=btqd+wxNRzbHiPozkH6Ho7qEjlMM8y1Ld49FHNxQVHA=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS4827wLUy8MmPY6StlaAnYEPtnbph52q+skWwFI XAVzRgeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuPAAKCRAk1otyXVSH0JIJB/ oCrWd7+8lenSLrmEPaoT/GdLM97XyJJq8VrJcdwQzPX1EIWGZh+3g8DectglpXL3rg+D0OclhkiHsj 7ii6pUapRsUOXu/VsRMHXLbsG7/oF7QQd1W0dQCS52PUPud9z+u/INXHLHUHwsiRBExYbI2P3DPF6L Ef6kc6sy+doeINvxa92qDSKx1MzAkBEdUEdujXm70CanLC7uSzlVCXDvaZseQ+uAqqL+V7luupeIhI ZXka6wgVAGayDuaLPTyXqkuQzuC02A9CWTdnXSkkFsutoJO4NdjJhCREhpfSL/f5sFsI1WbuADdILZ ix74erHYkzBOA5TCjAdaozRianVP5j
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4477; i=broonie@kernel.org; h=from:subject; bh=27+llr53xtHHEMl2wSYoYx5Yhlq4fzr34gu5YztKp94=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS49gjBAz1913gNi8lUAWVdLkYEQKxRyR8+kD0xS TnxXF6mJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuPQAKCRAk1otyXVSH0OrKB/ 4jJrk4IQtr486Je9wxRGUG51Y7zYbfwal472RN+uKG9p7BA4O8v7dvn5FU9vRwm9pSh/eY271U1LJm uKVg0neTsIgbsS3LUqpjqWbCRAfSgPzJd+k+xmM30BY8L7Zwv744tUeXfNLnj2W1Vk+jkuY+rL0Ww3 vwz3TSSqJkKMIC48vuuQKvafaXCzTAm3uNU1iE02o4sG1eyRXLqUeC0oHO5XTrfG13ZlJTtQMK7ion udePfccr8dvRbR3OsZcqN+bxEeR35G4v/bq7GSe4QlntKnvmWDSwU8xS77f7PoksZeshkucV5QAF4v CJ678UpUcfCVGfiPzLVixOZ746qeZs
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,178 +61,171 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We should have a ZT register frame with an expected size when ZA is enabled
-and have no ZT frame when ZA is disabled. Since we don't load any data into
-ZT we expect the data to all be zeros since the architecture guarantees it
-will be set to 0 as ZA is enabled.
+Verify that ZT0 is preserved over syscalls when it is present and
+PSTATE.ZA is set.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- .../testing/selftests/arm64/signal/.gitignore |  1 +
- .../arm64/signal/testcases/zt_no_regs.c       | 51 +++++++++++
- .../arm64/signal/testcases/zt_regs.c          | 85 +++++++++++++++++++
- 3 files changed, 137 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/zt_no_regs.c
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/zt_regs.c
+ .../selftests/arm64/abi/syscall-abi-asm.S     | 43 ++++++++++++++++++-
+ .../testing/selftests/arm64/abi/syscall-abi.c | 40 ++++++++++++++++-
+ 2 files changed, 80 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
-index e8d2b57f73ec..b7fbb65183e8 100644
---- a/tools/testing/selftests/arm64/signal/.gitignore
-+++ b/tools/testing/selftests/arm64/signal/.gitignore
-@@ -5,4 +5,5 @@ sme_*
- ssve_*
- sve_*
- za_*
-+zt_*
- !*.[ch]
-diff --git a/tools/testing/selftests/arm64/signal/testcases/zt_no_regs.c b/tools/testing/selftests/arm64/signal/testcases/zt_no_regs.c
-new file mode 100644
-index 000000000000..34f69bcf821e
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/zt_no_regs.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+index b523c21c2278..cca8f27900e9 100644
+--- a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
++++ b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+@@ -23,6 +23,9 @@
+ 
+ .arch_extension sve
+ 
++#define ID_AA64SMFR0_EL1_SMEver_SHIFT           56
++#define ID_AA64SMFR0_EL1_SMEver_WIDTH           4
++
+ /*
+  * LDR (vector to ZA array):
+  *	LDR ZA[\nw, #\offset], [X\nxbase, #\offset, MUL VL]
+@@ -45,6 +48,26 @@
+ 		| ((\offset) & 7)
+ .endm
+ 
 +/*
-+ * Copyright (C) 2021 ARM Limited
++ * LDR (ZT0)
 + *
-+ * Verify that using an instruction not supported in streaming mode
-+ * traps when in streaming mode.
++ *	LDR ZT0, nx
 + */
++.macro _ldr_zt nx
++	.inst	0xe11f8000			\
++		| (((\nx) & 0x1f) << 5)
++.endm
 +
-+#include <signal.h>
-+#include <ucontext.h>
-+#include <sys/prctl.h>
-+
-+#include "test_signals_utils.h"
-+#include "testcases.h"
-+
-+static union {
-+	ucontext_t uc;
-+	char buf[1024 * 128];
-+} context;
-+
-+int zt_no_regs_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
-+{
-+	size_t offset;
-+	struct _aarch64_ctx *head = GET_BUF_RESV_HEAD(context);
-+
-+	/*
-+	 * Get a signal context which should not have a ZT frame and
-+	 * registers in it.
-+	 */
-+	if (!get_current_context(td, &context.uc, sizeof(context)))
-+		return 1;
-+
-+	head = get_header(head, ZT_MAGIC, GET_BUF_RESV_SIZE(context), &offset);
-+	if (head) {
-+		fprintf(stderr, "Got unexpected ZT context\n");
-+		return 1;
-+	}
-+
-+	td->pass = 1;
-+
-+	return 0;
-+}
-+
-+struct tdescr tde = {
-+	.name = "ZT register data not present",
-+	.descr = "Validate that ZT is not present when ZA is disabled",
-+	.feats_required = FEAT_SME2,
-+	.timeout = 3,
-+	.sanity_disabled = true,
-+	.run = zt_no_regs_run,
-+};
-diff --git a/tools/testing/selftests/arm64/signal/testcases/zt_regs.c b/tools/testing/selftests/arm64/signal/testcases/zt_regs.c
-new file mode 100644
-index 000000000000..e1eb4d5c027a
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/zt_regs.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2021 ARM Limited
++ * STR (ZT0)
 + *
-+ * Verify that using an instruction not supported in streaming mode
-+ * traps when in streaming mode.
++ *	STR ZT0, nx
 + */
++.macro _str_zt nx
++	.inst	0xe13f8000			\
++		| (((\nx) & 0x1f) << 5)
++.endm
 +
-+#include <signal.h>
-+#include <ucontext.h>
-+#include <sys/prctl.h>
+ .globl do_syscall
+ do_syscall:
+ 	// Store callee saved registers x19-x29 (80 bytes) plus x0 and x1
+@@ -64,7 +87,7 @@ do_syscall:
+ 	msr	S3_3_C4_C2_2, x2
+ 1:
+ 
+-	// Load ZA if it's enabled - uses x12 as scratch due to SME LDR
++	// Load ZA and ZT0 if enabled - uses x12 as scratch due to SME LDR
+ 	tbz	x2, #SVCR_ZA_SHIFT, 1f
+ 	mov	w12, #0
+ 	ldr	x2, =za_in
+@@ -73,6 +96,15 @@ do_syscall:
+ 	add	x12, x12, #1
+ 	cmp	x1, x12
+ 	bne	2b
 +
-+#include "test_signals_utils.h"
-+#include "testcases.h"
++	// ZT0
++	mrs	x2, S3_0_C0_C4_5	// ID_AA64SMFR0_EL1
++	ubfx	x2, x2, #ID_AA64SMFR0_EL1_SMEver_SHIFT, \
++			 #ID_AA64SMFR0_EL1_SMEver_WIDTH
++	cbz	x2, 1f
++	adrp	x2, zt_in
++	add	x2, x2, :lo12:zt_in
++	_ldr_zt 2
+ 1:
+ 
+ 	// Load GPRs x8-x28, and save our SP/FP for later comparison
+@@ -235,6 +267,15 @@ do_syscall:
+ 	add	x12, x12, #1
+ 	cmp	x1, x12
+ 	bne	2b
 +
-+static union {
-+	ucontext_t uc;
-+	char buf[1024 * 128];
-+} context;
++	// ZT0
++	mrs	x2, S3_0_C0_C4_5	// ID_AA64SMFR0_EL1
++	ubfx	x2, x2, #ID_AA64SMFR0_EL1_SMEver_SHIFT, \
++			#ID_AA64SMFR0_EL1_SMEver_WIDTH
++	cbz	x2, 1f
++	adrp	x2, zt_out
++	add	x2, x2, :lo12:zt_out
++	_str_zt 2
+ 1:
+ 
+ 	// Save the SVE state if we have some
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
+index dd7ebe536d05..9800f9dc6b35 100644
+--- a/tools/testing/selftests/arm64/abi/syscall-abi.c
++++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
+@@ -311,6 +311,35 @@ static int check_za(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 	return errors;
+ }
+ 
++uint8_t zt_in[ZT_SIG_REG_BYTES] __attribute__((aligned(16)));
++uint8_t zt_out[ZT_SIG_REG_BYTES] __attribute__((aligned(16)));
 +
-+static void enable_za(void)
++static void setup_zt(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
++		     uint64_t svcr)
 +{
-+	/* smstart za; real data is TODO */
-+	asm volatile(".inst 0xd503457f" : : : );
++	fill_random(zt_in, sizeof(zt_in));
++	memset(zt_out, 0, sizeof(zt_out));
 +}
 +
-+int zt_regs_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
++static int check_zt(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
++		    uint64_t svcr)
 +{
-+	size_t offset;
-+	struct _aarch64_ctx *head = GET_BUF_RESV_HEAD(context);
-+	struct zt_context *zt;
-+	char *zeros;
++	int errors = 0;
 +
-+	/*
-+	 * Get a signal context which should have a ZT frame and registers
-+	 * in it.
-+	 */
-+	enable_za();
-+	if (!get_current_context(td, &context.uc, sizeof(context)))
-+		return 1;
++	if (!(getauxval(AT_HWCAP2) & HWCAP2_SME2))
++		return 0;
 +
-+	head = get_header(head, ZT_MAGIC, GET_BUF_RESV_SIZE(context), &offset);
-+	if (!head) {
-+		fprintf(stderr, "No ZT context\n");
-+		return 1;
++	if (!(svcr & SVCR_ZA_MASK))
++		return 0;
++
++	if (memcmp(zt_in, zt_out, sizeof(zt_in)) != 0) {
++		ksft_print_msg("SME VL %d ZT does not match\n", sme_vl);
++		errors++;
 +	}
 +
-+	zt = (struct zt_context *)head;
-+	if (zt->nregs == 0) {
-+		fprintf(stderr, "Got context with no registers\n");
-+		return 1;
-+	}
-+
-+	fprintf(stderr, "Got expected size %u for %d registers\n",
-+		head->size, zt->nregs);
-+
-+	/* We didn't load any data into ZT so it should be all zeros */
-+	zeros = malloc(ZT_SIG_REGS_SIZE(zt->nregs));
-+	if (!zeros) {
-+		fprintf(stderr, "Out of memory, nregs=%u\n", zt->nregs);
-+		return 1;
-+	}
-+	memset(zeros, 0, ZT_SIG_REGS_SIZE(zt->nregs));
-+
-+	if (memcmp(zeros, (char *)zt + ZT_SIG_REGS_OFFSET,
-+		   ZT_SIG_REGS_SIZE(zt->nregs)) != 0) {
-+		fprintf(stderr, "ZT data invalid\n");
-+		return 1;
-+	}
-+
-+	free(zeros);
-+
-+	td->pass = 1;
-+
-+	return 0;
++	return errors;
 +}
 +
-+struct tdescr tde = {
-+	.name = "ZT register data",
-+	.descr = "Validate that ZT is present and has data when ZA is enabled",
-+	.feats_required = FEAT_SME2,
-+	.timeout = 3,
-+	.sanity_disabled = true,
-+	.run = zt_regs_run,
-+};
+ typedef void (*setup_fn)(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+ 			 uint64_t svcr);
+ typedef int (*check_fn)(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+@@ -334,6 +363,7 @@ static struct {
+ 	{ setup_ffr, check_ffr },
+ 	{ setup_svcr, check_svcr },
+ 	{ setup_za, check_za },
++	{ setup_zt, check_zt },
+ };
+ 
+ static bool do_test(struct syscall_cfg *cfg, int sve_vl, int sme_vl,
+@@ -474,6 +504,7 @@ int main(void)
+ {
+ 	int i;
+ 	int tests = 1;  /* FPSIMD */
++	int sme_ver;
+ 
+ 	srandom(getpid());
+ 
+@@ -482,10 +513,15 @@ int main(void)
+ 	tests += (sve_count_vls() * sme_count_vls()) * 3;
+ 	ksft_set_plan(ARRAY_SIZE(syscalls) * tests);
+ 
++	if (getauxval(AT_HWCAP2) & HWCAP2_SME2)
++		sme_ver = 2;
++	else
++		sme_ver = 1;
++
+ 	if (getauxval(AT_HWCAP2) & HWCAP2_SME_FA64)
+-		ksft_print_msg("SME with FA64\n");
++		ksft_print_msg("SME%d with FA64\n", sme_ver);
+ 	else if (getauxval(AT_HWCAP2) & HWCAP2_SME)
+-		ksft_print_msg("SME without FA64\n");
++		ksft_print_msg("SME%d without FA64\n", sme_ver);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(syscalls); i++)
+ 		test_one_syscall(&syscalls[i]);
 -- 
 2.30.2
 
