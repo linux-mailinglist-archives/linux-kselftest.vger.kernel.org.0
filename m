@@ -2,111 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FF3614728
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 10:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42166147A7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 11:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiKAJtZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Nov 2022 05:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S229905AbiKAKYu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Nov 2022 06:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKAJsy (ORCPT
+        with ESMTP id S229511AbiKAKYt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:48:54 -0400
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E72E1902A;
-        Tue,  1 Nov 2022 02:48:53 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="94348500"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661785200"; 
-   d="scan'208";a="94348500"
-Received: from unknown (HELO yto-r2.gw.nic.fujitsu.com) ([218.44.52.218])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP; 01 Nov 2022 18:48:51 +0900
-Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-        by yto-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id F2A59D63B6;
-        Tue,  1 Nov 2022 18:48:49 +0900 (JST)
-Received: from oym-om4.fujitsu.com (oym-om4.o.css.fujitsu.com [10.85.58.164])
-        by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 587B1D35F3;
-        Tue,  1 Nov 2022 18:48:49 +0900 (JST)
-Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
-        by oym-om4.fujitsu.com (Postfix) with ESMTP id 376CF40164011;
-        Tue,  1 Nov 2022 18:48:49 +0900 (JST)
-From:   Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        tan.shaopeng@jp.fujitsu.com
-Subject: [PATCH v3 5/5] selftests/resctrl: Remove duplicate codes that clear each test result file
-Date:   Tue,  1 Nov 2022 18:43:41 +0900
-Message-Id: <20221101094341.3383073-6-tan.shaopeng@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
-References: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
+        Tue, 1 Nov 2022 06:24:49 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28DADF9E
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 03:24:48 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id j12so13146792plj.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Nov 2022 03:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=uc8EMo8fmnnWIYWG3csUSYQ+OHdoWbkP79x9b+G2Nmw=;
+        b=jE5JOCxq/IOOirJhXmMDkbQwG/8DCdx3gEPh9qSKGmBykQwnNMIQijrKFG+8+X32Hy
+         ULHjPqmtSOWHawcufnetQdxCwBRNQ8c45hkEc6m3E0+fcSB8xAtccKhz0sqkleWRUgvR
+         RHYgUubVpunTA/feKjsdFTZwJyKjM5ZCwZZhX/gWX9FQEEk/Enu7DfyetkTI5J51K7sp
+         aDn1sor8eqsZh1Wb/+WOot9+HRvDRGHWfqsmQJ+rGkraqr2/m1NeSMtFq+WnnDXJkyJS
+         qkOqBbO41p8tHDJyf34NFXXh7nbXd9Q+uQwtGfw+PcDMP2/iwij52uvvpjoDVbtJPR4i
+         05uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uc8EMo8fmnnWIYWG3csUSYQ+OHdoWbkP79x9b+G2Nmw=;
+        b=yCyHaFVui3Mm2njhKO1HMHWH+w6p5WVMezjcBpQNYnmWeDzo/zBQFNegOrxoJVc2nP
+         ZL4jm6Z/aQgxS0uht/u6r/OixF9D6uJ5h8V3KA6xKv2P40NC+J9V9u4mZG6gzK4CRaMq
+         tryNTVzFH/a1FrClJhVdazYEzvJ4e8A8Txu4O5aulSl23m/tAtrTiV5fW/FbARtgdndm
+         6IFtx3VaeGoUx/GUIKYhnOH+EHIePXIe2ZZeb/2U4MiMZJw3V4aWp1CRzMyj4ciUFZ8T
+         fiHCEMHqx3ftg7pYUqUT2sJHumSxhTp9j9G/hdrufPR4OS6w8PR45tGeV5DVfX0CShEU
+         Y09w==
+X-Gm-Message-State: ACrzQf0BPWNNh9GZkgTwWXRPwpbzUKEK3NyT8Eo9w1xmRnrqI8XNno5T
+        mSj9EtM57vvN2upBCcwq4DnFZw==
+X-Google-Smtp-Source: AMsMyM5eXlo7eyeLEiG/yY4LLMrs1j2pwTTR2+SyQKye0PQRzndtPVFWOC00eGIO1M2GkB8WfrwOUA==
+X-Received: by 2002:a17:902:8343:b0:187:31da:6195 with SMTP id z3-20020a170902834300b0018731da6195mr4780934pln.62.1667298288293;
+        Tue, 01 Nov 2022 03:24:48 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u7-20020a17090abb0700b00213e4d6c831sm3231372pjr.13.2022.11.01.03.24.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 03:24:47 -0700 (PDT)
+Message-ID: <6360f3ef.170a0220.724e9.6515@mx.google.com>
+Date:   Tue, 01 Nov 2022 03:24:47 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.1-rc1-13-g67c0b2b52916
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 6 builds: 0 failed, 6 passed,
+ 1 error (v6.1-rc1-13-g67c0b2b52916)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Before exiting each test function(run_cmt/cat/mbm/mba_test()),
-test results("ok","not ok") are printed by ksft_test_result() and then
-temporary result files are cleaned by function
-cmt/cat/mbm/mba_test_cleanup().
-However, before running ksft_test_result(),
-function cmt/cat/mbm/mba_test_cleanup()
-has been run in each test function as follows:
-  cmt_resctrl_val()
-  cat_perf_miss_val()
-  mba_schemata_change()
-  mbm_bw_change()
+kselftest/next build: 6 builds: 0 failed, 6 passed, 1 error (v6.1-rc1-13-g6=
+7c0b2b52916)
 
-Remove duplicate codes that clear each test result file.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.1-rc1-13-g67c0b2b52916/
 
-Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Tree: kselftest
+Branch: next
+Git Describe: v6.1-rc1-13-g67c0b2b52916
+Git Commit: 67c0b2b5291656cbcb15371f835f5152fae2f7a2
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Errors Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-15): 1 error
+
+Errors summary:
+
+    1    error: write on a pipe with no reader
+
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-15) =E2=80=94 PASS, 1 error, 0 wa=
+rnings, 0 section mismatches
+
+Errors:
+    error: write on a pipe with no reader
+
 ---
- tools/testing/selftests/resctrl/resctrl_tests.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index df0d8d8526fc..8732cf736528 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -88,7 +88,6 @@ static void run_mbm_test(bool has_ben, char **benchmark_cmd, int span,
- 	ksft_test_result(!res, "MBM: bw change\n");
- 	if ((get_vendor() == ARCH_INTEL) && res)
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
--	mbm_test_cleanup();
- }
- 
- static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
-@@ -107,7 +106,6 @@ static void run_mba_test(bool has_ben, char **benchmark_cmd, int span,
- 		sprintf(benchmark_cmd[1], "%d", span);
- 	res = mba_schemata_change(cpu_no, bw_report, benchmark_cmd);
- 	ksft_test_result(!res, "MBA: schemata change\n");
--	mba_test_cleanup();
- }
- 
- static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
-@@ -126,7 +124,6 @@ static void run_cmt_test(bool has_ben, char **benchmark_cmd, int cpu_no)
- 	ksft_test_result(!res, "CMT: test\n");
- 	if ((get_vendor() == ARCH_INTEL) && res)
- 		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
--	cmt_test_cleanup();
- }
- 
- static void run_cat_test(int cpu_no, int no_of_bits)
-@@ -142,7 +139,6 @@ static void run_cat_test(int cpu_no, int no_of_bits)
- 
- 	res = cat_perf_miss_val(cpu_no, no_of_bits, "L3");
- 	ksft_test_result(!res, "CAT: test\n");
--	cat_test_cleanup();
- }
- 
- int main(int argc, char **argv)
--- 
-2.27.0
-
+For more info write to <info@kernelci.org>
