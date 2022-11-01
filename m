@@ -2,333 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D621F614FBF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 17:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3396615065
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 18:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiKAQyY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Nov 2022 12:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
+        id S230035AbiKARRi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Nov 2022 13:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbiKAQyS (ORCPT
+        with ESMTP id S229487AbiKARRg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:54:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F392B2
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 09:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667321600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VlbZG9ub6DF/LY2VtLFrDY1eKkkq4JGcfuS3h450tTI=;
-        b=Lnsvyiruor4rGBNls8aTQBPmXM1lpE+VEBlKH8Zujp0UfIEPg7FeaLXGfxw90pY1mAqxQb
-        TnmZwQqk2YRvA42VcRc/QleWDQxezi4O/EY0TW+6tSI9HH221VANAFhu/d7OcfvqwCSD7u
-        kIjGtV41nLDtDhNY62y1lJPD2MRHaSM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-622-AyImlOReMvids-H-Ejt9cQ-1; Tue, 01 Nov 2022 12:53:16 -0400
-X-MC-Unique: AyImlOReMvids-H-Ejt9cQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5E87F85A5A6;
-        Tue,  1 Nov 2022 16:53:15 +0000 (UTC)
-Received: from fedora (unknown [10.22.32.201])
-        by smtp.corp.redhat.com (Postfix) with SMTP id A6E492166B2D;
-        Tue,  1 Nov 2022 16:53:11 +0000 (UTC)
-Date:   Tue, 1 Nov 2022 13:53:09 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v16 3/3] selftests: tdx: Test TDX attestation GetReport
- support
-Message-ID: <20221101165309.uihcsbjiejkrkiov@fedora>
-References: <20221028002820.3303030-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221028002820.3303030-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221101133556.l7dffiwl24lqjioz@fedora>
- <bb9efd4c-ad21-e03b-922d-cc137e52dc28@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb9efd4c-ad21-e03b-922d-cc137e52dc28@linux.intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 13:17:36 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FB93A8;
+        Tue,  1 Nov 2022 10:17:35 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4N1xXt5cLpzDql0;
+        Tue,  1 Nov 2022 17:17:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1667323055; bh=LgAWbPZqi1ZXCh+fazxGqEjob05/uqBjqnQibRDbwZI=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+        b=LvspmUySm1IXKYV8vpdqfWpgPEPWfruGlB2IVAjsqD5+MMm2Shi/CpOVedaUTWi98
+         Hsr25UFbRL6/KII/IYipVvdJyNQKuE4rWdsWbTUxF2tJqn/zS12zNLruaDfyMuP3n9
+         RW636ojurHVQf4rqHFH36vgremYeqX5XVq1TiWyM=
+X-Riseup-User-ID: CC02644C02845D0D9CF95341F98F056B4885011B995F0079F6C24C598E4A82E6
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4N1xXn6WlQz1yZp;
+        Tue,  1 Nov 2022 17:17:29 +0000 (UTC)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [igt-dev] [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility
+ for KUnit
+From:   Isabella Basso <isabbasso@riseup.net>
+In-Reply-To: <20221101133323.72101670@maurocar-mobl2>
+Date:   Tue, 1 Nov 2022 14:17:26 -0300
+Cc:     David Gow <davidgow@google.com>,
+        Magali Lemes <magalilemes00@gmail.com>,
+        =?utf-8?Q?Ma=C3=ADra_Canal?= <maira.canal@usp.br>,
+        Daniel Latypov <dlatypov@google.com>,
+        Tales Aparecida <tales.aparecida@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        leandro.ribeiro@collabora.com, igt-dev@lists.freedesktop.org,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org, n@nfraprado.net,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        =?utf-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F263C946-123C-407F-984D-7AC284CC1B29@riseup.net>
+References: <20220829000920.38185-1-isabbasso@riseup.net>
+ <20220829000920.38185-4-isabbasso@riseup.net>
+ <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
+ <D53B4EB1-1A95-48F1-BF49-8EC0CC7B5418@riseup.net>
+ <20221101133323.72101670@maurocar-mobl2>
+To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 06:43:31AM -0700, Sathyanarayanan Kuppuswamy wrote:
-> 
-> 
-> On 11/1/22 6:35 AM, Wander Lairson Costa wrote:
-> > On Thu, Oct 27, 2022 at 05:28:20PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> >> Attestation is used to verify the trustworthiness of a TDX guest.
-> >> During the guest bring-up, the Intel TDX module measures and records
-> >> the initial contents and configuration of the guest, and at runtime,
-> >> guest software uses runtime measurement registers (RMTRs) to measure
-> >> and record details related to kernel image, command line params, ACPI
-> >> tables, initrd, etc. At guest runtime, the attestation process is used
-> >> to attest to these measurements.
-> >>
-> >> The first step in the TDX attestation process is to get the TDREPORT
-> >> data. It is a fixed size data structure generated by the TDX module
-> >> which includes the above mentioned measurements data, a MAC ID to
-> >> protect the integrity of the TDREPORT, and a 64-Byte of user specified
-> >> data passed during TDREPORT request which can uniquely identify the
-> >> TDREPORT.
-> >>
-> >> Intel's TDX guest driver exposes TDX_CMD_GET_REPORT IOCTL interface to
-> >> enable guest userspace to get the TDREPORT.
-> >>
-> >> Add a kernel self test module to test this ABI and verify the validity
-> >> of the generated TDREPORT.
-> >>
-> >> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> >> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> >> Acked-by: Kai Huang <kai.huang@intel.com>
-> >> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> >> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> >> ---
-> >>
-> >> Changes since v15:
-> >>  * None
-> >>
-> >> Changes since v14:
-> >>  * Fixed format issue in struct comments.
-> >>  * Rebased on top of v6.1-rc1
-> >>
-> >> Changes since v13:
-> >>  * Removed __packed from TDREPORT structs.
-> >>  * Since the guest driver is moved to drivers/virt/coco, removed
-> >>    tools/arch/x86/include header folder usage.
-> >>  * Fixed struct comments to match kernel-doc format.
-> >>  * Fixed commit log as per review comments.
-> >>  * Fixed some format issues in the code.
-> >>
-> >> Changes since v12:
-> >>  * Changed #ifdef DEBUG usage with if (DEBUG).
-> >>  * Initialized reserved entries values to zero.
-> >>
-> >> Changes since v11:
-> >>  * Renamed devname with TDX_GUEST_DEVNAME.
-> >>
-> >> Changes since v10:
-> >>  * Replaced TD/TD Guest usage with guest or TDX guest.
-> >>  * Reworded the subject line.
-> >>
-> >> Changes since v9:
-> >>  * Copied arch/x86/include/uapi/asm/tdx.h to tools/arch/x86/include to
-> >>    decouple header dependency between kernel source and tools dir.
-> >>  * Fixed Makefile to adapt to above change.
-> >>  * Fixed commit log and comments.
-> >>  * Added __packed to hardware structs.
-> >>
-> >> Changes since v8:
-> >>  * Please refer to https://lore.kernel.org/all/ \
-> >>    20220728034420.648314-1-sathyanarayanan.kuppuswamy@linux.intel.com/
-> >>
-> >>  tools/testing/selftests/Makefile             |   1 +
-> >>  tools/testing/selftests/tdx/Makefile         |   7 +
-> >>  tools/testing/selftests/tdx/config           |   1 +
-> >>  tools/testing/selftests/tdx/tdx_guest_test.c | 175 +++++++++++++++++++
-> >>  4 files changed, 184 insertions(+)
-> >>  create mode 100644 tools/testing/selftests/tdx/Makefile
-> >>  create mode 100644 tools/testing/selftests/tdx/config
-> >>  create mode 100644 tools/testing/selftests/tdx/tdx_guest_test.c
-> >>
-> >> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> >> index 0464b2c6c1e4..f60e14d16bfd 100644
-> >> --- a/tools/testing/selftests/Makefile
-> >> +++ b/tools/testing/selftests/Makefile
-> >> @@ -73,6 +73,7 @@ TARGETS += sync
-> >>  TARGETS += syscall_user_dispatch
-> >>  TARGETS += sysctl
-> >>  TARGETS += tc-testing
-> >> +TARGETS += tdx
-> >>  TARGETS += timens
-> >>  ifneq (1, $(quicktest))
-> >>  TARGETS += timers
-> >> diff --git a/tools/testing/selftests/tdx/Makefile b/tools/testing/selftests/tdx/Makefile
-> >> new file mode 100644
-> >> index 000000000000..8dd43517cd55
-> >> --- /dev/null
-> >> +++ b/tools/testing/selftests/tdx/Makefile
-> >> @@ -0,0 +1,7 @@
-> >> +# SPDX-License-Identifier: GPL-2.0
-> >> +
-> >> +CFLAGS += -O3 -Wl,-no-as-needed -Wall -static
-> >> +
-> >> +TEST_GEN_PROGS := tdx_guest_test
-> >> +
-> >> +include ../lib.mk
-> >> diff --git a/tools/testing/selftests/tdx/config b/tools/testing/selftests/tdx/config
-> >> new file mode 100644
-> >> index 000000000000..aa1edc829ab6
-> >> --- /dev/null
-> >> +++ b/tools/testing/selftests/tdx/config
-> >> @@ -0,0 +1 @@
-> >> +CONFIG_TDX_GUEST_DRIVER=y
-> >> diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing/selftests/tdx/tdx_guest_test.c
-> >> new file mode 100644
-> >> index 000000000000..a5c243f73adc
-> >> --- /dev/null
-> >> +++ b/tools/testing/selftests/tdx/tdx_guest_test.c
-> >> @@ -0,0 +1,175 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * Test TDX guest features
-> >> + *
-> >> + * Copyright (C) 2022 Intel Corporation.
-> >> + *
-> >> + * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> >> + */
-> >> +
-> >> +#include <sys/ioctl.h>
-> >> +
-> >> +#include <errno.h>
-> >> +#include <fcntl.h>
-> >> +
-> >> +#include "../kselftest_harness.h"
-> >> +#include "../../../../include/uapi/linux/tdx-guest.h"
-> >> +
-> >> +#define TDX_GUEST_DEVNAME "/dev/tdx_guest"
-> >> +#define HEX_DUMP_SIZE 8
-> >> +#define DEBUG 0
-> >> +
-> >> +/**
-> >> + * struct tdreport_type - Type header of TDREPORT_STRUCT.
-> >> + * @type: Type of the TDREPORT (0 - SGX, 81 - TDX, rest are reserved)
-> >> + * @sub_type: Subtype of the TDREPORT (Default value is 0).
-> >> + * @version: TDREPORT version (Default value is 0).
-> >> + * @reserved: Added for future extension.
-> >> + *
-> >> + * More details can be found in TDX v1.0 module specification, sec
-> >> + * titled "REPORTTYPE".
-> >> + */
-> >> +struct tdreport_type {
-> >> +	__u8 type;
-> >> +	__u8 sub_type;
-> >> +	__u8 version;
-> >> +	__u8 reserved;
-> >> +};
-> >> +
-> >> +/**
-> >> + * struct reportmac - TDX guest report data, MAC and TEE hashes.
-> >> + * @type: TDREPORT type header.
-> >> + * @reserved1: Reserved for future extension.
-> >> + * @cpu_svn: CPU security version.
-> >> + * @tee_tcb_info_hash: SHA384 hash of TEE TCB INFO.
-> >> + * @tee_td_info_hash: SHA384 hash of TDINFO_STRUCT.
-> >> + * @reportdata: User defined unique data passed in TDG.MR.REPORT request.
-> >> + * @reserved2: Reserved for future extension.
-> >> + * @mac: CPU MAC ID.
-> >> + *
-> >> + * It is MAC-protected and contains hashes of the remainder of the
-> >> + * report structure along with user provided report data. More details can
-> >> + * be found in TDX v1.0 Module specification, sec titled "REPORTMACSTRUCT"
-> >> + */
-> >> +struct reportmac {
-> >> +	struct tdreport_type type;
-> >> +	__u8 reserved1[12];
-> >> +	__u8 cpu_svn[16];
-> >> +	__u8 tee_tcb_info_hash[48];
-> >> +	__u8 tee_td_info_hash[48];
-> >> +	__u8 reportdata[64];
-> >> +	__u8 reserved2[32];
-> >> +	__u8 mac[32];
-> >> +};
-> >> +
-> >> +/**
-> >> + * struct td_info - TDX guest measurements and configuration.
-> >> + * @attr: TDX Guest attributes (like debug, spet_disable, etc).
-> >> + * @xfam: Extended features allowed mask.
-> >> + * @mrtd: Build time measurement register.
-> >> + * @mrconfigid: Software-defined ID for non-owner-defined configuration
-> >> + *              of the guest - e.g., run-time or OS configuration.
-> >> + * @mrowner: Software-defined ID for the guest owner.
-> >> + * @mrownerconfig: Software-defined ID for owner-defined configuration of
-> >> + *                 the guest - e.g., specific to the workload.
-> >> + * @rtmr: Run time measurement registers.
-> >> + * @reserved: Added for future extension.
-> >> + *
-> >> + * It contains the measurements and initial configuration of the TDX guest
-> >> + * that was locked at initialization and a set of measurement registers
-> >> + * that are run-time extendable. More details can be found in TDX v1.0
-> >> + * Module specification, sec titled "TDINFO_STRUCT".
-> >> + */
-> >> +struct td_info {
-> >> +	__u8 attr[8];
-> >> +	__u64 xfam;
-> >> +	__u64 mrtd[6];
-> >> +	__u64 mrconfigid[6];
-> >> +	__u64 mrowner[6];
-> >> +	__u64 mrownerconfig[6];
-> >> +	__u64 rtmr[24];
-> >> +	__u64 reserved[14];
-> >> +};
-> >> +
-> >> +/*
-> >> + * struct tdreport - Output of TDCALL[TDG.MR.REPORT].
-> >> + * @reportmac: Mac protected header of size 256 bytes.
-> >> + * @tee_tcb_info: Additional attestable elements in the TCB are not
-> >> + *                reflected in the reportmac.
-> >> + * @reserved: Added for future extension.
-> >> + * @tdinfo: Measurements and configuration data of size 512 bytes.
-> >> + *
-> >> + * More details can be found in TDX v1.0 Module specification, sec
-> >> + * titled "TDREPORT_STRUCT".
-> >> + */
-> >> +struct tdreport {
-> >> +	struct reportmac reportmac;
-> >> +	__u8 tee_tcb_info[239];
-> >> +	__u8 reserved[17];
-> >> +	struct td_info tdinfo;
-> >> +};
-> >> +
-> >> +static void print_array_hex(const char *title, const char *prefix_str,
-> >> +			    const void *buf, int len)
-> >> +{
-> >> +	int i, j, line_len, rowsize = HEX_DUMP_SIZE;
-> >> +	const __u8 *ptr = buf;
-> >> +
-> >> +	if (!len || !buf)
-> > 
-> > If len is not zero and buf is null, this would be bug. It is better to
-> > let the code crash or assert buf isn't null after testing len.
-> 
-> It is just a debug dump routine. So I don't think you need to add assert or
-> crash here. If you really want some indication, maybe we can add an error message
-> for invalid params.
+Hi, Mauro,
 
-Honestly, by design the code never enters in the `if` condition. So I am
-in favor of removing it.
+> Am 01/11/2022 um 9:33 AM schrieb Mauro Carvalho Chehab =
+<mauro.chehab@linux.intel.com>:
+>=20
+> Hi Isabella,
+>=20
+> On Mon, 19 Sep 2022 17:43:19 -0300
+> Isabella Basso <isabbasso@riseup.net> wrote:
+>=20
+>>> Do you want to _require_ KUnit be built as a module, rather than =
+built-in here? =20
+>>=20
+>> I=E2=80=99ll change the comment and the warning in v3 to clarify =
+this.
+>=20
+> When do you intend to submit v3?
 
-> 
-> > 
-> 
-> -- 
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
-> 
+I=E2=80=99m currently waiting for my peers to review some refactorings =
+and test
+things thoroughly. I hope to submit it in a week or two. Sorry it=E2=80=99=
+s taking so
+long.
+
+Cheers,
+--
+Isabella Basso
+
+> Regards,
+> Mauro
 
