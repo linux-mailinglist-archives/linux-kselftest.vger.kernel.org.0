@@ -2,184 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316BB614C7B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF282614CCA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiKAOXW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Nov 2022 10:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S230321AbiKAOjX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Nov 2022 10:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiKAOXV (ORCPT
+        with ESMTP id S230354AbiKAOjR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:23:21 -0400
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA121B1FB;
-        Tue,  1 Nov 2022 07:23:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1667312593;
-        bh=l57fPtvVIgXTiYLMlFVCC6EXs6IDtJKDnxNvjdOUkcM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=dG4TA+4Bll7492rMsS8WJaix0eoOwd7HqJaAylQ9majA9lMWH3lAdDOHRgomRnAkx
-         p7gkd8+tclRIsPHJiVIpcZWie70dvu8i3VBT42+H8c6GYIR1/No4zU6Zrp2E/t+vGO
-         dLTymhQKQvxhQ7X4h5iBGnzbLRC7wWi94CMGk8x8=
-Received: from localhost.localdomain ([111.199.189.86])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id 5C8A8617; Tue, 01 Nov 2022 22:23:08 +0800
-X-QQ-mid: xmsmtpt1667312588tydmkk56a
-Message-ID: <tencent_630BF3724BC5EA157B341EB1C7604EE83705@qq.com>
-X-QQ-XMAILINFO: NkHKfw09D6j8nya1MpOLbHO6M3R7kUmTeJKqU8bBsXqWRReOWDSDVWI6V8tWhN
-         YGrHWs/ZqniKBScePxRhbqgGs190QduRHvk0+3ORugItPyo+KjTrVkAwfZFRPoHaE8g6aTEOsKu/
-         DtH3P2KV1Rvi4Zr3KSKl6Crl6xCDX/qiUJ62/aimuZao6phXPLed2obw86eoOAMtKZZmVRVHBl9s
-         GUsWE0XQH2eFlp3KCVkymh5ZzPdiB6BsmwCY3x3g6XDmdhEtSkKrdzGeholKfA5WJx58BE/lSMFz
-         h0G5vEkQ2E7ICILcIqvMxk6K8+9cgRp8bGr5JETqN7v7rpa2sphVrCpS6m5u1Lxjl18KeTaRBK9y
-         Syt6VMCfnctkcFAOLumCvwKbXj6FbJYkzEFOWzvktbWNbskSG7JSc256E+tGIQVlsmjKjTubmN/Z
-         hic6em+Wmub3kqm8Oo0NutB2do6AcJ0PjYDd0Rh3cqc2tqx/Y3BiAs6ISjGvBHPte/ev43eU7CEc
-         AKQR56nHD0HgCvOnWgBlYKKNxM3qC2DdB6a/oOloZI8i6WVqfayjLJ/hO8wfdM6UCNOdvNkhhtSc
-         WBOMPqRpICZQd/WWJmhzNLRCe9MQsHZSg0/C8UFogHQ2zZNjISA++DtrwGhB8RTLvvRZepfka+GK
-         45NQm2uC8syIUepLvCMzZ0jf3DpHEX7U+5uyhzO/dH8Fv7MQKs7k8YlZigI/QJe8BIb2fA0T+al/
-         m0WJdbe5m6LEaRZcQgaQlYrnlTkzGZmogl367ToL5MAILCJu4itC7GBh1voxTYzlua4GUrQYDsqI
-         Niv4X/6Hys/q5uEXXqgjN6eLTo6qrPisOvdQkVp0zTXN2rd52Yhf48rXuqjdCFaRWbJb0sywfEda
-         vuqFjBZDGMdk1E6CyXCz9K+R8GJSyHjRi93e1WoOvUtDyPMxBKfzClOfC90AIl3dlYNG0K1bb6WO
-         9hRHCW4gftV8RBiHNIv6KcqXI7XA74KNDpGFaOXhhIiP9a6kgiYio++dncugKNo81BVCFy5pTbqM
-         o7M0PjNEQczUTFfkRI
-From:   Rong Tao <rtoax@foxmail.com>
-To:     daniel@iogearbox.net
-Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, david.laight@aculab.com, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
-        rtoax@foxmail.com, sdf@google.com, shuah@kernel.org,
-        song@kernel.org, yhs@fb.com
-Subject: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
-Date:   Tue,  1 Nov 2022 22:23:07 +0800
-X-OQ-MSGID: <20221101142307.19414-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <fc8634e8-6efd-9911-cab4-07ad6ba4ad33@iogearbox.net>
-References: <fc8634e8-6efd-9911-cab4-07ad6ba4ad33@iogearbox.net>
+        Tue, 1 Nov 2022 10:39:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C77C12AFF
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:39:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D038615ED
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC8FC4347C;
+        Tue,  1 Nov 2022 14:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667313554;
+        bh=ok3wYYqC7asNixuLaykmjB8Ko0NgKTtAQ/Cl83MNXzs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=p70KkQJL1Tuut1cUOZsPQ8Tt6mZgcRl1gqxM8etcuDMdO1ls/HLihveotxXrCmck4
+         T3e8SNX+2ziwlDHi8WGmHo/rIuJOHH/jkKV9NZ4bjyy8vk2tjK04qHY/MQ+DjrF4Q5
+         ij+qyOFzGoRmQvT3O2AKw0WmP5kq1O/kOlV12B98jEm4IafrsZIoeia889LopBkr98
+         pMztVkZGTh7QXCqo71wyLXDcLO7dsCIENHyEIakciDQ8Oukv9h3rvKH72MZn8aikVQ
+         SkKSvGWHTF5JI98ZmipOLyuKDo+ckkbNpNjp0R0OKkC1YSxZi3zHw3EvA3+RsbwlOM
+         ryg/vKdfb9tqA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Alan Hayward <alan.hayward@arm.com>,
+        Luis Machado <luis.machado@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 00/21] arm64/sme: Support SME 2 and SME 2.1
+Date:   Tue,  1 Nov 2022 14:33:15 +0000
+Message-Id: <20221101143336.254445-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4829; i=broonie@kernel.org; h=from:subject; bh=ok3wYYqC7asNixuLaykmjB8Ko0NgKTtAQ/Cl83MNXzs=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS4oWoIMjR2dfXV7XDAG9hSn5Yrn7uSgd+w/U/jI pQ2ax4uJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuKAAKCRAk1otyXVSH0FI+CA CFYT4Bz/DVqkCRLsQrJTIN41XjAmI3GO9XMlQmO8pz9byCih3FyvXY/HjWNRf+Y6hdEpGuAiI1uNSl LbyslB2Pa7K6MqI06K1M4YtDDNHf91SHgJYo6xNGd/pJ5hUV7PHmZR8AyhQCm+JmFDM3DYbqgX6Odk yeQa9eXvUVD5Lxk0HCUoo73YkgIeeqHo1gUznrOp6aRqhaQ+JgQVOOyb7Oa5pg+GSVB3XDGlym5cPP lRtQH/lNKKy2lgSKnVF1cLelqg+sFqUnGo0JtAFNEnxlYa62jmD6sBpFTGW2mSUFl6mowVlIcUAGrr 7WhSeolE1289KkUxIRy8rhTae+Q2mH
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Arm have recently released versions 2 and 2.1 of the SME extension.
+Among the features introduced by SME 2 is some new architectural state,
+the ZT0 register. This series adds support for this and all the other
+features of the new SME versions.
 
-move libbpf_strlcpy() to bpf_util.h, and replace strncpy() with
-libbpf_strlcpy(), fix compile warning.
+Since the architecture has been designed with the possibility of adding
+further ZTn registers in mind the interfaces added for ZT0 are done with
+this possibility in mind. As ZT0 is a simple fixed size register these
+interfaces are all fairly simple, the main complication is that ZT0 is
+only accessible when PSTATE.ZA is enabled. The memory allocation that we
+already do for PSTATE.ZA is extended to include space for ZT0.
 
-Compile samples/bpf, warning:
-$ cd samples/bpf
-$ make
-...
-cgroup_helpers.c: In function ‘__enable_controllers’:
-cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
-   80 |                 strncpy(enable, controllers, sizeof(enable));
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Due to textual collisions especially around the addition of hwcaps this
+is based on the concurrently sent series "arm64: Support for 2022 data
+processing instructions" but there is no meaningful interaction.
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/bpf_util.h       | 19 +++++++++++++++++++
- tools/testing/selftests/bpf/cgroup_helpers.c |  3 ++-
- tools/testing/selftests/bpf/xsk.c            | 20 +-------------------
- 3 files changed, 22 insertions(+), 20 deletions(-)
+v2:
+ - Add missing initialisation of user->zt in signal context parsing.
+ - Change the magic for ZT signal frames to 0x5a544e01 (ZTN0).
 
-diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
-index a3352a64c067..bf78212ff6e9 100644
---- a/tools/testing/selftests/bpf/bpf_util.h
-+++ b/tools/testing/selftests/bpf/bpf_util.h
-@@ -20,6 +20,25 @@ static inline unsigned int bpf_num_possible_cpus(void)
- 	return possible_cpus;
- }
- 
-+/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
-+ * is zero-terminated string no matter what (unless sz == 0, in which case
-+ * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
-+ * in what is returned. Given this is internal helper, it's trivial to extend
-+ * this, when necessary. Use this instead of strncpy inside libbpf source code.
-+ */
-+static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
-+{
-+	size_t i;
-+
-+	if (sz == 0)
-+		return;
-+
-+	sz--;
-+	for (i = 0; i < sz && src[i]; i++)
-+		dst[i] = src[i];
-+	dst[i] = '\0';
-+}
-+
- #define __bpf_percpu_val_align	__attribute__((__aligned__(8)))
- 
- #define BPF_DECLARE_PERCPU(type, name)				\
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index e914cc45b766..e33b70e509da 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -13,6 +13,7 @@
- #include <ftw.h>
- 
- #include "cgroup_helpers.h"
-+#include "bpf_util.h"
- 
- /*
-  * To avoid relying on the system setup, when setup_cgroup_env is called
-@@ -77,7 +78,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
- 		enable[len] = 0;
- 		close(fd);
- 	} else {
--		strncpy(enable, controllers, sizeof(enable));
-+		libbpf_strlcpy(enable, controllers, sizeof(enable));
- 	}
- 
- 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
-diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
-index 0b3ff49c740d..cf6e9ab37b1b 100644
---- a/tools/testing/selftests/bpf/xsk.c
-+++ b/tools/testing/selftests/bpf/xsk.c
-@@ -33,6 +33,7 @@
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
- #include "xsk.h"
-+#include "bpf_util.h"
- 
- #ifndef SOL_XDP
-  #define SOL_XDP 283
-@@ -521,25 +522,6 @@ static int xsk_create_bpf_link(struct xsk_socket *xsk)
- 	return 0;
- }
- 
--/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
-- * is zero-terminated string no matter what (unless sz == 0, in which case
-- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
-- * in what is returned. Given this is internal helper, it's trivial to extend
-- * this, when necessary. Use this instead of strncpy inside libbpf source code.
-- */
--static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
--{
--        size_t i;
--
--        if (sz == 0)
--                return;
--
--        sz--;
--        for (i = 0; i < sz && src[i]; i++)
--                dst[i] = src[i];
--        dst[i] = '\0';
--}
--
- static int xsk_get_max_queues(struct xsk_socket *xsk)
- {
- 	struct ethtool_channels channels = { .cmd = ETHTOOL_GCHANNELS };
+Mark Brown (21):
+  arm64/sme: Rename za_state to sme_state
+  arm64: Document boot requirements for SME 2
+  arm64/sysreg: Update system registers for SME 2 and 2.1
+  arm64/sme: Document SME 2 and SME 2.1 ABI
+  arm64/esr: Document ISS for ZT0 being disabled
+  arm64/sme: Manually encode ZT0 load and store instructions
+  arm64/sme: Enable host kernel to access ZT0
+  arm64/sme: Add basic enumeration for SME2
+  arm64/sme: Provide storage for ZT0
+  arm64/sme: Implement context switching for ZT0
+  arm64/sme: Implement signal handling for ZT
+  arm64/sme: Implement ZT0 ptrace support
+  arm64/sme: Add hwcaps for SME 2 and 2.1 features
+  kselftest/arm64: Add a stress test program for ZT0
+  kselftest/arm64: Cover ZT in the FP stress test
+  kselftest/arm64: Enumerate SME2 in the signal test utility code
+  kselftest/arm64: Teach the generic signal context validation about ZT
+  kselftest/arm64: Add test coverage for ZT register signal frames
+  kselftest/arm64: Add SME2 coverage to syscall-abi
+  kselftest/arm64: Add coverage of the ZT ptrace regset
+  kselftest/arm64: Add coverage of SME 2 and 2.1 hwcaps
+
+ Documentation/arm64/booting.rst               |  10 +
+ Documentation/arm64/elf_hwcaps.rst            |  18 +
+ Documentation/arm64/sme.rst                   |  52 ++-
+ arch/arm64/include/asm/cpufeature.h           |   6 +
+ arch/arm64/include/asm/esr.h                  |   1 +
+ arch/arm64/include/asm/fpsimd.h               |  28 +-
+ arch/arm64/include/asm/fpsimdmacros.h         |  22 ++
+ arch/arm64/include/asm/hwcap.h                |   6 +
+ arch/arm64/include/asm/processor.h            |   2 +-
+ arch/arm64/include/uapi/asm/hwcap.h           |   6 +
+ arch/arm64/include/uapi/asm/sigcontext.h      |  19 +
+ arch/arm64/kernel/cpufeature.c                |  27 ++
+ arch/arm64/kernel/cpuinfo.c                   |   6 +
+ arch/arm64/kernel/entry-fpsimd.S              |  30 +-
+ arch/arm64/kernel/fpsimd.c                    |  53 ++-
+ arch/arm64/kernel/hyp-stub.S                  |   6 +
+ arch/arm64/kernel/idreg-override.c            |   1 +
+ arch/arm64/kernel/process.c                   |  21 +-
+ arch/arm64/kernel/ptrace.c                    |  60 ++-
+ arch/arm64/kernel/signal.c                    | 113 +++++-
+ arch/arm64/tools/cpucaps                      |   1 +
+ arch/arm64/tools/sysreg                       |  26 +-
+ include/uapi/linux/elf.h                      |   1 +
+ tools/testing/selftests/arm64/abi/hwcap.c     | 115 ++++++
+ .../selftests/arm64/abi/syscall-abi-asm.S     |  43 ++-
+ .../testing/selftests/arm64/abi/syscall-abi.c |  40 +-
+ tools/testing/selftests/arm64/fp/.gitignore   |   2 +
+ tools/testing/selftests/arm64/fp/Makefile     |   5 +
+ tools/testing/selftests/arm64/fp/fp-stress.c  |  29 +-
+ tools/testing/selftests/arm64/fp/sme-inst.h   |  20 +
+ tools/testing/selftests/arm64/fp/zt-ptrace.c  | 365 ++++++++++++++++++
+ tools/testing/selftests/arm64/fp/zt-test.S    | 324 ++++++++++++++++
+ .../testing/selftests/arm64/signal/.gitignore |   1 +
+ .../selftests/arm64/signal/test_signals.h     |   2 +
+ .../arm64/signal/test_signals_utils.c         |   3 +
+ .../arm64/signal/testcases/testcases.c        |  36 ++
+ .../arm64/signal/testcases/testcases.h        |   1 +
+ .../arm64/signal/testcases/zt_no_regs.c       |  51 +++
+ .../arm64/signal/testcases/zt_regs.c          |  85 ++++
+ 39 files changed, 1564 insertions(+), 73 deletions(-)
+ create mode 100644 tools/testing/selftests/arm64/fp/zt-ptrace.c
+ create mode 100644 tools/testing/selftests/arm64/fp/zt-test.S
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/zt_no_regs.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/zt_regs.c
+
+
+base-commit: ab0aff0601c29dc7b5cb2ecf42135dccbed6750a
 -- 
-2.31.1
+2.30.2
 
