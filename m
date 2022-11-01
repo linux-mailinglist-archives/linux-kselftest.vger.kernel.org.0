@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774C0614CD8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E229614CD9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiKAOjy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Nov 2022 10:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53058 "EHLO
+        id S230354AbiKAOj4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Nov 2022 10:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiKAOjx (ORCPT
+        with ESMTP id S229496AbiKAOjz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:39:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C4F13F9A
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:39:51 -0700 (PDT)
+        Tue, 1 Nov 2022 10:39:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C91D12AFF
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:39:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DAC1615CC
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:39:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC76C4347C;
-        Tue,  1 Nov 2022 14:39:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0981B615AF
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:39:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BB67C43470;
+        Tue,  1 Nov 2022 14:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667313590;
-        bh=Jb6w8cU2zmWHyNyhoentTlAJFr6uil/U2XQxkdBpcoc=;
+        s=k20201202; t=1667313593;
+        bh=zqkOAhenCAUz/pr+kao3s+tImHaUhiiOv81se6Arx3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dlbSJ2292zHkXAwwLs3DtE7lAeDYD7k0CO1GjjJVRvE5KMMmtNlNCSOVW04ig2sw1
-         5MTW39BYIGgqPIQYOS6mqjR5zcVyu+ZMm+AO9uAMCvNexgQtEhwYQxbpp4+UOP1BeY
-         hN6VM/jTtdpuLW5LADpuJQfrk7gxYCA9O7Xr+7Wn/mOHpaAinmWYeVdATzZzopLWb3
-         zV1JHqP190uDPKp3xTYpLAR51JmzZVXjQer+dCZrqEG7TTgA326aaY3hmV9gOs93Ax
-         xOdiClZ+UD9zX1rbeTv5wbVbOU8S9fyhhdxzPocAWZRwVs+AA+UrYI3k3jG8M4sGg5
-         Z/kSstVQgux6g==
+        b=L+S42iIJapDuL1XrNcnuA2MA7YtDcnIlSZvsg5AorrJbEb5xUo8M6Am+DGVwaUX6C
+         cVM+Y4VlAL89bXckn/nqLNN0fnP8rLlZf9K1wXznLdhnDwfKBme8rVoLtk0s9sSPLT
+         2JoPZzFBs0qPikAFvCN4iOi5LKPB6NnFL6S0n6GtD8lDm8cK7nmp2AQC0PrOzU1IeB
+         aQshaOvL1zOewgeLM7g/bO0z16PRLxn/Ro79mxO2+nfAjZFD9LZ9yAlN1PfmcSNy0R
+         1vOK7inrdAsNseJZr2chm0AqzgF5Du+VMwNnXiOm3QwXVH+YS8bIrmKsACzBUkDp7e
+         4b9YyxQevKHYA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -42,14 +42,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 14/21] kselftest/arm64: Add a stress test program for ZT0
-Date:   Tue,  1 Nov 2022 14:33:29 +0000
-Message-Id: <20221101143336.254445-15-broonie@kernel.org>
+Subject: [PATCH v2 15/21] kselftest/arm64: Cover ZT in the FP stress test
+Date:   Tue,  1 Nov 2022 14:33:30 +0000
+Message-Id: <20221101143336.254445-16-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221101143336.254445-1-broonie@kernel.org>
 References: <20221101143336.254445-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8809; i=broonie@kernel.org; h=from:subject; bh=Jb6w8cU2zmWHyNyhoentTlAJFr6uil/U2XQxkdBpcoc=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS43lKs0d7YvIzSdvCHe1aOqaM1yrLnixzNUtMhB wIPMXtOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuNwAKCRAk1otyXVSH0G44B/ 9u01LS+W2eD2wCEzyNb461lpX90H6XqINTW0LSOXguhtVn8f2qkx8SyMGTxHN/XIec5jt2Jt6GGZG0 iwbHkTA1ELB+gaJznz3VAWrkzebU2q3EjwvRyWRUAXtsH2+b1LjE9GbYinN2WSRhFmQbkBgQGIH79K SlWpf2rK5WKbyO4HoiVMc301jKuAiBantEw8KbaOKdUMpRI1MHPdNYQgORAmACU8B0gtpM0sBWmWqh A/azYnk8ULflAWtSoNu/x0Kmf/e58iXWQ4RoNkyGIihmgXaJdniArRb2IdT/o387HGdg8mpc+MoUMj A5rTceq1UKS3IJc5gT5WDbeyTIh8TB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2352; i=broonie@kernel.org; h=from:subject; bh=zqkOAhenCAUz/pr+kao3s+tImHaUhiiOv81se6Arx3U=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS44kTT9WgLFS1V0pEZsK+z22NxdqOJDGueqkO+F 4kFPcaqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuOAAKCRAk1otyXVSH0CuUB/ 45oX7TIICnH5JmXWqrZtA9rn+rG6cp4FRhnren2at2GpygqQQv5Ul23Rk3V/JGR0lLZe+KLzofN7GW sAFr9rKM8DJgBPDpfjLhv5OFcUB2EMRSzO48V/D0D6kovvRZrBvH8rb5Udkr7wbaJgPFt15/70viA4 Nda2n6cTCKuEpSscxxxCxObxZ7e48ogyjMPJaKxAXi21I8XIxt1Jb+ID49Vnlfcrf7wqKnt+axvZrq 3pJFi72yJ5lZu0lcmyLZFMZntPU0AvbffHB7AIWyIDtxrmTz7JwyxSp0mcljVLWMVBY7LWW5Lldp0Y 0yYbT0MiGjLhu00fyN70YBFAVHIepE
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,407 +61,82 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Following the pattern for the other register sets add a stress test program
-for ZT0 which continually loads and verifies patterns in the register in
-an effort to discover context switching problems.
+Hook up the newly added zt-test program in the FPSIMD stress tests, start
+a copy per CPU when SME2 is supported.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/.gitignore |   1 +
- tools/testing/selftests/arm64/fp/Makefile   |   3 +
- tools/testing/selftests/arm64/fp/sme-inst.h |  20 ++
- tools/testing/selftests/arm64/fp/zt-test.S  | 324 ++++++++++++++++++++
- 4 files changed, 348 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/fp/zt-test.S
+ tools/testing/selftests/arm64/fp/fp-stress.c | 29 ++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/.gitignore b/tools/testing/selftests/arm64/fp/.gitignore
-index df79d29664a1..41bde4c97d47 100644
---- a/tools/testing/selftests/arm64/fp/.gitignore
-+++ b/tools/testing/selftests/arm64/fp/.gitignore
-@@ -12,3 +12,4 @@ vlset
- za-fork
- za-ptrace
- za-test
-+zt-test
-diff --git a/tools/testing/selftests/arm64/fp/Makefile b/tools/testing/selftests/arm64/fp/Makefile
-index 36db61358ed5..aff3026d3dff 100644
---- a/tools/testing/selftests/arm64/fp/Makefile
-+++ b/tools/testing/selftests/arm64/fp/Makefile
-@@ -14,6 +14,7 @@ TEST_GEN_PROGS_EXTENDED := fp-pidbench fpsimd-test \
- 	sve-test \
- 	ssve-test \
- 	za-test \
-+	zt-test \
- 	vlset
- TEST_PROGS_EXTENDED := fpsimd-stress sve-stress ssve-stress za-stress
+diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
+index 4e62a9199f97..7f4eef8717ad 100644
+--- a/tools/testing/selftests/arm64/fp/fp-stress.c
++++ b/tools/testing/selftests/arm64/fp/fp-stress.c
+@@ -350,6 +350,19 @@ static void start_za(struct child_data *child, int vl, int cpu)
+ 	ksft_print_msg("Started %s\n", child->name);
+ }
  
-@@ -41,5 +42,7 @@ $(OUTPUT)/za-fork: za-fork.c $(OUTPUT)/za-fork-asm.o
- $(OUTPUT)/za-ptrace: za-ptrace.c
- $(OUTPUT)/za-test: za-test.S $(OUTPUT)/asm-utils.o
- 	$(CC) -nostdlib $^ -o $@
-+$(OUTPUT)/zt-test: zt-test.S $(OUTPUT)/asm-utils.o
-+	$(CC) -nostdlib $^ -o $@
++static void start_zt(struct child_data *child, int cpu)
++{
++	int ret;
++
++	child_start(child, "./zt-test");
++
++	ret = asprintf(&child->name, "ZT-%d", cpu);
++	if (ret == -1)
++		ksft_exit_fail_msg("asprintf() failed\n");
++
++	ksft_print_msg("Started %s\n", child->name);
++}
++
+ static void probe_vls(int vls[], int *vl_count, int set_vl)
+ {
+ 	unsigned int vq;
+@@ -404,6 +417,7 @@ int main(int argc, char **argv)
+ 	int cpus, tests, i, j, c;
+ 	int sve_vl_count, sme_vl_count, fpsimd_per_cpu;
+ 	int sve_vls[MAX_VLS], sme_vls[MAX_VLS];
++	bool have_sme2;
+ 	struct epoll_event ev;
+ 	struct sigaction sa;
  
- include ../../lib.mk
-diff --git a/tools/testing/selftests/arm64/fp/sme-inst.h b/tools/testing/selftests/arm64/fp/sme-inst.h
-index 7191e53ca1c0..9292bba5400b 100644
---- a/tools/testing/selftests/arm64/fp/sme-inst.h
-+++ b/tools/testing/selftests/arm64/fp/sme-inst.h
-@@ -48,4 +48,24 @@
- 		| ((\offset) & 7)
- .endm
+@@ -437,6 +451,13 @@ int main(int argc, char **argv)
+ 		sme_vl_count = 0;
+ 	}
  
-+/*
-+ * LDR (ZT0)
-+ *
-+ *	LDR ZT0, nx
-+ */
-+.macro _ldr_zt nx
-+	.inst	0xe11f8000			\
-+		| (((\nx) & 0x1f) << 5)
-+.endm
++	if (getauxval(AT_HWCAP2) & HWCAP2_SME2) {
++		tests += cpus;
++		have_sme2 = true;
++	} else {
++		have_sme2 = false;
++	}
 +
-+/*
-+ * STR (ZT0)
-+ *
-+ *	STR ZT0, nx
-+ */
-+.macro _str_zt nx
-+	.inst	0xe13f8000			\
-+		| (((\nx) & 0x1f) << 5)
-+.endm
+ 	/* Force context switching if we only have FPSIMD */
+ 	if (!sve_vl_count && !sme_vl_count)
+ 		fpsimd_per_cpu = 2;
+@@ -447,8 +468,9 @@ int main(int argc, char **argv)
+ 	ksft_print_header();
+ 	ksft_set_plan(tests);
+ 
+-	ksft_print_msg("%d CPUs, %d SVE VLs, %d SME VLs\n",
+-		       cpus, sve_vl_count, sme_vl_count);
++	ksft_print_msg("%d CPUs, %d SVE VLs, %d SME VLs, SME2 %s\n",
++		       cpus, sve_vl_count, sme_vl_count,
++		       have_sme2 ? "present" : "absent");
+ 
+ 	if (timeout > 0)
+ 		ksft_print_msg("Will run for %ds\n", timeout);
+@@ -495,6 +517,9 @@ int main(int argc, char **argv)
+ 			start_ssve(&children[num_children++], sme_vls[j], i);
+ 			start_za(&children[num_children++], sme_vls[j], i);
+ 		}
 +
- #endif
-diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
-new file mode 100644
-index 000000000000..6f04a8bf60f6
---- /dev/null
-+++ b/tools/testing/selftests/arm64/fp/zt-test.S
-@@ -0,0 +1,324 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2021-2 ARM Limited.
-+// Original author: Mark Brown <broonie@kernel.org>
-+//
-+// Scalable Matrix Extension ZT context switch test
-+// Repeatedly writes unique test patterns into ZT0
-+// and reads them back to verify integrity.
-+
-+#include <asm/unistd.h>
-+#include "assembler.h"
-+#include "asm-offsets.h"
-+#include "sme-inst.h"
-+
-+.arch_extension sve
-+
-+#define ZT_SZ	512
-+#define ZT_B	(ZT_SZ / 8)
-+
-+// Declare some storage space to shadow ZT register contents and a
-+// scratch buffer.
-+.pushsection .text
-+.data
-+.align 4
-+ztref:
-+	.space	ZT_B
-+scratch:
-+	.space	ZT_B
-+.popsection
-+
-+// Trivial memory copy: copy x2 bytes, starting at address x1, to address x0.
-+// Clobbers x0-x3
-+function memcpy
-+	cmp	x2, #0
-+	b.eq	1f
-+0:	ldrb	w3, [x1], #1
-+	strb	w3, [x0], #1
-+	subs	x2, x2, #1
-+	b.ne	0b
-+1:	ret
-+endfunction
-+
-+// Generate a test pattern for storage in ZT
-+// x0: pid
-+// x1: generation
-+
-+// These values are used to constuct a 32-bit pattern that is repeated in the
-+// scratch buffer as many times as will fit:
-+// bits 31:24	generation number (increments once per test_loop)
-+// bits 23: 8	pid
-+// bits  7: 0	32-bit lane index
-+
-+function pattern
-+	mov	w3, wzr
-+	bfi	w3, w0, #8, #16		// PID
-+	bfi	w3, w1, #24, #8		// Generation
-+
-+	ldr	x0, =scratch
-+	mov	w1, #ZT_B / 4
-+
-+0:	str	w3, [x0], #4
-+	add	w3, w3, #1		// Lane
-+	subs	w1, w1, #1
-+	b.ne	0b
-+
-+	ret
-+endfunction
-+
-+// Set up test pattern in a ZT horizontal vector
-+// x0: pid
-+// x1: generation
-+function setup_zt
-+	mov	x4, x30
-+
-+	bl	pattern			// Get pattern in scratch buffer
-+	ldr	x0, =ztref
-+	ldr	x1, =scratch
-+	mov	x2, #ZT_B
-+	bl	memcpy
-+
-+	_ldr_zt 0			// load zt0 from pointer x0
-+
-+	ret	x4
-+endfunction
-+
-+// Trivial memory compare: compare x2 bytes starting at address x0 with
-+// bytes starting at address x1.
-+// Returns only if all bytes match; otherwise, the program is aborted.
-+// Clobbers x0-x5.
-+function memcmp
-+	cbz	x2, 2f
-+
-+	stp	x0, x1, [sp, #-0x20]!
-+	str	x2, [sp, #0x10]
-+
-+	mov	x5, #0
-+0:	ldrb	w3, [x0, x5]
-+	ldrb	w4, [x1, x5]
-+	add	x5, x5, #1
-+	cmp	w3, w4
-+	b.ne	1f
-+	subs	x2, x2, #1
-+	b.ne	0b
-+
-+1:	ldr	x2, [sp, #0x10]
-+	ldp	x0, x1, [sp], #0x20
-+	b.ne	barf
-+
-+2:	ret
-+endfunction
-+
-+// Verify that a ZT vector matches its shadow in memory, else abort
-+// Clobbers x0-x7 and x12.
-+function check_zt
-+	mov	x3, x30
-+
-+	ldr	x0, =scratch		// Poison scratch
-+	mov	x1, #ZT_B
-+	bl	memfill_ae
-+
-+	ldr	x0, =scratch
-+	_str_zt 0
-+
-+	ldr	x0, =ztref
-+	ldr	x1, =scratch
-+	mov	x2, #ZT_B
-+	mov	x30, x3
-+	b	memcmp
-+endfunction
-+
-+// Any SME register modified here can cause corruption in the main
-+// thread -- but *only* the locations modified here.
-+function irritator_handler
-+	// Increment the irritation signal count (x23):
-+	ldr	x0, [x2, #ucontext_regs + 8 * 23]
-+	add	x0, x0, #1
-+	str	x0, [x2, #ucontext_regs + 8 * 23]
-+
-+	// Corrupt some random ZT data
-+#if 0
-+	adr	x0, .text + (irritator_handler - .text) / 16 * 16
-+	movi	v0.8b, #1
-+	movi	v9.16b, #2
-+	movi	v31.8b, #3
-+#endif
-+
-+	ret
-+endfunction
-+
-+function tickle_handler
-+	// Increment the signal count (x23):
-+	ldr	x0, [x2, #ucontext_regs + 8 * 23]
-+	add	x0, x0, #1
-+	str	x0, [x2, #ucontext_regs + 8 * 23]
-+
-+	ret
-+endfunction
-+
-+function terminate_handler
-+	mov	w21, w0
-+	mov	x20, x2
-+
-+	puts	"Terminated by signal "
-+	mov	w0, w21
-+	bl	putdec
-+	puts	", no error, iterations="
-+	ldr	x0, [x20, #ucontext_regs + 8 * 22]
-+	bl	putdec
-+	puts	", signals="
-+	ldr	x0, [x20, #ucontext_regs + 8 * 23]
-+	bl	putdecn
-+
-+	mov	x0, #0
-+	mov	x8, #__NR_exit
-+	svc	#0
-+endfunction
-+
-+// w0: signal number
-+// x1: sa_action
-+// w2: sa_flags
-+// Clobbers x0-x6,x8
-+function setsignal
-+	str	x30, [sp, #-((sa_sz + 15) / 16 * 16 + 16)]!
-+
-+	mov	w4, w0
-+	mov	x5, x1
-+	mov	w6, w2
-+
-+	add	x0, sp, #16
-+	mov	x1, #sa_sz
-+	bl	memclr
-+
-+	mov	w0, w4
-+	add	x1, sp, #16
-+	str	w6, [x1, #sa_flags]
-+	str	x5, [x1, #sa_handler]
-+	mov	x2, #0
-+	mov	x3, #sa_mask_sz
-+	mov	x8, #__NR_rt_sigaction
-+	svc	#0
-+
-+	cbz	w0, 1f
-+
-+	puts	"sigaction failure\n"
-+	b	.Labort
-+
-+1:	ldr	x30, [sp], #((sa_sz + 15) / 16 * 16 + 16)
-+	ret
-+endfunction
-+
-+// Main program entry point
-+.globl _start
-+function _start
-+_start:
-+	mov	x23, #0		// signal count
-+
-+	mov	w0, #SIGINT
-+	adr	x1, terminate_handler
-+	mov	w2, #SA_SIGINFO
-+	bl	setsignal
-+
-+	mov	w0, #SIGTERM
-+	adr	x1, terminate_handler
-+	mov	w2, #SA_SIGINFO
-+	bl	setsignal
-+
-+	mov	w0, #SIGUSR1
-+	adr	x1, irritator_handler
-+	mov	w2, #SA_SIGINFO
-+	orr	w2, w2, #SA_NODEFER
-+	bl	setsignal
-+
-+	mov	w0, #SIGUSR2
-+	adr	x1, tickle_handler
-+	mov	w2, #SA_SIGINFO
-+	orr	w2, w2, #SA_NODEFER
-+	bl	setsignal
-+
-+	smstart_za
-+
-+	// Obtain our PID, to ensure test pattern uniqueness between processes
-+	mov	x8, #__NR_getpid
-+	svc	#0
-+	mov	x20, x0
-+
-+	puts	"PID:\t"
-+	mov	x0, x20
-+	bl	putdecn
-+
-+	mov	x22, #0		// generation number, increments per iteration
-+.Ltest_loop:
-+	mov	x0, x20
-+	mov	x1, x22
-+	bl	setup_zt
-+
-+	mov	x8, #__NR_sched_yield	// Encourage preemption
-+	svc	#0
-+
-+	mov	x0, x20
-+	mov	x1, x22
-+	bl	check_zt
-+
-+	add	x22, x22, #1	// Everything still working
-+	b	.Ltest_loop
-+
-+.Labort:
-+	mov	x0, #0
-+	mov	x1, #SIGABRT
-+	mov	x8, #__NR_kill
-+	svc	#0
-+endfunction
-+
-+function barf
-+// fpsimd.c acitivty log dump hack
-+//	ldr	w0, =0xdeadc0de
-+//	mov	w8, #__NR_exit
-+//	svc	#0
-+// end hack
-+	smstop
-+	mov	x10, x0	// expected data
-+	mov	x11, x1	// actual data
-+	mov	x12, x2	// data size
-+
-+	puts	"Mismatch: PID="
-+	mov	x0, x20
-+	bl	putdec
-+	puts	", iteration="
-+	mov	x0, x22
-+	bl	putdec
-+	puts	"\tExpected ["
-+	mov	x0, x10
-+	mov	x1, x12
-+	bl	dumphex
-+	puts	"]\n\tGot      ["
-+	mov	x0, x11
-+	mov	x1, x12
-+	bl	dumphex
-+	puts	"]\n"
-+
-+	mov	x8, #__NR_getpid
-+	svc	#0
-+// fpsimd.c acitivty log dump hack
-+//	ldr	w0, =0xdeadc0de
-+//	mov	w8, #__NR_exit
-+//	svc	#0
-+// ^ end of hack
-+	mov	x1, #SIGABRT
-+	mov	x8, #__NR_kill
-+	svc	#0
-+//	mov	x8, #__NR_exit
-+//	mov	x1, #1
-+//	svc	#0
-+endfunction
-+
-+function svcr_barf
-+	mov	x10, x0
-+
-+	puts	"Bad SVCR: "
-+	mov	x0, x10
-+	bl	putdecn
-+
-+	mov	x8, #__NR_exit
-+	mov	x1, #1
-+	svc	#0
-+endfunction
++		if (have_sme2)
++			start_zt(&children[num_children++], i);
+ 	}
+ 
+ 	for (;;) {
 -- 
 2.30.2
 
