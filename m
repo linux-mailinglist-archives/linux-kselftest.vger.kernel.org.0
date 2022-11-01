@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781DD614CCF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B06614CD0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbiKAOja (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Nov 2022 10:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S230315AbiKAOjf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Nov 2022 10:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiKAOj3 (ORCPT
+        with ESMTP id S230333AbiKAOjd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:39:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766591903C
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:39:28 -0700 (PDT)
+        Tue, 1 Nov 2022 10:39:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9892D12AFF
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:39:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 138D3615ED
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1DAC433D7;
-        Tue,  1 Nov 2022 14:39:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59C06B81DDF
+        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 14:39:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4173C4347C;
+        Tue,  1 Nov 2022 14:39:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667313567;
-        bh=YKInprl0Z/WdYYYPuq/XXVfRQrNbgVz3ey4J2M/3SlI=;
+        s=k20201202; t=1667313570;
+        bh=nNqQUwIlLlhNTh00NGbkWKb/ZzHhU7JuzVml+Agak8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EeLJAfh53DSosVOk3rSRQUaUW8ErlZS8bWSDoSKNCe5pbOO40CasCAC4p30+LkEb+
-         tL2VtKyvGerDKnxAT82YvY5Nz3Jqaz6zVD5WlxS8TZlZqCr76V/bMT6r/snMpKE7vZ
-         iGbUr+tdvZqYWrOe45EU42tUirQaDF0EkmNbrOCcqSUOGRfJZ5pxNa0VPc9QeR8hi6
-         fUaPVKygpYQsxI15DGRyNfuzog+kpWYLkn5fimULXa9VlYHkvf/Cb3wtG5MNV0OZD2
-         yImuw4jvK7oj1kPA2BOBrj52iK3OmUcUP1zKShHe5iyTdcI3rjuJz3+7Y5mX78JUSt
-         8qyydxtrqOyXg==
+        b=ooRgAoGkoMAzNXQfsm8pn/4sZFyfCKgPO4DTQ55jzjgnU1aBbi0BelIZOvXp6nV4l
+         3st9gG3x/zeH3y1NZc+ASerxZqc0aAgqE89qROvAdpReVxRdqjqHp7htt+Sk3vbrDt
+         S72BL1Bz71hZp4AUHUMQo9tHwF4CDlbU3wLjhycLpnMRg/k0StzDYnR+cPDNDffCE7
+         +ckQF03mrgzQRM3ur4DbwZKjsl5V2LttqP0bKyRBcW6q95FCfrcOFMd7bRz5amGFOm
+         DhzxlO3lDwc6DpH6KijxwmEO1+kUZ/kXTvpKvagAj5eq34sLcLpX7CudR/oFXUsIvD
+         0xa8omovETkVw==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -42,14 +42,14 @@ Cc:     Alan Hayward <alan.hayward@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 05/21] arm64/esr: Document ISS for ZT0 being disabled
-Date:   Tue,  1 Nov 2022 14:33:20 +0000
-Message-Id: <20221101143336.254445-6-broonie@kernel.org>
+Subject: [PATCH v2 06/21] arm64/sme: Manually encode ZT0 load and store instructions
+Date:   Tue,  1 Nov 2022 14:33:21 +0000
+Message-Id: <20221101143336.254445-7-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221101143336.254445-1-broonie@kernel.org>
 References: <20221101143336.254445-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=645; i=broonie@kernel.org; h=from:subject; bh=YKInprl0Z/WdYYYPuq/XXVfRQrNbgVz3ey4J2M/3SlI=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS4utC8ef3jGaowJXIFnq+Ms+yKnG+/t2cBH8Ug2 gL1ykRGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuLgAKCRAk1otyXVSH0MPsB/ 9d2sFAonITHoPTNFnLA3oKF1bPJvnBWguMQf+1QtZo63o+D0dvqGoHTlzKBs2eqaWlLbFnKNpswith lCo6ac3g5SC0unHTuVmvKOhVsrEkm36rOb+kw7KjLG1RJiR3PduhGmMMQeaFDIoIak7aprq/rSGQ+5 eu49Lct9B96qvtOuF54J54VIlDdxh6VTFwR5DeE8ObZuh3AuaiH7mw9U+rj4lNd+qzw4MaFFKbaMJ8 bGt/yJleV6lED8vSPcZg53w7lGDZuhO4CQnos/JYLUB6CEdcHdRjxLSfLaC+c1VyUGV5Y48aQdec6c 0vVf3K6Vnzg9+redqHqSHEmE8j8JBR
+X-Developer-Signature: v=1; a=openpgp-sha256; l=909; i=broonie@kernel.org; h=from:subject; bh=nNqQUwIlLlhNTh00NGbkWKb/ZzHhU7JuzVml+Agak8Y=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjYS4vnGSUPdo5XijQQVesN8LP48yDwYn+xoJHDLQF kPqnmJ6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY2EuLwAKCRAk1otyXVSH0Fl/B/ 0faWBNOtatH8YELdjihsu7sT35RTc8WK8xytQPNTGIP2yRyOEoe/0hYGJlAj/K2HT1JjEpKw6yIXTU JtYPf0uTKrUYWNiWM7h8pAzfAryj2Z5caT5iqowMMBiQaC4Cad9FIvQ+au4WmFuAb3LtEawUPGA3mV h9u5UhIObQaVrpDv4Z1q6DU3eart15pSIe/LudZ+zkL/M/DR3Z0BSzi5kW9B0If9Xnu6ERGYalvsHo wyhyXAzIzOtWkihtAGUtMMK+LRgcPHMV0wW1sAFyTTro+G3piKVkjlYAAx1+tkGA/eOLk6AwpLsDdM 3El/1hOcUvgGmxXA/cYlvZE4FAOMd9
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,26 +61,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SME2 defines a new ISS code for use when trapping acesses to ZT0, add a
-definition for it.
+In order to avoid unrealistic toolchain requirements we manually encode the
+instructions for loading and storing ZT0.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/esr.h | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/include/asm/fpsimdmacros.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-index 15b34fbfca66..5f3271e9d5df 100644
---- a/arch/arm64/include/asm/esr.h
-+++ b/arch/arm64/include/asm/esr.h
-@@ -341,6 +341,7 @@
- #define ESR_ELx_SME_ISS_ILL		1
- #define ESR_ELx_SME_ISS_SM_DISABLED	2
- #define ESR_ELx_SME_ISS_ZA_DISABLED	3
-+#define ESR_ELx_SME_ISS_ZT_DISABLED	4
+diff --git a/arch/arm64/include/asm/fpsimdmacros.h b/arch/arm64/include/asm/fpsimdmacros.h
+index 5e0910cf4832..cd03819a3b68 100644
+--- a/arch/arm64/include/asm/fpsimdmacros.h
++++ b/arch/arm64/include/asm/fpsimdmacros.h
+@@ -220,6 +220,28 @@
+ 		| ((\offset) & 7)
+ .endm
  
- #ifndef __ASSEMBLY__
- #include <asm/types.h>
++/*
++ * LDR (ZT0)
++ *
++ *	LDR ZT0, nx
++ */
++.macro _ldr_zt nx
++	_check_general_reg \nx
++	.inst	0xe11f8000	\
++		 | (\nx << 5)
++.endm
++
++/*
++ * STR (ZT0)
++ *
++ *	STR ZT0, nx
++ */
++.macro _str_zt nx
++	_check_general_reg \nx
++	.inst	0xe13f8000		\
++		| (\nx << 5)
++.endm
++
+ /*
+  * Zero the entire ZA array
+  *	ZERO ZA
 -- 
 2.30.2
 
