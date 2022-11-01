@@ -2,125 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08032614C2F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 316BB614C7B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Nov 2022 15:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKAOE7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Nov 2022 10:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
+        id S230241AbiKAOXW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Nov 2022 10:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiKAOE6 (ORCPT
+        with ESMTP id S229766AbiKAOXV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:04:58 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D3B1740D
-        for <linux-kselftest@vger.kernel.org>; Tue,  1 Nov 2022 07:04:57 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id k2so37312197ejr.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Nov 2022 07:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dbwy8ITCoA5pOVbLQJbEcT2GDetN5uvf+3GbTAUDrCE=;
-        b=miyy9c9glmyzfufEN5otSKVrH8Sh29yFZ1xv03E4kPsejTjmnT272cRWCp5OvjvP4x
-         MphFAonTt/sh2ROc7RuhjUQRf+ujJcwu0Pl9aUGMLh8HqQWh8CVBUd/eNRFGvpTppP6F
-         yCGeN+9xLm/BJ/yaOc7eAIpzWCLrMTgvgu1AHRYZXyZkc0RHbI4a2IVVsngKmgUF70Wa
-         lHP4JpVBq3+VSpKO7sTGyWDwruOcC03qrcdq19rHA2booqkm1A7FqFkW4b/gIGb9MxXC
-         18Oq0CpjitQmwHPVq1WJ35uwTaExIjMooXlfHdHjBZopoWXVM7V7fGG4e0V7Wl0dXLRb
-         6DCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dbwy8ITCoA5pOVbLQJbEcT2GDetN5uvf+3GbTAUDrCE=;
-        b=GkSQp/fJdsz0OYNQr3sZLuekdpHvYe7+KzZxYrUjpNZKCApIuEOZE8mU0xKeueNNoj
-         8Oe6t0zPJ89fkWepu2SP5Zx8GykB38oXfoNiCmnxCi74Bc2Ch9od6puJUoPKrcmon8dO
-         iFeRphAvDa6VOsZebLhVS6edAgVT65KExoozFFxNgMblBbmjfkLLBD/VaH4JGjsivm7W
-         0NAOOMVqv0kavxKCP4eI5WYr7LMZFgqV8ventOVr+9BEhTkpv/w3qguSHPUBj8xmG5sB
-         UyoA4jGGscfd+ETpJvq8nTQJOTEzBfp/MRlJLj7Kn7f9UUA7dkSTy4tXqz5SLOTHKoqp
-         Uyyg==
-X-Gm-Message-State: ACrzQf2+qLHDp0ly0w7DADvUrIVcTrMZu7G7Wjz+Hu5t5GvaAeTHyeeJ
-        rwfTMb6vwVS/jDfEldIvNkyn3bSgQM3tVj8gRa6cl4eAMr81bg==
-X-Google-Smtp-Source: AMsMyM7RW6jeJsoZd4AqGMeCd5kgJTnDjjqPbSsmg4NAhClfu6VJBlQwlILNHLvLzV1lKjtc1/O0DJXswzJDkG1MZ8k=
-X-Received: by 2002:a17:907:74a:b0:77e:9455:b4e1 with SMTP id
- xc10-20020a170907074a00b0077e9455b4e1mr18364523ejb.462.1667311495135; Tue, 01
- Nov 2022 07:04:55 -0700 (PDT)
+        Tue, 1 Nov 2022 10:23:21 -0400
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA121B1FB;
+        Tue,  1 Nov 2022 07:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667312593;
+        bh=l57fPtvVIgXTiYLMlFVCC6EXs6IDtJKDnxNvjdOUkcM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=dG4TA+4Bll7492rMsS8WJaix0eoOwd7HqJaAylQ9majA9lMWH3lAdDOHRgomRnAkx
+         p7gkd8+tclRIsPHJiVIpcZWie70dvu8i3VBT42+H8c6GYIR1/No4zU6Zrp2E/t+vGO
+         dLTymhQKQvxhQ7X4h5iBGnzbLRC7wWi94CMGk8x8=
+Received: from localhost.localdomain ([111.199.189.86])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id 5C8A8617; Tue, 01 Nov 2022 22:23:08 +0800
+X-QQ-mid: xmsmtpt1667312588tydmkk56a
+Message-ID: <tencent_630BF3724BC5EA157B341EB1C7604EE83705@qq.com>
+X-QQ-XMAILINFO: NkHKfw09D6j8nya1MpOLbHO6M3R7kUmTeJKqU8bBsXqWRReOWDSDVWI6V8tWhN
+         YGrHWs/ZqniKBScePxRhbqgGs190QduRHvk0+3ORugItPyo+KjTrVkAwfZFRPoHaE8g6aTEOsKu/
+         DtH3P2KV1Rvi4Zr3KSKl6Crl6xCDX/qiUJ62/aimuZao6phXPLed2obw86eoOAMtKZZmVRVHBl9s
+         GUsWE0XQH2eFlp3KCVkymh5ZzPdiB6BsmwCY3x3g6XDmdhEtSkKrdzGeholKfA5WJx58BE/lSMFz
+         h0G5vEkQ2E7ICILcIqvMxk6K8+9cgRp8bGr5JETqN7v7rpa2sphVrCpS6m5u1Lxjl18KeTaRBK9y
+         Syt6VMCfnctkcFAOLumCvwKbXj6FbJYkzEFOWzvktbWNbskSG7JSc256E+tGIQVlsmjKjTubmN/Z
+         hic6em+Wmub3kqm8Oo0NutB2do6AcJ0PjYDd0Rh3cqc2tqx/Y3BiAs6ISjGvBHPte/ev43eU7CEc
+         AKQR56nHD0HgCvOnWgBlYKKNxM3qC2DdB6a/oOloZI8i6WVqfayjLJ/hO8wfdM6UCNOdvNkhhtSc
+         WBOMPqRpICZQd/WWJmhzNLRCe9MQsHZSg0/C8UFogHQ2zZNjISA++DtrwGhB8RTLvvRZepfka+GK
+         45NQm2uC8syIUepLvCMzZ0jf3DpHEX7U+5uyhzO/dH8Fv7MQKs7k8YlZigI/QJe8BIb2fA0T+al/
+         m0WJdbe5m6LEaRZcQgaQlYrnlTkzGZmogl367ToL5MAILCJu4itC7GBh1voxTYzlua4GUrQYDsqI
+         Niv4X/6Hys/q5uEXXqgjN6eLTo6qrPisOvdQkVp0zTXN2rd52Yhf48rXuqjdCFaRWbJb0sywfEda
+         vuqFjBZDGMdk1E6CyXCz9K+R8GJSyHjRi93e1WoOvUtDyPMxBKfzClOfC90AIl3dlYNG0K1bb6WO
+         9hRHCW4gftV8RBiHNIv6KcqXI7XA74KNDpGFaOXhhIiP9a6kgiYio++dncugKNo81BVCFy5pTbqM
+         o7M0PjNEQczUTFfkRI
+From:   Rong Tao <rtoax@foxmail.com>
+To:     daniel@iogearbox.net
+Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, david.laight@aculab.com, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
+        rtoax@foxmail.com, sdf@google.com, shuah@kernel.org,
+        song@kernel.org, yhs@fb.com
+Subject: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+Date:   Tue,  1 Nov 2022 22:23:07 +0800
+X-OQ-MSGID: <20221101142307.19414-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <fc8634e8-6efd-9911-cab4-07ad6ba4ad33@iogearbox.net>
+References: <fc8634e8-6efd-9911-cab4-07ad6ba4ad33@iogearbox.net>
 MIME-Version: 1.0
-References: <20220829000920.38185-1-isabbasso@riseup.net> <20220829000920.38185-5-isabbasso@riseup.net>
- <Yyl3UXvLd3Jyr9uP@platvala-desk.ger.corp.intel.com> <20221101135425.3ee12c9c@maurocar-mobl2>
- <Y2EcEnAzkt1Qn341@platvala-desk.ger.corp.intel.com> <20221101145333.5960e6e7@maurocar-mobl2>
-In-Reply-To: <20221101145333.5960e6e7@maurocar-mobl2>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 1 Nov 2022 07:04:43 -0700
-Message-ID: <CAGS_qxr+xzr1Ea6Y+xr+hBrGqx6rFSh_Q3xHi=ND1aPoQd+jtA@mail.gmail.com>
-Subject: Re: [igt-dev] [PATCH i-g-t v2 4/4] tests: DRM selftests: switch to KUnit
-To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-Cc:     Petri Latvala <petri.latvala@intel.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Trevor Woerner <twoerner@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Magali Lemes <magalilemes00@gmail.com>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        leandro.ribeiro@collabora.com, igt-dev@lists.freedesktop.org,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <n@nfraprado.net>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 1, 2022, 6:53 AM Mauro Carvalho Chehab
-<mauro.chehab@linux.intel.com> wrote:
-> > Ah, the selection is in kunit.ko itself. kunit.filter_glob, set from
-> > kunit.py with
-> >
-> > positional arguments:
-> >   filter_glob           Filter which KUnit test suites/tests run at boot-time, e.g. list* or list*.*del_test
-> > \
->
-> Gah, permissions are 0:
->
->         module_param_named(filter_glob, filter_glob_param, charp, 0);
->
-> You can't even see what filters were set via sysfs:
->
->         $ ls /sys/module/kunit/parameters/
->         stats_enabled
->
-> So, once set, there's no way to change it.
->
-> I wonder why this isn't 0x644.
->
-> It sounds that, if we want to control it at runtime, we'll need to
-> build with kunit as module, and unload/reload it every time if/when
-> we want to run IGT with a different filtering ruleset.
+From: Rong Tao <rongtao@cestc.cn>
 
-kunit.filter_glob only works on built-in tests, which is why you can
-only set it once atm.
-There is no currently no way for KUnit to run a subset of tests in modules.
+move libbpf_strlcpy() to bpf_util.h, and replace strncpy() with
+libbpf_strlcpy(), fix compile warning.
 
-The module init code is here:
-https://elixir.bootlin.com/linux/v6.0/source/lib/kunit/test.c#L620
-As you can see, that func it calls just initializes and runs all the
-suites: https://elixir.bootlin.com/linux/v6.0/source/lib/kunit/test.c#L589
+Compile samples/bpf, warning:
+$ cd samples/bpf
+$ make
+...
+cgroup_helpers.c: In function ‘__enable_controllers’:
+cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
+   80 |                 strncpy(enable, controllers, sizeof(enable));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This can of course be changed, just needs some work on the KUnit-side.
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/testing/selftests/bpf/bpf_util.h       | 19 +++++++++++++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.c |  3 ++-
+ tools/testing/selftests/bpf/xsk.c            | 20 +-------------------
+ 3 files changed, 22 insertions(+), 20 deletions(-)
 
-Daniel
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index a3352a64c067..bf78212ff6e9 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -20,6 +20,25 @@ static inline unsigned int bpf_num_possible_cpus(void)
+ 	return possible_cpus;
+ }
+ 
++/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
++ * is zero-terminated string no matter what (unless sz == 0, in which case
++ * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
++ * in what is returned. Given this is internal helper, it's trivial to extend
++ * this, when necessary. Use this instead of strncpy inside libbpf source code.
++ */
++static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
++{
++	size_t i;
++
++	if (sz == 0)
++		return;
++
++	sz--;
++	for (i = 0; i < sz && src[i]; i++)
++		dst[i] = src[i];
++	dst[i] = '\0';
++}
++
+ #define __bpf_percpu_val_align	__attribute__((__aligned__(8)))
+ 
+ #define BPF_DECLARE_PERCPU(type, name)				\
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index e914cc45b766..e33b70e509da 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -13,6 +13,7 @@
+ #include <ftw.h>
+ 
+ #include "cgroup_helpers.h"
++#include "bpf_util.h"
+ 
+ /*
+  * To avoid relying on the system setup, when setup_cgroup_env is called
+@@ -77,7 +78,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
+ 		enable[len] = 0;
+ 		close(fd);
+ 	} else {
+-		strncpy(enable, controllers, sizeof(enable));
++		libbpf_strlcpy(enable, controllers, sizeof(enable));
+ 	}
+ 
+ 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
+diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
+index 0b3ff49c740d..cf6e9ab37b1b 100644
+--- a/tools/testing/selftests/bpf/xsk.c
++++ b/tools/testing/selftests/bpf/xsk.c
+@@ -33,6 +33,7 @@
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
+ #include "xsk.h"
++#include "bpf_util.h"
+ 
+ #ifndef SOL_XDP
+  #define SOL_XDP 283
+@@ -521,25 +522,6 @@ static int xsk_create_bpf_link(struct xsk_socket *xsk)
+ 	return 0;
+ }
+ 
+-/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
+- * is zero-terminated string no matter what (unless sz == 0, in which case
+- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
+- * in what is returned. Given this is internal helper, it's trivial to extend
+- * this, when necessary. Use this instead of strncpy inside libbpf source code.
+- */
+-static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
+-{
+-        size_t i;
+-
+-        if (sz == 0)
+-                return;
+-
+-        sz--;
+-        for (i = 0; i < sz && src[i]; i++)
+-                dst[i] = src[i];
+-        dst[i] = '\0';
+-}
+-
+ static int xsk_get_max_queues(struct xsk_socket *xsk)
+ {
+ 	struct ethtool_channels channels = { .cmd = ETHTOOL_GCHANNELS };
+-- 
+2.31.1
+
