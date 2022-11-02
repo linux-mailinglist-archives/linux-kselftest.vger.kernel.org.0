@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78444616019
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 10:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F39C61603A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 10:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiKBJl5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Nov 2022 05:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        id S230089AbiKBJvy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Nov 2022 05:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiKBJly (ORCPT
+        with ESMTP id S229534AbiKBJvy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:41:54 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFF122BC4
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 02:41:52 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id 4so16079841pli.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 02:41:52 -0700 (PDT)
+        Wed, 2 Nov 2022 05:51:54 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3660C1F2D9
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 02:51:53 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q1so15754858pgl.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 02:51:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZjjsfhVpVmcKXTEAXNtkm7mljVLUHPV6/kXC2ILvLk=;
-        b=adDXi8Yok5j/QS1Hd0PWyyALEH6R9tJTsIbSAWlQ/AXtawOjzK452sQCf1g9NHbd0t
-         X93cZ4qPH//xgANbOAwuONnYWtpVmnhQJ2cAGZy0NpekfVrFZpOLpdsmzbX/It4MCQ3f
-         bsWrjcjWIHmzlMmOeRWYWhBzs/1dZCD3V+xs4=
+        bh=8gO4oBkwXoA7cXVJu0fHO5ySLapcLSIFeRuKjNXMt1c=;
+        b=e9M+T/yOXfGHQ0DVOM5Tz3Qgf0kzrIEjhC3+5GeAFHLHbFOx+dKo7vlzfmlj3Ovf8U
+         ed/Ff75KRUaGX78mEugrTxGXYSRwXhk7UEthFLKVrTzPCMvdM8I6FbH6bCNDfnh7UQR/
+         X86/1nTfVUhv3JluABi7U0eafDbCdOdmp+3Gc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZjjsfhVpVmcKXTEAXNtkm7mljVLUHPV6/kXC2ILvLk=;
-        b=AYNduZ/djnJPt1cweJmqqrMSp7qIdq7h2Ngz5xwOJTuZyXQYVPvwJL9+8vmYMvlyab
-         DHd8PdJG93JHDUzapspuYWx3DV4eWGSvZ76k7UuTVYhjyoRTwfcvOmplvSTrHg2ryTYm
-         sy62g4aclclFkAbnFBC9VL68cv1mEchAOSwP2ixNey43bAQ98r65FIl/Hk5LDUrWsjUq
-         9ohSNOJApq3+eNAhKXRijZugkcPIjXDE1wJM0z7AW70q0iTAeoyoLRHde/TiMKqZ2u5L
-         ciswPsmzNB1C2K4uhymZu2h6SnQHFbANfldg6Dyn20Cg8cv9IU6I6MF9029TyKqDppId
-         MTWw==
-X-Gm-Message-State: ACrzQf1+d+/6vg04d9HPD7tvg396+9HlEfTHlID2GufudusHJBuaXSd2
-        T0212X7JsQLO2wXk2OFzRcPu2g==
-X-Google-Smtp-Source: AMsMyM52YklWkHCnOHxtQRQyhs05T/jj5R+sIap/eItkZFEUIuRECDv4bxs6he5KZD3NLJVtrqKUPA==
-X-Received: by 2002:a17:90a:e545:b0:213:9c27:cded with SMTP id ei5-20020a17090ae54500b002139c27cdedmr7680602pjb.208.1667382111831;
-        Wed, 02 Nov 2022 02:41:51 -0700 (PDT)
+        bh=8gO4oBkwXoA7cXVJu0fHO5ySLapcLSIFeRuKjNXMt1c=;
+        b=x8m0Oqc3BTaj9C1AaKvss/+vQvE7ypVFWp3OlzmnO2H3Np4LtVJBUbN2YWnVJJoXOr
+         sKtN99yoEstvKBB9m40qnrN1UPtQruXQpsnAABqr/xN2IM5qfjtSDbfjRth3NBSnSRqA
+         wQOsiPakbkJdvSjoQ9afE943M+40JA64fr4JL7apdW3xYBjCUuU2pRaCxn9OylBDAo7e
+         HA14hgMPf+wnxoVSWCen2KBn+Lx/4zNkcvUWwXFMa3c6SlM1d2Nn+IIfBjDBs51XT2tX
+         /so/NpSSBPkC7xgSY6KODgieGoSuw82Mq0FDjoE0EkZS4dudtTPSL+gtYcXtf5nsAOBm
+         I9wQ==
+X-Gm-Message-State: ACrzQf1AEVvukPm4pVbnU8dAgRXoDBZEKMgxXsuuh0B2beemENQ+SV7U
+        QJ3me30UGKfc7nYZrbAyLxndNA==
+X-Google-Smtp-Source: AMsMyM4W5hLjwS8QmYrG1hulUCgTzpLZ6aI5I6Y3ZqvRqbFiMNvL0q2GziLv1mrFdLcIxLoJJ6MfYg==
+X-Received: by 2002:a63:44b:0:b0:46f:1082:32ac with SMTP id 72-20020a63044b000000b0046f108232acmr21727405pge.136.1667382712722;
+        Wed, 02 Nov 2022 02:51:52 -0700 (PDT)
 Received: from [192.168.0.168] ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id 3-20020a620403000000b0056da2bf607csm4326244pfe.214.2022.11.02.02.41.49
+        by smtp.gmail.com with ESMTPSA id v18-20020a170902ca9200b00186e8526790sm7841140pld.127.2022.11.02.02.51.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:41:51 -0700 (PDT)
-Message-ID: <39586b57-aad2-d9ca-df12-67f1dfe60258@linuxfoundation.org>
-Date:   Wed, 2 Nov 2022 03:41:47 -0600
+        Wed, 02 Nov 2022 02:51:52 -0700 (PDT)
+Message-ID: <58917c1e-9178-e9b7-8630-dbc935963b5a@linuxfoundation.org>
+Date:   Wed, 2 Nov 2022 03:51:47 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v3 4/5] selftests/resctrl: Cleanup properly when an error
- occurs in CAT test
+Subject: Re: [PATCH v3 5/5] selftests/resctrl: Remove duplicate codes that
+ clear each test result file
 Content-Language: en-US
 To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
@@ -62,9 +62,9 @@ To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
- <20221101094341.3383073-5-tan.shaopeng@jp.fujitsu.com>
+ <20221101094341.3383073-6-tan.shaopeng@jp.fujitsu.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221101094341.3383073-5-tan.shaopeng@jp.fujitsu.com>
+In-Reply-To: <20221101094341.3383073-6-tan.shaopeng@jp.fujitsu.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,106 +78,27 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 11/1/22 03:43, Shaopeng Tan wrote:
-> After creating a child process with fork() in CAT test, if there is
-> an error occurs or such as a SIGINT signal is received, the parent
-> process will be terminated immediately, but the child process will not
-> be killed and also umount_resctrlfs() will not be called.
+> Before exiting each test function(run_cmt/cat/mbm/mba_test()),
+> test results("ok","not ok") are printed by ksft_test_result() and then
+> temporary result files are cleaned by function
+> cmt/cat/mbm/mba_test_cleanup().
+> However, before running ksft_test_result(),
+> function cmt/cat/mbm/mba_test_cleanup()
+> has been run in each test function as follows:
+>    cmt_resctrl_val()
+>    cat_perf_miss_val()
+>    mba_schemata_change()
+>    mbm_bw_change()
 > 
-> Add a signal handler like other tests to kill child process, umount
-> resctrlfs, cleanup result files, etc. when an error occurs.
+> Remove duplicate codes that clear each test result file.
+
+This isn't making much sense to me. Please include test report before
+and after this change in the change log.
+
 > 
 > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
->   tools/testing/selftests/resctrl/cat_test.c | 28 +++++++++++++++-------
->   1 file changed, 19 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index 6a8306b0a109..5f81817f4366 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -98,12 +98,21 @@ void cat_test_cleanup(void)
->   	remove(RESULT_FILE_NAME2);
->   }
->   
-> +static void ctrl_handler(int signo)
-> +{
-> +	kill(bm_pid, SIGKILL);
-> +	umount_resctrlfs();
-> +	tests_cleanup();
-> +	ksft_print_msg("Ending\n\n");
 
-Is there a reason to print this message? Remove it unless it serves
-a purpose.
-
-> +
-> +	exit(EXIT_SUCCESS);
-> +}
-> +
->   int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   {
->   	unsigned long l_mask, l_mask_1;
->   	int ret, pipefd[2], sibling_cpu_no;
->   	char pipe_message;
-> -	pid_t bm_pid;
-
-Odd. bm_pid is used below - why remove it here?
-
->   
->   	cache_size = 0;
->   
-> @@ -181,17 +190,19 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   		strcpy(param.filename, RESULT_FILE_NAME1);
->   		param.num_of_runs = 0;
->   		param.cpu_no = sibling_cpu_no;
-> +	} else {
-> +		/* set up ctrl-c handler */
-> +		if (signal(SIGINT, ctrl_handler) == SIG_ERR ||
-> +		    signal(SIGHUP, ctrl_handler) == SIG_ERR ||
-> +		    signal(SIGTERM, ctrl_handler) == SIG_ERR)
-> +			printf("Failed to catch SIGNAL!\n");
-
-Is perror() more appropriate here?
-
->   	}
->   
->   	remove(param.filename);
->   
->   	ret = cat_val(&param);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = check_results(&param);
-> -	if (ret)
-> -		return ret;
-> +	if (ret == 0)
-> +		ret = check_results(&param);
-
-Why not use a goto in error case to do umount_resctrlfs() instead of changing
-the conditionals?
-
->   
->   	if (bm_pid == 0) {
->   		/* Tell parent that child is ready */
-> @@ -201,7 +212,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   		    sizeof(pipe_message)) {
->   			close(pipefd[1]);
->   			perror("# failed signaling parent process");
-> -			return errno;
->   		}
->   
->   		close(pipefd[1]);
-> @@ -226,5 +236,5 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   	if (bm_pid)
->   		umount_resctrlfs();
->   
-> -	return 0;
-> +	return ret;
->   }
-
-
-With these changes made:
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
