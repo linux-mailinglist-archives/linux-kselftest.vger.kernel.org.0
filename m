@@ -2,251 +2,218 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDBE6164AD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 15:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B49676164B3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 15:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiKBOOe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Nov 2022 10:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S231184AbiKBORG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Nov 2022 10:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiKBOOb (ORCPT
+        with ESMTP id S231134AbiKBORE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:14:31 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E512C240B2
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 07:14:30 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso2284707pjc.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 07:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=SEzAi1gqLEFmqpLuBtU1pOYSQtUDc+4Onj9zlcWo130=;
-        b=adrwCQe9PDid7ZGQHMQo5qdu4Ulu6LZOWpYgtZA9C1fAMgvQcL+PCLt0fU/UnVJxt6
-         RZ+wt0ypbN80daciIpswgoST6P2o1nyOQvi+nYUrDVL91SrKeF/JKdWYEUknIcotkqnO
-         slhTk5gl0BzG7wYLVJds2E4fTMMSx2qvegtfhR/pgwNp/AM8F5Dp4dkffFNamSe8Se3s
-         dWOwrGo1b40bdh6ErPc53n3+Kbb4n8wsPXAlA2wOI4EnYuH5jdhlnqi25dxYNUyAT5iM
-         bGA/2riA1DMBWfxPgV1ySwotFeQvfetAeVqj7K7W4v8Zah51JqfhZJH+TzzPuTmMssDt
-         q3xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SEzAi1gqLEFmqpLuBtU1pOYSQtUDc+4Onj9zlcWo130=;
-        b=0olz++mIckKrBT7CUB59UlkoFWMEmBXp7xErGj7Tpt5iLd+CVYfs7bGvakUyR94BAY
-         2nfKISIfcEH/yffj1Cyn4gR5wy/OnxOFjYlrO8uo6dJoFaYCH9siNOih5mQIbYpvnVoO
-         EwyEx57U24RMNGuawF6c2qapusGR1uUHmwEgeQv2IgQ1ytU0jRAD1z319KRMoQU9Nb4h
-         w6nKjtppu+2Ld50IYbVMQpea1yWZx7S+BgCmI1vk1g+1lcoAaOUDdJFU6iMyoMcBjSvq
-         wx4/3smaTrNccZdNzfr30PEOvdQ19PNO4lnqkcU9QnxM4GEPOB6lmrAwUVW3OTNgcUGG
-         lpSQ==
-X-Gm-Message-State: ACrzQf3m+rZmWe+S4YypanA+BBN+arVuTSQ/mwracx4uJe+k9QVa8yZn
-        SQZq8p+enMXgSloWNTCB6PMOLg==
-X-Google-Smtp-Source: AMsMyM6nFV+vfyMIq2QOmKe/94mVSXNpGIHxZGxzUGXI4BYtUabHS8ZAL105lb5YLSJq5PaAJ/5X/g==
-X-Received: by 2002:a17:902:e812:b0:187:2ab:7d6f with SMTP id u18-20020a170902e81200b0018702ab7d6fmr24906502plg.137.1667398470440;
-        Wed, 02 Nov 2022 07:14:30 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o24-20020aa79798000000b0056b8b17f914sm8491978pfp.216.2022.11.02.07.14.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 07:14:30 -0700 (PDT)
-Message-ID: <63627b46.a70a0220.bc22c.01d8@mx.google.com>
-Date:   Wed, 02 Nov 2022 07:14:30 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 2 Nov 2022 10:17:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6805524F33;
+        Wed,  2 Nov 2022 07:17:02 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2DnHl3025642;
+        Wed, 2 Nov 2022 14:16:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=rBcOVcE8p21SjX59jNF12Bk39Ytjo9izhdBtdZz+66s=;
+ b=bbQIQfrX18ZUfgygUq5meDRQ5C0f+8f0GGhYNXEvICoPz0Bfl8JC6huWw6GhxVK+hGJs
+ ci80ejKo7ct9b+JaYrbijnXZjRl21JqM+aNnflEiqWL/3VRdHHZCiPbnaXDw1i/yQjrr
+ Ef3XzwVbndNp+2Viu46Mw1Q5uy4ERmZzr4H5BfXKF8Qbr8aXFjsUB/Ttl2WVIX26B8BH
+ UMtNOiwMggP8TbDtjfu334MpIkfHP0bpCNeePxQheX/OeerazXE6yDZNDdSKrIIJDuPj
+ 0jCNkJCc/8+4rc9JKKiPo15mHLh594AIfXArTxbiCrItwIeXngmIaY/XBhVZCDzviwa1 0A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkss69ct5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 14:16:57 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2DoWgJ031654;
+        Wed, 2 Nov 2022 14:16:57 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkss69cky-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 14:16:57 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2E5jfi018093;
+        Wed, 2 Nov 2022 14:16:49 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3kgut8n602-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 14:16:49 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2EHM7244302820
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 14:17:22 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7463AE04D;
+        Wed,  2 Nov 2022 14:16:45 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 295FCAE051;
+        Wed,  2 Nov 2022 14:16:45 +0000 (GMT)
+Received: from osiris (unknown [9.145.56.93])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  2 Nov 2022 14:16:45 +0000 (GMT)
+Date:   Wed, 2 Nov 2022 15:16:43 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: [PATCH 1/5] s390/cmpxchg: use symbolic names for inline assembly
+ operands
+Message-ID: <Y2J7yzQYt/bjLQXY@osiris>
+References: <20221012205609.2811294-1-scgl@linux.ibm.com>
+ <20221012205609.2811294-2-scgl@linux.ibm.com>
+ <Y2J61LWSV+HolIeT@osiris>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: linux-kselftest-fixes-6.1-rc3-3-g89c1017aac67
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes kselftest-seccomp: 5 runs,
- 4 regressions (linux-kselftest-fixes-6.1-rc3-3-g89c1017aac67)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2J61LWSV+HolIeT@osiris>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -DBb08EzdRP5iJjnt_miWFRpiaZELN8g
+X-Proofpoint-ORIG-GUID: qcMSui0K3sancHdTcUItlhp2wAfGu3QK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_10,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 phishscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=702 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes kselftest-seccomp: 5 runs, 4 regressions (linux-kselftest-f=
-ixes-6.1-rc3-3-g89c1017aac67)
+Make cmpxchg() inline assemblies more readable by using symbolic names
+for operands.
 
-Regressions Summary
--------------------
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+---
+ arch/s390/include/asm/cmpxchg.h | 76 ++++++++++++++++++---------------
+ 1 file changed, 42 insertions(+), 34 deletions(-)
 
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
+diff --git a/arch/s390/include/asm/cmpxchg.h b/arch/s390/include/asm/cmpxchg.h
+index 84c3f0d576c5..56fb8aa08945 100644
+--- a/arch/s390/include/asm/cmpxchg.h
++++ b/arch/s390/include/asm/cmpxchg.h
+@@ -96,56 +96,64 @@ static __always_inline unsigned long __cmpxchg(unsigned long address,
+ 		shift = (3 ^ (address & 3)) << 3;
+ 		address ^= address & 3;
+ 		asm volatile(
+-			"       l       %0,%2\n"
+-			"0:     nr      %0,%5\n"
+-			"       lr      %1,%0\n"
+-			"       or      %0,%3\n"
+-			"       or      %1,%4\n"
+-			"       cs      %0,%1,%2\n"
+-			"       jnl     1f\n"
+-			"       xr      %1,%0\n"
+-			"       nr      %1,%5\n"
+-			"       jnz     0b\n"
++			"	l	%[prev],%[address]\n"
++			"0:	nr	%[prev],%[mask]\n"
++			"	lr	%[tmp],%[prev]\n"
++			"	or	%[prev],%[old]\n"
++			"	or	%[tmp],%[new]\n"
++			"	cs	%[prev],%[tmp],%[address]\n"
++			"	jnl	1f\n"
++			"	xr	%[tmp],%[prev]\n"
++			"	nr	%[tmp],%[mask]\n"
++			"	jnz	0b\n"
+ 			"1:"
+-			: "=&d" (prev), "=&d" (tmp), "+Q" (*(int *) address)
+-			: "d" ((old & 0xff) << shift),
+-			  "d" ((new & 0xff) << shift),
+-			  "d" (~(0xff << shift))
++			: [prev] "=&d" (prev),
++			  [tmp] "=&d" (tmp),
++			  [address] "+Q" (*(int *)address)
++			: [old] "d" ((old & 0xff) << shift),
++			  [new] "d" ((new & 0xff) << shift),
++			  [mask] "d" (~(0xff << shift))
+ 			: "memory", "cc");
+ 		return prev >> shift;
+ 	case 2:
+ 		shift = (2 ^ (address & 2)) << 3;
+ 		address ^= address & 2;
+ 		asm volatile(
+-			"       l       %0,%2\n"
+-			"0:     nr      %0,%5\n"
+-			"       lr      %1,%0\n"
+-			"       or      %0,%3\n"
+-			"       or      %1,%4\n"
+-			"       cs      %0,%1,%2\n"
+-			"       jnl     1f\n"
+-			"       xr      %1,%0\n"
+-			"       nr      %1,%5\n"
+-			"       jnz     0b\n"
++			"	l	%[prev],%[address]\n"
++			"0:	nr	%[prev],%[mask]\n"
++			"	lr	%[tmp],%[prev]\n"
++			"	or	%[prev],%[old]\n"
++			"	or	%[tmp],%[new]\n"
++			"	cs	%[prev],%[tmp],%[address]\n"
++			"	jnl	1f\n"
++			"	xr	%[tmp],%[prev]\n"
++			"	nr	%[tmp],%[mask]\n"
++			"	jnz	0b\n"
+ 			"1:"
+-			: "=&d" (prev), "=&d" (tmp), "+Q" (*(int *) address)
+-			: "d" ((old & 0xffff) << shift),
+-			  "d" ((new & 0xffff) << shift),
+-			  "d" (~(0xffff << shift))
++			: [prev] "=&d" (prev),
++			  [tmp] "=&d" (tmp),
++			  [address] "+Q" (*(int *)address)
++			: [old] "d" ((old & 0xffff) << shift),
++			  [new] "d" ((new & 0xffff) << shift),
++			  [mask] "d" (~(0xffff << shift))
+ 			: "memory", "cc");
+ 		return prev >> shift;
+ 	case 4:
+ 		asm volatile(
+-			"       cs      %0,%3,%1\n"
+-			: "=&d" (prev), "+Q" (*(int *) address)
+-			: "0" (old), "d" (new)
++			"	cs	%[prev],%[new],%[address]\n"
++			: [prev] "=&d" (prev),
++			  [address] "+Q" (*(int *)address)
++			: "0" (old),
++			  [new] "d" (new)
+ 			: "memory", "cc");
+ 		return prev;
+ 	case 8:
+ 		asm volatile(
+-			"       csg     %0,%3,%1\n"
+-			: "=&d" (prev), "+QS" (*(long *) address)
+-			: "0" (old), "d" (new)
++			"	csg	%[prev],%[new],%[address]\n"
++			: [prev] "=&d" (prev),
++			  [address] "+QS" (*(long *)address)
++			: "0" (old),
++			  [new] "d" (new)
+ 			: "memory", "cc");
+ 		return prev;
+ 	}
+-- 
+2.34.1
 
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
-ux-kselftest-fixes-6.1-rc3-3-g89c1017aac67/plan/kselftest-seccomp/
-
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: linux-kselftest-fixes-6.1-rc3-3-g89c1017aac67
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      89c1017aac67ca81973b7c8eac5d021315811a93 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63626ea90720ac3502e7db79
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.4-++20221026063345+db687=
-23804fd-1~exp1~20221026063423.87)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
-clang-15/lab-collabora/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
-clang-15/lab-collabora/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221024.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63626ea90720=
-ac3502e7db7a
-        failing since 14 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8173-elm-hana              | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63626adedb2e30d21ae7db55
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221024.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63626adedb2e=
-30d21ae7db56
-        failing since 14 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | clang-15 | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63626e9e0720ac3502e7db70
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    clang-15 (Debian clang version 15.0.4-++20221026063345+db687=
-23804fd-1~exp1~20221026063423.87)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
-clang-15/lab-collabora/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16=
-.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
-clang-15/lab-collabora/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221024.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63626e9e0720=
-ac3502e7db71
-        failing since 14 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =
-
-
-
-platform                     | arch  | lab           | compiler | defconfig=
-                    | regressions
------------------------------+-------+---------------+----------+----------=
---------------------+------------
-mt8183-kukui-...uniper-sku16 | arm64 | lab-collabora | gcc-10   | defconfig=
-+kse...4-chromebook | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63626af211e7c17733e7db6d
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.t=
-xt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
-t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
-gcc-10/lab-collabora/kselftest-seccomp-mt8183-kukui-jacuzzi-juniper-sku16.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20221024.1/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/63626af211e7=
-c17733e7db6e
-        failing since 14 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
-rst fail: v6.1-rc1-5-gcb05c81ada76) =
-
- =20
