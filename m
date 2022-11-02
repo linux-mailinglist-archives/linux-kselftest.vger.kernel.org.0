@@ -2,55 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E153616B65
+	by mail.lfdr.de (Postfix) with ESMTP id A8ED3616B66
 	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 19:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiKBSCr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Nov 2022 14:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
+        id S230005AbiKBSCs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Nov 2022 14:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiKBSCh (ORCPT
+        with ESMTP id S231264AbiKBSCl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:02:37 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B991DF02
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 11:02:37 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-36f8318e4d0so166506907b3.20
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 11:02:37 -0700 (PDT)
+        Wed, 2 Nov 2022 14:02:41 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8343421278
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 11:02:40 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e8-20020a5b0cc8000000b006bca0fa3ab6so16853724ybr.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 11:02:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dWyi/36idrKf9zvqL8JaBZPjyKB9f1dSHmjzSP1ojwk=;
-        b=dJOI0lPorycRsOpZymi9t1TnR2iJs0YJmGpf9Vx5xS8CdlqFk9+pumJSay0Kbj8BKA
-         VGjMwvYdP4/tdgbdSELKWvZeYkyL+1ecoOjRm+S1Thx375XXZngssigLnw8oikaKLvqU
-         mDjA3ZSmN3/Qs2x89wIhl5vdD3sb9qoBBVk5RyERf/1lzH8VMauxhjxOqmrsCJcU6Pf8
-         Fqo7v/sCsmW/6pX/WNY5rQaT1kZpXkHIJ7xZgTPgTYWKekf1sjeWoa3vWG7vyiaNja5H
-         D4Tw4N2W60VMFQeCx7v5tevS32JhpA7W6tQmPRZJI7IyryUoP0Vfr2AZdafP7fuXgGkA
-         Guug==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CAYN6r+yTQvu28IFOFbzBkKteLNKvCbZnYXbZl6k2DY=;
+        b=FrgvbWPhRA4VD87zdgqKKiY5UHCDYtYfe7CjaP2xgmEOG1Y05NjZSf3gzQWW8T0Uct
+         kwK/a9hcGw0YEYKVOJVFR5P9iNYw89sCx6ZHsJggC73BExIAmjho5Pbue4CgNBI3QOgO
+         FoPe42kXbj+qL8yjM5/fdOTg+3rYiSOtiXyjG+vM72l5OUaB8j+A2cgCkgbbQKnrcMOV
+         vjVP5OOJMItX52jvTtAXnPZObQ6EUQSPLAa0t1h0Rw23k0Jw4oAggVMoBX89jk82PyRN
+         zVVthy9iTThict8/JGXYxe/C830qJ3olt0/g7iLirWIKcLukRfjGALBtlSWm2uBgHMk7
+         3wwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dWyi/36idrKf9zvqL8JaBZPjyKB9f1dSHmjzSP1ojwk=;
-        b=qG2BCXKlJGAayeLBRH27pevlh4TiSB6Z/Bje2RZG7TROxy5KS3Y6ApPQrjrO3o2MgP
-         HigD5lh4MN9hkCjBn/LItNCKNuks6IBNq6s/eFFBQVNguiM1Rn/njpshoidp9GfNxV6/
-         9I2rfGajkQ7y27ZIp+7vCoVQ2091bm7gxLBpzOGccdPS7AADt3BpvMPtLQ1N8IWZDV9Q
-         HrNJOT9okVvLS1FOt6PkfZmWmQex7DdX2heer65RM+IuWQiOtoXDd5mXYav9+0Xckvl4
-         m5Qzj5w/HKvvgPfzKcrsd2QdfqvOtiZcMShG2Cvo7LAoiq1lOUBfr08DMAhoClnxZ5VG
-         VsKQ==
-X-Gm-Message-State: ACrzQf1VG3tkgKcmGjIrLwd6Y4x3/xkdf4XbLE0Z5uVFl9coUc/lIlIf
-        t1F+uy8mqt96c1SL5F8JtR/3Rxv9JA==
-X-Google-Smtp-Source: AMsMyM4nkGp71lUryvEpctCfZeBQK2w2hUU/0fEQWVZI7plPOH6PoaqnQ3PuELrve4EZR/p73cmB8xo8yQ==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CAYN6r+yTQvu28IFOFbzBkKteLNKvCbZnYXbZl6k2DY=;
+        b=q9gc6GPz36ytAXYKt3DecKsxby8L3hTtBN0uv/sZ5eDE6+ayCaThQ32ZLpAihWjwME
+         z3uYunEXc4batZHlBYKA64Mvgxsbm0HjNpdHqIo/1WcG0KVPKPsjONWbld5vo7jTTiaW
+         wEfrV8XDQg2dQr+MMjkkAz9uHytvnbGvHN7YthsSwBoq+npFJWHDeDENUAufvej5/z2D
+         5IcgHo8re8vKaTUoJ8RpBLMitnXx3gWAtm5ylI3jFQYImQGfu5Wy7HPuHzC/LQtWKwWp
+         Un4Eg/9Vde8p17xpm/g77OJpKpqv17dUSUC44xKjgjsvwrldEiIVhw3aWh/WbEp/b1Fl
+         jGnw==
+X-Gm-Message-State: ACrzQf01Z/d8WBs2Fx0Oq22IIMD2yljZXtaWztI3BwA2TyAHEEeJmPha
+        K6Woz/DWenD4sZUOEM0uXFM1VHzmmQ==
+X-Google-Smtp-Source: AMsMyM64HlkRFhAbArKDmM55aNm5YRW0BBSHLMBYENZZs5lf+VgK/ijoO38lHLz2MMzG8f46iR30Y68UQQ==
 X-Received: from rmoar.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:4259])
- (user=rmoar job=sendgmr) by 2002:a25:e6d2:0:b0:6ca:6965:6f8 with SMTP id
- d201-20020a25e6d2000000b006ca696506f8mr24343136ybh.461.1667412156588; Wed, 02
- Nov 2022 11:02:36 -0700 (PDT)
-Date:   Wed,  2 Nov 2022 17:59:57 +0000
+ (user=rmoar job=sendgmr) by 2002:a05:6902:1247:b0:6ca:88e8:6f43 with SMTP id
+ t7-20020a056902124700b006ca88e86f43mr24295801ybu.289.1667412159822; Wed, 02
+ Nov 2022 11:02:39 -0700 (PDT)
+Date:   Wed,  2 Nov 2022 17:59:58 +0000
+In-Reply-To: <20221102175959.2921063-1-rmoar@google.com>
 Mime-Version: 1.0
+References: <20221102175959.2921063-1-rmoar@google.com>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221102175959.2921063-1-rmoar@google.com>
-Subject: [PATCH v1 0/2] kunit: add macro to allow conditionally exposing
+Message-ID: <20221102175959.2921063-2-rmoar@google.com>
+Subject: [PATCH v1 1/2] kunit: add macro to allow conditionally exposing
  static symbols to tests
 From:   Rae Moar <rmoar@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
@@ -69,62 +71,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently in order to test a static function, tests must be included in the
-same translation unit as the function. However, this can cause issues with
-including implementation and test code in the same file. As an alternative,
-the first patch in this series creates a macro that will set a function to
-be static or not depending on whether CONFIG_KUNIT is enabled. This allows
-the function to be visible during testing and static otherwise.
+Create two macros:
 
-As an example, the current status quo to test static functions is:
+VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
+is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change
+to the symbol definition.
 
-=== test.c ===
+EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
+EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is enabled. Must
+use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING) in test file in order to
+use symbols.
 
-static void test_case(struct kunit *test)
-{
-  KUNIT_EXPECT_EQ(test, my_func_to_test(), 2);
-}
-
-Then the tests are included in the implementation file as a workaround to
-the issue of testing static functions:
-
-=== implementation.c ===
-
-static int my_func_to_test() {...}
-...
-#include "test.c"
-
-Instead, the function could be defined with this new macro:
-
-=== implementation.c ===
-
-VISIBLE_IF_KUNIT int my_func_to_test() {...}
-
-The first patch also creates a macro that will export a symbol into a kunit
-testing namespace only if CONFIG_KUNIT is enabled. This follows the logic
-above and allows symbols to be conditionally exported based on the testing
-status.
-
-The second patch in the series updates the policy_unpack test in AppArmor
-to show an example of how to use both of these macros in order to address
-the issue of testing static functions.
-
-Rae Moar (2):
-  kunit: add macro to allow conditionally exposing static symbols to
-    tests
-  apparmor: test: make static symbols visible during kunit testing
-
- include/kunit/visibility.h                | 32 ++++++++++
- security/apparmor/Kconfig                 |  4 +-
- security/apparmor/Makefile                |  2 +
- security/apparmor/include/policy_unpack.h | 50 ++++++++++++++++
- security/apparmor/policy_unpack.c         | 72 +++++++----------------
- security/apparmor/policy_unpack_test.c    |  5 ++
- 6 files changed, 112 insertions(+), 53 deletions(-)
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+ include/kunit/visibility.h | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
  create mode 100644 include/kunit/visibility.h
 
-
-base-commit: 11e76194937b506caf1b49512c42d5c2588681d7
+diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
+new file mode 100644
+index 000000000000..eb22c9e6b4eb
+--- /dev/null
++++ b/include/kunit/visibility.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * KUnit API to allow symbols to be conditionally visible during KUnit
++ * testing
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: Brendan Higgins <brendanhiggins@google.com>
++ */
++
++#ifndef _KUNIT_VISIBILITY_H
++#define _KUNIT_VISIBILITY_H
++
++/**
++ * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
++ * is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change
++ * to the symbol definition.
++ *
++ * EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
++ * EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is
++ * enabled. Must use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING)
++ * in test file in order to use symbols.
++ */
++#if IS_ENABLED(CONFIG_KUNIT)
++    #define VISIBLE_IF_KUNIT
++    #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
++	    EXPORTED_FOR_KUNIT_TESTING)
++#else
++    #define VISIBLE_IF_KUNIT static
++    #define EXPORT_SYMBOL_IF_KUNIT(symbol)
++#endif
++
++#endif /* _KUNIT_VISIBILITY_H */
 -- 
 2.38.1.273.g43a17bfeac-goog
 
