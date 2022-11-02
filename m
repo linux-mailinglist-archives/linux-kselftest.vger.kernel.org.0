@@ -2,168 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6376164A3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 15:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192C96164AC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 15:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiKBONB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Nov 2022 10:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
+        id S230509AbiKBOOc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Nov 2022 10:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKBOM7 (ORCPT
+        with ESMTP id S230266AbiKBOOb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:12:59 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7824B22B16;
-        Wed,  2 Nov 2022 07:12:57 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2Dqc0j008745;
-        Wed, 2 Nov 2022 14:12:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=35nE7o15c9riT5mLxghtC7oxViP9L6ZfHhdvEYODxLM=;
- b=SlEayUNUlqFz784oCyvTtczjBdNqH67uOoBWijkPAxYmaA2oi0QZrwojcdbz1m59dOuJ
- P4Mi47hD4dE0VGLg4Z/eMOaO7Jp7E61GhdpanVdvQfA722BxcSIeteSLaKByHdfo0Kkg
- Vpyg8a6Y7DDQPsTKajfiImHP2M3JsVwnG/3ZMZRpDcRvNRS0wMi0K9uFs0/02lBkR5EK
- e3IwCPykKJ2aHf8Zomm9U5cxvEYJ9jRSDXdB/R8Dhf9derW/w9n+Klxjt1YK8rVWh2On
- ReR3Bo0hc+q/kHuFQlVDfoHbSyQenFCms2bTP93WgxvJBPOTGL9EGuviBDYW12VWDp7I ig== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kks22jjtq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 14:12:43 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2DEIWY010237;
-        Wed, 2 Nov 2022 14:12:43 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kks22jjsq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 14:12:43 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2E6bq1008788;
-        Wed, 2 Nov 2022 14:12:41 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06fra.de.ibm.com with ESMTP id 3kguejd6fv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 14:12:41 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2ECcLZ27787858
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Nov 2022 14:12:38 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58260A405B;
-        Wed,  2 Nov 2022 14:12:38 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B4528A4060;
-        Wed,  2 Nov 2022 14:12:37 +0000 (GMT)
-Received: from osiris (unknown [9.145.56.93])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  2 Nov 2022 14:12:37 +0000 (GMT)
-Date:   Wed, 2 Nov 2022 15:12:36 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH v2 1/9] s390/uaccess: Add storage key checked cmpxchg
- access to user space
-Message-ID: <Y2J61LWSV+HolIeT@osiris>
-References: <20221012205609.2811294-1-scgl@linux.ibm.com>
- <20221012205609.2811294-2-scgl@linux.ibm.com>
+        Wed, 2 Nov 2022 10:14:31 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DD224F22
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 07:14:28 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l6so16401752pjj.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 07:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GFRjG8i3T4fOS8Rv8e2nX5ZouWI4bfnaD0zolGqsLv0=;
+        b=nDcX5xsc/lMAxCm6DPA+g5JhmvrvSwtdzP86CHAhQUmpdPsmGSaMbToum6MUl3zRx/
+         /Yh2b1ecdzbxw+MPjUxZri0Bfti+Eva2eb+5fUndRWauYDBC8S6RO41i0qbT219DyiBF
+         0oNtCegjDtQgDUMtsyQZ6A/ftB6GzVlYyyXKlsBiOV456J2fHh6/FhYoiyq3CekuUI5r
+         maT13/nmIVIS9A2Mhdi2FvXe66MPPvhn86hh6dkRRuFh7Mbo2u5kbRX3L0956r1JCb9J
+         ICHj3XtTs7Ff7yi5ZhKduCyJBqUunBo47vjI3o7AVf6Tjpx0y0qllwqQ85r56z/GUrLu
+         c+MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GFRjG8i3T4fOS8Rv8e2nX5ZouWI4bfnaD0zolGqsLv0=;
+        b=TySq8Jy6OoljaNdWR+IV8HNGiyLG9MM1jgG7ukZqYNkoC/j4KuL9rPDfvC1BdTjwAl
+         rnMUyWu+HbZL7pi2krWIOa5b3h8es5v6f0nXWWa4HIT+j4kcIZVZL0LiP4oKy5dVe7rm
+         rQ1C2i9/s8FpQSOiUnuc0jN1OoXURd8lIXwzRwI79SwjKPG4udfkyXKcNHhUn6R1rPtg
+         BQ31CKoNSp/0hTUOz1S/9/xHEP4pW/UPiO4ybWeYtjluNBCyRUb4130ZkjcmvruxQO6I
+         WLIxYPVTUrCxviyKnnViZ/rzXZVhC5rUS2+JKJMZ3TNwkpYcq9H3V7ySzPjVf2poFK3r
+         NtTA==
+X-Gm-Message-State: ACrzQf17zjst3fdcuu9kfAgMv6WpVXEJPG45KMj5OR3gZjokk9cwEz4p
+        1gUiBYwmgTNKh0NXEgqAxDgXkA==
+X-Google-Smtp-Source: AMsMyM4Ykz72abx089+up3PG66h/twa33bkTvW77Y4mwfQuNOFC7e7sDe20gClNqkDHwkWCsfuESTg==
+X-Received: by 2002:a17:90b:1c10:b0:213:1bb8:feb with SMTP id oc16-20020a17090b1c1000b002131bb80febmr42530267pjb.214.1667398468062;
+        Wed, 02 Nov 2022 07:14:28 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m19-20020a17090b069300b001fb1de10a4dsm1502251pjz.33.2022.11.02.07.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 07:14:27 -0700 (PDT)
+Message-ID: <63627b43.170a0220.ba683.2661@mx.google.com>
+Date:   Wed, 02 Nov 2022 07:14:27 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012205609.2811294-2-scgl@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vEqvPEkNOiMjLF4A4AXRnLajCt2hxpmZ
-X-Proofpoint-ORIG-GUID: eMFw4JuDxVV5yzho1KrLvvsVObKo68QS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_09,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxscore=0 phishscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211020090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: linux-kselftest-fixes-6.1-rc3-3-g89c1017aac67
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+Subject: kselftest/fixes kselftest-cpufreq: 2 runs,
+ 2 regressions (linux-kselftest-fixes-6.1-rc3-3-g89c1017aac67)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Janis,
+kselftest/fixes kselftest-cpufreq: 2 runs, 2 regressions (linux-kselftest-f=
+ixes-6.1-rc3-3-g89c1017aac67)
 
-On Wed, Oct 12, 2022 at 10:56:01PM +0200, Janis Schoetterl-Glausch wrote:
-> Add cmpxchg functionality similar to that in cmpxchg.h except that the
-> target is a user space address and that the address' storage key is
-> matched with the access_key argument in order to honor key-controlled
-> protection.
-> The access is performed by changing to the secondary-spaces mode and
-> setting the PSW key for the duration of the compare and swap.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
-> 
-> 
-> Possible variations:
->   * check the assumptions made in cmpxchg_user_key_size and error out
->   * call functions called by copy_to_user
->      * access_ok? is a nop
->      * should_fail_usercopy?
->      * instrument_copy_to_user? doesn't make sense IMO
->   * don't be overly strict in cmpxchg_user_key
-> 
-> 
->  arch/s390/include/asm/uaccess.h | 189 ++++++++++++++++++++++++++++++++
->  1 file changed, 189 insertions(+)
+Regressions Summary
+-------------------
 
-So finally I send the uaccess/cmpxchg patches in reply to this mail.
-Sorry for the long delay!
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | clang-15 | defconfig+kse...4-chro=
+mebook | 1          =
 
-The first three patches are not required for the functionality you need,
-but given that I always stress that the code should be consistent I include
-them anyway.
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
 
-The changes are probably quite obvious:
 
-- Keep uaccess cmpxchg code more or less identical to regular cmpxchg
-  code. I wasn't able to come up with a readable code base which could be
-  used for both variants.
+  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
+ux-kselftest-fixes-6.1-rc3-3-g89c1017aac67/plan/kselftest-cpufreq/
 
-- Users may only use the cmpxchg_user_key() macro - _not_ the inline
-  function, which is an internal API. This will require that you need to
-  add a switch statement and couple of casts within the KVM code, but
-  shouldn't have much of an impact on the generated code.
+  Test:     kselftest-cpufreq
+  Tree:     kselftest
+  Branch:   fixes
+  Describe: linux-kselftest-fixes-6.1-rc3-3-g89c1017aac67
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      89c1017aac67ca81973b7c8eac5d021315811a93 =
 
-- Cause link error for non-integral sizes, similar to other uaccess
-  functions.
 
-- cmpxchg_user_key() has now a simple return value: 0 or -EFAULT, and
-  writes the old value to a location provided by a pointer. This is quite
-  similar to the futex code. Users must compare the old and expected value
-  to figure out if something was exchanged. Note that this is in most cases
-  more efficient than extracting the condition code from the PSW with ipm,
-  since nowadays we have instructions like compare and branch relative on
-  condition, etc.
 
-- Couple of other minor changes which I forgot.
+Test Regressions
+---------------- =
 
-Code is untested (of course :) ). Please give it a try and let me know if
-this is good enough for your purposes.
 
-I also did not limit the number of retries for the one and two byte
-scenarion. Before doing that we need to have proof that there really is a
-problem. Maybe Nico or you will give this a try.
 
-Thanks,
-Heiko
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | clang-15 | defconfig+kse...4-chro=
+mebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63626e980720ac3502e7db67
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    clang-15 (Debian clang version 15.0.4-++20221026063345+db687=
+23804fd-1~exp1~20221026063423.87)
+  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
+clang-15/lab-collabora/kselftest-cpufreq-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
+clang-15/lab-collabora/kselftest-cpufreq-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20221024.1/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/63626e980720=
+ac3502e7db68
+        failing since 14 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
+rst fail: v6.1-rc1-5-gcb05c81ada76) =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig             =
+       | regressions
+----------------+-------+---------------+----------+-----------------------=
+-------+------------
+mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
+mebook | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63626aeb11e7c17733e7db5b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+kselftest+arm64-chromebook
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
+gcc-10/lab-collabora/kselftest-cpufreq-mt8173-elm-hana.txt
+  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux-kselftes=
+t-fixes-6.1-rc3-3-g89c1017aac67/arm64/defconfig+kselftest+arm64-chromebook/=
+gcc-10/lab-collabora/kselftest-cpufreq-mt8173-elm-hana.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
+elftest/20221024.1/arm64/initrd.cpio.gz =
+
+
+
+  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/63626aeb11e7=
+c17733e7db5c
+        failing since 14 days (last pass: linux-kselftest-fixes-6.0-rc3, fi=
+rst fail: v6.1-rc1-5-gcb05c81ada76) =
+
+ =20
