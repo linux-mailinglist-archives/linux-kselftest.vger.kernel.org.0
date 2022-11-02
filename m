@@ -2,93 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59BB616987
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 17:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E90A4616A6F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Nov 2022 18:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbiKBQo6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Nov 2022 12:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S230292AbiKBRS0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Nov 2022 13:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiKBQom (ORCPT
+        with ESMTP id S230314AbiKBRSW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:44:42 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A6C10AE
-        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 09:40:45 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id e8-20020a5b0cc8000000b006bca0fa3ab6so16678702ybr.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 09:40:45 -0700 (PDT)
+        Wed, 2 Nov 2022 13:18:22 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE37192
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 10:18:20 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id d3so25966423ljl.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 10:18:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YpyV4sjuN6nTtNbz4mfvOqF+6FZYm3YsT8sqkJTRsbo=;
-        b=tYOdkg3vf+59PIaLFlt3AchFCjbgSfE5+sKR/Ibm9yt6tvf4L9pmL54S+KOmiWse82
-         LH5y2tsuRIQlIw6+jxyiY+OBIrhZ59fPZKJj9ay1usM6BRCSTyP5B7d0hybfCT3bG7K6
-         bVKYaq4DI4E+j1yO6LoRWzS8Ie91OLuCW982zwz/Es9Xl1EedNUp/WcVIGO40vJ/nQIs
-         vG9QINdWWcmb7eFn7AQS0fAe0OTQ0OCKgaoQj9O7tEZ4GjxlXFkLmRGvj9MN+JhMwkj2
-         4S3KK+LP8iupGAOh/1/c2ii1SS7tBoc2Pt/u4ZQZ0dHrHcfX7i8Lb9NNDlY+L7q2bMea
-         gDLQ==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RknuEqUoiunPXi2OLjUbhlEwq60lRe2RTsR6hdfQJ0Y=;
+        b=RRnZ2dze/6CLhyKFhxGEw08Ckp4XwE8DWxZ0rZxAOcMdf5vdt9kUpYu0i/LLqPGehj
+         pYwLBE+/5Qto0rQ3PGtpUP8z7cfs5Z97tOSErjIiA7F6Gr0KhuXI0VS03iRzDSRFYUNa
+         ZtYLM10ihngzyi4eQW3AMFVgmfH2JF5B4VVzM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YpyV4sjuN6nTtNbz4mfvOqF+6FZYm3YsT8sqkJTRsbo=;
-        b=CzveOEvBlUDePb7fxgQM8QykCwqZTwk7SaMvS9QGPFEdfh5j27j4Du9UkntyJcGqb4
-         u7r5Zh1LzZ96jQMe6r5o6jggc/7jaifM2OqKjNP7iOeFbGREdYq785lwdBfKQLczOEcd
-         ChwuPhi9fnWvPNwOdtAsNAFJO+416CFqrR5Y0BvCG/oARTXmw2IRHD6O+3f2BdeJVJ7G
-         p/ZnzjjYRAYbHlxlqNUjKXlC9HVU4piB0l/3kz97dW9I5wLyl1tRplIm7UnUSbXDhG/m
-         is5+Qli0nEvHWFqb1Bi1lwhmlMfoKX2cvIl2wUFmaiHwkIRp1WxB2k0Xyz7AEh7zLwRP
-         ghqQ==
-X-Gm-Message-State: ACrzQf2lKnmtlh9+e8hzgq0LodkSdCfWs66pJ8rWW8byQ596dA5WAW+k
-        ylCMF68O+KDQqNTcvdZZ6y6v6H8/zNw2Tw==
-X-Google-Smtp-Source: AMsMyM6r3wwMHH1GQ3q0cp+5dQlmVo9cwzuc3IxzUtlriNpj4R6ZlD1q/C4MgEsEqTbg+/80TR2+m7HA8Rnxkw==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a81:1e10:0:b0:36b:532a:52be with SMTP id
- e16-20020a811e10000000b0036b532a52bemr23987758ywe.54.1667407244828; Wed, 02
- Nov 2022 09:40:44 -0700 (PDT)
-Date:   Wed,  2 Nov 2022 09:40:05 -0700
-In-Reply-To: <20221102164005.2516646-1-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20221102164005.2516646-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221102164005.2516646-3-dlatypov@google.com>
-Subject: [PATCH 3/3] kunit: tool: remove redundant file.close() call in unit test
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RknuEqUoiunPXi2OLjUbhlEwq60lRe2RTsR6hdfQJ0Y=;
+        b=DGYVmD/Ue7/ZrErrDGV58ZgMLW7S5b+BANe3S4Z53SQ1kOOX7IaKDrUSjrGGwPKtSC
+         a1LlAdofdHXv7sGhh7U1z0CGw0aMYZbFkogHJEpfnWBK0gMBJjkl92R7N5IzFnkJIGyF
+         9ufs/sq6PzFT3LerWWZBwXx7jBw6yAgSy1N5j8y9DANDVDnaIOk8p9kiuycXgfb7aol0
+         pqiQKPqehYx7BstMxtcrQ/L7oQRRqPiKilv8pLfJ6W80446DkBq2g+50q5vfWrVwMZyh
+         d6BYs56sKY+A99W7lYIVA/Er7SXOv0Gp2EGVDP+Ce/1SPrlZdpP+nMvyOc9pDuC1/UJS
+         2xow==
+X-Gm-Message-State: ACrzQf0dGQISEi7uw9wjk35aZyBaWTH7OoTCNfsCEnN82+kB+ZLYTRyv
+        NC79GKoXyYzar6bSVbStDvi7Fqm7rT7syAJLqnJSAg==
+X-Google-Smtp-Source: AMsMyM7GIYG7A4ghgZ0+aS8SyddPotFMK2d1/uL5kMGl7GKycv3x9BCqeqPj62YF1UHA3B/H7CEDTV/OSueDj54yRvU=
+X-Received: by 2002:a05:651c:19a8:b0:277:3cb2:d9f9 with SMTP id
+ bx40-20020a05651c19a800b002773cb2d9f9mr9918004ljb.278.1667409498411; Wed, 02
+ Nov 2022 10:18:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220805222126.142525-1-jeffxu@google.com> <202208081018.9C782F184C@keescook>
+ <CABi2SkVXMUVhSTJezfHt_BKxyKP+x++9oveuB3qJZL7N672UKw@mail.gmail.com> <202211011933.DD0979338@keescook>
+In-Reply-To: <202211011933.DD0979338@keescook>
+From:   Jeff Xu <jeffxu@chromium.org>
+Date:   Wed, 2 Nov 2022 10:18:07 -0700
+Message-ID: <CABi2SkWGo9Jrd=i1e2PoDWYGenGhR=pG=yGsQP5VLmizTmg-iA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] mm/memfd: MFD_NOEXEC for memfd_create
+To:     Kees Cook <keescook@chromium.org>
+Cc:     jeffxu@google.com, skhan@linuxfoundation.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
+        linux-hardening@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        dev@opencontainers.org, Christian Brauner <brauner@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-We're using a `with` block above, so the file object is already closed.
+On Tue, Nov 1, 2022 at 7:45 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Nov 01, 2022 at 04:14:39PM -0700, Jeff Xu wrote:
+> > Sorry for the long overdue reply.
+>
+> No worries! I am a fan of thread necromancy. :)
+>
+> > [...]
+> > 1> memfd_create:
+> > Add two flags:
+> > #define MFD_EXEC                      0x0008
+> > #define MFD_NOEXEC_SEAL    0x0010
+> > This lets application to set executable bit explicitly.
+> > (If application set both, it will be rejected)
+>
+> So no MFD_NOEXEC without seal? (I'm fine with that.)
+>
+no MFD_NOEXEC because memfd can be chmod to add x after creation,
+it is not secure.
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit_tool_test.py | 2 --
- 1 file changed, 2 deletions(-)
+no MFD_EXEC_SEAL because it is better to apply both w and x seal
+within the same function call, and w seal can't be applied at creation time.
 
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 0063773c0fc4..c41567eaf3c3 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -239,8 +239,6 @@ class KUnitParserTest(unittest.TestCase):
- 		self.assertEqual(
- 			"example",
- 			result.subtests[1].name)
--		file.close()
--
- 
- 	def test_ignores_prefix_printk_time(self):
- 		prefix_log = test_data_path('test_config_printk_time.log')
--- 
-2.38.1.273.g43a17bfeac-goog
+> > 2> For old application that doesn't set executable bit:
+> > Add a pid name-spaced sysctl.kernel.pid_mfd_noexec, with:
+>
+> bikeshed: vm.memfd_noexec
+> (doesn't belong in "kernel", and seems better suited to "vm" than "fs")
+>
+SG, will use vm.memfd_noexec
 
+> > value = 0: Default_EXEC
+> >      Honor MFD_EXEC and MFD_NOEXEC_SEAL
+> >      When none is set, will fall back to original behavior (EXEC)
+>
+> Yeah. Rephrasing for myself to understand more clearly:
+>
+> "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL act like MFD_EXEC
+> was set."
+>
+> > value = 1: Default_NOEXEC_SEAL
+> >       Honor MFD_EXEC and MFD_NOEXEC_SEAL
+> >       When none is set, will default to MFD_NOEXEC_SEAL
+>
+> "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL act like
+> MFD_NOEXEC_SEAL was set."
+>
+Copy, this is clearer. Thanks.
+
+> Also, I think there should be a pr_warn_ratelimited() when
+> memfd_create() is used without either bit, so that there is some
+> pressure to please adjust their API calls to explicitly set a bit.
+>
+Sure
+
+> > 3> Add a pid name-spaced sysctl kernel.pid_mfd_noexec_enforced: with:
+> > value = 0: default, not enforced.
+> > value = 1: enforce NOEXEC_SEAL (overwrite everything)
+>
+> How about making this just mode "value 2" for the first sysctl?
+> "memfd_create() without MFD_NOEXEC_SEAL will be rejected."
+>
+Good point. Kernel overwriting  might not be a good practice.
+I will add to vm.mfd_noexec.
+value = 2: "memfd_create() without MFD_NOEXEC_SEAL will be rejected."
+
+Thanks!
+Jeff
+
+> -Kees
+>
+> --
+> Kees Cook
