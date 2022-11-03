@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBB8617B74
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 12:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4B6617BA1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 12:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiKCLXw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 07:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
+        id S230509AbiKCLfv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 07:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKCLXv (ORCPT
+        with ESMTP id S231336AbiKCLfs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:23:51 -0400
+        Thu, 3 Nov 2022 07:35:48 -0400
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EE910FD0;
-        Thu,  3 Nov 2022 04:23:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB7B11C27;
+        Thu,  3 Nov 2022 04:35:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FhILi2yfvcxktek07eALVO1HW7rm9P9MDUCD3dvjgj4=; b=uEwHMbZ4rD8zck0Mz0UGcuvEQ0
-        y3D4aZVJrWTJL8/ieTRoUZ4LAYaO1SXm006oXFwKxXYC7rtchdOAeT0zejdtPc3rMGT7Zxr06VhQh
-        dnfHxX/4PkT5a9SykYNegtnQNMkRp5HzYq39vwkWYx9QnaTSNia7Qadskbjk3jYNwMnTjx1oi2LUD
-        vJDnphR7tjTZSpyHGZUcKl4PycinJt45wGcTM3UDC+FcEtm9Cc1jj+EALteqyfKG7kjV8AjBLtziS
-        wSIUcAm+dhJSAn3nA5a+ZegNJ87y9f1la1F6OMnc7wZwpSlzdhAm1V2j491M5JcqEnQFwawcZG1Xc
-        gWfnG6oA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35090)
+        bh=cODXvOWILXssuf2hSihjNWxlG+Nis9Z446oDoCKvjaY=; b=maw3pryN8lZOU0IdsOp6Unnp2B
+        0u3eYTW7E8E9A4i53UAc5exT8CsEdtLNR+ICUDriV9QDKFQsNDfjf7fXw++vuCHx+AM+11t3lyioP
+        mR2mLNzr/ejmwGvN8UpTmIIXWB6MZVD7ZYPoAsO/qQPcjNZN4CrTguPNoQfHuOt+lcD+Va3D+VTgq
+        Kfns1g6ZI/cskQSnNt+nGVRMaofodc2kBUEI60MtgQHs1fpaGoOay6jTDmG0PkBWFg6qZVOUMQjsM
+        qISp20JQ0uLG1jRlf3Tv9zXo7gcFxMvepwxZ6mIK2XGWHapcN9cSq9yElgaO+JGod+sN+NVZPHMWr
+        FlA/+eEw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35092)
         by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <linux@armlinux.org.uk>)
-        id 1oqYJX-0006E1-8A; Thu, 03 Nov 2022 11:23:15 +0000
+        id 1oqYVH-0006F9-QI; Thu, 03 Nov 2022 11:35:23 +0000
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
         (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1oqYJR-0008Jt-0G; Thu, 03 Nov 2022 11:23:09 +0000
-Date:   Thu, 3 Nov 2022 11:23:08 +0000
+        id 1oqYVF-0008K2-Uw; Thu, 03 Nov 2022 11:35:21 +0000
+Date:   Thu, 3 Nov 2022 11:35:21 +0000
 From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
 To:     Yang Jihong <yangjihong1@huawei.com>
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -48,15 +48,15 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         asavkov@redhat.com, bpf@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf RESEND 2/4] bpf: Remove size check for sk in
- bpf_skb_is_valid_access for 32-bit architecture
-Message-ID: <Y2OknBtLgqTHSrvy@shell.armlinux.org.uk>
+Subject: Re: [PATCH bpf RESEND 3/4] bpf: Add kernel function call support in
+ 32-bit ARM
+Message-ID: <Y2OnedQdQaIQEPDQ@shell.armlinux.org.uk>
 References: <20221103092118.248600-1-yangjihong1@huawei.com>
- <20221103092118.248600-3-yangjihong1@huawei.com>
+ <20221103092118.248600-4-yangjihong1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103092118.248600-3-yangjihong1@huawei.com>
+In-Reply-To: <20221103092118.248600-4-yangjihong1@huawei.com>
 Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
@@ -67,30 +67,98 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 05:21:16PM +0800, Yang Jihong wrote:
-> The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
-> This is because bpf_object__relocate modifies the instruction to change memory
-> size to 4 bytes, as shown in the following messages:
+On Thu, Nov 03, 2022 at 05:21:17PM +0800, Yang Jihong wrote:
+> This patch adds kernel function call support to the 32-bit ARM bpf jit.
 > 
-> libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
-> libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
-> libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+>  arch/arm/net/bpf_jit_32.c | 130 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 130 insertions(+)
 > 
-> As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
-> unnecessary checks need to be deleted.
+> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+> index 6a1c9fca5260..51428c82bec6 100644
+> --- a/arch/arm/net/bpf_jit_32.c
+> +++ b/arch/arm/net/bpf_jit_32.c
+> @@ -1337,6 +1337,118 @@ static void build_epilogue(struct jit_ctx *ctx)
+>  #endif
+>  }
+>  
+> +/*
+> + * Input parameters of function in 32-bit ARM architecture:
+> + * The first four word-sized parameters passed to a function will be
+> + * transferred in registers R0-R3. Sub-word sized arguments, for example,
+> + * char, will still use a whole register.
+> + * Arguments larger than a word will be passed in multiple registers.
+> + * If more arguments are passed, the fifth and subsequent words will be passed
+> + * on the stack.
+> + *
+> + * The first for args of a function will be considered for
+> + * putting into the 32bit register R1, R2, R3 and R4.
+> + *
+> + * Two 32bit registers are used to pass a 64bit arg.
+> + *
+> + * For example,
+> + * void foo(u32 a, u32 b, u32 c, u32 d, u32 e):
+> + *      u32 a: R0
+> + *      u32 b: R1
+> + *      u32 c: R2
+> + *      u32 d: R3
+> + *      u32 e: stack
+> + *
+> + * void foo(u64 a, u32 b, u32 c, u32 d):
+> + *      u64 a: R0 (lo32) R1 (hi32)
+> + *      u32 b: R2
+> + *      u32 c: R3
+> + *      u32 d: stack
+> + *
+> + * void foo(u32 a, u64 b, u32 c, u32 d):
+> + *       u32 a: R0
+> + *       u64 b: R2 (lo32) R3 (hi32)
+> + *       u32 c: stack
+> + *       u32 d: stack
 
-Isn't the purpose of this check to ensure that the entire pointer is
-written, and BPF can't write half of it?
+This code supports both EABI and OABI, but the above is EABI-only.
+Either we need to decide not to support OABI, or we need to add code
+for both. That can probably be done by making:
 
+> +	for (i = 0; i < fm->nr_args; i++) {
+> +		if (fm->arg_size[i] > sizeof(u32)) {
+> +			if (arg_regs_idx + 1 < nr_arg_regs) {
+> +				/*
+> +				 * AAPCS states:
+> +				 * A double-word sized type is passed in two
+> +				 * consecutive registers (e.g., r0 and r1, or
+> +				 * r2 and r3). The content of the registers is
+> +				 * as if the value had been loaded from memory
+> +				 * representation with a single LDM instruction.
+> +				 */
+> +				if (arg_regs_idx & 1)
+> +					arg_regs_idx++;
 
->  	case offsetof(struct __sk_buff, sk):
-> -		if (type == BPF_WRITE || size != sizeof(__u64))
-> -			return false;
+... this conditional on IS_ENABLED(CONFIG_AEABI).
 
-Wouldn't "(size != sizeof(struct bpf_sock *) && size != sizeof(__u64))"
-be more appropriate here, so 32-bit can only write the 32-bit pointer
-or the full 64-bit value, and 64-bit can only write the 64-bit pointer?
-Or is there a reason not to? bpf folk?
+> +				emit(ARM_LDRD_I(arg_regs[arg_regs_idx], ARM_FP,
+> +						EBPF_SCRATCH_TO_ARM_FP(
+> +							bpf2a32[BPF_REG_1 + i][1])), ctx);
+
+You probably want to re-use the internals of arm_bpf_get_reg64() to load
+the register.
+
+> +
+> +				arg_regs_idx += 2;
+> +			} else {
+> +				stack_off = ALIGN(stack_off, STACK_ALIGNMENT);
+> +
+> +				emit(ARM_LDRD_I(tmp[1], ARM_FP,
+> +						EBPF_SCRATCH_TO_ARM_FP(
+> +							bpf2a32[BPF_REG_1 + i][1])), ctx);
+
+Same here.
+
+> +				emit(ARM_STRD_I(tmp[1], ARM_SP, stack_off), ctx);
+
+and the internals of arm_bpf_put_reg64() here. Not all Arm CPUs that
+this code runs on supports ldrd and strd.
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
