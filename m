@@ -2,318 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EE1617CA7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 13:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E91B617DF9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiKCMfq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 08:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
+        id S231313AbiKCNeE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 09:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiKCMfp (ORCPT
+        with ESMTP id S230504AbiKCNeD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:35:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6020164C4;
-        Thu,  3 Nov 2022 05:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667478941; x=1699014941;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q//XY8N5Ob0kCIj/tkCi/HGMjPSQLnE1O0Ah7J6NzgI=;
-  b=f6ORpXy2XIX5F2rD5W0kKboUMMFzMp6/b83EXuwOhztniWOM0ybwm/lo
-   Qu++zxc/YKbnyQIFzPBVfBnVzkMG5Qjbccz+y1wLJEsKOAuF9Kmkj0EVS
-   VbFIH/R/5H2aNlqT97n+R5i8mxMEUsRysK02WP6d8d+GCSN3L4N+ouNS7
-   WbR3UjCALyXP7Mwgv+HKX8ZnqGChNTMmR8nPsTHJOEQC33I+lixiu6JGM
-   Q/y9yWMQMfwPRIKnSe2alZfyb+tQEUxLGG4kZwWewQ0MuGz1ZyCnteDky
-   GTcq3fKpxX6lM0Slab9LIBjgaRGoNVT9mu7RJh4Q2Q6Lf0/XTpDHBGoIC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="290057896"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="290057896"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 05:35:26 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="612634230"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="612634230"
-Received: from thrakatuluk.fi.intel.com (HELO platvala-desk.ger.corp.intel.com) ([10.237.72.90])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 05:35:21 -0700
-Date:   Thu, 3 Nov 2022 14:35:22 +0200
-From:   Petri Latvala <petri.latvala@intel.com>
-To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-Cc:     Isabella Basso <isabbasso@riseup.net>, twoerner@gmail.com,
-        linux-kselftest@vger.kernel.org, magalilemes00@gmail.com,
-        maira.canal@usp.br, dlatypov@google.com, tales.aparecida@gmail.com,
-        brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        leandro.ribeiro@collabora.com, igt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch, n@nfraprado.net,
-        davidgow@google.com, skhan@linuxfoundation.org,
-        andrealmeid@riseup.net, kunit-dev@googlegroups.com
-Subject: Re: [igt-dev] [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility
- for KUnit
-Message-ID: <Y2O1ivmZu7VWgUig@platvala-desk.ger.corp.intel.com>
-References: <20220829000920.38185-1-isabbasso@riseup.net>
- <20220829000920.38185-4-isabbasso@riseup.net>
- <20221103104840.7301df76@maurocar-mobl2>
- <20221103124059.682e7adf@maurocar-mobl2>
+        Thu, 3 Nov 2022 09:34:03 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FDE63D5
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:34:02 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so1799901pjl.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Nov 2022 06:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=1QqFy+VNTViKLjxab+1Xd32/kKSi0wuwBQO1qBHtEF8=;
+        b=E1fbxisBK5k0dh/6Que4DMtXFBnSiMApGw5drLTPqiCJbZ8x3aouLUNXQFMB08/7+C
+         KSaob9KNi88j/d5tKbPd9Zek65cV0aMBUfuJ5BS9v5IBzkmRO/vs1p5IJL/8bY4FM/sp
+         hJw5A7DMlZmI/30Vao9W2VlUE8P90vtfa+PW8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1QqFy+VNTViKLjxab+1Xd32/kKSi0wuwBQO1qBHtEF8=;
+        b=2nMgO5PwNSyRpfMeGNvE59ydsATAxXHCxP0Z5QOQ7shnERjERzegTREMxD5wNTmhuw
+         Q6gF+Qoc6RqqMqbob/5ugCG/qkRlfTyhfs4FdYY+DxaJN8kShPtBf7tJgHrEzu3dE9fu
+         4Y3buneZBlC3ACooF1BreDX8U6I7l1+7V7QjO7zY4jk3NMBVVZK2GcvHp+kuDr44CTNK
+         p1b47Yo43Zy4lwXLj8Y1oS0vM3wyjHyiJYNE7KSgN1wJEIX++TetN0wzG0u6FmX3evnx
+         nZuVSx7woH0xHDnSmL7iJRkqao97yyo8j3LMgdDrcjAG5/sN1eieYsqH4qpSddHprNT8
+         vpng==
+X-Gm-Message-State: ACrzQf1YTlDbhRCZzRDVwexBXy48xfmzCG1feM30ApGYSh+wHiuN56+8
+        nZsi9M8fc0gmDIhIq3kKsFRsNg==
+X-Google-Smtp-Source: AMsMyM6NGs7b/1Pg6bySVfF69pvW23dBz3md/qv8YnBd3S2o1/lNJ9g8cj8Z3LH7A9xfkQgPt1wtdA==
+X-Received: by 2002:a17:90b:1b01:b0:213:ccc6:87ea with SMTP id nu1-20020a17090b1b0100b00213ccc687eamr25733268pjb.135.1667482441723;
+        Thu, 03 Nov 2022 06:34:01 -0700 (PDT)
+Received: from [192.168.0.168] ([103.99.10.63])
+        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b001784a45511asm684361plg.79.2022.11.03.06.33.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 06:34:00 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------dfbO8p2MzthdkvVctIQ258AK"
+Message-ID: <6eae8f0b-2050-3c0f-828d-8b87262b1cef@linuxfoundation.org>
+Date:   Thu, 3 Nov 2022 07:33:57 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103124059.682e7adf@maurocar-mobl2>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 6.1-rc4
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 12:40:59PM +0100, Mauro Carvalho Chehab wrote:
-> On Thu, 3 Nov 2022 10:48:40 +0100
-> Mauro Carvalho Chehab <mauro.chehab@linux.intel.com> wrote:
-> 
-> > On Sun, 28 Aug 2022 21:09:19 -0300
-> > Isabella Basso <isabbasso@riseup.net> wrote:
-> > 
-> > > This adds functions for both executing the tests as well as parsing (K)TAP
-> > > kmsg output, as per the KTAP spec [1].
-> > > 
-> > > [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
-> > > 
-> > > Signed-off-by: Isabella Basso <isabbasso@riseup.net>  
-> > 
-> > Hi Isabella,
-> > 
-> > I'm doing some tests here with my i915 KUnit patch series.
-> > 
-> > There's a problem with the way it is currently parsing the KTAP logs on
-> > IGT. It sounds that it is parsing the data only at the end, and not as
-> > they arrive. That's bad, as if something goes wrong, the previously
-> > reported data is still useful.
-> > 
-> > Also, when there's a crash, the IGT process is getting segmentation
-> > fault. So, the end result is that nothing is actually reported.
-> > 
-> > 	$ sudo ./build/tests/i915_selftest
-> > 	IGT-Version: 1.26-gbab20eb65 (x86_64) (Linux: 6.1.0-rc2-drm-990037e9984e+ x86_64)
-> > 	Segmentation fault (core dumped)
-> 
-> Another issue related to KTAP parsing: this is the output before
-> the KUnit patch, which is used by IGT CI to check the test results, for
-> i915 mock selftest:
-> 
-> <snip>
-> IGT-Version: 1.26-gbab20eb65 (x86_64) (Linux: 6.1.0-rc2-drm-8dacd9299fcc+ x86_64)
-> process 659 (alsactl) is using audio device. Should be terminated.
-> Starting subtest: mock
-> Starting dynamic subtest: sanitycheck
-> Dynamic subtest sanitycheck: SUCCESS (0.648s)
-> Starting dynamic subtest: shmem
-> Dynamic subtest shmem: SUCCESS (0.557s)
-> Starting dynamic subtest: fence
-> Dynamic subtest fence: SUCCESS (8.078s)
-> Starting dynamic subtest: scatterlist
-> Dynamic subtest scatterlist: SUCCESS (1.531s)
-> Starting dynamic subtest: syncmap
-> Dynamic subtest syncmap: SUCCESS (2.875s)
-> Starting dynamic subtest: uncore
-> Dynamic subtest uncore: SUCCESS (0.525s)
-> Starting dynamic subtest: ring
-> Dynamic subtest ring: SUCCESS (0.529s)
-> Starting dynamic subtest: engine
-> Dynamic subtest engine: SUCCESS (0.527s)
-> Starting dynamic subtest: timelines
-> Dynamic subtest timelines: SUCCESS (4.177s)
-> Starting dynamic subtest: requests
-> Dynamic subtest requests: SUCCESS (3.561s)
-> Starting dynamic subtest: objects
-> Dynamic subtest objects: SUCCESS (0.596s)
-> Starting dynamic subtest: phys
-> Dynamic subtest phys: SUCCESS (0.602s)
-> Starting dynamic subtest: dmabuf
-> Dynamic subtest dmabuf: SUCCESS (0.605s)
-> Starting dynamic subtest: vma
-> Dynamic subtest vma: SUCCESS (9.724s)
-> Starting dynamic subtest: evict
-> Dynamic subtest evict: SUCCESS (1.660s)
-> Starting dynamic subtest: gtt
-> Dynamic subtest gtt: SUCCESS (3.309s)
-> Starting dynamic subtest: hugepages
-> Dynamic subtest hugepages: SUCCESS (1.665s)
-> Starting dynamic subtest: memory_region
-> Dynamic subtest memory_region: SUCCESS (2.789s)
-> Subtest mock: SUCCESS (43.961s)
-> </snip>
-> 
-> This is the logs after your patch:
-> 
-> <snip>
-> Missing test version string
-> Executing 18 tests in: i915 mock selftests
-> kmsg> 1..18
-> kmsg> i915: i915_mock_sanitycheck() - ok!
-> kmsg> ok 1 - mock_sanitycheck
-> kmsg> i915: Running shmem_utils_mock_selftests/igt_shmem_basic
-> kmsg> ok 2 - mock_shmem
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_self
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_dag
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_AB
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_ABC
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_AB_C
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_C_AB
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_chain
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_ipc
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_timer
-> kmsg> i915: Running i915_sw_fence_mock_selftests/test_dma_fence
-> kmsg> Asynchronous wait on fence mock:mock:0 timed out (hint:fence_notify [i915])
-> kmsg> ok 3 - mock_fence
-> kmsg> i915: Running scatterlist_mock_selftests/igt_sg_alloc
-> kmsg> sg_alloc_table timed out
-> kmsg> i915: Running scatterlist_mock_selftests/igt_sg_trim
-> kmsg> i915_sg_trim timed out
-> kmsg> ok 4 - mock_scatterlist
-> kmsg> i915: Running i915_syncmap_mock_selftests/igt_syncmap_init
-> kmsg> i915: Running i915_syncmap_mock_selftests/igt_syncmap_one
-> kmsg> i915: Running i915_syncmap_mock_selftests/igt_syncmap_join_above
-> kmsg> i915: Running i915_syncmap_mock_selftests/igt_syncmap_join_below
-> kmsg> i915: Running i915_syncmap_mock_selftests/igt_syncmap_neighbours
-> kmsg> i915: Running i915_syncmap_mock_selftests/igt_syncmap_compact
-> kmsg> i915: Running i915_syncmap_mock_selftests/igt_syncmap_random
-> kmsg> ok 5 - mock_syncmap
-> kmsg> ok 6 - mock_uncore
-> kmsg> i915: Running intel_ring_mock_selftests/igt_ring_direction
-> kmsg> ok 7 - mock_ring
-> kmsg> i915: Running intel_engine_cs_mock_selftests/intel_mmio_bases_check
-> kmsg> ok 8 - mock_engine
-> kmsg> i915: Running intel_timeline_mock_selftests/mock_hwsp_freelist
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running intel_timeline_mock_selftests/igt_sync
-> kmsg> i915: Running intel_timeline_mock_selftests/bench_sync
-> kmsg> bench_sync: 44045 random insertions, 2288ns/insert
-> kmsg> bench_sync: 44045 random lookups, 80ns/lookup
-> kmsg> bench_sync: 877617 in-order insertions, 114ns/insert
-> kmsg> bench_sync: 877617 in-order lookups, 3ns/lookup
-> kmsg> bench_sync: 6357870 repeated insert/lookups, 10ns/op
-> kmsg> bench_sync: 19942183 cyclic/1 insert/lookups, 5ns/op
-> kmsg> bench_sync: 19353937 cyclic/2 insert/lookups, 5ns/op
-> kmsg> bench_sync: 16969941 cyclic/3 insert/lookups, 5ns/op
-> kmsg> bench_sync: 14438533 cyclic/5 insert/lookups, 6ns/op
-> kmsg> bench_sync: 13418112 cyclic/8 insert/lookups, 7ns/op
-> kmsg> bench_sync: 9257200 cyclic/13 insert/lookups, 10ns/op
-> kmsg> bench_sync: 53636 cyclic/21 insert/lookups, 1877ns/op
-> kmsg> ok 9 - mock_timelines
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running i915_request_mock_selftests/igt_add_request
-> kmsg> i915: Running i915_request_mock_selftests/igt_wait_request
-> kmsg> i915: Running i915_request_mock_selftests/igt_fence_wait
-> kmsg> i915: Running i915_request_mock_selftests/igt_request_rewind
-> kmsg> i915: Running i915_request_mock_selftests/mock_breadcrumbs_smoketest
-> kmsg> Completed 92 waits for 49042 fence across 8 cpus
-> kmsg> ok 10 - mock_requests
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running i915_gem_object_mock_selftests/igt_gem_object
-> kmsg> ok 11 - mock_objects
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running i915_gem_phys_mock_selftests/mock_phys_object
-> kmsg> ok 12 - mock_phys
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running i915_gem_dmabuf_mock_selftests/igt_dmabuf_export
-> kmsg> i915: Running i915_gem_dmabuf_mock_selftests/igt_dmabuf_import_self
-> kmsg> i915: Running i915_gem_dmabuf_mock_selftests/igt_dmabuf_import
-> kmsg> i915: Running i915_gem_dmabuf_mock_selftests/igt_dmabuf_import_ownership
-> kmsg> i915: Running i915_gem_dmabuf_mock_selftests/igt_dmabuf_export_vmap
-> kmsg> ok 13 - mock_dmabuf
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running i915_vma_mock_selftests/igt_vma_create
-> kmsg> igt_vma_create timed out: after 31 objects in 23 contexts
-> kmsg> i915: Running i915_vma_mock_selftests/igt_vma_pin1
-> kmsg> i915: Running i915_vma_mock_selftests/igt_vma_rotate_remap
-> kmsg> i915: Running i915_vma_mock_selftests/igt_vma_partial
-> kmsg> ok 14 - mock_vma
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running i915_gem_evict_mock_selftests/igt_evict_something
-> kmsg> i915: Running i915_gem_evict_mock_selftests/igt_evict_for_vma
-> kmsg> i915: Running i915_gem_evict_mock_selftests/igt_evict_for_cache_color
-> kmsg> i915: Running i915_gem_evict_mock_selftests/igt_evict_vm
-> kmsg> i915: Running i915_gem_evict_mock_selftests/igt_overcommit
-> kmsg> ok 15 - mock_evict
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running i915_gem_gtt_mock_selftests/igt_mock_drunk
-> kmsg> drunk_hole timed out after 31635/524288
-> kmsg> i915: Running i915_gem_gtt_mock_selftests/igt_mock_walk
-> kmsg> walk_hole timed out at 812f000
-> kmsg> i915: Running i915_gem_gtt_mock_selftests/igt_mock_pot
-> kmsg> pot_hole timed out after 19/33
-> kmsg> i915: Running i915_gem_gtt_mock_selftests/igt_mock_fill
-> kmsg> fill_hole timed out (npages=1, prime=199)
-> kmsg> i915: Running i915_gem_gtt_mock_selftests/igt_gtt_reserve
-> kmsg> i915: Running i915_gem_gtt_mock_selftests/igt_gtt_insert
-> kmsg> ok 16 - mock_gtt
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running i915_gem_huge_page_mock_selftests/igt_mock_exhaust_device_supported_pages
-> kmsg> i915: Running i915_gem_huge_page_mock_selftests/igt_mock_memory_region_huge_pages
-> kmsg> i915: Running i915_gem_huge_page_mock_selftests/igt_mock_ppgtt_misaligned_dma
-> kmsg> i915: Running i915_gem_huge_page_mock_selftests/igt_mock_ppgtt_huge_fill
-> kmsg> igt_mock_ppgtt_huge_fill timed out at size 43986944
-> kmsg> i915: Running i915_gem_huge_page_mock_selftests/igt_mock_ppgtt_64K
-> kmsg> ok 17 - mock_hugepages
-> kmsg> mock: [drm] Using Transparent Hugepages
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - HuC is not supported!
-> kmsg> mock: [drm] Incompatible option enable_guc=3 - GuC submission is N/A
-> kmsg> i915: Running intel_memory_region_mock_selftests/igt_mock_reserve
-> kmsg> i915: Running intel_memory_region_mock_selftests/igt_mock_fill
-> kmsg> i915: Running intel_memory_region_mock_selftests/igt_mock_contiguous
-> kmsg> i915: Running intel_memory_region_mock_selftests/igt_mock_splintered_region
-> kmsg> i915: Running intel_memory_region_mock_selftests/igt_mock_max_segment
-> kmsg> i915: Running intel_memory_region_mock_selftests/igt_mock_io_size
-> kmsg> igt_mock_io_size with ps=10000, io_size=10000000, total=cf110000
-> kmsg> igt_mock_io_size mappable theft=(0MiB/256MiB), total=3313MiB
-> kmsg> ok 18 - mock_memory_region
-> kmsg> # i915 mock selftests: pass:18 fail:0 skip:0 total:18
-> kmsg> # Totals: pass:18 fail:0 skip:0 total:18
-> kmsg> ok 1 - i915 mock selftests
-> SUCCESS (29.259s)
-> </snip>
-> 
-> Basically, the current output will break CI reports presented at:
-> 	https://intel-gfx-ci.01.org/tree/drm-tip/bat-all.html?testfilter=selftest
-> 
-> The IGT output after your change should be similar to what we had
-> before, e. g. each test should output SUCCESS/FAIL/SKIP (plus the
-> final result of all tests at the suite).
+This is a multi-part message in MIME format.
+--------------dfbO8p2MzthdkvVctIQ258AK
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-That should not be done manually though. Only with igt_subtest /
-igt_dynamic blocks.
+Hi Linus,
 
--- 
-Petri Latvala
+Please pull the following Kselftest fixes update for Linux 6.1-rc4.
+
+This Kselftest fixes update for Linux 6.1-rc4 consists of fixes to
+pidfd test.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit cb05c81ada76a30a25a5f79b249375e33473af33:
+
+   selftests/ftrace: fix dynamic_events dependency check (2022-10-18 14:27:23 -0600)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.1-rc4
+
+for you to fetch changes up to 89c1017aac67ca81973b7c8eac5d021315811a93:
+
+   selftests/pidfd_test: Remove the erroneous ',' (2022-11-02 03:09:57 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-6.1-rc4
+
+This Kselftest fixes update for Linux 6.1-rc4 consists of fixes to
+pidfd test.
+
+----------------------------------------------------------------
+Li Zhijian (2):
+       ksefltests: pidfd: Fix wait_states: Test terminated by timeout
+       selftests: pidfd: Fix compling warnings
+
+Zhao Gongyi (1):
+       selftests/pidfd_test: Remove the erroneous ','
+
+  tools/testing/selftests/pidfd/Makefile     |  2 +-
+  tools/testing/selftests/pidfd/pidfd_test.c |  4 +++-
+  tools/testing/selftests/pidfd/pidfd_wait.c | 12 +++++++++++-
+  3 files changed, 15 insertions(+), 3 deletions(-)
+----------------------------------------------------------------
+--------------dfbO8p2MzthdkvVctIQ258AK
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-6.1-rc4.diff"
+Content-Disposition: attachment; filename="linux-kselftest-fixes-6.1-rc4.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL01ha2VmaWxlIGIv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQvTWFrZWZpbGUKaW5kZXggZjRhMmYyOGY5
+MjZiLi43NzhiNmNkYzhhZWQgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L3BpZGZkL01ha2VmaWxlCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL01h
+a2VmaWxlCkBAIC0xLDUgKzEsNSBAQAogIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BM
+LTIuMC1vbmx5Ci1DRkxBR1MgKz0gLWcgLUkuLi8uLi8uLi8uLi91c3IvaW5jbHVkZS8gLXB0
+aHJlYWQKK0NGTEFHUyArPSAtZyAtSS4uLy4uLy4uLy4uL3Vzci9pbmNsdWRlLyAtcHRocmVh
+ZCAtV2FsbAogCiBURVNUX0dFTl9QUk9HUyA6PSBwaWRmZF90ZXN0IHBpZGZkX2ZkaW5mb190
+ZXN0IHBpZGZkX29wZW5fdGVzdCBcCiAJcGlkZmRfcG9sbF90ZXN0IHBpZGZkX3dhaXQgcGlk
+ZmRfZ2V0ZmRfdGVzdCBwaWRmZF9zZXRuc190ZXN0CmRpZmYgLS1naXQgYS90b29scy90ZXN0
+aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cy9waWRmZC9waWRmZF90ZXN0LmMKaW5kZXggOWEyZDY0OTAxZDU5Li5lMmRkNGVkODQ5
+ODQgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3Rl
+c3QuYworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0LmMK
+QEAgLTQxMyw3ICs0MTMsNyBAQCBzdGF0aWMgdm9pZCBwb2xsX3BpZGZkKGNvbnN0IGNoYXIg
+KnRlc3RfbmFtZSwgaW50IHBpZGZkKQogCiAJYyA9IGVwb2xsX3dhaXQoZXBvbGxfZmQsIGV2
+ZW50cywgTUFYX0VWRU5UUywgNTAwMCk7CiAJaWYgKGMgIT0gMSB8fCAhKGV2ZW50c1swXS5l
+dmVudHMgJiBFUE9MTElOKSkKLQkJa3NmdF9leGl0X2ZhaWxfbXNnKCIlcyB0ZXN0OiBVbmV4
+cGVjdGVkIGVwb2xsX3dhaXQgcmVzdWx0IChjPSVkLCBldmVudHM9JXgpICIsCisJCWtzZnRf
+ZXhpdF9mYWlsX21zZygiJXMgdGVzdDogVW5leHBlY3RlZCBlcG9sbF93YWl0IHJlc3VsdCAo
+Yz0lZCwgZXZlbnRzPSV4KSAiCiAJCQkJICAgIihlcnJubyAlZClcbiIsCiAJCQkJICAgdGVz
+dF9uYW1lLCBjLCBldmVudHNbMF0uZXZlbnRzLCBlcnJubyk7CiAKQEAgLTQzNSw2ICs0MzUs
+OCBAQCBzdGF0aWMgaW50IGNoaWxkX3BvbGxfZXhlY190ZXN0KHZvaWQgKmFyZ3MpCiAJICov
+CiAJd2hpbGUgKDEpCiAJCXNsZWVwKDEpOworCisJcmV0dXJuIDA7CiB9CiAKIHN0YXRpYyB2
+b2lkIHRlc3RfcGlkZmRfcG9sbF9leGVjKGludCB1c2Vfd2FpdHBpZCkKZGlmZiAtLWdpdCBh
+L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3dhaXQuYyBiL3Rvb2xzL3Rl
+c3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3dhaXQuYwppbmRleCAwNzBjMWM4NzZkZjEu
+LjBkY2I4MzY1ZGRjMyAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlk
+ZmQvcGlkZmRfd2FpdC5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3Bp
+ZGZkX3dhaXQuYwpAQCAtOTUsMjAgKzk1LDI4IEBAIFRFU1Qod2FpdF9zdGF0ZXMpCiAJCS5m
+bGFncyA9IENMT05FX1BJREZEIHwgQ0xPTkVfUEFSRU5UX1NFVFRJRCwKIAkJLmV4aXRfc2ln
+bmFsID0gU0lHQ0hMRCwKIAl9OworCWludCBwZmRbMl07CiAJcGlkX3QgcGlkOwogCXNpZ2lu
+Zm9fdCBpbmZvID0gewogCQkuc2lfc2lnbm8gPSAwLAogCX07CiAKKwlBU1NFUlRfRVEocGlw
+ZShwZmQpLCAwKTsKIAlwaWQgPSBzeXNfY2xvbmUzKCZhcmdzKTsKIAlBU1NFUlRfR0UocGlk
+LCAwKTsKIAogCWlmIChwaWQgPT0gMCkgeworCQljaGFyIGJ1ZlsyXTsKKworCQljbG9zZShw
+ZmRbMV0pOwogCQlraWxsKGdldHBpZCgpLCBTSUdTVE9QKTsKKwkJQVNTRVJUX0VRKHJlYWQo
+cGZkWzBdLCBidWYsIDEpLCAxKTsKKwkJY2xvc2UocGZkWzBdKTsKIAkJa2lsbChnZXRwaWQo
+KSwgU0lHU1RPUCk7CiAJCWV4aXQoRVhJVF9TVUNDRVNTKTsKIAl9CiAKKwljbG9zZShwZmRb
+MF0pOwogCUFTU0VSVF9FUShzeXNfd2FpdGlkKFBfUElERkQsIHBpZGZkLCAmaW5mbywgV1NU
+T1BQRUQsIE5VTEwpLCAwKTsKIAlBU1NFUlRfRVEoaW5mby5zaV9zaWdubywgU0lHQ0hMRCk7
+CiAJQVNTRVJUX0VRKGluZm8uc2lfY29kZSwgQ0xEX1NUT1BQRUQpOwpAQCAtMTE3LDYgKzEy
+NSw4IEBAIFRFU1Qod2FpdF9zdGF0ZXMpCiAJQVNTRVJUX0VRKHN5c19waWRmZF9zZW5kX3Np
+Z25hbChwaWRmZCwgU0lHQ09OVCwgTlVMTCwgMCksIDApOwogCiAJQVNTRVJUX0VRKHN5c193
+YWl0aWQoUF9QSURGRCwgcGlkZmQsICZpbmZvLCBXQ09OVElOVUVELCBOVUxMKSwgMCk7CisJ
+QVNTRVJUX0VRKHdyaXRlKHBmZFsxXSwgIkMiLCAxKSwgMSk7CisJY2xvc2UocGZkWzFdKTsK
+IAlBU1NFUlRfRVEoaW5mby5zaV9zaWdubywgU0lHQ0hMRCk7CiAJQVNTRVJUX0VRKGluZm8u
+c2lfY29kZSwgQ0xEX0NPTlRJTlVFRCk7CiAJQVNTRVJUX0VRKGluZm8uc2lfcGlkLCBwYXJl
+bnRfdGlkKTsKQEAgLTEzOCw3ICsxNDgsNyBAQCBURVNUKHdhaXRfc3RhdGVzKQogCiBURVNU
+KHdhaXRfbm9uYmxvY2spCiB7Ci0JaW50IHBpZGZkLCBzdGF0dXMgPSAwOworCWludCBwaWRm
+ZDsKIAl1bnNpZ25lZCBpbnQgZmxhZ3MgPSAwOwogCXBpZF90IHBhcmVudF90aWQgPSAtMTsK
+IAlzdHJ1Y3QgY2xvbmVfYXJncyBhcmdzID0gewo=
+
+--------------dfbO8p2MzthdkvVctIQ258AK--
