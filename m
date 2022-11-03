@@ -2,177 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E91B617DF9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521D8617E8E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiKCNeE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 09:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
+        id S230074AbiKCN6k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 09:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiKCNeD (ORCPT
+        with ESMTP id S229994AbiKCN6j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:34:03 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FDE63D5
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:34:02 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so1799901pjl.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Nov 2022 06:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1QqFy+VNTViKLjxab+1Xd32/kKSi0wuwBQO1qBHtEF8=;
-        b=E1fbxisBK5k0dh/6Que4DMtXFBnSiMApGw5drLTPqiCJbZ8x3aouLUNXQFMB08/7+C
-         KSaob9KNi88j/d5tKbPd9Zek65cV0aMBUfuJ5BS9v5IBzkmRO/vs1p5IJL/8bY4FM/sp
-         hJw5A7DMlZmI/30Vao9W2VlUE8P90vtfa+PW8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1QqFy+VNTViKLjxab+1Xd32/kKSi0wuwBQO1qBHtEF8=;
-        b=2nMgO5PwNSyRpfMeGNvE59ydsATAxXHCxP0Z5QOQ7shnERjERzegTREMxD5wNTmhuw
-         Q6gF+Qoc6RqqMqbob/5ugCG/qkRlfTyhfs4FdYY+DxaJN8kShPtBf7tJgHrEzu3dE9fu
-         4Y3buneZBlC3ACooF1BreDX8U6I7l1+7V7QjO7zY4jk3NMBVVZK2GcvHp+kuDr44CTNK
-         p1b47Yo43Zy4lwXLj8Y1oS0vM3wyjHyiJYNE7KSgN1wJEIX++TetN0wzG0u6FmX3evnx
-         nZuVSx7woH0xHDnSmL7iJRkqao97yyo8j3LMgdDrcjAG5/sN1eieYsqH4qpSddHprNT8
-         vpng==
-X-Gm-Message-State: ACrzQf1YTlDbhRCZzRDVwexBXy48xfmzCG1feM30ApGYSh+wHiuN56+8
-        nZsi9M8fc0gmDIhIq3kKsFRsNg==
-X-Google-Smtp-Source: AMsMyM6NGs7b/1Pg6bySVfF69pvW23dBz3md/qv8YnBd3S2o1/lNJ9g8cj8Z3LH7A9xfkQgPt1wtdA==
-X-Received: by 2002:a17:90b:1b01:b0:213:ccc6:87ea with SMTP id nu1-20020a17090b1b0100b00213ccc687eamr25733268pjb.135.1667482441723;
-        Thu, 03 Nov 2022 06:34:01 -0700 (PDT)
-Received: from [192.168.0.168] ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b001784a45511asm684361plg.79.2022.11.03.06.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 06:34:00 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------dfbO8p2MzthdkvVctIQ258AK"
-Message-ID: <6eae8f0b-2050-3c0f-828d-8b87262b1cef@linuxfoundation.org>
-Date:   Thu, 3 Nov 2022 07:33:57 -0600
+        Thu, 3 Nov 2022 09:58:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45643140E6
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667483865;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fUsqybhXp/D82YuS/O33LZfOTzfFB038d5lKiyOEhC8=;
+        b=OODV3/lAkc4pzzBsU8BEhraCLDz3bBGlVKpW1NF2WLUOEorsMlhV9Tj5pljfJ7n2htwLIZ
+        p/1SXtQH8cE0eDwXrDZ4LOY/HE0pa1c2IXCdC2NzLdJY0fVB9R7X2JHjETTGGV1rd1XkkP
+        Ar7j6KSzQ/jAgx15StyGmoPRNjIfPpA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-wG8_w1AzN_-3brZ9aiF0Rw-1; Thu, 03 Nov 2022 09:57:41 -0400
+X-MC-Unique: wG8_w1AzN_-3brZ9aiF0Rw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD30A3815D2F;
+        Thu,  3 Nov 2022 13:57:40 +0000 (UTC)
+Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 52F8B40C2140;
+        Thu,  3 Nov 2022 13:57:37 +0000 (UTC)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Yang Zhong <yang.zhong@intel.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/9] nSVM: Security and correctness fixes
+Date:   Thu,  3 Nov 2022 15:57:27 +0200
+Message-Id: <20221103135736.42295-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest fixes update for Linux 6.1-rc4
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------dfbO8p2MzthdkvVctIQ258AK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Recently while trying to fix some unit tests I found a CVE in SVM nested co=
+de.=0D
+=0D
+In 'shutdown_interception' vmexit handler we call kvm_vcpu_reset.=0D
+=0D
+However if running nested and L1 doesn't intercept shutdown, we will still =
+end=0D
+up running this function and trigger a bug in it.=0D
+=0D
+The bug is that this function resets the 'vcpu->arch.hflags' without proper=
+ly=0D
+leaving the nested state, which leaves the vCPU in inconsistent state, whic=
+h=0D
+later triggers a kernel panic in SVM code.=0D
+=0D
+The same bug can likely be triggered by sending INIT via local apic to a vC=
+PU=0D
+which runs a nested guest.=0D
+=0D
+On VMX we are lucky that the issue can't happen because VMX always intercep=
+ts=0D
+triple faults, thus triple fault in L2 will always be redirected to L1.=0D
+Plus the 'handle_triple_fault' of VMX doesn't reset the vCPU.=0D
+=0D
+INIT IPI can't happen on VMX either because INIT events are masked while in=
+=0D
+VMX mode.=0D
+=0D
+First 4 patches in this series address the above issue, and are=0D
+already posted on the list with title,=0D
+('nSVM: fix L0 crash if L2 has shutdown condtion which L1 doesn't intercept=
+')=0D
+I addressed the review feedback and also added a unit test to hit this issu=
+e.=0D
+=0D
+In addition to these patches I noticed that KVM doesn't honour SHUTDOWN int=
+ercept bit=0D
+of L1 on SVM, and I included a fix to do so - its only for correctness=0D
+as a normal hypervisor should always intercept SHUTDOWN.=0D
+A unit test on the other hand might want to not do so.=0D
+I also extendted the triple_fault_test selftest to hit this issue.=0D
+=0D
+Finaly I found another security issue, I found a way to=0D
+trigger a kernel non rate limited printk on SVM from the guest, and=0D
+last patch in the series fixes that.=0D
+=0D
+A unit test I posted to kvm-unit-tests project hits this issue, so=0D
+no selftest was added.=0D
+=0D
+Best regards,=0D
+	Maxim Levitsky=0D
+=0D
+Maxim Levitsky (9):=0D
+  KVM: x86: nSVM: leave nested mode on vCPU free=0D
+  KVM: x86: nSVM: harden svm_free_nested against freeing vmcb02 while=0D
+    still in use=0D
+  KVM: x86: add kvm_leave_nested=0D
+  KVM: x86: forcibly leave nested mode on vCPU reset=0D
+  KVM: selftests: move idt_entry to header=0D
+  kvm: selftests: add svm nested shutdown test=0D
+  KVM: x86: allow L1 to not intercept triple fault=0D
+  KVM: selftests: add svm part to triple_fault_test=0D
+  KVM: x86: remove exit_int_info warning in svm_handle_exit=0D
+=0D
+ arch/x86/kvm/svm/nested.c                     | 12 +++-=0D
+ arch/x86/kvm/svm/svm.c                        | 10 +--=0D
+ arch/x86/kvm/vmx/nested.c                     |  4 +-=0D
+ arch/x86/kvm/x86.c                            | 29 ++++++--=0D
+ tools/testing/selftests/kvm/.gitignore        |  1 +=0D
+ tools/testing/selftests/kvm/Makefile          |  1 +=0D
+ .../selftests/kvm/include/x86_64/processor.h  | 13 ++++=0D
+ .../selftests/kvm/lib/x86_64/processor.c      | 13 ----=0D
+ .../kvm/x86_64/svm_nested_shutdown_test.c     | 71 +++++++++++++++++++=0D
+ .../kvm/x86_64/triple_fault_event_test.c      | 71 ++++++++++++++-----=0D
+ 10 files changed, 174 insertions(+), 51 deletions(-)=0D
+ create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_=
+test.c=0D
+=0D
+-- =0D
+2.34.3=0D
+=0D
 
-Hi Linus,
-
-Please pull the following Kselftest fixes update for Linux 6.1-rc4.
-
-This Kselftest fixes update for Linux 6.1-rc4 consists of fixes to
-pidfd test.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit cb05c81ada76a30a25a5f79b249375e33473af33:
-
-   selftests/ftrace: fix dynamic_events dependency check (2022-10-18 14:27:23 -0600)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.1-rc4
-
-for you to fetch changes up to 89c1017aac67ca81973b7c8eac5d021315811a93:
-
-   selftests/pidfd_test: Remove the erroneous ',' (2022-11-02 03:09:57 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-fixes-6.1-rc4
-
-This Kselftest fixes update for Linux 6.1-rc4 consists of fixes to
-pidfd test.
-
-----------------------------------------------------------------
-Li Zhijian (2):
-       ksefltests: pidfd: Fix wait_states: Test terminated by timeout
-       selftests: pidfd: Fix compling warnings
-
-Zhao Gongyi (1):
-       selftests/pidfd_test: Remove the erroneous ','
-
-  tools/testing/selftests/pidfd/Makefile     |  2 +-
-  tools/testing/selftests/pidfd/pidfd_test.c |  4 +++-
-  tools/testing/selftests/pidfd/pidfd_wait.c | 12 +++++++++++-
-  3 files changed, 15 insertions(+), 3 deletions(-)
-----------------------------------------------------------------
---------------dfbO8p2MzthdkvVctIQ258AK
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-fixes-6.1-rc4.diff"
-Content-Disposition: attachment; filename="linux-kselftest-fixes-6.1-rc4.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL01ha2VmaWxlIGIv
-dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlkZmQvTWFrZWZpbGUKaW5kZXggZjRhMmYyOGY5
-MjZiLi43NzhiNmNkYzhhZWQgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L3BpZGZkL01ha2VmaWxlCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL01h
-a2VmaWxlCkBAIC0xLDUgKzEsNSBAQAogIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BM
-LTIuMC1vbmx5Ci1DRkxBR1MgKz0gLWcgLUkuLi8uLi8uLi8uLi91c3IvaW5jbHVkZS8gLXB0
-aHJlYWQKK0NGTEFHUyArPSAtZyAtSS4uLy4uLy4uLy4uL3Vzci9pbmNsdWRlLyAtcHRocmVh
-ZCAtV2FsbAogCiBURVNUX0dFTl9QUk9HUyA6PSBwaWRmZF90ZXN0IHBpZGZkX2ZkaW5mb190
-ZXN0IHBpZGZkX29wZW5fdGVzdCBcCiAJcGlkZmRfcG9sbF90ZXN0IHBpZGZkX3dhaXQgcGlk
-ZmRfZ2V0ZmRfdGVzdCBwaWRmZF9zZXRuc190ZXN0CmRpZmYgLS1naXQgYS90b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9waWRmZC9waWRmZF90ZXN0LmMKaW5kZXggOWEyZDY0OTAxZDU5Li5lMmRkNGVkODQ5
-ODQgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3Rl
-c3QuYworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9waWRmZC9waWRmZF90ZXN0LmMK
-QEAgLTQxMyw3ICs0MTMsNyBAQCBzdGF0aWMgdm9pZCBwb2xsX3BpZGZkKGNvbnN0IGNoYXIg
-KnRlc3RfbmFtZSwgaW50IHBpZGZkKQogCiAJYyA9IGVwb2xsX3dhaXQoZXBvbGxfZmQsIGV2
-ZW50cywgTUFYX0VWRU5UUywgNTAwMCk7CiAJaWYgKGMgIT0gMSB8fCAhKGV2ZW50c1swXS5l
-dmVudHMgJiBFUE9MTElOKSkKLQkJa3NmdF9leGl0X2ZhaWxfbXNnKCIlcyB0ZXN0OiBVbmV4
-cGVjdGVkIGVwb2xsX3dhaXQgcmVzdWx0IChjPSVkLCBldmVudHM9JXgpICIsCisJCWtzZnRf
-ZXhpdF9mYWlsX21zZygiJXMgdGVzdDogVW5leHBlY3RlZCBlcG9sbF93YWl0IHJlc3VsdCAo
-Yz0lZCwgZXZlbnRzPSV4KSAiCiAJCQkJICAgIihlcnJubyAlZClcbiIsCiAJCQkJICAgdGVz
-dF9uYW1lLCBjLCBldmVudHNbMF0uZXZlbnRzLCBlcnJubyk7CiAKQEAgLTQzNSw2ICs0MzUs
-OCBAQCBzdGF0aWMgaW50IGNoaWxkX3BvbGxfZXhlY190ZXN0KHZvaWQgKmFyZ3MpCiAJICov
-CiAJd2hpbGUgKDEpCiAJCXNsZWVwKDEpOworCisJcmV0dXJuIDA7CiB9CiAKIHN0YXRpYyB2
-b2lkIHRlc3RfcGlkZmRfcG9sbF9leGVjKGludCB1c2Vfd2FpdHBpZCkKZGlmZiAtLWdpdCBh
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3dhaXQuYyBiL3Rvb2xzL3Rl
-c3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3BpZGZkX3dhaXQuYwppbmRleCAwNzBjMWM4NzZkZjEu
-LjBkY2I4MzY1ZGRjMyAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcGlk
-ZmQvcGlkZmRfd2FpdC5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3BpZGZkL3Bp
-ZGZkX3dhaXQuYwpAQCAtOTUsMjAgKzk1LDI4IEBAIFRFU1Qod2FpdF9zdGF0ZXMpCiAJCS5m
-bGFncyA9IENMT05FX1BJREZEIHwgQ0xPTkVfUEFSRU5UX1NFVFRJRCwKIAkJLmV4aXRfc2ln
-bmFsID0gU0lHQ0hMRCwKIAl9OworCWludCBwZmRbMl07CiAJcGlkX3QgcGlkOwogCXNpZ2lu
-Zm9fdCBpbmZvID0gewogCQkuc2lfc2lnbm8gPSAwLAogCX07CiAKKwlBU1NFUlRfRVEocGlw
-ZShwZmQpLCAwKTsKIAlwaWQgPSBzeXNfY2xvbmUzKCZhcmdzKTsKIAlBU1NFUlRfR0UocGlk
-LCAwKTsKIAogCWlmIChwaWQgPT0gMCkgeworCQljaGFyIGJ1ZlsyXTsKKworCQljbG9zZShw
-ZmRbMV0pOwogCQlraWxsKGdldHBpZCgpLCBTSUdTVE9QKTsKKwkJQVNTRVJUX0VRKHJlYWQo
-cGZkWzBdLCBidWYsIDEpLCAxKTsKKwkJY2xvc2UocGZkWzBdKTsKIAkJa2lsbChnZXRwaWQo
-KSwgU0lHU1RPUCk7CiAJCWV4aXQoRVhJVF9TVUNDRVNTKTsKIAl9CiAKKwljbG9zZShwZmRb
-MF0pOwogCUFTU0VSVF9FUShzeXNfd2FpdGlkKFBfUElERkQsIHBpZGZkLCAmaW5mbywgV1NU
-T1BQRUQsIE5VTEwpLCAwKTsKIAlBU1NFUlRfRVEoaW5mby5zaV9zaWdubywgU0lHQ0hMRCk7
-CiAJQVNTRVJUX0VRKGluZm8uc2lfY29kZSwgQ0xEX1NUT1BQRUQpOwpAQCAtMTE3LDYgKzEy
-NSw4IEBAIFRFU1Qod2FpdF9zdGF0ZXMpCiAJQVNTRVJUX0VRKHN5c19waWRmZF9zZW5kX3Np
-Z25hbChwaWRmZCwgU0lHQ09OVCwgTlVMTCwgMCksIDApOwogCiAJQVNTRVJUX0VRKHN5c193
-YWl0aWQoUF9QSURGRCwgcGlkZmQsICZpbmZvLCBXQ09OVElOVUVELCBOVUxMKSwgMCk7CisJ
-QVNTRVJUX0VRKHdyaXRlKHBmZFsxXSwgIkMiLCAxKSwgMSk7CisJY2xvc2UocGZkWzFdKTsK
-IAlBU1NFUlRfRVEoaW5mby5zaV9zaWdubywgU0lHQ0hMRCk7CiAJQVNTRVJUX0VRKGluZm8u
-c2lfY29kZSwgQ0xEX0NPTlRJTlVFRCk7CiAJQVNTRVJUX0VRKGluZm8uc2lfcGlkLCBwYXJl
-bnRfdGlkKTsKQEAgLTEzOCw3ICsxNDgsNyBAQCBURVNUKHdhaXRfc3RhdGVzKQogCiBURVNU
-KHdhaXRfbm9uYmxvY2spCiB7Ci0JaW50IHBpZGZkLCBzdGF0dXMgPSAwOworCWludCBwaWRm
-ZDsKIAl1bnNpZ25lZCBpbnQgZmxhZ3MgPSAwOwogCXBpZF90IHBhcmVudF90aWQgPSAtMTsK
-IAlzdHJ1Y3QgY2xvbmVfYXJncyBhcmdzID0gewo=
-
---------------dfbO8p2MzthdkvVctIQ258AK--
