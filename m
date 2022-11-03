@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95490617E98
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04193617EA4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiKCN7G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 09:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S231721AbiKCN7o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 09:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiKCN64 (ORCPT
+        with ESMTP id S231804AbiKCN7O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:58:56 -0400
+        Thu, 3 Nov 2022 09:59:14 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4469B140F2
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:57:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F47165B5
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667483874;
+        s=mimecast20190719; t=1667483879;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZLirfmVsMl7Z8L0J+XcE1Zsp+gCHNtOKzvKZLLJ8RdA=;
-        b=GYmun3fF0WOCUTTblZxpN+hX+38RSWMN/OTPBucV6NgBonqtj2Mp+ldWZ9mtwl5D/067tA
-        0rx6C7ciJPPOSJXQMVCc2yatOj9f8P/rq/wQiUWAm6K9dTMtey5leTDKDurywb5sSh4w6u
-        +FtE86Z8bdgBv4TBBUk6U2j1fZVbQBA=
+        bh=94fXNJlMtb+F/0JTvy69iWSeE6FRHdWRb8tmVfQpuZA=;
+        b=i9hvzahQMLZmjGFa7wSWGADb9VceZfIwDmpa+K8roTI8ZOzMXHRiKthE2J1jXg7WI1KCgk
+        yw3FyszEfJsIfLKjf5pnzaSlxs8L/80vD4qA7KZeaXeszVYpOmf69NZv4xhBjY4TE1OAE+
+        32ycO79YoG0CwGJAmNu6/r2PLPxLuz0=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-271-J74K2mJrOAGRjdR_58cgEA-1; Thu, 03 Nov 2022 09:57:50 -0400
-X-MC-Unique: J74K2mJrOAGRjdR_58cgEA-1
+ us-mta-573-hIm7tAVWNzu-RCY0-B8plw-1; Thu, 03 Nov 2022 09:57:53 -0400
+X-MC-Unique: hIm7tAVWNzu-RCY0-B8plw-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F6B33C0DDD0;
-        Thu,  3 Nov 2022 13:57:49 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB7E21C14345;
+        Thu,  3 Nov 2022 13:57:52 +0000 (UTC)
 Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C1F3040C2087;
-        Thu,  3 Nov 2022 13:57:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 76BD940C83AD;
+        Thu,  3 Nov 2022 13:57:49 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -56,9 +56,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Peter Xu <peterx@redhat.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
         linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH 2/9] KVM: x86: nSVM: harden svm_free_nested against freeing vmcb02 while still in use
-Date:   Thu,  3 Nov 2022 15:57:29 +0200
-Message-Id: <20221103135736.42295-3-mlevitsk@redhat.com>
+Subject: [PATCH 3/9] KVM: x86: add kvm_leave_nested
+Date:   Thu,  3 Nov 2022 15:57:30 +0200
+Message-Id: <20221103135736.42295-4-mlevitsk@redhat.com>
 In-Reply-To: <20221103135736.42295-1-mlevitsk@redhat.com>
 References: <20221103135736.42295-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -74,31 +74,70 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Make sure that KVM uses vmcb01 before freeing nested state, and warn if
-that is not the case.
-
-This is a minimal fix for CVE-2022-3344 making the kernel print a warning
-instead of a kernel panic.
+add kvm_leave_nested which wraps a call to nested_ops->leave_nested
+into a function.
 
 Cc: stable@vger.kernel.org
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/kvm/svm/nested.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/kvm/svm/nested.c | 3 ---
+ arch/x86/kvm/vmx/nested.c | 3 ---
+ arch/x86/kvm/x86.c        | 8 +++++++-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index b258d6988f5dde..b74da40c1fc40c 100644
+index b74da40c1fc40c..bcc4f6620f8aec 100644
 --- a/arch/x86/kvm/svm/nested.c
 +++ b/arch/x86/kvm/svm/nested.c
-@@ -1126,6 +1126,9 @@ void svm_free_nested(struct vcpu_svm *svm)
- 	if (!svm->nested.initialized)
- 		return;
+@@ -1147,9 +1147,6 @@ void svm_free_nested(struct vcpu_svm *svm)
+ 	svm->nested.initialized = false;
+ }
  
-+	if (WARN_ON_ONCE(svm->vmcb != svm->vmcb01.ptr))
-+		svm_switch_vmcb(svm, &svm->vmcb01);
+-/*
+- * Forcibly leave nested mode in order to be able to reset the VCPU later on.
+- */
+ void svm_leave_nested(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 61a2e551640a08..1ebe141a0a015f 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -6441,9 +6441,6 @@ static int vmx_get_nested_state(struct kvm_vcpu *vcpu,
+ 	return kvm_state.size;
+ }
+ 
+-/*
+- * Forcibly leave nested mode in order to be able to reset the VCPU later on.
+- */
+ void vmx_leave_nested(struct kvm_vcpu *vcpu)
+ {
+ 	if (is_guest_mode(vcpu)) {
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index cd9eb13e2ed7fc..316ab1d5317f92 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -627,6 +627,12 @@ static void kvm_queue_exception_vmexit(struct kvm_vcpu *vcpu, unsigned int vecto
+ 	ex->payload = payload;
+ }
+ 
++/* Forcibly leave the nested mode in cases like a vCPU reset */
++static void kvm_leave_nested(struct kvm_vcpu *vcpu)
++{
++	kvm_x86_ops.nested_ops->leave_nested(vcpu);
++}
 +
- 	svm_vcpu_free_msrpm(svm->nested.msrpm);
- 	svm->nested.msrpm = NULL;
+ static void kvm_multiple_exception(struct kvm_vcpu *vcpu,
+ 		unsigned nr, bool has_error, u32 error_code,
+ 	        bool has_payload, unsigned long payload, bool reinject)
+@@ -5193,7 +5199,7 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+ 	if (events->flags & KVM_VCPUEVENT_VALID_SMM) {
+ #ifdef CONFIG_KVM_SMM
+ 		if (!!(vcpu->arch.hflags & HF_SMM_MASK) != events->smi.smm) {
+-			kvm_x86_ops.nested_ops->leave_nested(vcpu);
++			kvm_leave_nested(vcpu);
+ 			kvm_smm_changed(vcpu, events->smi.smm);
+ 		}
  
 -- 
 2.34.3
