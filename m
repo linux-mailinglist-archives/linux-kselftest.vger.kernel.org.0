@@ -2,243 +2,242 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0334617630
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 06:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049FC6176C6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 07:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiKCFbX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 01:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S229887AbiKCGh7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 02:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKCFbW (ORCPT
+        with ESMTP id S229436AbiKCGh6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 01:31:22 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DE0BC2;
-        Wed,  2 Nov 2022 22:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667453481; x=1698989481;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=uLKfKb2vG9WeBo77d94cCUuf9HzF2ZIorvpt8M6u1sY=;
-  b=elE7/cM/BpcNdyHjh2TK6dfih3p+4X4E0CRzhXqpm771aAE50A3+n0y7
-   fHhoigOxVu1v7ealEekSCrMFz5ZH+JO7PTehTeJ1CnODEe/dlq+Dhzn0Z
-   RTjBTPhSf4XzMNDNa/11bQrkvjJjuELEETxCKhG9XYL40MX92F4oqVqzl
-   YvzUBpMJomAl0ZWXb0VB6HBLMWVyoa2yJrrNQ05ifpUjnEwgT4IP04RED
-   NEqCcoNTA+Z0H11iXibZjHIDq1jwZGoYEWtR+GYgbI9R8ZT1I9bxq6YbR
-   NHcuAT6LRepyEvA3kTEtVxx7j34/LK0ZaFdJzzGD9WaA6cci1GjI43gav
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="308309169"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="308309169"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 22:31:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="963804245"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="963804245"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Nov 2022 22:31:20 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 22:31:19 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 2 Nov 2022 22:31:19 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.43) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 2 Nov 2022 22:31:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FMZ5b+lm+9sBGmCYMUrYV8DyI/R98Wxoc8deF/gOjKooUmpq1wYiHCOuNVMU9jgvm2FE2uOoYABW2qpmj/pfyWjhaq0Tg+E8eh2/nxfUx2KHs6LA7EqVqFbiNsKvMvQWw4t3cMWtEaPmwD7glKQSH7JQ2B4ifjCUyo2TE6Qxk1aGah2VCqjZRyHAxmtuf49+s4RPQeOhoOfqPEG4GIzaDxwQxAJHkmb1SdzkXHWCW7qeBMvhXq2gGV4BqyMCEKbOuyJAmWV1rZQHkSseyfK5V52EkN5+Ic1r3wI9sA1MjnCkOrJdxHBkZw8UWPONwJjq1/IBqW25kFUn1/9HKjntqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0x7DYIMzJdTaH4kWmpb03ttwusognvDOusSCT/tu0cM=;
- b=e/7d9/GANT1dR4fRKU6yKwJtnp9EUSKlekAeBfbdiJzfDvOScYIK2eyolOH2XF3D6yZoBfqAB0kTpU6crt25aHD4GZ+QBnlwbKdeWLPSQD7AUFsyM1USIrE3aD0XWfotwg/aDFfNld8rHa8WJVZzDEtCkldlDbQ2670/r6w55dsrN/d1lYXwwkyx+mt8nzzEu4bI5CfBWUxrZJInk2AV9d+775PCf2SPuOojyZmZCfvJ99I4CfkAfU40SJGiJJ2Lt1/NBiqfyE2bgpkppFd+ISjuH8E1vWwUm/yskOInIb4w8FQSVk9wpRryOSD1buvDXRPwXHyIT6mCHOCZgfcLJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SA1PR11MB6821.namprd11.prod.outlook.com (2603:10b6:806:29d::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Thu, 3 Nov
- 2022 05:31:17 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::737e:211a:bb53:4cd7]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::737e:211a:bb53:4cd7%5]) with mapi id 15.20.5791.022; Thu, 3 Nov 2022
- 05:31:17 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>
-CC:     Alex Williamson <alex.williamson@redhat.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "Martins, Joao" <joao.m.martins@oracle.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Shameerali Kolothum Thodi" <shameerali.kolothum.thodi@huawei.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>
-Subject: RE: [PATCH v3 03/15] interval-tree: Add a utility to iterate over
- spans in an interval tree
-Thread-Topic: [PATCH v3 03/15] interval-tree: Add a utility to iterate over
- spans in an interval tree
-Thread-Index: AQHY6J1pV+jGP7pJvkiET+h0q4ynNq4suG4g
-Date:   Thu, 3 Nov 2022 05:31:17 +0000
-Message-ID: <BN9PR11MB527666424E77F8417DF1BF4C8C389@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <3-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
-In-Reply-To: <3-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SA1PR11MB6821:EE_
-x-ms-office365-filtering-correlation-id: eb20ab92-edfe-48f0-bd7e-08dabd5ca1bf
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9anwPCVEM6FJT1+cDMw1jMyTX+HF7u1btfXM/y01B9c3lZXv4ZkXQAr84Ny5lFBa0Qmz41K9z2K8r2UR/5mMPYkd0v7IaBwpJIS6wtidSj8CU4gbl0ccEJGvOE+xhZ2bc8bT5qnLfn754OhLFjPbtUpodZ72RseJej1/aka0OQChxufsCTkizfsuTYTBY0DUYgzqXqghnkD5Eo0wyPiAkdcyPIa7o75jClzIK8joWX+iYKvdudexiKKlitrIsge7tbREhOjkzTHp8ydf03kz2Z7fzAdCcwQviGjsMiHR4iCq7Ro64xbzmxKBgdtf+R6iswlWwKx3O2zTLzae3lZUDLGvbedqo3oxOeCghAn/I4+Zol0W7mhhUFvw+75ksqjI6i7Kmw7mBtOQA/CJHxKZof9m4U3kKJM2MsnkShvF0wrfIdE+luXwjqNyX2WivW9gv80dTxyt4UZlcANRgymmUV7DEJUFjGJ3HfHW+Ag8mcmP/pvZabx/V70OmnGY4dFjRiUSvF3A+d4VICKIH/ioDZOb/G0pJvosTyE3+T5pmaJ4XKfXKr20RLIJhRq5XcFNfc+qdPMz99VFytLMKpO2Tkv2MVa+yjPImOyFSRpN6P0hsPQDtZ1sBj1jY7y15VJ67qeD82J+ZpZw4e7BSOFZrVkjI5IKaaNt0ZdfUCXOH7hp5H7KI8RD/jdRNd5PjYE7JE7MM8gAJucfMHWXgLuyoFtqnYSzrIEgGBi62GEVSnnjAOT3AVhVr6SRFlUiKh4WS5ggOvWMQ0sMGrFaL+uPurvUCaNwRAdLoyEXYL8aum0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(346002)(136003)(376002)(39860400002)(451199015)(110136005)(316002)(54906003)(38100700002)(33656002)(38070700005)(2906002)(71200400001)(83380400001)(921005)(55016003)(478600001)(66946007)(7406005)(76116006)(5660300002)(41300700001)(8936002)(122000001)(66556008)(64756008)(66476007)(4326008)(8676002)(52536014)(66446008)(7416002)(186003)(9686003)(82960400001)(26005)(86362001)(7696005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?F7p1c0lnwQJgOPDCKHI9lHZ01FWNOTR7TwvYdCcvjDHlQ+keRlRGXJp4kJuo?=
- =?us-ascii?Q?KpM3rsW1isiM0lBXjKAdFR2VmwizX3PDZJnIzYWD0OxuRUtWMjRpNqiW1dzN?=
- =?us-ascii?Q?F8ZrPCj5pygqm06S0C79lXK+G+F7JVMdtY8VOOcusl2vK8y4y4pGmpQO6NbY?=
- =?us-ascii?Q?Kw/+Aaj/LAwTCBukqFjMaoIJa5F52+9cBE2BDSF3hgJu1UBMOUn/Hg+AhWRJ?=
- =?us-ascii?Q?+BE+wrww0cfDXpF0GsBYSkHIwmyMTND7OObTIZniAW2dTVGt1XzVbCEJcVU6?=
- =?us-ascii?Q?vRCy4afIdM2FKWwwO9jZZadCP1h5oPwJnfWFtdggu4bxpl2ufnffA98n0ZeF?=
- =?us-ascii?Q?/VApkYVEoHiX0h3ANi+VoM3eAXcqwzpqD+n1tIqLTjLfIl2j7zPVQyJh14nR?=
- =?us-ascii?Q?hLUYOf6QfDi9WRfMa3C+FhERwiYg3gPbcYKdMTKJne7zOYx4ACVRN7bxRR98?=
- =?us-ascii?Q?dX0OyNW1lUGThC/eo19KOgKUKBQdkdOhE/qL4LErr1OAqh7ebeDi3PtAPtwA?=
- =?us-ascii?Q?PK1I7X2xZwC49aYHJFEapdbPCxf0Dtg5IBdp4udWWNsfOolm01O2aHvEVyHP?=
- =?us-ascii?Q?DI2HS+hvnGsTehWre0VUiPw2GF2JvtOh9xNBOsXbzbfPv8c8KsO6oAZD70/9?=
- =?us-ascii?Q?GC76It3gpi0AkMZX6Nc9Plv4Ey22FI+hPijq1p9D9j5WpDQb8/joTmv2tsdH?=
- =?us-ascii?Q?gIl2VcAVhgJ0N+ACo6i+pbhf6CoA78gOUQ0gGdWapOw0gaNtcYsRw7Xv89Dy?=
- =?us-ascii?Q?+m3T53OZS1coaa9MYJ5F77+8wf/9Yw9Q80RJ6bcJhwx/++pvEJM5WVzBrLfn?=
- =?us-ascii?Q?vPufeYvjEDr2rRtJjWwysSXmcCXLkJU0HyBIX5/tp24MfGZbmbdeLToQRh12?=
- =?us-ascii?Q?JUl/bwRG6SzupjxmA6So7z4iBtDUh2KPvx/lsPpwynFT9RrqPaP7RT1E+CGa?=
- =?us-ascii?Q?rjrA6r7DVTZD5v6AvTcHuelW+umpxu2nPkLv7SPgBlLxKvr+xQD21IgCFvKx?=
- =?us-ascii?Q?HuEqt1Oe7z4sjb9GEkiFUVoiBgt9m4iQ45ea5BkU0I4+YYGSPtyt5wINRRZx?=
- =?us-ascii?Q?auc/uCs1wxSSQe87029gMRDGIMdNmfhQvuqMxl+DpDFZeV2uLm7Pzu8sWcnc?=
- =?us-ascii?Q?cL6OiUSx4sT3bNXGW6OSa3eFyiwxN92ut4htk5qF4c2dBOd6E88oiwaDDszs?=
- =?us-ascii?Q?yutHbqzJ7aIpEs7/10NFOiSeq8iQSR8OT6z663lxUfDDQy/WmuXousw7j9xL?=
- =?us-ascii?Q?ZlLa5WWi7rYFgP1jGDc6l943InZuB4OiNCbcYrqC8i3IwVBtFNTAD8iGd7Vo?=
- =?us-ascii?Q?emShvMykRFXKQjQf69G6q+ZzBRdYmjanFIL5WyDC3hq0jRNGDk7OZSxGMN9q?=
- =?us-ascii?Q?2ilKdvGZUE4kojwR3oTlg3qXXIsufs3yLFU6wQrRXhgpjetXUMNG3c4ODEFW?=
- =?us-ascii?Q?3M02BnKRdHZ/YA9fnv/NLS36XxvQlfcZCzj+i1UH5Kr5+F5fFFW1W5Pd1t7T?=
- =?us-ascii?Q?l2EUCkQiQEP1iNAu9Xomx/ay6qixC8cpalBoqk1aQYVJGJHc6KweENPOX7+m?=
- =?us-ascii?Q?cstovHI/JWywEe0bE/F4vlWox3Fke0/PQksHMxml?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 3 Nov 2022 02:37:58 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118341704C
+        for <linux-kselftest@vger.kernel.org>; Wed,  2 Nov 2022 23:37:58 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id 128so985595vsz.12
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Nov 2022 23:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AqubiIN/A48vKygy2hX58qFSMBIHK7nTJnhDeq9Cjgw=;
+        b=cblqQTCYfiSAwa0Uhh0kzlQT3/CA+8H0KBP8dMil4J3AqJ380No+dIHo4VQBEsDc0Z
+         UaL0I+dHgrDP1FhuzaAGKnlsmoxtxVcqh2C71jir+ZFlOIF5cGyhxOuAK+CxkMr0oxJb
+         Uxsb1Sz5e1OWeF1U+S3ZAnDtivGo09z5yP2zRY3HRdl8M+LaHAmUj24ld6+aQCDa/QvG
+         FqikBunqTMoJHsRrtMnBdSDo+gbdXHOoiOAfzQaIe+ZRVrY659BlLnvhS7JG5DWPMcwo
+         AlAQeXEYiLWAaLtiALenJvIQXONyCzJUIahG9+0TidT19+/oaG1qnz/DOlxCgqNQGaC9
+         wvYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AqubiIN/A48vKygy2hX58qFSMBIHK7nTJnhDeq9Cjgw=;
+        b=p/Yz+EYVr/uVI1q3W0gX+hXymaw6cwjdVfbNn7FfnFjYheO9W1JZPml9dip9U6isz3
+         xqmzm8q3drM8KhYC/EnjBfxCfcxq0Ea0B06LKM3ojQorr2PICcYYKuw/WqAS1jplRCYF
+         urftQ5jCYKel2nIeU0FepHJh4lMPSr4yqmPU8fHJb2902mbVt+nhHEwUbC5vBQnPhmGF
+         5Ny+OiGGYnvDgT6lGvR7dqeg0to94G0uplNHWkKnLgxInrqEfTpeCDlTmud5VuD3glA8
+         r0svGbZ4y3QTaVX9jDnCLx9O2hjoZ5gG8SbgKsHjOki7ulB3kf+DZVkdhKO0oBsVTCfh
+         jQ2g==
+X-Gm-Message-State: ACrzQf1ac82scwydPKZCzOIIlvwzgtDK6bvM/cyPjCa3IPeUt3Bj4Ko/
+        vairp19v2gaGGAgdaptfYfrXvE4Y2FfwafRhQb04jg==
+X-Google-Smtp-Source: AMsMyM5eUIcWB+JqmrEkjKB1XhyNcd/evxtRi4UrhRLeA2euVTiR/MaexJl9dBjsAGC9gnTGrMsjgZttwh0FGpM4Xgc=
+X-Received: by 2002:a67:b105:0:b0:3ac:39ae:806b with SMTP id
+ w5-20020a67b105000000b003ac39ae806bmr16258131vsl.38.1667457477001; Wed, 02
+ Nov 2022 23:37:57 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb20ab92-edfe-48f0-bd7e-08dabd5ca1bf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Nov 2022 05:31:17.4060
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fa9R8C1XB5Q+zby1eIAARxGuaETF9Hy99KLvG5woTbkZZw3X1ioZddZaugnu26s0DBFeBKIYvnjSdyXGZgWnhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6821
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221102164005.2516646-1-dlatypov@google.com>
+In-Reply-To: <20221102164005.2516646-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 3 Nov 2022 14:37:44 +0800
+Message-ID: <CABVgOSkPnJ122=4WSWR+3WLiHmGcJnk59pmmnix1GW=Mj8DtTA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kunit: tool: make TestCounts a dataclass
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000009cdeb905ec8b3208"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Wednesday, October 26, 2022 2:12 AM
-> +/*
-> + * This iterator travels over spans in an interval tree. It does not ret=
-urn
-> + * nodes but classifies each span as either a hole, where no nodes inter=
-sect,
-> or
-> + * a used, which is fully covered by nodes. Each iteration step toggles
-> between
-> + * hole and used until the entire range is covered. The returned spans
-> always
-> + * fully cover the requested range.
-> + *
-> + * The iterator is greedy, it always returns the largest hole or used po=
-ssible,
-> + * consolidating all consecutive nodes.
-> + *
-> + * Only is_hole, start_hole/used and last_hole/used are part of the exte=
-rnal
-> + * interface.
+--0000000000009cdeb905ec8b3208
+Content-Type: text/plain; charset="UTF-8"
 
-slightly better readability if moving this sentence into the structure as
-the break line
+On Thu, Nov 3, 2022 at 12:40 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Since we're using Python 3.7+, we can use dataclasses to tersen the
+> code.
+>
+> It also lets us create pre-populated TestCounts() objects and compare
+> them in our unit test. (Before, you could only create empty ones).
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-> +void interval_tree_span_iter_advance(struct interval_tree_span_iter *ite=
-r,
-> +				     struct rb_root_cached *itree,
-> +				     unsigned long new_index)
-> +{
-> +	if (iter->is_hole =3D=3D -1)
-> +		return;
-> +
-> +	iter->first_index =3D new_index;
-> +	if (new_index =3D=3D iter->last_index) {
-> +		iter->is_hole =3D -1;
-> +		return;
-> +	}
-> +
-> +	/* Rely on the union aliasing hole/used */
-> +	if (iter->start_hole <=3D new_index && new_index <=3D iter->last_hole) =
-{
+Looks good, thanks.
 
-"<=3D" to "<"
+Reviewed-by: David Gow <davidgow@google.com>
 
-> +		iter->start_hole =3D new_index;
-> +		return;
-> +	}
-> +	if (new_index =3D=3D iter->last_hole + 1)
-> +		interval_tree_span_iter_next(iter);
-> +	else
-> +		interval_tree_span_iter_first(iter, itree, new_index,
-> +					      iter->last_index);
-> +}
-> +EXPORT_SYMBOL_GPL(interval_tree_span_iter_advance);
-> +#endif
+Cheers,
+-- David
 
-Apart from those,
+>  tools/testing/kunit/kunit_parser.py    | 25 ++++++++-----------------
+>  tools/testing/kunit/kunit_tool_test.py |  4 +---
+>  2 files changed, 9 insertions(+), 20 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index 1ae873e3e341..f022966858f2 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -10,6 +10,7 @@
+>  # Author: Rae Moar <rmoar@google.com>
+>
+>  from __future__ import annotations
+> +from dataclasses import dataclass
+>  import re
+>  import sys
+>
+> @@ -67,27 +68,17 @@ class TestStatus(Enum):
+>         NO_TESTS = auto()
+>         FAILURE_TO_PARSE_TESTS = auto()
+>
+> +@dataclass
+>  class TestCounts:
+>         """
+>         Tracks the counts of statuses of all test cases and any errors within
+>         a Test.
+> -
+> -       Attributes:
+> -       passed : int - the number of tests that have passed
+> -       failed : int - the number of tests that have failed
+> -       crashed : int - the number of tests that have crashed
+> -       skipped : int - the number of tests that have skipped
+> -       errors : int - the number of errors in the test and subtests
+> -       """
+> -       def __init__(self):
+> -               """Creates TestCounts object with counts of all test
+> -               statuses and test errors set to 0.
+> -               """
+> -               self.passed = 0
+> -               self.failed = 0
+> -               self.crashed = 0
+> -               self.skipped = 0
+> -               self.errors = 0
+> +       """
+> +       passed: int = 0
+> +       failed: int = 0
+> +       crashed: int = 0
+> +       skipped: int = 0
+> +       errors: int = 0
+>
+>         def __str__(self) -> str:
+>                 """Returns the string representation of a TestCounts object."""
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index e2cd2cc2e98f..9fa4babb2506 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -179,9 +179,7 @@ class KUnitParserTest(unittest.TestCase):
+>                                 kunit_parser.extract_tap_lines(
+>                                 file.readlines()))
+>                 # A missing test plan is not an error.
+> -               self.assertEqual(0, result.counts.errors)
+> -               # All tests should be accounted for.
+> -               self.assertEqual(10, result.counts.total())
+> +               self.assertEqual(result.counts, kunit_parser.TestCounts(passed=10, errors=0))
+>                 self.assertEqual(
+>                         kunit_parser.TestStatus.SUCCESS,
+>                         result.status)
+>
+> base-commit: 5aaef24b5c6d4246b2cac1be949869fa36577737
+> --
+> 2.38.1.273.g43a17bfeac-goog
+>
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+--0000000000009cdeb905ec8b3208
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAb
+GQbpKvL/ligAl5OU5OI0zu6GHVu+98UUWMHKTgIg5TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMDMwNjM3NTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAl48S4t01sHCS3Q88/5VU
+eH5iLQSBJTcpEGcmXis5eFJh/hYzaighiC4obun/tE+XxWkIRndr/ptuxF4tvyGBHlqQ0/YUCKX9
+enMbRsYe169pPhtM0DHNsvMZlYP2GGqN52sbLEoRFAUMgPgHJ49F3BznOqwT3R0yGw/jAEDkKwHl
+dY/mz+tw//r7MeyLtCtqKA00NiJ32MX6QrV8P1Bx4beoEw+fEmWw1zN8Z2Z+AUGJB2dcogTL5AHV
+3uK4/5wrdmopzgCX4i26GqSTaOp5JKB3HWNlkH38RGaJCWnZyYmC2q46ylk4bSSw6wFxlFSK6kLz
+x9X5s80idirml9H79A==
+--0000000000009cdeb905ec8b3208--
