@@ -2,85 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFF36183E6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 17:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C73C618680
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 18:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiKCQOM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 12:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S231160AbiKCRqT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 13:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiKCQOK (ORCPT
+        with ESMTP id S231390AbiKCRqH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:14:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02DF1A06F;
-        Thu,  3 Nov 2022 09:14:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04A0661EE7;
-        Thu,  3 Nov 2022 16:14:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D08FBC433D6;
-        Thu,  3 Nov 2022 16:14:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667492045;
-        bh=DLXNl9+4z7DavzpTnZ1L5p06FytfjA+p8ymjbqGgiS4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DXcfYRg4u0MvTij8P2JTHEeWP0/91Tl0qN/7YDQqapLGO0WNc04x6Jkw7yWvqfaKb
-         3drBgTSEo/41veHAOOT8o42eT20vFgQ7nTtnMclIqNYScaQcgwhUHYRD+ixpnh2ias
-         ehJCwbepwh221nd+ZWppOUnA6uqEVsz3yw/qvKjTrVhgGf+kj92u9yh8pqh9Q23l8T
-         LRazn2RIbIgH+fIpf+EMvN6lmCV80niZTe9G+VD7RNmZts8PzEcBHTDP2IsNW6lMMA
-         lI6tG2Rvu4dh+r+T27x5WvCFEi9kKOd4+DbSojCZ9jwubhXwX5DxUYm/tXTK0qv1xv
-         gGh6ay7EWDvIA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Fix slab-out-of-bounds Write in dbgfs_rm_context_write
-Date:   Thu,  3 Nov 2022 16:14:03 +0000
-Message-Id: <20221103161403.115053-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221031182554.7882-1-sj@kernel.org>
-References: 
+        Thu, 3 Nov 2022 13:46:07 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5901AF22
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 10:46:06 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id y14so7286499ejd.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Nov 2022 10:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2vl8ggBQ4DSKIkQaxbrvGPJDtNwTTQXpx+tZPGGN8o=;
+        b=EvIvCAkWd7vySy5cybOo5dSXSJUaPIRJpDjtFYj0STk5LWyLct9eEPK12BRCKIM4My
+         hlj1AFu66Ep6lPBqlahaJCW60VORMqxez5xD42rPr1ctZtSaMN8uSMAZ0vtW9eTRptvg
+         xxxRIzJQA7M48Nakd+z8C85wbXZkjlB39cw4TQU3xealVdjmdXTbizLcmbOdbnMqTgEZ
+         TaqfBSiA17CVScCYMsl12JAAdoHjoRnCR088mCY8d7oTQxEkuv2W60H7s838DkbV8K2Q
+         S+E3um0kNwwvIYbAlAg88uVNQxqCCH+2neQniHsISDN0QsvmvBdgUxyvf0qFGQE0JenR
+         wSMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e2vl8ggBQ4DSKIkQaxbrvGPJDtNwTTQXpx+tZPGGN8o=;
+        b=e4x4dU2ioHEhAyogbkvykSW35FVqoKMUCeJtKbyxEJYroCQGKl9wrP/lkEq1iK5Ldc
+         m6Ly+AqMxWyDWLzTI4Lp7A5TCPpaXEMJfa6jmMcFj9wmq7/Dce/vPA8i1CufYIWvbk+/
+         1AtBqw3hx2EkcH62Bujd32LdGZNWHJG5clNnuw4UbduKbXvRqq1RwAtHmPj4D4MZxPW3
+         vjlwsnKLPjuxFK0gUPAGDWcMsdOqscqk/YCznC4Bce7UOhopOIfrB1vztztnPRsA01vE
+         Tw34Qx9ql7fJjLBFbP4wGhQg9/s4fwVKrEt2Y0dj8MZVmc+QrJJyCTpVfgcqb+oO6kgU
+         KapA==
+X-Gm-Message-State: ACrzQf3cAWnFVdQsMrzbaWxQD6A2uzytzCbtHArXHI6xihm0dFuF7qkL
+        RtCjbdR2SYfGuzu84OlSeTnPTr+q8QFm90cr/0cwcw==
+X-Google-Smtp-Source: AMsMyM5OdMT8h0r9sTXgL/pREiL0rU9mrqoPbLfTmrZFu/cEpJpgbnldnZzM/kekiYV9zZ7TUEYWUeDGduEIA++yJnk=
+X-Received: by 2002:a17:907:7d8f:b0:78e:2cba:560f with SMTP id
+ oz15-20020a1709077d8f00b0078e2cba560fmr30429617ejc.173.1667497565298; Thu, 03
+ Nov 2022 10:46:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221102164005.2516646-1-dlatypov@google.com> <20221102164005.2516646-2-dlatypov@google.com>
+ <CABVgOSki2WnA_JyYTwdzQJB+fJDPkFRWjmwW60vih+aEJ2QmLg@mail.gmail.com>
+In-Reply-To: <CABVgOSki2WnA_JyYTwdzQJB+fJDPkFRWjmwW60vih+aEJ2QmLg@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 3 Nov 2022 10:45:53 -0700
+Message-ID: <CAGS_qxpVvM825nxi2Vw3WcSAbbHJKPCk0Thx9LGgnz5FtPgxNQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] kunit: tool: unit tests all check parser errors,
+ standardize formatting a bit
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Andrew,
+On Wed, Nov 2, 2022 at 11:38 PM David Gow <davidgow@google.com> wrote:
+>
+> On Thu, Nov 3, 2022 at 12:40 AM 'Daniel Latypov' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+> >
+> > Let's verify that the parser isn't reporting any errors for valid
+> > inputs.
+> >
+> > This change also
+> > * does result.status checking on one line
+> > * makes sure we consistently do it outside of the `with` block
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> Looks good, thanks.
+>
+> Note that this patch does conflict with "kunit: tool: print summary of
+> failed tests if a few failed out of a lot":
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=f19dd011d8de6f0c1d20abea5158aa4f5d9cea44
+> It's only a context line issue, though.
+>
+> Reviewed-by: David Gow <davidgow@google.com>
 
+Oh huh, I rebased onto the kunit branch and it managed to merge cleanly.
+I guess `git am` is more picky than `git rebase`.
 
-May I ask you to merge this fix in your tree if you have no concern for this?
-I think it deserves stable@.
-
-
-Thanks,
-SJ
-
-On Mon, 31 Oct 2022 18:25:52 +0000 SeongJae Park <sj@kernel.org> wrote:
-
-> This patchset is for fixing (patch 1) the syzbot-reported
-> slab-out-of-bounds write in dbgfs_rm_context_write[1], and adding a
-> selftest for the bug (patch 2).
-> 
-> [1] https://lore.kernel.org/damon/000000000000ede3ac05ec4abf8e@google.com/
-> 
-> SeongJae Park (2):
->   mm/damon/dbgfs: check if rm_contexts input is for a real context
->   selftests/damon: test non-context inputs to rm_contexts file
-> 
->  mm/damon/dbgfs.c                              |  7 +++++++
->  tools/testing/selftests/damon/Makefile        |  1 +
->  .../damon/debugfs_rm_non_contexts.sh          | 19 +++++++++++++++++++
->  3 files changed, 27 insertions(+)
->  create mode 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
-> 
-> -- 
-> 2.25.1
+I'll send a v2 that's rebased to avoid issues applying them.
