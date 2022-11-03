@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36EA617E9C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62ADB617EA2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbiKCN7d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 09:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S231804AbiKCN7p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 09:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiKCN7J (ORCPT
+        with ESMTP id S231805AbiKCN7O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:59:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B6F15FD1
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:58:01 -0700 (PDT)
+        Thu, 3 Nov 2022 09:59:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3CE167E2
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667483880;
+        s=mimecast20190719; t=1667483885;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/YfhlfHGgnctluMl7Qrmit8OONQl7OJvXkn7jff4wDA=;
-        b=UvKj1ktmVfwaN34n/OaRCw7aqekRht9w2OEjgvgzDTZ2OIU+VoiclDvM13UHiyZs8sGrEn
-        Da71LZQNnA2qFId0tReLh9Z9TzpU2FTOT35h6NIm0ut2uUirg9kY2PEvlx92+4f/v3DUow
-        IXhHezt3j7ULXFJXaIJe5BVUykrfrXQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ZJCktf5q7jZ9/undR/aqzDAHm9J60Hmp1ceVzBBD+a0=;
+        b=d8Ku9R5NNYe54WWUHgUuEhBF7F81QUr0qrYeL6QVqsWpcJe2mmKVRGACyPN8GXIVo5dMHh
+        ayujmVAvwqq4931ibpsI9nnxrAvXF8vFgcVZ+rK6zKKvwQX9gaVw2DMm94yEUmTXUWYht6
+        /w6eYupn5OksKAGpf8PwCcLhUAduWMo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-kIsNtGYQNQSJL-Arnu4H7w-1; Thu, 03 Nov 2022 09:57:57 -0400
-X-MC-Unique: kIsNtGYQNQSJL-Arnu4H7w-1
+ us-mta-306-_DK-PyTPOtS6QuwQ90BdBQ-1; Thu, 03 Nov 2022 09:58:01 -0400
+X-MC-Unique: _DK-PyTPOtS6QuwQ90BdBQ-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FA198027F5;
-        Thu,  3 Nov 2022 13:57:56 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E92B3C0DDD0;
+        Thu,  3 Nov 2022 13:58:00 +0000 (UTC)
 Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2D89740C83AD;
-        Thu,  3 Nov 2022 13:57:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D832040C83AD;
+        Thu,  3 Nov 2022 13:57:56 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -55,10 +55,10 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         David Matlack <dmatlack@google.com>,
         Peter Xu <peterx@redhat.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH 4/9] KVM: x86: forcibly leave nested mode on vCPU reset
-Date:   Thu,  3 Nov 2022 15:57:31 +0200
-Message-Id: <20221103135736.42295-5-mlevitsk@redhat.com>
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 5/9] KVM: selftests: move idt_entry to header
+Date:   Thu,  3 Nov 2022 15:57:32 +0200
+Message-Id: <20221103135736.42295-6-mlevitsk@redhat.com>
 In-Reply-To: <20221103135736.42295-1-mlevitsk@redhat.com>
 References: <20221103135736.42295-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -74,52 +74,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While not obivous, kvm_vcpu_reset() leaves the nested mode by clearing
-'vcpu->arch.hflags' but it does so without all the required housekeeping.
+struct idt_entry will be used for a test which will break IDT on purpose.
 
-On SVM,	it is possible to have a vCPU reset while in guest mode because
-unlike VMX, on SVM, INIT's are not latched in SVM non root mode and in
-addition to that L1 doesn't have to intercept triple fault, which should
-also trigger L1's reset if happens in L2 while L1 didn't intercept it.
-
-If one of the above conditions happen, KVM will	continue to use vmcb02 while
-not having in the guest mode.
-
-Later the IA32_EFER will be cleared which will lead to freeing of the nested
-guest state which will (correctly) free the vmcb02, but since KVM still
-uses it (incorrectly) this will lead to a use after free and kernel crash.
-
-This issue is assigned CVE-2022-3344
-
-Cc: stable@vger.kernel.org
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/kvm/x86.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ .../selftests/kvm/include/x86_64/processor.h        | 13 +++++++++++++
+ tools/testing/selftests/kvm/lib/x86_64/processor.c  | 13 -------------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 316ab1d5317f92..3fd900504e683b 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11694,8 +11694,18 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
- 	WARN_ON_ONCE(!init_event &&
- 		     (old_cr0 || kvm_read_cr3(vcpu) || kvm_read_cr4(vcpu)));
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index e8ca0d8a6a7e0a..5da0c5e2a7afc4 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -748,6 +748,19 @@ struct ex_regs {
+ 	uint64_t rflags;
+ };
  
-+	/*
-+	 * SVM doesn't unconditionally VM-Exit on INIT and SHUTDOWN, thus it's
-+	 * possible to INIT the vCPU while L2 is active.  Force the vCPU back
-+	 * into L1 as EFER.SVME is cleared on INIT (along with all other EFER
-+	 * bits), i.e. virtualization is disabled.
-+	 */
-+	if (is_guest_mode(vcpu))
-+		kvm_leave_nested(vcpu);
++struct idt_entry {
++	uint16_t offset0;
++	uint16_t selector;
++	uint16_t ist : 3;
++	uint16_t : 5;
++	uint16_t type : 4;
++	uint16_t : 1;
++	uint16_t dpl : 2;
++	uint16_t p : 1;
++	uint16_t offset1;
++	uint32_t offset2; uint32_t reserved;
++};
 +
- 	kvm_lapic_reset(vcpu, init_event);
+ void vm_init_descriptor_tables(struct kvm_vm *vm);
+ void vcpu_init_descriptor_tables(struct kvm_vcpu *vcpu);
+ void vm_install_exception_handler(struct kvm_vm *vm, int vector,
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 39c4409ef56a6a..41c1c73c464d48 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -1074,19 +1074,6 @@ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+ 	}
+ }
  
-+	WARN_ON_ONCE(is_guest_mode(vcpu) || is_smm(vcpu));
- 	vcpu->arch.hflags = 0;
- 
- 	vcpu->arch.smi_pending = 0;
+-struct idt_entry {
+-	uint16_t offset0;
+-	uint16_t selector;
+-	uint16_t ist : 3;
+-	uint16_t : 5;
+-	uint16_t type : 4;
+-	uint16_t : 1;
+-	uint16_t dpl : 2;
+-	uint16_t p : 1;
+-	uint16_t offset1;
+-	uint32_t offset2; uint32_t reserved;
+-};
+-
+ static void set_idt_entry(struct kvm_vm *vm, int vector, unsigned long addr,
+ 			  int dpl, unsigned short selector)
+ {
 -- 
 2.34.3
 
