@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9E1617EA3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A328F617EA6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 14:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiKCN7q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 09:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S229611AbiKCN7s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 09:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiKCN7P (ORCPT
+        with ESMTP id S231639AbiKCN7U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:59:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4C2167ED
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:58:06 -0700 (PDT)
+        Thu, 3 Nov 2022 09:59:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3026715FC1
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 06:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667483885;
+        s=mimecast20190719; t=1667483897;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Wtyj4st2IPLZIWbkO/WxtNaf/mHZkAY+PB7RWK3OD5M=;
-        b=MuxFJR+KU1gqySrk8kueFN3k6OzecZ/7L/VkifTi8fuCP4m+hsK7moxsw4LFuRQ6k0C0k/
-        yJRSDlHq5Yp8G92H9sHPXWS+a591Lb0qi5eQbDVfaEsi70d/ERCEVS2cqmv2G5HiOx3p4F
-        KqnPvBzVgClAuV1H4qR43C7yXjXAcmo=
+        bh=PcvbZGqx/pbGysS7eWOgjCD7HbL3pDHBihn3geMPwgo=;
+        b=Q/S+Van2RO6RyeoB27Psn+MtSfKjXGHH4sQ7ee17jnUvVUXeto/c7hP/M++biSQ9dSP2Fu
+        SbrI7XsEbWXqUiJgZ7YZjDto+1lLohMLpY7UzJ92vy6RLAblG1/5OSGPVvBUlZJdhWEGLk
+        RieH2Zk9QMyM1zYK6+4gSu9eixuJbrE=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-340-XFwhDOxkPSmjBoMFEz27IQ-1; Thu, 03 Nov 2022 09:58:04 -0400
-X-MC-Unique: XFwhDOxkPSmjBoMFEz27IQ-1
+ us-mta-61-7RUDoIwgNuizMCmzPY9Xug-1; Thu, 03 Nov 2022 09:58:08 -0400
+X-MC-Unique: 7RUDoIwgNuizMCmzPY9Xug-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA5222A2AD79;
-        Thu,  3 Nov 2022 13:58:03 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5013B3C0DDD4;
+        Thu,  3 Nov 2022 13:58:07 +0000 (UTC)
 Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7813540C2140;
-        Thu,  3 Nov 2022 13:58:00 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E4AA40C2087;
+        Thu,  3 Nov 2022 13:58:03 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -56,9 +56,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Peter Xu <peterx@redhat.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 6/9] kvm: selftests: add svm nested shutdown test
-Date:   Thu,  3 Nov 2022 15:57:33 +0200
-Message-Id: <20221103135736.42295-7-mlevitsk@redhat.com>
+Subject: [PATCH 7/9] KVM: x86: allow L1 to not intercept triple fault
+Date:   Thu,  3 Nov 2022 15:57:34 +0200
+Message-Id: <20221103135736.42295-8-mlevitsk@redhat.com>
 In-Reply-To: <20221103135736.42295-1-mlevitsk@redhat.com>
 References: <20221103135736.42295-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -74,118 +74,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add test that tests that on SVM if L1 doesn't intercept SHUTDOWN,
-then L2 crashes L1 and doesn't crash L2
+This is SVM correctness fix - although a sane L1 would intercept
+SHUTDOWN event, it doesn't have to, so we have to honour this.
 
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- tools/testing/selftests/kvm/.gitignore        |  1 +
- tools/testing/selftests/kvm/Makefile          |  1 +
- .../kvm/x86_64/svm_nested_shutdown_test.c     | 71 +++++++++++++++++++
- 3 files changed, 73 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c
+ arch/x86/kvm/svm/nested.c |  6 ++++++
+ arch/x86/kvm/vmx/nested.c |  1 +
+ arch/x86/kvm/x86.c        | 11 ++++++-----
+ 3 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 2f0d705db9dba5..05d980fb083d17 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -41,6 +41,7 @@
- /x86_64/svm_vmcall_test
- /x86_64/svm_int_ctl_test
- /x86_64/svm_nested_soft_inject_test
-+/x86_64/svm_nested_shutdown_test
- /x86_64/sync_regs_test
- /x86_64/tsc_msrs_test
- /x86_64/tsc_scaling_sync
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 0172eb6cb6eee2..4a2caef2c9396f 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -101,6 +101,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/state_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
-+TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_shutdown_test
- TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_soft_inject_test
- TEST_GEN_PROGS_x86_64 += x86_64/tsc_scaling_sync
- TEST_GEN_PROGS_x86_64 += x86_64/sync_regs_test
-diff --git a/tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c b/tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c
-new file mode 100644
-index 00000000000000..3155edf81f5474
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * svm_nested_shutdown_test
-+ *
-+ * Copyright (C) 2022, Red Hat, Inc.
-+ *
-+ * Nested SVM testing: test that unintercepted shutdown in L2 doesn't crash the host
-+ */
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index bcc4f6620f8aec..3aa9184d1e4ed7 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -1092,6 +1092,12 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+ 
+ static void nested_svm_triple_fault(struct kvm_vcpu *vcpu)
+ {
++	struct vcpu_svm *svm = to_svm(vcpu);
 +
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
++	if (!vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_SHUTDOWN))
++		return;
 +
++	kvm_clear_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+ 	nested_svm_simple_vmexit(to_svm(vcpu), SVM_EXIT_SHUTDOWN);
+ }
+ 
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 1ebe141a0a015f..7924dea9367813 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -4855,6 +4855,7 @@ void nested_vmx_vmexit(struct kvm_vcpu *vcpu, u32 vm_exit_reason,
+ 
+ static void nested_vmx_triple_fault(struct kvm_vcpu *vcpu)
+ {
++	kvm_clear_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+ 	nested_vmx_vmexit(vcpu, EXIT_REASON_TRIPLE_FAULT, 0, 0);
+ }
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 3fd900504e683b..f0a0102a78f5c3 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9741,7 +9741,7 @@ static void update_cr8_intercept(struct kvm_vcpu *vcpu)
+ 
+ int kvm_check_nested_events(struct kvm_vcpu *vcpu)
+ {
+-	if (kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu)) {
++	if (kvm_test_request(KVM_REQ_TRIPLE_FAULT, vcpu)) {
+ 		kvm_x86_ops.nested_ops->triple_fault(vcpu);
+ 		return 1;
+ 	}
+@@ -10255,15 +10255,16 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 			r = 0;
+ 			goto out;
+ 		}
+-		if (kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu)) {
+-			if (is_guest_mode(vcpu)) {
++		if (kvm_test_request(KVM_REQ_TRIPLE_FAULT, vcpu)) {
++			if (is_guest_mode(vcpu))
+ 				kvm_x86_ops.nested_ops->triple_fault(vcpu);
+-			} else {
 +
-+static void l2_guest_code(struct svm_test_data *svm)
-+{
-+	__asm__ __volatile__("ud2");
-+}
-+
-+static void l1_guest_code(struct svm_test_data *svm, struct idt_entry * idt)
-+{
-+	#define L2_GUEST_STACK_SIZE 64
-+	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
-+	struct vmcb *vmcb = svm->vmcb;
-+
-+	generic_svm_setup(svm, l2_guest_code,
-+			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
-+
-+	vmcb->control.intercept &= ~(BIT(INTERCEPT_SHUTDOWN));
-+
-+	idt[6].p   = 0; // #UD is intercepted but its injection will cause #NP
-+	idt[11].p  = 0; // #NP is not intercepted and will cause another #NP will be be converted to #DF
-+	idt[8].p   = 0; // #DF will cause #NP which will cause SHUTDOWN
-+
-+	run_guest(vmcb, svm->vmcb_gpa);
-+
-+	/* should not reach here */
-+	GUEST_ASSERT(0);
-+}
-+
-+void test_run(bool emulated_shutdown)
-+{
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_run *run;
-+	vm_vaddr_t svm_gva;
-+	struct kvm_vm *vm;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
-+	vm_init_descriptor_tables(vm);
-+	vcpu_init_descriptor_tables(vcpu);
-+
-+	vcpu_alloc_svm(vm, &svm_gva);
-+
-+	vcpu_args_set(vcpu, 2, svm_gva, vm->idt);
-+	run = vcpu->run;
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_SHUTDOWN,
-+		    "Got exit_reason other than KVM_EXIT_SHUTDOWN: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+
-+	kvm_vm_free(vm);
-+}
++			if (kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu)) {
+ 				vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
+ 				vcpu->mmio_needed = 0;
+ 				r = 0;
+-				goto out;
+ 			}
++			goto out;
+ 		}
+ 		if (kvm_check_request(KVM_REQ_APF_HALT, vcpu)) {
+ 			/* Page is swapped out. Do synthetic halt */
 -- 
 2.34.3
 
