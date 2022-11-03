@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D346183A4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 17:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0786183A1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Nov 2022 17:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiKCQCi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Nov 2022 12:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
+        id S231784AbiKCQCh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Nov 2022 12:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiKCQCK (ORCPT
+        with ESMTP id S231731AbiKCQCN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:02:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D191AD8F
-        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 08:58:49 -0700 (PDT)
+        Thu, 3 Nov 2022 12:02:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498E41B7A7
+        for <linux-kselftest@vger.kernel.org>; Thu,  3 Nov 2022 08:58:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667491129;
+        s=mimecast20190719; t=1667491127;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=btyVhW39UVYEJW/pDazYy1wqNO56md1A7gDOFm+2V1o=;
-        b=gnTtH7Mui/lU467STv7YWlyOah/4WZZizvVxii3GqFFlcOxI4iri3HnfrxoTchhw8IOCYD
-        G9CpBNZyLiriNeOmFUxKQ1zqEodv/K+67gticntbAuDRRo2xI0gJLuC67UQD5WNIozyZb4
-        N60uVleJz4QfHaq6jaztRiOFckXokfw=
+        bh=35vI4iNIZI7SVC8N/h2i/xxhLm+SVmqisQHlXI8u33A=;
+        b=EF6D3n7XEgoIr/XiGUn/a6CeoZFmid2PTxeULCJMN1lZzR6KchIITa2QY+8LZeqFXVmRwm
+        2TWEdbrr05daVFsime23kgEZQcKNlHDzq1EGwWo1ClQuwFawaQ3HeO9L7fb8jo05dERi5Y
+        ax7pkWrAcvaqopqDkiM9wU3O+Z+Vyyk=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-pveXxEmhNny-45U7jw9n3w-1; Thu, 03 Nov 2022 11:58:44 -0400
-X-MC-Unique: pveXxEmhNny-45U7jw9n3w-1
+ us-mta-377-APgFDwdSM_u_ytZbRaf-ZA-1; Thu, 03 Nov 2022 11:58:46 -0400
+X-MC-Unique: APgFDwdSM_u_ytZbRaf-ZA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A7D032823802;
-        Thu,  3 Nov 2022 15:58:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA3652823803;
+        Thu,  3 Nov 2022 15:58:45 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.98])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 08A5D4A9254;
-        Thu,  3 Nov 2022 15:58:41 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E493A4A9254;
+        Thu,  3 Nov 2022 15:58:43 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -47,17 +47,18 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH hid v12 13/15] samples/hid: add new hid BPF example
-Date:   Thu,  3 Nov 2022 16:57:54 +0100
-Message-Id: <20221103155756.687789-14-benjamin.tissoires@redhat.com>
+Subject: [PATCH hid v12 14/15] samples/hid: add Surface Dial example
+Date:   Thu,  3 Nov 2022 16:57:55 +0100
+Message-Id: <20221103155756.687789-15-benjamin.tissoires@redhat.com>
 In-Reply-To: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
 References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +66,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Everything should be available in the selftest part of the tree, but
-providing an example without uhid and hidraw will be more easy to
-follow for users.
-
-This example will probably ever only work on the Etekcity Scroll 6E
-because we need to adapt the various raw values to the actual device.
-
-On that device, the X and Y axis will be swapped and inverted, and on
-any other device, chances are high that the device will not work until
-Ctrl-C is hit.
-
-The Makefiles are taken from samples/bpf to not reinvent the wheel and
-to force using in-kernel libbpf and bpftool.
+Add a more complete HID-BPF example.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
 changes in v12:
-- have a shared hid_bpf_attach.bpf.c program with its own header
-- have a header with all used kfuncs
+- use the shared hid_bpf_attach.bpf.c program
 
 changes in v11:
-- move the samples to samples/hid to not pollute bpf
+- use samples/hid instead of samples/bpf
 
 no changes in v10
 
 changes in v9:
-- amended the usage part
+- extend the usage section
+- add sleep while waiting
 - changed the title of the commit
 
 no changes in v8
@@ -101,406 +90,90 @@ no changes in v8
 changes in v7:
 - remove unnecessary __must_check definition
 
-changes in v6:
-- clean up code by removing old comments
+new in v6
 
-changes in v5:
-- bring back same features than v3, with the new API
-
-changes in v4:
-- dropped the not-yet-implemented rdesc_fixup
-- use the new API
-
-changes in v3:
-- use the new hid_get_data API
-- add a comment for the report descriptor fixup to explain what is done
-
-changes in v2:
-- split the series by bpf/libbpf/hid/selftests and samples
+fix sample hid_surface_dial
 ---
- MAINTAINERS                      |   1 +
- samples/hid/.gitignore           |   7 +
- samples/hid/Makefile             | 246 +++++++++++++++++++++++++++++++
- samples/hid/Makefile.target      |  75 ++++++++++
- samples/hid/hid_bpf_attach.bpf.c |  18 +++
- samples/hid/hid_bpf_attach.h     |  14 ++
- samples/hid/hid_bpf_helpers.h    |  19 +++
- samples/hid/hid_mouse.bpf.c      | 112 ++++++++++++++
- samples/hid/hid_mouse.c          | 155 +++++++++++++++++++
- 9 files changed, 647 insertions(+)
- create mode 100644 samples/hid/.gitignore
- create mode 100644 samples/hid/Makefile
- create mode 100644 samples/hid/Makefile.target
- create mode 100644 samples/hid/hid_bpf_attach.bpf.c
- create mode 100644 samples/hid/hid_bpf_attach.h
- create mode 100644 samples/hid/hid_bpf_helpers.h
- create mode 100644 samples/hid/hid_mouse.bpf.c
- create mode 100644 samples/hid/hid_mouse.c
+ samples/hid/.gitignore             |   1 +
+ samples/hid/Makefile               |   6 +-
+ samples/hid/hid_bpf_helpers.h      |   2 +
+ samples/hid/hid_surface_dial.bpf.c | 134 +++++++++++++++++
+ samples/hid/hid_surface_dial.c     | 226 +++++++++++++++++++++++++++++
+ 5 files changed, 368 insertions(+), 1 deletion(-)
+ create mode 100644 samples/hid/hid_surface_dial.bpf.c
+ create mode 100644 samples/hid/hid_surface_dial.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 514e05ddac18..b3e16057834a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9097,6 +9097,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
- F:	drivers/hid/
- F:	include/linux/hid*
- F:	include/uapi/linux/hid*
-+F:	samples/hid/
- F:	tools/testing/selftests/hid/
- 
- HID LOGITECH DRIVERS
 diff --git a/samples/hid/.gitignore b/samples/hid/.gitignore
-new file mode 100644
-index 000000000000..8cb45592e29a
---- /dev/null
+index 8cb45592e29a..3ea0fed3bbad 100644
+--- a/samples/hid/.gitignore
 +++ b/samples/hid/.gitignore
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+hid_mouse
-+*.out
-+*.skel.h
-+/vmlinux.h
-+/bpftool/
-+/libbpf/
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ hid_mouse
++hid_surface_dial
+ *.out
+ *.skel.h
+ /vmlinux.h
 diff --git a/samples/hid/Makefile b/samples/hid/Makefile
-new file mode 100644
-index 000000000000..8fe6ccfc5f29
---- /dev/null
+index 8fe6ccfc5f29..026288280a03 100644
+--- a/samples/hid/Makefile
 +++ b/samples/hid/Makefile
-@@ -0,0 +1,246 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+HID_SAMPLES_PATH ?= $(abspath $(srctree)/$(src))
-+TOOLS_PATH := $(HID_SAMPLES_PATH)/../../tools
-+
-+pound := \#
-+
-+# List of programs to build
-+tprogs-y += hid_mouse
-+
-+# Libbpf dependencies
-+LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
-+LIBBPF_OUTPUT = $(abspath $(HID_SAMPLES_PATH))/libbpf
-+LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
-+LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
-+LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
-+
-+EXTRA_HEADERS := hid_bpf_attach.h
-+EXTRA_BPF_HEADERS := hid_bpf_helpers.h
-+
-+hid_mouse-objs := hid_mouse.o
-+
-+# Tell kbuild to always build the programs
-+always-y := $(tprogs-y)
-+
-+ifeq ($(ARCH), arm)
-+# Strip all except -D__LINUX_ARM_ARCH__ option needed to handle linux
-+# headers when arm instruction set identification is requested.
-+ARM_ARCH_SELECTOR := $(filter -D__LINUX_ARM_ARCH__%, $(KBUILD_CFLAGS))
-+BPF_EXTRA_CFLAGS := $(ARM_ARCH_SELECTOR)
-+TPROGS_CFLAGS += $(ARM_ARCH_SELECTOR)
-+endif
-+
-+ifeq ($(ARCH), mips)
-+TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
-+ifdef CONFIG_MACH_LOONGSON64
-+BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-loongson64
-+BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-generic
-+endif
-+endif
-+
-+TPROGS_CFLAGS += -Wall -O2
-+TPROGS_CFLAGS += -Wmissing-prototypes
-+TPROGS_CFLAGS += -Wstrict-prototypes
-+
-+TPROGS_CFLAGS += -I$(objtree)/usr/include
-+TPROGS_CFLAGS += -I$(LIBBPF_INCLUDE)
-+TPROGS_CFLAGS += -I$(srctree)/tools/include
-+
-+ifdef SYSROOT
-+TPROGS_CFLAGS += --sysroot=$(SYSROOT)
-+TPROGS_LDFLAGS := -L$(SYSROOT)/usr/lib
-+endif
-+
-+TPROGS_LDLIBS			+= $(LIBBPF) -lelf -lz
-+
-+# Allows pointing LLC/CLANG to a LLVM backend with bpf support, redefine on cmdline:
-+# make M=samples/bpf LLC=~/git/llvm-project/llvm/build/bin/llc CLANG=~/git/llvm-project/llvm/build/bin/clang
-+LLC ?= llc
-+CLANG ?= clang
-+OPT ?= opt
-+LLVM_DIS ?= llvm-dis
-+LLVM_OBJCOPY ?= llvm-objcopy
-+LLVM_READELF ?= llvm-readelf
-+BTF_PAHOLE ?= pahole
-+
-+# Detect that we're cross compiling and use the cross compiler
-+ifdef CROSS_COMPILE
-+CLANG_ARCH_ARGS = --target=$(notdir $(CROSS_COMPILE:%-=%))
-+endif
-+
-+# Don't evaluate probes and warnings if we need to run make recursively
-+ifneq ($(src),)
-+HDR_PROBE := $(shell printf "$(pound)include <linux/types.h>\n struct list_head { int a; }; int main() { return 0; }" | \
-+	$(CC) $(TPROGS_CFLAGS) $(TPROGS_LDFLAGS) -x c - \
-+	-o /dev/null 2>/dev/null && echo okay)
-+
-+ifeq ($(HDR_PROBE),)
-+$(warning WARNING: Detected possible issues with include path.)
-+$(warning WARNING: Please install kernel headers locally (make headers_install).)
-+endif
-+
-+BTF_LLC_PROBE := $(shell $(LLC) -march=bpf -mattr=help 2>&1 | grep dwarfris)
-+BTF_PAHOLE_PROBE := $(shell $(BTF_PAHOLE) --help 2>&1 | grep BTF)
-+BTF_OBJCOPY_PROBE := $(shell $(LLVM_OBJCOPY) --help 2>&1 | grep -i 'usage.*llvm')
-+BTF_LLVM_PROBE := $(shell echo "int main() { return 0; }" | \
-+			  $(CLANG) -target bpf -O2 -g -c -x c - -o ./llvm_btf_verify.o; \
-+			  $(LLVM_READELF) -S ./llvm_btf_verify.o | grep BTF; \
-+			  /bin/rm -f ./llvm_btf_verify.o)
-+
-+BPF_EXTRA_CFLAGS += -fno-stack-protector
-+ifneq ($(BTF_LLVM_PROBE),)
-+	BPF_EXTRA_CFLAGS += -g
-+else
-+ifneq ($(and $(BTF_LLC_PROBE),$(BTF_PAHOLE_PROBE),$(BTF_OBJCOPY_PROBE)),)
-+	BPF_EXTRA_CFLAGS += -g
-+	LLC_FLAGS += -mattr=dwarfris
-+	DWARF2BTF = y
-+endif
-+endif
-+endif
-+
-+# Trick to allow make to be run from this directory
-+all:
-+	$(MAKE) -C ../../ M=$(CURDIR) HID_SAMPLES_PATH=$(CURDIR)
-+
-+clean:
-+	$(MAKE) -C ../../ M=$(CURDIR) clean
-+	@find $(CURDIR) -type f -name '*~' -delete
-+	@$(RM) -r $(CURDIR)/libbpf $(CURDIR)/bpftool
-+
-+$(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUTPUT)
-+# Fix up variables inherited from Kbuild that tools/ build system won't like
-+	$(MAKE) -C $(LIBBPF_SRC) RM='rm -rf' EXTRA_CFLAGS="$(TPROGS_CFLAGS)" \
-+		LDFLAGS=$(TPROGS_LDFLAGS) srctree=$(HID_SAMPLES_PATH)/../../ \
-+		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= \
-+		$@ install_headers
-+
-+BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
-+BPFTOOL_OUTPUT := $(abspath $(HID_SAMPLES_PATH))/bpftool
-+BPFTOOL := $(BPFTOOL_OUTPUT)/bootstrap/bpftool
-+$(BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
-+	$(MAKE) -C $(BPFTOOLDIR) srctree=$(HID_SAMPLES_PATH)/../../ 		\
-+		OUTPUT=$(BPFTOOL_OUTPUT)/ bootstrap
-+
-+$(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
-+	$(call msg,MKDIR,$@)
-+	$(Q)mkdir -p $@
-+
-+FORCE:
-+
-+
-+# Verify LLVM compiler tools are available and bpf target is supported by llc
-+.PHONY: verify_cmds verify_target_bpf $(CLANG) $(LLC)
-+
-+verify_cmds: $(CLANG) $(LLC)
-+	@for TOOL in $^ ; do \
-+		if ! (which -- "$${TOOL}" > /dev/null 2>&1); then \
-+			echo "*** ERROR: Cannot find LLVM tool $${TOOL}" ;\
-+			exit 1; \
-+		else true; fi; \
-+	done
-+
-+verify_target_bpf: verify_cmds
-+	@if ! (${LLC} -march=bpf -mattr=help > /dev/null 2>&1); then \
-+		echo "*** ERROR: LLVM (${LLC}) does not support 'bpf' target" ;\
-+		echo "   NOTICE: LLVM version >= 3.7.1 required" ;\
-+		exit 2; \
-+	else true; fi
-+
-+$(HID_SAMPLES_PATH)/*.c: verify_target_bpf $(LIBBPF)
-+$(src)/*.c: verify_target_bpf $(LIBBPF)
-+
-+libbpf_hdrs: $(LIBBPF)
-+
-+.PHONY: libbpf_hdrs
-+
-+$(obj)/hid_mouse.o: $(obj)/hid_mouse.skel.h
-+
-+-include $(HID_SAMPLES_PATH)/Makefile.target
-+
-+VMLINUX_BTF_PATHS ?= $(abspath $(if $(O),$(O)/vmlinux))				\
-+		     $(abspath $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux))	\
-+		     $(abspath ./vmlinux)
-+VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-+
-+$(obj)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
-+ifeq ($(VMLINUX_H),)
-+ifeq ($(VMLINUX_BTF),)
-+	$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)",\
-+		build the kernel or set VMLINUX_BTF or VMLINUX_H variable)
-+endif
-+	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-+else
-+	$(Q)cp "$(VMLINUX_H)" $@
-+endif
-+
-+clean-files += vmlinux.h
-+
-+# Get Clang's default includes on this system, as opposed to those seen by
-+# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-+#
-+# Use '-idirafter': Don't interfere with include mechanics except where the
-+# build would have failed anyways.
-+define get_sys_includes
-+$(shell $(1) -v -E - </dev/null 2>&1 \
-+        | sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-+$(shell $(1) -dM -E - </dev/null | grep '#define __riscv_xlen ' | sed 's/#define /-D/' | sed 's/ /=/')
-+endef
-+
-+CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
-+
-+EXTRA_BPF_HEADERS_SRC := $(addprefix $(src)/,$(EXTRA_BPF_HEADERS))
-+
-+$(obj)/%.bpf.o: $(src)/%.bpf.c $(EXTRA_BPF_HEADERS_SRC) $(obj)/vmlinux.h
-+	@echo "  CLANG-BPF " $@
-+	$(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
-+		-Wno-compare-distinct-pointer-types -I$(srctree)/include \
-+		-I$(srctree)/samples/bpf -I$(srctree)/tools/include \
-+		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
-+		-c $(filter %.bpf.c,$^) -o $@
-+
-+LINKED_SKELS := hid_mouse.skel.h
-+clean-files += $(LINKED_SKELS)
-+
-+hid_mouse.skel.h-deps := hid_mouse.bpf.o hid_bpf_attach.bpf.o
-+
-+LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
-+
-+BPF_SRCS_LINKED := $(notdir $(wildcard $(src)/*.bpf.c))
-+BPF_OBJS_LINKED := $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(BPF_SRCS_LINKED))
-+BPF_SKELS_LINKED := $(addprefix $(obj)/,$(LINKED_SKELS))
-+
-+$(BPF_SKELS_LINKED): $(BPF_OBJS_LINKED) $(BPFTOOL)
-+	@echo "  BPF GEN-OBJ " $(@:.skel.h=)
-+	$(Q)$(BPFTOOL) gen object $(@:.skel.h=.lbpf.o) $(addprefix $(obj)/,$($(@F)-deps))
-+	@echo "  BPF GEN-SKEL" $(@:.skel.h=)
-+	$(Q)$(BPFTOOL) gen skeleton $(@:.skel.h=.lbpf.o) name $(notdir $(@:.skel.h=)) > $@
-+
-+# asm/sysreg.h - inline assembly used by it is incompatible with llvm.
-+# But, there is no easy way to fix it, so just exclude it since it is
-+# useless for BPF samples.
-+# below we use long chain of commands, clang | opt | llvm-dis | llc,
-+# to generate final object file. 'clang' compiles the source into IR
-+# with native target, e.g., x64, arm64, etc. 'opt' does bpf CORE IR builtin
-+# processing (llvm12) and IR optimizations. 'llvm-dis' converts
-+# 'opt' output to IR, and finally 'llc' generates bpf byte code.
-+$(obj)/%.o: $(src)/%.c
-+	@echo "  CLANG-bpf " $@
-+	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
-+		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
-+		-I$(LIBBPF_INCLUDE) \
-+		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
-+		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
-+		-Wno-gnu-variable-sized-type-not-at-end \
-+		-Wno-address-of-packed-member -Wno-tautological-compare \
-+		-Wno-unknown-warning-option $(CLANG_ARCH_ARGS) \
-+		-fno-asynchronous-unwind-tables \
-+		-I$(srctree)/samples/hid/ \
-+		-O2 -emit-llvm -Xclang -disable-llvm-passes -c $< -o - | \
-+		$(OPT) -O2 -mtriple=bpf-pc-linux | $(LLVM_DIS) | \
-+		$(LLC) -march=bpf $(LLC_FLAGS) -filetype=obj -o $@
-+ifeq ($(DWARF2BTF),y)
-+	$(BTF_PAHOLE) -J $@
-+endif
-diff --git a/samples/hid/Makefile.target b/samples/hid/Makefile.target
+@@ -7,6 +7,7 @@ pound := \#
+ 
+ # List of programs to build
+ tprogs-y += hid_mouse
++tprogs-y += hid_surface_dial
+ 
+ # Libbpf dependencies
+ LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
+@@ -19,6 +20,7 @@ EXTRA_HEADERS := hid_bpf_attach.h
+ EXTRA_BPF_HEADERS := hid_bpf_helpers.h
+ 
+ hid_mouse-objs := hid_mouse.o
++hid_surface_dial-objs := hid_surface_dial.o
+ 
+ # Tell kbuild to always build the programs
+ always-y := $(tprogs-y)
+@@ -156,6 +158,7 @@ libbpf_hdrs: $(LIBBPF)
+ .PHONY: libbpf_hdrs
+ 
+ $(obj)/hid_mouse.o: $(obj)/hid_mouse.skel.h
++$(obj)/hid_surface_dial.o: $(obj)/hid_surface_dial.skel.h
+ 
+ -include $(HID_SAMPLES_PATH)/Makefile.target
+ 
+@@ -201,10 +204,11 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(EXTRA_BPF_HEADERS_SRC) $(obj)/vmlinux.h
+ 		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
+ 		-c $(filter %.bpf.c,$^) -o $@
+ 
+-LINKED_SKELS := hid_mouse.skel.h
++LINKED_SKELS := hid_mouse.skel.h hid_surface_dial.skel.h
+ clean-files += $(LINKED_SKELS)
+ 
+ hid_mouse.skel.h-deps := hid_mouse.bpf.o hid_bpf_attach.bpf.o
++hid_surface_dial.skel.h-deps := hid_surface_dial.bpf.o hid_bpf_attach.bpf.o
+ 
+ LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
+ 
+diff --git a/samples/hid/hid_bpf_helpers.h b/samples/hid/hid_bpf_helpers.h
+index c555aeef5e37..4fff31dbe0e7 100644
+--- a/samples/hid/hid_bpf_helpers.h
++++ b/samples/hid/hid_bpf_helpers.h
+@@ -10,6 +10,8 @@ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+ 			      unsigned int offset,
+ 			      const size_t __sz) __ksym;
+ extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
++extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
++extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
+ extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
+ 			      __u8 *data,
+ 			      size_t buf__sz,
+diff --git a/samples/hid/hid_surface_dial.bpf.c b/samples/hid/hid_surface_dial.bpf.c
 new file mode 100644
-index 000000000000..7621f55e2947
+index 000000000000..1f80478c0918
 --- /dev/null
-+++ b/samples/hid/Makefile.target
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# ==========================================================================
-+# Building binaries on the host system
-+# Binaries are not used during the compilation of the kernel, and intended
-+# to be build for target board, target board can be host of course. Added to
-+# build binaries to run not on host system.
-+#
-+# Sample syntax
-+# tprogs-y := xsk_example
-+# Will compile xsk_example.c and create an executable named xsk_example
-+#
-+# tprogs-y    := xdpsock
-+# xdpsock-objs := xdpsock_1.o xdpsock_2.o
-+# Will compile xdpsock_1.c and xdpsock_2.c, and then link the executable
-+# xdpsock, based on xdpsock_1.o and xdpsock_2.o
-+#
-+# Derived from scripts/Makefile.host
-+#
-+__tprogs := $(sort $(tprogs-y))
-+
-+# C code
-+# Executables compiled from a single .c file
-+tprog-csingle	:= $(foreach m,$(__tprogs), \
-+			$(if $($(m)-objs),,$(m)))
-+
-+# C executables linked based on several .o files
-+tprog-cmulti	:= $(foreach m,$(__tprogs),\
-+			$(if $($(m)-objs),$(m)))
-+
-+# Object (.o) files compiled from .c files
-+tprog-cobjs	:= $(sort $(foreach m,$(__tprogs),$($(m)-objs)))
-+
-+tprog-csingle	:= $(addprefix $(obj)/,$(tprog-csingle))
-+tprog-cmulti	:= $(addprefix $(obj)/,$(tprog-cmulti))
-+tprog-cobjs	:= $(addprefix $(obj)/,$(tprog-cobjs))
-+
-+#####
-+# Handle options to gcc. Support building with separate output directory
-+
-+_tprogc_flags   = $(TPROGS_CFLAGS) \
-+                 $(TPROGCFLAGS_$(basetarget).o)
-+
-+# $(objtree)/$(obj) for including generated headers from checkin source files
-+ifeq ($(KBUILD_EXTMOD),)
-+ifdef building_out_of_srctree
-+_tprogc_flags   += -I $(objtree)/$(obj)
-+endif
-+endif
-+
-+tprogc_flags    = -Wp,-MD,$(depfile) $(_tprogc_flags)
-+
-+# Create executable from a single .c file
-+# tprog-csingle -> Executable
-+quiet_cmd_tprog-csingle 	= CC  $@
-+      cmd_tprog-csingle	= $(CC) $(tprogc_flags) $(TPROGS_LDFLAGS) -o $@ $< \
-+		$(TPROGS_LDLIBS) $(TPROGLDLIBS_$(@F))
-+$(tprog-csingle): $(obj)/%: $(src)/%.c FORCE
-+	$(call if_changed_dep,tprog-csingle)
-+
-+# Link an executable based on list of .o files, all plain c
-+# tprog-cmulti -> executable
-+quiet_cmd_tprog-cmulti	= LD  $@
-+      cmd_tprog-cmulti	= $(CC) $(tprogc_flags) $(TPROGS_LDFLAGS) -o $@ \
-+			  $(addprefix $(obj)/,$($(@F)-objs)) \
-+			  $(TPROGS_LDLIBS) $(TPROGLDLIBS_$(@F))
-+$(tprog-cmulti): $(tprog-cobjs) FORCE
-+	$(call if_changed,tprog-cmulti)
-+$(call multi_depend, $(tprog-cmulti), , -objs)
-+
-+# Create .o file from a single .c file
-+# tprog-cobjs -> .o
-+quiet_cmd_tprog-cobjs	= CC  $@
-+      cmd_tprog-cobjs	= $(CC) $(tprogc_flags) -c -o $@ $<
-+$(tprog-cobjs): $(obj)/%.o: $(src)/%.c FORCE
-+	$(call if_changed_dep,tprog-cobjs)
-diff --git a/samples/hid/hid_bpf_attach.bpf.c b/samples/hid/hid_bpf_attach.bpf.c
-new file mode 100644
-index 000000000000..d4dce4ea7c6e
---- /dev/null
-+++ b/samples/hid/hid_bpf_attach.bpf.c
-@@ -0,0 +1,18 @@
++++ b/samples/hid/hid_surface_dial.bpf.c
+@@ -0,0 +1,134 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright (c) 2022 Benjamin Tissoires
 + */
@@ -508,196 +181,151 @@ index 000000000000..d4dce4ea7c6e
 +#include "vmlinux.h"
 +#include <bpf/bpf_helpers.h>
 +#include <bpf/bpf_tracing.h>
-+#include "hid_bpf_attach.h"
 +#include "hid_bpf_helpers.h"
 +
-+SEC("syscall")
-+int attach_prog(struct attach_prog_args *ctx)
++#define HID_UP_BUTTON		0x0009
++#define HID_GD_WHEEL		0x0038
++
++SEC("fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_event, struct hid_bpf_ctx *hctx)
 +{
-+	ctx->retval = hid_bpf_attach_prog(ctx->hid,
-+					  ctx->prog_fd,
-+					  0);
++	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
++
++	if (!data)
++		return 0; /* EPERM check */
++
++	/* Touch */
++	data[1] &= 0xfd;
++
++	/* X */
++	data[4] = 0;
++	data[5] = 0;
++
++	/* Y */
++	data[6] = 0;
++	data[7] = 0;
++
 +	return 0;
 +}
-diff --git a/samples/hid/hid_bpf_attach.h b/samples/hid/hid_bpf_attach.h
-new file mode 100644
-index 000000000000..35bb28b49264
---- /dev/null
-+++ b/samples/hid/hid_bpf_attach.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
 +
-+#ifndef __HID_BPF_ATTACH_H
-+#define __HID_BPF_ATTACH_H
++/* 72 == 360 / 5 -> 1 report every 5 degrees */
++int resolution = 72;
++int physical = 5;
 +
-+struct attach_prog_args {
-+	int prog_fd;
++struct haptic_syscall_args {
 +	unsigned int hid;
 +	int retval;
 +};
 +
-+#endif /* __HID_BPF_ATTACH_H */
-diff --git a/samples/hid/hid_bpf_helpers.h b/samples/hid/hid_bpf_helpers.h
-new file mode 100644
-index 000000000000..c555aeef5e37
---- /dev/null
-+++ b/samples/hid/hid_bpf_helpers.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
++static __u8 haptic_data[8];
 +
-+#ifndef __HID_BPF_HELPERS_H
-+#define __HID_BPF_HELPERS_H
-+
-+/* following are kfuncs exported by HID for HID-BPF */
-+extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
-+			      unsigned int offset,
-+			      const size_t __sz) __ksym;
-+extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
-+extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
-+			      __u8 *data,
-+			      size_t buf__sz,
-+			      enum hid_report_type type,
-+			      enum hid_class_request reqtype) __ksym;
-+
-+#endif /* __HID_BPF_HELPERS_H */
-diff --git a/samples/hid/hid_mouse.bpf.c b/samples/hid/hid_mouse.bpf.c
-new file mode 100644
-index 000000000000..7c8b453ccb16
---- /dev/null
-+++ b/samples/hid/hid_mouse.bpf.c
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "hid_bpf_helpers.h"
-+
-+SEC("fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_y_event, struct hid_bpf_ctx *hctx)
++SEC("syscall")
++int set_haptic(struct haptic_syscall_args *args)
 +{
-+	s16 y;
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
++	struct hid_bpf_ctx *ctx;
++	const size_t size = sizeof(haptic_data);
++	u16 *res;
++	int ret;
 +
-+	if (!data)
-+		return 0; /* EPERM check */
++	if (size > sizeof(haptic_data))
++		return -7; /* -E2BIG */
 +
-+	bpf_printk("event: size: %d", hctx->size);
-+	bpf_printk("incoming event: %02x %02x %02x",
-+		   data[0],
-+		   data[1],
-+		   data[2]);
-+	bpf_printk("                %02x %02x %02x",
-+		   data[3],
-+		   data[4],
-+		   data[5]);
-+	bpf_printk("                %02x %02x %02x",
-+		   data[6],
-+		   data[7],
-+		   data[8]);
++	ctx = hid_bpf_allocate_context(args->hid);
++	if (!ctx)
++		return -1; /* EPERM check */
 +
-+	y = data[3] | (data[4] << 8);
++	haptic_data[0] = 1;  /* report ID */
 +
-+	y = -y;
++	ret = hid_bpf_hw_request(ctx, haptic_data, size, HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
 +
-+	data[3] = y & 0xFF;
-+	data[4] = (y >> 8) & 0xFF;
++	bpf_printk("probed/remove event ret value: %d", ret);
++	bpf_printk("buf: %02x %02x %02x",
++		   haptic_data[0],
++		   haptic_data[1],
++		   haptic_data[2]);
++	bpf_printk("     %02x %02x %02x",
++		   haptic_data[3],
++		   haptic_data[4],
++		   haptic_data[5]);
++	bpf_printk("     %02x %02x",
++		   haptic_data[6],
++		   haptic_data[7]);
 +
-+	bpf_printk("modified event: %02x %02x %02x",
-+		   data[0],
-+		   data[1],
-+		   data[2]);
-+	bpf_printk("                %02x %02x %02x",
-+		   data[3],
-+		   data[4],
-+		   data[5]);
-+	bpf_printk("                %02x %02x %02x",
-+		   data[6],
-+		   data[7],
-+		   data[8]);
++	/* whenever resolution multiplier is not 3600, we have the fixed report descriptor */
++	res = (u16 *)&haptic_data[1];
++	if (*res != 3600) {
++//		haptic_data[1] = 72; /* resolution multiplier */
++//		haptic_data[2] = 0;  /* resolution multiplier */
++//		haptic_data[3] = 0;  /* Repeat Count */
++		haptic_data[4] = 3;  /* haptic Auto Trigger */
++//		haptic_data[5] = 5;  /* Waveform Cutoff Time */
++//		haptic_data[6] = 80; /* Retrigger Period */
++//		haptic_data[7] = 0;  /* Retrigger Period */
++	} else {
++		haptic_data[4] = 0;
++	}
++
++	ret = hid_bpf_hw_request(ctx, haptic_data, size, HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
++
++	bpf_printk("set haptic ret value: %d -> %d", ret, haptic_data[4]);
++
++	args->retval = ret;
++
++	hid_bpf_release_context(ctx);
 +
 +	return 0;
 +}
 +
-+SEC("fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_x_event, struct hid_bpf_ctx *hctx)
-+{
-+	s16 x;
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	x = data[1] | (data[2] << 8);
-+
-+	x = -x;
-+
-+	data[1] = x & 0xFF;
-+	data[2] = (x >> 8) & 0xFF;
-+	return 0;
-+}
-+
++/* Convert REL_DIAL into REL_WHEEL */
 +SEC("fmod_ret/hid_bpf_rdesc_fixup")
 +int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
 +{
 +	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
++	__u16 *res, *phys;
 +
 +	if (!data)
 +		return 0; /* EPERM check */
 +
-+	bpf_printk("rdesc: %02x %02x %02x",
-+		   data[0],
-+		   data[1],
-+		   data[2]);
-+	bpf_printk("       %02x %02x %02x",
-+		   data[3],
-+		   data[4],
-+		   data[5]);
-+	bpf_printk("       %02x %02x %02x ...",
-+		   data[6],
-+		   data[7],
-+		   data[8]);
++	/* Convert TOUCH into a button */
++	data[31] = HID_UP_BUTTON;
++	data[33] = 2;
 +
-+	/*
-+	 * The original report descriptor contains:
-+	 *
-+	 * 0x05, 0x01,                    //   Usage Page (Generic Desktop)      30
-+	 * 0x16, 0x01, 0x80,              //   Logical Minimum (-32767)          32
-+	 * 0x26, 0xff, 0x7f,              //   Logical Maximum (32767)           35
-+	 * 0x09, 0x30,                    //   Usage (X)                         38
-+	 * 0x09, 0x31,                    //   Usage (Y)                         40
-+	 *
-+	 * So byte 39 contains Usage X and byte 41 Usage Y.
-+	 *
-+	 * We simply swap the axes here.
-+	 */
-+	data[39] = 0x31;
-+	data[41] = 0x30;
++	/* Convert REL_DIAL into REL_WHEEL */
++	data[45] = HID_GD_WHEEL;
++
++	/* Change Resolution Multiplier */
++	phys = (__u16 *)&data[61];
++	*phys = physical;
++	res = (__u16 *)&data[66];
++	*res = resolution;
++
++	/* Convert X,Y from Abs to Rel */
++	data[88] = 0x06;
++	data[98] = 0x06;
 +
 +	return 0;
 +}
 +
 +char _license[] SEC("license") = "GPL";
-diff --git a/samples/hid/hid_mouse.c b/samples/hid/hid_mouse.c
++u32 _version SEC("version") = 1;
+diff --git a/samples/hid/hid_surface_dial.c b/samples/hid/hid_surface_dial.c
 new file mode 100644
-index 000000000000..018f1185f203
+index 000000000000..bceea53d39b0
 --- /dev/null
-+++ b/samples/hid/hid_mouse.c
-@@ -0,0 +1,155 @@
++++ b/samples/hid/hid_surface_dial.c
+@@ -0,0 +1,226 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright (c) 2022 Benjamin Tissoires
 + *
-+ * This is a pure HID-BPF example, and should be considered as such:
-+ * on the Etekcity Scroll 6E, the X and Y axes will be swapped and
-+ * inverted. On any other device... Not sure what this will do.
++ * This program will morph the Microsoft Surface Dial into a mouse,
++ * and depending on the chosen resolution enable or not the haptic feedback:
++ * - a resolution (-r) of 3600 will report 3600 "ticks" in one full rotation
++ *   wihout haptic feedback
++ * - any other resolution will report N "ticks" in a full rotation with haptic
++ *   feedback
 + *
-+ * This C main file is generic though. To adapt the code and test, users
-+ * must amend only the .bpf.c file, which this program will load any
-+ * eBPF program it finds.
++ * A good default for low resolution haptic scrolling is 72 (1 "tick" every 5
++ * degrees), and set to 3600 for smooth scrolling.
 + */
 +
 +#include <assert.h>
@@ -718,10 +346,15 @@ index 000000000000..018f1185f203
 +#include <bpf/bpf.h>
 +#include <bpf/libbpf.h>
 +
-+#include "hid_mouse.skel.h"
++#include "hid_surface_dial.skel.h"
 +#include "hid_bpf_attach.h"
 +
 +static bool running = true;
++
++struct haptic_syscall_args {
++	unsigned int hid;
++	int retval;
++};
 +
 +static void int_exit(int sig)
 +{
@@ -732,14 +365,20 @@ index 000000000000..018f1185f203
 +static void usage(const char *prog)
 +{
 +	fprintf(stderr,
-+		"%s: %s /sys/bus/hid/devices/0BUS:0VID:0PID:00ID\n\n",
++		"%s: %s [OPTIONS] /sys/bus/hid/devices/0BUS:0VID:0PID:00ID\n\n"
++		"  OPTIONS:\n"
++		"    -r N\t set the given resolution to the device (number of ticks per 360°)\n\n",
 +		__func__, prog);
 +	fprintf(stderr,
-+		"This program will upload and attach a HID-BPF program to the given device.\n"
-+		"On the Etekcity Scroll 6E, the X and Y axis will be inverted, but on any other\n"
-+		"device, chances are high that the device will not be working anymore\n\n"
-+		"consider this as a demo and adapt the eBPF program to your needs\n"
-+		"Hit Ctrl-C to unbind the program and reset the device\n");
++		"This program will morph the Microsoft Surface Dial into a mouse,\n"
++		"and depending on the chosen resolution enable or not the haptic feedback:\n"
++		"- a resolution (-r) of 3600 will report 3600 'ticks' in one full rotation\n"
++		"  wihout haptic feedback\n"
++		"- any other resolution will report N 'ticks' in a full rotation with haptic\n"
++		"  feedback\n"
++		"\n"
++		"A good default for low resolution haptic scrolling is 72 (1 'tick' every 5\n"
++		"degrees), and set to 3600 for smooth scrolling.\n");
 +}
 +
 +static int get_hid_id(const char *path)
@@ -763,24 +402,92 @@ index 000000000000..018f1185f203
 +	return (int)strtol(str_id, NULL, 16);
 +}
 +
-+int main(int argc, char **argv)
++static int attach_prog(struct hid_surface_dial *skel, struct bpf_program *prog, int hid_id)
 +{
-+	struct hid_mouse *skel;
-+	struct bpf_program *prog;
-+	int err;
-+	const char *optstr = "";
-+	const char *sysfs_path;
-+	int opt, hid_id, attach_fd;
 +	struct attach_prog_args args = {
++		.hid = hid_id,
 +		.retval = -1,
 +	};
++	int attach_fd, err;
 +	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
 +			    .ctx_in = &args,
 +			    .ctx_size_in = sizeof(args),
 +	);
 +
++	attach_fd = bpf_program__fd(skel->progs.attach_prog);
++	if (attach_fd < 0) {
++		fprintf(stderr, "can't locate attach prog: %m\n");
++		return 1;
++	}
++
++	args.prog_fd = bpf_program__fd(prog);
++	err = bpf_prog_test_run_opts(attach_fd, &tattr);
++	if (err) {
++		fprintf(stderr, "can't attach prog to hid device %d: %m (err: %d)\n",
++			hid_id, err);
++		return 1;
++	}
++	return 0;
++}
++
++static int set_haptic(struct hid_surface_dial *skel, int hid_id)
++{
++	struct haptic_syscall_args args = {
++		.hid = hid_id,
++		.retval = -1,
++	};
++	int haptic_fd, err;
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
++			    .ctx_in = &args,
++			    .ctx_size_in = sizeof(args),
++	);
++
++	haptic_fd = bpf_program__fd(skel->progs.set_haptic);
++	if (haptic_fd < 0) {
++		fprintf(stderr, "can't locate haptic prog: %m\n");
++		return 1;
++	}
++
++	err = bpf_prog_test_run_opts(haptic_fd, &tattr);
++	if (err) {
++		fprintf(stderr, "can't set haptic configuration to hid device %d: %m (err: %d)\n",
++			hid_id, err);
++		return 1;
++	}
++	return 0;
++}
++
++int main(int argc, char **argv)
++{
++	struct hid_surface_dial *skel;
++	struct bpf_program *prog;
++	const char *optstr = "r:";
++	const char *sysfs_path;
++	int opt, hid_id, resolution = 72;
++
 +	while ((opt = getopt(argc, argv, optstr)) != -1) {
 +		switch (opt) {
++		case 'r':
++			{
++				char *endp = NULL;
++				long l = -1;
++
++				if (optarg) {
++					l = strtol(optarg, &endp, 10);
++					if (endp && *endp)
++						l = -1;
++				}
++
++				if (l < 0) {
++					fprintf(stderr,
++						"invalid r option %s - expecting a number\n",
++						optarg ? optarg : "");
++					exit(EXIT_FAILURE);
++				};
++
++				resolution = (int) l;
++				break;
++			}
 +		default:
 +			usage(basename(argv[0]));
 +			return 1;
@@ -798,48 +505,38 @@ index 000000000000..018f1185f203
 +		return 1;
 +	}
 +
-+	skel = hid_mouse__open_and_load();
++	skel = hid_surface_dial__open_and_load();
 +	if (!skel) {
 +		fprintf(stderr, "%s  %s:%d", __func__, __FILE__, __LINE__);
 +		return -1;
 +	}
 +
 +	hid_id = get_hid_id(sysfs_path);
-+
 +	if (hid_id < 0) {
 +		fprintf(stderr, "can not open HID device: %m\n");
 +		return 1;
 +	}
-+	args.hid = hid_id;
 +
-+	attach_fd = bpf_program__fd(skel->progs.attach_prog);
-+	if (attach_fd < 0) {
-+		fprintf(stderr, "can't locate attach prog: %m\n");
-+		return 1;
-+	}
++	skel->data->resolution = resolution;
++	skel->data->physical = (int)(resolution / 72);
 +
 +	bpf_object__for_each_program(prog, *skel->skeleton->obj) {
 +		/* ignore syscalls */
 +		if (bpf_program__get_type(prog) != BPF_PROG_TYPE_TRACING)
 +			continue;
 +
-+		args.retval = -1;
-+		args.prog_fd = bpf_program__fd(prog);
-+		err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+		if (err) {
-+			fprintf(stderr, "can't attach prog to hid device %d: %m (err: %d)\n",
-+				hid_id, err);
-+			return 1;
-+		}
++		attach_prog(skel, prog, hid_id);
 +	}
 +
 +	signal(SIGINT, int_exit);
 +	signal(SIGTERM, int_exit);
 +
++	set_haptic(skel, hid_id);
++
 +	while (running)
 +		sleep(1);
 +
-+	hid_mouse__destroy(skel);
++	hid_surface_dial__destroy(skel);
 +
 +	return 0;
 +}
