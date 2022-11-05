@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0168261A709
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Nov 2022 03:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D85AF61A70C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Nov 2022 03:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiKECwc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Nov 2022 22:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
+        id S229589AbiKECwe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Nov 2022 22:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiKECwa (ORCPT
+        with ESMTP id S229601AbiKECwc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Nov 2022 22:52:30 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E15B3F06C
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Nov 2022 19:52:29 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id e15so4378050qts.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Nov 2022 19:52:29 -0700 (PDT)
+        Fri, 4 Nov 2022 22:52:32 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730D33FB8E
+        for <linux-kselftest@vger.kernel.org>; Fri,  4 Nov 2022 19:52:30 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id 8so4453930qka.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Nov 2022 19:52:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Wl8oQUpe8yXqSeuRtfUsJkpIGEQ98nwCnE5YcZtf2Pk=;
-        b=D3Efmuf4WRWk4XBr8PaHosbwLBamqCB1Qq1UsUIMQ1cYAddKnpMt9REEdYbmcxPJfv
-         mvu8px+Pp135sgK1Qrx/XyhjPfeEKOZQ2bWTNKLeAtKePRk312c/yRWK//4J1WuP3Rx7
-         Flmzd2PuZ3ZkysxXlU87KxkQz3vaE0Ldi5tRP4jUNvfPSf/tipTYPsGVQ+r+llHYbL78
-         sQvnXCg8kpohgS26Uk8QPY7Xcnt3mIcczIEnjl42LVuhQM8RYGLOer04tSFCrfeT5qPK
-         dMTz5O5LicnnSdKZxl/36cwUf6fpIzRTo69ZPQl+xsz9nxmWyNyAW0NWAztu2irqpF52
-         OCew==
+        bh=102zPobI2UCzZFYJfQ6W0YbWDm+eTOkX0gf/oCnQz2U=;
+        b=BhkDD2m+dHxDTTE8PUg8n+8FDifwARJY/czahSUEz9t0qC/XYnI6eDSQvxa7uhHeGv
+         l08NeotC1Xn9p98wFICv+UbKcRVQYXoIhe0yXVc0GWVq9rH7+pkF+jj1pIS7Hyd45Br2
+         3AQVwp/IB+SHvc+DhyFoH6lYq9HLAJIdT3/l96XmNmNmjusI9QuDKQj5kgDMOGfNHRM/
+         6zL1O6bIOT2BnuZlVOhF1QyL0ZUpUs548iOfJWCDFE2zkoMVk9UXe2e6PMyGUvsEmzOJ
+         yLKcRsOtw8NQfbgdQu5Ky4+h8EUjMm1hFDA7AUIanfg7gG+4tmQn65gWEb9jaSpN983A
+         J/Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wl8oQUpe8yXqSeuRtfUsJkpIGEQ98nwCnE5YcZtf2Pk=;
-        b=zSjO/HPf5oGzzLCS/FnEkPeTJS5uSQ9mvY1/ER4E1X41tArROgTlWvxKdGX+P5piaz
-         98WiNs2VJ7wI6aK3OskeWTx3tmPGwbmsFs9ypUWd8jxixg0atiuekpRK9y3deamYg47s
-         NVtCYIgASPq3tzFakinnZhLA+uZmsJclYMr2IoeRVEF8sOg6DTnl5AX3IbDNQfYOvcTt
-         aYSAswwQY0RchzzsLb+DaaAej18BU2AlPBUr+S4ctgKXYz/YYEfuRQigEYlfXfCj5ul/
-         MBj/Q259XTQpKNjAKM+9o0NoXHtQ3KT2HMQe23ui+O3g0ytVpxyPZHt8ZCotA7Nb1uv6
-         elVg==
-X-Gm-Message-State: ACrzQf1N2ZTM21LH3LBR1vBhbTV9/nwwXVFuN51IyDx+6mpU9a5GR1II
-        P/1GC69FgaCxLeNsq68HmU9RXw==
-X-Google-Smtp-Source: AMsMyM5BzqY21BEcuHkVF4tSoDHZTYxblDnn8FA6zvN9Z3p8MctvtJZVXGyaQmL+lFTU/eXQarCXPw==
-X-Received: by 2002:ac8:6e86:0:b0:3a5:27f8:f3db with SMTP id c6-20020ac86e86000000b003a527f8f3dbmr23498116qtv.97.1667616748585;
-        Fri, 04 Nov 2022 19:52:28 -0700 (PDT)
+        bh=102zPobI2UCzZFYJfQ6W0YbWDm+eTOkX0gf/oCnQz2U=;
+        b=mrlm+v1iCJo8564Ax1nb1WZTzuX8CyuiHN6eRb2ZUyk3vaWV4prUzAGOzGHaYzEBVo
+         XBpGoQPSK29BRjCu+z5aExmL5asCg0/F9I77o2evQnrhrM7muGkRNs1Ea9yMBgcy9OBm
+         vwznwl/W7p/jR7fChMEz1bE0FGjMsLf+jO7VGZaCO7ZwSf+KViARPBTCZmYsy+SgjF60
+         ifrjusUxZAnRaKMFDSAiAxKLPErfKkLBruLOtH8CLR/fOvbhls/MZIS4Rs+N9n1gd3p8
+         AZz2yoSKfz6bEeTiJPd6BFVsTNu7surcBpig9IdLx1LGAoX5tImkkvh/TMc6M0UsqVXT
+         Rc6w==
+X-Gm-Message-State: ACrzQf3M7Lc5hcTma7UKwiwUjq4SYaO3S6jEBlQp/u7seMHQOCy2LcYo
+        v/76u8UeXWQQs8u1IXRWZ0zpcg==
+X-Google-Smtp-Source: AMsMyM5LsDyyCf9+Zw1mXGYA4ucuY6NTuWddGyD0n37vQWA/+Hl7Tl+10ZExPfW37GvB/rpQ5+iIiA==
+X-Received: by 2002:a37:69c5:0:b0:6fa:d6f:e848 with SMTP id e188-20020a3769c5000000b006fa0d6fe848mr27896590qkc.17.1667616749442;
+        Fri, 04 Nov 2022 19:52:29 -0700 (PDT)
 Received: from 192-168-53-12.byted.org ([130.44.212.119])
-        by smtp.gmail.com with ESMTPSA id ay14-20020a05620a178e00b006bb366779a4sm805905qkb.6.2022.11.04.19.52.27
+        by smtp.gmail.com with ESMTPSA id ay14-20020a05620a178e00b006bb366779a4sm805905qkb.6.2022.11.04.19.52.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 19:52:28 -0700 (PDT)
+        Fri, 04 Nov 2022 19:52:29 -0700 (PDT)
 From:   "Ho-Ren (Jack) Chuang" <horenchuang@bytedance.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
@@ -80,353 +80,259 @@ Cc:     Ho-Ren Chuang <horenc@vt.edu>,
         Ho-Ren Chuang <horenchuang@bytedance.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH bpf-next v1 3/4] samples/bpf: Add concurrency testing for BPF htab map's used size
-Date:   Sat,  5 Nov 2022 02:51:45 +0000
-Message-Id: <20221105025146.238209-4-horenchuang@bytedance.com>
+Subject: [PATCH bpf-next v1 4/4] selftests/bpf: Add unit tests for BPF htab map's used size
+Date:   Sat,  5 Nov 2022 02:51:46 +0000
+Message-Id: <20221105025146.238209-5-horenchuang@bytedance.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221105025146.238209-1-horenchuang@bytedance.com>
 References: <20221105025146.238209-1-horenchuang@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add htab map's used_size test cases for concurrency testing.
-
-Support hash table type (BPF_MAP_TYPE_HASH).
+Integrate with existing unit tests such as basic,
+read/write-only htab maps, and concurrency testings for
+testing htab map's used_entires.
 
 Signed-off-by: Ho-Ren (Jack) Chuang <horenchuang@bytedance.com>
 ---
- samples/bpf/Makefile             |   4 +
- samples/bpf/test_map_used_kern.c |  65 ++++++++++
- samples/bpf/test_map_used_user.c | 204 +++++++++++++++++++++++++++++++
- 3 files changed, 273 insertions(+)
- create mode 100644 samples/bpf/test_map_used_kern.c
- create mode 100644 samples/bpf/test_map_used_user.c
+ tools/testing/selftests/bpf/test_maps.c | 74 ++++++++++++++++++++++++-
+ 1 file changed, 73 insertions(+), 1 deletion(-)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 727da3c5879b..8725d0d64a21 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -40,6 +40,7 @@ tprogs-y += tc_l2_redirect
- tprogs-y += lwt_len_hist
- tprogs-y += xdp_tx_iptunnel
- tprogs-y += test_map_in_map
-+tprogs-y += test_map_used
- tprogs-y += per_socket_stats_example
- tprogs-y += xdp_rxq_info
- tprogs-y += syscall_tp
-@@ -101,6 +102,7 @@ tc_l2_redirect-objs := tc_l2_redirect_user.o
- lwt_len_hist-objs := lwt_len_hist_user.o
- xdp_tx_iptunnel-objs := xdp_tx_iptunnel_user.o
- test_map_in_map-objs := test_map_in_map_user.o
-+test_map_used-objs := test_map_used_user.o
- per_socket_stats_example-objs := cookie_uid_helper_example.o
- xdp_rxq_info-objs := xdp_rxq_info_user.o
- syscall_tp-objs := syscall_tp_user.o
-@@ -153,6 +155,7 @@ always-y += sampleip_kern.o
- always-y += lwt_len_hist_kern.o
- always-y += xdp_tx_iptunnel_kern.o
- always-y += test_map_in_map_kern.o
-+always-y += test_map_used_kern.o
- always-y += tcp_synrto_kern.o
- always-y += tcp_rwnd_kern.o
- always-y += tcp_bufs_kern.o
-@@ -216,6 +219,7 @@ TPROGLDLIBS_xdp_router_ipv4	+= -lm -pthread
- TPROGLDLIBS_tracex4		+= -lrt
- TPROGLDLIBS_trace_output	+= -lrt
- TPROGLDLIBS_map_perf_test	+= -lrt
-+TPROGLDLIBS_test_map_used	+= -lrt
- TPROGLDLIBS_test_overhead	+= -lrt
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index b73152822aa2..3bd202d27563 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -38,6 +38,8 @@ static void test_hashmap(unsigned int task, void *data)
+ {
+ 	long long key, next_key, first_key, value;
+ 	int fd;
++	struct bpf_map_info map_info = {};
++	__u32 info_len = sizeof(map_info);
  
- # Allows pointing LLC/CLANG to a LLVM backend with bpf support, redefine on cmdline:
-diff --git a/samples/bpf/test_map_used_kern.c b/samples/bpf/test_map_used_kern.c
-new file mode 100644
-index 000000000000..e908593c1f09
---- /dev/null
-+++ b/samples/bpf/test_map_used_kern.c
-@@ -0,0 +1,65 @@
-+/* Copyright (c) 2022 ByteDance
-+ *
-+ * This program is free software; you can redistribute it and/or
-+ * modify it under the terms of version 2 of the GNU General Public
-+ * License as published by the Free Software Foundation.
-+ */
-+#include <linux/netdevice.h>
-+#include <linux/version.h>
-+#include <uapi/linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include "trace_common.h"
+ 	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value), 2, &map_opts);
+ 	if (fd < 0) {
+@@ -50,16 +52,32 @@ static void test_hashmap(unsigned int task, void *data)
+ 	/* Insert key=1 element. */
+ 	assert(bpf_map_update_elem(fd, &key, &value, BPF_ANY) == 0);
+ 
++	/* Check used_entires is now 1. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 1);
 +
-+#define MAX_ENTRIES 1000
+ 	value = 0;
+ 	/* BPF_NOEXIST means add new element if it doesn't exist. */
+ 	assert(bpf_map_update_elem(fd, &key, &value, BPF_NOEXIST) < 0 &&
+ 	       /* key=1 already exists. */
+ 	       errno == EEXIST);
+ 
++	/* Check used_entires is still 1 because we are updating
++	 * an existing element.
++	 */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 1);
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, u32);
-+	__type(value, long);
-+	__uint(max_entries, MAX_ENTRIES);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+} touch_hash_no_prealloc SEC(".maps");
+ 	/* -1 is an invalid flag. */
+ 	assert(bpf_map_update_elem(fd, &key, &value, -1) < 0 &&
+ 	       errno == EINVAL);
+ 
++	/* Check used_entires is still 1 because the last
++	 * insertion was invalid.
++	 */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 1);
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, u32);
-+	__type(value, long);
-+	__uint(max_entries, MAX_ENTRIES);
-+} touch_hash_prealloc SEC(".maps");
+ 	/* Check that key=1 can be found. */
+ 	assert(bpf_map_lookup_elem(fd, &key, &value) == 0 && value == 1234);
+ 
+@@ -68,6 +86,10 @@ static void test_hashmap(unsigned int task, void *data)
+ 	/* Insert key=2 element. */
+ 	assert(bpf_map_update_elem(fd, &key, &value, BPF_ANY) == 0);
+ 
++	/* Check used_entires is now 2. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 2);
 +
-+SEC("kprobe/" SYSCALL(sys_mount))
-+int stress_hmap_alloc(struct pt_regs *ctx)
-+{
-+	u32 key, i;
-+	long init_val = bpf_get_current_pid_tgid();
+ 	/* Check that key=2 matches the value and delete it */
+ 	assert(bpf_map_lookup_and_delete_elem(fd, &key, &value) == 0 && value == 1234);
+ 
+@@ -89,6 +111,10 @@ static void test_hashmap(unsigned int task, void *data)
+ 	assert(bpf_map_update_elem(fd, &key, &value, BPF_NOEXIST) < 0 &&
+ 	       errno == E2BIG);
+ 
++	/* Check used_entires is now 2. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 2);
 +
-+#pragma clang loop unroll(full)
-+	for (i = 0; i < MAX_ENTRIES; ++i) {
-+		key = i;
-+		bpf_map_update_elem(&touch_hash_no_prealloc,
-+							&key, &init_val, BPF_ANY);
-+	}
+ 	/* Update existing element, though the map is full. */
+ 	key = 1;
+ 	assert(bpf_map_update_elem(fd, &key, &value, BPF_EXIST) == 0);
+@@ -102,6 +128,10 @@ static void test_hashmap(unsigned int task, void *data)
+ 	key = 0;
+ 	assert(bpf_map_delete_elem(fd, &key) < 0 && errno == ENOENT);
+ 
++	/* Check used_entires is now 2. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 2);
 +
-+	return 0;
-+}
+ 	/* Iterate over two elements. */
+ 	assert(bpf_map_get_next_key(fd, NULL, &first_key) == 0 &&
+ 	       (first_key == 1 || first_key == 2));
+@@ -127,6 +157,10 @@ static void test_hashmap(unsigned int task, void *data)
+ 	assert(bpf_map_get_next_key(fd, &key, &next_key) < 0 &&
+ 	       errno == ENOENT);
+ 
++	/* Check used_entires is now 0 because both elements were deleted. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 0);
 +
-+SEC("kprobe/" SYSCALL(sys_umount))
-+int stress_hmap_prealloc(struct pt_regs *ctx)
-+{
-+	u32 key, i;
-+	long init_val = bpf_get_current_pid_tgid();
+ 	close(fd);
+ }
+ 
+@@ -292,6 +326,8 @@ static void test_hashmap_walk(unsigned int task, void *data)
+ 	int fd, i, max_entries = 10000;
+ 	long long key, value[VALUE_SIZE], next_key;
+ 	bool next_key_valid = true;
++	struct bpf_map_info map_info = {};
++	__u32 info_len = sizeof(map_info);
+ 
+ 	fd = helper_fill_hashmap(max_entries);
+ 
+@@ -302,6 +338,9 @@ static void test_hashmap_walk(unsigned int task, void *data)
+ 	}
+ 
+ 	assert(i == max_entries);
++	/* Check used_entires is now max_entries. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == max_entries);
+ 
+ 	assert(bpf_map_get_next_key(fd, NULL, &key) == 0);
+ 	for (i = 0; next_key_valid; i++) {
+@@ -313,6 +352,9 @@ static void test_hashmap_walk(unsigned int task, void *data)
+ 	}
+ 
+ 	assert(i == max_entries);
++	/* Check used_entires is now max_entries. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == max_entries);
+ 
+ 	for (i = 0; bpf_map_get_next_key(fd, !i ? NULL : &key,
+ 					 &next_key) == 0; i++) {
+@@ -322,6 +364,9 @@ static void test_hashmap_walk(unsigned int task, void *data)
+ 	}
+ 
+ 	assert(i == max_entries);
++	/* Check used_entires is now max_entries. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == max_entries);
+ 	close(fd);
+ }
+ 
+@@ -1303,13 +1348,14 @@ static void test_map_in_map(void)
+ 
+ static void test_map_large(void)
+ {
+-
+ 	struct bigkey {
+ 		int a;
+ 		char b[4096];
+ 		long long c;
+ 	} key;
+ 	int fd, i, value;
++	struct bpf_map_info map_info = {};
++	__u32 info_len = sizeof(map_info);
+ 
+ 	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value),
+ 			    MAP_SIZE, &map_opts);
+@@ -1341,6 +1387,10 @@ static void test_map_large(void)
+ 	key.a = 1;
+ 	assert(bpf_map_lookup_elem(fd, &key, &value) < 0 && errno == ENOENT);
+ 
++	/* Check used_entires is now MAP_SIZE. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == MAP_SIZE);
 +
-+#pragma clang loop unroll(full)
-+	for (i = 0; i < MAX_ENTRIES; ++i) {
-+		key = i;
-+		bpf_map_update_elem(&touch_hash_prealloc,
-+							&key, &init_val, BPF_ANY);
-+	}
+ 	close(fd);
+ }
+ 
+@@ -1466,6 +1516,8 @@ static void test_map_parallel(void)
+ {
+ 	int i, fd, key = 0, value = 0, j = 0;
+ 	int data[2];
++	struct bpf_map_info map_info = {};
++	__u32 info_len = sizeof(map_info);
+ 
+ 	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value),
+ 			    MAP_SIZE, &map_opts);
+@@ -1504,6 +1556,10 @@ static void test_map_parallel(void)
+ 		       value == key);
+ 	}
+ 
++	/* Check used_entires is now MAP_SIZE. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == MAP_SIZE);
 +
-+	return 0;
-+}
+ 	/* Now let's delete all elemenets in parallel. */
+ 	data[1] = DO_DELETE;
+ 	run_parallel(TASKS, test_update_delete, data);
+@@ -1513,6 +1569,10 @@ static void test_map_parallel(void)
+ 	assert(bpf_map_get_next_key(fd, NULL, &key) < 0 && errno == ENOENT);
+ 	assert(bpf_map_get_next_key(fd, &key, &key) < 0 && errno == ENOENT);
+ 
++	/* Check used_entires is now 0. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 0);
 +
-+char _license[] SEC("license") = "GPL";
-+u32 _version SEC("version") = LINUX_VERSION_CODE;
-diff --git a/samples/bpf/test_map_used_user.c b/samples/bpf/test_map_used_user.c
-new file mode 100644
-index 000000000000..797f6ca7434d
---- /dev/null
-+++ b/samples/bpf/test_map_used_user.c
-@@ -0,0 +1,204 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2022 ByteDance
-+ */
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <stdio.h>
-+#include <sys/types.h>
-+#include <asm/unistd.h>
-+#include <unistd.h>
-+#include <assert.h>
-+#include <sys/wait.h>
-+#include <stdlib.h>
-+#include <signal.h>
-+#include <linux/bpf.h>
-+#include <string.h>
-+#include <time.h>
-+#include <sys/resource.h>
-+#include <arpa/inet.h>
-+#include <errno.h>
+ 	key = 0;
+ 	bpf_map_delete_elem(fd, &key);
+ 	if (j++ < 5)
+@@ -1524,6 +1584,8 @@ static void test_map_rdonly(void)
+ {
+ 	int fd, key = 0, value = 0;
+ 	__u32 old_flags;
++	struct bpf_map_info map_info = {};
++	__u32 info_len = sizeof(map_info);
+ 
+ 	old_flags = map_opts.map_flags;
+ 	map_opts.map_flags |= BPF_F_RDONLY;
+@@ -1546,6 +1608,10 @@ static void test_map_rdonly(void)
+ 	assert(bpf_map_lookup_elem(fd, &key, &value) < 0 && errno == ENOENT);
+ 	assert(bpf_map_get_next_key(fd, &key, &value) < 0 && errno == ENOENT);
+ 
++	/* Check used_entires is now 0. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 0);
 +
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
+ 	close(fd);
+ }
+ 
+@@ -1553,6 +1619,8 @@ static void test_map_wronly_hash(void)
+ {
+ 	int fd, key = 0, value = 0;
+ 	__u32 old_flags;
++	struct bpf_map_info map_info = {};
++	__u32 info_len = sizeof(map_info);
+ 
+ 	old_flags = map_opts.map_flags;
+ 	map_opts.map_flags |= BPF_F_WRONLY;
+@@ -1574,6 +1642,10 @@ static void test_map_wronly_hash(void)
+ 	assert(bpf_map_lookup_elem(fd, &key, &value) < 0 && errno == EPERM);
+ 	assert(bpf_map_get_next_key(fd, &key, &value) < 0 && errno == EPERM);
+ 
++	/* Check used_entires is now 1. */
++	assert(bpf_obj_get_info_by_fd(fd, &map_info, &info_len) == 0);
++	assert(map_info.used_entries == 1);
 +
-+#define TEST_BIT(t) (1U << (t))
-+#define MAX_NR_CPUS 1024
-+
-+static __u64 time_get_ns(void)
-+{
-+	struct timespec ts;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	return ts.tv_sec * 1000000000ull + ts.tv_nsec;
-+}
-+
-+enum test_type {
-+	HASH_TOUCH_PREALLOC,
-+	HASH_TOUCH,
-+	NR_TESTS,
-+};
-+
-+const char *test_map_names[NR_TESTS] = {
-+	[HASH_TOUCH_PREALLOC] = "hash_map",
-+	[HASH_TOUCH] = "hash_map",
-+};
-+
-+static int test_flags = ~0;
-+static __u32 num_map_entries;
-+static __u32 inner_lru_hash_size;
-+static __u32 max_cnt = 1000;
-+
-+static int check_test_flags(enum test_type t)
-+{
-+	return test_flags & TEST_BIT(t);
-+}
-+
-+static void test_hash_touch_prealloc(int cpu)
-+{
-+	__u64 start_time;
-+	int i;
-+
-+	start_time = time_get_ns();
-+	for (i = 0; i < max_cnt; i++)
-+		syscall(__NR_umount2, NULL, 0);
-+	printf("%d:hash_touch pre-alloc %lld touches per sec\n",
-+		   cpu, max_cnt * 1000000000ll / (time_get_ns() - start_time));
-+}
-+
-+static void test_hash_touch(int cpu)
-+{
-+	__u64 start_time;
-+	int i;
-+
-+	start_time = time_get_ns();
-+	for (i = 0; i < max_cnt; i++)
-+		syscall(__NR_mount, NULL, NULL, NULL, 0, NULL);
-+	printf("%d:hash_touch %lld touchess per sec\n",
-+		   cpu, max_cnt * 1000000000ll * 64 / (time_get_ns() - start_time));
-+}
-+
-+typedef void (*test_func)(int cpu);
-+const test_func test_funcs[] = {
-+	[HASH_TOUCH_PREALLOC] = test_hash_touch_prealloc,
-+	[HASH_TOUCH] = test_hash_touch,
-+};
-+
-+static void loop(int cpu)
-+{
-+	cpu_set_t cpuset;
-+	int i;
-+
-+	CPU_ZERO(&cpuset);
-+	CPU_SET(cpu, &cpuset);
-+	sched_setaffinity(0, sizeof(cpuset), &cpuset);
-+
-+	for (i = 0; i < NR_TESTS; i++) {
-+		if (check_test_flags(i))
-+			test_funcs[i](cpu);
-+	}
-+}
-+
-+static void run_perf_test(int tasks)
-+{
-+	pid_t pid[tasks];
-+	int i;
-+
-+	for (i = 0; i < tasks; i++) {
-+		pid[i] = fork();
-+		if (pid[i])
-+			printf("Spawn process #%d [%u]\n", i, pid[i]);
-+
-+		if (pid[i] == 0) {
-+			loop(i);
-+			exit(0);
-+		} else if (pid[i] == -1) {
-+			printf("couldn't spawn #%d process\n", i);
-+			exit(1);
-+		}
-+	}
-+	for (i = 0; i < tasks; i++) {
-+		int status;
-+
-+		assert(waitpid(pid[i], &status, 0) == pid[i]);
-+		assert(status == 0);
-+	}
-+}
-+
-+static void fixup_map(struct bpf_object *obj)
-+{
-+	struct bpf_map *map;
-+	int i;
-+
-+	bpf_object__for_each_map(map, obj) {
-+		const char *name = bpf_map__name(map);
-+
-+		/* Only change the max_entries for the enabled test(s) */
-+		for (i = 0; i < NR_TESTS; i++) {
-+			if (!strcmp(test_map_names[i], name) &&
-+				(check_test_flags(i))) {
-+				bpf_map__set_max_entries(map, num_map_entries);
-+				continue;
-+			}
-+		}
-+	}
-+
-+	inner_lru_hash_size = num_map_entries;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
-+	struct bpf_link *links[8];
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	char filename[256];
-+	int i = 0;
-+
-+	if (argc > 1)
-+		test_flags = atoi(argv[1]) ? : test_flags;
-+
-+	if (argc > 2)
-+		nr_cpus = atoi(argv[2]) ? : nr_cpus;
-+
-+	if (argc > 3)
-+		num_map_entries = atoi(argv[3]);
-+
-+	if (argc > 4)
-+		max_cnt = atoi(argv[4]);
-+
-+	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
-+	obj = bpf_object__open_file(filename, NULL);
-+	if (libbpf_get_error(obj)) {
-+		fprintf(stderr, "ERROR: opening BPF object file failed\n");
-+		return 0;
-+	}
-+
-+	/* resize BPF map prior to loading */
-+	if (num_map_entries > 0)
-+		fixup_map(obj);
-+
-+	/* load BPF program */
-+	if (bpf_object__load(obj)) {
-+		fprintf(stderr, "ERROR: loading BPF object file failed\n");
-+		goto cleanup;
-+	}
-+
-+	bpf_object__for_each_program(prog, obj) {
-+		links[i] = bpf_program__attach(prog);
-+		if (libbpf_get_error(links[i])) {
-+			fprintf(stderr, "ERROR: bpf_program__attach failed\n");
-+			links[i] = NULL;
-+			goto cleanup;
-+		}
-+		i++;
-+	}
-+
-+	run_perf_test(nr_cpus);
-+
-+cleanup:
-+	for (i--; i >= 0; i--)
-+		bpf_link__destroy(links[i]);
-+
-+	bpf_object__close(obj);
-+	return 0;
-+}
+ 	close(fd);
+ }
+ 
 -- 
 Ho-Ren (Jack) Chuang
 
