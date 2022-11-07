@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598CB61FAB8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 18:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C46D61FAD1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 18:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbiKGRBC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 12:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        id S232339AbiKGRIT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 12:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbiKGRBA (ORCPT
+        with ESMTP id S231479AbiKGRIR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:01:00 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2068.outbound.protection.outlook.com [40.107.96.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D172250B;
-        Mon,  7 Nov 2022 09:00:57 -0800 (PST)
+        Mon, 7 Nov 2022 12:08:17 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2052.outbound.protection.outlook.com [40.107.101.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0172822BF0;
+        Mon,  7 Nov 2022 09:08:17 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DmhQCtAmDAu6Eq2N7DwmNYMFFyeOXU4AK8QgRYbW1pQt7NE5BqaL3SJgG4taFeNXRVb32iLc6PrCVJbcrQO/mUO9fFc2OkAPYdz4utPSlnEjsX2Mx2xolUGw3d9xnmr+HcCvOQ+N53wryXOjGqBJcBuRtI3H4zyNLN6zC//i+K+GEmlAUvbCVLPbhBmmFtJY9RI1zuxDpSLJ2iMCEocyzGzaSU+Ii3LOyDpeKAQtBW12BLAeiQ7vJ1Q7dMOBjK7Bpk7RDRXtnildxvKgAI/8pFURYr9oCVnLN86vBDjdFWfQngvfKI7fQLXN3+5GeWR1p9hRyknsUggk1Q9KrKUsnA==
+ b=MBV/yvqV/bFPJ1G5j+h1aY+8/MtyGMI0nQDMJlQVwKfgZ6k6h9RaJymHcYTXkpIb/ETDzGqs4WSSL10ENRm19amhpbdGC70RFpQCPwEmp6npFE5pNCMpkd+In6VVXufbMvwF4aSe4EUM0i2bU1qBFMC0x9DHWGfOQcO2K7jLrGnNaJZQ5hgZXGiXCAkBirSE45+J5U4dssXmnaDNQw4XMFWaRqQYyMDG13nMoXyb5Jys7qJjzbAORPhhYKPAzyAI9Ki+/vxw2VI3gTRddrPskkIpEc0HXnf/edfpG974X0SN4eHHDekG44SUDKQRZsNG5b5nRmB67aO45DcUXV6oEQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q86kIaktkqg5dJmgcVvPJJ5cKL0IhXPDeN1hkLVuMtM=;
- b=SuIVerdy9yVzRejdL5dOaVDbr3JyxdiwKQHoUvI91PEduNOtDQe/45V67pxGNb6k4SkWzG29pvBWwRH7IMMz9/pGKkgocFXf05xsS7Fwc4DmBOtE2H1oJgGvqzkzjJbFo8xGNGnftnyrTHNAKEgj1yvGBYCaZISNeDYPhNByHx/ivxAYWeBX8TIPU0Hc1HvbNLqL5VXmEE1lvtfI+N9fF5cqNkELGHf9amMly15eG6u8Q6wWCvDuJ2Ys6S6KuANbH00m5ceOAVUGG/VmuLAVS+Il3P0QbGCo91eR0DURgtTGEUTlJhn3DzHtOt0DOmXdC2ekjhu8GRHybEHqbnClOQ==
+ bh=cM0asfPs9CgfEFNfkLDgpBO1YLDglUVBEDX4SQOYeb8=;
+ b=Eycna+9Dw4so2DTzxvYqkoztY+RjyWBZZk9/R3HcB40UlY47dDjEmrwIZgV6doqst/7Odqs7DGehFp1Y7B8HYRAD+5Xvx+kNwyDNBo3/kJqznNAEmfcOk4jbNCALjz7DNno2f8pXp0gmNE37QOIHqM7RVC4y4/eqj6LJgLSti+1R8+2hhpHZo1aLjvGX7Bucxq4JENu6L91VEMOB+ugfgZiFg6iZT3Otv/pxynVZNqprjAJNGeupwxj+SkwOmQflQJLxpTU6/9LjUhNXwXI2Bfq/IZhBs3IShHiEqclmIkPn5Zw95Mj/V1bhA8kqjYjtKYVsE8H1c7PYxA1BfMldeg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q86kIaktkqg5dJmgcVvPJJ5cKL0IhXPDeN1hkLVuMtM=;
- b=KH+nCHtogbWI1JhfdF0OplRm9v0H8n8rg9K1x60W8un6UZ0+YfjNUv1N0sobHWL5pX6Av2FUC+MctOY4EcxwWWZc3v/DD+peNbwCfrjN27+Zb5V8b1dBehpb6eCjFqy6MZPip9gdKrISwYSO2LmZbP2sTL16zNWuSZhUMc/RWQ3MXA0u+WMW1q6ezPMR6WeTx23Jwosa9EM00Yjyt4lm6KzgztPJgAKkLMvzaXeUv/Sle367DQ74o6C8cfKALc4Jraol+SqZGCnG2ftwP9u71L9L5t+8ULFLg/x0LWFOQI+xT3JkvJ+QvHHB7qrCijTnk0CjFN6nwA21L1/kmyyPZA==
+ bh=cM0asfPs9CgfEFNfkLDgpBO1YLDglUVBEDX4SQOYeb8=;
+ b=cigMLUoR4cmT4+yQmAD1bXJHC7y5eBsteN/2gcpIvHax0Erz++Op00ugGviEvzPsIj7tsJ1C1H4erGJXWNboT18teSE0aAVYFxcQ06JlgXiiusXy6bEKdJwasmzs8pdbzZodhtKcSx2jQ0llwchYU6cBK4dVxlKeoIb5rCNQmMpZpjwyTQDfjHqN2tirdwqkXZWrsvnhKaewX7Jm38D+Fy7raqQJV7gMr4Tzvup1QJhEw3iYHB76WWRAz7Pr0r5Hi8ahq6K+A+NdQcl0Vg/mI+STJ5xKKSR3gN11lOPDW+gXWmGiz0W5OuWcEpjknXxZpCryN1/pk8vuIg9K/Qo8qA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ1PR12MB6267.namprd12.prod.outlook.com (2603:10b6:a03:456::10) with
+ by BY5PR12MB4917.namprd12.prod.outlook.com (2603:10b6:a03:1d1::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Mon, 7 Nov
- 2022 17:00:53 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 17:08:15 +0000
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 17:00:53 +0000
-Date:   Mon, 7 Nov 2022 13:00:52 -0400
+ 17:08:15 +0000
+Date:   Mon, 7 Nov 2022 13:08:14 -0400
 From:   Jason Gunthorpe <jgg@nvidia.com>
 To:     "Tian, Kevin" <kevin.tian@intel.com>
 Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
@@ -79,66 +79,65 @@ Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
         <shameerali.kolothum.thodi@huawei.com>,
         "Liu, Yi L" <yi.l.liu@intel.com>,
         Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v3 05/15] iommufd: File descriptor, context, kconfig and
- makefiles
-Message-ID: <Y2k5xIp3TksL94MV@nvidia.com>
+Subject: Re: [PATCH v3 14/15] iommufd: vfio container FD ioctl compatibility
+Message-ID: <Y2k7fkxSzxTPTXkN@nvidia.com>
 References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <5-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <BN9PR11MB527695C6CE5BEA4AFACF3DBB8C389@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <14-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
+ <BN9PR11MB52763ADFBACFE7AFE11F5F078C3A9@BN9PR11MB5276.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB527695C6CE5BEA4AFACF3DBB8C389@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1P221CA0015.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::34) To LV2PR12MB5869.namprd12.prod.outlook.com
+In-Reply-To: <BN9PR11MB52763ADFBACFE7AFE11F5F078C3A9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BL0PR05CA0005.namprd05.prod.outlook.com
+ (2603:10b6:208:91::15) To LV2PR12MB5869.namprd12.prod.outlook.com
  (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ1PR12MB6267:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63a65bd6-6e9c-49b7-5bbe-08dac0e1a129
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB4917:EE_
+X-MS-Office365-Filtering-Correlation-Id: d87e476b-3d93-48f6-0496-08dac0e2a87c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aPOV6R+BKNUxNo3VxvreQH+55vSJpDYweNjze+MqxcvlgEdV52nlQgk0hruycLfrhid0Loylht3MfDtUyhf1k7ww57WLcgRYbAJvB6aRDwAzVR8FNC2ftToinI6HKNwjS1yYXJtslGxwWLfv+D+sv+4qkF1QEClWKuxl+fVKBpyBk6G0ZtMHcfr3Vhm3N75znZxLdMX9FjTrwIFkll8AejHw+dk87rfZZNVSpWUQsy1FpqT4Zf6nc0G/4zODFnGNc973KH728eicOCaVHl0QFMhZVMow/or2F0yS6x6zrgd243Br5KiCoNn0ErQWj/PHlVHc5d4OjtqV1XDfgK5ZMt5peH6grhc0MB2SNoulzpMJYzGNRXzzYJO+qDEu5Z1MRK+jnFZEZDcgIeshCJvQCHgW/K6n4Ev0UCMagF0aCBaQumE2YSLUIztQ99ugpCyTVaxo4e10OJeZd+TCeOc4lCf+JKe51D9qFGp6BsPuSw3br51vWkIuGO50xRtdDEZCRNfLKZFvxmaSGsn3pCgpuLHPE0fY5+x+c0aYQRUZKxiheeOAXJ5e0BM4FczynSaxCnm7xcuLI33OC5A2EVMo7MDHimQ1PQTZKk1ogOgFLUzP+ZV73neMpTjH/J7nft8w1G4cEg1/1fLbwiz4Db1oTuAdbbQ0XxcO6G0sUSo8W61zrkg+G6/lxUh18fra+bCfeY7dnt4Z/PmY8mYUyHmArA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(451199015)(66899015)(2906002)(7416002)(5660300002)(8936002)(7406005)(6506007)(2616005)(36756003)(8676002)(6486002)(66946007)(66556008)(66476007)(4326008)(38100700002)(6916009)(54906003)(316002)(86362001)(41300700001)(6512007)(83380400001)(186003)(26005)(478600001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: yJWZ79yIw26uYaA0ZF/2Rsq/+5iBAZsqiHOaoSJ1AR4OEfcduNW7NRzFUIJCV2XTZT+au41FgzGomxyDRPL2NHtuqIwg1yJxptMFTFU4e+wJmFTmLVWLDvXoucr1gopcUzFOnast02GpGRVa67+yh6L2sVZQRMxqCXt3dqIPADZiZCwUlYBc5u4Iwr8ZAlsp3gRCdrdKwT/dd1XoKKxewKrgeuvbpyJU2cpx0XXwyws7H2Z5Pta4nKrJXoEGF63UF+QYlSXDiz6RjxCq8eJs/bb2iabYctHJQ5/xG2+11SKTLhMuOLLidSADFVo5VCuYjoMAgWM5cQWX95WYSgdSgDmQ4MRlUyBRzUJeBuna4KPKimeqzCLZtMW3eQIs79HupCvrEdZyttpOqUUQBwRH1RAs0cYsO3qLDiPYztsPuiSswbd18H4u9rNFH0jXCcc1SIcO/vId9SBxoBwKrj8h9BDBoodoySrao6ytl8tLbYtBZRwc+EtxXUWgj+mvwgvevY3FmGUHW5iZGnN+AGDkwsDKfKMp9x0VrniphNZpSG21JINlBPfGNmJDMBinmAFffC3wYXVGgv2ulQlwM5WI0dEAL7vnPuCW7TbiEyOfR8fLckJWmG3r2FoHttJ/AwISXc9PkSPpWnob3840Q7xyc/Yu1i1eC0zUqiYAqyfCbRfariI436RzRuqeXd88qqMhnWbPLF4hIMDng0C57DFsUw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(39860400002)(346002)(396003)(376002)(451199015)(36756003)(86362001)(66556008)(2906002)(2616005)(186003)(6512007)(26005)(83380400001)(6506007)(66476007)(66946007)(4326008)(6916009)(478600001)(54906003)(8676002)(7406005)(7416002)(8936002)(316002)(6486002)(38100700002)(5660300002)(41300700001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7myQjLT/aIppn1xgVdjH2Oqf2o/DhSFuRS4YP3U+ZYQARgIsXoTBuD+3+7dO?=
- =?us-ascii?Q?PWxTAyGCf0qLYzKAp/jXgiPz3aK0ZQ2vNunxQ76uHA9j+DklQgslxfWeBWXj?=
- =?us-ascii?Q?foHY6FyNcnCrHty5h4rE5ZjLOf+bPuYKPVzX3PVtDYcFl+yPYeNKiAUnjvOi?=
- =?us-ascii?Q?/PripGLLzUMNjKqAHdqTBS4JcrfNJpABf0DMPC3+IavChnPRYNrohgsBs9LD?=
- =?us-ascii?Q?yEDATKTqussj/kd3VNaib0UAYJfKu+61VdWqgAv46S0qvAohMjWUBg+Zcafk?=
- =?us-ascii?Q?T95At5mufOxF/dB+8rjpdSc0itWyDVScTQ0uxrj2SwqtpMSxj8QyCdT6G/YV?=
- =?us-ascii?Q?0/YcQKZe1xFfXF4K47I/VH3AfYZNGrej6w8DJwZ6dOgyKc3mI4R/LdHQGVqG?=
- =?us-ascii?Q?k7MS+4aJq1xrFS8XNXP9cDTO0O48Od5tnsJll9yjBKStDI8iaxSN+OjOj3qO?=
- =?us-ascii?Q?wIkDfEEs3NcNQQSYZpTbOC88oFRO0w2jPVx0gXJJq1x8/D/5e8XOv31DHaAs?=
- =?us-ascii?Q?jTyQVRjnVz2cM4Gv58P1LFbfikweW3Je5g+CVCdAi+wf8oZaVQGASrKyHHI5?=
- =?us-ascii?Q?7EoCcjJ8ivlxZPKzfc3W3KaXwG5p3kP9/moilNde6WgHVE7famP6WtPFmxNa?=
- =?us-ascii?Q?0TBwsSTOZ9cp1wgwngqu5RWKIvRKpH9uSkUeqI76oO8BkRhXxxjptdxWYmE+?=
- =?us-ascii?Q?WSZwavsfKaedrJaVH4JBHzL0EI6l2s7v9FLaZYATLgNDx7Kg7hf1i/Et9/tv?=
- =?us-ascii?Q?VtIs1Mdz+NmzRKXGA3KruaPznivUbSePhHrnpSW2y4l4fqVs604N/DdBtwLx?=
- =?us-ascii?Q?RHwZWCUSpL5iyHNlS8xazPsrln0nQq9+emBvUwMbLoqyTU9Ptd0vRe+rQB1u?=
- =?us-ascii?Q?71pYLhqlDiXR/ulSqzO2FgVf8wVo4AHviprCht8BggtHhEQhU/P9y60LxQUW?=
- =?us-ascii?Q?Sz3qAxZKFNoPza0kfZp33ysiilDHLimKhi9Oajvx+WgWumdisRIxZzpWzVkx?=
- =?us-ascii?Q?9TEotRd5ZFFJwwqPTT930Y2xsyqCOpyR023MAvQksBUEetNMmUvBmBMTJqpx?=
- =?us-ascii?Q?hg835lR418z6ywg4Xl7CMOvdr2yYWatQrM3tCfmUCaLOx/HpFh/fRKnvbKGg?=
- =?us-ascii?Q?H2nxzg5i3/xQL6Rz2fjfsM4s/Z3Mj33w9G2sJTL1RNCoh9mQ00Y7WFgHDamJ?=
- =?us-ascii?Q?XYehOgiFNPcq1gu4gd03eIuLclMG7d1G0ekH3VFGmSMm+Q5bzuuzcsGiYqgL?=
- =?us-ascii?Q?Ui6WJ0qGgmJVgXk7ev0eBVf7odZQTeIYSVxUz0G/OMZL2BF+MYWxsKUrnjRf?=
- =?us-ascii?Q?nC7qfJCtdCgKsU8OZLtn3AQj3bfGAkVyMilI6WFRtI0CEr94plh/Vj7pz5Eq?=
- =?us-ascii?Q?PR9ag5/RsnUGnmRr1NGGDfuHSzQVk5EGpVhMhHeXrJeKe5wpdlbhsdCNHd6Z?=
- =?us-ascii?Q?3T5w9r+8vq1igDlU/GjckxD1JwL9g2lS+se5iiO1NTzkDEVxH1ORvLiU/pff?=
- =?us-ascii?Q?BIOgiE4G5Z/n6Fh6ZKQQDoa1B+buWrQR1Zzz3w87NG5domMV55z4e7Osc+mk?=
- =?us-ascii?Q?qF+Q7btTzp1Q9fV9ZYw=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nYMMsXiC/MOFB7rmr1mRg4AqC5qS1noSrzeNAGesjDn4ZAyJPP/Cz4EGvFu+?=
+ =?us-ascii?Q?iT3r+XA6Pokq38oO3vw4E7sDk0nr6xJ+SMSOWMC8A2yiPT64RQ9scES1YRwL?=
+ =?us-ascii?Q?jYAKMLcwgnGstWL8NhSyPRR59d0CZi+ibyiTFOaiJ/4+p6wVIebXzo2/jjke?=
+ =?us-ascii?Q?MHefELAedV6uk4CnVumd9z+yP7to5zm38eCrR00zvYsCcvXEn+b/z32wRsPL?=
+ =?us-ascii?Q?370H4WRh037Rsao6ibJuSVjYHf61t+Fkk8yG0PtUlG1OibyyYQltVCJ960me?=
+ =?us-ascii?Q?Z/GwO6FymqjehB8YgM21Mv2GfNCewkcLH7GK13uiuE2vusJIDG/I8G9HRHRV?=
+ =?us-ascii?Q?h3MDAvp56LhXuykMLt9bcWrWnlrBPGz8XhVx+cVRUFuPRRF+FkKOA965fZIe?=
+ =?us-ascii?Q?OZqO+3J+OwVtkdfEgpU8220bVU2fk9WGj344PpNd6Rl8bzLE2WFr6SM5Q8+A?=
+ =?us-ascii?Q?YixEV8j5yVSHKaRbr6b+sphp0yjDFVGSXu9VQEFQe669fk3QZ96+JTVxUr6H?=
+ =?us-ascii?Q?0x+Zsp1Fj7Hw37SNeBmWLKXx2b7S4tkFEIxrtiDegGnd6YarGMdQjARm8dRU?=
+ =?us-ascii?Q?iqIi/AAgiI9g+l7kEDk/KITmVPoSfxuhzwgns9Ld3VYiacG8LLnveCX+qK0T?=
+ =?us-ascii?Q?n5uqkW2lHikY+PbbJW4r9PLev+NASh4iYLiTXixhZ/8VafnKos5zcIstm7zk?=
+ =?us-ascii?Q?6ApFQkwIDWYr2q1CRi+aaCQa2+oORLNN54Nn+q+ObB8m8SjV+CCZMipkwQ1x?=
+ =?us-ascii?Q?xvX9qIbkvwFYXBJu8RKW/Jmmg4vNbZTMDjGVyjuXIG4IIMavAZoVVf/VGMPE?=
+ =?us-ascii?Q?HotqeenpXVE70uOZ0ZJXi097Bj0+9WinUC/QgDw+e2D7S2gPREJB0o2fKvYK?=
+ =?us-ascii?Q?v5cYAgndsmRdZDFen8/2YvMuGxJGSIhMUjYImiD0kRe8+V2UAKPoYLgOXIJn?=
+ =?us-ascii?Q?EizI41kOtDq3KuDBpQwEy8txAEfOWNEx5IoKpbeF/UEIETZp90Vj+TdJvhoo?=
+ =?us-ascii?Q?DGvX4EE9VroBu2dzp+W8+J+J4pV3UsHKPi5cBmBX/tL18ClEVl2jOQUGB3dN?=
+ =?us-ascii?Q?6JQrx4t7Vy/QQjf99jGWxs9tcIrSRQ3SocrqWItGSTozabAA+uBC7xJDTrnU?=
+ =?us-ascii?Q?S1XZmfYPH8ijw8GGfcsZQxCoABakzwMs6+fOFe6Kj40Pcky2B5Nr+LpHrnW7?=
+ =?us-ascii?Q?vC6G3onUI8GUYEtgRDAANbXpuMM745xLJs6nYUNQmB0B05kavRE6ISHL91jo?=
+ =?us-ascii?Q?HQzDsmXH9yPEGj/7OJWSMSSe23njBJgcnki7A0IBgxrNdAilkNkZXO+sEQTX?=
+ =?us-ascii?Q?uIT976OgPRAlez86wf0pcu9ucnoFDU4D6XjotbrvSi+6Y4y3/A2dMtyNrJL1?=
+ =?us-ascii?Q?v+VIFT9/8rJw9TLarXGL6lnRBOBAYV2yVYCJag4GyNNd7lr3ULKguV9NPDts?=
+ =?us-ascii?Q?7SZZWUTPmA/Qw72S9UGfrtKtAKkGJIL7vSl9lragjyqb6XLzjowDb+ZQuaXz?=
+ =?us-ascii?Q?jI7v7Af36R1XvGeXZ/JHkRnYCkqiEVz8efFicuf8S1j2PBhHgq7CetkzJbRB?=
+ =?us-ascii?Q?rM3DAq4+3WR9BCY6Vmo=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63a65bd6-6e9c-49b7-5bbe-08dac0e1a129
+X-MS-Exchange-CrossTenant-Network-Message-Id: d87e476b-3d93-48f6-0496-08dac0e2a87c
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 17:00:53.5678
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 17:08:15.0531
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Oqz/uYXNF9oiYuQwtATAw35YBIM1Y0S8HxjpS8TwB9KnX0xdOapyGIMSLjQaQXly
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6267
+X-MS-Exchange-CrossTenant-UserPrincipalName: dWZeATpQb28phoL7IW4DaT+XWH1ExFHVmGiOIxHRnhw+xhCLQh+PsE7r5Q/PsRbQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4917
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -149,205 +148,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 07:22:11AM +0000, Tian, Kevin wrote:
+On Sat, Nov 05, 2022 at 09:31:39AM +0000, Tian, Kevin wrote:
 > > From: Jason Gunthorpe <jgg@nvidia.com>
 > > Sent: Wednesday, October 26, 2022 2:12 AM
-> > 
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -10714,6 +10714,16 @@ F:	drivers/iommu/dma-iommu.h
-> >  F:	drivers/iommu/iova.c
-> >  F:	include/linux/iova.h
-> > 
-> > +IOMMU FD
-> 
-> remove the space, i.e. IOMMUFD
-
-OK
-
-> > +config IOMMUFD
-> > +	tristate "IOMMU Userspace API"
-> > +	select INTERVAL_TREE
-> > +	select INTERVAL_TREE_SPAN_ITER
-> > +	select IOMMU_API
-> > +	default n
-> > +	help
-> > +	  Provides /dev/iommu the user API to control the IOMMU subsystem
-> > as
-> > +	  it relates to managing IO page tables that point at user space
-> > memory.
-> > +
-> > +	  This would commonly be used in combination with VFIO.
-> 
-> remove this line
-
-Sure
- 
-> > +/**
-> > + * iommufd_put_object_keep_user() - Release part of the refcount on obj
-> 
-> what does 'part of the refcount' mean?
-> 
-> > + * @obj - Object to release
-> > + *
-> > + * Objects have two protections to ensure that userspace has a consistent
-> > + * experience with destruction. Normally objects are locked so that destroy
-> > will
-> > + * block while there are concurrent users, and wait for the object to be
-> > + * unlocked.
-> > + *
-> > + * However, destroy can also be blocked by holding users reference counts
-> > on the
-> > + * objects, in that case destroy will immediately return EBUSY and will not
-> > wait
-> > + * for reference counts to go to zero.
-> > + *
-> > + * This function switches from blocking userspace to returning EBUSY.
-> 
-> Not sure where "switch from... to..." comes from. Also this function alone
-> doesn't deal anything with EBUSY. Probably it is clearer that this interface
-> is used for long-term refcounting which the destroy path should favor to
-> not block as it did for transient refcounting in concurrent ioctl paths.
-
-How about this:
-
-/**
- * iommufd_ref_to_users() - Switch from destroy_rwsem to users refcount
- *        protection
- * @obj - Object to release
- *
- * Objects have two refcount protections (destroy_rwsem and the refcount_t
- * users). Holding either of these will prevent the object from being destroyed.
- *
- * Depending on the use case, one protection or the other is appropriate.  In
- * most cases references are being protected by the destroy_rwsem. This allows
- * orderly destruction of the object becuase iommufd_object_destroy_user() will
- * wait for it to become unlocked. However, as a rwsem, it cannot be held across
- * a system call return. So cases that have longer term needs must switch
- * to the weaker users refcount_t.
- *
- * With users protection iommufd_object_destroy_user() will return -EBUSY to
- * userspace and refuse to destroy the object.
- */
-
-With a function rename.
-
-> > + * It should be used in places where the users will be held beyond a single
-> > + * system call.
-> 
-> 'users' or 'external drivers'? Do we ever allow userspace to hold the lock
-> of a kernel object for undefined time?
-
-"users" is the name of the variable and the refcount
-
-We don't allow userspace to hold a lock, but we do allow it to hold a
-refcount. And the refcount is defined so that it must be unheld
-internally in the kernel when the fd is released. Eg this is part of
-what the access_ops unmap callback is doing.
-
- 
-> > +++ b/drivers/iommu/iommufd/main.c
-> > @@ -0,0 +1,345 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/* Copyright (C) 2021 Intel Corporation
-> > + * Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES
-> > + *
-> > + * iommufd provides control over the IOMMU HW objects created by
-> > IOMMU kernel
-> > + * drivers. IOMMU HW objects revolve around IO page tables that map
-> > incoming DMA
-> > + * addresses (IOVA) to CPU addresses.
-> 
-> "to bus addresses".
-
-CPU address is correct, these are all phys_addr_t's. The IOVA is the
-"bus address" in kernel terminology.
-
-> > + *
-> > + * The API is divided into a general portion that is intended to work with any
-> > + * kernel IOMMU driver, and a device specific portion that  is intended to be
-> > + * used with a userspace HW driver paired with the specific kernel driver.
-> > This
-> > + * mechanism allows all the unique functionalities in individual IOMMUs to
-> > be
-> > + * exposed to userspace control.
-> 
-> there is no device specific portion in this series.
-
-Lets drop the paragraph
-
-> > +/*
-> > + * Allow concurrent access to the object. This should only be done once the
-> > + * system call that created the object is guaranteed to succeed.
-> 
-> an object is not always created by a system call, e.g. iommufd_access
-
-Yes, but that is actually a special case, "iommufd_access" is a "leaf"
-object that doesn't have any way for userspace to block it. Something
-like that can always be destroyed, indeed we require it as part of the
-drive facing API. So this guidance isn't aimed at that.
-
-How about:
-
-
-/*
- * Allow concurrent access to the object.
- *
- * Once another thread can see the object pointer it can prevent object
- * destruction. Expect for special kernel-only objects there is no in-kernel way
- * to reliably destroy a single object. Thus all APIs that are creating objects
- * must use iommufd_object_abort() to handle their errors and only call
- * iommufd_object_finalize() once object creation cannot fail.
- */
-
-> > +static int iommufd_destroy(struct iommufd_ucmd *ucmd)
+> >
+> > +int iommufd_vfio_compat_ioas_id(struct iommufd_ctx *ictx, u32
+> > *out_ioas_id)
 > > +{
-> > +	struct iommu_destroy *cmd = ucmd->cmd;
-> > +	struct iommufd_object *obj;
+> > +	struct iommufd_ioas *ioas = NULL;
+> > +	struct iommufd_ioas *out_ioas;
 > > +
-> > +	obj = iommufd_get_object(ucmd->ictx, cmd->id,
-> > IOMMUFD_OBJ_ANY);
-> > +	if (IS_ERR(obj))
-> > +		return PTR_ERR(obj);
-> > +	iommufd_put_object_keep_user(obj);
-> > +	if (!iommufd_object_destroy_user(ucmd->ictx, obj))
-> > +		return -EBUSY;
+> > +	ioas = iommufd_ioas_alloc(ictx);
+> > +	if (IS_ERR(ioas))
+> > +		return PTR_ERR(ioas);
 > 
-> Add a comment that it implies a refcnt hold by external driver in a
-> long time so return error instead of blocking...
-
-Lets do "See iommufd_ref_to_users" 
-
-> > +	nr = _IOC_NR(cmd);
-> > +	if (nr < IOMMUFD_CMD_BASE ||
-> > +	    (nr - IOMMUFD_CMD_BASE) >= ARRAY_SIZE(iommufd_ioctl_ops))
-> > +		return -ENOIOCTLCMD;
+> I tried to find out where the auto-created compat_ioas is destroyed.
 > 
-> According to the description in iommufd.h:
+> Is my understanding correct that nobody holds a long-term users
+> count on it then we expect it to be destroyed in iommufd release?
+
+This is creating a userspace owned ID, like every other IOAS.
+
+Userspace can obtain the ID using IOMMU_VFIO_IOAS GET and destroy it,
+if it wants. We keep track in a later hunk:
+
++	if (ictx->vfio_ioas && &ictx->vfio_ioas->obj == obj)
++		ictx->vfio_ioas = NULL;
+
+As with all userspace owned IDs they are always freed during iommufd
+release.
+
+So, a comment is:
+
+	/*
+	 * An automatically created compat IOAS is treated as a userspace
+	 * created object. Userspace can learn the ID via IOMMU_VFIO_IOAS_GET,
+	 * and if not manually destroyed it will be destroyed automatically
+	 * at iommufd release.
+	 */
+
+> > +	case IOMMU_VFIO_IOAS_SET:
+> > +		ioas = iommufd_get_ioas(ucmd, cmd->ioas_id);
+> > +		if (IS_ERR(ioas))
+> > +			return PTR_ERR(ioas);
+> > +		xa_lock(&ucmd->ictx->objects);
+> > +		ucmd->ictx->vfio_ioas = ioas;
+> > +		xa_unlock(&ucmd->ictx->objects);
+> > +		iommufd_put_object(&ioas->obj);
+> > +		return 0;
 > 
-> 	*  - ENOTTY: The IOCTL number itself is not supported at all
+> disallow changing vfio_ioas when it's already in-use e.g. has
+> a list of hwpt attached?
 
-Yes, it is weird, but in ioctl handlers you return ENOTTY by returning
-ENOIOCTLCMD which is then converted to ENOTTY in vfs_ioctl()
- 
-> > +	op = &iommufd_ioctl_ops[nr - IOMMUFD_CMD_BASE];
-> > +	if (op->ioctl_num != cmd)
-> > +		return -ENOIOCTLCMD;
-> > +	if (ucmd.user_size < op->min_size)
-> > +		return -EOPNOTSUPP;
-> 
-> -EINVAL?
+I don't see a reason to do so..
 
-Yes
+The semantic we have is the IOAS, whatever it is, is fixed once the
+device or access object is created. In VFIO sense that means it
+becomes locked to the IOAS that was set as compat when the vfio device
+is bound.
 
-> > +/**
-> > + * DOC: General ioctl format
-> > + *
-> > + * The ioctl mechanims follows a general format to allow for extensibility.
-> 
-> mechanism
+Other than that, userspace can change the IOAS it wants freely, there
+is no harm to the kernel and it may even be useful.
 
-It was changed to "interface" in another comment
-
-Thanks,
-Jason 
+Jason
