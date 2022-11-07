@@ -2,107 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5627761FB52
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 18:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1463E61FBB5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 18:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbiKGR1q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 12:27:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
+        id S232964AbiKGRnK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 12:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiKGR1q (ORCPT
+        with ESMTP id S232838AbiKGRnF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 12:27:46 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A5F12AF9
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 09:27:45 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id k2so7574739qkk.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 09:27:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OtwMIMageNgEFgITDbP/X4AlmExFVOD7QsjK39jRkOs=;
-        b=ZrBbGd0NE5W3bFjfpMfVEGchJiOqL5vKGUnJZWHQEDCz71oryF6CDiPscJkkJaNeeg
-         /pKDfIl6hW5yw8tjgrcZSOwrloCrFqYb1/s9Bc1/cV94xFkaKkZwH1bCSgyaTCtOH5Nq
-         2ijwSehO6aXkrD87GuWevIaaXGPhzXmGc/u0k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OtwMIMageNgEFgITDbP/X4AlmExFVOD7QsjK39jRkOs=;
-        b=uLp5lwP/F9PuGhML2UETxFAZfS/j/QjaJgI+RnFOX2d5+yFA+Pyie9FqIVuZFBJO3h
-         JRQbANP1asvhPiR8RmOS9fVYJmvNE0Av9AWps1caCKKooY3kgUZ6uRK2rvCHS/A8n7mh
-         LN723XSBt31goZQBpMosVQFMu0/4fqWLjgEQMjLJm9EwMuogTTTRx7mIVrKYMJcK8u9C
-         tcUBAYwXR6J4MMKZwkkfMxwH06h2+zwYl0yAUaGHPW0qf89gyjbwiqTETk0xFFsoNjqu
-         ZhxslW1e36KzBm6t/h1VpKW2+159OS/6m96O7itd/T8mtA3k48vKzUfoIpRqDxl51Pui
-         iGAQ==
-X-Gm-Message-State: ANoB5pn88iqTypi+S/2h1WFCrWnxHRjCl99vw0Lxa0QIcG8XqDrW36T4
-        7sgMEPjJZ0XfTuI6DGK9dOnbsaz0pcVrBA==
-X-Google-Smtp-Source: AA0mqf5vuXsKt8UiMD0feSnprxriA+w+G4WuYOctKXtYAiJUgr1LBL0C0XqdEzIspAdIF7U1YBt0/A==
-X-Received: by 2002:a05:620a:2087:b0:6fa:ece6:7cc8 with SMTP id e7-20020a05620a208700b006faece67cc8mr2496517qka.616.1667842064205;
-        Mon, 07 Nov 2022 09:27:44 -0800 (PST)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id y20-20020a37f614000000b006cfaee39ccesm7055348qkj.114.2022.11.07.09.27.39
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 09:27:41 -0800 (PST)
-Received: by mail-yb1-f174.google.com with SMTP id 7so9887211ybp.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 09:27:39 -0800 (PST)
-X-Received: by 2002:a05:6902:1352:b0:6bb:3f4b:9666 with SMTP id
- g18-20020a056902135200b006bb3f4b9666mr46634218ybu.101.1667842059236; Mon, 07
- Nov 2022 09:27:39 -0800 (PST)
+        Mon, 7 Nov 2022 12:43:05 -0500
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D044224080
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 09:43:03 -0800 (PST)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 6C0CC240031
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 18:43:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1667842982; bh=3Zd2LzTn35gGPZH57ZQu9I2pZQgysxz4Yi4s55fsDAA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SPRH4rRUnoiSw1sMFZVGvbd4orWrduz7iu/JNsrZC07JbOcMP3A3OWNU+KbIliydx
+         dwJIn0lrFX7IcE045BPxvTqFpBpZ1lqYuEDeCbwTGtPYUI1kI0TFenVGCEmoeOG5XE
+         S1jpGNVvtiMkg2l6Xi2Bb8dGk/XfplNGgnkguDqdu7q7UrpJFK9kAn7W1crVaTmZjT
+         h+Xb/eGTY6fD82Q5CrXsNQOU7hI1dA4QF8iYUldGtaYxC1xwCdtncmAcYD23DzaDa6
+         PAX1iRDXxCH2zi/1xfPK6mskDp1ConSBCUscivKBJnYhK1r/vqrfkVt2kn7ocpoY5A
+         90D7mKzHHhNAg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4N5dqM3Y1fz6tpl;
+        Mon,  7 Nov 2022 18:42:55 +0100 (CET)
+Date:   Mon,  7 Nov 2022 17:42:52 +0000
+From:   Daniel =?utf-8?Q?M=C3=BCller?= <deso@posteo.net>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stefano Salsano <stefano.salsano@uniroma2.it>,
+        Paolo Lungaroni <paolo.lungaroni@uniroma2.it>,
+        Ahmed Abdelsalam <ahabdels.dev@gmail.com>
+Subject: Re: [net] seg6: selftests/bpf: fix BPF object file name in
+ test_lwt_seg6local.sh
+Message-ID: <20221107174252.7ycgyedc575ojs4l@muellerd-fedora-PC2BDTX9>
+References: <20221107143044.27763-1-andrea.mayer@uniroma2.it>
 MIME-Version: 1.0
-References: <20221107161740.144456-1-david@redhat.com>
-In-Reply-To: <20221107161740.144456-1-david@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 7 Nov 2022 09:27:23 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
-Message-ID: <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 00/19] mm/gup: remove FOLL_FORCE usage from drivers
- (reliable R/O long-term pinning)
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221107143044.27763-1-andrea.mayer@uniroma2.it>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 8:18 AM David Hildenbrand <david@redhat.com> wrote:
->
-> So instead, make R/O long-term pinning work as expected, by breaking COW
-> in a COW mapping early, such that we can remove any FOLL_FORCE usage from
-> drivers.
+Hi Andrea,
 
-Nothing makes me unhappy from a quick scan through these patches.
+On Mon, Nov 07, 2022 at 03:30:44PM +0100, Andrea Mayer wrote:
+> The test_lwt_seg6local.c implements several eBPF programs which are
+> used to test the SRv6 End.BPF behavior.
+> Since commit afef88e65554 ("selftests/bpf: Store BPF object files with
+> .bpf.o extension"), part of the build system and test programs loading
+> BPF object files are supposed to work with the .bpf.o extension.
+> 
+> Consequently, the test_lwt_seg6local.c is compiled into
+> test_lwt_seg6local.bpf.o and the corresponding test_lwt_seg6local.sh
+> script is not updated to deal with the correct .bpf.o extension.
+> 
+> This patch fixes the test_lwt_seg6local.sh, using the correct .bpf.o
+> extension for the testing BPF object file, i.e. test_lwt_seg6local.bpf.o.
+> 
+> Fixes: afef88e65554 ("selftests/bpf: Store BPF object files with .bpf.o extension")
+> Signed-off-by: Andrea Mayer <andrea.mayer@uniroma2.it>
+> ---
+>  tools/testing/selftests/bpf/test_lwt_seg6local.sh | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.sh b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> index 826f4423ce02..bfe76ab78481 100755
+> --- a/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> +++ b/tools/testing/selftests/bpf/test_lwt_seg6local.sh
+> @@ -117,18 +117,18 @@ ip netns exec ${NS6} ip -6 addr add fb00::109/16 dev veth10 scope link
+>  ip netns exec ${NS1} ip -6 addr add fb00::1/16 dev lo
+>  ip netns exec ${NS1} ip -6 route add fb00::6 dev veth1 via fb00::21
+>  
+> -ip netns exec ${NS2} ip -6 route add fb00::6 encap bpf in obj test_lwt_seg6local.o sec encap_srh dev veth2
+> +ip netns exec ${NS2} ip -6 route add fb00::6 encap bpf in obj test_lwt_seg6local.bpf.o sec encap_srh dev veth2
+>  ip netns exec ${NS2} ip -6 route add fd00::1 dev veth3 via fb00::43 scope link
+>  
+>  ip netns exec ${NS3} ip -6 route add fc42::1 dev veth5 via fb00::65
+> -ip netns exec ${NS3} ip -6 route add fd00::1 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec add_egr_x dev veth4
+> +ip netns exec ${NS3} ip -6 route add fd00::1 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.bpf.o sec add_egr_x dev veth4
+>  
+> -ip netns exec ${NS4} ip -6 route add fd00::2 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec pop_egr dev veth6
+> +ip netns exec ${NS4} ip -6 route add fd00::2 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.bpf.o sec pop_egr dev veth6
+>  ip netns exec ${NS4} ip -6 addr add fc42::1 dev lo
+>  ip netns exec ${NS4} ip -6 route add fd00::3 dev veth7 via fb00::87
+>  
+>  ip netns exec ${NS5} ip -6 route add fd00::4 table 117 dev veth9 via fb00::109
+> -ip netns exec ${NS5} ip -6 route add fd00::3 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.o sec inspect_t dev veth8
+> +ip netns exec ${NS5} ip -6 route add fd00::3 encap seg6local action End.BPF endpoint obj test_lwt_seg6local.bpf.o sec inspect_t dev veth8
+>  
+>  ip netns exec ${NS6} ip -6 addr add fb00::6/16 dev lo
+>  ip netns exec ${NS6} ip -6 addr add fd00::4/16 dev lo
 
-And I'd really love to just have this long saga ended, and FOLL_FORCE
-finally relegated to purely ptrace accesses.
+The change looks good to me. Thanks for the fix.
 
-So an enthusiastic Ack from me.
+Daniel
 
-                   Linus
+Acked-by: Daniel Müller <deso@posteo.net>
