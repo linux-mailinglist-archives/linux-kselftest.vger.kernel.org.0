@@ -2,202 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6FC61FDB7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 19:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E9A61FE27
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 20:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbiKGSkC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 13:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S232346AbiKGTDx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 14:03:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiKGSjt (ORCPT
+        with ESMTP id S231693AbiKGTDw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 13:39:49 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FF41DA7F
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 10:38:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667846329; x=1699382329;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=N+CEEZouORCw3PbIgESSxwy065L/IpAxswmLC0fLS38=;
-  b=IM84V+vgysyCsvS6U7wYLJ6sKD9nDQQXrCpQf3pNIj0fKzjxznH7I6i5
-   RxhmtSXAKAJdz/VDduD5A2EPbIHGg9943Jjua2yVyvlL5prDorProN+ct
-   OxbdLKpBDNJL/Fg6076ybdf4s5nf4vD9iM6FBveVckQKYH0oJ/y+jwL4p
-   8v/vL0yK5B0MVOP5VvxUvDhi49WxzZ6kMyr9BAT8i+Vug2NjUfuO+ceuJ
-   IklIBeAsCn5lKL7maI4PPZFtDT70k0d/9jw7agaOQzPKcI/uQY7wcdM3w
-   Feji70CfjjmooYjovREj8dQMs+sP+8OKv9zmuSCbzIb5vjOd9PJmVE02y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="290212304"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="290212304"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 10:38:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="613970105"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="613970105"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga006.jf.intel.com with ESMTP; 07 Nov 2022 10:38:15 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 10:38:15 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 10:38:14 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 7 Nov 2022 10:38:14 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 7 Nov 2022 10:38:14 -0800
+        Mon, 7 Nov 2022 14:03:52 -0500
+Received: from DM6PR05CU003-vft-obe.outbound.protection.outlook.com (mail-centralusazon11013001.outbound.protection.outlook.com [52.101.64.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8578327934;
+        Mon,  7 Nov 2022 11:03:51 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DC+vKKTwi6W2AyXtkrLQ1fUaxVfG/f7Ss+nTW7BVdN+MosCH5eZp8bOVs5BNryazhs8sa/6tM0rTtzO2KOFI+WtQQn1F4o4mOVRJCYlKo7kc4TNhZLM5PfajqhNvu67R4Kd3n54Jsb4TMX28okIcozwjENEY2oD1jCdHYPmImsHqUz4n6soS+6FEXKq9TQssDrFE6ddCPsw5y6UHZhN5dOs4r82PLSc+vONB4PcYv86ZrpkMz9A2S3ciLKCQKmwL2pFakJA3R/yBK+12iUAB4sbBrHWeiG+K7z9On4x6SqTN4YygKNgbZ35k18PGDoEy237dgqdpGuYUJAxe2HnR6w==
+ b=joxD3CxbdvtT9/U8n0cSDvZ16HlOtT5519Gs9qHTmYbodKBGmwf7+xq+KCWiiqm+l6NVJVXor3bK+13OBRfhBzg4jz8BPNW21SK6suKyctGqC9jgTqTMP+n5Kcz9MduAtGSbPSEeVoSDMdeG7r8Hel5uN7VJattnn+onEd+y2i4SehWfNkj9JVhrjMBDHoi6Yv/W86acSQm0yVe4G3TvZ/zH8uyY2dlfipepTJg4kDuTBHJl0jo8A+U7SzamzN/Y25hJZRXALggdxGKOHb7K2HXYKioXo0totlENAZiefRfrrBSz0WJVoX6FYHTYIRQFaa/1lPUlE60Cm8VTOVIl5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ompKoPNIJ0I2u854Ux+R6l/uE42frnO7j03jIEXDOr0=;
- b=R/RoU9Dk68ajZHmqN8nhKucZyQ7A9jFM5+un1eACxRT1t+tqYUwQGWU8H4LAjifvQEb4H//naxNURDnYXgWrKDzuSfwxWRQHEG/1NcBT5BcPiQcd8uPaKbJGZTdbGnEnJI2IWODmvT1obbC+e1nAdWruGN5/DsuyVJ5MSW8xjTzyJvoAhkyq/rIspwq23y74IsQe8iC9ZaGPEsT57FcgFN2byWHOkBCVsfk4fVQCbJfiq7CBGaNfJab/D4NGrR1pranEh2n/0a7FngtV+M5/UE7Rp5BAi1MMxnTyAoygcpIouEapY/d27PGK82sMhj4SzHxAWMsfNNhgeVsqrR6YRg==
+ bh=MMm1F9kmDsUV3YAItctwDvww/eBkRcX8E/vAlxrs7Qs=;
+ b=HfI/6SATN3paV8BN8nmdBEsqqq2aqoluljRb4yKNB9u/AkgBfksalMKq2SuAUegbbj3B+1EYMujXIT44olNrO4faXy03/N60nWYYt1VW2aLUZUZDKbB2bfo3ayzS6KrOJxGf7nQasD7II8J5JMyvHJH4EkQkPEQ2g1RCh9NLUl/MN1Ahd6DlnNjG3XTTR8lmD86a34VUgEbBuRON7XZ3MqRtYhuwC21nWmBBo6URjwhYZuywG+qUTBZKcZoqYoegwMEfjSD4ZsOC6jkv/e0OcY6iim1VF1lPWdPYfIE+4qjFvhYc9WDuyn2E7enlVGqQpvooHAOkEXQjcKJjKoQNvg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
- BN9PR11MB5403.namprd11.prod.outlook.com (2603:10b6:408:11c::21) with
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MMm1F9kmDsUV3YAItctwDvww/eBkRcX8E/vAlxrs7Qs=;
+ b=nRS0d1aTB+odpfReEG9+bshqLvSaojXdlRynMOvwC0RceA0iqFegldKekhx3Fn6tQ49/kkluaTXuX7WQvIyATfwoMqGtjS+Y3+eesc9Z+Iv/5VBfdn76boc8S4kZyEmLkek1Kn4ERUM6qCHcOKZ1UwF9Tv589A7IeWv7FBQ1DmM=
+Received: from SA1PR05MB8534.namprd05.prod.outlook.com (2603:10b6:806:1dd::19)
+ by BY5PR05MB7190.namprd05.prod.outlook.com (2603:10b6:a03:1da::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
- 2022 18:38:13 +0000
-Received: from DM4PR11MB5373.namprd11.prod.outlook.com
- ([fe80::22c6:b7ab:a8ec:a6d8]) by DM4PR11MB5373.namprd11.prod.outlook.com
- ([fe80::22c6:b7ab:a8ec:a6d8%5]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 18:38:12 +0000
-Date:   Mon, 7 Nov 2022 19:38:09 +0100
-From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
-To:     Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-CC:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <igt-dev@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>
-Subject: Re: KUnit issues - Was: [igt-dev] [PATCH RFC v2 8/8] drm/i915: check
- if current->mm is not NULL
-Message-ID: <20221107183809.z5ntt6fj5ohs4bnn@nostramo>
-References: <20221103162302.4ba62d72@maurocar-mobl2>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221103162302.4ba62d72@maurocar-mobl2>
-X-ClientProxiedBy: LO2P265CA0230.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:b::26) To DM4PR11MB5373.namprd11.prod.outlook.com
- (2603:10b6:5:394::7)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.9; Mon, 7 Nov
+ 2022 19:03:48 +0000
+Received: from SA1PR05MB8534.namprd05.prod.outlook.com
+ ([fe80::ca89:ffc2:7e20:16fd]) by SA1PR05MB8534.namprd05.prod.outlook.com
+ ([fe80::ca89:ffc2:7e20:16fd%5]) with mapi id 15.20.5791.027; Mon, 7 Nov 2022
+ 19:03:48 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     David Hildenbrand <david@redhat.com>
+CC:     kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "etnaviv@lists.freedesktop.org" <etnaviv@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH RFC 05/19] mm: add early FAULT_FLAG_WRITE consistency
+ checks
+Thread-Topic: [PATCH RFC 05/19] mm: add early FAULT_FLAG_WRITE consistency
+ checks
+Thread-Index: AQHY8sSPsuqGQZcSwkqSjFQS9Nwjx64z0cqA
+Date:   Mon, 7 Nov 2022 19:03:48 +0000
+Message-ID: <E1E8C21A-EAEB-4FA3-A9B9-1DFF81FCDA70@vmware.com>
+References: <20221107161740.144456-1-david@redhat.com>
+ <20221107161740.144456-6-david@redhat.com>
+In-Reply-To: <20221107161740.144456-6-david@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR05MB8534:EE_|BY5PR05MB7190:EE_
+x-ms-office365-filtering-correlation-id: 58691cf8-f0a5-4dc9-95e2-08dac0f2cd1e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: V4ZgqZJ/nZo+t6bBykyeqlDysQg7OBj666BnOWgLCZqpArReQEDoOOTAkXgM9HkAOmw10Pdv1miyNP82OyEToEOKp6YGCtXrM0gDBVDCvRd3DcfIMsYqIQWFGzwUorYMa4C1dhap2x/A9AqWHHhtvPlVfgGgVFjCiZMEZ8cJoQH/iBO1svyWLEKoLdcoPyy1olH8E3vj4MBcnBGoOk8v6Be5ZFVDFMykrKtpuvUcD+tBrDmfBTCMDkjXGukxrsiiZKYB56A9AEV6yYkxnhanjqPrT0WYNoY/Ez/Zmn04S/dikfX+tcLj3UJQ/QXM4FEppfqc2uBlqX4CKnkPCqi6LK5S0wOliIOFjQZmGPGUo4srtHw/pCxCg1SIHYaymNkSZRXz10nkcUYlCzeSKX64O2q9YYUT9TTpHPq5bJ+sLQgTSWfunMgmV9B7PmeXwygk2fOIhSSfjsOPODKSsbK++U/BMhqk92MPyG5++K+YjJUJUHblYfJpwIb3kLLN497zVy0jp+Ouk5q0N/8EW5Kpo36qhe1YFKaTQOfQi+O2V0HMn+TYGNFkqqP3VME2lz7aerDow+O9lpPTLh1ZQbvrgQSdc9llzO24bix/XUYsO2sV6i/a/Ev+vtWuac/py7mKD2h1YDdOWcoUvImWH0W9DtLpOxr/4ew3EsVMdt2vD752nMTv5AAy2iVAFPlVXlXBnDIgCswPQcXqTmHQj7hgwgyK8qMuV/3GidPPAN3LIlMmAETZRZZKsoZ2bkxI3sTQmqt9ep7N8twQLWTjCJOIqJB46scaEqrY0K7Gs14bgvQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR05MB8534.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(396003)(39860400002)(346002)(451199015)(36756003)(186003)(38100700002)(122000001)(2616005)(64756008)(86362001)(41300700001)(5660300002)(7416002)(2906002)(8936002)(4326008)(8676002)(33656002)(6486002)(6512007)(26005)(478600001)(6916009)(316002)(54906003)(71200400001)(6506007)(53546011)(38070700005)(91956017)(76116006)(66446008)(66476007)(66556008)(66946007)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Vvly9o6KLAbVhCRPuWL1UNYXFJkT5nQ9vNVn7m1WSzmr4vzk9DFzyOqPKiVg?=
+ =?us-ascii?Q?xNlyZrLWR874tpGRpmcGQcobhw3/UJfS0FEcv+QthTazB0aezS/oafSaPhgO?=
+ =?us-ascii?Q?y7HHRVlV+erEtN6/pjby4WX8JJkbdaCAFlQ9advIT0O+DX/SqytcAF3Ip03P?=
+ =?us-ascii?Q?x62COCXsB5SVlu11nxcPozTGf7kGGrlZ3kzV+Ifthwewu3gRU94PlgEl33UA?=
+ =?us-ascii?Q?qjQxJ8TDThJ0MjH3VvOaYwwj9iF66gcsM+/oZoyj4PVTRctKDfHqVgT68Q9f?=
+ =?us-ascii?Q?SvmMx2wMtWIIZBd97QyE57DWs+lrFjY79CQCWcgYEAx5NkSVJ4w5jW9MSe3b?=
+ =?us-ascii?Q?6Pujf9W8bMKeiYQVeFi/4TBamyWxqi3rzOrML/SwcClLEmfn1HW6DW93esR9?=
+ =?us-ascii?Q?xPdTsiZjrs47NRsSV9JthzHcPDVwpSqq4+E44Opk5W4HDTZrfxhlrGIavy93?=
+ =?us-ascii?Q?JX6MirHulSQ+umPEF4MZ/++ox+p9RcKi9PAwamENOnxjTvTdoeRk3UAxf6Ix?=
+ =?us-ascii?Q?/fHAWIa0HKQ/BBlghdp/27a46YJofz39jbxb1i46ZUu6SEUDTekh9FAPkQDK?=
+ =?us-ascii?Q?DOx95yKhQCkZqlAIzcynD08atClkFfZi2PvuzbdARe/5In3AP086Cdv/5uYR?=
+ =?us-ascii?Q?nzDHuh7U1z5q/0g3FdnGzYVeBp3JlvXd5ZPUDm+Rag3ZCqqhC/yH5HUwPPG+?=
+ =?us-ascii?Q?8GDHuKIZ5i0ptFhmT4d75Q6lDGCF48ANsp4HJszVVy7xtdAhsbvij+dZAtXk?=
+ =?us-ascii?Q?B8vegZTdl24uJl3+4PCyZfe1G3TED3wYYI8vsebc5PmjcXIBpZOq43Dw/j+s?=
+ =?us-ascii?Q?aDtle7uRCZdnhYUjn/CmtxlXFf1Z4WaN8Yzy3EV6Nb3A5uhdGK1laNz6zdOs?=
+ =?us-ascii?Q?S1qP3tjgZM5Uq0flU5JBvwv2K9Su87kyZGh5jyAOtzyyo8rxqGB7NRRMGnX+?=
+ =?us-ascii?Q?4tsUv9k4ifOA+K5W5WDB/AyLmqSi5jm2fBOLUvcWpo1bEJRHMqYCV27T89mz?=
+ =?us-ascii?Q?H81DuB3KBSZL9GoZTn81qTkTkAdWVOupwaJMrk9I2dr03cCwRxkERa0A4TDF?=
+ =?us-ascii?Q?RgE8YIiSGyNS8besmEHUpQWDMyJXrFKXCElcK8Z1R4+qZtEF7u4Nw9kAUjaD?=
+ =?us-ascii?Q?MKR4gFSnxEJdZ/yRH8f3pDGU4/2s+5dZSPzUg7oIkTIXa4kk8ljcPkEmcExa?=
+ =?us-ascii?Q?uZ+rY2PUa00lxia2gOXwrdhBO01X4VmLdS4uD0mCfqqF2x9K31i0JKJT29yJ?=
+ =?us-ascii?Q?TaEotixZ1CqIKm6cX4LiFz78ZM9zP22TTtrWdjdkDqyDYpJx+t/bPk3aByji?=
+ =?us-ascii?Q?NQOBmyuSzLcnAuC50Fvl7pvi+XodzLBSxhIFbH7FhmEKuQ720j+aLEnvU35I?=
+ =?us-ascii?Q?XRd5kU4SLEH80r3A6Z7k10NmR+shal8RREJAa5NBb5h5ga1+beS74gmt4ijy?=
+ =?us-ascii?Q?dtwwkeLkixHqWc4a5/i/S+cpHiQI4bXX4tws9nXyVymcsID4dG8N4beGKeHI?=
+ =?us-ascii?Q?IDQNQBkGN4pzpm0ruFZWVbk6r+M9rtLP5MnPDb5v3U79Gmw9G+XdyTKhSD5U?=
+ =?us-ascii?Q?6udjOHHxfJk8g8wI8KMQnJ42HQW/ANmAfBRr9YPi?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <936CE9F434A0C84C92D104C436CD7D04@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|BN9PR11MB5403:EE_
-X-MS-Office365-Filtering-Correlation-Id: b51e6e83-80b1-4e4f-a5ea-08dac0ef39ed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CZTnH4+L4ZqwYGYEUziJ4x/bGofOLUUa3fGGBkSigvAD2E/s92qZFFgnnFBfjFhioVeKEV+hzXG1mAfut2sMtQKaXq+3jKhQlvyLo5kkYtkT4DpS6ddM2RpAtthnOywoHkD7jTnI4I3KLBrpXiK0i3bLYVXu805E+t4XDNiL+HD4JQTiz+IanLDxht61U8g1bEdwSjVLyyIMykhEQn3f3Vdr0O26uRjarRu+mSCae7srOqabOVaXqE13i5dtf4Meaib59e5bjDEsvWbDVzCzqG8ZTCEOB1ADsWuiHLkQ9v1AVpb/GuYC4pHw3tdox7MLSXWK+qnDKy6HyBgSbwDk7HQpcOfGphvzzUQl4m8ChBx36FCCtRt8IFobHAe5YL2DhsLN2NpFz9xXMqxnQe8VulbtK1f1mlHRhcvjTfy6kZmu7TabJ3y41+qril7d/LY+CpETBOEpyHpsKUi2UDzp3Cg3Sj31zVBYOSADFIsuuabmsTkQilHFBFihNc/5DniqjgaVV1BDWVjVpPNnnqgZrFCqyS4sc3xg2jL4mD/NTEBfYWRhyqivoltt7TUgPr9v3GECyl8tyqvUcSU2k7BNzIkFXhJfDm1l18HmSgAnCd9Q39lRWSPBer1CIKWgClHL4Iwb7NRlCpA09LlDdyvbm9vRqp06/Jckpw2YH1XnK6+qiY1VhMJB2mjkphD3xzn8I2rzPUEvrXGYot165EAuAA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(376002)(396003)(346002)(136003)(39860400002)(451199015)(6512007)(26005)(9686003)(6666004)(186003)(1076003)(6506007)(66946007)(2906002)(316002)(4326008)(33716001)(6916009)(54906003)(6486002)(8676002)(38100700002)(41300700001)(5660300002)(8936002)(66556008)(66476007)(478600001)(86362001)(82960400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?blhwNmp5bU5vRTZkNm9XVWc2akQ2ZXp3c1BQVVZLT0hXNUlYV0txQkkxcGdZ?=
- =?utf-8?B?MGdrZXR1VWtHYXpDd2Z4eC9JT3UyTmJjbDdOaUs4MG9oQi9IeVhRb1BRdkJv?=
- =?utf-8?B?eDdkSHhNSzJUbXZ5U09qMXVpWUVTVk9EU2Uya3d3Qk9ZZ3p6UVJNdlE3RzQ4?=
- =?utf-8?B?Zis2UGc2T0xaQWN6U0J6NzhaNlFVa1NkLzZrUThaSnFpV1E0VmV0bHdiaWd2?=
- =?utf-8?B?Zng0WG9KYTF4MUlISmlhazJmKy9FL3JEdUcyWUhUWWhZZ3FpNHdvZ2ZmaVRt?=
- =?utf-8?B?N2xJYkI2bGVYMVJtaEdRVUJZYklVdGhOZmxycy9xZlJ6VlN4WmNNVE5OMDl5?=
- =?utf-8?B?Q2Rwa2pyOHBuZEl2ZlpaV00vOUFLalBMSE9lTm1yZGVGc1lPT2RKeUxKSWE5?=
- =?utf-8?B?KzJKVVpKa3JUaE1sb0xmY1hIRXl2RWkyVHd5ZERGdDJpNkJrU2p6c2VSZXNJ?=
- =?utf-8?B?SGlvblFUMi8vMWdrYm03dy9QZXA1UldHZUo5NUgrZ3hyOFp4QTRxTzFDVnN2?=
- =?utf-8?B?ZUtGckJPY3RJY1F5eWoxNDRCeUs1a0dwbUZhb3d3ZnluUTVQaE91ck54QXMv?=
- =?utf-8?B?bHlaVGEyY1FoTmF6R3MrVUJmT0FUNEVLWXZwajM3OEo5WHpxbmhZTDdPZVA1?=
- =?utf-8?B?Rkw4S3hzUG5BOTFkQ2lkS242ZlpVZi9NeTk5bS9aQUovVElJVWxHZ2xBVFEz?=
- =?utf-8?B?MzZyQXRVbHM0S2ZnMWd2R0hiUUdOZ3NjZFBXVnY5K2FxZFI0RGV4K1VkR3dY?=
- =?utf-8?B?R0lGWW9iNGt2bUhPbnJHTWh0alowRXBZZ0dSTXJ2eDEvQUFkdFpkWGl0MG95?=
- =?utf-8?B?M1lhSXNFUUFQVWswd1RUa0ZPMXMvRVdlWWVlQzd1VXRzSVl2LzVDYXU1R0Jj?=
- =?utf-8?B?ZWV1ZVFLZkRtR1RSQ1hGTDhUMW5VcGlYck5UNFcycDVjZ1Z6ckRVcXlMWkZJ?=
- =?utf-8?B?NkNlVmU4c3NKQ0Z4UlRodGdkYnJtQ1EzMDlnZUdKN3gwV0hGVjB6MGIyZFBR?=
- =?utf-8?B?VWxsNEtkaks4WHhyQUtHdEJRUVc1T2VkY0NzTnZEZWlIc1h5NWF3c1V1WlY3?=
- =?utf-8?B?MTZScHU3bmJhMHZWVWNoSnJlVzU1bGNnaHU2NHhac0c5VEpIS1A4dmdKYWF3?=
- =?utf-8?B?K1dzbVhTRERpeU9LakIxVmhvSHF5T0U5RktqR2JQRUZLczVOd0tRU2xpb3Zv?=
- =?utf-8?B?L0pMNS9JMjcrSjFhSEs5WDJZWHZmK3p0QitoWFd4bkhSTEpCYk9QMnNFUmVP?=
- =?utf-8?B?K3NBZi91RVVycFhsWE1iQVNkczdzNWRWN1dGd3NXandSaGpIVlJkeFB3WnlE?=
- =?utf-8?B?VzREZm8vdmg4RmdoRE00YTNyTC9tUFFtTEI0UzNzRVFWM3dnY1pZQlZFNHVa?=
- =?utf-8?B?cnQ2UVVreHpxeVpQQVZKU2lCeUFWVjVZbDVLamlYRXkwM0ZrWkZHWmpRbmYv?=
- =?utf-8?B?UmpWTlgvUUlRM1ZvVUl5eGlWaFRXQjc1eEFDMDQzaFhYeEVoa1VlSkJmaHFP?=
- =?utf-8?B?NUt2Z2w2YXRqT0R4V0ZHQS9YcnpNQmFicjVBZ3ZaQTdiQnVLRHRqSWZ3bUJa?=
- =?utf-8?B?bC83ZE5uVStLc2lYMUpZSmNpdmswMndQdThyeDZxZ3o2bXphZEMwalhQUmRs?=
- =?utf-8?B?L0wwZmZtRzNFR1o4QS9zTlppSi9YYUQxQjJBU0tkRFZaaWJ2V2FJVXlMcWR0?=
- =?utf-8?B?bERxMzVlakhqYlNPTlhnRE8zWFVJK3RreVJZNFQzM0x1c3BMRmlTTnN5OHJ6?=
- =?utf-8?B?UHowZEt0UTRSTC9mWVR2ekJPUUgvN2JvWWJjV1NCSmNocjVnbU56ZVlpNDZD?=
- =?utf-8?B?SXdSRWdONGpKK3F0aGZmQVd5NEliOTIvejdmaW9FclFKQnBXdUE2WlZEVFM5?=
- =?utf-8?B?c3pwT1V1aUtRZ3ViZ0hpOTJRUTNockdTdUV4cFZuaExXNms3K2V1TytlbWJR?=
- =?utf-8?B?WTFacS9HdjJOV1RndFVscXhCUWNDQzA0RWdmSkk5ZGhWOGF5RzhzVVVSQVI0?=
- =?utf-8?B?K2lqNnk3VVBrQ1ZNTHNERmIzY0xxT3FsOG81V2M5bFVQUS9yN0pxeW80TjdY?=
- =?utf-8?B?SW96OWJlQWtNYlRkdzNqVkhvVjJDSmhIcndPajlVclc4WEw3WERIam5nLzlL?=
- =?utf-8?B?aWY5VHRWc0NnajVIZUw2Ykl3K21iaGRRYW1lWkNMZVpkbHY3akozRGNEazl2?=
- =?utf-8?B?NkE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b51e6e83-80b1-4e4f-a5ea-08dac0ef39ed
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
+X-OriginatorOrg: vmware.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 18:38:12.9188
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR05MB8534.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58691cf8-f0a5-4dc9-95e2-08dac0f2cd1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 19:03:48.1830
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bA3q/9Z7qOrpbTwHo+rLBGLlGeMr910vXIrl1vVNnavDStDxGQ+cQ2xfjnD462vnU4UErxpK47OeyXGHe51ELe2XHZiOrFBgvOYWIXtN3Xk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5403
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KfSM0iTEhYfCVrJe4QTKrVUTq2AdsVnmQAy3rNSQzzpUbV1I6knQSA1bZfitlCjDq6rH6cbaztTwAKdz2I1oOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR05MB7190
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 04:23:02PM +0100, Mauro Carvalho Chehab wrote:
-> Hi,
-> 
-> I'm facing a couple of issues when testing KUnit with the i915 driver.
-> 
-> The DRM subsystem and the i915 driver has, for a long time, his own
-> way to do unit tests, which seems to be added before KUnit.
-> 
-> I'm now checking if it is worth start using KUnit at i915. So, I wrote
-> a RFC with some patches adding support for the tests we have to be
-> reported using Kernel TAP and KUnit.
-> 
-> There are basically 3 groups of tests there:
-> 
-> - mock tests - check i915 hardware-independent logic;
-> - live tests - run some hardware-specific tests;
-> - perf tests - check perf support - also hardware-dependent.
-> 
-> As they depend on i915 driver, they run only on x86, with PCI
-> stack enabled, but the mock tests run nicely via qemu.
-> 
-> The live and perf tests require a real hardware. As we run them
-> together with our CI, which, among other things, test module
-> unload/reload and test loading i915 driver with different
-> modprobe parameters, the KUnit tests should be able to run as
-> a module.
+On Nov 7, 2022, at 8:17 AM, David Hildenbrand <david@redhat.com> wrote:
 
-Note that KUnit tests that are doing more of a functional/integration
-testing (on "live" hardware) rather than unit testing (where hardware
-interactions are mocked) are not very common.
-Do we have other KUnit tests like this merged?
-Some of the "live tests" are not even that, being more of a pure
-hardware tests (e.g. live_workarounds, which is checking whether values
-in MMIO regs stick over various HW state transitions).
+> !! External Email
+>=20
+> Let's catch abuse of FAULT_FLAG_WRITE early, such that we don't have to
+> care in all other handlers and might get "surprises" if we forget to do
+> so.
+>=20
+> Write faults without VM_MAYWRITE don't make any sense, and our
+> maybe_mkwrite() logic could have hidden such abuse for now.
+>=20
+> Write faults without VM_WRITE on something that is not a COW mapping is
+> similarly broken, and e.g., do_wp_page() could end up placing an
+> anonymous page into a shared mapping, which would be bad.
+>=20
+> This is a preparation for reliable R/O long-term pinning of pages in
+> private mappings, whereby we want to make sure that we will never break
+> COW in a read-only private mapping.
+>=20
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+> mm/memory.c | 8 ++++++++
+> 1 file changed, 8 insertions(+)
+>=20
+> diff --git a/mm/memory.c b/mm/memory.c
+> index fe131273217a..826353da7b23 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -5159,6 +5159,14 @@ static vm_fault_t sanitize_fault_flags(struct vm_a=
+rea_struct *vma,
+>                 */
+>                if (!is_cow_mapping(vma->vm_flags))
+>                        *flags &=3D ~FAULT_FLAG_UNSHARE;
+> +       } else if (*flags & FAULT_FLAG_WRITE) {
+> +               /* Write faults on read-only mappings are impossible ... =
+*/
+> +               if (WARN_ON_ONCE(!(vma->vm_flags & VM_MAYWRITE)))
+> +                       return VM_FAULT_SIGSEGV;
+> +               /* ... and FOLL_FORCE only applies to COW mappings. */
+> +               if (WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE) &&
+> +                                !is_cow_mapping(vma->vm_flags)))
+> +                       return VM_FAULT_SIGSEGV;
 
-I'm wondering, is KUnit the right tool for this job?
+Not sure about the WARN_*(). Seems as if it might trigger in benign even if
+rare scenarios, e.g., mprotect() racing with page-fault.
 
--Michał
