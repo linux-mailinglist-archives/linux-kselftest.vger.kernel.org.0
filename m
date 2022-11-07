@@ -2,135 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2179361FE5C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 20:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A8F61FEA0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 20:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbiKGTMN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 14:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S231866AbiKGT2T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 14:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbiKGTMA (ORCPT
+        with ESMTP id S232066AbiKGT2P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 14:12:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDF12A240;
-        Mon,  7 Nov 2022 11:11:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7B34422534;
-        Mon,  7 Nov 2022 19:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667848318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
+        Mon, 7 Nov 2022 14:28:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435FD29C9D
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 11:27:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667849237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IDZ+1J9gbkdeI4Dq1QHKthecD/b0UCy0MKie46ulwZw=;
-        b=oIErcstqUTvnyCIaNr2MynlO/sInNGy8OeQRYWuUtmsni2xUSucAsaolcL0hxrbvpQmM9r
-        HGZjGTkEKIX5bRip51TQwuVWmU8pMqM2erjJmzZ/NRaIM5G1ybKD++4VV4PFkuiok+v94n
-        5+8+rYslVbI7gX2sF8n6LY+eXjTUNE4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667848318;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IDZ+1J9gbkdeI4Dq1QHKthecD/b0UCy0MKie46ulwZw=;
-        b=MvgZMh0mSA1s7DaPqJILE+epydRvG7/9BFn/TNq6Q2lSPtGgzuoZK1SshRKp231AyPCcTw
-        GaGcrGxbHU7jkFDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A7D2A13AC7;
-        Mon,  7 Nov 2022 19:11:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sLg8I31YaWMjJgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Mon, 07 Nov 2022 19:11:57 +0000
-From:   Petr Vorel <pvorel@suse.cz>
-To:     ltp@lists.linux.it
-Cc:     Petr Vorel <pvorel@suse.cz>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Martin Doucha <mdoucha@suse.cz>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>
-Subject: [PATCH 1/1] zram01.sh: Workaround division by 0 on vfat on ppc64le
-Date:   Mon,  7 Nov 2022 20:11:36 +0100
-Message-Id: <20221107191136.18048-2-pvorel@suse.cz>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221107191136.18048-1-pvorel@suse.cz>
-References: <20221107191136.18048-1-pvorel@suse.cz>
+        bh=patZqZFG+VP3DSfi5ljEiY21OGL00v17le5HXIzu3EI=;
+        b=G3c8UWha1fHjhiRwSroVsi4bp89vI/97mF7/R4mh0rBYm3vQ3oJ3Xjdu2+bSobNDzyRFJh
+        XSPT+Fxhju+SeMx5qU1BXMP8Jd8uEbOCgg5zsRrbZvfZaCBCnsQyt3a8acV/HnhKN6sPhO
+        oigpkZiF6zGg8s5gn/B3jCqVU2Jk+ZA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-407-zRi2mNiQPEKbICCmygI6ig-1; Mon, 07 Nov 2022 14:27:13 -0500
+X-MC-Unique: zRi2mNiQPEKbICCmygI6ig-1
+Received: by mail-wm1-f71.google.com with SMTP id f62-20020a1c3841000000b003cf6d9aacbbso6199742wma.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 11:27:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=patZqZFG+VP3DSfi5ljEiY21OGL00v17le5HXIzu3EI=;
+        b=zJNi1GCKgBdjnqv73VMxvVdI70geZiwvEtL7RMaxxlOWKQqY5p/vi2G5toIi1vIbZF
+         2XNIcvYarja/ezRbUE1f79DyqHsUAlBbOpZ1JCCnFoC4wHsKx7Fv+Rop0qEOWYjTmDY3
+         9WifowQB6OzoX0xiiUWDq4sJfVu3Qz/IS1mOIEgRIPg+/FmV8bCi0cd7lDAa41jAIlI7
+         IGN5dmwLeWPjslHwIL+hIqXvSSponFllZ5eNMxlIE4UEuQpL8XqxagQb5NzZaoXz3etN
+         X9T1pvdsTVBey1yzXHOmwvBrEbx07THErDh6KKef/BwLogT729b9/9s3XqGb+fFNi0xl
+         Uudg==
+X-Gm-Message-State: ACrzQf3WVa79takmEio4a/2sHwJkmalP0LIwYiHQ9KeYc9rJ6PQoSt7m
+        //4nYSHNEa/vdlhx1MGbLvJb8cuYDsqp2S0ogpybgFGqZZ07lauJ6FsWPRFV0TaBwO35EuNOi3r
+        fAPXuq3061i+WvLvfXpLdRaG0Msla
+X-Received: by 2002:a5d:4487:0:b0:22e:3292:75ab with SMTP id j7-20020a5d4487000000b0022e329275abmr614287wrq.166.1667849232533;
+        Mon, 07 Nov 2022 11:27:12 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM7WA0QO9a9aE/aCsv95kc1/GI2mA1rxsv3w8NpMMhNZXKsgaEBfixEFS4BMiXoamohO6ncLKQ==
+X-Received: by 2002:a5d:4487:0:b0:22e:3292:75ab with SMTP id j7-20020a5d4487000000b0022e329275abmr614274wrq.166.1667849232188;
+        Mon, 07 Nov 2022 11:27:12 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:7800:3f13:77ac:9360:5e22? (p200300cbc70478003f1377ac93605e22.dip0.t-ipconnect.de. [2003:cb:c704:7800:3f13:77ac:9360:5e22])
+        by smtp.gmail.com with ESMTPSA id t20-20020a05600c199400b003cf9bf5208esm10877851wmq.19.2022.11.07.11.27.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 11:27:11 -0800 (PST)
+Message-ID: <c58fe356-62b5-bdec-92a7-6153a27e19b7@redhat.com>
+Date:   Mon, 7 Nov 2022 20:27:08 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH RFC 05/19] mm: add early FAULT_FLAG_WRITE consistency
+ checks
+To:     Nadav Amit <namit@vmware.com>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "etnaviv@lists.freedesktop.org" <etnaviv@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+References: <20221107161740.144456-1-david@redhat.com>
+ <20221107161740.144456-6-david@redhat.com>
+ <E1E8C21A-EAEB-4FA3-A9B9-1DFF81FCDA70@vmware.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <E1E8C21A-EAEB-4FA3-A9B9-1DFF81FCDA70@vmware.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Repeatedly read /sys/block/zram*/mm_stat for 1 sec. This should fix bug
-on ppc64le on stable kernels, where mem_used_total is often 0.
+On 07.11.22 20:03, Nadav Amit wrote:
+> On Nov 7, 2022, at 8:17 AM, David Hildenbrand <david@redhat.com> wrote:
+> 
+>> !! External Email
+>>
+>> Let's catch abuse of FAULT_FLAG_WRITE early, such that we don't have to
+>> care in all other handlers and might get "surprises" if we forget to do
+>> so.
+>>
+>> Write faults without VM_MAYWRITE don't make any sense, and our
+>> maybe_mkwrite() logic could have hidden such abuse for now.
+>>
+>> Write faults without VM_WRITE on something that is not a COW mapping is
+>> similarly broken, and e.g., do_wp_page() could end up placing an
+>> anonymous page into a shared mapping, which would be bad.
+>>
+>> This is a preparation for reliable R/O long-term pinning of pages in
+>> private mappings, whereby we want to make sure that we will never break
+>> COW in a read-only private mapping.
+>>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> ---
+>> mm/memory.c | 8 ++++++++
+>> 1 file changed, 8 insertions(+)
+>>
+>> diff --git a/mm/memory.c b/mm/memory.c
+>> index fe131273217a..826353da7b23 100644
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -5159,6 +5159,14 @@ static vm_fault_t sanitize_fault_flags(struct vm_area_struct *vma,
+>>                  */
+>>                 if (!is_cow_mapping(vma->vm_flags))
+>>                         *flags &= ~FAULT_FLAG_UNSHARE;
+>> +       } else if (*flags & FAULT_FLAG_WRITE) {
+>> +               /* Write faults on read-only mappings are impossible ... */
+>> +               if (WARN_ON_ONCE(!(vma->vm_flags & VM_MAYWRITE)))
+>> +                       return VM_FAULT_SIGSEGV;
+>> +               /* ... and FOLL_FORCE only applies to COW mappings. */
+>> +               if (WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE) &&
+>> +                                !is_cow_mapping(vma->vm_flags)))
+>> +                       return VM_FAULT_SIGSEGV;
+> 
+> Not sure about the WARN_*(). Seems as if it might trigger in benign even if
+> rare scenarios, e.g., mprotect() racing with page-fault.
+> 
 
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
- .../kernel/device-drivers/zram/zram01.sh      | 27 +++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+We most certainly would want to catch any such broken/racy cases. There 
+are no benign cases I could possibly think of.
 
-diff --git a/testcases/kernel/device-drivers/zram/zram01.sh b/testcases/kernel/device-drivers/zram/zram01.sh
-index 58d233f91..76a8ccab4 100755
---- a/testcases/kernel/device-drivers/zram/zram01.sh
-+++ b/testcases/kernel/device-drivers/zram/zram01.sh
-@@ -105,6 +105,26 @@ zram_mount()
- 	tst_res TPASS "mount of zram device(s) succeeded"
- }
- 
-+read_mem_used_total()
-+{
-+	echo $(awk '{print $3}' $1)
-+}
-+
-+# Reads /sys/block/zram*/mm_stat until mem_used_total is not 0.
-+loop_read_mem_used_total()
-+{
-+	local file="$1"
-+	local mem_used_total
-+
-+	tst_res TINFO "$file"
-+	cat $file >&2
-+
-+	mem_used_total=$(read_mem_used_total $file)
-+	[ "$mem_used_total" -eq 0 ] && return 1
-+
-+	return 0
-+}
-+
- zram_fill_fs()
- {
- 	local mem_used_total
-@@ -133,9 +153,12 @@ zram_fill_fs()
- 			continue
- 		fi
- 
--		mem_used_total=`awk '{print $3}' "/sys/block/zram$i/mm_stat"`
-+		TST_RETRY_FUNC "loop_read_mem_used_total /sys/block/zram$i/mm_stat" 0
-+		mem_used_total=$(read_mem_used_total /sys/block/zram$i/mm_stat)
-+		tst_res TINFO "mem_used_total: $mem_used_total"
-+
- 		v=$((100 * 1024 * $b / $mem_used_total))
--		r=`echo "scale=2; $v / 100 " | bc`
-+		r=$(echo "scale=2; $v / 100 " | bc)
- 
- 		if [ "$v" -lt 100 ]; then
- 			tst_res TFAIL "compression ratio: $r:1"
+Page faults need the mmap lock in read. mprotect() / VMA changes need 
+the mmap lock in write. Whoever calls handle_mm_fault() is supposed to 
+properly check VMA permissions.
+
+
 -- 
-2.38.0
+Thanks,
+
+David / dhildenb
 
