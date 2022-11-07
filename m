@@ -2,129 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585D361F071
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 11:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E51EC61F319
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 13:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbiKGKY2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 05:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S232252AbiKGM1P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 07:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbiKGKYS (ORCPT
+        with ESMTP id S232246AbiKGM1N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:24:18 -0500
-Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D93918E2F
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 02:24:03 -0800 (PST)
-Received: by mail-vk1-xa44.google.com with SMTP id h16so6301210vkn.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 02:24:03 -0800 (PST)
+        Mon, 7 Nov 2022 07:27:13 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430D914D05
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 04:27:12 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v27so17302051eda.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 04:27:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=Zv++OJ/ncK2pWuUWAQT+z52+cIoHK/WVJU4bVze52hunD5wDL4D5XJdl5mW2VbRjhi
-         PKA0tQ/z42/ONfUnPJoBfdYRGEG2gwiyoDRW7hecaxcg+/0t0u3g44ISFlpe+B9l1fvu
-         TmkNgtKOyak6WThRMAIvY+g5IgPZxvnz63e21BpajeaX9653GP4qpHUHyfV7BL4cSNb4
-         pCU1fNGxZBn7NlKzWZCMHMxM9LSs8sKofgpQ0FSoeb/qTDQ+CPP+tvlBe/vGQ8T8hOyn
-         vdUZr48/zTuwVxtBDF6IrOR7pT19nf73qD9i1Q8QUWEzM8dVJjwmGS+xVbVCXqFaE09J
-         SKzA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Spa9i7ZZi/PqL0mkZcklMgIzofmfvMGIgf+WKCkXIMQ=;
+        b=jLvnLgvlxGE5ngnjopyA4a2yysB33if8in8kuEiUGZz0XMRPhT3N3XX2UU0Z02SjJa
+         FE7atSEyVzKKdtrwY0PVb8zYTIeaOgJnpezWILnMIUcd6Q6BvMdB5Blys/Sk+si0wdoi
+         cxJWltzEJODEgrR6eSFlCqNwS9ZFIsMPbmeuGAi4XjatM6S9lPMiOqDUaJXOEPV65I5q
+         6nYIe3M7IkieIO++K+hxKwvxBHwyObk4oDxX+GtHhKVKU5ifHEuRcpYBBaF/NJWhWQo2
+         wxtsM5/WVBHfJTmKg1iAMoZWyNIEo94nUZkVDFxVJGHi00fgYNWEYCMAvqPlT6szNE4i
+         pocw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=zv1jXovu5st4hSM7XbjiJNFlco+IDZzY8ZC0rRQjNR1FmLDreP6Bfi9vOddwCnVp9T
-         yp7sa1oYnNdwqEXa9oav/peeUoA+RRsFjDNyF9X7ENboAn4mqCXxhqKT89XVTwTR7n3c
-         qRFoo1ecYVCpkesCc3k3YXlp5/ioT87RlPU5DUuli8K8XtfQ7y/i3qHogDAD485G78Q9
-         SW8Fr9E4xM4sJ8sE4BNPVn1pisdRUrlPuCX1BThsikvd6VrwjvcW6bKz7fefwZcEw7tz
-         2pnwYPQ6Mkju2zR80cWzNo7RA2x9YKhkIUx1lCmQCAN+ob8kFdVsF5qz0EH6DPz+CWrU
-         1KaA==
-X-Gm-Message-State: ACrzQf2wkzUupE8ANUcExpiOefv63dZXsF+BsKPcs32bskPaKIsEaU3t
-        EftjL8RJBSN8OFb+3khc0QOWdIZKIB6FRI9gZp4FTrsVTNw=
-X-Google-Smtp-Source: AMsMyM7DPjaK7bSeUBIcMTkNZUaqK+NSwCEUfp88ZZDLY5TXShnQ2+B86xH3ryBKqTyGQWW3ozA/96x60VupsK8qo34=
-X-Received: by 2002:a17:902:8a90:b0:186:b145:f5ec with SMTP id
- p16-20020a1709028a9000b00186b145f5ecmr50774476plo.103.1667816632274; Mon, 07
- Nov 2022 02:23:52 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Spa9i7ZZi/PqL0mkZcklMgIzofmfvMGIgf+WKCkXIMQ=;
+        b=asYUPPoGTAcMjNrrnmGcLwsWmkSdEgRAnIkufoLrrSsfMasN6KHoLMtWczmXUn56V/
+         TYIZ4AMQeisHTPoV9RBnez6ZUHOOYka8LKMj/doAF1mPw9udv+jLr0wdTbmtiiFM5wwg
+         Mg7GJ4laUnl+Z6ZVdtYa/OrC853TM1s/7CD0uJZ/Oy13BNniv/ippYr00zjMpPikb0lQ
+         vGCV2yer8Hy8OlsmefxDzzqv1ysyQQbcjf2BEHHnf3nRQhE2d0S61cA2AvQqF/TLwyf5
+         QNjOTqsaxrOAfH3+OP+9wB8lR9BpRvcW42JKVXXrLi8VsXoEmuWWT3iESszycFbBMOXy
+         vMbA==
+X-Gm-Message-State: ACrzQf0zzO2Ke9YeShyMclJ5IgEl7VMevYa0c8B16pF27/FkE28LlUjv
+        3dpNQmOQHUI9yyWDKx038eOeo64ciWuKfJReaRw8Lw==
+X-Google-Smtp-Source: AMsMyM6P4MUoGjkj6W0BuOtOqQhVLj9fCKtgk0YVH9i2+0GMg02EXI0DnuuovMLuo6xJlqXa24LIp4zGDBEoY6Qo63g=
+X-Received: by 2002:a05:6402:386:b0:463:c43f:6628 with SMTP id
+ o6-20020a056402038600b00463c43f6628mr32856779edv.53.1667824030610; Mon, 07
+ Nov 2022 04:27:10 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
- 02:23:51 -0800 (PST)
-Reply-To: contact@ammico.it
-From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
-Date:   Mon, 7 Nov 2022 11:23:51 +0100
-Message-ID: <CAHAXD+bPNCns8Ez=7iXmPLADMtJgZj3-mFTk3NMhWC-Ca1b9rw@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
+References: <20221103145353.3049303-1-usama.anjum@collabora.com> <20221103145353.3049303-3-usama.anjum@collabora.com>
+In-Reply-To: <20221103145353.3049303-3-usama.anjum@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Mon, 7 Nov 2022 13:26:59 +0100
+Message-ID: <CABb0KFFaYZG62TS+iM3Y92+hDyB35XR8dTX-5hDgWrXCcDQx7Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_40,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a44 listed in]
-        [list.dnswl.org]
-        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
-        *      [score: 0.2365]
-        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [977638ib[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hei ja miten voit?
-Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
- toivolla
-v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
-leikkaus
-t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
-suudet selviyty=C3=A4.
-Mutta ennen kuin min=C3=A4
-Tee toinen vaarallinen operaatio, annan sen sinulle
-Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
-sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
-voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
-iden auttamista
-ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
-=C3=A4 minulla ei ole niit=C3=A4
-kenelt=C3=A4 perii rahaa.
-Vastaa minulle nopeasti
-terveisi=C3=A4
-Rouva Monika Evereen
-Florida, Amerikan Yhdysvallat
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-Hi and how are you?
-My name is Mrs. Evereen, I am sending this message with great hope for
-an immediate response, as I have to undergo heart reoperation in my
-current poor health with little chance of survival. But before I
-undertake the second dangerous operation, I will give you the
-$6,550,000 I have in my US bank account to invest well, manage and use
-the profits to run a charity project for me. I count helping the sick
-and the poor as my last wish on earth, because I have no one to
-inherit money from.
-Please give me a quick reply
-regards
-Mrs. Monika Evereen
-Florida, United States of America
+On Thu, 3 Nov 2022 at 15:54, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> This IOCTL, PAGEMAP_SCAN can be used to get and/or clear the info about
+> page table entries. The following operations are supported in this ioctl:
+> - Get the information if the pages are soft-dirty, file mapped, present
+>   or swapped.
+> - Clear the soft-dirty PTE bit of the pages.
+> - Get and clear the soft-dirty PTE bit of the pages.
+>
+> Only the soft-dirty bit can be read and cleared atomically. struct
+> pagemap_sd_args is used as the argument of the IOCTL. In this struct:
+> - The range is specified through start and len.
+> - The output buffer and size is specified as vec and vec_len.
+> - The optional maximum requested pages are specified in the max_pages.
+> - The flags can be specified in the flags field. The PAGEMAP_SD_CLEAR
+>   and PAGEMAP_SD_NO_REUSED_REGIONS are supported.
+> - The masks are specified in rmask, amask, emask and return_mask.
+[...]
+> --- a/include/uapi/linux/fs.h
+> +++ b/include/uapi/linux/fs.h
+> @@ -305,4 +305,57 @@ typedef int __bitwise __kernel_rwf_t;
+>  #define RWF_SUPPORTED  (RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+>                          RWF_APPEND)
+>
+> +/* PAGEMAP IOCTL */
+> +#define PAGEMAP_SCAN   _IOWR('f', 16, struct pagemap_scan_arg)
+> +
+> +/* Bits are set in the bitmap of the page_region and masks in pagemap_sd=
+_args */
+> +#define PAGE_IS_SD     (1 << 0)
+
+Can we name it PAGE_IS_SOFTDIRTY? "SD" can mean so many things.
+
+> +#define PAGE_IS_FILE   (1 << 1)
+> +#define PAGE_IS_PRESENT        (1 << 2)
+> +#define PAGE_IS_SWAPED (1 << 3)
+
+PAGE_IS_SWAPPED?
+
+> +
+> +/*
+> + * struct page_region - Page region with bitmap flags
+> + * @start:     Start of the region
+> + * @len:       Length of the region
+> + * bitmap:     Bits sets for the region
+> + */
+> +struct page_region {
+> +       __u64 start;
+> +       __u64 len;
+> +       __u32 bitmap;
+> +       __u32 __reserved;
+
+"u64 flags"? If an extension is needed it would already require a new
+ioctl or something in the `arg` struct.
+
+> +
+> +/*
+> + * struct pagemap_scan_arg - Soft-dirty IOCTL argument
+
+Since this is no longer a soft-dirty-specific call, it might be better
+to describe it as "VM scan ioctl" or similar. BTW, the implementation
+is currently guarded by CONFIG_MEM_SOFT_DIRTY, but CRIU doesn't need
+that but needs the other bits handling.
+
+> + * @start:             Starting address of the region
+> + * @len:               Length of the region (All the pages in this lengt=
+h are included)
+> + * @vec:               Address of page_region struct array for output
+> + * @vec_len:           Length of the page_region struct array
+> + * @max_pages:         Optional max return pages (It must be less than v=
+ec_len if specified)
+
+I think we discussed that this is not counting the same things as
+vec_len, so there should not be a reference between the two. The limit
+is whatever fits under both conditions (IOW: n_vecs <=3D vec_len &&
+(!max_pages || n_pages <=3D max_pages).
+
+> + * @flags:             Special flags for the IOCTL
+
+Just "Flags for the IOCTL".
+
+> + * @rmask:             Required mask - All of these bits have to be set =
+in the PTE
+> + * @amask:             Any mask - Any of these bits are set in the PTE
+> + * @emask:             Exclude mask - None of these bits are set in the =
+PTE
+
+It might be easier for developers if those were named e.g.
+"required_mask", "anyof_mask", "excluded_mask".
+
+> + * @return_mask:       Bits that have to be reported to the user in page=
+_region
+
+"Bits that are to be reported in page_region"?
+
+> + */
+> +struct pagemap_scan_arg {
+> +       __u64 start;
+> +       __u64 len;
+> +       __u64 vec;
+> +       __u64 vec_len;
+> +       __u32 max_pages;
+> +       __u32 flags;
+> +       __u32 rmask;
+> +       __u32 amask;
+> +       __u32 emask;
+> +       __u32 return_mask;
+> +};
+> +
+> +/* Special flags */
+> +#define PAGEMAP_SD_CLEAR               (1 << 0)
+
+SD -> SOFTDIRTY
+
+> +/* Check the individual pages if they are soft-dirty to find dirty pages=
+ faster. */
+> +#define PAGEMAP_NO_REUSED_REGIONS      (1 << 1)
+
+Please include the description from commitmsg of what this flag does
+(i.e. how the behaviour differs because of the flag). I'd drop the
+part about it being faster, as if so - why have the flag at all
+instead of just always using the faster way?
+
+(I only reviewed the API now. The implementation I think could be
+simpler, but let's leave that to after the API is agreed on.)
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
