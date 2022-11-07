@@ -2,397 +2,220 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7D961F70A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 16:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCED461F81E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 17:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbiKGPCx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 10:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S232137AbiKGQA1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 11:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbiKGPC1 (ORCPT
+        with ESMTP id S232161AbiKGQAZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 10:02:27 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1026E1FE;
-        Mon,  7 Nov 2022 07:02:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eK1b51OhU8FLyTxmYKhLdxxevwrHQtpkC1TFoho24YPMN2A4Wo708jEDT800ysFEIhrfPWIIWlZKaLdqrS0q6aa2S8khg7Pxr6jRJIhYLeuTYtD4ooZseX4cQWMYWEWnxFJAL5gCGN/XSaD0ttkn0y7RKiiclFebGZ6GaB/Z7Mb5kCtEqMOsT3k7bkGAeG29GueT5e90lR3/uEQhZtEZz614366oQa4ybahP/ohPoF++q/kXwoRzwCuGMS8Iq/OL0sgQLSb0rdfDPmHVdynSHsTg2Kh2GtKQw3QNPtrgfXlutFlUOXDqxEZgYLEPtK0Dha76tnzGZXbl7XfjjV4Agw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dJb9x0t5zlzbbau5Fi8K6VXyhsC+zvK7TYCNUeF2RFA=;
- b=Xd2IMSPGfGSjyobn+02qcAweCqVjAUpif1JEwsgZkANjgWnYbGhnpVBaF8CpJzEAnrs5XxT76JDiELZWEo7s6KmgDySCuzUJnJwHASwdjgwDi5JDljovcZi1Xe1dF5sS50hhrJFWxY+hktCv7mQDAKsTFWoaFnfUx/mPSPXVe+7YZZNaxxElJFicSW5P5yiP1w7PbG5KhZAH4QP3e++S6LVw2KKsnMuut3BUFtjugGnGsnUMVVVUf1EEONQrWt7BgKVCImoq6iZbl+s8WGOeCkr4zEFZ7eO2VjT2HOYsMnGDzXTTepZ9wkQ25K3KV5rXrVEdWOmO+BXzYxtUEal+uw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dJb9x0t5zlzbbau5Fi8K6VXyhsC+zvK7TYCNUeF2RFA=;
- b=lVsOm1QnF0LJrfdwSBqZ/ITzjrs7kTg+/m7NaGR7lUH72b4YETenyuOFJBelVdChHmPcQ2AJpAOmUohPqsb9pgxsexMhwLrC1dSlQHmT4ZcRFL9SIm/THkQ8GGByZjwok4SOypv5XejRGpwRtX9Sqi0kqLTarFyBcxE7drhoXxHY0u8M8W6krJtkp3FxBx9O7N+XLr19HrTSPcSxkE+/hat8DK8vFLO7im8h3UFlQ6S9d3UUemc9igcFr7/lu38Wg8uJTA6gduEgJQKRDPMvjku+cq853PKjDjR3vZcPQ9jfl5GrBW3mLXF2sFjAmTeh5eM85S3uXcI9KG6ZPWvufQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM4PR12MB7672.namprd12.prod.outlook.com (2603:10b6:8:103::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
- 2022 15:02:22 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 15:02:22 +0000
-Date:   Mon, 7 Nov 2022 11:02:20 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "Martins, Joao" <joao.m.martins@oracle.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v3 10/15] iommufd: IOCTLs for the io_pagetable
-Message-ID: <Y2kd/Ptt0iR6SGsh@nvidia.com>
-References: <0-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <10-v3-402a7d6459de+24b-iommufd_jgg@nvidia.com>
- <BN9PR11MB52765289F880B8A7297077318C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52765289F880B8A7297077318C3B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1PR13CA0187.namprd13.prod.outlook.com
- (2603:10b6:208:2be::12) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 7 Nov 2022 11:00:25 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F73638A;
+        Mon,  7 Nov 2022 08:00:22 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id f5so31386224ejc.5;
+        Mon, 07 Nov 2022 08:00:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+lIXqP4rj9xpDmU5hRWj/6YWyT2YMyOV99bvITSLGw=;
+        b=Dzzx/pid0uEsTtvM7XLovM8woWQJDT60+jm6is41mDgEax/ZkH2ZhI8T4mv3UQmpz7
+         uF8leVHpYCihcnxCP9CJ7xAcGhVLe1J0IDl5bH/fAQAnYppe9ezCWTLRagRw2yyVDqLQ
+         twG4w8cGvu1Fi6k8PgEAqMTigvlfj6w8N+UHzCzYI4tmmrSO0SqhiWf1FxksEwlT0dBJ
+         ld2aB+EsuZW34P8epCwSAHuRfeTz1x1k+xgW0GXO3XMAVUwtv1Yy2CZCrF5AtAJMLaur
+         jEcX2J7VJsSP0BHgYxRn6GqWhIgkz3NqjsM8ZQv70HzBv4jL2vOlHu0XoYMtNLK0ld+p
+         4MKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g+lIXqP4rj9xpDmU5hRWj/6YWyT2YMyOV99bvITSLGw=;
+        b=AdVXfaiERIQfIsv3dVgOLjfiE/efy4iKlVLopi1gihFJACj3AIDXCmCLFQznaYAVHx
+         I2eUPHOsTuURAlUMO/egKflWT3H8j/R2MFlL+twOADAJlW1rlDoQQruIvLTvJNh7pke0
+         xnBSRicZ4CWXM73x+vb7SOS6fiOzVenGjkLbQHPNCinfsk+31a7/v2R0SB/pEUxkT5ml
+         XLbEr3PoE6IfQCQVB2ApU+Gbam8VNRtIsZ/L9tmSCLRTFvtDY8LlyhMmwpvvy/I71gRJ
+         kBWZIpJty9c6739cfX8fKMILBxrGbkwN9mdjuTWxV0vsOIFpbtd9MVgCZZ+VSfU2mkn2
+         hjrA==
+X-Gm-Message-State: ACrzQf0+/buRaDlDzw1HUh/2B4CbMSznsSMPOUq8Ek/RN5VRFwaYLc2O
+        dj9+yB/cvwsmDEDF10lEASKWq3HZmHzF9bBh6u8=
+X-Google-Smtp-Source: AMsMyM5f1sOg/7ieiNovUftNSyFVCfw4+gAEpvzWwyAldDM3ERMOc2Mqb8vSCd6HkUUKovrUHad2eyGhUjAz8q6a8mY=
+X-Received: by 2002:a17:906:8a73:b0:7ae:3962:47e7 with SMTP id
+ hy19-20020a1709068a7300b007ae396247e7mr16098703ejc.502.1667836820607; Mon, 07
+ Nov 2022 08:00:20 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB7672:EE_
-X-MS-Office365-Filtering-Correlation-Id: 94623a07-d613-4e7a-d224-08dac0d11278
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RohM0EV+8x8RIzgwJdPGtQmM7SDq8SFPAwNAc9UMaiN/8Iovh7gsXt+tUxfDWmNgh00OORuzW/XQVu6qPXv++bxXIXBW/99C8zQnPNM18H7uw8fGdrq1kD/4/qSue4rnY6DFLieoia4uAMX3kLT6G2eIZgB+PvPJ/er0Bo/v/QfsEMjKpjWfX6vPr91wPVJRh21xyb7Hsh6IdllbrYl6lvh5re9fHrf1NcusV3wTf6Hfp8WxEwWOjd6jzSXfaksrvPzjZd349yvS4iQZo96BBIOZi9x4JWM20pBcj3wW9yZrgrAbcmxh45XcLLmnO4b1cD0LZPA0dcLswYeAqKchHsjlGcB6sjyUs5GK7ss4EgmyW8+HxpTDyDafX6GkKymqF7Yw72agNmxncaNlfyfYturlQwQ+OXT8ndigjshETn41/YgTFKBUFoAN2eRBst3KsA63cmlE2t+hOuIYeNUFcgtjHRlAVTEjdLaoSaVsvsmniC2nNXvj+JSI2rMIBH1N/PFmUjKx2+oSQ/ybcCPMp1Wf0LSseFv73ltTq9cMaA/vNRHUcQ/wKroSqfC9YCvUSBbyOF8RDGG26ThiMNKpITFqF+QRk1z1jGZlAJTFZp3HQeLfEdF8cOtHxX5BwSWYL7tASm8jD7gLTdjBR48ox/8JqACXBzFaCF8wtHW6XKzPBD9Cvl4y56xWV+N3SiiL4mXlfbgntsDTH9rUWGCeDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(136003)(376002)(346002)(451199015)(2616005)(83380400001)(186003)(38100700002)(2906002)(7406005)(7416002)(8936002)(86362001)(5660300002)(478600001)(6486002)(6512007)(26005)(6506007)(66476007)(8676002)(66556008)(316002)(4326008)(41300700001)(6916009)(54906003)(66946007)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fCZx4UwOHeET4zF4RINjrqSbJ4ol5FjywJYtCqWKcaCUYlqit5T5wbN9bb5M?=
- =?us-ascii?Q?cJRMLAZnuJLeInotAojbsefcG5euQHFEFQLuyhGx3k7k3Qf2mun7mHD4LiqX?=
- =?us-ascii?Q?NYde8+nONA6TYqf6qqlFBvR6c40H9NxgfjohZJgc3rpPgvQUs6FuBhFLOkUj?=
- =?us-ascii?Q?OteJq+qIG+z/ARgaX/vVScZZCFbAKv9G93CTlNgH22CG8sktzfJmW5blWNPc?=
- =?us-ascii?Q?VuUpSGT3ZdHDeLkPAF/5NJBZoVrgc5JEgTArZTNkUQj0wIKVB+UzKYI+byiM?=
- =?us-ascii?Q?uGj7nst2uVvC6Plsr0OVcttXimdLR5QY9NlScVnS8WjxekFvia5vREkrM4nV?=
- =?us-ascii?Q?Oec5PUK7FMX4ub5w38NHErM51I3U3jruMNsU5YKZUFGJIbU7lVEcSz035Jrh?=
- =?us-ascii?Q?SW5kU4ZJfsX9pj4Z3Y15RR5apdIqbI3tRK/2lLvvfWVn4F2DzZXrATjEus4T?=
- =?us-ascii?Q?ImjoHSf2Pbw2GBPYpt3caLSpTfgTxNNcmGhG6/xHtKt+OmePdmU9hbDFAAv9?=
- =?us-ascii?Q?Vzx1jn7USxarzByC4CAlqAT+fp0fdi35iGEk1i/c0mzgxU/alqucc+JvJ6ru?=
- =?us-ascii?Q?Lc1r8NBg9cP4D0xd1y7I7pAazZBh4M4LHo6YJjyDoTZozhhPSVIdN0qCXwkY?=
- =?us-ascii?Q?jr1QJHUhX9A/27sOA8ds0SrLCKjRop6maO7gfL7PqqU22oCE4olR2JW+7bKO?=
- =?us-ascii?Q?iMdzp8Xz39M1FV3ezdGSympDfghW4dXJpjo2021yM8mjhihSpJMyWOQA/qGL?=
- =?us-ascii?Q?6EI+F6f2J9sb+ynIQditB8dZx/LEjdhXnqrpxq12rNKNDQFkmLAt3Q0+lYl5?=
- =?us-ascii?Q?qQA20hdorZkwErGOTXZ5FJP1Gr3fSGBDFjj4tXOu2Z+bqZ5Eb/bq+sPgyXYU?=
- =?us-ascii?Q?Na1gS+rQFR5RYm86/qMhNLDZEOMU6KtDO/Mh2dd4Dch2Zcu1nGAvKeJe9Hl6?=
- =?us-ascii?Q?HWVZzAwVknww1sdLju+yHbvhrh30Seqwbk9JlkIcbr1VYs6bBB0PR9s+vl/D?=
- =?us-ascii?Q?+azTQh5QOCOLE+ye18yLgrc/UP8mqGVbt9Far9c3/+9VC8f3NU0K3rb+t76w?=
- =?us-ascii?Q?s2QN3aoktsebQ1mp6TnNnG4AXO7XaYyLcIO8Ik1nEy3hrssmzQOeJw5zLARL?=
- =?us-ascii?Q?lznMROlm6bsXmuEtwlo34pk1kwDp5PQcwFedgL9CofAcQUB6SnJNhfKiZ0R2?=
- =?us-ascii?Q?euXubVD7Vxyyx/qehhKQiX9fFOl0iEQKX7vxs1U9/dqZL7BADQwe9WJCvRVR?=
- =?us-ascii?Q?HYROy6f/nQyQKlk5lTDup1AfXxtPdIS5hzybpne6Y5SjaL8D9epYfSjgUOc4?=
- =?us-ascii?Q?2DxhfDgbIAHN97aLJLumWF5vU5FtgE3lnUnN5rgYrC2VmCk4h84sZM5Make3?=
- =?us-ascii?Q?d404DLmPJ+D7ciCsLcTekQrHG+evka5t7bkTBykLnD0yKrdxTAnqzj9UqVHr?=
- =?us-ascii?Q?p8xQGOw6O/NOTqowSKIYzO6kcLvkINZxQhzQlnnaqs69SelKbrlH6DvFxTlQ?=
- =?us-ascii?Q?DSulqmW0/nzgsnonxLGcVA0eMLN4asjszruJYyTBb8Z3F19U0n2iEF8/0Xwt?=
- =?us-ascii?Q?Azi6L+2LRdG5Bxt/pLU=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94623a07-d613-4e7a-d224-08dac0d11278
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 15:02:21.9451
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: D7jKA57/J5sFjGTCP2QhN1Mllly5gtavE1geSSmauDy+gYJt+Pudrle7mjw8nL44
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7672
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221028165423.386151-1-roberto.sassu@huaweicloud.com>
+ <20221028165423.386151-2-roberto.sassu@huaweicloud.com> <CACYkzJ5gFu5a-NoKFD6XFNYMDyP+iPon=kHMimJybmNexbhAPg@mail.gmail.com>
+ <38c3ff70963de4a7a396c0fad84349c7c39c0f07.camel@huaweicloud.com>
+ <CAADnVQ+K0NMFKV8pQR+ZMHMM9KArRsLSv-F82_qbK4+4xaPxrg@mail.gmail.com> <7ecbf4fff621bb3340422ff668452c0bbf4c4e71.camel@huaweicloud.com>
+In-Reply-To: <7ecbf4fff621bb3340422ff668452c0bbf4c4e71.camel@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 7 Nov 2022 08:00:08 -0800
+Message-ID: <CAADnVQ+nmneJGNRHHh8yAbrewnD_SVsZmw1U=CzNf8AD38BTrw@mail.gmail.com>
+Subject: Re: [RESEND][RFC][PATCH 2/3] bpf-lsm: Limit values that can be
+ returned by security modules
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 08:32:30AM +0000, Tian, Kevin wrote:
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Wednesday, October 26, 2022 2:12 AM
-> > 
-> > +int iommufd_ioas_allow_iovas(struct iommufd_ucmd *ucmd)
-> > +{
-> > +	struct iommu_ioas_allow_iovas *cmd = ucmd->cmd;
-> > +	struct rb_root_cached allowed_iova = RB_ROOT_CACHED;
-> > +	struct interval_tree_node *node;
-> > +	struct iommufd_ioas *ioas;
-> > +	struct io_pagetable *iopt;
-> > +	int rc = 0;
-> > +
-> > +	ioas = iommufd_get_ioas(ucmd, cmd->ioas_id);
-> > +	if (IS_ERR(ioas))
-> > +		return PTR_ERR(ioas);
-> > +	iopt = &ioas->iopt;
-> 
-> Missed the check of __reserved field
+On Mon, Nov 7, 2022 at 4:33 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> On Fri, 2022-11-04 at 17:42 -0700, Alexei Starovoitov wrote:
+> > On Fri, Nov 4, 2022 at 8:29 AM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > On Thu, 2022-11-03 at 16:09 +0100, KP Singh wrote:
+> > > > On Fri, Oct 28, 2022 at 6:55 PM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > >
+> > > > > BPF LSM defines a bpf_lsm_*() function for each LSM hook, so that
+> > > > > security modules can define their own implementation for the desired hooks.
+> > > > >
+> > > > > Unfortunately, BPF LSM does not restrict which values security modules can
+> > > > > return (for non-void LSM hooks). Security modules might follow the
+> > > > > conventions stated in include/linux/lsm_hooks.h, or put arbitrary values.
+> > > > >
+> > > > > This could cause big troubles, as the kernel is not ready to handle
+> > > > > possibly malicious return values from LSMs. Until now, it was not the
+> > > >
+> > > > I am not sure I would call this malicious. This would be incorrect, if
+> > > > someone is writing a BPF LSM program they already have the powers
+> > > > to willingly do a lot of malicious stuff.
+> > > >
+> > > > It's about unknowingly returning values that can break the system.
+> > >
+> > > Maybe it is possible to return specific values that lead to acquire
+> > > more information/do actions that the eBPF program is not supposed to
+> > > cause.
+> > >
+> > > I don't have a concrete example, so I will use the word you suggested.
+> > >
+> > > > > case, as each LSM is carefully reviewed and it won't be accepted if it
+> > > > > does not meet the return value conventions.
+> > > > >
+> > > > > The biggest problem is when an LSM returns a positive value, instead of a
+> > > > > negative value, as it could be converted to a pointer. Since such pointer
+> > > > > escapes the IS_ERR() check, its use later in the code can cause
+> > > > > unpredictable consequences (e.g. invalid memory access).
+> > > > >
+> > > > > Another problem is returning zero when an LSM is supposed to have done some
+> > > > > operations. For example, the inode_init_security hook expects that their
+> > > > > implementations return zero only if they set the name and value of the new
+> > > > > xattr to be added to the new inode. Otherwise, other kernel subsystems
+> > > > > might encounter unexpected conditions leading to a crash (e.g.
+> > > > > evm_protected_xattr_common() getting NULL as argument).
+> > > > >
+> > > > > Finally, there are LSM hooks which are supposed to return just one as
+> > > > > positive value, or non-negative values. Also in these cases, although it
+> > > > > seems less critical, it is safer to return to callers of the LSM
+> > > > > infrastructure more precisely what they expect.
+> > > > >
+> > > > > As eBPF allows code outside the kernel to run, it is its responsibility
+> > > > > to ensure that only expected values are returned to LSM infrastructure
+> > > > > callers.
+> > > > >
+> > > > > Create four new BTF ID sets, respectively for hooks that can return
+> > > > > positive values, only one as positive value, that cannot return zero, and
+> > > > > that cannot return negative values. Create also corresponding functions to
+> > > > > check if the hook a security module is attached to belongs to one of the
+> > > > > defined sets.
+> > > > >
+> > > > > Finally, check in the eBPF verifier the value returned by security modules
+> > > > > for each attached LSM hook, and return -EINVAL (the security module cannot
+> > > > > run) if the hook implementation does not satisfy the hook return value
+> > > > > policy.
+> > > > >
+> > > > > Cc: stable@vger.kernel.org
+> > > > > Fixes: 9d3fdea789c8 ("bpf: lsm: Provide attachment points for BPF LSM programs")
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > ---
+> > > > >  include/linux/bpf_lsm.h | 24 ++++++++++++++++++
+> > > > >  kernel/bpf/bpf_lsm.c    | 56 +++++++++++++++++++++++++++++++++++++++++
+> > > > >  kernel/bpf/verifier.c   | 35 +++++++++++++++++++++++---
+> > > > >  3 files changed, 112 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> > > > > index 4bcf76a9bb06..cd38aca4cfc0 100644
+> > > > > --- a/include/linux/bpf_lsm.h
+> > > > > +++ b/include/linux/bpf_lsm.h
+> > > > > @@ -28,6 +28,10 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
+> > > > >                         const struct bpf_prog *prog);
+> > > > >
+> > > > >  bool bpf_lsm_is_sleepable_hook(u32 btf_id);
+> > > > > +bool bpf_lsm_can_ret_pos_value(u32 btf_id);
+> > > > > +bool bpf_lsm_can_ret_only_one_as_pos_value(u32 btf_id);
+> > > > > +bool bpf_lsm_cannot_ret_zero(u32 btf_id);
+> > > > > +bool bpf_lsm_cannot_ret_neg_value(u32 btf_id);
+> > > > >
+> > > >
+> > > > This does not need to be exported to the rest of the kernel. Please
+> > > > have this logic in bpf_lsm.c and export a single verify function.
+> > > >
+> > > > Also, these really don't need to be such scattered logic, Could we
+> > > > somehow encode this into the LSM_HOOK definition?
+> > >
+> > > The problem is that a new LSM_HOOK definition would apply to every LSM
+> > > hook, while we need the ability to select subsets.
+> > >
+> > > I was thinking, but I didn't check yet, what about using BTF_ID_FLAGS,
+> > > introducing a flag for each interval (<0, 0, 1, >1) and setting the
+> > > appropriate flags for each LSM hook?
+> >
+> > Before adding infra to all hooks, let's analyze all hooks first.
+> > I thought the number of exceptions is very small.
+> > 99% of hooks will be fine with IS_ERR.
+> > If so, adding an extra flag to every hook will cause too much churn.
+>
+> If I counted them correctly, there are 12 hooks which can return a
+> positive value. Among them, 6 can return only 1. 3 should not return a
+> negative value.
+>
+> A reason for making this change in the LSM infrastructure would be that
+> the return values provided there would be the official reference for
+> anyone dealing with LSM hooks (e.g. redefining the LSM_HOOK macro).
+>
+> Another reason would be that for new hooks, the developer introducing
+> them would have to provide the information. BPF LSM would use that
+> automatically (otherwise it might get out of sync).
 
-Done
+I'd prefer these 12 hooks to get converted to IS_ERR instead.
+Especially those that can only return 1... why aren't they void?
 
-> > +
-> > +int iommufd_ioas_copy(struct iommufd_ucmd *ucmd)
-> > +{
-> > +	struct iommu_ioas_copy *cmd = ucmd->cmd;
-> > +	struct iommufd_ioas *src_ioas;
-> > +	struct iommufd_ioas *dst_ioas;
-> > +	unsigned int flags = 0;
-> > +	LIST_HEAD(pages_list);
-> > +	unsigned long iova;
-> > +	int rc;
-> > +
-> > +	if ((cmd->flags &
-> > +	     ~(IOMMU_IOAS_MAP_FIXED_IOVA |
-> > IOMMU_IOAS_MAP_WRITEABLE |
-> > +	       IOMMU_IOAS_MAP_READABLE)))
-> > +		return -EOPNOTSUPP;
-> > +	if (cmd->length >= ULONG_MAX)
-> > +		return -EOVERFLOW;
-> 
-> and overflow on cmd->dest_iova/src_iova
+> The idea would be to use BTF_ID_FLAGS() with the flags coming from
+> lsm_hook_defs.h, and to check if a flag is set depending on the
+> interval of the return value provided by the eBPF program.
 
-Yep
-
-> > +
-> > +	src_ioas = iommufd_get_ioas(ucmd, cmd->src_ioas_id);
-> > +	if (IS_ERR(src_ioas))
-> > +		return PTR_ERR(src_ioas);
-> > +	rc = iopt_get_pages(&src_ioas->iopt, cmd->src_iova, cmd->length,
-> > +			    &pages_list);
-> > +	iommufd_put_object(&src_ioas->obj);
-> > +	if (rc)
-> > +		goto out_pages;
-> 
-> direct return given iopt_get_pages() already called
-> iopt_free_pages_list() upon error.
-
-Ok
-
-> > +int iommufd_ioas_unmap(struct iommufd_ucmd *ucmd)
-> > +{
-> > +	struct iommu_ioas_unmap *cmd = ucmd->cmd;
-> > +	struct iommufd_ioas *ioas;
-> > +	unsigned long unmapped = 0;
-> > +	int rc;
-> > +
-> > +	ioas = iommufd_get_ioas(ucmd, cmd->ioas_id);
-> > +	if (IS_ERR(ioas))
-> > +		return PTR_ERR(ioas);
-> > +
-> > +	if (cmd->iova == 0 && cmd->length == U64_MAX) {
-> > +		rc = iopt_unmap_all(&ioas->iopt, &unmapped);
-> > +		if (rc)
-> > +			goto out_put;
-> > +	} else {
-> > +		if (cmd->iova >= ULONG_MAX || cmd->length >=
-> > ULONG_MAX) {
-> > +			rc = -EOVERFLOW;
-> > +			goto out_put;
-> > +		}
-> 
-> Above check can be moved before iommufd_get_ioas().
-
-They have to be after this:
-
-	if (cmd->iova == 0 && cmd->length == U64_MAX) {
-
-Or it will false trigger
-
-
-> > +static int iommufd_option(struct iommufd_ucmd *ucmd)
-> > +{
-> > +	struct iommu_option *cmd = ucmd->cmd;
-> > +	int rc;
-> > +
-> 
-> lack of __reserved check
-
-Done
-
-> >  static struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
-> >  	IOCTL_OP(IOMMU_DESTROY, iommufd_destroy, struct
-> > iommu_destroy, id),
-> > +	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
-> > +		 struct iommu_ioas_alloc, out_ioas_id),
-> > +	IOCTL_OP(IOMMU_IOAS_ALLOW_IOVAS, iommufd_ioas_allow_iovas,
-> > +		 struct iommu_ioas_allow_iovas, allowed_iovas),
-> > +	IOCTL_OP(IOMMU_IOAS_COPY, iommufd_ioas_copy, struct
-> > iommu_ioas_copy,
-> > +		 src_iova),
-> > +	IOCTL_OP(IOMMU_IOAS_IOVA_RANGES, iommufd_ioas_iova_ranges,
-> > +		 struct iommu_ioas_iova_ranges, out_iova_alignment),
-> > +	IOCTL_OP(IOMMU_IOAS_MAP, iommufd_ioas_map, struct
-> > iommu_ioas_map,
-> > +		 __reserved),
-> > +	IOCTL_OP(IOMMU_IOAS_UNMAP, iommufd_ioas_unmap, struct
-> > iommu_ioas_unmap,
-> > +		 length),
-> > +	IOCTL_OP(IOMMU_OPTION, iommufd_option, struct iommu_option,
-> > +		 val64),
-> >  };
-> 
-> Just personal preference - it reads better to me if the above order (and
-> the enum definition in iommufd.h) can be same as how those commands
-> are defined/explained in iommufd.h.
-
-I prefer "keep sorted" for these kinds of lists, it is much easier to
-maintain in the long run
-
-> > + * Query an IOAS for ranges of allowed IOVAs. Mapping IOVA outside these
-> > ranges
-> > + * is not allowed. out_num_iovas will be set to the total number of iovas
-> > and
-> > + * the out_valid_iovas[] will be filled in as space permits.
-> 
-> out_num_iovas and out_valid_iovas[] are stale.
-
-Done
-
-> > + *
-> > + * The allowed ranges are dependent on the HW path the DMA operation
-> > takes, and
-> > + * can change during the lifetime of the IOAS. A fresh empty IOAS will have a
-> > + * full range, and each attached device will narrow the ranges based on that
-> > + * devices HW restrictions. Detatching a device can widen the ranges.
-> 
-> devices -> device's
-
-Ok
-
-> > +/**
-> > + * struct iommu_ioas_allow_iovas - ioctl(IOMMU_IOAS_ALLOW_IOVAS)
-> > + * @size: sizeof(struct iommu_ioas_allow_iovas)
-> > + * @ioas_id: IOAS ID to allow IOVAs from
-> 
-> missed num_iovas and __reserved
-
-Hurm. how do I get make W=1 to cover the header files?
-
-> > + * @allowed_iovas: Pointer to array of struct iommu_iova_range
-> > + *
-> > + * Ensure a range of IOVAs are always available for allocation. If this call
-> > + * succeeds then IOMMU_IOAS_IOVA_RANGES will never return a list of
-> > IOVA ranges
-> > + * that are narrower than the ranges provided here. This call will fail if
-> > + * IOMMU_IOAS_IOVA_RANGES is currently narrower than the given ranges.
-> > + *
-> > + * When an IOAS is first created the IOVA_RANGES will be maximally sized,
-> > and as
-> > + * devices are attached the IOVA will narrow based on the device
-> > restrictions.
-> > + * When an allowed range is specified any narrowing will be refused, ie
-> > device
-> > + * attachment can fail if the device requires limiting within the allowed
-> > range.
-> > + *
-> > + * Automatic IOVA allocation is also impacted by this call. MAP will only
-> > + * allocate within the allowed IOVAs if they are present.
-> 
-> According to iopt_check_iova() FIXED_IOVA can specify an iova which
-> is not in allowed list but in the list of reported IOVA_RANGES. Is it
-> correct or make more sense to have FIXED_IOVA also under guard of
-> the allowed list (if violating then fail the map call)?
-
-The concept was the allow list only really impacts domain
-attachment. When a user uses FIXED they have to know what they are
-doing. There is not a good reason to deny the user to use any IOVA
-that is not restricted by the reserved list.
-
-> > + * @length: Number of bytes to unmap, and return back the bytes
-> > unmapped
-> > + *
-> > + * Unmap an IOVA range. The iova/length must be a superset of a
-> > previously
-> > + * mapped range used with IOMMU_IOAS_PAGETABLE_MAP or COPY.
-> 
-> remove 'PAGETABLE'
-
-Done
-
-> 
-> > +/**
-> > + * enum iommufd_option
-> > + * @IOMMU_OPTION_RLIMIT_MODE:
-> > + *    Change how RLIMIT_MEMLOCK accounting works. The caller must have
-> > privilege
-> > + *    to invoke this. Value 0 (default) is user based accouting, 1 uses process
-> > + *    based accounting. Global option, object_id must be 0
-> > + * @IOMMU_OPTION_HUGE_PAGES:
-> > + *    Value 1 (default) allows contiguous pages to be combined when
-> > generating
-> > + *    iommu mappings. Value 0 disables combining, everything is mapped to
-> > + *    PAGE_SIZE. This can be useful for benchmarking.  This is a per-IOAS
-> > + *    option, the object_id must be the IOAS ID.
-> 
-> What about HWPT ID? Is there value of supporting HWPT's with different
-> mapping size attached to the same IOAS?
-
-This is a global IOAS flag, it just makes everything use PAGE_SIZE. It
-is really only interesting for debugging and benchmarking. The test
-suite and syzkaller have both made use of this to improve coverage.
-
-> > +/**
-> > + * @size: sizeof(struct iommu_option)
-> > + * @option_id: One of enum iommufd_option
-> > + * @op: One of enum iommufd_option_ops
-> > + * @__reserved: Must be 0
-> > + * @object_id: ID of the object if required
-> > + * @val64: Option value to set or value returned on get
-> > + *
-> > + * Change a simple option value. This multiplexor allows controlling a
-> > options
-> > + * on objects. IOMMU_OPTION_OP_SET will load an option and
-> > IOMMU_OPTION_OP_GET
-> > + * will return the current value.
-> > + */
-> 
-> This is quite generic. Does it imply that future device capability reporting
-> can be also implemented based on this cmd, i.e. have OP_GET on a
-> device object?
-
-I don't view this as a way to do capabilities. I think we will have a
-capability ioctl as well. This is really for something that can be
-get & set.
-
-Thanks,
-Jason
+BTF_ID_FLAGS is not appropriate for this.
