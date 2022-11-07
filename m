@@ -2,209 +2,345 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C06A62026D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 23:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CF76202D3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 23:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbiKGWmt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 17:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        id S231992AbiKGW66 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 17:58:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiKGWms (ORCPT
+        with ESMTP id S230362AbiKGW65 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 17:42:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AF222285;
-        Mon,  7 Nov 2022 14:42:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 31E991F383;
-        Mon,  7 Nov 2022 22:42:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667860966;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=heeLIqfHkxyg8vSslC2bUlS87rdacKF796SQBLNeRn4=;
-        b=ipvwXWdog3WNEK98N0mV2ZiUWIsWjXKSdc8tZ/NHABZqdGBGiypmIwnxjQ5GGHgv6a/ehY
-        u9ixUh76+Csd7LwN/K80zIDzp0sqIWM8maU19/jyMS2BpIJRX8JZhZszDnMm8S1Dhe/YbI
-        IBYwIWXQ1kMYzxkUUXt+/YlSHCVfrcM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667860966;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=heeLIqfHkxyg8vSslC2bUlS87rdacKF796SQBLNeRn4=;
-        b=XIo8CdBv5q5LFZ6wnsziOp1KPnSFTTo5I7Ph1t44gC0M0d74H9KdxtenFdbtIR9PaB8Hxk
-        zNmYVqe7u5pz4dCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C34EE13494;
-        Mon,  7 Nov 2022 22:42:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id I9/OLeWJaWM6RAAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Mon, 07 Nov 2022 22:42:45 +0000
-Date:   Mon, 7 Nov 2022 23:42:43 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Minchan Kim <minchan@kernel.org>, ltp@lists.linux.it,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Martin Doucha <mdoucha@suse.cz>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>
-Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
-Message-ID: <Y2mJ42Ap7VIZu32Y@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20221107191136.18048-1-pvorel@suse.cz>
- <Y2l3vJb1y2Jynf50@google.com>
- <Y2l89dt/t8M6+9go@pevik>
+        Mon, 7 Nov 2022 17:58:57 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F5128E2A
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 14:58:54 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id t25so34099577ejb.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Nov 2022 14:58:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sUwZCDwxMnAkjoqePpUD6650XsgFZMrEmZEKqVeeEao=;
+        b=ayODyuGoousx2v6HfI5+YnqQN/a4tPtpddMstewaTMLBoFilQsrp9tNXZwyPLMlzwU
+         A4jy4oVX0YGXvCSybGxyLdken2LdedbaebsZaSZxlT0gkTSLu2UBgnDqwY9gnuOos1B6
+         ACOu1ZA2BuZZ5vtBLTCk0TXV/eO4JzHsKOsl4qP3VrCMwQYyg7AThJdLN6WfR7NtMmOO
+         mjwUq54/hMtGPKadvwI9Njky992b8lx1rF58L6ZuIAahH94GGnOfTL5W4zFnFWAgMWjQ
+         lCef9Jd/OntTtL8YvTFq+pxX05RGyjR1/Fx8SON+PXM7kyGOz+Kj3nHmMRXp/NaRzAUk
+         ld7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sUwZCDwxMnAkjoqePpUD6650XsgFZMrEmZEKqVeeEao=;
+        b=Da0txIcCrgoG+2BTsChC6z0SYEX8SxImHwfjHsL7ZG0JYI4nCAQXuc3SBp4GKq0pls
+         o729njIZ3TH7u3pU72HR0720nzHDGlvIoi/5VyETsWeH6jM66+0/8Z4oeTGheYLdv60n
+         BI9nWOnAsoVDILniEpKKPAAIdSCJHor5Rgiwzvg6HX84KaIs6qxIreJU7xA1b2GH6MiS
+         U51NyEJ+jLTCHbvl/7bCAR2tTF9Go3fj5bjV2CO9Y2aqQs1DUC/gT2AGQ8nn76aBtbwP
+         VFtmKYzrDWN5Tzk69k5aX21p81o19sYmbdBNXGHQ1fGR0B740nB4VphozfK+JKSxkejC
+         PnEg==
+X-Gm-Message-State: ACrzQf1epwlfqJtqYziWBIWFfeVPWoe9Z3oI89U6dsu9t34DoksEhfWg
+        9sxH8PE7hdeSXHtUDddzF28gUHq5TSMfeA5i7nFrbg==
+X-Google-Smtp-Source: AMsMyM5n16cnNQd+UEYr8FtaMxZ4fIDCRjZHVDLMWw6wcx81hsAsWCQuaUJfz+m9gpoEPOo2muW1DLpa6SlPKnC5FgY=
+X-Received: by 2002:a17:907:74a:b0:77e:9455:b4e1 with SMTP id
+ xc10-20020a170907074a00b0077e9455b4e1mr50055830ejb.462.1667861933168; Mon, 07
+ Nov 2022 14:58:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2l89dt/t8M6+9go@pevik>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+References: <20221104194705.3245738-1-rmoar@google.com> <20221104194705.3245738-2-rmoar@google.com>
+In-Reply-To: <20221104194705.3245738-2-rmoar@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 7 Nov 2022 14:58:41 -0800
+Message-ID: <CAGS_qxphFQhKHbBDKVVS+0NaEPY=ivysdaTUmvCtjA=XQkx_Aw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] kunit: tool: parse KTAP compliant test output
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> Hi Minchan,
+On Fri, Nov 4, 2022 at 12:48 PM Rae Moar <rmoar@google.com> wrote:
+>
+> Change the KUnit parser to be able to parse test output that complies with
+> the KTAP version 1 specification format found here:
+> https://kernel.org/doc/html/latest/dev-tools/ktap.html. Ensure the parser
+> is able to parse tests with the original KUnit test output format as
+> well.
+>
+> KUnit parser now accepts any of the following test output formats:
+>
+> Original KUnit test output format:
+>
+>  TAP version 14
+>  1..1
+>    # Subtest: kunit-test-suite
+>    1..3
+>    ok 1 - kunit_test_1
+>    ok 2 - kunit_test_2
+>    ok 3 - kunit_test_3
+>  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+>  # Totals: pass:3 fail:0 skip:0 total:3
+>  ok 1 - kunit-test-suite
+>
+> KTAP version 1 test output format:
+>
+>  KTAP version 1
+>  1..1
+>    KTAP version 1
+>    1..3
+>    ok 1 kunit_test_1
+>    ok 2 kunit_test_2
+>    ok 3 kunit_test_3
+>  ok 1 kunit-test-suite
+>
+> New KUnit test output format (preferred for KUnit tests):
+>
+>  KTAP version 1
+>  1..1
+>    # Subtest: kunit-test-suite
+>    KTAP version 1
+>    1..3
+>    ok 1 kunit_test_1
+>    ok 2 kunit_test_2
+>    ok 3 kunit_test_3
+>  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+>  # Totals: pass:3 fail:0 skip:0 total:3
+>  ok 1 kunit-test-suite
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
 
-> > On Mon, Nov 07, 2022 at 08:11:35PM +0100, Petr Vorel wrote:
-> > > Hi all,
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-> > > following bug is trying to workaround an error on ppc64le, where
-> > > zram01.sh LTP test (there is also kernel selftest
-> > > tools/testing/selftests/zram/zram01.sh, but LTP test got further
-> > > updates) has often mem_used_total 0 although zram is already filled.
+Looks good to me.
+Some comments below, but nothing we have to address in this patch, IMO.
 
-> > Hi, Petr,
+> ---
+> Note: this patch is based on the linux-kselftest/kunit branch.
+> ---
+> tools/testing/kunit/kunit_parser.py           | 69 ++++++++++++-------
+>  tools/testing/kunit/kunit_tool_test.py        |  8 +++
+>  .../test_data/test_parse_ktap_output.log      |  8 +++
+>  3 files changed, 60 insertions(+), 25 deletions(-)
+>  create mode 100644 tools/testing/kunit/test_data/test_parse_ktap_output.log
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index a56c75a973b5..abb69f898263 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -441,6 +441,7 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+>         - '# Subtest: [test name]'
+>         - '[ok|not ok] [test number] [-] [test name] [optional skip
+>                 directive]'
+> +       - 'KTAP version [version number]'
+>
+>         Parameters:
+>         lines - LineStream of KTAP output to parse
+> @@ -449,8 +450,9 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+>         Log of diagnostic lines
+>         """
+>         log = []  # type: List[str]
+> -       while lines and not TEST_RESULT.match(lines.peek()) and not \
+> -                       TEST_HEADER.match(lines.peek()):
+> +       non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START]
+> +       while lines and not any(re.match(lines.peek())
+> +                       for re in non_diagnostic_lines):
+>                 log.append(lines.pop())
+>         return log
+>
+> @@ -496,6 +498,12 @@ def print_test_header(test: Test) -> None:
+>         test - Test object representing current test being printed
+>         """
+>         message = test.name
+> +       if message == "":
+> +               # KUnit tests print a Subtest header line that provides the name
+> +               # of the test suite. But the subtest header line isn't required
+> +               # by the KTAP spec, so use a placeholder name "Test suite" in that
+> +               # case.
+> +               message = "Test suite"
 
-> > Is it happening on only ppc64le?
-> I haven't seen it on other archs (x86_64, aarch64).
 
-> > Is it a new regression? What kernel version did you use?
-> Found on openSUSE kernel, which uses stable kernel releases 6.0.x.
-> It's probably much older, first I've seen it some years ago (I'm not able to find kernel version), but it was random. Now it's much more common.
+(something we can address in a later change)
 
-I tested it on bare metal machine with some older SLES kernel (based on 4.12.14,
-with thousands of patches) and it fails:
+Hmm, consider the following input
 
-# PATH="/opt/ltp/testcases/bin:$PATH" LTP_SINGLE_FS_TYPE=vfat zram01.sh
-...
-zram01 5 TINFO: make vfat filesystem on /dev/zram0
-zram01 5 TPASS: zram_makefs succeeded
-zram01 6 TINFO: mount /dev/zram0
-zram01 6 TPASS: mount of zram device(s) succeeded
-zram01 7 TINFO: filling zram0 (it can take long time)
-zram01 7 TPASS: zram0 was filled with '25568' KB
-/opt/ltp/testcases/bin/zram01.sh: line 137: 100 * 1024 * 25568 / 0: division by 0 (error token is "0")
-...
+KTAP version 1
+1..1
+  KTAP version 1
+  1..1
+    KTAP version 1
+    1..1
+      ok 1 - subtest1
+    ok 1 - test1
+  ok 1 - suite
 
-My patch does not help, obviously the value does not change.
+$ ./tools/testing/kunit/kunit.py parse < /tmp/example_nested_ktap
+============================================================
+================== Test suite (1 subtest) ==================
+================== Test suite (1 subtest) ==================
+[PASSED] subtest1
+====================== [PASSED] test1 ======================
+====================== [PASSED] suite ======================
+============================================================
 
-zram01 5 TINFO: make vfat filesystem on /dev/zram1
-zram01 5 TPASS: zram_makefs succeeded
-zram01 6 TINFO: mount /dev/zram1
-zram01 6 TPASS: mount of zram device(s) succeeded
-zram01 7 TINFO: filling zram1 (it can take long time)
-zram01 7 TPASS: zram1 was filled with '25568' KB
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TINFO: /sys/block/zram1/mm_stat
-15859712        0        0 26214400   196608      242        0
-zram01 7 TBROK: "loop_read_mem_used_total /sys/block/zram1/mm_stat" timed out
+I wonder if the duplicate "Test suite" line would be confusing.
+This also points to a slightly bigger problem that kunit_parser.py
+doesn't have a good way to format 3+ layers of tests atm.
 
-This is just to demonstrate, that the problem has been here long time,
-and it's not QEMU related (although it could be theoretically related to
-openSUSE/SLES user space, but it's very unlikely).
+I don't know if there's another placeholder name we can give that
+might be less confusing.
 
-I'll debug if page_same_filled() is being called on mainline kernel.
+>         if test.expected_count:
+>                 if test.expected_count == 1:
+>                         message += ' (1 subtest)'
+> @@ -647,13 +655,13 @@ def bubble_up_test_results(test: Test) -> None:
+>         elif test.counts.get_status() == TestStatus.TEST_CRASHED:
+>                 test.status = TestStatus.TEST_CRASHED
+>
+> -def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+> +def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest: bool) -> Test:
+>         """
+>         Finds next test to parse in LineStream, creates new Test object,
+>         parses any subtests of the test, populates Test object with all
+>         information (status, name) about the test and the Test objects for
+>         any subtests, and then returns the Test object. The method accepts
+> -       three formats of tests:
+> +       four formats of tests:
+>
+>         Accepted test formats:
+>
+> @@ -674,6 +682,16 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>         [subtests]
+>         ok 1 name
+>
+> +       - KTAP subtest header (in compliance with KTAP specification)
+> +
+> +       Example:
+> +
+> +    # May include subtest header line here
+> +       KTAP version 1
+> +       1..3
+> +       [subtests]
+> +       ok 1 name
+> +
+>         - Test result line
+>
+>         Example:
+> @@ -685,6 +703,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>         expected_num - expected test number for test to be parsed
+>         log - list of strings containing any preceding diagnostic lines
+>                 corresponding to the current test
+> +       is_subtest - boolean indicating whether test is a subtest
+>
+>         Return:
+>         Test object populated with characteristics and any subtests
+> @@ -692,21 +711,22 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>         test = Test()
+>         test.log.extend(log)
+>         parent_test = False
+> -       main = parse_ktap_header(lines, test)
+> -       if main:
+> -               # If KTAP/TAP header is found, attempt to parse
+> -               # test plan
+> +       if not is_subtest:
+> +               # If parsing the main test, attempt to parse KTAP/TAP header
+> +               # and test plan
+>                 test.name = "main"
+> +               parse_ktap_header(lines, test)
+>                 parse_test_plan(lines, test)
+>                 parent_test = True
+>         else:
+> -               # If KTAP/TAP header is not found, test must be subtest
+> -               # header or test result line so parse attempt to parser
+> -               # subtest header
+> -               parent_test = parse_test_header(lines, test)
+> +               # If test is a subtest, attempt to parse test suite header
+> +               # (either subtest line and/or KTAP/TAP version line)
+> +               subtest_line = parse_test_header(lines, test)
+> +               ktap_line = parse_ktap_header(lines, test)
+> +               parent_test = subtest_line or ktap_line
+>                 if parent_test:
+> -                       # If subtest header is found, attempt to parse
+> -                       # test plan and print header
+> +                       # If subtest header and/or KTAP/version line is found, attempt
+> +                       # to parse test plan and print header
+>                         parse_test_plan(lines, test)
+>                         print_test_header(test)
+>         expected_count = test.expected_count
+> @@ -721,7 +741,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>                 sub_log = parse_diagnostic(lines)
+>                 sub_test = Test()
+>                 if not lines or (peek_test_name_match(lines, test) and
+> -                               not main):
+> +                               is_subtest):
+>                         if expected_count and test_num <= expected_count:
+>                                 # If parser reaches end of test before
+>                                 # parsing expected number of subtests, print
+> @@ -735,20 +755,19 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
+>                                 test.log.extend(sub_log)
+>                                 break
+>                 else:
+> -                       sub_test = parse_test(lines, test_num, sub_log)
+> +                       sub_test = parse_test(lines, test_num, sub_log, True)
+>                 subtests.append(sub_test)
+>                 test_num += 1
+>         test.subtests = subtests
+> -       if not main:
+> +       if is_subtest:
+>                 # If not main test, look for test result line
+>                 test.log.extend(parse_diagnostic(lines))
+> -               if (parent_test and peek_test_name_match(lines, test)) or \
+> -                               not parent_test:
+> -                       parse_test_result(lines, test, expected_num)
+> -               else:
+> +               if subtest_line and not peek_test_name_match(lines, test):
+>                         test.add_error('missing subtest result line!')
+> +               else:
+> +                       parse_test_result(lines, test, expected_num)
 
-Kind regards,
-Petr
+This change isn't a straightforward change of the logic like
+s/main/not is_subtest.
+But looking at it, it seems fine.
 
-> Test runs on VM (I can give qemu command or whatever you need to know about it)
-> I'll try to verify it on some bare metal ppc64le.
+One example input would be
 
-> > Actually, mem_used_total indicates how many *physical memory* were
-> > currently used to keep original data size.
+ KTAP version 1
+ 1..2
+   # Subtest: suite1
+   KTAP version 1
+   1..1
+   ok 1 test1
+ # ok 1 suite1
+ ok 2 suite2
 
-> > However, if the test data is repeated pattern of unsigned long
-> > (https://github.com/torvalds/linux/blob/master/drivers/block/zram/zram_drv.c#L210)
-> > zram doesn't allocate the physical memory but just mark the unsigned long's value
-> > in meta area for decompression later.
+We get output like this
 
-> > Not sure you hit the this case.
-> Thanks for a hint, I'll try to debug it.
+$ ./tools/testing/kunit/kunit.py parse < /tmp/out
+[14:54:44] ============================================================
+[14:54:44] ==================== suite1 (1 subtest) ====================
+[14:54:44] [PASSED] test1
+[14:54:44] [ERROR] Test: suite1: missing subtest result line!
+[14:54:44] # Subtest: suite1
+[14:54:44] KTAP version 1
+[14:54:44] 1..1
+[14:54:44] # ok 1 suite1
+[14:54:44] ===================== [CRASHED] suite1 =====================
+[14:54:44] [PASSED] suite2
+[14:54:44] ============================================================
 
-> Kind regards,
-> Petr
+So it handles it about as well as we could expect.
 
-> > > Patch tries to repeatedly read /sys/block/zram*/mm_stat for 1 sec,
-> > > waiting for mem_used_total > 0. The question if this is expected and
-> > > should be workarounded or a bug which should be fixed.
-
-> > > REPRODUCE THE ISSUE
-> > > Quickest way to install only zram tests and their dependencies:
-> > > make autotools && ./configure && for i in testcases/lib/ testcases/kernel/device-drivers/zram/; do cd $i && make -j$(getconf _NPROCESSORS_ONLN) && make install && cd -; done
-
-> > > Run the test (only on vfat)
-> > > PATH="/opt/ltp/testcases/bin:$PATH" LTP_SINGLE_FS_TYPE=vfat zram01.sh
-
-> > > Petr Vorel (1):
-> > >   zram01.sh: Workaround division by 0 on vfat on ppc64le
-
-> > >  .../kernel/device-drivers/zram/zram01.sh      | 27 +++++++++++++++++--
-> > >  1 file changed, 25 insertions(+), 2 deletions(-)
-
-> > > -- 
-> > > 2.38.0
-
+Note: kunit.py is indeed saying the kernel crashed even though there's
+"kernel output" after the missing line. But this is a pre-existing
+condition. It already doesn't check to see that the output is
+truncated before saying "CRASHED"
