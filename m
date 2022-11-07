@@ -2,229 +2,292 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2943361E828
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 02:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C368861E894
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 03:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiKGBMC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 6 Nov 2022 20:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S230209AbiKGC2b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 6 Nov 2022 21:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbiKGBL6 (ORCPT
+        with ESMTP id S230214AbiKGC23 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 6 Nov 2022 20:11:58 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2047.outbound.protection.outlook.com [40.107.243.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53B8CE38;
-        Sun,  6 Nov 2022 17:11:56 -0800 (PST)
+        Sun, 6 Nov 2022 21:28:29 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972753B8;
+        Sun,  6 Nov 2022 18:28:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667788107; x=1699324107;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=SnV2FqQtIENQxg+56yvc2j12HdWyVLpu9U7PXdR9ct8=;
+  b=RGYtQZafMFF5P+mhazirNlqDvv7J70p+LBkzt0+4KNqc1t1zKG403WM6
+   //Owe7iLcd4xITJEa6q53iVQzvjX7LHcxxP+fKMzWM7mGEuEq5eomNDEs
+   vOlZNhxpDHpUgMldqD4a5/eYyTv/eELWJvOgESi8H4hzHq8v8sjzstXH/
+   7ZfUBS+pIyEN1S+O6fVxvNADvW/p7VHoDswNyzdl+V0GrwBN6YjVP2/WH
+   ttTTiYIchuaoLk6A65bbT57ysZKqUBr6R84Ef19ZaZVBx4lkcBENLyu1c
+   niX5sLdLVvmrJ5pOEJ4DUoCU0MpNfB06DhfVbqQbbK63WpKk2dofT7YTg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="293651567"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="293651567"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2022 18:28:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="724963234"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="724963234"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Nov 2022 18:28:25 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 6 Nov 2022 18:28:25 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 6 Nov 2022 18:28:25 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Sun, 6 Nov 2022 18:28:25 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Sun, 6 Nov 2022 18:28:24 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ODZ+hv65q8ZAg1fv4B3JtdbnrGQVbmsSdJPEDDz4/93CmGnhONwS8Z9cRKO3J5Ygr9BjDAA45i+HfWK/iOEmsb55bPu0RYd/3xoXrQ6cYJIzkP+dX05NmXkIyWyoNRxJARlbQunx0HmL13s1S2A2jtfHicm+i7Db+T+svtSc14Tsr3k3Y9CeZ7ODuKLFaqhTQcUkMTMyF7FeuJSiHXKiKSB0aCWZ2LLtdOEF56ECl/h0gj0spLVvtmKNn8xtdaPsh41luyd01Oeqj3t+nt59NJjO4Nog9kBk3oZFgPV+R9Z1TFrvh+hHgKI9KjkHNLAguMii6KxOK9Sx7NtFMD8zIg==
+ b=bkeFWwhYymM/eHhiTP2DXKs4ibRxTBpPicknRgNAO9wRJTgdLWrSA6Pik0DZVkwNMryDd0ZXgocKWODbaQc+PZzZ0zC8Ix10FW2lNVKFsEt6q0baBfvXqMHUDlNNkKwXSZC6itsnaubJQpzq6CQM8jnRqzBVJiw9omaKET2PFmh1nRUUZnPCcjS5T4s5dg8doDhYUupoW7w/6paYnUQHD4fZ1xL/hi0c1kh14gKD/f07Sqv4AZ9R80madUJq9u1g+xSnzAUiAAQklHzvXu8QkaObIF5B2CJfJgPxPhUoRfQOFmXSxGNE1FXSkJZVPgp/yTDW2PmGaBI4ceIY+mk2Mw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/yeAbtMZB4RTWAW8Xo4yyHYHNQG87gd44WNzdLH8uZM=;
- b=KqW04HpLphTekIFCygtWl6h7/W2+fbSg2xfBRn9IpBW+mBEzhSjR4m+WUlyHu+M04Bv86joYsSSvX2irpeBm2cHOuqd0VaQfBgfeO5KA3KFzdC+oFwWQFzD36Q9GrUwhxG7XWS8VizvgJwMOz52RDKUcb+DvIuFs135dqdBRZ/bO/VVeLYAFwAD6jTjTVXjhhzB84SuFzLj9m02AslGG7OaYfQk1Y0Q+m91mT8XxGLpQZf0ayl81j+So45UXxHfnR8/5DNNrwUlQlUdiV+0pAYgzc04XIuSvsL/EAVV1/w/25V/QkAFjOTjQ10y0Diw1jPKg/Sp4ZT0IUda0LUjDog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/yeAbtMZB4RTWAW8Xo4yyHYHNQG87gd44WNzdLH8uZM=;
- b=tyFlo5oQMFxbO/oAI9KIKhT4DL6N8arBADaWkljGX2ynoeIPMFAQQZDMjQN/0y61pg7eBvj+UDT+QNWjkUG2tHZ2ZCyDXIVxj2xhSoMaXX6ym+PpuV29Nt7VGBa5ZfO4jWNOyTg8Lh/A4Axxa6FD5M9iuVf29RO6iH6graLH9Zk=
-Received: from BN9PR03CA0313.namprd03.prod.outlook.com (2603:10b6:408:112::18)
- by CH2PR12MB5515.namprd12.prod.outlook.com (2603:10b6:610:34::20) with
+ bh=tCDtRC4vGNbeQ0Gdn+0qyoRu9dZxVAa4CFt4sZlFcIQ=;
+ b=XKcwTaXzuZl4LiCBDOsw32DJuX61YRKP3lKK0nQBOJtr1WaLlQ2NknZVYYH6qUPzDcdTLDpuBnmfr0yoi+XCRK5kz3c39Et6zbSYkHxPcLfUYFSFWTilZWRWvz4j9pQ/PrzsiESV25B2hICtcmhNIsuRqti3EssYsbFTcTnhO4FkLacYDD5U4eQoyvI4m+AA/p1tXGuIhrInKUt4ee6yADIwe0l3RitgWRGwVBwPq1blvH8ftGfzsDAeItCepod2xCLqye+6jAuW3AUdig3SCwaLbnPWw2ZQjZrlwopgrKDySgHq2VFGcnjcdegxDOBUazcfmxGNsVrwnJKP0qsLWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+ by CH0PR11MB5332.namprd11.prod.outlook.com (2603:10b6:610:bf::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Mon, 7 Nov
- 2022 01:11:54 +0000
-Received: from BL02EPF0000C408.namprd05.prod.outlook.com
- (2603:10b6:408:112:cafe::31) by BN9PR03CA0313.outlook.office365.com
- (2603:10b6:408:112::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26 via Frontend
- Transport; Mon, 7 Nov 2022 01:11:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000C408.mail.protection.outlook.com (10.167.241.10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.11 via Frontend Transport; Mon, 7 Nov 2022 01:11:53 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 6 Nov
- 2022 19:11:50 -0600
-From:   Meng Li <li.meng@amd.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>,
-        <linux-kselftest@vger.kernel.org>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
-        Meng Li <li.meng@amd.com>
-Subject: [RESEND PATCH V2 2/2] Documentation: amd-pstate: Add speedometer test introduction
-Date:   Mon, 7 Nov 2022 09:11:27 +0800
-Message-ID: <20221107011127.1818705-3-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221107011127.1818705-1-li.meng@amd.com>
-References: <20221107011127.1818705-1-li.meng@amd.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 02:28:22 +0000
+Received: from BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::bb20:85b6:d9ef:423e]) by BYAPR11MB3062.namprd11.prod.outlook.com
+ ([fe80::bb20:85b6:d9ef:423e%6]) with mapi id 15.20.5791.025; Mon, 7 Nov 2022
+ 02:28:22 +0000
+Date:   Mon, 7 Nov 2022 10:28:13 +0800
+From:   Aaron Lu <aaron.lu@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2] selftest/x86/meltdown: Add a selftest for meltdown
+Message-ID: <Y2htPReffG50xnu8@ziqianlu-desk>
+References: <Y1kwa0ZLI9xbEaHx@ziqianlu-desk1>
+ <Y2eKO48Tv+UD0IpV@ziqianlu-desk1>
+ <Y2eaEG5IX+tk4wuA@kroah.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y2eaEG5IX+tk4wuA@kroah.com>
+X-ClientProxiedBy: SI2P153CA0011.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:140::14) To BYAPR11MB3062.namprd11.prod.outlook.com
+ (2603:10b6:a03:92::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000C408:EE_|CH2PR12MB5515:EE_
-X-MS-Office365-Filtering-Correlation-Id: c85780a6-4329-4c95-3ca9-08dac05d0ed9
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|CH0PR11MB5332:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba58aca1-def3-45bb-7cb2-08dac067bdb8
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r8fjh4tOptWVvg9Ws9JFXUvdiHAfJY+OCFj7WZFYTwIivHOLJW8tWnxJnfU56G+wf68YUwVVHLfUahopTAaTsx3GY7A9XnOY64zTGVc6/Wv+kiwwZVd0gwf0+uDDWRfbnmM/3tSytHoAQW64krbDy3jVtfV0Ox1u2EEwV4WlldaDqPSayezz+Wg43a98vElavtE0EIjo0Hqlo7V6x4xlpNXQWSxjWsKqoGP/u3SiCnHfv/ZTrPWt9cKJNn0l2qmWOMHAtWZM90MI83AJZkYiOtO5mrTp5EQMeHuKyQWOJeOmnv+Ag15Bx34Za4rfVz2ob/CXdkREhvSoXDdomzp14Gby+cpgMBAW3BI/RJUUwhJnstgyUivaWaPkRg+6wi4pIMyCuld7QMhSzYtAKS0oWaCoTYYdrM8D9ymoJvVlm4JXnit1xz1WgHIhFIHjVSlOT9Fresa5MdMQGLFtD1HGOapTg99vOV7VA2bVhM12Fe8yFncTpdG9NLrE+ZgfNo2BZuV35r/uSEI89/uvMTHytL/p+XZXdOqwNn7pJo6ywa/mNADJ41Q1F1V+0ySiAm9D2OOzDoAD9AWJmwmO6RpBVzLlxVq1q3dsX+KUN3lgFzIcngzN1W6Kq4OiymtqgYn0RUII2T4Dd7s9uNuu9pKbuzMGQqD09vgmbenOInX5lKZCJ1WSrdBFsNxXGz+Rq3NpSJ1pbHVV+bJ0muyFR/KXhG71h3m6b58cqHmssmPHO5LVsiqFVlz9cyIokpxIdAUKujDtdMKsdxyMgrHKCgWdJhgMqsujYVywzhjx3ZrPdZc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(136003)(376002)(451199015)(40470700004)(36840700001)(46966006)(82310400005)(70586007)(41300700001)(81166007)(4326008)(70206006)(8676002)(54906003)(110136005)(83380400001)(356005)(8936002)(478600001)(40480700001)(2906002)(316002)(5660300002)(36756003)(26005)(2616005)(336012)(16526019)(186003)(66574015)(47076005)(426003)(40460700003)(82740400003)(1076003)(36860700001)(86362001)(6666004)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 01:11:53.9487
+X-Microsoft-Antispam-Message-Info: Nm21cIZL1P14s0lmWGm/eaOnk6CGIdLjskvxTjDJ8+grwfD0/BW10E7FqX45m4koMv1R3KQJXTRfRiOPPOJxAcA7CkSOGFguQofZeqBXM6bVUn6Cu7DD7rWzcfyuQaM012QoRXu22I2rD41E6UWYeRMXITaaRSlw4D6Mar3bLBX813ZfVRyYoq4Iy+lXMNETkWGX85jjWBH65HxtaqwyIcqfANga9odfOcC5EKNVis86AVb4sVnnjwKZPstNtQ/MfS1PMrt3J0tBlFhXZbQDmMgczFjzbkrru83j3YCwv8V0Wxla0c3T0wYI93Kqx0m9YpeLgkn9OKQ19omyeeqk05iwSugKVjW+GLeWa8PDgjG3L9iA5v8h/A6y+FES3u5t9dss87shjewYXIQ7mNh45fa3wH5zdCya6613xFEoQEBBdBg+m3em540Q3z5gNslHEcEy041Y+o6VEb7M3BcRcDd0rZEXColzlGi/gGQlctFwQtHHTOmhdIeoKMyMRGFzsRgOH9lsO7JF5z/7bAcUAbddPIx9+FhN1WU3oZ8gxI3V9g1c8ywd6hwaKclCQmxIhikuoSfMuTRMEwjIrLLYmmP2cdpDj9vyMqgix8zehwLYxTvV04U4mN5a3e+4LA7azjCT4F5porZn4iYs5MTHG2htacr6qosGLh3uUwvfbNgu7uCoKnwHvBTSw0qrHnF1b+YOd9c1gA7/b0Fwr57xc8+XBr9lyznVEgCMFom22dURQh2xkb/fdsy2Dt3XNNybMHGYLicd6kNtC9fzBoRPVw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(136003)(396003)(366004)(376002)(39860400002)(451199015)(6512007)(9686003)(6506007)(26005)(6666004)(186003)(83380400001)(44832011)(2906002)(8676002)(33716001)(45080400002)(6916009)(316002)(478600001)(54906003)(966005)(6486002)(38100700002)(41300700001)(5660300002)(8936002)(4326008)(66476007)(66556008)(66946007)(66899015)(82960400001)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TONMXzQoIfGolCG66e05Bc0ZhMWgOyVqLGikzcCZLlMYiJPodrkgSofhemY4?=
+ =?us-ascii?Q?xNPahyJRCMZSTeunZumY8Mw5EdlN2RTVOmDCNHsevQ5zGplPgo9Q3aNJv0S1?=
+ =?us-ascii?Q?mA6n2PIKPrgtnSIp5gioJeMl8RVty8VBL98un5WX/o8oa06/0Nf8ry5sxhEH?=
+ =?us-ascii?Q?/F1Ejm6weYZfnOTGp8XLiUkoFvBsVZWs/LotxBckc1q1WQ+baLEznOnIOfGf?=
+ =?us-ascii?Q?zGEc2zHR+sOA7+DuxmTbCpY+ElXxJNdnQobHDXfy5lYWTcJUu4s0auCx0dJH?=
+ =?us-ascii?Q?Yaazot+52vhLjWHHiCwqbv1dxRwZAmTP0gga5ROyzja2DXo6NMDRYO7LGVpg?=
+ =?us-ascii?Q?R+LJIPs6KhVek9qfTdXEPH0toEHRu9NoGY7FlxPRdRV6AZooh76z7b+X9Pq6?=
+ =?us-ascii?Q?PNtYToqmDORPw51okFMUw99nQ5+kglUj/QUQBSMZlhMw4UpouMrimXZDurbW?=
+ =?us-ascii?Q?hZxCo3ICuHdsBNR4LAK8w5+3a7U4LBo8j1e5FWxo1rZ1xxc0/71l6/czafC3?=
+ =?us-ascii?Q?1FMK3GiJe/P4qEtkjGaPMaQZ+L9OKSg1wgF0WEoUsEiLl7jclju72YkJGwFm?=
+ =?us-ascii?Q?NbyzOn8C2MjP1vbQd1USstV4JH4C+LqCJrOxOLkIujCRQyIkJltdZjcD0AOE?=
+ =?us-ascii?Q?rspdxWUsl14namV/MRgLptmfHrShpQCOkM70dYAnxBoI8ABHWsaryY4UukxT?=
+ =?us-ascii?Q?Y5P1h48RnybaVfndGRjQwrY6M5vMgRwlZ5Mpss6L2mUkuljbRuOlRIw5q7Rb?=
+ =?us-ascii?Q?89tN5zBqFhInwBYlxAT5ndaP+Yai95N9NGW0tEwMJfcaZZjutv6OjDWpaAcc?=
+ =?us-ascii?Q?ze1qZGJMl9r/xoDLZaV0zKdRQ6bGqC4oy5/rv7GaSQzsb6Dc6TCZlKFXS+qt?=
+ =?us-ascii?Q?hMXedmxUqKx5GTH4P+4SkMbZ/W41kCZwULvV1giLvZ8QShbvH3aKjrqoym6w?=
+ =?us-ascii?Q?1PPnGtR5KvWD+TWRN/z6SxwFG+YY7z6TjQaULcTZXoF9xnTJpdLk5yZ306E0?=
+ =?us-ascii?Q?eucbqGylxHNTfcmRh5aoAbG9wFaEl2V5jPyfhNc77cT8baqcbwoe1tpRHg5k?=
+ =?us-ascii?Q?BH9pTuKdotOGxqZJV5OWMRkArUuxkTrRMh4/qA097aNd7UdIwOlc7SS1fD3f?=
+ =?us-ascii?Q?sxm7yMl6WzehjN5EKEzommibS5KpV3d/a70wNk3tcR87EW/2vdB5Ll0VtcOA?=
+ =?us-ascii?Q?V9zGK3QCMJZBt2H4h1Gbqoq5FJ73oWxTYyZpkpVqhcsfEmNu5yyDewhTEVAQ?=
+ =?us-ascii?Q?tNGkLpqJ32uqnp8OVPMMtq6viq/AqH5ncyBGR9wxZiMqc8NNCR/abum5AFWg?=
+ =?us-ascii?Q?ZwwIdk5gm8bTseIwzcuVWb0C1LU/p3nXfYNkqR87mEQKhXEa8aOxlqcbiqKD?=
+ =?us-ascii?Q?rqWZozFdh40kGKjQW2sXC67iPyN6VApRvYGjlh4vBBjunfCdiVgCxI1H9xYO?=
+ =?us-ascii?Q?VNsr3SWXAOZe4RNVWZF1I1cqpL9244uJTASYQ/12SE4iRS5sM6WCtVIQcIga?=
+ =?us-ascii?Q?4/3h7VmebI5RX/h6BiZz+/Lq0Qo/azSpPlYBsWJbxKhC93N0fcUMubUBfnMn?=
+ =?us-ascii?Q?qYlb4gGsjBzrSk4UPXmVn84ra3SuP9r3i9+j2fMZ?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba58aca1-def3-45bb-7cb2-08dac067bdb8
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 02:28:22.5838
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c85780a6-4329-4c95-3ca9-08dac05d0ed9
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C408.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5515
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y3725bQwBT+57bo1wWx3vzHUaRebXxmeULXaywMRhYM1WAShHPmhCill+VL0mhoEk7Lpaig+us4e+R5GXPxWSg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5332
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Introduce speedometer test cases design and implementation.
-Monitor cpus changes about performance and power consumption etc.
+Hi Greg,
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 75 ++++++++++++++++++++-
- 1 file changed, 74 insertions(+), 1 deletion(-)
+Thanks for taking a look.
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 29c50e96eb95..0163d1231aa7 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -451,6 +451,23 @@ Unit Tests for amd-pstate
-         The specified governor is ondemand or schedutil.
-         Gitsource can also be tested on the ``acpi-cpufreq`` kernel driver for comparison.
- 
-+    4). Speedometer test
-+
-+        Test and monitor the cpu changes when running speedometer benchmark under the specified governor.
-+        These changes include desire performance, frequency, load, time, energy etc.
-+        The specified governor is ondemand or schedutil.
-+        Speedometer can also be tested on the ``acpi-cpufreq`` kernel driver for comparison.
-+
-+#. Preparations before tests
-+
-+    1). Speedometer
-+
-+     + Python version 3.0.x or higher
-+     + Install chromium-browser
-+     + Install chromium-chromedriver
-+     + Install selenium on the client
-+     + Install selenium-server on the server
-+
- #. How to execute the tests
- 
-    We use test module in the kselftest frameworks to implement it.
-@@ -487,6 +504,8 @@ Unit Tests for amd-pstate
-         $ sudo ./run.sh -t tbench -m acpi-cpufreq
-         $ sudo ./run.sh -t gitsource
-         $ sudo ./run.sh -t gitsource -m acpi-cpufreq
-+        $ sudo ./run.sh -t speedometer
-+        $ sudo ./run.sh -t speedometer -m acpi-cpufreq
-         $ ./run.sh --help
-         ./run.sh: illegal option -- -
-         Usage: ./run.sh [OPTION...]
-@@ -495,7 +514,8 @@ Unit Tests for amd-pstate
-                 [-c <all: All testing,
-                      basic: Basic testing,
-                      tbench: Tbench testing,
--                     gitsource: Gitsource testing.>]
-+                     gitsource: Gitsource testing,
-+                     speedometer: Speedometer testing.>]
-                 [-t <tbench time limit>]
-                 [-p <tbench process number>]
-                 [-l <loop times for tbench>]
-@@ -621,6 +641,59 @@ Unit Tests for amd-pstate
-          + acpi-cpufreq-schedutil VS amd-pstate-schedutil  | Comprison(%) |          |          |          | 2.1115      | 4.2873  | -4.1110              |
-          +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
- 
-+        + speedometer
-+
-+         When you finish test, you will get selftest.speedometer.csv and png images.
-+         The selftest.speedometer.csv file contains the raw data and the drop of the comparative test.
-+         The png images shows the goal, time, energy and performan per watt of each test.
-+         Open selftest.speedometer.csv :
-+
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + Governor                                        | Round        | Des-perf | Freq     | Load     | Goal        | Time        | Energy  | Performance Per Watt |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + Unit                                            |              |          | GHz      |          | Runs/Minute | s           | J       | Runs/w               |
-+         +=================================================+==============+==========+==========+==========+=============+=============+=========+======================+
-+         + acpi-cpufreq-ondemand                           | 1            |          |          |          | 209         | 51          | 731.84  | 0.2427               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand                           | 2            |          |          |          | 205         | 51          | 759.03  | 0.2295               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand                           | 3            |          |          |          | 206         | 51          | 755.15  | 0.2318               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand                           | Average      |          |          |          | 206.667     | 51          | 748.673 | 0.2346               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil                          | 1            |          |          |          | 206         | 56          | 775.08  | 0.248                |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil                          | 2            |          |          |          | 204         | 51          | 762.06  | 0.2275               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil                          | 3            |          |          |          | 207         | 56          | 776.35  | 0.2488               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil                          | Average      |          |          |          | 205.667     | 54.3333     | 771.163 | 0.2415               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand                             | 1            | 24.7974  | 1.73142  | 7.71728  | 195         | 64          | 756.6   | 0.2749               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand                             | 2            | 26.1653  | 1.91492  | 8.5525   | 195         | 51          | 705.67  | 0.2348               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand                             | 3            | 24.1789  | 1.69516  | 7.41152  | 196         | 65          | 758.98  | 0.2797               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand                             | Average      | 25.0472  | 1.7805   | 7.89377  | 195.333     | 60          | 740.417 | 0.2638               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-schedutil                            | 1            | 67.0214  | 2.76691  | 17.1314  | 197         | 51          | 737.52  | 0.227                |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-schedutil                            | 2            | 64.3032  | 2.75981  | 16.1196  | 198         | 55          | 763.57  | 0.2376               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-schedutil                            | 3            | 65.5175  | 2.59423  | 17.0067  | 201         | 51          | 735.96  | 0.2321               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-schedutil                            | Average      | 65.614   | 2.70698  | 16.7526  | 198.667     | 52.3333     | 745.683 | 0.2323               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand VS acpi-cpufreq-schedutil | Comprison(%) |          |          |          | -0.4838     | 6.5358      | 3.0039  | 2.9411               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand VS amd-pstate-schedutil     | Comprison(%) | 161.9614 | 52.0348  | 112.2255 | 1.7068      | -12.7778    | 0.7112  | -11.9408             |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand VS amd-pstate-ondemand    | Comprison(%) |          |          |          | -5.4841     | 17.647      | -1.1027 | 12.4467              |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil VS amd-pstate-schedutil  | Comprison(%) |          |          |          | -3.4035     | -3.6809     | -3.3041 | -3.8095              |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+
- Reference
- ===========
- 
--- 
-2.34.1
+On Sun, Nov 06, 2022 at 12:27:12PM +0100, Greg KH wrote:
+> On Sun, Nov 06, 2022 at 06:19:39PM +0800, Aaron Lu wrote:
+> > To capture potential programming errors like mistakenly setting Global
+> > bit on kernel page table entries, a selftest for meltdown is added.
+> > 
+> > This selftest is based on https://github.com/IAIK/meltdown. What this
+> > test does is to firstly set a predefined string at a random user address
+> > and then with pagemap, get the physical address of this string. Finally,
+> > try to fetch the data using kernel's directmap address for this physical
+> > address to see if user space can use kernel's page table.
+> 
+> As this is based on someone else's code, what happened to the proper
+> credit for them as the author and copyright owner?
 
+Should I list the contributors in the patch header comment section?
+Something like this:
+
+The original code is contributed by:
+$ git shortlog -sne --all
+    24  Michael Schwarz <michael.schwarz91@gmail.com>
+    23  Michael Schwarz <michael.schwarz@student.tugraz.at>
+     9  Pavel Boldin <boldin.pavel@gmail.com>
+     6  Daniel Gruss <lava@gruss.cc>
+     3  Daniel Gruss <daniel.gruss@iaik.tugraz.at>
+     3  Jared Deckard <jdeckard@equityins.net>
+     3  Moritz Lipp <github@mlq.me>
+     2  Matteo Croce <mcroce@redhat.com>
+     2  Raphael Carvalho <raphael.scarv@gmail.com>
+     2  asgh <asgh@users.noreply.github.com>
+     1  Eduardo Marques <eduardorbmarques@gmail.com>
+     1  Egor Vorontsov <sdoregor@sdore.me>
+     1  Jakub Wilk <jwilk@jwilk.net>
+     1  Jason Davies <jason@jasondavies.com>
+     1  Lukasz Gryglicki <lukaszgryglicki@o2.pl>
+     1  Michael Schwarz <michael.schwarz@iaik.tugraz.at>
+     1  Raphael S. Carvalho <raphaelsc@scylladb.com>
+     1  Steven <steven@ceriously.com>
+     1  Vamsi Krishna <vamsi3@outlook.com>
+     1  pierwill <19642016+pierwill@users.noreply.github.com>
+     1  ysiyer <yegnesh.s.iyer@intel.com>
+
+As for copyright, the only copyright I can find in the referenced repo
+is in the LICENSE file and it is: Copyright (c) 2018 meltdown, I'm not
+sure if I'm allowed to add copyright statement for others.
+
+> > Per my tests, this test works well on CPUs that have TSX support. For
+> > this reason, this selftest only works on CPUs that supports TSX.
+> > 
+> > This test requires the knowledge of direct map base. IAIK used the
+> > following two methods to get direct map base:
+> > 1 through a kernel module to show phys_to_virt(0);
+> > 2 by exploiting the same HW vulnerability to guess the base.
+> > Method 1 makes running this selftest complex while method 2 is not
+> > reliable and I do not want to use a possibly wrong value to run this
+> > test. Suggestions are welcome.
+> > 
+> > Tested on both x86_64 and i386_pae VMs on a host with i7-7700K cpu,
+> > success rate is about 50% when nopti kernel cmdline is used.
+> > 
+> > Signed-off-by: Aaron Lu <aaron.lu@intel.com>
+> > ---
+> > v2:
+> > - Added [SKIP], [INFO] prefix to some prints;
+> > - Do not run 32bits test on 64bits host since it doesn't make sense to
+> >   do that;
+> > - Minor comment update.
+> > 
+> >  tools/testing/selftests/x86/Makefile   |   2 +-
+> >  tools/testing/selftests/x86/meltdown.c | 418 +++++++++++++++++++++++++
+> >  2 files changed, 419 insertions(+), 1 deletion(-)
+> >  create mode 100644 tools/testing/selftests/x86/meltdown.c
+> > 
+> > diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> > index 0388c4d60af0..36f99c360a56 100644
+> > --- a/tools/testing/selftests/x86/Makefile
+> > +++ b/tools/testing/selftests/x86/Makefile
+> > @@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+> >  TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+> >  			check_initial_reg_state sigreturn iopl ioperm \
+> >  			test_vsyscall mov_ss_trap \
+> > -			syscall_arg_fault fsgsbase_restore sigaltstack
+> > +			syscall_arg_fault fsgsbase_restore sigaltstack meltdown
+> >  TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+> >  			test_FCMOV test_FCOMI test_FISTTP \
+> >  			vdso_restorer
+> > diff --git a/tools/testing/selftests/x86/meltdown.c b/tools/testing/selftests/x86/meltdown.c
+> > new file mode 100644
+> > index 000000000000..8c0c1db49096
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/x86/meltdown.c
+> > @@ -0,0 +1,418 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> 
+> That's nice but that does NOT reflect the license of the code below, as
+> you state in the comments.
+> 
+> You might want to get an Intel lawyer to look this over and give you
+> advice on how to properly tag this license.
+
+Thanks for the advice.
+
+I've gone through our internal process and was told it is OK to
+relicense zlib licensed code to GPLv2.
+
+> 
+> > +/*
+> > + * This selftest is based on code from https://github.com/IAIK/meltdown
+> > + * and can be used to check if user space can read data through kernel
+> > + * page table entries.
+> > + *
+> > + * Note for i386 test: due to kernel prefer to use high memory for user
+> > + * programs, it is necessary to restrict the available memory under that
+> > + * of low memory size(around ~896MiB) so that the memory hosting "string"
+> > + * in main() is directly mapped.
+> > + *
+> > + * Note for both x86_64 and i386 test: the hardware race window can not be
+> > + * exploited 100% each time so a single run of the test on a vulnerable system
+> > + * may not FAIL. My tests on a i7-7700K cpu have a success rate about 50%.
+> > + *
+> > + * The original copyright and license information are shown below:
+> > + *
+> > + * Copyright (c) 2018 meltdown
+> 
+> I don't see that copyright in the original github repo, are you sure
+> about that?  I see individual developers contributing there instead.
+> Please keep authorship information when you know it.
+
+There is a license file in this repo and I've kept the content intact
+in the patch, please see this:
+https://github.com/IAIK/meltdown/blob/master/LICENSE
+
+Thanks,
+Aaron
