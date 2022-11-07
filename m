@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA93F61F90B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 17:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 196AE61F910
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Nov 2022 17:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiKGQUD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 11:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
+        id S231790AbiKGQUE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 11:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiKGQUA (ORCPT
+        with ESMTP id S232253AbiKGQUA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 7 Nov 2022 11:20:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18942099C
-        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 08:18:12 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F271120BCA
+        for <linux-kselftest@vger.kernel.org>; Mon,  7 Nov 2022 08:18:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667837892;
+        s=mimecast20190719; t=1667837897;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1lSxL+XrmZJW7NH2+twP4XE4aLK3QEV8h23a3ZmFqyA=;
-        b=aAuXKpDNpXbEprERu350ivYC2ag5Yf6LUoihKAa+2+XyxC3EDzfDgoOtanDXy7pg+TLfHK
-        mvoQg00vJMVH7PVsHQ3/bqj+ufcDDpQmWPWD7ihsYXdUJGC/V2ugTlBUj0Zl9CEEB0c+mJ
-        5uE/NmEqDjp3HpDWNL4W7Dp051VpbCk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=jDk9bhO7j0dBiRTBonVIWKZ9rsqO0bmea9iIm0D/070=;
+        b=OKnwmUPs8qimtT29HooQLQjtZssIHbHa3jEDMSq2FsaDxz5an1uPYv7+QpG41l6FlXhAEB
+        whuVKoZBQvXkibnEZm+NvZMa/tmFQUiF1CBPrWmIxYCjukE1FE9Zs6KzadHE4TEned84pV
+        A2RwAEo87t+W+oSSNHl92v97tlW0YDU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-451-PWBvwyXsP6uR-JYwyobXFQ-1; Mon, 07 Nov 2022 11:18:06 -0500
-X-MC-Unique: PWBvwyXsP6uR-JYwyobXFQ-1
+ us-mta-316-TGbR2pUAPIyw3MgPlt6EzA-1; Mon, 07 Nov 2022 11:18:13 -0500
+X-MC-Unique: TGbR2pUAPIyw3MgPlt6EzA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 080183811F3B;
-        Mon,  7 Nov 2022 16:18:05 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2455857FAB;
+        Mon,  7 Nov 2022 16:18:11 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.195.106])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 749974B3FC6;
-        Mon,  7 Nov 2022 16:18:00 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 497EF4B3FC6;
+        Mon,  7 Nov 2022 16:18:05 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, etnaviv@lists.freedesktop.org,
@@ -61,9 +61,9 @@ Cc:     linux-mm@kvack.org, etnaviv@lists.freedesktop.org,
         Lucas Stach <l.stach@pengutronix.de>,
         David Airlie <airlied@gmail.com>,
         Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH RFC 03/19] selftests/vm: cow: R/O long-term pinning reliability tests for non-anon pages
-Date:   Mon,  7 Nov 2022 17:17:24 +0100
-Message-Id: <20221107161740.144456-4-david@redhat.com>
+Subject: [PATCH RFC 04/19] mm: add early FAULT_FLAG_UNSHARE consistency checks
+Date:   Mon,  7 Nov 2022 17:17:25 +0100
+Message-Id: <20221107161740.144456-5-david@redhat.com>
 In-Reply-To: <20221107161740.144456-1-david@redhat.com>
 References: <20221107161740.144456-1-david@redhat.com>
 MIME-Version: 1.0
@@ -79,113 +79,108 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Let's test whether R/O long-term pinning is reliable for non-anonymous
-memory: when R/O long-term pinning a page, the expectation is that we
-break COW early before pinning, such that actual write access via the
-page tables won't break COW later and end up replacing the R/O-pinned
-page in the page table.
+For now, FAULT_FLAG_UNSHARE only applies to anonymous pages, which
+implies a COW mapping. Let's hide FAULT_FLAG_UNSHARE early if we're not
+dealing with a COW mapping, such that we treat it like a read fault as
+documented and don't have to worry about the flag throughout all fault
+handlers.
 
-Consequently, R/O long-term pinning in private mappings would only target
-exclusive anonymous pages.
-
-For now, all tests fail:
-	# [RUN] R/O longterm GUP pin ... with shared zeropage
-	not ok 151 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP pin ... with memfd
-	not ok 152 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP pin ... with tmpfile
-	not ok 153 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP pin ... with huge zeropage
-	not ok 154 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP pin ... with memfd hugetlb (2048 kB)
-	not ok 155 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP pin ... with memfd hugetlb (1048576 kB)
-	not ok 156 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP-fast pin ... with shared zeropage
-	not ok 157 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP-fast pin ... with memfd
-	not ok 158 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP-fast pin ... with tmpfile
-	not ok 159 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP-fast pin ... with huge zeropage
-	not ok 160 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP-fast pin ... with memfd hugetlb (2048 kB)
-	not ok 161 Longterm R/O pin is reliable
-	# [RUN] R/O longterm GUP-fast pin ... with memfd hugetlb (1048576 kB)
-	not ok 162 Longterm R/O pin is reliable
+While at it, centralize the check for mutual exclusion of
+FAULT_FLAG_UNSHARE and FAULT_FLAG_WRITE and just drop the check that
+either flag is set in the WP handler.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- tools/testing/selftests/vm/cow.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+ mm/huge_memory.c |  3 ---
+ mm/hugetlb.c     |  5 -----
+ mm/memory.c      | 23 ++++++++++++++++++++---
+ 3 files changed, 20 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/cow.c b/tools/testing/selftests/vm/cow.c
-index 93c643bcdcf5..40ba45d0c6b4 100644
---- a/tools/testing/selftests/vm/cow.c
-+++ b/tools/testing/selftests/vm/cow.c
-@@ -534,6 +534,7 @@ static void test_iouring_fork(char *mem, size_t size)
- #endif /* LOCAL_CONFIG_HAVE_LIBURING */
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1d47b3f7b877..7173756d6868 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1267,9 +1267,6 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ 	vmf->ptl = pmd_lockptr(vma->vm_mm, vmf->pmd);
+ 	VM_BUG_ON_VMA(!vma->anon_vma, vma);
  
- enum ro_pin_test {
-+	RO_PIN_TEST,
- 	RO_PIN_TEST_SHARED,
- 	RO_PIN_TEST_PREVIOUSLY_SHARED,
- 	RO_PIN_TEST_RO_EXCLUSIVE,
-@@ -566,6 +567,8 @@ static void do_test_ro_pin(char *mem, size_t size, enum ro_pin_test test,
+-	VM_BUG_ON(unshare && (vmf->flags & FAULT_FLAG_WRITE));
+-	VM_BUG_ON(!unshare && !(vmf->flags & FAULT_FLAG_WRITE));
+-
+ 	if (is_huge_zero_pmd(orig_pmd))
+ 		goto fallback;
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index be572af75d9c..3672c7e06748 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5316,9 +5316,6 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	unsigned long haddr = address & huge_page_mask(h);
+ 	struct mmu_notifier_range range;
+ 
+-	VM_BUG_ON(unshare && (flags & FOLL_WRITE));
+-	VM_BUG_ON(!unshare && !(flags & FOLL_WRITE));
+-
+ 	/*
+ 	 * hugetlb does not support FOLL_FORCE-style write faults that keep the
+ 	 * PTE mapped R/O such as maybe_mkwrite() would do.
+@@ -5328,8 +5325,6 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
+ 
+ 	/* Let's take out MAP_SHARED mappings first. */
+ 	if (vma->vm_flags & VM_MAYSHARE) {
+-		if (unlikely(unshare))
+-			return 0;
+ 		set_huge_ptep_writable(vma, haddr, ptep);
+ 		return 0;
  	}
+diff --git a/mm/memory.c b/mm/memory.c
+index 78e2c58f6f31..fe131273217a 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3343,9 +3343,6 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	struct folio *folio;
  
- 	switch (test) {
-+	case RO_PIN_TEST:
-+		break;
- 	case RO_PIN_TEST_SHARED:
- 	case RO_PIN_TEST_PREVIOUSLY_SHARED:
- 		/*
-@@ -1150,6 +1153,16 @@ static void test_cow(char *mem, const char *smem, size_t size)
- 	free(old);
+-	VM_BUG_ON(unshare && (vmf->flags & FAULT_FLAG_WRITE));
+-	VM_BUG_ON(!unshare && !(vmf->flags & FAULT_FLAG_WRITE));
+-
+ 	if (likely(!unshare)) {
+ 		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+ 			pte_unmap_unlock(vmf->pte, vmf->ptl);
+@@ -5150,6 +5147,22 @@ static void lru_gen_exit_fault(void)
  }
+ #endif /* CONFIG_LRU_GEN */
  
-+static void test_ro_pin(char *mem, const char *smem, size_t size)
++static vm_fault_t sanitize_fault_flags(struct vm_area_struct *vma,
++				       unsigned int *flags)
 +{
-+	do_test_ro_pin(mem, size, RO_PIN_TEST, false);
++	if (unlikely(*flags & FAULT_FLAG_UNSHARE)) {
++		if (WARN_ON_ONCE(*flags & FAULT_FLAG_WRITE))
++			return VM_FAULT_SIGSEGV;
++		/*
++		 * FAULT_FLAG_UNSHARE only applies to COW mappings. Let's
++		 * just treat it like an ordinary read-fault otherwise.
++		 */
++		if (!is_cow_mapping(vma->vm_flags))
++			*flags &= ~FAULT_FLAG_UNSHARE;
++	}
++	return 0;
 +}
 +
-+static void test_ro_fast_pin(char *mem, const char *smem, size_t size)
-+{
-+	do_test_ro_pin(mem, size, RO_PIN_TEST, true);
-+}
-+
- static void run_with_zeropage(non_anon_test_fn fn, const char *desc)
- {
- 	char *mem, *smem, tmp;
-@@ -1390,7 +1403,7 @@ struct non_anon_test_case {
- };
- 
  /*
-- * Test cases that target any pages in private mappings that are non anonymous:
-+ * Test cases that target any pages in private mappings that are not anonymous:
-  * pages that may get shared via COW ndependent of fork(). This includes
-  * the shared zeropage(s), pagecache pages, ...
-  */
-@@ -1403,6 +1416,19 @@ static const struct non_anon_test_case non_anon_test_cases[] = {
- 		"Basic COW",
- 		test_cow,
- 	},
-+	/*
-+	 * Take a R/O longterm pin. When modifying the page via the page table,
-+	 * the page content change must be visible via the pin.
-+	 */
-+	{
-+		"R/O longterm GUP pin",
-+		test_ro_pin,
-+	},
-+	/* Same as above, but using GUP-fast. */
-+	{
-+		"R/O longterm GUP-fast pin",
-+		test_ro_fast_pin,
-+	},
- };
+  * By the time we get here, we already hold the mm semaphore
+  *
+@@ -5166,6 +5179,10 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+ 	count_vm_event(PGFAULT);
+ 	count_memcg_event_mm(vma->vm_mm, PGFAULT);
  
- static void run_non_anon_test_case(struct non_anon_test_case const *test_case)
++	ret = sanitize_fault_flags(vma, &flags);
++	if (ret)
++		return ret;
++
+ 	if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
+ 					    flags & FAULT_FLAG_INSTRUCTION,
+ 					    flags & FAULT_FLAG_REMOTE))
 -- 
 2.38.1
 
