@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57005621ADE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 18:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 957E6621AE0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 18:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234563AbiKHRjH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Nov 2022 12:39:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S233945AbiKHRjN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Nov 2022 12:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234573AbiKHRjG (ORCPT
+        with ESMTP id S234577AbiKHRjJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:39:06 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE44350F3B
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 09:39:05 -0800 (PST)
+        Tue, 8 Nov 2022 12:39:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4461B51C3C
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 09:39:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E90F3CE1C21
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 17:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B280C43140;
-        Tue,  8 Nov 2022 17:39:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02BFCB81BE4
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 17:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E267C433D6;
+        Tue,  8 Nov 2022 17:39:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667929141;
-        bh=MxrgM2gZnyNPORKkvopF3JErHgIzDJJ+N2SslHsLX3A=;
+        s=k20201202; t=1667929145;
+        bh=MrykR74GiOjtlPshJD7pCG1tFOTWnd1cDsN+HjWX9DY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=olKCf1DLPJfd9aUDuyc6Dxj9hqIlazQaLOs/xaVLTGmcSDy0gJqIo8/tyQHhlCZk7
-         vIbGvNmVOYAdDiZ91dljyf9PZn/XlciVQaTQMPg4TIIsUa/4wL5H43svRjd7HZ6lX8
-         5wiR0xeUuWAJR/lFokJbPbrL1bYQOI8mV+qZweQCmOr+C/WBR0WQpglMw5Aa0K83V9
-         U/wnsXeYJVgbjfS6hL18uu8+oUBkoPd+EZ0HBfC1rU5KhFSZ83gTjC6hsjv+jYW8it
-         4Nq4W0elghDXRlV+nPY1K4EJeltOfeypv5WxyTiiQxKbaLjIzdkAZpTqavgGXnEFtx
-         8hBA/uZ6q9S1A==
+        b=oQWScmLwj3NLams9iT6B4NDsA+5o+mpWYQRxYuZqrwFZ3HEK3bQywkyIrCOuD/Szb
+         35jdcxNmJwiApfcMoFLkAO8E6fQWz5EkE5FVBEXZGb2o7ioF6rRCUsBKUHIb1+Dn4h
+         xKUf6O/fGvV3kt7PH0yaYN6h6gCnIroPMQE5eEcqTkHLphXBB0zr6zplMC3A64pZHY
+         gqGiC5U0UiDncV9yp770mWNxGySIvP0Jr6jNadGonvcHdO9FjNO1GrpsOkg6aHEoJo
+         8NVOwYZmj7d4vCsHkAAYR9G8e5gheO/c13Ag7Yjo2/mGNA419+RJ61iIepvAZb8Z0O
+         A7cwoFxAkZcuQ==
 From:   Will Deacon <will@kernel.org>
 To:     Mark Brown <broonie@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 0/2] kselftest/arm64: fp-stress output clarity improvements
-Date:   Tue,  8 Nov 2022 17:38:40 +0000
-Message-Id: <166792340012.1917391.5252664593626184773.b4-ty@kernel.org>
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1] kselftest/arm64: Print ASCII version of unknown signal frame magic values
+Date:   Tue,  8 Nov 2022 17:38:42 +0000
+Message-Id: <166792349135.1917799.16443261128174146129.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221017144553.773176-1-broonie@kernel.org>
-References: <20221017144553.773176-1-broonie@kernel.org>
+In-Reply-To: <20221102140543.98193-1-broonie@kernel.org>
+References: <20221102140543.98193-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,24 +58,17 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 17 Oct 2022 15:45:51 +0100, Mark Brown wrote:
-> This series provides a couple of improvements to the output of
-> fp-stress, making it easier to follow what's going on and our
-> application of the timeout a bit more even.
+On Wed, 2 Nov 2022 14:05:43 +0000, Mark Brown wrote:
+> The signal magic values are supposed to be allocated as somewhat meaningful
+> ASCII so if we encounter a bad magic value print the any alphanumeric
+> characters we find in it as well as the hex value to aid debuggability.
 > 
-> Mark Brown (2):
->   kselftest/arm64: Check that all children are producing output in
->     fp-stress
->   kselftest/arm64: Provide progress messages when signalling children
 > 
-> [...]
 
 Applied to arm64 (for-next/selftests), thanks!
 
-[1/2] kselftest/arm64: Check that all children are producing output in fp-stress
-      https://git.kernel.org/arm64/c/3a38ef2b3cb6
-[2/2] kselftest/arm64: Provide progress messages when signalling children
-      https://git.kernel.org/arm64/c/3e02f57bcc6a
+[1/1] kselftest/arm64: Print ASCII version of unknown signal frame magic values
+      https://git.kernel.org/arm64/c/9b283888a6d5
 
 Cheers,
 -- 
