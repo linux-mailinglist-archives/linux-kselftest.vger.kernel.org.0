@@ -2,60 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B35621730
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 15:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC8C6218F3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 17:00:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiKHOq7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Nov 2022 09:46:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
+        id S234626AbiKHQAb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Nov 2022 11:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbiKHOq0 (ORCPT
+        with ESMTP id S234606AbiKHQAa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:46:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E512CA
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 06:46:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5209D615E6
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 14:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C24C433D6;
-        Tue,  8 Nov 2022 14:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667918784;
-        bh=5gwYFOVGF4mpjIAIeDXcm5vGvJBWzCTEf0IjQbFWZEA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FzH1qXQnkEGUUP7fss8g1QQ5kV4xMlp3hi8uLJAqbGqMVIbGQpfRok1Oa3ZCYHMa5
-         xOqG2T1tnhMVE63yVbz070A2eFC3W4uHMR1nEKHLnL1YRErPi6E6w+Kv8uSBLbTZA6
-         3IdE4fXPgcQhmtsKtcKCG/ZPJpdlmxKhq3hBGckMOx4zg9W9s6q50bwziyQ3iWlfcm
-         /T0MqTlJXDe+rGBlgDSdMLKYp32N4+wbFOydfEjoJTBcSrAXiH6e1LqfyMQ09LO7+C
-         lc9n37PIKYIUsnmBvViMnQ5W+YG3LRwo9kNM5Hcr1BLLQHxMyq1QXeao/8qTqP2CcB
-         M4zgEgR1jVTDw==
-Date:   Tue, 8 Nov 2022 14:46:19 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>
-Cc:     ALSA development <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        Liam Girdwood <liam.r.girdwood@intel.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jimmy Cheng-Yi Chiang <cychiang@google.com>,
-        Curtis Malainey <cujomalainey@google.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] [RFC] selftests: alsa - add PCM test
-Message-ID: <Y2pru8JLAGSjkDiJ@sirena.org.uk>
-References: <20221108115914.3751090-1-perex@perex.cz>
+        Tue, 8 Nov 2022 11:00:30 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEDB59FD9;
+        Tue,  8 Nov 2022 08:00:28 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8FMVMP014891;
+        Tue, 8 Nov 2022 07:59:56 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=Zo4Jn6tXWagAc63PHKC8DLxoOXT9tJ/plmgA1ZT12jA=;
+ b=dNaor7lwEPIOj0NBNMZMa26lJbuPMlMo+bqMzeoVw3Rw4x+F6Ghw6xxT3v9+rFvb1dIu
+ pJla1mtf0OFT9s9tNcdvlXBl6nMoDqTKjZb3vCt+41yBQqUXBisfTj0smtt6hjDT7xUh
+ Bcu8PDBc8CfQgyFG7lGcK43Usfh2sWb0bSMIE2pQF32r2+cWD+6YJac09r4iCxOUh8e7
+ kXIJE95E31bWNeGEL1AUohtNive7g72asmg/xPfbuuDJPofcyLlWwWYSr7Kvzw1U75d1
+ pZH9Yj3FT9XGLygeB7j4ne7vLxqjRfTAYYDuU08MyXwrkSbtcpnmF8u6/bYt7ExBTa1r 6g== 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kqd0eda23-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 07:59:56 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fUKiUiCo3TyCDiz9NsmxXSL+fISQuRt/GEjdvNKAXOO6rRazM4ta38PSAENt0c0b4qM43onJG/K5uGUqwwZwuk0l3YCyc7ZDT1ZWUuN9nfKPecRMrRIYSWm9+ijsgc8nIuuiJIFLJWRbTKVq79VUTdOusgOEpBoUYgu6H3l25gBTI8TXXtTgk8YRUJeA1GFXaDmNmrx8j5dJzKVToX1tTHpmCQ6f8gTkmBbtlAA/RoKLE9AFVhhF6XljT5OlnAGGqq7vXOFAgeqCIXLnD/AI3qwipOsjiJs630I3CPwEdPqQhoQEleBeDnGjcYjczG4OWKYO0FUepqlhHbbpWYcpyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zo4Jn6tXWagAc63PHKC8DLxoOXT9tJ/plmgA1ZT12jA=;
+ b=h46BRuQshqRxSsN0fP+Hf4k/mTOgOYuuMi/+tmyWE3737J8lps/yNBbzzIPQzWis8VdfdDZou86dhZ1qTe76iG77vdXrXmX7ehl7/7DLmxk3KqFH5oQAiRryFXr60YixACWVz+a0STV1SYYtiHQsgQwf7tuc5cJz9Na1L2+e2KsymFapyOaPHpGySKMD5W3QOG6KlG9/kf2pl6K1KoNlwq5qMmOi9eWaLDdPeABHufOXVcWOqMa+CNhtt4pXsZxAoqnVJOGlr8Dl4fHzghK2DfK5J+kpw85zyJe7PvxRzf92vNinO20/SMF4M2EBnExdvP9mZf9WrC6JeMaBEo3zVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by BYAPR15MB2677.namprd15.prod.outlook.com (2603:10b6:a03:153::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
+ 2022 15:59:46 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1f2:1491:9990:c8e3]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1f2:1491:9990:c8e3%4]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
+ 15:59:46 +0000
+Message-ID: <c8bd9f3b-52fa-08bd-e5df-e87b68ffdbba@meta.com>
+Date:   Tue, 8 Nov 2022 07:59:43 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH bpf] selftests/bpf: Fix xdp_synproxy compilation failure
+ in 32-bit arch
+Content-Language: en-US
+To:     Yang Jihong <yangjihong1@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
+        tariqt@nvidia.com, maximmi@nvidia.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221108131242.17362-1-yangjihong1@huawei.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20221108131242.17362-1-yangjihong1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR05CA0081.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::22) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xRL3iVwIhEqKXGUP"
-Content-Disposition: inline
-In-Reply-To: <20221108115914.3751090-1-perex@perex.cz>
-X-Cookie: Fortune favors the lucky.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BYAPR15MB2677:EE_
+X-MS-Office365-Filtering-Correlation-Id: a651170e-1f31-499c-b808-08dac1a2421b
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oO/ibTo1inX2bi0yXlmZoSZEWZjoVmDgNTVxQqLsDPBKIi3coEJHKQOUg2bfkaUHcpxQQT5AJGtjOs2WK9eaEBysprdH7t8jp8tgTDvYoAIEEIQxh8Yl/PFp/yya7mIveJutD2oe0qe8AHbFt8i39W95vHG+jHg/5VrRZbu2uqmbB76pStehmptMzGOBDrPXacueAy+cgI6CRfJ5cZPKksyiKufR0VaQN7mkLnjx0EIPMgsj4v5vA6wT2QdxwZm9XEsPhs3mYKkdRZOa4wX9SDkHfg+YiEM7w+f1A90MMZyCfxUEhWfe/f/K6G6LZn6zVb9RiarG1bCTnaC9sbeQ+2kMjG2u9WLHWm43WuvBxGB/D+EVcyRZP+ewwahraCrf6QE7gLvoVwjbSGordKp6Kl1n/ZD//yOo4bMXZpOf4XZ3rrg3g32QKjzn08fp2heJ9Z9GtHZ6GQHciV0hFd3TVlfls+tdk8UP/HDfonw7CTUfiEXPCF2lObMoPxeiCuXL+3sC7nEGVCOCj4UO+FQ+Pb/mMb5fhnyBc+8DYHuTnl1nm8KLHOkr544qdb68JY0VgIhfPExsUL/m6a6k6kyptKjXwfw3wKBDH6CjZTVH43ifRXnlZVM/QHxf7IVNXcpjKDbWoUw9oQMGs9B4rDda/ICqB7cgshVMzUb7Q0l99xhQjesn9zp1FYQUjt4hXIC6o11v4yQLicqW9HLkasB7DJo/1tXRCF1ggegjrQK4bX8ZwliSsxVB2JxlJYi6CFK/0VKY2hdmbwADZsirqBA3udcn5IdraaWSY7GYGB8V5KrswdmhQ86BBgOUOvGrBfWG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199015)(8936002)(31686004)(38100700002)(7416002)(5660300002)(41300700001)(2906002)(86362001)(31696002)(66556008)(66946007)(316002)(36756003)(478600001)(921005)(6666004)(6512007)(6486002)(6506007)(53546011)(186003)(66476007)(83380400001)(2616005)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NnB0aC9EYmZEejU2TzNYRlhMSXQyTExwYW90OEFSeWRYRFhqejAwelpOWmlj?=
+ =?utf-8?B?M0MwSTZacGFNMWZncndBSUNPb2tCdUVnWVZ5ZkZDVWFXZkN6U1ViYnBIZVpL?=
+ =?utf-8?B?dUhHOWwxWkFvdWZlTm9PdjlLV1ptWTR5b1c1TlVObXpKZmVCdTZublhtYVBX?=
+ =?utf-8?B?NDZnTFpieTBycWplVXRjVWpKc05GQmJhdk1tZUk2a0MzK3psSHp1SE1XbjFP?=
+ =?utf-8?B?VW9KTVp4QXIwSFRNazFzelBhd3AzeHZsTDFQekRDWFI3dm5ZeXg5NWhTbnVx?=
+ =?utf-8?B?RUowM3Rzai8yUHFPRkNUc1duOXpoWC9tam1PeDNQWk5JUFBPelRHYnJEOG9I?=
+ =?utf-8?B?eG9WdE45Ni9hVmNRQmMyQWE5ckpjQTNVd0RGMCtWcEFNUHN3R2RtUGZYV2VF?=
+ =?utf-8?B?cDI2YVJSU3MzeDlFRzFwS1BTTHlrcWMyQ01TUXFGb2IwZGRJaUZHNXlzcXBS?=
+ =?utf-8?B?UkRyUFBTbHJKdkhYWXVUSTlzUjZNOEw5ZEkwbXJlcHlCS3UzSjg4aVN0NENs?=
+ =?utf-8?B?V0xmZU1lVGN6V1c3T3ZZTE4yOUg2MDBFbGkwRmM1SGVsQUZyOGVpRXNON3dT?=
+ =?utf-8?B?ZWpIZ25ZbWFBM1FjU0NFNjZOaHVPckVjbTNxc2t2UUtYa0puOW1MRlplV3Ny?=
+ =?utf-8?B?OVNhMEpaeXFPR2l1YVdwVUhPQ2lNUHpVZEFsNkYzcU16RXJUbk5GbWJwNlYz?=
+ =?utf-8?B?MVhYK0JXQ3dhTlkxL1lhcTBFOW1pQmxiL2RWZjRqT0xMVTlwR0xkZGJwM1dx?=
+ =?utf-8?B?TDhjR0VhaUNUNHEreXA1dGlTNVhmYmg5ZnJmMXhOalZkOFRyRWF3bStJSURS?=
+ =?utf-8?B?RmlJTHhaVGtEV2JjZjdYNFJwRHZqdFhaK2hISnlXY3pwTWx0V2FlRkhYV2g5?=
+ =?utf-8?B?c0pDZDFQczhaNkZRYk9rQnVKVHh1M09PajdLZTdSaDdsbGZ5ME02Y2FaMkVZ?=
+ =?utf-8?B?M1YrRklXQ1RVTzlhU1VsSStJaXk3MnRzbHBPaGgycTlLajNkYWtnZU9hUjdL?=
+ =?utf-8?B?QWxQWEFLVEQ4QkJ0OE5vQWtkUWF3R2gxVUZLQTU0clpwZVZRaGVvUUxFdmli?=
+ =?utf-8?B?YjlDYVJKQzRpR1V4TGU3NVRBSUxGNHp3MWVkaHBQTVpBM0VIQmw0NjhwR3ps?=
+ =?utf-8?B?ekF5VWl0ZEJtbzh2dHF0RGQ3V0pHOUpyUEVxcFBTaWViODJSeWhIcGt0WUZj?=
+ =?utf-8?B?eUU3UmdJZmJ6Tkx5NzlBalRCMWh4cklVMWQveWJxYlVrQmNqaisxdlE0MCsw?=
+ =?utf-8?B?cnpWR040MjM3SHViUVhiMzlLVllrRjBDS3lMaVBDRGJHUDcwVGxLU0xhNjBl?=
+ =?utf-8?B?M3NNWTNmcmNqb28yMkNEWi95cXkvLzF3RFd3eW9nYXNjaTV5STlxTzgyYXlq?=
+ =?utf-8?B?NUQ0WkF1dGdiaWNZWk1SR2lRbXFpOENoSnVjNEFxT1BrVXRGSVNVSWNiNEdJ?=
+ =?utf-8?B?Z2QvNnpyNXJsaHg3aFFDS1BsWEkwYlplY2Z0WEpGSXFPN0s4RVkrNjhtVkpw?=
+ =?utf-8?B?N3IrY3ZBajdhWW14ckFWeFRmZ0VBSmVBUmxOUUI3K1ZoSUgzOHNkR0tyckJk?=
+ =?utf-8?B?Y3hGWkQzZHk2dVlxUTFDNjdFRzM1U0hqdzREVEtDNURWNGhFNmh3dTZIOWU5?=
+ =?utf-8?B?ZXowSm0zYkNpdklLTXl4dlVZQlB2K1pNaGphRjNOVG9PcGxLWU4xck50ZkJI?=
+ =?utf-8?B?Z1M2TXZwWnV5T0xQejFxUWNyRkQzQTRMNEZhMzIyV2ZkV08xSHorRjVsakcz?=
+ =?utf-8?B?cDE5bG9wS3Y0SHI5UDhZS0V0elUrbjBkS09GZmVuY3ZtOUdwTEdaNTFHc1RR?=
+ =?utf-8?B?RSs0MW1ZL3Z4Q1RBOUxJNEVRaWh6WGpvQzh5aGhDcVR0N2orQmgwVkIvdVVC?=
+ =?utf-8?B?MlRSSWlodWU1TnRZZ2FrMDdKemxoay9UTUp3dTBSVjFuZGFsVWtkYklRSHFG?=
+ =?utf-8?B?YVV1YTRoR28vdTZmOHh1dTBEZ2VWUnBmbDFEc3g2LzlteU9XSGdSaFpFeTZ3?=
+ =?utf-8?B?Q0l2blE5cktxbFRiNWtUSFBIcnoyR1ZiYXEyQ3EwWFlaMnFvck5LR1VpeEFq?=
+ =?utf-8?B?Z3NJWjZ1VlFSZjdzVUR2MDlURFhucklWb0V2MFdmcFNSemMrUlVnOE54WFlj?=
+ =?utf-8?B?VlFOUnR1TnFLTUR0M3pOcFpxbHFqV0x2WHAxS3FiVUV1SWZmcy9LS3hzZytv?=
+ =?utf-8?B?b0E9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a651170e-1f31-499c-b808-08dac1a2421b
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 15:59:46.5571
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aDgMFzaPw7USjcFrBTb+a/0DfRPmbPargWiwvHKtTlXCjZYfPS8/DDY1q/iLSw6r
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2677
+X-Proofpoint-ORIG-GUID: vmfn6AP2w5PjxdfAF_D23M7jA-mhnhzv
+X-Proofpoint-GUID: vmfn6AP2w5PjxdfAF_D23M7jA-mhnhzv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,142 +149,50 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---xRL3iVwIhEqKXGUP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Nov 08, 2022 at 12:59:14PM +0100, Jaroslav Kysela wrote:
-> This initial code does a simple sample transfer tests. By default,
-> all PCM devices are detected and tested with short and long
-> buffering parameters for 4 seconds. If the sample transfer timing
-> is not in a +-100ms boundary, the test fails. Only the interleaved
-> buffering scheme is supported in this version.
+On 11/8/22 5:12 AM, Yang Jihong wrote:
+> xdp_synproxy fails to be compiled in the 32-bit arch, log is as follows:
+> 
+>    xdp_synproxy.c: In function 'parse_options':
+>    xdp_synproxy.c:175:36: error: left shift count >= width of type [-Werror=shift-count-overflow]
+>      175 |                 *tcpipopts = (mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
+>          |                                    ^~
+>    xdp_synproxy.c: In function 'syncookie_open_bpf_maps':
+>    xdp_synproxy.c:289:28: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+>      289 |                 .map_ids = (__u64)map_ids,
+>          |                            ^
+> 
+> Fix it.
+> 
+> Fixes: fb5cd0ce70d4 ("selftests/bpf: Add selftests for raw syncookie helpers")
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+>   tools/testing/selftests/bpf/xdp_synproxy.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/xdp_synproxy.c b/tools/testing/selftests/bpf/xdp_synproxy.c
+> index ff35320d2be9..45fef01a87a8 100644
+> --- a/tools/testing/selftests/bpf/xdp_synproxy.c
+> +++ b/tools/testing/selftests/bpf/xdp_synproxy.c
+> @@ -172,7 +172,7 @@ static void parse_options(int argc, char *argv[], unsigned int *ifindex, __u32 *
+>   	if (tcpipopts_mask == 0xf) {
+>   		if (mss4 == 0 || mss6 == 0 || wscale == 0 || ttl == 0)
+>   			usage(argv[0]);
+> -		*tcpipopts = (mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
+> +		*tcpipopts = ((unsigned long long)mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
 
-Oh, thanks for picking this up - something like this has been on my mind
-for ages!  This should probably be copied to Shuah and the kselftest
-list as well, I've added them.  This looks basically good to me, I've
-got a bunch of comments below but I'm not sure any of them except
-possibly the one about not putting values in the configuration file by
-default should block getting this merged so:
+This looks weird. Maybe we should define mss6 as unsigned long long to 
+avoid this casting at all?
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
-> The configuration may be modified with the configuration files.
-> A specific hardware configuration is detected and activated
-> using the sysfs regex matching. This allows to use the DMI string
-> (/sys/class/dmi/id/* tree) or any other system parameters
-> exposed in sysfs for the matching for the CI automation.
-
-> The configuration file may also specify the PCM device list to detect
-> the missing PCM devices.
-
->  create mode 100644 tools/testing/selftests/alsa/alsa-local.h
->  create mode 100644 tools/testing/selftests/alsa/conf.c
->  create mode 100644 tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
->  create mode 100644 tools/testing/selftests/alsa/pcm-test.c
-
-This is a bit unusual for kselftest and might create a bit of churn but
-does seem sensible and reasonable to me, it's on the edge of what
-kselftest usually covers but seems close enough in scope.  I worry
-a bit about ending up needing to add a config fragment as a result but
-perhaps we can get away without.
-
-> index 000000000000..0a83f35d43eb
-> --- /dev/null
-> +++ b/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
-
-> +       pcm.0.0 {
-> +               PLAYBACK {
-> +                       test.time1 {
-> +                               access RW_INTERLEAVED   # can be omitted - default
-> +                               format S16_LE           # can be omitted - default
-> +                               rate 48000              # can be omitted - default
-> +                               channels 2              # can be omitted - default
-> +                               period_size 512
-> +                               buffer_size 4096
-
-I think it'd be better to leave these commented by default, especially
-if/once we improve the enumeration.  That way the coverage will default
-to whatever the tool does by default on the system (including any
-checking of constraints for example).  I guess we might want to add a
-way of saying "here's what I expect the constraints to be" but that's
-very much future work.
-
-> +#ifdef SND_LIB_VER
-> +#if SND_LIB_VERSION >= SND_LIB_VER(1, 2, 6)
-> +#define LIB_HAS_LOAD_STRING
-> +#endif
-> +#endif
-> +
-> +#ifndef LIB_HAS_LOAD_STRING
-> +static int snd_config_load_string(snd_config_t **config, const char *s,
-> +				  size_t size)
-> +{
-
-This is also in mixer-test, we should pull it into a helper library too.
-Something that could be done separately/incrementally.
-
-> +	for (i = 0; i < 4; i++) {
-
-> +
-> +	snd_pcm_drain(handle);
-> +	ms = timestamp_diff_ms(&tstamp);
-> +	if (ms < 3900 || ms > 4100) {
-
-It feels like the runtime might be usefully parameterised here - there's
-a tradeoff with detecting inaccurate clocks and runtime that people
-might want to make.
-
-> +	ksft_set_plan(num_missing + num_pcms * TESTS_PER_PCM);
-
-> +	for (pcm = pcm_missing; pcm != NULL; pcm = pcm->next) {
-> +		ksft_test_result(false, "test.missing.%d.%d.%d.%s\n",
-> +				 pcm->card, pcm->device, pcm->subdevice,
-> +				 snd_pcm_stream_name(pcm->stream));
-> +	}
-
-We don't seem to report a successful test.missing anywhere like
-find_pcms() so if we ever hit a test.missing then it'll look like a new
-test, old test runs won't have logged the failure.  That can change how
-people look at any failures that crop up, "it's new and never worked" is
-different to "this used to work" and people are likely to just be
-running kselftest rather than specifically know this test.  It'd be
-better if we counted the cards in the config and used that for our
-expected number of test.missings, logging cards that we find here as
-well.
-
-> +	for (pcm = pcm_list; pcm != NULL; pcm = pcm->next) {
-> +		test_pcm_time1(pcm, "test.time1", "S16_LE", 48000, 2, 512, 4096);
-> +		test_pcm_time1(pcm, "test.time2", "S16_LE", 48000, 2, 24000, 192000);
-> +	}
-
-It does feel like especially in the case where no configuration is
-specified we should be eumerating what the card can do and both
-potentially doing more tests (though there's obviously an execution time
-tradeoff with going overboard there) and skipping configurations that
-the card never claimed to support in the first place.  In particular I'm
-expecting we'll see some cards that only do either 44.1kHz or 48kHz and
-will get spurious fails by default, and I'd like to see coverage of mono
-playback on cards that claim to support it because I suspect there's a
-bunch of them that don't actually do the right thing.
-
-Like I say most of this could be done incrementally if we decide it
-needs to get done at all though, we shouldn't let perfect be the enemy
-of good.
-
---xRL3iVwIhEqKXGUP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNqa7oACgkQJNaLcl1U
-h9BTLgf+OYAlhB9FKMmF6Sa4xThE/JjnVMVg+DPOCzb4ZocUXPCrIEys+nY4RHis
-mOSfiWmqB2jtrg5LBaDpfKCnsIs8zyVgiLlKFh8GU5dAgmipgptX/0DMr0BuhqaT
-6SrF19S8Dm4GJbnIlfBfHYuLJ/H6y7S3lvT4qmD8bN8CTeImvIKBYeiwk2Ge3wSC
-06/QbS3IPs2zTObC3NhHhGl31xQ2RgtPBEncD/CFLvyoUr9BUbu9rxsyAiM0ZwBz
-A8sEmdXBwpO6o32tgmemlN6MBaeEv0ikZFoEEmTLImNCV9ljXwUBp7cooIXahdyy
-NOidsMw6Za1+QSPeS/UKZ3mmRPuLBw==
-=o4V8
------END PGP SIGNATURE-----
-
---xRL3iVwIhEqKXGUP--
+>   	} else if (tcpipopts_mask != 0) {
+>   		usage(argv[0]);
+>   	}
+> @@ -286,7 +286,7 @@ static int syncookie_open_bpf_maps(__u32 prog_id, int *values_map_fd, int *ports
+>   
+>   	prog_info = (struct bpf_prog_info) {
+>   		.nr_map_ids = 8,
+> -		.map_ids = (__u64)map_ids,
+> +		.map_ids = (__u64)(unsigned long)map_ids,
+>   	};
+>   	info_len = sizeof(prog_info);
+>   
