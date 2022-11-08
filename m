@@ -2,295 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C148621E9B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 22:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42953621ED8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 23:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiKHVfd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Nov 2022 16:35:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S229975AbiKHWIE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Nov 2022 17:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiKHVf2 (ORCPT
+        with ESMTP id S229526AbiKHWIC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 16:35:28 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C9F209A6;
-        Tue,  8 Nov 2022 13:35:25 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AAA201BF205;
-        Tue,  8 Nov 2022 21:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667943324;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tCLyGwO1Xxk3zWiEn/dL2L73JGzyw9SmIaEKSzws54s=;
-        b=hdUWf66MQzclRACZNucO0q0zdoDiIl6fyhz5kph6YAxzgm8zFimRMA/WLkC4XqEPsaf52p
-        fupqFb5U4ViGXboPpm5eF/69Q/mRcf2xPN/sfiEPAKMvQLXlODY6jCHKJzGpUZyGdO3qaf
-        5jI6b1Kr8FS3/CAHkEG0HUvUd1DY103L3k5ahE7F+mwrnYTA23CMyLC+kMBPom31BU30BG
-        t9v2ekXwuqlgSCtiISFyGBszAvcgS2qLADT+bcGPuRQDYEN+Y60RKOfsHLw9lqDd70d16+
-        1xI0IFL9MqvEszxyWGHtbZ7WnS/M+pPzUU2/5Rnonr+SG2dhk67j6KiGn8ocNQ==
-Date:   Tue, 8 Nov 2022 22:35:23 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: kselftest rtctests failed on arm64 Raspberry Pi 4 -
- rtctest.c:34:date_read:Expected -1 (-1) != self->fd (-1)
-Message-ID: <Y2rLm3O2mrG7PcZN@mail.local>
-References: <CA+G9fYvBtwi8jmQZNvYwjR425BXGgCG2ej3iE6gtgfRzZmQnOw@mail.gmail.com>
+        Tue, 8 Nov 2022 17:08:02 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE541E726;
+        Tue,  8 Nov 2022 14:07:59 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8JRKGO024346;
+        Tue, 8 Nov 2022 14:06:21 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=/aeC5P4a6geIBycwczBlQ0s+Lqao1x8HrCtNp5ECyTQ=;
+ b=Wxal9tea1bDoTxFwdr8YE+LhGEr+brXxn3ajrocOpoQd2agjzB6eIdXqprfAW7dgR7de
+ v1SxKTNsxJdco8jenU5Z52LshNbZrDHHpT6DUQPA+N/gel/snrEM8erVCbr80RZy8B57
+ 8iEh+x8pIHGUA1OVn+2cMPKwkJ19qqRojVg+wnHrFikCXDomDnUQYroettk9KVZNjzYS
+ 9G5wj/7RqMMUR+BcxwHr0S8ZlWLvtJKniHz+kWQ7yahMztyBYlIRBIrS4pN2hgIqWgVJ
+ UkurK74n27se5qEz6zCCmXT72KRGi50LV94gVSjHEQdngqZUEQKBMyj6xY4NGtcaAM+r Vg== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2104.outbound.protection.outlook.com [104.47.55.104])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kqh9wf2d7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 14:06:20 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EEVUYpcVgVzrh/w/NP1y5u/2oQhUnyyq6H/hXGvzf0Bl4u7JXksUCqy9+0IsOXObnF+dLmKlOR03co7K4We6DdLpUqqJfeB0DWCwYcY79nFFUnP6irhSO5QDz2NsBH8rsrjV6E1hq8KZ2/UPZSWayLdtMdSv/NROJL0LuvOzKlLzkrKDMqohyNXxZvsN90MQK0Nb7K2tI5ZIWLb48fIDutk3eBFRmBsGElqr67aoh/lmrEfWgCiXnzzKkmWFVkK/jFiRzPnXSrTYyMzTXs6X11A0DP1imuXCZY1y3IZG6Dv3/9HzKnudv8t4fQrsnhLMnPE3IjEOEJI6cHl9XlsHUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/aeC5P4a6geIBycwczBlQ0s+Lqao1x8HrCtNp5ECyTQ=;
+ b=QoKnrqIG2Tc2ZG/ho6dT89NuFbv6JAveP2tvM4EeL54QuqJz8xLQH/C6Bmn+LIdCzgsV2TiVQUghvO+WFmhH9sndvcQ6yRdDkpC4ni3EIRZOo/1V7wP7kpp4tMkIRquM3aYUA4zq3tyun+Qvo+ZKaMfqkZi5AvoY94SsrLYIYLOyonQ/YpTAYwXg+t1UIjnriuSx0BOjcDLlT81v+WzOHcAdxvjCXHxlFz63mwQ10c8kxPRf2hBvHXqwil6vUEiafgdYGh/8WR9slThH74mDmnimex2rb7/MX2mbsHpQaT4m5+HrmUX/bXu19boycJ4m5/Szwv0z8ar14XWI7Qphbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by BN8PR15MB3396.namprd15.prod.outlook.com (2603:10b6:408:a7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.24; Tue, 8 Nov
+ 2022 22:06:17 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1f2:1491:9990:c8e3]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::1f2:1491:9990:c8e3%4]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
+ 22:06:17 +0000
+Message-ID: <e38ccca6-52b6-27e0-5d10-3a5b8c80432a@meta.com>
+Date:   Tue, 8 Nov 2022 14:06:14 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [RFC PATCH v1 2/2] selftests: bpf: add a test when
+ bpf_probe_read_kernel_str() returns EFAULT
+Content-Language: en-US
+To:     Francis Laniel <flaniel@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Alban Crequy <alban.crequy@gmail.com>,
+        Alban Crequy <albancrequy@microsoft.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20221108195211.214025-1-flaniel@linux.microsoft.com>
+ <20221108195211.214025-3-flaniel@linux.microsoft.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20221108195211.214025-3-flaniel@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0334.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::9) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvBtwi8jmQZNvYwjR425BXGgCG2ej3iE6gtgfRzZmQnOw@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BN8PR15MB3396:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a55f573-7f81-447b-a00c-08dac1d575c5
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a5Ez905mlT+39EhayGlUlizYnd8kjgZj07kK3VAtidiaL1TNLuvAEX4me8e76MiUokqAskFuLhfzFrAZeu+nwMgfwurNroPbig4sxwCn1GgLVP4JkiNaOjERoLrkUE+LCWyL54e7/XkPNA9/3jn1t2IjV8zTq1+w/9NWASBz429pgiMGVe+ktI+uu0yMxcLClsoK5z+U3NYMk2sGH/OPd0UEG1iVRgiDsS3UYNPlUxoCh7Wdoi4oheggSuOQLgNIsdVysQsD5jaW39LUocIzZLG9RyInE2dX6iflT5thZpULBTGHINeNBmOFtv1ohm+CxytK2olNMK2N3zO7oK6rFFehJABaQ2IiTOFGV8UrM8AzxbJBVKDsUleJam+i4MKHkI/dzXdi1MHN+mCWAxsGWBuYV3PJsfPwqnpjReHJyTQvRNGIz8+g8n5wiDmSQZZfcbCYxEJjlesyItpGHP+IQEV3qMGJAsO/ZD3+JpY4Ml85U0GOyWRQdtQ1eezDuy2p1E7eJgTrB9BXKd6p1Hb9vy75gnsuRdKpKqqsMEFgZKGxaFU4e52bz/5Wo8mSOwxfiB33BnrJxvBsV+DdbGtvaeQEz3xc1SMGf2ddoeFU5sCZZybKw4ADzp4RiveUp7N1YaPcNNHx58dfL5aWit+Y5Ijn5oyqTrHiLrVXQ3v5M6KHcjmTg+fLIO+bepEmBxK9QWTe86Mqkr9gdMBBPadUHFknbw7HEcgMFWNjnx2wvefy4M88ZYJoDyjPXD02pZ3WyHLWIX4of0XNKGyyCX0mEmHSDN6t+ET5ks8hCOYTclA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(396003)(346002)(39860400002)(451199015)(4326008)(66946007)(66476007)(66556008)(2906002)(53546011)(6506007)(6666004)(45080400002)(478600001)(6486002)(86362001)(31696002)(186003)(8676002)(36756003)(2616005)(6512007)(54906003)(316002)(5660300002)(7416002)(31686004)(8936002)(41300700001)(38100700002)(4744005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHN6SmNKR1dFenROdEh2ZEpnZjlYM2tLN1VuYWZ1bUNuVVk5MkN6Mm5sTVNF?=
+ =?utf-8?B?anRPbWNYSUVMelNoT3BCR2U2K0VTZGdsTkhDbFdDM1FRT2tIcjBkZXVZcTl3?=
+ =?utf-8?B?RHhYV1JoRlFrUURLMHlleFljRThNaU14SmxVNm5IbHNPaXNaL3JMNnhmbCtw?=
+ =?utf-8?B?Mlk1VUdGaFJ6a0psbWhBcGxzSHkzOFY4eDhWcnM1Zkt2OWkyc0RiNGdTZXNh?=
+ =?utf-8?B?SzhkYUZDWFFJV3pQNXZSUWdYTFVsS2szZm9uSHovVXhsZGpJb2V2NWlGQlZP?=
+ =?utf-8?B?ZW1DeE9WMkFHbk0yN3QzV05OYVRiMjVPT3FzYWlFU1VUNkFlUThYWm5zblVa?=
+ =?utf-8?B?aU84YjkxbkpvK1FENHNrVkYydHd1eUJlYnFuMDEvSXJxZnh6cWwxbVhiVUIr?=
+ =?utf-8?B?dWFDSERlbTdEM2szR1VlNCtIY1lLWlNnV2pzNDBmQmIrd0xNZ1JpclltYUY2?=
+ =?utf-8?B?bFI2Y0U1Z2Z0dTByellIWkMyVGlYZHBUYlRWQU5pVVkveEc5Y3BmdmxjWUVI?=
+ =?utf-8?B?WTJMYWpLWWNZRlV5K1dHYmtpTUhrNnd2UjBRSFRYRXdhUHlnNm1hdHpKUTBH?=
+ =?utf-8?B?cjd1TGlGSWp4WDc0MU9jL2tEd1BHWEpXNUJSalRlOUV3L1M5YWtkNFRRQ2lj?=
+ =?utf-8?B?aTk3LzhnUXFvMDhhYWRyZ0pEVExMWWZzT2MxaE9yWWVwcDRUNkdCSWVCZzRR?=
+ =?utf-8?B?SXU4a3djalFjblkwVkFnSVh6WjhxUU5wUmY1eEc2a2ZpUEtPa3RBNFE3VXlZ?=
+ =?utf-8?B?Vm9UK0xhellnaWpKeThYU2kvL0pENGYzK25pTlMza0NoM0k4c0ExZlpLenl6?=
+ =?utf-8?B?KzdjNnBpcXUyd1RPMUZtL0tTYVdWbWp1U0k3VkJqWVVVNVJ5V2N5UlVzUkVC?=
+ =?utf-8?B?VTBnUnN5ODljek9ZUHI5WDNuUDZ5U2VvWmlyUDZ4RHl1QzZIVU84YTdyZjBZ?=
+ =?utf-8?B?djdSazA4c1VwOThOU3Q5WVMyYkZJdWd2VE8vRWZhL2liOFdjbmZlRzdjTE1B?=
+ =?utf-8?B?SkhwRzZKZWJRSzRwK0tvaGhLU2dzRFVnWmVWSDRIaVZtd05zLzZVS1JLMHBk?=
+ =?utf-8?B?S09NWlgydUZ5Ym85WVdrNWdSUE5sYmU1Ry83RFBmRG5QZkwzaXMxN2l4Wjlm?=
+ =?utf-8?B?eFg4QUZaUHVka3NZMVpWSldRL0pDMXVMTkFKVUwvWXhBOXdOZzRPdENvdHUw?=
+ =?utf-8?B?VmF1VDZNQlBkeWtad01BWkVWR1JsTVRFeTFGU1dubWR3TDJEZUpoS0g4aGg5?=
+ =?utf-8?B?NTQyWVFXNENqaXk5cjNIbU0zZnFJb2d0QVZHcG9yWnRDOWhOTXF6YTh0SXFH?=
+ =?utf-8?B?eFFvU1dYVzltbzVaMmN5TStweXl3YmZhdGhiNkkxM3RQSXNxeFJRWktEWEE3?=
+ =?utf-8?B?NG1ldGpnRkhXK2JaM1J5L0MxWG80ZDVoVzVSVmsrUG5QSjc1YVVlV09lWkMy?=
+ =?utf-8?B?dUlFWm1BNkc3WGZhYlNOYVFWdmNIbFdUTlJ2Nk1wd01lR2NVWHlacWZ2UWQ3?=
+ =?utf-8?B?emZqMmt5dEluTlRVcW9wakFDeG5JcHFKTlBOdmc5Ry9uWFhxaEJqTm5ZRXhZ?=
+ =?utf-8?B?Q0JOTmZzWHRxT2FWVWFReEswbFVIVDdQaEtJLzZvMWxTQnoyemlQc2duQmp2?=
+ =?utf-8?B?cUZTUlN4NWhBa2g2bUtDdm1uZGoyZWhZdGpzMnJkTUVPN1dtNWtNYlZ2U0hk?=
+ =?utf-8?B?MWZjR3h0TjQzRmtIYVJqZHJtNG9rbDE4MWRZV21LNHNDaFhDMmE4cnRkREI2?=
+ =?utf-8?B?NFpHVzBFWFk1Z3BpSVVKM0JTKzIxUXBzRmxHRG5yankrSUVWL2JJci9RdVVO?=
+ =?utf-8?B?eS9iNTBGRytTTko2cWQrQTcrZVNyNlhKZ2FCRThpVXp2eVBxSEU5TzF2R0Zm?=
+ =?utf-8?B?QzNZMk0yU1VQeEFNc2NNcWF5Z3NHckgxOVpENnZxbmREMWdVOWRUN1YzdjZB?=
+ =?utf-8?B?SzBqZzFtd3FwaGUyeTdpVVM0ekNrb0E3WVhGd1p2Z2hsdUp4WG5sbE1FUzlV?=
+ =?utf-8?B?RXNubXhvSFBxdStPVE1EVSttTWl6ci9rMXQwVWE1aWNwdTd0VzJ0Rk85WE1Z?=
+ =?utf-8?B?OCs1RWcwOEFPSXhBa2dUeE1BRHVsVXZ2c2pDSWo4bnRkNVhMUGxoMXg1OWd5?=
+ =?utf-8?B?U1I5SnVSYytYTld1OWFlQ1BBUS84by9VSzdCSGR2bzBmbjUwUHJxcFo0S2Zz?=
+ =?utf-8?B?ZWc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a55f573-7f81-447b-a00c-08dac1d575c5
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 22:06:17.6926
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mHThuFdnty+ZIaarWlkYg9oGDqA6tz64qS06zVoCjCJJt035YbzigT6S+yFgcKhr
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB3396
+X-Proofpoint-ORIG-GUID: 8MuyCova3LIRHPm0SFoZYNVmQ20OjlLB
+X-Proofpoint-GUID: 8MuyCova3LIRHPm0SFoZYNVmQ20OjlLB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
 
-On 08/11/2022 15:17:04+0530, Naresh Kamboju wrote:
-> kselftest rtctests failed on arm64 Raspberry Pi 4 Model B device and
-> passed on other devices and qemu emulators. Please refer to the
-> full logs and test comparison results links.
-> 
 
-It seems your board doesn't have an rtc at all, the tests will not run
-unless you add one.
+On 11/8/22 11:52 AM, Francis Laniel wrote:
+> From: Alban Crequy <albancrequy@microsoft.com>
+> 
+> This commit tests previous fix of bpf_probe_read_kernel_str().
+> 
+> Signed-off-by: Alban Crequy <albancrequy@microsoft.com>
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
 
-You can try the following patch:
-
-From e93ddc7046aba97b39b0ceffc53ebf1f10ad9868 Mon Sep 17 00:00:00 2001
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Date: Tue, 8 Nov 2022 22:18:55 +0100
-Subject: [PATCH] selftests: rtc: skip when RTC is not present
-
-There is not point in failing the tests when there the RTC is not present,
-simply skip the test.
-
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- tools/testing/selftests/rtc/rtctest.c | 33 ++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-index 2b9d929a24ed..63ce02d1d5cc 100644
---- a/tools/testing/selftests/rtc/rtctest.c
-+++ b/tools/testing/selftests/rtc/rtctest.c
-@@ -31,7 +31,6 @@ FIXTURE(rtc) {
- 
- FIXTURE_SETUP(rtc) {
- 	self->fd = open(rtc_file, O_RDONLY);
--	ASSERT_NE(-1, self->fd);
- }
- 
- FIXTURE_TEARDOWN(rtc) {
-@@ -42,6 +41,10 @@ TEST_F(rtc, date_read) {
- 	int rc;
- 	struct rtc_time rtc_tm;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	/* Read the RTC time/date */
- 	rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
- 	ASSERT_NE(-1, rc);
-@@ -85,6 +88,10 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
- 	struct rtc_time rtc_tm;
- 	time_t start_rtc_read, prev_rtc_read;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	TH_LOG("Continuously reading RTC time for %ds (with %dms breaks after every read).",
- 	       READ_LOOP_DURATION_SEC, READ_LOOP_SLEEP_MS);
- 
-@@ -119,6 +126,10 @@ TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
- 	int i, rc, irq = 0;
- 	unsigned long data;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	/* Turn on update interrupts */
- 	rc = ioctl(self->fd, RTC_UIE_ON, 0);
- 	if (rc == -1) {
-@@ -144,6 +155,10 @@ TEST_F(rtc, uie_select) {
- 	int i, rc, irq = 0;
- 	unsigned long data;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	/* Turn on update interrupts */
- 	rc = ioctl(self->fd, RTC_UIE_ON, 0);
- 	if (rc == -1) {
-@@ -183,6 +198,10 @@ TEST_F(rtc, alarm_alm_set) {
- 	time_t secs, new;
- 	int rc;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
- 	ASSERT_NE(-1, rc);
- 
-@@ -237,6 +256,10 @@ TEST_F(rtc, alarm_wkalm_set) {
- 	time_t secs, new;
- 	int rc;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
- 	ASSERT_NE(-1, rc);
- 
-@@ -285,6 +308,10 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
- 	time_t secs, new;
- 	int rc;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
- 	ASSERT_NE(-1, rc);
- 
-@@ -339,6 +366,10 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
- 	time_t secs, new;
- 	int rc;
- 
-+	if (self->fd == -1 && errno == ENOENT)
-+		SKIP(return, "Skipping test since %s does not exist", rtc_file);
-+	ASSERT_NE(-1, self->fd);
-+
- 	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
- 	ASSERT_NE(-1, rc);
- 
--- 
-2.38.1
-
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Test run log:
-> -------------
-> 
-> [  248.627989] kselftest: Running tests in rtc
-> TAP version 13
-> 1..1
-> # selftests: rtc: rtctest
-> [  249.116824] audit: type=1701 audit(1651167970.071:12):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2818 comm=\"rtctest\"
-> exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
-> [  249.133837] audit: type=1701 audit(1651167970.079:13):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2819 comm=\"rtctest\"
-> exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
-> [  249.151179] audit: type=1701 audit(1651167970.083:14):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2820 comm=\"rtctest\"
-> exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
-> [  249.168401] audit: type=1701 audit(1651167970.091:15):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2821 comm=\"rtctest\"
-> exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
-> [  249.185406] audit: type=1701 audit(1651167970.095:16):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2822 comm=\"rtctest\"
-> exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
-> [  249.202343] audit: type=1701 audit(1651167970.103:17):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2823 comm=\"rtctest\"
-> exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
-> #[  249.219262] audit: type=1701 audit(1651167970.111:18):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2824 comm=\"rtctest\"
-> exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
->  [  249.236233] audit: type=1701 audit(1651167970.115:19):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2825 comm=\"rtctest\"
-> exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
-> TAP version 13
-> # 1..8
-> # # Starting 8 tests from 2 test cases.
-> # #  RUN           rtc.date_read ...
-> # # rtctest.c:34:date_read:Expected -1 (-1) != self->fd (-1)
-> # # date_read: Test terminated by assertion
-> # #          FAIL  rtc.date_read
-> # not ok 1 rtc.date_read
-> # #  RUN           rtc.date_read_loop ...
-> # # rtctest.c:34:date_read_loop:Expected -1 (-1) != self->fd (-1)
-> # # date_read_loop: Test terminated by assertion
-> # #          FAIL  rtc.date_read_loop
-> # not ok 2 rtc.date_read_loop
-> # #  RUN           rtc.uie_read ...
-> # # rtctest.c:34:uie_read:Expected -1 (-1) != self->fd (-1)
-> # # uie_read: Test terminated by assertion
-> # #          FAIL  rtc.uie_read
-> # not ok 3 rtc.uie_read
-> # #  RUN           rtc.uie_select ...
-> # # rtctest.c:34:uie_select:Expected -1 (-1) != self->fd (-1)
-> # # uie_select: Test terminated by assertion
-> # #          FAIL  rtc.uie_select
-> # not ok 4 rtc.uie_select
-> # #  RUN           rtc.alarm_alm_set ...
-> # # rtctest.c:34:alarm_alm_set:Expected -1 (-1) != self->fd (-1)
-> # # alarm_alm_set: Test terminated by assertion
-> # #          FAIL  rtc.alarm_alm_set
-> # not ok 5 rtc.alarm_alm_set
-> # #  RUN           rtc.alarm_wkalm_set ...
-> # # rtctest.c:34:alarm_wkalm_set:Expected -1 (-1) != self->fd (-1)
-> # # alarm_wkalm_set: Test terminated by assertion
-> # #          FAIL  rtc.alarm_wkalm_set
-> # not ok 6 rtc.alarm_wkalm_set
-> # #  RUN           rtc.alarm_alm_set_minute ...
-> # # rtctest.c:34:alarm_alm_set_minute:Expected -1 (-1) != self->fd (-1)
-> # # alarm_alm_set_minute: Test terminated by assertion
-> # #          FAIL  rtc.alarm_alm_set_minute
-> # not ok 7 rtc.alarm_alm_set_minute
-> # #  RUN           rtc.alarm_wkalm_set_minute ...
-> # # rtctest.c:34:alarm_wkalm_set_minute:Expected -1 (-1) != self->fd (-1)
-> # # alarm_wkalm_set_minute: Test terminated by assertion
-> # #          FAIL  rtc.alarm_wkalm_set_minute
-> # not ok 8 rtc.alarm_wkalm_set_minute
-> # # FAILED: 0 / 8 tests passed.
-> # # Totals: pass:0 fail:8 xfail:0 xpass:0 skip:0 error:0
-> not ok 1 selftests: rtc: rtctest # exit=1
-> 
-> Test results details,
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848560/suite/kselftest-rtc/tests/
-> 
-> Test results compare,
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848560/suite/kselftest-rtc/test/rtc.rtctest/history/
-> 
-> Test detailed log,
-> https://lkft.validation.linaro.org/scheduler/job/5812742#L1759
-> 
-> metadata:
->   git_ref: master
->   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git_sha: d8e87774068af213ab5b058b1b114dc397b577aa
->   git_describe: next-20221107
->   kernel_version: 6.1.0-rc3
->   kernel-config: https://builds.tuxbuild.com/2HChVOSNxUpvfAfLTnaK7zyTdUi/config
->   build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/687092361
->   artifact-location: https://builds.tuxbuild.com/2HChVOSNxUpvfAfLTnaK7zyTdUi
->   toolchain: gcc-11
-> 
-> 
-> --
-> Linaro QA
-> https://qa-reports.linaro.org
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Acked-by: Yonghong Song <yhs@fb.com>
