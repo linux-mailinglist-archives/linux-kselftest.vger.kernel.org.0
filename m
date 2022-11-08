@@ -2,197 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC8C6218F3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 17:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9AA6218F0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 17:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbiKHQAb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Nov 2022 11:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+        id S234486AbiKHQA2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Nov 2022 11:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234606AbiKHQAa (ORCPT
+        with ESMTP id S234492AbiKHQA1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:00:30 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEDB59FD9;
-        Tue,  8 Nov 2022 08:00:28 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8FMVMP014891;
-        Tue, 8 Nov 2022 07:59:56 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=Zo4Jn6tXWagAc63PHKC8DLxoOXT9tJ/plmgA1ZT12jA=;
- b=dNaor7lwEPIOj0NBNMZMa26lJbuPMlMo+bqMzeoVw3Rw4x+F6Ghw6xxT3v9+rFvb1dIu
- pJla1mtf0OFT9s9tNcdvlXBl6nMoDqTKjZb3vCt+41yBQqUXBisfTj0smtt6hjDT7xUh
- Bcu8PDBc8CfQgyFG7lGcK43Usfh2sWb0bSMIE2pQF32r2+cWD+6YJac09r4iCxOUh8e7
- kXIJE95E31bWNeGEL1AUohtNive7g72asmg/xPfbuuDJPofcyLlWwWYSr7Kvzw1U75d1
- pZH9Yj3FT9XGLygeB7j4ne7vLxqjRfTAYYDuU08MyXwrkSbtcpnmF8u6/bYt7ExBTa1r 6g== 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kqd0eda23-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 07:59:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fUKiUiCo3TyCDiz9NsmxXSL+fISQuRt/GEjdvNKAXOO6rRazM4ta38PSAENt0c0b4qM43onJG/K5uGUqwwZwuk0l3YCyc7ZDT1ZWUuN9nfKPecRMrRIYSWm9+ijsgc8nIuuiJIFLJWRbTKVq79VUTdOusgOEpBoUYgu6H3l25gBTI8TXXtTgk8YRUJeA1GFXaDmNmrx8j5dJzKVToX1tTHpmCQ6f8gTkmBbtlAA/RoKLE9AFVhhF6XljT5OlnAGGqq7vXOFAgeqCIXLnD/AI3qwipOsjiJs630I3CPwEdPqQhoQEleBeDnGjcYjczG4OWKYO0FUepqlhHbbpWYcpyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zo4Jn6tXWagAc63PHKC8DLxoOXT9tJ/plmgA1ZT12jA=;
- b=h46BRuQshqRxSsN0fP+Hf4k/mTOgOYuuMi/+tmyWE3737J8lps/yNBbzzIPQzWis8VdfdDZou86dhZ1qTe76iG77vdXrXmX7ehl7/7DLmxk3KqFH5oQAiRryFXr60YixACWVz+a0STV1SYYtiHQsgQwf7tuc5cJz9Na1L2+e2KsymFapyOaPHpGySKMD5W3QOG6KlG9/kf2pl6K1KoNlwq5qMmOi9eWaLDdPeABHufOXVcWOqMa+CNhtt4pXsZxAoqnVJOGlr8Dl4fHzghK2DfK5J+kpw85zyJe7PvxRzf92vNinO20/SMF4M2EBnExdvP9mZf9WrC6JeMaBEo3zVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BYAPR15MB2677.namprd15.prod.outlook.com (2603:10b6:a03:153::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
- 2022 15:59:46 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::1f2:1491:9990:c8e3]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::1f2:1491:9990:c8e3%4]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
- 15:59:46 +0000
-Message-ID: <c8bd9f3b-52fa-08bd-e5df-e87b68ffdbba@meta.com>
-Date:   Tue, 8 Nov 2022 07:59:43 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH bpf] selftests/bpf: Fix xdp_synproxy compilation failure
- in 32-bit arch
-Content-Language: en-US
-To:     Yang Jihong <yangjihong1@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
-        tariqt@nvidia.com, maximmi@nvidia.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221108131242.17362-1-yangjihong1@huawei.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20221108131242.17362-1-yangjihong1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR05CA0081.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::22) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Tue, 8 Nov 2022 11:00:27 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B295C769
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 08:00:26 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id a5so23140856edb.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Nov 2022 08:00:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VFfZ5Bl5zhnH71PaGJAYrI//Xb3WWbjWoqFqkYPKW30=;
+        b=C7OwW3FUJWQ9TsMP4XtJFWdFbq3CIFU6pSqTzLUuNeB55sqBurNd9+lK+4O64ax5nw
+         sLHuW2BZWPNwW/HcxRsLULIhKy0426zbG2SmHFYjzexcTd9nih+dAA6GOaJuqGPnIlJp
+         1nZOK9263PPnD7jUo2SElcu0BQprg/+ggeWhc9GM9gBFv6XxZxODbXJ1OOSJG0De8TjU
+         TFUI9lToIWmJ9FDoEL1WLfETPa3grArpG45+0E7aAGCcNp9vSy2/3HGJfReROVxd2Utw
+         XtSCF2zhCxlopPVvcacqaaSX4KJXfXQIedEUmZeOJLbdqt2wlmR4FMQ9nuaDqYZybzye
+         Bucw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VFfZ5Bl5zhnH71PaGJAYrI//Xb3WWbjWoqFqkYPKW30=;
+        b=stYenZeTD5Y5dBUrQFJ6U2qEW41doRJgZxzDXdQgruzJ+2FV1GAzyTXWgHkM33SG3B
+         IYj+kcgRfl8ef7FGa90iJEPcqemCHZC0cO0ypy6kOmvlCPMrUe83rJiw8kZL6J7gA2Z6
+         u9KO8JJbLPxzB7VowFP/Wc5Cd1u7aO+Le2RfnVuT1K2+6WE/OuJKuVf+HasHiiUSaG/q
+         BnHOVEfSBPjUiABc/Dxp3Bxy0mD5nQxsqORPFDANP8954J0CDxVgW4YEmkezSqMHGnZ2
+         P8vqRd1Vf3vgYK/nJ/LM30ZFPggn66cPuarHTugzyH15JTNLo+reTZQcEmr6CULzsBAU
+         gZFA==
+X-Gm-Message-State: ACrzQf2bUtS02yHi71LwuHfCf6E9JNGoZ1NhuRC+8A4aqThJUlGPIXFy
+        DEVDBfMQ7FUUtS6drJcyUqYD6Ps6z4heAq4s4AMkaQ==
+X-Google-Smtp-Source: AMsMyM764Q6z1uaMrpLCjAMUVJWnIa32kDHXvdKz3wR3PYoFGk/3nY8ikLUuVdV2GstlG+PMkGKaZX23fir9c7kMHtY=
+X-Received: by 2002:a05:6402:386:b0:463:c43f:6628 with SMTP id
+ o6-20020a056402038600b00463c43f6628mr39052165edv.53.1667923224985; Tue, 08
+ Nov 2022 08:00:24 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BYAPR15MB2677:EE_
-X-MS-Office365-Filtering-Correlation-Id: a651170e-1f31-499c-b808-08dac1a2421b
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oO/ibTo1inX2bi0yXlmZoSZEWZjoVmDgNTVxQqLsDPBKIi3coEJHKQOUg2bfkaUHcpxQQT5AJGtjOs2WK9eaEBysprdH7t8jp8tgTDvYoAIEEIQxh8Yl/PFp/yya7mIveJutD2oe0qe8AHbFt8i39W95vHG+jHg/5VrRZbu2uqmbB76pStehmptMzGOBDrPXacueAy+cgI6CRfJ5cZPKksyiKufR0VaQN7mkLnjx0EIPMgsj4v5vA6wT2QdxwZm9XEsPhs3mYKkdRZOa4wX9SDkHfg+YiEM7w+f1A90MMZyCfxUEhWfe/f/K6G6LZn6zVb9RiarG1bCTnaC9sbeQ+2kMjG2u9WLHWm43WuvBxGB/D+EVcyRZP+ewwahraCrf6QE7gLvoVwjbSGordKp6Kl1n/ZD//yOo4bMXZpOf4XZ3rrg3g32QKjzn08fp2heJ9Z9GtHZ6GQHciV0hFd3TVlfls+tdk8UP/HDfonw7CTUfiEXPCF2lObMoPxeiCuXL+3sC7nEGVCOCj4UO+FQ+Pb/mMb5fhnyBc+8DYHuTnl1nm8KLHOkr544qdb68JY0VgIhfPExsUL/m6a6k6kyptKjXwfw3wKBDH6CjZTVH43ifRXnlZVM/QHxf7IVNXcpjKDbWoUw9oQMGs9B4rDda/ICqB7cgshVMzUb7Q0l99xhQjesn9zp1FYQUjt4hXIC6o11v4yQLicqW9HLkasB7DJo/1tXRCF1ggegjrQK4bX8ZwliSsxVB2JxlJYi6CFK/0VKY2hdmbwADZsirqBA3udcn5IdraaWSY7GYGB8V5KrswdmhQ86BBgOUOvGrBfWG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199015)(8936002)(31686004)(38100700002)(7416002)(5660300002)(41300700001)(2906002)(86362001)(31696002)(66556008)(66946007)(316002)(36756003)(478600001)(921005)(6666004)(6512007)(6486002)(6506007)(53546011)(186003)(66476007)(83380400001)(2616005)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NnB0aC9EYmZEejU2TzNYRlhMSXQyTExwYW90OEFSeWRYRFhqejAwelpOWmlj?=
- =?utf-8?B?M0MwSTZacGFNMWZncndBSUNPb2tCdUVnWVZ5ZkZDVWFXZkN6U1ViYnBIZVpL?=
- =?utf-8?B?dUhHOWwxWkFvdWZlTm9PdjlLV1ptWTR5b1c1TlVObXpKZmVCdTZublhtYVBX?=
- =?utf-8?B?NDZnTFpieTBycWplVXRjVWpKc05GQmJhdk1tZUk2a0MzK3psSHp1SE1XbjFP?=
- =?utf-8?B?VW9KTVp4QXIwSFRNazFzelBhd3AzeHZsTDFQekRDWFI3dm5ZeXg5NWhTbnVx?=
- =?utf-8?B?RUowM3Rzai8yUHFPRkNUc1duOXpoWC9tam1PeDNQWk5JUFBPelRHYnJEOG9I?=
- =?utf-8?B?eG9WdE45Ni9hVmNRQmMyQWE5ckpjQTNVd0RGMCtWcEFNUHN3R2RtUGZYV2VF?=
- =?utf-8?B?cDI2YVJSU3MzeDlFRzFwS1BTTHlrcWMyQ01TUXFGb2IwZGRJaUZHNXlzcXBS?=
- =?utf-8?B?UkRyUFBTbHJKdkhYWXVUSTlzUjZNOEw5ZEkwbXJlcHlCS3UzSjg4aVN0NENs?=
- =?utf-8?B?V0xmZU1lVGN6V1c3T3ZZTE4yOUg2MDBFbGkwRmM1SGVsQUZyOGVpRXNON3dT?=
- =?utf-8?B?ZWpIZ25ZbWFBM1FjU0NFNjZOaHVPckVjbTNxc2t2UUtYa0puOW1MRlplV3Ny?=
- =?utf-8?B?OVNhMEpaeXFPR2l1YVdwVUhPQ2lNUHpVZEFsNkYzcU16RXJUbk5GbWJwNlYz?=
- =?utf-8?B?MVhYK0JXQ3dhTlkxL1lhcTBFOW1pQmxiL2RWZjRqT0xMVTlwR0xkZGJwM1dx?=
- =?utf-8?B?TDhjR0VhaUNUNHEreXA1dGlTNVhmYmg5ZnJmMXhOalZkOFRyRWF3bStJSURS?=
- =?utf-8?B?RmlJTHhaVGtEV2JjZjdYNFJwRHZqdFhaK2hISnlXY3pwTWx0V2FlRkhYV2g5?=
- =?utf-8?B?c0pDZDFQczhaNkZRYk9rQnVKVHh1M09PajdLZTdSaDdsbGZ5ME02Y2FaMkVZ?=
- =?utf-8?B?M1YrRklXQ1RVTzlhU1VsSStJaXk3MnRzbHBPaGgycTlLajNkYWtnZU9hUjdL?=
- =?utf-8?B?QWxQWEFLVEQ4QkJ0OE5vQWtkUWF3R2gxVUZLQTU0clpwZVZRaGVvUUxFdmli?=
- =?utf-8?B?YjlDYVJKQzRpR1V4TGU3NVRBSUxGNHp3MWVkaHBQTVpBM0VIQmw0NjhwR3ps?=
- =?utf-8?B?ekF5VWl0ZEJtbzh2dHF0RGQ3V0pHOUpyUEVxcFBTaWViODJSeWhIcGt0WUZj?=
- =?utf-8?B?eUU3UmdJZmJ6Tkx5NzlBalRCMWh4cklVMWQveWJxYlVrQmNqaisxdlE0MCsw?=
- =?utf-8?B?cnpWR040MjM3SHViUVhiMzlLVllrRjBDS3lMaVBDRGJHUDcwVGxLU0xhNjBl?=
- =?utf-8?B?M3NNWTNmcmNqb28yMkNEWi95cXkvLzF3RFd3eW9nYXNjaTV5STlxTzgyYXlq?=
- =?utf-8?B?NUQ0WkF1dGdiaWNZWk1SR2lRbXFpOENoSnVjNEFxT1BrVXRGSVNVSWNiNEdJ?=
- =?utf-8?B?Z2QvNnpyNXJsaHg3aFFDS1BsWEkwYlplY2Z0WEpGSXFPN0s4RVkrNjhtVkpw?=
- =?utf-8?B?N3IrY3ZBajdhWW14ckFWeFRmZ0VBSmVBUmxOUUI3K1ZoSUgzOHNkR0tyckJk?=
- =?utf-8?B?Y3hGWkQzZHk2dVlxUTFDNjdFRzM1U0hqdzREVEtDNURWNGhFNmh3dTZIOWU5?=
- =?utf-8?B?ZXowSm0zYkNpdklLTXl4dlVZQlB2K1pNaGphRjNOVG9PcGxLWU4xck50ZkJI?=
- =?utf-8?B?Z1M2TXZwWnV5T0xQejFxUWNyRkQzQTRMNEZhMzIyV2ZkV08xSHorRjVsakcz?=
- =?utf-8?B?cDE5bG9wS3Y0SHI5UDhZS0V0elUrbjBkS09GZmVuY3ZtOUdwTEdaNTFHc1RR?=
- =?utf-8?B?RSs0MW1ZL3Z4Q1RBOUxJNEVRaWh6WGpvQzh5aGhDcVR0N2orQmgwVkIvdVVC?=
- =?utf-8?B?MlRSSWlodWU1TnRZZ2FrMDdKemxoay9UTUp3dTBSVjFuZGFsVWtkYklRSHFG?=
- =?utf-8?B?YVV1YTRoR28vdTZmOHh1dTBEZ2VWUnBmbDFEc3g2LzlteU9XSGdSaFpFeTZ3?=
- =?utf-8?B?Q0l2blE5cktxbFRiNWtUSFBIcnoyR1ZiYXEyQ3EwWFlaMnFvck5LR1VpeEFq?=
- =?utf-8?B?Z3NJWjZ1VlFSZjdzVUR2MDlURFhucklWb0V2MFdmcFNSemMrUlVnOE54WFlj?=
- =?utf-8?B?VlFOUnR1TnFLTUR0M3pOcFpxbHFqV0x2WHAxS3FiVUV1SWZmcy9LS3hzZytv?=
- =?utf-8?B?b0E9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a651170e-1f31-499c-b808-08dac1a2421b
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 15:59:46.5571
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aDgMFzaPw7USjcFrBTb+a/0DfRPmbPargWiwvHKtTlXCjZYfPS8/DDY1q/iLSw6r
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2677
-X-Proofpoint-ORIG-GUID: vmfn6AP2w5PjxdfAF_D23M7jA-mhnhzv
-X-Proofpoint-GUID: vmfn6AP2w5PjxdfAF_D23M7jA-mhnhzv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103145353.3049303-1-usama.anjum@collabora.com>
+ <20221103145353.3049303-3-usama.anjum@collabora.com> <CABb0KFFaYZG62TS+iM3Y92+hDyB35XR8dTX-5hDgWrXCcDQx7Q@mail.gmail.com>
+ <f394de31-b9c1-5a6c-eab2-74b84f2b3ba3@collabora.com>
+In-Reply-To: <f394de31-b9c1-5a6c-eab2-74b84f2b3ba3@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 8 Nov 2022 17:00:14 +0100
+Message-ID: <CABb0KFGbhM8V6qeDEzq7Lc_3cseScbK3zvfLndRdJfLstTO=2g@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, 8 Nov 2022 at 15:25, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Hi Micha=C5=82,
+>
+> Thank you so much for reviewing.
+>
+> On 11/7/22 5:26 PM, Micha=C5=82 Miros=C5=82aw wrote:
+> >> +
+> >> +/*
+> >> + * struct page_region - Page region with bitmap flags
+> >> + * @start:     Start of the region
+> >> + * @len:       Length of the region
+> >> + * bitmap:     Bits sets for the region
+> >> + */
+> >> +struct page_region {
+> >> +       __u64 start;
+> >> +       __u64 len;
+> >> +       __u32 bitmap;
+> >> +       __u32 __reserved;
+> >
+> > "u64 flags"? If an extension is needed it would already require a new
+> > ioctl or something in the `arg` struct.
+> I feel like the masks must have the same type as this bitmap variable as
+> the return_mask specifies the flags to be returned in bitmap. All the
+> masks are of type __u32. This is why I'd kept the bitmap of type _u32 as
+> well. I've kept them of 32 bit size as currently we are adding support
+> for 4 flags and there is still room to add 28 more bits in the future.
+> Do you still think that I should update the masks and bitmap to _u64?
 
+I agree that the `bitmap` (I'd rather call it `flags` though) should
+have the type matching the masks in the request. But the size I'm not
+sure about if u32 is enough compared to what is used (or will be in
+the future) for page flags in MM code. I suppose the ioctl() is not
+expected to be a fast path, so I would go with u64 and assume that
+overhead of the extra bytes read by the kernel won't matter.
 
-On 11/8/22 5:12 AM, Yang Jihong wrote:
-> xdp_synproxy fails to be compiled in the 32-bit arch, log is as follows:
-> 
->    xdp_synproxy.c: In function 'parse_options':
->    xdp_synproxy.c:175:36: error: left shift count >= width of type [-Werror=shift-count-overflow]
->      175 |                 *tcpipopts = (mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
->          |                                    ^~
->    xdp_synproxy.c: In function 'syncookie_open_bpf_maps':
->    xdp_synproxy.c:289:28: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
->      289 |                 .map_ids = (__u64)map_ids,
->          |                            ^
-> 
-> Fix it.
-> 
-> Fixes: fb5cd0ce70d4 ("selftests/bpf: Add selftests for raw syncookie helpers")
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->   tools/testing/selftests/bpf/xdp_synproxy.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/xdp_synproxy.c b/tools/testing/selftests/bpf/xdp_synproxy.c
-> index ff35320d2be9..45fef01a87a8 100644
-> --- a/tools/testing/selftests/bpf/xdp_synproxy.c
-> +++ b/tools/testing/selftests/bpf/xdp_synproxy.c
-> @@ -172,7 +172,7 @@ static void parse_options(int argc, char *argv[], unsigned int *ifindex, __u32 *
->   	if (tcpipopts_mask == 0xf) {
->   		if (mss4 == 0 || mss6 == 0 || wscale == 0 || ttl == 0)
->   			usage(argv[0]);
-> -		*tcpipopts = (mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
-> +		*tcpipopts = ((unsigned long long)mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
+> >> + * @start:             Starting address of the region
+> >> + * @len:               Length of the region (All the pages in this le=
+ngth are included)
+> >> + * @vec:               Address of page_region struct array for output
+> >> + * @vec_len:           Length of the page_region struct array
+> >> + * @max_pages:         Optional max return pages (It must be less tha=
+n vec_len if specified)
+> >
+> > I think we discussed that this is not counting the same things as
+> > vec_len, so there should not be a reference between the two. The limit
+> > is whatever fits under both conditions (IOW: n_vecs <=3D vec_len &&
+> > (!max_pages || n_pages <=3D max_pages).
+> In worse case when pages cannot be folded into the page_region, the one
+> page_region may have information of only one page. This is why I've
+> compared them. I want to communicate to the user that if max_pages is
+> used, the vec_len should be of equal or greater size (to cater worse
+> case which can happen at any time). Otherwise in worse case, the api can
+> return without finding the max_pages number of pages. I don't know how
+> should I put this in the comment.
 
-This looks weird. Maybe we should define mss6 as unsigned long long to 
-avoid this casting at all?
+I'm not sure you need to, as this conclusion follows from the range vs
+page distinction.
+A user who wants to cater for the worst case will provide big-enough
+`vec` array, but another, who might be memory-constrained, could
+instead just retry the call with `start` updated to just after the
+last returned page until the ioctl() returns less ranges than
+`vec_len` allows.
 
->   	} else if (tcpipopts_mask != 0) {
->   		usage(argv[0]);
->   	}
-> @@ -286,7 +286,7 @@ static int syncookie_open_bpf_maps(__u32 prog_id, int *values_map_fd, int *ports
->   
->   	prog_info = (struct bpf_prog_info) {
->   		.nr_map_ids = 8,
-> -		.map_ids = (__u64)map_ids,
-> +		.map_ids = (__u64)(unsigned long)map_ids,
->   	};
->   	info_len = sizeof(prog_info);
->   
+Best Regards
+Micha=C5=82 Miros=C5=82aw
