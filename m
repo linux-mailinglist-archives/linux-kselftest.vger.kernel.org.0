@@ -2,229 +2,296 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4D0621B42
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 18:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DCB621BD1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 19:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234366AbiKHR5Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Nov 2022 12:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S234281AbiKHSXu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Nov 2022 13:23:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234174AbiKHR5O (ORCPT
+        with ESMTP id S233995AbiKHSXt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:57:14 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95161A80A;
-        Tue,  8 Nov 2022 09:57:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=azwt/z0z0F+vvhs+qrMw3snhOeTOWZKc4bLqlM1mOv30U8BU3kaSY8sikWisy5cFXHZgXPbYG/5dXto/QvTxBPHGVgT4sHeNvaUhNqOaherfOrwKIAzGYz/dzKiFKlFqD8D7QXho8n7xerb/0Cl04VsOPv/d7SxprdlhEPq3b0ii5GBtoJn+tRllrwEL5uIu4yM5euGIh/vP3SnPNtsTOIAcBTMcsGNgh1+b404MOW9ZaHC8tgRAUzxtTPUZGZHAb/SGBBFkITMhVQWja1YiFTPUIMLOfUL8160PySl3lzHL3jWVSmmyA3GwhfqH0+edkbIqHc53j9+U7wX6vgEpaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0eB6UXbeCUZbPbpsR6COyGhET08rXi95JQRmA8dXsQQ=;
- b=WpikBDAXm/LHv2pGjZQXkaOcT67+R6Her2StkxmxmQZP9joPWuW4Jq7ifNVtZZnkrxCNcFSW4A3HGwhuXzEQf26ULf03g3vSbn5tobOriejFl5pYgwpJZr07SsZ+Dyc6OAL8nlhcgIGTz7IWAATiFxifKZ0hU0Me0CuOuEdm8959ZZp+P/n9xewQOddgeU07+L5n8e5+idPKbO4GjvdExWP0/1XG9/MkFW4o1LLs9Ds5zSkOjVJJPg0hDtKPTFIERp6xuWX3tV8Nv3kJuYhmSBSmckgnfuWwBH56kA+DHFrhcHTbMlz3Ybs4myNSx0NRv6idd0CsUtNOHySgkqMAtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0eB6UXbeCUZbPbpsR6COyGhET08rXi95JQRmA8dXsQQ=;
- b=m7zmbKXGCBcnzvARHmgMqwPn2WsDsEJzrk0LIb3dJP7B0T3LERLNNl7mAJFXZk0ESuwbvJ3KXT3xtJdpUNCI1+HzqI7t+rlEY81vLXU3jVc+Ah6B2KgvGFHHEgQNZ6ZTaTSp1WzEBBPu+ljzMwZDREz4bAcyoYVf57+rqGr+/Frixdoi5N2NLbXvKyhc/mNfI29BSsXDtDIkpE8AMTdSh4vQvE+8jua76oECnlJqlKfgbTA6eLhiu2k1j2NV+ook52tlLkKfRmJYWE7xwt7UY3TfIXZgTHSNkisyAEyteqpUIFxhp39yDXFV6pjRCJI0EVchU5+jKspzhzW+MJbX0w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL1PR12MB5029.namprd12.prod.outlook.com (2603:10b6:208:31d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
- 2022 17:57:12 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
- 17:57:12 +0000
-Date:   Tue, 8 Nov 2022 13:57:11 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     bpf@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Rix <trix@redhat.com>, Will Deacon <will@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        David Gibson <david@gibson.dropbear.id.au>,
-        Eric Auger <eric.auger@redhat.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Joao Martins <joao.m.martins@oracle.com>, kvm@vger.kernel.org,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>
-Subject: Re: [PATCH v4 12/17] iommufd: Add kAPI toward external drivers for
- physical devices
-Message-ID: <Y2qYd4W2zlvHLfJ7@nvidia.com>
-References: <12-v4-0de2f6c78ed0+9d1-iommufd_jgg@nvidia.com>
- <2cbd00ff-a51f-bd0f-1bd9-67db5f5d22f4@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2cbd00ff-a51f-bd0f-1bd9-67db5f5d22f4@intel.com>
-X-ClientProxiedBy: MN2PR16CA0030.namprd16.prod.outlook.com
- (2603:10b6:208:134::43) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Tue, 8 Nov 2022 13:23:49 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24712186E0;
+        Tue,  8 Nov 2022 10:23:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667931828; x=1699467828;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FfEVd3QNZBOJtLgf+04AipIfhJH1euMdPMQmxEcCU5M=;
+  b=MVn0rmQIC6w8gPdgLz+64lv84ddE37Wfya7Uu6SV8UsGuSUwP1Aoz01Q
+   mNVmGl/bO6/asJ9ouD/HbM69q74S7cqNNGINTf07XePFS/vSbdGz55G6S
+   T0PZ4/+ZDV8Om92mkyrfD5xxS3QaGJ42jx+GgBXZKfbo8OQKMn7cuI0CZ
+   ieEJ7lG9qmQPE3rcbXQYaCGNl0BCcxNwpUWHc8KKyfFPPqbT8XSBsd/Xh
+   Eusv8SbFX2l5FVShgHhu0BZf0U0tiW76wsGCIcd2XtxpjdwQcfo5VmcnQ
+   F6P36ktDHQH4YGU6I9s/b3nF27zWIgsVZl7IkA4IgTWGAcUMkXyM7xfW2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="372913952"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="372913952"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 10:23:04 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="811334327"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="811334327"
+Received: from vibhusha-mobl1.amr.corp.intel.com (HELO [10.252.133.56]) ([10.252.133.56])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 10:23:02 -0800
+Message-ID: <64e62ab9-71f6-6d90-24de-402921c244e7@intel.com>
+Date:   Tue, 8 Nov 2022 10:23:02 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5029:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0b077e7c-f595-4420-649b-08dac1b2a97b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fhYNGrLY27xyJxvq1mMqfFAX3DPyHyipRi3gLTT3qESUGaTpqMkwpXBkICQ2dldvpMIIAcD9nLLBDw6kFuVHK695qh04rZpGJC1kb0j8pkhsQFRhA+pn9tkivPj5a3JqdaJWte/Nyzm7h/9eNcrJfJknLyCqxvmvomytqACOLFxQfnbFPSByeXqQl5WYiDLZT8+9slJ0iKBXvsHzTAx58fUfCLw+Q4umvs4E0ki5hp6DRd1z9EmW/HL2EDXervVi3oChh0PzjYnzrnrELFoJjKFSjjIHZDdQRDj4tRGeZYwiMfpAf47EUhxXQA+/oujKAraBQ5V3kI6pR1B742KR+HQcNVAPKHUQ4sUjiY7OEfZaGkamtYYQ7/7aQvaFGYueJwybqv85qsMQOSIe3fUHt65jrX4BQHOed3lSf52rIXYAMaRXBVYcJu6Hs95zG0GklrA+YF/yLJ8r7X0H2zumwzD7q4xlHLdL8acGO7tr3SG77e/XA71tSfySob0YybNNgaUo9I4WcGkcMqCJmZhWFkrM2AKiISxwqZqLkIBrceF+/XgPf2TyRUdEaL3InN+dxHeBnUP7V+XW3CLQAwkSm8IAymQxznmWEGDuN23XiZO06bUzEqple+G28NudaQwWyHq1bro0uHjkwLMTuxQvAhzWCnHlrDiEkkEi+g+Lf3L2T6EDo1n3mBQr2crNbZFF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199015)(26005)(38100700002)(2616005)(6506007)(6512007)(186003)(83380400001)(7416002)(5660300002)(2906002)(7406005)(478600001)(6916009)(316002)(6486002)(41300700001)(66476007)(4326008)(8936002)(66556008)(8676002)(54906003)(66946007)(36756003)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9nqBZGL3TiFn8nvqhYqBbai/pXfLbkXR1BXftWQuSduNgeN1a7MnoysRk9y7?=
- =?us-ascii?Q?FspPwacFJQS3OobGs9y7yEMhTvVxWsJSFaiHsacuakKKgVELLH5qFOSbEKmG?=
- =?us-ascii?Q?LQGabKYmnqIBb7Fxl3fZ+wG6fD5P6az1TMkMpVEHasP0ElIq2jqENLYKnDxV?=
- =?us-ascii?Q?cEnldZaPBMiem/YFW7KC0b046iRsPwr0Rak8rMMyyKaRElforuZLZSyh4zAU?=
- =?us-ascii?Q?QypATIkhD6fhTj/su5PIlxcDjz3ZD2bnWRghxorkcOf7ZDoPyUFWFt9dj8NL?=
- =?us-ascii?Q?3aJrCXlJdKE+Y41wct1ykAOohpnNdejVFU9z1OqhJmup51wqjnqwoDR76dwP?=
- =?us-ascii?Q?ogg8UDNEN/0gOFXNufuAqkvkqEZ21qTduYcF+w/wlgPgCw0ILdyR2X284srg?=
- =?us-ascii?Q?idZlLAYDH2+W+wLGDk/CZzHlCtUKHfxZexPXIPPt1jPa8TUI3aFPLQfvFZb0?=
- =?us-ascii?Q?i2/ThoqIcmZxhDHOhyhIborvjc+zDZs2AnE31d+jjgYR/ejwidm/y1xKPpRD?=
- =?us-ascii?Q?kFhLXRC/T+GXtFmoTd723JXWaF0TusTfjw1K4VD23kkg7E50JJOVJG7NdeQ3?=
- =?us-ascii?Q?e9z3a/daC8gYe4PJ98nieT+CpkhBaGXhXpASFw5hZKA5gkdN77+AzrB73gLG?=
- =?us-ascii?Q?f4251Lbh4IukVUnLIqFw6Ma/a1zWh4wbnW40Z3mtup614Y1PCOgXz7n8JEPo?=
- =?us-ascii?Q?MxV10Tmwj6gtQTHQJF6h0PSWviMrPcQVEdKJ9BEYouM6cT9lMBo8puYPh7RZ?=
- =?us-ascii?Q?Z+ff0ZG/kcW52zOa/xlMr+XrfHDBHB9UlW7nmsfA3dH4Y0rBBw+bsvhwEm8A?=
- =?us-ascii?Q?j0IAeUu5705xWriC+kjiC9Ne3bG2m1meDa757Gmkl4p1YSJ2E/R4m7uj+U4w?=
- =?us-ascii?Q?dEGsZHHn6rVDdTx++uFG2XiSzd/2FOgh16NgGTlc9Qkn56A/XfarSLcm2fgR?=
- =?us-ascii?Q?m8PXD0M4iXbW3oIx6NPXXN3TBTIAXAj4+1hoUxTBTKksnEIGhEBP1rBqRdX4?=
- =?us-ascii?Q?dxRwJIT/yR5L2mnE/fqx1GbA/sQRX1hURFCl/TPM2oTCOLa3+FrilGI8B8DU?=
- =?us-ascii?Q?OGn8B+sa9IdJMT8uqj6VWbPjIOOCmrR/Q+0Y/gajrqcLyUJeXF3zEK0g8mgt?=
- =?us-ascii?Q?DA6389tnZ3VhdFXTj2M4meGNYjw08ypGlgL5KKFof+09ZZ0MpC56g4WKf0ca?=
- =?us-ascii?Q?XVLfgLifKj6p31cGXJQM+UVbaw9iz55xGZ4PWKSAat5kdgU3oavzc7K7kDfs?=
- =?us-ascii?Q?JFoxnfCGmcyxvxe93uXsR+kCxgLWvqu+FAUYeOdetvTN9+PJMawfk8P9CU6E?=
- =?us-ascii?Q?aAAMyIC7rExMxFTwNMj3o870J7hmFelwJfKgBI1EPg+AKG/Zj1K9foDMdLdP?=
- =?us-ascii?Q?+zdpTn+cFkLzbbLWv8nZVZNmHJDjjZ1GoWTId38Py8jPRfmrKEWJs1QXWuk/?=
- =?us-ascii?Q?0Z/1MA3gtcaRN3af5byiURtM6ZJrHofLSgOXA9u3wv3GNHEYfV3Me7XISsxA?=
- =?us-ascii?Q?E6vXsKEBCi4gzcnIPfxfPzF5gtjLmdGb31JJLeS5p5qDf1N1stqNN9sHNEby?=
- =?us-ascii?Q?9gAnZljRmngA5eD7leA=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b077e7c-f595-4420-649b-08dac1b2a97b
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 17:57:11.9684
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tzcioPbbA5Glyc1btNeAb/KNQI28X9LE4HPjxl+xfhQQYs+IsV17GsLMQlZTzgTc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5029
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RESEND PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again)
+ written by ptrace.
+Content-Language: en-US
+To:     Kyle Huey <me@kylehuey.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org
+References: <20221107063807.81774-1-khuey@kylehuey.com>
+ <20221107063807.81774-2-khuey@kylehuey.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221107063807.81774-2-khuey@kylehuey.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 10:34:05PM +0800, Yi Liu wrote:
-> > +/**
-> > + * iommufd_device_bind - Bind a physical device to an iommu fd
-> > + * @ictx: iommufd file descriptor
-> > + * @dev: Pointer to a physical PCI device struct
-> > + * @id: Output ID number to return to userspace for this device
-> > + *
-> > + * A successful bind establishes an ownership over the device and returns
-> > + * struct iommufd_device pointer, otherwise returns error pointer.
-> > + *
-> > + * A driver using this API must set driver_managed_dma and must not touch
-> > + * the device until this routine succeeds and establishes ownership.
-> > + *
-> > + * Binding a PCI device places the entire RID under iommufd control.
-> > + *
-> > + * The caller must undo this with iommufd_unbind_device()
-> 
-> it should be iommufd_device_unbind() now.
+Kyle, sorry this took so long to get to.  I do really appreciate the fix
+and the selftest.  This seems like something we want to get merged
+sooner rather than later, so please bear with me.
 
-Done
+On 11/6/22 22:38, Kyle Huey wrote:
+> There are three APIs that write PKRU: sigreturn, PTRACE_SETREGSET with
+> NT_X86_XSTATE, and KVM_SET_XSAVE. sigreturn still uses XRSTOR to write to
+> PKRU. KVM_SET_XSAVE has its own special handling to make PKRU writes take
+> effect (in fpu_copy_uabi_to_guest_fpstate). Push that down into
+> copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE pass in
+> a pointer to the appropriate PKRU slot. copy_sigframe_from_user_to_xstate
+> depends on copy_uabi_to_xstate populating the PKRU field in the task's
+> XSTATE so that __fpu_restore_sig can do a XRSTOR from it, so continue doing
+> that.
 
-> > +static int iommufd_device_do_attach(struct iommufd_device *idev,
-> > +				    struct iommufd_hw_pagetable *hwpt,
-> > +				    unsigned int flags)
-> > +{
-> > +	phys_addr_t sw_msi_start = 0;
-> > +	int rc;
-> > +
-> > +	mutex_lock(&hwpt->devices_lock);
-> > +
-> > +	/*
-> > +	 * Try to upgrade the domain we have, it is an iommu driver bug to
-> > +	 * report IOMMU_CAP_ENFORCE_CACHE_COHERENCY but fail
-> > +	 * enforce_cache_coherency when there are no devices attached to the
-> > +	 * domain.
-> > +	 */
-> > +	if (idev->enforce_cache_coherency && !hwpt->enforce_cache_coherency) {
-> > +		if (hwpt->domain->ops->enforce_cache_coherency)
-> > +			hwpt->enforce_cache_coherency =
-> > +				hwpt->domain->ops->enforce_cache_coherency(
-> > +					hwpt->domain);
-> > +		if (!hwpt->enforce_cache_coherency) {
-> > +			WARN_ON(list_empty(&hwpt->devices));
-> > +			rc = -EINVAL;
-> > +			goto out_unlock;
-> > +		}
-> > +	}
-> > +
-> > +	rc = iopt_table_enforce_group_resv_regions(&hwpt->ioas->iopt, idev->dev,
-> > +						   idev->group, &sw_msi_start);
-> > +	if (rc)
-> > +		goto out_unlock;
-> > +
-> > +	rc = iommufd_device_setup_msi(idev, hwpt, sw_msi_start, flags);
-> > +	if (rc)
-> > +		goto out_iova;
-> 
-> aren't the above two operations only once for a group? I remember you did
-> the two after iommu_attach_group().
+Please always write functions() with parenthesis to make it clear what
+you're talking about.  Also, there are much better ways to format this
+paragraph.  I probably would have said:
 
-No, with the new attach logic per-device is simpler.
+There are three APIs that write PKRU:
+1. sigreturn
+2. PTRACE_SETREGSET with NT_X86_XSTATE
+3. KVM_SET_XSAVE
 
-iopt_table_enforce_group_resv_regions() tags all the reserved ranges
-with:
+Then broken it up into three follow-on paragraphs.  I actually kinda had
+to do this to even make sense of what you were trying to say above.  It
+would also be nice to have a clear problem statement paired with the
+mention of these three ABIs.
 
-		rc = iopt_reserve_iova(iopt, resv->start,
-				       resv->length - 1 + resv->start,
-				       device);
+#1 and #3 work OK, right?  It's #2 that's broken?
 
-So they are all undone as each device detaches
+> sigreturn still uses XRSTOR to write to PKRU.
 
-And iommufd_device_setup_msi() keeps track of what has happened to the
-domain via:
+... which means?  That sigreturn is fine and does not need to be touched
+in this patch?
 
-		if (hwpt->msi_cookie)
-			return 0;
-		rc = iommu_get_msi_cookie(hwpt->domain, sw_msi_start);
-		if (rc)
-			return rc;
-		hwpt->msi_cookie = true;
+> KVM_SET_XSAVE has its own special handling to make PKRU writes take
+> effect (in fpu_copy_uabi_to_guest_fpstate()).  Push that down into
+> copy_uabi_to_xstate() and have PTRACE_SETREGSET with NT_X86_XSTATE pass in
+> a pointer to the appropriate PKRU slot. 
 
-So it is OK to call it multiple times
+So this is the bugfix?  KVM already does it right, and we just need to
+make ptrace() share the KVM code?
 
-Thanks,
-Jason
+> copy_sigframe_from_user_to_xstate() depends on copy_uabi_to_xstate()
+> populating the PKRU field in the task's XSTATE so that
+> __fpu_restore_sig() can do a XRSTOR from it, so continue doing that.
+
+I'm not quite sure what this chunk of the changelog is trying to tell
+me.  Isn't this the sigreturn path?  Why did the paragraph above go from
+talking about sigreturn to KVM then back to sigreturn?
+
+> This also adds code to initialize the PKRU value to the hardware init value
+> (namely 0) if the PKRU bit is not set in the XSTATE header provided to
+> ptrace, to match XRSTOR.
+
+The implication here is that we would like the sigreturn ABI and the
+ptrace ABI to behave in a similar fashion, right?
+
+At a high level, this patch does a *LOT*.  Generally, it's nice when
+bugfixes can be encapsulted in one patch, but I think there's too much
+going on here for one patch.
+
+> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+> index 3b28c5b25e12..c273669e8a00 100644
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+>  {
+>  	struct fpstate *kstate = gfpu->fpstate;
+>  	const union fpregs_state *ustate = buf;
+> -	struct pkru_state *xpkru;
+> -	int ret;
+>  
+>  	if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
+>  		if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
+> @@ -406,16 +404,16 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+>  	if (ustate->xsave.header.xfeatures & ~xcr0)
+>  		return -EINVAL;
+>  
+> -	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
+> -	if (ret)
+> -		return ret;
+> +	/*
+> +	 * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
+> +	 * in the header.  KVM's odd ABI is to leave PKRU untouched in this
+> +	 * case (all other components are eventually re-initialized).
+> +	 * (Not clear that this is actually necessary for compat).
+> +	 */
+> +	if (!(ustate->xsave.header.xfeatures & XFEATURE_MASK_PKRU))
+> +		vpkru = NULL;
+
+I'm not a big fan of hunks that are part of bugfixes where it is not
+clear that the hunk is necessary.
+
+> -	/* Retrieve PKRU if not in init state */
+> -	if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
+> -		xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
+> -		*vpkru = xpkru->pkru;
+> -	}
+> -	return 0;
+> +	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
+>  }
+>  EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
+>  #endif /* CONFIG_KVM */
+> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+> index 75ffaef8c299..6d056b68f4ed 100644
+> --- a/arch/x86/kernel/fpu/regset.c
+> +++ b/arch/x86/kernel/fpu/regset.c
+> @@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+>  	}
+>  
+>  	fpu_force_restore(fpu);
+> -	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
+> +	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
+
+I actually hadn't dug into the KVM code around this before.  It seems
+like the PKRU pointer (&target->thread.pkru) here can also be
+&vcpu->arch.pkru if it comes from the KVM side.
+
+I was missing why PKRU is so special here.  I think in *both* cases,
+we're copying a potential PKRU value from userspace.  But, the fpstate
+target is a useless place to write PKRU because the kernel doesn't
+update from there.  So, the copy-in function
+(copy_uabi_from_kernel_to_xstate()) needs a place to stash PKRU where
+the kernel will see it.  The place that the kernel wants to stash it is
+either the task PKRU field or the KVM vcpu field.  That's what the
+pointer provides.
+
+Also, is this getting a wee bit over 80 columns?
+
+>  out:
+>  	vfree(tmpbuf);
+> diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
+> index 91d4b6de58ab..558076dbde5b 100644
+> --- a/arch/x86/kernel/fpu/signal.c
+> +++ b/arch/x86/kernel/fpu/signal.c
+> @@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
+>  
+>  	fpregs = &fpu->fpstate->regs;
+>  	if (use_xsave() && !fx_only) {
+> -		if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
+> +		if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
+>  			return false;
+
+This is also changing copy_sigframe_from_user_to_xstate() to take a
+'task_struct' instead of an 'fpstate'.  Why?  That function just turns
+it right back into an fpstate with: tsk->thread.fpu.fpstate.
+
+>  	} else {
+>  		if (__copy_from_user(&fpregs->fxsave, buf_fx,
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index c8340156bfd2..8f14981a3936 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
+>  
+>  
+>  static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+> -			       const void __user *ubuf)
+> +			       const void __user *ubuf, u32 *pkru)
+
+I think this function deserves a little comment about what it expects
+from 'pkru' here.  Maybe:
+
+/*
+ * The kernel will not update the actual PKRU register from the PKRU
+ * space in @fpstate.  Allow callers to pass in an alternate destination
+ * for PKRU.  This is currently either the pkru field from the
+ * task_struct or vcpu.
+ */
+
+>  {
+>  	struct xregs_state *xsave = &fpstate->regs.xsave;
+>  	unsigned int offset, size;
+> @@ -1246,6 +1246,21 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * Update the user protection key storage. Allow KVM to
+> +	 * pass in a NULL pkru pointer if the mask bit is unset
+> +	 * for its legacy ABI behavior.
+> +	 */
+
+If I read this in 5 years, do I know what the "KVM legacy ABI behavior" is?
+
+> +	if (pkru)
+> +		*pkru = 0;
+> +
+> +	if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+> +		struct pkru_state *xpkru;
+> +
+> +		xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
+> +		*pkru = xpkru->pkru;
+> +	}
+
+This is a bit wonky.  The code kinda pretends that XFEATURE_MASK_PKRU
+and 'pkru' are independent.  But, it's actually impossible to have a
+pkru==NULL and have XFEATURE_MASK_PKRU set.  The code would oops in that
+case.
+
+Would something like this be more clear?
+
+	if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+		struct pkru_state *xpkru;
+
+		xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
+		*pkru = xpkru->pkru;
+	} else {
+		/*
+		 * KVM may pass a NULL 'pkru' to indicate
+		 * that it does not need PKRU updated.
+		 */
+		if (pkru)
+			*pkru = 0;
+	}
+
+
