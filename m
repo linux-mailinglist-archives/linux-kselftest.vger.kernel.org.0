@@ -2,165 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C55D620C84
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 10:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005CA620CA2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 10:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbiKHJlm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Nov 2022 04:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S233883AbiKHJsF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Nov 2022 04:48:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiKHJl0 (ORCPT
+        with ESMTP id S233779AbiKHJrx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:41:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E034C326D5
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 01:40:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667900428;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lW38e6pXJ1acSlo/JcbNSc5AQG/ffLUgHR8IViSMTS4=;
-        b=UA8+oXJC+IW9OLSaXL9eq6ACo1uKgTXMGDp8u7oC1Eb0QB22A1MviLU6Azrm3pS2KZC++b
-        W7rYPAu3vFu2/B4ilK3kQ08oBrOwkpk6r3vu40vEjTj4jkcJ5EaV/Pzryqx+XXCcDMVBZv
-        7jvykvQekgcak06736A8bjvr1uY+kdo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-274--wKUbHHbMWOn6MUsp5ut_A-1; Tue, 08 Nov 2022 04:40:26 -0500
-X-MC-Unique: -wKUbHHbMWOn6MUsp5ut_A-1
-Received: by mail-wm1-f69.google.com with SMTP id e8-20020a05600c218800b003cf634f5280so3648012wme.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Nov 2022 01:40:26 -0800 (PST)
+        Tue, 8 Nov 2022 04:47:53 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E0A32BBD
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 01:47:17 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id r3so16744642yba.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Nov 2022 01:47:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4ht7aoqC8L+vp9x1FcVPg+kZPUNeEgy80xJGTU+g4ns=;
+        b=hRKdatxOnnr2tMhhyTQW7oKQgChMIBUC00toaizTNv9u5Tl1ye2PSVok+HdAC8ZfTE
+         /SOqK08lKevabgnhcYPIU+JnknAISrYDQdTF5KgDLThvhyF2dbu8l/+1RPXhsXKNtii9
+         CdcS8565bh0aWexgRbYOmseHNy6TBozwVi+UnD3Xk+C0dCA32F8kH6kYMm9vXivgiPR1
+         WaTGtfhTeeL04GUyk180Gm3OUxetFY7E54FIChUF61zqLtG2TUWwfuP+wMKubvGOfwo1
+         Y9jqXkifyVZ0IClJFwhkiM4WX4Dn5PQ3zqnsA0OYqz5rG38QZpn8AK+Q53tMJux7ltHk
+         5nOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lW38e6pXJ1acSlo/JcbNSc5AQG/ffLUgHR8IViSMTS4=;
-        b=Bs77MnJjIhbaohaqvME3f4qIlNTVbikz+OhrAFRpI48zJxblNgDZsDF/ZMatLGbhJQ
-         oDQNoO/WxJkJJHXbZk5bpZ78fyRGFhtL+nA20HW+dTsPGoip0xTCp1olKdOLHm9XWoCp
-         W2n4fj15npaOVXOu7fhq6UtC4zRFNUVVHvPRPymVtiaeO/eXYW9Go5G9nWZZk6GJC5LV
-         2Sp7B3nWZfIhQPIWgh0EzccZKA5DJ8EnF9eVPFKbISMfkl+jwME6yHJOHVHxSbyHHu3t
-         6FfFTz2955ae7bQfaxqpdW77Z49BvEiqXT83ouXZWbrmA2WmXJUz5k0T+NusgcaLeFHA
-         6e8A==
-X-Gm-Message-State: ACrzQf2+4xj/c8JrXIFqtf/0Ac0ZYO++rtfxu92pXQTv/u07/PP4rx07
-        iCEbBiFZVoLaCnw3Yz8Aaqd5Myn90pWaK7KnwTtW1/MGb4X1r0nMq3UZpJF94qKEcF7ZGKsR7zl
-        khp5zTNAzXRzQzC/sM3PHdgq0d3VH
-X-Received: by 2002:a05:600c:54ca:b0:3cf:8e5d:7146 with SMTP id iw10-20020a05600c54ca00b003cf8e5d7146mr18675277wmb.191.1667900425631;
-        Tue, 08 Nov 2022 01:40:25 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5cH9tWJ/7f+h1bsvSFgTQP1m4PENc1Ye2cP0NqhUl7fQavJfxFFKESh5AiG6/w6GmkhSUyjQ==
-X-Received: by 2002:a05:600c:54ca:b0:3cf:8e5d:7146 with SMTP id iw10-20020a05600c54ca00b003cf8e5d7146mr18675241wmb.191.1667900425279;
-        Tue, 08 Nov 2022 01:40:25 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:db00:6510:da8d:df40:abbb? (p200300cbc708db006510da8ddf40abbb.dip0.t-ipconnect.de. [2003:cb:c708:db00:6510:da8d:df40:abbb])
-        by smtp.gmail.com with ESMTPSA id bu12-20020a056000078c00b0023655e51c33sm10027356wrb.4.2022.11.08.01.40.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 01:40:24 -0800 (PST)
-Message-ID: <040542e7-7d1c-4f25-b1ed-459f3c165283@redhat.com>
-Date:   Tue, 8 Nov 2022 10:40:23 +0100
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4ht7aoqC8L+vp9x1FcVPg+kZPUNeEgy80xJGTU+g4ns=;
+        b=2W4uJHXzXbwaqcrINhnf0XjJwlgW3urqsWHALUH2CAvKq0GVQg0xZ9HMhXoHz1X5jW
+         JCRiJuESM+KZ/YMmdasrM0sbqR1fJr1ct5xH55Ke8jt4xaX3du94z7F9iVWbP+M/MHJ3
+         E0MjJJzx5JgMvmEsOD9yQIjNGX1lXSNqSwII8mZXO3e6QOK9WFD77y79n2ja+SGt7gGq
+         OPlQdnX1ci8oKnl7MAEL19BKw3FDq9Qloii+6ZlvbANHdkBO8yVUTd90rIbL43VhWbpQ
+         DvXddzniLXVUTVsxzMlkzwHvYF8154gUK2zIR0rB8G7CXvEZNQSSMPGcFrEFW3MD7qsn
+         udFg==
+X-Gm-Message-State: ANoB5pkb1LrE+RsuWl252npYL5slN5vQu83fHHZHmwRcC53foPnp+SSM
+        x6xIPevj+Adh9iPeQ1ijnPRYzyoeVovnpBSGRiGC8yR8TcYnFw==
+X-Google-Smtp-Source: AA0mqf6ARo37GgMWPATx8BKKxWmxqVcERVL8ycUCVP/DgJHu2cBrI/gbhjTBy4EwqL8JS4Vvp/B2nYpBl01r9x9hLbo=
+X-Received: by 2002:a05:6902:b16:b0:6d6:9455:d6c5 with SMTP id
+ ch22-20020a0569020b1600b006d69455d6c5mr11705938ybb.164.1667900835160; Tue, 08
+ Nov 2022 01:47:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Content-Language: en-US
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20221107161740.144456-1-david@redhat.com>
- <20221107161740.144456-17-david@redhat.com>
- <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH RFC 16/19] mm/frame-vector: remove FOLL_FORCE usage
-In-Reply-To: <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Nov 2022 15:17:04 +0530
+Message-ID: <CA+G9fYvBtwi8jmQZNvYwjR425BXGgCG2ej3iE6gtgfRzZmQnOw@mail.gmail.com>
+Subject: kselftest rtctests failed on arm64 Raspberry Pi 4 -
+ rtctest.c:34:date_read:Expected -1 (-1) != self->fd (-1)
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 08.11.22 05:45, Tomasz Figa wrote:
-> Hi David,
-
-Hi Tomasz,
-
-thanks for looking into this!
-
-> 
-> On Tue, Nov 8, 2022 at 1:19 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> FOLL_FORCE is really only for debugger access. According to commit
->> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
->> writable"), the pinned pages are always writable.
-> 
-
-As reference, the cover letter of the series:
-
-https://lkml.kernel.org/r/20221107161740.144456-1-david@redhat.com
-
-> Actually that patch is only a workaround to temporarily disable
-> support for read-only pages as they seemed to suffer from some
-> corruption issues in the retrieved user pages. We expect to support
-> read-only pages as hardware input after. That said, FOLL_FORCE doesn't
-> sound like the right thing even in that case, but I don't know the
-> background behind it being added here in the first place. +Hans
-> Verkuil +Marek Szyprowski do you happen to remember anything about it?
-
-Maybe I mis-interpreted 707947247e95; re-reading it again, I am not 
-quite sure what the actual problem is and how it relates to GUP 
-FOLL_WRITE handling. FOLL_FORCE already was in place before 707947247e95 
-and should be removed.
-
-What I understood is "Just always call vb2_create_framevec() with 
-FOLL_WRITE to always allow writing to the buffers.".
+kselftest rtctests failed on arm64 Raspberry Pi 4 Model B device and
+passed on other devices and qemu emulators. Please refer to the
+full logs and test comparison results links.
 
 
-If the pinned page is never written to via the obtained GUP reference:
-* FOLL_WRITE should not be set
-* FOLL_FORCE should not be set
-* We should not dirty the page when unpinning
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-If the pinned page may be written to via the obtained GUP reference:
-* FOLL_WRITE should be set
-* FOLL_FORCE should not be set
-* We should dirty the page when unpinning
+Test run log:
+-------------
+
+[  248.627989] kselftest: Running tests in rtc
+TAP version 13
+1..1
+# selftests: rtc: rtctest
+[  249.116824] audit: type=1701 audit(1651167970.071:12):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2818 comm=\"rtctest\"
+exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
+[  249.133837] audit: type=1701 audit(1651167970.079:13):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2819 comm=\"rtctest\"
+exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
+[  249.151179] audit: type=1701 audit(1651167970.083:14):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2820 comm=\"rtctest\"
+exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
+[  249.168401] audit: type=1701 audit(1651167970.091:15):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2821 comm=\"rtctest\"
+exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
+[  249.185406] audit: type=1701 audit(1651167970.095:16):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2822 comm=\"rtctest\"
+exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
+[  249.202343] audit: type=1701 audit(1651167970.103:17):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2823 comm=\"rtctest\"
+exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
+#[  249.219262] audit: type=1701 audit(1651167970.111:18):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2824 comm=\"rtctest\"
+exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
+ [  249.236233] audit: type=1701 audit(1651167970.115:19):
+auid=4294967295 uid=0 gid=0 ses=4294967295 pid=2825 comm=\"rtctest\"
+exe=\"/opt/kselftests/default-in-kernel/rtc/rtctest\" sig=6 res=1
+TAP version 13
+# 1..8
+# # Starting 8 tests from 2 test cases.
+# #  RUN           rtc.date_read ...
+# # rtctest.c:34:date_read:Expected -1 (-1) != self->fd (-1)
+# # date_read: Test terminated by assertion
+# #          FAIL  rtc.date_read
+# not ok 1 rtc.date_read
+# #  RUN           rtc.date_read_loop ...
+# # rtctest.c:34:date_read_loop:Expected -1 (-1) != self->fd (-1)
+# # date_read_loop: Test terminated by assertion
+# #          FAIL  rtc.date_read_loop
+# not ok 2 rtc.date_read_loop
+# #  RUN           rtc.uie_read ...
+# # rtctest.c:34:uie_read:Expected -1 (-1) != self->fd (-1)
+# # uie_read: Test terminated by assertion
+# #          FAIL  rtc.uie_read
+# not ok 3 rtc.uie_read
+# #  RUN           rtc.uie_select ...
+# # rtctest.c:34:uie_select:Expected -1 (-1) != self->fd (-1)
+# # uie_select: Test terminated by assertion
+# #          FAIL  rtc.uie_select
+# not ok 4 rtc.uie_select
+# #  RUN           rtc.alarm_alm_set ...
+# # rtctest.c:34:alarm_alm_set:Expected -1 (-1) != self->fd (-1)
+# # alarm_alm_set: Test terminated by assertion
+# #          FAIL  rtc.alarm_alm_set
+# not ok 5 rtc.alarm_alm_set
+# #  RUN           rtc.alarm_wkalm_set ...
+# # rtctest.c:34:alarm_wkalm_set:Expected -1 (-1) != self->fd (-1)
+# # alarm_wkalm_set: Test terminated by assertion
+# #          FAIL  rtc.alarm_wkalm_set
+# not ok 6 rtc.alarm_wkalm_set
+# #  RUN           rtc.alarm_alm_set_minute ...
+# # rtctest.c:34:alarm_alm_set_minute:Expected -1 (-1) != self->fd (-1)
+# # alarm_alm_set_minute: Test terminated by assertion
+# #          FAIL  rtc.alarm_alm_set_minute
+# not ok 7 rtc.alarm_alm_set_minute
+# #  RUN           rtc.alarm_wkalm_set_minute ...
+# # rtctest.c:34:alarm_wkalm_set_minute:Expected -1 (-1) != self->fd (-1)
+# # alarm_wkalm_set_minute: Test terminated by assertion
+# #          FAIL  rtc.alarm_wkalm_set_minute
+# not ok 8 rtc.alarm_wkalm_set_minute
+# # FAILED: 0 / 8 tests passed.
+# # Totals: pass:0 fail:8 xfail:0 xpass:0 skip:0 error:0
+not ok 1 selftests: rtc: rtctest # exit=1
+
+Test results details,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848560/suite/kselftest-rtc/tests/
+
+Test results compare,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848560/suite/kselftest-rtc/test/rtc.rtctest/history/
+
+Test detailed log,
+https://lkft.validation.linaro.org/scheduler/job/5812742#L1759
+
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: d8e87774068af213ab5b058b1b114dc397b577aa
+  git_describe: next-20221107
+  kernel_version: 6.1.0-rc3
+  kernel-config: https://builds.tuxbuild.com/2HChVOSNxUpvfAfLTnaK7zyTdUi/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/687092361
+  artifact-location: https://builds.tuxbuild.com/2HChVOSNxUpvfAfLTnaK7zyTdUi
+  toolchain: gcc-11
 
 
-If the function is called for both, we should think about doing it 
-conditional based on a "write" variable, like pre-707947247e95 did.
-
-@Hans, any insight?
-
--- 
-Thanks,
-
-David / dhildenb
-
+--
+Linaro QA
+https://qa-reports.linaro.org
