@@ -2,50 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957E6621AE0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 18:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBFA621AE1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 18:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233945AbiKHRjN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S234562AbiKHRjN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Tue, 8 Nov 2022 12:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234577AbiKHRjJ (ORCPT
+        with ESMTP id S234050AbiKHRjL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:39:09 -0500
+        Tue, 8 Nov 2022 12:39:11 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4461B51C3C
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 09:39:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2624FF99
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 09:39:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02BFCB81BE4
-        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 17:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E267C433D6;
-        Tue,  8 Nov 2022 17:39:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20413B81BE2
+        for <linux-kselftest@vger.kernel.org>; Tue,  8 Nov 2022 17:39:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E880C4347C;
+        Tue,  8 Nov 2022 17:39:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667929145;
-        bh=MrykR74GiOjtlPshJD7pCG1tFOTWnd1cDsN+HjWX9DY=;
+        s=k20201202; t=1667929147;
+        bh=DWuMsiMOy2LvOTL46RZ8rtpD5Fam79MnYqNv+vIN8to=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oQWScmLwj3NLams9iT6B4NDsA+5o+mpWYQRxYuZqrwFZ3HEK3bQywkyIrCOuD/Szb
-         35jdcxNmJwiApfcMoFLkAO8E6fQWz5EkE5FVBEXZGb2o7ioF6rRCUsBKUHIb1+Dn4h
-         xKUf6O/fGvV3kt7PH0yaYN6h6gCnIroPMQE5eEcqTkHLphXBB0zr6zplMC3A64pZHY
-         gqGiC5U0UiDncV9yp770mWNxGySIvP0Jr6jNadGonvcHdO9FjNO1GrpsOkg6aHEoJo
-         8NVOwYZmj7d4vCsHkAAYR9G8e5gheO/c13Ag7Yjo2/mGNA419+RJ61iIepvAZb8Z0O
-         A7cwoFxAkZcuQ==
+        b=U2VNJixcuPwi+xYjzUWoAqZTBXTglY2H9Q5cpVU8O8QuMZvspaiD6H4BDcgWO3k7/
+         rX1lAJabnDKwvT8mHIOYDetCDPxqKRxpNKbm+RCcYT9qWZMpfqchBRapo4kh7qMuTp
+         cfmZs8+9rhYY33DbKjXsTR13QNOlOD6WJF8Kic2f7g6QlmyArOQIIcTiTvK3y/3WN+
+         jBkG0vUCgBhd2zDqKUgkNHbCndrNJaajQJjMsIgMe1ACIQ4PSJ6Ja0iEVIL1LqY/Ud
+         5Fs+glvqUCh613gOPCMX3CxosY6c79s9LWiAjseiVGe/NuQvC0f9T59AAjvgmPF3oh
+         M9r0LC+6wh9ZQ==
 From:   Will Deacon <will@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Shuah Khan <shuah@kernel.org>
 Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1] kselftest/arm64: Print ASCII version of unknown signal frame magic values
-Date:   Tue,  8 Nov 2022 17:38:42 +0000
-Message-Id: <166792349135.1917799.16443261128174146129.b4-ty@kernel.org>
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1] kselftest/arm64: Remove validation of extra_context from TODO
+Date:   Tue,  8 Nov 2022 17:38:43 +0000
+Message-Id: <166792343522.1917599.824046189071510906.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221102140543.98193-1-broonie@kernel.org>
-References: <20221102140543.98193-1-broonie@kernel.org>
+In-Reply-To: <20221027110324.33802-1-broonie@kernel.org>
+References: <20221027110324.33802-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,17 +58,17 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2 Nov 2022 14:05:43 +0000, Mark Brown wrote:
-> The signal magic values are supposed to be allocated as somewhat meaningful
-> ASCII so if we encounter a bad magic value print the any alphanumeric
-> characters we find in it as well as the hex value to aid debuggability.
+On Thu, 27 Oct 2022 12:03:24 +0100, Mark Brown wrote:
+> When fixing up support for extra_context in the signal handling tests I
+> didn't notice that there is a TODO file in the directory which lists this
+> as a thing to be done. Since it's been done remove it from the list.
 > 
 > 
 
 Applied to arm64 (for-next/selftests), thanks!
 
-[1/1] kselftest/arm64: Print ASCII version of unknown signal frame magic values
-      https://git.kernel.org/arm64/c/9b283888a6d5
+[1/1] kselftest/arm64: Remove validation of extra_context from TODO
+      https://git.kernel.org/arm64/c/2004734fb3fe
 
 Cheers,
 -- 
