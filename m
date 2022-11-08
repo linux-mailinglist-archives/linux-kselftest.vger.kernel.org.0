@@ -2,87 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943E462052B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 01:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103F3620580
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Nov 2022 02:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbiKHAw7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Nov 2022 19:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
+        id S233216AbiKHBA7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Nov 2022 20:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiKHAw6 (ORCPT
+        with ESMTP id S233299AbiKHBAq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Nov 2022 19:52:58 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50969252A2;
-        Mon,  7 Nov 2022 16:52:57 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5qMN3GlBzRp4C;
-        Tue,  8 Nov 2022 08:52:48 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 08:52:55 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 08:52:54 +0800
-Subject: Re: [PATCH bpf v2 4/5] bpf: Add kernel function call support in
- 32-bit ARM for EABI
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>,
-        <illusionist.neo@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <mykolal@fb.com>, <shuah@kernel.org>,
-        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
-        <asavkov@redhat.com>, <delyank@fb.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-References: <20221107092032.178235-1-yangjihong1@huawei.com>
- <20221107092032.178235-5-yangjihong1@huawei.com>
- <Y2j7J9mJxmKJ4ZpP@shell.armlinux.org.uk>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <8469b2d5-276b-9715-cf62-a5a724d438d7@huawei.com>
-Date:   Tue, 8 Nov 2022 08:52:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Mon, 7 Nov 2022 20:00:46 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC6020BF6;
+        Mon,  7 Nov 2022 17:00:45 -0800 (PST)
+Date:   Mon, 7 Nov 2022 17:00:38 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667869243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GwrfcPLWegZuEEj6CKXHwu1qKx5JNoa40Mx3JbzZqAQ=;
+        b=B7ri3UCtv3d9fm2jpYiLnPJPeUql2n6CDoGeYOaKmhurHDVulZvaXfdl9zcXOySTiQXpdl
+        3NBMoukjfCAUQPIHFGwBdG4Y6Z1OICOr5yjOAtskNfzQJixSbkIep7zDd6HOK5TlhDDwYo
+        7Edd6tBQzP3ulK36p3Y6KEKHG2aK06o=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        shuah@kernel.org, yosryahmed@google.com, shakeelb@google.com,
+        rientjes@google.com, akpm@linux-foundation.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: cgroup: Fix unsigned comparison with less
+ than zero
+Message-ID: <Y2mqNtqpmRnEBxcC@P9FQF9L96D>
+References: <20221105110611.28920-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <Y2j7J9mJxmKJ4ZpP@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221105110611.28920-1-yuehaibing@huawei.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Sat, Nov 05, 2022 at 07:06:11PM +0800, YueHaibing wrote:
+> 'size' is unsigned, it never less than zero.
+> 
+> Fixes: 6c26df84e1f2 ("selftests: cgroup: return -errno from cg_read()/cg_write() on failure")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  tools/testing/selftests/cgroup/cgroup_util.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+> index 4c52cc6f2f9c..e8bbbdb77e0d 100644
+> --- a/tools/testing/selftests/cgroup/cgroup_util.c
+> +++ b/tools/testing/selftests/cgroup/cgroup_util.c
+> @@ -555,6 +555,7 @@ int proc_mount_contains(const char *option)
+>  ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size)
+>  {
+>  	char path[PATH_MAX];
+> +	ssize_t ret;
+>  
+>  	if (!pid)
+>  		snprintf(path, sizeof(path), "/proc/%s/%s",
+> @@ -562,8 +563,8 @@ ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t
+>  	else
+>  		snprintf(path, sizeof(path), "/proc/%d/%s", pid, item);
+>  
+> -	size = read_text(path, buf, size);
+> -	return size < 0 ? -1 : size;
+> +	ret = read_text(path, buf, size);
+> +	return ret < 0 ? -1 : ret;
+>  }
 
-On 2022/11/7 20:33, Russell King (Oracle) wrote:
-> On Mon, Nov 07, 2022 at 05:20:31PM +0800, Yang Jihong wrote:
->> +bool bpf_jit_supports_kfunc_call(void)
->> +{
->> +	return true;
-> 
-> It would be far cleaner to make this:
-> 
-> 	return IS_ENABLED(CONFIG_AEABI);
-> 
-> So userspace knows that it isn't supported on OABI.
-> 
-Thanks for the suggestion, will change.
+Indeed, good catch!
 
-Thanks,
-Yang
-.
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+
+Thanks!
