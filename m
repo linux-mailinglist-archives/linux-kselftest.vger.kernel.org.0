@@ -2,99 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7822622028
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 00:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B2E6220D2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 01:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiKHXMn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Nov 2022 18:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
+        id S229639AbiKIAb3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Nov 2022 19:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiKHXMm (ORCPT
+        with ESMTP id S229452AbiKIAb2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:12:42 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C91A1181A;
-        Tue,  8 Nov 2022 15:12:41 -0800 (PST)
-Message-ID: <62bf28ac-c1fa-fc60-ce52-6d993a8a4bbf@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1667949159;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=23Tm+eKsq59oYINN64yC7sXxhhKfTi7aNRL9IyR7Fcg=;
-        b=WbcoZyQpXbCkr7+milw/nMCvBLTKt7rZgDcD8YhRwEgEWygXmmvThOlypgTdP8HObpx6hL
-        aiOyNE3Xs37eA6DW7C2gFD8KqCU77fb//5NoBRDkPntCdmZI+cOhXZrLQbS58GJ7K81FwC
-        do1kxKXNwF8EvWDtX8dLaJmNB3R+oiI=
-Date:   Tue, 8 Nov 2022 15:12:30 -0800
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2 1/5] bpf: Adapt 32-bit return value kfunc for
- 32-bit ARM when zext extension
-Content-Language: en-US
-To:     Yang Jihong <yangjihong1@huawei.com>
-References: <20221107092032.178235-1-yangjihong1@huawei.com>
- <20221107092032.178235-2-yangjihong1@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, illusionist.neo@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org,
-        benjamin.tissoires@redhat.com, memxor@gmail.com,
-        asavkov@redhat.com, delyank@fb.com, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20221107092032.178235-2-yangjihong1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 8 Nov 2022 19:31:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45B361765;
+        Tue,  8 Nov 2022 16:31:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 661FAB81CB9;
+        Wed,  9 Nov 2022 00:31:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3ABFC433C1;
+        Wed,  9 Nov 2022 00:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1667953885;
+        bh=60CWbc6xEw7X0NYzHrj2+bHlAe/BjGKdikDuaZWCdT8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ii1ohMOHnQ8+KT4qO4mP0IdkzvaPjv1FVWeOaqhWtiqul1mOCqa5sVXVUcR20GnNE
+         AxOIPigKUIHP6ez22gsA1jnva00qAOLrlvg8rJ4nNizVN3c4lL/daeimNBTLOZzrFT
+         zl9HMzebVg7z6yvXdiKS4Ndi4uuAIjfp+eohzf14=
+Date:   Tue, 8 Nov 2022 16:31:24 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Joel Savitz <jsavitz@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <dhildenb@redhat.com>,
+        Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH linux-next] selftests/vm: calculate variables in correct
+ order
+Message-Id: <20221108163124.a54f932f8f79f9c1d6e63903@linux-foundation.org>
+In-Reply-To: <20221028132640.2791026-1-jsavitz@redhat.com>
+References: <20221028132640.2791026-1-jsavitz@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/7/22 1:20 AM, Yang Jihong wrote:
-> For ARM32 architecture, if data width of kfunc return value is 32 bits,
-> need to do explicit zero extension for high 32-bit, insn_def_regno should
-> return dst_reg for BPF_JMP type of BPF_PSEUDO_KFUNC_CALL. Otherwise,
-> opt_subreg_zext_lo32_rnd_hi32 returns -EFAULT, resulting in BPF failure.
+On Fri, 28 Oct 2022 09:26:40 -0400 Joel Savitz <jsavitz@redhat.com> wrote:
+
+> commit b5ba705c2608 ("selftests/vm: enable running select groups of tests")
+> unintentionally reversed the ordering of some of the lines of
+> run_vmtests.sh that calculate values based on system configuration.
+> Importantly, $hpgsize_MB is determined from $hpgsize_KB, but this later
+> value is not read from /proc/meminfo until later, causing userfaultfd
+> tests to incorrectly fail since $half_ufd_size_MB will always be 0.
 > 
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->   kernel/bpf/verifier.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7f0a9f6cb889..bac37757ffca 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -2404,6 +2404,9 @@ static int insn_def_regno(const struct bpf_insn *insn)
->   {
->   	switch (BPF_CLASS(insn->code)) {
->   	case BPF_JMP:
-> +		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
-> +			return insn->dst_reg;
+> Switch these statements around into proper order to fix the invocation
+> of the userfaultfd tests that use $half_ufd_size_MB.
 
-This does not look right.  A kfunc can return void.  The btf type of the kfunc's 
-return value needs to be checked against "void" first?
-Also, this will affect insn_has_def32(), does is_reg64 (called from 
-insn_has_def32) need to be adjusted also?
+Does this fix address the failure in
+https://lkml.kernel.org/r/202211021026.61b267d1-yujie.liu@intel.com?
 
-
-For patch 2, as replied earlier in v1, I would separate out the prog that does 
-__sk_buff->sk and use the uapi's bpf.h instead of vmlinux.h since it does not 
-need CO-RE.
-
-This set should target for bpf-next instead of bpf.
-
-> +		fallthrough;
->   	case BPF_JMP32:
->   	case BPF_ST:
->   		return -1;
+Thanks.
 
