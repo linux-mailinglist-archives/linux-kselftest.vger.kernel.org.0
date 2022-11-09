@@ -2,111 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D196E622998
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 12:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C46622A62
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 12:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiKILGi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Nov 2022 06:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S230501AbiKILZP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Nov 2022 06:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiKILGc (ORCPT
+        with ESMTP id S231219AbiKILZJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:06:32 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8008522BC0
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Nov 2022 03:06:31 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id h133-20020a1c218b000000b003cf4d389c41so1007085wmh.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Nov 2022 03:06:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bkxuXtDed4rc7dbRvY9+2yDzxFpGHl/JP9vCeNecjEQ=;
-        b=6DFmQR5sbsez/Ge+WY3V6ty840AoV8XrukBvGEINyWwWIa5Atsx6UQyioeb3ThYd1s
-         87Edyh3XI17NuhV9Xv1ikEJTOvzAwntA2hRBdcY1OQVe1wcWysR5z8K8257HmINhRMkF
-         +Ss0VI9GYh4W35My1qvSx8d9WAtR3C6MBL/8gaXeXMJIiBoSaZZvSInCKIktQmFb7wMb
-         JvW7wN/vhoLc0Tuik/alsqmt5DnR8guLjwad/Sd1H55rYZq4+J0qLGKO4zf2qCrKFnfJ
-         cbOxYBOTaoeSFMza9dYvOTuQ1glAgXey9AnoloQzoCu0IePxDHqlmajTlF7PGlacKPJP
-         bP9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bkxuXtDed4rc7dbRvY9+2yDzxFpGHl/JP9vCeNecjEQ=;
-        b=YVqHSqmpD/Ns6l9voErkaC+nqd1hSEymg84mf/kSJ73mpEceEArK4PpGu0LBefJTZD
-         a0TkH2DClhv+vJIa4Pp4AQyCCBuKL1hsT3yUkjTlstxLZ61/sn7i0UFl37EOPecLi7vL
-         p2LsICOQjCtEa2/6fANkOHVYPD9BmAIBytkgSdQfz5VLywYRkS2tVyUkKz3d3QNzGGdg
-         vs9dLegingQhGwIZh8DD6sWwa3l6Hr01zOMVKxpd5DLDhaYD3lbJfB9Ioz8ACdv3qQIe
-         gObsE1N+jzRnkLBa/Oh7gVvrqShTRfdK/HoFa0raIKHBHcEXjG+4I7mVThe0PNvBW1zL
-         61pw==
-X-Gm-Message-State: ACrzQf3v4xfiFzKG5CrQhnyGv59S8ztIl2Enc77QXRQLHtirC+/GV5ZB
-        +iFxRWW2T4bfA6ivDequLI6UoQ==
-X-Google-Smtp-Source: AMsMyM5BvadxqH6GX2b2GSNjxZbt+RfSbJqqVZaOmo19Ouk7XqKsVYC0osO0pMhoMvRYcjnFslHO4Q==
-X-Received: by 2002:a05:600c:2e46:b0:3cf:8a34:2e98 with SMTP id q6-20020a05600c2e4600b003cf8a342e98mr23430198wmf.30.1667991989984;
-        Wed, 09 Nov 2022 03:06:29 -0800 (PST)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id r2-20020adfdc82000000b0022ae401e9e0sm12999034wrj.78.2022.11.09.03.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 03:06:29 -0800 (PST)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     akpm@linux-foundation.org, shuah@kernel.org
-Cc:     adobriyan@gmail.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Punit Agrawal <punit.agrawal@bytedance.com>
-Subject: [PATCH] selftests: proc: Fix proc-empty-vm build error on non x86_64
-Date:   Wed,  9 Nov 2022 11:06:21 +0000
-Message-Id: <20221109110621.1791999-1-punit.agrawal@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Nov 2022 06:25:09 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8ABC248F3;
+        Wed,  9 Nov 2022 03:25:07 -0800 (PST)
+Received: from neptune (ip5f592f1a.dynamic.kabel-deutschland.de [95.89.47.26])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1B3D1205DC1C;
+        Wed,  9 Nov 2022 03:25:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1B3D1205DC1C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667993107;
+        bh=zUwbg/HEyF+bezTrnaFC6nz76szbZgSmnWrOoGNXm+s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hn8MKJT/RjE39bY8km6r3nNO43pooj3ElbJ48yMi2AD+e8wHBh51flFON7siZhHRp
+         mLcXyuPZsf9P+60gg1ewlnJm29k4ElLfV44jMTYN5kss4lYlj/egI9D8+QMTA9NO23
+         QUtJqAXqxBPJJSvpATB8AyHbswG8r5BqdqtxtMAg=
+Date:   Wed, 9 Nov 2022 12:23:38 +0100
+From:   Alban Crequy <albancrequy@linux.microsoft.com>
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Francis Laniel <flaniel@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org,
+        Alban Crequy <alban.crequy@gmail.com>,
+        Alban Crequy <albancrequy@microsoft.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 1/2] maccess: fix writing offset in case of fault
+ in strncpy_from_kernel_nofault()
+Message-ID: <20221109122338.7e931640@neptune>
+In-Reply-To: <ab5a36cd-e9cc-074a-2fb6-858f5cc897e4@meta.com>
+References: <20221108195211.214025-1-flaniel@linux.microsoft.com>
+        <20221108195211.214025-2-flaniel@linux.microsoft.com>
+        <a725e235-f4e9-84a3-a88b-dce274423a75@meta.com>
+        <ab5a36cd-e9cc-074a-2fb6-858f5cc897e4@meta.com>
+Organization: Microsoft
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The proc-empty-vm test is implemented for x86_64 and fails to build
-for other architectures. Rather then emitting a compiler error it
-would be preferable to only build the test on supported architectures.
+On Tue, 8 Nov 2022 12:38:53 -0800
+Yonghong Song <yhs@meta.com> wrote:
 
-Mark proc-empty-vm as a test for x86_64 and customise to the Makefile
-to build it only when building for this target architecture.
+> On 11/8/22 12:35 PM, Yonghong Song wrote:
+> >=20
+> >=20
+> > On 11/8/22 11:52 AM, Francis Laniel wrote: =20
+> >> From: Alban Crequy <albancrequy@microsoft.com>
+> >>
+> >> If a page fault occurs while copying the first byte, this function=20
+> >> resets one
+> >> byte before dst.
+> >> As a consequence, an address could be modified and leaded to
+> >> kernel crashes if
+> >> case the modified address was accessed later.
+> >>
+> >> Signed-off-by: Alban Crequy <albancrequy@microsoft.com>
+> >> Tested-by: Francis Laniel <flaniel@linux.microsoft.com>
+> >> ---
+> >> =C2=A0 mm/maccess.c | 2 +-
+> >> =C2=A0 1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/mm/maccess.c b/mm/maccess.c
+> >> index 5f4d240f67ec..074f6b086671 100644
+> >> --- a/mm/maccess.c
+> >> +++ b/mm/maccess.c
+> >> @@ -97,7 +97,7 @@ long strncpy_from_kernel_nofault(char *dst,
+> >> const void *unsafe_addr, long count)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return src - unsafe_addr;
+> >> =C2=A0 Efault:
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pagefault_enable();
+> >> -=C2=A0=C2=A0=C2=A0 dst[-1] =3D '\0';
+> >> +=C2=A0=C2=A0=C2=A0 dst[0] =3D '\0'; =20
+> >=20
+> > What if the fault is due to dst, so the above won't work, right?
+> >=20
+> > The original code should work fine if the first byte copy is
+> > successful. For the first byte copy fault, maybe just to leave it
+> > as is? =20
+>=20
+> Okay, the dst is always safe (from func signature), so change looks
+> okay to me. Probably mm people can double check.
 
-Fixes: 5bc73bb3451b ("proc: test how it holds up with mapping'less process")
-Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
----
- tools/testing/selftests/proc/Makefile | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+My understanding was that the bpf verifier is supposed to check that the
+dst pointer is safe. But I don't know where it is done, and I don't
+know how it can check that the dst buffer is big enough.
 
-diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
-index cd95369254c0..6b31439902af 100644
---- a/tools/testing/selftests/proc/Makefile
-+++ b/tools/testing/selftests/proc/Makefile
-@@ -1,14 +1,18 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+# When ARCH not overridden for crosscompiling, lookup machine
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
- CFLAGS += -Wall -O2 -Wno-unused-function
- CFLAGS += -D_GNU_SOURCE
- LDFLAGS += -pthread
- 
--TEST_GEN_PROGS :=
-+TEST_GEN_PROGS_x86_64 += proc-empty-vm
-+
- TEST_GEN_PROGS += fd-001-lookup
- TEST_GEN_PROGS += fd-002-posix-eq
- TEST_GEN_PROGS += fd-003-kthread
- TEST_GEN_PROGS += proc-loadavg-001
--TEST_GEN_PROGS += proc-empty-vm
- TEST_GEN_PROGS += proc-pid-vm
- TEST_GEN_PROGS += proc-self-map-files-001
- TEST_GEN_PROGS += proc-self-map-files-002
--- 
-2.30.2
+> >  =20
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EFAULT;
+> >> =C2=A0 }
+> >>
+> >> --=20
+> >> 2.25.1
+> >> =20
+>=20
 
