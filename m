@@ -2,209 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6959762288B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 11:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA7062297D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Nov 2022 12:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiKIKf4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Nov 2022 05:35:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S230148AbiKILEd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Nov 2022 06:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiKIKfw (ORCPT
+        with ESMTP id S229714AbiKILEc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:35:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B0D19C1E
-        for <linux-kselftest@vger.kernel.org>; Wed,  9 Nov 2022 02:34:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667990088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3J441/GDgv6cN9YzwYIw/Qlxf96gs8QTcgGQhe6EZYE=;
-        b=SLHXDNu6OP/hwicW+P/ENpnWFs+Mz+dcKNKk/uRn4/tzJyoK1XvhbYks2GephIYj8hNXq6
-        +LHEhuT+cBeAPGOeVMjvzy/x+nPxb1IBM7YtKTdn180hhZc/4MdYc7rL21uLmuoSX6v9HE
-        BsxFlN9aSuaVnnyONcmPpu3Qk+MGYz4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-10-ST5sFBxeMlCDK4C3ijdTcg-1; Wed, 09 Nov 2022 05:34:47 -0500
-X-MC-Unique: ST5sFBxeMlCDK4C3ijdTcg-1
-Received: by mail-wr1-f71.google.com with SMTP id j25-20020adfa559000000b0023d5d7f95a2so3307207wrb.21
-        for <linux-kselftest@vger.kernel.org>; Wed, 09 Nov 2022 02:34:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3J441/GDgv6cN9YzwYIw/Qlxf96gs8QTcgGQhe6EZYE=;
-        b=3/EjUPhxC3RUing9bixl9m0hLywSXlNNDE+rkDp0BbR/A2W6a9040cUoUiTE4xbl3I
-         mfjNxuCy6pIiWy04ivsfyQe74GFihHo+CmvjCRdMiNjQDQeEDPzkVfICuhutHf+GUt27
-         rvskB6HjSkzEryYvOlstmdbepNaywZP4gEL51Djeb639eCfsmP4rqYKHGPyFzswW5Arp
-         Fr9YTeWD5NjZY0NOa52wMrZ0WmfwpsNDOolcioaNLBi1K9no2qPFugWU9gLNuiuyLIFB
-         IFW79yttUG885PKahtFF1bnzOuAp1MOCDT6rMfLgJMM13yWMN/ZztVP2+dyFD6W+q4Qw
-         Uj4g==
-X-Gm-Message-State: ACrzQf33kamhpohc2XNin8ng0+QLI2IgXYAGfwEdP+/YKJotBmwVzckz
-        PVMT8E6s+Jw0M4yuff4D206ce41znagtJhvVxF76MgJ9IIxIZeVzP9FxxfGoN0GZ9Cd83uGjt8R
-        8WAIAagJhP5666lUsNRvzwvD/W6oG
-X-Received: by 2002:a1c:f214:0:b0:3be:4e7c:1717 with SMTP id s20-20020a1cf214000000b003be4e7c1717mr40707883wmc.171.1667990086103;
-        Wed, 09 Nov 2022 02:34:46 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5KUj/gYNJcSIhtdNPjm0EteMyf5apuMBhpsiXhBbhX54nb3tAFmta3JZlLl0rVB/VwRx9Lrw==
-X-Received: by 2002:a1c:f214:0:b0:3be:4e7c:1717 with SMTP id s20-20020a1cf214000000b003be4e7c1717mr40707846wmc.171.1667990085742;
-        Wed, 09 Nov 2022 02:34:45 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:b000:3b0e:74a3:bc8:9937? (p200300cbc704b0003b0e74a30bc89937.dip0.t-ipconnect.de. [2003:cb:c704:b000:3b0e:74a3:bc8:9937])
-        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b003c6f426467fsm1194121wmq.40.2022.11.09.02.34.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 02:34:45 -0800 (PST)
-Message-ID: <9c167d01-ef09-ec4e-b4a1-2fff62bf01fe@redhat.com>
-Date:   Wed, 9 Nov 2022 11:34:43 +0100
+        Wed, 9 Nov 2022 06:04:32 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 909B7644C;
+        Wed,  9 Nov 2022 03:04:30 -0800 (PST)
+Received: from pwmachine.localnet (85-170-25-210.rev.numericable.fr [85.170.25.210])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E10EA20B929F;
+        Wed,  9 Nov 2022 03:04:26 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E10EA20B929F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667991870;
+        bh=xjS3RSgFinUTnn09YzQPAUOcc5Q2nF9iD2L4KzdBxww=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gf/R1SCtcGFF4CgzLlMsIc28oU4/5u8K8PB3INvwTTeVUNeluS7YQDzb7WkVZBGXM
+         aTE3sOLwkcICATx7N4IcHvqtFxt3hZH5a9ZuqjcrhWmR/tnPzX5NnDMaAnbb243Fdt
+         a+TEzsT3R21bijzQv3l8DC5BsrleqV8rqMp/comQ=
+From:   Francis Laniel <flaniel@linux.microsoft.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alban Crequy <alban.crequy@gmail.com>,
+        Alban Crequy <albancrequy@microsoft.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH v1 1/2] maccess: fix writing offset in case of fault in strncpy_from_kernel_nofault()
+Date:   Wed, 09 Nov 2022 12:04:24 +0100
+Message-ID: <2655397.mvXUDI8C0e@pwmachine>
+In-Reply-To: <20221108130551.85ad67b402582e3855418294@linux-foundation.org>
+References: <20221108195211.214025-1-flaniel@linux.microsoft.com> <20221108195211.214025-2-flaniel@linux.microsoft.com> <20221108130551.85ad67b402582e3855418294@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        "open list : KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        Paul Gofman <pgofman@codeweavers.com>
-References: <20221109102303.851281-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v6 0/3] Implement IOCTL to get and/or the clear info about
- PTEs
-In-Reply-To: <20221109102303.851281-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 09.11.22 11:23, Muhammad Usama Anjum wrote:
-> Changes in v6:
-> - Updated the interface and made cosmetic changes
-> 
-> Original Cover Letter in v5:
-> Hello,
-> 
-> This patch series implements IOCTL on the pagemap procfs file to get the
-> information about the page table entries (PTEs). The following operations
-> are supported in this ioctl:
-> - Get the information if the pages are soft-dirty, file mapped, present
->    or swapped.
-> - Clear the soft-dirty PTE bit of the pages.
-> - Get and clear the soft-dirty PTE bit of the pages atomically.
-> 
-> Soft-dirty PTE bit of the memory pages can be read by using the pagemap
-> procfs file. The soft-dirty PTE bit for the whole memory range of the
-> process can be cleared by writing to the clear_refs file. There are other
-> methods to mimic this information entirely in userspace with poor
-> performance:
-> - The mprotect syscall and SIGSEGV handler for bookkeeping
-> - The userfaultfd syscall with the handler for bookkeeping
-> Some benchmarks can be seen here[1]. This series adds features that weren't
-> present earlier:
-> - There is no atomic get soft-dirty PTE bit status and clear operation
->    possible.
-> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
-> 
-> Historically, soft-dirty PTE bit tracking has been used in the CRIU
-> project. The procfs interface is enough for finding the soft-dirty bit
-> status and clearing the soft-dirty bit of all the pages of a process.
-> We have the use case where we need to track the soft-dirty PTE bit for
-> only specific pages on demand. We need this tracking and clear mechanism
-> of a region of memory while the process is running to emulate the
-> getWriteWatch() syscall of Windows. This syscall is used by games to
-> keep track of dirty pages to process only the dirty pages.
-> 
-> The information related to pages if the page is file mapped, present and
-> swapped is required for the CRIU project[2][3]. The addition of the
-> required mask, any mask, excluded mask and return masks are also required
-> for the CRIU project[2].
-> 
-> The IOCTL returns the addresses of the pages which match the specific masks.
-> The page addresses are returned in struct page_region in a compact form.
-> The max_pages is needed to support a use case where user only wants to get
-> a specific number of pages. So there is no need to find all the pages of
-> interest in the range when max_pages is specified. The IOCTL returns when
-> the maximum number of the pages are found. The max_pages is optional. If
-> max_pages is specified, it must be equal or greater than the vec_size.
-> This restriction is needed to handle worse case when one page_region only
-> contains info of one page and it cannot be compacted. This is needed to
-> emulate the Windows getWriteWatch() syscall.
-> 
-> Some non-dirty pages get marked as dirty because of the kernel's
-> internal activity (such as VMA merging as soft-dirty bit difference isn't
-> considered while deciding to merge VMAs). The dirty bit of the pages is
-> stored in the VMA flags and in the per page flags. If any of these two bits
-> are set, the page is considered to be soft dirty. Suppose you have cleared
-> the soft dirty bit of half of VMA which will be done by splitting the VMA
-> and clearing soft dirty bit flag in the half VMA and the pages in it. Now
-> kernel may decide to merge the VMAs again. So the half VMA becomes dirty
-> again. This splitting/merging costs performance. The application receives
-> a lot of pages which aren't dirty in reality but marked as dirty.
-> Performance is lost again here. Also sometimes user doesn't want the newly
-> allocated memory to be marked as dirty. PAGEMAP_NO_REUSED_REGIONS flag
-> solves both the problems. It is used to not depend on the soft dirty flag
-> in the VMA flags. So VMA splitting and merging doesn't happen. It only
-> depends on the soft dirty bit of the individual pages. Thus by using this
-> flag, there may be a scenerio such that the new memory regions which are
-> just created, doesn't look dirty when seen with the IOCTL, but look dirty
-> when seen from procfs. This seems okay as the user of this flag know the
-> implication of using it.
+Hi.
 
-Please separate that part out from the other changes; I am still not 
-convinced that we want this and what the semantical implications are.
+Le mardi 8 novembre 2022, 22:05:51 CET Andrew Morton a =E9crit :
+> On Tue,  8 Nov 2022 20:52:06 +0100 Francis Laniel=20
+<flaniel@linux.microsoft.com> wrote:
+> > From: Alban Crequy <albancrequy@microsoft.com>
+> >=20
+> > If a page fault occurs while copying the first byte, this function rese=
+ts
+> > one byte before dst.
+> > As a consequence, an address could be modified and leaded to kernel
+> > crashes if case the modified address was accessed later.
+> >=20
+> > Signed-off-by: Alban Crequy <albancrequy@microsoft.com>
+> > Tested-by: Francis Laniel <flaniel@linux.microsoft.com>
+>=20
+> Reviewed-by: Andrew Morton <akpm@linux-foundation.org>
+>=20
+> Please merge via the bpf tree.
+>=20
+> This looks potentially nasty.  Fortunately only tracing code uses it,
+> but I'm thinking it should have cc:stable and a Fixes:?
 
-Let's take a look at an example: can_change_pte_writable()
+Thank you for the review!
+Sorry, I thought to add stable list but forgot to add it when sending the=20
+series...
+I will sent a v2 with your review and without rfc tag to, among others,=20
+stable.
 
-	/* Do we need write faults for softdirty tracking? */
-	if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
-		return false;
-
-We care about PTE softdirty tracking, if it is enabled for the VMA. 
-Tracking is enabled if: vma_soft_dirty_enabled()
-
-	/*
-	 * Soft-dirty is kind of special: its tracking is enabled when
-	 * the vma flags not set.
-	 */
-	return !(vma->vm_flags & VM_SOFTDIRTY);
-
-Consequently, if VM_SOFTDIRTY is set, we are not considering the 
-soft_dirty PTE bits accordingly.
-
-
-I'd suggest moving forward without this controversial 
-PAGEMAP_NO_REUSED_REGIONS functionality for now, and preparing it as a 
-clear add-on we can discuss separately.
-
--- 
-Thanks,
-
-David / dhildenb
 
